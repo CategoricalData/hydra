@@ -14,6 +14,7 @@ module Hydra.CoreDecoding (
   epsilonDecodeLambdaType,
   elementAsTypedTerm,
   fieldTypes,
+  moduleDependencyNamespaces,
   requireRecordType,
   requireType,
   requireUnionType,
@@ -28,6 +29,7 @@ import Hydra.Common
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Mantle
+import Hydra.Module
 import Hydra.Lexical
 import Hydra.Flows
 import Hydra.Rewriting
@@ -38,6 +40,7 @@ import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+import qualified Data.Maybe as Y
 
 
 epsilonDecodeApplicationType :: Show a => Term a -> GraphFlow a (ApplicationType a)
@@ -78,9 +81,14 @@ epsilonDecodeIntegerType = matchEnum [
   (_IntegerType_uint32, IntegerTypeUint32),
   (_IntegerType_uint64, IntegerTypeUint64)]
 
+-- epsilonDecodeLambdaType :: Show a => Term a -> GraphFlow a (LambdaType a)
+-- epsilonDecodeLambdaType term = do
+--   (Lambda var body) <- Expect.lambda term
+--   LambdaType var <$> epsilonDecodeType body
+
 epsilonDecodeLambdaType :: Show a => Term a -> GraphFlow a (LambdaType a)
 epsilonDecodeLambdaType = matchRecord $ \m -> LambdaType
-  <$> (Name <$> getField m _LambdaType_parameter epsilonDecodeString)
+  <$> (getField m _LambdaType_parameter epsilonDecodeName)
   <*> getField m _LambdaType_body epsilonDecodeType
 
 epsilonDecodeLiteralType :: Show a => Term a -> GraphFlow a LiteralType
@@ -96,10 +104,13 @@ epsilonDecodeMapType = matchRecord $ \m -> MapType
   <$> getField m _MapType_keys epsilonDecodeType
   <*> getField m _MapType_values epsilonDecodeType
 
+epsilonDecodeName :: Show a => Term a -> GraphFlow a Name
+epsilonDecodeName term = Name <$> Expect.string term
+
 epsilonDecodeRowType :: Show a => Term a -> GraphFlow a (RowType a)
 epsilonDecodeRowType = matchRecord $ \m -> RowType
   <$> (Name <$> getField m _RowType_typeName epsilonDecodeString)
-  <*> getField m _RowType_extends (Expect.optional (\term -> Name <$> Expect.string term))
+  <*> getField m _RowType_extends (Expect.optional epsilonDecodeName)
   <*> getField m _RowType_fields epsilonDecodeFieldTypes
 
 epsilonDecodeString :: Show a => Term a -> GraphFlow a String
@@ -124,8 +135,8 @@ epsilonDecodeType dat = case dat of
     (_Type_set, fmap TypeSet . epsilonDecodeType),
     (_Type_sum, \(TermList types) -> TypeSum <$> (CM.mapM epsilonDecodeType types)),
     (_Type_union, fmap TypeUnion . epsilonDecodeRowType),
-    (_Type_variable, fmap (TypeVariable . Name) . epsilonDecodeString),
-    (_Type_wrap, fmap TypeWrap . Expect.variable)] dat
+    (_Type_variable, fmap TypeVariable . epsilonDecodeName),
+    (_Type_wrap, fmap TypeWrap . epsilonDecodeName)] dat
 
 elementAsTypedTerm :: (Show a) => Element a -> GraphFlow a (TypedTerm a)
 elementAsTypedTerm el = do
@@ -177,6 +188,25 @@ matchUnion pairs term = do
 
 matchUnitField :: FieldName -> y -> (FieldName, x -> GraphFlow a y)
 matchUnitField fname x = (fname, \_ -> pure x)
+
+-- | Find dependency namespaces in various dimensions of a term: va
+moduleDependencyNamespaces :: (Ord a, Show a) => Bool -> Bool -> Bool -> Bool -> Module a -> GraphFlow a (S.Set Namespace)
+moduleDependencyNamespaces withVars withPrims withNoms withSchema mod = do
+    allNames <- S.unions <$> (CM.mapM elNames $ moduleElements mod)
+    let namespaces = S.fromList $ Y.catMaybes (namespaceOfEager <$> S.toList allNames)
+    return $ S.delete (moduleNamespace mod) namespaces
+  where
+    elNames el = do
+      let term = elementData el
+      let dataNames = termDependencyNames withVars withPrims withNoms term
+      schemaNames <- if withSchema
+        then typeDependencyNames <$> requireTypeAnnotation term
+        else pure S.empty
+
+      typeNames <- if isEncodedType term
+        then typeDependencyNames <$> epsilonDecodeType term
+        else pure S.empty
+      return $ S.unions [dataNames, schemaNames, typeNames]
 
 requireRecordType :: Show a => Bool -> Name -> GraphFlow a (RowType a)
 requireRecordType infer = requireRowType "record" infer $ \t -> case t of
@@ -245,10 +275,3 @@ typeDependencies name = deps (S.fromList [name]) M.empty
       withTrace ("type dependencies of " ++ unName name) $ do
         el <- requireElement name
         epsilonDecodeType (elementData el)
-
-typeDependencyNames :: Type a -> S.Set Name
-typeDependencyNames = foldOverType TraversalOrderPre addNames S.empty
-  where
-    addNames names typ = case typ of
-      TypeWrap name -> S.insert name names
-      _ -> names

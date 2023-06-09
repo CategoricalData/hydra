@@ -45,9 +45,12 @@ epsilonEncodeIntegerType it = unitVariant _IntegerType $ case it of
   IntegerTypeUint32 -> _IntegerType_uint32
   IntegerTypeUint64 -> _IntegerType_uint64
 
+-- epsilonEncodeLambdaType :: LambdaType a -> Term a
+-- epsilonEncodeLambdaType (LambdaType var body) = TermFunction $ FunctionLambda $ Lambda var $ epsilonEncodeType body
+
 epsilonEncodeLambdaType :: LambdaType a -> Term a
-epsilonEncodeLambdaType (LambdaType (Name var) body) = record _LambdaType [
-  Field _LambdaType_parameter $ string var,
+epsilonEncodeLambdaType (LambdaType var body) = record _LambdaType [
+  Field _LambdaType_parameter $ epsilonEncodeName var,
   Field _LambdaType_body $ epsilonEncodeType body]
 
 epsilonEncodeLiteralType :: LiteralType -> Term a
@@ -62,6 +65,9 @@ epsilonEncodeMapType :: MapType a -> Term a
 epsilonEncodeMapType (MapType kt vt) = record _MapType [
   Field _MapType_keys $ epsilonEncodeType kt,
   Field _MapType_values $ epsilonEncodeType vt]
+
+epsilonEncodeName :: Name -> Term a
+epsilonEncodeName name = string $ unName name
 
 epsilonEncodeRowType :: RowType a -> Term a
 epsilonEncodeRowType (RowType name extends fields) = record _RowType [
@@ -84,8 +90,8 @@ epsilonEncodeType typ = case typ of
   TypeSet t -> variant _Type _Type_set $ epsilonEncodeType t
   TypeSum types -> variant _Type _Type_sum $ list (epsilonEncodeType <$> types)
   TypeUnion rt -> variant _Type _Type_union $ epsilonEncodeRowType rt
-  TypeVariable (Name var) -> variant _Type _Type_variable $ string var
-  TypeWrap name -> variant _Type _Type_wrap $ TermVariable name
+  TypeVariable name -> variant _Type _Type_variable $ epsilonEncodeName name
+  TypeWrap name -> variant _Type _Type_wrap $ epsilonEncodeName name
 
 sigmaEncodeApplication :: Ord a => Application a -> Term a
 sigmaEncodeApplication (Application lhs rhs) = record _Application [

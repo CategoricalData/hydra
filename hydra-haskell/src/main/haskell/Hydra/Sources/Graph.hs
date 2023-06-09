@@ -14,9 +14,9 @@ hydraGraphModule = Module ns elements [hydraComputeModule] $
     Just "The extension to graphs of Hydra's core type system (hydra/core)"
   where
     ns = Namespace "hydra/graph"
-    core = nsref $ moduleNamespace hydraCoreModule
-    compute = nsref $ moduleNamespace hydraComputeModule
-    graph = nsref ns
+    core = typeref $ moduleNamespace hydraCoreModule
+    compute = typeref $ moduleNamespace hydraComputeModule
+    graph = typeref ns
     def = datatype ns
 
     elements = [

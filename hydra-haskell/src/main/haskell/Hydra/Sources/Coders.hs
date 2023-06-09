@@ -16,11 +16,11 @@ hydraCodersModule = Module ns elements [hydraMantleModule, hydraComputeModule, h
     Just "Abstractions for paired transformations between languages"
   where
     ns = Namespace "hydra/coders"
-    core = nsref $ moduleNamespace hydraCoreModule
-    compute = nsref $ moduleNamespace hydraComputeModule
-    graph = nsref $ moduleNamespace hydraGraphModule
-    mantle = nsref $ moduleNamespace hydraMantleModule
-    coders = nsref ns
+    core = typeref $ moduleNamespace hydraCoreModule
+    compute = typeref $ moduleNamespace hydraComputeModule
+    graph = typeref $ moduleNamespace hydraGraphModule
+    mantle = typeref $ moduleNamespace hydraMantleModule
+    coders = typeref ns
 
     def = datatype ns
 

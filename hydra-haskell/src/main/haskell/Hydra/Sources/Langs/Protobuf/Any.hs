@@ -8,7 +8,7 @@ import Hydra.Dsl.Types as Types
 
 
 pbAnyNs = Namespace "hydra/langs/protobuf/any"
-pbAny = nsref pbAnyNs
+pbAny = typeref pbAnyNs
 
 protobufAnyModule :: Module Kv
 protobufAnyModule = Module pbAnyNs elements [] $

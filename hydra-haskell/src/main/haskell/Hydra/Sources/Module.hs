@@ -13,8 +13,8 @@ hydraModuleModule = Module ns elements [hydraGraphModule] $
     Just "A model for Hydra namespaces and modules (collections of elements in the same namespace)"
   where
     ns = Namespace "hydra/module"
-    graph = nsref $ moduleNamespace hydraGraphModule
-    mod = nsref ns
+    graph = typeref $ moduleNamespace hydraGraphModule
+    mod = typeref ns
     def = datatype ns
 
     elements = [

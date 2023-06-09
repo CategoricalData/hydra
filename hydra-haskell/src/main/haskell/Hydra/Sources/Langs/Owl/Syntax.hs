@@ -28,9 +28,9 @@ owlSyntaxModule = Module ns elements [rdfSyntaxModule, xmlSchemaModule] $
     ns = Namespace "hydra/langs/owl/syntax"
     def = datatype ns
 
-    owl = nsref ns
-    rdf = nsref $ moduleNamespace rdfSyntaxModule
-    xsd = nsref $ moduleNamespace xmlSchemaModule
+    owl = typeref ns
+    rdf = typeref $ moduleNamespace rdfSyntaxModule
+    xsd = typeref $ moduleNamespace xmlSchemaModule
 
     objectPropertyConstraint lname = def lname $ record [
       "annotations">: list $ owl "Annotation",

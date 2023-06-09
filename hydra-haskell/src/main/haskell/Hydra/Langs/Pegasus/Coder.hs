@@ -24,11 +24,12 @@ printModule mod = do
     mapPair (path, sf) = (path, printExpr $ parenthesize $ exprSchemaFile sf)
 
 constructModule :: (Ord a, Read a, Show a)
-  => Module a
+  => M.Map Namespace String
+  -> Module a
   -> M.Map (Type a) (Coder (Graph a) (Graph a) (Term a) ())
   -> [(Element a, TypedTerm a)]
   -> GraphFlow a (M.Map FilePath PDL.SchemaFile)
-constructModule mod coders pairs = do
+constructModule aliases mod coders pairs = do
     sortedPairs <- case (topologicalSortElements $ fst <$> pairs) of
       Left comps -> fail $ "types form a cycle (unsupported in PDL): " ++ show (L.head comps)
       Right sorted -> pure $ Y.catMaybes $ fmap (\n -> M.lookup n pairByName) sorted
@@ -43,7 +44,6 @@ constructModule mod coders pairs = do
         local = PDL.unName $ PDL.qualifiedNameName $ PDL.namedSchemaQualifiedName schema
 
     pairByName = L.foldl (\m p -> M.insert (elementName $ fst p) p m) M.empty pairs
-    aliases = importAliasesForModule mod
     toSchema (el, TypedTerm typ term) = do
       if isType typ
         then epsilonDecodeType term >>= typeToSchema el
@@ -62,13 +62,13 @@ constructModule mod coders pairs = do
         imports = []
 --        imports = L.filter isExternal (pdlNameForElement aliases True <$> deps)
 --          where
---            deps = S.toList $ termDependencyNames False True False False $ elementData el
+--            deps = S.toList $ termDependencyNames False False False $ elementData el
 --            isExternal qn = PDL.qualifiedNameNamespace qn /= PDL.qualifiedNameNamespace qname
 
 moduleToPegasusSchemas :: (Ord a, Read a, Show a) => Module a -> GraphFlow a (M.Map FilePath PDL.SchemaFile)
-moduleToPegasusSchemas mod = transformModule pdlLanguage (encodeTerm aliases) constructModule mod
-  where
-    aliases = importAliasesForModule mod
+moduleToPegasusSchemas mod = do
+  aliases <- importAliasesForModule mod
+  transformModule pdlLanguage (encodeTerm aliases) (constructModule aliases) mod
 
 doc :: Y.Maybe String -> PDL.Annotations
 doc s = PDL.Annotations s False
@@ -102,7 +102,7 @@ encodeType aliases typ = case typ of
         _ -> unexpected "int32 or int64" it
       LiteralTypeString -> pure PDL.PrimitiveTypeString
     TypeMap (MapType kt vt) -> Left . PDL.SchemaMap <$> encode vt -- note: we simply assume string as a key type
-    TypeWrap name -> pure $ Left $ PDL.SchemaNamed $ pdlNameForElement aliases True name
+    TypeVariable name -> pure $ Left $ PDL.SchemaNamed $ pdlNameForElement aliases True name
     TypeOptional ot -> fail $ "optionals unexpected at top level"
     TypeRecord rt -> do
       let includes = []
@@ -160,9 +160,10 @@ encodeType aliases typ = case typ of
       r <- annotationClassTypeDescription (graphAnnotations cx) typ
       return $ doc r
 
-importAliasesForModule mod = M.fromList (toPair <$> deps)
+importAliasesForModule mod = do
+    nss <- moduleDependencyNamespaces False True True False mod
+    return $ M.fromList (toPair <$> S.toList nss)
   where
-    deps = S.toList $ moduleDependencyNamespaces False True True True mod
     toPair ns = (ns, slashesToDots $ unNamespace ns)
 
 noAnnotations :: PDL.Annotations

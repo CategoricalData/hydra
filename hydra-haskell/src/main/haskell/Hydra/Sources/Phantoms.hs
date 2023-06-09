@@ -14,9 +14,9 @@ hydraPhantomsModule = Module ns elements [hydraComputeModule] $
     Just "Phantom types for use in model definitions"
   where
     ns = Namespace "hydra/phantoms"
-    core = nsref $ moduleNamespace hydraCoreModule
-    evaluation = nsref $ moduleNamespace hydraComputeModule
-    phantoms = nsref ns
+    core = typeref $ moduleNamespace hydraCoreModule
+    evaluation = typeref $ moduleNamespace hydraComputeModule
+    phantoms = typeref ns
     def = datatype ns
 
     elements = [

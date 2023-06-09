@@ -11,7 +11,7 @@ scalaMetaModule = Module ns elements [] $
   where
     ns = Namespace "hydra/langs/scala/meta"
     def = datatype ns
-    meta = nsref ns
+    meta = typeref ns
 
     elements = [
 

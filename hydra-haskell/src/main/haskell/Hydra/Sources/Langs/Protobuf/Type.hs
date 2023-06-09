@@ -10,7 +10,7 @@ import Hydra.Dsl.Types as Types
 
 
 pbTypeNs = Namespace "hydra/langs/protobuf/type"
-pbType = nsref pbTypeNs
+pbType = typeref pbTypeNs
 
 -- Note: for now, all fields are considered to be required; some may need to be made optional in the future.
 --       For example the "name" of a message type is clearly required, while the syntax and source context

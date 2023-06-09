@@ -118,19 +118,23 @@ reduceTerm eager env = rewriteTermM mapping pure
 betaReduceType :: (Ord a, Show a) => Type a -> GraphFlow a (Type a)
 betaReduceType typ = do
     g <- getState :: GraphFlow a (Graph a)
-    return $ rewriteType (mapExpr g) id typ
+    rewriteTypeM mapExpr (pure . id) typ
   where
-    mapExpr g recurse t = case recurse t of
-        TypeApplication a -> reduceApp a
-        t' -> t'
+    mapExpr recurse t = do
+        r <- recurse t
+        case r of
+          TypeApplication a -> reduceApp a
+          t' -> pure t'
       where
         reduceApp (ApplicationType lhs rhs) = case lhs of
-          TypeAnnotated (Annotated t' ann) -> TypeAnnotated (Annotated (reduceApp (ApplicationType t' rhs)) ann)
-          TypeLambda (LambdaType v body) -> fromFlow g $ betaReduceType $ replaceFreeName v rhs body
+          TypeAnnotated (Annotated t' ann) -> do
+            a <- reduceApp $ ApplicationType t' rhs
+            return $ TypeAnnotated $ Annotated a ann
+          TypeLambda (LambdaType v body) -> betaReduceType $ replaceFreeName v rhs body
           -- nominal types are transparent
-          TypeWrap name -> fromFlow g $ betaReduceType $ TypeApplication $ ApplicationType t' rhs
-            where
-              t' = fromFlow g $ requireType name
+          TypeVariable name -> do
+            t' <- requireType name
+            betaReduceType $ TypeApplication $ ApplicationType t' rhs
 
 -- | Apply the special rules:
 --     ((\x.e1) e2) == e1, where x does not appear free in e1

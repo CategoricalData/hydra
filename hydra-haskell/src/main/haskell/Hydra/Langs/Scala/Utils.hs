@@ -12,7 +12,7 @@ import qualified Data.Maybe as Y
 
 nameOfType :: Graph a -> Type a -> Y.Maybe Name
 nameOfType cx t = case stripType t of
-  TypeWrap name -> Just name
+  TypeVariable name -> Just name
   TypeLambda (LambdaType _ body) -> nameOfType cx body
   _ -> Nothing
 

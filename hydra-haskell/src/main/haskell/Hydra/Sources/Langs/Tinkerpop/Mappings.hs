@@ -18,10 +18,10 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydr
     Just "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs"
   where
     ns = Namespace "hydra/langs/tinkerpop/mappings"
-    mappings = nsref ns
-    compute = nsref $ moduleNamespace hydraComputeModule
-    core = nsref $ moduleNamespace hydraCoreModule
-    v3 = nsref $ moduleNamespace tinkerpopPropertyGraphModule
+    mappings = typeref ns
+    compute = typeref $ moduleNamespace hydraComputeModule
+    core = typeref $ moduleNamespace hydraCoreModule
+    v3 = typeref $ moduleNamespace tinkerpopPropertyGraphModule
     def = datatype ns
     toField (k, v) = Field k $ Terms.string v
 

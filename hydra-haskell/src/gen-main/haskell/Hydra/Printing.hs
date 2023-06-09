@@ -66,9 +66,6 @@ describeType x = case x of
         (describeType (Core.mapTypeKeys v))],
       " to "],
     (describeType (Core.mapTypeValues v))])
-  Core.TypeWrap v -> (Strings.cat [
-    "alias for ",
-    (Core.unName v)])
   Core.TypeOptional v -> (Strings.cat [
     "optional ",
     (describeType v)])
@@ -83,3 +80,6 @@ describeType x = case x of
   Core.TypeSum _ -> "variant tuples"
   Core.TypeUnion _ -> "unions"
   Core.TypeVariable _ -> "instances of a named type"
+  Core.TypeWrap v -> (Strings.cat [
+    "wrapper for ",
+    (Core.unName v)])

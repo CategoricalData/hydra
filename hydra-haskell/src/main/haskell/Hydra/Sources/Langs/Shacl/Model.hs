@@ -14,8 +14,8 @@ shaclModelModule = Module ns elements [rdfSyntaxModule] $
   where
     ns = Namespace "hydra/langs/shacl/model"
     def = datatype ns
-    shacl = nsref ns
-    rdf = nsref $ moduleNamespace rdfSyntaxModule
+    shacl = typeref ns
+    rdf = typeref $ moduleNamespace rdfSyntaxModule
 
     elements = [
 

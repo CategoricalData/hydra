@@ -16,7 +16,7 @@ tinkerpopPropertyGraphModule = Module ns elements [hydraCoreModule] $
     Just "A typed property graph data model"
   where
     ns = Namespace "hydra/langs/tinkerpop/propertyGraph"
-    pg = nsref ns
+    pg = typeref ns
     def = datatype ns
 
     elements = [

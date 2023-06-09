@@ -39,8 +39,8 @@ datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders 
       where
         t' = rec t
 
-nsref :: Namespace -> String -> Type a
-nsref ns = Types.wrap . qualify ns . Name
+typeref :: Namespace -> String -> Type a
+typeref ns = TypeVariable . qualify ns . Name
 
 qualify :: Namespace -> Name -> Name
 qualify (Namespace gname) (Name lname) = Name $ gname ++ "." ++ lname

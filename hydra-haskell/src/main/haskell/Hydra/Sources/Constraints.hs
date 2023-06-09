@@ -14,9 +14,9 @@ hydraConstraintsModule = Module ns elements [hydraCoreModule, hydraQueryModule] 
     Just "A model for path- and pattern-based graph constraints, which may be considered as part of the schema of a graph"
   where
     ns = Namespace "hydra/constraints"
-    core = nsref $ moduleNamespace hydraCoreModule
-    query = nsref $ moduleNamespace hydraQueryModule
-    constraints = nsref ns
+    core = typeref $ moduleNamespace hydraCoreModule
+    query = typeref $ moduleNamespace hydraQueryModule
+    constraints = typeref ns
     def = datatype ns
 
     elements = [

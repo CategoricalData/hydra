@@ -16,11 +16,11 @@ hydraWorkflowModule = Module ns elements [hydraModuleModule, hydraComputeModule,
     Just "A model for Hydra transformation workflows"
   where
     ns = Namespace "hydra/workflow"
-    mod = nsref $ moduleNamespace hydraModuleModule
-    compute = nsref $ moduleNamespace hydraComputeModule
-    core = nsref $ moduleNamespace hydraCoreModule
-    graph = nsref $ moduleNamespace hydraGraphModule
-    wf = nsref ns
+    mod = typeref $ moduleNamespace hydraModuleModule
+    compute = typeref $ moduleNamespace hydraComputeModule
+    core = typeref $ moduleNamespace hydraCoreModule
+    graph = typeref $ moduleNamespace hydraGraphModule
+    wf = typeref ns
     def = datatype ns
 
     elements = [

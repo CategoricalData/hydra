@@ -16,7 +16,7 @@ relationalModelModule = Module ns elements [] $
   where
     ns = Namespace "hydra/langs/relationalModel"
     def = datatype ns
-    rm = nsref ns
+    rm = typeref ns
 
     elements = [
       def "ColumnName" $

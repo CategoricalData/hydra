@@ -5,14 +5,15 @@ module Hydra.Sources.Grammar where
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Types as Types
+import Hydra.Sources.Core
 
 
 hydraGrammarModule :: Module Kv
-hydraGrammarModule = Module ns elements [] $
+hydraGrammarModule = Module ns elements [hydraCoreModule] $
     Just "A common API for BNF-based grammars, specifying context-free languages"
   where
     ns = Namespace "hydra/grammar"
-    grammar = nsref ns
+    grammar = typeref ns
     def = datatype ns
 
     elements = [

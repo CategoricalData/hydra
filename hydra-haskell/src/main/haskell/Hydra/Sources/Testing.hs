@@ -14,8 +14,8 @@ hydraTestingModule = Module ns elements [hydraCoreModule] $
   where
     ns = Namespace "hydra/testing"
     def = datatype ns
-    core = nsref $ moduleNamespace hydraCoreModule
-    testing = nsref ns
+    core = typeref $ moduleNamespace hydraCoreModule
+    testing = typeref ns
 
     elements = [
 
@@ -30,7 +30,7 @@ hydraTestingModule = Module ns elements [hydraCoreModule] $
           "evaluationStyle">: testing "EvaluationStyle",
           "input">: core "Term" @@ "a",
           "output">: core "Term" @@ "a"],
-          
+
       def "TestGroup" $
         doc "A collection of test cases with a name and optional description" $
         lambda "a" $ record [

@@ -11,7 +11,7 @@ jsonModelModule = Module ns elements [] $
   where
     ns = Namespace "hydra/langs/json/model"
     def = datatype ns
-    json = nsref ns
+    json = typeref ns
 
     elements = [
 
