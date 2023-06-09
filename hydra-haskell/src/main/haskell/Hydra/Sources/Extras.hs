@@ -35,7 +35,7 @@ hydraExtrasModule = Module (Namespace "hydra/extras") elements [hydraGraphModule
 
 functionArityDef :: Definition (Function a -> Int)
 functionArityDef = hydraExtrasDefinition "functionArity" $
-  function (Types.apply (Types.wrap _Function) (Types.var "a")) Types.int32 $
+  function (Types.apply (TypeVariable _Function) (Types.var "a")) Types.int32 $
   match _Function Nothing [
     Case _Function_elimination --> constant (int32 1),
     Case _Function_lambda --> (Math.add @@ int32 1) <.> (ref termArityDef <.> project _Lambda _Lambda_body),
@@ -53,7 +53,7 @@ lookupPrimitiveDef = hydraExtrasDefinition "lookupPrimitive" $
 primitiveArityDef :: Definition (Primitive a -> Int)
 primitiveArityDef = hydraExtrasDefinition "primitiveArity" $
   doc "Find the arity (expected number of arguments) of a primitive constant or function" $
-  function (Types.apply (Types.wrap _Primitive) (Types.var "a")) Types.int32 $
+  function (Types.apply (TypeVariable _Primitive) (Types.var "a")) Types.int32 $
   (ref typeArityDef <.> (project _Primitive _Primitive_type))
 
 qnameDef :: Definition (Namespace -> String -> Name)
@@ -66,7 +66,7 @@ qnameDef = hydraExtrasDefinition "qname" $
 
 termArityDef :: Definition (Term a -> Int)
 termArityDef = hydraExtrasDefinition "termArity" $
-  function (Types.apply (Types.wrap _Term) (Types.var "a")) Types.int32 $
+  function (Types.apply (TypeVariable _Term) (Types.var "a")) Types.int32 $
   match _Term (Just $ Terms.int32 0) [
     Case _Term_application --> (lambda "x" $ Math.sub @@ var "x" @@ int32 1) <.> (ref termArityDef <.> (project _Application _Application_function)),
     Case _Term_function --> ref functionArityDef]
@@ -102,7 +102,7 @@ getAnnotationDef = hydraExtrasDefinition "getAnnotation" $
 --getAttrDef :: Definition (String -> Flow s (Maybe (Term Kv)))
 --getAttrDef = hydraExtrasDefinition "getAttr" $
 --  lambda "key" $ wrap _Flow $
---    function Types.string (Types.apply (Types.apply (Types.wrap _Flow) (Types.var "s")) (Types.optional $ Types.apply (Types.wrap _Term) (Types.wrap _Kv))) $
+--    function Types.string (Types.apply (Types.apply (TypeVariable _Flow) (Types.var "s")) (Types.optional $ Types.apply (TypeVariable _Term) (TypeVariable _Kv))) $
 --    lambda "s0" $ lambda "t0" $ record _FlowState [
 --      fld _FlowState_value (just (Maps.lookup @@ var "key" @@ (project _Trace _Trace_other @@ var "t0"))),
 --      fld _FlowState_state $ var "s0",
