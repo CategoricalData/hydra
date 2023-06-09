@@ -115,13 +115,6 @@ public interface Printing {
       }
       
       @Override
-      public String visit(hydra.core.Type.Wrap<A> instance) {
-        return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
-          "alias for ",
-          ((instance.value)).value));
-      }
-      
-      @Override
       public String visit(hydra.core.Type.Optional<A> instance) {
         return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
           "optional ",
@@ -165,6 +158,13 @@ public interface Printing {
       @Override
       public String visit(hydra.core.Type.Variable<A> instance) {
         return "instances of a named type";
+      }
+      
+      @Override
+      public String visit(hydra.core.Type.Wrap<A> instance) {
+        return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
+          "wrapper for ",
+          ((instance.value)).value));
       }
     });
   }

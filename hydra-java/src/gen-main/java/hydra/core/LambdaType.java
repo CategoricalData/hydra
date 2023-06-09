@@ -7,7 +7,7 @@ public class LambdaType<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.LambdaType");
   
   /**
-   * The parameter of the lambda
+   * The variable which is bound by the lambda
    */
   public final hydra.core.Name parameter;
   
