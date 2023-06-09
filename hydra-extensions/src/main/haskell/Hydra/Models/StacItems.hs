@@ -20,8 +20,8 @@ stacModule = Module ns elements [geoJsonModule, ianaRelationsModule] $
     ns = Namespace "org/stacspec/items"
     def = datatype ns
 
-    geoj = nsref $ moduleNamespace geoJsonModule
-    ianarel = nsref $ moduleNamespace ianaRelationsModule
+    geoj = typeref $ moduleNamespace geoJsonModule
+    ianarel = typeref $ moduleNamespace ianaRelationsModule
     stac = wrap . qualify ns . Name
 
     elements = [

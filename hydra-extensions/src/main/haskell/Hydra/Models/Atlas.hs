@@ -18,8 +18,8 @@ atlasModelModule = Module ns elements [xmlSchemaModule] $
   where
     ns = Namespace "org/apache/atlas"
     def = datatype ns
-    atlas = nsref ns
-    xsd = nsref (moduleNamespace xmlSchemaModule)
+    atlas = typeref ns
+    xsd = typeref (moduleNamespace xmlSchemaModule)
 
     elements = [
 
