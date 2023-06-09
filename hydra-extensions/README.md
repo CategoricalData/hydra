@@ -20,13 +20,13 @@ and the generated Haskell APIs for all of these models can be found [here](https
 For the sake of space, only generated Haskell is checked in to the repository, but Java APIs can be generated from GHCi (use `stack ghci`) as follows:
 
 ```haskell
-writeJava hydraExtensionsModules "src/gen-main/java"
+writeJava "src/gen-main/java" hydraExtensionsModules
 ```
 
 The generated Haskell can be updated using:
 
 ```haskell
-writeHaskell hydraExtensionsModules "src/gen-main/haskell"
+writeHaskell "src/gen-main/haskell" hydraExtensionsModules
 ```
 
 ## Tools

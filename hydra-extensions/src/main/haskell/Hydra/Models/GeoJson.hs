@@ -21,7 +21,7 @@ geoJsonModule = Module ns elements [jsonModelModule] $
     ns = Namespace "org/geojson/model"
     def = datatype ns
     geoj = wrap . qualify ns . Name
-    json = nsref $ moduleNamespace jsonModelModule
+    json = typeref $ moduleNamespace jsonModelModule
 
     elements = [
 

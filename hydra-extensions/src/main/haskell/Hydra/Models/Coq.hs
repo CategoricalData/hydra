@@ -13,7 +13,7 @@ coqSyntaxModule = Module ns elements [] $
   where
     ns = Namespace "hydra/langs/coq/syntax"
     def = datatype ns
-    coq = nsref ns
+    coq = typeref ns
 
     elements = [
 
