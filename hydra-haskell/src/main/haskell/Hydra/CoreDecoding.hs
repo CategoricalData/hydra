@@ -107,6 +107,13 @@ epsilonDecodeMapType = matchRecord $ \m -> MapType
 epsilonDecodeName :: Show a => Term a -> GraphFlow a Name
 epsilonDecodeName term = Name <$> Expect.string term
 
+epsilonDecodeNominal :: Show a => (Term a -> GraphFlow a x) -> Term a -> GraphFlow a (Nominal x)
+epsilonDecodeNominal mapping term = do
+  fields <- Expect.recordWithName _Nominal term
+  name <- Expect.field _Nominal_typeName epsilonDecodeName fields
+  obj <- Expect.field _Nominal_object mapping fields
+  pure $ Nominal name obj
+
 epsilonDecodeRowType :: Show a => Term a -> GraphFlow a (RowType a)
 epsilonDecodeRowType = matchRecord $ \m -> RowType
   <$> (Name <$> getField m _RowType_typeName epsilonDecodeString)
@@ -136,7 +143,7 @@ epsilonDecodeType dat = case dat of
     (_Type_sum, \(TermList types) -> TypeSum <$> (CM.mapM epsilonDecodeType types)),
     (_Type_union, fmap TypeUnion . epsilonDecodeRowType),
     (_Type_variable, fmap TypeVariable . epsilonDecodeName),
-    (_Type_wrap, fmap TypeWrap . epsilonDecodeName)] dat
+    (_Type_wrap, fmap TypeWrap . (epsilonDecodeNominal epsilonDecodeType))] dat
 
 elementAsTypedTerm :: (Show a) => Element a -> GraphFlow a (TypedTerm a)
 elementAsTypedTerm el = do
@@ -145,13 +152,13 @@ elementAsTypedTerm el = do
 
 fieldTypes :: Show a => Type a -> GraphFlow a (M.Map FieldName (Type a))
 fieldTypes t = case stripType t of
+    TypeLambda (LambdaType _ body) -> fieldTypes body
     TypeRecord rt -> pure $ toMap $ rowTypeFields rt
     TypeUnion rt -> pure $ toMap $ rowTypeFields rt
-    TypeWrap name -> do
+    TypeVariable name -> do
       withTrace ("field types of " ++ unName name) $ do
         el <- requireElement name
         epsilonDecodeType (elementData el) >>= fieldTypes
-    TypeLambda (LambdaType _ body) -> fieldTypes body
     _ -> unexpected "record or union type" t
   where
     toMap fields = M.fromList (toPair <$> fields)
@@ -243,7 +250,12 @@ requireUnionType infer = requireRowType "union" infer $ \t -> case t of
   _ -> Nothing
 
 requireWrappedType :: Show a => Name -> GraphFlow a (Type a)
-requireWrappedType name = withSchemaContext $ requireType name
+requireWrappedType name = do
+  typ <- withSchemaContext $ requireType name
+  case stripType typ of
+    TypeWrap (Nominal name t) -> return t
+    _ -> return typ -- TODO: stop allowing this "slop" once typedefs are clearly separated from newtypes
+--     _ -> fail $ "expected wrapped type for " ++ unName name ++ " but got " ++ show typ
 
 resolveType :: Show a => Type a -> GraphFlow a (Maybe (Type a))
 resolveType typ = case stripType typ of

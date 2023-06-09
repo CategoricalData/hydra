@@ -242,7 +242,7 @@ rewriteType f mf = rewrite fsub f
         TypeSum types -> TypeSum (recurse <$> types)
         TypeUnion (RowType name extends fields) -> TypeUnion $ RowType name extends (forField <$> fields)
         TypeVariable v -> TypeVariable v
-        TypeWrap name -> TypeWrap name
+        TypeWrap (Nominal name t) -> TypeWrap $ Nominal name $ recurse t
       where
         forField f = f {fieldTypeType = recurse (fieldTypeType f)}
 
@@ -270,7 +270,7 @@ rewriteTypeM f mf = rewrite fsub f
         TypeUnion (RowType name extends fields) ->
           TypeUnion <$> (RowType <$> pure name <*> pure extends <*> CM.mapM forField fields)
         TypeVariable v -> pure $ TypeVariable v
-        TypeWrap name -> pure $ TypeWrap name
+        TypeWrap (Nominal name t) -> TypeWrap <$> (Nominal <$> pure name <*> recurse t)
       where
         forField f = do
           t <- recurse $ fieldTypeType f
@@ -337,7 +337,6 @@ subtypes typ = case typ of
   TypeList lt -> [lt]
   TypeLiteral _ -> []
   TypeMap (MapType kt vt) -> [kt, vt]
-  TypeWrap _ -> []
   TypeOptional ot -> [ot]
   TypeProduct types -> types
   TypeRecord rt -> fieldTypeType <$> rowTypeFields rt
@@ -345,6 +344,7 @@ subtypes typ = case typ of
   TypeSum types -> types
   TypeUnion rt -> fieldTypeType <$> rowTypeFields rt
   TypeVariable _ -> []
+  TypeWrap (Nominal _ t) -> [t]
 
 -- Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that
 termDependencyNames :: Bool -> Bool -> Bool -> Term a -> S.Set Name

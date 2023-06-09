@@ -251,18 +251,18 @@ checkWrappedTerms = H.describe "Check nominal introductions and eliminations" $ 
 
     H.it "Check nominal introductions" $ do
       expectMonotype
-        (wrap (Name "StringTypeAlias") $ string "foo")
+        (wrap stringAliasTypeName $ string "foo")
         stringAliasType
       expectMonotype
-        (lambda "v" $ wrap (Name "StringTypeAlias") $ var "v")
+        (lambda "v" $ wrap stringAliasTypeName $ var "v")
         (Types.function Types.string stringAliasType)
 
     H.it "Check nominal eliminations" $ do
 --       expectMonotype
---         (unwrap $ Name "StringTypeAlias")
+--         (unwrap stringAliasTypeName)
 --         (Types.function stringAliasType (Ann.doc "An alias for the string type" Types.string))
       expectMonotype
-        (apply (unwrap $ Name "StringTypeAlias") (wrap (Name "StringTypeAlias") $ string "foo"))
+        (apply (unwrap stringAliasTypeName) (wrap stringAliasTypeName $ string "foo"))
         Types.string
 
 checkPrimitives :: H.SpecWith ()

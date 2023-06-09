@@ -58,9 +58,6 @@ optionalStringType = Types.optional Types.string
 setOfStringsType :: Type a
 setOfStringsType = Types.set Types.string
 
-stringAliasType :: Type a
-stringAliasType = TypeWrap $ Name "StringTypeAlias"
-
 stringOrIntName :: Name
 stringOrIntName = Name "StringOrInt"
 

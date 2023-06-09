@@ -346,7 +346,7 @@ hydraCoreModule = Module ns elements [] $
           "sum">: list (core "Type" @@ "a"),
           "union">: core "RowType" @@ "a",
           "variable">: core "Name",
-          "wrap">: core "Name"],
+          "wrap">: core "Nominal" @@ (core "Type" @@ "a")],
 
       def "Injection" $
         doc "An instance of a union type; i.e. a string-indexed generalization of inl() or inr()" $

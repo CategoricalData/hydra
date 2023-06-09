@@ -657,12 +657,13 @@ encodeType aliases t = case stripType t of
     jst <- encode st >>= javaTypeToJavaReferenceType
     return $ javaRefType [jst] javaUtilPackageName "Set"
   TypeUnion (RowType name _ _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True [] name Nothing
-  TypeVariable name -> pure $ if isLambdaBoundVariable name
-    then variableReference name
-    else nameReference name
-  TypeWrap name -> pure $ nameReference name
+  TypeVariable name -> forReference name
+  TypeWrap (Nominal name _) -> forReference name
   _ -> fail $ "can't encode unsupported type in Java: " ++ show t
   where
+    forReference name = pure $ if isLambdaBoundVariable name
+        then variableReference name
+        else nameReference name
     nameReference name = Java.TypeReference $ nameToJavaReferenceType aliases True [] name Nothing
     variableReference name = Java.TypeReference $ javaTypeVariable $ unName name
     encode = encodeType aliases

@@ -565,7 +565,7 @@ data Type a =
   TypeSum [Type a] |
   TypeUnion (RowType a) |
   TypeVariable Name |
-  TypeWrap Name
+  TypeWrap (Nominal (Type a))
   deriving (Eq, Ord, Read, Show)
 
 _Type = (Name "hydra/core.Type")

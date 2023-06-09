@@ -31,6 +31,12 @@ latLonPolyType :: Type a
 latLonPolyType = TypeLambda $ LambdaType (Name "a") $
   TypeRecord $ RowType latLonPolyName Nothing [Types.field "lat" $ Types.var "a", Types.field "lon" $ Types.var "a"]
 
+stringAliasType :: Type a
+stringAliasType = TypeWrap $ Nominal stringAliasTypeName Types.string
+
+stringAliasTypeName :: Name
+stringAliasTypeName = Name "StringTypeAlias"
+
 testElementArthur :: Element Kv
 testElementArthur = Element {
   elementName = Name "ArthurDent",
@@ -49,7 +55,7 @@ testNamespace = Namespace "testGraph"
 
 testSchemaGraph :: Graph Kv
 testSchemaGraph = elementsToGraph hydraCore (Just hydraCore) [
-    def (Name "StringTypeAlias") $ Ann.doc "An alias for the string type" Types.string,
+    def stringAliasTypeName $ Ann.doc "An alias for the string type" stringAliasType,
     def testTypeFoobarValueName testTypeFoobarValue,
     def testTypeNumberName testTypeNumber,
     def testTypeComparisonName testTypeComparison,
