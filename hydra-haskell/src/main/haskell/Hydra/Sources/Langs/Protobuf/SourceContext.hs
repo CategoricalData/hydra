@@ -8,7 +8,7 @@ import Hydra.Dsl.Annotations
 
 
 pbSourceContextNs = Namespace "hydra/langs/protobuf/sourceContext"
-pbSourceContext = nsref pbSourceContextNs
+pbSourceContext = typeref pbSourceContextNs
 
 protobufSourceContextModule :: Module Kv
 protobufSourceContextModule = Module pbSourceContextNs elements [] $

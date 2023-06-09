@@ -435,11 +435,12 @@ encodeElimination aliases marg dom cod elm = case elm of
         where
           qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
     return jexp
-  EliminationUnion (CaseStatement tname def fields) -> case marg of
+  EliminationUnion (CaseStatement tname def fields) -> do
+     case marg of
       Nothing -> do
         g <- getState
         let anns = graphAnnotations g
-        let lhs = annotationClassSetTermType anns g (Just $ Types.function (Types.wrap tname) cod) $ Terms.elimination elm
+        let lhs = annotationClassSetTermType anns g (Just $ Types.function (TypeVariable tname) cod) $ Terms.elimination elm
         let var = "u"
         encodeTerm aliases $ Terms.lambda var $ Terms.apply lhs (Terms.var var)
         -- TODO: default value
@@ -730,7 +731,11 @@ javaTypeParametersForType :: Type a -> [Java.TypeParameter]
 javaTypeParametersForType typ = toParam <$> vars
   where
     toParam (Name v) = Java.TypeParameter [] (javaTypeIdentifier $ capitalize v) Nothing
-    vars = L.filter isLambdaBoundVariable $ S.toList $ freeVariablesInType typ
+    vars = L.nub $ boundVars typ ++ freeVars
+    boundVars t = case stripType t of
+      TypeLambda (LambdaType v body) -> v:(boundVars body)
+      _ -> []
+    freeVars = L.filter isLambdaBoundVariable $ S.toList $ freeVariablesInType typ
 
 maybeLet :: (Ord a, Read a, Show a) => Aliases -> Term a -> (Aliases -> Term a -> [Java.BlockStatement] -> GraphFlow a x) -> GraphFlow a x
 maybeLet aliases term cons = helper [] term
@@ -829,7 +834,7 @@ toDataDeclaration aliases (el, TypedTerm typ term) = do
 
 typeNameDecl :: (Ord a, Read a, Show a) => Aliases -> Name -> GraphFlow a Java.ClassBodyDeclarationWithComments
 typeNameDecl aliases name = do
-  jt <- encodeType aliases $ Types.wrap _Name
+  jt <- encodeType aliases $ TypeVariable _Name
   arg <- encodeTerm aliases $ Terms.string $ unName name
   let init = Java.VariableInitializerExpression $ javaConstructorCall (javaConstructorName nameName Nothing) [arg] Nothing
   let var = javaVariableDeclarator (Java.Identifier "NAME") (Just init)

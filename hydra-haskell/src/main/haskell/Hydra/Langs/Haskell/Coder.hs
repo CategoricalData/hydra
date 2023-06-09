@@ -42,10 +42,11 @@ constantDecls g namespaces name@(Name nm) typ = if useCoreImport
     toConstant (FieldType (FieldName fname) _) = ("_" ++ lname ++ "_" ++ fname, fname)
 
 constructModule :: (Ord a, Read a, Show a)
-  => Module a
+  => Namespaces
+  -> Module a
   -> M.Map (Type a) (Coder (Graph a) (Graph a) (Term a) H.Expression)
   -> [(Element a, TypedTerm a)] -> GraphFlow a H.Module
-constructModule mod coders pairs = do
+constructModule namespaces mod coders pairs = do
     g <- getState
     decls <- L.concat <$> CM.mapM (createDeclarations g) pairs
     let mc = moduleDescription mod
@@ -59,7 +60,6 @@ constructModule mod coders pairs = do
         d <- toDataDeclaration coders namespaces pair
         return [d]
 
-    namespaces = namespacesForModule mod
     importName name = H.ModuleName $ L.intercalate "." (capitalize <$> Strings.splitOn "/" name)
     imports = domainImports ++ standardImports
       where
@@ -230,9 +230,9 @@ encodeType namespaces typ = case stripType typ of
     wrap name = pure $ H.TypeVariable $ elementReference namespaces name
 
 moduleToHaskellModule :: (Ord a, Read a, Show a) => Module a -> GraphFlow a H.Module
-moduleToHaskellModule mod = transformModule haskellLanguage (encodeTerm namespaces) constructModule mod
-  where
-    namespaces = namespacesForModule mod
+moduleToHaskellModule mod = do
+    namespaces <- namespacesForModule mod
+    transformModule haskellLanguage (encodeTerm namespaces) (constructModule namespaces) mod
 
 printModule :: (Ord a, Read a, Show a) => Module a -> GraphFlow a (M.Map FilePath String)
 printModule mod = do

@@ -77,13 +77,18 @@ namespaceToFilePath caps (FileExtension ext) (Namespace name) = L.intercalate "/
   where
     parts = (if caps then capitalize else id) <$> Strings.splitOn "/" name
 
+isEncodedType :: Term a -> Bool
+isEncodedType t = case stripTerm t of
+  TermApplication (Application lhs _) -> isEncodedType lhs
+  TermUnion (Injection _Type _) -> True
+  _ -> False
+
 isType :: Eq a => Type a -> Bool
 isType typ = case stripType typ of
   TypeApplication (ApplicationType lhs _) -> isType lhs
   TypeLambda (LambdaType _ body) -> isType body
   TypeUnion (RowType _Type _ _) -> True
   TypeVariable _Type -> True
-  TypeWrap _Type -> True
   _ -> False
 
 isUnitTerm :: Eq a => Term a -> Bool
@@ -121,11 +126,11 @@ qualifyNameEager (Name name) = case Strings.splitOn "." name of
 
 requireTypeAnnotation :: Show a => Term a -> Flow (Graph a) (Type a)
 requireTypeAnnotation term = do
-  anns <- graphAnnotations <$> getState
-  mt <- annotationClassTermType anns term
-  case mt of
-    Nothing -> fail $ "missing type annotation" ++ " in " ++ show term
-    Just t -> pure t
+    anns <- graphAnnotations <$> getState
+    mt <- annotationClassTermType anns term
+    case mt of
+      Nothing -> fail $ "missing type annotation in " ++ show term
+      Just t -> pure t
 
 stripTerm :: Term a -> Term a
 stripTerm = skipAnnotations $ \t -> case t of

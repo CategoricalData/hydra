@@ -11,7 +11,7 @@ hydraAstModule = Module ns elements [] $
   where
     ns = Namespace "hydra/ast"
     def = datatype ns
-    ast = nsref ns
+    ast = typeref ns
 
     elements = [
 

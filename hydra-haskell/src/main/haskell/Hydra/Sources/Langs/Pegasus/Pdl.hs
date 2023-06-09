@@ -13,8 +13,8 @@ pegasusPdlModule = Module ns elements [jsonModelModule] $
   where
     ns = Namespace "hydra/langs/pegasus/pdl"
     def = datatype ns
-    pdl = nsref ns
-    json = nsref $ moduleNamespace jsonModelModule
+    pdl = typeref ns
+    json = typeref $ moduleNamespace jsonModelModule
 
     elements = [
 

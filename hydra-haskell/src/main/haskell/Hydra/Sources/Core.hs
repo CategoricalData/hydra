@@ -15,7 +15,7 @@ hydraCoreModule = Module ns elements [] $
     Just "Hydra's core data model, defining types, terms, and their dependencies"
   where
     ns = Namespace "hydra/core"
-    core = nsref ns
+    core = typeref ns
     def = datatype ns
     doc s = setTypeDescription bootstrapGraph (Just s)
 
@@ -174,7 +174,7 @@ hydraCoreModule = Module ns elements [] $
         doc "A type abstraction; the type-level analog of a lambda term" $
         lambda "a" $ record [
           "parameter">:
-            doc "The parameter of the lambda" $
+            doc "The variable which is bound by the lambda" $
             core "Name",
           "body">:
             doc "The body of the lambda" $

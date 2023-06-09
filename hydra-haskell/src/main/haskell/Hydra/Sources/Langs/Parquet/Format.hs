@@ -15,7 +15,7 @@ parquetFormatModule = Module ns elements [] $
   where
     ns = Namespace "hydra/langs/parquet/format"
     def = datatype ns
-    parquet = nsref ns
+    parquet = typeref ns
 
     elements = [
 -- /**

@@ -63,8 +63,8 @@ generalize env t  = TypeScheme vars t
       (freeVariablesInType t)
       (L.foldr (S.union . freeVariablesInScheme) S.empty $ M.elems env)
 
-infer :: (Ord a, Show a) => Term a -> Flow (InferenceContext a) (Term (InfAnn a))
-infer term = case term of
+infer :: (Eq a, Ord a, Show a) => Term a -> Flow (InferenceContext a) (Term (InfAnn a))
+infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
     TermAnnotated (Annotated term1 ann) -> do
       iterm <- infer term1
       anns <- graphAnnotations . inferenceContextGraph <$> getState
@@ -243,6 +243,7 @@ infer term = case term of
         ifield <- inferFieldType field
         let ci = termConstraints $ fieldTerm ifield
         let co = (termType $ fieldTerm ifield, fieldTypeType sfield)
+
         yield (TermUnion $ Injection n ifield) (TypeUnion rt) (co:ci)
 
     TermVariable v -> do
@@ -305,7 +306,8 @@ requireName :: Show a => Name -> Flow (InferenceContext a) (Type a)
 requireName v = do
   env <- inferenceContextEnvironment <$> getState
   case M.lookup v env of
-    Nothing -> fail $ "variable not bound in environment: " ++ unName v ++ ". Environment: " ++ show env
+    Nothing -> fail $ "variable not bound in environment: " ++ unName v ++ ". Environment: "
+      ++ L.intercalate ", " (unName <$> M.keys env)
     Just s  -> instantiate s
 
 termConstraints :: Show a => Term (InfAnn a) -> [Constraint a]
@@ -344,7 +346,7 @@ withGraphContext f = do
   cx <- inferenceContextGraph <$> getState
   withState cx f
 
-yield :: Term (InfAnn a) -> Type a -> [Constraint a] -> Flow (InferenceContext a) (Term (InfAnn a))
+yield :: (Eq a, Ord a, Show a) => Term (InfAnn a) -> Type a -> [Constraint a] -> Flow (InferenceContext a) (Term (InfAnn a))
 yield term typ constraints = do
   case term of
     TermAnnotated _ -> fail "doubly-annotated term"
@@ -353,8 +355,8 @@ yield term typ constraints = do
   let defAnn = annotationClassDefault $ graphAnnotations g
   return $ TermAnnotated $ Annotated term (defAnn, typ, constraints)
 
-yieldFunction :: Function (InfAnn a) -> Type a -> [Constraint a] -> Flow (InferenceContext a) (Term (InfAnn a))
+yieldFunction :: (Eq a, Ord a, Show a) => Function (InfAnn a) -> Type a -> [Constraint a] -> Flow (InferenceContext a) (Term (InfAnn a))
 yieldFunction fun = yield (TermFunction fun)
 
-yieldElimination :: Elimination (InfAnn a) -> Type a -> [Constraint a] -> Flow (InferenceContext a) (Term (InfAnn a))
+yieldElimination :: (Eq a, Ord a, Show a) => Elimination (InfAnn a) -> Type a -> [Constraint a] -> Flow (InferenceContext a) (Term (InfAnn a))
 yieldElimination e = yield (TermFunction $ FunctionElimination e)

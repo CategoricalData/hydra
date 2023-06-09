@@ -11,7 +11,7 @@ rdfSyntaxModule = Module ns elements [] $
   where
     ns = Namespace "hydra/langs/rdf/syntax"
     def = datatype ns
-    rdf = nsref ns
+    rdf = typeref ns
 
     elements = [
 

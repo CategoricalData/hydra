@@ -283,7 +283,7 @@ _Lambda_body = (FieldName "body")
 -- | A type abstraction; the type-level analog of a lambda term
 data LambdaType a = 
   LambdaType {
-    -- | The parameter of the lambda
+    -- | The variable which is bound by the lambda
     lambdaTypeParameter :: Name,
     -- | The body of the lambda
     lambdaTypeBody :: (Type a)}

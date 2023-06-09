@@ -15,7 +15,7 @@ yamlModelModule = Module ns elements [] $
   where
     ns = Namespace "hydra/langs/yaml/model"
     def = datatype ns
-    model = nsref ns
+    model = typeref ns
 
     elements = [
       {-

@@ -15,8 +15,8 @@ avroSchemaModule = Module ns elements [jsonModelModule] $
   where
     ns = Namespace "hydra/langs/avro/schema"
     def = datatype ns
-    avro = nsref ns
-    json = nsref $ moduleNamespace jsonModelModule
+    avro = typeref ns
+    json = typeref $ moduleNamespace jsonModelModule
 
     elements = [
       def "Array" $

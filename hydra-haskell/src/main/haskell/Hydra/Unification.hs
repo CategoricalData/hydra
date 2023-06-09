@@ -11,6 +11,7 @@ import Hydra.Compute
 import Hydra.Core
 import Hydra.Lexical
 import Hydra.Flows
+import Hydra.Printing
 import Hydra.Rewriting
 import Hydra.Substitution
 import Hydra.Dsl.Types as Types
@@ -24,10 +25,16 @@ type Constraint a = (Type a, Type a)
 
 type Unifier a = (Subst a, [Constraint a])
 
+-- Note: type variables in Hydra are allowed to bind to type expressions which contain the variable;
+--       i.e. type recursion by name is allowed.
 bind :: (Eq a, Show a) => Name -> Type a -> Flow s (Subst a)
-bind a t | t == TypeVariable a = return M.empty
-         | variableOccursInType a t = fail $ "infinite type for ?" ++ unName a ++ ": " ++ show t
-         | otherwise = return $ M.singleton a t
+bind name typ = do
+  if typ == TypeVariable name
+  then return M.empty
+  else if variableOccursInType name typ
+--     then fail $ "infinite type for " ++ unName name ++ ": " ++ show typ
+    then return M.empty
+    else return $ M.singleton name typ
 
 solveConstraints :: (Eq a, Show a) => [Constraint a] -> Flow s (Subst a)
 solveConstraints cs = unificationSolver (M.empty, cs)
@@ -42,7 +49,9 @@ unificationSolver (su, cs) = case cs of
       (\(t1, t2) -> (substituteInType su1 t1, substituteInType su1 t2)) <$> rest)
 
 unify :: (Eq a, Show a) => Type a -> Type a -> Flow s (Subst a)
-unify ltyp rtyp = case (stripType ltyp, stripType rtyp) of
+unify ltyp rtyp = do
+--     withTrace ("unify " ++ show ltyp ++ " with " ++ show rtyp) $
+     case (stripType ltyp, stripType rtyp) of
        -- Symmetric patterns
       (TypeApplication (ApplicationType lhs1 rhs1), TypeApplication (ApplicationType lhs2 rhs2)) ->
         unifyMany [lhs1, rhs1] [lhs2, rhs2]
@@ -79,10 +88,12 @@ unify ltyp rtyp = case (stripType ltyp, stripType rtyp) of
       (_, TypeWrap name) -> return M.empty -- TODO
 
       (l, r) -> fail $ "unification of " ++ show (typeVariant l) ++ " with " ++ show (typeVariant r) ++
-        ":\n  " ++ show l ++ "\n  " ++ show r
+        ":\n  " ++ show l ++
+        "\n  " ++ show r
   where
     verify b = if b then return M.empty else failUnification
     failUnification = fail $ "could not unify type " ++ show (stripType ltyp) ++ " with " ++ show (stripType rtyp)
+--     failUnification = fail $ "could not unify type " ++ describeType (stripType ltyp) ++ " with " ++ describeType (stripType rtyp)
     bindWeakest v1 v2 = if isWeak v1
         then bind v1 (TypeVariable v2)
         else bind v2 (TypeVariable v1)

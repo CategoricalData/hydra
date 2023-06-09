@@ -33,11 +33,14 @@ constructModule mod coders pairs = do
     defs <- CM.mapM toDef pairs
     let pname = toScalaName $ h $ moduleNamespace mod
     let pref = Scala.Data_RefName pname
+    imports <- findImports
     return $ Scala.Pkg pname pref (imports ++ defs)
   where
     h (Namespace n) = n
-    imports = (toElImport <$> S.toList (moduleDependencyNamespaces False True False True mod))
-        ++ (toPrimImport <$> S.toList (moduleDependencyNamespaces False False True False mod))
+    findImports = do
+        elImps <- moduleDependencyNamespaces False False True False mod
+        primImps <- moduleDependencyNamespaces False True False False mod
+        return $ (toElImport <$> S.toList elImps) ++ (toPrimImport <$> S.toList primImps)
       where
         toElImport (Namespace ns) = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
           Scala.Importer (Scala.Data_RefName $ toScalaName ns) [Scala.ImporteeWildcard]]

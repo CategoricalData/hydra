@@ -13,7 +13,7 @@ javaSyntaxModule = Module ns elements [] $
   where
     ns = Namespace "hydra/langs/java/syntax"
     def = datatype ns
-    java = nsref ns
+    java = typeref ns
 
     elements = [
 

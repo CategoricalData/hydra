@@ -13,8 +13,8 @@ hydraMantleModule = Module ns elements [hydraCoreModule] $
     Just "A set of types which supplement hydra/core with type variants, graphs, and elements"
   where
     ns = Namespace "hydra/mantle"
-    core = nsref $ moduleNamespace hydraCoreModule
-    mantle = nsref ns
+    core = typeref $ moduleNamespace hydraCoreModule
+    mantle = typeref ns
     def = datatype ns
 
     elements = [

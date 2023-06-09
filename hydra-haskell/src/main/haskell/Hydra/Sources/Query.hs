@@ -13,8 +13,8 @@ hydraQueryModule = Module ns elements [hydraCoreModule] $
     Just "A model for language-agnostic graph pattern queries"
   where
     ns = Namespace "hydra/query"
-    core = nsref $ moduleNamespace hydraCoreModule
-    query = nsref ns
+    core = typeref $ moduleNamespace hydraCoreModule
+    query = typeref ns
     def = datatype ns
 
     elements = [
@@ -69,7 +69,7 @@ hydraQueryModule = Module ns elements [hydraCoreModule] $
           "inverse">:
             doc "A path given by the inverse of another path" $
             query "Path"],
-        
+
       def "Pattern" $
         doc "A query pattern" $
         lambda "a" $ union [
@@ -141,7 +141,7 @@ hydraQueryModule = Module ns elements [hydraCoreModule] $
           "subject">: query "Node" @@ "a",
           "predicate">: query "Path",
           "object">: query "Node" @@ "a"],
-          
+
       def "Variable" $
         doc "A query variable"
         string]

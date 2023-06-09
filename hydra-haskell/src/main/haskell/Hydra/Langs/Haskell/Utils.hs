@@ -48,12 +48,13 @@ hsPrimitiveReference name = H.NameNormal $ H.QualifiedName [prefix] $ H.NamePart
 hsvar :: String -> H.Expression
 hsvar s = H.ExpressionVariable $ rawName s
 
-namespacesForModule :: Module a -> Namespaces
-namespacesForModule mod = Namespaces focusPair mapping
+namespacesForModule :: (Ord a, Show a) => Module a -> GraphFlow a Namespaces
+namespacesForModule mod = do
+    nss <- moduleDependencyNamespaces True True True True mod
+    return $ Namespaces focusPair $ fst $ L.foldl addPair (M.empty, S.empty) (toPair <$> S.toList nss)
   where
     ns = moduleNamespace mod
     focusPair = toPair ns
-    mapping = fst $ L.foldl addPair (M.empty, S.empty) (toPair <$> S.toList (moduleDependencyNamespaces True True True True mod))
     toModuleName (Namespace n) = H.ModuleName $ capitalize $ L.last $ Strings.splitOn "/" n
     toPair name = (name, toModuleName name)
     addPair (m, s) (name, alias@(H.ModuleName aliasStr)) = if S.member alias s

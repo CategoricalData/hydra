@@ -28,7 +28,6 @@ hydraExtrasModule = Module (Namespace "hydra/extras") elements [hydraGraphModule
       el qnameDef,
       el termArityDef,
       el typeArityDef,
-
       el emptyKvDef,
       el getAnnotationDef
 --      el getAttrDef
@@ -82,7 +81,6 @@ typeArityDef = hydraExtrasDefinition "typeArity" $
     Case _Type_lambda --> ref typeArityDef <.> (project _LambdaType _LambdaType_body),
     Case _Type_function --> lambda "f" $
       Math.add @@ (int32 1) @@ (ref typeArityDef @@ (apply (project _FunctionType _FunctionType_codomain) (var "f")))]
-
 
 -- hydra/flows
 

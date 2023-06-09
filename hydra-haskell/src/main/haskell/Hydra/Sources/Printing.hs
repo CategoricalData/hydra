@@ -74,7 +74,6 @@ describeTypeDef = printingDefinition "describeType" $
         ++ (ref describeTypeDef @@ (project _MapType _MapType_keys @@ var "mt"))
         ++ string " to "
         ++ (ref describeTypeDef @@ (project _MapType _MapType_values  @@ var "mt")),
-      Case _Type_wrap        --> lambda "name" $ string "alias for " ++ (unwrap _Name @@ var "name"),
       Case _Type_optional    --> lambda "ot" $ string "optional " ++ (ref describeTypeDef @@ var "ot"),
       Case _Type_product     --> constant $ string "tuples",
       Case _Type_record      --> constant $ string "records",
@@ -82,4 +81,5 @@ describeTypeDef = printingDefinition "describeType" $
       Case _Type_stream      --> lambda "t" $ string "streams of " ++ (ref describeTypeDef @@ var "t"),
       Case _Type_sum         --> constant $ string "variant tuples",
       Case _Type_union       --> constant $ string "unions",
-      Case _Type_variable    --> constant $ string "instances of a named type"]
+      Case _Type_variable    --> constant $ string "instances of a named type",
+      Case _Type_wrap        --> lambda "name" $ string "wrapper for " ++ (unwrap _Name @@ var "name")]

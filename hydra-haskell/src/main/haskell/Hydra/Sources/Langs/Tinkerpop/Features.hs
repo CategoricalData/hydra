@@ -19,8 +19,8 @@ tinkerpopFeaturesModule = Module ns elements [hydraCoreModule] $
       "For example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().")
   where
     ns = Namespace "hydra/langs/tinkerpop/features"
-    core = nsref $ moduleNamespace hydraCoreModule
-    features = nsref ns
+    core = typeref $ moduleNamespace hydraCoreModule
+    features = typeref ns
     def = datatype ns
     supports name comment = ("supports" ++ capitalize name)>: doc comment boolean
 

@@ -6,6 +6,7 @@ import Hydra.Basics
 import Hydra.Coders
 import Hydra.Compute
 import Hydra.Core
+import Hydra.CoreEncoding
 import Hydra.Extras
 import Hydra.Graph
 import Hydra.Flows
@@ -24,7 +25,7 @@ import qualified Data.Maybe as Y
 elementsWithDependencies :: [Element a] -> GraphFlow a [Element a]
 elementsWithDependencies original = CM.mapM requireElement allDepNames
   where
-    depNames = S.toList . termDependencyNames True True False False . elementData
+    depNames = S.toList . termDependencyNames True False False . elementData
     allDepNames = L.nub $ (elementName <$> original) ++ (L.concat $ depNames <$> original)
 
 -- | Turn arbitrary terms like 'add 42' into terms like '\x.add 42 x',
@@ -93,18 +94,10 @@ freeVariablesInTerm term = case term of
   _ -> L.foldl (\s t -> S.union s $ freeVariablesInTerm t) S.empty $ subterms term
 
 freeVariablesInType :: Type a -> S.Set Name
-freeVariablesInType = foldOverType TraversalOrderPost fld S.empty
-  where
-    fld vars typ = case typ of
-      TypeVariable v -> S.insert v vars
-      _ -> vars
-
-moduleDependencyNamespaces :: Bool -> Bool -> Bool -> Bool -> Module a -> S.Set Namespace
-moduleDependencyNamespaces withVars withEls withPrims withNoms mod = S.delete (moduleNamespace mod) names
-  where
-    names = S.fromList $ Y.catMaybes (namespaceOfEager <$> S.toList elNames)
-    elNames = L.foldl (\s t -> S.union s $ termDependencyNames withVars withEls withPrims withNoms t) S.empty $
-      (elementData <$> moduleElements mod)
+freeVariablesInType typ = case typ of
+    TypeLambda (LambdaType v body) -> S.delete v $ freeVariablesInType body
+    TypeVariable v -> S.fromList [v]
+    _ -> L.foldl (\s t -> S.union s $ freeVariablesInType t) S.empty $ subtypes typ
 
 isFreeIn :: Name -> Term a -> Bool
 isFreeIn v term = not $ S.member v $ freeVariablesInTerm term
@@ -242,16 +235,46 @@ rewriteType f mf = rewrite fsub f
         TypeList t -> TypeList $ recurse t
         TypeLiteral lt -> TypeLiteral lt
         TypeMap (MapType kt vt) -> TypeMap (MapType (recurse kt) (recurse vt))
-        TypeWrap name -> TypeWrap name
         TypeOptional t -> TypeOptional $ recurse t
         TypeProduct types -> TypeProduct (recurse <$> types)
-        TypeRecord (RowType name extends fields) -> TypeRecord $ RowType name extends (forfield <$> fields)
+        TypeRecord (RowType name extends fields) -> TypeRecord $ RowType name extends (forField <$> fields)
         TypeSet t -> TypeSet $ recurse t
         TypeSum types -> TypeSum (recurse <$> types)
-        TypeUnion (RowType name extends fields) -> TypeUnion $ RowType name extends (forfield <$> fields)
+        TypeUnion (RowType name extends fields) -> TypeUnion $ RowType name extends (forField <$> fields)
         TypeVariable v -> TypeVariable v
+        TypeWrap name -> TypeWrap name
       where
-        forfield f = f {fieldTypeType = recurse (fieldTypeType f)}
+        forField f = f {fieldTypeType = recurse (fieldTypeType f)}
+
+rewriteTypeM :: Ord b =>
+  ((Type a -> Flow s (Type b)) -> Type a -> (Flow s (Type b))) ->
+  (a -> Flow s b) ->
+  Type a ->
+  Flow s (Type b)
+rewriteTypeM f mf = rewrite fsub f
+  where
+    fsub recurse typ = case typ of
+        TypeAnnotated (Annotated t ann) -> TypeAnnotated <$> (Annotated <$> recurse t <*> mf ann)
+        TypeApplication (ApplicationType lhs rhs) -> TypeApplication <$> (ApplicationType <$> recurse lhs <*> recurse rhs)
+        TypeFunction (FunctionType dom cod) -> TypeFunction <$> (FunctionType <$> recurse dom <*> recurse cod)
+        TypeLambda (LambdaType v b) -> TypeLambda <$> (LambdaType <$> pure v <*> recurse b)
+        TypeList t -> TypeList <$> recurse t
+        TypeLiteral lt -> pure $ TypeLiteral lt
+        TypeMap (MapType kt vt) -> TypeMap <$> (MapType <$> recurse kt <*> recurse vt)
+        TypeOptional t -> TypeOptional <$> recurse t
+        TypeProduct types -> TypeProduct <$> CM.mapM recurse types
+        TypeRecord (RowType name extends fields) ->
+          TypeRecord <$> (RowType <$> pure name <*> pure extends <*> CM.mapM forField fields)
+        TypeSet t -> TypeSet <$> recurse t
+        TypeSum types -> TypeSum <$> CM.mapM recurse types
+        TypeUnion (RowType name extends fields) ->
+          TypeUnion <$> (RowType <$> pure name <*> pure extends <*> CM.mapM forField fields)
+        TypeVariable v -> pure $ TypeVariable v
+        TypeWrap name -> pure $ TypeWrap name
+      where
+        forField f = do
+          t <- recurse $ fieldTypeType f
+          return f {fieldTypeType = t}
 
 rewriteTypeMeta :: (a -> b) -> Type a -> Type b
 rewriteTypeMeta = rewriteType mapExpr
@@ -324,8 +347,8 @@ subtypes typ = case typ of
   TypeVariable _ -> []
 
 -- Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that
-termDependencyNames :: Bool -> Bool -> Bool -> Bool -> Term a -> S.Set Name
-termDependencyNames withVars withEls withPrims withNoms = foldOverTerm TraversalOrderPre addNames S.empty
+termDependencyNames :: Bool -> Bool -> Bool -> Term a -> S.Set Name
+termDependencyNames withVars withPrims withNoms = foldOverTerm TraversalOrderPre addNames S.empty
   where
     addNames names term = case term of
         TermFunction f -> case f of
@@ -342,7 +365,6 @@ termDependencyNames withVars withEls withPrims withNoms = foldOverTerm Traversal
         TermWrap (Nominal name _) -> nominal name
         _ -> names
       where
-        el name = if withEls then S.insert name names else names
         nominal name = if withNoms then S.insert name names else names
         prim name = if withPrims then S.insert name names else names
         var name = if withVars then S.insert name names else names
@@ -350,4 +372,7 @@ termDependencyNames withVars withEls withPrims withNoms = foldOverTerm Traversal
 topologicalSortElements :: [Element a] -> Either [[Name]] [Name]
 topologicalSortElements els = topologicalSort $ adjlist <$> els
   where
-    adjlist e = (elementName e, S.toList $ termDependencyNames False True True True $ elementData e)
+    adjlist e = (elementName e, S.toList $ termDependencyNames False True True $ elementData e)
+
+typeDependencyNames :: Type a -> S.Set Name
+typeDependencyNames = freeVariablesInType
