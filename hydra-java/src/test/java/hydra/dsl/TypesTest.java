@@ -1,5 +1,6 @@
 package hydra.dsl;
 
+import hydra.core.Nominal;
 import hydra.core.Type;
 import org.junit.jupiter.api.Test;
 
@@ -23,13 +24,13 @@ public class TypesTest {
 
   private final Type<String> locationType = union("Location",
       field("name", string()),
-      field("latlon", wrap("LatLon"))); // refer to named types using nominal(name)
+      field("latlon", wrap("LatLon", float32()))); // refer to named types using nominal(name)
 
   private final Type<String> stringToIntType = function(
       string(), int32());
 
   private final Type<String> pairOfLatLonsToFloatType = function(
-      wrap("LatLon"), wrap("LatLon"), float32());
+      wrap("LatLon", float32()), wrap("LatLon", float32()), float32());
 
   private final Type<String> annotatedType = annot("this is a string-annotated double type", float64());
 
@@ -49,7 +50,7 @@ public class TypesTest {
 
     assertTrue(pairOfLatLonsToFloatType instanceof Type.Function);
     assertTrue(((Type.Function<String>) pairOfLatLonsToFloatType).value.domain instanceof Type.Wrap);
-    assertEquals(name("LatLon"), ((Type.Wrap<String>) ((Type.Function<String>) pairOfLatLonsToFloatType).value.domain).value);
+    assertEquals(new Nominal<>(name("LatLon"), float32()), ((Type.Wrap<String>) ((Type.Function<String>) pairOfLatLonsToFloatType).value.domain).value);
 
     assertTrue(annotatedType instanceof Type.Annotated);
     // Notice that annotations, here, are String-valued

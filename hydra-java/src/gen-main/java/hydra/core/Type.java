@@ -528,9 +528,9 @@ public abstract class Type<A> {
   }
   
   public static final class Wrap<A> extends hydra.core.Type<A> {
-    public final hydra.core.Name value;
+    public final hydra.core.Nominal<hydra.core.Type<A>> value;
     
-    public Wrap (hydra.core.Name value) {
+    public Wrap (hydra.core.Nominal<hydra.core.Type<A>> value) {
       this.value = value;
     }
     

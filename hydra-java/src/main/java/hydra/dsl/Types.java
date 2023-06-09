@@ -11,7 +11,9 @@ import hydra.core.LambdaType;
 import hydra.core.LiteralType;
 import hydra.core.MapType;
 import hydra.core.Name;
+import hydra.core.Nominal;
 import hydra.core.RowType;
+import hydra.core.Term;
 import hydra.core.Type;
 import hydra.core.UnitType;
 import hydra.compute.Flow;
@@ -254,11 +256,11 @@ public interface Types {
         return variable(new Name(name));
     }
 
-    static <A> Type<A> wrap(final Name name) {
-        return new Type.Wrap<>(name);
+    static <A> Type<A> wrap(final Name name, final Type<A> type) {
+        return new Type.Wrap<>(new Nominal<>(name, type));
     }
 
-    static <A> Type<A> wrap(final String name) {
-        return wrap(name(name));
+    static <A> Type<A> wrap(final String name, final Type<A> type) {
+        return wrap(name(name), type);
     }
 }
