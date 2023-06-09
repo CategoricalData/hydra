@@ -89,7 +89,7 @@ inject :: Name -> FieldName -> Datum a -> Datum b
 inject name fname (Datum term) = Datum $ Terms.inject name (Field fname term)
 
 inject2 :: Name -> FieldName -> Datum (a -> b)
-inject2 name fname = lambda "x2" $ typed (Types.wrap name) $ inject name fname $ var "x2"
+inject2 name fname = lambda "x2" $ inject name fname $ var "x2"
 
 just :: Datum x -> Datum (Maybe x)
 just (Datum term) = Datum $ Terms.just term
@@ -161,7 +161,7 @@ unit :: Datum a
 unit = Datum Terms.unit
 
 unitVariant :: Name -> FieldName -> Datum a
-unitVariant name fname = typed (Types.wrap name) $ Datum $ Terms.inject name $ Field fname Terms.unit
+unitVariant name fname = Datum $ Terms.inject name $ Field fname Terms.unit
 
 unwrap :: Name -> Datum (a -> b)
 unwrap = Datum . Terms.unwrap
@@ -170,7 +170,7 @@ var :: String -> Datum a
 var v = Datum $ Terms.var v
 
 variant :: Name -> FieldName -> Datum a -> Datum b
-variant name fname (Datum term) = typed (Types.wrap name) $ Datum $ Terms.inject name $ Field fname term
+variant name fname (Datum term) = Datum $ Terms.inject name $ Field fname term
 
 with :: Datum a -> [Fld a] -> Datum a
 (Datum env) `with` bindings = Datum $ TermLet $ Let (M.fromList $ toPair <$> bindings) env

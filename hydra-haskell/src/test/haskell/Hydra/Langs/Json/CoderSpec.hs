@@ -92,12 +92,12 @@ unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are t
 wrappedTypesAreSupported :: H.SpecWith ()
 wrappedTypesAreSupported = H.describe "Verify that nominal types are supported" $ do
   H.it "Nominal unions become single-attribute objects" $
-    QC.property $ \() -> checkJsonCoder (Types.wrap testTypeFoobarValueName)
+    QC.property $ \() -> checkJsonCoder (TypeVariable testTypeFoobarValueName)
       (Terms.inject testTypeFoobarValueName $ Terms.field "bool" $ Terms.boolean True)
       (jsonMap [("bool", jsonBool True)])
 
   H.it "Nominal enums become single-attribute objects with empty-object values, and type annotations are transparent" $
-    QC.property $ \() -> checkJsonCoder (Types.wrap testTypeComparisonName)
+    QC.property $ \() -> checkJsonCoder (TypeVariable testTypeComparisonName)
       (Terms.inject testTypeComparisonName $ Terms.field "equalTo" Terms.unit)
       (jsonMap [("equalTo", jsonMap [])])
 

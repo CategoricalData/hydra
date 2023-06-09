@@ -25,7 +25,7 @@ showTerm term = fromFlow hydraCore $ coderEncode termStringCoder encoded
     encoded = sigmaEncodeTerm $ rewriteTermMeta (const $ Kv M.empty) term
 
 termJsonCoder :: Coder (Graph Kv) (Graph Kv) (Term Kv) Json.Value
-termJsonCoder = fromFlow hydraCore $ jsonCoder $ Types.wrap _Term
+termJsonCoder = fromFlow hydraCore $ jsonCoder $ TypeVariable _Term
 
 termStringCoder :: Coder (Graph Kv) (Graph Kv) (Term Kv) String
 termStringCoder = Coder mout min
@@ -41,7 +41,7 @@ showType typ = fromFlow hydraCore $ coderEncode typeStringCoder encoded
     encoded = epsilonEncodeType $ rewriteTypeMeta (const $ Kv M.empty) typ
 
 typeJsonCoder :: Coder (Graph Kv) (Graph Kv) (Term Kv) Json.Value
-typeJsonCoder = fromFlow hydraCore $ jsonCoder $ Types.wrap _Type
+typeJsonCoder = fromFlow hydraCore $ jsonCoder $ TypeVariable _Type
 
 typeStringCoder :: Coder (Graph Kv) (Graph Kv) (Term Kv) String
 typeStringCoder = Coder mout min

@@ -75,7 +75,7 @@ grammarToModule ns (G.Grammar prods) desc = Module ns elements [] desc
           G.PatternLabeled (G.LabeledPattern (G.Label l) p) -> forPat p
           G.PatternConstant _ -> trivial
           G.PatternRegex _ -> [(lname, Types.string)]
-          G.PatternNonterminal (G.Symbol other) -> [(lname, Types.wrap $ toName other)]
+          G.PatternNonterminal (G.Symbol other) -> [(lname, TypeVariable $ toName other)]
           G.PatternSequence pats -> forRecordOrUnion True Types.record pats
           G.PatternAlternatives pats -> forRecordOrUnion False Types.union pats
           G.PatternOption p -> mod "Option" Types.optional p
@@ -103,7 +103,7 @@ grammarToModule ns (G.Grammar prods) desc = Module ns elements [] desc
             f2 ((lname, typ):rest) = (lname, f typ):rest
 
         descend n f p = f $ if isComplex p
-            then (lname, Types.wrap (toName $ fst $ L.head cpairs)):cpairs
+            then (lname, TypeVariable (toName $ fst $ L.head cpairs)):cpairs
             else if L.null cpairs
               then [(lname, Types.unit)]
               else (lname, snd (L.head cpairs)):L.tail cpairs
