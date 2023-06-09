@@ -164,7 +164,7 @@ public interface Printing {
       public String visit(hydra.core.Type.Wrap<A> instance) {
         return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
           "wrapper for ",
-          ((instance.value)).value));
+          hydra.printing.Printing.describeType(((instance.value)).object)));
       }
     });
   }
