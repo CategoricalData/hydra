@@ -134,7 +134,7 @@ nom :: Name -> Datum a -> Datum b
 nom name (Datum term) = Datum $ Terms.wrap name term
 
 nothing :: Datum x
-nothing = Datum $ Terms.nothing
+nothing = Datum Terms.nothing
 
 opt :: Maybe (Datum a) -> Datum (Maybe a)
 opt mc = Datum $ Terms.optional (unDatum <$> mc)
