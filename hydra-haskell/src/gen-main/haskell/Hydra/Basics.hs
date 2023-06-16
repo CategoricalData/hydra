@@ -4,7 +4,9 @@ module Hydra.Basics where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
+import qualified Hydra.Module as Module
 import Data.List
 import Data.Map
 import Data.Set
@@ -145,13 +147,6 @@ literalVariants = [
   Mantle.LiteralVariantInteger,
   Mantle.LiteralVariantString]
 
-skipAnnotations :: ((x -> Maybe (Core.Annotated x m)) -> x -> x)
-skipAnnotations getAnn t =  
-  let skip = \t1 -> (\x -> case x of
-          Nothing -> t1
-          Just v -> (skip (Core.annotatedSubject v))) (getAnn t1)
-  in (skip t)
-
 termMeta :: (Graph.Graph a -> Core.Term a -> a)
 termMeta x = (Graph.annotationClassTermAnnotation (Graph.graphAnnotations x))
 
@@ -233,3 +228,34 @@ typeVariants = [
   Mantle.TypeVariantSum,
   Mantle.TypeVariantUnion,
   Mantle.TypeVariantVariable]
+
+skipAnnotations :: ((x -> Maybe (Core.Annotated x m)) -> x -> x)
+skipAnnotations getAnn t =  
+  let skip = (\t1 -> (\x -> case x of
+          Nothing -> t1
+          Just v -> (skip (Core.annotatedSubject v))) (getAnn t1))
+  in (skip t)
+
+-- | Strip all annotations from a term
+stripTerm :: (Core.Term a -> Core.Term a)
+stripTerm x = (skipAnnotations (\x -> case x of
+  Core.TermAnnotated v -> (Just v)
+  _ -> Nothing) x)
+
+-- | Strip all annotations from a type
+stripType :: (Core.Type a -> Core.Type a)
+stripType = (skipAnnotations (\x -> case x of
+  Core.TypeAnnotated v -> (Just v)
+  _ -> Nothing))
+
+-- | Convert a qualified name to a dot-separated name
+unqualifyName :: (Module.QualifiedName -> Core.Name)
+unqualifyName qname =  
+  let prefix = ((\x -> case x of
+          Nothing -> ""
+          Just v -> (Strings.cat [
+            Module.unNamespace v,
+            "."])) (Module.qualifiedNameNamespace qname))
+  in (Core.Name (Strings.cat [
+    prefix,
+    (Module.qualifiedNameLocal qname)]))
