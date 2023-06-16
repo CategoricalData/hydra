@@ -41,12 +41,17 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
      el literalTypeVariantDef,
      el literalVariantDef,
      el literalVariantsDef,
-     el skipAnnotationsDef,
      el termMetaDef,
      el termVariantDef,
      el termVariantsDef,
      el typeVariantDef,
-     el typeVariantsDef]
+     el typeVariantsDef,
+     -- Common.hs
+     el skipAnnotationsDef,
+     el stripTermDef,
+     el stripTypeDef,
+     el unqualifyNameDef
+     ]
 
 eliminationVariantDef :: Definition (Elimination a -> EliminationVariant)
 eliminationVariantDef = basicsDefinition "eliminationVariant" $
@@ -202,23 +207,6 @@ literalVariantsDef = basicsDefinition "literalVariants" $
     _LiteralVariant_integer,
     _LiteralVariant_string]
 
-skipAnnotationsDef :: Definition ((a -> Maybe (Annotated a m)) -> a -> a)
-skipAnnotationsDef = basicsDefinition "skipAnnotations" $
-  function getAnnType (Types.function (Types.var "x") (Types.var "x")) $
-  lambda "getAnn" $ lambda "t" $
-    (var "skip" @@ var "t") `with` [
-      "skip">:
-        function (Types.var "x") (Types.var "x") $
-        lambda "t1" $
-          (matchOpt
-            (var "t1")
-            (lambda "ann" $ var "skip" @@ (project _Annotated _Annotated_subject @@ var "ann")))
-          @@ (var "getAnn" @@ var "t1")]
-  where
-    getAnnType = (Types.function
-      (Types.var "x")
-      (Types.optional $ Types.apply (Types.apply (TypeVariable _Annotated) (Types.var "x")) (Types.var "m")))
-
 termMetaDef :: Definition (Graph a -> Term a -> a)
 termMetaDef = basicsDefinition "termMeta" $
   function (Types.apply (TypeVariable _Graph) (Types.var "a")) (Types.function (Types.apply (TypeVariable _Term) (Types.var "a")) (Types.var "a")) $
@@ -308,3 +296,53 @@ typeVariantsDef = basicsDefinition "typeVariants" $
     _TypeVariant_sum,
     _TypeVariant_union,
     _TypeVariant_variable]
+
+-- Common.hs
+
+skipAnnotationsDef :: Definition ((a -> Maybe (Annotated a m)) -> a -> a)
+skipAnnotationsDef = basicsDefinition "skipAnnotations" $
+  function getAnnType (Types.function (Types.var "x") (Types.var "x")) $
+  lambda "getAnn" $ lambda "t" $
+    (var "skip" @@ var "t") `with` [
+      "skip">:
+        function (Types.var "x") (Types.var "x") $
+        lambda "t1" $
+          (matchOpt
+            (var "t1")
+            (lambda "ann" $ var "skip" @@ (project _Annotated _Annotated_subject @@ var "ann")))
+          @@ (var "getAnn" @@ var "t1")]
+  where
+    getAnnType = (Types.function
+      (Types.var "x")
+      (Types.optional $ Types.apply (Types.apply (TypeVariable _Annotated) (Types.var "x")) (Types.var "m")))
+
+stripTermDef :: Definition (Term a -> Term a)
+stripTermDef = basicsDefinition "stripTerm" $
+  doc "Strip all annotations from a term" $
+  function (Types.apply (TypeVariable _Term) (Types.var "a")) (Types.apply (TypeVariable _Term) (Types.var "a")) $
+    lambda "x" (ref skipAnnotationsDef @@ (match _Term (Just Terms.nothing) [
+      Field _Term_annotated $ Terms.lambda "ann" (Terms.just $ Terms.var "ann")]) @@ var "x")
+
+stripTypeDef :: Definition (Type a -> Type a)
+stripTypeDef = basicsDefinition "stripType" $
+  doc "Strip all annotations from a type" $
+  function (Types.apply (TypeVariable _Type) (Types.var "a")) (Types.apply (TypeVariable _Type) (Types.var "a")) $
+    ref skipAnnotationsDef @@ match _Type (Just Terms.nothing) [
+      Field _Type_annotated $ Terms.lambda "ann" (Terms.just $ Terms.var "ann")]
+
+unqualifyNameDef :: Definition (QualifiedName -> Name)
+unqualifyNameDef = basicsDefinition "unqualifyName" $
+  doc "Convert a qualified name to a dot-separated name" $
+  lambda "qname" $ (wrap _Name $ var "prefix" ++ (project _QualifiedName _QualifiedName_local @@ var "qname"))
+    `with` [
+      "prefix">: matchOpt (string "") (lambda "n" $ (unwrap _Namespace @@ var "n") ++ string ".")
+        @@ (project _QualifiedName _QualifiedName_namespace @@ var "qname")]
+
+
+--
+-- unqualifyName :: QualifiedName -> Name
+-- unqualifyName qname = Name $ prefix ++ (qualifiedNameLocal qname)
+--   where
+--     prefix = case qualifiedNameNamespace qname of
+--       Nothing -> ""
+--       Just n -> unNamespace n ++ "."

@@ -131,20 +131,3 @@ requireTypeAnnotation term = do
     case mt of
       Nothing -> fail $ "missing type annotation in " ++ show term
       Just t -> pure t
-
-stripTerm :: Term a -> Term a
-stripTerm = skipAnnotations $ \t -> case t of
-  TermAnnotated a -> Just a
-  _ -> Nothing
-
-stripType :: Type a -> Type a
-stripType = skipAnnotations $ \t -> case t of
-  TypeAnnotated a -> Just a
-  _ -> Nothing
-
-unqualifyName :: QualifiedName -> Name
-unqualifyName (QualifiedName ns local) = Name $ prefix ++ local
-  where
-    prefix = case ns of
-      Nothing -> ""
-      Just n -> unNamespace n ++ "."
