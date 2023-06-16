@@ -63,6 +63,16 @@ getState = Flow q
 maxTraceDepth :: Int
 maxTraceDepth = 50
 
+mutateTrace :: (Trace -> Either String Trace) -> (Trace -> Trace -> Trace) -> Flow s a -> Flow s a
+mutateTrace mutate restore f = Flow q
+  where
+    q s0 t0 = either forLeft forRight $ mutate t0
+      where
+        forLeft msg = FlowState Nothing s0 $ pushError msg t0
+        forRight t1 = FlowState v s1 $ restore t0 t2 -- retain the updated state, but reset the trace after execution
+          where
+            FlowState v s1 t2 = unFlow f s0 t1 -- execute the internal flow after augmenting the trace
+
 pushError :: String -> Trace -> Trace
 pushError msg t = t {traceMessages = errorMsg:(traceMessages t)}
   where
@@ -97,6 +107,12 @@ warn msg b = Flow u'
         FlowState v s1 t1 = unFlow b s0 t0
         t2 = t1 {traceMessages = ("Warning: " ++ msg):(traceMessages t1)}
 
+withFlag :: String -> Flow s a -> Flow s a
+withFlag flag = mutateTrace mutate restore
+  where
+    mutate t = Right $ t {traceOther = M.insert flag (TermLiteral $ LiteralBoolean True) (traceOther t)}
+    restore _ t1 = t1 {traceOther = M.delete flag (traceOther t1)}
+
 withState :: s1 -> Flow s1 a -> Flow s2 a
 withState cx0 f = Flow q
   where
@@ -105,13 +121,9 @@ withState cx0 f = Flow q
         FlowState v _ t2 = unFlow f cx0 t1
 
 withTrace :: String -> Flow s a -> Flow s a
-withTrace msg f = Flow q
+withTrace msg = mutateTrace mutate restore
   where
-    q s0 t0 = if L.length (traceStack t1) >= maxTraceDepth
-        then FlowState Nothing s0 $ pushError tooDeep t1
-        else FlowState v s1 t3
-      where
-        FlowState v s1 t2 = unFlow f s0 t1 -- execute the internal flow after augmenting the trace
-        t1 = t0 {traceStack = msg:(traceStack t0)} -- augment the trace
-        t3 = t2 {traceStack = traceStack t0} -- reset the trace stack after execution
-        tooDeep = "maximum trace depth exceeded. This may indicate an infinite loop"
+    mutate t = if L.length (traceStack t) >= maxTraceDepth
+      then Left "maximum trace depth exceeded. This may indicate an infinite loop"
+      else Right $ t {traceStack = msg:(traceStack t)} -- augment the trace
+    restore t0 t1 = t1 {traceStack = traceStack t0} -- reset the trace stack after execution
