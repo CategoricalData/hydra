@@ -27,6 +27,13 @@ aggregateAnnotations getAnn t = Kv $ M.fromList $ L.concat $ toPairs [] t
       Nothing -> rest
       Just (Annotated t' (Kv other)) -> toPairs ((M.toList other):rest) t'
 
+failOnFlag :: String -> String -> Flow s ()
+failOnFlag flag msg = do
+  val <- getAttrWithDefault flag (Terms.boolean False) >>= Expect.boolean
+  if val
+    then fail msg
+    else pure ()
+
 getAttr :: String -> Flow s (Maybe (Term Kv))
 getAttr key = Flow q
   where
