@@ -144,6 +144,9 @@ parentheses = Brackets (sym "(") (sym ")")
 
 parenthesize :: Expr -> Expr
 parenthesize exp = case exp of
+  ExprBrackets (BracketExpr br e newlines) -> ExprBrackets (BracketExpr br (parenthesize e) newlines)
+  ExprConst _ -> exp
+  ExprIndent (IndentedExpression style e) -> ExprIndent (IndentedExpression style (parenthesize e))
   ExprOp (OpExpr op@(Op _ _ prec assoc) lhs rhs) -> ExprOp (OpExpr op lhs2 rhs2)
     where
       lhs' = parenthesize lhs
@@ -166,8 +169,6 @@ parenthesize exp = case exp of
         _ -> rhs'
       assocLeft a = a == AssociativityLeft || a == AssociativityNone || a == AssociativityBoth
       assocRight a = a == AssociativityRight || a == AssociativityNone || a == AssociativityBoth
-  ExprBrackets (BracketExpr br e newlines) -> ExprBrackets (BracketExpr br (parenthesize e) newlines)
-  _ -> exp
 
 prefix :: String -> Expr -> Expr
 prefix p = ifx preOp (cst "")
