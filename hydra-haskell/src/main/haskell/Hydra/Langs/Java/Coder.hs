@@ -91,12 +91,22 @@ constructModule mod coders pairs = do
       return (elementName el,
         Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) imports [decl])
 
-    termToInterfaceMember coders pair = do
-        withTrace ("element " ++ unName (elementName el)) $ do
-          expanded <- contractTerm <$> (expandLambdas $ typedTermTerm $ snd pair)
-          if isLambda expanded
-            then termToMethod coders el (typedTermType $ snd pair) expanded
-            else termToConstant coders el (typedTermType $ snd pair) expanded
+    termToInterfaceMember coders pair = withTrace ("element " ++ unName (elementName el)) $ do
+        expanded <- contractTerm <$> (expandLambdas $ typedTermTerm $ snd pair)
+
+
+-- --         exp <- expandLambdas $ typedTermTerm $ snd pair
+--         if elementName el == Name "hydra/basics.stripTerm"
+-- --           then fail $ "isLambda: " ++ show (isLambda expanded)
+-- --           then fail $ "term: " ++ show (termVariant $ stripTerm exp)
+-- --           then fail $ "term: " ++ show (termVariant $ stripTerm expanded)
+--           then fail $ "term: " ++ show (expanded)
+--           else pure ()
+
+
+        if isLambda expanded
+          then termToMethod coders el (typedTermType $ snd pair) expanded
+          else termToConstant coders el (typedTermType $ snd pair) expanded
       where
         el = fst pair
         isLambda t = case stripTerm t of
@@ -505,8 +515,17 @@ encodeFunction aliases dom cod fun = case fun of
   FunctionElimination elm -> do
     encodeElimination aliases Nothing dom cod elm
   FunctionLambda (Lambda var body) -> do
-    jbody <- encodeTerm aliases body
-    return $ javaLambda var jbody
+      jbody <- encodeTerm aliases body
+      let lam = javaLambda var jbody
+      if needsCast body
+        then do
+          jtype <- encodeType aliases (TypeFunction $ FunctionType dom cod)
+          rt <- javaTypeToJavaReferenceType jtype
+          return $ javaCastExpressionToJavaExpression $
+            javaCastExpression rt (javaExpressionToJavaUnaryExpression lam)
+        else return lam
+    where
+      needsCast _  = True -- TODO: try to discriminate between lambdas which really need a cast, and those which do not
 --  FunctionPrimitive name ->
   _ -> pure $ encodeLiteral $ LiteralString $
     "Unimplemented function variant: " ++ show (functionVariant fun) -- TODO: temporary
@@ -624,42 +643,42 @@ encodeTerm aliases term0 = encodeInternal [] term0
 
 encodeType :: Show a => Aliases -> Type a -> GraphFlow a Java.Type
 encodeType aliases t = case stripType t of
-  TypeApplication (ApplicationType lhs rhs) -> do
-    jlhs <- encode lhs
-    jrhs <- encode rhs >>= javaTypeToJavaReferenceType
-    addJavaTypeParameter jrhs jlhs
-  TypeFunction (FunctionType dom cod) -> do
-    jdom <- encode dom >>= javaTypeToJavaReferenceType
-    jcod <- encode cod >>= javaTypeToJavaReferenceType
-    return $ javaRefType [jdom, jcod] javaUtilFunctionPackageName "Function"
-  TypeLambda (LambdaType (Name v) body) -> do
-    jbody <- encode body
-    addJavaTypeParameter (javaTypeVariable v) jbody
-  TypeList et -> do
-    jet <- encode et
-    if listsAsArrays
-      then toJavaArrayType jet
-      else do
-        rt <- javaTypeToJavaReferenceType jet
-        return $ javaRefType [rt] javaUtilPackageName "List"
-  TypeLiteral lt -> encodeLiteralType lt
-  TypeMap (MapType kt vt) -> do
-    jkt <- encode kt >>= javaTypeToJavaReferenceType
-    jvt <- encode vt >>= javaTypeToJavaReferenceType
-    return $ javaRefType [jkt, jvt] javaUtilPackageName "Map"
-  TypeProduct [] -> unit
-  TypeRecord (RowType _UnitType _ []) -> unit
-  TypeRecord (RowType name _ _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True [] name Nothing
-  TypeOptional ot -> do
-    jot <- encode ot >>= javaTypeToJavaReferenceType
-    return $ javaRefType [jot] javaUtilPackageName "Optional"
-  TypeSet st -> do
-    jst <- encode st >>= javaTypeToJavaReferenceType
-    return $ javaRefType [jst] javaUtilPackageName "Set"
-  TypeUnion (RowType name _ _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True [] name Nothing
-  TypeVariable name -> forReference name
-  TypeWrap (Nominal name _) -> forReference name
-  _ -> fail $ "can't encode unsupported type in Java: " ++ show t
+    TypeApplication (ApplicationType lhs rhs) -> do
+      jlhs <- encode lhs
+      jrhs <- encode rhs >>= javaTypeToJavaReferenceType
+      addJavaTypeParameter jrhs jlhs
+    TypeFunction (FunctionType dom cod) -> do
+      jdom <- encode dom >>= javaTypeToJavaReferenceType
+      jcod <- encode cod >>= javaTypeToJavaReferenceType
+      return $ javaRefType [jdom, jcod] javaUtilFunctionPackageName "Function"
+    TypeLambda (LambdaType (Name v) body) -> do
+      jbody <- encode body
+      addJavaTypeParameter (javaTypeVariable v) jbody
+    TypeList et -> do
+      jet <- encode et
+      if listsAsArrays
+        then toJavaArrayType jet
+        else do
+          rt <- javaTypeToJavaReferenceType jet
+          return $ javaRefType [rt] javaUtilPackageName "List"
+    TypeLiteral lt -> encodeLiteralType lt
+    TypeMap (MapType kt vt) -> do
+      jkt <- encode kt >>= javaTypeToJavaReferenceType
+      jvt <- encode vt >>= javaTypeToJavaReferenceType
+      return $ javaRefType [jkt, jvt] javaUtilPackageName "Map"
+    TypeProduct [] -> unit
+    TypeRecord (RowType _UnitType _ []) -> unit
+    TypeRecord (RowType name _ _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True [] name Nothing
+    TypeOptional ot -> do
+      jot <- encode ot >>= javaTypeToJavaReferenceType
+      return $ javaRefType [jot] javaUtilPackageName "Optional"
+    TypeSet st -> do
+      jst <- encode st >>= javaTypeToJavaReferenceType
+      return $ javaRefType [jst] javaUtilPackageName "Set"
+    TypeUnion (RowType name _ _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True [] name Nothing
+    TypeVariable name -> forReference name
+    TypeWrap (Nominal name _) -> forReference name
+    _ -> fail $ "can't encode unsupported type in Java: " ++ show t
   where
     forReference name = pure $ if isLambdaBoundVariable name
         then variableReference name
