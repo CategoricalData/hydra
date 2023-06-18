@@ -314,21 +314,25 @@ skipAnnotationsDef = basicsDefinition "skipAnnotations" $
   where
     getAnnType = (Types.function
       (Types.var "x")
-      (Types.optional $ Types.apply (Types.apply (TypeVariable _Annotated) (Types.var "x")) (Types.var "m")))
+      (Types.optional $ Types.apply (Types.apply (TypeVariable _Annotated) (Types.var "x")) (Types.var "a")))
 
 stripTermDef :: Definition (Term a -> Term a)
 stripTermDef = basicsDefinition "stripTerm" $
-  doc "Strip all annotations from a term" $
-  function (Types.apply (TypeVariable _Term) (Types.var "a")) (Types.apply (TypeVariable _Term) (Types.var "a")) $
-    lambda "x" (ref skipAnnotationsDef @@ (match _Term (Just Terms.nothing) [
-      Field _Term_annotated $ Terms.lambda "ann" (Terms.just $ Terms.var "ann")]) @@ var "x")
+    doc "Strip all annotations from a term" $
+    function termA termA $
+      lambda "x" (ref skipAnnotationsDef @@ (match _Term (Just Terms.nothing) [
+        Field _Term_annotated $ Terms.lambda "ann" (Terms.just $ Terms.var "ann")]) @@ var "x")
+  where
+    termA = Types.apply (TypeVariable _Term) (Types.var "a")
 
 stripTypeDef :: Definition (Type a -> Type a)
 stripTypeDef = basicsDefinition "stripType" $
   doc "Strip all annotations from a type" $
-  function (Types.apply (TypeVariable _Type) (Types.var "a")) (Types.apply (TypeVariable _Type) (Types.var "a")) $
+  function typeA typeA $
     ref skipAnnotationsDef @@ match _Type (Just Terms.nothing) [
       Field _Type_annotated $ Terms.lambda "ann" (Terms.just $ Terms.var "ann")]
+  where
+    typeA = Types.apply (TypeVariable _Type) (Types.var "a")
 
 unqualifyNameDef :: Definition (QualifiedName -> Name)
 unqualifyNameDef = basicsDefinition "unqualifyName" $
