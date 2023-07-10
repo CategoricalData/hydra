@@ -67,6 +67,7 @@ constructModule namespaces mod coders pairs = do
           where
             toImport (Namespace name, alias) = H.Import True (importName name) (Just alias) Nothing
         standardImports = toImport . H.ModuleName <$> Y.catMaybes [
+            Just "Data.Int",
             Just "Data.List",
             Just "Data.Map",
             Just "Data.Set"{-,
@@ -203,7 +204,10 @@ encodeType namespaces typ = case stripType typ of
         _ -> fail $ "unexpected floating-point type: " ++ show ft
       LiteralTypeInteger it -> case it of
         IntegerTypeBigint -> pure "Integer"
+        IntegerTypeInt8 -> pure "Int8"
+        IntegerTypeInt16 -> pure "Int16"
         IntegerTypeInt32 -> pure "Int"
+        IntegerTypeInt64 -> pure "Int64"
         _ -> fail $ "unexpected integer type: " ++ show it
       LiteralTypeString -> pure "String"
       _ -> fail $ "unexpected literal type: " ++ show lt

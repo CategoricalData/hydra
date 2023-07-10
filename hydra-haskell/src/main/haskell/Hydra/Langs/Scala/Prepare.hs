@@ -35,13 +35,13 @@ prepareIntegerType it = case it of
     $ \(IntegerValueBigint v) -> IntegerValueInt64 $ fromIntegral v
   IntegerTypeUint8 -> subst IntegerTypeInt8
     "unsigned 8-bit integers" "signed 8-bit integers"
-    $ \(IntegerValueUint8 v) -> IntegerValueInt8 v
+    $ \(IntegerValueUint8 v) -> IntegerValueInt8 $ fromIntegral v
   IntegerTypeUint32 -> subst IntegerTypeInt32
     "unsigned 32-bit integers" "signed 32-bit integers"
     $ \(IntegerValueUint32 v) -> IntegerValueInt32 $ fromIntegral v
   IntegerTypeUint64 -> subst IntegerTypeInt64
     "unsigned 64-bit integers" "signed 64-bit integers"
-    $ \(IntegerValueUint64 v) -> IntegerValueInt64 v
+    $ \(IntegerValueUint64 v) -> IntegerValueInt64 $ fromIntegral v
   _ -> same it
 
 prepareType :: Graph a -> Type a -> (Type a, Term a -> Term a, S.Set String)

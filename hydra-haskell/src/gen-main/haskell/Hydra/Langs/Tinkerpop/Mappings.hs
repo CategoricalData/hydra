@@ -5,6 +5,7 @@ module Hydra.Langs.Tinkerpop.Mappings where
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Langs.Tinkerpop.PropertyGraph as PropertyGraph
+import Data.Int
 import Data.List
 import Data.Map
 import Data.Set

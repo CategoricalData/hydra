@@ -7,6 +7,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Module as Module
+import Data.Int
 import Data.List
 import Data.Map
 import Data.Set
@@ -229,6 +230,15 @@ typeVariants = [
   Mantle.TypeVariantUnion,
   Mantle.TypeVariantVariable]
 
+-- | Test whether two literals are equal
+literalsEqual :: (Core.Literal -> t3039 -> Bool)
+literalsEqual x = case x of
+  Core.LiteralBinary _ -> (\_ -> False)
+  Core.LiteralBoolean _ -> (\_ -> False)
+  Core.LiteralFloat _ -> (\_ -> False)
+  Core.LiteralInteger _ -> (\_ -> False)
+  Core.LiteralString _ -> (\_ -> False)
+
 skipAnnotations :: ((x -> Maybe (Core.Annotated x a)) -> x -> x)
 skipAnnotations getAnn t =  
   let skip = (\t1 -> (\x -> case x of
@@ -244,9 +254,29 @@ stripTerm x = (skipAnnotations (\x -> case x of
 
 -- | Strip all annotations from a type
 stripType :: (Core.Type a -> Core.Type a)
-stripType = (skipAnnotations (\x -> case x of
+stripType x = (skipAnnotations (\x -> case x of
   Core.TypeAnnotated v -> (Just v)
-  _ -> Nothing))
+  _ -> Nothing) x)
+
+-- | Recursively test whether two terms are equal
+termsEqual :: (Core.Term a -> Core.Term a -> Bool)
+termsEqual x = case x of
+  Core.TermAnnotated _ -> (\_ -> False)
+  Core.TermApplication _ -> (\_ -> False)
+  Core.TermFunction _ -> (\_ -> False)
+  Core.TermLet _ -> (\_ -> False)
+  Core.TermList _ -> (\_ -> False)
+  Core.TermLiteral _ -> (\_ -> False)
+  Core.TermMap _ -> (\_ -> False)
+  Core.TermOptional _ -> (\_ -> False)
+  Core.TermProduct _ -> (\_ -> False)
+  Core.TermRecord _ -> (\_ -> False)
+  Core.TermSet _ -> (\_ -> False)
+  Core.TermStream _ -> (\_ -> False)
+  Core.TermSum _ -> (\_ -> False)
+  Core.TermUnion _ -> (\_ -> False)
+  Core.TermVariable _ -> (\_ -> False)
+  Core.TermWrap _ -> (\_ -> False)
 
 -- | Convert a qualified name to a dot-separated name
 unqualifyName :: (Module.QualifiedName -> Core.Name)

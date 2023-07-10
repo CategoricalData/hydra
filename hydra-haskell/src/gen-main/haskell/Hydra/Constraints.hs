@@ -4,6 +4,7 @@ module Hydra.Constraints where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Query as Query
+import Data.Int
 import Data.List
 import Data.Map
 import Data.Set

@@ -7,6 +7,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
+import Data.Int
 import Data.List
 import Data.Map
 import Data.Set

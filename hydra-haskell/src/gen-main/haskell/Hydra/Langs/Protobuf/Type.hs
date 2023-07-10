@@ -5,6 +5,7 @@ module Hydra.Langs.Protobuf.Type where
 import qualified Hydra.Core as Core
 import qualified Hydra.Langs.Protobuf.Any as Any
 import qualified Hydra.Langs.Protobuf.SourceContext as SourceContext
+import Data.Int
 import Data.List
 import Data.Map
 import Data.Set

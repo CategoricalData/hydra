@@ -15,7 +15,12 @@ haskellLanguage = Language (LanguageName "hydra/langs/haskell") $ LanguageConstr
     FloatTypeFloat32,
     FloatTypeFloat64],
   languageConstraintsFunctionVariants = S.fromList functionVariants,
-  languageConstraintsIntegerTypes = S.fromList [IntegerTypeBigint, IntegerTypeInt32],
+  languageConstraintsIntegerTypes = S.fromList [
+    IntegerTypeBigint,
+    IntegerTypeInt8,
+    IntegerTypeInt16,
+    IntegerTypeInt32,
+    IntegerTypeInt64],
   languageConstraintsTermVariants = S.fromList [
     TermVariantApplication,
     TermVariantFunction,

@@ -537,14 +537,13 @@ encodeLiteral lit = javaLiteralToJavaExpression $ case lit of
     FloatValueFloat64 v -> v
   LiteralInteger i -> case i of
       IntegerValueBigint v -> integer v -- BigInteger
-      IntegerValueInt16 v -> int v -- short
-      IntegerValueInt32 v -> int v -- int
-      IntegerValueInt64 v -> integer v -- long
-      IntegerValueUint8 v -> int v -- byte
+      IntegerValueInt16 v -> integer $ fromIntegral v -- short
+      IntegerValueInt32 v -> integer $ fromIntegral v -- int
+      IntegerValueInt64 v -> integer $ fromIntegral v -- long
+      IntegerValueUint8 v -> integer $ fromIntegral v -- byte
       IntegerValueUint16 v -> Java.LiteralCharacter $ fromIntegral v -- char
     where
       integer = Java.LiteralInteger . Java.IntegerLiteral
-      int = integer . fromIntegral
   LiteralString s -> javaString s
 
 -- Note: we use Java object types everywhere, rather than primitive types, as the latter cannot be used
