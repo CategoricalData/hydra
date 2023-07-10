@@ -93,17 +93,6 @@ constructModule mod coders pairs = do
 
     termToInterfaceMember coders pair = withTrace ("element " ++ unName (elementName el)) $ do
         expanded <- contractTerm <$> (expandLambdas $ typedTermTerm $ snd pair)
-
-
--- --         exp <- expandLambdas $ typedTermTerm $ snd pair
---         if elementName el == Name "hydra/basics.stripTerm"
--- --           then fail $ "isLambda: " ++ show (isLambda expanded)
--- --           then fail $ "term: " ++ show (termVariant $ stripTerm exp)
--- --           then fail $ "term: " ++ show (termVariant $ stripTerm expanded)
---           then fail $ "term: " ++ show (expanded)
---           else pure ()
-
-
         if isLambda expanded
           then termToMethod coders el (typedTermType $ snd pair) expanded
           else termToConstant coders el (typedTermType $ snd pair) expanded
@@ -668,14 +657,16 @@ encodeType aliases t = case stripType t of
       return $ javaRefType [jkt, jvt] javaUtilPackageName "Map"
     TypeProduct [] -> unit
     TypeRecord (RowType _UnitType _ []) -> unit
-    TypeRecord (RowType name _ _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True [] name Nothing
+    TypeRecord (RowType name _ _) -> pure $
+      Java.TypeReference $ nameToJavaReferenceType aliases True (javaTypeArgumentsForType t) name Nothing
     TypeOptional ot -> do
       jot <- encode ot >>= javaTypeToJavaReferenceType
       return $ javaRefType [jot] javaUtilPackageName "Optional"
     TypeSet st -> do
       jst <- encode st >>= javaTypeToJavaReferenceType
       return $ javaRefType [jst] javaUtilPackageName "Set"
-    TypeUnion (RowType name _ _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True [] name Nothing
+    TypeUnion (RowType name _ _) -> pure $
+      Java.TypeReference $ nameToJavaReferenceType aliases True (javaTypeArgumentsForType t) name Nothing
     TypeVariable name -> forReference name
     TypeWrap (Nominal name _) -> forReference name
     _ -> fail $ "can't encode unsupported type in Java: " ++ show t
@@ -745,6 +736,9 @@ javaTypeArgumentsForNamedType tname = do
     params <- javaTypeParametersForType <$> requireType tname
     return $ typeParameterToTypeArgument <$> params
 
+javaTypeArgumentsForType :: Type a -> [Java.TypeArgument]
+javaTypeArgumentsForType typ = L.reverse (typeParameterToTypeArgument <$> javaTypeParametersForType typ)
+
 -- Note: this is somewhat of a hack; it compensates for the irregular way in which type parameters are currently used.
 --       When this irregularity is resolved, a better approach will be to simply pick up type parameters from type applications.
 javaTypeParametersForType :: Type a -> [Java.TypeParameter]
@@ -798,11 +792,10 @@ maybeLet aliases term cons = helper [] term
             typ <- requireAnnotatedType value
             jtype <- encodeType aliasesWithRecursive typ
             let id = variableToJavaIdentifier name
-
             rhs <- encodeTerm aliasesWithRecursive value
             return $ if S.member name recursiveVars
               then Java.BlockStatementStatement $ javaMethodInvocationToJavaStatement $
-                methodInvocation (Just $ Left $ Java.ExpressionName Nothing id) (Java.Identifier "set") [rhs]
+                methodInvocation (Just $ Left $ Java.ExpressionName Nothing id) (Java.Identifier setMethodName) [rhs]
               else variableDeclarationStatement aliasesWithRecursive jtype id rhs
           bindingVars = S.fromList $ M.keys bindings
           recursiveVars = S.fromList $ L.concat (ifRec <$> sorted)
