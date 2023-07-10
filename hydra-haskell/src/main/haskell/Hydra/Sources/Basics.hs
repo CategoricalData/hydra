@@ -217,22 +217,22 @@ termVariantDef = basicsDefinition "termVariant" $
   doc "Find the term variant (constructor) for a given term" $
   function (Types.apply (TypeVariable _Term) (Types.var "a")) (TypeVariable _TermVariant) $
     matchToEnum _Term _TermVariant Nothing [
-      _Term_annotated       @-> _TermVariant_annotated,
-      _Term_application     @-> _TermVariant_application,
-      _Term_function        @-> _TermVariant_function,
-      _Term_let             @-> _TermVariant_let,
-      _Term_list            @-> _TermVariant_list,
-      _Term_literal         @-> _TermVariant_literal,
-      _Term_map             @-> _TermVariant_map,
-      _Term_optional        @-> _TermVariant_optional,
-      _Term_product         @-> _TermVariant_product,
-      _Term_record          @-> _TermVariant_record,
-      _Term_set             @-> _TermVariant_set,
-      _Term_stream          @-> _TermVariant_stream,
-      _Term_sum             @-> _TermVariant_sum,
-      _Term_union           @-> _TermVariant_union,
-      _Term_variable        @-> _TermVariant_variable,
-      _Term_wrap            @-> _TermVariant_wrap]
+      _Term_annotated   @-> _TermVariant_annotated,
+      _Term_application @-> _TermVariant_application,
+      _Term_function    @-> _TermVariant_function,
+      _Term_let         @-> _TermVariant_let,
+      _Term_list        @-> _TermVariant_list,
+      _Term_literal     @-> _TermVariant_literal,
+      _Term_map         @-> _TermVariant_map,
+      _Term_optional    @-> _TermVariant_optional,
+      _Term_product     @-> _TermVariant_product,
+      _Term_record      @-> _TermVariant_record,
+      _Term_set         @-> _TermVariant_set,
+      _Term_stream      @-> _TermVariant_stream,
+      _Term_sum         @-> _TermVariant_sum,
+      _Term_union       @-> _TermVariant_union,
+      _Term_variable    @-> _TermVariant_variable,
+      _Term_wrap        @-> _TermVariant_wrap]
 
 termVariantsDef :: Definition [TermVariant]
 termVariantsDef = basicsDefinition "termVariants" $
@@ -327,10 +327,10 @@ stripTermDef = basicsDefinition "stripTerm" $
 
 stripTypeDef :: Definition (Type a -> Type a)
 stripTypeDef = basicsDefinition "stripType" $
-  doc "Strip all annotations from a type" $
-  function typeA typeA $
-    ref skipAnnotationsDef @@ match _Type (Just Terms.nothing) [
-      Field _Type_annotated $ Terms.lambda "ann" (Terms.just $ Terms.var "ann")]
+    doc "Strip all annotations from a type" $
+    function typeA typeA $
+      ref skipAnnotationsDef @@ match _Type (Just Terms.nothing) [
+        Field _Type_annotated $ Terms.lambda "ann" (Terms.just $ Terms.var "ann")]
   where
     typeA = Types.apply (TypeVariable _Type) (Types.var "a")
 
@@ -341,12 +341,3 @@ unqualifyNameDef = basicsDefinition "unqualifyName" $
     `with` [
       "prefix">: matchOpt (string "") (lambda "n" $ (unwrap _Namespace @@ var "n") ++ string ".")
         @@ (project _QualifiedName _QualifiedName_namespace @@ var "qname")]
-
-
---
--- unqualifyName :: QualifiedName -> Name
--- unqualifyName qname = Name $ prefix ++ (qualifiedNameLocal qname)
---   where
---     prefix = case qualifiedNameNamespace qname of
---       Nothing -> ""
---       Just n -> unNamespace n ++ "."
