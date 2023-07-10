@@ -26,9 +26,9 @@ public interface Extras {
   }
   
   static <A> java.util.function.Function<hydra.core.Name, java.util.Optional<hydra.graph.Primitive<A>>> lookupPrimitive(hydra.graph.Graph<A> g) {
-    return name -> hydra.lib.maps.Lookup.apply(
+    return (java.util.function.Function<hydra.core.Name, java.util.Optional<hydra.graph.Primitive<A>>>) (name -> hydra.lib.maps.Lookup.apply(
       (name),
-      ((g)).primitives);
+      ((g)).primitives));
   }
   
   static <A> Integer primitiveArity(hydra.graph.Primitive<A> x) {
@@ -36,10 +36,10 @@ public interface Extras {
   }
   
   static java.util.function.Function<String, hydra.core.Name> qname(hydra.module.Namespace ns) {
-    return name -> new hydra.core.Name(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
+    return (java.util.function.Function<String, hydra.core.Name>) (name -> new hydra.core.Name(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       ((ns)).value,
       ".",
-      (name))));
+      (name)))));
   }
   
   static <A> Integer termArity(hydra.core.Term<A> v1) {
@@ -97,8 +97,8 @@ public interface Extras {
   hydra.compute.Kv emptyKv = new hydra.compute.Kv(hydra.lib.maps.Empty.apply());
   
   static java.util.function.Function<hydra.compute.Kv, java.util.Optional<hydra.core.Term<hydra.compute.Kv>>> getAnnotation(String key) {
-    return ann -> hydra.lib.maps.Lookup.apply(
+    return (java.util.function.Function<hydra.compute.Kv, java.util.Optional<hydra.core.Term<hydra.compute.Kv>>>) (ann -> hydra.lib.maps.Lookup.apply(
       (key),
-      ((ann)).annotations);
+      ((ann)).annotations));
   }
 }
