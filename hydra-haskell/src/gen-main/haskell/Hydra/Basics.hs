@@ -229,7 +229,7 @@ typeVariants = [
   Mantle.TypeVariantUnion,
   Mantle.TypeVariantVariable]
 
-skipAnnotations :: ((x -> Maybe (Core.Annotated x m)) -> x -> x)
+skipAnnotations :: ((x -> Maybe (Core.Annotated x a)) -> x -> x)
 skipAnnotations getAnn t =  
   let skip = (\t1 -> (\x -> case x of
           Nothing -> t1
