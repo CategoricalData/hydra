@@ -371,7 +371,15 @@ encodeApplication aliases app@(Application lhs rhs) = case stripTerm fun of
     TermFunction f -> case f of
       FunctionPrimitive name -> functionCall aliases True name args
       _ -> fallback
-    TermVariable name -> functionCall aliases False name args
+    TermVariable name -> do
+        firstCall <- functionCall aliases False name [L.head args]
+        calls firstCall $ L.tail args
+      where
+        calls exp args = case args of
+          [] -> pure exp
+          (h:r) -> do
+            jarg <- encodeTerm aliases h
+            calls (apply exp jarg) r
     _ -> fallback
   where
     (fun, args) = uncurry [] lhs rhs
@@ -398,7 +406,9 @@ encodeApplication aliases app@(Application lhs rhs) = case stripTerm fun of
           jfun <- encodeTerm aliases lhs
           jarg <- encodeTerm aliases rhs
           let prim = javaExpressionToJavaPrimary jfun
-          return $ javaMethodInvocationToJavaExpression $ methodInvocation (Just $ Right prim) (Java.Identifier applyMethodName) [jarg]
+          return $ apply jfun jarg
+    apply exp jarg = javaMethodInvocationToJavaExpression $
+      methodInvocation (Just $ Right $ javaExpressionToJavaPrimary exp) (Java.Identifier applyMethodName) [jarg]
 
 encodeElimination :: (Eq a, Ord a, Read a, Show a)
   => Aliases -> Maybe Java.Expression -> Type a -> Type a -> Elimination a -> GraphFlow a Java.Expression
