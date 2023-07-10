@@ -29,7 +29,7 @@ aggregateAnnotations getAnn t = Kv $ M.fromList $ L.concat $ toPairs [] t
 
 failOnFlag :: String -> String -> Flow s ()
 failOnFlag flag msg = do
-  val <- getAttrWithDefault flag (Terms.boolean False) >>= Expect.boolean
+  val <- hasFlag flag
   if val
     then fail msg
     else pure ()
@@ -65,6 +65,9 @@ getTypeAnnotation key = getAnnotation key . typeAnnotationInternal
 
 getTypeDescription :: Type Kv -> GraphFlow Kv (Y.Maybe String)
 getTypeDescription = getDescription . typeAnnotationInternal
+
+hasFlag :: String -> Flow s Bool
+hasFlag flag = getAttrWithDefault flag (Terms.boolean False) >>= Expect.boolean
 
 kvAnnotationClass :: AnnotationClass Kv
 kvAnnotationClass = AnnotationClass {
@@ -167,3 +170,10 @@ typeAnnotationInternal :: Type Kv -> Kv
 typeAnnotationInternal = aggregateAnnotations $ \t -> case t of
   TypeAnnotated a -> Just a
   _ -> Nothing
+
+whenFlag :: String -> Flow s a -> Flow s a -> Flow s a
+whenFlag flag fthen felse = do
+  b <- hasFlag flag
+  if b
+    then fthen
+    else felse
