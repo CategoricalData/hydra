@@ -63,8 +63,7 @@ writeHaskell "src/gen-test/haskell" testModules
 Java generation is similar, e.g.
 
 ```haskell
-writeJava "../hydra-java/src/gen-main/java" mainModules
-```
+m```
 
 For Java tests, use:
 

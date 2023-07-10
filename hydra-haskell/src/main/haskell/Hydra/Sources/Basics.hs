@@ -329,8 +329,8 @@ stripTypeDef :: Definition (Type a -> Type a)
 stripTypeDef = basicsDefinition "stripType" $
     doc "Strip all annotations from a type" $
     function typeA typeA $
-      ref skipAnnotationsDef @@ match _Type (Just Terms.nothing) [
-        Field _Type_annotated $ Terms.lambda "ann" (Terms.just $ Terms.var "ann")]
+      lambda "x" (ref skipAnnotationsDef @@ (match _Type (Just Terms.nothing) [
+        Field _Type_annotated $ Terms.lambda "ann" (Terms.just $ Terms.var "ann")]) @@ var "x")
   where
     typeA = Types.apply (TypeVariable _Type) (Types.var "a")
 
