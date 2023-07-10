@@ -12,6 +12,7 @@ instanceName = "instance" :: String
 otherInstanceName = "other" :: String
 otherwiseMethodName = "otherwise" :: String
 partialVisitorName = "PartialVisitor" :: String
+setMethodName = "set" :: String
 valueFieldName = "value" :: String
 visitMethodName = "visit" :: String
 visitorName = "Visitor" :: String
