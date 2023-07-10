@@ -7,6 +7,7 @@
 module Hydra.Langs.Xml.Schema where
 
 import qualified Hydra.Core as Core
+import Data.Int
 import Data.List
 import Data.Map
 import Data.Set
@@ -48,7 +49,7 @@ _Boolean = (Core.Name "hydra/langs/xml/schema.Boolean")
 
 newtype Byte = 
   Byte {
-    unByte :: Int}
+    unByte :: Int8}
   deriving (Eq, Ord, Read, Show)
 
 _Byte = (Core.Name "hydra/langs/xml/schema.Byte")
@@ -195,7 +196,7 @@ _Language = (Core.Name "hydra/langs/xml/schema.Language")
 
 newtype Long = 
   Long {
-    unLong :: Integer}
+    unLong :: Int64}
   deriving (Eq, Ord, Read, Show)
 
 _Long = (Core.Name "hydra/langs/xml/schema.Long")
@@ -265,7 +266,7 @@ _QName = (Core.Name "hydra/langs/xml/schema.QName")
 
 newtype Short = 
   Short {
-    unShort :: Int}
+    unShort :: Int16}
   deriving (Eq, Ord, Read, Show)
 
 _Short = (Core.Name "hydra/langs/xml/schema.Short")
@@ -293,14 +294,14 @@ _Token = (Core.Name "hydra/langs/xml/schema.Token")
 
 newtype UnsignedByte = 
   UnsignedByte {
-    unUnsignedByte :: Int}
+    unUnsignedByte :: Int16}
   deriving (Eq, Ord, Read, Show)
 
 _UnsignedByte = (Core.Name "hydra/langs/xml/schema.UnsignedByte")
 
 newtype UnsignedInt = 
   UnsignedInt {
-    unUnsignedInt :: Integer}
+    unUnsignedInt :: Int64}
   deriving (Eq, Ord, Read, Show)
 
 _UnsignedInt = (Core.Name "hydra/langs/xml/schema.UnsignedInt")

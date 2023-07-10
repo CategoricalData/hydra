@@ -9,6 +9,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
+import Data.Int
 import Data.List
 import Data.Map
 import Data.Set

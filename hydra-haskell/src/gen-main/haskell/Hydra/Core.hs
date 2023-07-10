@@ -2,6 +2,7 @@
 
 module Hydra.Core where
 
+import Data.Int
 import Data.List
 import Data.Map
 import Data.Set
@@ -228,19 +229,19 @@ data IntegerValue =
   -- | An arbitrary-precision integer value
   IntegerValueBigint Integer |
   -- | An 8-bit signed integer value
-  IntegerValueInt8 Int |
+  IntegerValueInt8 Int8 |
   -- | A 16-bit signed integer value (short value)
-  IntegerValueInt16 Int |
+  IntegerValueInt16 Int16 |
   -- | A 32-bit signed integer value (int value)
   IntegerValueInt32 Int |
   -- | A 64-bit signed integer value (long value)
-  IntegerValueInt64 Integer |
+  IntegerValueInt64 Int64 |
   -- | An 8-bit unsigned integer value (byte)
-  IntegerValueUint8 Int |
+  IntegerValueUint8 Int16 |
   -- | A 16-bit unsigned integer value
   IntegerValueUint16 Int |
   -- | A 32-bit unsigned integer value (unsigned int)
-  IntegerValueUint32 Integer |
+  IntegerValueUint32 Int64 |
   -- | A 64-bit unsigned integer value (unsigned long)
   IntegerValueUint64 Integer
   deriving (Eq, Ord, Read, Show)

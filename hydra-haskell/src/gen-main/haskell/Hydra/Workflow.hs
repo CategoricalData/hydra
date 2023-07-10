@@ -6,6 +6,7 @@ import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Module as Module
+import Data.Int
 import Data.List
 import Data.Map
 import Data.Set

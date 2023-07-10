@@ -4,6 +4,7 @@ module Hydra.Phantoms where
 
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
+import Data.Int
 import Data.List
 import Data.Map
 import Data.Set

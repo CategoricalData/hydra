@@ -3,6 +3,7 @@
 module Hydra.Langs.Scala.Meta where
 
 import qualified Hydra.Core as Core
+import Data.Int
 import Data.List
 import Data.Map
 import Data.Set
@@ -120,10 +121,10 @@ data Lit =
   LitInt Int |
   LitDouble Double |
   LitFloat Float |
-  LitByte Int |
-  LitShort Int |
+  LitByte Int8 |
+  LitShort Int16 |
   LitChar Int |
-  LitLong Integer |
+  LitLong Int64 |
   LitBoolean Bool |
   LitUnit  |
   LitString String |

@@ -3,6 +3,7 @@
 module Hydra.Langs.RelationalModel where
 
 import qualified Hydra.Core as Core
+import Data.Int
 import Data.List
 import Data.Map
 import Data.Set

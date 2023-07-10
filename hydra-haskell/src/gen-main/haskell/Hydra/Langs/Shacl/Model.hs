@@ -4,6 +4,7 @@ module Hydra.Langs.Shacl.Model where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Langs.Rdf.Syntax as Syntax
+import Data.Int
 import Data.List
 import Data.Map
 import Data.Set
