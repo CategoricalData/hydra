@@ -47,9 +47,11 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
      el typeVariantDef,
      el typeVariantsDef,
      -- Common.hs
+     el literalsEqualDef,
      el skipAnnotationsDef,
      el stripTermDef,
      el stripTypeDef,
+     el termsEqualDef,
      el unqualifyNameDef
      ]
 
@@ -299,6 +301,36 @@ typeVariantsDef = basicsDefinition "typeVariants" $
 
 -- Common.hs
 
+{-
+isUnitTerm :: Eq a => Term a -> Bool
+isUnitTerm t = stripTerm t == TermRecord (Record _UnitType [])
+
+isUnitType :: Eq a => Type a -> Bool
+isUnitType t = stripType t == TypeRecord (RowType _UnitType Nothing [])
+
+localNameOfLazy :: Name -> String
+localNameOfLazy = qualifiedNameLocal . qualifyNameLazy
+
+localNameOfEager :: Name -> String
+localNameOfEager = qualifiedNameLocal . qualifyNameEager
+
+namespaceOfLazy :: Name -> Maybe Namespace
+namespaceOfLazy = qualifiedNameNamespace . qualifyNameLazy
+
+namespaceOfEager :: Name -> Maybe Namespace
+namespaceOfEager = qualifiedNameNamespace . qualifyNameEager
+
+placeholderName :: Name
+placeholderName = Name "Placeholder"
+-}
+
+-- isUnitTermDef :: Definition (Term a -> Bool)
+-- isUnitTermDef = basicsDefinition "isUnitTerm" $
+--   function (Types.apply (TypeVariable _Term) (Types.var "a")) Types.boolean $
+--   lambda "t" $
+
+
+
 skipAnnotationsDef :: Definition ((a -> Maybe (Annotated a m)) -> a -> a)
 skipAnnotationsDef = basicsDefinition "skipAnnotations" $
   function getAnnType (Types.function (Types.var "x") (Types.var "x")) $
@@ -333,6 +365,55 @@ stripTypeDef = basicsDefinition "stripType" $
         Field _Type_annotated $ Terms.lambda "ann" (Terms.just $ Terms.var "ann")]) @@ var "x")
   where
     typeA = Types.apply (TypeVariable _Type) (Types.var "a")
+
+
+
+
+
+
+literalsEqualDef :: Definition (Literal -> Literal -> Bool)
+literalsEqualDef = basicsDefinition "literalsEqual" $
+    doc "Test whether two literals are equal" $
+    match _Literal Nothing [
+      Case _Literal_binary --> todo,
+      Case _Literal_boolean --> todo,
+      Case _Literal_float --> todo,
+      Case _Literal_integer --> todo,
+      Case _Literal_string --> todo]
+  where
+    todo = constant $ constant false
+
+termsEqualDef :: Definition (Term a -> Term a -> Bool)
+termsEqualDef = basicsDefinition "termsEqual" $
+    doc "Recursively test whether two terms are equal" $
+    function termA (Types.function termA Types.boolean) $
+    match _Term Nothing [
+      Case _Term_annotated   --> todo,
+      Case _Term_application --> todo,
+      Case _Term_function    --> todo,
+      Case _Term_let         --> todo,
+      Case _Term_list        --> todo,
+      Case _Term_literal     --> todo,
+      Case _Term_map         --> todo,
+      Case _Term_optional    --> todo,
+      Case _Term_product     --> todo,
+      Case _Term_record      --> todo,
+      Case _Term_set         --> todo,
+      Case _Term_stream      --> todo,
+      Case _Term_sum         --> todo,
+      Case _Term_union       --> todo,
+      Case _Term_variable    --> todo,
+      Case _Term_wrap        --> todo]
+  where
+    termA = Types.apply (TypeVariable _Term) (Types.var "a")
+    false = Datum $ Terms.boolean False
+    true = Datum $ Terms.boolean True
+    todo = constant $ constant false
+
+
+
+
+
 
 unqualifyNameDef :: Definition (QualifiedName -> Name)
 unqualifyNameDef = basicsDefinition "unqualifyName" $

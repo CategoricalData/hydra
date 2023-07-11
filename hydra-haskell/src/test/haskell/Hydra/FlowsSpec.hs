@@ -31,14 +31,14 @@ checkMaxTraceDepth = do
 
     H.it "Flows with a trace just below the maximum depth are OK" $
       H.shouldBe
-        (unFlow (testFlow 42 (maxTraceDepth-1)) () emptyTrace)
+        (unFlow (testFlow 42 maxTraceDepth) () emptyTrace)
         (FlowState (Just 42) () emptyTrace)
 
     H.it "Flows fail when their trace reaches the maximum depth" $ do
       H.shouldBe (flowStateValue overflow) Nothing
       H.shouldBe (L.length $ traceMessages $ flowStateTrace overflow) 1
   where
-    overflow = unFlow (testFlow 42 maxTraceDepth) () emptyTrace
+    overflow = unFlow (testFlow 42 (maxTraceDepth+1)) () emptyTrace
 
 testFlow :: x -> Int -> Flow () x
 testFlow seed depth = helper depth
@@ -46,7 +46,7 @@ testFlow seed depth = helper depth
     helper d = if d == 0
       then pure seed
       else withTrace ("level " ++ show (depth-d)) $ helper (d-1)
-  
+
 spec :: H.Spec
 spec = do
   checkErrorTrace
