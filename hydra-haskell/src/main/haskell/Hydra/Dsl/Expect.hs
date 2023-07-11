@@ -17,6 +17,22 @@ import qualified Control.Monad as CM
 import Data.Int
 
 
+bigfloat :: Show a => Term a -> Flow s Double
+bigfloat t = literal t >>= floatLiteral >>= bigfloatValue
+
+bigfloatValue :: FloatValue -> Flow s Double
+bigfloatValue v = case v of
+  FloatValueBigfloat f -> pure f
+  _ -> unexpected "bigfloat" v
+
+bigint :: Show a => Term a -> Flow s Integer
+bigint t = literal t >>= integerLiteral >>= bigintValue
+
+bigintValue :: IntegerValue -> Flow s Integer
+bigintValue v = case v of
+  IntegerValueBigint i -> pure i
+  _ -> unexpected "bigint" v
+
 binary :: Show a => Term a -> Flow s String
 binary t = literal t >>= binaryLiteral
 
@@ -55,20 +71,25 @@ field fname mapping fields = case L.filter (\f -> fieldName f == fname) fields o
   _ -> fail $ "multiple fields named " ++ unFieldName fname
 
 float32 :: Show a => Term a -> Flow s Float
-float32 t = literal t >>= float32Literal
+float32 t = literal t >>= floatLiteral >>= float32Value
 
-float32Literal :: Literal -> Flow s Float
-float32Literal v = case v of
-  LiteralFloat (FloatValueFloat32 f) -> pure f
+float32Value :: FloatValue -> Flow s Float
+float32Value v = case v of
+  FloatValueFloat32 f -> pure f
   _ -> unexpected "float32" v
 
 float64 :: Show a => Term a -> Flow s Double
-float64 t = literal t >>= float64Literal
+float64 t = literal t >>= floatLiteral >>= float64Value
 
-float64Literal :: Literal -> Flow s Double
-float64Literal v = case v of
-  LiteralFloat (FloatValueFloat64 f) -> pure f
+float64Value :: FloatValue -> Flow s Double
+float64Value v = case v of
+  FloatValueFloat64 f -> pure f
   _ -> unexpected "float64" v
+
+floatLiteral :: Literal -> Flow s FloatValue
+floatLiteral lit = case lit of
+  LiteralFloat v -> pure v
+  _ -> unexpected "floating-point value" lit
 
 inject :: Show a => Name -> Term a -> Flow s (Field a)
 inject name term = case stripTerm term of
@@ -89,21 +110,42 @@ injectionWithName expected term = case stripTerm term of
     else fail $ "found an injection of type " ++ unName actual ++ ", expected " ++ unName expected
   _ -> unexpected "injection" term
 
-int32 :: Show a => Term a -> Flow s Int
-int32 t = literal t >>= int32Literal
+int8 :: Show a => Term a -> Flow s Int8
+int8 t = literal t >>= integerLiteral >>= int8Value
 
-int32Literal :: Literal -> Flow s Int
-int32Literal v = case v of
-  LiteralInteger (IntegerValueInt32 i) -> pure i
+int8Value :: IntegerValue -> Flow s Int8
+int8Value v = case v of
+  IntegerValueInt8 i -> pure i
+  _ -> unexpected "int8" v
+
+int16 :: Show a => Term a -> Flow s Int16
+int16 t = literal t >>= integerLiteral >>= int16Value
+
+int16Value :: IntegerValue -> Flow s Int16
+int16Value v = case v of
+  IntegerValueInt16 i -> pure i
+  _ -> unexpected "int16" v
+
+int32 :: Show a => Term a -> Flow s Int
+int32 t = literal t >>= integerLiteral >>= int32Value
+
+int32Value :: IntegerValue -> Flow s Int
+int32Value v = case v of
+  IntegerValueInt32 i -> pure i
   _ -> unexpected "int32" v
 
-int64 :: Show a => Term a -> Flow s Integer
-int64 t = literal t >>= int64Literal
+int64 :: Show a => Term a -> Flow s Int64
+int64 t = literal t >>= integerLiteral >>= int64Value
 
-int64Literal :: Literal -> Flow s Integer
-int64Literal v = case v of
-  LiteralInteger (IntegerValueInt64 i) -> pure i
+int64Value :: IntegerValue -> Flow s Int64
+int64Value v = case v of
+  IntegerValueInt64 i -> pure i
   _ -> unexpected "int64" v
+
+integerLiteral :: Literal -> Flow s IntegerValue
+integerLiteral lit = case lit of
+  LiteralInteger v -> pure v
+  _ -> unexpected "integer value" lit
 
 lambda :: Show a => Term a -> Flow s (Lambda a)
 lambda term = case stripTerm term of
@@ -209,6 +251,38 @@ stringLiteral :: Literal -> Flow s String
 stringLiteral v = case v of
   LiteralString s -> pure s
   _ -> unexpected "string" v
+
+uint8 :: Show a => Term a -> Flow s Int16
+uint8 t = literal t >>= integerLiteral >>= uint8Value
+
+uint8Value :: IntegerValue -> Flow s Int16
+uint8Value v = case v of
+  IntegerValueUint8 i -> pure i
+  _ -> unexpected "uint8" v
+
+uint16 :: Show a => Term a -> Flow s Int
+uint16 t = literal t >>= integerLiteral >>= uint16Value
+
+uint16Value :: IntegerValue -> Flow s Int
+uint16Value v = case v of
+  IntegerValueUint16 i -> pure i
+  _ -> unexpected "uint16" v
+
+uint32 :: Show a => Term a -> Flow s Int64
+uint32 t = literal t >>= integerLiteral >>= uint32Value
+
+uint32Value :: IntegerValue -> Flow s Int64
+uint32Value v = case v of
+  IntegerValueUint32 i -> pure i
+  _ -> unexpected "uint32" v
+
+uint64 :: Show a => Term a -> Flow s Integer
+uint64 t = literal t >>= integerLiteral >>= uint64Value
+
+uint64Value :: IntegerValue -> Flow s Integer
+uint64Value v = case v of
+  IntegerValueUint64 i -> pure i
+  _ -> unexpected "uint64" v
 
 variable :: Show a => Term a -> Flow s Name
 variable term = case stripTerm term of

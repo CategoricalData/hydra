@@ -166,16 +166,16 @@ string = TermLiteral . LiteralString
 sum :: Int -> Int -> Term a -> Term a
 sum i s term = TermSum $ Sum i s term
 
-uint16 :: Integer -> Term a
+uint16 :: Int -> Term a
 uint16 = literal . Literals.uint16
 
-uint32 :: Integer -> Term a
+uint32 :: Int64 -> Term a
 uint32 = literal . Literals.uint32
 
 uint64 :: Integer -> Term a
 uint64 = literal . Literals.uint64
 
-uint8 :: Integer -> Term a
+uint8 :: Int16 -> Term a
 uint8 = literal . Literals.uint8
 
 unit :: Term a

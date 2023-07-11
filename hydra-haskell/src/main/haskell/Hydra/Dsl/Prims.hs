@@ -8,6 +8,7 @@ import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
+import Data.Int
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -17,11 +18,41 @@ import Data.String(IsString(..))
 
 instance IsString (TermCoder a (Term a)) where fromString = variable
 
+bigfloat :: Show a => TermCoder a Double
+bigfloat = TermCoder Types.bigfloat $ Coder encode decode
+  where
+    encode = Expect.bigfloat
+    decode = pure . Terms.bigfloat
+
+bigint :: Show a => TermCoder a Integer
+bigint = TermCoder Types.bigint $ Coder encode decode
+  where
+    encode = Expect.bigint
+    decode = pure . Terms.bigint
+
+binary :: Show a => TermCoder a String
+binary = TermCoder Types.binary $ Coder encode decode
+  where
+    encode = Expect.binary
+    decode = pure . Terms.binary
+
 boolean :: Show a => TermCoder a Bool
 boolean = TermCoder Types.boolean $ Coder encode decode
   where
     encode = Expect.boolean
     decode = pure . Terms.boolean
+
+float32 :: Show a => TermCoder a Float
+float32 = TermCoder Types.float32 $ Coder encode decode
+  where
+    encode = Expect.float32
+    decode = pure . Terms.float32
+
+float64 :: Show a => TermCoder a Double
+float64 = TermCoder Types.float64 $ Coder encode decode
+  where
+    encode = Expect.float64
+    decode = pure . Terms.float64
 
 flow :: TermCoder a s -> TermCoder a x -> TermCoder a (Flow s x)
 flow states values = TermCoder (TypeVariable _Flow Types.@@ (termCoderType states) Types.@@ (termCoderType values)) $
@@ -36,11 +67,29 @@ function dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType 
     encode term = fail $ "cannot encode terms to functions"
     decode _ = fail $ "cannot decode functions to terms"
 
+int8 :: Show a => TermCoder a Int8
+int8 = TermCoder Types.int8 $ Coder encode decode
+  where
+    encode = Expect.int8
+    decode = pure . Terms.int8
+
+int16 :: Show a => TermCoder a Int16
+int16 = TermCoder Types.int16 $ Coder encode decode
+  where
+    encode = Expect.int16
+    decode = pure . Terms.int16
+
 int32 :: Show a => TermCoder a Int
 int32 = TermCoder Types.int32 $ Coder encode decode
   where
     encode = Expect.int32
     decode = pure . Terms.int32
+
+int64 :: Show a => TermCoder a Int64
+int64 = TermCoder Types.int64 $ Coder encode decode
+  where
+    encode = Expect.int64
+    decode = pure . Terms.int64
 
 list :: Show a => TermCoder a x -> TermCoder a [x]
 list els = TermCoder (Types.list $ termCoderType els) $ Coder encode decode
@@ -133,6 +182,30 @@ string = TermCoder Types.string $ Coder encode decode
   where
     encode = Expect.string
     decode = pure . Terms.string
+
+uint8 :: Show a => TermCoder a Int16
+uint8 = TermCoder Types.uint8 $ Coder encode decode
+  where
+    encode = Expect.uint8
+    decode = pure . Terms.uint8
+
+uint16 :: Show a => TermCoder a Int
+uint16 = TermCoder Types.uint16 $ Coder encode decode
+  where
+    encode = Expect.uint16
+    decode = pure . Terms.uint16
+
+uint32 :: Show a => TermCoder a Int64
+uint32 = TermCoder Types.uint32 $ Coder encode decode
+  where
+    encode = Expect.uint32
+    decode = pure . Terms.uint32
+
+uint64 :: Show a => TermCoder a Integer
+uint64 = TermCoder Types.uint64 $ Coder encode decode
+  where
+    encode = Expect.uint64
+    decode = pure . Terms.uint64
 
 variable :: String -> TermCoder a (Term a)
 variable v = TermCoder (Types.var v) $ Coder encode decode

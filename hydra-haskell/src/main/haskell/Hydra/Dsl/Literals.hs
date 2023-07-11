@@ -48,14 +48,14 @@ integer = LiteralInteger
 string :: String -> Literal
 string = LiteralString
 
-uint16 :: Integer -> Literal
+uint16 :: Int -> Literal
 uint16 = integer . IntegerValueUint16 . fromIntegral
 
-uint32 :: Integer -> Literal
+uint32 :: Int64 -> Literal
 uint32 = integer . IntegerValueUint32 . fromIntegral
 
 uint64 :: Integer -> Literal
 uint64 = integer . IntegerValueUint64 . fromIntegral
 
-uint8 :: Integer -> Literal
+uint8 :: Int16 -> Literal
 uint8 = integer . IntegerValueUint8 . fromIntegral
