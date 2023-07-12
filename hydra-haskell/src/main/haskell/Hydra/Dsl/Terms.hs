@@ -2,6 +2,7 @@
 
 module Hydra.Dsl.Terms where
 
+import Hydra.Common
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Graph
@@ -55,10 +56,13 @@ compose :: Term a -> Term a -> Term a
 compose f g = lambda "x" $ apply f (apply g $ var "x")
 
 constant :: Term a -> Term a
-constant = lambda "_"
+constant = lambda ignoredVariable
 
 elimination :: Elimination a -> Term a
 elimination = TermFunction . FunctionElimination
+
+false :: Term a
+false = boolean False
 
 field :: String -> Term a -> Field a
 field n = Field (FieldName n)
@@ -165,6 +169,9 @@ string = TermLiteral . LiteralString
 
 sum :: Int -> Int -> Term a -> Term a
 sum i s term = TermSum $ Sum i s term
+
+true :: Term a
+true = boolean True
 
 uint16 :: Int -> Term a
 uint16 = literal . Literals.uint16

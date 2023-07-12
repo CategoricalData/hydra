@@ -524,7 +524,9 @@ variableDeclarationStatement aliases jtype id rhs = Java.BlockStatementLocalVari
         init = Java.VariableInitializerExpression rhs
 
 variableToJavaIdentifier :: Name -> Java.Identifier
-variableToJavaIdentifier (Name var) = Java.Identifier var -- TODO: escape
+variableToJavaIdentifier (Name var) = Java.Identifier $ if var == ignoredVariable
+  then "ignored"
+  else var -- TODO: escape
 
 variantClassName :: Bool -> Name -> FieldName -> Name
 variantClassName qualify elName (FieldName fname) = unqualifyName (QualifiedName ns local1)
