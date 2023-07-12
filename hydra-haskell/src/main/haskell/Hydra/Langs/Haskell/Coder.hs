@@ -96,7 +96,7 @@ encodeFunction namespaces fun = case fun of
           -- Note: some of the following could be brought together with FunctionCases
           let v0 = "v"
           let rhsTerm = simplifyTerm $ apply just (var v0)
-          let v1 = if S.member (Name v0) $ freeVariablesInTerm rhsTerm then v0 else "_"
+          let v1 = if S.member (Name v0) $ freeVariablesInTerm rhsTerm then v0 else ignoredVariable
           let lhs = applicationPattern (rawName "Just") [H.PatternName $ rawName v1]
           rhs <- H.CaseRhs <$> encodeTerm namespaces rhsTerm
           return $ H.Alternative lhs rhs Nothing
@@ -112,14 +112,14 @@ encodeFunction namespaces fun = case fun of
               Nothing -> pure []
               Just d -> do
                 cs <- H.CaseRhs <$> encodeTerm namespaces d
-                let lhs = H.PatternName $ rawName "_"
+                let lhs = H.PatternName $ rawName ignoredVariable
                 return [H.Alternative lhs cs Nothing]
             return $ H.ExpressionCase $ H.Expression_Case (hsvar "x") $ ecases ++ dcases
           toAlt fieldMap (Field fn fun') = do
             let v0 = "v"
             let raw = apply fun' (var v0)
             let rhsTerm = simplifyTerm raw
-            let v1 = if isFreeIn (Name v0) rhsTerm then "_" else v0
+            let v1 = if isFreeIn (Name v0) rhsTerm then ignoredVariable else v0
             let hname = unionFieldReference namespaces dn fn
             args <- case M.lookup fn fieldMap of
               Just (FieldType _ ft) -> case stripType ft of

@@ -10,6 +10,9 @@ import Data.Int
 equalBinary :: Datum (String -> String -> Bool)
 equalBinary = Datum $ Terms.primitive _literals_equalBinary
 
+equalBoolean :: Datum (Bool -> Bool -> Bool)
+equalBoolean = Datum $ Terms.primitive _literals_equalBoolean
+
 equalBigfloat :: Datum (Double -> Double -> Bool)
 equalBigfloat = Datum $ Terms.primitive _literals_equalBigfloat
 
