@@ -377,7 +377,7 @@ stripTypeDef = basicsDefinition "stripType" $
 floatEqualDef :: Definition (FloatValue -> FloatValue -> Bool)
 floatEqualDef = basicsDefinition "floatEqual" $
   match _FloatValue Nothing [
---     toPair _FloatValue_bigfloat Literals.equalBigfloat,
+    toPair _FloatValue_bigfloat Literals.equalBigfloat,
     toPair _FloatValue_float32 Literals.equalFloat32,
     toPair _FloatValue_float64 Literals.equalFloat64]
   where
@@ -391,11 +391,11 @@ integerEqualDef = basicsDefinition "integerEqual" $
     toPair _IntegerValue_int8 Literals.equalInt8,
     toPair _IntegerValue_int16 Literals.equalInt16,
     toPair _IntegerValue_int32 Literals.equalInt32,
-    toPair _IntegerValue_int64 Literals.equalInt64
---     toPair _IntegerValue_uint8 Literals.equalUint8
---     toPair _IntegerValue_uint16 Literals.equalUint16,
---     toPair _IntegerValue_uint32 Literals.equalUint32,
---     toPair _IntegerValue_uint64 Literals.equalUint64
+    toPair _IntegerValue_int64 Literals.equalInt64,
+    toPair _IntegerValue_uint8 Literals.equalUint8,
+    toPair _IntegerValue_uint16 Literals.equalUint16,
+    toPair _IntegerValue_uint32 Literals.equalUint32,
+    toPair _IntegerValue_uint64 Literals.equalUint64
     ]
   where
     toPair fname prim = Case fname --> lambda "x" $
@@ -406,10 +406,10 @@ literalEqualDef :: Definition (Literal -> Literal -> Bool)
 literalEqualDef = basicsDefinition "literalEqual" $
     doc "Test whether two literals are equal" $
     match _Literal Nothing [
---       toPair _Literal_binary Literals.equalBinary,
+      toPair _Literal_binary Literals.equalBinary,
       toPair _Literal_boolean Literals.equalBoolean,
---       toPair _Literal_float (ref floatEqualDef),
---       toPair _Literal_integer (ref integerEqualDef),
+      toPair _Literal_float (ref floatEqualDef),
+      toPair _Literal_integer (ref integerEqualDef),
       toPair _Literal_string Literals.equalString]
   where
     toPair fname prim = Case fname --> lambda "x" $
