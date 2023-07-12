@@ -7,6 +7,7 @@ import Hydra.Sources.Mantle
 import Hydra.Dsl.Base as Base
 import qualified Hydra.Dsl.Lib.Maps as Maps
 import qualified Hydra.Dsl.Lib.Lists as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Math as Math
 import qualified Hydra.Dsl.Lib.Strings as Strings
 import qualified Hydra.Dsl.Annotations as Ann
@@ -47,11 +48,13 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
      el typeVariantDef,
      el typeVariantsDef,
      -- Common.hs
-     el literalsEqualDef,
+     el floatEqualDef,
+     el integerEqualDef,
+     el literalEqualDef,
      el skipAnnotationsDef,
      el stripTermDef,
      el stripTypeDef,
-     el termsEqualDef,
+     el termEqualDef,
      el unqualifyNameDef
      ]
 
@@ -371,20 +374,50 @@ stripTypeDef = basicsDefinition "stripType" $
 
 
 
-literalsEqualDef :: Definition (Literal -> Literal -> Bool)
-literalsEqualDef = basicsDefinition "literalsEqual" $
+floatEqualDef :: Definition (FloatValue -> FloatValue -> Bool)
+floatEqualDef = basicsDefinition "floatEqual" $
+  match _FloatValue Nothing [
+--     toPair _FloatValue_bigfloat Literals.equalBigfloat,
+    toPair _FloatValue_float32 Literals.equalFloat32,
+    toPair _FloatValue_float64 Literals.equalFloat64]
+  where
+    toPair fname prim = Case fname --> lambda "x" $ match _FloatValue (Just Terms.false)
+      [Case fname --> prim @@ var "x"]
+
+integerEqualDef :: Definition (IntegerValue -> IntegerValue -> Bool)
+integerEqualDef = basicsDefinition "integerEqual" $
+  match _IntegerValue Nothing [
+    toPair _IntegerValue_bigint Literals.equalBigint,
+    toPair _IntegerValue_int8 Literals.equalInt8,
+    toPair _IntegerValue_int16 Literals.equalInt16,
+    toPair _IntegerValue_int32 Literals.equalInt32,
+    toPair _IntegerValue_int64 Literals.equalInt64
+--     toPair _IntegerValue_uint8 Literals.equalUint8
+--     toPair _IntegerValue_uint16 Literals.equalUint16,
+--     toPair _IntegerValue_uint32 Literals.equalUint32,
+--     toPair _IntegerValue_uint64 Literals.equalUint64
+    ]
+  where
+    toPair fname prim = Case fname --> lambda "x" $
+      match _IntegerValue (Just Terms.false)
+        [Case fname --> prim @@ var "x"]
+
+literalEqualDef :: Definition (Literal -> Literal -> Bool)
+literalEqualDef = basicsDefinition "literalEqual" $
     doc "Test whether two literals are equal" $
     match _Literal Nothing [
-      Case _Literal_binary --> todo,
-      Case _Literal_boolean --> todo,
-      Case _Literal_float --> todo,
-      Case _Literal_integer --> todo,
-      Case _Literal_string --> todo]
+--       toPair _Literal_binary Literals.equalBinary,
+      toPair _Literal_boolean Literals.equalBoolean,
+--       toPair _Literal_float (ref floatEqualDef),
+--       toPair _Literal_integer (ref integerEqualDef),
+      toPair _Literal_string Literals.equalString]
   where
-    todo = constant $ constant false
+    toPair fname prim = Case fname --> lambda "x" $
+      match _Literal (Just Terms.false)
+        [Case fname --> prim @@ var "x"]
 
-termsEqualDef :: Definition (Term a -> Term a -> Bool)
-termsEqualDef = basicsDefinition "termsEqual" $
+termEqualDef :: Definition (Term a -> Term a -> Bool)
+termEqualDef = basicsDefinition "termEqual" $
     doc "Recursively test whether two terms are equal" $
     function termA (Types.function termA Types.boolean) $
     match _Term Nothing [
