@@ -7,6 +7,7 @@ import Hydra.Dsl.Prims as Prims
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
+import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
@@ -16,6 +17,15 @@ import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 
+
+_hydra_lib_equality :: Namespace
+_hydra_lib_equality = Namespace "hydra/lib/equality"
+
+_equality_equalTerm :: Name
+_equality_equalTerm = qname _hydra_lib_equality "equalTerm"
+
+_equality_equalType :: Name
+_equality_equalType = qname _hydra_lib_equality "equalType"
 
 _hydra_lib_flows :: Namespace
 _hydra_lib_flows = Namespace "hydra/lib/flows"
@@ -223,6 +233,11 @@ _strings_toUpper = qname _hydra_lib_strings "toUpper"
 --  prim1 _io_showTerm (variable "a) string
 --  ]
 
+hydraLibEqualityPrimitives :: (Ord a, Show a) => [Primitive a]
+hydraLibEqualityPrimitives = [
+  prim2 _equality_equalTerm term term boolean Equality.equalTerm,
+  prim2 _equality_equalType type_ type_ boolean Equality.equalType]
+
 hydraLibFlowsPrimitives :: (Ord a, Show a) => [Primitive a]
 hydraLibFlowsPrimitives = [
     prim2 _flows_apply (flow s (function x y)) (flow s x) (flow s y) Flows.apply,
@@ -337,7 +352,8 @@ hydraLibStringsPrimitives = [
 
 standardPrimitives :: (Ord a, Show a) => [Primitive a]
 standardPrimitives =
-     hydraLibFlowsPrimitives
+     hydraLibEqualityPrimitives
+  ++ hydraLibFlowsPrimitives
   ++ hydraLibListsPrimitives
   ++ hydraLibLiteralsPrimitives
   ++ hydraLibMapsPrimitives
