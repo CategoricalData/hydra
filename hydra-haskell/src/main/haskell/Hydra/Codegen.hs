@@ -33,7 +33,6 @@ import Hydra.Sources.Coders
 import Hydra.Sources.Compute
 import Hydra.Sources.Constraints
 import Hydra.Sources.Core
-import Hydra.Sources.Equality
 import Hydra.Sources.Extras
 import Hydra.Sources.Grammar
 import Hydra.Sources.Graph
@@ -118,7 +117,6 @@ hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElement
 kernelDataModules :: [Module Kv]
 kernelDataModules = [
   hydraBasicsModule,
-  hydraEqualityModule,
   hydraExtrasModule,
 --  hydraMonadsModule,
   hydraPrintingModule]
