@@ -1,4 +1,4 @@
-package hydra.lib.literals;
+package hydra.lib.equality;
 
 import hydra.compute.Flow;
 import hydra.core.Term;
@@ -10,32 +10,32 @@ import java.util.function.Function;
 import static hydra.dsl.Types.*;
 
 
-public class EqualInt32<A> extends EqualityFunction<A, Integer> {
+public class EqualInt8<A> extends EqualityFunction<A, Short> {
     @Override
     protected String typeName() {
-        return "Int32";
+        return "Int8";
     }
 
     @Override
     protected Type<A> datatype() {
-        return int32();
+        return int8();
     }
 
     @Override
-    protected Flow<Graph<A>, Integer> expect(Term<A> term) {
-        return Expect.int32(term);
+    protected Flow<Graph<A>, Short> expect(Term<A> term) {
+        return Expect.int8(term);
     }
 
     @Override
-    protected boolean checkEqual(Integer first, Integer second) {
+    protected boolean checkEqual(Short first, Short second) {
         return apply(first, second);
     }
 
-    public static Function<Integer, Boolean> apply(Integer second) {
+    public static Function<Short, Boolean> apply(Short second) {
         return first -> apply(first, second);
     }
 
-    public static Boolean apply(Integer first, Integer second) {
+    public static Boolean apply(Short first, Short second) {
         return 0 == first.compareTo(second);
     }
 }

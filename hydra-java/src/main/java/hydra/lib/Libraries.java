@@ -1,5 +1,22 @@
 package hydra.lib;
 
+import hydra.lib.equality.EqualBigfloat;
+import hydra.lib.equality.EqualBigint;
+import hydra.lib.equality.EqualBinary;
+import hydra.lib.equality.EqualBoolean;
+import hydra.lib.equality.EqualFloat32;
+import hydra.lib.equality.EqualFloat64;
+import hydra.lib.equality.EqualInt16;
+import hydra.lib.equality.EqualInt32;
+import hydra.lib.equality.EqualInt64;
+import hydra.lib.equality.EqualInt8;
+import hydra.lib.equality.EqualString;
+import hydra.lib.equality.EqualTerm;
+import hydra.lib.equality.EqualType;
+import hydra.lib.equality.EqualUint16;
+import hydra.lib.equality.EqualUint32;
+import hydra.lib.equality.EqualUint64;
+import hydra.lib.equality.EqualUint8;
 import hydra.tools.PrimitiveFunction;
 
 import java.util.ArrayList;
@@ -28,8 +45,23 @@ public class Libraries {
 
     private static <A> List<PrimitiveFunction<A>> equalityPrimitives() {
         return Arrays.asList(
-            new hydra.lib.equality.EqualTerm<>(),
-            new hydra.lib.equality.EqualType<>());
+            new EqualBigfloat<>(),
+            new EqualBigint<>(),
+            new EqualBinary<>(),
+            new EqualBoolean<>(),
+            new EqualFloat32<>(),
+            new EqualFloat64<>(),
+            new EqualInt8<>(),
+            new EqualInt16<>(),
+            new EqualInt32<>(),
+            new EqualInt64<>(),
+            new EqualString<>(),
+            new EqualTerm<>(),
+            new EqualType<>(),
+            new EqualUint8<>(),
+            new EqualUint16<>(),
+            new EqualUint32<>(),
+            new EqualUint64<>());
     }
 
     private static <A> List<PrimitiveFunction<A>> flowsPrimitives() {
@@ -56,21 +88,6 @@ public class Libraries {
 
     private static <A> List<PrimitiveFunction<A>> literalsPrimitives() {
         return Arrays.asList(
-            new hydra.lib.literals.EqualBigfloat<>(),
-            new hydra.lib.literals.EqualBigint<>(),
-            new hydra.lib.literals.EqualBinary<>(),
-            new hydra.lib.literals.EqualBoolean<>(),
-            new hydra.lib.literals.EqualFloat32<>(),
-            new hydra.lib.literals.EqualFloat64<>(),
-            new hydra.lib.literals.EqualInt8<>(),
-            new hydra.lib.literals.EqualInt16<>(),
-            new hydra.lib.literals.EqualInt32<>(),
-            new hydra.lib.literals.EqualInt64<>(),
-            new hydra.lib.literals.EqualUint8<>(),
-            new hydra.lib.literals.EqualUint16<>(),
-            new hydra.lib.literals.EqualUint32<>(),
-            new hydra.lib.literals.EqualUint64<>(),
-            new hydra.lib.literals.EqualString<>(),
             new hydra.lib.literals.ShowInt32<>(),
             new hydra.lib.literals.ShowString<>());
     }

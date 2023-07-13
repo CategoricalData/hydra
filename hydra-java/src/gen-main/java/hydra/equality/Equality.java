@@ -16,7 +16,7 @@ public interface Equality {
           
           @Override
           public Boolean visit(hydra.core.FloatValue.Bigfloat instance) {
-            return hydra.lib.literals.EqualBigfloat.apply(
+            return hydra.lib.equality.EqualBigfloat.apply(
               (instance.value),
               (instance.value));
           }
@@ -33,7 +33,7 @@ public interface Equality {
           
           @Override
           public Boolean visit(hydra.core.FloatValue.Float32 instance) {
-            return hydra.lib.literals.EqualFloat32.apply(
+            return hydra.lib.equality.EqualFloat32.apply(
               (instance.value),
               (instance.value));
           }
@@ -50,7 +50,7 @@ public interface Equality {
           
           @Override
           public Boolean visit(hydra.core.FloatValue.Float64 instance) {
-            return hydra.lib.literals.EqualFloat64.apply(
+            return hydra.lib.equality.EqualFloat64.apply(
               (instance.value),
               (instance.value));
           }
@@ -71,7 +71,7 @@ public interface Equality {
           
           @Override
           public Boolean visit(hydra.core.IntegerValue.Bigint instance) {
-            return hydra.lib.literals.EqualBigint.apply(
+            return hydra.lib.equality.EqualBigint.apply(
               (instance.value),
               (instance.value));
           }
@@ -88,7 +88,7 @@ public interface Equality {
           
           @Override
           public Boolean visit(hydra.core.IntegerValue.Int8 instance) {
-            return hydra.lib.literals.EqualInt8.apply(
+            return hydra.lib.equality.EqualInt8.apply(
               (instance.value),
               (instance.value));
           }
@@ -105,7 +105,7 @@ public interface Equality {
           
           @Override
           public Boolean visit(hydra.core.IntegerValue.Int16 instance) {
-            return hydra.lib.literals.EqualInt16.apply(
+            return hydra.lib.equality.EqualInt16.apply(
               (instance.value),
               (instance.value));
           }
@@ -122,7 +122,7 @@ public interface Equality {
           
           @Override
           public Boolean visit(hydra.core.IntegerValue.Int32 instance) {
-            return hydra.lib.literals.EqualInt32.apply(
+            return hydra.lib.equality.EqualInt32.apply(
               (instance.value),
               (instance.value));
           }
@@ -139,7 +139,7 @@ public interface Equality {
           
           @Override
           public Boolean visit(hydra.core.IntegerValue.Int64 instance) {
-            return hydra.lib.literals.EqualInt64.apply(
+            return hydra.lib.equality.EqualInt64.apply(
               (instance.value),
               (instance.value));
           }
@@ -156,7 +156,7 @@ public interface Equality {
           
           @Override
           public Boolean visit(hydra.core.IntegerValue.Uint8 instance) {
-            return hydra.lib.literals.EqualUint8.apply(
+            return hydra.lib.equality.EqualUint8.apply(
               (instance.value),
               (instance.value));
           }
@@ -173,7 +173,7 @@ public interface Equality {
           
           @Override
           public Boolean visit(hydra.core.IntegerValue.Uint16 instance) {
-            return hydra.lib.literals.EqualUint16.apply(
+            return hydra.lib.equality.EqualUint16.apply(
               (instance.value),
               (instance.value));
           }
@@ -190,7 +190,7 @@ public interface Equality {
           
           @Override
           public Boolean visit(hydra.core.IntegerValue.Uint32 instance) {
-            return hydra.lib.literals.EqualUint32.apply(
+            return hydra.lib.equality.EqualUint32.apply(
               (instance.value),
               (instance.value));
           }
@@ -207,7 +207,7 @@ public interface Equality {
           
           @Override
           public Boolean visit(hydra.core.IntegerValue.Uint64 instance) {
-            return hydra.lib.literals.EqualUint64.apply(
+            return hydra.lib.equality.EqualUint64.apply(
               (instance.value),
               (instance.value));
           }
@@ -228,7 +228,7 @@ public interface Equality {
           
           @Override
           public Boolean visit(hydra.core.Literal.Binary instance) {
-            return hydra.lib.literals.EqualBinary.apply(
+            return hydra.lib.equality.EqualBinary.apply(
               (instance.value),
               (instance.value));
           }
@@ -245,7 +245,7 @@ public interface Equality {
           
           @Override
           public Boolean visit(hydra.core.Literal.Boolean_ instance) {
-            return hydra.lib.literals.EqualBoolean.apply(
+            return hydra.lib.equality.EqualBoolean.apply(
               (instance.value),
               (instance.value));
           }
@@ -292,7 +292,7 @@ public interface Equality {
           
           @Override
           public Boolean visit(hydra.core.Literal.String_ instance) {
-            return hydra.lib.literals.EqualString.apply(
+            return hydra.lib.equality.EqualString.apply(
               (instance.value),
               (instance.value));
           }

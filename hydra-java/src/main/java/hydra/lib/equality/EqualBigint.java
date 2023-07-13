@@ -1,4 +1,4 @@
-package hydra.lib.literals;
+package hydra.lib.equality;
 
 import hydra.compute.Flow;
 import hydra.core.Term;
@@ -11,20 +11,20 @@ import java.util.function.Function;
 import static hydra.dsl.Types.*;
 
 
-public class EqualUint64<A> extends EqualityFunction<A, BigInteger> {
+public class EqualBigint<A> extends EqualityFunction<A, BigInteger> {
     @Override
     protected String typeName() {
-        return "Uint64";
+        return "Bigint";
     }
 
     @Override
     protected Type<A> datatype() {
-        return uint64();
+        return bigint();
     }
 
     @Override
     protected Flow<Graph<A>, BigInteger> expect(Term<A> term) {
-        return Expect.uint64(term);
+        return Expect.bigint(term);
     }
 
     @Override

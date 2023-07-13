@@ -1,4 +1,4 @@
-package hydra.lib.literals;
+package hydra.lib.equality;
 
 import hydra.compute.Flow;
 import hydra.core.Name;
@@ -21,7 +21,7 @@ public abstract class EqualityFunction<A, T> extends PrimitiveFunction<A> {
     protected abstract boolean checkEqual(T first, T second);
 
     public Name name() {
-        return new Name("hydra/lib/literals." + typeName());
+        return new Name("hydra/lib/equality." + typeName());
     }
 
     @Override

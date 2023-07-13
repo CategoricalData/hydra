@@ -4,7 +4,6 @@ import hydra.compute.Flow;
 import hydra.core.Term;
 import hydra.core.Type;
 import hydra.graph.Graph;
-import hydra.lib.literals.EqualityFunction;
 import java.util.function.Function;
 
 import static hydra.Flows.*;

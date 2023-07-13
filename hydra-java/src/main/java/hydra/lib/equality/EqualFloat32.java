@@ -1,4 +1,4 @@
-package hydra.lib.literals;
+package hydra.lib.equality;
 
 import hydra.compute.Flow;
 import hydra.core.Term;
@@ -10,32 +10,32 @@ import java.util.function.Function;
 import static hydra.dsl.Types.*;
 
 
-public class EqualBoolean<A> extends EqualityFunction<A, Boolean> {
+public class EqualFloat32<A> extends EqualityFunction<A, Float> {
     @Override
     protected String typeName() {
-        return "Boolean";
+        return "Float32";
     }
 
     @Override
     protected Type<A> datatype() {
-        return boolean_();
+        return float32();
     }
 
     @Override
-    protected Flow<Graph<A>, Boolean> expect(Term<A> term) {
-        return Expect.boolean_(term);
+    protected Flow<Graph<A>, Float> expect(Term<A> term) {
+        return Expect.float32(term);
     }
 
     @Override
-    protected boolean checkEqual(Boolean first, Boolean second) {
+    protected boolean checkEqual(Float first, Float second) {
         return apply(first, second);
     }
 
-    public static Function<Boolean, Boolean> apply(Boolean second) {
+    public static Function<Float, Boolean> apply(Float second) {
         return first -> apply(first, second);
     }
 
-    public static Boolean apply(Boolean first, Boolean second) {
+    public static Boolean apply(Float first, Float second) {
         return 0 == first.compareTo(second);
     }
 }
