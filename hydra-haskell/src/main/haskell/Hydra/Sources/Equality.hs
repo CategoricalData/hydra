@@ -26,7 +26,8 @@ hydraEqualityModule = Module (Namespace "hydra/equality") elements [hydraCoreMod
      el floatEqualDef,
      el integerEqualDef,
      el literalEqualDef,
-     el termEqualDef]
+     el termEqualDef,
+     el typeEqualDef]
 
 eqcase tname fname eq = Case fname --> lambda "x" $
   match tname (Just Terms.false)
@@ -62,6 +63,10 @@ literalEqualDef = equalityDefinition "literalEqual" $
       eqcase _Literal _Literal_integer (ref integerEqualDef),
       eqcase _Literal _Literal_string Literals.equalString]
 
+mapEq mapf eqf = lambda "t1" $ lambda "t2" $ eqf @@ (mapf @@ var "t1") @@ (mapf @@ var "t2")
+
+nameEq = mapEq (unwrap _Name) Literals.equalString
+
 termEqualDef :: Definition (Term a -> Term a -> Bool)
 termEqualDef = equalityDefinition "termEqual" $
     doc "Recursively test whether two terms are equal" $
@@ -86,3 +91,28 @@ termEqualDef = equalityDefinition "termEqual" $
   where
     termA = Types.apply (TypeVariable _Term) (Types.var "a")
     todo = constant $ constant $ Datum Terms.false
+
+typeEqualDef :: Definition (Type a -> Type a -> Bool)
+typeEqualDef = equalityDefinition "typeEqual" $
+    doc "Recursively test whether two types are equal" $
+    function typeA (Types.function typeA Types.boolean) $
+    match _Type Nothing [
+      eqcase _Type _Type_annotated todo, -- TODO
+      eqcase _Type _Type_application todo, -- TODO
+      eqcase _Type _Type_function todo, -- TODO
+      eqcase _Type _Type_lambda todo, -- TODO
+      eqcase _Type _Type_list (ref typeEqualDef),
+      eqcase _Type _Type_literal todo, -- TODO
+      eqcase _Type _Type_map todo, -- TODO
+      eqcase _Type _Type_optional (ref typeEqualDef),
+      eqcase _Type _Type_product todo, -- TODO
+      eqcase _Type _Type_record todo, -- TODO
+      eqcase _Type _Type_set (ref typeEqualDef),
+      eqcase _Type _Type_stream todo, -- TODO
+      eqcase _Type _Type_sum todo, -- TODO
+      eqcase _Type _Type_union todo, -- TODO
+      eqcase _Type _Type_variable todo, -- TODO
+      eqcase _Type _Type_wrap todo] -- TODO
+  where
+    typeA = Types.apply (TypeVariable _Type) (Types.var "a")
+    todo = lambda "t1" $ lambda "t2" $ Datum Terms.false

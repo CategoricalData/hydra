@@ -4,7 +4,6 @@ module Hydra.Basics where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Module as Module
@@ -231,43 +230,6 @@ typeVariants = [
   Mantle.TypeVariantUnion,
   Mantle.TypeVariantVariable]
 
-floatEqual :: (Core.FloatValue -> Core.FloatValue -> Bool)
-floatEqual x = case x of
-  Core.FloatValueFloat32 v -> (\x -> case x of
-    Core.FloatValueFloat32 v -> (Literals.equalFloat32 v v)
-    _ -> False)
-  Core.FloatValueFloat64 v -> (\x -> case x of
-    Core.FloatValueFloat64 v -> (Literals.equalFloat64 v v)
-    _ -> False)
-
-integerEqual :: (Core.IntegerValue -> Core.IntegerValue -> Bool)
-integerEqual x = case x of
-  Core.IntegerValueBigint v -> (\x -> case x of
-    Core.IntegerValueBigint v -> (Literals.equalBigint v v)
-    _ -> False)
-  Core.IntegerValueInt8 v -> (\x -> case x of
-    Core.IntegerValueInt8 v -> (Literals.equalInt8 v v)
-    _ -> False)
-  Core.IntegerValueInt16 v -> (\x -> case x of
-    Core.IntegerValueInt16 v -> (Literals.equalInt16 v v)
-    _ -> False)
-  Core.IntegerValueInt32 v -> (\x -> case x of
-    Core.IntegerValueInt32 v -> (Literals.equalInt32 v v)
-    _ -> False)
-  Core.IntegerValueInt64 v -> (\x -> case x of
-    Core.IntegerValueInt64 v -> (Literals.equalInt64 v v)
-    _ -> False)
-
--- | Test whether two literals are equal
-literalEqual :: (Core.Literal -> Core.Literal -> Bool)
-literalEqual x = case x of
-  Core.LiteralBoolean v -> (\x -> case x of
-    Core.LiteralBoolean v -> (Literals.equalBoolean v v)
-    _ -> False)
-  Core.LiteralString v -> (\x -> case x of
-    Core.LiteralString v -> (Literals.equalString v v)
-    _ -> False)
-
 skipAnnotations :: ((x -> Maybe (Core.Annotated x a)) -> x -> x)
 skipAnnotations getAnn t =  
   let skip = (\t1 -> (\x -> case x of
@@ -286,26 +248,6 @@ stripType :: (Core.Type a -> Core.Type a)
 stripType x = (skipAnnotations (\x -> case x of
   Core.TypeAnnotated v -> (Just v)
   _ -> Nothing) x)
-
--- | Recursively test whether two terms are equal
-termEqual :: (Core.Term a -> Core.Term a -> Bool)
-termEqual x = case x of
-  Core.TermAnnotated _ -> (\_ -> False)
-  Core.TermApplication _ -> (\_ -> False)
-  Core.TermFunction _ -> (\_ -> False)
-  Core.TermLet _ -> (\_ -> False)
-  Core.TermList _ -> (\_ -> False)
-  Core.TermLiteral _ -> (\_ -> False)
-  Core.TermMap _ -> (\_ -> False)
-  Core.TermOptional _ -> (\_ -> False)
-  Core.TermProduct _ -> (\_ -> False)
-  Core.TermRecord _ -> (\_ -> False)
-  Core.TermSet _ -> (\_ -> False)
-  Core.TermStream _ -> (\_ -> False)
-  Core.TermSum _ -> (\_ -> False)
-  Core.TermUnion _ -> (\_ -> False)
-  Core.TermVariable _ -> (\_ -> False)
-  Core.TermWrap _ -> (\_ -> False)
 
 -- | Convert a qualified name to a dot-separated name
 unqualifyName :: (Module.QualifiedName -> Core.Name)
