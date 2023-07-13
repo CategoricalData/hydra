@@ -332,7 +332,39 @@ placeholderName = Name "Placeholder"
 --   function (Types.apply (TypeVariable _Term) (Types.var "a")) Types.boolean $
 --   lambda "t" $
 
+eqcase tname fname eq = Case fname --> lambda "x" $
+  match tname (Just Terms.false)
+    [Case fname --> eq @@ var "x"]
 
+floatEqualDef :: Definition (FloatValue -> FloatValue -> Bool)
+floatEqualDef = basicsDefinition "floatEqual" $
+  match _FloatValue Nothing [
+    eqcase _FloatValue _FloatValue_bigfloat Literals.equalBigfloat,
+    eqcase _FloatValue _FloatValue_float32 Literals.equalFloat32,
+    eqcase _FloatValue _FloatValue_float64 Literals.equalFloat64]
+
+integerEqualDef :: Definition (IntegerValue -> IntegerValue -> Bool)
+integerEqualDef = basicsDefinition "integerEqual" $
+  match _IntegerValue Nothing [
+    eqcase _IntegerValue _IntegerValue_bigint Literals.equalBigint,
+    eqcase _IntegerValue _IntegerValue_int8 Literals.equalInt8,
+    eqcase _IntegerValue _IntegerValue_int16 Literals.equalInt16,
+    eqcase _IntegerValue _IntegerValue_int32 Literals.equalInt32,
+    eqcase _IntegerValue _IntegerValue_int64 Literals.equalInt64,
+    eqcase _IntegerValue _IntegerValue_uint8 Literals.equalUint8,
+    eqcase _IntegerValue _IntegerValue_uint16 Literals.equalUint16,
+    eqcase _IntegerValue _IntegerValue_uint32 Literals.equalUint32,
+    eqcase _IntegerValue _IntegerValue_uint64 Literals.equalUint64]
+
+literalEqualDef :: Definition (Literal -> Literal -> Bool)
+literalEqualDef = basicsDefinition "literalEqual" $
+    doc "Test whether two literals are equal" $
+    match _Literal Nothing [
+      eqcase _Literal _Literal_binary Literals.equalBinary,
+      eqcase _Literal _Literal_boolean Literals.equalBoolean,
+      eqcase _Literal _Literal_float (ref floatEqualDef),
+      eqcase _Literal _Literal_integer (ref integerEqualDef),
+      eqcase _Literal _Literal_string Literals.equalString]
 
 skipAnnotationsDef :: Definition ((a -> Maybe (Annotated a m)) -> a -> a)
 skipAnnotationsDef = basicsDefinition "skipAnnotations" $
@@ -369,84 +401,30 @@ stripTypeDef = basicsDefinition "stripType" $
   where
     typeA = Types.apply (TypeVariable _Type) (Types.var "a")
 
-
-
-
-
-
-floatEqualDef :: Definition (FloatValue -> FloatValue -> Bool)
-floatEqualDef = basicsDefinition "floatEqual" $
-  match _FloatValue Nothing [
-    toPair _FloatValue_bigfloat Literals.equalBigfloat,
-    toPair _FloatValue_float32 Literals.equalFloat32,
-    toPair _FloatValue_float64 Literals.equalFloat64]
-  where
-    toPair fname prim = Case fname --> lambda "x" $ match _FloatValue (Just Terms.false)
-      [Case fname --> prim @@ var "x"]
-
-integerEqualDef :: Definition (IntegerValue -> IntegerValue -> Bool)
-integerEqualDef = basicsDefinition "integerEqual" $
-  match _IntegerValue Nothing [
-    toPair _IntegerValue_bigint Literals.equalBigint,
-    toPair _IntegerValue_int8 Literals.equalInt8,
-    toPair _IntegerValue_int16 Literals.equalInt16,
-    toPair _IntegerValue_int32 Literals.equalInt32,
-    toPair _IntegerValue_int64 Literals.equalInt64,
-    toPair _IntegerValue_uint8 Literals.equalUint8,
-    toPair _IntegerValue_uint16 Literals.equalUint16,
-    toPair _IntegerValue_uint32 Literals.equalUint32,
-    toPair _IntegerValue_uint64 Literals.equalUint64
-    ]
-  where
-    toPair fname prim = Case fname --> lambda "x" $
-      match _IntegerValue (Just Terms.false)
-        [Case fname --> prim @@ var "x"]
-
-literalEqualDef :: Definition (Literal -> Literal -> Bool)
-literalEqualDef = basicsDefinition "literalEqual" $
-    doc "Test whether two literals are equal" $
-    match _Literal Nothing [
-      toPair _Literal_binary Literals.equalBinary,
-      toPair _Literal_boolean Literals.equalBoolean,
-      toPair _Literal_float (ref floatEqualDef),
-      toPair _Literal_integer (ref integerEqualDef),
-      toPair _Literal_string Literals.equalString]
-  where
-    toPair fname prim = Case fname --> lambda "x" $
-      match _Literal (Just Terms.false)
-        [Case fname --> prim @@ var "x"]
-
 termEqualDef :: Definition (Term a -> Term a -> Bool)
 termEqualDef = basicsDefinition "termEqual" $
     doc "Recursively test whether two terms are equal" $
     function termA (Types.function termA Types.boolean) $
     match _Term Nothing [
-      Case _Term_annotated   --> todo,
-      Case _Term_application --> todo,
-      Case _Term_function    --> todo,
-      Case _Term_let         --> todo,
-      Case _Term_list        --> todo,
-      Case _Term_literal     --> todo,
-      Case _Term_map         --> todo,
-      Case _Term_optional    --> todo,
-      Case _Term_product     --> todo,
-      Case _Term_record      --> todo,
-      Case _Term_set         --> todo,
-      Case _Term_stream      --> todo,
-      Case _Term_sum         --> todo,
-      Case _Term_union       --> todo,
-      Case _Term_variable    --> todo,
-      Case _Term_wrap        --> todo]
+      Case _Term_annotated   --> todo, -- TODO
+      Case _Term_application --> todo, -- TODO
+      Case _Term_function    --> todo, -- TODO
+      Case _Term_let         --> todo, -- TODO
+      Case _Term_list        --> todo, -- TODO
+      eqcase _Term _Term_literal (ref literalEqualDef),
+      Case _Term_map         --> todo, -- TODO
+      Case _Term_optional    --> todo, -- TODO
+      Case _Term_product     --> todo, -- TODO
+      Case _Term_record      --> todo, -- TODO
+      Case _Term_set         --> todo, -- TODO
+      Case _Term_stream      --> todo, -- TODO
+      Case _Term_sum         --> todo, -- TODO
+      Case _Term_union       --> todo, -- TODO
+      Case _Term_variable    --> todo, -- TODO
+      Case _Term_wrap        --> todo] -- TODO
   where
     termA = Types.apply (TypeVariable _Term) (Types.var "a")
-    false = Datum $ Terms.boolean False
-    true = Datum $ Terms.boolean True
-    todo = constant $ constant false
-
-
-
-
-
+    todo = constant $ constant $ Datum Terms.false
 
 unqualifyNameDef :: Definition (QualifiedName -> Name)
 unqualifyNameDef = basicsDefinition "unqualifyName" $
