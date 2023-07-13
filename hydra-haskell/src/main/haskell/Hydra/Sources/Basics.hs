@@ -48,13 +48,9 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
      el typeVariantDef,
      el typeVariantsDef,
      -- Common.hs
-     el floatEqualDef,
-     el integerEqualDef,
-     el literalEqualDef,
      el skipAnnotationsDef,
      el stripTermDef,
      el stripTypeDef,
-     el termEqualDef,
      el unqualifyNameDef
      ]
 
@@ -332,40 +328,6 @@ placeholderName = Name "Placeholder"
 --   function (Types.apply (TypeVariable _Term) (Types.var "a")) Types.boolean $
 --   lambda "t" $
 
-eqcase tname fname eq = Case fname --> lambda "x" $
-  match tname (Just Terms.false)
-    [Case fname --> eq @@ var "x"]
-
-floatEqualDef :: Definition (FloatValue -> FloatValue -> Bool)
-floatEqualDef = basicsDefinition "floatEqual" $
-  match _FloatValue Nothing [
-    eqcase _FloatValue _FloatValue_bigfloat Literals.equalBigfloat,
-    eqcase _FloatValue _FloatValue_float32 Literals.equalFloat32,
-    eqcase _FloatValue _FloatValue_float64 Literals.equalFloat64]
-
-integerEqualDef :: Definition (IntegerValue -> IntegerValue -> Bool)
-integerEqualDef = basicsDefinition "integerEqual" $
-  match _IntegerValue Nothing [
-    eqcase _IntegerValue _IntegerValue_bigint Literals.equalBigint,
-    eqcase _IntegerValue _IntegerValue_int8 Literals.equalInt8,
-    eqcase _IntegerValue _IntegerValue_int16 Literals.equalInt16,
-    eqcase _IntegerValue _IntegerValue_int32 Literals.equalInt32,
-    eqcase _IntegerValue _IntegerValue_int64 Literals.equalInt64,
-    eqcase _IntegerValue _IntegerValue_uint8 Literals.equalUint8,
-    eqcase _IntegerValue _IntegerValue_uint16 Literals.equalUint16,
-    eqcase _IntegerValue _IntegerValue_uint32 Literals.equalUint32,
-    eqcase _IntegerValue _IntegerValue_uint64 Literals.equalUint64]
-
-literalEqualDef :: Definition (Literal -> Literal -> Bool)
-literalEqualDef = basicsDefinition "literalEqual" $
-    doc "Test whether two literals are equal" $
-    match _Literal Nothing [
-      eqcase _Literal _Literal_binary Literals.equalBinary,
-      eqcase _Literal _Literal_boolean Literals.equalBoolean,
-      eqcase _Literal _Literal_float (ref floatEqualDef),
-      eqcase _Literal _Literal_integer (ref integerEqualDef),
-      eqcase _Literal _Literal_string Literals.equalString]
-
 skipAnnotationsDef :: Definition ((a -> Maybe (Annotated a m)) -> a -> a)
 skipAnnotationsDef = basicsDefinition "skipAnnotations" $
   function getAnnType (Types.function (Types.var "x") (Types.var "x")) $
@@ -400,31 +362,6 @@ stripTypeDef = basicsDefinition "stripType" $
         Field _Type_annotated $ Terms.lambda "ann" (Terms.just $ Terms.var "ann")]) @@ var "x")
   where
     typeA = Types.apply (TypeVariable _Type) (Types.var "a")
-
-termEqualDef :: Definition (Term a -> Term a -> Bool)
-termEqualDef = basicsDefinition "termEqual" $
-    doc "Recursively test whether two terms are equal" $
-    function termA (Types.function termA Types.boolean) $
-    match _Term Nothing [
-      Case _Term_annotated   --> todo, -- TODO
-      Case _Term_application --> todo, -- TODO
-      Case _Term_function    --> todo, -- TODO
-      Case _Term_let         --> todo, -- TODO
-      Case _Term_list        --> todo, -- TODO
-      eqcase _Term _Term_literal (ref literalEqualDef),
-      Case _Term_map         --> todo, -- TODO
-      Case _Term_optional    --> todo, -- TODO
-      Case _Term_product     --> todo, -- TODO
-      Case _Term_record      --> todo, -- TODO
-      Case _Term_set         --> todo, -- TODO
-      Case _Term_stream      --> todo, -- TODO
-      Case _Term_sum         --> todo, -- TODO
-      Case _Term_union       --> todo, -- TODO
-      Case _Term_variable    --> todo, -- TODO
-      Case _Term_wrap        --> todo] -- TODO
-  where
-    termA = Types.apply (TypeVariable _Term) (Types.var "a")
-    todo = constant $ constant $ Datum Terms.false
 
 unqualifyNameDef :: Definition (QualifiedName -> Name)
 unqualifyNameDef = basicsDefinition "unqualifyName" $
