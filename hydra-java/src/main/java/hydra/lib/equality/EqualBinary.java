@@ -1,4 +1,4 @@
-package hydra.lib.literals;
+package hydra.lib.equality;
 
 import hydra.compute.Flow;
 import hydra.core.Term;
@@ -10,32 +10,32 @@ import java.util.function.Function;
 import static hydra.dsl.Types.*;
 
 
-public class EqualBigfloat<A> extends EqualityFunction<A, Double> {
+public class EqualBinary<A> extends EqualityFunction<A, String> {
     @Override
     protected String typeName() {
-        return "Bigfloat";
+        return "Binary";
     }
 
     @Override
     protected Type<A> datatype() {
-        return bigfloat();
+        return binary();
     }
 
     @Override
-    protected Flow<Graph<A>, Double> expect(Term<A> term) {
-        return Expect.bigfloat(term);
+    protected Flow<Graph<A>, String> expect(Term<A> term) {
+        return Expect.binary(term);
     }
 
     @Override
-    protected boolean checkEqual(Double first, Double second) {
+    protected boolean checkEqual(String first, String second) {
         return apply(first, second);
     }
 
-    public static Function<Double, Boolean> apply(Double second) {
+    public static Function<String, Boolean> apply(String second) {
         return first -> apply(first, second);
     }
 
-    public static Boolean apply(Double first, Double second) {
+    public static Boolean apply(String first, String second) {
         return 0 == first.compareTo(second);
     }
 }

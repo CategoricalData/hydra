@@ -3,9 +3,9 @@ module Hydra.Sources.Equality where
 import Hydra.Kernel
 import Hydra.Sources.Core
 import Hydra.Dsl.Base as Base
-import qualified Hydra.Dsl.Lib.Maps as Maps
+import qualified Hydra.Dsl.Lib.Equality as Equality
 import qualified Hydra.Dsl.Lib.Lists as Lists
-import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Maps as Maps
 import qualified Hydra.Dsl.Lib.Math as Math
 import qualified Hydra.Dsl.Lib.Strings as Strings
 import qualified Hydra.Dsl.Annotations as Ann
@@ -36,36 +36,36 @@ eqcase tname fname eq = Case fname --> lambda "x" $
 floatEqualDef :: Definition (FloatValue -> FloatValue -> Bool)
 floatEqualDef = equalityDefinition "floatEqual" $
   match _FloatValue Nothing [
-    eqcase _FloatValue _FloatValue_bigfloat Literals.equalBigfloat,
-    eqcase _FloatValue _FloatValue_float32 Literals.equalFloat32,
-    eqcase _FloatValue _FloatValue_float64 Literals.equalFloat64]
+    eqcase _FloatValue _FloatValue_bigfloat Equality.equalBigfloat,
+    eqcase _FloatValue _FloatValue_float32 Equality.equalFloat32,
+    eqcase _FloatValue _FloatValue_float64 Equality.equalFloat64]
 
 integerEqualDef :: Definition (IntegerValue -> IntegerValue -> Bool)
 integerEqualDef = equalityDefinition "integerEqual" $
   match _IntegerValue Nothing [
-    eqcase _IntegerValue _IntegerValue_bigint Literals.equalBigint,
-    eqcase _IntegerValue _IntegerValue_int8 Literals.equalInt8,
-    eqcase _IntegerValue _IntegerValue_int16 Literals.equalInt16,
-    eqcase _IntegerValue _IntegerValue_int32 Literals.equalInt32,
-    eqcase _IntegerValue _IntegerValue_int64 Literals.equalInt64,
-    eqcase _IntegerValue _IntegerValue_uint8 Literals.equalUint8,
-    eqcase _IntegerValue _IntegerValue_uint16 Literals.equalUint16,
-    eqcase _IntegerValue _IntegerValue_uint32 Literals.equalUint32,
-    eqcase _IntegerValue _IntegerValue_uint64 Literals.equalUint64]
+    eqcase _IntegerValue _IntegerValue_bigint Equality.equalBigint,
+    eqcase _IntegerValue _IntegerValue_int8 Equality.equalInt8,
+    eqcase _IntegerValue _IntegerValue_int16 Equality.equalInt16,
+    eqcase _IntegerValue _IntegerValue_int32 Equality.equalInt32,
+    eqcase _IntegerValue _IntegerValue_int64 Equality.equalInt64,
+    eqcase _IntegerValue _IntegerValue_uint8 Equality.equalUint8,
+    eqcase _IntegerValue _IntegerValue_uint16 Equality.equalUint16,
+    eqcase _IntegerValue _IntegerValue_uint32 Equality.equalUint32,
+    eqcase _IntegerValue _IntegerValue_uint64 Equality.equalUint64]
 
 literalEqualDef :: Definition (Literal -> Literal -> Bool)
 literalEqualDef = equalityDefinition "literalEqual" $
     doc "Test whether two literals are equal" $
     match _Literal Nothing [
-      eqcase _Literal _Literal_binary Literals.equalBinary,
-      eqcase _Literal _Literal_boolean Literals.equalBoolean,
+      eqcase _Literal _Literal_binary Equality.equalBinary,
+      eqcase _Literal _Literal_boolean Equality.equalBoolean,
       eqcase _Literal _Literal_float (ref floatEqualDef),
       eqcase _Literal _Literal_integer (ref integerEqualDef),
-      eqcase _Literal _Literal_string Literals.equalString]
+      eqcase _Literal _Literal_string Equality.equalString]
 
 mapEq mapf eqf = lambda "t1" $ lambda "t2" $ eqf @@ (mapf @@ var "t1") @@ (mapf @@ var "t2")
 
-nameEq = mapEq (unwrap _Name) Literals.equalString
+nameEq = mapEq (unwrap _Name) Equality.equalString
 
 termEqualDef :: Definition (Term a -> Term a -> Bool)
 termEqualDef = equalityDefinition "termEqual" $

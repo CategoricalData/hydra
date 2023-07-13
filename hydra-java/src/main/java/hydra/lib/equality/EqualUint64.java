@@ -1,41 +1,42 @@
-package hydra.lib.literals;
+package hydra.lib.equality;
 
 import hydra.compute.Flow;
 import hydra.core.Term;
 import hydra.core.Type;
 import hydra.dsl.Expect;
 import hydra.graph.Graph;
+import java.math.BigInteger;
 import java.util.function.Function;
 
 import static hydra.dsl.Types.*;
 
 
-public class EqualUint16<A> extends EqualityFunction<A, Character> {
+public class EqualUint64<A> extends EqualityFunction<A, BigInteger> {
     @Override
     protected String typeName() {
-        return "Uint16";
+        return "Uint64";
     }
 
     @Override
     protected Type<A> datatype() {
-        return uint16();
+        return uint64();
     }
 
     @Override
-    protected Flow<Graph<A>, Character> expect(Term<A> term) {
-        return Expect.uint16(term);
+    protected Flow<Graph<A>, BigInteger> expect(Term<A> term) {
+        return Expect.uint64(term);
     }
 
     @Override
-    protected boolean checkEqual(Character first, Character second) {
+    protected boolean checkEqual(BigInteger first, BigInteger second) {
         return apply(first, second);
     }
 
-    public static Function<Character, Boolean> apply(Character second) {
+    public static Function<BigInteger, Boolean> apply(BigInteger second) {
         return first -> apply(first, second);
     }
 
-    public static Boolean apply(Character first, Character second) {
+    public static Boolean apply(BigInteger first, BigInteger second) {
         return 0 == first.compareTo(second);
     }
 }
