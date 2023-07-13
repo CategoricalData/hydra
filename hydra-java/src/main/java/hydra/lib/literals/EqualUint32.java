@@ -17,7 +17,7 @@ public class EqualUint32<A> extends EqualityFunction<A, Long> {
     }
 
     @Override
-    protected Type<A> literalType() {
+    protected Type<A> datatype() {
         return uint32();
     }
 

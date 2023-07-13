@@ -17,7 +17,7 @@ public class EqualInt64<A> extends EqualityFunction<A, Long> {
     }
 
     @Override
-    protected Type<A> literalType() {
+    protected Type<A> datatype() {
         return int64();
     }
 

@@ -17,7 +17,7 @@ public class EqualUint16<A> extends EqualityFunction<A, Character> {
     }
 
     @Override
-    protected Type<A> literalType() {
+    protected Type<A> datatype() {
         return uint16();
     }
 

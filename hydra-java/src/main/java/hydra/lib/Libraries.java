@@ -13,6 +13,7 @@ public class Libraries {
 
     public static <A> List<PrimitiveFunction<A>> standardPrimitives() {
         List<PrimitiveFunction<A>> prims = new ArrayList<>();
+        prims.addAll(equalityPrimitives());
         prims.addAll(flowsPrimitives());
         prims.addAll(listsPrimitives());
         prims.addAll(literalsPrimitives());
@@ -23,6 +24,12 @@ public class Libraries {
         prims.addAll(stringsPrimitives());
 
         return prims;
+    }
+
+    private static <A> List<PrimitiveFunction<A>> equalityPrimitives() {
+        return Arrays.asList(
+            new hydra.lib.equality.EqualTerm<>(),
+            new hydra.lib.equality.EqualType<>());
     }
 
     private static <A> List<PrimitiveFunction<A>> flowsPrimitives() {

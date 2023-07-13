@@ -17,7 +17,7 @@ public class EqualBoolean<A> extends EqualityFunction<A, Boolean> {
     }
 
     @Override
-    protected Type<A> literalType() {
+    protected Type<A> datatype() {
         return boolean_();
     }
 
