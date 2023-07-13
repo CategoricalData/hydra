@@ -8,7 +8,6 @@ import qualified Data.Set as S
 javaLanguage :: Language a
 javaLanguage = Language (LanguageName "hydra/langs/java") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.fromList eliminationVariants,
-
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean, -- boolean
     LiteralVariantFloat, -- (see float types)
@@ -33,12 +32,12 @@ javaLanguage = Language (LanguageName "hydra/langs/java") $ LanguageConstraints 
     TermVariantList,
     TermVariantLiteral,
     TermVariantMap,
-    TermVariantWrap,
     TermVariantOptional,
     TermVariantRecord,
     TermVariantSet,
     TermVariantUnion,
-    TermVariantVariable],
+    TermVariantVariable,
+    TermVariantWrap],
   languageConstraintsTypeVariants = S.fromList [
     TypeVariantAnnotated,
     TypeVariantApplication,
@@ -47,12 +46,12 @@ javaLanguage = Language (LanguageName "hydra/langs/java") $ LanguageConstraints 
     TypeVariantList,
     TypeVariantLiteral,
     TypeVariantMap,
-    TypeVariantWrap,
     TypeVariantOptional,
     TypeVariantRecord,
     TypeVariantSet,
     TypeVariantUnion,
-    TypeVariantVariable],
+    TypeVariantVariable,
+    TypeVariantWrap],
   languageConstraintsTypes = const True }
 
 reservedWords :: S.Set String

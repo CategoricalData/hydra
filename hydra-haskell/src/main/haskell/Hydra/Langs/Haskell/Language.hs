@@ -9,18 +9,21 @@ haskellLanguage :: Language a
 haskellLanguage = Language (LanguageName "hydra/langs/haskell") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.fromList eliminationVariants,
   languageConstraintsLiteralVariants = S.fromList [
-    LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],
+    LiteralVariantBoolean,
+    LiteralVariantFloat,
+    LiteralVariantInteger,
+    LiteralVariantString],
   languageConstraintsFloatTypes = S.fromList [
     -- Bigfloat is excluded for now
-    FloatTypeFloat32,
-    FloatTypeFloat64],
+    FloatTypeFloat32, -- Float
+    FloatTypeFloat64], -- Double
   languageConstraintsFunctionVariants = S.fromList functionVariants,
   languageConstraintsIntegerTypes = S.fromList [
-    IntegerTypeBigint,
-    IntegerTypeInt8,
-    IntegerTypeInt16,
-    IntegerTypeInt32,
-    IntegerTypeInt64],
+    IntegerTypeBigint, -- Integer
+    IntegerTypeInt8, -- Int8
+    IntegerTypeInt16, -- Int16
+    IntegerTypeInt32, -- Int
+    IntegerTypeInt64], -- Int64
   languageConstraintsTermVariants = S.fromList [
     TermVariantApplication,
     TermVariantFunction,
@@ -28,13 +31,13 @@ haskellLanguage = Language (LanguageName "hydra/langs/haskell") $ LanguageConstr
     TermVariantList,
     TermVariantLiteral,
     TermVariantMap,
-    TermVariantWrap,
     TermVariantOptional,
     TermVariantProduct,
     TermVariantRecord,
     TermVariantSet,
     TermVariantUnion,
-    TermVariantVariable],
+    TermVariantVariable,
+    TermVariantWrap],
   languageConstraintsTypeVariants = S.fromList [
     TypeVariantAnnotated,
     TypeVariantApplication,
@@ -43,13 +46,13 @@ haskellLanguage = Language (LanguageName "hydra/langs/haskell") $ LanguageConstr
     TypeVariantList,
     TypeVariantLiteral,
     TypeVariantMap,
-    TypeVariantWrap,
     TypeVariantOptional,
     TypeVariantProduct,
     TypeVariantRecord,
     TypeVariantSet,
     TypeVariantUnion,
-    TypeVariantVariable],
+    TypeVariantVariable,
+    TypeVariantWrap],
   languageConstraintsTypes = const True }
 
 reservedWords :: S.Set String

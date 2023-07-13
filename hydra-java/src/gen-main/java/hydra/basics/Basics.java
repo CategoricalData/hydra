@@ -901,7 +901,17 @@ public interface Basics {
       
       @Override
       public java.util.function.Function<hydra.core.Term<A>, Boolean> visit(hydra.core.Term.Literal<A> instance) {
-        return (java.util.function.Function<hydra.core.Term<A>, Boolean>) (ignored -> false);
+        return (java.util.function.Function<hydra.core.Term<A>, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Term.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Term<A> instance) {
+            return false;
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Term.Literal<A> instance) {
+            return (hydra.basics.Basics.literalEqual((instance.value))).apply((instance.value));
+          }
+        }));
       }
       
       @Override
