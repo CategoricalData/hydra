@@ -17,7 +17,7 @@ public class EqualBigfloat<A> extends EqualityFunction<A, Double> {
     }
 
     @Override
-    protected Type<A> literalType() {
+    protected Type<A> datatype() {
         return bigfloat();
     }
 

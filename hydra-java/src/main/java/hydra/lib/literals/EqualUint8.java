@@ -17,7 +17,7 @@ public class EqualUint8<A> extends EqualityFunction<A, Byte> {
     }
 
     @Override
-    protected Type<A> literalType() {
+    protected Type<A> datatype() {
         return uint8();
     }
 

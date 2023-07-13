@@ -17,7 +17,7 @@ public class EqualFloat32<A> extends EqualityFunction<A, Float> {
     }
 
     @Override
-    protected Type<A> literalType() {
+    protected Type<A> datatype() {
         return float32();
     }
 

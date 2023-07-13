@@ -18,7 +18,7 @@ public class EqualBigint<A> extends EqualityFunction<A, BigInteger> {
     }
 
     @Override
-    protected Type<A> literalType() {
+    protected Type<A> datatype() {
         return bigint();
     }
 

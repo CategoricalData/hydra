@@ -17,7 +17,7 @@ public class EqualFloat64<A> extends EqualityFunction<A, Double> {
     }
 
     @Override
-    protected Type<A> literalType() {
+    protected Type<A> datatype() {
         return float64();
     }
 

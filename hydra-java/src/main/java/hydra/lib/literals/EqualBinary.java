@@ -17,7 +17,7 @@ public class EqualBinary<A> extends EqualityFunction<A, String> {
     }
 
     @Override
-    protected Type<A> literalType() {
+    protected Type<A> datatype() {
         return binary();
     }
 

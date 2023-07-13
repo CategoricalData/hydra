@@ -17,7 +17,7 @@ public class EqualString<A> extends EqualityFunction<A, String> {
     }
 
     @Override
-    protected Type<A> literalType() {
+    protected Type<A> datatype() {
         return string();
     }
 

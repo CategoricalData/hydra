@@ -16,7 +16,7 @@ import static hydra.dsl.Types.*;
 
 public abstract class EqualityFunction<A, T> extends PrimitiveFunction<A> {
     protected abstract String typeName();
-    protected abstract Type<A> literalType();
+    protected abstract Type<A> datatype();
     protected abstract Flow<Graph<A>, T> expect(Term<A> term);
     protected abstract boolean checkEqual(T first, T second);
 
@@ -26,7 +26,7 @@ public abstract class EqualityFunction<A, T> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return function(literalType(), literalType(), boolean_());
+        return function(datatype(), datatype(), boolean_());
     }
 
     @Override
