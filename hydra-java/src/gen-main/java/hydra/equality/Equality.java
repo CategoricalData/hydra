@@ -394,4 +394,248 @@ public interface Equality {
       }
     });
   }
+  
+  static <A> java.util.function.Function<hydra.core.Type<A>, Boolean> typeEqual(hydra.core.Type<A> v1) {
+    return ((v1)).accept(new hydra.core.Type.Visitor<>() {
+      @Override
+      public java.util.function.Function<hydra.core.Type<A>, Boolean> visit(hydra.core.Type.Annotated<A> instance) {
+        return (java.util.function.Function<hydra.core.Type<A>, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Type<A> instance) {
+            return false;
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Type.Annotated<A> instance) {
+            return false;
+          }
+        }));
+      }
+      
+      @Override
+      public java.util.function.Function<hydra.core.Type<A>, Boolean> visit(hydra.core.Type.Application<A> instance) {
+        return (java.util.function.Function<hydra.core.Type<A>, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Type<A> instance) {
+            return false;
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Type.Application<A> instance) {
+            return false;
+          }
+        }));
+      }
+      
+      @Override
+      public java.util.function.Function<hydra.core.Type<A>, Boolean> visit(hydra.core.Type.Function<A> instance) {
+        return (java.util.function.Function<hydra.core.Type<A>, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Type<A> instance) {
+            return false;
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Type.Function<A> instance) {
+            return false;
+          }
+        }));
+      }
+      
+      @Override
+      public java.util.function.Function<hydra.core.Type<A>, Boolean> visit(hydra.core.Type.Lambda<A> instance) {
+        return (java.util.function.Function<hydra.core.Type<A>, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Type<A> instance) {
+            return false;
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Type.Lambda<A> instance) {
+            return false;
+          }
+        }));
+      }
+      
+      @Override
+      public java.util.function.Function<hydra.core.Type<A>, Boolean> visit(hydra.core.Type.List<A> instance) {
+        return (java.util.function.Function<hydra.core.Type<A>, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Type<A> instance) {
+            return false;
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Type.List<A> instance) {
+            return (hydra.equality.Equality.typeEqual((instance.value))).apply((instance.value));
+          }
+        }));
+      }
+      
+      @Override
+      public java.util.function.Function<hydra.core.Type<A>, Boolean> visit(hydra.core.Type.Literal<A> instance) {
+        return (java.util.function.Function<hydra.core.Type<A>, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Type<A> instance) {
+            return false;
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Type.Literal<A> instance) {
+            return false;
+          }
+        }));
+      }
+      
+      @Override
+      public java.util.function.Function<hydra.core.Type<A>, Boolean> visit(hydra.core.Type.Map<A> instance) {
+        return (java.util.function.Function<hydra.core.Type<A>, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Type<A> instance) {
+            return false;
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Type.Map<A> instance) {
+            return false;
+          }
+        }));
+      }
+      
+      @Override
+      public java.util.function.Function<hydra.core.Type<A>, Boolean> visit(hydra.core.Type.Optional<A> instance) {
+        return (java.util.function.Function<hydra.core.Type<A>, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Type<A> instance) {
+            return false;
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Type.Optional<A> instance) {
+            return (hydra.equality.Equality.typeEqual((instance.value))).apply((instance.value));
+          }
+        }));
+      }
+      
+      @Override
+      public java.util.function.Function<hydra.core.Type<A>, Boolean> visit(hydra.core.Type.Product<A> instance) {
+        return (java.util.function.Function<hydra.core.Type<A>, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Type<A> instance) {
+            return false;
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Type.Product<A> instance) {
+            return false;
+          }
+        }));
+      }
+      
+      @Override
+      public java.util.function.Function<hydra.core.Type<A>, Boolean> visit(hydra.core.Type.Record<A> instance) {
+        return (java.util.function.Function<hydra.core.Type<A>, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Type<A> instance) {
+            return false;
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Type.Record<A> instance) {
+            return false;
+          }
+        }));
+      }
+      
+      @Override
+      public java.util.function.Function<hydra.core.Type<A>, Boolean> visit(hydra.core.Type.Set<A> instance) {
+        return (java.util.function.Function<hydra.core.Type<A>, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Type<A> instance) {
+            return false;
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Type.Set<A> instance) {
+            return (hydra.equality.Equality.typeEqual((instance.value))).apply((instance.value));
+          }
+        }));
+      }
+      
+      @Override
+      public java.util.function.Function<hydra.core.Type<A>, Boolean> visit(hydra.core.Type.Stream<A> instance) {
+        return (java.util.function.Function<hydra.core.Type<A>, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Type<A> instance) {
+            return false;
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Type.Stream<A> instance) {
+            return false;
+          }
+        }));
+      }
+      
+      @Override
+      public java.util.function.Function<hydra.core.Type<A>, Boolean> visit(hydra.core.Type.Sum<A> instance) {
+        return (java.util.function.Function<hydra.core.Type<A>, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Type<A> instance) {
+            return false;
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Type.Sum<A> instance) {
+            return false;
+          }
+        }));
+      }
+      
+      @Override
+      public java.util.function.Function<hydra.core.Type<A>, Boolean> visit(hydra.core.Type.Union<A> instance) {
+        return (java.util.function.Function<hydra.core.Type<A>, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Type<A> instance) {
+            return false;
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Type.Union<A> instance) {
+            return false;
+          }
+        }));
+      }
+      
+      @Override
+      public java.util.function.Function<hydra.core.Type<A>, Boolean> visit(hydra.core.Type.Variable<A> instance) {
+        return (java.util.function.Function<hydra.core.Type<A>, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Type<A> instance) {
+            return false;
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Type.Variable<A> instance) {
+            return false;
+          }
+        }));
+      }
+      
+      @Override
+      public java.util.function.Function<hydra.core.Type<A>, Boolean> visit(hydra.core.Type.Wrap<A> instance) {
+        return (java.util.function.Function<hydra.core.Type<A>, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Type<A> instance) {
+            return false;
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Type.Wrap<A> instance) {
+            return false;
+          }
+        }));
+      }
+    });
+  }
 }
