@@ -186,7 +186,7 @@ uint8 :: Int16 -> Term a
 uint8 = literal . Literals.uint8
 
 unit :: Term a
-unit = TermRecord $ Record (Name "hydra/core.UnitType") []
+unit = TermRecord $ Record _UnitType []
 
 unitVariant :: Name -> FieldName -> Term a
 unitVariant tname fname = variant tname fname unit

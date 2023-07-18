@@ -29,6 +29,10 @@ infixr 0 >:
 (>:) :: String -> Datum a -> Fld a
 n >: d = Fld $ Field (FieldName n) (unDatum d)
 
+infixr 0 >>:
+(>>:) :: FieldName -> Datum a -> Fld a
+fname >>: d = Fld $ Field fname (unDatum d)
+
 (<.>) :: Datum (b -> c) -> Datum (a -> b) -> Datum (a -> c)
 f <.> g = compose f g
 
