@@ -4,10 +4,9 @@ module Hydra.Sources.Printing where
 
 import Hydra.Kernel
 import Hydra.Sources.Basics
-import Hydra.Dsl.Base as Base
+import Hydra.Dsl.Base
 import Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Types as Types
-import qualified Hydra.Dsl.Annotations as Ann
 
 import Prelude hiding ((++))
 

@@ -28,6 +28,7 @@ module Hydra.Kernel (
   module Hydra.Reduction,
   module Hydra.Rewriting,
   module Hydra.TermAdapters,
+  module Hydra.TermEncoding,
   module Hydra.Tools.Debug,
   module Hydra.Tools.Formatting,
   module Hydra.Tools.Sorting,
@@ -62,6 +63,7 @@ import Hydra.Query
 import Hydra.Reduction
 import Hydra.Rewriting
 import Hydra.TermAdapters
+import Hydra.TermEncoding
 import Hydra.Tools.Debug
 import Hydra.Tools.Formatting
 import Hydra.Tools.Sorting

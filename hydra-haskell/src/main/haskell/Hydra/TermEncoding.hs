@@ -1,0 +1,135 @@
+-- | Encoding of terms as simplified terms (sigma encoding)
+
+module Hydra.TermEncoding where
+
+import Hydra.Basics
+import Hydra.Core
+import Hydra.Mantle
+import Hydra.Dsl.Terms
+
+import Prelude hiding (map)
+import qualified Data.Map as M
+import qualified Data.Set as S
+
+
+sigmaEncodeApplication :: Ord a => Application a -> Term a
+sigmaEncodeApplication (Application lhs rhs) = record _Application [
+  Field _Application_function $ sigmaEncodeTerm lhs,
+  Field _Application_argument $ sigmaEncodeTerm rhs]
+
+sigmaEncodeCaseStatement :: Ord a => CaseStatement a -> Term a
+sigmaEncodeCaseStatement (CaseStatement name def cases) = record _CaseStatement [
+  Field _CaseStatement_typeName $ sigmaEncodeName name,
+  Field _CaseStatement_default $ optional $ sigmaEncodeTerm <$> def,
+  Field _CaseStatement_cases $ list $ sigmaEncodeField <$> cases]
+
+sigmaEncodeElimination :: Ord a => Elimination a -> Term a
+sigmaEncodeElimination e = case e of
+  EliminationList f -> variant _Elimination _Elimination_list $ sigmaEncodeTerm f
+  EliminationWrap name -> variant _Elimination _Elimination_wrap $ sigmaEncodeName name
+  EliminationOptional cases -> variant _Elimination _Elimination_optional $ sigmaEncodeOptionalCases cases
+  EliminationRecord p -> variant _Elimination _Elimination_record $ sigmaEncodeProjection p
+  EliminationUnion c -> variant _Elimination _Elimination_union $ sigmaEncodeCaseStatement c
+
+sigmaEncodeField :: Ord a => Field a -> Term a
+sigmaEncodeField (Field fname term) = record _Field [
+  Field _Field_name $ sigmaEncodeFieldName fname,
+  Field _Field_term $ sigmaEncodeTerm term]
+
+sigmaEncodeFieldName :: FieldName -> Term a
+sigmaEncodeFieldName = TermWrap . Nominal _FieldName . string . unFieldName
+
+sigmaEncodeFloatValue :: FloatValue -> Term a
+sigmaEncodeFloatValue f = variant _FloatValue var $ float f
+  where
+    var = case floatValueType f of
+      FloatTypeBigfloat -> _FloatType_bigfloat
+      FloatTypeFloat32 -> _FloatType_float32
+      FloatTypeFloat64 -> _FloatType_float64
+
+sigmaEncodeFunction :: Ord a => Function a -> Term a
+sigmaEncodeFunction f = case f of
+  FunctionElimination e -> variant _Function _Function_elimination $ sigmaEncodeElimination e
+  FunctionLambda l -> variant _Function _Function_lambda $ sigmaEncodeLambda l
+  FunctionPrimitive name -> variant _Function _Function_primitive $ sigmaEncodeName name
+
+sigmaEncodeIntegerValue :: IntegerValue -> Term a
+sigmaEncodeIntegerValue i = variant _IntegerValue var $ integer i
+  where
+    var = case integerValueType i of
+      IntegerTypeBigint -> _IntegerType_bigint
+      IntegerTypeInt8 -> _IntegerType_int8
+      IntegerTypeInt16 -> _IntegerType_int16
+      IntegerTypeInt32 -> _IntegerType_int32
+      IntegerTypeInt64 -> _IntegerType_int64
+      IntegerTypeUint8 -> _IntegerType_uint8
+      IntegerTypeUint16 -> _IntegerType_uint16
+      IntegerTypeUint32 -> _IntegerType_uint32
+      IntegerTypeUint64 -> _IntegerType_uint64
+
+sigmaEncodeLambda :: Ord a => Lambda a -> Term a
+sigmaEncodeLambda (Lambda v b) = record _Lambda [
+  Field _Lambda_parameter $ sigmaEncodeName v,
+  Field _Lambda_body $ sigmaEncodeTerm b]
+
+sigmaEncodeLiteral :: Literal -> Term a
+sigmaEncodeLiteral l = case l of
+  LiteralBinary v -> variant _Literal _LiteralVariant_binary $ string v
+  LiteralBoolean v -> variant _Literal _LiteralVariant_boolean $ boolean v
+  LiteralFloat v -> variant _Literal _LiteralVariant_float $ sigmaEncodeFloatValue v
+  LiteralInteger v -> variant _Literal _LiteralVariant_integer $ sigmaEncodeIntegerValue v
+  LiteralString v -> variant _Literal _LiteralVariant_string $ string v
+
+sigmaEncodeLiteralVariant :: LiteralVariant -> Term a
+sigmaEncodeLiteralVariant av = unitVariant _LiteralVariant $ case av of
+  LiteralVariantBinary -> _LiteralVariant_binary
+  LiteralVariantBoolean -> _LiteralVariant_boolean
+  LiteralVariantFloat -> _LiteralVariant_float
+  LiteralVariantInteger -> _LiteralVariant_integer
+  LiteralVariantString -> _LiteralVariant_string
+
+sigmaEncodeName :: Name -> Term a
+sigmaEncodeName = TermWrap . Nominal _Name . string . unName
+
+sigmaEncodeNominalTerm :: Ord a => Nominal (Term a) -> Term a
+sigmaEncodeNominalTerm (Nominal name term) = record _Nominal [
+  Field _Nominal_typeName $ sigmaEncodeName name,
+  Field _Nominal_object $ sigmaEncodeTerm term]
+
+sigmaEncodeOptionalCases :: Ord a => OptionalCases a -> Term a
+sigmaEncodeOptionalCases (OptionalCases nothing just) = record _OptionalCases [
+  Field _OptionalCases_nothing $ sigmaEncodeTerm nothing,
+  Field _OptionalCases_just $ sigmaEncodeTerm just]
+
+sigmaEncodeProjection :: Projection -> Term a
+sigmaEncodeProjection (Projection name fname) = record _Projection [
+  Field _Projection_typeName $ sigmaEncodeName name,
+  Field _Projection_field $ sigmaEncodeFieldName fname]
+
+sigmaEncodeSum :: Ord a => Sum a -> Term a
+sigmaEncodeSum (Sum i l term) = record _Sum [
+  Field _Sum_index $ int32 i,
+  Field _Sum_size $ int32 l,
+  Field _Sum_term $ sigmaEncodeTerm term]
+
+sigmaEncodeTerm :: Ord a => Term a -> Term a
+sigmaEncodeTerm term = case term of
+  TermAnnotated (Annotated t ann) -> variant _Term _Term_annotated $ TermAnnotated $ Annotated (sigmaEncodeTerm t) ann
+  TermApplication a -> variant _Term _Term_application $ sigmaEncodeApplication a
+  TermLiteral av -> variant _Term _Term_literal $ sigmaEncodeLiteral av
+  TermFunction f -> variant _Term _Term_function $ sigmaEncodeFunction f
+  TermList terms -> variant _Term _Term_list $ list $ sigmaEncodeTerm <$> terms
+  TermMap m -> variant _Term _Term_map $ map $ M.fromList $ sigmaEncodePair <$> M.toList m
+    where sigmaEncodePair (k, v) = (sigmaEncodeTerm k, sigmaEncodeTerm v)
+  TermOptional m -> variant _Term _Term_optional $ optional $ sigmaEncodeTerm <$> m
+  TermProduct terms -> variant _Term _Term_product $ list (sigmaEncodeTerm <$> terms)
+  TermRecord (Record tname fields) -> variant _Term _Term_record $ record _Record [
+    Field _Record_typeName $ sigmaEncodeName tname,
+    Field _Record_fields $ list (sigmaEncodeField <$> fields)]
+  TermSet terms -> variant _Term _Term_set $ set $ S.fromList $ sigmaEncodeTerm <$> S.toList terms
+  TermSum s -> variant _Term _Term_sum $ sigmaEncodeSum s
+  TermUnion (Injection tname field) -> variant _Term _Term_union $ record _Injection [
+    Field _Injection_typeName $ sigmaEncodeName tname,
+    Field _Injection_field $ sigmaEncodeField field]
+  TermVariable var -> variant _Term _Term_variable $ sigmaEncodeName var
+  TermWrap ntt -> variant _Term _Term_wrap $ sigmaEncodeNominalTerm ntt
