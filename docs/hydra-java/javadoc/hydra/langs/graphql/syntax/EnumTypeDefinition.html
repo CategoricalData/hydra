@@ -27,8 +27,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -88,15 +88,15 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
@@ -130,12 +130,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
-<dl>
-<dt>Direct Known Subclasses:</dt>
-<dd><code><a href="EnumTypeDefinition.Sequence.html" title="class in hydra.langs.graphql.syntax">EnumTypeDefinition.Sequence</a></code>, <code><a href="EnumTypeDefinition.Sequence2.html" title="class in hydra.langs.graphql.syntax">EnumTypeDefinition.Sequence2</a></code></dd>
-</dl>
 <hr>
-<pre>public abstract class <span class="typeNameLabel">EnumTypeDefinition</span>
+<pre>public class <span class="typeNameLabel">EnumTypeDefinition</span>
 extends java.lang.Object</pre>
 </li>
 </ul>
@@ -143,44 +139,6 @@ extends java.lang.Object</pre>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- ======== NESTED CLASS SUMMARY ======== -->
-<section role="region">
-<ul class="blockList">
-<li class="blockList"><a id="nested.class.summary">
-<!--   -->
-</a>
-<h3>Nested Class Summary</h3>
-<table class="memberSummary">
-<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Class</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static interface&nbsp;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="EnumTypeDefinition.PartialVisitor.html" title="interface in hydra.langs.graphql.syntax">EnumTypeDefinition.PartialVisitor</a>&lt;<a href="EnumTypeDefinition.PartialVisitor.html" title="type parameter in EnumTypeDefinition.PartialVisitor">R</a>&gt;</span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static class&nbsp;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="EnumTypeDefinition.Sequence.html" title="class in hydra.langs.graphql.syntax">EnumTypeDefinition.Sequence</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static class&nbsp;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="EnumTypeDefinition.Sequence2.html" title="class in hydra.langs.graphql.syntax">EnumTypeDefinition.Sequence2</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static interface&nbsp;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="EnumTypeDefinition.Visitor.html" title="interface in hydra.langs.graphql.syntax">EnumTypeDefinition.Visitor</a>&lt;<a href="EnumTypeDefinition.Visitor.html" title="type parameter in EnumTypeDefinition.Visitor">R</a>&gt;</span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-</table>
-</li>
-</ul>
-</section>
 <!-- =========== FIELD SUMMARY =========== -->
 <section role="region">
 <ul class="blockList">
@@ -196,8 +154,52 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>java.util.Optional&lt;<a href="Description.html" title="class in hydra.langs.graphql.syntax">Description</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#description">description</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.util.Optional&lt;<a href="Directives.html" title="class in hydra.langs.graphql.syntax">Directives</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#directives">directives</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.util.Optional&lt;<a href="EnumValuesDefinition.html" title="class in hydra.langs.graphql.syntax">EnumValuesDefinition</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#enumValuesDefinition">enumValuesDefinition</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="Name.html" title="class in hydra.langs.graphql.syntax">Name</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#name">name</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../core/Name.html" title="class in hydra.core">Name</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#NAME">NAME</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+</section>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="constructor.summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="memberSummary">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Constructor</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Optional,hydra.langs.graphql.syntax.Name,java.util.Optional,java.util.Optional)">EnumTypeDefinition</a></span>&#8203;(java.util.Optional&lt;<a href="Description.html" title="class in hydra.langs.graphql.syntax">Description</a>&gt;&nbsp;description,
+                  <a href="Name.html" title="class in hydra.langs.graphql.syntax">Name</a>&nbsp;name,
+                  java.util.Optional&lt;<a href="Directives.html" title="class in hydra.langs.graphql.syntax">Directives</a>&gt;&nbsp;directives,
+                  java.util.Optional&lt;<a href="EnumValuesDefinition.html" title="class in hydra.langs.graphql.syntax">EnumValuesDefinition</a>&gt;&nbsp;enumValuesDefinition)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -212,15 +214,40 @@ extends java.lang.Object</pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>abstract &lt;R&gt;&nbsp;R</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#accept(hydra.langs.graphql.syntax.EnumTypeDefinition.Visitor)">accept</a></span>&#8203;(<a href="EnumTypeDefinition.Visitor.html" title="interface in hydra.langs.graphql.syntax">EnumTypeDefinition.Visitor</a>&lt;R&gt;&nbsp;visitor)</code></th>
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(java.lang.Object&nbsp;other)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="EnumTypeDefinition.html" title="class in hydra.langs.graphql.syntax">EnumTypeDefinition</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withDescription(java.util.Optional)">withDescription</a></span>&#8203;(java.util.Optional&lt;<a href="Description.html" title="class in hydra.langs.graphql.syntax">Description</a>&gt;&nbsp;description)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="EnumTypeDefinition.html" title="class in hydra.langs.graphql.syntax">EnumTypeDefinition</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withDirectives(java.util.Optional)">withDirectives</a></span>&#8203;(java.util.Optional&lt;<a href="Directives.html" title="class in hydra.langs.graphql.syntax">Directives</a>&gt;&nbsp;directives)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="EnumTypeDefinition.html" title="class in hydra.langs.graphql.syntax">EnumTypeDefinition</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withEnumValuesDefinition(java.util.Optional)">withEnumValuesDefinition</a></span>&#8203;(java.util.Optional&lt;<a href="EnumValuesDefinition.html" title="class in hydra.langs.graphql.syntax">EnumValuesDefinition</a>&gt;&nbsp;enumValuesDefinition)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="EnumTypeDefinition.html" title="class in hydra.langs.graphql.syntax">EnumTypeDefinition</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withName(hydra.langs.graphql.syntax.Name)">withName</a></span>&#8203;(<a href="Name.html" title="class in hydra.langs.graphql.syntax">Name</a>&nbsp;name)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -229,7 +256,7 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
-<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+<code>clone, finalize, getClass, notify, notifyAll, toString, wait, wait, wait</code></li>
 </ul>
 </li>
 </ul>
@@ -250,10 +277,68 @@ extends java.lang.Object</pre>
 <a id="NAME">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>NAME</h4>
 <pre>public static final&nbsp;<a href="../../../core/Name.html" title="class in hydra.core">Name</a> NAME</pre>
+</li>
+</ul>
+<a id="description">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>description</h4>
+<pre>public final&nbsp;java.util.Optional&lt;<a href="Description.html" title="class in hydra.langs.graphql.syntax">Description</a>&gt; description</pre>
+</li>
+</ul>
+<a id="name">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>name</h4>
+<pre>public final&nbsp;<a href="Name.html" title="class in hydra.langs.graphql.syntax">Name</a> name</pre>
+</li>
+</ul>
+<a id="directives">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>directives</h4>
+<pre>public final&nbsp;java.util.Optional&lt;<a href="Directives.html" title="class in hydra.langs.graphql.syntax">Directives</a>&gt; directives</pre>
+</li>
+</ul>
+<a id="enumValuesDefinition">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>enumValuesDefinition</h4>
+<pre>public final&nbsp;java.util.Optional&lt;<a href="EnumValuesDefinition.html" title="class in hydra.langs.graphql.syntax">EnumValuesDefinition</a>&gt; enumValuesDefinition</pre>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="constructor.detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a id="&lt;init&gt;(java.util.Optional,hydra.langs.graphql.syntax.Name,java.util.Optional,java.util.Optional)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>EnumTypeDefinition</h4>
+<pre>public&nbsp;EnumTypeDefinition&#8203;(java.util.Optional&lt;<a href="Description.html" title="class in hydra.langs.graphql.syntax">Description</a>&gt;&nbsp;description,
+                          <a href="Name.html" title="class in hydra.langs.graphql.syntax">Name</a>&nbsp;name,
+                          java.util.Optional&lt;<a href="Directives.html" title="class in hydra.langs.graphql.syntax">Directives</a>&gt;&nbsp;directives,
+                          java.util.Optional&lt;<a href="EnumValuesDefinition.html" title="class in hydra.langs.graphql.syntax">EnumValuesDefinition</a>&gt;&nbsp;enumValuesDefinition)</pre>
 </li>
 </ul>
 </li>
@@ -266,13 +351,66 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="accept(hydra.langs.graphql.syntax.EnumTypeDefinition.Visitor)">
+<a id="equals(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>equals</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;equals&#8203;(java.lang.Object&nbsp;other)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>equals</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+</dl>
+</li>
+</ul>
+<a id="hashCode()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hashCode</h4>
+<pre class="methodSignature">public&nbsp;int&nbsp;hashCode()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>hashCode</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+</dl>
+</li>
+</ul>
+<a id="withDescription(java.util.Optional)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>withDescription</h4>
+<pre class="methodSignature">public&nbsp;<a href="EnumTypeDefinition.html" title="class in hydra.langs.graphql.syntax">EnumTypeDefinition</a>&nbsp;withDescription&#8203;(java.util.Optional&lt;<a href="Description.html" title="class in hydra.langs.graphql.syntax">Description</a>&gt;&nbsp;description)</pre>
+</li>
+</ul>
+<a id="withName(hydra.langs.graphql.syntax.Name)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>withName</h4>
+<pre class="methodSignature">public&nbsp;<a href="EnumTypeDefinition.html" title="class in hydra.langs.graphql.syntax">EnumTypeDefinition</a>&nbsp;withName&#8203;(<a href="Name.html" title="class in hydra.langs.graphql.syntax">Name</a>&nbsp;name)</pre>
+</li>
+</ul>
+<a id="withDirectives(java.util.Optional)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>withDirectives</h4>
+<pre class="methodSignature">public&nbsp;<a href="EnumTypeDefinition.html" title="class in hydra.langs.graphql.syntax">EnumTypeDefinition</a>&nbsp;withDirectives&#8203;(java.util.Optional&lt;<a href="Directives.html" title="class in hydra.langs.graphql.syntax">Directives</a>&gt;&nbsp;directives)</pre>
+</li>
+</ul>
+<a id="withEnumValuesDefinition(java.util.Optional)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>accept</h4>
-<pre class="methodSignature">public abstract&nbsp;&lt;R&gt;&nbsp;R&nbsp;accept&#8203;(<a href="EnumTypeDefinition.Visitor.html" title="interface in hydra.langs.graphql.syntax">EnumTypeDefinition.Visitor</a>&lt;R&gt;&nbsp;visitor)</pre>
+<h4>withEnumValuesDefinition</h4>
+<pre class="methodSignature">public&nbsp;<a href="EnumTypeDefinition.html" title="class in hydra.langs.graphql.syntax">EnumTypeDefinition</a>&nbsp;withEnumValuesDefinition&#8203;(java.util.Optional&lt;<a href="EnumValuesDefinition.html" title="class in hydra.langs.graphql.syntax">EnumValuesDefinition</a>&gt;&nbsp;enumValuesDefinition)</pre>
 </li>
 </ul>
 </li>
@@ -326,15 +464,15 @@ extends java.lang.Object</pre>
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>

@@ -163,81 +163,99 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static &lt;S,&#8203;X,&#8203;Y&gt;<br><a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;Y&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(hydra.compute.Flow,hydra.compute.Flow)">apply</a></span>&#8203;(<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;java.util.function.Function&lt;X,&#8203;Y&gt;&gt;&nbsp;mapping,
+     <a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;X&gt;&nbsp;input)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>static &lt;S,&#8203;X,&#8203;Y&gt;<br><a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;Y&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#bind(hydra.compute.Flow,java.util.function.Function)">bind</a></span>&#8203;(<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;X&gt;&nbsp;p,
     java.util.function.Function&lt;X,&#8203;<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;Y&gt;&gt;&nbsp;k)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>static &lt;S,&#8203;X,&#8203;Y&gt;<br><a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;Y&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#bind(java.util.function.Function,hydra.compute.Flow)">bind</a></span>&#8203;(java.util.function.Function&lt;X,&#8203;<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;Y&gt;&gt;&nbsp;k,
+    <a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;X&gt;&nbsp;p)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static &lt;S,&#8203;X,&#8203;Y,&#8203;Z&gt;<br><a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;Z&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#bind2(hydra.compute.Flow,hydra.compute.Flow,java.util.function.BiFunction)">bind2</a></span>&#8203;(<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;X&gt;&nbsp;p1,
      <a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;Y&gt;&nbsp;p2,
      java.util.function.BiFunction&lt;X,&#8203;Y,&#8203;<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;Z&gt;&gt;&nbsp;k)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static &lt;S,&#8203;X&gt;<br><a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;X&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fail(java.lang.String)">fail</a></span>&#8203;(java.lang.String&nbsp;msg)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static &lt;S,&#8203;X&gt;<br>X</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromFlow(hydra.compute.Flow)">fromFlow</a></span>&#8203;(<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;X&gt;&nbsp;flow)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static &lt;S&gt;&nbsp;<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;S&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getState()">getState</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static &lt;S,&#8203;X,&#8203;Y&gt;<br><a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;Y&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#map(hydra.compute.Flow,java.util.function.Function)">map</a></span>&#8203;(<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;X&gt;&nbsp;x,
    java.util.function.Function&lt;X,&#8203;Y&gt;&nbsp;f)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>static &lt;S,&#8203;X,&#8203;Y&gt;<br><a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;Y&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#map(java.util.function.Function,hydra.compute.Flow)">map</a></span>&#8203;(java.util.function.Function&lt;X,&#8203;Y&gt;&nbsp;f,
+   <a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;X&gt;&nbsp;x)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static &lt;S,&#8203;X,&#8203;Y,&#8203;Z&gt;<br><a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;Z&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#map2(hydra.compute.Flow,hydra.compute.Flow,java.util.function.BiFunction)">map2</a></span>&#8203;(<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;X&gt;&nbsp;x,
     <a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;Y&gt;&nbsp;y,
     java.util.function.BiFunction&lt;X,&#8203;Y,&#8203;Z&gt;&nbsp;f)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static &lt;S,&#8203;X,&#8203;Y&gt;<br><a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;java.util.List&lt;Y&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#mapM(java.util.List,java.util.function.Function)">mapM</a></span>&#8203;(java.util.List&lt;X&gt;&nbsp;xs,
     java.util.function.Function&lt;X,&#8203;<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;Y&gt;&gt;&nbsp;f)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>static &lt;S,&#8203;K1,&#8203;V1,&#8203;K2,&#8203;V2&gt;<br><a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;java.util.Map&lt;K2,&#8203;V2&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#mapM(java.util.Map,java.util.function.Function,java.util.function.Function)">mapM</a></span>&#8203;(java.util.Map&lt;K1,&#8203;V1&gt;&nbsp;xs,
     java.util.function.Function&lt;K1,&#8203;<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;K2&gt;&gt;&nbsp;kf,
     java.util.function.Function&lt;V1,&#8203;<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;V2&gt;&gt;&nbsp;vf)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static &lt;S,&#8203;X,&#8203;Y&gt;<br><a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;java.util.Optional&lt;Y&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#mapM(java.util.Optional,java.util.function.Function)">mapM</a></span>&#8203;(java.util.Optional&lt;X&gt;&nbsp;xs,
     java.util.function.Function&lt;X,&#8203;<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;Y&gt;&gt;&nbsp;f)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>static &lt;S,&#8203;X,&#8203;Y&gt;<br><a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;java.util.Set&lt;Y&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#mapM(java.util.Set,java.util.function.Function)">mapM</a></span>&#8203;(java.util.Set&lt;X&gt;&nbsp;xs,
     java.util.function.Function&lt;X,&#8203;<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;Y&gt;&gt;&nbsp;f)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>static &lt;S,&#8203;X&gt;<br><a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;X&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pure(X)">pure</a></span>&#8203;(X&nbsp;obj)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>static &lt;S&gt;&nbsp;<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;java.lang.Boolean&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#putState(S)">putState</a></span>&#8203;(S&nbsp;snew)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>static &lt;S,&#8203;X&gt;<br><a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;X&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unexpected(java.lang.String,java.lang.Object)">unexpected</a></span>&#8203;(java.lang.String&nbsp;cat,
           java.lang.Object&nbsp;obj)</code></th>
@@ -279,6 +297,26 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="apply(hydra.compute.Flow,hydra.compute.Flow)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>apply</h4>
+<pre class="methodSignature">static&nbsp;&lt;S,&#8203;X,&#8203;Y&gt;&nbsp;<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;Y&gt;&nbsp;apply&#8203;(<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;java.util.function.Function&lt;X,&#8203;Y&gt;&gt;&nbsp;mapping,
+                                                 <a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;X&gt;&nbsp;input)</pre>
+</li>
+</ul>
+<a id="bind(java.util.function.Function,hydra.compute.Flow)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>bind</h4>
+<pre class="methodSignature">static&nbsp;&lt;S,&#8203;X,&#8203;Y&gt;&nbsp;<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;Y&gt;&nbsp;bind&#8203;(java.util.function.Function&lt;X,&#8203;<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;Y&gt;&gt;&nbsp;k,
+                                                <a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;X&gt;&nbsp;p)</pre>
+</li>
+</ul>
 <a id="bind(hydra.compute.Flow,java.util.function.Function)">
 <!--   -->
 </a>
@@ -330,6 +368,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>getState</h4>
 <pre class="methodSignature">static&nbsp;&lt;S&gt;&nbsp;<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;S&gt;&nbsp;getState()</pre>
+</li>
+</ul>
+<a id="map(java.util.function.Function,hydra.compute.Flow)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>map</h4>
+<pre class="methodSignature">static&nbsp;&lt;S,&#8203;X,&#8203;Y&gt;&nbsp;<a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;Y&gt;&nbsp;map&#8203;(java.util.function.Function&lt;X,&#8203;Y&gt;&nbsp;f,
+                                               <a href="compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;S,&#8203;X&gt;&nbsp;x)</pre>
 </li>
 </ul>
 <a id="map(hydra.compute.Flow,java.util.function.Function)">

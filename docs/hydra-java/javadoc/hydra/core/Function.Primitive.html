@@ -161,7 +161,7 @@ extends <a href="Function.html" title="class in hydra.core">Function</a>&lt;A&gt
 <!--   -->
 </a>
 <h3>Nested classes/interfaces inherited from class&nbsp;hydra.core.<a href="Function.html" title="class in hydra.core">Function</a></h3>
-<code><a href="Function.Elimination.html" title="class in hydra.core">Function.Elimination</a>&lt;<a href="Function.Elimination.html" title="type parameter in Function.Elimination">A</a>&gt;, <a href="Function.Lambda.html" title="class in hydra.core">Function.Lambda</a>&lt;<a href="Function.Lambda.html" title="type parameter in Function.Lambda">A</a>&gt;, <a href="Function.PartialVisitor.html" title="interface in hydra.core">Function.PartialVisitor</a>&lt;<a href="Function.PartialVisitor.html" title="type parameter in Function.PartialVisitor">R</a>&gt;, <a href="Function.Primitive.html" title="class in hydra.core">Function.Primitive</a>&lt;<a href="Function.Primitive.html" title="type parameter in Function.Primitive">A</a>&gt;, <a href="Function.Visitor.html" title="interface in hydra.core">Function.Visitor</a>&lt;<a href="Function.Visitor.html" title="type parameter in Function.Visitor">R</a>&gt;</code></li>
+<code><a href="Function.Elimination.html" title="class in hydra.core">Function.Elimination</a>&lt;<a href="Function.Elimination.html" title="type parameter in Function.Elimination">A</a>&gt;, <a href="Function.Lambda.html" title="class in hydra.core">Function.Lambda</a>&lt;<a href="Function.Lambda.html" title="type parameter in Function.Lambda">A</a>&gt;, <a href="Function.PartialVisitor.html" title="interface in hydra.core">Function.PartialVisitor</a>&lt;<a href="Function.PartialVisitor.html" title="type parameter in Function.PartialVisitor">A</a>,&#8203;<a href="Function.PartialVisitor.html" title="type parameter in Function.PartialVisitor">R</a>&gt;, <a href="Function.Primitive.html" title="class in hydra.core">Function.Primitive</a>&lt;<a href="Function.Primitive.html" title="type parameter in Function.Primitive">A</a>&gt;, <a href="Function.Visitor.html" title="interface in hydra.core">Function.Visitor</a>&lt;<a href="Function.Visitor.html" title="type parameter in Function.Visitor">A</a>,&#8203;<a href="Function.Visitor.html" title="type parameter in Function.Visitor">R</a>&gt;</code></li>
 </ul>
 </li>
 </ul>
@@ -235,7 +235,7 @@ extends <a href="Function.html" title="class in hydra.core">Function</a>&lt;A&gt
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>&lt;R&gt;&nbsp;R</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#accept(hydra.core.Function.Visitor)">accept</a></span>&#8203;(<a href="Function.Visitor.html" title="interface in hydra.core">Function.Visitor</a>&lt;R&gt;&nbsp;visitor)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#accept(hydra.core.Function.Visitor)">accept</a></span>&#8203;(<a href="Function.Visitor.html" title="interface in hydra.core">Function.Visitor</a>&lt;<a href="Function.Primitive.html" title="type parameter in Function.Primitive">A</a>,&#8203;R&gt;&nbsp;visitor)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -343,7 +343,7 @@ extends <a href="Function.html" title="class in hydra.core">Function</a>&lt;A&gt
 <ul class="blockListLast">
 <li class="blockList">
 <h4>accept</h4>
-<pre class="methodSignature">public&nbsp;&lt;R&gt;&nbsp;R&nbsp;accept&#8203;(<a href="Function.Visitor.html" title="interface in hydra.core">Function.Visitor</a>&lt;R&gt;&nbsp;visitor)</pre>
+<pre class="methodSignature">public&nbsp;&lt;R&gt;&nbsp;R&nbsp;accept&#8203;(<a href="Function.Visitor.html" title="interface in hydra.core">Function.Visitor</a>&lt;<a href="Function.Primitive.html" title="type parameter in Function.Primitive">A</a>,&#8203;R&gt;&nbsp;visitor)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Function.html#accept(hydra.core.Function.Visitor)">accept</a></code>&nbsp;in class&nbsp;<code><a href="Function.html" title="class in hydra.core">Function</a>&lt;<a href="Function.Primitive.html" title="type parameter in Function.Primitive">A</a>&gt;</code></dd>

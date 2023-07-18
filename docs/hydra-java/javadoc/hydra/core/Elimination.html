@@ -132,7 +132,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><code><a href="Elimination.Element.html" title="class in hydra.core">Elimination.Element</a></code>, <code><a href="Elimination.List.html" title="class in hydra.core">Elimination.List</a></code>, <code><a href="Elimination.Optional.html" title="class in hydra.core">Elimination.Optional</a></code>, <code><a href="Elimination.Record.html" title="class in hydra.core">Elimination.Record</a></code>, <code><a href="Elimination.Union.html" title="class in hydra.core">Elimination.Union</a></code>, <code><a href="Elimination.Wrap.html" title="class in hydra.core">Elimination.Wrap</a></code></dd>
+<dd><code><a href="Elimination.List.html" title="class in hydra.core">Elimination.List</a></code>, <code><a href="Elimination.Optional.html" title="class in hydra.core">Elimination.Optional</a></code>, <code><a href="Elimination.Record.html" title="class in hydra.core">Elimination.Record</a></code>, <code><a href="Elimination.Union.html" title="class in hydra.core">Elimination.Union</a></code>, <code><a href="Elimination.Wrap.html" title="class in hydra.core">Elimination.Wrap</a></code></dd>
 </dl>
 <hr>
 <pre>public abstract class <span class="typeNameLabel">Elimination&lt;A&gt;</span>
@@ -160,50 +160,43 @@ extends java.lang.Object</pre>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="Elimination.Element.html" title="class in hydra.core">Elimination.Element</a>&lt;<a href="Elimination.Element.html" title="type parameter in Elimination.Element">A</a>&gt;</span></code></th>
-<td class="colLast">
-<div class="block">Eliminates an element by mapping it to its data term.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static class&nbsp;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="Elimination.List.html" title="class in hydra.core">Elimination.List</a>&lt;<a href="Elimination.List.html" title="type parameter in Elimination.List">A</a>&gt;</span></code></th>
 <td class="colLast">
 <div class="block">Eliminates a list using a fold function; this function has the signature b -&gt; [a] -&gt; b</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="Elimination.Optional.html" title="class in hydra.core">Elimination.Optional</a>&lt;<a href="Elimination.Optional.html" title="type parameter in Elimination.Optional">A</a>&gt;</span></code></th>
 <td class="colLast">
 <div class="block">Eliminates an optional term by matching over the two possible cases</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static interface&nbsp;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="Elimination.PartialVisitor.html" title="interface in hydra.core">Elimination.PartialVisitor</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&gt;</span></code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="Elimination.PartialVisitor.html" title="interface in hydra.core">Elimination.PartialVisitor</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">A</a>,&#8203;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&gt;</span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="Elimination.Record.html" title="class in hydra.core">Elimination.Record</a>&lt;<a href="Elimination.Record.html" title="type parameter in Elimination.Record">A</a>&gt;</span></code></th>
 <td class="colLast">
 <div class="block">Eliminates a record by projecting a given field</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="Elimination.Union.html" title="class in hydra.core">Elimination.Union</a>&lt;<a href="Elimination.Union.html" title="type parameter in Elimination.Union">A</a>&gt;</span></code></th>
 <td class="colLast">
 <div class="block">Eliminates a union term by matching over the fields of the union.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static interface&nbsp;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="Elimination.Visitor.html" title="interface in hydra.core">Elimination.Visitor</a>&lt;<a href="Elimination.Visitor.html" title="type parameter in Elimination.Visitor">R</a>&gt;</span></code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="Elimination.Visitor.html" title="interface in hydra.core">Elimination.Visitor</a>&lt;<a href="Elimination.Visitor.html" title="type parameter in Elimination.Visitor">A</a>,&#8203;<a href="Elimination.Visitor.html" title="type parameter in Elimination.Visitor">R</a>&gt;</span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="Elimination.Wrap.html" title="class in hydra.core">Elimination.Wrap</a>&lt;<a href="Elimination.Wrap.html" title="type parameter in Elimination.Wrap">A</a>&gt;</span></code></th>
 <td class="colLast">
@@ -253,7 +246,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>abstract &lt;R&gt;&nbsp;R</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#accept(hydra.core.Elimination.Visitor)">accept</a></span>&#8203;(<a href="Elimination.Visitor.html" title="interface in hydra.core">Elimination.Visitor</a>&lt;R&gt;&nbsp;visitor)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#accept(hydra.core.Elimination.Visitor)">accept</a></span>&#8203;(<a href="Elimination.Visitor.html" title="interface in hydra.core">Elimination.Visitor</a>&lt;<a href="Elimination.html" title="type parameter in Elimination">A</a>,&#8203;R&gt;&nbsp;visitor)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -305,7 +298,7 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>accept</h4>
-<pre class="methodSignature">public abstract&nbsp;&lt;R&gt;&nbsp;R&nbsp;accept&#8203;(<a href="Elimination.Visitor.html" title="interface in hydra.core">Elimination.Visitor</a>&lt;R&gt;&nbsp;visitor)</pre>
+<pre class="methodSignature">public abstract&nbsp;&lt;R&gt;&nbsp;R&nbsp;accept&#8203;(<a href="Elimination.Visitor.html" title="interface in hydra.core">Elimination.Visitor</a>&lt;<a href="Elimination.html" title="type parameter in Elimination">A</a>,&#8203;R&gt;&nbsp;visitor)</pre>
 </li>
 </ul>
 </li>

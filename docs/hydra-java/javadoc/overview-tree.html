@@ -101,9 +101,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="hydra/basics/package-tree.html">hydra.basics</a>, </li>
 <li><a href="hydra/coders/package-tree.html">hydra.coders</a>, </li>
 <li><a href="hydra/compute/package-tree.html">hydra.compute</a>, </li>
+<li><a href="hydra/constraints/package-tree.html">hydra.constraints</a>, </li>
 <li><a href="hydra/core/package-tree.html">hydra.core</a>, </li>
 <li><a href="hydra/dsl/package-tree.html">hydra.dsl</a>, </li>
 <li><a href="hydra/dsl/prims/package-tree.html">hydra.dsl.prims</a>, </li>
+<li><a href="hydra/extras/package-tree.html">hydra.extras</a>, </li>
 <li><a href="hydra/grammar/package-tree.html">hydra.grammar</a>, </li>
 <li><a href="hydra/graph/package-tree.html">hydra.graph</a>, </li>
 <li><a href="hydra/langs/avro/schema/package-tree.html">hydra.langs.avro.schema</a>, </li>
@@ -124,14 +126,18 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="hydra/langs/shacl/model/package-tree.html">hydra.langs.shacl.model</a>, </li>
 <li><a href="hydra/langs/shex/syntax/package-tree.html">hydra.langs.shex.syntax</a>, </li>
 <li><a href="hydra/langs/sql/ansi/package-tree.html">hydra.langs.sql.ansi</a>, </li>
+<li><a href="hydra/langs/tabular/package-tree.html">hydra.langs.tabular</a>, </li>
 <li><a href="hydra/langs/tinkerpop/features/package-tree.html">hydra.langs.tinkerpop.features</a>, </li>
-<li><a href="hydra/langs/tinkerpop/types/package-tree.html">hydra.langs.tinkerpop.types</a>, </li>
-<li><a href="hydra/langs/tinkerpop/v3/package-tree.html">hydra.langs.tinkerpop.v3</a>, </li>
+<li><a href="hydra/langs/tinkerpop/mappings/package-tree.html">hydra.langs.tinkerpop.mappings</a>, </li>
+<li><a href="hydra/langs/tinkerpop/propertyGraph/package-tree.html">hydra.langs.tinkerpop.propertyGraph</a>, </li>
 <li><a href="hydra/langs/xml/schema/package-tree.html">hydra.langs.xml.schema</a>, </li>
 <li><a href="hydra/langs/yaml/model/package-tree.html">hydra.langs.yaml.model</a>, </li>
 <li><a href="hydra/lib/package-tree.html">hydra.lib</a>, </li>
+<li><a href="hydra/lib/equality/package-tree.html">hydra.lib.equality</a>, </li>
+<li><a href="hydra/lib/flows/package-tree.html">hydra.lib.flows</a>, </li>
 <li><a href="hydra/lib/lists/package-tree.html">hydra.lib.lists</a>, </li>
 <li><a href="hydra/lib/literals/package-tree.html">hydra.lib.literals</a>, </li>
+<li><a href="hydra/lib/maps/package-tree.html">hydra.lib.maps</a>, </li>
 <li><a href="hydra/lib/math/package-tree.html">hydra.lib.math</a>, </li>
 <li><a href="hydra/lib/optionals/package-tree.html">hydra.lib.optionals</a>, </li>
 <li><a href="hydra/lib/sets/package-tree.html">hydra.lib.sets</a>, </li>
@@ -140,6 +146,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="hydra/module/package-tree.html">hydra.module</a>, </li>
 <li><a href="hydra/phantoms/package-tree.html">hydra.phantoms</a>, </li>
 <li><a href="hydra/printing/package-tree.html">hydra.printing</a>, </li>
+<li><a href="hydra/query/package-tree.html">hydra.query</a>, </li>
 <li><a href="hydra/testing/package-tree.html">hydra.testing</a>, </li>
 <li><a href="hydra/tools/package-tree.html">hydra.tools</a>, </li>
 <li><a href="hydra/workflow/package-tree.html">hydra.workflow</a></li>
@@ -204,6 +211,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.owl.syntax.<a href="hydra/langs/owl/syntax/AnnotationPropertyDomain.html" title="class in hydra.langs.owl.syntax"><span class="typeNameLink">AnnotationPropertyDomain</span></a></li>
 <li class="circle">hydra.langs.owl.syntax.<a href="hydra/langs/owl/syntax/AnnotationPropertyRange.html" title="class in hydra.langs.owl.syntax"><span class="typeNameLink">AnnotationPropertyRange</span></a></li>
 <li class="circle">hydra.langs.pegasus.pdl.<a href="hydra/langs/pegasus/pdl/Annotations.html" title="class in hydra.langs.pegasus.pdl"><span class="typeNameLink">Annotations</span></a></li>
+<li class="circle">hydra.langs.tinkerpop.mappings.<a href="hydra/langs/tinkerpop/mappings/AnnotationSchema.html" title="class in hydra.langs.tinkerpop.mappings"><span class="typeNameLink">AnnotationSchema</span></a></li>
 <li class="circle">hydra.langs.owl.syntax.<a href="hydra/langs/owl/syntax/AnnotationSubject.html" title="class in hydra.langs.owl.syntax"><span class="typeNameLink">AnnotationSubject</span></a>
 <ul>
 <li class="circle">hydra.langs.owl.syntax.<a href="hydra/langs/owl/syntax/AnnotationSubject.AnonymousIndividual.html" title="class in hydra.langs.owl.syntax"><span class="typeNameLink">AnnotationSubject.AnonymousIndividual</span></a></li>
@@ -752,6 +760,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.graph.<a href="hydra/graph/Comparison.LessThan.html" title="class in hydra.graph"><span class="typeNameLink">Comparison.LessThan</span></a></li>
 </ul>
 </li>
+<li class="circle">hydra.query.<a href="hydra/query/ComparisonConstraint.html" title="class in hydra.query"><span class="typeNameLink">ComparisonConstraint</span></a>
+<ul>
+<li class="circle">hydra.query.<a href="hydra/query/ComparisonConstraint.Equal.html" title="class in hydra.query"><span class="typeNameLink">ComparisonConstraint.Equal</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/ComparisonConstraint.GreaterThan.html" title="class in hydra.query"><span class="typeNameLink">ComparisonConstraint.GreaterThan</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/ComparisonConstraint.GreaterThanOrEqual.html" title="class in hydra.query"><span class="typeNameLink">ComparisonConstraint.GreaterThanOrEqual</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/ComparisonConstraint.LessThan.html" title="class in hydra.query"><span class="typeNameLink">ComparisonConstraint.LessThan</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/ComparisonConstraint.LessThanOrEqual.html" title="class in hydra.query"><span class="typeNameLink">ComparisonConstraint.LessThanOrEqual</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/ComparisonConstraint.NotEqual.html" title="class in hydra.query"><span class="typeNameLink">ComparisonConstraint.NotEqual</span></a></li>
+</ul>
+</li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/CompilationUnit.html" title="class in hydra.langs.java.syntax"><span class="typeNameLink">CompilationUnit</span></a>
 <ul>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/CompilationUnit.Modular.html" title="class in hydra.langs.java.syntax"><span class="typeNameLink">CompilationUnit.Modular</span></a></li>
@@ -968,6 +986,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.owl.syntax.<a href="hydra/langs/owl/syntax/DataRange.DataUnionOf.html" title="class in hydra.langs.owl.syntax"><span class="typeNameLink">DataRange.DataUnionOf</span></a></li>
 </ul>
 </li>
+<li class="circle">hydra.langs.tabular.<a href="hydra/langs/tabular/DataRow.html" title="class in hydra.langs.tabular"><span class="typeNameLink">DataRow</span></a></li>
 <li class="circle">hydra.langs.rdf.syntax.<a href="hydra/langs/rdf/syntax/Dataset.html" title="class in hydra.langs.rdf.syntax"><span class="typeNameLink">Dataset</span></a></li>
 <li class="circle">hydra.langs.owl.syntax.<a href="hydra/langs/owl/syntax/DataSomeValuesFrom.html" title="class in hydra.langs.owl.syntax"><span class="typeNameLink">DataSomeValuesFrom</span></a></li>
 <li class="circle">hydra.langs.owl.syntax.<a href="hydra/langs/owl/syntax/Datatype.html" title="class in hydra.langs.owl.syntax"><span class="typeNameLink">Datatype</span></a>
@@ -1059,6 +1078,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.sql.ansi.<a href="hydra/langs/sql/ansi/DatetimeType.html" title="class in hydra.langs.sql.ansi"><span class="typeNameLink">DatetimeType</span></a></li>
 <li class="circle">hydra.langs.sql.ansi.<a href="hydra/langs/sql/ansi/DatetimeValueExpression.html" title="class in hydra.langs.sql.ansi"><span class="typeNameLink">DatetimeValueExpression</span></a></li>
 <li class="circle">hydra.phantoms.<a href="hydra/phantoms/Datum.html" title="class in hydra.phantoms"><span class="typeNameLink">Datum</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.<a href="hydra/Debug.html" title="class in hydra"><span class="typeNameLink">Debug</span></a></li>
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/Decimal.html" title="class in hydra.langs.shex.syntax"><span class="typeNameLink">Decimal</span></a></li>
 <li class="circle">hydra.langs.xml.schema.<a href="hydra/langs/xml/schema/Decimal.html" title="class in hydra.langs.xml.schema"><span class="typeNameLink">Decimal</span></a></li>
 <li class="circle">hydra.langs.parquet.format.<a href="hydra/langs/parquet/format/DecimalType.html" title="class in hydra.langs.parquet.format"><span class="typeNameLink">DecimalType</span></a></li>
@@ -1144,6 +1164,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.owl.syntax.<a href="hydra/langs/owl/syntax/DifferentIndividuals.html" title="class in hydra.langs.owl.syntax"><span class="typeNameLink">DifferentIndividuals</span></a></li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/DimExpr.html" title="class in hydra.langs.java.syntax"><span class="typeNameLink">DimExpr</span></a></li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/Dims.html" title="class in hydra.langs.java.syntax"><span class="typeNameLink">Dims</span></a></li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/Direction.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">Direction</span></a>
+<ul>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/Direction.Both.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">Direction.Both</span></a></li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/Direction.In.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">Direction.In</span></a></li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/Direction.Out.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">Direction.Out</span></a></li>
+</ul>
+</li>
 <li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/Directive.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">Directive</span></a></li>
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/Directive.html" title="class in hydra.langs.shex.syntax"><span class="typeNameLink">Directive</span></a>
 <ul>
@@ -1178,19 +1205,41 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.xml.schema.<a href="hydra/langs/xml/schema/Double_.html" title="class in hydra.langs.xml.schema"><span class="typeNameLink">Double_</span></a></li>
 <li class="circle">hydra.langs.xml.schema.<a href="hydra/langs/xml/schema/Duration.html" title="class in hydra.langs.xml.schema"><span class="typeNameLink">Duration</span></a></li>
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/Echar.html" title="class in hydra.langs.shex.syntax"><span class="typeNameLink">Echar</span></a></li>
-<li class="circle">hydra.langs.tinkerpop.v3.<a href="hydra/langs/tinkerpop/v3/Edge.html" title="class in hydra.langs.tinkerpop.v3"><span class="typeNameLink">Edge</span></a>&lt;V,&#8203;E,&#8203;P&gt;</li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/Edge.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">Edge</span></a>&lt;V,&#8203;E,&#8203;P&gt;</li>
+<li class="circle">hydra.query.<a href="hydra/query/Edge.html" title="class in hydra.query"><span class="typeNameLink">Edge</span></a></li>
 <li class="circle">hydra.langs.tinkerpop.features.<a href="hydra/langs/tinkerpop/features/EdgeFeatures.html" title="class in hydra.langs.tinkerpop.features"><span class="typeNameLink">EdgeFeatures</span></a></li>
-<li class="circle">hydra.langs.tinkerpop.v3.<a href="hydra/langs/tinkerpop/v3/EdgeLabel.html" title="class in hydra.langs.tinkerpop.v3"><span class="typeNameLink">EdgeLabel</span></a></li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/EdgeLabel.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">EdgeLabel</span></a></li>
 <li class="circle">hydra.langs.tinkerpop.features.<a href="hydra/langs/tinkerpop/features/EdgePropertyFeatures.html" title="class in hydra.langs.tinkerpop.features"><span class="typeNameLink">EdgePropertyFeatures</span></a></li>
-<li class="circle">hydra.langs.tinkerpop.types.<a href="hydra/langs/tinkerpop/types/EdgeType.html" title="class in hydra.langs.tinkerpop.types"><span class="typeNameLink">EdgeType</span></a>&lt;V,&#8203;E,&#8203;P&gt;</li>
+<li class="circle">hydra.langs.tinkerpop.mappings.<a href="hydra/langs/tinkerpop/mappings/EdgeSpec.html" title="class in hydra.langs.tinkerpop.mappings"><span class="typeNameLink">EdgeSpec</span></a></li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/EdgeType.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">EdgeType</span></a>&lt;T&gt;</li>
 <li class="circle">hydra.graph.<a href="hydra/graph/Element.html" title="class in hydra.graph"><span class="typeNameLink">Element</span></a>&lt;A&gt;</li>
-<li class="circle">hydra.langs.tinkerpop.v3.<a href="hydra/langs/tinkerpop/v3/Element.html" title="class in hydra.langs.tinkerpop.v3"><span class="typeNameLink">Element</span></a>&lt;V,&#8203;E,&#8203;P&gt;
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/Element.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">Element</span></a>&lt;V,&#8203;E,&#8203;P&gt;
 <ul>
-<li class="circle">hydra.langs.tinkerpop.v3.<a href="hydra/langs/tinkerpop/v3/Element.Edge.html" title="class in hydra.langs.tinkerpop.v3"><span class="typeNameLink">Element.Edge</span></a>&lt;V,&#8203;E,&#8203;P&gt;</li>
-<li class="circle">hydra.langs.tinkerpop.v3.<a href="hydra/langs/tinkerpop/v3/Element.Vertex.html" title="class in hydra.langs.tinkerpop.v3"><span class="typeNameLink">Element.Vertex</span></a>&lt;V,&#8203;E,&#8203;P&gt;</li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/Element.Edge.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">Element.Edge</span></a>&lt;V,&#8203;E,&#8203;P&gt;</li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/Element.Vertex.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">Element.Vertex</span></a>&lt;V,&#8203;E,&#8203;P&gt;</li>
 </ul>
 </li>
 <li class="circle">hydra.langs.tinkerpop.features.<a href="hydra/langs/tinkerpop/features/ElementFeatures.html" title="class in hydra.langs.tinkerpop.features"><span class="typeNameLink">ElementFeatures</span></a></li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/ElementKind.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">ElementKind</span></a>
+<ul>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/ElementKind.Edge.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">ElementKind.Edge</span></a></li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/ElementKind.Vertex.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">ElementKind.Vertex</span></a></li>
+</ul>
+</li>
+<li class="circle">hydra.langs.tinkerpop.mappings.<a href="hydra/langs/tinkerpop/mappings/ElementSpec.html" title="class in hydra.langs.tinkerpop.mappings"><span class="typeNameLink">ElementSpec</span></a>
+<ul>
+<li class="circle">hydra.langs.tinkerpop.mappings.<a href="hydra/langs/tinkerpop/mappings/ElementSpec.Edge.html" title="class in hydra.langs.tinkerpop.mappings"><span class="typeNameLink">ElementSpec.Edge</span></a></li>
+<li class="circle">hydra.langs.tinkerpop.mappings.<a href="hydra/langs/tinkerpop/mappings/ElementSpec.Vertex.html" title="class in hydra.langs.tinkerpop.mappings"><span class="typeNameLink">ElementSpec.Vertex</span></a></li>
+</ul>
+</li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/ElementTree.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">ElementTree</span></a>&lt;V,&#8203;E,&#8203;P&gt;</li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/ElementType.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">ElementType</span></a>&lt;T&gt;
+<ul>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/ElementType.Edge.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">ElementType.Edge</span></a>&lt;T&gt;</li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/ElementType.Vertex.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">ElementType.Vertex</span></a>&lt;T&gt;</li>
+</ul>
+</li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/ElementTypeTree.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">ElementTypeTree</span></a>&lt;T&gt;</li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/ElementValue.html" title="class in hydra.langs.java.syntax"><span class="typeNameLink">ElementValue</span></a>
 <ul>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/ElementValue.Annotation.html" title="class in hydra.langs.java.syntax"><span class="typeNameLink">ElementValue.Annotation</span></a></li>
@@ -1202,7 +1251,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/ElementValuePair.html" title="class in hydra.langs.java.syntax"><span class="typeNameLink">ElementValuePair</span></a></li>
 <li class="circle">hydra.core.<a href="hydra/core/Elimination.html" title="class in hydra.core"><span class="typeNameLink">Elimination</span></a>&lt;A&gt;
 <ul>
-<li class="circle">hydra.core.<a href="hydra/core/Elimination.Element.html" title="class in hydra.core"><span class="typeNameLink">Elimination.Element</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.core.<a href="hydra/core/Elimination.List.html" title="class in hydra.core"><span class="typeNameLink">Elimination.List</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.core.<a href="hydra/core/Elimination.Optional.html" title="class in hydra.core"><span class="typeNameLink">Elimination.Optional</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.core.<a href="hydra/core/Elimination.Record.html" title="class in hydra.core"><span class="typeNameLink">Elimination.Record</span></a>&lt;A&gt;</li>
@@ -1212,7 +1260,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </li>
 <li class="circle">hydra.mantle.<a href="hydra/mantle/EliminationVariant.html" title="class in hydra.mantle"><span class="typeNameLink">EliminationVariant</span></a>
 <ul>
-<li class="circle">hydra.mantle.<a href="hydra/mantle/EliminationVariant.Element.html" title="class in hydra.mantle"><span class="typeNameLink">EliminationVariant.Element</span></a></li>
 <li class="circle">hydra.mantle.<a href="hydra/mantle/EliminationVariant.List.html" title="class in hydra.mantle"><span class="typeNameLink">EliminationVariant.List</span></a></li>
 <li class="circle">hydra.mantle.<a href="hydra/mantle/EliminationVariant.Optional.html" title="class in hydra.mantle"><span class="typeNameLink">EliminationVariant.Optional</span></a></li>
 <li class="circle">hydra.mantle.<a href="hydra/mantle/EliminationVariant.Record.html" title="class in hydra.mantle"><span class="typeNameLink">EliminationVariant.Record</span></a></li>
@@ -1279,14 +1326,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.pegasus.pdl.<a href="hydra/langs/pegasus/pdl/EnumField.html" title="class in hydra.langs.pegasus.pdl"><span class="typeNameLink">EnumField</span></a></li>
 <li class="circle">hydra.langs.pegasus.pdl.<a href="hydra/langs/pegasus/pdl/EnumFieldName.html" title="class in hydra.langs.pegasus.pdl"><span class="typeNameLink">EnumFieldName</span></a></li>
 <li class="circle">hydra.langs.pegasus.pdl.<a href="hydra/langs/pegasus/pdl/EnumSchema.html" title="class in hydra.langs.pegasus.pdl"><span class="typeNameLink">EnumSchema</span></a></li>
-<li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/EnumTypeDefinition.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">EnumTypeDefinition</span></a>
-<ul>
-<li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/EnumTypeDefinition.Sequence.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">EnumTypeDefinition.Sequence</span></a></li>
-<li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/EnumTypeDefinition.Sequence2.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">EnumTypeDefinition.Sequence2</span></a></li>
-</ul>
-</li>
-<li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/EnumTypeDefinition_Sequence.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">EnumTypeDefinition_Sequence</span></a></li>
-<li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/EnumTypeDefinition_Sequence2.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">EnumTypeDefinition_Sequence2</span></a></li>
+<li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/EnumTypeDefinition.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">EnumTypeDefinition</span></a></li>
 <li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/EnumTypeExtension.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">EnumTypeExtension</span></a>
 <ul>
 <li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/EnumTypeExtension.Sequence.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">EnumTypeExtension.Sequence</span></a></li>
@@ -1379,6 +1419,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul>
 <li class="circle">hydra.ast.<a href="hydra/ast/Expr.Brackets.html" title="class in hydra.ast"><span class="typeNameLink">Expr.Brackets</span></a></li>
 <li class="circle">hydra.ast.<a href="hydra/ast/Expr.Const.html" title="class in hydra.ast"><span class="typeNameLink">Expr.Const</span></a></li>
+<li class="circle">hydra.ast.<a href="hydra/ast/Expr.Indent.html" title="class in hydra.ast"><span class="typeNameLink">Expr.Indent</span></a></li>
 <li class="circle">hydra.ast.<a href="hydra/ast/Expr.Op.html" title="class in hydra.ast"><span class="typeNameLink">Expr.Op</span></a></li>
 </ul>
 </li>
@@ -1587,8 +1628,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.grammar.<a href="hydra/grammar/Grammar.html" title="class in hydra.grammar"><span class="typeNameLink">Grammar</span></a></li>
 <li class="circle">hydra.graph.<a href="hydra/graph/Graph.html" title="class in hydra.graph"><span class="typeNameLink">Graph</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.langs.rdf.syntax.<a href="hydra/langs/rdf/syntax/Graph.html" title="class in hydra.langs.rdf.syntax"><span class="typeNameLink">Graph</span></a></li>
-<li class="circle">hydra.langs.tinkerpop.v3.<a href="hydra/langs/tinkerpop/v3/Graph.html" title="class in hydra.langs.tinkerpop.v3"><span class="typeNameLink">Graph</span></a>&lt;V,&#8203;E,&#8203;P&gt;</li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/Graph.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">Graph</span></a>&lt;V,&#8203;E,&#8203;P&gt;</li>
 <li class="circle">hydra.langs.tinkerpop.features.<a href="hydra/langs/tinkerpop/features/GraphFeatures.html" title="class in hydra.langs.tinkerpop.features"><span class="typeNameLink">GraphFeatures</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/GraphPattern.html" title="class in hydra.query"><span class="typeNameLink">GraphPattern</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/GroupTripleExpr.html" title="class in hydra.langs.shex.syntax"><span class="typeNameLink">GroupTripleExpr</span></a>
 <ul>
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/GroupTripleExpr.MultiElementGroup.html" title="class in hydra.langs.shex.syntax"><span class="typeNameLink">GroupTripleExpr.MultiElementGroup</span></a></li>
@@ -1598,6 +1640,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.xml.schema.<a href="hydra/langs/xml/schema/GYear.html" title="class in hydra.langs.xml.schema"><span class="typeNameLink">GYear</span></a></li>
 <li class="circle">hydra.langs.xml.schema.<a href="hydra/langs/xml/schema/GYearMonth.html" title="class in hydra.langs.xml.schema"><span class="typeNameLink">GYearMonth</span></a></li>
 <li class="circle">hydra.langs.owl.syntax.<a href="hydra/langs/owl/syntax/HasKey.html" title="class in hydra.langs.owl.syntax"><span class="typeNameLink">HasKey</span></a></li>
+<li class="circle">hydra.langs.tabular.<a href="hydra/langs/tabular/HeaderRow.html" title="class in hydra.langs.tabular"><span class="typeNameLink">HeaderRow</span></a></li>
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/Hex.html" title="class in hydra.langs.shex.syntax"><span class="typeNameLink">Hex</span></a></li>
 <li class="circle">hydra.langs.xml.schema.<a href="hydra/langs/xml/schema/HexBinary.html" title="class in hydra.langs.xml.schema"><span class="typeNameLink">HexBinary</span></a></li>
 <li class="circle">hydra.workflow.<a href="hydra/workflow/HydraSchemaSpec.html" title="class in hydra.workflow"><span class="typeNameLink">HydraSchemaSpec</span></a></li>
@@ -1670,6 +1713,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/Include.html" title="class in hydra.langs.shex.syntax"><span class="typeNameLink">Include</span></a></li>
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/IncludeSet.html" title="class in hydra.langs.shex.syntax"><span class="typeNameLink">IncludeSet</span></a></li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/InclusiveOrExpression.html" title="class in hydra.langs.java.syntax"><span class="typeNameLink">InclusiveOrExpression</span></a></li>
+<li class="circle">hydra.ast.<a href="hydra/ast/IndentedExpression.html" title="class in hydra.ast"><span class="typeNameLink">IndentedExpression</span></a></li>
+<li class="circle">hydra.ast.<a href="hydra/ast/IndentStyle.html" title="class in hydra.ast"><span class="typeNameLink">IndentStyle</span></a>
+<ul>
+<li class="circle">hydra.ast.<a href="hydra/ast/IndentStyle.AllLines.html" title="class in hydra.ast"><span class="typeNameLink">IndentStyle.AllLines</span></a></li>
+<li class="circle">hydra.ast.<a href="hydra/ast/IndentStyle.SubsequentLines.html" title="class in hydra.ast"><span class="typeNameLink">IndentStyle.SubsequentLines</span></a></li>
+</ul>
+</li>
 <li class="circle">hydra.langs.parquet.format.<a href="hydra/langs/parquet/format/IndexPageHeader.html" title="class in hydra.langs.parquet.format"><span class="typeNameLink">IndexPageHeader</span></a></li>
 <li class="circle">hydra.langs.owl.syntax.<a href="hydra/langs/owl/syntax/Individual.html" title="class in hydra.langs.owl.syntax"><span class="typeNameLink">Individual</span></a>
 <ul>
@@ -1903,6 +1953,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </li>
 <li class="circle">hydra.compute.<a href="hydra/compute/Kv.html" title="class in hydra.compute"><span class="typeNameLink">Kv</span></a></li>
 <li class="circle">hydra.grammar.<a href="hydra/grammar/Label.html" title="class in hydra.grammar"><span class="typeNameLink">Label</span></a></li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/Label.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">Label</span></a>
+<ul>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/Label.Edge.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">Label.Edge</span></a></li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/Label.Vertex.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">Label.Vertex</span></a></li>
+</ul>
+</li>
 <li class="circle">hydra.grammar.<a href="hydra/grammar/LabeledPattern.html" title="class in hydra.grammar"><span class="typeNameLink">LabeledPattern</span></a></li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/LabeledStatement.html" title="class in hydra.langs.java.syntax"><span class="typeNameLink">LabeledStatement</span></a></li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/LabeledStatementNoShortIf.html" title="class in hydra.langs.java.syntax"><span class="typeNameLink">LabeledStatementNoShortIf</span></a></li>
@@ -1942,7 +1998,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.coders.<a href="hydra/coders/LanguageName.html" title="class in hydra.coders"><span class="typeNameLink">LanguageName</span></a></li>
 <li class="circle">hydra.langs.rdf.syntax.<a href="hydra/langs/rdf/syntax/LanguageTag.html" title="class in hydra.langs.rdf.syntax"><span class="typeNameLink">LanguageTag</span></a></li>
 <li class="circle">hydra.langs.sql.ansi.<a href="hydra/langs/sql/ansi/LargeObjectLength.html" title="class in hydra.langs.sql.ansi"><span class="typeNameLink">LargeObjectLength</span></a></li>
-<li class="circle">hydra.workflow.<a href="hydra/workflow/LastMile.html" title="class in hydra.workflow"><span class="typeNameLink">LastMile</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.workflow.<a href="hydra/workflow/LastMile.html" title="class in hydra.workflow"><span class="typeNameLink">LastMile</span></a>&lt;S,&#8203;A&gt;</li>
 <li class="circle">hydra.langs.sql.ansi.<a href="hydra/langs/sql/ansi/LeftBracketOrTrigraph.html" title="class in hydra.langs.sql.ansi"><span class="typeNameLink">LeftBracketOrTrigraph</span></a></li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/LeftHandSide.html" title="class in hydra.langs.java.syntax"><span class="typeNameLink">LeftHandSide</span></a>
 <ul>
@@ -1954,7 +2010,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.sql.ansi.<a href="hydra/langs/sql/ansi/Length.html" title="class in hydra.langs.sql.ansi"><span class="typeNameLink">Length</span></a></li>
 <li class="circle">hydra.core.<a href="hydra/core/Let.html" title="class in hydra.core"><span class="typeNameLink">Let</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.<a href="hydra/Lexical.html" title="class in hydra"><span class="typeNameLink">Lexical</span></a></li>
-<li class="circle">hydra.lib.<a href="hydra/lib/Libraries.html" title="class in hydra.lib"><span class="typeNameLink">Libraries</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.<a href="hydra/lib/Libraries.html" title="class in hydra.lib"><span class="typeNameLink">Libraries</span></a></li>
 <li class="circle">hydra.langs.sql.ansi.<a href="hydra/langs/sql/ansi/LikeClause.html" title="class in hydra.langs.sql.ansi"><span class="typeNameLink">LikeClause</span></a></li>
 <li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/ListType.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">ListType</span></a></li>
 <li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/ListValue.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">ListValue</span></a>
@@ -2269,6 +2325,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.yaml.model.<a href="hydra/langs/yaml/model/Node.Sequence.html" title="class in hydra.langs.yaml.model"><span class="typeNameLink">Node.Sequence</span></a></li>
 </ul>
 </li>
+<li class="circle">hydra.query.<a href="hydra/query/Node.html" title="class in hydra.query"><span class="typeNameLink">Node</span></a>&lt;A&gt;
+<ul>
+<li class="circle">hydra.query.<a href="hydra/query/Node.Term.html" title="class in hydra.query"><span class="typeNameLink">Node.Term</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.query.<a href="hydra/query/Node.Variable.html" title="class in hydra.query"><span class="typeNameLink">Node.Variable</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.query.<a href="hydra/query/Node.Wildcard.html" title="class in hydra.query"><span class="typeNameLink">Node.Wildcard</span></a>&lt;A&gt;</li>
+</ul>
+</li>
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/NodeConstraint.html" title="class in hydra.langs.shex.syntax"><span class="typeNameLink">NodeConstraint</span></a>
 <ul>
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/NodeConstraint.ListOfXsFacet.html" title="class in hydra.langs.shex.syntax"><span class="typeNameLink">NodeConstraint.ListOfXsFacet</span></a></li>
@@ -2438,14 +2501,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </li>
 <li class="circle">hydra.langs.owl.syntax.<a href="hydra/langs/owl/syntax/ObjectPropertyRange.html" title="class in hydra.langs.owl.syntax"><span class="typeNameLink">ObjectPropertyRange</span></a></li>
 <li class="circle">hydra.langs.owl.syntax.<a href="hydra/langs/owl/syntax/ObjectSomeValuesFrom.html" title="class in hydra.langs.owl.syntax"><span class="typeNameLink">ObjectSomeValuesFrom</span></a></li>
-<li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/ObjectTypeDefinition.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">ObjectTypeDefinition</span></a>
-<ul>
-<li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/ObjectTypeDefinition.Sequence.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">ObjectTypeDefinition.Sequence</span></a></li>
-<li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/ObjectTypeDefinition.Sequence2.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">ObjectTypeDefinition.Sequence2</span></a></li>
-</ul>
-</li>
-<li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/ObjectTypeDefinition_Sequence.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">ObjectTypeDefinition_Sequence</span></a></li>
-<li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/ObjectTypeDefinition_Sequence2.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">ObjectTypeDefinition_Sequence2</span></a></li>
+<li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/ObjectTypeDefinition.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">ObjectTypeDefinition</span></a></li>
 <li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/ObjectTypeExtension.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">ObjectTypeExtension</span></a>
 <ul>
 <li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/ObjectTypeExtension.Sequence.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">ObjectTypeExtension.Sequence</span></a></li>
@@ -2558,6 +2614,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.scala.meta.<a href="hydra/langs/scala/meta/Pat_Typed.html" title="class in hydra.langs.scala.meta"><span class="typeNameLink">Pat_Typed</span></a></li>
 <li class="circle">hydra.langs.scala.meta.<a href="hydra/langs/scala/meta/Pat_Var.html" title="class in hydra.langs.scala.meta"><span class="typeNameLink">Pat_Var</span></a></li>
 <li class="circle">hydra.langs.scala.meta.<a href="hydra/langs/scala/meta/Pat_Xml.html" title="class in hydra.langs.scala.meta"><span class="typeNameLink">Pat_Xml</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/Path.html" title="class in hydra.query"><span class="typeNameLink">Path</span></a>
+<ul>
+<li class="circle">hydra.query.<a href="hydra/query/Path.Inverse.html" title="class in hydra.query"><span class="typeNameLink">Path.Inverse</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/Path.Regex.html" title="class in hydra.query"><span class="typeNameLink">Path.Regex</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/Path.Step.html" title="class in hydra.query"><span class="typeNameLink">Path.Step</span></a></li>
+</ul>
+</li>
+<li class="circle">hydra.constraints.<a href="hydra/constraints/PathEquation.html" title="class in hydra.constraints"><span class="typeNameLink">PathEquation</span></a></li>
 <li class="circle">hydra.langs.sql.ansi.<a href="hydra/langs/sql/ansi/PathResolvedUserDefinedTypeName.html" title="class in hydra.langs.sql.ansi"><span class="typeNameLink">PathResolvedUserDefinedTypeName</span></a></li>
 <li class="circle">hydra.grammar.<a href="hydra/grammar/Pattern.html" title="class in hydra.grammar"><span class="typeNameLink">Pattern</span></a>
 <ul>
@@ -2589,11 +2653,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </ul>
 </li>
 <li class="circle">hydra.langs.shacl.model.<a href="hydra/langs/shacl/model/Pattern.html" title="class in hydra.langs.shacl.model"><span class="typeNameLink">Pattern</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/Pattern.html" title="class in hydra.query"><span class="typeNameLink">Pattern</span></a>&lt;A&gt;
+<ul>
+<li class="circle">hydra.query.<a href="hydra/query/Pattern.Conjunction.html" title="class in hydra.query"><span class="typeNameLink">Pattern.Conjunction</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.query.<a href="hydra/query/Pattern.Disjunction.html" title="class in hydra.query"><span class="typeNameLink">Pattern.Disjunction</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.query.<a href="hydra/query/Pattern.Graph.html" title="class in hydra.query"><span class="typeNameLink">Pattern.Graph</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.query.<a href="hydra/query/Pattern.Negation.html" title="class in hydra.query"><span class="typeNameLink">Pattern.Negation</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.query.<a href="hydra/query/Pattern.Triple.html" title="class in hydra.query"><span class="typeNameLink">Pattern.Triple</span></a>&lt;A&gt;</li>
+</ul>
+</li>
 <li class="circle">hydra.langs.haskell.ast.<a href="hydra/langs/haskell/ast/Pattern_Application.html" title="class in hydra.langs.haskell.ast"><span class="typeNameLink">Pattern_Application</span></a></li>
 <li class="circle">hydra.langs.haskell.ast.<a href="hydra/langs/haskell/ast/Pattern_As.html" title="class in hydra.langs.haskell.ast"><span class="typeNameLink">Pattern_As</span></a></li>
 <li class="circle">hydra.langs.haskell.ast.<a href="hydra/langs/haskell/ast/Pattern_Record.html" title="class in hydra.langs.haskell.ast"><span class="typeNameLink">Pattern_Record</span></a></li>
 <li class="circle">hydra.langs.haskell.ast.<a href="hydra/langs/haskell/ast/Pattern_Typed.html" title="class in hydra.langs.haskell.ast"><span class="typeNameLink">Pattern_Typed</span></a></li>
 <li class="circle">hydra.langs.haskell.ast.<a href="hydra/langs/haskell/ast/PatternField.html" title="class in hydra.langs.haskell.ast"><span class="typeNameLink">PatternField</span></a></li>
+<li class="circle">hydra.constraints.<a href="hydra/constraints/PatternImplication.html" title="class in hydra.constraints"><span class="typeNameLink">PatternImplication</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/Percent.html" title="class in hydra.langs.shex.syntax"><span class="typeNameLink">Percent</span></a></li>
 <li class="circle">hydra.langs.scala.meta.<a href="hydra/langs/scala/meta/Pkg.html" title="class in hydra.langs.scala.meta"><span class="typeNameLink">Pkg</span></a></li>
 <li class="circle">hydra.langs.scala.meta.<a href="hydra/langs/scala/meta/Pkg_Object.html" title="class in hydra.langs.scala.meta"><span class="typeNameLink">Pkg_Object</span></a></li>
@@ -2745,17 +2819,42 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.tools.<a href="hydra/tools/PrimitiveFunction.html" title="class in hydra.tools"><span class="typeNameLink">PrimitiveFunction</span></a>&lt;A&gt;
 <ul>
 <li class="circle">hydra.lib.math.<a href="hydra/lib/math/Add.html" title="class in hydra.lib.math"><span class="typeNameLink">Add</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.flows.<a href="hydra/lib/flows/Apply.html" title="class in hydra.lib.flows"><span class="typeNameLink">Apply</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.lists.<a href="hydra/lib/lists/Apply.html" title="class in hydra.lib.lists"><span class="typeNameLink">Apply</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.optionals.<a href="hydra/lib/optionals/Apply.html" title="class in hydra.lib.optionals"><span class="typeNameLink">Apply</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.flows.<a href="hydra/lib/flows/Bind.html" title="class in hydra.lib.flows"><span class="typeNameLink">Bind</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.lists.<a href="hydra/lib/lists/Bind.html" title="class in hydra.lib.lists"><span class="typeNameLink">Bind</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.optionals.<a href="hydra/lib/optionals/Bind.html" title="class in hydra.lib.optionals"><span class="typeNameLink">Bind</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.strings.<a href="hydra/lib/strings/Cat.html" title="class in hydra.lib.strings"><span class="typeNameLink">Cat</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.lists.<a href="hydra/lib/lists/Concat.html" title="class in hydra.lib.lists"><span class="typeNameLink">Concat</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.sets.<a href="hydra/lib/sets/Contains.html" title="class in hydra.lib.sets"><span class="typeNameLink">Contains</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.math.<a href="hydra/lib/math/Div.html" title="class in hydra.lib.math"><span class="typeNameLink">Div</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.maps.<a href="hydra/lib/maps/Empty.html" title="class in hydra.lib.maps"><span class="typeNameLink">Empty</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.sets.<a href="hydra/lib/sets/Empty.html" title="class in hydra.lib.sets"><span class="typeNameLink">Empty</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.equality.<a href="hydra/lib/equality/EqualityFunction.html" title="class in hydra.lib.equality"><span class="typeNameLink">EqualityFunction</span></a>&lt;A,&#8203;T&gt;
+<ul>
+<li class="circle">hydra.lib.equality.<a href="hydra/lib/equality/EqualBigfloat.html" title="class in hydra.lib.equality"><span class="typeNameLink">EqualBigfloat</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.equality.<a href="hydra/lib/equality/EqualBigint.html" title="class in hydra.lib.equality"><span class="typeNameLink">EqualBigint</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.equality.<a href="hydra/lib/equality/EqualBinary.html" title="class in hydra.lib.equality"><span class="typeNameLink">EqualBinary</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.equality.<a href="hydra/lib/equality/EqualBoolean.html" title="class in hydra.lib.equality"><span class="typeNameLink">EqualBoolean</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.equality.<a href="hydra/lib/equality/EqualFloat32.html" title="class in hydra.lib.equality"><span class="typeNameLink">EqualFloat32</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.equality.<a href="hydra/lib/equality/EqualFloat64.html" title="class in hydra.lib.equality"><span class="typeNameLink">EqualFloat64</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.equality.<a href="hydra/lib/equality/EqualInt16.html" title="class in hydra.lib.equality"><span class="typeNameLink">EqualInt16</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.equality.<a href="hydra/lib/equality/EqualInt32.html" title="class in hydra.lib.equality"><span class="typeNameLink">EqualInt32</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.equality.<a href="hydra/lib/equality/EqualInt64.html" title="class in hydra.lib.equality"><span class="typeNameLink">EqualInt64</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.equality.<a href="hydra/lib/equality/EqualInt8.html" title="class in hydra.lib.equality"><span class="typeNameLink">EqualInt8</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.equality.<a href="hydra/lib/equality/EqualString.html" title="class in hydra.lib.equality"><span class="typeNameLink">EqualString</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.equality.<a href="hydra/lib/equality/EqualTerm.html" title="class in hydra.lib.equality"><span class="typeNameLink">EqualTerm</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.equality.<a href="hydra/lib/equality/EqualType.html" title="class in hydra.lib.equality"><span class="typeNameLink">EqualType</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.equality.<a href="hydra/lib/equality/EqualUint16.html" title="class in hydra.lib.equality"><span class="typeNameLink">EqualUint16</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.equality.<a href="hydra/lib/equality/EqualUint32.html" title="class in hydra.lib.equality"><span class="typeNameLink">EqualUint32</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.equality.<a href="hydra/lib/equality/EqualUint64.html" title="class in hydra.lib.equality"><span class="typeNameLink">EqualUint64</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.equality.<a href="hydra/lib/equality/EqualUint8.html" title="class in hydra.lib.equality"><span class="typeNameLink">EqualUint8</span></a>&lt;A&gt;</li>
+</ul>
+</li>
 <li class="circle">hydra.lib.sets.<a href="hydra/lib/sets/FromList.html" title="class in hydra.lib.sets"><span class="typeNameLink">FromList</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.lists.<a href="hydra/lib/lists/Head.html" title="class in hydra.lib.lists"><span class="typeNameLink">Head</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.maps.<a href="hydra/lib/maps/Insert.html" title="class in hydra.lib.maps"><span class="typeNameLink">Insert</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.sets.<a href="hydra/lib/sets/Insert.html" title="class in hydra.lib.sets"><span class="typeNameLink">Insert</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.lists.<a href="hydra/lib/lists/Intercalate.html" title="class in hydra.lib.lists"><span class="typeNameLink">Intercalate</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.lists.<a href="hydra/lib/lists/Intersperse.html" title="class in hydra.lib.lists"><span class="typeNameLink">Intersperse</span></a>&lt;A&gt;</li>
@@ -2763,12 +2862,15 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.lib.lists.<a href="hydra/lib/lists/Last.html" title="class in hydra.lib.lists"><span class="typeNameLink">Last</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.lists.<a href="hydra/lib/lists/Length.html" title="class in hydra.lib.lists"><span class="typeNameLink">Length</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.strings.<a href="hydra/lib/strings/Length.html" title="class in hydra.lib.strings"><span class="typeNameLink">Length</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.maps.<a href="hydra/lib/maps/Lookup.html" title="class in hydra.lib.maps"><span class="typeNameLink">Lookup</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.flows.<a href="hydra/lib/flows/Map.html" title="class in hydra.lib.flows"><span class="typeNameLink">Map</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.lists.<a href="hydra/lib/lists/Map.html" title="class in hydra.lib.lists"><span class="typeNameLink">Map</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.optionals.<a href="hydra/lib/optionals/Map.html" title="class in hydra.lib.optionals"><span class="typeNameLink">Map</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.sets.<a href="hydra/lib/sets/Map.html" title="class in hydra.lib.sets"><span class="typeNameLink">Map</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.math.<a href="hydra/lib/math/Mod.html" title="class in hydra.lib.math"><span class="typeNameLink">Mod</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.math.<a href="hydra/lib/math/Mul.html" title="class in hydra.lib.math"><span class="typeNameLink">Mul</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.math.<a href="hydra/lib/math/Neg.html" title="class in hydra.lib.math"><span class="typeNameLink">Neg</span></a>&lt;A&gt;</li>
+<li class="circle">hydra.lib.flows.<a href="hydra/lib/flows/Pure.html" title="class in hydra.lib.flows"><span class="typeNameLink">Pure</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.lists.<a href="hydra/lib/lists/Pure.html" title="class in hydra.lib.lists"><span class="typeNameLink">Pure</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.optionals.<a href="hydra/lib/optionals/Pure.html" title="class in hydra.lib.optionals"><span class="typeNameLink">Pure</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.lib.math.<a href="hydra/lib/math/Rem.html" title="class in hydra.lib.math"><span class="typeNameLink">Rem</span></a>&lt;A&gt;</li>
@@ -2806,10 +2908,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.core.<a href="hydra/core/Projection.html" title="class in hydra.core"><span class="typeNameLink">Projection</span></a></li>
 <li class="circle">hydra.langs.pegasus.pdl.<a href="hydra/langs/pegasus/pdl/Property.html" title="class in hydra.langs.pegasus.pdl"><span class="typeNameLink">Property</span></a></li>
 <li class="circle">hydra.langs.rdf.syntax.<a href="hydra/langs/rdf/syntax/Property.html" title="class in hydra.langs.rdf.syntax"><span class="typeNameLink">Property</span></a></li>
-<li class="circle">hydra.langs.tinkerpop.v3.<a href="hydra/langs/tinkerpop/v3/Property.html" title="class in hydra.langs.tinkerpop.v3"><span class="typeNameLink">Property</span></a>&lt;P&gt;</li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/Property.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">Property</span></a>&lt;P&gt;</li>
 <li class="circle">hydra.langs.tinkerpop.features.<a href="hydra/langs/tinkerpop/features/PropertyFeatures.html" title="class in hydra.langs.tinkerpop.features"><span class="typeNameLink">PropertyFeatures</span></a></li>
 <li class="circle">hydra.langs.pegasus.pdl.<a href="hydra/langs/pegasus/pdl/PropertyKey.html" title="class in hydra.langs.pegasus.pdl"><span class="typeNameLink">PropertyKey</span></a></li>
-<li class="circle">hydra.langs.tinkerpop.v3.<a href="hydra/langs/tinkerpop/v3/PropertyKey.html" title="class in hydra.langs.tinkerpop.v3"><span class="typeNameLink">PropertyKey</span></a></li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/PropertyKey.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">PropertyKey</span></a></li>
 <li class="circle">hydra.langs.shacl.model.<a href="hydra/langs/shacl/model/PropertyShape.html" title="class in hydra.langs.shacl.model"><span class="typeNameLink">PropertyShape</span></a></li>
 <li class="circle">hydra.langs.shacl.model.<a href="hydra/langs/shacl/model/PropertyShapeConstraint.html" title="class in hydra.langs.shacl.model"><span class="typeNameLink">PropertyShapeConstraint</span></a>
 <ul>
@@ -2821,13 +2923,18 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.shacl.model.<a href="hydra/langs/shacl/model/PropertyShapeConstraint.UniqueLang.html" title="class in hydra.langs.shacl.model"><span class="typeNameLink">PropertyShapeConstraint.UniqueLang</span></a></li>
 </ul>
 </li>
+<li class="circle">hydra.langs.tinkerpop.mappings.<a href="hydra/langs/tinkerpop/mappings/PropertySpec.html" title="class in hydra.langs.tinkerpop.mappings"><span class="typeNameLink">PropertySpec</span></a></li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/PropertyType.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">PropertyType</span></a>&lt;T&gt;</li>
 <li class="circle">hydra.langs.xml.schema.<a href="hydra/langs/xml/schema/QName.html" title="class in hydra.langs.xml.schema"><span class="typeNameLink">QName</span></a></li>
 <li class="circle">hydra.langs.rdf.syntax.<a href="hydra/langs/rdf/syntax/Quad.html" title="class in hydra.langs.rdf.syntax"><span class="typeNameLink">Quad</span></a></li>
 <li class="circle">hydra.langs.haskell.ast.<a href="hydra/langs/haskell/ast/QualifiedName.html" title="class in hydra.langs.haskell.ast"><span class="typeNameLink">QualifiedName</span></a></li>
 <li class="circle">hydra.langs.pegasus.pdl.<a href="hydra/langs/pegasus/pdl/QualifiedName.html" title="class in hydra.langs.pegasus.pdl"><span class="typeNameLink">QualifiedName</span></a></li>
+<li class="circle">hydra.module.<a href="hydra/module/QualifiedName.html" title="class in hydra.module"><span class="typeNameLink">QualifiedName</span></a></li>
 <li class="circle">hydra.langs.shacl.model.<a href="hydra/langs/shacl/model/QualifiedValueShape.html" title="class in hydra.langs.shacl.model"><span class="typeNameLink">QualifiedValueShape</span></a></li>
 <li class="circle">hydra.langs.scala.meta.<a href="hydra/langs/scala/meta/Quasi.html" title="class in hydra.langs.scala.meta"><span class="typeNameLink">Quasi</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/Query.html" title="class in hydra.query"><span class="typeNameLink">Query</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.langs.sql.ansi.<a href="hydra/langs/sql/ansi/QueryExpression.html" title="class in hydra.langs.sql.ansi"><span class="typeNameLink">QueryExpression</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/Range.html" title="class in hydra.query"><span class="typeNameLink">Range</span></a></li>
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/RdfLiteral.html" title="class in hydra.langs.shex.syntax"><span class="typeNameLink">RdfLiteral</span></a></li>
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/RdfLiteral_Alts_Option.html" title="class in hydra.langs.shex.syntax"><span class="typeNameLink">RdfLiteral_Alts_Option</span></a>
 <ul>
@@ -2878,6 +2985,18 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/Regexp_ListOfAlts_Elmt.Uchar.html" title="class in hydra.langs.shex.syntax"><span class="typeNameLink">Regexp_ListOfAlts_Elmt.Uchar</span></a></li>
 </ul>
 </li>
+<li class="circle">hydra.query.<a href="hydra/query/RegexQuantifier.html" title="class in hydra.query"><span class="typeNameLink">RegexQuantifier</span></a>
+<ul>
+<li class="circle">hydra.query.<a href="hydra/query/RegexQuantifier.AtLeast.html" title="class in hydra.query"><span class="typeNameLink">RegexQuantifier.AtLeast</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/RegexQuantifier.Exactly.html" title="class in hydra.query"><span class="typeNameLink">RegexQuantifier.Exactly</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/RegexQuantifier.One.html" title="class in hydra.query"><span class="typeNameLink">RegexQuantifier.One</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/RegexQuantifier.OneOrMore.html" title="class in hydra.query"><span class="typeNameLink">RegexQuantifier.OneOrMore</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/RegexQuantifier.Range.html" title="class in hydra.query"><span class="typeNameLink">RegexQuantifier.Range</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/RegexQuantifier.ZeroOrMore.html" title="class in hydra.query"><span class="typeNameLink">RegexQuantifier.ZeroOrMore</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/RegexQuantifier.ZeroOrOne.html" title="class in hydra.query"><span class="typeNameLink">RegexQuantifier.ZeroOrOne</span></a></li>
+</ul>
+</li>
+<li class="circle">hydra.query.<a href="hydra/query/RegexSequence.html" title="class in hydra.query"><span class="typeNameLink">RegexSequence</span></a></li>
 <li class="circle">hydra.langs.relationalModel.<a href="hydra/langs/relationalModel/Relation.html" title="class in hydra.langs.relationalModel"><span class="typeNameLink">Relation</span></a>&lt;V&gt;</li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/RelationalExpression.html" title="class in hydra.langs.java.syntax"><span class="typeNameLink">RelationalExpression</span></a>
 <ul>
@@ -2978,6 +3097,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.pegasus.pdl.<a href="hydra/langs/pegasus/pdl/Schema.Union.html" title="class in hydra.langs.pegasus.pdl"><span class="typeNameLink">Schema.Union</span></a></li>
 </ul>
 </li>
+<li class="circle">hydra.langs.tinkerpop.mappings.<a href="hydra/langs/tinkerpop/mappings/Schema.html" title="class in hydra.langs.tinkerpop.mappings"><span class="typeNameLink">Schema</span></a>&lt;S,&#8203;A,&#8203;T,&#8203;V,&#8203;E,&#8203;P&gt;</li>
 <li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/SchemaDefinition.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">SchemaDefinition</span></a></li>
 <li class="circle">hydra.langs.parquet.format.<a href="hydra/langs/parquet/format/SchemaElement.html" title="class in hydra.langs.parquet.format"><span class="typeNameLink">SchemaElement</span></a></li>
 <li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/SchemaExtension.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">SchemaExtension</span></a>
@@ -3149,6 +3269,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/StaticInitializer.html" title="class in hydra.langs.java.syntax"><span class="typeNameLink">StaticInitializer</span></a></li>
 <li class="circle">hydra.langs.sql.ansi.<a href="hydra/langs/sql/ansi/StaticMethodInvocation.html" title="class in hydra.langs.sql.ansi"><span class="typeNameLink">StaticMethodInvocation</span></a></li>
 <li class="circle">hydra.langs.parquet.format.<a href="hydra/langs/parquet/format/Statistics.html" title="class in hydra.langs.parquet.format"><span class="typeNameLink">Statistics</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/Step.html" title="class in hydra.query"><span class="typeNameLink">Step</span></a>
+<ul>
+<li class="circle">hydra.query.<a href="hydra/query/Step.Compare.html" title="class in hydra.query"><span class="typeNameLink">Step.Compare</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/Step.Edge.html" title="class in hydra.query"><span class="typeNameLink">Step.Edge</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/Step.Project.html" title="class in hydra.query"><span class="typeNameLink">Step.Project</span></a></li>
+</ul>
+</li>
 <li class="circle">hydra.core.<a href="hydra/core/Stream.html" title="class in hydra.core"><span class="typeNameLink">Stream</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/String_.html" title="class in hydra.langs.shex.syntax"><span class="typeNameLink">String_</span></a>
 <ul>
@@ -3253,6 +3380,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.protobuf.type.<a href="hydra/langs/protobuf/type/Syntax.Proto3.html" title="class in hydra.langs.protobuf.type"><span class="typeNameLink">Syntax.Proto3</span></a></li>
 </ul>
 </li>
+<li class="circle">hydra.langs.tabular.<a href="hydra/langs/tabular/Table.html" title="class in hydra.langs.tabular"><span class="typeNameLink">Table</span></a></li>
 <li class="circle">hydra.langs.sql.ansi.<a href="hydra/langs/sql/ansi/TableCommitAction.html" title="class in hydra.langs.sql.ansi"><span class="typeNameLink">TableCommitAction</span></a>
 <ul>
 <li class="circle">hydra.langs.sql.ansi.<a href="hydra/langs/sql/ansi/TableCommitAction.Delete.html" title="class in hydra.langs.sql.ansi"><span class="typeNameLink">TableCommitAction.Delete</span></a></li>
@@ -3286,7 +3414,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul>
 <li class="circle">hydra.core.<a href="hydra/core/Term.Annotated.html" title="class in hydra.core"><span class="typeNameLink">Term.Annotated</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.core.<a href="hydra/core/Term.Application.html" title="class in hydra.core"><span class="typeNameLink">Term.Application</span></a>&lt;A&gt;</li>
-<li class="circle">hydra.core.<a href="hydra/core/Term.Element.html" title="class in hydra.core"><span class="typeNameLink">Term.Element</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.core.<a href="hydra/core/Term.Function.html" title="class in hydra.core"><span class="typeNameLink">Term.Function</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.core.<a href="hydra/core/Term.Let.html" title="class in hydra.core"><span class="typeNameLink">Term.Let</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.core.<a href="hydra/core/Term.List.html" title="class in hydra.core"><span class="typeNameLink">Term.List</span></a>&lt;A&gt;</li>
@@ -3308,7 +3435,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul>
 <li class="circle">hydra.mantle.<a href="hydra/mantle/TermVariant.Annotated.html" title="class in hydra.mantle"><span class="typeNameLink">TermVariant.Annotated</span></a></li>
 <li class="circle">hydra.mantle.<a href="hydra/mantle/TermVariant.Application.html" title="class in hydra.mantle"><span class="typeNameLink">TermVariant.Application</span></a></li>
-<li class="circle">hydra.mantle.<a href="hydra/mantle/TermVariant.Element.html" title="class in hydra.mantle"><span class="typeNameLink">TermVariant.Element</span></a></li>
 <li class="circle">hydra.mantle.<a href="hydra/mantle/TermVariant.Function.html" title="class in hydra.mantle"><span class="typeNameLink">TermVariant.Function</span></a></li>
 <li class="circle">hydra.mantle.<a href="hydra/mantle/TermVariant.Let.html" title="class in hydra.mantle"><span class="typeNameLink">TermVariant.Let</span></a></li>
 <li class="circle">hydra.mantle.<a href="hydra/mantle/TermVariant.List.html" title="class in hydra.mantle"><span class="typeNameLink">TermVariant.List</span></a></li>
@@ -3393,6 +3519,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/TripleExprLabel.Iri.html" title="class in hydra.langs.shex.syntax"><span class="typeNameLink">TripleExprLabel.Iri</span></a></li>
 </ul>
 </li>
+<li class="circle">hydra.query.<a href="hydra/query/TriplePattern.html" title="class in hydra.query"><span class="typeNameLink">TriplePattern</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.langs.sql.ansi.<a href="hydra/langs/sql/ansi/TruthValue.html" title="class in hydra.langs.sql.ansi"><span class="typeNameLink">TruthValue</span></a>
 <ul>
 <li class="circle">hydra.langs.sql.ansi.<a href="hydra/langs/sql/ansi/TruthValue.FALSE.html" title="class in hydra.langs.sql.ansi"><span class="typeNameLink">TruthValue.FALSE</span></a></li>
@@ -3400,6 +3527,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.sql.ansi.<a href="hydra/langs/sql/ansi/TruthValue.UNKNOWN.html" title="class in hydra.langs.sql.ansi"><span class="typeNameLink">TruthValue.UNKNOWN</span></a></li>
 </ul>
 </li>
+<li class="circle">hydra.<a href="hydra/TryLocalVariables.html" title="class in hydra"><span class="typeNameLink">TryLocalVariables</span></a></li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/TryStatement.html" title="class in hydra.langs.java.syntax"><span class="typeNameLink">TryStatement</span></a>
 <ul>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/TryStatement.Simple.html" title="class in hydra.langs.java.syntax"><span class="typeNameLink">TryStatement.Simple</span></a></li>
@@ -3414,7 +3542,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul>
 <li class="circle">hydra.core.<a href="hydra/core/Type.Annotated.html" title="class in hydra.core"><span class="typeNameLink">Type.Annotated</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.core.<a href="hydra/core/Type.Application.html" title="class in hydra.core"><span class="typeNameLink">Type.Application</span></a>&lt;A&gt;</li>
-<li class="circle">hydra.core.<a href="hydra/core/Type.Element.html" title="class in hydra.core"><span class="typeNameLink">Type.Element</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.core.<a href="hydra/core/Type.Function.html" title="class in hydra.core"><span class="typeNameLink">Type.Function</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.core.<a href="hydra/core/Type.Lambda.html" title="class in hydra.core"><span class="typeNameLink">Type.Lambda</span></a>&lt;A&gt;</li>
 <li class="circle">hydra.core.<a href="hydra/core/Type.List.html" title="class in hydra.core"><span class="typeNameLink">Type.List</span></a>&lt;A&gt;</li>
@@ -3651,7 +3778,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul>
 <li class="circle">hydra.mantle.<a href="hydra/mantle/TypeVariant.Annotated.html" title="class in hydra.mantle"><span class="typeNameLink">TypeVariant.Annotated</span></a></li>
 <li class="circle">hydra.mantle.<a href="hydra/mantle/TypeVariant.Application.html" title="class in hydra.mantle"><span class="typeNameLink">TypeVariant.Application</span></a></li>
-<li class="circle">hydra.mantle.<a href="hydra/mantle/TypeVariant.Element.html" title="class in hydra.mantle"><span class="typeNameLink">TypeVariant.Element</span></a></li>
 <li class="circle">hydra.mantle.<a href="hydra/mantle/TypeVariant.Function.html" title="class in hydra.mantle"><span class="typeNameLink">TypeVariant.Function</span></a></li>
 <li class="circle">hydra.mantle.<a href="hydra/mantle/TypeVariant.Lambda.html" title="class in hydra.mantle"><span class="typeNameLink">TypeVariant.Lambda</span></a></li>
 <li class="circle">hydra.mantle.<a href="hydra/mantle/TypeVariant.List.html" title="class in hydra.mantle"><span class="typeNameLink">TypeVariant.List</span></a></li>
@@ -3804,8 +3930,15 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/ValueSetValue.Literal.html" title="class in hydra.langs.shex.syntax"><span class="typeNameLink">ValueSetValue.Literal</span></a></li>
 </ul>
 </li>
+<li class="circle">hydra.langs.tinkerpop.mappings.<a href="hydra/langs/tinkerpop/mappings/ValueSpec.html" title="class in hydra.langs.tinkerpop.mappings"><span class="typeNameLink">ValueSpec</span></a>
+<ul>
+<li class="circle">hydra.langs.tinkerpop.mappings.<a href="hydra/langs/tinkerpop/mappings/ValueSpec.Pattern.html" title="class in hydra.langs.tinkerpop.mappings"><span class="typeNameLink">ValueSpec.Pattern</span></a></li>
+<li class="circle">hydra.langs.tinkerpop.mappings.<a href="hydra/langs/tinkerpop/mappings/ValueSpec.Value.html" title="class in hydra.langs.tinkerpop.mappings"><span class="typeNameLink">ValueSpec.Value</span></a></li>
+</ul>
+</li>
 <li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/Variable.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">Variable</span></a></li>
 <li class="circle">hydra.langs.haskell.ast.<a href="hydra/langs/haskell/ast/Variable.html" title="class in hydra.langs.haskell.ast"><span class="typeNameLink">Variable</span></a></li>
+<li class="circle">hydra.query.<a href="hydra/query/Variable.html" title="class in hydra.query"><span class="typeNameLink">Variable</span></a></li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/VariableAccess.html" title="class in hydra.langs.java.syntax"><span class="typeNameLink">VariableAccess</span></a>
 <ul>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/VariableAccess.ExpressionName.html" title="class in hydra.langs.java.syntax"><span class="typeNameLink">VariableAccess.ExpressionName</span></a></li>
@@ -3829,11 +3962,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </ul>
 </li>
 <li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/VariablesDefinition.html" title="class in hydra.langs.graphql.syntax"><span class="typeNameLink">VariablesDefinition</span></a></li>
-<li class="circle">hydra.langs.tinkerpop.v3.<a href="hydra/langs/tinkerpop/v3/Vertex.html" title="class in hydra.langs.tinkerpop.v3"><span class="typeNameLink">Vertex</span></a>&lt;V,&#8203;P&gt;</li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/Vertex.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">Vertex</span></a>&lt;V,&#8203;P&gt;</li>
 <li class="circle">hydra.langs.tinkerpop.features.<a href="hydra/langs/tinkerpop/features/VertexFeatures.html" title="class in hydra.langs.tinkerpop.features"><span class="typeNameLink">VertexFeatures</span></a></li>
-<li class="circle">hydra.langs.tinkerpop.v3.<a href="hydra/langs/tinkerpop/v3/VertexLabel.html" title="class in hydra.langs.tinkerpop.v3"><span class="typeNameLink">VertexLabel</span></a></li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/VertexLabel.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">VertexLabel</span></a></li>
 <li class="circle">hydra.langs.tinkerpop.features.<a href="hydra/langs/tinkerpop/features/VertexPropertyFeatures.html" title="class in hydra.langs.tinkerpop.features"><span class="typeNameLink">VertexPropertyFeatures</span></a></li>
-<li class="circle">hydra.langs.tinkerpop.types.<a href="hydra/langs/tinkerpop/types/VertexType.html" title="class in hydra.langs.tinkerpop.types"><span class="typeNameLink">VertexType</span></a>&lt;V,&#8203;P&gt;</li>
+<li class="circle">hydra.langs.tinkerpop.mappings.<a href="hydra/langs/tinkerpop/mappings/VertexSpec.html" title="class in hydra.langs.tinkerpop.mappings"><span class="typeNameLink">VertexSpec</span></a></li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/VertexType.html" title="class in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">VertexType</span></a>&lt;T&gt;</li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/WhileStatement.html" title="class in hydra.langs.java.syntax"><span class="typeNameLink">WhileStatement</span></a></li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/WhileStatementNoShortIf.html" title="class in hydra.langs.java.syntax"><span class="typeNameLink">WhileStatementNoShortIf</span></a></li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/Wildcard.html" title="class in hydra.langs.java.syntax"><span class="typeNameLink">Wildcard</span></a></li>
@@ -4183,6 +4317,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.graph.<a href="hydra/graph/Comparison.PartialVisitor.html" title="interface in hydra.graph"><span class="typeNameLink">Comparison.PartialVisitor</span></a>&lt;R&gt;</li>
 </ul>
 </li>
+<li class="circle">hydra.query.<a href="hydra/query/ComparisonConstraint.Visitor.html" title="interface in hydra.query"><span class="typeNameLink">ComparisonConstraint.Visitor</span></a>&lt;R&gt;
+<ul>
+<li class="circle">hydra.query.<a href="hydra/query/ComparisonConstraint.PartialVisitor.html" title="interface in hydra.query"><span class="typeNameLink">ComparisonConstraint.PartialVisitor</span></a>&lt;R&gt;</li>
+</ul>
+</li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/CompilationUnit.Visitor.html" title="interface in hydra.langs.java.syntax"><span class="typeNameLink">CompilationUnit.Visitor</span></a>&lt;R&gt;
 <ul>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/CompilationUnit.PartialVisitor.html" title="interface in hydra.langs.java.syntax"><span class="typeNameLink">CompilationUnit.PartialVisitor</span></a>&lt;R&gt;</li>
@@ -4304,6 +4443,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.scala.meta.<a href="hydra/langs/scala/meta/Defn.PartialVisitor.html" title="interface in hydra.langs.scala.meta"><span class="typeNameLink">Defn.PartialVisitor</span></a>&lt;R&gt;</li>
 </ul>
 </li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/Direction.Visitor.html" title="interface in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">Direction.Visitor</span></a>&lt;R&gt;
+<ul>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/Direction.PartialVisitor.html" title="interface in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">Direction.PartialVisitor</span></a>&lt;R&gt;</li>
+</ul>
+</li>
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/Directive.Visitor.html" title="interface in hydra.langs.shex.syntax"><span class="typeNameLink">Directive.Visitor</span></a>&lt;R&gt;
 <ul>
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/Directive.PartialVisitor.html" title="interface in hydra.langs.shex.syntax"><span class="typeNameLink">Directive.PartialVisitor</span></a>&lt;R&gt;</li>
@@ -4319,9 +4463,24 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/DirectiveLocations.PartialVisitor.html" title="interface in hydra.langs.graphql.syntax"><span class="typeNameLink">DirectiveLocations.PartialVisitor</span></a>&lt;R&gt;</li>
 </ul>
 </li>
-<li class="circle">hydra.langs.tinkerpop.v3.<a href="hydra/langs/tinkerpop/v3/Element.Visitor.html" title="interface in hydra.langs.tinkerpop.v3"><span class="typeNameLink">Element.Visitor</span></a>&lt;R&gt;
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/Element.Visitor.html" title="interface in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">Element.Visitor</span></a>&lt;V,&#8203;E,&#8203;P,&#8203;R&gt;
 <ul>
-<li class="circle">hydra.langs.tinkerpop.v3.<a href="hydra/langs/tinkerpop/v3/Element.PartialVisitor.html" title="interface in hydra.langs.tinkerpop.v3"><span class="typeNameLink">Element.PartialVisitor</span></a>&lt;R&gt;</li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/Element.PartialVisitor.html" title="interface in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">Element.PartialVisitor</span></a>&lt;V,&#8203;E,&#8203;P,&#8203;R&gt;</li>
+</ul>
+</li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/ElementKind.Visitor.html" title="interface in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">ElementKind.Visitor</span></a>&lt;R&gt;
+<ul>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/ElementKind.PartialVisitor.html" title="interface in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">ElementKind.PartialVisitor</span></a>&lt;R&gt;</li>
+</ul>
+</li>
+<li class="circle">hydra.langs.tinkerpop.mappings.<a href="hydra/langs/tinkerpop/mappings/ElementSpec.Visitor.html" title="interface in hydra.langs.tinkerpop.mappings"><span class="typeNameLink">ElementSpec.Visitor</span></a>&lt;R&gt;
+<ul>
+<li class="circle">hydra.langs.tinkerpop.mappings.<a href="hydra/langs/tinkerpop/mappings/ElementSpec.PartialVisitor.html" title="interface in hydra.langs.tinkerpop.mappings"><span class="typeNameLink">ElementSpec.PartialVisitor</span></a>&lt;R&gt;</li>
+</ul>
+</li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/ElementType.Visitor.html" title="interface in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">ElementType.Visitor</span></a>&lt;T,&#8203;R&gt;
+<ul>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/ElementType.PartialVisitor.html" title="interface in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">ElementType.PartialVisitor</span></a>&lt;T,&#8203;R&gt;</li>
 </ul>
 </li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/ElementValue.Visitor.html" title="interface in hydra.langs.java.syntax"><span class="typeNameLink">ElementValue.Visitor</span></a>&lt;R&gt;
@@ -4329,9 +4488,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/ElementValue.PartialVisitor.html" title="interface in hydra.langs.java.syntax"><span class="typeNameLink">ElementValue.PartialVisitor</span></a>&lt;R&gt;</li>
 </ul>
 </li>
-<li class="circle">hydra.core.<a href="hydra/core/Elimination.Visitor.html" title="interface in hydra.core"><span class="typeNameLink">Elimination.Visitor</span></a>&lt;R&gt;
+<li class="circle">hydra.core.<a href="hydra/core/Elimination.Visitor.html" title="interface in hydra.core"><span class="typeNameLink">Elimination.Visitor</span></a>&lt;A,&#8203;R&gt;
 <ul>
-<li class="circle">hydra.core.<a href="hydra/core/Elimination.PartialVisitor.html" title="interface in hydra.core"><span class="typeNameLink">Elimination.PartialVisitor</span></a>&lt;R&gt;</li>
+<li class="circle">hydra.core.<a href="hydra/core/Elimination.PartialVisitor.html" title="interface in hydra.core"><span class="typeNameLink">Elimination.PartialVisitor</span></a>&lt;A,&#8203;R&gt;</li>
 </ul>
 </li>
 <li class="circle">hydra.mantle.<a href="hydra/mantle/EliminationVariant.Visitor.html" title="interface in hydra.mantle"><span class="typeNameLink">EliminationVariant.Visitor</span></a>&lt;R&gt;
@@ -4359,16 +4518,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.scala.meta.<a href="hydra/langs/scala/meta/Enumerator.PartialVisitor.html" title="interface in hydra.langs.scala.meta"><span class="typeNameLink">Enumerator.PartialVisitor</span></a>&lt;R&gt;</li>
 </ul>
 </li>
-<li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/EnumTypeDefinition.Visitor.html" title="interface in hydra.langs.graphql.syntax"><span class="typeNameLink">EnumTypeDefinition.Visitor</span></a>&lt;R&gt;
-<ul>
-<li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/EnumTypeDefinition.PartialVisitor.html" title="interface in hydra.langs.graphql.syntax"><span class="typeNameLink">EnumTypeDefinition.PartialVisitor</span></a>&lt;R&gt;</li>
-</ul>
-</li>
 <li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/EnumTypeExtension.Visitor.html" title="interface in hydra.langs.graphql.syntax"><span class="typeNameLink">EnumTypeExtension.Visitor</span></a>&lt;R&gt;
 <ul>
 <li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/EnumTypeExtension.PartialVisitor.html" title="interface in hydra.langs.graphql.syntax"><span class="typeNameLink">EnumTypeExtension.PartialVisitor</span></a>&lt;R&gt;</li>
 </ul>
 </li>
+<li class="circle">hydra.dsl.prims.<a href="hydra/dsl/prims/Equality.html" title="interface in hydra.dsl.prims"><span class="typeNameLink">Equality</span></a></li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/EqualityExpression.Visitor.html" title="interface in hydra.langs.java.syntax"><span class="typeNameLink">EqualityExpression.Visitor</span></a>&lt;R&gt;
 <ul>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/EqualityExpression.PartialVisitor.html" title="interface in hydra.langs.java.syntax"><span class="typeNameLink">EqualityExpression.PartialVisitor</span></a>&lt;R&gt;</li>
@@ -4424,6 +4579,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/Expression.PartialVisitor.html" title="interface in hydra.langs.java.syntax"><span class="typeNameLink">Expression.PartialVisitor</span></a>&lt;R&gt;</li>
 </ul>
 </li>
+<li class="circle">hydra.extras.<a href="hydra/extras/Extras.html" title="interface in hydra.extras"><span class="typeNameLink">Extras</span></a></li>
 <li class="circle">hydra.langs.protobuf.type.<a href="hydra/langs/protobuf/type/Field.Visitor.html" title="interface in hydra.langs.protobuf.type"><span class="typeNameLink">Field.Visitor</span></a>&lt;R&gt;
 <ul>
 <li class="circle">hydra.langs.protobuf.type.<a href="hydra/langs/protobuf/type/Field.PartialVisitor.html" title="interface in hydra.langs.protobuf.type"><span class="typeNameLink">Field.PartialVisitor</span></a>&lt;R&gt;</li>
@@ -4459,6 +4615,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.core.<a href="hydra/core/FloatValue.PartialVisitor.html" title="interface in hydra.core"><span class="typeNameLink">FloatValue.PartialVisitor</span></a>&lt;R&gt;</li>
 </ul>
 </li>
+<li class="circle">hydra.dsl.prims.<a href="hydra/dsl/prims/Flows.html" title="interface in hydra.dsl.prims"><span class="typeNameLink">Flows</span></a></li>
 <li class="circle">hydra.<a href="hydra/Flows.html" title="interface in hydra"><span class="typeNameLink">Flows</span></a></li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/ForInit.Visitor.html" title="interface in hydra.langs.java.syntax"><span class="typeNameLink">ForInit.Visitor</span></a>&lt;R&gt;
 <ul>
@@ -4480,9 +4637,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/ForStatementNoShortIf.PartialVisitor.html" title="interface in hydra.langs.java.syntax"><span class="typeNameLink">ForStatementNoShortIf.PartialVisitor</span></a>&lt;R&gt;</li>
 </ul>
 </li>
-<li class="circle">hydra.core.<a href="hydra/core/Function.Visitor.html" title="interface in hydra.core"><span class="typeNameLink">Function.Visitor</span></a>&lt;R&gt;
+<li class="circle">hydra.core.<a href="hydra/core/Function.Visitor.html" title="interface in hydra.core"><span class="typeNameLink">Function.Visitor</span></a>&lt;A,&#8203;R&gt;
 <ul>
-<li class="circle">hydra.core.<a href="hydra/core/Function.PartialVisitor.html" title="interface in hydra.core"><span class="typeNameLink">Function.PartialVisitor</span></a>&lt;R&gt;</li>
+<li class="circle">hydra.core.<a href="hydra/core/Function.PartialVisitor.html" title="interface in hydra.core"><span class="typeNameLink">Function.PartialVisitor</span></a>&lt;A,&#8203;R&gt;</li>
 </ul>
 </li>
 <li class="circle">hydra.mantle.<a href="hydra/mantle/FunctionVariant.Visitor.html" title="interface in hydra.mantle"><span class="typeNameLink">FunctionVariant.Visitor</span></a>&lt;R&gt;
@@ -4538,6 +4695,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.haskell.ast.<a href="hydra/langs/haskell/ast/ImportModifier.Visitor.html" title="interface in hydra.langs.haskell.ast"><span class="typeNameLink">ImportModifier.Visitor</span></a>&lt;R&gt;
 <ul>
 <li class="circle">hydra.langs.haskell.ast.<a href="hydra/langs/haskell/ast/ImportModifier.PartialVisitor.html" title="interface in hydra.langs.haskell.ast"><span class="typeNameLink">ImportModifier.PartialVisitor</span></a>&lt;R&gt;</li>
+</ul>
+</li>
+<li class="circle">hydra.ast.<a href="hydra/ast/IndentStyle.Visitor.html" title="interface in hydra.ast"><span class="typeNameLink">IndentStyle.Visitor</span></a>&lt;R&gt;
+<ul>
+<li class="circle">hydra.ast.<a href="hydra/ast/IndentStyle.PartialVisitor.html" title="interface in hydra.ast"><span class="typeNameLink">IndentStyle.PartialVisitor</span></a>&lt;R&gt;</li>
 </ul>
 </li>
 <li class="circle">hydra.langs.owl.syntax.<a href="hydra/langs/owl/syntax/Individual.Visitor.html" title="interface in hydra.langs.owl.syntax"><span class="typeNameLink">Individual.Visitor</span></a>&lt;R&gt;
@@ -4650,6 +4812,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.protobuf.type.<a href="hydra/langs/protobuf/type/Kind.PartialVisitor.html" title="interface in hydra.langs.protobuf.type"><span class="typeNameLink">Kind.PartialVisitor</span></a>&lt;R&gt;</li>
 </ul>
 </li>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/Label.Visitor.html" title="interface in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">Label.Visitor</span></a>&lt;R&gt;
+<ul>
+<li class="circle">hydra.langs.tinkerpop.propertyGraph.<a href="hydra/langs/tinkerpop/propertyGraph/Label.PartialVisitor.html" title="interface in hydra.langs.tinkerpop.propertyGraph"><span class="typeNameLink">Label.PartialVisitor</span></a>&lt;R&gt;</li>
+</ul>
+</li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/LambdaBody.Visitor.html" title="interface in hydra.langs.java.syntax"><span class="typeNameLink">LambdaBody.Visitor</span></a>&lt;R&gt;
 <ul>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/LambdaBody.PartialVisitor.html" title="interface in hydra.langs.java.syntax"><span class="typeNameLink">LambdaBody.PartialVisitor</span></a>&lt;R&gt;</li>
@@ -4733,6 +4900,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.parquet.format.<a href="hydra/langs/parquet/format/LogicalType.PartialVisitor.html" title="interface in hydra.langs.parquet.format"><span class="typeNameLink">LogicalType.PartialVisitor</span></a>&lt;R&gt;</li>
 </ul>
 </li>
+<li class="circle">hydra.dsl.prims.<a href="hydra/dsl/prims/Maps.html" title="interface in hydra.dsl.prims"><span class="typeNameLink">Maps</span></a></li>
 <li class="circle">hydra.dsl.prims.<a href="hydra/dsl/prims/Math.html" title="interface in hydra.dsl.prims"><span class="typeNameLink">Math</span></a></li>
 <li class="circle">hydra.langs.scala.meta.<a href="hydra/langs/scala/meta/Member_Data.Visitor.html" title="interface in hydra.langs.scala.meta"><span class="typeNameLink">Member_Data.Visitor</span></a>&lt;R&gt;
 <ul>
@@ -4812,6 +4980,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.yaml.model.<a href="hydra/langs/yaml/model/Node.Visitor.html" title="interface in hydra.langs.yaml.model"><span class="typeNameLink">Node.Visitor</span></a>&lt;R&gt;
 <ul>
 <li class="circle">hydra.langs.yaml.model.<a href="hydra/langs/yaml/model/Node.PartialVisitor.html" title="interface in hydra.langs.yaml.model"><span class="typeNameLink">Node.PartialVisitor</span></a>&lt;R&gt;</li>
+</ul>
+</li>
+<li class="circle">hydra.query.<a href="hydra/query/Node.Visitor.html" title="interface in hydra.query"><span class="typeNameLink">Node.Visitor</span></a>&lt;A,&#8203;R&gt;
+<ul>
+<li class="circle">hydra.query.<a href="hydra/query/Node.PartialVisitor.html" title="interface in hydra.query"><span class="typeNameLink">Node.PartialVisitor</span></a>&lt;A,&#8203;R&gt;</li>
 </ul>
 </li>
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/NodeConstraint.Visitor.html" title="interface in hydra.langs.shex.syntax"><span class="typeNameLink">NodeConstraint.Visitor</span></a>&lt;R&gt;
@@ -4894,11 +5067,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.owl.syntax.<a href="hydra/langs/owl/syntax/ObjectPropertyExpression.PartialVisitor.html" title="interface in hydra.langs.owl.syntax"><span class="typeNameLink">ObjectPropertyExpression.PartialVisitor</span></a>&lt;R&gt;</li>
 </ul>
 </li>
-<li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/ObjectTypeDefinition.Visitor.html" title="interface in hydra.langs.graphql.syntax"><span class="typeNameLink">ObjectTypeDefinition.Visitor</span></a>&lt;R&gt;
-<ul>
-<li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/ObjectTypeDefinition.PartialVisitor.html" title="interface in hydra.langs.graphql.syntax"><span class="typeNameLink">ObjectTypeDefinition.PartialVisitor</span></a>&lt;R&gt;</li>
-</ul>
-</li>
 <li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/ObjectTypeExtension.Visitor.html" title="interface in hydra.langs.graphql.syntax"><span class="typeNameLink">ObjectTypeExtension.Visitor</span></a>&lt;R&gt;
 <ul>
 <li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/ObjectTypeExtension.PartialVisitor.html" title="interface in hydra.langs.graphql.syntax"><span class="typeNameLink">ObjectTypeExtension.PartialVisitor</span></a>&lt;R&gt;</li>
@@ -4950,6 +5118,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.scala.meta.<a href="hydra/langs/scala/meta/Pat.PartialVisitor.html" title="interface in hydra.langs.scala.meta"><span class="typeNameLink">Pat.PartialVisitor</span></a>&lt;R&gt;</li>
 </ul>
 </li>
+<li class="circle">hydra.query.<a href="hydra/query/Path.Visitor.html" title="interface in hydra.query"><span class="typeNameLink">Path.Visitor</span></a>&lt;R&gt;
+<ul>
+<li class="circle">hydra.query.<a href="hydra/query/Path.PartialVisitor.html" title="interface in hydra.query"><span class="typeNameLink">Path.PartialVisitor</span></a>&lt;R&gt;</li>
+</ul>
+</li>
 <li class="circle">hydra.grammar.<a href="hydra/grammar/Pattern.Visitor.html" title="interface in hydra.grammar"><span class="typeNameLink">Pattern.Visitor</span></a>&lt;R&gt;
 <ul>
 <li class="circle">hydra.grammar.<a href="hydra/grammar/Pattern.PartialVisitor.html" title="interface in hydra.grammar"><span class="typeNameLink">Pattern.PartialVisitor</span></a>&lt;R&gt;</li>
@@ -4958,6 +5131,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.haskell.ast.<a href="hydra/langs/haskell/ast/Pattern.Visitor.html" title="interface in hydra.langs.haskell.ast"><span class="typeNameLink">Pattern.Visitor</span></a>&lt;R&gt;
 <ul>
 <li class="circle">hydra.langs.haskell.ast.<a href="hydra/langs/haskell/ast/Pattern.PartialVisitor.html" title="interface in hydra.langs.haskell.ast"><span class="typeNameLink">Pattern.PartialVisitor</span></a>&lt;R&gt;</li>
+</ul>
+</li>
+<li class="circle">hydra.query.<a href="hydra/query/Pattern.Visitor.html" title="interface in hydra.query"><span class="typeNameLink">Pattern.Visitor</span></a>&lt;A,&#8203;R&gt;
+<ul>
+<li class="circle">hydra.query.<a href="hydra/query/Pattern.PartialVisitor.html" title="interface in hydra.query"><span class="typeNameLink">Pattern.PartialVisitor</span></a>&lt;A,&#8203;R&gt;</li>
 </ul>
 </li>
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/Plx.Visitor.html" title="interface in hydra.langs.shex.syntax"><span class="typeNameLink">Plx.Visitor</span></a>&lt;R&gt;
@@ -5066,9 +5244,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.scala.meta.<a href="hydra/langs/scala/meta/Ref.PartialVisitor.html" title="interface in hydra.langs.scala.meta"><span class="typeNameLink">Ref.PartialVisitor</span></a>&lt;R&gt;</li>
 </ul>
 </li>
-<li class="circle">hydra.langs.shacl.model.<a href="hydra/langs/shacl/model/Reference.Visitor.html" title="interface in hydra.langs.shacl.model"><span class="typeNameLink">Reference.Visitor</span></a>&lt;R&gt;
+<li class="circle">hydra.langs.shacl.model.<a href="hydra/langs/shacl/model/Reference.Visitor.html" title="interface in hydra.langs.shacl.model"><span class="typeNameLink">Reference.Visitor</span></a>&lt;A,&#8203;R&gt;
 <ul>
-<li class="circle">hydra.langs.shacl.model.<a href="hydra/langs/shacl/model/Reference.PartialVisitor.html" title="interface in hydra.langs.shacl.model"><span class="typeNameLink">Reference.PartialVisitor</span></a>&lt;R&gt;</li>
+<li class="circle">hydra.langs.shacl.model.<a href="hydra/langs/shacl/model/Reference.PartialVisitor.html" title="interface in hydra.langs.shacl.model"><span class="typeNameLink">Reference.PartialVisitor</span></a>&lt;A,&#8203;R&gt;</li>
 </ul>
 </li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/ReferenceType.Visitor.html" title="interface in hydra.langs.java.syntax"><span class="typeNameLink">ReferenceType.Visitor</span></a>&lt;R&gt;
@@ -5079,6 +5257,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/Regexp_ListOfAlts_Elmt.Visitor.html" title="interface in hydra.langs.shex.syntax"><span class="typeNameLink">Regexp_ListOfAlts_Elmt.Visitor</span></a>&lt;R&gt;
 <ul>
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/Regexp_ListOfAlts_Elmt.PartialVisitor.html" title="interface in hydra.langs.shex.syntax"><span class="typeNameLink">Regexp_ListOfAlts_Elmt.PartialVisitor</span></a>&lt;R&gt;</li>
+</ul>
+</li>
+<li class="circle">hydra.query.<a href="hydra/query/RegexQuantifier.Visitor.html" title="interface in hydra.query"><span class="typeNameLink">RegexQuantifier.Visitor</span></a>&lt;R&gt;
+<ul>
+<li class="circle">hydra.query.<a href="hydra/query/RegexQuantifier.PartialVisitor.html" title="interface in hydra.query"><span class="typeNameLink">RegexQuantifier.PartialVisitor</span></a>&lt;R&gt;</li>
 </ul>
 </li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/RelationalExpression.Visitor.html" title="interface in hydra.langs.java.syntax"><span class="typeNameLink">RelationalExpression.Visitor</span></a>&lt;R&gt;
@@ -5214,6 +5397,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/StatementWithoutTrailingSubstatement.PartialVisitor.html" title="interface in hydra.langs.java.syntax"><span class="typeNameLink">StatementWithoutTrailingSubstatement.PartialVisitor</span></a>&lt;R&gt;</li>
 </ul>
 </li>
+<li class="circle">hydra.query.<a href="hydra/query/Step.Visitor.html" title="interface in hydra.query"><span class="typeNameLink">Step.Visitor</span></a>&lt;R&gt;
+<ul>
+<li class="circle">hydra.query.<a href="hydra/query/Step.PartialVisitor.html" title="interface in hydra.query"><span class="typeNameLink">Step.PartialVisitor</span></a>&lt;R&gt;</li>
+</ul>
+</li>
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/String_.Visitor.html" title="interface in hydra.langs.shex.syntax"><span class="typeNameLink">String_.Visitor</span></a>&lt;R&gt;
 <ul>
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/String_.PartialVisitor.html" title="interface in hydra.langs.shex.syntax"><span class="typeNameLink">String_.PartialVisitor</span></a>&lt;R&gt;</li>
@@ -5285,9 +5473,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.sql.ansi.<a href="hydra/langs/sql/ansi/TableElement.PartialVisitor.html" title="interface in hydra.langs.sql.ansi"><span class="typeNameLink">TableElement.PartialVisitor</span></a>&lt;R&gt;</li>
 </ul>
 </li>
-<li class="circle">hydra.core.<a href="hydra/core/Term.Visitor.html" title="interface in hydra.core"><span class="typeNameLink">Term.Visitor</span></a>&lt;R&gt;
+<li class="circle">hydra.core.<a href="hydra/core/Term.Visitor.html" title="interface in hydra.core"><span class="typeNameLink">Term.Visitor</span></a>&lt;A,&#8203;R&gt;
 <ul>
-<li class="circle">hydra.core.<a href="hydra/core/Term.PartialVisitor.html" title="interface in hydra.core"><span class="typeNameLink">Term.PartialVisitor</span></a>&lt;R&gt;</li>
+<li class="circle">hydra.core.<a href="hydra/core/Term.PartialVisitor.html" title="interface in hydra.core"><span class="typeNameLink">Term.PartialVisitor</span></a>&lt;A,&#8203;R&gt;</li>
 </ul>
 </li>
 <li class="circle">hydra.dsl.<a href="hydra/dsl/Terms.html" title="interface in hydra.dsl"><span class="typeNameLink">Terms</span></a></li>
@@ -5336,9 +5524,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.scala.meta.<a href="hydra/langs/scala/meta/Type_Ref.PartialVisitor.html" title="interface in hydra.langs.scala.meta"><span class="typeNameLink">Type_Ref.PartialVisitor</span></a>&lt;R&gt;</li>
 </ul>
 </li>
-<li class="circle">hydra.core.<a href="hydra/core/Type.Visitor.html" title="interface in hydra.core"><span class="typeNameLink">Type.Visitor</span></a>&lt;R&gt;
+<li class="circle">hydra.core.<a href="hydra/core/Type.Visitor.html" title="interface in hydra.core"><span class="typeNameLink">Type.Visitor</span></a>&lt;A,&#8203;R&gt;
 <ul>
-<li class="circle">hydra.core.<a href="hydra/core/Type.PartialVisitor.html" title="interface in hydra.core"><span class="typeNameLink">Type.PartialVisitor</span></a>&lt;R&gt;</li>
+<li class="circle">hydra.core.<a href="hydra/core/Type.PartialVisitor.html" title="interface in hydra.core"><span class="typeNameLink">Type.PartialVisitor</span></a>&lt;A,&#8203;R&gt;</li>
 </ul>
 </li>
 <li class="circle">hydra.langs.graphql.syntax.<a href="hydra/langs/graphql/syntax/Type.Visitor.html" title="interface in hydra.langs.graphql.syntax"><span class="typeNameLink">Type.Visitor</span></a>&lt;R&gt;
@@ -5510,6 +5698,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/ValueSetValue.Visitor.html" title="interface in hydra.langs.shex.syntax"><span class="typeNameLink">ValueSetValue.Visitor</span></a>&lt;R&gt;
 <ul>
 <li class="circle">hydra.langs.shex.syntax.<a href="hydra/langs/shex/syntax/ValueSetValue.PartialVisitor.html" title="interface in hydra.langs.shex.syntax"><span class="typeNameLink">ValueSetValue.PartialVisitor</span></a>&lt;R&gt;</li>
+</ul>
+</li>
+<li class="circle">hydra.langs.tinkerpop.mappings.<a href="hydra/langs/tinkerpop/mappings/ValueSpec.Visitor.html" title="interface in hydra.langs.tinkerpop.mappings"><span class="typeNameLink">ValueSpec.Visitor</span></a>&lt;R&gt;
+<ul>
+<li class="circle">hydra.langs.tinkerpop.mappings.<a href="hydra/langs/tinkerpop/mappings/ValueSpec.PartialVisitor.html" title="interface in hydra.langs.tinkerpop.mappings"><span class="typeNameLink">ValueSpec.PartialVisitor</span></a>&lt;R&gt;</li>
 </ul>
 </li>
 <li class="circle">hydra.langs.java.syntax.<a href="hydra/langs/java/syntax/VariableAccess.Visitor.html" title="interface in hydra.langs.java.syntax"><span class="typeNameLink">VariableAccess.Visitor</span></a>&lt;R&gt;

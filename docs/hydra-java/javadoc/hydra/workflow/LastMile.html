@@ -116,14 +116,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <main role="main">
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">hydra.workflow</a></div>
-<h2 title="Class LastMile" class="title">Class LastMile&lt;A&gt;</h2>
+<h2 title="Class LastMile" class="title">Class LastMile&lt;S,&#8203;A&gt;</h2>
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
-<li>hydra.workflow.LastMile&lt;A&gt;</li>
+<li>hydra.workflow.LastMile&lt;S,&#8203;A&gt;</li>
 </ul>
 </li>
 </ul>
@@ -131,7 +131,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <hr>
-<pre>public class <span class="typeNameLabel">LastMile&lt;A&gt;</span>
+<pre>public class <span class="typeNameLabel">LastMile&lt;S,&#8203;A&gt;</span>
 extends java.lang.Object</pre>
 <div class="block">The last mile of a transformation, which encodes and serializes terms to a file</div>
 </li>
@@ -155,7 +155,7 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>java.util.function.Function&lt;<a href="../core/Term.html" title="class in hydra.core">Term</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;java.util.function.Function&lt;<a href="../graph/Graph.html" title="class in hydra.graph">Graph</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="../graph/Graph.html" title="class in hydra.graph">Graph</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;&gt;&gt;&gt;</code></td>
+<td class="colFirst"><code>java.util.function.Function&lt;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="LastMile.html" title="type parameter in LastMile">S</a>,&#8203;java.util.function.Function&lt;<a href="../core/Term.html" title="class in hydra.core">Term</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;java.util.function.Function&lt;<a href="../graph/Graph.html" title="class in hydra.graph">Graph</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="LastMile.html" title="type parameter in LastMile">S</a>,&#8203;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;&gt;&gt;&gt;&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#encoder">encoder</a></span></code></th>
 <td class="colLast">
 <div class="block">An encoder for terms to a list of output objects</div>
@@ -174,7 +174,7 @@ extends java.lang.Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>java.util.function.Function&lt;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;,&#8203;java.lang.String&gt;</code></td>
+<td class="colFirst"><code>java.util.function.Function&lt;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="LastMile.html" title="type parameter in LastMile">S</a>,&#8203;java.lang.String&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#serializer">serializer</a></span></code></th>
 <td class="colLast">
 <div class="block">A function which serializes a list of output objects to a string representation</div>
@@ -198,8 +198,8 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.function.Function,java.util.function.Function,java.lang.String)">LastMile</a></span>&#8203;(java.util.function.Function&lt;<a href="../core/Term.html" title="class in hydra.core">Term</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;java.util.function.Function&lt;<a href="../graph/Graph.html" title="class in hydra.graph">Graph</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="../graph/Graph.html" title="class in hydra.graph">Graph</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;&gt;&gt;&gt;&nbsp;encoder,
-        java.util.function.Function&lt;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;,&#8203;java.lang.String&gt;&nbsp;serializer,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.function.Function,java.util.function.Function,java.lang.String)">LastMile</a></span>&#8203;(java.util.function.Function&lt;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="LastMile.html" title="type parameter in LastMile">S</a>,&#8203;java.util.function.Function&lt;<a href="../core/Term.html" title="class in hydra.core">Term</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;java.util.function.Function&lt;<a href="../graph/Graph.html" title="class in hydra.graph">Graph</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="LastMile.html" title="type parameter in LastMile">S</a>,&#8203;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;&gt;&gt;&gt;&gt;&gt;&nbsp;encoder,
+        java.util.function.Function&lt;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="LastMile.html" title="type parameter in LastMile">S</a>,&#8203;java.lang.String&gt;&gt;&nbsp;serializer,
         java.lang.String&nbsp;fileExtension)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -233,7 +233,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="LastMile.html" title="class in hydra.workflow">LastMile</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withEncoder(java.util.function.Function)">withEncoder</a></span>&#8203;(java.util.function.Function&lt;<a href="../core/Term.html" title="class in hydra.core">Term</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;java.util.function.Function&lt;<a href="../graph/Graph.html" title="class in hydra.graph">Graph</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="../graph/Graph.html" title="class in hydra.graph">Graph</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;&gt;&gt;&gt;&nbsp;encoder)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withEncoder(java.util.function.Function)">withEncoder</a></span>&#8203;(java.util.function.Function&lt;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="LastMile.html" title="type parameter in LastMile">S</a>,&#8203;java.util.function.Function&lt;<a href="../core/Term.html" title="class in hydra.core">Term</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;java.util.function.Function&lt;<a href="../graph/Graph.html" title="class in hydra.graph">Graph</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="LastMile.html" title="type parameter in LastMile">S</a>,&#8203;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;&gt;&gt;&gt;&gt;&gt;&nbsp;encoder)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -243,7 +243,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="LastMile.html" title="class in hydra.workflow">LastMile</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withSerializer(java.util.function.Function)">withSerializer</a></span>&#8203;(java.util.function.Function&lt;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;,&#8203;java.lang.String&gt;&nbsp;serializer)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withSerializer(java.util.function.Function)">withSerializer</a></span>&#8203;(java.util.function.Function&lt;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="LastMile.html" title="type parameter in LastMile">S</a>,&#8203;java.lang.String&gt;&gt;&nbsp;serializer)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -285,7 +285,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>encoder</h4>
-<pre>public final&nbsp;java.util.function.Function&lt;<a href="../core/Term.html" title="class in hydra.core">Term</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;java.util.function.Function&lt;<a href="../graph/Graph.html" title="class in hydra.graph">Graph</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="../graph/Graph.html" title="class in hydra.graph">Graph</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;&gt;&gt;&gt; encoder</pre>
+<pre>public final&nbsp;java.util.function.Function&lt;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="LastMile.html" title="type parameter in LastMile">S</a>,&#8203;java.util.function.Function&lt;<a href="../core/Term.html" title="class in hydra.core">Term</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;java.util.function.Function&lt;<a href="../graph/Graph.html" title="class in hydra.graph">Graph</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="LastMile.html" title="type parameter in LastMile">S</a>,&#8203;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;&gt;&gt;&gt;&gt;&gt; encoder</pre>
 <div class="block">An encoder for terms to a list of output objects</div>
 </li>
 </ul>
@@ -295,7 +295,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>serializer</h4>
-<pre>public final&nbsp;java.util.function.Function&lt;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;,&#8203;java.lang.String&gt; serializer</pre>
+<pre>public final&nbsp;java.util.function.Function&lt;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="LastMile.html" title="type parameter in LastMile">S</a>,&#8203;java.lang.String&gt;&gt; serializer</pre>
 <div class="block">A function which serializes a list of output objects to a string representation</div>
 </li>
 </ul>
@@ -325,8 +325,8 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>LastMile</h4>
-<pre>public&nbsp;LastMile&#8203;(java.util.function.Function&lt;<a href="../core/Term.html" title="class in hydra.core">Term</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;java.util.function.Function&lt;<a href="../graph/Graph.html" title="class in hydra.graph">Graph</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="../graph/Graph.html" title="class in hydra.graph">Graph</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;&gt;&gt;&gt;&nbsp;encoder,
-                java.util.function.Function&lt;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;,&#8203;java.lang.String&gt;&nbsp;serializer,
+<pre>public&nbsp;LastMile&#8203;(java.util.function.Function&lt;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="LastMile.html" title="type parameter in LastMile">S</a>,&#8203;java.util.function.Function&lt;<a href="../core/Term.html" title="class in hydra.core">Term</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;java.util.function.Function&lt;<a href="../graph/Graph.html" title="class in hydra.graph">Graph</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="LastMile.html" title="type parameter in LastMile">S</a>,&#8203;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;&gt;&gt;&gt;&gt;&gt;&nbsp;encoder,
+                java.util.function.Function&lt;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="LastMile.html" title="type parameter in LastMile">S</a>,&#8203;java.lang.String&gt;&gt;&nbsp;serializer,
                 java.lang.String&nbsp;fileExtension)</pre>
 </li>
 </ul>
@@ -372,7 +372,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>withEncoder</h4>
-<pre class="methodSignature">public&nbsp;<a href="LastMile.html" title="class in hydra.workflow">LastMile</a>&nbsp;withEncoder&#8203;(java.util.function.Function&lt;<a href="../core/Term.html" title="class in hydra.core">Term</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;java.util.function.Function&lt;<a href="../graph/Graph.html" title="class in hydra.graph">Graph</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="../graph/Graph.html" title="class in hydra.graph">Graph</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;&gt;&gt;&gt;&nbsp;encoder)</pre>
+<pre class="methodSignature">public&nbsp;<a href="LastMile.html" title="class in hydra.workflow">LastMile</a>&nbsp;withEncoder&#8203;(java.util.function.Function&lt;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="LastMile.html" title="type parameter in LastMile">S</a>,&#8203;java.util.function.Function&lt;<a href="../core/Term.html" title="class in hydra.core">Term</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;java.util.function.Function&lt;<a href="../graph/Graph.html" title="class in hydra.graph">Graph</a>&lt;<a href="../compute/Kv.html" title="class in hydra.compute">Kv</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="LastMile.html" title="type parameter in LastMile">S</a>,&#8203;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;&gt;&gt;&gt;&gt;&gt;&nbsp;encoder)</pre>
 </li>
 </ul>
 <a id="withSerializer(java.util.function.Function)">
@@ -381,7 +381,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>withSerializer</h4>
-<pre class="methodSignature">public&nbsp;<a href="LastMile.html" title="class in hydra.workflow">LastMile</a>&nbsp;withSerializer&#8203;(java.util.function.Function&lt;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;,&#8203;java.lang.String&gt;&nbsp;serializer)</pre>
+<pre class="methodSignature">public&nbsp;<a href="LastMile.html" title="class in hydra.workflow">LastMile</a>&nbsp;withSerializer&#8203;(java.util.function.Function&lt;java.util.List&lt;<a href="LastMile.html" title="type parameter in LastMile">A</a>&gt;,&#8203;<a href="../compute/Flow.html" title="class in hydra.compute">Flow</a>&lt;<a href="LastMile.html" title="type parameter in LastMile">S</a>,&#8203;java.lang.String&gt;&gt;&nbsp;serializer)</pre>
 </li>
 </ul>
 <a id="withFileExtension(java.lang.String)">

@@ -169,8 +169,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(hydra.core.Type,hydra.core.Type)">apply</a></span>&#8203;(<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;lhs,
-     <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;rhs)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(hydra.core.Type,hydra.core.Type...)">apply</a></span>&#8203;(<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;lhs,
+     <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;...&nbsp;rhs)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
@@ -221,187 +221,247 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#flow(hydra.core.Type,hydra.core.Type)">flow</a></span>&#8203;(<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;states,
+    <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;elements)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#flow(hydra.core.Type,java.lang.String)">flow</a></span>&#8203;(<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;states,
+    java.lang.String&nbsp;elements)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#flow(java.lang.String,hydra.core.Type)">flow</a></span>&#8203;(java.lang.String&nbsp;states,
+    <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;elements)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i14" class="altColor">
+<td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#flow(java.lang.String,java.lang.String)">flow</a></span>&#8203;(java.lang.String&nbsp;states,
+    java.lang.String&nbsp;elements)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i15" class="rowColor">
+<td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#function(hydra.core.Type,hydra.core.Type,hydra.core.Type...)">function</a></span>&#8203;(<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;dom,
         <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;cod,
         <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;...&nbsp;more)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#function(hydra.core.Type,java.lang.String,hydra.core.Type...)">function</a></span>&#8203;(<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;dom,
         java.lang.String&nbsp;cod,
         <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;...&nbsp;more)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#function(java.lang.String,hydra.core.Type,hydra.core.Type...)">function</a></span>&#8203;(java.lang.String&nbsp;dom,
         <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;cod,
         <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;...&nbsp;more)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#function(java.lang.String,java.lang.String,hydra.core.Type...)">function</a></span>&#8203;(java.lang.String&nbsp;dom,
         java.lang.String&nbsp;cod,
         <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;...&nbsp;more)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i19" class="rowColor">
+<td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#function(java.lang.String,java.lang.String,java.lang.String,hydra.core.Type...)">function</a></span>&#8203;(java.lang.String&nbsp;dom1,
+        java.lang.String&nbsp;dom2,
+        java.lang.String&nbsp;dom3,
+        <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;...&nbsp;cod)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#int16()">int16</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#int32()">int32</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#int64()">int64</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#int8()">int8</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#integer(hydra.core.IntegerType)">integer</a></span>&#8203;(<a href="../core/IntegerType.html" title="class in hydra.core">IntegerType</a>&nbsp;itype)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#lambda(java.lang.String,hydra.core.Type)">lambda</a></span>&#8203;(java.lang.String&nbsp;var,
       <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;body)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i26" class="altColor">
+<td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#lambda(java.lang.String,java.lang.String,hydra.core.Type)">lambda</a></span>&#8203;(java.lang.String&nbsp;var1,
+      java.lang.String&nbsp;var2,
+      <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;body)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i27" class="rowColor">
+<td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#lambda(java.lang.String,java.lang.String,java.lang.String,hydra.core.Type)">lambda</a></span>&#8203;(java.lang.String&nbsp;var1,
+      java.lang.String&nbsp;var2,
+      java.lang.String&nbsp;var3,
+      <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;body)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#list(hydra.core.Type)">list</a></span>&#8203;(<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;elements)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#list(java.lang.String)">list</a></span>&#8203;(java.lang.String&nbsp;elements)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#literal(hydra.core.LiteralType)">literal</a></span>&#8203;(<a href="../core/LiteralType.html" title="class in hydra.core">LiteralType</a>&nbsp;ltype)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#map(hydra.core.Type,hydra.core.Type)">map</a></span>&#8203;(<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;keys,
    <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;values)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i32" class="altColor">
+<td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#map(java.lang.String,java.lang.String)">map</a></span>&#8203;(java.lang.String&nbsp;keys,
+   java.lang.String&nbsp;values)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#optional(hydra.core.Type)">optional</a></span>&#8203;(<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;elements)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#optional(java.lang.String)">optional</a></span>&#8203;(java.lang.String&nbsp;elements)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#record(hydra.core.FieldType...)">record</a></span>&#8203;(<a href="../core/FieldType.html" title="class in hydra.core">FieldType</a>&lt;A&gt;...&nbsp;fields)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#record(hydra.core.Name,hydra.core.FieldType...)">record</a></span>&#8203;(<a href="../core/Name.html" title="class in hydra.core">Name</a>&nbsp;name,
       <a href="../core/FieldType.html" title="class in hydra.core">FieldType</a>&lt;A&gt;...&nbsp;fields)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#record(java.lang.String,hydra.core.FieldType...)">record</a></span>&#8203;(java.lang.String&nbsp;name,
       <a href="../core/FieldType.html" title="class in hydra.core">FieldType</a>&lt;A&gt;...&nbsp;fields)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/RowType.html" title="class in hydra.core">RowType</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#row(hydra.core.Name,hydra.core.FieldType...)">row</a></span>&#8203;(<a href="../core/Name.html" title="class in hydra.core">Name</a>&nbsp;name,
    <a href="../core/FieldType.html" title="class in hydra.core">FieldType</a>&lt;A&gt;...&nbsp;fields)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i39" class="rowColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#set(hydra.core.Type)">set</a></span>&#8203;(<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;elements)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i40" class="altColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#set(java.lang.String)">set</a></span>&#8203;(java.lang.String&nbsp;elements)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i41" class="rowColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#string()">string</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i42" class="altColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#uint16()">uint16</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i43" class="rowColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#uint32()">uint32</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i36" class="altColor">
+<tr id="i44" class="altColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#uint64()">uint64</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i37" class="rowColor">
+<tr id="i45" class="rowColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#uint8()">uint8</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i38" class="altColor">
+<tr id="i46" class="altColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#union(hydra.core.FieldType...)">union</a></span>&#8203;(<a href="../core/FieldType.html" title="class in hydra.core">FieldType</a>&lt;A&gt;...&nbsp;fields)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i39" class="rowColor">
+<tr id="i47" class="rowColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#union(hydra.core.Name,hydra.core.FieldType...)">union</a></span>&#8203;(<a href="../core/Name.html" title="class in hydra.core">Name</a>&nbsp;name,
      <a href="../core/FieldType.html" title="class in hydra.core">FieldType</a>&lt;A&gt;...&nbsp;fields)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i40" class="altColor">
+<tr id="i48" class="altColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#union(java.lang.String,hydra.core.FieldType...)">union</a></span>&#8203;(java.lang.String&nbsp;name,
      <a href="../core/FieldType.html" title="class in hydra.core">FieldType</a>&lt;A&gt;...&nbsp;fields)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i41" class="rowColor">
+<tr id="i49" class="rowColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unit()">unit</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i42" class="altColor">
+<tr id="i50" class="altColor">
+<td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#variable(hydra.core.Name)">variable</a></span>&#8203;(<a href="../core/Name.html" title="class in hydra.core">Name</a>&nbsp;name)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i51" class="rowColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#variable(java.lang.String)">variable</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i43" class="rowColor">
+<tr id="i52" class="altColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#wrap(hydra.core.Name)">wrap</a></span>&#8203;(<a href="../core/Name.html" title="class in hydra.core">Name</a>&nbsp;name)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#wrap(hydra.core.Name,hydra.core.Type)">wrap</a></span>&#8203;(<a href="../core/Name.html" title="class in hydra.core">Name</a>&nbsp;name,
+    <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;type)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i44" class="altColor">
+<tr id="i53" class="rowColor">
 <td class="colFirst"><code>static &lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#wrap(java.lang.String)">wrap</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#wrap(java.lang.String,hydra.core.Type)">wrap</a></span>&#8203;(java.lang.String&nbsp;name,
+    <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;type)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -452,14 +512,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
                          <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;base)</pre>
 </li>
 </ul>
-<a id="apply(hydra.core.Type,hydra.core.Type)">
+<a id="apply(hydra.core.Type,hydra.core.Type...)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>apply</h4>
 <pre class="methodSignature">static&nbsp;&lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;apply&#8203;(<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;lhs,
-                         <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;rhs)</pre>
+                         <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;...&nbsp;rhs)</pre>
 </li>
 </ul>
 <a id="bigfloat()">
@@ -544,6 +604,46 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre class="methodSignature">static&nbsp;&lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;float_&#8203;(<a href="../core/FloatType.html" title="class in hydra.core">FloatType</a>&nbsp;ftype)</pre>
 </li>
 </ul>
+<a id="flow(hydra.core.Type,hydra.core.Type)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>flow</h4>
+<pre class="methodSignature">static&nbsp;&lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;flow&#8203;(<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;states,
+                        <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;elements)</pre>
+</li>
+</ul>
+<a id="flow(hydra.core.Type,java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>flow</h4>
+<pre class="methodSignature">static&nbsp;&lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;flow&#8203;(<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;states,
+                        java.lang.String&nbsp;elements)</pre>
+</li>
+</ul>
+<a id="flow(java.lang.String,hydra.core.Type)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>flow</h4>
+<pre class="methodSignature">static&nbsp;&lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;flow&#8203;(java.lang.String&nbsp;states,
+                        <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;elements)</pre>
+</li>
+</ul>
+<a id="flow(java.lang.String,java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>flow</h4>
+<pre class="methodSignature">static&nbsp;&lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;flow&#8203;(java.lang.String&nbsp;states,
+                        java.lang.String&nbsp;elements)</pre>
+</li>
+</ul>
 <a id="function(hydra.core.Type,hydra.core.Type,hydra.core.Type...)">
 <!--   -->
 </a>
@@ -586,6 +686,18 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre class="methodSignature">static&nbsp;&lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;function&#8203;(java.lang.String&nbsp;dom,
                             java.lang.String&nbsp;cod,
                             <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;...&nbsp;more)</pre>
+</li>
+</ul>
+<a id="function(java.lang.String,java.lang.String,java.lang.String,hydra.core.Type...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>function</h4>
+<pre class="methodSignature">static&nbsp;&lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;function&#8203;(java.lang.String&nbsp;dom1,
+                            java.lang.String&nbsp;dom2,
+                            java.lang.String&nbsp;dom3,
+                            <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;...&nbsp;cod)</pre>
 </li>
 </ul>
 <a id="int16()">
@@ -643,6 +755,29 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
                           <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;body)</pre>
 </li>
 </ul>
+<a id="lambda(java.lang.String,java.lang.String,hydra.core.Type)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>lambda</h4>
+<pre class="methodSignature">static&nbsp;&lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;lambda&#8203;(java.lang.String&nbsp;var1,
+                          java.lang.String&nbsp;var2,
+                          <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;body)</pre>
+</li>
+</ul>
+<a id="lambda(java.lang.String,java.lang.String,java.lang.String,hydra.core.Type)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>lambda</h4>
+<pre class="methodSignature">static&nbsp;&lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;lambda&#8203;(java.lang.String&nbsp;var1,
+                          java.lang.String&nbsp;var2,
+                          java.lang.String&nbsp;var3,
+                          <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;body)</pre>
+</li>
+</ul>
 <a id="list(hydra.core.Type)">
 <!--   -->
 </a>
@@ -678,6 +813,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>map</h4>
 <pre class="methodSignature">static&nbsp;&lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;map&#8203;(<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;keys,
                        <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;values)</pre>
+</li>
+</ul>
+<a id="map(java.lang.String,java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>map</h4>
+<pre class="methodSignature">static&nbsp;&lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;map&#8203;(java.lang.String&nbsp;keys,
+                       java.lang.String&nbsp;values)</pre>
 </li>
 </ul>
 <a id="optional(hydra.core.Type)">
@@ -838,6 +983,15 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre class="methodSignature">static&nbsp;&lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;unit()</pre>
 </li>
 </ul>
+<a id="variable(hydra.core.Name)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>variable</h4>
+<pre class="methodSignature">static&nbsp;&lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;variable&#8203;(<a href="../core/Name.html" title="class in hydra.core">Name</a>&nbsp;name)</pre>
+</li>
+</ul>
 <a id="variable(java.lang.String)">
 <!--   -->
 </a>
@@ -847,22 +1001,24 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre class="methodSignature">static&nbsp;&lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;variable&#8203;(java.lang.String&nbsp;name)</pre>
 </li>
 </ul>
-<a id="wrap(hydra.core.Name)">
+<a id="wrap(hydra.core.Name,hydra.core.Type)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>wrap</h4>
-<pre class="methodSignature">static&nbsp;&lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;wrap&#8203;(<a href="../core/Name.html" title="class in hydra.core">Name</a>&nbsp;name)</pre>
+<pre class="methodSignature">static&nbsp;&lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;wrap&#8203;(<a href="../core/Name.html" title="class in hydra.core">Name</a>&nbsp;name,
+                        <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;type)</pre>
 </li>
 </ul>
-<a id="wrap(java.lang.String)">
+<a id="wrap(java.lang.String,hydra.core.Type)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>wrap</h4>
-<pre class="methodSignature">static&nbsp;&lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;wrap&#8203;(java.lang.String&nbsp;name)</pre>
+<pre class="methodSignature">static&nbsp;&lt;A&gt;&nbsp;<a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;wrap&#8203;(java.lang.String&nbsp;name,
+                        <a href="../core/Type.html" title="class in hydra.core">Type</a>&lt;A&gt;&nbsp;type)</pre>
 </li>
 </ul>
 </li>

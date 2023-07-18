@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":18,"i1":18,"i2":18,"i3":18,"i4":18,"i5":18,"i6":18};
+var data = {"i0":18,"i1":18,"i2":18,"i3":18,"i4":18,"i5":18};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -116,7 +116,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <main role="main">
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">hydra.core</a></div>
-<h2 title="Interface Elimination.PartialVisitor" class="title">Interface Elimination.PartialVisitor&lt;R&gt;</h2>
+<h2 title="Interface Elimination.PartialVisitor" class="title">Interface Elimination.PartialVisitor&lt;A,&#8203;R&gt;</h2>
 </div>
 <div class="contentContainer">
 <div class="description">
@@ -124,15 +124,15 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><code><a href="Elimination.Visitor.html" title="interface in hydra.core">Elimination.Visitor</a>&lt;R&gt;</code></dd>
+<dd><code><a href="Elimination.Visitor.html" title="interface in hydra.core">Elimination.Visitor</a>&lt;A,&#8203;R&gt;</code></dd>
 </dl>
 <dl>
 <dt>Enclosing class:</dt>
 <dd><a href="Elimination.html" title="class in hydra.core">Elimination</a>&lt;<a href="Elimination.html" title="type parameter in Elimination">A</a>&gt;</dd>
 </dl>
 <hr>
-<pre>public static interface <span class="typeNameLabel">Elimination.PartialVisitor&lt;R&gt;</span>
-extends <a href="Elimination.Visitor.html" title="interface in hydra.core">Elimination.Visitor</a>&lt;R&gt;</pre>
+<pre>public static interface <span class="typeNameLabel">Elimination.PartialVisitor&lt;A,&#8203;R&gt;</span>
+extends <a href="Elimination.Visitor.html" title="interface in hydra.core">Elimination.Visitor</a>&lt;A,&#8203;R&gt;</pre>
 </li>
 </ul>
 </div>
@@ -155,37 +155,32 @@ extends <a href="Elimination.Visitor.html" title="interface in hydra.core">Elimi
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>default <a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#otherwise(hydra.core.Elimination)">otherwise</a></span>&#8203;(<a href="Elimination.html" title="class in hydra.core">Elimination</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#otherwise(hydra.core.Elimination)">otherwise</a></span>&#8203;(<a href="Elimination.html" title="class in hydra.core">Elimination</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>default <a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Elimination.Element)">visit</a></span>&#8203;(<a href="Elimination.Element.html" title="class in hydra.core">Elimination.Element</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Elimination.List)">visit</a></span>&#8203;(<a href="Elimination.List.html" title="class in hydra.core">Elimination.List</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>default <a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Elimination.List)">visit</a></span>&#8203;(<a href="Elimination.List.html" title="class in hydra.core">Elimination.List</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Elimination.Optional)">visit</a></span>&#8203;(<a href="Elimination.Optional.html" title="class in hydra.core">Elimination.Optional</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>default <a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Elimination.Optional)">visit</a></span>&#8203;(<a href="Elimination.Optional.html" title="class in hydra.core">Elimination.Optional</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Elimination.Record)">visit</a></span>&#8203;(<a href="Elimination.Record.html" title="class in hydra.core">Elimination.Record</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>default <a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Elimination.Record)">visit</a></span>&#8203;(<a href="Elimination.Record.html" title="class in hydra.core">Elimination.Record</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Elimination.Union)">visit</a></span>&#8203;(<a href="Elimination.Union.html" title="class in hydra.core">Elimination.Union</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>default <a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Elimination.Union)">visit</a></span>&#8203;(<a href="Elimination.Union.html" title="class in hydra.core">Elimination.Union</a>&nbsp;instance)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>default <a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Elimination.Wrap)">visit</a></span>&#8203;(<a href="Elimination.Wrap.html" title="class in hydra.core">Elimination.Wrap</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Elimination.Wrap)">visit</a></span>&#8203;(<a href="Elimination.Wrap.html" title="class in hydra.core">Elimination.Wrap</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -211,20 +206,7 @@ extends <a href="Elimination.Visitor.html" title="interface in hydra.core">Elimi
 <ul class="blockList">
 <li class="blockList">
 <h4>otherwise</h4>
-<pre class="methodSignature">default&nbsp;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&nbsp;otherwise&#8203;(<a href="Elimination.html" title="class in hydra.core">Elimination</a>&nbsp;instance)</pre>
-</li>
-</ul>
-<a id="visit(hydra.core.Elimination.Element)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Elimination.Element.html" title="class in hydra.core">Elimination.Element</a>&nbsp;instance)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Elimination.Visitor.html#visit(hydra.core.Elimination.Element)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Elimination.Visitor.html" title="interface in hydra.core">Elimination.Visitor</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&gt;</code></dd>
-</dl>
+<pre class="methodSignature">default&nbsp;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&nbsp;otherwise&#8203;(<a href="Elimination.html" title="class in hydra.core">Elimination</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 <a id="visit(hydra.core.Elimination.List)">
@@ -233,10 +215,10 @@ extends <a href="Elimination.Visitor.html" title="interface in hydra.core">Elimi
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Elimination.List.html" title="class in hydra.core">Elimination.List</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Elimination.List.html" title="class in hydra.core">Elimination.List</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Elimination.Visitor.html#visit(hydra.core.Elimination.List)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Elimination.Visitor.html" title="interface in hydra.core">Elimination.Visitor</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Elimination.Visitor.html#visit(hydra.core.Elimination.List)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Elimination.Visitor.html" title="interface in hydra.core">Elimination.Visitor</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">A</a>,&#8203;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -246,10 +228,10 @@ extends <a href="Elimination.Visitor.html" title="interface in hydra.core">Elimi
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Elimination.Optional.html" title="class in hydra.core">Elimination.Optional</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Elimination.Optional.html" title="class in hydra.core">Elimination.Optional</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Elimination.Visitor.html#visit(hydra.core.Elimination.Optional)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Elimination.Visitor.html" title="interface in hydra.core">Elimination.Visitor</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Elimination.Visitor.html#visit(hydra.core.Elimination.Optional)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Elimination.Visitor.html" title="interface in hydra.core">Elimination.Visitor</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">A</a>,&#8203;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -259,10 +241,10 @@ extends <a href="Elimination.Visitor.html" title="interface in hydra.core">Elimi
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Elimination.Record.html" title="class in hydra.core">Elimination.Record</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Elimination.Record.html" title="class in hydra.core">Elimination.Record</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Elimination.Visitor.html#visit(hydra.core.Elimination.Record)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Elimination.Visitor.html" title="interface in hydra.core">Elimination.Visitor</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Elimination.Visitor.html#visit(hydra.core.Elimination.Record)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Elimination.Visitor.html" title="interface in hydra.core">Elimination.Visitor</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">A</a>,&#8203;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -272,10 +254,10 @@ extends <a href="Elimination.Visitor.html" title="interface in hydra.core">Elimi
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Elimination.Union.html" title="class in hydra.core">Elimination.Union</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Elimination.Union.html" title="class in hydra.core">Elimination.Union</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Elimination.Visitor.html#visit(hydra.core.Elimination.Union)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Elimination.Visitor.html" title="interface in hydra.core">Elimination.Visitor</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Elimination.Visitor.html#visit(hydra.core.Elimination.Union)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Elimination.Visitor.html" title="interface in hydra.core">Elimination.Visitor</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">A</a>,&#8203;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -285,10 +267,10 @@ extends <a href="Elimination.Visitor.html" title="interface in hydra.core">Elimi
 <ul class="blockListLast">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Elimination.Wrap.html" title="class in hydra.core">Elimination.Wrap</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Elimination.Wrap.html" title="class in hydra.core">Elimination.Wrap</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Elimination.Visitor.html#visit(hydra.core.Elimination.Wrap)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Elimination.Visitor.html" title="interface in hydra.core">Elimination.Visitor</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Elimination.Visitor.html#visit(hydra.core.Elimination.Wrap)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Elimination.Visitor.html" title="interface in hydra.core">Elimination.Visitor</a>&lt;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">A</a>,&#8203;<a href="Elimination.PartialVisitor.html" title="type parameter in Elimination.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

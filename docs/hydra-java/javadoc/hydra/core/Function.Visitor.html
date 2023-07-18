@@ -116,7 +116,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <main role="main">
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">hydra.core</a></div>
-<h2 title="Interface Function.Visitor" class="title">Interface Function.Visitor&lt;R&gt;</h2>
+<h2 title="Interface Function.Visitor" class="title">Interface Function.Visitor&lt;A,&#8203;R&gt;</h2>
 </div>
 <div class="contentContainer">
 <div class="description">
@@ -124,14 +124,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Known Subinterfaces:</dt>
-<dd><code><a href="Function.PartialVisitor.html" title="interface in hydra.core">Function.PartialVisitor</a>&lt;R&gt;</code></dd>
+<dd><code><a href="Function.PartialVisitor.html" title="interface in hydra.core">Function.PartialVisitor</a>&lt;A,&#8203;R&gt;</code></dd>
 </dl>
 <dl>
 <dt>Enclosing class:</dt>
 <dd><a href="Function.html" title="class in hydra.core">Function</a>&lt;<a href="Function.html" title="type parameter in Function">A</a>&gt;</dd>
 </dl>
 <hr>
-<pre>public static interface <span class="typeNameLabel">Function.Visitor&lt;R&gt;</span></pre>
+<pre>public static interface <span class="typeNameLabel">Function.Visitor&lt;A,&#8203;R&gt;</span></pre>
 </li>
 </ul>
 </div>
@@ -154,17 +154,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="Function.Visitor.html" title="type parameter in Function.Visitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Function.Elimination)">visit</a></span>&#8203;(<a href="Function.Elimination.html" title="class in hydra.core">Function.Elimination</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Function.Elimination)">visit</a></span>&#8203;(<a href="Function.Elimination.html" title="class in hydra.core">Function.Elimination</a>&lt;<a href="Function.Visitor.html" title="type parameter in Function.Visitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="Function.Visitor.html" title="type parameter in Function.Visitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Function.Lambda)">visit</a></span>&#8203;(<a href="Function.Lambda.html" title="class in hydra.core">Function.Lambda</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Function.Lambda)">visit</a></span>&#8203;(<a href="Function.Lambda.html" title="class in hydra.core">Function.Lambda</a>&lt;<a href="Function.Visitor.html" title="type parameter in Function.Visitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="Function.Visitor.html" title="type parameter in Function.Visitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Function.Primitive)">visit</a></span>&#8203;(<a href="Function.Primitive.html" title="class in hydra.core">Function.Primitive</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Function.Primitive)">visit</a></span>&#8203;(<a href="Function.Primitive.html" title="class in hydra.core">Function.Primitive</a>&lt;<a href="Function.Visitor.html" title="type parameter in Function.Visitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -190,7 +190,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature"><a href="Function.Visitor.html" title="type parameter in Function.Visitor">R</a>&nbsp;visit&#8203;(<a href="Function.Elimination.html" title="class in hydra.core">Function.Elimination</a>&nbsp;instance)</pre>
+<pre class="methodSignature"><a href="Function.Visitor.html" title="type parameter in Function.Visitor">R</a>&nbsp;visit&#8203;(<a href="Function.Elimination.html" title="class in hydra.core">Function.Elimination</a>&lt;<a href="Function.Visitor.html" title="type parameter in Function.Visitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 <a id="visit(hydra.core.Function.Lambda)">
@@ -199,7 +199,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature"><a href="Function.Visitor.html" title="type parameter in Function.Visitor">R</a>&nbsp;visit&#8203;(<a href="Function.Lambda.html" title="class in hydra.core">Function.Lambda</a>&nbsp;instance)</pre>
+<pre class="methodSignature"><a href="Function.Visitor.html" title="type parameter in Function.Visitor">R</a>&nbsp;visit&#8203;(<a href="Function.Lambda.html" title="class in hydra.core">Function.Lambda</a>&lt;<a href="Function.Visitor.html" title="type parameter in Function.Visitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 <a id="visit(hydra.core.Function.Primitive)">
@@ -208,7 +208,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockListLast">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature"><a href="Function.Visitor.html" title="type parameter in Function.Visitor">R</a>&nbsp;visit&#8203;(<a href="Function.Primitive.html" title="class in hydra.core">Function.Primitive</a>&nbsp;instance)</pre>
+<pre class="methodSignature"><a href="Function.Visitor.html" title="type parameter in Function.Visitor">R</a>&nbsp;visit&#8203;(<a href="Function.Primitive.html" title="class in hydra.core">Function.Primitive</a>&lt;<a href="Function.Visitor.html" title="type parameter in Function.Visitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 </li>

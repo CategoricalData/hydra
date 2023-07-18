@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -169,11 +169,6 @@ extends java.lang.Object</pre>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#NAME">NAME</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../core/Term.html" title="class in hydra.core">Term</a>&lt;<a href="Element.html" title="type parameter in Element">A</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#schema">schema</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
 </table>
 </li>
 </ul>
@@ -192,8 +187,7 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(hydra.core.Name,hydra.core.Term,hydra.core.Term)">Element</a></span>&#8203;(<a href="../core/Name.html" title="class in hydra.core">Name</a>&nbsp;name,
-       <a href="../core/Term.html" title="class in hydra.core">Term</a>&lt;<a href="Element.html" title="type parameter in Element">A</a>&gt;&nbsp;schema,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(hydra.core.Name,hydra.core.Term)">Element</a></span>&#8203;(<a href="../core/Name.html" title="class in hydra.core">Name</a>&nbsp;name,
        <a href="../core/Term.html" title="class in hydra.core">Term</a>&lt;<a href="Element.html" title="type parameter in Element">A</a>&gt;&nbsp;data)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -233,11 +227,6 @@ extends java.lang.Object</pre>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="Element.html" title="class in hydra.graph">Element</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withName(hydra.core.Name)">withName</a></span>&#8203;(<a href="../core/Name.html" title="class in hydra.core">Name</a>&nbsp;name)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="Element.html" title="class in hydra.graph">Element</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withSchema(hydra.core.Term)">withSchema</a></span>&#8203;(<a href="../core/Term.html" title="class in hydra.core">Term</a>&lt;<a href="Element.html" title="type parameter in Element">A</a>&gt;&nbsp;schema)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -282,15 +271,6 @@ extends java.lang.Object</pre>
 <pre>public final&nbsp;<a href="../core/Name.html" title="class in hydra.core">Name</a> name</pre>
 </li>
 </ul>
-<a id="schema">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>schema</h4>
-<pre>public final&nbsp;<a href="../core/Term.html" title="class in hydra.core">Term</a>&lt;<a href="Element.html" title="type parameter in Element">A</a>&gt; schema</pre>
-</li>
-</ul>
 <a id="data">
 <!--   -->
 </a>
@@ -310,14 +290,13 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(hydra.core.Name,hydra.core.Term,hydra.core.Term)">
+<a id="&lt;init&gt;(hydra.core.Name,hydra.core.Term)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Element</h4>
 <pre>public&nbsp;Element&#8203;(<a href="../core/Name.html" title="class in hydra.core">Name</a>&nbsp;name,
-               <a href="../core/Term.html" title="class in hydra.core">Term</a>&lt;<a href="Element.html" title="type parameter in Element">A</a>&gt;&nbsp;schema,
                <a href="../core/Term.html" title="class in hydra.core">Term</a>&lt;<a href="Element.html" title="type parameter in Element">A</a>&gt;&nbsp;data)</pre>
 </li>
 </ul>
@@ -364,15 +343,6 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>withName</h4>
 <pre class="methodSignature">public&nbsp;<a href="Element.html" title="class in hydra.graph">Element</a>&nbsp;withName&#8203;(<a href="../core/Name.html" title="class in hydra.core">Name</a>&nbsp;name)</pre>
-</li>
-</ul>
-<a id="withSchema(hydra.core.Term)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>withSchema</h4>
-<pre class="methodSignature">public&nbsp;<a href="Element.html" title="class in hydra.graph">Element</a>&nbsp;withSchema&#8203;(<a href="../core/Term.html" title="class in hydra.core">Term</a>&lt;<a href="Element.html" title="type parameter in Element">A</a>&gt;&nbsp;schema)</pre>
 </li>
 </ul>
 <a id="withData(hydra.core.Term)">

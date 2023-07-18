@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":18,"i1":18,"i2":18,"i3":18,"i4":18,"i5":18,"i6":18,"i7":18,"i8":18,"i9":18,"i10":18,"i11":18,"i12":18,"i13":18,"i14":18,"i15":18,"i16":18,"i17":18};
+var data = {"i0":18,"i1":18,"i2":18,"i3":18,"i4":18,"i5":18,"i6":18,"i7":18,"i8":18,"i9":18,"i10":18,"i11":18,"i12":18,"i13":18,"i14":18,"i15":18,"i16":18};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -116,7 +116,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <main role="main">
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">hydra.core</a></div>
-<h2 title="Interface Term.PartialVisitor" class="title">Interface Term.PartialVisitor&lt;R&gt;</h2>
+<h2 title="Interface Term.PartialVisitor" class="title">Interface Term.PartialVisitor&lt;A,&#8203;R&gt;</h2>
 </div>
 <div class="contentContainer">
 <div class="description">
@@ -124,15 +124,15 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;R&gt;</code></dd>
+<dd><code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;A,&#8203;R&gt;</code></dd>
 </dl>
 <dl>
 <dt>Enclosing class:</dt>
 <dd><a href="Term.html" title="class in hydra.core">Term</a>&lt;<a href="Term.html" title="type parameter in Term">A</a>&gt;</dd>
 </dl>
 <hr>
-<pre>public static interface <span class="typeNameLabel">Term.PartialVisitor&lt;R&gt;</span>
-extends <a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;R&gt;</pre>
+<pre>public static interface <span class="typeNameLabel">Term.PartialVisitor&lt;A,&#8203;R&gt;</span>
+extends <a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;A,&#8203;R&gt;</pre>
 </li>
 </ul>
 </div>
@@ -155,92 +155,87 @@ extends <a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>default <a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#otherwise(hydra.core.Term)">otherwise</a></span>&#8203;(<a href="Term.html" title="class in hydra.core">Term</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#otherwise(hydra.core.Term)">otherwise</a></span>&#8203;(<a href="Term.html" title="class in hydra.core">Term</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>default <a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Annotated)">visit</a></span>&#8203;(<a href="Term.Annotated.html" title="class in hydra.core">Term.Annotated</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Annotated)">visit</a></span>&#8203;(<a href="Term.Annotated.html" title="class in hydra.core">Term.Annotated</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>default <a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Application)">visit</a></span>&#8203;(<a href="Term.Application.html" title="class in hydra.core">Term.Application</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Application)">visit</a></span>&#8203;(<a href="Term.Application.html" title="class in hydra.core">Term.Application</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>default <a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Element)">visit</a></span>&#8203;(<a href="Term.Element.html" title="class in hydra.core">Term.Element</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Function)">visit</a></span>&#8203;(<a href="Term.Function.html" title="class in hydra.core">Term.Function</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>default <a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Function)">visit</a></span>&#8203;(<a href="Term.Function.html" title="class in hydra.core">Term.Function</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Let)">visit</a></span>&#8203;(<a href="Term.Let.html" title="class in hydra.core">Term.Let</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>default <a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Let)">visit</a></span>&#8203;(<a href="Term.Let.html" title="class in hydra.core">Term.Let</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.List)">visit</a></span>&#8203;(<a href="Term.List.html" title="class in hydra.core">Term.List</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>default <a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.List)">visit</a></span>&#8203;(<a href="Term.List.html" title="class in hydra.core">Term.List</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Literal)">visit</a></span>&#8203;(<a href="Term.Literal.html" title="class in hydra.core">Term.Literal</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>default <a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Literal)">visit</a></span>&#8203;(<a href="Term.Literal.html" title="class in hydra.core">Term.Literal</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Map)">visit</a></span>&#8203;(<a href="Term.Map.html" title="class in hydra.core">Term.Map</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>default <a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Map)">visit</a></span>&#8203;(<a href="Term.Map.html" title="class in hydra.core">Term.Map</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Optional)">visit</a></span>&#8203;(<a href="Term.Optional.html" title="class in hydra.core">Term.Optional</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>default <a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Optional)">visit</a></span>&#8203;(<a href="Term.Optional.html" title="class in hydra.core">Term.Optional</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Product)">visit</a></span>&#8203;(<a href="Term.Product.html" title="class in hydra.core">Term.Product</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>default <a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Product)">visit</a></span>&#8203;(<a href="Term.Product.html" title="class in hydra.core">Term.Product</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Record)">visit</a></span>&#8203;(<a href="Term.Record.html" title="class in hydra.core">Term.Record</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>default <a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Record)">visit</a></span>&#8203;(<a href="Term.Record.html" title="class in hydra.core">Term.Record</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Set)">visit</a></span>&#8203;(<a href="Term.Set.html" title="class in hydra.core">Term.Set</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>default <a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Set)">visit</a></span>&#8203;(<a href="Term.Set.html" title="class in hydra.core">Term.Set</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Stream)">visit</a></span>&#8203;(<a href="Term.Stream.html" title="class in hydra.core">Term.Stream</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>default <a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Stream)">visit</a></span>&#8203;(<a href="Term.Stream.html" title="class in hydra.core">Term.Stream</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Sum)">visit</a></span>&#8203;(<a href="Term.Sum.html" title="class in hydra.core">Term.Sum</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>default <a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Sum)">visit</a></span>&#8203;(<a href="Term.Sum.html" title="class in hydra.core">Term.Sum</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Union)">visit</a></span>&#8203;(<a href="Term.Union.html" title="class in hydra.core">Term.Union</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>default <a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Union)">visit</a></span>&#8203;(<a href="Term.Union.html" title="class in hydra.core">Term.Union</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Variable)">visit</a></span>&#8203;(<a href="Term.Variable.html" title="class in hydra.core">Term.Variable</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i16" class="altColor">
 <td class="colFirst"><code>default <a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Variable)">visit</a></span>&#8203;(<a href="Term.Variable.html" title="class in hydra.core">Term.Variable</a>&nbsp;instance)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i17" class="rowColor">
-<td class="colFirst"><code>default <a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Wrap)">visit</a></span>&#8203;(<a href="Term.Wrap.html" title="class in hydra.core">Term.Wrap</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Wrap)">visit</a></span>&#8203;(<a href="Term.Wrap.html" title="class in hydra.core">Term.Wrap</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -266,7 +261,7 @@ extends <a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor
 <ul class="blockList">
 <li class="blockList">
 <h4>otherwise</h4>
-<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;otherwise&#8203;(<a href="Term.html" title="class in hydra.core">Term</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;otherwise&#8203;(<a href="Term.html" title="class in hydra.core">Term</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 <a id="visit(hydra.core.Term.Annotated)">
@@ -275,10 +270,10 @@ extends <a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Annotated.html" title="class in hydra.core">Term.Annotated</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Annotated.html" title="class in hydra.core">Term.Annotated</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Annotated)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Annotated)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>,&#8203;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -288,23 +283,10 @@ extends <a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Application.html" title="class in hydra.core">Term.Application</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Application.html" title="class in hydra.core">Term.Application</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Application)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
-</dl>
-</li>
-</ul>
-<a id="visit(hydra.core.Term.Element)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Element.html" title="class in hydra.core">Term.Element</a>&nbsp;instance)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Element)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Application)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>,&#8203;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -314,10 +296,10 @@ extends <a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Function.html" title="class in hydra.core">Term.Function</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Function.html" title="class in hydra.core">Term.Function</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Function)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Function)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>,&#8203;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -327,10 +309,10 @@ extends <a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Let.html" title="class in hydra.core">Term.Let</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Let.html" title="class in hydra.core">Term.Let</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Let)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Let)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>,&#8203;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -340,10 +322,10 @@ extends <a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.List.html" title="class in hydra.core">Term.List</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.List.html" title="class in hydra.core">Term.List</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.List)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.List)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>,&#8203;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -353,10 +335,10 @@ extends <a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Literal.html" title="class in hydra.core">Term.Literal</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Literal.html" title="class in hydra.core">Term.Literal</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Literal)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Literal)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>,&#8203;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -366,10 +348,10 @@ extends <a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Map.html" title="class in hydra.core">Term.Map</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Map.html" title="class in hydra.core">Term.Map</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Map)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Map)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>,&#8203;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -379,10 +361,10 @@ extends <a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Optional.html" title="class in hydra.core">Term.Optional</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Optional.html" title="class in hydra.core">Term.Optional</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Optional)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Optional)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>,&#8203;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -392,10 +374,10 @@ extends <a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Product.html" title="class in hydra.core">Term.Product</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Product.html" title="class in hydra.core">Term.Product</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Product)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Product)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>,&#8203;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -405,10 +387,10 @@ extends <a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Record.html" title="class in hydra.core">Term.Record</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Record.html" title="class in hydra.core">Term.Record</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Record)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Record)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>,&#8203;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -418,10 +400,10 @@ extends <a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Set.html" title="class in hydra.core">Term.Set</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Set.html" title="class in hydra.core">Term.Set</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Set)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Set)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>,&#8203;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -431,10 +413,10 @@ extends <a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Stream.html" title="class in hydra.core">Term.Stream</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Stream.html" title="class in hydra.core">Term.Stream</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Stream)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Stream)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>,&#8203;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -444,10 +426,10 @@ extends <a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Sum.html" title="class in hydra.core">Term.Sum</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Sum.html" title="class in hydra.core">Term.Sum</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Sum)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Sum)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>,&#8203;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -457,10 +439,10 @@ extends <a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Union.html" title="class in hydra.core">Term.Union</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Union.html" title="class in hydra.core">Term.Union</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Union)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Union)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>,&#8203;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -470,10 +452,10 @@ extends <a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Variable.html" title="class in hydra.core">Term.Variable</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Variable.html" title="class in hydra.core">Term.Variable</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Variable)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Variable)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>,&#8203;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -483,10 +465,10 @@ extends <a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor
 <ul class="blockListLast">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Wrap.html" title="class in hydra.core">Term.Wrap</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Term.Wrap.html" title="class in hydra.core">Term.Wrap</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Wrap)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Term.Visitor.html#visit(hydra.core.Term.Wrap)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Term.Visitor.html" title="interface in hydra.core">Term.Visitor</a>&lt;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">A</a>,&#8203;<a href="Term.PartialVisitor.html" title="type parameter in Term.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

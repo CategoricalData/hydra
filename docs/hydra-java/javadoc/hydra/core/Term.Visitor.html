@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6,"i13":6,"i14":6,"i15":6,"i16":6};
+var data = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6,"i13":6,"i14":6,"i15":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -116,7 +116,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <main role="main">
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">hydra.core</a></div>
-<h2 title="Interface Term.Visitor" class="title">Interface Term.Visitor&lt;R&gt;</h2>
+<h2 title="Interface Term.Visitor" class="title">Interface Term.Visitor&lt;A,&#8203;R&gt;</h2>
 </div>
 <div class="contentContainer">
 <div class="description">
@@ -124,14 +124,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Known Subinterfaces:</dt>
-<dd><code><a href="Term.PartialVisitor.html" title="interface in hydra.core">Term.PartialVisitor</a>&lt;R&gt;</code></dd>
+<dd><code><a href="Term.PartialVisitor.html" title="interface in hydra.core">Term.PartialVisitor</a>&lt;A,&#8203;R&gt;</code></dd>
 </dl>
 <dl>
 <dt>Enclosing class:</dt>
 <dd><a href="Term.html" title="class in hydra.core">Term</a>&lt;<a href="Term.html" title="type parameter in Term">A</a>&gt;</dd>
 </dl>
 <hr>
-<pre>public static interface <span class="typeNameLabel">Term.Visitor&lt;R&gt;</span></pre>
+<pre>public static interface <span class="typeNameLabel">Term.Visitor&lt;A,&#8203;R&gt;</span></pre>
 </li>
 </ul>
 </div>
@@ -154,87 +154,82 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Annotated)">visit</a></span>&#8203;(<a href="Term.Annotated.html" title="class in hydra.core">Term.Annotated</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Annotated)">visit</a></span>&#8203;(<a href="Term.Annotated.html" title="class in hydra.core">Term.Annotated</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Application)">visit</a></span>&#8203;(<a href="Term.Application.html" title="class in hydra.core">Term.Application</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Application)">visit</a></span>&#8203;(<a href="Term.Application.html" title="class in hydra.core">Term.Application</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Element)">visit</a></span>&#8203;(<a href="Term.Element.html" title="class in hydra.core">Term.Element</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Function)">visit</a></span>&#8203;(<a href="Term.Function.html" title="class in hydra.core">Term.Function</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Function)">visit</a></span>&#8203;(<a href="Term.Function.html" title="class in hydra.core">Term.Function</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Let)">visit</a></span>&#8203;(<a href="Term.Let.html" title="class in hydra.core">Term.Let</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Let)">visit</a></span>&#8203;(<a href="Term.Let.html" title="class in hydra.core">Term.Let</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.List)">visit</a></span>&#8203;(<a href="Term.List.html" title="class in hydra.core">Term.List</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.List)">visit</a></span>&#8203;(<a href="Term.List.html" title="class in hydra.core">Term.List</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Literal)">visit</a></span>&#8203;(<a href="Term.Literal.html" title="class in hydra.core">Term.Literal</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Literal)">visit</a></span>&#8203;(<a href="Term.Literal.html" title="class in hydra.core">Term.Literal</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Map)">visit</a></span>&#8203;(<a href="Term.Map.html" title="class in hydra.core">Term.Map</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Map)">visit</a></span>&#8203;(<a href="Term.Map.html" title="class in hydra.core">Term.Map</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Optional)">visit</a></span>&#8203;(<a href="Term.Optional.html" title="class in hydra.core">Term.Optional</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Optional)">visit</a></span>&#8203;(<a href="Term.Optional.html" title="class in hydra.core">Term.Optional</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Product)">visit</a></span>&#8203;(<a href="Term.Product.html" title="class in hydra.core">Term.Product</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Product)">visit</a></span>&#8203;(<a href="Term.Product.html" title="class in hydra.core">Term.Product</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Record)">visit</a></span>&#8203;(<a href="Term.Record.html" title="class in hydra.core">Term.Record</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Record)">visit</a></span>&#8203;(<a href="Term.Record.html" title="class in hydra.core">Term.Record</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Set)">visit</a></span>&#8203;(<a href="Term.Set.html" title="class in hydra.core">Term.Set</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Set)">visit</a></span>&#8203;(<a href="Term.Set.html" title="class in hydra.core">Term.Set</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Stream)">visit</a></span>&#8203;(<a href="Term.Stream.html" title="class in hydra.core">Term.Stream</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Stream)">visit</a></span>&#8203;(<a href="Term.Stream.html" title="class in hydra.core">Term.Stream</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Sum)">visit</a></span>&#8203;(<a href="Term.Sum.html" title="class in hydra.core">Term.Sum</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Sum)">visit</a></span>&#8203;(<a href="Term.Sum.html" title="class in hydra.core">Term.Sum</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Union)">visit</a></span>&#8203;(<a href="Term.Union.html" title="class in hydra.core">Term.Union</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Union)">visit</a></span>&#8203;(<a href="Term.Union.html" title="class in hydra.core">Term.Union</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Variable)">visit</a></span>&#8203;(<a href="Term.Variable.html" title="class in hydra.core">Term.Variable</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Variable)">visit</a></span>&#8203;(<a href="Term.Variable.html" title="class in hydra.core">Term.Variable</a>&nbsp;instance)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i16" class="altColor">
-<td class="colFirst"><code><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Wrap)">visit</a></span>&#8203;(<a href="Term.Wrap.html" title="class in hydra.core">Term.Wrap</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.core.Term.Wrap)">visit</a></span>&#8203;(<a href="Term.Wrap.html" title="class in hydra.core">Term.Wrap</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -260,7 +255,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Annotated.html" title="class in hydra.core">Term.Annotated</a>&nbsp;instance)</pre>
+<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Annotated.html" title="class in hydra.core">Term.Annotated</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 <a id="visit(hydra.core.Term.Application)">
@@ -269,16 +264,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Application.html" title="class in hydra.core">Term.Application</a>&nbsp;instance)</pre>
-</li>
-</ul>
-<a id="visit(hydra.core.Term.Element)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>visit</h4>
-<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Element.html" title="class in hydra.core">Term.Element</a>&nbsp;instance)</pre>
+<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Application.html" title="class in hydra.core">Term.Application</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 <a id="visit(hydra.core.Term.Function)">
@@ -287,7 +273,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Function.html" title="class in hydra.core">Term.Function</a>&nbsp;instance)</pre>
+<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Function.html" title="class in hydra.core">Term.Function</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 <a id="visit(hydra.core.Term.Let)">
@@ -296,7 +282,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Let.html" title="class in hydra.core">Term.Let</a>&nbsp;instance)</pre>
+<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Let.html" title="class in hydra.core">Term.Let</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 <a id="visit(hydra.core.Term.List)">
@@ -305,7 +291,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.List.html" title="class in hydra.core">Term.List</a>&nbsp;instance)</pre>
+<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.List.html" title="class in hydra.core">Term.List</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 <a id="visit(hydra.core.Term.Literal)">
@@ -314,7 +300,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Literal.html" title="class in hydra.core">Term.Literal</a>&nbsp;instance)</pre>
+<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Literal.html" title="class in hydra.core">Term.Literal</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 <a id="visit(hydra.core.Term.Map)">
@@ -323,7 +309,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Map.html" title="class in hydra.core">Term.Map</a>&nbsp;instance)</pre>
+<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Map.html" title="class in hydra.core">Term.Map</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 <a id="visit(hydra.core.Term.Optional)">
@@ -332,7 +318,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Optional.html" title="class in hydra.core">Term.Optional</a>&nbsp;instance)</pre>
+<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Optional.html" title="class in hydra.core">Term.Optional</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 <a id="visit(hydra.core.Term.Product)">
@@ -341,7 +327,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Product.html" title="class in hydra.core">Term.Product</a>&nbsp;instance)</pre>
+<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Product.html" title="class in hydra.core">Term.Product</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 <a id="visit(hydra.core.Term.Record)">
@@ -350,7 +336,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Record.html" title="class in hydra.core">Term.Record</a>&nbsp;instance)</pre>
+<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Record.html" title="class in hydra.core">Term.Record</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 <a id="visit(hydra.core.Term.Set)">
@@ -359,7 +345,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Set.html" title="class in hydra.core">Term.Set</a>&nbsp;instance)</pre>
+<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Set.html" title="class in hydra.core">Term.Set</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 <a id="visit(hydra.core.Term.Stream)">
@@ -368,7 +354,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Stream.html" title="class in hydra.core">Term.Stream</a>&nbsp;instance)</pre>
+<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Stream.html" title="class in hydra.core">Term.Stream</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 <a id="visit(hydra.core.Term.Sum)">
@@ -377,7 +363,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Sum.html" title="class in hydra.core">Term.Sum</a>&nbsp;instance)</pre>
+<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Sum.html" title="class in hydra.core">Term.Sum</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 <a id="visit(hydra.core.Term.Union)">
@@ -386,7 +372,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Union.html" title="class in hydra.core">Term.Union</a>&nbsp;instance)</pre>
+<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Union.html" title="class in hydra.core">Term.Union</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 <a id="visit(hydra.core.Term.Variable)">
@@ -395,7 +381,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Variable.html" title="class in hydra.core">Term.Variable</a>&nbsp;instance)</pre>
+<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Variable.html" title="class in hydra.core">Term.Variable</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 <a id="visit(hydra.core.Term.Wrap)">
@@ -404,7 +390,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockListLast">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Wrap.html" title="class in hydra.core">Term.Wrap</a>&nbsp;instance)</pre>
+<pre class="methodSignature"><a href="Term.Visitor.html" title="type parameter in Term.Visitor">R</a>&nbsp;visit&#8203;(<a href="Term.Wrap.html" title="class in hydra.core">Term.Wrap</a>&lt;<a href="Term.Visitor.html" title="type parameter in Term.Visitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 </li>

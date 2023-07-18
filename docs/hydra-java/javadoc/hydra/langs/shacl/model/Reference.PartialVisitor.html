@@ -116,7 +116,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <main role="main">
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">hydra.langs.shacl.model</a></div>
-<h2 title="Interface Reference.PartialVisitor" class="title">Interface Reference.PartialVisitor&lt;R&gt;</h2>
+<h2 title="Interface Reference.PartialVisitor" class="title">Interface Reference.PartialVisitor&lt;A,&#8203;R&gt;</h2>
 </div>
 <div class="contentContainer">
 <div class="description">
@@ -124,15 +124,15 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><code><a href="Reference.Visitor.html" title="interface in hydra.langs.shacl.model">Reference.Visitor</a>&lt;R&gt;</code></dd>
+<dd><code><a href="Reference.Visitor.html" title="interface in hydra.langs.shacl.model">Reference.Visitor</a>&lt;A,&#8203;R&gt;</code></dd>
 </dl>
 <dl>
 <dt>Enclosing class:</dt>
 <dd><a href="Reference.html" title="class in hydra.langs.shacl.model">Reference</a>&lt;<a href="Reference.html" title="type parameter in Reference">A</a>&gt;</dd>
 </dl>
 <hr>
-<pre>public static interface <span class="typeNameLabel">Reference.PartialVisitor&lt;R&gt;</span>
-extends <a href="Reference.Visitor.html" title="interface in hydra.langs.shacl.model">Reference.Visitor</a>&lt;R&gt;</pre>
+<pre>public static interface <span class="typeNameLabel">Reference.PartialVisitor&lt;A,&#8203;R&gt;</span>
+extends <a href="Reference.Visitor.html" title="interface in hydra.langs.shacl.model">Reference.Visitor</a>&lt;A,&#8203;R&gt;</pre>
 </li>
 </ul>
 </div>
@@ -155,22 +155,22 @@ extends <a href="Reference.Visitor.html" title="interface in hydra.langs.shacl.m
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>default <a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#otherwise(hydra.langs.shacl.model.Reference)">otherwise</a></span>&#8203;(<a href="Reference.html" title="class in hydra.langs.shacl.model">Reference</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#otherwise(hydra.langs.shacl.model.Reference)">otherwise</a></span>&#8203;(<a href="Reference.html" title="class in hydra.langs.shacl.model">Reference</a>&lt;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>default <a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.langs.shacl.model.Reference.Anonymous)">visit</a></span>&#8203;(<a href="Reference.Anonymous.html" title="class in hydra.langs.shacl.model">Reference.Anonymous</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.langs.shacl.model.Reference.Anonymous)">visit</a></span>&#8203;(<a href="Reference.Anonymous.html" title="class in hydra.langs.shacl.model">Reference.Anonymous</a>&lt;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>default <a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.langs.shacl.model.Reference.Definition)">visit</a></span>&#8203;(<a href="Reference.Definition.html" title="class in hydra.langs.shacl.model">Reference.Definition</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.langs.shacl.model.Reference.Definition)">visit</a></span>&#8203;(<a href="Reference.Definition.html" title="class in hydra.langs.shacl.model">Reference.Definition</a>&lt;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>default <a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">R</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.langs.shacl.model.Reference.Named)">visit</a></span>&#8203;(<a href="Reference.Named.html" title="class in hydra.langs.shacl.model">Reference.Named</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#visit(hydra.langs.shacl.model.Reference.Named)">visit</a></span>&#8203;(<a href="Reference.Named.html" title="class in hydra.langs.shacl.model">Reference.Named</a>&lt;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">A</a>&gt;&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -196,7 +196,7 @@ extends <a href="Reference.Visitor.html" title="interface in hydra.langs.shacl.m
 <ul class="blockList">
 <li class="blockList">
 <h4>otherwise</h4>
-<pre class="methodSignature">default&nbsp;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">R</a>&nbsp;otherwise&#8203;(<a href="Reference.html" title="class in hydra.langs.shacl.model">Reference</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">R</a>&nbsp;otherwise&#8203;(<a href="Reference.html" title="class in hydra.langs.shacl.model">Reference</a>&lt;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 </li>
 </ul>
 <a id="visit(hydra.langs.shacl.model.Reference.Named)">
@@ -205,10 +205,10 @@ extends <a href="Reference.Visitor.html" title="interface in hydra.langs.shacl.m
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Reference.Named.html" title="class in hydra.langs.shacl.model">Reference.Named</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Reference.Named.html" title="class in hydra.langs.shacl.model">Reference.Named</a>&lt;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Reference.Visitor.html#visit(hydra.langs.shacl.model.Reference.Named)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Reference.Visitor.html" title="interface in hydra.langs.shacl.model">Reference.Visitor</a>&lt;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Reference.Visitor.html#visit(hydra.langs.shacl.model.Reference.Named)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Reference.Visitor.html" title="interface in hydra.langs.shacl.model">Reference.Visitor</a>&lt;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">A</a>,&#8203;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -218,10 +218,10 @@ extends <a href="Reference.Visitor.html" title="interface in hydra.langs.shacl.m
 <ul class="blockList">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Reference.Anonymous.html" title="class in hydra.langs.shacl.model">Reference.Anonymous</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Reference.Anonymous.html" title="class in hydra.langs.shacl.model">Reference.Anonymous</a>&lt;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Reference.Visitor.html#visit(hydra.langs.shacl.model.Reference.Anonymous)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Reference.Visitor.html" title="interface in hydra.langs.shacl.model">Reference.Visitor</a>&lt;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Reference.Visitor.html#visit(hydra.langs.shacl.model.Reference.Anonymous)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Reference.Visitor.html" title="interface in hydra.langs.shacl.model">Reference.Visitor</a>&lt;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">A</a>,&#8203;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -231,10 +231,10 @@ extends <a href="Reference.Visitor.html" title="interface in hydra.langs.shacl.m
 <ul class="blockListLast">
 <li class="blockList">
 <h4>visit</h4>
-<pre class="methodSignature">default&nbsp;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Reference.Definition.html" title="class in hydra.langs.shacl.model">Reference.Definition</a>&nbsp;instance)</pre>
+<pre class="methodSignature">default&nbsp;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">R</a>&nbsp;visit&#8203;(<a href="Reference.Definition.html" title="class in hydra.langs.shacl.model">Reference.Definition</a>&lt;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">A</a>&gt;&nbsp;instance)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Reference.Visitor.html#visit(hydra.langs.shacl.model.Reference.Definition)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Reference.Visitor.html" title="interface in hydra.langs.shacl.model">Reference.Visitor</a>&lt;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">R</a>&gt;</code></dd>
+<dd><code><a href="Reference.Visitor.html#visit(hydra.langs.shacl.model.Reference.Definition)">visit</a></code>&nbsp;in interface&nbsp;<code><a href="Reference.Visitor.html" title="interface in hydra.langs.shacl.model">Reference.Visitor</a>&lt;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">A</a>,&#8203;<a href="Reference.PartialVisitor.html" title="type parameter in Reference.PartialVisitor">R</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
