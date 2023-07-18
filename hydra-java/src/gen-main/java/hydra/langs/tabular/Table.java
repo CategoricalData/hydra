@@ -1,10 +1,19 @@
 package hydra.langs.tabular;
 
+/**
+ * A simple table as in a CSV file, having an optional header row and any number of data rows
+ */
 public class Table {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tabular.Table");
   
+  /**
+   * The optional header row of the table. If present, the header must have the same number of cells as each data row.
+   */
   public final java.util.Optional<hydra.langs.tabular.HeaderRow> header;
   
+  /**
+   * The data rows of the table. Each row must have the same number of cells.
+   */
   public final java.util.List<hydra.langs.tabular.DataRow> data;
   
   public Table (java.util.Optional<hydra.langs.tabular.HeaderRow> header, java.util.List<hydra.langs.tabular.DataRow> data) {

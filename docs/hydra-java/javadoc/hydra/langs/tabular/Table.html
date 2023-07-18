@@ -133,6 +133,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public class <span class="typeNameLabel">Table</span>
 extends java.lang.Object</pre>
+<div class="block">A simple table as in a CSV file, having an optional header row and any number of data rows</div>
 </li>
 </ul>
 </div>
@@ -156,12 +157,16 @@ extends java.lang.Object</pre>
 <tr class="altColor">
 <td class="colFirst"><code>java.util.List&lt;<a href="DataRow.html" title="class in hydra.langs.tabular">DataRow</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#data">data</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">The data rows of the table.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>java.util.Optional&lt;<a href="HeaderRow.html" title="class in hydra.langs.tabular">HeaderRow</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#header">header</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">The optional header row of the table.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../core/Name.html" title="class in hydra.core">Name</a></code></td>
@@ -268,6 +273,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>header</h4>
 <pre>public final&nbsp;java.util.Optional&lt;<a href="HeaderRow.html" title="class in hydra.langs.tabular">HeaderRow</a>&gt; header</pre>
+<div class="block">The optional header row of the table. If present, the header must have the same number of cells as each data row.</div>
 </li>
 </ul>
 <a id="data">
@@ -277,6 +283,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>data</h4>
 <pre>public final&nbsp;java.util.List&lt;<a href="DataRow.html" title="class in hydra.langs.tabular">DataRow</a>&gt; data</pre>
+<div class="block">The data rows of the table. Each row must have the same number of cells.</div>
 </li>
 </ul>
 </li>
