@@ -53,6 +53,7 @@ import Hydra.Sources.Langs.Scala.Meta
 import Hydra.Sources.Langs.Shacl.Model
 import Hydra.Sources.Langs.Shex.Syntax
 import Hydra.Sources.Langs.Sql.Ansi
+import Hydra.Sources.Langs.Tabular
 import Hydra.Sources.Langs.Tinkerpop.Features
 import Hydra.Sources.Langs.Tinkerpop.Mappings
 import Hydra.Sources.Langs.Tinkerpop.PropertyGraph
@@ -161,6 +162,7 @@ langModules = [
   shaclModelModule,
   shexSyntaxModule,
   sqlModule,
+  tabularModule,
   tinkerpopFeaturesModule,
   tinkerpopMappingsModule,
   tinkerpopPropertyGraphModule,
