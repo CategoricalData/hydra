@@ -91,7 +91,7 @@ checkFunctionTerms = H.describe "Check a few hand-picked function terms" $ do
 
     H.it "Check case statements" $ do
       expectMonotype
-        (cases testTypeFoobarValueName Nothing [
+        (match testTypeFoobarValueName Nothing [
           Field (FieldName "bool") (lambda "x" (boolean True)),
           Field (FieldName "string") (lambda "x" (boolean False)),
           Field (FieldName "unit") (lambda "x" (boolean False))])
@@ -378,11 +378,11 @@ checkSubtermAnnotations = H.describe "Check additional subterm annotations" $ do
     H.describe "Check case statements" $ do
       H.it "test #1" $ do
         expectTypeAnnotation pure
-          (cases testTypeNumberName (Just $ string "it's something else") [
+          (match testTypeNumberName (Just $ string "it's something else") [
             Field (FieldName "int") $ constant $ string "it's an integer"])
           (Types.function testTypeNumber Types.string)
       H.it "test #2" $ do
-        let  testCase = cases testTypeNumberName Nothing [
+        let  testCase = match testTypeNumberName Nothing [
                           Field (FieldName "int") $ constant $ string "it's an integer",
                           Field (FieldName "float") $ constant $ string "it's a float"]
         expectTypeAnnotation pure testCase

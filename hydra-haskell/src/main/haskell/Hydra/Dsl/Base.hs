@@ -113,10 +113,10 @@ map = Datum . Terms.map . M.fromList . fmap fromDatum . M.toList
     fromDatum (Datum k, Datum v) = (k, v)
 
 match :: Name -> Maybe (Term Kv) -> [Field Kv] -> Datum (u -> b)
-match name dflt fields = Datum $ Terms.cases name dflt fields
+match name dflt fields = Datum $ Terms.match name dflt fields
 
 matchData :: Name -> Maybe (Datum b) -> [(FieldName, Datum (x -> b))] -> Datum (a -> b)
-matchData name dflt pairs = Datum $ Terms.cases name (unDatum <$> dflt) (toField <$> pairs)
+matchData name dflt pairs = Datum $ Terms.match name (unDatum <$> dflt) (toField <$> pairs)
   where
     toField (fname, Datum term) = Field fname term
 
