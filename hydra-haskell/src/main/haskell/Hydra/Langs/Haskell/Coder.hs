@@ -289,7 +289,7 @@ toTypeDeclarations namespaces el term = withTrace ("element " ++ unName (element
     g <- getState
     let lname = localNameOfEager $ elementName el
     let hname = simpleName lname
-    t <- epsilonDecodeType term
+    t <- coreDecodeType term
     isSer <- isSerializable
     let deriv = H.Deriving $ if isSer
                   then rawName <$> ["Eq", "Ord", "Read", "Show"]

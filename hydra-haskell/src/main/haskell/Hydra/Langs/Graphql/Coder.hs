@@ -49,7 +49,7 @@ constructModule mod coders pairs = do
     toTypeDef prefixes el = do
       typ <- requireTypeAnnotation (elementData el)
       if isType typ
-        then epsilonDecodeType (elementData el) >>= encodeNamedType prefixes el
+        then coreDecodeType (elementData el) >>= encodeNamedType prefixes el
         else fail $ "mapping of non-type elements to GraphQL is not yet supported: " ++ unName (elementName el)
 
 descriptionFromType :: Type a -> GraphFlow a (Maybe G.Description)

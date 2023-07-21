@@ -32,8 +32,8 @@ groupElement lname group = def lname (Types.var "ignored") $ encodeGroup group
       Field _TestCase_evaluationStyle $ Terms.variant _EvaluationStyle (case style of
         EvaluationStyleEager -> _EvaluationStyle_eager
         EvaluationStyleLazy -> _EvaluationStyle_lazy) Terms.unit,
-      Field _TestCase_input $ sigmaEncodeTerm input,
-      Field _TestCase_output $ sigmaEncodeTerm output]
+      Field _TestCase_input $ coreEncodeTerm input,
+      Field _TestCase_output $ coreEncodeTerm output]
     def lname typ term = Element (unqualifyName $ QualifiedName (Just testSuiteNs) lname) term
 
 allTests :: TestGroup Kv

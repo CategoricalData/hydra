@@ -387,7 +387,7 @@ wrapToUnwrapped t@(TypeWrap (Nominal tname typ)) = do
     ad <- termAdapter typ
     return $ Adapter False t (adapterTarget ad) $ Coder (encode ad) (decode ad)
   where
-    encode ad term = Expect.wrapWithName tname term >>= coderEncode (adapterCoder ad)
+    encode ad term = Expect.wrap tname term >>= coderEncode (adapterCoder ad)
     decode ad term = do
       decoded <- coderDecode (adapterCoder ad) term
       return $ TermWrap $ Nominal tname decoded

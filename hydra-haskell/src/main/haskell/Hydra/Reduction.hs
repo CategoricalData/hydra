@@ -111,7 +111,7 @@ reduceTerm eager env = rewriteTermM mapping pure
             Just d -> pure d
             Nothing -> fail $ "no such field " ++ unFieldName (fieldName field) ++ " in " ++ unName name ++ " case statement"
           else pure $ Terms.apply (fieldTerm $ L.head matchingFields) (fieldTerm field)
-      EliminationWrap name -> Expect.wrapWithName name reducedArg
+      EliminationWrap name -> Expect.wrap name reducedArg
 
 -- Note: this is eager beta reduction, in that we always descend into subtypes,
 --       and always reduce the right-hand side of an application prior to substitution

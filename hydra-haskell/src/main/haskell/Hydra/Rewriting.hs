@@ -6,7 +6,7 @@ import Hydra.Basics
 import Hydra.Coders
 import Hydra.Compute
 import Hydra.Core
-import Hydra.TypeEncoding
+import Hydra.CoreEncoding
 import Hydra.Extras
 import Hydra.Graph
 import Hydra.Flows

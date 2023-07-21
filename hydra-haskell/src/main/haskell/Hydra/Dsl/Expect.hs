@@ -289,8 +289,8 @@ variable term = case stripTerm term of
   TermVariable name -> pure name
   _ -> unexpected "variable" term
 
-wrapWithName :: Show a => Name -> Term a -> Flow s (Term a)
-wrapWithName expected term = case stripTerm term of
+wrap :: Show a => Name -> Term a -> Flow s (Term a)
+wrap expected term = case stripTerm term of
   TermWrap (Nominal actual term) -> if actual == expected
     then pure term
     else fail $ "found a wrapper of type " ++ unName actual ++ ", expected " ++ unName expected

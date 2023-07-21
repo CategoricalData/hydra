@@ -5,7 +5,7 @@ module Hydra.Dsl.Prims where
 
 import Hydra.Kernel
 import Hydra.CoreDecoding
-import Hydra.TypeEncoding
+import Hydra.CoreEncoding
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
@@ -194,8 +194,8 @@ term = TermCoder (Types.apply (TypeVariable _Term) (Types.var "a")) $ Coder enco
 type_ :: Show a => TermCoder a (Type a)
 type_ = TermCoder (Types.apply (TypeVariable _Type) (Types.var "a")) $ Coder encode decode
   where
-    encode = epsilonDecodeType
-    decode = pure . epsilonEncodeType
+    encode = coreDecodeType
+    decode = pure . coreEncodeType
 
 uint8 :: Show a => TermCoder a Int16
 uint8 = TermCoder Types.uint8 $ Coder encode decode

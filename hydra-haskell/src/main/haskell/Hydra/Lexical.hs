@@ -19,11 +19,6 @@ import qualified Data.Maybe as Y
 import Control.Monad
 
 
-deref :: Term a -> GraphFlow a (Term a)
-deref term = case stripTerm term of
-  TermWrap (Nominal _ term') -> deref term'
-  _ -> pure term
-
 dereferenceElement :: Name -> GraphFlow a (Term a)
 dereferenceElement en = do
     cx <- getState
