@@ -17,87 +17,50 @@ typeEncodingModule = Module (Namespace "hydra/typeEncoding") elements [hydraCore
     Just "Implementation of LambdaGraph's epsilon encoding, which maps types to terms and back"
   where
    elements = [
+     Base.el epsilonEncodeAnnotatedTypeDef,
+     Base.el epsilonEncodeApplicationTypeDef,
+     Base.el epsilonEncodeFieldTypeDef,
      Base.el epsilonEncodeFloatTypeDef,
-     Base.el epsilonEncodeIntegerTypeDef
---      Base.el epsilonEncodeNameDef,
---      el epsilonEncodeLiteralTypeDef
---      el epsilonEncodeTypeDef,
-
-
-     ]
-
+     Base.el epsilonEncodeFunctionTypeDef,
+     Base.el epsilonEncodeIntegerTypeDef,
+     Base.el epsilonEncodeLambdaTypeDef,
+     Base.el epsilonEncodeLiteralTypeDef,
+     Base.el epsilonEncodeMapTypeDef,
+     Base.el epsilonEncodeNameDef,
+     Base.el epsilonEncodeNominalTypeDef,
+     Base.el epsilonEncodeRowTypeDef,
+     Base.el epsilonEncodeTypeDef]
 
 typeEncodingDefinition :: String -> Type Kv -> Term Kv -> Definition x
 typeEncodingDefinition label dom term = Base.definitionInModule typeEncodingModule ("eencode" ++ label) $
   Base.function dom termA $ Datum term
 
+annotatedTypeA = Types.apply (TypeVariable _Annotated) typeA :: Type a
+applicationTypeA = Types.apply (TypeVariable _ApplicationType) (Types.var "a") :: Type a
+fieldTypeA = Types.apply (TypeVariable _FieldType) (Types.var "a") :: Type a
+functionTypeA = Types.apply (TypeVariable _FunctionType) (Types.var "a") :: Type a
+lambdaTypeA = Types.apply (TypeVariable _LambdaType) (Types.var "a") :: Type a
+mapTypeA = Types.apply (TypeVariable _MapType) (Types.var "a") :: Type a
+nominalTypeA = Types.apply (TypeVariable _Nominal) typeA :: Type a
+rowTypeA = Types.apply (TypeVariable _RowType) (Types.var "a") :: Type a
 
+epsilonEncodeAnnotatedTypeDef :: Definition (Annotated (Type a) a -> Term a)
+epsilonEncodeAnnotatedTypeDef = termEncodingDefinition "AnnotatedType" annotatedTypeA $
+  lambda "at" $ record _Annotated [
+    Field _Annotated_subject $ ref epsilonEncodeTypeDef @@ (project _Annotated _Annotated_subject @@ var "at"),
+    Field _Annotated_annotation $ project _Annotated _Annotated_annotation @@ var "at"]
 
+epsilonEncodeApplicationTypeDef :: Definition (ApplicationType a -> Term a)
+epsilonEncodeApplicationTypeDef = typeEncodingDefinition "ApplicationType" applicationTypeA $
+  lambda "at" $ encodedRecord _ApplicationType [
+    (_ApplicationType_function, ref epsilonEncodeTypeDef @@ (project _ApplicationType _ApplicationType_function @@ var "at")),
+    (_ApplicationType_argument, ref epsilonEncodeTypeDef @@ (project _ApplicationType _ApplicationType_argument @@ var "at"))]
 
-
-
-
-
-
--- encodedFieldName :: FieldName -> Term a
--- encodedFieldName = TermWrap . Nominal _FieldName . TermLiteral . LiteralString . unFieldName
---
--- encodedName :: Name -> Term a
--- encodedName = TermWrap . Nominal _Name . TermLiteral . LiteralString . unName
---
--- -- epsilonEncodeNameDef :: Definition (Name -> Term a)
--- -- epsilonEncodeNameDef = typeEncodingDefinition "Name" $
--- --   lambda "n" $
---
--- encodedField :: Field a -> Term a
--- encodedField (Field fname term) = record _Field [
---   Field _Field_name $ encodedFieldName fname,
---   Field _Field_term $ encodedTerm term]
---
---
--- encodedTerm :: Term a -> Term a
--- encodedTerm term = inject _Term $ case term of
---   TermRecord (Record tname fields) -> Field _Term_record $ record _Record [
---     Field _Record_typeName $ encodedName tname,
---     Field _Record_fields $ TermList (encodedField <$> fields)]
---   TermUnion (Injection tname field) -> Field _Term_union $
---     record _Injection [
---       Field _Injection_typeName $ encodedName tname,
---       Field _Injection_field $ encodedField field]
---   -- ...
---
-
-
-
-
--- epsilonEncodeApplicationType :: ApplicationType a -> Term a
--- epsilonEncodeApplicationType (ApplicationType lhs rhs) = record _ApplicationType [
---   Field _ApplicationType_function $ epsilonEncodeType lhs,
---   Field _ApplicationType_argument $ epsilonEncodeType rhs]
---
-
-
-
-
-
-
-
--- epsilonEncodeFieldType :: FieldType a -> Term a
--- epsilonEncodeFieldType (FieldType (FieldName fname) t) = record _FieldType [
---   Field _FieldType_name $ string fname,
---   Field _FieldType_type $ epsilonEncodeType t]
-
--- epsilonEncodeFieldTypeDef :: Definition (FieldType a -> Term a)
--- epsilonEncodeFieldTypeDef = typeEncodingDefinition "FieldType" $
---   function (Types.apply (TypeVariable _FieldType) (Types.var "a")) (Types.apply (TypeVariable _Term) (Types.var "a")) $
---   lambda "field" $ encodedTerm $ record _FieldType [
---     Field _FieldType_name $ string fname,
---     Field _FieldType_type $ epsilonEncodeType t]
-
-
-
-
-
+epsilonEncodeFieldTypeDef :: Definition (FieldType a -> Term a)
+epsilonEncodeFieldTypeDef = typeEncodingDefinition "FieldType" fieldTypeA $
+  lambda "ft" $ encodedRecord _FieldType [
+    (_FieldType_name, ref epsilonEncodeNameDef @@ (project _FieldType _FieldType_name @@ var "ft")),
+    (_FieldType_type, ref epsilonEncodeTypeDef @@ (project _FieldType _FieldType_type @@ var "ft"))]
 
 epsilonEncodeFloatTypeDef :: Definition (FloatType -> Term a)
 epsilonEncodeFloatTypeDef = typeEncodingDefinition "FloatType" (TypeVariable _FloatType) $
@@ -108,18 +71,11 @@ epsilonEncodeFloatTypeDef = typeEncodingDefinition "FloatType" (TypeVariable _Fl
   where
     cs fname = Field fname $ constant $ sigmaEncodeTerm $ unitVariant _FloatType fname
 
-
-
-
-
-
--- epsilonEncodeFunctionType :: FunctionType a -> Term a
--- epsilonEncodeFunctionType (FunctionType dom cod) = record _FunctionType [
---   Field _FunctionType_domain $ epsilonEncodeType dom,
---   Field _FunctionType_codomain $ epsilonEncodeType cod]
-
--- epsilonEncodeFunctionTypeDef :: Definition (FunctionType -> Term a)
--- epsilonEncodeFunctionTypeDef = typeEncodingDefinition
+epsilonEncodeFunctionTypeDef :: Definition (FunctionType a -> Term a)
+epsilonEncodeFunctionTypeDef = typeEncodingDefinition "FunctionType" functionTypeA $
+  lambda "ft" $ encodedRecord _FunctionType [
+    (_FunctionType_domain, ref epsilonEncodeTypeDef @@ (project _FunctionType _FunctionType_domain @@ var "ft")),
+    (_FunctionType_codomain, ref epsilonEncodeTypeDef @@ (project _FunctionType _FunctionType_codomain @@ var "ft"))]
 
 epsilonEncodeIntegerTypeDef :: Definition (IntegerType -> Term a)
 epsilonEncodeIntegerTypeDef = typeEncodingDefinition "IntegerType" (TypeVariable _IntegerType) $
@@ -136,90 +92,66 @@ epsilonEncodeIntegerTypeDef = typeEncodingDefinition "IntegerType" (TypeVariable
   where
     cs fname = Field fname $ constant $ sigmaEncodeTerm $ unitVariant _IntegerType fname
 
+epsilonEncodeLambdaTypeDef :: Definition (LambdaType a -> Term a)
+epsilonEncodeLambdaTypeDef = typeEncodingDefinition "LambdaType" lambdaTypeA $
+  lambda "lt" $ encodedRecord _LambdaType [
+    (_LambdaType_parameter, ref epsilonEncodeTypeDef @@ (project _LambdaType _LambdaType_parameter @@ var "lt")),
+    (_LambdaType_body, ref epsilonEncodeTypeDef @@ (project _LambdaType _LambdaType_body @@ var "lt"))]
 
--- epsilonEncodeLambdaType :: LambdaType a -> Term a
--- epsilonEncodeLambdaType (LambdaType var body) = record _LambdaType [
---   Field _LambdaType_parameter $ epsilonEncodeName var,
---   Field _LambdaType_body $ epsilonEncodeType body]
---
--- epsilonEncodeLiteralType :: LiteralType -> Term a
--- epsilonEncodeLiteralType at = case at of
---   LiteralTypeBinary -> unitVariant _LiteralType _LiteralType_binary
---   LiteralTypeBoolean -> unitVariant _LiteralType _LiteralType_boolean
---   LiteralTypeFloat ft -> variant _LiteralType _LiteralType_float $ epsilonEncodeFloatType ft
---   LiteralTypeInteger it -> variant _LiteralType _LiteralType_integer $ epsilonEncodeIntegerType it
---   LiteralTypeString -> unitVariant _LiteralType _LiteralType_string
+epsilonEncodeLiteralTypeDef :: Definition (LiteralType -> Term a)
+epsilonEncodeLiteralTypeDef = typeEncodingDefinition "LiteralType" (TypeVariable _LiteralType) $
+  match _LiteralType Nothing [
+    csunit _LiteralType_binary,
+    csunit _LiteralType_boolean,
+    cs _LiteralType_float epsilonEncodeFloatTypeDef,
+    cs _LiteralType_integer epsilonEncodeIntegerTypeDef,
+    csunit _LiteralType_string]
+  where
+    cs fname fun = Field fname $ lambda "v" $ encodedVariant _LiteralType fname (ref fun @@ var "v")
+    csunit fname = Field fname $ constant $ sigmaEncodeTerm $ variant _LiteralType fname unit
 
--- epsilonEncodeLiteralTypeDef :: Definition (LiteralType -> Term a)
--- epsilonEncodeLiteralTypeDef = typeEncodingDefinition "LiteralType" $
---   function (TypeVariable _LiteralType) termA $
--- --   match _LiteralType Nothing [
--- --     Case _LiteralType_binary --> Datum $ constant $ sigmaEncodeTerm $ unitVariant _LiteralType _LiteralType_binary,
--- --     Case _LiteralType_boolean --> Datum $ constant $ sigmaEncodeTerm $ unitVariant _LiteralType _LiteralType_boolean,
--- -- --     Case _LiteralType_float --> Datum $
--- --     -- integer
--- --     Case _LiteralType_string --> Datum $ constant $ sigmaEncodeTerm $ unitVariant _LiteralType _LiteralType_string
--- --     ]
---   Datum $ sigmaEncodeTerm $ match _LiteralType Nothing [
--- --     Field _LiteralType_binary $ constant $ unitVariant _LiteralType _LiteralType_binary,
--- --     Field _LiteralType_boolean $ constant $ unitVariant _LiteralType _LiteralType_boolean,
--- -- --     Case _LiteralType_float --> Datum $
--- --     -- integer
---     Field _LiteralType_string $ constant $ unitVariant _LiteralType _LiteralType_string
---     ]
-
-
--- epsilonEncodeMapType :: MapType a -> Term a
--- epsilonEncodeMapType (MapType kt vt) = record _MapType [
---   Field _MapType_keys $ epsilonEncodeType kt,
---   Field _MapType_values $ epsilonEncodeType vt]
---
--- epsilonEncodeName :: Name -> Term a
--- epsilonEncodeName name = string $ unName name
-
+epsilonEncodeMapTypeDef :: Definition (MapType a -> Term a)
+epsilonEncodeMapTypeDef = typeEncodingDefinition "MapType" mapTypeA $
+    lambda "mt" $ encodedRecord _MapType [
+      (_MapType_keys, ref epsilonEncodeTypeDef @@ (project _MapType _MapType_keys @@ var "mt")),
+      (_MapType_values, ref epsilonEncodeTypeDef @@ (project _MapType _MapType_values @@ var "mt"))]
 
 epsilonEncodeNameDef :: Definition (Name -> Term a)
 epsilonEncodeNameDef = typeEncodingDefinition "Name" (TypeVariable _Name) $
-    lambda "name" $ (unwrap _Name @@ var "name")
+    lambda "name" $ encodedString $ (unwrap _Name @@ var "name")
 
+epsilonEncodeNominalTypeDef :: Definition (Nominal (Type a) -> Term a)
+epsilonEncodeNominalTypeDef = typeEncodingDefinition "NominalType" nominalTypeA $
+  lambda "nt" $ encodedRecord _Nominal [
+    (_Nominal_typeName, ref epsilonEncodeNameDef @@ (project _Nominal _Nominal_typeName @@ var "nt")),
+    (_Nominal_object, ref epsilonEncodeTypeDef @@ (project _Nominal _Nominal_object @@ var "nt"))]
 
+epsilonEncodeRowTypeDef :: Definition (RowType a -> Term a)
+epsilonEncodeRowTypeDef = typeEncodingDefinition "RowType" rowTypeA $
+  lambda "rt" $ encodedRecord _RowType [
+    (_RowType_typeName, ref epsilonEncodeNameDef @@ (project _RowType _RowType_typeName @@ var "rt")),
+    (_RowType_extends, encodedOptional (primitive _optionals_map @@ ref epsilonEncodeNameDef @@ (project _RowType _RowType_extends @@ var "rt"))),
+    (_RowType_fields, encodedList (primitive _lists_map @@ ref epsilonEncodeFieldTypeDef @@ (project _RowType _RowType_fields @@ var "rt")))]
 
--- epsilonEncodeNominal :: (x -> Term a) -> Nominal x -> Term a
--- epsilonEncodeNominal mapping (Nominal name obj) = record _Nominal [
---   Field _Nominal_typeName $ epsilonEncodeName name,
---   Field _Nominal_object $ mapping obj]
---
--- epsilonEncodeRowType :: RowType a -> Term a
--- epsilonEncodeRowType (RowType name extends fields) = record _RowType [
---   Field _RowType_typeName $ string (unName name),
---   Field _RowType_extends $ optional (string . unName <$> extends),
---   Field _RowType_fields $ list $ epsilonEncodeFieldType <$> fields]
---
--- epsilonEncodeType :: Type a -> Term a
--- epsilonEncodeType typ = case typ of
---     TypeAnnotated (Annotated t ann) -> TermAnnotated (Annotated (epsilonEncodeType t) ann)
---     TypeApplication a -> tvar _Type_application $ epsilonEncodeApplicationType a
---     TypeFunction ft -> tvar _Type_function $ epsilonEncodeFunctionType ft
---     TypeLambda ut -> tvar _Type_lambda $ epsilonEncodeLambdaType ut
---     TypeList t -> tvar _Type_list $ epsilonEncodeType t
---     TypeLiteral at -> tvar _Type_literal $ epsilonEncodeLiteralType at
---     TypeMap mt -> tvar _Type_map $ epsilonEncodeMapType mt
---     TypeOptional t -> tvar _Type_optional $ epsilonEncodeType t
---     TypeProduct types -> tvar _Type_product $ list (epsilonEncodeType <$> types)
---     TypeRecord rt -> tvar _Type_record $ epsilonEncodeRowType rt
---     TypeSet t -> tvar _Type_set $ epsilonEncodeType t
---     TypeSum types -> tvar _Type_sum $ list (epsilonEncodeType <$> types)
---     TypeUnion rt -> tvar _Type_union $ epsilonEncodeRowType rt
---     TypeVariable name -> tvar _Type_variable $ epsilonEncodeName name
---     TypeWrap n -> tvar _Type_wrap $ epsilonEncodeNominal epsilonEncodeType n
---   where
---     tvar = variant _Type
-
--- epsilonEncodeTypeDef :: Definition (Type a -> Term a)
--- epsilonEncodeTypeDef = typeEncodingDefinition "Type" $
---   function typeA termA $
---   match _Type Nothing [
---     -- ...
---     Case _Type_literal --> ref epsilonEncodeLiteralTypeDef
---     --- ...
---   ]
+epsilonEncodeTypeDef :: Definition (Type a -> Term a)
+epsilonEncodeTypeDef = typeEncodingDefinition "Type" typeA $
+  match _Type (Just $ string "not implemented") [ -- TODO
+    csref _Type_annotated epsilonEncodeAnnotatedTypeDef,
+    csref _Type_application epsilonEncodeApplicationTypeDef,
+    csref _Type_function epsilonEncodeFunctionTypeDef,
+    csref _Type_lambda epsilonEncodeLambdaTypeDef,
+    csref _Type_list epsilonEncodeTypeDef,
+    csref _Type_literal epsilonEncodeLiteralTypeDef,
+    csref _Type_map epsilonEncodeMapTypeDef,
+    csref _Type_optional epsilonEncodeTypeDef,
+    cs _Type_product $ encodedList $ primitive _lists_map @@ ref epsilonEncodeTypeDef @@ var "v",
+    csref _Type_record epsilonEncodeRowTypeDef,
+    csref _Type_set epsilonEncodeTypeDef,
+    csref _Type_stream epsilonEncodeTypeDef,
+    cs _Type_sum $ encodedList $ primitive _lists_map @@ ref epsilonEncodeTypeDef @@ var "v",
+    csref _Type_union epsilonEncodeRowTypeDef,
+    csref _Type_variable epsilonEncodeNameDef,
+    csref _Type_wrap epsilonEncodeNominalTypeDef]
+  where
+    cs fname term = Field fname $ lambda "v" $ encodedVariant _Type fname term
+    csref fname fun = cs fname (ref fun @@ var "v")

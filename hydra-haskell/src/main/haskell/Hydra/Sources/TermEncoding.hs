@@ -16,7 +16,7 @@ termEncodingModule = Module (Namespace "hydra/termEncoding") elements [hydraCore
     Just "Implementation of LambdaGraph's sigma encoding, which represents terms as terms"
   where
    elements = [
-     Base.el sigmaEncodeAnnotatedDef,
+     Base.el sigmaEncodeAnnotatedTermDef,
      Base.el sigmaEncodeApplicationDef,
      Base.el sigmaEncodeCaseStatementDef,
      Base.el sigmaEncodeEliminationDef,
@@ -44,7 +44,7 @@ termEncodingDefinition :: String -> Type Kv -> Term Kv -> Definition x
 termEncodingDefinition label dom term = Base.definitionInModule termEncodingModule ("sigmaEncode" ++ label) $
   Base.function dom termA $ Datum term
 
-annotatedTermAA = Types.apply (Types.apply (TypeVariable _Annotated) termA) (Types.var "a") :: Type a
+annotatedTermA = Types.apply (Types.apply (TypeVariable _Annotated) termA) (Types.var "a") :: Type a
 applicationA = Types.apply (TypeVariable _Application) (Types.var "a") :: Type a
 caseStatementA = Types.apply (TypeVariable _CaseStatement) (Types.var "a") :: Type a
 eliminationA = Types.apply (TypeVariable _Elimination) (Types.var "a") :: Type a
@@ -136,8 +136,8 @@ encodedUnion = variant _Term _Term_union
 encodedVariant :: Name -> FieldName -> Term a -> Term a
 encodedVariant tname fname term = encodedUnion $ encodedInjection tname fname term
 
-sigmaEncodeAnnotatedDef :: Definition (Annotated (Term a) a -> Term a)
-sigmaEncodeAnnotatedDef = termEncodingDefinition "Annotated" annotatedTermAA $
+sigmaEncodeAnnotatedTermDef :: Definition (Annotated (Term a) a -> Term a)
+sigmaEncodeAnnotatedTermDef = termEncodingDefinition "AnnotatedTerm" annotatedTermA $
   lambda "a" $ variant _Term _Term_annotated $ record _Annotated [
     Field _Annotated_subject $ ref sigmaEncodeTermDef @@ (project _Annotated _Annotated_subject @@ var "a"),
     Field _Annotated_annotation $ project _Annotated _Annotated_annotation @@ var "a"]
@@ -282,7 +282,7 @@ sigmaEncodeSumDef = termEncodingDefinition "Sum" sumA $
 sigmaEncodeTermDef :: Definition (Term a -> Term a)
 sigmaEncodeTermDef = termEncodingDefinition "Term" termA $
   match _Term (Just $ encodedString $ string "not implemented") [
-    ecase _Term_annotated (ref sigmaEncodeAnnotatedDef),
+    ecase _Term_annotated (ref sigmaEncodeAnnotatedTermDef),
     ecase _Term_application (ref sigmaEncodeApplicationDef),
     ecase _Term_function (ref sigmaEncodeFunctionDef),
     -- TODO: restore let constructor after finding a way to infer "Ord a =>" for Haskell
