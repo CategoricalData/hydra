@@ -41,7 +41,7 @@ ref :: Definition a -> Term Kv
 ref (Definition name _) = TermVariable name
 
 termEncodingDefinition :: String -> Type Kv -> Term Kv -> Definition x
-termEncodingDefinition label dom term = Base.definitionInModule termEncodingModule label $
+termEncodingDefinition label dom term = Base.definitionInModule termEncodingModule ("sigmaEncode" ++ label) $
   Base.function dom termA $ Datum term
 
 annotatedTermAA = Types.apply (Types.apply (TypeVariable _Annotated) termA) (Types.var "a") :: Type a
@@ -137,19 +137,19 @@ encodedVariant :: Name -> FieldName -> Term a -> Term a
 encodedVariant tname fname term = encodedUnion $ encodedInjection tname fname term
 
 sigmaEncodeAnnotatedDef :: Definition (Annotated (Term a) a -> Term a)
-sigmaEncodeAnnotatedDef = termEncodingDefinition "sigmaEncodeAnnotated" annotatedTermAA $
+sigmaEncodeAnnotatedDef = termEncodingDefinition "Annotated" annotatedTermAA $
   lambda "a" $ variant _Term _Term_annotated $ record _Annotated [
     Field _Annotated_subject $ ref sigmaEncodeTermDef @@ (project _Annotated _Annotated_subject @@ var "a"),
     Field _Annotated_annotation $ project _Annotated _Annotated_annotation @@ var "a"]
 
 sigmaEncodeApplicationDef :: Definition (Application a -> Term a)
-sigmaEncodeApplicationDef = termEncodingDefinition "sigmaEncodeApplication" applicationA $
+sigmaEncodeApplicationDef = termEncodingDefinition "Application" applicationA $
   lambda "app" $ encodedRecord _Application [
     (_Application_function, ref sigmaEncodeTermDef @@ (project _Application _Application_function @@ var "app")),
     (_Application_argument, ref sigmaEncodeTermDef @@ (project _Application _Application_argument @@ var "app"))]
 
 sigmaEncodeCaseStatementDef :: Definition (CaseStatement a -> Term a)
-sigmaEncodeCaseStatementDef = termEncodingDefinition "sigmaEncodeCaseStatement" caseStatementA $
+sigmaEncodeCaseStatementDef = termEncodingDefinition "CaseStatement" caseStatementA $
   lambda "cs" $ encodedRecord _CaseStatement [
     (_CaseStatement_typeName, ref sigmaEncodeNameDef @@ (project _CaseStatement _CaseStatement_typeName @@ var "cs")),
     (_CaseStatement_default, encodedOptional
@@ -158,7 +158,7 @@ sigmaEncodeCaseStatementDef = termEncodingDefinition "sigmaEncodeCaseStatement" 
       (primitive _lists_map @@ ref sigmaEncodeFieldDef @@ (project _CaseStatement _CaseStatement_cases @@ var "cs")))]
 
 sigmaEncodeEliminationDef :: Definition (Elimination a -> Term a)
-sigmaEncodeEliminationDef = termEncodingDefinition "sigmaEncodeElimination" eliminationA $
+sigmaEncodeEliminationDef = termEncodingDefinition "Elimination" eliminationA $
     match _Elimination Nothing [
       ecase _Elimination_list sigmaEncodeTermDef,
       ecase _Elimination_optional sigmaEncodeOptionalCasesDef,
@@ -169,17 +169,17 @@ sigmaEncodeEliminationDef = termEncodingDefinition "sigmaEncodeElimination" elim
     ecase fname funname = encodedCase _Elimination fname (ref funname)
 
 sigmaEncodeFieldDef :: Definition (Field a -> Term a)
-sigmaEncodeFieldDef = termEncodingDefinition "sigmaEncodeField" fieldA $
+sigmaEncodeFieldDef = termEncodingDefinition "Field" fieldA $
   lambda "f" $ encodedRecord _Field [
     (_Field_name, encodedString $ (unwrap _FieldName @@ (project _Field _Field_name @@ var "f"))),
     (_Field_term, ref sigmaEncodeTermDef @@ (project _Field _Field_term @@ var "f"))]
 
 sigmaEncodeFieldNameDef :: Definition (FieldName -> Term a)
-sigmaEncodeFieldNameDef = termEncodingDefinition "sigmaEncodeFieldName" (TypeVariable _FieldName) $
+sigmaEncodeFieldNameDef = termEncodingDefinition "FieldName" (TypeVariable _FieldName) $
   lambda "fn" $ encodedNominal _FieldName $ encodedString (unwrap _FieldName @@ var "fn")
 
 sigmaEncodeFloatValueDef :: Definition (FloatValue -> Term a)
-sigmaEncodeFloatValueDef = termEncodingDefinition "sigmaEncodeFloatValue" (TypeVariable _FloatValue) $
+sigmaEncodeFloatValueDef = termEncodingDefinition "FloatValue" (TypeVariable _FloatValue) $
   match _FloatValue Nothing (varField <$> [
     _FloatValue_bigfloat,
     _FloatValue_float32,
@@ -189,7 +189,7 @@ sigmaEncodeFloatValueDef = termEncodingDefinition "sigmaEncodeFloatValue" (TypeV
       variant _FloatValue fname $ var "v"
 
 sigmaEncodeFunctionDef :: Definition (Function a -> Term a)
-sigmaEncodeFunctionDef = termEncodingDefinition "sigmaEncodeFunction" functionA $
+sigmaEncodeFunctionDef = termEncodingDefinition "Function" functionA $
     match _Function Nothing [
       ecase _Function_elimination sigmaEncodeEliminationDef,
       ecase _Function_lambda sigmaEncodeLambdaDef,
@@ -198,13 +198,13 @@ sigmaEncodeFunctionDef = termEncodingDefinition "sigmaEncodeFunction" functionA 
     ecase fname funname = encodedCase _Function fname (ref funname)
 
 sigmaEncodeInjectionDef :: Definition (Injection a -> Term a)
-sigmaEncodeInjectionDef = termEncodingDefinition "sigmaEncodeInjection" injectionA $
+sigmaEncodeInjectionDef = termEncodingDefinition "Injection" injectionA $
   lambda "i" $ encodedRecord _Injection [
     (_Injection_typeName, ref sigmaEncodeNameDef @@ (project _Injection _Injection_typeName @@ var "i")),
     (_Injection_field, ref sigmaEncodeFieldDef @@ (project _Injection _Injection_field @@ var "i"))]
 
 sigmaEncodeIntegerValueDef :: Definition (IntegerValue -> Term a)
-sigmaEncodeIntegerValueDef = termEncodingDefinition "sigmaEncodeIntegerValue" (TypeVariable _IntegerValue) $
+sigmaEncodeIntegerValueDef = termEncodingDefinition "IntegerValue" (TypeVariable _IntegerValue) $
   match _IntegerValue Nothing (varField <$> [
     _IntegerValue_bigint,
     _IntegerValue_int8,
@@ -220,13 +220,13 @@ sigmaEncodeIntegerValueDef = termEncodingDefinition "sigmaEncodeIntegerValue" (T
       variant _IntegerValue fname $ var "v"
 
 sigmaEncodeLambdaDef :: Definition (Lambda a -> Term a)
-sigmaEncodeLambdaDef = termEncodingDefinition "sigmaEncodeLambda" lambdaA $
+sigmaEncodeLambdaDef = termEncodingDefinition "Lambda" lambdaA $
   lambda "l" $ encodedRecord _Lambda [
     (_Lambda_parameter, ref sigmaEncodeNameDef @@ (project _Lambda _Lambda_parameter @@ var "l")),
     (_Lambda_body, ref sigmaEncodeTermDef @@ (project _Lambda _Lambda_body @@ var "l"))]
 
 -- sigmaEncodeLetDef :: Definition (Let a -> Term a)
--- sigmaEncodeLetDef = termEncodingDefinition "sigmaEncodeLet" letA $
+-- sigmaEncodeLetDef = termEncodingDefinition "Let" letA $
 --   lambda "l" $ encodedRecord _Let [
 --     (_Let_bindings, encodedMap
 --       (primitive _maps_mapKeys @@ ref sigmaEncodeNameDef @@
@@ -234,7 +234,7 @@ sigmaEncodeLambdaDef = termEncodingDefinition "sigmaEncodeLambda" lambdaA $
 --     (_Let_environment, ref sigmaEncodeTermDef @@ (project _Let _Let_environment @@ var "l"))]
 
 sigmaEncodeLiteralDef :: Definition (Literal -> Term a)
-sigmaEncodeLiteralDef = termEncodingDefinition "sigmaEncodeLiteral" (TypeVariable _Literal) $
+sigmaEncodeLiteralDef = termEncodingDefinition "Literal" (TypeVariable _Literal) $
   match _Literal Nothing [
     varField _Literal_binary $ encodedBinary $ var "v",
     varField _Literal_boolean $ encodedBoolean $ var "v",
@@ -245,42 +245,42 @@ sigmaEncodeLiteralDef = termEncodingDefinition "sigmaEncodeLiteral" (TypeVariabl
     varField fname = Field fname . lambda "v" . encodedVariant _Literal fname
 
 sigmaEncodeNameDef :: Definition (Name -> Term a)
-sigmaEncodeNameDef = termEncodingDefinition "sigmaEncodeName" (TypeVariable _Name) $
+sigmaEncodeNameDef = termEncodingDefinition "Name" (TypeVariable _Name) $
   lambda "fn" $ encodedNominal _Name $ encodedString (unwrap _Name @@ var "fn")
 
 sigmaEncodeNominalTermDef :: Definition (Nominal (Term a) -> Term a)
-sigmaEncodeNominalTermDef = termEncodingDefinition "sigmaEncodeNominalTerm" nominalTermA $
+sigmaEncodeNominalTermDef = termEncodingDefinition "NominalTerm" nominalTermA $
   lambda "n" $ encodedRecord _Nominal [
     (_Nominal_typeName, ref sigmaEncodeNameDef @@ (project _Nominal _Nominal_typeName @@ var "n")),
     (_Nominal_object, ref sigmaEncodeTermDef @@ (project _Nominal _Nominal_object @@ var "n"))]
 
 sigmaEncodeOptionalCasesDef :: Definition (OptionalCases a -> Term a)
-sigmaEncodeOptionalCasesDef = termEncodingDefinition "sigmaEncodeOptionalCases" optionalCasesA $
+sigmaEncodeOptionalCasesDef = termEncodingDefinition "OptionalCases" optionalCasesA $
   lambda "oc" $ encodedRecord _OptionalCases [
     (_OptionalCases_nothing, ref sigmaEncodeTermDef @@ (project _OptionalCases _OptionalCases_nothing @@ var "oc")),
     (_OptionalCases_just, ref sigmaEncodeTermDef @@ (project _OptionalCases _OptionalCases_just @@ var "oc"))]
 
 sigmaEncodeProjectionDef :: Definition (Projection -> Term a)
-sigmaEncodeProjectionDef = termEncodingDefinition "sigmaEncodeProjection" (TypeVariable _Projection) $
+sigmaEncodeProjectionDef = termEncodingDefinition "Projection" (TypeVariable _Projection) $
   lambda "p" $ encodedRecord _Projection [
     (_Projection_typeName, ref sigmaEncodeNameDef @@ (project _Projection _Projection_typeName @@ var "p")),
     (_Projection_field, ref sigmaEncodeFieldNameDef @@ (project _Projection _Projection_field @@ var "p"))]
 
 sigmaEncodeRecordDef :: Definition (Record a -> Term a)
-sigmaEncodeRecordDef = termEncodingDefinition "sigmaEncodeRecord" recordA $
+sigmaEncodeRecordDef = termEncodingDefinition "Record" recordA $
   lambda "r" $ encodedRecord _Record [
     (_Record_typeName, ref sigmaEncodeNameDef @@ (project _Record _Record_typeName @@ var "r")),
     (_Record_fields, encodedList (primitive _lists_map @@ (ref sigmaEncodeFieldDef) @@ (project _Record _Record_fields @@ var "r")))]
 
 sigmaEncodeSumDef :: Definition (Sum a -> Term a)
-sigmaEncodeSumDef = termEncodingDefinition "sigmaEncodeSum" sumA $
+sigmaEncodeSumDef = termEncodingDefinition "Sum" sumA $
   lambda "s" $ encodedRecord _Sum [
     (_Sum_index, encodedInt32 $ project _Sum _Sum_index @@ var "s"),
     (_Sum_size, encodedInt32 $ project _Sum _Sum_size @@ var "s"),
     (_Sum_term, ref sigmaEncodeTermDef @@ (project _Sum _Sum_term @@ var "s"))]
 
 sigmaEncodeTermDef :: Definition (Term a -> Term a)
-sigmaEncodeTermDef = termEncodingDefinition "sigmaEncodeTerm" termA $
+sigmaEncodeTermDef = termEncodingDefinition "Term" termA $
   match _Term (Just $ encodedString $ string "not implemented") [
     ecase _Term_annotated (ref sigmaEncodeAnnotatedDef),
     ecase _Term_application (ref sigmaEncodeApplicationDef),
