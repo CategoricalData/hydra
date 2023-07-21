@@ -27,7 +27,7 @@ termEncodingModule = Module (Namespace "hydra/termEncoding") elements [hydraCore
      Base.el sigmaEncodeInjectionDef,
      Base.el sigmaEncodeIntegerValueDef,
      Base.el sigmaEncodeLambdaDef,
-     Base.el sigmaEncodeLetDef,
+     --Base.el sigmaEncodeLetDef,
      Base.el sigmaEncodeLiteralDef,
      Base.el sigmaEncodeNameDef,
      Base.el sigmaEncodeNominalTermDef,
@@ -99,6 +99,9 @@ encodedList = variant _Term _Term_list
 
 encodedLiteral :: Term a -> Term a
 encodedLiteral = variant _Term _Term_literal
+
+encodedMap :: Term a -> Term a
+encodedMap = variant _Term _Term_map
 
 encodedName :: Name -> Term a
 encodedName = wrap _Name . string . unName
@@ -222,11 +225,13 @@ sigmaEncodeLambdaDef = termEncodingDefinition "sigmaEncodeLambda" lambdaA $
     (_Lambda_parameter, ref sigmaEncodeNameDef @@ (project _Lambda _Lambda_parameter @@ var "l")),
     (_Lambda_body, ref sigmaEncodeTermDef @@ (project _Lambda _Lambda_body @@ var "l"))]
 
-sigmaEncodeLetDef :: Definition (Let a -> Term a)
-sigmaEncodeLetDef = termEncodingDefinition "sigmaEncodeLet" letA $
-  lambda "l" $ encodedRecord _Let [
-    -- (_Let_bindings, ...), TODO
-    (_Let_environment, ref sigmaEncodeTermDef @@ (project _Let _Let_environment @@ var "l"))]
+-- sigmaEncodeLetDef :: Definition (Let a -> Term a)
+-- sigmaEncodeLetDef = termEncodingDefinition "sigmaEncodeLet" letA $
+--   lambda "l" $ encodedRecord _Let [
+--     (_Let_bindings, encodedMap
+--       (primitive _maps_mapKeys @@ ref sigmaEncodeNameDef @@
+--         (primitive _maps_map @@ ref sigmaEncodeTermDef @@ (project _Let _Let_bindings @@ var "l")))),
+--     (_Let_environment, ref sigmaEncodeTermDef @@ (project _Let _Let_environment @@ var "l"))]
 
 sigmaEncodeLiteralDef :: Definition (Literal -> Term a)
 sigmaEncodeLiteralDef = termEncodingDefinition "sigmaEncodeLiteral" (TypeVariable _Literal) $
@@ -280,7 +285,7 @@ sigmaEncodeTermDef = termEncodingDefinition "sigmaEncodeTerm" termA $
     ecase _Term_annotated (ref sigmaEncodeAnnotatedDef),
     ecase _Term_application (ref sigmaEncodeApplicationDef),
     ecase _Term_function (ref sigmaEncodeFunctionDef),
-    -- TODO: add missing primitives for tuples and maps
+    -- TODO: restore let constructor after finding a way to infer "Ord a =>" for Haskell
     -- ecase _Term_let (ref sigmaEncodeLetDef),
     ecase _Term_literal (ref sigmaEncodeLiteralDef),
     ecase' _Term_list $ encodedList (primitive _lists_map @@ (ref sigmaEncodeTermDef) @@ var "v"),
