@@ -343,3 +343,4 @@ sigmaEncodeTerm x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.FieldName "wrap"),
       Core.fieldTerm = (sigmaEncodeNominalTerm v)}}))
+  _ -> (Core.TermLiteral (Core.LiteralString "not implemented"))
