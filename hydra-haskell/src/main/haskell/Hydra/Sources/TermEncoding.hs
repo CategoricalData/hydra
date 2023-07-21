@@ -171,7 +171,7 @@ sigmaEncodeEliminationDef = termEncodingDefinition "Elimination" eliminationA $
 sigmaEncodeFieldDef :: Definition (Field a -> Term a)
 sigmaEncodeFieldDef = termEncodingDefinition "Field" fieldA $
   lambda "f" $ encodedRecord _Field [
-    (_Field_name, encodedString $ (unwrap _FieldName @@ (project _Field _Field_name @@ var "f"))),
+    (_Field_name, encodedNominal _FieldName $ encodedString $ (unwrap _FieldName @@ (project _Field _Field_name @@ var "f"))),
     (_Field_term, ref sigmaEncodeTermDef @@ (project _Field _Field_term @@ var "f"))]
 
 sigmaEncodeFieldNameDef :: Definition (FieldName -> Term a)

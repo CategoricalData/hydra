@@ -74,7 +74,9 @@ sigmaEncodeField f = (Core.TermRecord (Core.Record {
   Core.recordFields = [
     Core.Field {
       Core.fieldName = (Core.FieldName "name"),
-      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString (Core.unFieldName (Core.fieldName f))))},
+      Core.fieldTerm = (Core.TermWrap (Core.Nominal {
+        Core.nominalTypeName = (Core.Name "hydra/core.FieldName"),
+        Core.nominalObject = (Core.TermLiteral (Core.LiteralString (Core.unFieldName (Core.fieldName f))))}))},
     Core.Field {
       Core.fieldName = (Core.FieldName "term"),
       Core.fieldTerm = (sigmaEncodeTerm (Core.fieldTerm f))}]}))
