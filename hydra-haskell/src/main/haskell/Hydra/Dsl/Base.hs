@@ -72,7 +72,7 @@ definitionInModule :: Module Kv -> String -> Datum a -> Definition a
 definitionInModule mod lname = Definition $ unqualifyName $ QualifiedName (Just $ moduleNamespace mod) lname
 
 doc :: String -> Datum a -> Datum a
-doc s (Datum term) = Datum $ setTermDescription hydraCore (Just s) term
+doc s (Datum term) = Datum $ setTermDescription (Just s) term
 
 field :: FieldName -> Datum a -> Field Kv
 field fname (Datum val) = Field fname val
@@ -159,7 +159,7 @@ set :: S.Set (Datum a) -> Datum (S.Set a)
 set = Datum . Terms.set . S.fromList . fmap unDatum . S.toList
 
 typed :: Type Kv -> Datum a -> Datum a
-typed t (Datum term) = Datum $ setTermType hydraCore (Just t) term
+typed t (Datum term) = Datum $ setTermType (Just t) term
 
 unit :: Datum a
 unit = Datum Terms.unit

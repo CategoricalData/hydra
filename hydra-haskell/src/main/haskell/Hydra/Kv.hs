@@ -133,33 +133,33 @@ setAnnotation key val (Kv m) = Kv $ M.alter (const val) key m
 setDescription :: Y.Maybe String -> Kv -> Kv
 setDescription d = setAnnotation kvDescription (Terms.string <$> d)
 
-setTermAnnotation :: Graph Kv -> String -> Y.Maybe (Term Kv) -> Term Kv -> Term Kv
-setTermAnnotation g key val term = if kv == annotationClassDefault (graphAnnotations g)
+setTermAnnotation :: String -> Y.Maybe (Term Kv) -> Term Kv -> Term Kv
+setTermAnnotation key val term = if kv == Kv M.empty
     then term'
     else TermAnnotated $ Annotated term' kv
   where
     term' = stripTerm term
     kv = setAnnotation key val $ termAnnotationInternal term
 
-setTermDescription :: Graph Kv -> Y.Maybe String -> Term Kv -> Term Kv
-setTermDescription g d = setTermAnnotation g kvDescription (Terms.string <$> d)
+setTermDescription :: Y.Maybe String -> Term Kv -> Term Kv
+setTermDescription d = setTermAnnotation kvDescription (Terms.string <$> d)
 
-setTermType :: Graph Kv -> Y.Maybe (Type Kv) -> Term Kv -> Term Kv
-setTermType g d = setTermAnnotation g kvType (epsilonEncodeType <$> d)
+setTermType :: Y.Maybe (Type Kv) -> Term Kv -> Term Kv
+setTermType d = setTermAnnotation kvType (epsilonEncodeType <$> d)
 
 setType :: Y.Maybe (Type Kv) -> Kv -> Kv
 setType mt = setAnnotation kvType (epsilonEncodeType <$> mt)
 
-setTypeAnnotation :: Graph Kv -> String -> Y.Maybe (Term Kv) -> Type Kv -> Type Kv
-setTypeAnnotation g key val typ = if kv == annotationClassDefault (graphAnnotations g)
+setTypeAnnotation :: String -> Y.Maybe (Term Kv) -> Type Kv -> Type Kv
+setTypeAnnotation key val typ = if kv == Kv M.empty
     then typ'
     else TypeAnnotated $ Annotated typ' kv
   where
     typ' = stripType typ
     kv = setAnnotation key val $ typeAnnotationInternal typ
 
-setTypeDescription :: Graph Kv -> Y.Maybe String -> Type Kv -> Type Kv
-setTypeDescription g d = setTypeAnnotation g kvDescription (Terms.string <$> d)
+setTypeDescription :: Y.Maybe String -> Type Kv -> Type Kv
+setTypeDescription d = setTypeAnnotation kvDescription (Terms.string <$> d)
 
 termAnnotationInternal :: Term Kv -> Kv
 termAnnotationInternal = aggregateAnnotations $ \t -> case t of

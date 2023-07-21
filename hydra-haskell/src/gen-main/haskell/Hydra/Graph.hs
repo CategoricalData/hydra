@@ -22,8 +22,8 @@ data AnnotationClass a =
     annotationClassTermDescription :: (Core.Term a -> Compute.Flow (Graph a) (Maybe String)),
     annotationClassTypeDescription :: (Core.Type a -> Compute.Flow (Graph a) (Maybe String)),
     annotationClassTermType :: (Core.Term a -> Compute.Flow (Graph a) (Maybe (Core.Type a))),
-    annotationClassSetTermDescription :: (Graph a -> Maybe String -> Core.Term a -> Core.Term a),
-    annotationClassSetTermType :: (Graph a -> Maybe (Core.Type a) -> Core.Term a -> Core.Term a),
+    annotationClassSetTermDescription :: (Maybe String -> Core.Term a -> Core.Term a),
+    annotationClassSetTermType :: (Maybe (Core.Type a) -> Core.Term a -> Core.Term a),
     annotationClassTypeOf :: (a -> Compute.Flow (Graph a) (Maybe (Core.Type a))),
     annotationClassSetTypeOf :: (Maybe (Core.Type a) -> a -> a)}
 

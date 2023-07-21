@@ -42,9 +42,9 @@ hydraGraphModule = Module ns elements [hydraComputeModule] $
           "termType">:
             core "Term" @@ "a" --> compute "Flow" @@ (graph "Graph" @@ "a") @@ optional (core "Type" @@ "a"),
           "setTermDescription">:
-            graph "Graph" @@ "a" --> optional string --> core "Term" @@ "a" --> core "Term" @@ "a",
+            optional string --> core "Term" @@ "a" --> core "Term" @@ "a",
           "setTermType">:
-            graph "Graph" @@ "a" --> optional (core "Type" @@ "a") --> core "Term" @@ "a" --> core "Term" @@ "a",
+            optional (core "Type" @@ "a") --> core "Term" @@ "a" --> core "Term" @@ "a",
           "typeOf">:
             "a" --> compute "Flow" @@ (graph "Graph" @@ "a") @@ optional (core "Type" @@ "a"),
           "setTypeOf">:
