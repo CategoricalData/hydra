@@ -46,7 +46,7 @@ constructModule aliases mod coders pairs = do
     pairByName = L.foldl (\m p -> M.insert (elementName $ fst p) p m) M.empty pairs
     toSchema (el, TypedTerm typ term) = do
       if isType typ
-        then epsilonDecodeType term >>= typeToSchema el
+        then coreDecodeType term >>= typeToSchema el
         else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ unName (elementName el)
     typeToSchema el typ = do
         res <- encodeAdaptedType aliases typ

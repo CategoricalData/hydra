@@ -22,7 +22,7 @@ import qualified Data.Maybe as Y
 showTerm :: Term a -> String
 showTerm term = fromFlow hydraCore $ coderEncode termStringCoder encoded
   where
-    encoded = sigmaEncodeTerm $ rewriteTermMeta (const $ Kv M.empty) term
+    encoded = coreEncodeTerm $ rewriteTermMeta (const $ Kv M.empty) term
 
 termJsonCoder :: Coder (Graph Kv) (Graph Kv) (Term Kv) Json.Value
 termJsonCoder = fromFlow hydraCore $ jsonCoder $ TypeVariable _Term
@@ -38,7 +38,7 @@ termStringCoder = Coder mout min
 showType :: Ord a => Type a -> String
 showType typ = fromFlow hydraCore $ coderEncode typeStringCoder encoded
   where
-    encoded = epsilonEncodeType $ rewriteTypeMeta (const $ Kv M.empty) typ
+    encoded = coreEncodeType $ rewriteTypeMeta (const $ Kv M.empty) typ
 
 typeJsonCoder :: Coder (Graph Kv) (Graph Kv) (Term Kv) Json.Value
 typeJsonCoder = fromFlow hydraCore $ jsonCoder $ TypeVariable _Type

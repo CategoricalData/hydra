@@ -267,7 +267,7 @@ declarationForRecordType isInner aliases tparams elName fields = do
 declarationForType :: (Ord a, Read a, Show a)
   => Aliases -> (Element a, TypedTerm a) -> GraphFlow a Java.TypeDeclarationWithComments
 declarationForType aliases (el, TypedTerm _ term) = withTrace ("element " ++ unName (elementName el)) $ do
-    t <- epsilonDecodeType term >>= adaptType javaLanguage
+    t <- coreDecodeType term >>= adaptType javaLanguage
     cd <- toClassDecl False aliases [] (elementName el) t
     comments <- commentsFromElement el
     return $ Java.TypeDeclarationWithComments (Java.TypeDeclarationClass cd) comments

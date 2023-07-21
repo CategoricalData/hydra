@@ -11,7 +11,7 @@ module Hydra.Inference (
 
 import Hydra.Compute
 import Hydra.Core
-import Hydra.TypeEncoding
+import Hydra.CoreEncoding
 import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Mantle

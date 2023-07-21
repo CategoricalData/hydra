@@ -9,7 +9,7 @@ import Hydra.Compute
 import Hydra.Extras
 import Hydra.Graph
 import Hydra.CoreDecoding
-import Hydra.TypeEncoding
+import Hydra.CoreEncoding
 import Hydra.Flows
 import Hydra.Mantle
 import qualified Hydra.Dsl.Expect as Expect
@@ -58,7 +58,7 @@ getTermDescription = getDescription . termAnnotationInternal
 getType :: Kv -> GraphFlow Kv (Y.Maybe (Type Kv))
 getType kv = case getAnnotation kvType kv of
   Nothing -> pure Nothing
-  Just dat -> Just <$> epsilonDecodeType dat
+  Just dat -> Just <$> coreDecodeType dat
 
 getTypeAnnotation :: String -> Type Kv -> Y.Maybe (Term Kv)
 getTypeAnnotation key = getAnnotation key . typeAnnotationInternal
@@ -145,10 +145,10 @@ setTermDescription :: Y.Maybe String -> Term Kv -> Term Kv
 setTermDescription d = setTermAnnotation kvDescription (Terms.string <$> d)
 
 setTermType :: Y.Maybe (Type Kv) -> Term Kv -> Term Kv
-setTermType d = setTermAnnotation kvType (epsilonEncodeType <$> d)
+setTermType d = setTermAnnotation kvType (coreEncodeType <$> d)
 
 setType :: Y.Maybe (Type Kv) -> Kv -> Kv
-setType mt = setAnnotation kvType (epsilonEncodeType <$> mt)
+setType mt = setAnnotation kvType (coreEncodeType <$> mt)
 
 setTypeAnnotation :: String -> Y.Maybe (Term Kv) -> Type Kv -> Type Kv
 setTypeAnnotation key val typ = if kv == Kv M.empty

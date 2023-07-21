@@ -7,7 +7,7 @@ import Hydra.Common
 import Hydra.Compute
 import Hydra.Core
 import Hydra.CoreDecoding
-import Hydra.TypeEncoding
+import Hydra.CoreEncoding
 import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Mantle
@@ -37,7 +37,7 @@ type TypingEnvironment a = M.Map Name (TypeScheme a)
 -- Decode a type, eliminating nominal types for the sake of unification
 decodeStructuralType :: Show a => Term a -> GraphFlow a (Type a)
 decodeStructuralType term = do
-  typ <- epsilonDecodeType term
+  typ <- coreDecodeType term
   let typ' = stripType typ
   case typ' of
     TypeVariable name -> withSchemaContext $ withTrace "decode structural type" $ do

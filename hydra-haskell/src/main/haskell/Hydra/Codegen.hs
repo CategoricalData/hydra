@@ -67,8 +67,7 @@ import Hydra.Sources.Printing
 import Hydra.Sources.Query
 import Hydra.Sources.Test.TestSuite
 import Hydra.Sources.Testing
-import Hydra.Sources.TermEncoding
-import Hydra.Sources.TypeEncoding
+import Hydra.Sources.CoreEncoding
 import Hydra.Sources.Workflow
 
 import qualified Control.Monad as CM
@@ -123,7 +122,6 @@ kernelDataModules = [
   hydraExtrasModule,
 --  hydraMonadsModule,
   hydraPrintingModule,
-  termEncodingModule,
   typeEncodingModule]
 
 kernelModelModules :: [Module Kv]

@@ -30,7 +30,7 @@ shaclCoder mod = do
       typ <- requireTypeAnnotation $ elementData el
       return $ stripType typ == TypeVariable _Type
     toShape el = do
-      typ <- epsilonDecodeType $ elementData el
+      typ <- coreDecodeType $ elementData el
       common <- encodeType typ
       return $ Shacl.Definition (elementIri el) $ Shacl.ShapeNode $ Shacl.NodeShape common
 
