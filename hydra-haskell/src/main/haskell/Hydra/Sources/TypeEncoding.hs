@@ -27,9 +27,9 @@ typeEncodingModule = Module (Namespace "hydra/typeEncoding") elements [hydraCore
      ]
 
 
-typeEncodingDefinition :: String -> Type Kv -> Type Kv -> Term Kv -> Definition x
-typeEncodingDefinition label dom cod term = Base.definitionInModule typeEncodingModule label $
-  Base.function dom cod $ Datum term
+typeEncodingDefinition :: String -> Type Kv -> Term Kv -> Definition x
+typeEncodingDefinition label dom term = Base.definitionInModule typeEncodingModule ("eencode" ++ label) $
+  Base.function dom termA $ Datum term
 
 
 
@@ -46,7 +46,7 @@ typeEncodingDefinition label dom cod term = Base.definitionInModule typeEncoding
 -- encodedName = TermWrap . Nominal _Name . TermLiteral . LiteralString . unName
 --
 -- -- epsilonEncodeNameDef :: Definition (Name -> Term a)
--- -- epsilonEncodeNameDef = typeEncodingDefinition "eencodeName" $
+-- -- epsilonEncodeNameDef = typeEncodingDefinition "Name" $
 -- --   lambda "n" $
 --
 -- encodedField :: Field a -> Term a
@@ -88,7 +88,7 @@ typeEncodingDefinition label dom cod term = Base.definitionInModule typeEncoding
 --   Field _FieldType_type $ epsilonEncodeType t]
 
 -- epsilonEncodeFieldTypeDef :: Definition (FieldType a -> Term a)
--- epsilonEncodeFieldTypeDef = typeEncodingDefinition "eencodeFieldType" $
+-- epsilonEncodeFieldTypeDef = typeEncodingDefinition "FieldType" $
 --   function (Types.apply (TypeVariable _FieldType) (Types.var "a")) (Types.apply (TypeVariable _Term) (Types.var "a")) $
 --   lambda "field" $ encodedTerm $ record _FieldType [
 --     Field _FieldType_name $ string fname,
@@ -100,7 +100,7 @@ typeEncodingDefinition label dom cod term = Base.definitionInModule typeEncoding
 
 
 epsilonEncodeFloatTypeDef :: Definition (FloatType -> Term a)
-epsilonEncodeFloatTypeDef = typeEncodingDefinition "eencodeFloatType" (TypeVariable _FloatType) termA $
+epsilonEncodeFloatTypeDef = typeEncodingDefinition "FloatType" (TypeVariable _FloatType) $
     match _FloatType Nothing (cs <$> [
       _FloatType_bigfloat,
       _FloatType_float32,
@@ -117,22 +117,12 @@ epsilonEncodeFloatTypeDef = typeEncodingDefinition "eencodeFloatType" (TypeVaria
 -- epsilonEncodeFunctionType (FunctionType dom cod) = record _FunctionType [
 --   Field _FunctionType_domain $ epsilonEncodeType dom,
 --   Field _FunctionType_codomain $ epsilonEncodeType cod]
---
--- epsilonEncodeIntegerType :: IntegerType -> Term a
--- epsilonEncodeIntegerType it = unitVariant _IntegerType $ case it of
---   IntegerTypeBigint -> _IntegerType_bigint
---   IntegerTypeInt8 -> _IntegerType_int8
---   IntegerTypeInt16 -> _IntegerType_int16
---   IntegerTypeInt32 -> _IntegerType_int32
---   IntegerTypeInt64 -> _IntegerType_int64
---   IntegerTypeUint8 -> _IntegerType_uint8
---   IntegerTypeUint16 -> _IntegerType_uint16
---   IntegerTypeUint32 -> _IntegerType_uint32
---   IntegerTypeUint64 -> _IntegerType_uint64
 
+-- epsilonEncodeFunctionTypeDef :: Definition (FunctionType -> Term a)
+-- epsilonEncodeFunctionTypeDef = typeEncodingDefinition
 
 epsilonEncodeIntegerTypeDef :: Definition (IntegerType -> Term a)
-epsilonEncodeIntegerTypeDef = typeEncodingDefinition "eencodeIntegerType" (TypeVariable _IntegerType) termA $
+epsilonEncodeIntegerTypeDef = typeEncodingDefinition "IntegerType" (TypeVariable _IntegerType) $
     match _IntegerType Nothing (cs <$> [
       _IntegerType_bigint,
       _IntegerType_int8,
@@ -161,7 +151,7 @@ epsilonEncodeIntegerTypeDef = typeEncodingDefinition "eencodeIntegerType" (TypeV
 --   LiteralTypeString -> unitVariant _LiteralType _LiteralType_string
 
 -- epsilonEncodeLiteralTypeDef :: Definition (LiteralType -> Term a)
--- epsilonEncodeLiteralTypeDef = typeEncodingDefinition "eencodeLiteralType" $
+-- epsilonEncodeLiteralTypeDef = typeEncodingDefinition "LiteralType" $
 --   function (TypeVariable _LiteralType) termA $
 -- --   match _LiteralType Nothing [
 -- --     Case _LiteralType_binary --> Datum $ constant $ sigmaEncodeTerm $ unitVariant _LiteralType _LiteralType_binary,
@@ -189,7 +179,7 @@ epsilonEncodeIntegerTypeDef = typeEncodingDefinition "eencodeIntegerType" (TypeV
 
 
 epsilonEncodeNameDef :: Definition (Name -> Term a)
-epsilonEncodeNameDef = typeEncodingDefinition "eencodeName" (TypeVariable _Name) termA $
+epsilonEncodeNameDef = typeEncodingDefinition "Name" (TypeVariable _Name) $
     lambda "name" $ (unwrap _Name @@ var "name")
 
 
@@ -226,7 +216,7 @@ epsilonEncodeNameDef = typeEncodingDefinition "eencodeName" (TypeVariable _Name)
 --     tvar = variant _Type
 
 -- epsilonEncodeTypeDef :: Definition (Type a -> Term a)
--- epsilonEncodeTypeDef = typeEncodingDefinition "eencodeType" $
+-- epsilonEncodeTypeDef = typeEncodingDefinition "Type" $
 --   function typeA termA $
 --   match _Type Nothing [
 --     -- ...
