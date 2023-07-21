@@ -105,35 +105,17 @@ _literals_showString = qname _hydra_lib_literals "showString" :: Name
 _hydra_lib_maps :: Namespace
 _hydra_lib_maps = Namespace "hydra/lib/maps"
 
-_maps_empty :: Name
-_maps_empty = qname _hydra_lib_maps "empty"
-
-_maps_fromList :: Name
-_maps_fromList = qname _hydra_lib_maps "fromList"
-
-_maps_insert :: Name
-_maps_insert = qname _hydra_lib_maps "insert"
-
-_maps_isEmpty :: Name
-_maps_isEmpty = qname _hydra_lib_maps "isEmpty"
-
-_maps_lookup :: Name
-_maps_lookup = qname _hydra_lib_maps "lookup"
-
-_maps_map :: Name
-_maps_map = qname _hydra_lib_maps "map"
-
-_maps_remove :: Name
-_maps_remove = qname _hydra_lib_maps "remove"
-
-_maps_singleton :: Name
-_maps_singleton = qname _hydra_lib_maps "singleton"
-
-_maps_size :: Name
-_maps_size = qname _hydra_lib_maps "size"
-
-_maps_toList :: Name
-_maps_toList = qname _hydra_lib_maps "toList"
+_maps_empty = qname _hydra_lib_maps "empty" :: Name
+_maps_fromList = qname _hydra_lib_maps "fromList" :: Name
+_maps_insert = qname _hydra_lib_maps "insert" :: Name
+_maps_isEmpty = qname _hydra_lib_maps "isEmpty" :: Name
+_maps_lookup = qname _hydra_lib_maps "lookup" :: Name
+_maps_map = qname _hydra_lib_maps "map" :: Name
+_maps_mapKeys = qname _hydra_lib_maps "mapKeys" :: Name
+_maps_remove = qname _hydra_lib_maps "remove" :: Name
+_maps_singleton = qname _hydra_lib_maps "singleton" :: Name
+_maps_size = qname _hydra_lib_maps "size" :: Name
+_maps_toList = qname _hydra_lib_maps "toList" :: Name
 
 _hydra_lib_math :: Namespace
 _hydra_lib_math = Namespace "hydra/lib/math"
@@ -288,7 +270,8 @@ hydraLibMapsPrimitives = [
     prim3 _maps_insert k v mapKv mapKv Maps.insert,
     prim1 _maps_isEmpty mapKv boolean Maps.isEmpty,
     prim2 _maps_lookup k mapKv (optional v) Maps.lookup,
-    prim2 _optionals_map (function v1 v2) (Prims.map k v1) (Prims.map k v2) Maps.map,
+    prim2 _maps_map (function v1 v2) (Prims.map k v1) (Prims.map k v2) Maps.map,
+    prim2 _maps_mapKeys (function k1 k2) (Prims.map k1 v) (Prims.map k2 v) Maps.mapKeys,
     prim1 _maps_size mapKv int32 Maps.size,
     prim2 _maps_remove k mapKv mapKv Maps.remove,
     prim2 _maps_singleton k v mapKv Maps.singleton,
@@ -296,6 +279,8 @@ hydraLibMapsPrimitives = [
     prim1 _maps_toList mapKv (list $ pair k v) Maps.toList]
   where
     k = variable "k"
+    k1 = variable "k1"
+    k2 = variable "k2"
     v = variable "v"
     v1 = variable "v1"
     v2 = variable "v2"
