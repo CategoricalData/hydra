@@ -10,8 +10,8 @@ import Data.List
 import Data.Map
 import Data.Set
 
-sigmaEncodeAnnotated :: (Core.Annotated (Core.Term a) a -> Core.Term a)
-sigmaEncodeAnnotated a = (Core.TermAnnotated (Core.Annotated {
+sigmaEncodeAnnotatedTerm :: (Core.Annotated (Core.Term a) a -> Core.Term a)
+sigmaEncodeAnnotatedTerm a = (Core.TermAnnotated (Core.Annotated {
   Core.annotatedSubject = (sigmaEncodeTerm (Core.annotatedSubject a)),
   Core.annotatedAnnotation = (Core.annotatedAnnotation a)}))
 
@@ -287,7 +287,7 @@ sigmaEncodeTerm x = case x of
     Core.injectionTypeName = (Core.Name "hydra/core.Term"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.FieldName "annotated"),
-      Core.fieldTerm = (sigmaEncodeAnnotated v)}}))
+      Core.fieldTerm = (sigmaEncodeAnnotatedTerm v)}}))
   Core.TermApplication v -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Term"),
     Core.injectionField = Core.Field {
