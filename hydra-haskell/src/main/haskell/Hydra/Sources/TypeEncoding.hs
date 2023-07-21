@@ -19,6 +19,7 @@ typeEncodingModule = Module (Namespace "hydra/typeEncoding") elements [hydraCore
    elements = [
      Base.el epsilonEncodeAnnotatedTypeDef,
      Base.el epsilonEncodeApplicationTypeDef,
+     Base.el epsilonEncodeFieldNameDef, -- TODO: reuse sigma encoding?
      Base.el epsilonEncodeFieldTypeDef,
      Base.el epsilonEncodeFloatTypeDef,
      Base.el epsilonEncodeFunctionTypeDef,
@@ -26,16 +27,16 @@ typeEncodingModule = Module (Namespace "hydra/typeEncoding") elements [hydraCore
      Base.el epsilonEncodeLambdaTypeDef,
      Base.el epsilonEncodeLiteralTypeDef,
      Base.el epsilonEncodeMapTypeDef,
-     Base.el epsilonEncodeNameDef,
+     Base.el epsilonEncodeNameDef, -- TODO: reuse sigma encoding?
      Base.el epsilonEncodeNominalTypeDef,
      Base.el epsilonEncodeRowTypeDef,
      Base.el epsilonEncodeTypeDef]
 
 typeEncodingDefinition :: String -> Type Kv -> Term Kv -> Definition x
-typeEncodingDefinition label dom term = Base.definitionInModule typeEncodingModule ("eencode" ++ label) $
+typeEncodingDefinition label dom term = Base.definitionInModule typeEncodingModule ("epsilonEncode" ++ label) $
   Base.function dom termA $ Datum term
 
-annotatedTypeA = Types.apply (TypeVariable _Annotated) typeA :: Type a
+annotatedTypeA = Types.apply (Types.apply (TypeVariable _Annotated) typeA) (Types.var "a") :: Type a
 applicationTypeA = Types.apply (TypeVariable _ApplicationType) (Types.var "a") :: Type a
 fieldTypeA = Types.apply (TypeVariable _FieldType) (Types.var "a") :: Type a
 functionTypeA = Types.apply (TypeVariable _FunctionType) (Types.var "a") :: Type a
@@ -45,8 +46,8 @@ nominalTypeA = Types.apply (TypeVariable _Nominal) typeA :: Type a
 rowTypeA = Types.apply (TypeVariable _RowType) (Types.var "a") :: Type a
 
 epsilonEncodeAnnotatedTypeDef :: Definition (Annotated (Type a) a -> Term a)
-epsilonEncodeAnnotatedTypeDef = termEncodingDefinition "AnnotatedType" annotatedTypeA $
-  lambda "at" $ record _Annotated [
+epsilonEncodeAnnotatedTypeDef = typeEncodingDefinition "AnnotatedType" annotatedTypeA $
+  lambda "at" $ variant _Term _Term_annotated $ record _Annotated [
     Field _Annotated_subject $ ref epsilonEncodeTypeDef @@ (project _Annotated _Annotated_subject @@ var "at"),
     Field _Annotated_annotation $ project _Annotated _Annotated_annotation @@ var "at"]
 
@@ -56,10 +57,14 @@ epsilonEncodeApplicationTypeDef = typeEncodingDefinition "ApplicationType" appli
     (_ApplicationType_function, ref epsilonEncodeTypeDef @@ (project _ApplicationType _ApplicationType_function @@ var "at")),
     (_ApplicationType_argument, ref epsilonEncodeTypeDef @@ (project _ApplicationType _ApplicationType_argument @@ var "at"))]
 
+epsilonEncodeFieldNameDef :: Definition (FieldName -> Term a)
+epsilonEncodeFieldNameDef = typeEncodingDefinition "FieldName" (TypeVariable _FieldName) $
+    lambda "fn" $ encodedString $ (unwrap _FieldName @@ var "fn")
+
 epsilonEncodeFieldTypeDef :: Definition (FieldType a -> Term a)
 epsilonEncodeFieldTypeDef = typeEncodingDefinition "FieldType" fieldTypeA $
   lambda "ft" $ encodedRecord _FieldType [
-    (_FieldType_name, ref epsilonEncodeNameDef @@ (project _FieldType _FieldType_name @@ var "ft")),
+    (_FieldType_name, ref epsilonEncodeFieldNameDef @@ (project _FieldType _FieldType_name @@ var "ft")),
     (_FieldType_type, ref epsilonEncodeTypeDef @@ (project _FieldType _FieldType_type @@ var "ft"))]
 
 epsilonEncodeFloatTypeDef :: Definition (FloatType -> Term a)
@@ -95,7 +100,7 @@ epsilonEncodeIntegerTypeDef = typeEncodingDefinition "IntegerType" (TypeVariable
 epsilonEncodeLambdaTypeDef :: Definition (LambdaType a -> Term a)
 epsilonEncodeLambdaTypeDef = typeEncodingDefinition "LambdaType" lambdaTypeA $
   lambda "lt" $ encodedRecord _LambdaType [
-    (_LambdaType_parameter, ref epsilonEncodeTypeDef @@ (project _LambdaType _LambdaType_parameter @@ var "lt")),
+    (_LambdaType_parameter, ref epsilonEncodeNameDef @@ (project _LambdaType _LambdaType_parameter @@ var "lt")),
     (_LambdaType_body, ref epsilonEncodeTypeDef @@ (project _LambdaType _LambdaType_body @@ var "lt"))]
 
 epsilonEncodeLiteralTypeDef :: Definition (LiteralType -> Term a)
@@ -135,8 +140,10 @@ epsilonEncodeRowTypeDef = typeEncodingDefinition "RowType" rowTypeA $
 
 epsilonEncodeTypeDef :: Definition (Type a -> Term a)
 epsilonEncodeTypeDef = typeEncodingDefinition "Type" typeA $
-  match _Type (Just $ string "not implemented") [ -- TODO
-    csref _Type_annotated epsilonEncodeAnnotatedTypeDef,
+  match _Type Nothing [
+    Field _Type_annotated $ lambda "v" $ variant _Term _Term_annotated $ record _Annotated [
+      Field _Annotated_subject $ ref epsilonEncodeTypeDef @@ (project _Annotated _Annotated_subject @@ var "v"),
+      Field _Annotated_annotation $ project _Annotated _Annotated_annotation @@ var "v"],
     csref _Type_application epsilonEncodeApplicationTypeDef,
     csref _Type_function epsilonEncodeFunctionTypeDef,
     csref _Type_lambda epsilonEncodeLambdaTypeDef,

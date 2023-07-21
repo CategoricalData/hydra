@@ -11,7 +11,7 @@ module Hydra.Kernel (
   module Hydra.Constraints,
   module Hydra.Core,
   module Hydra.CoreDecoding,
-  module Hydra.CoreEncoding,
+  module Hydra.TypeEncoding,
   module Hydra.CoreLanguage,
   module Hydra.Extras,
   module Hydra.Flows,
@@ -46,7 +46,7 @@ import Hydra.Compute
 import Hydra.Constraints
 import Hydra.Core
 import Hydra.CoreDecoding
-import Hydra.CoreEncoding
+import Hydra.TypeEncoding
 import Hydra.CoreLanguage
 import Hydra.Extras
 import Hydra.Flows

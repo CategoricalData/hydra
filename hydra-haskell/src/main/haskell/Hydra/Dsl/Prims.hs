@@ -5,7 +5,7 @@ module Hydra.Dsl.Prims where
 
 import Hydra.Kernel
 import Hydra.CoreDecoding
-import Hydra.CoreEncoding
+import Hydra.TypeEncoding
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
