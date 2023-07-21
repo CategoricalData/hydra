@@ -115,9 +115,9 @@ getAnn = getTermAnnotation
 
 getDesc term = fromFlow testGraph $ getTermDescription term
 
-setAnn = setTermAnnotation testGraph
+setAnn = setTermAnnotation
 
-setDesc = setTermDescription testGraph
+setDesc = setTermDescription
 
 spec :: H.Spec
 spec = do

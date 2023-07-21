@@ -65,7 +65,7 @@ expandLambdas term = do
           [] -> lhs
           (a:rest) -> app mtyp' (TermApplication $ Application lhs' a) rest
             where
-              lhs' = annotationClassSetTermType (graphAnnotations g) g mtyp lhs
+              lhs' = annotationClassSetTermType (graphAnnotations g) mtyp lhs
               mtyp' = case mtyp of
                 Just (TypeFunction (FunctionType _ cod)) -> Just cod
                 Nothing -> Nothing

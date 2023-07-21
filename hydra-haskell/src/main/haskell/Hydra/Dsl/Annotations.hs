@@ -21,10 +21,10 @@ key_maxSize = "maxLength"
 key_minSize = "minLength"
 
 annotateTerm :: String -> Y.Maybe (Term Kv) -> Term Kv -> Term Kv
-annotateTerm = setTermAnnotation hydraCore
+annotateTerm = setTermAnnotation
 
 annotateType :: String -> Y.Maybe (Term Kv) -> Type Kv -> Type Kv
-annotateType = setTypeAnnotation hydraCore
+annotateType = setTypeAnnotation
 
 bounded :: Maybe Int -> Maybe Int -> Type Kv -> Type Kv
 bounded min max = annotMin . annotMax
@@ -42,10 +42,10 @@ boundedString :: Maybe Int -> Maybe Int -> Type Kv
 boundedString min max = bounded min max Types.string
 
 doc :: String -> Type Kv -> Type Kv
-doc s = setTypeDescription hydraCore (Just s)
+doc s = setTypeDescription (Just s)
 
 dataDoc :: String -> Term Kv -> Term Kv
-dataDoc s = setTermDescription hydraCore (Just s)
+dataDoc s = setTermDescription (Just s)
 
 nonemptyList :: Type Kv -> Type Kv
 nonemptyList = boundedList (Just 1) Nothing
@@ -57,10 +57,10 @@ see :: String -> Type Kv -> Type Kv
 see s = doc $ "See " ++ s
 
 setMaxLength :: Int -> Type Kv -> Type Kv
-setMaxLength m = setTypeAnnotation hydraCore key_maxSize (Just $ Terms.int32 m)
+setMaxLength m = setTypeAnnotation key_maxSize (Just $ Terms.int32 m)
 
 setMinLength :: Int -> Type Kv -> Type Kv
-setMinLength m = setTypeAnnotation hydraCore key_minSize (Just $ Terms.int32 m)
+setMinLength m = setTypeAnnotation key_minSize (Just $ Terms.int32 m)
 
 twoOrMoreList :: Type Kv -> Type Kv
 twoOrMoreList = boundedList (Just 2) Nothing

@@ -17,7 +17,7 @@ hydraCoreModule = Module ns elements [] $
     ns = Namespace "hydra/core"
     core = typeref ns
     def = datatype ns
-    doc s = setTypeDescription bootstrapGraph (Just s)
+    doc s = setTypeDescription (Just s)
 
     elements = [
 
