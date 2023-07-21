@@ -23,6 +23,9 @@ lookup = M.lookup
 map :: (v1 -> v2) -> M.Map k v1 -> M.Map k v2
 map = fmap
 
+mapKeys :: (Ord k1, Ord k2) => (k1 -> k2) -> M.Map k1 v -> M.Map k2 v
+mapKeys = M.mapKeys
+
 remove :: Ord k => k -> M.Map k v -> M.Map k v
 remove = M.delete
 

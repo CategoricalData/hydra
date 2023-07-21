@@ -25,6 +25,9 @@ lookup = Datum $ Terms.primitive _maps_lookup
 map :: Datum ((v1 -> v2) -> Map k v1 -> Map k v2)
 map = Datum $ Terms.primitive _maps_map
 
+mapKeys :: Datum ((k1 -> k2) -> Map k1 v -> Map k2 v)
+mapKeys = Datum $ Terms.primitive _maps_mapKeys
+
 remove :: Datum (k -> Map k v -> Map k v)
 remove = Datum $ Terms.primitive _maps_remove
 
