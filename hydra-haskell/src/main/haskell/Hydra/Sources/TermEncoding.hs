@@ -27,6 +27,7 @@ termEncodingModule = Module (Namespace "hydra/termEncoding") elements [hydraCore
      Base.el sigmaEncodeInjectionDef,
      Base.el sigmaEncodeIntegerValueDef,
      Base.el sigmaEncodeLambdaDef,
+     Base.el sigmaEncodeLetDef,
      Base.el sigmaEncodeLiteralDef,
      Base.el sigmaEncodeNameDef,
      Base.el sigmaEncodeNominalTermDef,
@@ -51,6 +52,7 @@ fieldA = Types.apply (TypeVariable _Field) (Types.var "a") :: Type a
 functionA = Types.apply (TypeVariable _Function) (Types.var "a") :: Type a
 injectionA = Types.apply (TypeVariable _Injection) (Types.var "a") :: Type a
 lambdaA = Types.apply (TypeVariable _Lambda) (Types.var "a") :: Type a
+letA = Types.apply (TypeVariable _Let) (Types.var "a") :: Type a
 nominalTermA = Types.apply (TypeVariable _Nominal) termA :: Type a
 optionalCasesA = Types.apply (TypeVariable _OptionalCases) (Types.var "a") :: Type a
 recordA = Types.apply (TypeVariable _Record) (Types.var "a") :: Type a
@@ -220,6 +222,12 @@ sigmaEncodeLambdaDef = termEncodingDefinition "sigmaEncodeLambda" lambdaA $
     (_Lambda_parameter, ref sigmaEncodeNameDef @@ (project _Lambda _Lambda_parameter @@ var "l")),
     (_Lambda_body, ref sigmaEncodeTermDef @@ (project _Lambda _Lambda_body @@ var "l"))]
 
+sigmaEncodeLetDef :: Definition (Let a -> Term a)
+sigmaEncodeLetDef = termEncodingDefinition "sigmaEncodeLet" letA $
+  lambda "l" $ encodedRecord _Let [
+    -- (_Let_bindings, ...), TODO
+    (_Let_environment, ref sigmaEncodeTermDef @@ (project _Let _Let_environment @@ var "l"))]
+
 sigmaEncodeLiteralDef :: Definition (Literal -> Term a)
 sigmaEncodeLiteralDef = termEncodingDefinition "sigmaEncodeLiteral" (TypeVariable _Literal) $
   match _Literal Nothing [
@@ -230,14 +238,6 @@ sigmaEncodeLiteralDef = termEncodingDefinition "sigmaEncodeLiteral" (TypeVariabl
     varField _Literal_string $ encodedString $ var "v"]
   where
     varField fname = Field fname . lambda "v" . encodedVariant _Literal fname
-
--- sigmaEncodeLiteralVariant :: LiteralVariant -> Term a
--- sigmaEncodeLiteralVariant av = unitVariant _LiteralVariant $ case av of
---   LiteralVariantBinary -> _LiteralVariant_binary
---   LiteralVariantBoolean -> _LiteralVariant_boolean
---   LiteralVariantFloat -> _LiteralVariant_float
---   LiteralVariantInteger -> _LiteralVariant_integer
---   LiteralVariantString -> _LiteralVariant_string
 
 sigmaEncodeNameDef :: Definition (Name -> Term a)
 sigmaEncodeNameDef = termEncodingDefinition "sigmaEncodeName" (TypeVariable _Name) $
@@ -276,10 +276,12 @@ sigmaEncodeSumDef = termEncodingDefinition "sigmaEncodeSum" sumA $
 
 sigmaEncodeTermDef :: Definition (Term a -> Term a)
 sigmaEncodeTermDef = termEncodingDefinition "sigmaEncodeTerm" termA $
-  match _Term Nothing [
+  match _Term (Just $ encodedString $ string "not implemented") [
     ecase _Term_annotated (ref sigmaEncodeAnnotatedDef),
     ecase _Term_application (ref sigmaEncodeApplicationDef),
     ecase _Term_function (ref sigmaEncodeFunctionDef),
+    -- TODO: add missing primitives for tuples and maps
+    -- ecase _Term_let (ref sigmaEncodeLetDef),
     ecase _Term_literal (ref sigmaEncodeLiteralDef),
     ecase' _Term_list $ encodedList (primitive _lists_map @@ (ref sigmaEncodeTermDef) @@ var "v"),
     -- TODO: restore map and set constructors after finding a way to infer "Ord a =>" for Haskell
@@ -290,6 +292,8 @@ sigmaEncodeTermDef = termEncodingDefinition "sigmaEncodeTerm" termA $
     -- TODO: restore map and set constructors after finding a way to infer "Ord a =>" for Haskell
     -- ecase' _Term_set $ encodedSet (primitive _sets_map @@ (ref sigmaEncodeTermDef) @@ var "v")
     ecase _Term_sum (ref sigmaEncodeSumDef),
+    -- TODO: determine whether streams have a sigma encoding
+    -- _ Term_stream
     ecase _Term_union (ref sigmaEncodeInjectionDef),
     ecase _Term_variable (ref sigmaEncodeNameDef),
     ecase _Term_wrap (ref sigmaEncodeNominalTermDef)]
