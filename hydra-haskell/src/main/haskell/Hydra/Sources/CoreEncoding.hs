@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.CoreEncoding (typeEncodingModule) where
+module Hydra.Sources.CoreEncoding (coreEncodingModule) where
 
 import Hydra.Kernel
 import Hydra.Sources.Core
@@ -10,8 +10,8 @@ import qualified Hydra.Dsl.Base as Base
 import qualified Hydra.Dsl.Types as Types
 
 
-typeEncodingModule :: Module Kv
-typeEncodingModule = Module (Namespace "hydra/typeEncoding") elements [hydraCoreModule] $
+coreEncodingModule :: Module Kv
+coreEncodingModule = Module (Namespace "hydra/coreEncoding") elements [hydraCoreModule] $
     Just ("Mapping of hydra/core constructs in a host language like Haskell or Java "
       ++ " to their native Hydra counterparts as terms. "
       ++ " This includes an implementation of LambdaGraph's epsilon encoding (types to terms).")
@@ -51,7 +51,7 @@ typeEncodingModule = Module (Namespace "hydra/typeEncoding") elements [hydraCore
      Base.el coreEncodeTypeDef]
 
 coreEncodingDefinition :: String -> Type Kv -> Term Kv -> Definition x
-coreEncodingDefinition label dom term = Base.definitionInModule typeEncodingModule ("coreEncode" ++ label) $
+coreEncodingDefinition label dom term = Base.definitionInModule coreEncodingModule ("coreEncode" ++ label) $
   Base.function dom termA $ Datum term
 
 ref :: Definition a -> Term Kv
