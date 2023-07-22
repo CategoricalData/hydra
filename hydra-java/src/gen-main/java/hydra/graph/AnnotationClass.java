@@ -26,15 +26,15 @@ public class AnnotationClass<A> {
   
   public final java.util.function.Function<hydra.core.Term<A>, hydra.compute.Flow<hydra.graph.Graph<A>, java.util.Optional<hydra.core.Type<A>>>> termType;
   
-  public final java.util.function.Function<hydra.graph.Graph<A>, java.util.function.Function<java.util.Optional<String>, java.util.function.Function<hydra.core.Term<A>, hydra.core.Term<A>>>> setTermDescription;
+  public final java.util.function.Function<java.util.Optional<String>, java.util.function.Function<hydra.core.Term<A>, hydra.core.Term<A>>> setTermDescription;
   
-  public final java.util.function.Function<hydra.graph.Graph<A>, java.util.function.Function<java.util.Optional<hydra.core.Type<A>>, java.util.function.Function<hydra.core.Term<A>, hydra.core.Term<A>>>> setTermType;
+  public final java.util.function.Function<java.util.Optional<hydra.core.Type<A>>, java.util.function.Function<hydra.core.Term<A>, hydra.core.Term<A>>> setTermType;
   
   public final java.util.function.Function<A, hydra.compute.Flow<hydra.graph.Graph<A>, java.util.Optional<hydra.core.Type<A>>>> typeOf;
   
   public final java.util.function.Function<java.util.Optional<hydra.core.Type<A>>, java.util.function.Function<A, A>> setTypeOf;
   
-  public AnnotationClass (A default_, java.util.function.Function<A, java.util.function.Function<A, Boolean>> equal, java.util.function.Function<A, java.util.function.Function<A, hydra.graph.Comparison>> compare, java.util.function.Function<A, String> show, java.util.function.Function<String, java.util.Optional<A>> read, java.util.function.Function<hydra.core.Term<A>, A> termAnnotation, java.util.function.Function<hydra.core.Type<A>, A> typeAnnotation, java.util.function.Function<hydra.core.Term<A>, hydra.compute.Flow<hydra.graph.Graph<A>, java.util.Optional<String>>> termDescription, java.util.function.Function<hydra.core.Type<A>, hydra.compute.Flow<hydra.graph.Graph<A>, java.util.Optional<String>>> typeDescription, java.util.function.Function<hydra.core.Term<A>, hydra.compute.Flow<hydra.graph.Graph<A>, java.util.Optional<hydra.core.Type<A>>>> termType, java.util.function.Function<hydra.graph.Graph<A>, java.util.function.Function<java.util.Optional<String>, java.util.function.Function<hydra.core.Term<A>, hydra.core.Term<A>>>> setTermDescription, java.util.function.Function<hydra.graph.Graph<A>, java.util.function.Function<java.util.Optional<hydra.core.Type<A>>, java.util.function.Function<hydra.core.Term<A>, hydra.core.Term<A>>>> setTermType, java.util.function.Function<A, hydra.compute.Flow<hydra.graph.Graph<A>, java.util.Optional<hydra.core.Type<A>>>> typeOf, java.util.function.Function<java.util.Optional<hydra.core.Type<A>>, java.util.function.Function<A, A>> setTypeOf) {
+  public AnnotationClass (A default_, java.util.function.Function<A, java.util.function.Function<A, Boolean>> equal, java.util.function.Function<A, java.util.function.Function<A, hydra.graph.Comparison>> compare, java.util.function.Function<A, String> show, java.util.function.Function<String, java.util.Optional<A>> read, java.util.function.Function<hydra.core.Term<A>, A> termAnnotation, java.util.function.Function<hydra.core.Type<A>, A> typeAnnotation, java.util.function.Function<hydra.core.Term<A>, hydra.compute.Flow<hydra.graph.Graph<A>, java.util.Optional<String>>> termDescription, java.util.function.Function<hydra.core.Type<A>, hydra.compute.Flow<hydra.graph.Graph<A>, java.util.Optional<String>>> typeDescription, java.util.function.Function<hydra.core.Term<A>, hydra.compute.Flow<hydra.graph.Graph<A>, java.util.Optional<hydra.core.Type<A>>>> termType, java.util.function.Function<java.util.Optional<String>, java.util.function.Function<hydra.core.Term<A>, hydra.core.Term<A>>> setTermDescription, java.util.function.Function<java.util.Optional<hydra.core.Type<A>>, java.util.function.Function<hydra.core.Term<A>, hydra.core.Term<A>>> setTermType, java.util.function.Function<A, hydra.compute.Flow<hydra.graph.Graph<A>, java.util.Optional<hydra.core.Type<A>>>> typeOf, java.util.function.Function<java.util.Optional<hydra.core.Type<A>>, java.util.function.Function<A, A>> setTypeOf) {
     this.default_ = default_;
     this.equal = equal;
     this.compare = compare;
@@ -105,11 +105,11 @@ public class AnnotationClass<A> {
     return new AnnotationClass(default_, equal, compare, show, read, termAnnotation, typeAnnotation, termDescription, typeDescription, termType, setTermDescription, setTermType, typeOf, setTypeOf);
   }
   
-  public AnnotationClass withSetTermDescription(java.util.function.Function<hydra.graph.Graph<A>, java.util.function.Function<java.util.Optional<String>, java.util.function.Function<hydra.core.Term<A>, hydra.core.Term<A>>>> setTermDescription) {
+  public AnnotationClass withSetTermDescription(java.util.function.Function<java.util.Optional<String>, java.util.function.Function<hydra.core.Term<A>, hydra.core.Term<A>>> setTermDescription) {
     return new AnnotationClass(default_, equal, compare, show, read, termAnnotation, typeAnnotation, termDescription, typeDescription, termType, setTermDescription, setTermType, typeOf, setTypeOf);
   }
   
-  public AnnotationClass withSetTermType(java.util.function.Function<hydra.graph.Graph<A>, java.util.function.Function<java.util.Optional<hydra.core.Type<A>>, java.util.function.Function<hydra.core.Term<A>, hydra.core.Term<A>>>> setTermType) {
+  public AnnotationClass withSetTermType(java.util.function.Function<java.util.Optional<hydra.core.Type<A>>, java.util.function.Function<hydra.core.Term<A>, hydra.core.Term<A>>> setTermType) {
     return new AnnotationClass(default_, equal, compare, show, read, termAnnotation, typeAnnotation, termDescription, typeDescription, termType, setTermDescription, setTermType, typeOf, setTypeOf);
   }
   

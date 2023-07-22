@@ -118,11 +118,11 @@ hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElement
 
 kernelDataModules :: [Module Kv]
 kernelDataModules = [
+  coreEncodingModule,
   hydraBasicsModule,
   hydraExtrasModule,
 --  hydraMonadsModule,
-  hydraPrintingModule,
-  typeEncodingModule]
+  hydraPrintingModule]
 
 kernelModelModules :: [Module Kv]
 kernelModelModules = [
