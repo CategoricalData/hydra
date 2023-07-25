@@ -16,6 +16,8 @@ import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
 import Prelude hiding ((++))
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 
 basicsDefinition :: String -> Datum a -> Definition a
@@ -57,6 +59,7 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
      el unqualifyNameDef
      ]
 
+eqA = (M.fromList [(Name "a", S.fromList [TypeClassEquality])])
 termA = Types.apply (TypeVariable _Term) (Types.var "a") :: Type a
 typeA = Types.apply (TypeVariable _Type) (Types.var "a") :: Type a
 
@@ -308,7 +311,7 @@ typeVariantsDef = basicsDefinition "typeVariants" $
 
 isUnitTermDef :: Definition (Term a -> Bool)
 isUnitTermDef = basicsDefinition "isUnitTerm" $
-  function termA Types.boolean $
+  functionWithClasses termA Types.boolean eqA $
   lambda "t" $ equalTerm @@ (ref stripTermDef @@ var "t") @@ Datum (coreEncodeTerm Terms.unit)
 
 -- isUnitType :: Eq a => Type a -> Bool
@@ -316,7 +319,7 @@ isUnitTermDef = basicsDefinition "isUnitTerm" $
 
 isUnitTypeDef :: Definition (Term a -> Bool)
 isUnitTypeDef = basicsDefinition "isUnitType" $
-  function typeA Types.boolean $
+  functionWithClasses typeA Types.boolean eqA $
   lambda "t" $ equalType @@ (ref stripTypeDef @@ var "t") @@ Datum (coreEncodeType Types.unit)
 
 -- localNameOfLazy :: Name -> String
