@@ -9,6 +9,7 @@ module Hydra.CoreDecoding (
   coreDecodeLambdaType,
   coreDecodeLiteralType,
   coreDecodeMapType,
+  coreDecodeName,
   coreDecodeRowType,
   coreDecodeString,
   coreDecodeType,

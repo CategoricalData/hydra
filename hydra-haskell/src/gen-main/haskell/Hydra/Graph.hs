@@ -21,9 +21,11 @@ data AnnotationClass a =
     annotationClassTypeAnnotation :: (Core.Type a -> a),
     annotationClassTermDescription :: (Core.Term a -> Compute.Flow (Graph a) (Maybe String)),
     annotationClassTypeDescription :: (Core.Type a -> Compute.Flow (Graph a) (Maybe String)),
+    annotationClassTypeClasses :: (Core.Type a -> Compute.Flow (Graph a) (Map Core.Name (Set TypeClass))),
     annotationClassTermType :: (Core.Term a -> Compute.Flow (Graph a) (Maybe (Core.Type a))),
     annotationClassSetTermDescription :: (Maybe String -> Core.Term a -> Core.Term a),
     annotationClassSetTermType :: (Maybe (Core.Type a) -> Core.Term a -> Core.Term a),
+    annotationClassSetTypeClasses :: (Map Core.Name (Set TypeClass) -> Core.Type a -> Core.Type a),
     annotationClassTypeOf :: (a -> Compute.Flow (Graph a) (Maybe (Core.Type a))),
     annotationClassSetTypeOf :: (Maybe (Core.Type a) -> a -> a)}
 
@@ -47,11 +49,15 @@ _AnnotationClass_termDescription = (Core.FieldName "termDescription")
 
 _AnnotationClass_typeDescription = (Core.FieldName "typeDescription")
 
+_AnnotationClass_typeClasses = (Core.FieldName "typeClasses")
+
 _AnnotationClass_termType = (Core.FieldName "termType")
 
 _AnnotationClass_setTermDescription = (Core.FieldName "setTermDescription")
 
 _AnnotationClass_setTermType = (Core.FieldName "setTermType")
+
+_AnnotationClass_setTypeClasses = (Core.FieldName "setTypeClasses")
 
 _AnnotationClass_typeOf = (Core.FieldName "typeOf")
 
@@ -144,3 +150,15 @@ _TermCoder = (Core.Name "hydra/graph.TermCoder")
 _TermCoder_type = (Core.FieldName "type")
 
 _TermCoder_coder = (Core.FieldName "coder")
+
+-- | Any of a small number of built-in type classes
+data TypeClass = 
+  TypeClassEquality  |
+  TypeClassOrdering 
+  deriving (Eq, Ord, Read, Show)
+
+_TypeClass = (Core.Name "hydra/graph.TypeClass")
+
+_TypeClass_equality = (Core.FieldName "equality")
+
+_TypeClass_ordering = (Core.FieldName "ordering")

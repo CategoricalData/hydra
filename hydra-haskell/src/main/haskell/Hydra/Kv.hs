@@ -17,8 +17,11 @@ import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Data.List as L
 import qualified Data.Map as M
+import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
+
+key_classes = "classes" :: String
 
 aggregateAnnotations :: (x -> Maybe (Annotated x Kv)) -> x -> Kv
 aggregateAnnotations getAnn t = Kv $ M.fromList $ L.concat $ toPairs [] t
@@ -63,6 +66,16 @@ getType kv = case getAnnotation kvType kv of
 getTypeAnnotation :: String -> Type Kv -> Y.Maybe (Term Kv)
 getTypeAnnotation key = getAnnotation key . typeAnnotationInternal
 
+getTypeClasses :: Type Kv -> GraphFlow Kv (M.Map Name (S.Set TypeClass))
+getTypeClasses typ = case getTypeAnnotation key_classes typ of
+    Nothing -> pure M.empty
+    Just term -> Expect.map coreDecodeName (Expect.set decodeClass) term
+  where
+    decodeClass term = Expect.unitVariant _TypeClass term >>= \fn -> case fn of
+      _TypeClass_equality -> pure TypeClassEquality
+      _TypeClass_ordering -> pure TypeClassOrdering
+      _ -> unexpected "type class" term
+
 getTypeDescription :: Type Kv -> GraphFlow Kv (Y.Maybe String)
 getTypeDescription = getDescription . typeAnnotationInternal
 
@@ -82,9 +95,11 @@ kvAnnotationClass = AnnotationClass {
     annotationClassTypeAnnotation = typeAnnotationInternal,
     annotationClassTermDescription = getTermDescription,
     annotationClassTypeDescription = getTypeDescription,
+    annotationClassTypeClasses = getTypeClasses,
     annotationClassTermType = getType . termAnnotationInternal,
     annotationClassSetTermDescription = setTermDescription,
     annotationClassSetTermType = setTermType,
+    annotationClassSetTypeClasses = setTypeClasses,
     annotationClassTypeOf = getType,
     annotationClassSetTypeOf = setType}
   where
@@ -157,6 +172,17 @@ setTypeAnnotation key val typ = if kv == Kv M.empty
   where
     typ' = stripType typ
     kv = setAnnotation key val $ typeAnnotationInternal typ
+
+setTypeClasses :: M.Map Name (S.Set TypeClass) -> Type Kv -> Type Kv
+setTypeClasses m = setTypeAnnotation key_classes encoded
+  where
+    encoded = if M.null m
+      then Nothing
+      else Just $ Terms.map $ M.fromList (encodePair <$> M.toList m)
+    encodePair (name, classes) = (coreEncodeName name, Terms.set $ S.fromList (encodeClass <$> (S.toList classes)))
+    encodeClass tc = Terms.unitVariant _TypeClass $ case tc of
+      TypeClassEquality -> _TypeClass_equality
+      TypeClassOrdering -> _TypeClass_ordering
 
 setTypeDescription :: Y.Maybe String -> Type Kv -> Type Kv
 setTypeDescription d = setTypeAnnotation kvDescription (Terms.string <$> d)
