@@ -284,10 +284,26 @@ uint64Value v = case v of
   IntegerValueUint64 i -> pure i
   _ -> unexpected "uint64" v
 
+unit :: Show a => Term a -> Flow s ()
+unit term = do
+  fields <- recordWithName _UnitType term
+  if L.null fields
+    then pure ()
+    else unexpected "unit" term
+
+unitVariant :: Show a => Name -> Term a -> Flow s FieldName
+unitVariant tname term = do
+  field <- variant tname term
+  unit $ fieldTerm field
+  pure $ fieldName field
+
 variable :: Show a => Term a -> Flow s Name
 variable term = case stripTerm term of
   TermVariable name -> pure name
   _ -> unexpected "variable" term
+
+variant :: Show a => Name -> Term a -> Flow s (Field a)
+variant = injectionWithName
 
 wrap :: Show a => Name -> Term a -> Flow s (Term a)
 wrap expected term = case stripTerm term of
