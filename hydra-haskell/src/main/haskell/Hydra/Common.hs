@@ -93,12 +93,6 @@ isType typ = case stripType typ of
   TypeVariable _Type -> True
   _ -> False
 
-isUnitTerm :: Eq a => Term a -> Bool
-isUnitTerm t = stripTerm t == TermRecord (Record _UnitType [])
-
-isUnitType :: Eq a => Type a -> Bool
-isUnitType t = stripType t == TypeRecord (RowType _UnitType Nothing [])
-
 localNameOfLazy :: Name -> String
 localNameOfLazy = qualifiedNameLocal . qualifyNameLazy
 

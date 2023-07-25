@@ -1,6 +1,7 @@
 module Hydra.Dsl.Lib.Equality where
 
-import Hydra.Kernel
+import Hydra.Core
+import Hydra.Phantoms
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
 
@@ -37,6 +38,9 @@ equalInt32 = Datum $ Terms.primitive _equality_equalInt32
 equalInt64 :: Datum (Int64 -> Int64 -> Bool)
 equalInt64 = Datum $ Terms.primitive _equality_equalInt64
 
+equalString :: Datum (String -> String -> Bool)
+equalString = Datum $ Terms.primitive _equality_equalString
+
 equalTerm :: Datum (Term a -> Term a -> Bool)
 equalTerm = Datum $ Terms.primitive _equality_equalTerm
 
@@ -54,6 +58,3 @@ equalUint32 = Datum $ Terms.primitive _equality_equalUint32
 
 equalUint64 :: Datum (Integer -> Integer -> Bool)
 equalUint64 = Datum $ Terms.primitive _equality_equalUint64
-
-equalString :: Datum (String -> String -> Bool)
-equalString = Datum $ Terms.primitive _equality_equalString

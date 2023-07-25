@@ -2,7 +2,7 @@
 
 module Hydra.Lib.Equality where
 
-import Hydra.Kernel
+import Hydra.Core
 
 
 equalTerm :: Eq a => Term a -> Term a -> Bool

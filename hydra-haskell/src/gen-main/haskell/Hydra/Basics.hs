@@ -4,6 +4,7 @@ module Hydra.Basics where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Module as Module
@@ -230,8 +231,19 @@ typeVariants = [
   Mantle.TypeVariantUnion,
   Mantle.TypeVariantVariable]
 
+isUnitTerm :: Eq a => (Core.Term a -> Bool)
+isUnitTerm t = (Equality.equalTerm (stripTerm t) (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
+  Core.recordFields = []})))
+
+isUnitType :: Eq a => (Core.Type a -> Bool)
+isUnitType t = (Equality.equalType (stripType t) (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/core.UnitType"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = []})))
+
 skipAnnotations :: ((x -> Maybe (Core.Annotated x a)) -> x -> x)
-skipAnnotations getAnn t =  
+skipAnnotations getAnn t =
   let skip = (\t1 -> (\x -> case x of
           Nothing -> t1
           Just v -> (skip (Core.annotatedSubject v))) (getAnn t1))
@@ -251,7 +263,7 @@ stripType x = (skipAnnotations (\x -> case x of
 
 -- | Convert a qualified name to a dot-separated name
 unqualifyName :: (Module.QualifiedName -> Core.Name)
-unqualifyName qname =  
+unqualifyName qname =
   let prefix = ((\x -> case x of
           Nothing -> ""
           Just v -> (Strings.cat [
