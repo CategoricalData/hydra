@@ -39,12 +39,16 @@ hydraGraphModule = Module ns elements [hydraComputeModule] $
             core "Term" @@ "a" --> compute "Flow" @@ (graph "Graph" @@ "a") @@ optional string,
           "typeDescription">:
             core "Type" @@ "a" --> compute "Flow" @@ (graph "Graph" @@ "a") @@ optional string,
+          "typeClasses">:
+            core"Type" @@ "a" --> compute "Flow" @@ (graph "Graph" @@ "a") @@ (Types.map (core "Name") (set $ graph "TypeClass")),
           "termType">:
             core "Term" @@ "a" --> compute "Flow" @@ (graph "Graph" @@ "a") @@ optional (core "Type" @@ "a"),
           "setTermDescription">:
             optional string --> core "Term" @@ "a" --> core "Term" @@ "a",
           "setTermType">:
             optional (core "Type" @@ "a") --> core "Term" @@ "a" --> core "Term" @@ "a",
+          "setTypeClasses">:
+            (Types.map (core "Name") (set $ graph "TypeClass")) --> core "Type" @@ "a" --> core "Type" @@ "a",
           "typeOf">:
             "a" --> compute "Flow" @@ (graph "Graph" @@ "a") @@ optional (core "Type" @@ "a"),
           "setTypeOf">:
@@ -105,4 +109,10 @@ hydraGraphModule = Module ns elements [hydraComputeModule] $
         doc "A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms" $
         lambda "a" $ lambda "x" $ record [
           "type">: core "Type" @@ "a",
-          "coder">: compute "Coder" @@ (graph "Graph" @@ "a") @@ (graph "Graph" @@ "a") @@ (core "Term" @@ "a") @@ "x"]]
+          "coder">: compute "Coder" @@ (graph "Graph" @@ "a") @@ (graph "Graph" @@ "a") @@ (core "Term" @@ "a") @@ "x"],
+
+      def "TypeClass" $
+        doc "Any of a small number of built-in type classes" $
+        enum [
+          "equality",
+          "ordering"]]
