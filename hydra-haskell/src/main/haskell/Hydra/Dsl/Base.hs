@@ -86,6 +86,9 @@ function dom cod = typed (Types.function dom cod)
 functionN :: [Type Kv] -> Type Kv -> Datum a -> Datum a
 functionN doms cod = typed $ Types.functionN doms cod
 
+functionWithClasses :: Type Kv -> Type Kv -> M.Map Name (S.Set TypeClass) -> Datum a -> Datum a
+functionWithClasses dom cod classes = typed $ setTypeClasses classes (Types.function dom cod)
+
 -- id :: Datum (a -> a)
 -- id = Datum Terms.id
 
