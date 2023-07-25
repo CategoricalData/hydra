@@ -22,6 +22,14 @@ class ToTree a where
 instance ToTree H.Alternative where
   toTree (H.Alternative pat rhs _) = ifx caseOp (toTree pat) (toTree rhs)
 
+instance ToTree H.Assertion where
+  toTree sert = case sert of
+    H.AssertionClass cls -> toTree cls
+    H.AssertionTuple serts -> parenList False (toTree <$> serts)
+
+instance ToTree H.Assertion_Class where
+  toTree (H.Assertion_Class name types) = spaceSep [toTree name, commaSep halfBlockStyle (toTree <$> types)]
+
 instance ToTree H.CaseRhs where
   toTree (H.CaseRhs expr) = toTree expr
 
@@ -202,6 +210,7 @@ instance ToTree H.Statement where
 instance ToTree H.Type where
   toTree htype = case htype of
     H.TypeApplication (H.Type_Application lhs rhs) -> ifx appOp (toTree lhs) (toTree rhs)
+    H.TypeCtx (H.Type_Context ctx typ) -> ifx assertOp (toTree ctx) (toTree typ)
     H.TypeFunction (H.Type_Function dom cod) -> ifx arrowOp (toTree dom) (toTree cod)
 --  H.TypeInfix Type_Infix
     H.TypeList htype -> bracketList inlineStyle [toTree htype]

@@ -4,107 +4,39 @@ import Hydra.Ast
 import Hydra.Tools.Serialization
 
 
-andOp :: Op
-andOp = op "&&" 3 AssociativityRight
-
-apOp :: Op
-apOp = op "<*>" 4 AssociativityLeft
-
-appOp :: Op
-appOp = Op (Symbol "") (Padding WsNone WsSpace) (Precedence 0) AssociativityLeft -- No source
-
-applyOp :: Op
-applyOp = op "$" 0 AssociativityRight
-
-arrowOp :: Op
-arrowOp = op "->" (negate 1) AssociativityRight
-
+andOp = op "&&" 3 AssociativityRight :: Op
+apOp = op "<*>" 4 AssociativityLeft :: Op
+appOp = Op (Symbol "") (Padding WsNone WsSpace) (Precedence 0) AssociativityLeft :: Op -- No source
+applyOp = op "$" 0 AssociativityRight :: Op
+arrowOp = op "->" (negate 1) AssociativityRight :: Op
+assertOp = op "=>" 0 AssociativityNone :: Op -- No source
 --assignOp = op "<-"
-
-bindOp :: Op
-bindOp = op ">>=" 1 AssociativityLeft
-
-caseOp :: Op
-caseOp = op "->" 0 AssociativityNone -- No source
-
-composeOp :: Op
-composeOp = op "." 9 AssociativityLeft
-
-concatOp :: Op
-concatOp = op "++" 5 AssociativityRight
-
-consOp :: Op
-consOp = op ":" 5 AssociativityRight
-
-defineOp :: Op
-defineOp = op "=" 0 AssociativityNone -- No source
-
-diamondOp :: Op
-diamondOp = op "<>" 6 AssociativityRight
-
-divOp :: Op
-divOp = op "`div`" 7 AssociativityLeft
-
-divideOp :: Op
-divideOp = op "/" 7 AssociativityLeft
-
-elemOp :: Op
-elemOp = op "`elem`" 4 AssociativityNone
-
-equalOp :: Op
-equalOp = op "==" 4 AssociativityNone
-
-fmapOp :: Op
-fmapOp = op "<$>" 4 AssociativityLeft
-
-gtOp :: Op
-gtOp = op ">" 4 AssociativityNone
-
-gteOp :: Op
-gteOp = op ">=" 4 AssociativityNone
-
-indexOp :: Op
-indexOp = op "!!" 9 AssociativityLeft
-
-lambdaOp :: Op
-lambdaOp = op "->" (negate 1) AssociativityRight -- No source
-
-ltOp :: Op
-ltOp = op "<" 4 AssociativityNone
-
-lteOp :: Op
-lteOp = op ">=" 4 AssociativityNone
-
-minusOp :: Op
-minusOp = op "-" 6 AssociativityBoth -- Originally: AssociativityLeft
-
-modOp :: Op
-modOp = op "`mod`" 7 AssociativityLeft
-
-multOp :: Op
-multOp = op "*" 7 AssociativityBoth -- Originally: AssociativityLeft
-
-neqOp :: Op
-neqOp = op "/=" 4 AssociativityNone
-
-notElemOp :: Op
-notElemOp = op "`notElem`" 4 AssociativityNone
-
-orOp :: Op
-orOp = op "||" 2 AssociativityRight
-
-plusOp :: Op
-plusOp = op "+" 6 AssociativityBoth -- Originally: AssociativityLeft
-
-quotOp :: Op
-quotOp = op "`quot`" 7 AssociativityLeft
-
-remOp :: Op
-remOp = op "`rem`" 7 AssociativityLeft
-
+bindOp = op ">>=" 1 AssociativityLeft :: Op
+caseOp = op "->" 0 AssociativityNone :: Op -- No source
+composeOp = op "." 9 AssociativityLeft :: Op
+concatOp = op "++" 5 AssociativityRight :: Op
+consOp = op ":" 5 AssociativityRight :: Op
+defineOp = op "=" 0 AssociativityNone :: Op -- No source
+diamondOp = op "<>" 6 AssociativityRight :: Op
+divOp = op "`div`" 7 AssociativityLeft :: Op
+divideOp = op "/" 7 AssociativityLeft :: Op
+elemOp = op "`elem`" 4 AssociativityNone :: Op
+equalOp = op "==" 4 AssociativityNone :: Op
+fmapOp = op "<$>" 4 AssociativityLeft :: Op
+gtOp = op ">" 4 AssociativityNone :: Op
+gteOp = op ">=" 4 AssociativityNone :: Op
+indexOp = op "!!" 9 AssociativityLeft :: Op
+lambdaOp = op "->" (negate 1) AssociativityRight :: Op -- No source
+ltOp = op "<" 4 AssociativityNone :: Op
+lteOp = op ">=" 4 AssociativityNone :: Op
+minusOp = op "-" 6 AssociativityBoth :: Op -- Originally: AssociativityLeft
+modOp = op "`mod`" 7 AssociativityLeft :: Op
+multOp = op "*" 7 AssociativityBoth :: Op -- Originally: AssociativityLeft
+neqOp = op "/=" 4 AssociativityNone :: Op
+notElemOp = op "`notElem`" 4 AssociativityNone :: Op
+orOp = op "||" 2 AssociativityRight :: Op
+plusOp = op "+" 6 AssociativityBoth :: Op -- Originally: AssociativityLeft
+quotOp = op "`quot`" 7 AssociativityLeft :: Op
+remOp = op "`rem`" 7 AssociativityLeft :: Op
 --suchThatOp = op "|"
-
---thenOp = op "=>"
-
-typeOp :: Op
-typeOp = op "::" 0 AssociativityNone -- No source
+typeOp = op "::" 0 AssociativityNone :: Op -- No source
