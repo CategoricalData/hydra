@@ -5,6 +5,7 @@ import Hydra.Sources.Compute
 import Hydra.Sources.Graph
 import Hydra.Sources.Mantle
 import Hydra.Dsl.Base as Base
+import Hydra.Dsl.Lib.Equality
 import qualified Hydra.Dsl.Lib.Maps as Maps
 import qualified Hydra.Dsl.Lib.Lists as Lists
 import qualified Hydra.Dsl.Lib.Literals as Literals
@@ -48,11 +49,16 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
      el typeVariantDef,
      el typeVariantsDef,
      -- Common.hs
+     el isUnitTermDef,
+     el isUnitTypeDef,
      el skipAnnotationsDef,
      el stripTermDef,
      el stripTypeDef,
      el unqualifyNameDef
      ]
+
+termA = Types.apply (TypeVariable _Term) (Types.var "a") :: Type a
+typeA = Types.apply (TypeVariable _Type) (Types.var "a") :: Type a
 
 eliminationVariantDef :: Definition (Elimination a -> EliminationVariant)
 eliminationVariantDef = basicsDefinition "eliminationVariant" $
@@ -300,33 +306,35 @@ typeVariantsDef = basicsDefinition "typeVariants" $
 
 -- Common.hs
 
-{-
-isUnitTerm :: Eq a => Term a -> Bool
-isUnitTerm t = stripTerm t == TermRecord (Record _UnitType [])
+isUnitTermDef :: Definition (Term a -> Bool)
+isUnitTermDef = basicsDefinition "isUnitTerm" $
+  function termA Types.boolean $
+  lambda "t" $ equalTerm @@ (ref stripTermDef @@ var "t") @@ Datum (coreEncodeTerm Terms.unit)
 
-isUnitType :: Eq a => Type a -> Bool
-isUnitType t = stripType t == TypeRecord (RowType _UnitType Nothing [])
+-- isUnitType :: Eq a => Type a -> Bool
+-- isUnitType t = stripType t == TypeRecord (RowType _UnitType Nothing [])
 
-localNameOfLazy :: Name -> String
-localNameOfLazy = qualifiedNameLocal . qualifyNameLazy
+isUnitTypeDef :: Definition (Term a -> Bool)
+isUnitTypeDef = basicsDefinition "isUnitType" $
+  function typeA Types.boolean $
+  lambda "t" $ equalType @@ (ref stripTypeDef @@ var "t") @@ Datum (coreEncodeType Types.unit)
 
-localNameOfEager :: Name -> String
-localNameOfEager = qualifiedNameLocal . qualifyNameEager
+-- localNameOfLazy :: Name -> String
+-- localNameOfLazy = qualifiedNameLocal . qualifyNameLazy
+--
+-- localNameOfEager :: Name -> String
+-- localNameOfEager = qualifiedNameLocal . qualifyNameEager
+--
+-- namespaceOfLazy :: Name -> Maybe Namespace
+-- namespaceOfLazy = qualifiedNameNamespace . qualifyNameLazy
+--
+-- namespaceOfEager :: Name -> Maybe Namespace
+-- namespaceOfEager = qualifiedNameNamespace . qualifyNameEager
+--
+-- placeholderName :: Name
+-- placeholderName = Name "Placeholder"
 
-namespaceOfLazy :: Name -> Maybe Namespace
-namespaceOfLazy = qualifiedNameNamespace . qualifyNameLazy
 
-namespaceOfEager :: Name -> Maybe Namespace
-namespaceOfEager = qualifiedNameNamespace . qualifyNameEager
-
-placeholderName :: Name
-placeholderName = Name "Placeholder"
--}
-
--- isUnitTermDef :: Definition (Term a -> Bool)
--- isUnitTermDef = basicsDefinition "isUnitTerm" $
---   function (Types.apply (TypeVariable _Term) (Types.var "a")) Types.boolean $
---   lambda "t" $
 
 skipAnnotationsDef :: Definition ((a -> Maybe (Annotated a m)) -> a -> a)
 skipAnnotationsDef = basicsDefinition "skipAnnotations" $
@@ -351,8 +359,6 @@ stripTermDef = basicsDefinition "stripTerm" $
     function termA termA $
       lambda "x" (ref skipAnnotationsDef @@ (match _Term (Just Terms.nothing) [
         Field _Term_annotated $ Terms.lambda "ann" (Terms.just $ Terms.var "ann")]) @@ var "x")
-  where
-    termA = Types.apply (TypeVariable _Term) (Types.var "a")
 
 stripTypeDef :: Definition (Type a -> Type a)
 stripTypeDef = basicsDefinition "stripType" $
