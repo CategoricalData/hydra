@@ -233,6 +233,29 @@ encodeType namespaces typ = case stripType typ of
     encode = encodeType namespaces
     wrap name = pure $ H.TypeVariable $ elementReference namespaces name
 
+encodeTypeWithClassAssertions :: Show a => Namespaces -> M.Map Name (S.Set TypeClass) -> Type a -> GraphFlow a H.Type
+encodeTypeWithClassAssertions namespaces classes typ = do
+  htyp <- encodeType namespaces typ
+  if L.null assertPairs
+    then pure htyp
+    else do
+      let encoded = encodeAssertion <$> assertPairs
+      let hassert = if L.length encoded > 1 then L.head encoded else H.AssertionTuple encoded
+      return $ H.TypeCtx $ H.Type_Context hassert htyp
+  where
+    encodeAssertion (name, cls) = H.AssertionClass $ H.Assertion_Class hname [htype]
+      where
+        hname = rawName $ case cls of
+          TypeClassEquality -> "Eq"
+          TypeClassOrdering -> "Ord"
+        htype = H.TypeVariable $ rawName $ unName name -- TODO: sanitization
+
+    assertPairs = L.concat (toPairs <$> M.toList classes)
+      where
+        toPairs (name, cls) = toPair <$> S.toList cls
+          where
+            toPair c = (name, c)
+
 moduleToHaskellModule :: (Ord a, Read a, Show a) => Module a -> GraphFlow a H.Module
 moduleToHaskellModule mod = do
     namespaces <- namespacesForModule mod
@@ -274,13 +297,13 @@ toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term
         where
           toBinding hname' hterm' = H.LocalBindingValue $ simpleValueBinding hname' hterm' Nothing
       _ -> do
+        g <- getState
         hterm <- coderEncode coder term
         let vb = simpleValueBinding hname hterm bindings
+        classes <- annotationClassTypeClasses (graphAnnotations g) typ
         htype <- encodeType namespaces typ
         let decl = H.DeclarationTypedBinding $ H.TypedBinding (H.TypeSignature hname htype) (rewriteValueBinding vb)
-        g <- getState
         comments <- annotationClassTermDescription (graphAnnotations g) term
-
         return $ H.DeclarationWithComments decl comments
 
 toTypeDeclarations :: (Ord a, Read a, Show a)

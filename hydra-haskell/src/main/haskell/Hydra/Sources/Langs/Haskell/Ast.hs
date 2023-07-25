@@ -2,11 +2,12 @@ module Hydra.Sources.Langs.Haskell.Ast where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
+import Hydra.Sources.Core
 import Hydra.Dsl.Types as Types
 
 
 haskellAstModule :: Module Kv
-haskellAstModule = Module ns elements [] $
+haskellAstModule = Module ns elements [hydraCoreModule] $
     Just "A Haskell syntax model, loosely based on Language.Haskell.Tools.AST"
   where
     ns = Namespace "hydra/langs/haskell/ast"
@@ -24,7 +25,12 @@ haskellAstModule = Module ns elements [] $
 
       def "Assertion" $ -- UAssertion (UClassAssert)
         doc "A type assertion" $
+        union [
+          "class">: ast "Assertion.Class",
+          "tuple">: list $ ast "Assertion"],
         -- omitted for now: implicit and infix assertions
+
+      def "Assertion.Class" $ -- UClassAssert
         record [
           "name">: ast "Name",
           "types">: list $ ast "Type"],
@@ -362,10 +368,11 @@ haskellAstModule = Module ns elements [] $
         ast "Expression",
 
       def "Type" $ -- UType
-        -- omitted for now: forall, ctx, unboxed tuple, parallel array, kinded, promoted, splice, quasiquote, bang,
+        -- omitted for now: forall, unboxed tuple, parallel array, kinded, promoted, splice, quasiquote, bang,
         --                  lazy, unpack, nounpack, wildcard, named wildcard, sum
         union [
           "application">: ast "Type.Application",
+          "ctx">: ast "Type.Context",
           "function">: ast "Type.Function",
           "infix">: ast "Type.Infix",
           "list">: ast "Type",
@@ -377,6 +384,11 @@ haskellAstModule = Module ns elements [] $
         record [
           "context">: ast "Type",
           "argument">: ast "Type"],
+
+      def "Type.Context" $
+        record [
+          "ctx">: ast "Assertion", -- UContext
+          "type">: ast "Type"],
 
       def "Type.Function" $
         record [

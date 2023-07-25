@@ -26,16 +26,27 @@ _Alternative_binds = (Core.FieldName "binds")
 
 -- | A type assertion
 data Assertion = 
-  Assertion {
-    assertionName :: Name,
-    assertionTypes :: [Type]}
+  AssertionClass Assertion_Class |
+  AssertionTuple [Assertion]
   deriving (Eq, Ord, Read, Show)
 
 _Assertion = (Core.Name "hydra/langs/haskell/ast.Assertion")
 
-_Assertion_name = (Core.FieldName "name")
+_Assertion_class = (Core.FieldName "class")
 
-_Assertion_types = (Core.FieldName "types")
+_Assertion_tuple = (Core.FieldName "tuple")
+
+data Assertion_Class = 
+  Assertion_Class {
+    assertion_ClassName :: Name,
+    assertion_ClassTypes :: [Type]}
+  deriving (Eq, Ord, Read, Show)
+
+_Assertion_Class = (Core.Name "hydra/langs/haskell/ast.Assertion.Class")
+
+_Assertion_Class_name = (Core.FieldName "name")
+
+_Assertion_Class_types = (Core.FieldName "types")
 
 -- | The right-hand side of a pattern-matching alternative
 newtype CaseRhs = 
@@ -763,6 +774,7 @@ _Statement = (Core.Name "hydra/langs/haskell/ast.Statement")
 
 data Type = 
   TypeApplication Type_Application |
+  TypeCtx Type_Context |
   TypeFunction Type_Function |
   TypeInfix Type_Infix |
   TypeList Type |
@@ -774,6 +786,8 @@ data Type =
 _Type = (Core.Name "hydra/langs/haskell/ast.Type")
 
 _Type_application = (Core.FieldName "application")
+
+_Type_ctx = (Core.FieldName "ctx")
 
 _Type_function = (Core.FieldName "function")
 
@@ -798,6 +812,18 @@ _Type_Application = (Core.Name "hydra/langs/haskell/ast.Type.Application")
 _Type_Application_context = (Core.FieldName "context")
 
 _Type_Application_argument = (Core.FieldName "argument")
+
+data Type_Context = 
+  Type_Context {
+    type_ContextCtx :: Assertion,
+    type_ContextType :: Type}
+  deriving (Eq, Ord, Read, Show)
+
+_Type_Context = (Core.Name "hydra/langs/haskell/ast.Type.Context")
+
+_Type_Context_ctx = (Core.FieldName "ctx")
+
+_Type_Context_type = (Core.FieldName "type")
 
 data Type_Function = 
   Type_Function {
