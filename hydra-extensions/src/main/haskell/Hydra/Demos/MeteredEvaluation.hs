@@ -36,7 +36,7 @@ testModule = Module testNs elements [hydraMantleModule] Nothing
     test local datum = Definition (unqualifyName $ QualifiedName (Just testNs) local) datum
     elements = [
         el $ test "catStrings" (string "foo" ++ string "bar" ++ string "quux" ++ (Literals.showInt32 @@ int32 42)),
-        el $ test "describeType" $ ref describeTypeDef @@ (Datum $ epsilonEncodeType $ Types.list $ Types.int32)]
+        el $ test "describeType" $ ref describeTypeDef @@ (Datum $ coreEncodeType $ Types.list $ Types.int32)]
 
 demoMeteredEvaluation :: IO ()
 demoMeteredEvaluation = do
