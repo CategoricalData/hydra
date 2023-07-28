@@ -47,6 +47,7 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
      el typeVariantsDef,
      -- Common.hs
      el ignoredVariableDef,
+     el isEncodedTypeDef,
      el isUnitTermDef,
      el isUnitTypeDef,
      el skipAnnotationsDef,
@@ -308,6 +309,16 @@ typeVariantsDef = basicsDefinition "typeVariants" $
 ignoredVariableDef :: Definition String
 ignoredVariableDef = basicsDefinition "ignoredVariable" $
   string "_"
+
+isEncodedTypeDef :: Definition (Term a -> Bool)
+isEncodedTypeDef = basicsDefinition "isEncodedType" $
+  function termA Types.boolean $
+  lambda "t" $ (match _Term (Just false) [
+      Field _Term_application $ unDatum $ lambda "a" $
+        ref isEncodedTypeDef @@ (project _Application _Application_function @@ var "a"),
+      Field _Term_union       $ unDatum $ lambda "i" $
+        equalString @@ (string $ unName _Type) @@ (unwrap _Name @@ (project _Injection _Injection_typeName @@ var "i"))
+    ]) @@ (ref stripTermDef @@ var "t")
 
 isUnitTermDef :: Definition (Term a -> Bool)
 isUnitTermDef = basicsDefinition "isUnitTerm" $

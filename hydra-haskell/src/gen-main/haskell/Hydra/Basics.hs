@@ -234,6 +234,12 @@ typeVariants = [
 ignoredVariable :: String
 ignoredVariable = "_"
 
+isEncodedType :: (Core.Term a -> Bool)
+isEncodedType t = ((\x -> case x of
+  Core.TermApplication v -> (isEncodedType (Core.applicationFunction v))
+  Core.TermUnion v -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.injectionTypeName v)))
+  _ -> False) (stripTerm t))
+
 isUnitTerm :: (Eq a) => (Core.Term a -> Bool)
 isUnitTerm t = (Equality.equalTerm (stripTerm t) (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
