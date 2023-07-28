@@ -6,11 +6,6 @@ import Hydra.Sources.Graph
 import Hydra.Sources.Mantle
 import Hydra.Dsl.Base as Base
 import Hydra.Dsl.Lib.Equality
-import qualified Hydra.Dsl.Lib.Maps as Maps
-import qualified Hydra.Dsl.Lib.Lists as Lists
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Math as Math
-import qualified Hydra.Dsl.Lib.Strings as Strings
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
@@ -51,6 +46,7 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
      el typeVariantDef,
      el typeVariantsDef,
      -- Common.hs
+     el ignoredVariableDef,
      el isUnitTermDef,
      el isUnitTypeDef,
      el skipAnnotationsDef,
@@ -309,18 +305,20 @@ typeVariantsDef = basicsDefinition "typeVariants" $
 
 -- Common.hs
 
+ignoredVariableDef :: Definition String
+ignoredVariableDef = basicsDefinition "ignoredVariable" $
+  string "_"
+
 isUnitTermDef :: Definition (Term a -> Bool)
 isUnitTermDef = basicsDefinition "isUnitTerm" $
   functionWithClasses termA Types.boolean eqA $
   lambda "t" $ equalTerm @@ (ref stripTermDef @@ var "t") @@ Datum (coreEncodeTerm Terms.unit)
 
--- isUnitType :: Eq a => Type a -> Bool
--- isUnitType t = stripType t == TypeRecord (RowType _UnitType Nothing [])
-
 isUnitTypeDef :: Definition (Term a -> Bool)
 isUnitTypeDef = basicsDefinition "isUnitType" $
   functionWithClasses typeA Types.boolean eqA $
   lambda "t" $ equalType @@ (ref stripTypeDef @@ var "t") @@ Datum (coreEncodeType Types.unit)
+
 
 -- localNameOfLazy :: Name -> String
 -- localNameOfLazy = qualifiedNameLocal . qualifyNameLazy
@@ -360,14 +358,14 @@ stripTermDef :: Definition (Term a -> Term a)
 stripTermDef = basicsDefinition "stripTerm" $
     doc "Strip all annotations from a term" $
     function termA termA $
-      lambda "x" (ref skipAnnotationsDef @@ (match _Term (Just Terms.nothing) [
+      lambda "x" (ref skipAnnotationsDef @@ (match _Term (Just nothing) [
         Field _Term_annotated $ Terms.lambda "ann" (Terms.just $ Terms.var "ann")]) @@ var "x")
 
 stripTypeDef :: Definition (Type a -> Type a)
 stripTypeDef = basicsDefinition "stripType" $
     doc "Strip all annotations from a type" $
     function typeA typeA $
-      lambda "x" (ref skipAnnotationsDef @@ (match _Type (Just Terms.nothing) [
+      lambda "x" (ref skipAnnotationsDef @@ (match _Type (Just nothing) [
         Field _Type_annotated $ Terms.lambda "ann" (Terms.just $ Terms.var "ann")]) @@ var "x")
   where
     typeA = Types.apply (TypeVariable _Type) (Types.var "a")

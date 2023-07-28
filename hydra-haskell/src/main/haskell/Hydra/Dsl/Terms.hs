@@ -7,6 +7,7 @@ import Hydra.Compute
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Flows
+import Hydra.Basics
 import qualified Hydra.Dsl.Literals as Literals
 
 import Prelude hiding (map)
