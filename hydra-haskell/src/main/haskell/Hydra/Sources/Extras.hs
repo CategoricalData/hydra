@@ -67,7 +67,7 @@ qnameDef = hydraExtrasDefinition "qname" $
 termArityDef :: Definition (Term a -> Int)
 termArityDef = hydraExtrasDefinition "termArity" $
   function (Types.apply (TypeVariable _Term) (Types.var "a")) Types.int32 $
-  match _Term (Just $ Terms.int32 0) [
+  match _Term (Just $ int32 0) [
     Case _Term_application --> (lambda "x" $ Math.sub @@ var "x" @@ int32 1) <.> (ref termArityDef <.> (project _Application _Application_function)),
     Case _Term_function --> ref functionArityDef]
     -- Note: ignoring variables which might resolve to functions
@@ -75,7 +75,7 @@ termArityDef = hydraExtrasDefinition "termArity" $
 typeArityDef :: Definition (Type a -> Int)
 typeArityDef = hydraExtrasDefinition "typeArity" $
   function (Types.apply (TypeVariable _Type) (Types.var "a")) Types.int32 $
-  match _Type (Just $ Terms.int32 0) [
+  match _Type (Just $ int32 0) [
     Case _Type_annotated --> ref typeArityDef <.> (project _Annotated _Annotated_subject),
     Case _Type_application --> ref typeArityDef <.> (project _ApplicationType _ApplicationType_function),
     Case _Type_lambda --> ref typeArityDef <.> (project _LambdaType _LambdaType_body),

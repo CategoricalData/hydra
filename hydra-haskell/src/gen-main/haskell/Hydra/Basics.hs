@@ -231,6 +231,9 @@ typeVariants = [
   Mantle.TypeVariantUnion,
   Mantle.TypeVariantVariable]
 
+ignoredVariable :: String
+ignoredVariable = "_"
+
 isUnitTerm :: (Eq a) => (Core.Term a -> Bool)
 isUnitTerm t = (Equality.equalTerm (stripTerm t) (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
