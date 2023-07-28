@@ -541,6 +541,41 @@ public interface Basics {
     new hydra.mantle.TypeVariant.Union(),
     new hydra.mantle.TypeVariant.Variable());
   
+  String ignoredVariable = "_";
+  
+  static <A> Boolean isEncodedType(hydra.core.Term<A> t) {
+    return (hydra.basics.Basics.stripTerm((t))).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public Boolean otherwise(hydra.core.Term<A> instance) {
+        return false;
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Term.Application<A> instance) {
+        return hydra.basics.Basics.isEncodedType(((instance.value)).function);
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Term.Union<A> instance) {
+        return hydra.lib.equality.EqualString.apply(
+          "hydra/core.Type",
+          (((instance.value)).typeName).value);
+      }
+    });
+  }
+  
+  static <A> Boolean isUnitTerm(hydra.core.Term<A> t) {
+    return hydra.lib.equality.EqualTerm.apply(
+      hydra.basics.Basics.stripTerm((t)),
+      new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.UnitType"), java.util.Arrays.asList())));
+  }
+  
+  static <A> Boolean isUnitType(hydra.core.Type<A> t) {
+    return hydra.lib.equality.EqualType.apply(
+      hydra.basics.Basics.stripType((t)),
+      new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra/core.UnitType"), java.util.Optional.empty(), java.util.Arrays.asList())));
+  }
+  
   static <A, X> java.util.function.Function<X, X> skipAnnotations(java.util.function.Function<X, java.util.Optional<hydra.core.Annotated<X, A>>> getAnn) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<X, X>> skip = new java.util.concurrent.atomic.AtomicReference<>();
     skip.set((java.util.function.Function<X, X>) (t1 -> ((((getAnn)).apply((t1))).map((java.util.function.Function<hydra.core.Annotated<X, A>, X>) (ann -> (skip.get()).apply(((ann)).subject)))).orElse((t1))));
