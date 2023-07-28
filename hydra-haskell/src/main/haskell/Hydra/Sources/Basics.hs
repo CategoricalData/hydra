@@ -314,9 +314,9 @@ isEncodedTypeDef :: Definition (Term a -> Bool)
 isEncodedTypeDef = basicsDefinition "isEncodedType" $
   function termA Types.boolean $
   lambda "t" $ (match _Term (Just false) [
-      Field _Term_application $ unDatum $ lambda "a" $
+      Case _Term_application --> lambda "a" $
         ref isEncodedTypeDef @@ (project _Application _Application_function @@ var "a"),
-      Field _Term_union       $ unDatum $ lambda "i" $
+      Case _Term_union       --> lambda "i" $
         equalString @@ (string $ unName _Type) @@ (unwrap _Name @@ (project _Injection _Injection_typeName @@ var "i"))
     ]) @@ (ref stripTermDef @@ var "t")
 
@@ -370,14 +370,14 @@ stripTermDef = basicsDefinition "stripTerm" $
     doc "Strip all annotations from a term" $
     function termA termA $
       lambda "x" (ref skipAnnotationsDef @@ (match _Term (Just nothing) [
-        Field _Term_annotated $ Terms.lambda "ann" (Terms.just $ Terms.var "ann")]) @@ var "x")
+        Case _Term_annotated --> lambda "ann" (just $ var "ann")]) @@ var "x")
 
 stripTypeDef :: Definition (Type a -> Type a)
 stripTypeDef = basicsDefinition "stripType" $
     doc "Strip all annotations from a type" $
     function typeA typeA $
       lambda "x" (ref skipAnnotationsDef @@ (match _Type (Just nothing) [
-        Field _Type_annotated $ Terms.lambda "ann" (Terms.just $ Terms.var "ann")]) @@ var "x")
+        Case _Type_annotated --> lambda "ann" (just $ var "ann")]) @@ var "x")
   where
     typeA = Types.apply (TypeVariable _Type) (Types.var "a")
 
