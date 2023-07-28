@@ -48,6 +48,10 @@ public interface Flows {
         return Flows.bind(p1, x -> Flows.bind(p2, y -> k.apply(x, y)));
     }
 
+    static <S, X, Y, Z> Function<X, Flow<S, Z>> compose(Function<X, Flow<S, Y>> f, Function<Y, Flow<S, Z>> g) {
+        return x -> Flows.bind(f.apply(x), g);
+    }
+
     static <S, X> Flow<S, X> fail(String msg) {
         return new Flow<>(s -> trace -> {
             String errMsg = "Error: " + msg; // TODO: include stack trace
