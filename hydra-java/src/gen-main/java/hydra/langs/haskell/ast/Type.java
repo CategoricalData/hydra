@@ -12,6 +12,8 @@ public abstract class Type {
   public interface Visitor<R> {
     R visit(Application instance) ;
     
+    R visit(Ctx instance) ;
+    
     R visit(Function instance) ;
     
     R visit(Infix instance) ;
@@ -31,6 +33,10 @@ public abstract class Type {
     }
     
     default R visit(Application instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Ctx instance) {
       return otherwise((instance));
     }
     
@@ -72,6 +78,33 @@ public abstract class Type {
         return false;
       }
       Application o = (Application) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Ctx extends hydra.langs.haskell.ast.Type {
+    public final hydra.langs.haskell.ast.Type_Context value;
+    
+    public Ctx (hydra.langs.haskell.ast.Type_Context value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Ctx)) {
+        return false;
+      }
+      Ctx o = (Ctx) (other);
       return value.equals(o.value);
     }
     

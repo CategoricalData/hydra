@@ -3,37 +3,86 @@ package hydra.langs.haskell.ast;
 /**
  * A type assertion
  */
-public class Assertion {
+public abstract class Assertion {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Assertion");
   
-  public final hydra.langs.haskell.ast.Name name;
+  private Assertion () {
   
-  public final java.util.List<hydra.langs.haskell.ast.Type> types;
-  
-  public Assertion (hydra.langs.haskell.ast.Name name, java.util.List<hydra.langs.haskell.ast.Type> types) {
-    this.name = name;
-    this.types = types;
   }
   
-  @Override
-  public boolean equals(Object other) {
-    if (!(other instanceof Assertion)) {
-      return false;
+  public abstract <R> R accept(Visitor<R> visitor) ;
+  
+  public interface Visitor<R> {
+    R visit(Class_ instance) ;
+    
+    R visit(Tuple instance) ;
+  }
+  
+  public interface PartialVisitor<R> extends Visitor<R> {
+    default R otherwise(Assertion instance) {
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
-    Assertion o = (Assertion) (other);
-    return name.equals(o.name) && types.equals(o.types);
+    
+    default R visit(Class_ instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Tuple instance) {
+      return otherwise((instance));
+    }
   }
   
-  @Override
-  public int hashCode() {
-    return 2 * name.hashCode() + 3 * types.hashCode();
+  public static final class Class_ extends hydra.langs.haskell.ast.Assertion {
+    public final hydra.langs.haskell.ast.Assertion_Class value;
+    
+    public Class_ (hydra.langs.haskell.ast.Assertion_Class value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Class_)) {
+        return false;
+      }
+      Class_ o = (Class_) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
   }
   
-  public Assertion withName(hydra.langs.haskell.ast.Name name) {
-    return new Assertion(name, types);
-  }
-  
-  public Assertion withTypes(java.util.List<hydra.langs.haskell.ast.Type> types) {
-    return new Assertion(name, types);
+  public static final class Tuple extends hydra.langs.haskell.ast.Assertion {
+    public final java.util.List<hydra.langs.haskell.ast.Assertion> value;
+    
+    public Tuple (java.util.List<hydra.langs.haskell.ast.Assertion> value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Tuple)) {
+        return false;
+      }
+      Tuple o = (Tuple) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
   }
 }
