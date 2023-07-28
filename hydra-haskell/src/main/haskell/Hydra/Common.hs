@@ -77,12 +77,6 @@ namespaceToFilePath caps (FileExtension ext) (Namespace name) = L.intercalate "/
   where
     parts = (if caps then capitalize else id) <$> Strings.splitOn "/" name
 
-isEncodedType :: Term a -> Bool
-isEncodedType t = case stripTerm t of
-  TermApplication (Application lhs _) -> isEncodedType lhs
-  TermUnion (Injection _Type _) -> True
-  _ -> False
-
 isType :: Eq a => Type a -> Bool
 isType typ = case stripType typ of
   TypeApplication (ApplicationType lhs _) -> isType lhs

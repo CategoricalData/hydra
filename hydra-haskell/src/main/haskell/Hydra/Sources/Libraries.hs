@@ -213,23 +213,23 @@ _strings_toUpper = qname _hydra_lib_strings "toUpper"
 
 hydraLibEqualityPrimitives :: (Ord a, Show a) => [Primitive a]
 hydraLibEqualityPrimitives = [
-  prim2 _equality_equalBinary binary binary boolean Literals.equalBinary,
-  prim2 _equality_equalBoolean boolean boolean boolean Literals.equalBoolean,
-  prim2 _equality_equalBigfloat bigfloat bigfloat boolean Literals.equalBigfloat,
-  prim2 _equality_equalFloat32 float32 float32 boolean Literals.equalFloat32,
-  prim2 _equality_equalFloat64 float64 float64 boolean Literals.equalFloat64,
-  prim2 _equality_equalBigint bigint bigint boolean Literals.equalBigint,
-  prim2 _equality_equalInt8 int8 int8 boolean Literals.equalInt8,
-  prim2 _equality_equalInt16 int16 int16 boolean Literals.equalInt16,
-  prim2 _equality_equalInt32 int32 int32 boolean Literals.equalInt32,
-  prim2 _equality_equalInt64 int64 int64 boolean Literals.equalInt64,
+  prim2 _equality_equalBinary binary binary boolean Equality.equalBinary,
+  prim2 _equality_equalBoolean boolean boolean boolean Equality.equalBoolean,
+  prim2 _equality_equalBigfloat bigfloat bigfloat boolean Equality.equalBigfloat,
+  prim2 _equality_equalFloat32 float32 float32 boolean Equality.equalFloat32,
+  prim2 _equality_equalFloat64 float64 float64 boolean Equality.equalFloat64,
+  prim2 _equality_equalBigint bigint bigint boolean Equality.equalBigint,
+  prim2 _equality_equalInt8 int8 int8 boolean Equality.equalInt8,
+  prim2 _equality_equalInt16 int16 int16 boolean Equality.equalInt16,
+  prim2 _equality_equalInt32 int32 int32 boolean Equality.equalInt32,
+  prim2 _equality_equalInt64 int64 int64 boolean Equality.equalInt64,
   prim2 _equality_equalTerm term term boolean Equality.equalTerm,
   prim2 _equality_equalType type_ type_ boolean Equality.equalType,
-  prim2 _equality_equalUint8 uint8 uint8 boolean Literals.equalUint8,
-  prim2 _equality_equalUint16 uint16 uint16 boolean Literals.equalUint16,
-  prim2 _equality_equalUint32 uint32 uint32 boolean Literals.equalUint32,
-  prim2 _equality_equalUint64 uint64 uint64 boolean Literals.equalUint64,
-  prim2 _equality_equalString string string boolean Literals.equalString]
+  prim2 _equality_equalUint8 uint8 uint8 boolean Equality.equalUint8,
+  prim2 _equality_equalUint16 uint16 uint16 boolean Equality.equalUint16,
+  prim2 _equality_equalUint32 uint32 uint32 boolean Equality.equalUint32,
+  prim2 _equality_equalUint64 uint64 uint64 boolean Equality.equalUint64,
+  prim2 _equality_equalString string string boolean Equality.equalString]
 
 hydraLibFlowsPrimitives :: (Ord a, Show a) => [Primitive a]
 hydraLibFlowsPrimitives = [
