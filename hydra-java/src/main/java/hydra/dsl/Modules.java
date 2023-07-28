@@ -1,17 +1,15 @@
 package hydra.dsl;
 
 import hydra.basics.Basics;
-import hydra.core.FieldType;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
 import hydra.graph.Element;
-import hydra.module.Namespace;
 import hydra.module.Module;
+import hydra.module.Namespace;
 import hydra.module.QualifiedName;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Optional;
+
 import static hydra.coreEncoding.CoreEncoding.*;
 
 
@@ -29,15 +27,19 @@ public class Modules {
     return new Element<>(name, coreEncodeType(type));
   }
 
-  public static <A> Module<A> emptyModule(String ns, String description, Module<A>... dependencies) {
-    return new Module<>(new Namespace(ns), Collections.emptyList(), Arrays.asList(dependencies), Optional.of(description));
+  public static <A> ModuleBuilder<A> module(Namespace namespace) {
+    return new ModuleBuilder<>(namespace);
+  }
+
+  public static <A> ModuleBuilder<A> module(Namespace namespace, String description) {
+    return new ModuleBuilder<>(namespace, description);
   }
 
   public static <A> Name qname(Module<A> module, String localName) {
-    return Basics.unqualifyName(new QualifiedName(Optional.of(module.namespace), localName));
+    return qname(module.namespace, localName);
   }
-  public static <A> Element<A> recordElement(Module<A> module, String localName, FieldType<A>... fields) {
-    Name name = qname(module, localName);
-    return element(name, Types.record(name, fields));
+
+  public static Name qname(Namespace ns, String localName) {
+    return Basics.unqualifyName(new QualifiedName(Optional.of(ns), localName));
   }
 }
