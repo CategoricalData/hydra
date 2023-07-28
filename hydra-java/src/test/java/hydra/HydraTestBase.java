@@ -41,7 +41,7 @@ public class HydraTestBase {
     }
 
     protected static <S, V1, V2> void assertRoundTripIsNoop(Coder<S, S, V1, V2> coder, S initialState, V1 initialValue) {
-        assertSucceedsWith(roundTrip(coder, initialValue), initialState, initialValue);
+        assertSucceedsWith(initialValue, roundTrip(coder, initialValue), initialState);
     }
 
     protected static <S, V1, V2> void assertRoundTripFails(Coder<Void, Void, V1, V2> coder, V1 initialValue) {
@@ -52,11 +52,11 @@ public class HydraTestBase {
         assertFails(roundTrip(coder, initialValue), initialState);
     }
 
-    protected static <X> void assertSucceedsWith(Flow<Void, X> flow, X expected) {
-        assertSucceedsWith(flow, null, expected);
+    protected static <X> void assertSucceedsWith(X expected, Flow<Void, X> flow) {
+        assertSucceedsWith(expected, flow, null);
     }
 
-    protected static <S, X> void assertSucceedsWith(Flow<S, X> flow, S initialState, X expected) {
+    protected static <S, X> void assertSucceedsWith(X expected, Flow<S, X> flow, S initialState) {
         FlowState<S, X> result = flow.value.apply(initialState).apply(EMPTY_TRACE);
         assertTrue(result.value.isPresent());
         assertEquals(expected, result.value.get());
