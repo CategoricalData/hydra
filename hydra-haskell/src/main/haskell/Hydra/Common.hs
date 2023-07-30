@@ -77,14 +77,6 @@ namespaceToFilePath caps (FileExtension ext) (Namespace name) = L.intercalate "/
   where
     parts = (if caps then capitalize else id) <$> Strings.splitOn "/" name
 
-isType :: Eq a => Type a -> Bool
-isType typ = case stripType typ of
-  TypeApplication (ApplicationType lhs _) -> isType lhs
-  TypeLambda (LambdaType _ body) -> isType body
-  TypeUnion (RowType _Type _ _) -> True
-  TypeVariable _Type -> True
-  _ -> False
-
 localNameOfLazy :: Name -> String
 localNameOfLazy = qualifiedNameLocal . qualifyNameLazy
 
@@ -96,9 +88,6 @@ namespaceOfLazy = qualifiedNameNamespace . qualifyNameLazy
 
 namespaceOfEager :: Name -> Maybe Namespace
 namespaceOfEager = qualifiedNameNamespace . qualifyNameEager
-
-placeholderName :: Name
-placeholderName = Name "Placeholder"
 
 -- | Splits a Name on the last "." into a namespace and a local part
 qualifyNameLazy :: Name -> QualifiedName

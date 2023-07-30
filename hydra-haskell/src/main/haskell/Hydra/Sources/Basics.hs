@@ -48,8 +48,10 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
      -- Common.hs
      el ignoredVariableDef,
      el isEncodedTypeDef,
+     el isTypeDef,
      el isUnitTermDef,
      el isUnitTypeDef,
+     el placeholderNameDef,
      el skipAnnotationsDef,
      el stripTermDef,
      el stripTypeDef,
@@ -320,6 +322,19 @@ isEncodedTypeDef = basicsDefinition "isEncodedType" $
         equalString @@ (string $ unName _Type) @@ (unwrap _Name @@ (project _Injection _Injection_typeName @@ var "i"))
     ]) @@ (ref stripTermDef @@ var "t")
 
+isTypeDef :: Definition (Type a -> Bool)
+isTypeDef = basicsDefinition "isType" $
+  functionWithClasses typeA Types.boolean eqA $
+  lambda "t" $ (match _Type (Just false) [
+      Case _Type_application --> lambda "a" $
+        ref isTypeDef @@ (project _ApplicationType _ApplicationType_function @@ var "a"),
+      Case _Type_lambda --> lambda "l" $
+        ref isTypeDef @@ (project _LambdaType _LambdaType_body @@ var "l"),
+      Case _Type_union --> lambda "rt" $
+        equalString @@ (string $ unName _Type) @@ (unwrap _Name @@ (project _RowType _RowType_typeName @@ var "rt")),
+      Case _Type_variable --> constant true
+    ]) @@ (ref stripTypeDef @@ var "t")
+
 isUnitTermDef :: Definition (Term a -> Bool)
 isUnitTermDef = basicsDefinition "isUnitTerm" $
   functionWithClasses termA Types.boolean eqA $
@@ -342,11 +357,11 @@ isUnitTypeDef = basicsDefinition "isUnitType" $
 --
 -- namespaceOfEager :: Name -> Maybe Namespace
 -- namespaceOfEager = qualifiedNameNamespace . qualifyNameEager
---
--- placeholderName :: Name
--- placeholderName = Name "Placeholder"
 
-
+placeholderNameDef :: Definition Name
+placeholderNameDef = basicsDefinition "placeholderName" $
+  doc "A placeholder name for row types as they are being constructed" $
+  wrap _Name $ string "Placeholder"
 
 skipAnnotationsDef :: Definition ((a -> Maybe (Annotated a m)) -> a -> a)
 skipAnnotationsDef = basicsDefinition "skipAnnotations" $
