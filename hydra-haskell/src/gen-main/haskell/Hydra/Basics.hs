@@ -240,6 +240,14 @@ isEncodedType t = ((\x -> case x of
   Core.TermUnion v -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.injectionTypeName v)))
   _ -> False) (stripTerm t))
 
+isType :: (Eq a) => (Core.Type a -> Bool)
+isType t = ((\x -> case x of
+  Core.TypeApplication v -> (isType (Core.applicationTypeFunction v))
+  Core.TypeLambda v -> (isType (Core.lambdaTypeBody v))
+  Core.TypeUnion v -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.rowTypeTypeName v)))
+  Core.TypeVariable _ -> True
+  _ -> False) (stripType t))
+
 isUnitTerm :: (Eq a) => (Core.Term a -> Bool)
 isUnitTerm t = (Equality.equalTerm (stripTerm t) (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
@@ -250,6 +258,10 @@ isUnitType t = (Equality.equalType (stripType t) (Core.TypeRecord (Core.RowType 
   Core.rowTypeTypeName = (Core.Name "hydra/core.UnitType"),
   Core.rowTypeExtends = Nothing,
   Core.rowTypeFields = []})))
+
+-- | A placeholder name for row types as they are being constructed
+placeholderName :: Core.Name
+placeholderName = (Core.Name "Placeholder")
 
 skipAnnotations :: ((x -> Maybe (Core.Annotated x a)) -> x -> x)
 skipAnnotations getAnn t =  

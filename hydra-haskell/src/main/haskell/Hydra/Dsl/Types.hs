@@ -2,6 +2,7 @@
 
 module Hydra.Dsl.Types where
 
+import Hydra.Basics
 import Hydra.Common
 import Hydra.Core
 import Hydra.Lexical
