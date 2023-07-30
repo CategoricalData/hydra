@@ -23,5 +23,5 @@ last = Datum $ Terms.primitive _lists_last
 length :: Datum ([a] -> Int)
 length = Datum $ Terms.primitive _lists_length
 
---map :: Datum ((a -> b) -> [a] -> [b])
---map = Datum $ Terms.primitive _lists_map
+map :: Datum ((a -> b) -> [a] -> [b])
+map = Datum $ Terms.primitive _lists_map
