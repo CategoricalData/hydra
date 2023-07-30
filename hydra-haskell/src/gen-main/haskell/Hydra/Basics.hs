@@ -5,6 +5,7 @@ module Hydra.Basics where
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Equality as Equality
+import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Module as Module
@@ -230,6 +231,16 @@ typeVariants = [
   Mantle.TypeVariantSum,
   Mantle.TypeVariantUnion,
   Mantle.TypeVariantVariable]
+
+fieldMap :: ([Core.Field a] -> Map Core.FieldName (Core.Term a))
+fieldMap fields = (Maps.fromList (fmap toPair fields)) 
+  where 
+    toPair = (\f -> (Core.fieldName f, (Core.fieldTerm f)))
+
+fieldTypeMap :: ([Core.FieldType a] -> Map Core.FieldName (Core.Type a))
+fieldTypeMap fields = (Maps.fromList (fmap toPair fields)) 
+  where 
+    toPair = (\f -> (Core.fieldTypeName f, (Core.fieldTypeType f)))
 
 ignoredVariable :: String
 ignoredVariable = "_"

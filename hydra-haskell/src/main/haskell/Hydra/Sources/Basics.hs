@@ -5,7 +5,9 @@ import Hydra.Sources.Compute
 import Hydra.Sources.Graph
 import Hydra.Sources.Mantle
 import Hydra.Dsl.Base as Base
-import Hydra.Dsl.Lib.Equality
+import Hydra.Dsl.Lib.Equality as Equality
+import Hydra.Dsl.Lib.Maps as Maps
+import Hydra.Dsl.Lib.Lists as Lists
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
@@ -46,6 +48,8 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
      el typeVariantDef,
      el typeVariantsDef,
      -- Common.hs
+     el fieldMapDef,
+     el fieldTypeMapDef,
      el ignoredVariableDef,
      el isEncodedTypeDef,
      el isTypeDef,
@@ -59,6 +63,8 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
      ]
 
 eqA = (M.fromList [(Name "a", S.fromList [TypeClassEquality])])
+fieldA = Types.apply (TypeVariable _Field) (Types.var "a") :: Type a
+fieldTypeA = Types.apply (TypeVariable _FieldType) (Types.var "a") :: Type a
 termA = Types.apply (TypeVariable _Term) (Types.var "a") :: Type a
 typeA = Types.apply (TypeVariable _Type) (Types.var "a") :: Type a
 
@@ -307,6 +313,20 @@ typeVariantsDef = basicsDefinition "typeVariants" $
     _TypeVariant_variable]
 
 -- Common.hs
+
+fieldMapDef :: Definition ([Field a] -> M.Map FieldName (Term a))
+fieldMapDef = basicsDefinition "fieldMap" $
+  function (TypeList fieldA) (Types.map (TypeVariable _FieldName) termA) $
+    (lambda "fields" $ fromList @@ (Lists.map @@ var "toPair" @@ var "fields"))
+  `with` [
+    "toPair">: lambda "f" $ pair (project _Field _Field_name @@ var "f", project _Field _Field_term @@ var "f")]
+
+fieldTypeMapDef :: Definition ([FieldType a] -> M.Map FieldName (Type a))
+fieldTypeMapDef = basicsDefinition "fieldTypeMap" $
+  function (TypeList fieldTypeA) (Types.map (TypeVariable _FieldName) typeA) $
+    (lambda "fields" $ fromList @@ (Lists.map @@ var "toPair" @@ var "fields"))
+  `with` [
+    "toPair">: lambda "f" $ pair (project _FieldType _FieldType_name @@ var "f", project _FieldType _FieldType_type @@ var "f")]
 
 ignoredVariableDef :: Definition String
 ignoredVariableDef = basicsDefinition "ignoredVariable" $
