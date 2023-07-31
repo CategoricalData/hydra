@@ -1,0 +1,47 @@
+package hydra.lib.logic;
+
+import hydra.Flows;
+import hydra.compute.Flow;
+import hydra.core.Name;
+import hydra.core.Term;
+import hydra.core.Type;
+import hydra.dsl.Expect;
+import hydra.graph.Graph;
+import hydra.tools.PrimitiveFunction;
+
+import java.util.List;
+import java.util.function.Function;
+
+import static hydra.dsl.Types.boolean_;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.lambda;
+
+
+public class IfElse<A> extends PrimitiveFunction<A> {
+    public Name name() {
+        return new Name("hydra/lib/logic.ifElse");
+    }
+
+    @Override
+    public Type<A> type() {
+        return lambda("a",
+            function("a", "a", function(boolean_(), "a")));
+    }
+
+    @Override
+    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+        return args -> Flows.map(Expect.boolean_(args.get(2)), b -> IfElse.apply(args.get(0), args.get(1), b));
+    }
+
+    public static <X> Function<X, Function<Boolean, X>> apply(X ifBranch) {
+        return elseBranch -> condition -> apply(ifBranch, elseBranch, condition);
+    }
+
+    public static <X> Function<Boolean, X> apply(X ifBranch, X elseBranch) {
+        return condition -> IfElse.apply(ifBranch, elseBranch, condition);
+    }
+
+    public static <X> X apply(X ifBranch, X elseBranch, boolean condition) {
+        return condition ? ifBranch : elseBranch;
+    }
+}
