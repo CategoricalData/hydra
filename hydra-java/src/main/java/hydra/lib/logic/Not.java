@@ -34,7 +34,7 @@ public class Not<A> extends PrimitiveFunction<A> {
                 b1 -> Terms.boolean_(Not.apply(b1)));
     }
 
-    public static Boolean apply(Boolean b1) {
+    public static boolean apply(boolean b1) {
         return !b1;
     }
 }
