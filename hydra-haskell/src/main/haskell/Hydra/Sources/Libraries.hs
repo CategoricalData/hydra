@@ -11,6 +11,7 @@ import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
+import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Optionals as Optionals
@@ -42,65 +43,44 @@ _equality_equalString = qname _hydra_lib_equality "equalString" :: Name
 _hydra_lib_flows :: Namespace
 _hydra_lib_flows = Namespace "hydra/lib/flows"
 
-_flows_apply :: Name
-_flows_apply = qname _hydra_lib_flows "apply"
-
-_flows_bind :: Name
-_flows_bind = qname _hydra_lib_flows "bind"
-
-_flows_map :: Name
-_flows_map = qname _hydra_lib_flows "map"
-
-_flows_pure :: Name
-_flows_pure = qname _hydra_lib_flows "pure"
+_flows_apply = qname _hydra_lib_flows "apply" :: Name
+_flows_bind = qname _hydra_lib_flows "bind" :: Name
+_flows_map = qname _hydra_lib_flows "map" :: Name
+_flows_pure = qname _hydra_lib_flows "pure" :: Name
 
 _hydra_lib_io :: Namespace
 _hydra_lib_io = Namespace "hydra/lib/io"
 
-_io_showTerm :: Name
-_io_showTerm = qname _hydra_lib_io "showTerm"
-
-_io_showType :: Name
-_io_showType = qname _hydra_lib_io "showType"
+_io_showTerm = qname _hydra_lib_io "showTerm" :: Name
+_io_showType = qname _hydra_lib_io "showType" :: Name
 
 _hydra_lib_lists :: Namespace
 _hydra_lib_lists = Namespace "hydra/lib/lists"
 
-_lists_apply :: Name
-_lists_apply = qname _hydra_lib_lists "apply"
-
-_lists_bind :: Name
-_lists_bind = qname _hydra_lib_lists "bind"
-
-_lists_concat :: Name
-_lists_concat = qname _hydra_lib_lists "concat"
-
-_lists_head :: Name
-_lists_head = qname _hydra_lib_lists "head"
-
-_lists_intercalate :: Name
-_lists_intercalate = qname _hydra_lib_lists "intercalate"
-
-_lists_intersperse :: Name
-_lists_intersperse = qname _hydra_lib_lists "intersperse"
-
-_lists_last :: Name
-_lists_last = qname _hydra_lib_lists "last"
-
-_lists_length :: Name
-_lists_length = qname _hydra_lib_lists "length"
-
-_lists_map :: Name
-_lists_map = qname _hydra_lib_lists "map"
-
-_lists_pure :: Name
-_lists_pure = qname _hydra_lib_lists "pure"
+_lists_apply = qname _hydra_lib_lists "apply" :: Name
+_lists_bind = qname _hydra_lib_lists "bind" :: Name
+_lists_concat = qname _hydra_lib_lists "concat" :: Name
+_lists_head = qname _hydra_lib_lists "head" :: Name
+_lists_intercalate = qname _hydra_lib_lists "intercalate" :: Name
+_lists_intersperse = qname _hydra_lib_lists "intersperse" :: Name
+_lists_last = qname _hydra_lib_lists "last" :: Name
+_lists_length = qname _hydra_lib_lists "length" :: Name
+_lists_map = qname _hydra_lib_lists "map" :: Name
+_lists_pure = qname _hydra_lib_lists "pure" :: Name
 
 _hydra_lib_literals :: Namespace
 _hydra_lib_literals = Namespace "hydra/lib/literals"
 
 _literals_showInt32 = qname _hydra_lib_literals "showInt32" :: Name
 _literals_showString = qname _hydra_lib_literals "showString" :: Name
+
+_hydra_lib_logic :: Namespace
+_hydra_lib_logic = Namespace "hydra/lib/logic"
+
+_logic_and = qname _hydra_lib_logic "and" :: Name
+_logic_ifElse = qname _hydra_lib_logic "ifElse" :: Name
+_logic_not = qname _hydra_lib_logic "not" :: Name
+_logic_or = qname _hydra_lib_logic "or" :: Name
 
 _hydra_lib_maps :: Namespace
 _hydra_lib_maps = Namespace "hydra/lib/maps"
@@ -120,92 +100,45 @@ _maps_toList = qname _hydra_lib_maps "toList" :: Name
 _hydra_lib_math :: Namespace
 _hydra_lib_math = Namespace "hydra/lib/math"
 
-_math_add :: Name
-_math_add = qname _hydra_lib_math "add"
-
-_math_div :: Name
-_math_div = qname _hydra_lib_math "div"
-
-_math_mod :: Name
-_math_mod = qname _hydra_lib_math "mod"
-
-_math_mul :: Name
-_math_mul = qname _hydra_lib_math "mul"
-
-_math_neg :: Name
-_math_neg = qname _hydra_lib_math "neg"
-
-_math_rem :: Name
-_math_rem = qname _hydra_lib_math "rem"
-
-_math_sub :: Name
-_math_sub = qname _hydra_lib_math "sub"
+_math_add = qname _hydra_lib_math "add" :: Name
+_math_div = qname _hydra_lib_math "div" :: Name
+_math_mod = qname _hydra_lib_math "mod" :: Name
+_math_mul = qname _hydra_lib_math "mul" :: Name
+_math_neg = qname _hydra_lib_math "neg" :: Name
+_math_rem = qname _hydra_lib_math "rem" :: Name
+_math_sub = qname _hydra_lib_math "sub" :: Name
 
 _hydra_lib_optionals :: Namespace
 _hydra_lib_optionals = Namespace "hydra/lib/optionals"
 
 _optionals_apply :: Name
-_optionals_apply = qname _hydra_lib_optionals "apply"
-
-_optionals_bind :: Name
-_optionals_bind = qname _hydra_lib_optionals "bind"
-
-_optionals_map :: Name
-_optionals_map = qname _hydra_lib_optionals "map"
-
-_optionals_pure :: Name
-_optionals_pure = qname _hydra_lib_optionals "pure"
+_optionals_apply = qname _hydra_lib_optionals "apply" :: Name
+_optionals_bind = qname _hydra_lib_optionals "bind" :: Name
+_optionals_map = qname _hydra_lib_optionals "map" :: Name
+_optionals_pure = qname _hydra_lib_optionals "pure" :: Name
 
 _hydra_lib_sets :: Namespace
 _hydra_lib_sets = Namespace "hydra/lib/sets"
 
-_sets_insert :: Name
-_sets_insert = qname _hydra_lib_sets "add"
-
-_sets_contains :: Name
-_sets_contains = qname _hydra_lib_sets "contains"
-
-_sets_empty :: Name
-_sets_empty = qname _hydra_lib_sets "empty"
-
-_sets_fromList :: Name
-_sets_fromList = qname _hydra_lib_sets "fromList"
-
-_sets_isEmpty :: Name
-_sets_isEmpty = qname _hydra_lib_sets "isEmpty"
-
-_sets_map :: Name
-_sets_map = qname _hydra_lib_sets "map"
-
-_sets_remove :: Name
-_sets_remove = qname _hydra_lib_sets "remove"
-
-_sets_singleton :: Name
-_sets_singleton = qname _hydra_lib_sets "pure"
-
-_sets_size :: Name
-_sets_size = qname _hydra_lib_sets "size"
-
-_sets_toList :: Name
-_sets_toList = qname _hydra_lib_sets "toList"
+_sets_insert = qname _hydra_lib_sets "add" :: Name
+_sets_contains = qname _hydra_lib_sets "contains" :: Name
+_sets_empty = qname _hydra_lib_sets "empty" :: Name
+_sets_fromList = qname _hydra_lib_sets "fromList" :: Name
+_sets_isEmpty = qname _hydra_lib_sets "isEmpty" :: Name
+_sets_map = qname _hydra_lib_sets "map" :: Name
+_sets_remove = qname _hydra_lib_sets "remove" :: Name
+_sets_singleton = qname _hydra_lib_sets "pure" :: Name
+_sets_size = qname _hydra_lib_sets "size" :: Name
+_sets_toList = qname _hydra_lib_sets "toList" :: Name
 
 _hydra_lib_strings :: Namespace
 _hydra_lib_strings = Namespace "hydra/lib/strings"
 
-_strings_cat :: Name
-_strings_cat = qname _hydra_lib_strings "cat"
-
-_strings_length :: Name
-_strings_length = qname _hydra_lib_strings "length"
-
-_strings_splitOn :: Name
-_strings_splitOn = qname _hydra_lib_strings "splitOn"
-
-_strings_toLower :: Name
-_strings_toLower = qname _hydra_lib_strings "toLower"
-
-_strings_toUpper :: Name
-_strings_toUpper = qname _hydra_lib_strings "toUpper"
+_strings_cat = qname _hydra_lib_strings "cat" :: Name
+_strings_length = qname _hydra_lib_strings "length" :: Name
+_strings_splitOn = qname _hydra_lib_strings "splitOn" :: Name
+_strings_toLower = qname _hydra_lib_strings "toLower" :: Name
+_strings_toUpper = qname _hydra_lib_strings "toUpper" :: Name
 
 --hydraIoPrimitives = [
 --  prim1 _io_showTerm (variable "a) string
@@ -262,6 +195,15 @@ hydraLibLiteralsPrimitives :: Show a => [Primitive a]
 hydraLibLiteralsPrimitives = [
   prim1 _literals_showInt32 int32 string Literals.showInt32,
   prim1 _literals_showString string string Literals.showString]
+
+hydraLibLogicPrimitives :: Show a => [Primitive a]
+hydraLibLogicPrimitives = [
+    prim2 _logic_and boolean boolean boolean Logic.and,
+    prim3 _logic_ifElse x x boolean x Logic.ifElse,
+    prim1 _logic_not boolean boolean Logic.not,
+    prim2 _logic_or boolean boolean boolean Logic.or]
+  where
+    x = variable "x"
 
 hydraLibMapsPrimitives :: (Ord a, Show a) => [Primitive a]
 hydraLibMapsPrimitives = [
@@ -336,6 +278,7 @@ standardPrimitives =
   ++ hydraLibFlowsPrimitives
   ++ hydraLibListsPrimitives
   ++ hydraLibLiteralsPrimitives
+  ++ hydraLibLogicPrimitives
   ++ hydraLibMapsPrimitives
   ++ hydraLibMathInt32Primitives
   ++ hydraLibOptionalsPrimitives
