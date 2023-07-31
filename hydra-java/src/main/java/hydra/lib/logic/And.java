@@ -35,11 +35,11 @@ public class And<A> extends PrimitiveFunction<A> {
                 (b1, b2) -> Terms.boolean_(And.apply(b1, b2)));
     }
 
-    public static Function<Boolean, Boolean> apply(Boolean b1) {
+    public static Function<Boolean, Boolean> apply(boolean b1) {
         return b2 -> apply(b1, b2);
     }
 
-    public static Boolean apply(Boolean b1, Boolean b2) {
+    public static boolean apply(boolean b1, boolean b2) {
         return b1 && b2;
     }
 }
