@@ -63,9 +63,9 @@ elementsToGraph parent schema els = parent {graphElements = elementMap, graphSch
         toPair el = (elementName el, el)
 
 namespaceToFilePath :: Bool -> FileExtension -> Namespace -> FilePath
-namespaceToFilePath caps (FileExtension ext) (Namespace name) = L.intercalate "/" parts ++ "." ++ ext
+namespaceToFilePath caps ext name = L.intercalate "/" parts ++ "." ++ unFileExtension ext
   where
-    parts = (if caps then capitalize else id) <$> Strings.splitOn "/" name
+    parts = (if caps then capitalize else id) <$> Strings.splitOn "/" (unNamespace name)
 
 localNameOfLazy :: Name -> String
 localNameOfLazy = qualifiedNameLocal . qualifyNameLazy

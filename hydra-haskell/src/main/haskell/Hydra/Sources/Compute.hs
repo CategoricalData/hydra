@@ -28,6 +28,12 @@ hydraComputeModule = Module ns elements [hydraCoreModule] $
           "target">: var "t2",
           "coder">: compute "Coder" @@ "s1" @@ "s2" @@ "v1" @@ "v2"],
 
+      def "Bicoder" $
+        doc "A two-level encoder and decoder, operating both at a type level and an instance (data) level" $
+        lambda "s1" $ lambda "s2" $ lambda "t1" $ lambda "t2" $ lambda "v1" $ lambda "v2" $ record [
+          "encode">: "t1" --> compute "Adapter" @@ "s1" @@ "s2" @@ "t1" @@ "t2" @@ "v1" @@ "v2",
+          "decode">: "t2" --> compute "Adapter" @@ "s2" @@ "s1" @@ "t2" @@ "t1" @@ "v2" @@ "v1"],
+          
       def "Coder" $
         doc "An encoder and decoder; a bidirectional flow between two types" $
         lambda "s1" $ lambda "s2" $ lambda "v1" $ lambda "v2" $ record [

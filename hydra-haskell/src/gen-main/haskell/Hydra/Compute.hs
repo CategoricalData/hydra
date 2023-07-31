@@ -26,6 +26,18 @@ _Adapter_target = (Core.FieldName "target")
 
 _Adapter_coder = (Core.FieldName "coder")
 
+-- | A two-level encoder and decoder, operating both at a type level and an instance (data) level
+data Bicoder s1 s2 t1 t2 v1 v2 = 
+  Bicoder {
+    bicoderEncode :: (t1 -> Adapter s1 s2 t1 t2 v1 v2),
+    bicoderDecode :: (t2 -> Adapter s2 s1 t2 t1 v2 v1)}
+
+_Bicoder = (Core.Name "hydra/compute.Bicoder")
+
+_Bicoder_encode = (Core.FieldName "encode")
+
+_Bicoder_decode = (Core.FieldName "decode")
+
 -- | An encoder and decoder; a bidirectional flow between two types
 data Coder s1 s2 v1 v2 = 
   Coder {
