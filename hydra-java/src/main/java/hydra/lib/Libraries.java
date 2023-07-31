@@ -148,6 +148,7 @@ public class Libraries {
     private static <A> List<PrimitiveFunction<A>> stringsPrimitives() {
         return Arrays.asList(
                 new hydra.lib.strings.Cat<>(),
+                new hydra.lib.strings.IsEmpty<>(),
                 new hydra.lib.strings.Length<>(),
                 new hydra.lib.strings.SplitOn<>(),
                 new hydra.lib.strings.ToLower<>(),

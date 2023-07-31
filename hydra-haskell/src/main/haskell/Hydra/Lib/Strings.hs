@@ -10,6 +10,9 @@ import qualified Data.List.Split as LS
 cat :: [String] -> String
 cat = L.concat
 
+isEmpty :: String -> Bool
+isEmpty = L.null
+
 length :: String -> Int
 length = L.length
 
