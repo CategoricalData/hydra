@@ -542,14 +542,14 @@ public interface Basics {
     new hydra.mantle.TypeVariant.Variable());
   
   static <A> java.util.Map<hydra.core.FieldName, hydra.core.Term<A>> fieldMap(java.util.List<hydra.core.Field<A>> fields) {
-    java.util.function.Function<hydra.core.Field<A>, hydra.core.Tuple.Tuple2<hydra.core.FieldName, hydra.core.Term<A>>> toPair = (java.util.function.Function<hydra.core.Field<A>, hydra.core.Tuple.Tuple2<hydra.core.FieldName, hydra.core.Term<A>>>) (f -> "Unimplemented term variant: TermVariantProduct");
+    java.util.function.Function<hydra.core.Field<A>, hydra.core.Tuple.Tuple2<hydra.core.FieldName, hydra.core.Term<A>>> toPair = (java.util.function.Function<hydra.core.Field<A>, hydra.core.Tuple.Tuple2<hydra.core.FieldName, hydra.core.Term<A>>>) (f -> new hydra.core.Tuple.Tuple2(((f)).name, ((f)).term));
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
       (toPair),
       (fields)));
   }
   
   static <A> java.util.Map<hydra.core.FieldName, hydra.core.Type<A>> fieldTypeMap(java.util.List<hydra.core.FieldType<A>> fields) {
-    java.util.function.Function<hydra.core.FieldType<A>, hydra.core.Tuple.Tuple2<hydra.core.FieldName, hydra.core.Type<A>>> toPair = (java.util.function.Function<hydra.core.FieldType<A>, hydra.core.Tuple.Tuple2<hydra.core.FieldName, hydra.core.Type<A>>>) (f -> "Unimplemented term variant: TermVariantProduct");
+    java.util.function.Function<hydra.core.FieldType<A>, hydra.core.Tuple.Tuple2<hydra.core.FieldName, hydra.core.Type<A>>> toPair = (java.util.function.Function<hydra.core.FieldType<A>, hydra.core.Tuple.Tuple2<hydra.core.FieldName, hydra.core.Type<A>>>) (f -> new hydra.core.Tuple.Tuple2(((f)).name, ((f)).type));
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
       (toPair),
       (fields)));

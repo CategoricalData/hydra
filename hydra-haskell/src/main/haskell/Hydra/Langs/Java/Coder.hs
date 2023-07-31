@@ -600,10 +600,6 @@ encodeTerm aliases term0 = encodeInternal [] term0
 
         TermLiteral l -> pure $ encodeLiteral l
 
-        TermWrap (Nominal name arg) -> do
-          jarg <- encode arg
-          return $ javaConstructorCall (javaConstructorName (nameToJavaName aliases name) Nothing) [jarg] Nothing
-
         TermOptional mt -> case mt of
           Nothing -> pure $ javaMethodInvocationToJavaExpression $
             methodInvocationStatic (Java.Identifier "java.util.Optional") (Java.Identifier "empty") []
@@ -612,6 +608,11 @@ encodeTerm aliases term0 = encodeInternal [] term0
             return $ javaMethodInvocationToJavaExpression $
               methodInvocationStatic (Java.Identifier "java.util.Optional") (Java.Identifier "of") [expr]
 
+        TermProduct terms -> do
+          jterms <- CM.mapM encode terms
+          let tupleTypeName = "hydra.core.Tuple.Tuple" ++ show (length terms)
+          return $ javaConstructorCall (javaConstructorName (Java.Identifier tupleTypeName) Nothing) jterms Nothing
+          
         TermRecord (Record name fields) -> do
           fieldExprs <- CM.mapM encode (fieldTerm <$> fields)
           let consId = nameToJavaName aliases name
@@ -641,6 +642,10 @@ encodeTerm aliases term0 = encodeInternal [] term0
             -- Note: this criterion happens to work (for identifying static function references,
             -- and using '::' instead of '.'), but it may or may not always work.
             isRef = not (L.head (unName name) == '$')
+
+        TermWrap (Nominal name arg) -> do
+          jarg <- encode arg
+          return $ javaConstructorCall (javaConstructorName (nameToJavaName aliases name) Nothing) [jarg] Nothing
 
         _ -> failAsLiteral $ "Unimplemented term variant: " ++ show (termVariant term)
 
