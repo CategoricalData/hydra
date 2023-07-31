@@ -2,7 +2,7 @@
 
 module Hydra.Dsl.Types where
 
-import Hydra.Basics
+import qualified Hydra.Tier1 as Tier1
 import Hydra.Common
 import Hydra.Core
 import Hydra.Lexical
@@ -107,7 +107,7 @@ product :: [Type a] -> Type a
 product = TypeProduct
 
 record :: [FieldType a] -> Type a
-record fields = TypeRecord $ RowType placeholderName Nothing fields
+record fields = TypeRecord $ RowType Tier1.placeholderName Nothing fields
 
 set :: Type a -> Type a
 set = TypeSet
@@ -131,7 +131,7 @@ uint8 :: Type a
 uint8 = integer IntegerTypeUint8
 
 union :: [FieldType a] -> Type a
-union fields = TypeUnion $ RowType placeholderName Nothing fields
+union fields = TypeUnion $ RowType Tier1.placeholderName Nothing fields
 
 unit :: Type a
 --unit = TypeVariable $ Name "hydra/core.UnitType" -- TODO

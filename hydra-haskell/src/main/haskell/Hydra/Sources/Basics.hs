@@ -8,6 +8,7 @@ import Hydra.Dsl.Base as Base
 import Hydra.Dsl.Lib.Equality as Equality
 import Hydra.Dsl.Lib.Maps as Maps
 import Hydra.Dsl.Lib.Lists as Lists
+import Hydra.Sources.Tier1
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
@@ -22,9 +23,7 @@ basicsDefinition = definitionInModule hydraBasicsModule
 
 hydraBasicsModule :: Module Kv
 hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule, hydraMantleModule, hydraComputeModule] $
-    Just ("Basic functions for working with types and terms. "
-      <> "These functions are not allowed to include references to primitive functions, as the definitions of some "
-      <> "primitive functions in turn depend on them.")
+    Just "A tier-2 module of basic functions for working with types and terms."
   where
    elements = [
      el eliminationVariantDef,
@@ -50,23 +49,10 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
      -- Common.hs
      el fieldMapDef,
      el fieldTypeMapDef,
-     el ignoredVariableDef,
      el isEncodedTypeDef,
      el isTypeDef,
      el isUnitTermDef,
-     el isUnitTypeDef,
-     el placeholderNameDef,
-     el skipAnnotationsDef,
-     el stripTermDef,
-     el stripTypeDef,
-     el unqualifyNameDef
-     ]
-
-eqA = (M.fromList [(Name "a", S.fromList [TypeClassEquality])])
-fieldA = Types.apply (TypeVariable _Field) (Types.var "a") :: Type a
-fieldTypeA = Types.apply (TypeVariable _FieldType) (Types.var "a") :: Type a
-termA = Types.apply (TypeVariable _Term) (Types.var "a") :: Type a
-typeA = Types.apply (TypeVariable _Type) (Types.var "a") :: Type a
+     el isUnitTypeDef]
 
 eliminationVariantDef :: Definition (Elimination a -> EliminationVariant)
 eliminationVariantDef = basicsDefinition "eliminationVariant" $
@@ -328,10 +314,6 @@ fieldTypeMapDef = basicsDefinition "fieldTypeMap" $
   `with` [
     "toPair">: lambda "f" $ pair (project _FieldType _FieldType_name @@ var "f", project _FieldType _FieldType_type @@ var "f")]
 
-ignoredVariableDef :: Definition String
-ignoredVariableDef = basicsDefinition "ignoredVariable" $
-  string "_"
-
 isEncodedTypeDef :: Definition (Term a -> Bool)
 isEncodedTypeDef = basicsDefinition "isEncodedType" $
   function termA Types.boolean $
@@ -364,62 +346,3 @@ isUnitTypeDef :: Definition (Term a -> Bool)
 isUnitTypeDef = basicsDefinition "isUnitType" $
   functionWithClasses typeA Types.boolean eqA $
   lambda "t" $ equalType @@ (ref stripTypeDef @@ var "t") @@ Datum (coreEncodeType Types.unit)
-
-
--- localNameOfLazy :: Name -> String
--- localNameOfLazy = qualifiedNameLocal . qualifyNameLazy
---
--- localNameOfEager :: Name -> String
--- localNameOfEager = qualifiedNameLocal . qualifyNameEager
---
--- namespaceOfLazy :: Name -> Maybe Namespace
--- namespaceOfLazy = qualifiedNameNamespace . qualifyNameLazy
---
--- namespaceOfEager :: Name -> Maybe Namespace
--- namespaceOfEager = qualifiedNameNamespace . qualifyNameEager
-
-placeholderNameDef :: Definition Name
-placeholderNameDef = basicsDefinition "placeholderName" $
-  doc "A placeholder name for row types as they are being constructed" $
-  wrap _Name $ string "Placeholder"
-
-skipAnnotationsDef :: Definition ((a -> Maybe (Annotated a m)) -> a -> a)
-skipAnnotationsDef = basicsDefinition "skipAnnotations" $
-  function getAnnType (Types.function (Types.var "x") (Types.var "x")) $
-  lambda "getAnn" $ lambda "t" $
-    (var "skip" @@ var "t") `with` [
-      "skip">:
-        function (Types.var "x") (Types.var "x") $
-        lambda "t1" $
-          (matchOpt
-            (var "t1")
-            (lambda "ann" $ var "skip" @@ (project _Annotated _Annotated_subject @@ var "ann")))
-          @@ (var "getAnn" @@ var "t1")]
-  where
-    getAnnType = (Types.function
-      (Types.var "x")
-      (Types.optional $ Types.apply (Types.apply (TypeVariable _Annotated) (Types.var "x")) (Types.var "a")))
-
-stripTermDef :: Definition (Term a -> Term a)
-stripTermDef = basicsDefinition "stripTerm" $
-    doc "Strip all annotations from a term" $
-    function termA termA $
-      lambda "x" (ref skipAnnotationsDef @@ (match _Term (Just nothing) [
-        Case _Term_annotated --> lambda "ann" (just $ var "ann")]) @@ var "x")
-
-stripTypeDef :: Definition (Type a -> Type a)
-stripTypeDef = basicsDefinition "stripType" $
-    doc "Strip all annotations from a type" $
-    function typeA typeA $
-      lambda "x" (ref skipAnnotationsDef @@ (match _Type (Just nothing) [
-        Case _Type_annotated --> lambda "ann" (just $ var "ann")]) @@ var "x")
-  where
-    typeA = Types.apply (TypeVariable _Type) (Types.var "a")
-
-unqualifyNameDef :: Definition (QualifiedName -> Name)
-unqualifyNameDef = basicsDefinition "unqualifyName" $
-  doc "Convert a qualified name to a dot-separated name" $
-  lambda "qname" $ (wrap _Name $ var "prefix" ++ (project _QualifiedName _QualifiedName_local @@ var "qname"))
-    `with` [
-      "prefix">: matchOpt (string "") (lambda "n" $ (unwrap _Namespace @@ var "n") ++ string ".")
-        @@ (project _QualifiedName _QualifiedName_namespace @@ var "qname")]

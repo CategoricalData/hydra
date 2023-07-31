@@ -1,14 +1,14 @@
--- | Basic functions for working with types and terms. These functions are not allowed to include references to primitive functions, as the definitions of some primitive functions in turn depend on them.
+-- | A tier-2 module of basic functions for working with types and terms.
 
 module Hydra.Basics where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Equality as Equality
+import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
-import qualified Hydra.Module as Module
+import qualified Hydra.Tier1 as Tier1
 import Data.Int
 import Data.List
 import Data.Map
@@ -233,23 +233,20 @@ typeVariants = [
   Mantle.TypeVariantVariable]
 
 fieldMap :: ([Core.Field a] -> Map Core.FieldName (Core.Term a))
-fieldMap fields = (Maps.fromList (fmap toPair fields)) 
+fieldMap fields = (Maps.fromList (Lists.map toPair fields)) 
   where 
     toPair = (\f -> (Core.fieldName f, (Core.fieldTerm f)))
 
 fieldTypeMap :: ([Core.FieldType a] -> Map Core.FieldName (Core.Type a))
-fieldTypeMap fields = (Maps.fromList (fmap toPair fields)) 
+fieldTypeMap fields = (Maps.fromList (Lists.map toPair fields)) 
   where 
     toPair = (\f -> (Core.fieldTypeName f, (Core.fieldTypeType f)))
-
-ignoredVariable :: String
-ignoredVariable = "_"
 
 isEncodedType :: (Core.Term a -> Bool)
 isEncodedType t = ((\x -> case x of
   Core.TermApplication v -> (isEncodedType (Core.applicationFunction v))
   Core.TermUnion v -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.injectionTypeName v)))
-  _ -> False) (stripTerm t))
+  _ -> False) (Tier1.stripTerm t))
 
 isType :: (Eq a) => (Core.Type a -> Bool)
 isType t = ((\x -> case x of
@@ -257,50 +254,15 @@ isType t = ((\x -> case x of
   Core.TypeLambda v -> (isType (Core.lambdaTypeBody v))
   Core.TypeUnion v -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.rowTypeTypeName v)))
   Core.TypeVariable _ -> True
-  _ -> False) (stripType t))
+  _ -> False) (Tier1.stripType t))
 
 isUnitTerm :: (Eq a) => (Core.Term a -> Bool)
-isUnitTerm t = (Equality.equalTerm (stripTerm t) (Core.TermRecord (Core.Record {
+isUnitTerm t = (Equality.equalTerm (Tier1.stripTerm t) (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
   Core.recordFields = []})))
 
 isUnitType :: (Eq a) => (Core.Type a -> Bool)
-isUnitType t = (Equality.equalType (stripType t) (Core.TypeRecord (Core.RowType {
+isUnitType t = (Equality.equalType (Tier1.stripType t) (Core.TypeRecord (Core.RowType {
   Core.rowTypeTypeName = (Core.Name "hydra/core.UnitType"),
   Core.rowTypeExtends = Nothing,
   Core.rowTypeFields = []})))
-
--- | A placeholder name for row types as they are being constructed
-placeholderName :: Core.Name
-placeholderName = (Core.Name "Placeholder")
-
-skipAnnotations :: ((x -> Maybe (Core.Annotated x a)) -> x -> x)
-skipAnnotations getAnn t =  
-  let skip = (\t1 -> (\x -> case x of
-          Nothing -> t1
-          Just v -> (skip (Core.annotatedSubject v))) (getAnn t1))
-  in (skip t)
-
--- | Strip all annotations from a term
-stripTerm :: (Core.Term a -> Core.Term a)
-stripTerm x = (skipAnnotations (\x -> case x of
-  Core.TermAnnotated v -> (Just v)
-  _ -> Nothing) x)
-
--- | Strip all annotations from a type
-stripType :: (Core.Type a -> Core.Type a)
-stripType x = (skipAnnotations (\x -> case x of
-  Core.TypeAnnotated v -> (Just v)
-  _ -> Nothing) x)
-
--- | Convert a qualified name to a dot-separated name
-unqualifyName :: (Module.QualifiedName -> Core.Name)
-unqualifyName qname =  
-  let prefix = ((\x -> case x of
-          Nothing -> ""
-          Just v -> (Strings.cat [
-            Module.unNamespace v,
-            "."])) (Module.qualifiedNameNamespace qname))
-  in (Core.Name (Strings.cat [
-    prefix,
-    (Module.qualifiedNameLocal qname)]))

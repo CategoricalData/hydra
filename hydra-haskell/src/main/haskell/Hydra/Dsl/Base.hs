@@ -6,7 +6,13 @@ module Hydra.Dsl.Base (
   hydraCore,
 ) where
 
-import Hydra.Kernel
+import Hydra.Core
+import Hydra.Compute
+import Hydra.Graph
+import Hydra.Kv
+import Hydra.Phantoms
+import Hydra.Module
+import qualified Hydra.Tier1 as Tier1
 import Hydra.Dsl.PhantomLiterals
 import Hydra.Sources.Core
 import qualified Hydra.Dsl.Terms as Terms
@@ -69,7 +75,7 @@ constant :: Datum a -> Datum (b -> a)
 constant (Datum term) = Datum $ Terms.constant term
 
 definitionInModule :: Module Kv -> String -> Datum a -> Definition a
-definitionInModule mod lname = Definition $ unqualifyName $ QualifiedName (Just $ moduleNamespace mod) lname
+definitionInModule mod lname = Definition $ Tier1.unqualifyName $ QualifiedName (Just $ moduleNamespace mod) lname
 
 doc :: String -> Datum a -> Datum a
 doc s (Datum term) = Datum $ setTermDescription (Just s) term

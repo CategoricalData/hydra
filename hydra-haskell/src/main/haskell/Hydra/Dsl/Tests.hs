@@ -1,12 +1,11 @@
 module Hydra.Dsl.Tests (
-    module Hydra.Kernel,
     module Hydra.Testing,
     module Hydra.Sources.Libraries,
     module Hydra.Dsl.Terms,
     module Hydra.Dsl.Tests,
 ) where
 
-import Hydra.Kernel
+import Hydra.Core
 import Hydra.Testing
 import Hydra.Sources.Libraries
 import Hydra.Dsl.Terms
