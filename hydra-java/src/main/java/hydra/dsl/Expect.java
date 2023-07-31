@@ -7,6 +7,7 @@ import hydra.core.FloatValue;
 import hydra.core.IntegerValue;
 import hydra.core.Literal;
 import hydra.core.Term;
+import hydra.core.Tuple;
 import hydra.graph.Graph;
 import hydra.tools.PrettyPrinter;
 
@@ -21,6 +22,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 import static hydra.Flows.bind;
+import static hydra.Flows.fail;
 import static hydra.Flows.mapM;
 import static hydra.Flows.pure;
 import static hydra.Flows.unexpected;
@@ -269,6 +271,27 @@ public class Expect {
             public Flow<S, Optional<X>> visit(Term.Optional<A> instance) {
                 return instance.value.isPresent() ? Flows.map(elems.apply(instance.value.get()), Optional::of)
                     : pure(Optional.empty());
+            }
+        });
+    }
+
+    public static <S, A, T1, T2> Flow<S, Tuple.Tuple2<T1, T2>> pair(
+            final Function<Term<A>, Flow<S, T1>> first,
+            final Function<Term<A>, Flow<S, T2>> second,
+            final Term<A> term) {
+        return term.accept(new Term.PartialVisitor<>() {
+            @Override
+            public Flow<S, Tuple.Tuple2<T1, T2>> otherwise(Term<A> instance) {
+                return wrongType("tuple", term);
+            }
+
+            @Override
+            public Flow<S, Tuple.Tuple2<T1, T2>> visit(Term.Product<A> instance) {
+                List<Term<A>> values = instance.value;
+                if (values.size() != 2) {
+                    return fail("Expected a tuple of size 2, but found " + values.size());
+                }
+                return Flows.map2(first.apply(values.get(0)), second.apply(values.get(1)), Tuple.Tuple2::new);
             }
         });
     }
