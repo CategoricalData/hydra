@@ -2,6 +2,8 @@ module Hydra.Langs.Java.Names where
 
 import Hydra.Kernel
 
+import qualified Hydra.Langs.Java.Syntax as Java
+
 
 acceptMethodName = "accept" :: String
 applyMethodName = "apply" :: String
@@ -17,3 +19,18 @@ valueFieldName = "value" :: String
 visitMethodName = "visit" :: String
 visitorName = "Visitor" :: String
 visitorReturnParameter = "R" :: String
+
+javaPackageName :: [String] -> Java.PackageName
+javaPackageName parts = Java.PackageName (Java.Identifier <$> parts)
+
+hydraCorePackageName :: Maybe Java.PackageName
+hydraCorePackageName = Just $ javaPackageName ["hydra", "core"]
+
+javaLangPackageName :: Maybe Java.PackageName
+javaLangPackageName = Just $ javaPackageName ["java", "lang"]
+
+javaUtilFunctionPackageName :: Maybe Java.PackageName
+javaUtilFunctionPackageName = Just $ javaPackageName ["java", "util", "function"]
+
+javaUtilPackageName :: Maybe Java.PackageName
+javaUtilPackageName = Just $ javaPackageName ["java", "util"]

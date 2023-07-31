@@ -2,6 +2,8 @@ package hydra.core;
 
 /**
  * A simple class for tuples (instances of product types) in Java
+ *
+ * Tuples above a length of 9 are currently unsupported. See javaMaxTupleLength.
  */
 public abstract class Tuple {
     /**

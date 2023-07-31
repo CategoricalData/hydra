@@ -669,7 +669,12 @@ encodeType aliases t = case stripType t of
       jkt <- encode kt >>= javaTypeToJavaReferenceType
       jvt <- encode vt >>= javaTypeToJavaReferenceType
       return $ javaRefType [jkt, jvt] javaUtilPackageName "Map"
-    TypeProduct [] -> unit
+    TypeProduct types ->
+      case types of
+        [] -> unit
+        _ -> do
+          jtypes <- CM.mapM encode types >>= mapM javaTypeToJavaReferenceType
+          return $ javaRefType jtypes hydraCorePackageName $ "Tuple.Tuple" ++ (show $ length types)
     TypeRecord (RowType _UnitType _ []) -> unit
     TypeRecord (RowType name _ _) -> pure $
       Java.TypeReference $ nameToJavaReferenceType aliases True (javaTypeArgumentsForType t) name Nothing
