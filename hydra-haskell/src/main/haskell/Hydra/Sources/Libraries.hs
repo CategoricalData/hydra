@@ -135,6 +135,7 @@ _hydra_lib_strings :: Namespace
 _hydra_lib_strings = Namespace "hydra/lib/strings"
 
 _strings_cat = qname _hydra_lib_strings "cat" :: Name
+_strings_isEmpty = qname _hydra_lib_strings "isEmpty" :: Name
 _strings_length = qname _hydra_lib_strings "length" :: Name
 _strings_splitOn = qname _hydra_lib_strings "splitOn" :: Name
 _strings_toLower = qname _hydra_lib_strings "toLower" :: Name
@@ -267,6 +268,7 @@ hydraLibSetsPrimitives = [
 hydraLibStringsPrimitives :: Show a => [Primitive a]
 hydraLibStringsPrimitives = [
   prim1 _strings_cat (list string) string Strings.cat,
+  prim1 _strings_isEmpty string boolean Strings.isEmpty,
   prim1 _strings_length string int32 Strings.length,
   prim2 _strings_splitOn string string (list string) Strings.splitOn,
   prim1 _strings_toLower string string Strings.toLower,
