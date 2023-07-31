@@ -33,6 +33,12 @@ bindRaw args' fun = do
 concat :: [[x]] -> [x]
 concat = L.concat
 
+concat2 :: [x] -> [x] -> [x]
+concat2 l1 l2 = l1 ++ l2
+
+cons :: x -> [x] -> [x]
+cons = (:)
+
 head :: [x] -> x
 head = L.head
 
