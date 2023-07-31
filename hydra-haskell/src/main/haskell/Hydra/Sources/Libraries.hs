@@ -67,6 +67,7 @@ _lists_last = qname _hydra_lib_lists "last" :: Name
 _lists_length = qname _hydra_lib_lists "length" :: Name
 _lists_map = qname _hydra_lib_lists "map" :: Name
 _lists_pure = qname _hydra_lib_lists "pure" :: Name
+_lists_tail = qname _hydra_lib_lists "tail" :: Name
 
 _hydra_lib_literals :: Namespace
 _hydra_lib_literals = Namespace "hydra/lib/literals"
@@ -187,7 +188,8 @@ hydraLibListsPrimitives = [
     prim1 _lists_last (list x) x Lists.last,
     prim1 _lists_length (list x) int32 Lists.length,
     prim2Raw _lists_map (function x y) (list x) (list y) Lists.mapRaw,
-    prim1 _lists_pure x (list x) Lists.pure]
+    prim1 _lists_pure x (list x) Lists.pure,
+    prim1 _lists_tail (list x) (list x) Lists.tail]
   where
     x = variable "x"
     y = variable "y"
