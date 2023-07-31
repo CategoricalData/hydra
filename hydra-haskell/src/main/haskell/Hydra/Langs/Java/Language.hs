@@ -2,57 +2,67 @@ module Hydra.Langs.Java.Language where
 
 import Hydra.Kernel
 
+import qualified Data.List as L
 import qualified Data.Set as S
 
 
+-- Note: if this constant is changed, also change Tuples.java correspondingly
+javaMaxTupleLength = 9 :: Int
+
 javaLanguage :: Language a
 javaLanguage = Language (LanguageName "hydra/langs/java") $ LanguageConstraints {
-  languageConstraintsEliminationVariants = S.fromList eliminationVariants,
-  languageConstraintsLiteralVariants = S.fromList [
-    LiteralVariantBoolean, -- boolean
-    LiteralVariantFloat, -- (see float types)
-    LiteralVariantInteger, -- (see integer types)
-    LiteralVariantString], -- string
-  languageConstraintsFloatTypes = S.fromList [
-    -- Bigfloat (e.g. as Java's BigDecimal) is excluded for now
-    FloatTypeFloat32, -- float
-    FloatTypeFloat64], -- double
-  languageConstraintsFunctionVariants = S.fromList functionVariants,
-  languageConstraintsIntegerTypes = S.fromList [
-    IntegerTypeBigint, -- BigInteger
-    IntegerTypeInt16, -- short
-    IntegerTypeInt32, -- int
-    IntegerTypeInt64, -- long
-    IntegerTypeUint8, -- byte
-    IntegerTypeUint16], -- char
-  languageConstraintsTermVariants = S.fromList [
-    TermVariantApplication,
-    TermVariantFunction,
-    TermVariantLet,
-    TermVariantList,
-    TermVariantLiteral,
-    TermVariantMap,
-    TermVariantOptional,
-    TermVariantRecord,
-    TermVariantSet,
-    TermVariantUnion,
-    TermVariantVariable,
-    TermVariantWrap],
-  languageConstraintsTypeVariants = S.fromList [
-    TypeVariantAnnotated,
-    TypeVariantApplication,
-    TypeVariantFunction,
-    TypeVariantLambda,
-    TypeVariantList,
-    TypeVariantLiteral,
-    TypeVariantMap,
-    TypeVariantOptional,
-    TypeVariantRecord,
-    TypeVariantSet,
-    TypeVariantUnion,
-    TypeVariantVariable,
-    TypeVariantWrap],
-  languageConstraintsTypes = const True }
+    languageConstraintsEliminationVariants = S.fromList eliminationVariants,
+    languageConstraintsLiteralVariants = S.fromList [
+      LiteralVariantBoolean, -- boolean
+      LiteralVariantFloat, -- (see float types)
+      LiteralVariantInteger, -- (see integer types)
+      LiteralVariantString], -- string
+    languageConstraintsFloatTypes = S.fromList [
+      -- Bigfloat (e.g. as Java's BigDecimal) is excluded for now
+      FloatTypeFloat32, -- float
+      FloatTypeFloat64], -- double
+    languageConstraintsFunctionVariants = S.fromList functionVariants,
+    languageConstraintsIntegerTypes = S.fromList [
+      IntegerTypeBigint, -- BigInteger
+      IntegerTypeInt16, -- short
+      IntegerTypeInt32, -- int
+      IntegerTypeInt64, -- long
+      IntegerTypeUint8, -- byte
+      IntegerTypeUint16], -- char
+    languageConstraintsTermVariants = S.fromList [
+      TermVariantApplication,
+      TermVariantFunction,
+      TermVariantLet,
+      TermVariantList,
+      TermVariantLiteral,
+      TermVariantMap,
+      TermVariantOptional,
+      TermVariantProduct,
+      TermVariantRecord,
+      TermVariantSet,
+      TermVariantUnion,
+      TermVariantVariable,
+      TermVariantWrap],
+    languageConstraintsTypeVariants = S.fromList [
+      TypeVariantAnnotated,
+      TypeVariantApplication,
+      TypeVariantFunction,
+      TypeVariantLambda,
+      TypeVariantList,
+      TypeVariantLiteral,
+      TypeVariantMap,
+      TypeVariantOptional,
+      TypeVariantProduct,
+      TypeVariantRecord,
+      TypeVariantSet,
+      TypeVariantUnion,
+      TypeVariantVariable,
+      TypeVariantWrap],
+    languageConstraintsTypes = isSupportedType }
+  where
+    isSupportedType typ = case typ of
+      TypeProduct types -> L.length types <= javaMaxTupleLength
+      _ -> True
 
 reservedWords :: S.Set String
 reservedWords = S.fromList $ specialNames ++ classNames ++ keywords ++ literals

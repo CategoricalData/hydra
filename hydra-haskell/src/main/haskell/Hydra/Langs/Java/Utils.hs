@@ -54,12 +54,6 @@ fieldNameToJavaVariableDeclaratorId (FieldName n) = javaVariableDeclaratorId $ j
 
 importAliasesForModule :: Module a -> Aliases
 importAliasesForModule mod = Aliases (moduleNamespace mod) M.empty S.empty
--- importAliasesForModule mod = Aliases (moduleNamespace mod) pkgs S.empty
---   where
---     pkgs = addName (L.foldl addName M.empty $ S.toList deps) $ moduleNamespace mod
---     deps = moduleDependencyNamespaces True True True False mod
---     addName m name = M.insert name (moduleNamespaceToPackageName name) m
---     moduleNamespaceToPackageName (Namespace n) = javaPackageName $ Strings.splitOn "/" n
 
 interfaceMethodDeclaration :: [Java.InterfaceMethodModifier] -> [Java.TypeParameter] -> String -> [Java.FormalParameter]
    -> Java.Result -> Maybe [Java.BlockStatement] -> Java.InterfaceMemberDeclaration
@@ -192,9 +186,6 @@ javaLambda var jbody = Java.ExpressionLambda $ Java.LambdaExpression params (Jav
   where
     params = Java.LambdaParametersSingle $ variableToJavaIdentifier var
 
-javaLangPackageName :: Maybe Java.PackageName
-javaLangPackageName = Just $ javaPackageName ["java", "lang"]
-
 javaLiteralToJavaExpression = javaRelationalExpressionToJavaExpression .
   javaMultiplicativeExpressionToJavaRelationalExpression .
   javaLiteralToJavaMultiplicativeExpression
@@ -242,9 +233,6 @@ javaMultiplicativeExpressionToJavaRelationalExpression = Java.RelationalExpressi
 
 javaPackageDeclaration :: Namespace -> Java.PackageDeclaration
 javaPackageDeclaration (Namespace name) = Java.PackageDeclaration [] (Java.Identifier <$> Strings.splitOn "/" name)
-
-javaPackageName :: [String] -> Java.PackageName
-javaPackageName parts = Java.PackageName (Java.Identifier <$> parts)
 
 javaPostfixExpressionToJavaEqualityExpression :: Java.PostfixExpression -> Java.EqualityExpression
 javaPostfixExpressionToJavaEqualityExpression = Java.EqualityExpressionUnary .
@@ -354,12 +342,6 @@ javaUnaryExpressionToJavaExpression = javaRelationalExpressionToJavaExpression .
 javaUnaryExpressionToJavaRelationalExpression :: Java.UnaryExpression -> Java.RelationalExpression
 javaUnaryExpressionToJavaRelationalExpression = javaMultiplicativeExpressionToJavaRelationalExpression .
   Java.MultiplicativeExpressionUnary
-
-javaUtilFunctionPackageName :: Maybe Java.PackageName
-javaUtilFunctionPackageName = Just $ javaPackageName ["java", "util", "function"]
-
-javaUtilPackageName :: Maybe Java.PackageName
-javaUtilPackageName = Just $ javaPackageName ["java", "util"]
 
 javaVariableDeclarator :: Java.Identifier -> Y.Maybe Java.VariableInitializer -> Java.VariableDeclarator
 javaVariableDeclarator id = Java.VariableDeclarator (javaVariableDeclaratorId id)

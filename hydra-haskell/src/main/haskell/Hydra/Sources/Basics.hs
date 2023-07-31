@@ -1,9 +1,7 @@
 module Hydra.Sources.Basics where
 
 import Hydra.Kernel
-import Hydra.Sources.Compute
-import Hydra.Sources.Graph
-import Hydra.Sources.Mantle
+import Hydra.Sources.Tier1
 import Hydra.Dsl.Base as Base
 import Hydra.Dsl.Lib.Equality as Equality
 import Hydra.Dsl.Lib.Maps as Maps
@@ -22,7 +20,7 @@ basicsDefinition :: String -> Datum a -> Definition a
 basicsDefinition = definitionInModule hydraBasicsModule
 
 hydraBasicsModule :: Module Kv
-hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule, hydraMantleModule, hydraComputeModule] $
+hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraTier1Module] $
     Just "A tier-2 module of basic functions for working with types and terms."
   where
    elements = [
