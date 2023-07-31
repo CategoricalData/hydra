@@ -149,9 +149,11 @@ public class Libraries {
     private static <A> List<PrimitiveFunction<A>> stringsPrimitives() {
         return Arrays.asList(
                 new hydra.lib.strings.Cat<>(),
+                new hydra.lib.strings.FromList<>(),
                 new hydra.lib.strings.IsEmpty<>(),
                 new hydra.lib.strings.Length<>(),
                 new hydra.lib.strings.SplitOn<>(),
+                new hydra.lib.strings.ToList<>(),
                 new hydra.lib.strings.ToLower<>(),
                 new hydra.lib.strings.ToUpper<>());
     }

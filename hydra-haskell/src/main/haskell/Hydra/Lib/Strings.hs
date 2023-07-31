@@ -10,6 +10,9 @@ import qualified Data.List.Split as LS
 cat :: [String] -> String
 cat = L.concat
 
+fromList :: [Int] -> String
+fromList = fmap C.chr
+
 isEmpty :: String -> Bool
 isEmpty = L.null
 
@@ -18,6 +21,9 @@ length = L.length
 
 splitOn :: String -> String -> [String]
 splitOn = LS.splitOn
+
+toList :: String -> [Int]
+toList = fmap C.ord
 
 toLower :: String -> String
 toLower = fmap C.toLower
