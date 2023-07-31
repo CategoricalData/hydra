@@ -1,6 +1,6 @@
 package hydra.dsl;
 
-import hydra.basics.Basics;
+import hydra.tier1.Tier1;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
@@ -15,7 +15,7 @@ import static hydra.coreEncoding.CoreEncoding.*;
 
 public class Modules {
   public static <A> Element<A> element(Module<A> module, String localName, Term<A> data) {
-    Name name = Basics.unqualifyName(new QualifiedName(Optional.of(module.namespace), localName));
+    Name name = Tier1.unqualifyName(new QualifiedName(Optional.of(module.namespace), localName));
     return new Element<>(name, data);
   }
 
@@ -40,6 +40,6 @@ public class Modules {
   }
 
   public static Name qname(Namespace ns, String localName) {
-    return Basics.unqualifyName(new QualifiedName(Optional.of(ns), localName));
+    return Tier1.unqualifyName(new QualifiedName(Optional.of(ns), localName));
   }
 }

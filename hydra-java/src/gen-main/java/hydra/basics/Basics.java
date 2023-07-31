@@ -1,7 +1,7 @@
 package hydra.basics;
 
 /**
- * Basic functions for working with types and terms. These functions are not allowed to include references to primitive functions, as the definitions of some primitive functions in turn depend on them.
+ * A tier-2 module of basic functions for working with types and terms.
  */
 public interface Basics {
   static <A> hydra.mantle.EliminationVariant eliminationVariant(hydra.core.Elimination<A> v1) {
@@ -541,10 +541,8 @@ public interface Basics {
     new hydra.mantle.TypeVariant.Union(),
     new hydra.mantle.TypeVariant.Variable());
   
-  String ignoredVariable = "_";
-  
   static <A> Boolean isEncodedType(hydra.core.Term<A> t) {
-    return (hydra.basics.Basics.stripTerm((t))).accept(new hydra.core.Term.PartialVisitor<>() {
+    return (hydra.tier1.Tier1.stripTerm((t))).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Term<A> instance) {
         return false;
@@ -564,58 +562,46 @@ public interface Basics {
     });
   }
   
+  static <A> Boolean isType(hydra.core.Type<A> t) {
+    return (hydra.tier1.Tier1.stripType((t))).accept(new hydra.core.Type.PartialVisitor<>() {
+      @Override
+      public Boolean otherwise(hydra.core.Type<A> instance) {
+        return false;
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Type.Application<A> instance) {
+        return hydra.basics.Basics.isType(((instance.value)).function);
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Type.Lambda<A> instance) {
+        return hydra.basics.Basics.isType(((instance.value)).body);
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Type.Union<A> instance) {
+        return hydra.lib.equality.EqualString.apply(
+          "hydra/core.Type",
+          (((instance.value)).typeName).value);
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Type.Variable<A> instance) {
+        return true;
+      }
+    });
+  }
+  
   static <A> Boolean isUnitTerm(hydra.core.Term<A> t) {
     return hydra.lib.equality.EqualTerm.apply(
-      hydra.basics.Basics.stripTerm((t)),
+      hydra.tier1.Tier1.stripTerm((t)),
       new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.UnitType"), java.util.Arrays.asList())));
   }
   
   static <A> Boolean isUnitType(hydra.core.Type<A> t) {
     return hydra.lib.equality.EqualType.apply(
-      hydra.basics.Basics.stripType((t)),
+      hydra.tier1.Tier1.stripType((t)),
       new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra/core.UnitType"), java.util.Optional.empty(), java.util.Arrays.asList())));
-  }
-  
-  static <A, X> java.util.function.Function<X, X> skipAnnotations(java.util.function.Function<X, java.util.Optional<hydra.core.Annotated<X, A>>> getAnn) {
-    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<X, X>> skip = new java.util.concurrent.atomic.AtomicReference<>();
-    skip.set((java.util.function.Function<X, X>) (t1 -> ((((getAnn)).apply((t1))).map((java.util.function.Function<hydra.core.Annotated<X, A>, X>) (ann -> (skip.get()).apply(((ann)).subject)))).orElse((t1))));
-    return (java.util.function.Function<X, X>) (t -> (skip.get()).apply((t)));
-  }
-  
-  static <A> hydra.core.Term<A> stripTerm(hydra.core.Term<A> x) {
-    return (hydra.basics.Basics.skipAnnotations((java.util.function.Function<hydra.core.Term<A>, java.util.Optional<hydra.core.Annotated<hydra.core.Term<A>, A>>>) (v1 -> ((v1)).accept(new hydra.core.Term.PartialVisitor<>() {
-      @Override
-      public java.util.Optional<hydra.core.Annotated<hydra.core.Term<A>, A>> otherwise(hydra.core.Term<A> instance) {
-        return java.util.Optional.empty();
-      }
-      
-      @Override
-      public java.util.Optional<hydra.core.Annotated<hydra.core.Term<A>, A>> visit(hydra.core.Term.Annotated<A> instance) {
-        return java.util.Optional.of((instance.value));
-      }
-    })))).apply((x));
-  }
-  
-  static <A> hydra.core.Type<A> stripType(hydra.core.Type<A> x) {
-    return (hydra.basics.Basics.skipAnnotations((java.util.function.Function<hydra.core.Type<A>, java.util.Optional<hydra.core.Annotated<hydra.core.Type<A>, A>>>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<>() {
-      @Override
-      public java.util.Optional<hydra.core.Annotated<hydra.core.Type<A>, A>> otherwise(hydra.core.Type<A> instance) {
-        return java.util.Optional.empty();
-      }
-      
-      @Override
-      public java.util.Optional<hydra.core.Annotated<hydra.core.Type<A>, A>> visit(hydra.core.Type.Annotated<A> instance) {
-        return java.util.Optional.of((instance.value));
-      }
-    })))).apply((x));
-  }
-  
-  static hydra.core.Name unqualifyName(hydra.module.QualifiedName qname) {
-    String prefix = ((((qname)).namespace).map((java.util.function.Function<hydra.module.Namespace, String>) (n -> hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
-      ((n)).value,
-      "."))))).orElse("");
-    return new hydra.core.Name(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
-      (prefix),
-      ((qname)).local)));
   }
 }
