@@ -3,7 +3,9 @@
 -- | A DSL for constructing primitive function definitions
 module Hydra.Dsl.Prims where
 
-import Hydra.Kernel
+import Hydra.Compute
+import Hydra.Core
+import Hydra.Graph
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding
 import qualified Hydra.Dsl.Expect as Expect

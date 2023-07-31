@@ -2,9 +2,10 @@
 
 module Hydra.Dsl.PhantomLiterals where
 
-import Hydra.Kernel
-import Data.Int
+import Hydra.Phantoms
 import qualified Hydra.Dsl.Terms as Terms
+
+import Data.Int
 
 
 -- Note: does not yet properly capture arbitrary-precision floating-point numbers,

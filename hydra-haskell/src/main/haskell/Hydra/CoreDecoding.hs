@@ -26,6 +26,7 @@ module Hydra.CoreDecoding (
   ) where
 
 import Hydra.Basics
+import Hydra.Tier1
 import Hydra.Coders
 import Hydra.Common
 import Hydra.Core

@@ -2,8 +2,8 @@
 
 module Hydra.Codegen (
   hydraKernel,
-  kernelDataModules,
-  kernelModelModules,
+  tier2KernelModules,
+  tier0KernelModules,
   kernelModules,
   langModules,
   mainModules,
@@ -29,6 +29,7 @@ import qualified Hydra.Langs.Yaml.Modules as Yaml
 
 import Hydra.Sources.Ast
 import Hydra.Sources.Basics
+import Hydra.Sources.Tier1
 import Hydra.Sources.Coders
 import Hydra.Sources.Compute
 import Hydra.Sources.Constraints
@@ -116,16 +117,21 @@ hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElement
   hydraModuleModule,
   hydraTestingModule]
 
-kernelDataModules :: [Module Kv]
-kernelDataModules = [
-  coreEncodingModule,
+tier2KernelModules :: [Module Kv]
+tier2KernelModules = [
   hydraBasicsModule,
+  hydraTier1Module,
   hydraExtrasModule,
 --  hydraMonadsModule,
   hydraPrintingModule]
 
-kernelModelModules :: [Module Kv]
-kernelModelModules = [
+tier1KernelModules :: [Module Kv]
+tier1KernelModules = [
+  coreEncodingModule,
+  hydraTier1Module]
+
+tier0KernelModules :: [Module Kv]
+tier0KernelModules = [
   hydraAstModule,
   hydraCodersModule,
   hydraCoreModule,
@@ -142,7 +148,7 @@ kernelModelModules = [
   jsonModelModule] -- JSON module is part of the kernel, despite being an external language; JSON support is built in to Hydra
 
 kernelModules :: [Module Kv]
-kernelModules = kernelModelModules ++ kernelDataModules
+kernelModules = tier0KernelModules ++ tier1KernelModules ++ tier2KernelModules
 
 langModules :: [Module Kv]
 langModules = [

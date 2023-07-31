@@ -2,7 +2,6 @@
 
 module Hydra.Dsl.Grammars where
 
-import Hydra.Kernel
 import qualified Hydra.Grammar as G
 
 import Data.String(IsString(..))
