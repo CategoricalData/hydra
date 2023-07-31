@@ -84,7 +84,8 @@ public class Libraries {
                 new hydra.lib.lists.Last<>(),
                 new hydra.lib.lists.Length<>(),
                 new hydra.lib.lists.Map<>(),
-                new hydra.lib.lists.Pure<>());
+                new hydra.lib.lists.Pure<>(),
+                new hydra.lib.lists.Tail<>());
     }
 
     private static <A> List<PrimitiveFunction<A>> literalsPrimitives() {

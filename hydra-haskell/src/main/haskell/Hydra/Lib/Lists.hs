@@ -58,3 +58,6 @@ mapRaw fun args' = do
 
 pure :: x -> [x]
 pure e = [e]
+
+tail :: [x] -> [x]
+tail = L.tail
