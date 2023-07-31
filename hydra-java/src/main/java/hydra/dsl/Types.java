@@ -18,7 +18,9 @@ import hydra.core.Type;
 import hydra.core.UnitType;
 import hydra.compute.Flow;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static hydra.dsl.Core.*;
@@ -186,6 +188,13 @@ public interface Types {
 
     static <A> Type<A> optional(final String elements) {
         return optional(variable(elements));
+    }
+
+    static <A> Type<A> pair(final Type<A> fst, final Type<A> snd) {
+        List<Type<A>> types = new ArrayList<>();
+        types.add(fst);
+        types.add(snd);
+        return new Type.Product<>(types);
     }
 
     static <A> Type<A> record(final FieldType<A>... fields) {
