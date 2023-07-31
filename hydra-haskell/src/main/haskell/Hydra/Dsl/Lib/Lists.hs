@@ -5,8 +5,14 @@ import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
 
 
-concat :: Datum ([a] -> a)
+concat :: Datum ([[a]] -> [a])
 concat = Datum $ Terms.primitive _lists_concat
+
+concat2 :: Datum ([a] -> [a] -> [a])
+concat2 = Datum $ Terms.primitive _lists_concat2
+
+cons :: Datum (a -> [a] -> [a])
+cons = Datum $ Terms.primitive _lists_cons
 
 head :: Datum ([a] -> a)
 head = Datum $ Terms.primitive _lists_head
