@@ -2,6 +2,7 @@
 
 module Hydra.Tools.Formatting where
 
+import Hydra.Basics
 import qualified Hydra.Lib.Strings as Strings
 
 import qualified Data.Char as C
@@ -12,11 +13,6 @@ import qualified Data.Maybe as Y
 
 
 data CaseConvention = CaseConventionCamel | CaseConventionPascal | CaseConventionLowerSnake | CaseConventionUpperSnake
-
-capitalize :: String -> String
-capitalize s = case s of
-  [] -> []
-  (h:r) -> C.toUpper h : r
 
 convertCase :: CaseConvention -> CaseConvention -> String -> String
 convertCase from to original = case to of
@@ -35,10 +31,6 @@ convertCase from to original = case to of
       where
         helper (h:r) c = ["" | C.isUpper c] ++ ((c:h):r)
 
-decapitalize :: String -> String
-decapitalize s = case s of
-  [] -> []
-  (h:r) -> C.toLower h : r
 
 escapeWithUnderscore :: S.Set String -> String -> String
 escapeWithUnderscore reserved s = if S.member s reserved then s ++ "_" else s

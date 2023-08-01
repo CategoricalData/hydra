@@ -6,6 +6,8 @@ import Hydra.Dsl.Base as Base
 import Hydra.Dsl.Lib.Equality as Equality
 import Hydra.Dsl.Lib.Maps as Maps
 import Hydra.Dsl.Lib.Lists as Lists
+import Hydra.Dsl.Lib.Logic as Logic
+import Hydra.Dsl.Lib.Strings as Strings
 import Hydra.Sources.Tier1
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Terms as Terms
@@ -44,13 +46,19 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraTier1Module
      el termVariantsDef,
      el typeVariantDef,
      el typeVariantsDef,
+     -- Formatting.hs
+     el capitalizeDef,
+     el decapitalizeDef,
+     el mapFirstLetterDef,
      -- Common.hs
      el fieldMapDef,
      el fieldTypeMapDef,
      el isEncodedTypeDef,
      el isTypeDef,
      el isUnitTermDef,
-     el isUnitTypeDef]
+     el isUnitTypeDef,
+     el elementsToGraphDef
+     ]
 
 eliminationVariantDef :: Definition (Elimination a -> EliminationVariant)
 eliminationVariantDef = basicsDefinition "eliminationVariant" $
@@ -296,19 +304,45 @@ typeVariantsDef = basicsDefinition "typeVariants" $
     _TypeVariant_union,
     _TypeVariant_variable]
 
+-- Formatting hs
+
+capitalizeDef :: Definition (String -> String)
+capitalizeDef = basicsDefinition "capitalize" $
+  doc "Capitalize the first letter of a string" $
+  function Types.string Types.string $
+  ref mapFirstLetterDef @@ Strings.toUpper
+
+decapitalizeDef :: Definition (String -> String)
+decapitalizeDef = basicsDefinition "decapitalize" $
+  doc "Decapitalize the first letter of a string" $
+  function Types.string Types.string $
+  ref mapFirstLetterDef @@ Strings.toLower
+
+-- TODO: simplify this helper
+mapFirstLetterDef :: Definition ((String -> String) -> String -> String)
+mapFirstLetterDef = basicsDefinition "mapFirstLetter" $
+  doc "A helper which maps the first letter of a string to another string" $
+  lambda "mapping" $ lambda "s" ((Logic.ifElse
+       @@ var "s"
+       @@ (Strings.cat2 @@ var "firstLetter" @@ (Strings.fromList @@ (Lists.tail @@ var "list")))
+       @@ (Strings.isEmpty @@ var "s"))
+    `with` [
+      "firstLetter">: var "mapping" @@ (Strings.fromList @@ (Lists.pure @@ (Lists.head @@ var "list"))),
+      "list">: typed (TypeList $ Types.int32) $ Strings.toList @@ var "s"])
+
 -- Common.hs
 
 fieldMapDef :: Definition ([Field a] -> M.Map FieldName (Term a))
 fieldMapDef = basicsDefinition "fieldMap" $
   function (TypeList fieldA) (Types.map (TypeVariable _FieldName) termA) $
-    (lambda "fields" $ fromList @@ (Lists.map @@ var "toPair" @@ var "fields"))
+    (lambda "fields" $ Maps.fromList @@ (Lists.map @@ var "toPair" @@ var "fields"))
   `with` [
     "toPair">: lambda "f" $ pair (project _Field _Field_name @@ var "f", project _Field _Field_term @@ var "f")]
 
 fieldTypeMapDef :: Definition ([FieldType a] -> M.Map FieldName (Type a))
 fieldTypeMapDef = basicsDefinition "fieldTypeMap" $
   function (TypeList fieldTypeA) (Types.map (TypeVariable _FieldName) typeA) $
-    (lambda "fields" $ fromList @@ (Lists.map @@ var "toPair" @@ var "fields"))
+    (lambda "fields" $ Maps.fromList @@ (Lists.map @@ var "toPair" @@ var "fields"))
   `with` [
     "toPair">: lambda "f" $ pair (project _FieldType _FieldType_name @@ var "f", project _FieldType _FieldType_type @@ var "f")]
 
@@ -344,3 +378,36 @@ isUnitTypeDef :: Definition (Term a -> Bool)
 isUnitTypeDef = basicsDefinition "isUnitType" $
   functionWithClasses typeA Types.boolean eqA $
   lambda "t" $ equalType @@ (ref stripTypeDef @@ var "t") @@ Datum (coreEncodeType Types.unit)
+
+elementsToGraphDef :: Definition (Graph a -> Maybe (Graph a) -> [Element a] -> Graph a)
+elementsToGraphDef = basicsDefinition "elementsToGraph" $
+  function graphA (Types.function (Types.optional graphA) (Types.function (TypeList elementA) graphA)) $
+  lambda "parent" $ lambda "schema" $ lambda "elements" $
+    record _Graph [
+      _Graph_elements>>: Maps.fromList @@ (Lists.map @@ var "toPair" @@ var "elements"),
+      _Graph_environment>>: project _Graph _Graph_environment @@ var "parent",
+      _Graph_body>>: project _Graph _Graph_body @@ var "parent",
+      _Graph_primitives>>: project _Graph _Graph_primitives @@ var "parent",
+      _Graph_annotations>>: project _Graph _Graph_annotations @@ var "parent",
+      _Graph_schema>>: var "schema"]
+  `with` [
+    "toPair" >: lambda "el" $ pair (project _Element _Element_name @@ var "el", var "el")
+    ]
+
+
+{-
+
+namespaceToFilePath :: Bool -> FileExtension -> Namespace -> FilePath
+namespaceToFilePath caps ext name = L.intercalate "/" parts ++ "." ++ unFileExtension ext
+  where
+    parts = (if caps then capitalize else id) <$> Strings.splitOn "/" (unNamespace name)
+-}
+
+--namespaceToFilePathDef :: Definition (Bool -> FileExtension -> Namespace -> String)
+--namespaceToFilePathDef = basicsDefinition "namespaceToFilePath" $
+--  function Types.boolean (Types.function (TypeVariable _FileExtension) (Types.function (TypeVariable _Namespace) Types.string)) $
+--  lambda "caps" $ lambda "ext" $ lambda "name" $
+--    Lists.intercalate "/" @@ (Strings.splitOn "/" @@ (string $ unNamespace @@ var "name"))
+--    (string $ unNamespace @@ var "name")
+--    `with` [
+--      "capitalize">: lambda "s" $ (string $ Strings.capitalize @@ var "s")]

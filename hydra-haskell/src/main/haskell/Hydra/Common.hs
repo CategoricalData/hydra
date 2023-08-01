@@ -55,13 +55,6 @@ convertIntegerValue target = encoder . decoder
       IntegerTypeUint32 -> IntegerValueUint32 $ fromIntegral d
       IntegerTypeUint64 -> IntegerValueUint64 $ fromIntegral d
 
-elementsToGraph :: Graph a -> Maybe (Graph a) -> [Element a] -> Graph a
-elementsToGraph parent schema els = parent {graphElements = elementMap, graphSchema = schema}
-  where
-    elementMap = M.fromList (toPair <$> els)
-      where
-        toPair el = (elementName el, el)
-
 namespaceToFilePath :: Bool -> FileExtension -> Namespace -> FilePath
 namespaceToFilePath caps ext name = L.intercalate "/" parts ++ "." ++ unFileExtension ext
   where

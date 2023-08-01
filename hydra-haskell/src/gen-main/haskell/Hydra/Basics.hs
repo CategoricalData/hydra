@@ -6,7 +6,9 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
+import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
+import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Tier1 as Tier1
 import Data.Int
@@ -232,6 +234,21 @@ typeVariants = [
   Mantle.TypeVariantUnion,
   Mantle.TypeVariantVariable]
 
+-- | Capitalize the first letter of a string
+capitalize :: (String -> String)
+capitalize = (mapFirstLetter Strings.toUpper)
+
+-- | Decapitalize the first letter of a string
+decapitalize :: (String -> String)
+decapitalize = (mapFirstLetter Strings.toLower)
+
+-- | A helper which maps the first letter of a string to another string
+mapFirstLetter :: ((String -> String) -> String -> String)
+mapFirstLetter mapping s =  
+  let firstLetter = (mapping (Strings.fromList (Lists.pure (Lists.head list)))) 
+      list = (Strings.toList s)
+  in (Logic.ifElse s (Strings.cat2 firstLetter (Strings.fromList (Lists.tail list))) (Strings.isEmpty s))
+
 fieldMap :: ([Core.Field a] -> Map Core.FieldName (Core.Term a))
 fieldMap fields = (Maps.fromList (Lists.map toPair fields)) 
   where 
@@ -266,3 +283,14 @@ isUnitType t = (Equality.equalType (Tier1.stripType t) (Core.TypeRecord (Core.Ro
   Core.rowTypeTypeName = (Core.Name "hydra/core.UnitType"),
   Core.rowTypeExtends = Nothing,
   Core.rowTypeFields = []})))
+
+elementsToGraph :: (Graph.Graph a -> Maybe (Graph.Graph a) -> [Graph.Element a] -> Graph.Graph a)
+elementsToGraph parent schema elements =  
+  let toPair = (\el -> (Graph.elementName el, el))
+  in Graph.Graph {
+    Graph.graphElements = (Maps.fromList (Lists.map toPair elements)),
+    Graph.graphEnvironment = (Graph.graphEnvironment parent),
+    Graph.graphBody = (Graph.graphBody parent),
+    Graph.graphPrimitives = (Graph.graphPrimitives parent),
+    Graph.graphAnnotations = (Graph.graphAnnotations parent),
+    Graph.graphSchema = schema}

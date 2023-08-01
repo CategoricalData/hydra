@@ -35,8 +35,10 @@ hydraTier1Module = Module (Namespace "hydra/tier1") elements [hydraGraphModule, 
      el unqualifyNameDef]
 
 eqA = (M.fromList [(Name "a", S.fromList [TypeClassEquality])])
+elementA = Types.apply (TypeVariable _Element) (Types.var "a") :: Type a
 fieldA = Types.apply (TypeVariable _Field) (Types.var "a") :: Type a
 fieldTypeA = Types.apply (TypeVariable _FieldType) (Types.var "a") :: Type a
+graphA = Types.apply (TypeVariable _Graph) (Types.var "a") :: Type a
 termA = Types.apply (TypeVariable _Term) (Types.var "a") :: Type a
 typeA = Types.apply (TypeVariable _Type) (Types.var "a") :: Type a
 
