@@ -32,12 +32,12 @@ el :: Definition a -> Element Kv
 el (Definition name (Datum term)) = Element name term
 
 infixr 0 >:
-(>:) :: String -> Datum a -> Fld a
-n >: d = Fld $ Field (FieldName n) (unDatum d)
+(>:) :: String -> Datum a -> Field Kv
+n >: d = Field (FieldName n) (unDatum d)
 
 infixr 0 >>:
-(>>:) :: FieldName -> Datum a -> Fld a
-fname >>: d = Fld $ Field fname (unDatum d)
+(>>:) :: FieldName -> Datum a -> Field Kv
+fname >>: d = Field fname (unDatum d)
 
 (<.>) :: Datum (b -> c) -> Datum (a -> b) -> Datum (a -> c)
 f <.> g = compose f g
@@ -161,8 +161,8 @@ primitive = Datum . Terms.primitive
 project :: Name -> FieldName -> Datum (a -> b)
 project name fname = Datum $ Terms.project name fname
 
-record :: Name -> [Fld a] -> Datum a
-record name fields = Datum $ Terms.record name (unFld <$> fields)
+record :: Name -> [Field Kv] -> Datum a
+record name fields = Datum $ Terms.record name fields
 
 ref :: Definition a -> Datum a
 ref (Definition name _) = Datum (TermVariable name)
@@ -188,10 +188,10 @@ var v = Datum $ Terms.var v
 variant :: Name -> FieldName -> Datum a -> Datum b
 variant name fname (Datum term) = Datum $ Terms.inject name $ Field fname term
 
-with :: Datum a -> [Fld a] -> Datum a
+with :: Datum a -> [Field Kv] -> Datum a
 (Datum env) `with` bindings = Datum $ TermLet $ Let (M.fromList $ toPair <$> bindings) env
   where
-     toPair (Fld (Field name value)) = (Name $ unFieldName name, value)
+     toPair (Field name value) = (Name $ unFieldName name, value)
 
 wrap :: Name -> Datum a -> Datum b
 wrap name (Datum term) = Datum $ Terms.wrap name term

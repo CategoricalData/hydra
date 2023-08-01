@@ -91,7 +91,8 @@ typeArityDef = hydraExtrasDefinition "typeArity" $
 
 emptyKvDef :: Definition Kv
 emptyKvDef = hydraExtrasDefinition "emptyKv" $
-  record _Kv [fld _Kv_annotations Maps.empty]
+  record _Kv [
+    _Kv_annotations>>: Maps.empty]
 
 getAnnotationDef :: Definition (String -> Kv -> Maybe (Term Kv))
 getAnnotationDef = hydraExtrasDefinition "getAnnotation" $
