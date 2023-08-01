@@ -55,32 +55,6 @@ convertIntegerValue target = encoder . decoder
       IntegerTypeUint32 -> IntegerValueUint32 $ fromIntegral d
       IntegerTypeUint64 -> IntegerValueUint64 $ fromIntegral d
 
-localNameOfLazy :: Name -> String
-localNameOfLazy = qualifiedNameLocal . qualifyNameLazy
-
-localNameOfEager :: Name -> String
-localNameOfEager = qualifiedNameLocal . qualifyNameEager
-
-namespaceOfLazy :: Name -> Maybe Namespace
-namespaceOfLazy = qualifiedNameNamespace . qualifyNameLazy
-
-namespaceOfEager :: Name -> Maybe Namespace
-namespaceOfEager = qualifiedNameNamespace . qualifyNameEager
-
--- | Splits a Name on the last "." into a namespace and a local part
-qualifyNameLazy :: Name -> QualifiedName
-qualifyNameLazy (Name name) = case L.reverse $ Strings.splitOn "." name of
-  (local:rest) -> QualifiedName (Just $ Namespace $ L.intercalate "." $ L.reverse rest) local
-  _ -> QualifiedName Nothing name
-
--- | Splits a Name on the first "." into a namespace and a local part
-qualifyNameEager :: Name -> QualifiedName
-qualifyNameEager name = if L.length parts == 1
-    then QualifiedName Nothing $ unName name
-    else QualifiedName (Just $ Namespace $ L.head parts) (L.intercalate "." $ L.tail parts)
-  where
-    parts = Strings.splitOn "." $ unName name
-
 requireTypeAnnotation :: Show a => Term a -> Flow (Graph a) (Type a)
 requireTypeAnnotation term = do
     anns <- graphAnnotations <$> getState

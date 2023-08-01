@@ -61,7 +61,13 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraTier1Module
      el isUnitTermDef,
      el isUnitTypeDef,
      el elementsToGraphDef,
-     el namespaceToFilePathDef
+     el localNameOfEagerDef,
+     el localNameOfLazyDef,
+     el namespaceOfEagerDef,
+     el namespaceOfLazyDef,
+     el namespaceToFilePathDef,
+     el qualifyNameEagerDef,
+     el qualifyNameLazyDef
      ]
 
 eliminationVariantDef :: Definition (Elimination a -> EliminationVariant)
@@ -403,6 +409,26 @@ elementsToGraphDef = basicsDefinition "elementsToGraph" $
   `with` [
     "toPair" >: lambda "el" $ pair (project _Element _Element_name @@ var "el", var "el")]
 
+localNameOfEagerDef :: Definition (Name -> String)
+localNameOfEagerDef = basicsDefinition "localNameOfEager" $
+  function (TypeVariable _Name) (Types.string) $
+  (project _QualifiedName _QualifiedName_local) <.> ref qualifyNameEagerDef
+
+localNameOfLazyDef :: Definition (Name -> String)
+localNameOfLazyDef = basicsDefinition "localNameOfLazy" $
+  function (TypeVariable _Name) (Types.string) $
+  (project _QualifiedName _QualifiedName_local) <.> ref qualifyNameLazyDef
+
+namespaceOfEagerDef :: Definition (Name -> Maybe Namespace)
+namespaceOfEagerDef = basicsDefinition "namespaceOfEager" $
+  function (TypeVariable _Name) (Types.optional $ TypeVariable _Namespace) $
+  (project _QualifiedName _QualifiedName_namespace) <.> ref qualifyNameEagerDef
+
+namespaceOfLazyDef :: Definition (Name -> Maybe Namespace)
+namespaceOfLazyDef = basicsDefinition "namespaceOfLazy" $
+  function (TypeVariable _Name) (Types.optional $ TypeVariable _Namespace) $
+  (project _QualifiedName _QualifiedName_namespace) <.> ref qualifyNameLazyDef
+
 namespaceToFilePathDef :: Definition (Bool -> FileExtension -> Namespace -> String)
 namespaceToFilePathDef = basicsDefinition "namespaceToFilePath" $
   function Types.boolean (Types.function (TypeVariable _FileExtension) (Types.function (TypeVariable _Namespace) Types.string)) $
@@ -410,3 +436,29 @@ namespaceToFilePathDef = basicsDefinition "namespaceToFilePath" $
     (((Strings.intercalate @@ "/" @@ var "parts") ++ "." ++ (unwrap _FileExtension @@ var "ext"))
     `with` [
       "parts">: Lists.map @@ (Logic.ifElse @@ ref capitalizeDef @@ ref idDef @@ var "caps") @@ (Strings.splitOn @@ "/" @@ (unwrap _Namespace @@ var "ns"))])
+
+qualifyNameEagerDef :: Definition (Name -> QualifiedName)
+qualifyNameEagerDef = basicsDefinition "qualifyNameEager" $
+  lambda "name" $ ((Logic.ifElse
+      @@ (record _QualifiedName [
+        _QualifiedName_namespace>>: nothing,
+        _QualifiedName_local>>: unwrap _Name @@ var "name"])
+      @@ (record _QualifiedName [
+        _QualifiedName_namespace>>: just (wrap _Namespace (Lists.head @@ var "parts")),
+        _QualifiedName_local>>: Strings.intercalate @@ "." @@ (Lists.tail @@ var "parts")])
+      @@ (Equality.equalInt32 @@ int32 1 @@ (Lists.length @@ var "parts")))
+    `with` [
+      "parts">: Strings.splitOn @@ "." @@ (unwrap _Name @@ var "name")])
+
+qualifyNameLazyDef :: Definition (Name -> QualifiedName)
+qualifyNameLazyDef = basicsDefinition "qualifyNameLazy" $
+  lambda "name" $ (Logic.ifElse
+      @@ (record _QualifiedName [
+        _QualifiedName_namespace>>: nothing,
+        _QualifiedName_local>>: unwrap _Name @@ var "name"])
+      @@ (record _QualifiedName [
+        _QualifiedName_namespace>>: just (wrap _Namespace (Strings.intercalate @@ "." @@ (Lists.reverse @@ (Lists.tail @@ var "parts")))),
+        _QualifiedName_local>>: Lists.head @@ var "parts"])
+      @@ (Equality.equalInt32 @@ int32 1 @@ (Lists.length @@ var "parts")))
+    `with` [
+      "parts">: Lists.reverse @@ (Strings.splitOn @@ "." @@ (unwrap _Name @@ var "name"))]
