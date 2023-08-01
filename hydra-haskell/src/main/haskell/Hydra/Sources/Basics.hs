@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Hydra.Sources.Basics where
 
 import Hydra.Kernel
@@ -33,6 +35,7 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraTier1Module
      el floatValueTypeDef,
      el functionVariantDef,
      el functionVariantsDef,
+     el idDef,
      el integerTypeIsSignedDef,
      el integerTypePrecisionDef,
      el integerTypesDef,
@@ -57,7 +60,8 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraTier1Module
      el isTypeDef,
      el isUnitTermDef,
      el isUnitTypeDef,
-     el elementsToGraphDef
+     el elementsToGraphDef,
+     el namespaceToFilePathDef
      ]
 
 eliminationVariantDef :: Definition (Elimination a -> EliminationVariant)
@@ -121,6 +125,12 @@ functionVariantsDef = basicsDefinition "functionVariants" $
     _FunctionVariant_elimination,
     _FunctionVariant_lambda,
     _FunctionVariant_primitive]
+
+idDef :: Definition (a -> a)
+idDef = basicsDefinition "id" $
+  doc "The identity function" $
+  typed (Types.function (Types.var "a") (Types.var "a")) $
+  lambda "x" $ var "x"
 
 integerTypeIsSignedDef :: Definition (IntegerType -> Bool)
 integerTypeIsSignedDef = basicsDefinition "integerTypeIsSigned" $
@@ -391,23 +401,12 @@ elementsToGraphDef = basicsDefinition "elementsToGraph" $
       _Graph_annotations>>: project _Graph _Graph_annotations @@ var "parent",
       _Graph_schema>>: var "schema"]
   `with` [
-    "toPair" >: lambda "el" $ pair (project _Element _Element_name @@ var "el", var "el")
-    ]
+    "toPair" >: lambda "el" $ pair (project _Element _Element_name @@ var "el", var "el")]
 
-
-{-
-
-namespaceToFilePath :: Bool -> FileExtension -> Namespace -> FilePath
-namespaceToFilePath caps ext name = L.intercalate "/" parts ++ "." ++ unFileExtension ext
-  where
-    parts = (if caps then capitalize else id) <$> Strings.splitOn "/" (unNamespace name)
--}
-
---namespaceToFilePathDef :: Definition (Bool -> FileExtension -> Namespace -> String)
---namespaceToFilePathDef = basicsDefinition "namespaceToFilePath" $
---  function Types.boolean (Types.function (TypeVariable _FileExtension) (Types.function (TypeVariable _Namespace) Types.string)) $
---  lambda "caps" $ lambda "ext" $ lambda "name" $
---    Lists.intercalate "/" @@ (Strings.splitOn "/" @@ (string $ unNamespace @@ var "name"))
---    (string $ unNamespace @@ var "name")
---    `with` [
---      "capitalize">: lambda "s" $ (string $ Strings.capitalize @@ var "s")]
+namespaceToFilePathDef :: Definition (Bool -> FileExtension -> Namespace -> String)
+namespaceToFilePathDef = basicsDefinition "namespaceToFilePath" $
+  function Types.boolean (Types.function (TypeVariable _FileExtension) (Types.function (TypeVariable _Namespace) Types.string)) $
+  lambda "caps" $ lambda "ext" $ lambda "ns" $
+    (((Strings.intercalate @@ "/" @@ var "parts") ++ "." ++ (unwrap _FileExtension @@ var "ext"))
+    `with` [
+      "parts">: Lists.map @@ (Logic.ifElse @@ ref capitalizeDef @@ ref idDef @@ var "caps") @@ (Strings.splitOn @@ "/" @@ (unwrap _Namespace @@ var "ns"))])

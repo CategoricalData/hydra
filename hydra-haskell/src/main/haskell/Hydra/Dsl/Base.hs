@@ -20,13 +20,13 @@ import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Lib.Strings as Strings
 
 import Prelude hiding ((++))
--- import Data.String(IsString(..))
+import Data.String(IsString(..))
 
 import qualified Data.Map as M
 import qualified Data.Set as S
 
 
--- instance IsString (Datum String) where fromString = Datum . Terms.string
+instance IsString (Datum a) where fromString = Datum . Terms.string
 
 el :: Definition a -> Element Kv
 el (Definition name (Datum term)) = Element name term

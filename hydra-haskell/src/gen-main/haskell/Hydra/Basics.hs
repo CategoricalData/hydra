@@ -10,6 +10,7 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
+import qualified Hydra.Module as Module
 import qualified Hydra.Tier1 as Tier1
 import Data.Int
 import Data.List
@@ -68,6 +69,10 @@ functionVariants = [
   Mantle.FunctionVariantElimination,
   Mantle.FunctionVariantLambda,
   Mantle.FunctionVariantPrimitive]
+
+-- | The identity function
+id_ :: (a -> a)
+id_ x = x
 
 -- | Find whether a given integer type is signed (true) or unsigned (false)
 integerTypeIsSigned :: (Core.IntegerType -> Bool)
@@ -294,3 +299,12 @@ elementsToGraph parent schema elements =
     Graph.graphPrimitives = (Graph.graphPrimitives parent),
     Graph.graphAnnotations = (Graph.graphAnnotations parent),
     Graph.graphSchema = schema}
+
+namespaceToFilePath :: (Bool -> Module.FileExtension -> Module.Namespace -> String)
+namespaceToFilePath caps ext ns =  
+  let parts = (Lists.map (Logic.ifElse capitalize id_ caps) (Strings.splitOn "/" (Module.unNamespace ns)))
+  in (Strings.cat [
+    Strings.cat [
+      Strings.intercalate "/" parts,
+      "."],
+    (Module.unFileExtension ext)])
