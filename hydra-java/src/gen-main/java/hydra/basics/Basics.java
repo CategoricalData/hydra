@@ -541,6 +541,22 @@ public interface Basics {
     new hydra.mantle.TypeVariant.Union(),
     new hydra.mantle.TypeVariant.Variable());
   
+  java.util.function.Function<String, String> capitalize = hydra.basics.Basics.mapFirstLetter((java.util.function.Function<String, String>) (v1 -> hydra.lib.strings.ToUpper.apply((v1))));
+  
+  java.util.function.Function<String, String> decapitalize = hydra.basics.Basics.mapFirstLetter((java.util.function.Function<String, String>) (v1 -> hydra.lib.strings.ToLower.apply((v1))));
+  
+  static java.util.function.Function<String, String> mapFirstLetter(java.util.function.Function<String, String> mapping) {
+    return (java.util.function.Function<String, String>) (s -> {
+        java.util.List<Integer> list = hydra.lib.strings.ToList.apply((s));
+        String firstLetter = ((mapping)).apply(hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(hydra.lib.lists.Head.apply((list)))));
+        return hydra.lib.logic.IfElse.apply(
+                (s),
+                hydra.lib.strings.Cat2.apply(
+                        (firstLetter),
+                        hydra.lib.strings.FromList.apply(hydra.lib.lists.Tail.apply((list)))),
+                hydra.lib.strings.IsEmpty.apply((s)));});
+  }
+  
   static <A> java.util.Map<hydra.core.FieldName, hydra.core.Term<A>> fieldMap(java.util.List<hydra.core.Field<A>> fields) {
     java.util.function.Function<hydra.core.Field<A>, hydra.core.Tuple.Tuple2<hydra.core.FieldName, hydra.core.Term<A>>> toPair = (java.util.function.Function<hydra.core.Field<A>, hydra.core.Tuple.Tuple2<hydra.core.FieldName, hydra.core.Term<A>>>) (f -> new hydra.core.Tuple.Tuple2(((f)).name, ((f)).term));
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
@@ -617,5 +633,13 @@ public interface Basics {
     return hydra.lib.equality.EqualType.apply(
       hydra.tier1.Tier1.stripType((t)),
       new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra/core.UnitType"), java.util.Optional.empty(), java.util.Arrays.asList())));
+  }
+  
+  static <A> java.util.function.Function<java.util.Optional<hydra.graph.Graph<A>>, java.util.function.Function<java.util.List<hydra.graph.Element<A>>, hydra.graph.Graph<A>>> elementsToGraph(hydra.graph.Graph<A> parent) {
+    java.util.function.Function<hydra.graph.Element<A>, hydra.core.Tuple.Tuple2<hydra.core.Name, hydra.graph.Element<A>>> toPair = (java.util.function.Function<hydra.graph.Element<A>, hydra.core.Tuple.Tuple2<hydra.core.Name, hydra.graph.Element<A>>>) (el -> new hydra.core.Tuple.Tuple2(((el)).name, (el)));
+    return (java.util.function.Function<java.util.Optional<hydra.graph.Graph<A>>, java.util.function.Function<java.util.List<hydra.graph.Element<A>>, hydra.graph.Graph<A>>>) (schema -> {
+            return (java.util.function.Function<java.util.List<hydra.graph.Element<A>>, hydra.graph.Graph<A>>) (elements -> new hydra.graph.Graph(hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
+      (toPair),
+      (elements))), ((parent)).environment, ((parent)).body, ((parent)).primitives, ((parent)).annotations, (schema)));});
   }
 }
