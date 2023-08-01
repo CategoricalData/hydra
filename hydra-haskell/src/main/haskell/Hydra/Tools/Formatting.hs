@@ -31,7 +31,6 @@ convertCase from to original = case to of
       where
         helper (h:r) c = ["" | C.isUpper c] ++ ((c:h):r)
 
-
 escapeWithUnderscore :: S.Set String -> String -> String
 escapeWithUnderscore reserved s = if S.member s reserved then s ++ "_" else s
 

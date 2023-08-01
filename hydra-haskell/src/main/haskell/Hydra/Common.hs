@@ -55,11 +55,6 @@ convertIntegerValue target = encoder . decoder
       IntegerTypeUint32 -> IntegerValueUint32 $ fromIntegral d
       IntegerTypeUint64 -> IntegerValueUint64 $ fromIntegral d
 
-namespaceToFilePath :: Bool -> FileExtension -> Namespace -> FilePath
-namespaceToFilePath caps ext name = L.intercalate "/" parts ++ "." ++ unFileExtension ext
-  where
-    parts = (if caps then capitalize else id) <$> Strings.splitOn "/" (unNamespace name)
-
 localNameOfLazy :: Name -> String
 localNameOfLazy = qualifiedNameLocal . qualifyNameLazy
 
@@ -80,9 +75,11 @@ qualifyNameLazy (Name name) = case L.reverse $ Strings.splitOn "." name of
 
 -- | Splits a Name on the first "." into a namespace and a local part
 qualifyNameEager :: Name -> QualifiedName
-qualifyNameEager (Name name) = case Strings.splitOn "." name of
-  [n] -> QualifiedName Nothing name
-  (ns:rest) -> QualifiedName (Just $ Namespace ns) (L.intercalate "." rest)
+qualifyNameEager name = if L.length parts == 1
+    then QualifiedName Nothing $ unName name
+    else QualifiedName (Just $ Namespace $ L.head parts) (L.intercalate "." $ L.tail parts)
+  where
+    parts = Strings.splitOn "." $ unName name
 
 requireTypeAnnotation :: Show a => Term a -> Flow (Graph a) (Type a)
 requireTypeAnnotation term = do
