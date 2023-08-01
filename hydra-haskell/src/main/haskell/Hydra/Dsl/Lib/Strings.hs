@@ -14,6 +14,9 @@ cat2 = Datum $ Terms.primitive _strings_cat2
 fromList :: Datum ([Int] -> String)
 fromList = Datum $ Terms.primitive _strings_fromList
 
+intercalate :: Datum (String -> [String] -> String)
+intercalate = Datum $ Terms.primitive _strings_intercalate
+
 isEmpty :: Datum (String -> Bool)
 isEmpty = Datum $ Terms.primitive _strings_isEmpty
 

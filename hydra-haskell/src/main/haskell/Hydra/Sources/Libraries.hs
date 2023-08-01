@@ -140,6 +140,7 @@ _hydra_lib_strings = Namespace "hydra/lib/strings"
 _strings_cat = qname _hydra_lib_strings "cat" :: Name
 _strings_cat2 = qname _hydra_lib_strings "cat2" :: Name
 _strings_fromList = qname _hydra_lib_strings "fromList" :: Name
+_strings_intercalate = qname _hydra_lib_strings "intercalate" :: Name
 _strings_isEmpty = qname _hydra_lib_strings "isEmpty" :: Name
 _strings_length = qname _hydra_lib_strings "length" :: Name
 _strings_splitOn = qname _hydra_lib_strings "splitOn" :: Name
@@ -279,6 +280,7 @@ hydraLibStringsPrimitives = [
   prim1 _strings_cat (list string) string Strings.cat,
   prim2 _strings_cat2 string string string Strings.cat2,
   prim1 _strings_fromList (list int32) string Strings.fromList,
+  prim2 _strings_intercalate string (list string) string Strings.intercalate,
   prim1 _strings_isEmpty string boolean Strings.isEmpty,
   prim1 _strings_length string int32 Strings.length,
   prim2 _strings_splitOn string string (list string) Strings.splitOn,
