@@ -153,6 +153,7 @@ public class Libraries {
                 new hydra.lib.strings.Cat<>(),
                 new hydra.lib.strings.Cat2<>(),
                 new hydra.lib.strings.FromList<>(),
+                new hydra.lib.strings.Intercalate<>(),
                 new hydra.lib.strings.IsEmpty<>(),
                 new hydra.lib.strings.Length<>(),
                 new hydra.lib.strings.SplitOn<>(),

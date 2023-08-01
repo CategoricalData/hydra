@@ -16,6 +16,9 @@ cat2 s1 s2 = s1 ++ s2
 fromList :: [Int] -> String
 fromList = fmap C.chr
 
+intercalate :: String -> [String] -> String
+intercalate = L.intercalate
+
 isEmpty :: String -> Bool
 isEmpty = L.null
 

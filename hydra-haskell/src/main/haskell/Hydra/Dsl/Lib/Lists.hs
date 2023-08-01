@@ -17,7 +17,7 @@ cons = Datum $ Terms.primitive _lists_cons
 head :: Datum ([a] -> a)
 head = Datum $ Terms.primitive _lists_head
 
-intercalate :: Datum ([a] -> [a] -> [a])
+intercalate :: Datum ([a] -> [[a]] -> [a])
 intercalate = Datum $ Terms.primitive _lists_intercalate
 
 intersperse :: Datum ([a] -> a -> [a])
