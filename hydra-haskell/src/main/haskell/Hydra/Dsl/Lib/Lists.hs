@@ -35,5 +35,8 @@ map = Datum $ Terms.primitive _lists_map
 pure :: Datum (a -> [a])
 pure = Datum $ Terms.primitive _lists_pure
 
+reverse :: Datum ([a] -> [a])
+reverse = Datum $ Terms.primitive _lists_reverse
+
 tail :: Datum ([a] -> [a])
 tail = Datum $ Terms.primitive _lists_tail

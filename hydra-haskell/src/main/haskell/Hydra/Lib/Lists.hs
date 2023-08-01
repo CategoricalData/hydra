@@ -65,5 +65,8 @@ mapRaw fun args' = do
 pure :: x -> [x]
 pure e = [e]
 
+reverse :: [x] -> [x]
+reverse = L.reverse
+
 tail :: [x] -> [x]
 tail = L.tail
