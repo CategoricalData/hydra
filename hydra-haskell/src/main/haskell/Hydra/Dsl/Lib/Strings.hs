@@ -8,6 +8,9 @@ import qualified Hydra.Dsl.Terms as Terms
 cat :: Datum ([String] -> String)
 cat = Datum $ Terms.primitive _strings_cat
 
+cat2 :: Datum (String -> String -> String)
+cat2 = Datum $ Terms.primitive _strings_cat2
+
 fromList :: Datum ([Int] -> String)
 fromList = Datum $ Terms.primitive _strings_fromList
 
