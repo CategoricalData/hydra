@@ -10,6 +10,9 @@ import qualified Data.List.Split as LS
 cat :: [String] -> String
 cat = L.concat
 
+cat2 :: String -> String -> String
+cat2 s1 s2 = s1 ++ s2
+
 fromList :: [Int] -> String
 fromList = fmap C.chr
 
