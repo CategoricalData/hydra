@@ -157,7 +157,7 @@ testBetaReduceTypeRecursively = do
     app5 = Types.apply (Types.lambda "a" $ TypeRecord $ RowType (Name "Example") Nothing [Types.field "foo" $ Types.var "a"]) app1
 
 reduce :: Type Kv -> Type Kv
-reduce typ = fromFlow (schemaContext testGraph) (betaReduceType typ)
+reduce typ = fromFlow typ (schemaContext testGraph) (betaReduceType typ)
 
 spec :: H.Spec
 spec = do

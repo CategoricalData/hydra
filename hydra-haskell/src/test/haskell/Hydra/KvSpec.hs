@@ -113,7 +113,7 @@ checkNoncompactAnnotations = H.describe "Check non-compact (i.e. layered) annota
 
 getAnn = getTermAnnotation
 
-getDesc term = fromFlow testGraph $ getTermDescription term
+getDesc term = fromFlow "no description" testGraph $ getTermDescription term
 
 setAnn = setTermAnnotation
 

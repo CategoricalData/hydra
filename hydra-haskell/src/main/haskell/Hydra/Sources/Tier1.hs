@@ -117,9 +117,10 @@ flowSucceedsDef = tier1Definition "flowSucceeds" $
     lambda "cx" $ lambda "f" $
       Optionals.isJust @@ (Flows.flowStateValue @@ (Flows.unFlow @@ var "f" @@ var "cx" @@ ref emptyTraceDef))
 
---fromFlow :: s -> Flow s a -> a
---fromFlow cx f = case flowStateValue (unFlow f cx emptyTrace) of
+--fromFlow :: a -> s -> Flow s a -> a
+--fromFlow def cx f = case flowStateValue (unFlow f cx emptyTrace) of
 --  Just x -> x
+--  Nothing -> def
 --
 --fromFlowIo :: s -> Flow s a -> IO.IO a
 --fromFlowIo cx f = case mv of

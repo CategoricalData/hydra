@@ -55,10 +55,10 @@ checkAdapter normalize mkAdapter mkContext variants source target lossy vs vt = 
     adapterSource adapter `H.shouldBe` source
     adapterTarget adapter `H.shouldBe` target
     adapterIsLossy adapter `H.shouldBe` lossy
-    fromFlow g (normalize <$> coderEncode step vs) `H.shouldBe` (normalize vt)
+    fromFlow vt g (normalize <$> coderEncode step vs) `H.shouldBe` (normalize vt)
     if lossy
       then True `H.shouldBe` True
-      else fromFlow g (coderEncode step vs >>= coderDecode step) `H.shouldBe` vs
+      else fromFlow vs g (coderEncode step vs >>= coderDecode step) `H.shouldBe` vs
 
 checkLiteralAdapter :: [LiteralVariant] -> LiteralType -> LiteralType -> Bool -> Literal -> Literal -> H.Expectation
 checkLiteralAdapter = checkAdapter id literalAdapter context
