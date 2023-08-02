@@ -1,9 +1,13 @@
 module Hydra.Dsl.Lib.Strings where
 
+import Hydra.Dsl.Base
 import Hydra.Phantoms
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
 
+
+(++) :: Datum String -> Datum String -> Datum String
+l ++ r = (Datum $ Terms.primitive _strings_cat) @@ (list [l, r])
 
 cat :: Datum ([String] -> String)
 cat = Datum $ Terms.primitive _strings_cat

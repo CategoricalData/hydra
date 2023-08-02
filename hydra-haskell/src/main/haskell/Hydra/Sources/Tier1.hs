@@ -8,6 +8,7 @@ import Hydra.Dsl.Base as Base
 import Hydra.Dsl.Lib.Equality as Equality
 import Hydra.Dsl.Lib.Maps as Maps
 import Hydra.Dsl.Lib.Lists as Lists
+import Hydra.Dsl.Lib.Strings
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
@@ -38,6 +39,7 @@ eqA = (M.fromList [(Name "a", S.fromList [TypeClassEquality])])
 elementA = Types.apply (TypeVariable _Element) (Types.var "a") :: Type a
 fieldA = Types.apply (TypeVariable _Field) (Types.var "a") :: Type a
 fieldTypeA = Types.apply (TypeVariable _FieldType) (Types.var "a") :: Type a
+flowGraphATypeA = Types.apply (Types.apply (TypeVariable _Flow) graphA) typeA :: Type a
 graphA = Types.apply (TypeVariable _Graph) (Types.var "a") :: Type a
 termA = Types.apply (TypeVariable _Term) (Types.var "a") :: Type a
 typeA = Types.apply (TypeVariable _Type) (Types.var "a") :: Type a
@@ -45,18 +47,6 @@ typeA = Types.apply (TypeVariable _Type) (Types.var "a") :: Type a
 ignoredVariableDef :: Definition String
 ignoredVariableDef = tier1Definition "ignoredVariable" $
   string "_"
-
--- localNameOfLazy :: Name -> String
--- localNameOfLazy = qualifiedNameLocal . qualifyNameLazy
---
--- localNameOfEager :: Name -> String
--- localNameOfEager = qualifiedNameLocal . qualifyNameEager
---
--- namespaceOfLazy :: Name -> Maybe Namespace
--- namespaceOfLazy = qualifiedNameNamespace . qualifyNameLazy
---
--- namespaceOfEager :: Name -> Maybe Namespace
--- namespaceOfEager = qualifiedNameNamespace . qualifyNameEager
 
 placeholderNameDef :: Definition Name
 placeholderNameDef = tier1Definition "placeholderName" $
