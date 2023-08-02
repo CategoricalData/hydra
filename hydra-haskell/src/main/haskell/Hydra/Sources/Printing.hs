@@ -6,6 +6,7 @@ import Hydra.Kernel
 import Hydra.Sources.Basics
 import Hydra.Dsl.Base
 import Hydra.Dsl.Lib.Literals as Literals
+import Hydra.Dsl.Lib.Strings
 import qualified Hydra.Dsl.Types as Types
 
 import Prelude hiding ((++))

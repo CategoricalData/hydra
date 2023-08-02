@@ -17,7 +17,6 @@ import Hydra.Dsl.PhantomLiterals
 import Hydra.Sources.Core
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
-import qualified Hydra.Dsl.Lib.Strings as Strings
 
 import Prelude hiding ((++))
 import Data.String(IsString(..))
@@ -55,9 +54,6 @@ x @-> y = (x, y)
 infixr 0 -->
 (-->) :: Case a -> Datum (a -> b) -> Field Kv
 c --> t = caseField c t
-
-(++) :: Datum String -> Datum String -> Datum String
-l ++ r = Strings.cat @@ list [l, r]
 
 apply :: Datum (a -> b) -> Datum a -> Datum b
 apply (Datum lhs) (Datum rhs) = Datum $ Terms.apply lhs rhs
