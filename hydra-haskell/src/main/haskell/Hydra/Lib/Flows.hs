@@ -2,7 +2,8 @@
 
 module Hydra.Lib.Flows where
 
-import Hydra.Kernel
+import Hydra.Compute
+import Hydra.Flows
 
 
 apply :: Flow s (x -> y) -> Flow s x -> Flow s y
