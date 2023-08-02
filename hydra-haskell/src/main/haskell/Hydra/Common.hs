@@ -9,15 +9,14 @@ import Hydra.Flows
 import Hydra.Graph
 import Hydra.Module
 import Hydra.Tools.Formatting
+import qualified Hydra.Lib.Flows as Flows
+import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Strings as Strings
 
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-
-debug :: Bool
-debug = True
 
 convertFloatValue :: FloatType -> FloatValue -> FloatValue
 convertFloatValue target = encoder . decoder
@@ -56,9 +55,9 @@ convertIntegerValue target = encoder . decoder
       IntegerTypeUint64 -> IntegerValueUint64 $ fromIntegral d
 
 requireTypeAnnotation :: Show a => Term a -> Flow (Graph a) (Type a)
-requireTypeAnnotation term = do
-    anns <- graphAnnotations <$> getState
-    mt <- annotationClassTermType anns term
-    case mt of
-      Nothing -> fail $ "missing type annotation in " ++ show term
-      Just t -> pure t
+requireTypeAnnotation term = Flows.bind (Flows.map graphAnnotations getState) annsToType
+  where
+    annsToType anns = Flows.bind (annotationClassTermType anns term) checkType
+    checkType mt = case mt of
+        Nothing -> fail $ "missing type annotation in " ++ show term
+        Just t -> pure t
