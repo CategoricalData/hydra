@@ -3,9 +3,9 @@
 module Hydra.Lib.Io (
   showTerm,
   showType,
-  hydraCore,
-  termJsonCoder,
-  termStringCoder
+--  hydraCore,
+--  termJsonCoder,
+--  termStringCoder
 ) where
 
 import Hydra.Kernel
@@ -20,33 +20,35 @@ import qualified Data.Maybe as Y
 
 
 showTerm :: Term a -> String
-showTerm term = fromFlow hydraCore $ coderEncode termStringCoder encoded
+showTerm term = fromFlow "fail" hydraCore $ do
+    coder <- termStringCoder
+    coderEncode coder encoded
   where
     encoded = coreEncodeTerm $ rewriteTermMeta (const $ Kv M.empty) term
 
-termJsonCoder :: Coder (Graph Kv) (Graph Kv) (Term Kv) Json.Value
-termJsonCoder = fromFlow hydraCore $ jsonCoder $ TypeVariable _Term
-
-termStringCoder :: Coder (Graph Kv) (Graph Kv) (Term Kv) String
-termStringCoder = Coder mout min
+termStringCoder :: Flow (Graph Kv) (Coder (Graph Kv) (Graph Kv) (Term Kv) String)
+termStringCoder = do
+    termJsonCoder <- jsonCoder $ TypeVariable _Term
+    return $ Coder (mout termJsonCoder) (min termJsonCoder)
   where
-    mout term = jsonValueToString <$> coderEncode termJsonCoder term
-    min s = case stringToJsonValue s of
+    mout termJsonCoder term = jsonValueToString <$> coderEncode termJsonCoder term
+    min termJsonCoder s = case stringToJsonValue s of
       Left msg -> fail $ "failed to parse JSON value: " ++ msg
       Right v -> coderDecode termJsonCoder v
 
-showType :: Ord a => Type a -> String
-showType typ = fromFlow hydraCore $ coderEncode typeStringCoder encoded
+showType :: Type a -> String
+showType typ = fromFlow "fail" hydraCore $ do
+    coder <- typeStringCoder
+    coderEncode coder encoded
   where
     encoded = coreEncodeType $ rewriteTypeMeta (const $ Kv M.empty) typ
 
-typeJsonCoder :: Coder (Graph Kv) (Graph Kv) (Term Kv) Json.Value
-typeJsonCoder = fromFlow hydraCore $ jsonCoder $ TypeVariable _Type
-
-typeStringCoder :: Coder (Graph Kv) (Graph Kv) (Term Kv) String
-typeStringCoder = Coder mout min
+typeStringCoder :: Flow (Graph Kv) (Coder (Graph Kv) (Graph Kv) (Term Kv) String)
+typeStringCoder = do
+    typeJsonCoder <- jsonCoder $ TypeVariable _Type
+    return $ Coder (mout typeJsonCoder) (min typeJsonCoder)
   where
-    mout term = jsonValueToString <$> coderEncode typeJsonCoder term
-    min s = case stringToJsonValue s of
+    mout typeJsonCoder term = jsonValueToString <$> coderEncode typeJsonCoder term
+    min typeJsonCoder s = case stringToJsonValue s of
       Left msg -> fail $ "failed to parse as JSON value: " ++ msg
       Right v -> coderDecode typeJsonCoder v

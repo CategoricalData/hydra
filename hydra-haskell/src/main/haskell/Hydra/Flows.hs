@@ -34,9 +34,10 @@ instance Monad (Flow s) where
 instance MonadFail (Flow s) where
   fail msg = Flow $ \s t -> FlowState Nothing s (pushError msg t)
 
-fromFlow :: s -> Flow s a -> a
-fromFlow cx f = case flowStateValue (unFlow f cx emptyTrace) of
+fromFlow :: a -> s -> Flow s a -> a
+fromFlow def cx f = case flowStateValue (unFlow f cx emptyTrace) of
   Just x -> x
+  Nothing -> def
 
 fromFlowIo :: s -> Flow s a -> IO.IO a
 fromFlowIo cx f = case mv of
