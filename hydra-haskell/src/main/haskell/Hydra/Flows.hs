@@ -5,6 +5,7 @@ module Hydra.Flows where
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Graph
+import Hydra.Tier1
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -32,12 +33,6 @@ instance Monad (Flow s) where
             Nothing -> FlowState Nothing s1 t1
 instance MonadFail (Flow s) where
   fail msg = Flow $ \s t -> FlowState Nothing s (pushError msg t)
-
-emptyTrace :: Trace
-emptyTrace = Trace [] [] M.empty
-
-flowSucceeds :: s -> Flow s a -> Bool
-flowSucceeds cx f = Y.isJust $ flowStateValue $ unFlow f cx emptyTrace
 
 fromFlow :: s -> Flow s a -> a
 fromFlow cx f = case flowStateValue (unFlow f cx emptyTrace) of

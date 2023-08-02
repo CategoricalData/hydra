@@ -2,7 +2,10 @@
 
 module Hydra.Tier1 where
 
+import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
+import qualified Hydra.Lib.Maps as Maps
+import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import Data.Int
@@ -47,3 +50,13 @@ unqualifyName qname =
   in (Core.Name (Strings.cat [
     prefix,
     (Module.qualifiedNameLocal qname)]))
+
+emptyTrace :: Compute.Trace
+emptyTrace = Compute.Trace {
+  Compute.traceStack = [],
+  Compute.traceMessages = [],
+  Compute.traceOther = Maps.empty}
+
+-- | Check whether a flow succeeds
+flowSucceeds :: (s -> Compute.Flow s a -> Bool)
+flowSucceeds cx f = (Optionals.isJust (Compute.flowStateValue (Compute.unFlow f cx emptyTrace)))

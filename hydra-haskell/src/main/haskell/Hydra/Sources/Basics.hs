@@ -6,6 +6,7 @@ import Hydra.Kernel
 import Hydra.Sources.Tier1
 import Hydra.Dsl.Base as Base
 import Hydra.Dsl.Lib.Equality as Equality
+import Hydra.Dsl.Lib.Flows as Flows
 import Hydra.Dsl.Lib.Maps as Maps
 import Hydra.Dsl.Lib.Lists as Lists
 import Hydra.Dsl.Lib.Logic as Logic
@@ -320,7 +321,7 @@ typeVariantsDef = basicsDefinition "typeVariants" $
     _TypeVariant_union,
     _TypeVariant_variable]
 
--- Formatting hs
+-- Formatting.hs
 
 capitalizeDef :: Definition (String -> String)
 capitalizeDef = basicsDefinition "capitalize" $
@@ -462,3 +463,27 @@ qualifyNameLazyDef = basicsDefinition "qualifyNameLazy" $
       @@ (Equality.equalInt32 @@ int32 1 @@ (Lists.length @@ var "parts")))
     `with` [
       "parts">: Lists.reverse @@ (Strings.splitOn @@ "." @@ (unwrap _Name @@ var "name"))]
+      
+      
+{-
+requireTypeAnnotation :: Show a => Term a -> Flow (Graph a) (Type a)
+requireTypeAnnotation term = Flows.bind (Flows.map graphAnnotations getState) annsToType
+  where
+    annsToType anns = Flows.bind (annotationClassTermType anns term) checkType
+    checkType mt = case mt of
+        Nothing -> fail $ "missing type annotation in " ++ show term
+        Just t -> pure t
+
+-}
+
+--requireTypeAnnotationDef :: Definition (Term a -> Flow (Graph a) (Type a))
+--requireTypeAnnotationDef = basicsDefinition "requireTypeAnnotationTmp" $
+--  function termA flowGraphATypeA $
+--  lambda "term" $ (Flows.bind @@ (Flows.map @@ (project _Graph _Graph_annotations) @@ var .getState) @@ var "annsToType")
+--  `with` [
+--    "annsToType" >: lambda "anns" $ (Flow.bind @@ (ref annotationClassTermTypeDef @@ var "anns" @@ var "term") @@ var "checkType"),
+--    "checkType" >: lambda "mt" $ (Flow.caseOf @@ var "mt" [
+--      Case _Nothing --> Flow.fail @@ (Strings.concat @@ (Lists.map @@ (Strings.append @@ (string "missing type annotation in ")) @@ (Lists.map @@ (Strings.show @@ var "term")))),
+--      Case _Just --> Flow.pure @@ var "t"])
+--    `with` [
+--      "t" >: (project _Just _Just_value @@ var "mt")]]
