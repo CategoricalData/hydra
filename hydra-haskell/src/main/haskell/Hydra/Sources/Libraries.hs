@@ -118,6 +118,8 @@ _hydra_lib_optionals = Namespace "hydra/lib/optionals"
 _optionals_apply :: Name
 _optionals_apply = qname _hydra_lib_optionals "apply" :: Name
 _optionals_bind = qname _hydra_lib_optionals "bind" :: Name
+_optionals_isJust = qname _hydra_lib_optionals "isJust" :: Name
+_optionals_isNothing = qname _hydra_lib_optionals "isNothing" :: Name
 _optionals_map = qname _hydra_lib_optionals "map" :: Name
 _optionals_pure = qname _hydra_lib_optionals "pure" :: Name
 
@@ -255,6 +257,8 @@ hydraLibOptionalsPrimitives :: (Ord a, Show a) => [Primitive a]
 hydraLibOptionalsPrimitives = [
     prim2 _optionals_apply (optional $ function x y) (optional x) (optional y) Optionals.apply,
     prim2 _optionals_bind (optional x) (function x (optional y)) (optional y) Optionals.bind,
+    prim1 _optionals_isJust (optional x) boolean Optionals.isJust,
+    prim1 _optionals_isNothing (optional x) boolean Optionals.isNothing,
     prim2 _optionals_map (function x y) (optional x) (optional y) Optionals.map,
     prim1 _optionals_pure x (optional x) Optionals.pure]
   where

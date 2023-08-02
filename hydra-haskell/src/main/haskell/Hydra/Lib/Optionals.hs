@@ -11,6 +11,12 @@ apply = (<*>)
 bind :: Y.Maybe x -> (x -> Y.Maybe y) -> Y.Maybe y
 bind = (>>=)
 
+isJust :: Y.Maybe x -> Bool
+isJust = Y.isJust
+
+isNothing :: Y.Maybe x -> Bool
+isNothing = Y.isNothing
+
 map :: (x -> y) -> Y.Maybe x -> Y.Maybe y
 map = fmap
 

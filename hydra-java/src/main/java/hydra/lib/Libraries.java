@@ -131,6 +131,8 @@ public class Libraries {
                 new hydra.lib.math.Add<>(),
                 new hydra.lib.optionals.Apply<>(),
                 new hydra.lib.optionals.Bind<>(),
+                new hydra.lib.optionals.IsJust<>(),
+                new hydra.lib.optionals.IsNothing<>(),
                 new hydra.lib.optionals.Map<>(),
                 new hydra.lib.optionals.Pure<>());
     }
