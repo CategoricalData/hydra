@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Hydra.Sources.Tier1 where
 
 import Hydra.Kernel
@@ -10,7 +12,7 @@ import Hydra.Dsl.Lib.Flows as Flows
 import Hydra.Dsl.Lib.Maps as Maps
 import Hydra.Dsl.Lib.Lists as Lists
 import Hydra.Dsl.Lib.Optionals as Optionals
-import Hydra.Dsl.Lib.Strings
+import Hydra.Dsl.Lib.Strings as Strings
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
@@ -38,7 +40,11 @@ hydraTier1Module = Module (Namespace "hydra/tier1") elements [hydraGraphModule, 
      el unqualifyNameDef,
      -- Flows.hs
      el emptyTraceDef,
-     el flowSucceedsDef
+     el flowSucceedsDef,
+     el fromFlowDef,
+--     el getStateDef,
+     el maxTraceDepthDef,
+     el pushErrorDef
      ]
 
 eqA = (M.fromList [(Name "a", S.fromList [TypeClassEquality])])
@@ -47,6 +53,9 @@ fieldA = Types.apply (TypeVariable _Field) (Types.var "a") :: Type a
 fieldTypeA = Types.apply (TypeVariable _FieldType) (Types.var "a") :: Type a
 flowGraphATypeA = Types.apply (Types.apply (TypeVariable _Flow) graphA) typeA :: Type a
 flowSA = Types.apply (Types.apply (TypeVariable _Flow) (Types.var "s")) (Types.var "a") :: Type a
+flowSS = Types.apply (Types.apply (TypeVariable _Flow) (Types.var "s")) (Types.var "s") :: Type a
+flowSY = Types.apply (Types.apply (TypeVariable _Flow) (Types.var "s")) (Types.var "y") :: Type a
+flowStateSS = Types.apply (Types.apply (TypeVariable _FlowState) (Types.var "s")) (Types.var "s") :: Type a
 graphA = Types.apply (TypeVariable _Graph) (Types.var "a") :: Type a
 termA = Types.apply (TypeVariable _Term) (Types.var "a") :: Type a
 typeA = Types.apply (TypeVariable _Type) (Types.var "a") :: Type a
@@ -114,34 +123,56 @@ flowSucceedsDef :: Definition (Flow s a -> Bool)
 flowSucceedsDef = tier1Definition "flowSucceeds" $
   doc "Check whether a flow succeeds" $
   function (Types.var "s") (Types.function flowSA Types.boolean) $
-    lambda "cx" $ lambda "f" $
-      Optionals.isJust @@ (Flows.flowStateValue @@ (Flows.unFlow @@ var "f" @@ var "cx" @@ ref emptyTraceDef))
+  lambda "cx" $ lambda "f" $
+    Optionals.isJust @@ (Flows.flowStateValue @@ (Flows.unFlow @@ var "f" @@ var "cx" @@ ref emptyTraceDef))
 
---fromFlow :: a -> s -> Flow s a -> a
---fromFlow def cx f = case flowStateValue (unFlow f cx emptyTrace) of
---  Just x -> x
---  Nothing -> def
---
---fromFlowIo :: s -> Flow s a -> IO.IO a
---fromFlowIo cx f = case mv of
---    Just v -> pure v
---    Nothing -> fail $ traceSummary trace
---  where
---    FlowState mv _ trace = unFlow f cx emptyTrace
---
+fromFlowDef :: Definition (a -> s -> Flow s a -> a)
+fromFlowDef = tier1Definition "fromFlow" $
+  doc "Get the value of a flow, or a default value if the flow fails" $
+  function (Types.var "a") (Types.function (Types.var "s") (Types.function flowSA (Types.var "a"))) $
+  lambda "def" $ lambda "cx" $ lambda "f" $
+      matchOpt (var "def") (lambda "x" $ var "x")
+        @@ (Flows.flowStateValue @@ (Flows.unFlow @@ var "f" @@ var "cx" @@ ref emptyTraceDef))
+
+
 --getState :: Flow s s
 --getState = Flow q
 --  where
---    f = pure ()
---    q s0 t0 = case v1 of
+--    q s0 t0 = case flowStateValue fs1 of
 --        Nothing -> FlowState Nothing s1 t1
 --        Just _ -> FlowState (Just s1) s1 t1
 --      where
---        FlowState v1 s1 t1 = unFlow f s0 t0
---
---maxTraceDepth :: Int
---maxTraceDepth = 50
---
+--        fs1 = unFlow (pure ()) s0 t0
+--        s1 = flowStateState fs1
+--        t1 = flowStateTrace fs1
+
+--getStateDef :: Definition (Flow s s)
+--getStateDef = tier1Definition "getState" $
+--  doc "Get the state of the current flow" $
+--  typed flowSS $
+--  ((wrap _Flow $ var "q")
+--  `with` [
+--    "q">: function (Types.var "s") (Types.function (Types.var "x") flowStateSS) $
+--      lambda "s0" $ lambda "t0" $ (
+--        (matchOpt (Flows.flowState nothing (var "s1") (var "t1")) (constant (Flows.flowState (just $ var "s1") (var "s1") (var "t1")))
+--          @@ (Flows.flowStateValue @@ var "fs1"))
+--        `with` [
+--          "fs1">:
+--            typed (Types.apply (Types.apply (TypeVariable _FlowState) Types.unit) (Types.var "x")) $
+--            Flows.unFlow @@ (Flows.pure @@ unit) @@ var "s0" @@ var "t0",
+--          "s1">:
+--            typed (Types.var "s") $
+--            Flows.flowStateState @@ var "fs1",
+--          "t1">:
+--            typed (TypeVariable _Trace) $
+--            Flows.flowStateTrace @@ var "fs1"
+--        ])])
+
+
+
+maxTraceDepthDef :: Definition Int
+maxTraceDepthDef = tier1Definition "maxTraceDepth" $ int32 50
+
 --mutateTrace :: (Trace -> Either String Trace) -> (Trace -> Trace -> Trace) -> Flow s a -> Flow s a
 --mutateTrace mutate restore f = Flow q
 --  where
@@ -156,7 +187,19 @@ flowSucceedsDef = tier1Definition "flowSucceeds" $
 --pushError msg t = t {traceMessages = errorMsg:(traceMessages t)}
 --  where
 --    errorMsg = "Error: " ++ msg ++ " (" ++ L.intercalate " > " (L.reverse $ traceStack t) ++ ")"
---
+
+pushErrorDef :: Definition (String -> Trace -> Trace)
+pushErrorDef = tier1Definition "pushErrorTmp" $
+  doc "Push an error message" $
+  lambda "msg" $ lambda "t" $ ((Flows.trace
+      (Flows.traceStack @@ var "t")
+      (Lists.cons @@ var "errorMsg" @@ (Flows.traceMessages @@ var "t"))
+      (Flows.traceOther @@ var "t"))
+    `with` [
+--      "errorMsg">: "foo"])
+      "errorMsg">: Strings.concat ["Error: ", var "msg", " (", (Strings.intercalate @@ " > " @@ (Lists.reverse @@ (Flows.traceStack @@ var "t"))), ")"]])
+   
+
 --putState :: s -> Flow s ()
 --putState cx = Flow q
 --  where
@@ -177,7 +220,14 @@ flowSucceedsDef = tier1Definition "flowSucceeds" $
 --
 --unexpected :: Show x => String -> x -> Flow s y
 --unexpected cat obj = fail $ "expected " ++ cat ++ " but found: " ++ show obj
---
+
+--unexpectedDef :: Definition (String -> x -> Flow s y)
+--unexpectedDef = tier1Definition "unexpected" $
+--  doc "Fail with a message indicating an unexpected value" $
+--  function Types.string (Types.function (Types.var "x") flowSY) $
+--  lambda "cat" $ lambda "obj" $
+--    Flows.fail @@ (Strings.concat ["expected ", var "cat", " but found: " ++ (show @@ var "obj"))
+
 --warn :: String -> Flow s a -> Flow s a
 --warn msg b = Flow u'
 --  where

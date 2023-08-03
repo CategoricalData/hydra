@@ -60,3 +60,12 @@ emptyTrace = Compute.Trace {
 -- | Check whether a flow succeeds
 flowSucceeds :: (s -> Compute.Flow s a -> Bool)
 flowSucceeds cx f = (Optionals.isJust (Compute.flowStateValue (Compute.unFlow f cx emptyTrace)))
+
+-- | Get the value of a flow, or a default value if the flow fails
+fromFlow :: (a -> s -> Compute.Flow s a -> a)
+fromFlow def cx f = ((\x -> case x of
+  Nothing -> def
+  Just v -> v) (Compute.flowStateValue (Compute.unFlow f cx emptyTrace)))
+
+maxTraceDepth :: Int
+maxTraceDepth = 50
