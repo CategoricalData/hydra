@@ -4,6 +4,7 @@ module Hydra.Sources.Langs.Shacl.Model where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
+import Hydra.Dsl.Bootstrap
 import Hydra.Sources.Langs.Rdf.Syntax
 import Hydra.Dsl.Types as Types
 

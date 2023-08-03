@@ -4,6 +4,7 @@ module Hydra.Sources.Constraints where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
+import Hydra.Dsl.Bootstrap
 import Hydra.Sources.Core
 import Hydra.Sources.Query
 import Hydra.Dsl.Types as Types

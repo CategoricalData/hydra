@@ -3,15 +3,13 @@
 module Hydra.Lib.Io (
   showTerm,
   showType,
---  hydraCore,
---  termJsonCoder,
---  termStringCoder
 ) where
 
 import Hydra.Kernel
 import Hydra.Langs.Json.Coder
 import Hydra.Dsl.Annotations
 import Hydra.Langs.Json.Serde
+import Hydra.Sources.Core
 import qualified Hydra.Langs.Json.Model as Json
 import qualified Hydra.Dsl.Types as Types
 

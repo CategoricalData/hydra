@@ -3,6 +3,7 @@ module Hydra.Sources.Langs.Rdf.Syntax where
 import Hydra.Kernel
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Annotations
+import Hydra.Dsl.Bootstrap
 
 
 rdfSyntaxModule :: Module Kv

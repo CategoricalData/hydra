@@ -4,6 +4,7 @@ module Hydra.Sources.Module where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
+import Hydra.Dsl.Bootstrap
 import Hydra.Sources.Graph
 import Hydra.Dsl.Types as Types
 

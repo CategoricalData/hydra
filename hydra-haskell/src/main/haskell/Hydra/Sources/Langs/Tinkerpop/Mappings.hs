@@ -4,6 +4,7 @@ module Hydra.Sources.Langs.Tinkerpop.Mappings where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
+import Hydra.Dsl.Bootstrap
 import Hydra.Sources.Compute
 import Hydra.Sources.Core
 import Hydra.Langs.Tinkerpop.Mappings

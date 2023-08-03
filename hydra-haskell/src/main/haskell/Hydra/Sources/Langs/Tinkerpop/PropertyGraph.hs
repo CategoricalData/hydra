@@ -6,6 +6,7 @@ import Hydra.Compute
 import Hydra.Flows
 import Hydra.Module
 import Hydra.Dsl.Annotations
+import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
 import Hydra.Sources.Core

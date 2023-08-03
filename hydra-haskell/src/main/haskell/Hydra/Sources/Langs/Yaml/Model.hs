@@ -2,6 +2,7 @@ module Hydra.Sources.Langs.Yaml.Model where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
+import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
 

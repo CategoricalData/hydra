@@ -4,6 +4,7 @@ module Hydra.Sources.Testing where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
+import Hydra.Dsl.Bootstrap
 import Hydra.Sources.Core
 import Hydra.Dsl.Types as Types
 

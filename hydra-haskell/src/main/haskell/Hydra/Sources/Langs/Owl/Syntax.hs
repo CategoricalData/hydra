@@ -3,6 +3,7 @@ module Hydra.Sources.Langs.Owl.Syntax where
 import Hydra.Kernel
 
 import Hydra.Dsl.Annotations
+import Hydra.Dsl.Bootstrap
 import Hydra.Sources.Langs.Rdf.Syntax
 import Hydra.Sources.Langs.Xml.Schema
 import Hydra.Dsl.Types as Types
