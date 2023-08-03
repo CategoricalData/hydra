@@ -1,11 +1,13 @@
 module Hydra.Dsl.Lib.Flows where
 
 import Hydra.Dsl.Base
+import Hydra.Core
 import Hydra.Compute
 import Hydra.Phantoms
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
 
+import qualified Data.Map as M
 
 -- Primitives
 
@@ -23,8 +25,35 @@ pure = Datum $ Terms.primitive _flows_pure
 
 -- Accessors
 
+flowState :: Datum (Maybe x) -> Datum s -> Datum Trace -> Datum (FlowState s x)
+flowState value state trace = record _FlowState [
+    _FlowState_value>>: value,
+    _FlowState_state>>: state,
+    _FlowState_trace>>: trace]
+
+flowStateState :: Datum (FlowState s x -> s)
+flowStateState = project _FlowState _FlowState_state
+
+flowStateTrace :: Datum (FlowState s x -> Trace)
+flowStateTrace = project _FlowState _FlowState_trace
+
 flowStateValue :: Datum (FlowState s x -> Maybe x)
 flowStateValue = project _FlowState _FlowState_value
+
+trace :: Datum [String] -> Datum [String] -> Datum (M.Map String (Term Kv)) -> Datum Trace
+trace stack messages other = record _Trace [
+    _Trace_stack>>: stack,
+    _Trace_messages>>: messages,
+    _Trace_other>>: other]
+    
+traceStack :: Datum (Trace -> [String])
+traceStack = project _Trace _Trace_stack
+
+traceMessages :: Datum (Trace -> [String])
+traceMessages = project _Trace _Trace_messages
+
+traceOther :: Datum (Trace -> M.Map String (Term Kv))
+traceOther = project _Trace _Trace_other
 
 unFlow :: Datum (Flow s x -> s -> Trace -> FlowState s x)
 unFlow = unwrap _Flow

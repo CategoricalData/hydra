@@ -38,3 +38,8 @@ toLower = Datum $ Terms.primitive _strings_toLower
 
 toUpper :: Datum (String -> String)
 toUpper = Datum $ Terms.primitive _strings_toUpper
+
+-- Helpers
+
+concat :: [Datum String] -> Datum String
+concat strings = (Datum $ Terms.primitive _strings_cat) @@ list strings
