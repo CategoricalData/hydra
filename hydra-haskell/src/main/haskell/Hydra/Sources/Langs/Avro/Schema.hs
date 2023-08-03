@@ -4,6 +4,7 @@ module Hydra.Sources.Langs.Avro.Schema where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
+import Hydra.Dsl.Bootstrap
 import Hydra.Sources.Langs.Json.Model
 import Hydra.Dsl.Types as Types
 

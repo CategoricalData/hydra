@@ -5,7 +5,6 @@ module Hydra.Dsl.Terms where
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Graph
-import Hydra.Flows
 import qualified Hydra.Tier1 as Tier1
 import qualified Hydra.Dsl.Literals as Literals
 
@@ -153,11 +152,6 @@ project tname fname = TermFunction $ FunctionElimination $ EliminationRecord $ P
 
 record :: Name -> [Field a] -> Term a
 record tname fields = TermRecord $ Record tname fields
-
-requireField :: M.Map FieldName (Term a) -> FieldName -> GraphFlow a (Term a)
-requireField fields fname = Y.maybe err pure $ M.lookup fname fields
-  where
-    err = fail $ "no such field: " ++ unFieldName fname
 
 set :: S.Set (Term a) -> Term a
 set = TermSet

@@ -3,10 +3,7 @@
 module Hydra.Dsl.Types where
 
 import qualified Hydra.Tier1 as Tier1
-import Hydra.Common
 import Hydra.Core
-import Hydra.Lexical
-import Hydra.Flows
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -134,7 +131,6 @@ union :: [FieldType a] -> Type a
 union fields = TypeUnion $ RowType Tier1.placeholderName Nothing fields
 
 unit :: Type a
---unit = TypeVariable $ Name "hydra/core.UnitType" -- TODO
 unit = TypeRecord $ RowType (Name "hydra/core.UnitType") Nothing []
 
 var :: String -> Type a

@@ -19,6 +19,7 @@ module Hydra.Codegen (
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
+import Hydra.Dsl.Bootstrap
 import qualified Hydra.Langs.Graphql.Coder as Graphql
 import qualified Hydra.Langs.Haskell.Coder as Haskell
 import qualified Hydra.Langs.Java.Coder as Java

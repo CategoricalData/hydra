@@ -1,10 +1,8 @@
--- | A DSL for constructing literal types and terms
+-- | A DSL for constructing literal values
 
 module Hydra.Dsl.Literals where
 
-import Hydra.Compute
 import Hydra.Core
-import Hydra.Flows
 
 import Data.Int
 

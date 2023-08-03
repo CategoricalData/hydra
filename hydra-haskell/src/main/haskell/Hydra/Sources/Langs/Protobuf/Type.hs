@@ -4,6 +4,7 @@ module Hydra.Sources.Langs.Protobuf.Type where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
+import Hydra.Dsl.Bootstrap
 import Hydra.Sources.Langs.Protobuf.Any
 import Hydra.Sources.Langs.Protobuf.SourceContext
 import Hydra.Dsl.Types as Types

@@ -4,6 +4,7 @@ module Hydra.Sources.Coders where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
+import Hydra.Dsl.Bootstrap
 import Hydra.Sources.Core
 import Hydra.Sources.Compute
 import Hydra.Sources.Graph

@@ -5,6 +5,7 @@ module Hydra.Sources.Langs.Protobuf.SourceContext where
 import Hydra.Kernel
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Annotations
+import Hydra.Dsl.Bootstrap
 
 
 pbSourceContextNs = Namespace "hydra/langs/protobuf/sourceContext"

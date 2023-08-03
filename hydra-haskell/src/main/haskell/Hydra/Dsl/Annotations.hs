@@ -1,18 +1,11 @@
 -- | A DSL which is used as a basis for some of the other DSLs
 
-module Hydra.Dsl.Annotations (
-  module Hydra.Dsl.Annotations,
-  module Hydra.Dsl.Bootstrap,
-  module Hydra.Sources.Core,
-) where
+module Hydra.Dsl.Annotations where
 
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Kv
 import Hydra.Dsl.Terms as Terms
-import Hydra.Sources.Libraries
-import Hydra.Sources.Core
-import Hydra.Dsl.Bootstrap
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Data.Map as M
