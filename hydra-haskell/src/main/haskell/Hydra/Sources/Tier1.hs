@@ -32,8 +32,6 @@ hydraTier1Module = Module (Namespace "hydra/tier1") elements [hydraGraphModule, 
       <> "Higher tiers of generated code may not be depended upon, as these tiers may themselves need to depend on DSL functions or primitive functions.")
   where
    elements = [
-     el ignoredVariableDef,
-     el placeholderNameDef,
      el skipAnnotationsDef,
      el stripTermDef,
      el stripTypeDef,
@@ -43,7 +41,6 @@ hydraTier1Module = Module (Namespace "hydra/tier1") elements [hydraGraphModule, 
      el flowSucceedsDef,
      el fromFlowDef,
 --     el getStateDef,
-     el maxTraceDepthDef,
      el pushErrorDef
      ]
 
@@ -59,15 +56,6 @@ flowStateSS = Types.apply (Types.apply (TypeVariable _FlowState) (Types.var "s")
 graphA = Types.apply (TypeVariable _Graph) (Types.var "a") :: Type a
 termA = Types.apply (TypeVariable _Term) (Types.var "a") :: Type a
 typeA = Types.apply (TypeVariable _Type) (Types.var "a") :: Type a
-
-ignoredVariableDef :: Definition String
-ignoredVariableDef = tier1Definition "ignoredVariable" $
-  string "_"
-
-placeholderNameDef :: Definition Name
-placeholderNameDef = tier1Definition "placeholderName" $
-  doc "A placeholder name for row types as they are being constructed" $
-  wrap _Name $ string "Placeholder"
 
 skipAnnotationsDef :: Definition ((a -> Maybe (Annotated a m)) -> a -> a)
 skipAnnotationsDef = tier1Definition "skipAnnotations" $
@@ -167,11 +155,6 @@ fromFlowDef = tier1Definition "fromFlow" $
 --            typed (TypeVariable _Trace) $
 --            Flows.flowStateTrace @@ var "fs1"
 --        ])])
-
-
-
-maxTraceDepthDef :: Definition Int
-maxTraceDepthDef = tier1Definition "maxTraceDepth" $ int32 50
 
 --mutateTrace :: (Trace -> Either String Trace) -> (Trace -> Trace -> Trace) -> Flow s a -> Flow s a
 --mutateTrace mutate restore f = Flow q

@@ -30,6 +30,7 @@ import qualified Hydra.Langs.Yaml.Modules as Yaml
 
 import Hydra.Sources.Ast
 import Hydra.Sources.Basics
+import Hydra.Sources.Constants
 import Hydra.Sources.Tier1
 import Hydra.Sources.Coders
 import Hydra.Sources.Compute
@@ -121,7 +122,7 @@ hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElement
 tier2KernelModules :: [Module Kv]
 tier2KernelModules = [
   hydraBasicsModule,
-  hydraTier1Module,
+--  hydraTier1Module,
   hydraExtrasModule,
 --  hydraMonadsModule,
   hydraPrintingModule]
@@ -135,6 +136,7 @@ tier0KernelModules :: [Module Kv]
 tier0KernelModules = [
   hydraAstModule,
   hydraCodersModule,
+  hydraConstantsModule,
   hydraCoreModule,
   hydraComputeModule,
   hydraConstraintsModule,
