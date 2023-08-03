@@ -13,13 +13,6 @@ import Data.List
 import Data.Map
 import Data.Set
 
-ignoredVariable :: String
-ignoredVariable = "_"
-
--- | A placeholder name for row types as they are being constructed
-placeholderName :: Core.Name
-placeholderName = (Core.Name "Placeholder")
-
 skipAnnotations :: ((x -> Maybe (Core.Annotated x a)) -> x -> x)
 skipAnnotations getAnn t =  
   let skip = (\t1 -> (\x -> case x of
@@ -66,6 +59,3 @@ fromFlow :: (a -> s -> Compute.Flow s a -> a)
 fromFlow def cx f = ((\x -> case x of
   Nothing -> def
   Just v -> v) (Compute.flowStateValue (Compute.unFlow f cx emptyTrace)))
-
-maxTraceDepth :: Int
-maxTraceDepth = 50

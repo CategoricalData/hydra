@@ -2,6 +2,7 @@
 
 module Hydra.Flows where
 
+import Hydra.Constants
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Graph

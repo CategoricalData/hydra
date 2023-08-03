@@ -3,9 +3,9 @@
 module Hydra.Dsl.Terms where
 
 import Hydra.Compute
+import Hydra.Constants
 import Hydra.Core
 import Hydra.Graph
-import qualified Hydra.Tier1 as Tier1
 import qualified Hydra.Dsl.Literals as Literals
 
 import Prelude hiding (map)
@@ -52,7 +52,7 @@ compose :: Term a -> Term a -> Term a
 compose f g = lambda "x" $ apply f (apply g $ var "x")
 
 constant :: Term a -> Term a
-constant = lambda Tier1.ignoredVariable
+constant = lambda ignoredVariable
 
 elimination :: Elimination a -> Term a
 elimination = TermFunction . FunctionElimination
