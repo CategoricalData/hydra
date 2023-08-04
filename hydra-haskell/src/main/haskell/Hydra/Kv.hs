@@ -3,7 +3,7 @@
 module Hydra.Kv where
 
 import Hydra.Basics
-import Hydra.Tier1
+import Hydra.Strip
 import Hydra.Core
 import Hydra.Common
 import Hydra.Compute

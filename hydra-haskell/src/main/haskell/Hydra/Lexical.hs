@@ -7,7 +7,7 @@ module Hydra.Lexical (
 
 import Hydra.Common
 import Hydra.Basics
-import Hydra.Tier1
+import Hydra.Strip
 import Hydra.Core
 import Hydra.Extras
 import Hydra.Graph

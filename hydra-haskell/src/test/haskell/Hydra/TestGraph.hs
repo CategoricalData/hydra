@@ -8,6 +8,7 @@ import Hydra.Sources.Libraries
 import Hydra.Dsl.Terms
 import Hydra.Sources.Core
 import Hydra.Dsl.Annotations as Ann
+import Hydra.Dsl.Bootstrap
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Data.Map  as M

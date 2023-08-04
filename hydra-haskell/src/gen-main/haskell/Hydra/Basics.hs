@@ -11,7 +11,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Module as Module
-import qualified Hydra.Tier1 as Tier1
+import qualified Hydra.Strip as Strip
 import Data.Int
 import Data.List
 import Data.Map
@@ -268,7 +268,7 @@ isEncodedType :: (Core.Term a -> Bool)
 isEncodedType t = ((\x -> case x of
   Core.TermApplication v -> (isEncodedType (Core.applicationFunction v))
   Core.TermUnion v -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.injectionTypeName v)))
-  _ -> False) (Tier1.stripTerm t))
+  _ -> False) (Strip.stripTerm t))
 
 isType :: (Eq a) => (Core.Type a -> Bool)
 isType t = ((\x -> case x of
@@ -276,15 +276,15 @@ isType t = ((\x -> case x of
   Core.TypeLambda v -> (isType (Core.lambdaTypeBody v))
   Core.TypeUnion v -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.rowTypeTypeName v)))
   Core.TypeVariable _ -> True
-  _ -> False) (Tier1.stripType t))
+  _ -> False) (Strip.stripType t))
 
 isUnitTerm :: (Eq a) => (Core.Term a -> Bool)
-isUnitTerm t = (Equality.equalTerm (Tier1.stripTerm t) (Core.TermRecord (Core.Record {
+isUnitTerm t = (Equality.equalTerm (Strip.stripTerm t) (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
   Core.recordFields = []})))
 
 isUnitType :: (Eq a) => (Core.Type a -> Bool)
-isUnitType t = (Equality.equalType (Tier1.stripType t) (Core.TypeRecord (Core.RowType {
+isUnitType t = (Equality.equalType (Strip.stripType t) (Core.TypeRecord (Core.RowType {
   Core.rowTypeTypeName = (Core.Name "hydra/core.UnitType"),
   Core.rowTypeExtends = Nothing,
   Core.rowTypeFields = []})))

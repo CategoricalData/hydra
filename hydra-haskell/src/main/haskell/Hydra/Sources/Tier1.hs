@@ -32,63 +32,14 @@ hydraTier1Module = Module (Namespace "hydra/tier1") elements [hydraGraphModule, 
       <> "Higher tiers of generated code may not be depended upon, as these tiers may themselves need to depend on DSL functions or primitive functions.")
   where
    elements = [
-     el skipAnnotationsDef,
-     el stripTermDef,
-     el stripTypeDef,
      el unqualifyNameDef,
      -- Flows.hs
      el emptyTraceDef,
      el flowSucceedsDef,
-     el fromFlowDef,
+     el fromFlowDef
 --     el getStateDef,
-     el pushErrorDef
+--     el pushErrorDef
      ]
-
-eqA = (M.fromList [(Name "a", S.fromList [TypeClassEquality])])
-elementA = Types.apply (TypeVariable _Element) (Types.var "a") :: Type a
-fieldA = Types.apply (TypeVariable _Field) (Types.var "a") :: Type a
-fieldTypeA = Types.apply (TypeVariable _FieldType) (Types.var "a") :: Type a
-flowGraphATypeA = Types.apply (Types.apply (TypeVariable _Flow) graphA) typeA :: Type a
-flowSA = Types.apply (Types.apply (TypeVariable _Flow) (Types.var "s")) (Types.var "a") :: Type a
-flowSS = Types.apply (Types.apply (TypeVariable _Flow) (Types.var "s")) (Types.var "s") :: Type a
-flowSY = Types.apply (Types.apply (TypeVariable _Flow) (Types.var "s")) (Types.var "y") :: Type a
-flowStateSS = Types.apply (Types.apply (TypeVariable _FlowState) (Types.var "s")) (Types.var "s") :: Type a
-graphA = Types.apply (TypeVariable _Graph) (Types.var "a") :: Type a
-termA = Types.apply (TypeVariable _Term) (Types.var "a") :: Type a
-typeA = Types.apply (TypeVariable _Type) (Types.var "a") :: Type a
-
-skipAnnotationsDef :: Definition ((a -> Maybe (Annotated a m)) -> a -> a)
-skipAnnotationsDef = tier1Definition "skipAnnotations" $
-  function getAnnType (Types.function (Types.var "x") (Types.var "x")) $
-  lambda "getAnn" $ lambda "t" $
-    (var "skip" @@ var "t") `with` [
-      "skip">:
-        function (Types.var "x") (Types.var "x") $
-        lambda "t1" $
-          (matchOpt
-            (var "t1")
-            (lambda "ann" $ var "skip" @@ (project _Annotated _Annotated_subject @@ var "ann")))
-          @@ (var "getAnn" @@ var "t1")]
-  where
-    getAnnType = (Types.function
-      (Types.var "x")
-      (Types.optional $ Types.apply (Types.apply (TypeVariable _Annotated) (Types.var "x")) (Types.var "a")))
-
-stripTermDef :: Definition (Term a -> Term a)
-stripTermDef = tier1Definition "stripTerm" $
-    doc "Strip all annotations from a term" $
-    function termA termA $
-      lambda "x" (ref skipAnnotationsDef @@ (match _Term (Just nothing) [
-        Case _Term_annotated --> lambda "ann" (just $ var "ann")]) @@ var "x")
-
-stripTypeDef :: Definition (Type a -> Type a)
-stripTypeDef = tier1Definition "stripType" $
-    doc "Strip all annotations from a type" $
-    function typeA typeA $
-      lambda "x" (ref skipAnnotationsDef @@ (match _Type (Just nothing) [
-        Case _Type_annotated --> lambda "ann" (just $ var "ann")]) @@ var "x")
-  where
-    typeA = Types.apply (TypeVariable _Type) (Types.var "a")
 
 unqualifyNameDef :: Definition (QualifiedName -> Name)
 unqualifyNameDef = tier1Definition "unqualifyName" $

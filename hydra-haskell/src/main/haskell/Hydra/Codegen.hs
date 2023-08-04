@@ -31,6 +31,7 @@ import qualified Hydra.Langs.Yaml.Modules as Yaml
 import Hydra.Sources.Ast
 import Hydra.Sources.Basics
 import Hydra.Sources.Constants
+import Hydra.Sources.Strip
 import Hydra.Sources.Tier1
 import Hydra.Sources.Coders
 import Hydra.Sources.Compute
@@ -146,6 +147,7 @@ tier0KernelModules = [
   hydraModuleModule,
   hydraPhantomsModule,
   hydraQueryModule,
+  hydraStripModule,
   hydraTestingModule,
   hydraWorkflowModule,
   jsonModelModule] -- JSON module is part of the kernel, despite being an external language; JSON support is built in to Hydra
