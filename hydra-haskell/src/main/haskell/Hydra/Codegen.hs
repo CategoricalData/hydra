@@ -2,8 +2,6 @@
 
 module Hydra.Codegen (
   hydraKernel,
-  tier2KernelModules,
-  tier0KernelModules,
   kernelModules,
   langModules,
   mainModules,
@@ -123,7 +121,6 @@ hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElement
 tier2KernelModules :: [Module Kv]
 tier2KernelModules = [
   hydraBasicsModule,
---  hydraTier1Module,
   hydraExtrasModule,
 --  hydraMonadsModule,
   hydraPrintingModule]

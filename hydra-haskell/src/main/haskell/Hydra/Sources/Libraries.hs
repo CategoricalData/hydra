@@ -3,6 +3,7 @@
 module Hydra.Sources.Libraries where
 
 import Hydra.Kernel
+import qualified Hydra.Dsl.Expect as Expect
 import Hydra.Dsl.Prims as Prims
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
@@ -17,6 +18,8 @@ import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
+
+import qualified Data.List as L
 
 
 _hydra_lib_equality :: Namespace
@@ -186,10 +189,28 @@ hydraLibFlowsPrimitives = [
     x = variable "x"
     y = variable "y"
 
+applyInterp :: Show a => Term a -> Term a -> Flow (Graph a) (Term a)
+applyInterp funs' args' = do
+    funs <- Expect.list Prelude.pure funs'
+    args <- Expect.list Prelude.pure args'
+    return $ Terms.list $ L.concat (helper args <$> funs)
+  where
+    helper args f = Terms.apply f <$> args
+
+bindInterp :: Show a => Term a -> Term a -> Flow (Graph a) (Term a)
+bindInterp args' fun = do
+    args <- Expect.list Prelude.pure args'
+    return $ Terms.apply (Terms.primitive $ Name "hydra/lib/lists.concat") (Terms.list $ Terms.apply fun <$> args)
+
+mapInterp :: Show a => Term a -> Term a -> Flow (Graph a) (Term a)
+mapInterp fun args' = do
+    args <- Expect.list Prelude.pure args'
+    return $ Terms.list (Terms.apply fun <$> args)
+
 hydraLibListsPrimitives :: (Ord a, Show a) => [Primitive a]
 hydraLibListsPrimitives = [
-    prim2Raw _lists_apply (list $ function x y) (list x) (list y) Lists.applyRaw,
-    prim2Raw _lists_bind (list x) (function x (list y)) (list y) Lists.bindRaw,
+    prim2Interp _lists_apply (list $ function x y) (list x) (list y) applyInterp,
+    prim2Interp _lists_bind (list x) (function x (list y)) (list y) bindInterp,
     prim1 _lists_concat (list (list x)) (list x) Lists.concat,
     prim2 _lists_concat2 (list x) (list x) (list x) Lists.concat2,
     prim2 _lists_cons x (list x) (list x) Lists.cons,
@@ -198,7 +219,7 @@ hydraLibListsPrimitives = [
     prim2 _lists_intersperse x (list x) (list x) Lists.intersperse,
     prim1 _lists_last (list x) x Lists.last,
     prim1 _lists_length (list x) int32 Lists.length,
-    prim2Raw _lists_map (function x y) (list x) (list y) Lists.mapRaw,
+    prim2Interp _lists_map (function x y) (list x) (list y) mapInterp,
     prim1 _lists_pure x (list x) Lists.pure,
     prim1 _lists_reverse (list x) (list x) Lists.reverse,
     prim1 _lists_tail (list x) (list x) Lists.tail]
