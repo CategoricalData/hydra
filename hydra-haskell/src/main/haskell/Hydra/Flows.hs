@@ -6,7 +6,7 @@ import Hydra.Constants
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Graph
-import Hydra.Tier1
+import qualified Hydra.Tier1 as Tier1
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -33,14 +33,14 @@ instance Monad (Flow s) where
             Just x' -> unFlow (k x') s1 t1
             Nothing -> FlowState Nothing s1 t1
 instance MonadFail (Flow s) where
-  fail msg = Flow $ \s t -> FlowState Nothing s (pushError msg t)
+  fail msg = Flow $ \s t -> FlowState Nothing s (Tier1.pushError msg t)
 
 fromFlowIo :: s -> Flow s a -> IO.IO a
 fromFlowIo cx f = case mv of
     Just v -> pure v
     Nothing -> fail $ traceSummary trace
   where
-    FlowState mv _ trace = unFlow f cx emptyTrace
+    FlowState mv _ trace = unFlow f cx Tier1.emptyTrace
 
 getState :: Flow s s
 getState = Flow q
@@ -58,15 +58,10 @@ mutateTrace mutate restore f = Flow q
   where
     q s0 t0 = either forLeft forRight $ mutate t0
       where
-        forLeft msg = FlowState Nothing s0 $ pushError msg t0
+        forLeft msg = FlowState Nothing s0 $ Tier1.pushError msg t0
         forRight t1 = FlowState v s1 $ restore t0 t2 -- retain the updated state, but reset the trace after execution
           where
             FlowState v s1 t2 = unFlow f s0 t1 -- execute the internal flow after augmenting the trace
-
-pushError :: String -> Trace -> Trace
-pushError msg t = t {traceMessages = errorMsg:(traceMessages t)}
-  where
-    errorMsg = "Error: " ++ msg ++ " (" ++ L.intercalate " > " (L.reverse $ traceStack t) ++ ")"
 
 putState :: s -> Flow s ()
 putState cx = Flow q

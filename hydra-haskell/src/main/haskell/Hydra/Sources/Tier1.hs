@@ -6,6 +6,7 @@ import Hydra.Kernel
 import Hydra.Sources.Compute
 import Hydra.Sources.Graph
 import Hydra.Sources.Mantle
+import Hydra.Sources.Strip
 import Hydra.Dsl.Base as Base
 import Hydra.Dsl.Lib.Equality as Equality
 import Hydra.Dsl.Lib.Flows as Flows
@@ -26,19 +27,17 @@ tier1Definition :: String -> Datum a -> Definition a
 tier1Definition = definitionInModule hydraTier1Module
 
 hydraTier1Module :: Module Kv
-hydraTier1Module = Module (Namespace "hydra/tier1") elements [hydraGraphModule, hydraMantleModule, hydraComputeModule] $
-    Just ("A module for all tier-1 functions and constants. "
-      <> "These are generated functions and constants which DSL functions and the implementations of primitive functions are allowed to depend upon. "
-      <> "Higher tiers of generated code may not be depended upon, as these tiers may themselves need to depend on DSL functions or primitive functions.")
+hydraTier1Module = Module (Namespace "hydra/tier1") elements [hydraGraphModule, hydraMantleModule, hydraComputeModule, hydraStripModule] $
+    Just ("A module for miscellaneous tier-1 functions and constants.")
   where
    elements = [
      el unqualifyNameDef,
      -- Flows.hs
      el emptyTraceDef,
      el flowSucceedsDef,
-     el fromFlowDef
+     el fromFlowDef,
 --     el getStateDef,
---     el pushErrorDef
+     el pushErrorDef
      ]
 
 unqualifyNameDef :: Definition (QualifiedName -> Name)
@@ -86,7 +85,7 @@ fromFlowDef = tier1Definition "fromFlow" $
 --        t1 = flowStateTrace fs1
 
 --getStateDef :: Definition (Flow s s)
---getStateDef = tier1Definition "getState" $
+--getStateDef = tier2Definition "getState" $
 --  doc "Get the state of the current flow" $
 --  typed flowSS $
 --  ((wrap _Flow $ var "q")
@@ -123,16 +122,15 @@ fromFlowDef = tier1Definition "fromFlow" $
 --    errorMsg = "Error: " ++ msg ++ " (" ++ L.intercalate " > " (L.reverse $ traceStack t) ++ ")"
 
 pushErrorDef :: Definition (String -> Trace -> Trace)
-pushErrorDef = tier1Definition "pushErrorTmp" $
+pushErrorDef = tier1Definition "pushError" $
   doc "Push an error message" $
   lambda "msg" $ lambda "t" $ ((Flows.trace
       (Flows.traceStack @@ var "t")
       (Lists.cons @@ var "errorMsg" @@ (Flows.traceMessages @@ var "t"))
       (Flows.traceOther @@ var "t"))
     `with` [
---      "errorMsg">: "foo"])
       "errorMsg">: Strings.concat ["Error: ", var "msg", " (", (Strings.intercalate @@ " > " @@ (Lists.reverse @@ (Flows.traceStack @@ var "t"))), ")"]])
-   
+
 
 --putState :: s -> Flow s ()
 --putState cx = Flow q
@@ -156,7 +154,7 @@ pushErrorDef = tier1Definition "pushErrorTmp" $
 --unexpected cat obj = fail $ "expected " ++ cat ++ " but found: " ++ show obj
 
 --unexpectedDef :: Definition (String -> x -> Flow s y)
---unexpectedDef = tier1Definition "unexpected" $
+--unexpectedDef = tier2Definition "unexpected" $
 --  doc "Fail with a message indicating an unexpected value" $
 --  function Types.string (Types.function (Types.var "x") flowSY) $
 --  lambda "cat" $ lambda "obj" $

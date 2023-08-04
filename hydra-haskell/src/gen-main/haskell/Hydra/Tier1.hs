@@ -1,9 +1,10 @@
--- | A module for all tier-1 functions and constants. These are generated functions and constants which DSL functions and the implementations of primitive functions are allowed to depend upon. Higher tiers of generated code may not be depended upon, as these tiers may themselves need to depend on DSL functions or primitive functions.
+-- | A module for miscellaneous tier-1 functions and constants.
 
 module Hydra.Tier1 where
 
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
+import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Strings as Strings
@@ -40,3 +41,17 @@ fromFlow :: (a -> s -> Compute.Flow s a -> a)
 fromFlow def cx f = ((\x -> case x of
   Nothing -> def
   Just v -> v) (Compute.flowStateValue (Compute.unFlow f cx emptyTrace)))
+
+-- | Push an error message
+pushError :: (String -> Compute.Trace -> Compute.Trace)
+pushError msg t =  
+  let errorMsg = (Strings.cat [
+          "Error: ",
+          msg,
+          " (",
+          Strings.intercalate " > " (Lists.reverse (Compute.traceStack t)),
+          ")"])
+  in Compute.Trace {
+    Compute.traceStack = (Compute.traceStack t),
+    Compute.traceMessages = (Lists.cons errorMsg (Compute.traceMessages t)),
+    Compute.traceOther = (Compute.traceOther t)}

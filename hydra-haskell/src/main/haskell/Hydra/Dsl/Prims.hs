@@ -144,8 +144,8 @@ prim2 name input1 input2 output compute = Primitive name ft impl
       arg2 <- coderEncode (termCoderCoder input2) (args !! 1)
       coderDecode (termCoderCoder output) $ compute arg1 arg2
 
-prim2Raw :: Name -> TermCoder a x -> TermCoder a y -> TermCoder a z -> (Term a -> Term a -> Flow (Graph a) (Term a)) -> Primitive a
-prim2Raw name input1 input2 output compute = Primitive name ft impl
+prim2Interp :: Name -> TermCoder a x -> TermCoder a y -> TermCoder a z -> (Term a -> Term a -> Flow (Graph a) (Term a)) -> Primitive a
+prim2Interp name input1 input2 output compute = Primitive name ft impl
   where
     ft = TypeFunction $ FunctionType (termCoderType input1) (Types.function (termCoderType input2) (termCoderType output))
     impl args = do
