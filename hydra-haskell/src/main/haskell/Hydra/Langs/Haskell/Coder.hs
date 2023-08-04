@@ -308,7 +308,7 @@ toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term
 
 toTypeDeclarations :: (Ord a, Read a, Show a)
   => Namespaces -> Element a -> Term a -> GraphFlow a [H.DeclarationWithComments]
-toTypeDeclarations namespaces el term = withTrace ("element " ++ unName (elementName el)) $ do
+toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (elementName el)) $ do
     g <- getState
     let lname = localNameOfEager $ elementName el
     let hname = simpleName lname

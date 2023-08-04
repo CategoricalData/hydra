@@ -275,7 +275,6 @@ isType t = ((\x -> case x of
   Core.TypeApplication v -> (isType (Core.applicationTypeFunction v))
   Core.TypeLambda v -> (isType (Core.lambdaTypeBody v))
   Core.TypeUnion v -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.rowTypeTypeName v)))
-  Core.TypeVariable _ -> True
   _ -> False) (Strip.stripType t))
 
 isUnitTerm :: (Eq a) => (Core.Term a -> Bool)

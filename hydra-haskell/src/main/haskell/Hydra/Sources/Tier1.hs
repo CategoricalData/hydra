@@ -36,8 +36,8 @@ hydraTier1Module = Module (Namespace "hydra/tier1") elements [hydraGraphModule, 
      el emptyTraceDef,
      el flowSucceedsDef,
      el fromFlowDef,
---     el getStateDef,
      el pushErrorDef
+--     el unexpectedDef
      ]
 
 unqualifyNameDef :: Definition (QualifiedName -> Name)
@@ -73,38 +73,13 @@ fromFlowDef = tier1Definition "fromFlow" $
         @@ (Flows.flowStateValue @@ (Flows.unFlow @@ var "f" @@ var "cx" @@ ref emptyTraceDef))
 
 
---getState :: Flow s s
---getState = Flow q
---  where
---    q s0 t0 = case flowStateValue fs1 of
---        Nothing -> FlowState Nothing s1 t1
---        Just _ -> FlowState (Just s1) s1 t1
---      where
---        fs1 = unFlow (pure ()) s0 t0
---        s1 = flowStateState fs1
---        t1 = flowStateTrace fs1
 
---getStateDef :: Definition (Flow s s)
---getStateDef = tier2Definition "getState" $
---  doc "Get the state of the current flow" $
---  typed flowSS $
---  ((wrap _Flow $ var "q")
---  `with` [
---    "q">: function (Types.var "s") (Types.function (Types.var "x") flowStateSS) $
---      lambda "s0" $ lambda "t0" $ (
---        (matchOpt (Flows.flowState nothing (var "s1") (var "t1")) (constant (Flows.flowState (just $ var "s1") (var "s1") (var "t1")))
---          @@ (Flows.flowStateValue @@ var "fs1"))
---        `with` [
---          "fs1">:
---            typed (Types.apply (Types.apply (TypeVariable _FlowState) Types.unit) (Types.var "x")) $
---            Flows.unFlow @@ (Flows.pure @@ unit) @@ var "s0" @@ var "t0",
---          "s1">:
---            typed (Types.var "s") $
---            Flows.flowStateState @@ var "fs1",
---          "t1">:
---            typed (TypeVariable _Trace) $
---            Flows.flowStateTrace @@ var "fs1"
---        ])])
+
+
+
+
+
+
 
 --mutateTrace :: (Trace -> Either String Trace) -> (Trace -> Trace -> Trace) -> Flow s a -> Flow s a
 --mutateTrace mutate restore f = Flow q
@@ -154,11 +129,11 @@ pushErrorDef = tier1Definition "pushError" $
 --unexpected cat obj = fail $ "expected " ++ cat ++ " but found: " ++ show obj
 
 --unexpectedDef :: Definition (String -> x -> Flow s y)
---unexpectedDef = tier2Definition "unexpected" $
+--unexpectedDef = tier1Definition "unexpected" $
 --  doc "Fail with a message indicating an unexpected value" $
 --  function Types.string (Types.function (Types.var "x") flowSY) $
 --  lambda "cat" $ lambda "obj" $
---    Flows.fail @@ (Strings.concat ["expected ", var "cat", " but found: " ++ (show @@ var "obj"))
+--    Flows.fail @@ (Strings.concat ["expected ", var "cat", " but found: ", (show @@ var "obj"))
 
 --warn :: String -> Flow s a -> Flow s a
 --warn msg b = Flow u'

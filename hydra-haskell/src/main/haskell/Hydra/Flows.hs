@@ -42,16 +42,16 @@ fromFlowIo cx f = case mv of
   where
     FlowState mv _ trace = unFlow f cx Tier1.emptyTrace
 
-getState :: Flow s s
-getState = Flow q
-  where
-    q s0 t0 = case flowStateValue fs1 of
-        Nothing -> FlowState Nothing s1 t1
-        Just _ -> FlowState (Just s1) s1 t1
-      where
-        fs1 = unFlow (pure ()) s0 t0
-        s1 = flowStateState fs1
-        t1 = flowStateTrace fs1
+--getState :: Flow s s
+--getState = Flow q
+--  where
+--    q s0 t0 = case flowStateValue fs1 of
+--        Nothing -> FlowState Nothing s1 t1
+--        Just _ -> FlowState (Just s1) s1 t1
+--      where
+--        fs1 = unFlow (pure ()) s0 t0
+--        s1 = flowStateState fs1
+--        t1 = flowStateTrace fs1
 
 mutateTrace :: (Trace -> Either String Trace) -> (Trace -> Trace -> Trace) -> Flow s a -> Flow s a
 mutateTrace mutate restore f = Flow q

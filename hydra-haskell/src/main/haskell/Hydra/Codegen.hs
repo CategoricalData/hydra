@@ -31,6 +31,7 @@ import Hydra.Sources.Basics
 import Hydra.Sources.Constants
 import Hydra.Sources.Strip
 import Hydra.Sources.Tier1
+import Hydra.Sources.Tier2
 import Hydra.Sources.Coders
 import Hydra.Sources.Compute
 import Hydra.Sources.Constraints
@@ -123,7 +124,8 @@ tier2KernelModules = [
   hydraBasicsModule,
   hydraExtrasModule,
 --  hydraMonadsModule,
-  hydraPrintingModule]
+  hydraPrintingModule,
+  hydraTier2Module]
 
 tier1KernelModules :: [Module Kv]
 tier1KernelModules = [

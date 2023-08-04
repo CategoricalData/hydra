@@ -15,6 +15,7 @@ import Hydra.Module
 import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Tools.Sorting
+import Hydra.Tier2
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

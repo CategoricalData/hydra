@@ -65,7 +65,7 @@ coreDecodeFieldTypes term = case stripTerm term of
   _ -> unexpected "list" term
 
 coreDecodeFloatType :: Show a => Term a -> GraphFlow a FloatType
-coreDecodeFloatType = matchEnum [
+coreDecodeFloatType = matchEnum _FloatType [
   (_FloatType_bigfloat, FloatTypeBigfloat),
   (_FloatType_float32, FloatTypeFloat32),
   (_FloatType_float64, FloatTypeFloat64)]
@@ -76,7 +76,7 @@ coreDecodeFunctionType = matchRecord $ \m -> FunctionType
   <*> getField m _FunctionType_codomain coreDecodeType
 
 coreDecodeIntegerType :: Show a => Term a -> GraphFlow a IntegerType
-coreDecodeIntegerType = matchEnum [
+coreDecodeIntegerType = matchEnum _IntegerType [
   (_IntegerType_bigint, IntegerTypeBigint),
   (_IntegerType_int8, IntegerTypeInt8),
   (_IntegerType_int16, IntegerTypeInt16),
@@ -93,7 +93,7 @@ coreDecodeLambdaType = matchRecord $ \m -> LambdaType
   <*> getField m _LambdaType_body coreDecodeType
 
 coreDecodeLiteralType :: Show a => Term a -> GraphFlow a LiteralType
-coreDecodeLiteralType = matchUnion [
+coreDecodeLiteralType = matchUnion _LiteralType [
   matchUnitField _LiteralType_binary LiteralTypeBinary,
   matchUnitField _LiteralType_boolean LiteralTypeBoolean,
   (_LiteralType_float, fmap LiteralTypeFloat . coreDecodeFloatType),
@@ -127,7 +127,7 @@ coreDecodeString = Expect.string . stripTerm
 coreDecodeType :: Show a => Term a -> GraphFlow a (Type a)
 coreDecodeType dat = case dat of
   TermAnnotated (Annotated term ann) -> (\t -> TypeAnnotated $ Annotated t ann) <$> coreDecodeType term
-  _ -> matchUnion [
+  _ -> matchUnion _Type [
 --    (_Type_annotated, fmap TypeAnnotated . coreDecodeAnnotated),
     (_Type_application, fmap TypeApplication . coreDecodeApplicationType),
     (_Type_function, fmap TypeFunction . coreDecodeFunctionType),
@@ -170,22 +170,24 @@ getField m fname decode = case M.lookup fname m of
   Nothing -> fail $ "expected field " ++ show fname ++ " not found"
   Just val -> decode val
 
-matchEnum :: Show a => [(FieldName, b)] -> Term a -> GraphFlow a b
-matchEnum = matchUnion . fmap (uncurry matchUnitField)
+matchEnum :: Show a => Name -> [(FieldName, b)] -> Term a -> GraphFlow a b
+matchEnum tname = matchUnion tname . fmap (uncurry matchUnitField)
 
 matchRecord :: Show a => (M.Map FieldName (Term a) -> GraphFlow a b) -> Term a -> GraphFlow a b
 matchRecord decode term = case stripTerm term of
   TermRecord (Record _ fields) -> decode $ M.fromList $ fmap (\(Field fname val) -> (fname, val)) fields
   _ -> unexpected "record" term
 
-matchUnion :: Show a => [(FieldName, Term a -> GraphFlow a b)] -> Term a -> GraphFlow a b
-matchUnion pairs term = case stripTerm term of
+matchUnion :: Show a => Name -> [(FieldName, Term a -> GraphFlow a b)] -> Term a -> GraphFlow a b
+matchUnion tname pairs term = case stripTerm term of
     TermVariable name -> do
       el <- requireElement name
-      matchUnion pairs (elementData el)
-    TermUnion (Injection _ (Field fname val)) -> case M.lookup fname mapping of
-      Nothing -> fail $ "no matching case for field " ++ show fname
-      Just f -> f val
+      matchUnion tname pairs (elementData el)
+    TermUnion (Injection tname' (Field fname val)) -> if tname' == tname
+      then case M.lookup fname mapping of
+        Nothing -> fail $ "no matching case for field " ++ show fname
+        Just f -> f val
+      else unexpected ("injection for type " ++ show tname) term
     _ -> unexpected ("union with one of {" ++ L.intercalate ", " (unFieldName . fst <$> pairs) ++ "}") term
   where
     mapping = M.fromList pairs

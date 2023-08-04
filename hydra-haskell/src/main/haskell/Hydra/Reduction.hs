@@ -12,6 +12,7 @@ import Hydra.Graph
 import Hydra.Kv
 import Hydra.Lexical
 import Hydra.Rewriting
+import Hydra.Tier2
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
