@@ -42,3 +42,5 @@ Hydra also features a language-agnostic test suite which guarantees parity of pr
 Along with the rest of Hydra's generated code, the test suite will be used as a seed for future implementations in additional languages, such as
 [Python](https://github.com/CategoricalData/hydra/issues/66)
 and [Go](https://github.com/CategoricalData/hydra/issues/65).
+
+If you would like to contribute to Hydra, please see the [Hydra developer documentation](https://github.com/CategoricalData/hydra/wiki/Hydra-developers).
