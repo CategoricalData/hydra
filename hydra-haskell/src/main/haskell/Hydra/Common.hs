@@ -8,6 +8,7 @@ import Hydra.Compute
 import Hydra.Flows
 import Hydra.Graph
 import Hydra.Module
+import Hydra.Tier2
 import Hydra.Tools.Formatting
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists

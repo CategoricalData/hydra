@@ -18,6 +18,7 @@ import Hydra.Substitution
 import Hydra.Unification
 import Hydra.Tools.Debug
 import Hydra.Kv
+import Hydra.Tier2
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Control.Monad as CM

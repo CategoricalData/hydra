@@ -383,8 +383,8 @@ isTypeDef = basicsDefinition "isType" $
       Case _Type_lambda --> lambda "l" $
         ref isTypeDef @@ (project _LambdaType _LambdaType_body @@ var "l"),
       Case _Type_union --> lambda "rt" $
-        equalString @@ (string $ unName _Type) @@ (unwrap _Name @@ (project _RowType _RowType_typeName @@ var "rt")),
-      Case _Type_variable --> constant true
+        equalString @@ (string $ unName _Type) @@ (unwrap _Name @@ (project _RowType _RowType_typeName @@ var "rt"))
+--      Case _Type_variable --> constant true
     ]) @@ (ref stripTypeDef @@ var "t")
 
 isUnitTermDef :: Definition (Term a -> Bool)
@@ -464,8 +464,8 @@ qualifyNameLazyDef = basicsDefinition "qualifyNameLazy" $
       @@ (Equality.equalInt32 @@ int32 1 @@ (Lists.length @@ var "parts")))
     `with` [
       "parts">: Lists.reverse @@ (Strings.splitOn @@ "." @@ (unwrap _Name @@ var "name"))]
-      
-      
+
+
 {-
 requireTypeAnnotation :: Show a => Term a -> Flow (Graph a) (Type a)
 requireTypeAnnotation term = Flows.bind (Flows.map graphAnnotations getState) annsToType

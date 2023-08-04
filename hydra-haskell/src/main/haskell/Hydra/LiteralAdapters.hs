@@ -17,6 +17,7 @@ import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Flows
+import Hydra.Tier2
 
 import qualified Data.List as L
 import qualified Data.Set as S
