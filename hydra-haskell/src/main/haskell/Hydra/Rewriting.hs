@@ -3,7 +3,7 @@
 module Hydra.Rewriting where
 
 import Hydra.Basics
-import Hydra.Tier1
+import Hydra.Strip
 import Hydra.Coders
 import Hydra.Compute
 import Hydra.Core

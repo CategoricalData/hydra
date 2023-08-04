@@ -4,6 +4,7 @@ module Hydra.Sources.Basics where
 
 import Hydra.Kernel
 import Hydra.Sources.Tier1
+import Hydra.Sources.Strip
 import Hydra.Dsl.Base as Base
 import Hydra.Dsl.Lib.Equality as Equality
 import Hydra.Dsl.Lib.Flows as Flows

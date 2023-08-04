@@ -10,7 +10,7 @@ module Hydra.TermAdapters (
 import Hydra.Printing
 import Hydra.AdapterUtils
 import Hydra.Basics
-import Hydra.Tier1
+import Hydra.Strip
 import Hydra.Coders
 import Hydra.Common
 import Hydra.Compute

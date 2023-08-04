@@ -3,7 +3,7 @@
 module Hydra.Reduction where
 
 import Hydra.Basics
-import Hydra.Tier1
+import Hydra.Strip
 import Hydra.Core
 import Hydra.CoreDecoding
 import Hydra.Extras

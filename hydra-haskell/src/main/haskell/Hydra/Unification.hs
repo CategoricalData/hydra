@@ -6,7 +6,7 @@ module Hydra.Unification (
 ) where
 
 import Hydra.Basics
-import Hydra.Tier1
+import Hydra.Strip
 import Hydra.Common
 import Hydra.Compute
 import Hydra.Core
