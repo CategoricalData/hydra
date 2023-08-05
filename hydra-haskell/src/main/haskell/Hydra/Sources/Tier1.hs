@@ -187,4 +187,19 @@ withStateDef = tier1Definition "withState" $
 --      else Right $ t {traceStack = msg:(traceStack t)} -- augment the trace
 --    restore t0 t1 = t1 {traceStack = traceStack t0} -- reset the trace stack after execution
 
-
+--withTraceDef :: Definition (String -> Flow s a -> Flow s a)
+--withTraceDef = tier1Definition "withTrace" $
+--  doc "Continue the current flow after augmenting the trace" $
+--  functionN [Types.string flowSA flowSA] $
+--  lambda "msg" ((ref mutateTraceDef @@ var "mutate" @@ var "restore")
+--    `with` [
+--      -- augment the trace
+--      "mutate">: lambda "t" $ ifelse
+--        @@ ()
+--        @@ ()
+--        @@ (Lists.length @@ (Flows.traceStack @@ var "t") >=: maxTraceDepth)),
+--      -- reset the trace stack after execution
+--      "restore">: lambda "t0" $ lambda "t1" $ Flows.trace
+--        (Flows.traceStack @@ var "t0")
+--        (Flows.traceMessages @@ var "t1")
+--        (Flows.traceOther @@ var "t1")])

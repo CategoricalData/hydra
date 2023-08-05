@@ -43,6 +43,11 @@ _equality_equalUint32 = qname _hydra_lib_equality "equalUint32" :: Name
 _equality_equalUint64 = qname _hydra_lib_equality "equalUint64" :: Name
 _equality_equalString = qname _hydra_lib_equality "equalString" :: Name
 
+_equality_gtInt32 = qname _hydra_lib_equality "gtInt32" :: Name
+_equality_gteInt32 = qname _hydra_lib_equality "gteInt32" :: Name
+_equality_ltInt32 = qname _hydra_lib_equality "ltInt32" :: Name
+_equality_lteInt32 = qname _hydra_lib_equality "lteInt32" :: Name
+
 _hydra_lib_flows :: Namespace
 _hydra_lib_flows = Namespace "hydra/lib/flows"
 
@@ -176,7 +181,13 @@ hydraLibEqualityPrimitives = [
   prim2 _equality_equalUint16 uint16 uint16 boolean Equality.equalUint16,
   prim2 _equality_equalUint32 uint32 uint32 boolean Equality.equalUint32,
   prim2 _equality_equalUint64 uint64 uint64 boolean Equality.equalUint64,
-  prim2 _equality_equalString string string boolean Equality.equalString]
+  prim2 _equality_equalString string string boolean Equality.equalString,
+
+  prim2 _equality_gtInt32 int32 int32 boolean Equality.gtInt32,
+  prim2 _equality_gteInt32 int32 int32 boolean Equality.gteInt32,
+  prim2 _equality_ltInt32 int32 int32 boolean Equality.ltInt32,
+  prim2 _equality_lteInt32 int32 int32 boolean Equality.lteInt32]
+
 
 hydraLibFlowsPrimitives :: (Ord a, Show a) => [Primitive a]
 hydraLibFlowsPrimitives = [

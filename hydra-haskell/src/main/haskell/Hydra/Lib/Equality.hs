@@ -57,3 +57,16 @@ equalTerm = (==)
 
 equalType :: Eq a => Type a -> Type a -> Bool
 equalType = (==)
+
+
+gtInt32 :: Int -> Int -> Bool
+gtInt32 = (>)
+
+gteInt32 :: Int -> Int -> Bool
+gteInt32 = (>=)
+
+ltInt32 :: Int -> Int -> Bool
+ltInt32 = (<)
+
+lteInt32 :: Int -> Int -> Bool
+lteInt32 = (<=)
