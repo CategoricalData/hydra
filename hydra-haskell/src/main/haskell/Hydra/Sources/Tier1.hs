@@ -5,7 +5,7 @@ module Hydra.Sources.Tier1 where
 import Hydra.Kernel
 import Hydra.Sources.Compute
 import Hydra.Sources.Graph
-import Hydra.Sources.Mantle
+import Hydra.Sources.Mantle as Mantle
 import Hydra.Sources.Strip
 import Hydra.Dsl.Base as Base
 import Hydra.Dsl.Lib.Equality as Equality
@@ -36,8 +36,11 @@ hydraTier1Module = Module (Namespace "hydra/tier1") elements [hydraGraphModule, 
      el emptyTraceDef,
      el flowSucceedsDef,
      el fromFlowDef,
-     el pushErrorDef
+     el mutateTraceDef,
+     el pushErrorDef,
 --     el unexpectedDef
+     el withFlagDef,
+     el withStateDef
      ]
 
 unqualifyNameDef :: Definition (QualifiedName -> Name)
@@ -72,29 +75,35 @@ fromFlowDef = tier1Definition "fromFlow" $
       matchOpt (var "def") (lambda "x" $ var "x")
         @@ (Flows.flowStateValue @@ (Flows.unFlow @@ var "f" @@ var "cx" @@ ref emptyTraceDef))
 
-
-
-
-
-
-
-
-
-
---mutateTrace :: (Trace -> Either String Trace) -> (Trace -> Trace -> Trace) -> Flow s a -> Flow s a
---mutateTrace mutate restore f = Flow q
---  where
---    q s0 t0 = either forLeft forRight $ mutate t0
---      where
---        forLeft msg = FlowState Nothing s0 $ pushError msg t0
---        forRight t1 = FlowState v s1 $ restore t0 t2 -- retain the updated state, but reset the trace after execution
---          where
---            FlowState v s1 t2 = unFlow f s0 t1 -- execute the internal flow after augmenting the trace
---
---pushError :: String -> Trace -> Trace
---pushError msg t = t {traceMessages = errorMsg:(traceMessages t)}
---  where
---    errorMsg = "Error: " ++ msg ++ " (" ++ L.intercalate " > " (L.reverse $ traceStack t) ++ ")"
+mutateTraceDef :: Definition ((Trace -> Either_ String Trace) -> (Trace -> Trace -> Trace) -> Flow s a -> Flow s a)
+mutateTraceDef = tier1Definition "mutateTrace" $
+    functionN [
+      Types.function traceT (eitherT Types.string traceT),
+      Types.functionN [traceT, traceT, traceT],
+      flowSA,
+      flowSA] $
+    lambda "mutate" $ lambda "restore" $ lambda "f" $ wrap _Flow (
+      lambda "s0" $ lambda "t0" (
+        ((match _Either Nothing [
+            _Either_left>>: var "forLeft",
+            _Either_right>>: var "forRight"])
+          @@ (var "mutate" @@ var "t0"))
+        `with` [
+          "forLeft">:
+            lambda "msg" $ Flows.flowState nothing (var "s0") (ref pushErrorDef @@ var "msg" @@ var "t0"),
+          -- retain the updated state, but reset the trace after execution
+          "forRight">:
+            function traceT (flowStateT (Types.var "s") (Types.var "s")) $
+            lambda "t1" ((Flows.flowState
+                (Flows.flowStateValue @@ var "f2")
+                (Flows.flowStateState @@ var "f2")
+                (var "restore" @@ var "t0" @@ (Flows.flowStateTrace @@ var "f2")))
+              `with` [
+                 -- execute the internal flow after augmenting the trace
+                 "f2">: Flows.unFlow @@ var "f" @@ var "s0" @@ var "t1"
+              ])]))
+  where
+    eitherT l r = Types.applyN [TypeVariable _Either, l, r]
 
 pushErrorDef :: Definition (String -> Trace -> Trace)
 pushErrorDef = tier1Definition "pushError" $
@@ -142,20 +151,34 @@ pushErrorDef = tier1Definition "pushError" $
 --      where
 --        FlowState v s1 t1 = unFlow b s0 t0
 --        t2 = t1 {traceMessages = ("Warning: " ++ msg):(traceMessages t1)}
---
---withFlag :: String -> Flow s a -> Flow s a
---withFlag flag = mutateTrace mutate restore
---  where
---    mutate t = Right $ t {traceOther = M.insert flag (TermLiteral $ LiteralBoolean True) (traceOther t)}
---    restore _ t1 = t1 {traceOther = M.delete flag (traceOther t1)}
---
---withState :: s1 -> Flow s1 a -> Flow s2 a
---withState cx0 f = Flow q
---  where
---    q cx1 t1 = FlowState v cx1 t2
---      where
---        FlowState v _ t2 = unFlow f cx0 t1
---
+
+withFlagDef :: Definition (String -> Flow s a -> Flow s a)
+withFlagDef = tier1Definition "withFlag" $
+  doc "Continue the current flow after setting a flag" $
+  function Types.string (Types.function flowSA flowSA) $
+  lambda "flag" ((ref mutateTraceDef @@ var "mutate" @@ var "restore")
+  `with` [
+    "mutate">: lambda "t" $ inject _Either _Either_right $ (Flows.trace
+      (Flows.traceStack @@ var "t")
+      (Flows.traceMessages @@ var "t")
+      (Maps.insert @@ var "flag" @@ (inject _Term _Term_literal $ inject _Literal _Literal_boolean $ boolean True) @@ (Flows.traceOther @@ var "t"))),
+    "restore">: lambda "ignored" $ lambda "t1" $ Flows.trace
+      (Flows.traceStack @@ var "t1")
+      (Flows.traceMessages @@ var "t1")
+      (Maps.remove @@ var "flag" @@ (Flows.traceOther @@ var "t1"))])
+
+withStateDef :: Definition (s1 -> Flow s1 a -> Flow s2 a)
+withStateDef = tier1Definition "withState" $
+  doc "Continue a flow using a given state" $
+  function (Types.var "s1") (Types.function flowS1A flowS2A) $
+  lambda "cx0" $ lambda "f" $
+    wrap _Flow (lambda "cx1" $ lambda "t1" $ (
+      (Flows.flowState (Flows.flowStateValue @@ var "f1") (var "cx1") (Flows.flowStateTrace @@ var "f1"))
+      `with` [
+        "f1">:
+          typed (Types.apply (Types.apply (TypeVariable _FlowState) (Types.var "s1")) (Types.var "a")) $
+          Flows.unFlow @@ var "f" @@ var "cx0" @@ var "t1"]))
+
 --withTrace :: String -> Flow s a -> Flow s a
 --withTrace msg = mutateTrace mutate restore
 --  where

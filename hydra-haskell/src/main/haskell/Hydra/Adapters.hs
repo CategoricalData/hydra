@@ -19,6 +19,7 @@ import Hydra.Flows
 import Hydra.TermAdapters
 import Hydra.AdapterUtils
 import Hydra.Reduction
+import Hydra.Tier1
 import Hydra.Tier2
 
 import qualified Control.Monad as CM

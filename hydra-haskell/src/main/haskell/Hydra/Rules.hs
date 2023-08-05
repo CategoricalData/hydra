@@ -18,6 +18,7 @@ import Hydra.Substitution
 import Hydra.Unification
 import Hydra.Tools.Debug
 import Hydra.Kv
+import Hydra.Tier1
 import Hydra.Tier2
 import qualified Hydra.Dsl.Types as Types
 
@@ -95,9 +96,9 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
         EliminationList fun -> do
           a <- freshName
           b <- freshName
-          let expected = Types.functionN [b, a] b
+          let expected = Types.functionN [b, a, b]
           i <- infer fun
-          let elim = Types.functionN [b, Types.list a] b
+          let elim = Types.functionN [b, Types.list a, b]
           yieldElimination (EliminationList i) elim [(expected, termType i)]
 
         EliminationOptional (OptionalCases n j) -> do

@@ -8,6 +8,18 @@ import Data.List
 import Data.Map
 import Data.Set
 
+-- | A disjoint union between a 'left' type and a 'right' type
+data Either_ a b = 
+  EitherLeft a |
+  EitherRight b
+  deriving (Eq, Ord, Read, Show)
+
+_Either = (Core.Name "hydra/mantle.Either")
+
+_Either_left = (Core.FieldName "left")
+
+_Either_right = (Core.FieldName "right")
+
 -- | The identifier of an elimination constructor
 data EliminationVariant = 
   EliminationVariantList  |

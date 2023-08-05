@@ -29,6 +29,9 @@ annot ann t = TypeAnnotated $ Annotated t ann
 apply :: Type a -> Type a -> Type a
 apply lhs rhs = TypeApplication (ApplicationType lhs rhs)
 
+applyN :: [Type a] -> Type a
+applyN ts = foldl apply (L.head ts) (L.tail ts)
+
 bigfloat :: Type a
 bigfloat = float FloatTypeBigfloat
 
@@ -62,10 +65,10 @@ float = literal . LiteralTypeFloat
 function :: Type a -> Type a -> Type a
 function dom cod = TypeFunction $ FunctionType dom cod
 
-functionN :: [Type a] -> Type a -> Type a
-functionN doms cod = if L.null doms
-  then cod
-  else function (L.head doms) $ functionN (L.tail doms) cod
+functionN :: [Type a] -> Type a
+functionN ts = L.foldl (\cod dom -> function dom cod) (L.head r) (L.tail r)
+  where
+    r = L.reverse ts
 
 int16 :: Type a
 int16 = integer IntegerTypeInt16

@@ -32,10 +32,6 @@ elementA = Types.apply (TypeVariable _Element) (Types.var "a") :: Type a
 fieldA = Types.apply (TypeVariable _Field) (Types.var "a") :: Type a
 fieldTypeA = Types.apply (TypeVariable _FieldType) (Types.var "a") :: Type a
 flowGraphATypeA = Types.apply (Types.apply (TypeVariable _Flow) graphA) typeA :: Type a
-flowSA = Types.apply (Types.apply (TypeVariable _Flow) (Types.var "s")) (Types.var "a") :: Type a
-flowSS = Types.apply (Types.apply (TypeVariable _Flow) (Types.var "s")) (Types.var "s") :: Type a
-flowSY = Types.apply (Types.apply (TypeVariable _Flow) (Types.var "s")) (Types.var "y") :: Type a
-flowStateSS = Types.apply (Types.apply (TypeVariable _FlowState) (Types.var "s")) (Types.var "s") :: Type a
 graphA = Types.apply (TypeVariable _Graph) (Types.var "a") :: Type a
 termA = Types.apply (TypeVariable _Term) (Types.var "a") :: Type a
 typeA = Types.apply (TypeVariable _Type) (Types.var "a") :: Type a
@@ -98,8 +94,8 @@ fld fname (Datum val) = Fld $ Field fname val
 function :: Type Kv -> Type Kv -> Datum a -> Datum a
 function dom cod = typed (Types.function dom cod)
 
-functionN :: [Type Kv] -> Type Kv -> Datum a -> Datum a
-functionN doms cod = typed $ Types.functionN doms cod
+functionN :: [Type Kv] -> Datum a -> Datum a
+functionN ts = typed $ Types.functionN ts
 
 functionWithClasses :: Type Kv -> Type Kv -> M.Map Name (S.Set TypeClass) -> Datum a -> Datum a
 functionWithClasses dom cod classes = typed $ setTypeClasses classes (Types.function dom cod)
