@@ -13,6 +13,7 @@ import Hydra.Extras
 import Hydra.Graph
 import Hydra.Compute
 import Hydra.Flows
+import Hydra.Tier1
 import Hydra.Tier2
 
 import qualified Data.List as L

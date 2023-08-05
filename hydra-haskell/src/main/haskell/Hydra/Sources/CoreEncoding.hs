@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.CoreEncoding (coreEncodingModule) where
+module Hydra.Sources.CoreEncoding where
 
 import Hydra.Kernel
 import Hydra.Sources.Core

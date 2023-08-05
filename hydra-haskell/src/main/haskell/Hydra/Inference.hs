@@ -21,6 +21,7 @@ import Hydra.Rewriting
 import Hydra.Substitution
 import Hydra.Unification
 import Hydra.Rules
+import Hydra.Tier1
 import Hydra.Tier2
 import Hydra.Tools.Sorting
 import qualified Hydra.Dsl.Terms as Terms
