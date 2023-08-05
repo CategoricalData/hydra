@@ -71,11 +71,3 @@ warn msg b = Flow u'
       where
         FlowState v s1 t1 = unFlow b s0 t0
         t2 = t1 {traceMessages = ("Warning: " ++ msg):(traceMessages t1)}
-
-withTrace :: String -> Flow s a -> Flow s a
-withTrace msg = Tier1.mutateTrace mutate restore
-  where
-    mutate t = if L.length (traceStack t) >= maxTraceDepth
-      then EitherLeft "maximum trace depth exceeded. This may indicate an infinite loop"
-      else EitherRight $ t {traceStack = msg:(traceStack t)} -- augment the trace
-    restore t0 t1 = t1 {traceStack = traceStack t0} -- reset the trace stack after execution

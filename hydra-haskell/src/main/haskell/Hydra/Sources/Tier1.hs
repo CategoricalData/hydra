@@ -4,6 +4,7 @@ module Hydra.Sources.Tier1 where
 
 import Hydra.Kernel
 import Hydra.Sources.Compute
+import Hydra.Sources.Constants
 import Hydra.Sources.Graph
 import Hydra.Sources.Mantle as Mantle
 import Hydra.Sources.Strip
@@ -12,6 +13,7 @@ import Hydra.Dsl.Lib.Equality as Equality
 import Hydra.Dsl.Lib.Flows as Flows
 import Hydra.Dsl.Lib.Maps as Maps
 import Hydra.Dsl.Lib.Lists as Lists
+import Hydra.Dsl.Lib.Logic as Logic
 import Hydra.Dsl.Lib.Optionals as Optionals
 import Hydra.Dsl.Lib.Strings as Strings
 import qualified Hydra.Dsl.Annotations as Ann
@@ -27,7 +29,8 @@ tier1Definition :: String -> Datum a -> Definition a
 tier1Definition = definitionInModule hydraTier1Module
 
 hydraTier1Module :: Module Kv
-hydraTier1Module = Module (Namespace "hydra/tier1") elements [hydraGraphModule, hydraMantleModule, hydraComputeModule, hydraStripModule] $
+hydraTier1Module = Module (Namespace "hydra/tier1") elements
+    [hydraGraphModule, hydraMantleModule, hydraComputeModule, hydraStripModule, hydraConstantsModule] $
     Just ("A module for miscellaneous tier-1 functions and constants.")
   where
    elements = [
@@ -40,7 +43,8 @@ hydraTier1Module = Module (Namespace "hydra/tier1") elements [hydraGraphModule, 
      el pushErrorDef,
 --     el unexpectedDef
      el withFlagDef,
-     el withStateDef
+     el withStateDef,
+     el withTraceDef
      ]
 
 unqualifyNameDef :: Definition (QualifiedName -> Name)
@@ -187,19 +191,22 @@ withStateDef = tier1Definition "withState" $
 --      else Right $ t {traceStack = msg:(traceStack t)} -- augment the trace
 --    restore t0 t1 = t1 {traceStack = traceStack t0} -- reset the trace stack after execution
 
---withTraceDef :: Definition (String -> Flow s a -> Flow s a)
---withTraceDef = tier1Definition "withTrace" $
---  doc "Continue the current flow after augmenting the trace" $
---  functionN [Types.string flowSA flowSA] $
---  lambda "msg" ((ref mutateTraceDef @@ var "mutate" @@ var "restore")
---    `with` [
---      -- augment the trace
---      "mutate">: lambda "t" $ ifelse
---        @@ ()
---        @@ ()
---        @@ (Lists.length @@ (Flows.traceStack @@ var "t") >=: maxTraceDepth)),
---      -- reset the trace stack after execution
---      "restore">: lambda "t0" $ lambda "t1" $ Flows.trace
---        (Flows.traceStack @@ var "t0")
---        (Flows.traceMessages @@ var "t1")
---        (Flows.traceOther @@ var "t1")])
+withTraceDef :: Definition (String -> Flow s a -> Flow s a)
+withTraceDef = tier1Definition "withTrace" $
+  doc "Continue the current flow after augmenting the trace" $
+  functionN [Types.string, flowSA, flowSA] $
+  lambda "msg" ((ref mutateTraceDef @@ var "mutate" @@ var "restore")
+    `with` [
+      -- augment the trace
+      "mutate">: lambda "t" $ Logic.ifElse
+        @@ (inject _Either _Either_left $ string "maximum trace depth exceeded. This may indicate an infinite loop")
+        @@ (inject _Either _Either_right $ Flows.trace
+          (Lists.cons @@ var "msg" @@ (Flows.traceStack @@ var "t"))
+          (Flows.traceMessages @@ var "t")
+          (Flows.traceOther @@ var "t"))
+        @@ (Equality.gteInt32 @@ (Lists.length @@ (Flows.traceStack @@ var "t")) @@ ref maxTraceDepthDef),
+      -- reset the trace stack after execution
+      "restore">: lambda "t0" $ lambda "t1" $ Flows.trace
+        (Flows.traceStack @@ var "t0")
+        (Flows.traceMessages @@ var "t1")
+        (Flows.traceOther @@ var "t1")])
