@@ -31,7 +31,8 @@ hydraTier2Module = Module (Namespace "hydra/tier2") elements [hydraGraphModule, 
     Just ("A module for miscellaneous tier-2 functions and constants.")
   where
    elements = [
-     el getStateDef
+     el getStateDef,
+     el putStateDef
      ]
 
 getStateDef :: Definition (Flow s s)
@@ -49,3 +50,15 @@ getStateDef = tier2Definition "getState" $
     "fs1">:
       typed (Types.apply (Types.apply (TypeVariable _FlowState) (Types.var "s")) Types.unit) $
       Flows.unFlow @@ (Flows.pure @@ unit) @@ var "s0" @@ var "t0"])
+
+putStateDef :: Definition (s -> Flow s ())
+putStateDef = tier2Definition "putState" $
+  doc "Set the state of a flow" $
+  function (Types.var "s") (flowT (Types.var "s") Types.unit) $
+  lambda "cx" $ wrap _Flow $ lambda "s0" $ lambda "t0" (
+    (Flows.flowState
+      (Flows.flowStateValue @@ var "f1")
+      (var "cx")
+      (Flows.flowStateTrace @@ var "f1"))
+    `with` [
+      "f1">: Flows.unFlow @@ (Flows.pure @@ unit) @@ var "s0" @@ var "t0"])

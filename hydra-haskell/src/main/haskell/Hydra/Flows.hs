@@ -43,14 +43,6 @@ fromFlowIo cx f = case mv of
   where
     FlowState mv _ trace = unFlow f cx Tier1.emptyTrace
 
-putState :: s -> Flow s ()
-putState cx = Flow q
-  where
-    q s0 t0 = FlowState v cx t1
-      where
-        FlowState v _ t1 = unFlow f s0 t0
-        f = pure ()
-
 traceSummary :: Trace -> String
 traceSummary t = L.intercalate "\n" (messageLines ++ keyvalLines)
   where
@@ -58,16 +50,7 @@ traceSummary t = L.intercalate "\n" (messageLines ++ keyvalLines)
     keyvalLines = if M.null (traceOther t)
         then []
         else "key/value pairs:":(toLine <$> M.toList (traceOther t))
-      where
-        toLine (k, v) = "\t" ++ k ++ ": " ++ show v
+    toLine (k, v) = "\t" ++ k ++ ": " ++ show v
 
 unexpected :: Show x => String -> x -> Flow s y
 unexpected cat obj = fail $ "expected " ++ cat ++ " but found: " ++ show obj
-
-warn :: String -> Flow s a -> Flow s a
-warn msg b = Flow u'
-  where
-    u' s0 t0 = FlowState v s1 t2
-      where
-        FlowState v s1 t1 = unFlow b s0 t0
-        t2 = t1 {traceMessages = ("Warning: " ++ msg):(traceMessages t1)}

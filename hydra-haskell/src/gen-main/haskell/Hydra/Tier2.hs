@@ -23,3 +23,12 @@ getState = (Compute.Flow (\s0 -> \t0 ->
       Compute.flowStateValue = (Just s),
       Compute.flowStateState = s,
       Compute.flowStateTrace = t}) v) (Compute.flowStateValue fs1) (Compute.flowStateState fs1) (Compute.flowStateTrace fs1))))
+
+-- | Set the state of a flow
+putState :: (s -> Compute.Flow s ())
+putState cx = (Compute.Flow (\s0 -> \t0 ->  
+  let f1 = (Compute.unFlow (Flows.pure ()) s0 t0)
+  in Compute.FlowState {
+    Compute.flowStateValue = (Compute.flowStateValue f1),
+    Compute.flowStateState = cx,
+    Compute.flowStateTrace = (Compute.flowStateTrace f1)}))
