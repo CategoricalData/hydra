@@ -76,7 +76,7 @@ checkFunctionTerms = H.describe "Check a few hand-picked function terms" $ do
       let fun = Terms.fold $ primitive _math_add
       expectMonotype
         fun
-        (Types.functionN [Types.int32, Types.list Types.int32] Types.int32)
+        (Types.functionN [Types.int32, Types.list Types.int32, Types.int32])
       expectMonotype
         (apply fun $ int32 0)
         (Types.function (Types.list Types.int32) Types.int32)

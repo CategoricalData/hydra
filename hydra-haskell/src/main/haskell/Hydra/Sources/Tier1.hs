@@ -41,7 +41,7 @@ hydraTier1Module = Module (Namespace "hydra/tier1") elements
      el fromFlowDef,
      el mutateTraceDef,
      el pushErrorDef,
---     el unexpectedDef
+     el warnDef,
      el withFlagDef,
      el withStateDef,
      el withTraceDef
@@ -119,42 +119,21 @@ pushErrorDef = tier1Definition "pushError" $
     `with` [
       "errorMsg">: Strings.concat ["Error: ", var "msg", " (", (Strings.intercalate @@ " > " @@ (Lists.reverse @@ (Flows.traceStack @@ var "t"))), ")"]])
 
-
---putState :: s -> Flow s ()
---putState cx = Flow q
---  where
---    q s0 t0 = FlowState v cx t1
---      where
---        FlowState v _ t1 = unFlow f s0 t0
---        f = pure ()
---
---traceSummary :: Trace -> String
---traceSummary t = L.intercalate "\n" (messageLines ++ keyvalLines)
---  where
---    messageLines = L.nub $ traceMessages t
---    keyvalLines = if M.null (traceOther t)
---        then []
---        else "key/value pairs:":(toLine <$> M.toList (traceOther t))
---      where
---        toLine (k, v) = "\t" ++ k ++ ": " ++ show v
---
---unexpected :: Show x => String -> x -> Flow s y
---unexpected cat obj = fail $ "expected " ++ cat ++ " but found: " ++ show obj
-
---unexpectedDef :: Definition (String -> x -> Flow s y)
---unexpectedDef = tier1Definition "unexpected" $
---  doc "Fail with a message indicating an unexpected value" $
---  function Types.string (Types.function (Types.var "x") flowSY) $
---  lambda "cat" $ lambda "obj" $
---    Flows.fail @@ (Strings.concat ["expected ", var "cat", " but found: ", (show @@ var "obj"))
-
---warn :: String -> Flow s a -> Flow s a
---warn msg b = Flow u'
---  where
---    u' s0 t0 = FlowState v s1 t2
---      where
---        FlowState v s1 t1 = unFlow b s0 t0
---        t2 = t1 {traceMessages = ("Warning: " ++ msg):(traceMessages t1)}
+warnDef :: Definition (String -> Flow s a -> Flow s a)
+warnDef = tier1Definition "warn" $
+  doc "Continue the current flow after adding a warning message" $
+  functionN [Types.string, flowSA, flowSA] $
+  lambda "msg" $ lambda "b" $ wrap _Flow $ lambda "s0" $ lambda "t0" (
+    (Flows.flowState
+      (Flows.flowStateValue @@ var "f1")
+      (Flows.flowStateState @@ var "f1")
+      (var "addMessage" @@ (Flows.flowStateTrace @@ var "f1")))
+    `with` [
+      "f1">: Flows.unFlow @@ var "b" @@ var "s0" @@ var "t0",
+      "addMessage">: lambda "t" $ Flows.trace
+        (Flows.traceStack @@ var "t")
+        (Lists.cons @@ ("Warning: " ++ var "msg") @@ (Flows.traceMessages @@ var "t"))
+        (Flows.traceOther @@ var "t")])
 
 withFlagDef :: Definition (String -> Flow s a -> Flow s a)
 withFlagDef = tier1Definition "withFlag" $
@@ -176,20 +155,12 @@ withStateDef = tier1Definition "withState" $
   doc "Continue a flow using a given state" $
   function (Types.var "s1") (Types.function flowS1A flowS2A) $
   lambda "cx0" $ lambda "f" $
-    wrap _Flow (lambda "cx1" $ lambda "t1" $ (
+    wrap _Flow $ lambda "cx1" $ lambda "t1" (
       (Flows.flowState (Flows.flowStateValue @@ var "f1") (var "cx1") (Flows.flowStateTrace @@ var "f1"))
       `with` [
         "f1">:
           typed (Types.apply (Types.apply (TypeVariable _FlowState) (Types.var "s1")) (Types.var "a")) $
-          Flows.unFlow @@ var "f" @@ var "cx0" @@ var "t1"]))
-
---withTrace :: String -> Flow s a -> Flow s a
---withTrace msg = mutateTrace mutate restore
---  where
---    mutate t = if L.length (traceStack t) >= maxTraceDepth
---      then Left "maximum trace depth exceeded. This may indicate an infinite loop"
---      else Right $ t {traceStack = msg:(traceStack t)} -- augment the trace
---    restore t0 t1 = t1 {traceStack = traceStack t0} -- reset the trace stack after execution
+          Flows.unFlow @@ var "f" @@ var "cx0" @@ var "t1"])
 
 withTraceDef :: Definition (String -> Flow s a -> Flow s a)
 withTraceDef = tier1Definition "withTrace" $

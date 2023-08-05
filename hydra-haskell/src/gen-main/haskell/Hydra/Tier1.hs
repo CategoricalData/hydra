@@ -76,6 +76,21 @@ pushError msg t =
     Compute.traceMessages = (Lists.cons errorMsg (Compute.traceMessages t)),
     Compute.traceOther = (Compute.traceOther t)}
 
+-- | Continue the current flow after adding a warning message
+warn :: (String -> Compute.Flow s a -> Compute.Flow s a)
+warn msg b = (Compute.Flow (\s0 -> \t0 ->  
+  let addMessage = (\t -> Compute.Trace {
+          Compute.traceStack = (Compute.traceStack t),
+          Compute.traceMessages = (Lists.cons (Strings.cat [
+            "Warning: ",
+            msg]) (Compute.traceMessages t)),
+          Compute.traceOther = (Compute.traceOther t)}) 
+      f1 = (Compute.unFlow b s0 t0)
+  in Compute.FlowState {
+    Compute.flowStateValue = (Compute.flowStateValue f1),
+    Compute.flowStateState = (Compute.flowStateState f1),
+    Compute.flowStateTrace = (addMessage (Compute.flowStateTrace f1))}))
+
 -- | Continue the current flow after setting a flag
 withFlag :: (String -> Compute.Flow s a -> Compute.Flow s a)
 withFlag flag =  
