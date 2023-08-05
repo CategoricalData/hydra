@@ -58,3 +58,17 @@ equalUint32 = Datum $ Terms.primitive _equality_equalUint32
 
 equalUint64 :: Datum (Integer -> Integer -> Bool)
 equalUint64 = Datum $ Terms.primitive _equality_equalUint64
+
+
+
+gtInt32 :: Datum (Int -> Int -> Bool)
+gtInt32 = Datum $ Terms.primitive _equality_gtInt32
+
+gteInt32 :: Datum (Int -> Int -> Bool)
+gteInt32 = Datum $ Terms.primitive _equality_gteInt32
+
+ltInt32 :: Datum (Int -> Int -> Bool)
+ltInt32 = Datum $ Terms.primitive _equality_ltInt32
+
+lteInt32 :: Datum (Int -> Int -> Bool)
+lteInt32 = Datum $ Terms.primitive _equality_lteInt32
