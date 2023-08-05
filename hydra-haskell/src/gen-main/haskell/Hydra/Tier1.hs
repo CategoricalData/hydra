@@ -3,8 +3,11 @@
 module Hydra.Tier1 where
 
 import qualified Hydra.Compute as Compute
+import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
+import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
+import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Strings as Strings
@@ -94,3 +97,16 @@ withState cx0 f = (Compute.Flow (\cx1 -> \t1 ->
     Compute.flowStateValue = (Compute.flowStateValue f1),
     Compute.flowStateState = cx1,
     Compute.flowStateTrace = (Compute.flowStateTrace f1)}))
+
+-- | Continue the current flow after augmenting the trace
+withTrace :: (String -> Compute.Flow s a -> Compute.Flow s a)
+withTrace msg =  
+  let mutate = (\t -> Logic.ifElse (Mantle.EitherLeft "maximum trace depth exceeded. This may indicate an infinite loop") (Mantle.EitherRight (Compute.Trace {
+          Compute.traceStack = (Lists.cons msg (Compute.traceStack t)),
+          Compute.traceMessages = (Compute.traceMessages t),
+          Compute.traceOther = (Compute.traceOther t)})) (Equality.gteInt32 (Lists.length (Compute.traceStack t)) Constants.maxTraceDepth)) 
+      restore = (\t0 -> \t1 -> Compute.Trace {
+              Compute.traceStack = (Compute.traceStack t0),
+              Compute.traceMessages = (Compute.traceMessages t1),
+              Compute.traceOther = (Compute.traceOther t1)})
+  in (mutateTrace mutate restore)
