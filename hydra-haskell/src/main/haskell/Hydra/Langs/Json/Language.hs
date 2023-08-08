@@ -1,6 +1,9 @@
 module Hydra.Langs.Json.Language where
 
-import Hydra.Kernel
+import Hydra.Core
+import Hydra.Coders
+import Hydra.Strip
+import Hydra.Mantle
 
 import qualified Data.Set as S
 

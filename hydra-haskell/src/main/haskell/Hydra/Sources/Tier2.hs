@@ -11,6 +11,7 @@ import Hydra.Dsl.Base as Base
 import Hydra.Dsl.Lib.Equality as Equality
 import Hydra.Dsl.Lib.Flows as Flows
 import Hydra.Dsl.Lib.Maps as Maps
+import Hydra.Dsl.Lib.Io as Io
 import Hydra.Dsl.Lib.Lists as Lists
 import Hydra.Dsl.Lib.Optionals as Optionals
 import Hydra.Dsl.Lib.Strings as Strings
@@ -32,7 +33,8 @@ hydraTier2Module = Module (Namespace "hydra/tier2") elements [hydraGraphModule, 
   where
    elements = [
      el getStateDef,
-     el putStateDef
+     el putStateDef,
+     el requireTypeAnnotationDef
      ]
 
 getStateDef :: Definition (Flow s s)
@@ -62,3 +64,15 @@ putStateDef = tier2Definition "putState" $
       (Flows.flowStateTrace @@ var "f1"))
     `with` [
       "f1">: Flows.unFlow @@ (Flows.pure @@ unit) @@ var "s0" @@ var "t0"])
+
+requireTypeAnnotationDef :: Definition (Term a -> Flow (Graph a) (Type a))
+requireTypeAnnotationDef = tier2Definition "requireTypeAnnotation" $
+  function termA (flowT graphA typeA) $
+  lambda "term" ((Flows.bind @@ (Flows.map @@ (project _Graph _Graph_annotations) @@ ref getStateDef) @@ var "annsToType")
+  `with` [
+    "annsToType">: lambda "anns" $ (Flows.bind @@ (project _AnnotationClass _AnnotationClass_termType @@ var "anns" @@ var "term") @@ var "checkType"),
+    "checkType">:
+      function (Types.optional typeA) (flowT graphA typeA) $
+      matchOpt
+        (Flows.fail @@ "missing type annotation")
+        Flows.pure])

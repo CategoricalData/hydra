@@ -1,6 +1,9 @@
 module Hydra.Langs.Json.Serde where
 
-import Hydra.Kernel
+import Hydra.Core
+import Hydra.Compute
+import Hydra.Graph
+import Hydra.Flows
 import Hydra.Langs.Json.Coder
 import Hydra.Tools.Bytestrings
 import qualified Hydra.Langs.Json.Model as Json
