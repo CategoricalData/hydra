@@ -4,6 +4,8 @@ import hydra.compute.Flow;
 import hydra.compute.FlowState;
 import hydra.compute.Trace;
 import hydra.tools.FlowException;
+import hydra.tools.TriFunction;
+
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -121,6 +123,10 @@ public interface Flows {
 
     static <S, X, Y, Z> Flow<S, Z> map2(Flow<S, X> x, Flow<S, Y> y, BiFunction<X, Y, Z> f) {
         return Flows.bind(x, x1 -> Flows.bind(y, y1 -> Flows.pure(f.apply(x1, y1))));
+    }
+
+    static <S, X, Y, Z, R> Flow<S, R> map3(Flow<S, X> x, Flow<S, Y> y, Flow<S, Z> z, TriFunction<X, Y, Z, R> f) {
+        return Flows.bind(x, x1 -> Flows.bind(y, y1 -> Flows.bind(z, z1 -> Flows.pure(f.apply(x1, y1, z1)))));
     }
 
     static <S, X> Flow<S, X> pure(X obj) {
