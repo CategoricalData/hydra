@@ -3,9 +3,13 @@ package hydra.dsl;
 import hydra.Flows;
 import hydra.Reduction;
 import hydra.compute.Flow;
+import hydra.compute.Trace;
+import hydra.core.Field;
+import hydra.core.FieldName;
 import hydra.core.FloatValue;
 import hydra.core.IntegerValue;
 import hydra.core.Literal;
+import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Tuple;
 import hydra.graph.Graph;
@@ -86,6 +90,17 @@ public class Expect {
                 return pure(instance.value);
             }
         }));
+    }
+
+    public static <S, A, X> Flow<S, X> field (final FieldName fname,
+                                              final Function<Term<A>, Flow<S, X>> accessor,
+                                              final Map<FieldName, Term<A>> fields) {
+        Term<A> term = fields.get(fname);
+        if (term == null) {
+            return Flows.fail("field " + fname + " not found");
+        } else {
+            return accessor.apply(term);
+        }
     }
 
     public static <S, A> Flow<S, FloatValue> float_(final Term<A> term) {
@@ -293,6 +308,34 @@ public class Expect {
                 }
                 return Flows.map2(first.apply(values.get(0)), second.apply(values.get(1)), Tuple.Tuple2::new);
             }
+        });
+    }
+
+    public static <S, A> Flow<S, List<Field<A>>> record(final Name tname, final Term<A> term) {
+        return term.accept(new Term.PartialVisitor<>() {
+            @Override
+            public Flow<S, List<Field<A>>> otherwise(Term<A> instance) {
+                return wrongType("record", term);
+            }
+
+            @Override
+            public Flow<S, List<Field<A>>> visit(Term.Record<A> instance) {
+                if (instance.value.typeName.equals(tname)) {
+                    return pure(instance.value.fields);
+                } else {
+                    return fail("Expected a record of type " + tname + ", but found " + instance.value.typeName);
+                }
+            }
+        });
+    }
+
+    public static <S, A> Flow<S, Map<FieldName, Term<A>>> recordAsMap(final Name tname, final Term<A> term) {
+        return Flows.map(record(tname, term), fields -> {
+            Map<FieldName, Term<A>> result = new HashMap<>();
+            for (Field<A> f : fields) {
+                result.put(f.name, f.term);
+            }
+            return result;
         });
     }
 
