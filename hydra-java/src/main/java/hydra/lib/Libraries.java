@@ -93,8 +93,30 @@ public class Libraries {
 
     private static <A> List<PrimitiveFunction<A>> literalsPrimitives() {
         return Arrays.asList(
+                new hydra.lib.literals.BigfloatToBigint<>(),
+                new hydra.lib.literals.BigfloatToFloat32<>(),
+                new hydra.lib.literals.BigfloatToFloat64<>(),
+                new hydra.lib.literals.BigintToBigfloat<>(),
+                new hydra.lib.literals.BigintToInt8<>(),
+                new hydra.lib.literals.BigintToInt16<>(),
+                new hydra.lib.literals.BigintToInt32<>(),
+                new hydra.lib.literals.BigintToInt64<>(),
+                new hydra.lib.literals.BigintToUint8<>(),
+                new hydra.lib.literals.BigintToUint16<>(),
+                new hydra.lib.literals.BigintToUint32<>(),
+                new hydra.lib.literals.BigintToUint64<>(),
+                new hydra.lib.literals.Float32ToBigfloat<>(),
+                new hydra.lib.literals.Float64ToBigfloat<>(),
+                new hydra.lib.literals.Int8ToBigint<>(),
+                new hydra.lib.literals.Int16ToBigint<>(),
+                new hydra.lib.literals.Int32ToBigint<>(),
+                new hydra.lib.literals.Int64ToBigint<>(),
                 new hydra.lib.literals.ShowInt32<>(),
-                new hydra.lib.literals.ShowString<>());
+                new hydra.lib.literals.ShowString<>(),
+                new hydra.lib.literals.Uint8ToBigint<>(),
+                new hydra.lib.literals.Uint16ToBigint<>(),
+                new hydra.lib.literals.Uint32ToBigint<>(),
+                new hydra.lib.literals.Uint64ToBigint<>());
     }
 
     private static <A> List<PrimitiveFunction<A>> logicPrimitives() {
