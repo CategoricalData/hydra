@@ -4,6 +4,7 @@ module Hydra.Tier2 where
 
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Flows as Flows
 import Data.Int
 import Data.List
@@ -32,3 +33,11 @@ putState cx = (Compute.Flow (\s0 -> \t0 ->
     Compute.flowStateValue = (Compute.flowStateValue f1),
     Compute.flowStateState = cx,
     Compute.flowStateTrace = (Compute.flowStateTrace f1)}))
+
+requireTypeAnnotation :: (Core.Term a -> Compute.Flow (Graph.Graph a) (Core.Type a))
+requireTypeAnnotation term =  
+  let annsToType = (\anns -> Flows.bind (Graph.annotationClassTermType anns term) checkType) 
+      checkType = (\x -> case x of
+              Nothing -> (Flows.fail "missing type annotation")
+              Just v -> (Flows.pure v))
+  in (Flows.bind (Flows.map Graph.graphAnnotations getState) annsToType)

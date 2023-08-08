@@ -32,6 +32,7 @@ module Hydra.Kernel (
   module Hydra.TermAdapters,
   module Hydra.Tier1,
   module Hydra.Tier2,
+  module Hydra.Tier3,
   module Hydra.Tools.Debug,
   module Hydra.Tools.Formatting,
   module Hydra.Tools.Sorting,
@@ -70,6 +71,7 @@ import Hydra.Strip
 import Hydra.TermAdapters
 import Hydra.Tier1
 import Hydra.Tier2
+import Hydra.Tier3
 import Hydra.Tools.Debug
 import Hydra.Tools.Formatting
 import Hydra.Tools.Sorting

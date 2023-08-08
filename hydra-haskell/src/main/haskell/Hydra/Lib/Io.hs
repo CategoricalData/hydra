@@ -5,20 +5,37 @@ module Hydra.Lib.Io (
   showType,
 ) where
 
-import Hydra.Kernel
+import Hydra.Core
+import Hydra.Compute
+import Hydra.Graph
 import Hydra.Langs.Json.Coder
 import Hydra.Dsl.Annotations
 import Hydra.Langs.Json.Serde
-import Hydra.Sources.Core
+import Hydra.CoreEncoding
+import Hydra.Rewriting
+import Hydra.Kv
+import Hydra.Tier1
 import qualified Hydra.Langs.Json.Model as Json
+import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
+
+noGraph :: Graph Kv
+noGraph = Graph {
+  graphElements = M.empty,
+  graphEnvironment = M.empty,
+  graphBody = Terms.list [], -- Note: the bootstrap body is arbitrary
+  graphPrimitives = M.empty,
+  graphAnnotations = kvAnnotationClass,
+  graphSchema = Nothing}
+
+
 showTerm :: Term a -> String
-showTerm term = fromFlow "fail" hydraCore $ do
+showTerm term = fromFlow "fail" noGraph $ do
     coder <- termStringCoder
     coderEncode coder encoded
   where
@@ -35,7 +52,7 @@ termStringCoder = do
       Right v -> coderDecode termJsonCoder v
 
 showType :: Type a -> String
-showType typ = fromFlow "fail" hydraCore $ do
+showType typ = fromFlow "fail" noGraph $ do
     coder <- typeStringCoder
     coderEncode coder encoded
   where

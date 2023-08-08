@@ -54,11 +54,3 @@ convertIntegerValue target = encoder . decoder
       IntegerTypeUint16 -> IntegerValueUint16 $ fromIntegral d
       IntegerTypeUint32 -> IntegerValueUint32 $ fromIntegral d
       IntegerTypeUint64 -> IntegerValueUint64 $ fromIntegral d
-
-requireTypeAnnotation :: Show a => Term a -> Flow (Graph a) (Type a)
-requireTypeAnnotation term = Flows.bind (Flows.map graphAnnotations getState) annsToType
-  where
-    annsToType anns = Flows.bind (annotationClassTermType anns term) checkType
-    checkType mt = case mt of
-        Nothing -> fail $ "missing type annotation in " ++ show term
-        Just t -> pure t

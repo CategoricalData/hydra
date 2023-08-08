@@ -1,6 +1,13 @@
 module Hydra.Langs.Json.Coder (jsonCoder, literalJsonCoder, untypedTermToJson) where
 
-import Hydra.Kernel
+import Hydra.Core
+import Hydra.Compute
+import Hydra.Graph
+import Hydra.Flows
+import Hydra.Strip
+import Hydra.Basics
+import Hydra.Tier2
+import Hydra.Adapters
 import Hydra.TermAdapters
 import Hydra.Langs.Json.Language
 import Hydra.Lib.Literals

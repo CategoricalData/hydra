@@ -10,6 +10,7 @@ import qualified Hydra.Dsl.Types as Types
 
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
+import qualified Hydra.Lib.Io as Io
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
@@ -189,7 +190,6 @@ hydraLibEqualityPrimitives = [
   prim2 _equality_ltInt32 int32 int32 boolean Equality.ltInt32,
   prim2 _equality_lteInt32 int32 int32 boolean Equality.lteInt32]
 
-
 hydraLibFlowsPrimitives :: (Ord a, Show a) => [Primitive a]
 hydraLibFlowsPrimitives = [
     prim2 _flows_apply (flow s (function x y)) (flow s x) (flow s y) Flows.apply,
@@ -219,6 +219,11 @@ mapInterp :: Show a => Term a -> Term a -> Flow (Graph a) (Term a)
 mapInterp fun args' = do
     args <- Expect.list Prelude.pure args'
     return $ Terms.list (Terms.apply fun <$> args)
+
+hydraLibIoPrimitives :: (Ord a, Show a) => [Primitive a]
+hydraLibIoPrimitives = [
+    prim1 _io_showTerm term string Io.showTerm,
+    prim1 _io_showType type_ string Io.showType]
 
 hydraLibListsPrimitives :: (Ord a, Show a) => [Primitive a]
 hydraLibListsPrimitives = [
@@ -332,6 +337,7 @@ standardPrimitives :: (Ord a, Show a) => [Primitive a]
 standardPrimitives =
      hydraLibEqualityPrimitives
   ++ hydraLibFlowsPrimitives
+  ++ hydraLibIoPrimitives
   ++ hydraLibListsPrimitives
   ++ hydraLibLiteralsPrimitives
   ++ hydraLibLogicPrimitives

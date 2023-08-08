@@ -32,6 +32,7 @@ import Hydra.Sources.Constants
 import Hydra.Sources.Strip
 import Hydra.Sources.Tier1
 import Hydra.Sources.Tier2
+import Hydra.Sources.Tier3
 import Hydra.Sources.Coders
 import Hydra.Sources.Compute
 import Hydra.Sources.Constraints
@@ -119,6 +120,10 @@ hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElement
   hydraModuleModule,
   hydraTestingModule]
 
+tier3KernelModules :: [Module Kv]
+tier3KernelModules = [
+  hydraTier3Module]
+
 tier2KernelModules :: [Module Kv]
 tier2KernelModules = [
   hydraBasicsModule,
@@ -152,7 +157,7 @@ tier0KernelModules = [
   jsonModelModule] -- JSON module is part of the kernel, despite being an external language; JSON support is built in to Hydra
 
 kernelModules :: [Module Kv]
-kernelModules = tier0KernelModules ++ tier1KernelModules ++ tier2KernelModules
+kernelModules = tier0KernelModules ++ tier1KernelModules ++ tier2KernelModules ++ tier3KernelModules
 
 langModules :: [Module Kv]
 langModules = [
