@@ -18,6 +18,9 @@ apply = Datum $ Terms.primitive _flows_apply
 bind :: Datum (Flow s x -> (x -> Flow s y) -> Flow s y)
 bind = Datum $ Terms.primitive _flows_bind
 
+fail :: Datum (String -> Flow s x)
+fail = Datum $ Terms.primitive _flows_fail
+
 map :: Datum ((x -> y) -> Flow s x -> Flow s y)
 map = Datum $ Terms.primitive _flows_map
 

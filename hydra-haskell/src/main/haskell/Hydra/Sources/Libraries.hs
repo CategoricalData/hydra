@@ -53,6 +53,7 @@ _hydra_lib_flows = Namespace "hydra/lib/flows"
 
 _flows_apply = qname _hydra_lib_flows "apply" :: Name
 _flows_bind = qname _hydra_lib_flows "bind" :: Name
+_flows_fail = qname _hydra_lib_flows "fail" :: Name
 _flows_map = qname _hydra_lib_flows "map" :: Name
 _flows_pure = qname _hydra_lib_flows "pure" :: Name
 
@@ -193,6 +194,7 @@ hydraLibFlowsPrimitives :: (Ord a, Show a) => [Primitive a]
 hydraLibFlowsPrimitives = [
     prim2 _flows_apply (flow s (function x y)) (flow s x) (flow s y) Flows.apply,
     prim2 _flows_bind (flow s x) (function x (flow s y)) (flow s y) Flows.bind,
+    prim1 _flows_fail string (flow s x) Flows.fail,
     prim2 _flows_map (function x y) (flow s x) (flow s y) Flows.map,
     prim1 _flows_pure x (flow s x) Flows.pure]
   where
