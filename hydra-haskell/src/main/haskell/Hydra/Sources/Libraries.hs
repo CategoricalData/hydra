@@ -85,8 +85,30 @@ _lists_tail = qname _hydra_lib_lists "tail" :: Name
 _hydra_lib_literals :: Namespace
 _hydra_lib_literals = Namespace "hydra/lib/literals"
 
+_literals_bigfloatToBigint = qname _hydra_lib_literals "bigfloatToBigint" :: Name
+_literals_bigfloatToFloat32 = qname _hydra_lib_literals "bigfloatToFloat32" :: Name
+_literals_bigfloatToFloat64 = qname _hydra_lib_literals "bigfloatToFloat64" :: Name
+_literals_bigintToBigfloat = qname _hydra_lib_literals "bigintToBigfloat" :: Name
+_literals_bigintToInt8 = qname _hydra_lib_literals "bigintToInt8" :: Name
+_literals_bigintToInt16 = qname _hydra_lib_literals "bigintToInt16" :: Name
+_literals_bigintToInt32 = qname _hydra_lib_literals "bigintToInt32" :: Name
+_literals_bigintToInt64 = qname _hydra_lib_literals "bigintToInt64" :: Name
+_literals_bigintToUint8 = qname _hydra_lib_literals "bigintToUint8" :: Name
+_literals_bigintToUint16 = qname _hydra_lib_literals "bigintToUint16" :: Name
+_literals_bigintToUint32 = qname _hydra_lib_literals "bigintToUint32" :: Name
+_literals_bigintToUint64 = qname _hydra_lib_literals "bigintToUint64" :: Name
+_literals_float32ToBigfloat = qname _hydra_lib_literals "float32ToBigfloat" :: Name
+_literals_float64ToBigfloat = qname _hydra_lib_literals "float64ToBigfloat" :: Name
+_literals_int8ToBigint = qname _hydra_lib_literals "int8ToBigint" :: Name
+_literals_int16ToBigint = qname _hydra_lib_literals "int16ToBigint" :: Name
+_literals_int32ToBigint = qname _hydra_lib_literals "int32ToBigint" :: Name
+_literals_int64ToBigint = qname _hydra_lib_literals "int64ToBigint" :: Name
 _literals_showInt32 = qname _hydra_lib_literals "showInt32" :: Name
 _literals_showString = qname _hydra_lib_literals "showString" :: Name
+_literals_uint8ToBigint = qname _hydra_lib_literals "uint8ToBigint" :: Name
+_literals_uint16ToBigint = qname _hydra_lib_literals "uint16ToBigint" :: Name
+_literals_uint32ToBigint = qname _hydra_lib_literals "uint32ToBigint" :: Name
+_literals_uint64ToBigint = qname _hydra_lib_literals "uint64ToBigint" :: Name
 
 _hydra_lib_logic :: Namespace
 _hydra_lib_logic = Namespace "hydra/lib/logic"
@@ -160,10 +182,6 @@ _strings_splitOn = qname _hydra_lib_strings "splitOn" :: Name
 _strings_toList = qname _hydra_lib_strings "toList" :: Name
 _strings_toLower = qname _hydra_lib_strings "toLower" :: Name
 _strings_toUpper = qname _hydra_lib_strings "toUpper" :: Name
-
---hydraIoPrimitives = [
---  prim1 _io_showTerm (variable "a) string
---  ]
 
 hydraLibEqualityPrimitives :: (Ord a, Show a) => [Primitive a]
 hydraLibEqualityPrimitives = [
@@ -247,8 +265,30 @@ hydraLibListsPrimitives = [
 
 hydraLibLiteralsPrimitives :: Show a => [Primitive a]
 hydraLibLiteralsPrimitives = [
+  prim1 _literals_bigfloatToBigint bigfloat bigint Literals.bigfloatToBigint,
+  prim1 _literals_bigfloatToFloat32 bigfloat float32 Literals.bigfloatToFloat32,
+  prim1 _literals_bigfloatToFloat64 bigfloat float64 Literals.bigfloatToFloat64,
+  prim1 _literals_bigintToBigfloat bigint bigfloat Literals.bigintToBigfloat,
+  prim1 _literals_bigintToInt8 bigint int8 Literals.bigintToInt8,
+  prim1 _literals_bigintToInt16 bigint int16 Literals.bigintToInt16,
+  prim1 _literals_bigintToInt32 bigint int32 Literals.bigintToInt32,
+  prim1 _literals_bigintToInt64 bigint int64 Literals.bigintToInt64,
+  prim1 _literals_bigintToUint8 bigint uint8 Literals.bigintToUint8,
+  prim1 _literals_bigintToUint16 bigint uint16 Literals.bigintToUint16,
+  prim1 _literals_bigintToUint32 bigint uint32 Literals.bigintToUint32,
+  prim1 _literals_bigintToUint64 bigint uint64 Literals.bigintToUint64,
+  prim1 _literals_float32ToBigfloat float32 bigfloat Literals.float32ToBigfloat,
+  prim1 _literals_float64ToBigfloat float64 bigfloat Literals.float64ToBigfloat,
+  prim1 _literals_int8ToBigint int8 bigint Literals.int8ToBigint,
+  prim1 _literals_int16ToBigint int16 bigint Literals.int16ToBigint,
+  prim1 _literals_int32ToBigint int32 bigint Literals.int32ToBigint,
+  prim1 _literals_int64ToBigint int64 bigint Literals.int64ToBigint,
   prim1 _literals_showInt32 int32 string Literals.showInt32,
-  prim1 _literals_showString string string Literals.showString]
+  prim1 _literals_showString string string Literals.showString,
+  prim1 _literals_uint8ToBigint uint8 bigint Literals.uint8ToBigint,
+  prim1 _literals_uint16ToBigint uint16 bigint Literals.uint16ToBigint,
+  prim1 _literals_uint32ToBigint uint32 bigint Literals.uint32ToBigint,
+  prim1 _literals_uint64ToBigint uint64 bigint Literals.uint64ToBigint]
 
 hydraLibLogicPrimitives :: Show a => [Primitive a]
 hydraLibLogicPrimitives = [
