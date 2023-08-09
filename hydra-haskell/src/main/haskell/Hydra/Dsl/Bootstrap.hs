@@ -35,16 +35,19 @@ datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders 
     elName = qualify gname (Name lname)
 
     -- Note: placeholders are only expected at the top level, or beneath annotations and/or type lambdas
-    replacePlaceholders rec t = case t' of
-        TypeRecord (RowType n e fields) -> if n == placeholderName
+    replacePlaceholders rec t = case rect of
+        TypeRecord (RowType tname e fields) -> if tname == placeholderName
           then TypeRecord (RowType elName e fields)
-          else t'
-        TypeUnion (RowType n e fields) -> if n == placeholderName
+          else rect
+        TypeUnion (RowType tname e fields) -> if tname == placeholderName
           then TypeUnion (RowType elName e fields)
-          else t'
-        _ -> t'
+          else rect
+        TypeWrap (Nominal tname t) -> if tname == placeholderName
+          then TypeWrap (Nominal elName t)
+          else rect
+        _ -> rect
       where
-        t' = rec t
+        rect = rec t
 
 typeref :: Namespace -> String -> Type a
 typeref ns = TypeVariable . qualify ns . Name

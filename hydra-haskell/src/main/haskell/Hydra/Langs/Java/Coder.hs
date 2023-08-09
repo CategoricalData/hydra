@@ -615,7 +615,7 @@ encodeTerm aliases term0 = encodeInternal [] term0
           jterms <- CM.mapM encode terms
           let tupleTypeName = "hydra.core.Tuple.Tuple" ++ show (length terms)
           return $ javaConstructorCall (javaConstructorName (Java.Identifier tupleTypeName) Nothing) jterms Nothing
-          
+
         TermRecord (Record name fields) -> do
           fieldExprs <- CM.mapM encode (fieldTerm <$> fields)
           let consId = nameToJavaName aliases name
@@ -646,9 +646,9 @@ encodeTerm aliases term0 = encodeInternal [] term0
             -- and using '::' instead of '.'), but it may or may not always work.
             isRef = not (L.head (unName name) == '$')
 
-        TermWrap (Nominal name arg) -> do
+        TermWrap (Nominal tname arg) -> do
           jarg <- encode arg
-          return $ javaConstructorCall (javaConstructorName (nameToJavaName aliases name) Nothing) [jarg] Nothing
+          return $ javaConstructorCall (javaConstructorName (nameToJavaName aliases tname) Nothing) [jarg] Nothing
 
         _ -> failAsLiteral $ "Unimplemented term variant: " ++ show (termVariant term)
 
@@ -874,7 +874,7 @@ toDataDeclaration aliases (el, TypedTerm typ term) = do
 
 typeNameDecl :: (Ord a, Read a, Show a) => Aliases -> Name -> GraphFlow a Java.ClassBodyDeclarationWithComments
 typeNameDecl aliases name = do
-  jt <- encodeType aliases $ TypeVariable _Name
+  jt <- adaptTypeToJavaAndEncode aliases $ TypeVariable _Name
   arg <- encodeTerm aliases $ Terms.string $ unName name
   let init = Java.VariableInitializerExpression $ javaConstructorCall (javaConstructorName nameName Nothing) [arg] Nothing
   let var = javaVariableDeclarator (Java.Identifier "NAME") (Just init)

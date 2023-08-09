@@ -63,12 +63,11 @@ forTypeReference name = withTrace ("adapt named type " ++ unName name) $ do
   let adapters = adapterContextAdapters cx
   case M.lookup name adapters of
     Nothing -> do
-      -- Insert a placeholder until the actual adapter has been constructed, in case of
+      -- Insert a placeholder until the actual adapter has been constructed
       putState (cx {adapterContextAdapters = M.insert name placeholder adapters})
       mt <- withGraphContext $ resolveType $ TypeVariable name
       case mt of
         Nothing -> pure $ Adapter lossy (TypeVariable name) (TypeVariable name) $ bidirectional $ const pure
-          -- fail $ "type variable did not resolve to a type: " ++ unName name
         Just t -> do
           actual <- termAdapter t
           putState (cx {adapterContextAdapters = M.insert name actual adapters})
@@ -294,6 +293,12 @@ passUnion t@(TypeUnion rt) = do
     sfields = rowTypeFields rt
     nm = rowTypeTypeName rt
 
+passWrapped :: (Ord a, Read a, Show a) => TypeAdapter a
+passWrapped wt@(TypeWrap (Nominal tname t)) = do
+  adapter <- termAdapter t
+  return $ Adapter (adapterIsLossy adapter) wt (Types.wrapWithName tname $ adapterTarget adapter)
+    $ bidirectional $ \dir (TermWrap (Nominal _ term)) -> TermWrap . Nominal tname <$> encodeDecode dir (adapterCoder adapter) term
+
 simplifyApplication :: (Ord a, Read a, Show a) => TypeAdapter a
 simplifyApplication t@(TypeApplication (ApplicationType lhs _)) = do
   ad <- termAdapter lhs
@@ -307,15 +312,15 @@ termAdapter typ = withTrace ("adapter for " ++ describeType typ ) $ do
     -- Account for let-bound variables
     TypeVariable name -> forTypeReference name
     _ -> do
-        cx <- getState
-        chooseAdapter (alts cx) (supported cx) describeType typ
+        g <- getState
+        chooseAdapter (alts g) (supported g) describeType typ
       where
-        alts cx t = (\c -> c t) <$>
-            if supportedAtTopLevel cx t
+        alts g t = (\c -> c t) <$>
+            if supportedAtTopLevel g t
               then pass t
               else trySubstitution t
           where
-            supportedAtTopLevel cx t = variantIsSupported cx t && languageConstraintsTypes (constraints cx) t
+            supportedAtTopLevel g t = variantIsSupported g t && languageConstraintsTypes (constraints g) t
             pass t = case typeVariant t of
               TypeVariantAnnotated -> [passAnnotated]
               TypeVariantApplication -> [passApplication]
@@ -330,6 +335,7 @@ termAdapter typ = withTrace ("adapter for " ++ describeType typ ) $ do
               TypeVariantSet -> [passSet]
               TypeVariantSum -> [passSum]
               TypeVariantUnion -> [passUnion]
+              TypeVariantWrap -> [passWrapped]
               _ -> []
             trySubstitution t = case typeVariant t of
               TypeVariantAnnotated -> [passAnnotated]
@@ -344,7 +350,7 @@ termAdapter typ = withTrace ("adapter for " ++ describeType typ ) $ do
   where
     constraints = languageConstraints . adapterContextLanguage
     supported = typeIsSupported . constraints
-    variantIsSupported cx t = S.member (typeVariant t) $ languageConstraintsTypeVariants (constraints cx)
+    variantIsSupported g t = S.member (typeVariant t) $ languageConstraintsTypeVariants (constraints g)
 
 ---- Caution: possibility of an infinite loop if neither unions, optionals, nor lists are supported
 unionToRecord :: (Ord a, Read a, Show a) => TypeAdapter a

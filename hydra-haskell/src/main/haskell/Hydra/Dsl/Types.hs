@@ -139,5 +139,8 @@ unit = TypeRecord $ RowType (Name "hydra/core.UnitType") Nothing []
 var :: String -> Type a
 var = TypeVariable . Name
 
-wrap :: Name -> Type a -> Type a
-wrap name t = TypeWrap $ Nominal name t
+wrap :: Type a -> Type a
+wrap = wrapWithName placeholderName
+
+wrapWithName :: Name -> Type a -> Type a
+wrapWithName name t = TypeWrap $ Nominal name t
