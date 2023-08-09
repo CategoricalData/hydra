@@ -22,7 +22,8 @@ hydraStripModule = Module (Namespace "hydra/strip") elements [hydraCoreModule] $
    elements = [
      el skipAnnotationsDef,
      el stripTermDef,
-     el stripTypeDef]
+     el stripTypeDef,
+     el stripTypeParametersDef]
 
 skipAnnotationsDef :: Definition ((a -> Maybe (Annotated a m)) -> a -> a)
 skipAnnotationsDef = stripDefinition "skipAnnotations" $
@@ -54,5 +55,11 @@ stripTypeDef = stripDefinition "stripType" $
     function typeA typeA $
       lambda "x" (ref skipAnnotationsDef @@ (match _Type (Just nothing) [
         Case _Type_annotated --> lambda "ann" (just $ var "ann")]) @@ var "x")
-  where
-    typeA = Types.apply (TypeVariable _Type) (Types.var "a")
+        
+stripTypeParametersDef :: Definition (Type a -> Type a)
+stripTypeParametersDef = stripDefinition "stripTypeParameters" $
+    doc "Strip any top-level type lambdas from a type, extracting the (possibly nested) type body" $
+    function typeA typeA $
+      lambda "t" $ match _Type (Just $ var "t") [
+        Case _Type_lambda --> lambda "lt" (ref stripTypeParametersDef @@ (project _LambdaType _LambdaType_body @@ var "lt"))
+        ] @@ (ref stripTypeDef @@ var "t")
