@@ -100,8 +100,8 @@ functionN ts = typed $ Types.functionN ts
 functionWithClasses :: Type Kv -> Type Kv -> M.Map Name (S.Set TypeClass) -> Datum a -> Datum a
 functionWithClasses dom cod classes = typed $ setTypeClasses classes (Types.function dom cod)
 
--- id :: Datum (a -> a)
--- id = Datum Terms.id
+identity :: Datum (a -> a)
+identity = Datum Terms.identity
 
 inject :: Name -> FieldName -> Datum a -> Datum b
 inject name fname (Datum term) = Datum $ Terms.inject name (Field fname term)
