@@ -26,3 +26,9 @@ stripType :: (Core.Type a -> Core.Type a)
 stripType x = (skipAnnotations (\x -> case x of
   Core.TypeAnnotated v -> (Just v)
   _ -> Nothing) x)
+
+-- | Strip any top-level type lambdas from a type, extracting the (possibly nested) type body
+stripTypeParameters :: (Core.Type a -> Core.Type a)
+stripTypeParameters t = ((\x -> case x of
+  Core.TypeLambda v -> (stripTypeParameters (Core.lambdaTypeBody v))
+  _ -> t) (stripType t))

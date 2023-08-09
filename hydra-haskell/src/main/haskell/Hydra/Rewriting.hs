@@ -16,6 +16,7 @@ import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Tools.Sorting
 import Hydra.Tier2
+import Hydra.Tools.Debug
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -69,7 +70,9 @@ expandLambdas term = do
             where
               lhs' = annotationClassSetTermType (graphAnnotations g) mtyp lhs
               mtyp' = case mtyp of
-                Just (TypeFunction (FunctionType _ cod)) -> Just cod
+                Just t -> case stripTypeParameters t of
+                  TypeFunction (FunctionType _ cod) -> Just cod
+                  _ -> throwDebugException $ "expandLambdas: expected function type, got " ++ show t
                 Nothing -> Nothing
 
 foldOverTerm :: TraversalOrder -> (x -> Term a -> x) -> x -> Term a -> x
