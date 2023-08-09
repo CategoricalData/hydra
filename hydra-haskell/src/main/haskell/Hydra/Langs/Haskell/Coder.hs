@@ -189,7 +189,7 @@ encodeTerm namespaces term = do
     encode = encodeTerm namespaces
 
 encodeType :: Show a => Namespaces -> Type a -> GraphFlow a H.Type
-encodeType namespaces typ = case stripType typ of
+encodeType namespaces typ = withTrace "encode type" $ case stripType typ of
     TypeApplication (ApplicationType lhs rhs) -> toTypeApplication <$> CM.sequence [encode lhs, encode rhs]
     TypeFunction (FunctionType dom cod) -> H.TypeFunction <$> (H.Type_Function <$> encode dom <*> encode cod)
     TypeLambda (LambdaType (Name v) body) -> toTypeApplication <$> CM.sequence [
@@ -233,9 +233,9 @@ encodeType namespaces typ = case stripType typ of
     encode = encodeType namespaces
     wrap name = pure $ H.TypeVariable $ elementReference namespaces name
 
-encodeTypeWithClassAssertions :: Show a => Namespaces -> M.Map Name (S.Set TypeClass) -> Type a -> GraphFlow a H.Type
-encodeTypeWithClassAssertions namespaces classes typ = do
-  htyp <- encodeType namespaces typ
+encodeTypeWithClassAssertions :: (Ord a, Read a, Show a) => Namespaces -> M.Map Name (S.Set TypeClass) -> Type a -> GraphFlow a H.Type
+encodeTypeWithClassAssertions namespaces classes typ = withTrace "encode with assertions" $ do
+  htyp <- encodeAdaptedType namespaces typ
   if L.null assertPairs
     then pure htyp
     else do

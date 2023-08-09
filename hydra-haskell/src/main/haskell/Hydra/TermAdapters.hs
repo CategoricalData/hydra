@@ -202,12 +202,13 @@ passFunction t@(TypeFunction (FunctionType dom cod)) = do
                   Nothing -> pure Nothing
                   Just d -> Just <$> encodeDecode dir (adapterCoder codAd) d
                 return $ EliminationUnion $ CaseStatement n rdef rcases
-
               where
                 -- Note: this causes unrecognized cases to simply be passed through;
                 --       it is not the job of this adapter to catch validation issues.
                 getCoder fname = Y.maybe idCoder adapterCoder $ M.lookup fname caseAds
           FunctionLambda (Lambda var body) -> FunctionLambda <$> (Lambda var <$> encodeDecode dir (adapterCoder codAd) body)
+          FunctionPrimitive name -> pure $ FunctionPrimitive name
+          _ -> unexpected "lambda or elimination" f
         _ -> unexpected "function term" term
 
 passLambda :: (Ord a, Read a, Show a) => TypeAdapter a
