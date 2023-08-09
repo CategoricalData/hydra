@@ -13,6 +13,7 @@ import Hydra.Dsl.Lib.Equality as Equality
 import Hydra.Dsl.Lib.Flows as Flows
 import Hydra.Dsl.Lib.Maps as Maps
 import Hydra.Dsl.Lib.Lists as Lists
+import Hydra.Dsl.Lib.Literals as Literals
 import Hydra.Dsl.Lib.Logic as Logic
 import Hydra.Dsl.Lib.Optionals as Optionals
 import Hydra.Dsl.Lib.Strings as Strings
@@ -34,6 +35,8 @@ hydraTier1Module = Module (Namespace "hydra/tier1") elements
     Just ("A module for miscellaneous tier-1 functions and constants.")
   where
    elements = [
+     el floatValueToBigfloatDef,
+     el integerValueToBigintDef,
      el unqualifyNameDef,
      -- Flows.hs
      el emptyTraceDef,
@@ -46,6 +49,28 @@ hydraTier1Module = Module (Namespace "hydra/tier1") elements
      el withStateDef,
      el withTraceDef
      ]
+
+floatValueToBigfloatDef :: Definition (Double -> Double)
+floatValueToBigfloatDef = tier1Definition "floatValueToBigfloat" $
+  doc "Convert a floating-point value of any precision to a bigfloat" $
+  match _FloatValue Nothing [
+    _FloatValue_bigfloat>>: Equality.identity,
+    _FloatValue_float32>>: Literals.float32ToBigfloat,
+    _FloatValue_float64>>: Literals.float64ToBigfloat]
+
+integerValueToBigintDef :: Definition (Integer -> Integer)
+integerValueToBigintDef = tier1Definition "integerValueToBigint" $
+  doc "Convert an integer value of any precision to a bigint" $
+  match _IntegerValue Nothing [
+    _IntegerValue_bigint>>: Equality.identity,
+    _IntegerValue_int8>>: Literals.int8ToBigint,
+    _IntegerValue_int16>>: Literals.int16ToBigint,
+    _IntegerValue_int32>>: Literals.int32ToBigint,
+    _IntegerValue_int64>>: Literals.int64ToBigint,
+    _IntegerValue_uint8>>: Literals.uint8ToBigint,
+    _IntegerValue_uint16>>: Literals.uint16ToBigint,
+    _IntegerValue_uint32>>: Literals.uint32ToBigint,
+    _IntegerValue_uint64>>: Literals.uint64ToBigint]
 
 unqualifyNameDef :: Definition (QualifiedName -> Name)
 unqualifyNameDef = tier1Definition "unqualifyName" $
