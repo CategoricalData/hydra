@@ -518,8 +518,7 @@ encodeFunction aliases dom cod fun = case fun of
   FunctionElimination elm -> do
     encodeElimination aliases Nothing dom cod elm
   FunctionLambda (Lambda var body) -> do
-      jbody <- encodeTerm aliases body
-      let lam = javaLambda var jbody
+      lam <- toLambda var body
       if needsCast body
         then do
           jtype <- adaptTypeToJavaAndEncode aliases (TypeFunction $ FunctionType dom cod)
@@ -532,6 +531,17 @@ encodeFunction aliases dom cod fun = case fun of
 --  FunctionPrimitive name ->
   _ -> pure $ encodeLiteral $ LiteralString $
     "Unimplemented function variant: " ++ show (functionVariant fun) -- TODO: temporary
+  where
+    toLambda var body = maybeLet aliases body cons
+      where
+        cons aliases' term stmts = if L.null stmts
+          then do
+            jbody <- encodeTerm aliases term
+            return $ javaLambda var jbody
+          else do
+            jbody <- encodeTerm aliases term
+            return $ javaLambdaFromBlock var $ Java.Block $ stmts
+              ++ [Java.BlockStatementStatement $ javaReturnStatement $ Just jbody]
 
 encodeLiteral :: Literal -> Java.Expression
 encodeLiteral lit = javaLiteralToJavaExpression $ case lit of
@@ -595,6 +605,8 @@ encodeTerm aliases term0 = encodeInternal [] term0
             TypeFunction (FunctionType dom cod) -> do
               encodeFunction aliases dom cod f
             _ -> encodeNullaryConstant aliases t f
+
+        TermLet _ -> fail "nested let is unsupported for Java"
 
         TermList els -> do
           jels <- CM.mapM encode els

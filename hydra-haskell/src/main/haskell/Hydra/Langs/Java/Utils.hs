@@ -186,6 +186,11 @@ javaLambda var jbody = Java.ExpressionLambda $ Java.LambdaExpression params (Jav
   where
     params = Java.LambdaParametersSingle $ variableToJavaIdentifier var
 
+javaLambdaFromBlock :: Name -> Java.Block -> Java.Expression
+javaLambdaFromBlock var block = Java.ExpressionLambda $ Java.LambdaExpression params (Java.LambdaBodyBlock block)
+  where
+    params = Java.LambdaParametersSingle $ variableToJavaIdentifier var
+
 javaLiteralToJavaExpression = javaRelationalExpressionToJavaExpression .
   javaMultiplicativeExpressionToJavaRelationalExpression .
   javaLiteralToJavaMultiplicativeExpression
