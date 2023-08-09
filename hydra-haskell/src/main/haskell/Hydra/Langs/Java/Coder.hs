@@ -33,6 +33,9 @@ printModule mod = do
       elementNameToFilePath name,
       printExpr $ parenthesize $ writeCompilationUnit unit)
 
+adaptTypeToJavaAndEncode :: (Ord a, Read a, Show a) => Aliases -> Type a -> GraphFlow a Java.Type
+adaptTypeToJavaAndEncode aliases = adaptAndEncodeType javaLanguage (encodeType aliases)
+
 boundTypeVariables :: Type a -> [Name]
 boundTypeVariables typ = case typ of
   TypeAnnotated (Annotated typ1 _) -> boundTypeVariables typ1
@@ -104,7 +107,7 @@ constructModule mod coders pairs = do
           _ -> False
 
     termToConstant coders el typ term = do
-      jtype <- Java.UnannType <$> encodeType aliases typ
+      jtype <- Java.UnannType <$> adaptTypeToJavaAndEncode aliases typ
       jterm <- coderEncode (Y.fromJust $ M.lookup typ coders) term
       let mods = []
       let var = javaVariableDeclarator (javaVariableName $ elementName el) $ Just $ Java.VariableInitializerExpression jterm
@@ -114,8 +117,8 @@ constructModule mod coders pairs = do
     termToMethod coders el typ term = case stripType typ of
       TypeFunction (FunctionType dom cod) -> maybeLet aliases term $ \aliases' tm stmts -> case stripTerm tm of
         TermFunction (FunctionLambda (Lambda v body)) -> do
-          jdom <- encodeType aliases' dom
-          jcod <- encodeType aliases' cod
+          jdom <- adaptTypeToJavaAndEncode aliases' dom
+          jcod <- adaptTypeToJavaAndEncode aliases' cod
           let mods = [Java.InterfaceMethodModifierStatic]
           let anns = []
           let mname = sanitizeJavaName $ decapitalize $ localNameOfEager $ elementName el
@@ -174,7 +177,7 @@ declarationForRecordType isInner aliases tparams elName fields = do
 
     toMemberVar (FieldType fname ft) = do
       let mods = [Java.FieldModifierPublic, Java.FieldModifierFinal]
-      jt <- encodeType aliases ft
+      jt <- adaptTypeToJavaAndEncode aliases ft
       let var = fieldNameToJavaVariableDeclarator fname
       return $ javaMemberField mods jt var
 
@@ -391,7 +394,7 @@ encodeApplication aliases app@(Application lhs rhs) = case stripTerm fun of
 
     fallback = do
         t <- requireTypeAnnotation lhs
-        (dom, cod) <- case stripType t of
+        (dom, cod) <- case stripTypeParameters t of
             TypeFunction (FunctionType dom cod) -> pure (dom, cod)
             t' -> fail $ "expected a function type on function " ++ show lhs ++ ", but found " ++ show t'
         case stripTerm lhs of
@@ -428,13 +431,13 @@ encodeElimination aliases marg dom cod elm = case elm of
     let jbody = javaMethodInvocationToJavaExpression $ methodInvocation
           (Just $ Right $ javaExpressionToJavaPrimary jhead)
           (Java.Identifier "orElse") [jnothing]
-    castType <- encodeType aliases (TypeFunction $ FunctionType dom cod) >>= javaTypeToJavaReferenceType
+    castType <- adaptTypeToJavaAndEncode aliases (TypeFunction $ FunctionType dom cod) >>= javaTypeToJavaReferenceType
     return $ case marg of
       Nothing -> javaCastExpressionToJavaExpression $ javaCastExpression castType $
                        javaExpressionToJavaUnaryExpression $ javaLambda var jbody
       Just _ -> jbody
   EliminationRecord (Projection _ fname) -> do
-    jdomr <- encodeType aliases dom >>= javaTypeToJavaReferenceType
+    jdomr <- adaptTypeToJavaAndEncode aliases dom >>= javaTypeToJavaReferenceType
     jexp <- case marg of
       Nothing -> pure $ javaLambda var jbody
         where
@@ -461,7 +464,7 @@ encodeElimination aliases marg dom cod elm = case elm of
           let consId = innerClassRef aliases tname $ case def of
                 Nothing -> visitorName
                 Just _ -> partialVisitorName
-          jcod <- encodeType aliases cod
+          jcod <- adaptTypeToJavaAndEncode aliases cod
           let targs = Java.TypeArgumentsOrDiamondDiamond
           otherwiseBranches <- case def of
             Nothing -> pure []
@@ -519,7 +522,7 @@ encodeFunction aliases dom cod fun = case fun of
       let lam = javaLambda var jbody
       if needsCast body
         then do
-          jtype <- encodeType aliases (TypeFunction $ FunctionType dom cod)
+          jtype <- adaptTypeToJavaAndEncode aliases (TypeFunction $ FunctionType dom cod)
           rt <- javaTypeToJavaReferenceType jtype
           return $ javaCastExpressionToJavaExpression $
             javaCastExpression rt (javaExpressionToJavaUnaryExpression lam)
@@ -713,7 +716,7 @@ encodeVariable aliases isRef name = do
     jid = javaIdentifier $ unName name
 
 fieldTypeToFormalParam aliases (FieldType fname ft) = do
-  jt <- encodeType aliases ft
+  jt <- adaptTypeToJavaAndEncode aliases ft
   return $ javaTypeToJavaFormalParameter jt fname
 
 functionCall :: (Eq a, Ord a, Read a, Show a) => Aliases -> Bool -> Name -> [Term a] -> GraphFlow a Java.Expression
@@ -795,7 +798,7 @@ maybeLet aliases term cons = helper [] term
               -- TODO: repeated
               let value = Y.fromJust $ M.lookup name bindings
               typ <- requireAnnotatedType value
-              jtype <- encodeType aliasesWithRecursive typ
+              jtype <- adaptTypeToJavaAndEncode aliasesWithRecursive typ
               let id = variableToJavaIdentifier name
 
               let pkg = javaPackageName ["java", "util", "concurrent", "atomic"]
@@ -814,7 +817,7 @@ maybeLet aliases term cons = helper [] term
             -- TODO: repeated
             let value = Y.fromJust $ M.lookup name bindings
             typ <- requireAnnotatedType value
-            jtype <- encodeType aliasesWithRecursive typ
+            jtype <- adaptTypeToJavaAndEncode aliasesWithRecursive typ
             let id = variableToJavaIdentifier name
             rhs <- encodeTerm aliasesWithRecursive value
             return $ if S.member name recursiveVars

@@ -20,6 +20,9 @@ import qualified Data.Maybe as Y
 import Hydra.Rewriting (removeTypeAnnotations, removeTermAnnotations)
 
 
+adaptTypeToHaskellAndEncode :: (Ord a, Read a, Show a) => Namespaces -> Type a -> GraphFlow a H.Type
+adaptTypeToHaskellAndEncode namespaces = adaptAndEncodeType haskellLanguage (encodeType namespaces)
+
 constantDecls :: Graph a -> Namespaces -> Name -> Type a -> [H.DeclarationWithComments]
 constantDecls g namespaces name@(Name nm) typ = if useCoreImport
     then toDecl (Name "hydra/core.Name") nameDecl:(toDecl (Name "hydra/core.FieldName") <$> fieldDecls)
@@ -76,9 +79,6 @@ constructModule namespaces mod coders pairs = do
               else Nothing-}]
           where
             toImport name = H.Import False name Nothing Nothing
-
-encodeAdaptedType :: (Ord a, Read a, Show a) => Namespaces -> Type a -> GraphFlow a H.Type
-encodeAdaptedType namespaces typ = adaptType haskellLanguage typ >>= encodeType namespaces
 
 encodeFunction :: (Eq a, Ord a, Read a, Show a) => Namespaces -> Function a -> GraphFlow a H.Expression
 encodeFunction namespaces fun = case fun of
@@ -235,7 +235,7 @@ encodeType namespaces typ = withTrace "encode type" $ case stripType typ of
 
 encodeTypeWithClassAssertions :: (Ord a, Read a, Show a) => Namespaces -> M.Map Name (S.Set TypeClass) -> Type a -> GraphFlow a H.Type
 encodeTypeWithClassAssertions namespaces classes typ = withTrace "encode with assertions" $ do
-  htyp <- encodeAdaptedType namespaces typ
+  htyp <- adaptTypeToHaskellAndEncode namespaces typ
   if L.null assertPairs
     then pure htyp
     else do
@@ -331,7 +331,7 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
           cons <- newtypeCons el t'
           return $ H.DeclarationData $ H.DataDeclaration H.DataDeclaration_KeywordNewtype [] hd [cons] [deriv]
         else do
-          htype <- encodeAdaptedType namespaces t
+          htype <- adaptTypeToHaskellAndEncode namespaces t
           return $ H.DeclarationType (H.TypeDeclaration hd htype)
     comments <- annotationClassTermDescription (graphAnnotations g) term
     return $ [H.DeclarationWithComments decl comments] ++ constantDecls g namespaces (elementName el) t
@@ -351,7 +351,7 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
     newtypeCons el typ = do
         g <- getState
         let hname = simpleName $ newtypeAccessorName $ elementName el
-        htype <- encodeAdaptedType namespaces typ
+        htype <- adaptTypeToHaskellAndEncode namespaces typ
         comments <- annotationClassTypeDescription (graphAnnotations g) typ
         let hfield = H.FieldWithComments (H.Field hname htype) comments
         return $ H.ConstructorWithComments
@@ -363,7 +363,7 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
       where
         toField (FieldType (FieldName fname) ftype) = do
           let hname = simpleName $ decapitalize lname ++ capitalize fname
-          htype <- encodeAdaptedType namespaces ftype
+          htype <- adaptTypeToHaskellAndEncode namespaces ftype
           g <- getState
           comments <- annotationClassTypeDescription (graphAnnotations g) ftype
           return $ H.FieldWithComments (H.Field hname htype) comments
@@ -375,6 +375,6 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
       typeList <- if stripType ftype == Types.unit
         then pure []
         else do
-          htype <- encodeAdaptedType namespaces ftype
+          htype <- adaptTypeToHaskellAndEncode namespaces ftype
           return [htype]
       return $ H.ConstructorWithComments (H.ConstructorOrdinary $ H.Constructor_Ordinary (simpleName nm) typeList) comments

@@ -28,6 +28,9 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
+adaptAndEncodeType :: (Ord a, Read a, Show a) => Language a -> (Type a -> GraphFlow a t) -> Type a -> GraphFlow a t
+adaptAndEncodeType lang enc typ = adaptType lang typ >>= enc
+
 -- | Given a target language and a source type, find the target type to which the latter will be adapted.
 adaptType :: (Ord a, Read a, Show a) => Language a -> Type a -> GraphFlow a (Type a)
 adaptType lang typ = adapterTarget <$> languageAdapter lang typ
