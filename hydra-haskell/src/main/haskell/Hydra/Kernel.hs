@@ -6,7 +6,6 @@ module Hydra.Kernel (
   module Hydra.Adapters,
   module Hydra.Basics,
   module Hydra.Coders,
-  module Hydra.Common,
   module Hydra.Compute,
   module Hydra.Constants,
   module Hydra.Constraints,
@@ -45,7 +44,6 @@ import Hydra.AdapterUtils
 import Hydra.Adapters
 import Hydra.Basics
 import Hydra.Coders
-import Hydra.Common
 import Hydra.Compute
 import Hydra.Constants
 import Hydra.Constraints

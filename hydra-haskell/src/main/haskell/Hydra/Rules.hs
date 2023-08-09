@@ -4,7 +4,6 @@ module Hydra.Rules where
 
 import Hydra.Basics
 import Hydra.Strip
-import Hydra.Common
 import Hydra.Compute
 import Hydra.Core
 import Hydra.CoreDecoding

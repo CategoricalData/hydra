@@ -6,6 +6,7 @@ import Hydra.Graph
 import Hydra.Flows
 import Hydra.Strip
 import Hydra.Basics
+import Hydra.Tier1
 import Hydra.Tier2
 import Hydra.Adapters
 import Hydra.TermAdapters
@@ -129,10 +130,8 @@ untypedTermToJson term = case stripTerm term of
       TermLiteral lit -> pure $ case lit of
         LiteralBinary s -> Json.ValueString s
         LiteralBoolean b -> Json.ValueBoolean b
-        LiteralFloat f -> case (convertFloatValue FloatTypeBigfloat f) of
-          FloatValueBigfloat v -> Json.ValueNumber v
-        LiteralInteger i -> case (convertIntegerValue IntegerTypeBigint i) of
-          IntegerValueBigint v -> Json.ValueNumber $ bigintToBigfloat v
+        LiteralFloat f -> Json.ValueNumber $ floatValueToBigfloat f
+        LiteralInteger i -> Json.ValueNumber $ bigintToBigfloat $ integerValueToBigint i
         LiteralString s -> Json.ValueString s
       TermRecord (Record _ fields) -> do
         keyvals <- CM.mapM fieldToKeyval fields

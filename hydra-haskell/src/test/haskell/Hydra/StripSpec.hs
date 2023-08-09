@@ -1,4 +1,4 @@
-module Hydra.CommonSpec where
+module Hydra.StripSpec where
 
 import Hydra.Kernel
 

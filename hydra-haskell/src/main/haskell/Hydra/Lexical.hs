@@ -1,11 +1,7 @@
 -- | Functions for retrieving elements and primitive functions from a graph context
 
-module Hydra.Lexical (
-  module Hydra.Lexical,
-  module Hydra.Common,
-  ) where
+module Hydra.Lexical where
 
-import Hydra.Common
 import Hydra.Basics
 import Hydra.Strip
 import Hydra.Core
