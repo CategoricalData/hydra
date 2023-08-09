@@ -7,6 +7,7 @@ import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
+import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
@@ -17,6 +18,26 @@ import Data.Int
 import Data.List
 import Data.Map
 import Data.Set
+
+-- | Convert a floating-point value of any precision to a bigfloat
+floatValueToBigfloat :: (Core.FloatValue -> Double)
+floatValueToBigfloat x = case x of
+  Core.FloatValueBigfloat v -> (Equality.identity v)
+  Core.FloatValueFloat32 v -> (Literals.float32ToBigfloat v)
+  Core.FloatValueFloat64 v -> (Literals.float64ToBigfloat v)
+
+-- | Convert an integer value of any precision to a bigint
+integerValueToBigint :: (Core.IntegerValue -> Integer)
+integerValueToBigint x = case x of
+  Core.IntegerValueBigint v -> (Equality.identity v)
+  Core.IntegerValueInt8 v -> (Literals.int8ToBigint v)
+  Core.IntegerValueInt16 v -> (Literals.int16ToBigint v)
+  Core.IntegerValueInt32 v -> (Literals.int32ToBigint v)
+  Core.IntegerValueInt64 v -> (Literals.int64ToBigint v)
+  Core.IntegerValueUint8 v -> (Literals.uint8ToBigint v)
+  Core.IntegerValueUint16 v -> (Literals.uint16ToBigint v)
+  Core.IntegerValueUint32 v -> (Literals.uint32ToBigint v)
+  Core.IntegerValueUint64 v -> (Literals.uint64ToBigint v)
 
 -- | Convert a qualified name to a dot-separated name
 unqualifyName :: (Module.QualifiedName -> Core.Name)
