@@ -6,9 +6,6 @@ package hydra.core;
 public class Name {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Name");
   
-  /**
-   * A symbol which stands for a term, type, or element
-   */
   public final String value;
   
   public Name (String value) {

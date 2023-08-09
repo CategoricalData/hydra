@@ -81,7 +81,7 @@ hydraCoreModule = Module ns elements [] $
 
       def "FieldName" $
         doc "The name of a field, unique within a record or union type"
-        string,
+        $ wrap string,
 
       def "FieldType" $
         doc "The name and type of a field" $
@@ -218,7 +218,7 @@ hydraCoreModule = Module ns elements [] $
 
       def "Name" $
         doc "A symbol which stands for a term, type, or element"
-        string,
+        $ wrap string,
 
       def "Nominal" $
         doc "An object wrapped in a type name" $

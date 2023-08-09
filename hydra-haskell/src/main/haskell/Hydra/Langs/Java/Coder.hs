@@ -863,6 +863,8 @@ toClassDecl isInner aliases tparams elName t = case stripType t of
     TypeRecord rt -> declarationForRecordType isInner aliases tparams elName $ rowTypeFields rt
     TypeUnion rt -> declarationForUnionType aliases tparams elName $ rowTypeFields rt
     TypeLambda ut -> declarationForLambdaType aliases tparams elName ut
+    TypeWrap (Nominal tname wt) -> declarationForRecordType isInner aliases tparams elName
+      [FieldType (FieldName "value") wt]
     -- Other types are not supported as class declarations, so we wrap them as record types.
     _ -> wrap t -- TODO: wrap and unwrap the corresponding terms as record terms.
   where

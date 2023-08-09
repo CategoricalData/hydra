@@ -326,6 +326,9 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
       TypeUnion rt -> do
         cons <- CM.mapM (unionCons lname) $ rowTypeFields rt
         return $ H.DeclarationData $ H.DataDeclaration H.DataDeclaration_KeywordData [] hd cons [deriv]
+      TypeWrap (Nominal tname wt) -> do
+        cons <- newtypeCons el wt
+        return $ H.DeclarationData $ H.DataDeclaration H.DataDeclaration_KeywordNewtype [] hd [cons] [deriv]
       _ -> if newtypesNotTypedefs
         then do
           cons <- newtypeCons el t'
