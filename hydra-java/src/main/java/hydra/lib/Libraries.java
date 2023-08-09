@@ -17,6 +17,7 @@ import hydra.lib.equality.EqualUint16;
 import hydra.lib.equality.EqualUint32;
 import hydra.lib.equality.EqualUint64;
 import hydra.lib.equality.EqualUint8;
+import hydra.lib.equality.Identity;
 import hydra.tools.PrimitiveFunction;
 
 import java.util.ArrayList;
@@ -62,7 +63,8 @@ public class Libraries {
                 new EqualUint8<>(),
                 new EqualUint16<>(),
                 new EqualUint32<>(),
-                new EqualUint64<>());
+                new EqualUint64<>(),
+                new Identity<>());
     }
 
     private static <A> List<PrimitiveFunction<A>> flowsPrimitives() {

@@ -43,7 +43,7 @@ _equality_equalUint16 = qname _hydra_lib_equality "equalUint16" :: Name
 _equality_equalUint32 = qname _hydra_lib_equality "equalUint32" :: Name
 _equality_equalUint64 = qname _hydra_lib_equality "equalUint64" :: Name
 _equality_equalString = qname _hydra_lib_equality "equalString" :: Name
-
+_equality_identity = qname _hydra_lib_equality "identity" :: Name
 _equality_gtInt32 = qname _hydra_lib_equality "gtInt32" :: Name
 _equality_gteInt32 = qname _hydra_lib_equality "gteInt32" :: Name
 _equality_ltInt32 = qname _hydra_lib_equality "ltInt32" :: Name
@@ -185,28 +185,30 @@ _strings_toUpper = qname _hydra_lib_strings "toUpper" :: Name
 
 hydraLibEqualityPrimitives :: (Ord a, Show a) => [Primitive a]
 hydraLibEqualityPrimitives = [
-  prim2 _equality_equalBinary binary binary boolean Equality.equalBinary,
-  prim2 _equality_equalBoolean boolean boolean boolean Equality.equalBoolean,
-  prim2 _equality_equalBigfloat bigfloat bigfloat boolean Equality.equalBigfloat,
-  prim2 _equality_equalFloat32 float32 float32 boolean Equality.equalFloat32,
-  prim2 _equality_equalFloat64 float64 float64 boolean Equality.equalFloat64,
-  prim2 _equality_equalBigint bigint bigint boolean Equality.equalBigint,
-  prim2 _equality_equalInt8 int8 int8 boolean Equality.equalInt8,
-  prim2 _equality_equalInt16 int16 int16 boolean Equality.equalInt16,
-  prim2 _equality_equalInt32 int32 int32 boolean Equality.equalInt32,
-  prim2 _equality_equalInt64 int64 int64 boolean Equality.equalInt64,
-  prim2 _equality_equalTerm term term boolean Equality.equalTerm,
-  prim2 _equality_equalType type_ type_ boolean Equality.equalType,
-  prim2 _equality_equalUint8 uint8 uint8 boolean Equality.equalUint8,
-  prim2 _equality_equalUint16 uint16 uint16 boolean Equality.equalUint16,
-  prim2 _equality_equalUint32 uint32 uint32 boolean Equality.equalUint32,
-  prim2 _equality_equalUint64 uint64 uint64 boolean Equality.equalUint64,
-  prim2 _equality_equalString string string boolean Equality.equalString,
-
-  prim2 _equality_gtInt32 int32 int32 boolean Equality.gtInt32,
-  prim2 _equality_gteInt32 int32 int32 boolean Equality.gteInt32,
-  prim2 _equality_ltInt32 int32 int32 boolean Equality.ltInt32,
-  prim2 _equality_lteInt32 int32 int32 boolean Equality.lteInt32]
+    prim2 _equality_equalBinary binary binary boolean Equality.equalBinary,
+    prim2 _equality_equalBoolean boolean boolean boolean Equality.equalBoolean,
+    prim2 _equality_equalBigfloat bigfloat bigfloat boolean Equality.equalBigfloat,
+    prim2 _equality_equalFloat32 float32 float32 boolean Equality.equalFloat32,
+    prim2 _equality_equalFloat64 float64 float64 boolean Equality.equalFloat64,
+    prim2 _equality_equalBigint bigint bigint boolean Equality.equalBigint,
+    prim2 _equality_equalInt8 int8 int8 boolean Equality.equalInt8,
+    prim2 _equality_equalInt16 int16 int16 boolean Equality.equalInt16,
+    prim2 _equality_equalInt32 int32 int32 boolean Equality.equalInt32,
+    prim2 _equality_equalInt64 int64 int64 boolean Equality.equalInt64,
+    prim2 _equality_equalTerm term term boolean Equality.equalTerm,
+    prim2 _equality_equalType type_ type_ boolean Equality.equalType,
+    prim2 _equality_equalUint8 uint8 uint8 boolean Equality.equalUint8,
+    prim2 _equality_equalUint16 uint16 uint16 boolean Equality.equalUint16,
+    prim2 _equality_equalUint32 uint32 uint32 boolean Equality.equalUint32,
+    prim2 _equality_equalUint64 uint64 uint64 boolean Equality.equalUint64,
+    prim2 _equality_equalString string string boolean Equality.equalString,
+    prim1 _equality_identity x x Equality.identity,
+    prim2 _equality_gtInt32 int32 int32 boolean Equality.gtInt32,
+    prim2 _equality_gteInt32 int32 int32 boolean Equality.gteInt32,
+    prim2 _equality_ltInt32 int32 int32 boolean Equality.ltInt32,
+    prim2 _equality_lteInt32 int32 int32 boolean Equality.lteInt32]
+  where
+    x = variable "x"
 
 hydraLibFlowsPrimitives :: (Ord a, Show a) => [Primitive a]
 hydraLibFlowsPrimitives = [
