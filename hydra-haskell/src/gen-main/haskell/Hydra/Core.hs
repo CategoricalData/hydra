@@ -108,7 +108,6 @@ _Field_term = (FieldName "term")
 -- | The name of a field, unique within a record or union type
 newtype FieldName = 
   FieldName {
-    -- | The name of a field, unique within a record or union type
     unFieldName :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -372,7 +371,6 @@ _MapType_values = (FieldName "values")
 -- | A symbol which stands for a term, type, or element
 newtype Name = 
   Name {
-    -- | A symbol which stands for a term, type, or element
     unName :: String}
   deriving (Eq, Ord, Read, Show)
 
