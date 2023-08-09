@@ -28,7 +28,6 @@ module Hydra.CoreDecoding (
 import Hydra.Basics
 import Hydra.Strip
 import Hydra.Coders
-import Hydra.Common
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Mantle

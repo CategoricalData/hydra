@@ -3,11 +3,9 @@
 module Hydra.AdapterUtils (
   module Hydra.AdapterUtils,
   module Hydra.Printing,
-  module Hydra.Common,
 ) where
 
 import Hydra.Coders
-import Hydra.Common
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Basics
