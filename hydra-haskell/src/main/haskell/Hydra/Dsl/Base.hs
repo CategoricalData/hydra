@@ -33,6 +33,7 @@ fieldA = Types.apply (TypeVariable _Field) (Types.var "a") :: Type a
 fieldTypeA = Types.apply (TypeVariable _FieldType) (Types.var "a") :: Type a
 flowGraphATypeA = Types.apply (Types.apply (TypeVariable _Flow) graphA) typeA :: Type a
 graphA = Types.apply (TypeVariable _Graph) (Types.var "a") :: Type a
+lambdaTypeA = Types.apply (TypeVariable _LambdaType) (Types.var "a") :: Type a
 termA = Types.apply (TypeVariable _Term) (Types.var "a") :: Type a
 typeA = Types.apply (TypeVariable _Type) (Types.var "a") :: Type a
 
