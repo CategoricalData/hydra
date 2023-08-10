@@ -30,7 +30,7 @@ addJavaTypeParameter rt t = case t of
     Java.ReferenceTypeClassOrInterface cit -> case cit of
       Java.ClassOrInterfaceTypeClass (Java.ClassType anns qual id args) -> pure $
         Java.TypeReference $ Java.ReferenceTypeClassOrInterface $
-          Java.ClassOrInterfaceTypeClass $ Java.ClassType anns qual id (args ++ [Java.TypeArgumentReference rt])
+          Java.ClassOrInterfaceTypeClass $ Java.ClassType anns qual id (L.nub $ args ++ [Java.TypeArgumentReference rt])
       _ -> fail $ "expected a Java class type. Found: " ++ show cit
     Java.ReferenceTypeVariable tv -> pure $ javaTypeVariableToType tv
     _ -> fail $ "expected a Java class or interface type, or a variable. Found: " ++ show rt
