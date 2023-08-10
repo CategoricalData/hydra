@@ -101,10 +101,6 @@ constructModule mod coders pairs = do
           else termToConstant coders el (typedTermType $ snd pair) expanded
       where
         el = fst pair
-        isLambda t = case stripTerm t of
-          TermFunction (FunctionLambda _) -> True
-          TermLet (Let _ env) -> isLambda env
-          _ -> False
 
     termToConstant coders el typ term = do
       jtype <- Java.UnannType <$> adaptTypeToJavaAndEncode aliases typ
@@ -136,7 +132,7 @@ constructModule mod coders pairs = do
             let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
             return $ interfaceMethodDeclaration mods tparams mname [param] result (Just $ stmts2 ++ stmts3 ++ [returnSt])
         _ -> unexpected "function term" term
-      _ -> unexpected "function type" typ    
+      _ -> unexpected "function type" typ
 
 constructElementsInterface :: Module a -> [Java.InterfaceMemberDeclaration] -> (Name, Java.CompilationUnit)
 constructElementsInterface mod members = (elName, cu)

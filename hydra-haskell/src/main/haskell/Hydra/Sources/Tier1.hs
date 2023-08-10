@@ -31,12 +31,13 @@ tier1Definition = definitionInModule hydraTier1Module
 
 hydraTier1Module :: Module Kv
 hydraTier1Module = Module (Namespace "hydra/tier1") elements
-    [hydraGraphModule, hydraMantleModule, hydraComputeModule, hydraStripModule, hydraConstantsModule] $
+    [hydraGraphModule, hydraMantleModule, hydraComputeModule, hydraStripModule, hydraConstantsModule, hydraStripModule] $
     Just ("A module for miscellaneous tier-1 functions and constants.")
   where
    elements = [
      el floatValueToBigfloatDef,
      el integerValueToBigintDef,
+     el isLambdaDef,
      el unqualifyNameDef,
      -- Flows.hs
      el emptyTraceDef,
@@ -71,6 +72,16 @@ integerValueToBigintDef = tier1Definition "integerValueToBigint" $
     _IntegerValue_uint16>>: Literals.uint16ToBigint,
     _IntegerValue_uint32>>: Literals.uint32ToBigint,
     _IntegerValue_uint64>>: Literals.uint64ToBigint]
+
+isLambdaDef :: Definition (Term a -> Bool)
+isLambdaDef = tier1Definition "isLambda" $
+  doc "Check whether a term is a lambda, possibly nested within let and/or annotation terms" $
+  function termA Types.boolean $
+  lambda "term" $ (match _Term (Just false) [
+      _Term_function>>: match _Function (Just false) [
+        _Function_lambda>>: constant true],
+      _Term_let>>: lambda "lt" (ref isLambdaDef @@ (project _Let _Let_environment @@ var "lt"))])
+    @@ (ref stripTermDef @@ var "term")
 
 unqualifyNameDef :: Definition (QualifiedName -> Name)
 unqualifyNameDef = tier1Definition "unqualifyName" $

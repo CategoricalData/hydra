@@ -14,6 +14,7 @@ import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Module as Module
+import qualified Hydra.Strip as Strip
 import Data.Int
 import Data.List
 import Data.Map
@@ -38,6 +39,15 @@ integerValueToBigint x = case x of
   Core.IntegerValueUint16 v -> (Literals.uint16ToBigint v)
   Core.IntegerValueUint32 v -> (Literals.uint32ToBigint v)
   Core.IntegerValueUint64 v -> (Literals.uint64ToBigint v)
+
+-- | Check whether a term is a lambda, possibly nested within let and/or annotation terms
+isLambda :: (Core.Term a -> Bool)
+isLambda term = ((\x -> case x of
+  Core.TermFunction v -> ((\x -> case x of
+    Core.FunctionLambda _ -> True
+    _ -> False) v)
+  Core.TermLet v -> (isLambda (Core.letEnvironment v))
+  _ -> False) (Strip.stripTerm term))
 
 -- | Convert a qualified name to a dot-separated name
 unqualifyName :: (Module.QualifiedName -> Core.Name)
