@@ -107,6 +107,10 @@ public interface Basics {
     new hydra.mantle.FunctionVariant.Lambda(),
     new hydra.mantle.FunctionVariant.Primitive());
   
+  static <A> A id(A x) {
+    return (x);
+  }
+  
   static Boolean integerTypeIsSigned(hydra.core.IntegerType v1) {
     return ((v1)).accept(new hydra.core.IntegerType.Visitor<>() {
       @Override
@@ -334,8 +338,8 @@ public interface Basics {
     new hydra.mantle.LiteralVariant.Integer_(),
     new hydra.mantle.LiteralVariant.String_());
   
-  static <A> java.util.function.Function<hydra.core.Term<A>, A> termMeta(hydra.graph.Graph<A> x) {
-    return (((x)).annotations).termAnnotation;
+  static <A> java.util.function.Function<hydra.core.Term<A>, A> termMeta(hydra.graph.Graph<A> v1) {
+    return (((v1)).annotations).termAnnotation;
   }
   
   static <A> hydra.mantle.TermVariant termVariant(hydra.core.Term<A> v1) {
@@ -541,20 +545,25 @@ public interface Basics {
     new hydra.mantle.TypeVariant.Union(),
     new hydra.mantle.TypeVariant.Variable());
   
-  java.util.function.Function<String, String> capitalize = hydra.basics.Basics.mapFirstLetter((java.util.function.Function<String, String>) (v1 -> hydra.lib.strings.ToUpper.apply((v1))));
+  static String capitalize(String v1) {
+    return (hydra.basics.Basics.mapFirstLetter((java.util.function.Function<String, String>) (v1 -> hydra.lib.strings.ToUpper.apply((v1))))).apply((v1));
+  }
   
-  java.util.function.Function<String, String> decapitalize = hydra.basics.Basics.mapFirstLetter((java.util.function.Function<String, String>) (v1 -> hydra.lib.strings.ToLower.apply((v1))));
+  static String decapitalize(String v1) {
+    return (hydra.basics.Basics.mapFirstLetter((java.util.function.Function<String, String>) (v1 -> hydra.lib.strings.ToLower.apply((v1))))).apply((v1));
+  }
   
   static java.util.function.Function<String, String> mapFirstLetter(java.util.function.Function<String, String> mapping) {
     return (java.util.function.Function<String, String>) (s -> {
-        java.util.List<Integer> list = hydra.lib.strings.ToList.apply((s));
-        String firstLetter = ((mapping)).apply(hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(hydra.lib.lists.Head.apply((list)))));
-        return hydra.lib.logic.IfElse.apply(
-                (s),
-                hydra.lib.strings.Cat2.apply(
-                        (firstLetter),
-                        hydra.lib.strings.FromList.apply(hydra.lib.lists.Tail.apply((list)))),
-                hydra.lib.strings.IsEmpty.apply((s)));});
+      java.util.List<Integer> list = hydra.lib.strings.ToList.apply((s));
+      String firstLetter = ((mapping)).apply(hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(hydra.lib.lists.Head.apply((list)))));
+      return hydra.lib.logic.IfElse.apply(
+        (s),
+        hydra.lib.strings.Cat2.apply(
+          (firstLetter),
+          hydra.lib.strings.FromList.apply(hydra.lib.lists.Tail.apply((list)))),
+        hydra.lib.strings.IsEmpty.apply((s)));
+    });
   }
   
   static <A> java.util.Map<hydra.core.FieldName, hydra.core.Term<A>> fieldMap(java.util.List<hydra.core.Field<A>> fields) {
@@ -572,7 +581,7 @@ public interface Basics {
   }
   
   static <A> Boolean isEncodedType(hydra.core.Term<A> t) {
-    return (hydra.tier1.Tier1.stripTerm((t))).accept(new hydra.core.Term.PartialVisitor<>() {
+    return (hydra.strip.Strip.stripTerm((t))).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Term<A> instance) {
         return false;
@@ -593,7 +602,7 @@ public interface Basics {
   }
   
   static <A> Boolean isType(hydra.core.Type<A> t) {
-    return (hydra.tier1.Tier1.stripType((t))).accept(new hydra.core.Type.PartialVisitor<>() {
+    return (hydra.strip.Strip.stripType((t))).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Type<A> instance) {
         return false;
@@ -615,31 +624,91 @@ public interface Basics {
           "hydra/core.Type",
           (((instance.value)).typeName).value);
       }
-      
-      @Override
-      public Boolean visit(hydra.core.Type.Variable<A> instance) {
-        return true;
-      }
     });
   }
   
   static <A> Boolean isUnitTerm(hydra.core.Term<A> t) {
     return hydra.lib.equality.EqualTerm.apply(
-      hydra.tier1.Tier1.stripTerm((t)),
+      hydra.strip.Strip.stripTerm((t)),
       new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.UnitType"), java.util.Arrays.asList())));
   }
   
   static <A> Boolean isUnitType(hydra.core.Type<A> t) {
     return hydra.lib.equality.EqualType.apply(
-      hydra.tier1.Tier1.stripType((t)),
+      hydra.strip.Strip.stripType((t)),
       new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra/core.UnitType"), java.util.Optional.empty(), java.util.Arrays.asList())));
   }
   
   static <A> java.util.function.Function<java.util.Optional<hydra.graph.Graph<A>>, java.util.function.Function<java.util.List<hydra.graph.Element<A>>, hydra.graph.Graph<A>>> elementsToGraph(hydra.graph.Graph<A> parent) {
-    java.util.function.Function<hydra.graph.Element<A>, hydra.core.Tuple.Tuple2<hydra.core.Name, hydra.graph.Element<A>>> toPair = (java.util.function.Function<hydra.graph.Element<A>, hydra.core.Tuple.Tuple2<hydra.core.Name, hydra.graph.Element<A>>>) (el -> new hydra.core.Tuple.Tuple2(((el)).name, (el)));
-    return (java.util.function.Function<java.util.Optional<hydra.graph.Graph<A>>, java.util.function.Function<java.util.List<hydra.graph.Element<A>>, hydra.graph.Graph<A>>>) (schema -> {
-            return (java.util.function.Function<java.util.List<hydra.graph.Element<A>>, hydra.graph.Graph<A>>) (elements -> new hydra.graph.Graph(hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-      (toPair),
-      (elements))), ((parent)).environment, ((parent)).body, ((parent)).primitives, ((parent)).annotations, (schema)));});
+    return (java.util.function.Function<java.util.Optional<hydra.graph.Graph<A>>, java.util.function.Function<java.util.List<hydra.graph.Element<A>>, hydra.graph.Graph<A>>>) (schema -> (java.util.function.Function<java.util.List<hydra.graph.Element<A>>, hydra.graph.Graph<A>>) (elements -> {
+      java.util.function.Function<hydra.graph.Element<A>, hydra.core.Tuple.Tuple2<hydra.core.Name, hydra.graph.Element<A>>> toPair = (java.util.function.Function<hydra.graph.Element<A>, hydra.core.Tuple.Tuple2<hydra.core.Name, hydra.graph.Element<A>>>) (el -> new hydra.core.Tuple.Tuple2(((el)).name, (el)));
+      return new hydra.graph.Graph(hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
+        (toPair),
+        (elements))), ((parent)).environment, ((parent)).body, ((parent)).primitives, ((parent)).annotations, (schema));
+    }));
+  }
+  
+  static String localNameOfEager(hydra.core.Name x) {
+    return (hydra.basics.Basics.qualifyNameEager((x))).local;
+  }
+  
+  static String localNameOfLazy(hydra.core.Name x) {
+    return (hydra.basics.Basics.qualifyNameLazy((x))).local;
+  }
+  
+  static java.util.Optional<hydra.module.Namespace> namespaceOfEager(hydra.core.Name x) {
+    return (hydra.basics.Basics.qualifyNameEager((x))).namespace;
+  }
+  
+  static java.util.Optional<hydra.module.Namespace> namespaceOfLazy(hydra.core.Name x) {
+    return (hydra.basics.Basics.qualifyNameLazy((x))).namespace;
+  }
+  
+  static java.util.function.Function<hydra.module.FileExtension, java.util.function.Function<hydra.module.Namespace, String>> namespaceToFilePath(Boolean caps) {
+    return (java.util.function.Function<hydra.module.FileExtension, java.util.function.Function<hydra.module.Namespace, String>>) (ext -> (java.util.function.Function<hydra.module.Namespace, String>) (ns -> {
+      java.util.List<String> parts = hydra.lib.lists.Map.apply(
+        hydra.lib.logic.IfElse.apply(
+          (hydra.basics.Basics::capitalize),
+          (hydra.basics.Basics::id),
+          (caps)),
+        hydra.lib.strings.SplitOn.apply(
+          "/",
+          ((ns)).value));
+      return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
+        hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
+          hydra.lib.strings.Intercalate.apply(
+            "/",
+            (parts)),
+          ".")),
+        ((ext)).value));
+    }));
+  }
+  
+  static hydra.module.QualifiedName qualifyNameEager(hydra.core.Name name) {
+    java.util.List<String> parts = hydra.lib.strings.SplitOn.apply(
+      ".",
+      ((name)).value);
+    return hydra.lib.logic.IfElse.apply(
+      new hydra.module.QualifiedName(java.util.Optional.empty(), ((name)).value),
+      new hydra.module.QualifiedName(java.util.Optional.of(new hydra.module.Namespace(hydra.lib.lists.Head.apply((parts)))), hydra.lib.strings.Intercalate.apply(
+        ".",
+        hydra.lib.lists.Tail.apply((parts)))),
+      hydra.lib.equality.EqualInt32.apply(
+        1,
+        hydra.lib.lists.Length.apply((parts))));
+  }
+  
+  static hydra.module.QualifiedName qualifyNameLazy(hydra.core.Name name) {
+    java.util.List<String> parts = hydra.lib.lists.Reverse.apply(hydra.lib.strings.SplitOn.apply(
+      ".",
+      ((name)).value));
+    return hydra.lib.logic.IfElse.apply(
+      new hydra.module.QualifiedName(java.util.Optional.empty(), ((name)).value),
+      new hydra.module.QualifiedName(java.util.Optional.of(new hydra.module.Namespace(hydra.lib.strings.Intercalate.apply(
+        ".",
+        hydra.lib.lists.Reverse.apply(hydra.lib.lists.Tail.apply((parts)))))), hydra.lib.lists.Head.apply((parts))),
+      hydra.lib.equality.EqualInt32.apply(
+        1,
+        hydra.lib.lists.Length.apply((parts))));
   }
 }
