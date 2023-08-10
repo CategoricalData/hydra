@@ -398,4 +398,4 @@ wrapLambdas term = do
     pad arity term = L.foldl (\t v -> TermFunction $ FunctionLambda $ Lambda v t) apps $ L.reverse variables
       where
         apps = L.foldl (\t v -> TermApplication (Application t $ TermVariable v)) term variables
-        variables = L.take arity ((\i -> Name $ "v" ++ show i) <$> [1..])
+        variables = L.take arity ((\i -> Name $ "a" ++ show i) <$> [1..])
