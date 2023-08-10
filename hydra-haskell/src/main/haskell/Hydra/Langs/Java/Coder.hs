@@ -96,6 +96,9 @@ constructModule mod coders pairs = do
 
     termToInterfaceMember coders pair = withTrace ("element " ++ unName (elementName el)) $ do
         expanded <- contractTerm <$> (expandLambdas $ typedTermTerm $ snd pair)
+        if elementName el == Name "hydra/basics.capitalize"
+          then fail $ "isLambda: " ++ show (isLambda expanded) ++ ": " ++ show expanded
+          else pure ()
         if isLambda expanded
           then termToMethod coders el (typedTermType $ snd pair) expanded
           else termToConstant coders el (typedTermType $ snd pair) expanded
@@ -114,24 +117,29 @@ constructModule mod coders pairs = do
       return $ Java.InterfaceMemberDeclarationConstant $ Java.ConstantDeclaration mods jtype [var]
 
     -- Lambdas cannot (in general) be turned into top-level constants, as there is no way of declaring type parameters for constants
+    -- This function must be capable of handling various combinations of let and lambda terms:
+    -- * Plain lambdas such as \x y -> x + y + 42
+    -- * Lambdas with nested let terms, such as \x y -> let z = x + y in z + 42
+    -- * Let terms with nested lambdas, such as let z = 42 in \x y -> x + y + z
     termToMethod coders el typ term = case stripType typ of
-      TypeFunction (FunctionType dom cod) -> maybeLet aliases term $ \aliases' tm stmts -> case stripTerm tm of
+      TypeFunction (FunctionType dom cod) -> maybeLet aliases term $ \aliases2 term2 stmts2 -> case stripTerm term2 of
         TermFunction (FunctionLambda (Lambda v body)) -> do
-          jdom <- adaptTypeToJavaAndEncode aliases' dom
-          jcod <- adaptTypeToJavaAndEncode aliases' cod
+          jdom <- adaptTypeToJavaAndEncode aliases2 dom
+          jcod <- adaptTypeToJavaAndEncode aliases2 cod
           let mods = [Java.InterfaceMethodModifierStatic]
           let anns = []
           let mname = sanitizeJavaName $ decapitalize $ localNameOfEager $ elementName el
           let param = javaTypeToJavaFormalParameter jdom (FieldName $ unName v)
           let result = javaTypeToJavaResult jcod
-          jbody <- encodeTerm aliases' body
-          -- TODO: use coders
---           jbody <- coderEncode (Y.fromJust $ M.lookup typ coders) body
-          let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
           let tparams = javaTypeParametersForType typ
-          return $ interfaceMethodDeclaration mods tparams mname [param] result (Just $ stmts ++ [returnSt])
-        _ -> unexpected "function term" tm
-      _ -> unexpected "function type (1)" typ
+          maybeLet aliases2 body $ \aliases3 term3 stmts3 -> do
+            jbody <- encodeTerm aliases3 term3
+            -- TODO: use coders
+            --jbody <- coderEncode (Y.fromJust $ M.lookup typ coders) body
+            let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
+            return $ interfaceMethodDeclaration mods tparams mname [param] result (Just $ stmts2 ++ stmts3 ++ [returnSt])
+        _ -> unexpected "function term" term
+      _ -> unexpected "function type" typ    
 
 constructElementsInterface :: Module a -> [Java.InterfaceMemberDeclaration] -> (Name, Java.CompilationUnit)
 constructElementsInterface mod members = (elName, cu)
@@ -528,7 +536,6 @@ encodeFunction aliases dom cod fun = case fun of
         else return lam
     where
       needsCast _  = True -- TODO: try to discriminate between lambdas which really need a cast, and those which do not
---  FunctionPrimitive name ->
   _ -> pure $ encodeLiteral $ LiteralString $
     "Unimplemented function variant: " ++ show (functionVariant fun) -- TODO: temporary
   where
@@ -852,8 +859,8 @@ maybeLet aliases term cons = helper [] term
           sorted = topologicalSortComponents (toDeps <$> M.toList allDeps)
             where
               toDeps (key, deps) = (key, S.toList deps)
-      TermFunction (FunctionLambda (Lambda v body)) -> maybeLet aliases body $
-        \aliases' tm stmts' -> cons aliases' (reannotate anns (TermFunction (FunctionLambda (Lambda v tm)))) stmts'
+--      TermFunction (FunctionLambda (Lambda v body)) -> maybeLet aliases body $
+--        \aliases' tm stmts' -> cons aliases' (reannotate anns (TermFunction (FunctionLambda (Lambda v tm)))) stmts'
       _ -> cons aliases (reannotate anns term) []
 
 reannotate anns term = case anns of

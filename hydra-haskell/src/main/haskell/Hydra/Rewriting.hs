@@ -32,7 +32,7 @@ elementsWithDependencies original = CM.mapM requireElement allDepNames
     allDepNames = L.nub $ (elementName <$> original) ++ (L.concat $ depNames <$> original)
 
 -- | Turn arbitrary terms like 'add 42' into terms like '\x.add 42 x',
---   whose arity (in the absences of application terms) is equal to the depth of nested lambdas.
+--   whose arity (in the absence of application terms) is equal to the depth of nested lambdas.
 --   This function leaves application terms intact, simply rewriting their left and right subterms.
 expandLambdas :: (Ord a, Show a) => Term a -> GraphFlow a (Term a)
 expandLambdas term = do

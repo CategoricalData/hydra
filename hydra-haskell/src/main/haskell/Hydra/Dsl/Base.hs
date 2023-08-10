@@ -27,15 +27,18 @@ import qualified Data.Set as S
 
 instance IsString (Datum a) where fromString = Datum . Terms.string
 
+aT = Types.var "a" :: Type a
 eqA = (M.fromList [(Name "a", S.fromList [TypeClassEquality])])
-elementA = Types.apply (TypeVariable _Element) (Types.var "a") :: Type a
-fieldA = Types.apply (TypeVariable _Field) (Types.var "a") :: Type a
-fieldTypeA = Types.apply (TypeVariable _FieldType) (Types.var "a") :: Type a
+elementA = Types.apply (TypeVariable _Element) aT :: Type a
+fieldA = Types.apply (TypeVariable _Field) aT :: Type a
+fieldTypeA = Types.apply (TypeVariable _FieldType) aT :: Type a
 flowGraphATypeA = Types.apply (Types.apply (TypeVariable _Flow) graphA) typeA :: Type a
-graphA = Types.apply (TypeVariable _Graph) (Types.var "a") :: Type a
-lambdaTypeA = Types.apply (TypeVariable _LambdaType) (Types.var "a") :: Type a
-termA = Types.apply (TypeVariable _Term) (Types.var "a") :: Type a
-typeA = Types.apply (TypeVariable _Type) (Types.var "a") :: Type a
+graphA = Types.apply (TypeVariable _Graph) aT :: Type a
+lambdaTypeA = Types.apply (TypeVariable _LambdaType) aT :: Type a
+sT = Types.var "s" :: Type a
+termA = Types.apply (TypeVariable _Term) aT :: Type a
+typeA = Types.apply (TypeVariable _Type) aT :: Type a
+unitT = Types.unit :: Type a
 
 el :: Definition a -> Element Kv
 el (Definition name (Datum term)) = Element name term
