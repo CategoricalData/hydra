@@ -381,3 +381,21 @@ topologicalSortElements els = topologicalSort $ adjlist <$> els
 
 typeDependencyNames :: Type a -> S.Set Name
 typeDependencyNames = freeVariablesInType
+
+-- Where non-lambda terms with nonzero arity occur at the top level, turn them into lambdas
+wrapLambdas :: (Ord a, Show a) => Term a -> GraphFlow a (Term a)
+wrapLambdas term = do
+      arity <- typeArity <$> requireTypeAnnotation term
+      return $ pad (missingArity arity term) term
+  where
+    missingArity arity term = if arity == 0
+      then 0
+      else case term of
+        TermAnnotated (Annotated term2 _) -> missingArity arity term2
+        TermLet (Let _ env) -> missingArity arity env
+        TermFunction (FunctionLambda (Lambda _ body)) -> missingArity (arity - 1) body
+        _ -> arity
+    pad arity term = L.foldl (\t v -> TermFunction $ FunctionLambda $ Lambda v t) apps $ L.reverse variables
+      where
+        apps = L.foldl (\t v -> TermApplication (Application t $ TermVariable v)) term variables
+        variables = L.take arity ((\i -> Name $ "v" ++ show i) <$> [1..])
