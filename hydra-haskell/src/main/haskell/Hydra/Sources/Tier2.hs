@@ -50,13 +50,13 @@ getStateDef = tier2Definition "getState" $
     @@ (Flows.flowStateValue @@ var "fs1") @@ (Flows.flowStateState @@ var "fs1") @@ (Flows.flowStateTrace @@ var "fs1"))
   `with` [
     "fs1">:
-      typed (Types.apply (Types.apply (TypeVariable _FlowState) (Types.var "s")) Types.unit) $
+      typed (Types.apply (Types.apply (TypeVariable _FlowState) sT) unitT) $
       Flows.unFlow @@ (Flows.pure @@ unit) @@ var "s0" @@ var "t0"])
 
 putStateDef :: Definition (s -> Flow s ())
 putStateDef = tier2Definition "putState" $
   doc "Set the state of a flow" $
-  function (Types.var "s") (flowT (Types.var "s") Types.unit) $
+  function sT (flowT sT unitT) $
   lambda "cx" $ wrap _Flow $ lambda "s0" $ lambda "t0" (
     (Flows.flowState
       (Flows.flowStateValue @@ var "f1")
