@@ -1,5 +1,4 @@
 -- | Variable substitution and normalization of type expressions
-
 module Hydra.Substitution where
 
 import Hydra.Core

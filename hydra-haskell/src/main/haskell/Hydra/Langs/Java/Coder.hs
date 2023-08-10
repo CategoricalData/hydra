@@ -95,7 +95,7 @@ constructModule mod coders pairs = do
         Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) imports [decl])
 
     termToInterfaceMember coders pair = withTrace ("element " ++ unName (elementName el)) $ do
-        expanded <- contractTerm <$> (expandLambdas (typedTermTerm $ snd pair) >>= wrapLambdas)
+        expanded <- contractTerm . unshadowVariables <$> (expandLambdas (typedTermTerm $ snd pair) >>= wrapLambdas)
         if isLambda expanded
           then termToMethod coders el (typedTermType $ snd pair) expanded
           else termToConstant coders el (typedTermType $ snd pair) expanded
