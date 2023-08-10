@@ -338,8 +338,8 @@ public interface Basics {
     new hydra.mantle.LiteralVariant.Integer_(),
     new hydra.mantle.LiteralVariant.String_());
   
-  static <A> java.util.function.Function<hydra.core.Term<A>, A> termMeta(hydra.graph.Graph<A> v1) {
-    return (((v1)).annotations).termAnnotation;
+  static <A> java.util.function.Function<hydra.core.Term<A>, A> termMeta(hydra.graph.Graph<A> a1) {
+    return (((a1)).annotations).termAnnotation;
   }
   
   static <A> hydra.mantle.TermVariant termVariant(hydra.core.Term<A> v1) {
@@ -545,12 +545,12 @@ public interface Basics {
     new hydra.mantle.TypeVariant.Union(),
     new hydra.mantle.TypeVariant.Variable());
   
-  static String capitalize(String v1) {
-    return (hydra.basics.Basics.mapFirstLetter((java.util.function.Function<String, String>) (v1 -> hydra.lib.strings.ToUpper.apply((v1))))).apply((v1));
+  static String capitalize(String a1) {
+    return (hydra.basics.Basics.mapFirstLetter((java.util.function.Function<String, String>) (v1 -> hydra.lib.strings.ToUpper.apply((v1))))).apply((a1));
   }
   
-  static String decapitalize(String v1) {
-    return (hydra.basics.Basics.mapFirstLetter((java.util.function.Function<String, String>) (v1 -> hydra.lib.strings.ToLower.apply((v1))))).apply((v1));
+  static String decapitalize(String a1) {
+    return (hydra.basics.Basics.mapFirstLetter((java.util.function.Function<String, String>) (v1 -> hydra.lib.strings.ToLower.apply((v1))))).apply((a1));
   }
   
   static java.util.function.Function<String, String> mapFirstLetter(java.util.function.Function<String, String> mapping) {
