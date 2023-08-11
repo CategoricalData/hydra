@@ -292,8 +292,9 @@ propertyAdapter schema (ProjectionSpec tfield values alias) = do
           decode _ = noDecoding "property"
   return $ Adapter lossy tfield (PG.PropertyType key pt) coder
 
-propertyTypes propAdapters = M.fromList $
-  fmap (\a -> (PG.propertyTypeKey $ adapterTarget a, PG.propertyTypeValue $ adapterTarget a)) propAdapters
+propertyTypes propAdapters = toPropertyType <$> propAdapters
+  where
+    toPropertyType a = PG.PropertyType (PG.propertyTypeKey $ adapterTarget a) (PG.propertyTypeValue $ adapterTarget a)
 
 selectEdgeId fields (fname, ad) = case M.lookup fname fields of
   Nothing -> fail $ "no " ++ unFieldName fname ++ " in record"

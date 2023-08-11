@@ -27,11 +27,11 @@ public class EdgeType<T> {
   public final hydra.langs.tinkerpop.propertyGraph.VertexLabel in;
   
   /**
-   * A key/value map of edge property types
+   * A list of property types. The types are ordered for the sake of applications in which property order is significant.
    */
-  public final java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, T> properties;
+  public final java.util.List<hydra.langs.tinkerpop.propertyGraph.PropertyType<T>> properties;
   
-  public EdgeType (hydra.langs.tinkerpop.propertyGraph.EdgeLabel label, T id, hydra.langs.tinkerpop.propertyGraph.VertexLabel out, hydra.langs.tinkerpop.propertyGraph.VertexLabel in, java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, T> properties) {
+  public EdgeType (hydra.langs.tinkerpop.propertyGraph.EdgeLabel label, T id, hydra.langs.tinkerpop.propertyGraph.VertexLabel out, hydra.langs.tinkerpop.propertyGraph.VertexLabel in, java.util.List<hydra.langs.tinkerpop.propertyGraph.PropertyType<T>> properties) {
     this.label = label;
     this.id = id;
     this.out = out;
@@ -69,7 +69,7 @@ public class EdgeType<T> {
     return new EdgeType(label, id, out, in, properties);
   }
   
-  public EdgeType withProperties(java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, T> properties) {
+  public EdgeType withProperties(java.util.List<hydra.langs.tinkerpop.propertyGraph.PropertyType<T>> properties) {
     return new EdgeType(label, id, out, in, properties);
   }
 }

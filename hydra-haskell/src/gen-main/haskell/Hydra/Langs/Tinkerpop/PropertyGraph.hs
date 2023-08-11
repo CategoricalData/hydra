@@ -70,8 +70,8 @@ data EdgeType t =
     edgeTypeOut :: VertexLabel,
     -- | The label of the in-vertex (head) of any edge of this edge type
     edgeTypeIn :: VertexLabel,
-    -- | A key/value map of edge property types
-    edgeTypeProperties :: (Map PropertyKey t)}
+    -- | A list of property types. The types are ordered for the sake of applications in which property order is significant.
+    edgeTypeProperties :: [PropertyType t]}
   deriving (Eq, Ord, Read, Show)
 
 _EdgeType = (Core.Name "hydra/langs/tinkerpop/propertyGraph.EdgeType")
@@ -215,7 +215,9 @@ _PropertyKey = (Core.Name "hydra/langs/tinkerpop/propertyGraph.PropertyKey")
 -- | The type of a property
 data PropertyType t = 
   PropertyType {
+    -- | A property's key
     propertyTypeKey :: PropertyKey,
+    -- | The type of a property's value
     propertyTypeValue :: t}
   deriving (Eq, Ord, Read, Show)
 
@@ -260,8 +262,8 @@ data VertexType t =
     vertexTypeLabel :: VertexLabel,
     -- | The type of the id of any vertex of this vertex type
     vertexTypeId :: t,
-    -- | A key/value map of vertex property types
-    vertexTypeProperties :: (Map PropertyKey t)}
+    -- | A list of property types. The types are ordered for the sake of applications in which property order is significant.
+    vertexTypeProperties :: [PropertyType t]}
   deriving (Eq, Ord, Read, Show)
 
 _VertexType = (Core.Name "hydra/langs/tinkerpop/propertyGraph.VertexType")
