@@ -117,17 +117,17 @@ _PropertySpec_key = (Core.FieldName "key")
 _PropertySpec_value = (Core.FieldName "value")
 
 -- | A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types
-data Schema s a vt et pt v e p = 
+data Schema s a t v = 
   Schema {
-    schemaVertexIdTypes :: (Compute.Coder s s (Core.Type a) vt),
+    schemaVertexIdTypes :: (Compute.Coder s s (Core.Type a) t),
     schemaVertexIds :: (Compute.Coder s s (Core.Term a) v),
-    schemaEdgeIdTypes :: (Compute.Coder s s (Core.Type a) et),
-    schemaEdgeIds :: (Compute.Coder s s (Core.Term a) e),
-    schemaPropertyTypes :: (Compute.Coder s s (Core.Type a) pt),
-    schemaPropertyValues :: (Compute.Coder s s (Core.Term a) p),
+    schemaEdgeIdTypes :: (Compute.Coder s s (Core.Type a) t),
+    schemaEdgeIds :: (Compute.Coder s s (Core.Term a) v),
+    schemaPropertyTypes :: (Compute.Coder s s (Core.Type a) t),
+    schemaPropertyValues :: (Compute.Coder s s (Core.Term a) v),
     schemaAnnotations :: AnnotationSchema,
     schemaDefaultVertexId :: v,
-    schemaDefaultEdgeId :: e}
+    schemaDefaultEdgeId :: v}
 
 _Schema = (Core.Name "hydra/langs/tinkerpop/mappings.Schema")
 

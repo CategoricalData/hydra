@@ -3,14 +3,14 @@ package hydra.langs.tinkerpop.propertyGraph;
 /**
  * A key/value property
  */
-public class Property<P> {
+public class Property<V> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.Property");
   
   public final hydra.langs.tinkerpop.propertyGraph.PropertyKey key;
   
-  public final P value;
+  public final V value;
   
-  public Property (hydra.langs.tinkerpop.propertyGraph.PropertyKey key, P value) {
+  public Property (hydra.langs.tinkerpop.propertyGraph.PropertyKey key, V value) {
     this.key = key;
     this.value = value;
   }
@@ -33,7 +33,7 @@ public class Property<P> {
     return new Property(key, value);
   }
   
-  public Property withValue(P value) {
+  public Property withValue(V value) {
     return new Property(key, value);
   }
 }

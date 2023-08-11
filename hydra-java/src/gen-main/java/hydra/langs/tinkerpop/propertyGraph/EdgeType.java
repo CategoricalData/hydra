@@ -3,20 +3,20 @@ package hydra.langs.tinkerpop.propertyGraph;
 /**
  * The type of an edge
  */
-public class EdgeType<E, P> {
+public class EdgeType<T> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.EdgeType");
   
   public final hydra.langs.tinkerpop.propertyGraph.EdgeLabel label;
   
-  public final E id;
+  public final T id;
   
   public final hydra.langs.tinkerpop.propertyGraph.VertexLabel out;
   
   public final hydra.langs.tinkerpop.propertyGraph.VertexLabel in;
   
-  public final java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, P> properties;
+  public final java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, T> properties;
   
-  public EdgeType (hydra.langs.tinkerpop.propertyGraph.EdgeLabel label, E id, hydra.langs.tinkerpop.propertyGraph.VertexLabel out, hydra.langs.tinkerpop.propertyGraph.VertexLabel in, java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, P> properties) {
+  public EdgeType (hydra.langs.tinkerpop.propertyGraph.EdgeLabel label, T id, hydra.langs.tinkerpop.propertyGraph.VertexLabel out, hydra.langs.tinkerpop.propertyGraph.VertexLabel in, java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, T> properties) {
     this.label = label;
     this.id = id;
     this.out = out;
@@ -42,7 +42,7 @@ public class EdgeType<E, P> {
     return new EdgeType(label, id, out, in, properties);
   }
   
-  public EdgeType withId(E id) {
+  public EdgeType withId(T id) {
     return new EdgeType(label, id, out, in, properties);
   }
   
@@ -54,7 +54,7 @@ public class EdgeType<E, P> {
     return new EdgeType(label, id, out, in, properties);
   }
   
-  public EdgeType withProperties(java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, P> properties) {
+  public EdgeType withProperties(java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, T> properties) {
     return new EdgeType(label, id, out, in, properties);
   }
 }
