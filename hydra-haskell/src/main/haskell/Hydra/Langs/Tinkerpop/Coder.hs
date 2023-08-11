@@ -40,12 +40,13 @@ checkRecordName expected actual = check (actual == expected) $
 
 edgeCoder :: Show a
   => PG.Direction -> Schema s a t v
+  -> Type a
   -> t
-  -> Type a -> Name
+  -> Name
   -> PG.EdgeLabel -> PG.VertexLabel -> PG.VertexLabel
   -> Maybe (IdAdapter s a t v) -> Maybe (IdAdapter s a t v) -> Maybe (IdAdapter s a t v) -> [PropertyAdapter s a t v]
   -> ElementAdapter s a t v
-edgeCoder dir schema eidType source tname label outLabel inLabel mIdAdapter outAdapter inAdapter propAdapters
+edgeCoder dir schema source eidType tname label outLabel inLabel mIdAdapter outAdapter inAdapter propAdapters
     = Adapter lossy source (elementTypeTreeEdge et []) coder
   where
     et = PG.EdgeType label eidType outLabel inLabel $ propertyTypes propAdapters
@@ -103,7 +104,7 @@ elementCoder mparent schema vidType eidType source = case stripType source of
           idAdapter <- vertexIdAdapter name vertexIdKey fields
           outEdgeAdapters <- edgeAdapters label PG.DirectionOut fields
           inEdgeAdapters <- edgeAdapters label PG.DirectionIn fields
-          return $ vertexCoder schema vidType source name label idAdapter propAdapters (outEdgeAdapters ++ inEdgeAdapters)
+          return $ vertexCoder schema source vidType name label idAdapter propAdapters (outEdgeAdapters ++ inEdgeAdapters)
         PG.ElementKindEdge -> do
           label <- PG.EdgeLabel <$> findLabelString name edgeLabelKey
           idAdapter <- edgeIdAdapter name edgeIdKey fields
@@ -115,7 +116,7 @@ elementCoder mparent schema vidType eidType source = case stripType source of
           inLabel <- case mInSpec of
             Nothing -> pure parentLabel
             Just spec -> Y.maybe (fail "no in-vertex label") (pure . PG.VertexLabel) $ projectionSpecAlias spec
-          return $ edgeCoder dir schema eidType source name label outLabel inLabel idAdapter outAdapter inAdapter propAdapters
+          return $ edgeCoder dir schema source eidType name label outLabel inLabel idAdapter outAdapter inAdapter propAdapters
 
     _ -> unexpected "record type" source
   where
@@ -313,12 +314,13 @@ traverseToSingleTerm desc traversal term = do
 
 vertexCoder :: (Show a, Show t, Show v)
   => Schema s a t v
+  -> Type a
   -> t
-  -> Type a -> Name
+   -> Name
   -> PG.VertexLabel -> IdAdapter s a t v -> [PropertyAdapter s a t v]
   -> [AdjacentEdgeAdapter s a t v]
   -> ElementAdapter s a t v
-vertexCoder schema vidType source tname label idAdapter propAdapters edgeAdapters = Adapter lossy source target coder
+vertexCoder schema source vidType tname label idAdapter propAdapters edgeAdapters = Adapter lossy source target coder
   where
     target = elementTypeTreeVertex vtype depTypes
     vtype = PG.VertexType label vidType $ propertyTypes propAdapters
