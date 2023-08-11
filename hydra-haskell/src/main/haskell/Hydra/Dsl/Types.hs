@@ -88,6 +88,9 @@ integer = literal . LiteralTypeInteger
 lambda :: String -> Type a -> Type a
 lambda v body = TypeLambda $ LambdaType (Name v) body
 
+lambdas :: [String] -> Type a -> Type a
+lambdas vs body = L.foldr lambda body vs
+
 list :: Type a -> Type a
 list = TypeList
 

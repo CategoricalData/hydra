@@ -84,11 +84,13 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydr
 
       def "Schema" $
         doc "A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types" $
-        lambda "s" $ lambda "a" $ lambda "t" $ lambda "v" $ lambda "e" $ lambda "p" $
+        lambdas ["s", "a", "vt", "et", "pt", "v", "e", "p"] $
           record [
+            "vertexIdTypes">: compute "Coder" @@ "s" @@ "s" @@ (core "Type" @@ "a") @@ "vt",
             "vertexIds">: compute "Coder" @@ "s" @@ "s" @@ (core "Term" @@ "a") @@ "v",
+            "edgeIdTypes">: compute "Coder" @@ "s" @@ "s" @@ (core "Type" @@ "a") @@ "et",
             "edgeIds">: compute "Coder" @@ "s" @@ "s" @@ (core "Term" @@ "a") @@ "e",
-            "propertyTypes">: compute "Coder" @@ "s" @@ "s" @@ (core "Type" @@ "a") @@ "t",
+            "propertyTypes">: compute "Coder" @@ "s" @@ "s" @@ (core "Type" @@ "a") @@ "pt",
             "propertyValues">: compute "Coder" @@ "s" @@ "s" @@ (core "Term" @@ "a") @@ "p",
             "annotations">: mappings "AnnotationSchema",
             "defaultVertexId">: "v",

@@ -55,17 +55,20 @@ newtype EdgeLabel =
 _EdgeLabel = (Core.Name "hydra/langs/tinkerpop/propertyGraph.EdgeLabel")
 
 -- | The type of an edge
-data EdgeType t = 
+data EdgeType e p = 
   EdgeType {
     edgeTypeLabel :: EdgeLabel,
+    edgeTypeId :: e,
     edgeTypeOut :: VertexLabel,
     edgeTypeIn :: VertexLabel,
-    edgeTypeProperties :: (Map PropertyKey t)}
+    edgeTypeProperties :: (Map PropertyKey p)}
   deriving (Eq, Ord, Read, Show)
 
 _EdgeType = (Core.Name "hydra/langs/tinkerpop/propertyGraph.EdgeType")
 
 _EdgeType_label = (Core.FieldName "label")
+
+_EdgeType_id = (Core.FieldName "id")
 
 _EdgeType_out = (Core.FieldName "out")
 
@@ -111,9 +114,9 @@ _ElementTree_primary = (Core.FieldName "primary")
 _ElementTree_dependencies = (Core.FieldName "dependencies")
 
 -- | The type of a vertex or edge
-data ElementType t = 
-  ElementTypeVertex (VertexType t) |
-  ElementTypeEdge (EdgeType t)
+data ElementType v e p = 
+  ElementTypeVertex (VertexType v p) |
+  ElementTypeEdge (EdgeType e p)
   deriving (Eq, Ord, Read, Show)
 
 _ElementType = (Core.Name "hydra/langs/tinkerpop/propertyGraph.ElementType")
@@ -123,10 +126,10 @@ _ElementType_vertex = (Core.FieldName "vertex")
 _ElementType_edge = (Core.FieldName "edge")
 
 -- | An element type together with its dependencies in some context
-data ElementTypeTree t = 
+data ElementTypeTree v e p = 
   ElementTypeTree {
-    elementTypeTreePrimary :: (ElementType t),
-    elementTypeTreeDependencies :: [ElementTypeTree t]}
+    elementTypeTreePrimary :: (ElementType v e p),
+    elementTypeTreeDependencies :: [ElementTypeTree v e p]}
   deriving (Eq, Ord, Read, Show)
 
 _ElementTypeTree = (Core.Name "hydra/langs/tinkerpop/propertyGraph.ElementTypeTree")
@@ -183,10 +186,10 @@ newtype PropertyKey =
 _PropertyKey = (Core.Name "hydra/langs/tinkerpop/propertyGraph.PropertyKey")
 
 -- | The type of a property
-data PropertyType t = 
+data PropertyType p = 
   PropertyType {
     propertyTypeKey :: PropertyKey,
-    propertyTypeValue :: t}
+    propertyTypeValue :: p}
   deriving (Eq, Ord, Read, Show)
 
 _PropertyType = (Core.Name "hydra/langs/tinkerpop/propertyGraph.PropertyType")
@@ -221,14 +224,17 @@ newtype VertexLabel =
 _VertexLabel = (Core.Name "hydra/langs/tinkerpop/propertyGraph.VertexLabel")
 
 -- | The type of a vertex
-data VertexType t = 
+data VertexType v p = 
   VertexType {
     vertexTypeLabel :: VertexLabel,
-    vertexTypeProperties :: (Map PropertyKey t)}
+    vertexTypeId :: v,
+    vertexTypeProperties :: (Map PropertyKey p)}
   deriving (Eq, Ord, Read, Show)
 
 _VertexType = (Core.Name "hydra/langs/tinkerpop/propertyGraph.VertexType")
 
 _VertexType_label = (Core.FieldName "label")
+
+_VertexType_id = (Core.FieldName "id")
 
 _VertexType_properties = (Core.FieldName "properties")
