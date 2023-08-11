@@ -1,7 +1,7 @@
 package hydra.langs.tinkerpop.propertyGraph;
 
 /**
- * A vertex or edge label
+ * Either a vertex or edge label
  */
 public abstract class Label {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.Label");

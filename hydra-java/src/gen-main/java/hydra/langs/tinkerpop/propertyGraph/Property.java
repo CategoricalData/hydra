@@ -6,8 +6,14 @@ package hydra.langs.tinkerpop.propertyGraph;
 public class Property<V> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.Property");
   
+  /**
+   * They key of the property
+   */
   public final hydra.langs.tinkerpop.propertyGraph.PropertyKey key;
   
+  /**
+   * The value of the property
+   */
   public final V value;
   
   public Property (hydra.langs.tinkerpop.propertyGraph.PropertyKey key, V value) {

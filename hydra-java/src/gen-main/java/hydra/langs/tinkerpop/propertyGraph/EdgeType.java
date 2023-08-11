@@ -6,14 +6,29 @@ package hydra.langs.tinkerpop.propertyGraph;
 public class EdgeType<T> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.EdgeType");
   
+  /**
+   * The label of any edge of this edge type
+   */
   public final hydra.langs.tinkerpop.propertyGraph.EdgeLabel label;
   
+  /**
+   * The type of the id of any edge of this edge type
+   */
   public final T id;
   
+  /**
+   * The label of the out-vertex (tail) of any edge of this edge type
+   */
   public final hydra.langs.tinkerpop.propertyGraph.VertexLabel out;
   
+  /**
+   * The label of the in-vertex (head) of any edge of this edge type
+   */
   public final hydra.langs.tinkerpop.propertyGraph.VertexLabel in;
   
+  /**
+   * A key/value map of edge property types
+   */
   public final java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, T> properties;
   
   public EdgeType (hydra.langs.tinkerpop.propertyGraph.EdgeLabel label, T id, hydra.langs.tinkerpop.propertyGraph.VertexLabel out, hydra.langs.tinkerpop.propertyGraph.VertexLabel in, java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, T> properties) {

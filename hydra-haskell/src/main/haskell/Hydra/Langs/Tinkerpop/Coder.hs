@@ -341,8 +341,8 @@ vertexCoder schema vidType source tname label idAdapter propAdapters edgeAdapter
                   Nothing -> pure Nothing
                   Just fterm -> Just <$> (coderEncode (adapterCoder ad) fterm >>= fixTree)
               where
-                fixTree tree = case PG.elementTreePrimary tree of
-                  PG.ElementEdge e -> pure $ tree {PG.elementTreePrimary = PG.ElementEdge $ fixEdge e}
+                fixTree tree = case PG.elementTreeSelf tree of
+                  PG.ElementEdge e -> pure $ tree {PG.elementTreeSelf = PG.ElementEdge $ fixEdge e}
                   _ -> unexpected "edge tree" tree
                 fixEdge e = case dir of
                   PG.DirectionOut -> e {PG.edgeOut = vid}

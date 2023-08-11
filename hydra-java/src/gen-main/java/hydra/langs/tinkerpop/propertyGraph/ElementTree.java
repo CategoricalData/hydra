@@ -6,12 +6,12 @@ package hydra.langs.tinkerpop.propertyGraph;
 public class ElementTree<V> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.ElementTree");
   
-  public final hydra.langs.tinkerpop.propertyGraph.Element<V> primary;
+  public final hydra.langs.tinkerpop.propertyGraph.Element<V> self;
   
   public final java.util.List<hydra.langs.tinkerpop.propertyGraph.ElementTree<V>> dependencies;
   
-  public ElementTree (hydra.langs.tinkerpop.propertyGraph.Element<V> primary, java.util.List<hydra.langs.tinkerpop.propertyGraph.ElementTree<V>> dependencies) {
-    this.primary = primary;
+  public ElementTree (hydra.langs.tinkerpop.propertyGraph.Element<V> self, java.util.List<hydra.langs.tinkerpop.propertyGraph.ElementTree<V>> dependencies) {
+    this.self = self;
     this.dependencies = dependencies;
   }
   
@@ -21,19 +21,19 @@ public class ElementTree<V> {
       return false;
     }
     ElementTree o = (ElementTree) (other);
-    return primary.equals(o.primary) && dependencies.equals(o.dependencies);
+    return self.equals(o.self) && dependencies.equals(o.dependencies);
   }
   
   @Override
   public int hashCode() {
-    return 2 * primary.hashCode() + 3 * dependencies.hashCode();
+    return 2 * self.hashCode() + 3 * dependencies.hashCode();
   }
   
-  public ElementTree withPrimary(hydra.langs.tinkerpop.propertyGraph.Element<V> primary) {
-    return new ElementTree(primary, dependencies);
+  public ElementTree withSelf(hydra.langs.tinkerpop.propertyGraph.Element<V> self) {
+    return new ElementTree(self, dependencies);
   }
   
   public ElementTree withDependencies(java.util.List<hydra.langs.tinkerpop.propertyGraph.ElementTree<V>> dependencies) {
-    return new ElementTree(primary, dependencies);
+    return new ElementTree(self, dependencies);
   }
 }

@@ -1,4 +1,4 @@
--- | A typed property graph data model
+-- | A typed property graph data model. Property graphs are parameterized a type for property and id values, while property graph schemas are parameterized by a type for property and id types
 
 module Hydra.Langs.Tinkerpop.PropertyGraph where
 
@@ -26,10 +26,15 @@ _Direction_both = (Core.FieldName "both")
 -- | An edge
 data Edge t = 
   Edge {
+    -- | The label of the edge
     edgeLabel :: EdgeLabel,
+    -- | The unique identifier of the edge
     edgeId :: t,
+    -- | The id of the out-vertex (tail) of the edge
     edgeOut :: t,
+    -- | The id of the in-vertex (head) of the edge
     edgeIn :: t,
+    -- | A key/value map of edge properties
     edgeProperties :: (Map PropertyKey t)}
   deriving (Eq, Ord, Read, Show)
 
@@ -45,10 +50,10 @@ _Edge_in = (Core.FieldName "in")
 
 _Edge_properties = (Core.FieldName "properties")
 
--- | The (required) label of an edge
+-- | The label of an edge
 newtype EdgeLabel = 
   EdgeLabel {
-    -- | The (required) label of an edge
+    -- | The label of an edge
     unEdgeLabel :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -57,10 +62,15 @@ _EdgeLabel = (Core.Name "hydra/langs/tinkerpop/propertyGraph.EdgeLabel")
 -- | The type of an edge
 data EdgeType t = 
   EdgeType {
+    -- | The label of any edge of this edge type
     edgeTypeLabel :: EdgeLabel,
+    -- | The type of the id of any edge of this edge type
     edgeTypeId :: t,
+    -- | The label of the out-vertex (tail) of any edge of this edge type
     edgeTypeOut :: VertexLabel,
+    -- | The label of the in-vertex (head) of any edge of this edge type
     edgeTypeIn :: VertexLabel,
+    -- | A key/value map of edge property types
     edgeTypeProperties :: (Map PropertyKey t)}
   deriving (Eq, Ord, Read, Show)
 
@@ -103,13 +113,13 @@ _ElementKind_edge = (Core.FieldName "edge")
 -- | An element together with its dependencies in some context
 data ElementTree v = 
   ElementTree {
-    elementTreePrimary :: (Element v),
+    elementTreeSelf :: (Element v),
     elementTreeDependencies :: [ElementTree v]}
   deriving (Eq, Ord, Read, Show)
 
 _ElementTree = (Core.Name "hydra/langs/tinkerpop/propertyGraph.ElementTree")
 
-_ElementTree_primary = (Core.FieldName "primary")
+_ElementTree_self = (Core.FieldName "self")
 
 _ElementTree_dependencies = (Core.FieldName "dependencies")
 
@@ -128,13 +138,13 @@ _ElementType_edge = (Core.FieldName "edge")
 -- | An element type together with its dependencies in some context
 data ElementTypeTree t = 
   ElementTypeTree {
-    elementTypeTreePrimary :: (ElementType t),
+    elementTypeTreeSelf :: (ElementType t),
     elementTypeTreeDependencies :: [ElementTypeTree t]}
   deriving (Eq, Ord, Read, Show)
 
 _ElementTypeTree = (Core.Name "hydra/langs/tinkerpop/propertyGraph.ElementTypeTree")
 
-_ElementTypeTree_primary = (Core.FieldName "primary")
+_ElementTypeTree_self = (Core.FieldName "self")
 
 _ElementTypeTree_dependencies = (Core.FieldName "dependencies")
 
@@ -151,7 +161,22 @@ _Graph_vertices = (Core.FieldName "vertices")
 
 _Graph_edges = (Core.FieldName "edges")
 
--- | A vertex or edge label
+-- | A graph schema; a vertex and edge types for the vertices and edges of a graph conforming to the schema
+data GraphSchema t = 
+  GraphSchema {
+    -- | A unique vertex type for each vertex label which may occur in a graph
+    graphSchemaVertices :: (Map VertexLabel (VertexType t)),
+    -- | A unique edge type for each edge label which may occur in a graph
+    graphSchemaEdges :: (Map EdgeLabel (EdgeType t))}
+  deriving (Eq, Ord, Read, Show)
+
+_GraphSchema = (Core.Name "hydra/langs/tinkerpop/propertyGraph.GraphSchema")
+
+_GraphSchema_vertices = (Core.FieldName "vertices")
+
+_GraphSchema_edges = (Core.FieldName "edges")
+
+-- | Either a vertex or edge label
 data Label = 
   LabelVertex VertexLabel |
   LabelEdge EdgeLabel
@@ -166,7 +191,9 @@ _Label_edge = (Core.FieldName "edge")
 -- | A key/value property
 data Property v = 
   Property {
+    -- | They key of the property
     propertyKey :: PropertyKey,
+    -- | The value of the property
     propertyValue :: v}
   deriving (Eq, Ord, Read, Show)
 
@@ -201,8 +228,11 @@ _PropertyType_value = (Core.FieldName "value")
 -- | A vertex
 data Vertex v = 
   Vertex {
+    -- | The label of the vertex
     vertexLabel :: VertexLabel,
+    -- | The unique identifier of the vertex
     vertexId :: v,
+    -- | A key/value map of vertex properties
     vertexProperties :: (Map PropertyKey v)}
   deriving (Eq, Ord, Read, Show)
 
@@ -226,8 +256,11 @@ _VertexLabel = (Core.Name "hydra/langs/tinkerpop/propertyGraph.VertexLabel")
 -- | The type of a vertex
 data VertexType t = 
   VertexType {
+    -- | The label of any vertex of this vertex type
     vertexTypeLabel :: VertexLabel,
+    -- | The type of the id of any vertex of this vertex type
     vertexTypeId :: t,
+    -- | A key/value map of vertex property types
     vertexTypeProperties :: (Map PropertyKey t)}
   deriving (Eq, Ord, Read, Show)
 
