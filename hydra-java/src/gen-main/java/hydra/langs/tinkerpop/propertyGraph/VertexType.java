@@ -17,11 +17,11 @@ public class VertexType<T> {
   public final T id;
   
   /**
-   * A key/value map of vertex property types
+   * A list of property types. The types are ordered for the sake of applications in which property order is significant.
    */
-  public final java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, T> properties;
+  public final java.util.List<hydra.langs.tinkerpop.propertyGraph.PropertyType<T>> properties;
   
-  public VertexType (hydra.langs.tinkerpop.propertyGraph.VertexLabel label, T id, java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, T> properties) {
+  public VertexType (hydra.langs.tinkerpop.propertyGraph.VertexLabel label, T id, java.util.List<hydra.langs.tinkerpop.propertyGraph.PropertyType<T>> properties) {
     this.label = label;
     this.id = id;
     this.properties = properties;
@@ -49,7 +49,7 @@ public class VertexType<T> {
     return new VertexType(label, id, properties);
   }
   
-  public VertexType withProperties(java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, T> properties) {
+  public VertexType withProperties(java.util.List<hydra.langs.tinkerpop.propertyGraph.PropertyType<T>> properties) {
     return new VertexType(label, id, properties);
   }
 }

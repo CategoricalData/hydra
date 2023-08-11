@@ -69,8 +69,8 @@ tinkerpopPropertyGraphModule = Module ns elements [hydraCoreModule] $
               doc "The label of the in-vertex (head) of any edge of this edge type" $
               pg "VertexLabel",
             "properties">:
-              doc "A key/value map of edge property types" $
-              Types.map (pg "PropertyKey") "t"],
+              doc "A list of property types. The types are ordered for the sake of applications in which property order is significant." $
+              list (pg "PropertyType" @@ "t")],
 
       def "Element" $
         doc "Either a vertex or an edge" $
@@ -147,8 +147,12 @@ tinkerpopPropertyGraphModule = Module ns elements [hydraCoreModule] $
         doc "The type of a property" $
         lambda "t" $
           record [
-            "key">: pg "PropertyKey",
-            "value">: "t"],
+            "key">:
+              doc "A property's key" $
+              pg "PropertyKey",
+            "value">:
+              doc "The type of a property's value"
+              "t"],
 
       def "Vertex" $
         doc "A vertex" $
@@ -179,5 +183,5 @@ tinkerpopPropertyGraphModule = Module ns elements [hydraCoreModule] $
               doc "The type of the id of any vertex of this vertex type"
               "t",
             "properties">:
-              doc "A key/value map of vertex property types" $
-              Types.map (pg "PropertyKey") "t"]]
+              doc "A list of property types. The types are ordered for the sake of applications in which property order is significant." $
+              list (pg "PropertyType" @@ "t")]]
