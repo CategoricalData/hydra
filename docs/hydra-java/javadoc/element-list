@@ -3,8 +3,10 @@ hydra.ast
 hydra.basics
 hydra.coders
 hydra.compute
+hydra.constants
 hydra.constraints
 hydra.core
+hydra.coreEncoding
 hydra.dsl
 hydra.dsl.prims
 hydra.extras
@@ -39,6 +41,7 @@ hydra.lib.equality
 hydra.lib.flows
 hydra.lib.lists
 hydra.lib.literals
+hydra.lib.logic
 hydra.lib.maps
 hydra.lib.math
 hydra.lib.optionals
@@ -49,6 +52,8 @@ hydra.module
 hydra.phantoms
 hydra.printing
 hydra.query
+hydra.strip
 hydra.testing
+hydra.tier1
 hydra.tools
 hydra.workflow
