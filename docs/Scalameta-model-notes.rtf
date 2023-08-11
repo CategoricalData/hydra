@@ -1,0 +1,496 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2580
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 HelveticaNeue;\f2\fmodern\fcharset0 Courier-Bold;
+\f3\fmodern\fcharset0 Courier;\f4\fmodern\fcharset0 Courier-Oblique;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red255\green255\blue255;\red192\green237\blue254;
+\red202\green219\blue254;\red217\green234\blue202;\red0\green0\blue109;\red109\green109\blue109;\red254\green219\blue205;
+\red254\green253\blue213;\red254\green209\blue207;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;\cssrgb\c100000\c100000\c100000;\cssrgb\c79369\c94291\c99728;
+\cssrgb\c82956\c88909\c99731;\cssrgb\c87817\c93001\c83061;\csgenericrgb\c0\c0\c42745;\csgenericrgb\c42745\c42745\c42745;\cssrgb\c100000\c88718\c84032;
+\cssrgb\c99682\c99006\c86634;\cssrgb\c100000\c85667\c84695;}
+\margl1440\margr1440\vieww11520\viewh15280\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+{\field{\*\fldinst{HYPERLINK "https://%3Corganization%3E.slack.com/messages/%3Cchannel%3E/"}}{\fldrslt 
+\f1\fs30 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\ul \ulc2 \outl0\strokewidth0 \strokec2 https://GraphCommunity.slack.com/messages/hydra/}}\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\
+\cb4 Member extends Tree\
+\cb1 \
+\cb4 Pat extends Tree\
+\cb1 \
+\cb4 Stat extends Tree\
+\cb1 \
+\cb4 Type extends Tree\
+\cb1 \
+\cb4 Ref extends Tree\
+\cb1 \
+\cb5 Decl extends Stat\
+\cb1 \
+\cb5 Defn extends Stat\
+\cb1 \
+\cb6 Member.Type extends Member\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\fs26 \cf0 \cb1           
+\f2\b \cf7 record
+\f3\b0 \cf0 :\
+
+\f4\i \cf8 #    def name: scala.meta.Type.Name\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : name\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 : Type.Name\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \
+\cb6 Member.Term extends Member\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\fs26 \cf0 \cb1           
+\f2\b \cf7 record
+\f3\b0 \cf0 :\
+
+\f4\i \cf8 #    def name: scala.meta.Term.Name\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : name\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 : Term.Name
+\f0\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\cb9 Pkg extends Member.Term with Stat\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f2\b\fs26 \cf7 \cb1 record
+\f3\b0 \cf0 :\
+  - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : ref\
+    
+\f2\b \cf7 type
+\f3\b0 \cf0 : Term.Ref\
+  - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : stats\
+    
+\f2\b \cf7 type
+\f3\b0 \cf0 :\
+      
+\f2\b \cf7 list
+\f3\b0 \cf0 : Stat\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \
+\cb10 Pkg.Object extends Member.Term with Stat\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f2\b\fs26 \cf7 \cb1 record
+\f3\b0 \cf0 :\
+  - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : mods\
+    
+\f2\b \cf7 type
+\f3\b0 \cf0 :\
+      
+\f2\b \cf7 list
+\f3\b0 \cf0 : Mod\
+  - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : name\
+    
+\f2\b \cf7 type
+\f3\b0 \cf0 : Term.Name\
+  - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : template\
+    
+\f2\b \cf7 type
+\f3\b0 \cf0 : Template\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \
+..\
+\cb10 Pat.Var extends Pat with Member.Term\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f2\b\fs26 \cf7 \cb1 record
+\f3\b0 \cf0 :\
+  - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : name\
+    
+\f2\b \cf7 type
+\f3\b0 \cf0 : Term.Name\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \
+..\
+\
+\cb10 Decl.Def extends Decl with Member.Term\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\fs26 \cf0 \cb1           
+\f2\b \cf7 record
+\f3\b0 \cf0 :\
+
+\f4\i \cf8 #      mods: List[Mod],\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : mods\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 :\
+                
+\f2\b \cf7 list
+\f3\b0 \cf0 : Mod\
+
+\f4\i \cf8 #      name: Term.Name,\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : name\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 : Term.Name\
+
+\f4\i \cf8 #      tparams: List[scala.meta.Type.Param],\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : tparams\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 :\
+                
+\f2\b \cf7 list
+\f3\b0 \cf0 : Type.Param\
+
+\f4\i \cf8 #      paramss: List[List[Term.Param]],\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : paramss\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 :\
+                
+\f2\b \cf7 list
+\f3\b0 \cf0 :\
+                  
+\f2\b \cf7 list
+\f3\b0 \cf0 : Term.Param\
+
+\f4\i \cf8 #      decltpe: scala.meta.Type\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : decltpe\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 : Type\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \
+\cb10 Decl.Given extends Decl with Member.Term\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\fs26 \cf0 \cb1           
+\f2\b \cf7 record
+\f3\b0 \cf0 :\
+
+\f4\i \cf8 #      mods: List[Mod],\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : mods\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 :\
+                
+\f2\b \cf7 list
+\f3\b0 \cf0 : Mod\
+
+\f4\i \cf8 #      name: Term.Name,\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : name\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 : Term.Name\
+
+\f4\i \cf8 #      tparams: List[scala.meta.Type.Param],\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : tparams\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 :\
+                
+\f2\b \cf7 list
+\f3\b0 \cf0 : Type.Param\
+
+\f4\i \cf8 #      sparams: List[List[Term.Param]],\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : sparams\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 :\
+                
+\f2\b \cf7 list
+\f3\b0 \cf0 :\
+                  
+\f2\b \cf7 list
+\f3\b0 \cf0 : Term.Param\
+
+\f4\i \cf8 #      decltpe: scala.meta.Type\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : decltpe\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 : Type\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \
+\cb10 Defn.EnumCase extends Defn with Member.Term\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\fs26 \cf0 \cb1           
+\f2\b \cf7 record
+\f3\b0 \cf0 :\
+
+\f4\i \cf8 #      mods: List[Mod],\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : mods\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 :\
+                
+\f2\b \cf7 list
+\f3\b0 \cf0 : Mod\
+
+\f4\i \cf8 #      name: Term.Name,\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : name\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 : Term.Name\
+
+\f4\i \cf8 #      tparams: List[scala.meta.Type.Param],\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : tparams\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 :\
+                
+\f2\b \cf7 list
+\f3\b0 \cf0 : Type.Param\
+
+\f4\i \cf8 #      ctor: Ctor.Primary,\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : ctor\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 : Ctor.Primary\
+
+\f4\i \cf8 #      inits: List[Init]\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : inits\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 :\
+                
+\f2\b \cf7 list
+\f3\b0 \cf0 : Init\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \
+\cb10 Defn.Def extends Defn with Member.Term\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\fs26 \cf0 \cb1           
+\f2\b \cf7 record
+\f3\b0 \cf0 :\
+
+\f4\i \cf8 #      mods: List[Mod],\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : mods\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 :\
+                
+\f2\b \cf7 list
+\f3\b0 \cf0 : Mod\
+
+\f4\i \cf8 #      name: Term.Name,\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : name\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 : Term.Name\
+
+\f4\i \cf8 #      tparams: List[scala.meta.Type.Param],\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : tparams\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 :\
+                
+\f2\b \cf7 list
+\f3\b0 \cf0 : Type.Param\
+
+\f4\i \cf8 #      paramss: List[List[Term.Param]],\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : paramss\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 :\
+                
+\f2\b \cf7 list
+\f3\b0 \cf0 :\
+                  
+\f2\b \cf7 list
+\f3\b0 \cf0 : Term.Param\
+
+\f4\i \cf8 #      decltpe: Option[scala.meta.Type],\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : decltpe\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 :\
+                
+\f2\b \cf7 option
+\f3\b0 \cf0 : Type\
+
+\f4\i \cf8 #      body: Term\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : body\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 : Term\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \
+\cb10 Defn.Macro extends Defn with Member.Term\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\fs26 \cf0 \cb1           
+\f2\b \cf7 record
+\f3\b0 \cf0 :\
+
+\f4\i \cf8 #      mods: List[Mod],\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : mods\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 :\
+                
+\f2\b \cf7 list
+\f3\b0 \cf0 : Mod\
+
+\f4\i \cf8 #      name: Term.Name,\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : name\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 : Term.Name\
+
+\f4\i \cf8 #      tparams: List[scala.meta.Type.Param],\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : tparams\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 :\
+                
+\f2\b \cf7 list
+\f3\b0 \cf0 : Type.Param\
+
+\f4\i \cf8 #      paramss: List[List[Term.Param]],\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : paramss\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 :\
+                
+\f2\b \cf7 list
+\f3\b0 \cf0 :\
+                  
+\f2\b \cf7 list
+\f3\b0 \cf0 : Term.Param\
+
+\f4\i \cf8 #      decltpe: Option[scala.meta.Type],\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : decltpe\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 :\
+                
+\f2\b \cf7 optional
+\f3\b0 \cf0 : Type\
+
+\f4\i \cf8 #      body: Term\
+            
+\f3\i0 \cf0 - 
+\f2\b \cf7 name
+\f3\b0 \cf0 : body\
+              
+\f2\b \cf7 type
+\f3\b0 \cf0 : Term\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \
+\cb11 Defn.Object extends Defn with Member.Term\
+\cb1 \
+.}
