@@ -3,14 +3,14 @@ package hydra.langs.tinkerpop.propertyGraph;
 /**
  * The type of a property
  */
-public class PropertyType<T> {
+public class PropertyType<P> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.PropertyType");
   
   public final hydra.langs.tinkerpop.propertyGraph.PropertyKey key;
   
-  public final T value;
+  public final P value;
   
-  public PropertyType (hydra.langs.tinkerpop.propertyGraph.PropertyKey key, T value) {
+  public PropertyType (hydra.langs.tinkerpop.propertyGraph.PropertyKey key, P value) {
     this.key = key;
     this.value = value;
   }
@@ -33,7 +33,7 @@ public class PropertyType<T> {
     return new PropertyType(key, value);
   }
   
-  public PropertyType withValue(T value) {
+  public PropertyType withValue(P value) {
     return new PropertyType(key, value);
   }
 }

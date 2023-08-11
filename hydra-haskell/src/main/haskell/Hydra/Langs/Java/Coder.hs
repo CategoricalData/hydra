@@ -150,7 +150,7 @@ constructElementsInterface mod members = (elName, cu)
 declarationForLambdaType :: (Eq a, Ord a, Read a, Show a) => Aliases
   -> [Java.TypeParameter] -> Name -> LambdaType a -> GraphFlow a Java.ClassDeclaration
 declarationForLambdaType aliases tparams elName (LambdaType (Name v) body) =
-    toClassDecl False aliases (L.nub $ tparams ++ [param]) elName body
+    toClassDecl False aliases (tparams ++ [param]) elName body
   where
     param = javaTypeParameter $ capitalize v
 
@@ -307,7 +307,7 @@ declarationForUnionType aliases tparams elName fields = do
       where
         mods = [Java.InterfaceModifierPublic]
         ti = Java.TypeIdentifier $ Java.Identifier visitorName
-        vtparams = L.nub $ tparams ++ [javaTypeParameter visitorReturnParameter]
+        vtparams = tparams ++ [javaTypeParameter visitorReturnParameter]
         extends = []
         body = Java.InterfaceBody (toVisitMethod . fieldTypeName <$> fields)
           where
@@ -317,9 +317,9 @@ declarationForUnionType aliases tparams elName fields = do
         Java.NormalInterfaceDeclaration {
             Java.normalInterfaceDeclarationModifiers = [Java.InterfaceModifierPublic],
             Java.normalInterfaceDeclarationIdentifier = Java.TypeIdentifier $ Java.Identifier partialVisitorName,
-            Java.normalInterfaceDeclarationParameters = L.nub $ tparams ++ [javaTypeParameter visitorReturnParameter],
+            Java.normalInterfaceDeclarationParameters = tparams ++ [javaTypeParameter visitorReturnParameter],
             Java.normalInterfaceDeclarationExtends =
-              [Java.InterfaceType $ javaClassType (L.nub $ (typeParameterToReferenceType <$> tparams) ++ [visitorTypeVariable]) Nothing visitorName],
+              [Java.InterfaceType $ javaClassType ((typeParameterToReferenceType <$> tparams) ++ [visitorTypeVariable]) Nothing visitorName],
             Java.normalInterfaceDeclarationBody = Java.InterfaceBody $ otherwise:(toVisitMethod . fieldTypeName <$> fields)}
       where
         otherwise = interfaceMethodDeclaration defaultMod [] otherwiseMethodName [mainInstanceParam] resultR $ Just [throw]
