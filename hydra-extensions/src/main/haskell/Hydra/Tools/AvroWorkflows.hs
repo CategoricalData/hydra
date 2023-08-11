@@ -69,7 +69,7 @@ defaultTinkerpopAnnotations = PGM.AnnotationSchema {
   PGM.annotationSchemaInEdgeLabel = "inEdgeLabel",
   PGM.annotationSchemaIgnore = "ignore"}
 
-examplePgSchema :: Show a => PGM.Schema s a () String String String
+examplePgSchema :: Show a => PGM.Schema s a () String
 examplePgSchema = PGM.Schema {
     PGM.schemaVertexIds = mkCoder "encode vertex id" Expect.string (pure . Terms.string),
     PGM.schemaEdgeIds = mkCoder "encode edge id" Expect.string (pure . Terms.string),
@@ -101,7 +101,7 @@ listsToSets = rewriteTerm mapExpr id
       TermList els -> TermSet $ S.fromList els
       _ -> term
 
-pgElementToJson :: PGM.Schema (Graph Kv) Kv t v e p -> PG.Element v e p -> Flow (Graph Kv) Json.Value
+pgElementToJson :: PGM.Schema (Graph Kv) Kv t v -> PG.Element v -> Flow (Graph Kv) Json.Value
 pgElementToJson schema el = case el of
     PG.ElementVertex vertex -> do
       let labelJson = Json.ValueString $ PG.unVertexLabel $ PG.vertexLabel vertex
@@ -134,12 +134,12 @@ pgElementToJson schema el = case el of
           json <- coderDecode (PGM.schemaPropertyValues schema) v >>= untypedTermToJson
           return (key, json)
 
-pgElementsToJson :: PGM.Schema (Graph Kv) Kv t v e p -> [PG.Element v e p] -> Flow (Graph Kv) Json.Value
+pgElementsToJson :: PGM.Schema (Graph Kv) Kv t v -> [PG.Element v] -> Flow (Graph Kv) Json.Value
 pgElementsToJson schema els = Json.ValueArray <$> CM.mapM (pgElementToJson schema) els
 
-propertyGraphLastMile :: (Show v, Show e, Show p) => PGM.Schema (Graph Kv) Kv t v e p -> LastMile (Graph Kv) (PG.Element v e p)
-propertyGraphLastMile schema =
-  LastMile (typedTermToPropertyGraph schema) (\els -> jsonValueToString <$> pgElementsToJson schema els) "json"
+propertyGraphLastMile :: (Show t, Show v) => PGM.Schema (Graph Kv) Kv t v -> t -> t -> LastMile (Graph Kv) (PG.Element v)
+propertyGraphLastMile schema vidType eidType =
+  LastMile (\typ -> typedTermToPropertyGraph schema typ vidType eidType) (\els -> jsonValueToString <$> pgElementsToJson schema els) "json"
 
 rdfDescriptionsToNtriples :: [Rdf.Description] -> String
 rdfDescriptionsToNtriples = rdfGraphToNtriples . RdfUt.descriptionsToGraph
@@ -147,12 +147,12 @@ rdfDescriptionsToNtriples = rdfGraphToNtriples . RdfUt.descriptionsToGraph
 shaclRdfLastMile :: LastMile (Graph Kv) Rdf.Description
 shaclRdfLastMile = LastMile typedTermToShaclRdf (pure . rdfDescriptionsToNtriples) "nt"
 
-typedTermToPropertyGraph :: (Show v, Show e, Show p) => PGM.Schema (Graph Kv) Kv t v e p -> Type Kv -> GraphFlow Kv (Term Kv -> Graph Kv -> GraphFlow Kv [PG.Element v e p])
-typedTermToPropertyGraph schema typ = do
-    adapter <- elementCoder Nothing schema typ
+typedTermToPropertyGraph :: (Show t, Show v) => PGM.Schema (Graph Kv) Kv t v -> Type Kv -> t -> t -> GraphFlow Kv (Term Kv -> Graph Kv -> GraphFlow Kv [PG.Element v])
+typedTermToPropertyGraph schema typ vidType eidType = do
+    adapter <- elementCoder Nothing schema typ vidType eidType
     return $ \term graph -> flattenTree <$> coderEncode (adapterCoder adapter) term
   where
-    flattenTree tree = (PG.elementTreePrimary tree):(L.concat $ (flattenTree <$> PG.elementTreeDependencies tree))
+    flattenTree tree = (PG.elementTreeSelf tree):(L.concat $ (flattenTree <$> PG.elementTreeDependencies tree))
 
 typedTermToShaclRdf :: Type Kv -> GraphFlow Kv (Term Kv -> Graph Kv -> GraphFlow Kv [Rdf.Description])
 typedTermToShaclRdf _ = pure encode

@@ -1,5 +1,5 @@
 module Hydra.Langs.Tinkerpop.Coder (
---  elementCoder,
+  elementCoder,
 ) where
 
 import Hydra.Kernel
@@ -74,10 +74,11 @@ edgeCoder dir schema source eidType tname label outLabel inLabel mIdAdapter outA
 
 elementCoder :: (Show t, Show v) => Y.Maybe (PG.Direction, PG.VertexLabel)
   -> Schema s Kv t v
+  -> Type Kv
   -> t -> t
-  -> Type Kv -> Flow s (ElementAdapter s Kv t v)
-elementCoder mparent schema vidType eidType source = case stripType source of
-    TypeOptional ot -> elementCoder mparent schema vidType eidType ot
+  -> Flow s (ElementAdapter s Kv t v)
+elementCoder mparent schema source vidType eidType = case stripType source of
+    TypeOptional ot -> elementCoder mparent schema ot vidType eidType
     TypeRecord (RowType name _ fields) -> withTrace ("adapter for " ++ unName name) $ do
       mOutSpec <- findProjectionSpec name outVertexKey outVertexLabelKey fields
       mInSpec <- findProjectionSpec name inVertexKey inVertexLabelKey fields
@@ -213,7 +214,7 @@ elementCoder mparent schema vidType eidType source = case stripType source of
           Nothing -> pure Nothing
           Just a -> do
             label <- PG.EdgeLabel <$> Expect.string a
-            elad <- elementCoder (Just (dir, vlabel)) schema vidType eidType $ fieldTypeType field
+            elad <- elementCoder (Just (dir, vlabel)) schema (fieldTypeType field) vidType eidType 
             return $ Just $ AdjacentEdgeAdapter dir field label elad
         key = case dir of
           PG.DirectionOut -> outEdgeLabelKey
