@@ -1,11 +1,8 @@
 module Hydra.Models.Atlas where
 
-import Hydra.Sources.Core
-
-import Hydra.Compute
-import Hydra.Core
-import Hydra.Module
+import Hydra.Kernel
 import Hydra.Dsl.Types as Types
+import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Annotations
 import Hydra.Sources.Langs.Xml.Schema
 
