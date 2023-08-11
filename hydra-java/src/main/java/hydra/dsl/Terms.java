@@ -58,19 +58,19 @@ public interface Terms {
     }
 
     static <A> Term<A> bigfloat(final double value) {
-        return float_(new FloatValue.Bigfloat(value));
+        return literal(Literals.bigfloat(value));
     }
 
     static <A> Term<A> bigint(final BigInteger value) {
-        return integer(new IntegerValue.Bigint(value));
+        return literal(Literals.bigint(value));
     }
 
     static <A> Term<A> binary(final String value) {
-        return literal(new Literal.Binary(value));
+        return literal(Literals.binary(value));
     }
 
     static <A> Term<A> boolean_(final boolean value) {
-        return literal(new Literal.Boolean_(value));
+        return literal(Literals.boolean_(value));
     }
 
     static <A> Term<A> cases(final Name name, final Optional<Term<A>> def, final Field<A>... fields) {
@@ -90,15 +90,15 @@ public interface Terms {
     }
 
     static <A> Term<A> float_(final FloatValue value) {
-        return literal(new Literal.Float_(value));
+        return literal(Literals.float_(value));
     }
 
     static <A> Term<A> float32(final float value) {
-        return float_(new FloatValue.Float32(value));
+        return literal(Literals.float32(value));
     }
 
     static <A> Term<A> float64(final double value) {
-        return float_(new FloatValue.Float64(value));
+        return literal(Literals.float64(value));
     }
 
     static <A> Term<A> flowState(Term<A> value, Term<A> state, Term<A> trace) {
@@ -129,23 +129,23 @@ public interface Terms {
     }
 
     static <A> Term<A> int8(final short value) {
-        return integer(new IntegerValue.Int8(value));
+        return literal(Literals.int8(value));
     }
 
     static <A> Term<A> int16(final short value) {
-        return integer(new IntegerValue.Int16(value));
+        return literal(Literals.int16(value));
     }
 
     static <A> Term<A> int32(final int value) {
-        return integer(new IntegerValue.Int32(value));
+        return literal(Literals.int32(value));
     }
 
     static <A> Term<A> int64(final long value) {
-        return integer(new IntegerValue.Int64(value));
+        return literal(Literals.int64(value));
     }
 
     static <A> Term<A> integer(final IntegerValue value) {
-        return literal(new Literal.Integer_(value));
+        return literal(Literals.integer(value));
     }
 
     static <A> Term<A> just(final Term<A> elem) {
@@ -248,23 +248,23 @@ public interface Terms {
     }
 
     static <A> Term<A> string(final String value) {
-        return literal(new Literal.String_(value));
+        return literal(Literals.string(value));
     }
 
     static <A> Term<A> uint8(final byte value) {
-        return integer(new IntegerValue.Uint8(value));
+        return literal(Literals.uint8(value));
     }
 
     static <A> Term<A> uint16(final char value) {
-        return integer(new IntegerValue.Uint16(value));
+        return literal(Literals.uint16(value));
     }
 
     static <A> Term<A> uint32(final long value) {
-        return integer(new IntegerValue.Uint32(value));
+        return literal(Literals.uint32(value));
     }
 
     static <A> Term<A> uint64(final BigInteger value) {
-        return integer(new IntegerValue.Uint64(value));
+        return literal(Literals.uint64(value));
     }
 
     static <A> Term<A> inject(final Name unionName, final Field<A> field) {

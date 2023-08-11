@@ -1,4 +1,4 @@
--- | A utility for transforming Avro-compliant JSON to RDF
+-- | A utility for transforming Avro-compliant JSON into other models
 
 module Hydra.Tools.AvroWorkflows (
   TransformWorkflow(..),
