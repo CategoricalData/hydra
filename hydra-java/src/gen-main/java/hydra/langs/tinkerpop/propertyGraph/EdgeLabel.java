@@ -1,13 +1,13 @@
 package hydra.langs.tinkerpop.propertyGraph;
 
 /**
- * The (required) label of an edge
+ * The label of an edge
  */
 public class EdgeLabel {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.EdgeLabel");
   
   /**
-   * The (required) label of an edge
+   * The label of an edge
    */
   public final String value;
   

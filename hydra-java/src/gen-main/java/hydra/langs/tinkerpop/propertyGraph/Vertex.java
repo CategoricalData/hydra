@@ -6,10 +6,19 @@ package hydra.langs.tinkerpop.propertyGraph;
 public class Vertex<V> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.Vertex");
   
+  /**
+   * The label of the vertex
+   */
   public final hydra.langs.tinkerpop.propertyGraph.VertexLabel label;
   
+  /**
+   * The unique identifier of the vertex
+   */
   public final V id;
   
+  /**
+   * A key/value map of vertex properties
+   */
   public final java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, V> properties;
   
   public Vertex (hydra.langs.tinkerpop.propertyGraph.VertexLabel label, V id, java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, V> properties) {
