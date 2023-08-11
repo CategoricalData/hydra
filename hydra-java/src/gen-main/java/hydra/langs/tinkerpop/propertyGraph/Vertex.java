@@ -3,16 +3,16 @@ package hydra.langs.tinkerpop.propertyGraph;
 /**
  * A vertex
  */
-public class Vertex<V, P> {
+public class Vertex<V> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.Vertex");
   
   public final hydra.langs.tinkerpop.propertyGraph.VertexLabel label;
   
   public final V id;
   
-  public final java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, P> properties;
+  public final java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, V> properties;
   
-  public Vertex (hydra.langs.tinkerpop.propertyGraph.VertexLabel label, V id, java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, P> properties) {
+  public Vertex (hydra.langs.tinkerpop.propertyGraph.VertexLabel label, V id, java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, V> properties) {
     this.label = label;
     this.id = id;
     this.properties = properties;
@@ -40,7 +40,7 @@ public class Vertex<V, P> {
     return new Vertex(label, id, properties);
   }
   
-  public Vertex withProperties(java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, P> properties) {
+  public Vertex withProperties(java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, V> properties) {
     return new Vertex(label, id, properties);
   }
 }

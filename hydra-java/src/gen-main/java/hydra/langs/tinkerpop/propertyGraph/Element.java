@@ -3,39 +3,39 @@ package hydra.langs.tinkerpop.propertyGraph;
 /**
  * Either a vertex or an edge
  */
-public abstract class Element<V, E, P> {
+public abstract class Element<V> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.Element");
   
   private Element () {
   
   }
   
-  public abstract <R> R accept(Visitor<V, E, P, R> visitor) ;
+  public abstract <R> R accept(Visitor<V, R> visitor) ;
   
-  public interface Visitor<V, E, P, R> {
-    R visit(Vertex<V, E, P> instance) ;
+  public interface Visitor<V, R> {
+    R visit(Vertex<V> instance) ;
     
-    R visit(Edge<V, E, P> instance) ;
+    R visit(Edge<V> instance) ;
   }
   
-  public interface PartialVisitor<V, E, P, R> extends Visitor<V, E, P, R> {
-    default R otherwise(Element<V, E, P> instance) {
+  public interface PartialVisitor<V, R> extends Visitor<V, R> {
+    default R otherwise(Element<V> instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Vertex<V, E, P> instance) {
+    default R visit(Vertex<V> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Edge<V, E, P> instance) {
+    default R visit(Edge<V> instance) {
       return otherwise((instance));
     }
   }
   
-  public static final class Vertex<V, E, P> extends hydra.langs.tinkerpop.propertyGraph.Element<V, E, P> {
-    public final hydra.langs.tinkerpop.propertyGraph.Vertex<V, P> value;
+  public static final class Vertex<V> extends hydra.langs.tinkerpop.propertyGraph.Element<V> {
+    public final hydra.langs.tinkerpop.propertyGraph.Vertex<V> value;
     
-    public Vertex (hydra.langs.tinkerpop.propertyGraph.Vertex<V, P> value) {
+    public Vertex (hydra.langs.tinkerpop.propertyGraph.Vertex<V> value) {
       this.value = value;
     }
     
@@ -54,15 +54,15 @@ public abstract class Element<V, E, P> {
     }
     
     @Override
-    public <R> R accept(Visitor<V, E, P, R> visitor) {
+    public <R> R accept(Visitor<V, R> visitor) {
       return visitor.visit(this);
     }
   }
   
-  public static final class Edge<V, E, P> extends hydra.langs.tinkerpop.propertyGraph.Element<V, E, P> {
-    public final hydra.langs.tinkerpop.propertyGraph.Edge<V, E, P> value;
+  public static final class Edge<V> extends hydra.langs.tinkerpop.propertyGraph.Element<V> {
+    public final hydra.langs.tinkerpop.propertyGraph.Edge<V> value;
     
-    public Edge (hydra.langs.tinkerpop.propertyGraph.Edge<V, E, P> value) {
+    public Edge (hydra.langs.tinkerpop.propertyGraph.Edge<V> value) {
       this.value = value;
     }
     
@@ -81,7 +81,7 @@ public abstract class Element<V, E, P> {
     }
     
     @Override
-    public <R> R accept(Visitor<V, E, P, R> visitor) {
+    public <R> R accept(Visitor<V, R> visitor) {
       return visitor.visit(this);
     }
   }

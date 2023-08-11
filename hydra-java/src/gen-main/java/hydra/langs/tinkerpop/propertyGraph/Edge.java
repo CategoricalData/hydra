@@ -3,20 +3,20 @@ package hydra.langs.tinkerpop.propertyGraph;
 /**
  * An edge
  */
-public class Edge<V, E, P> {
+public class Edge<T> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.Edge");
   
   public final hydra.langs.tinkerpop.propertyGraph.EdgeLabel label;
   
-  public final E id;
+  public final T id;
   
-  public final V out;
+  public final T out;
   
-  public final V in;
+  public final T in;
   
-  public final java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, P> properties;
+  public final java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, T> properties;
   
-  public Edge (hydra.langs.tinkerpop.propertyGraph.EdgeLabel label, E id, V out, V in, java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, P> properties) {
+  public Edge (hydra.langs.tinkerpop.propertyGraph.EdgeLabel label, T id, T out, T in, java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, T> properties) {
     this.label = label;
     this.id = id;
     this.out = out;
@@ -42,19 +42,19 @@ public class Edge<V, E, P> {
     return new Edge(label, id, out, in, properties);
   }
   
-  public Edge withId(E id) {
+  public Edge withId(T id) {
     return new Edge(label, id, out, in, properties);
   }
   
-  public Edge withOut(V out) {
+  public Edge withOut(T out) {
     return new Edge(label, id, out, in, properties);
   }
   
-  public Edge withIn(V in) {
+  public Edge withIn(T in) {
     return new Edge(label, id, out, in, properties);
   }
   
-  public Edge withProperties(java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, P> properties) {
+  public Edge withProperties(java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, T> properties) {
     return new Edge(label, id, out, in, properties);
   }
 }

@@ -17,9 +17,9 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-type PgAdapter s a v e p = Adapter s s (Type a) [PG.Label] (Term a) [PG.Element v e p]
+type PgAdapter s a v = Adapter s s (Type a) [PG.Label] (Term a) [PG.Element v]
 
-termToElementsAdapter :: Schema s Kv vt et pt v e p -> Type Kv -> Flow s (PgAdapter s Kv v e p)
+termToElementsAdapter :: Schema s Kv t v -> Type Kv -> Flow s (PgAdapter s Kv v)
 termToElementsAdapter schema typ = do
     case getTypeAnnotation "elements" typ of
       Nothing -> pure trivialAdapter
@@ -38,12 +38,12 @@ lossy = False
 noDecoding :: String -> Flow s x
 noDecoding cat = fail $ cat ++ " decoding is not yet supported"
 
-parseEdgeIdPattern :: Show a => Schema s a vt et pt v e p -> ValueSpec -> Flow s (Term a -> Flow s [e])
+parseEdgeIdPattern :: Show a => Schema s a t v -> ValueSpec -> Flow s (Term a -> Flow s [v])
 parseEdgeIdPattern schema spec = do
   fun <- parseValueSpec spec
   return $ \term -> fun term >>= CM.mapM (coderEncode $ schemaEdgeIds schema)
 
-parseEdgeSpec :: Show a => Schema s a vt et pt v e p -> EdgeSpec -> Flow s (PG.Label, Term a -> Flow s [PG.Element v e p])
+parseEdgeSpec :: Show a => Schema s a t v -> EdgeSpec -> Flow s (PG.Label, Term a -> Flow s [PG.Element v])
 parseEdgeSpec schema (EdgeSpec label id outV inV props) = do
   getId <- parseEdgeIdPattern schema id
   getOut <- parseVertexIdPattern schema outV
@@ -57,7 +57,7 @@ parseEdgeSpec schema (EdgeSpec label id outV inV props) = do
         return [PG.ElementEdge $ PG.Edge label tid tout tin tprops]
   return (PG.LabelEdge label, encode)
 
-parseElementSpec :: Show a => Schema s a vt et pt v e p -> ElementSpec -> Flow s (PG.Label, Term a -> Flow s [PG.Element v e p])
+parseElementSpec :: Show a => Schema s a t v -> ElementSpec -> Flow s (PG.Label, Term a -> Flow s [PG.Element v])
 parseElementSpec schema spec = case spec of
   ElementSpecVertex vspec -> parseVertexSpec schema vspec
   ElementSpecEdge espec -> parseEdgeSpec schema espec
@@ -148,7 +148,7 @@ parsePattern pat = withTrace "parse path pattern" $ do
         Just t -> toString t
       _ -> pure $ show term
 
-parsePropertySpec :: Show a => Schema s a vt et pt v e p -> PropertySpec -> Flow s (Term a -> Flow s [(PG.PropertyKey, p)])
+parsePropertySpec :: Show a => Schema s a t v -> PropertySpec -> Flow s (Term a -> Flow s [(PG.PropertyKey, v)])
 parsePropertySpec schema (PropertySpec key value) = withTrace "parse property spec" $ do
   fun <- parseValueSpec value
   return $ \term -> withTrace ("encode property " ++ PG.unPropertyKey key) $ do
@@ -161,12 +161,12 @@ parseValueSpec spec = case spec of
   ValueSpecValue -> pure $ \term -> pure [term]
   ValueSpecPattern pat -> parsePattern pat
 
-parseVertexIdPattern :: Show a => Schema s a vt et pt v e p -> ValueSpec -> Flow s (Term a -> Flow s [v])
+parseVertexIdPattern :: Show a => Schema s a t v -> ValueSpec -> Flow s (Term a -> Flow s [v])
 parseVertexIdPattern schema spec = do
   fun <- parseValueSpec spec
   return $ \term -> fun term >>= CM.mapM (coderEncode $ schemaVertexIds schema)
 
-parseVertexSpec :: Show a => Schema s a vt et pt v e p -> VertexSpec -> Flow s (PG.Label, Term a -> Flow s [PG.Element v e p])
+parseVertexSpec :: Show a => Schema s a t v -> VertexSpec -> Flow s (PG.Label, Term a -> Flow s [PG.Element v])
 parseVertexSpec schema (VertexSpec label id props) = do
   getId <- parseVertexIdPattern schema id
   getProps <- CM.mapM (parsePropertySpec schema) props
