@@ -1,9 +1,8 @@
 module Hydra.Models.StacItems where
 
-import Hydra.Compute
-import Hydra.Core
-import Hydra.Module
+import Hydra.Kernel
 import Hydra.Dsl.Types as Types
+import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Annotations
 import Hydra.Sources.Compute
 import Hydra.Sources.Core

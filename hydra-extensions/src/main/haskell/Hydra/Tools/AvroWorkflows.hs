@@ -25,7 +25,6 @@ import Hydra.Langs.Json.Serde
 import Hydra.Langs.Avro.Coder
 import Hydra.Langs.Avro.SchemaJson
 import Hydra.Langs.Tinkerpop.Coder
-import Hydra.Rewriting
 import qualified Hydra.Langs.Shacl.Coder as Shacl
 import qualified Hydra.Langs.Rdf.Syntax as Rdf
 import qualified Hydra.Langs.Rdf.Utils as RdfUt
@@ -35,7 +34,7 @@ import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Expect as Expect
 import Hydra.Langs.Rdf.Serde
-import Hydra.Workflow
+import Hydra.Sources.Core
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
