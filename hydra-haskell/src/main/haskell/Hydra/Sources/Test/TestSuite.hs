@@ -1,11 +1,11 @@
 module Hydra.Sources.Test.TestSuite (testSuiteModule) where
 
 import Hydra.Kernel
-import Hydra.Sources.Core
-import Hydra.Sources.Testing
 import Hydra.Testing
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
+import Hydra.Sources.Core
+import Hydra.Sources.Testing
 import Hydra.Sources.Test.Lib.Lists
 import Hydra.Sources.Test.Lib.Strings
 
@@ -20,7 +20,7 @@ testSuiteModule = Module testSuiteNs elements [hydraCoreModule, hydraTestingModu
       groupElement "allTests" allTests]
 
 groupElement :: String -> TestGroup Kv -> Element Kv
-groupElement lname group = def lname (Types.var "ignored") $ encodeGroup group
+groupElement lname group = Element name $ setTermType (Just typ) $ encodeGroup group
   where
     encodeGroup (TestGroup name desc groups cases) = Terms.record _TestGroup [
       Field _TestGroup_name $ Terms.string name,
@@ -34,7 +34,8 @@ groupElement lname group = def lname (Types.var "ignored") $ encodeGroup group
         EvaluationStyleLazy -> _EvaluationStyle_lazy) Terms.unit,
       Field _TestCase_input $ coreEncodeTerm input,
       Field _TestCase_output $ coreEncodeTerm output]
-    def lname typ term = Element (unqualifyName $ QualifiedName (Just testSuiteNs) lname) term
+    name = unqualifyName $ QualifiedName (Just testSuiteNs) lname
+    typ = Types.apply (TypeVariable _TestGroup) (TypeVariable _Kv)
 
 allTests :: TestGroup Kv
 allTests = TestGroup "All tests" Nothing primTests []
