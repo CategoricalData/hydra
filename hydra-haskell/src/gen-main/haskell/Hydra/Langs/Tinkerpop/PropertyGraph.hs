@@ -24,18 +24,18 @@ _Direction_in = (Core.FieldName "in")
 _Direction_both = (Core.FieldName "both")
 
 -- | An edge
-data Edge t = 
+data Edge v = 
   Edge {
     -- | The label of the edge
     edgeLabel :: EdgeLabel,
     -- | The unique identifier of the edge
-    edgeId :: t,
+    edgeId :: v,
     -- | The id of the out-vertex (tail) of the edge
-    edgeOut :: t,
+    edgeOut :: v,
     -- | The id of the in-vertex (head) of the edge
-    edgeIn :: t,
+    edgeIn :: v,
     -- | A key/value map of edge properties
-    edgeProperties :: (Map PropertyKey t)}
+    edgeProperties :: (Map PropertyKey v)}
   deriving (Eq, Ord, Read, Show)
 
 _Edge = (Core.Name "hydra/langs/tinkerpop/propertyGraph.Edge")

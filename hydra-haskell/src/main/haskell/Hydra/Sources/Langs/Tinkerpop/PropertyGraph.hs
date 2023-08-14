@@ -30,23 +30,23 @@ tinkerpopPropertyGraphModule = Module ns elements [hydraCoreModule] $
 
       def "Edge" $
         doc "An edge" $
-        lambda "t" $
+        lambda "v" $
         record [
           "label">:
             doc "The label of the edge" $
             pg "EdgeLabel",
           "id">:
             doc "The unique identifier of the edge"
-            "t",
+            "v",
           "out">:
             doc "The id of the out-vertex (tail) of the edge"
-            "t",
+            "v",
           "in">:
             doc "The id of the in-vertex (head) of the edge"
-            "t",
+            "v",
           "properties">:
             doc "A key/value map of edge properties" $
-            Types.map (pg "PropertyKey") "t"],
+            Types.map (pg "PropertyKey") "v"],
 
       def "EdgeLabel" $
         doc "The label of an edge" $
