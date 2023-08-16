@@ -30,5 +30,22 @@ hydraTier3Module = Module (Namespace "hydra/tier3") elements [hydraCoreModule] $
     Just ("A module for miscellaneous tier-3 functions and constants.")
   where
    elements = [
---     traceSummaryDef
+     el traceSummaryDef
      ]
+
+traceSummaryDef :: Definition (Trace -> String)
+traceSummaryDef = tier3Definition "traceSummary" $
+  doc "Summarize a trace as a string" $
+--  function traceT stringT $
+  lambda "t" $ (
+    (Strings.intercalate @@ "\n" @@ (Lists.concat2 @@ var "messageLines" @@ var "keyvalLines"))
+      `with` [
+        "messageLines">: (Lists.nub @@ (Flows.traceMessages @@ var "t")),
+        "keyvalLines">: Logic.ifElse
+          @@ (list [])
+          @@ (Lists.cons @@ "key/value pairs: "
+            @@ (Lists.map @@ (var "toLine") @@ (Maps.toList @@ (Flows.traceOther @@ var "t"))))
+          @@ (Maps.isEmpty @@ (Flows.traceOther @@ var "t")),
+        "toLine">:
+          function (pairT stringT termKV) stringT $
+          lambda "pair" $ "\t" ++ (first @@ var "pair") ++ ": " ++ (Io.showTerm @@ (second @@ var "pair"))])
