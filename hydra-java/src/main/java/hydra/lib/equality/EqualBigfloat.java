@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 public class EqualBigfloat<A> extends EqualityFunction<A, Double> {
     public EqualBigfloat() {
-        super(PrimitiveType.bigfloat());
+        super(PrimitiveType.bigfloat(), Relation.EQUALS);
     }
 
     public static Function<Double, Boolean> apply(Double second) {
@@ -15,6 +15,6 @@ public class EqualBigfloat<A> extends EqualityFunction<A, Double> {
     }
 
     public static Boolean apply(Double first, Double second) {
-        return 0 == first.compareTo(second);
+        return first.equals(second);
     }
 }
