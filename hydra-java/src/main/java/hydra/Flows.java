@@ -3,6 +3,7 @@ package hydra;
 import hydra.compute.Flow;
 import hydra.compute.FlowState;
 import hydra.compute.Trace;
+import hydra.tier1.Tier1;
 import hydra.tools.FlowException;
 import hydra.tools.TriFunction;
 
@@ -207,5 +208,13 @@ public interface Flows {
      */
     static <S, X> Flow<S, X> unexpected(String cat, Object obj) {
         return fail("expected " + cat + " but found: " + obj);
+    }
+
+    /**
+     * Continue a flow after adding a warning message
+     */
+    static <S, X> Flow<S, X> warn(String message, Flow<S, X> flow) {
+        Function<Flow<S, X>, Flow<S, X>> f = Tier1.warn(message);
+        return f.apply(flow);
     }
 }
