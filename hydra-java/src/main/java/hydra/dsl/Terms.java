@@ -19,6 +19,7 @@ import hydra.core.OptionalCases;
 import hydra.core.Projection;
 import hydra.core.Record;
 import hydra.core.Term;
+import hydra.core.Tuple;
 import hydra.core.UnitType;
 
 import hydra.core.Nominal;
@@ -213,6 +214,14 @@ public interface Terms {
 
     static <A> Term<A> optional(final Optional<Term<A>> maybeTerm) {
         return new Term.Optional<>(maybeTerm);
+    }
+
+    static <A> Term<A> pair(final Term<A> left, final Term<A> right) {
+        return new Term.Product<>(Arrays.asList(left, right));
+    }
+
+    static <A> Term<A> pair(final Tuple.Tuple2<Term<A>, Term<A>> tuple) {
+        return pair(tuple.object1, tuple.object2);
     }
 
     static <A> Term<A> primitive(final Name primName) {
