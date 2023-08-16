@@ -89,7 +89,7 @@ checkIntegerAdapter = checkAdapter id integerAdapter context
 checkDataAdapter :: [TypeVariant] -> Type Kv -> Type Kv -> Bool -> Term Kv -> Term Kv -> H.Expectation
 checkDataAdapter = checkAdapter stripTerm termAdapter termTestContext
 
-checkSerdeRoundTrip :: (Type Kv -> GraphFlow Kv (Coder (Graph Kv) (Graph Kv) (Term Kv) BS.ByteString))
+checkSerdeRoundTrip :: (Type Kv -> Flow (Graph Kv) (Coder (Graph Kv) (Graph Kv) (Term Kv) BS.ByteString))
   -> TypedTerm Kv -> H.Expectation
 checkSerdeRoundTrip mkSerde (TypedTerm typ term) = do
     case mserde of
@@ -100,7 +100,7 @@ checkSerdeRoundTrip mkSerde (TypedTerm typ term) = do
   where
     FlowState mserde _ trace = unFlow (mkSerde typ) testGraph emptyTrace
 
-checkSerialization :: (Type Kv -> GraphFlow Kv (Coder (Graph Kv) (Graph Kv) (Term Kv) String))
+checkSerialization :: (Type Kv -> Flow (Graph Kv) (Coder (Graph Kv) (Graph Kv) (Term Kv) String))
   -> TypedTerm Kv -> String -> H.Expectation
 checkSerialization mkSerdeStr (TypedTerm typ term) expected = do
     case mserde of
@@ -112,20 +112,20 @@ checkSerialization mkSerdeStr (TypedTerm typ term) expected = do
     normalize = unlines . L.filter (not . L.null) . lines
     FlowState mserde _ trace = unFlow (mkSerdeStr typ) testGraph emptyTrace
 
-eval :: Term Kv -> GraphFlow Kv (Term Kv)
+eval :: Term Kv -> Flow (Graph Kv) (Term Kv)
 eval = reduceTerm True M.empty
 
-shouldFail :: GraphFlow Kv a -> H.Expectation
+shouldFail :: Flow (Graph Kv) a -> H.Expectation
 shouldFail f = H.shouldBe True (Y.isNothing $ flowStateValue $ unFlow f testGraph emptyTrace)
 
-shouldSucceed :: GraphFlow Kv a -> H.Expectation
+shouldSucceed :: Flow (Graph Kv) a -> H.Expectation
 shouldSucceed f = case my of
     Nothing -> HL.assertFailure (traceSummary trace)
     Just y -> True `H.shouldBe` True
   where
     FlowState my _ trace = unFlow f testGraph emptyTrace
 
-shouldSucceedWith :: (Eq a, Show a) => GraphFlow Kv a -> a -> H.Expectation
+shouldSucceedWith :: (Eq a, Show a) => Flow (Graph Kv) a -> a -> H.Expectation
 shouldSucceedWith f x = case my of
     Nothing -> HL.assertFailure (traceSummary trace)
     Just y -> y `H.shouldBe` x

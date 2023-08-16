@@ -18,7 +18,6 @@ import Hydra.CoreDecoding
 import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Mantle
-import Hydra.Flows
 import Hydra.Reduction
 import Hydra.Rewriting
 import Hydra.LiteralAdapters
@@ -206,8 +205,8 @@ passFunction t@(TypeFunction (FunctionType dom cod)) = do
                 getCoder fname = Y.maybe idCoder adapterCoder $ M.lookup fname caseAds
           FunctionLambda (Lambda var body) -> FunctionLambda <$> (Lambda var <$> encodeDecode dir (adapterCoder codAd) body)
           FunctionPrimitive name -> pure $ FunctionPrimitive name
-          _ -> unexpected "lambda or elimination" f
-        _ -> unexpected "function term" term
+          _ -> unexpected "lambda or elimination" $ show f
+        _ -> unexpected "function term" $ show term
 
 passLambda :: (Ord a, Read a, Show a) => TypeAdapter a
 passLambda t@(TypeLambda (LambdaType (Name v) body)) = do
@@ -401,7 +400,7 @@ wrapToUnwrapped t@(TypeWrap (Nominal tname typ)) = do
       decoded <- coderDecode (adapterCoder ad) term
       return $ TermWrap $ Nominal tname decoded
 
-withGraphContext :: GraphFlow a x -> Flow (AdapterContext a) x
+withGraphContext :: Flow (Graph a) x -> Flow (AdapterContext a) x
 withGraphContext f = do
   cx <- getState
   withState (adapterContextGraph cx) f

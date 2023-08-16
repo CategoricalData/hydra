@@ -3,7 +3,6 @@ module Hydra.Langs.Json.Coder (jsonCoder, literalJsonCoder, untypedTermToJson) w
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Graph
-import Hydra.Flows
 import Hydra.Strip
 import Hydra.Basics
 import Hydra.Tier1
@@ -22,36 +21,36 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-jsonCoder :: (Eq a, Ord a, Read a, Show a) => Type a -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) Json.Value)
+jsonCoder :: (Eq a, Ord a, Read a, Show a) => Type a -> Flow (Graph a) (Coder (Graph a) (Graph a) (Term a) Json.Value)
 jsonCoder typ = do
   adapter <- languageAdapter jsonLanguage typ
   coder <- termCoder $ adapterTarget adapter
   return $ composeCoders (adapterCoder adapter) coder
 
-literalJsonCoder :: LiteralType -> GraphFlow a (Coder (Graph a) (Graph a) Literal Json.Value)
+literalJsonCoder :: LiteralType -> Flow (Graph a) (Coder (Graph a) (Graph a) Literal Json.Value)
 literalJsonCoder at = pure $ case at of
   LiteralTypeBoolean -> Coder {
     coderEncode = \(LiteralBoolean b) -> pure $ Json.ValueBoolean b,
     coderDecode = \s -> case s of
       Json.ValueBoolean b -> pure $ LiteralBoolean b
-      _ -> unexpected "boolean" s}
+      _ -> unexpected "boolean" $ show s}
   LiteralTypeFloat _ -> Coder {
     coderEncode = \(LiteralFloat (FloatValueBigfloat f)) -> pure $ Json.ValueNumber f,
     coderDecode = \s -> case s of
       Json.ValueNumber f -> pure $ LiteralFloat $ FloatValueBigfloat f
-      _ -> unexpected "number" s}
+      _ -> unexpected "number" $ show s}
   LiteralTypeInteger _ -> Coder {
     coderEncode = \(LiteralInteger (IntegerValueBigint i)) -> pure $ Json.ValueNumber $ bigintToBigfloat i,
     coderDecode = \s -> case s of
       Json.ValueNumber f -> pure $ LiteralInteger $ IntegerValueBigint $ bigfloatToBigint f
-      _ -> unexpected "number" s}
+      _ -> unexpected "number" $ show s}
   LiteralTypeString -> Coder {
     coderEncode = \(LiteralString s) -> pure $ Json.ValueString s,
     coderDecode = \s -> case s of
       Json.ValueString s' -> pure $ LiteralString s'
-      _ -> unexpected "string" s}
+      _ -> unexpected "string" $ show s}
 
-recordCoder :: (Eq a, Ord a, Read a, Show a) => RowType a -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) Json.Value)
+recordCoder :: (Eq a, Ord a, Read a, Show a) => RowType a -> Flow (Graph a) (Coder (Graph a) (Graph a) (Term a) Json.Value)
 recordCoder rt = do
     coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder (fieldTypeType f)) (rowTypeFields rt)
     return $ Coder (encode coders) (decode coders)
@@ -62,19 +61,19 @@ recordCoder rt = do
           encodeField (ft, coder) (Field fname fv) = case (fieldTypeType ft, fv) of
             (TypeOptional _, TermOptional Nothing) -> pure Nothing
             _ -> Just <$> ((,) <$> pure (unFieldName fname) <*> coderEncode coder fv)
-      _ -> unexpected "record" term
+      _ -> unexpected "record" $ show term
     decode coders n = case n of
       Json.ValueObject m -> Terms.record (rowTypeTypeName rt) <$> CM.mapM (decodeField m) coders -- Note: unknown fields are ignored
         where
           decodeField a (FieldType fname _, coder) = do
             v <- coderDecode coder $ Y.fromMaybe Json.ValueNull $ M.lookup (unFieldName fname) m
             return $ Field fname v
-      _ -> unexpected "mapping" n
+      _ -> unexpected "mapping" $ show n
     getCoder coders fname = Y.maybe error pure $ M.lookup fname coders
       where
         error = fail $ "no such field: " ++ fname
 
-termCoder :: (Eq a, Ord a, Read a, Show a) => Type a -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) Json.Value)
+termCoder :: (Eq a, Ord a, Read a, Show a) => Type a -> Flow (Graph a) (Coder (Graph a) (Graph a) (Term a) Json.Value)
 termCoder typ = case stripType typ of
   TypeLiteral at -> do
     ac <- literalJsonCoder at
@@ -88,13 +87,13 @@ termCoder typ = case stripType typ of
       coderEncode = \(TermList els) -> Json.ValueArray <$> CM.mapM (coderEncode lc) els,
       coderDecode = \n -> case n of
         Json.ValueArray nodes -> Terms.list <$> CM.mapM (coderDecode lc) nodes
-        _ -> unexpected "sequence" n}
+        _ -> unexpected "sequence" $ show n}
   TypeOptional ot -> do
     oc <- termCoder ot
     return Coder {
       coderEncode = \t -> case t of
         TermOptional el -> Y.maybe (pure Json.ValueNull) (coderEncode oc) el
-        _ -> unexpected "optional term" t,
+        _ -> unexpected "optional term" $ show t,
       coderDecode = \n -> case n of
         Json.ValueNull -> pure $ Terms.optional Nothing
         _ -> Terms.optional . Just <$> coderDecode oc n}
@@ -108,7 +107,7 @@ termCoder typ = case stripType typ of
         coderEncode = \(TermMap m) -> Json.ValueObject . M.fromList <$> CM.mapM encodeEntry (M.toList m),
         coderDecode = \n -> case n of
           Json.ValueObject m -> Terms.map . M.fromList <$> CM.mapM decodeEntry (M.toList m)
-          _ -> unexpected "mapping" n}
+          _ -> unexpected "mapping" $ show n}
     where
       toString cx v = if isStringKey cx
         then case stripTerm v of
@@ -141,7 +140,7 @@ untypedTermToJson term = case stripTerm term of
         return $ Json.ValueObject $ M.fromList $ case mkeyval of
           Nothing -> []
           Just keyval -> [keyval]
-      t -> unexpected "literal value" t
+      t -> unexpected "literal value" $ show t
   where
     fieldToKeyval f = do
         mjson <- forTerm $ fieldTerm f

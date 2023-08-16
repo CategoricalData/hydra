@@ -120,6 +120,15 @@ optional mel = TermCoder (Types.optional $ termCoderType mel) $ Coder encode dec
       Nothing -> pure Nothing
       Just v -> Just <$> (coderDecode $ termCoderCoder mel) v
 
+pair :: Show a => TermCoder a k -> TermCoder a v -> TermCoder a (k, v)
+pair kCoder vCoder = TermCoder (Types.product [termCoderType kCoder, termCoderType vCoder]) $ Coder encode decode
+  where
+    encode = Expect.pair (coderEncode $ termCoderCoder kCoder) (coderEncode $ termCoderCoder vCoder)
+    decode (k, v) = do
+      kTerm <- coderDecode (termCoderCoder kCoder) k
+      vTerm <- coderDecode (termCoderCoder vCoder) v
+      return $ Terms.product [kTerm, vTerm]
+
 prim0 :: Name -> TermCoder a x -> x -> Primitive a
 prim0 name output value = Primitive name (termCoderType output) impl
   where
@@ -165,15 +174,6 @@ prim3 name input1 input2 input3 output compute = Primitive name ft impl
       arg2 <- coderEncode (termCoderCoder input2) (args !! 1)
       arg3 <- coderEncode (termCoderCoder input3) (args !! 2)
       coderDecode (termCoderCoder output) $ compute arg1 arg2 arg3
-
-pair :: Show a => TermCoder a k -> TermCoder a v -> TermCoder a (k, v)
-pair kCoder vCoder = TermCoder (Types.product [termCoderType kCoder, termCoderType vCoder]) $ Coder encode decode
-  where
-    encode = Expect.pair (coderEncode $ termCoderCoder kCoder) (coderEncode $ termCoderCoder vCoder)
-    decode (k, v) = do
-      kTerm <- coderDecode (termCoderCoder kCoder) k
-      vTerm <- coderDecode (termCoderCoder vCoder) v
-      return $ Terms.product [kTerm, vTerm]
 
 set :: (Ord x, Ord a, Show a) => TermCoder a x -> TermCoder a (S.Set x)
 set els = TermCoder (Types.set $ termCoderType els) $ Coder encode decode

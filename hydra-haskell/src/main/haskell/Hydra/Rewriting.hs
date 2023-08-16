@@ -10,7 +10,6 @@ import Hydra.Core
 import Hydra.CoreEncoding
 import Hydra.Extras
 import Hydra.Graph
-import Hydra.Flows
 import Hydra.Module
 import Hydra.Lexical
 import Hydra.Mantle
@@ -26,7 +25,7 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-elementsWithDependencies :: [Element a] -> GraphFlow a [Element a]
+elementsWithDependencies :: [Element a] -> Flow (Graph a) [Element a]
 elementsWithDependencies original = CM.mapM requireElement allDepNames
   where
     depNames = S.toList . termDependencyNames True False False . elementData
@@ -35,7 +34,7 @@ elementsWithDependencies original = CM.mapM requireElement allDepNames
 -- | Turn arbitrary terms like 'add 42' into terms like '\x.add 42 x',
 --   whose arity (in the absence of application terms) is equal to the depth of nested lambdas.
 --   This function leaves application terms intact, simply rewriting their left and right subterms.
-expandLambdas :: (Ord a, Show a) => Term a -> GraphFlow a (Term a)
+expandLambdas :: (Ord a, Show a) => Term a -> Flow (Graph a) (Term a)
 expandLambdas term = do
     g <- getState
     rewriteTermM (expand g Nothing []) (pure . id) term
@@ -384,7 +383,7 @@ typeDependencyNames :: Type a -> S.Set Name
 typeDependencyNames = freeVariablesInType
 
 -- Where non-lambda terms with nonzero arity occur at the top level, turn them into lambdas
-wrapLambdas :: (Ord a, Show a) => Term a -> GraphFlow a (Term a)
+wrapLambdas :: (Ord a, Show a) => Term a -> Flow (Graph a) (Term a)
 wrapLambdas term = do
       arity <- typeArity <$> requireTypeAnnotation term
       return $ pad (missingArity arity term) term

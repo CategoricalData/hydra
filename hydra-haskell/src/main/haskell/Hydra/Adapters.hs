@@ -15,7 +15,6 @@ import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Module
-import Hydra.Flows
 import Hydra.TermAdapters
 import Hydra.AdapterUtils
 import Hydra.Reduction
@@ -28,11 +27,11 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-adaptAndEncodeType :: (Ord a, Read a, Show a) => Language a -> (Type a -> GraphFlow a t) -> Type a -> GraphFlow a t
+adaptAndEncodeType :: (Ord a, Read a, Show a) => Language a -> (Type a -> Flow (Graph a) t) -> Type a -> Flow (Graph a) t
 adaptAndEncodeType lang enc typ = adaptType lang typ >>= enc
 
 -- | Given a target language and a source type, find the target type to which the latter will be adapted.
-adaptType :: (Ord a, Read a, Show a) => Language a -> Type a -> GraphFlow a (Type a)
+adaptType :: (Ord a, Read a, Show a) => Language a -> Type a -> Flow (Graph a) (Type a)
 adaptType lang typ = adapterTarget <$> languageAdapter lang typ
 
 -- | Given a target language, a unidirectional last-mile encoding, and a source type,
@@ -40,9 +39,9 @@ adaptType lang typ = adapterTarget <$> languageAdapter lang typ
 --   according to the constraints of the target language, then carried by the last mile into the final representation
 constructCoder :: (Ord a, Read a, Show a)
   => Language a
-  -> (Term a -> GraphFlow a c)
+  -> (Term a -> Flow (Graph a) c)
   -> Type a
-  -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) c)
+  -> Flow (Graph a) (Coder (Graph a) (Graph a) (Term a) c)
 constructCoder lang encodeTerm typ = withTrace ("coder for " ++ describeType typ) $ do
     adapter <- languageAdapter lang typ
     return $ composeCoders (adapterCoder adapter) (unidirectionalCoder encodeTerm)
@@ -50,7 +49,7 @@ constructCoder lang encodeTerm typ = withTrace ("coder for " ++ describeType typ
 -- | Given a target language and a source type, produce an adapter,
 --   which rewrites the type and its terms according to the language's constraints
 languageAdapter :: (Ord a, Read a, Show a)
-  => Language a -> Type a -> GraphFlow a (SymmetricAdapter (Graph a) (Type a) (Term a))
+  => Language a -> Type a -> Flow (Graph a) (SymmetricAdapter (Graph a) (Type a) (Term a))
 languageAdapter lang typ0 = do
   -- TODO: rather than beta-reducing types all at once, we should incrementally extend the environment when application types are adapted
   -- typ <- betaReduceType typ0
@@ -75,9 +74,9 @@ languageAdapter lang typ0 = do
 --   transform a given module into a target representation
 transformModule :: (Ord a, Read a, Show a)
   => Language a
-  -> (Term a -> GraphFlow a e)
-  -> (Module a -> M.Map (Type a) (Coder (Graph a) (Graph a) (Term a) e) -> [(Element a, TypedTerm a)] -> GraphFlow a d)
-  -> Module a -> GraphFlow a d
+  -> (Term a -> Flow (Graph a) e)
+  -> (Module a -> M.Map (Type a) (Coder (Graph a) (Graph a) (Term a) e) -> [(Element a, TypedTerm a)] -> Flow (Graph a) d)
+  -> Module a -> Flow (Graph a) d
 transformModule lang encodeTerm createModule mod = withTrace ("transform module " ++ unNamespace (moduleNamespace mod)) $ do
     pairs <- withSchemaContext $ CM.mapM elementAsTypedTerm els
     let types = L.nub (typedTermType <$> pairs)

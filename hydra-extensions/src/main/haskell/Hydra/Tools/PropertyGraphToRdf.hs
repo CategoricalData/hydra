@@ -1,6 +1,6 @@
 module Hydra.Tools.PropertyGraphToRdf where
 
-import Hydra.Flows
+import Hydra.Kernel
 import qualified Hydra.Langs.Tinkerpop.PropertyGraph as PG
 import qualified Hydra.Langs.Rdf.Syntax as Rdf
 import qualified Hydra.Langs.Rdf.Utils as RdfUt
@@ -11,14 +11,14 @@ import qualified Control.Monad as CM
 
 
 data PropertyGraphRdfHelper a v = PropertyGraphRdfHelper {
-    encodeEdgeId :: v -> GraphFlow a Rdf.Iri,
-    encodeEdgeLabel :: PG.EdgeLabel -> GraphFlow a Rdf.Iri,
-    encodePropertyKey :: PG.PropertyKey -> GraphFlow a Rdf.Iri,
-    encodePropertyValue :: v -> GraphFlow a Rdf.Literal,
-    encodeVertexId :: v -> GraphFlow a Rdf.Iri,
-    encodeVertexLabel :: PG.VertexLabel -> GraphFlow a Rdf.Iri}
+    encodeEdgeId :: v -> Flow (Graph a) Rdf.Iri,
+    encodeEdgeLabel :: PG.EdgeLabel -> Flow (Graph a) Rdf.Iri,
+    encodePropertyKey :: PG.PropertyKey -> Flow (Graph a) Rdf.Iri,
+    encodePropertyValue :: v -> Flow (Graph a) Rdf.Literal,
+    encodeVertexId :: v -> Flow (Graph a) Rdf.Iri,
+    encodeVertexLabel :: PG.VertexLabel -> Flow (Graph a) Rdf.Iri}
 
-encodeEdge ::  PropertyGraphRdfHelper a v -> PG.Edge v -> GraphFlow a Rdf.Description
+encodeEdge ::  PropertyGraphRdfHelper a v -> PG.Edge v -> Flow (Graph a) Rdf.Description
 encodeEdge helper edge = do
     subj <- Rdf.ResourceIri <$> encodeVertexId helper eout
     obj <-  Rdf.NodeIri <$> encodeVertexId helper ein
@@ -28,7 +28,7 @@ encodeEdge helper edge = do
     -- Note: edge id and edge properties are discarded. An RDF-star encoding would preserve them
     PG.Edge elab _ eout ein _ = edge
 
-encodeVertex :: PropertyGraphRdfHelper a v -> PG.Vertex v -> GraphFlow a Rdf.Description
+encodeVertex :: PropertyGraphRdfHelper a v -> PG.Vertex v -> Flow (Graph a) Rdf.Description
 encodeVertex helper vertex = do
     subj <- Rdf.ResourceIri <$> encodeVertexId helper vid
     rtype <- Rdf.NodeIri <$> encodeVertexLabel helper vlab

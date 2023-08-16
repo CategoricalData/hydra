@@ -10,7 +10,6 @@ import Hydra.Compute
 import Hydra.Core
 import Hydra.Basics
 import Hydra.Module
-import Hydra.Flows
 import Hydra.Printing
 import Hydra.Mantle
 import Hydra.Kv

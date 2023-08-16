@@ -16,21 +16,21 @@ import qualified Data.Maybe as Y
 
 type Prefixes = M.Map Namespace String
 
-printModule :: (Ord a, Read a, Show a) => Module a -> GraphFlow a (M.Map FilePath String)
+printModule :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
 printModule mod = do
     files <- moduleToGraphqlSchemas mod
     return $ M.fromList (mapPair <$> M.toList files)
   where
     mapPair (path, sf) = (path, printExpr $ parenthesize $ exprDocument sf)
 
-moduleToGraphqlSchemas :: (Ord a, Read a, Show a) => Module a -> GraphFlow a (M.Map FilePath G.Document)
+moduleToGraphqlSchemas :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath G.Document)
 moduleToGraphqlSchemas mod = transformModule graphqlLanguage encodeTerm constructModule mod
 
 constructModule :: (Ord a, Read a, Show a)
   => Module a
   -> M.Map (Type a) (Coder (Graph a) (Graph a) (Term a) ())
   -> [(Element a, TypedTerm a)]
-  -> GraphFlow a (M.Map FilePath G.Document)
+  -> Flow (Graph a) (M.Map FilePath G.Document)
 constructModule mod coders pairs = do
     -- Gather all dependencies because GraphQL does not support imports (in a standard way)
     withDeps <- elementsWithDependencies $ fst <$> pairs
@@ -52,13 +52,13 @@ constructModule mod coders pairs = do
         then coreDecodeType (elementData el) >>= encodeNamedType prefixes el
         else fail $ "mapping of non-type elements to GraphQL is not yet supported: " ++ unName (elementName el)
 
-descriptionFromType :: Type a -> GraphFlow a (Maybe G.Description)
+descriptionFromType :: Type a -> Flow (Graph a) (Maybe G.Description)
 descriptionFromType typ = do
   ac <- graphAnnotations <$> getState
   mval <- annotationClassTypeDescription ac typ
   return $ G.Description . G.StringValue <$> mval
 
-encodeEnumFieldType :: FieldType a -> GraphFlow a G.EnumValueDefinition
+encodeEnumFieldType :: FieldType a -> Flow (Graph a) G.EnumValueDefinition
 encodeEnumFieldType ft = do
   desc <- descriptionFromType $ fieldTypeType ft
   return G.EnumValueDefinition {
@@ -72,7 +72,7 @@ encodeEnumFieldName = G.EnumValue . G.Name . sanitize . unFieldName
 encodeFieldName :: FieldName -> G.Name
 encodeFieldName = G.Name . sanitize . unFieldName
 
-encodeFieldType :: Show a => Prefixes -> FieldType a -> GraphFlow a G.FieldDefinition
+encodeFieldType :: Show a => Prefixes -> FieldType a -> Flow (Graph a) G.FieldDefinition
 encodeFieldType prefixes ft = do
   gtype <- encodeType prefixes $ fieldTypeType ft
   desc <- descriptionFromType $ fieldTypeType ft
@@ -83,19 +83,19 @@ encodeFieldType prefixes ft = do
     G.fieldDefinitionType = gtype,
     G.fieldDefinitionDirectives = Nothing}
 
-encodeLiteralType :: LiteralType -> GraphFlow a G.NamedType
+encodeLiteralType :: LiteralType -> Flow (Graph a) G.NamedType
 encodeLiteralType lt = G.NamedType . G.Name <$> case lt of
   LiteralTypeBoolean -> pure "Boolean"
   LiteralTypeFloat ft -> case ft of
     FloatTypeFloat64 -> pure "Float"
-    _ -> unexpected "64-bit float type" ft
+    _ -> unexpected "64-bit float type" $ show ft
   LiteralTypeInteger it -> case it of
     IntegerTypeInt32 -> pure "Int"
-    _ -> unexpected "32-bit signed integer type" it
+    _ -> unexpected "32-bit signed integer type" $ show it
   LiteralTypeString -> pure "String"
-  _ -> unexpected "GraphQL-compatible literal type" lt
+  _ -> unexpected "GraphQL-compatible literal type" $ show lt
 
-encodeNamedType :: (Ord a, Read a, Show a) => Prefixes -> Element a -> Type a -> GraphFlow a G.TypeDefinition
+encodeNamedType :: (Ord a, Read a, Show a) => Prefixes -> Element a -> Type a -> Flow (Graph a) G.TypeDefinition
 encodeNamedType prefixes el typ = do
     g <- getState
     let cx = AdapterContext g graphqlLanguage M.empty
@@ -121,15 +121,15 @@ encodeNamedType prefixes el typ = do
       TypeList _ -> wrapAsRecord
       TypeLiteral _ -> wrapAsRecord
       TypeVariable _ -> wrapAsRecord
-      t -> unexpected "record or union type" t
+      t -> unexpected "record or union type" $ show t
   where
     wrapAsRecord = encodeNamedType prefixes el $ TypeRecord $ RowType (elementName el) Nothing [
       FieldType (FieldName "value") typ]
 
-encodeTerm :: (Eq a, Ord a, Read a, Show a) => Term a -> GraphFlow a ()
+encodeTerm :: (Eq a, Ord a, Read a, Show a) => Term a -> Flow (Graph a) ()
 encodeTerm term = fail "not yet implemented"
 
-encodeType :: Show a => Prefixes -> Type a -> GraphFlow a G.Type
+encodeType :: Show a => Prefixes -> Type a -> Flow (Graph a) G.Type
 encodeType prefixes typ = case stripType typ of
     TypeOptional et -> case stripType et of
         TypeList et -> G.TypeList . G.ListType <$> encodeType prefixes et
@@ -138,7 +138,7 @@ encodeType prefixes typ = case stripType typ of
         TypeUnion rt -> forRowType rt
 --         TypeWrap name -> forName name
         TypeVariable name -> forName name
-        t -> unexpected "GraphQL-compatible type" t
+        t -> unexpected "GraphQL-compatible type" $ show t
       where
         forName = pure . G.TypeNamed . G.NamedType . encodeTypeName prefixes
         forRowType = forName . rowTypeTypeName
@@ -151,7 +151,7 @@ encodeType prefixes typ = case stripType typ of
         TypeUnion rt -> forRowType rt
         TypeVariable name -> forName name
 --         TypeWrap name -> forName name
-        _ -> unexpected "GraphQL-compatible non-null type" t
+        _ -> unexpected "GraphQL-compatible non-null type" $ show t
       where
         forName = pure . G.NonNullTypeNamed . G.NamedType . encodeTypeName prefixes
         forRowType = forName . rowTypeTypeName

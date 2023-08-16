@@ -11,7 +11,6 @@ import Hydra.CoreEncoding
 import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Mantle
-import Hydra.Flows
 import Hydra.Rewriting
 import Hydra.Substitution
 import Hydra.Unification
@@ -37,7 +36,7 @@ data InferenceContext a = InferenceContext {
 type TypingEnvironment a = M.Map Name (TypeScheme a)
 
 -- Decode a type, eliminating nominal types for the sake of unification
-decodeStructuralType :: Show a => Term a -> GraphFlow a (Type a)
+decodeStructuralType :: Show a => Term a -> Flow (Graph a) (Type a)
 decodeStructuralType term = do
   typ <- coreDecodeType term
   let typ' = stripType typ
@@ -324,10 +323,10 @@ termType (TermAnnotated (Annotated _ (_, typ, _))) = typ
 termTypeScheme :: Term (InfAnn a) -> TypeScheme a
 termTypeScheme = monotype . termType
 
-typeOfPrimitive :: Name -> GraphFlow a (Type a)
+typeOfPrimitive :: Name -> Flow (Graph a) (Type a)
 typeOfPrimitive name = primitiveType <$> requirePrimitive name
 
-typeOfTerm :: Term a -> GraphFlow a (Maybe (Type a))
+typeOfTerm :: Term a -> Flow (Graph a) (Maybe (Type a))
 typeOfTerm term = do
   anns <- graphAnnotations <$> getState
   annotationClassTypeOf anns $ annotationClassTermAnnotation anns term
@@ -343,7 +342,7 @@ withEnvironment m flow = do
   InferenceContext g e <- getState
   withState (InferenceContext g (m e)) flow
 
-withGraphContext :: GraphFlow a x -> Flow (InferenceContext a) x
+withGraphContext :: Flow (Graph a) x -> Flow (InferenceContext a) x
 withGraphContext f = do
   cx <- inferenceContextGraph <$> getState
   withState cx f

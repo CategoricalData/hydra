@@ -12,30 +12,30 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-literalCoder :: LiteralType -> GraphFlow a (Coder (Graph a) (Graph a) Literal YM.Scalar)
+literalCoder :: LiteralType -> Flow (Graph a) (Coder (Graph a) (Graph a) Literal YM.Scalar)
 literalCoder at = pure $ case at of
   LiteralTypeBoolean -> Coder {
     coderEncode = \(LiteralBoolean b) -> pure $ YM.ScalarBool b,
     coderDecode = \s -> case s of
       YM.ScalarBool b -> pure $ LiteralBoolean b
-      _ -> unexpected "boolean" s}
+      _ -> unexpected "boolean" $ show s}
   LiteralTypeFloat _ -> Coder {
     coderEncode = \(LiteralFloat (FloatValueBigfloat f)) -> pure $ YM.ScalarFloat f,
     coderDecode = \s -> case s of
       YM.ScalarFloat f -> pure $ LiteralFloat $ FloatValueBigfloat f
-      _ -> unexpected "floating-point value" s}
+      _ -> unexpected "floating-point value" $ show s}
   LiteralTypeInteger _ -> Coder {
     coderEncode = \(LiteralInteger (IntegerValueBigint i)) -> pure $ YM.ScalarInt i,
     coderDecode = \s -> case s of
       YM.ScalarInt i -> pure $ LiteralInteger $ IntegerValueBigint i
-      _ -> unexpected "integer" s}
+      _ -> unexpected "integer" $ show s}
   LiteralTypeString -> Coder {
     coderEncode = \(LiteralString s) -> pure $ YM.ScalarStr s,
     coderDecode = \s -> case s of
       YM.ScalarStr s' -> pure $ LiteralString s'
-      _ -> unexpected "string" s}
+      _ -> unexpected "string" $ show s}
 
-recordCoder :: (Eq a, Ord a, Read a, Show a) => RowType a -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) YM.Node)
+recordCoder :: (Eq a, Ord a, Read a, Show a) => RowType a -> Flow (Graph a) (Coder (Graph a) (Graph a) (Term a) YM.Node)
 recordCoder rt = do
     coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder (fieldTypeType f)) (rowTypeFields rt)
     return $ Coder (encode coders) (decode coders)
@@ -46,7 +46,7 @@ recordCoder rt = do
           encodeField (ft, coder) (Field (FieldName fn) fv) = case (fieldTypeType ft, fv) of
             (TypeOptional _, TermOptional Nothing) -> pure Nothing
             _ -> Just <$> ((,) <$> pure (yamlString fn) <*> coderEncode coder fv)
-      _ -> unexpected "record" term
+      _ -> unexpected "record" $ show term
     decode coders n = case n of
       YM.NodeMapping m -> Terms.record (rowTypeTypeName rt) <$>
           CM.mapM (decodeField m) coders -- Note: unknown fields are ignored
@@ -54,37 +54,37 @@ recordCoder rt = do
           decodeField a (FieldType fname@(FieldName fn) ft, coder) = do
             v <- coderDecode coder $ Y.fromMaybe yamlNull $ M.lookup (yamlString fn) m
             return $ Field fname v
-      _ -> unexpected "mapping" n
+      _ -> unexpected "mapping" $ show n
     getCoder coders fname = Y.maybe error pure $ M.lookup fname coders
       where
         error = fail $ "no such field: " ++ fname
 
-termCoder :: (Eq a, Ord a, Read a, Show a) => Type a -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) YM.Node)
+termCoder :: (Eq a, Ord a, Read a, Show a) => Type a -> Flow (Graph a) (Coder (Graph a) (Graph a) (Term a) YM.Node)
 termCoder typ = case stripType typ of
   TypeLiteral at -> do
     ac <- literalCoder at
     return Coder {
       coderEncode = \t -> case t of
          TermLiteral av -> YM.NodeScalar <$> coderEncode ac av
-         _ -> unexpected "literal" t,
+         _ -> unexpected "literal" $ show t,
       coderDecode = \n -> case n of
         YM.NodeScalar s -> Terms.literal <$> coderDecode ac s
-        _ -> unexpected "scalar node" n}
+        _ -> unexpected "scalar node" $ show n}
   TypeList lt -> do
     lc <- termCoder lt
     return Coder {
       coderEncode = \t -> case t of
          TermList els -> YM.NodeSequence <$> CM.mapM (coderEncode lc) els
-         _ -> unexpected "list" t,
+         _ -> unexpected "list" $ show t,
       coderDecode = \n -> case n of
         YM.NodeSequence nodes -> Terms.list <$> CM.mapM (coderDecode lc) nodes
-        _ -> unexpected "sequence" n}
+        _ -> unexpected "sequence" $ show n}
   TypeOptional ot -> do
     oc <- termCoder ot
     return Coder {
       coderEncode = \t -> case t of
          TermOptional el -> Y.maybe (pure yamlNull) (coderEncode oc) el
-         _ -> unexpected "optional" t,
+         _ -> unexpected "optional" $ show t,
       coderDecode = \n -> case n of
         YM.NodeScalar YM.ScalarNull -> pure $ Terms.optional Nothing
         _ -> Terms.optional . Just <$> coderDecode oc n}
@@ -96,13 +96,13 @@ termCoder typ = case stripType typ of
     return Coder {
       coderEncode = \t -> case t of
         TermMap m -> YM.NodeMapping . M.fromList <$> CM.mapM encodeEntry (M.toList m)
-        _ -> unexpected "term" t,
+        _ -> unexpected "term" $ show t,
       coderDecode = \n -> case n of
         YM.NodeMapping m -> Terms.map . M.fromList <$> CM.mapM decodeEntry (M.toList m)
-        _ -> unexpected "mapping" n}
+        _ -> unexpected "mapping" $ show n}
   TypeRecord rt -> recordCoder rt
 
-yamlCoder :: (Eq a, Ord a, Read a, Show a) => Type a -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) YM.Node)
+yamlCoder :: (Eq a, Ord a, Read a, Show a) => Type a -> Flow (Graph a) (Coder (Graph a) (Graph a) (Term a) YM.Node)
 yamlCoder typ = do
   adapter <- languageAdapter yamlLanguage typ
   coder <- termCoder $ adapterTarget adapter

@@ -14,7 +14,6 @@ module Hydra.Kernel (
   module Hydra.CoreEncoding,
   module Hydra.CoreLanguage,
   module Hydra.Extras,
-  module Hydra.Flows,
   module Hydra.Graph,
   module Hydra.Inference,
   module Hydra.Kv,
@@ -52,7 +51,6 @@ import Hydra.CoreDecoding
 import Hydra.CoreEncoding
 import Hydra.CoreLanguage
 import Hydra.Extras
-import Hydra.Flows
 import Hydra.Graph
 import Hydra.Inference
 import Hydra.Kv

@@ -2,7 +2,19 @@
 
 module Hydra.Tier3 where
 
-import Data.Int
-import Data.List
-import Data.Map
-import Data.Set
+import Hydra.Compute
+import Hydra.Lib.Io
+import qualified Hydra.Tier1 as Tier1
+
+import qualified Data.List as L
+import qualified Data.Map as M
+
+
+traceSummary :: Trace -> String
+traceSummary t = L.intercalate "\n" (messageLines ++ keyvalLines)
+  where
+    messageLines = L.nub $ traceMessages t
+    keyvalLines = if M.null (traceOther t)
+        then []
+        else "key/value pairs:":(toLine <$> M.toList (traceOther t))
+    toLine (k, v) = "\t" ++ k ++ ": " ++ showTerm v

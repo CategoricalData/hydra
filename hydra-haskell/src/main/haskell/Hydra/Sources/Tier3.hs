@@ -27,4 +27,6 @@ hydraTier3Module :: Module Kv
 hydraTier3Module = Module (Namespace "hydra/tier3") elements [hydraCoreModule] $
     Just ("A module for miscellaneous tier-3 functions and constants.")
   where
-   elements = []
+   elements = [
+--     traceSummaryDef
+     ]

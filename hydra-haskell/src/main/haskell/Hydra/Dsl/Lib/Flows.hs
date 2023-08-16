@@ -10,6 +10,7 @@ import qualified Hydra.Dsl.Types as Types
 
 import qualified Data.Map as M
 
+
 -- Primitives
 
 apply :: Datum (Flow s (x -> y) -> Flow s x -> Flow s y)

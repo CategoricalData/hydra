@@ -345,7 +345,7 @@ jsonToString v = case v of
   Json.ValueNumber d -> pure $ if fromIntegral (round d) == d
     then show (round d)
     else show d
-  _ -> unexpected "string, number, or boolean" v
+  _ -> unexpected "string, number, or boolean" $ show v
 
 showQname :: AvroQualifiedName -> String
 showQname (AvroQualifiedName mns local) = (Y.maybe "" (\ns -> ns ++ ".") mns) ++ local
@@ -365,7 +365,7 @@ stringToTerm typ s = case stripType typ of
         IntegerTypeUint32 -> IntegerValueUint32 <$> doRead s
         IntegerTypeUint64 -> IntegerValueUint64 <$> doRead s
       LiteralTypeString -> LiteralString <$> pure s
-      _ -> unexpected "literal type" lt
+      _ -> unexpected "literal type" $ show lt
   where
     doRead s = case TR.readEither s of
       Left msg -> fail $ "failed to read value: " ++ msg
@@ -386,6 +386,6 @@ termToString term = case stripTerm term of
       IntegerValueUint32 i -> show i
       IntegerValueUint64 i -> show i
     LiteralString s -> pure s
-    _ -> unexpected "boolean, integer, or string" l
+    _ -> unexpected "boolean, integer, or string" $ show l
   TermOptional (Just term') -> termToString term'
-  _ -> unexpected "literal value" term
+  _ -> unexpected "literal value" $ show term

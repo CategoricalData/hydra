@@ -16,7 +16,7 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-printModule :: (Ord a, Read a, Show a) => Module a -> GraphFlow a (M.Map FilePath String)
+printModule :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
 printModule mod = do
     files <- moduleToPegasusSchemas mod
     return $ M.fromList (mapPair <$> M.toList files)
@@ -28,7 +28,7 @@ constructModule :: (Ord a, Read a, Show a)
   -> Module a
   -> M.Map (Type a) (Coder (Graph a) (Graph a) (Term a) ())
   -> [(Element a, TypedTerm a)]
-  -> GraphFlow a (M.Map FilePath PDL.SchemaFile)
+  -> Flow (Graph a) (M.Map FilePath PDL.SchemaFile)
 constructModule aliases mod coders pairs = do
     sortedPairs <- case (topologicalSortElements $ fst <$> pairs) of
       Left comps -> fail $ "types form a cycle (unsupported in PDL): " ++ show (L.head comps)
@@ -65,7 +65,7 @@ constructModule aliases mod coders pairs = do
 --            deps = S.toList $ termDependencyNames False False False $ elementData el
 --            isExternal qn = PDL.qualifiedNameNamespace qn /= PDL.qualifiedNameNamespace qname
 
-moduleToPegasusSchemas :: (Ord a, Read a, Show a) => Module a -> GraphFlow a (M.Map FilePath PDL.SchemaFile)
+moduleToPegasusSchemas :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath PDL.SchemaFile)
 moduleToPegasusSchemas mod = do
   aliases <- importAliasesForModule mod
   transformModule pdlLanguage (encodeTerm aliases) (constructModule aliases) mod
@@ -75,17 +75,17 @@ doc s = PDL.Annotations s False
 
 encodeAdaptedType :: (Ord a, Read a, Show a)
   => M.Map Namespace String -> Type a
-  -> GraphFlow a (Either PDL.Schema PDL.NamedSchema_Type)
+  -> Flow (Graph a) (Either PDL.Schema PDL.NamedSchema_Type)
 encodeAdaptedType aliases typ = do
   g <- getState
   let cx = AdapterContext g pdlLanguage M.empty
   ad <- withState cx $ termAdapter typ
   encodeType aliases $ adapterTarget ad
 
-encodeTerm :: (Eq a, Ord a, Read a, Show a) => M.Map Namespace String -> Term a -> GraphFlow a ()
+encodeTerm :: (Eq a, Ord a, Read a, Show a) => M.Map Namespace String -> Term a -> Flow (Graph a) ()
 encodeTerm aliases term = fail "not yet implemented"
 
-encodeType :: (Eq a, Show a) => M.Map Namespace String -> Type a -> GraphFlow a (Either PDL.Schema PDL.NamedSchema_Type)
+encodeType :: (Eq a, Show a) => M.Map Namespace String -> Type a -> Flow (Graph a) (Either PDL.Schema PDL.NamedSchema_Type)
 encodeType aliases typ = case typ of
     TypeAnnotated (Annotated typ' _) -> encodeType aliases typ'
     TypeList lt -> Left . PDL.SchemaArray <$> encode lt
@@ -95,11 +95,11 @@ encodeType aliases typ = case typ of
       LiteralTypeFloat ft -> case ft of
         FloatTypeFloat32 -> pure PDL.PrimitiveTypeFloat
         FloatTypeFloat64 -> pure PDL.PrimitiveTypeDouble
-        _ -> unexpected "float32 or float64" ft
+        _ -> unexpected "float32 or float64" $ show ft
       LiteralTypeInteger it -> case it of
         IntegerTypeInt32 -> pure PDL.PrimitiveTypeInt
         IntegerTypeInt64 -> pure PDL.PrimitiveTypeLong
-        _ -> unexpected "int32 or int64" it
+        _ -> unexpected "int32 or int64" $ show it
       LiteralTypeString -> pure PDL.PrimitiveTypeString
     TypeMap (MapType kt vt) -> Left . PDL.SchemaMap <$> encode vt -- note: we simply assume string as a key type
     TypeVariable name -> pure $ Left $ PDL.SchemaNamed $ pdlNameForElement aliases True name
@@ -115,7 +115,7 @@ encodeType aliases typ = case typ of
         else Left . PDL.SchemaUnion . PDL.UnionSchema <$> CM.mapM encodeUnionField (rowTypeFields rt)
       where
         isEnum = L.foldl (\b t -> b && stripType t == Types.unit) True $ fmap fieldTypeType (rowTypeFields rt)
-    _ -> unexpected "PDL-supported type" typ
+    _ -> unexpected "PDL-supported type" $ show typ
   where
     encode t = case stripType t of
       TypeRecord (RowType _ Nothing []) -> encode Types.int32 -- special case for the unit type

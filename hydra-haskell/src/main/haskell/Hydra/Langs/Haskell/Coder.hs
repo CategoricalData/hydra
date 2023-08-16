@@ -20,7 +20,7 @@ import qualified Data.Maybe as Y
 import Hydra.Rewriting (removeTypeAnnotations, removeTermAnnotations)
 
 
-adaptTypeToHaskellAndEncode :: (Ord a, Read a, Show a) => Namespaces -> Type a -> GraphFlow a H.Type
+adaptTypeToHaskellAndEncode :: (Ord a, Read a, Show a) => Namespaces -> Type a -> Flow (Graph a) H.Type
 adaptTypeToHaskellAndEncode namespaces = adaptAndEncodeType haskellLanguage (encodeType namespaces)
 
 constantDecls :: Graph a -> Namespaces -> Name -> Type a -> [H.DeclarationWithComments]
@@ -48,7 +48,7 @@ constructModule :: (Ord a, Read a, Show a)
   => Namespaces
   -> Module a
   -> M.Map (Type a) (Coder (Graph a) (Graph a) (Term a) H.Expression)
-  -> [(Element a, TypedTerm a)] -> GraphFlow a H.Module
+  -> [(Element a, TypedTerm a)] -> Flow (Graph a) H.Module
 constructModule namespaces mod coders pairs = do
     g <- getState
     decls <- L.concat <$> CM.mapM (createDeclarations g) pairs
@@ -80,7 +80,7 @@ constructModule namespaces mod coders pairs = do
           where
             toImport name = H.Import False name Nothing Nothing
 
-encodeFunction :: (Eq a, Ord a, Read a, Show a) => Namespaces -> Function a -> GraphFlow a H.Expression
+encodeFunction :: (Eq a, Ord a, Read a, Show a) => Namespaces -> Function a -> Flow (Graph a) H.Expression
 encodeFunction namespaces fun = case fun of
     FunctionElimination e -> case e of
       EliminationList fun -> do
@@ -132,21 +132,21 @@ encodeFunction namespaces fun = case fun of
     FunctionLambda (Lambda (Name v) body) -> hslambda v <$> encodeTerm namespaces body
     FunctionPrimitive name -> pure $ H.ExpressionVariable $ hsPrimitiveReference name
 
-encodeLiteral :: Literal -> GraphFlow a H.Expression
+encodeLiteral :: Literal -> Flow (Graph a) H.Expression
 encodeLiteral av = case av of
     LiteralBoolean b -> pure $ hsvar $ if b then "True" else "False"
     LiteralFloat fv -> case fv of
       FloatValueFloat32 f -> pure $ hslit $ H.LiteralFloat f
       FloatValueFloat64 f -> pure $ hslit $ H.LiteralDouble f
-      _ -> unexpected "floating-point number" fv
+      _ -> unexpected "floating-point number" $ show fv
     LiteralInteger iv -> case iv of
       IntegerValueBigint i -> pure $ hslit $ H.LiteralInteger i
       IntegerValueInt32 i -> pure $ hslit $ H.LiteralInt i
-      _ -> unexpected "integer" iv
+      _ -> unexpected "integer" $ show iv
     LiteralString s -> pure $ hslit $ H.LiteralString s
-    _ -> unexpected "literal value" av
+    _ -> unexpected "literal value" $ show av
 
-encodeTerm :: (Eq a, Ord a, Read a, Show a) => Namespaces -> Term a -> GraphFlow a H.Expression
+encodeTerm :: (Eq a, Ord a, Read a, Show a) => Namespaces -> Term a -> Flow (Graph a) H.Expression
 encodeTerm namespaces term = do
    case stripTerm term of
     TermApplication (Application fun arg) -> hsapp <$> encode fun <*> encode arg
@@ -188,7 +188,7 @@ encodeTerm namespaces term = do
   where
     encode = encodeTerm namespaces
 
-encodeType :: Show a => Namespaces -> Type a -> GraphFlow a H.Type
+encodeType :: Show a => Namespaces -> Type a -> Flow (Graph a) H.Type
 encodeType namespaces typ = withTrace "encode type" $ case stripType typ of
     TypeApplication (ApplicationType lhs rhs) -> toTypeApplication <$> CM.sequence [encode lhs, encode rhs]
     TypeFunction (FunctionType dom cod) -> H.TypeFunction <$> (H.Type_Function <$> encode dom <*> encode cod)
@@ -233,7 +233,7 @@ encodeType namespaces typ = withTrace "encode type" $ case stripType typ of
     encode = encodeType namespaces
     wrap name = pure $ H.TypeVariable $ elementReference namespaces name
 
-encodeTypeWithClassAssertions :: (Ord a, Read a, Show a) => Namespaces -> M.Map Name (S.Set TypeClass) -> Type a -> GraphFlow a H.Type
+encodeTypeWithClassAssertions :: (Ord a, Read a, Show a) => Namespaces -> M.Map Name (S.Set TypeClass) -> Type a -> Flow (Graph a) H.Type
 encodeTypeWithClassAssertions namespaces classes typ = withTrace "encode with assertions" $ do
   htyp <- adaptTypeToHaskellAndEncode namespaces typ
   if L.null assertPairs
@@ -256,12 +256,12 @@ encodeTypeWithClassAssertions namespaces classes typ = withTrace "encode with as
           where
             toPair c = (name, c)
 
-moduleToHaskellModule :: (Ord a, Read a, Show a) => Module a -> GraphFlow a H.Module
+moduleToHaskellModule :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) H.Module
 moduleToHaskellModule mod = do
     namespaces <- namespacesForModule mod
     transformModule haskellLanguage (encodeTerm namespaces) (constructModule namespaces) mod
 
-printModule :: (Ord a, Read a, Show a) => Module a -> GraphFlow a (M.Map FilePath String)
+printModule :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
 printModule mod = do
   hsmod <- moduleToHaskellModule mod
   let s = printExpr $ parenthesize $ toTree hsmod
@@ -269,7 +269,7 @@ printModule mod = do
 
 toDataDeclaration :: (Ord a, Read a, Show a)
   => M.Map (Type a) (Coder (Graph a) (Graph a) (Term a) H.Expression) -> Namespaces
-  -> (Element a, TypedTerm a) -> GraphFlow a H.DeclarationWithComments
+  -> (Element a, TypedTerm a) -> Flow (Graph a) H.DeclarationWithComments
 toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term coder Nothing
   where
     coder = Y.fromJust $ M.lookup typ coders
@@ -307,7 +307,7 @@ toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term
         return $ H.DeclarationWithComments decl comments
 
 toTypeDeclarations :: (Ord a, Read a, Show a)
-  => Namespaces -> Element a -> Term a -> GraphFlow a [H.DeclarationWithComments]
+  => Namespaces -> Element a -> Term a -> Flow (Graph a) [H.DeclarationWithComments]
 toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (elementName el)) $ do
     g <- getState
     let lname = localNameOfEager $ elementName el

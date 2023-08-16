@@ -96,7 +96,7 @@ decodeNamedSchema value = do
   ns <- optString avro_namespace m
   typ <- requireString avro_type m
   nt <- case M.lookup typ decoders of
-    Nothing -> unexpected "Avro type" typ
+    Nothing -> unexpected "Avro type" $ show typ
     Just d -> d m
   aliases <- decodeAliases m
   doc <- optString avro_doc m
@@ -110,7 +110,7 @@ decodeNamedSchema value = do
 
 decodeOrder :: String -> Flow s Avro.Order
 decodeOrder o = case M.lookup o orderMap of
-    Nothing -> unexpected "ordering" o
+    Nothing -> unexpected "ordering" $ show o
     Just order -> pure order
   where
     orderMap = M.fromList [
@@ -129,7 +129,7 @@ decodeSchema v = case v of
   Json.ValueObject m -> do
       typ <- requireString avro_type m
       case M.lookup typ decoders of
-        Nothing -> unexpected "\"array\" or \"map\"" typ
+        Nothing -> unexpected "\"array\" or \"map\"" $ show typ
         Just d -> d m
     where
       decoders = M.fromList [
@@ -156,7 +156,7 @@ decodeSchema v = case v of
         (avro_null, Avro.PrimitiveNull),
         (avro_string, Avro.PrimitiveString)]
   Json.ValueNull -> pure $ Avro.SchemaPrimitive $ Avro.PrimitiveNull
-  _ -> unexpected "JSON array, object, or string" v
+  _ -> unexpected "JSON array, object, or string" $ show v
 
 getAnnotations :: M.Map String Json.Value -> M.Map String Json.Value
 getAnnotations = M.fromList . Y.catMaybes . fmap toPair . M.toList

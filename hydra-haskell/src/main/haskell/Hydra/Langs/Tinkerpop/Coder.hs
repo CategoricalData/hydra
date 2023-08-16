@@ -64,7 +64,7 @@ edgeCoder dir schema source eidType tname label outLabel inLabel mIdAdapter outA
             outId <- getVertexId PG.DirectionOut fieldsm outAdapter
             inId <- getVertexId PG.DirectionIn fieldsm inAdapter
             return $ elementTreeEdge (PG.Edge label id outId inId props) []
-          _ -> unexpected "record (1)" term
+          _ -> unexpected "record (1)" $ show term
         decode el = noDecoding "edge"
         getVertexId dir1 fieldsm adapter = if dir1 == dir
           then pure $ schemaDefaultVertexId schema
@@ -119,7 +119,7 @@ elementCoder mparent schema source vidType eidType = case stripType source of
             Just spec -> Y.maybe (fail "no in-vertex label") (pure . PG.VertexLabel) $ projectionSpecAlias spec
           return $ edgeCoder dir schema source eidType name label outLabel inLabel idAdapter outAdapter inAdapter propAdapters
 
-    _ -> unexpected "record type" source
+    _ -> unexpected "record type" $ show source
   where
     dir = Y.maybe PG.DirectionBoth fst mparent
     parentLabel = Y.maybe (PG.VertexLabel "NOLABEL") snd mparent
@@ -248,7 +248,7 @@ encodeProperty fields adapter = do
         TermOptional ov -> case ov of
           Nothing -> pure Nothing
           Just v -> Just <$> encodeValue v
-        _ -> unexpected "optional term" value
+        _ -> unexpected "optional term" $ show value
       _ -> Just <$> encodeValue value
   where
     fname = fieldTypeName $ adapterSource adapter
@@ -285,7 +285,7 @@ propertyAdapter schema (ProjectionSpec tfield values alias) = do
         where
           encode dfield = withTrace ("encode property field " ++ show (unFieldName $ fieldTypeName tfield)) $ do
             if fieldName dfield /= fieldTypeName tfield
-              then unexpected ("field '" ++ unFieldName (fieldTypeName tfield) ++ "'") dfield
+              then unexpected ("field '" ++ unFieldName (fieldTypeName tfield) ++ "'") $ show dfield
               else do
                 result <- traverseToSingleTerm "property traversal" traversal $ fieldTerm dfield
                 value <- coderEncode (schemaPropertyValues schema) result
@@ -338,7 +338,7 @@ vertexCoder schema source vidType tname label idAdapter propAdapters edgeAdapter
               props <- encodeProperties (fieldMap fields) propAdapters
               deps <- Y.catMaybes <$> CM.mapM (findDeps vid fieldsm) edgeAdapters
               return $ elementTreeVertex (PG.Vertex label vid props) deps
-            _ -> unexpected "record (2)" term
+            _ -> unexpected "record (2)" $ show term
           where
             findDeps vid fieldsm (AdjacentEdgeAdapter dir field label ad) = do
                 case M.lookup (fieldTypeName field) fieldsm of
@@ -347,7 +347,7 @@ vertexCoder schema source vidType tname label idAdapter propAdapters edgeAdapter
               where
                 fixTree tree = case PG.elementTreeSelf tree of
                   PG.ElementEdge e -> pure $ tree {PG.elementTreeSelf = PG.ElementEdge $ fixEdge e}
-                  _ -> unexpected "edge tree" tree
+                  _ -> unexpected "edge tree" $ show tree
                 fixEdge e = case dir of
                   PG.DirectionOut -> e {PG.edgeOut = vid}
                   PG.DirectionIn -> e {PG.edgeIn = vid}
