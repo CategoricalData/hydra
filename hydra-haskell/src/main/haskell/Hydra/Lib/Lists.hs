@@ -43,6 +43,9 @@ length = L.length
 map :: (x -> y) -> [x] -> [y]
 map = fmap
 
+nub :: Eq x => [x] -> [x]
+nub = L.nub
+
 pure :: x -> [x]
 pure e = [e]
 
