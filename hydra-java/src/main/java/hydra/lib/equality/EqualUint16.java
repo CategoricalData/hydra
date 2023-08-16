@@ -1,34 +1,13 @@
 package hydra.lib.equality;
 
-import hydra.compute.Flow;
-import hydra.core.Term;
-import hydra.core.Type;
-import hydra.dsl.Expect;
-import hydra.graph.Graph;
-import java.util.function.Function;
+import hydra.lib.PrimitiveType;
 
-import static hydra.dsl.Types.*;
+import java.util.function.Function;
 
 
 public class EqualUint16<A> extends EqualityFunction<A, Character> {
-    @Override
-    protected String typeName() {
-        return "Uint16";
-    }
-
-    @Override
-    protected Type<A> datatype() {
-        return uint16();
-    }
-
-    @Override
-    protected Flow<Graph<A>, Character> expect(Term<A> term) {
-        return Expect.uint16(term);
-    }
-
-    @Override
-    protected boolean checkEqual(Character first, Character second) {
-        return apply(first, second);
+    public EqualUint16() {
+        super(PrimitiveType.uint16());
     }
 
     public static Function<Character, Boolean> apply(Character second) {

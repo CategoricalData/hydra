@@ -1,36 +1,14 @@
 package hydra.lib.equality;
 
-import hydra.compute.Flow;
-import hydra.core.Term;
-import hydra.core.Type;
-import hydra.dsl.Expect;
-import hydra.graph.Graph;
-import java.util.function.Function;
+import hydra.lib.PrimitiveType;
 
-import static hydra.dsl.Types.*;
+import java.util.function.Function;
 
 
 public class EqualFloat32<A> extends EqualityFunction<A, Float> {
-    @Override
-    protected String typeName() {
-        return "Float32";
+    public EqualFloat32() {
+        super(PrimitiveType.float32());
     }
-
-    @Override
-    protected Type<A> datatype() {
-        return float32();
-    }
-
-    @Override
-    protected Flow<Graph<A>, Float> expect(Term<A> term) {
-        return Expect.float32(term);
-    }
-
-    @Override
-    protected boolean checkEqual(Float first, Float second) {
-        return apply(first, second);
-    }
-
     public static Function<Float, Boolean> apply(Float second) {
         return first -> apply(first, second);
     }

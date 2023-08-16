@@ -1,35 +1,14 @@
 package hydra.lib.equality;
 
-import hydra.compute.Flow;
-import hydra.core.Term;
-import hydra.core.Type;
-import hydra.dsl.Expect;
-import hydra.graph.Graph;
+import hydra.lib.PrimitiveType;
+
 import java.math.BigInteger;
 import java.util.function.Function;
 
-import static hydra.dsl.Types.*;
-
 
 public class EqualBigint<A> extends EqualityFunction<A, BigInteger> {
-    @Override
-    protected String typeName() {
-        return "Bigint";
-    }
-
-    @Override
-    protected Type<A> datatype() {
-        return bigint();
-    }
-
-    @Override
-    protected Flow<Graph<A>, BigInteger> expect(Term<A> term) {
-        return Expect.bigint(term);
-    }
-
-    @Override
-    protected boolean checkEqual(BigInteger first, BigInteger second) {
-        return apply(first, second);
+    public EqualBigint() {
+        super(PrimitiveType.bigint());
     }
 
     public static Function<BigInteger, Boolean> apply(BigInteger second) {

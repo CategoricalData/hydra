@@ -1,33 +1,14 @@
 package hydra.lib.equality;
 
-import hydra.compute.Flow;
-import hydra.core.Term;
 import hydra.core.Type;
-import hydra.graph.Graph;
-import java.util.function.Function;
+import hydra.lib.PrimitiveType;
 
-import static hydra.dsl.Types.*;
+import java.util.function.Function;
 
 
 public class EqualType<A> extends EqualityFunction<A, Type<A>> {
-    @Override
-    protected String typeName() {
-        return "Type";
-    }
-
-    @Override
-    protected Type<A> datatype() {
-        return hydra.dsl.Types.apply(variable(Type.NAME), variable("a"));
-    }
-
-    @Override
-    protected Flow<Graph<A>, Type<A>> expect(Term<A> encoded) {
-        throw new UnsupportedOperationException(); // TODO: implement epsilon decoding
-    }
-
-    @Override
-    protected boolean checkEqual(Type<A> first, Type<A> second) {
-        return apply(first, second);
+    public EqualType() {
+        super(PrimitiveType.type());
     }
 
     public static <A> Function<Type<A>, Boolean> apply(Type<A> second) {

@@ -3,7 +3,6 @@ package hydra.dsl;
 import hydra.Flows;
 import hydra.Reduction;
 import hydra.compute.Flow;
-import hydra.compute.Trace;
 import hydra.core.Field;
 import hydra.core.FieldName;
 import hydra.core.FloatValue;
@@ -12,6 +11,7 @@ import hydra.core.Literal;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Tuple;
+import hydra.core.Type;
 import hydra.graph.Graph;
 import hydra.tools.PrettyPrinter;
 
@@ -365,6 +365,14 @@ public class Expect {
                 return pure(instance.value);
             }
         }));
+    }
+
+    public static <S, A> Flow<S, Term<A>> term(final Term<A> term) {
+        return pure(term);
+    }
+
+    public static <S, A> Flow<S, Type<A>> type(final Term<A> term) {
+        return fail("Core decoding not yet implemented");
     }
 
     public static <S, A> Flow<S, Byte> uint8(final Term<A> term) {

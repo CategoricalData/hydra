@@ -1,34 +1,13 @@
 package hydra.lib.equality;
 
-import hydra.compute.Flow;
-import hydra.core.Term;
-import hydra.core.Type;
-import hydra.dsl.Expect;
-import hydra.graph.Graph;
-import java.util.function.Function;
+import hydra.lib.PrimitiveType;
 
-import static hydra.dsl.Types.*;
+import java.util.function.Function;
 
 
 public class EqualInt64<A> extends EqualityFunction<A, Long> {
-    @Override
-    protected String typeName() {
-        return "Int64";
-    }
-
-    @Override
-    protected Type<A> datatype() {
-        return int64();
-    }
-
-    @Override
-    protected Flow<Graph<A>, Long> expect(Term<A> term) {
-        return Expect.int64(term);
-    }
-
-    @Override
-    protected boolean checkEqual(Long first, Long second) {
-        return apply(first, second);
+    public EqualInt64() {
+        super(PrimitiveType.int64());
     }
 
     public static Function<Long, Boolean> apply(Long second) {
