@@ -37,6 +37,7 @@ public class Libraries {
         List<PrimitiveFunction<A>> prims = new ArrayList<>();
         prims.addAll(equalityPrimitives());
         prims.addAll(flowsPrimitives());
+        prims.addAll(ioPrimitives());
         prims.addAll(listsPrimitives());
         prims.addAll(literalsPrimitives());
         prims.addAll(logicPrimitives());
@@ -81,6 +82,11 @@ public class Libraries {
                 new hydra.lib.flows.Bind<>(),
                 new hydra.lib.flows.Map<>(),
                 new hydra.lib.flows.Pure<>());
+    }
+
+    private static <A> List<PrimitiveFunction<A>> ioPrimitives() {
+        return Arrays.asList(
+                new hydra.lib.io.ShowTerm<>());
     }
 
     private static <A> List<PrimitiveFunction<A>> listsPrimitives() {
