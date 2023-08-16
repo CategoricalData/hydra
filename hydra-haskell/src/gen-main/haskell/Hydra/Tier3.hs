@@ -2,19 +2,28 @@
 
 module Hydra.Tier3 where
 
-import Hydra.Compute
-import Hydra.Lib.Io
-import qualified Hydra.Tier1 as Tier1
+import qualified Hydra.Compute as Compute
+import qualified Hydra.Core as Core
+import qualified Hydra.Lib.Io as Io
+import qualified Hydra.Lib.Lists as Lists
+import qualified Hydra.Lib.Logic as Logic
+import qualified Hydra.Lib.Maps as Maps
+import qualified Hydra.Lib.Strings as Strings
+import Data.Int
+import Data.List
+import Data.Map
+import Data.Set
 
-import qualified Data.List as L
-import qualified Data.Map as M
-
-
-traceSummary :: Trace -> String
-traceSummary t = L.intercalate "\n" (messageLines ++ keyvalLines)
-  where
-    messageLines = L.nub $ traceMessages t
-    keyvalLines = if M.null (traceOther t)
-        then []
-        else "key/value pairs:":(toLine <$> M.toList (traceOther t))
-    toLine (k, v) = "\t" ++ k ++ ": " ++ showTerm v
+-- | Summarize a trace as a string
+traceSummary :: (Compute.Trace -> String)
+traceSummary t =  
+  let keyvalLines = (Logic.ifElse [] (Lists.cons "key/value pairs: " (Lists.map toLine (Maps.toList (Compute.traceOther t)))) (Maps.isEmpty (Compute.traceOther t))) 
+      messageLines = (Lists.nub (Compute.traceMessages t))
+      toLine = (\pair -> Strings.cat [
+              Strings.cat [
+                Strings.cat [
+                  "\t",
+                  (fst pair)],
+                ": "],
+              (Io.showTerm (snd pair))])
+  in (Strings.intercalate "\n" (Lists.concat2 messageLines keyvalLines))

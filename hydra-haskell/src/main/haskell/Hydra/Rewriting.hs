@@ -149,6 +149,7 @@ rewriteTerm f mf = rewrite fsub f
             EliminationWrap name -> EliminationWrap name
             EliminationOptional (OptionalCases nothing just) -> EliminationOptional
               (OptionalCases (recurse nothing) (recurse just))
+            EliminationProduct tp -> EliminationProduct tp
             EliminationRecord p -> EliminationRecord p
             EliminationUnion (CaseStatement n def cases) -> EliminationUnion $ CaseStatement n (recurse <$> def) (forField <$> cases)
           FunctionLambda (Lambda v body) -> FunctionLambda $ Lambda v $ recurse body
@@ -185,6 +186,7 @@ rewriteTermM f mf = rewrite fsub f
             EliminationWrap name -> pure $ EliminationWrap name
             EliminationOptional (OptionalCases nothing just) -> EliminationOptional <$>
               (OptionalCases <$> recurse nothing <*> recurse just)
+            EliminationProduct tp -> pure $ EliminationProduct tp
             EliminationRecord p -> pure $ EliminationRecord p
             EliminationUnion (CaseStatement n def cases) -> do
               rdef <- case def of
