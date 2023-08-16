@@ -183,6 +183,9 @@ unit = TermRecord $ Record _UnitType []
 unitVariant :: Name -> FieldName -> Term a
 unitVariant tname fname = variant tname fname unit
 
+untuple :: Int -> Int -> Term a
+untuple arity idx = TermFunction $ FunctionElimination $ EliminationProduct $ TupleProjection arity idx
+
 unwrap :: Name -> Term a
 unwrap = TermFunction . FunctionElimination . EliminationWrap
 

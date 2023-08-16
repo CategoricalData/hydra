@@ -72,6 +72,8 @@ data Elimination a =
   EliminationList (Term a) |
   -- | Eliminates an optional term by matching over the two possible cases
   EliminationOptional (OptionalCases a) |
+  -- | Eliminates a tuple by projecting the component at a given 0-indexed offset
+  EliminationProduct TupleProjection |
   -- | Eliminates a record by projecting a given field
   EliminationRecord Projection |
   -- | Eliminates a union term by matching over the fields of the union. This is a case statement.
@@ -85,6 +87,8 @@ _Elimination = (Name "hydra/core.Elimination")
 _Elimination_list = (FieldName "list")
 
 _Elimination_optional = (FieldName "optional")
+
+_Elimination_product = (FieldName "product")
 
 _Elimination_record = (FieldName "record")
 
@@ -545,6 +549,21 @@ _Term_union = (FieldName "union")
 _Term_variable = (FieldName "variable")
 
 _Term_wrap = (FieldName "wrap")
+
+-- | A tuple elimination; a projection from an integer-indexed product
+data TupleProjection = 
+  TupleProjection {
+    -- | The arity of the tuple
+    tupleProjectionArity :: Int,
+    -- | The 0-indexed offset from the beginning of the tuple
+    tupleProjectionIndex :: Int}
+  deriving (Eq, Ord, Read, Show)
+
+_TupleProjection = (Name "hydra/core.TupleProjection")
+
+_TupleProjection_arity = (FieldName "arity")
+
+_TupleProjection_index = (FieldName "index")
 
 -- | A data type
 data Type a = 

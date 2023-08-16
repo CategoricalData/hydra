@@ -449,6 +449,7 @@ encodeElimination aliases marg dom cod elm = case elm of
         where
           qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
     return jexp
+  EliminationProduct (TupleProjection arity idx) -> fail "Tuple eliminations are not yet suported in Java"
   EliminationUnion (CaseStatement tname def fields) -> do
      case marg of
       Nothing -> do

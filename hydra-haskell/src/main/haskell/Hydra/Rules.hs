@@ -109,6 +109,12 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
                               ++ [(cod, termType ni), (Types.function dom cod, termType ji)]
           yieldElimination (EliminationOptional $ OptionalCases ni ji) t constraints
 
+        EliminationProduct (TupleProjection arity idx) -> do
+          types <- CM.replicateM arity freshName
+          let cod = types !! idx
+          let t = Types.function (Types.product types) cod
+          yieldElimination (EliminationProduct $ TupleProjection arity idx) t []
+
         EliminationRecord (Projection name fname) -> do
           rt <- withGraphContext $ requireRecordType True name
           sfield <- findMatchingField fname (rowTypeFields rt)
