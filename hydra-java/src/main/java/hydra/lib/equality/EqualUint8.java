@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 public class EqualUint8<A> extends EqualityFunction<A, Byte> {
     public EqualUint8() {
-        super(PrimitiveType.uint8());
+        super(PrimitiveType.uint8(), Relation.EQUALS);
     }
 
     public static Function<Byte, Boolean> apply(Byte second) {
@@ -15,6 +15,6 @@ public class EqualUint8<A> extends EqualityFunction<A, Byte> {
     }
 
     public static Boolean apply(Byte first, Byte second) {
-        return 0 == first.compareTo(second);
+        return first.equals(second);
     }
 }

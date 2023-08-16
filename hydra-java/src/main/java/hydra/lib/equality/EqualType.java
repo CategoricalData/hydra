@@ -8,7 +8,7 @@ import java.util.function.Function;
 
 public class EqualType<A> extends EqualityFunction<A, Type<A>> {
     public EqualType() {
-        super(PrimitiveType.type());
+        super(PrimitiveType.type(), Relation.EQUALS);
     }
 
     public static <A> Function<Type<A>, Boolean> apply(Type<A> second) {

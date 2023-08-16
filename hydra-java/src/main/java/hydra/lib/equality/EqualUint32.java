@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 public class EqualUint32<A> extends EqualityFunction<A, Long> {
     public EqualUint32() {
-        super(PrimitiveType.uint32());
+        super(PrimitiveType.uint32(), Relation.EQUALS);
     }
 
     public static Function<Long, Boolean> apply(Long second) {
@@ -15,6 +15,6 @@ public class EqualUint32<A> extends EqualityFunction<A, Long> {
     }
 
     public static Boolean apply(Long first, Long second) {
-        return 0 == first.compareTo(second);
+        return first.equals(second);
     }
 }

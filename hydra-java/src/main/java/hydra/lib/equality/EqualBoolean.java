@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 public class EqualBoolean<A> extends EqualityFunction<A, Boolean> {
     public EqualBoolean() {
-        super(PrimitiveType.boolean_());
+        super(PrimitiveType.boolean_(), Relation.EQUALS);
     }
 
     public static Function<Boolean, Boolean> apply(Boolean second) {
@@ -15,6 +15,6 @@ public class EqualBoolean<A> extends EqualityFunction<A, Boolean> {
     }
 
     public static Boolean apply(Boolean first, Boolean second) {
-        return 0 == first.compareTo(second);
+        return first.equals(second);
     }
 }

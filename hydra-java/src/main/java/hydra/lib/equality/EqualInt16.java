@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 public class EqualInt16<A> extends EqualityFunction<A, Short> {
     public EqualInt16() {
-        super(PrimitiveType.int16());
+        super(PrimitiveType.int16(), Relation.EQUALS);
     }
 
     public static Function<Short, Boolean> apply(Short second) {
@@ -15,6 +15,6 @@ public class EqualInt16<A> extends EqualityFunction<A, Short> {
     }
 
     public static Boolean apply(Short first, Short second) {
-        return 0 == first.compareTo(second);
+        return first.equals(second);
     }
 }

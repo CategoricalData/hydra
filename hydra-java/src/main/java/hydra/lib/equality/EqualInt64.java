@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 public class EqualInt64<A> extends EqualityFunction<A, Long> {
     public EqualInt64() {
-        super(PrimitiveType.int64());
+        super(PrimitiveType.int64(), Relation.EQUALS);
     }
 
     public static Function<Long, Boolean> apply(Long second) {
@@ -15,6 +15,6 @@ public class EqualInt64<A> extends EqualityFunction<A, Long> {
     }
 
     public static Boolean apply(Long first, Long second) {
-        return 0 == first.compareTo(second);
+        return first.equals(second);
     }
 }
