@@ -1,34 +1,13 @@
 package hydra.lib.equality;
 
-import hydra.compute.Flow;
-import hydra.core.Term;
-import hydra.core.Type;
-import hydra.dsl.Expect;
-import hydra.graph.Graph;
-import java.util.function.Function;
+import hydra.lib.PrimitiveType;
 
-import static hydra.dsl.Types.*;
+import java.util.function.Function;
 
 
 public class EqualBinary<A> extends EqualityFunction<A, String> {
-    @Override
-    protected String typeName() {
-        return "Binary";
-    }
-
-    @Override
-    protected Type<A> datatype() {
-        return binary();
-    }
-
-    @Override
-    protected Flow<Graph<A>, String> expect(Term<A> term) {
-        return Expect.binary(term);
-    }
-
-    @Override
-    protected boolean checkEqual(String first, String second) {
-        return apply(first, second);
+    public EqualBinary() {
+        super(PrimitiveType.binary());
     }
 
     public static Function<String, Boolean> apply(String second) {

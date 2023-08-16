@@ -1,34 +1,13 @@
 package hydra.lib.equality;
 
-import hydra.compute.Flow;
-import hydra.core.Term;
-import hydra.core.Type;
-import hydra.dsl.Expect;
-import hydra.graph.Graph;
-import java.util.function.Function;
+import hydra.lib.PrimitiveType;
 
-import static hydra.dsl.Types.*;
+import java.util.function.Function;
 
 
 public class EqualUint8<A> extends EqualityFunction<A, Byte> {
-    @Override
-    protected String typeName() {
-        return "Uint8";
-    }
-
-    @Override
-    protected Type<A> datatype() {
-        return uint8();
-    }
-
-    @Override
-    protected Flow<Graph<A>, Byte> expect(Term<A> term) {
-        return Expect.uint8(term);
-    }
-
-    @Override
-    protected boolean checkEqual(Byte first, Byte second) {
-        return apply(first, second);
+    public EqualUint8() {
+        super(PrimitiveType.uint8());
     }
 
     public static Function<Byte, Boolean> apply(Byte second) {

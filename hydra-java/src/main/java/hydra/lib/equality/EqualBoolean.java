@@ -1,34 +1,13 @@
 package hydra.lib.equality;
 
-import hydra.compute.Flow;
-import hydra.core.Term;
-import hydra.core.Type;
-import hydra.dsl.Expect;
-import hydra.graph.Graph;
-import java.util.function.Function;
+import hydra.lib.PrimitiveType;
 
-import static hydra.dsl.Types.*;
+import java.util.function.Function;
 
 
 public class EqualBoolean<A> extends EqualityFunction<A, Boolean> {
-    @Override
-    protected String typeName() {
-        return "Boolean";
-    }
-
-    @Override
-    protected Type<A> datatype() {
-        return boolean_();
-    }
-
-    @Override
-    protected Flow<Graph<A>, Boolean> expect(Term<A> term) {
-        return Expect.boolean_(term);
-    }
-
-    @Override
-    protected boolean checkEqual(Boolean first, Boolean second) {
-        return apply(first, second);
+    public EqualBoolean() {
+        super(PrimitiveType.boolean_());
     }
 
     public static Function<Boolean, Boolean> apply(Boolean second) {
