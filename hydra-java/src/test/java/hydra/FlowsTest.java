@@ -2,14 +2,23 @@ package hydra;
 
 import hydra.compute.Flow;
 import hydra.compute.FlowState;
+import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import org.junit.jupiter.api.Test;
 
-import static hydra.Flows.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static hydra.Flows.EMPTY_TRACE;
+import static hydra.Flows.bind;
+import static hydra.Flows.getState;
+import static hydra.Flows.map;
+import static hydra.Flows.mapM;
+import static hydra.Flows.pure;
+import static hydra.Flows.putState;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class FlowsTest {
@@ -49,5 +58,44 @@ public class FlowsTest {
         FlowState<String, Integer> result3 = flow3.value.apply("foo").apply(EMPTY_TRACE);
         assertEquals("foo;42", result3.state);
         assertEquals(Optional.of(43), result3.value);
+    }
+
+    @Test
+    public void checkWarnings() {
+        Flow<Void, Integer> flow0 = pure(42);
+        Flow<Void, Integer> flow1 = Flows.warn("oops", flow0);
+        Flow<Void, Integer> flow2 = Flows.warn("drat", flow1);
+        Flow<Void, Integer> flow3 = Flows.warn("oops", flow2);
+        Flow<Void, Integer> flow4 = Flows.bind(flow3, x -> Flows.fail("failed"));
+
+        FlowState<Void, Integer> result0 = flow0.value.apply(null).apply(EMPTY_TRACE);
+        FlowState<Void, Integer> result1 = flow1.value.apply(null).apply(EMPTY_TRACE);
+        FlowState<Void, Integer> result2 = flow2.value.apply(null).apply(EMPTY_TRACE);
+        FlowState<Void, Integer> result3 = flow3.value.apply(null).apply(EMPTY_TRACE);
+        FlowState<Void, Integer> result4 = flow4.value.apply(null).apply(EMPTY_TRACE);
+
+        assertTrue(result0.value.isPresent());
+        assertTrue(result1.value.isPresent());
+        assertTrue(result2.value.isPresent());
+        assertTrue(result3.value.isPresent());
+        assertFalse(result4.value.isPresent());
+
+        assertEquals(0, result0.trace.messages.size());
+        assertEquals(1, result1.trace.messages.size());
+        assertEquals(2, result2.trace.messages.size());
+        assertEquals(3, result3.trace.messages.size());
+        assertEquals(4, result4.trace.messages.size());
+
+        assertEquals("Warning: oops", result1.trace.messages.get(0));
+
+        // Warning messages are FILO
+        assertEquals("Warning: drat", result2.trace.messages.get(0));
+        assertEquals("Warning: oops", result2.trace.messages.get(1));
+
+        // Failure message appears at the end
+        assertEquals("Warning: oops", result4.trace.messages.get(0));
+        assertEquals("Warning: drat", result4.trace.messages.get(1));
+        assertEquals("Warning: oops", result4.trace.messages.get(2));
+        assertEquals("Error: failed", result4.trace.messages.get(3));
     }
 }
