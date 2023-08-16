@@ -9,6 +9,7 @@ import hydra.tools.TriFunction;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -161,7 +162,7 @@ public interface Flows {
      * Map a monadic function over a set, producing a flow of sets
      */
     static <S, X, Y> Flow<S, Set<Y>> mapM(Set<X> xs, Function<X, Flow<S, Y>> f) {
-        Flow<S, Set<Y>> result = pure(Collections.emptySet());
+        Flow<S, Set<Y>> result = pure(new HashSet<>(xs.size()));
         for (X x : xs) {
             result = bind(result, ys -> map(f.apply(x), y -> {
                 ys.add(y); // Modify in place
