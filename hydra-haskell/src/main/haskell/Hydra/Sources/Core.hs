@@ -63,6 +63,9 @@ hydraCoreModule = Module ns elements [] $
           "optional">:
             doc "Eliminates an optional term by matching over the two possible cases" $
             core "OptionalCases" @@ "a",
+          "product">:
+            doc "Eliminates a tuple by projecting the component at a given 0-indexed offset" $
+            core "TupleProjection",
           "record">:
             doc "Eliminates a record by projecting a given field" $
             core "Projection",
@@ -325,6 +328,16 @@ hydraCoreModule = Module ns elements [] $
             core "Name",
           "wrap">:
             core "Nominal" @@ (core "Term" @@ "a")],
+
+      def "TupleProjection" $
+        doc "A tuple elimination; a projection from an integer-indexed product" $
+        record [
+          "arity">:
+            doc "The arity of the tuple"
+            int32,
+          "index">:
+            doc "The 0-indexed offset from the beginning of the tuple"
+            int32],
 
       def "Type" $
         doc "A data type" $

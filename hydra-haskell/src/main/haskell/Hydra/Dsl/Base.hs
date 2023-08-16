@@ -95,6 +95,9 @@ doc s (Datum term) = Datum $ setTermDescription (Just s) term
 field :: FieldName -> Datum a -> Field Kv
 field fname (Datum val) = Field fname val
 
+first :: Datum ((a, b) -> a)
+first = Datum $ Terms.untuple 2 0
+
 fld :: FieldName -> Datum a -> Fld Kv
 fld fname (Datum val) = Fld $ Field fname val
 
@@ -178,6 +181,9 @@ record name fields = Datum $ Terms.record name fields
 
 ref :: Definition a -> Datum a
 ref (Definition name _) = Datum (TermVariable name)
+
+second :: Datum ((a, b) -> a)
+second = Datum $ Terms.untuple 2 1
 
 set :: S.Set (Datum a) -> Datum (S.Set a)
 set = Datum . Terms.set . S.fromList . fmap unDatum . S.toList

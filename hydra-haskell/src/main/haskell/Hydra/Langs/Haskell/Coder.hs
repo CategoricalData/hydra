@@ -101,6 +101,9 @@ encodeFunction namespaces fun = case fun of
           rhs <- H.CaseRhs <$> encodeTerm namespaces rhsTerm
           return $ H.Alternative lhs rhs Nothing
         return $ hslambda "x" $ H.ExpressionCase $ H.Expression_Case (hsvar "x") [nothingAlt, justAlt]
+      EliminationProduct (TupleProjection arity idx) -> if arity == 2
+        then return $ hsvar $ if idx == 0 then "fst" else "snd"
+        else fail "Eliminations for tuples of arity > 2 are not supported yet in the Haskell coder"
       EliminationRecord (Projection dn fname) -> return $ H.ExpressionVariable $ recordFieldReference namespaces dn fname
       EliminationUnion (CaseStatement dn def fields) -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
         where
