@@ -449,7 +449,18 @@ encodeElimination aliases marg dom cod elm = case elm of
         where
           qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
     return jexp
-  EliminationProduct (TupleProjection arity idx) -> fail "Tuple eliminations are not yet suported in Java"
+  EliminationProduct (TupleProjection arity idx) -> if arity > javaMaxTupleLength
+      then fail $ "Tuple eliminations of arity greater than " ++ show javaMaxTupleLength ++ " are unsupported"
+      else pure $ case marg of
+        Nothing -> javaLambda var $ accessExpr $ javaIdentifierToJavaExpression $ variableToJavaIdentifier var
+          where
+            var = Name "w"
+        Just jarg -> accessExpr jarg
+    where
+      accessExpr jarg = javaFieldAccessToJavaExpression $ Java.FieldAccess qual accessor
+        where
+          accessor = javaIdentifier $ "object" ++ show (idx + 1)
+          qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
   EliminationUnion (CaseStatement tname def fields) -> do
      case marg of
       Nothing -> do
