@@ -32,6 +32,9 @@ length = Datum $ Terms.primitive _lists_length
 map :: Datum ((a -> b) -> [a] -> [b])
 map = Datum $ Terms.primitive _lists_map
 
+nub :: Eq a => Datum ([a] -> [a])
+nub = Datum $ Terms.primitive _lists_nub
+
 pure :: Datum (a -> [a])
 pure = Datum $ Terms.primitive _lists_pure
 

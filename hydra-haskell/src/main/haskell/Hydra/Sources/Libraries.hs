@@ -78,6 +78,7 @@ _lists_intersperse = qname _hydra_lib_lists "intersperse" :: Name
 _lists_last = qname _hydra_lib_lists "last" :: Name
 _lists_length = qname _hydra_lib_lists "length" :: Name
 _lists_map = qname _hydra_lib_lists "map" :: Name
+_lists_nub = qname _hydra_lib_lists "nub" :: Name
 _lists_pure = qname _hydra_lib_lists "pure" :: Name
 _lists_reverse = qname _hydra_lib_lists "reverse" :: Name
 _lists_tail = qname _hydra_lib_lists "tail" :: Name
@@ -258,6 +259,7 @@ hydraLibListsPrimitives = [
     prim1 _lists_last (list x) x Lists.last,
     prim1 _lists_length (list x) int32 Lists.length,
     prim2Interp _lists_map (function x y) (list x) (list y) mapInterp,
+    prim1 _lists_nub (list x) (list x) Lists.nub,
     prim1 _lists_pure x (list x) Lists.pure,
     prim1 _lists_reverse (list x) (list x) Lists.reverse,
     prim1 _lists_tail (list x) (list x) Lists.tail]

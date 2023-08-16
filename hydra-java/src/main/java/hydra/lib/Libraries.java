@@ -96,6 +96,7 @@ public class Libraries {
                 new hydra.lib.lists.Last<>(),
                 new hydra.lib.lists.Length<>(),
                 new hydra.lib.lists.Map<>(),
+                new hydra.lib.lists.Nub<>(),
                 new hydra.lib.lists.Pure<>(),
                 new hydra.lib.lists.Reverse<>(),
                 new hydra.lib.lists.Tail<>());
