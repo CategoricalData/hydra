@@ -10,7 +10,6 @@ import Hydra.Extras
 import Hydra.Graph
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding
-import Hydra.Flows
 import Hydra.Mantle
 import Hydra.Rewriting
 import Hydra.Tier1
@@ -48,7 +47,7 @@ getAttr key = Flow q
 getAttrWithDefault :: String -> Term Kv -> Flow s (Term Kv)
 getAttrWithDefault key def = Y.fromMaybe def <$> getAttr key
 
-getDescription :: Kv -> GraphFlow Kv (Y.Maybe String)
+getDescription :: Kv -> Flow (Graph Kv) (Y.Maybe String)
 getDescription kv = case getAnnotation kvDescription kv of
   Nothing -> pure Nothing
   Just term -> case term of
@@ -58,10 +57,10 @@ getDescription kv = case getAnnotation kvDescription kv of
 getTermAnnotation :: String -> Term Kv -> Y.Maybe (Term Kv)
 getTermAnnotation key = getAnnotation key . termAnnotationInternal
 
-getTermDescription :: Term Kv -> GraphFlow Kv (Y.Maybe String)
+getTermDescription :: Term Kv -> Flow (Graph Kv) (Y.Maybe String)
 getTermDescription = getDescription . termAnnotationInternal
 
-getType :: Kv -> GraphFlow Kv (Y.Maybe (Type Kv))
+getType :: Kv -> Flow (Graph Kv) (Y.Maybe (Type Kv))
 getType kv = case getAnnotation kvType kv of
   Nothing -> pure Nothing
   Just dat -> Just <$> coreDecodeType dat
@@ -69,7 +68,7 @@ getType kv = case getAnnotation kvType kv of
 getTypeAnnotation :: String -> Type Kv -> Y.Maybe (Term Kv)
 getTypeAnnotation key = getAnnotation key . typeAnnotationInternal
 
-getTypeClasses :: Type Kv -> GraphFlow Kv (M.Map Name (S.Set TypeClass))
+getTypeClasses :: Type Kv -> Flow (Graph Kv) (M.Map Name (S.Set TypeClass))
 getTypeClasses typ = case getTypeAnnotation key_classes typ of
     Nothing -> pure M.empty
     Just term -> Expect.map coreDecodeName (Expect.set decodeClass) term
@@ -77,9 +76,9 @@ getTypeClasses typ = case getTypeAnnotation key_classes typ of
     decodeClass term = Expect.unitVariant _TypeClass term >>= \fn -> case fn of
       _TypeClass_equality -> pure TypeClassEquality
       _TypeClass_ordering -> pure TypeClassOrdering
-      _ -> unexpected "type class" term
+      _ -> unexpected "type class" $ show term
 
-getTypeDescription :: Type Kv -> GraphFlow Kv (Y.Maybe String)
+getTypeDescription :: Type Kv -> Flow (Graph Kv) (Y.Maybe String)
 getTypeDescription = getDescription . typeAnnotationInternal
 
 hasFlag :: String -> Flow s Bool

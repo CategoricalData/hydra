@@ -6,6 +6,7 @@ import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Flows as Flows
+import qualified Hydra.Lib.Strings as Strings
 import Data.Int
 import Data.List
 import Data.Map
@@ -41,3 +42,12 @@ requireTypeAnnotation term =
               Nothing -> (Flows.fail "missing type annotation")
               Just v -> (Flows.pure v))
   in (Flows.bind (Flows.map Graph.graphAnnotations getState) annsToType)
+
+unexpected :: (String -> String -> Compute.Flow s y)
+unexpected cat obj = (Flows.fail (Strings.cat [
+  Strings.cat [
+    Strings.cat [
+      "expected ",
+      cat],
+    " but found: "],
+  obj]))

@@ -10,7 +10,6 @@ import Hydra.Strip
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Lexical
-import Hydra.Flows
 import Hydra.Printing
 import Hydra.Rewriting
 import Hydra.Substitution

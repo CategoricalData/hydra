@@ -4,6 +4,7 @@ module Hydra.RewritingSpec where
 
 import Hydra.Kernel
 import Hydra.Dsl.Terms
+import Hydra.Flows
 
 import Hydra.TestUtils
 

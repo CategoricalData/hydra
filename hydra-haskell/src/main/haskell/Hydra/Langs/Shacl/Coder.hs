@@ -15,7 +15,7 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-shaclCoder :: (Eq a, Show a) => Module a -> GraphFlow a (Shacl.ShapesGraph, Graph a -> GraphFlow a Rdf.Graph)
+shaclCoder :: (Eq a, Show a) => Module a -> Flow (Graph a) (Shacl.ShapesGraph, Graph a -> Flow (Graph a) Rdf.Graph)
 shaclCoder mod = do
     g <- getState
     -- Note: untested since deprecation of element schemas
@@ -52,14 +52,14 @@ defaultCommonProperties = Shacl.CommonProperties {
 elementIri :: Element a -> Rdf.Iri
 elementIri = nameToIri . elementName
 
-encodeField :: Show a => Name -> Rdf.Resource -> Field a -> GraphFlow a [Rdf.Triple]
+encodeField :: Show a => Name -> Rdf.Resource -> Field a -> Flow (Graph a) [Rdf.Triple]
 encodeField rname subject field = do
   node <- nextBlankNode
   descs <- encodeTerm node (fieldTerm field)
   return $ triplesOf descs ++
     forObjects subject (propertyIri rname $ fieldName field) (subjectsOf descs)
 
-encodeFieldType :: Show a => Name -> Maybe Integer -> FieldType a -> GraphFlow a (Shacl.Definition Shacl.PropertyShape)
+encodeFieldType :: Show a => Name -> Maybe Integer -> FieldType a -> Flow (Graph a) (Shacl.Definition Shacl.PropertyShape)
 encodeFieldType rname order (FieldType fname ft) = do
     shape <- forType (Just 1) (Just 1) ft
     return $ Shacl.Definition iri shape
@@ -100,7 +100,7 @@ encodeLiteralType lt = case lt of
   where
     xsd local = common [Shacl.CommonConstraintDatatype $ xmlSchemaDatatypeIri local]
 
-encodeTerm :: Show a => Rdf.Resource -> Term a -> GraphFlow a [Rdf.Description]
+encodeTerm :: Show a => Rdf.Resource -> Term a -> Flow (Graph a) [Rdf.Description]
 encodeTerm subject term = case term of
   TermAnnotated (Annotated inner ann) -> encodeTerm subject inner -- TODO: extract an rdfs:comment
   TermList terms -> encodeList subject terms
@@ -150,9 +150,9 @@ encodeTerm subject term = case term of
   TermUnion (Injection rname field) -> do
     triples <- encodeField rname subject field
     return [withType rname $ Rdf.Description (resourceToNode subject) (Rdf.Graph $ S.fromList triples)]
-  _ -> unexpected "RDF-compatible term" term
+  _ -> unexpected "RDF-compatible term" $ show term
 
-encodeType :: Show a => Type a -> GraphFlow a Shacl.CommonProperties
+encodeType :: Show a => Type a -> Flow (Graph a) Shacl.CommonProperties
 encodeType typ = case stripType typ of
     TypeList _ -> any
     TypeLiteral lt -> pure $ encodeLiteralType lt
@@ -168,7 +168,7 @@ encodeType typ = case stripType typ of
         return $ common [Shacl.CommonConstraintXone $ S.fromList shapes]
       where
         toShape prop = node [Shacl.CommonConstraintProperty $ S.fromList [Shacl.ReferenceDefinition prop]]
-    _ -> unexpected "type" typ
+    _ -> unexpected "type" $ show typ
   where
     -- SHACL's built-in vocabulary is less expressive than Hydra's type system, so for now, SHACL validation simply ends
     -- when inexpressible types are encountered. However, certain constructs such as lists can be validated using

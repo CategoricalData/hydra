@@ -36,9 +36,12 @@ flowGraphATypeA = Types.apply (Types.apply (TypeVariable _Flow) graphA) typeA ::
 graphA = Types.apply (TypeVariable _Graph) aT :: Type a
 lambdaTypeA = Types.apply (TypeVariable _LambdaType) aT :: Type a
 sT = Types.var "s" :: Type a
+stringT = Types.string :: Type a
 termA = Types.apply (TypeVariable _Term) aT :: Type a
 typeA = Types.apply (TypeVariable _Type) aT :: Type a
 unitT = Types.unit :: Type a
+yT = Types.var "y" :: Type a
+
 
 el :: Definition a -> Element Kv
 el (Definition name (Datum term)) = Element name term

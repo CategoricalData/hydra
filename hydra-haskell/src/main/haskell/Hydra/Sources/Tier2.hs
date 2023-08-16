@@ -34,7 +34,8 @@ hydraTier2Module = Module (Namespace "hydra/tier2") elements [hydraGraphModule, 
    elements = [
      el getStateDef,
      el putStateDef,
-     el requireTypeAnnotationDef
+     el requireTypeAnnotationDef,
+     el unexpectedDef
      ]
 
 getStateDef :: Definition (Flow s s)
@@ -76,3 +77,8 @@ requireTypeAnnotationDef = tier2Definition "requireTypeAnnotation" $
       matchOpt
         (Flows.fail @@ "missing type annotation")
         Flows.pure])
+
+unexpectedDef :: Definition (String -> String -> Flow s y)
+unexpectedDef = tier2Definition "unexpected" $
+  function stringT (Types.function stringT (flowT sT yT)) $
+  lambda "cat" $ lambda "obj" $ Flows.fail @@ ("expected " ++ var "cat" ++ " but found: " ++ var "obj")

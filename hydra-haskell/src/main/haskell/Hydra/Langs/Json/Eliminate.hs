@@ -9,22 +9,22 @@ import qualified Data.Map as M
 expectArray :: Json.Value -> Flow s [Json.Value]
 expectArray value = case value of
   Json.ValueArray els -> pure els
-  _ -> unexpected "JSON array" value
+  _ -> unexpected "JSON array" $ show value
 
 expectNumber :: Json.Value -> Flow s Double
 expectNumber value = case value of
   Json.ValueNumber d -> pure d
-  _ -> unexpected "JSON number" value
+  _ -> unexpected "JSON number" $ show value
 
 expectObject :: Json.Value -> Flow s (M.Map String Json.Value)
 expectObject value = case value of
   Json.ValueObject m -> pure m
-  _ -> unexpected "JSON object" value
+  _ -> unexpected "JSON object" $ show value
 
 expectString :: Json.Value -> Flow s String
 expectString value = case value of
   Json.ValueString s -> pure s
-  _ -> unexpected "JSON string" value
+  _ -> unexpected "JSON string" $ show value
 
 opt :: String -> M.Map String Json.Value -> Maybe Json.Value
 opt = M.lookup

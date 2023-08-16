@@ -6,6 +6,7 @@ module Hydra.Tools.OsvToRdf (
 ) where
 
 import Hydra.Kernel
+import Hydra.Flows
 import Hydra.Langs.Json.Serde
 import Hydra.Langs.Json.Coder
 import Hydra.CoreDecoding

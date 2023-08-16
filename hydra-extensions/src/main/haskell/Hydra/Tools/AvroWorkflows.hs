@@ -16,6 +16,7 @@ module Hydra.Tools.AvroWorkflows (
 ) where
 
 import Hydra.Kernel
+import Hydra.Flows
 import Hydra.Dsl.Annotations
 import qualified Hydra.Langs.Avro.Schema as Avro
 import qualified Hydra.Langs.Json.Model as Json
@@ -49,7 +50,7 @@ import System.Directory
 
 data JsonPayloadFormat = Json | Jsonl
 
-type TermEncoder x = Term Kv -> Graph Kv -> GraphFlow Kv [x]
+type TermEncoder x = Term Kv -> Graph Kv -> Flow (Graph Kv) [x]
 
 defaultTinkerpopAnnotations :: PGM.AnnotationSchema
 defaultTinkerpopAnnotations = PGM.AnnotationSchema {
@@ -147,14 +148,14 @@ rdfDescriptionsToNtriples = rdfGraphToNtriples . RdfUt.descriptionsToGraph
 shaclRdfLastMile :: LastMile (Graph Kv) Rdf.Description
 shaclRdfLastMile = LastMile typedTermToShaclRdf (pure . rdfDescriptionsToNtriples) "nt"
 
-typedTermToPropertyGraph :: (Show t, Show v) => PGM.Schema (Graph Kv) Kv t v -> Type Kv -> t -> t -> GraphFlow Kv (Term Kv -> Graph Kv -> GraphFlow Kv [PG.Element v])
+typedTermToPropertyGraph :: (Show t, Show v) => PGM.Schema (Graph Kv) Kv t v -> Type Kv -> t -> t -> Flow (Graph Kv) (Term Kv -> Graph Kv -> Flow (Graph Kv) [PG.Element v])
 typedTermToPropertyGraph schema typ vidType eidType = do
     adapter <- elementCoder Nothing schema typ vidType eidType
     return $ \term graph -> flattenTree <$> coderEncode (adapterCoder adapter) term
   where
     flattenTree tree = (PG.elementTreeSelf tree):(L.concat $ (flattenTree <$> PG.elementTreeDependencies tree))
 
-typedTermToShaclRdf :: Type Kv -> GraphFlow Kv (Term Kv -> Graph Kv -> GraphFlow Kv [Rdf.Description])
+typedTermToShaclRdf :: Type Kv -> Flow (Graph Kv) (Term Kv -> Graph Kv -> Flow (Graph Kv) [Rdf.Description])
 typedTermToShaclRdf _ = pure encode
   where
     encode term graph = do

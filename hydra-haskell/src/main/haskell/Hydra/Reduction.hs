@@ -4,10 +4,10 @@ module Hydra.Reduction where
 
 import Hydra.Basics
 import Hydra.Strip
+import Hydra.Compute
 import Hydra.Core
 import Hydra.CoreDecoding
 import Hydra.Extras
-import Hydra.Flows
 import Hydra.Graph
 import Hydra.Kv
 import Hydra.Lexical
@@ -38,7 +38,7 @@ countPrimitiveInvocations :: Bool
 countPrimitiveInvocations = True
 
 -- A term evaluation function which is alternatively lazy or eager
-reduceTerm :: (Ord a, Show a) => Bool -> M.Map Name (Term a) -> Term a -> GraphFlow a (Term a)
+reduceTerm :: (Ord a, Show a) => Bool -> M.Map Name (Term a) -> Term a -> Flow (Graph a) (Term a)
 reduceTerm eager env = rewriteTermM mapping pure
   where
     reduce eager = reduceTerm eager M.empty
@@ -117,9 +117,9 @@ reduceTerm eager env = rewriteTermM mapping pure
 
 -- Note: this is eager beta reduction, in that we always descend into subtypes,
 --       and always reduce the right-hand side of an application prior to substitution
-betaReduceType :: (Ord a, Show a) => Type a -> GraphFlow a (Type a)
+betaReduceType :: (Ord a, Show a) => Type a -> Flow (Graph a) (Type a)
 betaReduceType typ = do
-    g <- getState :: GraphFlow a (Graph a)
+    g <- getState :: Flow (Graph a) (Graph a)
     rewriteTypeM mapExpr (pure . id) typ
   where
     mapExpr recurse t = do
