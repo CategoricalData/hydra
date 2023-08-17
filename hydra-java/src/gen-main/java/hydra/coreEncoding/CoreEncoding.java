@@ -48,6 +48,11 @@ public interface CoreEncoding {
       }
       
       @Override
+      public hydra.core.Term<A> visit(hydra.core.Elimination.Product<A> instance) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.Elimination"), new hydra.core.Field(new hydra.core.FieldName("product"), hydra.coreEncoding.CoreEncoding.coreEncodeTupleProjection((instance.value)))));
+      }
+      
+      @Override
       public hydra.core.Term<A> visit(hydra.core.Elimination.Record<A> instance) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.Elimination"), new hydra.core.Field(new hydra.core.FieldName("record"), hydra.coreEncoding.CoreEncoding.coreEncodeProjection((instance.value)))));
       }
@@ -450,6 +455,12 @@ public interface CoreEncoding {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.Term"), new hydra.core.Field(new hydra.core.FieldName("wrap"), hydra.coreEncoding.CoreEncoding.coreEncodeNominalTerm((instance.value)))));
       }
     });
+  }
+  
+  static <A> hydra.core.Term<A> coreEncodeTupleProjection(hydra.core.TupleProjection tp) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.TupleProjection"), java.util.Arrays.asList(
+      new hydra.core.Field(new hydra.core.FieldName("arity"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(((tp)).arity)))),
+      new hydra.core.Field(new hydra.core.FieldName("index"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(((tp)).index)))))));
   }
   
   static <A> hydra.core.Term<A> coreEncodeType(hydra.core.Type<A> v1) {

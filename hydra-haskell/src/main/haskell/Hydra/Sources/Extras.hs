@@ -12,6 +12,7 @@ import qualified Hydra.Dsl.Lib.Strings as Strings
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
+import qualified Hydra.Dsl.Core as Core
 
 
 hydraExtrasDefinition :: String -> Datum a -> Definition a
@@ -28,6 +29,7 @@ hydraExtrasModule = Module (Namespace "hydra/extras") elements [hydraGraphModule
       el qnameDef,
       el termArityDef,
       el typeArityDef,
+      el uncurryTypeDef,
       el emptyKvDef,
       el getAnnotationDef
 --      el getAttrDef
@@ -76,16 +78,23 @@ typeArityDef :: Definition (Type a -> Int)
 typeArityDef = hydraExtrasDefinition "typeArity" $
   function (Types.apply (TypeVariable _Type) (Types.var "a")) Types.int32 $
   match _Type (Just $ int32 0) [
-    Case _Type_annotated --> ref typeArityDef <.> (project _Annotated _Annotated_subject),
+    Case _Type_annotated --> ref typeArityDef <.> Core.annotatedSubject,
     Case _Type_application --> ref typeArityDef <.> (project _ApplicationType _ApplicationType_function),
     Case _Type_lambda --> ref typeArityDef <.> (project _LambdaType _LambdaType_body),
     Case _Type_function --> lambda "f" $
       Math.add @@ (int32 1) @@ (ref typeArityDef @@ (apply (project _FunctionType _FunctionType_codomain) (var "f")))]
 
--- hydra/flows
-
---unexpected :: Show x => String -> x -> Flow s y
---unexpected cat obj = fail $ "expected " ++ cat ++ " but found: " ++ show obj
+uncurryTypeDef :: Definition (Type a -> [Type a])
+uncurryTypeDef = hydraExtrasDefinition "uncurryType" $
+  function typeA (listT typeA) $
+  doc "Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)" $
+  lambda "t" ((match _Type (Just $ list [var "t"]) [
+    _Type_annotated>>: ref uncurryTypeDef <.> Core.annotatedSubject,
+    _Type_application>>: ref uncurryTypeDef <.> Core.applicationTypeFunction,
+    _Type_lambda>>: ref uncurryTypeDef <.> Core.lambdaTypeBody,
+    _Type_function>>: lambda "ft" $ Lists.cons
+      @@ (Core.functionTypeDomain @@ var "ft")
+      @@ (ref uncurryTypeDef @@ (Core.functionTypeCodomain @@ var "ft"))]) @@ var "t")
 
 -- hydra/kv
 

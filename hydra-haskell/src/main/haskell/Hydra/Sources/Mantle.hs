@@ -31,6 +31,7 @@ hydraMantleModule = Module ns elements [hydraCoreModule] $
         enum [
           "list",
           "optional",
+          "product",
           "record",
           "union",
           "wrap"],

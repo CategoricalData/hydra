@@ -26,6 +26,12 @@ getState = (Compute.Flow (\s0 -> \t0 ->
       Compute.flowStateState = s,
       Compute.flowStateTrace = t}) v) (Compute.flowStateValue fs1) (Compute.flowStateState fs1) (Compute.flowStateTrace fs1))))
 
+-- | Get the annotated type of a given term, if any
+getTermType :: (Core.Term a -> Compute.Flow (Graph.Graph a) (Maybe (Core.Type a)))
+getTermType term =  
+  let annsToType = (\anns -> Graph.annotationClassTermType anns term)
+  in (Flows.bind (Flows.map Graph.graphAnnotations getState) annsToType)
+
 -- | Set the state of a flow
 putState :: (s -> Compute.Flow s ())
 putState cx = (Compute.Flow (\s0 -> \t0 ->  
@@ -35,19 +41,30 @@ putState cx = (Compute.Flow (\s0 -> \t0 ->
     Compute.flowStateState = cx,
     Compute.flowStateTrace = (Compute.flowStateTrace f1)}))
 
-requireTypeAnnotation :: (Core.Term a -> Compute.Flow (Graph.Graph a) (Core.Type a))
-requireTypeAnnotation term =  
-  let annsToType = (\anns -> Flows.bind (Graph.annotationClassTermType anns term) checkType) 
-      checkType = (\x -> case x of
-              Nothing -> (Flows.fail "missing type annotation")
-              Just v -> (Flows.pure v))
-  in (Flows.bind (Flows.map Graph.graphAnnotations getState) annsToType)
+-- | Get the annotated type of a given element, or fail if it is missing
+requireElementType :: (Graph.Element a -> Compute.Flow (Graph.Graph a) (Core.Type a))
+requireElementType el =  
+  let withType = (\x -> case x of
+          Nothing -> (Flows.fail (Strings.cat [
+            "missing type annotation for element ",
+            (Core.unName (Graph.elementName el))]))
+          Just v -> (Flows.pure v))
+  in (Flows.bind (getTermType (Graph.elementData el)) withType)
 
-unexpected :: (String -> String -> Compute.Flow s y)
-unexpected cat obj = (Flows.fail (Strings.cat [
+-- | Get the annotated type of a given term, or fail if it is missing
+requireTermType :: Show a => (Core.Term a -> Compute.Flow (Graph.Graph a) (Core.Type a))
+requireTermType term =  
+  let withType = (\x -> case x of
+          Nothing -> (Flows.fail $ "missing type annotation: " <> show term)
+          Just v -> (Flows.pure v))
+  in (Flows.bind (getTermType term) withType)
+
+-- | Fail if an actual value does not match an expected value
+unexpected :: (String -> String -> Compute.Flow s x)
+unexpected expected actual = (Flows.fail (Strings.cat [
   Strings.cat [
     Strings.cat [
       "expected ",
-      cat],
+      expected],
     " but found: "],
-  obj]))
+  actual]))
