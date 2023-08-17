@@ -13,7 +13,6 @@ import Hydra.Dsl.Lib.Logic as Logic
 import Hydra.Dsl.Lib.Maps as Maps
 import Hydra.Dsl.Lib.Strings as Strings
 import Hydra.Sources.Tier1
-import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
