@@ -384,12 +384,20 @@ topologicalSortElements els = topologicalSort $ adjlist <$> els
 typeDependencyNames :: Type a -> S.Set Name
 typeDependencyNames = freeVariablesInType
 
--- Where non-lambda terms with nonzero arity occur at the top level, turn them into lambdas
+-- | Where non-lambda terms with nonzero arity occur at the top level, turn them into lambdas,
+--   also adding an appropriate type annotation to each new lambda.
 wrapLambdas :: (Ord a, Show a) => Term a -> Flow (Graph a) (Term a)
 wrapLambdas term = do
-      arity <- typeArity <$> requireTypeAnnotation term
-      return $ pad (missingArity arity term) term
+    typ <- requireTermType term
+    anns <- graphAnnotations <$> getState
+    let types = uncurryType typ
+    let argTypes = L.init types
+    let missing = missingArity (L.length argTypes) term
+    return $ pad anns term (L.take missing argTypes) (toFunType $ L.drop missing types)
   where
+    toFunType types = case types of
+      [t] -> t
+      (dom:rest) -> TypeFunction $ FunctionType dom $ toFunType rest
     missingArity arity term = if arity == 0
       then 0
       else case term of
@@ -397,7 +405,10 @@ wrapLambdas term = do
         TermLet (Let _ env) -> missingArity arity env
         TermFunction (FunctionLambda (Lambda _ body)) -> missingArity (arity - 1) body
         _ -> arity
-    pad arity term = L.foldl (\t v -> TermFunction $ FunctionLambda $ Lambda v t) apps $ L.reverse variables
+    pad anns term doms cod = fst $ L.foldl newLambda (apps, cod) $ L.reverse variables
       where
-        apps = L.foldl (\t v -> TermApplication (Application t $ TermVariable v)) term variables
-        variables = L.take arity ((\i -> Name $ "a" ++ show i) <$> [1..])
+        newLambda (body, cod) (v, dom) = (annotationClassSetTermType anns (Just ft) $ TermFunction $ FunctionLambda $ Lambda v body, ft)
+          where
+            ft = TypeFunction $ FunctionType dom cod
+        apps = L.foldl (\lhs (v, _) -> TermApplication (Application lhs $ TermVariable v)) term variables
+        variables = L.zip ((\i -> Name $ "a" ++ show i) <$> [1..]) doms
