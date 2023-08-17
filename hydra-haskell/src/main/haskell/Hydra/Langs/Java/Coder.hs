@@ -23,6 +23,8 @@ import qualified Data.Maybe as Y
 import Data.String (String)
 
 
+data JavaSymbolClass = JavaSymbolClassConstant | JavaSymbolClassNullaryFunction | JavaSymbolClassUnaryFunction
+
 printModule :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
 printModule mod = do
     withTrace "encode in Java" $ do
@@ -72,6 +74,18 @@ moduleToJavaCompilationUnit mod = transformModule javaLanguage encode constructM
 classModsPublic :: [Java.ClassModifier]
 classModsPublic = [Java.ClassModifierPublic]
 
+classifyDataTerm :: Type a -> Term a -> JavaSymbolClass
+classifyDataTerm typ term = if isLambda term
+    then JavaSymbolClassNullaryFunction
+    else if hasTypeParameters || isUnsupportedVariant
+      then JavaSymbolClassNullaryFunction
+      else JavaSymbolClassConstant
+  where
+    hasTypeParameters = not $ S.null $ freeVariablesInType typ
+    isUnsupportedVariant = case stripTerm term of
+      TermLet _ -> True
+      _ -> False
+
 constructModule :: (Ord a, Read a, Show a)
   => Module a
   -> M.Map (Type a) (Coder (Graph a) (Graph a) (Term a) Java.Expression)
@@ -94,45 +108,55 @@ constructModule mod coders pairs = do
       return (elementName el,
         Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) imports [decl])
 
-    termToInterfaceMember coders pair = withTrace ("element " ++ unName (elementName el)) $ do
-        expanded <- contractTerm . unshadowVariables <$> (expandLambdas (typedTermTerm $ snd pair) >>= wrapLambdas)
-        if isLambda expanded
-          then termToMethod coders el (typedTermType $ snd pair) expanded
-          else termToConstant coders el (typedTermType $ snd pair) expanded
-      where
-        el = fst pair
-
-    termToConstant coders el typ term = do
-      jtype <- Java.UnannType <$> adaptTypeToJavaAndEncode aliases typ
-      jterm <- coderEncode (Y.fromJust $ M.lookup typ coders) term
-      let mods = []
-      let var = javaVariableDeclarator (javaVariableName $ elementName el) $ Just $ Java.VariableInitializerExpression jterm
-      return $ Java.InterfaceMemberDeclarationConstant $ Java.ConstantDeclaration mods jtype [var]
-
     -- Lambdas cannot (in general) be turned into top-level constants, as there is no way of declaring type parameters for constants
-    -- This function must be capable of handling various combinations of let and lambda terms:
+    -- These functions must be capable of handling various combinations of let and lambda terms:
     -- * Plain lambdas such as \x y -> x + y + 42
     -- * Lambdas with nested let terms, such as \x y -> let z = x + y in z + 42
     -- * Let terms with nested lambdas, such as let z = 42 in \x y -> x + y + z
-    termToMethod coders el typ term = case stripType typ of
-      TypeFunction (FunctionType dom cod) -> maybeLet aliases term $ \aliases2 term2 stmts2 -> case stripTerm term2 of
-        TermFunction (FunctionLambda (Lambda v body)) -> do
-          jdom <- adaptTypeToJavaAndEncode aliases2 dom
-          jcod <- adaptTypeToJavaAndEncode aliases2 cod
-          let mods = [Java.InterfaceMethodModifierStatic]
-          let anns = []
-          let mname = sanitizeJavaName $ decapitalize $ localNameOfEager $ elementName el
-          let param = javaTypeToJavaFormalParameter jdom (FieldName $ unName v)
-          let result = javaTypeToJavaResult jcod
-          let tparams = javaTypeParametersForType typ
-          maybeLet aliases2 body $ \aliases3 term3 stmts3 -> do
-            jbody <- encodeTerm aliases3 term3
-            -- TODO: use coders
-            --jbody <- coderEncode (Y.fromJust $ M.lookup typ coders) body
-            let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
-            return $ interfaceMethodDeclaration mods tparams mname [param] result (Just $ stmts2 ++ stmts3 ++ [returnSt])
-        _ -> unexpected "function term" $ show term
-      _ -> unexpected "function type" $ show typ
+    termToInterfaceMember coders pair = withTrace ("element " ++ unName (elementName el)) $ do
+        expanded <- contractTerm . unshadowVariables <$> (expandLambdas (typedTermTerm $ snd pair) >>= wrapLambdas)
+        case classifyDataTerm typ expanded of
+          JavaSymbolClassConstant -> termToConstant coders el expanded
+          JavaSymbolClassNullaryFunction -> termToNullaryMethod coders el expanded
+          JavaSymbolClassUnaryFunction -> termToUnaryMethod coders el expanded
+      where
+        el = fst pair
+        typ = typedTermType $ snd pair
+        tparams = javaTypeParametersForType typ
+        mname = sanitizeJavaName $ decapitalize $ localNameOfEager $ elementName el
+
+        termToConstant coders el term = do
+          jtype <- Java.UnannType <$> adaptTypeToJavaAndEncode aliases typ
+          jterm <- coderEncode (Y.fromJust $ M.lookup typ coders) term
+          let mods = []
+          let var = javaVariableDeclarator (javaVariableName $ elementName el) $ Just $ Java.VariableInitializerExpression jterm
+          return $ Java.InterfaceMemberDeclarationConstant $ Java.ConstantDeclaration mods jtype [var]
+
+        termToNullaryMethod coders el term0 = maybeLet aliases term0 forInnerTerm
+          where
+            forInnerTerm aliases2 term stmts = do
+              result <- javaTypeToJavaResult <$> adaptTypeToJavaAndEncode aliases2 typ
+              jbody <- encodeTerm aliases2 term
+              let mods = [Java.InterfaceMethodModifierStatic]
+              let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
+              return $ interfaceMethodDeclaration mods tparams mname [] result (Just $ stmts ++ [returnSt])
+
+        termToUnaryMethod coders el term = case stripType typ of
+          TypeFunction (FunctionType dom cod) -> maybeLet aliases term $ \aliases2 term2 stmts2 -> case stripTerm term2 of
+            TermFunction (FunctionLambda (Lambda v body)) -> do
+              jdom <- adaptTypeToJavaAndEncode aliases2 dom
+              jcod <- adaptTypeToJavaAndEncode aliases2 cod
+              let mods = [Java.InterfaceMethodModifierStatic]
+              let param = javaTypeToJavaFormalParameter jdom (FieldName $ unName v)
+              let result = javaTypeToJavaResult jcod
+              maybeLet aliases2 body $ \aliases3 term3 stmts3 -> do
+                jbody <- encodeTerm aliases3 term3
+                -- TODO: use coders
+                --jbody <- coderEncode (Y.fromJust $ M.lookup typ coders) body
+                let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
+                return $ interfaceMethodDeclaration mods tparams mname [param] result (Just $ stmts2 ++ stmts3 ++ [returnSt])
+            _ -> unexpected "function term" $ show term
+          _ -> unexpected "function type" $ show typ
 
 constructElementsInterface :: Module a -> [Java.InterfaceMemberDeclaration] -> (Name, Java.CompilationUnit)
 constructElementsInterface mod members = (elName, cu)
