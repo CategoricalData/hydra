@@ -17,6 +17,8 @@ public abstract class EliminationVariant {
     
     R visit(Optional instance) ;
     
+    R visit(Product instance) ;
+    
     R visit(Record instance) ;
     
     R visit(Union instance) ;
@@ -34,6 +36,10 @@ public abstract class EliminationVariant {
     }
     
     default R visit(Optional instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Product instance) {
       return otherwise((instance));
     }
     
@@ -86,6 +92,31 @@ public abstract class EliminationVariant {
         return false;
       }
       Optional o = (Optional) (other);
+      return true;
+    }
+    
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Product extends hydra.mantle.EliminationVariant {
+    public Product () {
+    
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Product)) {
+        return false;
+      }
+      Product o = (Product) (other);
       return true;
     }
     

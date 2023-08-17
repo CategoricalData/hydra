@@ -54,6 +54,11 @@ public interface Rewriting {
             }
 
             @Override
+            public Flow<S, Elimination<B>> visit(Elimination.Product<A> instance) {
+                return pure(new Elimination.Product<B>(instance.value));
+            }
+
+            @Override
             public Flow<S, Elimination<B>> visit(Elimination.Record<A> instance) {
                 return pure(new Elimination.Record<>(new Projection(instance.value.typeName, instance.value.field)));
             }

@@ -17,6 +17,8 @@ public abstract class Elimination<A> {
     
     R visit(Optional<A> instance) ;
     
+    R visit(Product<A> instance) ;
+    
     R visit(Record<A> instance) ;
     
     R visit(Union<A> instance) ;
@@ -34,6 +36,10 @@ public abstract class Elimination<A> {
     }
     
     default R visit(Optional<A> instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Product<A> instance) {
       return otherwise((instance));
     }
     
@@ -102,6 +108,39 @@ public abstract class Elimination<A> {
         return false;
       }
       Optional o = (Optional) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<A, R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * Eliminates a tuple by projecting the component at a given 0-indexed offset
+   */
+  public static final class Product<A> extends hydra.core.Elimination<A> {
+    /**
+     * Eliminates a tuple by projecting the component at a given 0-indexed offset
+     */
+    public final hydra.core.TupleProjection value;
+    
+    public Product (hydra.core.TupleProjection value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Product)) {
+        return false;
+      }
+      Product o = (Product) (other);
       return value.equals(o.value);
     }
     

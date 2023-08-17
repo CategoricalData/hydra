@@ -129,6 +129,11 @@ public class Reduction {
             }
 
             @Override
+            public Flow<Graph<A>, Term<A>> visit(Elimination.Product<A> instance) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
             public Flow<Graph<A>, Term<A>> visit(Elimination.Record<A> elim) {
                 return reducedArg.accept(new Term.PartialVisitor<>() {
                     @Override
