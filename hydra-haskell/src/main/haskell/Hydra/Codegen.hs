@@ -47,6 +47,7 @@ import Hydra.Sources.Graph
 import Hydra.Sources.Langs.Avro.Schema
 import Hydra.Sources.Langs.Graphql.Syntax
 import Hydra.Sources.Langs.Haskell.Ast
+import Hydra.Sources.Langs.Java.Language
 import Hydra.Sources.Langs.Java.Syntax
 import Hydra.Sources.Langs.Json.Model
 import Hydra.Sources.Langs.Owl.Syntax
@@ -114,9 +115,11 @@ generateSources printModule basePath mods = do
 
     forModule mod = withTrace ("module " ++ unNamespace (moduleNamespace mod)) $ printModule mod
 
--- Note: currently a subset of the kernel, as the other modules are not yet needed in the runtime environment
+-- Note: currently a subset of the kernel which is used as a schema graph.
+--       The other modules are not yet needed in the runtime environment
 hydraKernel :: Graph Kv
 hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElements [
+  hydraCodersModule,
   hydraComputeModule,
   hydraCoreModule,
   hydraGraphModule,
@@ -168,6 +171,7 @@ langModules = [
   avroSchemaModule,
   graphqlSyntaxModule,
   haskellAstModule,
+  javaLanguageModule,
   javaSyntaxModule,
   owlSyntaxModule,
   parquetFormatModule,
