@@ -23,7 +23,7 @@ import qualified Data.Maybe as Y
 import Data.String (String)
 
 
-data JavaSymbolClass = JavaSymbolClassConstant | JavaSymbolClassNullaryFunction | JavaSymbolClassUnaryFunction
+data JavaSymbolClass = JavaSymbolClassConstant | JavaSymbolClassNullaryFunction | JavaSymbolClassUnaryFunction | JavaSymbolLocalVariable
 
 printModule :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
 printModule mod = do
@@ -50,9 +50,18 @@ boundTypeVariables typ = case typ of
 classModsPublic :: [Java.ClassModifier]
 classModsPublic = [Java.ClassModifierPublic]
 
+classifyDataReference :: Name -> Flow (Graph a) JavaSymbolClass
+classifyDataReference name = do
+  mel <- dereferenceElement name
+  case mel of
+    Nothing -> return JavaSymbolLocalVariable
+    Just el -> do
+      typ <- requireElementType el
+      return $ classifyDataTerm typ $ elementData el
+
 classifyDataTerm :: Type a -> Term a -> JavaSymbolClass
 classifyDataTerm typ term = if isLambda term
-    then JavaSymbolClassNullaryFunction
+    then JavaSymbolClassUnaryFunction
     else if hasTypeParameters || isUnsupportedVariant
       then JavaSymbolClassNullaryFunction
       else JavaSymbolClassConstant
@@ -367,13 +376,13 @@ declarationForUnionType aliases tparams elName fields = do
           nameToJavaClassType aliases False typeArgs (variantClassName False elName fname) Nothing
 
 elementJavaIdentifier :: Bool -> Bool -> Aliases -> Name -> Java.Identifier
-elementJavaIdentifier isPrim isRef aliases name = Java.Identifier $ if isPrim
+elementJavaIdentifier isPrim isMethod aliases name = Java.Identifier $ if isPrim
     then (qualify $ capitalize local) ++ "." ++ applyMethodName
     else case ns of
       Nothing -> local
       Just n -> (qualify $ elementsClassName n) ++ sep ++ local
   where
-    sep = if isRef then "::" else "."
+    sep = if isMethod then "::" else "."
     qualify s = Java.unIdentifier $ nameToJavaName aliases $ unqualifyName $ QualifiedName ns s
     QualifiedName ns local = qualifyNameEager name
 
@@ -409,7 +418,7 @@ encodeApplication aliases app@(Application lhs rhs) = case stripTerm fun of
          _ -> (lhs, (rhs:args))
 
     fallback = do
-        t <- requireTypeAnnotation lhs
+        t <- requireTermType lhs
         (dom, cod) <- case stripTypeParameters t of
             TypeFunction (FunctionType dom cod) -> pure (dom, cod)
             t' -> fail $ "expected a function type on function " ++ show lhs ++ ", but found " ++ show t'
@@ -626,9 +635,9 @@ encodeTerm aliases term0 = encodeInternal [] term0
 
         TermApplication app -> encodeApplication aliases app
 
-        TermFunction f -> do
-          t <- requireTypeAnnotation term0
-          case t of
+        TermFunction f -> withTrace "encode function" $ do
+          t <- requireTermType term0
+          case stripType t of
             TypeFunction (FunctionType dom cod) -> do
               encodeFunction aliases dom cod f
             _ -> encodeNullaryConstant aliases t f
@@ -679,11 +688,7 @@ encodeTerm aliases term0 = encodeInternal [] term0
               return [ex]
           return $ javaConstructorCall (javaConstructorName consId Nothing) args Nothing
 
-        TermVariable name -> encodeVariable aliases isRef name
-          where
-            -- Note: this criterion happens to work (for identifying static function references,
-            -- and using '::' instead of '.'), but it may or may not always work.
-            isRef = not (L.head (unName name) == '$')
+        TermVariable name -> encodeVariable aliases name
 
         TermWrap (Nominal tname arg) -> do
           jarg <- encode arg
@@ -745,12 +750,17 @@ encodeType aliases t = case stripType t of
     encode = encodeType aliases
     unit = return $ javaRefType [] javaLangPackageName "Void"
 
-encodeVariable :: Aliases -> Bool -> Name -> Flow (Graph a) Java.Expression
-encodeVariable aliases isRef name = do
-   pure $ if isRecursiveVariable aliases name
-    then javaMethodInvocationToJavaExpression $
+encodeVariable :: Aliases -> Name -> Flow (Graph a) Java.Expression
+encodeVariable aliases name = if isRecursiveVariable aliases name
+    then return $ javaMethodInvocationToJavaExpression $
       methodInvocation (Just $ Left $ Java.ExpressionName Nothing jid) (Java.Identifier getMethodName) []
-    else javaIdentifierToJavaExpression $ elementJavaIdentifier False isRef aliases name
+    else do
+      cls <- classifyDataReference name
+      return $ case cls of
+        JavaSymbolLocalVariable -> javaIdentifierToJavaExpression $ elementJavaIdentifier False False aliases name
+        JavaSymbolClassConstant -> javaIdentifierToJavaExpression $ elementJavaIdentifier False False aliases name
+        JavaSymbolClassNullaryFunction -> javaIdentifierToJavaExpression $ elementJavaIdentifier False True aliases name -- TODO
+        JavaSymbolClassUnaryFunction -> javaIdentifierToJavaExpression $ elementJavaIdentifier False True aliases name
   where
     jid = javaIdentifier $ unName name
 
@@ -763,7 +773,7 @@ functionCall aliases isPrim name args = do
     jargs <- CM.mapM (encodeTerm aliases) args
     if isLocalVariable name
       then do
-        prim <- javaExpressionToJavaPrimary <$> encodeVariable aliases False name
+        prim <- javaExpressionToJavaPrimary <$> encodeVariable aliases name
         return $ javaMethodInvocationToJavaExpression $
           methodInvocation (Just $ Right prim) (Java.Identifier applyMethodName) jargs
       else do

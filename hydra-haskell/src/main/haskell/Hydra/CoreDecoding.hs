@@ -149,7 +149,7 @@ coreDecodeType dat = case dat of
 
 elementAsTypedTerm :: (Show a) => Element a -> Flow (Graph a) (TypedTerm a)
 elementAsTypedTerm el = do
-  typ <- requireTypeAnnotation (elementData el)
+  typ <- requireTermType (elementData el)
   return $ TypedTerm typ (elementData el)
 
 fieldTypes :: Show a => Type a -> Flow (Graph a) (M.Map FieldName (Type a))
@@ -207,7 +207,7 @@ moduleDependencyNamespaces withVars withPrims withNoms withSchema mod = do
       let term = elementData el
       let dataNames = termDependencyNames withVars withPrims withNoms term
       schemaNames <- if withSchema
-        then typeDependencyNames <$> requireTypeAnnotation term
+        then typeDependencyNames <$> requireTermType term
         else pure S.empty
 
       typeNames <- if isEncodedType term

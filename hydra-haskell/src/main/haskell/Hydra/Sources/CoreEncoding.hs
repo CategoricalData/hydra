@@ -48,6 +48,7 @@ coreEncodingModule = Module (Namespace "hydra/coreEncoding") elements [hydraCore
      Base.el coreEncodeRowTypeDef,
      Base.el coreEncodeSumDef,
      Base.el coreEncodeTermDef,
+     Base.el coreEncodeTupleProjectionDef,
      Base.el coreEncodeTypeDef]
 
 coreEncodingDefinition :: String -> Type Kv -> Term Kv -> Definition x
@@ -195,6 +196,7 @@ coreEncodeEliminationDef = coreEncodingDefinition "Elimination" eliminationA $
     match _Elimination Nothing [
       ecase _Elimination_list coreEncodeTermDef,
       ecase _Elimination_optional coreEncodeOptionalCasesDef,
+      ecase _Elimination_product coreEncodeTupleProjectionDef,
       ecase _Elimination_record coreEncodeProjectionDef,
       ecase _Elimination_union coreEncodeCaseStatementDef,
       ecase _Elimination_wrap coreEncodeNameDef]
@@ -411,6 +413,12 @@ coreEncodeTermDef = coreEncodingDefinition "Term" termA $
   where
     ecase = encodedCase _Term
     ecase' fname = Field fname . lambda "v" . encodedVariant _Term fname
+
+coreEncodeTupleProjectionDef :: Definition (TupleProjection -> Term a)
+coreEncodeTupleProjectionDef = coreEncodingDefinition "TupleProjection" (TypeVariable _TupleProjection) $
+  lambda "tp" $ encodedRecord _TupleProjection [
+    (_TupleProjection_arity, encodedInt32 $ project _TupleProjection _TupleProjection_arity @@ var "tp"),
+    (_TupleProjection_index, encodedInt32 $ project _TupleProjection _TupleProjection_index @@ var "tp")]
 
 coreEncodeTypeDef :: Definition (Type a -> Term a)
 coreEncodeTypeDef = coreEncodingDefinition "Type" typeA $

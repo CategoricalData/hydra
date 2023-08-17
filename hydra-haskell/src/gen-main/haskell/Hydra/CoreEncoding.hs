@@ -68,6 +68,11 @@ coreEncodeElimination x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.FieldName "optional"),
       Core.fieldTerm = (coreEncodeOptionalCases v)}}))
+  Core.EliminationProduct v -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra/core.Elimination"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.FieldName "product"),
+      Core.fieldTerm = (coreEncodeTupleProjection v)}}))
   Core.EliminationRecord v -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Elimination"),
     Core.injectionField = Core.Field {
@@ -555,6 +560,17 @@ coreEncodeTerm x = case x of
       Core.fieldName = (Core.FieldName "wrap"),
       Core.fieldTerm = (coreEncodeNominalTerm v)}}))
   _ -> (Core.TermLiteral (Core.LiteralString "not implemented"))
+
+coreEncodeTupleProjection :: (Core.TupleProjection -> Core.Term a)
+coreEncodeTupleProjection tp = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra/core.TupleProjection"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.FieldName "arity"),
+      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Core.tupleProjectionArity tp))))},
+    Core.Field {
+      Core.fieldName = (Core.FieldName "index"),
+      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Core.tupleProjectionIndex tp))))}]}))
 
 coreEncodeType :: (Core.Type a -> Core.Term a)
 coreEncodeType x = case x of

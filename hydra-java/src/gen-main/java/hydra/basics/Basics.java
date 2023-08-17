@@ -17,6 +17,11 @@ public interface Basics {
       }
       
       @Override
+      public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Product<A> instance) {
+        return new hydra.mantle.EliminationVariant.Product();
+      }
+      
+      @Override
       public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Record<A> instance) {
         return new hydra.mantle.EliminationVariant.Record();
       }
@@ -37,6 +42,7 @@ public interface Basics {
     new hydra.mantle.EliminationVariant.List(),
     new hydra.mantle.EliminationVariant.Wrap(),
     new hydra.mantle.EliminationVariant.Optional(),
+    new hydra.mantle.EliminationVariant.Product(),
     new hydra.mantle.EliminationVariant.Record(),
     new hydra.mantle.EliminationVariant.Union());
   

@@ -5,6 +5,7 @@ module Hydra.Extras where
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Strings as Strings
@@ -47,6 +48,16 @@ typeArity x = case x of
   Core.TypeLambda v -> (typeArity (Core.lambdaTypeBody v))
   Core.TypeFunction v -> (Math.add 1 (typeArity (Core.functionTypeCodomain v)))
   _ -> 0
+
+-- | Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)
+uncurryType :: (Core.Type a -> [Core.Type a])
+uncurryType t = ((\x -> case x of
+  Core.TypeAnnotated v -> (uncurryType (Core.annotatedSubject v))
+  Core.TypeApplication v -> (uncurryType (Core.applicationTypeFunction v))
+  Core.TypeLambda v -> (uncurryType (Core.lambdaTypeBody v))
+  Core.TypeFunction v -> (Lists.cons (Core.functionTypeDomain v) (uncurryType (Core.functionTypeCodomain v)))
+  _ -> [
+    t]) t)
 
 emptyKv :: Compute.Kv
 emptyKv = Compute.Kv {

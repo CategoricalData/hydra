@@ -27,7 +27,7 @@ shaclCoder mod = do
     return (sg, termFlow)
   where
     isType g el = do
-      typ <- requireTypeAnnotation $ elementData el
+      typ <- requireTermType $ elementData el
       return $ stripType typ == TypeVariable _Type
     toShape el = do
       typ <- coreDecodeType $ elementData el
