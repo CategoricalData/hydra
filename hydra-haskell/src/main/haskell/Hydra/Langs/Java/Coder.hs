@@ -38,38 +38,14 @@ printModule mod = do
 adaptTypeToJavaAndEncode :: (Ord a, Read a, Show a) => Aliases -> Type a -> Flow (Graph a) Java.Type
 adaptTypeToJavaAndEncode aliases = adaptAndEncodeType javaLanguage (encodeType aliases)
 
+addComment :: Java.ClassBodyDeclaration -> FieldType a -> Flow (Graph a) Java.ClassBodyDeclarationWithComments
+addComment decl field = Java.ClassBodyDeclarationWithComments decl <$> commentsFromFieldType field
+
 boundTypeVariables :: Type a -> [Name]
 boundTypeVariables typ = case typ of
   TypeAnnotated (Annotated typ1 _) -> boundTypeVariables typ1
   TypeLambda (LambdaType v body) -> v:(boundTypeVariables body)
   _ -> []
-
-commentsFromElement :: Element a -> Flow (Graph a) (Maybe String)
-commentsFromElement el = do
-  g <- getState
-  annotationClassTermDescription (graphAnnotations g) (elementData el)
-
-commentsFromFieldType :: FieldType a -> Flow (Graph a) (Maybe String)
-commentsFromFieldType (FieldType _ t) = do
-  g <- getState
-  annotationClassTypeDescription (graphAnnotations g) t
-
-addComment :: Java.ClassBodyDeclaration -> FieldType a -> Flow (Graph a) Java.ClassBodyDeclarationWithComments
-addComment decl field = Java.ClassBodyDeclarationWithComments decl <$> commentsFromFieldType field
-
-noComment :: Java.ClassBodyDeclaration -> Java.ClassBodyDeclarationWithComments
-noComment decl = Java.ClassBodyDeclarationWithComments decl Nothing
-
-elementNameToFilePath :: Name -> FilePath
-elementNameToFilePath name = nameToFilePath False (FileExtension "java") $ unqualifyName $ QualifiedName ns (sanitizeJavaName local)
-  where
-    QualifiedName ns local = qualifyNameEager name
-
-moduleToJavaCompilationUnit :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map Name Java.CompilationUnit)
-moduleToJavaCompilationUnit mod = transformModule javaLanguage encode constructModule mod
-  where
-    aliases = importAliasesForModule mod
-    encode = encodeTerm aliases . contractTerm
 
 classModsPublic :: [Java.ClassModifier]
 classModsPublic = [Java.ClassModifierPublic]
@@ -85,6 +61,29 @@ classifyDataTerm typ term = if isLambda term
     isUnsupportedVariant = case stripTerm term of
       TermLet _ -> True
       _ -> False
+
+commentsFromElement :: Element a -> Flow (Graph a) (Maybe String)
+commentsFromElement el = do
+  g <- getState
+  annotationClassTermDescription (graphAnnotations g) (elementData el)
+
+commentsFromFieldType :: FieldType a -> Flow (Graph a) (Maybe String)
+commentsFromFieldType (FieldType _ t) = do
+  g <- getState
+  annotationClassTypeDescription (graphAnnotations g) t
+
+constructElementsInterface :: Module a -> [Java.InterfaceMemberDeclaration] -> (Name, Java.CompilationUnit)
+constructElementsInterface mod members = (elName, cu)
+  where
+    cu = Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) [] [decl]
+    pkg = javaPackageDeclaration $ moduleNamespace mod
+    mods = [Java.InterfaceModifierPublic]
+    className = elementsClassName $ moduleNamespace mod
+    elName = unqualifyName $ QualifiedName (Just $ moduleNamespace mod) className
+    body = Java.InterfaceBody members
+    itf = Java.TypeDeclarationInterface $ Java.InterfaceDeclarationNormalInterface $
+      Java.NormalInterfaceDeclaration mods (javaTypeIdentifier className) [] [] body
+    decl = Java.TypeDeclarationWithComments itf $ moduleDescription mod
 
 constructModule :: (Ord a, Read a, Show a)
   => Module a
@@ -157,19 +156,6 @@ constructModule mod coders pairs = do
                 return $ interfaceMethodDeclaration mods tparams mname [param] result (Just $ stmts2 ++ stmts3 ++ [returnSt])
             _ -> unexpected "function term" $ show term
           _ -> unexpected "function type" $ show typ
-
-constructElementsInterface :: Module a -> [Java.InterfaceMemberDeclaration] -> (Name, Java.CompilationUnit)
-constructElementsInterface mod members = (elName, cu)
-  where
-    cu = Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) [] [decl]
-    pkg = javaPackageDeclaration $ moduleNamespace mod
-    mods = [Java.InterfaceModifierPublic]
-    className = elementsClassName $ moduleNamespace mod
-    elName = unqualifyName $ QualifiedName (Just $ moduleNamespace mod) className
-    body = Java.InterfaceBody members
-    itf = Java.TypeDeclarationInterface $ Java.InterfaceDeclarationNormalInterface $
-      Java.NormalInterfaceDeclaration mods (javaTypeIdentifier className) [] [] body
-    decl = Java.TypeDeclarationWithComments itf $ moduleDescription mod
 
 declarationForLambdaType :: (Eq a, Ord a, Read a, Show a) => Aliases
   -> [Java.TypeParameter] -> Name -> LambdaType a -> Flow (Graph a) Java.ClassDeclaration
@@ -389,6 +375,11 @@ elementJavaIdentifier isPrim isRef aliases name = Java.Identifier $ if isPrim
   where
     sep = if isRef then "::" else "."
     qualify s = Java.unIdentifier $ nameToJavaName aliases $ unqualifyName $ QualifiedName ns s
+    QualifiedName ns local = qualifyNameEager name
+
+elementNameToFilePath :: Name -> FilePath
+elementNameToFilePath name = nameToFilePath False (FileExtension "java") $ unqualifyName $ QualifiedName ns (sanitizeJavaName local)
+  where
     QualifiedName ns local = qualifyNameEager name
 
 elementsClassName :: Namespace -> String
@@ -888,9 +879,16 @@ maybeLet aliases term cons = helper [] term
           sorted = topologicalSortComponents (toDeps <$> M.toList allDeps)
             where
               toDeps (key, deps) = (key, S.toList deps)
---      TermFunction (FunctionLambda (Lambda v body)) -> maybeLet aliases body $
---        \aliases' tm stmts' -> cons aliases' (reannotate anns (TermFunction (FunctionLambda (Lambda v tm)))) stmts'
       _ -> cons aliases (reannotate anns term) []
+
+moduleToJavaCompilationUnit :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map Name Java.CompilationUnit)
+moduleToJavaCompilationUnit mod = transformModule javaLanguage encode constructModule mod
+  where
+    aliases = importAliasesForModule mod
+    encode = encodeTerm aliases . contractTerm
+
+noComment :: Java.ClassBodyDeclaration -> Java.ClassBodyDeclarationWithComments
+noComment decl = Java.ClassBodyDeclarationWithComments decl Nothing
 
 reannotate anns term = case anns of
   [] -> term
