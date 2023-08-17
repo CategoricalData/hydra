@@ -78,6 +78,7 @@ eliminationVariantDef = basicsDefinition "eliminationVariant" $
   matchToEnum _Elimination _EliminationVariant Nothing [
     _Elimination_list     @-> _EliminationVariant_list,
     _Elimination_optional @-> _EliminationVariant_optional,
+    _Elimination_product  @-> _EliminationVariant_product,
     _Elimination_record   @-> _EliminationVariant_record,
     _Elimination_union    @-> _EliminationVariant_union,
     _Elimination_wrap     @-> _EliminationVariant_wrap]
@@ -89,6 +90,7 @@ eliminationVariantsDef = basicsDefinition "eliminationVariants" $
     _EliminationVariant_list,
     _EliminationVariant_wrap,
     _EliminationVariant_optional,
+    _EliminationVariant_product,
     _EliminationVariant_record,
     _EliminationVariant_union]
 
@@ -233,7 +235,7 @@ literalVariantsDef = basicsDefinition "literalVariants" $
 
 termMetaDef :: Definition (Graph a -> Term a -> a)
 termMetaDef = basicsDefinition "termMeta" $
-  function (Types.apply (TypeVariable _Graph) (Types.var "a")) (Types.function (Types.apply (TypeVariable _Term) (Types.var "a")) (Types.var "a")) $
+  function graphA (Types.function termA (Types.var "a")) $
   (project _AnnotationClass _AnnotationClass_termAnnotation) <.> (project _Graph _Graph_annotations)
 
 termVariantDef :: Definition (Term a -> TermVariant)

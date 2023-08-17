@@ -24,6 +24,7 @@ _Either_right = (Core.FieldName "right")
 data EliminationVariant = 
   EliminationVariantList  |
   EliminationVariantOptional  |
+  EliminationVariantProduct  |
   EliminationVariantRecord  |
   EliminationVariantUnion  |
   EliminationVariantWrap 
@@ -34,6 +35,8 @@ _EliminationVariant = (Core.Name "hydra/mantle.EliminationVariant")
 _EliminationVariant_list = (Core.FieldName "list")
 
 _EliminationVariant_optional = (Core.FieldName "optional")
+
+_EliminationVariant_product = (Core.FieldName "product")
 
 _EliminationVariant_record = (Core.FieldName "record")
 

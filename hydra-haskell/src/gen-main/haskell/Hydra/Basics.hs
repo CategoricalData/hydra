@@ -22,6 +22,7 @@ eliminationVariant :: (Core.Elimination a -> Mantle.EliminationVariant)
 eliminationVariant x = case x of
   Core.EliminationList _ -> Mantle.EliminationVariantList
   Core.EliminationOptional _ -> Mantle.EliminationVariantOptional
+  Core.EliminationProduct _ -> Mantle.EliminationVariantProduct
   Core.EliminationRecord _ -> Mantle.EliminationVariantRecord
   Core.EliminationUnion _ -> Mantle.EliminationVariantUnion
   Core.EliminationWrap _ -> Mantle.EliminationVariantWrap
@@ -32,6 +33,7 @@ eliminationVariants = [
   Mantle.EliminationVariantList,
   Mantle.EliminationVariantWrap,
   Mantle.EliminationVariantOptional,
+  Mantle.EliminationVariantProduct,
   Mantle.EliminationVariantRecord,
   Mantle.EliminationVariantUnion]
 

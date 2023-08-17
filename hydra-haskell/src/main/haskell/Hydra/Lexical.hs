@@ -17,22 +17,22 @@ import qualified Data.Maybe as Y
 import Control.Monad
 
 
-dereferenceElement :: Name -> Flow (Graph a) (Term a)
+dereferenceElement :: Name -> Flow (Graph a) (Maybe (Element a))
 dereferenceElement en = do
-    cx <- getState
-    case M.lookup en (graphElements cx) of
-      Nothing -> fail $ "element " ++ unName en ++ " does not exist"
-      Just e -> pure $ elementData e
+  g <- getState
+  return $ M.lookup en (graphElements g)
 
 requireElement :: Name -> Flow (Graph a) (Element a)
 requireElement name = do
-    cx <- getState
-    Y.maybe (err cx) pure $ M.lookup name $ graphElements cx
+    mel <- dereferenceElement name
+    case mel of
+      Just el -> return el
+      Nothing -> getState >>= err
   where
-    err cx = fail $ "no such element: " ++ unName name
-        ++ ". Available elements: {" ++ L.intercalate ", " (ellipsis (unName . elementName <$> M.elems (graphElements cx))) ++ "}"
+    err g = fail $ "no such element: " ++ unName name
+        ++ ". Available elements: {" ++ L.intercalate ", " (ellipsis (unName . elementName <$> M.elems (graphElements g))) ++ "}"
       where
-        showAll = True -- False
+        showAll = False
         ellipsis strings = if L.length strings > 3 && not showAll
           then L.take 3 strings ++ ["..."]
           else strings
