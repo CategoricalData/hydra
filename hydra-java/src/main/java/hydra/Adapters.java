@@ -28,8 +28,8 @@ public class Adapters {
      * Compose two stateless adapters, in turn composing their coders
      */
     public static <T1, T2, T3, V1, V2, V3> StatelessAdapter<T1, T3, V1, V3> composeStateless(
-            Adapter<Void, Void, T1, T2, V1, V2> adapter1,
-            Adapter<Void, Void, T2, T3, V2, V3> adapter2) {
+            StatelessAdapter<T1, T2, V1, V2> adapter1,
+            StatelessAdapter<T2, T3, V2, V3> adapter2) {
 
         return new StatelessAdapter<>(
                 adapter1.isLossy || adapter2.isLossy,
@@ -55,8 +55,8 @@ public class Adapters {
      * Compose two stateless adapters constructed from their source types, in turn composing their coders
      */
     public static <T1, T2, T3, V1, V2, V3> Function<T1, Flow<Void, StatelessAdapter<T1, T3, V1, V3>>> composeStateless(
-            Function<T1, Flow<Void, Adapter<Void, Void, T1, T2, V1, V2>>> constructor1,
-            Function<T2, Flow<Void, Adapter<Void, Void, T2, T3, V2, V3>>> constructor2) {
+            Function<T1, Flow<Void, StatelessAdapter<T1, T2, V1, V2>>> constructor1,
+            Function<T2, Flow<Void, StatelessAdapter<T2, T3, V2, V3>>> constructor2) {
         return t1 -> Flows.bind(
                 constructor1.apply(t1),
                 firstMile -> Flows.map(
