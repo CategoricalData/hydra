@@ -1,16 +1,18 @@
 -- | Entry point for Hydra code generation utilities
 
 module Hydra.Codegen (
-  hydraKernel,
+  allModules,
   kernelModules,
-  langModules,
   mainModules,
   modulesToGraph,
   testModules,
-  tier0KernelModules,
-  tier1KernelModules,
-  tier2KernelModules,
-  tier3KernelModules,
+  tier0Modules,
+  tier1Modules,
+  tier2Modules,
+  tier3Modules,
+  tier4LangModules,
+  tier4Modules,
+  tier4TestModules,
   writeGraphql,
   writeHaskell,
   writeJava,
@@ -93,12 +95,15 @@ import qualified System.Directory as SD
 import qualified Data.Maybe as Y
 
 
+allModules :: [Module Kv]
+allModules = mainModules ++ testModules
+
 findType :: Graph a -> Term a -> Flow (Graph a) (Maybe (Type a))
 findType cx term = annotationClassTermType (graphAnnotations cx) term
 
 generateSources :: (Module Kv -> Flow (Graph Kv) (M.Map FilePath String)) -> FilePath -> [Module Kv] -> IO ()
 generateSources printModule basePath mods = do
-    mfiles <- runFlow hydraKernel generateFiles
+    mfiles <- runFlow kernelSchema generateFiles
     case mfiles of
       Nothing -> fail "Transformation failed"
       Just files -> mapM_ writePair files
@@ -121,10 +126,13 @@ generateSources printModule basePath mods = do
 
     forModule mod = withTrace ("module " ++ unNamespace (moduleNamespace mod)) $ printModule mod
 
+kernelModules :: [Module Kv]
+kernelModules = tier0Modules ++ tier1Modules ++ tier2Modules ++ tier3Modules
+
 -- Note: currently a subset of the kernel which is used as a schema graph.
 --       The other modules are not yet needed in the runtime environment
-hydraKernel :: Graph Kv
-hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElements [
+kernelSchema :: Graph Kv
+kernelSchema = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElements [
   hydraCodersModule,
   hydraComputeModule,
   hydraCoreModule,
@@ -133,26 +141,34 @@ hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElement
   hydraModuleModule,
   hydraTestingModule]
 
-tier3KernelModules :: [Module Kv]
-tier3KernelModules = [
-  hydraTier3Module]
+mainModules :: [Module Kv]
+mainModules = kernelModules ++ tier4LangModules
 
-tier2KernelModules :: [Module Kv]
-tier2KernelModules = [
-  hydraBasicsModule,
-  hydraExtrasModule,
---  hydraMonadsModule,
-  hydraPrintingModule,
-  hydraTier2Module]
+modulesToGraph :: [Module Kv] -> Graph Kv
+modulesToGraph mods = elementsToGraph kernelSchema (Just kernelSchema) elements
+  where
+    elements = L.concat (moduleElements <$> modules)
+    modules = L.concat (close <$> mods)
+      where
+        close mod = mod:(L.concat (close <$> moduleDependencies mod))
 
-tier1KernelModules :: [Module Kv]
-tier1KernelModules = [
-  coreEncodingModule,
-  hydraCoreLanguageModule,
-  hydraTier1Module]
+printTrace :: Bool -> Trace -> IO ()
+printTrace isError t = do
+  CM.unless (L.null $ traceMessages t) $ do
+      putStrLn $ if isError then "Flow failed. Messages:" else "Messages:"
+      putStrLn $ indentLines $ traceSummary t
 
-tier0KernelModules :: [Module Kv]
-tier0KernelModules = [
+runFlow :: s -> Flow s a -> IO (Maybe a)
+runFlow cx f = do
+  let FlowState v _ t = unFlow f cx emptyTrace
+  printTrace (Y.isNothing v) t
+  return v
+
+testModules :: [Module Kv]
+testModules = tier4TestModules
+
+tier0Modules :: [Module Kv]
+tier0Modules = [
   hydraAstModule,
   hydraCodersModule,
   hydraComputeModule,
@@ -170,11 +186,29 @@ tier0KernelModules = [
   hydraWorkflowModule,
   jsonModelModule] -- JSON module is part of the kernel, despite being an external language; JSON support is built in to Hydra
 
-kernelModules :: [Module Kv]
-kernelModules = tier0KernelModules ++ tier1KernelModules ++ tier2KernelModules ++ tier3KernelModules
+tier1Modules :: [Module Kv]
+tier1Modules = [
+  coreEncodingModule,
+  hydraCoreLanguageModule,
+  hydraTier1Module]
 
-langModules :: [Module Kv]
-langModules = [
+tier2Modules :: [Module Kv]
+tier2Modules = [
+  hydraBasicsModule,
+  hydraExtrasModule,
+--  hydraMonadsModule,
+  hydraPrintingModule,
+  hydraTier2Module]
+
+tier3Modules :: [Module Kv]
+tier3Modules = [
+  hydraTier3Module]
+
+tier4Modules :: [Module Kv]
+tier4Modules = tier4LangModules ++ tier4TestModules
+
+tier4LangModules :: [Module Kv]
+tier4LangModules = [
   avroSchemaModule,
   graphqlSyntaxModule,
   haskellAstModule,
@@ -199,31 +233,8 @@ langModules = [
   xmlSchemaModule,
   yamlModelModule]
 
-mainModules :: [Module Kv]
-mainModules = kernelModules ++ langModules
-
-modulesToGraph :: [Module Kv] -> Graph Kv
-modulesToGraph mods = elementsToGraph hydraKernel (Just hydraKernel) elements
-  where
-    elements = L.concat (moduleElements <$> modules)
-    modules = L.concat (close <$> mods)
-      where
-        close mod = mod:(L.concat (close <$> moduleDependencies mod))
-
-printTrace :: Bool -> Trace -> IO ()
-printTrace isError t = do
-  CM.unless (L.null $ traceMessages t) $ do
-      putStrLn $ if isError then "Flow failed. Messages:" else "Messages:"
-      putStrLn $ indentLines $ traceSummary t
-
-runFlow :: s -> Flow s a -> IO (Maybe a)
-runFlow cx f = do
-  let FlowState v _ t = unFlow f cx emptyTrace
-  printTrace (Y.isNothing v) t
-  return v
-
-testModules :: [Module Kv]
-testModules = [
+tier4TestModules :: [Module Kv]
+tier4TestModules = [
   testSuiteModule]
 
 writeGraphql :: FP.FilePath -> [Module Kv] -> IO ()
