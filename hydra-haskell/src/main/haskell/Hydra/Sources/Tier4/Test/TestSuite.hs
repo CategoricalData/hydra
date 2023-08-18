@@ -4,7 +4,7 @@ import Hydra.Kernel
 import Hydra.Testing
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
-import Hydra.Sources.Tier0.Core
+import Hydra.Sources.Core
 import Hydra.Sources.Tier0.Testing
 
 import Hydra.Sources.Tier4.Test.Lib.Lists

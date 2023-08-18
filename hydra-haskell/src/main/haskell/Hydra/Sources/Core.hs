@@ -1,8 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier0.Core where
+module Hydra.Sources.Core(
+  hydraCore,
+  hydraCoreModule,
+  module Hydra.Kernel,
+) where
 
--- Note: hydra/core has nonstandard imports
 import Hydra.Kernel
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
