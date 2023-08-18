@@ -1,10 +1,10 @@
-package hydra.langs.json.model;
+package hydra.json;
 
 /**
  * A JSON value
  */
 public abstract class Value {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/json/model.Value");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/json.Value");
   
   private Value () {
   
@@ -56,10 +56,10 @@ public abstract class Value {
     }
   }
   
-  public static final class Array extends hydra.langs.json.model.Value {
-    public final java.util.List<hydra.langs.json.model.Value> value;
+  public static final class Array extends hydra.json.Value {
+    public final java.util.List<hydra.json.Value> value;
     
-    public Array (java.util.List<hydra.langs.json.model.Value> value) {
+    public Array (java.util.List<hydra.json.Value> value) {
       this.value = value;
     }
     
@@ -83,7 +83,7 @@ public abstract class Value {
     }
   }
   
-  public static final class Boolean_ extends hydra.langs.json.model.Value {
+  public static final class Boolean_ extends hydra.json.Value {
     public final Boolean value;
     
     public Boolean_ (Boolean value) {
@@ -110,7 +110,7 @@ public abstract class Value {
     }
   }
   
-  public static final class Null extends hydra.langs.json.model.Value {
+  public static final class Null extends hydra.json.Value {
     public Null () {
     
     }
@@ -135,7 +135,7 @@ public abstract class Value {
     }
   }
   
-  public static final class Number_ extends hydra.langs.json.model.Value {
+  public static final class Number_ extends hydra.json.Value {
     public final Double value;
     
     public Number_ (Double value) {
@@ -162,10 +162,10 @@ public abstract class Value {
     }
   }
   
-  public static final class Object_ extends hydra.langs.json.model.Value {
-    public final java.util.Map<String, hydra.langs.json.model.Value> value;
+  public static final class Object_ extends hydra.json.Value {
+    public final java.util.Map<String, hydra.json.Value> value;
     
-    public Object_ (java.util.Map<String, hydra.langs.json.model.Value> value) {
+    public Object_ (java.util.Map<String, hydra.json.Value> value) {
       this.value = value;
     }
     
@@ -189,7 +189,7 @@ public abstract class Value {
     }
   }
   
-  public static final class String_ extends hydra.langs.json.model.Value {
+  public static final class String_ extends hydra.json.Value {
     public final String value;
     
     public String_ (String value) {
