@@ -1,4 +1,4 @@
--- | Haskell implementations of hydra/lib/io primitives
+-- | Tier-1 library which provides Haskell implementations of hydra/lib/io primitives.
 
 module Hydra.Lib.Io (
   showTerm,

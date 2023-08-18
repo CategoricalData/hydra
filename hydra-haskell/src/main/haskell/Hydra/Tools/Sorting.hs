@@ -3,9 +3,6 @@
 module Hydra.Tools.Sorting (
   topologicalSort,
   topologicalSortComponents,
-
-
-
   initGraph
 ) where
 

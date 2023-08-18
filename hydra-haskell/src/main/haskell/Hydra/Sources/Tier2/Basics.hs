@@ -2,24 +2,30 @@
 
 module Hydra.Sources.Tier2.Basics where
 
-import Hydra.Kernel
-import Hydra.Dsl.Base
-import Hydra.Sources.Tier1.Tier1
-import Hydra.Sources.Tier0.Strip
-import qualified Hydra.Dsl.Graph as Graph
-import qualified Hydra.Dsl.Module as Module
-import Hydra.Dsl.Lib.Equality as Equality
-import Hydra.Dsl.Lib.Flows as Flows
-import Hydra.Dsl.Lib.Lists as Lists
-import Hydra.Dsl.Lib.Logic as Logic
-import Hydra.Dsl.Lib.Maps as Maps
-import Hydra.Dsl.Lib.Strings as Strings
-import qualified Hydra.Dsl.Terms as Terms
-import qualified Hydra.Dsl.Types as Types
-
-import Prelude hiding ((++))
-import qualified Data.Map as M
-import qualified Data.Set as S
+-- Standard Tier-2 imports
+import           Prelude hiding ((++))
+import qualified Data.List                 as L
+import qualified Data.Map                  as M
+import qualified Data.Set                  as S
+import qualified Data.Maybe                as Y
+import           Hydra.Dsl.Base
+import qualified Hydra.Dsl.Core            as Core
+import qualified Hydra.Dsl.Graph           as Graph
+import qualified Hydra.Dsl.Lib.Equality    as Equality
+import qualified Hydra.Dsl.Lib.Flows       as Flows
+import qualified Hydra.Dsl.Lib.Io          as Io
+import qualified Hydra.Dsl.Lib.Lists       as Lists
+import qualified Hydra.Dsl.Lib.Literals    as Literals
+import qualified Hydra.Dsl.Lib.Logic       as Logic
+import qualified Hydra.Dsl.Lib.Maps        as Maps
+import qualified Hydra.Dsl.Lib.Math        as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Sets        as Sets
+import           Hydra.Dsl.Lib.Strings     as Strings
+import qualified Hydra.Dsl.Module          as Module
+import qualified Hydra.Dsl.Terms           as Terms
+import qualified Hydra.Dsl.Types           as Types
+import           Hydra.Sources.Tier1.All
 
 
 basicsDefinition :: String -> Datum a -> Definition a
@@ -373,7 +379,7 @@ isEncodedTypeDef = basicsDefinition "isEncodedType" $
       Case _Term_application --> lambda "a" $
         ref isEncodedTypeDef @@ (project _Application _Application_function @@ var "a"),
       Case _Term_union       --> lambda "i" $
-        equalString @@ (string $ unName _Type) @@ (unwrap _Name @@ (project _Injection _Injection_typeName @@ var "i"))
+        Equality.equalString @@ (string $ unName _Type) @@ (unwrap _Name @@ (project _Injection _Injection_typeName @@ var "i"))
     ]) @@ (ref stripTermDef @@ var "t")
 
 isTypeDef :: Definition (Type a -> Bool)
@@ -385,19 +391,19 @@ isTypeDef = basicsDefinition "isType" $
       Case _Type_lambda --> lambda "l" $
         ref isTypeDef @@ (project _LambdaType _LambdaType_body @@ var "l"),
       Case _Type_union --> lambda "rt" $
-        equalString @@ (string $ unName _Type) @@ (unwrap _Name @@ (project _RowType _RowType_typeName @@ var "rt"))
+        Equality.equalString @@ (string $ unName _Type) @@ (unwrap _Name @@ (project _RowType _RowType_typeName @@ var "rt"))
 --      Case _Type_variable --> constant true
     ]) @@ (ref stripTypeDef @@ var "t")
 
 isUnitTermDef :: Definition (Term a -> Bool)
 isUnitTermDef = basicsDefinition "isUnitTerm" $
   functionWithClasses termA booleanT eqA $
-  lambda "t" $ equalTerm @@ (ref stripTermDef @@ var "t") @@ Datum (coreEncodeTerm Terms.unit)
+  lambda "t" $ Equality.equalTerm @@ (ref stripTermDef @@ var "t") @@ Datum (coreEncodeTerm Terms.unit)
 
 isUnitTypeDef :: Definition (Term a -> Bool)
 isUnitTypeDef = basicsDefinition "isUnitType" $
   functionWithClasses typeA booleanT eqA $
-  lambda "t" $ equalType @@ (ref stripTypeDef @@ var "t") @@ Datum (coreEncodeType Types.unit)
+  lambda "t" $ Equality.equalType @@ (ref stripTypeDef @@ var "t") @@ Datum (coreEncodeType Types.unit)
 
 elementsToGraphDef :: Definition (Graph a -> Maybe (Graph a) -> [Element a] -> Graph a)
 elementsToGraphDef = basicsDefinition "elementsToGraph" $
