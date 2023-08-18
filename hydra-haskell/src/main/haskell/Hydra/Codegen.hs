@@ -39,6 +39,7 @@ import Hydra.Sources.Tier0.Constraints
 import Hydra.Sources.Tier0.Core
 import Hydra.Sources.Tier0.Grammar
 import Hydra.Sources.Tier0.Graph
+import Hydra.Sources.Tier0.Langs.Json.Model
 import Hydra.Sources.Tier0.Mantle
 import Hydra.Sources.Tier0.Module
 import Hydra.Sources.Tier0.Phantoms
@@ -60,30 +61,29 @@ import Hydra.Sources.Tier3.Tier3
 
 import Hydra.Sources.Tier4.Test.TestSuite
 
-import Hydra.Sources.Langs.Avro.Schema
-import Hydra.Sources.Langs.Graphql.Syntax
-import Hydra.Sources.Langs.Haskell.Ast
-import Hydra.Sources.Langs.Java.Language
-import Hydra.Sources.Langs.Java.Syntax
-import Hydra.Sources.Langs.Json.Model
-import Hydra.Sources.Langs.Owl.Syntax
-import Hydra.Sources.Langs.Parquet.Format
-import Hydra.Sources.Langs.Pegasus.Pdl
-import Hydra.Sources.Langs.Protobuf.Any
-import Hydra.Sources.Langs.Protobuf.SourceContext
-import Hydra.Sources.Langs.Protobuf.Type
-import Hydra.Sources.Langs.Rdf.Syntax
-import Hydra.Sources.Langs.RelationalModel
-import Hydra.Sources.Langs.Scala.Meta
-import Hydra.Sources.Langs.Shacl.Model
-import Hydra.Sources.Langs.Shex.Syntax
-import Hydra.Sources.Langs.Sql.Ansi
-import Hydra.Sources.Langs.Tabular
-import Hydra.Sources.Langs.Tinkerpop.Features
-import Hydra.Sources.Langs.Tinkerpop.Mappings
-import Hydra.Sources.Langs.Tinkerpop.PropertyGraph
-import Hydra.Sources.Langs.Xml.Schema
-import Hydra.Sources.Langs.Yaml.Model
+import Hydra.Sources.Tier4.Langs.Avro.Schema
+import Hydra.Sources.Tier4.Langs.Graphql.Syntax
+import Hydra.Sources.Tier4.Langs.Haskell.Ast
+import Hydra.Sources.Tier4.Langs.Java.Language
+import Hydra.Sources.Tier4.Langs.Java.Syntax
+import Hydra.Sources.Tier4.Langs.Owl.Syntax
+import Hydra.Sources.Tier4.Langs.Parquet.Format
+import Hydra.Sources.Tier4.Langs.Pegasus.Pdl
+import Hydra.Sources.Tier4.Langs.Protobuf.Any
+import Hydra.Sources.Tier4.Langs.Protobuf.SourceContext
+import Hydra.Sources.Tier4.Langs.Protobuf.Type
+import Hydra.Sources.Tier4.Langs.Rdf.Syntax
+import Hydra.Sources.Tier4.Langs.RelationalModel
+import Hydra.Sources.Tier4.Langs.Scala.Meta
+import Hydra.Sources.Tier4.Langs.Shacl.Model
+import Hydra.Sources.Tier4.Langs.Shex.Syntax
+import Hydra.Sources.Tier4.Langs.Sql.Ansi
+import Hydra.Sources.Tier4.Langs.Tabular
+import Hydra.Sources.Tier4.Langs.Tinkerpop.Features
+import Hydra.Sources.Tier4.Langs.Tinkerpop.Mappings
+import Hydra.Sources.Tier4.Langs.Tinkerpop.PropertyGraph
+import Hydra.Sources.Tier4.Langs.Xml.Schema
+import Hydra.Sources.Tier4.Langs.Yaml.Model
 
 import qualified Control.Monad as CM
 import qualified System.FilePath as FP
