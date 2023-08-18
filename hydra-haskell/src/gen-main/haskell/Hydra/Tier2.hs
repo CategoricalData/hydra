@@ -52,10 +52,10 @@ requireElementType el =
   in (Flows.bind (getTermType (Graph.elementData el)) withType)
 
 -- | Get the annotated type of a given term, or fail if it is missing
-requireTermType :: Show a => (Core.Term a -> Compute.Flow (Graph.Graph a) (Core.Type a))
+requireTermType :: (Core.Term a -> Compute.Flow (Graph.Graph a) (Core.Type a))
 requireTermType term =  
   let withType = (\x -> case x of
-          Nothing -> (Flows.fail $ "missing type annotation: " <> show term)
+          Nothing -> (Flows.fail "missing type annotation")
           Just v -> (Flows.pure v))
   in (Flows.bind (getTermType term) withType)
 

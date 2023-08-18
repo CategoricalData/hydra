@@ -41,6 +41,7 @@ import Hydra.Sources.Coders
 import Hydra.Sources.Compute
 import Hydra.Sources.Constraints
 import Hydra.Sources.Core
+import Hydra.Sources.CoreLanguage
 import Hydra.Sources.Extras
 import Hydra.Sources.Grammar
 import Hydra.Sources.Graph
@@ -149,9 +150,10 @@ tier0KernelModules = [
   hydraAstModule,
   hydraCodersModule,
   hydraConstantsModule,
-  hydraCoreModule,
   hydraComputeModule,
   hydraConstraintsModule,
+  hydraCoreModule,
+  hydraCoreLanguageModule,
   hydraGrammarModule,
   hydraGraphModule,
   hydraMantleModule,
