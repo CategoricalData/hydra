@@ -1,24 +1,14 @@
 -- | Entry point for Hydra code generation utilities
 
 module Hydra.Codegen (
-  allModules,
-  kernelModules,
-  mainModules,
   modulesToGraph,
-  testModules,
-  tier0Modules,
-  tier1Modules,
-  tier2Modules,
-  tier3Modules,
-  tier4LangModules,
-  tier4Modules,
-  tier4TestModules,
   writeGraphql,
   writeHaskell,
   writeJava,
   writePdl,
   writeScala,
   writeYaml,
+  module Hydra.Sources.Tier4.All
 ) where
 
 import Hydra.Kernel
@@ -33,32 +23,7 @@ import qualified Hydra.Langs.Scala.Coder as Scala
 import qualified Hydra.Langs.Yaml.Modules as Yaml
 
 import Hydra.Sources.Libraries
-import Hydra.Sources.Tier3.All
-import Hydra.Sources.Tier4.Test.TestSuite
-
-import Hydra.Sources.Tier4.Langs.Avro.Schema
-import Hydra.Sources.Tier4.Langs.Graphql.Syntax
-import Hydra.Sources.Tier4.Langs.Haskell.Ast
-import Hydra.Sources.Tier4.Langs.Java.Language
-import Hydra.Sources.Tier4.Langs.Java.Syntax
-import Hydra.Sources.Tier4.Langs.Owl.Syntax
-import Hydra.Sources.Tier4.Langs.Parquet.Format
-import Hydra.Sources.Tier4.Langs.Pegasus.Pdl
-import Hydra.Sources.Tier4.Langs.Protobuf.Any
-import Hydra.Sources.Tier4.Langs.Protobuf.SourceContext
-import Hydra.Sources.Tier4.Langs.Protobuf.Type
-import Hydra.Sources.Tier4.Langs.Rdf.Syntax
-import Hydra.Sources.Tier4.Langs.RelationalModel
-import Hydra.Sources.Tier4.Langs.Scala.Meta
-import Hydra.Sources.Tier4.Langs.Shacl.Model
-import Hydra.Sources.Tier4.Langs.Shex.Syntax
-import Hydra.Sources.Tier4.Langs.Sql.Ansi
-import Hydra.Sources.Tier4.Langs.Tabular
-import Hydra.Sources.Tier4.Langs.Tinkerpop.Features
-import Hydra.Sources.Tier4.Langs.Tinkerpop.Mappings
-import Hydra.Sources.Tier4.Langs.Tinkerpop.PropertyGraph
-import Hydra.Sources.Tier4.Langs.Xml.Schema
-import Hydra.Sources.Tier4.Langs.Yaml.Model
+import Hydra.Sources.Tier4.All
 
 import qualified Control.Monad as CM
 import qualified System.FilePath as FP
@@ -67,9 +32,6 @@ import qualified Data.Map as M
 import qualified System.Directory as SD
 import qualified Data.Maybe as Y
 
-
-allModules :: [Module Kv]
-allModules = mainModules ++ testModules
 
 findType :: Graph a -> Term a -> Flow (Graph a) (Maybe (Type a))
 findType cx term = annotationClassTermType (graphAnnotations cx) term
@@ -99,9 +61,6 @@ generateSources printModule basePath mods = do
 
     forModule mod = withTrace ("module " ++ unNamespace (moduleNamespace mod)) $ printModule mod
 
-kernelModules :: [Module Kv]
-kernelModules = tier0Modules ++ tier1Modules ++ tier2Modules ++ tier3Modules
-
 -- Note: currently a subset of the kernel which is used as a schema graph.
 --       The other modules are not yet needed in the runtime environment
 kernelSchema :: Graph Kv
@@ -113,9 +72,6 @@ kernelSchema = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElemen
   hydraMantleModule,
   hydraModuleModule,
   hydraTestingModule]
-
-mainModules :: [Module Kv]
-mainModules = kernelModules ++ tier4LangModules
 
 modulesToGraph :: [Module Kv] -> Graph Kv
 modulesToGraph mods = elementsToGraph kernelSchema (Just kernelSchema) elements
@@ -136,79 +92,6 @@ runFlow cx f = do
   let FlowState v _ t = unFlow f cx emptyTrace
   printTrace (Y.isNothing v) t
   return v
-
-testModules :: [Module Kv]
-testModules = tier4TestModules
-
-tier0Modules :: [Module Kv]
-tier0Modules = [
-  hydraAstModule,
-  hydraCodersModule,
-  hydraComputeModule,
-  hydraConstantsModule,
-  hydraConstraintsModule,
-  hydraCoreModule,
-  hydraGrammarModule,
-  hydraGraphModule,
-  hydraMantleModule,
-  hydraModuleModule,
-  hydraPhantomsModule,
-  hydraQueryModule,
-  hydraStripModule,
-  hydraTestingModule,
-  hydraWorkflowModule,
-  jsonModelModule] -- JSON module is part of the kernel, despite being an external language; JSON support is built in to Hydra
-
-tier1Modules :: [Module Kv]
-tier1Modules = [
-  coreEncodingModule,
-  hydraCoreLanguageModule,
-  hydraTier1Module]
-
-tier2Modules :: [Module Kv]
-tier2Modules = [
-  hydraBasicsModule,
-  hydraExtrasModule,
---  hydraMonadsModule,
-  hydraPrintingModule,
-  hydraTier2Module]
-
-tier3Modules :: [Module Kv]
-tier3Modules = [
-  hydraTier3Module]
-
-tier4Modules :: [Module Kv]
-tier4Modules = tier4LangModules ++ tier4TestModules
-
-tier4LangModules :: [Module Kv]
-tier4LangModules = [
-  avroSchemaModule,
-  graphqlSyntaxModule,
-  haskellAstModule,
-  javaLanguageModule,
-  javaSyntaxModule,
-  owlSyntaxModule,
-  parquetFormatModule,
-  pegasusPdlModule,
-  protobufAnyModule,
-  protobufSourceContextModule,
-  protobufTypeModule,
-  rdfSyntaxModule,
-  relationalModelModule,
-  scalaMetaModule,
-  shaclModelModule,
-  shexSyntaxModule,
-  sqlModule,
-  tabularModule,
-  tinkerpopFeaturesModule,
-  tinkerpopMappingsModule,
-  tinkerpopPropertyGraphModule,
-  xmlSchemaModule,
-  yamlModelModule]
-
-tier4TestModules :: [Module Kv]
-tier4TestModules = [
-  testSuiteModule]
 
 writeGraphql :: FP.FilePath -> [Module Kv] -> IO ()
 writeGraphql = generateSources Graphql.printModule

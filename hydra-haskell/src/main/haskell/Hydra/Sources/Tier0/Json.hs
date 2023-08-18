@@ -1,3 +1,5 @@
+-- | A simple JSON model. This model is part of the Hydra kernel, despite JSON being an external language; JSON support is built in to Hydra
+
 module Hydra.Sources.Tier0.Json where
 
 -- Standard Tier-0 imports

@@ -1,4 +1,5 @@
 module Hydra.Sources.Tier0.All(
+  module Hydra.Sources.Tier0.All,
   module Hydra.Sources.Core,
   module Hydra.Sources.Tier0.Ast,
   module Hydra.Sources.Tier0.Coders,
@@ -30,3 +31,20 @@ import Hydra.Sources.Tier0.Phantoms
 import Hydra.Sources.Tier0.Query
 import Hydra.Sources.Tier0.Testing
 import Hydra.Sources.Tier0.Workflow
+
+tier0Modules :: [Module Kv]
+tier0Modules = [
+  hydraAstModule,
+  hydraCodersModule,
+  hydraComputeModule,
+  hydraConstraintsModule,
+  hydraCoreModule,
+  hydraGrammarModule,
+  hydraGraphModule,
+  hydraMantleModule,
+  hydraModuleModule,
+  hydraPhantomsModule,
+  hydraQueryModule,
+  hydraTestingModule,
+  hydraWorkflowModule,
+  jsonModelModule]
