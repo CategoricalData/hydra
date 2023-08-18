@@ -2,17 +2,17 @@
 
 module Hydra.Models.Datalog where
 
-import Hydra.Kernel
+import Hydra.Sources.Tier4.All
 import Hydra.Dsl.Grammars
 import Hydra.Tools.GrammarToModule
 import qualified Hydra.Grammar as G
+
 
 comma = terminal ","
 entail = terminal ":-"
 lparen = terminal "("
 period = terminal "."
 rparen = terminal ")"
-
 
 datalogSyntaxModule :: Module Kv
 datalogSyntaxModule = grammarToModule ns datalogGrammar $

@@ -1,11 +1,9 @@
 module Hydra.Models.Osv where
 
-import Hydra.Kernel
+import Hydra.Sources.Tier4.All
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Annotations
-
-import Hydra.Sources.Core
 
 
 -- Note: database_specific and ecosystem_specific fields are ignored, though they must be tolerated when reading entry JSON

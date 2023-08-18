@@ -1,13 +1,9 @@
 module Hydra.Models.GeoJson where
 
-import Hydra.Kernel
+import Hydra.Sources.Tier4.All
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Annotations
-import Hydra.Sources.Compute
-import Hydra.Sources.Core
-
-import Hydra.Sources.Langs.Json.Model
 
 
 geoJsonModule :: Module Kv

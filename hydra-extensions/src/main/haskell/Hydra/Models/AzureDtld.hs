@@ -1,10 +1,9 @@
 module Hydra.Models.AzureDtld (dtldModule) where
 
-import Hydra.Kernel
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Annotations
-import Hydra.Sources.Core
+import Hydra.Sources.Tier4.All
 
 
 dtmi128 :: Type Kv
