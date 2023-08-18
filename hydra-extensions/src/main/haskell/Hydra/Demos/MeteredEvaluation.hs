@@ -4,20 +4,15 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Hydra.Demos.MeteredEvaluation (demoMeteredEvaluation) where
 
-import Hydra.Kernel
+import Hydra.Sources.Tier4.All
 import Hydra.Dsl.Base as Base
-import Hydra.Sources.Module
-import Hydra.Sources.Mantle
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Lib.Lists as Lists
 import Hydra.Dsl.Lib.Strings as Strings
 import Hydra.Codegen
-import Hydra.Reduction
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Math as Math
 import qualified Hydra.Dsl.Lib.Strings as Strings
-import Hydra.Sources.Printing
-import Hydra.CoreEncoding
 
 import System.IO
 import qualified Control.Monad as CM
@@ -47,6 +42,6 @@ demoMeteredEvaluation = do
   where
     context = modulesToGraph [testModule]
     evaluateSelectedTerm = do
-      original <- dereferenceElement $ unqualifyName $ QualifiedName (Just testNs) "catStrings"
+      original <- elementData <$> (requireElement $ unqualifyName $ QualifiedName (Just testNs) "catStrings")
       reduced <- reduceTerm False M.empty original
       return reduced

@@ -1,11 +1,9 @@
 module Hydra.Models.StacItems where
 
-import Hydra.Kernel
+import Hydra.Sources.Tier4.All
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Annotations
-import Hydra.Sources.Compute
-import Hydra.Sources.Core
 
 import Hydra.Models.GeoJson
 import Hydra.Models.IanaRelations
