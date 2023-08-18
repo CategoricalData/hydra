@@ -6,6 +6,7 @@ module Hydra.Dsl.Base (
   hydraCore,
 ) where
 
+import Hydra.Coders
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Graph
@@ -37,6 +38,7 @@ flowGraphATypeA = Types.apply (Types.apply (TypeVariable _Flow) graphA) typeA ::
 functionT = Types.function
 graphA = Types.apply (TypeVariable _Graph) aT :: Type a
 lambdaTypeA = Types.apply (TypeVariable _LambdaType) aT :: Type a
+languageA = Types.apply (TypeVariable _Language) aT :: Type a
 listT = Types.list
 pairT t1 t2 = Types.pair (t1, t2)
 sT = Types.var "s" :: Type a
