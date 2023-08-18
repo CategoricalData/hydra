@@ -27,6 +27,9 @@ import qualified Hydra.Dsl.Terms           as Terms
 import qualified Hydra.Dsl.Types           as Types
 import           Hydra.Sources.Tier0.All
 
+import Hydra.Sources.Tier1.Constants
+import Hydra.Sources.Tier1.Strip
+
 
 tier1Definition :: String -> Datum a -> Definition a
 tier1Definition = definitionInModule hydraTier1Module

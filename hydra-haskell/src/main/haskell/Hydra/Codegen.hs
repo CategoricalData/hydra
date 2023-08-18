@@ -36,7 +36,6 @@ import Hydra.Sources.Libraries
 import Hydra.Sources.Tier0.Ast
 import Hydra.Sources.Tier0.Coders
 import Hydra.Sources.Tier0.Compute
-import Hydra.Sources.Tier0.Constants
 import Hydra.Sources.Tier0.Constraints
 import Hydra.Sources.Tier0.Core
 import Hydra.Sources.Tier0.Grammar
@@ -46,11 +45,12 @@ import Hydra.Sources.Tier0.Mantle
 import Hydra.Sources.Tier0.Module
 import Hydra.Sources.Tier0.Phantoms
 import Hydra.Sources.Tier0.Query
-import Hydra.Sources.Tier0.Strip
 import Hydra.Sources.Tier0.Testing
 import Hydra.Sources.Tier0.Workflow
 
+import Hydra.Sources.Tier1.Constants
 import Hydra.Sources.Tier1.CoreEncoding
+import Hydra.Sources.Tier1.Strip
 import Hydra.Sources.Tier1.Tier1
 
 import Hydra.Sources.Tier2.Basics
