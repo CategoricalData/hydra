@@ -1,13 +1,14 @@
-module Hydra.Sources.Test.TestSuite (testSuiteModule) where
+module Hydra.Sources.Tier4.Test.TestSuite (testSuiteModule) where
 
 import Hydra.Kernel
 import Hydra.Testing
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
-import Hydra.Sources.Core
-import Hydra.Sources.Testing
-import Hydra.Sources.Test.Lib.Lists
-import Hydra.Sources.Test.Lib.Strings
+import Hydra.Sources.Tier0.Core
+import Hydra.Sources.Tier0.Testing
+
+import Hydra.Sources.Tier4.Test.Lib.Lists
+import Hydra.Sources.Tier4.Test.Lib.Strings
 
 
 testSuiteNs = Namespace "hydra/test/testSuite"

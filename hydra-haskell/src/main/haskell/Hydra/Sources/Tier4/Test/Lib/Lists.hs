@@ -1,4 +1,4 @@
-module Hydra.Sources.Test.Lib.Lists (listPrimitiveTests) where
+module Hydra.Sources.Tier4.Test.Lib.Lists (listPrimitiveTests) where
 
 import Hydra.Dsl.Tests
 import Hydra.Dsl.Terms

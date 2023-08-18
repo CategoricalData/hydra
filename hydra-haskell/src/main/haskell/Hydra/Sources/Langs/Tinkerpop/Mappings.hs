@@ -5,8 +5,8 @@ module Hydra.Sources.Langs.Tinkerpop.Mappings where
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
-import Hydra.Sources.Compute
-import Hydra.Sources.Core
+import Hydra.Sources.Tier0.Compute
+import Hydra.Sources.Tier0.Core
 import Hydra.Langs.Tinkerpop.Mappings
 import Hydra.Dsl.Types as Record
 import qualified Hydra.Dsl.Terms as Terms

@@ -1,12 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Constraints where
+module Hydra.Sources.Tier0.Constraints where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
-import Hydra.Sources.Core
-import Hydra.Sources.Query
+import Hydra.Sources.Tier0.Core
+import Hydra.Sources.Tier0.Query
 import Hydra.Dsl.Types as Types
 
 

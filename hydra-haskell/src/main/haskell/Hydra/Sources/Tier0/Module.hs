@@ -1,11 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Module where
+module Hydra.Sources.Tier0.Module where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
-import Hydra.Sources.Graph
+import Hydra.Sources.Tier0.Graph
 import Hydra.Dsl.Types as Types
 
 

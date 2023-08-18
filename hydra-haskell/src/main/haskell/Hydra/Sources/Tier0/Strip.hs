@@ -1,10 +1,10 @@
-module Hydra.Sources.Strip where
+module Hydra.Sources.Tier0.Strip where
 
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Module
 import Hydra.Phantoms
-import Hydra.Sources.Core
+import Hydra.Sources.Tier0.Core
 import Hydra.Dsl.Base as Base
 import qualified Hydra.Dsl.Types as Types
 

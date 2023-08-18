@@ -1,13 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier2 where
+module Hydra.Sources.Tier2.Tier2 where
 
 import Hydra.Kernel
-import Hydra.Sources.Compute
-import Hydra.Sources.Graph
-import Hydra.Sources.Mantle
-import Hydra.Sources.Strip
-import Hydra.Dsl.Base as Base
+import Hydra.Dsl.Base
+import Hydra.Sources.Tier0.Compute
+import Hydra.Sources.Tier0.Graph
+import Hydra.Sources.Tier0.Mantle
+import Hydra.Sources.Tier0.Strip
 import Hydra.Dsl.Lib.Equality as Equality
 import Hydra.Dsl.Lib.Flows as Flows
 import Hydra.Dsl.Lib.Maps as Maps
@@ -15,8 +15,6 @@ import Hydra.Dsl.Lib.Io as Io
 import Hydra.Dsl.Lib.Lists as Lists
 import Hydra.Dsl.Lib.Optionals as Optionals
 import Hydra.Dsl.Lib.Strings as Strings
-import qualified Hydra.Dsl.Annotations as Ann
-import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
 import Prelude hiding ((++))
@@ -98,6 +96,6 @@ requireTermTypeDef = tier2Definition "requireTermType" $
 
 unexpectedDef :: Definition (String -> String -> Flow s x)
 unexpectedDef = tier2Definition "unexpected" $
-  function stringT (Types.function stringT (flowT sT xT)) $
+  function stringT (functionT stringT (flowT sT xT)) $
   doc "Fail if an actual value does not match an expected value" $
   lambda "expected" $ lambda "actual" $ Flows.fail @@ ("expected " ++ var "expected" ++ " but found: " ++ var "actual")

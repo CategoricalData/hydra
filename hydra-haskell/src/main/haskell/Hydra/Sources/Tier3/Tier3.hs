@@ -1,10 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier3 where
+module Hydra.Sources.Tier3.Tier3 where
 
 import Hydra.Kernel
-import Hydra.Sources.Core
-import Hydra.Dsl.Base as Base
+import Hydra.Dsl.Base
+import Hydra.Sources.Tier0.Core
 import Hydra.Dsl.Lib.Equality as Equality
 import Hydra.Dsl.Lib.Flows as Flows
 import Hydra.Dsl.Lib.Maps as Maps

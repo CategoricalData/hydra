@@ -1,10 +1,10 @@
-module Hydra.Sources.Extras (hydraExtrasModule) where
+module Hydra.Sources.Tier2.Extras (hydraExtrasModule) where
 
 import Hydra.Kernel
-import Hydra.Sources.Compute
-import Hydra.Sources.Graph
-import Hydra.Sources.Mantle
-import Hydra.Dsl.Base as Base
+import Hydra.Dsl.Base
+import Hydra.Sources.Tier0.Compute
+import Hydra.Sources.Tier0.Graph
+import Hydra.Sources.Tier0.Mantle
 import qualified Hydra.Dsl.Lib.Maps as Maps
 import qualified Hydra.Dsl.Lib.Lists as Lists
 import qualified Hydra.Dsl.Lib.Math as Math
