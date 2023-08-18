@@ -9,11 +9,11 @@ public class RecordField {
   
   public final Boolean optional;
   
-  public final java.util.Optional<hydra.langs.json.model.Value> default_;
+  public final java.util.Optional<hydra.json.Value> default_;
   
   public final hydra.langs.pegasus.pdl.Annotations annotations;
   
-  public RecordField (hydra.langs.pegasus.pdl.FieldName name, hydra.langs.pegasus.pdl.Schema value, Boolean optional, java.util.Optional<hydra.langs.json.model.Value> default_, hydra.langs.pegasus.pdl.Annotations annotations) {
+  public RecordField (hydra.langs.pegasus.pdl.FieldName name, hydra.langs.pegasus.pdl.Schema value, Boolean optional, java.util.Optional<hydra.json.Value> default_, hydra.langs.pegasus.pdl.Annotations annotations) {
     this.name = name;
     this.value = value;
     this.optional = optional;
@@ -47,7 +47,7 @@ public class RecordField {
     return new RecordField(name, value, optional, default_, annotations);
   }
   
-  public RecordField withDefault(java.util.Optional<hydra.langs.json.model.Value> default_) {
+  public RecordField withDefault(java.util.Optional<hydra.json.Value> default_) {
     return new RecordField(name, value, optional, default_, annotations);
   }
   
