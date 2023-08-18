@@ -97,7 +97,7 @@ inject :: Show a => Name -> Term a -> Flow s (Field a)
 inject name term = case stripTerm term of
   TermUnion (Injection name' field) -> if name' == name
     then pure field
-    else fail $ "found an injection of type " ++ unName name' ++ ", expected " ++ unName name
+    else unexpected ("injection of type " ++ unName name) (unName name')
   _ -> unexpected "injection" $ show term
 
 injection :: Show a => Term a -> Flow s (Field a)
@@ -109,7 +109,7 @@ injectionWithName :: Show a => Name -> Term a -> Flow s (Field a)
 injectionWithName expected term = case stripTerm term of
   TermUnion (Injection actual field) -> if actual == expected
     then pure field
-    else fail $ "found an injection of type " ++ unName actual ++ ", expected " ++ unName expected
+    else unexpected ("injection of type " ++ unName expected) (unName actual)
   _ -> unexpected "injection" $ show term
 
 int8 :: Show a => Term a -> Flow s Int8
@@ -238,7 +238,7 @@ recordWithName :: Show a => Name -> Term a -> Flow s [Field a]
 recordWithName expected term = case stripTerm term of
   TermRecord (Record actual fields) -> if actual == expected
     then pure fields
-    else fail $ "found a record of type " ++ unName actual ++ ", expected " ++ unName expected
+    else unexpected ("record of type" ++ unName expected) (unName actual)
   _ -> unexpected "record" $ show term
 
 set :: (Ord x, Show a) => (Term a -> Flow s x) -> Term a -> Flow s (S.Set x)
@@ -311,5 +311,5 @@ wrap :: Show a => Name -> Term a -> Flow s (Term a)
 wrap expected term = case stripTerm term of
   TermWrap (Nominal actual term) -> if actual == expected
     then pure term
-    else fail $ "found a wrapper of type " ++ unName actual ++ ", expected " ++ unName expected
+    else unexpected ("wrapper of type " ++ unName expected) (unName actual)
   _ -> unexpected ("wrap(" ++ unName expected ++ ")") $ show term
