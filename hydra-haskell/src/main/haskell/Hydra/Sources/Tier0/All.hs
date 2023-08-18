@@ -1,10 +1,9 @@
 module Hydra.Sources.Tier0.All(
-  module Hydra.Kernel,
+  module Hydra.Sources.Core,
   module Hydra.Sources.Tier0.Ast,
   module Hydra.Sources.Tier0.Coders,
   module Hydra.Sources.Tier0.Compute,
   module Hydra.Sources.Tier0.Constraints,
-  module Hydra.Sources.Tier0.Core,
   module Hydra.Sources.Tier0.Grammar,
   module Hydra.Sources.Tier0.Graph,
   module Hydra.Sources.Tier0.Mantle,
@@ -15,12 +14,12 @@ module Hydra.Sources.Tier0.All(
   module Hydra.Sources.Tier0.Workflow,
 ) where
 
-import Hydra.Kernel
+import Hydra.Sources.Core
 import Hydra.Sources.Tier0.Ast
 import Hydra.Sources.Tier0.Coders
 import Hydra.Sources.Tier0.Compute
 import Hydra.Sources.Tier0.Constraints
-import Hydra.Sources.Tier0.Core
+import Hydra.Sources.Core
 import Hydra.Sources.Tier0.Grammar
 import Hydra.Sources.Tier0.Graph
 import Hydra.Sources.Tier0.Mantle

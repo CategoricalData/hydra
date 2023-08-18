@@ -9,7 +9,7 @@ import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
-import Hydra.Sources.Tier0.Core
+import Hydra.Sources.Core
 
 
 tinkerpopPropertyGraphModule :: Module Kv

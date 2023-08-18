@@ -37,7 +37,7 @@ import Hydra.Sources.Tier0.Ast
 import Hydra.Sources.Tier0.Coders
 import Hydra.Sources.Tier0.Compute
 import Hydra.Sources.Tier0.Constraints
-import Hydra.Sources.Tier0.Core
+import Hydra.Sources.Core
 import Hydra.Sources.Tier0.Grammar
 import Hydra.Sources.Tier0.Graph
 import Hydra.Sources.Tier0.Langs.Json.Model
