@@ -29,22 +29,37 @@ import qualified Hydra.Langs.Json.Coder as Json
 import qualified Hydra.Langs.Pegasus.Coder as PDL
 import qualified Hydra.Langs.Scala.Coder as Scala
 import qualified Hydra.Langs.Yaml.Modules as Yaml
+import Hydra.Sources.Libraries
 
-import Hydra.Sources.Ast
-import Hydra.Sources.Basics
-import Hydra.Sources.Constants
-import Hydra.Sources.Strip
-import Hydra.Sources.Tier1
-import Hydra.Sources.Tier2
-import Hydra.Sources.Tier3
-import Hydra.Sources.Coders
-import Hydra.Sources.Compute
-import Hydra.Sources.Constraints
-import Hydra.Sources.Core
-import Hydra.Sources.CoreLanguage
-import Hydra.Sources.Extras
-import Hydra.Sources.Grammar
-import Hydra.Sources.Graph
+import Hydra.Sources.Tier0.Ast
+import Hydra.Sources.Tier0.Coders
+import Hydra.Sources.Tier0.Compute
+import Hydra.Sources.Tier0.Constants
+import Hydra.Sources.Tier0.Constraints
+import Hydra.Sources.Tier0.Core
+import Hydra.Sources.Tier0.Grammar
+import Hydra.Sources.Tier0.Graph
+import Hydra.Sources.Tier0.Mantle
+import Hydra.Sources.Tier0.Module
+import Hydra.Sources.Tier0.Phantoms
+import Hydra.Sources.Tier0.Query
+import Hydra.Sources.Tier0.Strip
+import Hydra.Sources.Tier0.Testing
+import Hydra.Sources.Tier0.Workflow
+
+import Hydra.Sources.Tier1.CoreEncoding
+import Hydra.Sources.Tier1.Tier1
+
+import Hydra.Sources.Tier2.Basics
+import Hydra.Sources.Tier2.CoreLanguage
+import Hydra.Sources.Tier2.Extras
+import Hydra.Sources.Tier2.Printing
+import Hydra.Sources.Tier2.Tier2
+
+import Hydra.Sources.Tier3.Tier3
+
+import Hydra.Sources.Tier4.Test.TestSuite
+
 import Hydra.Sources.Langs.Avro.Schema
 import Hydra.Sources.Langs.Graphql.Syntax
 import Hydra.Sources.Langs.Haskell.Ast
@@ -69,16 +84,6 @@ import Hydra.Sources.Langs.Tinkerpop.Mappings
 import Hydra.Sources.Langs.Tinkerpop.PropertyGraph
 import Hydra.Sources.Langs.Xml.Schema
 import Hydra.Sources.Langs.Yaml.Model
-import Hydra.Sources.Libraries
-import Hydra.Sources.Mantle
-import Hydra.Sources.Module
-import Hydra.Sources.Phantoms
-import Hydra.Sources.Printing
-import Hydra.Sources.Query
-import Hydra.Sources.Test.TestSuite
-import Hydra.Sources.Testing
-import Hydra.Sources.CoreEncoding
-import Hydra.Sources.Workflow
 
 import qualified Control.Monad as CM
 import qualified System.FilePath as FP
@@ -143,17 +148,17 @@ tier2KernelModules = [
 tier1KernelModules :: [Module Kv]
 tier1KernelModules = [
   coreEncodingModule,
+  hydraCoreLanguageModule,
   hydraTier1Module]
 
 tier0KernelModules :: [Module Kv]
 tier0KernelModules = [
   hydraAstModule,
   hydraCodersModule,
-  hydraConstantsModule,
   hydraComputeModule,
+  hydraConstantsModule,
   hydraConstraintsModule,
   hydraCoreModule,
-  hydraCoreLanguageModule,
   hydraGrammarModule,
   hydraGraphModule,
   hydraMantleModule,

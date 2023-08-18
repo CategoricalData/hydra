@@ -1,15 +1,15 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Workflow where
+module Hydra.Sources.Tier0.Workflow where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
-import Hydra.Sources.Module
-import Hydra.Sources.Compute
-import Hydra.Sources.Core
-import Hydra.Sources.Graph
 import Hydra.Dsl.Types as Types
+import Hydra.Sources.Tier0.Module
+import Hydra.Sources.Tier0.Compute
+import Hydra.Sources.Tier0.Core
+import Hydra.Sources.Tier0.Graph
 
 
 hydraWorkflowModule :: Module Kv

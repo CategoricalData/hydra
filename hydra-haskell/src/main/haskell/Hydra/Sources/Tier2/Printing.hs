@@ -1,10 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Printing where
+module Hydra.Sources.Tier2.Printing where
 
 import Hydra.Kernel
-import Hydra.Sources.Basics
 import Hydra.Dsl.Base
+import Hydra.Sources.Tier2.Basics
 import Hydra.Dsl.Lib.Literals as Literals
 import Hydra.Dsl.Lib.Strings
 import qualified Hydra.Dsl.Types as Types

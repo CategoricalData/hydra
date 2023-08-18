@@ -3,6 +3,7 @@
 module Hydra.Dsl.Base (
   module Hydra.Dsl.Base,
   module Hydra.Dsl.PhantomLiterals,
+  module Hydra.Dsl.ShorthandTypes,
   hydraCore,
 ) where
 
@@ -15,7 +16,8 @@ import Hydra.Phantoms
 import Hydra.Module
 import qualified Hydra.Tier1 as Tier1
 import Hydra.Dsl.PhantomLiterals
-import Hydra.Sources.Core
+import Hydra.Dsl.ShorthandTypes
+import Hydra.Sources.Tier0.Core
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
@@ -27,28 +29,6 @@ import qualified Data.Set as S
 
 
 instance IsString (Datum a) where fromString = Datum . Terms.string
-
-aT = Types.var "a" :: Type a
-booleanT = Types.boolean
-eqA = (M.fromList [(Name "a", S.fromList [TypeClassEquality])])
-elementA = Types.apply (TypeVariable _Element) aT :: Type a
-fieldA = Types.apply (TypeVariable _Field) aT :: Type a
-fieldTypeA = Types.apply (TypeVariable _FieldType) aT :: Type a
-flowGraphATypeA = Types.apply (Types.apply (TypeVariable _Flow) graphA) typeA :: Type a
-functionT = Types.function
-graphA = Types.apply (TypeVariable _Graph) aT :: Type a
-lambdaTypeA = Types.apply (TypeVariable _LambdaType) aT :: Type a
-languageA = Types.apply (TypeVariable _Language) aT :: Type a
-listT = Types.list
-pairT t1 t2 = Types.pair (t1, t2)
-sT = Types.var "s" :: Type a
-stringT = Types.string :: Type a
-termA = Types.apply (TypeVariable _Term) aT :: Type a
-termKV = Types.apply (TypeVariable _Term) (TypeVariable _Kv) :: Type a
-typeA = Types.apply (TypeVariable _Type) aT :: Type a
-unitT = Types.unit :: Type a
-xT = Types.var "x" :: Type a
-
 
 el :: Definition a -> Element Kv
 el (Definition name (Datum term)) = Element name term

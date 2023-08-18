@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Core where
+module Hydra.Sources.Tier0.Core where
 
 import Hydra.Kernel
 import Hydra.Dsl.Bootstrap

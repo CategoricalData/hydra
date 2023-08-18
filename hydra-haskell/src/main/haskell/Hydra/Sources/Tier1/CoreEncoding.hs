@@ -1,13 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.CoreEncoding where
+module Hydra.Sources.Tier1.CoreEncoding where
 
 import Hydra.Kernel
-import Hydra.Sources.Core
 import Hydra.Dsl.Terms
-import Hydra.Sources.Libraries
+import Hydra.Dsl.ShorthandTypes
 import qualified Hydra.Dsl.Base as Base
-import qualified Hydra.Dsl.Types as Types
+import Hydra.Sources.Libraries
+import Hydra.Sources.Tier0.Core
 
 
 coreEncodingModule :: Module Kv
@@ -57,30 +57,6 @@ coreEncodingDefinition label dom term = Base.definitionInModule coreEncodingModu
 
 ref :: Definition a -> Term Kv
 ref (Definition name _) = TermVariable name
-
-annotatedTermA = Types.apply (Types.apply (TypeVariable _Annotated) termA) (Types.var "a") :: Type a
-annotatedTypeA = Types.apply (Types.apply (TypeVariable _Annotated) typeA) (Types.var "a") :: Type a
-applicationA = Types.apply (TypeVariable _Application) (Types.var "a") :: Type a
-applicationTypeA = Types.apply (TypeVariable _ApplicationType) (Types.var "a") :: Type a
-caseStatementA = Types.apply (TypeVariable _CaseStatement) (Types.var "a") :: Type a
-eliminationA = Types.apply (TypeVariable _Elimination) (Types.var "a") :: Type a
-fieldA = Types.apply (TypeVariable _Field) (Types.var "a") :: Type a
-fieldTypeA = Types.apply (TypeVariable _FieldType) (Types.var "a") :: Type a
-functionA = Types.apply (TypeVariable _Function) (Types.var "a") :: Type a
-functionTypeA = Types.apply (TypeVariable _FunctionType) (Types.var "a") :: Type a
-injectionA = Types.apply (TypeVariable _Injection) (Types.var "a") :: Type a
-lambdaA = Types.apply (TypeVariable _Lambda) (Types.var "a") :: Type a
-lambdaTypeA = Types.apply (TypeVariable _LambdaType) (Types.var "a") :: Type a
-letA = Types.apply (TypeVariable _Let) (Types.var "a") :: Type a
-mapTypeA = Types.apply (TypeVariable _MapType) (Types.var "a") :: Type a
-nominalTermA = Types.apply (TypeVariable _Nominal) termA :: Type a
-nominalTypeA = Types.apply (TypeVariable _Nominal) typeA :: Type a
-optionalCasesA = Types.apply (TypeVariable _OptionalCases) (Types.var "a") :: Type a
-recordA = Types.apply (TypeVariable _Record) (Types.var "a") :: Type a
-rowTypeA = Types.apply (TypeVariable _RowType) (Types.var "a") :: Type a
-sumA = Types.apply (TypeVariable _Sum) (Types.var "a") :: Type a
-termA = Types.apply (TypeVariable _Term) (Types.var "a") :: Type a
-typeA = Types.apply (TypeVariable _Type) (Types.var "a") :: Type a
 
 encodedBinary :: Term a -> Term a
 encodedBinary = encodedLiteral . variant _Literal _Literal_binary

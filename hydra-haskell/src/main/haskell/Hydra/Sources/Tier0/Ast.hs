@@ -1,4 +1,4 @@
-module Hydra.Sources.Ast where
+module Hydra.Sources.Tier0.Ast where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations

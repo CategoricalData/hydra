@@ -23,12 +23,11 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-
 noGraph :: Graph Kv
 noGraph = Graph {
   graphElements = M.empty,
   graphEnvironment = M.empty,
-  graphBody = Terms.list [], -- Note: the bootstrap body is arbitrary
+  graphBody = Terms.list [],
   graphPrimitives = M.empty,
   graphAnnotations = kvAnnotationClass,
   graphSchema = Nothing}

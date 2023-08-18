@@ -1,11 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Basics where
+module Hydra.Sources.Tier2.Basics where
 
 import Hydra.Kernel
-import Hydra.Sources.Tier1
-import Hydra.Sources.Strip
-import Hydra.Dsl.Base as Base
+import Hydra.Dsl.Base
+import Hydra.Sources.Tier1.Tier1
+import Hydra.Sources.Tier0.Strip
 import qualified Hydra.Dsl.Graph as Graph
 import qualified Hydra.Dsl.Module as Module
 import Hydra.Dsl.Lib.Equality as Equality
@@ -14,7 +14,6 @@ import Hydra.Dsl.Lib.Lists as Lists
 import Hydra.Dsl.Lib.Logic as Logic
 import Hydra.Dsl.Lib.Maps as Maps
 import Hydra.Dsl.Lib.Strings as Strings
-import Hydra.Sources.Tier1
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 

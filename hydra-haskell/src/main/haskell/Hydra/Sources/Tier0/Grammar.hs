@@ -1,12 +1,12 @@
 -- | A model for Hydra labeled-BNF grammars
 
-module Hydra.Sources.Grammar where
+module Hydra.Sources.Tier0.Grammar where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
-import Hydra.Sources.Core
+import Hydra.Sources.Tier0.Core
 
 
 hydraGrammarModule :: Module Kv

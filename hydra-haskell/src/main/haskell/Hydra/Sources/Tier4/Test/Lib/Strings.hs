@@ -1,4 +1,4 @@
-module Hydra.Sources.Test.Lib.Strings (stringPrimitiveTests) where
+module Hydra.Sources.Tier4.Test.Lib.Strings (stringPrimitiveTests) where
 
 import Hydra.Dsl.Tests
 

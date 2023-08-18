@@ -1,14 +1,14 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier1 where
+module Hydra.Sources.Tier1.Tier1 where
 
 import Hydra.Kernel
-import Hydra.Sources.Compute
-import Hydra.Sources.Constants
-import Hydra.Sources.Graph
-import Hydra.Sources.Mantle as Mantle
-import Hydra.Sources.Strip
-import Hydra.Dsl.Base as Base
+import Hydra.Dsl.Base
+import Hydra.Sources.Tier0.Compute
+import Hydra.Sources.Tier0.Constants
+import Hydra.Sources.Tier0.Graph
+import Hydra.Sources.Tier0.Mantle
+import Hydra.Sources.Tier0.Strip
 import Hydra.Dsl.Lib.Equality as Equality
 import Hydra.Dsl.Lib.Flows as Flows
 import Hydra.Dsl.Lib.Maps as Maps

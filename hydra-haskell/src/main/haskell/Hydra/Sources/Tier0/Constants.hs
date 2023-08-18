@@ -1,7 +1,7 @@
-module Hydra.Sources.Constants where
+module Hydra.Sources.Tier0.Constants where
 
 import Hydra.Kernel
-import Hydra.Sources.Core
+import Hydra.Sources.Tier0.Core
 import Hydra.Dsl.Base as Base
 
 
