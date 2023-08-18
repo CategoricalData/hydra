@@ -14,7 +14,7 @@ import Hydra.Dsl.Lib.Strings as Strings
 import Hydra.Sources.Tier1.Tier1
 import Hydra.Sources.Tier2.Basics
 import Hydra.Sources.Tier0.Coders
-import Hydra.Sources.Tier0.Strip
+import Hydra.Sources.Tier1.Strip
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
