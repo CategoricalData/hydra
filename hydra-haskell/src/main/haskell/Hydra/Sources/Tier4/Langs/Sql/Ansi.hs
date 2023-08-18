@@ -2,7 +2,7 @@
 
 module Hydra.Sources.Tier4.Langs.Sql.Ansi where
 
-import Hydra.Kernel
+import Hydra.Sources.Tier3.All
 import Hydra.Dsl.Grammars
 import Hydra.Tools.GrammarToModule
 import qualified Hydra.Dsl.Annotations as Ann

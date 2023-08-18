@@ -31,36 +31,9 @@ import qualified Hydra.Langs.Json.Coder as Json
 import qualified Hydra.Langs.Pegasus.Coder as PDL
 import qualified Hydra.Langs.Scala.Coder as Scala
 import qualified Hydra.Langs.Yaml.Modules as Yaml
+
 import Hydra.Sources.Libraries
-
-import Hydra.Sources.Tier0.Ast
-import Hydra.Sources.Tier0.Coders
-import Hydra.Sources.Tier0.Compute
-import Hydra.Sources.Tier0.Constraints
-import Hydra.Sources.Core
-import Hydra.Sources.Tier0.Grammar
-import Hydra.Sources.Tier0.Graph
-import Hydra.Sources.Tier0.Langs.Json.Model
-import Hydra.Sources.Tier0.Mantle
-import Hydra.Sources.Tier0.Module
-import Hydra.Sources.Tier0.Phantoms
-import Hydra.Sources.Tier0.Query
-import Hydra.Sources.Tier0.Testing
-import Hydra.Sources.Tier0.Workflow
-
-import Hydra.Sources.Tier1.Constants
-import Hydra.Sources.Tier1.CoreEncoding
-import Hydra.Sources.Tier1.Strip
-import Hydra.Sources.Tier1.Tier1
-
-import Hydra.Sources.Tier2.Basics
-import Hydra.Sources.Tier2.CoreLanguage
-import Hydra.Sources.Tier2.Extras
-import Hydra.Sources.Tier2.Printing
-import Hydra.Sources.Tier2.Tier2
-
-import Hydra.Sources.Tier3.Tier3
-
+import Hydra.Sources.Tier3.All
 import Hydra.Sources.Tier4.Test.TestSuite
 
 import Hydra.Sources.Tier4.Langs.Avro.Schema

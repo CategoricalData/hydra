@@ -2,7 +2,7 @@
 
 module Hydra.Sources.Tier4.Langs.Protobuf.SourceContext where
 
-import Hydra.Kernel
+import Hydra.Sources.Tier3.All
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap

@@ -1,11 +1,9 @@
 module Hydra.Sources.Tier4.Test.TestSuite (testSuiteModule) where
 
-import Hydra.Kernel
 import Hydra.Testing
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
-import Hydra.Sources.Core
-import Hydra.Sources.Tier0.Testing
+import Hydra.Sources.Tier3.All
 
 import Hydra.Sources.Tier4.Test.Lib.Lists
 import Hydra.Sources.Tier4.Test.Lib.Strings

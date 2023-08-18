@@ -2,9 +2,7 @@
 
 module Hydra.Sources.Tier4.Langs.Tinkerpop.PropertyGraph where
 
-import Hydra.Compute
-import Hydra.Flows
-import Hydra.Module
+import Hydra.Sources.Tier3.All
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types

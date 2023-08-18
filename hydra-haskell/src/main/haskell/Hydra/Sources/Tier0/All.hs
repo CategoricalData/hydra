@@ -6,6 +6,7 @@ module Hydra.Sources.Tier0.All(
   module Hydra.Sources.Tier0.Constraints,
   module Hydra.Sources.Tier0.Grammar,
   module Hydra.Sources.Tier0.Graph,
+  module Hydra.Sources.Tier0.Json,
   module Hydra.Sources.Tier0.Mantle,
   module Hydra.Sources.Tier0.Module,
   module Hydra.Sources.Tier0.Phantoms,
@@ -22,6 +23,7 @@ import Hydra.Sources.Tier0.Constraints
 import Hydra.Sources.Core
 import Hydra.Sources.Tier0.Grammar
 import Hydra.Sources.Tier0.Graph
+import Hydra.Sources.Tier0.Json
 import Hydra.Sources.Tier0.Mantle
 import Hydra.Sources.Tier0.Module
 import Hydra.Sources.Tier0.Phantoms
