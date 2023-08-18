@@ -5,9 +5,9 @@ public class Property {
   
   public final hydra.langs.pegasus.pdl.PropertyKey key;
   
-  public final java.util.Optional<hydra.langs.json.model.Value> value;
+  public final java.util.Optional<hydra.json.Value> value;
   
-  public Property (hydra.langs.pegasus.pdl.PropertyKey key, java.util.Optional<hydra.langs.json.model.Value> value) {
+  public Property (hydra.langs.pegasus.pdl.PropertyKey key, java.util.Optional<hydra.json.Value> value) {
     this.key = key;
     this.value = value;
   }
@@ -30,7 +30,7 @@ public class Property {
     return new Property(key, value);
   }
   
-  public Property withValue(java.util.Optional<hydra.langs.json.model.Value> value) {
+  public Property withValue(java.util.Optional<hydra.json.Value> value) {
     return new Property(key, value);
   }
 }

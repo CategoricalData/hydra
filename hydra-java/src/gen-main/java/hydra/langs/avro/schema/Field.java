@@ -21,7 +21,7 @@ public class Field {
   /**
    * default value for this field, only used when reading instances that lack the field for schema evolution purposes
    */
-  public final java.util.Optional<hydra.langs.json.model.Value> default_;
+  public final java.util.Optional<hydra.json.Value> default_;
   
   /**
    * specifies how this field impacts sort ordering of this record
@@ -36,9 +36,9 @@ public class Field {
   /**
    * Any additional key/value pairs attached to the field
    */
-  public final java.util.Map<String, hydra.langs.json.model.Value> annotations;
+  public final java.util.Map<String, hydra.json.Value> annotations;
   
-  public Field (String name, java.util.Optional<String> doc, hydra.langs.avro.schema.Schema type, java.util.Optional<hydra.langs.json.model.Value> default_, java.util.Optional<hydra.langs.avro.schema.Order> order, java.util.Optional<java.util.List<String>> aliases, java.util.Map<String, hydra.langs.json.model.Value> annotations) {
+  public Field (String name, java.util.Optional<String> doc, hydra.langs.avro.schema.Schema type, java.util.Optional<hydra.json.Value> default_, java.util.Optional<hydra.langs.avro.schema.Order> order, java.util.Optional<java.util.List<String>> aliases, java.util.Map<String, hydra.json.Value> annotations) {
     this.name = name;
     this.doc = doc;
     this.type = type;
@@ -74,7 +74,7 @@ public class Field {
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
-  public Field withDefault(java.util.Optional<hydra.langs.json.model.Value> default_) {
+  public Field withDefault(java.util.Optional<hydra.json.Value> default_) {
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
@@ -86,7 +86,7 @@ public class Field {
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
-  public Field withAnnotations(java.util.Map<String, hydra.langs.json.model.Value> annotations) {
+  public Field withAnnotations(java.util.Map<String, hydra.json.Value> annotations) {
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
 }

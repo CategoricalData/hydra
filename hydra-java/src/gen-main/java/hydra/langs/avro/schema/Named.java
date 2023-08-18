@@ -28,9 +28,9 @@ public class Named {
   /**
    * Any additional key/value pairs attached to the type
    */
-  public final java.util.Map<String, hydra.langs.json.model.Value> annotations;
+  public final java.util.Map<String, hydra.json.Value> annotations;
   
-  public Named (String name, java.util.Optional<String> namespace, java.util.Optional<java.util.List<String>> aliases, java.util.Optional<String> doc, hydra.langs.avro.schema.NamedType type, java.util.Map<String, hydra.langs.json.model.Value> annotations) {
+  public Named (String name, java.util.Optional<String> namespace, java.util.Optional<java.util.List<String>> aliases, java.util.Optional<String> doc, hydra.langs.avro.schema.NamedType type, java.util.Map<String, hydra.json.Value> annotations) {
     this.name = name;
     this.namespace = namespace;
     this.aliases = aliases;
@@ -73,7 +73,7 @@ public class Named {
     return new Named(name, namespace, aliases, doc, type, annotations);
   }
   
-  public Named withAnnotations(java.util.Map<String, hydra.langs.json.model.Value> annotations) {
+  public Named withAnnotations(java.util.Map<String, hydra.json.Value> annotations) {
     return new Named(name, namespace, aliases, doc, type, annotations);
   }
 }
