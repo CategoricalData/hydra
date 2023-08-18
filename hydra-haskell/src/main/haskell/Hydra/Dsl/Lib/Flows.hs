@@ -28,19 +28,6 @@ map = Datum $ Terms.primitive _flows_map
 pure :: Datum (x -> Flow s x)
 pure = Datum $ Terms.primitive _flows_pure
 
--- Types
-
-traceT = TypeVariable _Trace
-flowT s x = Types.apply (Types.apply (TypeVariable _Flow) s) x
-flowStateT s x = Types.apply (Types.apply (TypeVariable _FlowState) s) x
-
-flowSA = flowT (Types.var "s") (Types.var "a") :: Type a
-flowS1A = flowT (Types.var "s1") (Types.var "a") :: Type a
-flowS2A = flowT (Types.var "s2") (Types.var "a") :: Type a
-flowSS = flowT (Types.var "s") (Types.var "s") :: Type a
-flowSY = flowT (Types.var "s") (Types.var "y") :: Type a
-flowStateSS = flowStateT (Types.var "s") (Types.var "s") :: Type a
-
 -- Accessors
 
 flowState :: Datum (Maybe x) -> Datum s -> Datum Trace -> Datum (FlowState s x)

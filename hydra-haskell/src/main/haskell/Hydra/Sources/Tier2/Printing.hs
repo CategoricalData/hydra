@@ -2,14 +2,32 @@
 
 module Hydra.Sources.Tier2.Printing where
 
-import Hydra.Kernel
-import Hydra.Dsl.Base
-import Hydra.Sources.Tier2.Basics
-import Hydra.Dsl.Lib.Literals as Literals
-import Hydra.Dsl.Lib.Strings
-import qualified Hydra.Dsl.Types as Types
+-- Standard Tier-2 imports
+import           Prelude hiding ((++))
+import qualified Data.List                 as L
+import qualified Data.Map                  as M
+import qualified Data.Set                  as S
+import qualified Data.Maybe                as Y
+import           Hydra.Dsl.Base
+import qualified Hydra.Dsl.Core            as Core
+import qualified Hydra.Dsl.Graph           as Graph
+import qualified Hydra.Dsl.Lib.Equality    as Equality
+import qualified Hydra.Dsl.Lib.Flows       as Flows
+import qualified Hydra.Dsl.Lib.Io          as Io
+import qualified Hydra.Dsl.Lib.Lists       as Lists
+import qualified Hydra.Dsl.Lib.Literals    as Literals
+import qualified Hydra.Dsl.Lib.Logic       as Logic
+import qualified Hydra.Dsl.Lib.Maps        as Maps
+import qualified Hydra.Dsl.Lib.Math        as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Sets        as Sets
+import           Hydra.Dsl.Lib.Strings     as Strings
+import qualified Hydra.Dsl.Module          as Module
+import qualified Hydra.Dsl.Terms           as Terms
+import qualified Hydra.Dsl.Types           as Types
+import           Hydra.Sources.Tier1.All
 
-import Prelude hiding ((++))
+import Hydra.Sources.Tier2.Basics
 
 
 hydraPrintingModule :: Module Kv
@@ -53,7 +71,7 @@ describePrecisionDef = printingDefinition "describePrecision" $
   doc "Display numeric precision as a string" $
   match _Precision Nothing [
     Case _Precision_arbitrary --> constant $ string "arbitrary-precision",
-    Case _Precision_bits      --> lambda "bits" $ showInt32 @@ var "bits" ++ string "-bit"]
+    Case _Precision_bits      --> lambda "bits" $ Literals.showInt32 @@ var "bits" ++ string "-bit"]
 
 describeTypeDef :: Definition (Type a -> String)
 describeTypeDef = printingDefinition "describeType" $

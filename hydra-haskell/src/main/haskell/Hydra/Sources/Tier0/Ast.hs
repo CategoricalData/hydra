@@ -1,9 +1,15 @@
 module Hydra.Sources.Tier0.Ast where
 
-import Hydra.Kernel
-import Hydra.Dsl.Annotations
-import Hydra.Dsl.Bootstrap
-import Hydra.Dsl.Types as Types
+-- Standard Tier-0 imports
+import           Hydra.Kernel
+import           Hydra.Dsl.Annotations
+import           Hydra.Dsl.Bootstrap
+import qualified Data.List       as L
+import qualified Data.Map        as M
+import qualified Data.Set        as S
+import qualified Data.Maybe      as Y
+import qualified Hydra.Dsl.Terms as Terms
+import           Hydra.Dsl.Types as Types
 
 
 hydraAstModule :: Module Kv

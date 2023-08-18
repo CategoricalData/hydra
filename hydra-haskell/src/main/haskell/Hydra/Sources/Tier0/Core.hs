@@ -2,6 +2,7 @@
 
 module Hydra.Sources.Tier0.Core where
 
+-- Note: hydra/core has nonstandard imports
 import Hydra.Kernel
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types

@@ -1,5 +1,6 @@
 module Hydra.Sources.Tier0.Strip where
 
+-- TODO: use standard imports
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Module

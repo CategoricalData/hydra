@@ -16,10 +16,10 @@ data CaseConvention = CaseConventionCamel | CaseConventionPascal | CaseConventio
 
 convertCase :: CaseConvention -> CaseConvention -> String -> String
 convertCase from to original = case to of
-    CaseConventionCamel -> decapitalize $ L.concat (capitalize . fmap C.toLower <$> parts)
-    CaseConventionPascal -> L.concat (capitalize . fmap C.toLower <$> parts)
-    CaseConventionLowerSnake -> L.intercalate "_" (fmap C.toLower <$> parts)
-    CaseConventionUpperSnake -> L.intercalate "_" (fmap C.toUpper <$> parts)
+    CaseConventionCamel -> decapitalize $ L.concat (capitalize . Strings.toLower <$> parts)
+    CaseConventionPascal -> L.concat (capitalize . Strings.toLower <$> parts)
+    CaseConventionLowerSnake -> L.intercalate "_" (Strings.toLower <$> parts)
+    CaseConventionUpperSnake -> L.intercalate "_" (Strings.toUpper <$> parts)
   where
     parts = case from of
       CaseConventionCamel -> byCaps
@@ -56,12 +56,6 @@ nonAlnumToUnderscores = L.reverse . fst . L.foldl replace ([], False)
 
 sanitizeWithUnderscores :: S.Set String -> String -> String
 sanitizeWithUnderscores reserved = escapeWithUnderscore reserved . nonAlnumToUnderscores
-
-toLower :: String -> String
-toLower = fmap C.toLower
-
-toUpper :: String -> String
-toUpper = fmap C.toUpper
 
 withCharacterAliases :: String -> String
 withCharacterAliases original = L.filter C.isAlphaNum $ L.concat $ alias <$> original

@@ -2,14 +2,21 @@
 
 module Hydra.Sources.Tier0.Workflow where
 
-import Hydra.Kernel
-import Hydra.Dsl.Annotations
-import Hydra.Dsl.Bootstrap
-import Hydra.Dsl.Types as Types
-import Hydra.Sources.Tier0.Module
+-- Standard Tier-0 imports
+import           Hydra.Kernel
+import           Hydra.Dsl.Annotations
+import           Hydra.Dsl.Bootstrap
+import qualified Data.List       as L
+import qualified Data.Map        as M
+import qualified Data.Set        as S
+import qualified Data.Maybe      as Y
+import qualified Hydra.Dsl.Terms as Terms
+import           Hydra.Dsl.Types as Types
+
 import Hydra.Sources.Tier0.Compute
 import Hydra.Sources.Tier0.Core
 import Hydra.Sources.Tier0.Graph
+import Hydra.Sources.Tier0.Module
 
 
 hydraWorkflowModule :: Module Kv

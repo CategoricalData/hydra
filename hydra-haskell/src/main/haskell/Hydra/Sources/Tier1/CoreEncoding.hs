@@ -2,12 +2,12 @@
 
 module Hydra.Sources.Tier1.CoreEncoding where
 
-import Hydra.Kernel
+-- TODO: use standard Tier-1 imports
+import Hydra.Sources.Tier0.All
 import Hydra.Dsl.Terms
 import Hydra.Dsl.ShorthandTypes
 import qualified Hydra.Dsl.Base as Base
 import Hydra.Sources.Libraries
-import Hydra.Sources.Tier0.Core
 
 
 coreEncodingModule :: Module Kv
