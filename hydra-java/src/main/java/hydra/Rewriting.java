@@ -111,12 +111,12 @@ public interface Rewriting {
         Function<A, B> mf, Term<A> original) {
         Function<Function<Term<A>, Flow<Boolean, Term<B>>>, Function<Term<A>, Flow<Boolean, Term<B>>>> fFlow =
             recurse -> (Function<Term<A>, Flow<Boolean, Term<B>>>) term -> {
-                Term<B> result = f.apply(t -> fromFlow(recurse.apply(t))).apply(term);
+                Term<B> result = f.apply(t -> fromFlow(null, null, recurse.apply(t))).apply(term);
                 return pure(result);
             };
 
         Function<A, Flow<Boolean, B>> mfFlow = a -> pure(mf.apply(a));
-        return fromFlow(rewriteTermM(fFlow, mfFlow, original));
+        return fromFlow(null, null, rewriteTermM(fFlow, mfFlow, original));
     }
 
     static <A, B, S> Flow<S, Term<B>> rewriteTermM(
