@@ -91,16 +91,11 @@ public interface Flows {
     }
 
     /**
-     * Extract the value from a flow, throwing an exception if the flow failed. Use this method sparingly.
+     * Extract the value from a flow, returning a default value instead if the flow failed.
      */
-    static <S, X> X fromFlow(Flow<S, X> flow) throws FlowException {
-        FlowState<S, X> wrapper = flow.value.apply(null).apply(EMPTY_TRACE);
-
-        if (!wrapper.value.isPresent()) {
-            throw new FlowException(wrapper.trace);
-        } else {
-            return wrapper.value.get();
-        }
+    static <S, X> X fromFlow(X dflt, S state, Flow<S, X> flow) throws FlowException {
+        Function<S, Function<Flow<S, X>, X>> helper = Tier1.fromFlow(dflt);
+        return helper.apply(state).apply(flow);
     }
 
     /**
