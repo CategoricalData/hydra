@@ -43,6 +43,8 @@ hydraTier1Module = Module (Namespace "hydra/tier1") elements
      el floatValueToBigfloatDef,
      el integerValueToBigintDef,
      el isLambdaDef,
+     el subtermsDef,
+     el subtypesDef,
      el unqualifyNameDef,
      -- Flows.hs
      el emptyTraceDef,
@@ -159,6 +161,69 @@ pushErrorDef = tier1Definition "pushError" $
       (Flows.traceOther @@ var "t"))
     `with` [
       "errorMsg">: Strings.concat ["Error: ", var "msg", " (", (Strings.intercalate @@ " > " @@ (Lists.reverse @@ (Flows.traceStack @@ var "t"))), ")"]])
+
+subtermsDef :: Definition (Term a -> [Term a])
+subtermsDef = tier1Definition "subterms" $
+  doc "Find the children of a given term" $
+  functionWithClasses termA (listT termA) ordA $
+  match _Term Nothing [
+    _Term_annotated>>: lambda "at" $ list [Core.annotatedSubject @@ var "at"],
+    _Term_application>>: lambda "p" $ list [
+      Core.applicationFunction @@ var "p",
+      Core.applicationArgument @@ var "p"],
+    _Term_function>>: match _Function (Just $ list []) [
+        _Function_elimination>>: match _Elimination (Just $ list []) [
+            _Elimination_list>>: lambda "fld" $ list [var "fld"],
+            _Elimination_optional>>: lambda "oc" $ list [
+              Core.optionalCasesNothing @@ var "oc",
+              Core.optionalCasesJust @@ var "oc"],
+            _Elimination_union>>: lambda "cs" $ Lists.concat2
+              @@ ((matchOpt (list []) (lambda "t" $ list [var "t"])) @@ (Core.caseStatementDefault @@ var "cs"))
+              @@ (Lists.map @@ Core.fieldTerm @@ (Core.caseStatementCases @@ var "cs"))],
+        _Function_lambda>>: lambda "l" $ list [Core.lambdaBody @@ var "l"]],
+    _Term_let>>: lambda "lt" $ Lists.cons
+      @@ (Core.letEnvironment @@ var "lt")
+      @@ (Lists.map @@ second @@ (Maps.toList @@ (Core.letBindings @@ var "lt"))),
+    _Term_list>>: lambda "l" $ var "l",
+    _Term_literal>>: constant $ list [],
+    _Term_map>>: lambda "m" (Lists.concat @@
+      (Lists.map @@ (lambda "p" $ list [first @@ var "p", second @@ var "p"]) @@ (Maps.toList @@ var "m"))),
+    _Term_optional>>: matchOpt (list []) (lambda "t" $ list [var "t"]),
+    _Term_product>>: lambda "tuple" $ var "tuple",
+    _Term_record>>: lambda "rt" (Lists.map @@ Core.fieldTerm @@ (Core.recordFields @@ var "rt")),
+    _Term_set>>: Sets.toList,
+    _Term_stream>>: constant $ list [],
+    _Term_sum>>: lambda "st" $ list [Core.sumTerm @@ var "st"],
+    _Term_union>>: lambda "ut" $ list [Core.fieldTerm @@ (Core.injectionField @@ var "ut")],
+    _Term_variable>>: constant $ list [],
+    _Term_wrap>>: lambda "n" $ list [Core.nominalObject @@ var "n"]]
+
+subtypesDef :: Definition (Type a -> [Type a])
+subtypesDef = tier1Definition "subtypes" $
+  doc "Find the children of a given type expression" $
+  function typeA (listT typeA) $
+  match _Type Nothing [
+    _Type_annotated>>: lambda "at" $ list [Core.annotatedSubject @@ var "at"],
+    _Type_application>>: lambda "at" $ list [
+      Core.applicationTypeFunction @@ var "at",
+      Core.applicationTypeArgument @@ var "at"],
+    _Type_function>>: lambda "ft" $ list [
+      Core.functionTypeDomain @@ var "ft",
+      Core.functionTypeCodomain @@ var "ft"],
+    _Type_lambda>>: lambda "lt" $ list [Core.lambdaTypeBody @@ var "lt"],
+    _Type_list>>: lambda "lt" $ list [var "lt"],
+    _Type_literal>>: constant $ list [],
+    _Type_map>>: lambda "mt" $ list [
+      Core.mapTypeKeys @@ var "mt",
+      Core.mapTypeValues @@ var "mt"],
+    _Type_optional>>: lambda "ot" $ list [var "ot"],
+    _Type_product>>: lambda "pt" $ var "pt",
+    _Type_record>>: lambda "rt" (Lists.map @@ Core.fieldTypeType @@ (Core.rowTypeFields @@ var "rt")),
+    _Type_set>>: lambda "st" $ list [var "st"],
+    _Type_sum>>: lambda "st" $ var "st",
+    _Type_union>>: lambda "rt" (Lists.map @@ Core.fieldTypeType @@ (Core.rowTypeFields @@ var "rt")),
+    _Type_variable>>: constant $ list [],
+    _Type_wrap>>: lambda "nt" $ list [Core.nominalObject @@ var "nt"]]
 
 warnDef :: Definition (String -> Flow s a -> Flow s a)
 warnDef = tier1Definition "warn" $

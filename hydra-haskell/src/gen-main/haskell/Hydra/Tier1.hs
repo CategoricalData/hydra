@@ -11,6 +11,7 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Module as Module
@@ -48,6 +49,82 @@ isLambda term = ((\x -> case x of
     _ -> False) v)
   Core.TermLet v -> (isLambda (Core.letEnvironment v))
   _ -> False) (Strip.stripTerm term))
+
+-- | Find the children of a given term
+subterms :: (Ord a) => (Core.Term a -> [Core.Term a])
+subterms x = case x of
+  Core.TermAnnotated v -> [
+    Core.annotatedSubject v]
+  Core.TermApplication v -> [
+    Core.applicationFunction v,
+    (Core.applicationArgument v)]
+  Core.TermFunction v -> ((\x -> case x of
+    Core.FunctionElimination v -> ((\x -> case x of
+      Core.EliminationList v -> [
+        v]
+      Core.EliminationOptional v -> [
+        Core.optionalCasesNothing v,
+        (Core.optionalCasesJust v)]
+      Core.EliminationUnion v -> (Lists.concat2 ((\x -> case x of
+        Nothing -> []
+        Just v -> [
+          v]) (Core.caseStatementDefault v)) (Lists.map Core.fieldTerm (Core.caseStatementCases v)))
+      _ -> []) v)
+    Core.FunctionLambda v -> [
+      Core.lambdaBody v]
+    _ -> []) v)
+  Core.TermLet v -> (Lists.cons (Core.letEnvironment v) (Lists.map snd (Maps.toList (Core.letBindings v))))
+  Core.TermList v -> v
+  Core.TermLiteral _ -> []
+  Core.TermMap v -> (Lists.concat (Lists.map (\p -> [
+    fst p,
+    (snd p)]) (Maps.toList v)))
+  Core.TermOptional v -> ((\x -> case x of
+    Nothing -> []
+    Just v -> [
+      v]) v)
+  Core.TermProduct v -> v
+  Core.TermRecord v -> (Lists.map Core.fieldTerm (Core.recordFields v))
+  Core.TermSet v -> (Sets.toList v)
+  Core.TermStream _ -> []
+  Core.TermSum v -> [
+    Core.sumTerm v]
+  Core.TermUnion v -> [
+    Core.fieldTerm (Core.injectionField v)]
+  Core.TermVariable _ -> []
+  Core.TermWrap v -> [
+    Core.nominalObject v]
+
+-- | Find the children of a given type expression
+subtypes :: (Core.Type a -> [Core.Type a])
+subtypes x = case x of
+  Core.TypeAnnotated v -> [
+    Core.annotatedSubject v]
+  Core.TypeApplication v -> [
+    Core.applicationTypeFunction v,
+    (Core.applicationTypeArgument v)]
+  Core.TypeFunction v -> [
+    Core.functionTypeDomain v,
+    (Core.functionTypeCodomain v)]
+  Core.TypeLambda v -> [
+    Core.lambdaTypeBody v]
+  Core.TypeList v -> [
+    v]
+  Core.TypeLiteral _ -> []
+  Core.TypeMap v -> [
+    Core.mapTypeKeys v,
+    (Core.mapTypeValues v)]
+  Core.TypeOptional v -> [
+    v]
+  Core.TypeProduct v -> v
+  Core.TypeRecord v -> (Lists.map Core.fieldTypeType (Core.rowTypeFields v))
+  Core.TypeSet v -> [
+    v]
+  Core.TypeSum v -> v
+  Core.TypeUnion v -> (Lists.map Core.fieldTypeType (Core.rowTypeFields v))
+  Core.TypeVariable _ -> []
+  Core.TypeWrap v -> [
+    Core.nominalObject v]
 
 -- | Convert a qualified name to a dot-separated name
 unqualifyName :: (Module.QualifiedName -> Core.Name)

@@ -25,7 +25,7 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-elementsWithDependencies :: [Element a] -> Flow (Graph a) [Element a]
+elementsWithDependencies :: Ord a => [Element a] -> Flow (Graph a) [Element a]
 elementsWithDependencies original = CM.mapM requireElement allDepNames
   where
     depNames = S.toList . termDependencyNames True False False . elementData
@@ -75,7 +75,7 @@ expandLambdas term = do
                   _ -> throwDebugException $ "expandLambdas: expected function type, got " ++ show t
                 Nothing -> Nothing
 
-foldOverTerm :: TraversalOrder -> (x -> Term a -> x) -> x -> Term a -> x
+foldOverTerm :: Ord a => TraversalOrder -> (x -> Term a -> x) -> x -> Term a -> x
 foldOverTerm order fld b0 term = case order of
     TraversalOrderPre -> L.foldl (foldOverTerm order fld) (fld b0 term) children
     TraversalOrderPost -> fld (L.foldl (foldOverTerm order fld) b0 children) term
@@ -92,7 +92,7 @@ foldOverType order fld b0 typ = case order of
 freeVariablesInScheme :: Show a => TypeScheme a -> S.Set Name
 freeVariablesInScheme (TypeScheme vars t) = S.difference (freeVariablesInType t) (S.fromList vars)
 
-freeVariablesInTerm :: Term a -> S.Set Name
+freeVariablesInTerm :: Ord a => Term a -> S.Set Name
 freeVariablesInTerm term = case term of
   TermFunction (FunctionLambda (Lambda var body)) -> S.delete var $ freeVariablesInTerm body
   TermVariable v -> S.fromList [v]
@@ -104,7 +104,7 @@ freeVariablesInType typ = case typ of
     TypeVariable v -> S.fromList [v]
     _ -> L.foldl (\s t -> S.union s $ freeVariablesInType t) S.empty $ subtypes typ
 
-isFreeIn :: Name -> Term a -> Bool
+isFreeIn :: Ord a => Name -> Term a -> Bool
 isFreeIn v term = not $ S.member v $ freeVariablesInTerm term
 
 -- | Recursively remove term annotations, including within subterms
@@ -312,49 +312,8 @@ substituteVariable from to = rewriteTerm replace id
         else recurse term
       _ -> recurse term
 
-subterms :: Term a -> [Term a]
-subterms term = case term of
-  TermAnnotated (Annotated t _) -> [t]
-  TermApplication (Application lhs rhs) -> [lhs, rhs]
-  TermFunction f -> case f of
-    FunctionElimination e -> case e of
-      EliminationOptional (OptionalCases nothing just) -> [nothing, just]
-      EliminationUnion (CaseStatement _ def cases) -> (fieldTerm <$> cases) ++ (Y.catMaybes [def])
-      _ -> []
-    FunctionLambda (Lambda _ body) -> [body]
-    _ -> []
-  TermLet (Let bindings env) -> (snd <$> M.toList bindings) ++ [env]
-  TermList els -> els
-  TermMap m -> L.concat ((\(k, v) -> [k, v]) <$> M.toList m)
-  TermWrap (Nominal _ t) -> [t]
-  TermOptional m -> Y.maybeToList m
-  TermProduct tuple -> tuple
-  TermRecord (Record n fields) -> fieldTerm <$> fields
-  TermSet s -> S.toList s
-  TermSum (Sum _ _ trm) -> [trm]
-  TermUnion (Injection _ field) -> [fieldTerm field]
-  _ -> []
-
-subtypes :: Type a -> [Type a]
-subtypes typ = case typ of
-  TypeAnnotated (Annotated t _) -> [t]
-  TypeApplication (ApplicationType lhs rhs) -> [lhs, rhs]
-  TypeFunction (FunctionType dom cod) -> [dom, cod]
-  TypeLambda (LambdaType v body) -> [body]
-  TypeList lt -> [lt]
-  TypeLiteral _ -> []
-  TypeMap (MapType kt vt) -> [kt, vt]
-  TypeOptional ot -> [ot]
-  TypeProduct types -> types
-  TypeRecord rt -> fieldTypeType <$> rowTypeFields rt
-  TypeSet st -> [st]
-  TypeSum types -> types
-  TypeUnion rt -> fieldTypeType <$> rowTypeFields rt
-  TypeVariable _ -> []
-  TypeWrap (Nominal _ t) -> [t]
-
 -- Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that
-termDependencyNames :: Bool -> Bool -> Bool -> Term a -> S.Set Name
+termDependencyNames :: Ord a => Bool -> Bool -> Bool -> Term a -> S.Set Name
 termDependencyNames withVars withPrims withNoms = foldOverTerm TraversalOrderPre addNames S.empty
   where
     addNames names term = case term of
@@ -376,7 +335,7 @@ termDependencyNames withVars withPrims withNoms = foldOverTerm TraversalOrderPre
         prim name = if withPrims then S.insert name names else names
         var name = if withVars then S.insert name names else names
 
-topologicalSortElements :: [Element a] -> Either [[Name]] [Name]
+topologicalSortElements :: Ord a => [Element a] -> Either [[Name]] [Name]
 topologicalSortElements els = topologicalSort $ adjlist <$> els
   where
     adjlist e = (elementName e, S.toList $ termDependencyNames False True True $ elementData e)

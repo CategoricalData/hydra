@@ -132,6 +132,12 @@ hydraCoreModule = Module ns elements [] $
           "domain">: core "Type" @@ "a",
           "codomain">: core "Type" @@ "a"],
 
+      def "Injection" $
+        doc "An instance of a union type; i.e. a string-indexed generalization of inl() or inr()" $
+        lambda "a" $ record [
+          "typeName">: core "Name",
+          "field">: core "Field" @@ "a"],
+
       def "IntegerType" $
         doc "An integer type" $
         enum [
@@ -364,12 +370,6 @@ hydraCoreModule = Module ns elements [] $
           "union">: core "RowType" @@ "a",
           "variable">: core "Name",
           "wrap">: core "Nominal" @@ (core "Type" @@ "a")],
-
-      def "Injection" $
-        doc "An instance of a union type; i.e. a string-indexed generalization of inl() or inr()" $
-        lambda "a" $ record [
-          "typeName">: core "Name",
-          "field">: core "Field" @@ "a"],
 
       def "UnitType" $
         doc "An empty record type as a canonical unit type" $

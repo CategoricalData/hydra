@@ -157,7 +157,7 @@ contractTerm = rewriteTerm rewrite id
         rec = recurse term
 
 -- Note: unused / untested
-etaReduceTerm :: Term a -> Term a
+etaReduceTerm :: Ord a => Term a -> Term a
 etaReduceTerm term = case term of
     TermAnnotated (Annotated term1 ann) -> TermAnnotated (Annotated (etaReduceTerm term1) ann)
     TermFunction (FunctionLambda l) -> reduceLambda l
@@ -177,7 +177,7 @@ etaReduceTerm term = case term of
     noChange = term
 
 -- | Whether a term is closed, i.e. represents a complete program
-termIsClosed :: Term a -> Bool
+termIsClosed :: Ord a => Term a -> Bool
 termIsClosed = S.null . freeVariablesInTerm
 
 -- | Whether a term has been fully reduced to a "value"

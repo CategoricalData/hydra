@@ -73,10 +73,9 @@ getTypeClasses typ = case getTypeAnnotation key_classes typ of
     Nothing -> pure M.empty
     Just term -> Expect.map coreDecodeName (Expect.set decodeClass) term
   where
-    decodeClass term = Expect.unitVariant _TypeClass term >>= \fn -> case fn of
-      _TypeClass_equality -> pure TypeClassEquality
-      _TypeClass_ordering -> pure TypeClassOrdering
-      _ -> unexpected "type class" $ show term
+    decodeClass term = Expect.unitVariant _TypeClass term >>= \fn -> Y.maybe
+      (unexpected "type class" $ show term) pure $ M.lookup fn byName
+    byName = M.fromList [(_TypeClass_equality, TypeClassEquality), (_TypeClass_ordering, TypeClassOrdering)]
 
 getTypeDescription :: Type Kv -> Flow (Graph Kv) (Y.Maybe String)
 getTypeDescription = getDescription . typeAnnotationInternal
