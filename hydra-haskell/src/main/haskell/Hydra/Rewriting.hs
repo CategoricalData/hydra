@@ -75,20 +75,6 @@ expandLambdas term = do
                   _ -> throwDebugException $ "expandLambdas: expected function type, got " ++ show t
                 Nothing -> Nothing
 
-foldOverTerm :: Ord a => TraversalOrder -> (x -> Term a -> x) -> x -> Term a -> x
-foldOverTerm order fld b0 term = case order of
-    TraversalOrderPre -> L.foldl (foldOverTerm order fld) (fld b0 term) children
-    TraversalOrderPost -> fld (L.foldl (foldOverTerm order fld) b0 children) term
-  where
-    children = subterms term
-
-foldOverType :: TraversalOrder -> (x -> Type a -> x) -> x -> Type a -> x
-foldOverType order fld b0 typ = case order of
-    TraversalOrderPre -> L.foldl (foldOverType order fld) (fld b0 typ) children
-    TraversalOrderPost -> fld (L.foldl (foldOverType order fld) b0 children) typ
-  where
-    children = subtypes typ
-
 freeVariablesInScheme :: Show a => TypeScheme a -> S.Set Name
 freeVariablesInScheme (TypeScheme vars t) = S.difference (freeVariablesInType t) (S.fromList vars)
 
@@ -146,12 +132,13 @@ rewriteTerm f mf = rewrite fsub f
         TermApplication (Application lhs rhs) -> TermApplication $ Application (recurse lhs) (recurse rhs)
         TermFunction fun -> TermFunction $ case fun of
           FunctionElimination e -> FunctionElimination $ case e of
-            EliminationWrap name -> EliminationWrap name
+            EliminationList fld -> EliminationList $ recurse fld
             EliminationOptional (OptionalCases nothing just) -> EliminationOptional
               (OptionalCases (recurse nothing) (recurse just))
             EliminationProduct tp -> EliminationProduct tp
             EliminationRecord p -> EliminationRecord p
             EliminationUnion (CaseStatement n def cases) -> EliminationUnion $ CaseStatement n (recurse <$> def) (forField <$> cases)
+            EliminationWrap name -> EliminationWrap name
           FunctionLambda (Lambda v body) -> FunctionLambda $ Lambda v $ recurse body
           FunctionPrimitive name -> FunctionPrimitive name
         TermLet (Let bindings env) -> TermLet $ Let (M.fromList (mapBinding <$> M.toList bindings)) (recurse env)
@@ -183,7 +170,7 @@ rewriteTermM f mf = rewrite fsub f
         TermApplication (Application lhs rhs) -> TermApplication <$> (Application <$> recurse lhs <*> recurse rhs)
         TermFunction fun -> TermFunction <$> case fun of
           FunctionElimination e -> FunctionElimination <$> case e of
-            EliminationWrap name -> pure $ EliminationWrap name
+            EliminationList fld -> EliminationList <$> recurse fld
             EliminationOptional (OptionalCases nothing just) -> EliminationOptional <$>
               (OptionalCases <$> recurse nothing <*> recurse just)
             EliminationProduct tp -> pure $ EliminationProduct tp
@@ -193,6 +180,7 @@ rewriteTermM f mf = rewrite fsub f
                 Nothing -> pure Nothing
                 Just t -> Just <$> recurse t
               EliminationUnion <$> (CaseStatement n rdef <$> (CM.mapM forField cases))
+            EliminationWrap name -> pure $ EliminationWrap name
           FunctionLambda (Lambda v body) -> FunctionLambda <$> (Lambda v <$> recurse body)
           FunctionPrimitive name -> pure $ FunctionPrimitive name
         TermLet (Let bindings env) -> TermLet <$> (Let <$> (M.fromList <$> (CM.mapM mapBinding $ M.toList bindings)) <*> recurse env)

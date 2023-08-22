@@ -69,22 +69,19 @@ constructModule namespaces mod coders pairs = do
         domainImports = toImport <$> M.toList (namespacesMapping namespaces)
           where
             toImport (Namespace name, alias) = H.Import True (importName name) (Just alias) Nothing
-        standardImports = toImport . H.ModuleName <$> Y.catMaybes [
-            Just "Data.Int",
-            Just "Data.List",
-            Just "Data.Map",
-            Just "Data.Set"{-,
-            if useCoreImport && moduleNamespace g /= Namespace "hydra/core"
-              then Just "Hydra.Core"
-              else Nothing-}]
+        standardImports = toImport <$> [
+            ("Data.Int", Nothing),
+            ("Data.List", Just "L"),
+            ("Data.Map", Just "M"),
+            ("Data.Set", Just "S")]
           where
-            toImport name = H.Import False name Nothing Nothing
+            toImport (name, alias) = H.Import False (H.ModuleName name) (H.ModuleName <$> alias) Nothing
 
 encodeFunction :: (Eq a, Ord a, Read a, Show a) => Namespaces -> Function a -> Flow (Graph a) H.Expression
 encodeFunction namespaces fun = case fun of
     FunctionElimination e -> case e of
       EliminationList fun -> do
-        let lhs = hsvar "foldl"
+        let lhs = hsvar "L.foldl"
         rhs <- encodeTerm namespaces fun
         return $ hsapp lhs rhs
       EliminationWrap name -> pure $ H.ExpressionVariable $ elementReference namespaces $
