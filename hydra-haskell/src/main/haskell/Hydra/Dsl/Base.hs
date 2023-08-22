@@ -169,7 +169,7 @@ record name fields = Datum $ Terms.record name fields
 ref :: Definition a -> Datum a
 ref (Definition name _) = Datum (TermVariable name)
 
-second :: Datum ((a, b) -> a)
+second :: Datum ((a, b) -> b)
 second = Datum $ Terms.untuple 2 1
 
 set :: S.Set (Datum a) -> Datum (S.Set a)

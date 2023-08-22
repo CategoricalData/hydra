@@ -10,6 +10,9 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
+eqA = (M.fromList [(Name "a", S.fromList [TypeClassEquality])])
+ordA = (M.fromList [(Name "a", S.fromList [TypeClassOrdering])])
+
 aT = Types.var "a" :: Type a
 annotatedTermA = Types.apply (Types.apply (TypeVariable _Annotated) termA) (Types.var "a") :: Type a
 annotatedTypeA = Types.apply (Types.apply (TypeVariable _Annotated) typeA) (Types.var "a") :: Type a
@@ -19,7 +22,6 @@ booleanT = Types.boolean
 caseStatementA = Types.apply (TypeVariable _CaseStatement) (Types.var "a") :: Type a
 elementA = Types.apply (TypeVariable _Element) aT :: Type a
 eliminationA = Types.apply (TypeVariable _Elimination) (Types.var "a") :: Type a
-eqA = (M.fromList [(Name "a", S.fromList [TypeClassEquality])])
 fieldA = Types.apply (TypeVariable _Field) aT :: Type a
 fieldTypeA = Types.apply (TypeVariable _FieldType) aT :: Type a
 flowGraphATypeA = Types.apply (Types.apply (TypeVariable _Flow) graphA) typeA :: Type a
