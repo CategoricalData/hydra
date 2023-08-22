@@ -4,6 +4,7 @@ module Hydra.Substitution where
 import Hydra.Core
 import Hydra.Mantle
 import Hydra.Rewriting
+import Hydra.Tier1
 import Hydra.Dsl.Types as Types
 
 import qualified Data.List as L

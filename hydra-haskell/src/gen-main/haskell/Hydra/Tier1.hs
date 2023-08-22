@@ -75,6 +75,26 @@ foldOverType order fld b0 typ = ((\x -> case x of
   Coders.TraversalOrderPre -> (L.foldl (foldOverType order fld) (fld b0 typ) (subtypes typ))
   Coders.TraversalOrderPost -> (fld (L.foldl (foldOverType order fld) b0 (subtypes typ)) typ)) order)
 
+-- | Find the free variables (i.e. variables not bound by a lambda or let) in a term
+freeVariablesInTerm :: (Ord a) => (Core.Term a -> Set Core.Name)
+freeVariablesInTerm term =  
+  let dfltVars = (L.foldl (\s -> \t -> Sets.union s (freeVariablesInTerm t)) Sets.empty (subterms term))
+  in ((\x -> case x of
+    Core.TermFunction v -> ((\x -> case x of
+      Core.FunctionLambda v -> (Sets.remove (Core.lambdaParameter v) (freeVariablesInTerm (Core.lambdaBody v)))
+      _ -> dfltVars) v)
+    Core.TermVariable v -> (Sets.singleton v)
+    _ -> dfltVars) term)
+
+-- | Find the free variables (i.e. variables not bound by a lambda or let) in a type
+freeVariablesInType :: (Core.Type a -> Set Core.Name)
+freeVariablesInType typ =  
+  let dfltVars = (L.foldl (\s -> \t -> Sets.union s (freeVariablesInType t)) Sets.empty (subtypes typ))
+  in ((\x -> case x of
+    Core.TypeLambda v -> (Sets.remove (Core.lambdaTypeParameter v) (freeVariablesInType (Core.lambdaTypeBody v)))
+    Core.TypeVariable v -> (Sets.singleton v)
+    _ -> dfltVars) typ)
+
 -- | Find the children of a given term
 subterms :: (Ord a) => (Core.Term a -> [Core.Term a])
 subterms x = case x of

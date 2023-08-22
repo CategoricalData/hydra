@@ -161,14 +161,17 @@ _hydra_lib_sets = Namespace "hydra/lib/sets"
 
 _sets_insert = qname _hydra_lib_sets "add" :: Name
 _sets_contains = qname _hydra_lib_sets "contains" :: Name
+_sets_difference = qname _hydra_lib_sets "difference" :: Name
 _sets_empty = qname _hydra_lib_sets "empty" :: Name
 _sets_fromList = qname _hydra_lib_sets "fromList" :: Name
+_sets_intersection = qname _hydra_lib_sets "intersection" :: Name
 _sets_isEmpty = qname _hydra_lib_sets "isEmpty" :: Name
 _sets_map = qname _hydra_lib_sets "map" :: Name
 _sets_remove = qname _hydra_lib_sets "remove" :: Name
-_sets_singleton = qname _hydra_lib_sets "pure" :: Name
+_sets_singleton = qname _hydra_lib_sets "singleton" :: Name
 _sets_size = qname _hydra_lib_sets "size" :: Name
 _sets_toList = qname _hydra_lib_sets "toList" :: Name
+_sets_union = qname _hydra_lib_sets "union" :: Name
 
 _hydra_lib_strings :: Namespace
 _hydra_lib_strings = Namespace "hydra/lib/strings"
@@ -351,15 +354,18 @@ hydraLibOptionalsPrimitives = [
 hydraLibSetsPrimitives :: (Ord a, Show a) => [Primitive a]
 hydraLibSetsPrimitives = [
     prim2 _sets_contains x (set x) boolean Sets.contains,
+    prim2 _sets_difference (set x) (set x) (set x) Sets.difference,
     prim0 _sets_empty (set x) Sets.empty,
     prim1 _sets_fromList (list x) (set x) Sets.fromList,
     prim2 _sets_insert x (set x) (set x) Sets.insert,
+    prim2 _sets_intersection (set x) (set x) (set x) Sets.intersection,
     prim1 _sets_isEmpty (set x) boolean Sets.isEmpty,
     prim2 _sets_map (function x y) (set x) (set y) Sets.map,
     prim2 _sets_remove x (set x) (set x) Sets.remove,
     prim1 _sets_singleton x (set x) Sets.singleton,
     prim1 _sets_size (set x) int32 Sets.size,
-    prim1 _sets_toList (set x) (list x) Sets.toList]
+    prim1 _sets_toList (set x) (list x) Sets.toList,
+    prim2 _sets_union (set x) (set x) (set x) Sets.union]
   where
     x = variable "x"
     y = variable "y"

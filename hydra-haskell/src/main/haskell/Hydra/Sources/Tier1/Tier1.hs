@@ -47,6 +47,8 @@ hydraTier1Module = Module (Namespace "hydra/tier1") elements
      -- Rewriting.hs
      el foldOverTermDef,
      el foldOverTypeDef,
+     el freeVariablesInTermDef,
+     el freeVariablesInTypeDef,
      el subtermsDef,
      el subtypesDef,
      -- Flows.hs
@@ -122,6 +124,42 @@ foldOverTypeDef = tier1Definition "foldOverType" $
         @@ (var "b0")
         @@ (ref subtypesDef @@ var "typ"))
       @@ var "typ")] @@ var "order")
+
+freeVariablesInTermDef :: Definition (Term a -> S.Set Name)
+freeVariablesInTermDef = tier1Definition "freeVariablesInTerm" $
+  doc "Find the free variables (i.e. variables not bound by a lambda or let) in a term" $
+  functionWithClasses termA (setT nameT) ordA $
+  lambda "term" (
+    (match _Term (Just $ var "dfltVars") [
+      _Term_function>>: match _Function (Just $ var "dfltVars") [
+        _Function_lambda>>: lambda "l" (Sets.remove
+          @@ (Core.lambdaParameter @@ var "l")
+          @@ (ref freeVariablesInTermDef @@ (Core.lambdaBody @@ var "l")))],
+--      TODO: restore the following
+--      _Term_let>>: lambda "l" (Sets.difference
+--        @@ (ref freeVariablesInTermDef @@ (Core.letEnvironment @@ var "l"))
+--        @@ (Sets.fromList @@ (Lists.map @@ first @@ (Maps.toList @@ (Core.letBindings @@ var "l"))))),
+      _Term_variable>>: lambda "v" (Sets.singleton @@ var "v")] @@ var "term")
+    `with` [
+      "dfltVars">: typed (setT nameT) $ Base.fold (lambda "s" $ lambda "t" $ Sets.union @@ var "s" @@ (ref freeVariablesInTermDef @@ var "t"))
+        @@ Sets.empty
+        @@ (ref subtermsDef @@ var "term")])
+
+freeVariablesInTypeDef :: Definition (Type a -> S.Set Name)
+freeVariablesInTypeDef = tier1Definition "freeVariablesInType" $
+  doc "Find the free variables (i.e. variables not bound by a lambda or let) in a type" $
+  function typeA (setT nameT) $
+  lambda "typ" (
+    (match _Type (Just $ var "dfltVars") [
+      _Type_lambda>>: lambda "lt" (Sets.remove
+          @@ (Core.lambdaTypeParameter @@ var "lt")
+          @@ (ref freeVariablesInTypeDef @@ (Core.lambdaTypeBody @@ var "lt"))),
+      -- TODO: let-types
+      _Type_variable>>: lambda "v" (Sets.singleton @@ var "v")] @@ var "typ")
+    `with` [
+      "dfltVars">: typed (setT nameT) $ Base.fold (lambda "s" $ lambda "t" $ Sets.union @@ var "s" @@ (ref freeVariablesInTypeDef @@ var "t"))
+        @@ Sets.empty
+        @@ (ref subtypesDef @@ var "typ")])
 
 subtermsDef :: Definition (Term a -> [Term a])
 subtermsDef = tier1Definition "subterms" $
