@@ -2,6 +2,7 @@
 
 module Hydra.Tier1 where
 
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
@@ -17,9 +18,9 @@ import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Module as Module
 import qualified Hydra.Strip as Strip
 import Data.Int
-import Data.List
-import Data.Map
-import Data.Set
+import Data.List as L
+import Data.Map as M
+import Data.Set as S
 
 -- | Convert a floating-point value of any precision to a bigfloat
 floatValueToBigfloat :: (Core.FloatValue -> Double)
@@ -49,6 +50,30 @@ isLambda term = ((\x -> case x of
     _ -> False) v)
   Core.TermLet v -> (isLambda (Core.letEnvironment v))
   _ -> False) (Strip.stripTerm term))
+
+-- | Convert a qualified name to a dot-separated name
+unqualifyName :: (Module.QualifiedName -> Core.Name)
+unqualifyName qname =  
+  let prefix = ((\x -> case x of
+          Nothing -> ""
+          Just v -> (Strings.cat [
+            Module.unNamespace v,
+            "."])) (Module.qualifiedNameNamespace qname))
+  in (Core.Name (Strings.cat [
+    prefix,
+    (Module.qualifiedNameLocal qname)]))
+
+-- | Fold over a term, traversing its subterms in the specified order
+foldOverTerm :: (Ord a) => (Coders.TraversalOrder -> (x -> Core.Term a -> x) -> x -> Core.Term a -> x)
+foldOverTerm order fld b0 term = ((\x -> case x of
+  Coders.TraversalOrderPre -> (L.foldl (foldOverTerm order fld) (fld b0 term) (subterms term))
+  Coders.TraversalOrderPost -> (fld (L.foldl (foldOverTerm order fld) b0 (subterms term)) term)) order)
+
+-- | Fold over a type, traversing its subtypes in the specified order
+foldOverType :: (Coders.TraversalOrder -> (x -> Core.Type a -> x) -> x -> Core.Type a -> x)
+foldOverType order fld b0 typ = ((\x -> case x of
+  Coders.TraversalOrderPre -> (L.foldl (foldOverType order fld) (fld b0 typ) (subtypes typ))
+  Coders.TraversalOrderPost -> (fld (L.foldl (foldOverType order fld) b0 (subtypes typ)) typ)) order)
 
 -- | Find the children of a given term
 subterms :: (Ord a) => (Core.Term a -> [Core.Term a])
@@ -125,18 +150,6 @@ subtypes x = case x of
   Core.TypeVariable _ -> []
   Core.TypeWrap v -> [
     Core.nominalObject v]
-
--- | Convert a qualified name to a dot-separated name
-unqualifyName :: (Module.QualifiedName -> Core.Name)
-unqualifyName qname =  
-  let prefix = ((\x -> case x of
-          Nothing -> ""
-          Just v -> (Strings.cat [
-            Module.unNamespace v,
-            "."])) (Module.qualifiedNameNamespace qname))
-  in (Core.Name (Strings.cat [
-    prefix,
-    (Module.qualifiedNameLocal qname)]))
 
 emptyTrace :: Compute.Trace
 emptyTrace = Compute.Trace {

@@ -88,11 +88,20 @@ first = Datum $ Terms.untuple 2 0
 fld :: FieldName -> Datum a -> Fld Kv
 fld fname (Datum val) = Fld $ Field fname val
 
+fold :: Datum (b -> a -> b) -> Datum (b -> [a] -> b)
+fold (Datum f) = Datum $ TermFunction $ FunctionElimination $ EliminationList f
+
+--foldl :: Datum ((b -> a -> b) -> b -> [a] -> b) -> Datum b -> Datum ([a] -> b)
+--foldl (Datum f) (Datum arg) = Datum (Terms.apply (TermFunction $ FunctionElimination $ EliminationList f) arg)
+
 function :: Type Kv -> Type Kv -> Datum a -> Datum a
 function dom cod = typed (Types.function dom cod)
 
 functionN :: [Type Kv] -> Datum a -> Datum a
 functionN ts = typed $ Types.functionN ts
+
+functionNWithClasses :: [Type Kv] -> M.Map Name (S.Set TypeClass) -> Datum a -> Datum a
+functionNWithClasses ts classes = typed $ setTypeClasses classes (Types.functionN ts)
 
 functionWithClasses :: Type Kv -> Type Kv -> M.Map Name (S.Set TypeClass) -> Datum a -> Datum a
 functionWithClasses dom cod classes = typed $ setTypeClasses classes (Types.function dom cod)
