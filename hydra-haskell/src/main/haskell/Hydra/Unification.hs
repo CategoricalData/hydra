@@ -13,6 +13,7 @@ import Hydra.Lexical
 import Hydra.Printing
 import Hydra.Rewriting
 import Hydra.Substitution
+import Hydra.Tier1
 import Hydra.Dsl.Types as Types
 
 import qualified Data.List as L

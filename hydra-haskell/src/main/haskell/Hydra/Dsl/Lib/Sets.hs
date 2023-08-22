@@ -10,6 +10,9 @@ import Data.Set
 contains :: Datum (a -> Set a -> Bool)
 contains = Datum $ Terms.primitive _sets_contains
 
+difference :: Datum (Set a -> Set a -> Set a)
+difference = Datum $ Terms.primitive _sets_difference
+
 empty :: Datum (Set a)
 empty = Datum $ Terms.primitive _sets_empty
 
@@ -18,6 +21,9 @@ fromList = Datum $ Terms.primitive _sets_fromList
 
 insert :: Datum (a -> Set a -> Set a)
 insert = Datum $ Terms.primitive _sets_insert
+
+intersection :: Datum (Set a -> Set a -> Set a)
+intersection = Datum $ Terms.primitive _sets_intersection
 
 isEmpty :: Datum (Set a -> Bool)
 isEmpty = Datum $ Terms.primitive _sets_isEmpty
@@ -36,3 +42,6 @@ size = Datum $ Terms.primitive _sets_size
 
 toList :: Datum (Set a -> [a])
 toList = Datum $ Terms.primitive _sets_toList
+
+union :: Datum (Set a -> Set a -> Set a)
+union = Datum $ Terms.primitive _sets_union

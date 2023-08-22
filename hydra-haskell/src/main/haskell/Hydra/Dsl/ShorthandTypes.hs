@@ -52,6 +52,7 @@ pairT t1 t2 = Types.pair (t1, t2)
 recordA = Types.apply (TypeVariable _Record) (Types.var "a") :: Type a
 rowTypeA = Types.apply (TypeVariable _RowType) (Types.var "a") :: Type a
 sT = Types.var "s" :: Type a
+setT = TypeSet
 stringT = Types.string :: Type a
 sumA = Types.apply (TypeVariable _Sum) (Types.var "a") :: Type a
 termA = Types.apply (TypeVariable _Term) aT :: Type a

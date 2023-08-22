@@ -78,18 +78,6 @@ expandLambdas term = do
 freeVariablesInScheme :: Show a => TypeScheme a -> S.Set Name
 freeVariablesInScheme (TypeScheme vars t) = S.difference (freeVariablesInType t) (S.fromList vars)
 
-freeVariablesInTerm :: Ord a => Term a -> S.Set Name
-freeVariablesInTerm term = case term of
-  TermFunction (FunctionLambda (Lambda var body)) -> S.delete var $ freeVariablesInTerm body
-  TermVariable v -> S.fromList [v]
-  _ -> L.foldl (\s t -> S.union s $ freeVariablesInTerm t) S.empty $ subterms term
-
-freeVariablesInType :: Type a -> S.Set Name
-freeVariablesInType typ = case typ of
-    TypeLambda (LambdaType v body) -> S.delete v $ freeVariablesInType body
-    TypeVariable v -> S.fromList [v]
-    _ -> L.foldl (\s t -> S.union s $ freeVariablesInType t) S.empty $ subtypes typ
-
 isFreeIn :: Ord a => Name -> Term a -> Bool
 isFreeIn v term = not $ S.member v $ freeVariablesInTerm term
 
