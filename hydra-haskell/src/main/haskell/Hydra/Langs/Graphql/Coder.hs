@@ -1,4 +1,4 @@
-module Hydra.Langs.Graphql.Coder where -- (printGraph) where
+module Hydra.Langs.Graphql.Coder (moduleToGraphql) where
 
 import Hydra.Kernel
 import Hydra.Langs.Graphql.Language
@@ -16,8 +16,8 @@ import qualified Data.Maybe as Y
 
 type Prefixes = M.Map Namespace String
 
-printModule :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
-printModule mod = do
+moduleToGraphql :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
+moduleToGraphql mod = do
     files <- moduleToGraphqlSchemas mod
     return $ M.fromList (mapPair <$> M.toList files)
   where

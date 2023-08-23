@@ -1,4 +1,4 @@
-module Hydra.Langs.Haskell.Coder (printModule) where
+module Hydra.Langs.Haskell.Coder (moduleToHaskell) where
 
 import Hydra.Kernel
 import Hydra.Adapters
@@ -261,8 +261,8 @@ moduleToHaskellModule mod = do
     namespaces <- namespacesForModule mod
     transformModule haskellLanguage (encodeTerm namespaces) (constructModule namespaces) mod
 
-printModule :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
-printModule mod = do
+moduleToHaskell :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
+moduleToHaskell mod = do
   hsmod <- moduleToHaskellModule mod
   let s = printExpr $ parenthesize $ toTree hsmod
   return $ M.fromList [(namespaceToFilePath True (FileExtension "hs") $ moduleNamespace mod, s)]
