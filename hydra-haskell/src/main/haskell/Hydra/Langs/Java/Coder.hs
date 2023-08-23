@@ -1,4 +1,4 @@
-module Hydra.Langs.Java.Coder (printModule) where
+module Hydra.Langs.Java.Coder (moduleToJava) where
 
 import Hydra.Kernel
 import Hydra.Reduction
@@ -25,8 +25,8 @@ import Data.String (String)
 
 data JavaSymbolClass = JavaSymbolClassConstant | JavaSymbolClassNullaryFunction | JavaSymbolClassUnaryFunction | JavaSymbolLocalVariable
 
-printModule :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
-printModule mod = do
+moduleToJava :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
+moduleToJava mod = do
     withTrace "encode in Java" $ do
       units <- moduleToJavaCompilationUnit mod
       return $ M.fromList $ forPair <$> M.toList units

@@ -6,6 +6,7 @@ module Hydra.Codegen (
   writeHaskell,
   writeJava,
   writePdl,
+  writeProtobuf,
   writeScala,
   writeYaml,
   module Hydra.Sources.Tier4.All
@@ -14,13 +15,14 @@ module Hydra.Codegen (
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
-import qualified Hydra.Langs.Graphql.Coder as Graphql
-import qualified Hydra.Langs.Haskell.Coder as Haskell
-import qualified Hydra.Langs.Java.Coder as Java
-import qualified Hydra.Langs.Json.Coder as Json
-import qualified Hydra.Langs.Pegasus.Coder as PDL
-import qualified Hydra.Langs.Scala.Coder as Scala
-import qualified Hydra.Langs.Yaml.Modules as Yaml
+import Hydra.Langs.Graphql.Coder
+import Hydra.Langs.Haskell.Coder
+import Hydra.Langs.Java.Coder
+import Hydra.Langs.Json.Coder
+import Hydra.Langs.Pegasus.Coder
+import Hydra.Langs.Protobuf.Coder
+import Hydra.Langs.Scala.Coder
+import Hydra.Langs.Yaml.Modules
 
 import Hydra.Sources.Libraries
 import Hydra.Sources.Tier4.All
@@ -94,22 +96,25 @@ runFlow cx f = do
   return v
 
 writeGraphql :: FP.FilePath -> [Module Kv] -> IO ()
-writeGraphql = generateSources Graphql.printModule
+writeGraphql = generateSources moduleToGraphql
 
 writeHaskell :: FilePath -> [Module Kv] -> IO ()
-writeHaskell = generateSources Haskell.printModule
+writeHaskell = generateSources moduleToHaskell
 
 writeJava :: FP.FilePath -> [Module Kv] -> IO ()
-writeJava = generateSources Java.printModule
+writeJava = generateSources moduleToJava
 
 -- writeJson :: FP.FilePath -> [Module Kv] -> IO ()
 -- writeJson = generateSources Json.printModule
 
 writePdl :: FP.FilePath -> [Module Kv] -> IO ()
-writePdl = generateSources PDL.printModule
+writePdl = generateSources moduleToPdl
+
+writeProtobuf :: FP.FilePath -> [Module Kv] -> IO ()
+writeProtobuf = generateSources moduleToProtobuf
 
 writeScala :: FP.FilePath -> [Module Kv] -> IO ()
-writeScala = generateSources Scala.printModule
+writeScala = generateSources moduleToScala
 
 writeYaml :: FP.FilePath -> [Module Kv] -> IO ()
-writeYaml = generateSources Yaml.printModule
+writeYaml = generateSources moduleToYaml
