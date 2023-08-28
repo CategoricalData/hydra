@@ -5,6 +5,7 @@ module Hydra.Tools.Serialization where
 import Hydra.Ast
 
 import qualified Data.List as L
+import qualified Data.Maybe as Y
 
 
 angleBraces :: Brackets
@@ -24,27 +25,18 @@ brackets :: Brackets -> BlockStyle -> Expr -> Expr
 brackets br style e = ExprBrackets $ BracketExpr br e style
 
 commaSep :: BlockStyle -> [Expr] -> Expr
-commaSep style l = case l of
-    [] -> cst ""
-    [x] -> x
-    (h:r) -> ifx commaOp h $ commaSep style r
-  where
-    break = case L.length $ L.filter id [blockStyleNewlineBeforeContent style, blockStyleNewlineAfterContent style] of
-      0 -> WsSpace
-      1 -> WsBreak
-      2 -> WsDoubleBreak
-    commaOp = Op (sym ",") (Padding WsNone break) (Precedence 0) AssociativityNone -- No source
+commaSep = symbolSep ","
 
 curlyBlock :: BlockStyle -> Expr -> Expr
-curlyBlock style e = curlyBracesList style [e]
+curlyBlock style e = curlyBracesList Nothing style [e]
 
 curlyBraces :: Brackets
 curlyBraces = Brackets (sym "{") (sym "}")
 
-curlyBracesList :: BlockStyle -> [Expr] -> Expr
-curlyBracesList style els = case els of
+curlyBracesList :: Maybe String -> BlockStyle -> [Expr] -> Expr
+curlyBracesList msymb style els = case els of
   [] -> cst "{}"
-  _ -> brackets curlyBraces style $ commaSep style els
+  _ -> brackets curlyBraces style $ symbolSep (Y.fromMaybe "," msymb) style els
 
 cst :: String -> Expr
 cst = ExprConst . Symbol
@@ -223,3 +215,15 @@ squareBrackets = Brackets (sym "[") (sym "]")
 
 sym :: String -> Symbol
 sym = Symbol
+
+symbolSep :: String -> BlockStyle -> [Expr] -> Expr
+symbolSep symb style l = case l of
+    [] -> cst ""
+    [x] -> x
+    (h:r) -> ifx commaOp h $ commaSep style r
+  where
+    break = case L.length $ L.filter id [blockStyleNewlineBeforeContent style, blockStyleNewlineAfterContent style] of
+      0 -> WsSpace
+      1 -> WsBreak
+      2 -> WsDoubleBreak
+    commaOp = Op (sym symb) (Padding WsNone break) (Precedence 0) AssociativityNone -- No source
