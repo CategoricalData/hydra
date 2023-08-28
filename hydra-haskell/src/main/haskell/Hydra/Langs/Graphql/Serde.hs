@@ -28,7 +28,7 @@ exprDocument d = doubleNewlineSep (exprDefinition <$> G.unDocument d)
 exprEnumTypeDefinition :: G.EnumTypeDefinition -> CT.Expr
 exprEnumTypeDefinition def = withDescription (G.enumTypeDefinitionDescription def) $
     spaceSep [cst "enum", exprName (G.enumTypeDefinitionName def),
-      curlyBracesList fullBlockStyle valuesExpr]
+      curlyBracesList Nothing fullBlockStyle valuesExpr]
   where
     valuesExpr = case G.enumTypeDefinitionEnumValuesDefinition def of
       Nothing -> []
@@ -67,7 +67,7 @@ exprNonNullType nnt = noSep [typeExpr, cst "!"]
 exprObjectTypeDefinition :: G.ObjectTypeDefinition -> CT.Expr
 exprObjectTypeDefinition def = withDescription (G.objectTypeDefinitionDescription def) $
     spaceSep [cst "type", exprName (G.objectTypeDefinitionName def),
-      curlyBracesList fullBlockStyle fieldsExpr]
+      curlyBracesList Nothing fullBlockStyle fieldsExpr]
   where
     fieldsExpr = case G.objectTypeDefinitionFieldsDefinition def of
       Nothing -> []

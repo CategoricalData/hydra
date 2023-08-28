@@ -40,7 +40,7 @@ instance ToTree H.Constructor where
       spaceSep (toTree <$> types)]
     H.ConstructorRecord (H.Constructor_Record name fields) -> spaceSep [
       toTree name,
-      curlyBracesList halfBlockStyle (toTree <$> fields)]
+      curlyBracesList Nothing halfBlockStyle (toTree <$> fields)]
 
 instance ToTree H.ConstructorWithComments where
   toTree (H.ConstructorWithComments body mc) = case mc of
