@@ -22,9 +22,9 @@ exprNamedSchema :: PDL.NamedSchema -> CT.Expr
 exprNamedSchema (PDL.NamedSchema qn t anns) = withAnnotations anns $
   case t of
     PDL.NamedSchema_TypeRecord (PDL.RecordSchema fields _) -> spaceSep [cst "record", exprQualifiedName qn,
-      curlyBracesList fullBlockStyle (exprRecordField <$> fields)]
+      curlyBracesList Nothing fullBlockStyle (exprRecordField <$> fields)]
     PDL.NamedSchema_TypeEnum (PDL.EnumSchema fields) -> spaceSep [cst "enum", exprQualifiedName qn,
-      curlyBracesList fullBlockStyle (exprEnumField <$> fields)]
+      curlyBracesList Nothing fullBlockStyle (exprEnumField <$> fields)]
     PDL.NamedSchema_TypeTyperef schema -> spaceSep [cst "typeref", exprQualifiedName qn, cst "=", exprSchema schema]
 
 exprPrimitiveType :: PDL.PrimitiveType -> CT.Expr

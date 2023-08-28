@@ -52,7 +52,7 @@ writeImporter (Scala.Importer (Scala.Data_RefName (Scala.Data_Name (Scala.Predef
       then cst ""
       else if L.length its == 1
       then noSep [cst ".", forImportee $ L.head its]
-      else noSep [cst ".", curlyBracesList inlineStyle (forImportee <$> its)]
+      else noSep [cst ".", curlyBracesList Nothing inlineStyle (forImportee <$> its)]
 writeLit :: Scala.Lit -> Expr
 writeLit lit = case lit of
 --  Scala.LitNull
