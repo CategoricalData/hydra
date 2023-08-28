@@ -25,11 +25,13 @@ moduleToProtobuf mod = do
 
 --
 
-checkIsStringType :: Show a => Type a -> Flow s ()
+checkIsStringType :: Show a => Type a -> Flow (Graph a) ()
 checkIsStringType typ = case stripType typ of
   TypeLiteral lt -> case lt of
     LiteralTypeString -> pure ()
     _ -> unexpected "string type" $ show lt
+  TypeVariable name -> requireType name >>= checkIsStringType
+  TypeWrap (Nominal _ t) -> checkIsStringType t
   _ -> unexpected "literal (string) type" $ show typ
 
 constructModule :: (Ord a, Read a, Show a)
@@ -53,7 +55,7 @@ constructModule mod@(Module ns els _ desc) _ pairs = do
         then coreDecodeType term >>= encodeDefinition ns (elementName el)
         else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ unName (elementName el)
 
-encodeDefinition :: (Eq a, Ord a, Show a) => Namespace -> Name -> Type a -> Flow s P3.Definition
+encodeDefinition :: (Eq a, Ord a, Show a) => Namespace -> Name -> Type a -> Flow (Graph a) P3.Definition
 encodeDefinition localNs name typ = do
     resetCount "proto_field_index"
     case stripType typ of
@@ -86,7 +88,7 @@ encodeEnumValueName = P3.EnumValueName . Strings.toUpper . unFieldName
 encodeFieldName :: FieldName -> P3.FieldName
 encodeFieldName = P3.FieldName . unFieldName
 
-encodeFieldType :: (Ord a, Show a) => Namespace -> FieldType a -> Flow s P3.Field
+encodeFieldType :: (Ord a, Show a) => Namespace -> FieldType a -> Flow (Graph a) P3.Field
 encodeFieldType localNs (FieldType fname ftype) = do
     idx <- nextCount "proto_field_index"
     ft <- encodeType ftype
@@ -114,7 +116,7 @@ encodeFieldType localNs (FieldType fname ftype) = do
       TypeWrap (Nominal _ typ1) -> encodeSimpleType typ1
       t -> unexpected "simple type" $ show $ removeTypeAnnotations t
 
-encodeRecordType :: (Ord a, Show a) => Namespace -> RowType a -> Flow s P3.MessageDefinition
+encodeRecordType :: (Ord a, Show a) => Namespace -> RowType a -> Flow (Graph a) P3.MessageDefinition
 encodeRecordType localNs (RowType tname _ fields) = do
     pfields <- CM.mapM (encodeFieldType localNs) fields
     return P3.MessageDefinition {
