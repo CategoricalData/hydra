@@ -238,11 +238,8 @@ requireRowType label infer getter name = do
       TypeLambda (LambdaType _ body) -> rawType body -- Note: throwing away quantification here
       _ -> t
 
--- TODO: this should operate on the primary graph, not the schema graph
 requireType :: Show a => Name -> Flow (Graph a) (Type a)
-requireType name = withTrace "require type" $ do
-  el <- requireElement name
-  coreDecodeType $ elementData el
+requireType name = withTrace "require type" $ requireElement name >>= (coreDecodeType . elementData)
 
 requireUnionType :: Show a => Bool -> Name -> Flow (Graph a) (RowType a)
 requireUnionType infer = requireRowType "union" infer $ \t -> case t of

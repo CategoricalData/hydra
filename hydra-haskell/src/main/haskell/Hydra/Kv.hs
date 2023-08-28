@@ -122,6 +122,11 @@ nextCount attrName = do
   putAttr attrName (Terms.int32 $ count + 1)
   return count
 
+resetCount :: String -> Flow s ()
+resetCount attrName = do
+  putAttr attrName (Terms.int32 0)
+  return ()
+
 normalizeTermAnnotations :: Term Kv -> Term Kv
 normalizeTermAnnotations term = if M.null (kvAnnotations kv)
     then stripped
