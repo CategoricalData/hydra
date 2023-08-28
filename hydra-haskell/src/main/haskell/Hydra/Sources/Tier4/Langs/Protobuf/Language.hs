@@ -76,7 +76,8 @@ protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
         _TypeVariant_map,
         _TypeVariant_optional,
         _TypeVariant_record,
-        _TypeVariant_union]),
+        _TypeVariant_union,
+        _TypeVariant_variable]),
       _LanguageConstraints_types>>: match _Type (Just true) [
         _Type_map>>: lambda "mt" ((match _Type (Just false) [
           _Type_literal>>: match _LiteralType (Just false) [
