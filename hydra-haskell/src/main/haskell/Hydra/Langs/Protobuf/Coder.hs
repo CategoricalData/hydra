@@ -40,12 +40,11 @@ constructModule :: (Ord a, Read a, Show a)
   -> [(Element a, TypedTerm a)]
   -> Flow (Graph a) (M.Map FilePath P3.ProtoFile)
 constructModule mod@(Module ns els _ desc) _ pairs = do
---    imports <- (fmap namespaceToFileReference . S.toList) <$> moduleDependencyNamespaces True False True False mod
-    imports <- (fmap namespaceToFileReference . S.toList) <$> moduleDependencyNamespaces True False False False mod
+    schemaImports <- (fmap namespaceToFileReference . S.toList) <$> moduleDependencyNamespaces True False False False mod
     definitions <- CM.mapM toDef pairs
     let pfile = P3.ProtoFile {
       P3.protoFilePackage = namespaceToPackageName ns,
-      P3.protoFileImports = imports,
+      P3.protoFileImports = schemaImports ++ defaultImports,
       P3.protoFileTypes = definitions,
       P3.protoFileOptions = []}
     return $ M.singleton path pfile
@@ -57,6 +56,7 @@ constructModule mod@(Module ns els _ desc) _ pairs = do
           >>= pure . flattenType
           >>= adaptAndEncodeType protobufLanguage (encodeDefinition ns (elementName el))
         else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ unName (elementName el)
+    defaultImports = [P3.FileReference "google/protobuf/wrappers.proto"]
 
 encodeDefinition :: (Eq a, Ord a, Show a) => Namespace -> Name -> Type a -> Flow (Graph a) P3.Definition
 encodeDefinition localNs name typ = withTrace ("encoding " ++ unName name) $ do
@@ -116,7 +116,9 @@ encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ 
       TypeMap (MapType kt vt) -> do
         checkIsStringType kt
         P3.FieldTypeMap <$> encodeSimpleType vt
-      TypeOptional ot -> encodeType ot -- TODO
+      TypeOptional ot -> case stripType ot of
+        TypeLiteral lt -> P3.FieldTypeSimple <$> encodeScalarTypeWrapped lt
+        _ -> encodeType ot -- TODO
       TypeUnion (RowType _ _ fields) -> do
         pfields <- CM.mapM (encodeFieldType localNs) fields
         return $ P3.FieldTypeOneof pfields
@@ -154,6 +156,24 @@ encodeScalarType lt = case lt of
     IntegerTypeUint64 -> return P3.ScalarTypeUint64
     _ -> unexpected "32-bit or 64-bit integer type" $ show it
   LiteralTypeString -> return P3.ScalarTypeString
+
+encodeScalarTypeWrapped :: LiteralType -> Flow s P3.SimpleType
+encodeScalarTypeWrapped lt = toType <$> case lt of
+    LiteralTypeBinary -> return "Bytes"
+    LiteralTypeBoolean -> return "Bool"
+    LiteralTypeFloat ft -> case ft of
+      FloatTypeFloat32 -> return "Float"
+      FloatTypeFloat64 -> return "Double"
+      _ -> unexpected "32-bit or 64-bit floating-point type" $ show ft
+    LiteralTypeInteger it -> case it of
+      IntegerTypeInt32 -> return "Int32"
+      IntegerTypeInt64 -> return "Int64"
+      IntegerTypeUint32 -> return "UInt32"
+      IntegerTypeUint64 -> return "UInt64"
+      _ -> unexpected "32-bit or 64-bit integer type" $ show it
+    LiteralTypeString -> return "String"
+  where
+    toType label = P3.SimpleTypeReference $ P3.TypeName $ "google.protobuf." ++ label ++ "Value"
 
 encodeTypeName :: Name -> P3.TypeName
 encodeTypeName = P3.TypeName . localNameOfEager
