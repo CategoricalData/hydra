@@ -183,7 +183,7 @@ encodeTypeReference localNs name = P3.TypeName $ if ns == Just localNs
     then local
     else case ns of
       Nothing -> local
-      Just (Namespace n) -> L.last (Strings.splitOn "." n) ++ "." ++ local
+      Just (Namespace n) -> L.last (Strings.splitOn "/" n) ++ "." ++ local
   where
     QualifiedName ns local = qualifyNameEager name
 
