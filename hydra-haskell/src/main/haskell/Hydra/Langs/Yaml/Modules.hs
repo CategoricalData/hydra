@@ -1,4 +1,4 @@
-module Hydra.Langs.Yaml.Modules (printModule) where
+module Hydra.Langs.Yaml.Modules (moduleToYaml) where
 
 import Hydra.Kernel
 import Hydra.Adapters
@@ -30,8 +30,8 @@ constructModule mod coders pairs = do
     ns = unNamespace $ moduleNamespace mod
     localNameOf name = L.drop (1 + L.length ns) $ unName name
 
-printModule :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
-printModule mod = withTrace ("print module " ++ (unNamespace $ moduleNamespace mod)) $ do
+moduleToYaml :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
+moduleToYaml mod = withTrace ("print module " ++ (unNamespace $ moduleNamespace mod)) $ do
     node <- transformModule yamlLanguage encodeTerm constructModule mod
     return $ M.fromList [(path, hydraYamlToString node)]
   where

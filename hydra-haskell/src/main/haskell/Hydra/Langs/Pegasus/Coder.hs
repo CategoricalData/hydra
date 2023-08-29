@@ -1,4 +1,4 @@
-module Hydra.Langs.Pegasus.Coder (printModule) where
+module Hydra.Langs.Pegasus.Coder (moduleToPdl) where
 
 import Hydra.Kernel
 import Hydra.TermAdapters
@@ -16,8 +16,8 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-printModule :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
-printModule mod = do
+moduleToPdl :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
+moduleToPdl mod = do
     files <- moduleToPegasusSchemas mod
     return $ M.fromList (mapPair <$> M.toList files)
   where

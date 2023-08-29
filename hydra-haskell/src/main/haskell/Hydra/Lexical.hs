@@ -18,9 +18,9 @@ import Control.Monad
 
 
 dereferenceElement :: Name -> Flow (Graph a) (Maybe (Element a))
-dereferenceElement en = do
+dereferenceElement name = do
   g <- getState
-  return $ M.lookup en (graphElements g)
+  return $ M.lookup name (graphElements g)
 
 requireElement :: Name -> Flow (Graph a) (Element a)
 requireElement name = do

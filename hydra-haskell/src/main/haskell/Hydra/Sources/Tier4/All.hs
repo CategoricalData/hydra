@@ -14,8 +14,9 @@ import Hydra.Sources.Tier4.Langs.Owl.Syntax
 import Hydra.Sources.Tier4.Langs.Parquet.Format
 import Hydra.Sources.Tier4.Langs.Pegasus.Pdl
 import Hydra.Sources.Tier4.Langs.Protobuf.Any
+import Hydra.Sources.Tier4.Langs.Protobuf.Language
+import Hydra.Sources.Tier4.Langs.Protobuf.Proto3
 import Hydra.Sources.Tier4.Langs.Protobuf.SourceContext
-import Hydra.Sources.Tier4.Langs.Protobuf.Type
 import Hydra.Sources.Tier4.Langs.Rdf.Syntax
 import Hydra.Sources.Tier4.Langs.RelationalModel
 import Hydra.Sources.Tier4.Langs.Scala.Meta
@@ -51,9 +52,10 @@ tier4LangModules = [
   owlSyntaxModule,
   parquetFormatModule,
   pegasusPdlModule,
+  proto3Module,
   protobufAnyModule,
+  protobufLanguageModule,
   protobufSourceContextModule,
-  protobufTypeModule,
   rdfSyntaxModule,
   relationalModelModule,
   scalaMetaModule,

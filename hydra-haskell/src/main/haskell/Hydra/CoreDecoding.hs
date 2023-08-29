@@ -13,6 +13,7 @@ module Hydra.CoreDecoding (
   coreDecodeRowType,
   coreDecodeString,
   coreDecodeType,
+  dereferenceType,
   elementAsTypedTerm,
   fieldTypes,
   moduleDependencyNamespaces,
@@ -147,6 +148,13 @@ coreDecodeType dat = case dat of
     (_Type_variable, fmap TypeVariable . coreDecodeName),
     (_Type_wrap, fmap TypeWrap . (coreDecodeNominal coreDecodeType))] dat
 
+dereferenceType :: Show a => Name -> Flow (Graph a) (Maybe (Type a))
+dereferenceType name = do
+  mel <- dereferenceElement name
+  case mel of
+    Nothing -> return Nothing
+    Just el -> Just <$> coreDecodeType (elementData el)
+
 elementAsTypedTerm :: (Show a) => Element a -> Flow (Graph a) (TypedTerm a)
 elementAsTypedTerm el = do
   typ <- requireTermType (elementData el)
@@ -238,11 +246,8 @@ requireRowType label infer getter name = do
       TypeLambda (LambdaType _ body) -> rawType body -- Note: throwing away quantification here
       _ -> t
 
--- TODO: this should operate on the primary graph, not the schema graph
 requireType :: Show a => Name -> Flow (Graph a) (Type a)
-requireType name = withTrace "require type" $ do
-  el <- requireElement name
-  coreDecodeType $ elementData el
+requireType name = withTrace ("require type " ++ unName name) $ requireElement name >>= (coreDecodeType . elementData)
 
 requireUnionType :: Show a => Bool -> Name -> Flow (Graph a) (RowType a)
 requireUnionType infer = requireRowType "union" infer $ \t -> case t of
