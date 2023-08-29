@@ -7,6 +7,7 @@ import qualified Hydra.Lib.Strings as Strings
 import Hydra.Langs.Protobuf.Language
 import Hydra.Langs.Protobuf.Serde
 import Hydra.Tools.Serialization
+import qualified Hydra.Dsl.Types as Types
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -26,12 +27,11 @@ moduleToProtobuf mod = do
 --
 
 checkIsStringType :: Show a => Type a -> Flow (Graph a) ()
-checkIsStringType typ = case stripType typ of
+checkIsStringType typ = case simplifyType typ of
   TypeLiteral lt -> case lt of
     LiteralTypeString -> pure ()
     _ -> unexpected "string type" $ show lt
   TypeVariable name -> requireType name >>= checkIsStringType
-  TypeWrap (Nominal _ t) -> checkIsStringType t
   _ -> unexpected "literal (string) type" $ show typ
 
 constructModule :: (Ord a, Read a, Show a)
@@ -52,17 +52,17 @@ constructModule mod@(Module ns els _ desc) _ pairs = do
     path = P3.unFileReference $ namespaceToFileReference ns
     toDef (el, (TypedTerm typ term)) = do
       if isType typ
-        then coreDecodeType term >>= encodeDefinition ns (elementName el)
+        then coreDecodeType term >>= pure . flattenType >>= encodeDefinition ns (elementName el)
         else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ unName (elementName el)
 
 encodeDefinition :: (Eq a, Ord a, Show a) => Namespace -> Name -> Type a -> Flow (Graph a) P3.Definition
-encodeDefinition localNs name typ = do
+encodeDefinition localNs name typ = withTrace ("encoding " ++ unName name) $ do
     resetCount "proto_field_index"
-    case stripType typ of
+    case simplifyType typ of
       TypeRecord rt -> P3.DefinitionMessage <$> encodeRecordType localNs rt
       TypeUnion rt -> if isEnumDefinition typ
         then pure $ P3.DefinitionEnum $ encodeEnumDefinition rt
-        else fail $ "union type is not an enumeration: " ++ show typ
+        else encodeDefinition localNs name $ wrapAsRecordType typ
       t -> encodeDefinition localNs name $ wrapAsRecordType t
   where
     wrapAsRecordType t = TypeRecord $ RowType name Nothing [FieldType (FieldName "value") t]
@@ -89,7 +89,7 @@ encodeFieldName :: FieldName -> P3.FieldName
 encodeFieldName = P3.FieldName . unFieldName
 
 encodeFieldType :: (Ord a, Show a) => Namespace -> FieldType a -> Flow (Graph a) P3.Field
-encodeFieldType localNs (FieldType fname ftype) = do
+encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ show (unFieldName fname)) $ do
     idx <- nextCount "proto_field_index"
     ft <- encodeType ftype
     return $ P3.Field {
@@ -99,7 +99,7 @@ encodeFieldType localNs (FieldType fname ftype) = do
       P3.fieldNumber = idx,
       P3.fieldOptions = []}
   where
-    encodeType typ = case stripType typ of
+    encodeType typ = case simplifyType typ of
       TypeList lt -> P3.FieldTypeRepeated <$> encodeSimpleType lt
       TypeMap (MapType kt vt) -> do
         checkIsStringType kt
@@ -108,13 +108,15 @@ encodeFieldType localNs (FieldType fname ftype) = do
       TypeUnion (RowType _ _ fields) -> do
         pfields <- CM.mapM (encodeFieldType localNs) fields
         return $ P3.FieldTypeOneof pfields
-      TypeWrap (Nominal _ typ1) -> encodeType typ1
       _ -> P3.FieldTypeSimple <$> encodeSimpleType typ
-    encodeSimpleType typ = case stripType typ of
+    encodeSimpleType typ = case simplifyType typ of
       TypeLiteral lt -> P3.SimpleTypeScalar <$> encodeScalarType lt
-      TypeVariable name -> pure $ P3.SimpleTypeReference $ encodeTypeReference localNs name
-      TypeWrap (Nominal _ typ1) -> encodeSimpleType typ1
+      TypeRecord (RowType name _ _) -> forNominal name
+      TypeUnion (RowType name _ _) -> forNominal name
+      TypeVariable name -> forNominal name
       t -> unexpected "simple type" $ show $ removeTypeAnnotations t
+      where
+        forNominal name = pure $ P3.SimpleTypeReference $ encodeTypeReference localNs name
 
 encodeRecordType :: (Ord a, Show a) => Namespace -> RowType a -> Flow (Graph a) P3.MessageDefinition
 encodeRecordType localNs (RowType tname _ fields) = do
@@ -153,10 +155,10 @@ encodeTypeReference localNs name = P3.TypeName $ if ns == Just localNs
 isEnumFields :: Eq a => [FieldType a] -> Bool
 isEnumFields fields = L.foldl (&&) True $ fmap isEnumField fields
   where
-    isEnumField = isUnitType . stripType . fieldTypeType
+    isEnumField = isUnitType . simplifyType . fieldTypeType
 
 isEnumDefinition :: Eq a => Type a -> Bool
-isEnumDefinition typ = case stripType typ of
+isEnumDefinition typ = case simplifyType typ of
   TypeUnion (RowType _ _ fields) -> isEnumFields fields
   _ -> False
 
@@ -168,3 +170,20 @@ namespaceToFileReference (Namespace ns) = P3.FileReference $ ns ++ ".proto"
 
 namespaceToPackageName :: Namespace -> P3.PackageName
 namespaceToPackageName (Namespace ns) = P3.PackageName $ Strings.intercalate "." $ Strings.splitOn "/" ns
+
+-- Note: this should probably be done in the term adapters
+simplifyType :: Type a -> Type a
+simplifyType typ = case stripType typ of
+--  TypeApplication (ApplicationType lhs _) -> simplifyType lhs
+--  TypeLambda (LambdaType _ body) -> simplifyType body
+  TypeWrap (Nominal _ t) -> simplifyType t
+  t -> t
+
+-- Eliminate type lambdas and type applications, simply replacing type variables with the string type
+flattenType :: Ord a => Type a -> Type a
+flattenType = rewriteType f id
+  where
+   f recurse typ = case typ of
+     TypeLambda (LambdaType v body) -> recurse $ replaceFreeName v Types.string body
+     TypeApplication (ApplicationType lhs _) -> recurse lhs
+     _ -> recurse typ
