@@ -14,6 +14,9 @@ import qualified Data.Maybe as Y
 -- A special Protobuf option for descriptions (documentation)
 descriptionOptionName = "_description"
 
+protoBlock :: [CT.Expr] -> CT.Expr
+protoBlock = brackets curlyBraces fullBlockStyle . doubleNewlineSep
+
 semi :: CT.Expr -> CT.Expr
 semi e = noSep [e, cst ";"]
 
@@ -33,7 +36,7 @@ writeEnumDefinition :: P3.EnumDefinition -> CT.Expr
 writeEnumDefinition (P3.EnumDefinition name values options) = optDesc options $ spaceSep [
   cst "enum",
   cst $ P3.unTypeName name,
-  curlyBracesList (Just "") fullBlockStyle (writeEnumValue <$> values)]
+  protoBlock (writeEnumValue <$> values)]
 
 writeEnumValue :: P3.EnumValue -> CT.Expr
 writeEnumValue (P3.EnumValue name number options) = optDesc options $ semi $ spaceSep [
@@ -46,7 +49,7 @@ writeField (P3.Field name jsonName typ num options) = optDesc options $ case typ
   P3.FieldTypeOneof fields -> spaceSep [
     cst "oneof",
     cst $ P3.unFieldName name,
-    curlyBracesList (Just "") fullBlockStyle (writeField <$> fields)]
+    protoBlock (writeField <$> fields)]
   _ -> semi $ spaceSep [ -- TODO: jsonName
     writeFieldType typ,
     cst $ P3.unFieldName name,
@@ -66,7 +69,7 @@ writeMessageDefinition :: P3.MessageDefinition -> CT.Expr
 writeMessageDefinition (P3.MessageDefinition name fields options) = optDesc options $ spaceSep [
   cst "message",
   cst $ P3.unTypeName name,
-  curlyBracesList (Just "") fullBlockStyle (writeField <$> fields)]
+  protoBlock (writeField <$> fields)]
 
 writeOption :: P3.Option -> CT.Expr
 writeOption (P3.Option name value) = semi $ spaceSep [cst "option", cst name, cst "=", cst $ show value]
