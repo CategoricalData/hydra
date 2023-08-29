@@ -40,7 +40,8 @@ constructModule :: (Ord a, Read a, Show a)
   -> [(Element a, TypedTerm a)]
   -> Flow (Graph a) (M.Map FilePath P3.ProtoFile)
 constructModule mod@(Module ns els _ desc) _ pairs = do
-    imports <- (fmap namespaceToFileReference . S.toList) <$> moduleDependencyNamespaces True False True False mod
+--    imports <- (fmap namespaceToFileReference . S.toList) <$> moduleDependencyNamespaces True False True False mod
+    imports <- (fmap namespaceToFileReference . S.toList) <$> moduleDependencyNamespaces True False False False mod
     definitions <- CM.mapM toDef pairs
     let pfile = P3.ProtoFile {
       P3.protoFilePackage = namespaceToPackageName ns,
@@ -206,7 +207,5 @@ nextIndex = nextCount "proto_field_index"
 -- Note: this should probably be done in the term adapters
 simplifyType :: Type a -> Type a
 simplifyType typ = case stripType typ of
---  TypeApplication (ApplicationType lhs _) -> simplifyType lhs
---  TypeLambda (LambdaType _ body) -> simplifyType body
   TypeWrap (Nominal _ t) -> simplifyType t
   t -> t
