@@ -28,8 +28,7 @@ tinkerpopPropertyGraphModule = Module ns elements [hydraCoreModule] $
 
       def "Edge" $
         doc "An edge" $
-        lambda "v" $
-        record [
+        lambda "v" $ record [
           "label">:
             doc "The label of the edge" $
             pg "EdgeLabel",
@@ -52,8 +51,7 @@ tinkerpopPropertyGraphModule = Module ns elements [hydraCoreModule] $
 
       def "EdgeType" $
         doc "The type of an edge" $
-        lambda "t" $
-          record [
+        lambda "t" $ record [
             "label">:
               doc "The label of any edge of this edge type" $
               pg "EdgeLabel",
@@ -72,8 +70,7 @@ tinkerpopPropertyGraphModule = Module ns elements [hydraCoreModule] $
 
       def "Element" $
         doc "Either a vertex or an edge" $
-        lambda "v" $
-        union [
+        lambda "v" $ union [
           "vertex">: pg "Vertex" @@ "v",
           "edge">: pg "Edge" @@ "v"],
 
@@ -83,36 +80,31 @@ tinkerpopPropertyGraphModule = Module ns elements [hydraCoreModule] $
 
       def "ElementTree" $
         doc "An element together with its dependencies in some context" $
-        lambda "v" $
-        record [
+        lambda "v" $ record [
           "self">: pg "Element" @@ "v",
           "dependencies">: Types.list $ pg "ElementTree" @@ "v"],
 
       def "ElementType" $
         doc "The type of a vertex or edge" $
-        lambda "t" $
-        union [
+        lambda "t" $ union [
           "vertex">: pg "VertexType" @@ "t",
           "edge">: pg "EdgeType" @@ "t"],
 
       def "ElementTypeTree" $
         doc "An element type together with its dependencies in some context" $
-        lambda "t" $
-        record [
+        lambda "t" $ record [
           "self">: pg "ElementType" @@ "t",
           "dependencies">: Types.list $ pg "ElementTypeTree" @@ "t"],
 
       def "Graph" $
         doc "A graph; a self-contained collection of vertices and edges" $
-        lambda "v" $
-        record [
+        lambda "v" $ record [
           "vertices">: Types.map "v" $ pg "Vertex" @@ "v",
           "edges">: Types.map "v" $ pg "Edge" @@ "v"],
 
       def "GraphSchema" $
         doc "A graph schema; a vertex and edge types for the vertices and edges of a graph conforming to the schema" $
-        lambda "t" $
-        record [
+        lambda "t" $ record [
           "vertices">:
             doc "A unique vertex type for each vertex label which may occur in a graph" $
             Types.map (pg "VertexLabel") (pg "VertexType" @@ "t"),
@@ -128,8 +120,7 @@ tinkerpopPropertyGraphModule = Module ns elements [hydraCoreModule] $
 
       def "Property" $
         doc "A key/value property" $
-        lambda "v" $
-        record [
+        lambda "v" $ record [
           "key">:
             doc "They key of the property" $
             pg "PropertyKey",
@@ -143,19 +134,17 @@ tinkerpopPropertyGraphModule = Module ns elements [hydraCoreModule] $
 
       def "PropertyType" $
         doc "The type of a property" $
-        lambda "t" $
-          record [
-            "key">:
-              doc "A property's key" $
-              pg "PropertyKey",
-            "value">:
-              doc "The type of a property's value"
-              "t"],
+        lambda "t" $ record [
+          "key">:
+            doc "A property's key" $
+            pg "PropertyKey",
+          "value">:
+            doc "The type of a property's value"
+            "t"],
 
       def "Vertex" $
         doc "A vertex" $
-        lambda "v" $
-        record [
+        lambda "v" $ record [
           "label">:
             doc "The label of the vertex" $
             pg "VertexLabel",
@@ -172,14 +161,13 @@ tinkerpopPropertyGraphModule = Module ns elements [hydraCoreModule] $
 
       def "VertexType" $
         doc "The type of a vertex" $
-        lambda "t" $
-          record [
-            "label">:
-              doc "The label of any vertex of this vertex type" $
-              pg "VertexLabel",
-            "id">:
-              doc "The type of the id of any vertex of this vertex type"
-              "t",
-            "properties">:
-              doc "A list of property types. The types are ordered for the sake of applications in which property order is significant." $
-              list (pg "PropertyType" @@ "t")]]
+        lambda "t" $ record [
+          "label">:
+            doc "The label of any vertex of this vertex type" $
+            pg "VertexLabel",
+          "id">:
+            doc "The type of the id of any vertex of this vertex type"
+            "t",
+          "properties">:
+            doc "A list of property types. The types are ordered for the sake of applications in which property order is significant." $
+            list (pg "PropertyType" @@ "t")]]
