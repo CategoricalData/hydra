@@ -60,29 +60,35 @@ constructModule mod@(Module ns els _ desc) _ pairs = do
 encodeDefinition :: (Eq a, Ord a, Show a) => Namespace -> Name -> Type a -> Flow (Graph a) P3.Definition
 encodeDefinition localNs name typ = withTrace ("encoding " ++ unName name) $ do
     resetCount "proto_field_index"
-    case simplifyType typ of
-      TypeRecord rt -> P3.DefinitionMessage <$> encodeRecordType localNs rt
-      TypeUnion rt -> if isEnumDefinition typ
-        then pure $ P3.DefinitionEnum $ encodeEnumDefinition rt
-        else encodeDefinition localNs name $ wrapAsRecordType typ
-      t -> encodeDefinition localNs name $ wrapAsRecordType t
+    options <- findOptions typ
+    encode options typ
   where
     wrapAsRecordType t = TypeRecord $ RowType name Nothing [FieldType (FieldName "value") t]
+    encode options typ = case simplifyType typ of
+      TypeRecord rt -> P3.DefinitionMessage <$> encodeRecordType localNs options rt
+      TypeUnion rt -> if isEnumDefinition typ
+        then P3.DefinitionEnum <$> encodeEnumDefinition options rt
+        else encode options $ wrapAsRecordType $ TypeUnion rt
+      t -> encode options $ wrapAsRecordType t
 
-encodeEnumDefinition :: RowType a -> P3.EnumDefinition
-encodeEnumDefinition (RowType tname _ fields) = P3.EnumDefinition {
-    P3.enumDefinitionName = encodeTypeName tname,
-    P3.enumDefinitionValues = unknownField:(L.zipWith encodeEnumField fields [1..]),
-    P3.enumDefinitionOptions = []}
+encodeEnumDefinition :: [P3.Option] -> RowType a -> Flow (Graph a) P3.EnumDefinition
+encodeEnumDefinition options (RowType tname _ fields) = do
+    values <- CM.zipWithM encodeEnumField fields [1..]
+    return $ P3.EnumDefinition {
+      P3.enumDefinitionName = encodeTypeName tname,
+      P3.enumDefinitionValues = unknownField:values,
+      P3.enumDefinitionOptions = options}
   where
     unknownField = P3.EnumValue {
       P3.enumValueName = P3.EnumValueName "UNKNOWN",
       P3.enumValueNumber = 0,
       P3.enumValueOptions = []}
-    encodeEnumField (FieldType fname _) idx = P3.EnumValue {
-      P3.enumValueName = encodeEnumValueName fname,
-      P3.enumValueNumber = idx,
-      P3.enumValueOptions = []}
+    encodeEnumField (FieldType fname ftype) idx = do
+      opts <- findOptions ftype
+      return $ P3.EnumValue {
+        P3.enumValueName = encodeEnumValueName fname,
+        P3.enumValueNumber = idx,
+        P3.enumValueOptions = opts}
 
 encodeEnumValueName :: FieldName -> P3.EnumValueName
 encodeEnumValueName = P3.EnumValueName . Strings.toUpper . unFieldName
@@ -93,13 +99,14 @@ encodeFieldName = P3.FieldName . unFieldName
 encodeFieldType :: (Ord a, Show a) => Namespace -> FieldType a -> Flow (Graph a) P3.Field
 encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ show (unFieldName fname)) $ do
     idx <- nextCount "proto_field_index"
+    options <- findOptions ftype
     ft <- encodeType ftype
     return $ P3.Field {
       P3.fieldName = encodeFieldName fname,
       P3.fieldJsonName = Nothing,
       P3.fieldType = ft,
       P3.fieldNumber = idx,
-      P3.fieldOptions = []}
+      P3.fieldOptions = options}
   where
     encodeType typ = case simplifyType typ of
       TypeList lt -> P3.FieldTypeRepeated <$> encodeSimpleType lt
@@ -120,13 +127,13 @@ encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ 
       where
         forNominal name = pure $ P3.SimpleTypeReference $ encodeTypeReference localNs name
 
-encodeRecordType :: (Ord a, Show a) => Namespace -> RowType a -> Flow (Graph a) P3.MessageDefinition
-encodeRecordType localNs (RowType tname _ fields) = do
+encodeRecordType :: (Ord a, Show a) => Namespace -> [P3.Option] -> RowType a -> Flow (Graph a) P3.MessageDefinition
+encodeRecordType localNs options (RowType tname _ fields) = do
     pfields <- CM.mapM (encodeFieldType localNs) fields
     return P3.MessageDefinition {
       P3.messageDefinitionName = encodeTypeName tname,
       P3.messageDefinitionFields = pfields,
-      P3.messageDefinitionOptions = []}
+      P3.messageDefinitionOptions = options}
 
 encodeScalarType :: LiteralType -> Flow s P3.ScalarType
 encodeScalarType lt = case lt of
@@ -162,6 +169,14 @@ flattenType = rewriteType f id
      TypeLambda (LambdaType v body) -> recurse $ replaceFreeName v Types.string body
      TypeApplication (ApplicationType lhs _) -> recurse lhs
      _ -> recurse typ
+
+findOptions :: Type a -> Flow (Graph a) [P3.Option]
+findOptions typ = do
+  anns <- graphAnnotations <$> getState
+  mdesc <- annotationClassTypeDescription anns typ
+  return $ case mdesc of
+    Nothing -> []
+    Just desc -> [P3.Option descriptionOptionName desc]
 
 isEnumFields :: Eq a => [FieldType a] -> Bool
 isEnumFields fields = L.foldl (&&) True $ fmap isEnumField fields

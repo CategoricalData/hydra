@@ -1,4 +1,6 @@
-module Hydra.Langs.Protobuf.Serde (writeProtoFile) where
+module Hydra.Langs.Protobuf.Serde (
+  descriptionOptionName,
+  writeProtoFile) where
 
 import Hydra.Tools.Serialization
 import Hydra.Tools.Formatting
@@ -9,8 +11,18 @@ import qualified Data.List as L
 import qualified Data.Maybe as Y
 
 
+-- A special Protobuf option for descriptions (documentation)
+descriptionOptionName = "_description"
+
 semi :: CT.Expr -> CT.Expr
 semi e = noSep [e, cst ";"]
+
+optDesc :: [P3.Option] -> CT.Expr -> CT.Expr
+optDesc opts expr = if L.null descs
+    then expr
+    else newlineSep [cst $ "// " ++ (P3.optionValue $ L.head descs), expr]
+  where
+    descs = L.filter (\(P3.Option name value) -> name == descriptionOptionName) opts
 
 writeDefinition :: P3.Definition -> CT.Expr
 writeDefinition def = case def of
@@ -18,24 +30,24 @@ writeDefinition def = case def of
   P3.DefinitionMessage msg -> writeMessageDefinition msg
 
 writeEnumDefinition :: P3.EnumDefinition -> CT.Expr
-writeEnumDefinition (P3.EnumDefinition name values options) = spaceSep [ -- TODO: options
+writeEnumDefinition (P3.EnumDefinition name values options) = optDesc options $ spaceSep [
   cst "enum",
   cst $ P3.unTypeName name,
   curlyBracesList (Just "") fullBlockStyle (writeEnumValue <$> values)]
 
 writeEnumValue :: P3.EnumValue -> CT.Expr
-writeEnumValue (P3.EnumValue name number options) = semi $ spaceSep [ -- TODO: options
+writeEnumValue (P3.EnumValue name number options) = optDesc options $ semi $ spaceSep [
     cst $ P3.unEnumValueName name,
     cst "=",
     cst $ show number]
 
 writeField :: P3.Field -> CT.Expr
-writeField (P3.Field name jsonName typ num opts) = case typ of
+writeField (P3.Field name jsonName typ num options) = optDesc options $ case typ of
   P3.FieldTypeOneof fields -> spaceSep [
     cst "oneof",
     cst $ P3.unFieldName name,
     curlyBracesList (Just "") fullBlockStyle (writeField <$> fields)]
-  _ -> semi $ spaceSep [ -- TODO: options, jsonName
+  _ -> semi $ spaceSep [ -- TODO: jsonName
     writeFieldType typ,
     cst $ P3.unFieldName name,
     cst "=",
@@ -51,7 +63,7 @@ writeImport :: P3.FileReference -> CT.Expr
 writeImport (P3.FileReference path) = semi $ spaceSep [cst "import", cst $ show path]
 
 writeMessageDefinition :: P3.MessageDefinition -> CT.Expr
-writeMessageDefinition (P3.MessageDefinition name fields opts) = spaceSep [ -- TODO: options
+writeMessageDefinition (P3.MessageDefinition name fields options) = optDesc options $ spaceSep [
   cst "message",
   cst $ P3.unTypeName name,
   curlyBracesList (Just "") fullBlockStyle (writeField <$> fields)]
@@ -60,7 +72,7 @@ writeOption :: P3.Option -> CT.Expr
 writeOption (P3.Option name value) = semi $ spaceSep [cst "option", cst name, cst "=", cst $ show value]
 
 writeProtoFile :: P3.ProtoFile -> CT.Expr
-writeProtoFile (P3.ProtoFile pkg imports defs options) = doubleNewlineSep
+writeProtoFile (P3.ProtoFile pkg imports defs options) = optDesc options $ doubleNewlineSep
     $ Y.catMaybes [headerSec, importsSec, optionsSec, defsSec]
   where
     headerSec = Just $ newlineSep [
@@ -69,12 +81,13 @@ writeProtoFile (P3.ProtoFile pkg imports defs options) = doubleNewlineSep
     importsSec = if L.null imports
       then Nothing
       else Just $ newlineSep $ writeImport <$> imports
-    optionsSec = if L.null options
+    optionsSec = if L.null options1
       then Nothing
-      else Just $ newlineSep $ writeOption <$> options
+      else Just $ newlineSep $ writeOption <$> options1
     defsSec = if L.null defs
       then Nothing
       else Just $ doubleNewlineSep $ writeDefinition <$> defs
+    options1 = L.filter (\(P3.Option name value) -> name /= descriptionOptionName) options
 
 writeScalarType :: P3.ScalarType -> CT.Expr
 writeScalarType sct = cst $ case sct of
