@@ -181,7 +181,9 @@ encodeTypeName = P3.TypeName . localNameOfEager
 encodeTypeReference :: Namespace -> Name -> P3.TypeName
 encodeTypeReference localNs name = P3.TypeName $ if ns == Just localNs
     then local
-    else unName name -- TODO
+    else case ns of
+      Nothing -> local
+      Just (Namespace n) -> L.last (Strings.splitOn "." n) ++ "." ++ local
   where
     QualifiedName ns local = qualifyNameEager name
 
