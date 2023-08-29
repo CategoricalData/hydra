@@ -60,6 +60,7 @@ constructModule mod@(Module ns els _ desc) _ pairs = do
 encodeDefinition :: (Eq a, Ord a, Show a) => Namespace -> Name -> Type a -> Flow (Graph a) P3.Definition
 encodeDefinition localNs name typ = withTrace ("encoding " ++ unName name) $ do
     resetCount "proto_field_index"
+    nextIndex
     options <- findOptions typ
     encode options typ
   where
@@ -98,9 +99,9 @@ encodeFieldName = P3.FieldName . unFieldName
 
 encodeFieldType :: (Ord a, Show a) => Namespace -> FieldType a -> Flow (Graph a) P3.Field
 encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ show (unFieldName fname)) $ do
-    idx <- nextCount "proto_field_index"
     options <- findOptions ftype
     ft <- encodeType ftype
+    idx <- nextIndex
     return $ P3.Field {
       P3.fieldName = encodeFieldName fname,
       P3.fieldJsonName = Nothing,
@@ -109,7 +110,8 @@ encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ 
       P3.fieldOptions = options}
   where
     encodeType typ = case simplifyType typ of
-      TypeList lt -> P3.FieldTypeRepeated <$> encodeSimpleType lt
+      TypeList lt -> do
+        P3.FieldTypeRepeated <$> encodeSimpleType lt
       TypeMap (MapType kt vt) -> do
         checkIsStringType kt
         P3.FieldTypeMap <$> encodeSimpleType vt
@@ -117,7 +119,8 @@ encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ 
       TypeUnion (RowType _ _ fields) -> do
         pfields <- CM.mapM (encodeFieldType localNs) fields
         return $ P3.FieldTypeOneof pfields
-      _ -> P3.FieldTypeSimple <$> encodeSimpleType typ
+      _ -> do
+        P3.FieldTypeSimple <$> encodeSimpleType typ
     encodeSimpleType typ = case simplifyType typ of
       TypeLiteral lt -> P3.SimpleTypeScalar <$> encodeScalarType lt
       TypeRecord (RowType name _ _) -> forNominal name
@@ -196,6 +199,9 @@ namespaceToFileReference (Namespace ns) = P3.FileReference $ ns ++ ".proto"
 
 namespaceToPackageName :: Namespace -> P3.PackageName
 namespaceToPackageName (Namespace ns) = P3.PackageName $ Strings.intercalate "." $ Strings.splitOn "/" ns
+
+nextIndex :: Flow s Int
+nextIndex = nextCount "proto_field_index"
 
 -- Note: this should probably be done in the term adapters
 simplifyType :: Type a -> Type a
