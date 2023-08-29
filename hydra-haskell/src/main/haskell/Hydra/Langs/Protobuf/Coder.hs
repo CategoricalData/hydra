@@ -52,7 +52,9 @@ constructModule mod@(Module ns els _ desc) _ pairs = do
     path = P3.unFileReference $ namespaceToFileReference ns
     toDef (el, (TypedTerm typ term)) = do
       if isType typ
-        then coreDecodeType term >>= pure . flattenType >>= encodeDefinition ns (elementName el)
+        then coreDecodeType term
+          >>= pure . flattenType
+          >>= adaptAndEncodeType protobufLanguage (encodeDefinition ns (elementName el))
         else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ unName (elementName el)
 
 encodeDefinition :: (Eq a, Ord a, Show a) => Namespace -> Name -> Type a -> Flow (Graph a) P3.Definition
@@ -133,7 +135,7 @@ encodeScalarType lt = case lt of
   LiteralTypeFloat ft -> case ft of
     FloatTypeFloat32 -> return P3.ScalarTypeFloat
     FloatTypeFloat64 -> return P3.ScalarTypeDouble
-    _ -> unexpected "32-bit or 64-bit floating-poind type" $ show ft
+    _ -> unexpected "32-bit or 64-bit floating-point type" $ show ft
   LiteralTypeInteger it -> case it of
     IntegerTypeInt32 -> return P3.ScalarTypeInt32
     IntegerTypeInt64 -> return P3.ScalarTypeInt64
@@ -151,6 +153,15 @@ encodeTypeReference localNs name = P3.TypeName $ if ns == Just localNs
     else unName name -- TODO
   where
     QualifiedName ns local = qualifyNameEager name
+
+-- Eliminate type lambdas and type applications, simply replacing type variables with the string type
+flattenType :: Ord a => Type a -> Type a
+flattenType = rewriteType f id
+  where
+   f recurse typ = case typ of
+     TypeLambda (LambdaType v body) -> recurse $ replaceFreeName v Types.string body
+     TypeApplication (ApplicationType lhs _) -> recurse lhs
+     _ -> recurse typ
 
 isEnumFields :: Eq a => [FieldType a] -> Bool
 isEnumFields fields = L.foldl (&&) True $ fmap isEnumField fields
@@ -178,12 +189,3 @@ simplifyType typ = case stripType typ of
 --  TypeLambda (LambdaType _ body) -> simplifyType body
   TypeWrap (Nominal _ t) -> simplifyType t
   t -> t
-
--- Eliminate type lambdas and type applications, simply replacing type variables with the string type
-flattenType :: Ord a => Type a -> Type a
-flattenType = rewriteType f id
-  where
-   f recurse typ = case typ of
-     TypeLambda (LambdaType v body) -> recurse $ replaceFreeName v Types.string body
-     TypeApplication (ApplicationType lhs _) -> recurse lhs
-     _ -> recurse typ
