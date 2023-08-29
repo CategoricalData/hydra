@@ -1,4 +1,4 @@
-module Hydra.Langs.Scala.Coder (printModule) where
+module Hydra.Langs.Scala.Coder (moduleToScala) where
 
 import Hydra.Kernel
 import Hydra.Dsl.Terms
@@ -18,8 +18,8 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-printModule :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
-printModule mod = do
+moduleToScala :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
+moduleToScala mod = do
   pkg <- moduleToScalaPackage mod
   let s = printExpr $ parenthesize $ writePkg pkg
   return $ M.fromList [(namespaceToFilePath False (FileExtension "scala") $ moduleNamespace mod, s)]
