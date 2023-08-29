@@ -129,6 +129,7 @@ encodeRecordType localNs (RowType tname _ fields) = do
 encodeScalarType :: LiteralType -> Flow s P3.ScalarType
 encodeScalarType lt = case lt of
   LiteralTypeBinary -> return P3.ScalarTypeBytes
+  LiteralTypeBoolean -> return P3.ScalarTypeBool
   LiteralTypeFloat ft -> case ft of
     FloatTypeFloat32 -> return P3.ScalarTypeFloat
     FloatTypeFloat64 -> return P3.ScalarTypeDouble
@@ -140,7 +141,6 @@ encodeScalarType lt = case lt of
     IntegerTypeUint64 -> return P3.ScalarTypeUint64
     _ -> unexpected "32-bit or 64-bit integer type" $ show it
   LiteralTypeString -> return P3.ScalarTypeString
-  _ -> unexpected "binary, float, integer, or string type" $ show lt
 
 encodeTypeName :: Name -> P3.TypeName
 encodeTypeName = P3.TypeName . localNameOfEager
