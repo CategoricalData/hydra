@@ -93,10 +93,10 @@ encodeEnumDefinition options (RowType tname _ fields) = do
         P3.enumValueOptions = opts}
 
 encodeEnumValueName :: FieldName -> P3.EnumValueName
-encodeEnumValueName = P3.EnumValueName . Strings.toUpper . unFieldName
+encodeEnumValueName = P3.EnumValueName . convertCase CaseConventionCamel CaseConventionUpperSnake . unFieldName
 
 encodeFieldName :: FieldName -> P3.FieldName
-encodeFieldName = P3.FieldName . unFieldName
+encodeFieldName = P3.FieldName . convertCase CaseConventionCamel CaseConventionLowerSnake . unFieldName
 
 encodeFieldType :: (Ord a, Show a) => Namespace -> FieldType a -> Flow (Graph a) P3.Field
 encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ show (unFieldName fname)) $ do
