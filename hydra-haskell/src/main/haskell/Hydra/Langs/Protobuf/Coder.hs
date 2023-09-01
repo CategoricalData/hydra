@@ -130,7 +130,7 @@ encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ 
       TypeList lt -> do
         P3.FieldTypeRepeated <$> encodeSimpleType lt
       TypeMap (MapType kt vt) -> do
-        checkIsStringType kt
+--        checkIsStringType kt
         P3.FieldTypeMap <$> encodeSimpleType vt
       TypeOptional ot -> case stripType ot of
         TypeLiteral lt -> P3.FieldTypeSimple <$> encodeScalarTypeWrapped lt
