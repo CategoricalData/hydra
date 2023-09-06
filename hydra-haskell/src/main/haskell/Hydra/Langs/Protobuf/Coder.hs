@@ -98,18 +98,21 @@ encodeEnumDefinition options (RowType tname _ fields) = do
       P3.enumDefinitionOptions = options}
   where
     unknownField = P3.EnumValue {
-      P3.enumValueName = P3.EnumValueName "UNKNOWN",
+      P3.enumValueName = encodeEnumValueName tname $ FieldName "unknown",
       P3.enumValueNumber = 0,
       P3.enumValueOptions = []}
     encodeEnumField (FieldType fname ftype) idx = do
       opts <- findOptions ftype
       return $ P3.EnumValue {
-        P3.enumValueName = encodeEnumValueName fname,
+        P3.enumValueName = encodeEnumValueName tname fname,
         P3.enumValueNumber = idx,
         P3.enumValueOptions = opts}
 
-encodeEnumValueName :: FieldName -> P3.EnumValueName
-encodeEnumValueName = P3.EnumValueName . convertCase CaseConventionCamel CaseConventionUpperSnake . unFieldName
+encodeEnumValueName :: Name -> FieldName -> P3.EnumValueName
+encodeEnumValueName tname fname = P3.EnumValueName (prefix ++ "_" ++ suffix)
+  where
+    prefix = localNameOfEager tname
+    suffix = convertCase CaseConventionCamel CaseConventionUpperSnake $ unFieldName fname
 
 encodeFieldName :: FieldName -> P3.FieldName
 encodeFieldName = P3.FieldName . convertCase CaseConventionCamel CaseConventionLowerSnake . unFieldName
