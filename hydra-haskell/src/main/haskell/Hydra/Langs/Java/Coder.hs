@@ -422,7 +422,7 @@ encodeApplication aliases app@(Application lhs rhs) = case stripTerm fun of
 
     fallback = do
         t <- requireTermType lhs
-        (dom, cod) <- case stripTypeParameters t of
+        (dom, cod) <- case stripTypeParameters $ stripType t of
             TypeFunction (FunctionType dom cod) -> pure (dom, cod)
             t' -> fail $ "expected a function type on function " ++ show lhs ++ ", but found " ++ show t'
         case stripTerm lhs of
