@@ -1,59 +1,61 @@
 plugins {
-  id 'java-library'
-  id 'maven-publish'
+    id 'java-library'
+    id 'maven-publish'
 }
 
 group 'hydra'
 version '0.2'
 
-// JDK 11+ is needed for RDF4j compatibility
-sourceCompatibility = '1.11'
-targetCompatibility = '1.11'
+// We use Java 8 for maximum compatibility with legacy systems, such as certain Spark deployments
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 
 dependencies {
-  implementation group: 'org.apache.commons', name: 'commons-text', version: '1.10.0'
-  implementation 'org.eclipse.rdf4j:rdf4j-rio-ntriples:4.2.3'
+    implementation group: 'org.apache.commons', name: 'commons-text', version: '1.10.0'
 //  implementation 'com.linkedin.pegasus:generator:29.22.13'
 
-  testImplementation(platform('org.junit:junit-bom:5.9.2'))
-  testImplementation('org.junit.jupiter:junit-jupiter')
-  testImplementation('org.junit.jupiter:junit-jupiter-params:5.9.2')
+    // We use RDF 3.x rather than 4.x or 5.x for compatibility with Java 8
+    implementation 'org.eclipse.rdf4j:rdf4j-rio-ntriples:3.7.7'
+
+    testImplementation(platform('org.junit:junit-bom:5.9.2'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testImplementation('org.junit.jupiter:junit-jupiter-params:5.9.2')
 }
 
 sourceSets {
-  main {
-    java {
-      srcDirs 'src/main/java'
-      srcDirs 'src/gen-main/java'
+    main {
+        java {
+            srcDirs 'src/main/java'
+            srcDirs 'src/gen-main/java'
+        }
     }
-  }
-  test {
-    java {
-      srcDirs 'src/test/java'
-      srcDirs 'src/gen-test/java'
+    test {
+        java {
+            srcDirs 'src/test/java'
+            srcDirs 'src/gen-test/java'
+        }
     }
-  }
 }
 
 test {
-  useJUnitPlatform()
+    useJUnitPlatform()
 }
 
 repositories {
-  mavenCentral()
-  mavenLocal()
-  maven {
-    url "https://linkedin.jfrog.io/artifactory/open-source/" // For Pegasus dependencies
-  }
+    mavenCentral()
+    mavenLocal()
+    maven {
+        url "https://linkedin.jfrog.io/artifactory/open-source/" // For Pegasus dependencies
+    }
 }
 
 publishing {
-  publications {
-    mavenJava(MavenPublication) {
-      from components.java
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
     }
-  }
-  repositories {
-    mavenLocal()
-  }
+    repositories {
+        mavenLocal()
+    }
 }
