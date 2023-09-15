@@ -10,7 +10,7 @@ import Data.List
 import Data.Map
 import Data.Set
 
-allTests :: (Testing.TestGroup Compute.Kv)
+allTests :: (Testing.TestGroup Core.Kv)
 allTests = Testing.TestGroup {
   Testing.testGroupName = "All tests",
   Testing.testGroupDescription = Nothing,
