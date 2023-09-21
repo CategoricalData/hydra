@@ -9,6 +9,7 @@ import hydra.tools.TriFunction;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -91,6 +92,13 @@ public interface Flows {
     }
 
     /**
+     * Produce a failure flow with the provided message and additional information from a Throwable
+     */
+    static <S, X> Flow<S, X> fail(String msg, Throwable cause) {
+        return fail(msg + ": " + cause.getMessage());
+    }
+
+    /**
      * Extract the value from a flow, returning a default value instead if the flow failed.
      */
     static <S, X> X fromFlow(X dflt, S state, Flow<S, X> flow) throws FlowException {
@@ -134,6 +142,13 @@ public interface Flows {
             }));
         }
         return result;
+    }
+
+    /**
+     * Map a monadic function over an array, producing a flow of lists
+     */
+    static <S, X, Y> Flow<S, List<Y>> mapM(X[] xs, Function<X, Flow<S, Y>> f) {
+        return mapM(Arrays.asList(xs), f);
     }
 
     /**
