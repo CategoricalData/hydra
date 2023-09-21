@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static hydra.Coders.roundTrip;
 import static hydra.Flows.EMPTY_TRACE;
@@ -26,14 +27,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HydraTestBase {
 
-    protected static <X> void assertFails(Flow<Void, X> flow) {
-        assertFails(flow, null);
-    }
-
     protected static <S, X> void assertFails(Flow<S, X> flow, S initialState) {
         FlowState<S, X> result = flow.value.apply(initialState).apply(EMPTY_TRACE);
         assertTrue(!result.value.isPresent());
         //assertTrue(result.trace.messages.size() > 1);
+    }
+
+    protected static <X> void assertFails(Flow<Void, X> flow) {
+        assertFails(flow, null);
     }
 
     protected static <V1, V2> void assertRoundTripIsNoop(Coder<Void, Void, V1, V2> coder, V1 initialValue) {
@@ -44,7 +45,7 @@ public class HydraTestBase {
         assertSucceedsWith(initialValue, roundTrip(coder, initialValue), initialState);
     }
 
-    protected static <S, V1, V2> void assertRoundTripFails(Coder<Void, Void, V1, V2> coder, V1 initialValue) {
+    protected static <V1, V2> void assertRoundTripFails(Coder<Void, Void, V1, V2> coder, V1 initialValue) {
         assertFails(roundTrip(coder, initialValue));
     }
 
@@ -57,9 +58,17 @@ public class HydraTestBase {
     }
 
     protected static <S, X> void assertSucceedsWith(X expected, Flow<S, X> flow, S initialState) {
+        checkFlow(flow, initialState, x -> assertEquals(expected, x));
+    }
+
+    protected static <S, X> void checkFlow(Flow<S, X> flow, S initialState, Consumer<X> consumer) {
         FlowState<S, X> result = flow.value.apply(initialState).apply(EMPTY_TRACE);
         assertTrue(result.value.isPresent());
-        assertEquals(expected, result.value.get());
+        consumer.accept(result.value.get());
+    }
+
+    protected static <X> void checkFlow(Flow<Void, X> flow, Consumer<X> consumer) {
+        checkFlow(flow, null, consumer);
     }
 
     protected static <A> Graph<A> emptyGraph() {
