@@ -36,7 +36,6 @@ public class JsonSerdeTest extends HydraTestBase {
                 new Value.Number_(3.0))));
     }});
 
-
     @Test
     public void checkDecoding() {
         checkFlow(JsonSerde.decode(JSON_STRING_1), value -> value.accept(new Value.PartialVisitor<Void>() {

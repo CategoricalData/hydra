@@ -221,6 +221,13 @@ public interface Flows {
     }
 
     /**
+     * Produce an error flow indicating an unexpected class of value
+     */
+    static <S, X> Flow<S, X> unexpectedClass(String cat, Object obj) {
+        return fail("expected " + cat + " but found an instance of " + obj.getClass().getName());
+    }
+
+    /**
      * Continue a flow after adding a warning message
      */
     static <S, X> Flow<S, X> warn(String message, Flow<S, X> flow) {
