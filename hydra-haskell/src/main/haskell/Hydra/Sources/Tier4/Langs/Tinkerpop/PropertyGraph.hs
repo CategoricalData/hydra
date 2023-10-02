@@ -145,6 +145,10 @@ tinkerpopPropertyGraphModule = Module ns elements [hydraCoreModule] $
             doc "Whether the property is required; values may be omitted from a property map otherwise"
             boolean],
 
+      def "Validator" $
+        doc "A function which checks a value for conformance with a type" $
+        lambda "t" $ lambda "v" $ Types.function "t" $ Types.function "v" boolean,
+
       def "Vertex" $
         doc "A vertex" $
         lambda "v" $ record [
