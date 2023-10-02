@@ -219,7 +219,7 @@ data PropertyType t =
     propertyTypeKey :: PropertyKey,
     -- | The type of a property's value
     propertyTypeValue :: t,
-    -- | Whether the property type is required; values may be omitted from the property map otherwise
+    -- | Whether the property is required; values may be omitted from a property map otherwise
     propertyTypeRequired :: Bool}
   deriving (Eq, Ord, Read, Show)
 
@@ -230,6 +230,13 @@ _PropertyType_key = (Core.FieldName "key")
 _PropertyType_value = (Core.FieldName "value")
 
 _PropertyType_required = (Core.FieldName "required")
+
+-- | A function which checks a value for conformance with a type
+newtype Validator t v = 
+  Validator {
+    unValidator :: (t -> v -> Bool)}
+
+_Validator = (Core.Name "hydra/langs/tinkerpop/propertyGraph.Validator")
 
 -- | A vertex
 data Vertex v = 

@@ -19,7 +19,7 @@ public class PropertyType<T> implements Serializable {
   public final T value;
   
   /**
-   * Whether the property type is required; values may be omitted from the property map otherwise
+   * Whether the property is required; values may be omitted from a property map otherwise
    */
   public final Boolean required;
   
