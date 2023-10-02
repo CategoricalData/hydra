@@ -218,7 +218,9 @@ data PropertyType t =
     -- | A property's key
     propertyTypeKey :: PropertyKey,
     -- | The type of a property's value
-    propertyTypeValue :: t}
+    propertyTypeValue :: t,
+    -- | Whether the property type is required; values may be omitted from the property map otherwise
+    propertyTypeRequired :: Bool}
   deriving (Eq, Ord, Read, Show)
 
 _PropertyType = (Core.Name "hydra/langs/tinkerpop/propertyGraph.PropertyType")
@@ -226,6 +228,8 @@ _PropertyType = (Core.Name "hydra/langs/tinkerpop/propertyGraph.PropertyType")
 _PropertyType_key = (Core.FieldName "key")
 
 _PropertyType_value = (Core.FieldName "value")
+
+_PropertyType_required = (Core.FieldName "required")
 
 -- | A vertex
 data Vertex v = 
