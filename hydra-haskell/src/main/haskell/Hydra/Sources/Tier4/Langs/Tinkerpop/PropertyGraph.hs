@@ -140,7 +140,10 @@ tinkerpopPropertyGraphModule = Module ns elements [hydraCoreModule] $
             pg "PropertyKey",
           "value">:
             doc "The type of a property's value"
-            "t"],
+            "t",
+          "required">:
+            doc "Whether the property is required; values may be omitted from a property map otherwise"
+            boolean],
 
       def "Vertex" $
         doc "A vertex" $
