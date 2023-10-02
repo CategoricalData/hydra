@@ -58,7 +58,7 @@ public class TestSuiteRunner extends HydraTestBase {
 
     private static List<Arguments> provideTestCases() {
         List<Arguments> args = new ArrayList<>();
-        addTestGroup(TestSuite.allTests, null, args);
+        addTestGroup(TestSuite.allTests(), null, args);
         return args;
     }
 
