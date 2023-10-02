@@ -61,15 +61,30 @@ public interface Flows {
     /**
      * Variant of monadic bind which takes two monadic arguments and a binary function
      */
-    static <S, X, Y, Z> Flow<S, Z> bind2(Flow<S, X> p1, Flow<S, Y> p2, BiFunction<X, Y, Flow <S, Z>> k) {
+    static <S, X, Y, Z> Flow<S, Z> bind2(Flow<S, X> p1, Flow<S, Y> p2, BiFunction<X, Y, Flow<S, Z>> k) {
         return Flows.bind(p1, x -> Flows.bind(p2, y -> k.apply(x, y)));
     }
 
     /**
      * Two-argument monadic bind with reversed arguments
      */
-    static <S, X, Y, Z> Flow<S, Z> bind2(BiFunction<X, Y, Flow <S, Z>> k, Flow<S, X> p1, Flow<S, Y> p2) {
+    static <S, X, Y, Z> Flow<S, Z> bind2(BiFunction<X, Y, Flow<S, Z>> k, Flow<S, X> p1, Flow<S, Y> p2) {
         return Flows.bind2(p1, p2, k);
+    }
+
+    /**
+     * Check whether a given value satisfies a list of predicates, returning the value itself if all checks are
+     * successful, or a failure flow for the first predicate that fails.
+     */
+    static <S, A> Flow<S, A> check(A input, Function<A, Optional<String>>... predicates) {
+        for (Function<A, Optional<String>> predicate : predicates) {
+            Optional<String> msg = predicate.apply(input);
+            if (msg.isPresent()) {
+                return Flows.fail(msg.get());
+            }
+        }
+
+        return pure(input);
     }
 
     /**
@@ -110,13 +125,13 @@ public interface Flows {
      * Extract the state from a flow
      */
     static <S> Flow<S, S> getState() {
-      return new Flow<>(s0 -> t0 -> new FlowState<>(Optional.of(s0), s0, t0));
+        return new Flow<>(s0 -> t0 -> new FlowState<>(Optional.of(s0), s0, t0));
     }
 
     /**
      * Map a function over a flow
      */
-    static <S, X, Y> Flow<S, Y> map(Function<X, Y> f, Flow <S, X> x) {
+    static <S, X, Y> Flow<S, Y> map(Function<X, Y> f, Flow<S, X> x) {
         return new Flow<>(s -> trace -> {
             FlowState<S, X> result = x.value.apply(s).apply(trace);
             return new FlowState<>(result.value.map(f), result.state, result.trace);
@@ -126,7 +141,7 @@ public interface Flows {
     /**
      * Map a function over a flow, with reversed arguments
      */
-    static <S, X, Y> Flow<S, Y> map(Flow <S, X> x, Function<X, Y> f) {
+    static <S, X, Y> Flow<S, Y> map(Flow<S, X> x, Function<X, Y> f) {
         return map(f, x);
     }
 
