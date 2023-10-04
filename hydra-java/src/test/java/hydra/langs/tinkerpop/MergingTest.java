@@ -6,6 +6,7 @@ import hydra.compute.Flow;
 import hydra.compute.StatelessAdapter;
 import hydra.core.Literal;
 import hydra.core.LiteralType;
+import hydra.core.Unit;
 import hydra.dsl.LiteralTypes;
 import hydra.dsl.Literals;
 import hydra.langs.tinkerpop.dsl.Graphs;
@@ -204,7 +205,7 @@ public class MergingTest extends HydraTestBase {
 
     @Test
     public void testVertexRoundTripsAreNoop() {
-        Flow<Void, StatelessAdapter<List<VertexType<LiteralType>>, VertexType<LiteralType>, Vertex<Literal>, Vertex<Literal>>> adapterFlow
+        Flow<Unit, StatelessAdapter<List<VertexType<LiteralType>>, VertexType<LiteralType>, Vertex<Literal>, Vertex<Literal>>> adapterFlow
                 = Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION));
         Flows.map(adapterFlow, adapter -> {
             assertRoundTripIsNoop(adapter.coder, VERTEX_PERSON_1);
@@ -218,7 +219,7 @@ public class MergingTest extends HydraTestBase {
 
     @Test
     public void testEdgeRoundTripsAreNoop() {
-        Flow<Void, StatelessAdapter<List<EdgeType<LiteralType>>, EdgeType<LiteralType>, Edge<Literal>, Edge<Literal>>> adapterFlow
+        Flow<Unit, StatelessAdapter<List<EdgeType<LiteralType>>, EdgeType<LiteralType>, Edge<Literal>, Edge<Literal>>> adapterFlow
                 = Merging.createEdgeAdapter(Arrays.asList(EDGE_TYPE_WORKSAT_A, EDGE_TYPE_FOUNDED, EDGE_TYPE_PARTOF));
         Flows.map(adapterFlow, adapter -> {
             assertRoundTripIsNoop(adapter.coder, EDGE_WORKSAT_1);
@@ -228,17 +229,17 @@ public class MergingTest extends HydraTestBase {
         });
     }
 
-    private static Flow<Void, Vertex<Literal>> encodeVertex(Vertex<Literal> v) {
+    private static Flow<Unit, Vertex<Literal>> encodeVertex(Vertex<Literal> v) {
         return Flows.bind(
                 Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION)),
-                (Function<StatelessAdapter<List<VertexType<LiteralType>>, VertexType<LiteralType>, Vertex<Literal>, Vertex<Literal>>, Flow<Void, Vertex<Literal>>>)
+                (Function<StatelessAdapter<List<VertexType<LiteralType>>, VertexType<LiteralType>, Vertex<Literal>, Vertex<Literal>>, Flow<Unit, Vertex<Literal>>>)
                         adapter -> adapter.coder.encode.apply(v));
     }
 
-    private static Flow<Void, Edge<Literal>> encodeEdge(Edge<Literal> e) {
+    private static Flow<Unit, Edge<Literal>> encodeEdge(Edge<Literal> e) {
         return Flows.bind(
                 Merging.createEdgeAdapter(Arrays.asList(EDGE_TYPE_WORKSAT_A, EDGE_TYPE_FOUNDED, EDGE_TYPE_PARTOF)),
-                (Function<StatelessAdapter<List<EdgeType<LiteralType>>, EdgeType<LiteralType>, Edge<Literal>, Edge<Literal>>, Flow<Void, Edge<Literal>>>)
+                (Function<StatelessAdapter<List<EdgeType<LiteralType>>, EdgeType<LiteralType>, Edge<Literal>, Edge<Literal>>, Flow<Unit, Edge<Literal>>>)
                         adapter -> adapter.coder.encode.apply(e));
     }
 }

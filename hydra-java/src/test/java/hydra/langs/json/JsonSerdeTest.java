@@ -1,6 +1,7 @@
 package hydra.langs.json;
 
 import hydra.HydraTestBase;
+import hydra.core.Unit;
 import hydra.json.Value;
 import org.junit.jupiter.api.Test;
 
@@ -79,8 +80,8 @@ public class JsonSerdeTest extends HydraTestBase {
     @Test
     // Note: we can't easily check round trips from strings, as json-io serializes map entries in an arbitrary order
     public void checkRoundTripFromValue() {
-        assertRoundTripIsNoop(new JsonSerde<Void, Void>(), JSON_VALUE_0);
-        assertRoundTripIsNoop(new JsonSerde<Void, Void>(), JSON_VALUE_1);
+        assertRoundTripIsNoop(new JsonSerde<Unit, Unit>(), JSON_VALUE_0);
+        assertRoundTripIsNoop(new JsonSerde<Unit, Unit>(), JSON_VALUE_1);
     }
 
     @Test
