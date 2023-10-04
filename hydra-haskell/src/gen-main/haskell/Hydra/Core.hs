@@ -3,9 +3,9 @@
 module Hydra.Core where
 
 import Data.Int
-import Data.List
-import Data.Map
-import Data.Set
+import Data.List as L
+import Data.Map as M
+import Data.Set as S
 
 -- | An object, such as a type or term, together with an annotation
 data Annotated x a = 
@@ -193,6 +193,19 @@ _FunctionType = (Name "hydra/core.FunctionType")
 _FunctionType_domain = (FieldName "domain")
 
 _FunctionType_codomain = (FieldName "codomain")
+
+-- | An instance of a union type; i.e. a string-indexed generalization of inl() or inr()
+data Injection a = 
+  Injection {
+    injectionTypeName :: Name,
+    injectionField :: (Field a)}
+  deriving (Eq, Ord, Read, Show)
+
+_Injection = (Name "hydra/core.Injection")
+
+_Injection_typeName = (FieldName "typeName")
+
+_Injection_field = (FieldName "field")
 
 -- | An integer type
 data IntegerType = 
@@ -620,22 +633,9 @@ _Type_variable = (FieldName "variable")
 
 _Type_wrap = (FieldName "wrap")
 
--- | An instance of a union type; i.e. a string-indexed generalization of inl() or inr()
-data Injection a = 
-  Injection {
-    injectionTypeName :: Name,
-    injectionField :: (Field a)}
+-- | An empty record as a canonical unit value
+data Unit = 
+  Unit {}
   deriving (Eq, Ord, Read, Show)
 
-_Injection = (Name "hydra/core.Injection")
-
-_Injection_typeName = (FieldName "typeName")
-
-_Injection_field = (FieldName "field")
-
--- | An empty record type as a canonical unit type
-data UnitType = 
-  UnitType {}
-  deriving (Eq, Ord, Read, Show)
-
-_UnitType = (Name "hydra/core.UnitType")
+_Unit = (Name "hydra/core.Unit")

@@ -636,13 +636,13 @@ public interface Basics {
   static <A> Boolean isUnitTerm(hydra.core.Term<A> t) {
     return hydra.lib.equality.EqualTerm.apply(
       hydra.strip.Strip.stripTerm((t)),
-      new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.UnitType"), java.util.Arrays.asList())));
+      new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList())));
   }
   
   static <A> Boolean isUnitType(hydra.core.Type<A> t) {
     return hydra.lib.equality.EqualType.apply(
       hydra.strip.Strip.stripType((t)),
-      new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra/core.UnitType"), java.util.Optional.empty(), java.util.Arrays.asList())));
+      new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra/core.Unit"), java.util.Optional.empty(), java.util.Arrays.asList())));
   }
   
   static <A> java.util.function.Function<java.util.Optional<hydra.graph.Graph<A>>, java.util.function.Function<java.util.List<hydra.graph.Element<A>>, hydra.graph.Graph<A>>> elementsToGraph(hydra.graph.Graph<A> parent) {

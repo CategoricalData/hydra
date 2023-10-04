@@ -15,7 +15,7 @@ import hydra.core.Nominal;
 import hydra.core.RowType;
 import hydra.core.Term;
 import hydra.core.Type;
-import hydra.core.UnitType;
+import hydra.core.Unit;
 import hydra.compute.Flow;
 
 import java.util.ArrayList;
@@ -254,7 +254,7 @@ public interface Types {
     }
 
     static <A> Type<A> unit() {
-        return record(UnitType.NAME);
+        return record(Unit.NAME);
     }
 
     static <A> Type<A> variable(final Name name) {

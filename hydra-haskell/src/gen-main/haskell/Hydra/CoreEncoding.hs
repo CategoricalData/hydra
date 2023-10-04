@@ -125,21 +125,21 @@ coreEncodeFloatType x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.FieldName "bigfloat"),
       Core.fieldTerm = (Core.TermRecord (Core.Record {
-        Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
+        Core.recordTypeName = (Core.Name "hydra/core.Unit"),
         Core.recordFields = []}))}}))
   Core.FloatTypeFloat32 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.FloatType"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.FieldName "float32"),
       Core.fieldTerm = (Core.TermRecord (Core.Record {
-        Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
+        Core.recordTypeName = (Core.Name "hydra/core.Unit"),
         Core.recordFields = []}))}}))
   Core.FloatTypeFloat64 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.FloatType"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.FieldName "float64"),
       Core.fieldTerm = (Core.TermRecord (Core.Record {
-        Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
+        Core.recordTypeName = (Core.Name "hydra/core.Unit"),
         Core.recordFields = []}))}}))
 
 coreEncodeFloatValue :: (Core.FloatValue -> Core.Term a)
@@ -207,63 +207,63 @@ coreEncodeIntegerType x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.FieldName "bigint"),
       Core.fieldTerm = (Core.TermRecord (Core.Record {
-        Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
+        Core.recordTypeName = (Core.Name "hydra/core.Unit"),
         Core.recordFields = []}))}}))
   Core.IntegerTypeInt8 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.IntegerType"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.FieldName "int8"),
       Core.fieldTerm = (Core.TermRecord (Core.Record {
-        Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
+        Core.recordTypeName = (Core.Name "hydra/core.Unit"),
         Core.recordFields = []}))}}))
   Core.IntegerTypeInt16 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.IntegerType"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.FieldName "int16"),
       Core.fieldTerm = (Core.TermRecord (Core.Record {
-        Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
+        Core.recordTypeName = (Core.Name "hydra/core.Unit"),
         Core.recordFields = []}))}}))
   Core.IntegerTypeInt32 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.IntegerType"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.FieldName "int32"),
       Core.fieldTerm = (Core.TermRecord (Core.Record {
-        Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
+        Core.recordTypeName = (Core.Name "hydra/core.Unit"),
         Core.recordFields = []}))}}))
   Core.IntegerTypeInt64 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.IntegerType"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.FieldName "int64"),
       Core.fieldTerm = (Core.TermRecord (Core.Record {
-        Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
+        Core.recordTypeName = (Core.Name "hydra/core.Unit"),
         Core.recordFields = []}))}}))
   Core.IntegerTypeUint8 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.IntegerType"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.FieldName "uint8"),
       Core.fieldTerm = (Core.TermRecord (Core.Record {
-        Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
+        Core.recordTypeName = (Core.Name "hydra/core.Unit"),
         Core.recordFields = []}))}}))
   Core.IntegerTypeUint16 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.IntegerType"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.FieldName "uint16"),
       Core.fieldTerm = (Core.TermRecord (Core.Record {
-        Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
+        Core.recordTypeName = (Core.Name "hydra/core.Unit"),
         Core.recordFields = []}))}}))
   Core.IntegerTypeUint32 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.IntegerType"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.FieldName "uint32"),
       Core.fieldTerm = (Core.TermRecord (Core.Record {
-        Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
+        Core.recordTypeName = (Core.Name "hydra/core.Unit"),
         Core.recordFields = []}))}}))
   Core.IntegerTypeUint64 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.IntegerType"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.FieldName "uint64"),
       Core.fieldTerm = (Core.TermRecord (Core.Record {
-        Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
+        Core.recordTypeName = (Core.Name "hydra/core.Unit"),
         Core.recordFields = []}))}}))
 
 coreEncodeIntegerValue :: (Core.IntegerValue -> Core.Term a)
@@ -371,14 +371,14 @@ coreEncodeLiteralType x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.FieldName "binary"),
       Core.fieldTerm = (Core.TermRecord (Core.Record {
-        Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
+        Core.recordTypeName = (Core.Name "hydra/core.Unit"),
         Core.recordFields = []}))}}))
   Core.LiteralTypeBoolean -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.LiteralType"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.FieldName "boolean"),
       Core.fieldTerm = (Core.TermRecord (Core.Record {
-        Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
+        Core.recordTypeName = (Core.Name "hydra/core.Unit"),
         Core.recordFields = []}))}}))
   Core.LiteralTypeFloat v -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.LiteralType"),
@@ -395,7 +395,7 @@ coreEncodeLiteralType x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.FieldName "string"),
       Core.fieldTerm = (Core.TermRecord (Core.Record {
-        Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
+        Core.recordTypeName = (Core.Name "hydra/core.Unit"),
         Core.recordFields = []}))}}))
 
 coreEncodeMapType :: (Core.MapType a -> Core.Term a)
