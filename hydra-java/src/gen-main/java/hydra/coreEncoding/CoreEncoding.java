@@ -89,17 +89,17 @@ public interface CoreEncoding {
     return ((v1)).accept(new hydra.core.FloatType.Visitor<hydra.core.Term<A>>() {
       @Override
       public hydra.core.Term<A> visit(hydra.core.FloatType.Bigfloat instance) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.FloatType"), new hydra.core.Field(new hydra.core.FieldName("bigfloat"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.UnitType"), java.util.Arrays.asList())))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.FloatType"), new hydra.core.Field(new hydra.core.FieldName("bigfloat"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList())))));
       }
       
       @Override
       public hydra.core.Term<A> visit(hydra.core.FloatType.Float32 instance) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.FloatType"), new hydra.core.Field(new hydra.core.FieldName("float32"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.UnitType"), java.util.Arrays.asList())))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.FloatType"), new hydra.core.Field(new hydra.core.FieldName("float32"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList())))));
       }
       
       @Override
       public hydra.core.Term<A> visit(hydra.core.FloatType.Float64 instance) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.FloatType"), new hydra.core.Field(new hydra.core.FieldName("float64"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.UnitType"), java.util.Arrays.asList())))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.FloatType"), new hydra.core.Field(new hydra.core.FieldName("float64"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList())))));
       }
     });
   }
@@ -158,47 +158,47 @@ public interface CoreEncoding {
     return ((v1)).accept(new hydra.core.IntegerType.Visitor<hydra.core.Term<A>>() {
       @Override
       public hydra.core.Term<A> visit(hydra.core.IntegerType.Bigint instance) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.IntegerType"), new hydra.core.Field(new hydra.core.FieldName("bigint"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.UnitType"), java.util.Arrays.asList())))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.IntegerType"), new hydra.core.Field(new hydra.core.FieldName("bigint"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList())))));
       }
       
       @Override
       public hydra.core.Term<A> visit(hydra.core.IntegerType.Int8 instance) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.IntegerType"), new hydra.core.Field(new hydra.core.FieldName("int8"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.UnitType"), java.util.Arrays.asList())))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.IntegerType"), new hydra.core.Field(new hydra.core.FieldName("int8"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList())))));
       }
       
       @Override
       public hydra.core.Term<A> visit(hydra.core.IntegerType.Int16 instance) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.IntegerType"), new hydra.core.Field(new hydra.core.FieldName("int16"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.UnitType"), java.util.Arrays.asList())))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.IntegerType"), new hydra.core.Field(new hydra.core.FieldName("int16"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList())))));
       }
       
       @Override
       public hydra.core.Term<A> visit(hydra.core.IntegerType.Int32 instance) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.IntegerType"), new hydra.core.Field(new hydra.core.FieldName("int32"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.UnitType"), java.util.Arrays.asList())))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.IntegerType"), new hydra.core.Field(new hydra.core.FieldName("int32"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList())))));
       }
       
       @Override
       public hydra.core.Term<A> visit(hydra.core.IntegerType.Int64 instance) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.IntegerType"), new hydra.core.Field(new hydra.core.FieldName("int64"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.UnitType"), java.util.Arrays.asList())))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.IntegerType"), new hydra.core.Field(new hydra.core.FieldName("int64"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList())))));
       }
       
       @Override
       public hydra.core.Term<A> visit(hydra.core.IntegerType.Uint8 instance) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.IntegerType"), new hydra.core.Field(new hydra.core.FieldName("uint8"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.UnitType"), java.util.Arrays.asList())))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.IntegerType"), new hydra.core.Field(new hydra.core.FieldName("uint8"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList())))));
       }
       
       @Override
       public hydra.core.Term<A> visit(hydra.core.IntegerType.Uint16 instance) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.IntegerType"), new hydra.core.Field(new hydra.core.FieldName("uint16"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.UnitType"), java.util.Arrays.asList())))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.IntegerType"), new hydra.core.Field(new hydra.core.FieldName("uint16"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList())))));
       }
       
       @Override
       public hydra.core.Term<A> visit(hydra.core.IntegerType.Uint32 instance) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.IntegerType"), new hydra.core.Field(new hydra.core.FieldName("uint32"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.UnitType"), java.util.Arrays.asList())))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.IntegerType"), new hydra.core.Field(new hydra.core.FieldName("uint32"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList())))));
       }
       
       @Override
       public hydra.core.Term<A> visit(hydra.core.IntegerType.Uint64 instance) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.IntegerType"), new hydra.core.Field(new hydra.core.FieldName("uint64"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.UnitType"), java.util.Arrays.asList())))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.IntegerType"), new hydra.core.Field(new hydra.core.FieldName("uint64"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList())))));
       }
     });
   }
@@ -297,12 +297,12 @@ public interface CoreEncoding {
     return ((v1)).accept(new hydra.core.LiteralType.Visitor<hydra.core.Term<A>>() {
       @Override
       public hydra.core.Term<A> visit(hydra.core.LiteralType.Binary instance) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.LiteralType"), new hydra.core.Field(new hydra.core.FieldName("binary"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.UnitType"), java.util.Arrays.asList())))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.LiteralType"), new hydra.core.Field(new hydra.core.FieldName("binary"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList())))));
       }
       
       @Override
       public hydra.core.Term<A> visit(hydra.core.LiteralType.Boolean_ instance) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.LiteralType"), new hydra.core.Field(new hydra.core.FieldName("boolean"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.UnitType"), java.util.Arrays.asList())))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.LiteralType"), new hydra.core.Field(new hydra.core.FieldName("boolean"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList())))));
       }
       
       @Override
@@ -317,7 +317,7 @@ public interface CoreEncoding {
       
       @Override
       public hydra.core.Term<A> visit(hydra.core.LiteralType.String_ instance) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.LiteralType"), new hydra.core.Field(new hydra.core.FieldName("string"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.UnitType"), java.util.Arrays.asList())))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.LiteralType"), new hydra.core.Field(new hydra.core.FieldName("string"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList())))));
       }
     });
   }

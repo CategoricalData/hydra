@@ -86,7 +86,7 @@ constructModule mod@(Module ns els _ desc) _ pairs = do
           then Just False
           else Nothing
         isUnitField typ = case typ of
-          TypeRecord (RowType name _ _) -> name == _UnitType
+          TypeRecord (RowType name _ _) -> name == _Unit
           _ -> False
 
 encodeDefinition :: (Eq a, Ord a, Show a) => Namespace -> Name -> Type a -> Flow (Graph a) P3.Definition
@@ -160,7 +160,7 @@ encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ 
         P3.FieldTypeSimple <$> encodeSimpleType typ
     encodeSimpleType typ = case simplifyType typ of
       TypeLiteral lt -> P3.SimpleTypeScalar <$> encodeScalarType lt
-      TypeRecord (RowType name _ _) -> if name == _UnitType
+      TypeRecord (RowType name _ _) -> if name == _Unit
         then pure $ P3.SimpleTypeReference $ P3.TypeName $ "google.protobuf.Empty"
         else forNominal name
       TypeUnion (RowType name _ _) -> forNominal name

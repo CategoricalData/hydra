@@ -20,7 +20,7 @@ import hydra.core.Projection;
 import hydra.core.Record;
 import hydra.core.Term;
 import hydra.core.Tuple;
-import hydra.core.UnitType;
+import hydra.core.Unit;
 
 import hydra.core.Nominal;
 
@@ -285,7 +285,7 @@ public interface Terms {
     }
 
     static <A> Term<A> unit() {
-        return record(UnitType.NAME);
+        return record(Unit.NAME);
     }
 
     static <A> Term<A> unwrap(final Name name) {

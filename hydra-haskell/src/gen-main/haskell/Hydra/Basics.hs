@@ -281,12 +281,12 @@ isType t = ((\x -> case x of
 
 isUnitTerm :: (Eq a) => (Core.Term a -> Bool)
 isUnitTerm t = (Equality.equalTerm (Strip.stripTerm t) (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra/core.UnitType"),
+  Core.recordTypeName = (Core.Name "hydra/core.Unit"),
   Core.recordFields = []})))
 
 isUnitType :: (Eq a) => (Core.Type a -> Bool)
 isUnitType t = (Equality.equalType (Strip.stripType t) (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.UnitType"),
+  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
   Core.rowTypeExtends = Nothing,
   Core.rowTypeFields = []})))
 

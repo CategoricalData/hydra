@@ -371,6 +371,6 @@ hydraCoreModule = Module ns elements [] $
           "variable">: core "Name",
           "wrap">: core "Nominal" @@ (core "Type" @@ "a")],
 
-      def "UnitType" $
-        doc "An empty record type as a canonical unit type" $
+      def "Unit" $
+        doc "An empty record as a canonical unit value" $
         record []]

@@ -288,7 +288,7 @@ uint64Value v = case v of
 
 unit :: Show a => Term a -> Flow s ()
 unit term = do
-  fields <- recordWithName _UnitType term
+  fields <- recordWithName _Unit term
   if L.null fields
     then pure ()
     else unexpected "unit" $ show term

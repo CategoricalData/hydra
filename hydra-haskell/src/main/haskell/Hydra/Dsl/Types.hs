@@ -137,7 +137,7 @@ union :: [FieldType a] -> Type a
 union fields = TypeUnion $ RowType placeholderName Nothing fields
 
 unit :: Type a
-unit = TypeRecord $ RowType (Name "hydra/core.UnitType") Nothing []
+unit = TypeRecord $ RowType (Name "hydra/core.Unit") Nothing []
 
 var :: String -> Type a
 var = TypeVariable . Name
