@@ -4,6 +4,7 @@ import hydra.Flows;
 import hydra.compute.Flow;
 import hydra.compute.StatelessAdapter;
 import hydra.compute.StatelessCoder;
+import hydra.core.Unit;
 import hydra.langs.tinkerpop.propertyGraph.Edge;
 import hydra.langs.tinkerpop.propertyGraph.EdgeLabel;
 import hydra.langs.tinkerpop.propertyGraph.EdgeType;
@@ -31,7 +32,7 @@ public class Merging {
     public static VertexLabel DEFAULT_VERTEX_LABEL = new VertexLabel("_Merged");
     public static EdgeLabel DEFAULT_EDGE_LABEL = new EdgeLabel("_merged");
 
-    public static <T, V> Flow<Void, StatelessAdapter<List<VertexType<T>>, VertexType<T>, Vertex<V>, Vertex<V>>>
+    public static <T, V> Flow<Unit, StatelessAdapter<List<VertexType<T>>, VertexType<T>, Vertex<V>, Vertex<V>>>
     createVertexAdapter(List<VertexType<T>> types) {
         return Flows.map(Flows.check(types,
                 Merging::checkNontrivial,
@@ -40,7 +41,7 @@ public class Merging {
                 false, types, mergeVertexTypes(safeTypes), constructMergedVertexCoder(safeTypes)));
     }
 
-    public static <T, V> Flow<Void, StatelessAdapter<List<EdgeType<T>>, EdgeType<T>, Edge<V>, Edge<V>>>
+    public static <T, V> Flow<Unit, StatelessAdapter<List<EdgeType<T>>, EdgeType<T>, Edge<V>, Edge<V>>>
     createEdgeAdapter(List<EdgeType<T>> types) {
         return Flows.map(Flows.check(types,
                 Merging::checkNontrivial,
@@ -133,7 +134,7 @@ public class Merging {
 
     private static <V> StatelessCoder<Map<PropertyKey, V>, Map<PropertyKey, V>> constructPropertiesCoder(
             String label) {
-        Function<Map<PropertyKey, V>, Flow<Void, Map<PropertyKey, V>>> encode = before -> {
+        Function<Map<PropertyKey, V>, Flow<Unit, Map<PropertyKey, V>>> encode = before -> {
             Map<PropertyKey, V> after = new HashMap<PropertyKey, V>();
             for (Map.Entry<PropertyKey, V> entry : before.entrySet()) {
                 after.put(encodePropertyKey(label, entry.getKey()), entry.getValue());
@@ -141,7 +142,7 @@ public class Merging {
             return Flows.pure(after);
         };
 
-        Function<Map<PropertyKey, V>, Flow<Void, Map<PropertyKey, V>>> decode = before -> {
+        Function<Map<PropertyKey, V>, Flow<Unit, Map<PropertyKey, V>>> decode = before -> {
             Map<PropertyKey, V> after = new HashMap<PropertyKey, V>();
             for (Map.Entry<PropertyKey, V> entry : before.entrySet()) {
                 after.put(decodePropertyKey(label, entry.getKey()), entry.getValue());
@@ -182,7 +183,7 @@ public class Merging {
         return new PropertyKey(key.value.substring(label.length() + 1));
     }
 
-    private static <L, E> Flow<Void, StatelessCoder<E, E>> getCoder(Map<L, StatelessCoder<E, E>> coders, L label) {
+    private static <L, E> Flow<Unit, StatelessCoder<E, E>> getCoder(Map<L, StatelessCoder<E, E>> coders, L label) {
         StatelessCoder<E, E> helper = coders.get(label);
         return helper == null
                 ? Flows.fail("No coder associated with label " + label)

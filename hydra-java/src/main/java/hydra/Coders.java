@@ -3,6 +3,7 @@ package hydra;
 import hydra.compute.Coder;
 import hydra.compute.Flow;
 import hydra.compute.StatelessCoder;
+import hydra.core.Unit;
 
 /**
  * Convenience functions for working with Hydra coders
@@ -23,8 +24,8 @@ public class Coders {
      * Compose two stateless coders, chaining their encode and decode functions
      */
     public static <V1, V2, V3> StatelessCoder<V1, V3> composeStateless(
-            Coder<Void, Void, V1, V2> coder1,
-            Coder<Void, Void, V2, V3> coder2) {
+            Coder<Unit, Unit, V1, V2> coder1,
+            Coder<Unit, Unit, V2, V3> coder2) {
         return new StatelessCoder<>(
                 Flows.compose(coder1.encode, coder2.encode),
                 Flows.compose(coder2.decode, coder1.decode));
@@ -40,7 +41,7 @@ public class Coders {
     /**
      * Find the inverse of a stateless coder
      */
-    public static <V1, V2> StatelessCoder<V2, V1> inverseStateless(Coder<Void, Void, V1, V2> coder) {
+    public static <V1, V2> StatelessCoder<V2, V1> inverseStateless(Coder<Unit, Unit, V1, V2> coder) {
         return new StatelessCoder<V2, V1>(coder.decode, coder.encode);
     }
 

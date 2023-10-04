@@ -3,6 +3,7 @@ package hydra;
 import hydra.compute.Adapter;
 import hydra.compute.Flow;
 import hydra.compute.StatelessAdapter;
+import hydra.core.Unit;
 
 import java.util.function.Function;
 
@@ -54,9 +55,9 @@ public class Adapters {
     /**
      * Compose two stateless adapters constructed from their source types, in turn composing their coders
      */
-    public static <T1, T2, T3, V1, V2, V3> Function<T1, Flow<Void, StatelessAdapter<T1, T3, V1, V3>>> composeStateless(
-            Function<T1, Flow<Void, StatelessAdapter<T1, T2, V1, V2>>> constructor1,
-            Function<T2, Flow<Void, StatelessAdapter<T2, T3, V2, V3>>> constructor2) {
+    public static <T1, T2, T3, V1, V2, V3> Function<T1, Flow<Unit, StatelessAdapter<T1, T3, V1, V3>>> composeStateless(
+            Function<T1, Flow<Unit, StatelessAdapter<T1, T2, V1, V2>>> constructor1,
+            Function<T2, Flow<Unit, StatelessAdapter<T2, T3, V2, V3>>> constructor2) {
         return t1 -> Flows.bind(
                 constructor1.apply(t1),
                 firstMile -> Flows.map(
