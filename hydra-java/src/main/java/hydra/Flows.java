@@ -5,7 +5,8 @@ import hydra.compute.FlowState;
 import hydra.compute.Trace;
 import hydra.tier1.Tier1;
 import hydra.tools.FlowException;
-import hydra.tools.TriFunction;
+import hydra.tools.Function3;
+import hydra.tools.Function4;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -28,10 +29,10 @@ public interface Flows {
     Trace EMPTY_TRACE
             = new Trace(Collections.emptyList(), Collections.emptyList(), Collections.emptyMap());
 
-    static <S, X, Y> Flow<S, Y> apply(Flow<S, Function<X, Y>> mapping, Flow<S, X> input) {
+    static <S, A, B> Flow<S, B> apply(Flow<S, Function<A, B>> mapping, Flow<S, A> input) {
         return new Flow<>(s0 -> t0 -> {
-            FlowState<S, Function<X, Y>> fs1 = mapping.value.apply(s0).apply(t0);
-            Optional<Function<X, Y>> mf = fs1.value;
+            FlowState<S, Function<A, B>> fs1 = mapping.value.apply(s0).apply(t0);
+            Optional<Function<A, B>> mf = fs1.value;
             return mf.isPresent()
                     ? map(mf.get(), input).value.apply(fs1.state).apply(fs1.trace)
                     : new FlowState<>(Optional.empty(), fs1.state, fs1.trace);
@@ -41,12 +42,12 @@ public interface Flows {
     /**
      * Monadic bind function for flows
      */
-    static <S, X, Y> Flow<S, Y> bind(Flow<S, X> p, Function<X, Flow<S, Y>> k) {
+    static <S, A, B> Flow<S, B> bind(Flow<S, A> p, Function<A, Flow<S, B>> k) {
         return new Flow<>(s0 -> t0 -> {
-            FlowState<S, X> fs1 = p.value.apply(s0).apply(t0);
-            Optional<X> x = fs1.value;
-            return x.isPresent()
-                    ? k.apply(x.get()).value.apply(fs1.state).apply(fs1.trace)
+            FlowState<S, A> fs1 = p.value.apply(s0).apply(t0);
+            Optional<A> a = fs1.value;
+            return a.isPresent()
+                    ? k.apply(a.get()).value.apply(fs1.state).apply(fs1.trace)
                     : new FlowState<>(Optional.empty(), fs1.state, fs1.trace);
         });
     }
@@ -54,21 +55,21 @@ public interface Flows {
     /**
      * Monadic bind with reversed arguments
      */
-    static <S, X, Y> Flow<S, Y> bind(Function<X, Flow<S, Y>> k, Flow<S, X> p) {
+    static <S, A, B> Flow<S, B> bind(Function<A, Flow<S, B>> k, Flow<S, A> p) {
         return bind(k, p);
     }
 
     /**
      * Variant of monadic bind which takes two monadic arguments and a binary function
      */
-    static <S, X, Y, Z> Flow<S, Z> bind2(Flow<S, X> p1, Flow<S, Y> p2, BiFunction<X, Y, Flow<S, Z>> k) {
-        return Flows.bind(p1, x -> Flows.bind(p2, y -> k.apply(x, y)));
+    static <S, A, B, C> Flow<S, C> bind2(Flow<S, A> p1, Flow<S, B> p2, BiFunction<A, B, Flow<S, C>> k) {
+        return Flows.bind(p1, a -> Flows.bind(p2, b -> k.apply(a, b)));
     }
 
     /**
      * Two-argument monadic bind with reversed arguments
      */
-    static <S, X, Y, Z> Flow<S, Z> bind2(BiFunction<X, Y, Flow<S, Z>> k, Flow<S, X> p1, Flow<S, Y> p2) {
+    static <S, A, B, C> Flow<S, C> bind2(BiFunction<A, B, Flow<S, C>> k, Flow<S, A> p1, Flow<S, B> p2) {
         return Flows.bind2(p1, p2, k);
     }
 
@@ -90,14 +91,14 @@ public interface Flows {
     /**
      * Compose two monadic functions, feeding the output of the first into the second
      */
-    static <S, X, Y, Z> Function<X, Flow<S, Z>> compose(Function<X, Flow<S, Y>> f, Function<Y, Flow<S, Z>> g) {
-        return x -> Flows.bind(f.apply(x), g);
+    static <S, A, B, C> Function<A, Flow<S, C>> compose(Function<A, Flow<S, B>> f, Function<B, Flow<S, C>> g) {
+        return a -> Flows.bind(f.apply(a), g);
     }
 
     /**
      * Produce a failure flow with the provided message
      */
-    static <S, X> Flow<S, X> fail(String msg) {
+    static <S, A> Flow<S, A> fail(String msg) {
         return new Flow<>(s -> trace -> {
             String errMsg = "Error: " + msg; // TODO: include stack trace
             List<String> messages = new ArrayList<>(trace.messages);
@@ -109,15 +110,15 @@ public interface Flows {
     /**
      * Produce a failure flow with the provided message and additional information from a Throwable
      */
-    static <S, X> Flow<S, X> fail(String msg, Throwable cause) {
+    static <S, A> Flow<S, A> fail(String msg, Throwable cause) {
         return fail(msg + ": " + cause.getMessage());
     }
 
     /**
      * Extract the value from a flow, returning a default value instead if the flow failed.
      */
-    static <S, X> X fromFlow(X dflt, S state, Flow<S, X> flow) throws FlowException {
-        Function<S, Function<Flow<S, X>, X>> helper = Tier1.fromFlow(dflt);
+    static <S, A> A fromFlow(A dflt, S state, Flow<S, A> flow) throws FlowException {
+        Function<S, Function<Flow<S, A>, A>> helper = Tier1.fromFlow(dflt);
         return helper.apply(state).apply(flow);
     }
 
@@ -131,9 +132,9 @@ public interface Flows {
     /**
      * Map a function over a flow
      */
-    static <S, X, Y> Flow<S, Y> map(Function<X, Y> f, Flow<S, X> x) {
+    static <S, A, B> Flow<S, B> map(Function<A, B> f, Flow<S, A> x) {
         return new Flow<>(s -> trace -> {
-            FlowState<S, X> result = x.value.apply(s).apply(trace);
+            FlowState<S, A> result = x.value.apply(s).apply(trace);
             return new FlowState<>(result.value.map(f), result.state, result.trace);
         });
     }
@@ -141,18 +142,18 @@ public interface Flows {
     /**
      * Map a function over a flow, with reversed arguments
      */
-    static <S, X, Y> Flow<S, Y> map(Flow<S, X> x, Function<X, Y> f) {
+    static <S, A, B> Flow<S, B> map(Flow<S, A> x, Function<A, B> f) {
         return map(f, x);
     }
 
     /**
      * Map a monadic function over a list, producing a flow of lists
      */
-    static <S, X, Y> Flow<S, List<Y>> mapM(List<X> xs, Function<X, Flow<S, Y>> f) {
-        Flow<S, List<Y>> result = pure(new ArrayList<>());
-        for (X x : xs) {
-            result = bind(result, ys -> map(f.apply(x), y -> {
-                ys.add(y); // Modify in place
+    static <S, A, B> Flow<S, List<B>> mapM(List<A> as, Function<A, Flow<S, B>> f) {
+        Flow<S, List<B>> result = pure(new ArrayList<>());
+        for (A a : as) {
+            result = bind(result, ys -> map(f.apply(a), b -> {
+                ys.add(b); // Modify in place
                 return ys;
             }));
         }
@@ -162,7 +163,7 @@ public interface Flows {
     /**
      * Map a monadic function over an array, producing a flow of lists
      */
-    static <S, X, Y> Flow<S, List<Y>> mapM(X[] xs, Function<X, Flow<S, Y>> f) {
+    static <S, A, B> Flow<S, List<B>> mapM(A[] xs, Function<A, Flow<S, B>> f) {
         return mapM(Arrays.asList(xs), f);
     }
 
@@ -180,18 +181,18 @@ public interface Flows {
     /**
      * Map a monadic function over an optional value, producing a flow of optionals
      */
-    static <S, X, Y> Flow<S, Optional<Y>> mapM(Optional<X> xs, Function<X, Flow<S, Y>> f) {
-        return xs.map(x -> map(f.apply(x), Optional::of)).orElseGet(() -> pure(Optional.empty()));
+    static <S, A, B> Flow<S, Optional<B>> mapM(Optional<A> xs, Function<A, Flow<S, B>> f) {
+        return xs.map(a -> map(f.apply(a), Optional::of)).orElseGet(() -> pure(Optional.empty()));
     }
 
     /**
      * Map a monadic function over a set, producing a flow of sets
      */
-    static <S, X, Y> Flow<S, Set<Y>> mapM(Set<X> xs, Function<X, Flow<S, Y>> f) {
-        Flow<S, Set<Y>> result = pure(new HashSet<>(xs.size()));
-        for (X x : xs) {
-            result = bind(result, ys -> map(f.apply(x), y -> {
-                ys.add(y); // Modify in place
+    static <S, A, B> Flow<S, Set<B>> mapM(Set<A> as, Function<A, Flow<S, B>> f) {
+        Flow<S, Set<B>> result = pure(new HashSet<>(as.size()));
+        for (A a : as) {
+            result = bind(result, ys -> map(f.apply(a), b -> {
+                ys.add(b); // Modify in place
                 return ys;
             }));
         }
@@ -201,21 +202,35 @@ public interface Flows {
     /**
      * Map a bifunction over two flows, producing a flow
      */
-    static <S, X, Y, Z> Flow<S, Z> map2(Flow<S, X> x, Flow<S, Y> y, BiFunction<X, Y, Z> f) {
-        return Flows.bind(x, x1 -> Flows.bind(y, y1 -> Flows.pure(f.apply(x1, y1))));
+    static <S, A, B, C> Flow<S, C> map2(Flow<S, A> x, Flow<S, B> y, BiFunction<A, B, C> f) {
+        return Flows.bind(x, a1 -> Flows.bind(y, b1 -> Flows.pure(f.apply(a1, b1))));
     }
 
     /**
-     * Map a ternary function over three flowr, producing a flow
+     * Map an arity-3 function over three flows, producing a flow
      */
-    static <S, X, Y, Z, R> Flow<S, R> map3(Flow<S, X> x, Flow<S, Y> y, Flow<S, Z> z, TriFunction<X, Y, Z, R> f) {
-        return Flows.bind(x, x1 -> Flows.bind(y, y1 -> Flows.bind(z, z1 -> Flows.pure(f.apply(x1, y1, z1)))));
+    static <S, A, B, C, D> Flow<S, D> map3(Flow<S, A> a, Flow<S, B> b, Flow<S, C> c, Function3<A, B, C, D> f) {
+        return Flows.bind(a,
+                a1 -> Flows.bind(b,
+                        b1 -> Flows.bind(c,
+                                c1 -> Flows.pure(f.apply(a1, b1, c1)))));
+    }
+
+    /**
+     * Map an arity-4 function over four flows, producing a flow
+     */
+    static <S, A, B, C, D, E> Flow<S, E> map4(Flow<S, A> a, Flow<S, B> b, Flow<S, C> c, Flow<S, D> d, Function4<A, B, C, D, E> f) {
+        return Flows.bind(a,
+                a1 -> Flows.bind(b,
+                        b1 -> Flows.bind(c,
+                                c1 -> Flows.bind(d,
+                                        d1 -> Flows.pure(f.apply(a1, b1, c1, d1))))));
     }
 
     /**
      * Produce a given object as a pure flow; the value is guaranteed to be present, and neither state nor trace are modified
      */
-    static <S, X> Flow<S, X> pure(X obj) {
+    static <S, A> Flow<S, A> pure(A obj) {
         return new Flow<>(s -> trace -> new FlowState<>(Optional.of(obj), s, trace));
     }
 
@@ -231,22 +246,22 @@ public interface Flows {
      * Produce an error flow indicating an unexpected value.
      * For example, if you expect a string but find an integer, use unexpected("string", myInt)
      */
-    static <S, X> Flow<S, X> unexpected(String cat, Object obj) {
+    static <S, A> Flow<S, A> unexpected(String cat, Object obj) {
         return fail("expected " + cat + " but found: " + obj);
     }
 
     /**
      * Produce an error flow indicating an unexpected class of value
      */
-    static <S, X> Flow<S, X> unexpectedClass(String cat, Object obj) {
+    static <S, A> Flow<S, A> unexpectedClass(String cat, Object obj) {
         return fail("expected " + cat + " but found an instance of " + obj.getClass().getName());
     }
 
     /**
      * Continue a flow after adding a warning message
      */
-    static <S, X> Flow<S, X> warn(String message, Flow<S, X> flow) {
-        Function<Flow<S, X>, Flow<S, X>> f = Tier1.warn(message);
+    static <S, A> Flow<S, A> warn(String message, Flow<S, A> flow) {
+        Function<Flow<S, A>, Flow<S, A>> f = Tier1.warn(message);
         return f.apply(flow);
     }
 }
