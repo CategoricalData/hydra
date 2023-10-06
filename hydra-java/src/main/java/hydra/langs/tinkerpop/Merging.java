@@ -5,7 +5,11 @@ import hydra.basics.Basics;
 import hydra.compute.Flow;
 import hydra.compute.StatelessAdapter;
 import hydra.compute.StatelessCoder;
+import hydra.core.Literal;
+import hydra.core.LiteralType;
 import hydra.core.Unit;
+import hydra.dsl.LiteralTypes;
+import hydra.dsl.Literals;
 import hydra.langs.tinkerpop.propertyGraph.Edge;
 import hydra.langs.tinkerpop.propertyGraph.EdgeLabel;
 import hydra.langs.tinkerpop.propertyGraph.EdgeType;
@@ -22,8 +26,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.BiFunction;
 import java.util.function.Function;
+
+import static hydra.Flows.pure;
 
 
 /**
@@ -35,21 +40,21 @@ public class Merging {
     public static EdgeLabel DEFAULT_EDGE_LABEL = new EdgeLabel("_merged");
 
     public static <T, V> Flow<Unit, StatelessAdapter<List<VertexType<T>>, VertexType<T>, Vertex<V>, Vertex<V>>>
-    createVertexAdapter(List<VertexType<T>> types, IdCoders<T, V> idCoders) {
+    createVertexAdapter(List<VertexType<T>> types, IdAdapters<T, V> idAdapters) {
         return Flows.map(Flows.check(types,
                 Merging::checkNontrivial,
                 Merging::checkNoDuplicatedVertexLabels), safeTypes -> new StatelessAdapter<List<VertexType<T>>, VertexType<T>, Vertex<V>, Vertex<V>>(
-                false, types, mergeVertexTypes(safeTypes, idCoders),
-                constructMergedVertexCoder(safeTypes, idCoders)));
+                false, types, mergeVertexTypes(safeTypes, idAdapters),
+                constructMergedVertexCoder(safeTypes, idAdapters)));
     }
 
     public static <T, V> Flow<Unit, StatelessAdapter<List<EdgeType<T>>, EdgeType<T>, Edge<V>, Edge<V>>>
-    createEdgeAdapter(List<EdgeType<T>> types, IdCoders<T, V> idCoders) {
+    createEdgeAdapter(List<EdgeType<T>> types, IdAdapters<T, V> idAdapters) {
         return Flows.map(Flows.check(types,
                 Merging::checkNontrivial,
                 Merging::checkNoDuplicatedEdgeLabels), safeTypes -> new StatelessAdapter<List<EdgeType<T>>, EdgeType<T>, Edge<V>, Edge<V>>(
-                false, types, mergeEdgeTypes(safeTypes, idCoders),
-                constructMergedEdgeCoder(safeTypes, idCoders)));
+                false, types, mergeEdgeTypes(safeTypes, idAdapters),
+                constructMergedEdgeCoder(safeTypes, idAdapters)));
     }
 
     private static <A> Optional<String> checkNontrivial(List<A> types) {
@@ -80,8 +85,8 @@ public class Merging {
 
     private static <T, V> StatelessCoder<Vertex<V>, Vertex<V>> constructMergedVertexCoder(
             List<VertexType<T>> types,
-            IdCoders<T, V> idCoders) {
-        Map<VertexLabel, StatelessCoder<Vertex<V>, Vertex<V>>> coders = constructVertexCoders(types, idCoders);
+            IdAdapters<T, V> idAdapters) {
+        Map<VertexLabel, StatelessCoder<Vertex<V>, Vertex<V>>> coders = constructVertexCoders(types, idAdapters);
         return new StatelessCoder<Vertex<V>, Vertex<V>>(
                 v -> Flows.bind(getCoder(coders, v.label), coder -> coder.encode.apply(v)),
                 v -> Flows.bind(getCoder(coders, v.label), coder -> coder.decode.apply(v)));
@@ -89,8 +94,8 @@ public class Merging {
 
     private static <T, V> StatelessCoder<Edge<V>, Edge<V>> constructMergedEdgeCoder(
             List<EdgeType<T>> types,
-            IdCoders<T, V> idCoders) {
-        Map<EdgeLabel, StatelessCoder<Edge<V>, Edge<V>>> coders = constructEdgeCoders(types, idCoders);
+            IdAdapters<T, V> idAdapters) {
+        Map<EdgeLabel, StatelessCoder<Edge<V>, Edge<V>>> coders = constructEdgeCoders(types, idAdapters);
         return new StatelessCoder<Edge<V>, Edge<V>>(
                 e -> Flows.bind(getCoder(coders, e.label), coder -> coder.encode.apply(e)),
                 e -> Flows.bind(getCoder(coders, e.label), coder -> coder.decode.apply(e)));
@@ -98,38 +103,40 @@ public class Merging {
 
     private static <T, V> StatelessCoder<Vertex<V>, Vertex<V>> constructVertexCoder(
             VertexType<T> type,
-            IdCoders<T, V> idCoders) {
+            IdAdapters<T, V> idAdapters) {
         StatelessCoder<Map<PropertyKey, V>, Map<PropertyKey, V>> propertiesCoder
                 = constructPropertiesCoder(type.label.value);
 
         return new StatelessCoder<Vertex<V>, Vertex<V>>(
-                v -> Flows.map(propertiesCoder.encode.apply(v.properties),
-                        props -> new Vertex<V>(v.label, idCoders.encodeVertexId.apply(type.label, v.id), props)),
-                v -> Flows.map(propertiesCoder.decode.apply(v.properties),
-                        props -> new Vertex<V>(v.label, idCoders.decodeVertexId.apply(type.label, v.id), props)));
+                v -> Flows.map2(
+                        idAdapters.forVertexId.apply(type.label).encode.apply(v.id),
+                        propertiesCoder.encode.apply(v.properties),
+                        (id, props) -> new Vertex<V>(v.label, id, props)),
+                v -> Flows.map2(
+                        idAdapters.forVertexId.apply(type.label).decode.apply(v.id),
+                        propertiesCoder.decode.apply(v.properties),
+                        (id, props) -> new Vertex<V>(v.label, id, props)));
     }
 
     private static <T, V> StatelessCoder<Edge<V>, Edge<V>> constructEdgeCoder(
             EdgeType<T> type,
-            IdCoders<T, V> idCoders) {
+            IdAdapters<T, V> idAdapters) {
         StatelessCoder<Map<PropertyKey, V>, Map<PropertyKey, V>> propertiesCoder
                 = constructPropertiesCoder(type.label.value);
 
         return new StatelessCoder<Edge<V>, Edge<V>>(
-                e -> Flows.map(propertiesCoder.encode.apply(e.properties),
-                        props -> new Edge<V>(
-                                e.label,
-                                idCoders.encodeEdgeId.apply(type.label, e.id),
-                                idCoders.encodeVertexId.apply(type.out, e.out),
-                                idCoders.encodeVertexId.apply(type.in, e.in),
-                                props)),
-                e -> Flows.map(propertiesCoder.decode.apply(e.properties),
-                        props -> new Edge<V>(
-                                e.label,
-                                idCoders.decodeEdgeId.apply(type.label, e.id),
-                                idCoders.decodeVertexId.apply(type.out, e.out),
-                                idCoders.decodeVertexId.apply(type.in, e.in),
-                                props)));
+                e -> Flows.map4(
+                        idAdapters.forEdgeId.apply(type.label).encode.apply(e.id),
+                        idAdapters.forVertexId.apply(type.out).encode.apply(e.out),
+                        idAdapters.forVertexId.apply(type.in).encode.apply(e.in),
+                        propertiesCoder.encode.apply(e.properties),
+                        (id, outId, inId, props) -> new Edge<V>(e.label, id, outId, inId, props)),
+                e -> Flows.map4(
+                        idAdapters.forEdgeId.apply(type.label).decode.apply(e.id),
+                        idAdapters.forVertexId.apply(type.out).decode.apply(e.out),
+                        idAdapters.forVertexId.apply(type.in).decode.apply(e.in),
+                        propertiesCoder.decode.apply(e.properties),
+                        (id, outId, inId, props) -> new Edge<V>(e.label, id, outId, inId, props)));
     }
 
     private static <V> StatelessCoder<Map<PropertyKey, V>, Map<PropertyKey, V>> constructPropertiesCoder(
@@ -166,14 +173,14 @@ public class Merging {
 
     private static <T, V> Map<VertexLabel, StatelessCoder<Vertex<V>, Vertex<V>>> constructVertexCoders(
             List<VertexType<T>> types,
-            IdCoders<T, V> idCoders) {
-        return constructCoders(types, type -> type.label, type -> constructVertexCoder(type, idCoders));
+            IdAdapters<T, V> idAdapters) {
+        return constructCoders(types, type -> type.label, type -> constructVertexCoder(type, idAdapters));
     }
 
     private static <T, V> Map<EdgeLabel, StatelessCoder<Edge<V>, Edge<V>>> constructEdgeCoders(
             List<EdgeType<T>> types,
-            IdCoders<T, V> idCoders) {
-        return constructCoders(types, type -> type.label, type -> constructEdgeCoder(type, idCoders));
+            IdAdapters<T, V> idAdapters) {
+        return constructCoders(types, type -> type.label, type -> constructEdgeCoder(type, idAdapters));
     }
 
     private static PropertyKey encodePropertyKey(String label, PropertyKey key) {
@@ -192,13 +199,13 @@ public class Merging {
                 : Flows.pure(helper);
     }
 
-    private static <T, V> VertexType<T> mergeVertexTypes(List<VertexType<T>> types, IdCoders<T, V> idCoders) {
-        return new VertexType<T>(DEFAULT_VERTEX_LABEL, idCoders.commonVertexIdType,
+    private static <T, V> VertexType<T> mergeVertexTypes(List<VertexType<T>> types, IdAdapters<T, V> idAdapters) {
+        return new VertexType<T>(DEFAULT_VERTEX_LABEL, idAdapters.mergedVertexIdType,
                 mergePropertyTypes(types, t -> t.label.value, t -> t.properties));
     }
 
-    private static <T, V> EdgeType<T> mergeEdgeTypes(List<EdgeType<T>> types, IdCoders<T, V> idCoders) {
-        return new EdgeType<T>(DEFAULT_EDGE_LABEL, idCoders.commonEdgeIdType, DEFAULT_VERTEX_LABEL, DEFAULT_VERTEX_LABEL,
+    private static <T, V> EdgeType<T> mergeEdgeTypes(List<EdgeType<T>> types, IdAdapters<T, V> idAdapters) {
+        return new EdgeType<T>(DEFAULT_EDGE_LABEL, idAdapters.mergedEdgeIdType, DEFAULT_VERTEX_LABEL, DEFAULT_VERTEX_LABEL,
                 mergePropertyTypes(types, t -> t.label.value, t -> t.properties));
     }
 
@@ -215,27 +222,69 @@ public class Merging {
         return ptypes;
     }
 
-    public static class IdCoders<T, V> {
-        public final T commonVertexIdType;
-        public final T commonEdgeIdType;
-        public final BiFunction<VertexLabel, V, V> encodeVertexId;
-        public final BiFunction<VertexLabel, V, V> decodeVertexId;
-        public final BiFunction<EdgeLabel, V, V> encodeEdgeId;
-        public final BiFunction<EdgeLabel, V, V> decodeEdgeId;
+    public static class IdAdapters<T, V> {
+        public final T mergedVertexIdType;
+        public final T mergedEdgeIdType;
+        public final Function<VertexLabel, StatelessCoder<V, V>> forVertexId;
+        public final Function<EdgeLabel, StatelessCoder<V, V>> forEdgeId;
 
-        public IdCoders(
-                T commonVertexIdType,
-                T commonEdgeIdType,
-                BiFunction<VertexLabel, V, V> encodeVertexId,
-                BiFunction<VertexLabel, V, V> decodeVertexId,
-                BiFunction<EdgeLabel, V, V> encodeEdgeId,
-                BiFunction<EdgeLabel, V, V> decodeEdgeId) {
-            this.commonVertexIdType = commonVertexIdType;
-            this.commonEdgeIdType = commonEdgeIdType;
-            this.encodeVertexId = encodeVertexId;
-            this.decodeVertexId = decodeVertexId;
-            this.encodeEdgeId = encodeEdgeId;
-            this.decodeEdgeId = decodeEdgeId;
+        public IdAdapters(
+                T mergedVertexIdType,
+                T mergedEdgeIdType,
+                Function<VertexLabel, StatelessCoder<V, V>> forVertexId,
+                Function<EdgeLabel, StatelessCoder<V, V>> forEdgeId) {
+            this.mergedVertexIdType = mergedVertexIdType;
+            this.mergedEdgeIdType = mergedEdgeIdType;
+            this.forVertexId = forVertexId;
+            this.forEdgeId = forEdgeId;
         }
     }
+
+    public static final Merging.IdAdapters<LiteralType, Literal> STRING_ID_ADAPTERS = new Merging.IdAdapters<>(
+            LiteralTypes.string(),
+            LiteralTypes.string(),
+            label -> StatelessCoder.of(literal -> literal.accept(new Literal.PartialVisitor<Flow<Unit, Literal>>() {
+                @Override
+                public Flow<Unit, Literal> otherwise(Literal instance) {
+                    return Flows.unexpected("string literal", instance);
+                }
+
+                @Override
+                public Flow<Unit, Literal> visit(Literal.String_ id) {
+                    return pure(Literals.string(
+                            Basics.decapitalize(label.value) + "_" + ((Literal.String_) literal).value));
+                }
+            }), literal -> literal.accept(new Literal.PartialVisitor<Flow<Unit, Literal>>() {
+                @Override
+                public Flow<Unit, Literal> otherwise(Literal instance) {
+                    return Flows.unexpected("string literal", instance);
+                }
+
+                @Override
+                public Flow<Unit, Literal> visit(Literal.String_ id) {
+                    return pure(Literals.string(id.value.substring(label.value.length() + 1)));
+                }
+            })),
+            label -> StatelessCoder.of(literal -> literal.accept(new Literal.PartialVisitor<Flow<Unit, Literal>>() {
+                @Override
+                public Flow<Unit, Literal> otherwise(Literal instance) {
+                    return Flows.unexpected("string literal", instance);
+                }
+
+                @Override
+                public Flow<Unit, Literal> visit(Literal.String_ id) {
+                    return pure(Literals.string(
+                            Basics.decapitalize(label.value) + "_" + ((Literal.String_) literal).value));
+                }
+            }), literal -> literal.accept(new Literal.PartialVisitor<Flow<Unit, Literal>>() {
+                @Override
+                public Flow<Unit, Literal> otherwise(Literal instance) {
+                    return Flows.unexpected("string literal", instance);
+                }
+
+                @Override
+                public Flow<Unit, Literal> visit(Literal.String_ id) {
+                    return pure(Literals.string(id.value.substring(label.value.length() + 1)));
+                }
+            })));
 }

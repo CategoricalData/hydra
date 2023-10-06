@@ -5,6 +5,7 @@ import hydra.HydraTestBase;
 import hydra.basics.Basics;
 import hydra.compute.Flow;
 import hydra.compute.StatelessAdapter;
+import hydra.compute.StatelessCoder;
 import hydra.core.Literal;
 import hydra.core.LiteralType;
 import hydra.core.Unit;
@@ -12,6 +13,7 @@ import hydra.dsl.LiteralTypes;
 import hydra.dsl.Literals;
 import hydra.langs.tinkerpop.dsl.Graphs;
 import hydra.langs.tinkerpop.propertyGraph.Edge;
+import hydra.langs.tinkerpop.propertyGraph.EdgeLabel;
 import hydra.langs.tinkerpop.propertyGraph.EdgeType;
 import hydra.langs.tinkerpop.propertyGraph.PropertyKey;
 import hydra.langs.tinkerpop.propertyGraph.Vertex;
@@ -21,6 +23,8 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+
+import static hydra.Flows.pure;
 
 public class MergingTest extends HydraTestBase {
     private static final LiteralType ID_TYPE = LiteralTypes.string();
@@ -83,57 +87,49 @@ public class MergingTest extends HydraTestBase {
     private static final Edge<Literal> EDGE_PARTOF_1 = Graphs.edge(EDGE_TYPE_PARTOF, Literals.string("megadodo-parent"),
                     VERTEX_ORGANIZATION_1.id, VERTEX_ORGANIZATION_2.id)
             .build();
-
-    private static final Merging.IdCoders<LiteralType, Literal> SIMPLE_ID_CODERS = new Merging.IdCoders<>(
-            LiteralTypes.string(),
-            LiteralTypes.string(),
-            (label, id) -> Literals.string(Basics.decapitalize(label.value) + "_" + ((Literal.String_) id).value),
-            (label, id) -> Literals.string(((Literal.String_) id).value.substring(label.value.length() + 1)),
-            (label, id) -> Literals.string(Basics.decapitalize(label.value) + "_" + ((Literal.String_) id).value),
-            (label, id) -> Literals.string(((Literal.String_) id).value.substring(label.value.length() + 1)));
-
+    
     @Test
     public void testFailOnEmptyListOfInputTypes() {
-        assertFails(Merging.createVertexAdapter(Arrays.asList(), SIMPLE_ID_CODERS));
-        assertFails(Merging.createEdgeAdapter(Arrays.asList(), SIMPLE_ID_CODERS));
+        assertFails(Merging.createVertexAdapter(Arrays.asList(), Merging.STRING_ID_ADAPTERS));
+        assertFails(Merging.createEdgeAdapter(Arrays.asList(), Merging.STRING_ID_ADAPTERS));
     }
 
     @Test
     public void failOnDuplicateLabels() {
-        assertFails(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_PERSON_C), SIMPLE_ID_CODERS));
-        assertFails(Merging.createEdgeAdapter(Arrays.asList(EDGE_TYPE_WORKSAT_A, EDGE_TYPE_WORKSAT_C), SIMPLE_ID_CODERS));
+        assertFails(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_PERSON_C), Merging.STRING_ID_ADAPTERS));
+        assertFails(Merging.createEdgeAdapter(Arrays.asList(EDGE_TYPE_WORKSAT_A, EDGE_TYPE_WORKSAT_C), Merging.STRING_ID_ADAPTERS));
     }
 
     @Test
     public void testVertexTypeIsAsExpected() {
         assertSucceedsWith(2,
-                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS),
+                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), Merging.STRING_ID_ADAPTERS),
                         adapter -> adapter.source.size()));
         assertSucceedsWith(Merging.DEFAULT_VERTEX_LABEL,
-                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS),
+                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), Merging.STRING_ID_ADAPTERS),
                         adapter -> adapter.target.label));
         assertSucceedsWith(5,
-                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS),
+                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), Merging.STRING_ID_ADAPTERS),
                         adapter -> adapter.target.properties.size()));
         assertSucceedsWith(false,
-                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS),
+                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), Merging.STRING_ID_ADAPTERS),
                         adapter -> adapter.isLossy));
 
         assertSucceedsWith(new PropertyKey("person_name"),
-                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS),
+                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), Merging.STRING_ID_ADAPTERS),
                         adapter -> adapter.target.properties.get(0).key));
         assertSucceedsWith(new PropertyKey("person_nickname"),
-                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS),
+                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), Merging.STRING_ID_ADAPTERS),
                         adapter -> adapter.target.properties.get(1).key));
         assertSucceedsWith(new PropertyKey("organization_name"),
-                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS),
+                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), Merging.STRING_ID_ADAPTERS),
                         adapter -> adapter.target.properties.get(2).key));
 
         assertSucceedsWith(false,
-                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS),
+                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), Merging.STRING_ID_ADAPTERS),
                         adapter -> adapter.target.properties.get(0).required));
         assertSucceedsWith(LiteralTypes.string(),
-                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS),
+                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), Merging.STRING_ID_ADAPTERS),
                         adapter -> adapter.target.properties.get(0).value));
     }
 
@@ -209,7 +205,7 @@ public class MergingTest extends HydraTestBase {
     @Test
     public void testVertexRoundTripsAreNoop() {
         Flow<Unit, StatelessAdapter<List<VertexType<LiteralType>>, VertexType<LiteralType>, Vertex<Literal>, Vertex<Literal>>> adapterFlow
-                = Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS);
+                = Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), Merging.STRING_ID_ADAPTERS);
         Flows.map(adapterFlow, adapter -> {
             assertRoundTripIsNoop(adapter.coder, VERTEX_PERSON_1);
             assertRoundTripIsNoop(adapter.coder, VERTEX_PERSON_2);
@@ -223,7 +219,7 @@ public class MergingTest extends HydraTestBase {
     @Test
     public void testEdgeRoundTripsAreNoop() {
         Flow<Unit, StatelessAdapter<List<EdgeType<LiteralType>>, EdgeType<LiteralType>, Edge<Literal>, Edge<Literal>>> adapterFlow
-                = Merging.createEdgeAdapter(Arrays.asList(EDGE_TYPE_WORKSAT_A, EDGE_TYPE_FOUNDED, EDGE_TYPE_PARTOF), SIMPLE_ID_CODERS);
+                = Merging.createEdgeAdapter(Arrays.asList(EDGE_TYPE_WORKSAT_A, EDGE_TYPE_FOUNDED, EDGE_TYPE_PARTOF), Merging.STRING_ID_ADAPTERS);
         Flows.map(adapterFlow, adapter -> {
             assertRoundTripIsNoop(adapter.coder, EDGE_WORKSAT_1);
             assertRoundTripIsNoop(adapter.coder, EDGE_FOUNDED_1);
@@ -234,14 +230,14 @@ public class MergingTest extends HydraTestBase {
 
     private static Flow<Unit, Vertex<Literal>> encodeVertex(Vertex<Literal> v) {
         return Flows.bind(
-                Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS),
+                Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), Merging.STRING_ID_ADAPTERS),
                 (Function<StatelessAdapter<List<VertexType<LiteralType>>, VertexType<LiteralType>, Vertex<Literal>, Vertex<Literal>>, Flow<Unit, Vertex<Literal>>>)
                         adapter -> adapter.coder.encode.apply(v));
     }
 
     private static Flow<Unit, Edge<Literal>> encodeEdge(Edge<Literal> e) {
         return Flows.bind(
-                Merging.createEdgeAdapter(Arrays.asList(EDGE_TYPE_WORKSAT_A, EDGE_TYPE_FOUNDED, EDGE_TYPE_PARTOF), SIMPLE_ID_CODERS),
+                Merging.createEdgeAdapter(Arrays.asList(EDGE_TYPE_WORKSAT_A, EDGE_TYPE_FOUNDED, EDGE_TYPE_PARTOF), Merging.STRING_ID_ADAPTERS),
                 (Function<StatelessAdapter<List<EdgeType<LiteralType>>, EdgeType<LiteralType>, Edge<Literal>, Edge<Literal>>, Flow<Unit, Edge<Literal>>>)
                         adapter -> adapter.coder.encode.apply(e));
     }
