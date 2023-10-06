@@ -2,6 +2,7 @@ package hydra.langs.tinkerpop;
 
 import hydra.Flows;
 import hydra.HydraTestBase;
+import hydra.basics.Basics;
 import hydra.compute.Flow;
 import hydra.compute.StatelessAdapter;
 import hydra.core.Literal;
@@ -22,33 +23,33 @@ import java.util.List;
 import java.util.function.Function;
 
 public class MergingTest extends HydraTestBase {
-    private static LiteralType idType = LiteralTypes.string();
+    private static final LiteralType ID_TYPE = LiteralTypes.string();
 
-    private static final VertexType<LiteralType> VERTEX_TYPE_PERSON_A = Graphs.vertexType("Person", idType)
+    private static final VertexType<LiteralType> VERTEX_TYPE_PERSON_A = Graphs.vertexType("Person", ID_TYPE)
             .property("name", LiteralTypes.string(), true)
             .property("nickname", LiteralTypes.string(), false)
             .build();
     private static final VertexType<LiteralType> VERTEX_TYPE_PERSON_B = VERTEX_TYPE_PERSON_A.withId(LiteralTypes.int32());
     private static final VertexType<LiteralType> VERTEX_TYPE_PERSON_C = VERTEX_TYPE_PERSON_A.withProperties(Arrays.asList());
 
-    private static final VertexType<LiteralType> VERTEX_TYPE_ORGANIZATION = Graphs.vertexType("Organization", idType)
+    private static final VertexType<LiteralType> VERTEX_TYPE_ORGANIZATION = Graphs.vertexType("Organization", ID_TYPE)
             .property("name", LiteralTypes.string(), true)
             .property("industry", LiteralTypes.string(), true)
             .property("numberOfEmployees", LiteralTypes.int32(), false)
             .build();
 
-    private static final EdgeType<LiteralType> EDGE_TYPE_WORKSAT_A = Graphs.edgeType("worksAt", idType, "Person", "Organization")
+    private static final EdgeType<LiteralType> EDGE_TYPE_WORKSAT_A = Graphs.edgeType("worksAt", ID_TYPE, "Person", "Organization")
             .property("employeeStatus", LiteralTypes.string(), true)
             .property("effectiveAtUnixSeconds", LiteralTypes.uint32(), false)
             .build();
     private static final EdgeType<LiteralType> EDGE_TYPE_WORKSAT_B = EDGE_TYPE_WORKSAT_A.withId(LiteralTypes.int32());
     private static final EdgeType<LiteralType> EDGE_TYPE_WORKSAT_C = EDGE_TYPE_WORKSAT_A.withProperties(Arrays.asList());
 
-    private static final EdgeType<LiteralType> EDGE_TYPE_FOUNDED = Graphs.edgeType("founded", idType, "Person", "Organization")
+    private static final EdgeType<LiteralType> EDGE_TYPE_FOUNDED = Graphs.edgeType("founded", ID_TYPE, "Person", "Organization")
             .property("ownershipPercentage", LiteralTypes.float32(), false)
             .build();
 
-    private static final EdgeType<LiteralType> EDGE_TYPE_PARTOF = Graphs.edgeType("partOf", idType, "Organization", "Organization")
+    private static final EdgeType<LiteralType> EDGE_TYPE_PARTOF = Graphs.edgeType("partOf", ID_TYPE, "Organization", "Organization")
             .build();
 
     private static final Vertex<Literal> VERTEX_PERSON_1 = Graphs.vertex(VERTEX_TYPE_PERSON_A, Literals.string("arthur"))
@@ -66,7 +67,7 @@ public class MergingTest extends HydraTestBase {
             .property("industry", Literals.string("publishers"))
             .property("numberOfEmployees", Literals.int32(1000042))
             .build();
-    private static final Vertex<Literal> VERTEX_ORGANIZATION_2 = Graphs.vertex(VERTEX_TYPE_ORGANIZATION, Literals.string("infidim"))
+    private static final Vertex<Literal> VERTEX_ORGANIZATION_2 = Graphs.vertex(VERTEX_TYPE_ORGANIZATION, Literals.string("infinidim"))
             .property("name", Literals.string("Infinidim Enterprises"))
             .property("industry", Literals.string("all-powerful conglomerates"))
             .build();
@@ -83,60 +84,62 @@ public class MergingTest extends HydraTestBase {
                     VERTEX_ORGANIZATION_1.id, VERTEX_ORGANIZATION_2.id)
             .build();
 
-    @Test
-    public void testFailOnEmptyListOfInputTypes() {
-        assertFails(Merging.createVertexAdapter(Arrays.asList()));
-        assertFails(Merging.createEdgeAdapter(Arrays.asList()));
-    }
+    private static final Merging.IdCoders<LiteralType, Literal> SIMPLE_ID_CODERS = new Merging.IdCoders<>(
+            LiteralTypes.string(),
+            LiteralTypes.string(),
+            (label, id) -> Literals.string(Basics.decapitalize(label.value) + "_" + ((Literal.String_) id).value),
+            (label, id) -> Literals.string(((Literal.String_) id).value.substring(label.value.length() + 1)),
+            (label, id) -> Literals.string(Basics.decapitalize(label.value) + "_" + ((Literal.String_) id).value),
+            (label, id) -> Literals.string(((Literal.String_) id).value.substring(label.value.length() + 1)));
 
     @Test
-    public void testFailOnMismatchedIdTypes() {
-        assertFails(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_B, VERTEX_TYPE_ORGANIZATION)));
-        assertFails(Merging.createEdgeAdapter(Arrays.asList(EDGE_TYPE_WORKSAT_B, EDGE_TYPE_FOUNDED)));
+    public void testFailOnEmptyListOfInputTypes() {
+        assertFails(Merging.createVertexAdapter(Arrays.asList(), SIMPLE_ID_CODERS));
+        assertFails(Merging.createEdgeAdapter(Arrays.asList(), SIMPLE_ID_CODERS));
     }
 
     @Test
     public void failOnDuplicateLabels() {
-        assertFails(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_PERSON_C)));
-        assertFails(Merging.createEdgeAdapter(Arrays.asList(EDGE_TYPE_WORKSAT_A, EDGE_TYPE_WORKSAT_C)));
+        assertFails(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_PERSON_C), SIMPLE_ID_CODERS));
+        assertFails(Merging.createEdgeAdapter(Arrays.asList(EDGE_TYPE_WORKSAT_A, EDGE_TYPE_WORKSAT_C), SIMPLE_ID_CODERS));
     }
 
     @Test
     public void testVertexTypeIsAsExpected() {
         assertSucceedsWith(2,
-                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION)),
+                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS),
                         adapter -> adapter.source.size()));
         assertSucceedsWith(Merging.DEFAULT_VERTEX_LABEL,
-                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION)),
+                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS),
                         adapter -> adapter.target.label));
         assertSucceedsWith(5,
-                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION)),
+                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS),
                         adapter -> adapter.target.properties.size()));
         assertSucceedsWith(false,
-                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION)),
+                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS),
                         adapter -> adapter.isLossy));
 
         assertSucceedsWith(new PropertyKey("person_name"),
-                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION)),
+                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS),
                         adapter -> adapter.target.properties.get(0).key));
         assertSucceedsWith(new PropertyKey("person_nickname"),
-                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION)),
+                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS),
                         adapter -> adapter.target.properties.get(1).key));
         assertSucceedsWith(new PropertyKey("organization_name"),
-                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION)),
+                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS),
                         adapter -> adapter.target.properties.get(2).key));
 
         assertSucceedsWith(false,
-                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION)),
+                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS),
                         adapter -> adapter.target.properties.get(0).required));
         assertSucceedsWith(LiteralTypes.string(),
-                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION)),
+                Flows.map(Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS),
                         adapter -> adapter.target.properties.get(0).value));
     }
 
     @Test
     public void testVertexEncodingIsAsExpected() {
-        assertSucceedsWith(VERTEX_PERSON_1.id, Flows.map(encodeVertex(VERTEX_PERSON_1),
+        assertSucceedsWith(Literals.string("person_arthur"), Flows.map(encodeVertex(VERTEX_PERSON_1),
                 v -> v.id));
         assertSucceedsWith(VERTEX_PERSON_1.label, Flows.map(encodeVertex(VERTEX_PERSON_1), v -> v.label));
         assertSucceedsWith(true, Flows.map(encodeVertex(VERTEX_PERSON_1),
@@ -153,7 +156,7 @@ public class MergingTest extends HydraTestBase {
         assertSucceedsWith(Literals.string("Ix"), Flows.map(encodeVertex(VERTEX_PERSON_2),
                 v -> v.properties.get(new PropertyKey("person_nickname"))));
 
-        assertSucceedsWith(VERTEX_ORGANIZATION_1.id, Flows.map(encodeVertex(VERTEX_ORGANIZATION_1),
+        assertSucceedsWith(Literals.string("organization_megadodo"), Flows.map(encodeVertex(VERTEX_ORGANIZATION_1),
                 v -> v.id));
         assertSucceedsWith(VERTEX_ORGANIZATION_1.label, Flows.map(encodeVertex(VERTEX_ORGANIZATION_1), v -> v.label));
         assertSucceedsWith(true, Flows.map(encodeVertex(VERTEX_ORGANIZATION_1),
@@ -177,36 +180,36 @@ public class MergingTest extends HydraTestBase {
 
     @Test
     public void testEdgeEncodingIsAsExpected() {
-        assertSucceedsWith(EDGE_WORKSAT_1.id, Flows.map(encodeEdge(EDGE_WORKSAT_1),
+        assertSucceedsWith(Literals.string("worksAt_ford-megadodo"), Flows.map(encodeEdge(EDGE_WORKSAT_1),
                 e -> e.id));
         assertSucceedsWith(EDGE_WORKSAT_1.label, Flows.map(encodeEdge(EDGE_WORKSAT_1),
                 e -> e.label));
-        assertSucceedsWith(VERTEX_PERSON_2.id, Flows.map(encodeEdge(EDGE_WORKSAT_1),
+        assertSucceedsWith(Literals.string("person_ford"), Flows.map(encodeEdge(EDGE_WORKSAT_1),
                 e -> e.out));
-        assertSucceedsWith(VERTEX_ORGANIZATION_1.id, Flows.map(encodeEdge(EDGE_WORKSAT_1),
+        assertSucceedsWith(Literals.string("organization_megadodo"), Flows.map(encodeEdge(EDGE_WORKSAT_1),
                 e -> e.in));
         assertSucceedsWith(true, Flows.map(encodeEdge(EDGE_WORKSAT_1),
                 v -> v.properties.get(new PropertyKey("employeeStatus")) == null));
         assertSucceedsWith(Literals.string("current"), Flows.map(encodeEdge(EDGE_WORKSAT_1),
-                v -> v.properties.get(new PropertyKey("worksat_employeeStatus"))));
+                v -> v.properties.get(new PropertyKey("worksAt_employeeStatus"))));
 
-        assertSucceedsWith(VERTEX_PERSON_3.id, Flows.map(encodeEdge(EDGE_FOUNDED_1),
+        assertSucceedsWith(Literals.string("person_hoopy"), Flows.map(encodeEdge(EDGE_FOUNDED_1),
                 e -> e.out));
-        assertSucceedsWith(VERTEX_ORGANIZATION_1.id, Flows.map(encodeEdge(EDGE_FOUNDED_1),
+        assertSucceedsWith(Literals.string("organization_megadodo"), Flows.map(encodeEdge(EDGE_FOUNDED_1),
                 e -> e.in));
         assertSucceedsWith(Literals.float32(51.0f), Flows.map(encodeEdge(EDGE_FOUNDED_1),
                 v -> v.properties.get(new PropertyKey("founded_ownershipPercentage"))));
 
-        assertSucceedsWith(VERTEX_ORGANIZATION_1.id, Flows.map(encodeEdge(EDGE_PARTOF_1),
+        assertSucceedsWith(Literals.string("organization_megadodo"), Flows.map(encodeEdge(EDGE_PARTOF_1),
                 e -> e.out));
-        assertSucceedsWith(VERTEX_ORGANIZATION_2.id, Flows.map(encodeEdge(EDGE_PARTOF_1),
+        assertSucceedsWith(Literals.string("organization_infinidim"), Flows.map(encodeEdge(EDGE_PARTOF_1),
                 e -> e.in));
     }
 
     @Test
     public void testVertexRoundTripsAreNoop() {
         Flow<Unit, StatelessAdapter<List<VertexType<LiteralType>>, VertexType<LiteralType>, Vertex<Literal>, Vertex<Literal>>> adapterFlow
-                = Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION));
+                = Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS);
         Flows.map(adapterFlow, adapter -> {
             assertRoundTripIsNoop(adapter.coder, VERTEX_PERSON_1);
             assertRoundTripIsNoop(adapter.coder, VERTEX_PERSON_2);
@@ -220,7 +223,7 @@ public class MergingTest extends HydraTestBase {
     @Test
     public void testEdgeRoundTripsAreNoop() {
         Flow<Unit, StatelessAdapter<List<EdgeType<LiteralType>>, EdgeType<LiteralType>, Edge<Literal>, Edge<Literal>>> adapterFlow
-                = Merging.createEdgeAdapter(Arrays.asList(EDGE_TYPE_WORKSAT_A, EDGE_TYPE_FOUNDED, EDGE_TYPE_PARTOF));
+                = Merging.createEdgeAdapter(Arrays.asList(EDGE_TYPE_WORKSAT_A, EDGE_TYPE_FOUNDED, EDGE_TYPE_PARTOF), SIMPLE_ID_CODERS);
         Flows.map(adapterFlow, adapter -> {
             assertRoundTripIsNoop(adapter.coder, EDGE_WORKSAT_1);
             assertRoundTripIsNoop(adapter.coder, EDGE_FOUNDED_1);
@@ -231,14 +234,14 @@ public class MergingTest extends HydraTestBase {
 
     private static Flow<Unit, Vertex<Literal>> encodeVertex(Vertex<Literal> v) {
         return Flows.bind(
-                Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION)),
+                Merging.createVertexAdapter(Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION), SIMPLE_ID_CODERS),
                 (Function<StatelessAdapter<List<VertexType<LiteralType>>, VertexType<LiteralType>, Vertex<Literal>, Vertex<Literal>>, Flow<Unit, Vertex<Literal>>>)
                         adapter -> adapter.coder.encode.apply(v));
     }
 
     private static Flow<Unit, Edge<Literal>> encodeEdge(Edge<Literal> e) {
         return Flows.bind(
-                Merging.createEdgeAdapter(Arrays.asList(EDGE_TYPE_WORKSAT_A, EDGE_TYPE_FOUNDED, EDGE_TYPE_PARTOF)),
+                Merging.createEdgeAdapter(Arrays.asList(EDGE_TYPE_WORKSAT_A, EDGE_TYPE_FOUNDED, EDGE_TYPE_PARTOF), SIMPLE_ID_CODERS),
                 (Function<StatelessAdapter<List<EdgeType<LiteralType>>, EdgeType<LiteralType>, Edge<Literal>, Edge<Literal>>, Flow<Unit, Edge<Literal>>>)
                         adapter -> adapter.coder.encode.apply(e));
     }
