@@ -243,6 +243,15 @@ public interface Flows {
     }
 
     /**
+     * Test an optional value, producing a flow with the value if present, or an error flow if absent
+     */
+    static <S, A> Flow<S, A> require(Optional<A> optValue, String category) {
+        return optValue.isPresent()
+                ? Flows.pure(optValue.get())
+                : Flows.fail("require " + category + " is missing/null");
+    }
+
+    /**
      * Produce an error flow indicating an unexpected value.
      * For example, if you expect a string but find an integer, use unexpected("string", myInt)
      */
