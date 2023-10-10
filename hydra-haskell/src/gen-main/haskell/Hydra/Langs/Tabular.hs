@@ -4,15 +4,14 @@ module Hydra.Langs.Tabular where
 
 import qualified Hydra.Core as Core
 import Data.Int
-import Data.List
-import Data.Map
-import Data.Set
+import Data.List as L
+import Data.Map as M
+import Data.Set as S
 
--- | A data row, containing untyped cells; one per column
-newtype DataRow = 
+-- | A data row, containing optional-valued cells; one per column
+newtype DataRow v = 
   DataRow {
-    -- | A data row, containing untyped cells; one per column
-    unDataRow :: [String]}
+    unDataRow :: [Maybe v]}
   deriving (Eq, Ord, Read, Show)
 
 _DataRow = (Core.Name "hydra/langs/tabular.DataRow")
@@ -27,12 +26,12 @@ newtype HeaderRow =
 _HeaderRow = (Core.Name "hydra/langs/tabular.HeaderRow")
 
 -- | A simple table as in a CSV file, having an optional header row and any number of data rows
-data Table = 
+data Table v = 
   Table {
     -- | The optional header row of the table. If present, the header must have the same number of cells as each data row.
     tableHeader :: (Maybe HeaderRow),
     -- | The data rows of the table. Each row must have the same number of cells.
-    tableData :: [DataRow]}
+    tableData :: [DataRow v]}
   deriving (Eq, Ord, Read, Show)
 
 _Table = (Core.Name "hydra/langs/tabular.Table")

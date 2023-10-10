@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * A simple table as in a CSV file, having an optional header row and any number of data rows
  */
-public class Table implements Serializable {
+public class Table<V> implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tabular.Table");
   
   /**
@@ -16,9 +16,9 @@ public class Table implements Serializable {
   /**
    * The data rows of the table. Each row must have the same number of cells.
    */
-  public final java.util.List<hydra.langs.tabular.DataRow> data;
+  public final java.util.List<hydra.langs.tabular.DataRow<V>> data;
   
-  public Table (java.util.Optional<hydra.langs.tabular.HeaderRow> header, java.util.List<hydra.langs.tabular.DataRow> data) {
+  public Table (java.util.Optional<hydra.langs.tabular.HeaderRow> header, java.util.List<hydra.langs.tabular.DataRow<V>> data) {
     this.header = header;
     this.data = data;
   }
@@ -41,7 +41,7 @@ public class Table implements Serializable {
     return new Table(header, data);
   }
   
-  public Table withData(java.util.List<hydra.langs.tabular.DataRow> data) {
+  public Table withData(java.util.List<hydra.langs.tabular.DataRow<V>> data) {
     return new Table(header, data);
   }
 }

@@ -3,17 +3,14 @@ package hydra.langs.tabular;
 import java.io.Serializable;
 
 /**
- * A data row, containing untyped cells; one per column
+ * A data row, containing optional-valued cells; one per column
  */
-public class DataRow implements Serializable {
+public class DataRow<V> implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tabular.DataRow");
   
-  /**
-   * A data row, containing untyped cells; one per column
-   */
-  public final java.util.List<String> value;
+  public final java.util.List<java.util.Optional<V>> value;
   
-  public DataRow (java.util.List<String> value) {
+  public DataRow (java.util.List<java.util.Optional<V>> value) {
     this.value = value;
   }
   
