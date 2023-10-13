@@ -252,6 +252,21 @@ public interface Flows {
     }
 
     /**
+     * Evaluate each flow from left to right, and produce a flow of the resulting list.
+     * Analogous to the sequence function in Haskell
+     */
+    static <S, A> Flow<S, List<A>> sequence(List<Flow<S, A>> elements) {
+        Flow<S, List<A>> result = Flows.pure(new ArrayList<>(elements.size()));
+        for (Flow<S, A> element : elements) {
+            result = Flows.bind(result, xs -> Flows.map(element, x -> {
+                xs.add(x); // Modify in place
+                return xs;
+            }));
+        }
+        return result;
+    }
+
+    /**
      * Produce an error flow indicating an unexpected value.
      * For example, if you expect a string but find an integer, use unexpected("string", myInt)
      */
