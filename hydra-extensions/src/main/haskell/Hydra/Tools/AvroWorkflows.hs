@@ -19,7 +19,7 @@ import Hydra.Kernel
 import Hydra.Flows
 import Hydra.Dsl.Annotations
 import qualified Hydra.Langs.Avro.Schema as Avro
-import qualified Hydra.Langs.Json.Model as Json
+import qualified Hydra.Json as Json
 import Hydra.Langs.Json.Coder
 import Hydra.Langs.Json.Eliminate
 import Hydra.Langs.Json.Serde
