@@ -1,6 +1,8 @@
 package hydra.langs.json;
 
 import hydra.json.Value;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,11 @@ public abstract class JsonDecoding {
       @Override
       public List<A> visit(Value.Array instance) {
         return instance.value.stream().map(mapping).collect(Collectors.toList());
+      }
+
+      @Override
+      public List<A> visit(Value.Null instance) {
+        return Collections.emptyList();
       }
     });
   }
@@ -56,6 +63,10 @@ public abstract class JsonDecoding {
   public static int decodeInteger(Value json) {
     Number num = decodeNumber(json);
     return num.intValue();
+  }
+
+  public static <A> List<A> decodeListField(String name, Function<Value, A> mapping, Value json) {
+    return decodeOptionalField(name, v -> decodeList(mapping, v), json).orElseGet(Arrays::asList);
   }
 
   public static double decodeNumber(Value json) {
@@ -109,7 +120,7 @@ public abstract class JsonDecoding {
     if (opt.isPresent()) {
       return opt.get();
     } else {
-      throw new RuntimeException("missing required field " + name);
+      throw new RuntimeException("missing required field \"" + name + "\"");
     }
   }
 
@@ -140,31 +151,47 @@ public abstract class JsonDecoding {
   }
 
   public static <A> A decodeEnum(Map<String, A> values, Value json) {
-    Map<String, Value> map = decodeObject(json);
-    if (map.size() != 1) {
-      throw new RuntimeException("expected union, found object with " + map.size() + " fields");
-    }
-    Map.Entry<String, Value> entry = map.entrySet().iterator().next();
-    A value = values.get(entry.getKey());
+    String key = decodeString(json);
+    A value = values.get(key);
     if (value == null) {
-      throw new RuntimeException("expected union, found object with unknown field " + entry.getKey());
+      throw new RuntimeException("no such enum value: " + key);
     } else {
       return value;
     }
   }
 
   public static <A> A decodeUnion(Map<String, Function<Value, A>> mappings, Value json) {
-    Map<String, Value> map = decodeObject(json);
-    if (map.size() != 1) {
-      throw new RuntimeException("expected union, found object with " + map.size() + " fields");
-    }
-    Map.Entry<String, Value> entry = map.entrySet().iterator().next();
-    Function<Value, A> mapping = mappings.get(entry.getKey());
-    if (mapping == null) {
-      throw new RuntimeException("expected union, found object with unknown field " + entry.getKey());
-    } else {
-      return mapping.apply(entry.getValue());
-    }
+    return json.accept(new Value.PartialVisitor<A>() {
+      @Override
+      public A otherwise(Value instance) {
+        throw unexpected("string or object", instance);
+      }
+
+      @Override
+      public A visit(Value.Object_ instance) {
+        Map<String, Value> map = instance.value;
+        if (map.size() != 1) {
+          throw new RuntimeException("expected union, found object with " + map.size() + " fields");
+        }
+        Map.Entry<String, Value> entry = map.entrySet().iterator().next();
+        Function<Value, A> mapping = mappings.get(entry.getKey());
+        if (mapping == null) {
+          throw new RuntimeException("unexpected union value: " + entry.getKey());
+        } else {
+          return mapping.apply(entry.getValue());
+        }
+      }
+
+      @Override
+      public A visit(Value.String_ instance) {
+        Function<Value, A> mapping = mappings.get(instance.value);
+        if (mapping == null) {
+          throw new RuntimeException("unexpected union value: " + instance.value);
+        } else {
+          return mapping.apply(new Value.Null());
+        }
+      }
+    });
   }
 
   public static RuntimeException unexpected(String expected, Value actual) {
