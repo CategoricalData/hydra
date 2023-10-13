@@ -58,6 +58,14 @@ public interface Terms {
         return apply(variable(lhs), rhs);
     }
 
+    static <A> Term<A> app(final String lhs, final String rhs) {
+        return app(lhs, variable(rhs));
+    }
+
+    static <A> Term<A> app(final String lhs, final String rhs1, final String rhs2) {
+        return app(lhs, variable(rhs1), variable(rhs2));
+    }
+
     static <A> Term<A> bigfloat(final double value) {
         return literal(Literals.bigfloat(value));
     }
@@ -119,6 +127,10 @@ public interface Terms {
 
     static <A> Term<A> flowStateTrace() {
         return projection(FlowState.NAME, "trace");
+    }
+
+    static <A> Term<A> fold(final Term<A> fun) {
+        return elimination(new Elimination.List<>(fun));
     }
 
     static <A> Term<A> foldOpt(OptionalCases<A> cases) {

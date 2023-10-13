@@ -25,6 +25,9 @@ fail = Datum $ Terms.primitive _flows_fail
 map :: Datum ((x -> y) -> Flow s x -> Flow s y)
 map = Datum $ Terms.primitive _flows_map
 
+mapList :: Datum ((x -> Flow s y) -> [x] -> Flow s [y])
+mapList = Datum $ Terms.primitive _flows_mapList
+
 pure :: Datum (x -> Flow s x)
 pure = Datum $ Terms.primitive _flows_pure
 

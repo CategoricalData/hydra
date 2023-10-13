@@ -81,6 +81,7 @@ public class Libraries {
                 new hydra.lib.flows.Apply<>(),
                 new hydra.lib.flows.Bind<>(),
                 new hydra.lib.flows.Map<>(),
+                new hydra.lib.flows.MapList<>(),
                 new hydra.lib.flows.Pure<>());
     }
 

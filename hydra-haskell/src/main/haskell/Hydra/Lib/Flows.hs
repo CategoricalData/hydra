@@ -42,5 +42,8 @@ fail = CM.fail
 map :: (x -> y) -> Flow s x -> Flow s y
 map = fmap
 
+mapList :: (x -> Flow s y) -> [x] -> Flow s [y]
+mapList = CM.mapM
+
 pure :: x -> Flow s x
 pure = return
