@@ -33,9 +33,10 @@ requireElement name = do
         ++ ". Available elements: {" ++ L.intercalate ", " (ellipsis (unName . elementName <$> M.elems (graphElements g))) ++ "}"
       where
         showAll = False
-        ellipsis strings = if L.length strings > 3 && not showAll
-          then L.take 3 strings ++ ["..."]
-          else strings
+        ellipsis = id
+--        ellipsis strings = if L.length strings > 3 && not showAll
+--          then L.take 3 strings ++ ["..."]
+--          else strings
 
 requirePrimitive :: Name -> Flow (Graph a) (Primitive a)
 requirePrimitive fn = do

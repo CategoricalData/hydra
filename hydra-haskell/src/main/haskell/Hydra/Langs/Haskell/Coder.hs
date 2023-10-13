@@ -201,7 +201,8 @@ encodeType namespaces typ = withTrace "encode type" $ case stripType typ of
       LiteralTypeFloat ft -> case ft of
         FloatTypeFloat32 -> pure "Float"
         FloatTypeFloat64 -> pure "Double"
-        _ -> fail $ "unexpected floating-point type: " ++ show ft
+        FloatTypeBigfloat -> pure "Double" -- TODO: type adapter should prevent this
+--        _ -> fail $ "unexpected floating-point type: " ++ show ft
       LiteralTypeInteger it -> case it of
         IntegerTypeBigint -> pure "Integer"
         IntegerTypeInt8 -> pure "Int8"
