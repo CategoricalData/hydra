@@ -10,6 +10,7 @@ import Hydra.Sources.Tier4.Langs.Graphql.Syntax
 import Hydra.Sources.Tier4.Langs.Haskell.Ast
 import Hydra.Sources.Tier4.Langs.Java.Language
 import Hydra.Sources.Tier4.Langs.Java.Syntax
+import Hydra.Sources.Tier4.Langs.Json.Decoding
 import Hydra.Sources.Tier4.Langs.Owl.Syntax
 import Hydra.Sources.Tier4.Langs.Parquet.Format
 import Hydra.Sources.Tier4.Langs.Pegasus.Pdl
@@ -49,6 +50,7 @@ tier4LangModules = [
   haskellAstModule,
   javaLanguageModule,
   javaSyntaxModule,
+  jsonDecodingModule,
   owlSyntaxModule,
   parquetFormatModule,
   pegasusPdlModule,

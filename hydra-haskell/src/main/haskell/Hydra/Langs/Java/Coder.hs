@@ -620,7 +620,8 @@ encodeLiteralType lt = case lt of
     LiteralTypeFloat ft -> case ft of
       FloatTypeFloat32 -> simple "Float"
       FloatTypeFloat64 -> simple "Double"
-      _ -> fail $ "unexpected float type: " ++ show ft
+      FloatTypeBigfloat -> simple "Double" -- TODO: type adapter should prevent this
+--      _ -> fail $ "unexpected float type: " ++ show ft
     LiteralTypeInteger it -> case it of
       IntegerTypeBigint -> pure $ javaRefType [] (Just $ javaPackageName ["java", "math"]) "BigInteger"
       IntegerTypeInt16 -> simple "Short"

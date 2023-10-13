@@ -73,7 +73,8 @@ kernelSchema = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElemen
   hydraGraphModule,
   hydraMantleModule,
   hydraModuleModule,
-  hydraTestingModule]
+  hydraTestingModule,
+  jsonModelModule]
 
 modulesToGraph :: [Module Kv] -> Graph Kv
 modulesToGraph mods = elementsToGraph kernelSchema (Just kernelSchema) elements
