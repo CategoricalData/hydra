@@ -77,10 +77,18 @@ public interface Decoding {
   }
   
   static <A, S> java.util.function.Function<String, java.util.function.Function<java.util.Map<String, hydra.json.Value>, hydra.compute.Flow<S, A>>> decodeField(java.util.function.Function<hydra.json.Value, hydra.compute.Flow<S, A>> decodeValue) {
-    return (java.util.function.Function<String, java.util.function.Function<java.util.Map<String, hydra.json.Value>, hydra.compute.Flow<S, A>>>) (name -> (java.util.function.Function<java.util.Map<String, hydra.json.Value>, hydra.compute.Flow<S, A>>) (m -> ((hydra.lib.maps.Lookup.apply(
+    return (java.util.function.Function<String, java.util.function.Function<java.util.Map<String, hydra.json.Value>, hydra.compute.Flow<S, A>>>) (name -> (java.util.function.Function<java.util.Map<String, hydra.json.Value>, hydra.compute.Flow<S, A>>) (m -> hydra.lib.flows.Bind.apply(
+      ((hydra.langs.json.decoding.Decoding.decodeOptionalField((decodeValue))).apply((name))).apply((m)),
+      (java.util.function.Function<java.util.Optional<A>, hydra.compute.Flow<S, A>>) (v1 -> (((v1)).map((java.util.function.Function<A, hydra.compute.Flow<S, A>>) (s0 -> hydra.lib.flows.Pure.apply((s0))))).orElse(hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
+        "missing field: ",
+        (name)))))))));
+  }
+  
+  static <A, S> java.util.function.Function<String, java.util.function.Function<java.util.Map<String, hydra.json.Value>, hydra.compute.Flow<S, java.util.Optional<A>>>> decodeOptionalField(java.util.function.Function<hydra.json.Value, hydra.compute.Flow<S, A>> decodeValue) {
+    return (java.util.function.Function<String, java.util.function.Function<java.util.Map<String, hydra.json.Value>, hydra.compute.Flow<S, java.util.Optional<A>>>>) (name -> (java.util.function.Function<java.util.Map<String, hydra.json.Value>, hydra.compute.Flow<S, java.util.Optional<A>>>) (m -> ((hydra.lib.maps.Lookup.apply(
       (name),
-      (m))).map((decodeValue))).orElse(hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
-      "unexpected field: ",
-      (name)))))));
+      (m))).map((java.util.function.Function<hydra.json.Value, hydra.compute.Flow<S, java.util.Optional<A>>>) (v -> hydra.lib.flows.Map.apply(
+      (java.util.function.Function<A, java.util.Optional<A>>) (x -> java.util.Optional.of((x))),
+      ((decodeValue)).apply((v)))))).orElse(hydra.lib.flows.Pure.apply(java.util.Optional.empty()))));
   }
 }
