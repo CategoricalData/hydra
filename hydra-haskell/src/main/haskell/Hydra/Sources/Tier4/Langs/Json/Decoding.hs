@@ -41,7 +41,8 @@ jsonDecodingModule = Module (Namespace "hydra/langs/json/decoding") elements [js
      Base.el decodeBooleanDef,
      Base.el decodeArrayDef,
      Base.el decodeObjectDef,
-     Base.el decodeFieldDef]
+     Base.el decodeFieldDef,
+     Base.el decodeOptionalFieldDef]
 
 jsonDecodingDefinition :: String -> Datum a -> Definition a
 jsonDecodingDefinition label = definitionInModule jsonDecodingModule ("decode" <> label)
@@ -82,5 +83,13 @@ decodeFieldDef :: Definition ((Json.Value -> Flow s a) -> String -> (M.Map Strin
 decodeFieldDef  = jsonDecodingDefinition "Field" $
   function (functionT valueT (flowT sT aT)) (functionT stringT (functionT (mapT stringT valueT) (flowT sT aT))) $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
-    (matchOpt (Flows.fail @@ ("unexpected field: " ++ var "name")) (var "decodeValue"))
+    Flows.bind
+      @@ (ref decodeOptionalFieldDef @@ var "decodeValue" @@ var "name" @@ var "m")
+      @@ (matchOpt (Flows.fail @@ ("missing field: " ++ var "name")) Flows.pure)
+
+decodeOptionalFieldDef :: Definition ((Json.Value -> Flow s a) -> String -> (M.Map String Json.Value) -> Flow s (Maybe a))
+decodeOptionalFieldDef  = jsonDecodingDefinition "OptionalField" $
+  function (functionT valueT (flowT sT aT)) (functionT stringT (functionT (mapT stringT valueT) (flowT sT (Types.optional aT)))) $
+  lambda "decodeValue" $ lambda "name" $ lambda "m" $
+    (matchOpt (Flows.pure @@ nothing) (lambda "v" (Flows.map @@ (lambda "x" (just $ var "x")) @@ (var "decodeValue" @@ var "v"))))
       @@ (Maps.lookup @@ var "name" @@ var "m")
