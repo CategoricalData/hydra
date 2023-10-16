@@ -65,7 +65,9 @@ public abstract class JsonDecoding {
     }
 
     public static <A> List<A> decodeListField(String name, Function<Value, A> mapping, Value json) {
-        return decodeRequiredField(name, v -> decodeList(mapping, v), json, Collections.emptyList());
+        // Note: this allows the field to be omitted, and also allows a null value, both resulting in an empty list
+        Optional<List<A>> opt = decodeOptionalField(name, v -> decodeList(mapping, v), json, Collections.emptyList());
+        return opt.orElse(Collections.emptyList());
     }
 
     public static double decodeNumber(Value json) {
