@@ -107,7 +107,17 @@ public abstract class JsonDecoding {
     if (fieldValue == null) {
       return Optional.empty();
     } else {
-      return Optional.of(mapping.apply(fieldValue));
+      return fieldValue.accept(new Value.PartialVisitor<Optional<A>>() {
+        @Override
+        public Optional<A> otherwise(Value instance) {
+          return Optional.of(mapping.apply(fieldValue));
+        }
+
+        @Override
+        public Optional<A> visit(Value.Null instance) {
+          return Optional.empty();
+        }
+      });
     }
   }
 
