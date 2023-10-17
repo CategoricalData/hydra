@@ -6,6 +6,7 @@ module Hydra.Sources.Tier4.All(
 
 import Hydra.Sources.Tier3.All
 import Hydra.Sources.Tier4.Langs.Avro.Schema
+import Hydra.Sources.Tier4.Langs.Cypher.OpenCypher
 import Hydra.Sources.Tier4.Langs.Graphql.Syntax
 import Hydra.Sources.Tier4.Langs.Haskell.Ast
 import Hydra.Sources.Tier4.Langs.Java.Language
@@ -51,6 +52,7 @@ tier4LangModules = [
   javaLanguageModule,
   javaSyntaxModule,
   jsonDecodingModule,
+  openCypherModule,
   owlSyntaxModule,
   parquetFormatModule,
   pegasusPdlModule,
