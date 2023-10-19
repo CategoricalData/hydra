@@ -15,7 +15,7 @@ import           Hydra.Sources.Core
 
 
 jsonModelModule :: Module Kv
-jsonModelModule = Module ns elements [] [] $
+jsonModelModule = Module ns elements [] [hydraCoreModule] $
     Just "A JSON syntax model. See the BNF at https://www.json.org"
   where
     ns = Namespace "hydra/json"

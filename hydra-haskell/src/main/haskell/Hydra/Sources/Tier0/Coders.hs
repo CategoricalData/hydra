@@ -19,7 +19,7 @@ import Hydra.Sources.Tier0.Mantle
 
 
 hydraCodersModule :: Module Kv
-hydraCodersModule = Module ns elements [hydraCoreModule, hydraMantleModule, hydraComputeModule, hydraGraphModule] [] $
+hydraCodersModule = Module ns elements [hydraMantleModule, hydraGraphModule] [hydraCoreModule] $
     Just "Abstractions for paired transformations between languages"
   where
     ns = Namespace "hydra/coders"
