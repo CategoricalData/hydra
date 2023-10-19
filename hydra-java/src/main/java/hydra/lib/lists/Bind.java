@@ -24,8 +24,8 @@ public class Bind<A> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return lambda("x", lambda("y",
-            function(list("x"), function("x", list("y")), list("y"))));
+        return lambda("a", lambda("b",
+            function(list("a"), function("a", list("b")), list("b"))));
     }
 
     @Override

@@ -10,47 +10,50 @@ import qualified Hydra.Dsl.Terms as Terms
 import qualified Data.List as L
 
 
-apply :: [x -> y] -> [x] -> [y]
+apply :: [a -> b] -> [a] -> [b]
 apply = (<*>)
 
-bind :: [x] -> (x -> [y]) -> [y]
+bind :: [a] -> (a -> [b]) -> [b]
 bind = (>>=)
 
-concat :: [[x]] -> [x]
+concat :: [[a]] -> [a]
 concat = L.concat
 
-concat2 :: [x] -> [x] -> [x]
+concat2 :: [a] -> [a] -> [a]
 concat2 l1 l2 = l1 ++ l2
 
-cons :: x -> [x] -> [x]
+cons :: a -> [a] -> [a]
 cons = (:)
 
-head :: [x] -> x
+head :: [a] -> a
 head = L.head
 
-intercalate :: [x] -> [[x]] -> [x]
+intercalate :: [a] -> [[a]] -> [a]
 intercalate = L.intercalate
 
-intersperse :: x -> [x] -> [x]
+intersperse :: a -> [a] -> [a]
 intersperse = L.intersperse
 
-last :: [x] -> x
+last :: [a] -> a
 last = L.last
 
-length :: [x] -> Int
+length :: [a] -> Int
 length = L.length
 
-map :: (x -> y) -> [x] -> [y]
+map :: (a -> b) -> [a] -> [b]
 map = fmap
 
-nub :: Eq x => [x] -> [x]
+nub :: Eq a => [a] -> [a]
 nub = L.nub
 
-pure :: x -> [x]
+null :: [a] -> Bool
+null = L.null
+
+pure :: a -> [a]
 pure e = [e]
 
-reverse :: [x] -> [x]
+reverse :: [a] -> [a]
 reverse = L.reverse
 
-tail :: [x] -> [x]
+tail :: [a] -> [a]
 tail = L.tail

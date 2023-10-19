@@ -25,7 +25,7 @@ public class Concat<A> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return lambda("x", function(list(list("x")), list("x")));
+        return lambda("a", function(list(list("a")), list("a")));
     }
 
     @Override

@@ -26,7 +26,7 @@ public class IsJust<A> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return lambda("x", function(optional("x"), "x"));
+        return lambda("a", function(optional("a"), "a"));
     }
 
     @Override

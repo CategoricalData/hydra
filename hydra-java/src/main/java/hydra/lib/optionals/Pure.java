@@ -22,7 +22,7 @@ public class Pure<A> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return lambda("x", function("x", optional("x")));
+        return lambda("a", function("a", optional("a")));
     }
 
     @Override
