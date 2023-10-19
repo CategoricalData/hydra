@@ -36,7 +36,7 @@ tier1Definition = definitionInModule hydraTier1Module
 
 hydraTier1Module :: Module Kv
 hydraTier1Module = Module (Namespace "hydra/tier1") elements
-    [hydraGraphModule, hydraMantleModule, hydraComputeModule, hydraStripModule, hydraConstantsModule, hydraStripModule] $
+    [hydraConstantsModule, hydraStripModule] [hydraMantleModule, hydraModuleModule, hydraCodersModule] $
     Just ("A module for miscellaneous tier-1 functions and constants.")
   where
    elements = [

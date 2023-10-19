@@ -35,12 +35,9 @@ import qualified System.Directory as SD
 import qualified Data.Maybe as Y
 
 
-findType :: Graph a -> Term a -> Flow (Graph a) (Maybe (Type a))
-findType cx term = annotationClassTermType (graphAnnotations cx) term
-
 generateSources :: (Module Kv -> Flow (Graph Kv) (M.Map FilePath String)) -> FilePath -> [Module Kv] -> IO ()
 generateSources printModule basePath mods = do
-    mfiles <- runFlow kernelSchema generateFiles
+    mfiles <- runFlow bootstrapGraph generateFiles
     case mfiles of
       Nothing -> fail "Transformation failed"
       Just files -> mapM_ writePair files
@@ -63,26 +60,14 @@ generateSources printModule basePath mods = do
 
     forModule mod = withTrace ("module " ++ unNamespace (moduleNamespace mod)) $ printModule mod
 
--- Note: currently a subset of the kernel which is used as a schema graph.
---       The other modules are not yet needed in the runtime environment
-kernelSchema :: Graph Kv
-kernelSchema = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElements [
-  hydraCodersModule,
-  hydraComputeModule,
-  hydraCoreModule,
-  hydraGraphModule,
-  hydraMantleModule,
-  hydraModuleModule,
-  hydraTestingModule,
-  jsonModelModule]
-
 modulesToGraph :: [Module Kv] -> Graph Kv
-modulesToGraph mods = elementsToGraph kernelSchema (Just kernelSchema) elements
+modulesToGraph mods = elementsToGraph parent (Just schemaGraph) dataElements
   where
-    elements = L.concat (moduleElements <$> modules)
-    modules = L.concat (close <$> mods)
-      where
-        close mod = mod:(L.concat (close <$> moduleDependencies mod))
+    parent = bootstrapGraph
+    dataElements = L.concat (moduleElements <$> (L.concat (close <$> mods)))
+    schemaElements = L.concat (moduleElements <$> (L.concat (close <$> (L.nub $ L.concat (moduleTypeDependencies <$> mods)))))
+    schemaGraph = elementsToGraph bootstrapGraph Nothing schemaElements
+    close mod = mod:(L.concat (close <$> moduleTermDependencies mod))
 
 printTrace :: Bool -> Trace -> IO ()
 printTrace isError t = do
@@ -92,9 +77,10 @@ printTrace isError t = do
 
 runFlow :: s -> Flow s a -> IO (Maybe a)
 runFlow cx f = do
-  let FlowState v _ t = unFlow f cx emptyTrace
-  printTrace (Y.isNothing v) t
-  return v
+    printTrace (Y.isNothing v) t
+    return v
+  where
+    FlowState v _ t = unFlow f cx emptyTrace
 
 writeGraphql :: FP.FilePath -> [Module Kv] -> IO ()
 writeGraphql = generateSources moduleToGraphql

@@ -39,7 +39,7 @@ constructModule :: (Ord a, Read a, Show a)
   -> M.Map (Type a) (Coder (Graph a) (Graph a) (Term a) ())
   -> [(Element a, TypedTerm a)]
   -> Flow (Graph a) (M.Map FilePath P3.ProtoFile)
-constructModule mod@(Module ns els _ desc) _ pairs = do
+constructModule mod@(Module ns els _ _ desc) _ pairs = do
     schemaImports <- (fmap namespaceToFileReference . S.toList) <$> moduleDependencyNamespaces True False False False mod
     types <- CM.mapM toType pairs
     definitions <- CM.mapM toDef types

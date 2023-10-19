@@ -21,7 +21,8 @@ javaLanguageDefinition :: String -> Datum a -> Definition a
 javaLanguageDefinition = definitionInModule javaLanguageModule
 
 javaLanguageModule :: Module Kv
-javaLanguageModule = Module ns elements [hydraCodersModule, hydraBasicsModule] Nothing
+javaLanguageModule = Module ns elements [hydraCodersModule, hydraBasicsModule] [] $
+    Just "Language constraints for Java"
   where
     ns = Namespace "hydra/langs/java/language"
     elements = [

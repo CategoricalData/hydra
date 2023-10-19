@@ -8,9 +8,10 @@
 module Com.Azure.Dtld where
 
 import qualified Hydra.Core as Core
-import Data.List
-import Data.Map
-import Data.Set
+import Data.Int
+import Data.List as L
+import Data.Map as M
+import Data.Set as S
 
 -- | A Command describes a function or operation that can be performed on any digital twin.
 data Command = 

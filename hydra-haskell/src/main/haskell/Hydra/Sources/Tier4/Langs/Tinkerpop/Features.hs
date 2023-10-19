@@ -9,7 +9,7 @@ import Hydra.Dsl.Types as Types
 
 
 tinkerpopFeaturesModule :: Module Kv
-tinkerpopFeaturesModule = Module ns elements [hydraCoreModule] $
+tinkerpopFeaturesModule = Module ns elements [hydraCoreModule] [] $
     Just ("A model derived from TinkerPop's Graph.Features. See\n" ++
       "  https://tinkerpop.apache.org/javadocs/current/core/org/apache/tinkerpop/gremlin/structure/Graph.Features.html\n" ++
       "\n" ++

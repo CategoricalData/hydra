@@ -3,9 +3,10 @@
 module Dev.Osv.Schema where
 
 import qualified Hydra.Core as Core
-import Data.List
-import Data.Map
-import Data.Set
+import Data.Int
+import Data.List as L
+import Data.Map as M
+import Data.Set as S
 
 data Credited = 
   Credited {

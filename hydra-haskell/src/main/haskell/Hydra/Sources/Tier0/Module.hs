@@ -17,7 +17,7 @@ import Hydra.Sources.Tier0.Graph
 
 
 hydraModuleModule :: Module Kv
-hydraModuleModule = Module ns elements [hydraGraphModule] $
+hydraModuleModule = Module ns elements [hydraGraphModule] [hydraCoreModule] $
     Just "A model for Hydra namespaces and modules (collections of elements in the same namespace)"
   where
     ns = Namespace "hydra/module"
@@ -38,8 +38,11 @@ hydraModuleModule = Module ns elements [hydraGraphModule] $
           "elements">:
             doc "The elements defined in this module" $
             list $ graph "Element" @@ "a",
-          "dependencies">:
-            doc "Any additional modules this one has a direct dependency upon" $
+          "termDependencies">:
+            doc "Any modules which the term expressions of this module directly depend upon" $
+            list $ mod "Module" @@ "a",
+          "typeDependencies">:
+            doc "Any modules which the type expressions of this module directly depend upon" $
             list $ mod "Module" @@ "a",
           "description">:
             doc "An optional human-readable description of the module" $
