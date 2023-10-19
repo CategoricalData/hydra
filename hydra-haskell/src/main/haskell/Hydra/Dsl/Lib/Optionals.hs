@@ -5,20 +5,23 @@ import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
 
 
-apply :: Datum (Maybe (x -> y) -> Maybe x -> Maybe y)
+apply :: Datum (Maybe (a -> b) -> Maybe a -> Maybe b)
 apply = Datum $ Terms.primitive _optionals_apply
 
-bind :: Datum (Maybe x -> (x -> Maybe y) -> Maybe y)
+bind :: Datum (Maybe a -> (a -> Maybe b) -> Maybe b)
 bind = Datum $ Terms.primitive _optionals_bind
 
-isJust :: Datum (Maybe  x-> Bool)
+cat :: Datum ([Maybe a] -> [a])
+cat = Datum $ Terms.primitive _optionals_cat
+
+isJust :: Datum (Maybe a -> Bool)
 isJust = Datum $ Terms.primitive _optionals_isJust
 
-isNothing :: Datum (Maybe x -> Bool)
+isNothing :: Datum (Maybe a -> Bool)
 isNothing = Datum $ Terms.primitive _optionals_isNothing
 
-map :: Datum ((x -> y) -> Maybe x -> Maybe y)
+map :: Datum ((a -> b) -> Maybe a -> Maybe b)
 map = Datum $ Terms.primitive _optionals_map
 
-pure :: Datum (x -> Maybe x)
+pure :: Datum (a -> Maybe a)
 pure = Datum $ Terms.primitive _optionals_pure

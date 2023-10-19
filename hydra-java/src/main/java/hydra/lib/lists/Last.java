@@ -22,7 +22,7 @@ public class Last<A> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return lambda("x", function(list("x"), "x"));
+        return lambda("a", function(list("a"), "a"));
     }
 
     @Override

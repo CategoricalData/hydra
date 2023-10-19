@@ -25,8 +25,8 @@ public class Apply<A> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return lambda("x", lambda("y",
-            function(optional(function("x", "y")), optional("x"), optional("y"))));
+        return lambda("a", lambda("b",
+            function(optional(function("a", "b")), optional("a"), optional("b"))));
     }
 
     @Override

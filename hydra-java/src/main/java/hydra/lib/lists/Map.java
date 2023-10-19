@@ -23,7 +23,7 @@ public class Map<A> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return lambda("x", lambda("y", function(function("x", "y"), list("x"), list("y"))));
+        return lambda("a", lambda("b", function(function("a", "b"), list("a"), list("b"))));
     }
 
     @Override

@@ -22,7 +22,7 @@ public class Bind<A> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return lambda("x", lambda("y", function(optional("x"), function("x", optional("y")), optional("y"))));
+        return lambda("a", lambda("b", function(optional("a"), function("a", optional("b")), optional("b"))));
     }
 
     @Override

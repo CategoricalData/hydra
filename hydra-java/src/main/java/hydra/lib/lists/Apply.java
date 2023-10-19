@@ -25,7 +25,7 @@ public class Apply<A> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return lambda("x", lambda("y", function(list(function("x", "y")), list("x"), list("y"))));
+        return lambda("a", lambda("b", function(list(function("a", "b")), list("a"), list("b"))));
     }
 
     // Note: this implementation does not use apply(), as actually applying the mapping function would require beta reduction,

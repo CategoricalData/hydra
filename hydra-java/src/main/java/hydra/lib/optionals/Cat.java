@@ -1,4 +1,4 @@
-package hydra.lib.lists;
+package hydra.lib.optionals;
 
 import hydra.Flows;
 import hydra.compute.Flow;
@@ -11,38 +11,36 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.list;
+import static hydra.dsl.Types.optional;
 
-public class Nub<A> extends PrimitiveFunction<A> {
+
+public class Cat<A> extends PrimitiveFunction<A> {
     public Name name() {
-        return new Name("hydra/lib/lists.nub");
+        return new Name("hydra/lib/optionals.cat");
     }
 
     @Override
     public Type<A> type() {
-        return lambda("a", function(list("a"), list("a")));
+        return lambda("a", function(list(optional("a")), list("a")));
     }
 
     @Override
     protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
-      return args -> Flows.map(Expect.list(Flows::pure, args.get(0)), l -> Terms.list(apply(l)));
+        return args -> Flows.map(Expect.list(x -> Expect.optional(Flows::pure, x), args.get(0)),
+                (Function<List<Optional<Term<A>>>, Term<A>>) optionals -> Terms.list(apply(optionals)));
     }
 
-    public static <X> List<X> apply(List<X> arg) {
-        Set<X> visited = new HashSet<>();
-        List<X> result = new ArrayList<>(arg.size());
-        for (X x : arg) {
-            if (!visited.contains(x)) {
-                visited.add(x);
-                result.add(x);
-            }
+    public static <X> List<X> apply(List<Optional<X>> opt) {
+        List<X> result = new ArrayList<>();
+        for (Optional<X> x : opt) {
+            x.ifPresent(result::add);
         }
         return result;
     }

@@ -5,20 +5,23 @@ module Hydra.Lib.Optionals where
 import qualified Data.Maybe as Y
 
 
-apply :: Y.Maybe (x -> y) -> Y.Maybe x -> Y.Maybe y
+apply :: Y.Maybe (a -> b) -> Y.Maybe a -> Y.Maybe b
 apply = (<*>)
 
-bind :: Y.Maybe x -> (x -> Y.Maybe y) -> Y.Maybe y
+bind :: Y.Maybe a -> (a -> Y.Maybe b) -> Y.Maybe b
 bind = (>>=)
 
-isJust :: Y.Maybe x -> Bool
+cat :: [Y.Maybe a] -> [a]
+cat = Y.catMaybes
+
+isJust :: Y.Maybe a -> Bool
 isJust = Y.isJust
 
-isNothing :: Y.Maybe x -> Bool
+isNothing :: Y.Maybe a -> Bool
 isNothing = Y.isNothing
 
-map :: (x -> y) -> Y.Maybe x -> Y.Maybe y
+map :: (a -> b) -> Y.Maybe a -> Y.Maybe b
 map = fmap
 
-pure :: x -> Y.Maybe x
+pure :: a -> Y.Maybe a
 pure = Just

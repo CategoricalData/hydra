@@ -80,6 +80,7 @@ _lists_last = qname _hydra_lib_lists "last" :: Name
 _lists_length = qname _hydra_lib_lists "length" :: Name
 _lists_map = qname _hydra_lib_lists "map" :: Name
 _lists_nub = qname _hydra_lib_lists "nub" :: Name
+_lists_null = qname _hydra_lib_lists "null" :: Name
 _lists_pure = qname _hydra_lib_lists "pure" :: Name
 _lists_reverse = qname _hydra_lib_lists "reverse" :: Name
 _lists_tail = qname _hydra_lib_lists "tail" :: Name
@@ -152,6 +153,7 @@ _hydra_lib_optionals = Namespace "hydra/lib/optionals"
 _optionals_apply :: Name
 _optionals_apply = qname _hydra_lib_optionals "apply" :: Name
 _optionals_bind = qname _hydra_lib_optionals "bind" :: Name
+_optionals_cat = qname _hydra_lib_optionals "cat" :: Name
 _optionals_isJust = qname _hydra_lib_optionals "isJust" :: Name
 _optionals_isNothing = qname _hydra_lib_optionals "isNothing" :: Name
 _optionals_map = qname _hydra_lib_optionals "map" :: Name
@@ -265,6 +267,7 @@ hydraLibListsPrimitives = [
     prim1 _lists_length (list x) int32 Lists.length,
     prim2Interp _lists_map (function x y) (list x) (list y) mapInterp,
     prim1 _lists_nub (list x) (list x) Lists.nub,
+    prim1 _lists_null (list x) boolean Lists.null,
     prim1 _lists_pure x (list x) Lists.pure,
     prim1 _lists_reverse (list x) (list x) Lists.reverse,
     prim1 _lists_tail (list x) (list x) Lists.tail]
@@ -345,6 +348,7 @@ hydraLibOptionalsPrimitives :: (Ord a, Show a) => [Primitive a]
 hydraLibOptionalsPrimitives = [
     prim2 _optionals_apply (optional $ function x y) (optional x) (optional y) Optionals.apply,
     prim2 _optionals_bind (optional x) (function x (optional y)) (optional y) Optionals.bind,
+    prim1 _optionals_cat (list $ optional x) (list x) Optionals.cat,
     prim1 _optionals_isJust (optional x) boolean Optionals.isJust,
     prim1 _optionals_isNothing (optional x) boolean Optionals.isNothing,
     prim2 _optionals_map (function x y) (optional x) (optional y) Optionals.map,

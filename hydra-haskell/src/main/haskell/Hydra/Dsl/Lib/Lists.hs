@@ -35,6 +35,9 @@ map = Datum $ Terms.primitive _lists_map
 nub :: Eq a => Datum ([a] -> [a])
 nub = Datum $ Terms.primitive _lists_nub
 
+null :: Datum ([a] -> Bool)
+null = Datum $ Terms.primitive _lists_null
+
 pure :: Datum (a -> [a])
 pure = Datum $ Terms.primitive _lists_pure
 
