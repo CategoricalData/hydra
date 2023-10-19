@@ -9,82 +9,6 @@ import Data.List as L
 import Data.Map as M
 import Data.Set as S
 
-data TypeError t v = 
-  TypeError {
-    -- | An expected type
-    typeErrorExpectedType :: t,
-    -- | The actual value, which does not conform to the expected type
-    typeErrorActualValue :: v}
-  deriving (Eq, Ord, Read, Show)
-
-_TypeError = (Core.Name "hydra/langs/tinkerpop/errors.TypeError")
-
-_TypeError_expectedType = (Core.FieldName "expectedType")
-
-_TypeError_actualValue = (Core.FieldName "actualValue")
-
-data ElementValidationError t v = 
-  -- | A vertex validation error
-  ElementValidationErrorVertex (VertexValidationError t v) |
-  -- | An edge validation error
-  ElementValidationErrorEdge (EdgeValidationError t v)
-  deriving (Eq, Ord, Read, Show)
-
-_ElementValidationError = (Core.Name "hydra/langs/tinkerpop/errors.ElementValidationError")
-
-_ElementValidationError_vertex = (Core.FieldName "vertex")
-
-_ElementValidationError_edge = (Core.FieldName "edge")
-
-data VertexValidationError t v = 
-  VertexValidationError {
-    -- | The id of the vertex which failed validation
-    vertexValidationErrorId :: v,
-    -- | A specific validation error for the vertex
-    vertexValidationErrorError :: (BadVertex t v)}
-  deriving (Eq, Ord, Read, Show)
-
-_VertexValidationError = (Core.Name "hydra/langs/tinkerpop/errors.VertexValidationError")
-
-_VertexValidationError_id = (Core.FieldName "id")
-
-_VertexValidationError_error = (Core.FieldName "error")
-
-data EdgeValidationError t v = 
-  EdgeValidationError {
-    -- | The id of the edge which failed validation
-    edgeValidationErrorId :: v,
-    -- | A specific validation error for the edge
-    edgeValidationErrorError :: (BadEdge t v)}
-  deriving (Eq, Ord, Read, Show)
-
-_EdgeValidationError = (Core.Name "hydra/langs/tinkerpop/errors.EdgeValidationError")
-
-_EdgeValidationError_id = (Core.FieldName "id")
-
-_EdgeValidationError_error = (Core.FieldName "error")
-
-data BadVertex t v = 
-  -- | A vertex label mismatch
-  BadVertexLabel VertexLabelMismatch |
-  -- | The label of the vertex does not have an associated vertex type
-  BadVertexLabelUnexpected PropertyGraph.VertexLabel |
-  -- | A vertex id type error
-  BadVertexId (TypeError t v) |
-  -- | A vertex property error
-  BadVertexProperty (BadProperty t v)
-  deriving (Eq, Ord, Read, Show)
-
-_BadVertex = (Core.Name "hydra/langs/tinkerpop/errors.BadVertex")
-
-_BadVertex_label = (Core.FieldName "label")
-
-_BadVertex_labelUnexpected = (Core.FieldName "labelUnexpected")
-
-_BadVertex_id = (Core.FieldName "id")
-
-_BadVertex_property = (Core.FieldName "property")
-
 data BadEdge t v = 
   -- | An edge label mismatch
   BadEdgeLabel EdgeLabelMismatch |
@@ -139,19 +63,26 @@ _BadProperty_missingKey = (Core.FieldName "missingKey")
 
 _BadProperty_value = (Core.FieldName "value")
 
-data VertexLabelMismatch = 
-  VertexLabelMismatch {
-    -- | The expected vertex label, based on the vertex type
-    vertexLabelMismatchExpected :: PropertyGraph.VertexLabel,
-    -- | The actual vertex label
-    vertexLabelMismatchActual :: PropertyGraph.VertexLabel}
+data BadVertex t v = 
+  -- | A vertex label mismatch
+  BadVertexLabel VertexLabelMismatch |
+  -- | The label of the vertex does not have an associated vertex type
+  BadVertexLabelUnexpected PropertyGraph.VertexLabel |
+  -- | A vertex id type error
+  BadVertexId (TypeError t v) |
+  -- | A vertex property error
+  BadVertexProperty (BadProperty t v)
   deriving (Eq, Ord, Read, Show)
 
-_VertexLabelMismatch = (Core.Name "hydra/langs/tinkerpop/errors.VertexLabelMismatch")
+_BadVertex = (Core.Name "hydra/langs/tinkerpop/errors.BadVertex")
 
-_VertexLabelMismatch_expected = (Core.FieldName "expected")
+_BadVertex_label = (Core.FieldName "label")
 
-_VertexLabelMismatch_actual = (Core.FieldName "actual")
+_BadVertex_labelUnexpected = (Core.FieldName "labelUnexpected")
+
+_BadVertex_id = (Core.FieldName "id")
+
+_BadVertex_property = (Core.FieldName "property")
 
 data EdgeLabelMismatch = 
   EdgeLabelMismatch {
@@ -166,3 +97,72 @@ _EdgeLabelMismatch = (Core.Name "hydra/langs/tinkerpop/errors.EdgeLabelMismatch"
 _EdgeLabelMismatch_expected = (Core.FieldName "expected")
 
 _EdgeLabelMismatch_actual = (Core.FieldName "actual")
+
+data EdgeValidationError t v = 
+  EdgeValidationError {
+    -- | The id of the edge which failed validation
+    edgeValidationErrorId :: v,
+    -- | A specific validation error for the edge
+    edgeValidationErrorError :: (BadEdge t v)}
+  deriving (Eq, Ord, Read, Show)
+
+_EdgeValidationError = (Core.Name "hydra/langs/tinkerpop/errors.EdgeValidationError")
+
+_EdgeValidationError_id = (Core.FieldName "id")
+
+_EdgeValidationError_error = (Core.FieldName "error")
+
+data ElementValidationError t v = 
+  -- | A vertex validation error
+  ElementValidationErrorVertex (VertexValidationError t v) |
+  -- | An edge validation error
+  ElementValidationErrorEdge (EdgeValidationError t v)
+  deriving (Eq, Ord, Read, Show)
+
+_ElementValidationError = (Core.Name "hydra/langs/tinkerpop/errors.ElementValidationError")
+
+_ElementValidationError_vertex = (Core.FieldName "vertex")
+
+_ElementValidationError_edge = (Core.FieldName "edge")
+
+data TypeError t v = 
+  TypeError {
+    -- | An expected type
+    typeErrorExpectedType :: t,
+    -- | The actual value, which does not conform to the expected type
+    typeErrorActualValue :: v}
+  deriving (Eq, Ord, Read, Show)
+
+_TypeError = (Core.Name "hydra/langs/tinkerpop/errors.TypeError")
+
+_TypeError_expectedType = (Core.FieldName "expectedType")
+
+_TypeError_actualValue = (Core.FieldName "actualValue")
+
+data VertexLabelMismatch = 
+  VertexLabelMismatch {
+    -- | The expected vertex label, based on the vertex type
+    vertexLabelMismatchExpected :: PropertyGraph.VertexLabel,
+    -- | The actual vertex label
+    vertexLabelMismatchActual :: PropertyGraph.VertexLabel}
+  deriving (Eq, Ord, Read, Show)
+
+_VertexLabelMismatch = (Core.Name "hydra/langs/tinkerpop/errors.VertexLabelMismatch")
+
+_VertexLabelMismatch_expected = (Core.FieldName "expected")
+
+_VertexLabelMismatch_actual = (Core.FieldName "actual")
+
+data VertexValidationError t v = 
+  VertexValidationError {
+    -- | The id of the vertex which failed validation
+    vertexValidationErrorId :: v,
+    -- | A specific validation error for the vertex
+    vertexValidationErrorError :: (BadVertex t v)}
+  deriving (Eq, Ord, Read, Show)
+
+_VertexValidationError = (Core.Name "hydra/langs/tinkerpop/errors.VertexValidationError")
+
+_VertexValidationError_id = (Core.FieldName "id")
+
+_VertexValidationError_error = (Core.FieldName "error")
