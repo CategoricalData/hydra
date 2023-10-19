@@ -11,7 +11,7 @@ import Hydra.Sources.Libraries
 
 
 coreEncodingModule :: Module Kv
-coreEncodingModule = Module (Namespace "hydra/coreEncoding") elements [] $
+coreEncodingModule = Module (Namespace "hydra/coreEncoding") elements [] [] $
     Just ("Mapping of hydra/core constructs in a host language like Haskell or Java "
       ++ " to their native Hydra counterparts as terms. "
       ++ " This includes an implementation of LambdaGraph's epsilon encoding (types to terms).")

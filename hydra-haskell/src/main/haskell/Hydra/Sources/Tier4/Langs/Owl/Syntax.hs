@@ -22,7 +22,7 @@ owlIri :: [Char] -> Type Kv -> Type Kv
 owlIri local = withIri $ "http://www.w3.org/2002/07/owl#" ++ local
 
 owlSyntaxModule :: Module Kv
-owlSyntaxModule = Module ns elements [rdfSyntaxModule, xmlSchemaModule] $
+owlSyntaxModule = Module ns elements [rdfSyntaxModule, xmlSchemaModule] [] $
     Just "An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax"
   where
     ns = Namespace "hydra/langs/owl/syntax"

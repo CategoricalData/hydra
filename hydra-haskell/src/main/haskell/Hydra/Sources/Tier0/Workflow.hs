@@ -19,7 +19,7 @@ import Hydra.Sources.Tier0.Module
 
 
 hydraWorkflowModule :: Module Kv
-hydraWorkflowModule = Module ns elements [hydraModuleModule, hydraComputeModule, hydraGraphModule] $
+hydraWorkflowModule = Module ns elements [hydraModuleModule, hydraComputeModule, hydraGraphModule] [] $
     Just "A model for Hydra transformation workflows"
   where
     ns = Namespace "hydra/workflow"

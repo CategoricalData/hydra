@@ -7,7 +7,7 @@ import Hydra.Dsl.Bootstrap
 
 
 javaSyntaxModule :: Module Kv
-javaSyntaxModule = Module ns elements [] $
+javaSyntaxModule = Module ns elements [] [] $
     Just ("A Java syntax module. Based on the Oracle Java SE 12 BNF:\n" ++
       "  https://docs.oracle.com/javase/specs/jls/se12/html/jls-19.html\n" ++
       "Note: all *WithComments types were added manually, rather than derived from the BNF, which does not allow for comments.")

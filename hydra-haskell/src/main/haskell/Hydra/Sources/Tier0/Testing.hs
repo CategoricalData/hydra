@@ -15,7 +15,7 @@ import           Hydra.Sources.Core
 
 
 hydraTestingModule :: Module Kv
-hydraTestingModule = Module ns elements [hydraCoreModule] $
+hydraTestingModule = Module ns elements [hydraCoreModule] [] $
     Just "A model for unit testing"
   where
     ns = Namespace "hydra/testing"

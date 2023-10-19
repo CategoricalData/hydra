@@ -8,7 +8,7 @@ import Hydra.Dsl.Annotations
 
 -- Note: database_specific and ecosystem_specific fields are ignored, though they must be tolerated when reading entry JSON
 osvSchemaModule :: Module Kv
-osvSchemaModule = Module ns elements [] $
+osvSchemaModule = Module ns elements [] [] $
     Just "See https://ossf.github.io/osv-schema"
   where
     ns = Namespace "dev/osv/schema"

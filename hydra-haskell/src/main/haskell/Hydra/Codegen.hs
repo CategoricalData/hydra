@@ -82,7 +82,7 @@ modulesToGraph mods = elementsToGraph kernelSchema (Just kernelSchema) elements
     elements = L.concat (moduleElements <$> modules)
     modules = L.concat (close <$> mods)
       where
-        close mod = mod:(L.concat (close <$> moduleDependencies mod))
+        close mod = mod:(L.concat (close <$> moduleTermDependencies mod))
 
 printTrace :: Bool -> Trace -> IO ()
 printTrace isError t = do

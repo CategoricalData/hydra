@@ -15,7 +15,7 @@ hydraCore :: Graph Kv
 hydraCore = elementsToGraph bootstrapGraph Nothing (moduleElements hydraCoreModule)
 
 hydraCoreModule :: Module Kv
-hydraCoreModule = Module ns elements [] $
+hydraCoreModule = Module ns elements [] [] $
     Just "Hydra's core data model, defining types, terms, and their dependencies"
   where
     ns = Namespace "hydra/core"
