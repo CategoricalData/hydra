@@ -32,7 +32,8 @@ protobufLanguageDefinition :: String -> Datum a -> Definition a
 protobufLanguageDefinition = definitionInModule protobufLanguageModule
 
 protobufLanguageModule :: Module Kv
-protobufLanguageModule = Module ns elements [hydraCodersModule, hydraBasicsModule, hydraStripModule] Nothing
+protobufLanguageModule = Module ns elements [hydraCodersModule, hydraBasicsModule, hydraStripModule] [] $
+    Just "Language constraints for Protobuf v3"
   where
     ns = Namespace "hydra/langs/protobuf/language"
     elements = [

@@ -31,7 +31,7 @@ import Hydra.Sources.Tier2.Basics
 
 
 hydraPrintingModule :: Module Kv
-hydraPrintingModule = Module (Namespace "hydra/printing") elements [hydraBasicsModule] $
+hydraPrintingModule = Module (Namespace "hydra/printing") elements [hydraBasicsModule] [] $
     Just "Utilities for use in transformations"
   where
    elements = [

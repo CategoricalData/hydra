@@ -1,3 +1,5 @@
+-- | Language constraints for Hydra Core
+
 module Hydra.CoreLanguage where
 
 import qualified Hydra.Basics as Basics

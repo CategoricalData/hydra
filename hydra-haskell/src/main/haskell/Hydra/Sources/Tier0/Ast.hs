@@ -13,7 +13,7 @@ import           Hydra.Sources.Core
 
 
 hydraAstModule :: Module Kv
-hydraAstModule = Module ns elements [] $
+hydraAstModule = Module ns elements [] [hydraCoreModule] $
     Just "A model which provides a common syntax tree for Hydra serializers"
   where
     ns = Namespace "hydra/ast"

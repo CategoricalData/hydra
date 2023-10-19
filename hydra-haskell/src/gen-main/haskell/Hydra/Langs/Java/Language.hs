@@ -1,3 +1,5 @@
+-- | Language constraints for Java
+
 module Hydra.Langs.Java.Language where
 
 import qualified Hydra.Basics as Basics

@@ -7,7 +7,7 @@ import Hydra.Dsl.Annotations
 
 
 ianaRelationsModule :: Module Kv
-ianaRelationsModule = Module ns elements [] $
+ianaRelationsModule = Module ns elements [] [] $
     Just ("All IANA Link Relation Types, as of 2022-10-11. " ++
           "See https://www.iana.org/assignments/link-relations/link-relations.xhtml")
   where

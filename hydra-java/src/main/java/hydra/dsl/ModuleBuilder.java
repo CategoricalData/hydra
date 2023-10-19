@@ -18,7 +18,7 @@ import static hydra.dsl.Modules.*;
 public class ModuleBuilder<A> {
   private final Namespace namespace;
   private final Optional<String> description;
-  private final List<Element<A>> elements = new ArrayList<>();
+  private final List<Element<A>> elements = new ArrayList<Element<A>>();
 
   public ModuleBuilder(Namespace namespace, Optional<String> description) {
     this.namespace = namespace;
@@ -57,6 +57,6 @@ public class ModuleBuilder<A> {
   }
 
   public Module<A> build() {
-    return new Module<>(namespace, elements, Collections.emptyList(), description);
+    return new Module<A>(namespace, elements, Collections.emptyList(), Collections.emptyList(), description);
   }
 }
