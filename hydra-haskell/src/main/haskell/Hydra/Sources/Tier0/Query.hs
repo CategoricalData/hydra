@@ -15,7 +15,7 @@ import           Hydra.Sources.Core
 
 
 hydraQueryModule :: Module Kv
-hydraQueryModule = Module ns elements [hydraCoreModule] [] $
+hydraQueryModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just "A model for language-agnostic graph pattern queries"
   where
     ns = Namespace "hydra/query"

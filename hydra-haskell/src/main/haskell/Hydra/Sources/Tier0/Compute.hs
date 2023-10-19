@@ -15,7 +15,7 @@ import           Hydra.Sources.Core
 
 
 hydraComputeModule :: Module Kv
-hydraComputeModule = Module ns elements [hydraCoreModule] [] $
+hydraComputeModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just "Abstractions for single- and bidirectional transformations"
   where
     ns = Namespace "hydra/compute"
