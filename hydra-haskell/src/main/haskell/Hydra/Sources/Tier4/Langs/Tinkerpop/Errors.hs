@@ -117,6 +117,15 @@ tinkerpopErrorsModule = Module ns elements [tinkerpopPropertyGraphModule] $
               doc "The actual value, which does not conform to the expected type"
               "v"],
 
+      def "Validator" $
+        lambda "t" $ lambda "v" $
+          record [
+            "showType">: "t" --> string,
+            "showValue">: "v" --> string,
+            "checkValue">:
+              doc "Check a value for conformance with a type" $
+              "t" --> "v" --> optional (errors "TypeError" @@ "t" @@ "v")],
+
       def "VertexLabelMismatch" $
         record [
           "expected">:
