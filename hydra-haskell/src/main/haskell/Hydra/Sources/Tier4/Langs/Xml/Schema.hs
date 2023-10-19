@@ -7,7 +7,7 @@ import Hydra.Dsl.Types as Types
 
 
 xmlSchemaModule :: Module Kv
-xmlSchemaModule = Module ns elements [] $
+xmlSchemaModule = Module ns elements [] [] $
     Just ("A partial XML Schema model, focusing on datatypes. All simple datatypes (i.e. xsd:anySimpleType and below) are included.\n" ++
       "See: https://www.w3.org/TR/xmlschema-2\n" ++
       "Note: for most of the XML Schema datatype definitions included here, the associated Hydra type is simply\n" ++

@@ -7,7 +7,7 @@ import Hydra.Dsl.Bootstrap
 
 
 rdfSyntaxModule :: Module Kv
-rdfSyntaxModule = Module ns elements [] $
+rdfSyntaxModule = Module ns elements [] [] $
     Just "An RDF 1.1 syntax model"
   where
     ns = Namespace "hydra/langs/rdf/syntax"
