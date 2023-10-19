@@ -32,7 +32,8 @@ tier2Definition :: String -> Datum a -> Definition a
 tier2Definition = definitionInModule hydraTier2Module
 
 hydraTier2Module :: Module Kv
-hydraTier2Module = Module (Namespace "hydra/tier2") elements [hydraGraphModule, hydraMantleModule, hydraComputeModule, hydraStripModule] [] $
+hydraTier2Module = Module (Namespace "hydra/tier2") elements
+   [hydraGraphModule, hydraMantleModule, hydraComputeModule, hydraStripModule] [hydraGraphModule] $
     Just ("A module for miscellaneous tier-2 functions and constants.")
   where
    elements = [

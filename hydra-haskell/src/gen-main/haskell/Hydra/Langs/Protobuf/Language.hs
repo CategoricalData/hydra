@@ -1,3 +1,5 @@
+-- | Language constraints for Protobuf v3
+
 module Hydra.Langs.Protobuf.Language where
 
 import qualified Hydra.Coders as Coders

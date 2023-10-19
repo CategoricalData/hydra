@@ -35,7 +35,8 @@ tier1Definition :: String -> Datum a -> Definition a
 tier1Definition = definitionInModule hydraTier1Module
 
 hydraTier1Module :: Module Kv
-hydraTier1Module = Module (Namespace "hydra/tier1") elements [hydraConstantsModule, hydraStripModule] [] $
+hydraTier1Module = Module (Namespace "hydra/tier1") elements
+    [hydraConstantsModule, hydraStripModule] [hydraMantleModule, hydraModuleModule, hydraCodersModule] $
     Just ("A module for miscellaneous tier-1 functions and constants.")
   where
    elements = [
