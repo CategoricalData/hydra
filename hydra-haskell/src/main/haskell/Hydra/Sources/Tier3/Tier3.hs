@@ -32,7 +32,7 @@ tier3Definition :: String -> Datum a -> Definition a
 tier3Definition = definitionInModule hydraTier3Module
 
 hydraTier3Module :: Module Kv
-hydraTier3Module = Module (Namespace "hydra/tier3") elements [hydraCoreModule] [] $
+hydraTier3Module = Module (Namespace "hydra/tier3") elements [] [hydraComputeModule] $
     Just ("A module for miscellaneous tier-3 functions and constants.")
   where
    elements = [
