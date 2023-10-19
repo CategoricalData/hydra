@@ -27,7 +27,6 @@ import Hydra.Sources.Tier4.Langs.Sql.Ansi
 import Hydra.Sources.Tier4.Langs.Tabular
 import Hydra.Sources.Tier4.Langs.Tinkerpop.Features
 import Hydra.Sources.Tier4.Langs.Tinkerpop.Mappings
-import Hydra.Sources.Tier4.Langs.Tinkerpop.Errors
 import Hydra.Sources.Tier4.Langs.Tinkerpop.PropertyGraph
 import Hydra.Sources.Tier4.Langs.Xml.Schema
 import Hydra.Sources.Tier4.Langs.Yaml.Model
@@ -66,7 +65,6 @@ tier4LangModules = [
   shexSyntaxModule,
   sqlModule,
   tabularModule,
-  tinkerpopErrorsModule,
   tinkerpopFeaturesModule,
   tinkerpopMappingsModule,
   tinkerpopPropertyGraphModule,
