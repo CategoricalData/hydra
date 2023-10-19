@@ -37,7 +37,7 @@ import qualified Data.Maybe as Y
 
 generateSources :: (Module Kv -> Flow (Graph Kv) (M.Map FilePath String)) -> FilePath -> [Module Kv] -> IO ()
 generateSources printModule basePath mods = do
-    mfiles <- runFlow kernelSchema generateFiles
+    mfiles <- runFlow bootstrapGraph generateFiles
     case mfiles of
       Nothing -> fail "Transformation failed"
       Just files -> mapM_ writePair files
@@ -60,23 +60,10 @@ generateSources printModule basePath mods = do
 
     forModule mod = withTrace ("module " ++ unNamespace (moduleNamespace mod)) $ printModule mod
 
--- Note: currently a subset of the kernel which is used as a schema graph.
---       The other modules are not yet needed in the runtime environment
-kernelSchema :: Graph Kv
-kernelSchema = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElements [
-  hydraCodersModule,
-  hydraComputeModule,
-  hydraCoreModule,
-  hydraGraphModule,
-  hydraMantleModule,
-  hydraModuleModule,
-  hydraTestingModule,
-  jsonModelModule]
-
 modulesToGraph :: [Module Kv] -> Graph Kv
 modulesToGraph mods = elementsToGraph parent (Just schemaGraph) dataElements
   where
-    parent = kernelSchema -- TODO: revisit this
+    parent = bootstrapGraph
     dataElements = L.concat (moduleElements <$> (L.concat (close <$> mods)))
     schemaElements = L.concat (moduleElements <$> (L.concat (close <$> (L.nub $ L.concat (moduleTypeDependencies <$> mods)))))
     schemaGraph = elementsToGraph bootstrapGraph Nothing schemaElements
