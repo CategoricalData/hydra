@@ -231,13 +231,6 @@ _PropertyType_value = (Core.FieldName "value")
 
 _PropertyType_required = (Core.FieldName "required")
 
--- | A function which checks a value for conformance with a type
-newtype Validator t v = 
-  Validator {
-    unValidator :: (t -> v -> Bool)}
-
-_Validator = (Core.Name "hydra/langs/tinkerpop/propertyGraph.Validator")
-
 -- | A vertex
 data Vertex v = 
   Vertex {

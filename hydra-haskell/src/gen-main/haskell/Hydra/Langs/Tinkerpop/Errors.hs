@@ -139,6 +139,20 @@ _TypeError_expectedType = (Core.FieldName "expectedType")
 
 _TypeError_actualValue = (Core.FieldName "actualValue")
 
+data Validator t v = 
+  Validator {
+    validatorShowType :: (t -> String),
+    validatorShowValue :: (v -> String),
+    validatorCheckValue :: (t -> v -> Maybe (TypeError t v))}
+
+_Validator = (Core.Name "hydra/langs/tinkerpop/errors.Validator")
+
+_Validator_showType = (Core.FieldName "showType")
+
+_Validator_showValue = (Core.FieldName "showValue")
+
+_Validator_checkValue = (Core.FieldName "checkValue")
+
 data VertexLabelMismatch = 
   VertexLabelMismatch {
     -- | The expected vertex label, based on the vertex type
