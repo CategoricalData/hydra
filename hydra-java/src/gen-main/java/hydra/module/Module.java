@@ -19,19 +19,25 @@ public class Module<A> implements Serializable {
   public final java.util.List<hydra.graph.Element<A>> elements;
   
   /**
-   * Any additional modules this one has a direct dependency upon
+   * Any modules which the term expressions of this module directly depend upon
    */
-  public final java.util.List<hydra.module.Module<A>> dependencies;
+  public final java.util.List<hydra.module.Module<A>> termDependencies;
+  
+  /**
+   * Any modules which the type expressions of this module directly depend upon
+   */
+  public final java.util.List<hydra.module.Module<A>> typeDependencies;
   
   /**
    * An optional human-readable description of the module
    */
   public final java.util.Optional<String> description;
   
-  public Module (hydra.module.Namespace namespace, java.util.List<hydra.graph.Element<A>> elements, java.util.List<hydra.module.Module<A>> dependencies, java.util.Optional<String> description) {
+  public Module (hydra.module.Namespace namespace, java.util.List<hydra.graph.Element<A>> elements, java.util.List<hydra.module.Module<A>> termDependencies, java.util.List<hydra.module.Module<A>> typeDependencies, java.util.Optional<String> description) {
     this.namespace = namespace;
     this.elements = elements;
-    this.dependencies = dependencies;
+    this.termDependencies = termDependencies;
+    this.typeDependencies = typeDependencies;
     this.description = description;
   }
   
@@ -41,27 +47,31 @@ public class Module<A> implements Serializable {
       return false;
     }
     Module o = (Module) (other);
-    return namespace.equals(o.namespace) && elements.equals(o.elements) && dependencies.equals(o.dependencies) && description.equals(o.description);
+    return namespace.equals(o.namespace) && elements.equals(o.elements) && termDependencies.equals(o.termDependencies) && typeDependencies.equals(o.typeDependencies) && description.equals(o.description);
   }
   
   @Override
   public int hashCode() {
-    return 2 * namespace.hashCode() + 3 * elements.hashCode() + 5 * dependencies.hashCode() + 7 * description.hashCode();
+    return 2 * namespace.hashCode() + 3 * elements.hashCode() + 5 * termDependencies.hashCode() + 7 * typeDependencies.hashCode() + 11 * description.hashCode();
   }
   
   public Module withNamespace(hydra.module.Namespace namespace) {
-    return new Module(namespace, elements, dependencies, description);
+    return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }
   
   public Module withElements(java.util.List<hydra.graph.Element<A>> elements) {
-    return new Module(namespace, elements, dependencies, description);
+    return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }
   
-  public Module withDependencies(java.util.List<hydra.module.Module<A>> dependencies) {
-    return new Module(namespace, elements, dependencies, description);
+  public Module withTermDependencies(java.util.List<hydra.module.Module<A>> termDependencies) {
+    return new Module(namespace, elements, termDependencies, typeDependencies, description);
+  }
+  
+  public Module withTypeDependencies(java.util.List<hydra.module.Module<A>> typeDependencies) {
+    return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }
   
   public Module withDescription(java.util.Optional<String> description) {
-    return new Module(namespace, elements, dependencies, description);
+    return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }
 }

@@ -23,8 +23,10 @@ data Module a =
     moduleNamespace :: Namespace,
     -- | The elements defined in this module
     moduleElements :: [Graph.Element a],
-    -- | Any additional modules this one has a direct dependency upon
-    moduleDependencies :: [Module a],
+    -- | Any modules which the term expressions of this module directly depend upon
+    moduleTermDependencies :: [Module a],
+    -- | Any modules which the type expressions of this module directly depend upon
+    moduleTypeDependencies :: [Module a],
     -- | An optional human-readable description of the module
     moduleDescription :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
@@ -35,7 +37,9 @@ _Module_namespace = (Core.FieldName "namespace")
 
 _Module_elements = (Core.FieldName "elements")
 
-_Module_dependencies = (Core.FieldName "dependencies")
+_Module_termDependencies = (Core.FieldName "termDependencies")
+
+_Module_typeDependencies = (Core.FieldName "typeDependencies")
 
 _Module_description = (Core.FieldName "description")
 
