@@ -17,6 +17,9 @@ insert = M.insert
 isEmpty :: M.Map k v -> Bool
 isEmpty = M.null
 
+keys :: M.Map k v -> [k]
+keys = M.keys
+
 lookup :: Ord k => k -> M.Map k v -> Maybe v
 lookup = M.lookup
 
@@ -37,3 +40,6 @@ size = M.size
 
 toList :: M.Map k v -> [(k, v)]
 toList = M.toList
+
+values :: M.Map k v -> [v]
+values = M.elems

@@ -20,6 +20,7 @@ import Hydra.Dsl.ShorthandTypes
 import Hydra.Sources.Core
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
+import Hydra.Sources.Libraries
 
 import Prelude hiding ((++))
 import Data.String(IsString(..))
@@ -105,6 +106,14 @@ functionNWithClasses ts classes = typed $ setTypeClasses classes (Types.function
 
 functionWithClasses :: Type Kv -> Type Kv -> M.Map Name (S.Set TypeClass) -> Datum a -> Datum a
 functionWithClasses dom cod classes = typed $ setTypeClasses classes (Types.function dom cod)
+
+-- Note: Haskell has trouble type-checking this construction if the convenience functions from Base are used
+ifElse :: Datum Bool -> Datum a -> Datum a -> Datum a
+ifElse (Datum cond) (Datum ifTrue) (Datum ifFalse) = Datum $
+  Terms.apply (Terms.apply (Terms.apply (Terms.primitive _logic_ifElse) ifTrue) ifFalse) cond
+
+ifOpt :: Datum (Maybe a) -> Datum b -> Datum (a -> b) -> Datum b
+ifOpt m n j = matchOpt n j @@ m
 
 identity :: Datum (a -> a)
 identity = Datum Terms.identity

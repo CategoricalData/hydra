@@ -128,6 +128,7 @@ _maps_empty = qname _hydra_lib_maps "empty" :: Name
 _maps_fromList = qname _hydra_lib_maps "fromList" :: Name
 _maps_insert = qname _hydra_lib_maps "insert" :: Name
 _maps_isEmpty = qname _hydra_lib_maps "isEmpty" :: Name
+_maps_keys = qname _hydra_lib_maps "keys" :: Name
 _maps_lookup = qname _hydra_lib_maps "lookup" :: Name
 _maps_map = qname _hydra_lib_maps "map" :: Name
 _maps_mapKeys = qname _hydra_lib_maps "mapKeys" :: Name
@@ -135,6 +136,7 @@ _maps_remove = qname _hydra_lib_maps "remove" :: Name
 _maps_singleton = qname _hydra_lib_maps "singleton" :: Name
 _maps_size = qname _hydra_lib_maps "size" :: Name
 _maps_toList = qname _hydra_lib_maps "toList" :: Name
+_maps_values = qname _hydra_lib_maps "values" :: Name
 
 _hydra_lib_math :: Namespace
 _hydra_lib_math = Namespace "hydra/lib/math"
@@ -317,6 +319,7 @@ hydraLibMapsPrimitives = [
     prim1 _maps_fromList (list $ pair k v) mapKv Maps.fromList,
     prim3 _maps_insert k v mapKv mapKv Maps.insert,
     prim1 _maps_isEmpty mapKv boolean Maps.isEmpty,
+    prim1 _maps_keys mapKv (list k) Maps.keys,
     prim2 _maps_lookup k mapKv (optional v) Maps.lookup,
     prim2 _maps_map (function v1 v2) (Prims.map k v1) (Prims.map k v2) Maps.map,
     prim2 _maps_mapKeys (function k1 k2) (Prims.map k1 v) (Prims.map k2 v) Maps.mapKeys,
@@ -324,7 +327,8 @@ hydraLibMapsPrimitives = [
     prim2 _maps_remove k mapKv mapKv Maps.remove,
     prim2 _maps_singleton k v mapKv Maps.singleton,
     prim1 _maps_size mapKv int32 Maps.size,
-    prim1 _maps_toList mapKv (list $ pair k v) Maps.toList]
+    prim1 _maps_toList mapKv (list $ pair k v) Maps.toList,
+    prim1 _maps_values mapKv (list v) Maps.values]
   where
     k = variable "k"
     k1 = variable "k1"
