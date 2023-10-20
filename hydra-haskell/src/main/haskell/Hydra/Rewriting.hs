@@ -75,6 +75,33 @@ expandLambdas term = do
                   _ -> throwDebugException $ "expandLambdas: expected function type, got " ++ show t
                 Nothing -> Nothing
 
+flattenLetTerms :: Ord a => Term a -> Term a
+flattenLetTerms = rewriteTerm flatten id
+  where
+    flatten recurse term = case recurse term of
+      TermLet (Let bindings body) -> TermLet $ Let newBindings body
+        where
+          newBindings = M.fromList $ L.concat (forResult . rewriteBinding <$> M.toList bindings)
+            where
+              forResult (h, rest) = (h:rest)
+          rewriteBinding (k0, v0) = case v0 of
+            TermAnnotated (Annotated v1 ann) -> ((k0, TermAnnotated $ Annotated v2 ann), deps)
+              where
+                ((_, v2), deps) = rewriteBinding (k0, v1)
+            TermLet (Let bindings1 body1) -> ((k0, newBody), newBinding <$> bindingsList)
+              where
+                bindingsList = M.toList bindings1
+                newBody = replaceVars body1
+                newBinding (kn, vn) = (qualify kn, replaceVars vn)
+                qualify n = Name $ prefix ++ unName n
+                replaceVars = substituteVariables subst
+                subst = M.fromList (toSubstPair <$> bindingsList)
+                  where
+                    toSubstPair (n, _) = (n, qualify n)
+                prefix = unName k0 ++ "_"
+            v1 -> ((k0, v1), [])
+      term0 -> term0
+
 freeVariablesInScheme :: Show a => TypeScheme a -> S.Set Name
 freeVariablesInScheme (TypeScheme vars t) = S.difference (freeVariablesInType t) (S.fromList vars)
 
@@ -282,10 +309,20 @@ substituteVariable :: Ord a => Name -> Name -> Term a -> Term a
 substituteVariable from to = rewriteTerm replace id
   where
     replace recurse term = case term of
-      TermVariable x -> recurse $ (TermVariable $ if x == from then to else x)
+      TermVariable x -> (TermVariable $ if x == from then to else x)
       TermFunction (FunctionLambda (Lambda var _)) -> if var == from
         then term
         else recurse term
+      _ -> recurse term
+
+substituteVariables :: Ord a => M.Map Name Name -> Term a -> Term a
+substituteVariables subst = rewriteTerm replace id
+  where
+    replace recurse term = case term of
+      TermVariable n -> TermVariable $ Y.fromMaybe n $ M.lookup n subst
+      TermFunction (FunctionLambda (Lambda v _ )) -> case M.lookup v subst of
+        Nothing -> recurse term
+        Just _ -> term
       _ -> recurse term
 
 -- Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that

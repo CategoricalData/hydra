@@ -5,12 +5,14 @@ module Hydra.RewritingSpec where
 import Hydra.Kernel
 import Hydra.Dsl.Terms
 import Hydra.Flows
+import qualified Hydra.Dsl.Terms as Terms
 
 import Hydra.TestUtils
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
 import qualified Data.List as L
+import qualified Data.Map as M
 import qualified Data.Set as S
 
 
@@ -108,6 +110,62 @@ testFoldOverTerm = do
     listLengths l term = case term of
       TermList els -> L.length els:l
       _ -> l
+
+testFlattenLetTerms :: H.SpecWith ()
+testFlattenLetTerms = do
+  H.describe "Test flattening of 'let' terms" $ do
+
+    H.it "Non-let terms are unaffected" $ do
+      H.shouldBe
+        (flattenLetTerms $ Terms.int32 42)
+        (Terms.int32 42 :: Term Kv)
+      H.shouldBe
+        (flattenLetTerms $ Terms.list [Terms.string "foo"])
+        (Terms.list [Terms.string "foo"] :: Term Kv)
+
+    H.it "Non-nested let terms are unaffected" $
+      H.shouldBe
+        (flattenLetTerms letTerm1)
+        (letTerm1 :: Term Kv)
+
+    H.it "Nonrecursive, nested bindings are flattened" $
+      H.shouldBe
+        (flattenLetTerms letTerm2)
+        (letTerm2_flattened :: Term Kv)
+
+    H.it "Multiple levels of nesting are flattened appropriately" $
+      H.shouldBe
+        (flattenLetTerms letTerm3)
+        (letTerm3_flattened :: Term Kv)
+  where
+    makeLet body pairs = TermLet $ Let (M.fromList (makePair <$> pairs)) body
+      where
+        makePair (k, v) = (Name k, v)
+    letTerm1 = makeLet (TermList [Terms.var "x", Terms.var "y"]) [
+      ("x", Terms.int32 1),
+      ("y", Terms.int32 2)]
+    letTerm2 = makeLet (TermList [Terms.var "a", Terms.var "b"]) [
+      ("a", Terms.int32 1),
+      ("b", letTerm1)]
+    letTerm2_flattened = makeLet (TermList [Terms.var "a", Terms.var "b"]) [
+      ("a", Terms.int32 1),
+      ("b", TermList [Terms.var "b_x", Terms.var "b_y"]),
+      ("b_x", Terms.int32 1),
+      ("b_y", Terms.int32 2)]
+    letTerm3 = makeLet (TermList [Terms.var "a", Terms.var "b"]) [
+      ("a", Terms.int32 1),
+      ("b", makeLet (TermList [Terms.var "x", Terms.var "y"]) [
+        ("x", Terms.int32 1),
+        ("y", makeLet (TermList [Terms.var "a", Terms.var "q"]) [
+          ("p", Terms.int32 137),
+          ("q", TermList [Terms.var "x", Terms.int32 5])])])]
+    letTerm3_flattened = makeLet (TermList [Terms.var "a", Terms.var "b"]) [
+      ("a", Terms.int32 1),
+      ("b", TermList [Terms.var "b_x", Terms.var "b_y"]),
+      ("b_x", Terms.int32 1),
+      ("b_y", TermList [Terms.var "a", Terms.var "b_y_q"]),
+      ("b_y_p", Terms.int32 137),
+      ("b_y_q", TermList [Terms.var "b_x", Terms.int32 5])]
 
 testFreeVariablesInTerm :: H.SpecWith ()
 testFreeVariablesInTerm = do
@@ -249,6 +307,7 @@ spec :: H.Spec
 spec = do
   testExpandLambdas
   testFoldOverTerm
+  testFlattenLetTerms
   testFreeVariablesInTerm
 --  testReplaceFreeName
   testReplaceTerm
