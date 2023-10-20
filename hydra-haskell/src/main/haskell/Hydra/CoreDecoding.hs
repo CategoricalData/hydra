@@ -256,7 +256,8 @@ requireRowType label infer getter name = do
       _ -> t
 
 requireType :: Show a => Name -> Flow (Graph a) (Type a)
-requireType name = withTrace ("require type " ++ unName name) $ requireElement name >>= (coreDecodeType . elementData)
+requireType name = withTrace ("require type " ++ unName name) $
+  (withSchemaContext $ requireElement name) >>= (coreDecodeType . elementData)
 
 requireUnionType :: Show a => Bool -> Name -> Flow (Graph a) (RowType a)
 requireUnionType infer = requireRowType "union" infer $ \t -> case t of

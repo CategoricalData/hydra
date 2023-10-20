@@ -659,7 +659,7 @@ encodeTerm aliases term0 = encodeInternal [] term0
               encodeFunction aliases dom cod f
             _ -> encodeNullaryConstant aliases t f
 
-        TermLet _ -> fail "nested let is unsupported for Java"
+        TermLet _ -> fail $ "nested let is unsupported for Java: " ++ show term
 
         TermList els -> do
           jels <- CM.mapM encode els
@@ -853,7 +853,8 @@ javaTypeParametersForType typ = toParam <$> vars
 maybeLet :: (Ord a, Read a, Show a) => Aliases -> Term a -> (Aliases -> Term a -> [Java.BlockStatement] -> Flow (Graph a) x) -> Flow (Graph a) x
 maybeLet aliases term cons = helper [] term
   where
-    helper anns term = case term of
+    -- Note: let-flattening could be done at the top level for better efficiency
+    helper anns term = case flattenLetTerms term of
       TermAnnotated (Annotated term' ann) -> helper (ann:anns) term'
       TermLet (Let bindings env) -> do
           stmts <- L.concat <$> CM.mapM toDeclStatements sorted
