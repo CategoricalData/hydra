@@ -19,6 +19,9 @@ insert = Datum $ Terms.primitive _maps_insert
 isEmpty :: Datum (Map k v -> Bool)
 isEmpty = Datum $ Terms.primitive _maps_isEmpty
 
+keys :: Datum (Map k v -> [k])
+keys = Datum $ Terms.primitive _maps_keys
+
 lookup :: Datum (k -> Map k v -> Maybe v)
 lookup = Datum $ Terms.primitive _maps_lookup
 
@@ -39,3 +42,6 @@ size = Datum $ Terms.primitive _maps_size
 
 toList :: Datum (Map k v -> [(k, v)])
 toList = Datum $ Terms.primitive _maps_toList
+
+values :: Datum (Map k v -> [v])
+values = Datum $ Terms.primitive _maps_values

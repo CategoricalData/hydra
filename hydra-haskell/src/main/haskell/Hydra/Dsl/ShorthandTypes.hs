@@ -51,6 +51,7 @@ nameT = TypeVariable _Name
 nominalTermA = Types.apply (TypeVariable _Nominal) termA :: Type a
 nominalTypeA = Types.apply (TypeVariable _Nominal) typeA :: Type a
 optionalCasesA = Types.apply (TypeVariable _OptionalCases) (Types.var "a") :: Type a
+optionalT = Types.optional
 pairT t1 t2 = Types.pair (t1, t2)
 recordA = Types.apply (TypeVariable _Record) (Types.var "a") :: Type a
 rowTypeA = Types.apply (TypeVariable _RowType) (Types.var "a") :: Type a

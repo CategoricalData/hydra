@@ -152,11 +152,13 @@ public class Libraries {
                 new hydra.lib.maps.FromList<>(),
                 new hydra.lib.maps.Insert<>(),
                 new hydra.lib.maps.IsEmpty(),
+                new hydra.lib.maps.Keys<>(),
                 new hydra.lib.maps.Lookup<>(),
                 new hydra.lib.maps.Map<>(),
                 new hydra.lib.maps.MapKeys<>(),
                 new hydra.lib.maps.Remove<>(),
-                new hydra.lib.maps.ToList());
+                new hydra.lib.maps.ToList(),
+                new hydra.lib.maps.Values());
     }
 
     private static <A> List<PrimitiveFunction<A>> mathPrimitives() {
