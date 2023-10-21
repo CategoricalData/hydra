@@ -1,10 +1,13 @@
 package hydra.dsl;
 
+import hydra.basics.Basics;
 import hydra.core.FloatValue;
 import hydra.core.IntegerValue;
 import hydra.core.Literal;
+import hydra.core.LiteralType;
 
 import java.math.BigInteger;
+import java.util.Optional;
 
 
 /**
@@ -167,5 +170,13 @@ public interface Literals {
                 return "string:\"" + instance.value + "\"";
             }
         });
+    }
+
+    static Optional<String> checkLiteral(LiteralType type, Literal value) {
+        String expected = LiteralTypes.showLiteralType(type);
+        String actual = LiteralTypes.showLiteralType(Basics.literalType(value));
+        return expected.equals(actual)
+                ? Optional.empty()
+                : Optional.of("Expected literal of type " + expected + ", found " + actual);
     }
 }

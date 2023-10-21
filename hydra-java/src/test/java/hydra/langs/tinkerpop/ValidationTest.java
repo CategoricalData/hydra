@@ -1,6 +1,5 @@
 package hydra.langs.tinkerpop;
 
-import hydra.basics.Basics;
 import hydra.core.Literal;
 import hydra.core.LiteralType;
 import hydra.dsl.LiteralTypes;
@@ -26,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class ValidationTest extends PropertyGraphTestBase {
     private static final Function<LiteralType, Function<Literal, Optional<String>>> CHECK_LITERAL
-            = type -> value -> checkLiteral(type, value);
+            = type -> value -> Literals.checkLiteral(type, value);
 
     @Test
     public void testValidVertexSucceeds() {
@@ -171,11 +170,4 @@ public class ValidationTest extends PropertyGraphTestBase {
         result.ifPresent(s -> fail("Validation failed: " + s));
     }
 
-    private static Optional<String> checkLiteral(LiteralType type, Literal value) {
-        String expected = LiteralTypes.showLiteralType(type);
-        String actual = LiteralTypes.showLiteralType(Basics.literalType(value));
-        return expected.equals(actual)
-                ? Optional.empty()
-                : Optional.of("Expected literal of type " + expected + ", found " + actual);
-    }
 }
