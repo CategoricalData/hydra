@@ -1,19 +1,14 @@
 package hydra.langs.tinkerpop;
 
 import hydra.Flows;
-import hydra.HydraTestBase;
-import hydra.basics.Basics;
 import hydra.compute.Flow;
 import hydra.compute.StatelessAdapter;
-import hydra.compute.StatelessCoder;
 import hydra.core.Literal;
 import hydra.core.LiteralType;
 import hydra.core.Unit;
 import hydra.dsl.LiteralTypes;
 import hydra.dsl.Literals;
-import hydra.langs.tinkerpop.dsl.Graphs;
 import hydra.langs.tinkerpop.propertyGraph.Edge;
-import hydra.langs.tinkerpop.propertyGraph.EdgeLabel;
 import hydra.langs.tinkerpop.propertyGraph.EdgeType;
 import hydra.langs.tinkerpop.propertyGraph.PropertyKey;
 import hydra.langs.tinkerpop.propertyGraph.Vertex;
@@ -24,70 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-import static hydra.Flows.pure;
-
-public class MergingTest extends HydraTestBase {
-    private static final LiteralType ID_TYPE = LiteralTypes.string();
-
-    private static final VertexType<LiteralType> VERTEX_TYPE_PERSON_A = Graphs.vertexType("Person", ID_TYPE)
-            .property("name", LiteralTypes.string(), true)
-            .property("nickname", LiteralTypes.string(), false)
-            .build();
-    private static final VertexType<LiteralType> VERTEX_TYPE_PERSON_B = VERTEX_TYPE_PERSON_A.withId(LiteralTypes.int32());
-    private static final VertexType<LiteralType> VERTEX_TYPE_PERSON_C = VERTEX_TYPE_PERSON_A.withProperties(Arrays.asList());
-
-    private static final VertexType<LiteralType> VERTEX_TYPE_ORGANIZATION = Graphs.vertexType("Organization", ID_TYPE)
-            .property("name", LiteralTypes.string(), true)
-            .property("industry", LiteralTypes.string(), true)
-            .property("numberOfEmployees", LiteralTypes.int32(), false)
-            .build();
-
-    private static final EdgeType<LiteralType> EDGE_TYPE_WORKSAT_A = Graphs.edgeType("worksAt", ID_TYPE, "Person", "Organization")
-            .property("employeeStatus", LiteralTypes.string(), true)
-            .property("effectiveAtUnixSeconds", LiteralTypes.uint32(), false)
-            .build();
-    private static final EdgeType<LiteralType> EDGE_TYPE_WORKSAT_B = EDGE_TYPE_WORKSAT_A.withId(LiteralTypes.int32());
-    private static final EdgeType<LiteralType> EDGE_TYPE_WORKSAT_C = EDGE_TYPE_WORKSAT_A.withProperties(Arrays.asList());
-
-    private static final EdgeType<LiteralType> EDGE_TYPE_FOUNDED = Graphs.edgeType("founded", ID_TYPE, "Person", "Organization")
-            .property("ownershipPercentage", LiteralTypes.float32(), false)
-            .build();
-
-    private static final EdgeType<LiteralType> EDGE_TYPE_PARTOF = Graphs.edgeType("partOf", ID_TYPE, "Organization", "Organization")
-            .build();
-
-    private static final Vertex<Literal> VERTEX_PERSON_1 = Graphs.vertex(VERTEX_TYPE_PERSON_A, Literals.string("arthur"))
-            .property("name", Literals.string("Arthur Dent"))
-            .build();
-    private static final Vertex<Literal> VERTEX_PERSON_2 = Graphs.vertex(VERTEX_TYPE_PERSON_A, Literals.string("ford"))
-            .property("name", Literals.string("Ford Prefect"))
-            .property("nickname", Literals.string("Ix"))
-            .build();
-    private static final Vertex<Literal> VERTEX_PERSON_3 = Graphs.vertex(VERTEX_TYPE_PERSON_A, Literals.string("hoopy"))
-            .property("name", Literals.string("Some Hoopy Frood"))
-            .build();
-    private static final Vertex<Literal> VERTEX_ORGANIZATION_1 = Graphs.vertex(VERTEX_TYPE_ORGANIZATION, Literals.string("megadodo"))
-            .property("name", Literals.string("Megadodo Publications"))
-            .property("industry", Literals.string("publishers"))
-            .property("numberOfEmployees", Literals.int32(1000042))
-            .build();
-    private static final Vertex<Literal> VERTEX_ORGANIZATION_2 = Graphs.vertex(VERTEX_TYPE_ORGANIZATION, Literals.string("infinidim"))
-            .property("name", Literals.string("Infinidim Enterprises"))
-            .property("industry", Literals.string("all-powerful conglomerates"))
-            .build();
-    private static final Edge<Literal> EDGE_WORKSAT_1 = Graphs.edge(EDGE_TYPE_WORKSAT_A, Literals.string("ford-megadodo"),
-                    VERTEX_PERSON_2.id, VERTEX_ORGANIZATION_1.id)
-            .property("employeeStatus", Literals.string("current"))
-            .property("effectiveAtUnixSeconds", Literals.uint32(252460800))
-            .build();
-    private static final Edge<Literal> EDGE_FOUNDED_1 = Graphs.edge(EDGE_TYPE_FOUNDED, Literals.string("hoopy-founded"),
-                    VERTEX_PERSON_3.id, VERTEX_ORGANIZATION_1.id)
-            .property("ownershipPercentage", Literals.float32(51.0f))
-            .build();
-    private static final Edge<Literal> EDGE_PARTOF_1 = Graphs.edge(EDGE_TYPE_PARTOF, Literals.string("megadodo-parent"),
-                    VERTEX_ORGANIZATION_1.id, VERTEX_ORGANIZATION_2.id)
-            .build();
-    
+public class MergingTest extends PropertyGraphTestBase {
     @Test
     public void testFailOnEmptyListOfInputTypes() {
         assertFails(Merging.createVertexAdapter(Arrays.asList(), Merging.STRING_ID_ADAPTERS));

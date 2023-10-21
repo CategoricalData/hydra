@@ -69,8 +69,7 @@ validateEdgeDef = validateDefinition "validateEdge" $
     edgeVT,
     optionalT stringT] $
   lambda "checkValue" $ lambda "showValue" $ lambda "labelForVertexId" $ lambda "typ" $ lambda "el" $
---    (ref checkAllDef @@ list [var "checkLabel", var "checkId", var "checkProperties", var "checkOut", var "checkIn"]
-    (ref checkAllDef @@ list [var "checkLabel", var "checkId", var "checkProperties"]
+    (ref checkAllDef @@ list [var "checkLabel", var "checkId", var "checkProperties", var "checkOut", var "checkIn"]
     `with` [
       "failWith">: typed (functionT stringT stringT) $
         ref edgeErrorDef @@ var "showValue" @@ var "el",
