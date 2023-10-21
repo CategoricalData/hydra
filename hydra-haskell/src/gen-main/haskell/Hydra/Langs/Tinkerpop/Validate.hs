@@ -36,7 +36,9 @@ validateEdge checkValue showValue labelForVertexId typ el =
   in (checkAll [
     checkLabel,
     checkId,
-    checkProperties])
+    checkProperties,
+    checkOut,
+    checkIn])
 
 validateElement :: ((t -> v -> Maybe String) -> (v -> String) -> Maybe (v -> Maybe PropertyGraph.VertexLabel) -> PropertyGraph.ElementType t -> PropertyGraph.Element v -> Maybe String)
 validateElement checkValue showValue labelForVertexId typ el = ((\x -> case x of

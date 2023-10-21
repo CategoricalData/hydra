@@ -31,6 +31,10 @@ public class Head<A> extends PrimitiveFunction<A> {
     }
 
     public static <X> X apply(List<X> list) {
-        return list.get(0);
+        if (list.isEmpty()) {
+            throw new IllegalArgumentException("Cannot get head of empty list");
+        } else {
+            return list.get(0);
+        }
     }
 }
