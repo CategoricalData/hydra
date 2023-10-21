@@ -79,4 +79,93 @@ public interface Literals {
     static Literal uint64(final BigInteger value) {
         return integer(new IntegerValue.Uint64(value));
     }
+
+    static String showLiteral(Literal value) {
+        return value.accept(new Literal.Visitor<String>() {
+            @Override
+            public String visit(Literal.Binary instance) {
+                return "binary:" + instance.value;
+            }
+
+            @Override
+            public String visit(Literal.Boolean_ instance) {
+                return "boolean:" + instance.value;
+            }
+
+            @Override
+            public String visit(Literal.Float_ instance) {
+                return "float:" + instance.value.accept(new FloatValue.Visitor<String>() {
+                    @Override
+                    public String visit(FloatValue.Bigfloat instance) {
+                        return "bigfloat:" + instance.value;
+                    }
+
+                    @Override
+                    public String visit(FloatValue.Float32 instance) {
+                        return "float32:" + instance.value;
+                    }
+
+                    @Override
+                    public String visit(FloatValue.Float64 instance) {
+                        return "float64:" + instance.value;
+                    }
+                });
+            }
+
+            @Override
+            public String visit(Literal.Integer_ instance) {
+                return "integer:" + instance.value.accept(new IntegerValue.Visitor<String>() {
+                    @Override
+                    public String visit(IntegerValue.Bigint instance) {
+                        return "bigint:" + instance.value;
+                    }
+
+                    @Override
+                    public String visit(IntegerValue.Int16 instance) {
+                        return "int16:" + instance.value;
+                    }
+
+                    @Override
+                    public String visit(IntegerValue.Int32 instance) {
+                        return "int32:" + instance.value;
+                    }
+
+                    @Override
+                    public String visit(IntegerValue.Int64 instance) {
+                        return "int64:" + instance.value;
+                    }
+
+                    @Override
+                    public String visit(IntegerValue.Int8 instance) {
+                        return "int8:" + instance.value;
+                    }
+
+                    @Override
+                    public String visit(IntegerValue.Uint16 instance) {
+                        return "uint16:" + instance.value;
+                    }
+
+                    @Override
+                    public String visit(IntegerValue.Uint32 instance) {
+                        return "uint32:" + instance.value;
+                    }
+
+                    @Override
+                    public String visit(IntegerValue.Uint64 instance) {
+                        return "uint64:" + instance.value;
+                    }
+
+                    @Override
+                    public String visit(IntegerValue.Uint8 instance) {
+                        return "uint8:" + instance.value;
+                    }
+                });
+            }
+
+            @Override
+            public String visit(Literal.String_ instance) {
+                return "string:\"" + instance.value + "\"";
+            }
+        });
+    }
 }

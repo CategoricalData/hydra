@@ -115,7 +115,7 @@ public class ValidationTest extends PropertyGraphTestBase {
     }
 
     private static void assertInvalid(VertexType<LiteralType> type, Vertex<Literal> element) {
-        Optional<String> result = Validate.validateVertex(CHECK_LITERAL).apply(ValidationTest::showLiteral)
+        Optional<String> result = Validate.validateVertex(CHECK_LITERAL).apply(Literals::showLiteral)
                 .apply(type).apply(element);
         if (!result.isPresent()) {
             fail("Validation succeeded where it should have failed");
@@ -123,7 +123,7 @@ public class ValidationTest extends PropertyGraphTestBase {
     }
 
     private static void assertValid(VertexType<LiteralType> type, Vertex<Literal> element) {
-        Optional<String> result = Validate.validateVertex(CHECK_LITERAL).apply(ValidationTest::showLiteral)
+        Optional<String> result = Validate.validateVertex(CHECK_LITERAL).apply(Literals::showLiteral)
                 .apply(type).apply(element);
         result.ifPresent(s -> fail("Validation failed: " + s));
     }
@@ -131,7 +131,7 @@ public class ValidationTest extends PropertyGraphTestBase {
     private static void assertInvalid(EdgeType<LiteralType> type,
                                       Edge<Literal> element,
                                       Optional<Function<Literal, Optional<VertexLabel>>> labelForVertexId) {
-        Optional<String> result = Validate.validateEdge(CHECK_LITERAL).apply(ValidationTest::showLiteral)
+        Optional<String> result = Validate.validateEdge(CHECK_LITERAL).apply(Literals::showLiteral)
                 .apply(labelForVertexId).apply(type).apply(element);
         if (!result.isPresent()) {
             fail("Validation succeeded where it should have failed");
@@ -146,7 +146,7 @@ public class ValidationTest extends PropertyGraphTestBase {
     private static void assertValid(EdgeType<LiteralType> type,
                                     Edge<Literal> element,
                                     Optional<Function<Literal, Optional<VertexLabel>>> labelForVertexId) {
-        Optional<String> result = Validate.validateEdge(CHECK_LITERAL).apply(ValidationTest::showLiteral)
+        Optional<String> result = Validate.validateEdge(CHECK_LITERAL).apply(Literals::showLiteral)
                 .apply(labelForVertexId).apply(type).apply(element);
         result.ifPresent(s -> fail("Validation failed: " + s));
     }
@@ -158,7 +158,7 @@ public class ValidationTest extends PropertyGraphTestBase {
 
     private static void assertInvalid(ElementType<LiteralType> type,
                                       Element<Literal> element) {
-        Optional<String> result = Validate.validateElement(CHECK_LITERAL).apply(ValidationTest::showLiteral)
+        Optional<String> result = Validate.validateElement(CHECK_LITERAL).apply(Literals::showLiteral)
                 .apply(Optional.empty()).apply(type).apply(element);
         if (!result.isPresent()) {
             fail("Validation succeeded where it should have failed");
@@ -166,14 +166,14 @@ public class ValidationTest extends PropertyGraphTestBase {
     }
 
     private static void assertValid(ElementType<LiteralType> type, Element<Literal> element) {
-        Optional<String> result = Validate.validateElement(CHECK_LITERAL).apply(ValidationTest::showLiteral)
+        Optional<String> result = Validate.validateElement(CHECK_LITERAL).apply(Literals::showLiteral)
                 .apply(Optional.empty()).apply(type).apply(element);
         result.ifPresent(s -> fail("Validation failed: " + s));
     }
 
     private static Optional<String> checkLiteral(LiteralType type, Literal value) {
-        String expected = showLiteralType(type);
-        String actual = showLiteralType(Basics.literalType(value));
+        String expected = LiteralTypes.showLiteralType(type);
+        String actual = LiteralTypes.showLiteralType(Basics.literalType(value));
         return expected.equals(actual)
                 ? Optional.empty()
                 : Optional.of("Expected literal of type " + expected + ", found " + actual);
