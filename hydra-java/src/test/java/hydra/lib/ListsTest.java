@@ -39,7 +39,7 @@ public class ListsTest {
     public void headIsCorrect() {
         assertEquals(1, Head.apply(Arrays.asList(1, 2, 3)));
 
-        assertThrows(IndexOutOfBoundsException.class, () -> Head.apply(Collections.emptyList()));
+        assertThrows(IllegalArgumentException.class, () -> Head.apply(Collections.emptyList()));
     }
 
     @Test
