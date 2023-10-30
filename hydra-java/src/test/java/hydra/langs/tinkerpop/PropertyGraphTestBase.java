@@ -25,14 +25,17 @@ public abstract class PropertyGraphTestBase extends HydraTestBase {
     protected static final VertexType<LiteralType> VERTEX_TYPE_PERSON_A = Graphs.vertexType("Person", ID_TYPE)
             .property("name", LiteralTypes.string(), true)
             .property("nickname", LiteralTypes.string(), false)
+            .property("age", LiteralTypes.int32(), false)
             .build();
     protected static final VertexType<LiteralType> VERTEX_TYPE_PERSON_B = VERTEX_TYPE_PERSON_A.withId(LiteralTypes.int32());
     protected static final VertexType<LiteralType> VERTEX_TYPE_PERSON_C = VERTEX_TYPE_PERSON_A.withProperties(Arrays.asList());
 
     protected static final VertexType<LiteralType> VERTEX_TYPE_ORGANIZATION = Graphs.vertexType("Organization", ID_TYPE)
             .property("name", LiteralTypes.string(), true)
+            .property("nickname", LiteralTypes.string(), true) // Intentionally different in requiredness with Person.nickname
+            .property("age", LiteralTypes.int64(), false) // Intentionally different in datatype from Person.age
             .property("industry", LiteralTypes.string(), true)
-            .property("numberOfEmployees", LiteralTypes.int32(), false)
+            .property("numberOfEmployees", LiteralTypes.int64(), false)
             .build();
 
     protected static final EdgeType<LiteralType> EDGE_TYPE_WORKSAT_A = Graphs.edgeType("worksAt", ID_TYPE, "Person", "Organization")
@@ -51,6 +54,7 @@ public abstract class PropertyGraphTestBase extends HydraTestBase {
 
     protected static final Vertex<Literal> VERTEX_PERSON_1 = Graphs.vertex(VERTEX_TYPE_PERSON_A, Literals.string("arthur"))
             .property("name", Literals.string("Arthur Dent"))
+            .property("age", Literals.int32(42))
             .build();
     protected static final Vertex<Literal> VERTEX_PERSON_2 = Graphs.vertex(VERTEX_TYPE_PERSON_A, Literals.string("ford"))
             .property("name", Literals.string("Ford Prefect"))
@@ -61,11 +65,13 @@ public abstract class PropertyGraphTestBase extends HydraTestBase {
             .build();
     protected static final Vertex<Literal> VERTEX_ORGANIZATION_1 = Graphs.vertex(VERTEX_TYPE_ORGANIZATION, Literals.string("megadodo"))
             .property("name", Literals.string("Megadodo Publications"))
+            .property("nickname", Literals.string("Megadodo"))
             .property("industry", Literals.string("publishers"))
             .property("numberOfEmployees", Literals.int32(1000042))
             .build();
     protected static final Vertex<Literal> VERTEX_ORGANIZATION_2 = Graphs.vertex(VERTEX_TYPE_ORGANIZATION, Literals.string("infinidim"))
             .property("name", Literals.string("Infinidim Enterprises"))
+            .property("nickname", Literals.string("Infinidim"))
             .property("industry", Literals.string("all-powerful conglomerates"))
             .build();
     protected static final Edge<Literal> EDGE_WORKSAT_1 = Graphs.edge(EDGE_TYPE_WORKSAT_A, Literals.string("ford-megadodo"),
