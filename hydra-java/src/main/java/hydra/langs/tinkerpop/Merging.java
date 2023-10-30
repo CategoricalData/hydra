@@ -20,6 +20,7 @@ import hydra.langs.tinkerpop.propertyGraph.VertexLabel;
 import hydra.langs.tinkerpop.propertyGraph.VertexType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -40,21 +41,31 @@ public class Merging {
     public static EdgeLabel DEFAULT_EDGE_LABEL = new EdgeLabel("_merged");
 
     public static <T, V> Flow<Unit, StatelessAdapter<List<VertexType<T>>, VertexType<T>, Vertex<V>, Vertex<V>>>
-    createVertexAdapter(List<VertexType<T>> types, IdAdapters<T, V> idAdapters) {
+    createVertexAdapter(List<VertexType<T>> types,
+                        IdAdapters<T, V> idAdapters,
+                        boolean unifyIdenticalTypes) {
         return Flows.map(Flows.check(types,
                 Merging::checkNontrivial,
-                Merging::checkNoDuplicatedVertexLabels), safeTypes -> new StatelessAdapter<List<VertexType<T>>, VertexType<T>, Vertex<V>, Vertex<V>>(
-                false, types, mergeVertexTypes(safeTypes, idAdapters),
-                constructMergedVertexCoder(safeTypes, idAdapters)));
+                Merging::checkNoDuplicatedVertexLabels), safeTypes -> {
+            MergedEntity<VertexType<T>> mergedType = mergeVertexTypes(safeTypes, idAdapters, unifyIdenticalTypes);
+            return new StatelessAdapter<List<VertexType<T>>, VertexType<T>, Vertex<V>, Vertex<V>>(
+                    false, types, mergedType.entity,
+                    constructMergedVertexCoder(safeTypes, idAdapters, mergedType.unifiedProperties));
+        });
     }
 
     public static <T, V> Flow<Unit, StatelessAdapter<List<EdgeType<T>>, EdgeType<T>, Edge<V>, Edge<V>>>
-    createEdgeAdapter(List<EdgeType<T>> types, IdAdapters<T, V> idAdapters) {
+    createEdgeAdapter(List<EdgeType<T>> types,
+                      IdAdapters<T, V> idAdapters,
+                      boolean unifyIdenticalTypes) {
         return Flows.map(Flows.check(types,
                 Merging::checkNontrivial,
-                Merging::checkNoDuplicatedEdgeLabels), safeTypes -> new StatelessAdapter<List<EdgeType<T>>, EdgeType<T>, Edge<V>, Edge<V>>(
-                false, types, mergeEdgeTypes(safeTypes, idAdapters),
-                constructMergedEdgeCoder(safeTypes, idAdapters)));
+                Merging::checkNoDuplicatedEdgeLabels), safeTypes -> {
+            MergedEntity<EdgeType<T>> mergedType = mergeEdgeTypes(safeTypes, idAdapters, unifyIdenticalTypes);
+            return new StatelessAdapter<List<EdgeType<T>>, EdgeType<T>, Edge<V>, Edge<V>>(
+                    false, types, mergedType.entity,
+                    constructMergedEdgeCoder(safeTypes, idAdapters, mergedType.unifiedProperties));
+        });
     }
 
     private static <A> Optional<String> checkNontrivial(List<A> types) {
@@ -85,8 +96,10 @@ public class Merging {
 
     private static <T, V> StatelessCoder<Vertex<V>, Vertex<V>> constructMergedVertexCoder(
             List<VertexType<T>> types,
-            IdAdapters<T, V> idAdapters) {
-        Map<VertexLabel, StatelessCoder<Vertex<V>, Vertex<V>>> coders = constructVertexCoders(types, idAdapters);
+            IdAdapters<T, V> idAdapters,
+            Set<PropertyKey> unifiedPropertyKeys) {
+        Map<VertexLabel, StatelessCoder<Vertex<V>, Vertex<V>>> coders
+                = constructVertexCoders(types, idAdapters, unifiedPropertyKeys);
         return new StatelessCoder<Vertex<V>, Vertex<V>>(
                 v -> Flows.bind(getCoder(coders, v.label), coder -> coder.encode.apply(v)),
                 v -> Flows.bind(getCoder(coders, v.label), coder -> coder.decode.apply(v)));
@@ -94,8 +107,10 @@ public class Merging {
 
     private static <T, V> StatelessCoder<Edge<V>, Edge<V>> constructMergedEdgeCoder(
             List<EdgeType<T>> types,
-            IdAdapters<T, V> idAdapters) {
-        Map<EdgeLabel, StatelessCoder<Edge<V>, Edge<V>>> coders = constructEdgeCoders(types, idAdapters);
+            IdAdapters<T, V> idAdapters,
+            Set<PropertyKey> unifiedPropertyKeys) {
+        Map<EdgeLabel, StatelessCoder<Edge<V>, Edge<V>>> coders
+                = constructEdgeCoders(types, idAdapters, unifiedPropertyKeys);
         return new StatelessCoder<Edge<V>, Edge<V>>(
                 e -> Flows.bind(getCoder(coders, e.label), coder -> coder.encode.apply(e)),
                 e -> Flows.bind(getCoder(coders, e.label), coder -> coder.decode.apply(e)));
@@ -103,9 +118,10 @@ public class Merging {
 
     private static <T, V> StatelessCoder<Vertex<V>, Vertex<V>> constructVertexCoder(
             VertexType<T> type,
-            IdAdapters<T, V> idAdapters) {
+            IdAdapters<T, V> idAdapters,
+            Set<PropertyKey> unifiedPropertyKeys) {
         StatelessCoder<Map<PropertyKey, V>, Map<PropertyKey, V>> propertiesCoder
-                = constructPropertiesCoder(type.label.value);
+                = constructPropertiesCoder(type.label.value, unifiedPropertyKeys);
 
         return new StatelessCoder<Vertex<V>, Vertex<V>>(
                 v -> Flows.map2(
@@ -120,9 +136,10 @@ public class Merging {
 
     private static <T, V> StatelessCoder<Edge<V>, Edge<V>> constructEdgeCoder(
             EdgeType<T> type,
-            IdAdapters<T, V> idAdapters) {
+            IdAdapters<T, V> idAdapters,
+            Set<PropertyKey> unifiedPropertyKeys) {
         StatelessCoder<Map<PropertyKey, V>, Map<PropertyKey, V>> propertiesCoder
-                = constructPropertiesCoder(type.label.value);
+                = constructPropertiesCoder(type.label.value, unifiedPropertyKeys);
 
         return new StatelessCoder<Edge<V>, Edge<V>>(
                 e -> Flows.map4(
@@ -140,11 +157,12 @@ public class Merging {
     }
 
     private static <V> StatelessCoder<Map<PropertyKey, V>, Map<PropertyKey, V>> constructPropertiesCoder(
-            String label) {
+            String label,
+            Set<PropertyKey> unifiedPropertyKeys) {
         Function<Map<PropertyKey, V>, Flow<Unit, Map<PropertyKey, V>>> encode = before -> {
             Map<PropertyKey, V> after = new HashMap<PropertyKey, V>();
             for (Map.Entry<PropertyKey, V> entry : before.entrySet()) {
-                after.put(encodePropertyKey(label, entry.getKey()), entry.getValue());
+                after.put(encodePropertyKey(label, entry.getKey(), unifiedPropertyKeys), entry.getValue());
             }
             return Flows.pure(after);
         };
@@ -152,7 +170,7 @@ public class Merging {
         Function<Map<PropertyKey, V>, Flow<Unit, Map<PropertyKey, V>>> decode = before -> {
             Map<PropertyKey, V> after = new HashMap<PropertyKey, V>();
             for (Map.Entry<PropertyKey, V> entry : before.entrySet()) {
-                after.put(decodePropertyKey(label, entry.getKey()), entry.getValue());
+                after.put(decodePropertyKey(label, entry.getKey(), unifiedPropertyKeys), entry.getValue());
             }
             return Flows.pure(after);
         };
@@ -173,23 +191,33 @@ public class Merging {
 
     private static <T, V> Map<VertexLabel, StatelessCoder<Vertex<V>, Vertex<V>>> constructVertexCoders(
             List<VertexType<T>> types,
-            IdAdapters<T, V> idAdapters) {
-        return constructCoders(types, type -> type.label, type -> constructVertexCoder(type, idAdapters));
+            IdAdapters<T, V> idAdapters,
+            Set<PropertyKey> unifiedPropertyKeys) {
+        return constructCoders(types, type -> type.label, type -> constructVertexCoder(type, idAdapters, unifiedPropertyKeys));
     }
 
     private static <T, V> Map<EdgeLabel, StatelessCoder<Edge<V>, Edge<V>>> constructEdgeCoders(
             List<EdgeType<T>> types,
-            IdAdapters<T, V> idAdapters) {
-        return constructCoders(types, type -> type.label, type -> constructEdgeCoder(type, idAdapters));
+            IdAdapters<T, V> idAdapters,
+            Set<PropertyKey> unifiedPropertyKeys) {
+        return constructCoders(types, type -> type.label, type -> constructEdgeCoder(type, idAdapters, unifiedPropertyKeys));
     }
 
-    private static PropertyKey encodePropertyKey(String label, PropertyKey key) {
-        String prefix = Basics.decapitalize(label) + "_";
-        return new PropertyKey(prefix + key.value);
+    private static PropertyKey encodePropertyKey(String label, PropertyKey key, Set<PropertyKey> unifiedPropertyKeys) {
+        if (unifiedPropertyKeys.contains(key)) {
+            return key;
+        } else {
+            String prefix = Basics.decapitalize(label) + "_";
+            return new PropertyKey(prefix + key.value);
+        }
     }
 
-    private static PropertyKey decodePropertyKey(String label, PropertyKey key) {
-        return new PropertyKey(key.value.substring(label.length() + 1));
+    private static PropertyKey decodePropertyKey(String label, PropertyKey key, Set<PropertyKey> unifiedPropertyKeys) {
+        if (unifiedPropertyKeys.contains(key)) {
+            return key;
+        } else {
+            return new PropertyKey(key.value.substring(label.length() + 1));
+        }
     }
 
     private static <L, E> Flow<Unit, StatelessCoder<E, E>> getCoder(Map<L, StatelessCoder<E, E>> coders, L label) {
@@ -199,27 +227,109 @@ public class Merging {
                 : Flows.pure(helper);
     }
 
-    private static <T, V> VertexType<T> mergeVertexTypes(List<VertexType<T>> types, IdAdapters<T, V> idAdapters) {
-        return new VertexType<T>(DEFAULT_VERTEX_LABEL, idAdapters.mergedVertexIdType,
-                mergePropertyTypes(types, t -> t.label.value, t -> t.properties));
+    private static <T, V> MergedEntity<VertexType<T>> mergeVertexTypes(List<VertexType<T>> types,
+                                                                       IdAdapters<T, V> idAdapters,
+                                                                       boolean unifyIdenticalTypes) {
+        MergedEntity<List<PropertyType<T>>> mergedProps = mergePropertyTypes(
+                types, t -> t.label, l -> l.value, t -> t.properties, unifyIdenticalTypes);
+        VertexType<T> type = new VertexType<T>(DEFAULT_VERTEX_LABEL, idAdapters.mergedVertexIdType,
+                mergedProps.entity);
+        return new MergedEntity<VertexType<T>>(type, mergedProps.unifiedProperties);
     }
 
-    private static <T, V> EdgeType<T> mergeEdgeTypes(List<EdgeType<T>> types, IdAdapters<T, V> idAdapters) {
-        return new EdgeType<T>(DEFAULT_EDGE_LABEL, idAdapters.mergedEdgeIdType, DEFAULT_VERTEX_LABEL, DEFAULT_VERTEX_LABEL,
-                mergePropertyTypes(types, t -> t.label.value, t -> t.properties));
+    private static <T, V> MergedEntity<EdgeType<T>> mergeEdgeTypes(List<EdgeType<T>> types,
+                                                                   IdAdapters<T, V> idAdapters,
+                                                                   boolean unifyIdenticalTypes) {
+        MergedEntity<List<PropertyType<T>>> mergedProps = mergePropertyTypes(
+                types, t -> t.label, l -> l.value, t -> t.properties, unifyIdenticalTypes);
+        EdgeType<T> type = new EdgeType<T>(DEFAULT_EDGE_LABEL, idAdapters.mergedEdgeIdType,
+                DEFAULT_VERTEX_LABEL, DEFAULT_VERTEX_LABEL,
+                mergedProps.entity);
+        return new MergedEntity<EdgeType<T>>(type, mergedProps.unifiedProperties);
     }
 
-    private static <T, E> List<PropertyType<T>> mergePropertyTypes(
+    /**
+     * Produces a set of merged properties together with some metadata on unification:
+     * if all property types for a given key (before merging) are equal, then a single merged property type is produced
+     * for that key. If any are unequal, then an individual property type is produced for each, where the key is
+     * prefixed by the vertex or edge label for disambiguation.
+     */
+    private static <T, E, L> MergedEntity<List<PropertyType<T>>> mergePropertyTypes(
             List<E> types,
-            Function<E, String> getLabel,
-            Function<E, List<PropertyType<T>>> getProperties) {
+            Function<E, L> getLabel,
+            Function<L, String> labelToString,
+            Function<E, List<PropertyType<T>>> getProperties,
+            boolean unifyIdenticalTypes) {
+
+        Set<PropertyKey> unifiedProperties; // Properties to be unified across types
+        Set<PropertyKey> requiredProperties; // Properties which are also present in all types, and required in all types
+        if (unifyIdenticalTypes) {
+            Map<PropertyKey, List<PropertyType<T>>> typesForPropertyKey = new HashMap<PropertyKey, List<PropertyType<T>>>();
+            for (E type : types) {
+                for (PropertyType<T> ptype : getProperties.apply(type)) {
+                    List<PropertyType<T>> typesForThisKey = typesForPropertyKey
+                            .computeIfAbsent(ptype.key, k -> new ArrayList<PropertyType<T>>());
+                    typesForThisKey.add(ptype);
+                }
+            }
+            unifiedProperties = new HashSet<>();
+            requiredProperties = new HashSet<>();
+            for (Map.Entry<PropertyKey, List<PropertyType<T>>> entry : typesForPropertyKey.entrySet()) {
+                if (allPropertyTypesAreEqual(entry.getValue())) {
+                    unifiedProperties.add(entry.getKey());
+
+                    // Also make the property required if it is present and required in all types
+                    if (entry.getValue().size() == types.size() && allPropertyTypesAreRequired(entry.getValue())) {
+                        requiredProperties.add(entry.getKey());
+                    }
+                }
+            }
+        } else {
+            unifiedProperties = Collections.emptySet();
+            requiredProperties = Collections.emptySet();
+        }
+
         List<PropertyType<T>> ptypes = new ArrayList<PropertyType<T>>();
+        Set<PropertyKey> visited = new HashSet<PropertyKey>();
         for (E e : types) {
             for (PropertyType<T> ptype : getProperties.apply(e)) {
-                ptypes.add(new PropertyType<T>(encodePropertyKey(getLabel.apply(e), ptype.key), ptype.value, false));
+                if (unifiedProperties.contains(ptype.key)) {
+                    if (visited.contains(ptype.key)) {
+                        continue;
+                    }
+                    ptypes.add(new PropertyType<T>(ptype.key, ptype.value, requiredProperties.contains(ptype.key)));
+                    visited.add(ptype.key);
+                } else {
+                    boolean required = ptype.required && types.size() == 1;
+                    ptypes.add(new PropertyType<T>(
+                            encodePropertyKey(labelToString.apply(getLabel.apply(e)), ptype.key, unifiedProperties),
+                            ptype.value, required));
+                }
             }
         }
-        return ptypes;
+        return new MergedEntity<List<PropertyType<T>>>(ptypes, unifiedProperties);
+    }
+
+    private static <T> boolean allPropertyTypesAreEqual(List<PropertyType<T>> types) {
+        if (types.isEmpty()) {
+            return true;
+        }
+        PropertyType<T> first = types.get(0);
+        for (int i = 1; i < types.size(); ++i) {
+            if (!types.get(i).value.equals(first.value)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static <T> boolean allPropertyTypesAreRequired(List<PropertyType<T>> types) {
+        for (PropertyType<T> type : types) {
+            if (!type.required) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static class IdAdapters<T, V> {
@@ -287,4 +397,14 @@ public class Merging {
                     return pure(Literals.string(id.value.substring(label.value.length() + 1)));
                 }
             })));
+
+    private static class MergedEntity<A> {
+        private final A entity;
+        private final Set<PropertyKey> unifiedProperties;
+
+        private MergedEntity(A entity, Set<PropertyKey> unifiedProperties) {
+            this.entity = entity;
+            this.unifiedProperties = unifiedProperties;
+        }
+    }
 }
