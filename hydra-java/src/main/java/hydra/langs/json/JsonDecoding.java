@@ -126,6 +126,10 @@ public abstract class JsonDecoding {
         return decodeOptionalField(name, mapping, json, null);
     }
 
+    public static Optional<Integer> decodeOptionalIntegerField(String name, Value json) {
+        return decodeOptionalField(name, JsonDecoding::decodeInteger, json, null);
+    }
+
     public static <A> Optional<Set<A>> decodeOptionalSetField(String name, Function<Value, A> mapping, Value json) {
         return decodeOptionalField(name, v -> decodeSet(mapping, v), json);
     }
