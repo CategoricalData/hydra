@@ -1,7 +1,8 @@
 package hydra.dsl.prims;
 
 import hydra.core.Term;
-import hydra.lib.literals.*;
+import hydra.lib.literals.ShowInt32;
+import hydra.lib.literals.ShowString;
 
 
 public interface Literals {

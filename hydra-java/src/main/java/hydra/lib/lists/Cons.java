@@ -37,6 +37,9 @@ public class Cons<A> extends PrimitiveFunction<A> {
                 l -> Terms.list(Cons.apply(args.get(0), l)));
     }
 
+    /**
+     * Apply the function to both arguments.
+     */
     public static <X> List<X> apply(X el, List<X> l) {
         List<X> combined = new ArrayList<>();
         combined.add(el);

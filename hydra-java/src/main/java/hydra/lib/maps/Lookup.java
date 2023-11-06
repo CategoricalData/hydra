@@ -10,16 +10,14 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
+import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.map;
-import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.optional;
 
 public class Lookup<A> extends PrimitiveFunction<A> {
@@ -29,7 +27,8 @@ public class Lookup<A> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return lambda("k", "v", function("k", map("k", "v"), optional("v")));
+        return lambda("k", "v",
+                function("k", map("k", "v"), optional("v")));
     }
 
     @Override

@@ -4,7 +4,6 @@ import hydra.Flows;
 import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
-import hydra.core.Tuple;
 import hydra.core.Type;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
@@ -15,14 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.map;
-import static hydra.dsl.Types.pair;
-import static hydra.dsl.Types.variable;
 
 public class Keys<A> extends PrimitiveFunction<A> {
     public Name name() {

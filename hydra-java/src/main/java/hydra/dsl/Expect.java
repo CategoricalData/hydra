@@ -32,10 +32,16 @@ import static hydra.Flows.pure;
 import static hydra.Flows.unexpected;
 
 
+/**
+ * Functions for decoding of native Java values from Hydra terms.
+ */
 public class Expect {
     private Expect() {
     }
 
+    /**
+     * Decode a bigfloat value.
+     */
     public static <S, A> Flow<S, Double> bigfloat(final Term<A> term) {
         return bind(float_(term), floatValue -> floatValue.accept(new FloatValue.PartialVisitor<Flow<S, Double>>() {
             @Override
@@ -50,8 +56,12 @@ public class Expect {
         }));
     }
 
+    /**
+     * Decode a bigint value.
+     */
     public static <S, A> Flow<S, BigInteger> bigint(final Term<A> term) {
-        return bind(integer(term), integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, BigInteger>>() {
+        return bind(integer(term),
+                integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, BigInteger>>() {
             @Override
             public Flow<S, BigInteger> otherwise(IntegerValue instance) {
                 return wrongType("bigint", term);
@@ -64,6 +74,9 @@ public class Expect {
         }));
     }
 
+    /**
+     * Decode a binary value.
+     */
     public static <S, A> Flow<S, String> binary(final Term<A> term) {
         return bind(literal(term), literal -> literal.accept(new Literal.PartialVisitor<Flow<S, String>>() {
             @Override
@@ -78,6 +91,9 @@ public class Expect {
         }));
     }
 
+    /**
+     * Decode a boolean value.
+     */
     public static <S, A> Flow<S, Boolean> boolean_(final Term<A> term) {
         return bind(literal(term), literal -> literal.accept(new Literal.PartialVisitor<Flow<S, Boolean>>() {
             @Override
@@ -92,9 +108,12 @@ public class Expect {
         }));
     }
 
-    public static <S, A, X> Flow<S, X> field (final FieldName fname,
-                                              final Function<Term<A>, Flow<S, X>> accessor,
-                                              final Map<FieldName, Term<A>> fields) {
+    /**
+     * Retrieve and decode a field from a map of field names to terms.
+     */
+    public static <S, A, X> Flow<S, X> field(final FieldName fname,
+                                             final Function<Term<A>, Flow<S, X>> accessor,
+                                             final Map<FieldName, Term<A>> fields) {
         Term<A> term = fields.get(fname);
         if (term == null) {
             return Flows.fail("field " + fname + " not found");
@@ -103,6 +122,9 @@ public class Expect {
         }
     }
 
+    /**
+     * Decode a floating point value.
+     */
     public static <S, A> Flow<S, FloatValue> float_(final Term<A> term) {
         return bind(literal(term), literal -> literal.accept(new Literal.PartialVisitor<Flow<S, FloatValue>>() {
             @Override
@@ -117,6 +139,9 @@ public class Expect {
         }));
     }
 
+    /**
+     * Decode a float32 value.
+     */
     public static <S, A> Flow<S, Float> float32(final Term<A> term) {
         return bind(float_(term), floatValue -> floatValue.accept(new FloatValue.PartialVisitor<Flow<S, Float>>() {
             @Override
@@ -131,6 +156,9 @@ public class Expect {
         }));
     }
 
+    /**
+     * Decode a float64 value.
+     */
     public static <S, A> Flow<S, Double> float64(final Term<A> term) {
         return bind(float_(term), floatValue -> floatValue.accept(new FloatValue.PartialVisitor<Flow<S, Double>>() {
             @Override
@@ -145,6 +173,9 @@ public class Expect {
         }));
     }
 
+    /**
+     * Decode a function.
+     */
     public static <A, X, Y> Function<X, Flow<Graph<A>, Y>> function(
         final Function<X, Term<A>> fin,
         final Function<Term<A>, Flow<Graph<A>, Y>> fout,
@@ -152,8 +183,12 @@ public class Expect {
         return x -> bind(Reduction.reduce(false, Terms.apply(func, fin.apply(x))), fout);
     }
 
+    /**
+     * Decode an int8 value.
+     */
     public static <S, A> Flow<S, Short> int8(final Term<A> term) {
-        return bind(integer(term), integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Short>>() {
+        return bind(integer(term),
+                integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Short>>() {
             @Override
             public Flow<S, Short> otherwise(IntegerValue instance) {
                 return wrongType("int8", term);
@@ -166,8 +201,12 @@ public class Expect {
         }));
     }
 
+    /**
+     * Decode an int16 value.
+     */
     public static <S, A> Flow<S, Short> int16(final Term<A> term) {
-        return bind(integer(term), integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Short>>() {
+        return bind(integer(term),
+                integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Short>>() {
             @Override
             public Flow<S, Short> otherwise(IntegerValue instance) {
                 return wrongType("int16", term);
@@ -180,8 +219,12 @@ public class Expect {
         }));
     }
 
+    /**
+     * Decode an int32 value.
+     */
     public static <S, A> Flow<S, Integer> int32(final Term<A> term) {
-        return bind(integer(term), integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Integer>>() {
+        return bind(integer(term),
+                integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Integer>>() {
             @Override
             public Flow<S, Integer> otherwise(IntegerValue instance) {
                 return wrongType("int32", term);
@@ -194,8 +237,12 @@ public class Expect {
         }));
     }
 
+    /**
+     * Decode an int64 value.
+     */
     public static <S, A> Flow<S, Long> int64(final Term<A> term) {
-        return bind(integer(term), integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Long>>() {
+        return bind(integer(term),
+                integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Long>>() {
             @Override
             public Flow<S, Long> otherwise(IntegerValue instance) {
                 return wrongType("int64", term);
@@ -208,6 +255,9 @@ public class Expect {
         }));
     }
 
+    /**
+     * Decode an integer value.
+     */
     public static <S, A> Flow<S, IntegerValue> integer(final Term<A> term) {
         return bind(literal(term), literal -> literal.accept(new Literal.PartialVisitor<Flow<S, IntegerValue>>() {
             @Override
@@ -222,6 +272,9 @@ public class Expect {
         }));
     }
 
+    /**
+     * Decode a list of values.
+     */
     public static <S, A, X> Flow<S, List<X>> list(final Function<Term<A>, Flow<S, X>> elems, final Term<A> term) {
         return term.accept(new Term.PartialVisitor<A, Flow<S, List<X>>>() {
             @Override
@@ -236,6 +289,9 @@ public class Expect {
         });
     }
 
+    /**
+     * Decode a literal value.
+     */
     public static <S, A> Flow<S, Literal> literal(final Term<A> term) {
         return term.accept(new Term.PartialVisitor<A, Flow<S, Literal>>() {
             @Override
@@ -250,6 +306,9 @@ public class Expect {
         });
     }
 
+    /**
+     * Decode a map of keys to values.
+     */
     public static <S, A, K, V> Flow<S, Map<K, V>> map(
             final Function<Term<A>, Flow<S, K>> keys,
             final Function<Term<A>, Flow<S, V>> values,
@@ -263,7 +322,11 @@ public class Expect {
             @Override
             public Flow<S, Map<K, V>> visit(Term.Map<A> instance) {
                 Term.Map<A> mp = instance;
-                return Flows.map(Flows.mapM(new ArrayList<>(mp.value.entrySet()), entry -> Flows.map2(keys.apply(entry.getKey()), values.apply(entry.getValue()), AbstractMap.SimpleEntry::new)),
+                return Flows.map(Flows.mapM(new ArrayList<>(mp.value.entrySet()),
+                                entry -> Flows.map2(
+                                        keys.apply(entry.getKey()),
+                                        values.apply(entry.getValue()),
+                                        AbstractMap.SimpleEntry::new)),
                         (Function<List<Map.Entry<K, V>>, Map<K, V>>) entries -> {
                     Map<K, V> result = new HashMap<>();
                     for (Map.Entry<K, V> e : entries) {
@@ -275,7 +338,11 @@ public class Expect {
         });
     }
 
-    public static <S, A, X> Flow<S, Optional<X>> optional(final Function<Term<A>, Flow<S, X>> elems, final Term<A> term) {
+    /**
+     * Decode an optional value.
+     */
+    public static <S, A, X> Flow<S, Optional<X>> optional(final Function<Term<A>, Flow<S, X>> elems,
+                                                          final Term<A> term) {
         return term.accept(new Term.PartialVisitor<A, Flow<S, Optional<X>>>() {
             @Override
             public Flow<S, Optional<X>> otherwise(Term<A> instance) {
@@ -290,6 +357,9 @@ public class Expect {
         });
     }
 
+    /**
+     * Decode a pair of values.
+     */
     public static <S, A, T1, T2> Flow<S, Tuple.Tuple2<T1, T2>> pair(
             final Function<Term<A>, Flow<S, T1>> first,
             final Function<Term<A>, Flow<S, T2>> second,
@@ -311,6 +381,9 @@ public class Expect {
         });
     }
 
+    /**
+     * Decode a record.
+     */
     public static <S, A> Flow<S, List<Field<A>>> record(final Name tname, final Term<A> term) {
         return term.accept(new Term.PartialVisitor<A, Flow<S, List<Field<A>>>>() {
             @Override
@@ -329,6 +402,9 @@ public class Expect {
         });
     }
 
+    /**
+     * Decode a record as a map from field names to terms.
+     */
     public static <S, A> Flow<S, Map<FieldName, Term<A>>> recordAsMap(final Name tname, final Term<A> term) {
         return Flows.map(record(tname, term), fields -> {
             Map<FieldName, Term<A>> result = new HashMap<>();
@@ -339,6 +415,9 @@ public class Expect {
         });
     }
 
+    /**
+     * Decode a set of values.
+     */
     public static <S, A, X> Flow<S, Set<X>> set(final Function<Term<A>, Flow<S, X>> elems, final Term<A> term) {
         return term.accept(new Term.PartialVisitor<A, Flow<S, Set<X>>>() {
             @Override
@@ -353,6 +432,9 @@ public class Expect {
         });
     }
 
+    /**
+     * Decode a string value.
+     */
     public static <S, A> Flow<S, String> string(final Term<A> term) {
         return bind(literal(term), literal -> literal.accept(new Literal.PartialVisitor<Flow<S, String>>() {
             @Override
@@ -367,16 +449,26 @@ public class Expect {
         }));
     }
 
+    /**
+     * Decode a term.
+     */
     public static <S, A> Flow<S, Term<A>> term(final Term<A> term) {
         return pure(term);
     }
 
+    /**
+     * Decode a type.
+     */
     public static <S, A> Flow<S, Type<A>> type(final Term<A> term) {
         return fail("Core decoding not yet implemented");
     }
 
+    /**
+     * Decode a uint8 value.
+     */
     public static <S, A> Flow<S, Byte> uint8(final Term<A> term) {
-        return bind(integer(term), integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Byte>>() {
+        return bind(integer(term),
+                integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Byte>>() {
             @Override
             public Flow<S, Byte> otherwise(IntegerValue instance) {
                 return wrongType("uint8", term);
@@ -389,8 +481,12 @@ public class Expect {
         }));
     }
 
+    /**
+     * Decode a uint16 value.
+     */
     public static <S, A> Flow<S, Character> uint16(final Term<A> term) {
-        return bind(integer(term), integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Character>>() {
+        return bind(integer(term),
+                integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Character>>() {
             @Override
             public Flow<S, Character> otherwise(IntegerValue instance) {
                 return wrongType("uint16", term);
@@ -403,8 +499,12 @@ public class Expect {
         }));
     }
 
+    /**
+     * Decode a uint32 value.
+     */
     public static <S, A> Flow<S, Long> uint32(final Term<A> term) {
-        return bind(integer(term), integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Long>>() {
+        return bind(integer(term),
+                integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Long>>() {
             @Override
             public Flow<S, Long> otherwise(IntegerValue instance) {
                 return wrongType("uint32", term);
@@ -417,8 +517,12 @@ public class Expect {
         }));
     }
 
+    /**
+     * Decode a uint64 value.
+     */
     public static <S, A> Flow<S, BigInteger> uint64(final Term<A> term) {
-        return bind(integer(term), integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, BigInteger>>() {
+        return bind(integer(term),
+                integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, BigInteger>>() {
             @Override
             public Flow<S, BigInteger> otherwise(IntegerValue instance) {
                 return wrongType("uint64", term);

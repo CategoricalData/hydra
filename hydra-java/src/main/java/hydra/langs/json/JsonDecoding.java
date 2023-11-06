@@ -16,6 +16,9 @@ import java.util.stream.Collectors;
  * Decoding failures result in Java exceptions rather than failure flows.
  */
 public abstract class JsonDecoding {
+    /**
+     * Decode a list from JSON.
+     */
     public static <A> List<A> decodeList(Function<Value, A> mapping, Value json) {
         return json.accept(new Value.PartialVisitor<List<A>>() {
             @Override
@@ -35,6 +38,9 @@ public abstract class JsonDecoding {
         });
     }
 
+    /**
+     * Decode a boolean value from JSON.
+     */
     public static boolean decodeBoolean(Value json) {
         return json.accept(new Value.PartialVisitor<Boolean>() {
             @Override
@@ -49,27 +55,42 @@ public abstract class JsonDecoding {
         });
     }
 
+    /**
+     * Decode a double value from JSON.
+     */
     public static double decodeDouble(Value json) {
         Number num = decodeNumber(json);
         return num.doubleValue();
     }
 
+    /**
+     * Decode a float value from JSON.
+     */
     public static float decodeFloat(Value json) {
         Number num = decodeNumber(json);
         return num.floatValue();
     }
 
+    /**
+     * Decode an integer value from JSON.
+     */
     public static int decodeInteger(Value json) {
         Number num = decodeNumber(json);
         return num.intValue();
     }
 
+    /**
+     * Decode a list field from JSON.
+     */
     public static <A> List<A> decodeListField(String name, Function<Value, A> mapping, Value json) {
         // Note: this allows the field to be omitted, and also allows a null value, both resulting in an empty list
         Optional<List<A>> opt = decodeOptionalField(name, v -> decodeList(mapping, v), json, Collections.emptyList());
         return opt.orElse(Collections.emptyList());
     }
 
+    /**
+     * Decode a number from JSON.
+     */
     public static double decodeNumber(Value json) {
         return json.accept(new Value.PartialVisitor<Double>() {
             @Override
@@ -84,6 +105,9 @@ public abstract class JsonDecoding {
         });
     }
 
+    /**
+     * Decode an object (key/value map) from JSON.
+     */
     public static Map<String, Value> decodeObject(Value json) {
         return json.accept(new Value.PartialVisitor<Map<String, Value>>() {
             @Override
@@ -98,11 +122,20 @@ public abstract class JsonDecoding {
         });
     }
 
+    /**
+     * Decode an optional double-valued field from JSON.
+     */
     public static Optional<Double> decodeOptionalDoubleField(String name, Value json) {
         return decodeOptionalField(name, JsonDecoding::decodeDouble, json, null);
     }
 
-    public static <A> Optional<A> decodeOptionalField(String name, Function<Value, A> mapping, Value json, A defaultValue) {
+    /**
+     * Decode an optional field from JSON.
+     */
+    public static <A> Optional<A> decodeOptionalField(String name,
+                                                      Function<Value, A> mapping,
+                                                      Value json,
+                                                      A defaultValue) {
         Map<String, Value> map = decodeObject(json);
         Value fieldValue = map.get(name);
         if (fieldValue == null) {
@@ -122,18 +155,30 @@ public abstract class JsonDecoding {
         }
     }
 
+    /**
+     * Decode an optional field from JSON.
+     */
     public static <A> Optional<A> decodeOptionalField(String name, Function<Value, A> mapping, Value json) {
         return decodeOptionalField(name, mapping, json, null);
     }
 
+    /**
+     * Decode an optional integer-valued field from JSON.
+     */
     public static Optional<Integer> decodeOptionalIntegerField(String name, Value json) {
         return decodeOptionalField(name, JsonDecoding::decodeInteger, json, null);
     }
 
+    /**
+     * Decode an optional set-valued field from JSON.
+     */
     public static <A> Optional<Set<A>> decodeOptionalSetField(String name, Function<Value, A> mapping, Value json) {
         return decodeOptionalField(name, v -> decodeSet(mapping, v), json);
     }
 
+    /**
+     * Decode a required field from JSON.
+     */
     public static <A> A decodeRequiredField(String name, Function<Value, A> mapping, Value json, A defaultValue) {
         Optional<A> opt = decodeOptionalField(name, mapping, json);
         if (opt.isPresent()) {
@@ -143,18 +188,30 @@ public abstract class JsonDecoding {
         }
     }
 
+    /**
+     * Decode a required field from JSON.
+     */
     public static <A> A decodeRequiredField(String name, Function<Value, A> mapping, Value json) {
         return decodeRequiredField(name, mapping, json, null);
     }
 
+    /**
+     * Decode a required list-valued field from JSON.
+     */
     public static <A> List<A> decodeRequiredListField(String name, Function<Value, A> mapping, Value json) {
         return decodeRequiredField(name, v -> decodeList(mapping, v), json, Collections.emptyList());
     }
 
+    /**
+     * Decode a set from JSON.
+     */
     public static <A> Set<A> decodeSet(Function<Value, A> mapping, Value json) {
         return new HashSet<>(decodeList(mapping, json));
     }
 
+    /**
+     * Decode a string value from JSON.
+     */
     public static String decodeString(Value json) {
         return json.accept(new Value.PartialVisitor<String>() {
             @Override
@@ -169,10 +226,16 @@ public abstract class JsonDecoding {
         });
     }
 
+    /**
+     * Decode a list of string values from JSON.
+     */
     public static List<String> decodeStringList(Value json) {
         return decodeList(JsonDecoding::decodeString, json);
     }
 
+    /**
+     * Decode an enumerated value from JSON.
+     */
     public static <A> A decodeEnum(Map<String, A> values, Value json) {
         String key = decodeString(json);
         A value = values.get(key);
@@ -183,6 +246,9 @@ public abstract class JsonDecoding {
         }
     }
 
+    /**
+     * Decode a union (injection) from JSON.
+     */
     public static <A> A decodeUnion(Map<String, Function<Value, A>> mappings, Value json) {
         return json.accept(new Value.PartialVisitor<A>() {
             @Override
@@ -217,6 +283,9 @@ public abstract class JsonDecoding {
         });
     }
 
+    /**
+     * Fail on an unexpected JSON value.
+     */
     public static RuntimeException unexpected(String expected, Value actual) {
         return new RuntimeException("expected " + expected + ", found " + actual);
     }

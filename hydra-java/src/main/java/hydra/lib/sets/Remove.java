@@ -14,7 +14,11 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.HashSet;
 import java.util.Set;
-import static hydra.dsl.Types.*;
+
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.set;
+
 
 public class Remove<A> extends PrimitiveFunction<A> {
     public Name name() {
@@ -35,6 +39,9 @@ public class Remove<A> extends PrimitiveFunction<A> {
         return (arg) -> apply(elem, arg);
     }
 
+    /**
+     * Apply the function to both arguments.
+     */
     public static <X> Set<X> apply(X elem, Set<X> arg) {
         Set<X> newSet = new HashSet<>(arg);
         newSet.remove(elem);

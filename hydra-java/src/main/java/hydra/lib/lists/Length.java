@@ -13,8 +13,10 @@ import hydra.tools.PrimitiveFunction;
 import java.util.List;
 import java.util.function.Function;
 
-import static hydra.Flows.*;
-import static hydra.dsl.Types.*;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.int32;
+import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.list;
 
 public class Length<A> extends PrimitiveFunction<A> {
     public Name name() {
@@ -28,7 +30,7 @@ public class Length<A> extends PrimitiveFunction<A> {
 
     @Override
     protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
-        return args -> map(Expect.list(Flows::pure, args.get(0)), l -> Terms.int32(apply(l)));
+        return args -> Flows.map(Expect.list(Flows::pure, args.get(0)), l -> Terms.int32(apply(l)));
     }
 
     public static <X> int apply(List<X> list) {

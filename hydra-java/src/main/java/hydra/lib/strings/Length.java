@@ -12,7 +12,10 @@ import java.util.List;
 import java.util.function.Function;
 
 import static hydra.Flows.map;
-import static hydra.dsl.Types.*;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.int32;
+import static hydra.dsl.Types.string;
+
 
 public class Length<A> extends PrimitiveFunction<A> {
     public Name name() {

@@ -11,13 +11,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A bidirectional coder between Hydra's native JSON values and the JSON objects supported by json-io
+ * A bidirectional coder between Hydra's native JSON values and the JSON objects supported by json-io.
  */
 public class JsonIoCoder<S1, S2> extends Coder<S1, S2, Value, Object> {
     public JsonIoCoder() {
         super(JsonIoCoder::encode, JsonIoCoder::decode);
     }
 
+    /**
+     * Encode a JSON value as a json-io object.
+     */
     public static <S> Flow<S, Object> encode(Value value) {
         return value.accept(new Value.Visitor<Flow<S, Object>>() {
             @Override
@@ -59,6 +62,9 @@ public class JsonIoCoder<S1, S2> extends Coder<S1, S2, Value, Object> {
         });
     }
 
+    /**
+     * Decode a json-io object as a JSON value.
+     */
     public static <S> Flow<S, Value> decode(Object value) {
         if (value == null) {
             return Flows.pure(new Value.Null());
@@ -79,6 +85,9 @@ public class JsonIoCoder<S1, S2> extends Coder<S1, S2, Value, Object> {
         }
     }
 
+    /**
+     * Normalize an already-encoded json-io object.
+     */
     public static Object normalizeEncoded(Object raw) {
         if (raw instanceof Value.Null) {
             return null;

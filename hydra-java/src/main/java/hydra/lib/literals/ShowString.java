@@ -12,7 +12,9 @@ import hydra.tools.PrimitiveFunction;
 import java.util.List;
 import java.util.function.Function;
 import org.apache.commons.text.StringEscapeUtils;
-import static hydra.dsl.Types.*;
+
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.string;
 
 public class ShowString<A> extends PrimitiveFunction<A> {
     public Name name() {

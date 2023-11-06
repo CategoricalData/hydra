@@ -36,6 +36,9 @@ public class FromList<A> extends PrimitiveFunction<A> {
         };
     }
 
+    /**
+     * Apply the function to its single argument.
+     */
     public static String apply(List<Integer> list) {
         StringBuilder sb = new StringBuilder();
         for (Integer i : list) {

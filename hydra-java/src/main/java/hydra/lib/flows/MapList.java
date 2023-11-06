@@ -2,29 +2,24 @@ package hydra.lib.flows;
 
 import hydra.Flows;
 import hydra.compute.Flow;
-import hydra.compute.FlowState;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.dsl.Types;
-import hydra.dsl.prims.Optionals;
 import hydra.graph.Graph;
 import hydra.lib.lists.Cons;
 import hydra.tools.PrimitiveFunction;
 
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static hydra.dsl.Terms.app;
-import static hydra.dsl.Terms.flowState;
 import static hydra.dsl.Terms.lambda;
 import static hydra.dsl.Terms.list;
-import static hydra.dsl.Terms.projection;
-import static hydra.dsl.Terms.unwrap;
+import static hydra.dsl.Terms.project;
 import static hydra.dsl.Terms.variable;
 
 
@@ -37,7 +32,8 @@ public class MapList<A> extends PrimitiveFunction<A> {
     private final Term<A> cons = (new Cons<A>()).term();
     private final Term<A> pure = (new Pure<A>()).term();
     private final Term<A> map2 = lambda("x", lambda("y", lambda("fun",
-                app(bind, variable("x"), lambda("x1", app(bind, variable("y"), lambda("y1", app(pure, app("f", "a1", "b1")))))))));
+                app(bind, variable("x"), lambda("x1", app(bind, variable("y"),
+                        lambda("y1", app(pure, app("f", "a1", "b1")))))))));
 
     @Override
     public Type<A> type() {
@@ -54,7 +50,8 @@ public class MapList<A> extends PrimitiveFunction<A> {
             Term<A> mapping = args.get(0);
             return Flows.map(Expect.list(Flows::pure, args.get(1)), (Function<List<Term<A>>, Term<A>>) terms -> {
                 Term<A> appList = list(terms.stream().map(x -> app(mapping, x)).collect(Collectors.toList()));
-                Term<A> foldFun = lambda("fList", lambda("fEl", app(map2, variable("fEl"), variable("fList"), cons)));
+                Term<A> foldFun = lambda("fList",
+                        lambda("fEl", app(map2, variable("fEl"), variable("fList"), cons)));
                 return app(Terms.fold(foldFun), app(pure, list()), appList);
             });
         };

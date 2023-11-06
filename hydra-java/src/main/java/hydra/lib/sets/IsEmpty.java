@@ -14,7 +14,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-import static hydra.dsl.Types.*;
+import static hydra.dsl.Types.boolean_;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.set;
+
 
 public class IsEmpty<A> extends PrimitiveFunction<A> {
     public Name name() {

@@ -1,5 +1,6 @@
 package hydra.lib.strings;
 
+import hydra.Flows;
 import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
@@ -12,8 +13,10 @@ import hydra.tools.PrimitiveFunction;
 import java.util.List;
 import java.util.function.Function;
 
-import static hydra.Flows.*;
-import static hydra.dsl.Types.*;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.list;
+import static hydra.dsl.Types.string;
+
 
 public class Cat<A> extends PrimitiveFunction<A> {
     public Name name() {
@@ -27,7 +30,7 @@ public class Cat<A> extends PrimitiveFunction<A> {
 
     @Override
     protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
-        return args -> map(Expect.list(Expect::string, args.get(0)),
+        return args -> Flows.map(Expect.list(Expect::string, args.get(0)),
             strings -> Terms.string(apply(strings)));
     }
 

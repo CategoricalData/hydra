@@ -1,30 +1,41 @@
 package hydra.lib;
 
+import hydra.lib.lists.Apply;
+import hydra.lib.lists.Bind;
+import hydra.lib.lists.Concat;
+import hydra.lib.lists.Head;
+import hydra.lib.lists.Intercalate;
+import hydra.lib.lists.Intersperse;
+import hydra.lib.lists.Last;
+import hydra.lib.lists.Length;
+import hydra.lib.lists.Map;
+import hydra.lib.lists.Pure;
 import org.junit.jupiter.api.Test;
-
-import hydra.lib.strings.ToUpper;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
-import hydra.lib.lists.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 public class ListsTest {
     @Test
     public void applyIsCorrect() {
         assertEquals(Arrays.asList("ONE", "TWO", "THREE", "one", "two", "three"),
-                Apply.apply(Arrays.asList(String::toUpperCase, String::toLowerCase), Arrays.asList("One", "Two", "Three")));
+                Apply.apply(Arrays.asList(String::toUpperCase, String::toLowerCase),
+                        Arrays.asList("One", "Two", "Three")));
     }
 
     @Test
     public void bindIsCorrect() {
-        Function<Integer, List<Integer>> mapping = n -> (n%2 == 0) ? Arrays.asList(n, n) : Collections.singletonList(n);
+        Function<Integer, List<Integer>> mapping = n -> (n % 2 == 0)
+                ? Arrays.asList(n, n)
+                : Collections.singletonList(n);
 
-        assertEquals(Arrays.asList(1,2,2,3,4,4), Bind.apply(Arrays.asList(1,2,3,4), mapping));
+        assertEquals(Arrays.asList(1, 2, 2, 3, 4, 4), Bind.apply(Arrays.asList(1, 2, 3, 4), mapping));
     }
 
     @Test

@@ -4,16 +4,26 @@ import hydra.core.Nominal;
 import hydra.core.Type;
 import org.junit.jupiter.api.Test;
 
-import static hydra.dsl.Core.*;
-import static hydra.dsl.Types.*;
+import static hydra.dsl.Core.fieldName;
+import static hydra.dsl.Core.name;
+import static hydra.dsl.Types.annot;
+import static hydra.dsl.Types.field;
+import static hydra.dsl.Types.float32;
+import static hydra.dsl.Types.float64;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.int32;
+import static hydra.dsl.Types.record;
+import static hydra.dsl.Types.string;
+import static hydra.dsl.Types.union;
+import static hydra.dsl.Types.wrap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 /**
  * Test illustrating the use of the Types API in Java, which is used for constructing type definitions.
- *
- * Note: for simplicity, these types are annotated using the String class. A more typical annotation class is {@link hydra.compute.Kv}
+ * Note: for simplicity, these types are annotated using the String class.
+ * A more typical annotation class is {@link hydra.compute.Kv}
  */
 @SuppressWarnings("unchecked")
 public class TypesTest {
@@ -50,11 +60,13 @@ public class TypesTest {
 
     assertTrue(pairOfLatLonsToFloatType instanceof Type.Function);
     assertTrue(((Type.Function<String>) pairOfLatLonsToFloatType).value.domain instanceof Type.Wrap);
-    assertEquals(new Nominal<>(name("LatLon"), float32()), ((Type.Wrap<String>) ((Type.Function<String>) pairOfLatLonsToFloatType).value.domain).value);
+    assertEquals(new Nominal<>(name("LatLon"), float32()),
+            ((Type.Wrap<String>) ((Type.Function<String>) pairOfLatLonsToFloatType).value.domain).value);
 
     assertTrue(annotatedType instanceof Type.Annotated);
     // Notice that annotations, here, are String-valued
-    assertEquals("this is a string-annotated double type", ((Type.Annotated<String>) annotatedType).value.annotation);
+    assertEquals("this is a string-annotated double type",
+            ((Type.Annotated<String>) annotatedType).value.annotation);
     assertEquals(float64(), ((Type.Annotated<String>) annotatedType).value.subject);
   }
 

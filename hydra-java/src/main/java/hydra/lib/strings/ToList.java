@@ -41,6 +41,9 @@ public class ToList<A> extends PrimitiveFunction<A> {
         });
     }
 
+    /**
+     * Apply the function to its single argument.
+     */
     public static List<Integer> apply(String s) {
         List<Integer> list = new ArrayList<>(s.length());
         for (char c : s.toCharArray()) {

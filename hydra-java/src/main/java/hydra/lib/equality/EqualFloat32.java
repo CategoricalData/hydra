@@ -9,6 +9,7 @@ public class EqualFloat32<A> extends EqualityFunction<A, Float> {
     public EqualFloat32() {
         super(PrimitiveType.float32(), Relation.EQUALS);
     }
+
     public static Function<Float, Boolean> apply(Float second) {
         return first -> apply(first, second);
     }

@@ -4,12 +4,18 @@ import hydra.langs.tinkerpop.propertyGraph.Edge;
 import hydra.langs.tinkerpop.propertyGraph.EdgeLabel;
 import hydra.langs.tinkerpop.propertyGraph.EdgeType;
 
+/**
+ * A builder object for property graph edges.
+ */
 public class EdgeBuilder<V> extends ElementBuilder<V, Edge<V>, EdgeBuilder<V>> {
     private final EdgeLabel label;
     private final V id;
     private final V outId;
     private final V inId;
 
+    /**
+     * Construct the builder object.
+     */
     public EdgeBuilder(EdgeLabel label, V id, V outId, V inId) {
         this.label = label;
         this.id = id;

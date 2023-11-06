@@ -1,13 +1,17 @@
 package hydra.lib;
 
+import hydra.lib.strings.Cat;
+import hydra.lib.strings.Length;
+import hydra.lib.strings.SplitOn;
+import hydra.lib.strings.ToLower;
+import hydra.lib.strings.ToUpper;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 
-// import static hydra.dsl.prims.Strings.*;
-import hydra.lib.strings.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class StringsTest {
     @Test
@@ -43,14 +47,16 @@ public class StringsTest {
     }
 
     @Test
-    // TODO: test the behavior of toLower for extended characters. Currently, the implementation just inherits Java's String.toLower()
+    // TODO: test the behavior of toLower for extended characters.
+    // Currently, the implementation just inherits Java's String.toLower()
     public void toLowerIsCorrect() {
         assertEquals("one two three", ToLower.apply("One TWO threE"));
         assertEquals("abc123", ToLower.apply("AbC123"));
     }
 
     @Test
-    // TODO: test the behavior of toUpper for extended characters. Currently, the implementation just inherits Java's String.toUpper()
+    // TODO: test the behavior of toUpper for extended characters.
+    // Currently, the implementation just inherits Java's String.toUpper()
     public void toUpperIsCorrect() {
         assertEquals("ONE TWO THREE", ToUpper.apply("One TWO threE"));
         assertEquals("ABC123", ToUpper.apply("AbC123"));

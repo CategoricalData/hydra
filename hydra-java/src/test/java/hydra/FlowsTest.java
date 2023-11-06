@@ -62,17 +62,17 @@ public class FlowsTest {
 
     @Test
     public void checkWarnings() {
-        Flow<Void, Integer> flow0 = pure(42);
-        Flow<Void, Integer> flow1 = Flows.warn("oops", flow0);
-        Flow<Void, Integer> flow2 = Flows.warn("drat", flow1);
-        Flow<Void, Integer> flow3 = Flows.warn("oops", flow2);
-        Flow<Void, Integer> flow4 = Flows.bind(flow3, x -> Flows.fail("failed"));
+        final Flow<Void, Integer> flow0 = pure(42);
+        final Flow<Void, Integer> flow1 = Flows.warn("oops", flow0);
+        final Flow<Void, Integer> flow2 = Flows.warn("drat", flow1);
+        final Flow<Void, Integer> flow3 = Flows.warn("oops", flow2);
+        final Flow<Void, Integer> flow4 = Flows.bind(flow3, x -> Flows.fail("failed"));
 
-        FlowState<Void, Integer> result0 = flow0.value.apply(null).apply(EMPTY_TRACE);
-        FlowState<Void, Integer> result1 = flow1.value.apply(null).apply(EMPTY_TRACE);
-        FlowState<Void, Integer> result2 = flow2.value.apply(null).apply(EMPTY_TRACE);
-        FlowState<Void, Integer> result3 = flow3.value.apply(null).apply(EMPTY_TRACE);
-        FlowState<Void, Integer> result4 = flow4.value.apply(null).apply(EMPTY_TRACE);
+        final FlowState<Void, Integer> result0 = flow0.value.apply(null).apply(EMPTY_TRACE);
+        final FlowState<Void, Integer> result1 = flow1.value.apply(null).apply(EMPTY_TRACE);
+        final FlowState<Void, Integer> result2 = flow2.value.apply(null).apply(EMPTY_TRACE);
+        final FlowState<Void, Integer> result3 = flow3.value.apply(null).apply(EMPTY_TRACE);
+        final FlowState<Void, Integer> result4 = flow4.value.apply(null).apply(EMPTY_TRACE);
 
         assertTrue(result0.value.isPresent());
         assertTrue(result1.value.isPresent());

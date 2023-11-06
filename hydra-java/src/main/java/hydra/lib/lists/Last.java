@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.function.Function;
 
 import static hydra.Flows.map;
-import static hydra.dsl.Types.*;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.list;
 
 public class Last<A> extends PrimitiveFunction<A> {
     public Name name() {

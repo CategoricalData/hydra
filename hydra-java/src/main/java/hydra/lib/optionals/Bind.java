@@ -13,7 +13,11 @@ import hydra.tools.PrimitiveFunction;
 import java.util.List;
 import java.util.function.Function;
 import java.util.Optional;
-import static hydra.dsl.Types.*;
+
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.optional;
+
 
 public class Bind<A> extends PrimitiveFunction<A> {
     public Name name() {
@@ -22,13 +26,14 @@ public class Bind<A> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return lambda("a", lambda("b", function(optional("a"), function("a", optional("b")), optional("b"))));
+        return lambda("a", lambda("b",
+                function(optional("a"), function("a", optional("b")), optional("b"))));
     }
 
     @Override
     protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
         return args -> Flows.map(Expect.optional(Flows::pure, args.get(0)),
-            optionalArg -> optionalArg.map(aTerm -> Terms.optional(Optional.of(Terms.apply(args.get(1), aTerm))))
+            arg -> arg.map(term -> Terms.optional(Optional.of(Terms.apply(args.get(1), term))))
                 .orElseGet(() -> Terms.optional(Optional.empty())));
     }
 
@@ -36,6 +41,9 @@ public class Bind<A> extends PrimitiveFunction<A> {
         return (f) -> apply(optionalArg, f);
     }
 
+    /**
+     * Apply the function to both arguments.
+     */
     public static <X, Y> Optional<Y> apply(Optional<X> optionalArg, Function<X, Optional<Y>> f) {
         return optionalArg.isPresent()
             ? f.apply(optionalArg.get())

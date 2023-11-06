@@ -17,7 +17,7 @@ import java.util.function.Function;
 import static hydra.dsl.Terms.app;
 import static hydra.dsl.Terms.flowState;
 import static hydra.dsl.Terms.lambda;
-import static hydra.dsl.Terms.projection;
+import static hydra.dsl.Terms.project;
 import static hydra.dsl.Terms.unwrap;
 import static hydra.dsl.Terms.variable;
 
@@ -40,9 +40,9 @@ public class Map<A> extends PrimitiveFunction<A> {
             Term<A> input = args.get(1);
             Term<A> output = lambda("s", "t",
                     app(lambda("q", flowState(
-                                    app(Optionals.map(), mapping, app(projection(FlowState.NAME, "value"), variable("q"))),
-                                    app(projection(FlowState.NAME, "state"), variable("q")),
-                                    app(projection(FlowState.NAME, "trace"), variable("q")))),
+                                    app(Optionals.map(), mapping, app(project(FlowState.NAME, "value"), variable("q"))),
+                                    app(project(FlowState.NAME, "state"), variable("q")),
+                                    app(project(FlowState.NAME, "trace"), variable("q")))),
                             (app(unwrap(Flow.NAME), input, variable("s"), variable("t")))));
             return Flows.pure(output);
         };

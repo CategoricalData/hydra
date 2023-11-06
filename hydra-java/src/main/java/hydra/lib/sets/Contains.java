@@ -13,7 +13,12 @@ import hydra.tools.PrimitiveFunction;
 import java.util.List;
 import java.util.function.Function;
 import java.util.Set;
-import static hydra.dsl.Types.*;
+
+import static hydra.dsl.Types.boolean_;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.set;
+
 
 public class Contains<A> extends PrimitiveFunction<A> {
     public Name name() {

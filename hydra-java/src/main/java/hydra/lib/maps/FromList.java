@@ -30,7 +30,8 @@ public class FromList<A> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return lambda("k", "v", function(list(pair(variable("k"), variable("v"))), map("k", "v")));
+        return lambda("k", "v",
+                function(list(pair(variable("k"), variable("v"))), map("k", "v")));
     }
 
     @Override
@@ -39,6 +40,9 @@ public class FromList<A> extends PrimitiveFunction<A> {
                 (Function<List<Tuple.Tuple2<Term<A>, Term<A>>>, Term<A>>) pairs -> new Term.Map<>(apply(pairs)));
     }
 
+    /**
+     * Apply the function to its single argument.
+     */
     public static <K, V> Map<K, V> apply(List<Tuple.Tuple2<K, V>> pairs) {
         Map<K, V> mp = new HashMap<>();
         for (Tuple.Tuple2<K, V> pair : pairs) {

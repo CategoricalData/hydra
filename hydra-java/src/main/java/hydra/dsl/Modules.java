@@ -10,7 +10,7 @@ import hydra.module.Namespace;
 import hydra.module.QualifiedName;
 import java.util.Optional;
 
-import static hydra.coreEncoding.CoreEncoding.*;
+import static hydra.coreEncoding.CoreEncoding.coreEncodeType;
 
 
 public class Modules {

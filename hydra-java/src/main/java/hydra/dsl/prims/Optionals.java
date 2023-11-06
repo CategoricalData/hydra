@@ -1,7 +1,10 @@
 package hydra.dsl.prims;
 
 import hydra.core.Term;
-import hydra.lib.optionals.*;
+import hydra.lib.optionals.Apply;
+import hydra.lib.optionals.Bind;
+import hydra.lib.optionals.Map;
+import hydra.lib.optionals.Pure;
 
 public interface Optionals {
     static <A> Term<A> apply() {

@@ -41,6 +41,9 @@ public class Intersection<A> extends PrimitiveFunction<A> {
         return (s2) -> apply(s1, s2);
     }
 
+    /**
+     * Apply the function to both arguments.
+     */
     public static <X> Set<X> apply(Set<X> s1, Set<X> s2) {
         Set<X> newSet = new HashSet<>(s1);
         newSet.retainAll(s2);

@@ -13,7 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-import static hydra.dsl.Types.*;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.list;
 
 
 public class Intercalate<A> extends PrimitiveFunction<A> {
@@ -23,7 +25,8 @@ public class Intercalate<A> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return lambda("a", function(list("a"), list(list("a")), list("a")));
+        return lambda("a",
+                function(list("a"), list(list("a")), list("a")));
     }
 
     @Override
@@ -38,6 +41,9 @@ public class Intercalate<A> extends PrimitiveFunction<A> {
         return (sublists) -> apply(delim, sublists);
     }
 
+    /**
+     * Apply the function to both arguments.
+     */
     public static <X> List<X> apply(List<X> delim, List<List<X>> sublists) {
         List<X> result = new ArrayList<>();
         boolean first = true;

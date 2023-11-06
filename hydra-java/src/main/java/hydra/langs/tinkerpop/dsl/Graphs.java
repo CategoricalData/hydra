@@ -6,7 +6,8 @@ import hydra.langs.tinkerpop.propertyGraph.VertexLabel;
 import hydra.langs.tinkerpop.propertyGraph.VertexType;
 
 /**
- * DSL for constructing property graph types (vertex and edge types, property types) and values (vertices, edges, and properties)
+ * DSL for constructing property graph types (vertex and edge types, property types)
+ * and values (vertices, edges, and properties).
  */
 public interface Graphs {
     static <T, V> EdgeBuilder<V> edge(EdgeType<T> type, V id, V outId, V inId) {
@@ -18,7 +19,8 @@ public interface Graphs {
     }
 
     static <T> EdgeTypeBuilder<T> edgeType(String label, T idType, String outLabel, String inLabel) {
-        return new EdgeTypeBuilder<T>(new EdgeLabel(label), idType, new VertexLabel(outLabel), new VertexLabel(inLabel));
+        return new EdgeTypeBuilder<T>(
+                new EdgeLabel(label), idType, new VertexLabel(outLabel), new VertexLabel(inLabel));
     }
 
     static <T, V> VertexBuilder<V> vertex(VertexType<T> type, V id) {

@@ -13,13 +13,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+
 public class JsonSerdeTest extends HydraTestBase {
-    private static final String JSON_STRING_1 = "{" +
-            "\"numVal\": 42, " +
-            "\"boolVal\": true, " +
-            "\"nullVal\": null, " +
-            "\"objVal\": {\"foo\": \"bar\"}, " +
-            "\"arrayval\": [1,2,3.0]}";
+    private static final String JSON_STRING_1 = "{"
+            + "\"numVal\": 42, "
+            + "\"boolVal\": true, "
+            + "\"nullVal\": null, "
+            + "\"objVal\": {\"foo\": \"bar\"}, "
+            + "\"arrayval\": [1,2,3.0]}";
 
     private static final Value JSON_VALUE_0 = new Value.Object_(new HashMap<String, Value>() {{
         put("boolVal", new Value.Boolean_(true));
@@ -63,9 +64,10 @@ public class JsonSerdeTest extends HydraTestBase {
     @Test
     public void checkEncoding() {
         assertSucceedsWith("\"foo\"", JsonSerde.encode(new Value.String_("foo")));
-        assertSucceedsWith("{\"foo\":42.0}", JsonSerde.encode(new Value.Object_(new HashMap<String, Value>() {{
-            put("foo", new Value.Number_(42.0));
-        }})));
+        assertSucceedsWith("{\"foo\":42.0}",
+                JsonSerde.encode(new Value.Object_(new HashMap<String, Value>() {{
+                    put("foo", new Value.Number_(42.0));
+                }})));
 
         // Raw values (other than null) are wrapped as objects by json-io
         assertSucceedsWith("{\"value\":42.0}", JsonSerde.encode(new Value.Number_(42.0)));
@@ -74,7 +76,8 @@ public class JsonSerdeTest extends HydraTestBase {
         // Raw nulls are *not* wrapped by json-io
         assertSucceedsWith("null", JsonSerde.encode(new Value.Null()));
 
-        assertSucceedsWith("[\"foo\"]", JsonSerde.encode(new Value.Array(Arrays.asList(new Value.String_("foo")))));
+        assertSucceedsWith("[\"foo\"]",
+                JsonSerde.encode(new Value.Array(Arrays.asList(new Value.String_("foo")))));
     }
 
     @Test
@@ -86,6 +89,6 @@ public class JsonSerdeTest extends HydraTestBase {
 
     @Test
     public void checkFailOnInvalidJsonString() {
-       assertFails(JsonSerde.decode("{{"));
+        assertFails(JsonSerde.decode("{{"));
     }
 }

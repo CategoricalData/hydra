@@ -11,9 +11,11 @@ import hydra.tools.PrimitiveFunction;
 import java.util.List;
 import java.util.function.Function;
 
-import static hydra.Flows.*;
 import hydra.dsl.Terms;
-import static hydra.dsl.Types.*;
+
+import static hydra.Flows.map2;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.int32;
 
 
 public class Add<A> extends PrimitiveFunction<A> {

@@ -37,6 +37,9 @@ public class Cat<A> extends PrimitiveFunction<A> {
                 (Function<List<Optional<Term<A>>>, Term<A>>) optionals -> Terms.list(apply(optionals)));
     }
 
+    /**
+     * Apply the function to its single argument.
+     */
     public static <X> List<X> apply(List<Optional<X>> opt) {
         List<X> result = new ArrayList<>();
         for (Optional<X> x : opt) {

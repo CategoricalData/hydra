@@ -48,13 +48,17 @@ public class ValidationTest extends PropertyGraphTestBase {
     public void testMissingRequiredVertexPropertyFails() {
         assertInvalid(VERTEX_TYPE_PERSON_A, VERTEX_PERSON_2.withProperties(new HashMap<>()));
         assertInvalid(VERTEX_TYPE_PERSON_A, VERTEX_PERSON_2.withProperties(
-                new HashMap<PropertyKey, Literal>(){{put(new PropertyKey("nickname"), Literals.string("Ix"));}}));
+                new HashMap<PropertyKey, Literal>() {{
+                    put(new PropertyKey("nickname"), Literals.string("Ix"));
+                }}));
     }
 
     @Test
     public void testMissingOptionalVertexPropertySucceeds() {
         assertValid(VERTEX_TYPE_PERSON_A, VERTEX_PERSON_2.withProperties(
-                new HashMap<PropertyKey, Literal>(){{put(new PropertyKey("name"), Literals.string("Ford"));}}));
+                new HashMap<PropertyKey, Literal>() {{
+                    put(new PropertyKey("name"), Literals.string("Ford"));
+                }}));
     }
 
     @Test
@@ -64,7 +68,7 @@ public class ValidationTest extends PropertyGraphTestBase {
 
     @Test
     public void testValidEdgeSucceedsWithGraph() {
-        Map<Literal, Vertex<Literal>> vertices = new HashMap<Literal, Vertex<Literal>>(){{
+        Map<Literal, Vertex<Literal>> vertices = new HashMap<Literal, Vertex<Literal>>() {{
             put(VERTEX_PERSON_2.id, VERTEX_PERSON_2);
             put(VERTEX_ORGANIZATION_1.id, VERTEX_ORGANIZATION_1);
         }};
@@ -73,7 +77,7 @@ public class ValidationTest extends PropertyGraphTestBase {
 
         assertValid(EDGE_TYPE_WORKSAT_A, EDGE_WORKSAT_1, Optional.of(labelForVertexId));
     }
-    
+
     @Test
     public void testMissingOutOrInVertexFails() {
         Function<Literal, Optional<VertexLabel>> labelForVertexId = id -> Optional.empty();
@@ -84,7 +88,7 @@ public class ValidationTest extends PropertyGraphTestBase {
     @Test
     public void testEdgeWithOutOrInVertexOfWrongLabelFails() {
         // Oops: ids point to the wrong vertices
-        Map<Literal, Vertex<Literal>> vertices = new HashMap<Literal, Vertex<Literal>>(){{
+        Map<Literal, Vertex<Literal>> vertices = new HashMap<Literal, Vertex<Literal>>() {{
             put(VERTEX_PERSON_2.id, VERTEX_ORGANIZATION_1);
             put(VERTEX_ORGANIZATION_1.id, VERTEX_PERSON_2);
         }};
@@ -121,12 +125,6 @@ public class ValidationTest extends PropertyGraphTestBase {
         }
     }
 
-    private static void assertValid(VertexType<LiteralType> type, Vertex<Literal> element) {
-        Optional<String> result = Validate.validateVertex(CHECK_LITERAL).apply(Literals::showLiteral)
-                .apply(type).apply(element);
-        result.ifPresent(s -> fail("Validation failed: " + s));
-    }
-
     private static void assertInvalid(EdgeType<LiteralType> type,
                                       Edge<Literal> element,
                                       Optional<Function<Literal, Optional<VertexLabel>>> labelForVertexId) {
@@ -142,6 +140,21 @@ public class ValidationTest extends PropertyGraphTestBase {
         assertInvalid(type, element, Optional.empty());
     }
 
+    private static void assertInvalid(ElementType<LiteralType> type,
+                                      Element<Literal> element) {
+        Optional<String> result = Validate.validateElement(CHECK_LITERAL).apply(Literals::showLiteral)
+                .apply(Optional.empty()).apply(type).apply(element);
+        if (!result.isPresent()) {
+            fail("Validation succeeded where it should have failed");
+        }
+    }
+
+    private static void assertValid(VertexType<LiteralType> type, Vertex<Literal> element) {
+        Optional<String> result = Validate.validateVertex(CHECK_LITERAL).apply(Literals::showLiteral)
+                .apply(type).apply(element);
+        result.ifPresent(s -> fail("Validation failed: " + s));
+    }
+
     private static void assertValid(EdgeType<LiteralType> type,
                                     Edge<Literal> element,
                                     Optional<Function<Literal, Optional<VertexLabel>>> labelForVertexId) {
@@ -155,19 +168,9 @@ public class ValidationTest extends PropertyGraphTestBase {
         assertValid(type, element, Optional.empty());
     }
 
-    private static void assertInvalid(ElementType<LiteralType> type,
-                                      Element<Literal> element) {
-        Optional<String> result = Validate.validateElement(CHECK_LITERAL).apply(Literals::showLiteral)
-                .apply(Optional.empty()).apply(type).apply(element);
-        if (!result.isPresent()) {
-            fail("Validation succeeded where it should have failed");
-        }
-    }
-
     private static void assertValid(ElementType<LiteralType> type, Element<Literal> element) {
         Optional<String> result = Validate.validateElement(CHECK_LITERAL).apply(Literals::showLiteral)
                 .apply(Optional.empty()).apply(type).apply(element);
         result.ifPresent(s -> fail("Validation failed: " + s));
     }
-
 }

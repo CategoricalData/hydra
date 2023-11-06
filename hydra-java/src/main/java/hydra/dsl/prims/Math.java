@@ -1,7 +1,13 @@
 package hydra.dsl.prims;
 
 import hydra.core.Term;
-import hydra.lib.math.*;
+import hydra.lib.math.Add;
+import hydra.lib.math.Div;
+import hydra.lib.math.Mod;
+import hydra.lib.math.Mul;
+import hydra.lib.math.Neg;
+import hydra.lib.math.Rem;
+import hydra.lib.math.Sub;
 
 public interface Math {
     static <A> Term<A> add() {

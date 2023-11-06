@@ -5,7 +5,12 @@ import hydra.core.Term;
 import hydra.lib.strings.SplitOn;
 import org.junit.jupiter.api.Test;
 
-import static hydra.dsl.Terms.*;
+import static hydra.dsl.Terms.apply;
+import static hydra.dsl.Terms.int32;
+import static hydra.dsl.Terms.lambda;
+import static hydra.dsl.Terms.list;
+import static hydra.dsl.Terms.string;
+import static hydra.dsl.Terms.variable;
 
 
 /**

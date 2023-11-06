@@ -1,7 +1,11 @@
 package hydra.dsl.prims;
 
 import hydra.core.Term;
-import hydra.lib.strings.*;
+import hydra.lib.strings.Length;
+import hydra.lib.strings.Cat;
+import hydra.lib.strings.SplitOn;
+import hydra.lib.strings.ToLower;
+import hydra.lib.strings.ToUpper;
 
 public interface Strings {
     static <A> Term<A> cat() {

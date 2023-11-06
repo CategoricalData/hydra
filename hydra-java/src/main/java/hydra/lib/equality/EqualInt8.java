@@ -9,6 +9,7 @@ public class EqualInt8<A> extends EqualityFunction<A, Short> {
     public EqualInt8() {
         super(PrimitiveType.int8(), Relation.EQUALS);
     }
+
     public static Function<Short, Boolean> apply(Short second) {
         return first -> apply(first, second);
     }
