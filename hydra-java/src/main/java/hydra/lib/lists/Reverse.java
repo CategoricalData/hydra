@@ -37,6 +37,9 @@ public class Reverse<A> extends PrimitiveFunction<A> {
                 Expect.list(Flows::pure, args.get(0)), l -> Terms.list(Reverse.apply(l)));
     }
 
+    /**
+     * Apply the function to the single argument.
+     */
     public static <X> List<X> apply(List<X> list) {
         List<X> newList = new ArrayList<>();
         newList.addAll(list);

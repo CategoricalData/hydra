@@ -5,6 +5,9 @@ import hydra.core.IntegerType;
 import hydra.core.LiteralType;
 
 
+/**
+ * DSL utilities for working with literal types.
+ */
 public interface LiteralTypes {
     static LiteralType bigfloat() {
         return float_(new FloatType.Bigfloat());
@@ -74,6 +77,9 @@ public interface LiteralTypes {
         return integer(new IntegerType.Uint8());
     }
 
+    /**
+     * Encode a literal type as a string.
+     */
     static String showLiteralType(LiteralType type) {
         return type.accept(new LiteralType.Visitor<String>() {
             @Override

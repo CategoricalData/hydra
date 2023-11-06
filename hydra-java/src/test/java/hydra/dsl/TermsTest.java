@@ -7,40 +7,52 @@ import hydra.dsl.prims.Strings;
 import hydra.core.Name;
 import org.junit.jupiter.api.Test;
 
-import static hydra.dsl.Core.*;
-import static hydra.dsl.Terms.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static hydra.dsl.Core.fieldName;
+import static hydra.dsl.Core.name;
+import static hydra.dsl.Terms.annot;
+import static hydra.dsl.Terms.apply;
+import static hydra.dsl.Terms.field;
+import static hydra.dsl.Terms.float32;
+import static hydra.dsl.Terms.inject;
+import static hydra.dsl.Terms.lambda;
+import static hydra.dsl.Terms.list;
+import static hydra.dsl.Terms.primitive;
+import static hydra.dsl.Terms.project;
+import static hydra.dsl.Terms.record;
+import static hydra.dsl.Terms.variable;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 /**
  * Test illustrating the use of the Terms API in Java, which is used for constructing terms (untyped expressions).
- *
- * Note: for simplicity, these terms are annotated using the String class. A more typical annotation class is {@link hydra.compute.Kv}
+ * Note: for simplicity, these terms are annotated using the String class.
+ * A more typical annotation class is {@link hydra.compute.Kv}
  */
 @SuppressWarnings("unchecked")
 public class TermsTest {
   /**
-   * See {@link hydra.dsl.TypesTest} for the record type corresponding to this term
+   * See {@link hydra.dsl.TypesTest} for the record type corresponding to this term.
    */
   private final Term<String> bayAreaLatLon = record("LatLon", // records always have a name
       field("lat", float32(37.7749f)), field("lon", float32(-122.4194f)));
 
   /**
-   * An injection term chooses one of the variants of a union type, and supplies an appropriate term
-   *
+   * An injection term chooses one of the variants of a union type, and supplies an appropriate term.
    * See {@link hydra.dsl.TypesTest} for the union type corresponding to this term
    */
   private final Term<String> bayAreaLocation = inject("Location", field("latlon", bayAreaLatLon));
 
   /**
-   * See {@link hydra.dsl.TypesTest} for a function type corresponding to this term
+   * See {@link hydra.dsl.TypesTest} for a function type corresponding to this term.
    */
   private final Term<String> stringLength = primitive("hydra/lib/strings.length");
 
   private final Term<String> cat3 =
-      lambda("s1", lambda("s2", lambda("s3", apply(Strings.cat(), list(variable("s1"), variable("s2"), variable("s3"))))));
+      lambda("s1", lambda("s2",
+              lambda("s3", apply(Strings.cat(), list(variable("s1"), variable("s2"), variable("s3"))))));
 
-  private final Term<String> longitude = projection("LatLon", "lon");
+  private final Term<String> longitude = project("LatLon", "lon");
 
   private final Term<String> longitudeAnnotated = annot("Gets the longitude from a LatLon", longitude);
 
@@ -90,20 +102,24 @@ public class TermsTest {
 
     assertTrue(cat3 instanceof Term.Function);
     assertTrue(((Term.Function<String>) cat3).value instanceof Function.Lambda);
-    assertEquals(new Name("s1"), ((Function.Lambda<String>) ((Term.Function<String>) cat3).value).value.parameter);
+    assertEquals(new Name("s1"),
+            ((Function.Lambda<String>) ((Term.Function<String>) cat3).value).value.parameter);
 
     assertTrue(longitude instanceof Term.Function);
     assertTrue(((Term.Function<String>) longitude).value instanceof Function.Elimination);
     assertTrue(
         ((Function.Elimination<String>) ((Term.Function<String>) longitude).value).value instanceof Elimination.Record);
     assertEquals(name("LatLon"),
-        ((Elimination.Record<String>) ((Function.Elimination<String>) ((Term.Function<String>) longitude).value).value).value.typeName);
+        ((Elimination.Record<String>) ((Function.Elimination<String>) ((Term.Function<String>) longitude).value).value)
+                .value.typeName);
     assertEquals(fieldName("lon"),
-        ((Elimination.Record<String>) ((Function.Elimination<String>) ((Term.Function<String>) longitude).value).value).value.field);
+        ((Elimination.Record<String>) ((Function.Elimination<String>) ((Term.Function<String>) longitude).value).value)
+                .value.field);
 
     assertTrue(longitudeAnnotated instanceof Term.Annotated);
     // Notice that annotations, here, are String-valued
-    assertEquals("Gets the longitude from a LatLon", ((Term.Annotated<String>) longitudeAnnotated).value.annotation);
+    assertEquals("Gets the longitude from a LatLon",
+            ((Term.Annotated<String>) longitudeAnnotated).value.annotation);
     assertEquals(longitude, ((Term.Annotated<String>) longitudeAnnotated).value.subject);
   }
 

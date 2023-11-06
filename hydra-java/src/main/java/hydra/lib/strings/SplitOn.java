@@ -9,13 +9,16 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import static hydra.Flows.*;
-import static hydra.dsl.Types.*;
+import static hydra.Flows.map2;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.list;
+import static hydra.dsl.Types.string;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.List;
 import java.util.ArrayList;
+
 
 public class SplitOn<A> extends PrimitiveFunction<A> {
     public Name name() {
@@ -37,14 +40,18 @@ public class SplitOn<A> extends PrimitiveFunction<A> {
         return (string) -> apply(delim, string);
     }
 
-    // Note: the delimiter is not interpreted as a regular expression; it is simply a literal string. See Haskell's Data.List.Split.
+    /**
+     * Apply the function to both arguments.
+     * Note: the delimiter is not interpreted as a regular expression;
+     * it is simply a literal string. See Haskell's Data.List.Split.
+     * */
     public static List<String> apply(String delim, String string) {
         List<String> parts = new ArrayList<>();
 
         if (delim.length() == 0) {
             parts.add("");
             for (int i = 0; i < string.length(); i++) {
-                parts.add(string.substring(i, i+1));
+                parts.add(string.substring(i, i + 1));
             }
         } else {
             byte[] delimBytes = delim.getBytes();

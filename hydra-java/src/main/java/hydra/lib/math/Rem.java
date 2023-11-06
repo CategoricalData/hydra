@@ -13,8 +13,12 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static hydra.Flows.*;
-import static hydra.dsl.Types.*;
+import static hydra.Flows.bind2;
+import static hydra.Flows.fail;
+import static hydra.Flows.pure;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.int32;
+
 
 public class Rem<A> extends PrimitiveFunction<A> {
     public Name name() {

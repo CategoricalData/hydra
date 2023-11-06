@@ -21,7 +21,7 @@ import static hydra.dsl.Terms.flowStateTrace;
 import static hydra.dsl.Terms.foldOpt;
 import static hydra.dsl.Terms.lambda;
 import static hydra.dsl.Terms.nothing;
-import static hydra.dsl.Terms.projection;
+import static hydra.dsl.Terms.project;
 import static hydra.dsl.Terms.variable;
 
 
@@ -45,12 +45,14 @@ public class Apply<A> extends PrimitiveFunction<A> {
             Term<A> mapping = args.get(0);
             Term<A> input = args.get(1);
 
-            Term<A> ifNothing = flowState(nothing(), app("fs1", flowStateState()), app("fs1", flowStateTrace()));
-            Term<A> ifJust = lambda("f", app(variable("f"), input, app("fs1", flowStateState()), app("fs2", flowStateTrace())));
+            Term<A> ifNothing = flowState(nothing(),
+                    app("fs1", flowStateState()), app("fs1", flowStateTrace()));
+            Term<A> ifJust = lambda("f",
+                    app(variable("f"), input, app("fs1", flowStateState()), app("fs2", flowStateTrace())));
             Term<A> output = lambda("s0", "t0", app(
                     lambda("fs1", app(foldOpt(
                             new OptionalCases<>(ifNothing, ifJust)),
-                            projection(FlowState.NAME, "value"))),
+                            project(FlowState.NAME, "value"))),
                     app(mapping, variable("s0"), variable("s1"))));
             return Flows.pure(output);
         };

@@ -13,7 +13,10 @@ import hydra.tools.PrimitiveFunction;
 import java.util.ArrayList;
 import java.util.function.Function;
 import java.util.List;
-import static hydra.dsl.Types.*;
+
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.list;
 
 public class Intersperse<A> extends PrimitiveFunction<A> {
     public Name name() {
@@ -36,6 +39,9 @@ public class Intersperse<A> extends PrimitiveFunction<A> {
         return (list) -> apply(delim, list);
     }
 
+    /**
+     * Apply the function to both arguments.
+     */
     public static <X> List<X> apply(X delim, List<X> list) {
         List<X> result = new ArrayList<>();
         boolean first = true;

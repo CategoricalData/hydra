@@ -26,7 +26,8 @@ public class Insert<A> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return lambda("k", "v", function("k", "v", map("k", "v"), map("k", "v")));
+        return lambda("k", "v",
+                function("k", "v", map("k", "v"), map("k", "v")));
     }
 
     @Override
@@ -34,7 +35,8 @@ public class Insert<A> extends PrimitiveFunction<A> {
         return args -> {
             Term<A> key = args.get(0);
             Term<A> value = args.get(1);
-            return Flows.map(Expect.map(Flows::pure, Flows::pure, args.get(2)), before -> Terms.map(apply(key, value, before)));
+            return Flows.map(Expect.map(Flows::pure, Flows::pure, args.get(2)),
+                    before -> Terms.map(apply(key, value, before)));
         };
     }
 
@@ -46,6 +48,9 @@ public class Insert<A> extends PrimitiveFunction<A> {
         return before -> apply(k, v, before);
     }
 
+    /**
+     * Apply the function to all three arguments.
+     */
     public static <K, V> Map<K, V> apply(K k, V v, Map<K, V> before) {
         Map<K, V> after = new HashMap<>(before);
         after.put(k, v);

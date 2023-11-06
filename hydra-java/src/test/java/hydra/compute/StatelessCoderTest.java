@@ -3,8 +3,11 @@ package hydra.compute;
 import hydra.HydraTestBase;
 import org.junit.jupiter.api.Test;
 
-import static hydra.Coders.*;
-import static hydra.Flows.*;
+import static hydra.Coders.composeStateless;
+import static hydra.Coders.inverseStateless;
+import static hydra.Flows.fail;
+import static hydra.Flows.pure;
+
 
 /**
  * A collection of tests illustrating the use of stateless coders, for simplicity.

@@ -13,9 +13,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
 
-import static hydra.Flows.*;
+import static hydra.Flows.pure;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.map;
-import static hydra.dsl.Types.*;
 
 
 public class MapKeys<A> extends PrimitiveFunction<A> {
@@ -39,6 +40,9 @@ public class MapKeys<A> extends PrimitiveFunction<A> {
         return (arg) -> apply(mapping, arg);
     }
 
+    /**
+     * Apply the function to both arguments.
+     */
     public static <K1, K2, V> java.util.Map<K2, V> apply(Function<K1, K2> mapping, java.util.Map<K1, V> arg) {
         java.util.Map<K2, V> result = new HashMap<>();
         for (java.util.Map.Entry<K1, V> e : arg.entrySet()) {

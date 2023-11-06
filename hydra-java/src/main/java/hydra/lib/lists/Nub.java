@@ -35,6 +35,9 @@ public class Nub<A> extends PrimitiveFunction<A> {
       return args -> Flows.map(Expect.list(Flows::pure, args.get(0)), l -> Terms.list(apply(l)));
     }
 
+    /**
+     * Apply the function to the single argument.
+     */
     public static <X> List<X> apply(List<X> arg) {
         Set<X> visited = new HashSet<>();
         List<X> result = new ArrayList<>(arg.size());

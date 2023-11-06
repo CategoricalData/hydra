@@ -14,7 +14,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import static hydra.dsl.Types.*;
+
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.list;
 
 public class Concat<A> extends PrimitiveFunction<A> {
     public static final Name NAME = new Name("hydra/lib/lists.concat");

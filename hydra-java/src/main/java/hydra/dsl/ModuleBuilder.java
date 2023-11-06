@@ -12,7 +12,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static hydra.dsl.Modules.*;
+import static hydra.dsl.Modules.element;
+import static hydra.dsl.Modules.qname;
 
 
 public class ModuleBuilder<A> {

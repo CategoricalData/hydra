@@ -40,6 +40,9 @@ public class Merging {
     public static VertexLabel DEFAULT_VERTEX_LABEL = new VertexLabel("_Merged");
     public static EdgeLabel DEFAULT_EDGE_LABEL = new EdgeLabel("_merged");
 
+    /**
+     * Create a vertex adapter based on a list of vertex types and given id adapters.
+     */
     public static <T, V> Flow<Unit, StatelessAdapter<List<VertexType<T>>, VertexType<T>, Vertex<V>, Vertex<V>>>
     createVertexAdapter(List<VertexType<T>> types,
                         IdAdapters<T, V> idAdapters,
@@ -54,6 +57,9 @@ public class Merging {
         });
     }
 
+    /**
+     * Create an edge adapter based on a list of edge types and given id adapters.
+     */
     public static <T, V> Flow<Unit, StatelessAdapter<List<EdgeType<T>>, EdgeType<T>, Edge<V>, Edge<V>>>
     createEdgeAdapter(List<EdgeType<T>> types,
                       IdAdapters<T, V> idAdapters,
@@ -178,12 +184,12 @@ public class Merging {
         return new StatelessCoder<Map<PropertyKey, V>, Map<PropertyKey, V>>(encode, decode);
     }
 
-    private static <EV, ET, L> Map<L, StatelessCoder<EV, EV>> constructCoders(
-            List<ET> types,
-            Function<ET, L> getLabel,
-            Function<ET, StatelessCoder<EV, EV>> constructCoder) {
-        Map<L, StatelessCoder<EV, EV>> coders = new HashMap<L, StatelessCoder<EV, EV>>();
-        for (ET type : types) {
+    private static <V, T, L> Map<L, StatelessCoder<V, V>> constructCoders(
+            List<T> types,
+            Function<T, L> getLabel,
+            Function<T, StatelessCoder<V, V>> constructCoder) {
+        Map<L, StatelessCoder<V, V>> coders = new HashMap<L, StatelessCoder<V, V>>();
+        for (T type : types) {
             coders.put(getLabel.apply(type), constructCoder.apply(type));
         }
         return coders;
@@ -193,14 +199,16 @@ public class Merging {
             List<VertexType<T>> types,
             IdAdapters<T, V> idAdapters,
             Set<PropertyKey> unifiedPropertyKeys) {
-        return constructCoders(types, type -> type.label, type -> constructVertexCoder(type, idAdapters, unifiedPropertyKeys));
+        return constructCoders(types, type -> type.label,
+                type -> constructVertexCoder(type, idAdapters, unifiedPropertyKeys));
     }
 
     private static <T, V> Map<EdgeLabel, StatelessCoder<Edge<V>, Edge<V>>> constructEdgeCoders(
             List<EdgeType<T>> types,
             IdAdapters<T, V> idAdapters,
             Set<PropertyKey> unifiedPropertyKeys) {
-        return constructCoders(types, type -> type.label, type -> constructEdgeCoder(type, idAdapters, unifiedPropertyKeys));
+        return constructCoders(types, type -> type.label,
+                type -> constructEdgeCoder(type, idAdapters, unifiedPropertyKeys));
     }
 
     private static PropertyKey encodePropertyKey(String label, PropertyKey key, Set<PropertyKey> unifiedPropertyKeys) {
@@ -261,10 +269,14 @@ public class Merging {
             Function<E, List<PropertyType<T>>> getProperties,
             boolean unifyIdenticalTypes) {
 
-        Set<PropertyKey> unifiedProperties; // Properties to be unified across types
-        Set<PropertyKey> requiredProperties; // Properties which are also present in all types, and required in all types
+        // Properties to be unified across types
+        Set<PropertyKey> unifiedProperties;
+        // Properties which are also present in all types, and required in all types
+        Set<PropertyKey> requiredProperties;
+
         if (unifyIdenticalTypes) {
-            Map<PropertyKey, List<PropertyType<T>>> typesForPropertyKey = new HashMap<PropertyKey, List<PropertyType<T>>>();
+            Map<PropertyKey, List<PropertyType<T>>> typesForPropertyKey
+                    = new HashMap<PropertyKey, List<PropertyType<T>>>();
             for (E type : types) {
                 for (PropertyType<T> ptype : getProperties.apply(type)) {
                     List<PropertyType<T>> typesForThisKey = typesForPropertyKey
@@ -332,12 +344,18 @@ public class Merging {
         return true;
     }
 
+    /**
+     * A helper object which defines merged vertex and edge id types, and a value coder for each vertex and edge label.
+     */
     public static class IdAdapters<T, V> {
         public final T mergedVertexIdType;
         public final T mergedEdgeIdType;
         public final Function<VertexLabel, StatelessCoder<V, V>> forVertexId;
         public final Function<EdgeLabel, StatelessCoder<V, V>> forEdgeId;
 
+        /**
+         * Construct the helper object.
+         */
         public IdAdapters(
                 T mergedVertexIdType,
                 T mergedEdgeIdType,

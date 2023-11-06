@@ -38,6 +38,9 @@ public class Concat2<A> extends PrimitiveFunction<A> {
                 (l1, l2) -> Terms.list(Concat2.apply(l1, l2)));
     }
 
+    /**
+     * Apply the function to both arguments.
+     */
     public static <X> List<X> apply(List<X> l1, List<X> l2) {
         List<X> combined = new ArrayList<>();
         combined.addAll(l1);

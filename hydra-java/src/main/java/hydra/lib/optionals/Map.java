@@ -12,9 +12,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static hydra.Flows.*;
-import static hydra.dsl.Types.*;
-import static hydra.Flows.*;
+import static hydra.Flows.bind;
+import static hydra.Flows.pure;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.optional;
 
 
 public class Map<A> extends PrimitiveFunction<A> {
@@ -24,7 +26,8 @@ public class Map<A> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return lambda("a", lambda("b", function(function("a", "b"), optional("a"), optional("b"))));
+        return lambda("a", lambda("b",
+                function(function("a", "b"), optional("a"), optional("b"))));
     }
 
     @Override
@@ -37,6 +40,9 @@ public class Map<A> extends PrimitiveFunction<A> {
         return (optionalArg) -> apply(f, optionalArg);
     }
 
+    /**
+     * Apply the function to both arguments.
+     */
     public static <X, Y> Optional<Y> apply(Function<X, Y> f, Optional<X> optionalArg) {
         if (!optionalArg.isPresent()) {
             return Optional.empty();

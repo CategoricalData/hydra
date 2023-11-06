@@ -13,7 +13,10 @@ import java.util.List;
 import java.util.Collections;
 import java.util.function.Function;
 
-import static hydra.dsl.Types.*;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.list;
+
 
 public class Pure<A> extends PrimitiveFunction<A> {
     public Name name() {
@@ -30,6 +33,9 @@ public class Pure<A> extends PrimitiveFunction<A> {
         return args -> Flows.pure(Terms.list(apply(args.get(0))));
     }
 
+    /**
+     * Apply the function to the single argument.
+     */
     public static <X> List<X> apply(X single) {
         return Collections.singletonList(single);
     }

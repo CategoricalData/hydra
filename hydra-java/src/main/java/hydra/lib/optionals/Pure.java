@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static hydra.dsl.Types.*;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.optional;
 
 
 public class Pure<A> extends PrimitiveFunction<A> {

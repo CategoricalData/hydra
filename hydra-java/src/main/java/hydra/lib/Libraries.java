@@ -29,10 +29,16 @@ import java.util.Arrays;
 import java.util.List;
 
 
+/**
+ * A registry of all of the primitive functions available in Hydra-Java.
+ */
 public class Libraries {
     private Libraries() {
     }
 
+    /**
+     * All standard primitive functions as a list.
+     */
     public static <A> List<PrimitiveFunction<A>> standardPrimitives() {
         List<PrimitiveFunction<A>> prims = new ArrayList<>();
         prims.addAll(equalityPrimitives());

@@ -1,5 +1,6 @@
 package hydra.lib.math;
 
+import hydra.Flows;
 import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
@@ -11,8 +12,9 @@ import hydra.tools.PrimitiveFunction;
 import java.util.List;
 import java.util.function.Function;
 
-import static hydra.Flows.*;
-import static hydra.dsl.Types.*;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.int32;
+
 
 public class Neg<A> extends PrimitiveFunction<A> {
     public Name name() {
@@ -26,7 +28,7 @@ public class Neg<A> extends PrimitiveFunction<A> {
 
     @Override
     protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
-        return args -> map(Expect.int32(args.get(0)),
+        return args -> Flows.map(Expect.int32(args.get(0)),
             (arg0) -> Terms.int32(apply(arg0)));
     }
 

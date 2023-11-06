@@ -14,7 +14,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-import static hydra.dsl.Types.*;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.set;
+
 
 public class Singleton<A> extends PrimitiveFunction<A> {
     public Name name() {
@@ -31,6 +34,9 @@ public class Singleton<A> extends PrimitiveFunction<A> {
         return args -> Flows.pure(Terms.set(apply(args.get(0))));
     }
 
+    /**
+     * Apply the function to its single argument.
+     */
     public static <X> Set<X> apply(X elem) {
         Set<X> newSet = new HashSet<>();
         newSet.add(elem);

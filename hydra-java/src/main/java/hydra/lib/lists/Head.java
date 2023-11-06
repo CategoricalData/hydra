@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.function.Function;
 
 import static hydra.Flows.map;
-import static hydra.dsl.Types.*;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.list;
 
 
 public class Head<A> extends PrimitiveFunction<A> {
@@ -30,6 +32,9 @@ public class Head<A> extends PrimitiveFunction<A> {
         return args -> map(Expect.list(Flows::pure, args.get(0)), Head::apply);
     }
 
+    /**
+     * Apply the function to it single argument.
+     */
     public static <X> X apply(List<X> list) {
         if (list.isEmpty()) {
             throw new IllegalArgumentException("Cannot get head of empty list");

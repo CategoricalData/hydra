@@ -9,19 +9,21 @@ import hydra.test.testSuite.TestSuite;
 import hydra.testing.TestCase;
 import hydra.testing.TestGroup;
 import hydra.tools.PrettyPrinter;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import static hydra.Flows.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static hydra.Flows.EMPTY_TRACE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 /**
- * Java executor for Hydra's language-agnostic test suite
+ * Java executor for Hydra's language-agnostic test suite.
  */
 public class TestSuiteRunner extends HydraTestBase {
     @ParameterizedTest
@@ -30,6 +32,9 @@ public class TestSuiteRunner extends HydraTestBase {
         runReductionTestCase(true, name, input, output);
     }
 
+    /**
+     * Run a beta-reduction test case.
+     */
     public static void runReductionTestCase(boolean eager, String name, Term<Kv> input, Term<Kv> output) {
         Graph<Kv> graph = emptyGraph();
         String suffix = " (" + name + ")";
@@ -41,11 +46,11 @@ public class TestSuiteRunner extends HydraTestBase {
                 // First, assert that the pretty-printed strings for the results are the same;
                 // this provides more readable failure messages.
                 assertEquals(print(output), print(result.value.get()),
-                    "Original term does not reduce to expected term" + suffix);
+                        "Original term does not reduce to expected term" + suffix);
                 // Now check that the terms are truly equal
                 assertEquals(output, result.value.get(), "Original term does not reduce to expected term" + suffix);
             }
-        } else if (result.trace.messages.isEmpty()){
+        } else if (result.trace.messages.isEmpty()) {
             Assertions.fail("Reduction failed" + suffix);
         } else {
             Assertions.fail("Reduction failed: " + result.trace.messages.get(0) + suffix);

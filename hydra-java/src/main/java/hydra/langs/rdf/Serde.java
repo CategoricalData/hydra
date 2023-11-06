@@ -19,19 +19,31 @@ import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.Rio;
 
+/**
+ * RDF4j-based serialization for Hydra RDF graphs.
+ */
 public interface Serde {
   ValueFactory valueFactory = SimpleValueFactory.getInstance();
 
+  /**
+   * Serialize a list of RDF descriptions.
+   */
   static String toNtriples(List<Description> descriptions) {
     List<Triple> triples = descriptions.stream().flatMap(
         description -> description.graph.value.stream()).collect(Collectors.toList());
     return Serde.toNtriples(triples);
   }
 
+  /**
+   * Serialize an RDF graph.
+   */
   static String toNtriples(Graph graph) {
     return toNtriples(graph.value);
   }
 
+  /**
+   * Serialize a collection of RDF triples.
+   */
   static String toNtriples(Collection<Triple> triples) {
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
     List<Statement> model = triples.stream().map(Serde::tripleToStatement).collect(Collectors.toList());
@@ -40,18 +52,30 @@ public interface Serde {
     return bos.toString();
   }
 
+  /**
+   * Convert a blank node to its RDF4j equivalent.
+   */
   static BNode bnode(hydra.langs.rdf.syntax.BlankNode r) {
     return valueFactory.createBNode(r.value);
   }
 
+  /**
+   * Convert an IRI to its RDF4j equivalent.
+   */
   static IRI iri(hydra.langs.rdf.syntax.Iri r) {
     return valueFactory.createIRI(r.value);
   }
 
+  /**
+   * Convert an RDF literal to its RDF4j equivalent.
+   */
   static Literal literal(hydra.langs.rdf.syntax.Literal r) {
     return valueFactory.createLiteral(r.lexicalForm, iri(r.datatypeIri));
   }
 
+  /**
+   * Convert an RDF resource to its RDF4j equivalent.
+   */
   static Resource resource(hydra.langs.rdf.syntax.Resource r) {
     return r.accept(new hydra.langs.rdf.syntax.Resource.Visitor<Resource>() {
       @Override
@@ -66,6 +90,9 @@ public interface Serde {
     });
   }
 
+  /**
+   * Convert an RDF triple to its RDF4j equivalent.
+   */
   static Statement tripleToStatement(Triple triple) {
     Resource subj = resource(triple.subject);
     IRI pred = iri(triple.predicate);
@@ -73,6 +100,9 @@ public interface Serde {
     return valueFactory.createStatement(subj, pred, obj);
   }
 
+  /**
+   * Convert an RDF node to its RDF4j equivalent.
+   */
   static Value value(hydra.langs.rdf.syntax.Node r) {
     return r.accept(new Node.Visitor<Value>() {
       @Override

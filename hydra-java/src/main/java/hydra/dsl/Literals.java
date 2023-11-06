@@ -11,7 +11,7 @@ import java.util.Optional;
 
 
 /**
- * DSL functions for constructing literal values
+ * DSL functions for working with literal values.
  */
 public interface Literals {
 
@@ -83,6 +83,9 @@ public interface Literals {
         return integer(new IntegerValue.Uint64(value));
     }
 
+    /**
+     * Encode a literal value as a string.
+     */
     static String showLiteral(Literal value) {
         return value.accept(new Literal.Visitor<String>() {
             @Override
@@ -172,6 +175,9 @@ public interface Literals {
         });
     }
 
+    /**
+     * Check a literal value against an expected type.
+     */
     static Optional<String> checkLiteral(LiteralType type, Literal value) {
         String expected = LiteralTypes.showLiteralType(type);
         String actual = LiteralTypes.showLiteralType(Basics.literalType(value));

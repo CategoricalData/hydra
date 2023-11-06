@@ -1,5 +1,15 @@
 package hydra.lib;
 
+import hydra.lib.sets.Contains;
+import hydra.lib.sets.Empty;
+import hydra.lib.sets.FromList;
+import hydra.lib.sets.Insert;
+import hydra.lib.sets.IsEmpty;
+import hydra.lib.sets.Map;
+import hydra.lib.sets.Remove;
+import hydra.lib.sets.Singleton;
+import hydra.lib.sets.Size;
+import hydra.lib.sets.ToList;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -7,10 +17,10 @@ import java.util.function.Function;
 import java.util.HashSet;
 import java.util.Set;
 
-import hydra.lib.sets.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 public class SetsTest {
     @Test
@@ -66,11 +76,12 @@ public class SetsTest {
 
     @Test
     public void removeIsCorrect() {
-        HashSet<Integer> testSet = new HashSet<Integer>(Arrays.asList(1, 2, 3));
-        HashSet<Integer> emptySet = new HashSet<Integer>();
-        Set<Integer> newSet1 = Remove.apply(4, testSet);
-        Set<Integer> newSet2 = Remove.apply(3, testSet);
-        Set<Integer> newSet3 = Remove.apply(1, emptySet);
+        final HashSet<Integer> testSet = new HashSet<Integer>(Arrays.asList(1, 2, 3));
+        final HashSet<Integer> emptySet = new HashSet<Integer>();
+
+        final Set<Integer> newSet1 = Remove.apply(4, testSet);
+        final Set<Integer> newSet2 = Remove.apply(3, testSet);
+        final Set<Integer> newSet3 = Remove.apply(1, emptySet);
     
         assertEquals(testSet, new HashSet<Integer>(Arrays.asList(1, 2, 3)));
         assertEquals(emptySet, new HashSet<Integer>());

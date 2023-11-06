@@ -14,7 +14,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-import static hydra.dsl.Types.*;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.int32;
+import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.set;
 
 
 public class Size<A> extends PrimitiveFunction<A> {

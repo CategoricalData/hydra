@@ -23,6 +23,7 @@ import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.pair;
 import static hydra.dsl.Types.variable;
 
+
 public class ToList<A> extends PrimitiveFunction<A> {
     public Name name() {
         return new Name("hydra/lib/maps.toList");
@@ -43,6 +44,9 @@ public class ToList<A> extends PrimitiveFunction<A> {
         };
     }
 
+    /**
+     * Apply the function to its single argument.
+     */
     public static <K, V> List<Tuple.Tuple2<K, V>> apply(Map<K, V> map) {
         List<Tuple.Tuple2<K, V>> pairs = new java.util.ArrayList<>(map.size());
         for (Map.Entry<K, V> entry : map.entrySet()) {

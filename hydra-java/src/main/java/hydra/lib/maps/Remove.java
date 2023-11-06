@@ -26,14 +26,16 @@ public class Remove<A> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return lambda("k", "v", function("k", map("k", "v"), map("k", "v")));
+        return lambda("k", "v",
+                function("k", map("k", "v"), map("k", "v")));
     }
 
     @Override
     protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
         return args -> {
             Term<A> key = args.get(0);
-            return Flows.map(Expect.map(Flows::pure, Flows::pure, args.get(2)), before -> Terms.map(apply(key, before)));
+            return Flows.map(Expect.map(Flows::pure, Flows::pure, args.get(2)),
+                    before -> Terms.map(apply(key, before)));
         };
     }
 
@@ -41,6 +43,9 @@ public class Remove<A> extends PrimitiveFunction<A> {
         return before -> apply(k, before);
     }
 
+    /**
+     * Apply the function to both arguments.
+     */
     public static <K, V> Map<K, V> apply(K k, Map<K, V> before) {
         Map<K, V> after = new HashMap<>(before);
         after.remove(k);

@@ -14,8 +14,10 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static hydra.Flows.*;
-import static hydra.dsl.Types.*;
+import static hydra.Flows.map2;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.optional;
 
 
 public class Apply<A> extends PrimitiveFunction<A> {
@@ -42,6 +44,9 @@ public class Apply<A> extends PrimitiveFunction<A> {
         return (optionalArg) -> apply(optionalF, optionalArg);
     }
 
+    /**
+     * Apply the function to both arguments.
+     */
     public static <X, Y> Optional<Y> apply(Optional<Function<X, Y>> optionalF, Optional<X> optionalArg) {
         if (!optionalF.isPresent() || !optionalArg.isPresent()) {
             return Optional.empty();

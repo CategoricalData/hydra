@@ -1,7 +1,16 @@
 package hydra.dsl.prims;
 
 import hydra.core.Term;
-import hydra.lib.sets.*;
+import hydra.lib.sets.Contains;
+import hydra.lib.sets.Empty;
+import hydra.lib.sets.FromList;
+import hydra.lib.sets.Insert;
+import hydra.lib.sets.IsEmpty;
+import hydra.lib.sets.Map;
+import hydra.lib.sets.Remove;
+import hydra.lib.sets.Singleton;
+import hydra.lib.sets.Size;
+import hydra.lib.sets.ToList;
 
 public interface Sets {
     static <A> Term<A> contains() {

@@ -39,6 +39,9 @@ public class Intercalate<A> extends PrimitiveFunction<A> {
         return (strings) -> apply(delim, strings);
     }
 
+    /**
+     * Apply the function to both arguments.
+     */
     public static String apply(String delim, List<String> strings) {
         StringBuilder sb = new StringBuilder();
         boolean first = true;

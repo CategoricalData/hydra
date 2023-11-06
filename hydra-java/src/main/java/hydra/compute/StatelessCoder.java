@@ -15,6 +15,9 @@ public class StatelessCoder<V1, V2> extends Coder<Unit, Unit, V1, V2> {
         super(encode, decode);
     }
 
+    /**
+     * Construct a stateless coder.
+     */
     public static <V1, V2> StatelessCoder<V1, V2> of(
             java.util.function.Function<V1, hydra.compute.Flow<Unit, V2>> encode,
             java.util.function.Function<V2, hydra.compute.Flow<Unit, V1>> decode) {
@@ -22,7 +25,7 @@ public class StatelessCoder<V1, V2> extends Coder<Unit, Unit, V1, V2> {
     }
 
     /**
-     * Construct a unidirectional coder; encoding follows the provided function, while decoding will fail gracefully
+     * Construct a unidirectional coder; encoding follows the provided function, while decoding will fail gracefully.
      */
     public static <V1, V2> StatelessCoder<V1, V2> unidirectional(
             java.util.function.Function<V1, hydra.compute.Flow<Unit, V2>> encode) {

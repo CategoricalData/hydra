@@ -14,7 +14,11 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.Set;
 import java.util.stream.Collectors;
-import static hydra.dsl.Types.*;
+
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.set;
+
 
 public class Map<A> extends PrimitiveFunction<A> {
     public Name name() {
@@ -23,7 +27,8 @@ public class Map<A> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return lambda("x", lambda("y", function(function("x", "y"), set("x"), set("y"))));
+        return lambda("x", lambda("y",
+                function(function("x", "y"), set("x"), set("y"))));
     }
 
     @Override

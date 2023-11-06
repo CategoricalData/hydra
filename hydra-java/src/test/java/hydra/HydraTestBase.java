@@ -42,7 +42,9 @@ public class HydraTestBase {
         assertRoundTripIsNoop(coder, new Unit(), initialValue);
     }
 
-    protected static <S, V1, V2> void assertRoundTripIsNoop(Coder<S, S, V1, V2> coder, S initialState, V1 initialValue) {
+    protected static <S, V1, V2> void assertRoundTripIsNoop(Coder<S, S, V1, V2> coder,
+                                                            S initialState,
+                                                            V1 initialValue) {
         assertSucceedsWith(initialValue, roundTrip(coder, initialValue), initialState);
     }
 
@@ -50,7 +52,9 @@ public class HydraTestBase {
         assertFails(roundTrip(coder, initialValue));
     }
 
-    protected static <S, V1, V2> void assertRoundTripFails(Coder<S, S, V1, V2> coder, S initialState, V1 initialValue) {
+    protected static <S, V1, V2> void assertRoundTripFails(Coder<S, S, V1, V2> coder,
+                                                           S initialState,
+                                                           V1 initialValue) {
         assertFails(roundTrip(coder, initialValue), initialState);
     }
 
