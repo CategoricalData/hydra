@@ -13,7 +13,7 @@ cypherNs = Namespace "hydra/langs/cypher/openCypher"
 cypher = typeref cypherNs
 
 openCypherModule :: Module Kv
-openCypherModule = Module cypherNs elements [hydraCoreModule] $
+openCypherModule = Module cypherNs elements [] [hydraCoreModule] $
     Just "An OpenCypher query model based on the M23 EBNF grammar. See https://opencypher.org/resources."
   where
     def = datatype cypherNs

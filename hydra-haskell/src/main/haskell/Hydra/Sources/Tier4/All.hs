@@ -19,6 +19,7 @@ import Hydra.Sources.Tier4.Langs.Protobuf.Any
 import Hydra.Sources.Tier4.Langs.Protobuf.Language
 import Hydra.Sources.Tier4.Langs.Protobuf.Proto3
 import Hydra.Sources.Tier4.Langs.Protobuf.SourceContext
+import Hydra.Sources.Tier4.Langs.Python.Python3
 import Hydra.Sources.Tier4.Langs.Rdf.Syntax
 import Hydra.Sources.Tier4.Langs.RelationalModel
 import Hydra.Sources.Tier4.Langs.Scala.Meta
@@ -61,6 +62,7 @@ tier4LangModules = [
   protobufAnyModule,
   protobufLanguageModule,
   protobufSourceContextModule,
+  python3Module,
   rdfSyntaxModule,
   relationalModelModule,
   scalaMetaModule,
