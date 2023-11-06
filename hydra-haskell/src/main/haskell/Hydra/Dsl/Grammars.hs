@@ -41,6 +41,14 @@ plus = G.PatternPlus
 regex :: String -> G.Pattern
 regex = G.PatternRegex . G.Regex
 
+-- | A helper which matches patterns like "foo.bar.quux" or "one; two; three; four"
+sep :: G.Pattern -> G.Pattern -> G.Pattern
+sep separator pat = list[pat, star(list[separator, pat])]
+
+-- | A helper which matches patterns like "foo.bar.quux" or "foo.bar.quux." (i.e. trailing separators are allowed)
+sepp :: G.Pattern -> G.Pattern -> G.Pattern
+sepp separator pat = list[pat, star(list[separator, pat]), opt(separator)]
+
 star :: G.Pattern -> G.Pattern
 star = G.PatternStar
 
