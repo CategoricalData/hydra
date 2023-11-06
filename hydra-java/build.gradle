@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
+    id 'checkstyle'
 }
 
 group 'hydra'
@@ -60,4 +61,25 @@ publishing {
     repositories {
         mavenLocal()
     }
+}
+
+checkstyle {
+    toolVersion = '8.29' // Temporary, due to the Java 1.8 limitation. A more recent version of Checkstyle it 10.12.4
+}
+
+tasks.withType(Checkstyle) {
+    reports {
+        xml.required = false
+        html.required = true
+    }
+}
+
+checkstyleMain {
+    source = 'src/main'
+    include '**/*.java'
+}
+
+checkstyleTest {
+    source = 'src/test'
+    include '**/*.java'
 }
