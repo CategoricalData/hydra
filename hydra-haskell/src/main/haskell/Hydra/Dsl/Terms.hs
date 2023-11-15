@@ -67,6 +67,9 @@ field n = Field (Name n)
 fieldsToMap :: [Field] -> M.Map Name Term
 fieldsToMap fields = M.fromList $ (\(Field name term) -> (name, term)) <$> fields
 
+first :: Term
+first = untuple 2 0
+
 float32 :: Float -> Term
 float32 = literal . Literals.float32
 
@@ -153,6 +156,9 @@ project tname fname = TermFunction $ FunctionElimination $ EliminationRecord $ P
 
 record :: Name -> [Field] -> Term
 record tname fields = TermRecord $ Record tname fields
+
+second :: Term
+second = untuple 2 1
 
 set :: S.Set Term -> Term
 set = TermSet
