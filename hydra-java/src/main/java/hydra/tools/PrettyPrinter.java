@@ -24,6 +24,9 @@ public class PrettyPrinter {
     private PrettyPrinter() {
     }
 
+    /**
+     * Serialize a term to a string.
+     */
     public static <A> String printTerm(Term<A> t) {
         StringBuilder sb = new StringBuilder();
         term(t).accept(sb);

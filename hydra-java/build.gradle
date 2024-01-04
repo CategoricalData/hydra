@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'hydra'
-version '0.2'
+version '0.2.0'
 
 // We use Java 8 for maximum compatibility with legacy systems, such as certain Spark deployments
 sourceCompatibility = '1.8'
