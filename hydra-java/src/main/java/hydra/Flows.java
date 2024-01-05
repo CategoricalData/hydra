@@ -45,12 +45,12 @@ public interface Flows {
     /**
      * Monadic bind function for flows.
      */
-    static <S, A, B> Flow<S, B> bind(Flow<S, A> p, Function<A, Flow<S, B>> k) {
+    static <S, A, B> Flow<S, B> bind(Flow<S, A> p, Function<A, Flow<S, B>> f) {
         return new Flow<>(s0 -> t0 -> {
             FlowState<S, A> fs1 = p.value.apply(s0).apply(t0);
             Optional<A> a = fs1.value;
             return a.isPresent()
-                    ? k.apply(a.get()).value.apply(fs1.state).apply(fs1.trace)
+                    ? f.apply(a.get()).value.apply(fs1.state).apply(fs1.trace)
                     : new FlowState<>(Optional.empty(), fs1.state, fs1.trace);
         });
     }
@@ -58,22 +58,36 @@ public interface Flows {
     /**
      * Monadic bind with reversed arguments.
      */
-    static <S, A, B> Flow<S, B> bind(Function<A, Flow<S, B>> k, Flow<S, A> p) {
-        return bind(k, p);
+    static <S, A, B> Flow<S, B> bind(Function<A, Flow<S, B>> f, Flow<S, A> p) {
+        return bind(f, p);
     }
 
     /**
      * Variant of monadic bind which takes two monadic arguments and a binary function.
      */
-    static <S, A, B, C> Flow<S, C> bind2(Flow<S, A> p1, Flow<S, B> p2, BiFunction<A, B, Flow<S, C>> k) {
-        return Flows.bind(p1, a -> Flows.bind(p2, b -> k.apply(a, b)));
+    static <S, A, B, C> Flow<S, C> bind2(Flow<S, A> p1, Flow<S, B> p2, BiFunction<A, B, Flow<S, C>> f) {
+        return Flows.bind(p1, a -> Flows.bind(p2, b -> f.apply(a, b)));
     }
 
     /**
      * Two-argument monadic bind with reversed arguments.
      */
-    static <S, A, B, C> Flow<S, C> bind2(BiFunction<A, B, Flow<S, C>> k, Flow<S, A> p1, Flow<S, B> p2) {
-        return Flows.bind2(p1, p2, k);
+    static <S, A, B, C> Flow<S, C> bind2(BiFunction<A, B, Flow<S, C>> f, Flow<S, A> p1, Flow<S, B> p2) {
+        return Flows.bind2(p1, p2, f);
+    }
+    
+    /**
+     * Variant of monadic bind which takes three monadic arguments and an arity-3 function.
+     */
+    static <S, A, B, C, D> Flow<S, D> bind3(Flow<S, A> p1, Flow<S, B> p2, Flow<S, C> p3, Function3<A, B, C, Flow<S, D>> f) {
+        return Flows.bind(p1, a -> Flows.bind2(p2, p3, (b, c) -> f.apply(a, b, c)));
+    }
+
+    /**
+     * Three-argument monadic bind with reversed arguments.
+     */
+    static <S, A, B, C, D> Flow<S, D> bind3(Function3<A, B, C, Flow<S, D>> f, Flow<S, A> p1, Flow<S, B> p2, Flow<S, C> p3) {
+        return Flows.bind3(p1, p2, p3, f);
     }
 
     /**
