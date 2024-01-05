@@ -75,18 +75,24 @@ public interface Flows {
     static <S, A, B, C> Flow<S, C> bind2(BiFunction<A, B, Flow<S, C>> f, Flow<S, A> p1, Flow<S, B> p2) {
         return Flows.bind2(p1, p2, f);
     }
-    
+
     /**
      * Variant of monadic bind which takes three monadic arguments and an arity-3 function.
      */
-    static <S, A, B, C, D> Flow<S, D> bind3(Flow<S, A> p1, Flow<S, B> p2, Flow<S, C> p3, Function3<A, B, C, Flow<S, D>> f) {
+    static <S, A, B, C, D> Flow<S, D> bind3(Flow<S, A> p1,
+                                            Flow<S, B> p2,
+                                            Flow<S, C> p3,
+                                            Function3<A, B, C, Flow<S, D>> f) {
         return Flows.bind(p1, a -> Flows.bind2(p2, p3, (b, c) -> f.apply(a, b, c)));
     }
 
     /**
      * Three-argument monadic bind with reversed arguments.
      */
-    static <S, A, B, C, D> Flow<S, D> bind3(Function3<A, B, C, Flow<S, D>> f, Flow<S, A> p1, Flow<S, B> p2, Flow<S, C> p3) {
+    static <S, A, B, C, D> Flow<S, D> bind3(Function3<A, B, C, Flow<S, D>> f,
+                                            Flow<S, A> p1,
+                                            Flow<S, B> p2,
+                                            Flow<S, C> p3) {
         return Flows.bind3(p1, p2, p3, f);
     }
 
@@ -134,9 +140,21 @@ public interface Flows {
     /**
      * Extract the value from a flow, returning a default value instead if the flow failed.
      */
-    static <S, A> A fromFlow(A dflt, S state, Flow<S, A> flow) throws FlowException {
+    static <S, A> A fromFlow(A dflt, S state, Flow<S, A> flow) {
         Function<S, Function<Flow<S, A>, A>> helper = Tier1.fromFlow(dflt);
         return helper.apply(state).apply(flow);
+    }
+
+    /**
+     * Extract the value from a flow, throwing an exception if the flow failed.
+     */
+    static <S, A> A fromFlow(S state, Flow<S, A> flow) throws FlowException {
+        FlowState<S, A> result = flow.value.apply(state).apply(EMPTY_TRACE);
+        if (result.value.isPresent()) {
+            return result.value.get();
+        } else {
+            throw new FlowException(result.trace);
+        }
     }
 
     /**
