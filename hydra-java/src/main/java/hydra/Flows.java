@@ -3,6 +3,7 @@ package hydra;
 import hydra.compute.Flow;
 import hydra.compute.FlowState;
 import hydra.compute.Trace;
+import hydra.core.Unit;
 import hydra.tier1.Tier1;
 import hydra.tools.FlowException;
 import hydra.tools.Function3;
@@ -144,7 +145,7 @@ public interface Flows {
         Function<S, Function<Flow<S, A>, A>> helper = Tier1.fromFlow(dflt);
         return helper.apply(state).apply(flow);
     }
-
+    
     /**
      * Extract the value from a flow, throwing an exception if the flow failed.
      */
@@ -155,6 +156,13 @@ public interface Flows {
         } else {
             throw new FlowException(result.trace);
         }
+    }
+
+    /**
+     * Extract the value from a stateless flow, throwing an exception if the flow failed.
+     */
+    static <A> A fromFlow(Flow<Unit, A> flow) throws FlowException {
+        return fromFlow(new Unit(), flow);
     }
 
     /**
