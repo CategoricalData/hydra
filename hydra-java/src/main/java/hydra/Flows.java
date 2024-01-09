@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -120,6 +121,16 @@ public interface Flows {
     }
 
     /**
+     * Evaluate a flow and consume the result.
+     */
+    static <S, A> Flow<S, Unit> consume(Flow<S, A> x, Consumer<A> consumer) {
+        return map(x, a -> {
+            consumer.accept(a);
+            return new Unit();
+        });
+    }
+    
+    /**
      * Produce a failure flow with the provided message.
      */
     static <S, A> Flow<S, A> fail(String msg) {
@@ -145,7 +156,7 @@ public interface Flows {
         Function<S, Function<Flow<S, A>, A>> helper = Tier1.fromFlow(dflt);
         return helper.apply(state).apply(flow);
     }
-    
+
     /**
      * Extract the value from a flow, throwing an exception if the flow failed.
      */
