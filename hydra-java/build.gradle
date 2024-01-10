@@ -1,10 +1,12 @@
 plugins {
     id 'java-library'
+    id 'signing'
     id 'maven-publish'
+    id('io.github.gradle-nexus.publish-plugin') version '1.1.0'
     id 'checkstyle'
 }
 
-group 'hydra'
+group 'net.fortytwo.hydra'
 version '0.2.0'
 
 // We use Java 8 for maximum compatibility with legacy systems, such as certain Spark deployments
@@ -55,12 +57,46 @@ repositories {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            from components.java
+            from(components.java)
+            pom {
+                name = 'hydra'
+                description = 'The Hydra language for strongly-typed transformations'
+                url = 'https://github.com/CategoricalData/hydra'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'joshsh'
+                        name = 'Joshua Shinavier'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/CategoricalData/hydra'
+                    connection = 'scm:git://github.com/ConnectedData/hydra.git'
+                    developerConnection = 'scm:git://github.com/CategoricalData/hydra.git'
+                }
+            }
         }
     }
+
+    // RESTORE ME
+//    repositories {
+//        mavenLocal()
+//    }
+}
+
+nexusPublishing {
     repositories {
-        mavenLocal()
+        sonatype()
     }
+}
+
+signing {
+    sign publishing.publications.mavenJava
 }
 
 checkstyle {

@@ -129,7 +129,7 @@ public interface Flows {
             return new Unit();
         });
     }
-    
+
     /**
      * Produce a failure flow with the provided message.
      */

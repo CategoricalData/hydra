@@ -1,5 +1,6 @@
 # Java / Gradle
 .gradle
+gradle.properties`
 build
 
 # IntelliJ
