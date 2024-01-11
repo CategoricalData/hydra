@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'net.fortytwo.hydra'
-version '0.2.0'
+version '0.2.1'
 
 // We use Java 8 for maximum compatibility with legacy systems, such as certain Spark deployments
 sourceCompatibility = '1.8'
@@ -15,16 +15,17 @@ targetCompatibility = '1.8'
 
 dependencies {
     implementation group: 'org.apache.commons', name: 'commons-text', version: '1.10.0'
-//  implementation 'com.linkedin.pegasus:generator:29.22.13'
 
     implementation group: 'com.cedarsoftware', name: 'json-io', version: '4.14.1'
 
     // We use RDF 3.x rather than 4.x or 5.x for compatibility with Java 8
     implementation 'org.eclipse.rdf4j:rdf4j-rio-ntriples:3.7.7'
 
-    testImplementation(platform('org.junit:junit-bom:5.9.2'))
-    testImplementation('org.junit.jupiter:junit-jupiter')
-    testImplementation('org.junit.jupiter:junit-jupiter-params:5.9.2')
+    // Temporarily including HydraTestBase and the unit testing dependencies in main,
+    // until we have a separately published artifact for the test framework.
+    implementation(platform('org.junit:junit-bom:5.9.2'))
+    implementation('org.junit.jupiter:junit-jupiter')
+    implementation('org.junit.jupiter:junit-jupiter-params:5.9.2')
 }
 
 sourceSets {
@@ -40,6 +41,20 @@ sourceSets {
             srcDirs 'src/gen-test/java'
         }
     }
+}
+
+// This is a workaround for an issue in Gradle 7, which manifests on `./gradlew publishToSonatype`
+// After upgrading to Gradle 8, try deleting this.
+// See: https://github.com/gradle/gradle/issues/17236
+task sourcesJar(type: Jar) {
+    duplicatesStrategy = 'include'
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
 test {
@@ -58,6 +73,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             from(components.java)
+
             pom {
                 name = 'hydra'
                 description = 'The Hydra language for strongly-typed transformations'
@@ -100,14 +116,7 @@ signing {
 }
 
 checkstyle {
-    toolVersion = '8.29' // Temporary, due to the Java 1.8 limitation. A more recent version of Checkstyle it 10.12.4
-}
-
-tasks.withType(Checkstyle) {
-    reports {
-        xml.required = false
-        html.required = true
-    }
+    toolVersion = '8.29' // Temporary, due to the Java 1.8 limitation. A more recent version of Checkstyle is 10.12.4
 }
 
 checkstyleMain {
@@ -118,4 +127,11 @@ checkstyleMain {
 checkstyleTest {
     source = 'src/test'
     include '**/*.java'
+}
+
+tasks.withType(Checkstyle) {
+    reports {
+        xml.required = false
+        html.required = true
+    }
 }
