@@ -97,3 +97,17 @@ withCharacterAliases original = L.filter C.isAlphaNum $ L.concat $ alias <$> ori
       (124, "verbar"),
       (125, "rcub"),
       (126, "tilde")]
+
+-- A simple soft line wrap which is suitable for code comments
+wrapLine :: Int -> String -> String
+wrapLine maxlen = L.intercalate "\n" . helper []
+  where
+    helper prev rem = if L.length rem <= maxlen
+        then L.reverse (rem:prev)
+        else if L.null prefix
+        then helper (trunc:prev) $ L.drop maxlen rem
+        else helper ((init prefix):prev) $ suffix ++ L.drop maxlen rem
+      where
+        trunc = L.take maxlen rem
+        (prefix, suffix) = case span (\c -> c /= ' ' && c /= '\t') (reverse trunc) of
+                                      (restRev, firstRev) -> (reverse firstRev, reverse restRev)
