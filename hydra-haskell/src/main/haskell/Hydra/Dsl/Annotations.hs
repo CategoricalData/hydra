@@ -5,6 +5,7 @@ module Hydra.Dsl.Annotations where
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Kv
+import Hydra.Tools.Formatting
 import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
@@ -38,6 +39,12 @@ boundedString min max = bounded min max Types.string
 
 doc :: String -> Type Kv -> Type Kv
 doc s = setTypeDescription (Just s)
+
+doc70 :: String -> Type Kv -> Type Kv
+doc70 = doc . wrapLine 70
+
+doc80 :: String -> Type Kv -> Type Kv
+doc80 = doc . wrapLine 80
 
 dataDoc :: String -> Term Kv -> Term Kv
 dataDoc s = setTermDescription (Just s)

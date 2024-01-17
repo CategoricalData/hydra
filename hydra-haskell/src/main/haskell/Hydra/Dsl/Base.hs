@@ -80,6 +80,9 @@ definitionInModule mod lname = Definition $ Tier1.unqualifyName $ QualifiedName 
 doc :: String -> Datum a -> Datum a
 doc s (Datum term) = Datum $ setTermDescription (Just s) term
 
+doc70 :: String -> Datum a -> Datum a
+doc70 = doc . wrapLine 70
+
 doc80 :: String -> Datum a -> Datum a
 doc80 = doc . wrapLine 80
 
