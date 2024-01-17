@@ -23,9 +23,10 @@ semi e = noSep [e, cst ";"]
 optDesc :: [P3.Option] -> CT.Expr -> CT.Expr
 optDesc opts expr = if L.null descs
     then expr
-    else newlineSep [cst $ "// " ++ (P3.optionValue $ L.head descs), expr]
+    else newlineSep [cst $ asComment (P3.optionValue $ L.head descs), expr]
   where
     descs = L.filter (\(P3.Option name value) -> name == descriptionOptionName) opts
+    asComment = L.intercalate "\n" . fmap (\s -> "// " ++ s) . lines
 
 writeDefinition :: P3.Definition -> CT.Expr
 writeDefinition def = case def of
