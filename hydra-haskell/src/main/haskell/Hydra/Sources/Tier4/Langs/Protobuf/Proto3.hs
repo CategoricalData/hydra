@@ -12,7 +12,7 @@ proto3Ns = Namespace "hydra/langs/protobuf/proto3"
 proto3 = typeref proto3Ns
 
 proto3Module :: Module Kv
-proto3Module = Module proto3Ns elements [hydraCoreModule] [] $
+proto3Module = Module proto3Ns elements [hydraCoreModule] [hydraCoreModule] $
     Just ("A model for Protocol Buffers v3 enum and message types, designed as a target for transformations."
       ++ "This model is loosely based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/type.proto,"
       ++ " as well as the proto3 reference documentation")
@@ -110,7 +110,7 @@ proto3Module = Module proto3Ns elements [hydraCoreModule] [] $
             string,
           "value">:
             doc ("The option's value") $
-            string], -- TODO: although "Any" may be overkill, we do need to accommodate option values other than strings
+            proto3 "Value"],
 
       def "PackageName" string,
 
@@ -153,4 +153,12 @@ proto3Module = Module proto3Ns elements [hydraCoreModule] [] $
 
       def "TypeReference" $
         doc "A reference to an enum type or message type"
-        string]
+        string,
+
+      def "Value" $
+        doc "A scalar value" $
+        union [
+          "boolean">: boolean,
+          "string">: string
+          -- Add other scalar value types as needed
+        ]]
