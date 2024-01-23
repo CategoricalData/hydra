@@ -149,7 +149,7 @@ data Option =
     -- | The option's name. For protobuf built-in options (options defined in descriptor.proto), this is the short name. For example, `"map_entry"`. For custom options, it should be the fully-qualified name. For example, `"google.api.http"`.
     optionName :: String,
     -- | The option's value
-    optionValue :: String}
+    optionValue :: Value}
   deriving (Eq, Ord, Read, Show)
 
 _Option = (Core.Name "hydra/langs/protobuf/proto3.Option")
@@ -264,3 +264,15 @@ newtype TypeReference =
   deriving (Eq, Ord, Read, Show)
 
 _TypeReference = (Core.Name "hydra/langs/protobuf/proto3.TypeReference")
+
+-- | A scalar value
+data Value = 
+  ValueBoolean Bool |
+  ValueString String
+  deriving (Eq, Ord, Read, Show)
+
+_Value = (Core.Name "hydra/langs/protobuf/proto3.Value")
+
+_Value_boolean = (Core.FieldName "boolean")
+
+_Value_string = (Core.FieldName "string")
