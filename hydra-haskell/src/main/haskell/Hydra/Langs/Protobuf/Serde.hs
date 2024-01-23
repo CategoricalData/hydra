@@ -23,10 +23,13 @@ semi e = noSep [e, cst ";"]
 optDesc :: [P3.Option] -> CT.Expr -> CT.Expr
 optDesc opts expr = if L.null descs
     then expr
-    else newlineSep [cst $ asComment (P3.optionValue $ L.head descs), expr]
+    else newlineSep [cst $ asComment (unValue $ P3.optionValue $ L.head descs), expr]
   where
     descs = L.filter (\(P3.Option name value) -> name == descriptionOptionName) opts
     asComment = L.intercalate "\n" . fmap (\s -> "// " ++ s) . lines
+    unValue v = case v of
+      P3.ValueBoolean b -> if b then "true" else "false"
+      P3.ValueString s -> s
 
 writeDefinition :: P3.Definition -> CT.Expr
 writeDefinition def = case def of
@@ -73,7 +76,7 @@ writeMessageDefinition (P3.MessageDefinition name fields options) = optDesc opti
   protoBlock (writeField <$> fields)]
 
 writeOption :: P3.Option -> CT.Expr
-writeOption (P3.Option name value) = semi $ spaceSep [cst "option", cst name, cst "=", cst $ show value]
+writeOption (P3.Option name value) = semi $ spaceSep [cst "option", cst name, cst "=", writeValue value]
 
 writeProtoFile :: P3.ProtoFile -> CT.Expr
 writeProtoFile (P3.ProtoFile pkg imports defs options) = optDesc options $ doubleNewlineSep
@@ -115,3 +118,8 @@ writeSimpleType :: P3.SimpleType -> CT.Expr
 writeSimpleType st = case st of
   P3.SimpleTypeReference name -> cst $ P3.unTypeName name
   P3.SimpleTypeScalar sct -> writeScalarType sct
+
+writeValue :: P3.Value -> CT.Expr
+writeValue v = cst $ case v of
+  P3.ValueBoolean b -> if b then "true" else "false"
+  P3.ValueString s -> show s
