@@ -26,6 +26,9 @@ moduleToProtobuf mod = do
 
 --
 
+javaMultipleFilesOptionName = "java_multiple_files"
+javaPackageOptionName = "java_package"
+
 checkIsStringType :: Show a => Type a -> Flow (Graph a) ()
 checkIsStringType typ = case simplifyType typ of
   TypeLiteral lt -> case lt of
@@ -47,9 +50,12 @@ constructModule mod@(Module ns els _ _ desc) _ pairs = do
       P3.protoFilePackage = namespaceToPackageName ns,
       P3.protoFileImports = schemaImports ++ (wrapperImport $ snd <$> types) ++ (emptyImport $ snd <$> types),
       P3.protoFileTypes = definitions,
-      P3.protoFileOptions = []}
+      P3.protoFileOptions = javaOptions}
     return $ M.singleton path pfile
   where
+    javaOptions = [
+      P3.Option javaMultipleFilesOptionName $ P3.ValueBoolean True,
+      P3.Option javaPackageOptionName $ P3.ValueString $ P3.unPackageName $ namespaceToPackageName ns]
     path = P3.unFileReference $ namespaceToFileReference ns
     toType (el, (TypedTerm typ term)) = do
       if isType typ
@@ -238,7 +244,7 @@ findOptions typ = do
   mdesc <- annotationClassTypeDescription anns typ
   return $ case mdesc of
     Nothing -> []
-    Just desc -> [P3.Option descriptionOptionName desc]
+    Just desc -> [P3.Option descriptionOptionName $ P3.ValueString desc]
 
 isEnumFields :: Eq a => [FieldType a] -> Bool
 isEnumFields fields = L.foldl (&&) True $ fmap isEnumField fields
@@ -257,7 +263,8 @@ namespaceToFileReference :: Namespace -> P3.FileReference
 namespaceToFileReference (Namespace ns) = P3.FileReference $ ns ++ ".proto"
 
 namespaceToPackageName :: Namespace -> P3.PackageName
-namespaceToPackageName (Namespace ns) = P3.PackageName $ Strings.intercalate "." $ Strings.splitOn "/" ns
+namespaceToPackageName (Namespace ns) = P3.PackageName $ Strings.intercalate "." $
+  L.init $ Strings.splitOn "/" ns
 
 nextIndex :: Flow s Int
 nextIndex = nextCount "proto_field_index"
