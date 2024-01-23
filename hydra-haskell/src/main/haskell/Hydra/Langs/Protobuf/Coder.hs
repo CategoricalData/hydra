@@ -221,13 +221,15 @@ encodeTypeName :: Name -> P3.TypeName
 encodeTypeName = P3.TypeName . localNameOfEager
 
 encodeTypeReference :: Namespace -> Name -> P3.TypeName
-encodeTypeReference localNs name = P3.TypeName $ if ns == Just localNs
+encodeTypeReference localNs name = P3.TypeName $ if nsParts == Just localNsParts
     then local
-    else case ns of
+    else case nsParts of
       Nothing -> local
-      Just (Namespace n) -> L.last (Strings.splitOn "/" n) ++ "." ++ local
+      Just parts -> L.intercalate "." (parts ++ [local])
   where
     QualifiedName ns local = qualifyNameEager name
+    nsParts = fmap (\n -> L.init $ Strings.splitOn "/" $ unNamespace n) ns
+    localNsParts = L.init $ Strings.splitOn "/" $ unNamespace localNs
 
 -- Eliminate type lambdas and type applications, simply replacing type variables with the string type
 flattenType :: Ord a => Type a -> Type a
