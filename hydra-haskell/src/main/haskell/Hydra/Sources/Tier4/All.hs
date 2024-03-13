@@ -12,6 +12,7 @@ import Hydra.Sources.Tier4.Langs.Haskell.Ast
 import Hydra.Sources.Tier4.Langs.Java.Language
 import Hydra.Sources.Tier4.Langs.Java.Syntax
 import Hydra.Sources.Tier4.Langs.Json.Decoding
+import Hydra.Sources.Tier4.Langs.Kusto.Kql
 import Hydra.Sources.Tier4.Langs.Owl.Syntax
 import Hydra.Sources.Tier4.Langs.Parquet.Format
 import Hydra.Sources.Tier4.Langs.Pegasus.Pdl
@@ -54,6 +55,7 @@ tier4LangModules = [
   javaLanguageModule,
   javaSyntaxModule,
   jsonDecodingModule,
+  kqlModule,
   openCypherModule,
   owlSyntaxModule,
   parquetFormatModule,
