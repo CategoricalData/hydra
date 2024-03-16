@@ -1,5 +1,7 @@
 package hydra.tools;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +14,10 @@ public class AntlrReaderBase {
     public static class AntlrReaderException extends RuntimeException {
         public AntlrReaderException(String message) {
             super(message);
+        }
+
+        public AntlrReaderException(Throwable cause) {
+            super(cause);
         }
     }
 
@@ -60,8 +66,13 @@ public class AntlrReaderBase {
         return invalid("unexpected null");
     }
 
-    protected static <P0, P> P match(P0 ctx,
-                                     Function<P0, Optional<P>>... funs) {
+    protected static <P0 extends ParserRuleContext, P> P match(P0 ctx,
+                                                               Function<P0, Optional<P>>... funs) {
+        if (null != ctx.exception) {
+            String text = ctx.getText();
+            throw new AntlrReaderException(ctx.exception);
+        }
+
         for (Function<P0, Optional<P>> f : funs) {
             Optional<P> res = f.apply(ctx);
             if (res.isPresent()) {

@@ -60,8 +60,9 @@ oC_SinglePartQuery
                    | ( ( oC_ReadingClause SP? )* oC_UpdatingClause ( SP? oC_UpdatingClause )* ( SP? oC_Return )? )
                    ;
 
-oC_MultiPartQuery
-              :  ( ( oC_ReadingClause SP? )* ( oC_UpdatingClause SP? )* oC_With SP? )+ oC_SinglePartQuery ;
+oC_MultiPartQuery : ( oc_WithClause )+ oC_SinglePartQuery ;
+
+oc_WithClause : ( oC_ReadingClause SP? )* ( oC_UpdatingClause SP? )* oC_With SP? ;
 
 oC_UpdatingClause
               :  oC_Create
@@ -300,17 +301,11 @@ oC_NotExpression
 
 NOT : ( 'N' | 'n' ) ( 'O' | 'o' ) ( 'T' | 't' ) ;
 
-oC_ComparisonExpression
-                    :  oC_StringListNullPredicateExpression ( SP? oC_PartialComparisonExpression )* ;
+oC_ComparisonExpression : oC_StringListNullPredicateExpression ( SP? oC_PartialComparisonExpression )* ;
 
-oC_PartialComparisonExpression
-                           :  ( '=' SP? oC_StringListNullPredicateExpression )
-                               | ( '<>' SP? oC_StringListNullPredicateExpression )
-                               | ( '<' SP? oC_StringListNullPredicateExpression )
-                               | ( '>' SP? oC_StringListNullPredicateExpression )
-                               | ( '<=' SP? oC_StringListNullPredicateExpression )
-                               | ( '>=' SP? oC_StringListNullPredicateExpression )
-                               ;
+oC_PartialComparisonExpression : oC_ComparisonOperator SP? oC_StringListNullPredicateExpression ;
+
+oC_ComparisonOperator :  '=' | '<>' | '<' | '>' | '<=' | '>=' ;
 
 oC_StringListNullPredicateExpression :  oC_AddOrSubtractExpression ( oC_StringListNullPredicateExpression_RHS )* ;
 

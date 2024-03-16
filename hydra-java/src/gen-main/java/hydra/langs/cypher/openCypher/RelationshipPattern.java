@@ -2,119 +2,44 @@ package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
 
-public abstract class RelationshipPattern implements Serializable {
+public class RelationshipPattern implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.RelationshipPattern");
   
-  private RelationshipPattern () {
+  public final Boolean leftArrow;
   
+  public final java.util.Optional<hydra.langs.cypher.openCypher.RelationshipDetail> detail;
+  
+  public final Boolean rightArrow;
+  
+  public RelationshipPattern (Boolean leftArrow, java.util.Optional<hydra.langs.cypher.openCypher.RelationshipDetail> detail, Boolean rightArrow) {
+    this.leftArrow = leftArrow;
+    this.detail = detail;
+    this.rightArrow = rightArrow;
   }
   
-  public abstract <R> R accept(Visitor<R> visitor) ;
-  
-  public interface Visitor<R> {
-    R visit(LeftArrow instance) ;
-    
-    R visit(Detail instance) ;
-    
-    R visit(RightArrow instance) ;
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof RelationshipPattern)) {
+      return false;
+    }
+    RelationshipPattern o = (RelationshipPattern) (other);
+    return leftArrow.equals(o.leftArrow) && detail.equals(o.detail) && rightArrow.equals(o.rightArrow);
   }
   
-  public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(RelationshipPattern instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
-    }
-    
-    default R visit(LeftArrow instance) {
-      return otherwise((instance));
-    }
-    
-    default R visit(Detail instance) {
-      return otherwise((instance));
-    }
-    
-    default R visit(RightArrow instance) {
-      return otherwise((instance));
-    }
+  @Override
+  public int hashCode() {
+    return 2 * leftArrow.hashCode() + 3 * detail.hashCode() + 5 * rightArrow.hashCode();
   }
   
-  public static final class LeftArrow extends hydra.langs.cypher.openCypher.RelationshipPattern implements Serializable {
-    public final Boolean value;
-    
-    public LeftArrow (Boolean value) {
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof LeftArrow)) {
-        return false;
-      }
-      LeftArrow o = (LeftArrow) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
+  public RelationshipPattern withLeftArrow(Boolean leftArrow) {
+    return new RelationshipPattern(leftArrow, detail, rightArrow);
   }
   
-  public static final class Detail extends hydra.langs.cypher.openCypher.RelationshipPattern implements Serializable {
-    public final java.util.Optional<hydra.langs.cypher.openCypher.RelationshipDetail> value;
-    
-    public Detail (java.util.Optional<hydra.langs.cypher.openCypher.RelationshipDetail> value) {
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Detail)) {
-        return false;
-      }
-      Detail o = (Detail) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
+  public RelationshipPattern withDetail(java.util.Optional<hydra.langs.cypher.openCypher.RelationshipDetail> detail) {
+    return new RelationshipPattern(leftArrow, detail, rightArrow);
   }
   
-  public static final class RightArrow extends hydra.langs.cypher.openCypher.RelationshipPattern implements Serializable {
-    public final Boolean value;
-    
-    public RightArrow (Boolean value) {
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof RightArrow)) {
-        return false;
-      }
-      RightArrow o = (RightArrow) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
+  public RelationshipPattern withRightArrow(Boolean rightArrow) {
+    return new RelationshipPattern(leftArrow, detail, rightArrow);
   }
 }
