@@ -195,8 +195,13 @@ oC_Limit
 
 LIMIT : ( 'L' | 'l' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'I' | 'i' ) ( 'T' | 't' ) ;
 
-oC_SortItem
-        :  oC_Expression ( SP? ( ASCENDING | ASC | DESCENDING | DESC ) )? ;
+oC_SortItem : oC_Expression ( SP? oC_SortOrder )? ;
+
+oC_SortOrder : oC_SortOrder_Ascending | oC_SortOrder_Descending ;
+
+oC_SortOrder_Ascending : ( ASCENDING | ASC ) ;
+
+oC_SortOrder_Descending : ( DESCENDING | DESC ) ;
 
 ASCENDING : ( 'A' | 'a' ) ( 'S' | 's' ) ( 'C' | 'c' ) ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' ) ;
 
@@ -307,8 +312,9 @@ oC_PartialComparisonExpression
                                | ( '>=' SP? oC_StringListNullPredicateExpression )
                                ;
 
-oC_StringListNullPredicateExpression
-                                 :  oC_AddOrSubtractExpression ( oC_StringPredicateExpression | oC_ListPredicateExpression | oC_NullPredicateExpression )* ;
+oC_StringListNullPredicateExpression :  oC_AddOrSubtractExpression ( oC_StringListNullPredicateExpression_RHS )* ;
+
+oC_StringListNullPredicateExpression_RHS : oC_StringPredicateExpression | oC_ListPredicateExpression | oC_NullPredicateExpression ;
 
 oC_StringPredicateExpression
                          :  ( ( SP STARTS SP WITH ) | ( SP ENDS SP WITH ) | ( SP CONTAINS ) ) SP? oC_AddOrSubtractExpression ;
@@ -333,22 +339,32 @@ IS : ( 'I' | 'i' ) ( 'S' | 's' ) ;
 
 NULL : ( 'N' | 'n' ) ( 'U' | 'u' ) ( 'L' | 'l' ) ( 'L' | 'l' ) ;
 
-oC_AddOrSubtractExpression
-                       :  oC_MultiplyDivideModuloExpression ( ( SP? '+' SP? oC_MultiplyDivideModuloExpression ) | ( SP? '-' SP? oC_MultiplyDivideModuloExpression ) )* ;
+oC_AddOrSubtractExpression : oC_MultiplyDivideModuloExpression ( SP? oC_AddOrSubtractExpression_RHS )* ;
 
-oC_MultiplyDivideModuloExpression
-                              :  oC_PowerOfExpression ( ( SP? '*' SP? oC_PowerOfExpression ) | ( SP? '/' SP? oC_PowerOfExpression ) | ( SP? '%' SP? oC_PowerOfExpression ) )* ;
+oC_AddOrSubtractExpression_Operator : '+' | '-' ;
+
+oC_AddOrSubtractExpression_RHS : oC_AddOrSubtractExpression_Operator SP? oC_MultiplyDivideModuloExpression ;
+
+oC_MultiplyDivideModuloExpression :  oC_PowerOfExpression ( SP? oC_MultiplyDivideModuloExpression_RHS )* ;
+
+oC_MultiplyDivideModuloExpression_Operator : '*' | '/' | '%' ;
+
+oC_MultiplyDivideModuloExpression_RHS : oC_MultiplyDivideModuloExpression_Operator SP? oC_PowerOfExpression ;
 
 oC_PowerOfExpression
                  :  oC_UnaryAddOrSubtractExpression ( SP? '^' SP? oC_UnaryAddOrSubtractExpression )* ;
 
 oC_UnaryAddOrSubtractExpression
                             :  oC_NonArithmeticOperatorExpression
-                                | ( ( '+' | '-' ) SP? oC_NonArithmeticOperatorExpression )
+                                | ( oC_UnaryAddOrSubtractExpression_Operator SP? oC_NonArithmeticOperatorExpression )
                                 ;
 
+oC_UnaryAddOrSubtractExpression_Operator : '+' | '-' ;
+
 oC_NonArithmeticOperatorExpression
-                               :  oC_Atom ( ( SP? oC_ListOperatorExpression ) | ( SP? oC_PropertyLookup ) )* ( SP? oC_NodeLabels )? ;
+                               :  oC_Atom ( SP? oC_ListOperatorExpressionOrPropertyLookup )* ( SP? oC_NodeLabels )? ;
+
+oC_ListOperatorExpressionOrPropertyLookup : oC_ListOperatorExpression | oC_PropertyLookup ;
 
 oC_ListOperatorExpression
                       :  ( '[' oC_Expression ']' )
@@ -557,7 +573,9 @@ oC_ListLiteral
            :  '[' SP? ( oC_Expression SP? ( ',' SP? oC_Expression SP? )* )? ']' ;
 
 oC_MapLiteral
-          :  '{' SP? ( oC_PropertyKeyName SP? ':' SP? oC_Expression SP? ( ',' SP? oC_PropertyKeyName SP? ':' SP? oC_Expression SP? )* )? '}' ;
+          :  '{' SP? ( oc_KeyValuePair ( ',' oc_KeyValuePair )* )? '}' ;
+
+oc_KeyValuePair : oC_PropertyKeyName SP? ':' SP? oC_Expression ;
 
 oC_PropertyKeyName
                :  oC_SchemaName ;
