@@ -4,14 +4,18 @@ plugins {
     id 'maven-publish'
     id('io.github.gradle-nexus.publish-plugin') version '1.1.0'
     id 'checkstyle'
+    id 'antlr'
 }
 
 group 'net.fortytwo.hydra'
 version '0.2.1'
 
-// We use Java 8 for maximum compatibility with legacy systems, such as certain Spark deployments
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+apply plugin: 'antlr'
+
+// We use Java 8 for maximum compatibility with legacy systems, such as certain Spark deployments,
+// but we are disabling this "feature" until it is needed again.
+//sourceCompatibility = '1.8'
+//targetCompatibility = '1.8'
 
 dependencies {
     implementation group: 'org.apache.commons', name: 'commons-text', version: '1.10.0'
@@ -20,6 +24,8 @@ dependencies {
 
     // We use RDF 3.x rather than 4.x or 5.x for compatibility with Java 8
     implementation 'org.eclipse.rdf4j:rdf4j-rio-ntriples:3.7.7'
+
+    antlr 'org.antlr:antlr4:4.9.2'
 
     // Temporarily including HydraTestBase and the unit testing dependencies in main,
     // until we have a separately published artifact for the test framework.
@@ -134,4 +140,13 @@ tasks.withType(Checkstyle) {
         xml.required = false
         html.required = true
     }
+}
+
+generateGrammarSource {
+    arguments += ["-package", "org.neo4j"] // Cypher only
+    arguments += ["-visitor"]
+    arguments += ["-no-listener"]
+}
+compileJava {
+    dependsOn generateGrammarSource
 }
