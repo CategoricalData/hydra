@@ -91,8 +91,8 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "create">: cypher "Create",
           "merge">: cypher "Merge",
           "delete">: cypher "Delete",
-          "set">: nonemptyList $ cypher "SetItem",
-          "remove">: nonemptyList $ cypher "RemoveItem"],
+          "set">: cypher "Set",
+          "remove">: cypher "Remove"],
 
 -- ReadingClause = Match
 --               | Unwind
@@ -144,7 +144,10 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "Create" $ cypher "Pattern",
 
 -- Set = (S,E,T), [SP], SetItem, { [SP], ',', [SP], SetItem } ;
---          
+
+      def "Set" $
+        nonemptyList $ cypher "SetItem",
+
 -- SetItem = (PropertyExpression, [SP], '=', [SP], Expression)
 --         | (Variable, [SP], '=', [SP], Expression)
 --         | (Variable, [SP], '+=', [SP], Expression)
@@ -182,7 +185,10 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "expressions">: nonemptyList $ cypher "Expression"],
 
 -- Remove = (R,E,M,O,V,E), SP, RemoveItem, { [SP], ',', [SP], RemoveItem } ;
---        
+
+      def "Remove" $
+        nonemptyList $ cypher "RemoveItem",
+
 -- RemoveItem = (Variable, NodeLabels)
 --            | PropertyExpression
 --            ;
@@ -355,11 +361,11 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --                     | (Dash, [SP], [RelationshipDetail], [SP], Dash)
 --                     ;
 
-       def "RelationshipPattern" $
-        union [
-          "leftArrow">: boolean,
-          "detail">: optional $ cypher "RelationshipDetail",
-          "rightArrow">: boolean],
+        def "RelationshipPattern" $
+          record [
+            "leftArrow">: boolean,
+            "detail">: optional $ cypher "RelationshipDetail",
+            "rightArrow">: boolean],
 
 -- RelationshipDetail = '[', [SP], [Variable, [SP]], [RelationshipTypes, [SP]], [RangeLiteral], [Properties, [SP]], ']' ;
 
@@ -384,7 +390,6 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       -- TODO: check whether the slight difference in colon syntax is significant
       def "RelationshipTypes" $ nonemptyList $ cypher "RelTypeName",
 
--- 
 -- NodeLabels = NodeLabel, { [SP], NodeLabel } ;
 
       def "NodeLabels" $ nonemptyList $ cypher "NodeLabel",

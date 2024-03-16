@@ -131,9 +131,9 @@ public abstract class UpdatingClause implements Serializable {
   }
   
   public static final class Set extends hydra.langs.cypher.openCypher.UpdatingClause implements Serializable {
-    public final java.util.List<hydra.langs.cypher.openCypher.SetItem> value;
+    public final hydra.langs.cypher.openCypher.Set value;
     
-    public Set (java.util.List<hydra.langs.cypher.openCypher.SetItem> value) {
+    public Set (hydra.langs.cypher.openCypher.Set value) {
       this.value = value;
     }
     
@@ -158,9 +158,9 @@ public abstract class UpdatingClause implements Serializable {
   }
   
   public static final class Remove extends hydra.langs.cypher.openCypher.UpdatingClause implements Serializable {
-    public final java.util.List<hydra.langs.cypher.openCypher.RemoveItem> value;
+    public final hydra.langs.cypher.openCypher.Remove value;
     
-    public Remove (java.util.List<hydra.langs.cypher.openCypher.RemoveItem> value) {
+    public Remove (hydra.langs.cypher.openCypher.Remove value) {
       this.value = value;
     }
     
