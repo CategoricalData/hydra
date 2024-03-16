@@ -5,12 +5,12 @@ import java.io.Serializable;
 public class MergeAction implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.MergeAction");
   
-  public final Boolean create;
+  public final hydra.langs.cypher.openCypher.CreateOrMatch action;
   
   public final java.util.List<hydra.langs.cypher.openCypher.SetItem> set;
   
-  public MergeAction (Boolean create, java.util.List<hydra.langs.cypher.openCypher.SetItem> set) {
-    this.create = create;
+  public MergeAction (hydra.langs.cypher.openCypher.CreateOrMatch action, java.util.List<hydra.langs.cypher.openCypher.SetItem> set) {
+    this.action = action;
     this.set = set;
   }
   
@@ -20,19 +20,19 @@ public class MergeAction implements Serializable {
       return false;
     }
     MergeAction o = (MergeAction) (other);
-    return create.equals(o.create) && set.equals(o.set);
+    return action.equals(o.action) && set.equals(o.set);
   }
   
   @Override
   public int hashCode() {
-    return 2 * create.hashCode() + 3 * set.hashCode();
+    return 2 * action.hashCode() + 3 * set.hashCode();
   }
   
-  public MergeAction withCreate(Boolean create) {
-    return new MergeAction(create, set);
+  public MergeAction withAction(hydra.langs.cypher.openCypher.CreateOrMatch action) {
+    return new MergeAction(action, set);
   }
   
   public MergeAction withSet(java.util.List<hydra.langs.cypher.openCypher.SetItem> set) {
-    return new MergeAction(create, set);
+    return new MergeAction(action, set);
   }
 }

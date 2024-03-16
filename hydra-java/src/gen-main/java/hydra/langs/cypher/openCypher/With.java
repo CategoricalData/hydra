@@ -7,9 +7,9 @@ public class With implements Serializable {
   
   public final hydra.langs.cypher.openCypher.ProjectionBody projection;
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.Expression> where;
+  public final java.util.Optional<hydra.langs.cypher.openCypher.Where> where;
   
-  public With (hydra.langs.cypher.openCypher.ProjectionBody projection, java.util.Optional<hydra.langs.cypher.openCypher.Expression> where) {
+  public With (hydra.langs.cypher.openCypher.ProjectionBody projection, java.util.Optional<hydra.langs.cypher.openCypher.Where> where) {
     this.projection = projection;
     this.where = where;
   }
@@ -32,7 +32,7 @@ public class With implements Serializable {
     return new With(projection, where);
   }
   
-  public With withWhere(java.util.Optional<hydra.langs.cypher.openCypher.Expression> where) {
+  public With withWhere(java.util.Optional<hydra.langs.cypher.openCypher.Where> where) {
     return new With(projection, where);
   }
 }

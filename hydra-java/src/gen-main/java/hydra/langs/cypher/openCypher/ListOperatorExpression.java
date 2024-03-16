@@ -59,9 +59,9 @@ public abstract class ListOperatorExpression implements Serializable {
   }
   
   public static final class Range extends hydra.langs.cypher.openCypher.ListOperatorExpression implements Serializable {
-    public final hydra.langs.cypher.openCypher.ListOperatorRange value;
+    public final hydra.langs.cypher.openCypher.RangeExpression value;
     
-    public Range (hydra.langs.cypher.openCypher.ListOperatorRange value) {
+    public Range (hydra.langs.cypher.openCypher.RangeExpression value) {
       this.value = value;
     }
     

@@ -5,12 +5,12 @@ import java.io.Serializable;
 public class Quantifier implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.Quantifier");
   
-  public final hydra.langs.cypher.openCypher.QuantifierType type;
+  public final hydra.langs.cypher.openCypher.QuantifierOperator operator;
   
   public final hydra.langs.cypher.openCypher.FilterExpression expression;
   
-  public Quantifier (hydra.langs.cypher.openCypher.QuantifierType type, hydra.langs.cypher.openCypher.FilterExpression expression) {
-    this.type = type;
+  public Quantifier (hydra.langs.cypher.openCypher.QuantifierOperator operator, hydra.langs.cypher.openCypher.FilterExpression expression) {
+    this.operator = operator;
     this.expression = expression;
   }
   
@@ -20,19 +20,19 @@ public class Quantifier implements Serializable {
       return false;
     }
     Quantifier o = (Quantifier) (other);
-    return type.equals(o.type) && expression.equals(o.expression);
+    return operator.equals(o.operator) && expression.equals(o.expression);
   }
   
   @Override
   public int hashCode() {
-    return 2 * type.hashCode() + 3 * expression.hashCode();
+    return 2 * operator.hashCode() + 3 * expression.hashCode();
   }
   
-  public Quantifier withType(hydra.langs.cypher.openCypher.QuantifierType type) {
-    return new Quantifier(type, expression);
+  public Quantifier withOperator(hydra.langs.cypher.openCypher.QuantifierOperator operator) {
+    return new Quantifier(operator, expression);
   }
   
   public Quantifier withExpression(hydra.langs.cypher.openCypher.FilterExpression expression) {
-    return new Quantifier(type, expression);
+    return new Quantifier(operator, expression);
   }
 }

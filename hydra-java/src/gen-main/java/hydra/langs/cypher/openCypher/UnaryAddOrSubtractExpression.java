@@ -5,11 +5,11 @@ import java.io.Serializable;
 public class UnaryAddOrSubtractExpression implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.UnaryAddOrSubtractExpression");
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.PlusOrMinus> operator;
+  public final java.util.Optional<hydra.langs.cypher.openCypher.AddOrSubtractOperator> operator;
   
   public final hydra.langs.cypher.openCypher.NonArithmeticOperatorExpression expression;
   
-  public UnaryAddOrSubtractExpression (java.util.Optional<hydra.langs.cypher.openCypher.PlusOrMinus> operator, hydra.langs.cypher.openCypher.NonArithmeticOperatorExpression expression) {
+  public UnaryAddOrSubtractExpression (java.util.Optional<hydra.langs.cypher.openCypher.AddOrSubtractOperator> operator, hydra.langs.cypher.openCypher.NonArithmeticOperatorExpression expression) {
     this.operator = operator;
     this.expression = expression;
   }
@@ -28,7 +28,7 @@ public class UnaryAddOrSubtractExpression implements Serializable {
     return 2 * operator.hashCode() + 3 * expression.hashCode();
   }
   
-  public UnaryAddOrSubtractExpression withOperator(java.util.Optional<hydra.langs.cypher.openCypher.PlusOrMinus> operator) {
+  public UnaryAddOrSubtractExpression withOperator(java.util.Optional<hydra.langs.cypher.openCypher.AddOrSubtractOperator> operator) {
     return new UnaryAddOrSubtractExpression(operator, expression);
   }
   

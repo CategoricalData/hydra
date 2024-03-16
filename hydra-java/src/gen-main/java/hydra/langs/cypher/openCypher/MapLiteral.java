@@ -5,9 +5,9 @@ import java.io.Serializable;
 public class MapLiteral implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.MapLiteral");
   
-  public final java.util.Map<hydra.langs.cypher.openCypher.PropertyKeyName, hydra.langs.cypher.openCypher.Expression> value;
+  public final java.util.List<hydra.langs.cypher.openCypher.KeyValuePair> value;
   
-  public MapLiteral (java.util.Map<hydra.langs.cypher.openCypher.PropertyKeyName, hydra.langs.cypher.openCypher.Expression> value) {
+  public MapLiteral (java.util.List<hydra.langs.cypher.openCypher.KeyValuePair> value) {
     this.value = value;
   }
   

@@ -12,25 +12,27 @@ public abstract class Atom implements Serializable {
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
+    R visit(Literal instance) ;
+    
     R visit(Parameter instance) ;
     
     R visit(Case instance) ;
     
-    R visit(Count instance) ;
+    R visit(CountStar instance) ;
     
-    R visit(List instance) ;
+    R visit(ListComprehension instance) ;
     
-    R visit(Pattern instance) ;
+    R visit(PatternComprehension instance) ;
     
     R visit(Quantifier instance) ;
     
-    R visit(Predicate instance) ;
+    R visit(PatternPredicate instance) ;
     
-    R visit(Parens instance) ;
+    R visit(Parenthesized instance) ;
     
-    R visit(Function instance) ;
+    R visit(FunctionInvocation instance) ;
     
-    R visit(Existence instance) ;
+    R visit(ExistentialSubquery instance) ;
     
     R visit(Variable instance) ;
   }
@@ -38,6 +40,10 @@ public abstract class Atom implements Serializable {
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Atom instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+    }
+    
+    default R visit(Literal instance) {
+      return otherwise((instance));
     }
     
     default R visit(Parameter instance) {
@@ -48,15 +54,15 @@ public abstract class Atom implements Serializable {
       return otherwise((instance));
     }
     
-    default R visit(Count instance) {
+    default R visit(CountStar instance) {
       return otherwise((instance));
     }
     
-    default R visit(List instance) {
+    default R visit(ListComprehension instance) {
       return otherwise((instance));
     }
     
-    default R visit(Pattern instance) {
+    default R visit(PatternComprehension instance) {
       return otherwise((instance));
     }
     
@@ -64,24 +70,51 @@ public abstract class Atom implements Serializable {
       return otherwise((instance));
     }
     
-    default R visit(Predicate instance) {
+    default R visit(PatternPredicate instance) {
       return otherwise((instance));
     }
     
-    default R visit(Parens instance) {
+    default R visit(Parenthesized instance) {
       return otherwise((instance));
     }
     
-    default R visit(Function instance) {
+    default R visit(FunctionInvocation instance) {
       return otherwise((instance));
     }
     
-    default R visit(Existence instance) {
+    default R visit(ExistentialSubquery instance) {
       return otherwise((instance));
     }
     
     default R visit(Variable instance) {
       return otherwise((instance));
+    }
+  }
+  
+  public static final class Literal extends hydra.langs.cypher.openCypher.Atom implements Serializable {
+    public final hydra.langs.cypher.openCypher.Literal value;
+    
+    public Literal (hydra.langs.cypher.openCypher.Literal value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Literal)) {
+        return false;
+      }
+      Literal o = (Literal) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
     }
   }
   
@@ -139,17 +172,17 @@ public abstract class Atom implements Serializable {
     }
   }
   
-  public static final class Count extends hydra.langs.cypher.openCypher.Atom implements Serializable {
-    public Count () {
+  public static final class CountStar extends hydra.langs.cypher.openCypher.Atom implements Serializable {
+    public CountStar () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Count)) {
+      if (!(other instanceof CountStar)) {
         return false;
       }
-      Count o = (Count) (other);
+      CountStar o = (CountStar) (other);
       return true;
     }
     
@@ -164,19 +197,19 @@ public abstract class Atom implements Serializable {
     }
   }
   
-  public static final class List extends hydra.langs.cypher.openCypher.Atom implements Serializable {
+  public static final class ListComprehension extends hydra.langs.cypher.openCypher.Atom implements Serializable {
     public final hydra.langs.cypher.openCypher.ListComprehension value;
     
-    public List (hydra.langs.cypher.openCypher.ListComprehension value) {
+    public ListComprehension (hydra.langs.cypher.openCypher.ListComprehension value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof List)) {
+      if (!(other instanceof ListComprehension)) {
         return false;
       }
-      List o = (List) (other);
+      ListComprehension o = (ListComprehension) (other);
       return value.equals(o.value);
     }
     
@@ -191,19 +224,19 @@ public abstract class Atom implements Serializable {
     }
   }
   
-  public static final class Pattern extends hydra.langs.cypher.openCypher.Atom implements Serializable {
+  public static final class PatternComprehension extends hydra.langs.cypher.openCypher.Atom implements Serializable {
     public final hydra.langs.cypher.openCypher.PatternComprehension value;
     
-    public Pattern (hydra.langs.cypher.openCypher.PatternComprehension value) {
+    public PatternComprehension (hydra.langs.cypher.openCypher.PatternComprehension value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Pattern)) {
+      if (!(other instanceof PatternComprehension)) {
         return false;
       }
-      Pattern o = (Pattern) (other);
+      PatternComprehension o = (PatternComprehension) (other);
       return value.equals(o.value);
     }
     
@@ -245,19 +278,19 @@ public abstract class Atom implements Serializable {
     }
   }
   
-  public static final class Predicate extends hydra.langs.cypher.openCypher.Atom implements Serializable {
-    public final hydra.langs.cypher.openCypher.RelationshipsPattern value;
+  public static final class PatternPredicate extends hydra.langs.cypher.openCypher.Atom implements Serializable {
+    public final hydra.langs.cypher.openCypher.PatternPredicate value;
     
-    public Predicate (hydra.langs.cypher.openCypher.RelationshipsPattern value) {
+    public PatternPredicate (hydra.langs.cypher.openCypher.PatternPredicate value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Predicate)) {
+      if (!(other instanceof PatternPredicate)) {
         return false;
       }
-      Predicate o = (Predicate) (other);
+      PatternPredicate o = (PatternPredicate) (other);
       return value.equals(o.value);
     }
     
@@ -272,19 +305,19 @@ public abstract class Atom implements Serializable {
     }
   }
   
-  public static final class Parens extends hydra.langs.cypher.openCypher.Atom implements Serializable {
-    public final hydra.langs.cypher.openCypher.Expression value;
+  public static final class Parenthesized extends hydra.langs.cypher.openCypher.Atom implements Serializable {
+    public final hydra.langs.cypher.openCypher.ParenthesizedExpression value;
     
-    public Parens (hydra.langs.cypher.openCypher.Expression value) {
+    public Parenthesized (hydra.langs.cypher.openCypher.ParenthesizedExpression value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Parens)) {
+      if (!(other instanceof Parenthesized)) {
         return false;
       }
-      Parens o = (Parens) (other);
+      Parenthesized o = (Parenthesized) (other);
       return value.equals(o.value);
     }
     
@@ -299,19 +332,19 @@ public abstract class Atom implements Serializable {
     }
   }
   
-  public static final class Function extends hydra.langs.cypher.openCypher.Atom implements Serializable {
+  public static final class FunctionInvocation extends hydra.langs.cypher.openCypher.Atom implements Serializable {
     public final hydra.langs.cypher.openCypher.FunctionInvocation value;
     
-    public Function (hydra.langs.cypher.openCypher.FunctionInvocation value) {
+    public FunctionInvocation (hydra.langs.cypher.openCypher.FunctionInvocation value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Function)) {
+      if (!(other instanceof FunctionInvocation)) {
         return false;
       }
-      Function o = (Function) (other);
+      FunctionInvocation o = (FunctionInvocation) (other);
       return value.equals(o.value);
     }
     
@@ -326,19 +359,19 @@ public abstract class Atom implements Serializable {
     }
   }
   
-  public static final class Existence extends hydra.langs.cypher.openCypher.Atom implements Serializable {
+  public static final class ExistentialSubquery extends hydra.langs.cypher.openCypher.Atom implements Serializable {
     public final hydra.langs.cypher.openCypher.ExistentialSubquery value;
     
-    public Existence (hydra.langs.cypher.openCypher.ExistentialSubquery value) {
+    public ExistentialSubquery (hydra.langs.cypher.openCypher.ExistentialSubquery value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Existence)) {
+      if (!(other instanceof ExistentialSubquery)) {
         return false;
       }
-      Existence o = (Existence) (other);
+      ExistentialSubquery o = (ExistentialSubquery) (other);
       return value.equals(o.value);
     }
     

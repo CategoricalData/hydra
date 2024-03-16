@@ -12,7 +12,7 @@ public abstract class ExistentialSubquery implements Serializable {
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(Query instance) ;
+    R visit(Regular instance) ;
     
     R visit(Pattern instance) ;
   }
@@ -22,7 +22,7 @@ public abstract class ExistentialSubquery implements Serializable {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Query instance) {
+    default R visit(Regular instance) {
       return otherwise((instance));
     }
     
@@ -31,19 +31,19 @@ public abstract class ExistentialSubquery implements Serializable {
     }
   }
   
-  public static final class Query extends hydra.langs.cypher.openCypher.ExistentialSubquery implements Serializable {
+  public static final class Regular extends hydra.langs.cypher.openCypher.ExistentialSubquery implements Serializable {
     public final hydra.langs.cypher.openCypher.RegularQuery value;
     
-    public Query (hydra.langs.cypher.openCypher.RegularQuery value) {
+    public Regular (hydra.langs.cypher.openCypher.RegularQuery value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Query)) {
+      if (!(other instanceof Regular)) {
         return false;
       }
-      Query o = (Query) (other);
+      Regular o = (Regular) (other);
       return value.equals(o.value);
     }
     
@@ -59,9 +59,9 @@ public abstract class ExistentialSubquery implements Serializable {
   }
   
   public static final class Pattern extends hydra.langs.cypher.openCypher.ExistentialSubquery implements Serializable {
-    public final hydra.langs.cypher.openCypher.Pattern value;
+    public final hydra.langs.cypher.openCypher.PatternWhere value;
     
-    public Pattern (hydra.langs.cypher.openCypher.Pattern value) {
+    public Pattern (hydra.langs.cypher.openCypher.PatternWhere value) {
       this.value = value;
     }
     

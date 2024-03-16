@@ -2,10 +2,10 @@ package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
 
-public abstract class NonArithmeticOperatorInfix implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.NonArithmeticOperatorInfix");
+public abstract class ListOperatorExpressionOrPropertyLookup implements Serializable {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.ListOperatorExpressionOrPropertyLookup");
   
-  private NonArithmeticOperatorInfix () {
+  private ListOperatorExpressionOrPropertyLookup () {
   
   }
   
@@ -18,7 +18,7 @@ public abstract class NonArithmeticOperatorInfix implements Serializable {
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(NonArithmeticOperatorInfix instance) {
+    default R otherwise(ListOperatorExpressionOrPropertyLookup instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
@@ -31,7 +31,7 @@ public abstract class NonArithmeticOperatorInfix implements Serializable {
     }
   }
   
-  public static final class List extends hydra.langs.cypher.openCypher.NonArithmeticOperatorInfix implements Serializable {
+  public static final class List extends hydra.langs.cypher.openCypher.ListOperatorExpressionOrPropertyLookup implements Serializable {
     public final hydra.langs.cypher.openCypher.ListOperatorExpression value;
     
     public List (hydra.langs.cypher.openCypher.ListOperatorExpression value) {
@@ -58,10 +58,10 @@ public abstract class NonArithmeticOperatorInfix implements Serializable {
     }
   }
   
-  public static final class Property extends hydra.langs.cypher.openCypher.NonArithmeticOperatorInfix implements Serializable {
-    public final hydra.langs.cypher.openCypher.PropertyKeyName value;
+  public static final class Property extends hydra.langs.cypher.openCypher.ListOperatorExpressionOrPropertyLookup implements Serializable {
+    public final hydra.langs.cypher.openCypher.PropertyLookup value;
     
-    public Property (hydra.langs.cypher.openCypher.PropertyKeyName value) {
+    public Property (hydra.langs.cypher.openCypher.PropertyLookup value) {
       this.value = value;
     }
     

@@ -7,9 +7,9 @@ public class PropertyExpression implements Serializable {
   
   public final hydra.langs.cypher.openCypher.Atom atom;
   
-  public final java.util.List<hydra.langs.cypher.openCypher.PropertyKeyName> lookups;
+  public final java.util.List<hydra.langs.cypher.openCypher.PropertyLookup> lookups;
   
-  public PropertyExpression (hydra.langs.cypher.openCypher.Atom atom, java.util.List<hydra.langs.cypher.openCypher.PropertyKeyName> lookups) {
+  public PropertyExpression (hydra.langs.cypher.openCypher.Atom atom, java.util.List<hydra.langs.cypher.openCypher.PropertyLookup> lookups) {
     this.atom = atom;
     this.lookups = lookups;
   }
@@ -32,7 +32,7 @@ public class PropertyExpression implements Serializable {
     return new PropertyExpression(atom, lookups);
   }
   
-  public PropertyExpression withLookups(java.util.List<hydra.langs.cypher.openCypher.PropertyKeyName> lookups) {
+  public PropertyExpression withLookups(java.util.List<hydra.langs.cypher.openCypher.PropertyLookup> lookups) {
     return new PropertyExpression(atom, lookups);
   }
 }

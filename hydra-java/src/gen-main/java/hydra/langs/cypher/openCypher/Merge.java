@@ -5,12 +5,12 @@ import java.io.Serializable;
 public class Merge implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.Merge");
   
-  public final hydra.langs.cypher.openCypher.PatternPart pattern;
+  public final hydra.langs.cypher.openCypher.PatternPart patternPart;
   
   public final java.util.List<hydra.langs.cypher.openCypher.MergeAction> actions;
   
-  public Merge (hydra.langs.cypher.openCypher.PatternPart pattern, java.util.List<hydra.langs.cypher.openCypher.MergeAction> actions) {
-    this.pattern = pattern;
+  public Merge (hydra.langs.cypher.openCypher.PatternPart patternPart, java.util.List<hydra.langs.cypher.openCypher.MergeAction> actions) {
+    this.patternPart = patternPart;
     this.actions = actions;
   }
   
@@ -20,19 +20,19 @@ public class Merge implements Serializable {
       return false;
     }
     Merge o = (Merge) (other);
-    return pattern.equals(o.pattern) && actions.equals(o.actions);
+    return patternPart.equals(o.patternPart) && actions.equals(o.actions);
   }
   
   @Override
   public int hashCode() {
-    return 2 * pattern.hashCode() + 3 * actions.hashCode();
+    return 2 * patternPart.hashCode() + 3 * actions.hashCode();
   }
   
-  public Merge withPattern(hydra.langs.cypher.openCypher.PatternPart pattern) {
-    return new Merge(pattern, actions);
+  public Merge withPatternPart(hydra.langs.cypher.openCypher.PatternPart patternPart) {
+    return new Merge(patternPart, actions);
   }
   
   public Merge withActions(java.util.List<hydra.langs.cypher.openCypher.MergeAction> actions) {
-    return new Merge(pattern, actions);
+    return new Merge(patternPart, actions);
   }
 }

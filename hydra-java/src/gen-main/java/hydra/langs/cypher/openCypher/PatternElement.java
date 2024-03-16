@@ -12,9 +12,9 @@ public abstract class PatternElement implements Serializable {
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(NodePattern instance) ;
+    R visit(Chained instance) ;
     
-    R visit(Parens instance) ;
+    R visit(Parenthesized instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -22,28 +22,28 @@ public abstract class PatternElement implements Serializable {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(NodePattern instance) {
+    default R visit(Chained instance) {
       return otherwise((instance));
     }
     
-    default R visit(Parens instance) {
+    default R visit(Parenthesized instance) {
       return otherwise((instance));
     }
   }
   
-  public static final class NodePattern extends hydra.langs.cypher.openCypher.PatternElement implements Serializable {
-    public final hydra.langs.cypher.openCypher.NodePatternExpression value;
+  public static final class Chained extends hydra.langs.cypher.openCypher.PatternElement implements Serializable {
+    public final hydra.langs.cypher.openCypher.NodePatternChain value;
     
-    public NodePattern (hydra.langs.cypher.openCypher.NodePatternExpression value) {
+    public Chained (hydra.langs.cypher.openCypher.NodePatternChain value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof NodePattern)) {
+      if (!(other instanceof Chained)) {
         return false;
       }
-      NodePattern o = (NodePattern) (other);
+      Chained o = (Chained) (other);
       return value.equals(o.value);
     }
     
@@ -58,19 +58,19 @@ public abstract class PatternElement implements Serializable {
     }
   }
   
-  public static final class Parens extends hydra.langs.cypher.openCypher.PatternElement implements Serializable {
+  public static final class Parenthesized extends hydra.langs.cypher.openCypher.PatternElement implements Serializable {
     public final hydra.langs.cypher.openCypher.PatternElement value;
     
-    public Parens (hydra.langs.cypher.openCypher.PatternElement value) {
+    public Parenthesized (hydra.langs.cypher.openCypher.PatternElement value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Parens)) {
+      if (!(other instanceof Parenthesized)) {
         return false;
       }
-      Parens o = (Parens) (other);
+      Parenthesized o = (Parenthesized) (other);
       return value.equals(o.value);
     }
     

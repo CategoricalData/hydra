@@ -2,10 +2,10 @@ package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
 
-public abstract class QuantifierType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.QuantifierType");
+public abstract class QuantifierOperator implements Serializable {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.QuantifierOperator");
   
-  private QuantifierType () {
+  private QuantifierOperator () {
   
   }
   
@@ -22,7 +22,7 @@ public abstract class QuantifierType implements Serializable {
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(QuantifierType instance) {
+    default R otherwise(QuantifierOperator instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
@@ -43,7 +43,7 @@ public abstract class QuantifierType implements Serializable {
     }
   }
   
-  public static final class All extends hydra.langs.cypher.openCypher.QuantifierType implements Serializable {
+  public static final class All extends hydra.langs.cypher.openCypher.QuantifierOperator implements Serializable {
     public All () {
     
     }
@@ -68,7 +68,7 @@ public abstract class QuantifierType implements Serializable {
     }
   }
   
-  public static final class Any extends hydra.langs.cypher.openCypher.QuantifierType implements Serializable {
+  public static final class Any extends hydra.langs.cypher.openCypher.QuantifierOperator implements Serializable {
     public Any () {
     
     }
@@ -93,7 +93,7 @@ public abstract class QuantifierType implements Serializable {
     }
   }
   
-  public static final class None extends hydra.langs.cypher.openCypher.QuantifierType implements Serializable {
+  public static final class None extends hydra.langs.cypher.openCypher.QuantifierOperator implements Serializable {
     public None () {
     
     }
@@ -118,7 +118,7 @@ public abstract class QuantifierType implements Serializable {
     }
   }
   
-  public static final class Single extends hydra.langs.cypher.openCypher.QuantifierType implements Serializable {
+  public static final class Single extends hydra.langs.cypher.openCypher.QuantifierOperator implements Serializable {
     public Single () {
     
     }

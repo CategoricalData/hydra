@@ -5,9 +5,9 @@ import java.io.Serializable;
 public class Create implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.Create");
   
-  public final java.util.List<hydra.langs.cypher.openCypher.PatternPart> value;
+  public final hydra.langs.cypher.openCypher.Pattern value;
   
-  public Create (java.util.List<hydra.langs.cypher.openCypher.PatternPart> value) {
+  public Create (hydra.langs.cypher.openCypher.Pattern value) {
     this.value = value;
   }
   

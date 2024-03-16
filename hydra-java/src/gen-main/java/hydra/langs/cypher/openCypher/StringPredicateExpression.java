@@ -5,12 +5,12 @@ import java.io.Serializable;
 public class StringPredicateExpression implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.StringPredicateExpression");
   
-  public final hydra.langs.cypher.openCypher.StringPredicate predicate;
+  public final hydra.langs.cypher.openCypher.StringPredicateOperator operator;
   
   public final hydra.langs.cypher.openCypher.AddOrSubtractExpression expression;
   
-  public StringPredicateExpression (hydra.langs.cypher.openCypher.StringPredicate predicate, hydra.langs.cypher.openCypher.AddOrSubtractExpression expression) {
-    this.predicate = predicate;
+  public StringPredicateExpression (hydra.langs.cypher.openCypher.StringPredicateOperator operator, hydra.langs.cypher.openCypher.AddOrSubtractExpression expression) {
+    this.operator = operator;
     this.expression = expression;
   }
   
@@ -20,19 +20,19 @@ public class StringPredicateExpression implements Serializable {
       return false;
     }
     StringPredicateExpression o = (StringPredicateExpression) (other);
-    return predicate.equals(o.predicate) && expression.equals(o.expression);
+    return operator.equals(o.operator) && expression.equals(o.expression);
   }
   
   @Override
   public int hashCode() {
-    return 2 * predicate.hashCode() + 3 * expression.hashCode();
+    return 2 * operator.hashCode() + 3 * expression.hashCode();
   }
   
-  public StringPredicateExpression withPredicate(hydra.langs.cypher.openCypher.StringPredicate predicate) {
-    return new StringPredicateExpression(predicate, expression);
+  public StringPredicateExpression withOperator(hydra.langs.cypher.openCypher.StringPredicateOperator operator) {
+    return new StringPredicateExpression(operator, expression);
   }
   
   public StringPredicateExpression withExpression(hydra.langs.cypher.openCypher.AddOrSubtractExpression expression) {
-    return new StringPredicateExpression(predicate, expression);
+    return new StringPredicateExpression(operator, expression);
   }
 }

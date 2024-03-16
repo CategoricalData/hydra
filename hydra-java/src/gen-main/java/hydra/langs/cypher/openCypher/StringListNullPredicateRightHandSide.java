@@ -2,10 +2,10 @@ package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
 
-public abstract class StringListNullPredicateSuffix implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.StringListNullPredicateSuffix");
+public abstract class StringListNullPredicateRightHandSide implements Serializable {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.StringListNullPredicateRightHandSide");
   
-  private StringListNullPredicateSuffix () {
+  private StringListNullPredicateRightHandSide () {
   
   }
   
@@ -20,7 +20,7 @@ public abstract class StringListNullPredicateSuffix implements Serializable {
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(StringListNullPredicateSuffix instance) {
+    default R otherwise(StringListNullPredicateRightHandSide instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
@@ -37,7 +37,7 @@ public abstract class StringListNullPredicateSuffix implements Serializable {
     }
   }
   
-  public static final class String_ extends hydra.langs.cypher.openCypher.StringListNullPredicateSuffix implements Serializable {
+  public static final class String_ extends hydra.langs.cypher.openCypher.StringListNullPredicateRightHandSide implements Serializable {
     public final hydra.langs.cypher.openCypher.StringPredicateExpression value;
     
     public String_ (hydra.langs.cypher.openCypher.StringPredicateExpression value) {
@@ -64,10 +64,10 @@ public abstract class StringListNullPredicateSuffix implements Serializable {
     }
   }
   
-  public static final class List extends hydra.langs.cypher.openCypher.StringListNullPredicateSuffix implements Serializable {
-    public final hydra.langs.cypher.openCypher.AddOrSubtractExpression value;
+  public static final class List extends hydra.langs.cypher.openCypher.StringListNullPredicateRightHandSide implements Serializable {
+    public final hydra.langs.cypher.openCypher.ListPredicateExpression value;
     
-    public List (hydra.langs.cypher.openCypher.AddOrSubtractExpression value) {
+    public List (hydra.langs.cypher.openCypher.ListPredicateExpression value) {
       this.value = value;
     }
     
@@ -91,16 +91,10 @@ public abstract class StringListNullPredicateSuffix implements Serializable {
     }
   }
   
-  /**
-   * True if NULL, false if NOT NULL
-   */
-  public static final class Null extends hydra.langs.cypher.openCypher.StringListNullPredicateSuffix implements Serializable {
-    /**
-     * True if NULL, false if NOT NULL
-     */
-    public final Boolean value;
+  public static final class Null extends hydra.langs.cypher.openCypher.StringListNullPredicateRightHandSide implements Serializable {
+    public final hydra.langs.cypher.openCypher.NullPredicateExpression value;
     
-    public Null (Boolean value) {
+    public Null (hydra.langs.cypher.openCypher.NullPredicateExpression value) {
       this.value = value;
     }
     

@@ -16,7 +16,7 @@ public abstract class ReadingClause implements Serializable {
     
     R visit(Unwind instance) ;
     
-    R visit(Call instance) ;
+    R visit(InQueryCall instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -32,7 +32,7 @@ public abstract class ReadingClause implements Serializable {
       return otherwise((instance));
     }
     
-    default R visit(Call instance) {
+    default R visit(InQueryCall instance) {
       return otherwise((instance));
     }
   }
@@ -91,19 +91,19 @@ public abstract class ReadingClause implements Serializable {
     }
   }
   
-  public static final class Call extends hydra.langs.cypher.openCypher.ReadingClause implements Serializable {
+  public static final class InQueryCall extends hydra.langs.cypher.openCypher.ReadingClause implements Serializable {
     public final hydra.langs.cypher.openCypher.InQueryCall value;
     
-    public Call (hydra.langs.cypher.openCypher.InQueryCall value) {
+    public InQueryCall (hydra.langs.cypher.openCypher.InQueryCall value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Call)) {
+      if (!(other instanceof InQueryCall)) {
         return false;
       }
-      Call o = (Call) (other);
+      InQueryCall o = (InQueryCall) (other);
       return value.equals(o.value);
     }
     

@@ -5,12 +5,12 @@ import java.io.Serializable;
 public class FilterExpression implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.FilterExpression");
   
-  public final hydra.langs.cypher.openCypher.IdInColl id;
+  public final hydra.langs.cypher.openCypher.IdInColl idInColl;
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.Expression> where;
+  public final java.util.Optional<hydra.langs.cypher.openCypher.Where> where;
   
-  public FilterExpression (hydra.langs.cypher.openCypher.IdInColl id, java.util.Optional<hydra.langs.cypher.openCypher.Expression> where) {
-    this.id = id;
+  public FilterExpression (hydra.langs.cypher.openCypher.IdInColl idInColl, java.util.Optional<hydra.langs.cypher.openCypher.Where> where) {
+    this.idInColl = idInColl;
     this.where = where;
   }
   
@@ -20,19 +20,19 @@ public class FilterExpression implements Serializable {
       return false;
     }
     FilterExpression o = (FilterExpression) (other);
-    return id.equals(o.id) && where.equals(o.where);
+    return idInColl.equals(o.idInColl) && where.equals(o.where);
   }
   
   @Override
   public int hashCode() {
-    return 2 * id.hashCode() + 3 * where.hashCode();
+    return 2 * idInColl.hashCode() + 3 * where.hashCode();
   }
   
-  public FilterExpression withId(hydra.langs.cypher.openCypher.IdInColl id) {
-    return new FilterExpression(id, where);
+  public FilterExpression withIdInColl(hydra.langs.cypher.openCypher.IdInColl idInColl) {
+    return new FilterExpression(idInColl, where);
   }
   
-  public FilterExpression withWhere(java.util.Optional<hydra.langs.cypher.openCypher.Expression> where) {
-    return new FilterExpression(id, where);
+  public FilterExpression withWhere(java.util.Optional<hydra.langs.cypher.openCypher.Where> where) {
+    return new FilterExpression(idInColl, where);
   }
 }

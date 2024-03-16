@@ -12,13 +12,13 @@ public abstract class SetItem implements Serializable {
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(PropertyEquals instance) ;
+    R visit(Property instance) ;
     
-    R visit(VariableEquals instance) ;
+    R visit(VariableEqual instance) ;
     
-    R visit(VariablePlusEquals instance) ;
+    R visit(VariablePlusEqual instance) ;
     
-    R visit(VariableNodeLabels instance) ;
+    R visit(VariableLabels instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -26,36 +26,36 @@ public abstract class SetItem implements Serializable {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(PropertyEquals instance) {
+    default R visit(Property instance) {
       return otherwise((instance));
     }
     
-    default R visit(VariableEquals instance) {
+    default R visit(VariableEqual instance) {
       return otherwise((instance));
     }
     
-    default R visit(VariablePlusEquals instance) {
+    default R visit(VariablePlusEqual instance) {
       return otherwise((instance));
     }
     
-    default R visit(VariableNodeLabels instance) {
+    default R visit(VariableLabels instance) {
       return otherwise((instance));
     }
   }
   
-  public static final class PropertyEquals extends hydra.langs.cypher.openCypher.SetItem implements Serializable {
+  public static final class Property extends hydra.langs.cypher.openCypher.SetItem implements Serializable {
     public final hydra.langs.cypher.openCypher.PropertyEquals value;
     
-    public PropertyEquals (hydra.langs.cypher.openCypher.PropertyEquals value) {
+    public Property (hydra.langs.cypher.openCypher.PropertyEquals value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof PropertyEquals)) {
+      if (!(other instanceof Property)) {
         return false;
       }
-      PropertyEquals o = (PropertyEquals) (other);
+      Property o = (Property) (other);
       return value.equals(o.value);
     }
     
@@ -70,19 +70,19 @@ public abstract class SetItem implements Serializable {
     }
   }
   
-  public static final class VariableEquals extends hydra.langs.cypher.openCypher.SetItem implements Serializable {
+  public static final class VariableEqual extends hydra.langs.cypher.openCypher.SetItem implements Serializable {
     public final hydra.langs.cypher.openCypher.VariableEquals value;
     
-    public VariableEquals (hydra.langs.cypher.openCypher.VariableEquals value) {
+    public VariableEqual (hydra.langs.cypher.openCypher.VariableEquals value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof VariableEquals)) {
+      if (!(other instanceof VariableEqual)) {
         return false;
       }
-      VariableEquals o = (VariableEquals) (other);
+      VariableEqual o = (VariableEqual) (other);
       return value.equals(o.value);
     }
     
@@ -97,19 +97,19 @@ public abstract class SetItem implements Serializable {
     }
   }
   
-  public static final class VariablePlusEquals extends hydra.langs.cypher.openCypher.SetItem implements Serializable {
+  public static final class VariablePlusEqual extends hydra.langs.cypher.openCypher.SetItem implements Serializable {
     public final hydra.langs.cypher.openCypher.VariablePlusEquals value;
     
-    public VariablePlusEquals (hydra.langs.cypher.openCypher.VariablePlusEquals value) {
+    public VariablePlusEqual (hydra.langs.cypher.openCypher.VariablePlusEquals value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof VariablePlusEquals)) {
+      if (!(other instanceof VariablePlusEqual)) {
         return false;
       }
-      VariablePlusEquals o = (VariablePlusEquals) (other);
+      VariablePlusEqual o = (VariablePlusEqual) (other);
       return value.equals(o.value);
     }
     
@@ -124,19 +124,19 @@ public abstract class SetItem implements Serializable {
     }
   }
   
-  public static final class VariableNodeLabels extends hydra.langs.cypher.openCypher.SetItem implements Serializable {
-    public final hydra.langs.cypher.openCypher.VariableNodeLabels value;
+  public static final class VariableLabels extends hydra.langs.cypher.openCypher.SetItem implements Serializable {
+    public final hydra.langs.cypher.openCypher.VariableAndNodeLabels value;
     
-    public VariableNodeLabels (hydra.langs.cypher.openCypher.VariableNodeLabels value) {
+    public VariableLabels (hydra.langs.cypher.openCypher.VariableAndNodeLabels value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof VariableNodeLabels)) {
+      if (!(other instanceof VariableLabels)) {
         return false;
       }
-      VariableNodeLabels o = (VariableNodeLabels) (other);
+      VariableLabels o = (VariableLabels) (other);
       return value.equals(o.value);
     }
     

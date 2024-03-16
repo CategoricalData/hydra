@@ -2,46 +2,46 @@ package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
 
-public abstract class YieldExpression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.YieldExpression");
+public abstract class SortOrder implements Serializable {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.SortOrder");
   
-  private YieldExpression () {
+  private SortOrder () {
   
   }
   
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(All instance) ;
+    R visit(Ascending instance) ;
     
-    R visit(List instance) ;
+    R visit(Descending instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(YieldExpression instance) {
+    default R otherwise(SortOrder instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(All instance) {
+    default R visit(Ascending instance) {
       return otherwise((instance));
     }
     
-    default R visit(List instance) {
+    default R visit(Descending instance) {
       return otherwise((instance));
     }
   }
   
-  public static final class All extends hydra.langs.cypher.openCypher.YieldExpression implements Serializable {
-    public All () {
+  public static final class Ascending extends hydra.langs.cypher.openCypher.SortOrder implements Serializable {
+    public Ascending () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof All)) {
+      if (!(other instanceof Ascending)) {
         return false;
       }
-      All o = (All) (other);
+      Ascending o = (Ascending) (other);
       return true;
     }
     
@@ -56,25 +56,23 @@ public abstract class YieldExpression implements Serializable {
     }
   }
   
-  public static final class List extends hydra.langs.cypher.openCypher.YieldExpression implements Serializable {
-    public final hydra.langs.cypher.openCypher.YieldItems value;
+  public static final class Descending extends hydra.langs.cypher.openCypher.SortOrder implements Serializable {
+    public Descending () {
     
-    public List (hydra.langs.cypher.openCypher.YieldItems value) {
-      this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof List)) {
+      if (!(other instanceof Descending)) {
         return false;
       }
-      List o = (List) (other);
-      return value.equals(o.value);
+      Descending o = (Descending) (other);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
     }
     
     @Override
