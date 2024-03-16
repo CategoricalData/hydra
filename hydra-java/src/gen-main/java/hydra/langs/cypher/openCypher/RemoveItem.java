@@ -12,9 +12,9 @@ public abstract class RemoveItem implements Serializable {
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(VariableNodeLabels instance) ;
+    R visit(VariableLabels instance) ;
     
-    R visit(PropertyExpression instance) ;
+    R visit(Property instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -22,28 +22,28 @@ public abstract class RemoveItem implements Serializable {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(VariableNodeLabels instance) {
+    default R visit(VariableLabels instance) {
       return otherwise((instance));
     }
     
-    default R visit(PropertyExpression instance) {
+    default R visit(Property instance) {
       return otherwise((instance));
     }
   }
   
-  public static final class VariableNodeLabels extends hydra.langs.cypher.openCypher.RemoveItem implements Serializable {
-    public final hydra.langs.cypher.openCypher.VariableNodeLabels value;
+  public static final class VariableLabels extends hydra.langs.cypher.openCypher.RemoveItem implements Serializable {
+    public final hydra.langs.cypher.openCypher.VariableAndNodeLabels value;
     
-    public VariableNodeLabels (hydra.langs.cypher.openCypher.VariableNodeLabels value) {
+    public VariableLabels (hydra.langs.cypher.openCypher.VariableAndNodeLabels value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof VariableNodeLabels)) {
+      if (!(other instanceof VariableLabels)) {
         return false;
       }
-      VariableNodeLabels o = (VariableNodeLabels) (other);
+      VariableLabels o = (VariableLabels) (other);
       return value.equals(o.value);
     }
     
@@ -58,19 +58,19 @@ public abstract class RemoveItem implements Serializable {
     }
   }
   
-  public static final class PropertyExpression extends hydra.langs.cypher.openCypher.RemoveItem implements Serializable {
+  public static final class Property extends hydra.langs.cypher.openCypher.RemoveItem implements Serializable {
     public final hydra.langs.cypher.openCypher.PropertyExpression value;
     
-    public PropertyExpression (hydra.langs.cypher.openCypher.PropertyExpression value) {
+    public Property (hydra.langs.cypher.openCypher.PropertyExpression value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof PropertyExpression)) {
+      if (!(other instanceof Property)) {
         return false;
       }
-      PropertyExpression o = (PropertyExpression) (other);
+      Property o = (Property) (other);
       return value.equals(o.value);
     }
     

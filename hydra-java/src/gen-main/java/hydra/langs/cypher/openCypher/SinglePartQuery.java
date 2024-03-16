@@ -2,86 +2,44 @@ package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
 
-public abstract class SinglePartQuery implements Serializable {
+public class SinglePartQuery implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.SinglePartQuery");
   
-  private SinglePartQuery () {
+  public final java.util.List<hydra.langs.cypher.openCypher.ReadingClause> reading;
   
+  public final java.util.List<hydra.langs.cypher.openCypher.UpdatingClause> updating;
+  
+  public final java.util.Optional<hydra.langs.cypher.openCypher.Return> return_;
+  
+  public SinglePartQuery (java.util.List<hydra.langs.cypher.openCypher.ReadingClause> reading, java.util.List<hydra.langs.cypher.openCypher.UpdatingClause> updating, java.util.Optional<hydra.langs.cypher.openCypher.Return> return_) {
+    this.reading = reading;
+    this.updating = updating;
+    this.return_ = return_;
   }
   
-  public abstract <R> R accept(Visitor<R> visitor) ;
-  
-  public interface Visitor<R> {
-    R visit(Reading instance) ;
-    
-    R visit(Return instance) ;
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof SinglePartQuery)) {
+      return false;
+    }
+    SinglePartQuery o = (SinglePartQuery) (other);
+    return reading.equals(o.reading) && updating.equals(o.updating) && return_.equals(o.return_);
   }
   
-  public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(SinglePartQuery instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
-    }
-    
-    default R visit(Reading instance) {
-      return otherwise((instance));
-    }
-    
-    default R visit(Return instance) {
-      return otherwise((instance));
-    }
+  @Override
+  public int hashCode() {
+    return 2 * reading.hashCode() + 3 * updating.hashCode() + 5 * return_.hashCode();
   }
   
-  public static final class Reading extends hydra.langs.cypher.openCypher.SinglePartQuery implements Serializable {
-    public final hydra.langs.cypher.openCypher.ReadingQuery value;
-    
-    public Reading (hydra.langs.cypher.openCypher.ReadingQuery value) {
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Reading)) {
-        return false;
-      }
-      Reading o = (Reading) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
+  public SinglePartQuery withReading(java.util.List<hydra.langs.cypher.openCypher.ReadingClause> reading) {
+    return new SinglePartQuery(reading, updating, return_);
   }
   
-  public static final class Return extends hydra.langs.cypher.openCypher.SinglePartQuery implements Serializable {
-    public final hydra.langs.cypher.openCypher.UpdatingQuery value;
-    
-    public Return (hydra.langs.cypher.openCypher.UpdatingQuery value) {
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Return)) {
-        return false;
-      }
-      Return o = (Return) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
+  public SinglePartQuery withUpdating(java.util.List<hydra.langs.cypher.openCypher.UpdatingClause> updating) {
+    return new SinglePartQuery(reading, updating, return_);
+  }
+  
+  public SinglePartQuery withReturn(java.util.Optional<hydra.langs.cypher.openCypher.Return> return_) {
+    return new SinglePartQuery(reading, updating, return_);
   }
 }

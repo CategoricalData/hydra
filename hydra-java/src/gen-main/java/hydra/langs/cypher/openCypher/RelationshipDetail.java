@@ -7,13 +7,13 @@ public class RelationshipDetail implements Serializable {
   
   public final java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable;
   
-  public final java.util.List<hydra.langs.cypher.openCypher.RelTypeName> types;
+  public final java.util.Optional<hydra.langs.cypher.openCypher.RelationshipTypes> types;
   
   public final java.util.Optional<hydra.langs.cypher.openCypher.RangeLiteral> range;
   
   public final java.util.Optional<hydra.langs.cypher.openCypher.Properties> properties;
   
-  public RelationshipDetail (java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable, java.util.List<hydra.langs.cypher.openCypher.RelTypeName> types, java.util.Optional<hydra.langs.cypher.openCypher.RangeLiteral> range, java.util.Optional<hydra.langs.cypher.openCypher.Properties> properties) {
+  public RelationshipDetail (java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable, java.util.Optional<hydra.langs.cypher.openCypher.RelationshipTypes> types, java.util.Optional<hydra.langs.cypher.openCypher.RangeLiteral> range, java.util.Optional<hydra.langs.cypher.openCypher.Properties> properties) {
     this.variable = variable;
     this.types = types;
     this.range = range;
@@ -38,7 +38,7 @@ public class RelationshipDetail implements Serializable {
     return new RelationshipDetail(variable, types, range, properties);
   }
   
-  public RelationshipDetail withTypes(java.util.List<hydra.langs.cypher.openCypher.RelTypeName> types) {
+  public RelationshipDetail withTypes(java.util.Optional<hydra.langs.cypher.openCypher.RelationshipTypes> types) {
     return new RelationshipDetail(variable, types, range, properties);
   }
   

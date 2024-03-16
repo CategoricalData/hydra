@@ -5,13 +5,13 @@ import java.io.Serializable;
 public class ProjectionItems implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.ProjectionItems");
   
-  public final Boolean all;
+  public final Boolean star;
   
-  public final java.util.List<hydra.langs.cypher.openCypher.ProjectionItem> items;
+  public final java.util.List<hydra.langs.cypher.openCypher.ProjectionItem> explicit;
   
-  public ProjectionItems (Boolean all, java.util.List<hydra.langs.cypher.openCypher.ProjectionItem> items) {
-    this.all = all;
-    this.items = items;
+  public ProjectionItems (Boolean star, java.util.List<hydra.langs.cypher.openCypher.ProjectionItem> explicit) {
+    this.star = star;
+    this.explicit = explicit;
   }
   
   @Override
@@ -20,19 +20,19 @@ public class ProjectionItems implements Serializable {
       return false;
     }
     ProjectionItems o = (ProjectionItems) (other);
-    return all.equals(o.all) && items.equals(o.items);
+    return star.equals(o.star) && explicit.equals(o.explicit);
   }
   
   @Override
   public int hashCode() {
-    return 2 * all.hashCode() + 3 * items.hashCode();
+    return 2 * star.hashCode() + 3 * explicit.hashCode();
   }
   
-  public ProjectionItems withAll(Boolean all) {
-    return new ProjectionItems(all, items);
+  public ProjectionItems withStar(Boolean star) {
+    return new ProjectionItems(star, explicit);
   }
   
-  public ProjectionItems withItems(java.util.List<hydra.langs.cypher.openCypher.ProjectionItem> items) {
-    return new ProjectionItems(all, items);
+  public ProjectionItems withExplicit(java.util.List<hydra.langs.cypher.openCypher.ProjectionItem> explicit) {
+    return new ProjectionItems(star, explicit);
   }
 }

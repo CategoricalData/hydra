@@ -5,13 +5,13 @@ import java.io.Serializable;
 public class RegularQuery implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.RegularQuery");
   
-  public final hydra.langs.cypher.openCypher.SingleQuery query;
+  public final hydra.langs.cypher.openCypher.SingleQuery head;
   
-  public final java.util.List<hydra.langs.cypher.openCypher.Union> union;
+  public final java.util.List<hydra.langs.cypher.openCypher.Union> rest;
   
-  public RegularQuery (hydra.langs.cypher.openCypher.SingleQuery query, java.util.List<hydra.langs.cypher.openCypher.Union> union) {
-    this.query = query;
-    this.union = union;
+  public RegularQuery (hydra.langs.cypher.openCypher.SingleQuery head, java.util.List<hydra.langs.cypher.openCypher.Union> rest) {
+    this.head = head;
+    this.rest = rest;
   }
   
   @Override
@@ -20,19 +20,19 @@ public class RegularQuery implements Serializable {
       return false;
     }
     RegularQuery o = (RegularQuery) (other);
-    return query.equals(o.query) && union.equals(o.union);
+    return head.equals(o.head) && rest.equals(o.rest);
   }
   
   @Override
   public int hashCode() {
-    return 2 * query.hashCode() + 3 * union.hashCode();
+    return 2 * head.hashCode() + 3 * rest.hashCode();
   }
   
-  public RegularQuery withQuery(hydra.langs.cypher.openCypher.SingleQuery query) {
-    return new RegularQuery(query, union);
+  public RegularQuery withHead(hydra.langs.cypher.openCypher.SingleQuery head) {
+    return new RegularQuery(head, rest);
   }
   
-  public RegularQuery withUnion(java.util.List<hydra.langs.cypher.openCypher.Union> union) {
-    return new RegularQuery(query, union);
+  public RegularQuery withRest(java.util.List<hydra.langs.cypher.openCypher.Union> rest) {
+    return new RegularQuery(head, rest);
   }
 }

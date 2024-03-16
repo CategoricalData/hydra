@@ -7,11 +7,11 @@ public class ProjectionItem implements Serializable {
   
   public final hydra.langs.cypher.openCypher.Expression expression;
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.Variable> alias;
+  public final java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable;
   
-  public ProjectionItem (hydra.langs.cypher.openCypher.Expression expression, java.util.Optional<hydra.langs.cypher.openCypher.Variable> alias) {
+  public ProjectionItem (hydra.langs.cypher.openCypher.Expression expression, java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable) {
     this.expression = expression;
-    this.alias = alias;
+    this.variable = variable;
   }
   
   @Override
@@ -20,19 +20,19 @@ public class ProjectionItem implements Serializable {
       return false;
     }
     ProjectionItem o = (ProjectionItem) (other);
-    return expression.equals(o.expression) && alias.equals(o.alias);
+    return expression.equals(o.expression) && variable.equals(o.variable);
   }
   
   @Override
   public int hashCode() {
-    return 2 * expression.hashCode() + 3 * alias.hashCode();
+    return 2 * expression.hashCode() + 3 * variable.hashCode();
   }
   
   public ProjectionItem withExpression(hydra.langs.cypher.openCypher.Expression expression) {
-    return new ProjectionItem(expression, alias);
+    return new ProjectionItem(expression, variable);
   }
   
-  public ProjectionItem withAlias(java.util.Optional<hydra.langs.cypher.openCypher.Variable> alias) {
-    return new ProjectionItem(expression, alias);
+  public ProjectionItem withVariable(java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable) {
+    return new ProjectionItem(expression, variable);
   }
 }

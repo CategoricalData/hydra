@@ -5,13 +5,13 @@ import java.io.Serializable;
 public class AddOrSubtractExpression implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.AddOrSubtractExpression");
   
-  public final hydra.langs.cypher.openCypher.MultiplyDivideModuloExpression lhs;
+  public final hydra.langs.cypher.openCypher.MultiplyDivideModuloExpression left;
   
-  public final java.util.List<hydra.langs.cypher.openCypher.AddOrSubtractRhs> rhs;
+  public final java.util.List<hydra.langs.cypher.openCypher.AddOrSubtractRightHandSide> right;
   
-  public AddOrSubtractExpression (hydra.langs.cypher.openCypher.MultiplyDivideModuloExpression lhs, java.util.List<hydra.langs.cypher.openCypher.AddOrSubtractRhs> rhs) {
-    this.lhs = lhs;
-    this.rhs = rhs;
+  public AddOrSubtractExpression (hydra.langs.cypher.openCypher.MultiplyDivideModuloExpression left, java.util.List<hydra.langs.cypher.openCypher.AddOrSubtractRightHandSide> right) {
+    this.left = left;
+    this.right = right;
   }
   
   @Override
@@ -20,19 +20,19 @@ public class AddOrSubtractExpression implements Serializable {
       return false;
     }
     AddOrSubtractExpression o = (AddOrSubtractExpression) (other);
-    return lhs.equals(o.lhs) && rhs.equals(o.rhs);
+    return left.equals(o.left) && right.equals(o.right);
   }
   
   @Override
   public int hashCode() {
-    return 2 * lhs.hashCode() + 3 * rhs.hashCode();
+    return 2 * left.hashCode() + 3 * right.hashCode();
   }
   
-  public AddOrSubtractExpression withLhs(hydra.langs.cypher.openCypher.MultiplyDivideModuloExpression lhs) {
-    return new AddOrSubtractExpression(lhs, rhs);
+  public AddOrSubtractExpression withLeft(hydra.langs.cypher.openCypher.MultiplyDivideModuloExpression left) {
+    return new AddOrSubtractExpression(left, right);
   }
   
-  public AddOrSubtractExpression withRhs(java.util.List<hydra.langs.cypher.openCypher.AddOrSubtractRhs> rhs) {
-    return new AddOrSubtractExpression(lhs, rhs);
+  public AddOrSubtractExpression withRight(java.util.List<hydra.langs.cypher.openCypher.AddOrSubtractRightHandSide> right) {
+    return new AddOrSubtractExpression(left, right);
   }
 }

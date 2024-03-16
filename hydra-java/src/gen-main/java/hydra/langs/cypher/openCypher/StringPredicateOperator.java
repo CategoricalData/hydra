@@ -2,33 +2,33 @@ package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
 
-public abstract class StringPredicate implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.StringPredicate");
+public abstract class StringPredicateOperator implements Serializable {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.StringPredicateOperator");
   
-  private StringPredicate () {
+  private StringPredicateOperator () {
   
   }
   
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(StartsWith instance) ;
+    R visit(Starts instance) ;
     
-    R visit(EndsWith instance) ;
+    R visit(Ends instance) ;
     
     R visit(Contains instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(StringPredicate instance) {
+    default R otherwise(StringPredicateOperator instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(StartsWith instance) {
+    default R visit(Starts instance) {
       return otherwise((instance));
     }
     
-    default R visit(EndsWith instance) {
+    default R visit(Ends instance) {
       return otherwise((instance));
     }
     
@@ -37,17 +37,17 @@ public abstract class StringPredicate implements Serializable {
     }
   }
   
-  public static final class StartsWith extends hydra.langs.cypher.openCypher.StringPredicate implements Serializable {
-    public StartsWith () {
+  public static final class Starts extends hydra.langs.cypher.openCypher.StringPredicateOperator implements Serializable {
+    public Starts () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof StartsWith)) {
+      if (!(other instanceof Starts)) {
         return false;
       }
-      StartsWith o = (StartsWith) (other);
+      Starts o = (Starts) (other);
       return true;
     }
     
@@ -62,17 +62,17 @@ public abstract class StringPredicate implements Serializable {
     }
   }
   
-  public static final class EndsWith extends hydra.langs.cypher.openCypher.StringPredicate implements Serializable {
-    public EndsWith () {
+  public static final class Ends extends hydra.langs.cypher.openCypher.StringPredicateOperator implements Serializable {
+    public Ends () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof EndsWith)) {
+      if (!(other instanceof Ends)) {
         return false;
       }
-      EndsWith o = (EndsWith) (other);
+      Ends o = (Ends) (other);
       return true;
     }
     
@@ -87,7 +87,7 @@ public abstract class StringPredicate implements Serializable {
     }
   }
   
-  public static final class Contains extends hydra.langs.cypher.openCypher.StringPredicate implements Serializable {
+  public static final class Contains extends hydra.langs.cypher.openCypher.StringPredicateOperator implements Serializable {
     public Contains () {
     
     }

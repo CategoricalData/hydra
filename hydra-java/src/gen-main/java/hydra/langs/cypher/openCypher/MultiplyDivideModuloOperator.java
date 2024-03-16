@@ -2,17 +2,17 @@ package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
 
-public abstract class TimesOrDivideOrModulo implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.TimesOrDivideOrModulo");
+public abstract class MultiplyDivideModuloOperator implements Serializable {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.MultiplyDivideModuloOperator");
   
-  private TimesOrDivideOrModulo () {
+  private MultiplyDivideModuloOperator () {
   
   }
   
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(Times instance) ;
+    R visit(Multiply instance) ;
     
     R visit(Divide instance) ;
     
@@ -20,11 +20,11 @@ public abstract class TimesOrDivideOrModulo implements Serializable {
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(TimesOrDivideOrModulo instance) {
+    default R otherwise(MultiplyDivideModuloOperator instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Times instance) {
+    default R visit(Multiply instance) {
       return otherwise((instance));
     }
     
@@ -37,17 +37,17 @@ public abstract class TimesOrDivideOrModulo implements Serializable {
     }
   }
   
-  public static final class Times extends hydra.langs.cypher.openCypher.TimesOrDivideOrModulo implements Serializable {
-    public Times () {
+  public static final class Multiply extends hydra.langs.cypher.openCypher.MultiplyDivideModuloOperator implements Serializable {
+    public Multiply () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Times)) {
+      if (!(other instanceof Multiply)) {
         return false;
       }
-      Times o = (Times) (other);
+      Multiply o = (Multiply) (other);
       return true;
     }
     
@@ -62,7 +62,7 @@ public abstract class TimesOrDivideOrModulo implements Serializable {
     }
   }
   
-  public static final class Divide extends hydra.langs.cypher.openCypher.TimesOrDivideOrModulo implements Serializable {
+  public static final class Divide extends hydra.langs.cypher.openCypher.MultiplyDivideModuloOperator implements Serializable {
     public Divide () {
     
     }
@@ -87,7 +87,7 @@ public abstract class TimesOrDivideOrModulo implements Serializable {
     }
   }
   
-  public static final class Modulo extends hydra.langs.cypher.openCypher.TimesOrDivideOrModulo implements Serializable {
+  public static final class Modulo extends hydra.langs.cypher.openCypher.MultiplyDivideModuloOperator implements Serializable {
     public Modulo () {
     
     }

@@ -2,37 +2,86 @@ package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
 
-public class Parameter implements Serializable {
+public abstract class Parameter implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.Parameter");
   
-  public final String name;
+  private Parameter () {
   
-  public final Integer index;
-  
-  public Parameter (String name, Integer index) {
-    this.name = name;
-    this.index = index;
   }
   
-  @Override
-  public boolean equals(Object other) {
-    if (!(other instanceof Parameter)) {
-      return false;
+  public abstract <R> R accept(Visitor<R> visitor) ;
+  
+  public interface Visitor<R> {
+    R visit(Symbolic instance) ;
+    
+    R visit(Integer_ instance) ;
+  }
+  
+  public interface PartialVisitor<R> extends Visitor<R> {
+    default R otherwise(Parameter instance) {
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
-    Parameter o = (Parameter) (other);
-    return name.equals(o.name) && index.equals(o.index);
+    
+    default R visit(Symbolic instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Integer_ instance) {
+      return otherwise((instance));
+    }
   }
   
-  @Override
-  public int hashCode() {
-    return 2 * name.hashCode() + 3 * index.hashCode();
+  public static final class Symbolic extends hydra.langs.cypher.openCypher.Parameter implements Serializable {
+    public final String value;
+    
+    public Symbolic (String value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Symbolic)) {
+        return false;
+      }
+      Symbolic o = (Symbolic) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
   }
   
-  public Parameter withName(String name) {
-    return new Parameter(name, index);
-  }
-  
-  public Parameter withIndex(Integer index) {
-    return new Parameter(name, index);
+  public static final class Integer_ extends hydra.langs.cypher.openCypher.Parameter implements Serializable {
+    public final java.math.BigInteger value;
+    
+    public Integer_ (java.math.BigInteger value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Integer_)) {
+        return false;
+      }
+      Integer_ o = (Integer_) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
   }
 }

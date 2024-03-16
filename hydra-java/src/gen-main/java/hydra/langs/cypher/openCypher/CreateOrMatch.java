@@ -2,46 +2,46 @@ package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
 
-public abstract class PlusOrMinus implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.PlusOrMinus");
+public abstract class CreateOrMatch implements Serializable {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.CreateOrMatch");
   
-  private PlusOrMinus () {
+  private CreateOrMatch () {
   
   }
   
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(Plus instance) ;
+    R visit(Create instance) ;
     
-    R visit(Minus instance) ;
+    R visit(Match instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(PlusOrMinus instance) {
+    default R otherwise(CreateOrMatch instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Plus instance) {
+    default R visit(Create instance) {
       return otherwise((instance));
     }
     
-    default R visit(Minus instance) {
+    default R visit(Match instance) {
       return otherwise((instance));
     }
   }
   
-  public static final class Plus extends hydra.langs.cypher.openCypher.PlusOrMinus implements Serializable {
-    public Plus () {
+  public static final class Create extends hydra.langs.cypher.openCypher.CreateOrMatch implements Serializable {
+    public Create () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Plus)) {
+      if (!(other instanceof Create)) {
         return false;
       }
-      Plus o = (Plus) (other);
+      Create o = (Create) (other);
       return true;
     }
     
@@ -56,17 +56,17 @@ public abstract class PlusOrMinus implements Serializable {
     }
   }
   
-  public static final class Minus extends hydra.langs.cypher.openCypher.PlusOrMinus implements Serializable {
-    public Minus () {
+  public static final class Match extends hydra.langs.cypher.openCypher.CreateOrMatch implements Serializable {
+    public Match () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Minus)) {
+      if (!(other instanceof Match)) {
         return false;
       }
-      Minus o = (Minus) (other);
+      Match o = (Match) (other);
       return true;
     }
     

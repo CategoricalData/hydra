@@ -5,13 +5,13 @@ import java.io.Serializable;
 public class CaseAlternative implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.CaseAlternative");
   
-  public final hydra.langs.cypher.openCypher.Expression when;
+  public final hydra.langs.cypher.openCypher.Expression condition;
   
-  public final hydra.langs.cypher.openCypher.Expression then;
+  public final hydra.langs.cypher.openCypher.Expression result;
   
-  public CaseAlternative (hydra.langs.cypher.openCypher.Expression when, hydra.langs.cypher.openCypher.Expression then) {
-    this.when = when;
-    this.then = then;
+  public CaseAlternative (hydra.langs.cypher.openCypher.Expression condition, hydra.langs.cypher.openCypher.Expression result) {
+    this.condition = condition;
+    this.result = result;
   }
   
   @Override
@@ -20,19 +20,19 @@ public class CaseAlternative implements Serializable {
       return false;
     }
     CaseAlternative o = (CaseAlternative) (other);
-    return when.equals(o.when) && then.equals(o.then);
+    return condition.equals(o.condition) && result.equals(o.result);
   }
   
   @Override
   public int hashCode() {
-    return 2 * when.hashCode() + 3 * then.hashCode();
+    return 2 * condition.hashCode() + 3 * result.hashCode();
   }
   
-  public CaseAlternative withWhen(hydra.langs.cypher.openCypher.Expression when) {
-    return new CaseAlternative(when, then);
+  public CaseAlternative withCondition(hydra.langs.cypher.openCypher.Expression condition) {
+    return new CaseAlternative(condition, result);
   }
   
-  public CaseAlternative withThen(hydra.langs.cypher.openCypher.Expression then) {
-    return new CaseAlternative(when, then);
+  public CaseAlternative withResult(hydra.langs.cypher.openCypher.Expression result) {
+    return new CaseAlternative(condition, result);
   }
 }

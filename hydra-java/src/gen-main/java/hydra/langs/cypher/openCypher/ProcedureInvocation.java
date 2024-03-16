@@ -2,37 +2,86 @@ package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
 
-public class ProcedureInvocation implements Serializable {
+public abstract class ProcedureInvocation implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.ProcedureInvocation");
   
-  public final hydra.langs.cypher.openCypher.ProcedureName name;
+  private ProcedureInvocation () {
   
-  public final java.util.Optional<java.util.List<hydra.langs.cypher.openCypher.Expression>> arguments;
-  
-  public ProcedureInvocation (hydra.langs.cypher.openCypher.ProcedureName name, java.util.Optional<java.util.List<hydra.langs.cypher.openCypher.Expression>> arguments) {
-    this.name = name;
-    this.arguments = arguments;
   }
   
-  @Override
-  public boolean equals(Object other) {
-    if (!(other instanceof ProcedureInvocation)) {
-      return false;
+  public abstract <R> R accept(Visitor<R> visitor) ;
+  
+  public interface Visitor<R> {
+    R visit(Explicit instance) ;
+    
+    R visit(Implicit instance) ;
+  }
+  
+  public interface PartialVisitor<R> extends Visitor<R> {
+    default R otherwise(ProcedureInvocation instance) {
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
-    ProcedureInvocation o = (ProcedureInvocation) (other);
-    return name.equals(o.name) && arguments.equals(o.arguments);
+    
+    default R visit(Explicit instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Implicit instance) {
+      return otherwise((instance));
+    }
   }
   
-  @Override
-  public int hashCode() {
-    return 2 * name.hashCode() + 3 * arguments.hashCode();
+  public static final class Explicit extends hydra.langs.cypher.openCypher.ProcedureInvocation implements Serializable {
+    public final hydra.langs.cypher.openCypher.ExplicitProcedureInvocation value;
+    
+    public Explicit (hydra.langs.cypher.openCypher.ExplicitProcedureInvocation value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Explicit)) {
+        return false;
+      }
+      Explicit o = (Explicit) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
   }
   
-  public ProcedureInvocation withName(hydra.langs.cypher.openCypher.ProcedureName name) {
-    return new ProcedureInvocation(name, arguments);
-  }
-  
-  public ProcedureInvocation withArguments(java.util.Optional<java.util.List<hydra.langs.cypher.openCypher.Expression>> arguments) {
-    return new ProcedureInvocation(name, arguments);
+  public static final class Implicit extends hydra.langs.cypher.openCypher.ProcedureInvocation implements Serializable {
+    public final hydra.langs.cypher.openCypher.QualifiedName value;
+    
+    public Implicit (hydra.langs.cypher.openCypher.QualifiedName value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Implicit)) {
+        return false;
+      }
+      Implicit o = (Implicit) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
   }
 }

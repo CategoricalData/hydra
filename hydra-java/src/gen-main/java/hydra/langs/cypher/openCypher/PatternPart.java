@@ -7,9 +7,9 @@ public class PatternPart implements Serializable {
   
   public final java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable;
   
-  public final hydra.langs.cypher.openCypher.PatternElement pattern;
+  public final hydra.langs.cypher.openCypher.AnonymousPatternPart pattern;
   
-  public PatternPart (java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable, hydra.langs.cypher.openCypher.PatternElement pattern) {
+  public PatternPart (java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable, hydra.langs.cypher.openCypher.AnonymousPatternPart pattern) {
     this.variable = variable;
     this.pattern = pattern;
   }
@@ -32,7 +32,7 @@ public class PatternPart implements Serializable {
     return new PatternPart(variable, pattern);
   }
   
-  public PatternPart withPattern(hydra.langs.cypher.openCypher.PatternElement pattern) {
+  public PatternPart withPattern(hydra.langs.cypher.openCypher.AnonymousPatternPart pattern) {
     return new PatternPart(variable, pattern);
   }
 }

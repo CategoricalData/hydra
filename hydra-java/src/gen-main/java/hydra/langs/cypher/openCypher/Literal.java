@@ -16,9 +16,7 @@ public abstract class Literal implements Serializable {
     
     R visit(Null instance) ;
     
-    R visit(Double_ instance) ;
-    
-    R visit(Integer_ instance) ;
+    R visit(Number_ instance) ;
     
     R visit(String_ instance) ;
     
@@ -40,11 +38,7 @@ public abstract class Literal implements Serializable {
       return otherwise((instance));
     }
     
-    default R visit(Double_ instance) {
-      return otherwise((instance));
-    }
-    
-    default R visit(Integer_ instance) {
+    default R visit(Number_ instance) {
       return otherwise((instance));
     }
     
@@ -113,46 +107,19 @@ public abstract class Literal implements Serializable {
     }
   }
   
-  public static final class Double_ extends hydra.langs.cypher.openCypher.Literal implements Serializable {
-    public final Double value;
+  public static final class Number_ extends hydra.langs.cypher.openCypher.Literal implements Serializable {
+    public final hydra.langs.cypher.openCypher.NumberLiteral value;
     
-    public Double_ (Double value) {
+    public Number_ (hydra.langs.cypher.openCypher.NumberLiteral value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Double_)) {
+      if (!(other instanceof Number_)) {
         return false;
       }
-      Double_ o = (Double_) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  public static final class Integer_ extends hydra.langs.cypher.openCypher.Literal implements Serializable {
-    public final Integer value;
-    
-    public Integer_ (Integer value) {
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Integer_)) {
-        return false;
-      }
-      Integer_ o = (Integer_) (other);
+      Number_ o = (Number_) (other);
       return value.equals(o.value);
     }
     
@@ -168,9 +135,9 @@ public abstract class Literal implements Serializable {
   }
   
   public static final class String_ extends hydra.langs.cypher.openCypher.Literal implements Serializable {
-    public final String value;
+    public final hydra.langs.cypher.openCypher.StringLiteral value;
     
-    public String_ (String value) {
+    public String_ (hydra.langs.cypher.openCypher.StringLiteral value) {
       this.value = value;
     }
     
@@ -195,9 +162,9 @@ public abstract class Literal implements Serializable {
   }
   
   public static final class List extends hydra.langs.cypher.openCypher.Literal implements Serializable {
-    public final java.util.List<hydra.langs.cypher.openCypher.Expression> value;
+    public final hydra.langs.cypher.openCypher.ListLiteral value;
     
-    public List (java.util.List<hydra.langs.cypher.openCypher.Expression> value) {
+    public List (hydra.langs.cypher.openCypher.ListLiteral value) {
       this.value = value;
     }
     

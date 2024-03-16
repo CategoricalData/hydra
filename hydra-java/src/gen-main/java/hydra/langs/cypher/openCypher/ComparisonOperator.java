@@ -12,17 +12,17 @@ public abstract class ComparisonOperator implements Serializable {
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(Equal instance) ;
+    R visit(Eq instance) ;
     
-    R visit(NotEqual instance) ;
+    R visit(Neq instance) ;
     
-    R visit(LessThan instance) ;
+    R visit(Lt instance) ;
     
-    R visit(GreaterThan instance) ;
+    R visit(Gt instance) ;
     
-    R visit(LessThanOrEqual instance) ;
+    R visit(Lte instance) ;
     
-    R visit(GreaterThanOrEqual instance) ;
+    R visit(Gte instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -30,42 +30,42 @@ public abstract class ComparisonOperator implements Serializable {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Equal instance) {
+    default R visit(Eq instance) {
       return otherwise((instance));
     }
     
-    default R visit(NotEqual instance) {
+    default R visit(Neq instance) {
       return otherwise((instance));
     }
     
-    default R visit(LessThan instance) {
+    default R visit(Lt instance) {
       return otherwise((instance));
     }
     
-    default R visit(GreaterThan instance) {
+    default R visit(Gt instance) {
       return otherwise((instance));
     }
     
-    default R visit(LessThanOrEqual instance) {
+    default R visit(Lte instance) {
       return otherwise((instance));
     }
     
-    default R visit(GreaterThanOrEqual instance) {
+    default R visit(Gte instance) {
       return otherwise((instance));
     }
   }
   
-  public static final class Equal extends hydra.langs.cypher.openCypher.ComparisonOperator implements Serializable {
-    public Equal () {
+  public static final class Eq extends hydra.langs.cypher.openCypher.ComparisonOperator implements Serializable {
+    public Eq () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Equal)) {
+      if (!(other instanceof Eq)) {
         return false;
       }
-      Equal o = (Equal) (other);
+      Eq o = (Eq) (other);
       return true;
     }
     
@@ -80,17 +80,17 @@ public abstract class ComparisonOperator implements Serializable {
     }
   }
   
-  public static final class NotEqual extends hydra.langs.cypher.openCypher.ComparisonOperator implements Serializable {
-    public NotEqual () {
+  public static final class Neq extends hydra.langs.cypher.openCypher.ComparisonOperator implements Serializable {
+    public Neq () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof NotEqual)) {
+      if (!(other instanceof Neq)) {
         return false;
       }
-      NotEqual o = (NotEqual) (other);
+      Neq o = (Neq) (other);
       return true;
     }
     
@@ -105,17 +105,17 @@ public abstract class ComparisonOperator implements Serializable {
     }
   }
   
-  public static final class LessThan extends hydra.langs.cypher.openCypher.ComparisonOperator implements Serializable {
-    public LessThan () {
+  public static final class Lt extends hydra.langs.cypher.openCypher.ComparisonOperator implements Serializable {
+    public Lt () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof LessThan)) {
+      if (!(other instanceof Lt)) {
         return false;
       }
-      LessThan o = (LessThan) (other);
+      Lt o = (Lt) (other);
       return true;
     }
     
@@ -130,17 +130,17 @@ public abstract class ComparisonOperator implements Serializable {
     }
   }
   
-  public static final class GreaterThan extends hydra.langs.cypher.openCypher.ComparisonOperator implements Serializable {
-    public GreaterThan () {
+  public static final class Gt extends hydra.langs.cypher.openCypher.ComparisonOperator implements Serializable {
+    public Gt () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof GreaterThan)) {
+      if (!(other instanceof Gt)) {
         return false;
       }
-      GreaterThan o = (GreaterThan) (other);
+      Gt o = (Gt) (other);
       return true;
     }
     
@@ -155,17 +155,17 @@ public abstract class ComparisonOperator implements Serializable {
     }
   }
   
-  public static final class LessThanOrEqual extends hydra.langs.cypher.openCypher.ComparisonOperator implements Serializable {
-    public LessThanOrEqual () {
+  public static final class Lte extends hydra.langs.cypher.openCypher.ComparisonOperator implements Serializable {
+    public Lte () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof LessThanOrEqual)) {
+      if (!(other instanceof Lte)) {
         return false;
       }
-      LessThanOrEqual o = (LessThanOrEqual) (other);
+      Lte o = (Lte) (other);
       return true;
     }
     
@@ -180,17 +180,17 @@ public abstract class ComparisonOperator implements Serializable {
     }
   }
   
-  public static final class GreaterThanOrEqual extends hydra.langs.cypher.openCypher.ComparisonOperator implements Serializable {
-    public GreaterThanOrEqual () {
+  public static final class Gte extends hydra.langs.cypher.openCypher.ComparisonOperator implements Serializable {
+    public Gte () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof GreaterThanOrEqual)) {
+      if (!(other instanceof Gte)) {
         return false;
       }
-      GreaterThanOrEqual o = (GreaterThanOrEqual) (other);
+      Gte o = (Gte) (other);
       return true;
     }
     

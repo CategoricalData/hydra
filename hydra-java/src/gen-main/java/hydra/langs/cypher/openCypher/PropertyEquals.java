@@ -5,13 +5,13 @@ import java.io.Serializable;
 public class PropertyEquals implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.PropertyEquals");
   
-  public final hydra.langs.cypher.openCypher.PropertyExpression left;
+  public final hydra.langs.cypher.openCypher.PropertyExpression lhs;
   
-  public final hydra.langs.cypher.openCypher.Expression right;
+  public final hydra.langs.cypher.openCypher.Expression rhs;
   
-  public PropertyEquals (hydra.langs.cypher.openCypher.PropertyExpression left, hydra.langs.cypher.openCypher.Expression right) {
-    this.left = left;
-    this.right = right;
+  public PropertyEquals (hydra.langs.cypher.openCypher.PropertyExpression lhs, hydra.langs.cypher.openCypher.Expression rhs) {
+    this.lhs = lhs;
+    this.rhs = rhs;
   }
   
   @Override
@@ -20,19 +20,19 @@ public class PropertyEquals implements Serializable {
       return false;
     }
     PropertyEquals o = (PropertyEquals) (other);
-    return left.equals(o.left) && right.equals(o.right);
+    return lhs.equals(o.lhs) && rhs.equals(o.rhs);
   }
   
   @Override
   public int hashCode() {
-    return 2 * left.hashCode() + 3 * right.hashCode();
+    return 2 * lhs.hashCode() + 3 * rhs.hashCode();
   }
   
-  public PropertyEquals withLeft(hydra.langs.cypher.openCypher.PropertyExpression left) {
-    return new PropertyEquals(left, right);
+  public PropertyEquals withLhs(hydra.langs.cypher.openCypher.PropertyExpression lhs) {
+    return new PropertyEquals(lhs, rhs);
   }
   
-  public PropertyEquals withRight(hydra.langs.cypher.openCypher.Expression right) {
-    return new PropertyEquals(left, right);
+  public PropertyEquals withRhs(hydra.langs.cypher.openCypher.Expression rhs) {
+    return new PropertyEquals(lhs, rhs);
   }
 }

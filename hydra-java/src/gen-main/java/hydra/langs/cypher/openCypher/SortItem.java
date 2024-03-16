@@ -5,13 +5,13 @@ import java.io.Serializable;
 public class SortItem implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.SortItem");
   
-  public final hydra.langs.cypher.openCypher.Expression sortBy;
+  public final hydra.langs.cypher.openCypher.Expression expression;
   
-  public final Boolean descending;
+  public final java.util.Optional<hydra.langs.cypher.openCypher.SortOrder> order;
   
-  public SortItem (hydra.langs.cypher.openCypher.Expression sortBy, Boolean descending) {
-    this.sortBy = sortBy;
-    this.descending = descending;
+  public SortItem (hydra.langs.cypher.openCypher.Expression expression, java.util.Optional<hydra.langs.cypher.openCypher.SortOrder> order) {
+    this.expression = expression;
+    this.order = order;
   }
   
   @Override
@@ -20,19 +20,19 @@ public class SortItem implements Serializable {
       return false;
     }
     SortItem o = (SortItem) (other);
-    return sortBy.equals(o.sortBy) && descending.equals(o.descending);
+    return expression.equals(o.expression) && order.equals(o.order);
   }
   
   @Override
   public int hashCode() {
-    return 2 * sortBy.hashCode() + 3 * descending.hashCode();
+    return 2 * expression.hashCode() + 3 * order.hashCode();
   }
   
-  public SortItem withSortBy(hydra.langs.cypher.openCypher.Expression sortBy) {
-    return new SortItem(sortBy, descending);
+  public SortItem withExpression(hydra.langs.cypher.openCypher.Expression expression) {
+    return new SortItem(expression, order);
   }
   
-  public SortItem withDescending(Boolean descending) {
-    return new SortItem(sortBy, descending);
+  public SortItem withOrder(java.util.Optional<hydra.langs.cypher.openCypher.SortOrder> order) {
+    return new SortItem(expression, order);
   }
 }

@@ -5,13 +5,13 @@ import java.io.Serializable;
 public class VariablePlusEquals implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.VariablePlusEquals");
   
-  public final hydra.langs.cypher.openCypher.Variable left;
+  public final String lhs;
   
-  public final hydra.langs.cypher.openCypher.Expression right;
+  public final hydra.langs.cypher.openCypher.Expression rhs;
   
-  public VariablePlusEquals (hydra.langs.cypher.openCypher.Variable left, hydra.langs.cypher.openCypher.Expression right) {
-    this.left = left;
-    this.right = right;
+  public VariablePlusEquals (String lhs, hydra.langs.cypher.openCypher.Expression rhs) {
+    this.lhs = lhs;
+    this.rhs = rhs;
   }
   
   @Override
@@ -20,19 +20,19 @@ public class VariablePlusEquals implements Serializable {
       return false;
     }
     VariablePlusEquals o = (VariablePlusEquals) (other);
-    return left.equals(o.left) && right.equals(o.right);
+    return lhs.equals(o.lhs) && rhs.equals(o.rhs);
   }
   
   @Override
   public int hashCode() {
-    return 2 * left.hashCode() + 3 * right.hashCode();
+    return 2 * lhs.hashCode() + 3 * rhs.hashCode();
   }
   
-  public VariablePlusEquals withLeft(hydra.langs.cypher.openCypher.Variable left) {
-    return new VariablePlusEquals(left, right);
+  public VariablePlusEquals withLhs(String lhs) {
+    return new VariablePlusEquals(lhs, rhs);
   }
   
-  public VariablePlusEquals withRight(hydra.langs.cypher.openCypher.Expression right) {
-    return new VariablePlusEquals(left, right);
+  public VariablePlusEquals withRhs(hydra.langs.cypher.openCypher.Expression rhs) {
+    return new VariablePlusEquals(lhs, rhs);
   }
 }

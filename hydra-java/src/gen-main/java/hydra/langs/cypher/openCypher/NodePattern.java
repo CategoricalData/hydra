@@ -7,11 +7,11 @@ public class NodePattern implements Serializable {
   
   public final java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable;
   
-  public final java.util.List<hydra.langs.cypher.openCypher.NodeLabel> labels;
+  public final java.util.Optional<hydra.langs.cypher.openCypher.NodeLabels> labels;
   
   public final java.util.Optional<hydra.langs.cypher.openCypher.Properties> properties;
   
-  public NodePattern (java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable, java.util.List<hydra.langs.cypher.openCypher.NodeLabel> labels, java.util.Optional<hydra.langs.cypher.openCypher.Properties> properties) {
+  public NodePattern (java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable, java.util.Optional<hydra.langs.cypher.openCypher.NodeLabels> labels, java.util.Optional<hydra.langs.cypher.openCypher.Properties> properties) {
     this.variable = variable;
     this.labels = labels;
     this.properties = properties;
@@ -35,7 +35,7 @@ public class NodePattern implements Serializable {
     return new NodePattern(variable, labels, properties);
   }
   
-  public NodePattern withLabels(java.util.List<hydra.langs.cypher.openCypher.NodeLabel> labels) {
+  public NodePattern withLabels(java.util.Optional<hydra.langs.cypher.openCypher.NodeLabels> labels) {
     return new NodePattern(variable, labels, properties);
   }
   

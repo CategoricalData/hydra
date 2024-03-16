@@ -158,9 +158,9 @@ public abstract class UpdatingClause implements Serializable {
   }
   
   public static final class Remove extends hydra.langs.cypher.openCypher.UpdatingClause implements Serializable {
-    public final hydra.langs.cypher.openCypher.Remove value;
+    public final java.util.List<hydra.langs.cypher.openCypher.RemoveItem> value;
     
-    public Remove (hydra.langs.cypher.openCypher.Remove value) {
+    public Remove (java.util.List<hydra.langs.cypher.openCypher.RemoveItem> value) {
       this.value = value;
     }
     

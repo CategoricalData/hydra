@@ -5,13 +5,13 @@ import java.io.Serializable;
 public class RelationshipsPattern implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.RelationshipsPattern");
   
-  public final hydra.langs.cypher.openCypher.NodePattern pattern;
+  public final hydra.langs.cypher.openCypher.NodePattern nodePattern;
   
-  public final java.util.List<hydra.langs.cypher.openCypher.PatternElementChain> chains;
+  public final java.util.List<hydra.langs.cypher.openCypher.PatternElementChain> chain;
   
-  public RelationshipsPattern (hydra.langs.cypher.openCypher.NodePattern pattern, java.util.List<hydra.langs.cypher.openCypher.PatternElementChain> chains) {
-    this.pattern = pattern;
-    this.chains = chains;
+  public RelationshipsPattern (hydra.langs.cypher.openCypher.NodePattern nodePattern, java.util.List<hydra.langs.cypher.openCypher.PatternElementChain> chain) {
+    this.nodePattern = nodePattern;
+    this.chain = chain;
   }
   
   @Override
@@ -20,19 +20,19 @@ public class RelationshipsPattern implements Serializable {
       return false;
     }
     RelationshipsPattern o = (RelationshipsPattern) (other);
-    return pattern.equals(o.pattern) && chains.equals(o.chains);
+    return nodePattern.equals(o.nodePattern) && chain.equals(o.chain);
   }
   
   @Override
   public int hashCode() {
-    return 2 * pattern.hashCode() + 3 * chains.hashCode();
+    return 2 * nodePattern.hashCode() + 3 * chain.hashCode();
   }
   
-  public RelationshipsPattern withPattern(hydra.langs.cypher.openCypher.NodePattern pattern) {
-    return new RelationshipsPattern(pattern, chains);
+  public RelationshipsPattern withNodePattern(hydra.langs.cypher.openCypher.NodePattern nodePattern) {
+    return new RelationshipsPattern(nodePattern, chain);
   }
   
-  public RelationshipsPattern withChains(java.util.List<hydra.langs.cypher.openCypher.PatternElementChain> chains) {
-    return new RelationshipsPattern(pattern, chains);
+  public RelationshipsPattern withChain(java.util.List<hydra.langs.cypher.openCypher.PatternElementChain> chain) {
+    return new RelationshipsPattern(nodePattern, chain);
   }
 }
