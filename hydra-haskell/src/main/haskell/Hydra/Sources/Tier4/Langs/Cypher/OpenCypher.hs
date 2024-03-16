@@ -51,31 +51,33 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- SingleQuery = SinglePartQuery
 --             | MultiPartQuery
 --             ;
---
+      def "SingleQuery" $
+        union [
+          "singlePart">: cypher "SinglePartQuery",
+          "multiPart">: cypher "MultiPartQuery"],
+
 -- SinglePartQuery = ({ ReadingClause, [SP] }, Return)
 --                 | ({ ReadingClause, [SP] }, UpdatingClause, { [SP], UpdatingClause }, [[SP], Return])
 --                 ;
---
--- MultiPartQuery = { { ReadingClause, [SP] }, { UpdatingClause, [SP] }, With, [SP] }-, SinglePartQuery ;
 
-      def "ReadsAndUpdates" $
+      def "SinglePartQuery" $
         record [
           "reading">: list $ cypher "ReadingClause",
-          "updating">: list $ cypher "UpdatingClause"],
+          "updating">: list $ cypher "UpdatingClause",
+          "return">: optional $ cypher "Return"],
           
-      def "SingleQuery" $
-        doc "Note: a query without updating clauses in the body must have a return clause" $
-        record [
-          "with">:
-            doc "Optional WITH clauses which make this a multi-part query" $
-            list $ cypher "WithClause",
-          "body">: cypher "ReadsAndUpdates",
-          "return">: optional $ cypher "ProjectionBody"],
+-- MultiPartQuery = { { ReadingClause, [SP] }, { UpdatingClause, [SP] }, With, [SP] }-, SinglePartQuery ;
           
       def "WithClause" $
         record [
-          "body">: cypher "ReadsAndUpdates",
+          "reading">: list $ cypher "ReadingClause",
+          "updating">: list $ cypher "UpdatingClause",
           "with">: cypher "With"],
+
+      def "MultiPartQuery" $
+        record [
+          "with">: list $ cypher "WithClause",
+          "body">: cypher "SinglePartQuery"],
 
 -- UpdatingClause = Create
 --                | Merge
@@ -86,7 +88,7 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "UpdatingClause" $
         union [
-          "create">: nonemptyList $ cypher "PatternPart",
+          "create">: cypher "Create",
           "merge">: cypher "Merge",
           "delete">: cypher "Delete",
           "set">: nonemptyList $ cypher "SetItem",
@@ -108,15 +110,15 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "Match" $
         record [
           "optional">: boolean,
-          "pattern">: nonemptyList $ cypher "PatternPart",
-          "where">: optional $ cypher "Expression"],
+          "pattern">: cypher "Pattern",
+          "where">: optional $ cypher "Where"],
 
 -- Unwind = (U,N,W,I,N,D), [SP], Expression, SP, (A,S), SP, Variable ;
 
       def "Unwind" $
         record [
           "expression">: cypher "Expression",
-          "variable">: string],
+          "variable">: cypher "Variable"],
 
 -- Merge = (M,E,R,G,E), [SP], PatternPart, { SP, MergeAction } ;
 
@@ -138,7 +140,9 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "set">: nonemptyList $ cypher "SetItem"],
           
 -- Create = (C,R,E,A,T,E), [SP], Pattern ;
--- 
+
+      def "Create" $ cypher "Pattern",
+
 -- Set = (S,E,T), [SP], SetItem, { [SP], ',', [SP], SetItem } ;
 --          
 -- SetItem = (PropertyExpression, [SP], '=', [SP], Expression)
@@ -167,8 +171,8 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "rhs">: cypher "Expression"],
       def "VariableAndNodeLabels" $
         record [
-          "variable">: string,
-          "labels">: nonemptyList $ cypher "NodeLabel"],
+          "variable">: cypher "Variable",
+          "labels">: cypher "NodeLabels"],
 
 -- Delete = [(D,E,T,A,C,H), SP], (D,E,L,E,T,E), [SP], Expression, { [SP], ',', [SP], Expression } ;
 
@@ -212,33 +216,36 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "YieldItems" $
         record [
           "items">: list $ cypher "YieldItem",
-          "where">: optional $ cypher "Expression"],
+          "where">: optional $ cypher "Where"],
 
 -- YieldItem = [ProcedureResultField, SP, (A,S), SP], Variable ;
 
       def "YieldItem" $
         record [
           "field">: optional string,
-          "variable">: string],
+          "variable">: cypher "Variable"],
 
 -- With = (W,I,T,H), ProjectionBody, [[SP], Where] ;
 
       def "With" $
         record [
           "projection">: cypher "ProjectionBody",
-          "where">: optional $ cypher "Expression"],
+          "where">: optional $ cypher "Where"],
 
 -- Return = (R,E,T,U,R,N), ProjectionBody ;
--- 
+
+      def "Return" $
+        cypher "ProjectionBody",
+
 -- ProjectionBody = [[SP], (D,I,S,T,I,N,C,T)], SP, ProjectionItems, [SP, Order], [SP, Skip], [SP, Limit] ;
 
       def "ProjectionBody" $
         record [
           "distinct">: boolean,
-          "projectionItems">: nonemptyList $ cypher "ProjectionItem",
-          "order">: list $ cypher "SortItem",
-          "skip">: optional $ cypher "Expression",
-          "limit">: optional $ cypher "Expression"],
+          "projectionItems">: cypher "ProjectionItems",
+          "order">: optional $ cypher "Order",
+          "skip">: optional $ cypher "Skip",
+          "limit">: optional $ cypher "Limit"],
 
 -- ProjectionItems = ('*', { [SP], ',', [SP], ProjectionItem })
 --                 | (ProjectionItem, { [SP], ',', [SP], ProjectionItem })
@@ -256,38 +263,57 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
         def "ProjectionItem" $
           record [
             "expression">: cypher "Expression",
-            "variable">: optional string],
+            "variable">: optional $ cypher "Variable"],
 
 -- Order = (O,R,D,E,R), SP, (B,Y), SP, SortItem, { ',', [SP], SortItem } ;
--- 
+
+      def "Order" $
+        nonemptyList $ cypher "SortItem",
+
 -- Skip = (S,K,I,P), SP, Expression ;
--- 
+
+      def "Skip" $
+        cypher "Expression",
+
 -- Limit = (L,I,M,I,T), SP, Expression ;
--- 
+
+      def "Limit" $
+        cypher "Expression",
+
 -- SortItem = Expression, [[SP], ((A,S,C,E,N,D,I,N,G) | (A,S,C) | (D,E,S,C,E,N,D,I,N,G) | (D,E,S,C))] ;
 
       def "SortOrder" $
         enum ["ascending", "descending"],
+
       def "SortItem" $
         record [
-           "expression">: cypher "Expression",
+          "expression">: cypher "Expression",
           "order">: optional $ cypher "SortOrder"],
 
 -- Where = (W,H,E,R,E), SP, Expression ;
--- 
+
+      def "Where" $
+        cypher "Expression",
+
 -- Pattern = PatternPart, { [SP], ',', [SP], PatternPart } ;
--- 
+
+      def "Pattern" $
+        nonemptyList $ cypher "PatternPart",
+
 -- PatternPart = (Variable, [SP], '=', [SP], AnonymousPatternPart)
 --             | AnonymousPatternPart
 --             ;
 
       def "PatternPart" $
         record [
-          "variable">: optional string,
-          "pattern">: cypher "PatternElement"],
+          "variable">: optional $ cypher "Variable",
+          "pattern">: cypher "AnonymousPatternPart"],
 
 -- AnonymousPatternPart = PatternElement ;
--- 
+
+        def "AnonymousPatternPart" $
+          cypher "PatternElement",
+
 -- PatternElement = (NodePattern, { [SP], PatternElementChain })
 --                | ('(', PatternElement, ')')
 --                ;
@@ -312,8 +338,8 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- NodePattern = '(', [SP], [Variable, [SP]], [NodeLabels, [SP]], [Properties, [SP]], ')' ;
       def "NodePattern" $
         record [
-          "variable">: optional string,
-          "labels">: list $ cypher "NodeLabel",
+          "variable">: optional $ cypher "Variable",
+          "labels">: optional $ cypher "NodeLabels",
           "properties">: optional $ cypher "Properties"],
 
 -- PatternElementChain = RelationshipPattern, [SP], NodePattern ;
@@ -339,7 +365,7 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "RelationshipDetail" $
         record [
-          "variable">: optional string,
+          "variable">: optional $ cypher "Variable",
           "types">: optional $ cypher "RelationshipTypes",
           "range">: optional $ cypher "RangeLiteral",
           "properties">: optional $ cypher "Properties"],
@@ -350,7 +376,7 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "Properties" $
         union [
-          "map">: list $ cypher "KeyValuePair",
+          "map">: cypher "MapLiteral",
           "parameter">: cypher "Parameter"],
 
 -- RelationshipTypes = ':', [SP], RelTypeName, { [SP], '|', [':'], [SP], RelTypeName } ;
@@ -360,7 +386,9 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 -- 
 -- NodeLabels = NodeLabel, { [SP], NodeLabel } ;
--- 
+
+      def "NodeLabels" $ nonemptyList $ cypher "NodeLabel",
+
 -- NodeLabel = ':', [SP], LabelName ;
 
       def "NodeLabel" string,
@@ -383,7 +411,7 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "PropertyExpression" $
         record [
           "atom">: cypher "Atom",
-          "lookups">: nonemptyList string],
+          "lookups">: nonemptyList $ cypher "PropertyLookup"],
 
 -- Expression = OrExpression ;
 
@@ -447,8 +475,8 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "StringListNullPredicateRightHandSide" $
         union [
           "string">: cypher "StringPredicateExpression",
-          "list">: cypher "AddOrSubtractExpression",
-          "null">: boolean],
+          "list">: cypher "ListPredicateExpression",
+          "null">: cypher "NullPredicateExpression"],
 
 -- StringPredicateExpression = ((SP, (S,T,A,R,T,S), SP, (W,I,T,H)) | (SP, (E,N,D,S), SP, (W,I,T,H)) | (SP, (C,O,N,T,A,I,N,S))), [SP], AddOrSubtractExpression ;
 
@@ -464,11 +492,17 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "contains"],
 
 -- ListPredicateExpression = SP, (I,N), [SP], AddOrSubtractExpression ;
---
+
+      def "ListPredicateExpression" $
+        cypher "AddOrSubtractExpression",
+
 -- NullPredicateExpression = (SP, (I,S), SP, (N,U,L,L))
 --                         | (SP, (I,S), SP, (N,O,T), SP, (N,U,L,L))
 --                         ;
---
+
+      def "NullPredicateExpression" $
+        boolean,
+
 -- AddOrSubtractExpression = MultiplyDivideModuloExpression, { ([SP], '+', [SP], MultiplyDivideModuloExpression) | ([SP], '-', [SP], MultiplyDivideModuloExpression) } ;
 
       def "AddOrSubtractExpression" $
@@ -522,13 +556,13 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "ListOperatorExpressionOrPropertyLookup" $
         union [
           "list">: cypher "ListOperatorExpression",
-          "property">: string],
+          "property">: cypher "PropertyLookup"],
 
       def "NonArithmeticOperatorExpression" $
         record [
           "atom">: cypher "Atom",
           "listsAndLookups">: list $ cypher "ListOperatorExpressionOrPropertyLookup",
-          "labels">: list $ cypher "NodeLabel"],
+          "labels">: optional $ cypher "NodeLabels"],
 
 -- ListOperatorExpression = ('[', Expression, ']')
 --                        | ('[', [Expression], '..', [Expression], ']')
@@ -545,7 +579,10 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "range">: cypher "RangeExpression"],
 
 -- PropertyLookup = '.', [SP], (PropertyKeyName) ;
--- 
+
+      def "PropertyLookup" $
+        cypher "PropertyKeyName",
+
 -- Atom = Literal
 --      | Parameter
 --      | CaseExpression
@@ -569,11 +606,11 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "listComprehension">: cypher "ListComprehension",
           "patternComprehension">: cypher "PatternComprehension",
           "quantifier">: cypher "Quantifier",
-          "patternPredicate">: cypher "RelationshipsPattern",
-          "parenthesized">: cypher "Expression",
+          "patternPredicate">: cypher "PatternPredicate",
+          "parenthesized">: cypher "ParenthesizedExpression",
           "functionInvocation">: cypher "FunctionInvocation",
           "existentialSubquery">: cypher "ExistentialSubquery",
-          "variable">: string],
+          "variable">: cypher "Variable"],
 
 -- CaseExpression = (((C,A,S,E), { [SP], CaseAlternative }-) | ((C,A,S,E), [SP], Expression, { [SP], CaseAlternative }-)), [[SP], (E,L,S,E), [SP], Expression], [SP], (E,N,D) ;
 
@@ -601,10 +638,10 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "PatternComprehension" $
         record [
-          "variable">: optional string,
+          "variable">: optional $ cypher "Variable",
           "pattern">: cypher "RelationshipsPattern",
           "where">: optional $ cypher "Expression",
-          "right">: cypher "Expression"],
+          "right">: cypher "Where"],
 
 -- Quantifier = ((A,L,L), [SP], '(', [SP], FilterExpression, [SP], ')')
 --            | ((A,N,Y), [SP], '(', [SP], FilterExpression, [SP], ')')
@@ -629,17 +666,21 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "FilterExpression" $
         record [
           "idInColl">: cypher "IdInColl",
-          "where">: optional $ cypher "Expression"],
+          "where">: optional $ cypher "Where"],
 
 -- PatternPredicate = RelationshipsPattern ;
--- 
+
+      def "PatternPredicate" $ cypher "RelationshipsPattern",
+
 -- ParenthesizedExpression = '(', [SP], Expression, [SP], ')' ;
--- 
+
+      def "ParenthesizedExpression" $ cypher "Expression",
+
 -- IdInColl = Variable, SP, (I,N), SP, Expression ;
 
       def "IdInColl" $
         record [
-          "variable">: string,
+          "variable">: cypher "Variable",
           "expression">: cypher "Expression"],
 
 -- FunctionInvocation = FunctionName, [SP], '(', [SP], [(D,I,S,T,I,N,C,T), [SP]], [Expression, [SP], { ',', [SP], Expression, [SP] }], ')' ;
@@ -661,8 +702,8 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "PatternWhere" $
         record [
-          "pattern">: nonemptyList $ cypher "PatternPart",
-          "where">: optional $ cypher "Expression"],
+          "pattern">: cypher "Pattern",
+          "where">: optional $ cypher "Where"],
 
       def "ExistentialSubquery" $
         union [
@@ -685,7 +726,9 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- Namespace = { SymbolicName, '.' } ;
 -- 
 -- Variable = SymbolicName ;
--- 
+
+      def "Variable" string,
+
 -- Literal = BooleanLiteral
 --         | (N,U,L,L)
 --         | NumberLiteral
@@ -699,9 +742,9 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "boolean">: boolean,
           "null">: unit,
           "number">: cypher "NumberLiteral",
-          "string">: string,
-          "list">: list $ cypher "Expression",
-          "map">: list $ cypher "KeyValuePair"],
+          "string">: cypher "StringLiteral",
+          "list">: cypher "ListLiteral",
+          "map">: cypher "MapLiteral"],
           
 -- BooleanLiteral = (T,R,U,E)
 --                | (F,A,L,S,E)
@@ -714,7 +757,7 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "NumberLiteral" $
         union [
           "double">: float64,
-          "integer">: bigint], -- TODO: bigint does not properly encode decimal/hex/octal integers
+          "integer">: bigint],
 
 -- IntegerLiteral = HexInteger
 --                | OctalInteger
@@ -776,20 +819,30 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- StringLiteral = ('"', { ANY - ('"' | '\') | EscapedChar }, '"')
 --               | ("'", { ANY - ("'" | '\') | EscapedChar }, "'")
 --               ;
--- 
+
+      def "StringLiteral" string,
+
 -- EscapedChar = '\', ('\' | "'" | '"' | (B) | (F) | (N) | (R) | (T) | ((U), 4 * HexDigit) | ((U), 8 * HexDigit)) ;
 -- 
 -- ListLiteral = '[', [SP], [Expression, [SP], { ',', [SP], Expression, [SP] }], ']' ;
--- 
+
+      def "ListLiteral" $
+        list $ cypher "Expression",
+
 -- MapLiteral = '{', [SP], [PropertyKeyName, [SP], ':', [SP], Expression, [SP], { ',', [SP], PropertyKeyName, [SP], ':', [SP], Expression, [SP] }], '}' ;
+
+      def "MapLiteral" $
+        list $ cypher "KeyValuePair",
 
       def "KeyValuePair" $
         record [
-          "key">: string,
+          "key">: cypher "PropertyKeyName",
           "value">: cypher "Expression"],
           
 -- PropertyKeyName = SchemaName ;
--- 
+
+      def "PropertyKeyName" string,
+
 -- Parameter = '$', (SymbolicName | DecimalInteger) ;
 
       def "Parameter" $
