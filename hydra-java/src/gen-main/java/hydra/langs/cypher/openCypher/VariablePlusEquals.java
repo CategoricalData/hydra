@@ -5,11 +5,11 @@ import java.io.Serializable;
 public class VariablePlusEquals implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.VariablePlusEquals");
   
-  public final String lhs;
+  public final hydra.langs.cypher.openCypher.Variable lhs;
   
   public final hydra.langs.cypher.openCypher.Expression rhs;
   
-  public VariablePlusEquals (String lhs, hydra.langs.cypher.openCypher.Expression rhs) {
+  public VariablePlusEquals (hydra.langs.cypher.openCypher.Variable lhs, hydra.langs.cypher.openCypher.Expression rhs) {
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -28,7 +28,7 @@ public class VariablePlusEquals implements Serializable {
     return 2 * lhs.hashCode() + 3 * rhs.hashCode();
   }
   
-  public VariablePlusEquals withLhs(String lhs) {
+  public VariablePlusEquals withLhs(hydra.langs.cypher.openCypher.Variable lhs) {
     return new VariablePlusEquals(lhs, rhs);
   }
   

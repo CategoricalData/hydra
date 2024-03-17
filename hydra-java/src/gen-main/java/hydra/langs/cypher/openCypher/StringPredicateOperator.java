@@ -12,9 +12,9 @@ public abstract class StringPredicateOperator implements Serializable {
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(Starts instance) ;
+    R visit(StartsWith instance) ;
     
-    R visit(Ends instance) ;
+    R visit(EndsWith instance) ;
     
     R visit(Contains instance) ;
   }
@@ -24,11 +24,11 @@ public abstract class StringPredicateOperator implements Serializable {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Starts instance) {
+    default R visit(StartsWith instance) {
       return otherwise((instance));
     }
     
-    default R visit(Ends instance) {
+    default R visit(EndsWith instance) {
       return otherwise((instance));
     }
     
@@ -37,17 +37,17 @@ public abstract class StringPredicateOperator implements Serializable {
     }
   }
   
-  public static final class Starts extends hydra.langs.cypher.openCypher.StringPredicateOperator implements Serializable {
-    public Starts () {
+  public static final class StartsWith extends hydra.langs.cypher.openCypher.StringPredicateOperator implements Serializable {
+    public StartsWith () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Starts)) {
+      if (!(other instanceof StartsWith)) {
         return false;
       }
-      Starts o = (Starts) (other);
+      StartsWith o = (StartsWith) (other);
       return true;
     }
     
@@ -62,17 +62,17 @@ public abstract class StringPredicateOperator implements Serializable {
     }
   }
   
-  public static final class Ends extends hydra.langs.cypher.openCypher.StringPredicateOperator implements Serializable {
-    public Ends () {
+  public static final class EndsWith extends hydra.langs.cypher.openCypher.StringPredicateOperator implements Serializable {
+    public EndsWith () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Ends)) {
+      if (!(other instanceof EndsWith)) {
         return false;
       }
-      Ends o = (Ends) (other);
+      EndsWith o = (EndsWith) (other);
       return true;
     }
     
