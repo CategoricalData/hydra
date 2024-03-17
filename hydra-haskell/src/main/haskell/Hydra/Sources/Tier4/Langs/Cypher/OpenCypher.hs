@@ -160,18 +160,22 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "variableEqual">: cypher "VariableEquals",
           "variablePlusEqual">: cypher "VariablePlusEquals",
           "variableLabels">: cypher "VariableAndNodeLabels"],
+
       def "PropertyEquals" $
         record [
           "lhs">: cypher "PropertyExpression",
           "rhs">: cypher "Expression"],
+
       def "VariableEquals" $
         record [
-          "lhs">: string,
+          "lhs">: cypher "Variable",
           "rhs">: cypher "Expression"],
+
       def "VariablePlusEquals" $
         record [
-          "lhs">: string,
+          "lhs">: cypher "Variable",
           "rhs">: cypher "Expression"],
+
       def "VariableAndNodeLabels" $
         record [
           "variable">: cypher "Variable",
@@ -492,8 +496,8 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "StringPredicateOperator" $
         enum [
-          "starts",
-          "ends",
+          "startsWith",
+          "endsWith",
           "contains"],
 
 -- ListPredicateExpression = SP, (I,N), [SP], AddOrSubtractExpression ;
@@ -506,7 +510,7 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --                         ;
 
       def "NullPredicateExpression" $
-        boolean,
+        boolean, -- true: NULL, false: NOT NULL
 
 -- AddOrSubtractExpression = MultiplyDivideModuloExpression, { ([SP], '+', [SP], MultiplyDivideModuloExpression) | ([SP], '-', [SP], MultiplyDivideModuloExpression) } ;
 

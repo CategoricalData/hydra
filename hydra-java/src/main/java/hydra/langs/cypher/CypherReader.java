@@ -6,6 +6,7 @@ import hydra.langs.cypher.openCypher.AddOrSubtractRightHandSide;
 import hydra.langs.cypher.openCypher.AndExpression;
 import hydra.langs.cypher.openCypher.AnonymousPatternPart;
 import hydra.langs.cypher.openCypher.Atom;
+import hydra.langs.cypher.openCypher.CaseAlternative;
 import hydra.langs.cypher.openCypher.CaseExpression;
 import hydra.langs.cypher.openCypher.ComparisonExpression;
 import hydra.langs.cypher.openCypher.ComparisonOperator;
@@ -54,6 +55,8 @@ import hydra.langs.cypher.openCypher.ProjectionBody;
 import hydra.langs.cypher.openCypher.ProjectionItem;
 import hydra.langs.cypher.openCypher.ProjectionItems;
 import hydra.langs.cypher.openCypher.Properties;
+import hydra.langs.cypher.openCypher.PropertyEquals;
+import hydra.langs.cypher.openCypher.PropertyExpression;
 import hydra.langs.cypher.openCypher.PropertyKeyName;
 import hydra.langs.cypher.openCypher.PropertyLookup;
 import hydra.langs.cypher.openCypher.QualifiedName;
@@ -70,6 +73,7 @@ import hydra.langs.cypher.openCypher.RelationshipsPattern;
 import hydra.langs.cypher.openCypher.Remove;
 import hydra.langs.cypher.openCypher.Return;
 import hydra.langs.cypher.openCypher.Set;
+import hydra.langs.cypher.openCypher.SetItem;
 import hydra.langs.cypher.openCypher.SinglePartQuery;
 import hydra.langs.cypher.openCypher.SingleQuery;
 import hydra.langs.cypher.openCypher.Skip;
@@ -79,11 +83,15 @@ import hydra.langs.cypher.openCypher.StringListNullPredicateExpression;
 import hydra.langs.cypher.openCypher.StringListNullPredicateRightHandSide;
 import hydra.langs.cypher.openCypher.StringLiteral;
 import hydra.langs.cypher.openCypher.StringPredicateExpression;
+import hydra.langs.cypher.openCypher.StringPredicateOperator;
 import hydra.langs.cypher.openCypher.UnaryAddOrSubtractExpression;
 import hydra.langs.cypher.openCypher.Union;
 import hydra.langs.cypher.openCypher.Unwind;
 import hydra.langs.cypher.openCypher.UpdatingClause;
 import hydra.langs.cypher.openCypher.Variable;
+import hydra.langs.cypher.openCypher.VariableAndNodeLabels;
+import hydra.langs.cypher.openCypher.VariableEquals;
+import hydra.langs.cypher.openCypher.VariablePlusEquals;
 import hydra.langs.cypher.openCypher.Where;
 import hydra.langs.cypher.openCypher.With;
 import hydra.langs.cypher.openCypher.WithClause;
@@ -188,7 +196,16 @@ public class CypherReader extends AntlrReaderBase {
     }
 
     private static StringPredicateExpression read(CypherParser.OC_StringPredicateExpressionContext ctx) {
-        return unsupported();
+        return new StringPredicateExpression(
+                required(ctx, CypherParser.OC_StringPredicateExpressionContext::oC_StringPredicateOperator, CypherReader::read),
+                required(ctx, CypherParser.OC_StringPredicateExpressionContext::oC_AddOrSubtractExpression, CypherReader::read));
+    }
+
+    private static StringPredicateOperator read(CypherParser.OC_StringPredicateOperatorContext ctx) {
+        return match(ctx,
+                matchCase(CypherParser.OC_StringPredicateOperatorContext::STARTS, new StringPredicateOperator.StartsWith()),
+                matchCase(CypherParser.OC_StringPredicateOperatorContext::ENDS, new StringPredicateOperator.EndsWith()),
+                matchCase(CypherParser.OC_StringPredicateOperatorContext::CONTAINS, new StringPredicateOperator.Contains()));
     }
 
     private static ListPredicateExpression read(CypherParser.OC_ListPredicateExpressionContext ctx) {
@@ -196,7 +213,7 @@ public class CypherReader extends AntlrReaderBase {
     }
 
     private static NullPredicateExpression read(CypherParser.OC_NullPredicateExpressionContext ctx) {
-        return unsupported();
+        return new NullPredicateExpression(ctx.NOT() == null);
     }
 
     private static AddOrSubtractExpression read(CypherParser.OC_AddOrSubtractExpressionContext ctx) {
@@ -345,7 +362,19 @@ public class CypherReader extends AntlrReaderBase {
     }
 
     private static CaseExpression read(CypherParser.OC_CaseExpressionContext ctx) {
-        return unsupported();
+        return new CaseExpression(optional(ctx, CypherParser.OC_CaseExpressionContext::oC_Expression, CypherReader::read),
+                list(ctx, CypherParser.OC_CaseExpressionContext::oC_CaseAlternative, CypherReader::read),
+                optional(ctx, CypherParser.OC_CaseExpressionContext::oc_CaseElse, CypherReader::read));
+    }
+
+    private static Expression read(CypherParser.Oc_CaseElseContext ctx) {
+        return required(ctx, CypherParser.Oc_CaseElseContext::oC_Expression, CypherReader::read);
+    }
+
+    private static CaseAlternative read(CypherParser.OC_CaseAlternativeContext ctx) {
+        return new CaseAlternative(
+                required(ctx, 0, CypherParser.OC_CaseAlternativeContext::oC_Expression, CypherReader::read),
+                required(ctx, 1, CypherParser.OC_CaseAlternativeContext::oC_Expression, CypherReader::read));
     }
 
     private static Parameter read(CypherParser.OC_ParameterContext ctx) {
@@ -363,7 +392,7 @@ public class CypherReader extends AntlrReaderBase {
     }
 
     private static ListLiteral read(CypherParser.OC_ListLiteralContext ctx) {
-        return unsupported();
+        return new ListLiteral(list(ctx, CypherParser.OC_ListLiteralContext::oC_Expression, CypherReader::read));
     }
 
     private static StringLiteral read(TerminalNode n) {
@@ -628,7 +657,45 @@ public class CypherReader extends AntlrReaderBase {
     }
 
     private static Set read(CypherParser.OC_SetContext ctx) {
-        return unsupported();
+        return new Set(list(ctx, CypherParser.OC_SetContext::oC_SetItem, CypherReader::read));
+    }
+
+    private static SetItem read(CypherParser.OC_SetItemContext ctx) {
+      return match(ctx,
+              matchCase(CypherParser.OC_SetItemContext::oC_SetItem_Property, CypherReader::read, SetItem.Property::new),
+              matchCase(CypherParser.OC_SetItemContext::oC_SetItem_Equal, CypherReader::read, SetItem.VariableEqual::new),
+              matchCase(CypherParser.OC_SetItemContext::oC_SetItem_PlusEqual, CypherReader::read, SetItem.VariablePlusEqual::new),
+              matchCase(CypherParser.OC_SetItemContext::oC_SetItem_NodeLabels, CypherReader::read, SetItem.VariableLabels::new));
+    }
+
+    private static VariableAndNodeLabels read(CypherParser.OC_SetItem_NodeLabelsContext ctx) {
+        return new VariableAndNodeLabels(
+                required(ctx, CypherParser.OC_SetItem_NodeLabelsContext::oC_Variable, CypherReader::read),
+                required(ctx, CypherParser.OC_SetItem_NodeLabelsContext::oC_NodeLabels, CypherReader::read));
+    }
+
+    private static VariablePlusEquals read(CypherParser.OC_SetItem_PlusEqualContext ctx) {
+        return new VariablePlusEquals(
+                required(ctx, CypherParser.OC_SetItem_PlusEqualContext::oC_Variable, CypherReader::read),
+                required(ctx, CypherParser.OC_SetItem_PlusEqualContext::oC_Expression, CypherReader::read));
+    }
+
+    private static VariableEquals read(CypherParser.OC_SetItem_EqualContext ctx) {
+        return new VariableEquals(
+                required(ctx, CypherParser.OC_SetItem_EqualContext::oC_Variable, CypherReader::read),
+                required(ctx, CypherParser.OC_SetItem_EqualContext::oC_Expression, CypherReader::read));
+    }
+
+    private static PropertyEquals read(CypherParser.OC_SetItem_PropertyContext ctx) {
+        return new PropertyEquals(
+                required(ctx, CypherParser.OC_SetItem_PropertyContext::oC_PropertyExpression, CypherReader::read),
+                required(ctx, CypherParser.OC_SetItem_PropertyContext::oC_Expression, CypherReader::read));
+    }
+
+    private static PropertyExpression read(CypherParser.OC_PropertyExpressionContext ctx) {
+        return new PropertyExpression(
+                required(ctx, CypherParser.OC_PropertyExpressionContext::oC_Atom, CypherReader::read),
+                nonemptyList(ctx, CypherParser.OC_PropertyExpressionContext::oC_PropertyLookup, CypherReader::read));
     }
 
     private static Delete read(CypherParser.OC_DeleteContext ctx) {
@@ -642,7 +709,7 @@ public class CypherReader extends AntlrReaderBase {
     }
 
     private static Create read(CypherParser.OC_CreateContext ctx) {
-        return unsupported();
+        return new Create(required(ctx, CypherParser.OC_CreateContext::oC_Pattern, CypherReader::read));
     }
 
     private static SingleQuery read(CypherParser.OC_SingleQueryContext ctx) {
@@ -652,7 +719,9 @@ public class CypherReader extends AntlrReaderBase {
     }
 
     private static Union read(CypherParser.OC_UnionContext ctx) {
-        return unsupported();
+        return new Union(
+                ctx.ALL() != null,
+                required(ctx, CypherParser.OC_UnionContext::oC_SingleQuery, CypherReader::read));
     }
 
     private static Variable read(CypherParser.OC_VariableContext ctx) {
@@ -665,7 +734,9 @@ public class CypherReader extends AntlrReaderBase {
     }
 
     private static With read(CypherParser.OC_WithContext ctx) {
-        return unsupported();
+        return new With(
+                required(ctx, CypherParser.OC_WithContext::oC_ProjectionBody, CypherReader::read),
+                optional(ctx, CypherParser.OC_WithContext::oC_Where, CypherReader::read));
     }
 
     // TODO: this may not match Neo4j's behavior exactly

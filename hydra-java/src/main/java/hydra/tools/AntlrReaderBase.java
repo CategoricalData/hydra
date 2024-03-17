@@ -26,8 +26,18 @@ public class AntlrReaderBase {
         return c2 == null ? Optional.empty() : Optional.of(constructor.apply(c2));
     }
 
+    protected static <C1, C2, T> Optional<T> optional(C1 c1, int index, Function<C1, List<C2>> accessor, Function<C2, T> constructor) {
+        List<C2> c2 = accessor.apply(c1);
+        return null == c2 || index >= c2.size() ? Optional.empty() : Optional.of(constructor.apply(c2.get(index)));
+    }
+
     protected static <C1, C2, T> T required(C1 c1, Function<C1, C2> accessor, Function<C2, T> constructor) {
         Optional<T> t = optional(c1, accessor, constructor);
+        return t.orElseGet(() -> invalid("missing required field"));
+    }
+
+    protected static <C1, C2, T> T required(C1 c1, int index, Function<C1, List<C2>> accessor, Function<C2, T> constructor) {
+        Optional<T> t = optional(c1, index, accessor, constructor);
         return t.orElseGet(() -> invalid("missing required field"));
     }
 

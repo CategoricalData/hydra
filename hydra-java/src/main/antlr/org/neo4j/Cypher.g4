@@ -115,11 +115,20 @@ oC_Set
 SET : ( 'S' | 's' ) ( 'E' | 'e' ) ( 'T' | 't' ) ;
 
 oC_SetItem
-       :  ( oC_PropertyExpression SP? '=' SP? oC_Expression )
-           | ( oC_Variable SP? '=' SP? oC_Expression )
-           | ( oC_Variable SP? '+=' SP? oC_Expression )
-           | ( oC_Variable SP? oC_NodeLabels )
+       :  oC_SetItem_Property
+           | oC_SetItem_Equal
+           | oC_SetItem_PlusEqual
+           | oC_SetItem_NodeLabels
            ;
+
+oC_SetItem_Property : oC_PropertyExpression SP? '=' SP? oC_Expression ;
+
+oC_SetItem_Equal : oC_Variable SP? '=' SP? oC_Expression ;
+
+oC_SetItem_PlusEqual : oC_Variable SP? '+=' SP? oC_Expression ;
+
+oC_SetItem_NodeLabels : oC_Variable SP? oC_NodeLabels ;
+
 
 oC_Delete
       :  ( DETACH SP )? DELETE SP? oC_Expression ( SP? ',' SP? oC_Expression )* ;
@@ -311,8 +320,9 @@ oC_StringListNullPredicateExpression :  oC_AddOrSubtractExpression ( oC_StringLi
 
 oC_StringListNullPredicateExpression_RHS : oC_StringPredicateExpression | oC_ListPredicateExpression | oC_NullPredicateExpression ;
 
-oC_StringPredicateExpression
-                         :  ( ( SP STARTS SP WITH ) | ( SP ENDS SP WITH ) | ( SP CONTAINS ) ) SP? oC_AddOrSubtractExpression ;
+oC_StringPredicateExpression : SP oC_StringPredicateOperator SP? oC_AddOrSubtractExpression ;
+
+oC_StringPredicateOperator : ( STARTS SP WITH ) | ( ENDS SP WITH ) | ( CONTAINS ) ;
 
 STARTS : ( 'S' | 's' ) ( 'T' | 't' ) ( 'A' | 'a' ) ( 'R' | 'r' ) ( 'T' | 't' ) ( 'S' | 's' ) ;
 
@@ -387,7 +397,9 @@ oC_Atom
 COUNT : ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'T' | 't' ) ;
 
 oC_CaseExpression
-              :  ( ( CASE ( SP? oC_CaseAlternative )+ ) | ( CASE SP? oC_Expression ( SP? oC_CaseAlternative )+ ) ) ( SP? ELSE SP? oC_Expression )? SP? END ;
+              :  ( ( CASE ( SP? oC_CaseAlternative )+ ) | ( CASE SP? oC_Expression ( SP? oC_CaseAlternative )+ ) ) ( SP? oc_CaseElse )? SP? END ;
+
+oc_CaseElse : ELSE SP? oC_Expression ;
 
 CASE : ( 'C' | 'c' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'E' | 'e' ) ;
 
