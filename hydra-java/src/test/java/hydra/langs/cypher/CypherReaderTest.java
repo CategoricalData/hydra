@@ -6,21 +6,27 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.io.IOException;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 /**
  * Tests for CypherReader
- *
- * Sources of test cases:
- *   QUERY_BASIC_xx    -- https://neo4j.com/docs/cypher-manual/current/queries/basic/
- *   QUERY_CASE_xx     -- https://neo4j.com/docs/cypher-manual/current/queries/case/
- *   QUERY_CLAUSE_xx   -- https://neo4j.com/docs/cypher-manual/current/clauses/clause_composition/
- *   QUERY_MATCH_xx    -- https://neo4j.com/docs/cypher-manual/current/clauses/match/
- *   QUERY_OPTIONAL_xx -- https://neo4j.com/docs/cypher-manual/current/clauses/optional-match/
  */
 public class CypherReaderTest {
+    private static final List<CypherTestCase> testCases;
+
+    static {
+        try {
+            testCases = CypherTestCase.loadCases();
+        } catch (IOException e) {
+            throw new ExceptionInInitializerError(e);
+        }
+    }
+
     private static final String QUERY_1 = "MATCH (n) RETURN *";
 
     private static final String QUERY_BASIC_1
@@ -326,7 +332,40 @@ public class CypherReaderTest {
     }
 
     @Test
+    public void testCypherQuerySuite() {
+        for (CypherTestCase tc : testCases) {
+          if (tc.supported) {
+            Query query = CypherReader.read(tc.query);
+            assertNotNull(query);
+          } else {
+            assertThrows(Exception.class, () -> {
+              CypherReader.read(tc.query);
+            });
+          }
+        }
+
+//        int start = 0;
+//        int line = 1;
+//        for (CypherTestCase tc : testCases) {
+//            if (++line >= start) {
+////                System.out.println("Trying " + tc.getName() + " (line #" + line + ")");
+//                String status;
+//                try {
+//                    Query query = CypherReader.read(tc.query);
+//                    assertNotNull(query);
+//                    status = "yes";
+//                } catch (Exception e) {
+//                    status = "no";
+//                }
+////                System.out.println(line + "\t" + status);
+//                System.out.println(status);
+//            }
+//        }
+    }
+
+    @Test
     public void testSingleQueryForDebugging() {
 //        CypherReader.read(QUERY_OPTIONAL_8);
     }
+
 }
