@@ -18,20 +18,21 @@ apply plugin: 'antlr'
 //targetCompatibility = '1.8'
 
 dependencies {
+    antlr 'org.antlr:antlr4:4.9.2'
+
     implementation group: 'org.apache.commons', name: 'commons-text', version: '1.10.0'
-
     implementation group: 'com.cedarsoftware', name: 'json-io', version: '4.14.1'
-
     // We use RDF 3.x rather than 4.x or 5.x for compatibility with Java 8
     implementation 'org.eclipse.rdf4j:rdf4j-rio-ntriples:3.7.7'
-
-    antlr 'org.antlr:antlr4:4.9.2'
 
     // Temporarily including HydraTestBase and the unit testing dependencies in main,
     // until we have a separately published artifact for the test framework.
     implementation(platform('org.junit:junit-bom:5.9.2'))
     implementation('org.junit.jupiter:junit-jupiter')
     implementation('org.junit.jupiter:junit-jupiter-params:5.9.2')
+
+    // These dependencies only need to be in the test environment
+    testImplementation 'org.apache.commons:commons-csv:1.10.0'
 }
 
 sourceSets {
