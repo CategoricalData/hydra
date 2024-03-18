@@ -59,9 +59,9 @@ public abstract class ProcedureInvocation implements Serializable {
   }
   
   public static final class Implicit extends hydra.langs.cypher.openCypher.ProcedureInvocation implements Serializable {
-    public final hydra.langs.cypher.openCypher.QualifiedName value;
+    public final hydra.langs.cypher.openCypher.ImplicitProcedureInvocation value;
     
-    public Implicit (hydra.langs.cypher.openCypher.QualifiedName value) {
+    public Implicit (hydra.langs.cypher.openCypher.ImplicitProcedureInvocation value) {
       this.value = value;
     }
     

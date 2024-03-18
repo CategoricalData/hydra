@@ -97,10 +97,9 @@ oC_Merge
 
 MERGE : ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'G' | 'g' ) ( 'E' | 'e' ) ;
 
-oC_MergeAction
-           :  ( ON SP MATCH SP oC_Set )
-               | ( ON SP CREATE SP oC_Set )
-               ;
+oC_MergeAction : ON SP oC_MatchOrCreate SP oC_Set ;
+
+oC_MatchOrCreate : MATCH | CREATE ;
 
 ON : ( 'O' | 'o' ) ( 'N' | 'n' ) ;
 
@@ -143,9 +142,11 @@ oC_Remove
 REMOVE : ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'M' | 'm' ) ( 'O' | 'o' ) ( 'V' | 'v' ) ( 'E' | 'e' ) ;
 
 oC_RemoveItem
-          :  ( oC_Variable oC_NodeLabels )
+          :  oC_VariableAndNodeLabels
               | oC_PropertyExpression
               ;
+
+oC_VariableAndNodeLabels : oC_Variable oC_NodeLabels ;
 
 oC_InQueryCall
            :  CALL SP oC_ExplicitProcedureInvocation ( SP? YIELD SP oC_YieldItems )? ;
@@ -154,8 +155,11 @@ CALL : ( 'C' | 'c' ) ( 'A' | 'a' ) ( 'L' | 'l' ) ( 'L' | 'l' ) ;
 
 YIELD : ( 'Y' | 'y' ) ( 'I' | 'i' ) ( 'E' | 'e' ) ( 'L' | 'l' ) ( 'D' | 'd' ) ;
 
-oC_StandaloneCall
-              :  CALL SP ( oC_ExplicitProcedureInvocation | oC_ImplicitProcedureInvocation ) ( SP? YIELD SP ( '*' | oC_YieldItems ) )? ;
+oC_StandaloneCall : CALL SP oC_ProcedureInvocation ( SP? YIELD SP oC_StarOrYieldItems )? ;
+
+oC_ProcedureInvocation : oC_ExplicitProcedureInvocation | oC_ImplicitProcedureInvocation ;
+
+oC_StarOrYieldItems : '*' | oC_YieldItems ;
 
 oC_YieldItems
           :  oC_YieldItem ( SP? ',' SP? oC_YieldItem )* ( SP? oC_Where )? ;
@@ -275,8 +279,9 @@ oC_NodeLabels
 oC_NodeLabel
          :  ':' SP? oC_LabelName ;
 
-oC_RangeLiteral
-            :  '*' SP? ( oC_IntegerLiteral SP? )? ( '..' SP? ( oC_IntegerLiteral SP? )? )? ;
+oC_RangeLiteral : '*' SP? ( oC_IntegerLiteral SP? )? ( oC_RangeLiteralUpperBound )? ;
+
+oC_RangeLiteralUpperBound : '..' SP? ( oC_IntegerLiteral SP? )? ;
 
 oC_LabelName
          :  oC_SchemaName ;
@@ -372,9 +377,17 @@ oC_NonArithmeticOperatorExpression
 oC_ListOperatorExpressionOrPropertyLookup : oC_ListOperatorExpression | oC_PropertyLookup ;
 
 oC_ListOperatorExpression
-                      :  ( '[' oC_Expression ']' )
-                          | ( '[' oC_Expression? '..' oC_Expression? ']' )
-                          ;
+                      : oC_ListOperatorExpressionSingle
+                      | oC_ListOperatorExpressionRange
+                      ;
+
+oC_ListOperatorExpressionSingle : '[' oC_Expression ']' ;
+
+oC_ListOperatorExpressionRange : '[' oC_ListOperatorExpressionRangeLHS '..' oC_ListOperatorExpressionRangeRHS ']' ;
+
+oC_ListOperatorExpressionRangeLHS : oC_Expression? ;
+
+oC_ListOperatorExpressionRangeRHS : oC_Expression? ;
 
 oC_PropertyLookup
               :  '.' SP? ( oC_PropertyKeyName ) ;
@@ -420,12 +433,9 @@ oC_ListComprehension
 oC_PatternComprehension
                     :  '[' SP? ( oC_Variable SP? '=' SP? )? oC_RelationshipsPattern SP? ( oC_Where SP? )? '|' SP? oC_Expression SP? ']' ;
 
-oC_Quantifier
-          :  ( ALL SP? '(' SP? oC_FilterExpression SP? ')' )
-              | ( ANY SP? '(' SP? oC_FilterExpression SP? ')' )
-              | ( NONE SP? '(' SP? oC_FilterExpression SP? ')' )
-              | ( SINGLE SP? '(' SP? oC_FilterExpression SP? ')' )
-              ;
+oC_Quantifier : oC_QuantifierOperator SP? '(' SP? oC_FilterExpression SP? ')' ;
+
+oC_QuantifierOperator : ALL | ANY | NONE | SINGLE ;
 
 ANY : ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'Y' | 'y' ) ;
 
@@ -451,8 +461,9 @@ oC_FunctionInvocation
 oC_FunctionName
             :  oC_Namespace oC_SymbolicName ;
 
-oC_ExistentialSubquery
-                   :  EXISTS SP? '{' SP? ( oC_RegularQuery | ( oC_Pattern ( SP? oC_Where )? ) ) SP? '}' ;
+oC_ExistentialSubquery : EXISTS SP? '{' SP? ( oC_RegularQuery | oC_PatternWhere ) SP? '}' ;
+
+oC_PatternWhere : oC_Pattern ( SP? oC_Where )? ;
 
 EXISTS : ( 'E' | 'e' ) ( 'X' | 'x' ) ( 'I' | 'i' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'S' | 's' ) ;
 

@@ -5,11 +5,11 @@ import java.io.Serializable;
 public class MergeAction implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.MergeAction");
   
-  public final hydra.langs.cypher.openCypher.CreateOrMatch action;
+  public final hydra.langs.cypher.openCypher.MatchOrCreate action;
   
-  public final java.util.List<hydra.langs.cypher.openCypher.SetItem> set;
+  public final hydra.langs.cypher.openCypher.Set set;
   
-  public MergeAction (hydra.langs.cypher.openCypher.CreateOrMatch action, java.util.List<hydra.langs.cypher.openCypher.SetItem> set) {
+  public MergeAction (hydra.langs.cypher.openCypher.MatchOrCreate action, hydra.langs.cypher.openCypher.Set set) {
     this.action = action;
     this.set = set;
   }
@@ -28,11 +28,11 @@ public class MergeAction implements Serializable {
     return 2 * action.hashCode() + 3 * set.hashCode();
   }
   
-  public MergeAction withAction(hydra.langs.cypher.openCypher.CreateOrMatch action) {
+  public MergeAction withAction(hydra.langs.cypher.openCypher.MatchOrCreate action) {
     return new MergeAction(action, set);
   }
   
-  public MergeAction withSet(java.util.List<hydra.langs.cypher.openCypher.SetItem> set) {
+  public MergeAction withSet(hydra.langs.cypher.openCypher.Set set) {
     return new MergeAction(action, set);
   }
 }

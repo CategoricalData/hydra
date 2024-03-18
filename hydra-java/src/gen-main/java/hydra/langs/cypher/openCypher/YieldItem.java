@@ -5,11 +5,11 @@ import java.io.Serializable;
 public class YieldItem implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.YieldItem");
   
-  public final java.util.Optional<String> field;
+  public final java.util.Optional<hydra.langs.cypher.openCypher.ProcedureResultField> field;
   
   public final hydra.langs.cypher.openCypher.Variable variable;
   
-  public YieldItem (java.util.Optional<String> field, hydra.langs.cypher.openCypher.Variable variable) {
+  public YieldItem (java.util.Optional<hydra.langs.cypher.openCypher.ProcedureResultField> field, hydra.langs.cypher.openCypher.Variable variable) {
     this.field = field;
     this.variable = variable;
   }
@@ -28,7 +28,7 @@ public class YieldItem implements Serializable {
     return 2 * field.hashCode() + 3 * variable.hashCode();
   }
   
-  public YieldItem withField(java.util.Optional<String> field) {
+  public YieldItem withField(java.util.Optional<hydra.langs.cypher.openCypher.ProcedureResultField> field) {
     return new YieldItem(field, variable);
   }
   

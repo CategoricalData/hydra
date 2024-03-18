@@ -131,13 +131,13 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --             | ((O,N), SP, (C,R,E,A,T,E), SP, Set)
 --             ;
 
-      def "CreateOrMatch" $
-        enum ["create", "match"],
+      def "MatchOrCreate" $
+        enum ["match", "create"],
         
       def "MergeAction" $
         record [
-          "action">: cypher "CreateOrMatch",
-          "set">: nonemptyList $ cypher "SetItem"],
+          "action">: cypher "MatchOrCreate",
+          "set">: cypher "Set"],
           
 -- Create = (C,R,E,A,T,E), [SP], Pattern ;
 
@@ -214,25 +214,30 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "ProcedureInvocation" $
         union [
           "explicit">: cypher "ExplicitProcedureInvocation",
-          "implicit">: cypher "QualifiedName"],
+          "implicit">: cypher "ImplicitProcedureInvocation"],
+
+      def "StarOrYieldItems" $
+        union [
+          "star">: unit,
+          "items">: cypher "YieldItems"],
 
       def "StandaloneCall" $
         record [
           "call">: cypher "ProcedureInvocation",
-          "yieldItems">: optional $ cypher "YieldItems"],
+          "yieldItems">: optional $ cypher "StarOrYieldItems"],
 
 -- YieldItems = YieldItem, { [SP], ',', [SP], YieldItem }, [[SP], Where] ;
 
       def "YieldItems" $
         record [
-          "items">: list $ cypher "YieldItem",
+          "items">: nonemptyList $ cypher "YieldItem",
           "where">: optional $ cypher "Where"],
 
 -- YieldItem = [ProcedureResultField, SP, (A,S), SP], Variable ;
 
       def "YieldItem" $
         record [
-          "field">: optional string,
+          "field">: optional $ cypher "ProcedureResultField",
           "variable">: cypher "Variable"],
 
 -- With = (W,I,T,H), ProjectionBody, [[SP], Where] ;
@@ -579,8 +584,8 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "RangeExpression" $
          record [
-            "start">: cypher "Expression",
-            "end">: cypher "Expression"],
+            "start">: optional $ cypher "Expression",
+            "end">: optional $ cypher "Expression"],
 
       def "ListOperatorExpression" $
         union [
@@ -649,8 +654,8 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
         record [
           "variable">: optional $ cypher "Variable",
           "pattern">: cypher "RelationshipsPattern",
-          "where">: optional $ cypher "Expression",
-          "right">: cypher "Where"],
+          "where">: optional $ cypher "Where",
+          "right">: cypher "Expression"],
 
 -- Quantifier = ((A,L,L), [SP], '(', [SP], FilterExpression, [SP], ')')
 --            | ((A,N,Y), [SP], '(', [SP], FilterExpression, [SP], ')')
@@ -727,9 +732,13 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "arguments">: list $ cypher "Expression"],
           
 -- ImplicitProcedureInvocation = ProcedureName ;
--- 
+
+      def "ImplicitProcedureInvocation" $ cypher "QualifiedName",
+
 -- ProcedureResultField = SymbolicName ;
--- 
+
+      def "ProcedureResultField" string,
+
 -- ProcedureName = Namespace, SymbolicName ;
 --        
 -- Namespace = { SymbolicName, '.' } ;
