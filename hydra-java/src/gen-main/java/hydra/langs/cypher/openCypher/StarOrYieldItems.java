@@ -2,46 +2,46 @@ package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
 
-public abstract class CreateOrMatch implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.CreateOrMatch");
+public abstract class StarOrYieldItems implements Serializable {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.StarOrYieldItems");
   
-  private CreateOrMatch () {
+  private StarOrYieldItems () {
   
   }
   
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(Create instance) ;
+    R visit(Star instance) ;
     
-    R visit(Match instance) ;
+    R visit(Items instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(CreateOrMatch instance) {
+    default R otherwise(StarOrYieldItems instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Create instance) {
+    default R visit(Star instance) {
       return otherwise((instance));
     }
     
-    default R visit(Match instance) {
+    default R visit(Items instance) {
       return otherwise((instance));
     }
   }
   
-  public static final class Create extends hydra.langs.cypher.openCypher.CreateOrMatch implements Serializable {
-    public Create () {
+  public static final class Star extends hydra.langs.cypher.openCypher.StarOrYieldItems implements Serializable {
+    public Star () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Create)) {
+      if (!(other instanceof Star)) {
         return false;
       }
-      Create o = (Create) (other);
+      Star o = (Star) (other);
       return true;
     }
     
@@ -56,23 +56,25 @@ public abstract class CreateOrMatch implements Serializable {
     }
   }
   
-  public static final class Match extends hydra.langs.cypher.openCypher.CreateOrMatch implements Serializable {
-    public Match () {
+  public static final class Items extends hydra.langs.cypher.openCypher.StarOrYieldItems implements Serializable {
+    public final hydra.langs.cypher.openCypher.YieldItems value;
     
+    public Items (hydra.langs.cypher.openCypher.YieldItems value) {
+      this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Match)) {
+      if (!(other instanceof Items)) {
         return false;
       }
-      Match o = (Match) (other);
-      return true;
+      Items o = (Items) (other);
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

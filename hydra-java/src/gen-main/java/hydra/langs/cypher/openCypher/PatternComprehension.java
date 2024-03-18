@@ -9,11 +9,11 @@ public class PatternComprehension implements Serializable {
   
   public final hydra.langs.cypher.openCypher.RelationshipsPattern pattern;
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.Expression> where;
+  public final java.util.Optional<hydra.langs.cypher.openCypher.Where> where;
   
-  public final hydra.langs.cypher.openCypher.Where right;
+  public final hydra.langs.cypher.openCypher.Expression right;
   
-  public PatternComprehension (java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable, hydra.langs.cypher.openCypher.RelationshipsPattern pattern, java.util.Optional<hydra.langs.cypher.openCypher.Expression> where, hydra.langs.cypher.openCypher.Where right) {
+  public PatternComprehension (java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable, hydra.langs.cypher.openCypher.RelationshipsPattern pattern, java.util.Optional<hydra.langs.cypher.openCypher.Where> where, hydra.langs.cypher.openCypher.Expression right) {
     this.variable = variable;
     this.pattern = pattern;
     this.where = where;
@@ -42,11 +42,11 @@ public class PatternComprehension implements Serializable {
     return new PatternComprehension(variable, pattern, where, right);
   }
   
-  public PatternComprehension withWhere(java.util.Optional<hydra.langs.cypher.openCypher.Expression> where) {
+  public PatternComprehension withWhere(java.util.Optional<hydra.langs.cypher.openCypher.Where> where) {
     return new PatternComprehension(variable, pattern, where, right);
   }
   
-  public PatternComprehension withRight(hydra.langs.cypher.openCypher.Where right) {
+  public PatternComprehension withRight(hydra.langs.cypher.openCypher.Expression right) {
     return new PatternComprehension(variable, pattern, where, right);
   }
 }
