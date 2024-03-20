@@ -81,7 +81,7 @@ propertyGraphQueriesModule = Module ns elements [tinkerpopPropertyGraphModule] [
       def "MatchQuery" $
         record [
           "optional">: boolean,
-          "selection">: list $ q "Projection",
+          "pattern">: list $ q "Projection",
           "where">: optional $ q "Expression"],
 
       def "Projection" $
