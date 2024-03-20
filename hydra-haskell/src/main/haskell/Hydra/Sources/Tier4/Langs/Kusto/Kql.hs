@@ -18,26 +18,6 @@ kqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
     elements = [
 
-      def "AndExpression" $
-        nonemptyList $ kql "BasicExpression",
-
-      def "BasicExpression" $
-        union [
-          "any">: unit,
-          "between">: kql "BetweenExpression",
-          "binary">: kql "BinaryExpression",
-          "braces">: kql "Expression", -- TODO: what do braces represent? E.g. "let timeRange = {TimeRange}"
-          "column">: kql "ColumnName",
-          "dataset">: kql "DatasetName",
-          "index">: kql "IndexExpression",
-          "let">: kql "LetExpression",
-          "list">: list $ kql "Expression",
-          "literal">: kql "Literal",
-          "parentheses">: kql "Expression",
-          "pipeline">: kql "PipelineExpression",
-          "property">: kql "PropertyExpression",
-          "unary">: kql "UnaryExpression"],
-
       def "BetweenExpression" $
         record [
           "not">: boolean,
@@ -132,8 +112,6 @@ kqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "union">: kql "UnionCommand",
           "where">: kql "Expression"],
 
-      def "DatasetName" string,
-
       def "Datetime" string,
 
       def "Duration" $
@@ -144,7 +122,22 @@ kqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "DurationUnit" $
         enum ["second", "minute", "hour"],
 
-      def "Expression" $ kql "OrExpression",
+      def "Expression" $
+        union [
+          "and">: nonemptyList $ kql "Expression",
+          "any">: unit,
+          "between">: kql "BetweenExpression",
+          "binary">: kql "BinaryExpression",
+          "braces">: kql "Expression", -- TODO: what do braces represent? E.g. "let timeRange = {TimeRange}"
+          "column">: kql "ColumnName",
+          "dataset">: kql "TableName",
+          "index">: kql "IndexExpression",
+          "list">: list $ kql "Expression",
+          "literal">: kql "Literal",
+          "or">: nonemptyList $ kql "Expression",
+          "parentheses">: kql "Expression",
+          "property">: kql "PropertyExpression",
+          "unary">: kql "UnaryExpression"],
 
       def "Function" $
         union [
@@ -166,7 +159,7 @@ kqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "JoinCommand" $
         record [
           "kind">: kql "JoinKind",
-          "expression">: kql "DatasetName",
+          "expression">: kql "TableName",
           "on">: kql "Expression"],
 
       def "JoinKind" $
@@ -185,7 +178,7 @@ kqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "LetExpression" $
         record [
           "bindings">: nonemptyList $ kql "LetBinding",
-          "expression">: kql "Expression"],
+          "expression">: kql "TabularExpression"],
 
       def "Literal" $
         union [
@@ -197,9 +190,6 @@ kqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "long">: int64,
           "double">: float64,
           "boolean">: boolean],
-
-      def "OrExpression" $
-        nonemptyList $ kql "AndExpression",
 
       def "Order" $
         enum ["ascending", "descending"],
@@ -216,9 +206,7 @@ kqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       -- TODO: what are these expressions actually called in KQL?
       def "PipelineExpression" $
-        record [
-          "head">: kql "BasicExpression",
-          "commands">: list $ kql "Command"],
+        nonemptyList $ kql "TabularExpression",
 
       def "PrintCommand" $
         record [
@@ -235,18 +223,20 @@ kqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "expression">: kql "Expression",
           "property">: string],
 
-      def "Query" $ kql "PipelineExpression",
+      def "Query" $ kql "TabularExpression",
 
       def "SearchCommand" $
         doc "Search across all datasets and columns or, if provided, specific datasets and/or columns" $
         record [
-          "datasets">: list $ kql "DatasetName",
+          "datasets">: list $ kql "TableName",
           "pattern">: kql "Expression"],
 
       def "SummarizeCommand" $
         record [
            "columns">: nonemptyList $ kql "ColumnAssignment",
            "by">: list $ kql "ColumnName"],
+
+      def "TableName" string,
 
       def "TopCommand" $
         record [
@@ -257,6 +247,13 @@ kqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
         record [
           "column">: kql "ColumnName",
           "order">: optional $ kql "Order"],
+
+      def "TabularExpression" $
+        union [
+          "command">: kql "Command",
+          "pipeline">: kql "PipelineExpression",
+          "let">: kql "LetExpression",
+          "table">: kql "TableName"],
 
       def "UnaryExpression" $
         record [
@@ -272,6 +269,6 @@ kqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "kind">: optional $ kql "UnionKind",
           "withSource">: optional $ kql "ColumnName",
           "isFuzzy">: optional boolean,
-          "tables">: nonemptyList $ kql "DatasetName"],
+          "tables">: nonemptyList $ kql "TableName"],
 
       def "UnionKind" $ enum ["inner", "outer"]]
