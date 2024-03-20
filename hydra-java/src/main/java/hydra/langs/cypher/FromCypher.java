@@ -146,7 +146,7 @@ public class FromCypher extends MapperBase {
     }
 
     public static ComparisonOperator from(hydra.langs.cypher.openCypher.ComparisonOperator cypher) {
-        return cypher.accept(new hydra.langs.cypher.openCypher.ComparisonOperator.Visitor<>() {
+        return cypher.accept(new hydra.langs.cypher.openCypher.ComparisonOperator.Visitor<ComparisonOperator>() {
             @Override
             public ComparisonOperator visit(hydra.langs.cypher.openCypher.ComparisonOperator.Eq instance) {
                 return new ComparisonOperator.Eq();
@@ -258,7 +258,7 @@ public class FromCypher extends MapperBase {
 
         for (ListOperatorExpressionOrPropertyLookup l : cypher.listsAndLookups) {
             final Expression c = cur;
-            cur = l.accept(new ListOperatorExpressionOrPropertyLookup.Visitor<>() {
+            cur = l.accept(new ListOperatorExpressionOrPropertyLookup.Visitor<Expression>() {
                 @Override
                 public Expression visit(ListOperatorExpressionOrPropertyLookup.List instance) {
                     return unsupported();
@@ -303,7 +303,7 @@ public class FromCypher extends MapperBase {
     }
 
     public static Expression from(PatternElement cypher) {
-        return cypher.accept(new PatternElement.Visitor<>() {
+        return cypher.accept(new PatternElement.Visitor<Expression>() {
             @Override
             public Expression visit(PatternElement.Chained instance) {
                 return new Expression.Vertex(from(instance.value));
@@ -329,7 +329,7 @@ public class FromCypher extends MapperBase {
     }
 
     public static Query from(hydra.langs.cypher.openCypher.Query cypher) {
-        return cypher.accept(new hydra.langs.cypher.openCypher.Query.Visitor<>() {
+        return cypher.accept(new hydra.langs.cypher.openCypher.Query.Visitor<Query>() {
             @Override
             public Query visit(hydra.langs.cypher.openCypher.Query.Regular instance) {
                 return from(instance.value);
@@ -361,7 +361,7 @@ public class FromCypher extends MapperBase {
     }
 
     public static Query from(ReadingClause cypher) {
-        return cypher.accept(new ReadingClause.Visitor<>() {
+        return cypher.accept(new ReadingClause.Visitor<Query>() {
             @Override
             public Query visit(ReadingClause.Match instance) {
                 return new Query.Match(from(instance.value));
@@ -388,7 +388,7 @@ public class FromCypher extends MapperBase {
     }
 
     public static Query from(SingleQuery cypher) {
-        return cypher.accept(new hydra.langs.cypher.openCypher.SingleQuery.Visitor<>() {
+        return cypher.accept(new hydra.langs.cypher.openCypher.SingleQuery.Visitor<Query>() {
             @Override
             public Query visit(hydra.langs.cypher.openCypher.SingleQuery.SinglePart instance) {
                 return from(instance.value);
