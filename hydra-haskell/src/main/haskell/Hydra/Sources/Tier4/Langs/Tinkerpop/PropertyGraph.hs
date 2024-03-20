@@ -23,8 +23,8 @@ tinkerpopPropertyGraphModule = Module ns elements [hydraCoreModule] [] $
     elements = [
 
       def "Direction" $
-        doc "The direction of an edge" $
-          enum ["out", "in", "both"],
+        doc "The direction of an edge or edge pattern" $
+          enum ["out", "in", "both", "undirected"],
 
       def "Edge" $
         doc "An edge" $

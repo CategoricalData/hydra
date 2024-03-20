@@ -108,7 +108,9 @@ kqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "Command" $
         union [
           "count">: unit,
-          "distinct">: nonemptyList $ kql "ColumnName",
+          "distinct">:
+            doc "See https://learn.microsoft.com/en-us/azure/data-explorer/kusto/query/distinct-operator" $
+            nonemptyList $ kql "ColumnName",
           "extend">: nonemptyList $ kql "ColumnAssignment",
           "join">: kql "JoinCommand",
           "limit">: int32,
