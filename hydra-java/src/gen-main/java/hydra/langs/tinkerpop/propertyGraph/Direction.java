@@ -3,7 +3,7 @@ package hydra.langs.tinkerpop.propertyGraph;
 import java.io.Serializable;
 
 /**
- * The direction of an edge
+ * The direction of an edge or edge pattern
  */
 public abstract class Direction implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.Direction");
@@ -20,6 +20,8 @@ public abstract class Direction implements Serializable {
     R visit(In instance) ;
     
     R visit(Both instance) ;
+    
+    R visit(Undirected instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -36,6 +38,10 @@ public abstract class Direction implements Serializable {
     }
     
     default R visit(Both instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Undirected instance) {
       return otherwise((instance));
     }
   }
@@ -101,6 +107,31 @@ public abstract class Direction implements Serializable {
         return false;
       }
       Both o = (Both) (other);
+      return true;
+    }
+    
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Undirected extends hydra.langs.tinkerpop.propertyGraph.Direction implements Serializable {
+    public Undirected () {
+    
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Undirected)) {
+        return false;
+      }
+      Undirected o = (Undirected) (other);
       return true;
     }
     

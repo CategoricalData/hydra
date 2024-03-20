@@ -162,7 +162,7 @@ public class CypherReader extends AntlrReaderBase {
 
     private static NotExpression read(CypherParser.OC_NotExpressionContext ctx) {
         return new NotExpression(
-                ctx.NOT() != null,
+                ctx.NOT() != null && ctx.NOT().size() > 0,
                 required(ctx, CypherParser.OC_NotExpressionContext::oC_ComparisonExpression, CypherReader::read)
         );
     }
