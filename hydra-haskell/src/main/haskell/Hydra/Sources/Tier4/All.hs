@@ -31,6 +31,7 @@ import Hydra.Sources.Tier4.Langs.Tabular
 import Hydra.Sources.Tier4.Langs.Tinkerpop.Features
 import Hydra.Sources.Tier4.Langs.Tinkerpop.Mappings
 import Hydra.Sources.Tier4.Langs.Tinkerpop.PropertyGraph
+import Hydra.Sources.Tier4.Langs.Tinkerpop.Queries
 import Hydra.Sources.Tier4.Langs.Tinkerpop.Validate
 import Hydra.Sources.Tier4.Langs.Xml.Schema
 import Hydra.Sources.Tier4.Langs.Yaml.Model
@@ -75,6 +76,7 @@ tier4LangModules = [
   tinkerpopFeaturesModule,
   tinkerpopMappingsModule,
   tinkerpopPropertyGraphModule,
+  propertyGraphQueriesModule,
   tinkerpopValidateModule,
   xmlSchemaModule,
   yamlModelModule]
