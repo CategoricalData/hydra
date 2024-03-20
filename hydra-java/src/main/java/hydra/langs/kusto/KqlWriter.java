@@ -1,7 +1,5 @@
 package hydra.langs.kusto;
 
-import hydra.langs.kusto.kql.AndExpression;
-import hydra.langs.kusto.kql.BasicExpression;
 import hydra.langs.kusto.kql.BetweenExpression;
 import hydra.langs.kusto.kql.BinaryExpression;
 import hydra.langs.kusto.kql.BinaryOperator;
@@ -9,7 +7,6 @@ import hydra.langs.kusto.kql.ColumnAlias;
 import hydra.langs.kusto.kql.ColumnAssignment;
 import hydra.langs.kusto.kql.ColumnName;
 import hydra.langs.kusto.kql.Command;
-import hydra.langs.kusto.kql.DatasetName;
 import hydra.langs.kusto.kql.Datetime;
 import hydra.langs.kusto.kql.Duration;
 import hydra.langs.kusto.kql.DurationUnit;
@@ -21,7 +18,6 @@ import hydra.langs.kusto.kql.KeyValuePair;
 import hydra.langs.kusto.kql.LetBinding;
 import hydra.langs.kusto.kql.LetExpression;
 import hydra.langs.kusto.kql.Literal;
-import hydra.langs.kusto.kql.OrExpression;
 import hydra.langs.kusto.kql.Order;
 import hydra.langs.kusto.kql.Parameter;
 import hydra.langs.kusto.kql.ParseCommand;
@@ -33,13 +29,15 @@ import hydra.langs.kusto.kql.Query;
 import hydra.langs.kusto.kql.SearchCommand;
 import hydra.langs.kusto.kql.SortBy;
 import hydra.langs.kusto.kql.SummarizeCommand;
+import hydra.langs.kusto.kql.TableName;
+import hydra.langs.kusto.kql.TabularExpression;
 import hydra.langs.kusto.kql.TopCommand;
 import hydra.langs.kusto.kql.UnaryExpression;
 import hydra.langs.kusto.kql.UnaryOperator;
 import hydra.langs.kusto.kql.UnionCommand;
 import hydra.langs.kusto.kql.UnionKind;
+import hydra.tools.MapperBase;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -47,7 +45,7 @@ import java.util.stream.Collectors;
 /**
  * Simple serializer for Kusto Query Language (KQL) queries
  */
-public class KqlWriter {
+public class KqlWriter extends MapperBase {
 
     private static <T> String commaSep(List<T> parts, Function<T, String> toString) {
         return sep(", ", parts, toString);
@@ -55,96 +53,6 @@ public class KqlWriter {
 
     private static <T> String sep(String delimiter, List<T> parts, Function<T, String> toString) {
         return parts.stream().map(toString).collect(Collectors.joining(delimiter));
-    }
-
-    private static String write(AndExpression e) {
-        return sep(" and ", e.value, KqlWriter::write);
-    }
-
-    private static String write(BasicExpression e) {
-        return e.accept(new BasicExpression.Visitor<String>(){
-            @Override
-            public String visit(BasicExpression.Any instance) {
-                return "*";
-            }
-
-            @Override
-            public String visit(BasicExpression.Between instance) {
-                BetweenExpression e = instance.value;
-                return write(e.expression) + " "
-                        + (e.not ? "!" : "")
-                        + "between("
-                        + write(e.lowerBound)
-                        + " .. "
-                        + write(e.upperBound)
-                        + ")";
-            }
-
-            @Override
-            public String visit(BasicExpression.Binary instance) {
-                BinaryExpression e = instance.value;
-                return write(e.left) + " " + write(e.operator) + " " + write(e.right);
-            }
-
-            @Override
-            public String visit(BasicExpression.Braces instance) {
-                return "{" + write(instance.value) + "}";
-            }
-
-            @Override
-            public String visit(BasicExpression.Column instance) {
-                return write(instance.value);
-            }
-
-            @Override
-            public String visit(BasicExpression.Dataset instance) {
-                return write(instance.value);
-            }
-
-            @Override
-            public String visit(BasicExpression.Index instance) {
-                IndexExpression e = instance.value;
-                return write(e.expression) + "[" + write(e.index) + "]";
-            }
-
-            @Override
-            public String visit(BasicExpression.Let instance) {
-                LetExpression l = instance.value;
-                return sep("\n", l.bindings, KqlWriter::write) + "\n" + write(l.expression);
-            }
-
-            @Override
-            public String visit(BasicExpression.List instance) {
-                return "(" + commaSep(instance.value, KqlWriter::write) + ")";
-            }
-
-            @Override
-            public String visit(BasicExpression.Literal instance) {
-                return write(instance.value);
-            }
-
-            @Override
-            public String visit(BasicExpression.Parentheses instance) {
-                return "(" + write(instance.value) + ")";
-            }
-
-            @Override
-            public String visit(BasicExpression.Pipeline instance) {
-                return write(instance.value);
-            }
-
-            @Override
-            public String visit(BasicExpression.Property instance) {
-                PropertyExpression e = instance.value;
-                return write(e.expression) + "." + write(e.property);
-            }
-
-            @Override
-            public String visit(BasicExpression.Unary instance) {
-                UnaryExpression e = instance.value;
-                return write(e.operator) + " " + write(e.expression);
-            }
-        });
     }
 
     private static String write(boolean b) {
@@ -397,10 +305,6 @@ public class KqlWriter {
         });
     }
 
-    private static String write(DatasetName n) {
-        return n.value;
-    }
-
     private static String write(Datetime d) {
         return d.value;
     }
@@ -429,7 +333,88 @@ public class KqlWriter {
     }
 
     private static String write(Expression e) {
-        return write(e.value);
+        return e.accept(new Expression.Visitor<String>(){
+            @Override
+            public String visit(Expression.And instance) {
+                return sep(" and ", instance.value, KqlWriter::write);
+            }
+
+            @Override
+            public String visit(Expression.Any instance) {
+                return "*";
+            }
+
+            @Override
+            public String visit(Expression.Between instance) {
+                BetweenExpression e = instance.value;
+                return write(e.expression) + " "
+                        + (e.not ? "!" : "")
+                        + "between("
+                        + write(e.lowerBound)
+                        + " .. "
+                        + write(e.upperBound)
+                        + ")";
+            }
+
+            @Override
+            public String visit(Expression.Binary instance) {
+                BinaryExpression e = instance.value;
+                return write(e.left) + " " + write(e.operator) + " " + write(e.right);
+            }
+
+            @Override
+            public String visit(Expression.Braces instance) {
+                return "{" + write(instance.value) + "}";
+            }
+
+            @Override
+            public String visit(Expression.Column instance) {
+                return write(instance.value);
+            }
+
+            @Override
+            public String visit(Expression.Dataset instance) {
+                return write(instance.value);
+            }
+
+            @Override
+            public String visit(Expression.Index instance) {
+                IndexExpression e = instance.value;
+                return write(e.expression) + "[" + write(e.index) + "]";
+            }
+
+            @Override
+            public String visit(Expression.List instance) {
+                return "(" + commaSep(instance.value, KqlWriter::write) + ")";
+            }
+
+            @Override
+            public String visit(Expression.Literal instance) {
+                return write(instance.value);
+            }
+
+            @Override
+            public String visit(Expression.Or instance) {
+                return sep(" or ", instance.value, KqlWriter::write);
+            }
+
+            @Override
+            public String visit(Expression.Parentheses instance) {
+                return "(" + write(instance.value) + ")";
+            }
+
+            @Override
+            public String visit(Expression.Property instance) {
+                PropertyExpression e = instance.value;
+                return write(e.expression) + "." + write(e.property);
+            }
+
+            @Override
+            public String visit(Expression.Unary instance) {
+                UnaryExpression e = instance.value;
+                return write(e.operator) + " " + write(e.expression);
+            }
+        });
     }
 
     private static String write(JoinKind k) {
@@ -487,6 +472,10 @@ public class KqlWriter {
 
     private static String write(LetBinding b) {
         return write(b.name) + " = " + write(b.expression) + ";";
+    }
+
+    private static String write(LetExpression l) {
+        return sep("\n", l.bindings, KqlWriter::write) + "\n" + write(l.expression);
     }
 
     private static String write(Literal l) {
@@ -547,20 +536,11 @@ public class KqlWriter {
     }
 
     private static String write(PipelineExpression p) {
-        List<String> parts = new ArrayList<>();
-        parts.add(write(p.head));
-        for (Command c : p.commands) {
-            parts.add(write(c));
-        }
-        return String.join("\n\t| ", parts);
+        return String.join("\n\t| ", map(p.value, KqlWriter::write));
     }
 
     private static String write(Projection p) {
         return write(p.expression) + (p.alias.map(columnName -> " = " + write(columnName)).orElse(""));
-    }
-
-    private static String write(OrExpression e) {
-        return sep(" or ", e.value, KqlWriter::write);
     }
 
     public static String write(Query query) {
@@ -569,6 +549,34 @@ public class KqlWriter {
 
     private static String write(SortBy s) {
         return write(s.column) + (s.order.map(order -> " by " + write(order)).orElse(""));
+    }
+
+    private static String write(TableName n) {
+        return n.value;
+    }
+
+    private static String write(TabularExpression e) {
+        return e.accept(new TabularExpression.Visitor<String>() {
+            @Override
+            public String visit(TabularExpression.Command instance) {
+                return write(instance.value);
+            }
+
+            @Override
+            public String visit(TabularExpression.Pipeline instance) {
+                return write(instance.value);
+            }
+
+            @Override
+            public String visit(TabularExpression.Let instance) {
+                return write(instance.value);
+            }
+
+            @Override
+            public String visit(TabularExpression.Table instance) {
+                return write(instance.value);
+            }
+        });
     }
 
     private static String write(UnaryOperator o) {
