@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * Tests for CypherReader
  */
 public class CypherReaderTest {
-    private static final List<CypherTestCase> testCases;
+    protected static final List<CypherTestCase> testCases;
 
     static {
         try {
@@ -28,6 +28,8 @@ public class CypherReaderTest {
     }
 
     private static final String QUERY_1 = "MATCH (n) RETURN *";
+
+    private static final String QUERY_2 = "MATCH (n:Person) RETURN COUNT(n)";
 
     private static final String QUERY_BASIC_1
             = "MATCH (keanu:Person {name:'Keanu Reeves'})\n"
@@ -310,7 +312,7 @@ public class CypherReaderTest {
     @ParameterizedTest
     @ValueSource(strings = {QUERY_INVALID_1})
     public void testInvalidQueriesAreRejected(String queryStr) {
-        assertThrows(AntlrReaderBase.AntlrReaderException.class, () -> {
+        assertThrows(AntlrReaderBase.MapperException.class, () -> {
             CypherReader.read(queryStr);
         });
     }
@@ -326,7 +328,7 @@ public class CypherReaderTest {
             QUERY_CLAUSE_4_UNSUPPORTED,
             QUERY_MATCH_5_UNSUPPORTED})
     public void testUnsupportedQueriesAreRejected(String queryStr) {
-        assertThrows(AntlrReaderBase.AntlrReaderException.class, () -> {
+        assertThrows(AntlrReaderBase.MapperException.class, () -> {
             CypherReader.read(queryStr);
         });
     }
@@ -365,7 +367,8 @@ public class CypherReaderTest {
 
     @Test
     public void testSingleQueryForDebugging() {
-//        CypherReader.read(QUERY_OPTIONAL_8);
+        Query query = CypherReader.read(QUERY_2);
+        assertNotNull(query);
     }
 
 }
