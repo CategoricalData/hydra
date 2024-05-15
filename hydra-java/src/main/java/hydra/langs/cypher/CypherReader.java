@@ -595,7 +595,8 @@ public class CypherReader extends AntlrReaderBase {
     }
 
     private static NodeLabel read(CypherParser.OC_NodeLabelContext ctx) {
-        return new NodeLabel(ctx.getText());
+        String s = ctx.getText();
+        return new NodeLabel(s.startsWith(":") ? s.substring(1) : s);
     }
 
     private static PatternElementChain read(CypherParser.OC_PatternElementChainContext ctx) {
