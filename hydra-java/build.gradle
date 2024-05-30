@@ -12,11 +12,6 @@ version '0.2.1'
 
 apply plugin: 'antlr'
 
-// We use Java 8 for maximum compatibility with legacy systems, such as certain Spark deployments,
-// but we are disabling this "feature" until it is needed again.
-//sourceCompatibility = '1.8'
-//targetCompatibility = '1.8'
-
 dependencies {
     antlr 'org.antlr:antlr4:4.9.2'
 
