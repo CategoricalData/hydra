@@ -237,17 +237,17 @@ public class KqlWriter extends MapperBase {
 
             @Override
             public String visit(Command.Project instance) {
-                return "project " + sep("\n\t, ", instance.value, KqlWriter::write);
+                return "project " + commaSep(instance.value, KqlWriter::write);
             }
 
             @Override
             public String visit(Command.ProjectAway instance) {
-                return "project-away " + sep("\n\t, ", instance.value, KqlWriter::write);
+                return "project-away " + commaSep(instance.value, KqlWriter::write);
             }
 
             @Override
             public String visit(Command.ProjectRename instance) {
-                return "project-rename " + sep("\n\t, ", instance.value, KqlWriter::write);
+                return "project-rename " + commaSep(instance.value, KqlWriter::write);
             }
 
             @Override
