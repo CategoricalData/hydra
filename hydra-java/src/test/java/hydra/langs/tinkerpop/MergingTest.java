@@ -13,11 +13,10 @@ import hydra.langs.tinkerpop.propertyGraph.EdgeType;
 import hydra.langs.tinkerpop.propertyGraph.PropertyKey;
 import hydra.langs.tinkerpop.propertyGraph.Vertex;
 import hydra.langs.tinkerpop.propertyGraph.VertexType;
-import org.junit.jupiter.api.Test;
-
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
+import org.junit.jupiter.api.Test;
+
 
 public class MergingTest extends PropertyGraphTestBase {
     private static final boolean DO_NOT_UNIFY = false;
@@ -54,7 +53,7 @@ public class MergingTest extends PropertyGraphTestBase {
                                 Merging.STRING_ID_ADAPTERS,
                                 unify),
                         adapter -> adapter.target.label));
-        assertSucceedsWith(8,
+        assertSucceedsWith(9,
                 Flows.map(Merging.createVertexAdapter(
                                 Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION),
                                 Merging.STRING_ID_ADAPTERS,
@@ -85,30 +84,36 @@ public class MergingTest extends PropertyGraphTestBase {
                                 Merging.STRING_ID_ADAPTERS,
                                 unify),
                         adapter -> adapter.target.properties.get(2).key.value));
+        assertSucceedsWith("person_birthTimeUnixMilliseconds",
+            Flows.map(Merging.createVertexAdapter(
+                Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION),
+                Merging.STRING_ID_ADAPTERS,
+                unify),
+                adapter -> adapter.target.properties.get(3).key.value));
         assertSucceedsWith("organization_name",
                 Flows.map(Merging.createVertexAdapter(
                                 Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION),
                                 Merging.STRING_ID_ADAPTERS,
                                 unify),
-                        adapter -> adapter.target.properties.get(3).key.value));
+                        adapter -> adapter.target.properties.get(4).key.value));
         assertSucceedsWith("organization_nickname",
                 Flows.map(Merging.createVertexAdapter(
                                 Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION),
                                 Merging.STRING_ID_ADAPTERS,
                                 unify),
-                        adapter -> adapter.target.properties.get(4).key.value));
+                        adapter -> adapter.target.properties.get(5).key.value));
         assertSucceedsWith("organization_age",
                 Flows.map(Merging.createVertexAdapter(
                                 Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION),
                                 Merging.STRING_ID_ADAPTERS,
                                 unify),
-                        adapter -> adapter.target.properties.get(5).key.value));
+                        adapter -> adapter.target.properties.get(6).key.value));
         assertSucceedsWith("organization_industry",
                 Flows.map(Merging.createVertexAdapter(
                                 Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION),
                                 Merging.STRING_ID_ADAPTERS,
                                 unify),
-                        adapter -> adapter.target.properties.get(6).key.value));
+                        adapter -> adapter.target.properties.get(7).key.value));
 
         assertSucceedsWith(false,
                 Flows.map(Merging.createVertexAdapter(
@@ -140,7 +145,7 @@ public class MergingTest extends PropertyGraphTestBase {
                                 Merging.STRING_ID_ADAPTERS,
                                 unify),
                         adapter -> adapter.target.label));
-        assertSucceedsWith(6,
+        assertSucceedsWith(7,
                 Flows.map(Merging.createVertexAdapter(
                                 Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION),
                                 Merging.STRING_ID_ADAPTERS,
@@ -171,18 +176,24 @@ public class MergingTest extends PropertyGraphTestBase {
                                 Merging.STRING_ID_ADAPTERS,
                                 unify),
                         adapter -> adapter.target.properties.get(2).key.value));
+        assertSucceedsWith("birthTimeUnixMilliseconds",
+            Flows.map(Merging.createVertexAdapter(
+                Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION),
+                Merging.STRING_ID_ADAPTERS,
+                unify),
+                adapter -> adapter.target.properties.get(3).key.value));
         assertSucceedsWith("organization_age",
                 Flows.map(Merging.createVertexAdapter(
                                 Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION),
                                 Merging.STRING_ID_ADAPTERS,
                                 unify),
-                        adapter -> adapter.target.properties.get(3).key.value));
+                        adapter -> adapter.target.properties.get(4).key.value));
         assertSucceedsWith("industry",
                 Flows.map(Merging.createVertexAdapter(
                                 Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION),
                                 Merging.STRING_ID_ADAPTERS,
                                 unify),
-                        adapter -> adapter.target.properties.get(4).key.value));
+                        adapter -> adapter.target.properties.get(5).key.value));
 
         // The "name" property is required, because it is required in all component vertex types
         assertSucceedsWith(true,
@@ -219,17 +230,29 @@ public class MergingTest extends PropertyGraphTestBase {
                                 unify),
                         adapter -> adapter.target.properties.get(2).value));
         assertSucceedsWith(false,
+            Flows.map(Merging.createVertexAdapter(
+                Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION),
+                Merging.STRING_ID_ADAPTERS,
+                unify),
+                adapter -> adapter.target.properties.get(3).required));
+        assertSucceedsWith(LiteralTypes.uint64(),
+            Flows.map(Merging.createVertexAdapter(
+                Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION),
+                Merging.STRING_ID_ADAPTERS,
+                unify),
+                adapter -> adapter.target.properties.get(3).value));
+        assertSucceedsWith(false,
                 Flows.map(Merging.createVertexAdapter(
                                 Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION),
                                 Merging.STRING_ID_ADAPTERS,
                                 unify),
-                        adapter -> adapter.target.properties.get(3).required));
+                        adapter -> adapter.target.properties.get(4).required));
         assertSucceedsWith(LiteralTypes.int64(),
                 Flows.map(Merging.createVertexAdapter(
                                 Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION),
                                 Merging.STRING_ID_ADAPTERS,
                                 unify),
-                        adapter -> adapter.target.properties.get(3).value));
+                        adapter -> adapter.target.properties.get(4).value));
         // The "industry" property, while required in Organization, is not required in the merged type
         // because it is not present in Person.
         assertSucceedsWith(false,
@@ -237,7 +260,7 @@ public class MergingTest extends PropertyGraphTestBase {
                                 Arrays.asList(VERTEX_TYPE_PERSON_A, VERTEX_TYPE_ORGANIZATION),
                                 Merging.STRING_ID_ADAPTERS,
                                 unify),
-                        adapter -> adapter.target.properties.get(4).required));
+                        adapter -> adapter.target.properties.get(5).required));
     }
 
     @Test

@@ -23,6 +23,7 @@ public abstract class PropertyGraphTestBase extends HydraTestBase {
             .property("name", LiteralTypes.string(), true)
             .property("nickname", LiteralTypes.string(), false)
             .property("age", LiteralTypes.int32(), false)
+            .property("birthTimeUnixMilliseconds", LiteralTypes.uint64(), false)
             .build();
     protected static final VertexType<LiteralType> VERTEX_TYPE_PERSON_B
             = VERTEX_TYPE_PERSON_A.withId(LiteralTypes.int32());
@@ -44,6 +45,7 @@ public abstract class PropertyGraphTestBase extends HydraTestBase {
             "worksAt", ID_TYPE, "Person", "Organization")
             .property("employeeStatus", LiteralTypes.string(), true)
             .property("effectiveAtUnixSeconds", LiteralTypes.uint32(), false)
+            .property("effectiveAtUnixMilliseconds", LiteralTypes.uint64(), false)
             .build();
     protected static final EdgeType<LiteralType> EDGE_TYPE_WORKSAT_B
             = EDGE_TYPE_WORKSAT_A.withId(LiteralTypes.int32());
@@ -93,6 +95,7 @@ public abstract class PropertyGraphTestBase extends HydraTestBase {
                     VERTEX_ORGANIZATION_1.id)
             .property("employeeStatus", Literals.string("current"))
             .property("effectiveAtUnixSeconds", Literals.uint32(252460800))
+            .property("effectiveAtUnixMilliseconds", Literals.uint64(2524608000001L))
             .build();
     protected static final Edge<Literal> EDGE_FOUNDED_1 = Graphs.edge(
                     EDGE_TYPE_FOUNDED,
