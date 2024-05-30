@@ -42,7 +42,7 @@ public interface Literals {
     static Literal float64(final double value) {
         return float_(new FloatValue.Float64(value));
     }
-    
+
     static Literal int8(final short value) {
         return integer(new IntegerValue.Int8(value));
     }
@@ -62,7 +62,7 @@ public interface Literals {
     static Literal integer(final IntegerValue value) {
         return new Literal.Integer_(value);
     }
-    
+
     static Literal string(final String value) {
         return new Literal.String_(value);
     }
@@ -77,6 +77,10 @@ public interface Literals {
 
     static Literal uint32(final long value) {
         return integer(new IntegerValue.Uint32(value));
+    }
+
+    static Literal uint64(final long value) {
+        return uint64(BigInteger.valueOf(value));
     }
 
     static Literal uint64(final BigInteger value) {
