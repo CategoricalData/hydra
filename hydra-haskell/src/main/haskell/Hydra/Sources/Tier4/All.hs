@@ -14,6 +14,7 @@ import Hydra.Sources.Tier4.Langs.Java.Syntax
 import Hydra.Sources.Tier4.Langs.Json.Decoding
 import Hydra.Sources.Tier4.Langs.Kusto.Kql
 import Hydra.Sources.Tier4.Langs.Owl.Syntax
+import Hydra.Sources.Tier4.Langs.Parquet.Delta
 import Hydra.Sources.Tier4.Langs.Parquet.Format
 import Hydra.Sources.Tier4.Langs.Pegasus.Pdl
 import Hydra.Sources.Tier4.Langs.Protobuf.Any
@@ -51,6 +52,7 @@ testModules = [
 tier4LangModules :: [Module Kv]
 tier4LangModules = [
   avroSchemaModule,
+  deltaParquetModule,
   graphqlSyntaxModule,
   haskellAstModule,
   javaLanguageModule,
