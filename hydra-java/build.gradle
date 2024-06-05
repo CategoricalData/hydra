@@ -8,7 +8,7 @@ plugins {
 }
 
 group 'net.fortytwo.hydra'
-version '0.2.1'
+version '0.3.0'
 
 apply plugin: 'antlr'
 
@@ -17,7 +17,7 @@ dependencies {
 
     implementation group: 'org.apache.commons', name: 'commons-text', version: '1.10.0'
     implementation group: 'com.cedarsoftware', name: 'json-io', version: '4.14.1'
-    // We use RDF 3.x rather than 4.x or 5.x for compatibility with Java 8
+    // We previously used RDF 3.x rather than 4.x or 5.x for compatibility with Java 8, and haven't upgraded yet.
     implementation 'org.eclipse.rdf4j:rdf4j-rio-ntriples:3.7.7'
 
     // Temporarily including HydraTestBase and the unit testing dependencies in main,
