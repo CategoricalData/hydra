@@ -25,8 +25,19 @@ deltaParquetModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "DataType" $
         union [
           "array">: delta "ArrayType",
+          "binary">: unit,
+          "boolean">: unit,
+          "byte">: unit,
+          "date">: unit,
+          "decimal">: delta "DecimalType",
+          "double">: unit,
+          "float">: unit,
+          "integer">: unit,
+          "long">: unit,
           "map">: delta "MapType",
-          "scalar">: delta "ScalarType",
+          "null">: unit,
+          "short">: unit,
+          "string">: unit,
           "struct">: delta "StructType"],
 
       def "DecimalType" $
@@ -39,25 +50,6 @@ deltaParquetModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "keyType">: delta "DataType",
           "valueType">: delta "DataType",
           "valueContainsNull">: boolean],
-
-      def "NumberType" $
-        union [
-          "byte">: unit,
-          "decimal">: delta "DecimalType",
-          "double">: unit,
-          "float">: unit,
-          "integer">: unit,
-          "long">: unit,
-          "short">: unit],
-
-      def "ScalarType" $
-        union [
-          "binary">: unit,
-          "boolean">: unit,
-          "date">: unit,
-          "null">: unit,
-          "number">: delta "NumberType",
-          "string">: unit],
 
       def "StructField" $
         record [
