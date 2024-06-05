@@ -22,8 +22,19 @@ _ArrayType_containsNull = (Core.FieldName "containsNull")
 
 data DataType = 
   DataTypeArray ArrayType |
+  DataTypeBinary  |
+  DataTypeBoolean  |
+  DataTypeByte  |
+  DataTypeDate  |
+  DataTypeDecimal DecimalType |
+  DataTypeDouble  |
+  DataTypeFloat  |
+  DataTypeInteger  |
+  DataTypeLong  |
   DataTypeMap MapType |
-  DataTypeScalar ScalarType |
+  DataTypeNull  |
+  DataTypeShort  |
+  DataTypeString  |
   DataTypeStruct StructType
   deriving (Eq, Ord, Read, Show)
 
@@ -31,9 +42,31 @@ _DataType = (Core.Name "hydra/langs/parquet/delta.DataType")
 
 _DataType_array = (Core.FieldName "array")
 
+_DataType_binary = (Core.FieldName "binary")
+
+_DataType_boolean = (Core.FieldName "boolean")
+
+_DataType_byte = (Core.FieldName "byte")
+
+_DataType_date = (Core.FieldName "date")
+
+_DataType_decimal = (Core.FieldName "decimal")
+
+_DataType_double = (Core.FieldName "double")
+
+_DataType_float = (Core.FieldName "float")
+
+_DataType_integer = (Core.FieldName "integer")
+
+_DataType_long = (Core.FieldName "long")
+
 _DataType_map = (Core.FieldName "map")
 
-_DataType_scalar = (Core.FieldName "scalar")
+_DataType_null = (Core.FieldName "null")
+
+_DataType_short = (Core.FieldName "short")
+
+_DataType_string = (Core.FieldName "string")
 
 _DataType_struct = (Core.FieldName "struct")
 
@@ -63,55 +96,6 @@ _MapType_keyType = (Core.FieldName "keyType")
 _MapType_valueType = (Core.FieldName "valueType")
 
 _MapType_valueContainsNull = (Core.FieldName "valueContainsNull")
-
-data NumberType = 
-  NumberTypeByte  |
-  NumberTypeDecimal DecimalType |
-  NumberTypeDouble  |
-  NumberTypeFloat  |
-  NumberTypeInteger  |
-  NumberTypeLong  |
-  NumberTypeShort 
-  deriving (Eq, Ord, Read, Show)
-
-_NumberType = (Core.Name "hydra/langs/parquet/delta.NumberType")
-
-_NumberType_byte = (Core.FieldName "byte")
-
-_NumberType_decimal = (Core.FieldName "decimal")
-
-_NumberType_double = (Core.FieldName "double")
-
-_NumberType_float = (Core.FieldName "float")
-
-_NumberType_integer = (Core.FieldName "integer")
-
-_NumberType_long = (Core.FieldName "long")
-
-_NumberType_short = (Core.FieldName "short")
-
-data ScalarType = 
-  ScalarTypeBinary  |
-  ScalarTypeBoolean  |
-  ScalarTypeDate  |
-  ScalarTypeNull  |
-  ScalarTypeNumber NumberType |
-  ScalarTypeString 
-  deriving (Eq, Ord, Read, Show)
-
-_ScalarType = (Core.Name "hydra/langs/parquet/delta.ScalarType")
-
-_ScalarType_binary = (Core.FieldName "binary")
-
-_ScalarType_boolean = (Core.FieldName "boolean")
-
-_ScalarType_date = (Core.FieldName "date")
-
-_ScalarType_null = (Core.FieldName "null")
-
-_ScalarType_number = (Core.FieldName "number")
-
-_ScalarType_string = (Core.FieldName "string")
 
 data StructField = 
   StructField {
