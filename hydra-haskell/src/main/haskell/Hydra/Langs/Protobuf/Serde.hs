@@ -20,11 +20,12 @@ protoBlock = brackets curlyBraces fullBlockStyle . doubleNewlineSep
 semi :: CT.Expr -> CT.Expr
 semi e = noSep [e, cst ";"]
 
-optDesc :: [P3.Option] -> CT.Expr -> CT.Expr
-optDesc opts expr = if L.null descs
+optDesc :: Bool -> [P3.Option] -> CT.Expr -> CT.Expr
+optDesc doubleNewline opts expr = if L.null descs
     then expr
-    else newlineSep [cst $ asComment (unValue $ P3.optionValue $ L.head descs), expr]
+    else sep [cst $ asComment (unValue $ P3.optionValue $ L.head descs), expr]
   where
+    sep = if doubleNewline then doubleNewlineSep else newlineSep
     descs = L.filter (\(P3.Option name value) -> name == descriptionOptionName) opts
     asComment = L.intercalate "\n" . fmap (\s -> "// " ++ s) . lines
     unValue v = case v of
@@ -37,19 +38,19 @@ writeDefinition def = case def of
   P3.DefinitionMessage msg -> writeMessageDefinition msg
 
 writeEnumDefinition :: P3.EnumDefinition -> CT.Expr
-writeEnumDefinition (P3.EnumDefinition name values options) = optDesc options $ spaceSep [
+writeEnumDefinition (P3.EnumDefinition name values options) = optDesc False options $ spaceSep [
   cst "enum",
   cst $ P3.unTypeName name,
   protoBlock (writeEnumValue <$> values)]
 
 writeEnumValue :: P3.EnumValue -> CT.Expr
-writeEnumValue (P3.EnumValue name number options) = optDesc options $ semi $ spaceSep [
+writeEnumValue (P3.EnumValue name number options) = optDesc False options $ semi $ spaceSep [
     cst $ P3.unEnumValueName name,
     cst "=",
     cst $ show number]
 
 writeField :: P3.Field -> CT.Expr
-writeField (P3.Field name jsonName typ num options) = optDesc options $ case typ of
+writeField (P3.Field name jsonName typ num options) = optDesc False options $ case typ of
   P3.FieldTypeOneof fields -> spaceSep [
     cst "oneof",
     cst $ P3.unFieldName name,
@@ -70,7 +71,7 @@ writeImport :: P3.FileReference -> CT.Expr
 writeImport (P3.FileReference path) = semi $ spaceSep [cst "import", cst $ show path]
 
 writeMessageDefinition :: P3.MessageDefinition -> CT.Expr
-writeMessageDefinition (P3.MessageDefinition name fields options) = optDesc options $ spaceSep [
+writeMessageDefinition (P3.MessageDefinition name fields options) = optDesc False options $ spaceSep [
   cst "message",
   cst $ P3.unTypeName name,
   protoBlock (writeField <$> fields)]
@@ -79,7 +80,7 @@ writeOption :: P3.Option -> CT.Expr
 writeOption (P3.Option name value) = semi $ spaceSep [cst "option", cst name, cst "=", writeValue value]
 
 writeProtoFile :: P3.ProtoFile -> CT.Expr
-writeProtoFile (P3.ProtoFile pkg imports defs options) = optDesc options $ doubleNewlineSep
+writeProtoFile (P3.ProtoFile pkg imports defs options) = optDesc True options $ doubleNewlineSep
     $ Y.catMaybes [headerSec, importsSec, optionsSec, defsSec]
   where
     headerSec = Just $ newlineSep [
