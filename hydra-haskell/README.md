@@ -88,11 +88,19 @@ writeGraphql "/tmp/graphql" [graphqlSyntaxModule, jsonModelModule]
 
 Because GraphQL does not support imports, the GraphQL coder will gather all of the dependencies of a given module together,
 and map them to a single `.graphql` file.
-Hydra has a similar level of schema-only support for [PDL](https://linkedin.github.io/rest.li/pdl_schema):
+Hydra has a similar level of schema-only support for [Protobuf](https://protobuf.dev/):
 
 ```haskell
-writePdl "/tmp/pdl" kernelModules
+writeProtobuf "/tmp/proto" [jsonModelModule]
 ```
+
+...and similarly for [PDL](https://linkedin.github.io/rest.li/pdl_schema):
+
+```haskell
+writePdl "/tmp/pdl" [jsonModelModule]
+```
+
+Note that neither the Protobuf nor PDL coder currently supports polymorphic models.
 
 ### JSON and YAML generation
 
