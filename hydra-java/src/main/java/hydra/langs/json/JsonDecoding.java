@@ -64,6 +64,19 @@ public abstract class JsonDecoding {
     }
 
     /**
+     * Decode an enumerated value from JSON.
+     */
+    public static <A> A decodeEnum(Map<String, A> values, Value json) {
+        String key = decodeString(json);
+        A value = values.get(key);
+        if (value == null) {
+            throw new RuntimeException("no such enum value: " + key);
+        } else {
+            return value;
+        }
+    }
+
+    /**
      * Decode a float value from JSON.
      */
     public static float decodeFloat(Value json) {
@@ -177,6 +190,13 @@ public abstract class JsonDecoding {
     }
 
     /**
+     * Decode a required boolean-valued field from JSON.
+     */
+    public static boolean decodeRequiredBooleanField(String name, Value json) {
+        return decodeRequiredField(name, JsonDecoding::decodeBoolean, json);
+    }
+
+    /**
      * Decode a required field from JSON.
      */
     public static <A> A decodeRequiredField(String name, Function<Value, A> mapping, Value json, A defaultValue) {
@@ -193,6 +213,13 @@ public abstract class JsonDecoding {
      */
     public static <A> A decodeRequiredField(String name, Function<Value, A> mapping, Value json) {
         return decodeRequiredField(name, mapping, json, null);
+    }
+
+    /**
+     * Decode a required int32-valued field from JSON.
+     */
+    public static int decodeRequiredIntField(String name, Value json) {
+        return decodeRequiredField(name, JsonDecoding::decodeInteger, json);
     }
 
     /**
@@ -231,19 +258,6 @@ public abstract class JsonDecoding {
      */
     public static List<String> decodeStringList(Value json) {
         return decodeList(JsonDecoding::decodeString, json);
-    }
-
-    /**
-     * Decode an enumerated value from JSON.
-     */
-    public static <A> A decodeEnum(Map<String, A> values, Value json) {
-        String key = decodeString(json);
-        A value = values.get(key);
-        if (value == null) {
-            throw new RuntimeException("no such enum value: " + key);
-        } else {
-            return value;
-        }
     }
 
     /**
