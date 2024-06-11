@@ -20,6 +20,7 @@ module Hydra.Kernel (
   module Hydra.Lexical,
   module Hydra.LiteralAdapters,
   module Hydra.Mantle,
+  module Hydra.Messages,
   module Hydra.Module,
   module Hydra.Phantoms,
   module Hydra.Printing,
@@ -57,6 +58,7 @@ import Hydra.Kv
 import Hydra.Lexical
 import Hydra.LiteralAdapters
 import Hydra.Mantle
+import Hydra.Messages
 import Hydra.Module
 import Hydra.Phantoms
 import Hydra.Printing
