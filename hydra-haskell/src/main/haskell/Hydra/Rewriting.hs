@@ -25,6 +25,8 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
+type GraphSchema a = M.Map Name (Type a)
+
 elementsWithDependencies :: Ord a => [Element a] -> Flow (Graph a) [Element a]
 elementsWithDependencies original = CM.mapM requireElement allDepNames
   where
@@ -104,6 +106,19 @@ flattenLetTerms = rewriteTerm flatten id
 
 freeVariablesInScheme :: Show a => TypeScheme a -> S.Set Name
 freeVariablesInScheme (TypeScheme vars t) = S.difference (freeVariablesInType t) (S.fromList vars)
+
+-- | Inline all type variables in a type using the provided schema.
+--   Note: this function is only appropriate for nonrecursive type definitions.
+inlineType :: Ord a => GraphSchema a -> Type a -> Flow s (Type a)
+inlineType schema = rewriteTypeM f pure
+  where
+    f recurse typ = do
+      tr <- recurse typ
+      case tr of
+        TypeVariable v -> case M.lookup v schema of
+          Just t -> inlineType schema t
+          Nothing -> fail $ "No such type in schema: " ++ unName v
+        t -> return t
 
 isFreeIn :: Ord a => Name -> Term a -> Bool
 isFreeIn v term = not $ S.member v $ freeVariablesInTerm term

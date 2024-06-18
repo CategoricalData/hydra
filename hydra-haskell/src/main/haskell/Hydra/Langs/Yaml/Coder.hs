@@ -101,6 +101,7 @@ termCoder typ = case stripType typ of
         YM.NodeMapping m -> Terms.map . M.fromList <$> CM.mapM decodeEntry (M.toList m)
         _ -> unexpected "mapping" $ show n}
   TypeRecord rt -> recordCoder rt
+  _ -> fail $ "unsupported type variant: " ++ show (typeVariant typ)
 
 yamlCoder :: (Eq a, Ord a, Read a, Show a) => Type a -> Flow (Graph a) (Coder (Graph a) (Graph a) (Term a) YM.Node)
 yamlCoder typ = do
