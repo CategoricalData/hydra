@@ -18,10 +18,10 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
     core = typeref $ moduleNamespace hydraCoreModule
     cypherFeatures = typeref ns
     def = datatype ns
-    featureField name comment = (name ++ "Feature")>: doc comment boolean
+    featureField name comment = name>: doc comment boolean
     defFeatureSet name desc fields = def (capitalize name ++ "Features") $
         doc ("A set of features for " ++ desc ++ ".") $ record fields
-    featureSet name desc = (name ++ "Features")>:
+    featureSet name desc = name>:
       doc ("Whether to expect " ++ desc ++ ", and if so, which specific features") $
       optional $ cypherFeatures $ capitalize name ++ "Features"
     feature n s = featureField n $ "Whether to expect " ++ s ++ "."
@@ -99,13 +99,13 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
         feature "listRange" "list range comprehensions (e.g. [1..10])"],
 
       defFeatureSet "Literal" "various types of literal values" [
-        fixedFeature "booleanLiteral" "boolean literals",
-        feature "doubleLiteral" "double-precision floating-point literals",
-        feature "integerLiteral" "integer literals",
-        feature "listLiteral" "list literals",
-        feature "mapLiteral" "map literals",
-        feature "nullLiteral" "the NULL literal",
-        fixedFeature "stringLiteral" "string literals"],
+        fixedFeature "boolean" "boolean literals",
+        feature "double" "double-precision floating-point literals",
+        feature "integer" "integer literals",
+        feature "list" "list literals",
+        feature "map" "map literals",
+        feature "null" "the NULL literal",
+        fixedFeature "string" "string literals"],
 
       defFeatureSet "Logical" "logical operations" [
         feature "and" "the AND operator",
@@ -114,18 +114,19 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
         feature "xor" "the XOR operator"],
 
       defFeatureSet "Match" "match queries" [
-        feature "optionalMatch" "OPTIONAL MATCH"],
+        feature "optional" "OPTIONAL MATCH"],
 
       defFeatureSet "Merge" "merge operations" [
+        feature "merge" "the basic MERGE clause",
         feature "mergeOnCreate" "MERGE with the ON CREATE action",
         feature "mergeOnMatch" "MERGE with the ON MATCH action"],
 
       defFeatureSet "NodePattern" "node patterns" [
-        feature "multipleLabelsInNodePattern" "specifying multiple labels in a node pattern",
-        feature "nodePatternParameter" "specifying a parameter as part of a node pattern",
-        feature "nodePatternPropertyMap" "specifying a key/value map of properties in a node pattern",
+        feature "multipleLabels" "specifying multiple labels in a node pattern",
+        feature "parameter" "specifying a parameter as part of a node pattern",
+        feature "propertyMap" "specifying a key/value map of properties in a node pattern",
         fixedFeature "variableNode" "binding a variable to a node in a node pattern",
-        feature "wildcardLabelNodePattern" "omitting labels from a node pattern"],
+        feature "wildcardLabel" "omitting labels from a node pattern"],
 
       defFeatureSet "Null" "IS NULL / IS NOT NULL checks" [
         feature "isNull" "the IS NULL operator",
@@ -153,11 +154,11 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
         feature "single" "the SINGLE quantifier"],
 
       defFeatureSet "RangeLiteral" "range literals within relationship patterns" [
-        feature "starRangeLiteral" "the * range literal",
-        feature "exactRangeLiteral" "range literals providing an exact number of repetitions",
-        feature "rangeLiteralWithLowerBound" "range literals with a lower bound (only)",
-        feature "rangeLiteralWithUpperBound" "range literals with an upper bound (only)",
-        feature "rangeLiteralWithBounds" "range literals with both lower and upper bounds"],
+        feature "bounds" "range literals with both lower and upper bounds",
+        feature "exactRange" "range literals providing an exact number of repetitions",
+        feature "lowerBound" "range literals with a lower bound (only)",
+        feature "starRange" "the * range literal",
+        feature "upperBound" "range literals with an upper bound (only)"],
 
       defFeatureSet "Reading" "specific syntax related to reading data from the graph." [
         feature "union" "the UNION operator",
@@ -165,25 +166,25 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
         feature "unwind" "the UNWIND clause"],
 
       defFeatureSet "RelationshipDirection" "relationship directions / arrow patterns" [
-        feature "bothArrow" "the two-headed arrow (<-[]->) relationship direction",
-        feature "leftArrow" "the left arrow (<-[]-) relationship direction",
-        feature "neitherArrow" "the headless arrow (-[]-) relationship direction",
-        feature "rightArrow" "the right arrow (-[]->) relationship direction"],
+        feature "both" "the two-headed arrow (<-[]->) relationship direction",
+        feature "left" "the left arrow (<-[]-) relationship direction",
+        feature "neither" "the headless arrow (-[]-) relationship direction",
+        feature "right" "the right arrow (-[]->) relationship direction"],
 
       defFeatureSet "RelationshipPattern" "relationship patterns" [
-        feature "multipleTypesInRelationshipPattern" "specifying a disjunction of multiple types in a relationship pattern",
+        feature "multipleTypes" "specifying a disjunction of multiple types in a relationship pattern",
         fixedFeature "variableRelationship" "binding a variable to a relationship in a relationship pattern",
-        feature "wildcardTypeInRelationshipPattern" "omitting types from a relationship pattern"],
+        feature "wildcardType" "omitting types from a relationship pattern"],
 
       defFeatureSet "Remove" "REMOVE operations" [
-        feature "removeByLabel" "REMOVE Variable:NodeLabels",
-        feature "removeByProperty" "REMOVE PropertyExpression"],
+        feature "byLabel" "REMOVE Variable:NodeLabels",
+        feature "byProperty" "REMOVE PropertyExpression"],
 
       defFeatureSet "Set" "set definitions" [
-        feature "setPropertyEquals" "defining a set using PropertyExpression = Expression",
-        feature "setVariableEquals" "defining a set using Variable = Expression",
-        feature "setVariablePlusEquals" "defining a set using Variable += Expression",
-        feature "setVariableWithNodeLabels" "defining a set using Variable:NodeLabels"],
+        feature "propertyEquals" "defining a set using PropertyExpression = Expression",
+        feature "variableEquals" "defining a set using Variable = Expression",
+        feature "variablePlusEquals" "defining a set using Variable += Expression",
+        feature "variableWithNodeLabels" "defining a set using Variable:NodeLabels"],
 
       defFeatureSet "String" "string functions" [
         feature "contains" "the CONTAINS function",
