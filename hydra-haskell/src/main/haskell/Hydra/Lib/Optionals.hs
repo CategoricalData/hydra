@@ -14,6 +14,9 @@ bind = (>>=)
 cat :: [Y.Maybe a] -> [a]
 cat = Y.catMaybes
 
+fromMaybe :: a -> Y.Maybe a -> a
+fromMaybe = Y.fromMaybe
+
 isJust :: Y.Maybe a -> Bool
 isJust = Y.isJust
 
@@ -22,6 +25,9 @@ isNothing = Y.isNothing
 
 map :: (a -> b) -> Y.Maybe a -> Y.Maybe b
 map = fmap
+
+maybe :: b -> (a -> b) -> Y.Maybe a -> b
+maybe = Y.maybe
 
 pure :: a -> Y.Maybe a
 pure = Just
