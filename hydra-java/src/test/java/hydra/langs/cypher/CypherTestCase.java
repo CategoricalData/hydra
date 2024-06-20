@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A test case drawn from Neo4j's Cypher manual (https://neo4j.com/docs/cypher-manual)
- *
+ * A test case drawn from Neo4j's Cypher manual (https://neo4j.com/docs/cypher-manual).
+ * <p/>
  * The test cases are broken down by section and subsection of the manual,
  * and given a numeric id within each subsection.
  * Certain sections and subsections (e.g. on loading from CSVs, database management, etc.) have been omitted

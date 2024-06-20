@@ -15,26 +15,28 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
     Just ("A model for characterizing OpenCypher queries and implementations in terms of included features.")
   where
     ns = Namespace "hydra/langs/cypher/features"
-    core = typeref $ moduleNamespace hydraCoreModule
     cypherFeatures = typeref ns
     def = datatype ns
-    featureField name comment = name>: doc comment boolean
     defFeatureSet name desc fields = def (capitalize name ++ "Features") $
         doc ("A set of features for " ++ desc ++ ".") $ record fields
+    feature n s = featureField n $ "Whether to expect " ++ s ++ "."
+    featureField name comment = name>: doc comment boolean
     featureSet name desc = name>:
       doc ("Whether to expect " ++ desc ++ ", and if so, which specific features") $
       optional $ cypherFeatures $ capitalize name ++ "Features"
-    feature n s = featureField n $ "Whether to expect " ++ s ++ "."
     fixedFeature n s = featureField n $ "Whether to expect " ++ s ++ " (note: included by most if not all implementations)."
+    function name = feature name $ "the " ++ name ++ "() function"
+    functionWithKeyword name keyword = feature name $ "the " ++ name ++ "() / " ++ keyword ++ " aggregate function"
 
     elements = [
 
       defFeatureSet "Aggregate" "aggregation functions" [
-        feature "average" "the AVG aggregate function",
-        feature "count" "the COUNT aggregate function",
-        feature "max" "the MAX aggregate function",
-        feature "min" "the MIN aggregate function",
-        feature "sum" "the SUM aggregate function"],
+        functionWithKeyword "avg" "AVG",
+        functionWithKeyword "collect" "COLLECT",
+        functionWithKeyword "count" "COUNT",
+        functionWithKeyword "max" "MAX",
+        functionWithKeyword "min" "MIN",
+        functionWithKeyword "sum" "SUM"],
 
       defFeatureSet "Arithmetic" "arithmetic operations" [
         feature "plus" "the + operator",
@@ -79,6 +81,7 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
           featureSet "merge" "merge operations",
           featureSet "nodePattern" "node patterns",
           featureSet "null" "IS NULL / IS NOT NULL checks",
+          featureSet "path" "path functions",
           featureSet "procedureCall" "procedure calls",
           featureSet "projection" "projection operations",
           featureSet "rangeLiteral" "range literals",
@@ -86,6 +89,7 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
           featureSet "relationshipDirection" "relationship directions",
           featureSet "relationshipPattern" "relationship patterns",
           featureSet "remove" "remove operations",
+          featureSet "schema" "schema functions",
           featureSet "set" "set operations",
           featureSet "string" "string operations",
           featureSet "updating" "updating operations"],
@@ -131,6 +135,10 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
       defFeatureSet "Null" "IS NULL / IS NOT NULL checks" [
         feature "isNull" "the IS NULL operator",
         feature "isNotNull" "the IS NOT NULL operator"],
+
+      defFeatureSet "Path" "path functions" [
+        function "length",
+        function "shortestPath"],
 
       defFeatureSet "ProcedureCall" "procedure calls" [
         feature "inQueryCall" "CALL within a query",
@@ -180,6 +188,9 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
         feature "byLabel" "REMOVE Variable:NodeLabels",
         feature "byProperty" "REMOVE PropertyExpression"],
 
+      defFeatureSet "Schema" "schema functions" [
+          function "type"],
+
       defFeatureSet "Set" "set definitions" [
         feature "propertyEquals" "defining a set using PropertyExpression = Expression",
         feature "variableEquals" "defining a set using Variable = Expression",
@@ -187,10 +198,10 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
         feature "variableWithNodeLabels" "defining a set using Variable:NodeLabels"],
 
       defFeatureSet "String" "string functions" [
-        feature "contains" "the CONTAINS function",
-        feature "endsWith" "the ENDS WITH function",
-        feature "in" "the IN function",
-        feature "startsWith" "the STARTS WITH function"],
+        functionWithKeyword "contains" "CONTAINS",
+        functionWithKeyword "endsWith" "ENDS WITH",
+        functionWithKeyword "in" "IN",
+        functionWithKeyword "startsWith" "STARTS WITH"],
 
       defFeatureSet "Updating" "specific syntax related to updating data in the graph" [
         feature "create" "the CREATE clause",
