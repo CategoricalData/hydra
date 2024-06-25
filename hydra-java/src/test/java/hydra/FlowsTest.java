@@ -2,6 +2,12 @@ package hydra;
 
 import hydra.compute.Flow;
 import hydra.compute.FlowState;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -9,16 +15,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static hydra.Flows.EMPTY_TRACE;
-import static hydra.Flows.bind;
-import static hydra.Flows.getState;
-import static hydra.Flows.map;
-import static hydra.Flows.mapM;
-import static hydra.Flows.pure;
-import static hydra.Flows.putState;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static hydra.Flows.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class FlowsTest {
@@ -58,6 +56,48 @@ public class FlowsTest {
         FlowState<String, Integer> result3 = flow3.value.apply("foo").apply(EMPTY_TRACE);
         assertEquals("foo;42", result3.state);
         assertEquals(Optional.of(43), result3.value);
+    }
+
+    @Test
+    public void checkMapMSizeLimitForLists() {
+        List<Integer> list1 = Arrays.asList(1, 2, 3, 4, 5);
+        List<Integer> list2 = new LinkedList<>();
+        for (int i = 0; i <= MAX_MAPM_SIZE; i++) {
+            list2.add(i);
+        }
+
+        // Small list succeeds
+        assertEquals(5, Flows.fromFlow(mapM(list1, Flows::pure)).size());
+        // Large list fails
+        assertThrows(IllegalArgumentException.class, () -> Flows.mapM(list2, Flows::pure));
+    }
+
+    @Test
+    public void checkMapMSizeLimitForMaps() {
+        Map<Integer, Integer> map1 = Map.of(1, 1, 2, 2, 3, 3, 4, 4, 5, 5);
+        Map<Integer, Integer> map2 = new HashMap<>();
+        for (int i = 0; i <= MAX_MAPM_SIZE; i++) {
+            map2.put(i, i);
+        }
+        
+        // Small map succeeds
+        assertEquals(5, Flows.fromFlow(mapM(map1, Flows::pure, Flows::pure)).size());
+        // Large map fails
+        assertThrows(IllegalArgumentException.class, () -> Flows.mapM(map2, Flows::pure, Flows::pure));
+    }
+
+    @Test
+    public void checkMapMSizeLimitForSets() {
+        Set<Integer> set1 = Set.of(1, 2, 3, 4, 5);
+        Set<Integer> set2 = new HashSet<>();
+        for (int i = 0; i <= MAX_MAPM_SIZE; i++) {
+            set2.add(i);
+        }
+
+        // Small set succeeds
+        assertEquals(5, Flows.fromFlow(mapM(set1, Flows::pure)).size());
+        // Large set fails
+        assertThrows(IllegalArgumentException.class, () -> Flows.mapM(set2, Flows::pure));
     }
 
     @Test
