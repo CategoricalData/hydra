@@ -32,6 +32,12 @@ public interface Flows {
             = new Trace(Collections.emptyList(), Collections.emptyList(), Collections.emptyMap());
 
     /**
+     * The maximum size of a collection over which we can apply the mapM() functions.
+     * This is a conservative limit which will avoid stack overflow conditions in typical JVM environments.
+     */
+    int MAX_MAPM_SIZE = 1000;
+
+    /**
      * Apply a function flow to a domain value flow.
      */
     static <S, A, B> Flow<S, B> apply(Flow<S, Function<A, B>> mapping, Flow<S, A> input) {
@@ -204,6 +210,11 @@ public interface Flows {
      * Map a monadic function over a list, producing a flow of lists.
      */
     static <S, A, B> Flow<S, List<B>> mapM(List<A> as, Function<A, Flow<S, B>> f) {
+        if (as.size() > MAX_MAPM_SIZE) {
+            throw new IllegalArgumentException("Can't mapM over a collection with more than "
+                + MAX_MAPM_SIZE + " (MAX_MAPM_SIZE) elements. This would present a risk of stack overflow.");
+        }
+
         Flow<S, List<B>> result = pure(new ArrayList<>());
         for (A a : as) {
             result = bind(result, ys -> map(f.apply(a), b -> {
@@ -247,6 +258,11 @@ public interface Flows {
      * Map a monadic function over a set, producing a flow of sets.
      */
     static <S, A, B> Flow<S, Set<B>> mapM(Set<A> as, Function<A, Flow<S, B>> f) {
+        if (as.size() > MAX_MAPM_SIZE) {
+            throw new IllegalArgumentException("Can't mapM over a collection with more than "
+                + MAX_MAPM_SIZE + " (MAX_MAPM_SIZE) elements. This would present a risk of stack overflow.");
+        }
+
         Flow<S, Set<B>> result = pure(new HashSet<>(as.size()));
         for (A a : as) {
             result = bind(result, ys -> map(f.apply(a), b -> {
