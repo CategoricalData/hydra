@@ -31,6 +31,9 @@ mapList = TTerm $ Terms.primitive _flows_mapList
 pure :: TTerm (x -> Flow s x)
 pure = TTerm $ Terms.primitive _flows_pure
 
+sequence :: TTerm ([Flow s a] -> Flow s [a])
+sequence = TTerm $ Terms.primitive _flows_sequence
+
 -- Accessors
 
 flowState :: TTerm (Maybe x) -> TTerm s -> TTerm Trace -> TTerm (FlowState s x)

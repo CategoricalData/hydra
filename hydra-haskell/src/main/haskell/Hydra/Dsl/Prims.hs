@@ -129,45 +129,50 @@ pair kCoder vCoder = TermCoder (Types.product [termCoderType kCoder, termCoderTy
       vTerm <- coderDecode (termCoderCoder vCoder) v
       return $ Terms.product [kTerm, vTerm]
 
-prim0 :: Name -> TermCoder x -> x -> Primitive
-prim0 name output value = Primitive name (termCoderType output) impl
+prim0 :: [String] -> Name -> TermCoder x -> x -> Primitive
+prim0 vars name output value = Primitive name typ impl
   where
+    typ = Types.lambdas vars $ termCoderType output
     impl _ = coderDecode (termCoderCoder output) value
 
-prim1 :: Name -> TermCoder x -> TermCoder y -> (x -> y) -> Primitive
-prim1 name input1 output compute = Primitive name ft impl
+prim1 :: [String] -> Name -> TermCoder x -> TermCoder y -> (x -> y) -> Primitive
+prim1 vars name input1 output compute = Primitive name typ impl
   where
-    ft = TypeFunction $ FunctionType (termCoderType input1) $ termCoderType output
+    typ = Types.lambdas vars $
+      TypeFunction $ FunctionType (termCoderType input1) $ termCoderType output
     impl args = do
       Expect.nArgs 1 args
       arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
       coderDecode (termCoderCoder output) $ compute arg1
 
-prim2 :: Name -> TermCoder x -> TermCoder y -> TermCoder z -> (x -> y -> z) -> Primitive
-prim2 name input1 input2 output compute = Primitive name ft impl
+prim2 :: [String] -> Name -> TermCoder x -> TermCoder y -> TermCoder z -> (x -> y -> z) -> Primitive
+prim2 vars name input1 input2 output compute = Primitive name typ impl
   where
-    ft = TypeFunction $ FunctionType (termCoderType input1) (Types.function (termCoderType input2) (termCoderType output))
+    typ = Types.lambdas vars $
+      TypeFunction $ FunctionType (termCoderType input1) (Types.function (termCoderType input2) (termCoderType output))
     impl args = do
       Expect.nArgs 2 args
       arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
       arg2 <- coderEncode (termCoderCoder input2) (args !! 1)
       coderDecode (termCoderCoder output) $ compute arg1 arg2
 
-prim2Interp :: Name -> TermCoder x -> TermCoder y -> TermCoder z -> (Term -> Term -> Flow (Graph) (Term)) -> Primitive
-prim2Interp name input1 input2 output compute = Primitive name ft impl
+prim2Interp :: [String] -> Name -> TermCoder x -> TermCoder y -> TermCoder z -> (Term -> Term -> Flow (Graph) (Term)) -> Primitive
+prim2Interp vars name input1 input2 output compute = Primitive name typ impl
   where
-    ft = TypeFunction $ FunctionType (termCoderType input1) (Types.function (termCoderType input2) (termCoderType output))
+    typ = Types.lambdas vars $
+      TypeFunction $ FunctionType (termCoderType input1) (Types.function (termCoderType input2) (termCoderType output))
     impl args = do
       Expect.nArgs 2 args
       compute (args !! 0) (args !! 1)
 
-prim3 :: Name -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> (w -> x -> y -> z) -> Primitive
-prim3 name input1 input2 input3 output compute = Primitive name ft impl
+prim3 :: [String] -> Name -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> (w -> x -> y -> z) -> Primitive
+prim3 vars name input1 input2 input3 output compute = Primitive name typ impl
   where
-    ft = TypeFunction $ FunctionType
-      (termCoderType input1)
-      (Types.function (termCoderType input2)
-      (Types.function (termCoderType input3) (termCoderType output)))
+    typ = Types.lambdas vars $
+      TypeFunction $ FunctionType
+        (termCoderType input1)
+        (Types.function (termCoderType input2)
+        (Types.function (termCoderType input3) (termCoderType output)))
     impl args = do
       Expect.nArgs 2 args
       arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
