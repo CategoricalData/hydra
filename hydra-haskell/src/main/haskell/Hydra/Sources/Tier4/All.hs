@@ -31,6 +31,7 @@ import Hydra.Sources.Tier4.Langs.Shex.Syntax
 import Hydra.Sources.Tier4.Langs.Sql.Ansi
 import Hydra.Sources.Tier4.Langs.Tabular
 import Hydra.Sources.Tier4.Langs.Tinkerpop.Features
+import Hydra.Sources.Tier4.Langs.Tinkerpop.Gremlin
 import Hydra.Sources.Tier4.Langs.Tinkerpop.Mappings
 import Hydra.Sources.Tier4.Langs.Tinkerpop.PropertyGraph
 import Hydra.Sources.Tier4.Langs.Tinkerpop.Queries
@@ -55,6 +56,7 @@ tier4LangModules = [
   avroSchemaModule,
   deltaParquetModule,
   graphqlSyntaxModule,
+  gremlinModule,
   haskellAstModule,
   javaLanguageModule,
   javaSyntaxModule,
