@@ -2,18 +2,16 @@ package hydra;
 
 import hydra.compute.Flow;
 import hydra.compute.FlowState;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
-import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
+import org.junit.jupiter.api.Test;
 
 import static hydra.Flows.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -79,7 +77,7 @@ public class FlowsTest {
         for (int i = 0; i <= MAX_MAPM_SIZE; i++) {
             map2.put(i, i);
         }
-        
+
         // Small map succeeds
         assertEquals(5, Flows.fromFlow(mapM(map1, Flows::pure, Flows::pure)).size());
         // Large map fails

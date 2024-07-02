@@ -36,6 +36,9 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
         functionWithKeyword "count" "COUNT",
         functionWithKeyword "max" "MAX",
         functionWithKeyword "min" "MIN",
+        function "percentileCont",
+        function "percentileDisc",
+        function "stdev",
         functionWithKeyword "sum" "SUM"],
 
       defFeatureSet "Arithmetic" "arithmetic operations" [
@@ -51,7 +54,7 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
         feature "count" "the COUNT (*) expression",
         feature "existentialSubquery" "existential subqueries",
         feature "functionInvocation" "function invocation",
-        featureSet "listComprehension" "list comprehensions",
+        featureSet "list" "lists",
         featureSet "literal" "literal values",
         feature "parameter" "parameter expressions",
         feature "patternComprehension" "pattern comprehensions",
@@ -59,13 +62,14 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
         featureSet "quantifier" "quantifier expressions",
         fixedFeature "variable" "variable expressions"],
 
-      defFeatureSet "Comparison" "comparison operations" [
+      defFeatureSet "Comparison" "comparison operators and functions" [
         feature "equal" "the = comparison operator",
         feature "greaterThan" "the > comparison operator",
         feature "greaterThanOrEqual" "the >= comparison operator",
         feature "lessThan" "the < comparison operator",
         feature "lessThanOrEqual" "the <= comparison operator",
-        feature "notEqual" "the <> comparison operator"],
+        feature "notEqual" "the <> comparison operator",
+        function "nullIf"],
 
       def "CypherFeatures" $
         doc ("A set of features which characterize an OpenCypher query or implementation. "
@@ -76,14 +80,18 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
           featureSet "atom" "atomic expressions",
           featureSet "comparison" "comparison operations",
           featureSet "delete" "delete operations",
+          featureSet "element" "element functions",
           featureSet "logical" "logical operations",
+          featureSet "map" "property map functions",
           featureSet "match" "match queries",
           featureSet "merge" "merge operations",
           featureSet "nodePattern" "node patterns",
           featureSet "null" "IS NULL / IS NOT NULL checks",
+          featureSet "numeric" "numeric functions",
           featureSet "path" "path functions",
           featureSet "procedureCall" "procedure calls",
           featureSet "projection" "projection operations",
+          featureSet "randomness" "random value generation",
           featureSet "rangeLiteral" "range literals",
           featureSet "reading" "reading operations",
           featureSet "relationshipDirection" "relationship directions",
@@ -98,9 +106,32 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
         feature "delete" "the basic DELETE clause",
         feature "detachDelete" "the DETACH DELETE clause"],
 
-      defFeatureSet "ListComprehension" "list comprehensions" [
+      defFeatureSet "Element" "element functions" [
+        function "elementId",
+        function "endNode",
+        function "labels",
+        function "properties",
+        function "startNode"],
+
+      defFeatureSet "List" "list functionality" [
+        function "all",
+        function "any",
+        function "coalesce",
+        function "isEmpty",
+        function "head",
+        function "last",
         feature "listComprehension" "basic list comprehensions",
-        feature "listRange" "list range comprehensions (e.g. [1..10])"],
+        feature "listRange" "list range comprehensions (e.g. [1..10])",
+        function "none",
+        function "reduce",
+        function "reverse",
+        function "single",
+        function "size",
+        function "tail",
+        function "toBooleanList",
+        function "toFloatList",
+        function "toIntegerList",
+        function "toStringList"],
 
       defFeatureSet "Literal" "various types of literal values" [
         fixedFeature "boolean" "boolean literals",
@@ -117,8 +148,12 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
         feature "or" "the OR operator",
         feature "xor" "the XOR operator"],
 
+      defFeatureSet "Map" "property map functions" [
+        function "keys"],
+
       defFeatureSet "Match" "match queries" [
-        feature "optional" "OPTIONAL MATCH"],
+        feature "match" "the basic (non-optional) MATCH clause",
+        feature "optionalMatch" "OPTIONAL MATCH"],
 
       defFeatureSet "Merge" "merge operations" [
         feature "merge" "the basic MERGE clause",
@@ -136,8 +171,24 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
         feature "isNull" "the IS NULL operator",
         feature "isNotNull" "the IS NOT NULL operator"],
 
+      defFeatureSet "Numeric" "numeric functions" [
+        function "abs",
+        function "ceil",
+        function "e",
+        function "exp",
+        function "floor",
+        function "isNaN",
+        function "log",
+        function "log10",
+        function "range",
+        function "round",
+        function "sign",
+        function "sqrt"],
+
       defFeatureSet "Path" "path functions" [
         function "length",
+        function "nodes",
+        function "relationships",
         function "shortestPath"],
 
       defFeatureSet "ProcedureCall" "procedure calls" [
@@ -158,8 +209,13 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
       defFeatureSet "Quantifier" "quantifier expressions" [
         feature "all" "the ALL quantifier",
         feature "any" "the ANY quantifier",
+        function "exists",
         feature "none" "the NONE quantifier",
         feature "single" "the SINGLE quantifier"],
+
+      defFeatureSet "Randomness" "random value generation" [
+        function "rand",
+        function "randomUUID"],
 
       defFeatureSet "RangeLiteral" "range literals within relationship patterns" [
         feature "bounds" "range literals with both lower and upper bounds",
@@ -189,7 +245,8 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
         feature "byProperty" "REMOVE PropertyExpression"],
 
       defFeatureSet "Schema" "schema functions" [
-          function "type"],
+          function "type",
+          function "valueType"],
 
       defFeatureSet "Set" "set definitions" [
         feature "propertyEquals" "defining a set using PropertyExpression = Expression",
@@ -198,10 +255,18 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
         feature "variableWithNodeLabels" "defining a set using Variable:NodeLabels"],
 
       defFeatureSet "String" "string functions" [
+        function "char_length",
+        function "character_length",
         functionWithKeyword "contains" "CONTAINS",
         functionWithKeyword "endsWith" "ENDS WITH",
         functionWithKeyword "in" "IN",
-        functionWithKeyword "startsWith" "STARTS WITH"],
+        functionWithKeyword "startsWith" "STARTS WITH",
+        function "toBoolean",
+        function "toBooleanOrNull",
+        function "toFloat",
+        function "toFloatOrNull",
+        function "toInteger",
+        function "toIntegerOrNull"],
 
       defFeatureSet "Updating" "specific syntax related to updating data in the graph" [
         feature "create" "the CREATE clause",
