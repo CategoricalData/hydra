@@ -19,8 +19,13 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     gremlin = typeref ns
     def = datatype ns
 
+    defArgument name typ =  def name $ union [
+      "value">: typ,
+      "variable">: variable]
+
     booleanLiteral = boolean
-    classType = gremlin "Identifier"
+    booleanArgument = gremlin "BooleanArgument"
+    classType = identifier
     dateArgument = gremlin "DateArgument"
     dateLiteral = gremlin "DateLiteral"
     floatArgument = gremlin "FloatArgument"
@@ -28,14 +33,22 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     genericLiteral = gremlin "GenericLiteral"
     genericLiteralArgument = gremlin "GenericLiteralArgument"
     genericLiteralCollection = gremlin "GenericLiteralCollection"
+    genericLiteralList = gremlin "GenericLiteralList"
     genericLiteralMap = gremlin "GenericLiteralMap"
+    genericLiteralMapArgument = gremlin "GenericLiteralMapArgument"
+    genericLiteralMapNullableArgument = gremlin "GenericLiteralMapNullableArgument"
     genericLiteralRange = gremlin "GenericLiteralRange"
     genericLiteralSet = gremlin "GenericLiteralSet"
+    genericLiteralVarargs = nonemptyList genericLiteralArgument
+    identifier = gremlin "Identifier"
     integerArgument = gremlin "IntegerArgument"
     integerLiteral = gremlin "IntegerLiteral"
+    keyword = gremlin "Keyword"
     nestedTraversal = gremlin "NestedTraversal"
-    nestedTraversalList = list $ gremlin "NestedTraversal"
+    nestedTraversalList = list nestedTraversal
     numericLiteral = gremlin "NumericLiteral"
+    optionalGenericLiteralVarargs = list genericLiteralArgument
+    optionalStringLiteralVarargs = list stringNullableArgument
     stringArgument = gremlin "StringArgument"
     stringLiteral = string
     stringLiteralVarargs = nonemptyList stringNullableArgument
@@ -44,15 +57,35 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     structureVertex = gremlin "StructureVertex"
     structureVertexArgument = gremlin "StructureVertexArgument"
     terminatedTraversal = gremlin "TerminatedTraversal"
+    traversalBarrier = unit
+    traversalBiFunctionArgument = gremlin "TraversalBiFunctionArgument"
     traversalCardinality = gremlin "TraversalCardinality"
+    traversalCardinalityArgument = gremlin "TraversalCardinalityArgument"
+    traversalColumn = gremlin "TraversalColumn"
+    traversalColumnArgument = gremlin "TraversalColumnArgument"
+    traversalComparator = traversalOrder
+    traversalComparatorArgument = gremlin "TraversalComparatorArgument"
     traversalDT = gremlin "TraversalDT"
     traversalDirection = gremlin "TraversalDirection"
+    traversalDirectionArgument = gremlin "TraversalDirectionArgument"
+    traversalFunction = gremlin "TraversalFunction"
+    traversalFunctionArgument = gremlin "TraversalFunctionArgument"
+    traversalMergeArgument = gremlin "TraversalMergeArgument"
+    traversalOperator = gremlin "TraversalOperator"
+    traversalOrder = gremlin "TraversalOrder"
+    traversalOrderArgument = gremlin "TraversalOrderArgument"
     traversalMerge = gremlin "TraversalMerge"
+    traversalMethod = gremlin "TraversalMethod"
     traversalPick = gremlin "TraversalPick"
+    traversalPop = gremlin "TraversalPop"
+    traversalPopArgument = gremlin "TraversalPopArgument"
     traversalPredicate = gremlin "TraversalPredicate"
+    traversalSackMethod = traversalBarrier
+    traversalScope = gremlin "TraversalScope"
     traversalScopeArgument = gremlin "TraversalScopeArgument"
     traversalToken = gremlin "TraversalToken"
-    variable = gremlin "Identifier"
+    traversalTokenArgument = gremlin "TraversalTokenArgument"
+    variable = identifier
 
     elements = [
 
@@ -75,11 +108,11 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --  * under the License.
 --  */
 -- grammar Gremlin;
--- 
+--
 -- /*********************************************
 --     PARSER RULES
 -- **********************************************/
--- 
+--
 -- queryList
 --     : query (SEMI? query)* SEMI? EOF
 --     ;
@@ -111,7 +144,7 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- emptyQuery
 --     : EmptyStringLiteral
 --     ;
--- 
+--
 -- traversalSource
 --     : TRAVERSAL_ROOT
 --     | TRAVERSAL_ROOT DOT traversalSourceSelfMethod
@@ -149,41 +182,41 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | traversalSourceSelfMethod_withPath
         "withPath">: unit,
 --     | traversalSourceSelfMethod_withSack
-        "withSack">: gremlin "WithSack",
+        "withSack">: gremlin "GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument",
 --     | traversalSourceSelfMethod_withSideEffect
-        "withSideEffect">: gremlin "WithSideEffect",
+        "withSideEffect">: gremlin "StringArgumentAndGenericLiteralArgument",
 --     | traversalSourceSelfMethod_withStrategies
         "withStrategies">: nonemptyList $ gremlin "TraversalStrategy",
 --     | traversalSourceSelfMethod_withoutStrategies
         "withoutStrategies">: nonemptyList classType,
 --     | traversalSourceSelfMethod_with
-        "with">: gremlin "With"],
+        "with">: gremlin "StringArgumentAndOptionalGenericLiteralArgument"],
 --     ;
 
 -- traversalSourceSelfMethod_withBulk
 --     : 'withBulk' LPAREN booleanArgument RPAREN
 --     ;
--- 
+--
 -- traversalSourceSelfMethod_withPath
 --     : 'withPath' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalSourceSelfMethod_withSack
 --     : 'withSack' LPAREN genericLiteralArgument RPAREN
 --     | 'withSack' LPAREN genericLiteralArgument COMMA traversalBiFunctionArgument RPAREN
 --     ;
 
-      def "WithSack" $ record [
+      def "GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument" $ record [
         "literal">: genericLiteralArgument,
-        "biFunction">: optional $ gremlin "TraversalBiFunctionArgument"],
+        "biFunction">: optional traversalBiFunctionArgument],
 
 -- traversalSourceSelfMethod_withSideEffect
 --     : 'withSideEffect' LPAREN stringArgument COMMA genericLiteralArgument RPAREN
 --     ;
 
-      def "WithSideEffect" $ record [
-        "key">: stringArgument,
-        "value">: genericLiteralArgument],
+      def "StringArgumentAndGenericLiteralArgument" $ record [
+        "string">: stringArgument,
+        "literal">: genericLiteralArgument],
 
 -- traversalSourceSelfMethod_withStrategies
 --     : 'withStrategies' LPAREN traversalStrategy (COMMA traversalStrategyList)? RPAREN
@@ -192,32 +225,32 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- traversalSourceSelfMethod_withoutStrategies
 --     : 'withoutStrategies' LPAREN classType (COMMA classTypeList)? RPAREN
 --     ;
--- 
+--
 -- traversalSourceSelfMethod_with
 --     : 'with' LPAREN stringArgument RPAREN
 --     | 'with' LPAREN stringArgument COMMA genericLiteralArgument RPAREN
 --     ;
 
-      def "With" $ record [
-        "key">: stringArgument,
-        "value">: optional genericLiteralArgument],
+      def "StringArgumentAndOptionalGenericLiteralArgument" $ record [
+        "string">: stringArgument,
+        "literal">: optional genericLiteralArgument],
 
 -- traversalSourceSpawnMethod
       def "TraversalSourceSpawnMethod" $ union [
 --     : traversalSourceSpawnMethod_addE
-        "addE">: gremlin "StringOrTraversal",
+        "addE">: gremlin "StringArgumentOrNestedTraversal",
 --     | traversalSourceSpawnMethod_addV
-        "addV">: optional $ gremlin "StringOrTraversal",
+        "addV">: optional $ gremlin "StringArgumentOrNestedTraversal",
 --     | traversalSourceSpawnMethod_E
-        "e">: gremlin "GenericLiteralVarArgs",
+        "e">: genericLiteralVarargs,
 --     | traversalSourceSpawnMethod_V
-        "v">: gremlin "GenericLiteralVarArgs",
+        "v">: genericLiteralVarargs,
 --     | traversalSourceSpawnMethod_mergeE
-        "mergeV">: gremlin "SpawnMerge",
+        "mergeV">: gremlin "GenericLiteralMapNullableArgumentOrNestedTraversal",
 --     | traversalSourceSpawnMethod_mergeV
-        "mergeE">: gremlin "SpawnMerge",
+        "mergeE">: gremlin "GenericLiteralMapNullableArgumentOrNestedTraversal",
 --     | traversalSourceSpawnMethod_inject
-        "inject">: gremlin "GenericLiteralVarArgs",
+        "inject">: genericLiteralVarargs,
 --     | traversalSourceSpawnMethod_io
         "io">: stringArgument,
 --     | traversalSourceSpawnMethod_call
@@ -236,37 +269,37 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | 'addV' LPAREN stringArgument RPAREN
 --     | 'addV' LPAREN nestedTraversal RPAREN
 --     ;
--- 
+--
 -- traversalSourceSpawnMethod_E
 --     : 'E' LPAREN genericLiteralVarargs RPAREN
 --     ;
--- 
+--
 -- traversalSourceSpawnMethod_V
 --     : 'V' LPAREN genericLiteralVarargs RPAREN
 --     ;
--- 
+--
 -- traversalSourceSpawnMethod_inject
 --     : 'inject' LPAREN genericLiteralVarargs RPAREN
 --     ;
--- 
+--
 -- traversalSourceSpawnMethod_io
 --     : 'io' LPAREN stringArgument RPAREN
 --     ;
--- 
+--
 -- traversalSourceSpawnMethod_mergeV
 --     : 'mergeV' LPAREN genericLiteralMapNullableArgument RPAREN #traversalSourceSpawnMethod_mergeV_Map
 --     | 'mergeV' LPAREN nestedTraversal RPAREN #traversalSourceSpawnMethod_mergeV_Traversal
 --     ;
 
-      def "SpawnMerge" $ union [
-        "map">: gremlin "GenericLiteralMapNullableArgument",
+      def "GenericLiteralMapNullableArgumentOrNestedTraversal" $ union [
+        "map">: genericLiteralMapNullableArgument,
         "traversal">: nestedTraversal],
 
 -- traversalSourceSpawnMethod_mergeE
 --     : 'mergeE' LPAREN genericLiteralMapNullableArgument RPAREN #traversalSourceSpawnMethod_mergeE_Map
 --     | 'mergeE' LPAREN nestedTraversal RPAREN #traversalSourceSpawnMethod_mergeE_Traversal
 --     ;
--- 
+--
 -- traversalSourceSpawnMethod_call
 --     : 'call' LPAREN RPAREN #traversalSourceSpawnMethod_call_empty
 --     | 'call' LPAREN stringArgument RPAREN #traversalSourceSpawnMethod_call_string
@@ -276,23 +309,17 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     ;
 
       def "ServiceCall" $ record [
-        "name">: stringArgument,
+        "service">: stringArgument,
         "arguments">: gremlin "ServiceArguments"],
 
       def "ServiceArguments" $ union [
-        "none">: unit,
-        "map">: gremlin "GenericLiteralMapArgument",
-        "traversal">: nestedTraversal,
-        "mapTraversal">: gremlin "MapTraversalArgument"],
-
-      def "MapTraversalArgument" $ record [
-        "map">: gremlin "GenericLiteralMapArgument",
-        "traversal">: nestedTraversal],
+        "map">: optional genericLiteralMapArgument,
+        "traversal">: optional nestedTraversal],
 
 -- traversalSourceSpawnMethod_union
 --     : 'union' LPAREN nestedTraversalList RPAREN
 --     ;
--- 
+--
 -- chainedTraversal
 --     : traversalMethod
 --     | chainedTraversal DOT traversalMethod
@@ -300,11 +327,11 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     ;
 
       def "ChainedTraversal" $ record [
-        "first">: gremlin "TraversalMethod",
+        "first">: traversalMethod,
         "rest">: gremlin "ChainedTraversalElement"],
 
       def "ChainedTraversalElement" $ union [
-        "method">: gremlin "TraversalMethod",
+        "method">: traversalMethod,
         "self">: gremlin "TraversalSelfMethod"],
 
 -- chainedParentOfGraphTraversal
@@ -334,19 +361,19 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- traversalMethod
       def "TraversalMethod" $ union [ -- TODO
 --     : traversalMethod_V
-        "v">: gremlin "GenericLiteralVarArgs",
+        "v">: genericLiteralVarargs,
 --     | traversalMethod_E
-        "e">: gremlin "GenericLiteralVarArgs",
+        "e">: genericLiteralVarargs,
 --     | traversalMethod_addE
-        "addE">: gremlin "StringOrTraversal",
+        "addE">: gremlin "StringArgumentOrNestedTraversal",
 --     | traversalMethod_addV
-        "addV">: optional $ gremlin "StringOrTraversal",
+        "addV">: optional $ gremlin "StringArgumentOrNestedTraversal",
 --     | traversalMethod_mergeE
-        "mergeE">: optional $ gremlin "MergeArgs",
+        "mergeE">: optional $ gremlin "GenericLiteralMapNullableArgumentOrNestedTraversal",
 --     | traversalMethod_mergeV
-        "mergeV">: optional $ gremlin "MergeArgs",
+        "mergeV">: optional $ gremlin "GenericLiteralMapNullableArgumentOrNestedTraversal",
 --     | traversalMethod_aggregate
-        "aggregate">: gremlin "AggregateArgs",
+        "aggregate">: gremlin "OptionalTraversalScopeArgumentAndStringArgument",
 --     | traversalMethod_all
         "all">: traversalPredicate,
 --     | traversalMethod_and
@@ -354,9 +381,9 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | traversalMethod_any
         "any">: traversalPredicate,
 --     | traversalMethod_as
-        "as">: gremlin "StringArgs",
+        "as">: gremlin "StringArgumentAndOptionalStringLiteralVarargs",
 --     | traversalMethod_barrier
-        "barrier">: optional $ gremlin "BarrierArgs",
+        "barrier">: optional $ gremlin "TraversalSackMethodArgumentOrIntegerArgument",
 --     | traversalMethod_both
         "both">: stringLiteralVarargs,
 --     | traversalMethod_bothE
@@ -366,9 +393,9 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | traversalMethod_branch
         "branch">: nestedTraversal,
 --     | traversalMethod_by
-        "by">: optional $ gremlin "ByArgs",
+        "by">: gremlin "ByArgs",
 --     | traversalMethod_cap
-        "cap">: gremlin "StringArgs",
+        "cap">: gremlin "StringArgumentAndOptionalStringLiteralVarargs",
 --     | traversalMethod_choose
         "choose">: gremlin "ChooseArgs",
 --     | traversalMethod_coalesce
@@ -402,7 +429,7 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | traversalMethod_flatMap
         "flatMap">: nestedTraversal,
 --     | traversalMethod_fold
-        "fold">: optional $ gremlin "LiteralBiFunctionArgument",
+        "fold">: optional $ gremlin "GenericLiteralArgumentAndTraversalBiFunctionArgument",
 --     | traversalMethod_from
         "from">: gremlin "FromArgs",
 --     | traversalMethod_group
@@ -412,15 +439,15 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | traversalMethod_has
         "has">: gremlin "HasArgs",
 --     | traversalMethod_hasId
-        "hasId">: gremlin "HasIdArgs",
+        "hasId">: gremlin "GenericLiteralArgumentAndTraversalPredicate",
 --     | traversalMethod_hasKey
-        "hasKey">: gremlin "PredicateOrStringsArgument",
+        "hasKey">: gremlin "TraversalPredicateOrStringLiteralVarargs",
 --     | traversalMethod_hasLabel
-        "hasLabel">: gremlin "PredicateOrStringsArgument",
+        "hasLabel">: gremlin "TraversalPredicateOrStringLiteralVarargs",
 --     | traversalMethod_hasNot
         "hasNot">: stringNullableArgument,
 --     | traversalMethod_hasValue
-        "hasValue">: gremlin "PredicateOrObjectsArgument",
+        "hasValue">: gremlin "TraversalPredicateOrGenericLiteralArgument",
 --     | traversalMethod_id
         "id">: unit,
 --     | traversalMethod_identity
@@ -436,15 +463,15 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | traversalMethod_index
         "index">: unit,
 --     | traversalMethod_inject
-        "inject">: gremlin "GenericLiteralVarArgs",
+        "inject">: genericLiteralVarargs,
 --     | traversalMethod_is
-        "is">: gremlin "PredicateOrObjectsArgument",
+        "is">: gremlin "TraversalPredicateOrGenericLiteralArgument",
 --     | traversalMethod_key
         "key">: unit,
 --     | traversalMethod_label
         "label">: unit,
 --     | traversalMethod_limit
-        "limit">: gremlin "LimitArgs",
+        "limit">: gremlin "OptionalTraversalScopeArgumentAndIntegerArgument",
 --     | traversalMethod_local
         "local">: nestedTraversal,
 --     | traversalMethod_loops
@@ -466,52 +493,98 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | traversalMethod_not
         "not">: nestedTraversal,
 --     | traversalMethod_option
+        "option">: gremlin "OptionArgs",
 --     | traversalMethod_optional
+        "optional">: nestedTraversal,
 --     | traversalMethod_or
+        "or">: nestedTraversalList,
 --     | traversalMethod_order
+        "order">: optional traversalScopeArgument,
 --     | traversalMethod_otherV
+        "otherV">: unit,
 --     | traversalMethod_out
+        "out">: stringLiteralVarargs,
 --     | traversalMethod_outE
+        "outE">: stringLiteralVarargs,
 --     | traversalMethod_outV
+        "outV">: unit,
 --     | traversalMethod_pageRank
+        "pageRank">: optional floatArgument,
 --     | traversalMethod_path
+        "path">: unit,
 --     | traversalMethod_peerPressure
+        "peerPressure">: unit,
 --     | traversalMethod_profile
+        "profile">: optional stringArgument,
 --     | traversalMethod_project
+        "project">: gremlin "StringArgumentAndOptionalStringLiteralVarargs",
 --     | traversalMethod_properties
+        "properties">: stringLiteralVarargs,
 --     | traversalMethod_property
+        "property">: gremlin "PropertyArgs",
 --     | traversalMethod_propertyMap
+        "propertyMap">: stringLiteralVarargs,
 --     | traversalMethod_range
+        "range">: gremlin "RangeArgs",
 --     | traversalMethod_read
+        "read">: unit,
 --     | traversalMethod_repeat
+        "repeat">: gremlin "OptionalStringArgumentAndNestedTraversal",
 --     | traversalMethod_sack
+        "sack">: optional traversalBiFunctionArgument,
 --     | traversalMethod_sample
+        "sample">: gremlin "OptionalTraversalScopeArgumentAndIntegerArgument",
 --     | traversalMethod_select
+        "select">: gremlin "SelectArgs",
 --     | traversalMethod_combine
+        "combine">: genericLiteralArgument,
 --     | traversalMethod_product
+        "product">: genericLiteralArgument,
 --     | traversalMethod_merge
+        "merge">: genericLiteralArgument,
 --     | traversalMethod_shortestPath
+        "shortestPath">: unit,
 --     | traversalMethod_sideEffect
+        "sideEffect">: nestedTraversal,
 --     | traversalMethod_simplePath
+        "simplePath">: unit,
 --     | traversalMethod_skip
+        "skip">: gremlin "OptionalTraversalScopeArgumentAndIntegerArgument",
 --     | traversalMethod_store
+        "store">: stringArgument,
 --     | traversalMethod_subgraph
+        "subgraph">: stringArgument,
 --     | traversalMethod_sum
+        "sum">: optional traversalScopeArgument,
 --     | traversalMethod_tail
+        "tail">: optional $ gremlin "TailArgs",
 --     | traversalMethod_fail
+        "fail">: optional stringArgument,
 --     | traversalMethod_timeLimit
 --     | traversalMethod_times
+        "times">: integerArgument,
 --     | traversalMethod_to
+        "to">: gremlin "ToArgs",
 --     | traversalMethod_toE
+        "toE">: gremlin "DirectionAndVarargs",
 --     | traversalMethod_toV
+        "toV">: traversalDirectionArgument,
 --     | traversalMethod_tree
+        "tree">: optional stringArgument,
 --     | traversalMethod_unfold
+        "unfold">: unit,
 --     | traversalMethod_union
+        "union">: nestedTraversalList,
 --     | traversalMethod_until
+        "until">: gremlin "PredicateOrTraversal",
 --     | traversalMethod_value
+        "value">: unit,
 --     | traversalMethod_valueMap
+        "valueMap">: gremlin "ValueMapArgs",
 --     | traversalMethod_values
+        "values">: stringLiteralVarargs,
 --     | traversalMethod_where
+        "where">: gremlin "WhereArgs",
 --     | traversalMethod_with
         "with">: gremlin "WithArgs",
 --     | traversalMethod_write
@@ -557,17 +630,17 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- traversalMethod_V
 --     : 'V' LPAREN genericLiteralVarargs RPAREN
 --     ;
--- 
+--
 -- traversalMethod_E
 --     : 'E' LPAREN genericLiteralVarargs RPAREN
 --     ;
--- 
+--
 -- traversalMethod_addE
 --     : 'addE' LPAREN stringArgument RPAREN #traversalMethod_addE_String
 --     | 'addE' LPAREN nestedTraversal RPAREN #traversalMethod_addE_Traversal
 --     ;
 
-      def "StringOrTraversal" $ union [
+      def "StringArgumentOrNestedTraversal" $ union [
         "string">: stringArgument,
         "traversal">: nestedTraversal],
 
@@ -583,10 +656,6 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | 'mergeV' LPAREN nestedTraversal RPAREN #traversalMethod_mergeV_Traversal
 --     ;
 
-      def "MergeArgs" $ union [
-        "map">: gremlin "GenericLiteralMapNullableArgument",
-        "traversal">: nestedTraversal],
-
 -- traversalMethod_mergeE
 --     : 'mergeE' LPAREN RPAREN #traversalMethod_mergeE_empty
 --     | 'mergeE' LPAREN genericLiteralMapNullableArgument RPAREN #traversalMethod_mergeE_Map
@@ -598,29 +667,29 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | 'aggregate' LPAREN stringArgument RPAREN #traversalMethod_aggregate_String
 --     ;
 
-      def "AggregateArgs" $ record [
+      def "OptionalTraversalScopeArgumentAndStringArgument" $ record [
         "scope">: optional traversalScopeArgument,
         "string">: stringArgument],
-        
+
 -- traversalMethod_all
 --     : 'all' LPAREN traversalPredicate RPAREN #traversalMethod_all_P
 --     ;
--- 
+--
 -- traversalMethod_and
 --     : 'and' LPAREN nestedTraversalList RPAREN
 --     ;
--- 
+--
 -- traversalMethod_any
 --     : 'any' LPAREN traversalPredicate RPAREN #traversalMethod_any_P
 --     ;
--- 
+--
 -- traversalMethod_as
 --     : 'as' LPAREN stringArgument (COMMA stringLiteralVarargs)? RPAREN
 --     ;
 
-      def "StringArgs" $ record [
-        "label">: stringArgument,
-        "rest">: list stringNullableArgument],
+      def "StringArgumentAndOptionalStringLiteralVarargs" $ record [
+        "first">: stringArgument,
+        "rest">: optionalStringLiteralVarargs],
 
 -- traversalMethod_barrier
 --     : 'barrier' LPAREN traversalSackMethodArgument RPAREN #traversalMethod_barrier_Consumer
@@ -628,27 +697,27 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | 'barrier' LPAREN integerArgument RPAREN #traversalMethod_barrier_int
 --     ;
 
-      def "BarrierArgs" $ union [
+      def "TraversalSackMethodArgumentOrIntegerArgument" $ union [
         "consumer">: gremlin "TraversalSackMethodArgument",
         "int">: integerArgument],
 
--- 
+--
 -- traversalMethod_both
 --     : 'both' LPAREN stringLiteralVarargs RPAREN
 --     ;
--- 
+--
 -- traversalMethod_bothE
 --     : 'bothE' LPAREN stringLiteralVarargs RPAREN
 --     ;
--- 
+--
 -- traversalMethod_bothV
 --     : 'bothV' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_branch
 --     : 'branch' LPAREN nestedTraversal RPAREN
 --     ;
--- 
+--
 -- traversalMethod_by
 --     : 'by' LPAREN traversalComparatorArgument RPAREN #traversalMethod_by_Comparator
 --     | 'by' LPAREN RPAREN #traversalMethod_by_Empty
@@ -663,26 +732,23 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     ;
 
       def "ByArgs" $ union [
-        "comparator">: gremlin "TraversalComparatorArgument",
-        "functionComparator">: gremlin "FunctionComparatorArgument",
-        "order">: gremlin "TraversalOrderArgument",
+        "order">: traversalOrderArgument,
+        "token">: traversalTokenArgument,
+        "other">: gremlin "ByOtherArgs"],
+
+      def "ByOtherArgs" $ union [
+        "comparator">: optional traversalComparatorArgument,
+        "other">: optional $ gremlin "TraversalFunctionArgumentOrStringArgumentOrNestedTraversal"],
+
+      def "TraversalFunctionArgumentOrStringArgumentOrNestedTraversal" $ union [
+        "function">: traversalFunctionArgument,
         "string">: stringArgument,
-        "t">: gremlin "TraversalTokenArgument",
-        "traversal">: nestedTraversal,
-        "traversalComparator">: gremlin "TraversalComparatorArgument"],
-
-      def "FunctionComparatorArgument" $ record [
-        "function">: gremlin "TraversalFunctionArgument",
-        "comparator">: gremlin "TraversalComparatorArgument"],
-
-      def "TraversalComparatorArgument" $ record [
-        "traversal">: nestedTraversal,
-        "comparator">: gremlin "TraversalComparatorArgument"],
+        "traversal">: nestedTraversal],
 
 -- traversalMethod_cap
 --     : 'cap' LPAREN stringArgument (COMMA stringLiteralVarargs)? RPAREN
 --     ;
--- 
+--
 -- traversalMethod_choose
 --     : 'choose' LPAREN traversalFunctionArgument RPAREN #traversalMethod_choose_Function
 --     | 'choose' LPAREN traversalPredicate COMMA nestedTraversal RPAREN #traversalMethod_choose_Predicate_Traversal
@@ -693,7 +759,7 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     ;
 
       def "ChooseArgs" $ union [
-        "function">: gremlin "TraversalFunctionArgument",
+        "function">: traversalFunctionArgument,
         "predicateTraversal">: gremlin "PredicateTraversalArgument",
         "traversal">: gremlin "NestedTraversalArgument"],
 
@@ -710,32 +776,32 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- traversalMethod_coalesce
 --     : 'coalesce' LPAREN nestedTraversalList RPAREN
 --     ;
--- 
+--
 -- traversalMethod_coin
 --     : 'coin' LPAREN floatArgument RPAREN
 --     ;
--- 
+--
 -- traversalMethod_combine
 --     : 'combine' LPAREN genericLiteralArgument RPAREN #traversalMethod_combine_Object
 --     ;
--- 
+--
 -- traversalMethod_connectedComponent
 --     : 'connectedComponent' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_constant
 --     : 'constant' LPAREN genericLiteralArgument RPAREN
 --     ;
--- 
+--
 -- traversalMethod_count
 --     : 'count' LPAREN RPAREN #traversalMethod_count_Empty
 --     | 'count' LPAREN traversalScopeArgument RPAREN #traversalMethod_count_Scope
 --     ;
--- 
+--
 -- traversalMethod_cyclicPath
 --     : 'cyclicPath' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_dedup
 --     : 'dedup' LPAREN traversalScopeArgument (COMMA stringLiteralVarargs)? RPAREN #traversalMethod_dedup_Scope_String
 --     | 'dedup' LPAREN stringLiteralVarargs RPAREN #traversalMethod_dedup_String
@@ -747,24 +813,24 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "ScopeStringArgument" $ record [
         "scope">: traversalScopeArgument,
-        "strings">: list stringNullableArgument],
+        "strings">: optionalStringLiteralVarargs],
 
 -- traversalMethod_difference
 --     : 'difference' LPAREN genericLiteralArgument RPAREN #traversalMethod_difference_Object
 --     ;
--- 
+--
 -- traversalMethod_disjunct
 --     : 'disjunct' LPAREN genericLiteralArgument RPAREN #traversalMethod_disjunct_Object
 --     ;
--- 
+--
 -- traversalMethod_drop
 --     : 'drop' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_elementMap
 --     : 'elementMap' LPAREN stringLiteralVarargs RPAREN
 --     ;
--- 
+--
 -- traversalMethod_emit
 --     : 'emit' LPAREN RPAREN #traversalMethod_emit_Empty
 --     | 'emit' LPAREN traversalPredicate RPAREN #traversalMethod_emit_Predicate
@@ -783,15 +849,15 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- traversalMethod_flatMap
 --     : 'flatMap' LPAREN nestedTraversal RPAREN
 --     ;
--- 
+--
 -- traversalMethod_fold
 --     : 'fold' LPAREN RPAREN #traversalMethod_fold_Empty
 --     | 'fold' LPAREN genericLiteralArgument COMMA traversalBiFunctionArgument RPAREN #traversalMethod_fold_Object_BiFunction
 --     ;
 
-      def "LiteralBiFunctionArgument" $ record [
+      def "GenericLiteralArgumentAndTraversalBiFunctionArgument" $ record [
         "literal">: genericLiteralArgument,
-        "biFunction">: gremlin "TraversalBiFunctionArgument"],
+        "biFunction">: traversalBiFunctionArgument],
 
 -- traversalMethod_from
 --     : 'from' LPAREN stringArgument RPAREN #traversalMethod_from_String
@@ -808,12 +874,12 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     : 'group' LPAREN RPAREN #traversalMethod_group_Empty
 --     | 'group' LPAREN stringArgument RPAREN #traversalMethod_group_String
 --     ;
--- 
+--
 -- traversalMethod_groupCount
 --     : 'groupCount' LPAREN RPAREN #traversalMethod_groupCount_Empty
 --     | 'groupCount' LPAREN stringArgument RPAREN #traversalMethod_groupCount_String
 --     ;
--- 
+--
 -- traversalMethod_has
 --     : 'has' LPAREN stringNullableArgument RPAREN #traversalMethod_has_String
 --     | 'has' LPAREN stringNullableArgument COMMA genericLiteralArgument RPAREN #traversalMethod_has_String_Object
@@ -827,34 +893,34 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     ;
 
       def "HasArgs" $ union [
-        "string">: gremlin "HasStringArgs",
+        "string">: gremlin "HasStringArgumentAndOptionalStringLiteralVarargs",
         "traversalToken">: gremlin "HasTraversalTokenArgs"],
 
-      def "HasStringArgs" $ record [
+      def "HasStringArgumentAndOptionalStringLiteralVarargs" $ record [
         "string">: stringNullableArgument,
-        "rest">: optional $ gremlin "HasStringArgsRest"],
+        "rest">: optional $ gremlin "HasStringArgumentAndOptionalStringLiteralVarargsRest"],
 
-      def "HasStringArgsRest" $ union [
+      def "HasStringArgumentAndOptionalStringLiteralVarargsRest" $ union [
         "object">: genericLiteralArgument,
         "predicate">: traversalPredicate,
-        "stringObject">: gremlin "StringObjectArgument",
-        "stringPredicate">: gremlin "StringPredicateArgument",
+        "stringObject">: gremlin "StringNullableArgumentAndGenericLiteralArgument",
+        "stringPredicate">: gremlin "StringNullableArgumentAndTraversalPredicate",
         "traversal">: nestedTraversal],
 
-      def "StringObjectArgument" $ record [
+      def "StringNullableArgumentAndGenericLiteralArgument" $ record [
         "string">: stringNullableArgument,
-        "object">: genericLiteralArgument],
+        "literal">: genericLiteralArgument],
 
-      def "StringPredicateArgument" $ record [
+      def "StringNullableArgumentAndTraversalPredicate" $ record [
         "string">: stringNullableArgument,
         "predicate">: traversalPredicate],
 
       def "HasTraversalTokenArgs" $ record [
-        "traversalToken">: gremlin "TraversalTokenArgument",
+        "traversalToken">: traversalTokenArgument,
         "rest">: gremlin "HasTraversalTokenArgsRest"],
 
       def "HasTraversalTokenArgsRest" $ union [
-        "object">: genericLiteralArgument,
+        "literal">: genericLiteralArgument,
         "predicate">: traversalPredicate,
         "traversal">: nestedTraversal],
 
@@ -863,8 +929,8 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | 'hasId' LPAREN traversalPredicate RPAREN #traversalMethod_hasId_P
 --     ;
 
-      def "HasIdArgs" $ union [
-        "object">: genericLiteralArgument,
+      def "GenericLiteralArgumentAndTraversalPredicate" $ union [
+        "literal">: genericLiteralArgument,
         "predicate">: traversalPredicate],
 
 -- traversalMethod_hasKey
@@ -872,134 +938,130 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | 'hasKey' LPAREN stringNullableArgument (COMMA stringLiteralVarargs)? RPAREN #traversalMethod_hasKey_String_String
 --     ;
 
-      def "PredicateOrStringsArgument" $ union [
+      def "TraversalPredicateOrStringLiteralVarargs" $ union [
         "predicate">: traversalPredicate,
-        "string">: list stringNullableArgument],
+        "string">: stringLiteralVarargs],
 
 -- traversalMethod_hasLabel
 --     : 'hasLabel' LPAREN traversalPredicate RPAREN #traversalMethod_hasLabel_P
 --     | 'hasLabel' LPAREN stringNullableArgument (COMMA stringLiteralVarargs)? RPAREN #traversalMethod_hasLabel_String_String
 --     ;
--- 
+--
 -- traversalMethod_hasNot
 --     : 'hasNot' LPAREN stringNullableArgument RPAREN
 --     ;
--- 
+--
 -- traversalMethod_hasValue
 --     : 'hasValue' LPAREN genericLiteralArgument (COMMA genericLiteralVarargs)? RPAREN #traversalMethod_hasValue_Object_Object
 --     | 'hasValue' LPAREN traversalPredicate RPAREN #traversalMethod_hasValue_P
 --     ;
 
-      def "PredicateOrObjectsArgument" $ union [
+      def "TraversalPredicateOrGenericLiteralArgument" $ union [
         "predicate">: traversalPredicate,
-        "object">: list genericLiteralArgument],
+        "literal">: list genericLiteralArgument],
 
 -- traversalMethod_id
 --     : 'id' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_identity
 --     : 'identity' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_in
 --     : 'in' LPAREN stringLiteralVarargs RPAREN
 --     ;
--- 
+--
 -- traversalMethod_inE
 --     : 'inE' LPAREN stringLiteralVarargs RPAREN
 --     ;
--- 
+--
 -- traversalMethod_intersect
 --     : 'intersect' LPAREN genericLiteralArgument RPAREN #traversalMethod_intersect_Object
 --     ;
--- 
+--
 -- traversalMethod_inV
 --     : 'inV' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_index
 --     : 'index' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_inject
 --     : 'inject' LPAREN genericLiteralVarargs RPAREN
 --     ;
--- 
+--
 -- traversalMethod_is
 --     : 'is' LPAREN genericLiteralArgument RPAREN #traversalMethod_is_Object
 --     | 'is' LPAREN traversalPredicate RPAREN #traversalMethod_is_P
 --     ;
--- 
+--
 -- traversalMethod_conjoin
 --     : 'conjoin' LPAREN stringArgument RPAREN #traversalMethod_conjoin_String
 --     ;
--- 
+--
 -- traversalMethod_key
 --     : 'key' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_label
 --     : 'label' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_limit
 --     : 'limit' LPAREN traversalScopeArgument COMMA integerArgument RPAREN #traversalMethod_limit_Scope_long
 --     | 'limit' LPAREN integerArgument RPAREN #traversalMethod_limit_long
 --     ;
 
-      def "LimitArgs" $ union [
-        "scope">: optional traversalScopeArgument,
-        "limit">: integerArgument],
-
 -- traversalMethod_local
 --     : 'local' LPAREN nestedTraversal RPAREN
 --     ;
--- 
+--
 -- traversalMethod_loops
 --     : 'loops' LPAREN RPAREN #traversalMethod_loops_Empty
 --     | 'loops' LPAREN stringArgument RPAREN #traversalMethod_loops_String
 --     ;
--- 
+--
 -- traversalMethod_map
 --     : 'map' LPAREN nestedTraversal RPAREN
 --     ;
--- 
+--
 -- traversalMethod_match
 --     : 'match' LPAREN nestedTraversalList RPAREN
 --     ;
--- 
+--
 -- traversalMethod_math
 --     : 'math' LPAREN stringArgument RPAREN
 --     ;
--- 
+--
 -- traversalMethod_max
 --     : 'max' LPAREN RPAREN #traversalMethod_max_Empty
 --     | 'max' LPAREN traversalScopeArgument RPAREN #traversalMethod_max_Scope
 --     ;
--- 
+--
 -- traversalMethod_mean
 --     : 'mean' LPAREN RPAREN #traversalMethod_mean_Empty
 --     | 'mean' LPAREN traversalScopeArgument RPAREN #traversalMethod_mean_Scope
 --     ;
--- 
+--
 -- traversalMethod_merge
 --     : 'merge' LPAREN genericLiteralArgument RPAREN #traversalMethod_merge_Object
 --     ;
--- 
+--
 -- traversalMethod_min
 --     : 'min' LPAREN RPAREN #traversalMethod_min_Empty
 --     | 'min' LPAREN traversalScopeArgument RPAREN #traversalMethod_min_Scope
 --     ;
--- 
+--
 -- traversalMethod_none
 --     : 'none' LPAREN traversalPredicate RPAREN #traversalMethod_none_P
 --     ;
--- 
+--
 -- traversalMethod_not
 --     : 'not' LPAREN nestedTraversal RPAREN
 --     ;
--- 
+--
 -- traversalMethod_option
 --     : 'option' LPAREN traversalPredicate COMMA nestedTraversal RPAREN #traversalMethod_option_Predicate_Traversal
 --     | 'option' LPAREN traversalMergeArgument COMMA genericLiteralMapNullableArgument RPAREN #traversalMethod_option_Merge_Map
@@ -1008,105 +1070,152 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | 'option' LPAREN genericLiteralArgument COMMA nestedTraversal RPAREN #traversalMethod_option_Object_Traversal
 --     | 'option' LPAREN nestedTraversal RPAREN #traversalMethod_option_Traversal
 --     ;
--- 
+
+      def "OptionArgs" $ union [
+        "predicateTraversal">: gremlin "TraversalPredicateAndNestedTraversal",
+        "mergeMap">: gremlin "TraversalMergeArgumentAndGenericLiteralMapNullableArgument",
+        "mergeTraversal">: gremlin "TraversalMergeArgumentAndNestedTraversal",
+        "objectTraversal">: gremlin "GenericLiteralArgumentAndNestedTraversal",
+        "traversal">: nestedTraversal],
+
+      def "TraversalPredicateAndNestedTraversal" $ record [
+        "predicate">: traversalPredicate,
+        "traversal">: nestedTraversal],
+
+      def "TraversalMergeArgumentAndGenericLiteralMapNullableArgument" $ record [
+        "merge">: traversalMergeArgument,
+        "map">: genericLiteralMapNullableArgument,
+        "cardinality">: optional traversalCardinality],
+
+      def "TraversalMergeArgumentAndNestedTraversal" $ record [
+        "merge">: traversalMergeArgument,
+        "traversal">: nestedTraversal],
+
+      def "GenericLiteralArgumentAndNestedTraversal" $ record [
+        "object">: genericLiteralArgument,
+        "traversal">: nestedTraversal],
+
 -- traversalMethod_optional
 --     : 'optional' LPAREN nestedTraversal RPAREN
 --     ;
--- 
+--
 -- traversalMethod_or
 --     : 'or' LPAREN nestedTraversalList RPAREN
 --     ;
--- 
+--
 -- traversalMethod_order
 --     : 'order' LPAREN RPAREN #traversalMethod_order_Empty
 --     | 'order' LPAREN traversalScopeArgument RPAREN #traversalMethod_order_Scope
 --     ;
--- 
+--
 -- traversalMethod_otherV
 --     : 'otherV' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_out
 --     : 'out' LPAREN stringLiteralVarargs RPAREN
 --     ;
--- 
+--
 -- traversalMethod_outE
 --     : 'outE' LPAREN stringLiteralVarargs RPAREN
 --     ;
--- 
+--
 -- traversalMethod_outV
 --     : 'outV' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_pageRank
 --     : 'pageRank' LPAREN RPAREN #traversalMethod_pageRank_Empty
 --     | 'pageRank' LPAREN floatArgument RPAREN #traversalMethod_pageRank_double
 --     ;
--- 
+--
 -- traversalMethod_path
 --     : 'path' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_peerPressure
 --     : 'peerPressure' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_product
 --     : 'product' LPAREN genericLiteralArgument RPAREN #traversalMethod_product_Object
 --     ;
--- 
+--
 -- traversalMethod_profile
 --     : 'profile' LPAREN RPAREN #traversalMethod_profile_Empty
 --     | 'profile' LPAREN stringArgument RPAREN #traversalMethod_profile_String
 --     ;
--- 
+--
 -- traversalMethod_project
 --     : 'project' LPAREN stringArgument (COMMA stringLiteralVarargs)? RPAREN
 --     ;
--- 
+
 -- traversalMethod_properties
 --     : 'properties' LPAREN stringLiteralVarargs RPAREN
 --     ;
--- 
+--
 -- traversalMethod_property
 --     : 'property' LPAREN traversalCardinalityArgument COMMA genericLiteralArgument COMMA genericLiteralArgument (COMMA genericLiteralVarargs)? RPAREN #traversalMethod_property_Cardinality_Object_Object_Object
 --     | 'property' LPAREN genericLiteralArgument COMMA genericLiteralArgument (COMMA genericLiteralVarargs)? RPAREN #traversalMethod_property_Object_Object_Object
 --     | 'property' LPAREN genericLiteralMapNullableArgument RPAREN # traversalMethod_property_Object
 --     | 'property' LPAREN traversalCardinalityArgument COMMA genericLiteralMapNullableArgument RPAREN # traversalMethod_property_Cardinality_Object
 --     ;
--- 
+
+      def "PropertyArgs" $ union [
+        "cardinalityObjects">: gremlin "PropertyArgsCardinalityObjects",
+        "objects">: minLengthList 2 genericLiteralArgument,
+        "object">: genericLiteralMapNullableArgument,
+        "cardinalityObject">: gremlin "PropertyArgsCardinalityObject"],
+
+      def "PropertyArgsCardinalityObjects" $ record [
+        "cardinality">: traversalCardinalityArgument,
+        "objects">: minLengthList 2 genericLiteralArgument],
+
+      def "PropertyArgsCardinalityObject" $ record [
+        "cardinality">: traversalCardinalityArgument,
+        "object">: genericLiteralMapNullableArgument],
+
 -- traversalMethod_propertyMap
 --     : 'propertyMap' LPAREN stringLiteralVarargs RPAREN
 --     ;
--- 
+--
 -- traversalMethod_range
 --     : 'range' LPAREN traversalScopeArgument COMMA integerArgument COMMA integerArgument RPAREN #traversalMethod_range_Scope_long_long
 --     | 'range' LPAREN integerArgument COMMA integerArgument RPAREN #traversalMethod_range_long_long
 --     ;
--- 
+
+      def "RangeArgs" $ record [
+        "scope">: optional traversalScopeArgument,
+        "min">: integerArgument,
+        "max">: integerArgument],
+
 -- traversalMethod_read
 --     : 'read' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_repeat
 --     : 'repeat' LPAREN stringArgument COMMA nestedTraversal RPAREN #traversalMethod_repeat_String_Traversal
 --     | 'repeat' LPAREN nestedTraversal RPAREN #traversalMethod_repeat_Traversal
 --     ;
--- 
+
+      def "OptionalStringArgumentAndNestedTraversal" $ record [
+        "string">: optional stringArgument,
+        "traversal">: nestedTraversal],
+
 -- traversalMethod_reverse
 --     : 'reverse' LPAREN RPAREN #traversalMethod_reverse_Empty
 --     ;
--- 
+--
 -- traversalMethod_sack
 --     : 'sack' LPAREN traversalBiFunctionArgument RPAREN #traversalMethod_sack_BiFunction
 --     | 'sack' LPAREN RPAREN #traversalMethod_sack_Empty
 --     ;
--- 
+--
 -- traversalMethod_sample
 --     : 'sample' LPAREN traversalScopeArgument COMMA integerArgument RPAREN #traversalMethod_sample_Scope_int
 --     | 'sample' LPAREN integerArgument RPAREN #traversalMethod_sample_int
 --     ;
--- 
+
 -- traversalMethod_select
 --     : 'select' LPAREN traversalColumnArgument RPAREN #traversalMethod_select_Column
 --     | 'select' LPAREN traversalPopArgument COMMA stringArgument RPAREN #traversalMethod_select_Pop_String
@@ -1116,109 +1225,159 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | 'select' LPAREN stringArgument COMMA stringArgument (COMMA stringLiteralVarargs)? RPAREN #traversalMethod_select_String_String_String
 --     | 'select' LPAREN nestedTraversal RPAREN #traversalMethod_select_Traversal
 --     ;
--- 
+
+      def "SelectArgs" $ union [
+        "column">: traversalColumnArgument,
+        "popStrings">: gremlin "PopStringsArgument",
+        "popTraversal">: gremlin "TraversalPopArgumentAndNestedTraversal",
+        "strings">: nonemptyList stringArgument,
+        "traversal">: nestedTraversal],
+
+      def "PopStringsArgument" $ record [
+        "pop">: traversalPopArgument,
+        "string">: nonemptyList stringArgument],
+
+      def "TraversalPopArgumentAndNestedTraversal" $ record [
+        "pop">: traversalPopArgument,
+        "traversal">: nestedTraversal],
+
 -- traversalMethod_shortestPath
 --     : 'shortestPath' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_sideEffect
 --     : 'sideEffect' LPAREN nestedTraversal RPAREN
 --     ;
--- 
+--
 -- traversalMethod_simplePath
 --     : 'simplePath' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_skip
 --     : 'skip' LPAREN traversalScopeArgument COMMA integerArgument RPAREN #traversalMethod_skip_Scope_long
 --     | 'skip' LPAREN integerArgument RPAREN #traversalMethod_skip_long
 --     ;
--- 
+
+      def "OptionalTraversalScopeArgumentAndIntegerArgument" $ record [
+        "scope">: optional traversalScopeArgument,
+        "long">: integerArgument],
+
 -- traversalMethod_store
 --     : 'store' LPAREN stringArgument RPAREN
 --     ;
--- 
+--
 -- traversalMethod_subgraph
 --     : 'subgraph' LPAREN stringArgument RPAREN
 --     ;
--- 
+--
 -- traversalMethod_sum
 --     : 'sum' LPAREN RPAREN #traversalMethod_sum_Empty
 --     | 'sum' LPAREN traversalScopeArgument RPAREN #traversalMethod_sum_Scope
 --     ;
--- 
+--
 -- traversalMethod_tail
 --     : 'tail' LPAREN RPAREN #traversalMethod_tail_Empty
 --     | 'tail' LPAREN traversalScopeArgument RPAREN #traversalMethod_tail_Scope
 --     | 'tail' LPAREN traversalScopeArgument COMMA integerArgument RPAREN #traversalMethod_tail_Scope_long
 --     | 'tail' LPAREN integerArgument RPAREN #traversalMethod_tail_long
 --     ;
--- 
+
+      def "TailArgs" $ record [
+        "scope">: optional traversalScopeArgument,
+        "integer">: optional integerArgument],
+
 -- traversalMethod_fail
 --     : 'fail' LPAREN RPAREN #traversalMethod_fail_Empty
 --     | 'fail' LPAREN stringArgument RPAREN #traversalMethod_fail_String
 --     ;
--- 
+--
 -- traversalMethod_timeLimit
 --     : 'timeLimit' LPAREN integerArgument RPAREN
 --     ;
--- 
+--
 -- traversalMethod_times
 --     : 'times' LPAREN integerArgument RPAREN
 --     ;
--- 
+--
 -- traversalMethod_to
 --     : 'to' LPAREN traversalDirectionArgument (COMMA stringLiteralVarargs)? RPAREN #traversalMethod_to_Direction_String
 --     | 'to' LPAREN stringArgument RPAREN #traversalMethod_to_String
 --     | 'to' LPAREN structureVertexArgument RPAREN #traversalMethod_to_Vertex
 --     | 'to' LPAREN nestedTraversal RPAREN #traversalMethod_to_Traversal
 --     ;
--- 
+
+      def "ToArgs" $ union [
+        "direction">: gremlin "DirectionAndVarargs",
+        "string">: stringArgument,
+        "vertex">: structureVertexArgument,
+        "traversal">: nestedTraversal],
+
 -- traversalMethod_toE
 --     : 'toE' LPAREN traversalDirectionArgument (COMMA stringLiteralVarargs)? RPAREN
 --     ;
--- 
+
+      def "DirectionAndVarargs" $ record [
+        "direction">: traversalDirectionArgument,
+        "varargs">: optionalStringLiteralVarargs],
+
 -- traversalMethod_toV
 --     : 'toV' LPAREN traversalDirectionArgument RPAREN
 --     ;
--- 
+--
 -- traversalMethod_tree
 --     : 'tree' LPAREN RPAREN #traversalMethod_tree_Empty
 --     | 'tree' LPAREN stringArgument RPAREN #traversalMethod_tree_String
 --     ;
--- 
+--
 -- traversalMethod_unfold
 --     : 'unfold' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_union
 --     : 'union' LPAREN nestedTraversalList RPAREN
 --     ;
--- 
+--
 -- traversalMethod_until
 --     : 'until' LPAREN traversalPredicate RPAREN #traversalMethod_until_Predicate
 --     | 'until' LPAREN nestedTraversal RPAREN #traversalMethod_until_Traversal
 --     ;
--- 
+--
 -- traversalMethod_value
 --     : 'value' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_valueMap
 --     : 'valueMap' LPAREN stringLiteralVarargs RPAREN #traversalMethod_valueMap_String
 --     | 'valueMap' LPAREN booleanArgument (COMMA stringLiteralVarargs)? RPAREN #traversalMethod_valueMap_boolean_String
 --     ;
--- 
+
+      def "ValueMapArgs" $ union [
+        "string">: stringLiteralVarargs,
+        "boolean">: gremlin "ValueMapBooleanArgs"],
+
+      def "ValueMapBooleanArgs" $ record [
+        "value">: booleanArgument,
+        "keys">: optional stringLiteralVarargs],
+
 -- traversalMethod_values
 --     : 'values' LPAREN stringLiteralVarargs RPAREN
 --     ;
--- 
+--
 -- traversalMethod_where
 --     : 'where' LPAREN traversalPredicate RPAREN #traversalMethod_where_P
 --     | 'where' LPAREN stringArgument COMMA traversalPredicate RPAREN #traversalMethod_where_String_P
 --     | 'where' LPAREN nestedTraversal RPAREN #traversalMethod_where_Traversal
 --     ;
--- 
+
+      def "WhereArgs" $ union [
+        "predicate">: gremlin "WhereWithPredicateArgs",
+        "string">: stringArgument,
+        "traversal">: nestedTraversal],
+
+      def "WhereWithPredicateArgs" $ record [
+        "leftArg">: optional stringArgument,
+        "predicate">: traversalPredicate],
+
 -- traversalMethod_with
 --     : 'with' LPAREN (withOptionKeys | stringArgument) RPAREN #traversalMethod_with_String
 --     | 'with' LPAREN (withOptionKeys | stringArgument) COMMA (withOptionsValues | ioOptionsValues | genericLiteralArgument) RPAREN #traversalMethod_with_String_Object
@@ -1240,11 +1399,11 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- traversalMethod_write
 --     : 'write' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_element
 --     : 'element' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_call
 --     : 'call' LPAREN stringArgument RPAREN #traversalMethod_call_string
 --     | 'call' LPAREN stringArgument COMMA genericLiteralMapArgument RPAREN #traversalMethod_call_string_map
@@ -1265,41 +1424,41 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     : 'asString' LPAREN RPAREN #traversalMethod_asString_Empty
 --     | 'asString' LPAREN traversalScopeArgument RPAREN #traversalMethod_asString_Scope
 --     ;
--- 
+--
 -- traversalMethod_format
 --     : 'format' LPAREN stringArgument RPAREN #traversalMethod_format_String
 --     ;
--- 
+--
 -- traversalMethod_toUpper
 --     : 'toUpper' LPAREN RPAREN #traversalMethod_toUpper_Empty
 --     | 'toUpper' LPAREN traversalScopeArgument RPAREN #traversalMethod_toUpper_Scope
 --     ;
--- 
+--
 -- traversalMethod_toLower
 --     : 'toLower' LPAREN RPAREN #traversalMethod_toLower_Empty
 --     | 'toLower' LPAREN traversalScopeArgument RPAREN #traversalMethod_toLower_Scope
 --     ;
--- 
+--
 -- traversalMethod_length
 --     : 'length' LPAREN RPAREN #traversalMethod_length_Empty
 --     | 'length' LPAREN traversalScopeArgument RPAREN #traversalMethod_length_Scope
 --     ;
--- 
+--
 -- traversalMethod_trim
 --     : 'trim' LPAREN RPAREN #traversalMethod_trim_Empty
 --     | 'trim' LPAREN traversalScopeArgument RPAREN #traversalMethod_trim_Scope
 --     ;
--- 
+--
 -- traversalMethod_lTrim
 --     : 'lTrim' LPAREN RPAREN #traversalMethod_lTrim_Empty
 --     | 'lTrim' LPAREN traversalScopeArgument RPAREN #traversalMethod_lTrim_Scope
 --     ;
--- 
+--
 -- traversalMethod_rTrim
 --     : 'rTrim' LPAREN RPAREN #traversalMethod_rTrim_Empty
 --     | 'rTrim' LPAREN traversalScopeArgument RPAREN #traversalMethod_rTrim_Scope
 --     ;
--- 
+--
 -- traversalMethod_replace
 --     : 'replace' LPAREN stringNullableArgument COMMA stringNullableArgument RPAREN #traversalMethod_replace_String_String
 --     | 'replace' LPAREN traversalScopeArgument COMMA stringNullableArgument COMMA stringNullableArgument RPAREN #traversalMethod_replace_Scope_String_String
@@ -1310,7 +1469,7 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
         "from">: stringNullableArgument,
         "to">: stringNullableArgument],
 
--- 
+--
 -- traversalMethod_split
 --     : 'split' LPAREN stringNullableArgument RPAREN #traversalMethod_split_String
 --     | 'split' LPAREN traversalScopeArgument COMMA stringNullableArgument RPAREN #traversalMethod_split_Scope_String
@@ -1319,8 +1478,8 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "SplitArgs" $ record [
         "scope">: optional traversalScopeArgument,
         "delimiter">: stringNullableArgument],
-        
--- 
+
+--
 -- traversalMethod_substring
 --     : 'substring' LPAREN integerArgument RPAREN #traversalMethod_substring_int
 --     | 'substring' LPAREN traversalScopeArgument COMMA integerArgument RPAREN #traversalMethod_substring_Scope_int
@@ -1336,13 +1495,13 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- traversalMethod_asDate
 --     : 'asDate' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalMethod_dateAdd
 --     : 'dateAdd' LPAREN traversalDTArgument COMMA integerArgument RPAREN
 --     ;
 
       def "DateAddArgs" $ record [
-        "unit">: gremlin "TimeUnitArgument",
+        "unit">: gremlin "TraversalDTArgument",
         "duration">: integerArgument],
 
 -- traversalMethod_dateDiff
@@ -1357,7 +1516,7 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- /*********************************************
 --     ARGUMENT AND TERMINAL RULES
 -- **********************************************/
--- 
+--
 -- // There is syntax available in the construction of a ReferenceVertex, that allows the label to not be specified.
 -- // That use case is related to OLAP when the StarGraph does not preserve the label of adjacent vertices or other
 -- // fail fast scenarios in that processing model. It is not relevant to the grammar however when a user is creating
@@ -1369,7 +1528,7 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "StructureVertex" $ record [
         "new">: boolean,
         "id">: genericLiteralArgument,
-        "label">: gremlin "StringArgument"],
+        "label">: stringArgument],
 
 -- traversalStrategy
 --     : NEW? classType (LPAREN (configuration (COMMA configuration)*)? RPAREN)?
@@ -1391,7 +1550,7 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "KeywordOrIdentifier" $ union [
         "keyword">: gremlin "Keyword",
-        "identifier">: gremlin "Identifier"],
+        "identifier">: identifier],
 
 -- traversalScope
 --     : 'local' | 'Scope.local'
@@ -1489,7 +1648,13 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | 'all' | 'Pop.all'
 --     | 'mixed' | 'Pop.mixed'
 --     ;
--- 
+
+      def "TraversalPop" $ enum [
+        "first",
+        "last",
+        "all",
+        "mixed"],
+
 -- traversalOperator
 --     : 'addAll' | 'Operator.addAll'
 --     | 'and' | 'Operator.and'
@@ -1564,7 +1729,7 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | traversalPredicate_without
         "without">: optional genericLiteralArgument,
 --     | traversalPredicate_not
-        "not">: gremlin $ "TraversalPredicate",
+        "not">: traversalPredicate,
 --     | traversalPredicate_startingWith
         "startingWith">: stringArgument,
 --     | traversalPredicate_notStartingWith
@@ -1616,7 +1781,7 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- traversalSackMethod
 --     : traversalBarrier
 --     ;
---
+
 -- traversalSelfMethod
       def "TraversalSelfMethod" $ enum [
 --     : traversalSelfMethod_discard
@@ -1629,7 +1794,7 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- traversalComparator
 --     : traversalOrder
 --     ;
--- 
+
 -- traversalFunction
 --     : traversalToken
 --     | traversalColumn
@@ -1642,35 +1807,35 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- traversalBiFunction
 --     : traversalOperator
 --     ;
--- 
+--
 -- traversalPredicate_eq
 --     : ('P.eq' | 'eq') LPAREN genericLiteralArgument RPAREN
 --     ;
--- 
+--
 -- traversalPredicate_neq
 --     : ('P.neq' | 'neq') LPAREN genericLiteralArgument RPAREN
 --     ;
--- 
+--
 -- traversalPredicate_lt
 --     : ('P.lt' | 'lt') LPAREN genericLiteralArgument RPAREN
 --     ;
--- 
+--
 -- traversalPredicate_lte
 --     : ('P.lte' | 'lte') LPAREN genericLiteralArgument RPAREN
 --     ;
--- 
+--
 -- traversalPredicate_gt
 --     : ('P.gt' | 'gt') LPAREN genericLiteralArgument RPAREN
 --     ;
--- 
+--
 -- traversalPredicate_gte
 --     : ('P.gte' | 'gte') LPAREN genericLiteralArgument RPAREN
 --     ;
--- 
+--
 -- traversalPredicate_inside
 --     : ('P.inside' | 'inside') LPAREN genericLiteralArgument COMMA genericLiteralArgument RPAREN
 --     ;
--- 
+--
 -- traversalPredicate_outside
 --     : ('P.outside' | 'outside') LPAREN genericLiteralArgument COMMA genericLiteralArgument RPAREN
 --     ;
@@ -1682,92 +1847,92 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- traversalPredicate_between
 --     : ('P.between' | 'between') LPAREN genericLiteralArgument COMMA genericLiteralArgument RPAREN
 --     ;
--- 
+--
 -- traversalPredicate_within
 --     : ('P.within' | 'within') LPAREN RPAREN
 --     | ('P.within' | 'within') LPAREN genericLiteralListArgument RPAREN
 --     ;
--- 
+--
 -- traversalPredicate_without
 --     : ('P.without' | 'without') LPAREN RPAREN
 --     | ('P.without' | 'without') LPAREN genericLiteralListArgument RPAREN
 --     ;
--- 
+--
 -- traversalPredicate_not
 --     : ('P.not' | 'not') LPAREN traversalPredicate RPAREN
 --     ;
--- 
+--
 -- traversalPredicate_containing
 --     : ('TextP.containing' | 'containing') LPAREN stringArgument RPAREN
 --     ;
--- 
+--
 -- traversalPredicate_notContaining
 --     : ('TextP.notContaining' | 'notContaining') LPAREN stringArgument RPAREN
 --     ;
--- 
+--
 -- traversalPredicate_startingWith
 --     : ('TextP.startingWith' | 'startingWith') LPAREN stringArgument RPAREN
 --     ;
--- 
+--
 -- traversalPredicate_notStartingWith
 --     : ('TextP.notStartingWith' | 'notStartingWith') LPAREN stringArgument RPAREN
 --     ;
--- 
+--
 -- traversalPredicate_endingWith
 --     : ('TextP.endingWith' | 'endingWith') LPAREN stringArgument RPAREN
 --     ;
--- 
+--
 -- traversalPredicate_notEndingWith
 --     : ('TextP.notEndingWith' | 'notEndingWith') LPAREN stringArgument RPAREN
 --     ;
--- 
+--
 -- traversalPredicate_regex
 --     : ('TextP.regex' | 'regex') LPAREN stringArgument RPAREN
 --     ;
--- 
+--
 -- traversalPredicate_notRegex
 --     : ('TextP.notRegex' | 'notRegex') LPAREN stringArgument RPAREN
 --     ;
--- 
+--
 -- traversalTerminalMethod_explain
 --     : 'explain' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalTerminalMethod_hasNext
 --     : 'hasNext' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalTerminalMethod_iterate
 --     : 'iterate' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalTerminalMethod_tryNext
 --     : 'tryNext' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalTerminalMethod_next
 --     : 'next' LPAREN RPAREN
 --     | 'next' LPAREN integerLiteral RPAREN
 --     ;
--- 
+--
 -- traversalTerminalMethod_toList
 --     : 'toList' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalTerminalMethod_toSet
 --     : 'toSet' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalTerminalMethod_toBulkSet
 --     : 'toBulkSet' LPAREN RPAREN
 --     ;
--- 
+--
 -- traversalSelfMethod_discard
 --     : 'discard' LPAREN RPAREN
 --     ;
--- 
+--
 -- // Gremlin specific lexer rules
--- 
+--
 -- withOptionKeys
 --     : shortestPathConstants
 --     | connectedComponentConstants
@@ -2023,14 +2188,14 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | variable
 --     ;
 
+      defArgument "BooleanArgument" booleanLiteral,
+
 -- integerArgument
 --     : integerLiteral
 --     | variable
 --     ;
 
-      def "IntegerArgument" $ union [
-        "value">: integerLiteral,
-        "variable">: variable],
+      defArgument "IntegerArgument" integerLiteral,
 
 --
 -- floatArgument
@@ -2038,59 +2203,49 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | variable
 --     ;
 
-      def "FloatArgument" $ union [
-        "value">: floatLiteral,
-        "variable">: variable],
+      defArgument "FloatArgument" floatLiteral,
 
 -- stringArgument
 --     : stringLiteral
 --     | variable
 --     ;
 
-      def "StringArgument" $ union [
-        "value">: stringLiteral,
-        "variable">: variable],
+      defArgument "StringArgument" stringLiteral,
 
 -- stringNullableArgument
 --     : stringNullableLiteral
 --     | variable
 --     ;
 
-      def "StringNullableArgument" $ union [
-        "value">: stringNullableLiteral,
-        "variable">: variable],
+      defArgument "StringNullableArgument" stringNullableLiteral,
 
 -- dateArgument
 --     : dateLiteral
 --     | variable
 --     ;
 
-      def "DateArgument" $ union [
-        "value">: gremlin "DateLiteral",
-        "variable">: variable],
+      defArgument "DateArgument" dateLiteral,
 
 -- genericLiteralArgument
 --     : genericLiteral
 --     | variable
 --     ;
 
-      def "GenericLiteralArgument" $ union [
-        "value">: genericLiteral,
-        "variable">: variable],
+      defArgument "GenericLiteralArgument" genericLiteral,
 
 -- genericLiteralListArgument
 --     : genericLiteralList
 --     | variable
 --     ;
---
+
+      defArgument "GenericLiteralListArgument" genericLiteralList,
+
 -- genericLiteralMapArgument
 --     : genericLiteralMap
 --     | variable
 --     ;
 
-      def "GenericLiteralMapArgument" $ union [
-        "value">: gremlin "GenericLiteralMap",
-        "variable">: variable],
+      defArgument "GenericLiteralMapArgument" genericLiteralMap,
 
 -- genericLiteralMapNullableArgument
 --     : genericLiteralMap
@@ -2098,112 +2253,105 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | variable
 --     ;
 
-      def "GenericLiteralMapNullableArgument" $ union [
-        "value">: gremlin "GenericLiteralMap",
-        "null">: unit,
-        "variable">: variable],
+      defArgument "GenericLiteralMapNullableArgument" (optional genericLiteralMap),
 
 -- structureVertexArgument
 --     : structureVertex
 --     | variable
 --     ;
 
-      def "StructureVertexArgument" $ union [
-        "value">: structureVertex,
-        "variable">: variable],
+      defArgument "StructureVertexArgument" structureVertex,
 
 -- traversalCardinalityArgument
 --     : traversalCardinality
 --     | variable
 --     ;
---
+
+      defArgument "TraversalCardinalityArgument" traversalCardinality,
+
 -- traversalColumnArgument
 --     : traversalColumn
 --     | variable
 --     ;
---
+
+      defArgument "TraversalColumnArgument" traversalColumn,
+
 -- traversalDirectionArgument
 --     : traversalDirection
 --     | variable
 --     ;
---
+
+      defArgument "TraversalDirectionArgument" traversalDirection,
+
 -- traversalMergeArgument
 --     : traversalMerge
 --     | variable
 --     ;
---
+
+      defArgument "TraversalMergeArgument" traversalMerge,
+
 -- traversalOrderArgument
 --     : traversalOrder
 --     | variable
 --     ;
 
-      def "TraversalOrderArgument" $ union [
-        "value">: gremlin "TraversalOrder",
-        "variable">: variable],
+      defArgument "TraversalOrderArgument" traversalOrder,
 
 -- traversalPopArgument
 --     : traversalPop
 --     | variable
 --     ;
---
+
+      defArgument "TraversalPopArgument" traversalPop,
+
 -- traversalSackMethodArgument
 --     : traversalSackMethod
 --     | variable
 --     ;
 
-      def "TraversalSackMethodArgument" $ union [
-        "value">: unit,
-        "variable">: variable],
+      defArgument "TraversalSackMethodArgument" traversalSackMethod,
 
 -- traversalScopeArgument
 --     : traversalScope
 --     | variable
 --     ;
 
-      def "TraversalScopeArgument" $ union [
-        "value">: gremlin "TraversalScope",
-        "variable">: variable],
+      defArgument "TraversalScopeArgument" traversalScope,
 
 -- traversalTokenArgument
 --     : traversalToken
 --     | variable
 --     ;
 
-      def "TraversalTokenArgument" $ union [
-        "value">: traversalToken,
-        "variable">: variable],
+      defArgument "TraversalTokenArgument" traversalToken,
 
 -- traversalComparatorArgument
 --     : traversalComparator
 --     | variable
 --     ;
---
+
+      defArgument "TraversalComparatorArgument" traversalComparator,
+
 -- traversalFunctionArgument
 --     : traversalFunction
 --     | variable
 --     ;
 
-      def "TraversalFunctionArgument" $ union [
-        "value">: gremlin "TraversalFunction",
-        "variable">: variable],
+      defArgument "TraversalFunctionArgument" traversalFunction,
 
 -- traversalBiFunctionArgument
 --     : traversalBiFunction
 --     | variable
 --     ;
 
-      def "TraversalBiFunctionArgument" $ union [
-        "value">: gremlin "TraversalOperator",
-        "variable">: variable],
+      defArgument "TraversalBiFunctionArgument" traversalOperator,
 
 -- traversalDTArgument
 --     : traversalDT
 --     | variable
 --     ;
 
-      def "TimeUnitArgument" $ union [
-        "value">: gremlin "TraversalDT",
-        "variable">: variable],
+      defArgument "TraversalDTArgument" traversalDT,
 
 -- traversalStrategyList
 --     : traversalStrategyExpr?
@@ -2235,12 +2383,12 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     : (genericLiteralArgument (COMMA genericLiteralArgument)*)?
 --     ;
 
-      def "GenericLiteralVarArgs" $ nonemptyList genericLiteralArgument,
-
 -- genericLiteralList
 --     : genericLiteralExpr?
 --     ;
---
+
+      def "GenericLiteralList" $ list genericLiteral,
+
 -- genericLiteralExpr
 --     : genericLiteral (COMMA genericLiteral)*
 --     ;
@@ -2362,12 +2510,12 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
         "string">: stringLiteral,
         "numeric">: numericLiteral,
         "traversalToken">: traversalToken,
-        "traversalDirection">: gremlin "TraversalDirection",
-        "set">: gremlin "GenericLiteralSet",
-        "collection">: gremlin "GenericLiteralCollection",
-        "map">: gremlin "GenericLiteralMap",
-        "keyword">: gremlin "Keyword",
-        "identifier">: gremlin "Identifier"],
+        "traversalDirection">: traversalDirection,
+        "set">: genericLiteralSet,
+        "collection">: genericLiteralCollection,
+        "map">: genericLiteralMap,
+        "keyword">: keyword,
+        "identifier">: identifier],
 
 -- stringLiteral
 --     : EmptyStringLiteral
@@ -2461,204 +2609,204 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- /*********************************************
 --     LEXER RULES
 -- **********************************************/
--- 
+--
 -- // Lexer rules
 -- // These rules are extracted from Java ANTLRv4 Grammar.
 -- // Source: https://github.com/antlr/grammars-v4/blob/master/java8/Java8.g4
--- 
+--
 -- // §3.9 Keywords
--- 
+--
 -- EDGES: 'edges';
 -- KEYS: 'keys';
 -- NEW : 'new';
 -- VALUES: 'values';
--- 
+--
 -- // Integer Literals
--- 
+--
 -- IntegerLiteral
 --     : Sign? DecimalIntegerLiteral
 --     | Sign? HexIntegerLiteral
 --     | Sign? OctalIntegerLiteral
 --     ;
--- 
+--
 -- fragment
 -- DecimalIntegerLiteral
 --     : DecimalNumeral IntegerTypeSuffix?
 --     ;
--- 
+--
 -- fragment
 -- HexIntegerLiteral
 --     : HexNumeral IntegerTypeSuffix?
 --     ;
--- 
+--
 -- fragment
 -- OctalIntegerLiteral
 --     : OctalNumeral IntegerTypeSuffix?
 --     ;
--- 
+--
 -- fragment
 -- IntegerTypeSuffix
 --     : [bBsSnNiIlL]
 --     ;
--- 
+--
 -- fragment
 -- DecimalNumeral
 --     : '0'
 --     | NonZeroDigit (Digits? | Underscores Digits)
 --     ;
--- 
+--
 -- fragment
 -- Digits
 --     : Digit (DigitsAndUnderscores? Digit)?
 --     ;
--- 
+--
 -- fragment
 -- Digit
 --     : '0'
 --     | NonZeroDigit
 --     ;
--- 
+--
 -- fragment
 -- NonZeroDigit
 --     : [1-9]
 --     ;
--- 
+--
 -- fragment
 -- DigitsAndUnderscores
 --     : DigitOrUnderscore+
 --     ;
--- 
+--
 -- fragment
 -- DigitOrUnderscore
 --     : Digit
 --     | '_'
 --     ;
--- 
+--
 -- fragment
 -- Underscores
 --     : '_'+
 --     ;
--- 
+--
 -- fragment
 -- HexNumeral
 --     : '0' [xX] HexDigits
 --     ;
--- 
+--
 -- fragment
 -- HexDigits
 --     : HexDigit (HexDigitsAndUnderscores? HexDigit)?
 --     ;
--- 
+--
 -- fragment
 -- HexDigit
 --     : [0-9a-fA-F]
 --     ;
--- 
+--
 -- fragment
 -- HexDigitsAndUnderscores
 --     : HexDigitOrUnderscore+
 --     ;
--- 
+--
 -- fragment
 -- HexDigitOrUnderscore
 --     : HexDigit
 --     | '_'
 --     ;
--- 
+--
 -- fragment
 -- OctalNumeral
 --     : '0' Underscores? OctalDigits
 --     ;
--- 
+--
 -- fragment
 -- OctalDigits
 --     : OctalDigit (OctalDigitsAndUnderscores? OctalDigit)?
 --     ;
--- 
+--
 -- fragment
 -- OctalDigit
 --     : [0-7]
 --     ;
--- 
+--
 -- fragment
 -- OctalDigitsAndUnderscores
 --     : OctalDigitOrUnderscore+
 --     ;
--- 
+--
 -- fragment
 -- OctalDigitOrUnderscore
 --     : OctalDigit
 --     | '_'
 --     ;
--- 
+--
 -- // Floating-Point Literals
--- 
+--
 -- FloatingPointLiteral
 --     : Sign? DecimalFloatingPointLiteral
 --     ;
--- 
+--
 -- fragment
 -- DecimalFloatingPointLiteral
 --     : Digits ('.' Digits ExponentPart? | ExponentPart) FloatTypeSuffix?
 --     | Digits FloatTypeSuffix
 --     ;
--- 
+--
 -- fragment
 -- ExponentPart
 --     : ExponentIndicator SignedInteger
 --     ;
--- 
+--
 -- fragment
 -- ExponentIndicator
 --     : [eE]
 --     ;
--- 
+--
 -- fragment
 -- SignedInteger
 --     : Sign? Digits
 --     ;
--- 
+--
 -- fragment
 -- Sign
 --     : [+-]
 --     ;
--- 
+--
 -- fragment
 -- FloatTypeSuffix
 --     : [fFdDmM]
 --     ;
--- 
+--
 -- // Boolean Literals
--- 
+--
 -- BooleanLiteral
 --     : 'true'
 --     | 'false'
 --     ;
--- 
+--
 -- // Null Literal
--- 
+--
 -- NullLiteral
 --     : 'null'
 --     ;
--- 
+--
 -- // NaN Literal
--- 
+--
 -- NaNLiteral
 --     : 'NaN'
 --     ;
--- 
+--
 -- // Inf Literal
--- 
+--
 -- SignedInfLiteral
 --     : Sign? InfLiteral
 --     ;
--- 
+--
 -- InfLiteral
 --     : 'Infinity'
 --     ;
--- 
+--
 -- // String Literals
--- 
+--
 -- // String literal is customized since Java only allows double quoted strings where Groovy supports single quoted
 -- // literals also. A side effect of this is ANTLR will not be able to parse single character string literals with
 -- // single quoted so we instead remove char literal altogether and only have string literal in lexer tokens.
@@ -2666,69 +2814,69 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     : '"' DoubleQuotedStringCharacters '"'
 --     | '\'' SingleQuotedStringCharacters '\''
 --     ;
--- 
+--
 -- // We define NonEmptyStringLiteral and EmptyStringLiteral separately so that we can unambiguously handle empty queries
 -- EmptyStringLiteral
 --     : '""'
 --     | '\'\''
 --     ;
--- 
+--
 -- fragment
 -- DoubleQuotedStringCharacters
 --     : DoubleQuotedStringCharacter+
 --     ;
--- 
+--
 -- fragment
 -- DoubleQuotedStringCharacter
 --     : ~('"' | '\\')
 --     | JoinLineEscape
 --     | EscapeSequence
 --     ;
--- 
+--
 -- fragment
 -- SingleQuotedStringCharacters
 --     : SingleQuotedStringCharacter+
 --     ;
--- 
+--
 -- fragment
 -- SingleQuotedStringCharacter
 --     : ~('\'' | '\\')
 --     | JoinLineEscape
 --     | EscapeSequence
 --     ;
--- 
+--
 -- // Escape Sequences for Character and String Literals
 -- fragment JoinLineEscape
 --     : '\\' '\r'? '\n'
 --     ;
--- 
+--
 -- fragment
 -- EscapeSequence
 --     : '\\' [btnfr"'\\]
 --     | OctalEscape
 --     | UnicodeEscape // This is not in the spec but prevents having to preprocess the input
 --     ;
--- 
+--
 -- fragment
 -- OctalEscape
 --     : '\\' OctalDigit
 --     | '\\' OctalDigit OctalDigit
 --     | '\\' ZeroToThree OctalDigit OctalDigit
 --     ;
--- 
+--
 -- fragment
 -- ZeroToThree
 --     : [0-3]
 --     ;
--- 
+--
 -- // This is not in the spec but prevents having to preprocess the input
 -- fragment
 -- UnicodeEscape
 --     :   '\\' 'u'+  HexDigit HexDigit HexDigit HexDigit
 --     ;
--- 
+--
 -- // Separators
--- 
+--
 -- LPAREN : '(';
 -- RPAREN : ')';
 -- LBRACE : '{';
@@ -2739,19 +2887,19 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- COMMA : ',';
 -- DOT : '.';
 -- COLON : ':';
--- 
+--
 -- TRAVERSAL_ROOT:     'g';
 -- ANON_TRAVERSAL_ROOT:     '__';
--- 
+--
 -- // Trim whitespace and comments if present
--- 
+--
 -- WS  :  [ \t\r\n\u000C]+ -> skip
 --     ;
--- 
+--
 -- LINE_COMMENT
 --     :   '//' ~[\r\n]* -> skip
 --     ;
--- 
+--
 -- Identifier
 --     : IdentifierStart IdentifierPart*
 --     ;
@@ -3164,7 +3312,7 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | [\uFFE0-\uFFE1]
 --     | [\uFFE5-\uFFE6]
 --     ;
--- 
+--
 -- fragment
 -- IdentifierPart
 --     : IdentifierStart
