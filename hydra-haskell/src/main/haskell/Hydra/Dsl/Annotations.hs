@@ -49,8 +49,11 @@ doc80 = doc . wrapLine 80
 dataDoc :: String -> Term Kv -> Term Kv
 dataDoc s = setTermDescription (Just s)
 
+minLengthList :: Int -> Type Kv -> Type Kv
+minLengthList len = boundedList (Just len) Nothing
+
 nonemptyList :: Type Kv -> Type Kv
-nonemptyList = boundedList (Just 1) Nothing
+nonemptyList = minLengthList 1
 
 note :: String -> Type Kv -> Type Kv
 note s = doc $ "Note: " ++ s
