@@ -16,6 +16,9 @@ deprecatedOptionName = "deprecated"
 -- A special Protobuf option for descriptions (documentation)
 descriptionOptionName = "_description"
 
+excludeInternalOptions :: [P3.Option] -> [P3.Option]
+excludeInternalOptions = L.filter (\opt -> L.head (P3.optionName opt) /= '_' )
+
 protoBlock :: [CT.Expr] -> CT.Expr
 protoBlock = brackets curlyBraces fullBlockStyle . doubleNewlineSep
 
@@ -68,9 +71,11 @@ writeFieldOption :: P3.Option -> CT.Expr
 writeFieldOption (P3.Option name value) = spaceSep [cst name, cst "=", writeValue value]
 
 writeFieldOptions :: [P3.Option] -> Y.Maybe CT.Expr
-writeFieldOptions options = if L.null options
-  then Nothing
-  else Just $ bracketList inlineStyle (writeFieldOption <$> options)
+writeFieldOptions options0 = if L.null options
+    then Nothing
+    else Just $ bracketList inlineStyle (writeFieldOption <$> options)
+  where
+    options = excludeInternalOptions options0
 
 writeFieldType :: P3.FieldType -> CT.Expr
 writeFieldType ftyp = case ftyp of
@@ -82,9 +87,11 @@ writeFileOption :: P3.Option -> CT.Expr
 writeFileOption (P3.Option name value) = semi $ spaceSep [cst "option", cst name, cst "=", writeValue value]
 
 writeFileOptions :: [P3.Option] -> Y.Maybe CT.Expr
-writeFileOptions options = if L.null options
-  then Nothing
-  else Just $ newlineSep $ writeFileOption <$> options
+writeFileOptions options0 = if L.null options
+    then Nothing
+    else Just $ newlineSep $ writeFileOption <$> options
+  where
+    options = excludeInternalOptions options0
 
 writeImport :: P3.FileReference -> CT.Expr
 writeImport (P3.FileReference path) = semi $ spaceSep [cst "import", cst $ show path]
