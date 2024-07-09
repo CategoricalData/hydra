@@ -13,8 +13,9 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-key_maxSize = "maxLength"
-key_minSize = "minLength"
+key_deprecated = "deprecated"
+key_maxLength = "maxLength"
+key_minLength = "minLength"
 
 annotateTerm :: String -> Y.Maybe (Term Kv) -> Term Kv -> Term Kv
 annotateTerm = setTermAnnotation
@@ -36,6 +37,9 @@ boundedSet min max et = bounded min max $ Types.set et
 
 boundedString :: Maybe Int -> Maybe Int -> Type Kv
 boundedString min max = bounded min max Types.string
+
+deprecated :: Type Kv -> Type Kv
+deprecated = setTypeAnnotation key_deprecated (Just $ Terms.boolean True)
 
 doc :: String -> Type Kv -> Type Kv
 doc s = setTypeDescription (Just s)
@@ -62,10 +66,10 @@ see :: String -> Type Kv -> Type Kv
 see s = doc $ "See " ++ s
 
 setMaxLength :: Int -> Type Kv -> Type Kv
-setMaxLength m = setTypeAnnotation key_maxSize (Just $ Terms.int32 m)
+setMaxLength m = setTypeAnnotation key_maxLength (Just $ Terms.int32 m)
 
 setMinLength :: Int -> Type Kv -> Type Kv
-setMinLength m = setTypeAnnotation key_minSize (Just $ Terms.int32 m)
+setMinLength m = setTypeAnnotation key_minLength (Just $ Terms.int32 m)
 
 twoOrMoreList :: Type Kv -> Type Kv
 twoOrMoreList = boundedList (Just 2) Nothing
