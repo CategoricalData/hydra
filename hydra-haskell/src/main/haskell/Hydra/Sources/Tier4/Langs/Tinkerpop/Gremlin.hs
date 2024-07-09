@@ -1162,16 +1162,16 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     ;
 
       def "PropertyArgs" $ union [
-        "cardinalityObjects">: gremlin "PropertyArgsCardinalityObjects",
+        "cardinalityObjects">: gremlin "TraversalCardinalityArgumentAndObjects",
         "objects">: minLengthList 2 genericLiteralArgument,
         "object">: genericLiteralMapNullableArgument,
-        "cardinalityObject">: gremlin "PropertyArgsCardinalityObject"],
+        "cardinalityObject">: gremlin "GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument"],
 
-      def "PropertyArgsCardinalityObjects" $ record [
+      def "TraversalCardinalityArgumentAndObjects" $ record [
         "cardinality">: traversalCardinalityArgument,
         "objects">: minLengthList 2 genericLiteralArgument],
 
-      def "PropertyArgsCardinalityObject" $ record [
+      def "GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument" $ record [
         "cardinality">: traversalCardinalityArgument,
         "object">: genericLiteralMapNullableArgument],
 
