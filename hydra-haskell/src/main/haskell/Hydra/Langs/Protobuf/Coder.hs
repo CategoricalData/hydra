@@ -138,16 +138,21 @@ encodeEnumValueName tname fname = P3.EnumValueName (prefix ++ "_" ++ suffix)
     prefix = localNameOfEager tname
     suffix = convertCase CaseConventionCamel CaseConventionUpperSnake $ unFieldName fname
 
-encodeFieldName :: FieldName -> P3.FieldName
-encodeFieldName = P3.FieldName . convertCase CaseConventionCamel CaseConventionLowerSnake . unFieldName
+encodeFieldName :: Bool -> FieldName -> P3.FieldName
+encodeFieldName preserve = P3.FieldName . toPname . unFieldName
+  where
+    toPname = if preserve
+      then id
+      else convertCase CaseConventionCamel CaseConventionLowerSnake
 
 encodeFieldType :: (Ord a, Show a) => Namespace -> FieldType a -> Flow (Graph a) P3.Field
 encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ show (unFieldName fname)) $ do
     options <- findOptions ftype
     ft <- encodeType ftype
     idx <- nextIndex
+    preserve <- readBooleanAnnotation key_preserveFieldName ftype
     return $ P3.Field {
-      P3.fieldName = encodeFieldName fname,
+      P3.fieldName = encodeFieldName preserve fname,
       P3.fieldJsonName = Nothing,
       P3.fieldType = ft,
       P3.fieldNumber = idx,
@@ -245,19 +250,12 @@ flattenType = rewriteType f id
 
 findOptions :: Type a -> Flow (Graph a) [P3.Option]
 findOptions typ = do
-    anns <- graphAnnotations <$> getState
-    mdesc <- annotationClassTypeDescription anns typ
-    let bdep = isDeprecated anns
-    let mdescAnn = fmap (\desc -> P3.Option descriptionOptionName $ P3.ValueString desc) mdesc
-    let mdepAnn = if bdep then Just (P3.Option deprecatedOptionName $ P3.ValueBoolean True) else Nothing
-    return $ Y.catMaybes [mdescAnn, mdepAnn]
-  where
-    showAnn anns = annotationClassShow anns (annotationClassTypeAnnotation anns typ)
-    isDeprecated anns = case TR.readMaybe (showAnn anns) of
-      Nothing -> False
-      Just kv -> case getAnnotation key_deprecated kv of
-        Nothing -> False
-        Just _ -> True
+  anns <- graphAnnotations <$> getState
+  mdesc <- annotationClassTypeDescription anns typ
+  bdep <- readBooleanAnnotation key_deprecated typ
+  let mdescAnn = fmap (\desc -> P3.Option descriptionOptionName $ P3.ValueString desc) mdesc
+  let mdepAnn = if bdep then Just (P3.Option deprecatedOptionName $ P3.ValueBoolean True) else Nothing
+  return $ Y.catMaybes [mdescAnn, mdepAnn]
 
 isEnumFields :: Eq a => [FieldType a] -> Bool
 isEnumFields fields = L.foldl (&&) True $ fmap isEnumField fields
@@ -281,6 +279,16 @@ namespaceToPackageName (Namespace ns) = P3.PackageName $ Strings.intercalate "."
 
 nextIndex :: Flow s Int
 nextIndex = nextCount "proto_field_index"
+
+readBooleanAnnotation :: String -> Type a -> Flow (Graph a) Bool
+readBooleanAnnotation key typ = do
+    anns <- graphAnnotations <$> getState
+    let ann = annotationClassTypeAnnotation anns typ
+    case TR.readMaybe $ annotationClassShow anns ann of
+      Just kv -> case getAnnotation key kv of
+        Just _ -> return True
+        Nothing -> return False
+      Nothing -> return False
 
 -- Note: this should probably be done in the term adapters
 simplifyType :: Type a -> Type a
