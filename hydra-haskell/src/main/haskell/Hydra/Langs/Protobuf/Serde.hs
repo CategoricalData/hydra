@@ -1,4 +1,5 @@
 module Hydra.Langs.Protobuf.Serde (
+  deprecatedOptionName,
   descriptionOptionName,
   writeProtoFile) where
 
@@ -11,6 +12,7 @@ import qualified Data.List as L
 import qualified Data.Maybe as Y
 
 
+deprecatedOptionName = "deprecated"
 -- A special Protobuf option for descriptions (documentation)
 descriptionOptionName = "_description"
 
@@ -55,17 +57,34 @@ writeField (P3.Field name jsonName typ num options) = optDesc False options $ ca
     cst "oneof",
     cst $ P3.unFieldName name,
     protoBlock (writeField <$> fields)]
-  _ -> semi $ spaceSep [ -- TODO: jsonName
-    writeFieldType typ,
-    cst $ P3.unFieldName name,
-    cst "=",
-    cst $ show num]
+  _ -> semi $ spaceSep $ Y.catMaybes [ -- TODO: jsonName
+    Just $ writeFieldType typ,
+    Just $ cst $ P3.unFieldName name,
+    Just $ cst "=",
+    Just $ cst $ show num,
+    writeFieldOptions options]
+
+writeFieldOption :: P3.Option -> CT.Expr
+writeFieldOption (P3.Option name value) = spaceSep [cst name, cst "=", writeValue value]
+
+writeFieldOptions :: [P3.Option] -> Y.Maybe CT.Expr
+writeFieldOptions options = if L.null options
+  then Nothing
+  else Just $ bracketList inlineStyle (writeFieldOption <$> options)
 
 writeFieldType :: P3.FieldType -> CT.Expr
 writeFieldType ftyp = case ftyp of
   P3.FieldTypeMap st -> noSep [cst "map", angleBracesList inlineStyle [cst "string", writeSimpleType st]]
   P3.FieldTypeRepeated st -> spaceSep [cst "repeated", writeSimpleType st]
   P3.FieldTypeSimple st -> writeSimpleType st
+
+writeFileOption :: P3.Option -> CT.Expr
+writeFileOption (P3.Option name value) = semi $ spaceSep [cst "option", cst name, cst "=", writeValue value]
+
+writeFileOptions :: [P3.Option] -> Y.Maybe CT.Expr
+writeFileOptions options = if L.null options
+  then Nothing
+  else Just $ newlineSep $ writeFileOption <$> options
 
 writeImport :: P3.FileReference -> CT.Expr
 writeImport (P3.FileReference path) = semi $ spaceSep [cst "import", cst $ show path]
@@ -75,9 +94,6 @@ writeMessageDefinition (P3.MessageDefinition name fields options) = optDesc Fals
   cst "message",
   cst $ P3.unTypeName name,
   protoBlock (writeField <$> fields)]
-
-writeOption :: P3.Option -> CT.Expr
-writeOption (P3.Option name value) = semi $ spaceSep [cst "option", cst name, cst "=", writeValue value]
 
 writeProtoFile :: P3.ProtoFile -> CT.Expr
 writeProtoFile (P3.ProtoFile pkg imports defs options) = optDesc True options $ doubleNewlineSep
@@ -89,9 +105,7 @@ writeProtoFile (P3.ProtoFile pkg imports defs options) = optDesc True options $ 
     importsSec = if L.null imports
       then Nothing
       else Just $ newlineSep $ writeImport <$> imports
-    optionsSec = if L.null options1
-      then Nothing
-      else Just $ newlineSep $ writeOption <$> options1
+    optionsSec = writeFileOptions options1
     defsSec = if L.null defs
       then Nothing
       else Just $ doubleNewlineSep $ writeDefinition <$> defs

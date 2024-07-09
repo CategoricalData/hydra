@@ -8,13 +8,14 @@ import Hydra.Langs.Protobuf.Language
 import Hydra.Langs.Protobuf.Serde
 import Hydra.Tools.Serialization
 import qualified Hydra.Dsl.Types as Types
+import Hydra.Dsl.Annotations
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+import qualified Text.Read as TR
 import qualified Data.Maybe as Y
-
 
 moduleToProtobuf :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
 moduleToProtobuf mod = do
@@ -244,11 +245,19 @@ flattenType = rewriteType f id
 
 findOptions :: Type a -> Flow (Graph a) [P3.Option]
 findOptions typ = do
-  anns <- graphAnnotations <$> getState
-  mdesc <- annotationClassTypeDescription anns typ
-  return $ case mdesc of
-    Nothing -> []
-    Just desc -> [P3.Option descriptionOptionName $ P3.ValueString desc]
+    anns <- graphAnnotations <$> getState
+    mdesc <- annotationClassTypeDescription anns typ
+    let bdep = isDeprecated anns
+    let mdescAnn = fmap (\desc -> P3.Option descriptionOptionName $ P3.ValueString desc) mdesc
+    let mdepAnn = if bdep then Just (P3.Option deprecatedOptionName $ P3.ValueBoolean True) else Nothing
+    return $ Y.catMaybes [mdescAnn, mdepAnn]
+  where
+    showAnn anns = annotationClassShow anns (annotationClassTypeAnnotation anns typ)
+    isDeprecated anns = case TR.readMaybe (showAnn anns) of
+      Nothing -> False
+      Just kv -> case getAnnotation key_deprecated kv of
+        Nothing -> False
+        Just _ -> True
 
 isEnumFields :: Eq a => [FieldType a] -> Bool
 isEnumFields fields = L.foldl (&&) True $ fmap isEnumField fields
