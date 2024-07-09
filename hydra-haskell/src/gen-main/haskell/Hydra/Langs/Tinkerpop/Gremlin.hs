@@ -1060,10 +1060,10 @@ _GenericLiteralArgumentAndNestedTraversal_object = (Core.FieldName "object")
 _GenericLiteralArgumentAndNestedTraversal_traversal = (Core.FieldName "traversal")
 
 data PropertyArgs = 
-  PropertyArgsCardinalityObjects PropertyArgsCardinalityObjects |
+  PropertyArgsCardinalityObjects TraversalCardinalityArgumentAndObjects |
   PropertyArgsObjects [GenericLiteralArgument] |
   PropertyArgsObject GenericLiteralMapNullableArgument |
-  PropertyArgsCardinalityObject PropertyArgsCardinalityObject
+  PropertyArgsCardinalityObject GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument
   deriving (Eq, Ord, Read, Show)
 
 _PropertyArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.PropertyArgs")
@@ -1076,29 +1076,29 @@ _PropertyArgs_object = (Core.FieldName "object")
 
 _PropertyArgs_cardinalityObject = (Core.FieldName "cardinalityObject")
 
-data PropertyArgsCardinalityObjects = 
-  PropertyArgsCardinalityObjects {
-    propertyArgsCardinalityObjectsCardinality :: TraversalCardinalityArgument,
-    propertyArgsCardinalityObjectsObjects :: [GenericLiteralArgument]}
+data TraversalCardinalityArgumentAndObjects = 
+  TraversalCardinalityArgumentAndObjects {
+    traversalCardinalityArgumentAndObjectsCardinality :: TraversalCardinalityArgument,
+    traversalCardinalityArgumentAndObjectsObjects :: [GenericLiteralArgument]}
   deriving (Eq, Ord, Read, Show)
 
-_PropertyArgsCardinalityObjects = (Core.Name "hydra/langs/tinkerpop/gremlin.PropertyArgsCardinalityObjects")
+_TraversalCardinalityArgumentAndObjects = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalCardinalityArgumentAndObjects")
 
-_PropertyArgsCardinalityObjects_cardinality = (Core.FieldName "cardinality")
+_TraversalCardinalityArgumentAndObjects_cardinality = (Core.FieldName "cardinality")
 
-_PropertyArgsCardinalityObjects_objects = (Core.FieldName "objects")
+_TraversalCardinalityArgumentAndObjects_objects = (Core.FieldName "objects")
 
-data PropertyArgsCardinalityObject = 
-  PropertyArgsCardinalityObject {
-    propertyArgsCardinalityObjectCardinality :: TraversalCardinalityArgument,
-    propertyArgsCardinalityObjectObject :: GenericLiteralMapNullableArgument}
+data GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument = 
+  GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument {
+    genericLiteralMapNullableArgumentAndTraversalCardinalityArgumentCardinality :: TraversalCardinalityArgument,
+    genericLiteralMapNullableArgumentAndTraversalCardinalityArgumentObject :: GenericLiteralMapNullableArgument}
   deriving (Eq, Ord, Read, Show)
 
-_PropertyArgsCardinalityObject = (Core.Name "hydra/langs/tinkerpop/gremlin.PropertyArgsCardinalityObject")
+_GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument")
 
-_PropertyArgsCardinalityObject_cardinality = (Core.FieldName "cardinality")
+_GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument_cardinality = (Core.FieldName "cardinality")
 
-_PropertyArgsCardinalityObject_object = (Core.FieldName "object")
+_GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument_object = (Core.FieldName "object")
 
 data RangeArgs = 
   RangeArgs {
