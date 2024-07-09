@@ -16,6 +16,7 @@ import qualified Data.Maybe as Y
 key_deprecated = "deprecated"
 key_maxLength = "maxLength"
 key_minLength = "minLength"
+key_preserveFieldName = "preserveFieldName"
 
 annotateTerm :: String -> Y.Maybe (Term Kv) -> Term Kv -> Term Kv
 annotateTerm = setTermAnnotation
@@ -61,6 +62,9 @@ nonemptyList = minLengthList 1
 
 note :: String -> Type Kv -> Type Kv
 note s = doc $ "Note: " ++ s
+
+preserveFieldName :: Type Kv -> Type Kv
+preserveFieldName = setTypeAnnotation key_preserveFieldName (Just $ Terms.boolean True)
 
 see :: String -> Type Kv -> Type Kv
 see s = doc $ "See " ++ s
