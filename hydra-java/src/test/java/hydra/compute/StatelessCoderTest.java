@@ -32,8 +32,7 @@ public class StatelessCoderTest extends HydraTestBase {
                 } catch (NumberFormatException e) {
                     return fail(e.getMessage());
                 }
-            }
-    );
+            });
 
     @Test
     public void checkBidirectionalCoder() {

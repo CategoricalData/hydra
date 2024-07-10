@@ -37,10 +37,15 @@ public interface Flows {
      */
     int MAX_MAPM_SIZE = 1000;
 
+    Unit UNIT = new Unit();
+
     /**
      * Apply a function flow to a domain value flow.
      */
     static <S, A, B> Flow<S, B> apply(Flow<S, Function<A, B>> mapping, Flow<S, A> input) {
+        nullCheck(mapping, "mapping");
+        nullCheck(input, "input");
+
         return new Flow<>(s0 -> t0 -> {
             FlowState<S, Function<A, B>> fs1 = mapping.value.apply(s0).apply(t0);
             Optional<Function<A, B>> mf = fs1.value;
@@ -54,6 +59,9 @@ public interface Flows {
      * Monadic bind function for flows.
      */
     static <S, A, B> Flow<S, B> bind(Flow<S, A> p, Function<A, Flow<S, B>> f) {
+        nullCheck(p, "p");
+        nullCheck(f, "f");
+
         return new Flow<>(s0 -> t0 -> {
             FlowState<S, A> fs1 = p.value.apply(s0).apply(t0);
             Optional<A> a = fs1.value;
@@ -74,6 +82,10 @@ public interface Flows {
      * Variant of monadic bind which takes two monadic arguments and a binary function.
      */
     static <S, A, B, C> Flow<S, C> bind2(Flow<S, A> p1, Flow<S, B> p2, BiFunction<A, B, Flow<S, C>> f) {
+        nullCheck(p1, "p1");
+        nullCheck(p2, "p2");
+        nullCheck(f, "f");
+
         return Flows.bind(p1, a -> Flows.bind(p2, b -> f.apply(a, b)));
     }
 
@@ -91,6 +103,10 @@ public interface Flows {
                                             Flow<S, B> p2,
                                             Flow<S, C> p3,
                                             Function3<A, B, C, Flow<S, D>> f) {
+        nullCheck(p1, "p1");
+        nullCheck(p2, "p2");
+        nullCheck(p3, "p3");
+
         return Flows.bind(p1, a -> Flows.bind2(p2, p3, (b, c) -> f.apply(a, b, c)));
     }
 
@@ -109,6 +125,9 @@ public interface Flows {
      * successful, or a failure flow for the first predicate that fails.
      */
     static <S, A> Flow<S, A> check(A input, Function<A, Optional<String>>... predicates) {
+        nullCheck(input, "input");
+        nullCheck(predicates, "predicates");
+
         for (Function<A, Optional<String>> predicate : predicates) {
             Optional<String> msg = predicate.apply(input);
             if (msg.isPresent()) {
@@ -123,6 +142,9 @@ public interface Flows {
      * Compose two monadic functions, feeding the output of the first into the second.
      */
     static <S, A, B, C> Function<A, Flow<S, C>> compose(Function<A, Flow<S, B>> f, Function<B, Flow<S, C>> g) {
+        nullCheck(f, "f");
+        nullCheck(g, "g");
+
         return a -> Flows.bind(f.apply(a), g);
     }
 
@@ -130,6 +152,9 @@ public interface Flows {
      * Evaluate a flow and consume the result.
      */
     static <S, A> Flow<S, Unit> consume(Flow<S, A> x, Consumer<A> consumer) {
+        nullCheck(x, "x");
+        nullCheck(consumer, "consumer");
+
         return map(x, a -> {
             consumer.accept(a);
             return new Unit();
@@ -140,6 +165,8 @@ public interface Flows {
      * Produce a failure flow with the provided message.
      */
     static <S, A> Flow<S, A> fail(String msg) {
+        nullCheck(msg, "msg");
+
         return new Flow<>(s -> trace -> {
             String errMsg = "Error: " + msg; // TODO: include stack trace
             List<String> messages = new ArrayList<>(trace.messages);
@@ -152,6 +179,8 @@ public interface Flows {
      * Produce a failure flow with the provided message and additional information from a Throwable.
      */
     static <S, A> Flow<S, A> fail(String msg, Throwable cause) {
+        nullCheck(msg, "msg");
+
         return fail(msg + ": " + cause.getMessage());
     }
 
@@ -159,6 +188,10 @@ public interface Flows {
      * Extract the value from a flow, returning a default value instead if the flow failed.
      */
     static <S, A> A fromFlow(A dflt, S state, Flow<S, A> flow) {
+        nullCheck(dflt, "dflt");
+        nullCheck(state, "state");
+        nullCheck(flow, "flow");
+
         Function<S, Function<Flow<S, A>, A>> helper = Tier1.fromFlow(dflt);
         return helper.apply(state).apply(flow);
     }
@@ -167,6 +200,9 @@ public interface Flows {
      * Extract the value from a flow, throwing an exception if the flow failed.
      */
     static <S, A> A fromFlow(S state, Flow<S, A> flow) throws FlowException {
+        nullCheck(state, "state");
+        nullCheck(flow, "flow");
+
         FlowState<S, A> result = flow.value.apply(state).apply(EMPTY_TRACE);
         if (result.value.isPresent()) {
             return result.value.get();
@@ -193,6 +229,9 @@ public interface Flows {
      * Map a function over a flow.
      */
     static <S, A, B> Flow<S, B> map(Function<A, B> f, Flow<S, A> x) {
+        nullCheck(f, "f");
+        nullCheck(x, "x");
+
         return new Flow<>(s -> trace -> {
             FlowState<S, A> result = x.value.apply(s).apply(trace);
             return new FlowState<>(result.value.map(f), result.state, result.trace);
@@ -210,6 +249,9 @@ public interface Flows {
      * Map a monadic function over a list, producing a flow of lists.
      */
     static <S, A, B> Flow<S, List<B>> mapM(List<A> as, Function<A, Flow<S, B>> f) {
+        nullCheck(as, "as");
+        nullCheck(f, "f");
+
         if (as.size() > MAX_MAPM_SIZE) {
             throw new IllegalArgumentException("Can't mapM over a collection with more than "
                 + MAX_MAPM_SIZE + " (MAX_MAPM_SIZE) elements. This would present a risk of stack overflow.");
@@ -229,6 +271,9 @@ public interface Flows {
      * Map a monadic function over an array, producing a flow of lists.
      */
     static <S, A, B> Flow<S, List<B>> mapM(A[] xs, Function<A, Flow<S, B>> f) {
+        nullCheck(xs, "xs");
+        nullCheck(f, "f");
+
         return mapM(Arrays.asList(xs), f);
     }
 
@@ -239,6 +284,10 @@ public interface Flows {
     static <S, K1, V1, K2, V2> Flow<S, Map<K2, V2>> mapM(Map<K1, V1> xs,
                                                          Function<K1, Flow<S, K2>> kf,
                                                          Function<V1, Flow<S, V2>> vf) {
+        nullCheck(xs, "xs");
+        nullCheck(kf, "kf");
+        nullCheck(vf, "vf");
+
         Set<Map.Entry<K1, V1>> entries1 = xs.entrySet();
         Flow<S, Set<Map.Entry<K2, V2>>> entries2 = mapM(entries1,
                 e -> bind(kf.apply(e.getKey()), k2 -> map(vf.apply(e.getValue()),
@@ -251,6 +300,9 @@ public interface Flows {
      * Map a monadic function over an optional value, producing a flow of optionals.
      */
     static <S, A, B> Flow<S, Optional<B>> mapM(Optional<A> xs, Function<A, Flow<S, B>> f) {
+        nullCheck(xs, "xs");
+        nullCheck(f, "f");
+
         return xs.map(a -> map(f.apply(a), Optional::of)).orElseGet(() -> pure(Optional.empty()));
     }
 
@@ -258,6 +310,9 @@ public interface Flows {
      * Map a monadic function over a set, producing a flow of sets.
      */
     static <S, A, B> Flow<S, Set<B>> mapM(Set<A> as, Function<A, Flow<S, B>> f) {
+        nullCheck(as, "as");
+        nullCheck(f, "f");
+
         if (as.size() > MAX_MAPM_SIZE) {
             throw new IllegalArgumentException("Can't mapM over a collection with more than "
                 + MAX_MAPM_SIZE + " (MAX_MAPM_SIZE) elements. This would present a risk of stack overflow.");
@@ -277,6 +332,10 @@ public interface Flows {
      * Map a bifunction over two flows, producing a flow.
      */
     static <S, A, B, C> Flow<S, C> map2(Flow<S, A> x, Flow<S, B> y, BiFunction<A, B, C> f) {
+        nullCheck(x, "x");
+        nullCheck(y, "y");
+        nullCheck(f, "f");
+
         return Flows.bind(x, a1 -> Flows.bind(y, b1 -> Flows.pure(f.apply(a1, b1))));
     }
 
@@ -284,6 +343,11 @@ public interface Flows {
      * Map an arity-3 function over three flows, producing a flow.
      */
     static <S, A, B, C, D> Flow<S, D> map3(Flow<S, A> a, Flow<S, B> b, Flow<S, C> c, Function3<A, B, C, D> f) {
+        nullCheck(a, "a");
+        nullCheck(b, "b");
+        nullCheck(c, "c");
+        nullCheck(f, "f");
+
         return Flows.bind(a,
                 a1 -> Flows.bind(b,
                         b1 -> Flows.bind(c,
@@ -298,6 +362,12 @@ public interface Flows {
                                               Flow<S, C> c,
                                               Flow<S, D> d,
                                               Function4<A, B, C, D, E> f) {
+        nullCheck(a, "a");
+        nullCheck(b, "b");
+        nullCheck(c, "c");
+        nullCheck(d, "d");
+        nullCheck(f, "f");
+
         return Flows.bind(a,
                 a1 -> Flows.bind(b,
                         b1 -> Flows.bind(c,
@@ -305,11 +375,19 @@ public interface Flows {
                                         d1 -> Flows.pure(f.apply(a1, b1, c1, d1))))));
     }
 
+    static <A> void nullCheck(A arg, String argName) {
+        if (arg == null) {
+            throw new IllegalArgumentException("null value for '" + argName + "' argument");
+        }
+    }
+
     /**
      * Produce a given object as a pure flow; the value is guaranteed to be present,
      * and neither state nor trace are modified.
      */
     static <S, A> Flow<S, A> pure(A obj) {
+        nullCheck(obj, "obj");
+
         return new Flow<>(s -> trace -> new FlowState<>(Optional.of(obj), s, trace));
     }
 
@@ -317,6 +395,8 @@ public interface Flows {
      * Modify the state of a flow.
      */
     static <S> Flow<S, Boolean> putState(S snew) {
+        nullCheck(snew, "snew");
+
         // Note: for lack of a unit value other than null,
         // we use use a boolean as the ignorable value output of putState()
         return new Flow<>(s0 -> t0 -> new FlowState<>(Optional.of(true), snew, t0));
@@ -326,6 +406,9 @@ public interface Flows {
      * Test an optional value, producing a flow with the value if present, or an error flow if absent.
      */
     static <S, A> Flow<S, A> require(Optional<A> optValue, String category) {
+        nullCheck(optValue, "optValue");
+        nullCheck(category, "category");
+
         return optValue.isPresent()
                 ? Flows.pure(optValue.get())
                 : Flows.fail("require " + category + " is missing/null");
@@ -336,6 +419,8 @@ public interface Flows {
      * Analogous to the sequence function in Haskell.
      */
     static <S, A> Flow<S, List<A>> sequence(List<Flow<S, A>> elements) {
+        nullCheck(elements, "elements");
+
         Flow<S, List<A>> result = Flows.pure(new ArrayList<>(elements.size()));
         for (Flow<S, A> element : elements) {
             result = Flows.bind(result, xs -> Flows.map(element, x -> {

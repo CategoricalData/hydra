@@ -3,15 +3,25 @@ package hydra;
 import hydra.compute.Flow;
 import hydra.compute.FlowState;
 import hydra.compute.Kv;
+import hydra.core.Name;
 import hydra.core.Term;
+import hydra.core.Type;
+import hydra.graph.AnnotationClass;
+import hydra.graph.Comparison;
 import hydra.graph.Graph;
+import hydra.graph.TypeClass;
 import hydra.test.testSuite.TestSuite;
 import hydra.testing.TestCase;
 import hydra.testing.TestGroup;
 import hydra.tools.PrettyPrinter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,6 +36,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Java executor for Hydra's language-agnostic test suite.
  */
 public class TestSuiteRunner extends HydraTestBase {
+    protected static final Kv EMPTY_KV = new Kv(new HashMap<>());
+
+    protected static final AnnotationClass<Kv> FAKE_KV_ANNOTATION_CLASS = new AnnotationClass<>(
+            EMPTY_KV,
+            a1 -> a2 -> false,
+            a1 -> a2 -> new Comparison.EqualTo(),
+            a -> "fake",
+            s -> Optional.empty(),
+            t -> EMPTY_KV,
+            t -> EMPTY_KV,
+            t -> Flows.fail("fake"),
+            t -> Flows.fail("fake"),
+            t -> Flows.fail("fake"),
+            t -> Flows.fail("fake"),
+            d -> t -> t,
+            d -> t -> t,
+            m -> t -> t,
+            a -> Flows.fail("fake"),
+            t -> a -> a);
+
     @ParameterizedTest
     @MethodSource("provideTestCases")
     void runParameterizedTestCase(String name, Term<Kv> input, Term<Kv> output) {
@@ -36,7 +66,7 @@ public class TestSuiteRunner extends HydraTestBase {
      * Run a beta-reduction test case.
      */
     public static void runReductionTestCase(boolean eager, String name, Term<Kv> input, Term<Kv> output) {
-        Graph<Kv> graph = emptyGraph();
+        Graph<Kv> graph = emptyGraph(FAKE_KV_ANNOTATION_CLASS);
         String suffix = " (" + name + ")";
 
         Flow<Graph<Kv>, Term<Kv>> reduced = Reduction.reduce(eager, input);
