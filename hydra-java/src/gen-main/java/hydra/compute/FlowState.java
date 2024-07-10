@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.compute;
 
 import java.io.Serializable;
@@ -15,6 +17,15 @@ public class FlowState<S, X> implements Serializable {
   public final hydra.compute.Trace trace;
   
   public FlowState (java.util.Optional<X> value, S state, hydra.compute.Trace trace) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
+    if (state == null) {
+      throw new IllegalArgumentException("null value for 'state' argument");
+    }
+    if (trace == null) {
+      throw new IllegalArgumentException("null value for 'trace' argument");
+    }
     this.value = value;
     this.state = state;
     this.trace = trace;
@@ -35,14 +46,23 @@ public class FlowState<S, X> implements Serializable {
   }
   
   public FlowState withValue(java.util.Optional<X> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     return new FlowState(value, state, trace);
   }
   
   public FlowState withState(S state) {
+    if (state == null) {
+      throw new IllegalArgumentException("null value for 'state' argument");
+    }
     return new FlowState(value, state, trace);
   }
   
   public FlowState withTrace(hydra.compute.Trace trace) {
+    if (trace == null) {
+      throw new IllegalArgumentException("null value for 'trace' argument");
+    }
     return new FlowState(value, state, trace);
   }
 }

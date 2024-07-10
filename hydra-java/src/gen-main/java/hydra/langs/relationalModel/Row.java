@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.relationalModel;
 
 import java.io.Serializable;
@@ -11,6 +13,9 @@ public class Row<V> implements Serializable {
   public final java.util.List<V> value;
   
   public Row (java.util.List<V> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

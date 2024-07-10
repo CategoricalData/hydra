@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class NumericType implements Serializable {
     public final hydra.langs.java.syntax.IntegralType value;
     
     public Integral (hydra.langs.java.syntax.IntegralType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class NumericType implements Serializable {
     public final hydra.langs.java.syntax.FloatingPointType value;
     
     public FloatingPoint (hydra.langs.java.syntax.FloatingPointType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

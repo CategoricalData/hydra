@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class ShapeAnd implements Serializable {
   public final java.util.List<hydra.langs.shex.syntax.ShapeNot> listOfSequence;
   
   public ShapeAnd (hydra.langs.shex.syntax.ShapeNot shapeNot, java.util.List<hydra.langs.shex.syntax.ShapeNot> listOfSequence) {
+    if (shapeNot == null) {
+      throw new IllegalArgumentException("null value for 'shapeNot' argument");
+    }
+    if (listOfSequence == null) {
+      throw new IllegalArgumentException("null value for 'listOfSequence' argument");
+    }
     this.shapeNot = shapeNot;
     this.listOfSequence = listOfSequence;
   }
@@ -29,10 +37,16 @@ public class ShapeAnd implements Serializable {
   }
   
   public ShapeAnd withShapeNot(hydra.langs.shex.syntax.ShapeNot shapeNot) {
+    if (shapeNot == null) {
+      throw new IllegalArgumentException("null value for 'shapeNot' argument");
+    }
     return new ShapeAnd(shapeNot, listOfSequence);
   }
   
   public ShapeAnd withListOfSequence(java.util.List<hydra.langs.shex.syntax.ShapeNot> listOfSequence) {
+    if (listOfSequence == null) {
+      throw new IllegalArgumentException("null value for 'listOfSequence' argument");
+    }
     return new ShapeAnd(shapeNot, listOfSequence);
   }
 }

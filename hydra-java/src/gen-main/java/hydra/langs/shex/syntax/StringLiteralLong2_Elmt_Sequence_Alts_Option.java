@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -60,6 +62,9 @@ public abstract class StringLiteralLong2_Elmt_Sequence_Alts_Option implements Se
     public final hydra.langs.shex.syntax.StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence value;
     
     public Sequence (hydra.langs.shex.syntax.StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

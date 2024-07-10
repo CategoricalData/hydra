@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Directive implements Serializable {
   public final java.util.Optional<hydra.langs.graphql.syntax.Arguments> arguments;
   
   public Directive (hydra.langs.graphql.syntax.Name name, java.util.Optional<hydra.langs.graphql.syntax.Arguments> arguments) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (arguments == null) {
+      throw new IllegalArgumentException("null value for 'arguments' argument");
+    }
     this.name = name;
     this.arguments = arguments;
   }
@@ -29,10 +37,16 @@ public class Directive implements Serializable {
   }
   
   public Directive withName(hydra.langs.graphql.syntax.Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new Directive(name, arguments);
   }
   
   public Directive withArguments(java.util.Optional<hydra.langs.graphql.syntax.Arguments> arguments) {
+    if (arguments == null) {
+      throw new IllegalArgumentException("null value for 'arguments' argument");
+    }
     return new Directive(name, arguments);
   }
 }

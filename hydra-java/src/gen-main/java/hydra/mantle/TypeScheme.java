@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.mantle;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class TypeScheme<A> implements Serializable {
   public final hydra.core.Type<A> type;
   
   public TypeScheme (java.util.List<hydra.core.Name> variables, hydra.core.Type<A> type) {
+    if (variables == null) {
+      throw new IllegalArgumentException("null value for 'variables' argument");
+    }
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     this.variables = variables;
     this.type = type;
   }
@@ -32,10 +40,16 @@ public class TypeScheme<A> implements Serializable {
   }
   
   public TypeScheme withVariables(java.util.List<hydra.core.Name> variables) {
+    if (variables == null) {
+      throw new IllegalArgumentException("null value for 'variables' argument");
+    }
     return new TypeScheme(variables, type);
   }
   
   public TypeScheme withType(hydra.core.Type<A> type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new TypeScheme(variables, type);
   }
 }

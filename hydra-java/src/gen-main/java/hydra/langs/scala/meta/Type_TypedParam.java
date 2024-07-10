@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Type_TypedParam implements Serializable {
   public final hydra.langs.scala.meta.Type typ;
   
   public Type_TypedParam (hydra.langs.scala.meta.Name name, hydra.langs.scala.meta.Type typ) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (typ == null) {
+      throw new IllegalArgumentException("null value for 'typ' argument");
+    }
     this.name = name;
     this.typ = typ;
   }
@@ -29,10 +37,16 @@ public class Type_TypedParam implements Serializable {
   }
   
   public Type_TypedParam withName(hydra.langs.scala.meta.Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new Type_TypedParam(name, typ);
   }
   
   public Type_TypedParam withTyp(hydra.langs.scala.meta.Type typ) {
+    if (typ == null) {
+      throw new IllegalArgumentException("null value for 'typ' argument");
+    }
     return new Type_TypedParam(name, typ);
   }
 }

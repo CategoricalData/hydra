@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.protobuf.proto3;
 
 import java.io.Serializable;
@@ -24,6 +26,15 @@ public class EnumValue implements Serializable {
   public final java.util.List<hydra.langs.protobuf.proto3.Option> options;
   
   public EnumValue (hydra.langs.protobuf.proto3.EnumValueName name, Integer number, java.util.List<hydra.langs.protobuf.proto3.Option> options) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (number == null) {
+      throw new IllegalArgumentException("null value for 'number' argument");
+    }
+    if (options == null) {
+      throw new IllegalArgumentException("null value for 'options' argument");
+    }
     this.name = name;
     this.number = number;
     this.options = options;
@@ -44,14 +55,23 @@ public class EnumValue implements Serializable {
   }
   
   public EnumValue withName(hydra.langs.protobuf.proto3.EnumValueName name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new EnumValue(name, number, options);
   }
   
   public EnumValue withNumber(Integer number) {
+    if (number == null) {
+      throw new IllegalArgumentException("null value for 'number' argument");
+    }
     return new EnumValue(name, number, options);
   }
   
   public EnumValue withOptions(java.util.List<hydra.langs.protobuf.proto3.Option> options) {
+    if (options == null) {
+      throw new IllegalArgumentException("null value for 'options' argument");
+    }
     return new EnumValue(name, number, options);
   }
 }

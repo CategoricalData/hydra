@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class Constructor_Ordinary implements Serializable {
   public final java.util.List<hydra.langs.haskell.ast.Type> fields;
   
   public Constructor_Ordinary (hydra.langs.haskell.ast.Name name, java.util.List<hydra.langs.haskell.ast.Type> fields) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (fields == null) {
+      throw new IllegalArgumentException("null value for 'fields' argument");
+    }
     this.name = name;
     this.fields = fields;
   }
@@ -32,10 +40,16 @@ public class Constructor_Ordinary implements Serializable {
   }
   
   public Constructor_Ordinary withName(hydra.langs.haskell.ast.Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new Constructor_Ordinary(name, fields);
   }
   
   public Constructor_Ordinary withFields(java.util.List<hydra.langs.haskell.ast.Type> fields) {
+    if (fields == null) {
+      throw new IllegalArgumentException("null value for 'fields' argument");
+    }
     return new Constructor_Ordinary(name, fields);
   }
 }

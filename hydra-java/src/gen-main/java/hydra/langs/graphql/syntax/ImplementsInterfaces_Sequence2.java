@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class ImplementsInterfaces_Sequence2 implements Serializable {
   public final hydra.langs.graphql.syntax.NamedType namedType;
   
   public ImplementsInterfaces_Sequence2 (java.util.Optional<java.lang.Void> amp, hydra.langs.graphql.syntax.NamedType namedType) {
+    if (amp == null) {
+      throw new IllegalArgumentException("null value for 'amp' argument");
+    }
+    if (namedType == null) {
+      throw new IllegalArgumentException("null value for 'namedType' argument");
+    }
     this.amp = amp;
     this.namedType = namedType;
   }
@@ -29,10 +37,16 @@ public class ImplementsInterfaces_Sequence2 implements Serializable {
   }
   
   public ImplementsInterfaces_Sequence2 withAmp(java.util.Optional<java.lang.Void> amp) {
+    if (amp == null) {
+      throw new IllegalArgumentException("null value for 'amp' argument");
+    }
     return new ImplementsInterfaces_Sequence2(amp, namedType);
   }
   
   public ImplementsInterfaces_Sequence2 withNamedType(hydra.langs.graphql.syntax.NamedType namedType) {
+    if (namedType == null) {
+      throw new IllegalArgumentException("null value for 'namedType' argument");
+    }
     return new ImplementsInterfaces_Sequence2(amp, namedType);
   }
 }

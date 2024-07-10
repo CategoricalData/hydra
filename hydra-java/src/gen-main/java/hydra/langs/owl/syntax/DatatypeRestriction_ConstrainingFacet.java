@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -41,6 +43,9 @@ public abstract class DatatypeRestriction_ConstrainingFacet implements Serializa
     public final hydra.langs.xml.schema.ConstrainingFacet value;
     
     public XmlSchema (hydra.langs.xml.schema.ConstrainingFacet value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -68,6 +73,9 @@ public abstract class DatatypeRestriction_ConstrainingFacet implements Serializa
     public final hydra.langs.rdf.syntax.Iri value;
     
     public Other (hydra.langs.rdf.syntax.Iri value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

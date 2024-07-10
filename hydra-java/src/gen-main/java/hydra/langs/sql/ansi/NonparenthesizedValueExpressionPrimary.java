@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -137,6 +139,9 @@ public abstract class NonparenthesizedValueExpressionPrimary implements Serializ
     public final hydra.langs.sql.ansi.UnsignedValueSpecification value;
     
     public Unsigned (hydra.langs.sql.ansi.UnsignedValueSpecification value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -164,6 +169,9 @@ public abstract class NonparenthesizedValueExpressionPrimary implements Serializ
     public final hydra.langs.sql.ansi.ColumnReference value;
     
     public Column (hydra.langs.sql.ansi.ColumnReference value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -191,6 +199,9 @@ public abstract class NonparenthesizedValueExpressionPrimary implements Serializ
     public final hydra.langs.sql.ansi.SetFunctionSpecification value;
     
     public SetFunction (hydra.langs.sql.ansi.SetFunctionSpecification value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -218,6 +229,9 @@ public abstract class NonparenthesizedValueExpressionPrimary implements Serializ
     public final hydra.langs.sql.ansi.WindowFunction value;
     
     public WindowFunction (hydra.langs.sql.ansi.WindowFunction value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -245,6 +259,9 @@ public abstract class NonparenthesizedValueExpressionPrimary implements Serializ
     public final hydra.langs.sql.ansi.ScalarSubquery value;
     
     public ScalarSubquery (hydra.langs.sql.ansi.ScalarSubquery value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -272,6 +289,9 @@ public abstract class NonparenthesizedValueExpressionPrimary implements Serializ
     public final hydra.langs.sql.ansi.CaseExpression value;
     
     public Cases (hydra.langs.sql.ansi.CaseExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -299,6 +319,9 @@ public abstract class NonparenthesizedValueExpressionPrimary implements Serializ
     public final hydra.langs.sql.ansi.CastSpecification value;
     
     public Cast (hydra.langs.sql.ansi.CastSpecification value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -326,6 +349,9 @@ public abstract class NonparenthesizedValueExpressionPrimary implements Serializ
     public final hydra.langs.sql.ansi.FieldReference value;
     
     public Field (hydra.langs.sql.ansi.FieldReference value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -353,6 +379,9 @@ public abstract class NonparenthesizedValueExpressionPrimary implements Serializ
     public final hydra.langs.sql.ansi.SubtypeTreatment value;
     
     public Subtype (hydra.langs.sql.ansi.SubtypeTreatment value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -380,6 +409,9 @@ public abstract class NonparenthesizedValueExpressionPrimary implements Serializ
     public final hydra.langs.sql.ansi.MethodInvocation value;
     
     public Method (hydra.langs.sql.ansi.MethodInvocation value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -407,6 +439,9 @@ public abstract class NonparenthesizedValueExpressionPrimary implements Serializ
     public final hydra.langs.sql.ansi.StaticMethodInvocation value;
     
     public StaticMethod (hydra.langs.sql.ansi.StaticMethodInvocation value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -434,6 +469,9 @@ public abstract class NonparenthesizedValueExpressionPrimary implements Serializ
     public final hydra.langs.sql.ansi.NewSpecification value;
     
     public New (hydra.langs.sql.ansi.NewSpecification value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -461,6 +499,9 @@ public abstract class NonparenthesizedValueExpressionPrimary implements Serializ
     public final hydra.langs.sql.ansi.AttributeOrMethodReference value;
     
     public AttributeOrMethod (hydra.langs.sql.ansi.AttributeOrMethodReference value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -488,6 +529,9 @@ public abstract class NonparenthesizedValueExpressionPrimary implements Serializ
     public final hydra.langs.sql.ansi.ReferenceResolution value;
     
     public Reference (hydra.langs.sql.ansi.ReferenceResolution value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -515,6 +559,9 @@ public abstract class NonparenthesizedValueExpressionPrimary implements Serializ
     public final hydra.langs.sql.ansi.CollectionValueConstructor value;
     
     public Collection (hydra.langs.sql.ansi.CollectionValueConstructor value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -542,6 +589,9 @@ public abstract class NonparenthesizedValueExpressionPrimary implements Serializ
     public final hydra.langs.sql.ansi.ArrayElementReference value;
     
     public ArrayElement (hydra.langs.sql.ansi.ArrayElementReference value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -569,6 +619,9 @@ public abstract class NonparenthesizedValueExpressionPrimary implements Serializ
     public final hydra.langs.sql.ansi.MultisetElementReference value;
     
     public MultisetElement (hydra.langs.sql.ansi.MultisetElementReference value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -596,6 +649,9 @@ public abstract class NonparenthesizedValueExpressionPrimary implements Serializ
     public final hydra.langs.sql.ansi.RoutineInvocation value;
     
     public Routine (hydra.langs.sql.ansi.RoutineInvocation value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -623,6 +679,9 @@ public abstract class NonparenthesizedValueExpressionPrimary implements Serializ
     public final hydra.langs.sql.ansi.NextValueExpression value;
     
     public Next (hydra.langs.sql.ansi.NextValueExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

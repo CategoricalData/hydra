@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class ExactNumericType_Dec_Option implements Serializable {
   public final java.util.Optional<hydra.langs.sql.ansi.Scale> sequence;
   
   public ExactNumericType_Dec_Option (hydra.langs.sql.ansi.Precision precision, java.util.Optional<hydra.langs.sql.ansi.Scale> sequence) {
+    if (precision == null) {
+      throw new IllegalArgumentException("null value for 'precision' argument");
+    }
+    if (sequence == null) {
+      throw new IllegalArgumentException("null value for 'sequence' argument");
+    }
     this.precision = precision;
     this.sequence = sequence;
   }
@@ -29,10 +37,16 @@ public class ExactNumericType_Dec_Option implements Serializable {
   }
   
   public ExactNumericType_Dec_Option withPrecision(hydra.langs.sql.ansi.Precision precision) {
+    if (precision == null) {
+      throw new IllegalArgumentException("null value for 'precision' argument");
+    }
     return new ExactNumericType_Dec_Option(precision, sequence);
   }
   
   public ExactNumericType_Dec_Option withSequence(java.util.Optional<hydra.langs.sql.ansi.Scale> sequence) {
+    if (sequence == null) {
+      throw new IllegalArgumentException("null value for 'sequence' argument");
+    }
     return new ExactNumericType_Dec_Option(precision, sequence);
   }
 }

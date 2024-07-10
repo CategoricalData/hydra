@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class Export implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Importer> importers;
   
   public Export (java.util.List<hydra.langs.scala.meta.Importer> importers) {
+    if (importers == null) {
+      throw new IllegalArgumentException("null value for 'importers' argument");
+    }
     this.importers = importers;
   }
   

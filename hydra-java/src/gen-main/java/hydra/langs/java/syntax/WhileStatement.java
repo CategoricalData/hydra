@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class WhileStatement implements Serializable {
   public final hydra.langs.java.syntax.Statement body;
   
   public WhileStatement (java.util.Optional<hydra.langs.java.syntax.Expression> cond, hydra.langs.java.syntax.Statement body) {
+    if (cond == null) {
+      throw new IllegalArgumentException("null value for 'cond' argument");
+    }
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     this.cond = cond;
     this.body = body;
   }
@@ -29,10 +37,16 @@ public class WhileStatement implements Serializable {
   }
   
   public WhileStatement withCond(java.util.Optional<hydra.langs.java.syntax.Expression> cond) {
+    if (cond == null) {
+      throw new IllegalArgumentException("null value for 'cond' argument");
+    }
     return new WhileStatement(cond, body);
   }
   
   public WhileStatement withBody(hydra.langs.java.syntax.Statement body) {
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     return new WhileStatement(cond, body);
   }
 }

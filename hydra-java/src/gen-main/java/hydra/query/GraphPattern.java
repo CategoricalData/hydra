@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.query;
 
 import java.io.Serializable;
@@ -19,6 +21,12 @@ public class GraphPattern<A> implements Serializable {
   public final java.util.List<hydra.query.Pattern<A>> patterns;
   
   public GraphPattern (hydra.core.Name graph, java.util.List<hydra.query.Pattern<A>> patterns) {
+    if (graph == null) {
+      throw new IllegalArgumentException("null value for 'graph' argument");
+    }
+    if (patterns == null) {
+      throw new IllegalArgumentException("null value for 'patterns' argument");
+    }
     this.graph = graph;
     this.patterns = patterns;
   }
@@ -38,10 +46,16 @@ public class GraphPattern<A> implements Serializable {
   }
   
   public GraphPattern withGraph(hydra.core.Name graph) {
+    if (graph == null) {
+      throw new IllegalArgumentException("null value for 'graph' argument");
+    }
     return new GraphPattern(graph, patterns);
   }
   
   public GraphPattern withPatterns(java.util.List<hydra.query.Pattern<A>> patterns) {
+    if (patterns == null) {
+      throw new IllegalArgumentException("null value for 'patterns' argument");
+    }
     return new GraphPattern(graph, patterns);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class UnsignedNumericLiteral implements Serializable {
     public final hydra.langs.sql.ansi.ExactNumericLiteral value;
     
     public Exact (hydra.langs.sql.ansi.ExactNumericLiteral value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class UnsignedNumericLiteral implements Serializable {
     public final hydra.langs.sql.ansi.ApproximateNumericLiteral value;
     
     public Approximate (hydra.langs.sql.ansi.ApproximateNumericLiteral value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

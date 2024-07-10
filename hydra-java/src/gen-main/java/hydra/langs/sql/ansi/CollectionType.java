@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class CollectionType implements Serializable {
     public final hydra.langs.sql.ansi.ArrayType value;
     
     public Array (hydra.langs.sql.ansi.ArrayType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class CollectionType implements Serializable {
     public final hydra.langs.sql.ansi.MultisetType value;
     
     public Multiset (hydra.langs.sql.ansi.MultisetType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

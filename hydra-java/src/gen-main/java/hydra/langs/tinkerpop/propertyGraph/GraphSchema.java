@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.propertyGraph;
 
 import java.io.Serializable;
@@ -19,6 +21,12 @@ public class GraphSchema<T> implements Serializable {
   public final java.util.Map<hydra.langs.tinkerpop.propertyGraph.EdgeLabel, hydra.langs.tinkerpop.propertyGraph.EdgeType<T>> edges;
   
   public GraphSchema (java.util.Map<hydra.langs.tinkerpop.propertyGraph.VertexLabel, hydra.langs.tinkerpop.propertyGraph.VertexType<T>> vertices, java.util.Map<hydra.langs.tinkerpop.propertyGraph.EdgeLabel, hydra.langs.tinkerpop.propertyGraph.EdgeType<T>> edges) {
+    if (vertices == null) {
+      throw new IllegalArgumentException("null value for 'vertices' argument");
+    }
+    if (edges == null) {
+      throw new IllegalArgumentException("null value for 'edges' argument");
+    }
     this.vertices = vertices;
     this.edges = edges;
   }
@@ -38,10 +46,16 @@ public class GraphSchema<T> implements Serializable {
   }
   
   public GraphSchema withVertices(java.util.Map<hydra.langs.tinkerpop.propertyGraph.VertexLabel, hydra.langs.tinkerpop.propertyGraph.VertexType<T>> vertices) {
+    if (vertices == null) {
+      throw new IllegalArgumentException("null value for 'vertices' argument");
+    }
     return new GraphSchema(vertices, edges);
   }
   
   public GraphSchema withEdges(java.util.Map<hydra.langs.tinkerpop.propertyGraph.EdgeLabel, hydra.langs.tinkerpop.propertyGraph.EdgeType<T>> edges) {
+    if (edges == null) {
+      throw new IllegalArgumentException("null value for 'edges' argument");
+    }
     return new GraphSchema(vertices, edges);
   }
 }

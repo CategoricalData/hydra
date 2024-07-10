@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.core;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class Nominal<X> implements Serializable {
   public final X object;
   
   public Nominal (hydra.core.Name typeName, X object) {
+    if (typeName == null) {
+      throw new IllegalArgumentException("null value for 'typeName' argument");
+    }
+    if (object == null) {
+      throw new IllegalArgumentException("null value for 'object' argument");
+    }
     this.typeName = typeName;
     this.object = object;
   }
@@ -32,10 +40,16 @@ public class Nominal<X> implements Serializable {
   }
   
   public Nominal withTypeName(hydra.core.Name typeName) {
+    if (typeName == null) {
+      throw new IllegalArgumentException("null value for 'typeName' argument");
+    }
     return new Nominal(typeName, object);
   }
   
   public Nominal withObject(X object) {
+    if (object == null) {
+      throw new IllegalArgumentException("null value for 'object' argument");
+    }
     return new Nominal(typeName, object);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -59,6 +61,9 @@ public abstract class MethodReference implements Serializable {
     public final hydra.langs.java.syntax.MethodReference_Expression value;
     
     public Expression (hydra.langs.java.syntax.MethodReference_Expression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -86,6 +91,9 @@ public abstract class MethodReference implements Serializable {
     public final hydra.langs.java.syntax.MethodReference_Primary value;
     
     public Primary (hydra.langs.java.syntax.MethodReference_Primary value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -113,6 +121,9 @@ public abstract class MethodReference implements Serializable {
     public final hydra.langs.java.syntax.MethodReference_ReferenceType value;
     
     public ReferenceType (hydra.langs.java.syntax.MethodReference_ReferenceType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -140,6 +151,9 @@ public abstract class MethodReference implements Serializable {
     public final hydra.langs.java.syntax.MethodReference_Super value;
     
     public Super (hydra.langs.java.syntax.MethodReference_Super value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -167,6 +181,9 @@ public abstract class MethodReference implements Serializable {
     public final hydra.langs.java.syntax.MethodReference_New value;
     
     public New (hydra.langs.java.syntax.MethodReference_New value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -194,6 +211,9 @@ public abstract class MethodReference implements Serializable {
     public final hydra.langs.java.syntax.MethodReference_Array value;
     
     public Array (hydra.langs.java.syntax.MethodReference_Array value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

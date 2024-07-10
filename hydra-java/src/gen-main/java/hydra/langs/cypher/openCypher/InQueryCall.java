@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class InQueryCall implements Serializable {
   public final java.util.Optional<hydra.langs.cypher.openCypher.YieldItems> yieldItems;
   
   public InQueryCall (hydra.langs.cypher.openCypher.ExplicitProcedureInvocation call, java.util.Optional<hydra.langs.cypher.openCypher.YieldItems> yieldItems) {
+    if (call == null) {
+      throw new IllegalArgumentException("null value for 'call' argument");
+    }
+    if (yieldItems == null) {
+      throw new IllegalArgumentException("null value for 'yieldItems' argument");
+    }
     this.call = call;
     this.yieldItems = yieldItems;
   }
@@ -29,10 +37,16 @@ public class InQueryCall implements Serializable {
   }
   
   public InQueryCall withCall(hydra.langs.cypher.openCypher.ExplicitProcedureInvocation call) {
+    if (call == null) {
+      throw new IllegalArgumentException("null value for 'call' argument");
+    }
     return new InQueryCall(call, yieldItems);
   }
   
   public InQueryCall withYieldItems(java.util.Optional<hydra.langs.cypher.openCypher.YieldItems> yieldItems) {
+    if (yieldItems == null) {
+      throw new IllegalArgumentException("null value for 'yieldItems' argument");
+    }
     return new InQueryCall(call, yieldItems);
   }
 }

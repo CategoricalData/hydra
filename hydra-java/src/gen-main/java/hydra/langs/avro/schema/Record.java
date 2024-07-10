@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.avro.schema;
 
 import java.io.Serializable;
@@ -11,6 +13,9 @@ public class Record implements Serializable {
   public final java.util.List<hydra.langs.avro.schema.Field> fields;
   
   public Record (java.util.List<hydra.langs.avro.schema.Field> fields) {
+    if (fields == null) {
+      throw new IllegalArgumentException("null value for 'fields' argument");
+    }
     this.fields = fields;
   }
   

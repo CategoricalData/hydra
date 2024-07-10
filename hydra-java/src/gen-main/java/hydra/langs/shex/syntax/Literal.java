@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -41,6 +43,9 @@ public abstract class Literal implements Serializable {
     public final hydra.langs.shex.syntax.RdfLiteral value;
     
     public RdfLiteral (hydra.langs.shex.syntax.RdfLiteral value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -68,6 +73,9 @@ public abstract class Literal implements Serializable {
     public final hydra.langs.shex.syntax.NumericLiteral value;
     
     public NumericLiteral (hydra.langs.shex.syntax.NumericLiteral value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -95,6 +103,9 @@ public abstract class Literal implements Serializable {
     public final hydra.langs.shex.syntax.BooleanLiteral value;
     
     public BooleanLiteral (hydra.langs.shex.syntax.BooleanLiteral value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -47,6 +49,9 @@ public abstract class ImportDeclaration implements Serializable {
     public final hydra.langs.java.syntax.SingleTypeImportDeclaration value;
     
     public SingleType (hydra.langs.java.syntax.SingleTypeImportDeclaration value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -74,6 +79,9 @@ public abstract class ImportDeclaration implements Serializable {
     public final hydra.langs.java.syntax.TypeImportOnDemandDeclaration value;
     
     public TypeImportOnDemand (hydra.langs.java.syntax.TypeImportOnDemandDeclaration value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -101,6 +109,9 @@ public abstract class ImportDeclaration implements Serializable {
     public final hydra.langs.java.syntax.SingleStaticImportDeclaration value;
     
     public SingleStaticImport (hydra.langs.java.syntax.SingleStaticImportDeclaration value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -128,6 +139,9 @@ public abstract class ImportDeclaration implements Serializable {
     public final hydra.langs.java.syntax.StaticImportOnDemandDeclaration value;
     
     public StaticImportOnDemand (hydra.langs.java.syntax.StaticImportOnDemandDeclaration value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

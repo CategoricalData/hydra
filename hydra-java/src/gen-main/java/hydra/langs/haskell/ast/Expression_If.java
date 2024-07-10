@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -15,6 +17,15 @@ public class Expression_If implements Serializable {
   public final hydra.langs.haskell.ast.Expression else_;
   
   public Expression_If (hydra.langs.haskell.ast.Expression condition, hydra.langs.haskell.ast.Expression then, hydra.langs.haskell.ast.Expression else_) {
+    if (condition == null) {
+      throw new IllegalArgumentException("null value for 'condition' argument");
+    }
+    if (then == null) {
+      throw new IllegalArgumentException("null value for 'then' argument");
+    }
+    if (else_ == null) {
+      throw new IllegalArgumentException("null value for 'else' argument");
+    }
     this.condition = condition;
     this.then = then;
     this.else_ = else_;
@@ -35,14 +46,23 @@ public class Expression_If implements Serializable {
   }
   
   public Expression_If withCondition(hydra.langs.haskell.ast.Expression condition) {
+    if (condition == null) {
+      throw new IllegalArgumentException("null value for 'condition' argument");
+    }
     return new Expression_If(condition, then, else_);
   }
   
   public Expression_If withThen(hydra.langs.haskell.ast.Expression then) {
+    if (then == null) {
+      throw new IllegalArgumentException("null value for 'then' argument");
+    }
     return new Expression_If(condition, then, else_);
   }
   
   public Expression_If withElse(hydra.langs.haskell.ast.Expression else_) {
+    if (else_ == null) {
+      throw new IllegalArgumentException("null value for 'else' argument");
+    }
     return new Expression_If(condition, then, else_);
   }
 }

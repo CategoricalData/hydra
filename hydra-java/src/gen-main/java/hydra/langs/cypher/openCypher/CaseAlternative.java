@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class CaseAlternative implements Serializable {
   public final hydra.langs.cypher.openCypher.Expression result;
   
   public CaseAlternative (hydra.langs.cypher.openCypher.Expression condition, hydra.langs.cypher.openCypher.Expression result) {
+    if (condition == null) {
+      throw new IllegalArgumentException("null value for 'condition' argument");
+    }
+    if (result == null) {
+      throw new IllegalArgumentException("null value for 'result' argument");
+    }
     this.condition = condition;
     this.result = result;
   }
@@ -29,10 +37,16 @@ public class CaseAlternative implements Serializable {
   }
   
   public CaseAlternative withCondition(hydra.langs.cypher.openCypher.Expression condition) {
+    if (condition == null) {
+      throw new IllegalArgumentException("null value for 'condition' argument");
+    }
     return new CaseAlternative(condition, result);
   }
   
   public CaseAlternative withResult(hydra.langs.cypher.openCypher.Expression result) {
+    if (result == null) {
+      throw new IllegalArgumentException("null value for 'result' argument");
+    }
     return new CaseAlternative(condition, result);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class ReceiverParameter implements Serializable {
   public final java.util.Optional<hydra.langs.java.syntax.Identifier> identifier;
   
   public ReceiverParameter (java.util.List<hydra.langs.java.syntax.Annotation> annotations, hydra.langs.java.syntax.UnannType unannType, java.util.Optional<hydra.langs.java.syntax.Identifier> identifier) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
+    if (unannType == null) {
+      throw new IllegalArgumentException("null value for 'unannType' argument");
+    }
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
     this.annotations = annotations;
     this.unannType = unannType;
     this.identifier = identifier;
@@ -32,14 +43,23 @@ public class ReceiverParameter implements Serializable {
   }
   
   public ReceiverParameter withAnnotations(java.util.List<hydra.langs.java.syntax.Annotation> annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     return new ReceiverParameter(annotations, unannType, identifier);
   }
   
   public ReceiverParameter withUnannType(hydra.langs.java.syntax.UnannType unannType) {
+    if (unannType == null) {
+      throw new IllegalArgumentException("null value for 'unannType' argument");
+    }
     return new ReceiverParameter(annotations, unannType, identifier);
   }
   
   public ReceiverParameter withIdentifier(java.util.Optional<hydra.langs.java.syntax.Identifier> identifier) {
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
     return new ReceiverParameter(annotations, unannType, identifier);
   }
 }

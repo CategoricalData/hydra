@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.pegasus.pdl;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class Namespace implements Serializable {
   public final String value;
   
   public Namespace (String value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

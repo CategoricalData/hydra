@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.avro.schema;
 
 import java.io.Serializable;
@@ -41,6 +43,27 @@ public class Field implements Serializable {
   public final java.util.Map<String, hydra.json.Value> annotations;
   
   public Field (String name, java.util.Optional<String> doc, hydra.langs.avro.schema.Schema type, java.util.Optional<hydra.json.Value> default_, java.util.Optional<hydra.langs.avro.schema.Order> order, java.util.Optional<java.util.List<String>> aliases, java.util.Map<String, hydra.json.Value> annotations) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (doc == null) {
+      throw new IllegalArgumentException("null value for 'doc' argument");
+    }
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
+    if (default_ == null) {
+      throw new IllegalArgumentException("null value for 'default' argument");
+    }
+    if (order == null) {
+      throw new IllegalArgumentException("null value for 'order' argument");
+    }
+    if (aliases == null) {
+      throw new IllegalArgumentException("null value for 'aliases' argument");
+    }
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     this.name = name;
     this.doc = doc;
     this.type = type;
@@ -65,30 +88,51 @@ public class Field implements Serializable {
   }
   
   public Field withName(String name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
   public Field withDoc(java.util.Optional<String> doc) {
+    if (doc == null) {
+      throw new IllegalArgumentException("null value for 'doc' argument");
+    }
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
   public Field withType(hydra.langs.avro.schema.Schema type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
   public Field withDefault(java.util.Optional<hydra.json.Value> default_) {
+    if (default_ == null) {
+      throw new IllegalArgumentException("null value for 'default' argument");
+    }
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
   public Field withOrder(java.util.Optional<hydra.langs.avro.schema.Order> order) {
+    if (order == null) {
+      throw new IllegalArgumentException("null value for 'order' argument");
+    }
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
   public Field withAliases(java.util.Optional<java.util.List<String>> aliases) {
+    if (aliases == null) {
+      throw new IllegalArgumentException("null value for 'aliases' argument");
+    }
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
   public Field withAnnotations(java.util.Map<String, hydra.json.Value> annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
 }

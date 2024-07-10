@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class CodeDecl implements Serializable {
   public final hydra.langs.shex.syntax.CodeDecl_Alts alts;
   
   public CodeDecl (hydra.langs.shex.syntax.Iri iri, hydra.langs.shex.syntax.CodeDecl_Alts alts) {
+    if (iri == null) {
+      throw new IllegalArgumentException("null value for 'iri' argument");
+    }
+    if (alts == null) {
+      throw new IllegalArgumentException("null value for 'alts' argument");
+    }
     this.iri = iri;
     this.alts = alts;
   }
@@ -29,10 +37,16 @@ public class CodeDecl implements Serializable {
   }
   
   public CodeDecl withIri(hydra.langs.shex.syntax.Iri iri) {
+    if (iri == null) {
+      throw new IllegalArgumentException("null value for 'iri' argument");
+    }
     return new CodeDecl(iri, alts);
   }
   
   public CodeDecl withAlts(hydra.langs.shex.syntax.CodeDecl_Alts alts) {
+    if (alts == null) {
+      throw new IllegalArgumentException("null value for 'alts' argument");
+    }
     return new CodeDecl(iri, alts);
   }
 }

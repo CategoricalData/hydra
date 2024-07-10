@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.queries;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class MatchQuery implements Serializable {
   public final java.util.Optional<hydra.langs.tinkerpop.queries.Expression> where;
   
   public MatchQuery (Boolean optional, java.util.List<hydra.langs.tinkerpop.queries.Projection> pattern, java.util.Optional<hydra.langs.tinkerpop.queries.Expression> where) {
+    if (optional == null) {
+      throw new IllegalArgumentException("null value for 'optional' argument");
+    }
+    if (pattern == null) {
+      throw new IllegalArgumentException("null value for 'pattern' argument");
+    }
+    if (where == null) {
+      throw new IllegalArgumentException("null value for 'where' argument");
+    }
     this.optional = optional;
     this.pattern = pattern;
     this.where = where;
@@ -32,14 +43,23 @@ public class MatchQuery implements Serializable {
   }
   
   public MatchQuery withOptional(Boolean optional) {
+    if (optional == null) {
+      throw new IllegalArgumentException("null value for 'optional' argument");
+    }
     return new MatchQuery(optional, pattern, where);
   }
   
   public MatchQuery withPattern(java.util.List<hydra.langs.tinkerpop.queries.Projection> pattern) {
+    if (pattern == null) {
+      throw new IllegalArgumentException("null value for 'pattern' argument");
+    }
     return new MatchQuery(optional, pattern, where);
   }
   
   public MatchQuery withWhere(java.util.Optional<hydra.langs.tinkerpop.queries.Expression> where) {
+    if (where == null) {
+      throw new IllegalArgumentException("null value for 'where' argument");
+    }
     return new MatchQuery(optional, pattern, where);
   }
 }

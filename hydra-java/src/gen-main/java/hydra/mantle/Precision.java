@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.mantle;
 
 import java.io.Serializable;
@@ -63,6 +65,9 @@ public abstract class Precision implements Serializable {
     public final Integer value;
     
     public Bits (Integer value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

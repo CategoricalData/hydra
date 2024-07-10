@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -41,6 +43,9 @@ public abstract class ValueExpression implements Serializable {
     public final hydra.langs.sql.ansi.CommonValueExpression value;
     
     public Common (hydra.langs.sql.ansi.CommonValueExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -68,6 +73,9 @@ public abstract class ValueExpression implements Serializable {
     public final hydra.langs.sql.ansi.BooleanValueExpression value;
     
     public Boolean_ (hydra.langs.sql.ansi.BooleanValueExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -95,6 +103,9 @@ public abstract class ValueExpression implements Serializable {
     public final hydra.langs.sql.ansi.RowValueExpression value;
     
     public Row (hydra.langs.sql.ansi.RowValueExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class MultiplyDivideModuloExpression implements Serializable {
   public final java.util.List<hydra.langs.cypher.openCypher.MultiplyDivideModuloRightHandSide> right;
   
   public MultiplyDivideModuloExpression (hydra.langs.cypher.openCypher.PowerOfExpression left, java.util.List<hydra.langs.cypher.openCypher.MultiplyDivideModuloRightHandSide> right) {
+    if (left == null) {
+      throw new IllegalArgumentException("null value for 'left' argument");
+    }
+    if (right == null) {
+      throw new IllegalArgumentException("null value for 'right' argument");
+    }
     this.left = left;
     this.right = right;
   }
@@ -29,10 +37,16 @@ public class MultiplyDivideModuloExpression implements Serializable {
   }
   
   public MultiplyDivideModuloExpression withLeft(hydra.langs.cypher.openCypher.PowerOfExpression left) {
+    if (left == null) {
+      throw new IllegalArgumentException("null value for 'left' argument");
+    }
     return new MultiplyDivideModuloExpression(left, right);
   }
   
   public MultiplyDivideModuloExpression withRight(java.util.List<hydra.langs.cypher.openCypher.MultiplyDivideModuloRightHandSide> right) {
+    if (right == null) {
+      throw new IllegalArgumentException("null value for 'right' argument");
+    }
     return new MultiplyDivideModuloExpression(left, right);
   }
 }

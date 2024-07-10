@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class Directive implements Serializable {
     public final hydra.langs.shex.syntax.BaseDecl value;
     
     public BaseDecl (hydra.langs.shex.syntax.BaseDecl value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class Directive implements Serializable {
     public final hydra.langs.shex.syntax.PrefixDecl value;
     
     public PrefixDecl (hydra.langs.shex.syntax.PrefixDecl value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class SubDataPropertyOf implements Serializable {
   public final hydra.langs.owl.syntax.DataPropertyExpression superProperty;
   
   public SubDataPropertyOf (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, hydra.langs.owl.syntax.DataPropertyExpression subProperty, hydra.langs.owl.syntax.DataPropertyExpression superProperty) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
+    if (subProperty == null) {
+      throw new IllegalArgumentException("null value for 'subProperty' argument");
+    }
+    if (superProperty == null) {
+      throw new IllegalArgumentException("null value for 'superProperty' argument");
+    }
     this.annotations = annotations;
     this.subProperty = subProperty;
     this.superProperty = superProperty;
@@ -32,14 +43,23 @@ public class SubDataPropertyOf implements Serializable {
   }
   
   public SubDataPropertyOf withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     return new SubDataPropertyOf(annotations, subProperty, superProperty);
   }
   
   public SubDataPropertyOf withSubProperty(hydra.langs.owl.syntax.DataPropertyExpression subProperty) {
+    if (subProperty == null) {
+      throw new IllegalArgumentException("null value for 'subProperty' argument");
+    }
     return new SubDataPropertyOf(annotations, subProperty, superProperty);
   }
   
   public SubDataPropertyOf withSuperProperty(hydra.langs.owl.syntax.DataPropertyExpression superProperty) {
+    if (superProperty == null) {
+      throw new IllegalArgumentException("null value for 'superProperty' argument");
+    }
     return new SubDataPropertyOf(annotations, subProperty, superProperty);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -14,6 +16,18 @@ public class Uchar_Sequence implements Serializable {
   public final hydra.langs.shex.syntax.Hex hex4;
   
   public Uchar_Sequence (hydra.langs.shex.syntax.Hex hex, hydra.langs.shex.syntax.Hex hex2, hydra.langs.shex.syntax.Hex hex3, hydra.langs.shex.syntax.Hex hex4) {
+    if (hex == null) {
+      throw new IllegalArgumentException("null value for 'hex' argument");
+    }
+    if (hex2 == null) {
+      throw new IllegalArgumentException("null value for 'hex2' argument");
+    }
+    if (hex3 == null) {
+      throw new IllegalArgumentException("null value for 'hex3' argument");
+    }
+    if (hex4 == null) {
+      throw new IllegalArgumentException("null value for 'hex4' argument");
+    }
     this.hex = hex;
     this.hex2 = hex2;
     this.hex3 = hex3;
@@ -35,18 +49,30 @@ public class Uchar_Sequence implements Serializable {
   }
   
   public Uchar_Sequence withHex(hydra.langs.shex.syntax.Hex hex) {
+    if (hex == null) {
+      throw new IllegalArgumentException("null value for 'hex' argument");
+    }
     return new Uchar_Sequence(hex, hex2, hex3, hex4);
   }
   
   public Uchar_Sequence withHex2(hydra.langs.shex.syntax.Hex hex2) {
+    if (hex2 == null) {
+      throw new IllegalArgumentException("null value for 'hex2' argument");
+    }
     return new Uchar_Sequence(hex, hex2, hex3, hex4);
   }
   
   public Uchar_Sequence withHex3(hydra.langs.shex.syntax.Hex hex3) {
+    if (hex3 == null) {
+      throw new IllegalArgumentException("null value for 'hex3' argument");
+    }
     return new Uchar_Sequence(hex, hex2, hex3, hex4);
   }
   
   public Uchar_Sequence withHex4(hydra.langs.shex.syntax.Hex hex4) {
+    if (hex4 == null) {
+      throw new IllegalArgumentException("null value for 'hex4' argument");
+    }
     return new Uchar_Sequence(hex, hex2, hex3, hex4);
   }
 }

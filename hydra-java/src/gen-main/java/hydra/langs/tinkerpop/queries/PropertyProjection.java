@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.queries;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class PropertyProjection implements Serializable {
   public final hydra.langs.tinkerpop.propertyGraph.PropertyKey key;
   
   public PropertyProjection (hydra.langs.tinkerpop.queries.Expression base, hydra.langs.tinkerpop.propertyGraph.PropertyKey key) {
+    if (base == null) {
+      throw new IllegalArgumentException("null value for 'base' argument");
+    }
+    if (key == null) {
+      throw new IllegalArgumentException("null value for 'key' argument");
+    }
     this.base = base;
     this.key = key;
   }
@@ -29,10 +37,16 @@ public class PropertyProjection implements Serializable {
   }
   
   public PropertyProjection withBase(hydra.langs.tinkerpop.queries.Expression base) {
+    if (base == null) {
+      throw new IllegalArgumentException("null value for 'base' argument");
+    }
     return new PropertyProjection(base, key);
   }
   
   public PropertyProjection withKey(hydra.langs.tinkerpop.propertyGraph.PropertyKey key) {
+    if (key == null) {
+      throw new IllegalArgumentException("null value for 'key' argument");
+    }
     return new PropertyProjection(base, key);
   }
 }

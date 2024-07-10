@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class InputObjectTypeExtension_Sequence implements Serializable {
   public final hydra.langs.graphql.syntax.InputFieldsDefinition inputFieldsDefinition;
   
   public InputObjectTypeExtension_Sequence (hydra.langs.graphql.syntax.Name name, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.InputFieldsDefinition inputFieldsDefinition) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
+    if (inputFieldsDefinition == null) {
+      throw new IllegalArgumentException("null value for 'inputFieldsDefinition' argument");
+    }
     this.name = name;
     this.directives = directives;
     this.inputFieldsDefinition = inputFieldsDefinition;
@@ -32,14 +43,23 @@ public class InputObjectTypeExtension_Sequence implements Serializable {
   }
   
   public InputObjectTypeExtension_Sequence withName(hydra.langs.graphql.syntax.Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new InputObjectTypeExtension_Sequence(name, directives, inputFieldsDefinition);
   }
   
   public InputObjectTypeExtension_Sequence withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
     return new InputObjectTypeExtension_Sequence(name, directives, inputFieldsDefinition);
   }
   
   public InputObjectTypeExtension_Sequence withInputFieldsDefinition(hydra.langs.graphql.syntax.InputFieldsDefinition inputFieldsDefinition) {
+    if (inputFieldsDefinition == null) {
+      throw new IllegalArgumentException("null value for 'inputFieldsDefinition' argument");
+    }
     return new InputObjectTypeExtension_Sequence(name, directives, inputFieldsDefinition);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class ExecutableDefinition implements Serializable {
     public final hydra.langs.graphql.syntax.OperationDefinition value;
     
     public Operation (hydra.langs.graphql.syntax.OperationDefinition value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class ExecutableDefinition implements Serializable {
     public final hydra.langs.graphql.syntax.FragmentDefinition value;
     
     public Fragment (hydra.langs.graphql.syntax.FragmentDefinition value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

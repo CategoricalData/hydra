@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shacl.model;
 
 import java.io.Serializable;
@@ -44,6 +46,9 @@ public abstract class Reference<A> implements Serializable {
     public final hydra.langs.rdf.syntax.Iri value;
     
     public Named (hydra.langs.rdf.syntax.Iri value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -77,6 +82,9 @@ public abstract class Reference<A> implements Serializable {
     public final A value;
     
     public Anonymous (A value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -110,6 +118,9 @@ public abstract class Reference<A> implements Serializable {
     public final hydra.langs.shacl.model.Definition<A> value;
     
     public Definition (hydra.langs.shacl.model.Definition<A> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

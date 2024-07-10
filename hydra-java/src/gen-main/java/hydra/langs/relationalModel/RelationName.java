@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.relationalModel;
 
 import java.io.Serializable;
@@ -14,6 +16,9 @@ public class RelationName implements Serializable {
   public final String value;
   
   public RelationName (String value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

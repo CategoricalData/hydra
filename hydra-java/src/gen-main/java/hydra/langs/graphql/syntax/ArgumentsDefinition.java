@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class ArgumentsDefinition implements Serializable {
   public final java.util.List<hydra.langs.graphql.syntax.InputValueDefinition> value;
   
   public ArgumentsDefinition (java.util.List<hydra.langs.graphql.syntax.InputValueDefinition> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

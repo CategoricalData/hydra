@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -41,6 +43,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.graphql.syntax.NamedType value;
     
     public Named (hydra.langs.graphql.syntax.NamedType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -68,6 +73,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.graphql.syntax.ListType value;
     
     public List (hydra.langs.graphql.syntax.ListType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -95,6 +103,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.graphql.syntax.NonNullType value;
     
     public NonNull (hydra.langs.graphql.syntax.NonNullType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

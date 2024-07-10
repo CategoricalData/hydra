@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -134,6 +136,9 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.haskell.ast.Expression_Application value;
     
     public Application (hydra.langs.haskell.ast.Expression_Application value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -161,6 +166,9 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.haskell.ast.Expression_Case value;
     
     public Case (hydra.langs.haskell.ast.Expression_Case value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -188,6 +196,9 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.haskell.ast.Expression_ConstructRecord value;
     
     public ConstructRecord (hydra.langs.haskell.ast.Expression_ConstructRecord value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -215,6 +226,9 @@ public abstract class Expression implements Serializable {
     public final java.util.List<hydra.langs.haskell.ast.Statement> value;
     
     public Do (java.util.List<hydra.langs.haskell.ast.Statement> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -242,6 +256,9 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.haskell.ast.Expression_If value;
     
     public If (hydra.langs.haskell.ast.Expression_If value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -269,6 +286,9 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.haskell.ast.Expression_InfixApplication value;
     
     public InfixApplication (hydra.langs.haskell.ast.Expression_InfixApplication value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -296,6 +316,9 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.haskell.ast.Literal value;
     
     public Literal (hydra.langs.haskell.ast.Literal value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -323,6 +346,9 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.haskell.ast.Expression_Lambda value;
     
     public Lambda (hydra.langs.haskell.ast.Expression_Lambda value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -350,6 +376,9 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.haskell.ast.Expression_Section value;
     
     public LeftSection (hydra.langs.haskell.ast.Expression_Section value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -377,6 +406,9 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.haskell.ast.Expression_Let value;
     
     public Let (hydra.langs.haskell.ast.Expression_Let value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -404,6 +436,9 @@ public abstract class Expression implements Serializable {
     public final java.util.List<hydra.langs.haskell.ast.Expression> value;
     
     public List (java.util.List<hydra.langs.haskell.ast.Expression> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -431,6 +466,9 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.haskell.ast.Expression value;
     
     public Parens (hydra.langs.haskell.ast.Expression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -458,6 +496,9 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.haskell.ast.Expression_PrefixApplication value;
     
     public PrefixApplication (hydra.langs.haskell.ast.Expression_PrefixApplication value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -485,6 +526,9 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.haskell.ast.Expression_Section value;
     
     public RightSection (hydra.langs.haskell.ast.Expression_Section value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -512,6 +556,9 @@ public abstract class Expression implements Serializable {
     public final java.util.List<hydra.langs.haskell.ast.Expression> value;
     
     public Tuple (java.util.List<hydra.langs.haskell.ast.Expression> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -539,6 +586,9 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.haskell.ast.Expression_TypeSignature value;
     
     public TypeSignature (hydra.langs.haskell.ast.Expression_TypeSignature value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -566,6 +616,9 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.haskell.ast.Expression_UpdateRecord value;
     
     public UpdateRecord (hydra.langs.haskell.ast.Expression_UpdateRecord value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -593,6 +646,9 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.haskell.ast.Name value;
     
     public Variable (hydra.langs.haskell.ast.Name value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

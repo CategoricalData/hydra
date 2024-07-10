@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class TypeBound_ClassOrInterface implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.AdditionalBound> additional;
   
   public TypeBound_ClassOrInterface (hydra.langs.java.syntax.ClassOrInterfaceType type, java.util.List<hydra.langs.java.syntax.AdditionalBound> additional) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
+    if (additional == null) {
+      throw new IllegalArgumentException("null value for 'additional' argument");
+    }
     this.type = type;
     this.additional = additional;
   }
@@ -29,10 +37,16 @@ public class TypeBound_ClassOrInterface implements Serializable {
   }
   
   public TypeBound_ClassOrInterface withType(hydra.langs.java.syntax.ClassOrInterfaceType type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new TypeBound_ClassOrInterface(type, additional);
   }
   
   public TypeBound_ClassOrInterface withAdditional(java.util.List<hydra.langs.java.syntax.AdditionalBound> additional) {
+    if (additional == null) {
+      throw new IllegalArgumentException("null value for 'additional' argument");
+    }
     return new TypeBound_ClassOrInterface(type, additional);
   }
 }

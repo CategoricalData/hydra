@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.workflow;
 
 import java.io.Serializable;
@@ -29,6 +31,18 @@ public class TransformWorkflow implements Serializable {
   public final String destDir;
   
   public TransformWorkflow (String name, hydra.workflow.SchemaSpec schemaSpec, String srcDir, String destDir) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (schemaSpec == null) {
+      throw new IllegalArgumentException("null value for 'schemaSpec' argument");
+    }
+    if (srcDir == null) {
+      throw new IllegalArgumentException("null value for 'srcDir' argument");
+    }
+    if (destDir == null) {
+      throw new IllegalArgumentException("null value for 'destDir' argument");
+    }
     this.name = name;
     this.schemaSpec = schemaSpec;
     this.srcDir = srcDir;
@@ -50,18 +64,30 @@ public class TransformWorkflow implements Serializable {
   }
   
   public TransformWorkflow withName(String name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new TransformWorkflow(name, schemaSpec, srcDir, destDir);
   }
   
   public TransformWorkflow withSchemaSpec(hydra.workflow.SchemaSpec schemaSpec) {
+    if (schemaSpec == null) {
+      throw new IllegalArgumentException("null value for 'schemaSpec' argument");
+    }
     return new TransformWorkflow(name, schemaSpec, srcDir, destDir);
   }
   
   public TransformWorkflow withSrcDir(String srcDir) {
+    if (srcDir == null) {
+      throw new IllegalArgumentException("null value for 'srcDir' argument");
+    }
     return new TransformWorkflow(name, schemaSpec, srcDir, destDir);
   }
   
   public TransformWorkflow withDestDir(String destDir) {
+    if (destDir == null) {
+      throw new IllegalArgumentException("null value for 'destDir' argument");
+    }
     return new TransformWorkflow(name, schemaSpec, srcDir, destDir);
   }
 }

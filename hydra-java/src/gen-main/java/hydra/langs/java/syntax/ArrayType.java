@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class ArrayType implements Serializable {
   public final hydra.langs.java.syntax.ArrayType_Variant variant;
   
   public ArrayType (hydra.langs.java.syntax.Dims dims, hydra.langs.java.syntax.ArrayType_Variant variant) {
+    if (dims == null) {
+      throw new IllegalArgumentException("null value for 'dims' argument");
+    }
+    if (variant == null) {
+      throw new IllegalArgumentException("null value for 'variant' argument");
+    }
     this.dims = dims;
     this.variant = variant;
   }
@@ -29,10 +37,16 @@ public class ArrayType implements Serializable {
   }
   
   public ArrayType withDims(hydra.langs.java.syntax.Dims dims) {
+    if (dims == null) {
+      throw new IllegalArgumentException("null value for 'dims' argument");
+    }
     return new ArrayType(dims, variant);
   }
   
   public ArrayType withVariant(hydra.langs.java.syntax.ArrayType_Variant variant) {
+    if (variant == null) {
+      throw new IllegalArgumentException("null value for 'variant' argument");
+    }
     return new ArrayType(dims, variant);
   }
 }

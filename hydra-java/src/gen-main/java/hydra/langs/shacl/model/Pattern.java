@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shacl.model;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class Pattern implements Serializable {
   public final java.util.Optional<String> flags;
   
   public Pattern (String regex, java.util.Optional<String> flags) {
+    if (regex == null) {
+      throw new IllegalArgumentException("null value for 'regex' argument");
+    }
+    if (flags == null) {
+      throw new IllegalArgumentException("null value for 'flags' argument");
+    }
     this.regex = regex;
     this.flags = flags;
   }
@@ -32,10 +40,16 @@ public class Pattern implements Serializable {
   }
   
   public Pattern withRegex(String regex) {
+    if (regex == null) {
+      throw new IllegalArgumentException("null value for 'regex' argument");
+    }
     return new Pattern(regex, flags);
   }
   
   public Pattern withFlags(java.util.Optional<String> flags) {
+    if (flags == null) {
+      throw new IllegalArgumentException("null value for 'flags' argument");
+    }
     return new Pattern(regex, flags);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class CatchType implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.ClassType> types;
   
   public CatchType (hydra.langs.java.syntax.UnannClassType type, java.util.List<hydra.langs.java.syntax.ClassType> types) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
+    if (types == null) {
+      throw new IllegalArgumentException("null value for 'types' argument");
+    }
     this.type = type;
     this.types = types;
   }
@@ -29,10 +37,16 @@ public class CatchType implements Serializable {
   }
   
   public CatchType withType(hydra.langs.java.syntax.UnannClassType type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new CatchType(type, types);
   }
   
   public CatchType withTypes(java.util.List<hydra.langs.java.syntax.ClassType> types) {
+    if (types == null) {
+      throw new IllegalArgumentException("null value for 'types' argument");
+    }
     return new CatchType(type, types);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class FunctionalObjectProperty implements Serializable {
   public final hydra.langs.owl.syntax.ObjectPropertyExpression property;
   
   public FunctionalObjectProperty (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, hydra.langs.owl.syntax.ObjectPropertyExpression property) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
+    if (property == null) {
+      throw new IllegalArgumentException("null value for 'property' argument");
+    }
     this.annotations = annotations;
     this.property = property;
   }
@@ -29,10 +37,16 @@ public class FunctionalObjectProperty implements Serializable {
   }
   
   public FunctionalObjectProperty withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     return new FunctionalObjectProperty(annotations, property);
   }
   
   public FunctionalObjectProperty withProperty(hydra.langs.owl.syntax.ObjectPropertyExpression property) {
+    if (property == null) {
+      throw new IllegalArgumentException("null value for 'property' argument");
+    }
     return new FunctionalObjectProperty(annotations, property);
   }
 }

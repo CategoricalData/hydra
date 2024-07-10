@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.compute;
 
 import java.io.Serializable;
@@ -18,6 +20,15 @@ public class Trace implements Serializable {
   public final java.util.Map<String, hydra.core.Term<hydra.compute.Kv>> other;
   
   public Trace (java.util.List<String> stack, java.util.List<String> messages, java.util.Map<String, hydra.core.Term<hydra.compute.Kv>> other) {
+    if (stack == null) {
+      throw new IllegalArgumentException("null value for 'stack' argument");
+    }
+    if (messages == null) {
+      throw new IllegalArgumentException("null value for 'messages' argument");
+    }
+    if (other == null) {
+      throw new IllegalArgumentException("null value for 'other' argument");
+    }
     this.stack = stack;
     this.messages = messages;
     this.other = other;
@@ -38,14 +49,23 @@ public class Trace implements Serializable {
   }
   
   public Trace withStack(java.util.List<String> stack) {
+    if (stack == null) {
+      throw new IllegalArgumentException("null value for 'stack' argument");
+    }
     return new Trace(stack, messages, other);
   }
   
   public Trace withMessages(java.util.List<String> messages) {
+    if (messages == null) {
+      throw new IllegalArgumentException("null value for 'messages' argument");
+    }
     return new Trace(stack, messages, other);
   }
   
   public Trace withOther(java.util.Map<String, hydra.core.Term<hydra.compute.Kv>> other) {
+    if (other == null) {
+      throw new IllegalArgumentException("null value for 'other' argument");
+    }
     return new Trace(stack, messages, other);
   }
 }

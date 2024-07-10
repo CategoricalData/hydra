@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class MethodReference_Expression implements Serializable {
   public final hydra.langs.java.syntax.Identifier identifier;
   
   public MethodReference_Expression (hydra.langs.java.syntax.ExpressionName name, java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments, hydra.langs.java.syntax.Identifier identifier) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (typeArguments == null) {
+      throw new IllegalArgumentException("null value for 'typeArguments' argument");
+    }
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
     this.name = name;
     this.typeArguments = typeArguments;
     this.identifier = identifier;
@@ -32,14 +43,23 @@ public class MethodReference_Expression implements Serializable {
   }
   
   public MethodReference_Expression withName(hydra.langs.java.syntax.ExpressionName name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new MethodReference_Expression(name, typeArguments, identifier);
   }
   
   public MethodReference_Expression withTypeArguments(java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments) {
+    if (typeArguments == null) {
+      throw new IllegalArgumentException("null value for 'typeArguments' argument");
+    }
     return new MethodReference_Expression(name, typeArguments, identifier);
   }
   
   public MethodReference_Expression withIdentifier(hydra.langs.java.syntax.Identifier identifier) {
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
     return new MethodReference_Expression(name, typeArguments, identifier);
   }
 }

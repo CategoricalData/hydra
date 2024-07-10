@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.protobuf.proto3;
 
 import java.io.Serializable;
@@ -24,6 +26,15 @@ public class EnumDefinition implements Serializable {
   public final java.util.List<hydra.langs.protobuf.proto3.Option> options;
   
   public EnumDefinition (hydra.langs.protobuf.proto3.TypeName name, java.util.List<hydra.langs.protobuf.proto3.EnumValue> values, java.util.List<hydra.langs.protobuf.proto3.Option> options) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (values == null) {
+      throw new IllegalArgumentException("null value for 'values' argument");
+    }
+    if (options == null) {
+      throw new IllegalArgumentException("null value for 'options' argument");
+    }
     this.name = name;
     this.values = values;
     this.options = options;
@@ -44,14 +55,23 @@ public class EnumDefinition implements Serializable {
   }
   
   public EnumDefinition withName(hydra.langs.protobuf.proto3.TypeName name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new EnumDefinition(name, values, options);
   }
   
   public EnumDefinition withValues(java.util.List<hydra.langs.protobuf.proto3.EnumValue> values) {
+    if (values == null) {
+      throw new IllegalArgumentException("null value for 'values' argument");
+    }
     return new EnumDefinition(name, values, options);
   }
   
   public EnumDefinition withOptions(java.util.List<hydra.langs.protobuf.proto3.Option> options) {
+    if (options == null) {
+      throw new IllegalArgumentException("null value for 'options' argument");
+    }
     return new EnumDefinition(name, values, options);
   }
 }

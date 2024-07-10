@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Type_ImplicitFunction implements Serializable {
   public final hydra.langs.scala.meta.Type res;
   
   public Type_ImplicitFunction (java.util.List<hydra.langs.scala.meta.Type> params, hydra.langs.scala.meta.Type res) {
+    if (params == null) {
+      throw new IllegalArgumentException("null value for 'params' argument");
+    }
+    if (res == null) {
+      throw new IllegalArgumentException("null value for 'res' argument");
+    }
     this.params = params;
     this.res = res;
   }
@@ -29,10 +37,16 @@ public class Type_ImplicitFunction implements Serializable {
   }
   
   public Type_ImplicitFunction withParams(java.util.List<hydra.langs.scala.meta.Type> params) {
+    if (params == null) {
+      throw new IllegalArgumentException("null value for 'params' argument");
+    }
     return new Type_ImplicitFunction(params, res);
   }
   
   public Type_ImplicitFunction withRes(hydra.langs.scala.meta.Type res) {
+    if (res == null) {
+      throw new IllegalArgumentException("null value for 'res' argument");
+    }
     return new Type_ImplicitFunction(params, res);
   }
 }

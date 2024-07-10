@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.format;
 
 import java.io.Serializable;
@@ -28,6 +30,21 @@ public class ColumnIndex implements Serializable {
   public final java.util.Optional<java.util.List<Long>> nullCounts;
   
   public ColumnIndex (java.util.List<Boolean> nullPages, java.util.List<String> minValues, java.util.List<String> maxValues, hydra.langs.parquet.format.BoundaryOrder boundaryOrder, java.util.Optional<java.util.List<Long>> nullCounts) {
+    if (nullPages == null) {
+      throw new IllegalArgumentException("null value for 'nullPages' argument");
+    }
+    if (minValues == null) {
+      throw new IllegalArgumentException("null value for 'minValues' argument");
+    }
+    if (maxValues == null) {
+      throw new IllegalArgumentException("null value for 'maxValues' argument");
+    }
+    if (boundaryOrder == null) {
+      throw new IllegalArgumentException("null value for 'boundaryOrder' argument");
+    }
+    if (nullCounts == null) {
+      throw new IllegalArgumentException("null value for 'nullCounts' argument");
+    }
     this.nullPages = nullPages;
     this.minValues = minValues;
     this.maxValues = maxValues;
@@ -50,22 +67,37 @@ public class ColumnIndex implements Serializable {
   }
   
   public ColumnIndex withNullPages(java.util.List<Boolean> nullPages) {
+    if (nullPages == null) {
+      throw new IllegalArgumentException("null value for 'nullPages' argument");
+    }
     return new ColumnIndex(nullPages, minValues, maxValues, boundaryOrder, nullCounts);
   }
   
   public ColumnIndex withMinValues(java.util.List<String> minValues) {
+    if (minValues == null) {
+      throw new IllegalArgumentException("null value for 'minValues' argument");
+    }
     return new ColumnIndex(nullPages, minValues, maxValues, boundaryOrder, nullCounts);
   }
   
   public ColumnIndex withMaxValues(java.util.List<String> maxValues) {
+    if (maxValues == null) {
+      throw new IllegalArgumentException("null value for 'maxValues' argument");
+    }
     return new ColumnIndex(nullPages, minValues, maxValues, boundaryOrder, nullCounts);
   }
   
   public ColumnIndex withBoundaryOrder(hydra.langs.parquet.format.BoundaryOrder boundaryOrder) {
+    if (boundaryOrder == null) {
+      throw new IllegalArgumentException("null value for 'boundaryOrder' argument");
+    }
     return new ColumnIndex(nullPages, minValues, maxValues, boundaryOrder, nullCounts);
   }
   
   public ColumnIndex withNullCounts(java.util.Optional<java.util.List<Long>> nullCounts) {
+    if (nullCounts == null) {
+      throw new IllegalArgumentException("null value for 'nullCounts' argument");
+    }
     return new ColumnIndex(nullPages, minValues, maxValues, boundaryOrder, nullCounts);
   }
 }

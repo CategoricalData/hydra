@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.format;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class EncryptionAlgorithm implements Serializable {
     public final hydra.langs.parquet.format.AesGcmV1 value;
     
     public AesGcmV1 (hydra.langs.parquet.format.AesGcmV1 value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class EncryptionAlgorithm implements Serializable {
     public final hydra.langs.parquet.format.AesGcmCtrV1 value;
     
     public AesGcmCtrV1 (hydra.langs.parquet.format.AesGcmCtrV1 value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.pegasus.pdl;
 
 import java.io.Serializable;
@@ -41,6 +43,9 @@ public abstract class NamedSchema_Type implements Serializable {
     public final hydra.langs.pegasus.pdl.RecordSchema value;
     
     public Record (hydra.langs.pegasus.pdl.RecordSchema value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -68,6 +73,9 @@ public abstract class NamedSchema_Type implements Serializable {
     public final hydra.langs.pegasus.pdl.EnumSchema value;
     
     public Enum_ (hydra.langs.pegasus.pdl.EnumSchema value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -95,6 +103,9 @@ public abstract class NamedSchema_Type implements Serializable {
     public final hydra.langs.pegasus.pdl.Schema value;
     
     public Typeref (hydra.langs.pegasus.pdl.Schema value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

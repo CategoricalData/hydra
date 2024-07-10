@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class ClassBodyDeclarationWithComments implements Serializable {
   public final java.util.Optional<String> comments;
   
   public ClassBodyDeclarationWithComments (hydra.langs.java.syntax.ClassBodyDeclaration value, java.util.Optional<String> comments) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
+    if (comments == null) {
+      throw new IllegalArgumentException("null value for 'comments' argument");
+    }
     this.value = value;
     this.comments = comments;
   }
@@ -29,10 +37,16 @@ public class ClassBodyDeclarationWithComments implements Serializable {
   }
   
   public ClassBodyDeclarationWithComments withValue(hydra.langs.java.syntax.ClassBodyDeclaration value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     return new ClassBodyDeclarationWithComments(value, comments);
   }
   
   public ClassBodyDeclarationWithComments withComments(java.util.Optional<String> comments) {
+    if (comments == null) {
+      throw new IllegalArgumentException("null value for 'comments' argument");
+    }
     return new ClassBodyDeclarationWithComments(value, comments);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class NodeConstraint_Sequence2 implements Serializable {
   public final java.util.List<hydra.langs.shex.syntax.StringFacet> listOfStringFacet;
   
   public NodeConstraint_Sequence2 (hydra.langs.shex.syntax.NonLiteralKind nonLiteralKind, java.util.List<hydra.langs.shex.syntax.StringFacet> listOfStringFacet) {
+    if (nonLiteralKind == null) {
+      throw new IllegalArgumentException("null value for 'nonLiteralKind' argument");
+    }
+    if (listOfStringFacet == null) {
+      throw new IllegalArgumentException("null value for 'listOfStringFacet' argument");
+    }
     this.nonLiteralKind = nonLiteralKind;
     this.listOfStringFacet = listOfStringFacet;
   }
@@ -29,10 +37,16 @@ public class NodeConstraint_Sequence2 implements Serializable {
   }
   
   public NodeConstraint_Sequence2 withNonLiteralKind(hydra.langs.shex.syntax.NonLiteralKind nonLiteralKind) {
+    if (nonLiteralKind == null) {
+      throw new IllegalArgumentException("null value for 'nonLiteralKind' argument");
+    }
     return new NodeConstraint_Sequence2(nonLiteralKind, listOfStringFacet);
   }
   
   public NodeConstraint_Sequence2 withListOfStringFacet(java.util.List<hydra.langs.shex.syntax.StringFacet> listOfStringFacet) {
+    if (listOfStringFacet == null) {
+      throw new IllegalArgumentException("null value for 'listOfStringFacet' argument");
+    }
     return new NodeConstraint_Sequence2(nonLiteralKind, listOfStringFacet);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.propertyGraph;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class Graph<V> implements Serializable {
   public final java.util.Map<V, hydra.langs.tinkerpop.propertyGraph.Edge<V>> edges;
   
   public Graph (java.util.Map<V, hydra.langs.tinkerpop.propertyGraph.Vertex<V>> vertices, java.util.Map<V, hydra.langs.tinkerpop.propertyGraph.Edge<V>> edges) {
+    if (vertices == null) {
+      throw new IllegalArgumentException("null value for 'vertices' argument");
+    }
+    if (edges == null) {
+      throw new IllegalArgumentException("null value for 'edges' argument");
+    }
     this.vertices = vertices;
     this.edges = edges;
   }
@@ -32,10 +40,16 @@ public class Graph<V> implements Serializable {
   }
   
   public Graph withVertices(java.util.Map<V, hydra.langs.tinkerpop.propertyGraph.Vertex<V>> vertices) {
+    if (vertices == null) {
+      throw new IllegalArgumentException("null value for 'vertices' argument");
+    }
     return new Graph(vertices, edges);
   }
   
   public Graph withEdges(java.util.Map<V, hydra.langs.tinkerpop.propertyGraph.Edge<V>> edges) {
+    if (edges == null) {
+      throw new IllegalArgumentException("null value for 'edges' argument");
+    }
     return new Graph(vertices, edges);
   }
 }

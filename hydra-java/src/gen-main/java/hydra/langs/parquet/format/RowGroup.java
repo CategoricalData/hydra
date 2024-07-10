@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.format;
 
 import java.io.Serializable;
@@ -41,6 +43,27 @@ public class RowGroup implements Serializable {
   public final java.util.Optional<Short> ordinal;
   
   public RowGroup (java.util.List<hydra.langs.parquet.format.ColumnChunk> columns, Long totalByteSize, Long numRows, java.util.Optional<java.util.List<hydra.langs.parquet.format.SortingColumn>> sortingColumns, java.util.Optional<Long> fileOffset, java.util.Optional<Long> totalCompressedSize, java.util.Optional<Short> ordinal) {
+    if (columns == null) {
+      throw new IllegalArgumentException("null value for 'columns' argument");
+    }
+    if (totalByteSize == null) {
+      throw new IllegalArgumentException("null value for 'totalByteSize' argument");
+    }
+    if (numRows == null) {
+      throw new IllegalArgumentException("null value for 'numRows' argument");
+    }
+    if (sortingColumns == null) {
+      throw new IllegalArgumentException("null value for 'sortingColumns' argument");
+    }
+    if (fileOffset == null) {
+      throw new IllegalArgumentException("null value for 'fileOffset' argument");
+    }
+    if (totalCompressedSize == null) {
+      throw new IllegalArgumentException("null value for 'totalCompressedSize' argument");
+    }
+    if (ordinal == null) {
+      throw new IllegalArgumentException("null value for 'ordinal' argument");
+    }
     this.columns = columns;
     this.totalByteSize = totalByteSize;
     this.numRows = numRows;
@@ -65,30 +88,51 @@ public class RowGroup implements Serializable {
   }
   
   public RowGroup withColumns(java.util.List<hydra.langs.parquet.format.ColumnChunk> columns) {
+    if (columns == null) {
+      throw new IllegalArgumentException("null value for 'columns' argument");
+    }
     return new RowGroup(columns, totalByteSize, numRows, sortingColumns, fileOffset, totalCompressedSize, ordinal);
   }
   
   public RowGroup withTotalByteSize(Long totalByteSize) {
+    if (totalByteSize == null) {
+      throw new IllegalArgumentException("null value for 'totalByteSize' argument");
+    }
     return new RowGroup(columns, totalByteSize, numRows, sortingColumns, fileOffset, totalCompressedSize, ordinal);
   }
   
   public RowGroup withNumRows(Long numRows) {
+    if (numRows == null) {
+      throw new IllegalArgumentException("null value for 'numRows' argument");
+    }
     return new RowGroup(columns, totalByteSize, numRows, sortingColumns, fileOffset, totalCompressedSize, ordinal);
   }
   
   public RowGroup withSortingColumns(java.util.Optional<java.util.List<hydra.langs.parquet.format.SortingColumn>> sortingColumns) {
+    if (sortingColumns == null) {
+      throw new IllegalArgumentException("null value for 'sortingColumns' argument");
+    }
     return new RowGroup(columns, totalByteSize, numRows, sortingColumns, fileOffset, totalCompressedSize, ordinal);
   }
   
   public RowGroup withFileOffset(java.util.Optional<Long> fileOffset) {
+    if (fileOffset == null) {
+      throw new IllegalArgumentException("null value for 'fileOffset' argument");
+    }
     return new RowGroup(columns, totalByteSize, numRows, sortingColumns, fileOffset, totalCompressedSize, ordinal);
   }
   
   public RowGroup withTotalCompressedSize(java.util.Optional<Long> totalCompressedSize) {
+    if (totalCompressedSize == null) {
+      throw new IllegalArgumentException("null value for 'totalCompressedSize' argument");
+    }
     return new RowGroup(columns, totalByteSize, numRows, sortingColumns, fileOffset, totalCompressedSize, ordinal);
   }
   
   public RowGroup withOrdinal(java.util.Optional<Short> ordinal) {
+    if (ordinal == null) {
+      throw new IllegalArgumentException("null value for 'ordinal' argument");
+    }
     return new RowGroup(columns, totalByteSize, numRows, sortingColumns, fileOffset, totalCompressedSize, ordinal);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.kusto.kql;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Duration implements Serializable {
   public final hydra.langs.kusto.kql.DurationUnit unit;
   
   public Duration (Integer value, hydra.langs.kusto.kql.DurationUnit unit) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
+    if (unit == null) {
+      throw new IllegalArgumentException("null value for 'unit' argument");
+    }
     this.value = value;
     this.unit = unit;
   }
@@ -29,10 +37,16 @@ public class Duration implements Serializable {
   }
   
   public Duration withValue(Integer value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     return new Duration(value, unit);
   }
   
   public Duration withUnit(hydra.langs.kusto.kql.DurationUnit unit) {
+    if (unit == null) {
+      throw new IllegalArgumentException("null value for 'unit' argument");
+    }
     return new Duration(value, unit);
   }
 }

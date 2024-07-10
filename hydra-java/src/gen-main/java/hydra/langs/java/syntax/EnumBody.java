@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class EnumBody implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.EnumBody_Element> value;
   
   public EnumBody (java.util.List<hydra.langs.java.syntax.EnumBody_Element> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

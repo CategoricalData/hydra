@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class LocalBinding implements Serializable {
     public final hydra.langs.haskell.ast.TypeSignature value;
     
     public Signature (hydra.langs.haskell.ast.TypeSignature value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class LocalBinding implements Serializable {
     public final hydra.langs.haskell.ast.ValueBinding value;
     
     public Value (hydra.langs.haskell.ast.ValueBinding value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

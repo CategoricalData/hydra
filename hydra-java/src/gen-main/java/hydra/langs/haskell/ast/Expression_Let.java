@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class Expression_Let implements Serializable {
   public final hydra.langs.haskell.ast.Expression inner;
   
   public Expression_Let (java.util.List<hydra.langs.haskell.ast.LocalBinding> bindings, hydra.langs.haskell.ast.Expression inner) {
+    if (bindings == null) {
+      throw new IllegalArgumentException("null value for 'bindings' argument");
+    }
+    if (inner == null) {
+      throw new IllegalArgumentException("null value for 'inner' argument");
+    }
     this.bindings = bindings;
     this.inner = inner;
   }
@@ -32,10 +40,16 @@ public class Expression_Let implements Serializable {
   }
   
   public Expression_Let withBindings(java.util.List<hydra.langs.haskell.ast.LocalBinding> bindings) {
+    if (bindings == null) {
+      throw new IllegalArgumentException("null value for 'bindings' argument");
+    }
     return new Expression_Let(bindings, inner);
   }
   
   public Expression_Let withInner(hydra.langs.haskell.ast.Expression inner) {
+    if (inner == null) {
+      throw new IllegalArgumentException("null value for 'inner' argument");
+    }
     return new Expression_Let(bindings, inner);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.format;
 
 import java.io.Serializable;
@@ -15,6 +17,15 @@ public class AesGcmCtrV1 implements Serializable {
   public final java.util.Optional<Boolean> supplyAadPrefix;
   
   public AesGcmCtrV1 (java.util.Optional<String> aadPrefix, java.util.Optional<String> aadFileUnique, java.util.Optional<Boolean> supplyAadPrefix) {
+    if (aadPrefix == null) {
+      throw new IllegalArgumentException("null value for 'aadPrefix' argument");
+    }
+    if (aadFileUnique == null) {
+      throw new IllegalArgumentException("null value for 'aadFileUnique' argument");
+    }
+    if (supplyAadPrefix == null) {
+      throw new IllegalArgumentException("null value for 'supplyAadPrefix' argument");
+    }
     this.aadPrefix = aadPrefix;
     this.aadFileUnique = aadFileUnique;
     this.supplyAadPrefix = supplyAadPrefix;
@@ -35,14 +46,23 @@ public class AesGcmCtrV1 implements Serializable {
   }
   
   public AesGcmCtrV1 withAadPrefix(java.util.Optional<String> aadPrefix) {
+    if (aadPrefix == null) {
+      throw new IllegalArgumentException("null value for 'aadPrefix' argument");
+    }
     return new AesGcmCtrV1(aadPrefix, aadFileUnique, supplyAadPrefix);
   }
   
   public AesGcmCtrV1 withAadFileUnique(java.util.Optional<String> aadFileUnique) {
+    if (aadFileUnique == null) {
+      throw new IllegalArgumentException("null value for 'aadFileUnique' argument");
+    }
     return new AesGcmCtrV1(aadPrefix, aadFileUnique, supplyAadPrefix);
   }
   
   public AesGcmCtrV1 withSupplyAadPrefix(java.util.Optional<Boolean> supplyAadPrefix) {
+    if (supplyAadPrefix == null) {
+      throw new IllegalArgumentException("null value for 'supplyAadPrefix' argument");
+    }
     return new AesGcmCtrV1(aadPrefix, aadFileUnique, supplyAadPrefix);
   }
 }

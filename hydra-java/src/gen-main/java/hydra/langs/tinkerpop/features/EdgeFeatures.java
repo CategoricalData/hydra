@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.features;
 
 import java.io.Serializable;
@@ -28,6 +30,21 @@ public class EdgeFeatures implements Serializable {
   public final Boolean supportsUpsert;
   
   public EdgeFeatures (hydra.langs.tinkerpop.features.ElementFeatures elementFeatures, hydra.langs.tinkerpop.features.EdgePropertyFeatures properties, Boolean supportsAddEdges, Boolean supportsRemoveEdges, Boolean supportsUpsert) {
+    if (elementFeatures == null) {
+      throw new IllegalArgumentException("null value for 'elementFeatures' argument");
+    }
+    if (properties == null) {
+      throw new IllegalArgumentException("null value for 'properties' argument");
+    }
+    if (supportsAddEdges == null) {
+      throw new IllegalArgumentException("null value for 'supportsAddEdges' argument");
+    }
+    if (supportsRemoveEdges == null) {
+      throw new IllegalArgumentException("null value for 'supportsRemoveEdges' argument");
+    }
+    if (supportsUpsert == null) {
+      throw new IllegalArgumentException("null value for 'supportsUpsert' argument");
+    }
     this.elementFeatures = elementFeatures;
     this.properties = properties;
     this.supportsAddEdges = supportsAddEdges;
@@ -50,22 +67,37 @@ public class EdgeFeatures implements Serializable {
   }
   
   public EdgeFeatures withElementFeatures(hydra.langs.tinkerpop.features.ElementFeatures elementFeatures) {
+    if (elementFeatures == null) {
+      throw new IllegalArgumentException("null value for 'elementFeatures' argument");
+    }
     return new EdgeFeatures(elementFeatures, properties, supportsAddEdges, supportsRemoveEdges, supportsUpsert);
   }
   
   public EdgeFeatures withProperties(hydra.langs.tinkerpop.features.EdgePropertyFeatures properties) {
+    if (properties == null) {
+      throw new IllegalArgumentException("null value for 'properties' argument");
+    }
     return new EdgeFeatures(elementFeatures, properties, supportsAddEdges, supportsRemoveEdges, supportsUpsert);
   }
   
   public EdgeFeatures withSupportsAddEdges(Boolean supportsAddEdges) {
+    if (supportsAddEdges == null) {
+      throw new IllegalArgumentException("null value for 'supportsAddEdges' argument");
+    }
     return new EdgeFeatures(elementFeatures, properties, supportsAddEdges, supportsRemoveEdges, supportsUpsert);
   }
   
   public EdgeFeatures withSupportsRemoveEdges(Boolean supportsRemoveEdges) {
+    if (supportsRemoveEdges == null) {
+      throw new IllegalArgumentException("null value for 'supportsRemoveEdges' argument");
+    }
     return new EdgeFeatures(elementFeatures, properties, supportsAddEdges, supportsRemoveEdges, supportsUpsert);
   }
   
   public EdgeFeatures withSupportsUpsert(Boolean supportsUpsert) {
+    if (supportsUpsert == null) {
+      throw new IllegalArgumentException("null value for 'supportsUpsert' argument");
+    }
     return new EdgeFeatures(elementFeatures, properties, supportsAddEdges, supportsRemoveEdges, supportsUpsert);
   }
 }

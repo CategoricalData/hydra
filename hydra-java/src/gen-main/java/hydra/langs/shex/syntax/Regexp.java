@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Regexp implements Serializable {
   public final java.util.List<String> listOfRegex;
   
   public Regexp (java.util.List<hydra.langs.shex.syntax.Regexp_ListOfAlts_Elmt> listOfAlts, java.util.List<String> listOfRegex) {
+    if (listOfAlts == null) {
+      throw new IllegalArgumentException("null value for 'listOfAlts' argument");
+    }
+    if (listOfRegex == null) {
+      throw new IllegalArgumentException("null value for 'listOfRegex' argument");
+    }
     this.listOfAlts = listOfAlts;
     this.listOfRegex = listOfRegex;
   }
@@ -29,10 +37,16 @@ public class Regexp implements Serializable {
   }
   
   public Regexp withListOfAlts(java.util.List<hydra.langs.shex.syntax.Regexp_ListOfAlts_Elmt> listOfAlts) {
+    if (listOfAlts == null) {
+      throw new IllegalArgumentException("null value for 'listOfAlts' argument");
+    }
     return new Regexp(listOfAlts, listOfRegex);
   }
   
   public Regexp withListOfRegex(java.util.List<String> listOfRegex) {
+    if (listOfRegex == null) {
+      throw new IllegalArgumentException("null value for 'listOfRegex' argument");
+    }
     return new Regexp(listOfAlts, listOfRegex);
   }
 }

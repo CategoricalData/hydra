@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.features;
 
 /**
@@ -9,6 +11,9 @@ public class ExtraFeatures<A> {
   public final java.util.function.Function<hydra.core.Type<A>, Boolean> supportsMapKey;
   
   public ExtraFeatures (java.util.function.Function<hydra.core.Type<A>, Boolean> supportsMapKey) {
+    if (supportsMapKey == null) {
+      throw new IllegalArgumentException("null value for 'supportsMapKey' argument");
+    }
     this.supportsMapKey = supportsMapKey;
   }
   

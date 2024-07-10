@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -62,6 +64,9 @@ public abstract class DataRange implements Serializable {
     public final hydra.langs.owl.syntax.DataComplementOf value;
     
     public DataComplementOf (hydra.langs.owl.syntax.DataComplementOf value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -89,6 +94,9 @@ public abstract class DataRange implements Serializable {
     public final hydra.langs.owl.syntax.DataIntersectionOf value;
     
     public DataIntersectionOf (hydra.langs.owl.syntax.DataIntersectionOf value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -116,6 +124,9 @@ public abstract class DataRange implements Serializable {
     public final hydra.langs.owl.syntax.DataOneOf value;
     
     public DataOneOf (hydra.langs.owl.syntax.DataOneOf value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -143,6 +154,9 @@ public abstract class DataRange implements Serializable {
     public final hydra.langs.owl.syntax.DataUnionOf value;
     
     public DataUnionOf (hydra.langs.owl.syntax.DataUnionOf value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -170,6 +184,9 @@ public abstract class DataRange implements Serializable {
     public final hydra.langs.owl.syntax.Datatype value;
     
     public Datatype (hydra.langs.owl.syntax.Datatype value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -197,6 +214,9 @@ public abstract class DataRange implements Serializable {
     public final hydra.langs.owl.syntax.DatatypeRestriction value;
     
     public DatatypeRestriction (hydra.langs.owl.syntax.DatatypeRestriction value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

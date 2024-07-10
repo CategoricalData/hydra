@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class ObjectUnionOf implements Serializable {
   public final java.util.List<hydra.langs.owl.syntax.ClassExpression> value;
   
   public ObjectUnionOf (java.util.List<hydra.langs.owl.syntax.ClassExpression> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

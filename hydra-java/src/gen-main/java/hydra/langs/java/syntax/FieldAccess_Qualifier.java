@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -41,6 +43,9 @@ public abstract class FieldAccess_Qualifier implements Serializable {
     public final hydra.langs.java.syntax.Primary value;
     
     public Primary (hydra.langs.java.syntax.Primary value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -93,6 +98,9 @@ public abstract class FieldAccess_Qualifier implements Serializable {
     public final hydra.langs.java.syntax.TypeName value;
     
     public Typed (hydra.langs.java.syntax.TypeName value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

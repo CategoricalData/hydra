@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class PreDecrementExpression implements Serializable {
   public final hydra.langs.java.syntax.UnaryExpression value;
   
   public PreDecrementExpression (hydra.langs.java.syntax.UnaryExpression value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

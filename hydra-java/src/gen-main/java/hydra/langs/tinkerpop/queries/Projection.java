@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.queries;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Projection implements Serializable {
   public final java.util.Optional<hydra.langs.tinkerpop.queries.Variable> as;
   
   public Projection (hydra.langs.tinkerpop.queries.Expression value, java.util.Optional<hydra.langs.tinkerpop.queries.Variable> as) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
+    if (as == null) {
+      throw new IllegalArgumentException("null value for 'as' argument");
+    }
     this.value = value;
     this.as = as;
   }
@@ -29,10 +37,16 @@ public class Projection implements Serializable {
   }
   
   public Projection withValue(hydra.langs.tinkerpop.queries.Expression value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     return new Projection(value, as);
   }
   
   public Projection withAs(java.util.Optional<hydra.langs.tinkerpop.queries.Variable> as) {
+    if (as == null) {
+      throw new IllegalArgumentException("null value for 'as' argument");
+    }
     return new Projection(value, as);
   }
 }

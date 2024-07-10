@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -53,6 +55,9 @@ public abstract class Decl implements Serializable {
     public final hydra.langs.scala.meta.Decl_Val value;
     
     public Val (hydra.langs.scala.meta.Decl_Val value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -80,6 +85,9 @@ public abstract class Decl implements Serializable {
     public final hydra.langs.scala.meta.Decl_Var value;
     
     public Var (hydra.langs.scala.meta.Decl_Var value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -107,6 +115,9 @@ public abstract class Decl implements Serializable {
     public final hydra.langs.scala.meta.Decl_Def value;
     
     public Def (hydra.langs.scala.meta.Decl_Def value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -134,6 +145,9 @@ public abstract class Decl implements Serializable {
     public final hydra.langs.scala.meta.Decl_Type value;
     
     public Type (hydra.langs.scala.meta.Decl_Type value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -161,6 +175,9 @@ public abstract class Decl implements Serializable {
     public final hydra.langs.scala.meta.Decl_Given value;
     
     public Given (hydra.langs.scala.meta.Decl_Given value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

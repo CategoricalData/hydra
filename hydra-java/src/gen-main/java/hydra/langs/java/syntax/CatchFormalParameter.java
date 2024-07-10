@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class CatchFormalParameter implements Serializable {
   public final hydra.langs.java.syntax.VariableDeclaratorId id;
   
   public CatchFormalParameter (java.util.List<hydra.langs.java.syntax.VariableModifier> modifiers, hydra.langs.java.syntax.CatchType type, hydra.langs.java.syntax.VariableDeclaratorId id) {
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
+    if (id == null) {
+      throw new IllegalArgumentException("null value for 'id' argument");
+    }
     this.modifiers = modifiers;
     this.type = type;
     this.id = id;
@@ -32,14 +43,23 @@ public class CatchFormalParameter implements Serializable {
   }
   
   public CatchFormalParameter withModifiers(java.util.List<hydra.langs.java.syntax.VariableModifier> modifiers) {
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
     return new CatchFormalParameter(modifiers, type, id);
   }
   
   public CatchFormalParameter withType(hydra.langs.java.syntax.CatchType type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new CatchFormalParameter(modifiers, type, id);
   }
   
   public CatchFormalParameter withId(hydra.langs.java.syntax.VariableDeclaratorId id) {
+    if (id == null) {
+      throw new IllegalArgumentException("null value for 'id' argument");
+    }
     return new CatchFormalParameter(modifiers, type, id);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.format;
 
 import java.io.Serializable;
@@ -34,6 +36,21 @@ public class DataPageHeader implements Serializable {
   public final java.util.Optional<hydra.langs.parquet.format.Statistics> statistics;
   
   public DataPageHeader (Integer numValues, hydra.langs.parquet.format.Encoding encoding, hydra.langs.parquet.format.Encoding definitionLevelEncoding, hydra.langs.parquet.format.Encoding repetitionLevelEncoding, java.util.Optional<hydra.langs.parquet.format.Statistics> statistics) {
+    if (numValues == null) {
+      throw new IllegalArgumentException("null value for 'numValues' argument");
+    }
+    if (encoding == null) {
+      throw new IllegalArgumentException("null value for 'encoding' argument");
+    }
+    if (definitionLevelEncoding == null) {
+      throw new IllegalArgumentException("null value for 'definitionLevelEncoding' argument");
+    }
+    if (repetitionLevelEncoding == null) {
+      throw new IllegalArgumentException("null value for 'repetitionLevelEncoding' argument");
+    }
+    if (statistics == null) {
+      throw new IllegalArgumentException("null value for 'statistics' argument");
+    }
     this.numValues = numValues;
     this.encoding = encoding;
     this.definitionLevelEncoding = definitionLevelEncoding;
@@ -56,22 +73,37 @@ public class DataPageHeader implements Serializable {
   }
   
   public DataPageHeader withNumValues(Integer numValues) {
+    if (numValues == null) {
+      throw new IllegalArgumentException("null value for 'numValues' argument");
+    }
     return new DataPageHeader(numValues, encoding, definitionLevelEncoding, repetitionLevelEncoding, statistics);
   }
   
   public DataPageHeader withEncoding(hydra.langs.parquet.format.Encoding encoding) {
+    if (encoding == null) {
+      throw new IllegalArgumentException("null value for 'encoding' argument");
+    }
     return new DataPageHeader(numValues, encoding, definitionLevelEncoding, repetitionLevelEncoding, statistics);
   }
   
   public DataPageHeader withDefinitionLevelEncoding(hydra.langs.parquet.format.Encoding definitionLevelEncoding) {
+    if (definitionLevelEncoding == null) {
+      throw new IllegalArgumentException("null value for 'definitionLevelEncoding' argument");
+    }
     return new DataPageHeader(numValues, encoding, definitionLevelEncoding, repetitionLevelEncoding, statistics);
   }
   
   public DataPageHeader withRepetitionLevelEncoding(hydra.langs.parquet.format.Encoding repetitionLevelEncoding) {
+    if (repetitionLevelEncoding == null) {
+      throw new IllegalArgumentException("null value for 'repetitionLevelEncoding' argument");
+    }
     return new DataPageHeader(numValues, encoding, definitionLevelEncoding, repetitionLevelEncoding, statistics);
   }
   
   public DataPageHeader withStatistics(java.util.Optional<hydra.langs.parquet.format.Statistics> statistics) {
+    if (statistics == null) {
+      throw new IllegalArgumentException("null value for 'statistics' argument");
+    }
     return new DataPageHeader(numValues, encoding, definitionLevelEncoding, repetitionLevelEncoding, statistics);
   }
 }

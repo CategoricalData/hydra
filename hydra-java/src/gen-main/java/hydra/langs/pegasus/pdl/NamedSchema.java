@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.pegasus.pdl;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class NamedSchema implements Serializable {
   public final hydra.langs.pegasus.pdl.Annotations annotations;
   
   public NamedSchema (hydra.langs.pegasus.pdl.QualifiedName qualifiedName, hydra.langs.pegasus.pdl.NamedSchema_Type type, hydra.langs.pegasus.pdl.Annotations annotations) {
+    if (qualifiedName == null) {
+      throw new IllegalArgumentException("null value for 'qualifiedName' argument");
+    }
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     this.qualifiedName = qualifiedName;
     this.type = type;
     this.annotations = annotations;
@@ -32,14 +43,23 @@ public class NamedSchema implements Serializable {
   }
   
   public NamedSchema withQualifiedName(hydra.langs.pegasus.pdl.QualifiedName qualifiedName) {
+    if (qualifiedName == null) {
+      throw new IllegalArgumentException("null value for 'qualifiedName' argument");
+    }
     return new NamedSchema(qualifiedName, type, annotations);
   }
   
   public NamedSchema withType(hydra.langs.pegasus.pdl.NamedSchema_Type type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new NamedSchema(qualifiedName, type, annotations);
   }
   
   public NamedSchema withAnnotations(hydra.langs.pegasus.pdl.Annotations annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     return new NamedSchema(qualifiedName, type, annotations);
   }
 }

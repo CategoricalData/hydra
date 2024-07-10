@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class InterfaceBody implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.InterfaceMemberDeclaration> value;
   
   public InterfaceBody (java.util.List<hydra.langs.java.syntax.InterfaceMemberDeclaration> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

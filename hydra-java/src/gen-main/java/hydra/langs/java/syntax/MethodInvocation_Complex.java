@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class MethodInvocation_Complex implements Serializable {
   public final hydra.langs.java.syntax.Identifier identifier;
   
   public MethodInvocation_Complex (hydra.langs.java.syntax.MethodInvocation_Variant variant, java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments, hydra.langs.java.syntax.Identifier identifier) {
+    if (variant == null) {
+      throw new IllegalArgumentException("null value for 'variant' argument");
+    }
+    if (typeArguments == null) {
+      throw new IllegalArgumentException("null value for 'typeArguments' argument");
+    }
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
     this.variant = variant;
     this.typeArguments = typeArguments;
     this.identifier = identifier;
@@ -32,14 +43,23 @@ public class MethodInvocation_Complex implements Serializable {
   }
   
   public MethodInvocation_Complex withVariant(hydra.langs.java.syntax.MethodInvocation_Variant variant) {
+    if (variant == null) {
+      throw new IllegalArgumentException("null value for 'variant' argument");
+    }
     return new MethodInvocation_Complex(variant, typeArguments, identifier);
   }
   
   public MethodInvocation_Complex withTypeArguments(java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments) {
+    if (typeArguments == null) {
+      throw new IllegalArgumentException("null value for 'typeArguments' argument");
+    }
     return new MethodInvocation_Complex(variant, typeArguments, identifier);
   }
   
   public MethodInvocation_Complex withIdentifier(hydra.langs.java.syntax.Identifier identifier) {
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
     return new MethodInvocation_Complex(variant, typeArguments, identifier);
   }
 }

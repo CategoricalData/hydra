@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tabular;
 
 import java.io.Serializable;
@@ -19,6 +21,12 @@ public class Table<V> implements Serializable {
   public final java.util.List<hydra.langs.tabular.DataRow<V>> data;
   
   public Table (java.util.Optional<hydra.langs.tabular.HeaderRow> header, java.util.List<hydra.langs.tabular.DataRow<V>> data) {
+    if (header == null) {
+      throw new IllegalArgumentException("null value for 'header' argument");
+    }
+    if (data == null) {
+      throw new IllegalArgumentException("null value for 'data' argument");
+    }
     this.header = header;
     this.data = data;
   }
@@ -38,10 +46,16 @@ public class Table<V> implements Serializable {
   }
   
   public Table withHeader(java.util.Optional<hydra.langs.tabular.HeaderRow> header) {
+    if (header == null) {
+      throw new IllegalArgumentException("null value for 'header' argument");
+    }
     return new Table(header, data);
   }
   
   public Table withData(java.util.List<hydra.langs.tabular.DataRow<V>> data) {
+    if (data == null) {
+      throw new IllegalArgumentException("null value for 'data' argument");
+    }
     return new Table(header, data);
   }
 }

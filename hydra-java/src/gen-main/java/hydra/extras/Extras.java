@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.extras;
 
 /**
@@ -94,7 +96,40 @@ public interface Extras {
     });
   }
   
-  hydra.compute.Kv emptyKv = new hydra.compute.Kv(hydra.lib.maps.Empty.apply());
+  static <A> java.util.List<hydra.core.Type<A>> uncurryType(hydra.core.Type<A> t) {
+    return ((t)).accept(new hydra.core.Type.PartialVisitor<A, java.util.List<hydra.core.Type<A>>>() {
+      @Override
+      public java.util.List<hydra.core.Type<A>> otherwise(hydra.core.Type<A> instance) {
+        return java.util.Arrays.asList((t));
+      }
+      
+      @Override
+      public java.util.List<hydra.core.Type<A>> visit(hydra.core.Type.Annotated<A> instance) {
+        return hydra.extras.Extras.uncurryType(((instance.value)).subject);
+      }
+      
+      @Override
+      public java.util.List<hydra.core.Type<A>> visit(hydra.core.Type.Application<A> instance) {
+        return hydra.extras.Extras.uncurryType(((instance.value)).function);
+      }
+      
+      @Override
+      public java.util.List<hydra.core.Type<A>> visit(hydra.core.Type.Lambda<A> instance) {
+        return hydra.extras.Extras.uncurryType(((instance.value)).body);
+      }
+      
+      @Override
+      public java.util.List<hydra.core.Type<A>> visit(hydra.core.Type.Function<A> instance) {
+        return hydra.lib.lists.Cons.apply(
+          ((instance.value)).domain,
+          hydra.extras.Extras.uncurryType(((instance.value)).codomain));
+      }
+    });
+  }
+  
+  static hydra.compute.Kv emptyKv() {
+    return new hydra.compute.Kv(hydra.lib.maps.Empty.apply());
+  }
   
   static java.util.function.Function<hydra.compute.Kv, java.util.Optional<hydra.core.Term<hydra.compute.Kv>>> getAnnotation(String key) {
     return (java.util.function.Function<hydra.compute.Kv, java.util.Optional<hydra.core.Term<hydra.compute.Kv>>>) (ann -> hydra.lib.maps.Lookup.apply(

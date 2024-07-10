@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class EnumValueDefinition implements Serializable {
   public final java.util.Optional<hydra.langs.graphql.syntax.Directives> directives;
   
   public EnumValueDefinition (java.util.Optional<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.EnumValue enumValue, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+    if (description == null) {
+      throw new IllegalArgumentException("null value for 'description' argument");
+    }
+    if (enumValue == null) {
+      throw new IllegalArgumentException("null value for 'enumValue' argument");
+    }
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
     this.description = description;
     this.enumValue = enumValue;
     this.directives = directives;
@@ -32,14 +43,23 @@ public class EnumValueDefinition implements Serializable {
   }
   
   public EnumValueDefinition withDescription(java.util.Optional<hydra.langs.graphql.syntax.Description> description) {
+    if (description == null) {
+      throw new IllegalArgumentException("null value for 'description' argument");
+    }
     return new EnumValueDefinition(description, enumValue, directives);
   }
   
   public EnumValueDefinition withEnumValue(hydra.langs.graphql.syntax.EnumValue enumValue) {
+    if (enumValue == null) {
+      throw new IllegalArgumentException("null value for 'enumValue' argument");
+    }
     return new EnumValueDefinition(description, enumValue, directives);
   }
   
   public EnumValueDefinition withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
     return new EnumValueDefinition(description, enumValue, directives);
   }
 }

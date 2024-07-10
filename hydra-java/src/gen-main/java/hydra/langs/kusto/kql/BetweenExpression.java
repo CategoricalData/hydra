@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.kusto.kql;
 
 import java.io.Serializable;
@@ -14,6 +16,18 @@ public class BetweenExpression implements Serializable {
   public final hydra.langs.kusto.kql.Expression upperBound;
   
   public BetweenExpression (Boolean not, hydra.langs.kusto.kql.Expression expression, hydra.langs.kusto.kql.Expression lowerBound, hydra.langs.kusto.kql.Expression upperBound) {
+    if (not == null) {
+      throw new IllegalArgumentException("null value for 'not' argument");
+    }
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
+    if (lowerBound == null) {
+      throw new IllegalArgumentException("null value for 'lowerBound' argument");
+    }
+    if (upperBound == null) {
+      throw new IllegalArgumentException("null value for 'upperBound' argument");
+    }
     this.not = not;
     this.expression = expression;
     this.lowerBound = lowerBound;
@@ -35,18 +49,30 @@ public class BetweenExpression implements Serializable {
   }
   
   public BetweenExpression withNot(Boolean not) {
+    if (not == null) {
+      throw new IllegalArgumentException("null value for 'not' argument");
+    }
     return new BetweenExpression(not, expression, lowerBound, upperBound);
   }
   
   public BetweenExpression withExpression(hydra.langs.kusto.kql.Expression expression) {
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     return new BetweenExpression(not, expression, lowerBound, upperBound);
   }
   
   public BetweenExpression withLowerBound(hydra.langs.kusto.kql.Expression lowerBound) {
+    if (lowerBound == null) {
+      throw new IllegalArgumentException("null value for 'lowerBound' argument");
+    }
     return new BetweenExpression(not, expression, lowerBound, upperBound);
   }
   
   public BetweenExpression withUpperBound(hydra.langs.kusto.kql.Expression upperBound) {
+    if (upperBound == null) {
+      throw new IllegalArgumentException("null value for 'upperBound' argument");
+    }
     return new BetweenExpression(not, expression, lowerBound, upperBound);
   }
 }

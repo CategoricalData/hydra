@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class Individual implements Serializable {
     public final hydra.langs.owl.syntax.NamedIndividual value;
     
     public Named (hydra.langs.owl.syntax.NamedIndividual value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class Individual implements Serializable {
     public final hydra.langs.owl.syntax.AnonymousIndividual value;
     
     public Anonymous (hydra.langs.owl.syntax.AnonymousIndividual value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

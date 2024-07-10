@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class Mod_Private implements Serializable {
   public final hydra.langs.scala.meta.Ref within;
   
   public Mod_Private (hydra.langs.scala.meta.Ref within) {
+    if (within == null) {
+      throw new IllegalArgumentException("null value for 'within' argument");
+    }
     this.within = within;
   }
   

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.format;
 
 import java.io.Serializable;
@@ -29,6 +31,18 @@ public class BloomFilterHeader implements Serializable {
   public final hydra.langs.parquet.format.BloomFilterCompression compression;
   
   public BloomFilterHeader (Integer numBytes, hydra.langs.parquet.format.BloomFilterAlgorithm algorithm, hydra.langs.parquet.format.BloomFilterHash hash, hydra.langs.parquet.format.BloomFilterCompression compression) {
+    if (numBytes == null) {
+      throw new IllegalArgumentException("null value for 'numBytes' argument");
+    }
+    if (algorithm == null) {
+      throw new IllegalArgumentException("null value for 'algorithm' argument");
+    }
+    if (hash == null) {
+      throw new IllegalArgumentException("null value for 'hash' argument");
+    }
+    if (compression == null) {
+      throw new IllegalArgumentException("null value for 'compression' argument");
+    }
     this.numBytes = numBytes;
     this.algorithm = algorithm;
     this.hash = hash;
@@ -50,18 +64,30 @@ public class BloomFilterHeader implements Serializable {
   }
   
   public BloomFilterHeader withNumBytes(Integer numBytes) {
+    if (numBytes == null) {
+      throw new IllegalArgumentException("null value for 'numBytes' argument");
+    }
     return new BloomFilterHeader(numBytes, algorithm, hash, compression);
   }
   
   public BloomFilterHeader withAlgorithm(hydra.langs.parquet.format.BloomFilterAlgorithm algorithm) {
+    if (algorithm == null) {
+      throw new IllegalArgumentException("null value for 'algorithm' argument");
+    }
     return new BloomFilterHeader(numBytes, algorithm, hash, compression);
   }
   
   public BloomFilterHeader withHash(hydra.langs.parquet.format.BloomFilterHash hash) {
+    if (hash == null) {
+      throw new IllegalArgumentException("null value for 'hash' argument");
+    }
     return new BloomFilterHeader(numBytes, algorithm, hash, compression);
   }
   
   public BloomFilterHeader withCompression(hydra.langs.parquet.format.BloomFilterCompression compression) {
+    if (compression == null) {
+      throw new IllegalArgumentException("null value for 'compression' argument");
+    }
     return new BloomFilterHeader(numBytes, algorithm, hash, compression);
   }
 }

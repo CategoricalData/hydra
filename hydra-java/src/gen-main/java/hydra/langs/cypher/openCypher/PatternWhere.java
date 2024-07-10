@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class PatternWhere implements Serializable {
   public final java.util.Optional<hydra.langs.cypher.openCypher.Where> where;
   
   public PatternWhere (hydra.langs.cypher.openCypher.Pattern pattern, java.util.Optional<hydra.langs.cypher.openCypher.Where> where) {
+    if (pattern == null) {
+      throw new IllegalArgumentException("null value for 'pattern' argument");
+    }
+    if (where == null) {
+      throw new IllegalArgumentException("null value for 'where' argument");
+    }
     this.pattern = pattern;
     this.where = where;
   }
@@ -29,10 +37,16 @@ public class PatternWhere implements Serializable {
   }
   
   public PatternWhere withPattern(hydra.langs.cypher.openCypher.Pattern pattern) {
+    if (pattern == null) {
+      throw new IllegalArgumentException("null value for 'pattern' argument");
+    }
     return new PatternWhere(pattern, where);
   }
   
   public PatternWhere withWhere(java.util.Optional<hydra.langs.cypher.openCypher.Where> where) {
+    if (where == null) {
+      throw new IllegalArgumentException("null value for 'where' argument");
+    }
     return new PatternWhere(pattern, where);
   }
 }

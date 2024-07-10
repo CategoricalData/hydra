@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class PredefinedType_String implements Serializable {
   public final java.util.Optional<hydra.langs.sql.ansi.CollateClause> collate;
   
   public PredefinedType_String (hydra.langs.sql.ansi.CharacterStringType type, java.util.Optional<hydra.langs.sql.ansi.CharacterSetSpecification> characters, java.util.Optional<hydra.langs.sql.ansi.CollateClause> collate) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
+    if (characters == null) {
+      throw new IllegalArgumentException("null value for 'characters' argument");
+    }
+    if (collate == null) {
+      throw new IllegalArgumentException("null value for 'collate' argument");
+    }
     this.type = type;
     this.characters = characters;
     this.collate = collate;
@@ -32,14 +43,23 @@ public class PredefinedType_String implements Serializable {
   }
   
   public PredefinedType_String withType(hydra.langs.sql.ansi.CharacterStringType type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new PredefinedType_String(type, characters, collate);
   }
   
   public PredefinedType_String withCharacters(java.util.Optional<hydra.langs.sql.ansi.CharacterSetSpecification> characters) {
+    if (characters == null) {
+      throw new IllegalArgumentException("null value for 'characters' argument");
+    }
     return new PredefinedType_String(type, characters, collate);
   }
   
   public PredefinedType_String withCollate(java.util.Optional<hydra.langs.sql.ansi.CollateClause> collate) {
+    if (collate == null) {
+      throw new IllegalArgumentException("null value for 'collate' argument");
+    }
     return new PredefinedType_String(type, characters, collate);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -47,6 +49,9 @@ public abstract class MultiplicativeExpression implements Serializable {
     public final hydra.langs.java.syntax.UnaryExpression value;
     
     public Unary (hydra.langs.java.syntax.UnaryExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -74,6 +79,9 @@ public abstract class MultiplicativeExpression implements Serializable {
     public final hydra.langs.java.syntax.MultiplicativeExpression_Binary value;
     
     public Times (hydra.langs.java.syntax.MultiplicativeExpression_Binary value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -101,6 +109,9 @@ public abstract class MultiplicativeExpression implements Serializable {
     public final hydra.langs.java.syntax.MultiplicativeExpression_Binary value;
     
     public Divide (hydra.langs.java.syntax.MultiplicativeExpression_Binary value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -128,6 +139,9 @@ public abstract class MultiplicativeExpression implements Serializable {
     public final hydra.langs.java.syntax.MultiplicativeExpression_Binary value;
     
     public Mod (hydra.langs.java.syntax.MultiplicativeExpression_Binary value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

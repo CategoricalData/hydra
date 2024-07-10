@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -60,6 +62,9 @@ public abstract class BooleanArray implements Serializable {
     public final hydra.langs.java.syntax.BooleanArray value;
     
     public Array (hydra.langs.java.syntax.BooleanArray value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

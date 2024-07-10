@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class ArrayAccess implements Serializable {
   public final hydra.langs.java.syntax.ArrayAccess_Variant variant;
   
   public ArrayAccess (java.util.Optional<hydra.langs.java.syntax.Expression> expression, hydra.langs.java.syntax.ArrayAccess_Variant variant) {
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
+    if (variant == null) {
+      throw new IllegalArgumentException("null value for 'variant' argument");
+    }
     this.expression = expression;
     this.variant = variant;
   }
@@ -29,10 +37,16 @@ public class ArrayAccess implements Serializable {
   }
   
   public ArrayAccess withExpression(java.util.Optional<hydra.langs.java.syntax.Expression> expression) {
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     return new ArrayAccess(expression, variant);
   }
   
   public ArrayAccess withVariant(hydra.langs.java.syntax.ArrayAccess_Variant variant) {
+    if (variant == null) {
+      throw new IllegalArgumentException("null value for 'variant' argument");
+    }
     return new ArrayAccess(expression, variant);
   }
 }

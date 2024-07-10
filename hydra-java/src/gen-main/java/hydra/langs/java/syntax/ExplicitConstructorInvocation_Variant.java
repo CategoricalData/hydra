@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -66,6 +68,9 @@ public abstract class ExplicitConstructorInvocation_Variant implements Serializa
     public final java.util.Optional<hydra.langs.java.syntax.ExpressionName> value;
     
     public Super (java.util.Optional<hydra.langs.java.syntax.ExpressionName> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -93,6 +98,9 @@ public abstract class ExplicitConstructorInvocation_Variant implements Serializa
     public final hydra.langs.java.syntax.Primary value;
     
     public Primary (hydra.langs.java.syntax.Primary value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

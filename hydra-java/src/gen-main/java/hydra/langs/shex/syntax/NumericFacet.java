@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class NumericFacet implements Serializable {
     public final hydra.langs.shex.syntax.NumericFacet_Sequence value;
     
     public Sequence (hydra.langs.shex.syntax.NumericFacet_Sequence value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class NumericFacet implements Serializable {
     public final hydra.langs.shex.syntax.NumericFacet_Sequence2 value;
     
     public Sequence2 (hydra.langs.shex.syntax.NumericFacet_Sequence2 value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

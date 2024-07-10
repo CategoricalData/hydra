@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -83,6 +85,9 @@ public abstract class PrimaryNoNewArray implements Serializable {
     public final hydra.langs.java.syntax.Literal value;
     
     public Literal (hydra.langs.java.syntax.Literal value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -110,6 +115,9 @@ public abstract class PrimaryNoNewArray implements Serializable {
     public final hydra.langs.java.syntax.ClassLiteral value;
     
     public ClassLiteral (hydra.langs.java.syntax.ClassLiteral value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -162,6 +170,9 @@ public abstract class PrimaryNoNewArray implements Serializable {
     public final hydra.langs.java.syntax.TypeName value;
     
     public DotThis (hydra.langs.java.syntax.TypeName value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -189,6 +200,9 @@ public abstract class PrimaryNoNewArray implements Serializable {
     public final hydra.langs.java.syntax.Expression value;
     
     public Parens (hydra.langs.java.syntax.Expression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -216,6 +230,9 @@ public abstract class PrimaryNoNewArray implements Serializable {
     public final hydra.langs.java.syntax.ClassInstanceCreationExpression value;
     
     public ClassInstance (hydra.langs.java.syntax.ClassInstanceCreationExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -243,6 +260,9 @@ public abstract class PrimaryNoNewArray implements Serializable {
     public final hydra.langs.java.syntax.FieldAccess value;
     
     public FieldAccess (hydra.langs.java.syntax.FieldAccess value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -270,6 +290,9 @@ public abstract class PrimaryNoNewArray implements Serializable {
     public final hydra.langs.java.syntax.ArrayAccess value;
     
     public ArrayAccess (hydra.langs.java.syntax.ArrayAccess value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -297,6 +320,9 @@ public abstract class PrimaryNoNewArray implements Serializable {
     public final hydra.langs.java.syntax.MethodInvocation value;
     
     public MethodInvocation (hydra.langs.java.syntax.MethodInvocation value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -324,6 +350,9 @@ public abstract class PrimaryNoNewArray implements Serializable {
     public final hydra.langs.java.syntax.MethodReference value;
     
     public MethodReference (hydra.langs.java.syntax.MethodReference value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

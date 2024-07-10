@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class ObjectTypeExtension_Sequence2 implements Serializable {
   public final java.util.Optional<hydra.langs.graphql.syntax.Directives> directives;
   
   public ObjectTypeExtension_Sequence2 (hydra.langs.graphql.syntax.Name name, java.util.Optional<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (implementsInterfaces == null) {
+      throw new IllegalArgumentException("null value for 'implementsInterfaces' argument");
+    }
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
     this.name = name;
     this.implementsInterfaces = implementsInterfaces;
     this.directives = directives;
@@ -32,14 +43,23 @@ public class ObjectTypeExtension_Sequence2 implements Serializable {
   }
   
   public ObjectTypeExtension_Sequence2 withName(hydra.langs.graphql.syntax.Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new ObjectTypeExtension_Sequence2(name, implementsInterfaces, directives);
   }
   
   public ObjectTypeExtension_Sequence2 withImplementsInterfaces(java.util.Optional<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces) {
+    if (implementsInterfaces == null) {
+      throw new IllegalArgumentException("null value for 'implementsInterfaces' argument");
+    }
     return new ObjectTypeExtension_Sequence2(name, implementsInterfaces, directives);
   }
   
   public ObjectTypeExtension_Sequence2 withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
     return new ObjectTypeExtension_Sequence2(name, implementsInterfaces, directives);
   }
 }

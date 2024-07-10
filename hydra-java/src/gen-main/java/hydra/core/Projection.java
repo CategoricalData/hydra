@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.core;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class Projection implements Serializable {
   public final hydra.core.FieldName field;
   
   public Projection (hydra.core.Name typeName, hydra.core.FieldName field) {
+    if (typeName == null) {
+      throw new IllegalArgumentException("null value for 'typeName' argument");
+    }
+    if (field == null) {
+      throw new IllegalArgumentException("null value for 'field' argument");
+    }
     this.typeName = typeName;
     this.field = field;
   }
@@ -32,10 +40,16 @@ public class Projection implements Serializable {
   }
   
   public Projection withTypeName(hydra.core.Name typeName) {
+    if (typeName == null) {
+      throw new IllegalArgumentException("null value for 'typeName' argument");
+    }
     return new Projection(typeName, field);
   }
   
   public Projection withField(hydra.core.FieldName field) {
+    if (field == null) {
+      throw new IllegalArgumentException("null value for 'field' argument");
+    }
     return new Projection(typeName, field);
   }
 }

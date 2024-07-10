@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.propertyGraph;
 
 import java.io.Serializable;
@@ -24,6 +26,15 @@ public class PropertyType<T> implements Serializable {
   public final Boolean required;
   
   public PropertyType (hydra.langs.tinkerpop.propertyGraph.PropertyKey key, T value, Boolean required) {
+    if (key == null) {
+      throw new IllegalArgumentException("null value for 'key' argument");
+    }
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
+    if (required == null) {
+      throw new IllegalArgumentException("null value for 'required' argument");
+    }
     this.key = key;
     this.value = value;
     this.required = required;
@@ -44,14 +55,23 @@ public class PropertyType<T> implements Serializable {
   }
   
   public PropertyType withKey(hydra.langs.tinkerpop.propertyGraph.PropertyKey key) {
+    if (key == null) {
+      throw new IllegalArgumentException("null value for 'key' argument");
+    }
     return new PropertyType(key, value, required);
   }
   
   public PropertyType withValue(T value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     return new PropertyType(key, value, required);
   }
   
   public PropertyType withRequired(Boolean required) {
+    if (required == null) {
+      throw new IllegalArgumentException("null value for 'required' argument");
+    }
     return new PropertyType(key, value, required);
   }
 }

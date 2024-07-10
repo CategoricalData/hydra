@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -16,6 +18,21 @@ public class Defn_Given implements Serializable {
   public final hydra.langs.scala.meta.Template templ;
   
   public Defn_Given (java.util.List<hydra.langs.scala.meta.Mod> mods, hydra.langs.scala.meta.Name name, java.util.List<java.util.List<hydra.langs.scala.meta.Type_Param>> tparams, java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> sparams, hydra.langs.scala.meta.Template templ) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (tparams == null) {
+      throw new IllegalArgumentException("null value for 'tparams' argument");
+    }
+    if (sparams == null) {
+      throw new IllegalArgumentException("null value for 'sparams' argument");
+    }
+    if (templ == null) {
+      throw new IllegalArgumentException("null value for 'templ' argument");
+    }
     this.mods = mods;
     this.name = name;
     this.tparams = tparams;
@@ -38,22 +55,37 @@ public class Defn_Given implements Serializable {
   }
   
   public Defn_Given withMods(java.util.List<hydra.langs.scala.meta.Mod> mods) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
     return new Defn_Given(mods, name, tparams, sparams, templ);
   }
   
   public Defn_Given withName(hydra.langs.scala.meta.Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new Defn_Given(mods, name, tparams, sparams, templ);
   }
   
   public Defn_Given withTparams(java.util.List<java.util.List<hydra.langs.scala.meta.Type_Param>> tparams) {
+    if (tparams == null) {
+      throw new IllegalArgumentException("null value for 'tparams' argument");
+    }
     return new Defn_Given(mods, name, tparams, sparams, templ);
   }
   
   public Defn_Given withSparams(java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> sparams) {
+    if (sparams == null) {
+      throw new IllegalArgumentException("null value for 'sparams' argument");
+    }
     return new Defn_Given(mods, name, tparams, sparams, templ);
   }
   
   public Defn_Given withTempl(hydra.langs.scala.meta.Template templ) {
+    if (templ == null) {
+      throw new IllegalArgumentException("null value for 'templ' argument");
+    }
     return new Defn_Given(mods, name, tparams, sparams, templ);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shacl.model;
 
 import java.io.Serializable;
@@ -11,6 +13,9 @@ public class NodeShape implements Serializable {
   public final hydra.langs.shacl.model.CommonProperties common;
   
   public NodeShape (hydra.langs.shacl.model.CommonProperties common) {
+    if (common == null) {
+      throw new IllegalArgumentException("null value for 'common' argument");
+    }
     this.common = common;
   }
   

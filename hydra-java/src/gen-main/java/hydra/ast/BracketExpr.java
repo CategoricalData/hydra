@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.ast;
 
 import java.io.Serializable;
@@ -15,6 +17,15 @@ public class BracketExpr implements Serializable {
   public final hydra.ast.BlockStyle style;
   
   public BracketExpr (hydra.ast.Brackets brackets, hydra.ast.Expr enclosed, hydra.ast.BlockStyle style) {
+    if (brackets == null) {
+      throw new IllegalArgumentException("null value for 'brackets' argument");
+    }
+    if (enclosed == null) {
+      throw new IllegalArgumentException("null value for 'enclosed' argument");
+    }
+    if (style == null) {
+      throw new IllegalArgumentException("null value for 'style' argument");
+    }
     this.brackets = brackets;
     this.enclosed = enclosed;
     this.style = style;
@@ -35,14 +46,23 @@ public class BracketExpr implements Serializable {
   }
   
   public BracketExpr withBrackets(hydra.ast.Brackets brackets) {
+    if (brackets == null) {
+      throw new IllegalArgumentException("null value for 'brackets' argument");
+    }
     return new BracketExpr(brackets, enclosed, style);
   }
   
   public BracketExpr withEnclosed(hydra.ast.Expr enclosed) {
+    if (enclosed == null) {
+      throw new IllegalArgumentException("null value for 'enclosed' argument");
+    }
     return new BracketExpr(brackets, enclosed, style);
   }
   
   public BracketExpr withStyle(hydra.ast.BlockStyle style) {
+    if (style == null) {
+      throw new IllegalArgumentException("null value for 'style' argument");
+    }
     return new BracketExpr(brackets, enclosed, style);
   }
 }

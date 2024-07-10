@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class DoStatement implements Serializable {
   public final java.util.Optional<hydra.langs.java.syntax.Expression> conde;
   
   public DoStatement (hydra.langs.java.syntax.Statement body, java.util.Optional<hydra.langs.java.syntax.Expression> conde) {
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
+    if (conde == null) {
+      throw new IllegalArgumentException("null value for 'conde' argument");
+    }
     this.body = body;
     this.conde = conde;
   }
@@ -29,10 +37,16 @@ public class DoStatement implements Serializable {
   }
   
   public DoStatement withBody(hydra.langs.java.syntax.Statement body) {
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     return new DoStatement(body, conde);
   }
   
   public DoStatement withConde(java.util.Optional<hydra.langs.java.syntax.Expression> conde) {
+    if (conde == null) {
+      throw new IllegalArgumentException("null value for 'conde' argument");
+    }
     return new DoStatement(body, conde);
   }
 }

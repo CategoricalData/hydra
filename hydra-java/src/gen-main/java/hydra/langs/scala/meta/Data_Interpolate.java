@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class Data_Interpolate implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Data> args;
   
   public Data_Interpolate (hydra.langs.scala.meta.Data_Name prefix, java.util.List<hydra.langs.scala.meta.Lit> parts, java.util.List<hydra.langs.scala.meta.Data> args) {
+    if (prefix == null) {
+      throw new IllegalArgumentException("null value for 'prefix' argument");
+    }
+    if (parts == null) {
+      throw new IllegalArgumentException("null value for 'parts' argument");
+    }
+    if (args == null) {
+      throw new IllegalArgumentException("null value for 'args' argument");
+    }
     this.prefix = prefix;
     this.parts = parts;
     this.args = args;
@@ -32,14 +43,23 @@ public class Data_Interpolate implements Serializable {
   }
   
   public Data_Interpolate withPrefix(hydra.langs.scala.meta.Data_Name prefix) {
+    if (prefix == null) {
+      throw new IllegalArgumentException("null value for 'prefix' argument");
+    }
     return new Data_Interpolate(prefix, parts, args);
   }
   
   public Data_Interpolate withParts(java.util.List<hydra.langs.scala.meta.Lit> parts) {
+    if (parts == null) {
+      throw new IllegalArgumentException("null value for 'parts' argument");
+    }
     return new Data_Interpolate(prefix, parts, args);
   }
   
   public Data_Interpolate withArgs(java.util.List<hydra.langs.scala.meta.Data> args) {
+    if (args == null) {
+      throw new IllegalArgumentException("null value for 'args' argument");
+    }
     return new Data_Interpolate(prefix, parts, args);
   }
 }

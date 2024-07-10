@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class StaticImportOnDemandDeclaration implements Serializable {
   public final hydra.langs.java.syntax.TypeName value;
   
   public StaticImportOnDemandDeclaration (hydra.langs.java.syntax.TypeName value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

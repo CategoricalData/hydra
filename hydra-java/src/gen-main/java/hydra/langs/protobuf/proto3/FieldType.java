@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.protobuf.proto3;
 
 import java.io.Serializable;
@@ -47,6 +49,9 @@ public abstract class FieldType implements Serializable {
     public final hydra.langs.protobuf.proto3.SimpleType value;
     
     public Map (hydra.langs.protobuf.proto3.SimpleType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -74,6 +79,9 @@ public abstract class FieldType implements Serializable {
     public final java.util.List<hydra.langs.protobuf.proto3.Field> value;
     
     public Oneof (java.util.List<hydra.langs.protobuf.proto3.Field> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -101,6 +109,9 @@ public abstract class FieldType implements Serializable {
     public final hydra.langs.protobuf.proto3.SimpleType value;
     
     public Repeated (hydra.langs.protobuf.proto3.SimpleType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -128,6 +139,9 @@ public abstract class FieldType implements Serializable {
     public final hydra.langs.protobuf.proto3.SimpleType value;
     
     public Simple (hydra.langs.protobuf.proto3.SimpleType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

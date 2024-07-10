@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shacl.model;
 
 import java.io.Serializable;
@@ -49,6 +51,30 @@ public class CommonProperties implements Serializable {
   public final java.util.Set<hydra.langs.rdf.syntax.Property> targetSubjectsOf;
   
   public CommonProperties (java.util.Set<hydra.langs.shacl.model.CommonConstraint> constraints, java.util.Optional<Boolean> deactivated, hydra.langs.rdf.syntax.LangStrings message, hydra.langs.shacl.model.Severity severity, java.util.Set<hydra.langs.rdf.syntax.RdfsClass> targetClass, java.util.Set<hydra.langs.rdf.syntax.IriOrLiteral> targetNode, java.util.Set<hydra.langs.rdf.syntax.Property> targetObjectsOf, java.util.Set<hydra.langs.rdf.syntax.Property> targetSubjectsOf) {
+    if (constraints == null) {
+      throw new IllegalArgumentException("null value for 'constraints' argument");
+    }
+    if (deactivated == null) {
+      throw new IllegalArgumentException("null value for 'deactivated' argument");
+    }
+    if (message == null) {
+      throw new IllegalArgumentException("null value for 'message' argument");
+    }
+    if (severity == null) {
+      throw new IllegalArgumentException("null value for 'severity' argument");
+    }
+    if (targetClass == null) {
+      throw new IllegalArgumentException("null value for 'targetClass' argument");
+    }
+    if (targetNode == null) {
+      throw new IllegalArgumentException("null value for 'targetNode' argument");
+    }
+    if (targetObjectsOf == null) {
+      throw new IllegalArgumentException("null value for 'targetObjectsOf' argument");
+    }
+    if (targetSubjectsOf == null) {
+      throw new IllegalArgumentException("null value for 'targetSubjectsOf' argument");
+    }
     this.constraints = constraints;
     this.deactivated = deactivated;
     this.message = message;
@@ -74,34 +100,58 @@ public class CommonProperties implements Serializable {
   }
   
   public CommonProperties withConstraints(java.util.Set<hydra.langs.shacl.model.CommonConstraint> constraints) {
+    if (constraints == null) {
+      throw new IllegalArgumentException("null value for 'constraints' argument");
+    }
     return new CommonProperties(constraints, deactivated, message, severity, targetClass, targetNode, targetObjectsOf, targetSubjectsOf);
   }
   
   public CommonProperties withDeactivated(java.util.Optional<Boolean> deactivated) {
+    if (deactivated == null) {
+      throw new IllegalArgumentException("null value for 'deactivated' argument");
+    }
     return new CommonProperties(constraints, deactivated, message, severity, targetClass, targetNode, targetObjectsOf, targetSubjectsOf);
   }
   
   public CommonProperties withMessage(hydra.langs.rdf.syntax.LangStrings message) {
+    if (message == null) {
+      throw new IllegalArgumentException("null value for 'message' argument");
+    }
     return new CommonProperties(constraints, deactivated, message, severity, targetClass, targetNode, targetObjectsOf, targetSubjectsOf);
   }
   
   public CommonProperties withSeverity(hydra.langs.shacl.model.Severity severity) {
+    if (severity == null) {
+      throw new IllegalArgumentException("null value for 'severity' argument");
+    }
     return new CommonProperties(constraints, deactivated, message, severity, targetClass, targetNode, targetObjectsOf, targetSubjectsOf);
   }
   
   public CommonProperties withTargetClass(java.util.Set<hydra.langs.rdf.syntax.RdfsClass> targetClass) {
+    if (targetClass == null) {
+      throw new IllegalArgumentException("null value for 'targetClass' argument");
+    }
     return new CommonProperties(constraints, deactivated, message, severity, targetClass, targetNode, targetObjectsOf, targetSubjectsOf);
   }
   
   public CommonProperties withTargetNode(java.util.Set<hydra.langs.rdf.syntax.IriOrLiteral> targetNode) {
+    if (targetNode == null) {
+      throw new IllegalArgumentException("null value for 'targetNode' argument");
+    }
     return new CommonProperties(constraints, deactivated, message, severity, targetClass, targetNode, targetObjectsOf, targetSubjectsOf);
   }
   
   public CommonProperties withTargetObjectsOf(java.util.Set<hydra.langs.rdf.syntax.Property> targetObjectsOf) {
+    if (targetObjectsOf == null) {
+      throw new IllegalArgumentException("null value for 'targetObjectsOf' argument");
+    }
     return new CommonProperties(constraints, deactivated, message, severity, targetClass, targetNode, targetObjectsOf, targetSubjectsOf);
   }
   
   public CommonProperties withTargetSubjectsOf(java.util.Set<hydra.langs.rdf.syntax.Property> targetSubjectsOf) {
+    if (targetSubjectsOf == null) {
+      throw new IllegalArgumentException("null value for 'targetSubjectsOf' argument");
+    }
     return new CommonProperties(constraints, deactivated, message, severity, targetClass, targetNode, targetObjectsOf, targetSubjectsOf);
   }
 }

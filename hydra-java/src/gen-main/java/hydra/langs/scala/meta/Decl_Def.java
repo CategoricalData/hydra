@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -16,6 +18,21 @@ public class Decl_Def implements Serializable {
   public final hydra.langs.scala.meta.Type decltpe;
   
   public Decl_Def (java.util.List<hydra.langs.scala.meta.Mod> mods, hydra.langs.scala.meta.Data_Name name, java.util.List<hydra.langs.scala.meta.Type_Param> tparams, java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> paramss, hydra.langs.scala.meta.Type decltpe) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (tparams == null) {
+      throw new IllegalArgumentException("null value for 'tparams' argument");
+    }
+    if (paramss == null) {
+      throw new IllegalArgumentException("null value for 'paramss' argument");
+    }
+    if (decltpe == null) {
+      throw new IllegalArgumentException("null value for 'decltpe' argument");
+    }
     this.mods = mods;
     this.name = name;
     this.tparams = tparams;
@@ -38,22 +55,37 @@ public class Decl_Def implements Serializable {
   }
   
   public Decl_Def withMods(java.util.List<hydra.langs.scala.meta.Mod> mods) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
     return new Decl_Def(mods, name, tparams, paramss, decltpe);
   }
   
   public Decl_Def withName(hydra.langs.scala.meta.Data_Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new Decl_Def(mods, name, tparams, paramss, decltpe);
   }
   
   public Decl_Def withTparams(java.util.List<hydra.langs.scala.meta.Type_Param> tparams) {
+    if (tparams == null) {
+      throw new IllegalArgumentException("null value for 'tparams' argument");
+    }
     return new Decl_Def(mods, name, tparams, paramss, decltpe);
   }
   
   public Decl_Def withParamss(java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> paramss) {
+    if (paramss == null) {
+      throw new IllegalArgumentException("null value for 'paramss' argument");
+    }
     return new Decl_Def(mods, name, tparams, paramss, decltpe);
   }
   
   public Decl_Def withDecltpe(hydra.langs.scala.meta.Type decltpe) {
+    if (decltpe == null) {
+      throw new IllegalArgumentException("null value for 'decltpe' argument");
+    }
     return new Decl_Def(mods, name, tparams, paramss, decltpe);
   }
 }

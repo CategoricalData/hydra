@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class InlineShapeOr implements Serializable {
   public final java.util.List<hydra.langs.shex.syntax.InlineShapeAnd> listOfSequence;
   
   public InlineShapeOr (hydra.langs.shex.syntax.ShapeAnd shapeAnd, java.util.List<hydra.langs.shex.syntax.InlineShapeAnd> listOfSequence) {
+    if (shapeAnd == null) {
+      throw new IllegalArgumentException("null value for 'shapeAnd' argument");
+    }
+    if (listOfSequence == null) {
+      throw new IllegalArgumentException("null value for 'listOfSequence' argument");
+    }
     this.shapeAnd = shapeAnd;
     this.listOfSequence = listOfSequence;
   }
@@ -29,10 +37,16 @@ public class InlineShapeOr implements Serializable {
   }
   
   public InlineShapeOr withShapeAnd(hydra.langs.shex.syntax.ShapeAnd shapeAnd) {
+    if (shapeAnd == null) {
+      throw new IllegalArgumentException("null value for 'shapeAnd' argument");
+    }
     return new InlineShapeOr(shapeAnd, listOfSequence);
   }
   
   public InlineShapeOr withListOfSequence(java.util.List<hydra.langs.shex.syntax.InlineShapeAnd> listOfSequence) {
+    if (listOfSequence == null) {
+      throw new IllegalArgumentException("null value for 'listOfSequence' argument");
+    }
     return new InlineShapeOr(shapeAnd, listOfSequence);
   }
 }

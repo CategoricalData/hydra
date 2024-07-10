@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class SingleQuery implements Serializable {
     public final hydra.langs.cypher.openCypher.SinglePartQuery value;
     
     public SinglePart (hydra.langs.cypher.openCypher.SinglePartQuery value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class SingleQuery implements Serializable {
     public final hydra.langs.cypher.openCypher.MultiPartQuery value;
     
     public MultiPart (hydra.langs.cypher.openCypher.MultiPartQuery value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

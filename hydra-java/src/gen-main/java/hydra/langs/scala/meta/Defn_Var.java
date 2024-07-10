@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -14,6 +16,18 @@ public class Defn_Var implements Serializable {
   public final java.util.Optional<hydra.langs.scala.meta.Data> rhs;
   
   public Defn_Var (java.util.List<hydra.langs.scala.meta.Mod> mods, java.util.List<hydra.langs.scala.meta.Pat> pats, hydra.langs.scala.meta.Type decltpe, java.util.Optional<hydra.langs.scala.meta.Data> rhs) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
+    if (pats == null) {
+      throw new IllegalArgumentException("null value for 'pats' argument");
+    }
+    if (decltpe == null) {
+      throw new IllegalArgumentException("null value for 'decltpe' argument");
+    }
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     this.mods = mods;
     this.pats = pats;
     this.decltpe = decltpe;
@@ -35,18 +49,30 @@ public class Defn_Var implements Serializable {
   }
   
   public Defn_Var withMods(java.util.List<hydra.langs.scala.meta.Mod> mods) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
     return new Defn_Var(mods, pats, decltpe, rhs);
   }
   
   public Defn_Var withPats(java.util.List<hydra.langs.scala.meta.Pat> pats) {
+    if (pats == null) {
+      throw new IllegalArgumentException("null value for 'pats' argument");
+    }
     return new Defn_Var(mods, pats, decltpe, rhs);
   }
   
   public Defn_Var withDecltpe(hydra.langs.scala.meta.Type decltpe) {
+    if (decltpe == null) {
+      throw new IllegalArgumentException("null value for 'decltpe' argument");
+    }
     return new Defn_Var(mods, pats, decltpe, rhs);
   }
   
   public Defn_Var withRhs(java.util.Optional<hydra.langs.scala.meta.Data> rhs) {
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     return new Defn_Var(mods, pats, decltpe, rhs);
   }
 }

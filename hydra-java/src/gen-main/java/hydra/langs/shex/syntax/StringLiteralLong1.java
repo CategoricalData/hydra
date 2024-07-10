@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class StringLiteralLong1 implements Serializable {
   public final java.util.List<hydra.langs.shex.syntax.StringLiteralLong1_Elmt> value;
   
   public StringLiteralLong1 (java.util.List<hydra.langs.shex.syntax.StringLiteralLong1_Elmt> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

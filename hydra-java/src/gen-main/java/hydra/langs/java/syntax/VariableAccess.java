@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class VariableAccess implements Serializable {
     public final hydra.langs.java.syntax.ExpressionName value;
     
     public ExpressionName (hydra.langs.java.syntax.ExpressionName value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class VariableAccess implements Serializable {
     public final hydra.langs.java.syntax.FieldAccess value;
     
     public FieldAccess (hydra.langs.java.syntax.FieldAccess value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

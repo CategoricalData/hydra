@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.features;
 
 import java.io.Serializable;
@@ -99,6 +101,60 @@ public class DataTypeFeatures implements Serializable {
   public final Boolean supportsUniformListValues;
   
   public DataTypeFeatures (Boolean supportsBooleanArrayValues, Boolean supportsBooleanValues, Boolean supportsByteArrayValues, Boolean supportsByteValues, Boolean supportsDoubleArrayValues, Boolean supportsDoubleValues, Boolean supportsFloatArrayValues, Boolean supportsFloatValues, Boolean supportsIntegerArrayValues, Boolean supportsIntegerValues, Boolean supportsLongArrayValues, Boolean supportsLongValues, Boolean supportsMapValues, Boolean supportsMixedListValues, Boolean supportsSerializableValues, Boolean supportsStringArrayValues, Boolean supportsStringValues, Boolean supportsUniformListValues) {
+    if (supportsBooleanArrayValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsBooleanArrayValues' argument");
+    }
+    if (supportsBooleanValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsBooleanValues' argument");
+    }
+    if (supportsByteArrayValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsByteArrayValues' argument");
+    }
+    if (supportsByteValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsByteValues' argument");
+    }
+    if (supportsDoubleArrayValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsDoubleArrayValues' argument");
+    }
+    if (supportsDoubleValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsDoubleValues' argument");
+    }
+    if (supportsFloatArrayValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsFloatArrayValues' argument");
+    }
+    if (supportsFloatValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsFloatValues' argument");
+    }
+    if (supportsIntegerArrayValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsIntegerArrayValues' argument");
+    }
+    if (supportsIntegerValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsIntegerValues' argument");
+    }
+    if (supportsLongArrayValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsLongArrayValues' argument");
+    }
+    if (supportsLongValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsLongValues' argument");
+    }
+    if (supportsMapValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsMapValues' argument");
+    }
+    if (supportsMixedListValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsMixedListValues' argument");
+    }
+    if (supportsSerializableValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsSerializableValues' argument");
+    }
+    if (supportsStringArrayValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsStringArrayValues' argument");
+    }
+    if (supportsStringValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsStringValues' argument");
+    }
+    if (supportsUniformListValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsUniformListValues' argument");
+    }
     this.supportsBooleanArrayValues = supportsBooleanArrayValues;
     this.supportsBooleanValues = supportsBooleanValues;
     this.supportsByteArrayValues = supportsByteArrayValues;
@@ -134,74 +190,128 @@ public class DataTypeFeatures implements Serializable {
   }
   
   public DataTypeFeatures withSupportsBooleanArrayValues(Boolean supportsBooleanArrayValues) {
+    if (supportsBooleanArrayValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsBooleanArrayValues' argument");
+    }
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsBooleanValues(Boolean supportsBooleanValues) {
+    if (supportsBooleanValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsBooleanValues' argument");
+    }
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsByteArrayValues(Boolean supportsByteArrayValues) {
+    if (supportsByteArrayValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsByteArrayValues' argument");
+    }
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsByteValues(Boolean supportsByteValues) {
+    if (supportsByteValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsByteValues' argument");
+    }
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsDoubleArrayValues(Boolean supportsDoubleArrayValues) {
+    if (supportsDoubleArrayValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsDoubleArrayValues' argument");
+    }
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsDoubleValues(Boolean supportsDoubleValues) {
+    if (supportsDoubleValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsDoubleValues' argument");
+    }
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsFloatArrayValues(Boolean supportsFloatArrayValues) {
+    if (supportsFloatArrayValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsFloatArrayValues' argument");
+    }
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsFloatValues(Boolean supportsFloatValues) {
+    if (supportsFloatValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsFloatValues' argument");
+    }
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsIntegerArrayValues(Boolean supportsIntegerArrayValues) {
+    if (supportsIntegerArrayValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsIntegerArrayValues' argument");
+    }
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsIntegerValues(Boolean supportsIntegerValues) {
+    if (supportsIntegerValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsIntegerValues' argument");
+    }
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsLongArrayValues(Boolean supportsLongArrayValues) {
+    if (supportsLongArrayValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsLongArrayValues' argument");
+    }
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsLongValues(Boolean supportsLongValues) {
+    if (supportsLongValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsLongValues' argument");
+    }
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsMapValues(Boolean supportsMapValues) {
+    if (supportsMapValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsMapValues' argument");
+    }
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsMixedListValues(Boolean supportsMixedListValues) {
+    if (supportsMixedListValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsMixedListValues' argument");
+    }
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsSerializableValues(Boolean supportsSerializableValues) {
+    if (supportsSerializableValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsSerializableValues' argument");
+    }
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsStringArrayValues(Boolean supportsStringArrayValues) {
+    if (supportsStringArrayValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsStringArrayValues' argument");
+    }
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsStringValues(Boolean supportsStringValues) {
+    if (supportsStringValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsStringValues' argument");
+    }
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsUniformListValues(Boolean supportsUniformListValues) {
+    if (supportsUniformListValues == null) {
+      throw new IllegalArgumentException("null value for 'supportsUniformListValues' argument");
+    }
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
 }

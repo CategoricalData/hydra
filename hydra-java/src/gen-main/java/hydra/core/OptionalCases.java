@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.core;
 
 import java.io.Serializable;
@@ -19,6 +21,12 @@ public class OptionalCases<A> implements Serializable {
   public final hydra.core.Term<A> just;
   
   public OptionalCases (hydra.core.Term<A> nothing, hydra.core.Term<A> just) {
+    if (nothing == null) {
+      throw new IllegalArgumentException("null value for 'nothing' argument");
+    }
+    if (just == null) {
+      throw new IllegalArgumentException("null value for 'just' argument");
+    }
     this.nothing = nothing;
     this.just = just;
   }
@@ -38,10 +46,16 @@ public class OptionalCases<A> implements Serializable {
   }
   
   public OptionalCases withNothing(hydra.core.Term<A> nothing) {
+    if (nothing == null) {
+      throw new IllegalArgumentException("null value for 'nothing' argument");
+    }
     return new OptionalCases(nothing, just);
   }
   
   public OptionalCases withJust(hydra.core.Term<A> just) {
+    if (just == null) {
+      throw new IllegalArgumentException("null value for 'just' argument");
+    }
     return new OptionalCases(nothing, just);
   }
 }

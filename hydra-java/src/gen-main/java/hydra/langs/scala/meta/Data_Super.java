@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Data_Super implements Serializable {
   public final hydra.langs.scala.meta.Name superp;
   
   public Data_Super (hydra.langs.scala.meta.Name thisp, hydra.langs.scala.meta.Name superp) {
+    if (thisp == null) {
+      throw new IllegalArgumentException("null value for 'thisp' argument");
+    }
+    if (superp == null) {
+      throw new IllegalArgumentException("null value for 'superp' argument");
+    }
     this.thisp = thisp;
     this.superp = superp;
   }
@@ -29,10 +37,16 @@ public class Data_Super implements Serializable {
   }
   
   public Data_Super withThisp(hydra.langs.scala.meta.Name thisp) {
+    if (thisp == null) {
+      throw new IllegalArgumentException("null value for 'thisp' argument");
+    }
     return new Data_Super(thisp, superp);
   }
   
   public Data_Super withSuperp(hydra.langs.scala.meta.Name superp) {
+    if (superp == null) {
+      throw new IllegalArgumentException("null value for 'superp' argument");
+    }
     return new Data_Super(thisp, superp);
   }
 }

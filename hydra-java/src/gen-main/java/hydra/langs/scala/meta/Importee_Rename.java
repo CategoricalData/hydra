@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Importee_Rename implements Serializable {
   public final hydra.langs.scala.meta.Name rename;
   
   public Importee_Rename (hydra.langs.scala.meta.Name name, hydra.langs.scala.meta.Name rename) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (rename == null) {
+      throw new IllegalArgumentException("null value for 'rename' argument");
+    }
     this.name = name;
     this.rename = rename;
   }
@@ -29,10 +37,16 @@ public class Importee_Rename implements Serializable {
   }
   
   public Importee_Rename withName(hydra.langs.scala.meta.Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new Importee_Rename(name, rename);
   }
   
   public Importee_Rename withRename(hydra.langs.scala.meta.Name rename) {
+    if (rename == null) {
+      throw new IllegalArgumentException("null value for 'rename' argument");
+    }
     return new Importee_Rename(name, rename);
   }
 }

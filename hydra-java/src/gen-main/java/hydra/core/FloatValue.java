@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.core;
 
 import java.io.Serializable;
@@ -44,6 +46,9 @@ public abstract class FloatValue implements Serializable {
     public final Double value;
     
     public Bigfloat (Double value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -77,6 +82,9 @@ public abstract class FloatValue implements Serializable {
     public final Float value;
     
     public Float32 (Float value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -110,6 +118,9 @@ public abstract class FloatValue implements Serializable {
     public final Double value;
     
     public Float64 (Double value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

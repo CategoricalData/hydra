@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.format;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class TimestampType implements Serializable {
   public final hydra.langs.parquet.format.TimeUnit unit;
   
   public TimestampType (Boolean isAdjustedToUtc, hydra.langs.parquet.format.TimeUnit unit) {
+    if (isAdjustedToUtc == null) {
+      throw new IllegalArgumentException("null value for 'isAdjustedToUtc' argument");
+    }
+    if (unit == null) {
+      throw new IllegalArgumentException("null value for 'unit' argument");
+    }
     this.isAdjustedToUtc = isAdjustedToUtc;
     this.unit = unit;
   }
@@ -32,10 +40,16 @@ public class TimestampType implements Serializable {
   }
   
   public TimestampType withIsAdjustedToUtc(Boolean isAdjustedToUtc) {
+    if (isAdjustedToUtc == null) {
+      throw new IllegalArgumentException("null value for 'isAdjustedToUtc' argument");
+    }
     return new TimestampType(isAdjustedToUtc, unit);
   }
   
   public TimestampType withUnit(hydra.langs.parquet.format.TimeUnit unit) {
+    if (unit == null) {
+      throw new IllegalArgumentException("null value for 'unit' argument");
+    }
     return new TimestampType(isAdjustedToUtc, unit);
   }
 }

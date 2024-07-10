@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -41,6 +43,9 @@ public abstract class AnnotationValue implements Serializable {
     public final hydra.langs.owl.syntax.AnonymousIndividual value;
     
     public AnonymousIndividual (hydra.langs.owl.syntax.AnonymousIndividual value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -68,6 +73,9 @@ public abstract class AnnotationValue implements Serializable {
     public final hydra.langs.rdf.syntax.Iri value;
     
     public Iri (hydra.langs.rdf.syntax.Iri value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -95,6 +103,9 @@ public abstract class AnnotationValue implements Serializable {
     public final hydra.langs.rdf.syntax.Literal value;
     
     public Literal (hydra.langs.rdf.syntax.Literal value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

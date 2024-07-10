@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class ForStatementNoShortIf implements Serializable {
     public final hydra.langs.java.syntax.BasicForStatementNoShortIf value;
     
     public Basic (hydra.langs.java.syntax.BasicForStatementNoShortIf value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class ForStatementNoShortIf implements Serializable {
     public final hydra.langs.java.syntax.EnhancedForStatementNoShortIf value;
     
     public Enhanced (hydra.langs.java.syntax.EnhancedForStatementNoShortIf value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

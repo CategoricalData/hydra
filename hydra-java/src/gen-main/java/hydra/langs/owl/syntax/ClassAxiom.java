@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -47,6 +49,9 @@ public abstract class ClassAxiom implements Serializable {
     public final hydra.langs.owl.syntax.DisjointClasses value;
     
     public DisjointClasses (hydra.langs.owl.syntax.DisjointClasses value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -74,6 +79,9 @@ public abstract class ClassAxiom implements Serializable {
     public final hydra.langs.owl.syntax.DisjointUnion value;
     
     public DisjointUnion (hydra.langs.owl.syntax.DisjointUnion value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -101,6 +109,9 @@ public abstract class ClassAxiom implements Serializable {
     public final hydra.langs.owl.syntax.EquivalentClasses value;
     
     public EquivalentClasses (hydra.langs.owl.syntax.EquivalentClasses value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -128,6 +139,9 @@ public abstract class ClassAxiom implements Serializable {
     public final hydra.langs.owl.syntax.SubClassOf value;
     
     public SubClassOf (hydra.langs.owl.syntax.SubClassOf value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

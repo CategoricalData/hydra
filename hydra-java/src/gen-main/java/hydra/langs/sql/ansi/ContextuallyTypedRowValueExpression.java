@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class ContextuallyTypedRowValueExpression implements Serializabl
     public final hydra.langs.sql.ansi.RowValueSpecialCase value;
     
     public SpecialCase (hydra.langs.sql.ansi.RowValueSpecialCase value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class ContextuallyTypedRowValueExpression implements Serializabl
     public final hydra.langs.sql.ansi.ContextuallyTypedRowValueConstructor value;
     
     public Constructor (hydra.langs.sql.ansi.ContextuallyTypedRowValueConstructor value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

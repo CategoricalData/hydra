@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -15,6 +17,15 @@ public class ImportExportSpec implements Serializable {
   public final java.util.Optional<hydra.langs.haskell.ast.ImportExportSpec_Subspec> subspec;
   
   public ImportExportSpec (java.util.Optional<hydra.langs.haskell.ast.ImportModifier> modifier, hydra.langs.haskell.ast.Name name, java.util.Optional<hydra.langs.haskell.ast.ImportExportSpec_Subspec> subspec) {
+    if (modifier == null) {
+      throw new IllegalArgumentException("null value for 'modifier' argument");
+    }
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (subspec == null) {
+      throw new IllegalArgumentException("null value for 'subspec' argument");
+    }
     this.modifier = modifier;
     this.name = name;
     this.subspec = subspec;
@@ -35,14 +46,23 @@ public class ImportExportSpec implements Serializable {
   }
   
   public ImportExportSpec withModifier(java.util.Optional<hydra.langs.haskell.ast.ImportModifier> modifier) {
+    if (modifier == null) {
+      throw new IllegalArgumentException("null value for 'modifier' argument");
+    }
     return new ImportExportSpec(modifier, name, subspec);
   }
   
   public ImportExportSpec withName(hydra.langs.haskell.ast.Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new ImportExportSpec(modifier, name, subspec);
   }
   
   public ImportExportSpec withSubspec(java.util.Optional<hydra.langs.haskell.ast.ImportExportSpec_Subspec> subspec) {
+    if (subspec == null) {
+      throw new IllegalArgumentException("null value for 'subspec' argument");
+    }
     return new ImportExportSpec(modifier, name, subspec);
   }
 }

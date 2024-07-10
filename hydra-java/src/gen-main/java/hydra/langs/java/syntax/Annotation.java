@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -41,6 +43,9 @@ public abstract class Annotation implements Serializable {
     public final hydra.langs.java.syntax.NormalAnnotation value;
     
     public Normal (hydra.langs.java.syntax.NormalAnnotation value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -68,6 +73,9 @@ public abstract class Annotation implements Serializable {
     public final hydra.langs.java.syntax.MarkerAnnotation value;
     
     public Marker (hydra.langs.java.syntax.MarkerAnnotation value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -95,6 +103,9 @@ public abstract class Annotation implements Serializable {
     public final hydra.langs.java.syntax.SingleElementAnnotation value;
     
     public SingleElement (hydra.langs.java.syntax.SingleElementAnnotation value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

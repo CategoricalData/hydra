@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.core;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class Stream<A> implements Serializable {
   public final hydra.core.Stream<A> rest;
   
   public Stream (hydra.core.Term<A> first, hydra.core.Stream<A> rest) {
+    if (first == null) {
+      throw new IllegalArgumentException("null value for 'first' argument");
+    }
+    if (rest == null) {
+      throw new IllegalArgumentException("null value for 'rest' argument");
+    }
     this.first = first;
     this.rest = rest;
   }
@@ -32,10 +40,16 @@ public class Stream<A> implements Serializable {
   }
   
   public Stream withFirst(hydra.core.Term<A> first) {
+    if (first == null) {
+      throw new IllegalArgumentException("null value for 'first' argument");
+    }
     return new Stream(first, rest);
   }
   
   public Stream withRest(hydra.core.Stream<A> rest) {
+    if (rest == null) {
+      throw new IllegalArgumentException("null value for 'rest' argument");
+    }
     return new Stream(first, rest);
   }
 }

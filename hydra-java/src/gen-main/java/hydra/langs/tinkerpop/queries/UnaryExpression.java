@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.queries;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class UnaryExpression implements Serializable {
   public final hydra.langs.tinkerpop.queries.Expression operand;
   
   public UnaryExpression (hydra.langs.tinkerpop.queries.UnaryOperator operator, hydra.langs.tinkerpop.queries.Expression operand) {
+    if (operator == null) {
+      throw new IllegalArgumentException("null value for 'operator' argument");
+    }
+    if (operand == null) {
+      throw new IllegalArgumentException("null value for 'operand' argument");
+    }
     this.operator = operator;
     this.operand = operand;
   }
@@ -29,10 +37,16 @@ public class UnaryExpression implements Serializable {
   }
   
   public UnaryExpression withOperator(hydra.langs.tinkerpop.queries.UnaryOperator operator) {
+    if (operator == null) {
+      throw new IllegalArgumentException("null value for 'operator' argument");
+    }
     return new UnaryExpression(operator, operand);
   }
   
   public UnaryExpression withOperand(hydra.langs.tinkerpop.queries.Expression operand) {
+    if (operand == null) {
+      throw new IllegalArgumentException("null value for 'operand' argument");
+    }
     return new UnaryExpression(operator, operand);
   }
 }

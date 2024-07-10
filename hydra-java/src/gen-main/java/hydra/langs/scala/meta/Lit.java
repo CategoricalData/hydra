@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -95,6 +97,9 @@ public abstract class Lit implements Serializable {
     public final Boolean value;
     
     public Boolean_ (Boolean value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -122,6 +127,9 @@ public abstract class Lit implements Serializable {
     public final Short value;
     
     public Byte_ (Short value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -149,6 +157,9 @@ public abstract class Lit implements Serializable {
     public final Character value;
     
     public Char (Character value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -176,6 +187,9 @@ public abstract class Lit implements Serializable {
     public final Double value;
     
     public Double_ (Double value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -203,6 +217,9 @@ public abstract class Lit implements Serializable {
     public final Float value;
     
     public Float_ (Float value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -230,6 +247,9 @@ public abstract class Lit implements Serializable {
     public final Integer value;
     
     public Int (Integer value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -257,6 +277,9 @@ public abstract class Lit implements Serializable {
     public final Long value;
     
     public Long_ (Long value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -309,6 +332,9 @@ public abstract class Lit implements Serializable {
     public final Short value;
     
     public Short_ (Short value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -336,6 +362,9 @@ public abstract class Lit implements Serializable {
     public final String value;
     
     public String_ (String value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -363,6 +392,9 @@ public abstract class Lit implements Serializable {
     public final hydra.langs.scala.meta.ScalaSymbol value;
     
     public Symbol (hydra.langs.scala.meta.ScalaSymbol value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

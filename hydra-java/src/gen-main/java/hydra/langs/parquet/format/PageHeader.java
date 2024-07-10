@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.format;
 
 import java.io.Serializable;
@@ -57,6 +59,30 @@ public class PageHeader implements Serializable {
   public final java.util.Optional<hydra.langs.parquet.format.DataPageHeaderV2> dataPageHeaderV2;
   
   public PageHeader (hydra.langs.parquet.format.PageType type, Integer uncompressedPageSize, Integer compressedPageSize, java.util.Optional<Integer> crc, java.util.Optional<hydra.langs.parquet.format.DataPageHeader> dataPageHeader, java.util.Optional<hydra.langs.parquet.format.IndexPageHeader> indexPageHeader, java.util.Optional<hydra.langs.parquet.format.DictionaryPageHeader> dictionaryPageHeader, java.util.Optional<hydra.langs.parquet.format.DataPageHeaderV2> dataPageHeaderV2) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
+    if (uncompressedPageSize == null) {
+      throw new IllegalArgumentException("null value for 'uncompressedPageSize' argument");
+    }
+    if (compressedPageSize == null) {
+      throw new IllegalArgumentException("null value for 'compressedPageSize' argument");
+    }
+    if (crc == null) {
+      throw new IllegalArgumentException("null value for 'crc' argument");
+    }
+    if (dataPageHeader == null) {
+      throw new IllegalArgumentException("null value for 'dataPageHeader' argument");
+    }
+    if (indexPageHeader == null) {
+      throw new IllegalArgumentException("null value for 'indexPageHeader' argument");
+    }
+    if (dictionaryPageHeader == null) {
+      throw new IllegalArgumentException("null value for 'dictionaryPageHeader' argument");
+    }
+    if (dataPageHeaderV2 == null) {
+      throw new IllegalArgumentException("null value for 'dataPageHeaderV2' argument");
+    }
     this.type = type;
     this.uncompressedPageSize = uncompressedPageSize;
     this.compressedPageSize = compressedPageSize;
@@ -82,34 +108,58 @@ public class PageHeader implements Serializable {
   }
   
   public PageHeader withType(hydra.langs.parquet.format.PageType type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new PageHeader(type, uncompressedPageSize, compressedPageSize, crc, dataPageHeader, indexPageHeader, dictionaryPageHeader, dataPageHeaderV2);
   }
   
   public PageHeader withUncompressedPageSize(Integer uncompressedPageSize) {
+    if (uncompressedPageSize == null) {
+      throw new IllegalArgumentException("null value for 'uncompressedPageSize' argument");
+    }
     return new PageHeader(type, uncompressedPageSize, compressedPageSize, crc, dataPageHeader, indexPageHeader, dictionaryPageHeader, dataPageHeaderV2);
   }
   
   public PageHeader withCompressedPageSize(Integer compressedPageSize) {
+    if (compressedPageSize == null) {
+      throw new IllegalArgumentException("null value for 'compressedPageSize' argument");
+    }
     return new PageHeader(type, uncompressedPageSize, compressedPageSize, crc, dataPageHeader, indexPageHeader, dictionaryPageHeader, dataPageHeaderV2);
   }
   
   public PageHeader withCrc(java.util.Optional<Integer> crc) {
+    if (crc == null) {
+      throw new IllegalArgumentException("null value for 'crc' argument");
+    }
     return new PageHeader(type, uncompressedPageSize, compressedPageSize, crc, dataPageHeader, indexPageHeader, dictionaryPageHeader, dataPageHeaderV2);
   }
   
   public PageHeader withDataPageHeader(java.util.Optional<hydra.langs.parquet.format.DataPageHeader> dataPageHeader) {
+    if (dataPageHeader == null) {
+      throw new IllegalArgumentException("null value for 'dataPageHeader' argument");
+    }
     return new PageHeader(type, uncompressedPageSize, compressedPageSize, crc, dataPageHeader, indexPageHeader, dictionaryPageHeader, dataPageHeaderV2);
   }
   
   public PageHeader withIndexPageHeader(java.util.Optional<hydra.langs.parquet.format.IndexPageHeader> indexPageHeader) {
+    if (indexPageHeader == null) {
+      throw new IllegalArgumentException("null value for 'indexPageHeader' argument");
+    }
     return new PageHeader(type, uncompressedPageSize, compressedPageSize, crc, dataPageHeader, indexPageHeader, dictionaryPageHeader, dataPageHeaderV2);
   }
   
   public PageHeader withDictionaryPageHeader(java.util.Optional<hydra.langs.parquet.format.DictionaryPageHeader> dictionaryPageHeader) {
+    if (dictionaryPageHeader == null) {
+      throw new IllegalArgumentException("null value for 'dictionaryPageHeader' argument");
+    }
     return new PageHeader(type, uncompressedPageSize, compressedPageSize, crc, dataPageHeader, indexPageHeader, dictionaryPageHeader, dataPageHeaderV2);
   }
   
   public PageHeader withDataPageHeaderV2(java.util.Optional<hydra.langs.parquet.format.DataPageHeaderV2> dataPageHeaderV2) {
+    if (dataPageHeaderV2 == null) {
+      throw new IllegalArgumentException("null value for 'dataPageHeaderV2' argument");
+    }
     return new PageHeader(type, uncompressedPageSize, compressedPageSize, crc, dataPageHeader, indexPageHeader, dictionaryPageHeader, dataPageHeaderV2);
   }
 }

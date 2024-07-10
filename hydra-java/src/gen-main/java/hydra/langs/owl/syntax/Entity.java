@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -59,6 +61,9 @@ public abstract class Entity implements Serializable {
     public final hydra.langs.owl.syntax.AnnotationProperty value;
     
     public AnnotationProperty (hydra.langs.owl.syntax.AnnotationProperty value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -86,6 +91,9 @@ public abstract class Entity implements Serializable {
     public final hydra.langs.owl.syntax.Class_ value;
     
     public Class_ (hydra.langs.owl.syntax.Class_ value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -113,6 +121,9 @@ public abstract class Entity implements Serializable {
     public final hydra.langs.owl.syntax.DataProperty value;
     
     public DataProperty (hydra.langs.owl.syntax.DataProperty value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -140,6 +151,9 @@ public abstract class Entity implements Serializable {
     public final hydra.langs.owl.syntax.Datatype value;
     
     public Datatype (hydra.langs.owl.syntax.Datatype value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -167,6 +181,9 @@ public abstract class Entity implements Serializable {
     public final hydra.langs.owl.syntax.NamedIndividual value;
     
     public NamedIndividual (hydra.langs.owl.syntax.NamedIndividual value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -194,6 +211,9 @@ public abstract class Entity implements Serializable {
     public final hydra.langs.owl.syntax.ObjectProperty value;
     
     public ObjectProperty (hydra.langs.owl.syntax.ObjectProperty value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

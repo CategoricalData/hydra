@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class BooleanTest implements Serializable {
   public final java.util.Optional<hydra.langs.sql.ansi.BooleanTest_Sequence_Option> sequence;
   
   public BooleanTest (hydra.langs.sql.ansi.BooleanPrimary booleanPrimary, java.util.Optional<hydra.langs.sql.ansi.BooleanTest_Sequence_Option> sequence) {
+    if (booleanPrimary == null) {
+      throw new IllegalArgumentException("null value for 'booleanPrimary' argument");
+    }
+    if (sequence == null) {
+      throw new IllegalArgumentException("null value for 'sequence' argument");
+    }
     this.booleanPrimary = booleanPrimary;
     this.sequence = sequence;
   }
@@ -29,10 +37,16 @@ public class BooleanTest implements Serializable {
   }
   
   public BooleanTest withBooleanPrimary(hydra.langs.sql.ansi.BooleanPrimary booleanPrimary) {
+    if (booleanPrimary == null) {
+      throw new IllegalArgumentException("null value for 'booleanPrimary' argument");
+    }
     return new BooleanTest(booleanPrimary, sequence);
   }
   
   public BooleanTest withSequence(java.util.Optional<hydra.langs.sql.ansi.BooleanTest_Sequence_Option> sequence) {
+    if (sequence == null) {
+      throw new IllegalArgumentException("null value for 'sequence' argument");
+    }
     return new BooleanTest(booleanPrimary, sequence);
   }
 }

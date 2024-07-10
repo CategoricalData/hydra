@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class ShapeAtom_Sequence implements Serializable {
   public final java.util.Optional<hydra.langs.shex.syntax.ShapeOrRef> shapeOrRef;
   
   public ShapeAtom_Sequence (hydra.langs.shex.syntax.NodeConstraint nodeConstraint, java.util.Optional<hydra.langs.shex.syntax.ShapeOrRef> shapeOrRef) {
+    if (nodeConstraint == null) {
+      throw new IllegalArgumentException("null value for 'nodeConstraint' argument");
+    }
+    if (shapeOrRef == null) {
+      throw new IllegalArgumentException("null value for 'shapeOrRef' argument");
+    }
     this.nodeConstraint = nodeConstraint;
     this.shapeOrRef = shapeOrRef;
   }
@@ -29,10 +37,16 @@ public class ShapeAtom_Sequence implements Serializable {
   }
   
   public ShapeAtom_Sequence withNodeConstraint(hydra.langs.shex.syntax.NodeConstraint nodeConstraint) {
+    if (nodeConstraint == null) {
+      throw new IllegalArgumentException("null value for 'nodeConstraint' argument");
+    }
     return new ShapeAtom_Sequence(nodeConstraint, shapeOrRef);
   }
   
   public ShapeAtom_Sequence withShapeOrRef(java.util.Optional<hydra.langs.shex.syntax.ShapeOrRef> shapeOrRef) {
+    if (shapeOrRef == null) {
+      throw new IllegalArgumentException("null value for 'shapeOrRef' argument");
+    }
     return new ShapeAtom_Sequence(nodeConstraint, shapeOrRef);
   }
 }

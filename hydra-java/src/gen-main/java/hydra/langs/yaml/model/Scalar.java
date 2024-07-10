@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.yaml.model;
 
 import java.io.Serializable;
@@ -62,6 +64,9 @@ public abstract class Scalar implements Serializable {
     public final Boolean value;
     
     public Bool (Boolean value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -89,6 +94,9 @@ public abstract class Scalar implements Serializable {
     public final Double value;
     
     public Float_ (Double value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -122,6 +130,9 @@ public abstract class Scalar implements Serializable {
     public final java.math.BigInteger value;
     
     public Int (java.math.BigInteger value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -183,6 +194,9 @@ public abstract class Scalar implements Serializable {
     public final String value;
     
     public Str (String value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

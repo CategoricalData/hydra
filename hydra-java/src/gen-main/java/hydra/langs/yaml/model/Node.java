@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.yaml.model;
 
 import java.io.Serializable;
@@ -44,6 +46,9 @@ public abstract class Node implements Serializable {
     public final java.util.Map<hydra.langs.yaml.model.Node, hydra.langs.yaml.model.Node> value;
     
     public Mapping (java.util.Map<hydra.langs.yaml.model.Node, hydra.langs.yaml.model.Node> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -71,6 +76,9 @@ public abstract class Node implements Serializable {
     public final hydra.langs.yaml.model.Scalar value;
     
     public Scalar (hydra.langs.yaml.model.Scalar value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -98,6 +106,9 @@ public abstract class Node implements Serializable {
     public final java.util.List<hydra.langs.yaml.model.Node> value;
     
     public Sequence (java.util.List<hydra.langs.yaml.model.Node> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

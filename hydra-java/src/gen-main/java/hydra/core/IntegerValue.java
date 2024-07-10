@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.core;
 
 import java.io.Serializable;
@@ -86,6 +88,9 @@ public abstract class IntegerValue implements Serializable {
     public final java.math.BigInteger value;
     
     public Bigint (java.math.BigInteger value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -119,6 +124,9 @@ public abstract class IntegerValue implements Serializable {
     public final Short value;
     
     public Int16 (Short value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -152,6 +160,9 @@ public abstract class IntegerValue implements Serializable {
     public final Integer value;
     
     public Int32 (Integer value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -185,6 +196,9 @@ public abstract class IntegerValue implements Serializable {
     public final Long value;
     
     public Int64 (Long value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -212,6 +226,9 @@ public abstract class IntegerValue implements Serializable {
     public final Short value;
     
     public Int8 (Short value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -245,6 +262,9 @@ public abstract class IntegerValue implements Serializable {
     public final Character value;
     
     public Uint16 (Character value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -272,6 +292,9 @@ public abstract class IntegerValue implements Serializable {
     public final Long value;
     
     public Uint32 (Long value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -299,6 +322,9 @@ public abstract class IntegerValue implements Serializable {
     public final java.math.BigInteger value;
     
     public Uint64 (java.math.BigInteger value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -332,6 +358,9 @@ public abstract class IntegerValue implements Serializable {
     public final Byte value;
     
     public Uint8 (Byte value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

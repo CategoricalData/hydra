@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -14,6 +16,18 @@ public class TryWithResourcesStatement implements Serializable {
   public final java.util.Optional<hydra.langs.java.syntax.Finally> finally_;
   
   public TryWithResourcesStatement (hydra.langs.java.syntax.ResourceSpecification resourceSpecification, hydra.langs.java.syntax.Block block, java.util.Optional<hydra.langs.java.syntax.Catches> catches, java.util.Optional<hydra.langs.java.syntax.Finally> finally_) {
+    if (resourceSpecification == null) {
+      throw new IllegalArgumentException("null value for 'resourceSpecification' argument");
+    }
+    if (block == null) {
+      throw new IllegalArgumentException("null value for 'block' argument");
+    }
+    if (catches == null) {
+      throw new IllegalArgumentException("null value for 'catches' argument");
+    }
+    if (finally_ == null) {
+      throw new IllegalArgumentException("null value for 'finally' argument");
+    }
     this.resourceSpecification = resourceSpecification;
     this.block = block;
     this.catches = catches;
@@ -35,18 +49,30 @@ public class TryWithResourcesStatement implements Serializable {
   }
   
   public TryWithResourcesStatement withResourceSpecification(hydra.langs.java.syntax.ResourceSpecification resourceSpecification) {
+    if (resourceSpecification == null) {
+      throw new IllegalArgumentException("null value for 'resourceSpecification' argument");
+    }
     return new TryWithResourcesStatement(resourceSpecification, block, catches, finally_);
   }
   
   public TryWithResourcesStatement withBlock(hydra.langs.java.syntax.Block block) {
+    if (block == null) {
+      throw new IllegalArgumentException("null value for 'block' argument");
+    }
     return new TryWithResourcesStatement(resourceSpecification, block, catches, finally_);
   }
   
   public TryWithResourcesStatement withCatches(java.util.Optional<hydra.langs.java.syntax.Catches> catches) {
+    if (catches == null) {
+      throw new IllegalArgumentException("null value for 'catches' argument");
+    }
     return new TryWithResourcesStatement(resourceSpecification, block, catches, finally_);
   }
   
   public TryWithResourcesStatement withFinally(java.util.Optional<hydra.langs.java.syntax.Finally> finally_) {
+    if (finally_ == null) {
+      throw new IllegalArgumentException("null value for 'finally' argument");
+    }
     return new TryWithResourcesStatement(resourceSpecification, block, catches, finally_);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class SingleElementGroup implements Serializable {
   public final java.util.Optional<java.lang.Void> semi;
   
   public SingleElementGroup (hydra.langs.shex.syntax.UnaryTripleExpr unaryTripleExpr, java.util.Optional<java.lang.Void> semi) {
+    if (unaryTripleExpr == null) {
+      throw new IllegalArgumentException("null value for 'unaryTripleExpr' argument");
+    }
+    if (semi == null) {
+      throw new IllegalArgumentException("null value for 'semi' argument");
+    }
     this.unaryTripleExpr = unaryTripleExpr;
     this.semi = semi;
   }
@@ -29,10 +37,16 @@ public class SingleElementGroup implements Serializable {
   }
   
   public SingleElementGroup withUnaryTripleExpr(hydra.langs.shex.syntax.UnaryTripleExpr unaryTripleExpr) {
+    if (unaryTripleExpr == null) {
+      throw new IllegalArgumentException("null value for 'unaryTripleExpr' argument");
+    }
     return new SingleElementGroup(unaryTripleExpr, semi);
   }
   
   public SingleElementGroup withSemi(java.util.Optional<java.lang.Void> semi) {
+    if (semi == null) {
+      throw new IllegalArgumentException("null value for 'semi' argument");
+    }
     return new SingleElementGroup(unaryTripleExpr, semi);
   }
 }

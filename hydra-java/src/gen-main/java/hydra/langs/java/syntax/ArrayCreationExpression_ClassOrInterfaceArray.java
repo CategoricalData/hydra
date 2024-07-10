@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class ArrayCreationExpression_ClassOrInterfaceArray implements Serializab
   public final hydra.langs.java.syntax.ArrayInitializer array;
   
   public ArrayCreationExpression_ClassOrInterfaceArray (hydra.langs.java.syntax.ClassOrInterfaceType type, java.util.List<hydra.langs.java.syntax.Dims> dims, hydra.langs.java.syntax.ArrayInitializer array) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
+    if (dims == null) {
+      throw new IllegalArgumentException("null value for 'dims' argument");
+    }
+    if (array == null) {
+      throw new IllegalArgumentException("null value for 'array' argument");
+    }
     this.type = type;
     this.dims = dims;
     this.array = array;
@@ -32,14 +43,23 @@ public class ArrayCreationExpression_ClassOrInterfaceArray implements Serializab
   }
   
   public ArrayCreationExpression_ClassOrInterfaceArray withType(hydra.langs.java.syntax.ClassOrInterfaceType type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new ArrayCreationExpression_ClassOrInterfaceArray(type, dims, array);
   }
   
   public ArrayCreationExpression_ClassOrInterfaceArray withDims(java.util.List<hydra.langs.java.syntax.Dims> dims) {
+    if (dims == null) {
+      throw new IllegalArgumentException("null value for 'dims' argument");
+    }
     return new ArrayCreationExpression_ClassOrInterfaceArray(type, dims, array);
   }
   
   public ArrayCreationExpression_ClassOrInterfaceArray withArray(hydra.langs.java.syntax.ArrayInitializer array) {
+    if (array == null) {
+      throw new IllegalArgumentException("null value for 'array' argument");
+    }
     return new ArrayCreationExpression_ClassOrInterfaceArray(type, dims, array);
   }
 }

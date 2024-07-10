@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class ObjectOneOf implements Serializable {
   public final java.util.List<hydra.langs.owl.syntax.Individual> value;
   
   public ObjectOneOf (java.util.List<hydra.langs.owl.syntax.Individual> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

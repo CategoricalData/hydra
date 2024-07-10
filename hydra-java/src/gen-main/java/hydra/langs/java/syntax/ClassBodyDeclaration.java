@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -47,6 +49,9 @@ public abstract class ClassBodyDeclaration implements Serializable {
     public final hydra.langs.java.syntax.ClassMemberDeclaration value;
     
     public ClassMember (hydra.langs.java.syntax.ClassMemberDeclaration value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -74,6 +79,9 @@ public abstract class ClassBodyDeclaration implements Serializable {
     public final hydra.langs.java.syntax.InstanceInitializer value;
     
     public InstanceInitializer (hydra.langs.java.syntax.InstanceInitializer value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -101,6 +109,9 @@ public abstract class ClassBodyDeclaration implements Serializable {
     public final hydra.langs.java.syntax.StaticInitializer value;
     
     public StaticInitializer (hydra.langs.java.syntax.StaticInitializer value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -128,6 +139,9 @@ public abstract class ClassBodyDeclaration implements Serializable {
     public final hydra.langs.java.syntax.ConstructorDeclaration value;
     
     public ConstructorDeclaration (hydra.langs.java.syntax.ConstructorDeclaration value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

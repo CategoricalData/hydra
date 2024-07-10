@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class DisjointDataProperties implements Serializable {
   public final java.util.List<hydra.langs.owl.syntax.DataPropertyExpression> properties;
   
   public DisjointDataProperties (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, java.util.List<hydra.langs.owl.syntax.DataPropertyExpression> properties) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
+    if (properties == null) {
+      throw new IllegalArgumentException("null value for 'properties' argument");
+    }
     this.annotations = annotations;
     this.properties = properties;
   }
@@ -29,10 +37,16 @@ public class DisjointDataProperties implements Serializable {
   }
   
   public DisjointDataProperties withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     return new DisjointDataProperties(annotations, properties);
   }
   
   public DisjointDataProperties withProperties(java.util.List<hydra.langs.owl.syntax.DataPropertyExpression> properties) {
+    if (properties == null) {
+      throw new IllegalArgumentException("null value for 'properties' argument");
+    }
     return new DisjointDataProperties(annotations, properties);
   }
 }

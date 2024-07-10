@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class Data_PartialFunction implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Case> cases;
   
   public Data_PartialFunction (java.util.List<hydra.langs.scala.meta.Case> cases) {
+    if (cases == null) {
+      throw new IllegalArgumentException("null value for 'cases' argument");
+    }
     this.cases = cases;
   }
   

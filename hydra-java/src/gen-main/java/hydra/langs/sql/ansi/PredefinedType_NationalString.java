@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class PredefinedType_NationalString implements Serializable {
   public final java.util.Optional<hydra.langs.sql.ansi.CollateClause> collate;
   
   public PredefinedType_NationalString (hydra.langs.sql.ansi.NationalCharacterStringType type, java.util.Optional<hydra.langs.sql.ansi.CollateClause> collate) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
+    if (collate == null) {
+      throw new IllegalArgumentException("null value for 'collate' argument");
+    }
     this.type = type;
     this.collate = collate;
   }
@@ -29,10 +37,16 @@ public class PredefinedType_NationalString implements Serializable {
   }
   
   public PredefinedType_NationalString withType(hydra.langs.sql.ansi.NationalCharacterStringType type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new PredefinedType_NationalString(type, collate);
   }
   
   public PredefinedType_NationalString withCollate(java.util.Optional<hydra.langs.sql.ansi.CollateClause> collate) {
+    if (collate == null) {
+      throw new IllegalArgumentException("null value for 'collate' argument");
+    }
     return new PredefinedType_NationalString(type, collate);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Annotation implements Serializable {
   public final hydra.langs.shex.syntax.Annotation_Alts alts;
   
   public Annotation (hydra.langs.shex.syntax.Predicate predicate, hydra.langs.shex.syntax.Annotation_Alts alts) {
+    if (predicate == null) {
+      throw new IllegalArgumentException("null value for 'predicate' argument");
+    }
+    if (alts == null) {
+      throw new IllegalArgumentException("null value for 'alts' argument");
+    }
     this.predicate = predicate;
     this.alts = alts;
   }
@@ -29,10 +37,16 @@ public class Annotation implements Serializable {
   }
   
   public Annotation withPredicate(hydra.langs.shex.syntax.Predicate predicate) {
+    if (predicate == null) {
+      throw new IllegalArgumentException("null value for 'predicate' argument");
+    }
     return new Annotation(predicate, alts);
   }
   
   public Annotation withAlts(hydra.langs.shex.syntax.Annotation_Alts alts) {
+    if (alts == null) {
+      throw new IllegalArgumentException("null value for 'alts' argument");
+    }
     return new Annotation(predicate, alts);
   }
 }

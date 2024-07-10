@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.format;
 
 import java.io.Serializable;
@@ -47,6 +49,27 @@ public class SchemaElement implements Serializable {
   public final java.util.Optional<hydra.langs.parquet.format.LogicalType> logicalType;
   
   public SchemaElement (java.util.Optional<hydra.langs.parquet.format.Type> type, java.util.Optional<Integer> typeLength, java.util.Optional<hydra.langs.parquet.format.FieldRepetitionType> repetitionType, String name, java.util.Optional<Integer> numChildren, java.util.Optional<Integer> fieldId, java.util.Optional<hydra.langs.parquet.format.LogicalType> logicalType) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
+    if (typeLength == null) {
+      throw new IllegalArgumentException("null value for 'typeLength' argument");
+    }
+    if (repetitionType == null) {
+      throw new IllegalArgumentException("null value for 'repetitionType' argument");
+    }
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (numChildren == null) {
+      throw new IllegalArgumentException("null value for 'numChildren' argument");
+    }
+    if (fieldId == null) {
+      throw new IllegalArgumentException("null value for 'fieldId' argument");
+    }
+    if (logicalType == null) {
+      throw new IllegalArgumentException("null value for 'logicalType' argument");
+    }
     this.type = type;
     this.typeLength = typeLength;
     this.repetitionType = repetitionType;
@@ -71,30 +94,51 @@ public class SchemaElement implements Serializable {
   }
   
   public SchemaElement withType(java.util.Optional<hydra.langs.parquet.format.Type> type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new SchemaElement(type, typeLength, repetitionType, name, numChildren, fieldId, logicalType);
   }
   
   public SchemaElement withTypeLength(java.util.Optional<Integer> typeLength) {
+    if (typeLength == null) {
+      throw new IllegalArgumentException("null value for 'typeLength' argument");
+    }
     return new SchemaElement(type, typeLength, repetitionType, name, numChildren, fieldId, logicalType);
   }
   
   public SchemaElement withRepetitionType(java.util.Optional<hydra.langs.parquet.format.FieldRepetitionType> repetitionType) {
+    if (repetitionType == null) {
+      throw new IllegalArgumentException("null value for 'repetitionType' argument");
+    }
     return new SchemaElement(type, typeLength, repetitionType, name, numChildren, fieldId, logicalType);
   }
   
   public SchemaElement withName(String name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new SchemaElement(type, typeLength, repetitionType, name, numChildren, fieldId, logicalType);
   }
   
   public SchemaElement withNumChildren(java.util.Optional<Integer> numChildren) {
+    if (numChildren == null) {
+      throw new IllegalArgumentException("null value for 'numChildren' argument");
+    }
     return new SchemaElement(type, typeLength, repetitionType, name, numChildren, fieldId, logicalType);
   }
   
   public SchemaElement withFieldId(java.util.Optional<Integer> fieldId) {
+    if (fieldId == null) {
+      throw new IllegalArgumentException("null value for 'fieldId' argument");
+    }
     return new SchemaElement(type, typeLength, repetitionType, name, numChildren, fieldId, logicalType);
   }
   
   public SchemaElement withLogicalType(java.util.Optional<hydra.langs.parquet.format.LogicalType> logicalType) {
+    if (logicalType == null) {
+      throw new IllegalArgumentException("null value for 'logicalType' argument");
+    }
     return new SchemaElement(type, typeLength, repetitionType, name, numChildren, fieldId, logicalType);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -14,6 +16,18 @@ public class EnhancedForCond implements Serializable {
   public final hydra.langs.java.syntax.Expression expression;
   
   public EnhancedForCond (java.util.List<hydra.langs.java.syntax.VariableModifier> modifiers, hydra.langs.java.syntax.LocalVariableType type, hydra.langs.java.syntax.VariableDeclaratorId id, hydra.langs.java.syntax.Expression expression) {
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
+    if (id == null) {
+      throw new IllegalArgumentException("null value for 'id' argument");
+    }
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     this.modifiers = modifiers;
     this.type = type;
     this.id = id;
@@ -35,18 +49,30 @@ public class EnhancedForCond implements Serializable {
   }
   
   public EnhancedForCond withModifiers(java.util.List<hydra.langs.java.syntax.VariableModifier> modifiers) {
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
     return new EnhancedForCond(modifiers, type, id, expression);
   }
   
   public EnhancedForCond withType(hydra.langs.java.syntax.LocalVariableType type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new EnhancedForCond(modifiers, type, id, expression);
   }
   
   public EnhancedForCond withId(hydra.langs.java.syntax.VariableDeclaratorId id) {
+    if (id == null) {
+      throw new IllegalArgumentException("null value for 'id' argument");
+    }
     return new EnhancedForCond(modifiers, type, id, expression);
   }
   
   public EnhancedForCond withExpression(hydra.langs.java.syntax.Expression expression) {
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     return new EnhancedForCond(modifiers, type, id, expression);
   }
 }

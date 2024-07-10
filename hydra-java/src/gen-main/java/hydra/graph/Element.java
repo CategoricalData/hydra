@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.graph;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class Element<A> implements Serializable {
   public final hydra.core.Term<A> data;
   
   public Element (hydra.core.Name name, hydra.core.Term<A> data) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (data == null) {
+      throw new IllegalArgumentException("null value for 'data' argument");
+    }
     this.name = name;
     this.data = data;
   }
@@ -32,10 +40,16 @@ public class Element<A> implements Serializable {
   }
   
   public Element withName(hydra.core.Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new Element(name, data);
   }
   
   public Element withData(hydra.core.Term<A> data) {
+    if (data == null) {
+      throw new IllegalArgumentException("null value for 'data' argument");
+    }
     return new Element(name, data);
   }
 }

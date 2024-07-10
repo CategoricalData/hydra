@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class Type_FunctionType implements Serializable {
     public final hydra.langs.scala.meta.Type_Function value;
     
     public Function (hydra.langs.scala.meta.Type_Function value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class Type_FunctionType implements Serializable {
     public final hydra.langs.scala.meta.Type_ContextFunction value;
     
     public ContextFunction (hydra.langs.scala.meta.Type_ContextFunction value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

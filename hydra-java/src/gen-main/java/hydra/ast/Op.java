@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.ast;
 
 import java.io.Serializable;
@@ -17,6 +19,18 @@ public class Op implements Serializable {
   public final hydra.ast.Associativity associativity;
   
   public Op (hydra.ast.Symbol symbol, hydra.ast.Padding padding, hydra.ast.Precedence precedence, hydra.ast.Associativity associativity) {
+    if (symbol == null) {
+      throw new IllegalArgumentException("null value for 'symbol' argument");
+    }
+    if (padding == null) {
+      throw new IllegalArgumentException("null value for 'padding' argument");
+    }
+    if (precedence == null) {
+      throw new IllegalArgumentException("null value for 'precedence' argument");
+    }
+    if (associativity == null) {
+      throw new IllegalArgumentException("null value for 'associativity' argument");
+    }
     this.symbol = symbol;
     this.padding = padding;
     this.precedence = precedence;
@@ -38,18 +52,30 @@ public class Op implements Serializable {
   }
   
   public Op withSymbol(hydra.ast.Symbol symbol) {
+    if (symbol == null) {
+      throw new IllegalArgumentException("null value for 'symbol' argument");
+    }
     return new Op(symbol, padding, precedence, associativity);
   }
   
   public Op withPadding(hydra.ast.Padding padding) {
+    if (padding == null) {
+      throw new IllegalArgumentException("null value for 'padding' argument");
+    }
     return new Op(symbol, padding, precedence, associativity);
   }
   
   public Op withPrecedence(hydra.ast.Precedence precedence) {
+    if (precedence == null) {
+      throw new IllegalArgumentException("null value for 'precedence' argument");
+    }
     return new Op(symbol, padding, precedence, associativity);
   }
   
   public Op withAssociativity(hydra.ast.Associativity associativity) {
+    if (associativity == null) {
+      throw new IllegalArgumentException("null value for 'associativity' argument");
+    }
     return new Op(symbol, padding, precedence, associativity);
   }
 }

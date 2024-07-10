@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class ExplicitProcedureInvocation implements Serializable {
   public final java.util.List<hydra.langs.cypher.openCypher.Expression> arguments;
   
   public ExplicitProcedureInvocation (hydra.langs.cypher.openCypher.QualifiedName name, java.util.List<hydra.langs.cypher.openCypher.Expression> arguments) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (arguments == null) {
+      throw new IllegalArgumentException("null value for 'arguments' argument");
+    }
     this.name = name;
     this.arguments = arguments;
   }
@@ -29,10 +37,16 @@ public class ExplicitProcedureInvocation implements Serializable {
   }
   
   public ExplicitProcedureInvocation withName(hydra.langs.cypher.openCypher.QualifiedName name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new ExplicitProcedureInvocation(name, arguments);
   }
   
   public ExplicitProcedureInvocation withArguments(java.util.List<hydra.langs.cypher.openCypher.Expression> arguments) {
+    if (arguments == null) {
+      throw new IllegalArgumentException("null value for 'arguments' argument");
+    }
     return new ExplicitProcedureInvocation(name, arguments);
   }
 }

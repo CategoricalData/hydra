@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.phantoms;
 
 import java.io.Serializable;
@@ -11,6 +13,9 @@ public class Case<A> implements Serializable {
   public final hydra.core.FieldName value;
   
   public Case (hydra.core.FieldName value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

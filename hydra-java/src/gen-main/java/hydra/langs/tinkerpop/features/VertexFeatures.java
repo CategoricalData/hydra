@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.features;
 
 import java.io.Serializable;
@@ -43,6 +45,30 @@ public class VertexFeatures implements Serializable {
   public final Boolean supportsUpsert;
   
   public VertexFeatures (hydra.langs.tinkerpop.features.ElementFeatures elementFeatures, hydra.langs.tinkerpop.features.VertexPropertyFeatures properties, Boolean supportsAddVertices, Boolean supportsDuplicateMultiProperties, Boolean supportsMetaProperties, Boolean supportsMultiProperties, Boolean supportsRemoveVertices, Boolean supportsUpsert) {
+    if (elementFeatures == null) {
+      throw new IllegalArgumentException("null value for 'elementFeatures' argument");
+    }
+    if (properties == null) {
+      throw new IllegalArgumentException("null value for 'properties' argument");
+    }
+    if (supportsAddVertices == null) {
+      throw new IllegalArgumentException("null value for 'supportsAddVertices' argument");
+    }
+    if (supportsDuplicateMultiProperties == null) {
+      throw new IllegalArgumentException("null value for 'supportsDuplicateMultiProperties' argument");
+    }
+    if (supportsMetaProperties == null) {
+      throw new IllegalArgumentException("null value for 'supportsMetaProperties' argument");
+    }
+    if (supportsMultiProperties == null) {
+      throw new IllegalArgumentException("null value for 'supportsMultiProperties' argument");
+    }
+    if (supportsRemoveVertices == null) {
+      throw new IllegalArgumentException("null value for 'supportsRemoveVertices' argument");
+    }
+    if (supportsUpsert == null) {
+      throw new IllegalArgumentException("null value for 'supportsUpsert' argument");
+    }
     this.elementFeatures = elementFeatures;
     this.properties = properties;
     this.supportsAddVertices = supportsAddVertices;
@@ -68,34 +94,58 @@ public class VertexFeatures implements Serializable {
   }
   
   public VertexFeatures withElementFeatures(hydra.langs.tinkerpop.features.ElementFeatures elementFeatures) {
+    if (elementFeatures == null) {
+      throw new IllegalArgumentException("null value for 'elementFeatures' argument");
+    }
     return new VertexFeatures(elementFeatures, properties, supportsAddVertices, supportsDuplicateMultiProperties, supportsMetaProperties, supportsMultiProperties, supportsRemoveVertices, supportsUpsert);
   }
   
   public VertexFeatures withProperties(hydra.langs.tinkerpop.features.VertexPropertyFeatures properties) {
+    if (properties == null) {
+      throw new IllegalArgumentException("null value for 'properties' argument");
+    }
     return new VertexFeatures(elementFeatures, properties, supportsAddVertices, supportsDuplicateMultiProperties, supportsMetaProperties, supportsMultiProperties, supportsRemoveVertices, supportsUpsert);
   }
   
   public VertexFeatures withSupportsAddVertices(Boolean supportsAddVertices) {
+    if (supportsAddVertices == null) {
+      throw new IllegalArgumentException("null value for 'supportsAddVertices' argument");
+    }
     return new VertexFeatures(elementFeatures, properties, supportsAddVertices, supportsDuplicateMultiProperties, supportsMetaProperties, supportsMultiProperties, supportsRemoveVertices, supportsUpsert);
   }
   
   public VertexFeatures withSupportsDuplicateMultiProperties(Boolean supportsDuplicateMultiProperties) {
+    if (supportsDuplicateMultiProperties == null) {
+      throw new IllegalArgumentException("null value for 'supportsDuplicateMultiProperties' argument");
+    }
     return new VertexFeatures(elementFeatures, properties, supportsAddVertices, supportsDuplicateMultiProperties, supportsMetaProperties, supportsMultiProperties, supportsRemoveVertices, supportsUpsert);
   }
   
   public VertexFeatures withSupportsMetaProperties(Boolean supportsMetaProperties) {
+    if (supportsMetaProperties == null) {
+      throw new IllegalArgumentException("null value for 'supportsMetaProperties' argument");
+    }
     return new VertexFeatures(elementFeatures, properties, supportsAddVertices, supportsDuplicateMultiProperties, supportsMetaProperties, supportsMultiProperties, supportsRemoveVertices, supportsUpsert);
   }
   
   public VertexFeatures withSupportsMultiProperties(Boolean supportsMultiProperties) {
+    if (supportsMultiProperties == null) {
+      throw new IllegalArgumentException("null value for 'supportsMultiProperties' argument");
+    }
     return new VertexFeatures(elementFeatures, properties, supportsAddVertices, supportsDuplicateMultiProperties, supportsMetaProperties, supportsMultiProperties, supportsRemoveVertices, supportsUpsert);
   }
   
   public VertexFeatures withSupportsRemoveVertices(Boolean supportsRemoveVertices) {
+    if (supportsRemoveVertices == null) {
+      throw new IllegalArgumentException("null value for 'supportsRemoveVertices' argument");
+    }
     return new VertexFeatures(elementFeatures, properties, supportsAddVertices, supportsDuplicateMultiProperties, supportsMetaProperties, supportsMultiProperties, supportsRemoveVertices, supportsUpsert);
   }
   
   public VertexFeatures withSupportsUpsert(Boolean supportsUpsert) {
+    if (supportsUpsert == null) {
+      throw new IllegalArgumentException("null value for 'supportsUpsert' argument");
+    }
     return new VertexFeatures(elementFeatures, properties, supportsAddVertices, supportsDuplicateMultiProperties, supportsMetaProperties, supportsMultiProperties, supportsRemoveVertices, supportsUpsert);
   }
 }

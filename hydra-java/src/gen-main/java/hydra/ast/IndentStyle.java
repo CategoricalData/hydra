@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.ast;
 
 import java.io.Serializable;
@@ -38,6 +40,9 @@ public abstract class IndentStyle implements Serializable {
     public final String value;
     
     public AllLines (String value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -65,6 +70,9 @@ public abstract class IndentStyle implements Serializable {
     public final String value;
     
     public SubsequentLines (String value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

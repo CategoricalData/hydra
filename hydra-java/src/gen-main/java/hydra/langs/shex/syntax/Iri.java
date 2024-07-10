@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class Iri implements Serializable {
     public final hydra.langs.shex.syntax.IriRef value;
     
     public IriRef (hydra.langs.shex.syntax.IriRef value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class Iri implements Serializable {
     public final hydra.langs.shex.syntax.PrefixedName value;
     
     public PrefixedName (hydra.langs.shex.syntax.PrefixedName value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

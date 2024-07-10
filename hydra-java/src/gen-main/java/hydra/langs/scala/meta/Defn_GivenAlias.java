@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -18,6 +20,24 @@ public class Defn_GivenAlias implements Serializable {
   public final hydra.langs.scala.meta.Data body;
   
   public Defn_GivenAlias (java.util.List<hydra.langs.scala.meta.Mod> mods, hydra.langs.scala.meta.Name name, java.util.List<java.util.List<hydra.langs.scala.meta.Type_Param>> tparams, java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> sparams, hydra.langs.scala.meta.Type decltpe, hydra.langs.scala.meta.Data body) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (tparams == null) {
+      throw new IllegalArgumentException("null value for 'tparams' argument");
+    }
+    if (sparams == null) {
+      throw new IllegalArgumentException("null value for 'sparams' argument");
+    }
+    if (decltpe == null) {
+      throw new IllegalArgumentException("null value for 'decltpe' argument");
+    }
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     this.mods = mods;
     this.name = name;
     this.tparams = tparams;
@@ -41,26 +61,44 @@ public class Defn_GivenAlias implements Serializable {
   }
   
   public Defn_GivenAlias withMods(java.util.List<hydra.langs.scala.meta.Mod> mods) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
     return new Defn_GivenAlias(mods, name, tparams, sparams, decltpe, body);
   }
   
   public Defn_GivenAlias withName(hydra.langs.scala.meta.Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new Defn_GivenAlias(mods, name, tparams, sparams, decltpe, body);
   }
   
   public Defn_GivenAlias withTparams(java.util.List<java.util.List<hydra.langs.scala.meta.Type_Param>> tparams) {
+    if (tparams == null) {
+      throw new IllegalArgumentException("null value for 'tparams' argument");
+    }
     return new Defn_GivenAlias(mods, name, tparams, sparams, decltpe, body);
   }
   
   public Defn_GivenAlias withSparams(java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> sparams) {
+    if (sparams == null) {
+      throw new IllegalArgumentException("null value for 'sparams' argument");
+    }
     return new Defn_GivenAlias(mods, name, tparams, sparams, decltpe, body);
   }
   
   public Defn_GivenAlias withDecltpe(hydra.langs.scala.meta.Type decltpe) {
+    if (decltpe == null) {
+      throw new IllegalArgumentException("null value for 'decltpe' argument");
+    }
     return new Defn_GivenAlias(mods, name, tparams, sparams, decltpe, body);
   }
   
   public Defn_GivenAlias withBody(hydra.langs.scala.meta.Data body) {
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     return new Defn_GivenAlias(mods, name, tparams, sparams, decltpe, body);
   }
 }

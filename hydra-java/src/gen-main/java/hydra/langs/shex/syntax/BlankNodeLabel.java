@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class BlankNodeLabel implements Serializable {
   public final hydra.langs.shex.syntax.PnChars pnChars;
   
   public BlankNodeLabel (hydra.langs.shex.syntax.BlankNodeLabel_Alts alts, java.util.Optional<java.util.List<hydra.langs.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt>> listOfAlts, hydra.langs.shex.syntax.PnChars pnChars) {
+    if (alts == null) {
+      throw new IllegalArgumentException("null value for 'alts' argument");
+    }
+    if (listOfAlts == null) {
+      throw new IllegalArgumentException("null value for 'listOfAlts' argument");
+    }
+    if (pnChars == null) {
+      throw new IllegalArgumentException("null value for 'pnChars' argument");
+    }
     this.alts = alts;
     this.listOfAlts = listOfAlts;
     this.pnChars = pnChars;
@@ -32,14 +43,23 @@ public class BlankNodeLabel implements Serializable {
   }
   
   public BlankNodeLabel withAlts(hydra.langs.shex.syntax.BlankNodeLabel_Alts alts) {
+    if (alts == null) {
+      throw new IllegalArgumentException("null value for 'alts' argument");
+    }
     return new BlankNodeLabel(alts, listOfAlts, pnChars);
   }
   
   public BlankNodeLabel withListOfAlts(java.util.Optional<java.util.List<hydra.langs.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt>> listOfAlts) {
+    if (listOfAlts == null) {
+      throw new IllegalArgumentException("null value for 'listOfAlts' argument");
+    }
     return new BlankNodeLabel(alts, listOfAlts, pnChars);
   }
   
   public BlankNodeLabel withPnChars(hydra.langs.shex.syntax.PnChars pnChars) {
+    if (pnChars == null) {
+      throw new IllegalArgumentException("null value for 'pnChars' argument");
+    }
     return new BlankNodeLabel(alts, listOfAlts, pnChars);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class ArrayCreationExpression_Primitive implements Serializable {
   public final java.util.Optional<hydra.langs.java.syntax.Dims> dims;
   
   public ArrayCreationExpression_Primitive (hydra.langs.java.syntax.PrimitiveTypeWithAnnotations type, java.util.List<hydra.langs.java.syntax.DimExpr> dimExprs, java.util.Optional<hydra.langs.java.syntax.Dims> dims) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
+    if (dimExprs == null) {
+      throw new IllegalArgumentException("null value for 'dimExprs' argument");
+    }
+    if (dims == null) {
+      throw new IllegalArgumentException("null value for 'dims' argument");
+    }
     this.type = type;
     this.dimExprs = dimExprs;
     this.dims = dims;
@@ -32,14 +43,23 @@ public class ArrayCreationExpression_Primitive implements Serializable {
   }
   
   public ArrayCreationExpression_Primitive withType(hydra.langs.java.syntax.PrimitiveTypeWithAnnotations type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new ArrayCreationExpression_Primitive(type, dimExprs, dims);
   }
   
   public ArrayCreationExpression_Primitive withDimExprs(java.util.List<hydra.langs.java.syntax.DimExpr> dimExprs) {
+    if (dimExprs == null) {
+      throw new IllegalArgumentException("null value for 'dimExprs' argument");
+    }
     return new ArrayCreationExpression_Primitive(type, dimExprs, dims);
   }
   
   public ArrayCreationExpression_Primitive withDims(java.util.Optional<hydra.langs.java.syntax.Dims> dims) {
+    if (dims == null) {
+      throw new IllegalArgumentException("null value for 'dims' argument");
+    }
     return new ArrayCreationExpression_Primitive(type, dimExprs, dims);
   }
 }

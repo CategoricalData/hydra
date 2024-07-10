@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class DisjointClasses implements Serializable {
   public final java.util.List<hydra.langs.owl.syntax.ClassExpression> classes;
   
   public DisjointClasses (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, java.util.List<hydra.langs.owl.syntax.ClassExpression> classes) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
+    if (classes == null) {
+      throw new IllegalArgumentException("null value for 'classes' argument");
+    }
     this.annotations = annotations;
     this.classes = classes;
   }
@@ -29,10 +37,16 @@ public class DisjointClasses implements Serializable {
   }
   
   public DisjointClasses withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     return new DisjointClasses(annotations, classes);
   }
   
   public DisjointClasses withClasses(java.util.List<hydra.langs.owl.syntax.ClassExpression> classes) {
+    if (classes == null) {
+      throw new IllegalArgumentException("null value for 'classes' argument");
+    }
     return new DisjointClasses(annotations, classes);
   }
 }

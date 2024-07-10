@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.pegasus.pdl;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class EnumField implements Serializable {
   public final hydra.langs.pegasus.pdl.Annotations annotations;
   
   public EnumField (hydra.langs.pegasus.pdl.EnumFieldName name, hydra.langs.pegasus.pdl.Annotations annotations) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     this.name = name;
     this.annotations = annotations;
   }
@@ -29,10 +37,16 @@ public class EnumField implements Serializable {
   }
   
   public EnumField withName(hydra.langs.pegasus.pdl.EnumFieldName name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new EnumField(name, annotations);
   }
   
   public EnumField withAnnotations(hydra.langs.pegasus.pdl.Annotations annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     return new EnumField(name, annotations);
   }
 }

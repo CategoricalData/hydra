@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Pat_Bind implements Serializable {
   public final hydra.langs.scala.meta.Pat rhs;
   
   public Pat_Bind (hydra.langs.scala.meta.Pat lhs, hydra.langs.scala.meta.Pat rhs) {
+    if (lhs == null) {
+      throw new IllegalArgumentException("null value for 'lhs' argument");
+    }
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -29,10 +37,16 @@ public class Pat_Bind implements Serializable {
   }
   
   public Pat_Bind withLhs(hydra.langs.scala.meta.Pat lhs) {
+    if (lhs == null) {
+      throw new IllegalArgumentException("null value for 'lhs' argument");
+    }
     return new Pat_Bind(lhs, rhs);
   }
   
   public Pat_Bind withRhs(hydra.langs.scala.meta.Pat rhs) {
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     return new Pat_Bind(lhs, rhs);
   }
 }

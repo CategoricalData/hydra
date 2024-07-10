@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class Data_ForYield implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Enumerator> enums;
   
   public Data_ForYield (java.util.List<hydra.langs.scala.meta.Enumerator> enums) {
+    if (enums == null) {
+      throw new IllegalArgumentException("null value for 'enums' argument");
+    }
     this.enums = enums;
   }
   

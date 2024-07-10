@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class ParenthesizedValueExpression implements Serializable {
   public final hydra.langs.sql.ansi.ValueExpression value;
   
   public ParenthesizedValueExpression (hydra.langs.sql.ansi.ValueExpression value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

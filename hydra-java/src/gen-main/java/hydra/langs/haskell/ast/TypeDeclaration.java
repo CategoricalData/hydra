@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class TypeDeclaration implements Serializable {
   public final hydra.langs.haskell.ast.Type type;
   
   public TypeDeclaration (hydra.langs.haskell.ast.DeclarationHead name, hydra.langs.haskell.ast.Type type) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     this.name = name;
     this.type = type;
   }
@@ -29,10 +37,16 @@ public class TypeDeclaration implements Serializable {
   }
   
   public TypeDeclaration withName(hydra.langs.haskell.ast.DeclarationHead name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new TypeDeclaration(name, type);
   }
   
   public TypeDeclaration withType(hydra.langs.haskell.ast.Type type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new TypeDeclaration(name, type);
   }
 }

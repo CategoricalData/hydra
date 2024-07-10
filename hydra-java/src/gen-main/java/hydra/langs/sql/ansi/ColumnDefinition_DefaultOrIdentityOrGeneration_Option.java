@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -41,6 +43,9 @@ public abstract class ColumnDefinition_DefaultOrIdentityOrGeneration_Option impl
     public final hydra.langs.sql.ansi.DefaultClause value;
     
     public DefaultClause (hydra.langs.sql.ansi.DefaultClause value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -68,6 +73,9 @@ public abstract class ColumnDefinition_DefaultOrIdentityOrGeneration_Option impl
     public final hydra.langs.sql.ansi.IdentityColumnSpecification value;
     
     public IdentityColumnSpecification (hydra.langs.sql.ansi.IdentityColumnSpecification value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -95,6 +103,9 @@ public abstract class ColumnDefinition_DefaultOrIdentityOrGeneration_Option impl
     public final hydra.langs.sql.ansi.GenerationClause value;
     
     public GenerationClause (hydra.langs.sql.ansi.GenerationClause value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

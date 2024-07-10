@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class SwitchBlockStatementGroup implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.BlockStatement> statements;
   
   public SwitchBlockStatementGroup (java.util.List<hydra.langs.java.syntax.SwitchLabel> labels, java.util.List<hydra.langs.java.syntax.BlockStatement> statements) {
+    if (labels == null) {
+      throw new IllegalArgumentException("null value for 'labels' argument");
+    }
+    if (statements == null) {
+      throw new IllegalArgumentException("null value for 'statements' argument");
+    }
     this.labels = labels;
     this.statements = statements;
   }
@@ -29,10 +37,16 @@ public class SwitchBlockStatementGroup implements Serializable {
   }
   
   public SwitchBlockStatementGroup withLabels(java.util.List<hydra.langs.java.syntax.SwitchLabel> labels) {
+    if (labels == null) {
+      throw new IllegalArgumentException("null value for 'labels' argument");
+    }
     return new SwitchBlockStatementGroup(labels, statements);
   }
   
   public SwitchBlockStatementGroup withStatements(java.util.List<hydra.langs.java.syntax.BlockStatement> statements) {
+    if (statements == null) {
+      throw new IllegalArgumentException("null value for 'statements' argument");
+    }
     return new SwitchBlockStatementGroup(labels, statements);
   }
 }

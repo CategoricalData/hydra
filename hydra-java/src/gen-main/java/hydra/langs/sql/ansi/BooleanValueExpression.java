@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class BooleanValueExpression implements Serializable {
     public final hydra.langs.sql.ansi.BooleanTerm value;
     
     public Term (hydra.langs.sql.ansi.BooleanTerm value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class BooleanValueExpression implements Serializable {
     public final hydra.langs.sql.ansi.BooleanValueExpression_Or value;
     
     public Or (hydra.langs.sql.ansi.BooleanValueExpression_Or value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

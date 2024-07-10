@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.features;
 
 import java.io.Serializable;
@@ -49,6 +51,30 @@ public class GraphFeatures implements Serializable {
   public final hydra.langs.tinkerpop.features.VariableFeatures variables;
   
   public GraphFeatures (Boolean supportsComputer, Boolean supportsConcurrentAccess, Boolean supportsIoRead, Boolean supportsIoWrite, Boolean supportsPersistence, Boolean supportsThreadedTransactions, Boolean supportsTransactions, hydra.langs.tinkerpop.features.VariableFeatures variables) {
+    if (supportsComputer == null) {
+      throw new IllegalArgumentException("null value for 'supportsComputer' argument");
+    }
+    if (supportsConcurrentAccess == null) {
+      throw new IllegalArgumentException("null value for 'supportsConcurrentAccess' argument");
+    }
+    if (supportsIoRead == null) {
+      throw new IllegalArgumentException("null value for 'supportsIoRead' argument");
+    }
+    if (supportsIoWrite == null) {
+      throw new IllegalArgumentException("null value for 'supportsIoWrite' argument");
+    }
+    if (supportsPersistence == null) {
+      throw new IllegalArgumentException("null value for 'supportsPersistence' argument");
+    }
+    if (supportsThreadedTransactions == null) {
+      throw new IllegalArgumentException("null value for 'supportsThreadedTransactions' argument");
+    }
+    if (supportsTransactions == null) {
+      throw new IllegalArgumentException("null value for 'supportsTransactions' argument");
+    }
+    if (variables == null) {
+      throw new IllegalArgumentException("null value for 'variables' argument");
+    }
     this.supportsComputer = supportsComputer;
     this.supportsConcurrentAccess = supportsConcurrentAccess;
     this.supportsIoRead = supportsIoRead;
@@ -74,34 +100,58 @@ public class GraphFeatures implements Serializable {
   }
   
   public GraphFeatures withSupportsComputer(Boolean supportsComputer) {
+    if (supportsComputer == null) {
+      throw new IllegalArgumentException("null value for 'supportsComputer' argument");
+    }
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
   public GraphFeatures withSupportsConcurrentAccess(Boolean supportsConcurrentAccess) {
+    if (supportsConcurrentAccess == null) {
+      throw new IllegalArgumentException("null value for 'supportsConcurrentAccess' argument");
+    }
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
   public GraphFeatures withSupportsIoRead(Boolean supportsIoRead) {
+    if (supportsIoRead == null) {
+      throw new IllegalArgumentException("null value for 'supportsIoRead' argument");
+    }
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
   public GraphFeatures withSupportsIoWrite(Boolean supportsIoWrite) {
+    if (supportsIoWrite == null) {
+      throw new IllegalArgumentException("null value for 'supportsIoWrite' argument");
+    }
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
   public GraphFeatures withSupportsPersistence(Boolean supportsPersistence) {
+    if (supportsPersistence == null) {
+      throw new IllegalArgumentException("null value for 'supportsPersistence' argument");
+    }
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
   public GraphFeatures withSupportsThreadedTransactions(Boolean supportsThreadedTransactions) {
+    if (supportsThreadedTransactions == null) {
+      throw new IllegalArgumentException("null value for 'supportsThreadedTransactions' argument");
+    }
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
   public GraphFeatures withSupportsTransactions(Boolean supportsTransactions) {
+    if (supportsTransactions == null) {
+      throw new IllegalArgumentException("null value for 'supportsTransactions' argument");
+    }
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
   public GraphFeatures withVariables(hydra.langs.tinkerpop.features.VariableFeatures variables) {
+    if (variables == null) {
+      throw new IllegalArgumentException("null value for 'variables' argument");
+    }
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
 }

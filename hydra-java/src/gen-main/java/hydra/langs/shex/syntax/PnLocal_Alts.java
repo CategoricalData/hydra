@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -47,6 +49,9 @@ public abstract class PnLocal_Alts implements Serializable {
     public final hydra.langs.shex.syntax.PnCharsU value;
     
     public PnCharsU (hydra.langs.shex.syntax.PnCharsU value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -99,6 +104,9 @@ public abstract class PnLocal_Alts implements Serializable {
     public final String value;
     
     public Regex (String value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -126,6 +134,9 @@ public abstract class PnLocal_Alts implements Serializable {
     public final hydra.langs.shex.syntax.Plx value;
     
     public Plx (hydra.langs.shex.syntax.Plx value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

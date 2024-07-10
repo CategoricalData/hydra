@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class MethodReference_Super implements Serializable {
   public final Boolean super_;
   
   public MethodReference_Super (java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments, hydra.langs.java.syntax.Identifier identifier, Boolean super_) {
+    if (typeArguments == null) {
+      throw new IllegalArgumentException("null value for 'typeArguments' argument");
+    }
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
+    if (super_ == null) {
+      throw new IllegalArgumentException("null value for 'super' argument");
+    }
     this.typeArguments = typeArguments;
     this.identifier = identifier;
     this.super_ = super_;
@@ -32,14 +43,23 @@ public class MethodReference_Super implements Serializable {
   }
   
   public MethodReference_Super withTypeArguments(java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments) {
+    if (typeArguments == null) {
+      throw new IllegalArgumentException("null value for 'typeArguments' argument");
+    }
     return new MethodReference_Super(typeArguments, identifier, super_);
   }
   
   public MethodReference_Super withIdentifier(hydra.langs.java.syntax.Identifier identifier) {
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
     return new MethodReference_Super(typeArguments, identifier, super_);
   }
   
   public MethodReference_Super withSuper(Boolean super_) {
+    if (super_ == null) {
+      throw new IllegalArgumentException("null value for 'super' argument");
+    }
     return new MethodReference_Super(typeArguments, identifier, super_);
   }
 }

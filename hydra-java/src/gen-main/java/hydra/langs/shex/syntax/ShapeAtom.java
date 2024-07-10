@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -47,6 +49,9 @@ public abstract class ShapeAtom implements Serializable {
     public final hydra.langs.shex.syntax.ShapeAtom_Sequence value;
     
     public Sequence (hydra.langs.shex.syntax.ShapeAtom_Sequence value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -74,6 +79,9 @@ public abstract class ShapeAtom implements Serializable {
     public final hydra.langs.shex.syntax.ShapeOrRef value;
     
     public ShapeOrRef (hydra.langs.shex.syntax.ShapeOrRef value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -101,6 +109,9 @@ public abstract class ShapeAtom implements Serializable {
     public final hydra.langs.shex.syntax.ShapeExpression value;
     
     public Sequence2 (hydra.langs.shex.syntax.ShapeExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

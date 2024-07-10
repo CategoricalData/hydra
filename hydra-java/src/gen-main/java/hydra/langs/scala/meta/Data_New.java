@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class Data_New implements Serializable {
   public final hydra.langs.scala.meta.Init init;
   
   public Data_New (hydra.langs.scala.meta.Init init) {
+    if (init == null) {
+      throw new IllegalArgumentException("null value for 'init' argument");
+    }
     this.init = init;
   }
   

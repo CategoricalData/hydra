@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -71,6 +73,9 @@ public abstract class CharacterStringType implements Serializable {
     public final java.util.Optional<hydra.langs.sql.ansi.Length> value;
     
     public Character_ (java.util.Optional<hydra.langs.sql.ansi.Length> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -98,6 +103,9 @@ public abstract class CharacterStringType implements Serializable {
     public final java.util.Optional<hydra.langs.sql.ansi.Length> value;
     
     public Char (java.util.Optional<hydra.langs.sql.ansi.Length> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -125,6 +133,9 @@ public abstract class CharacterStringType implements Serializable {
     public final hydra.langs.sql.ansi.Length value;
     
     public CharacterVarying (hydra.langs.sql.ansi.Length value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -152,6 +163,9 @@ public abstract class CharacterStringType implements Serializable {
     public final hydra.langs.sql.ansi.Length value;
     
     public CharVarying (hydra.langs.sql.ansi.Length value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -179,6 +193,9 @@ public abstract class CharacterStringType implements Serializable {
     public final hydra.langs.sql.ansi.Length value;
     
     public Varchar (hydra.langs.sql.ansi.Length value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -206,6 +223,9 @@ public abstract class CharacterStringType implements Serializable {
     public final java.util.Optional<hydra.langs.sql.ansi.LargeObjectLength> value;
     
     public CharacterLargeObject (java.util.Optional<hydra.langs.sql.ansi.LargeObjectLength> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -233,6 +253,9 @@ public abstract class CharacterStringType implements Serializable {
     public final java.util.Optional<hydra.langs.sql.ansi.LargeObjectLength> value;
     
     public CharLargeObject (java.util.Optional<hydra.langs.sql.ansi.LargeObjectLength> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -260,6 +283,9 @@ public abstract class CharacterStringType implements Serializable {
     public final java.util.Optional<hydra.langs.sql.ansi.LargeObjectLength> value;
     
     public Clob (java.util.Optional<hydra.langs.sql.ansi.LargeObjectLength> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

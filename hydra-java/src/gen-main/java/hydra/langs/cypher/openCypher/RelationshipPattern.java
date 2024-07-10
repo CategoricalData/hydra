@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class RelationshipPattern implements Serializable {
   public final Boolean rightArrow;
   
   public RelationshipPattern (Boolean leftArrow, java.util.Optional<hydra.langs.cypher.openCypher.RelationshipDetail> detail, Boolean rightArrow) {
+    if (leftArrow == null) {
+      throw new IllegalArgumentException("null value for 'leftArrow' argument");
+    }
+    if (detail == null) {
+      throw new IllegalArgumentException("null value for 'detail' argument");
+    }
+    if (rightArrow == null) {
+      throw new IllegalArgumentException("null value for 'rightArrow' argument");
+    }
     this.leftArrow = leftArrow;
     this.detail = detail;
     this.rightArrow = rightArrow;
@@ -32,14 +43,23 @@ public class RelationshipPattern implements Serializable {
   }
   
   public RelationshipPattern withLeftArrow(Boolean leftArrow) {
+    if (leftArrow == null) {
+      throw new IllegalArgumentException("null value for 'leftArrow' argument");
+    }
     return new RelationshipPattern(leftArrow, detail, rightArrow);
   }
   
   public RelationshipPattern withDetail(java.util.Optional<hydra.langs.cypher.openCypher.RelationshipDetail> detail) {
+    if (detail == null) {
+      throw new IllegalArgumentException("null value for 'detail' argument");
+    }
     return new RelationshipPattern(leftArrow, detail, rightArrow);
   }
   
   public RelationshipPattern withRightArrow(Boolean rightArrow) {
+    if (rightArrow == null) {
+      throw new IllegalArgumentException("null value for 'rightArrow' argument");
+    }
     return new RelationshipPattern(leftArrow, detail, rightArrow);
   }
 }

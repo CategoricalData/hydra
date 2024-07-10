@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class VariablePlusEquals implements Serializable {
   public final hydra.langs.cypher.openCypher.Expression rhs;
   
   public VariablePlusEquals (hydra.langs.cypher.openCypher.Variable lhs, hydra.langs.cypher.openCypher.Expression rhs) {
+    if (lhs == null) {
+      throw new IllegalArgumentException("null value for 'lhs' argument");
+    }
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -29,10 +37,16 @@ public class VariablePlusEquals implements Serializable {
   }
   
   public VariablePlusEquals withLhs(hydra.langs.cypher.openCypher.Variable lhs) {
+    if (lhs == null) {
+      throw new IllegalArgumentException("null value for 'lhs' argument");
+    }
     return new VariablePlusEquals(lhs, rhs);
   }
   
   public VariablePlusEquals withRhs(hydra.langs.cypher.openCypher.Expression rhs) {
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     return new VariablePlusEquals(lhs, rhs);
   }
 }

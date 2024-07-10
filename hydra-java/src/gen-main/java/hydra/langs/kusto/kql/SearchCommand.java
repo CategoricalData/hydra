@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.kusto.kql;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class SearchCommand implements Serializable {
   public final hydra.langs.kusto.kql.Expression pattern;
   
   public SearchCommand (java.util.List<hydra.langs.kusto.kql.TableName> datasets, hydra.langs.kusto.kql.Expression pattern) {
+    if (datasets == null) {
+      throw new IllegalArgumentException("null value for 'datasets' argument");
+    }
+    if (pattern == null) {
+      throw new IllegalArgumentException("null value for 'pattern' argument");
+    }
     this.datasets = datasets;
     this.pattern = pattern;
   }
@@ -32,10 +40,16 @@ public class SearchCommand implements Serializable {
   }
   
   public SearchCommand withDatasets(java.util.List<hydra.langs.kusto.kql.TableName> datasets) {
+    if (datasets == null) {
+      throw new IllegalArgumentException("null value for 'datasets' argument");
+    }
     return new SearchCommand(datasets, pattern);
   }
   
   public SearchCommand withPattern(hydra.langs.kusto.kql.Expression pattern) {
+    if (pattern == null) {
+      throw new IllegalArgumentException("null value for 'pattern' argument");
+    }
     return new SearchCommand(datasets, pattern);
   }
 }

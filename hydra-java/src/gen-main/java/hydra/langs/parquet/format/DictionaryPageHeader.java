@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.format;
 
 import java.io.Serializable;
@@ -24,6 +26,15 @@ public class DictionaryPageHeader implements Serializable {
   public final java.util.Optional<Boolean> isSorted;
   
   public DictionaryPageHeader (Integer numValues, hydra.langs.parquet.format.Encoding encoding, java.util.Optional<Boolean> isSorted) {
+    if (numValues == null) {
+      throw new IllegalArgumentException("null value for 'numValues' argument");
+    }
+    if (encoding == null) {
+      throw new IllegalArgumentException("null value for 'encoding' argument");
+    }
+    if (isSorted == null) {
+      throw new IllegalArgumentException("null value for 'isSorted' argument");
+    }
     this.numValues = numValues;
     this.encoding = encoding;
     this.isSorted = isSorted;
@@ -44,14 +55,23 @@ public class DictionaryPageHeader implements Serializable {
   }
   
   public DictionaryPageHeader withNumValues(Integer numValues) {
+    if (numValues == null) {
+      throw new IllegalArgumentException("null value for 'numValues' argument");
+    }
     return new DictionaryPageHeader(numValues, encoding, isSorted);
   }
   
   public DictionaryPageHeader withEncoding(hydra.langs.parquet.format.Encoding encoding) {
+    if (encoding == null) {
+      throw new IllegalArgumentException("null value for 'encoding' argument");
+    }
     return new DictionaryPageHeader(numValues, encoding, isSorted);
   }
   
   public DictionaryPageHeader withIsSorted(java.util.Optional<Boolean> isSorted) {
+    if (isSorted == null) {
+      throw new IllegalArgumentException("null value for 'isSorted' argument");
+    }
     return new DictionaryPageHeader(numValues, encoding, isSorted);
   }
 }

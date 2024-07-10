@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class Expression_Case implements Serializable {
   public final java.util.List<hydra.langs.haskell.ast.Alternative> alternatives;
   
   public Expression_Case (hydra.langs.haskell.ast.Expression case_, java.util.List<hydra.langs.haskell.ast.Alternative> alternatives) {
+    if (case_ == null) {
+      throw new IllegalArgumentException("null value for 'case' argument");
+    }
+    if (alternatives == null) {
+      throw new IllegalArgumentException("null value for 'alternatives' argument");
+    }
     this.case_ = case_;
     this.alternatives = alternatives;
   }
@@ -32,10 +40,16 @@ public class Expression_Case implements Serializable {
   }
   
   public Expression_Case withCase(hydra.langs.haskell.ast.Expression case_) {
+    if (case_ == null) {
+      throw new IllegalArgumentException("null value for 'case' argument");
+    }
     return new Expression_Case(case_, alternatives);
   }
   
   public Expression_Case withAlternatives(java.util.List<hydra.langs.haskell.ast.Alternative> alternatives) {
+    if (alternatives == null) {
+      throw new IllegalArgumentException("null value for 'alternatives' argument");
+    }
     return new Expression_Case(case_, alternatives);
   }
 }

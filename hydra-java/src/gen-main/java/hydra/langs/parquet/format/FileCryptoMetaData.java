@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.format;
 
 import java.io.Serializable;
@@ -16,6 +18,12 @@ public class FileCryptoMetaData implements Serializable {
   public final java.util.Optional<String> keyMetadata;
   
   public FileCryptoMetaData (hydra.langs.parquet.format.EncryptionAlgorithm encryptionAlgorithm, java.util.Optional<String> keyMetadata) {
+    if (encryptionAlgorithm == null) {
+      throw new IllegalArgumentException("null value for 'encryptionAlgorithm' argument");
+    }
+    if (keyMetadata == null) {
+      throw new IllegalArgumentException("null value for 'keyMetadata' argument");
+    }
     this.encryptionAlgorithm = encryptionAlgorithm;
     this.keyMetadata = keyMetadata;
   }
@@ -35,10 +43,16 @@ public class FileCryptoMetaData implements Serializable {
   }
   
   public FileCryptoMetaData withEncryptionAlgorithm(hydra.langs.parquet.format.EncryptionAlgorithm encryptionAlgorithm) {
+    if (encryptionAlgorithm == null) {
+      throw new IllegalArgumentException("null value for 'encryptionAlgorithm' argument");
+    }
     return new FileCryptoMetaData(encryptionAlgorithm, keyMetadata);
   }
   
   public FileCryptoMetaData withKeyMetadata(java.util.Optional<String> keyMetadata) {
+    if (keyMetadata == null) {
+      throw new IllegalArgumentException("null value for 'keyMetadata' argument");
+    }
     return new FileCryptoMetaData(encryptionAlgorithm, keyMetadata);
   }
 }

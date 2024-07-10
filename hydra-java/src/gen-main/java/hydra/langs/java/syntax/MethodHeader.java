@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -14,6 +16,18 @@ public class MethodHeader implements Serializable {
   public final java.util.Optional<hydra.langs.java.syntax.Throws> throws_;
   
   public MethodHeader (java.util.List<hydra.langs.java.syntax.TypeParameter> parameters, hydra.langs.java.syntax.Result result, hydra.langs.java.syntax.MethodDeclarator declarator, java.util.Optional<hydra.langs.java.syntax.Throws> throws_) {
+    if (parameters == null) {
+      throw new IllegalArgumentException("null value for 'parameters' argument");
+    }
+    if (result == null) {
+      throw new IllegalArgumentException("null value for 'result' argument");
+    }
+    if (declarator == null) {
+      throw new IllegalArgumentException("null value for 'declarator' argument");
+    }
+    if (throws_ == null) {
+      throw new IllegalArgumentException("null value for 'throws' argument");
+    }
     this.parameters = parameters;
     this.result = result;
     this.declarator = declarator;
@@ -35,18 +49,30 @@ public class MethodHeader implements Serializable {
   }
   
   public MethodHeader withParameters(java.util.List<hydra.langs.java.syntax.TypeParameter> parameters) {
+    if (parameters == null) {
+      throw new IllegalArgumentException("null value for 'parameters' argument");
+    }
     return new MethodHeader(parameters, result, declarator, throws_);
   }
   
   public MethodHeader withResult(hydra.langs.java.syntax.Result result) {
+    if (result == null) {
+      throw new IllegalArgumentException("null value for 'result' argument");
+    }
     return new MethodHeader(parameters, result, declarator, throws_);
   }
   
   public MethodHeader withDeclarator(hydra.langs.java.syntax.MethodDeclarator declarator) {
+    if (declarator == null) {
+      throw new IllegalArgumentException("null value for 'declarator' argument");
+    }
     return new MethodHeader(parameters, result, declarator, throws_);
   }
   
   public MethodHeader withThrows(java.util.Optional<hydra.langs.java.syntax.Throws> throws_) {
+    if (throws_ == null) {
+      throw new IllegalArgumentException("null value for 'throws' argument");
+    }
     return new MethodHeader(parameters, result, declarator, throws_);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class ForStatement implements Serializable {
     public final hydra.langs.java.syntax.BasicForStatement value;
     
     public Basic (hydra.langs.java.syntax.BasicForStatement value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class ForStatement implements Serializable {
     public final hydra.langs.java.syntax.EnhancedForStatement value;
     
     public Enhanced (hydra.langs.java.syntax.EnhancedForStatement value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

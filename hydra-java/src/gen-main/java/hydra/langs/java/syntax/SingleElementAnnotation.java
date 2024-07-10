@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class SingleElementAnnotation implements Serializable {
   public final java.util.Optional<hydra.langs.java.syntax.ElementValue> value;
   
   public SingleElementAnnotation (hydra.langs.java.syntax.TypeName name, java.util.Optional<hydra.langs.java.syntax.ElementValue> value) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.name = name;
     this.value = value;
   }
@@ -29,10 +37,16 @@ public class SingleElementAnnotation implements Serializable {
   }
   
   public SingleElementAnnotation withName(hydra.langs.java.syntax.TypeName name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new SingleElementAnnotation(name, value);
   }
   
   public SingleElementAnnotation withValue(java.util.Optional<hydra.langs.java.syntax.ElementValue> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     return new SingleElementAnnotation(name, value);
   }
 }

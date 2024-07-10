@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.graph;
 
 /**
@@ -37,6 +39,24 @@ public class Graph<A> {
   public final java.util.Optional<hydra.graph.Graph<A>> schema;
   
   public Graph (java.util.Map<hydra.core.Name, hydra.graph.Element<A>> elements, java.util.Map<hydra.core.Name, java.util.Optional<hydra.core.Term<A>>> environment, hydra.core.Term<A> body, java.util.Map<hydra.core.Name, hydra.graph.Primitive<A>> primitives, hydra.graph.AnnotationClass<A> annotations, java.util.Optional<hydra.graph.Graph<A>> schema) {
+    if (elements == null) {
+      throw new IllegalArgumentException("null value for 'elements' argument");
+    }
+    if (environment == null) {
+      throw new IllegalArgumentException("null value for 'environment' argument");
+    }
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
+    if (primitives == null) {
+      throw new IllegalArgumentException("null value for 'primitives' argument");
+    }
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
+    if (schema == null) {
+      throw new IllegalArgumentException("null value for 'schema' argument");
+    }
     this.elements = elements;
     this.environment = environment;
     this.body = body;
@@ -60,26 +80,44 @@ public class Graph<A> {
   }
   
   public Graph withElements(java.util.Map<hydra.core.Name, hydra.graph.Element<A>> elements) {
+    if (elements == null) {
+      throw new IllegalArgumentException("null value for 'elements' argument");
+    }
     return new Graph(elements, environment, body, primitives, annotations, schema);
   }
   
   public Graph withEnvironment(java.util.Map<hydra.core.Name, java.util.Optional<hydra.core.Term<A>>> environment) {
+    if (environment == null) {
+      throw new IllegalArgumentException("null value for 'environment' argument");
+    }
     return new Graph(elements, environment, body, primitives, annotations, schema);
   }
   
   public Graph withBody(hydra.core.Term<A> body) {
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     return new Graph(elements, environment, body, primitives, annotations, schema);
   }
   
   public Graph withPrimitives(java.util.Map<hydra.core.Name, hydra.graph.Primitive<A>> primitives) {
+    if (primitives == null) {
+      throw new IllegalArgumentException("null value for 'primitives' argument");
+    }
     return new Graph(elements, environment, body, primitives, annotations, schema);
   }
   
   public Graph withAnnotations(hydra.graph.AnnotationClass<A> annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     return new Graph(elements, environment, body, primitives, annotations, schema);
   }
   
   public Graph withSchema(java.util.Optional<hydra.graph.Graph<A>> schema) {
+    if (schema == null) {
+      throw new IllegalArgumentException("null value for 'schema' argument");
+    }
     return new Graph(elements, environment, body, primitives, annotations, schema);
   }
 }

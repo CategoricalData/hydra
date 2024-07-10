@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.kusto.kql;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class IndexExpression implements Serializable {
   public final String index;
   
   public IndexExpression (hydra.langs.kusto.kql.Expression expression, String index) {
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
+    if (index == null) {
+      throw new IllegalArgumentException("null value for 'index' argument");
+    }
     this.expression = expression;
     this.index = index;
   }
@@ -29,10 +37,16 @@ public class IndexExpression implements Serializable {
   }
   
   public IndexExpression withExpression(hydra.langs.kusto.kql.Expression expression) {
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     return new IndexExpression(expression, index);
   }
   
   public IndexExpression withIndex(String index) {
+    if (index == null) {
+      throw new IllegalArgumentException("null value for 'index' argument");
+    }
     return new IndexExpression(expression, index);
   }
 }

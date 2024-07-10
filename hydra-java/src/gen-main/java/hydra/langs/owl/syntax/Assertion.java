@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -65,6 +67,9 @@ public abstract class Assertion implements Serializable {
     public final hydra.langs.owl.syntax.ClassAssertion value;
     
     public ClassAssertion (hydra.langs.owl.syntax.ClassAssertion value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -92,6 +97,9 @@ public abstract class Assertion implements Serializable {
     public final hydra.langs.owl.syntax.DataPropertyAssertion value;
     
     public DataPropertyAssertion (hydra.langs.owl.syntax.DataPropertyAssertion value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -119,6 +127,9 @@ public abstract class Assertion implements Serializable {
     public final hydra.langs.owl.syntax.DifferentIndividuals value;
     
     public DifferentIndividuals (hydra.langs.owl.syntax.DifferentIndividuals value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -146,6 +157,9 @@ public abstract class Assertion implements Serializable {
     public final hydra.langs.owl.syntax.ObjectPropertyAssertion value;
     
     public ObjectPropertyAssertion (hydra.langs.owl.syntax.ObjectPropertyAssertion value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -173,6 +187,9 @@ public abstract class Assertion implements Serializable {
     public final hydra.langs.owl.syntax.NegativeDataPropertyAssertion value;
     
     public NegativeDataPropertyAssertion (hydra.langs.owl.syntax.NegativeDataPropertyAssertion value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -200,6 +217,9 @@ public abstract class Assertion implements Serializable {
     public final hydra.langs.owl.syntax.NegativeObjectPropertyAssertion value;
     
     public NegativeObjectPropertyAssertion (hydra.langs.owl.syntax.NegativeObjectPropertyAssertion value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -227,6 +247,9 @@ public abstract class Assertion implements Serializable {
     public final hydra.langs.owl.syntax.SameIndividual value;
     
     public SameIndividual (hydra.langs.owl.syntax.SameIndividual value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class ProjectionItem implements Serializable {
   public final java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable;
   
   public ProjectionItem (hydra.langs.cypher.openCypher.Expression expression, java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable) {
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
+    if (variable == null) {
+      throw new IllegalArgumentException("null value for 'variable' argument");
+    }
     this.expression = expression;
     this.variable = variable;
   }
@@ -29,10 +37,16 @@ public class ProjectionItem implements Serializable {
   }
   
   public ProjectionItem withExpression(hydra.langs.cypher.openCypher.Expression expression) {
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     return new ProjectionItem(expression, variable);
   }
   
   public ProjectionItem withVariable(java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable) {
+    if (variable == null) {
+      throw new IllegalArgumentException("null value for 'variable' argument");
+    }
     return new ProjectionItem(expression, variable);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -53,6 +55,9 @@ public abstract class ModuleDirective implements Serializable {
     public final hydra.langs.java.syntax.ModuleDirective_Requires value;
     
     public Requires (hydra.langs.java.syntax.ModuleDirective_Requires value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -80,6 +85,9 @@ public abstract class ModuleDirective implements Serializable {
     public final hydra.langs.java.syntax.ModuleDirective_ExportsOrOpens value;
     
     public Exports (hydra.langs.java.syntax.ModuleDirective_ExportsOrOpens value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -107,6 +115,9 @@ public abstract class ModuleDirective implements Serializable {
     public final hydra.langs.java.syntax.ModuleDirective_ExportsOrOpens value;
     
     public Opens (hydra.langs.java.syntax.ModuleDirective_ExportsOrOpens value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -134,6 +145,9 @@ public abstract class ModuleDirective implements Serializable {
     public final hydra.langs.java.syntax.TypeName value;
     
     public Uses (hydra.langs.java.syntax.TypeName value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -161,6 +175,9 @@ public abstract class ModuleDirective implements Serializable {
     public final hydra.langs.java.syntax.ModuleDirective_Provides value;
     
     public Provides (hydra.langs.java.syntax.ModuleDirective_Provides value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

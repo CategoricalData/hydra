@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class ColumnDefinition_TypeOrDomain_Option implements Serializab
     public final hydra.langs.sql.ansi.DataType value;
     
     public DataType (hydra.langs.sql.ansi.DataType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class ColumnDefinition_TypeOrDomain_Option implements Serializab
     public final hydra.langs.sql.ansi.DomainName value;
     
     public DomainName (hydra.langs.sql.ansi.DomainName value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

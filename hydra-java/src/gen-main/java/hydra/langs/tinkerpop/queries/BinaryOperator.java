@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.queries;
 
 import java.io.Serializable;
@@ -41,6 +43,9 @@ public abstract class BinaryOperator implements Serializable {
     public final hydra.langs.tinkerpop.queries.BinaryBooleanOperator value;
     
     public Boolean_ (hydra.langs.tinkerpop.queries.BinaryBooleanOperator value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -68,6 +73,9 @@ public abstract class BinaryOperator implements Serializable {
     public final hydra.langs.tinkerpop.queries.ComparisonOperator value;
     
     public Comparison (hydra.langs.tinkerpop.queries.ComparisonOperator value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.module;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class QualifiedName implements Serializable {
   public final String local;
   
   public QualifiedName (java.util.Optional<hydra.module.Namespace> namespace, String local) {
+    if (namespace == null) {
+      throw new IllegalArgumentException("null value for 'namespace' argument");
+    }
+    if (local == null) {
+      throw new IllegalArgumentException("null value for 'local' argument");
+    }
     this.namespace = namespace;
     this.local = local;
   }
@@ -32,10 +40,16 @@ public class QualifiedName implements Serializable {
   }
   
   public QualifiedName withNamespace(java.util.Optional<hydra.module.Namespace> namespace) {
+    if (namespace == null) {
+      throw new IllegalArgumentException("null value for 'namespace' argument");
+    }
     return new QualifiedName(namespace, local);
   }
   
   public QualifiedName withLocal(String local) {
+    if (local == null) {
+      throw new IllegalArgumentException("null value for 'local' argument");
+    }
     return new QualifiedName(namespace, local);
   }
 }

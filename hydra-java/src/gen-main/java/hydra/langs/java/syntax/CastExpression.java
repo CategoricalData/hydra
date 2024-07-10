@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -41,6 +43,9 @@ public abstract class CastExpression implements Serializable {
     public final hydra.langs.java.syntax.CastExpression_Primitive value;
     
     public Primitive (hydra.langs.java.syntax.CastExpression_Primitive value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -68,6 +73,9 @@ public abstract class CastExpression implements Serializable {
     public final hydra.langs.java.syntax.CastExpression_NotPlusMinus value;
     
     public NotPlusMinus (hydra.langs.java.syntax.CastExpression_NotPlusMinus value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -95,6 +103,9 @@ public abstract class CastExpression implements Serializable {
     public final hydra.langs.java.syntax.CastExpression_Lambda value;
     
     public Lambda (hydra.langs.java.syntax.CastExpression_Lambda value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

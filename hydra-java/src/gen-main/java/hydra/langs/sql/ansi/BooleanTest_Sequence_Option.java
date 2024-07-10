@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class BooleanTest_Sequence_Option implements Serializable {
   public final hydra.langs.sql.ansi.TruthValue truthValue;
   
   public BooleanTest_Sequence_Option (java.util.Optional<java.lang.Void> nOT, hydra.langs.sql.ansi.TruthValue truthValue) {
+    if (nOT == null) {
+      throw new IllegalArgumentException("null value for 'nOT' argument");
+    }
+    if (truthValue == null) {
+      throw new IllegalArgumentException("null value for 'truthValue' argument");
+    }
     this.nOT = nOT;
     this.truthValue = truthValue;
   }
@@ -29,10 +37,16 @@ public class BooleanTest_Sequence_Option implements Serializable {
   }
   
   public BooleanTest_Sequence_Option withNOT(java.util.Optional<java.lang.Void> nOT) {
+    if (nOT == null) {
+      throw new IllegalArgumentException("null value for 'nOT' argument");
+    }
     return new BooleanTest_Sequence_Option(nOT, truthValue);
   }
   
   public BooleanTest_Sequence_Option withTruthValue(hydra.langs.sql.ansi.TruthValue truthValue) {
+    if (truthValue == null) {
+      throw new IllegalArgumentException("null value for 'truthValue' argument");
+    }
     return new BooleanTest_Sequence_Option(nOT, truthValue);
   }
 }

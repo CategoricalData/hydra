@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class InterfaceDeclaration implements Serializable {
     public final hydra.langs.java.syntax.NormalInterfaceDeclaration value;
     
     public NormalInterface (hydra.langs.java.syntax.NormalInterfaceDeclaration value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class InterfaceDeclaration implements Serializable {
     public final hydra.langs.java.syntax.AnnotationTypeDeclaration value;
     
     public AnnotationType (hydra.langs.java.syntax.AnnotationTypeDeclaration value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class Member_Data implements Serializable {
     public final hydra.langs.scala.meta.Pkg value;
     
     public Pkg (hydra.langs.scala.meta.Pkg value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class Member_Data implements Serializable {
     public final hydra.langs.scala.meta.Pkg_Object value;
     
     public Object_ (hydra.langs.scala.meta.Pkg_Object value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

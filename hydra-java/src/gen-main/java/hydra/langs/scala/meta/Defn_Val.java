@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -14,6 +16,18 @@ public class Defn_Val implements Serializable {
   public final hydra.langs.scala.meta.Data rhs;
   
   public Defn_Val (java.util.List<hydra.langs.scala.meta.Mod> mods, java.util.List<hydra.langs.scala.meta.Pat> pats, java.util.Optional<hydra.langs.scala.meta.Type> decltpe, hydra.langs.scala.meta.Data rhs) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
+    if (pats == null) {
+      throw new IllegalArgumentException("null value for 'pats' argument");
+    }
+    if (decltpe == null) {
+      throw new IllegalArgumentException("null value for 'decltpe' argument");
+    }
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     this.mods = mods;
     this.pats = pats;
     this.decltpe = decltpe;
@@ -35,18 +49,30 @@ public class Defn_Val implements Serializable {
   }
   
   public Defn_Val withMods(java.util.List<hydra.langs.scala.meta.Mod> mods) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
     return new Defn_Val(mods, pats, decltpe, rhs);
   }
   
   public Defn_Val withPats(java.util.List<hydra.langs.scala.meta.Pat> pats) {
+    if (pats == null) {
+      throw new IllegalArgumentException("null value for 'pats' argument");
+    }
     return new Defn_Val(mods, pats, decltpe, rhs);
   }
   
   public Defn_Val withDecltpe(java.util.Optional<hydra.langs.scala.meta.Type> decltpe) {
+    if (decltpe == null) {
+      throw new IllegalArgumentException("null value for 'decltpe' argument");
+    }
     return new Defn_Val(mods, pats, decltpe, rhs);
   }
   
   public Defn_Val withRhs(hydra.langs.scala.meta.Data rhs) {
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     return new Defn_Val(mods, pats, decltpe, rhs);
   }
 }

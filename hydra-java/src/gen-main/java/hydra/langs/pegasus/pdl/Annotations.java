@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.pegasus.pdl;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class Annotations implements Serializable {
   public final Boolean deprecated;
   
   public Annotations (java.util.Optional<String> doc, Boolean deprecated) {
+    if (doc == null) {
+      throw new IllegalArgumentException("null value for 'doc' argument");
+    }
+    if (deprecated == null) {
+      throw new IllegalArgumentException("null value for 'deprecated' argument");
+    }
     this.doc = doc;
     this.deprecated = deprecated;
   }
@@ -32,10 +40,16 @@ public class Annotations implements Serializable {
   }
   
   public Annotations withDoc(java.util.Optional<String> doc) {
+    if (doc == null) {
+      throw new IllegalArgumentException("null value for 'doc' argument");
+    }
     return new Annotations(doc, deprecated);
   }
   
   public Annotations withDeprecated(Boolean deprecated) {
+    if (deprecated == null) {
+      throw new IllegalArgumentException("null value for 'deprecated' argument");
+    }
     return new Annotations(doc, deprecated);
   }
 }

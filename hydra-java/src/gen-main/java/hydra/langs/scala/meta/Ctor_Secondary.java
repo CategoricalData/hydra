@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -16,6 +18,21 @@ public class Ctor_Secondary implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Stat> stats;
   
   public Ctor_Secondary (java.util.List<hydra.langs.scala.meta.Mod> mods, hydra.langs.scala.meta.Name name, java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> paramss, hydra.langs.scala.meta.Init init, java.util.List<hydra.langs.scala.meta.Stat> stats) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (paramss == null) {
+      throw new IllegalArgumentException("null value for 'paramss' argument");
+    }
+    if (init == null) {
+      throw new IllegalArgumentException("null value for 'init' argument");
+    }
+    if (stats == null) {
+      throw new IllegalArgumentException("null value for 'stats' argument");
+    }
     this.mods = mods;
     this.name = name;
     this.paramss = paramss;
@@ -38,22 +55,37 @@ public class Ctor_Secondary implements Serializable {
   }
   
   public Ctor_Secondary withMods(java.util.List<hydra.langs.scala.meta.Mod> mods) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
     return new Ctor_Secondary(mods, name, paramss, init, stats);
   }
   
   public Ctor_Secondary withName(hydra.langs.scala.meta.Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new Ctor_Secondary(mods, name, paramss, init, stats);
   }
   
   public Ctor_Secondary withParamss(java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> paramss) {
+    if (paramss == null) {
+      throw new IllegalArgumentException("null value for 'paramss' argument");
+    }
     return new Ctor_Secondary(mods, name, paramss, init, stats);
   }
   
   public Ctor_Secondary withInit(hydra.langs.scala.meta.Init init) {
+    if (init == null) {
+      throw new IllegalArgumentException("null value for 'init' argument");
+    }
     return new Ctor_Secondary(mods, name, paramss, init, stats);
   }
   
   public Ctor_Secondary withStats(java.util.List<hydra.langs.scala.meta.Stat> stats) {
+    if (stats == null) {
+      throw new IllegalArgumentException("null value for 'stats' argument");
+    }
     return new Ctor_Secondary(mods, name, paramss, init, stats);
   }
 }

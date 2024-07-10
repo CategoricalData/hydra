@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -47,6 +49,9 @@ public abstract class PnLocal_Sequence_Option_ListOfAlts_Elmt implements Seriali
     public final hydra.langs.shex.syntax.PnChars value;
     
     public PnChars (hydra.langs.shex.syntax.PnChars value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -124,6 +129,9 @@ public abstract class PnLocal_Sequence_Option_ListOfAlts_Elmt implements Seriali
     public final hydra.langs.shex.syntax.Plx value;
     
     public Plx (hydra.langs.shex.syntax.Plx value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

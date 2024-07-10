@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -101,6 +103,9 @@ public abstract class ObjectPropertyAxiom implements Serializable {
     public final hydra.langs.owl.syntax.AsymmetricObjectProperty value;
     
     public AsymmetricObjectProperty (hydra.langs.owl.syntax.AsymmetricObjectProperty value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -128,6 +133,9 @@ public abstract class ObjectPropertyAxiom implements Serializable {
     public final hydra.langs.owl.syntax.DisjointObjectProperties value;
     
     public DisjointObjectProperties (hydra.langs.owl.syntax.DisjointObjectProperties value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -155,6 +163,9 @@ public abstract class ObjectPropertyAxiom implements Serializable {
     public final hydra.langs.owl.syntax.EquivalentObjectProperties value;
     
     public EquivalentObjectProperties (hydra.langs.owl.syntax.EquivalentObjectProperties value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -182,6 +193,9 @@ public abstract class ObjectPropertyAxiom implements Serializable {
     public final hydra.langs.owl.syntax.FunctionalObjectProperty value;
     
     public FunctionalObjectProperty (hydra.langs.owl.syntax.FunctionalObjectProperty value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -209,6 +223,9 @@ public abstract class ObjectPropertyAxiom implements Serializable {
     public final hydra.langs.owl.syntax.InverseFunctionalObjectProperty value;
     
     public InverseFunctionalObjectProperty (hydra.langs.owl.syntax.InverseFunctionalObjectProperty value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -236,6 +253,9 @@ public abstract class ObjectPropertyAxiom implements Serializable {
     public final hydra.langs.owl.syntax.InverseObjectProperties value;
     
     public InverseObjectProperties (hydra.langs.owl.syntax.InverseObjectProperties value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -263,6 +283,9 @@ public abstract class ObjectPropertyAxiom implements Serializable {
     public final hydra.langs.owl.syntax.IrreflexiveObjectProperty value;
     
     public IrreflexiveObjectProperty (hydra.langs.owl.syntax.IrreflexiveObjectProperty value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -290,6 +313,9 @@ public abstract class ObjectPropertyAxiom implements Serializable {
     public final hydra.langs.owl.syntax.ObjectPropertyDomain value;
     
     public ObjectPropertyDomain (hydra.langs.owl.syntax.ObjectPropertyDomain value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -317,6 +343,9 @@ public abstract class ObjectPropertyAxiom implements Serializable {
     public final hydra.langs.owl.syntax.ObjectPropertyRange value;
     
     public ObjectPropertyRange (hydra.langs.owl.syntax.ObjectPropertyRange value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -344,6 +373,9 @@ public abstract class ObjectPropertyAxiom implements Serializable {
     public final hydra.langs.owl.syntax.ReflexiveObjectProperty value;
     
     public ReflexiveObjectProperty (hydra.langs.owl.syntax.ReflexiveObjectProperty value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -371,6 +403,9 @@ public abstract class ObjectPropertyAxiom implements Serializable {
     public final hydra.langs.owl.syntax.SubObjectPropertyOf value;
     
     public SubObjectPropertyOf (hydra.langs.owl.syntax.SubObjectPropertyOf value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -398,6 +433,9 @@ public abstract class ObjectPropertyAxiom implements Serializable {
     public final hydra.langs.owl.syntax.SymmetricObjectProperty value;
     
     public SymmetricObjectProperty (hydra.langs.owl.syntax.SymmetricObjectProperty value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -425,6 +463,9 @@ public abstract class ObjectPropertyAxiom implements Serializable {
     public final hydra.langs.owl.syntax.TransitiveObjectProperty value;
     
     public TransitiveObjectProperty (hydra.langs.owl.syntax.TransitiveObjectProperty value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

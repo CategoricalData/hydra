@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class RdfLiteral implements Serializable {
   public final java.util.Optional<hydra.langs.shex.syntax.RdfLiteral_Alts_Option> alts;
   
   public RdfLiteral (hydra.langs.shex.syntax.String_ string, java.util.Optional<hydra.langs.shex.syntax.RdfLiteral_Alts_Option> alts) {
+    if (string == null) {
+      throw new IllegalArgumentException("null value for 'string' argument");
+    }
+    if (alts == null) {
+      throw new IllegalArgumentException("null value for 'alts' argument");
+    }
     this.string = string;
     this.alts = alts;
   }
@@ -29,10 +37,16 @@ public class RdfLiteral implements Serializable {
   }
   
   public RdfLiteral withString(hydra.langs.shex.syntax.String_ string) {
+    if (string == null) {
+      throw new IllegalArgumentException("null value for 'string' argument");
+    }
     return new RdfLiteral(string, alts);
   }
   
   public RdfLiteral withAlts(java.util.Optional<hydra.langs.shex.syntax.RdfLiteral_Alts_Option> alts) {
+    if (alts == null) {
+      throw new IllegalArgumentException("null value for 'alts' argument");
+    }
     return new RdfLiteral(string, alts);
   }
 }

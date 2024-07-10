@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class FieldUpdate implements Serializable {
   public final hydra.langs.haskell.ast.Expression value;
   
   public FieldUpdate (hydra.langs.haskell.ast.Name name, hydra.langs.haskell.ast.Expression value) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.name = name;
     this.value = value;
   }
@@ -32,10 +40,16 @@ public class FieldUpdate implements Serializable {
   }
   
   public FieldUpdate withName(hydra.langs.haskell.ast.Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new FieldUpdate(name, value);
   }
   
   public FieldUpdate withValue(hydra.langs.haskell.ast.Expression value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     return new FieldUpdate(name, value);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class CatchClause implements Serializable {
   public final hydra.langs.java.syntax.Block block;
   
   public CatchClause (java.util.Optional<hydra.langs.java.syntax.CatchFormalParameter> parameter, hydra.langs.java.syntax.Block block) {
+    if (parameter == null) {
+      throw new IllegalArgumentException("null value for 'parameter' argument");
+    }
+    if (block == null) {
+      throw new IllegalArgumentException("null value for 'block' argument");
+    }
     this.parameter = parameter;
     this.block = block;
   }
@@ -29,10 +37,16 @@ public class CatchClause implements Serializable {
   }
   
   public CatchClause withParameter(java.util.Optional<hydra.langs.java.syntax.CatchFormalParameter> parameter) {
+    if (parameter == null) {
+      throw new IllegalArgumentException("null value for 'parameter' argument");
+    }
     return new CatchClause(parameter, block);
   }
   
   public CatchClause withBlock(hydra.langs.java.syntax.Block block) {
+    if (block == null) {
+      throw new IllegalArgumentException("null value for 'block' argument");
+    }
     return new CatchClause(parameter, block);
   }
 }

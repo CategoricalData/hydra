@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.ast;
 
 import java.io.Serializable;
@@ -15,6 +17,15 @@ public class BlockStyle implements Serializable {
   public final Boolean newlineAfterContent;
   
   public BlockStyle (java.util.Optional<String> indent, Boolean newlineBeforeContent, Boolean newlineAfterContent) {
+    if (indent == null) {
+      throw new IllegalArgumentException("null value for 'indent' argument");
+    }
+    if (newlineBeforeContent == null) {
+      throw new IllegalArgumentException("null value for 'newlineBeforeContent' argument");
+    }
+    if (newlineAfterContent == null) {
+      throw new IllegalArgumentException("null value for 'newlineAfterContent' argument");
+    }
     this.indent = indent;
     this.newlineBeforeContent = newlineBeforeContent;
     this.newlineAfterContent = newlineAfterContent;
@@ -35,14 +46,23 @@ public class BlockStyle implements Serializable {
   }
   
   public BlockStyle withIndent(java.util.Optional<String> indent) {
+    if (indent == null) {
+      throw new IllegalArgumentException("null value for 'indent' argument");
+    }
     return new BlockStyle(indent, newlineBeforeContent, newlineAfterContent);
   }
   
   public BlockStyle withNewlineBeforeContent(Boolean newlineBeforeContent) {
+    if (newlineBeforeContent == null) {
+      throw new IllegalArgumentException("null value for 'newlineBeforeContent' argument");
+    }
     return new BlockStyle(indent, newlineBeforeContent, newlineAfterContent);
   }
   
   public BlockStyle withNewlineAfterContent(Boolean newlineAfterContent) {
+    if (newlineAfterContent == null) {
+      throw new IllegalArgumentException("null value for 'newlineAfterContent' argument");
+    }
     return new BlockStyle(indent, newlineBeforeContent, newlineAfterContent);
   }
 }

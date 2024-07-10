@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.avro.schema;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class Array implements Serializable {
   public final hydra.langs.avro.schema.Schema items;
   
   public Array (hydra.langs.avro.schema.Schema items) {
+    if (items == null) {
+      throw new IllegalArgumentException("null value for 'items' argument");
+    }
     this.items = items;
   }
   

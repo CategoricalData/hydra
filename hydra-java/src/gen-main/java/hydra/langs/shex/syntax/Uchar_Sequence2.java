@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -22,6 +24,30 @@ public class Uchar_Sequence2 implements Serializable {
   public final hydra.langs.shex.syntax.Hex hex8;
   
   public Uchar_Sequence2 (hydra.langs.shex.syntax.Hex hex, hydra.langs.shex.syntax.Hex hex2, hydra.langs.shex.syntax.Hex hex3, hydra.langs.shex.syntax.Hex hex4, hydra.langs.shex.syntax.Hex hex5, hydra.langs.shex.syntax.Hex hex6, hydra.langs.shex.syntax.Hex hex7, hydra.langs.shex.syntax.Hex hex8) {
+    if (hex == null) {
+      throw new IllegalArgumentException("null value for 'hex' argument");
+    }
+    if (hex2 == null) {
+      throw new IllegalArgumentException("null value for 'hex2' argument");
+    }
+    if (hex3 == null) {
+      throw new IllegalArgumentException("null value for 'hex3' argument");
+    }
+    if (hex4 == null) {
+      throw new IllegalArgumentException("null value for 'hex4' argument");
+    }
+    if (hex5 == null) {
+      throw new IllegalArgumentException("null value for 'hex5' argument");
+    }
+    if (hex6 == null) {
+      throw new IllegalArgumentException("null value for 'hex6' argument");
+    }
+    if (hex7 == null) {
+      throw new IllegalArgumentException("null value for 'hex7' argument");
+    }
+    if (hex8 == null) {
+      throw new IllegalArgumentException("null value for 'hex8' argument");
+    }
     this.hex = hex;
     this.hex2 = hex2;
     this.hex3 = hex3;
@@ -47,34 +73,58 @@ public class Uchar_Sequence2 implements Serializable {
   }
   
   public Uchar_Sequence2 withHex(hydra.langs.shex.syntax.Hex hex) {
+    if (hex == null) {
+      throw new IllegalArgumentException("null value for 'hex' argument");
+    }
     return new Uchar_Sequence2(hex, hex2, hex3, hex4, hex5, hex6, hex7, hex8);
   }
   
   public Uchar_Sequence2 withHex2(hydra.langs.shex.syntax.Hex hex2) {
+    if (hex2 == null) {
+      throw new IllegalArgumentException("null value for 'hex2' argument");
+    }
     return new Uchar_Sequence2(hex, hex2, hex3, hex4, hex5, hex6, hex7, hex8);
   }
   
   public Uchar_Sequence2 withHex3(hydra.langs.shex.syntax.Hex hex3) {
+    if (hex3 == null) {
+      throw new IllegalArgumentException("null value for 'hex3' argument");
+    }
     return new Uchar_Sequence2(hex, hex2, hex3, hex4, hex5, hex6, hex7, hex8);
   }
   
   public Uchar_Sequence2 withHex4(hydra.langs.shex.syntax.Hex hex4) {
+    if (hex4 == null) {
+      throw new IllegalArgumentException("null value for 'hex4' argument");
+    }
     return new Uchar_Sequence2(hex, hex2, hex3, hex4, hex5, hex6, hex7, hex8);
   }
   
   public Uchar_Sequence2 withHex5(hydra.langs.shex.syntax.Hex hex5) {
+    if (hex5 == null) {
+      throw new IllegalArgumentException("null value for 'hex5' argument");
+    }
     return new Uchar_Sequence2(hex, hex2, hex3, hex4, hex5, hex6, hex7, hex8);
   }
   
   public Uchar_Sequence2 withHex6(hydra.langs.shex.syntax.Hex hex6) {
+    if (hex6 == null) {
+      throw new IllegalArgumentException("null value for 'hex6' argument");
+    }
     return new Uchar_Sequence2(hex, hex2, hex3, hex4, hex5, hex6, hex7, hex8);
   }
   
   public Uchar_Sequence2 withHex7(hydra.langs.shex.syntax.Hex hex7) {
+    if (hex7 == null) {
+      throw new IllegalArgumentException("null value for 'hex7' argument");
+    }
     return new Uchar_Sequence2(hex, hex2, hex3, hex4, hex5, hex6, hex7, hex8);
   }
   
   public Uchar_Sequence2 withHex8(hydra.langs.shex.syntax.Hex hex8) {
+    if (hex8 == null) {
+      throw new IllegalArgumentException("null value for 'hex8' argument");
+    }
     return new Uchar_Sequence2(hex, hex2, hex3, hex4, hex5, hex6, hex7, hex8);
   }
 }

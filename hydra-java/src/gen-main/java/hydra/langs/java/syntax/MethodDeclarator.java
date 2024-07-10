@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class MethodDeclarator implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.FormalParameter> formalParameters;
   
   public MethodDeclarator (hydra.langs.java.syntax.Identifier identifier, java.util.Optional<hydra.langs.java.syntax.ReceiverParameter> receiverParameter, java.util.List<hydra.langs.java.syntax.FormalParameter> formalParameters) {
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
+    if (receiverParameter == null) {
+      throw new IllegalArgumentException("null value for 'receiverParameter' argument");
+    }
+    if (formalParameters == null) {
+      throw new IllegalArgumentException("null value for 'formalParameters' argument");
+    }
     this.identifier = identifier;
     this.receiverParameter = receiverParameter;
     this.formalParameters = formalParameters;
@@ -32,14 +43,23 @@ public class MethodDeclarator implements Serializable {
   }
   
   public MethodDeclarator withIdentifier(hydra.langs.java.syntax.Identifier identifier) {
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
     return new MethodDeclarator(identifier, receiverParameter, formalParameters);
   }
   
   public MethodDeclarator withReceiverParameter(java.util.Optional<hydra.langs.java.syntax.ReceiverParameter> receiverParameter) {
+    if (receiverParameter == null) {
+      throw new IllegalArgumentException("null value for 'receiverParameter' argument");
+    }
     return new MethodDeclarator(identifier, receiverParameter, formalParameters);
   }
   
   public MethodDeclarator withFormalParameters(java.util.List<hydra.langs.java.syntax.FormalParameter> formalParameters) {
+    if (formalParameters == null) {
+      throw new IllegalArgumentException("null value for 'formalParameters' argument");
+    }
     return new MethodDeclarator(identifier, receiverParameter, formalParameters);
   }
 }

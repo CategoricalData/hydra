@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Type_Function implements Serializable {
   public final hydra.langs.haskell.ast.Type codomain;
   
   public Type_Function (hydra.langs.haskell.ast.Type domain, hydra.langs.haskell.ast.Type codomain) {
+    if (domain == null) {
+      throw new IllegalArgumentException("null value for 'domain' argument");
+    }
+    if (codomain == null) {
+      throw new IllegalArgumentException("null value for 'codomain' argument");
+    }
     this.domain = domain;
     this.codomain = codomain;
   }
@@ -29,10 +37,16 @@ public class Type_Function implements Serializable {
   }
   
   public Type_Function withDomain(hydra.langs.haskell.ast.Type domain) {
+    if (domain == null) {
+      throw new IllegalArgumentException("null value for 'domain' argument");
+    }
     return new Type_Function(domain, codomain);
   }
   
   public Type_Function withCodomain(hydra.langs.haskell.ast.Type codomain) {
+    if (codomain == null) {
+      throw new IllegalArgumentException("null value for 'codomain' argument");
+    }
     return new Type_Function(domain, codomain);
   }
 }

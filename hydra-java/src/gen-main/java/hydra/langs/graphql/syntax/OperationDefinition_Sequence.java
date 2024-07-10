@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -16,6 +18,21 @@ public class OperationDefinition_Sequence implements Serializable {
   public final hydra.langs.graphql.syntax.SelectionSet selectionSet;
   
   public OperationDefinition_Sequence (hydra.langs.graphql.syntax.OperationType operationType, java.util.Optional<hydra.langs.graphql.syntax.Name> name, java.util.Optional<hydra.langs.graphql.syntax.VariablesDefinition> variablesDefinition, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.SelectionSet selectionSet) {
+    if (operationType == null) {
+      throw new IllegalArgumentException("null value for 'operationType' argument");
+    }
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (variablesDefinition == null) {
+      throw new IllegalArgumentException("null value for 'variablesDefinition' argument");
+    }
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
+    if (selectionSet == null) {
+      throw new IllegalArgumentException("null value for 'selectionSet' argument");
+    }
     this.operationType = operationType;
     this.name = name;
     this.variablesDefinition = variablesDefinition;
@@ -38,22 +55,37 @@ public class OperationDefinition_Sequence implements Serializable {
   }
   
   public OperationDefinition_Sequence withOperationType(hydra.langs.graphql.syntax.OperationType operationType) {
+    if (operationType == null) {
+      throw new IllegalArgumentException("null value for 'operationType' argument");
+    }
     return new OperationDefinition_Sequence(operationType, name, variablesDefinition, directives, selectionSet);
   }
   
   public OperationDefinition_Sequence withName(java.util.Optional<hydra.langs.graphql.syntax.Name> name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new OperationDefinition_Sequence(operationType, name, variablesDefinition, directives, selectionSet);
   }
   
   public OperationDefinition_Sequence withVariablesDefinition(java.util.Optional<hydra.langs.graphql.syntax.VariablesDefinition> variablesDefinition) {
+    if (variablesDefinition == null) {
+      throw new IllegalArgumentException("null value for 'variablesDefinition' argument");
+    }
     return new OperationDefinition_Sequence(operationType, name, variablesDefinition, directives, selectionSet);
   }
   
   public OperationDefinition_Sequence withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
     return new OperationDefinition_Sequence(operationType, name, variablesDefinition, directives, selectionSet);
   }
   
   public OperationDefinition_Sequence withSelectionSet(hydra.langs.graphql.syntax.SelectionSet selectionSet) {
+    if (selectionSet == null) {
+      throw new IllegalArgumentException("null value for 'selectionSet' argument");
+    }
     return new OperationDefinition_Sequence(operationType, name, variablesDefinition, directives, selectionSet);
   }
 }

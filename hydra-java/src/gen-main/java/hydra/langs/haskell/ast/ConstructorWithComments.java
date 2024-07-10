@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class ConstructorWithComments implements Serializable {
   public final java.util.Optional<String> comments;
   
   public ConstructorWithComments (hydra.langs.haskell.ast.Constructor body, java.util.Optional<String> comments) {
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
+    if (comments == null) {
+      throw new IllegalArgumentException("null value for 'comments' argument");
+    }
     this.body = body;
     this.comments = comments;
   }
@@ -32,10 +40,16 @@ public class ConstructorWithComments implements Serializable {
   }
   
   public ConstructorWithComments withBody(hydra.langs.haskell.ast.Constructor body) {
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     return new ConstructorWithComments(body, comments);
   }
   
   public ConstructorWithComments withComments(java.util.Optional<String> comments) {
+    if (comments == null) {
+      throw new IllegalArgumentException("null value for 'comments' argument");
+    }
     return new ConstructorWithComments(body, comments);
   }
 }

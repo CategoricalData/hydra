@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -38,6 +40,9 @@ public abstract class Constructor implements Serializable {
     public final hydra.langs.haskell.ast.Constructor_Ordinary value;
     
     public Ordinary (hydra.langs.haskell.ast.Constructor_Ordinary value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -65,6 +70,9 @@ public abstract class Constructor implements Serializable {
     public final hydra.langs.haskell.ast.Constructor_Record value;
     
     public Record (hydra.langs.haskell.ast.Constructor_Record value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

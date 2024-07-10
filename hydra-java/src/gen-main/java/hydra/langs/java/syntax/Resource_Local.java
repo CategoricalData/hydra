@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -14,6 +16,18 @@ public class Resource_Local implements Serializable {
   public final hydra.langs.java.syntax.Expression expression;
   
   public Resource_Local (java.util.List<hydra.langs.java.syntax.VariableModifier> modifiers, hydra.langs.java.syntax.LocalVariableType type, hydra.langs.java.syntax.Identifier identifier, hydra.langs.java.syntax.Expression expression) {
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     this.modifiers = modifiers;
     this.type = type;
     this.identifier = identifier;
@@ -35,18 +49,30 @@ public class Resource_Local implements Serializable {
   }
   
   public Resource_Local withModifiers(java.util.List<hydra.langs.java.syntax.VariableModifier> modifiers) {
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
     return new Resource_Local(modifiers, type, identifier, expression);
   }
   
   public Resource_Local withType(hydra.langs.java.syntax.LocalVariableType type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new Resource_Local(modifiers, type, identifier, expression);
   }
   
   public Resource_Local withIdentifier(hydra.langs.java.syntax.Identifier identifier) {
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
     return new Resource_Local(modifiers, type, identifier, expression);
   }
   
   public Resource_Local withExpression(hydra.langs.java.syntax.Expression expression) {
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     return new Resource_Local(modifiers, type, identifier, expression);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -14,6 +16,18 @@ public class UnionTypeDefinition implements Serializable {
   public final java.util.Optional<hydra.langs.graphql.syntax.UnionMemberTypes> unionMemberTypes;
   
   public UnionTypeDefinition (java.util.Optional<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.Name name, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives, java.util.Optional<hydra.langs.graphql.syntax.UnionMemberTypes> unionMemberTypes) {
+    if (description == null) {
+      throw new IllegalArgumentException("null value for 'description' argument");
+    }
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
+    if (unionMemberTypes == null) {
+      throw new IllegalArgumentException("null value for 'unionMemberTypes' argument");
+    }
     this.description = description;
     this.name = name;
     this.directives = directives;
@@ -35,18 +49,30 @@ public class UnionTypeDefinition implements Serializable {
   }
   
   public UnionTypeDefinition withDescription(java.util.Optional<hydra.langs.graphql.syntax.Description> description) {
+    if (description == null) {
+      throw new IllegalArgumentException("null value for 'description' argument");
+    }
     return new UnionTypeDefinition(description, name, directives, unionMemberTypes);
   }
   
   public UnionTypeDefinition withName(hydra.langs.graphql.syntax.Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new UnionTypeDefinition(description, name, directives, unionMemberTypes);
   }
   
   public UnionTypeDefinition withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
     return new UnionTypeDefinition(description, name, directives, unionMemberTypes);
   }
   
   public UnionTypeDefinition withUnionMemberTypes(java.util.Optional<hydra.langs.graphql.syntax.UnionMemberTypes> unionMemberTypes) {
+    if (unionMemberTypes == null) {
+      throw new IllegalArgumentException("null value for 'unionMemberTypes' argument");
+    }
     return new UnionTypeDefinition(description, name, directives, unionMemberTypes);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class InlineShapeAtom_Sequence implements Serializable {
   public final java.util.Optional<hydra.langs.shex.syntax.InlineShapeOrRef> inlineShapeOrRef;
   
   public InlineShapeAtom_Sequence (hydra.langs.shex.syntax.NodeConstraint nodeConstraint, java.util.Optional<hydra.langs.shex.syntax.InlineShapeOrRef> inlineShapeOrRef) {
+    if (nodeConstraint == null) {
+      throw new IllegalArgumentException("null value for 'nodeConstraint' argument");
+    }
+    if (inlineShapeOrRef == null) {
+      throw new IllegalArgumentException("null value for 'inlineShapeOrRef' argument");
+    }
     this.nodeConstraint = nodeConstraint;
     this.inlineShapeOrRef = inlineShapeOrRef;
   }
@@ -29,10 +37,16 @@ public class InlineShapeAtom_Sequence implements Serializable {
   }
   
   public InlineShapeAtom_Sequence withNodeConstraint(hydra.langs.shex.syntax.NodeConstraint nodeConstraint) {
+    if (nodeConstraint == null) {
+      throw new IllegalArgumentException("null value for 'nodeConstraint' argument");
+    }
     return new InlineShapeAtom_Sequence(nodeConstraint, inlineShapeOrRef);
   }
   
   public InlineShapeAtom_Sequence withInlineShapeOrRef(java.util.Optional<hydra.langs.shex.syntax.InlineShapeOrRef> inlineShapeOrRef) {
+    if (inlineShapeOrRef == null) {
+      throw new IllegalArgumentException("null value for 'inlineShapeOrRef' argument");
+    }
     return new InlineShapeAtom_Sequence(nodeConstraint, inlineShapeOrRef);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class ImportExportStat implements Serializable {
     public final hydra.langs.scala.meta.Import value;
     
     public Import (hydra.langs.scala.meta.Import value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class ImportExportStat implements Serializable {
     public final hydra.langs.scala.meta.Export value;
     
     public Export (hydra.langs.scala.meta.Export value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

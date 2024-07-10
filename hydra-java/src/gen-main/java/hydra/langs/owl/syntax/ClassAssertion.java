@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class ClassAssertion implements Serializable {
   public final hydra.langs.owl.syntax.Individual individual;
   
   public ClassAssertion (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, hydra.langs.owl.syntax.ClassExpression class_, hydra.langs.owl.syntax.Individual individual) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
+    if (class_ == null) {
+      throw new IllegalArgumentException("null value for 'class' argument");
+    }
+    if (individual == null) {
+      throw new IllegalArgumentException("null value for 'individual' argument");
+    }
     this.annotations = annotations;
     this.class_ = class_;
     this.individual = individual;
@@ -32,14 +43,23 @@ public class ClassAssertion implements Serializable {
   }
   
   public ClassAssertion withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     return new ClassAssertion(annotations, class_, individual);
   }
   
   public ClassAssertion withClass(hydra.langs.owl.syntax.ClassExpression class_) {
+    if (class_ == null) {
+      throw new IllegalArgumentException("null value for 'class' argument");
+    }
     return new ClassAssertion(annotations, class_, individual);
   }
   
   public ClassAssertion withIndividual(hydra.langs.owl.syntax.Individual individual) {
+    if (individual == null) {
+      throw new IllegalArgumentException("null value for 'individual' argument");
+    }
     return new ClassAssertion(annotations, class_, individual);
   }
 }

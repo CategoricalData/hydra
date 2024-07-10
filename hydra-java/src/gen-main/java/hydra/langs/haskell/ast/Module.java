@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class Module implements Serializable {
   public final java.util.List<hydra.langs.haskell.ast.DeclarationWithComments> declarations;
   
   public Module (java.util.Optional<hydra.langs.haskell.ast.ModuleHead> head, java.util.List<hydra.langs.haskell.ast.Import> imports, java.util.List<hydra.langs.haskell.ast.DeclarationWithComments> declarations) {
+    if (head == null) {
+      throw new IllegalArgumentException("null value for 'head' argument");
+    }
+    if (imports == null) {
+      throw new IllegalArgumentException("null value for 'imports' argument");
+    }
+    if (declarations == null) {
+      throw new IllegalArgumentException("null value for 'declarations' argument");
+    }
     this.head = head;
     this.imports = imports;
     this.declarations = declarations;
@@ -32,14 +43,23 @@ public class Module implements Serializable {
   }
   
   public Module withHead(java.util.Optional<hydra.langs.haskell.ast.ModuleHead> head) {
+    if (head == null) {
+      throw new IllegalArgumentException("null value for 'head' argument");
+    }
     return new Module(head, imports, declarations);
   }
   
   public Module withImports(java.util.List<hydra.langs.haskell.ast.Import> imports) {
+    if (imports == null) {
+      throw new IllegalArgumentException("null value for 'imports' argument");
+    }
     return new Module(head, imports, declarations);
   }
   
   public Module withDeclarations(java.util.List<hydra.langs.haskell.ast.DeclarationWithComments> declarations) {
+    if (declarations == null) {
+      throw new IllegalArgumentException("null value for 'declarations' argument");
+    }
     return new Module(head, imports, declarations);
   }
 }

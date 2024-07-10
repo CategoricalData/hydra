@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -19,6 +21,21 @@ public class DataDeclaration implements Serializable {
   public final java.util.List<hydra.langs.haskell.ast.Deriving> deriving;
   
   public DataDeclaration (hydra.langs.haskell.ast.DataDeclaration_Keyword keyword, java.util.List<hydra.langs.haskell.ast.Assertion> context, hydra.langs.haskell.ast.DeclarationHead head, java.util.List<hydra.langs.haskell.ast.ConstructorWithComments> constructors, java.util.List<hydra.langs.haskell.ast.Deriving> deriving) {
+    if (keyword == null) {
+      throw new IllegalArgumentException("null value for 'keyword' argument");
+    }
+    if (context == null) {
+      throw new IllegalArgumentException("null value for 'context' argument");
+    }
+    if (head == null) {
+      throw new IllegalArgumentException("null value for 'head' argument");
+    }
+    if (constructors == null) {
+      throw new IllegalArgumentException("null value for 'constructors' argument");
+    }
+    if (deriving == null) {
+      throw new IllegalArgumentException("null value for 'deriving' argument");
+    }
     this.keyword = keyword;
     this.context = context;
     this.head = head;
@@ -41,22 +58,37 @@ public class DataDeclaration implements Serializable {
   }
   
   public DataDeclaration withKeyword(hydra.langs.haskell.ast.DataDeclaration_Keyword keyword) {
+    if (keyword == null) {
+      throw new IllegalArgumentException("null value for 'keyword' argument");
+    }
     return new DataDeclaration(keyword, context, head, constructors, deriving);
   }
   
   public DataDeclaration withContext(java.util.List<hydra.langs.haskell.ast.Assertion> context) {
+    if (context == null) {
+      throw new IllegalArgumentException("null value for 'context' argument");
+    }
     return new DataDeclaration(keyword, context, head, constructors, deriving);
   }
   
   public DataDeclaration withHead(hydra.langs.haskell.ast.DeclarationHead head) {
+    if (head == null) {
+      throw new IllegalArgumentException("null value for 'head' argument");
+    }
     return new DataDeclaration(keyword, context, head, constructors, deriving);
   }
   
   public DataDeclaration withConstructors(java.util.List<hydra.langs.haskell.ast.ConstructorWithComments> constructors) {
+    if (constructors == null) {
+      throw new IllegalArgumentException("null value for 'constructors' argument");
+    }
     return new DataDeclaration(keyword, context, head, constructors, deriving);
   }
   
   public DataDeclaration withDeriving(java.util.List<hydra.langs.haskell.ast.Deriving> deriving) {
+    if (deriving == null) {
+      throw new IllegalArgumentException("null value for 'deriving' argument");
+    }
     return new DataDeclaration(keyword, context, head, constructors, deriving);
   }
 }

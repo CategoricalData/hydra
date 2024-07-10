@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class NodeConstraint_Sequence3 implements Serializable {
   public final java.util.List<hydra.langs.shex.syntax.XsFacet> listOfXsFacet;
   
   public NodeConstraint_Sequence3 (hydra.langs.shex.syntax.Datatype datatype, java.util.List<hydra.langs.shex.syntax.XsFacet> listOfXsFacet) {
+    if (datatype == null) {
+      throw new IllegalArgumentException("null value for 'datatype' argument");
+    }
+    if (listOfXsFacet == null) {
+      throw new IllegalArgumentException("null value for 'listOfXsFacet' argument");
+    }
     this.datatype = datatype;
     this.listOfXsFacet = listOfXsFacet;
   }
@@ -29,10 +37,16 @@ public class NodeConstraint_Sequence3 implements Serializable {
   }
   
   public NodeConstraint_Sequence3 withDatatype(hydra.langs.shex.syntax.Datatype datatype) {
+    if (datatype == null) {
+      throw new IllegalArgumentException("null value for 'datatype' argument");
+    }
     return new NodeConstraint_Sequence3(datatype, listOfXsFacet);
   }
   
   public NodeConstraint_Sequence3 withListOfXsFacet(java.util.List<hydra.langs.shex.syntax.XsFacet> listOfXsFacet) {
+    if (listOfXsFacet == null) {
+      throw new IllegalArgumentException("null value for 'listOfXsFacet' argument");
+    }
     return new NodeConstraint_Sequence3(datatype, listOfXsFacet);
   }
 }

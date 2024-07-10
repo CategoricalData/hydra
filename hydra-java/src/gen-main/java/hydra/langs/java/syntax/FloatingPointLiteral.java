@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -11,6 +13,9 @@ public class FloatingPointLiteral implements Serializable {
   public final Double value;
   
   public FloatingPointLiteral (Double value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

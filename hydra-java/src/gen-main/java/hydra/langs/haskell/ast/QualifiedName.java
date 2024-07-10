@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class QualifiedName implements Serializable {
   public final hydra.langs.haskell.ast.NamePart unqualified;
   
   public QualifiedName (java.util.List<hydra.langs.haskell.ast.NamePart> qualifiers, hydra.langs.haskell.ast.NamePart unqualified) {
+    if (qualifiers == null) {
+      throw new IllegalArgumentException("null value for 'qualifiers' argument");
+    }
+    if (unqualified == null) {
+      throw new IllegalArgumentException("null value for 'unqualified' argument");
+    }
     this.qualifiers = qualifiers;
     this.unqualified = unqualified;
   }
@@ -29,10 +37,16 @@ public class QualifiedName implements Serializable {
   }
   
   public QualifiedName withQualifiers(java.util.List<hydra.langs.haskell.ast.NamePart> qualifiers) {
+    if (qualifiers == null) {
+      throw new IllegalArgumentException("null value for 'qualifiers' argument");
+    }
     return new QualifiedName(qualifiers, unqualified);
   }
   
   public QualifiedName withUnqualified(hydra.langs.haskell.ast.NamePart unqualified) {
+    if (unqualified == null) {
+      throw new IllegalArgumentException("null value for 'unqualified' argument");
+    }
     return new QualifiedName(qualifiers, unqualified);
   }
 }

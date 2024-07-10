@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class DataHasValue implements Serializable {
   public final hydra.langs.rdf.syntax.Literal value;
   
   public DataHasValue (hydra.langs.owl.syntax.DataPropertyExpression property, hydra.langs.rdf.syntax.Literal value) {
+    if (property == null) {
+      throw new IllegalArgumentException("null value for 'property' argument");
+    }
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.property = property;
     this.value = value;
   }
@@ -29,10 +37,16 @@ public class DataHasValue implements Serializable {
   }
   
   public DataHasValue withProperty(hydra.langs.owl.syntax.DataPropertyExpression property) {
+    if (property == null) {
+      throw new IllegalArgumentException("null value for 'property' argument");
+    }
     return new DataHasValue(property, value);
   }
   
   public DataHasValue withValue(hydra.langs.rdf.syntax.Literal value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     return new DataHasValue(property, value);
   }
 }

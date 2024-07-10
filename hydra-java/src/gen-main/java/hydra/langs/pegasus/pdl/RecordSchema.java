@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.pegasus.pdl;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class RecordSchema implements Serializable {
   public final java.util.List<hydra.langs.pegasus.pdl.NamedSchema> includes;
   
   public RecordSchema (java.util.List<hydra.langs.pegasus.pdl.RecordField> fields, java.util.List<hydra.langs.pegasus.pdl.NamedSchema> includes) {
+    if (fields == null) {
+      throw new IllegalArgumentException("null value for 'fields' argument");
+    }
+    if (includes == null) {
+      throw new IllegalArgumentException("null value for 'includes' argument");
+    }
     this.fields = fields;
     this.includes = includes;
   }
@@ -29,10 +37,16 @@ public class RecordSchema implements Serializable {
   }
   
   public RecordSchema withFields(java.util.List<hydra.langs.pegasus.pdl.RecordField> fields) {
+    if (fields == null) {
+      throw new IllegalArgumentException("null value for 'fields' argument");
+    }
     return new RecordSchema(fields, includes);
   }
   
   public RecordSchema withIncludes(java.util.List<hydra.langs.pegasus.pdl.NamedSchema> includes) {
+    if (includes == null) {
+      throw new IllegalArgumentException("null value for 'includes' argument");
+    }
     return new RecordSchema(fields, includes);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Type_Method implements Serializable {
   public final hydra.langs.scala.meta.Type tpe;
   
   public Type_Method (java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> paramss, hydra.langs.scala.meta.Type tpe) {
+    if (paramss == null) {
+      throw new IllegalArgumentException("null value for 'paramss' argument");
+    }
+    if (tpe == null) {
+      throw new IllegalArgumentException("null value for 'tpe' argument");
+    }
     this.paramss = paramss;
     this.tpe = tpe;
   }
@@ -29,10 +37,16 @@ public class Type_Method implements Serializable {
   }
   
   public Type_Method withParamss(java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> paramss) {
+    if (paramss == null) {
+      throw new IllegalArgumentException("null value for 'paramss' argument");
+    }
     return new Type_Method(paramss, tpe);
   }
   
   public Type_Method withTpe(hydra.langs.scala.meta.Type tpe) {
+    if (tpe == null) {
+      throw new IllegalArgumentException("null value for 'tpe' argument");
+    }
     return new Type_Method(paramss, tpe);
   }
 }

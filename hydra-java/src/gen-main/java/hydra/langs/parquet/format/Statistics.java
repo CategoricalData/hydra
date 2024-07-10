@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.format;
 
 import java.io.Serializable;
@@ -17,6 +19,18 @@ public class Statistics implements Serializable {
   public final java.util.Optional<String> minValue;
   
   public Statistics (java.util.Optional<java.math.BigInteger> nullCount, java.util.Optional<java.math.BigInteger> distinctCount, java.util.Optional<String> maxValue, java.util.Optional<String> minValue) {
+    if (nullCount == null) {
+      throw new IllegalArgumentException("null value for 'nullCount' argument");
+    }
+    if (distinctCount == null) {
+      throw new IllegalArgumentException("null value for 'distinctCount' argument");
+    }
+    if (maxValue == null) {
+      throw new IllegalArgumentException("null value for 'maxValue' argument");
+    }
+    if (minValue == null) {
+      throw new IllegalArgumentException("null value for 'minValue' argument");
+    }
     this.nullCount = nullCount;
     this.distinctCount = distinctCount;
     this.maxValue = maxValue;
@@ -38,18 +52,30 @@ public class Statistics implements Serializable {
   }
   
   public Statistics withNullCount(java.util.Optional<java.math.BigInteger> nullCount) {
+    if (nullCount == null) {
+      throw new IllegalArgumentException("null value for 'nullCount' argument");
+    }
     return new Statistics(nullCount, distinctCount, maxValue, minValue);
   }
   
   public Statistics withDistinctCount(java.util.Optional<java.math.BigInteger> distinctCount) {
+    if (distinctCount == null) {
+      throw new IllegalArgumentException("null value for 'distinctCount' argument");
+    }
     return new Statistics(nullCount, distinctCount, maxValue, minValue);
   }
   
   public Statistics withMaxValue(java.util.Optional<String> maxValue) {
+    if (maxValue == null) {
+      throw new IllegalArgumentException("null value for 'maxValue' argument");
+    }
     return new Statistics(nullCount, distinctCount, maxValue, minValue);
   }
   
   public Statistics withMinValue(java.util.Optional<String> minValue) {
+    if (minValue == null) {
+      throw new IllegalArgumentException("null value for 'minValue' argument");
+    }
     return new Statistics(nullCount, distinctCount, maxValue, minValue);
   }
 }

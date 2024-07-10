@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class ModuleDirective_Requires implements Serializable {
   public final hydra.langs.java.syntax.ModuleName module;
   
   public ModuleDirective_Requires (java.util.List<hydra.langs.java.syntax.RequiresModifier> modifiers, hydra.langs.java.syntax.ModuleName module) {
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
+    if (module == null) {
+      throw new IllegalArgumentException("null value for 'module' argument");
+    }
     this.modifiers = modifiers;
     this.module = module;
   }
@@ -29,10 +37,16 @@ public class ModuleDirective_Requires implements Serializable {
   }
   
   public ModuleDirective_Requires withModifiers(java.util.List<hydra.langs.java.syntax.RequiresModifier> modifiers) {
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
     return new ModuleDirective_Requires(modifiers, module);
   }
   
   public ModuleDirective_Requires withModule(hydra.langs.java.syntax.ModuleName module) {
+    if (module == null) {
+      throw new IllegalArgumentException("null value for 'module' argument");
+    }
     return new ModuleDirective_Requires(modifiers, module);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.coders;
 
 /**
@@ -47,6 +49,30 @@ public class LanguageConstraints<A> {
   public final java.util.function.Function<hydra.core.Type<A>, Boolean> types;
   
   public LanguageConstraints (java.util.Set<hydra.mantle.EliminationVariant> eliminationVariants, java.util.Set<hydra.mantle.LiteralVariant> literalVariants, java.util.Set<hydra.core.FloatType> floatTypes, java.util.Set<hydra.mantle.FunctionVariant> functionVariants, java.util.Set<hydra.core.IntegerType> integerTypes, java.util.Set<hydra.mantle.TermVariant> termVariants, java.util.Set<hydra.mantle.TypeVariant> typeVariants, java.util.function.Function<hydra.core.Type<A>, Boolean> types) {
+    if (eliminationVariants == null) {
+      throw new IllegalArgumentException("null value for 'eliminationVariants' argument");
+    }
+    if (literalVariants == null) {
+      throw new IllegalArgumentException("null value for 'literalVariants' argument");
+    }
+    if (floatTypes == null) {
+      throw new IllegalArgumentException("null value for 'floatTypes' argument");
+    }
+    if (functionVariants == null) {
+      throw new IllegalArgumentException("null value for 'functionVariants' argument");
+    }
+    if (integerTypes == null) {
+      throw new IllegalArgumentException("null value for 'integerTypes' argument");
+    }
+    if (termVariants == null) {
+      throw new IllegalArgumentException("null value for 'termVariants' argument");
+    }
+    if (typeVariants == null) {
+      throw new IllegalArgumentException("null value for 'typeVariants' argument");
+    }
+    if (types == null) {
+      throw new IllegalArgumentException("null value for 'types' argument");
+    }
     this.eliminationVariants = eliminationVariants;
     this.literalVariants = literalVariants;
     this.floatTypes = floatTypes;
@@ -72,34 +98,58 @@ public class LanguageConstraints<A> {
   }
   
   public LanguageConstraints withEliminationVariants(java.util.Set<hydra.mantle.EliminationVariant> eliminationVariants) {
+    if (eliminationVariants == null) {
+      throw new IllegalArgumentException("null value for 'eliminationVariants' argument");
+    }
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
   
   public LanguageConstraints withLiteralVariants(java.util.Set<hydra.mantle.LiteralVariant> literalVariants) {
+    if (literalVariants == null) {
+      throw new IllegalArgumentException("null value for 'literalVariants' argument");
+    }
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
   
   public LanguageConstraints withFloatTypes(java.util.Set<hydra.core.FloatType> floatTypes) {
+    if (floatTypes == null) {
+      throw new IllegalArgumentException("null value for 'floatTypes' argument");
+    }
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
   
   public LanguageConstraints withFunctionVariants(java.util.Set<hydra.mantle.FunctionVariant> functionVariants) {
+    if (functionVariants == null) {
+      throw new IllegalArgumentException("null value for 'functionVariants' argument");
+    }
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
   
   public LanguageConstraints withIntegerTypes(java.util.Set<hydra.core.IntegerType> integerTypes) {
+    if (integerTypes == null) {
+      throw new IllegalArgumentException("null value for 'integerTypes' argument");
+    }
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
   
   public LanguageConstraints withTermVariants(java.util.Set<hydra.mantle.TermVariant> termVariants) {
+    if (termVariants == null) {
+      throw new IllegalArgumentException("null value for 'termVariants' argument");
+    }
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
   
   public LanguageConstraints withTypeVariants(java.util.Set<hydra.mantle.TypeVariant> typeVariants) {
+    if (typeVariants == null) {
+      throw new IllegalArgumentException("null value for 'typeVariants' argument");
+    }
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
   
   public LanguageConstraints withTypes(java.util.function.Function<hydra.core.Type<A>, Boolean> types) {
+    if (types == null) {
+      throw new IllegalArgumentException("null value for 'types' argument");
+    }
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
 }

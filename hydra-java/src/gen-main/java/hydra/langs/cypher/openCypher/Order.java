@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class Order implements Serializable {
   public final java.util.List<hydra.langs.cypher.openCypher.SortItem> value;
   
   public Order (java.util.List<hydra.langs.cypher.openCypher.SortItem> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

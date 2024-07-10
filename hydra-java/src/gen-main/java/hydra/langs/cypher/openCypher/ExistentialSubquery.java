@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class ExistentialSubquery implements Serializable {
     public final hydra.langs.cypher.openCypher.RegularQuery value;
     
     public Regular (hydra.langs.cypher.openCypher.RegularQuery value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class ExistentialSubquery implements Serializable {
     public final hydra.langs.cypher.openCypher.PatternWhere value;
     
     public Pattern (hydra.langs.cypher.openCypher.PatternWhere value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

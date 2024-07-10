@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class NonArithmeticOperatorExpression implements Serializable {
   public final java.util.Optional<hydra.langs.cypher.openCypher.NodeLabels> labels;
   
   public NonArithmeticOperatorExpression (hydra.langs.cypher.openCypher.Atom atom, java.util.List<hydra.langs.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups, java.util.Optional<hydra.langs.cypher.openCypher.NodeLabels> labels) {
+    if (atom == null) {
+      throw new IllegalArgumentException("null value for 'atom' argument");
+    }
+    if (listsAndLookups == null) {
+      throw new IllegalArgumentException("null value for 'listsAndLookups' argument");
+    }
+    if (labels == null) {
+      throw new IllegalArgumentException("null value for 'labels' argument");
+    }
     this.atom = atom;
     this.listsAndLookups = listsAndLookups;
     this.labels = labels;
@@ -32,14 +43,23 @@ public class NonArithmeticOperatorExpression implements Serializable {
   }
   
   public NonArithmeticOperatorExpression withAtom(hydra.langs.cypher.openCypher.Atom atom) {
+    if (atom == null) {
+      throw new IllegalArgumentException("null value for 'atom' argument");
+    }
     return new NonArithmeticOperatorExpression(atom, listsAndLookups, labels);
   }
   
   public NonArithmeticOperatorExpression withListsAndLookups(java.util.List<hydra.langs.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups) {
+    if (listsAndLookups == null) {
+      throw new IllegalArgumentException("null value for 'listsAndLookups' argument");
+    }
     return new NonArithmeticOperatorExpression(atom, listsAndLookups, labels);
   }
   
   public NonArithmeticOperatorExpression withLabels(java.util.Optional<hydra.langs.cypher.openCypher.NodeLabels> labels) {
+    if (labels == null) {
+      throw new IllegalArgumentException("null value for 'labels' argument");
+    }
     return new NonArithmeticOperatorExpression(atom, listsAndLookups, labels);
   }
 }

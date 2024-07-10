@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.avro.schema;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class Union implements Serializable {
   public final java.util.List<hydra.langs.avro.schema.Schema> value;
   
   public Union (java.util.List<hydra.langs.avro.schema.Schema> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

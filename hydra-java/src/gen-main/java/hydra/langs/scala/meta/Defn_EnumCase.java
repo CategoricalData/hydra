@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -16,6 +18,21 @@ public class Defn_EnumCase implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Init> inits;
   
   public Defn_EnumCase (java.util.List<hydra.langs.scala.meta.Mod> mods, hydra.langs.scala.meta.Data_Name name, java.util.List<hydra.langs.scala.meta.Type_Param> tparams, hydra.langs.scala.meta.Ctor_Primary ctor, java.util.List<hydra.langs.scala.meta.Init> inits) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (tparams == null) {
+      throw new IllegalArgumentException("null value for 'tparams' argument");
+    }
+    if (ctor == null) {
+      throw new IllegalArgumentException("null value for 'ctor' argument");
+    }
+    if (inits == null) {
+      throw new IllegalArgumentException("null value for 'inits' argument");
+    }
     this.mods = mods;
     this.name = name;
     this.tparams = tparams;
@@ -38,22 +55,37 @@ public class Defn_EnumCase implements Serializable {
   }
   
   public Defn_EnumCase withMods(java.util.List<hydra.langs.scala.meta.Mod> mods) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
     return new Defn_EnumCase(mods, name, tparams, ctor, inits);
   }
   
   public Defn_EnumCase withName(hydra.langs.scala.meta.Data_Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new Defn_EnumCase(mods, name, tparams, ctor, inits);
   }
   
   public Defn_EnumCase withTparams(java.util.List<hydra.langs.scala.meta.Type_Param> tparams) {
+    if (tparams == null) {
+      throw new IllegalArgumentException("null value for 'tparams' argument");
+    }
     return new Defn_EnumCase(mods, name, tparams, ctor, inits);
   }
   
   public Defn_EnumCase withCtor(hydra.langs.scala.meta.Ctor_Primary ctor) {
+    if (ctor == null) {
+      throw new IllegalArgumentException("null value for 'ctor' argument");
+    }
     return new Defn_EnumCase(mods, name, tparams, ctor, inits);
   }
   
   public Defn_EnumCase withInits(java.util.List<hydra.langs.scala.meta.Init> inits) {
+    if (inits == null) {
+      throw new IllegalArgumentException("null value for 'inits' argument");
+    }
     return new Defn_EnumCase(mods, name, tparams, ctor, inits);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Pattern_As implements Serializable {
   public final hydra.langs.haskell.ast.Pattern inner;
   
   public Pattern_As (hydra.langs.haskell.ast.Name name, hydra.langs.haskell.ast.Pattern inner) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (inner == null) {
+      throw new IllegalArgumentException("null value for 'inner' argument");
+    }
     this.name = name;
     this.inner = inner;
   }
@@ -29,10 +37,16 @@ public class Pattern_As implements Serializable {
   }
   
   public Pattern_As withName(hydra.langs.haskell.ast.Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new Pattern_As(name, inner);
   }
   
   public Pattern_As withInner(hydra.langs.haskell.ast.Pattern inner) {
+    if (inner == null) {
+      throw new IllegalArgumentException("null value for 'inner' argument");
+    }
     return new Pattern_As(name, inner);
   }
 }

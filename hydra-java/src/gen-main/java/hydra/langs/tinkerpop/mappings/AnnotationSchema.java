@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.mappings;
 
 import java.io.Serializable;
@@ -39,6 +41,51 @@ public class AnnotationSchema implements Serializable {
   public final String ignore;
   
   public AnnotationSchema (String vertexLabel, String edgeLabel, String vertexId, String edgeId, String propertyKey, String propertyValue, String outVertex, String outVertexLabel, String inVertex, String inVertexLabel, String outEdge, String outEdgeLabel, String inEdge, String inEdgeLabel, String ignore) {
+    if (vertexLabel == null) {
+      throw new IllegalArgumentException("null value for 'vertexLabel' argument");
+    }
+    if (edgeLabel == null) {
+      throw new IllegalArgumentException("null value for 'edgeLabel' argument");
+    }
+    if (vertexId == null) {
+      throw new IllegalArgumentException("null value for 'vertexId' argument");
+    }
+    if (edgeId == null) {
+      throw new IllegalArgumentException("null value for 'edgeId' argument");
+    }
+    if (propertyKey == null) {
+      throw new IllegalArgumentException("null value for 'propertyKey' argument");
+    }
+    if (propertyValue == null) {
+      throw new IllegalArgumentException("null value for 'propertyValue' argument");
+    }
+    if (outVertex == null) {
+      throw new IllegalArgumentException("null value for 'outVertex' argument");
+    }
+    if (outVertexLabel == null) {
+      throw new IllegalArgumentException("null value for 'outVertexLabel' argument");
+    }
+    if (inVertex == null) {
+      throw new IllegalArgumentException("null value for 'inVertex' argument");
+    }
+    if (inVertexLabel == null) {
+      throw new IllegalArgumentException("null value for 'inVertexLabel' argument");
+    }
+    if (outEdge == null) {
+      throw new IllegalArgumentException("null value for 'outEdge' argument");
+    }
+    if (outEdgeLabel == null) {
+      throw new IllegalArgumentException("null value for 'outEdgeLabel' argument");
+    }
+    if (inEdge == null) {
+      throw new IllegalArgumentException("null value for 'inEdge' argument");
+    }
+    if (inEdgeLabel == null) {
+      throw new IllegalArgumentException("null value for 'inEdgeLabel' argument");
+    }
+    if (ignore == null) {
+      throw new IllegalArgumentException("null value for 'ignore' argument");
+    }
     this.vertexLabel = vertexLabel;
     this.edgeLabel = edgeLabel;
     this.vertexId = vertexId;
@@ -71,62 +118,107 @@ public class AnnotationSchema implements Serializable {
   }
   
   public AnnotationSchema withVertexLabel(String vertexLabel) {
+    if (vertexLabel == null) {
+      throw new IllegalArgumentException("null value for 'vertexLabel' argument");
+    }
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
   
   public AnnotationSchema withEdgeLabel(String edgeLabel) {
+    if (edgeLabel == null) {
+      throw new IllegalArgumentException("null value for 'edgeLabel' argument");
+    }
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
   
   public AnnotationSchema withVertexId(String vertexId) {
+    if (vertexId == null) {
+      throw new IllegalArgumentException("null value for 'vertexId' argument");
+    }
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
   
   public AnnotationSchema withEdgeId(String edgeId) {
+    if (edgeId == null) {
+      throw new IllegalArgumentException("null value for 'edgeId' argument");
+    }
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
   
   public AnnotationSchema withPropertyKey(String propertyKey) {
+    if (propertyKey == null) {
+      throw new IllegalArgumentException("null value for 'propertyKey' argument");
+    }
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
   
   public AnnotationSchema withPropertyValue(String propertyValue) {
+    if (propertyValue == null) {
+      throw new IllegalArgumentException("null value for 'propertyValue' argument");
+    }
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
   
   public AnnotationSchema withOutVertex(String outVertex) {
+    if (outVertex == null) {
+      throw new IllegalArgumentException("null value for 'outVertex' argument");
+    }
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
   
   public AnnotationSchema withOutVertexLabel(String outVertexLabel) {
+    if (outVertexLabel == null) {
+      throw new IllegalArgumentException("null value for 'outVertexLabel' argument");
+    }
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
   
   public AnnotationSchema withInVertex(String inVertex) {
+    if (inVertex == null) {
+      throw new IllegalArgumentException("null value for 'inVertex' argument");
+    }
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
   
   public AnnotationSchema withInVertexLabel(String inVertexLabel) {
+    if (inVertexLabel == null) {
+      throw new IllegalArgumentException("null value for 'inVertexLabel' argument");
+    }
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
   
   public AnnotationSchema withOutEdge(String outEdge) {
+    if (outEdge == null) {
+      throw new IllegalArgumentException("null value for 'outEdge' argument");
+    }
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
   
   public AnnotationSchema withOutEdgeLabel(String outEdgeLabel) {
+    if (outEdgeLabel == null) {
+      throw new IllegalArgumentException("null value for 'outEdgeLabel' argument");
+    }
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
   
   public AnnotationSchema withInEdge(String inEdge) {
+    if (inEdge == null) {
+      throw new IllegalArgumentException("null value for 'inEdge' argument");
+    }
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
   
   public AnnotationSchema withInEdgeLabel(String inEdgeLabel) {
+    if (inEdgeLabel == null) {
+      throw new IllegalArgumentException("null value for 'inEdgeLabel' argument");
+    }
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
   
   public AnnotationSchema withIgnore(String ignore) {
+    if (ignore == null) {
+      throw new IllegalArgumentException("null value for 'ignore' argument");
+    }
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
 }

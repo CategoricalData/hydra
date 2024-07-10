@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class FromConstructor implements Serializable {
   public final hydra.langs.sql.ansi.ContextuallyTypedTableValueConstructor values;
   
   public FromConstructor (java.util.Optional<hydra.langs.sql.ansi.InsertColumnList> columns, java.util.Optional<hydra.langs.sql.ansi.OverrideClause> override, hydra.langs.sql.ansi.ContextuallyTypedTableValueConstructor values) {
+    if (columns == null) {
+      throw new IllegalArgumentException("null value for 'columns' argument");
+    }
+    if (override == null) {
+      throw new IllegalArgumentException("null value for 'override' argument");
+    }
+    if (values == null) {
+      throw new IllegalArgumentException("null value for 'values' argument");
+    }
     this.columns = columns;
     this.override = override;
     this.values = values;
@@ -32,14 +43,23 @@ public class FromConstructor implements Serializable {
   }
   
   public FromConstructor withColumns(java.util.Optional<hydra.langs.sql.ansi.InsertColumnList> columns) {
+    if (columns == null) {
+      throw new IllegalArgumentException("null value for 'columns' argument");
+    }
     return new FromConstructor(columns, override, values);
   }
   
   public FromConstructor withOverride(java.util.Optional<hydra.langs.sql.ansi.OverrideClause> override) {
+    if (override == null) {
+      throw new IllegalArgumentException("null value for 'override' argument");
+    }
     return new FromConstructor(columns, override, values);
   }
   
   public FromConstructor withValues(hydra.langs.sql.ansi.ContextuallyTypedTableValueConstructor values) {
+    if (values == null) {
+      throw new IllegalArgumentException("null value for 'values' argument");
+    }
     return new FromConstructor(columns, override, values);
   }
 }

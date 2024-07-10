@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Data_Xml implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Data> args;
   
   public Data_Xml (java.util.List<hydra.langs.scala.meta.Lit> parts, java.util.List<hydra.langs.scala.meta.Data> args) {
+    if (parts == null) {
+      throw new IllegalArgumentException("null value for 'parts' argument");
+    }
+    if (args == null) {
+      throw new IllegalArgumentException("null value for 'args' argument");
+    }
     this.parts = parts;
     this.args = args;
   }
@@ -29,10 +37,16 @@ public class Data_Xml implements Serializable {
   }
   
   public Data_Xml withParts(java.util.List<hydra.langs.scala.meta.Lit> parts) {
+    if (parts == null) {
+      throw new IllegalArgumentException("null value for 'parts' argument");
+    }
     return new Data_Xml(parts, args);
   }
   
   public Data_Xml withArgs(java.util.List<hydra.langs.scala.meta.Data> args) {
+    if (args == null) {
+      throw new IllegalArgumentException("null value for 'args' argument");
+    }
     return new Data_Xml(parts, args);
   }
 }

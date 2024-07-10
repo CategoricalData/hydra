@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.pegasus.pdl;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Property implements Serializable {
   public final java.util.Optional<hydra.json.Value> value;
   
   public Property (hydra.langs.pegasus.pdl.PropertyKey key, java.util.Optional<hydra.json.Value> value) {
+    if (key == null) {
+      throw new IllegalArgumentException("null value for 'key' argument");
+    }
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.key = key;
     this.value = value;
   }
@@ -29,10 +37,16 @@ public class Property implements Serializable {
   }
   
   public Property withKey(hydra.langs.pegasus.pdl.PropertyKey key) {
+    if (key == null) {
+      throw new IllegalArgumentException("null value for 'key' argument");
+    }
     return new Property(key, value);
   }
   
   public Property withValue(java.util.Optional<hydra.json.Value> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     return new Property(key, value);
   }
 }

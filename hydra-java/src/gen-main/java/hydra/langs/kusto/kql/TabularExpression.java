@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.kusto.kql;
 
 import java.io.Serializable;
@@ -47,6 +49,9 @@ public abstract class TabularExpression implements Serializable {
     public final hydra.langs.kusto.kql.Command value;
     
     public Command (hydra.langs.kusto.kql.Command value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -74,6 +79,9 @@ public abstract class TabularExpression implements Serializable {
     public final hydra.langs.kusto.kql.PipelineExpression value;
     
     public Pipeline (hydra.langs.kusto.kql.PipelineExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -101,6 +109,9 @@ public abstract class TabularExpression implements Serializable {
     public final hydra.langs.kusto.kql.LetExpression value;
     
     public Let (hydra.langs.kusto.kql.LetExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -128,6 +139,9 @@ public abstract class TabularExpression implements Serializable {
     public final hydra.langs.kusto.kql.TableName value;
     
     public Table (hydra.langs.kusto.kql.TableName value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

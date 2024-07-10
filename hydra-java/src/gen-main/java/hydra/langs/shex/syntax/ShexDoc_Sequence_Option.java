@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class ShexDoc_Sequence_Option implements Serializable {
   public final java.util.List<hydra.langs.shex.syntax.Statement> listOfStatement;
   
   public ShexDoc_Sequence_Option (hydra.langs.shex.syntax.ShexDoc_Sequence_Option_Alts alts, java.util.List<hydra.langs.shex.syntax.Statement> listOfStatement) {
+    if (alts == null) {
+      throw new IllegalArgumentException("null value for 'alts' argument");
+    }
+    if (listOfStatement == null) {
+      throw new IllegalArgumentException("null value for 'listOfStatement' argument");
+    }
     this.alts = alts;
     this.listOfStatement = listOfStatement;
   }
@@ -29,10 +37,16 @@ public class ShexDoc_Sequence_Option implements Serializable {
   }
   
   public ShexDoc_Sequence_Option withAlts(hydra.langs.shex.syntax.ShexDoc_Sequence_Option_Alts alts) {
+    if (alts == null) {
+      throw new IllegalArgumentException("null value for 'alts' argument");
+    }
     return new ShexDoc_Sequence_Option(alts, listOfStatement);
   }
   
   public ShexDoc_Sequence_Option withListOfStatement(java.util.List<hydra.langs.shex.syntax.Statement> listOfStatement) {
+    if (listOfStatement == null) {
+      throw new IllegalArgumentException("null value for 'listOfStatement' argument");
+    }
     return new ShexDoc_Sequence_Option(alts, listOfStatement);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -14,6 +16,18 @@ public class Data_ApplyInfix implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Data> args;
   
   public Data_ApplyInfix (hydra.langs.scala.meta.Data lhs, hydra.langs.scala.meta.Data_Name op, java.util.List<hydra.langs.scala.meta.Type> targs, java.util.List<hydra.langs.scala.meta.Data> args) {
+    if (lhs == null) {
+      throw new IllegalArgumentException("null value for 'lhs' argument");
+    }
+    if (op == null) {
+      throw new IllegalArgumentException("null value for 'op' argument");
+    }
+    if (targs == null) {
+      throw new IllegalArgumentException("null value for 'targs' argument");
+    }
+    if (args == null) {
+      throw new IllegalArgumentException("null value for 'args' argument");
+    }
     this.lhs = lhs;
     this.op = op;
     this.targs = targs;
@@ -35,18 +49,30 @@ public class Data_ApplyInfix implements Serializable {
   }
   
   public Data_ApplyInfix withLhs(hydra.langs.scala.meta.Data lhs) {
+    if (lhs == null) {
+      throw new IllegalArgumentException("null value for 'lhs' argument");
+    }
     return new Data_ApplyInfix(lhs, op, targs, args);
   }
   
   public Data_ApplyInfix withOp(hydra.langs.scala.meta.Data_Name op) {
+    if (op == null) {
+      throw new IllegalArgumentException("null value for 'op' argument");
+    }
     return new Data_ApplyInfix(lhs, op, targs, args);
   }
   
   public Data_ApplyInfix withTargs(java.util.List<hydra.langs.scala.meta.Type> targs) {
+    if (targs == null) {
+      throw new IllegalArgumentException("null value for 'targs' argument");
+    }
     return new Data_ApplyInfix(lhs, op, targs, args);
   }
   
   public Data_ApplyInfix withArgs(java.util.List<hydra.langs.scala.meta.Data> args) {
+    if (args == null) {
+      throw new IllegalArgumentException("null value for 'args' argument");
+    }
     return new Data_ApplyInfix(lhs, op, targs, args);
   }
 }

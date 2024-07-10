@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class Expression_PrefixApplication implements Serializable {
   public final hydra.langs.haskell.ast.Expression rhs;
   
   public Expression_PrefixApplication (hydra.langs.haskell.ast.Operator operator, hydra.langs.haskell.ast.Expression rhs) {
+    if (operator == null) {
+      throw new IllegalArgumentException("null value for 'operator' argument");
+    }
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     this.operator = operator;
     this.rhs = rhs;
   }
@@ -32,10 +40,16 @@ public class Expression_PrefixApplication implements Serializable {
   }
   
   public Expression_PrefixApplication withOperator(hydra.langs.haskell.ast.Operator operator) {
+    if (operator == null) {
+      throw new IllegalArgumentException("null value for 'operator' argument");
+    }
     return new Expression_PrefixApplication(operator, rhs);
   }
   
   public Expression_PrefixApplication withRhs(hydra.langs.haskell.ast.Expression rhs) {
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     return new Expression_PrefixApplication(operator, rhs);
   }
 }

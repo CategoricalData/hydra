@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class SchemaExtension_Sequence implements Serializable {
   public final hydra.langs.graphql.syntax.RootOperationTypeDefinition rootOperationTypeDefinition;
   
   public SchemaExtension_Sequence (java.util.Optional<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.RootOperationTypeDefinition rootOperationTypeDefinition) {
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
+    if (rootOperationTypeDefinition == null) {
+      throw new IllegalArgumentException("null value for 'rootOperationTypeDefinition' argument");
+    }
     this.directives = directives;
     this.rootOperationTypeDefinition = rootOperationTypeDefinition;
   }
@@ -29,10 +37,16 @@ public class SchemaExtension_Sequence implements Serializable {
   }
   
   public SchemaExtension_Sequence withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
     return new SchemaExtension_Sequence(directives, rootOperationTypeDefinition);
   }
   
   public SchemaExtension_Sequence withRootOperationTypeDefinition(hydra.langs.graphql.syntax.RootOperationTypeDefinition rootOperationTypeDefinition) {
+    if (rootOperationTypeDefinition == null) {
+      throw new IllegalArgumentException("null value for 'rootOperationTypeDefinition' argument");
+    }
     return new SchemaExtension_Sequence(directives, rootOperationTypeDefinition);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.propertyGraph;
 
 import java.io.Serializable;
@@ -34,6 +36,21 @@ public class EdgeType<T> implements Serializable {
   public final java.util.List<hydra.langs.tinkerpop.propertyGraph.PropertyType<T>> properties;
   
   public EdgeType (hydra.langs.tinkerpop.propertyGraph.EdgeLabel label, T id, hydra.langs.tinkerpop.propertyGraph.VertexLabel out, hydra.langs.tinkerpop.propertyGraph.VertexLabel in, java.util.List<hydra.langs.tinkerpop.propertyGraph.PropertyType<T>> properties) {
+    if (label == null) {
+      throw new IllegalArgumentException("null value for 'label' argument");
+    }
+    if (id == null) {
+      throw new IllegalArgumentException("null value for 'id' argument");
+    }
+    if (out == null) {
+      throw new IllegalArgumentException("null value for 'out' argument");
+    }
+    if (in == null) {
+      throw new IllegalArgumentException("null value for 'in' argument");
+    }
+    if (properties == null) {
+      throw new IllegalArgumentException("null value for 'properties' argument");
+    }
     this.label = label;
     this.id = id;
     this.out = out;
@@ -56,22 +73,37 @@ public class EdgeType<T> implements Serializable {
   }
   
   public EdgeType withLabel(hydra.langs.tinkerpop.propertyGraph.EdgeLabel label) {
+    if (label == null) {
+      throw new IllegalArgumentException("null value for 'label' argument");
+    }
     return new EdgeType(label, id, out, in, properties);
   }
   
   public EdgeType withId(T id) {
+    if (id == null) {
+      throw new IllegalArgumentException("null value for 'id' argument");
+    }
     return new EdgeType(label, id, out, in, properties);
   }
   
   public EdgeType withOut(hydra.langs.tinkerpop.propertyGraph.VertexLabel out) {
+    if (out == null) {
+      throw new IllegalArgumentException("null value for 'out' argument");
+    }
     return new EdgeType(label, id, out, in, properties);
   }
   
   public EdgeType withIn(hydra.langs.tinkerpop.propertyGraph.VertexLabel in) {
+    if (in == null) {
+      throw new IllegalArgumentException("null value for 'in' argument");
+    }
     return new EdgeType(label, id, out, in, properties);
   }
   
   public EdgeType withProperties(java.util.List<hydra.langs.tinkerpop.propertyGraph.PropertyType<T>> properties) {
+    if (properties == null) {
+      throw new IllegalArgumentException("null value for 'properties' argument");
+    }
     return new EdgeType(label, id, out, in, properties);
   }
 }

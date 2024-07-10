@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.format;
 
 import java.io.Serializable;
@@ -11,6 +13,9 @@ public class OffsetIndex implements Serializable {
   public final java.util.List<hydra.langs.parquet.format.PageLocation> pageLocations;
   
   public OffsetIndex (java.util.List<hydra.langs.parquet.format.PageLocation> pageLocations) {
+    if (pageLocations == null) {
+      throw new IllegalArgumentException("null value for 'pageLocations' argument");
+    }
     this.pageLocations = pageLocations;
   }
   

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.query;
 
 import java.io.Serializable;
@@ -24,6 +26,15 @@ public class Edge implements Serializable {
   public final java.util.Optional<hydra.core.FieldName> in;
   
   public Edge (hydra.core.Name type, java.util.Optional<hydra.core.FieldName> out, java.util.Optional<hydra.core.FieldName> in) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
+    if (out == null) {
+      throw new IllegalArgumentException("null value for 'out' argument");
+    }
+    if (in == null) {
+      throw new IllegalArgumentException("null value for 'in' argument");
+    }
     this.type = type;
     this.out = out;
     this.in = in;
@@ -44,14 +55,23 @@ public class Edge implements Serializable {
   }
   
   public Edge withType(hydra.core.Name type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new Edge(type, out, in);
   }
   
   public Edge withOut(java.util.Optional<hydra.core.FieldName> out) {
+    if (out == null) {
+      throw new IllegalArgumentException("null value for 'out' argument");
+    }
     return new Edge(type, out, in);
   }
   
   public Edge withIn(java.util.Optional<hydra.core.FieldName> in) {
+    if (in == null) {
+      throw new IllegalArgumentException("null value for 'in' argument");
+    }
     return new Edge(type, out, in);
   }
 }

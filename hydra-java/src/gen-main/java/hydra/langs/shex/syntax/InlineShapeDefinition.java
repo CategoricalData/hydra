@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class InlineShapeDefinition implements Serializable {
   public final java.util.Optional<hydra.langs.shex.syntax.TripleExpression> tripleExpression;
   
   public InlineShapeDefinition (java.util.List<hydra.langs.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt> listOfAlts, java.util.Optional<hydra.langs.shex.syntax.TripleExpression> tripleExpression) {
+    if (listOfAlts == null) {
+      throw new IllegalArgumentException("null value for 'listOfAlts' argument");
+    }
+    if (tripleExpression == null) {
+      throw new IllegalArgumentException("null value for 'tripleExpression' argument");
+    }
     this.listOfAlts = listOfAlts;
     this.tripleExpression = tripleExpression;
   }
@@ -29,10 +37,16 @@ public class InlineShapeDefinition implements Serializable {
   }
   
   public InlineShapeDefinition withListOfAlts(java.util.List<hydra.langs.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt> listOfAlts) {
+    if (listOfAlts == null) {
+      throw new IllegalArgumentException("null value for 'listOfAlts' argument");
+    }
     return new InlineShapeDefinition(listOfAlts, tripleExpression);
   }
   
   public InlineShapeDefinition withTripleExpression(java.util.Optional<hydra.langs.shex.syntax.TripleExpression> tripleExpression) {
+    if (tripleExpression == null) {
+      throw new IllegalArgumentException("null value for 'tripleExpression' argument");
+    }
     return new InlineShapeDefinition(listOfAlts, tripleExpression);
   }
 }

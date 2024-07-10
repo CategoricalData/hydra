@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class Data_QuotedMacroType implements Serializable {
   public final hydra.langs.scala.meta.Type tpe;
   
   public Data_QuotedMacroType (hydra.langs.scala.meta.Type tpe) {
+    if (tpe == null) {
+      throw new IllegalArgumentException("null value for 'tpe' argument");
+    }
     this.tpe = tpe;
   }
   

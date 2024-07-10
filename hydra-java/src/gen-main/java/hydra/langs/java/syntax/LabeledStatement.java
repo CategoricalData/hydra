@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class LabeledStatement implements Serializable {
   public final hydra.langs.java.syntax.Statement statement;
   
   public LabeledStatement (hydra.langs.java.syntax.Identifier identifier, hydra.langs.java.syntax.Statement statement) {
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
+    if (statement == null) {
+      throw new IllegalArgumentException("null value for 'statement' argument");
+    }
     this.identifier = identifier;
     this.statement = statement;
   }
@@ -29,10 +37,16 @@ public class LabeledStatement implements Serializable {
   }
   
   public LabeledStatement withIdentifier(hydra.langs.java.syntax.Identifier identifier) {
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
     return new LabeledStatement(identifier, statement);
   }
   
   public LabeledStatement withStatement(hydra.langs.java.syntax.Statement statement) {
+    if (statement == null) {
+      throw new IllegalArgumentException("null value for 'statement' argument");
+    }
     return new LabeledStatement(identifier, statement);
   }
 }

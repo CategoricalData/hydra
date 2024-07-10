@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class ObjectField implements Serializable {
   public final hydra.langs.graphql.syntax.Value value;
   
   public ObjectField (hydra.langs.graphql.syntax.Name name, hydra.langs.graphql.syntax.Value value) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.name = name;
     this.value = value;
   }
@@ -29,10 +37,16 @@ public class ObjectField implements Serializable {
   }
   
   public ObjectField withName(hydra.langs.graphql.syntax.Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new ObjectField(name, value);
   }
   
   public ObjectField withValue(hydra.langs.graphql.syntax.Value value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     return new ObjectField(name, value);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class NodeConstraint_Sequence4 implements Serializable {
   public final java.util.List<hydra.langs.shex.syntax.XsFacet> listOfXsFacet;
   
   public NodeConstraint_Sequence4 (hydra.langs.shex.syntax.ValueSet valueSet, java.util.List<hydra.langs.shex.syntax.XsFacet> listOfXsFacet) {
+    if (valueSet == null) {
+      throw new IllegalArgumentException("null value for 'valueSet' argument");
+    }
+    if (listOfXsFacet == null) {
+      throw new IllegalArgumentException("null value for 'listOfXsFacet' argument");
+    }
     this.valueSet = valueSet;
     this.listOfXsFacet = listOfXsFacet;
   }
@@ -29,10 +37,16 @@ public class NodeConstraint_Sequence4 implements Serializable {
   }
   
   public NodeConstraint_Sequence4 withValueSet(hydra.langs.shex.syntax.ValueSet valueSet) {
+    if (valueSet == null) {
+      throw new IllegalArgumentException("null value for 'valueSet' argument");
+    }
     return new NodeConstraint_Sequence4(valueSet, listOfXsFacet);
   }
   
   public NodeConstraint_Sequence4 withListOfXsFacet(java.util.List<hydra.langs.shex.syntax.XsFacet> listOfXsFacet) {
+    if (listOfXsFacet == null) {
+      throw new IllegalArgumentException("null value for 'listOfXsFacet' argument");
+    }
     return new NodeConstraint_Sequence4(valueSet, listOfXsFacet);
   }
 }

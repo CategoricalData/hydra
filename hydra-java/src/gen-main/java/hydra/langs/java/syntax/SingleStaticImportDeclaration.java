@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class SingleStaticImportDeclaration implements Serializable {
   public final hydra.langs.java.syntax.Identifier identifier;
   
   public SingleStaticImportDeclaration (hydra.langs.java.syntax.TypeName typeName, hydra.langs.java.syntax.Identifier identifier) {
+    if (typeName == null) {
+      throw new IllegalArgumentException("null value for 'typeName' argument");
+    }
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
     this.typeName = typeName;
     this.identifier = identifier;
   }
@@ -29,10 +37,16 @@ public class SingleStaticImportDeclaration implements Serializable {
   }
   
   public SingleStaticImportDeclaration withTypeName(hydra.langs.java.syntax.TypeName typeName) {
+    if (typeName == null) {
+      throw new IllegalArgumentException("null value for 'typeName' argument");
+    }
     return new SingleStaticImportDeclaration(typeName, identifier);
   }
   
   public SingleStaticImportDeclaration withIdentifier(hydra.langs.java.syntax.Identifier identifier) {
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
     return new SingleStaticImportDeclaration(typeName, identifier);
   }
 }

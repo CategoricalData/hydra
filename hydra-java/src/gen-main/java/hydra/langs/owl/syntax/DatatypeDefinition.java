@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class DatatypeDefinition implements Serializable {
   public final hydra.langs.owl.syntax.DataRange range;
   
   public DatatypeDefinition (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, hydra.langs.owl.syntax.Datatype datatype, hydra.langs.owl.syntax.DataRange range) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
+    if (datatype == null) {
+      throw new IllegalArgumentException("null value for 'datatype' argument");
+    }
+    if (range == null) {
+      throw new IllegalArgumentException("null value for 'range' argument");
+    }
     this.annotations = annotations;
     this.datatype = datatype;
     this.range = range;
@@ -32,14 +43,23 @@ public class DatatypeDefinition implements Serializable {
   }
   
   public DatatypeDefinition withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     return new DatatypeDefinition(annotations, datatype, range);
   }
   
   public DatatypeDefinition withDatatype(hydra.langs.owl.syntax.Datatype datatype) {
+    if (datatype == null) {
+      throw new IllegalArgumentException("null value for 'datatype' argument");
+    }
     return new DatatypeDefinition(annotations, datatype, range);
   }
   
   public DatatypeDefinition withRange(hydra.langs.owl.syntax.DataRange range) {
+    if (range == null) {
+      throw new IllegalArgumentException("null value for 'range' argument");
+    }
     return new DatatypeDefinition(annotations, datatype, range);
   }
 }
