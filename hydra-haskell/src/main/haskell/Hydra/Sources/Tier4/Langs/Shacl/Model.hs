@@ -10,7 +10,7 @@ import Hydra.Dsl.Types as Types
 
 
 shaclModelModule :: Module Kv
-shaclModelModule = Module ns elements [rdfSyntaxModule] [] $
+shaclModelModule = Module ns elements [rdfSyntaxModule] tier0Modules $
     Just "A SHACL syntax model. See https://www.w3.org/TR/shacl"
   where
     ns = Namespace "hydra/langs/shacl/model"

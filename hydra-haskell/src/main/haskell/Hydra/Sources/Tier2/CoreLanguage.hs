@@ -31,7 +31,9 @@ import Hydra.Sources.Tier2.Basics
 
 
 hydraCoreLanguageModule :: Module Kv
-hydraCoreLanguageModule = Module ns elements [hydraBasicsModule] [] $
+hydraCoreLanguageModule = Module ns elements
+    [hydraBasicsModule]
+    tier0Modules $
     Just "Language constraints for Hydra Core"
   where
     ns = Namespace "hydra/coreLanguage"

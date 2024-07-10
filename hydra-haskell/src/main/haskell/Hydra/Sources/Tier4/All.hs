@@ -71,7 +71,7 @@ tier4LangModules = [
   protobufAnyModule,
   protobufLanguageModule,
   protobufSourceContextModule,
-  python3Module,
+--  python3Module,
   rdfSyntaxModule,
   relationalModelModule,
   scalaMetaModule,

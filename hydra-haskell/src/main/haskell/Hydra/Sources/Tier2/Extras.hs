@@ -30,7 +30,9 @@ hydraExtrasDefinition :: String -> Datum a -> Definition a
 hydraExtrasDefinition = definitionInModule hydraExtrasModule
 
 hydraExtrasModule :: Module Kv
-hydraExtrasModule = Module (Namespace "hydra/extras") elements [hydraGraphModule, hydraMantleModule, hydraComputeModule] [] $
+hydraExtrasModule = Module (Namespace "hydra/extras") elements
+    [hydraGraphModule, hydraMantleModule, hydraComputeModule]
+    tier0Modules $
     Just "Basic functions which depend on primitive functions"
   where
     elements = [

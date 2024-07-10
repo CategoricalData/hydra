@@ -32,7 +32,9 @@ basicsDefinition :: String -> Datum a -> Definition a
 basicsDefinition = definitionInModule hydraBasicsModule
 
 hydraBasicsModule :: Module Kv
-hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraTier1Module] [] $
+hydraBasicsModule = Module (Namespace "hydra/basics") elements
+    [hydraTier1Module]
+    tier0Modules $
     Just "A tier-2 module of basic functions for working with types and terms."
   where
    elements = [

@@ -9,7 +9,7 @@ import Hydra.Dsl.Types as Types
 
 
 tabularModule :: Module Kv
-tabularModule = Module ns elements [hydraCoreModule] [] $
+tabularModule = Module ns elements [hydraCoreModule] tier0Modules $
     Just ("A simple, untyped tabular data model, suitable for CSVs and TSVs")
   where
     ns = Namespace "hydra/langs/tabular"
