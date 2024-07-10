@@ -35,7 +35,8 @@ validateDefinition :: String -> Datum a -> Definition a
 validateDefinition = definitionInModule tinkerpopValidateModule
 
 tinkerpopValidateModule :: Module Kv
-tinkerpopValidateModule = Module (Namespace "hydra/langs/tinkerpop/validate") elements [] [tinkerpopPropertyGraphModule] $
+tinkerpopValidateModule = Module (Namespace "hydra/langs/tinkerpop/validate") elements
+    [] [tinkerpopPropertyGraphModule] $
     Just "Utilities for validating property graphs against property graph schemas"
   where
    elements = [

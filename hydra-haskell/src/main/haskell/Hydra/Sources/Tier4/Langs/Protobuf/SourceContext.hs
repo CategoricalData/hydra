@@ -12,7 +12,7 @@ pbSourceContextNs = Namespace "hydra/langs/protobuf/sourceContext"
 pbSourceContext = typeref pbSourceContextNs
 
 protobufSourceContextModule :: Module Kv
-protobufSourceContextModule = Module pbSourceContextNs elements [] [] $
+protobufSourceContextModule = Module pbSourceContextNs elements [hydraCoreModule] tier0Modules $
     Just "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/source_context.proto"
   where
     def = datatype pbSourceContextNs

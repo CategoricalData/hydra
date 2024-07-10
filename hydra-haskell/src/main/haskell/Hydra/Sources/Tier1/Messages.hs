@@ -32,7 +32,7 @@ messagesDefinition :: String -> Datum a -> Definition a
 messagesDefinition = definitionInModule hydraMessagesModule
 
 hydraMessagesModule :: Module Kv
-hydraMessagesModule = Module (Namespace "hydra/messages") elements [] [] $
+hydraMessagesModule = Module (Namespace "hydra/messages") elements [] tier0Modules $
     Just "A collection of standard error and warning messages"
   where
    elements = [

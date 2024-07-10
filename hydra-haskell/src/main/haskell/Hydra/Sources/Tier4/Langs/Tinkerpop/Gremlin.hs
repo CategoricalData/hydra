@@ -11,7 +11,7 @@ import Hydra.Sources.Core
 
 
 gremlinModule :: Module Kv
-gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
+gremlinModule = Module ns elements [hydraCoreModule] tier0Modules $
     Just ("A Gremlin model, based on the Gremlin ANTLR grammar "
       ++ "(master branch, as of 2024-06-30).")
   where

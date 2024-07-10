@@ -30,7 +30,7 @@ constantsDefinition :: String -> Datum a -> Definition a
 constantsDefinition = definitionInModule hydraConstantsModule
 
 hydraConstantsModule :: Module Kv
-hydraConstantsModule = Module (Namespace "hydra/constants") elements [] [] $
+hydraConstantsModule = Module (Namespace "hydra/constants") elements [] tier0Modules $
     Just ("A module for tier-0 constants.")
   where
    elements = [

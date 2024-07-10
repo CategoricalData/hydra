@@ -30,7 +30,7 @@ stripDefinition :: String -> Datum a -> Definition a
 stripDefinition = definitionInModule hydraStripModule
 
 hydraStripModule :: Module Kv
-hydraStripModule = Module (Namespace "hydra/strip") elements [] [] $
+hydraStripModule = Module (Namespace "hydra/strip") elements [] tier0Modules $
     Just "Several functions for stripping annotations from types and terms."
   where
    elements = [

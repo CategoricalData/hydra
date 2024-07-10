@@ -11,7 +11,7 @@ import qualified Data.Maybe as Y
 
 
 openCypherFeaturesModule :: Module Kv
-openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
+openCypherFeaturesModule = Module ns elements [hydraCoreModule] tier0Modules $
     Just ("A model for characterizing OpenCypher queries and implementations in terms of included features.")
   where
     ns = Namespace "hydra/langs/cypher/features"

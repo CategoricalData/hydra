@@ -12,7 +12,8 @@ import Hydra.Sources.Tier4.Langs.Tinkerpop.PropertyGraph
 
 
 tinkerpopMappingsModule :: Module Kv
-tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydraCoreModule, hydraComputeModule] [] $
+tinkerpopMappingsModule = Module ns elements
+    [tinkerpopPropertyGraphModule, hydraCoreModule, hydraComputeModule] tier0Modules $
     Just "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs"
   where
     ns = Namespace "hydra/langs/tinkerpop/mappings"
