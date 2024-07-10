@@ -205,8 +205,11 @@ declarationForRecordType isInner isSer aliases tparams elName fields = do
   where
     constructor = do
       params <- CM.mapM (fieldTypeToFormalParam aliases) fields
-      let stmts = Java.BlockStatementStatement . toAssignStmt . fieldTypeName <$> fields
-      return $ makeConstructor aliases elName False params stmts
+      let nullCheckStmts = fieldToNullCheckStatement <$> fields
+      let assignStmts = fieldToAssignStatement <$> fields
+      return $ makeConstructor aliases elName False params $ nullCheckStmts ++ assignStmts
+
+    fieldToAssignStatement = Java.BlockStatementStatement . toAssignStmt . fieldTypeName
 
     fieldArgs = fieldNameToJavaExpression . fieldTypeName <$> fields
 
@@ -217,15 +220,17 @@ declarationForRecordType isInner isSer aliases tparams elName fields = do
       return $ javaMemberField mods jt var
 
     toWithMethod field = do
-      let mods = [Java.MethodModifierPublic]
-      let methodName = "with" ++ capitalize (unFieldName $ fieldTypeName field)
-      param <- fieldTypeToFormalParam aliases field
-      let anns = [] -- TODO
-      let result = referenceTypeToResult $ nameToJavaReferenceType aliases False [] elName Nothing
-      let consId = Java.Identifier $ sanitizeJavaName $ localNameOfEager elName
-      let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just $
-            javaConstructorCall (javaConstructorName consId Nothing) fieldArgs Nothing
-      return $ methodDeclaration mods [] anns methodName [param] result (Just [returnStmt])
+        param <- fieldTypeToFormalParam aliases field
+        return $ methodDeclaration mods [] anns methodName [param] result (Just [nullCheck, returnStmt])
+      where
+        anns = [] -- TODO
+        mods = [Java.MethodModifierPublic]
+        methodName = "with" ++ capitalize (unFieldName $ fieldTypeName field)
+        nullCheck = fieldToNullCheckStatement field
+        result = referenceTypeToResult $ nameToJavaReferenceType aliases False [] elName Nothing
+        consId = Java.Identifier $ sanitizeJavaName $ localNameOfEager elName
+        returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just $
+          javaConstructorCall (javaConstructorName consId Nothing) fieldArgs Nothing
 
     equalsMethod = methodDeclaration mods [] anns equalsMethodName [param] result $
         Just [instanceOfStmt,
@@ -359,9 +364,7 @@ declarationForUnionType isSer aliases tparams elName fields = do
         otherwise = interfaceMethodDeclaration defaultMod [] otherwiseMethodName [mainInstanceParam] resultR $ Just [throw]
           where
             typeArgs = typeParameterToTypeArgument <$> tparams
-            throw = Java.BlockStatementStatement $ Java.StatementWithoutTrailing $
-                Java.StatementWithoutTrailingSubstatementThrow $ Java.ThrowStatement $
-                javaConstructorCall (javaConstructorName (Java.Identifier "IllegalStateException") Nothing) args Nothing
+            throw = Java.BlockStatementStatement $ javaThrowIllegalStateException args
               where
                 args = [javaAdditiveExpressionToJavaExpression $ addExpressions [
                   javaStringMultiplicativeExpression "Non-exhaustive patterns when matching: ",
@@ -780,6 +783,19 @@ encodeVariable aliases name = if isRecursiveVariable aliases name
         JavaSymbolClassUnaryFunction -> javaIdentifierToJavaExpression $ elementJavaIdentifier False True aliases name
   where
     jid = javaIdentifier $ unName name
+
+fieldToNullCheckStatement :: FieldType a -> Java.BlockStatement
+fieldToNullCheckStatement field = Java.BlockStatementStatement $ Java.StatementIfThen $
+    Java.IfThenStatement cond throw
+  where
+    cond = javaEqualityExpressionToJavaExpression $
+        javaEqualsNull $
+        javaRelationalExpressionToJavaEqualityExpression $
+        javaIdentifierToJavaRelationalExpression $ fieldNameToJavaIdentifier $ fieldTypeName field
+
+    throw = javaThrowIllegalArgumentException [
+      javaLiteralToJavaExpression $ Java.LiteralString $ Java.StringLiteral $
+        "null value for '" ++ unFieldName (fieldTypeName field) ++ "' argument"]
 
 fieldTypeToFormalParam aliases (FieldType fname ft) = do
   jt <- adaptTypeToJavaAndEncode aliases ft

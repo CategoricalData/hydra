@@ -133,9 +133,19 @@ javaDeclName = Java.TypeIdentifier . javaVariableName
 javaEmptyStatement :: Java.Statement
 javaEmptyStatement = Java.StatementWithoutTrailing $ Java.StatementWithoutTrailingSubstatementEmpty Java.EmptyStatement
 
+javaEqualityExpressionToJavaExpression :: Java.EqualityExpression -> Java.Expression
+javaEqualityExpressionToJavaExpression eqEx = javaConditionalAndExpressionToJavaExpression $
+    Java.ConditionalAndExpression [javaEqualityExpressionToJavaInclusiveOrExpression eqEx]
+
 javaEqualityExpressionToJavaInclusiveOrExpression :: Java.EqualityExpression -> Java.InclusiveOrExpression
 javaEqualityExpressionToJavaInclusiveOrExpression eq = Java.InclusiveOrExpression [
   Java.ExclusiveOrExpression [Java.AndExpression [eq]]]
+
+javaEquals :: Java.EqualityExpression -> Java.RelationalExpression -> Java.EqualityExpression
+javaEquals lhs rhs = Java.EqualityExpressionEqual $ Java.EqualityExpression_Binary lhs rhs
+
+javaEqualsNull :: Java.EqualityExpression -> Java.EqualityExpression
+javaEqualsNull lhs = javaEquals lhs $ javaLiteralToJavaRelationalExpression Java.LiteralNull
 
 javaExpressionNameToJavaExpression :: Java.ExpressionName -> Java.Expression
 javaExpressionNameToJavaExpression = javaPostfixExpressionToJavaExpression . Java.PostfixExpressionName
@@ -190,6 +200,10 @@ javaLambdaFromBlock :: Name -> Java.Block -> Java.Expression
 javaLambdaFromBlock var block = Java.ExpressionLambda $ Java.LambdaExpression params (Java.LambdaBodyBlock block)
   where
     params = Java.LambdaParametersSingle $ variableToJavaIdentifier var
+
+javaLiteralToJavaRelationalExpression :: Java.Literal -> Java.RelationalExpression
+javaLiteralToJavaRelationalExpression = javaMultiplicativeExpressionToJavaRelationalExpression .
+  javaLiteralToJavaMultiplicativeExpression
 
 javaLiteralToJavaExpression = javaRelationalExpressionToJavaExpression .
   javaMultiplicativeExpressionToJavaRelationalExpression .
@@ -273,9 +287,11 @@ javaRefType :: [Java.ReferenceType] -> Maybe Java.PackageName -> String -> Java.
 javaRefType args pkg id = Java.TypeReference $ Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
   javaClassType args pkg id
 
+javaRelationalExpressionToJavaEqualityExpression :: Java.RelationalExpression -> Java.EqualityExpression
+javaRelationalExpressionToJavaEqualityExpression = Java.EqualityExpressionUnary
+
 javaRelationalExpressionToJavaExpression :: Java.RelationalExpression -> Java.Expression
-javaRelationalExpressionToJavaExpression relEx = javaConditionalAndExpressionToJavaExpression $
-    Java.ConditionalAndExpression [javaEqualityExpressionToJavaInclusiveOrExpression $ Java.EqualityExpressionUnary relEx]
+javaRelationalExpressionToJavaExpression = javaEqualityExpressionToJavaExpression . javaRelationalExpressionToJavaEqualityExpression
 
 javaRelationalExpressionToJavaUnaryExpression :: Java.RelationalExpression -> Java.UnaryExpression
 javaRelationalExpressionToJavaUnaryExpression = javaPrimaryToJavaUnaryExpression .
@@ -284,8 +300,8 @@ javaRelationalExpressionToJavaUnaryExpression = javaPrimaryToJavaUnaryExpression
   javaRelationalExpressionToJavaExpression
 
 javaReturnStatement :: Y.Maybe Java.Expression -> Java.Statement
-javaReturnStatement mex = Java.StatementWithoutTrailing $ Java.StatementWithoutTrailingSubstatementReturn $
-  Java.ReturnStatement mex
+javaReturnStatement = Java.StatementWithoutTrailing . Java.StatementWithoutTrailingSubstatementReturn .
+  Java.ReturnStatement
 
 javaStatementsToBlock :: [Java.Statement] -> Java.Block
 javaStatementsToBlock stmts = Java.Block (Java.BlockStatementStatement <$> stmts)
@@ -295,6 +311,18 @@ javaString = Java.LiteralString . Java.StringLiteral
 
 javaStringMultiplicativeExpression :: String -> Java.MultiplicativeExpression
 javaStringMultiplicativeExpression = javaLiteralToJavaMultiplicativeExpression . javaString
+
+javaThrowIllegalArgumentException :: [Java.Expression] -> Java.Statement
+javaThrowIllegalArgumentException args = javaThrowStatement $
+  javaConstructorCall (javaConstructorName (Java.Identifier "IllegalArgumentException") Nothing) args Nothing
+
+javaThrowIllegalStateException :: [Java.Expression] -> Java.Statement
+javaThrowIllegalStateException args = javaThrowStatement $
+  javaConstructorCall (javaConstructorName (Java.Identifier "IllegalStateException") Nothing) args Nothing
+
+javaThrowStatement :: Java.Expression -> Java.Statement
+javaThrowStatement = Java.StatementWithoutTrailing .
+  Java.StatementWithoutTrailingSubstatementThrow . Java.ThrowStatement
 
 javaThis :: Java.Expression
 javaThis = javaPrimaryToJavaExpression $ Java.PrimaryNoNewArray Java.PrimaryNoNewArrayThis
