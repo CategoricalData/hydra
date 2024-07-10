@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class Data_NewAnonymous implements Serializable {
   public final hydra.langs.scala.meta.Template templ;
   
   public Data_NewAnonymous (hydra.langs.scala.meta.Template templ) {
+    if (templ == null) {
+      throw new IllegalArgumentException("null value for 'templ' argument");
+    }
     this.templ = templ;
   }
   

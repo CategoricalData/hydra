@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class UnaryTripleExpr_Sequence implements Serializable {
   public final hydra.langs.shex.syntax.UnaryTripleExpr_Sequence_Alts alts;
   
   public UnaryTripleExpr_Sequence (java.util.Optional<hydra.langs.shex.syntax.TripleExprLabel> sequence, hydra.langs.shex.syntax.UnaryTripleExpr_Sequence_Alts alts) {
+    if (sequence == null) {
+      throw new IllegalArgumentException("null value for 'sequence' argument");
+    }
+    if (alts == null) {
+      throw new IllegalArgumentException("null value for 'alts' argument");
+    }
     this.sequence = sequence;
     this.alts = alts;
   }
@@ -29,10 +37,16 @@ public class UnaryTripleExpr_Sequence implements Serializable {
   }
   
   public UnaryTripleExpr_Sequence withSequence(java.util.Optional<hydra.langs.shex.syntax.TripleExprLabel> sequence) {
+    if (sequence == null) {
+      throw new IllegalArgumentException("null value for 'sequence' argument");
+    }
     return new UnaryTripleExpr_Sequence(sequence, alts);
   }
   
   public UnaryTripleExpr_Sequence withAlts(hydra.langs.shex.syntax.UnaryTripleExpr_Sequence_Alts alts) {
+    if (alts == null) {
+      throw new IllegalArgumentException("null value for 'alts' argument");
+    }
     return new UnaryTripleExpr_Sequence(sequence, alts);
   }
 }

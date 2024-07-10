@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.format;
 
 import java.io.Serializable;
@@ -222,6 +224,9 @@ public abstract class LogicalType implements Serializable {
     public final hydra.langs.parquet.format.DecimalType value;
     
     public Decimal (hydra.langs.parquet.format.DecimalType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -283,6 +288,9 @@ public abstract class LogicalType implements Serializable {
     public final hydra.langs.parquet.format.TimeType value;
     
     public Time (hydra.langs.parquet.format.TimeType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -316,6 +324,9 @@ public abstract class LogicalType implements Serializable {
     public final hydra.langs.parquet.format.TimestampType value;
     
     public Timestamp (hydra.langs.parquet.format.TimestampType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -349,6 +360,9 @@ public abstract class LogicalType implements Serializable {
     public final hydra.langs.parquet.format.IntType value;
     
     public Integer_ (hydra.langs.parquet.format.IntType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

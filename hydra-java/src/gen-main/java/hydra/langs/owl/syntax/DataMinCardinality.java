@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class DataMinCardinality implements Serializable {
   public final java.util.List<hydra.langs.owl.syntax.DataRange> range;
   
   public DataMinCardinality (java.math.BigInteger bound, hydra.langs.owl.syntax.DataPropertyExpression property, java.util.List<hydra.langs.owl.syntax.DataRange> range) {
+    if (bound == null) {
+      throw new IllegalArgumentException("null value for 'bound' argument");
+    }
+    if (property == null) {
+      throw new IllegalArgumentException("null value for 'property' argument");
+    }
+    if (range == null) {
+      throw new IllegalArgumentException("null value for 'range' argument");
+    }
     this.bound = bound;
     this.property = property;
     this.range = range;
@@ -32,14 +43,23 @@ public class DataMinCardinality implements Serializable {
   }
   
   public DataMinCardinality withBound(java.math.BigInteger bound) {
+    if (bound == null) {
+      throw new IllegalArgumentException("null value for 'bound' argument");
+    }
     return new DataMinCardinality(bound, property, range);
   }
   
   public DataMinCardinality withProperty(hydra.langs.owl.syntax.DataPropertyExpression property) {
+    if (property == null) {
+      throw new IllegalArgumentException("null value for 'property' argument");
+    }
     return new DataMinCardinality(bound, property, range);
   }
   
   public DataMinCardinality withRange(java.util.List<hydra.langs.owl.syntax.DataRange> range) {
+    if (range == null) {
+      throw new IllegalArgumentException("null value for 'range' argument");
+    }
     return new DataMinCardinality(bound, property, range);
   }
 }

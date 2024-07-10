@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class DimExpr implements Serializable {
   public final java.util.Optional<hydra.langs.java.syntax.Expression> expression;
   
   public DimExpr (java.util.List<hydra.langs.java.syntax.Annotation> annotations, java.util.Optional<hydra.langs.java.syntax.Expression> expression) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     this.annotations = annotations;
     this.expression = expression;
   }
@@ -29,10 +37,16 @@ public class DimExpr implements Serializable {
   }
   
   public DimExpr withAnnotations(java.util.List<hydra.langs.java.syntax.Annotation> annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     return new DimExpr(annotations, expression);
   }
   
   public DimExpr withExpression(java.util.Optional<hydra.langs.java.syntax.Expression> expression) {
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     return new DimExpr(annotations, expression);
   }
 }

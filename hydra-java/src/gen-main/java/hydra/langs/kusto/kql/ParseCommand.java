@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.kusto.kql;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class ParseCommand implements Serializable {
   public final java.util.List<hydra.langs.kusto.kql.KeyValuePair> pairs;
   
   public ParseCommand (hydra.langs.kusto.kql.ColumnName column, java.util.List<hydra.langs.kusto.kql.KeyValuePair> pairs) {
+    if (column == null) {
+      throw new IllegalArgumentException("null value for 'column' argument");
+    }
+    if (pairs == null) {
+      throw new IllegalArgumentException("null value for 'pairs' argument");
+    }
     this.column = column;
     this.pairs = pairs;
   }
@@ -29,10 +37,16 @@ public class ParseCommand implements Serializable {
   }
   
   public ParseCommand withColumn(hydra.langs.kusto.kql.ColumnName column) {
+    if (column == null) {
+      throw new IllegalArgumentException("null value for 'column' argument");
+    }
     return new ParseCommand(column, pairs);
   }
   
   public ParseCommand withPairs(java.util.List<hydra.langs.kusto.kql.KeyValuePair> pairs) {
+    if (pairs == null) {
+      throw new IllegalArgumentException("null value for 'pairs' argument");
+    }
     return new ParseCommand(column, pairs);
   }
 }

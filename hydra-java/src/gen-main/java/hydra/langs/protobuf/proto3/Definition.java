@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.protobuf.proto3;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class Definition implements Serializable {
     public final hydra.langs.protobuf.proto3.EnumDefinition value;
     
     public Enum_ (hydra.langs.protobuf.proto3.EnumDefinition value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class Definition implements Serializable {
     public final hydra.langs.protobuf.proto3.MessageDefinition value;
     
     public Message (hydra.langs.protobuf.proto3.MessageDefinition value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

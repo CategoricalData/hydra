@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.xml.schema;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class NonPositiveInteger implements Serializable {
   public final java.math.BigInteger value;
   
   public NonPositiveInteger (java.math.BigInteger value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

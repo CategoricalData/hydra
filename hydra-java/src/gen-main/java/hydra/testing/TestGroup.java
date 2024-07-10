@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.testing;
 
 import java.io.Serializable;
@@ -17,6 +19,18 @@ public class TestGroup<A> implements Serializable {
   public final java.util.List<hydra.testing.TestCase<A>> cases;
   
   public TestGroup (String name, java.util.Optional<String> description, java.util.List<hydra.testing.TestGroup<A>> subgroups, java.util.List<hydra.testing.TestCase<A>> cases) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (description == null) {
+      throw new IllegalArgumentException("null value for 'description' argument");
+    }
+    if (subgroups == null) {
+      throw new IllegalArgumentException("null value for 'subgroups' argument");
+    }
+    if (cases == null) {
+      throw new IllegalArgumentException("null value for 'cases' argument");
+    }
     this.name = name;
     this.description = description;
     this.subgroups = subgroups;
@@ -38,18 +52,30 @@ public class TestGroup<A> implements Serializable {
   }
   
   public TestGroup withName(String name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new TestGroup(name, description, subgroups, cases);
   }
   
   public TestGroup withDescription(java.util.Optional<String> description) {
+    if (description == null) {
+      throw new IllegalArgumentException("null value for 'description' argument");
+    }
     return new TestGroup(name, description, subgroups, cases);
   }
   
   public TestGroup withSubgroups(java.util.List<hydra.testing.TestGroup<A>> subgroups) {
+    if (subgroups == null) {
+      throw new IllegalArgumentException("null value for 'subgroups' argument");
+    }
     return new TestGroup(name, description, subgroups, cases);
   }
   
   public TestGroup withCases(java.util.List<hydra.testing.TestCase<A>> cases) {
+    if (cases == null) {
+      throw new IllegalArgumentException("null value for 'cases' argument");
+    }
     return new TestGroup(name, description, subgroups, cases);
   }
 }

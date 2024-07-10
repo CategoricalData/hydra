@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Data_Apply implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Data> args;
   
   public Data_Apply (hydra.langs.scala.meta.Data fun, java.util.List<hydra.langs.scala.meta.Data> args) {
+    if (fun == null) {
+      throw new IllegalArgumentException("null value for 'fun' argument");
+    }
+    if (args == null) {
+      throw new IllegalArgumentException("null value for 'args' argument");
+    }
     this.fun = fun;
     this.args = args;
   }
@@ -29,10 +37,16 @@ public class Data_Apply implements Serializable {
   }
   
   public Data_Apply withFun(hydra.langs.scala.meta.Data fun) {
+    if (fun == null) {
+      throw new IllegalArgumentException("null value for 'fun' argument");
+    }
     return new Data_Apply(fun, args);
   }
   
   public Data_Apply withArgs(java.util.List<hydra.langs.scala.meta.Data> args) {
+    if (args == null) {
+      throw new IllegalArgumentException("null value for 'args' argument");
+    }
     return new Data_Apply(fun, args);
   }
 }

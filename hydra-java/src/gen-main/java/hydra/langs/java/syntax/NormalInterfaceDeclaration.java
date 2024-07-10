@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -16,6 +18,21 @@ public class NormalInterfaceDeclaration implements Serializable {
   public final hydra.langs.java.syntax.InterfaceBody body;
   
   public NormalInterfaceDeclaration (java.util.List<hydra.langs.java.syntax.InterfaceModifier> modifiers, hydra.langs.java.syntax.TypeIdentifier identifier, java.util.List<hydra.langs.java.syntax.TypeParameter> parameters, java.util.List<hydra.langs.java.syntax.InterfaceType> extends_, hydra.langs.java.syntax.InterfaceBody body) {
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
+    if (parameters == null) {
+      throw new IllegalArgumentException("null value for 'parameters' argument");
+    }
+    if (extends_ == null) {
+      throw new IllegalArgumentException("null value for 'extends' argument");
+    }
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     this.modifiers = modifiers;
     this.identifier = identifier;
     this.parameters = parameters;
@@ -38,22 +55,37 @@ public class NormalInterfaceDeclaration implements Serializable {
   }
   
   public NormalInterfaceDeclaration withModifiers(java.util.List<hydra.langs.java.syntax.InterfaceModifier> modifiers) {
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
     return new NormalInterfaceDeclaration(modifiers, identifier, parameters, extends_, body);
   }
   
   public NormalInterfaceDeclaration withIdentifier(hydra.langs.java.syntax.TypeIdentifier identifier) {
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
     return new NormalInterfaceDeclaration(modifiers, identifier, parameters, extends_, body);
   }
   
   public NormalInterfaceDeclaration withParameters(java.util.List<hydra.langs.java.syntax.TypeParameter> parameters) {
+    if (parameters == null) {
+      throw new IllegalArgumentException("null value for 'parameters' argument");
+    }
     return new NormalInterfaceDeclaration(modifiers, identifier, parameters, extends_, body);
   }
   
   public NormalInterfaceDeclaration withExtends(java.util.List<hydra.langs.java.syntax.InterfaceType> extends_) {
+    if (extends_ == null) {
+      throw new IllegalArgumentException("null value for 'extends' argument");
+    }
     return new NormalInterfaceDeclaration(modifiers, identifier, parameters, extends_, body);
   }
   
   public NormalInterfaceDeclaration withBody(hydra.langs.java.syntax.InterfaceBody body) {
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     return new NormalInterfaceDeclaration(modifiers, identifier, parameters, extends_, body);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class SwitchStatement implements Serializable {
   public final hydra.langs.java.syntax.SwitchBlock block;
   
   public SwitchStatement (hydra.langs.java.syntax.Expression cond, hydra.langs.java.syntax.SwitchBlock block) {
+    if (cond == null) {
+      throw new IllegalArgumentException("null value for 'cond' argument");
+    }
+    if (block == null) {
+      throw new IllegalArgumentException("null value for 'block' argument");
+    }
     this.cond = cond;
     this.block = block;
   }
@@ -29,10 +37,16 @@ public class SwitchStatement implements Serializable {
   }
   
   public SwitchStatement withCond(hydra.langs.java.syntax.Expression cond) {
+    if (cond == null) {
+      throw new IllegalArgumentException("null value for 'cond' argument");
+    }
     return new SwitchStatement(cond, block);
   }
   
   public SwitchStatement withBlock(hydra.langs.java.syntax.SwitchBlock block) {
+    if (block == null) {
+      throw new IllegalArgumentException("null value for 'block' argument");
+    }
     return new SwitchStatement(cond, block);
   }
 }

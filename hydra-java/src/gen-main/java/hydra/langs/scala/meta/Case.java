@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class Case implements Serializable {
   public final hydra.langs.scala.meta.Data body;
   
   public Case (hydra.langs.scala.meta.Pat pat, java.util.Optional<hydra.langs.scala.meta.Data> cond, hydra.langs.scala.meta.Data body) {
+    if (pat == null) {
+      throw new IllegalArgumentException("null value for 'pat' argument");
+    }
+    if (cond == null) {
+      throw new IllegalArgumentException("null value for 'cond' argument");
+    }
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     this.pat = pat;
     this.cond = cond;
     this.body = body;
@@ -32,14 +43,23 @@ public class Case implements Serializable {
   }
   
   public Case withPat(hydra.langs.scala.meta.Pat pat) {
+    if (pat == null) {
+      throw new IllegalArgumentException("null value for 'pat' argument");
+    }
     return new Case(pat, cond, body);
   }
   
   public Case withCond(java.util.Optional<hydra.langs.scala.meta.Data> cond) {
+    if (cond == null) {
+      throw new IllegalArgumentException("null value for 'cond' argument");
+    }
     return new Case(pat, cond, body);
   }
   
   public Case withBody(hydra.langs.scala.meta.Data body) {
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     return new Case(pat, cond, body);
   }
 }

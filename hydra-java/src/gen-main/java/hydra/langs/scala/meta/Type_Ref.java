@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -47,6 +49,9 @@ public abstract class Type_Ref implements Serializable {
     public final hydra.langs.scala.meta.Type_Name value;
     
     public Name (hydra.langs.scala.meta.Type_Name value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -74,6 +79,9 @@ public abstract class Type_Ref implements Serializable {
     public final hydra.langs.scala.meta.Type_Select value;
     
     public Select (hydra.langs.scala.meta.Type_Select value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -101,6 +109,9 @@ public abstract class Type_Ref implements Serializable {
     public final hydra.langs.scala.meta.Type_Project value;
     
     public Project (hydra.langs.scala.meta.Type_Project value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -128,6 +139,9 @@ public abstract class Type_Ref implements Serializable {
     public final hydra.langs.scala.meta.Type_Singleton value;
     
     public Singleton (hydra.langs.scala.meta.Type_Singleton value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class Type_Placeholder implements Serializable {
   public final hydra.langs.scala.meta.Type_Bounds bounds;
   
   public Type_Placeholder (hydra.langs.scala.meta.Type_Bounds bounds) {
+    if (bounds == null) {
+      throw new IllegalArgumentException("null value for 'bounds' argument");
+    }
     this.bounds = bounds;
   }
   

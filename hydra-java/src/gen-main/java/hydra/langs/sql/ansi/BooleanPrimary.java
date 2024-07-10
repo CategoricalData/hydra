@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class BooleanPrimary implements Serializable {
     public final hydra.langs.sql.ansi.Predicate value;
     
     public Predicate (hydra.langs.sql.ansi.Predicate value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class BooleanPrimary implements Serializable {
     public final hydra.langs.sql.ansi.BooleanPredicand value;
     
     public Predicand (hydra.langs.sql.ansi.BooleanPredicand value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

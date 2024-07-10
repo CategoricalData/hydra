@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -41,6 +43,9 @@ public abstract class ElementValue implements Serializable {
     public final hydra.langs.java.syntax.ConditionalExpression value;
     
     public ConditionalExpression (hydra.langs.java.syntax.ConditionalExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -68,6 +73,9 @@ public abstract class ElementValue implements Serializable {
     public final hydra.langs.java.syntax.ElementValueArrayInitializer value;
     
     public ElementValueArrayInitializer (hydra.langs.java.syntax.ElementValueArrayInitializer value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -95,6 +103,9 @@ public abstract class ElementValue implements Serializable {
     public final hydra.langs.java.syntax.Annotation value;
     
     public Annotation (hydra.langs.java.syntax.Annotation value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

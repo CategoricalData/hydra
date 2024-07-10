@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.kusto.kql;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class PipelineExpression implements Serializable {
   public final java.util.List<hydra.langs.kusto.kql.TabularExpression> value;
   
   public PipelineExpression (java.util.List<hydra.langs.kusto.kql.TabularExpression> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

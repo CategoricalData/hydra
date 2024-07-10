@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -83,6 +85,9 @@ public abstract class Pattern implements Serializable {
     public final hydra.langs.haskell.ast.Pattern_Application value;
     
     public Application (hydra.langs.haskell.ast.Pattern_Application value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -110,6 +115,9 @@ public abstract class Pattern implements Serializable {
     public final hydra.langs.haskell.ast.Pattern_As value;
     
     public As (hydra.langs.haskell.ast.Pattern_As value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -137,6 +145,9 @@ public abstract class Pattern implements Serializable {
     public final java.util.List<hydra.langs.haskell.ast.Pattern> value;
     
     public List (java.util.List<hydra.langs.haskell.ast.Pattern> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -164,6 +175,9 @@ public abstract class Pattern implements Serializable {
     public final hydra.langs.haskell.ast.Literal value;
     
     public Literal (hydra.langs.haskell.ast.Literal value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -191,6 +205,9 @@ public abstract class Pattern implements Serializable {
     public final hydra.langs.haskell.ast.Name value;
     
     public Name (hydra.langs.haskell.ast.Name value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -218,6 +235,9 @@ public abstract class Pattern implements Serializable {
     public final hydra.langs.haskell.ast.Pattern value;
     
     public Parens (hydra.langs.haskell.ast.Pattern value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -245,6 +265,9 @@ public abstract class Pattern implements Serializable {
     public final hydra.langs.haskell.ast.Pattern_Record value;
     
     public Record (hydra.langs.haskell.ast.Pattern_Record value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -272,6 +295,9 @@ public abstract class Pattern implements Serializable {
     public final java.util.List<hydra.langs.haskell.ast.Pattern> value;
     
     public Tuple (java.util.List<hydra.langs.haskell.ast.Pattern> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -299,6 +325,9 @@ public abstract class Pattern implements Serializable {
     public final hydra.langs.haskell.ast.Pattern_Typed value;
     
     public Typed (hydra.langs.haskell.ast.Pattern_Typed value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

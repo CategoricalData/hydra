@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class VariableDeclaratorId implements Serializable {
   public final java.util.Optional<hydra.langs.java.syntax.Dims> dims;
   
   public VariableDeclaratorId (hydra.langs.java.syntax.Identifier identifier, java.util.Optional<hydra.langs.java.syntax.Dims> dims) {
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
+    if (dims == null) {
+      throw new IllegalArgumentException("null value for 'dims' argument");
+    }
     this.identifier = identifier;
     this.dims = dims;
   }
@@ -29,10 +37,16 @@ public class VariableDeclaratorId implements Serializable {
   }
   
   public VariableDeclaratorId withIdentifier(hydra.langs.java.syntax.Identifier identifier) {
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
     return new VariableDeclaratorId(identifier, dims);
   }
   
   public VariableDeclaratorId withDims(java.util.Optional<hydra.langs.java.syntax.Dims> dims) {
+    if (dims == null) {
+      throw new IllegalArgumentException("null value for 'dims' argument");
+    }
     return new VariableDeclaratorId(identifier, dims);
   }
 }

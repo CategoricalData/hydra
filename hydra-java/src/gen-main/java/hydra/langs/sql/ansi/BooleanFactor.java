@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class BooleanFactor implements Serializable {
   public final hydra.langs.sql.ansi.BooleanTest booleanTest;
   
   public BooleanFactor (java.util.Optional<java.lang.Void> nOT, hydra.langs.sql.ansi.BooleanTest booleanTest) {
+    if (nOT == null) {
+      throw new IllegalArgumentException("null value for 'nOT' argument");
+    }
+    if (booleanTest == null) {
+      throw new IllegalArgumentException("null value for 'booleanTest' argument");
+    }
     this.nOT = nOT;
     this.booleanTest = booleanTest;
   }
@@ -29,10 +37,16 @@ public class BooleanFactor implements Serializable {
   }
   
   public BooleanFactor withNOT(java.util.Optional<java.lang.Void> nOT) {
+    if (nOT == null) {
+      throw new IllegalArgumentException("null value for 'nOT' argument");
+    }
     return new BooleanFactor(nOT, booleanTest);
   }
   
   public BooleanFactor withBooleanTest(hydra.langs.sql.ansi.BooleanTest booleanTest) {
+    if (booleanTest == null) {
+      throw new IllegalArgumentException("null value for 'booleanTest' argument");
+    }
     return new BooleanFactor(nOT, booleanTest);
   }
 }

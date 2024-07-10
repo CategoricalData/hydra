@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class PnCharsBase implements Serializable {
     public final String value;
     
     public Regex (String value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class PnCharsBase implements Serializable {
     public final String value;
     
     public Regex2 (String value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

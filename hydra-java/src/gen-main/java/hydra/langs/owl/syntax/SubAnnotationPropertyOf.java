@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class SubAnnotationPropertyOf implements Serializable {
   public final hydra.langs.owl.syntax.AnnotationProperty superProperty;
   
   public SubAnnotationPropertyOf (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, hydra.langs.owl.syntax.AnnotationProperty subProperty, hydra.langs.owl.syntax.AnnotationProperty superProperty) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
+    if (subProperty == null) {
+      throw new IllegalArgumentException("null value for 'subProperty' argument");
+    }
+    if (superProperty == null) {
+      throw new IllegalArgumentException("null value for 'superProperty' argument");
+    }
     this.annotations = annotations;
     this.subProperty = subProperty;
     this.superProperty = superProperty;
@@ -32,14 +43,23 @@ public class SubAnnotationPropertyOf implements Serializable {
   }
   
   public SubAnnotationPropertyOf withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     return new SubAnnotationPropertyOf(annotations, subProperty, superProperty);
   }
   
   public SubAnnotationPropertyOf withSubProperty(hydra.langs.owl.syntax.AnnotationProperty subProperty) {
+    if (subProperty == null) {
+      throw new IllegalArgumentException("null value for 'subProperty' argument");
+    }
     return new SubAnnotationPropertyOf(annotations, subProperty, superProperty);
   }
   
   public SubAnnotationPropertyOf withSuperProperty(hydra.langs.owl.syntax.AnnotationProperty superProperty) {
+    if (superProperty == null) {
+      throw new IllegalArgumentException("null value for 'superProperty' argument");
+    }
     return new SubAnnotationPropertyOf(annotations, subProperty, superProperty);
   }
 }

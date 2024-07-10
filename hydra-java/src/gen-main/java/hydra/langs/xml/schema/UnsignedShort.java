@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.xml.schema;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class UnsignedShort implements Serializable {
   public final Character value;
   
   public UnsignedShort (Character value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class TypeSystemDefinitionOrExtension implements Serializable {
     public final hydra.langs.graphql.syntax.TypeSystemDefinition value;
     
     public Definition (hydra.langs.graphql.syntax.TypeSystemDefinition value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class TypeSystemDefinitionOrExtension implements Serializable {
     public final hydra.langs.graphql.syntax.TypeSystemExtension value;
     
     public Extension (hydra.langs.graphql.syntax.TypeSystemExtension value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

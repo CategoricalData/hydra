@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class NumericTypeArray implements Serializable {
     public final hydra.langs.java.syntax.NumericType value;
     
     public Simple (hydra.langs.java.syntax.NumericType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class NumericTypeArray implements Serializable {
     public final hydra.langs.java.syntax.NumericTypeArray value;
     
     public Array (hydra.langs.java.syntax.NumericTypeArray value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shacl.model;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class Closed implements Serializable {
   public final java.util.Optional<java.util.Set<hydra.langs.rdf.syntax.Property>> ignoredProperties;
   
   public Closed (Boolean isClosed, java.util.Optional<java.util.Set<hydra.langs.rdf.syntax.Property>> ignoredProperties) {
+    if (isClosed == null) {
+      throw new IllegalArgumentException("null value for 'isClosed' argument");
+    }
+    if (ignoredProperties == null) {
+      throw new IllegalArgumentException("null value for 'ignoredProperties' argument");
+    }
     this.isClosed = isClosed;
     this.ignoredProperties = ignoredProperties;
   }
@@ -32,10 +40,16 @@ public class Closed implements Serializable {
   }
   
   public Closed withIsClosed(Boolean isClosed) {
+    if (isClosed == null) {
+      throw new IllegalArgumentException("null value for 'isClosed' argument");
+    }
     return new Closed(isClosed, ignoredProperties);
   }
   
   public Closed withIgnoredProperties(java.util.Optional<java.util.Set<hydra.langs.rdf.syntax.Property>> ignoredProperties) {
+    if (ignoredProperties == null) {
+      throw new IllegalArgumentException("null value for 'ignoredProperties' argument");
+    }
     return new Closed(isClosed, ignoredProperties);
   }
 }

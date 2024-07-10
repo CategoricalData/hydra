@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Enumerator_Generator implements Serializable {
   public final hydra.langs.scala.meta.Data rhs;
   
   public Enumerator_Generator (hydra.langs.scala.meta.Pat pat, hydra.langs.scala.meta.Data rhs) {
+    if (pat == null) {
+      throw new IllegalArgumentException("null value for 'pat' argument");
+    }
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     this.pat = pat;
     this.rhs = rhs;
   }
@@ -29,10 +37,16 @@ public class Enumerator_Generator implements Serializable {
   }
   
   public Enumerator_Generator withPat(hydra.langs.scala.meta.Pat pat) {
+    if (pat == null) {
+      throw new IllegalArgumentException("null value for 'pat' argument");
+    }
     return new Enumerator_Generator(pat, rhs);
   }
   
   public Enumerator_Generator withRhs(hydra.langs.scala.meta.Data rhs) {
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     return new Enumerator_Generator(pat, rhs);
   }
 }

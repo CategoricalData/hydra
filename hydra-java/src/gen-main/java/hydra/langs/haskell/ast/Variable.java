@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class Variable implements Serializable {
   public final hydra.langs.haskell.ast.Name value;
   
   public Variable (hydra.langs.haskell.ast.Name value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

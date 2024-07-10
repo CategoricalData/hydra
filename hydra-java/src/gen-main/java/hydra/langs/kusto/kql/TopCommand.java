@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.kusto.kql;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class TopCommand implements Serializable {
   public final java.util.List<hydra.langs.kusto.kql.SortBy> sort;
   
   public TopCommand (Integer count, java.util.List<hydra.langs.kusto.kql.SortBy> sort) {
+    if (count == null) {
+      throw new IllegalArgumentException("null value for 'count' argument");
+    }
+    if (sort == null) {
+      throw new IllegalArgumentException("null value for 'sort' argument");
+    }
     this.count = count;
     this.sort = sort;
   }
@@ -29,10 +37,16 @@ public class TopCommand implements Serializable {
   }
   
   public TopCommand withCount(Integer count) {
+    if (count == null) {
+      throw new IllegalArgumentException("null value for 'count' argument");
+    }
     return new TopCommand(count, sort);
   }
   
   public TopCommand withSort(java.util.List<hydra.langs.kusto.kql.SortBy> sort) {
+    if (sort == null) {
+      throw new IllegalArgumentException("null value for 'sort' argument");
+    }
     return new TopCommand(count, sort);
   }
 }

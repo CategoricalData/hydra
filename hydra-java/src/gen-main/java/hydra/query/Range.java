@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.query;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class Range implements Serializable {
   public final Integer max;
   
   public Range (Integer min, Integer max) {
+    if (min == null) {
+      throw new IllegalArgumentException("null value for 'min' argument");
+    }
+    if (max == null) {
+      throw new IllegalArgumentException("null value for 'max' argument");
+    }
     this.min = min;
     this.max = max;
   }
@@ -32,10 +40,16 @@ public class Range implements Serializable {
   }
   
   public Range withMin(Integer min) {
+    if (min == null) {
+      throw new IllegalArgumentException("null value for 'min' argument");
+    }
     return new Range(min, max);
   }
   
   public Range withMax(Integer max) {
+    if (max == null) {
+      throw new IllegalArgumentException("null value for 'max' argument");
+    }
     return new Range(min, max);
   }
 }

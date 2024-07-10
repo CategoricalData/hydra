@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -65,6 +67,9 @@ public abstract class GeneralLiteral implements Serializable {
     public final hydra.langs.sql.ansi.CharacterStringLiteral value;
     
     public String_ (hydra.langs.sql.ansi.CharacterStringLiteral value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -92,6 +97,9 @@ public abstract class GeneralLiteral implements Serializable {
     public final hydra.langs.sql.ansi.NationalCharacterStringLiteral value;
     
     public NationalString (hydra.langs.sql.ansi.NationalCharacterStringLiteral value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -119,6 +127,9 @@ public abstract class GeneralLiteral implements Serializable {
     public final hydra.langs.sql.ansi.UnicodeCharacterStringLiteral value;
     
     public Unicode (hydra.langs.sql.ansi.UnicodeCharacterStringLiteral value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -146,6 +157,9 @@ public abstract class GeneralLiteral implements Serializable {
     public final hydra.langs.sql.ansi.BinaryStringLiteral value;
     
     public Binary (hydra.langs.sql.ansi.BinaryStringLiteral value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -173,6 +187,9 @@ public abstract class GeneralLiteral implements Serializable {
     public final hydra.langs.sql.ansi.DatetimeLiteral value;
     
     public DateTime (hydra.langs.sql.ansi.DatetimeLiteral value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -200,6 +217,9 @@ public abstract class GeneralLiteral implements Serializable {
     public final hydra.langs.sql.ansi.IntervalLiteral value;
     
     public Interval (hydra.langs.sql.ansi.IntervalLiteral value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -227,6 +247,9 @@ public abstract class GeneralLiteral implements Serializable {
     public final hydra.langs.sql.ansi.BooleanLiteral value;
     
     public Boolean_ (hydra.langs.sql.ansi.BooleanLiteral value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

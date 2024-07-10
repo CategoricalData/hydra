@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class PatternPart implements Serializable {
   public final hydra.langs.cypher.openCypher.AnonymousPatternPart pattern;
   
   public PatternPart (java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable, hydra.langs.cypher.openCypher.AnonymousPatternPart pattern) {
+    if (variable == null) {
+      throw new IllegalArgumentException("null value for 'variable' argument");
+    }
+    if (pattern == null) {
+      throw new IllegalArgumentException("null value for 'pattern' argument");
+    }
     this.variable = variable;
     this.pattern = pattern;
   }
@@ -29,10 +37,16 @@ public class PatternPart implements Serializable {
   }
   
   public PatternPart withVariable(java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable) {
+    if (variable == null) {
+      throw new IllegalArgumentException("null value for 'variable' argument");
+    }
     return new PatternPart(variable, pattern);
   }
   
   public PatternPart withPattern(hydra.langs.cypher.openCypher.AnonymousPatternPart pattern) {
+    if (pattern == null) {
+      throw new IllegalArgumentException("null value for 'pattern' argument");
+    }
     return new PatternPart(variable, pattern);
   }
 }

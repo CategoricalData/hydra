@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class LocalVariableDeclaration implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.VariableDeclarator> declarators;
   
   public LocalVariableDeclaration (java.util.List<hydra.langs.java.syntax.VariableModifier> modifiers, hydra.langs.java.syntax.LocalVariableType type, java.util.List<hydra.langs.java.syntax.VariableDeclarator> declarators) {
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
+    if (declarators == null) {
+      throw new IllegalArgumentException("null value for 'declarators' argument");
+    }
     this.modifiers = modifiers;
     this.type = type;
     this.declarators = declarators;
@@ -32,14 +43,23 @@ public class LocalVariableDeclaration implements Serializable {
   }
   
   public LocalVariableDeclaration withModifiers(java.util.List<hydra.langs.java.syntax.VariableModifier> modifiers) {
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
     return new LocalVariableDeclaration(modifiers, type, declarators);
   }
   
   public LocalVariableDeclaration withType(hydra.langs.java.syntax.LocalVariableType type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new LocalVariableDeclaration(modifiers, type, declarators);
   }
   
   public LocalVariableDeclaration withDeclarators(java.util.List<hydra.langs.java.syntax.VariableDeclarator> declarators) {
+    if (declarators == null) {
+      throw new IllegalArgumentException("null value for 'declarators' argument");
+    }
     return new LocalVariableDeclaration(modifiers, type, declarators);
   }
 }

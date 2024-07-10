@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class IdInColl implements Serializable {
   public final hydra.langs.cypher.openCypher.Expression expression;
   
   public IdInColl (hydra.langs.cypher.openCypher.Variable variable, hydra.langs.cypher.openCypher.Expression expression) {
+    if (variable == null) {
+      throw new IllegalArgumentException("null value for 'variable' argument");
+    }
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     this.variable = variable;
     this.expression = expression;
   }
@@ -29,10 +37,16 @@ public class IdInColl implements Serializable {
   }
   
   public IdInColl withVariable(hydra.langs.cypher.openCypher.Variable variable) {
+    if (variable == null) {
+      throw new IllegalArgumentException("null value for 'variable' argument");
+    }
     return new IdInColl(variable, expression);
   }
   
   public IdInColl withExpression(hydra.langs.cypher.openCypher.Expression expression) {
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     return new IdInColl(variable, expression);
   }
 }

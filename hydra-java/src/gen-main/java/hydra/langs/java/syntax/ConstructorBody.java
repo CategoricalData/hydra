@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class ConstructorBody implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.BlockStatement> statements;
   
   public ConstructorBody (java.util.Optional<hydra.langs.java.syntax.ExplicitConstructorInvocation> invocation, java.util.List<hydra.langs.java.syntax.BlockStatement> statements) {
+    if (invocation == null) {
+      throw new IllegalArgumentException("null value for 'invocation' argument");
+    }
+    if (statements == null) {
+      throw new IllegalArgumentException("null value for 'statements' argument");
+    }
     this.invocation = invocation;
     this.statements = statements;
   }
@@ -29,10 +37,16 @@ public class ConstructorBody implements Serializable {
   }
   
   public ConstructorBody withInvocation(java.util.Optional<hydra.langs.java.syntax.ExplicitConstructorInvocation> invocation) {
+    if (invocation == null) {
+      throw new IllegalArgumentException("null value for 'invocation' argument");
+    }
     return new ConstructorBody(invocation, statements);
   }
   
   public ConstructorBody withStatements(java.util.List<hydra.langs.java.syntax.BlockStatement> statements) {
+    if (statements == null) {
+      throw new IllegalArgumentException("null value for 'statements' argument");
+    }
     return new ConstructorBody(invocation, statements);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class InlineShapeNot implements Serializable {
   public final hydra.langs.shex.syntax.InlineShapeAtom inlineShapeAtom;
   
   public InlineShapeNot (java.util.Optional<java.lang.Void> nOT, hydra.langs.shex.syntax.InlineShapeAtom inlineShapeAtom) {
+    if (nOT == null) {
+      throw new IllegalArgumentException("null value for 'nOT' argument");
+    }
+    if (inlineShapeAtom == null) {
+      throw new IllegalArgumentException("null value for 'inlineShapeAtom' argument");
+    }
     this.nOT = nOT;
     this.inlineShapeAtom = inlineShapeAtom;
   }
@@ -29,10 +37,16 @@ public class InlineShapeNot implements Serializable {
   }
   
   public InlineShapeNot withNOT(java.util.Optional<java.lang.Void> nOT) {
+    if (nOT == null) {
+      throw new IllegalArgumentException("null value for 'nOT' argument");
+    }
     return new InlineShapeNot(nOT, inlineShapeAtom);
   }
   
   public InlineShapeNot withInlineShapeAtom(hydra.langs.shex.syntax.InlineShapeAtom inlineShapeAtom) {
+    if (inlineShapeAtom == null) {
+      throw new IllegalArgumentException("null value for 'inlineShapeAtom' argument");
+    }
     return new InlineShapeNot(nOT, inlineShapeAtom);
   }
 }

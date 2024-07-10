@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.kusto.kql;
 
 import java.io.Serializable;

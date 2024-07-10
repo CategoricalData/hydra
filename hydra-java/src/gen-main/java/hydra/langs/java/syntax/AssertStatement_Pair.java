@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class AssertStatement_Pair implements Serializable {
   public final hydra.langs.java.syntax.Expression second;
   
   public AssertStatement_Pair (hydra.langs.java.syntax.Expression first, hydra.langs.java.syntax.Expression second) {
+    if (first == null) {
+      throw new IllegalArgumentException("null value for 'first' argument");
+    }
+    if (second == null) {
+      throw new IllegalArgumentException("null value for 'second' argument");
+    }
     this.first = first;
     this.second = second;
   }
@@ -29,10 +37,16 @@ public class AssertStatement_Pair implements Serializable {
   }
   
   public AssertStatement_Pair withFirst(hydra.langs.java.syntax.Expression first) {
+    if (first == null) {
+      throw new IllegalArgumentException("null value for 'first' argument");
+    }
     return new AssertStatement_Pair(first, second);
   }
   
   public AssertStatement_Pair withSecond(hydra.langs.java.syntax.Expression second) {
+    if (second == null) {
+      throw new IllegalArgumentException("null value for 'second' argument");
+    }
     return new AssertStatement_Pair(first, second);
   }
 }

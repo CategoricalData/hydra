@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.module;
 
 import java.io.Serializable;
@@ -34,6 +36,21 @@ public class Module<A> implements Serializable {
   public final java.util.Optional<String> description;
   
   public Module (hydra.module.Namespace namespace, java.util.List<hydra.graph.Element<A>> elements, java.util.List<hydra.module.Module<A>> termDependencies, java.util.List<hydra.module.Module<A>> typeDependencies, java.util.Optional<String> description) {
+    if (namespace == null) {
+      throw new IllegalArgumentException("null value for 'namespace' argument");
+    }
+    if (elements == null) {
+      throw new IllegalArgumentException("null value for 'elements' argument");
+    }
+    if (termDependencies == null) {
+      throw new IllegalArgumentException("null value for 'termDependencies' argument");
+    }
+    if (typeDependencies == null) {
+      throw new IllegalArgumentException("null value for 'typeDependencies' argument");
+    }
+    if (description == null) {
+      throw new IllegalArgumentException("null value for 'description' argument");
+    }
     this.namespace = namespace;
     this.elements = elements;
     this.termDependencies = termDependencies;
@@ -56,22 +73,37 @@ public class Module<A> implements Serializable {
   }
   
   public Module withNamespace(hydra.module.Namespace namespace) {
+    if (namespace == null) {
+      throw new IllegalArgumentException("null value for 'namespace' argument");
+    }
     return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }
   
   public Module withElements(java.util.List<hydra.graph.Element<A>> elements) {
+    if (elements == null) {
+      throw new IllegalArgumentException("null value for 'elements' argument");
+    }
     return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }
   
   public Module withTermDependencies(java.util.List<hydra.module.Module<A>> termDependencies) {
+    if (termDependencies == null) {
+      throw new IllegalArgumentException("null value for 'termDependencies' argument");
+    }
     return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }
   
   public Module withTypeDependencies(java.util.List<hydra.module.Module<A>> typeDependencies) {
+    if (typeDependencies == null) {
+      throw new IllegalArgumentException("null value for 'typeDependencies' argument");
+    }
     return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }
   
   public Module withDescription(java.util.Optional<String> description) {
+    if (description == null) {
+      throw new IllegalArgumentException("null value for 'description' argument");
+    }
     return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }
 }

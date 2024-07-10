@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class MergeAction implements Serializable {
   public final hydra.langs.cypher.openCypher.Set set;
   
   public MergeAction (hydra.langs.cypher.openCypher.MatchOrCreate action, hydra.langs.cypher.openCypher.Set set) {
+    if (action == null) {
+      throw new IllegalArgumentException("null value for 'action' argument");
+    }
+    if (set == null) {
+      throw new IllegalArgumentException("null value for 'set' argument");
+    }
     this.action = action;
     this.set = set;
   }
@@ -29,10 +37,16 @@ public class MergeAction implements Serializable {
   }
   
   public MergeAction withAction(hydra.langs.cypher.openCypher.MatchOrCreate action) {
+    if (action == null) {
+      throw new IllegalArgumentException("null value for 'action' argument");
+    }
     return new MergeAction(action, set);
   }
   
   public MergeAction withSet(hydra.langs.cypher.openCypher.Set set) {
+    if (set == null) {
+      throw new IllegalArgumentException("null value for 'set' argument");
+    }
     return new MergeAction(action, set);
   }
 }

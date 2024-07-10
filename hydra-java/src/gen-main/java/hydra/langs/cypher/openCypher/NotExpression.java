@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class NotExpression implements Serializable {
   public final hydra.langs.cypher.openCypher.ComparisonExpression expression;
   
   public NotExpression (Boolean not, hydra.langs.cypher.openCypher.ComparisonExpression expression) {
+    if (not == null) {
+      throw new IllegalArgumentException("null value for 'not' argument");
+    }
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     this.not = not;
     this.expression = expression;
   }
@@ -29,10 +37,16 @@ public class NotExpression implements Serializable {
   }
   
   public NotExpression withNot(Boolean not) {
+    if (not == null) {
+      throw new IllegalArgumentException("null value for 'not' argument");
+    }
     return new NotExpression(not, expression);
   }
   
   public NotExpression withExpression(hydra.langs.cypher.openCypher.ComparisonExpression expression) {
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     return new NotExpression(not, expression);
   }
 }

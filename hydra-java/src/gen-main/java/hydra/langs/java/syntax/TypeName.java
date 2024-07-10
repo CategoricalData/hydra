@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class TypeName implements Serializable {
   public final java.util.Optional<hydra.langs.java.syntax.PackageOrTypeName> qualifier;
   
   public TypeName (hydra.langs.java.syntax.TypeIdentifier identifier, java.util.Optional<hydra.langs.java.syntax.PackageOrTypeName> qualifier) {
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
+    if (qualifier == null) {
+      throw new IllegalArgumentException("null value for 'qualifier' argument");
+    }
     this.identifier = identifier;
     this.qualifier = qualifier;
   }
@@ -29,10 +37,16 @@ public class TypeName implements Serializable {
   }
   
   public TypeName withIdentifier(hydra.langs.java.syntax.TypeIdentifier identifier) {
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
     return new TypeName(identifier, qualifier);
   }
   
   public TypeName withQualifier(java.util.Optional<hydra.langs.java.syntax.PackageOrTypeName> qualifier) {
+    if (qualifier == null) {
+      throw new IllegalArgumentException("null value for 'qualifier' argument");
+    }
     return new TypeName(identifier, qualifier);
   }
 }

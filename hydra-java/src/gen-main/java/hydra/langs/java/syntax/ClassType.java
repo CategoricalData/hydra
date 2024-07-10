@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -14,6 +16,18 @@ public class ClassType implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.TypeArgument> arguments;
   
   public ClassType (java.util.List<hydra.langs.java.syntax.Annotation> annotations, hydra.langs.java.syntax.ClassTypeQualifier qualifier, hydra.langs.java.syntax.TypeIdentifier identifier, java.util.List<hydra.langs.java.syntax.TypeArgument> arguments) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
+    if (qualifier == null) {
+      throw new IllegalArgumentException("null value for 'qualifier' argument");
+    }
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
+    if (arguments == null) {
+      throw new IllegalArgumentException("null value for 'arguments' argument");
+    }
     this.annotations = annotations;
     this.qualifier = qualifier;
     this.identifier = identifier;
@@ -35,18 +49,30 @@ public class ClassType implements Serializable {
   }
   
   public ClassType withAnnotations(java.util.List<hydra.langs.java.syntax.Annotation> annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     return new ClassType(annotations, qualifier, identifier, arguments);
   }
   
   public ClassType withQualifier(hydra.langs.java.syntax.ClassTypeQualifier qualifier) {
+    if (qualifier == null) {
+      throw new IllegalArgumentException("null value for 'qualifier' argument");
+    }
     return new ClassType(annotations, qualifier, identifier, arguments);
   }
   
   public ClassType withIdentifier(hydra.langs.java.syntax.TypeIdentifier identifier) {
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
     return new ClassType(annotations, qualifier, identifier, arguments);
   }
   
   public ClassType withArguments(java.util.List<hydra.langs.java.syntax.TypeArgument> arguments) {
+    if (arguments == null) {
+      throw new IllegalArgumentException("null value for 'arguments' argument");
+    }
     return new ClassType(annotations, qualifier, identifier, arguments);
   }
 }

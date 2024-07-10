@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shacl.model;
 
 import java.io.Serializable;
@@ -38,6 +40,9 @@ public abstract class Shape implements Serializable {
     public final hydra.langs.shacl.model.NodeShape value;
     
     public Node (hydra.langs.shacl.model.NodeShape value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -65,6 +70,9 @@ public abstract class Shape implements Serializable {
     public final hydra.langs.shacl.model.PropertyShape value;
     
     public Property (hydra.langs.shacl.model.PropertyShape value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

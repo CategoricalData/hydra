@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Wildcard implements Serializable {
   public final java.util.Optional<hydra.langs.java.syntax.WildcardBounds> wildcard;
   
   public Wildcard (java.util.List<hydra.langs.java.syntax.Annotation> annotations, java.util.Optional<hydra.langs.java.syntax.WildcardBounds> wildcard) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
+    if (wildcard == null) {
+      throw new IllegalArgumentException("null value for 'wildcard' argument");
+    }
     this.annotations = annotations;
     this.wildcard = wildcard;
   }
@@ -29,10 +37,16 @@ public class Wildcard implements Serializable {
   }
   
   public Wildcard withAnnotations(java.util.List<hydra.langs.java.syntax.Annotation> annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     return new Wildcard(annotations, wildcard);
   }
   
   public Wildcard withWildcard(java.util.Optional<hydra.langs.java.syntax.WildcardBounds> wildcard) {
+    if (wildcard == null) {
+      throw new IllegalArgumentException("null value for 'wildcard' argument");
+    }
     return new Wildcard(annotations, wildcard);
   }
 }

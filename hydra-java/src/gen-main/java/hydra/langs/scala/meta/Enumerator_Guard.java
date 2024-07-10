@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class Enumerator_Guard implements Serializable {
   public final hydra.langs.scala.meta.Data cond;
   
   public Enumerator_Guard (hydra.langs.scala.meta.Data cond) {
+    if (cond == null) {
+      throw new IllegalArgumentException("null value for 'cond' argument");
+    }
     this.cond = cond;
   }
   

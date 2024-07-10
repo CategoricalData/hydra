@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class StringLiteralLong1_Elmt_Sequence implements Serializable {
   public final String regex;
   
   public StringLiteralLong1_Elmt_Sequence (java.util.Optional<hydra.langs.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option> alts, String regex) {
+    if (alts == null) {
+      throw new IllegalArgumentException("null value for 'alts' argument");
+    }
+    if (regex == null) {
+      throw new IllegalArgumentException("null value for 'regex' argument");
+    }
     this.alts = alts;
     this.regex = regex;
   }
@@ -29,10 +37,16 @@ public class StringLiteralLong1_Elmt_Sequence implements Serializable {
   }
   
   public StringLiteralLong1_Elmt_Sequence withAlts(java.util.Optional<hydra.langs.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option> alts) {
+    if (alts == null) {
+      throw new IllegalArgumentException("null value for 'alts' argument");
+    }
     return new StringLiteralLong1_Elmt_Sequence(alts, regex);
   }
   
   public StringLiteralLong1_Elmt_Sequence withRegex(String regex) {
+    if (regex == null) {
+      throw new IllegalArgumentException("null value for 'regex' argument");
+    }
     return new StringLiteralLong1_Elmt_Sequence(alts, regex);
   }
 }

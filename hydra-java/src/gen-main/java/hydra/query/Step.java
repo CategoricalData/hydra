@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.query;
 
 import java.io.Serializable;
@@ -50,6 +52,9 @@ public abstract class Step implements Serializable {
     public final hydra.query.Edge value;
     
     public Edge (hydra.query.Edge value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -83,6 +88,9 @@ public abstract class Step implements Serializable {
     public final hydra.core.Projection value;
     
     public Project (hydra.core.Projection value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -116,6 +124,9 @@ public abstract class Step implements Serializable {
     public final hydra.query.ComparisonConstraint value;
     
     public Compare (hydra.query.ComparisonConstraint value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

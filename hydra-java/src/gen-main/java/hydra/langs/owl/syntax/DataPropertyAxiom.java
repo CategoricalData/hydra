@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -59,6 +61,9 @@ public abstract class DataPropertyAxiom implements Serializable {
     public final hydra.langs.owl.syntax.DataPropertyAxiom value;
     
     public DataPropertyAxiom_ (hydra.langs.owl.syntax.DataPropertyAxiom value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -86,6 +91,9 @@ public abstract class DataPropertyAxiom implements Serializable {
     public final hydra.langs.owl.syntax.DataPropertyRange value;
     
     public DataPropertyRange (hydra.langs.owl.syntax.DataPropertyRange value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -113,6 +121,9 @@ public abstract class DataPropertyAxiom implements Serializable {
     public final hydra.langs.owl.syntax.DisjointDataProperties value;
     
     public DisjointDataProperties (hydra.langs.owl.syntax.DisjointDataProperties value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -140,6 +151,9 @@ public abstract class DataPropertyAxiom implements Serializable {
     public final hydra.langs.owl.syntax.EquivalentDataProperties value;
     
     public EquivalentDataProperties (hydra.langs.owl.syntax.EquivalentDataProperties value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -167,6 +181,9 @@ public abstract class DataPropertyAxiom implements Serializable {
     public final hydra.langs.owl.syntax.FunctionalDataProperty value;
     
     public FunctionalDataProperty (hydra.langs.owl.syntax.FunctionalDataProperty value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -194,6 +211,9 @@ public abstract class DataPropertyAxiom implements Serializable {
     public final hydra.langs.owl.syntax.SubDataPropertyOf value;
     
     public SubDataPropertyOf (hydra.langs.owl.syntax.SubDataPropertyOf value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.kusto.kql;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class ColumnAssignment implements Serializable {
   public final hydra.langs.kusto.kql.Expression expression;
   
   public ColumnAssignment (hydra.langs.kusto.kql.ColumnName column, hydra.langs.kusto.kql.Expression expression) {
+    if (column == null) {
+      throw new IllegalArgumentException("null value for 'column' argument");
+    }
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     this.column = column;
     this.expression = expression;
   }
@@ -29,10 +37,16 @@ public class ColumnAssignment implements Serializable {
   }
   
   public ColumnAssignment withColumn(hydra.langs.kusto.kql.ColumnName column) {
+    if (column == null) {
+      throw new IllegalArgumentException("null value for 'column' argument");
+    }
     return new ColumnAssignment(column, expression);
   }
   
   public ColumnAssignment withExpression(hydra.langs.kusto.kql.Expression expression) {
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     return new ColumnAssignment(column, expression);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.propertyGraph;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class ElementTree<V> implements Serializable {
   public final java.util.List<hydra.langs.tinkerpop.propertyGraph.ElementTree<V>> dependencies;
   
   public ElementTree (hydra.langs.tinkerpop.propertyGraph.Element<V> self, java.util.List<hydra.langs.tinkerpop.propertyGraph.ElementTree<V>> dependencies) {
+    if (self == null) {
+      throw new IllegalArgumentException("null value for 'self' argument");
+    }
+    if (dependencies == null) {
+      throw new IllegalArgumentException("null value for 'dependencies' argument");
+    }
     this.self = self;
     this.dependencies = dependencies;
   }
@@ -32,10 +40,16 @@ public class ElementTree<V> implements Serializable {
   }
   
   public ElementTree withSelf(hydra.langs.tinkerpop.propertyGraph.Element<V> self) {
+    if (self == null) {
+      throw new IllegalArgumentException("null value for 'self' argument");
+    }
     return new ElementTree(self, dependencies);
   }
   
   public ElementTree withDependencies(java.util.List<hydra.langs.tinkerpop.propertyGraph.ElementTree<V>> dependencies) {
+    if (dependencies == null) {
+      throw new IllegalArgumentException("null value for 'dependencies' argument");
+    }
     return new ElementTree(self, dependencies);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -41,6 +43,9 @@ public abstract class ShapeDefinition_ListOfAlts_Elmt implements Serializable {
     public final hydra.langs.shex.syntax.IncludeSet value;
     
     public IncludeSet (hydra.langs.shex.syntax.IncludeSet value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -68,6 +73,9 @@ public abstract class ShapeDefinition_ListOfAlts_Elmt implements Serializable {
     public final hydra.langs.shex.syntax.ExtraPropertySet value;
     
     public ExtraPropertySet (hydra.langs.shex.syntax.ExtraPropertySet value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

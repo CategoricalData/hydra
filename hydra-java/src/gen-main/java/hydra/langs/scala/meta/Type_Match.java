@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Type_Match implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.TypeCase> cases;
   
   public Type_Match (hydra.langs.scala.meta.Type tpe, java.util.List<hydra.langs.scala.meta.TypeCase> cases) {
+    if (tpe == null) {
+      throw new IllegalArgumentException("null value for 'tpe' argument");
+    }
+    if (cases == null) {
+      throw new IllegalArgumentException("null value for 'cases' argument");
+    }
     this.tpe = tpe;
     this.cases = cases;
   }
@@ -29,10 +37,16 @@ public class Type_Match implements Serializable {
   }
   
   public Type_Match withTpe(hydra.langs.scala.meta.Type tpe) {
+    if (tpe == null) {
+      throw new IllegalArgumentException("null value for 'tpe' argument");
+    }
     return new Type_Match(tpe, cases);
   }
   
   public Type_Match withCases(java.util.List<hydra.langs.scala.meta.TypeCase> cases) {
+    if (cases == null) {
+      throw new IllegalArgumentException("null value for 'cases' argument");
+    }
     return new Type_Match(tpe, cases);
   }
 }

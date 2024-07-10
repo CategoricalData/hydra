@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.avro.schema;
 
 import java.io.Serializable;
@@ -11,6 +13,9 @@ public class Fixed implements Serializable {
   public final Integer size;
   
   public Fixed (Integer size) {
+    if (size == null) {
+      throw new IllegalArgumentException("null value for 'size' argument");
+    }
     this.size = size;
   }
   

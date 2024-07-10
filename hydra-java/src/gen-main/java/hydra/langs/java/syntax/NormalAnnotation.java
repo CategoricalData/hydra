@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class NormalAnnotation implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.ElementValuePair> pairs;
   
   public NormalAnnotation (hydra.langs.java.syntax.TypeName typeName, java.util.List<hydra.langs.java.syntax.ElementValuePair> pairs) {
+    if (typeName == null) {
+      throw new IllegalArgumentException("null value for 'typeName' argument");
+    }
+    if (pairs == null) {
+      throw new IllegalArgumentException("null value for 'pairs' argument");
+    }
     this.typeName = typeName;
     this.pairs = pairs;
   }
@@ -29,10 +37,16 @@ public class NormalAnnotation implements Serializable {
   }
   
   public NormalAnnotation withTypeName(hydra.langs.java.syntax.TypeName typeName) {
+    if (typeName == null) {
+      throw new IllegalArgumentException("null value for 'typeName' argument");
+    }
     return new NormalAnnotation(typeName, pairs);
   }
   
   public NormalAnnotation withPairs(java.util.List<hydra.langs.java.syntax.ElementValuePair> pairs) {
+    if (pairs == null) {
+      throw new IllegalArgumentException("null value for 'pairs' argument");
+    }
     return new NormalAnnotation(typeName, pairs);
   }
 }

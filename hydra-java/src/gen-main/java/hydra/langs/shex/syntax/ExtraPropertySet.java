@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class ExtraPropertySet implements Serializable {
   public final java.util.List<hydra.langs.shex.syntax.Predicate> value;
   
   public ExtraPropertySet (java.util.List<hydra.langs.shex.syntax.Predicate> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

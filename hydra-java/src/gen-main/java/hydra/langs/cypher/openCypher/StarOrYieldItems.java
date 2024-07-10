@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -60,6 +62,9 @@ public abstract class StarOrYieldItems implements Serializable {
     public final hydra.langs.cypher.openCypher.YieldItems value;
     
     public Items (hydra.langs.cypher.openCypher.YieldItems value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

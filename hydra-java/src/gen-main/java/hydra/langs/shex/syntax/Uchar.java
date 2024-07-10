@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class Uchar implements Serializable {
     public final hydra.langs.shex.syntax.Uchar_Sequence value;
     
     public Sequence (hydra.langs.shex.syntax.Uchar_Sequence value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class Uchar implements Serializable {
     public final hydra.langs.shex.syntax.Uchar_Sequence2 value;
     
     public Sequence2 (hydra.langs.shex.syntax.Uchar_Sequence2 value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

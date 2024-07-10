@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.core;
 
 import java.io.Serializable;
@@ -19,6 +21,12 @@ public class TupleProjection implements Serializable {
   public final Integer index;
   
   public TupleProjection (Integer arity, Integer index) {
+    if (arity == null) {
+      throw new IllegalArgumentException("null value for 'arity' argument");
+    }
+    if (index == null) {
+      throw new IllegalArgumentException("null value for 'index' argument");
+    }
     this.arity = arity;
     this.index = index;
   }
@@ -38,10 +46,16 @@ public class TupleProjection implements Serializable {
   }
   
   public TupleProjection withArity(Integer arity) {
+    if (arity == null) {
+      throw new IllegalArgumentException("null value for 'arity' argument");
+    }
     return new TupleProjection(arity, index);
   }
   
   public TupleProjection withIndex(Integer index) {
+    if (index == null) {
+      throw new IllegalArgumentException("null value for 'index' argument");
+    }
     return new TupleProjection(arity, index);
   }
 }

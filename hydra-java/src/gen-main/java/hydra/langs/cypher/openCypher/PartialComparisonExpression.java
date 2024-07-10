@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class PartialComparisonExpression implements Serializable {
   public final hydra.langs.cypher.openCypher.StringListNullPredicateExpression right;
   
   public PartialComparisonExpression (hydra.langs.cypher.openCypher.ComparisonOperator operator, hydra.langs.cypher.openCypher.StringListNullPredicateExpression right) {
+    if (operator == null) {
+      throw new IllegalArgumentException("null value for 'operator' argument");
+    }
+    if (right == null) {
+      throw new IllegalArgumentException("null value for 'right' argument");
+    }
     this.operator = operator;
     this.right = right;
   }
@@ -29,10 +37,16 @@ public class PartialComparisonExpression implements Serializable {
   }
   
   public PartialComparisonExpression withOperator(hydra.langs.cypher.openCypher.ComparisonOperator operator) {
+    if (operator == null) {
+      throw new IllegalArgumentException("null value for 'operator' argument");
+    }
     return new PartialComparisonExpression(operator, right);
   }
   
   public PartialComparisonExpression withRight(hydra.langs.cypher.openCypher.StringListNullPredicateExpression right) {
+    if (right == null) {
+      throw new IllegalArgumentException("null value for 'right' argument");
+    }
     return new PartialComparisonExpression(operator, right);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.workflow;
 
 import java.io.Serializable;
@@ -50,6 +52,9 @@ public abstract class SchemaSpec implements Serializable {
     public final hydra.workflow.HydraSchemaSpec value;
     
     public Hydra (hydra.workflow.HydraSchemaSpec value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -83,6 +88,9 @@ public abstract class SchemaSpec implements Serializable {
     public final String value;
     
     public File (String value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

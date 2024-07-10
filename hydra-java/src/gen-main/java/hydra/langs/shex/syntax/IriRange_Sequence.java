@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class IriRange_Sequence implements Serializable {
   public final java.util.Optional<java.util.List<hydra.langs.shex.syntax.Exclusion>> sequence;
   
   public IriRange_Sequence (hydra.langs.shex.syntax.Iri iri, java.util.Optional<java.util.List<hydra.langs.shex.syntax.Exclusion>> sequence) {
+    if (iri == null) {
+      throw new IllegalArgumentException("null value for 'iri' argument");
+    }
+    if (sequence == null) {
+      throw new IllegalArgumentException("null value for 'sequence' argument");
+    }
     this.iri = iri;
     this.sequence = sequence;
   }
@@ -29,10 +37,16 @@ public class IriRange_Sequence implements Serializable {
   }
   
   public IriRange_Sequence withIri(hydra.langs.shex.syntax.Iri iri) {
+    if (iri == null) {
+      throw new IllegalArgumentException("null value for 'iri' argument");
+    }
     return new IriRange_Sequence(iri, sequence);
   }
   
   public IriRange_Sequence withSequence(java.util.Optional<java.util.List<hydra.langs.shex.syntax.Exclusion>> sequence) {
+    if (sequence == null) {
+      throw new IllegalArgumentException("null value for 'sequence' argument");
+    }
     return new IriRange_Sequence(iri, sequence);
   }
 }

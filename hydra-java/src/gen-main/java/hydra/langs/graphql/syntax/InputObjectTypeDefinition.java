@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class InputObjectTypeDefinition implements Serializable {
     public final hydra.langs.graphql.syntax.InputObjectTypeDefinition_Sequence value;
     
     public Sequence (hydra.langs.graphql.syntax.InputObjectTypeDefinition_Sequence value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class InputObjectTypeDefinition implements Serializable {
     public final hydra.langs.graphql.syntax.InputObjectTypeDefinition_Sequence2 value;
     
     public Sequence2 (hydra.langs.graphql.syntax.InputObjectTypeDefinition_Sequence2 value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

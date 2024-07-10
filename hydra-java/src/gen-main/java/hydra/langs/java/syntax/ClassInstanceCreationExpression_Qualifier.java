@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class ClassInstanceCreationExpression_Qualifier implements Seria
     public final hydra.langs.java.syntax.ExpressionName value;
     
     public Expression (hydra.langs.java.syntax.ExpressionName value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class ClassInstanceCreationExpression_Qualifier implements Seria
     public final hydra.langs.java.syntax.Primary value;
     
     public Primary (hydra.langs.java.syntax.Primary value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

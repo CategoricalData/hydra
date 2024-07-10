@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Data_Annotate implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Mod_Annot> annots;
   
   public Data_Annotate (hydra.langs.scala.meta.Data expr, java.util.List<hydra.langs.scala.meta.Mod_Annot> annots) {
+    if (expr == null) {
+      throw new IllegalArgumentException("null value for 'expr' argument");
+    }
+    if (annots == null) {
+      throw new IllegalArgumentException("null value for 'annots' argument");
+    }
     this.expr = expr;
     this.annots = annots;
   }
@@ -29,10 +37,16 @@ public class Data_Annotate implements Serializable {
   }
   
   public Data_Annotate withExpr(hydra.langs.scala.meta.Data expr) {
+    if (expr == null) {
+      throw new IllegalArgumentException("null value for 'expr' argument");
+    }
     return new Data_Annotate(expr, annots);
   }
   
   public Data_Annotate withAnnots(java.util.List<hydra.langs.scala.meta.Mod_Annot> annots) {
+    if (annots == null) {
+      throw new IllegalArgumentException("null value for 'annots' argument");
+    }
     return new Data_Annotate(expr, annots);
   }
 }

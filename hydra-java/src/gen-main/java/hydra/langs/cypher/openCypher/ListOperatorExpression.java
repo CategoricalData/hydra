@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class ListOperatorExpression implements Serializable {
     public final hydra.langs.cypher.openCypher.Expression value;
     
     public Single (hydra.langs.cypher.openCypher.Expression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class ListOperatorExpression implements Serializable {
     public final hydra.langs.cypher.openCypher.RangeExpression value;
     
     public Range (hydra.langs.cypher.openCypher.RangeExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

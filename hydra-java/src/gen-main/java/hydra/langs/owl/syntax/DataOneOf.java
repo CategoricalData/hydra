@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -14,6 +16,9 @@ public class DataOneOf implements Serializable {
   public final java.util.List<hydra.langs.rdf.syntax.Literal> value;
   
   public DataOneOf (java.util.List<hydra.langs.rdf.syntax.Literal> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

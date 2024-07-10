@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -84,6 +86,9 @@ public abstract class Importee implements Serializable {
     public final hydra.langs.scala.meta.Importee_Given value;
     
     public Given (hydra.langs.scala.meta.Importee_Given value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -136,6 +141,9 @@ public abstract class Importee implements Serializable {
     public final hydra.langs.scala.meta.Importee_Name value;
     
     public Name (hydra.langs.scala.meta.Importee_Name value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -163,6 +171,9 @@ public abstract class Importee implements Serializable {
     public final hydra.langs.scala.meta.Importee_Rename value;
     
     public Rename (hydra.langs.scala.meta.Importee_Rename value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -190,6 +201,9 @@ public abstract class Importee implements Serializable {
     public final hydra.langs.scala.meta.Importee_Unimport value;
     
     public Unimport (hydra.langs.scala.meta.Importee_Unimport value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

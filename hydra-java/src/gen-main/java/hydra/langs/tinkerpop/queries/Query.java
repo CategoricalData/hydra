@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.queries;
 
 import java.io.Serializable;
@@ -59,6 +61,9 @@ public abstract class Query implements Serializable {
     public final hydra.langs.tinkerpop.queries.ApplicationQuery value;
     
     public Application (hydra.langs.tinkerpop.queries.ApplicationQuery value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -86,6 +91,9 @@ public abstract class Query implements Serializable {
     public final hydra.langs.tinkerpop.queries.AggregationQuery value;
     
     public Aggregate (hydra.langs.tinkerpop.queries.AggregationQuery value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -113,6 +121,9 @@ public abstract class Query implements Serializable {
     public final hydra.langs.tinkerpop.queries.LetQuery value;
     
     public LetQuery (hydra.langs.tinkerpop.queries.LetQuery value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -140,6 +151,9 @@ public abstract class Query implements Serializable {
     public final hydra.langs.tinkerpop.queries.MatchQuery value;
     
     public Match (hydra.langs.tinkerpop.queries.MatchQuery value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -167,6 +181,9 @@ public abstract class Query implements Serializable {
     public final hydra.langs.tinkerpop.queries.SelectQuery value;
     
     public Select (hydra.langs.tinkerpop.queries.SelectQuery value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -194,6 +211,9 @@ public abstract class Query implements Serializable {
     public final String value;
     
     public Value (String value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class MultiElementGroup implements Serializable {
   public final java.util.Optional<java.lang.Void> semi;
   
   public MultiElementGroup (hydra.langs.shex.syntax.UnaryTripleExpr unaryTripleExpr, java.util.List<hydra.langs.shex.syntax.UnaryTripleExpr> listOfSequence, java.util.Optional<java.lang.Void> semi) {
+    if (unaryTripleExpr == null) {
+      throw new IllegalArgumentException("null value for 'unaryTripleExpr' argument");
+    }
+    if (listOfSequence == null) {
+      throw new IllegalArgumentException("null value for 'listOfSequence' argument");
+    }
+    if (semi == null) {
+      throw new IllegalArgumentException("null value for 'semi' argument");
+    }
     this.unaryTripleExpr = unaryTripleExpr;
     this.listOfSequence = listOfSequence;
     this.semi = semi;
@@ -32,14 +43,23 @@ public class MultiElementGroup implements Serializable {
   }
   
   public MultiElementGroup withUnaryTripleExpr(hydra.langs.shex.syntax.UnaryTripleExpr unaryTripleExpr) {
+    if (unaryTripleExpr == null) {
+      throw new IllegalArgumentException("null value for 'unaryTripleExpr' argument");
+    }
     return new MultiElementGroup(unaryTripleExpr, listOfSequence, semi);
   }
   
   public MultiElementGroup withListOfSequence(java.util.List<hydra.langs.shex.syntax.UnaryTripleExpr> listOfSequence) {
+    if (listOfSequence == null) {
+      throw new IllegalArgumentException("null value for 'listOfSequence' argument");
+    }
     return new MultiElementGroup(unaryTripleExpr, listOfSequence, semi);
   }
   
   public MultiElementGroup withSemi(java.util.Optional<java.lang.Void> semi) {
+    if (semi == null) {
+      throw new IllegalArgumentException("null value for 'semi' argument");
+    }
     return new MultiElementGroup(unaryTripleExpr, listOfSequence, semi);
   }
 }

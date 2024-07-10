@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -65,6 +67,9 @@ public abstract class StatementExpression implements Serializable {
     public final hydra.langs.java.syntax.Assignment value;
     
     public Assignment (hydra.langs.java.syntax.Assignment value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -92,6 +97,9 @@ public abstract class StatementExpression implements Serializable {
     public final hydra.langs.java.syntax.PreIncrementExpression value;
     
     public PreIncrement (hydra.langs.java.syntax.PreIncrementExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -119,6 +127,9 @@ public abstract class StatementExpression implements Serializable {
     public final hydra.langs.java.syntax.PreDecrementExpression value;
     
     public PreDecrement (hydra.langs.java.syntax.PreDecrementExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -146,6 +157,9 @@ public abstract class StatementExpression implements Serializable {
     public final hydra.langs.java.syntax.PostIncrementExpression value;
     
     public PostIncrement (hydra.langs.java.syntax.PostIncrementExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -173,6 +187,9 @@ public abstract class StatementExpression implements Serializable {
     public final hydra.langs.java.syntax.PostDecrementExpression value;
     
     public PostDecrement (hydra.langs.java.syntax.PostDecrementExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -200,6 +217,9 @@ public abstract class StatementExpression implements Serializable {
     public final hydra.langs.java.syntax.MethodInvocation value;
     
     public MethodInvocation (hydra.langs.java.syntax.MethodInvocation value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -227,6 +247,9 @@ public abstract class StatementExpression implements Serializable {
     public final hydra.langs.java.syntax.ClassInstanceCreationExpression value;
     
     public ClassInstanceCreation (hydra.langs.java.syntax.ClassInstanceCreationExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

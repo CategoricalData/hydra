@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.query;
 
 import java.io.Serializable;
@@ -186,6 +188,9 @@ public abstract class RegexQuantifier implements Serializable {
     public final Integer value;
     
     public Exactly (Integer value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -219,6 +224,9 @@ public abstract class RegexQuantifier implements Serializable {
     public final Integer value;
     
     public AtLeast (Integer value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -252,6 +260,9 @@ public abstract class RegexQuantifier implements Serializable {
     public final hydra.query.Range value;
     
     public Range (hydra.query.Range value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

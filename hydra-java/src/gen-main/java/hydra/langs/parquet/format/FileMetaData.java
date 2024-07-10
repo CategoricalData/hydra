@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.format;
 
 import java.io.Serializable;
@@ -53,6 +55,33 @@ public class FileMetaData implements Serializable {
   public final java.util.Optional<String> footerSigningKeyMetadata;
   
   public FileMetaData (Integer version, java.util.List<hydra.langs.parquet.format.SchemaElement> schema, Long numRows, java.util.List<hydra.langs.parquet.format.RowGroup> rowGroups, java.util.Optional<java.util.List<hydra.langs.parquet.format.KeyValue>> keyValueMetadata, java.util.Optional<String> createdBy, java.util.Optional<java.util.List<hydra.langs.parquet.format.ColumnOrder>> columnOrders, java.util.Optional<hydra.langs.parquet.format.EncryptionAlgorithm> encryptionAlgorithm, java.util.Optional<String> footerSigningKeyMetadata) {
+    if (version == null) {
+      throw new IllegalArgumentException("null value for 'version' argument");
+    }
+    if (schema == null) {
+      throw new IllegalArgumentException("null value for 'schema' argument");
+    }
+    if (numRows == null) {
+      throw new IllegalArgumentException("null value for 'numRows' argument");
+    }
+    if (rowGroups == null) {
+      throw new IllegalArgumentException("null value for 'rowGroups' argument");
+    }
+    if (keyValueMetadata == null) {
+      throw new IllegalArgumentException("null value for 'keyValueMetadata' argument");
+    }
+    if (createdBy == null) {
+      throw new IllegalArgumentException("null value for 'createdBy' argument");
+    }
+    if (columnOrders == null) {
+      throw new IllegalArgumentException("null value for 'columnOrders' argument");
+    }
+    if (encryptionAlgorithm == null) {
+      throw new IllegalArgumentException("null value for 'encryptionAlgorithm' argument");
+    }
+    if (footerSigningKeyMetadata == null) {
+      throw new IllegalArgumentException("null value for 'footerSigningKeyMetadata' argument");
+    }
     this.version = version;
     this.schema = schema;
     this.numRows = numRows;
@@ -79,38 +108,65 @@ public class FileMetaData implements Serializable {
   }
   
   public FileMetaData withVersion(Integer version) {
+    if (version == null) {
+      throw new IllegalArgumentException("null value for 'version' argument");
+    }
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
   
   public FileMetaData withSchema(java.util.List<hydra.langs.parquet.format.SchemaElement> schema) {
+    if (schema == null) {
+      throw new IllegalArgumentException("null value for 'schema' argument");
+    }
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
   
   public FileMetaData withNumRows(Long numRows) {
+    if (numRows == null) {
+      throw new IllegalArgumentException("null value for 'numRows' argument");
+    }
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
   
   public FileMetaData withRowGroups(java.util.List<hydra.langs.parquet.format.RowGroup> rowGroups) {
+    if (rowGroups == null) {
+      throw new IllegalArgumentException("null value for 'rowGroups' argument");
+    }
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
   
   public FileMetaData withKeyValueMetadata(java.util.Optional<java.util.List<hydra.langs.parquet.format.KeyValue>> keyValueMetadata) {
+    if (keyValueMetadata == null) {
+      throw new IllegalArgumentException("null value for 'keyValueMetadata' argument");
+    }
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
   
   public FileMetaData withCreatedBy(java.util.Optional<String> createdBy) {
+    if (createdBy == null) {
+      throw new IllegalArgumentException("null value for 'createdBy' argument");
+    }
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
   
   public FileMetaData withColumnOrders(java.util.Optional<java.util.List<hydra.langs.parquet.format.ColumnOrder>> columnOrders) {
+    if (columnOrders == null) {
+      throw new IllegalArgumentException("null value for 'columnOrders' argument");
+    }
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
   
   public FileMetaData withEncryptionAlgorithm(java.util.Optional<hydra.langs.parquet.format.EncryptionAlgorithm> encryptionAlgorithm) {
+    if (encryptionAlgorithm == null) {
+      throw new IllegalArgumentException("null value for 'encryptionAlgorithm' argument");
+    }
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
   
   public FileMetaData withFooterSigningKeyMetadata(java.util.Optional<String> footerSigningKeyMetadata) {
+    if (footerSigningKeyMetadata == null) {
+      throw new IllegalArgumentException("null value for 'footerSigningKeyMetadata' argument");
+    }
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
 }

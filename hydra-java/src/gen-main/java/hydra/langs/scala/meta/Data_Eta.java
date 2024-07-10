@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class Data_Eta implements Serializable {
   public final hydra.langs.scala.meta.Data expr;
   
   public Data_Eta (hydra.langs.scala.meta.Data expr) {
+    if (expr == null) {
+      throw new IllegalArgumentException("null value for 'expr' argument");
+    }
     this.expr = expr;
   }
   

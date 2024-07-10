@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.pegasus.pdl;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class EnumSchema implements Serializable {
   public final java.util.List<hydra.langs.pegasus.pdl.EnumField> fields;
   
   public EnumSchema (java.util.List<hydra.langs.pegasus.pdl.EnumField> fields) {
+    if (fields == null) {
+      throw new IllegalArgumentException("null value for 'fields' argument");
+    }
     this.fields = fields;
   }
   

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -15,6 +17,15 @@ public class Alternative implements Serializable {
   public final java.util.Optional<hydra.langs.haskell.ast.LocalBindings> binds;
   
   public Alternative (hydra.langs.haskell.ast.Pattern pattern, hydra.langs.haskell.ast.CaseRhs rhs, java.util.Optional<hydra.langs.haskell.ast.LocalBindings> binds) {
+    if (pattern == null) {
+      throw new IllegalArgumentException("null value for 'pattern' argument");
+    }
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
+    if (binds == null) {
+      throw new IllegalArgumentException("null value for 'binds' argument");
+    }
     this.pattern = pattern;
     this.rhs = rhs;
     this.binds = binds;
@@ -35,14 +46,23 @@ public class Alternative implements Serializable {
   }
   
   public Alternative withPattern(hydra.langs.haskell.ast.Pattern pattern) {
+    if (pattern == null) {
+      throw new IllegalArgumentException("null value for 'pattern' argument");
+    }
     return new Alternative(pattern, rhs, binds);
   }
   
   public Alternative withRhs(hydra.langs.haskell.ast.CaseRhs rhs) {
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     return new Alternative(pattern, rhs, binds);
   }
   
   public Alternative withBinds(java.util.Optional<hydra.langs.haskell.ast.LocalBindings> binds) {
+    if (binds == null) {
+      throw new IllegalArgumentException("null value for 'binds' argument");
+    }
     return new Alternative(pattern, rhs, binds);
   }
 }

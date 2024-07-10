@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.format;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class ColumnCryptoMetaData implements Serializable {
     public final hydra.langs.parquet.format.EncryptionWithFooterKey value;
     
     public EncryptionWithFooterKey (hydra.langs.parquet.format.EncryptionWithFooterKey value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class ColumnCryptoMetaData implements Serializable {
     public final hydra.langs.parquet.format.EncryptionWithColumnKey value;
     
     public EncryptionWithColumnKey (hydra.langs.parquet.format.EncryptionWithColumnKey value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

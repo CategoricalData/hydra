@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.xml.schema;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class Byte_ implements Serializable {
   public final Short value;
   
   public Byte_ (Short value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Data_PolyFunction implements Serializable {
   public final hydra.langs.scala.meta.Data body;
   
   public Data_PolyFunction (java.util.List<hydra.langs.scala.meta.Type_Param> tparams, hydra.langs.scala.meta.Data body) {
+    if (tparams == null) {
+      throw new IllegalArgumentException("null value for 'tparams' argument");
+    }
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     this.tparams = tparams;
     this.body = body;
   }
@@ -29,10 +37,16 @@ public class Data_PolyFunction implements Serializable {
   }
   
   public Data_PolyFunction withTparams(java.util.List<hydra.langs.scala.meta.Type_Param> tparams) {
+    if (tparams == null) {
+      throw new IllegalArgumentException("null value for 'tparams' argument");
+    }
     return new Data_PolyFunction(tparams, body);
   }
   
   public Data_PolyFunction withBody(hydra.langs.scala.meta.Data body) {
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     return new Data_PolyFunction(tparams, body);
   }
 }

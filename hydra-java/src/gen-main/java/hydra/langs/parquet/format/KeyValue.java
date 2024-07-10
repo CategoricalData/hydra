@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.format;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class KeyValue implements Serializable {
   public final java.util.Optional<String> value;
   
   public KeyValue (String key, java.util.Optional<String> value) {
+    if (key == null) {
+      throw new IllegalArgumentException("null value for 'key' argument");
+    }
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.key = key;
     this.value = value;
   }
@@ -32,10 +40,16 @@ public class KeyValue implements Serializable {
   }
   
   public KeyValue withKey(String key) {
+    if (key == null) {
+      throw new IllegalArgumentException("null value for 'key' argument");
+    }
     return new KeyValue(key, value);
   }
   
   public KeyValue withValue(java.util.Optional<String> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     return new KeyValue(key, value);
   }
 }

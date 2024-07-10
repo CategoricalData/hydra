@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class CaseExpression implements Serializable {
   public final java.util.Optional<hydra.langs.cypher.openCypher.Expression> else_;
   
   public CaseExpression (java.util.Optional<hydra.langs.cypher.openCypher.Expression> expression, java.util.List<hydra.langs.cypher.openCypher.CaseAlternative> alternatives, java.util.Optional<hydra.langs.cypher.openCypher.Expression> else_) {
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
+    if (alternatives == null) {
+      throw new IllegalArgumentException("null value for 'alternatives' argument");
+    }
+    if (else_ == null) {
+      throw new IllegalArgumentException("null value for 'else' argument");
+    }
     this.expression = expression;
     this.alternatives = alternatives;
     this.else_ = else_;
@@ -32,14 +43,23 @@ public class CaseExpression implements Serializable {
   }
   
   public CaseExpression withExpression(java.util.Optional<hydra.langs.cypher.openCypher.Expression> expression) {
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     return new CaseExpression(expression, alternatives, else_);
   }
   
   public CaseExpression withAlternatives(java.util.List<hydra.langs.cypher.openCypher.CaseAlternative> alternatives) {
+    if (alternatives == null) {
+      throw new IllegalArgumentException("null value for 'alternatives' argument");
+    }
     return new CaseExpression(expression, alternatives, else_);
   }
   
   public CaseExpression withElse(java.util.Optional<hydra.langs.cypher.openCypher.Expression> else_) {
+    if (else_ == null) {
+      throw new IllegalArgumentException("null value for 'else' argument");
+    }
     return new CaseExpression(expression, alternatives, else_);
   }
 }

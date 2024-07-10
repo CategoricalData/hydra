@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.relationalModel;
 
 import java.io.Serializable;
@@ -11,6 +13,9 @@ public class Relationship<V> implements Serializable {
   public final java.util.Set<java.util.Map<hydra.langs.relationalModel.ColumnName, V>> value;
   
   public Relationship (java.util.Set<java.util.Map<hydra.langs.relationalModel.ColumnName, V>> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

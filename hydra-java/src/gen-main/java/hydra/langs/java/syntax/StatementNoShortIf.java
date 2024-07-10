@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -53,6 +55,9 @@ public abstract class StatementNoShortIf implements Serializable {
     public final hydra.langs.java.syntax.StatementWithoutTrailingSubstatement value;
     
     public WithoutTrailing (hydra.langs.java.syntax.StatementWithoutTrailingSubstatement value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -80,6 +85,9 @@ public abstract class StatementNoShortIf implements Serializable {
     public final hydra.langs.java.syntax.LabeledStatementNoShortIf value;
     
     public Labeled (hydra.langs.java.syntax.LabeledStatementNoShortIf value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -107,6 +115,9 @@ public abstract class StatementNoShortIf implements Serializable {
     public final hydra.langs.java.syntax.IfThenElseStatementNoShortIf value;
     
     public IfThenElse (hydra.langs.java.syntax.IfThenElseStatementNoShortIf value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -134,6 +145,9 @@ public abstract class StatementNoShortIf implements Serializable {
     public final hydra.langs.java.syntax.WhileStatementNoShortIf value;
     
     public While (hydra.langs.java.syntax.WhileStatementNoShortIf value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -161,6 +175,9 @@ public abstract class StatementNoShortIf implements Serializable {
     public final hydra.langs.java.syntax.ForStatementNoShortIf value;
     
     public For (hydra.langs.java.syntax.ForStatementNoShortIf value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

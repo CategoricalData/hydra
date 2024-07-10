@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class ObjectAllValuesFrom implements Serializable {
   public final hydra.langs.owl.syntax.ClassExpression class_;
   
   public ObjectAllValuesFrom (hydra.langs.owl.syntax.ObjectPropertyExpression property, hydra.langs.owl.syntax.ClassExpression class_) {
+    if (property == null) {
+      throw new IllegalArgumentException("null value for 'property' argument");
+    }
+    if (class_ == null) {
+      throw new IllegalArgumentException("null value for 'class' argument");
+    }
     this.property = property;
     this.class_ = class_;
   }
@@ -29,10 +37,16 @@ public class ObjectAllValuesFrom implements Serializable {
   }
   
   public ObjectAllValuesFrom withProperty(hydra.langs.owl.syntax.ObjectPropertyExpression property) {
+    if (property == null) {
+      throw new IllegalArgumentException("null value for 'property' argument");
+    }
     return new ObjectAllValuesFrom(property, class_);
   }
   
   public ObjectAllValuesFrom withClass(hydra.langs.owl.syntax.ClassExpression class_) {
+    if (class_ == null) {
+      throw new IllegalArgumentException("null value for 'class' argument");
+    }
     return new ObjectAllValuesFrom(property, class_);
   }
 }

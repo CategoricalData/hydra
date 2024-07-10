@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class RelationalExpression_LessThanEqual implements Serializable {
   public final hydra.langs.java.syntax.ShiftExpression rhs;
   
   public RelationalExpression_LessThanEqual (hydra.langs.java.syntax.RelationalExpression lhs, hydra.langs.java.syntax.ShiftExpression rhs) {
+    if (lhs == null) {
+      throw new IllegalArgumentException("null value for 'lhs' argument");
+    }
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -29,10 +37,16 @@ public class RelationalExpression_LessThanEqual implements Serializable {
   }
   
   public RelationalExpression_LessThanEqual withLhs(hydra.langs.java.syntax.RelationalExpression lhs) {
+    if (lhs == null) {
+      throw new IllegalArgumentException("null value for 'lhs' argument");
+    }
     return new RelationalExpression_LessThanEqual(lhs, rhs);
   }
   
   public RelationalExpression_LessThanEqual withRhs(hydra.langs.java.syntax.ShiftExpression rhs) {
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     return new RelationalExpression_LessThanEqual(lhs, rhs);
   }
 }

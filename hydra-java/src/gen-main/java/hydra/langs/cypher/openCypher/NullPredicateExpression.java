@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class NullPredicateExpression implements Serializable {
   public final Boolean value;
   
   public NullPredicateExpression (Boolean value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

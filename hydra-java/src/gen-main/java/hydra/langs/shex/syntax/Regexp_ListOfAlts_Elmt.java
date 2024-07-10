@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -41,6 +43,9 @@ public abstract class Regexp_ListOfAlts_Elmt implements Serializable {
     public final String value;
     
     public Regex (String value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -68,6 +73,9 @@ public abstract class Regexp_ListOfAlts_Elmt implements Serializable {
     public final String value;
     
     public Sequence (String value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -95,6 +103,9 @@ public abstract class Regexp_ListOfAlts_Elmt implements Serializable {
     public final hydra.langs.shex.syntax.Uchar value;
     
     public Uchar (hydra.langs.shex.syntax.Uchar value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

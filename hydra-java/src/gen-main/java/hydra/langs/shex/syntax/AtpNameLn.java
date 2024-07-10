@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class AtpNameLn implements Serializable {
   public final hydra.langs.shex.syntax.PnLocal pnLocal;
   
   public AtpNameLn (hydra.langs.shex.syntax.PnameNs pnameNs, hydra.langs.shex.syntax.PnLocal pnLocal) {
+    if (pnameNs == null) {
+      throw new IllegalArgumentException("null value for 'pnameNs' argument");
+    }
+    if (pnLocal == null) {
+      throw new IllegalArgumentException("null value for 'pnLocal' argument");
+    }
     this.pnameNs = pnameNs;
     this.pnLocal = pnLocal;
   }
@@ -29,10 +37,16 @@ public class AtpNameLn implements Serializable {
   }
   
   public AtpNameLn withPnameNs(hydra.langs.shex.syntax.PnameNs pnameNs) {
+    if (pnameNs == null) {
+      throw new IllegalArgumentException("null value for 'pnameNs' argument");
+    }
     return new AtpNameLn(pnameNs, pnLocal);
   }
   
   public AtpNameLn withPnLocal(hydra.langs.shex.syntax.PnLocal pnLocal) {
+    if (pnLocal == null) {
+      throw new IllegalArgumentException("null value for 'pnLocal' argument");
+    }
     return new AtpNameLn(pnameNs, pnLocal);
   }
 }

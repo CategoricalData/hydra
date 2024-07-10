@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.kusto.kql;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class Function implements Serializable {
     public final hydra.langs.kusto.kql.BuiltInFunction value;
     
     public BuiltIn (hydra.langs.kusto.kql.BuiltInFunction value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class Function implements Serializable {
     public final hydra.langs.kusto.kql.FunctionName value;
     
     public Custom (hydra.langs.kusto.kql.FunctionName value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -14,6 +16,9 @@ public class IntegerLiteral implements Serializable {
   public final java.math.BigInteger value;
   
   public IntegerLiteral (java.math.BigInteger value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

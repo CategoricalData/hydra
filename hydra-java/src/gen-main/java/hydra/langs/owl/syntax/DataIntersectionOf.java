@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -14,6 +16,9 @@ public class DataIntersectionOf implements Serializable {
   public final java.util.List<hydra.langs.owl.syntax.DataRange> value;
   
   public DataIntersectionOf (java.util.List<hydra.langs.owl.syntax.DataRange> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

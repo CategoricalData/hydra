@@ -1,5 +1,10 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.language;
 
+/**
+ * Language constraints for Java
+ */
 public interface Language {
   Integer javaMaxTupleLength = 9;
   

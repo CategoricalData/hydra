@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class RemoveItem implements Serializable {
     public final hydra.langs.cypher.openCypher.VariableAndNodeLabels value;
     
     public VariableLabels (hydra.langs.cypher.openCypher.VariableAndNodeLabels value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class RemoveItem implements Serializable {
     public final hydra.langs.cypher.openCypher.PropertyExpression value;
     
     public Property (hydra.langs.cypher.openCypher.PropertyExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -14,6 +16,9 @@ public class Deriving implements Serializable {
   public final java.util.List<hydra.langs.haskell.ast.Name> value;
   
   public Deriving (java.util.List<hydra.langs.haskell.ast.Name> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

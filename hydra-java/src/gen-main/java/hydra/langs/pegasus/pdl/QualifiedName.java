@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.pegasus.pdl;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class QualifiedName implements Serializable {
   public final java.util.Optional<hydra.langs.pegasus.pdl.Namespace> namespace;
   
   public QualifiedName (hydra.langs.pegasus.pdl.Name name, java.util.Optional<hydra.langs.pegasus.pdl.Namespace> namespace) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (namespace == null) {
+      throw new IllegalArgumentException("null value for 'namespace' argument");
+    }
     this.name = name;
     this.namespace = namespace;
   }
@@ -29,10 +37,16 @@ public class QualifiedName implements Serializable {
   }
   
   public QualifiedName withName(hydra.langs.pegasus.pdl.Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new QualifiedName(name, namespace);
   }
   
   public QualifiedName withNamespace(java.util.Optional<hydra.langs.pegasus.pdl.Namespace> namespace) {
+    if (namespace == null) {
+      throw new IllegalArgumentException("null value for 'namespace' argument");
+    }
     return new QualifiedName(name, namespace);
   }
 }

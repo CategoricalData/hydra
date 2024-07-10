@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Defn_RepeatedEnumCase implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Data_Name> cases;
   
   public Defn_RepeatedEnumCase (java.util.List<hydra.langs.scala.meta.Mod> mods, java.util.List<hydra.langs.scala.meta.Data_Name> cases) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
+    if (cases == null) {
+      throw new IllegalArgumentException("null value for 'cases' argument");
+    }
     this.mods = mods;
     this.cases = cases;
   }
@@ -29,10 +37,16 @@ public class Defn_RepeatedEnumCase implements Serializable {
   }
   
   public Defn_RepeatedEnumCase withMods(java.util.List<hydra.langs.scala.meta.Mod> mods) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
     return new Defn_RepeatedEnumCase(mods, cases);
   }
   
   public Defn_RepeatedEnumCase withCases(java.util.List<hydra.langs.scala.meta.Data_Name> cases) {
+    if (cases == null) {
+      throw new IllegalArgumentException("null value for 'cases' argument");
+    }
     return new Defn_RepeatedEnumCase(mods, cases);
   }
 }

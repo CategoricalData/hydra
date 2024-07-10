@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Importer implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Importee> importees;
   
   public Importer (hydra.langs.scala.meta.Data_Ref ref, java.util.List<hydra.langs.scala.meta.Importee> importees) {
+    if (ref == null) {
+      throw new IllegalArgumentException("null value for 'ref' argument");
+    }
+    if (importees == null) {
+      throw new IllegalArgumentException("null value for 'importees' argument");
+    }
     this.ref = ref;
     this.importees = importees;
   }
@@ -29,10 +37,16 @@ public class Importer implements Serializable {
   }
   
   public Importer withRef(hydra.langs.scala.meta.Data_Ref ref) {
+    if (ref == null) {
+      throw new IllegalArgumentException("null value for 'ref' argument");
+    }
     return new Importer(ref, importees);
   }
   
   public Importer withImportees(java.util.List<hydra.langs.scala.meta.Importee> importees) {
+    if (importees == null) {
+      throw new IllegalArgumentException("null value for 'importees' argument");
+    }
     return new Importer(ref, importees);
   }
 }

@@ -1,0 +1,52 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.langs.tinkerpop.gremlin;
+
+import java.io.Serializable;
+
+public class HasTraversalTokenArgs implements Serializable {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.HasTraversalTokenArgs");
+  
+  public final hydra.langs.tinkerpop.gremlin.TraversalTokenArgument traversalToken;
+  
+  public final hydra.langs.tinkerpop.gremlin.HasTraversalTokenArgsRest rest;
+  
+  public HasTraversalTokenArgs (hydra.langs.tinkerpop.gremlin.TraversalTokenArgument traversalToken, hydra.langs.tinkerpop.gremlin.HasTraversalTokenArgsRest rest) {
+    if (traversalToken == null) {
+      throw new IllegalArgumentException("null value for 'traversalToken' argument");
+    }
+    if (rest == null) {
+      throw new IllegalArgumentException("null value for 'rest' argument");
+    }
+    this.traversalToken = traversalToken;
+    this.rest = rest;
+  }
+  
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof HasTraversalTokenArgs)) {
+      return false;
+    }
+    HasTraversalTokenArgs o = (HasTraversalTokenArgs) (other);
+    return traversalToken.equals(o.traversalToken) && rest.equals(o.rest);
+  }
+  
+  @Override
+  public int hashCode() {
+    return 2 * traversalToken.hashCode() + 3 * rest.hashCode();
+  }
+  
+  public HasTraversalTokenArgs withTraversalToken(hydra.langs.tinkerpop.gremlin.TraversalTokenArgument traversalToken) {
+    if (traversalToken == null) {
+      throw new IllegalArgumentException("null value for 'traversalToken' argument");
+    }
+    return new HasTraversalTokenArgs(traversalToken, rest);
+  }
+  
+  public HasTraversalTokenArgs withRest(hydra.langs.tinkerpop.gremlin.HasTraversalTokenArgsRest rest) {
+    if (rest == null) {
+      throw new IllegalArgumentException("null value for 'rest' argument");
+    }
+    return new HasTraversalTokenArgs(traversalToken, rest);
+  }
+}

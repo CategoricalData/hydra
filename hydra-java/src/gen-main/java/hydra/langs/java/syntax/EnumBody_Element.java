@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class EnumBody_Element implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.ClassBodyDeclaration> bodyDeclarations;
   
   public EnumBody_Element (java.util.List<hydra.langs.java.syntax.EnumConstant> constants, java.util.List<hydra.langs.java.syntax.ClassBodyDeclaration> bodyDeclarations) {
+    if (constants == null) {
+      throw new IllegalArgumentException("null value for 'constants' argument");
+    }
+    if (bodyDeclarations == null) {
+      throw new IllegalArgumentException("null value for 'bodyDeclarations' argument");
+    }
     this.constants = constants;
     this.bodyDeclarations = bodyDeclarations;
   }
@@ -29,10 +37,16 @@ public class EnumBody_Element implements Serializable {
   }
   
   public EnumBody_Element withConstants(java.util.List<hydra.langs.java.syntax.EnumConstant> constants) {
+    if (constants == null) {
+      throw new IllegalArgumentException("null value for 'constants' argument");
+    }
     return new EnumBody_Element(constants, bodyDeclarations);
   }
   
   public EnumBody_Element withBodyDeclarations(java.util.List<hydra.langs.java.syntax.ClassBodyDeclaration> bodyDeclarations) {
+    if (bodyDeclarations == null) {
+      throw new IllegalArgumentException("null value for 'bodyDeclarations' argument");
+    }
     return new EnumBody_Element(constants, bodyDeclarations);
   }
 }

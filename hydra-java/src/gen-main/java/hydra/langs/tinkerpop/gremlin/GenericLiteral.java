@@ -1,0 +1,728 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.langs.tinkerpop.gremlin;
+
+import java.io.Serializable;
+
+public abstract class GenericLiteral implements Serializable {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.GenericLiteral");
+  
+  private GenericLiteral () {
+  
+  }
+  
+  public abstract <R> R accept(Visitor<R> visitor) ;
+  
+  public interface Visitor<R> {
+    R visit(Numeric instance) ;
+    
+    R visit(Boolean_ instance) ;
+    
+    R visit(String_ instance) ;
+    
+    R visit(Date instance) ;
+    
+    R visit(Null instance) ;
+    
+    R visit(Nan instance) ;
+    
+    R visit(Inf instance) ;
+    
+    R visit(TraversalToken instance) ;
+    
+    R visit(TraversalCardinality instance) ;
+    
+    R visit(TraversalDirection instance) ;
+    
+    R visit(TraversalMerge instance) ;
+    
+    R visit(TraversalPick instance) ;
+    
+    R visit(TraversalDT instance) ;
+    
+    R visit(StructureVertex instance) ;
+    
+    R visit(GenericLiteralSet instance) ;
+    
+    R visit(GenericLiteralCollection instance) ;
+    
+    R visit(GenericLiteralRange instance) ;
+    
+    R visit(NestedTraversal instance) ;
+    
+    R visit(TerminatedTraversal instance) ;
+    
+    R visit(GenericLiteralMap instance) ;
+  }
+  
+  public interface PartialVisitor<R> extends Visitor<R> {
+    default R otherwise(GenericLiteral instance) {
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+    }
+    
+    default R visit(Numeric instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Boolean_ instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(String_ instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Date instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Null instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Nan instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Inf instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(TraversalToken instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(TraversalCardinality instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(TraversalDirection instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(TraversalMerge instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(TraversalPick instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(TraversalDT instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(StructureVertex instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(GenericLiteralSet instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(GenericLiteralCollection instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(GenericLiteralRange instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(NestedTraversal instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(TerminatedTraversal instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(GenericLiteralMap instance) {
+      return otherwise((instance));
+    }
+  }
+  
+  public static final class Numeric extends hydra.langs.tinkerpop.gremlin.GenericLiteral implements Serializable {
+    public final hydra.langs.tinkerpop.gremlin.NumericLiteral value;
+    
+    public Numeric (hydra.langs.tinkerpop.gremlin.NumericLiteral value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Numeric)) {
+        return false;
+      }
+      Numeric o = (Numeric) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Boolean_ extends hydra.langs.tinkerpop.gremlin.GenericLiteral implements Serializable {
+    public final Boolean value;
+    
+    public Boolean_ (Boolean value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Boolean_)) {
+        return false;
+      }
+      Boolean_ o = (Boolean_) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class String_ extends hydra.langs.tinkerpop.gremlin.GenericLiteral implements Serializable {
+    public final String value;
+    
+    public String_ (String value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof String_)) {
+        return false;
+      }
+      String_ o = (String_) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Date extends hydra.langs.tinkerpop.gremlin.GenericLiteral implements Serializable {
+    public final hydra.langs.tinkerpop.gremlin.DateLiteral value;
+    
+    public Date (hydra.langs.tinkerpop.gremlin.DateLiteral value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Date)) {
+        return false;
+      }
+      Date o = (Date) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Null extends hydra.langs.tinkerpop.gremlin.GenericLiteral implements Serializable {
+    public Null () {
+    
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Null)) {
+        return false;
+      }
+      Null o = (Null) (other);
+      return true;
+    }
+    
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Nan extends hydra.langs.tinkerpop.gremlin.GenericLiteral implements Serializable {
+    public Nan () {
+    
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Nan)) {
+        return false;
+      }
+      Nan o = (Nan) (other);
+      return true;
+    }
+    
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Inf extends hydra.langs.tinkerpop.gremlin.GenericLiteral implements Serializable {
+    public Inf () {
+    
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Inf)) {
+        return false;
+      }
+      Inf o = (Inf) (other);
+      return true;
+    }
+    
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class TraversalToken extends hydra.langs.tinkerpop.gremlin.GenericLiteral implements Serializable {
+    public final hydra.langs.tinkerpop.gremlin.TraversalToken value;
+    
+    public TraversalToken (hydra.langs.tinkerpop.gremlin.TraversalToken value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof TraversalToken)) {
+        return false;
+      }
+      TraversalToken o = (TraversalToken) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class TraversalCardinality extends hydra.langs.tinkerpop.gremlin.GenericLiteral implements Serializable {
+    public final hydra.langs.tinkerpop.gremlin.TraversalCardinality value;
+    
+    public TraversalCardinality (hydra.langs.tinkerpop.gremlin.TraversalCardinality value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof TraversalCardinality)) {
+        return false;
+      }
+      TraversalCardinality o = (TraversalCardinality) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class TraversalDirection extends hydra.langs.tinkerpop.gremlin.GenericLiteral implements Serializable {
+    public final hydra.langs.tinkerpop.gremlin.TraversalDirection value;
+    
+    public TraversalDirection (hydra.langs.tinkerpop.gremlin.TraversalDirection value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof TraversalDirection)) {
+        return false;
+      }
+      TraversalDirection o = (TraversalDirection) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class TraversalMerge extends hydra.langs.tinkerpop.gremlin.GenericLiteral implements Serializable {
+    public final hydra.langs.tinkerpop.gremlin.TraversalMerge value;
+    
+    public TraversalMerge (hydra.langs.tinkerpop.gremlin.TraversalMerge value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof TraversalMerge)) {
+        return false;
+      }
+      TraversalMerge o = (TraversalMerge) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class TraversalPick extends hydra.langs.tinkerpop.gremlin.GenericLiteral implements Serializable {
+    public final hydra.langs.tinkerpop.gremlin.TraversalPick value;
+    
+    public TraversalPick (hydra.langs.tinkerpop.gremlin.TraversalPick value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof TraversalPick)) {
+        return false;
+      }
+      TraversalPick o = (TraversalPick) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class TraversalDT extends hydra.langs.tinkerpop.gremlin.GenericLiteral implements Serializable {
+    public final hydra.langs.tinkerpop.gremlin.TraversalDT value;
+    
+    public TraversalDT (hydra.langs.tinkerpop.gremlin.TraversalDT value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof TraversalDT)) {
+        return false;
+      }
+      TraversalDT o = (TraversalDT) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class StructureVertex extends hydra.langs.tinkerpop.gremlin.GenericLiteral implements Serializable {
+    public final hydra.langs.tinkerpop.gremlin.StructureVertex value;
+    
+    public StructureVertex (hydra.langs.tinkerpop.gremlin.StructureVertex value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof StructureVertex)) {
+        return false;
+      }
+      StructureVertex o = (StructureVertex) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class GenericLiteralSet extends hydra.langs.tinkerpop.gremlin.GenericLiteral implements Serializable {
+    public final hydra.langs.tinkerpop.gremlin.GenericLiteralSet value;
+    
+    public GenericLiteralSet (hydra.langs.tinkerpop.gremlin.GenericLiteralSet value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof GenericLiteralSet)) {
+        return false;
+      }
+      GenericLiteralSet o = (GenericLiteralSet) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class GenericLiteralCollection extends hydra.langs.tinkerpop.gremlin.GenericLiteral implements Serializable {
+    public final hydra.langs.tinkerpop.gremlin.GenericLiteralCollection value;
+    
+    public GenericLiteralCollection (hydra.langs.tinkerpop.gremlin.GenericLiteralCollection value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof GenericLiteralCollection)) {
+        return false;
+      }
+      GenericLiteralCollection o = (GenericLiteralCollection) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class GenericLiteralRange extends hydra.langs.tinkerpop.gremlin.GenericLiteral implements Serializable {
+    public final hydra.langs.tinkerpop.gremlin.GenericLiteralRange value;
+    
+    public GenericLiteralRange (hydra.langs.tinkerpop.gremlin.GenericLiteralRange value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof GenericLiteralRange)) {
+        return false;
+      }
+      GenericLiteralRange o = (GenericLiteralRange) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class NestedTraversal extends hydra.langs.tinkerpop.gremlin.GenericLiteral implements Serializable {
+    public final hydra.langs.tinkerpop.gremlin.NestedTraversal value;
+    
+    public NestedTraversal (hydra.langs.tinkerpop.gremlin.NestedTraversal value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof NestedTraversal)) {
+        return false;
+      }
+      NestedTraversal o = (NestedTraversal) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class TerminatedTraversal extends hydra.langs.tinkerpop.gremlin.GenericLiteral implements Serializable {
+    public final hydra.langs.tinkerpop.gremlin.TerminatedTraversal value;
+    
+    public TerminatedTraversal (hydra.langs.tinkerpop.gremlin.TerminatedTraversal value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof TerminatedTraversal)) {
+        return false;
+      }
+      TerminatedTraversal o = (TerminatedTraversal) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class GenericLiteralMap extends hydra.langs.tinkerpop.gremlin.GenericLiteral implements Serializable {
+    public final hydra.langs.tinkerpop.gremlin.GenericLiteralMap value;
+    
+    public GenericLiteralMap (hydra.langs.tinkerpop.gremlin.GenericLiteralMap value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof GenericLiteralMap)) {
+        return false;
+      }
+      GenericLiteralMap o = (GenericLiteralMap) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+}

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class PnPrefix_Sequence_Option_Alts implements Serializable {
     public final hydra.langs.shex.syntax.PnChars value;
     
     public PnChars (hydra.langs.shex.syntax.PnChars value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

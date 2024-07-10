@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.core;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class FieldType<A> implements Serializable {
   public final hydra.core.Type<A> type;
   
   public FieldType (hydra.core.FieldName name, hydra.core.Type<A> type) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     this.name = name;
     this.type = type;
   }
@@ -32,10 +40,16 @@ public class FieldType<A> implements Serializable {
   }
   
   public FieldType withName(hydra.core.FieldName name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new FieldType(name, type);
   }
   
   public FieldType withType(hydra.core.Type<A> type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new FieldType(name, type);
   }
 }

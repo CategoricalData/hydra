@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.core;
 
 import java.io.Serializable;
@@ -19,6 +21,12 @@ public class ApplicationType<A> implements Serializable {
   public final hydra.core.Type<A> argument;
   
   public ApplicationType (hydra.core.Type<A> function, hydra.core.Type<A> argument) {
+    if (function == null) {
+      throw new IllegalArgumentException("null value for 'function' argument");
+    }
+    if (argument == null) {
+      throw new IllegalArgumentException("null value for 'argument' argument");
+    }
     this.function = function;
     this.argument = argument;
   }
@@ -38,10 +46,16 @@ public class ApplicationType<A> implements Serializable {
   }
   
   public ApplicationType withFunction(hydra.core.Type<A> function) {
+    if (function == null) {
+      throw new IllegalArgumentException("null value for 'function' argument");
+    }
     return new ApplicationType(function, argument);
   }
   
   public ApplicationType withArgument(hydra.core.Type<A> argument) {
+    if (argument == null) {
+      throw new IllegalArgumentException("null value for 'argument' argument");
+    }
     return new ApplicationType(function, argument);
   }
 }

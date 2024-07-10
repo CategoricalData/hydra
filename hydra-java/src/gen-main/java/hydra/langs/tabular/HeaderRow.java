@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tabular;
 
 import java.io.Serializable;
@@ -14,6 +16,9 @@ public class HeaderRow implements Serializable {
   public final java.util.List<String> value;
   
   public HeaderRow (java.util.List<String> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

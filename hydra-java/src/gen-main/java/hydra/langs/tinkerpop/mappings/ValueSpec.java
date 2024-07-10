@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.mappings;
 
 import java.io.Serializable;
@@ -72,6 +74,9 @@ public abstract class ValueSpec implements Serializable {
     public final String value;
     
     public Pattern (String value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

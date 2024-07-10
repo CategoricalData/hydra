@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.compute;
 
 import java.io.Serializable;
@@ -14,6 +16,9 @@ public class Kv implements Serializable {
   public final java.util.Map<String, hydra.core.Term<hydra.compute.Kv>> annotations;
   
   public Kv (java.util.Map<String, hydra.core.Term<hydra.compute.Kv>> annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     this.annotations = annotations;
   }
   

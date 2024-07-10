@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class SchemaExtension implements Serializable {
     public final hydra.langs.graphql.syntax.SchemaExtension_Sequence value;
     
     public Sequence (hydra.langs.graphql.syntax.SchemaExtension_Sequence value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class SchemaExtension implements Serializable {
     public final hydra.langs.graphql.syntax.Directives value;
     
     public Sequence2 (hydra.langs.graphql.syntax.Directives value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

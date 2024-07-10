@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.protobuf.proto3;
 
 import java.io.Serializable;
@@ -16,9 +18,15 @@ public class Option implements Serializable {
   /**
    * The option's value
    */
-  public final String value;
+  public final hydra.langs.protobuf.proto3.Value value;
   
-  public Option (String name, String value) {
+  public Option (String name, hydra.langs.protobuf.proto3.Value value) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.name = name;
     this.value = value;
   }
@@ -38,10 +46,16 @@ public class Option implements Serializable {
   }
   
   public Option withName(String name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new Option(name, value);
   }
   
-  public Option withValue(String value) {
+  public Option withValue(hydra.langs.protobuf.proto3.Value value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     return new Option(name, value);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class ModularCompilationUnit implements Serializable {
   public final hydra.langs.java.syntax.ModuleDeclaration module;
   
   public ModularCompilationUnit (java.util.List<hydra.langs.java.syntax.ImportDeclaration> imports, hydra.langs.java.syntax.ModuleDeclaration module) {
+    if (imports == null) {
+      throw new IllegalArgumentException("null value for 'imports' argument");
+    }
+    if (module == null) {
+      throw new IllegalArgumentException("null value for 'module' argument");
+    }
     this.imports = imports;
     this.module = module;
   }
@@ -29,10 +37,16 @@ public class ModularCompilationUnit implements Serializable {
   }
   
   public ModularCompilationUnit withImports(java.util.List<hydra.langs.java.syntax.ImportDeclaration> imports) {
+    if (imports == null) {
+      throw new IllegalArgumentException("null value for 'imports' argument");
+    }
     return new ModularCompilationUnit(imports, module);
   }
   
   public ModularCompilationUnit withModule(hydra.langs.java.syntax.ModuleDeclaration module) {
+    if (module == null) {
+      throw new IllegalArgumentException("null value for 'module' argument");
+    }
     return new ModularCompilationUnit(imports, module);
   }
 }

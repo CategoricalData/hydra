@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class MethodReference_Array implements Serializable {
   public final hydra.langs.java.syntax.ArrayType value;
   
   public MethodReference_Array (hydra.langs.java.syntax.ArrayType value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

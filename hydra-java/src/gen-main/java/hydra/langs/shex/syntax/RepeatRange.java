@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class RepeatRange implements Serializable {
   public final java.util.Optional<java.util.Optional<java.util.Optional<hydra.langs.shex.syntax.RepeatRange_Sequence_Option_Option_Option>>> sequence;
   
   public RepeatRange (hydra.langs.shex.syntax.Integer_ integer, java.util.Optional<java.util.Optional<java.util.Optional<hydra.langs.shex.syntax.RepeatRange_Sequence_Option_Option_Option>>> sequence) {
+    if (integer == null) {
+      throw new IllegalArgumentException("null value for 'integer' argument");
+    }
+    if (sequence == null) {
+      throw new IllegalArgumentException("null value for 'sequence' argument");
+    }
     this.integer = integer;
     this.sequence = sequence;
   }
@@ -29,10 +37,16 @@ public class RepeatRange implements Serializable {
   }
   
   public RepeatRange withInteger(hydra.langs.shex.syntax.Integer_ integer) {
+    if (integer == null) {
+      throw new IllegalArgumentException("null value for 'integer' argument");
+    }
     return new RepeatRange(integer, sequence);
   }
   
   public RepeatRange withSequence(java.util.Optional<java.util.Optional<java.util.Optional<hydra.langs.shex.syntax.RepeatRange_Sequence_Option_Option_Option>>> sequence) {
+    if (sequence == null) {
+      throw new IllegalArgumentException("null value for 'sequence' argument");
+    }
     return new RepeatRange(integer, sequence);
   }
 }

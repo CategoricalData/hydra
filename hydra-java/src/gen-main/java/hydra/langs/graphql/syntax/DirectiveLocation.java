@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class DirectiveLocation implements Serializable {
     public final hydra.langs.graphql.syntax.ExecutableDirectiveLocation value;
     
     public Executable (hydra.langs.graphql.syntax.ExecutableDirectiveLocation value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class DirectiveLocation implements Serializable {
     public final hydra.langs.graphql.syntax.TypeSystemDirectiveLocation value;
     
     public TypeSystem (hydra.langs.graphql.syntax.TypeSystemDirectiveLocation value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

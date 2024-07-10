@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class RelationshipsPattern implements Serializable {
   public final java.util.List<hydra.langs.cypher.openCypher.PatternElementChain> chain;
   
   public RelationshipsPattern (hydra.langs.cypher.openCypher.NodePattern nodePattern, java.util.List<hydra.langs.cypher.openCypher.PatternElementChain> chain) {
+    if (nodePattern == null) {
+      throw new IllegalArgumentException("null value for 'nodePattern' argument");
+    }
+    if (chain == null) {
+      throw new IllegalArgumentException("null value for 'chain' argument");
+    }
     this.nodePattern = nodePattern;
     this.chain = chain;
   }
@@ -29,10 +37,16 @@ public class RelationshipsPattern implements Serializable {
   }
   
   public RelationshipsPattern withNodePattern(hydra.langs.cypher.openCypher.NodePattern nodePattern) {
+    if (nodePattern == null) {
+      throw new IllegalArgumentException("null value for 'nodePattern' argument");
+    }
     return new RelationshipsPattern(nodePattern, chain);
   }
   
   public RelationshipsPattern withChain(java.util.List<hydra.langs.cypher.openCypher.PatternElementChain> chain) {
+    if (chain == null) {
+      throw new IllegalArgumentException("null value for 'chain' argument");
+    }
     return new RelationshipsPattern(nodePattern, chain);
   }
 }

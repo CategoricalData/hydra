@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class NodePattern implements Serializable {
   public final java.util.Optional<hydra.langs.cypher.openCypher.Properties> properties;
   
   public NodePattern (java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable, java.util.Optional<hydra.langs.cypher.openCypher.NodeLabels> labels, java.util.Optional<hydra.langs.cypher.openCypher.Properties> properties) {
+    if (variable == null) {
+      throw new IllegalArgumentException("null value for 'variable' argument");
+    }
+    if (labels == null) {
+      throw new IllegalArgumentException("null value for 'labels' argument");
+    }
+    if (properties == null) {
+      throw new IllegalArgumentException("null value for 'properties' argument");
+    }
     this.variable = variable;
     this.labels = labels;
     this.properties = properties;
@@ -32,14 +43,23 @@ public class NodePattern implements Serializable {
   }
   
   public NodePattern withVariable(java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable) {
+    if (variable == null) {
+      throw new IllegalArgumentException("null value for 'variable' argument");
+    }
     return new NodePattern(variable, labels, properties);
   }
   
   public NodePattern withLabels(java.util.Optional<hydra.langs.cypher.openCypher.NodeLabels> labels) {
+    if (labels == null) {
+      throw new IllegalArgumentException("null value for 'labels' argument");
+    }
     return new NodePattern(variable, labels, properties);
   }
   
   public NodePattern withProperties(java.util.Optional<hydra.langs.cypher.openCypher.Properties> properties) {
+    if (properties == null) {
+      throw new IllegalArgumentException("null value for 'properties' argument");
+    }
     return new NodePattern(variable, labels, properties);
   }
 }

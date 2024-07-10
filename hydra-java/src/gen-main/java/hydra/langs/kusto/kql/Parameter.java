@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.kusto.kql;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Parameter implements Serializable {
   public final hydra.langs.kusto.kql.Literal value;
   
   public Parameter (String key, hydra.langs.kusto.kql.Literal value) {
+    if (key == null) {
+      throw new IllegalArgumentException("null value for 'key' argument");
+    }
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.key = key;
     this.value = value;
   }
@@ -29,10 +37,16 @@ public class Parameter implements Serializable {
   }
   
   public Parameter withKey(String key) {
+    if (key == null) {
+      throw new IllegalArgumentException("null value for 'key' argument");
+    }
     return new Parameter(key, value);
   }
   
   public Parameter withValue(hydra.langs.kusto.kql.Literal value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     return new Parameter(key, value);
   }
 }

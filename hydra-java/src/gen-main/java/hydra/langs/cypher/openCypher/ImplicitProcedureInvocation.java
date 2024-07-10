@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class ImplicitProcedureInvocation implements Serializable {
   public final hydra.langs.cypher.openCypher.QualifiedName value;
   
   public ImplicitProcedureInvocation (hydra.langs.cypher.openCypher.QualifiedName value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

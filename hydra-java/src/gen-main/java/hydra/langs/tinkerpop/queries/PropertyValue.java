@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.queries;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class PropertyValue implements Serializable {
   public final String value;
   
   public PropertyValue (String value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

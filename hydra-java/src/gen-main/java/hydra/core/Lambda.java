@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.core;
 
 import java.io.Serializable;
@@ -19,6 +21,12 @@ public class Lambda<A> implements Serializable {
   public final hydra.core.Term<A> body;
   
   public Lambda (hydra.core.Name parameter, hydra.core.Term<A> body) {
+    if (parameter == null) {
+      throw new IllegalArgumentException("null value for 'parameter' argument");
+    }
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     this.parameter = parameter;
     this.body = body;
   }
@@ -38,10 +46,16 @@ public class Lambda<A> implements Serializable {
   }
   
   public Lambda withParameter(hydra.core.Name parameter) {
+    if (parameter == null) {
+      throw new IllegalArgumentException("null value for 'parameter' argument");
+    }
     return new Lambda(parameter, body);
   }
   
   public Lambda withBody(hydra.core.Term<A> body) {
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     return new Lambda(parameter, body);
   }
 }

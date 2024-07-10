@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.core;
 
 import java.io.Serializable;
@@ -106,6 +108,9 @@ public abstract class LiteralType implements Serializable {
     public final hydra.core.FloatType value;
     
     public Float_ (hydra.core.FloatType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -133,6 +138,9 @@ public abstract class LiteralType implements Serializable {
     public final hydra.core.IntegerType value;
     
     public Integer_ (hydra.core.IntegerType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

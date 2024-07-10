@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -18,6 +20,24 @@ public class Defn_Macro implements Serializable {
   public final hydra.langs.scala.meta.Data body;
   
   public Defn_Macro (java.util.List<hydra.langs.scala.meta.Mod> mods, hydra.langs.scala.meta.Data_Name name, java.util.List<hydra.langs.scala.meta.Type_Param> tparams, java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> paramss, java.util.Optional<hydra.langs.scala.meta.Type> decltpe, hydra.langs.scala.meta.Data body) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (tparams == null) {
+      throw new IllegalArgumentException("null value for 'tparams' argument");
+    }
+    if (paramss == null) {
+      throw new IllegalArgumentException("null value for 'paramss' argument");
+    }
+    if (decltpe == null) {
+      throw new IllegalArgumentException("null value for 'decltpe' argument");
+    }
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     this.mods = mods;
     this.name = name;
     this.tparams = tparams;
@@ -41,26 +61,44 @@ public class Defn_Macro implements Serializable {
   }
   
   public Defn_Macro withMods(java.util.List<hydra.langs.scala.meta.Mod> mods) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
     return new Defn_Macro(mods, name, tparams, paramss, decltpe, body);
   }
   
   public Defn_Macro withName(hydra.langs.scala.meta.Data_Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new Defn_Macro(mods, name, tparams, paramss, decltpe, body);
   }
   
   public Defn_Macro withTparams(java.util.List<hydra.langs.scala.meta.Type_Param> tparams) {
+    if (tparams == null) {
+      throw new IllegalArgumentException("null value for 'tparams' argument");
+    }
     return new Defn_Macro(mods, name, tparams, paramss, decltpe, body);
   }
   
   public Defn_Macro withParamss(java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> paramss) {
+    if (paramss == null) {
+      throw new IllegalArgumentException("null value for 'paramss' argument");
+    }
     return new Defn_Macro(mods, name, tparams, paramss, decltpe, body);
   }
   
   public Defn_Macro withDecltpe(java.util.Optional<hydra.langs.scala.meta.Type> decltpe) {
+    if (decltpe == null) {
+      throw new IllegalArgumentException("null value for 'decltpe' argument");
+    }
     return new Defn_Macro(mods, name, tparams, paramss, decltpe, body);
   }
   
   public Defn_Macro withBody(hydra.langs.scala.meta.Data body) {
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     return new Defn_Macro(mods, name, tparams, paramss, decltpe, body);
   }
 }

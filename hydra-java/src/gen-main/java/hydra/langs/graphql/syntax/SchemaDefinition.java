@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class SchemaDefinition implements Serializable {
   public final hydra.langs.graphql.syntax.RootOperationTypeDefinition rootOperationTypeDefinition;
   
   public SchemaDefinition (java.util.Optional<hydra.langs.graphql.syntax.Description> description, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.RootOperationTypeDefinition rootOperationTypeDefinition) {
+    if (description == null) {
+      throw new IllegalArgumentException("null value for 'description' argument");
+    }
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
+    if (rootOperationTypeDefinition == null) {
+      throw new IllegalArgumentException("null value for 'rootOperationTypeDefinition' argument");
+    }
     this.description = description;
     this.directives = directives;
     this.rootOperationTypeDefinition = rootOperationTypeDefinition;
@@ -32,14 +43,23 @@ public class SchemaDefinition implements Serializable {
   }
   
   public SchemaDefinition withDescription(java.util.Optional<hydra.langs.graphql.syntax.Description> description) {
+    if (description == null) {
+      throw new IllegalArgumentException("null value for 'description' argument");
+    }
     return new SchemaDefinition(description, directives, rootOperationTypeDefinition);
   }
   
   public SchemaDefinition withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
     return new SchemaDefinition(description, directives, rootOperationTypeDefinition);
   }
   
   public SchemaDefinition withRootOperationTypeDefinition(hydra.langs.graphql.syntax.RootOperationTypeDefinition rootOperationTypeDefinition) {
+    if (rootOperationTypeDefinition == null) {
+      throw new IllegalArgumentException("null value for 'rootOperationTypeDefinition' argument");
+    }
     return new SchemaDefinition(description, directives, rootOperationTypeDefinition);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shacl.model;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class Definition<A> implements Serializable {
   public final A target;
   
   public Definition (hydra.langs.rdf.syntax.Iri iri, A target) {
+    if (iri == null) {
+      throw new IllegalArgumentException("null value for 'iri' argument");
+    }
+    if (target == null) {
+      throw new IllegalArgumentException("null value for 'target' argument");
+    }
     this.iri = iri;
     this.target = target;
   }
@@ -32,10 +40,16 @@ public class Definition<A> implements Serializable {
   }
   
   public Definition withIri(hydra.langs.rdf.syntax.Iri iri) {
+    if (iri == null) {
+      throw new IllegalArgumentException("null value for 'iri' argument");
+    }
     return new Definition(iri, target);
   }
   
   public Definition withTarget(A target) {
+    if (target == null) {
+      throw new IllegalArgumentException("null value for 'target' argument");
+    }
     return new Definition(iri, target);
   }
 }

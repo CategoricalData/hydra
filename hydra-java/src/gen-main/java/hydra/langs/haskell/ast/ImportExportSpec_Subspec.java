@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -60,6 +62,9 @@ public abstract class ImportExportSpec_Subspec implements Serializable {
     public final java.util.List<hydra.langs.haskell.ast.Name> value;
     
     public List (java.util.List<hydra.langs.haskell.ast.Name> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

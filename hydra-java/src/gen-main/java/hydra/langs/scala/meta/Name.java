@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -41,6 +43,9 @@ public abstract class Name implements Serializable {
     public final String value;
     
     public Value (String value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -93,6 +98,9 @@ public abstract class Name implements Serializable {
     public final hydra.langs.scala.meta.PredefString value;
     
     public Indeterminate (hydra.langs.scala.meta.PredefString value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

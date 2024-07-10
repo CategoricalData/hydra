@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class ScalarSubquery implements Serializable {
   public final hydra.langs.sql.ansi.Subquery value;
   
   public ScalarSubquery (hydra.langs.sql.ansi.Subquery value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

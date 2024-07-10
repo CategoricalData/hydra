@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.protobuf.proto3;
 
 import java.io.Serializable;
@@ -38,6 +40,9 @@ public abstract class SimpleType implements Serializable {
     public final hydra.langs.protobuf.proto3.TypeName value;
     
     public Reference (hydra.langs.protobuf.proto3.TypeName value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -65,6 +70,9 @@ public abstract class SimpleType implements Serializable {
     public final hydra.langs.protobuf.proto3.ScalarType value;
     
     public Scalar (hydra.langs.protobuf.proto3.ScalarType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

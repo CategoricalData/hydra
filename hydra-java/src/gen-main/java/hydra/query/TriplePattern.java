@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.query;
 
 import java.io.Serializable;
@@ -15,6 +17,15 @@ public class TriplePattern<A> implements Serializable {
   public final hydra.query.Node<A> object;
   
   public TriplePattern (hydra.query.Node<A> subject, hydra.query.Path predicate, hydra.query.Node<A> object) {
+    if (subject == null) {
+      throw new IllegalArgumentException("null value for 'subject' argument");
+    }
+    if (predicate == null) {
+      throw new IllegalArgumentException("null value for 'predicate' argument");
+    }
+    if (object == null) {
+      throw new IllegalArgumentException("null value for 'object' argument");
+    }
     this.subject = subject;
     this.predicate = predicate;
     this.object = object;
@@ -35,14 +46,23 @@ public class TriplePattern<A> implements Serializable {
   }
   
   public TriplePattern withSubject(hydra.query.Node<A> subject) {
+    if (subject == null) {
+      throw new IllegalArgumentException("null value for 'subject' argument");
+    }
     return new TriplePattern(subject, predicate, object);
   }
   
   public TriplePattern withPredicate(hydra.query.Path predicate) {
+    if (predicate == null) {
+      throw new IllegalArgumentException("null value for 'predicate' argument");
+    }
     return new TriplePattern(subject, predicate, object);
   }
   
   public TriplePattern withObject(hydra.query.Node<A> object) {
+    if (object == null) {
+      throw new IllegalArgumentException("null value for 'object' argument");
+    }
     return new TriplePattern(subject, predicate, object);
   }
 }

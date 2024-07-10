@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.delta;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class MapType implements Serializable {
   public final Boolean valueContainsNull;
   
   public MapType (hydra.langs.parquet.delta.DataType keyType, hydra.langs.parquet.delta.DataType valueType, Boolean valueContainsNull) {
+    if (keyType == null) {
+      throw new IllegalArgumentException("null value for 'keyType' argument");
+    }
+    if (valueType == null) {
+      throw new IllegalArgumentException("null value for 'valueType' argument");
+    }
+    if (valueContainsNull == null) {
+      throw new IllegalArgumentException("null value for 'valueContainsNull' argument");
+    }
     this.keyType = keyType;
     this.valueType = valueType;
     this.valueContainsNull = valueContainsNull;
@@ -32,14 +43,23 @@ public class MapType implements Serializable {
   }
   
   public MapType withKeyType(hydra.langs.parquet.delta.DataType keyType) {
+    if (keyType == null) {
+      throw new IllegalArgumentException("null value for 'keyType' argument");
+    }
     return new MapType(keyType, valueType, valueContainsNull);
   }
   
   public MapType withValueType(hydra.langs.parquet.delta.DataType valueType) {
+    if (valueType == null) {
+      throw new IllegalArgumentException("null value for 'valueType' argument");
+    }
     return new MapType(keyType, valueType, valueContainsNull);
   }
   
   public MapType withValueContainsNull(Boolean valueContainsNull) {
+    if (valueContainsNull == null) {
+      throw new IllegalArgumentException("null value for 'valueContainsNull' argument");
+    }
     return new MapType(keyType, valueType, valueContainsNull);
   }
 }

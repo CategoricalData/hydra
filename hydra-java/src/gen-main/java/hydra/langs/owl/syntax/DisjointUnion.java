@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -15,6 +17,15 @@ public class DisjointUnion implements Serializable {
   public final java.util.List<hydra.langs.owl.syntax.ClassExpression> classes;
   
   public DisjointUnion (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, hydra.langs.owl.syntax.Class_ class_, java.util.List<hydra.langs.owl.syntax.ClassExpression> classes) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
+    if (class_ == null) {
+      throw new IllegalArgumentException("null value for 'class' argument");
+    }
+    if (classes == null) {
+      throw new IllegalArgumentException("null value for 'classes' argument");
+    }
     this.annotations = annotations;
     this.class_ = class_;
     this.classes = classes;
@@ -35,14 +46,23 @@ public class DisjointUnion implements Serializable {
   }
   
   public DisjointUnion withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     return new DisjointUnion(annotations, class_, classes);
   }
   
   public DisjointUnion withClass(hydra.langs.owl.syntax.Class_ class_) {
+    if (class_ == null) {
+      throw new IllegalArgumentException("null value for 'class' argument");
+    }
     return new DisjointUnion(annotations, class_, classes);
   }
   
   public DisjointUnion withClasses(java.util.List<hydra.langs.owl.syntax.ClassExpression> classes) {
+    if (classes == null) {
+      throw new IllegalArgumentException("null value for 'classes' argument");
+    }
     return new DisjointUnion(annotations, class_, classes);
   }
 }

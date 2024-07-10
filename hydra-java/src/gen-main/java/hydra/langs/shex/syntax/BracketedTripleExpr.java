@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -14,6 +16,18 @@ public class BracketedTripleExpr implements Serializable {
   public final hydra.langs.shex.syntax.SemanticActions semanticActions;
   
   public BracketedTripleExpr (hydra.langs.shex.syntax.InnerTripleExpr innerTripleExpr, java.util.Optional<hydra.langs.shex.syntax.Cardinality> cardinality, java.util.List<hydra.langs.shex.syntax.Annotation> listOfAnnotation, hydra.langs.shex.syntax.SemanticActions semanticActions) {
+    if (innerTripleExpr == null) {
+      throw new IllegalArgumentException("null value for 'innerTripleExpr' argument");
+    }
+    if (cardinality == null) {
+      throw new IllegalArgumentException("null value for 'cardinality' argument");
+    }
+    if (listOfAnnotation == null) {
+      throw new IllegalArgumentException("null value for 'listOfAnnotation' argument");
+    }
+    if (semanticActions == null) {
+      throw new IllegalArgumentException("null value for 'semanticActions' argument");
+    }
     this.innerTripleExpr = innerTripleExpr;
     this.cardinality = cardinality;
     this.listOfAnnotation = listOfAnnotation;
@@ -35,18 +49,30 @@ public class BracketedTripleExpr implements Serializable {
   }
   
   public BracketedTripleExpr withInnerTripleExpr(hydra.langs.shex.syntax.InnerTripleExpr innerTripleExpr) {
+    if (innerTripleExpr == null) {
+      throw new IllegalArgumentException("null value for 'innerTripleExpr' argument");
+    }
     return new BracketedTripleExpr(innerTripleExpr, cardinality, listOfAnnotation, semanticActions);
   }
   
   public BracketedTripleExpr withCardinality(java.util.Optional<hydra.langs.shex.syntax.Cardinality> cardinality) {
+    if (cardinality == null) {
+      throw new IllegalArgumentException("null value for 'cardinality' argument");
+    }
     return new BracketedTripleExpr(innerTripleExpr, cardinality, listOfAnnotation, semanticActions);
   }
   
   public BracketedTripleExpr withListOfAnnotation(java.util.List<hydra.langs.shex.syntax.Annotation> listOfAnnotation) {
+    if (listOfAnnotation == null) {
+      throw new IllegalArgumentException("null value for 'listOfAnnotation' argument");
+    }
     return new BracketedTripleExpr(innerTripleExpr, cardinality, listOfAnnotation, semanticActions);
   }
   
   public BracketedTripleExpr withSemanticActions(hydra.langs.shex.syntax.SemanticActions semanticActions) {
+    if (semanticActions == null) {
+      throw new IllegalArgumentException("null value for 'semanticActions' argument");
+    }
     return new BracketedTripleExpr(innerTripleExpr, cardinality, listOfAnnotation, semanticActions);
   }
 }

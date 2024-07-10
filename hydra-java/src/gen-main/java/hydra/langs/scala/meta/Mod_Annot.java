@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class Mod_Annot implements Serializable {
   public final hydra.langs.scala.meta.Init init;
   
   public Mod_Annot (hydra.langs.scala.meta.Init init) {
+    if (init == null) {
+      throw new IllegalArgumentException("null value for 'init' argument");
+    }
     this.init = init;
   }
   

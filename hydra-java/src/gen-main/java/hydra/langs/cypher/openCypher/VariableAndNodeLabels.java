@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class VariableAndNodeLabels implements Serializable {
   public final hydra.langs.cypher.openCypher.NodeLabels labels;
   
   public VariableAndNodeLabels (hydra.langs.cypher.openCypher.Variable variable, hydra.langs.cypher.openCypher.NodeLabels labels) {
+    if (variable == null) {
+      throw new IllegalArgumentException("null value for 'variable' argument");
+    }
+    if (labels == null) {
+      throw new IllegalArgumentException("null value for 'labels' argument");
+    }
     this.variable = variable;
     this.labels = labels;
   }
@@ -29,10 +37,16 @@ public class VariableAndNodeLabels implements Serializable {
   }
   
   public VariableAndNodeLabels withVariable(hydra.langs.cypher.openCypher.Variable variable) {
+    if (variable == null) {
+      throw new IllegalArgumentException("null value for 'variable' argument");
+    }
     return new VariableAndNodeLabels(variable, labels);
   }
   
   public VariableAndNodeLabels withLabels(hydra.langs.cypher.openCypher.NodeLabels labels) {
+    if (labels == null) {
+      throw new IllegalArgumentException("null value for 'labels' argument");
+    }
     return new VariableAndNodeLabels(variable, labels);
   }
 }

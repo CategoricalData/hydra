@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class ArrayElementList implements Serializable {
   public final java.util.List<hydra.langs.sql.ansi.ArrayElement> rest;
   
   public ArrayElementList (hydra.langs.sql.ansi.ArrayElement first, java.util.List<hydra.langs.sql.ansi.ArrayElement> rest) {
+    if (first == null) {
+      throw new IllegalArgumentException("null value for 'first' argument");
+    }
+    if (rest == null) {
+      throw new IllegalArgumentException("null value for 'rest' argument");
+    }
     this.first = first;
     this.rest = rest;
   }
@@ -29,10 +37,16 @@ public class ArrayElementList implements Serializable {
   }
   
   public ArrayElementList withFirst(hydra.langs.sql.ansi.ArrayElement first) {
+    if (first == null) {
+      throw new IllegalArgumentException("null value for 'first' argument");
+    }
     return new ArrayElementList(first, rest);
   }
   
   public ArrayElementList withRest(java.util.List<hydra.langs.sql.ansi.ArrayElement> rest) {
+    if (rest == null) {
+      throw new IllegalArgumentException("null value for 'rest' argument");
+    }
     return new ArrayElementList(first, rest);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class AnnotationTypeDeclaration implements Serializable {
   public final hydra.langs.java.syntax.AnnotationTypeBody body;
   
   public AnnotationTypeDeclaration (java.util.List<hydra.langs.java.syntax.InterfaceModifier> modifiers, hydra.langs.java.syntax.TypeIdentifier identifier, hydra.langs.java.syntax.AnnotationTypeBody body) {
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     this.modifiers = modifiers;
     this.identifier = identifier;
     this.body = body;
@@ -32,14 +43,23 @@ public class AnnotationTypeDeclaration implements Serializable {
   }
   
   public AnnotationTypeDeclaration withModifiers(java.util.List<hydra.langs.java.syntax.InterfaceModifier> modifiers) {
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
     return new AnnotationTypeDeclaration(modifiers, identifier, body);
   }
   
   public AnnotationTypeDeclaration withIdentifier(hydra.langs.java.syntax.TypeIdentifier identifier) {
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
     return new AnnotationTypeDeclaration(modifiers, identifier, body);
   }
   
   public AnnotationTypeDeclaration withBody(hydra.langs.java.syntax.AnnotationTypeBody body) {
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     return new AnnotationTypeDeclaration(modifiers, identifier, body);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class ConditionalExpression_TernaryLambda implements Serializable {
   public final hydra.langs.java.syntax.LambdaExpression ifFalse;
   
   public ConditionalExpression_TernaryLambda (hydra.langs.java.syntax.ConditionalOrExpression cond, hydra.langs.java.syntax.Expression ifTrue, hydra.langs.java.syntax.LambdaExpression ifFalse) {
+    if (cond == null) {
+      throw new IllegalArgumentException("null value for 'cond' argument");
+    }
+    if (ifTrue == null) {
+      throw new IllegalArgumentException("null value for 'ifTrue' argument");
+    }
+    if (ifFalse == null) {
+      throw new IllegalArgumentException("null value for 'ifFalse' argument");
+    }
     this.cond = cond;
     this.ifTrue = ifTrue;
     this.ifFalse = ifFalse;
@@ -32,14 +43,23 @@ public class ConditionalExpression_TernaryLambda implements Serializable {
   }
   
   public ConditionalExpression_TernaryLambda withCond(hydra.langs.java.syntax.ConditionalOrExpression cond) {
+    if (cond == null) {
+      throw new IllegalArgumentException("null value for 'cond' argument");
+    }
     return new ConditionalExpression_TernaryLambda(cond, ifTrue, ifFalse);
   }
   
   public ConditionalExpression_TernaryLambda withIfTrue(hydra.langs.java.syntax.Expression ifTrue) {
+    if (ifTrue == null) {
+      throw new IllegalArgumentException("null value for 'ifTrue' argument");
+    }
     return new ConditionalExpression_TernaryLambda(cond, ifTrue, ifFalse);
   }
   
   public ConditionalExpression_TernaryLambda withIfFalse(hydra.langs.java.syntax.LambdaExpression ifFalse) {
+    if (ifFalse == null) {
+      throw new IllegalArgumentException("null value for 'ifFalse' argument");
+    }
     return new ConditionalExpression_TernaryLambda(cond, ifTrue, ifFalse);
   }
 }

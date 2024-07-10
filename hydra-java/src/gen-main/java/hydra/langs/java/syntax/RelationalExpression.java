@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -59,6 +61,9 @@ public abstract class RelationalExpression implements Serializable {
     public final hydra.langs.java.syntax.ShiftExpression value;
     
     public Simple (hydra.langs.java.syntax.ShiftExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -86,6 +91,9 @@ public abstract class RelationalExpression implements Serializable {
     public final hydra.langs.java.syntax.RelationalExpression_LessThan value;
     
     public LessThan (hydra.langs.java.syntax.RelationalExpression_LessThan value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -113,6 +121,9 @@ public abstract class RelationalExpression implements Serializable {
     public final hydra.langs.java.syntax.RelationalExpression_GreaterThan value;
     
     public GreaterThan (hydra.langs.java.syntax.RelationalExpression_GreaterThan value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -140,6 +151,9 @@ public abstract class RelationalExpression implements Serializable {
     public final hydra.langs.java.syntax.RelationalExpression_LessThanEqual value;
     
     public LessThanEqual (hydra.langs.java.syntax.RelationalExpression_LessThanEqual value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -167,6 +181,9 @@ public abstract class RelationalExpression implements Serializable {
     public final hydra.langs.java.syntax.RelationalExpression_GreaterThanEqual value;
     
     public GreaterThanEqual (hydra.langs.java.syntax.RelationalExpression_GreaterThanEqual value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -194,6 +211,9 @@ public abstract class RelationalExpression implements Serializable {
     public final hydra.langs.java.syntax.RelationalExpression_InstanceOf value;
     
     public Instanceof (hydra.langs.java.syntax.RelationalExpression_InstanceOf value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

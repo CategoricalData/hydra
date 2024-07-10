@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class ConstantDeclaration implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.VariableDeclarator> variables;
   
   public ConstantDeclaration (java.util.List<hydra.langs.java.syntax.ConstantModifier> modifiers, hydra.langs.java.syntax.UnannType type, java.util.List<hydra.langs.java.syntax.VariableDeclarator> variables) {
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
+    if (variables == null) {
+      throw new IllegalArgumentException("null value for 'variables' argument");
+    }
     this.modifiers = modifiers;
     this.type = type;
     this.variables = variables;
@@ -32,14 +43,23 @@ public class ConstantDeclaration implements Serializable {
   }
   
   public ConstantDeclaration withModifiers(java.util.List<hydra.langs.java.syntax.ConstantModifier> modifiers) {
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
     return new ConstantDeclaration(modifiers, type, variables);
   }
   
   public ConstantDeclaration withType(hydra.langs.java.syntax.UnannType type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new ConstantDeclaration(modifiers, type, variables);
   }
   
   public ConstantDeclaration withVariables(java.util.List<hydra.langs.java.syntax.VariableDeclarator> variables) {
+    if (variables == null) {
+      throw new IllegalArgumentException("null value for 'variables' argument");
+    }
     return new ConstantDeclaration(modifiers, type, variables);
   }
 }

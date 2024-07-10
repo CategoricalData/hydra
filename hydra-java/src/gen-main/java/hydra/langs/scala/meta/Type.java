@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -161,6 +163,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_Ref value;
     
     public Ref (hydra.langs.scala.meta.Type_Ref value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -188,6 +193,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_AnonymousName value;
     
     public AnonymousName (hydra.langs.scala.meta.Type_AnonymousName value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -215,6 +223,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_Apply value;
     
     public Apply (hydra.langs.scala.meta.Type_Apply value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -242,6 +253,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_ApplyInfix value;
     
     public ApplyInfix (hydra.langs.scala.meta.Type_ApplyInfix value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -269,6 +283,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_FunctionType value;
     
     public FunctionType (hydra.langs.scala.meta.Type_FunctionType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -296,6 +313,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_PolyFunction value;
     
     public PolyFunction (hydra.langs.scala.meta.Type_PolyFunction value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -323,6 +343,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_ImplicitFunction value;
     
     public ImplicitFunction (hydra.langs.scala.meta.Type_ImplicitFunction value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -350,6 +373,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_Tuple value;
     
     public Tuple (hydra.langs.scala.meta.Type_Tuple value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -377,6 +403,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_With value;
     
     public With (hydra.langs.scala.meta.Type_With value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -404,6 +433,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_And value;
     
     public And (hydra.langs.scala.meta.Type_And value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -431,6 +463,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_Or value;
     
     public Or (hydra.langs.scala.meta.Type_Or value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -458,6 +493,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_Refine value;
     
     public Refine (hydra.langs.scala.meta.Type_Refine value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -485,6 +523,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_Existential value;
     
     public Existential (hydra.langs.scala.meta.Type_Existential value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -512,6 +553,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_Annotate value;
     
     public Annotate (hydra.langs.scala.meta.Type_Annotate value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -539,6 +583,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_Lambda value;
     
     public Lambda (hydra.langs.scala.meta.Type_Lambda value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -566,6 +613,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_Macro value;
     
     public Macro (hydra.langs.scala.meta.Type_Macro value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -593,6 +643,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_Method value;
     
     public Method (hydra.langs.scala.meta.Type_Method value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -620,6 +673,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_Placeholder value;
     
     public Placeholder (hydra.langs.scala.meta.Type_Placeholder value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -647,6 +703,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_ByName value;
     
     public ByName (hydra.langs.scala.meta.Type_ByName value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -674,6 +733,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_Repeated value;
     
     public Repeated (hydra.langs.scala.meta.Type_Repeated value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -701,6 +763,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_Var value;
     
     public Var (hydra.langs.scala.meta.Type_Var value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -728,6 +793,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_TypedParam value;
     
     public TypedParam (hydra.langs.scala.meta.Type_TypedParam value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -755,6 +823,9 @@ public abstract class Type implements Serializable {
     public final hydra.langs.scala.meta.Type_Match value;
     
     public Match (hydra.langs.scala.meta.Type_Match value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

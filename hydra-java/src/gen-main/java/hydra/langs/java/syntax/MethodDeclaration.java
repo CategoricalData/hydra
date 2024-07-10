@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -17,6 +19,18 @@ public class MethodDeclaration implements Serializable {
   public final hydra.langs.java.syntax.MethodBody body;
   
   public MethodDeclaration (java.util.List<hydra.langs.java.syntax.Annotation> annotations, java.util.List<hydra.langs.java.syntax.MethodModifier> modifiers, hydra.langs.java.syntax.MethodHeader header, hydra.langs.java.syntax.MethodBody body) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
+    if (header == null) {
+      throw new IllegalArgumentException("null value for 'header' argument");
+    }
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     this.annotations = annotations;
     this.modifiers = modifiers;
     this.header = header;
@@ -38,18 +52,30 @@ public class MethodDeclaration implements Serializable {
   }
   
   public MethodDeclaration withAnnotations(java.util.List<hydra.langs.java.syntax.Annotation> annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     return new MethodDeclaration(annotations, modifiers, header, body);
   }
   
   public MethodDeclaration withModifiers(java.util.List<hydra.langs.java.syntax.MethodModifier> modifiers) {
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
     return new MethodDeclaration(annotations, modifiers, header, body);
   }
   
   public MethodDeclaration withHeader(hydra.langs.java.syntax.MethodHeader header) {
+    if (header == null) {
+      throw new IllegalArgumentException("null value for 'header' argument");
+    }
     return new MethodDeclaration(annotations, modifiers, header, body);
   }
   
   public MethodDeclaration withBody(hydra.langs.java.syntax.MethodBody body) {
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     return new MethodDeclaration(annotations, modifiers, header, body);
   }
 }

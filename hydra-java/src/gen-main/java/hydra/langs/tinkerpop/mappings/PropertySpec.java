@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.mappings;
 
 import java.io.Serializable;
@@ -19,6 +21,12 @@ public class PropertySpec implements Serializable {
   public final hydra.langs.tinkerpop.mappings.ValueSpec value;
   
   public PropertySpec (hydra.langs.tinkerpop.propertyGraph.PropertyKey key, hydra.langs.tinkerpop.mappings.ValueSpec value) {
+    if (key == null) {
+      throw new IllegalArgumentException("null value for 'key' argument");
+    }
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.key = key;
     this.value = value;
   }
@@ -38,10 +46,16 @@ public class PropertySpec implements Serializable {
   }
   
   public PropertySpec withKey(hydra.langs.tinkerpop.propertyGraph.PropertyKey key) {
+    if (key == null) {
+      throw new IllegalArgumentException("null value for 'key' argument");
+    }
     return new PropertySpec(key, value);
   }
   
   public PropertySpec withValue(hydra.langs.tinkerpop.mappings.ValueSpec value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     return new PropertySpec(key, value);
   }
 }

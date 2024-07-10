@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class DatatypeRestriction implements Serializable {
   public final java.util.List<hydra.langs.owl.syntax.DatatypeRestriction_Constraint> constraints;
   
   public DatatypeRestriction (hydra.langs.owl.syntax.Datatype datatype, java.util.List<hydra.langs.owl.syntax.DatatypeRestriction_Constraint> constraints) {
+    if (datatype == null) {
+      throw new IllegalArgumentException("null value for 'datatype' argument");
+    }
+    if (constraints == null) {
+      throw new IllegalArgumentException("null value for 'constraints' argument");
+    }
     this.datatype = datatype;
     this.constraints = constraints;
   }
@@ -32,10 +40,16 @@ public class DatatypeRestriction implements Serializable {
   }
   
   public DatatypeRestriction withDatatype(hydra.langs.owl.syntax.Datatype datatype) {
+    if (datatype == null) {
+      throw new IllegalArgumentException("null value for 'datatype' argument");
+    }
     return new DatatypeRestriction(datatype, constraints);
   }
   
   public DatatypeRestriction withConstraints(java.util.List<hydra.langs.owl.syntax.DatatypeRestriction_Constraint> constraints) {
+    if (constraints == null) {
+      throw new IllegalArgumentException("null value for 'constraints' argument");
+    }
     return new DatatypeRestriction(datatype, constraints);
   }
 }

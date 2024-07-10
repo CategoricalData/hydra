@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -47,6 +49,9 @@ public abstract class Enumerator implements Serializable {
     public final hydra.langs.scala.meta.Enumerator_Generator value;
     
     public Generator (hydra.langs.scala.meta.Enumerator_Generator value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -74,6 +79,9 @@ public abstract class Enumerator implements Serializable {
     public final hydra.langs.scala.meta.Enumerator_CaseGenerator value;
     
     public CaseGenerator (hydra.langs.scala.meta.Enumerator_CaseGenerator value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -101,6 +109,9 @@ public abstract class Enumerator implements Serializable {
     public final hydra.langs.scala.meta.Enumerator_Val value;
     
     public Val (hydra.langs.scala.meta.Enumerator_Val value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -128,6 +139,9 @@ public abstract class Enumerator implements Serializable {
     public final hydra.langs.scala.meta.Enumerator_Guard value;
     
     public Guard (hydra.langs.scala.meta.Enumerator_Guard value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

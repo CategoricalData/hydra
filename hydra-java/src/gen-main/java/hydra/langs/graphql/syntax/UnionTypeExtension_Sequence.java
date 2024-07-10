@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class UnionTypeExtension_Sequence implements Serializable {
   public final hydra.langs.graphql.syntax.UnionMemberTypes unionMemberTypes;
   
   public UnionTypeExtension_Sequence (hydra.langs.graphql.syntax.Name name, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.UnionMemberTypes unionMemberTypes) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
+    if (unionMemberTypes == null) {
+      throw new IllegalArgumentException("null value for 'unionMemberTypes' argument");
+    }
     this.name = name;
     this.directives = directives;
     this.unionMemberTypes = unionMemberTypes;
@@ -32,14 +43,23 @@ public class UnionTypeExtension_Sequence implements Serializable {
   }
   
   public UnionTypeExtension_Sequence withName(hydra.langs.graphql.syntax.Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new UnionTypeExtension_Sequence(name, directives, unionMemberTypes);
   }
   
   public UnionTypeExtension_Sequence withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
     return new UnionTypeExtension_Sequence(name, directives, unionMemberTypes);
   }
   
   public UnionTypeExtension_Sequence withUnionMemberTypes(hydra.langs.graphql.syntax.UnionMemberTypes unionMemberTypes) {
+    if (unionMemberTypes == null) {
+      throw new IllegalArgumentException("null value for 'unionMemberTypes' argument");
+    }
     return new UnionTypeExtension_Sequence(name, directives, unionMemberTypes);
   }
 }

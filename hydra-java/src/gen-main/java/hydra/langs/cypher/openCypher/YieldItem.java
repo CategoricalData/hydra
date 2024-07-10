@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class YieldItem implements Serializable {
   public final hydra.langs.cypher.openCypher.Variable variable;
   
   public YieldItem (java.util.Optional<hydra.langs.cypher.openCypher.ProcedureResultField> field, hydra.langs.cypher.openCypher.Variable variable) {
+    if (field == null) {
+      throw new IllegalArgumentException("null value for 'field' argument");
+    }
+    if (variable == null) {
+      throw new IllegalArgumentException("null value for 'variable' argument");
+    }
     this.field = field;
     this.variable = variable;
   }
@@ -29,10 +37,16 @@ public class YieldItem implements Serializable {
   }
   
   public YieldItem withField(java.util.Optional<hydra.langs.cypher.openCypher.ProcedureResultField> field) {
+    if (field == null) {
+      throw new IllegalArgumentException("null value for 'field' argument");
+    }
     return new YieldItem(field, variable);
   }
   
   public YieldItem withVariable(hydra.langs.cypher.openCypher.Variable variable) {
+    if (variable == null) {
+      throw new IllegalArgumentException("null value for 'variable' argument");
+    }
     return new YieldItem(field, variable);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.queries;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Projections implements Serializable {
   public final java.util.List<hydra.langs.tinkerpop.queries.Projection> explicit;
   
   public Projections (Boolean all, java.util.List<hydra.langs.tinkerpop.queries.Projection> explicit) {
+    if (all == null) {
+      throw new IllegalArgumentException("null value for 'all' argument");
+    }
+    if (explicit == null) {
+      throw new IllegalArgumentException("null value for 'explicit' argument");
+    }
     this.all = all;
     this.explicit = explicit;
   }
@@ -29,10 +37,16 @@ public class Projections implements Serializable {
   }
   
   public Projections withAll(Boolean all) {
+    if (all == null) {
+      throw new IllegalArgumentException("null value for 'all' argument");
+    }
     return new Projections(all, explicit);
   }
   
   public Projections withExplicit(java.util.List<hydra.langs.tinkerpop.queries.Projection> explicit) {
+    if (explicit == null) {
+      throw new IllegalArgumentException("null value for 'explicit' argument");
+    }
     return new Projections(all, explicit);
   }
 }

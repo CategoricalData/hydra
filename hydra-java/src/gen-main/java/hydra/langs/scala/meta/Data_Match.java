@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Data_Match implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Case> cases;
   
   public Data_Match (hydra.langs.scala.meta.Data expr, java.util.List<hydra.langs.scala.meta.Case> cases) {
+    if (expr == null) {
+      throw new IllegalArgumentException("null value for 'expr' argument");
+    }
+    if (cases == null) {
+      throw new IllegalArgumentException("null value for 'cases' argument");
+    }
     this.expr = expr;
     this.cases = cases;
   }
@@ -29,10 +37,16 @@ public class Data_Match implements Serializable {
   }
   
   public Data_Match withExpr(hydra.langs.scala.meta.Data expr) {
+    if (expr == null) {
+      throw new IllegalArgumentException("null value for 'expr' argument");
+    }
     return new Data_Match(expr, cases);
   }
   
   public Data_Match withCases(java.util.List<hydra.langs.scala.meta.Case> cases) {
+    if (cases == null) {
+      throw new IllegalArgumentException("null value for 'cases' argument");
+    }
     return new Data_Match(expr, cases);
   }
 }

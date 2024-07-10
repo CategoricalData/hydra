@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class TypeVariable implements Serializable {
   public final hydra.langs.java.syntax.TypeIdentifier identifier;
   
   public TypeVariable (java.util.List<hydra.langs.java.syntax.Annotation> annotations, hydra.langs.java.syntax.TypeIdentifier identifier) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
     this.annotations = annotations;
     this.identifier = identifier;
   }
@@ -29,10 +37,16 @@ public class TypeVariable implements Serializable {
   }
   
   public TypeVariable withAnnotations(java.util.List<hydra.langs.java.syntax.Annotation> annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     return new TypeVariable(annotations, identifier);
   }
   
   public TypeVariable withIdentifier(hydra.langs.java.syntax.TypeIdentifier identifier) {
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
     return new TypeVariable(annotations, identifier);
   }
 }

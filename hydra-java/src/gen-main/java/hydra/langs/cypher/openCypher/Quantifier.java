@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Quantifier implements Serializable {
   public final hydra.langs.cypher.openCypher.FilterExpression expression;
   
   public Quantifier (hydra.langs.cypher.openCypher.QuantifierOperator operator, hydra.langs.cypher.openCypher.FilterExpression expression) {
+    if (operator == null) {
+      throw new IllegalArgumentException("null value for 'operator' argument");
+    }
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     this.operator = operator;
     this.expression = expression;
   }
@@ -29,10 +37,16 @@ public class Quantifier implements Serializable {
   }
   
   public Quantifier withOperator(hydra.langs.cypher.openCypher.QuantifierOperator operator) {
+    if (operator == null) {
+      throw new IllegalArgumentException("null value for 'operator' argument");
+    }
     return new Quantifier(operator, expression);
   }
   
   public Quantifier withExpression(hydra.langs.cypher.openCypher.FilterExpression expression) {
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     return new Quantifier(operator, expression);
   }
 }

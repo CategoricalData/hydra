@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class Defn_ExtensionGroup implements Serializable {
   public final hydra.langs.scala.meta.Stat body;
   
   public Defn_ExtensionGroup (java.util.List<hydra.langs.scala.meta.Type_Param> tparams, java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> parmss, hydra.langs.scala.meta.Stat body) {
+    if (tparams == null) {
+      throw new IllegalArgumentException("null value for 'tparams' argument");
+    }
+    if (parmss == null) {
+      throw new IllegalArgumentException("null value for 'parmss' argument");
+    }
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     this.tparams = tparams;
     this.parmss = parmss;
     this.body = body;
@@ -32,14 +43,23 @@ public class Defn_ExtensionGroup implements Serializable {
   }
   
   public Defn_ExtensionGroup withTparams(java.util.List<hydra.langs.scala.meta.Type_Param> tparams) {
+    if (tparams == null) {
+      throw new IllegalArgumentException("null value for 'tparams' argument");
+    }
     return new Defn_ExtensionGroup(tparams, parmss, body);
   }
   
   public Defn_ExtensionGroup withParmss(java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> parmss) {
+    if (parmss == null) {
+      throw new IllegalArgumentException("null value for 'parmss' argument");
+    }
     return new Defn_ExtensionGroup(tparams, parmss, body);
   }
   
   public Defn_ExtensionGroup withBody(hydra.langs.scala.meta.Stat body) {
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     return new Defn_ExtensionGroup(tparams, parmss, body);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.queries;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class BinaryExpression implements Serializable {
   public final hydra.langs.tinkerpop.queries.Expression right;
   
   public BinaryExpression (hydra.langs.tinkerpop.queries.Expression left, hydra.langs.tinkerpop.queries.BinaryOperator operator, hydra.langs.tinkerpop.queries.Expression right) {
+    if (left == null) {
+      throw new IllegalArgumentException("null value for 'left' argument");
+    }
+    if (operator == null) {
+      throw new IllegalArgumentException("null value for 'operator' argument");
+    }
+    if (right == null) {
+      throw new IllegalArgumentException("null value for 'right' argument");
+    }
     this.left = left;
     this.operator = operator;
     this.right = right;
@@ -32,14 +43,23 @@ public class BinaryExpression implements Serializable {
   }
   
   public BinaryExpression withLeft(hydra.langs.tinkerpop.queries.Expression left) {
+    if (left == null) {
+      throw new IllegalArgumentException("null value for 'left' argument");
+    }
     return new BinaryExpression(left, operator, right);
   }
   
   public BinaryExpression withOperator(hydra.langs.tinkerpop.queries.BinaryOperator operator) {
+    if (operator == null) {
+      throw new IllegalArgumentException("null value for 'operator' argument");
+    }
     return new BinaryExpression(left, operator, right);
   }
   
   public BinaryExpression withRight(hydra.langs.tinkerpop.queries.Expression right) {
+    if (right == null) {
+      throw new IllegalArgumentException("null value for 'right' argument");
+    }
     return new BinaryExpression(left, operator, right);
   }
 }

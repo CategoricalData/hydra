@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Union implements Serializable {
   public final hydra.langs.cypher.openCypher.SingleQuery query;
   
   public Union (Boolean all, hydra.langs.cypher.openCypher.SingleQuery query) {
+    if (all == null) {
+      throw new IllegalArgumentException("null value for 'all' argument");
+    }
+    if (query == null) {
+      throw new IllegalArgumentException("null value for 'query' argument");
+    }
     this.all = all;
     this.query = query;
   }
@@ -29,10 +37,16 @@ public class Union implements Serializable {
   }
   
   public Union withAll(Boolean all) {
+    if (all == null) {
+      throw new IllegalArgumentException("null value for 'all' argument");
+    }
     return new Union(all, query);
   }
   
   public Union withQuery(hydra.langs.cypher.openCypher.SingleQuery query) {
+    if (query == null) {
+      throw new IllegalArgumentException("null value for 'query' argument");
+    }
     return new Union(all, query);
   }
 }

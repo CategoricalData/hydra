@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.core;
 
 import java.io.Serializable;
@@ -15,6 +17,15 @@ public class CaseStatement<A> implements Serializable {
   public final java.util.List<hydra.core.Field<A>> cases;
   
   public CaseStatement (hydra.core.Name typeName, java.util.Optional<hydra.core.Term<A>> default_, java.util.List<hydra.core.Field<A>> cases) {
+    if (typeName == null) {
+      throw new IllegalArgumentException("null value for 'typeName' argument");
+    }
+    if (default_ == null) {
+      throw new IllegalArgumentException("null value for 'default' argument");
+    }
+    if (cases == null) {
+      throw new IllegalArgumentException("null value for 'cases' argument");
+    }
     this.typeName = typeName;
     this.default_ = default_;
     this.cases = cases;
@@ -35,14 +46,23 @@ public class CaseStatement<A> implements Serializable {
   }
   
   public CaseStatement withTypeName(hydra.core.Name typeName) {
+    if (typeName == null) {
+      throw new IllegalArgumentException("null value for 'typeName' argument");
+    }
     return new CaseStatement(typeName, default_, cases);
   }
   
   public CaseStatement withDefault(java.util.Optional<hydra.core.Term<A>> default_) {
+    if (default_ == null) {
+      throw new IllegalArgumentException("null value for 'default' argument");
+    }
     return new CaseStatement(typeName, default_, cases);
   }
   
   public CaseStatement withCases(java.util.List<hydra.core.Field<A>> cases) {
+    if (cases == null) {
+      throw new IllegalArgumentException("null value for 'cases' argument");
+    }
     return new CaseStatement(typeName, default_, cases);
   }
 }

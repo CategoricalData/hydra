@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class ObjectPropertyExpression implements Serializable {
     public final hydra.langs.owl.syntax.ObjectProperty value;
     
     public Object_ (hydra.langs.owl.syntax.ObjectProperty value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class ObjectPropertyExpression implements Serializable {
     public final hydra.langs.owl.syntax.InverseObjectProperty value;
     
     public InverseObject (hydra.langs.owl.syntax.InverseObjectProperty value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

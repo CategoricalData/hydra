@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.constraints;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class PatternImplication<A> implements Serializable {
   public final hydra.query.Pattern<A> consequent;
   
   public PatternImplication (hydra.query.Pattern<A> antecedent, hydra.query.Pattern<A> consequent) {
+    if (antecedent == null) {
+      throw new IllegalArgumentException("null value for 'antecedent' argument");
+    }
+    if (consequent == null) {
+      throw new IllegalArgumentException("null value for 'consequent' argument");
+    }
     this.antecedent = antecedent;
     this.consequent = consequent;
   }
@@ -32,10 +40,16 @@ public class PatternImplication<A> implements Serializable {
   }
   
   public PatternImplication withAntecedent(hydra.query.Pattern<A> antecedent) {
+    if (antecedent == null) {
+      throw new IllegalArgumentException("null value for 'antecedent' argument");
+    }
     return new PatternImplication(antecedent, consequent);
   }
   
   public PatternImplication withConsequent(hydra.query.Pattern<A> consequent) {
+    if (consequent == null) {
+      throw new IllegalArgumentException("null value for 'consequent' argument");
+    }
     return new PatternImplication(antecedent, consequent);
   }
 }

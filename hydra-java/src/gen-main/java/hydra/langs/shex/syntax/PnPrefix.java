@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class PnPrefix implements Serializable {
   public final java.util.Optional<hydra.langs.shex.syntax.PnPrefix_Sequence_Option> sequence;
   
   public PnPrefix (hydra.langs.shex.syntax.PnCharsBase pnCharsBase, java.util.Optional<hydra.langs.shex.syntax.PnPrefix_Sequence_Option> sequence) {
+    if (pnCharsBase == null) {
+      throw new IllegalArgumentException("null value for 'pnCharsBase' argument");
+    }
+    if (sequence == null) {
+      throw new IllegalArgumentException("null value for 'sequence' argument");
+    }
     this.pnCharsBase = pnCharsBase;
     this.sequence = sequence;
   }
@@ -29,10 +37,16 @@ public class PnPrefix implements Serializable {
   }
   
   public PnPrefix withPnCharsBase(hydra.langs.shex.syntax.PnCharsBase pnCharsBase) {
+    if (pnCharsBase == null) {
+      throw new IllegalArgumentException("null value for 'pnCharsBase' argument");
+    }
     return new PnPrefix(pnCharsBase, sequence);
   }
   
   public PnPrefix withSequence(java.util.Optional<hydra.langs.shex.syntax.PnPrefix_Sequence_Option> sequence) {
+    if (sequence == null) {
+      throw new IllegalArgumentException("null value for 'sequence' argument");
+    }
     return new PnPrefix(pnCharsBase, sequence);
   }
 }

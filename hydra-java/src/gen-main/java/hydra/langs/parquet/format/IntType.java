@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.format;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class IntType implements Serializable {
   public final Boolean isSigned;
   
   public IntType (Byte bitWidth, Boolean isSigned) {
+    if (bitWidth == null) {
+      throw new IllegalArgumentException("null value for 'bitWidth' argument");
+    }
+    if (isSigned == null) {
+      throw new IllegalArgumentException("null value for 'isSigned' argument");
+    }
     this.bitWidth = bitWidth;
     this.isSigned = isSigned;
   }
@@ -32,10 +40,16 @@ public class IntType implements Serializable {
   }
   
   public IntType withBitWidth(Byte bitWidth) {
+    if (bitWidth == null) {
+      throw new IllegalArgumentException("null value for 'bitWidth' argument");
+    }
     return new IntType(bitWidth, isSigned);
   }
   
   public IntType withIsSigned(Boolean isSigned) {
+    if (isSigned == null) {
+      throw new IllegalArgumentException("null value for 'isSigned' argument");
+    }
     return new IntType(bitWidth, isSigned);
   }
 }

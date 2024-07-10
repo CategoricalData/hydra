@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Data_ContextFunction implements Serializable {
   public final hydra.langs.scala.meta.Data body;
   
   public Data_ContextFunction (java.util.List<hydra.langs.scala.meta.Data_Param> params, hydra.langs.scala.meta.Data body) {
+    if (params == null) {
+      throw new IllegalArgumentException("null value for 'params' argument");
+    }
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     this.params = params;
     this.body = body;
   }
@@ -29,10 +37,16 @@ public class Data_ContextFunction implements Serializable {
   }
   
   public Data_ContextFunction withParams(java.util.List<hydra.langs.scala.meta.Data_Param> params) {
+    if (params == null) {
+      throw new IllegalArgumentException("null value for 'params' argument");
+    }
     return new Data_ContextFunction(params, body);
   }
   
   public Data_ContextFunction withBody(hydra.langs.scala.meta.Data body) {
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     return new Data_ContextFunction(params, body);
   }
 }

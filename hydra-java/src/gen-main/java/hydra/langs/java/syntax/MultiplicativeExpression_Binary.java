@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class MultiplicativeExpression_Binary implements Serializable {
   public final hydra.langs.java.syntax.UnaryExpression rhs;
   
   public MultiplicativeExpression_Binary (hydra.langs.java.syntax.MultiplicativeExpression lhs, hydra.langs.java.syntax.UnaryExpression rhs) {
+    if (lhs == null) {
+      throw new IllegalArgumentException("null value for 'lhs' argument");
+    }
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -29,10 +37,16 @@ public class MultiplicativeExpression_Binary implements Serializable {
   }
   
   public MultiplicativeExpression_Binary withLhs(hydra.langs.java.syntax.MultiplicativeExpression lhs) {
+    if (lhs == null) {
+      throw new IllegalArgumentException("null value for 'lhs' argument");
+    }
     return new MultiplicativeExpression_Binary(lhs, rhs);
   }
   
   public MultiplicativeExpression_Binary withRhs(hydra.langs.java.syntax.UnaryExpression rhs) {
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     return new MultiplicativeExpression_Binary(lhs, rhs);
   }
 }

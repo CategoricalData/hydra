@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class SubClassOf implements Serializable {
   public final hydra.langs.owl.syntax.ClassExpression superClass;
   
   public SubClassOf (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, hydra.langs.owl.syntax.ClassExpression subClass, hydra.langs.owl.syntax.ClassExpression superClass) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
+    if (subClass == null) {
+      throw new IllegalArgumentException("null value for 'subClass' argument");
+    }
+    if (superClass == null) {
+      throw new IllegalArgumentException("null value for 'superClass' argument");
+    }
     this.annotations = annotations;
     this.subClass = subClass;
     this.superClass = superClass;
@@ -32,14 +43,23 @@ public class SubClassOf implements Serializable {
   }
   
   public SubClassOf withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     return new SubClassOf(annotations, subClass, superClass);
   }
   
   public SubClassOf withSubClass(hydra.langs.owl.syntax.ClassExpression subClass) {
+    if (subClass == null) {
+      throw new IllegalArgumentException("null value for 'subClass' argument");
+    }
     return new SubClassOf(annotations, subClass, superClass);
   }
   
   public SubClassOf withSuperClass(hydra.langs.owl.syntax.ClassExpression superClass) {
+    if (superClass == null) {
+      throw new IllegalArgumentException("null value for 'superClass' argument");
+    }
     return new SubClassOf(annotations, subClass, superClass);
   }
 }

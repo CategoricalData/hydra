@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class NumericFacet_Sequence implements Serializable {
   public final hydra.langs.shex.syntax.NumericLiteral numericLiteral;
   
   public NumericFacet_Sequence (hydra.langs.shex.syntax.NumericRange numericRange, hydra.langs.shex.syntax.NumericLiteral numericLiteral) {
+    if (numericRange == null) {
+      throw new IllegalArgumentException("null value for 'numericRange' argument");
+    }
+    if (numericLiteral == null) {
+      throw new IllegalArgumentException("null value for 'numericLiteral' argument");
+    }
     this.numericRange = numericRange;
     this.numericLiteral = numericLiteral;
   }
@@ -29,10 +37,16 @@ public class NumericFacet_Sequence implements Serializable {
   }
   
   public NumericFacet_Sequence withNumericRange(hydra.langs.shex.syntax.NumericRange numericRange) {
+    if (numericRange == null) {
+      throw new IllegalArgumentException("null value for 'numericRange' argument");
+    }
     return new NumericFacet_Sequence(numericRange, numericLiteral);
   }
   
   public NumericFacet_Sequence withNumericLiteral(hydra.langs.shex.syntax.NumericLiteral numericLiteral) {
+    if (numericLiteral == null) {
+      throw new IllegalArgumentException("null value for 'numericLiteral' argument");
+    }
     return new NumericFacet_Sequence(numericRange, numericLiteral);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class ModuleDirective_Provides implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.TypeName> with;
   
   public ModuleDirective_Provides (hydra.langs.java.syntax.TypeName to, java.util.List<hydra.langs.java.syntax.TypeName> with) {
+    if (to == null) {
+      throw new IllegalArgumentException("null value for 'to' argument");
+    }
+    if (with == null) {
+      throw new IllegalArgumentException("null value for 'with' argument");
+    }
     this.to = to;
     this.with = with;
   }
@@ -32,10 +40,16 @@ public class ModuleDirective_Provides implements Serializable {
   }
   
   public ModuleDirective_Provides withTo(hydra.langs.java.syntax.TypeName to) {
+    if (to == null) {
+      throw new IllegalArgumentException("null value for 'to' argument");
+    }
     return new ModuleDirective_Provides(to, with);
   }
   
   public ModuleDirective_Provides withWith(java.util.List<hydra.langs.java.syntax.TypeName> with) {
+    if (with == null) {
+      throw new IllegalArgumentException("null value for 'with' argument");
+    }
     return new ModuleDirective_Provides(to, with);
   }
 }

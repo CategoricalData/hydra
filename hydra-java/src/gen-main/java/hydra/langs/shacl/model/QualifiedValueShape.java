@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shacl.model;
 
 import java.io.Serializable;
@@ -17,6 +19,18 @@ public class QualifiedValueShape implements Serializable {
   public final java.util.Optional<Boolean> qualifiedValueShapesDisjoint;
   
   public QualifiedValueShape (hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape> qualifiedValueShape, java.math.BigInteger qualifiedMaxCount, java.math.BigInteger qualifiedMinCount, java.util.Optional<Boolean> qualifiedValueShapesDisjoint) {
+    if (qualifiedValueShape == null) {
+      throw new IllegalArgumentException("null value for 'qualifiedValueShape' argument");
+    }
+    if (qualifiedMaxCount == null) {
+      throw new IllegalArgumentException("null value for 'qualifiedMaxCount' argument");
+    }
+    if (qualifiedMinCount == null) {
+      throw new IllegalArgumentException("null value for 'qualifiedMinCount' argument");
+    }
+    if (qualifiedValueShapesDisjoint == null) {
+      throw new IllegalArgumentException("null value for 'qualifiedValueShapesDisjoint' argument");
+    }
     this.qualifiedValueShape = qualifiedValueShape;
     this.qualifiedMaxCount = qualifiedMaxCount;
     this.qualifiedMinCount = qualifiedMinCount;
@@ -38,18 +52,30 @@ public class QualifiedValueShape implements Serializable {
   }
   
   public QualifiedValueShape withQualifiedValueShape(hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape> qualifiedValueShape) {
+    if (qualifiedValueShape == null) {
+      throw new IllegalArgumentException("null value for 'qualifiedValueShape' argument");
+    }
     return new QualifiedValueShape(qualifiedValueShape, qualifiedMaxCount, qualifiedMinCount, qualifiedValueShapesDisjoint);
   }
   
   public QualifiedValueShape withQualifiedMaxCount(java.math.BigInteger qualifiedMaxCount) {
+    if (qualifiedMaxCount == null) {
+      throw new IllegalArgumentException("null value for 'qualifiedMaxCount' argument");
+    }
     return new QualifiedValueShape(qualifiedValueShape, qualifiedMaxCount, qualifiedMinCount, qualifiedValueShapesDisjoint);
   }
   
   public QualifiedValueShape withQualifiedMinCount(java.math.BigInteger qualifiedMinCount) {
+    if (qualifiedMinCount == null) {
+      throw new IllegalArgumentException("null value for 'qualifiedMinCount' argument");
+    }
     return new QualifiedValueShape(qualifiedValueShape, qualifiedMaxCount, qualifiedMinCount, qualifiedValueShapesDisjoint);
   }
   
   public QualifiedValueShape withQualifiedValueShapesDisjoint(java.util.Optional<Boolean> qualifiedValueShapesDisjoint) {
+    if (qualifiedValueShapesDisjoint == null) {
+      throw new IllegalArgumentException("null value for 'qualifiedValueShapesDisjoint' argument");
+    }
     return new QualifiedValueShape(qualifiedValueShape, qualifiedMaxCount, qualifiedMinCount, qualifiedValueShapesDisjoint);
   }
 }

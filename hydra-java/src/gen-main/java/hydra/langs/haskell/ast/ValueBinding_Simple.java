@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class ValueBinding_Simple implements Serializable {
   public final java.util.Optional<hydra.langs.haskell.ast.LocalBindings> localBindings;
   
   public ValueBinding_Simple (hydra.langs.haskell.ast.Pattern pattern, hydra.langs.haskell.ast.RightHandSide rhs, java.util.Optional<hydra.langs.haskell.ast.LocalBindings> localBindings) {
+    if (pattern == null) {
+      throw new IllegalArgumentException("null value for 'pattern' argument");
+    }
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
+    if (localBindings == null) {
+      throw new IllegalArgumentException("null value for 'localBindings' argument");
+    }
     this.pattern = pattern;
     this.rhs = rhs;
     this.localBindings = localBindings;
@@ -32,14 +43,23 @@ public class ValueBinding_Simple implements Serializable {
   }
   
   public ValueBinding_Simple withPattern(hydra.langs.haskell.ast.Pattern pattern) {
+    if (pattern == null) {
+      throw new IllegalArgumentException("null value for 'pattern' argument");
+    }
     return new ValueBinding_Simple(pattern, rhs, localBindings);
   }
   
   public ValueBinding_Simple withRhs(hydra.langs.haskell.ast.RightHandSide rhs) {
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     return new ValueBinding_Simple(pattern, rhs, localBindings);
   }
   
   public ValueBinding_Simple withLocalBindings(java.util.Optional<hydra.langs.haskell.ast.LocalBindings> localBindings) {
+    if (localBindings == null) {
+      throw new IllegalArgumentException("null value for 'localBindings' argument");
+    }
     return new ValueBinding_Simple(pattern, rhs, localBindings);
   }
 }

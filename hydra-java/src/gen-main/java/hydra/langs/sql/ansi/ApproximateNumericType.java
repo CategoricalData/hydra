@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -41,6 +43,9 @@ public abstract class ApproximateNumericType implements Serializable {
     public final java.util.Optional<hydra.langs.sql.ansi.Precision> value;
     
     public Float_ (java.util.Optional<hydra.langs.sql.ansi.Precision> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

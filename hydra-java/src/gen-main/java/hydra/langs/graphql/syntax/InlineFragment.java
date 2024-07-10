@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class InlineFragment implements Serializable {
   public final hydra.langs.graphql.syntax.SelectionSet selectionSet;
   
   public InlineFragment (java.util.Optional<hydra.langs.graphql.syntax.TypeCondition> typeCondition, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.SelectionSet selectionSet) {
+    if (typeCondition == null) {
+      throw new IllegalArgumentException("null value for 'typeCondition' argument");
+    }
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
+    if (selectionSet == null) {
+      throw new IllegalArgumentException("null value for 'selectionSet' argument");
+    }
     this.typeCondition = typeCondition;
     this.directives = directives;
     this.selectionSet = selectionSet;
@@ -32,14 +43,23 @@ public class InlineFragment implements Serializable {
   }
   
   public InlineFragment withTypeCondition(java.util.Optional<hydra.langs.graphql.syntax.TypeCondition> typeCondition) {
+    if (typeCondition == null) {
+      throw new IllegalArgumentException("null value for 'typeCondition' argument");
+    }
     return new InlineFragment(typeCondition, directives, selectionSet);
   }
   
   public InlineFragment withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
     return new InlineFragment(typeCondition, directives, selectionSet);
   }
   
   public InlineFragment withSelectionSet(hydra.langs.graphql.syntax.SelectionSet selectionSet) {
+    if (selectionSet == null) {
+      throw new IllegalArgumentException("null value for 'selectionSet' argument");
+    }
     return new InlineFragment(typeCondition, directives, selectionSet);
   }
 }

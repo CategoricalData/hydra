@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class ExpressionName implements Serializable {
   public final hydra.langs.java.syntax.Identifier identifier;
   
   public ExpressionName (java.util.Optional<hydra.langs.java.syntax.AmbiguousName> qualifier, hydra.langs.java.syntax.Identifier identifier) {
+    if (qualifier == null) {
+      throw new IllegalArgumentException("null value for 'qualifier' argument");
+    }
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
     this.qualifier = qualifier;
     this.identifier = identifier;
   }
@@ -29,10 +37,16 @@ public class ExpressionName implements Serializable {
   }
   
   public ExpressionName withQualifier(java.util.Optional<hydra.langs.java.syntax.AmbiguousName> qualifier) {
+    if (qualifier == null) {
+      throw new IllegalArgumentException("null value for 'qualifier' argument");
+    }
     return new ExpressionName(qualifier, identifier);
   }
   
   public ExpressionName withIdentifier(hydra.langs.java.syntax.Identifier identifier) {
+    if (identifier == null) {
+      throw new IllegalArgumentException("null value for 'identifier' argument");
+    }
     return new ExpressionName(qualifier, identifier);
   }
 }

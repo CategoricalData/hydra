@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class OrdinaryCompilationUnit implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.TypeDeclarationWithComments> types;
   
   public OrdinaryCompilationUnit (java.util.Optional<hydra.langs.java.syntax.PackageDeclaration> package_, java.util.List<hydra.langs.java.syntax.ImportDeclaration> imports, java.util.List<hydra.langs.java.syntax.TypeDeclarationWithComments> types) {
+    if (package_ == null) {
+      throw new IllegalArgumentException("null value for 'package' argument");
+    }
+    if (imports == null) {
+      throw new IllegalArgumentException("null value for 'imports' argument");
+    }
+    if (types == null) {
+      throw new IllegalArgumentException("null value for 'types' argument");
+    }
     this.package_ = package_;
     this.imports = imports;
     this.types = types;
@@ -32,14 +43,23 @@ public class OrdinaryCompilationUnit implements Serializable {
   }
   
   public OrdinaryCompilationUnit withPackage(java.util.Optional<hydra.langs.java.syntax.PackageDeclaration> package_) {
+    if (package_ == null) {
+      throw new IllegalArgumentException("null value for 'package' argument");
+    }
     return new OrdinaryCompilationUnit(package_, imports, types);
   }
   
   public OrdinaryCompilationUnit withImports(java.util.List<hydra.langs.java.syntax.ImportDeclaration> imports) {
+    if (imports == null) {
+      throw new IllegalArgumentException("null value for 'imports' argument");
+    }
     return new OrdinaryCompilationUnit(package_, imports, types);
   }
   
   public OrdinaryCompilationUnit withTypes(java.util.List<hydra.langs.java.syntax.TypeDeclarationWithComments> types) {
+    if (types == null) {
+      throw new IllegalArgumentException("null value for 'types' argument");
+    }
     return new OrdinaryCompilationUnit(package_, imports, types);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -107,6 +109,9 @@ public abstract class Pat implements Serializable {
     public final hydra.langs.scala.meta.Pat_Var value;
     
     public Var (hydra.langs.scala.meta.Pat_Var value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -184,6 +189,9 @@ public abstract class Pat implements Serializable {
     public final hydra.langs.scala.meta.Pat_Bind value;
     
     public Bind (hydra.langs.scala.meta.Pat_Bind value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -211,6 +219,9 @@ public abstract class Pat implements Serializable {
     public final hydra.langs.scala.meta.Pat_Alternative value;
     
     public Alternative (hydra.langs.scala.meta.Pat_Alternative value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -238,6 +249,9 @@ public abstract class Pat implements Serializable {
     public final hydra.langs.scala.meta.Pat_Tuple value;
     
     public Tuple (hydra.langs.scala.meta.Pat_Tuple value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -265,6 +279,9 @@ public abstract class Pat implements Serializable {
     public final hydra.langs.scala.meta.Pat_Repeated value;
     
     public Repeated (hydra.langs.scala.meta.Pat_Repeated value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -292,6 +309,9 @@ public abstract class Pat implements Serializable {
     public final hydra.langs.scala.meta.Pat_Extract value;
     
     public Extract (hydra.langs.scala.meta.Pat_Extract value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -319,6 +339,9 @@ public abstract class Pat implements Serializable {
     public final hydra.langs.scala.meta.Pat_ExtractInfix value;
     
     public ExtractInfix (hydra.langs.scala.meta.Pat_ExtractInfix value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -346,6 +369,9 @@ public abstract class Pat implements Serializable {
     public final hydra.langs.scala.meta.Pat_Interpolate value;
     
     public Interpolate (hydra.langs.scala.meta.Pat_Interpolate value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -373,6 +399,9 @@ public abstract class Pat implements Serializable {
     public final hydra.langs.scala.meta.Pat_Xml value;
     
     public Xml (hydra.langs.scala.meta.Pat_Xml value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -400,6 +429,9 @@ public abstract class Pat implements Serializable {
     public final hydra.langs.scala.meta.Pat_Typed value;
     
     public Typed (hydra.langs.scala.meta.Pat_Typed value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -427,6 +459,9 @@ public abstract class Pat implements Serializable {
     public final hydra.langs.scala.meta.Pat_Macro value;
     
     public Macro (hydra.langs.scala.meta.Pat_Macro value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -454,6 +489,9 @@ public abstract class Pat implements Serializable {
     public final hydra.langs.scala.meta.Pat_Given value;
     
     public Given (hydra.langs.scala.meta.Pat_Given value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

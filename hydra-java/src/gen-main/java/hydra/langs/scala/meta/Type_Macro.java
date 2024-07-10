@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class Type_Macro implements Serializable {
   public final hydra.langs.scala.meta.Data body;
   
   public Type_Macro (hydra.langs.scala.meta.Data body) {
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     this.body = body;
   }
   

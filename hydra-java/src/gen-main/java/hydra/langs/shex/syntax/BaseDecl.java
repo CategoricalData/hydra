@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class BaseDecl implements Serializable {
   public final hydra.langs.shex.syntax.IriRef value;
   
   public BaseDecl (hydra.langs.shex.syntax.IriRef value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

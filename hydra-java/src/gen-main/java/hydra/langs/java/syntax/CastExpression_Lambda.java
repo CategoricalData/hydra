@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class CastExpression_Lambda implements Serializable {
   public final hydra.langs.java.syntax.LambdaExpression expression;
   
   public CastExpression_Lambda (hydra.langs.java.syntax.CastExpression_RefAndBounds refAndBounds, hydra.langs.java.syntax.LambdaExpression expression) {
+    if (refAndBounds == null) {
+      throw new IllegalArgumentException("null value for 'refAndBounds' argument");
+    }
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     this.refAndBounds = refAndBounds;
     this.expression = expression;
   }
@@ -29,10 +37,16 @@ public class CastExpression_Lambda implements Serializable {
   }
   
   public CastExpression_Lambda withRefAndBounds(hydra.langs.java.syntax.CastExpression_RefAndBounds refAndBounds) {
+    if (refAndBounds == null) {
+      throw new IllegalArgumentException("null value for 'refAndBounds' argument");
+    }
     return new CastExpression_Lambda(refAndBounds, expression);
   }
   
   public CastExpression_Lambda withExpression(hydra.langs.java.syntax.LambdaExpression expression) {
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     return new CastExpression_Lambda(refAndBounds, expression);
   }
 }

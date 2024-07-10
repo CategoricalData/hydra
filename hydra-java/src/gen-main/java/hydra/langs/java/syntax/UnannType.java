@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -14,6 +16,9 @@ public class UnannType implements Serializable {
   public final hydra.langs.java.syntax.Type value;
   
   public UnannType (hydra.langs.java.syntax.Type value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

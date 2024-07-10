@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shacl.model;
 
 import java.io.Serializable;
@@ -14,6 +16,9 @@ public class ShapesGraph implements Serializable {
   public final java.util.Set<hydra.langs.shacl.model.Definition<hydra.langs.shacl.model.Shape>> value;
   
   public ShapesGraph (java.util.Set<hydra.langs.shacl.model.Definition<hydra.langs.shacl.model.Shape>> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

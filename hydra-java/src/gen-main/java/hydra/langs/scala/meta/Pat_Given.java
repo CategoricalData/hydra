@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class Pat_Given implements Serializable {
   public final hydra.langs.scala.meta.Type tpe;
   
   public Pat_Given (hydra.langs.scala.meta.Type tpe) {
+    if (tpe == null) {
+      throw new IllegalArgumentException("null value for 'tpe' argument");
+    }
     this.tpe = tpe;
   }
   

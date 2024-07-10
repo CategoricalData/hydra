@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class PropertyLookup implements Serializable {
   public final hydra.langs.cypher.openCypher.PropertyKeyName value;
   
   public PropertyLookup (hydra.langs.cypher.openCypher.PropertyKeyName value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

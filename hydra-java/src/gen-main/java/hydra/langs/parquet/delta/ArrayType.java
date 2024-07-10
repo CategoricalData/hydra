@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.delta;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class ArrayType implements Serializable {
   public final Boolean containsNull;
   
   public ArrayType (hydra.langs.parquet.delta.DataType elementType, Boolean containsNull) {
+    if (elementType == null) {
+      throw new IllegalArgumentException("null value for 'elementType' argument");
+    }
+    if (containsNull == null) {
+      throw new IllegalArgumentException("null value for 'containsNull' argument");
+    }
     this.elementType = elementType;
     this.containsNull = containsNull;
   }
@@ -29,10 +37,16 @@ public class ArrayType implements Serializable {
   }
   
   public ArrayType withElementType(hydra.langs.parquet.delta.DataType elementType) {
+    if (elementType == null) {
+      throw new IllegalArgumentException("null value for 'elementType' argument");
+    }
     return new ArrayType(elementType, containsNull);
   }
   
   public ArrayType withContainsNull(Boolean containsNull) {
+    if (containsNull == null) {
+      throw new IllegalArgumentException("null value for 'containsNull' argument");
+    }
     return new ArrayType(elementType, containsNull);
   }
 }

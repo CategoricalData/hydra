@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.ast;
 
 import java.io.Serializable;
@@ -14,6 +16,9 @@ public class Precedence implements Serializable {
   public final Integer value;
   
   public Precedence (Integer value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class DeclarationHead_Application implements Serializable {
   public final hydra.langs.haskell.ast.Variable operand;
   
   public DeclarationHead_Application (hydra.langs.haskell.ast.DeclarationHead function, hydra.langs.haskell.ast.Variable operand) {
+    if (function == null) {
+      throw new IllegalArgumentException("null value for 'function' argument");
+    }
+    if (operand == null) {
+      throw new IllegalArgumentException("null value for 'operand' argument");
+    }
     this.function = function;
     this.operand = operand;
   }
@@ -32,10 +40,16 @@ public class DeclarationHead_Application implements Serializable {
   }
   
   public DeclarationHead_Application withFunction(hydra.langs.haskell.ast.DeclarationHead function) {
+    if (function == null) {
+      throw new IllegalArgumentException("null value for 'function' argument");
+    }
     return new DeclarationHead_Application(function, operand);
   }
   
   public DeclarationHead_Application withOperand(hydra.langs.haskell.ast.Variable operand) {
+    if (operand == null) {
+      throw new IllegalArgumentException("null value for 'operand' argument");
+    }
     return new DeclarationHead_Application(function, operand);
   }
 }

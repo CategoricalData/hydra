@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -41,6 +43,9 @@ public abstract class InterfaceTypeExtension implements Serializable {
     public final hydra.langs.graphql.syntax.InterfaceTypeExtension_Sequence value;
     
     public Sequence (hydra.langs.graphql.syntax.InterfaceTypeExtension_Sequence value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -68,6 +73,9 @@ public abstract class InterfaceTypeExtension implements Serializable {
     public final hydra.langs.graphql.syntax.InterfaceTypeExtension_Sequence2 value;
     
     public Sequence2 (hydra.langs.graphql.syntax.InterfaceTypeExtension_Sequence2 value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -95,6 +103,9 @@ public abstract class InterfaceTypeExtension implements Serializable {
     public final hydra.langs.graphql.syntax.InterfaceTypeExtension_Sequence3 value;
     
     public Sequence3 (hydra.langs.graphql.syntax.InterfaceTypeExtension_Sequence3 value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

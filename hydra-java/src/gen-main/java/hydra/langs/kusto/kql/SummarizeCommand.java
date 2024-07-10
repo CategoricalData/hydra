@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.kusto.kql;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class SummarizeCommand implements Serializable {
   public final java.util.List<hydra.langs.kusto.kql.ColumnName> by;
   
   public SummarizeCommand (java.util.List<hydra.langs.kusto.kql.ColumnAssignment> columns, java.util.List<hydra.langs.kusto.kql.ColumnName> by) {
+    if (columns == null) {
+      throw new IllegalArgumentException("null value for 'columns' argument");
+    }
+    if (by == null) {
+      throw new IllegalArgumentException("null value for 'by' argument");
+    }
     this.columns = columns;
     this.by = by;
   }
@@ -29,10 +37,16 @@ public class SummarizeCommand implements Serializable {
   }
   
   public SummarizeCommand withColumns(java.util.List<hydra.langs.kusto.kql.ColumnAssignment> columns) {
+    if (columns == null) {
+      throw new IllegalArgumentException("null value for 'columns' argument");
+    }
     return new SummarizeCommand(columns, by);
   }
   
   public SummarizeCommand withBy(java.util.List<hydra.langs.kusto.kql.ColumnName> by) {
+    if (by == null) {
+      throw new IllegalArgumentException("null value for 'by' argument");
+    }
     return new SummarizeCommand(columns, by);
   }
 }

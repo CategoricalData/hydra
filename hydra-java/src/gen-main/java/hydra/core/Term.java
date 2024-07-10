@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.core;
 
 import java.io.Serializable;
@@ -128,6 +130,9 @@ public abstract class Term<A> implements Serializable {
     public final hydra.core.Annotated<hydra.core.Term<A>, A> value;
     
     public Annotated (hydra.core.Annotated<hydra.core.Term<A>, A> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -161,6 +166,9 @@ public abstract class Term<A> implements Serializable {
     public final hydra.core.Application<A> value;
     
     public Application (hydra.core.Application<A> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -194,6 +202,9 @@ public abstract class Term<A> implements Serializable {
     public final hydra.core.Function<A> value;
     
     public Function (hydra.core.Function<A> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -221,6 +232,9 @@ public abstract class Term<A> implements Serializable {
     public final hydra.core.Let<A> value;
     
     public Let (hydra.core.Let<A> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -254,6 +268,9 @@ public abstract class Term<A> implements Serializable {
     public final java.util.List<hydra.core.Term<A>> value;
     
     public List (java.util.List<hydra.core.Term<A>> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -287,6 +304,9 @@ public abstract class Term<A> implements Serializable {
     public final hydra.core.Literal value;
     
     public Literal (hydra.core.Literal value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -320,6 +340,9 @@ public abstract class Term<A> implements Serializable {
     public final java.util.Map<hydra.core.Term<A>, hydra.core.Term<A>> value;
     
     public Map (java.util.Map<hydra.core.Term<A>, hydra.core.Term<A>> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -353,6 +376,9 @@ public abstract class Term<A> implements Serializable {
     public final java.util.Optional<hydra.core.Term<A>> value;
     
     public Optional (java.util.Optional<hydra.core.Term<A>> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -386,6 +412,9 @@ public abstract class Term<A> implements Serializable {
     public final java.util.List<hydra.core.Term<A>> value;
     
     public Product (java.util.List<hydra.core.Term<A>> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -419,6 +448,9 @@ public abstract class Term<A> implements Serializable {
     public final hydra.core.Record<A> value;
     
     public Record (hydra.core.Record<A> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -452,6 +484,9 @@ public abstract class Term<A> implements Serializable {
     public final java.util.Set<hydra.core.Term<A>> value;
     
     public Set (java.util.Set<hydra.core.Term<A>> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -485,6 +520,9 @@ public abstract class Term<A> implements Serializable {
     public final hydra.core.Stream<A> value;
     
     public Stream (hydra.core.Stream<A> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -518,6 +556,9 @@ public abstract class Term<A> implements Serializable {
     public final hydra.core.Sum<A> value;
     
     public Sum (hydra.core.Sum<A> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -551,6 +592,9 @@ public abstract class Term<A> implements Serializable {
     public final hydra.core.Injection<A> value;
     
     public Union (hydra.core.Injection<A> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -584,6 +628,9 @@ public abstract class Term<A> implements Serializable {
     public final hydra.core.Name value;
     
     public Variable (hydra.core.Name value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -611,6 +658,9 @@ public abstract class Term<A> implements Serializable {
     public final hydra.core.Nominal<hydra.core.Term<A>> value;
     
     public Wrap (hydra.core.Nominal<hydra.core.Term<A>> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

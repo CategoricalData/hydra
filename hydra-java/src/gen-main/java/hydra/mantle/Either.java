@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.mantle;
 
 import java.io.Serializable;
@@ -38,6 +40,9 @@ public abstract class Either<A, B> implements Serializable {
     public final A value;
     
     public Left (A value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -65,6 +70,9 @@ public abstract class Either<A, B> implements Serializable {
     public final B value;
     
     public Right (B value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

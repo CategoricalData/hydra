@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class NumberLiteral implements Serializable {
     public final Double value;
     
     public Double_ (Double value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class NumberLiteral implements Serializable {
     public final java.math.BigInteger value;
     
     public Integer_ (java.math.BigInteger value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

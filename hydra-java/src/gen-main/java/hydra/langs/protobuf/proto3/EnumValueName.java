@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.protobuf.proto3;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class EnumValueName implements Serializable {
   public final String value;
   
   public EnumValueName (String value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

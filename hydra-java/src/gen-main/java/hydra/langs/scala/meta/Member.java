@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -53,6 +55,9 @@ public abstract class Member implements Serializable {
     public final hydra.langs.scala.meta.Member_Data value;
     
     public Term (hydra.langs.scala.meta.Member_Data value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -80,6 +85,9 @@ public abstract class Member implements Serializable {
     public final hydra.langs.scala.meta.Member_Type value;
     
     public Type (hydra.langs.scala.meta.Member_Type value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -107,6 +115,9 @@ public abstract class Member implements Serializable {
     public final hydra.langs.scala.meta.Data_Param value;
     
     public TermParam (hydra.langs.scala.meta.Data_Param value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -134,6 +145,9 @@ public abstract class Member implements Serializable {
     public final hydra.langs.scala.meta.Type_Param value;
     
     public TypeParam (hydra.langs.scala.meta.Type_Param value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -161,6 +175,9 @@ public abstract class Member implements Serializable {
     public final hydra.langs.scala.meta.Self value;
     
     public Self (hydra.langs.scala.meta.Self value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

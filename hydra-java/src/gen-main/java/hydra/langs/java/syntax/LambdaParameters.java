@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class LambdaParameters implements Serializable {
     public final java.util.List<hydra.langs.java.syntax.LambdaParameters> value;
     
     public Tuple (java.util.List<hydra.langs.java.syntax.LambdaParameters> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class LambdaParameters implements Serializable {
     public final hydra.langs.java.syntax.Identifier value;
     
     public Single (hydra.langs.java.syntax.Identifier value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

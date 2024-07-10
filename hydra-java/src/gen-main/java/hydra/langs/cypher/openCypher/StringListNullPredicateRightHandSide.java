@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -41,6 +43,9 @@ public abstract class StringListNullPredicateRightHandSide implements Serializab
     public final hydra.langs.cypher.openCypher.StringPredicateExpression value;
     
     public String_ (hydra.langs.cypher.openCypher.StringPredicateExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -68,6 +73,9 @@ public abstract class StringListNullPredicateRightHandSide implements Serializab
     public final hydra.langs.cypher.openCypher.ListPredicateExpression value;
     
     public List (hydra.langs.cypher.openCypher.ListPredicateExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -95,6 +103,9 @@ public abstract class StringListNullPredicateRightHandSide implements Serializab
     public final hydra.langs.cypher.openCypher.NullPredicateExpression value;
     
     public Null (hydra.langs.cypher.openCypher.NullPredicateExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.mantle;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class TypedTerm<A> implements Serializable {
   public final hydra.core.Term<A> term;
   
   public TypedTerm (hydra.core.Type<A> type, hydra.core.Term<A> term) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
+    if (term == null) {
+      throw new IllegalArgumentException("null value for 'term' argument");
+    }
     this.type = type;
     this.term = term;
   }
@@ -32,10 +40,16 @@ public class TypedTerm<A> implements Serializable {
   }
   
   public TypedTerm withType(hydra.core.Type<A> type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new TypedTerm(type, term);
   }
   
   public TypedTerm withTerm(hydra.core.Term<A> term) {
+    if (term == null) {
+      throw new IllegalArgumentException("null value for 'term' argument");
+    }
     return new TypedTerm(type, term);
   }
 }

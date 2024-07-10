@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.pegasus.pdl;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class UnionSchema implements Serializable {
   public final java.util.List<hydra.langs.pegasus.pdl.UnionMember> value;
   
   public UnionSchema (java.util.List<hydra.langs.pegasus.pdl.UnionMember> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

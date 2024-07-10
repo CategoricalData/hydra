@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -17,6 +19,18 @@ public class Import implements Serializable {
   public final java.util.Optional<hydra.langs.haskell.ast.Import_Spec> spec;
   
   public Import (Boolean qualified, hydra.langs.haskell.ast.ModuleName module, java.util.Optional<hydra.langs.haskell.ast.ModuleName> as, java.util.Optional<hydra.langs.haskell.ast.Import_Spec> spec) {
+    if (qualified == null) {
+      throw new IllegalArgumentException("null value for 'qualified' argument");
+    }
+    if (module == null) {
+      throw new IllegalArgumentException("null value for 'module' argument");
+    }
+    if (as == null) {
+      throw new IllegalArgumentException("null value for 'as' argument");
+    }
+    if (spec == null) {
+      throw new IllegalArgumentException("null value for 'spec' argument");
+    }
     this.qualified = qualified;
     this.module = module;
     this.as = as;
@@ -38,18 +52,30 @@ public class Import implements Serializable {
   }
   
   public Import withQualified(Boolean qualified) {
+    if (qualified == null) {
+      throw new IllegalArgumentException("null value for 'qualified' argument");
+    }
     return new Import(qualified, module, as, spec);
   }
   
   public Import withModule(hydra.langs.haskell.ast.ModuleName module) {
+    if (module == null) {
+      throw new IllegalArgumentException("null value for 'module' argument");
+    }
     return new Import(qualified, module, as, spec);
   }
   
   public Import withAs(java.util.Optional<hydra.langs.haskell.ast.ModuleName> as) {
+    if (as == null) {
+      throw new IllegalArgumentException("null value for 'as' argument");
+    }
     return new Import(qualified, module, as, spec);
   }
   
   public Import withSpec(java.util.Optional<hydra.langs.haskell.ast.Import_Spec> spec) {
+    if (spec == null) {
+      throw new IllegalArgumentException("null value for 'spec' argument");
+    }
     return new Import(qualified, module, as, spec);
   }
 }

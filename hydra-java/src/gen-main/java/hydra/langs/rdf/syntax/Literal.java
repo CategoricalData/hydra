@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.rdf.syntax;
 
 import java.io.Serializable;
@@ -24,6 +26,15 @@ public class Literal implements Serializable {
   public final java.util.Optional<hydra.langs.rdf.syntax.LanguageTag> languageTag;
   
   public Literal (String lexicalForm, hydra.langs.rdf.syntax.Iri datatypeIri, java.util.Optional<hydra.langs.rdf.syntax.LanguageTag> languageTag) {
+    if (lexicalForm == null) {
+      throw new IllegalArgumentException("null value for 'lexicalForm' argument");
+    }
+    if (datatypeIri == null) {
+      throw new IllegalArgumentException("null value for 'datatypeIri' argument");
+    }
+    if (languageTag == null) {
+      throw new IllegalArgumentException("null value for 'languageTag' argument");
+    }
     this.lexicalForm = lexicalForm;
     this.datatypeIri = datatypeIri;
     this.languageTag = languageTag;
@@ -44,14 +55,23 @@ public class Literal implements Serializable {
   }
   
   public Literal withLexicalForm(String lexicalForm) {
+    if (lexicalForm == null) {
+      throw new IllegalArgumentException("null value for 'lexicalForm' argument");
+    }
     return new Literal(lexicalForm, datatypeIri, languageTag);
   }
   
   public Literal withDatatypeIri(hydra.langs.rdf.syntax.Iri datatypeIri) {
+    if (datatypeIri == null) {
+      throw new IllegalArgumentException("null value for 'datatypeIri' argument");
+    }
     return new Literal(lexicalForm, datatypeIri, languageTag);
   }
   
   public Literal withLanguageTag(java.util.Optional<hydra.langs.rdf.syntax.LanguageTag> languageTag) {
+    if (languageTag == null) {
+      throw new IllegalArgumentException("null value for 'languageTag' argument");
+    }
     return new Literal(lexicalForm, datatypeIri, languageTag);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class TypeArgument implements Serializable {
     public final hydra.langs.java.syntax.ReferenceType value;
     
     public Reference (hydra.langs.java.syntax.ReferenceType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class TypeArgument implements Serializable {
     public final hydra.langs.java.syntax.Wildcard value;
     
     public Wildcard (hydra.langs.java.syntax.Wildcard value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

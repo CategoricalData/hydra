@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.sql.ansi;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class DateLiteral implements Serializable {
   public final hydra.langs.sql.ansi.DateString value;
   
   public DateLiteral (hydra.langs.sql.ansi.DateString value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

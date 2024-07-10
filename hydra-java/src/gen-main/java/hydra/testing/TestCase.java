@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.testing;
 
 import java.io.Serializable;
@@ -17,6 +19,18 @@ public class TestCase<A> implements Serializable {
   public final hydra.core.Term<A> output;
   
   public TestCase (java.util.Optional<String> description, hydra.testing.EvaluationStyle evaluationStyle, hydra.core.Term<A> input, hydra.core.Term<A> output) {
+    if (description == null) {
+      throw new IllegalArgumentException("null value for 'description' argument");
+    }
+    if (evaluationStyle == null) {
+      throw new IllegalArgumentException("null value for 'evaluationStyle' argument");
+    }
+    if (input == null) {
+      throw new IllegalArgumentException("null value for 'input' argument");
+    }
+    if (output == null) {
+      throw new IllegalArgumentException("null value for 'output' argument");
+    }
     this.description = description;
     this.evaluationStyle = evaluationStyle;
     this.input = input;
@@ -38,18 +52,30 @@ public class TestCase<A> implements Serializable {
   }
   
   public TestCase withDescription(java.util.Optional<String> description) {
+    if (description == null) {
+      throw new IllegalArgumentException("null value for 'description' argument");
+    }
     return new TestCase(description, evaluationStyle, input, output);
   }
   
   public TestCase withEvaluationStyle(hydra.testing.EvaluationStyle evaluationStyle) {
+    if (evaluationStyle == null) {
+      throw new IllegalArgumentException("null value for 'evaluationStyle' argument");
+    }
     return new TestCase(description, evaluationStyle, input, output);
   }
   
   public TestCase withInput(hydra.core.Term<A> input) {
+    if (input == null) {
+      throw new IllegalArgumentException("null value for 'input' argument");
+    }
     return new TestCase(description, evaluationStyle, input, output);
   }
   
   public TestCase withOutput(hydra.core.Term<A> output) {
+    if (output == null) {
+      throw new IllegalArgumentException("null value for 'output' argument");
+    }
     return new TestCase(description, evaluationStyle, input, output);
   }
 }

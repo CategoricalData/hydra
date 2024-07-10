@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -41,6 +43,9 @@ public abstract class TryStatement implements Serializable {
     public final hydra.langs.java.syntax.TryStatement_Simple value;
     
     public Simple (hydra.langs.java.syntax.TryStatement_Simple value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -68,6 +73,9 @@ public abstract class TryStatement implements Serializable {
     public final hydra.langs.java.syntax.TryStatement_WithFinally value;
     
     public WithFinally (hydra.langs.java.syntax.TryStatement_WithFinally value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -95,6 +103,9 @@ public abstract class TryStatement implements Serializable {
     public final hydra.langs.java.syntax.TryWithResourcesStatement value;
     
     public WithResources (hydra.langs.java.syntax.TryWithResourcesStatement value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

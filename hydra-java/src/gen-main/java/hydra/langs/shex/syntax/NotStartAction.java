@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class NotStartAction implements Serializable {
     public final hydra.langs.shex.syntax.ShapeExpression value;
     
     public Start (hydra.langs.shex.syntax.ShapeExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class NotStartAction implements Serializable {
     public final hydra.langs.shex.syntax.NotStartAction_ShapeExprDecl value;
     
     public ShapeExprDecl (hydra.langs.shex.syntax.NotStartAction_ShapeExprDecl value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

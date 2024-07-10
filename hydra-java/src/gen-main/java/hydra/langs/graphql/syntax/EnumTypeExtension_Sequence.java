@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class EnumTypeExtension_Sequence implements Serializable {
   public final hydra.langs.graphql.syntax.EnumValuesDefinition enumValuesDefinition;
   
   public EnumTypeExtension_Sequence (hydra.langs.graphql.syntax.Name name, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.EnumValuesDefinition enumValuesDefinition) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
+    if (enumValuesDefinition == null) {
+      throw new IllegalArgumentException("null value for 'enumValuesDefinition' argument");
+    }
     this.name = name;
     this.directives = directives;
     this.enumValuesDefinition = enumValuesDefinition;
@@ -32,14 +43,23 @@ public class EnumTypeExtension_Sequence implements Serializable {
   }
   
   public EnumTypeExtension_Sequence withName(hydra.langs.graphql.syntax.Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new EnumTypeExtension_Sequence(name, directives, enumValuesDefinition);
   }
   
   public EnumTypeExtension_Sequence withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
     return new EnumTypeExtension_Sequence(name, directives, enumValuesDefinition);
   }
   
   public EnumTypeExtension_Sequence withEnumValuesDefinition(hydra.langs.graphql.syntax.EnumValuesDefinition enumValuesDefinition) {
+    if (enumValuesDefinition == null) {
+      throw new IllegalArgumentException("null value for 'enumValuesDefinition' argument");
+    }
     return new EnumTypeExtension_Sequence(name, directives, enumValuesDefinition);
   }
 }

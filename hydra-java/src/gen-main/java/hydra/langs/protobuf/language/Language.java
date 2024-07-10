@@ -1,5 +1,10 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.protobuf.language;
 
+/**
+ * Language constraints for Protobuf v3
+ */
 public interface Language {
   static <A> hydra.coders.Language<A> protobufLanguage() {
     return new hydra.coders.Language(new hydra.coders.LanguageName("hydra/langs/protobuf"), new hydra.coders.LanguageConstraints(hydra.lib.sets.Empty.apply(), hydra.lib.sets.FromList.apply(java.util.Arrays.asList(

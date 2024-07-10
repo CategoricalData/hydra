@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -53,6 +55,9 @@ public abstract class UpdatingClause implements Serializable {
     public final hydra.langs.cypher.openCypher.Create value;
     
     public Create (hydra.langs.cypher.openCypher.Create value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -80,6 +85,9 @@ public abstract class UpdatingClause implements Serializable {
     public final hydra.langs.cypher.openCypher.Merge value;
     
     public Merge (hydra.langs.cypher.openCypher.Merge value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -107,6 +115,9 @@ public abstract class UpdatingClause implements Serializable {
     public final hydra.langs.cypher.openCypher.Delete value;
     
     public Delete (hydra.langs.cypher.openCypher.Delete value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -134,6 +145,9 @@ public abstract class UpdatingClause implements Serializable {
     public final hydra.langs.cypher.openCypher.Set value;
     
     public Set (hydra.langs.cypher.openCypher.Set value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -161,6 +175,9 @@ public abstract class UpdatingClause implements Serializable {
     public final hydra.langs.cypher.openCypher.Remove value;
     
     public Remove (hydra.langs.cypher.openCypher.Remove value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

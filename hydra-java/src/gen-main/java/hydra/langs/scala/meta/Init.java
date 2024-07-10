@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class Init implements Serializable {
   public final java.util.List<java.util.List<hydra.langs.scala.meta.Data>> argss;
   
   public Init (hydra.langs.scala.meta.Type tpe, hydra.langs.scala.meta.Name name, java.util.List<java.util.List<hydra.langs.scala.meta.Data>> argss) {
+    if (tpe == null) {
+      throw new IllegalArgumentException("null value for 'tpe' argument");
+    }
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (argss == null) {
+      throw new IllegalArgumentException("null value for 'argss' argument");
+    }
     this.tpe = tpe;
     this.name = name;
     this.argss = argss;
@@ -32,14 +43,23 @@ public class Init implements Serializable {
   }
   
   public Init withTpe(hydra.langs.scala.meta.Type tpe) {
+    if (tpe == null) {
+      throw new IllegalArgumentException("null value for 'tpe' argument");
+    }
     return new Init(tpe, name, argss);
   }
   
   public Init withName(hydra.langs.scala.meta.Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new Init(tpe, name, argss);
   }
   
   public Init withArgss(java.util.List<java.util.List<hydra.langs.scala.meta.Data>> argss) {
+    if (argss == null) {
+      throw new IllegalArgumentException("null value for 'argss' argument");
+    }
     return new Init(tpe, name, argss);
   }
 }

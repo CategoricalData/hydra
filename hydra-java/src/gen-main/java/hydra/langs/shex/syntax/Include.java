@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class Include implements Serializable {
   public final hydra.langs.shex.syntax.TripleExprLabel value;
   
   public Include (hydra.langs.shex.syntax.TripleExprLabel value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

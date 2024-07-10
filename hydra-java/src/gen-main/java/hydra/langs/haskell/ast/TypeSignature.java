@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class TypeSignature implements Serializable {
   public final hydra.langs.haskell.ast.Type type;
   
   public TypeSignature (hydra.langs.haskell.ast.Name name, hydra.langs.haskell.ast.Type type) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     this.name = name;
     this.type = type;
   }
@@ -29,10 +37,16 @@ public class TypeSignature implements Serializable {
   }
   
   public TypeSignature withName(hydra.langs.haskell.ast.Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new TypeSignature(name, type);
   }
   
   public TypeSignature withType(hydra.langs.haskell.ast.Type type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new TypeSignature(name, type);
   }
 }

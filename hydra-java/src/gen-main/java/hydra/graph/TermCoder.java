@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.graph;
 
 /**
@@ -11,6 +13,12 @@ public class TermCoder<A, X> {
   public final hydra.compute.Coder<hydra.graph.Graph<A>, hydra.graph.Graph<A>, hydra.core.Term<A>, X> coder;
   
   public TermCoder (hydra.core.Type<A> type, hydra.compute.Coder<hydra.graph.Graph<A>, hydra.graph.Graph<A>, hydra.core.Term<A>, X> coder) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
+    if (coder == null) {
+      throw new IllegalArgumentException("null value for 'coder' argument");
+    }
     this.type = type;
     this.coder = coder;
   }
@@ -30,10 +38,16 @@ public class TermCoder<A, X> {
   }
   
   public TermCoder withType(hydra.core.Type<A> type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new TermCoder(type, coder);
   }
   
   public TermCoder withCoder(hydra.compute.Coder<hydra.graph.Graph<A>, hydra.graph.Graph<A>, hydra.core.Term<A>, X> coder) {
+    if (coder == null) {
+      throw new IllegalArgumentException("null value for 'coder' argument");
+    }
     return new TermCoder(type, coder);
   }
 }

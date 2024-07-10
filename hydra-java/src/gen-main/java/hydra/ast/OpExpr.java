@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.ast;
 
 import java.io.Serializable;
@@ -15,6 +17,15 @@ public class OpExpr implements Serializable {
   public final hydra.ast.Expr rhs;
   
   public OpExpr (hydra.ast.Op op, hydra.ast.Expr lhs, hydra.ast.Expr rhs) {
+    if (op == null) {
+      throw new IllegalArgumentException("null value for 'op' argument");
+    }
+    if (lhs == null) {
+      throw new IllegalArgumentException("null value for 'lhs' argument");
+    }
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     this.op = op;
     this.lhs = lhs;
     this.rhs = rhs;
@@ -35,14 +46,23 @@ public class OpExpr implements Serializable {
   }
   
   public OpExpr withOp(hydra.ast.Op op) {
+    if (op == null) {
+      throw new IllegalArgumentException("null value for 'op' argument");
+    }
     return new OpExpr(op, lhs, rhs);
   }
   
   public OpExpr withLhs(hydra.ast.Expr lhs) {
+    if (lhs == null) {
+      throw new IllegalArgumentException("null value for 'lhs' argument");
+    }
     return new OpExpr(op, lhs, rhs);
   }
   
   public OpExpr withRhs(hydra.ast.Expr rhs) {
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     return new OpExpr(op, lhs, rhs);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class PatternElement implements Serializable {
     public final hydra.langs.cypher.openCypher.NodePatternChain value;
     
     public Chained (hydra.langs.cypher.openCypher.NodePatternChain value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class PatternElement implements Serializable {
     public final hydra.langs.cypher.openCypher.PatternElement value;
     
     public Parenthesized (hydra.langs.cypher.openCypher.PatternElement value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

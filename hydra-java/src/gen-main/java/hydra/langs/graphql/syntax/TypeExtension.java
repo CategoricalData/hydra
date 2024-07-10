@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -59,6 +61,9 @@ public abstract class TypeExtension implements Serializable {
     public final hydra.langs.graphql.syntax.ScalarTypeExtension value;
     
     public Scalar (hydra.langs.graphql.syntax.ScalarTypeExtension value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -86,6 +91,9 @@ public abstract class TypeExtension implements Serializable {
     public final hydra.langs.graphql.syntax.ObjectTypeExtension value;
     
     public Object_ (hydra.langs.graphql.syntax.ObjectTypeExtension value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -113,6 +121,9 @@ public abstract class TypeExtension implements Serializable {
     public final hydra.langs.graphql.syntax.InterfaceTypeExtension value;
     
     public Interface (hydra.langs.graphql.syntax.InterfaceTypeExtension value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -140,6 +151,9 @@ public abstract class TypeExtension implements Serializable {
     public final hydra.langs.graphql.syntax.UnionTypeExtension value;
     
     public Union (hydra.langs.graphql.syntax.UnionTypeExtension value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -167,6 +181,9 @@ public abstract class TypeExtension implements Serializable {
     public final hydra.langs.graphql.syntax.EnumTypeExtension value;
     
     public Enum_ (hydra.langs.graphql.syntax.EnumTypeExtension value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -194,6 +211,9 @@ public abstract class TypeExtension implements Serializable {
     public final hydra.langs.graphql.syntax.InputObjectTypeExtension value;
     
     public InputObject (hydra.langs.graphql.syntax.InputObjectTypeExtension value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

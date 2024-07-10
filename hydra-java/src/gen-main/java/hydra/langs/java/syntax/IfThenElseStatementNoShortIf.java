@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class IfThenElseStatementNoShortIf implements Serializable {
   public final hydra.langs.java.syntax.StatementNoShortIf else_;
   
   public IfThenElseStatementNoShortIf (java.util.Optional<hydra.langs.java.syntax.Expression> cond, hydra.langs.java.syntax.StatementNoShortIf then, hydra.langs.java.syntax.StatementNoShortIf else_) {
+    if (cond == null) {
+      throw new IllegalArgumentException("null value for 'cond' argument");
+    }
+    if (then == null) {
+      throw new IllegalArgumentException("null value for 'then' argument");
+    }
+    if (else_ == null) {
+      throw new IllegalArgumentException("null value for 'else' argument");
+    }
     this.cond = cond;
     this.then = then;
     this.else_ = else_;
@@ -32,14 +43,23 @@ public class IfThenElseStatementNoShortIf implements Serializable {
   }
   
   public IfThenElseStatementNoShortIf withCond(java.util.Optional<hydra.langs.java.syntax.Expression> cond) {
+    if (cond == null) {
+      throw new IllegalArgumentException("null value for 'cond' argument");
+    }
     return new IfThenElseStatementNoShortIf(cond, then, else_);
   }
   
   public IfThenElseStatementNoShortIf withThen(hydra.langs.java.syntax.StatementNoShortIf then) {
+    if (then == null) {
+      throw new IllegalArgumentException("null value for 'then' argument");
+    }
     return new IfThenElseStatementNoShortIf(cond, then, else_);
   }
   
   public IfThenElseStatementNoShortIf withElse(hydra.langs.java.syntax.StatementNoShortIf else_) {
+    if (else_ == null) {
+      throw new IllegalArgumentException("null value for 'else' argument");
+    }
     return new IfThenElseStatementNoShortIf(cond, then, else_);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -16,6 +18,21 @@ public class Defn_Trait implements Serializable {
   public final hydra.langs.scala.meta.Template template;
   
   public Defn_Trait (java.util.List<hydra.langs.scala.meta.Mod> mods, hydra.langs.scala.meta.Type_Name name, java.util.List<hydra.langs.scala.meta.Type_Param> tparams, hydra.langs.scala.meta.Ctor_Primary ctor, hydra.langs.scala.meta.Template template) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (tparams == null) {
+      throw new IllegalArgumentException("null value for 'tparams' argument");
+    }
+    if (ctor == null) {
+      throw new IllegalArgumentException("null value for 'ctor' argument");
+    }
+    if (template == null) {
+      throw new IllegalArgumentException("null value for 'template' argument");
+    }
     this.mods = mods;
     this.name = name;
     this.tparams = tparams;
@@ -38,22 +55,37 @@ public class Defn_Trait implements Serializable {
   }
   
   public Defn_Trait withMods(java.util.List<hydra.langs.scala.meta.Mod> mods) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
     return new Defn_Trait(mods, name, tparams, ctor, template);
   }
   
   public Defn_Trait withName(hydra.langs.scala.meta.Type_Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new Defn_Trait(mods, name, tparams, ctor, template);
   }
   
   public Defn_Trait withTparams(java.util.List<hydra.langs.scala.meta.Type_Param> tparams) {
+    if (tparams == null) {
+      throw new IllegalArgumentException("null value for 'tparams' argument");
+    }
     return new Defn_Trait(mods, name, tparams, ctor, template);
   }
   
   public Defn_Trait withCtor(hydra.langs.scala.meta.Ctor_Primary ctor) {
+    if (ctor == null) {
+      throw new IllegalArgumentException("null value for 'ctor' argument");
+    }
     return new Defn_Trait(mods, name, tparams, ctor, template);
   }
   
   public Defn_Trait withTemplate(hydra.langs.scala.meta.Template template) {
+    if (template == null) {
+      throw new IllegalArgumentException("null value for 'template' argument");
+    }
     return new Defn_Trait(mods, name, tparams, ctor, template);
   }
 }

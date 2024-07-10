@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class ListComprehension implements Serializable {
   public final java.util.Optional<hydra.langs.cypher.openCypher.Expression> right;
   
   public ListComprehension (hydra.langs.cypher.openCypher.FilterExpression left, java.util.Optional<hydra.langs.cypher.openCypher.Expression> right) {
+    if (left == null) {
+      throw new IllegalArgumentException("null value for 'left' argument");
+    }
+    if (right == null) {
+      throw new IllegalArgumentException("null value for 'right' argument");
+    }
     this.left = left;
     this.right = right;
   }
@@ -29,10 +37,16 @@ public class ListComprehension implements Serializable {
   }
   
   public ListComprehension withLeft(hydra.langs.cypher.openCypher.FilterExpression left) {
+    if (left == null) {
+      throw new IllegalArgumentException("null value for 'left' argument");
+    }
     return new ListComprehension(left, right);
   }
   
   public ListComprehension withRight(java.util.Optional<hydra.langs.cypher.openCypher.Expression> right) {
+    if (right == null) {
+      throw new IllegalArgumentException("null value for 'right' argument");
+    }
     return new ListComprehension(left, right);
   }
 }

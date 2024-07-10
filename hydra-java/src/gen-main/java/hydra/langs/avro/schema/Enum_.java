@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.avro.schema;
 
 import java.io.Serializable;
@@ -16,6 +18,12 @@ public class Enum_ implements Serializable {
   public final java.util.Optional<String> default_;
   
   public Enum_ (java.util.List<String> symbols, java.util.Optional<String> default_) {
+    if (symbols == null) {
+      throw new IllegalArgumentException("null value for 'symbols' argument");
+    }
+    if (default_ == null) {
+      throw new IllegalArgumentException("null value for 'default' argument");
+    }
     this.symbols = symbols;
     this.default_ = default_;
   }
@@ -35,10 +43,16 @@ public class Enum_ implements Serializable {
   }
   
   public Enum_ withSymbols(java.util.List<String> symbols) {
+    if (symbols == null) {
+      throw new IllegalArgumentException("null value for 'symbols' argument");
+    }
     return new Enum_(symbols, default_);
   }
   
   public Enum_ withDefault(java.util.Optional<String> default_) {
+    if (default_ == null) {
+      throw new IllegalArgumentException("null value for 'default' argument");
+    }
     return new Enum_(symbols, default_);
   }
 }

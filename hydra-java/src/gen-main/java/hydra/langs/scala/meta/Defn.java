@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -107,6 +109,9 @@ public abstract class Defn implements Serializable {
     public final hydra.langs.scala.meta.Defn_Val value;
     
     public Val (hydra.langs.scala.meta.Defn_Val value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -134,6 +139,9 @@ public abstract class Defn implements Serializable {
     public final hydra.langs.scala.meta.Defn_Var value;
     
     public Var (hydra.langs.scala.meta.Defn_Var value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -161,6 +169,9 @@ public abstract class Defn implements Serializable {
     public final hydra.langs.scala.meta.Defn_Given value;
     
     public Given (hydra.langs.scala.meta.Defn_Given value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -188,6 +199,9 @@ public abstract class Defn implements Serializable {
     public final hydra.langs.scala.meta.Defn_Enum value;
     
     public Enum_ (hydra.langs.scala.meta.Defn_Enum value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -215,6 +229,9 @@ public abstract class Defn implements Serializable {
     public final hydra.langs.scala.meta.Defn_EnumCase value;
     
     public EnumCase (hydra.langs.scala.meta.Defn_EnumCase value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -242,6 +259,9 @@ public abstract class Defn implements Serializable {
     public final hydra.langs.scala.meta.Defn_RepeatedEnumCase value;
     
     public RepeatedEnumCase (hydra.langs.scala.meta.Defn_RepeatedEnumCase value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -269,6 +289,9 @@ public abstract class Defn implements Serializable {
     public final hydra.langs.scala.meta.Defn_GivenAlias value;
     
     public GivenAlias (hydra.langs.scala.meta.Defn_GivenAlias value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -296,6 +319,9 @@ public abstract class Defn implements Serializable {
     public final hydra.langs.scala.meta.Defn_ExtensionGroup value;
     
     public ExtensionGroup (hydra.langs.scala.meta.Defn_ExtensionGroup value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -323,6 +349,9 @@ public abstract class Defn implements Serializable {
     public final hydra.langs.scala.meta.Defn_Def value;
     
     public Def (hydra.langs.scala.meta.Defn_Def value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -350,6 +379,9 @@ public abstract class Defn implements Serializable {
     public final hydra.langs.scala.meta.Defn_Macro value;
     
     public Macro (hydra.langs.scala.meta.Defn_Macro value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -377,6 +409,9 @@ public abstract class Defn implements Serializable {
     public final hydra.langs.scala.meta.Defn_Type value;
     
     public Type (hydra.langs.scala.meta.Defn_Type value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -404,6 +439,9 @@ public abstract class Defn implements Serializable {
     public final hydra.langs.scala.meta.Defn_Class value;
     
     public Class_ (hydra.langs.scala.meta.Defn_Class value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -431,6 +469,9 @@ public abstract class Defn implements Serializable {
     public final hydra.langs.scala.meta.Defn_Trait value;
     
     public Trait (hydra.langs.scala.meta.Defn_Trait value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -458,6 +499,9 @@ public abstract class Defn implements Serializable {
     public final hydra.langs.scala.meta.Defn_Object value;
     
     public Object_ (hydra.langs.scala.meta.Defn_Object value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

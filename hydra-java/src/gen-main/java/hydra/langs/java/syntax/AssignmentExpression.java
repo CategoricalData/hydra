@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class AssignmentExpression implements Serializable {
     public final hydra.langs.java.syntax.ConditionalExpression value;
     
     public Conditional (hydra.langs.java.syntax.ConditionalExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class AssignmentExpression implements Serializable {
     public final hydra.langs.java.syntax.Assignment value;
     
     public Assignment (hydra.langs.java.syntax.Assignment value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class SortItem implements Serializable {
   public final java.util.Optional<hydra.langs.cypher.openCypher.SortOrder> order;
   
   public SortItem (hydra.langs.cypher.openCypher.Expression expression, java.util.Optional<hydra.langs.cypher.openCypher.SortOrder> order) {
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
+    if (order == null) {
+      throw new IllegalArgumentException("null value for 'order' argument");
+    }
     this.expression = expression;
     this.order = order;
   }
@@ -29,10 +37,16 @@ public class SortItem implements Serializable {
   }
   
   public SortItem withExpression(hydra.langs.cypher.openCypher.Expression expression) {
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     return new SortItem(expression, order);
   }
   
   public SortItem withOrder(java.util.Optional<hydra.langs.cypher.openCypher.SortOrder> order) {
+    if (order == null) {
+      throw new IllegalArgumentException("null value for 'order' argument");
+    }
     return new SortItem(expression, order);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.protobuf.proto3;
 
 import java.io.Serializable;
@@ -34,6 +36,21 @@ public class Field implements Serializable {
   public final java.util.List<hydra.langs.protobuf.proto3.Option> options;
   
   public Field (hydra.langs.protobuf.proto3.FieldName name, java.util.Optional<String> jsonName, hydra.langs.protobuf.proto3.FieldType type, Integer number, java.util.List<hydra.langs.protobuf.proto3.Option> options) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (jsonName == null) {
+      throw new IllegalArgumentException("null value for 'jsonName' argument");
+    }
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
+    if (number == null) {
+      throw new IllegalArgumentException("null value for 'number' argument");
+    }
+    if (options == null) {
+      throw new IllegalArgumentException("null value for 'options' argument");
+    }
     this.name = name;
     this.jsonName = jsonName;
     this.type = type;
@@ -56,22 +73,37 @@ public class Field implements Serializable {
   }
   
   public Field withName(hydra.langs.protobuf.proto3.FieldName name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new Field(name, jsonName, type, number, options);
   }
   
   public Field withJsonName(java.util.Optional<String> jsonName) {
+    if (jsonName == null) {
+      throw new IllegalArgumentException("null value for 'jsonName' argument");
+    }
     return new Field(name, jsonName, type, number, options);
   }
   
   public Field withType(hydra.langs.protobuf.proto3.FieldType type) {
+    if (type == null) {
+      throw new IllegalArgumentException("null value for 'type' argument");
+    }
     return new Field(name, jsonName, type, number, options);
   }
   
   public Field withNumber(Integer number) {
+    if (number == null) {
+      throw new IllegalArgumentException("null value for 'number' argument");
+    }
     return new Field(name, jsonName, type, number, options);
   }
   
   public Field withOptions(java.util.List<hydra.langs.protobuf.proto3.Option> options) {
+    if (options == null) {
+      throw new IllegalArgumentException("null value for 'options' argument");
+    }
     return new Field(name, jsonName, type, number, options);
   }
 }

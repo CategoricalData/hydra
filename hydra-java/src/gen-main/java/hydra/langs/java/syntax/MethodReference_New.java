@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class MethodReference_New implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments;
   
   public MethodReference_New (hydra.langs.java.syntax.ClassType classType, java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments) {
+    if (classType == null) {
+      throw new IllegalArgumentException("null value for 'classType' argument");
+    }
+    if (typeArguments == null) {
+      throw new IllegalArgumentException("null value for 'typeArguments' argument");
+    }
     this.classType = classType;
     this.typeArguments = typeArguments;
   }
@@ -29,10 +37,16 @@ public class MethodReference_New implements Serializable {
   }
   
   public MethodReference_New withClassType(hydra.langs.java.syntax.ClassType classType) {
+    if (classType == null) {
+      throw new IllegalArgumentException("null value for 'classType' argument");
+    }
     return new MethodReference_New(classType, typeArguments);
   }
   
   public MethodReference_New withTypeArguments(java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments) {
+    if (typeArguments == null) {
+      throw new IllegalArgumentException("null value for 'typeArguments' argument");
+    }
     return new MethodReference_New(classType, typeArguments);
   }
 }

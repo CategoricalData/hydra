@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -47,6 +49,9 @@ public abstract class AnnotationAxiom implements Serializable {
     public final hydra.langs.owl.syntax.AnnotationAssertion value;
     
     public AnnotationAssertion (hydra.langs.owl.syntax.AnnotationAssertion value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -74,6 +79,9 @@ public abstract class AnnotationAxiom implements Serializable {
     public final hydra.langs.owl.syntax.AnnotationPropertyDomain value;
     
     public AnnotationPropertyDomain (hydra.langs.owl.syntax.AnnotationPropertyDomain value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -101,6 +109,9 @@ public abstract class AnnotationAxiom implements Serializable {
     public final hydra.langs.owl.syntax.AnnotationPropertyRange value;
     
     public AnnotationPropertyRange (hydra.langs.owl.syntax.AnnotationPropertyRange value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -128,6 +139,9 @@ public abstract class AnnotationAxiom implements Serializable {
     public final hydra.langs.owl.syntax.SubAnnotationPropertyOf value;
     
     public SubAnnotationPropertyOf (hydra.langs.owl.syntax.SubAnnotationPropertyOf value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

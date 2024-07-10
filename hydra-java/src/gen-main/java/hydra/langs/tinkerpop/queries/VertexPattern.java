@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.queries;
 
 import java.io.Serializable;
@@ -14,6 +16,18 @@ public class VertexPattern implements Serializable {
   public final java.util.List<hydra.langs.tinkerpop.queries.EdgeProjectionPattern> edges;
   
   public VertexPattern (java.util.Optional<hydra.langs.tinkerpop.queries.Variable> variable, java.util.Optional<hydra.langs.tinkerpop.propertyGraph.VertexLabel> label, java.util.List<hydra.langs.tinkerpop.queries.PropertyPattern> properties, java.util.List<hydra.langs.tinkerpop.queries.EdgeProjectionPattern> edges) {
+    if (variable == null) {
+      throw new IllegalArgumentException("null value for 'variable' argument");
+    }
+    if (label == null) {
+      throw new IllegalArgumentException("null value for 'label' argument");
+    }
+    if (properties == null) {
+      throw new IllegalArgumentException("null value for 'properties' argument");
+    }
+    if (edges == null) {
+      throw new IllegalArgumentException("null value for 'edges' argument");
+    }
     this.variable = variable;
     this.label = label;
     this.properties = properties;
@@ -35,18 +49,30 @@ public class VertexPattern implements Serializable {
   }
   
   public VertexPattern withVariable(java.util.Optional<hydra.langs.tinkerpop.queries.Variable> variable) {
+    if (variable == null) {
+      throw new IllegalArgumentException("null value for 'variable' argument");
+    }
     return new VertexPattern(variable, label, properties, edges);
   }
   
   public VertexPattern withLabel(java.util.Optional<hydra.langs.tinkerpop.propertyGraph.VertexLabel> label) {
+    if (label == null) {
+      throw new IllegalArgumentException("null value for 'label' argument");
+    }
     return new VertexPattern(variable, label, properties, edges);
   }
   
   public VertexPattern withProperties(java.util.List<hydra.langs.tinkerpop.queries.PropertyPattern> properties) {
+    if (properties == null) {
+      throw new IllegalArgumentException("null value for 'properties' argument");
+    }
     return new VertexPattern(variable, label, properties, edges);
   }
   
   public VertexPattern withEdges(java.util.List<hydra.langs.tinkerpop.queries.EdgeProjectionPattern> edges) {
+    if (edges == null) {
+      throw new IllegalArgumentException("null value for 'edges' argument");
+    }
     return new VertexPattern(variable, label, properties, edges);
   }
 }

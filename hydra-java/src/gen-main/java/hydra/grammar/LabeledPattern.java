@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.grammar;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class LabeledPattern implements Serializable {
   public final hydra.grammar.Pattern pattern;
   
   public LabeledPattern (hydra.grammar.Label label, hydra.grammar.Pattern pattern) {
+    if (label == null) {
+      throw new IllegalArgumentException("null value for 'label' argument");
+    }
+    if (pattern == null) {
+      throw new IllegalArgumentException("null value for 'pattern' argument");
+    }
     this.label = label;
     this.pattern = pattern;
   }
@@ -32,10 +40,16 @@ public class LabeledPattern implements Serializable {
   }
   
   public LabeledPattern withLabel(hydra.grammar.Label label) {
+    if (label == null) {
+      throw new IllegalArgumentException("null value for 'label' argument");
+    }
     return new LabeledPattern(label, pattern);
   }
   
   public LabeledPattern withPattern(hydra.grammar.Pattern pattern) {
+    if (pattern == null) {
+      throw new IllegalArgumentException("null value for 'pattern' argument");
+    }
     return new LabeledPattern(label, pattern);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.core;
 
 import java.io.Serializable;
@@ -13,6 +15,12 @@ public class Annotated<X, A> implements Serializable {
   public final A annotation;
   
   public Annotated (X subject, A annotation) {
+    if (subject == null) {
+      throw new IllegalArgumentException("null value for 'subject' argument");
+    }
+    if (annotation == null) {
+      throw new IllegalArgumentException("null value for 'annotation' argument");
+    }
     this.subject = subject;
     this.annotation = annotation;
   }
@@ -32,10 +40,16 @@ public class Annotated<X, A> implements Serializable {
   }
   
   public Annotated withSubject(X subject) {
+    if (subject == null) {
+      throw new IllegalArgumentException("null value for 'subject' argument");
+    }
     return new Annotated(subject, annotation);
   }
   
   public Annotated withAnnotation(A annotation) {
+    if (annotation == null) {
+      throw new IllegalArgumentException("null value for 'annotation' argument");
+    }
     return new Annotated(subject, annotation);
   }
 }

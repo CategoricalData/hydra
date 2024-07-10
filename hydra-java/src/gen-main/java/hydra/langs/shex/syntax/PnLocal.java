@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class PnLocal implements Serializable {
   public final java.util.Optional<hydra.langs.shex.syntax.PnLocal_Sequence_Option> sequence;
   
   public PnLocal (hydra.langs.shex.syntax.PnLocal_Alts alts, java.util.Optional<hydra.langs.shex.syntax.PnLocal_Sequence_Option> sequence) {
+    if (alts == null) {
+      throw new IllegalArgumentException("null value for 'alts' argument");
+    }
+    if (sequence == null) {
+      throw new IllegalArgumentException("null value for 'sequence' argument");
+    }
     this.alts = alts;
     this.sequence = sequence;
   }
@@ -29,10 +37,16 @@ public class PnLocal implements Serializable {
   }
   
   public PnLocal withAlts(hydra.langs.shex.syntax.PnLocal_Alts alts) {
+    if (alts == null) {
+      throw new IllegalArgumentException("null value for 'alts' argument");
+    }
     return new PnLocal(alts, sequence);
   }
   
   public PnLocal withSequence(java.util.Optional<hydra.langs.shex.syntax.PnLocal_Sequence_Option> sequence) {
+    if (sequence == null) {
+      throw new IllegalArgumentException("null value for 'sequence' argument");
+    }
     return new PnLocal(alts, sequence);
   }
 }

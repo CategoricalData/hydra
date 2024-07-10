@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class RightHandSide implements Serializable {
   public final hydra.langs.haskell.ast.Expression value;
   
   public RightHandSide (hydra.langs.haskell.ast.Expression value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

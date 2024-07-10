@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.rdf.syntax;
 
 import java.io.Serializable;
@@ -15,6 +17,15 @@ public class Triple implements Serializable {
   public final hydra.langs.rdf.syntax.Node object;
   
   public Triple (hydra.langs.rdf.syntax.Resource subject, hydra.langs.rdf.syntax.Iri predicate, hydra.langs.rdf.syntax.Node object) {
+    if (subject == null) {
+      throw new IllegalArgumentException("null value for 'subject' argument");
+    }
+    if (predicate == null) {
+      throw new IllegalArgumentException("null value for 'predicate' argument");
+    }
+    if (object == null) {
+      throw new IllegalArgumentException("null value for 'object' argument");
+    }
     this.subject = subject;
     this.predicate = predicate;
     this.object = object;
@@ -35,14 +46,23 @@ public class Triple implements Serializable {
   }
   
   public Triple withSubject(hydra.langs.rdf.syntax.Resource subject) {
+    if (subject == null) {
+      throw new IllegalArgumentException("null value for 'subject' argument");
+    }
     return new Triple(subject, predicate, object);
   }
   
   public Triple withPredicate(hydra.langs.rdf.syntax.Iri predicate) {
+    if (predicate == null) {
+      throw new IllegalArgumentException("null value for 'predicate' argument");
+    }
     return new Triple(subject, predicate, object);
   }
   
   public Triple withObject(hydra.langs.rdf.syntax.Node object) {
+    if (object == null) {
+      throw new IllegalArgumentException("null value for 'object' argument");
+    }
     return new Triple(subject, predicate, object);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class ObjectComplementOf implements Serializable {
   public final hydra.langs.owl.syntax.ClassExpression value;
   
   public ObjectComplementOf (hydra.langs.owl.syntax.ClassExpression value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

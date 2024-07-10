@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class Pattern implements Serializable {
   public final java.util.List<hydra.langs.cypher.openCypher.PatternPart> value;
   
   public Pattern (java.util.List<hydra.langs.cypher.openCypher.PatternPart> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

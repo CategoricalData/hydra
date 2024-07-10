@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -66,6 +68,9 @@ public abstract class ClassTypeQualifier implements Serializable {
     public final hydra.langs.java.syntax.PackageName value;
     
     public Package_ (hydra.langs.java.syntax.PackageName value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -93,6 +98,9 @@ public abstract class ClassTypeQualifier implements Serializable {
     public final hydra.langs.java.syntax.ClassOrInterfaceType value;
     
     public Parent (hydra.langs.java.syntax.ClassOrInterfaceType value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

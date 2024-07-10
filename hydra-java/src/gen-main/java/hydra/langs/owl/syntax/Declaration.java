@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class Declaration implements Serializable {
   public final hydra.langs.owl.syntax.Entity entity;
   
   public Declaration (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, hydra.langs.owl.syntax.Entity entity) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
+    if (entity == null) {
+      throw new IllegalArgumentException("null value for 'entity' argument");
+    }
     this.annotations = annotations;
     this.entity = entity;
   }
@@ -29,10 +37,16 @@ public class Declaration implements Serializable {
   }
   
   public Declaration withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     return new Declaration(annotations, entity);
   }
   
   public Declaration withEntity(hydra.langs.owl.syntax.Entity entity) {
+    if (entity == null) {
+      throw new IllegalArgumentException("null value for 'entity' argument");
+    }
     return new Declaration(annotations, entity);
   }
 }

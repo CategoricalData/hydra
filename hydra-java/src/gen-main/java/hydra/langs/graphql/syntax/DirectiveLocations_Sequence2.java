@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class DirectiveLocations_Sequence2 implements Serializable {
   public final hydra.langs.graphql.syntax.DirectiveLocation directiveLocation;
   
   public DirectiveLocations_Sequence2 (java.util.Optional<java.lang.Void> or, hydra.langs.graphql.syntax.DirectiveLocation directiveLocation) {
+    if (or == null) {
+      throw new IllegalArgumentException("null value for 'or' argument");
+    }
+    if (directiveLocation == null) {
+      throw new IllegalArgumentException("null value for 'directiveLocation' argument");
+    }
     this.or = or;
     this.directiveLocation = directiveLocation;
   }
@@ -29,10 +37,16 @@ public class DirectiveLocations_Sequence2 implements Serializable {
   }
   
   public DirectiveLocations_Sequence2 withOr(java.util.Optional<java.lang.Void> or) {
+    if (or == null) {
+      throw new IllegalArgumentException("null value for 'or' argument");
+    }
     return new DirectiveLocations_Sequence2(or, directiveLocation);
   }
   
   public DirectiveLocations_Sequence2 withDirectiveLocation(hydra.langs.graphql.syntax.DirectiveLocation directiveLocation) {
+    if (directiveLocation == null) {
+      throw new IllegalArgumentException("null value for 'directiveLocation' argument");
+    }
     return new DirectiveLocations_Sequence2(or, directiveLocation);
   }
 }

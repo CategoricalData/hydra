@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class MethodInvocation implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.Expression> arguments;
   
   public MethodInvocation (hydra.langs.java.syntax.MethodInvocation_Header header, java.util.List<hydra.langs.java.syntax.Expression> arguments) {
+    if (header == null) {
+      throw new IllegalArgumentException("null value for 'header' argument");
+    }
+    if (arguments == null) {
+      throw new IllegalArgumentException("null value for 'arguments' argument");
+    }
     this.header = header;
     this.arguments = arguments;
   }
@@ -29,10 +37,16 @@ public class MethodInvocation implements Serializable {
   }
   
   public MethodInvocation withHeader(hydra.langs.java.syntax.MethodInvocation_Header header) {
+    if (header == null) {
+      throw new IllegalArgumentException("null value for 'header' argument");
+    }
     return new MethodInvocation(header, arguments);
   }
   
   public MethodInvocation withArguments(java.util.List<hydra.langs.java.syntax.Expression> arguments) {
+    if (arguments == null) {
+      throw new IllegalArgumentException("null value for 'arguments' argument");
+    }
     return new MethodInvocation(header, arguments);
   }
 }

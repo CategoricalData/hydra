@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class ModuleHead implements Serializable {
   public final java.util.List<hydra.langs.haskell.ast.Export> exports;
   
   public ModuleHead (java.util.Optional<String> comments, hydra.langs.haskell.ast.ModuleName name, java.util.List<hydra.langs.haskell.ast.Export> exports) {
+    if (comments == null) {
+      throw new IllegalArgumentException("null value for 'comments' argument");
+    }
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (exports == null) {
+      throw new IllegalArgumentException("null value for 'exports' argument");
+    }
     this.comments = comments;
     this.name = name;
     this.exports = exports;
@@ -32,14 +43,23 @@ public class ModuleHead implements Serializable {
   }
   
   public ModuleHead withComments(java.util.Optional<String> comments) {
+    if (comments == null) {
+      throw new IllegalArgumentException("null value for 'comments' argument");
+    }
     return new ModuleHead(comments, name, exports);
   }
   
   public ModuleHead withName(hydra.langs.haskell.ast.ModuleName name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new ModuleHead(comments, name, exports);
   }
   
   public ModuleHead withExports(java.util.List<hydra.langs.haskell.ast.Export> exports) {
+    if (exports == null) {
+      throw new IllegalArgumentException("null value for 'exports' argument");
+    }
     return new ModuleHead(comments, name, exports);
   }
 }

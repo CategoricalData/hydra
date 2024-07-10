@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.features;
 
 import java.io.Serializable;
@@ -16,6 +18,12 @@ public class PropertyFeatures implements Serializable {
   public final Boolean supportsProperties;
   
   public PropertyFeatures (hydra.langs.tinkerpop.features.DataTypeFeatures dataTypeFeatures, Boolean supportsProperties) {
+    if (dataTypeFeatures == null) {
+      throw new IllegalArgumentException("null value for 'dataTypeFeatures' argument");
+    }
+    if (supportsProperties == null) {
+      throw new IllegalArgumentException("null value for 'supportsProperties' argument");
+    }
     this.dataTypeFeatures = dataTypeFeatures;
     this.supportsProperties = supportsProperties;
   }
@@ -35,10 +43,16 @@ public class PropertyFeatures implements Serializable {
   }
   
   public PropertyFeatures withDataTypeFeatures(hydra.langs.tinkerpop.features.DataTypeFeatures dataTypeFeatures) {
+    if (dataTypeFeatures == null) {
+      throw new IllegalArgumentException("null value for 'dataTypeFeatures' argument");
+    }
     return new PropertyFeatures(dataTypeFeatures, supportsProperties);
   }
   
   public PropertyFeatures withSupportsProperties(Boolean supportsProperties) {
+    if (supportsProperties == null) {
+      throw new IllegalArgumentException("null value for 'supportsProperties' argument");
+    }
     return new PropertyFeatures(dataTypeFeatures, supportsProperties);
   }
 }

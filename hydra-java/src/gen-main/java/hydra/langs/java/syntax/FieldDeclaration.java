@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class FieldDeclaration implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.VariableDeclarator> variableDeclarators;
   
   public FieldDeclaration (java.util.List<hydra.langs.java.syntax.FieldModifier> modifiers, hydra.langs.java.syntax.UnannType unannType, java.util.List<hydra.langs.java.syntax.VariableDeclarator> variableDeclarators) {
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
+    if (unannType == null) {
+      throw new IllegalArgumentException("null value for 'unannType' argument");
+    }
+    if (variableDeclarators == null) {
+      throw new IllegalArgumentException("null value for 'variableDeclarators' argument");
+    }
     this.modifiers = modifiers;
     this.unannType = unannType;
     this.variableDeclarators = variableDeclarators;
@@ -32,14 +43,23 @@ public class FieldDeclaration implements Serializable {
   }
   
   public FieldDeclaration withModifiers(java.util.List<hydra.langs.java.syntax.FieldModifier> modifiers) {
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
     return new FieldDeclaration(modifiers, unannType, variableDeclarators);
   }
   
   public FieldDeclaration withUnannType(hydra.langs.java.syntax.UnannType unannType) {
+    if (unannType == null) {
+      throw new IllegalArgumentException("null value for 'unannType' argument");
+    }
     return new FieldDeclaration(modifiers, unannType, variableDeclarators);
   }
   
   public FieldDeclaration withVariableDeclarators(java.util.List<hydra.langs.java.syntax.VariableDeclarator> variableDeclarators) {
+    if (variableDeclarators == null) {
+      throw new IllegalArgumentException("null value for 'variableDeclarators' argument");
+    }
     return new FieldDeclaration(modifiers, unannType, variableDeclarators);
   }
 }

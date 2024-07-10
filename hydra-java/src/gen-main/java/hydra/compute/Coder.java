@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.compute;
 
 /**
@@ -11,6 +13,12 @@ public class Coder<S1, S2, V1, V2> {
   public final java.util.function.Function<V2, hydra.compute.Flow<S2, V1>> decode;
   
   public Coder (java.util.function.Function<V1, hydra.compute.Flow<S1, V2>> encode, java.util.function.Function<V2, hydra.compute.Flow<S2, V1>> decode) {
+    if (encode == null) {
+      throw new IllegalArgumentException("null value for 'encode' argument");
+    }
+    if (decode == null) {
+      throw new IllegalArgumentException("null value for 'decode' argument");
+    }
     this.encode = encode;
     this.decode = decode;
   }
@@ -30,10 +38,16 @@ public class Coder<S1, S2, V1, V2> {
   }
   
   public Coder withEncode(java.util.function.Function<V1, hydra.compute.Flow<S1, V2>> encode) {
+    if (encode == null) {
+      throw new IllegalArgumentException("null value for 'encode' argument");
+    }
     return new Coder(encode, decode);
   }
   
   public Coder withDecode(java.util.function.Function<V2, hydra.compute.Flow<S2, V1>> decode) {
+    if (decode == null) {
+      throw new IllegalArgumentException("null value for 'decode' argument");
+    }
     return new Coder(encode, decode);
   }
 }

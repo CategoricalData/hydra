@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.protobuf.proto3;
 
 import java.io.Serializable;
@@ -17,6 +19,18 @@ public class ProtoFile implements Serializable {
   public final java.util.List<hydra.langs.protobuf.proto3.Option> options;
   
   public ProtoFile (hydra.langs.protobuf.proto3.PackageName package_, java.util.List<hydra.langs.protobuf.proto3.FileReference> imports, java.util.List<hydra.langs.protobuf.proto3.Definition> types, java.util.List<hydra.langs.protobuf.proto3.Option> options) {
+    if (package_ == null) {
+      throw new IllegalArgumentException("null value for 'package' argument");
+    }
+    if (imports == null) {
+      throw new IllegalArgumentException("null value for 'imports' argument");
+    }
+    if (types == null) {
+      throw new IllegalArgumentException("null value for 'types' argument");
+    }
+    if (options == null) {
+      throw new IllegalArgumentException("null value for 'options' argument");
+    }
     this.package_ = package_;
     this.imports = imports;
     this.types = types;
@@ -38,18 +52,30 @@ public class ProtoFile implements Serializable {
   }
   
   public ProtoFile withPackage(hydra.langs.protobuf.proto3.PackageName package_) {
+    if (package_ == null) {
+      throw new IllegalArgumentException("null value for 'package' argument");
+    }
     return new ProtoFile(package_, imports, types, options);
   }
   
   public ProtoFile withImports(java.util.List<hydra.langs.protobuf.proto3.FileReference> imports) {
+    if (imports == null) {
+      throw new IllegalArgumentException("null value for 'imports' argument");
+    }
     return new ProtoFile(package_, imports, types, options);
   }
   
   public ProtoFile withTypes(java.util.List<hydra.langs.protobuf.proto3.Definition> types) {
+    if (types == null) {
+      throw new IllegalArgumentException("null value for 'types' argument");
+    }
     return new ProtoFile(package_, imports, types, options);
   }
   
   public ProtoFile withOptions(java.util.List<hydra.langs.protobuf.proto3.Option> options) {
+    if (options == null) {
+      throw new IllegalArgumentException("null value for 'options' argument");
+    }
     return new ProtoFile(package_, imports, types, options);
   }
 }

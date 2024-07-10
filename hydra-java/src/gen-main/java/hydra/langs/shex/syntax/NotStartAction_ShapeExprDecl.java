@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class NotStartAction_ShapeExprDecl implements Serializable {
   public final hydra.langs.shex.syntax.NotStartAction_ShapeExprDecl_Alts alts;
   
   public NotStartAction_ShapeExprDecl (hydra.langs.shex.syntax.ShapeExprLabel shapeExprLabel, hydra.langs.shex.syntax.NotStartAction_ShapeExprDecl_Alts alts) {
+    if (shapeExprLabel == null) {
+      throw new IllegalArgumentException("null value for 'shapeExprLabel' argument");
+    }
+    if (alts == null) {
+      throw new IllegalArgumentException("null value for 'alts' argument");
+    }
     this.shapeExprLabel = shapeExprLabel;
     this.alts = alts;
   }
@@ -29,10 +37,16 @@ public class NotStartAction_ShapeExprDecl implements Serializable {
   }
   
   public NotStartAction_ShapeExprDecl withShapeExprLabel(hydra.langs.shex.syntax.ShapeExprLabel shapeExprLabel) {
+    if (shapeExprLabel == null) {
+      throw new IllegalArgumentException("null value for 'shapeExprLabel' argument");
+    }
     return new NotStartAction_ShapeExprDecl(shapeExprLabel, alts);
   }
   
   public NotStartAction_ShapeExprDecl withAlts(hydra.langs.shex.syntax.NotStartAction_ShapeExprDecl_Alts alts) {
+    if (alts == null) {
+      throw new IllegalArgumentException("null value for 'alts' argument");
+    }
     return new NotStartAction_ShapeExprDecl(shapeExprLabel, alts);
   }
 }

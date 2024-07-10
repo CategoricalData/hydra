@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.phantoms;
 
 import java.io.Serializable;
@@ -11,6 +13,9 @@ public class Datum<A> implements Serializable {
   public final hydra.core.Term<hydra.compute.Kv> value;
   
   public Datum (hydra.core.Term<hydra.compute.Kv> value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

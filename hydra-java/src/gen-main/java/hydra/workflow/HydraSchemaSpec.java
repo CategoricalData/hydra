@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.workflow;
 
 import java.io.Serializable;
@@ -19,6 +21,12 @@ public class HydraSchemaSpec implements Serializable {
   public final hydra.core.Name typeName;
   
   public HydraSchemaSpec (java.util.List<hydra.module.Module<hydra.compute.Kv>> modules, hydra.core.Name typeName) {
+    if (modules == null) {
+      throw new IllegalArgumentException("null value for 'modules' argument");
+    }
+    if (typeName == null) {
+      throw new IllegalArgumentException("null value for 'typeName' argument");
+    }
     this.modules = modules;
     this.typeName = typeName;
   }
@@ -38,10 +46,16 @@ public class HydraSchemaSpec implements Serializable {
   }
   
   public HydraSchemaSpec withModules(java.util.List<hydra.module.Module<hydra.compute.Kv>> modules) {
+    if (modules == null) {
+      throw new IllegalArgumentException("null value for 'modules' argument");
+    }
     return new HydraSchemaSpec(modules, typeName);
   }
   
   public HydraSchemaSpec withTypeName(hydra.core.Name typeName) {
+    if (typeName == null) {
+      throw new IllegalArgumentException("null value for 'typeName' argument");
+    }
     return new HydraSchemaSpec(modules, typeName);
   }
 }

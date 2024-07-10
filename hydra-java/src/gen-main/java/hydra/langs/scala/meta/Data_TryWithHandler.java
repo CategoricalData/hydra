@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class Data_TryWithHandler implements Serializable {
   public final java.util.Optional<hydra.langs.scala.meta.Data> finallyp;
   
   public Data_TryWithHandler (hydra.langs.scala.meta.Data expr, hydra.langs.scala.meta.Data catchp, java.util.Optional<hydra.langs.scala.meta.Data> finallyp) {
+    if (expr == null) {
+      throw new IllegalArgumentException("null value for 'expr' argument");
+    }
+    if (catchp == null) {
+      throw new IllegalArgumentException("null value for 'catchp' argument");
+    }
+    if (finallyp == null) {
+      throw new IllegalArgumentException("null value for 'finallyp' argument");
+    }
     this.expr = expr;
     this.catchp = catchp;
     this.finallyp = finallyp;
@@ -32,14 +43,23 @@ public class Data_TryWithHandler implements Serializable {
   }
   
   public Data_TryWithHandler withExpr(hydra.langs.scala.meta.Data expr) {
+    if (expr == null) {
+      throw new IllegalArgumentException("null value for 'expr' argument");
+    }
     return new Data_TryWithHandler(expr, catchp, finallyp);
   }
   
   public Data_TryWithHandler withCatchp(hydra.langs.scala.meta.Data catchp) {
+    if (catchp == null) {
+      throw new IllegalArgumentException("null value for 'catchp' argument");
+    }
     return new Data_TryWithHandler(expr, catchp, finallyp);
   }
   
   public Data_TryWithHandler withFinallyp(java.util.Optional<hydra.langs.scala.meta.Data> finallyp) {
+    if (finallyp == null) {
+      throw new IllegalArgumentException("null value for 'finallyp' argument");
+    }
     return new Data_TryWithHandler(expr, catchp, finallyp);
   }
 }

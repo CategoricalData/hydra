@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shacl.model;
 
 import java.io.Serializable;
@@ -38,6 +40,27 @@ public class PropertyShape implements Serializable {
   public final hydra.langs.rdf.syntax.Iri path;
   
   public PropertyShape (hydra.langs.shacl.model.CommonProperties common, java.util.Set<hydra.langs.shacl.model.PropertyShapeConstraint> constraints, java.util.Optional<hydra.langs.rdf.syntax.Node> defaultValue, hydra.langs.rdf.syntax.LangStrings description, hydra.langs.rdf.syntax.LangStrings name, java.util.Optional<java.math.BigInteger> order, hydra.langs.rdf.syntax.Iri path) {
+    if (common == null) {
+      throw new IllegalArgumentException("null value for 'common' argument");
+    }
+    if (constraints == null) {
+      throw new IllegalArgumentException("null value for 'constraints' argument");
+    }
+    if (defaultValue == null) {
+      throw new IllegalArgumentException("null value for 'defaultValue' argument");
+    }
+    if (description == null) {
+      throw new IllegalArgumentException("null value for 'description' argument");
+    }
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (order == null) {
+      throw new IllegalArgumentException("null value for 'order' argument");
+    }
+    if (path == null) {
+      throw new IllegalArgumentException("null value for 'path' argument");
+    }
     this.common = common;
     this.constraints = constraints;
     this.defaultValue = defaultValue;
@@ -62,30 +85,51 @@ public class PropertyShape implements Serializable {
   }
   
   public PropertyShape withCommon(hydra.langs.shacl.model.CommonProperties common) {
+    if (common == null) {
+      throw new IllegalArgumentException("null value for 'common' argument");
+    }
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
   
   public PropertyShape withConstraints(java.util.Set<hydra.langs.shacl.model.PropertyShapeConstraint> constraints) {
+    if (constraints == null) {
+      throw new IllegalArgumentException("null value for 'constraints' argument");
+    }
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
   
   public PropertyShape withDefaultValue(java.util.Optional<hydra.langs.rdf.syntax.Node> defaultValue) {
+    if (defaultValue == null) {
+      throw new IllegalArgumentException("null value for 'defaultValue' argument");
+    }
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
   
   public PropertyShape withDescription(hydra.langs.rdf.syntax.LangStrings description) {
+    if (description == null) {
+      throw new IllegalArgumentException("null value for 'description' argument");
+    }
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
   
   public PropertyShape withName(hydra.langs.rdf.syntax.LangStrings name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
   
   public PropertyShape withOrder(java.util.Optional<java.math.BigInteger> order) {
+    if (order == null) {
+      throw new IllegalArgumentException("null value for 'order' argument");
+    }
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
   
   public PropertyShape withPath(hydra.langs.rdf.syntax.Iri path) {
+    if (path == null) {
+      throw new IllegalArgumentException("null value for 'path' argument");
+    }
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.core;
 
 import java.io.Serializable;
@@ -24,6 +26,15 @@ public class RowType<A> implements Serializable {
   public final java.util.List<hydra.core.FieldType<A>> fields;
   
   public RowType (hydra.core.Name typeName, java.util.Optional<hydra.core.Name> extends_, java.util.List<hydra.core.FieldType<A>> fields) {
+    if (typeName == null) {
+      throw new IllegalArgumentException("null value for 'typeName' argument");
+    }
+    if (extends_ == null) {
+      throw new IllegalArgumentException("null value for 'extends' argument");
+    }
+    if (fields == null) {
+      throw new IllegalArgumentException("null value for 'fields' argument");
+    }
     this.typeName = typeName;
     this.extends_ = extends_;
     this.fields = fields;
@@ -44,14 +55,23 @@ public class RowType<A> implements Serializable {
   }
   
   public RowType withTypeName(hydra.core.Name typeName) {
+    if (typeName == null) {
+      throw new IllegalArgumentException("null value for 'typeName' argument");
+    }
     return new RowType(typeName, extends_, fields);
   }
   
   public RowType withExtends(java.util.Optional<hydra.core.Name> extends_) {
+    if (extends_ == null) {
+      throw new IllegalArgumentException("null value for 'extends' argument");
+    }
     return new RowType(typeName, extends_, fields);
   }
   
   public RowType withFields(java.util.List<hydra.core.FieldType<A>> fields) {
+    if (fields == null) {
+      throw new IllegalArgumentException("null value for 'fields' argument");
+    }
     return new RowType(typeName, extends_, fields);
   }
 }

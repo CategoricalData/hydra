@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.queries;
 
 import java.io.Serializable;
@@ -59,6 +61,9 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.tinkerpop.queries.AssociativeExpression value;
     
     public Associative (hydra.langs.tinkerpop.queries.AssociativeExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -86,6 +91,9 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.tinkerpop.queries.BinaryExpression value;
     
     public Binary (hydra.langs.tinkerpop.queries.BinaryExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -113,6 +121,9 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.tinkerpop.queries.PropertyProjection value;
     
     public Property (hydra.langs.tinkerpop.queries.PropertyProjection value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -140,6 +151,9 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.tinkerpop.queries.UnaryExpression value;
     
     public Unary (hydra.langs.tinkerpop.queries.UnaryExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -167,6 +181,9 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.tinkerpop.queries.Variable value;
     
     public Variable (hydra.langs.tinkerpop.queries.Variable value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -194,6 +211,9 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.tinkerpop.queries.VertexPattern value;
     
     public Vertex (hydra.langs.tinkerpop.queries.VertexPattern value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

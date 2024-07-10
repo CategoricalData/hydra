@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class PropertyExpression implements Serializable {
   public final java.util.List<hydra.langs.cypher.openCypher.PropertyLookup> lookups;
   
   public PropertyExpression (hydra.langs.cypher.openCypher.Atom atom, java.util.List<hydra.langs.cypher.openCypher.PropertyLookup> lookups) {
+    if (atom == null) {
+      throw new IllegalArgumentException("null value for 'atom' argument");
+    }
+    if (lookups == null) {
+      throw new IllegalArgumentException("null value for 'lookups' argument");
+    }
     this.atom = atom;
     this.lookups = lookups;
   }
@@ -29,10 +37,16 @@ public class PropertyExpression implements Serializable {
   }
   
   public PropertyExpression withAtom(hydra.langs.cypher.openCypher.Atom atom) {
+    if (atom == null) {
+      throw new IllegalArgumentException("null value for 'atom' argument");
+    }
     return new PropertyExpression(atom, lookups);
   }
   
   public PropertyExpression withLookups(java.util.List<hydra.langs.cypher.openCypher.PropertyLookup> lookups) {
+    if (lookups == null) {
+      throw new IllegalArgumentException("null value for 'lookups' argument");
+    }
     return new PropertyExpression(atom, lookups);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class StringPredicateExpression implements Serializable {
   public final hydra.langs.cypher.openCypher.AddOrSubtractExpression expression;
   
   public StringPredicateExpression (hydra.langs.cypher.openCypher.StringPredicateOperator operator, hydra.langs.cypher.openCypher.AddOrSubtractExpression expression) {
+    if (operator == null) {
+      throw new IllegalArgumentException("null value for 'operator' argument");
+    }
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     this.operator = operator;
     this.expression = expression;
   }
@@ -29,10 +37,16 @@ public class StringPredicateExpression implements Serializable {
   }
   
   public StringPredicateExpression withOperator(hydra.langs.cypher.openCypher.StringPredicateOperator operator) {
+    if (operator == null) {
+      throw new IllegalArgumentException("null value for 'operator' argument");
+    }
     return new StringPredicateExpression(operator, expression);
   }
   
   public StringPredicateExpression withExpression(hydra.langs.cypher.openCypher.AddOrSubtractExpression expression) {
+    if (expression == null) {
+      throw new IllegalArgumentException("null value for 'expression' argument");
+    }
     return new StringPredicateExpression(operator, expression);
   }
 }

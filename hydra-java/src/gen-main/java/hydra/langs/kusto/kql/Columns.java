@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.kusto.kql;
 
 import java.io.Serializable;
@@ -60,6 +62,9 @@ public abstract class Columns implements Serializable {
     public final hydra.langs.kusto.kql.ColumnName value;
     
     public Single (hydra.langs.kusto.kql.ColumnName value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

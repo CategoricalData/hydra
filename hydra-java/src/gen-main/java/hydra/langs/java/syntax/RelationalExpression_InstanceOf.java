@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class RelationalExpression_InstanceOf implements Serializable {
   public final hydra.langs.java.syntax.ReferenceType rhs;
   
   public RelationalExpression_InstanceOf (hydra.langs.java.syntax.RelationalExpression lhs, hydra.langs.java.syntax.ReferenceType rhs) {
+    if (lhs == null) {
+      throw new IllegalArgumentException("null value for 'lhs' argument");
+    }
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -29,10 +37,16 @@ public class RelationalExpression_InstanceOf implements Serializable {
   }
   
   public RelationalExpression_InstanceOf withLhs(hydra.langs.java.syntax.RelationalExpression lhs) {
+    if (lhs == null) {
+      throw new IllegalArgumentException("null value for 'lhs' argument");
+    }
     return new RelationalExpression_InstanceOf(lhs, rhs);
   }
   
   public RelationalExpression_InstanceOf withRhs(hydra.langs.java.syntax.ReferenceType rhs) {
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     return new RelationalExpression_InstanceOf(lhs, rhs);
   }
 }

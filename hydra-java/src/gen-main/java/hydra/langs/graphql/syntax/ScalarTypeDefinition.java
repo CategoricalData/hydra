@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.graphql.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class ScalarTypeDefinition implements Serializable {
   public final java.util.Optional<hydra.langs.graphql.syntax.Directives> directives;
   
   public ScalarTypeDefinition (java.util.Optional<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.Name name, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+    if (description == null) {
+      throw new IllegalArgumentException("null value for 'description' argument");
+    }
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
     this.description = description;
     this.name = name;
     this.directives = directives;
@@ -32,14 +43,23 @@ public class ScalarTypeDefinition implements Serializable {
   }
   
   public ScalarTypeDefinition withDescription(java.util.Optional<hydra.langs.graphql.syntax.Description> description) {
+    if (description == null) {
+      throw new IllegalArgumentException("null value for 'description' argument");
+    }
     return new ScalarTypeDefinition(description, name, directives);
   }
   
   public ScalarTypeDefinition withName(hydra.langs.graphql.syntax.Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new ScalarTypeDefinition(description, name, directives);
   }
   
   public ScalarTypeDefinition withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+    if (directives == null) {
+      throw new IllegalArgumentException("null value for 'directives' argument");
+    }
     return new ScalarTypeDefinition(description, name, directives);
   }
 }

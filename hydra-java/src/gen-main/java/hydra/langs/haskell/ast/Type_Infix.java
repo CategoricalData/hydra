@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.haskell.ast;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class Type_Infix implements Serializable {
   public final hydra.langs.haskell.ast.Operator rhs;
   
   public Type_Infix (hydra.langs.haskell.ast.Type lhs, hydra.langs.haskell.ast.Operator operator, hydra.langs.haskell.ast.Operator rhs) {
+    if (lhs == null) {
+      throw new IllegalArgumentException("null value for 'lhs' argument");
+    }
+    if (operator == null) {
+      throw new IllegalArgumentException("null value for 'operator' argument");
+    }
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     this.lhs = lhs;
     this.operator = operator;
     this.rhs = rhs;
@@ -32,14 +43,23 @@ public class Type_Infix implements Serializable {
   }
   
   public Type_Infix withLhs(hydra.langs.haskell.ast.Type lhs) {
+    if (lhs == null) {
+      throw new IllegalArgumentException("null value for 'lhs' argument");
+    }
     return new Type_Infix(lhs, operator, rhs);
   }
   
   public Type_Infix withOperator(hydra.langs.haskell.ast.Operator operator) {
+    if (operator == null) {
+      throw new IllegalArgumentException("null value for 'operator' argument");
+    }
     return new Type_Infix(lhs, operator, rhs);
   }
   
   public Type_Infix withRhs(hydra.langs.haskell.ast.Operator rhs) {
+    if (rhs == null) {
+      throw new IllegalArgumentException("null value for 'rhs' argument");
+    }
     return new Type_Infix(lhs, operator, rhs);
   }
 }

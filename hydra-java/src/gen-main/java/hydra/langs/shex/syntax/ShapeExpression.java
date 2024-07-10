@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class ShapeExpression implements Serializable {
   public final hydra.langs.shex.syntax.ShapeOr value;
   
   public ShapeExpression (hydra.langs.shex.syntax.ShapeOr value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null value for 'value' argument");
+    }
     this.value = value;
   }
   

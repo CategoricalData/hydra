@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -41,6 +43,9 @@ public abstract class AdditiveExpression implements Serializable {
     public final hydra.langs.java.syntax.MultiplicativeExpression value;
     
     public Unary (hydra.langs.java.syntax.MultiplicativeExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -68,6 +73,9 @@ public abstract class AdditiveExpression implements Serializable {
     public final hydra.langs.java.syntax.AdditiveExpression_Binary value;
     
     public Plus (hydra.langs.java.syntax.AdditiveExpression_Binary value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -95,6 +103,9 @@ public abstract class AdditiveExpression implements Serializable {
     public final hydra.langs.java.syntax.AdditiveExpression_Binary value;
     
     public Minus (hydra.langs.java.syntax.AdditiveExpression_Binary value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

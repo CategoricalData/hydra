@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shex.syntax;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public abstract class Plx implements Serializable {
     public final hydra.langs.shex.syntax.Percent value;
     
     public Percent (hydra.langs.shex.syntax.Percent value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -62,6 +67,9 @@ public abstract class Plx implements Serializable {
     public final hydra.langs.shex.syntax.PnLocalEsc value;
     
     public PnLocalEsc (hydra.langs.shex.syntax.PnLocalEsc value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

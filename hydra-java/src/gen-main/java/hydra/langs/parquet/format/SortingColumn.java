@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.format;
 
 import java.io.Serializable;
@@ -24,6 +26,15 @@ public class SortingColumn implements Serializable {
   public final Boolean nullsFirst;
   
   public SortingColumn (Integer columnIdx, Boolean descending, Boolean nullsFirst) {
+    if (columnIdx == null) {
+      throw new IllegalArgumentException("null value for 'columnIdx' argument");
+    }
+    if (descending == null) {
+      throw new IllegalArgumentException("null value for 'descending' argument");
+    }
+    if (nullsFirst == null) {
+      throw new IllegalArgumentException("null value for 'nullsFirst' argument");
+    }
     this.columnIdx = columnIdx;
     this.descending = descending;
     this.nullsFirst = nullsFirst;
@@ -44,14 +55,23 @@ public class SortingColumn implements Serializable {
   }
   
   public SortingColumn withColumnIdx(Integer columnIdx) {
+    if (columnIdx == null) {
+      throw new IllegalArgumentException("null value for 'columnIdx' argument");
+    }
     return new SortingColumn(columnIdx, descending, nullsFirst);
   }
   
   public SortingColumn withDescending(Boolean descending) {
+    if (descending == null) {
+      throw new IllegalArgumentException("null value for 'descending' argument");
+    }
     return new SortingColumn(columnIdx, descending, nullsFirst);
   }
   
   public SortingColumn withNullsFirst(Boolean nullsFirst) {
+    if (nullsFirst == null) {
+      throw new IllegalArgumentException("null value for 'nullsFirst' argument");
+    }
     return new SortingColumn(columnIdx, descending, nullsFirst);
   }
 }

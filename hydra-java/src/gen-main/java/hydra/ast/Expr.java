@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.ast;
 
 import java.io.Serializable;
@@ -50,6 +52,9 @@ public abstract class Expr implements Serializable {
     public final hydra.ast.Symbol value;
     
     public Const (hydra.ast.Symbol value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -77,6 +82,9 @@ public abstract class Expr implements Serializable {
     public final hydra.ast.IndentedExpression value;
     
     public Indent (hydra.ast.IndentedExpression value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -104,6 +112,9 @@ public abstract class Expr implements Serializable {
     public final hydra.ast.OpExpr value;
     
     public Op (hydra.ast.OpExpr value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -131,6 +142,9 @@ public abstract class Expr implements Serializable {
     public final hydra.ast.BracketExpr value;
     
     public Brackets (hydra.ast.BracketExpr value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

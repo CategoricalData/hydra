@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.shacl.model;
 
 import java.io.Serializable;
@@ -164,6 +166,9 @@ public abstract class CommonConstraint implements Serializable {
     public final java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape>> value;
     
     public And (java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape>> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -197,6 +202,9 @@ public abstract class CommonConstraint implements Serializable {
     public final hydra.langs.shacl.model.Closed value;
     
     public Closed (hydra.langs.shacl.model.Closed value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -230,6 +238,9 @@ public abstract class CommonConstraint implements Serializable {
     public final java.util.Set<hydra.langs.rdf.syntax.RdfsClass> value;
     
     public Class_ (java.util.Set<hydra.langs.rdf.syntax.RdfsClass> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -263,6 +274,9 @@ public abstract class CommonConstraint implements Serializable {
     public final hydra.langs.rdf.syntax.Iri value;
     
     public Datatype (hydra.langs.rdf.syntax.Iri value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -296,6 +310,9 @@ public abstract class CommonConstraint implements Serializable {
     public final java.util.Set<hydra.langs.rdf.syntax.Property> value;
     
     public Disjoint (java.util.Set<hydra.langs.rdf.syntax.Property> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -329,6 +346,9 @@ public abstract class CommonConstraint implements Serializable {
     public final java.util.Set<hydra.langs.rdf.syntax.Property> value;
     
     public Equals (java.util.Set<hydra.langs.rdf.syntax.Property> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -362,6 +382,9 @@ public abstract class CommonConstraint implements Serializable {
     public final java.util.Set<hydra.langs.rdf.syntax.Node> value;
     
     public HasValue (java.util.Set<hydra.langs.rdf.syntax.Node> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -395,6 +418,9 @@ public abstract class CommonConstraint implements Serializable {
     public final java.util.List<hydra.langs.rdf.syntax.Node> value;
     
     public In (java.util.List<hydra.langs.rdf.syntax.Node> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -428,6 +454,9 @@ public abstract class CommonConstraint implements Serializable {
     public final java.util.Set<hydra.langs.rdf.syntax.LanguageTag> value;
     
     public LanguageIn (java.util.Set<hydra.langs.rdf.syntax.LanguageTag> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -461,6 +490,9 @@ public abstract class CommonConstraint implements Serializable {
     public final hydra.langs.shacl.model.NodeKind value;
     
     public NodeKind (hydra.langs.shacl.model.NodeKind value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -494,6 +526,9 @@ public abstract class CommonConstraint implements Serializable {
     public final java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.NodeShape>> value;
     
     public Node (java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.NodeShape>> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -527,6 +562,9 @@ public abstract class CommonConstraint implements Serializable {
     public final java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape>> value;
     
     public Not (java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape>> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -560,6 +598,9 @@ public abstract class CommonConstraint implements Serializable {
     public final hydra.langs.rdf.syntax.Literal value;
     
     public MaxExclusive (hydra.langs.rdf.syntax.Literal value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -593,6 +634,9 @@ public abstract class CommonConstraint implements Serializable {
     public final hydra.langs.rdf.syntax.Literal value;
     
     public MaxInclusive (hydra.langs.rdf.syntax.Literal value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -626,6 +670,9 @@ public abstract class CommonConstraint implements Serializable {
     public final java.math.BigInteger value;
     
     public MaxLength (java.math.BigInteger value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -659,6 +706,9 @@ public abstract class CommonConstraint implements Serializable {
     public final hydra.langs.rdf.syntax.Literal value;
     
     public MinExclusive (hydra.langs.rdf.syntax.Literal value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -692,6 +742,9 @@ public abstract class CommonConstraint implements Serializable {
     public final hydra.langs.rdf.syntax.Literal value;
     
     public MinInclusive (hydra.langs.rdf.syntax.Literal value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -725,6 +778,9 @@ public abstract class CommonConstraint implements Serializable {
     public final java.math.BigInteger value;
     
     public MinLength (java.math.BigInteger value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -758,6 +814,9 @@ public abstract class CommonConstraint implements Serializable {
     public final hydra.langs.shacl.model.Pattern value;
     
     public Pattern (hydra.langs.shacl.model.Pattern value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -791,6 +850,9 @@ public abstract class CommonConstraint implements Serializable {
     public final java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.PropertyShape>> value;
     
     public Property (java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.PropertyShape>> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -824,6 +886,9 @@ public abstract class CommonConstraint implements Serializable {
     public final java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape>> value;
     
     public Or (java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape>> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -857,6 +922,9 @@ public abstract class CommonConstraint implements Serializable {
     public final java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape>> value;
     
     public Xone (java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape>> value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

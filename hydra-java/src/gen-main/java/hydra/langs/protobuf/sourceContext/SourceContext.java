@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.protobuf.sourceContext;
 
 import java.io.Serializable;
@@ -14,6 +16,9 @@ public class SourceContext implements Serializable {
   public final String fileName;
   
   public SourceContext (String fileName) {
+    if (fileName == null) {
+      throw new IllegalArgumentException("null value for 'fileName' argument");
+    }
     this.fileName = fileName;
   }
   

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.propertyGraph;
 
 import java.io.Serializable;
@@ -24,6 +26,15 @@ public class Vertex<V> implements Serializable {
   public final java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, V> properties;
   
   public Vertex (hydra.langs.tinkerpop.propertyGraph.VertexLabel label, V id, java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, V> properties) {
+    if (label == null) {
+      throw new IllegalArgumentException("null value for 'label' argument");
+    }
+    if (id == null) {
+      throw new IllegalArgumentException("null value for 'id' argument");
+    }
+    if (properties == null) {
+      throw new IllegalArgumentException("null value for 'properties' argument");
+    }
     this.label = label;
     this.id = id;
     this.properties = properties;
@@ -44,14 +55,23 @@ public class Vertex<V> implements Serializable {
   }
   
   public Vertex withLabel(hydra.langs.tinkerpop.propertyGraph.VertexLabel label) {
+    if (label == null) {
+      throw new IllegalArgumentException("null value for 'label' argument");
+    }
     return new Vertex(label, id, properties);
   }
   
   public Vertex withId(V id) {
+    if (id == null) {
+      throw new IllegalArgumentException("null value for 'id' argument");
+    }
     return new Vertex(label, id, properties);
   }
   
   public Vertex withProperties(java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, V> properties) {
+    if (properties == null) {
+      throw new IllegalArgumentException("null value for 'properties' argument");
+    }
     return new Vertex(label, id, properties);
   }
 }

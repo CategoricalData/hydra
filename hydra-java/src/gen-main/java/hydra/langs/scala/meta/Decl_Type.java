@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.scala.meta;
 
 import java.io.Serializable;
@@ -14,6 +16,18 @@ public class Decl_Type implements Serializable {
   public final hydra.langs.scala.meta.Type_Bounds bounds;
   
   public Decl_Type (java.util.List<hydra.langs.scala.meta.Mod> mods, hydra.langs.scala.meta.Type_Name name, java.util.List<hydra.langs.scala.meta.Type_Param> tparams, hydra.langs.scala.meta.Type_Bounds bounds) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
+    if (tparams == null) {
+      throw new IllegalArgumentException("null value for 'tparams' argument");
+    }
+    if (bounds == null) {
+      throw new IllegalArgumentException("null value for 'bounds' argument");
+    }
     this.mods = mods;
     this.name = name;
     this.tparams = tparams;
@@ -35,18 +49,30 @@ public class Decl_Type implements Serializable {
   }
   
   public Decl_Type withMods(java.util.List<hydra.langs.scala.meta.Mod> mods) {
+    if (mods == null) {
+      throw new IllegalArgumentException("null value for 'mods' argument");
+    }
     return new Decl_Type(mods, name, tparams, bounds);
   }
   
   public Decl_Type withName(hydra.langs.scala.meta.Type_Name name) {
+    if (name == null) {
+      throw new IllegalArgumentException("null value for 'name' argument");
+    }
     return new Decl_Type(mods, name, tparams, bounds);
   }
   
   public Decl_Type withTparams(java.util.List<hydra.langs.scala.meta.Type_Param> tparams) {
+    if (tparams == null) {
+      throw new IllegalArgumentException("null value for 'tparams' argument");
+    }
     return new Decl_Type(mods, name, tparams, bounds);
   }
   
   public Decl_Type withBounds(hydra.langs.scala.meta.Type_Bounds bounds) {
+    if (bounds == null) {
+      throw new IllegalArgumentException("null value for 'bounds' argument");
+    }
     return new Decl_Type(mods, name, tparams, bounds);
   }
 }

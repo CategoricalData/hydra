@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.queries;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class AssociativeExpression implements Serializable {
   public final java.util.List<hydra.langs.tinkerpop.queries.Expression> operands;
   
   public AssociativeExpression (hydra.langs.tinkerpop.queries.BinaryOperator operator, java.util.List<hydra.langs.tinkerpop.queries.Expression> operands) {
+    if (operator == null) {
+      throw new IllegalArgumentException("null value for 'operator' argument");
+    }
+    if (operands == null) {
+      throw new IllegalArgumentException("null value for 'operands' argument");
+    }
     this.operator = operator;
     this.operands = operands;
   }
@@ -29,10 +37,16 @@ public class AssociativeExpression implements Serializable {
   }
   
   public AssociativeExpression withOperator(hydra.langs.tinkerpop.queries.BinaryOperator operator) {
+    if (operator == null) {
+      throw new IllegalArgumentException("null value for 'operator' argument");
+    }
     return new AssociativeExpression(operator, operands);
   }
   
   public AssociativeExpression withOperands(java.util.List<hydra.langs.tinkerpop.queries.Expression> operands) {
+    if (operands == null) {
+      throw new IllegalArgumentException("null value for 'operands' argument");
+    }
     return new AssociativeExpression(operator, operands);
   }
 }

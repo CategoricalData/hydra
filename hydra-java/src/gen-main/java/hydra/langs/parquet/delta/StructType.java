@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.parquet.delta;
 
 import java.io.Serializable;
@@ -8,6 +10,9 @@ public class StructType implements Serializable {
   public final java.util.List<hydra.langs.parquet.delta.StructField> fields;
   
   public StructType (java.util.List<hydra.langs.parquet.delta.StructField> fields) {
+    if (fields == null) {
+      throw new IllegalArgumentException("null value for 'fields' argument");
+    }
     this.fields = fields;
   }
   

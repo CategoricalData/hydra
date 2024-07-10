@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.owl.syntax;
 
 import java.io.Serializable;
@@ -10,6 +12,12 @@ public class SameIndividual implements Serializable {
   public final java.util.List<hydra.langs.owl.syntax.Individual> individuals;
   
   public SameIndividual (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, java.util.List<hydra.langs.owl.syntax.Individual> individuals) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
+    if (individuals == null) {
+      throw new IllegalArgumentException("null value for 'individuals' argument");
+    }
     this.annotations = annotations;
     this.individuals = individuals;
   }
@@ -29,10 +37,16 @@ public class SameIndividual implements Serializable {
   }
   
   public SameIndividual withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
+    if (annotations == null) {
+      throw new IllegalArgumentException("null value for 'annotations' argument");
+    }
     return new SameIndividual(annotations, individuals);
   }
   
   public SameIndividual withIndividuals(java.util.List<hydra.langs.owl.syntax.Individual> individuals) {
+    if (individuals == null) {
+      throw new IllegalArgumentException("null value for 'individuals' argument");
+    }
     return new SameIndividual(annotations, individuals);
   }
 }

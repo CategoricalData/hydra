@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.avro.schema;
 
 import java.io.Serializable;
@@ -41,6 +43,9 @@ public abstract class NamedType implements Serializable {
     public final hydra.langs.avro.schema.Enum_ value;
     
     public Enum_ (hydra.langs.avro.schema.Enum_ value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -68,6 +73,9 @@ public abstract class NamedType implements Serializable {
     public final hydra.langs.avro.schema.Fixed value;
     
     public Fixed (hydra.langs.avro.schema.Fixed value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     
@@ -95,6 +103,9 @@ public abstract class NamedType implements Serializable {
     public final hydra.langs.avro.schema.Record value;
     
     public Record (hydra.langs.avro.schema.Record value) {
+      if (value == null) {
+        throw new IllegalArgumentException("null value for 'value' argument");
+      }
       this.value = value;
     }
     

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.cypher.openCypher;
 
 import java.io.Serializable;
@@ -14,6 +16,18 @@ public class RelationshipDetail implements Serializable {
   public final java.util.Optional<hydra.langs.cypher.openCypher.Properties> properties;
   
   public RelationshipDetail (java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable, java.util.Optional<hydra.langs.cypher.openCypher.RelationshipTypes> types, java.util.Optional<hydra.langs.cypher.openCypher.RangeLiteral> range, java.util.Optional<hydra.langs.cypher.openCypher.Properties> properties) {
+    if (variable == null) {
+      throw new IllegalArgumentException("null value for 'variable' argument");
+    }
+    if (types == null) {
+      throw new IllegalArgumentException("null value for 'types' argument");
+    }
+    if (range == null) {
+      throw new IllegalArgumentException("null value for 'range' argument");
+    }
+    if (properties == null) {
+      throw new IllegalArgumentException("null value for 'properties' argument");
+    }
     this.variable = variable;
     this.types = types;
     this.range = range;
@@ -35,18 +49,30 @@ public class RelationshipDetail implements Serializable {
   }
   
   public RelationshipDetail withVariable(java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable) {
+    if (variable == null) {
+      throw new IllegalArgumentException("null value for 'variable' argument");
+    }
     return new RelationshipDetail(variable, types, range, properties);
   }
   
   public RelationshipDetail withTypes(java.util.Optional<hydra.langs.cypher.openCypher.RelationshipTypes> types) {
+    if (types == null) {
+      throw new IllegalArgumentException("null value for 'types' argument");
+    }
     return new RelationshipDetail(variable, types, range, properties);
   }
   
   public RelationshipDetail withRange(java.util.Optional<hydra.langs.cypher.openCypher.RangeLiteral> range) {
+    if (range == null) {
+      throw new IllegalArgumentException("null value for 'range' argument");
+    }
     return new RelationshipDetail(variable, types, range, properties);
   }
   
   public RelationshipDetail withProperties(java.util.Optional<hydra.langs.cypher.openCypher.Properties> properties) {
+    if (properties == null) {
+      throw new IllegalArgumentException("null value for 'properties' argument");
+    }
     return new RelationshipDetail(variable, types, range, properties);
   }
 }

@@ -1,3 +1,5 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.java.syntax;
 
 import java.io.Serializable;
@@ -12,6 +14,15 @@ public class InterfaceMethodDeclaration implements Serializable {
   public final hydra.langs.java.syntax.MethodBody body;
   
   public InterfaceMethodDeclaration (java.util.List<hydra.langs.java.syntax.InterfaceMethodModifier> modifiers, hydra.langs.java.syntax.MethodHeader header, hydra.langs.java.syntax.MethodBody body) {
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
+    if (header == null) {
+      throw new IllegalArgumentException("null value for 'header' argument");
+    }
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     this.modifiers = modifiers;
     this.header = header;
     this.body = body;
@@ -32,14 +43,23 @@ public class InterfaceMethodDeclaration implements Serializable {
   }
   
   public InterfaceMethodDeclaration withModifiers(java.util.List<hydra.langs.java.syntax.InterfaceMethodModifier> modifiers) {
+    if (modifiers == null) {
+      throw new IllegalArgumentException("null value for 'modifiers' argument");
+    }
     return new InterfaceMethodDeclaration(modifiers, header, body);
   }
   
   public InterfaceMethodDeclaration withHeader(hydra.langs.java.syntax.MethodHeader header) {
+    if (header == null) {
+      throw new IllegalArgumentException("null value for 'header' argument");
+    }
     return new InterfaceMethodDeclaration(modifiers, header, body);
   }
   
   public InterfaceMethodDeclaration withBody(hydra.langs.java.syntax.MethodBody body) {
+    if (body == null) {
+      throw new IllegalArgumentException("null value for 'body' argument");
+    }
     return new InterfaceMethodDeclaration(modifiers, header, body);
   }
 }
