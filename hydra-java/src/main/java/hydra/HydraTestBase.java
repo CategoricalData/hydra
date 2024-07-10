@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static hydra.Coders.roundTrip;
 import static hydra.Flows.EMPTY_TRACE;
@@ -35,7 +36,7 @@ public class HydraTestBase {
     }
 
     protected static <X> void assertFails(Flow<Unit, X> flow) {
-        assertFails(flow, null);
+        assertFails(flow, Flows.UNIT);
     }
 
     protected static <V1, V2> void assertRoundTripIsNoop(Coder<Unit, Unit, V1, V2> coder, V1 initialValue) {
@@ -76,7 +77,7 @@ public class HydraTestBase {
         checkFlow(flow, new Unit(), consumer);
     }
 
-    protected static <A> Graph<A> emptyGraph() {
+    protected static <A> Graph<A> emptyGraph(AnnotationClass<A> anns) {
         Map<Name, Element<A>> elements = Collections.emptyMap();
         Map<Name, Optional<Term<A>>> environment = Collections.emptyMap();
         Term<A> body = Terms.string("empty graph");
@@ -86,9 +87,8 @@ public class HydraTestBase {
             primitives.put(prim.name(), prim.toNative());
         }
 
-        AnnotationClass<A> annotations = null;
         Optional<Graph<A>> schema = Optional.empty();
 
-        return new Graph<>(elements, environment, body, primitives, annotations, schema);
+        return new Graph<>(elements, environment, body, primitives, anns, schema);
     }
 }

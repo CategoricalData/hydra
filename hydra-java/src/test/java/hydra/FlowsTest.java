@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+
+import hydra.core.Unit;
 import org.junit.jupiter.api.Test;
 
 import static hydra.Flows.*;
@@ -100,17 +102,17 @@ public class FlowsTest {
 
     @Test
     public void checkWarnings() {
-        final Flow<Void, Integer> flow0 = pure(42);
-        final Flow<Void, Integer> flow1 = Flows.warn("oops", flow0);
-        final Flow<Void, Integer> flow2 = Flows.warn("drat", flow1);
-        final Flow<Void, Integer> flow3 = Flows.warn("oops", flow2);
-        final Flow<Void, Integer> flow4 = Flows.bind(flow3, x -> Flows.fail("failed"));
+        final Flow<Unit, Integer> flow0 = pure(42);
+        final Flow<Unit, Integer> flow1 = Flows.warn("oops", flow0);
+        final Flow<Unit, Integer> flow2 = Flows.warn("drat", flow1);
+        final Flow<Unit, Integer> flow3 = Flows.warn("oops", flow2);
+        final Flow<Unit, Integer> flow4 = Flows.bind(flow3, x -> Flows.fail("failed"));
 
-        final FlowState<Void, Integer> result0 = flow0.value.apply(null).apply(EMPTY_TRACE);
-        final FlowState<Void, Integer> result1 = flow1.value.apply(null).apply(EMPTY_TRACE);
-        final FlowState<Void, Integer> result2 = flow2.value.apply(null).apply(EMPTY_TRACE);
-        final FlowState<Void, Integer> result3 = flow3.value.apply(null).apply(EMPTY_TRACE);
-        final FlowState<Void, Integer> result4 = flow4.value.apply(null).apply(EMPTY_TRACE);
+        final FlowState<Unit, Integer> result0 = flow0.value.apply(UNIT).apply(EMPTY_TRACE);
+        final FlowState<Unit, Integer> result1 = flow1.value.apply(UNIT).apply(EMPTY_TRACE);
+        final FlowState<Unit, Integer> result2 = flow2.value.apply(UNIT).apply(EMPTY_TRACE);
+        final FlowState<Unit, Integer> result3 = flow3.value.apply(UNIT).apply(EMPTY_TRACE);
+        final FlowState<Unit, Integer> result4 = flow4.value.apply(UNIT).apply(EMPTY_TRACE);
 
         assertTrue(result0.value.isPresent());
         assertTrue(result1.value.isPresent());

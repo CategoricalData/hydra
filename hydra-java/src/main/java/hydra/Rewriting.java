@@ -16,6 +16,7 @@ import hydra.core.Projection;
 import hydra.core.Record;
 import hydra.core.Sum;
 import hydra.core.Term;
+import hydra.core.Unit;
 import hydra.dsl.Terms;
 
 import java.util.List;
@@ -130,14 +131,14 @@ public interface Rewriting {
      */
     static <A, B> Term<B> rewriteTerm(Function<Function<Term<A>, Term<B>>, Function<Term<A>, Term<B>>> f,
                                       Function<A, B> mf, Term<A> original) {
-        Function<Function<Term<A>, Flow<Boolean, Term<B>>>, Function<Term<A>, Flow<Boolean, Term<B>>>> fflow =
-                recurse -> (Function<Term<A>, Flow<Boolean, Term<B>>>) term -> {
-                    Term<B> result = f.apply(t -> fromFlow(null, null, recurse.apply(t))).apply(term);
+        Function<Function<Term<A>, Flow<Unit, Term<B>>>, Function<Term<A>, Flow<Unit, Term<B>>>> fflow =
+                recurse -> (Function<Term<A>, Flow<Unit, Term<B>>>) term -> {
+                    Term<B> result = f.apply(t -> fromFlow(Flows.UNIT, recurse.apply(t))).apply(term);
                     return pure(result);
                 };
 
-        Function<A, Flow<Boolean, B>> mfflow = a -> pure(mf.apply(a));
-        return fromFlow(null, null, rewriteTermM(fflow, mfflow, original));
+        Function<A, Flow<Unit, B>> mfflow = a -> pure(mf.apply(a));
+        return fromFlow(Flows.UNIT, rewriteTermM(fflow, mfflow, original));
     }
 
     /**
