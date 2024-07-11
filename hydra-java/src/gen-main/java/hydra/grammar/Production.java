@@ -15,12 +15,8 @@ public class Production implements Serializable {
   public final hydra.grammar.Pattern pattern;
   
   public Production (hydra.grammar.Symbol symbol, hydra.grammar.Pattern pattern) {
-    if (symbol == null) {
-      throw new IllegalArgumentException("null value for 'symbol' argument");
-    }
-    if (pattern == null) {
-      throw new IllegalArgumentException("null value for 'pattern' argument");
-    }
+    java.util.Objects.requireNonNull((symbol));
+    java.util.Objects.requireNonNull((pattern));
     this.symbol = symbol;
     this.pattern = pattern;
   }
@@ -40,16 +36,12 @@ public class Production implements Serializable {
   }
   
   public Production withSymbol(hydra.grammar.Symbol symbol) {
-    if (symbol == null) {
-      throw new IllegalArgumentException("null value for 'symbol' argument");
-    }
+    java.util.Objects.requireNonNull((symbol));
     return new Production(symbol, pattern);
   }
   
   public Production withPattern(hydra.grammar.Pattern pattern) {
-    if (pattern == null) {
-      throw new IllegalArgumentException("null value for 'pattern' argument");
-    }
+    java.util.Objects.requireNonNull((pattern));
     return new Production(symbol, pattern);
   }
 }

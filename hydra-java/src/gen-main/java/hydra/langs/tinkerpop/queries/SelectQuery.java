@@ -12,12 +12,8 @@ public class SelectQuery implements Serializable {
   public final hydra.langs.tinkerpop.queries.Projections projection;
   
   public SelectQuery (Boolean distinct, hydra.langs.tinkerpop.queries.Projections projection) {
-    if (distinct == null) {
-      throw new IllegalArgumentException("null value for 'distinct' argument");
-    }
-    if (projection == null) {
-      throw new IllegalArgumentException("null value for 'projection' argument");
-    }
+    java.util.Objects.requireNonNull((distinct));
+    java.util.Objects.requireNonNull((projection));
     this.distinct = distinct;
     this.projection = projection;
   }
@@ -37,16 +33,12 @@ public class SelectQuery implements Serializable {
   }
   
   public SelectQuery withDistinct(Boolean distinct) {
-    if (distinct == null) {
-      throw new IllegalArgumentException("null value for 'distinct' argument");
-    }
+    java.util.Objects.requireNonNull((distinct));
     return new SelectQuery(distinct, projection);
   }
   
   public SelectQuery withProjection(hydra.langs.tinkerpop.queries.Projections projection) {
-    if (projection == null) {
-      throw new IllegalArgumentException("null value for 'projection' argument");
-    }
+    java.util.Objects.requireNonNull((projection));
     return new SelectQuery(distinct, projection);
   }
 }

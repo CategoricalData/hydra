@@ -40,9 +40,7 @@ public abstract class Label implements Serializable {
     public final hydra.langs.tinkerpop.propertyGraph.VertexLabel value;
     
     public Vertex (hydra.langs.tinkerpop.propertyGraph.VertexLabel value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -70,9 +68,7 @@ public abstract class Label implements Serializable {
     public final hydra.langs.tinkerpop.propertyGraph.EdgeLabel value;
     
     public Edge (hydra.langs.tinkerpop.propertyGraph.EdgeLabel value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

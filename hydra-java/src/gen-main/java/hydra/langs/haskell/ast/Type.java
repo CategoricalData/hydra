@@ -73,9 +73,7 @@ public abstract class Type implements Serializable {
     public final hydra.langs.haskell.ast.Type_Application value;
     
     public Application (hydra.langs.haskell.ast.Type_Application value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +101,7 @@ public abstract class Type implements Serializable {
     public final hydra.langs.haskell.ast.Type_Context value;
     
     public Ctx (hydra.langs.haskell.ast.Type_Context value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -133,9 +129,7 @@ public abstract class Type implements Serializable {
     public final hydra.langs.haskell.ast.Type_Function value;
     
     public Function (hydra.langs.haskell.ast.Type_Function value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -163,9 +157,7 @@ public abstract class Type implements Serializable {
     public final hydra.langs.haskell.ast.Type_Infix value;
     
     public Infix (hydra.langs.haskell.ast.Type_Infix value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -193,9 +185,7 @@ public abstract class Type implements Serializable {
     public final hydra.langs.haskell.ast.Type value;
     
     public List (hydra.langs.haskell.ast.Type value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -223,9 +213,7 @@ public abstract class Type implements Serializable {
     public final hydra.langs.haskell.ast.Type value;
     
     public Parens (hydra.langs.haskell.ast.Type value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -253,9 +241,7 @@ public abstract class Type implements Serializable {
     public final java.util.List<hydra.langs.haskell.ast.Type> value;
     
     public Tuple (java.util.List<hydra.langs.haskell.ast.Type> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -283,9 +269,7 @@ public abstract class Type implements Serializable {
     public final hydra.langs.haskell.ast.Name value;
     
     public Variable (hydra.langs.haskell.ast.Name value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

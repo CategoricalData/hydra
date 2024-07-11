@@ -10,9 +10,7 @@ public class MethodReference_Array implements Serializable {
   public final hydra.langs.java.syntax.ArrayType value;
   
   public MethodReference_Array (hydra.langs.java.syntax.ArrayType value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

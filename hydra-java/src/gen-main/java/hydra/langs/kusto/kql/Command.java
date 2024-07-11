@@ -176,9 +176,7 @@ public abstract class Command implements Serializable {
     public final java.util.List<hydra.langs.kusto.kql.ColumnName> value;
     
     public Distinct (java.util.List<hydra.langs.kusto.kql.ColumnName> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -206,9 +204,7 @@ public abstract class Command implements Serializable {
     public final java.util.List<hydra.langs.kusto.kql.ColumnAssignment> value;
     
     public Extend (java.util.List<hydra.langs.kusto.kql.ColumnAssignment> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -236,9 +232,7 @@ public abstract class Command implements Serializable {
     public final hydra.langs.kusto.kql.JoinCommand value;
     
     public Join (hydra.langs.kusto.kql.JoinCommand value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -266,9 +260,7 @@ public abstract class Command implements Serializable {
     public final Integer value;
     
     public Limit (Integer value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -296,9 +288,7 @@ public abstract class Command implements Serializable {
     public final hydra.langs.kusto.kql.ColumnName value;
     
     public Mvexpand (hydra.langs.kusto.kql.ColumnName value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -326,9 +316,7 @@ public abstract class Command implements Serializable {
     public final java.util.List<hydra.langs.kusto.kql.SortBy> value;
     
     public OrderBy (java.util.List<hydra.langs.kusto.kql.SortBy> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -356,9 +344,7 @@ public abstract class Command implements Serializable {
     public final hydra.langs.kusto.kql.ParseCommand value;
     
     public Parse (hydra.langs.kusto.kql.ParseCommand value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -386,9 +372,7 @@ public abstract class Command implements Serializable {
     public final hydra.langs.kusto.kql.PrintCommand value;
     
     public Print (hydra.langs.kusto.kql.PrintCommand value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -416,9 +400,7 @@ public abstract class Command implements Serializable {
     public final java.util.List<hydra.langs.kusto.kql.Projection> value;
     
     public Project (java.util.List<hydra.langs.kusto.kql.Projection> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -446,9 +428,7 @@ public abstract class Command implements Serializable {
     public final java.util.List<hydra.langs.kusto.kql.ColumnName> value;
     
     public ProjectAway (java.util.List<hydra.langs.kusto.kql.ColumnName> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -476,9 +456,7 @@ public abstract class Command implements Serializable {
     public final java.util.List<hydra.langs.kusto.kql.ColumnAlias> value;
     
     public ProjectRename (java.util.List<hydra.langs.kusto.kql.ColumnAlias> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -506,9 +484,7 @@ public abstract class Command implements Serializable {
     public final String value;
     
     public Render (String value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -536,9 +512,7 @@ public abstract class Command implements Serializable {
     public final hydra.langs.kusto.kql.SearchCommand value;
     
     public Search (hydra.langs.kusto.kql.SearchCommand value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -566,9 +540,7 @@ public abstract class Command implements Serializable {
     public final java.util.List<hydra.langs.kusto.kql.SortBy> value;
     
     public SortBy (java.util.List<hydra.langs.kusto.kql.SortBy> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -596,9 +568,7 @@ public abstract class Command implements Serializable {
     public final hydra.langs.kusto.kql.SummarizeCommand value;
     
     public Summarize (hydra.langs.kusto.kql.SummarizeCommand value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -632,9 +602,7 @@ public abstract class Command implements Serializable {
     public final Integer value;
     
     public Take (Integer value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -662,9 +630,7 @@ public abstract class Command implements Serializable {
     public final hydra.langs.kusto.kql.TopCommand value;
     
     public Top (hydra.langs.kusto.kql.TopCommand value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -692,9 +658,7 @@ public abstract class Command implements Serializable {
     public final hydra.langs.kusto.kql.UnionCommand value;
     
     public Union (hydra.langs.kusto.kql.UnionCommand value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -722,9 +686,7 @@ public abstract class Command implements Serializable {
     public final hydra.langs.kusto.kql.Expression value;
     
     public Where (hydra.langs.kusto.kql.Expression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

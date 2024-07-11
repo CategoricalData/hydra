@@ -12,12 +12,8 @@ public class TypeSignature implements Serializable {
   public final hydra.langs.haskell.ast.Type type;
   
   public TypeSignature (hydra.langs.haskell.ast.Name name, hydra.langs.haskell.ast.Type type) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((type));
     this.name = name;
     this.type = type;
   }
@@ -37,16 +33,12 @@ public class TypeSignature implements Serializable {
   }
   
   public TypeSignature withName(hydra.langs.haskell.ast.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new TypeSignature(name, type);
   }
   
   public TypeSignature withType(hydra.langs.haskell.ast.Type type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new TypeSignature(name, type);
   }
 }

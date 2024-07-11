@@ -56,33 +56,15 @@ public class AggregateFeatures implements Serializable {
   public final Boolean sum;
   
   public AggregateFeatures (Boolean avg, Boolean collect, Boolean count, Boolean max, Boolean min, Boolean percentileCont, Boolean percentileDisc, Boolean stdev, Boolean sum) {
-    if (avg == null) {
-      throw new IllegalArgumentException("null value for 'avg' argument");
-    }
-    if (collect == null) {
-      throw new IllegalArgumentException("null value for 'collect' argument");
-    }
-    if (count == null) {
-      throw new IllegalArgumentException("null value for 'count' argument");
-    }
-    if (max == null) {
-      throw new IllegalArgumentException("null value for 'max' argument");
-    }
-    if (min == null) {
-      throw new IllegalArgumentException("null value for 'min' argument");
-    }
-    if (percentileCont == null) {
-      throw new IllegalArgumentException("null value for 'percentileCont' argument");
-    }
-    if (percentileDisc == null) {
-      throw new IllegalArgumentException("null value for 'percentileDisc' argument");
-    }
-    if (stdev == null) {
-      throw new IllegalArgumentException("null value for 'stdev' argument");
-    }
-    if (sum == null) {
-      throw new IllegalArgumentException("null value for 'sum' argument");
-    }
+    java.util.Objects.requireNonNull((avg));
+    java.util.Objects.requireNonNull((collect));
+    java.util.Objects.requireNonNull((count));
+    java.util.Objects.requireNonNull((max));
+    java.util.Objects.requireNonNull((min));
+    java.util.Objects.requireNonNull((percentileCont));
+    java.util.Objects.requireNonNull((percentileDisc));
+    java.util.Objects.requireNonNull((stdev));
+    java.util.Objects.requireNonNull((sum));
     this.avg = avg;
     this.collect = collect;
     this.count = count;
@@ -109,65 +91,47 @@ public class AggregateFeatures implements Serializable {
   }
   
   public AggregateFeatures withAvg(Boolean avg) {
-    if (avg == null) {
-      throw new IllegalArgumentException("null value for 'avg' argument");
-    }
+    java.util.Objects.requireNonNull((avg));
     return new AggregateFeatures(avg, collect, count, max, min, percentileCont, percentileDisc, stdev, sum);
   }
   
   public AggregateFeatures withCollect(Boolean collect) {
-    if (collect == null) {
-      throw new IllegalArgumentException("null value for 'collect' argument");
-    }
+    java.util.Objects.requireNonNull((collect));
     return new AggregateFeatures(avg, collect, count, max, min, percentileCont, percentileDisc, stdev, sum);
   }
   
   public AggregateFeatures withCount(Boolean count) {
-    if (count == null) {
-      throw new IllegalArgumentException("null value for 'count' argument");
-    }
+    java.util.Objects.requireNonNull((count));
     return new AggregateFeatures(avg, collect, count, max, min, percentileCont, percentileDisc, stdev, sum);
   }
   
   public AggregateFeatures withMax(Boolean max) {
-    if (max == null) {
-      throw new IllegalArgumentException("null value for 'max' argument");
-    }
+    java.util.Objects.requireNonNull((max));
     return new AggregateFeatures(avg, collect, count, max, min, percentileCont, percentileDisc, stdev, sum);
   }
   
   public AggregateFeatures withMin(Boolean min) {
-    if (min == null) {
-      throw new IllegalArgumentException("null value for 'min' argument");
-    }
+    java.util.Objects.requireNonNull((min));
     return new AggregateFeatures(avg, collect, count, max, min, percentileCont, percentileDisc, stdev, sum);
   }
   
   public AggregateFeatures withPercentileCont(Boolean percentileCont) {
-    if (percentileCont == null) {
-      throw new IllegalArgumentException("null value for 'percentileCont' argument");
-    }
+    java.util.Objects.requireNonNull((percentileCont));
     return new AggregateFeatures(avg, collect, count, max, min, percentileCont, percentileDisc, stdev, sum);
   }
   
   public AggregateFeatures withPercentileDisc(Boolean percentileDisc) {
-    if (percentileDisc == null) {
-      throw new IllegalArgumentException("null value for 'percentileDisc' argument");
-    }
+    java.util.Objects.requireNonNull((percentileDisc));
     return new AggregateFeatures(avg, collect, count, max, min, percentileCont, percentileDisc, stdev, sum);
   }
   
   public AggregateFeatures withStdev(Boolean stdev) {
-    if (stdev == null) {
-      throw new IllegalArgumentException("null value for 'stdev' argument");
-    }
+    java.util.Objects.requireNonNull((stdev));
     return new AggregateFeatures(avg, collect, count, max, min, percentileCont, percentileDisc, stdev, sum);
   }
   
   public AggregateFeatures withSum(Boolean sum) {
-    if (sum == null) {
-      throw new IllegalArgumentException("null value for 'sum' argument");
-    }
+    java.util.Objects.requireNonNull((sum));
     return new AggregateFeatures(avg, collect, count, max, min, percentileCont, percentileDisc, stdev, sum);
   }
 }

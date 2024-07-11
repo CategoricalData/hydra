@@ -37,9 +37,7 @@ public abstract class UnsignedLiteral implements Serializable {
     public final hydra.langs.sql.ansi.UnsignedNumericLiteral value;
     
     public Numeric (hydra.langs.sql.ansi.UnsignedNumericLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class UnsignedLiteral implements Serializable {
     public final hydra.langs.sql.ansi.GeneralLiteral value;
     
     public General (hydra.langs.sql.ansi.GeneralLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

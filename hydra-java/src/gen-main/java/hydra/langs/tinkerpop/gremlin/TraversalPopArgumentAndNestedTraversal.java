@@ -12,12 +12,8 @@ public class TraversalPopArgumentAndNestedTraversal implements Serializable {
   public final hydra.langs.tinkerpop.gremlin.NestedTraversal traversal;
   
   public TraversalPopArgumentAndNestedTraversal (hydra.langs.tinkerpop.gremlin.TraversalPopArgument pop, hydra.langs.tinkerpop.gremlin.NestedTraversal traversal) {
-    if (pop == null) {
-      throw new IllegalArgumentException("null value for 'pop' argument");
-    }
-    if (traversal == null) {
-      throw new IllegalArgumentException("null value for 'traversal' argument");
-    }
+    java.util.Objects.requireNonNull((pop));
+    java.util.Objects.requireNonNull((traversal));
     this.pop = pop;
     this.traversal = traversal;
   }
@@ -37,16 +33,12 @@ public class TraversalPopArgumentAndNestedTraversal implements Serializable {
   }
   
   public TraversalPopArgumentAndNestedTraversal withPop(hydra.langs.tinkerpop.gremlin.TraversalPopArgument pop) {
-    if (pop == null) {
-      throw new IllegalArgumentException("null value for 'pop' argument");
-    }
+    java.util.Objects.requireNonNull((pop));
     return new TraversalPopArgumentAndNestedTraversal(pop, traversal);
   }
   
   public TraversalPopArgumentAndNestedTraversal withTraversal(hydra.langs.tinkerpop.gremlin.NestedTraversal traversal) {
-    if (traversal == null) {
-      throw new IllegalArgumentException("null value for 'traversal' argument");
-    }
+    java.util.Objects.requireNonNull((traversal));
     return new TraversalPopArgumentAndNestedTraversal(pop, traversal);
   }
 }

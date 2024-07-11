@@ -12,12 +12,8 @@ public class TwoTraversalPredicates implements Serializable {
   public final hydra.langs.tinkerpop.gremlin.TraversalPredicate right;
   
   public TwoTraversalPredicates (hydra.langs.tinkerpop.gremlin.TraversalPredicate left, hydra.langs.tinkerpop.gremlin.TraversalPredicate right) {
-    if (left == null) {
-      throw new IllegalArgumentException("null value for 'left' argument");
-    }
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((left));
+    java.util.Objects.requireNonNull((right));
     this.left = left;
     this.right = right;
   }
@@ -37,16 +33,12 @@ public class TwoTraversalPredicates implements Serializable {
   }
   
   public TwoTraversalPredicates withLeft(hydra.langs.tinkerpop.gremlin.TraversalPredicate left) {
-    if (left == null) {
-      throw new IllegalArgumentException("null value for 'left' argument");
-    }
+    java.util.Objects.requireNonNull((left));
     return new TwoTraversalPredicates(left, right);
   }
   
   public TwoTraversalPredicates withRight(hydra.langs.tinkerpop.gremlin.TraversalPredicate right) {
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((right));
     return new TwoTraversalPredicates(left, right);
   }
 }

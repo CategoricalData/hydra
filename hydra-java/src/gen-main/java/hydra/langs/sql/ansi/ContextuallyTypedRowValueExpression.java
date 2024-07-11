@@ -37,9 +37,7 @@ public abstract class ContextuallyTypedRowValueExpression implements Serializabl
     public final hydra.langs.sql.ansi.RowValueSpecialCase value;
     
     public SpecialCase (hydra.langs.sql.ansi.RowValueSpecialCase value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class ContextuallyTypedRowValueExpression implements Serializabl
     public final hydra.langs.sql.ansi.ContextuallyTypedRowValueConstructor value;
     
     public Constructor (hydra.langs.sql.ansi.ContextuallyTypedRowValueConstructor value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

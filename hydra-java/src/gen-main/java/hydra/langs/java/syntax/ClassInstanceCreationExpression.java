@@ -12,12 +12,8 @@ public class ClassInstanceCreationExpression implements Serializable {
   public final hydra.langs.java.syntax.UnqualifiedClassInstanceCreationExpression expression;
   
   public ClassInstanceCreationExpression (hydra.util.Opt<hydra.langs.java.syntax.ClassInstanceCreationExpression_Qualifier> qualifier, hydra.langs.java.syntax.UnqualifiedClassInstanceCreationExpression expression) {
-    if (qualifier == null) {
-      throw new IllegalArgumentException("null value for 'qualifier' argument");
-    }
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((qualifier));
+    java.util.Objects.requireNonNull((expression));
     this.qualifier = qualifier;
     this.expression = expression;
   }
@@ -37,16 +33,12 @@ public class ClassInstanceCreationExpression implements Serializable {
   }
   
   public ClassInstanceCreationExpression withQualifier(hydra.util.Opt<hydra.langs.java.syntax.ClassInstanceCreationExpression_Qualifier> qualifier) {
-    if (qualifier == null) {
-      throw new IllegalArgumentException("null value for 'qualifier' argument");
-    }
+    java.util.Objects.requireNonNull((qualifier));
     return new ClassInstanceCreationExpression(qualifier, expression);
   }
   
   public ClassInstanceCreationExpression withExpression(hydra.langs.java.syntax.UnqualifiedClassInstanceCreationExpression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new ClassInstanceCreationExpression(qualifier, expression);
   }
 }

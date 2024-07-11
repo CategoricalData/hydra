@@ -37,9 +37,7 @@ public abstract class TypeNameArray implements Serializable {
     public final hydra.langs.java.syntax.TypeName value;
     
     public Simple (hydra.langs.java.syntax.TypeName value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class TypeNameArray implements Serializable {
     public final hydra.langs.java.syntax.TypeNameArray value;
     
     public Array (hydra.langs.java.syntax.TypeNameArray value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -37,9 +37,7 @@ public abstract class VariableInitializer implements Serializable {
     public final hydra.langs.java.syntax.Expression value;
     
     public Expression (hydra.langs.java.syntax.Expression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class VariableInitializer implements Serializable {
     public final hydra.langs.java.syntax.ArrayInitializer value;
     
     public ArrayInitializer (hydra.langs.java.syntax.ArrayInitializer value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -13,9 +13,7 @@ public class Relation<V> implements Serializable {
   public final java.util.Set<java.util.List<V>> value;
   
   public Relation (java.util.Set<java.util.List<V>> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

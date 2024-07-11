@@ -14,15 +14,9 @@ public class Init implements Serializable {
   public final java.util.List<java.util.List<hydra.langs.scala.meta.Data>> argss;
   
   public Init (hydra.langs.scala.meta.Type tpe, hydra.langs.scala.meta.Name name, java.util.List<java.util.List<hydra.langs.scala.meta.Data>> argss) {
-    if (tpe == null) {
-      throw new IllegalArgumentException("null value for 'tpe' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (argss == null) {
-      throw new IllegalArgumentException("null value for 'argss' argument");
-    }
+    java.util.Objects.requireNonNull((tpe));
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((argss));
     this.tpe = tpe;
     this.name = name;
     this.argss = argss;
@@ -43,23 +37,17 @@ public class Init implements Serializable {
   }
   
   public Init withTpe(hydra.langs.scala.meta.Type tpe) {
-    if (tpe == null) {
-      throw new IllegalArgumentException("null value for 'tpe' argument");
-    }
+    java.util.Objects.requireNonNull((tpe));
     return new Init(tpe, name, argss);
   }
   
   public Init withName(hydra.langs.scala.meta.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Init(tpe, name, argss);
   }
   
   public Init withArgss(java.util.List<java.util.List<hydra.langs.scala.meta.Data>> argss) {
-    if (argss == null) {
-      throw new IllegalArgumentException("null value for 'argss' argument");
-    }
+    java.util.Objects.requireNonNull((argss));
     return new Init(tpe, name, argss);
   }
 }

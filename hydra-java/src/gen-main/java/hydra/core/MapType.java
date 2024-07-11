@@ -15,12 +15,8 @@ public class MapType<A> implements Serializable {
   public final hydra.core.Type<A> values;
   
   public MapType (hydra.core.Type<A> keys, hydra.core.Type<A> values) {
-    if (keys == null) {
-      throw new IllegalArgumentException("null value for 'keys' argument");
-    }
-    if (values == null) {
-      throw new IllegalArgumentException("null value for 'values' argument");
-    }
+    java.util.Objects.requireNonNull((keys));
+    java.util.Objects.requireNonNull((values));
     this.keys = keys;
     this.values = values;
   }
@@ -40,16 +36,12 @@ public class MapType<A> implements Serializable {
   }
   
   public MapType withKeys(hydra.core.Type<A> keys) {
-    if (keys == null) {
-      throw new IllegalArgumentException("null value for 'keys' argument");
-    }
+    java.util.Objects.requireNonNull((keys));
     return new MapType(keys, values);
   }
   
   public MapType withValues(hydra.core.Type<A> values) {
-    if (values == null) {
-      throw new IllegalArgumentException("null value for 'values' argument");
-    }
+    java.util.Objects.requireNonNull((values));
     return new MapType(keys, values);
   }
 }

@@ -14,15 +14,9 @@ public class ScalarTypeDefinition implements Serializable {
   public final hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives;
   
   public ScalarTypeDefinition (hydra.util.Opt<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.Name name, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((description));
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((directives));
     this.description = description;
     this.name = name;
     this.directives = directives;
@@ -43,23 +37,17 @@ public class ScalarTypeDefinition implements Serializable {
   }
   
   public ScalarTypeDefinition withDescription(hydra.util.Opt<hydra.langs.graphql.syntax.Description> description) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
+    java.util.Objects.requireNonNull((description));
     return new ScalarTypeDefinition(description, name, directives);
   }
   
   public ScalarTypeDefinition withName(hydra.langs.graphql.syntax.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new ScalarTypeDefinition(description, name, directives);
   }
   
   public ScalarTypeDefinition withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((directives));
     return new ScalarTypeDefinition(description, name, directives);
   }
 }

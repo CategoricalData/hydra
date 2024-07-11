@@ -37,9 +37,7 @@ public abstract class SingleQuery implements Serializable {
     public final hydra.langs.cypher.openCypher.SinglePartQuery value;
     
     public SinglePart (hydra.langs.cypher.openCypher.SinglePartQuery value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class SingleQuery implements Serializable {
     public final hydra.langs.cypher.openCypher.MultiPartQuery value;
     
     public MultiPart (hydra.langs.cypher.openCypher.MultiPartQuery value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

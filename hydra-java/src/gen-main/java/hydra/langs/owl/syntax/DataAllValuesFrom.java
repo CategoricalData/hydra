@@ -12,12 +12,8 @@ public class DataAllValuesFrom implements Serializable {
   public final hydra.langs.owl.syntax.DataRange range;
   
   public DataAllValuesFrom (java.util.List<hydra.langs.owl.syntax.DataPropertyExpression> property, hydra.langs.owl.syntax.DataRange range) {
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
-    if (range == null) {
-      throw new IllegalArgumentException("null value for 'range' argument");
-    }
+    java.util.Objects.requireNonNull((property));
+    java.util.Objects.requireNonNull((range));
     this.property = property;
     this.range = range;
   }
@@ -37,16 +33,12 @@ public class DataAllValuesFrom implements Serializable {
   }
   
   public DataAllValuesFrom withProperty(java.util.List<hydra.langs.owl.syntax.DataPropertyExpression> property) {
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
+    java.util.Objects.requireNonNull((property));
     return new DataAllValuesFrom(property, range);
   }
   
   public DataAllValuesFrom withRange(hydra.langs.owl.syntax.DataRange range) {
-    if (range == null) {
-      throw new IllegalArgumentException("null value for 'range' argument");
-    }
+    java.util.Objects.requireNonNull((range));
     return new DataAllValuesFrom(property, range);
   }
 }

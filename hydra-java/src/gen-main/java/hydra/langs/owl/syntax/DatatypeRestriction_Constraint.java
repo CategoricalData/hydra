@@ -12,12 +12,8 @@ public class DatatypeRestriction_Constraint implements Serializable {
   public final hydra.langs.rdf.syntax.Literal restrictionValue;
   
   public DatatypeRestriction_Constraint (hydra.langs.owl.syntax.DatatypeRestriction_ConstrainingFacet constrainingFacet, hydra.langs.rdf.syntax.Literal restrictionValue) {
-    if (constrainingFacet == null) {
-      throw new IllegalArgumentException("null value for 'constrainingFacet' argument");
-    }
-    if (restrictionValue == null) {
-      throw new IllegalArgumentException("null value for 'restrictionValue' argument");
-    }
+    java.util.Objects.requireNonNull((constrainingFacet));
+    java.util.Objects.requireNonNull((restrictionValue));
     this.constrainingFacet = constrainingFacet;
     this.restrictionValue = restrictionValue;
   }
@@ -37,16 +33,12 @@ public class DatatypeRestriction_Constraint implements Serializable {
   }
   
   public DatatypeRestriction_Constraint withConstrainingFacet(hydra.langs.owl.syntax.DatatypeRestriction_ConstrainingFacet constrainingFacet) {
-    if (constrainingFacet == null) {
-      throw new IllegalArgumentException("null value for 'constrainingFacet' argument");
-    }
+    java.util.Objects.requireNonNull((constrainingFacet));
     return new DatatypeRestriction_Constraint(constrainingFacet, restrictionValue);
   }
   
   public DatatypeRestriction_Constraint withRestrictionValue(hydra.langs.rdf.syntax.Literal restrictionValue) {
-    if (restrictionValue == null) {
-      throw new IllegalArgumentException("null value for 'restrictionValue' argument");
-    }
+    java.util.Objects.requireNonNull((restrictionValue));
     return new DatatypeRestriction_Constraint(constrainingFacet, restrictionValue);
   }
 }

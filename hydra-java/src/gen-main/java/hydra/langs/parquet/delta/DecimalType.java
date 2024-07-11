@@ -12,12 +12,8 @@ public class DecimalType implements Serializable {
   public final Integer scale;
   
   public DecimalType (Integer precision, Integer scale) {
-    if (precision == null) {
-      throw new IllegalArgumentException("null value for 'precision' argument");
-    }
-    if (scale == null) {
-      throw new IllegalArgumentException("null value for 'scale' argument");
-    }
+    java.util.Objects.requireNonNull((precision));
+    java.util.Objects.requireNonNull((scale));
     this.precision = precision;
     this.scale = scale;
   }
@@ -37,16 +33,12 @@ public class DecimalType implements Serializable {
   }
   
   public DecimalType withPrecision(Integer precision) {
-    if (precision == null) {
-      throw new IllegalArgumentException("null value for 'precision' argument");
-    }
+    java.util.Objects.requireNonNull((precision));
     return new DecimalType(precision, scale);
   }
   
   public DecimalType withScale(Integer scale) {
-    if (scale == null) {
-      throw new IllegalArgumentException("null value for 'scale' argument");
-    }
+    java.util.Objects.requireNonNull((scale));
     return new DecimalType(precision, scale);
   }
 }

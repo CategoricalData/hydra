@@ -12,12 +12,8 @@ public class PatternWhere implements Serializable {
   public final hydra.util.Opt<hydra.langs.cypher.openCypher.Where> where;
   
   public PatternWhere (hydra.langs.cypher.openCypher.Pattern pattern, hydra.util.Opt<hydra.langs.cypher.openCypher.Where> where) {
-    if (pattern == null) {
-      throw new IllegalArgumentException("null value for 'pattern' argument");
-    }
-    if (where == null) {
-      throw new IllegalArgumentException("null value for 'where' argument");
-    }
+    java.util.Objects.requireNonNull((pattern));
+    java.util.Objects.requireNonNull((where));
     this.pattern = pattern;
     this.where = where;
   }
@@ -37,16 +33,12 @@ public class PatternWhere implements Serializable {
   }
   
   public PatternWhere withPattern(hydra.langs.cypher.openCypher.Pattern pattern) {
-    if (pattern == null) {
-      throw new IllegalArgumentException("null value for 'pattern' argument");
-    }
+    java.util.Objects.requireNonNull((pattern));
     return new PatternWhere(pattern, where);
   }
   
   public PatternWhere withWhere(hydra.util.Opt<hydra.langs.cypher.openCypher.Where> where) {
-    if (where == null) {
-      throw new IllegalArgumentException("null value for 'where' argument");
-    }
+    java.util.Objects.requireNonNull((where));
     return new PatternWhere(pattern, where);
   }
 }

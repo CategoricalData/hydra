@@ -10,9 +10,7 @@ public class Create implements Serializable {
   public final hydra.langs.cypher.openCypher.Pattern value;
   
   public Create (hydra.langs.cypher.openCypher.Pattern value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

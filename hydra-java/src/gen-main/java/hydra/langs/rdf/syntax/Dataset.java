@@ -10,9 +10,7 @@ public class Dataset implements Serializable {
   public final java.util.Set<hydra.langs.rdf.syntax.Quad> value;
   
   public Dataset (java.util.Set<hydra.langs.rdf.syntax.Quad> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

@@ -18,21 +18,11 @@ public class ProjectionBody implements Serializable {
   public final hydra.util.Opt<hydra.langs.cypher.openCypher.Limit> limit;
   
   public ProjectionBody (Boolean distinct, hydra.langs.cypher.openCypher.ProjectionItems projectionItems, hydra.util.Opt<hydra.langs.cypher.openCypher.Order> order, hydra.util.Opt<hydra.langs.cypher.openCypher.Skip> skip, hydra.util.Opt<hydra.langs.cypher.openCypher.Limit> limit) {
-    if (distinct == null) {
-      throw new IllegalArgumentException("null value for 'distinct' argument");
-    }
-    if (projectionItems == null) {
-      throw new IllegalArgumentException("null value for 'projectionItems' argument");
-    }
-    if (order == null) {
-      throw new IllegalArgumentException("null value for 'order' argument");
-    }
-    if (skip == null) {
-      throw new IllegalArgumentException("null value for 'skip' argument");
-    }
-    if (limit == null) {
-      throw new IllegalArgumentException("null value for 'limit' argument");
-    }
+    java.util.Objects.requireNonNull((distinct));
+    java.util.Objects.requireNonNull((projectionItems));
+    java.util.Objects.requireNonNull((order));
+    java.util.Objects.requireNonNull((skip));
+    java.util.Objects.requireNonNull((limit));
     this.distinct = distinct;
     this.projectionItems = projectionItems;
     this.order = order;
@@ -55,37 +45,27 @@ public class ProjectionBody implements Serializable {
   }
   
   public ProjectionBody withDistinct(Boolean distinct) {
-    if (distinct == null) {
-      throw new IllegalArgumentException("null value for 'distinct' argument");
-    }
+    java.util.Objects.requireNonNull((distinct));
     return new ProjectionBody(distinct, projectionItems, order, skip, limit);
   }
   
   public ProjectionBody withProjectionItems(hydra.langs.cypher.openCypher.ProjectionItems projectionItems) {
-    if (projectionItems == null) {
-      throw new IllegalArgumentException("null value for 'projectionItems' argument");
-    }
+    java.util.Objects.requireNonNull((projectionItems));
     return new ProjectionBody(distinct, projectionItems, order, skip, limit);
   }
   
   public ProjectionBody withOrder(hydra.util.Opt<hydra.langs.cypher.openCypher.Order> order) {
-    if (order == null) {
-      throw new IllegalArgumentException("null value for 'order' argument");
-    }
+    java.util.Objects.requireNonNull((order));
     return new ProjectionBody(distinct, projectionItems, order, skip, limit);
   }
   
   public ProjectionBody withSkip(hydra.util.Opt<hydra.langs.cypher.openCypher.Skip> skip) {
-    if (skip == null) {
-      throw new IllegalArgumentException("null value for 'skip' argument");
-    }
+    java.util.Objects.requireNonNull((skip));
     return new ProjectionBody(distinct, projectionItems, order, skip, limit);
   }
   
   public ProjectionBody withLimit(hydra.util.Opt<hydra.langs.cypher.openCypher.Limit> limit) {
-    if (limit == null) {
-      throw new IllegalArgumentException("null value for 'limit' argument");
-    }
+    java.util.Objects.requireNonNull((limit));
     return new ProjectionBody(distinct, projectionItems, order, skip, limit);
   }
 }

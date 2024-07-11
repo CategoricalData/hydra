@@ -14,15 +14,9 @@ public class MethodDeclarator implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.FormalParameter> formalParameters;
   
   public MethodDeclarator (hydra.langs.java.syntax.Identifier identifier, hydra.util.Opt<hydra.langs.java.syntax.ReceiverParameter> receiverParameter, java.util.List<hydra.langs.java.syntax.FormalParameter> formalParameters) {
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
-    if (receiverParameter == null) {
-      throw new IllegalArgumentException("null value for 'receiverParameter' argument");
-    }
-    if (formalParameters == null) {
-      throw new IllegalArgumentException("null value for 'formalParameters' argument");
-    }
+    java.util.Objects.requireNonNull((identifier));
+    java.util.Objects.requireNonNull((receiverParameter));
+    java.util.Objects.requireNonNull((formalParameters));
     this.identifier = identifier;
     this.receiverParameter = receiverParameter;
     this.formalParameters = formalParameters;
@@ -43,23 +37,17 @@ public class MethodDeclarator implements Serializable {
   }
   
   public MethodDeclarator withIdentifier(hydra.langs.java.syntax.Identifier identifier) {
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
+    java.util.Objects.requireNonNull((identifier));
     return new MethodDeclarator(identifier, receiverParameter, formalParameters);
   }
   
   public MethodDeclarator withReceiverParameter(hydra.util.Opt<hydra.langs.java.syntax.ReceiverParameter> receiverParameter) {
-    if (receiverParameter == null) {
-      throw new IllegalArgumentException("null value for 'receiverParameter' argument");
-    }
+    java.util.Objects.requireNonNull((receiverParameter));
     return new MethodDeclarator(identifier, receiverParameter, formalParameters);
   }
   
   public MethodDeclarator withFormalParameters(java.util.List<hydra.langs.java.syntax.FormalParameter> formalParameters) {
-    if (formalParameters == null) {
-      throw new IllegalArgumentException("null value for 'formalParameters' argument");
-    }
+    java.util.Objects.requireNonNull((formalParameters));
     return new MethodDeclarator(identifier, receiverParameter, formalParameters);
   }
 }

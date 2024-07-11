@@ -14,15 +14,9 @@ public class SinglePartQuery implements Serializable {
   public final hydra.util.Opt<hydra.langs.cypher.openCypher.Return> return_;
   
   public SinglePartQuery (java.util.List<hydra.langs.cypher.openCypher.ReadingClause> reading, java.util.List<hydra.langs.cypher.openCypher.UpdatingClause> updating, hydra.util.Opt<hydra.langs.cypher.openCypher.Return> return_) {
-    if (reading == null) {
-      throw new IllegalArgumentException("null value for 'reading' argument");
-    }
-    if (updating == null) {
-      throw new IllegalArgumentException("null value for 'updating' argument");
-    }
-    if (return_ == null) {
-      throw new IllegalArgumentException("null value for 'return' argument");
-    }
+    java.util.Objects.requireNonNull((reading));
+    java.util.Objects.requireNonNull((updating));
+    java.util.Objects.requireNonNull((return_));
     this.reading = reading;
     this.updating = updating;
     this.return_ = return_;
@@ -43,23 +37,17 @@ public class SinglePartQuery implements Serializable {
   }
   
   public SinglePartQuery withReading(java.util.List<hydra.langs.cypher.openCypher.ReadingClause> reading) {
-    if (reading == null) {
-      throw new IllegalArgumentException("null value for 'reading' argument");
-    }
+    java.util.Objects.requireNonNull((reading));
     return new SinglePartQuery(reading, updating, return_);
   }
   
   public SinglePartQuery withUpdating(java.util.List<hydra.langs.cypher.openCypher.UpdatingClause> updating) {
-    if (updating == null) {
-      throw new IllegalArgumentException("null value for 'updating' argument");
-    }
+    java.util.Objects.requireNonNull((updating));
     return new SinglePartQuery(reading, updating, return_);
   }
   
   public SinglePartQuery withReturn(hydra.util.Opt<hydra.langs.cypher.openCypher.Return> return_) {
-    if (return_ == null) {
-      throw new IllegalArgumentException("null value for 'return' argument");
-    }
+    java.util.Objects.requireNonNull((return_));
     return new SinglePartQuery(reading, updating, return_);
   }
 }

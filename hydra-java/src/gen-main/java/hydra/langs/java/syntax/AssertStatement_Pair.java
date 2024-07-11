@@ -12,12 +12,8 @@ public class AssertStatement_Pair implements Serializable {
   public final hydra.langs.java.syntax.Expression second;
   
   public AssertStatement_Pair (hydra.langs.java.syntax.Expression first, hydra.langs.java.syntax.Expression second) {
-    if (first == null) {
-      throw new IllegalArgumentException("null value for 'first' argument");
-    }
-    if (second == null) {
-      throw new IllegalArgumentException("null value for 'second' argument");
-    }
+    java.util.Objects.requireNonNull((first));
+    java.util.Objects.requireNonNull((second));
     this.first = first;
     this.second = second;
   }
@@ -37,16 +33,12 @@ public class AssertStatement_Pair implements Serializable {
   }
   
   public AssertStatement_Pair withFirst(hydra.langs.java.syntax.Expression first) {
-    if (first == null) {
-      throw new IllegalArgumentException("null value for 'first' argument");
-    }
+    java.util.Objects.requireNonNull((first));
     return new AssertStatement_Pair(first, second);
   }
   
   public AssertStatement_Pair withSecond(hydra.langs.java.syntax.Expression second) {
-    if (second == null) {
-      throw new IllegalArgumentException("null value for 'second' argument");
-    }
+    java.util.Objects.requireNonNull((second));
     return new AssertStatement_Pair(first, second);
   }
 }

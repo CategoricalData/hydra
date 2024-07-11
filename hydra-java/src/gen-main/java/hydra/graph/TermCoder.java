@@ -13,12 +13,8 @@ public class TermCoder<A, X> {
   public final hydra.compute.Coder<hydra.graph.Graph<A>, hydra.graph.Graph<A>, hydra.core.Term<A>, X> coder;
   
   public TermCoder (hydra.core.Type<A> type, hydra.compute.Coder<hydra.graph.Graph<A>, hydra.graph.Graph<A>, hydra.core.Term<A>, X> coder) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (coder == null) {
-      throw new IllegalArgumentException("null value for 'coder' argument");
-    }
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((coder));
     this.type = type;
     this.coder = coder;
   }
@@ -38,16 +34,12 @@ public class TermCoder<A, X> {
   }
   
   public TermCoder withType(hydra.core.Type<A> type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new TermCoder(type, coder);
   }
   
   public TermCoder withCoder(hydra.compute.Coder<hydra.graph.Graph<A>, hydra.graph.Graph<A>, hydra.core.Term<A>, X> coder) {
-    if (coder == null) {
-      throw new IllegalArgumentException("null value for 'coder' argument");
-    }
+    java.util.Objects.requireNonNull((coder));
     return new TermCoder(type, coder);
   }
 }

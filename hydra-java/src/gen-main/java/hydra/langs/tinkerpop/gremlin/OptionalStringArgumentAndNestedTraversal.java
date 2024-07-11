@@ -12,12 +12,8 @@ public class OptionalStringArgumentAndNestedTraversal implements Serializable {
   public final hydra.langs.tinkerpop.gremlin.NestedTraversal traversal;
   
   public OptionalStringArgumentAndNestedTraversal (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> string, hydra.langs.tinkerpop.gremlin.NestedTraversal traversal) {
-    if (string == null) {
-      throw new IllegalArgumentException("null value for 'string' argument");
-    }
-    if (traversal == null) {
-      throw new IllegalArgumentException("null value for 'traversal' argument");
-    }
+    java.util.Objects.requireNonNull((string));
+    java.util.Objects.requireNonNull((traversal));
     this.string = string;
     this.traversal = traversal;
   }
@@ -37,16 +33,12 @@ public class OptionalStringArgumentAndNestedTraversal implements Serializable {
   }
   
   public OptionalStringArgumentAndNestedTraversal withString(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> string) {
-    if (string == null) {
-      throw new IllegalArgumentException("null value for 'string' argument");
-    }
+    java.util.Objects.requireNonNull((string));
     return new OptionalStringArgumentAndNestedTraversal(string, traversal);
   }
   
   public OptionalStringArgumentAndNestedTraversal withTraversal(hydra.langs.tinkerpop.gremlin.NestedTraversal traversal) {
-    if (traversal == null) {
-      throw new IllegalArgumentException("null value for 'traversal' argument");
-    }
+    java.util.Objects.requireNonNull((traversal));
     return new OptionalStringArgumentAndNestedTraversal(string, traversal);
   }
 }

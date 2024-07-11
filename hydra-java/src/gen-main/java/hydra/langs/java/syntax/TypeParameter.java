@@ -14,15 +14,9 @@ public class TypeParameter implements Serializable {
   public final hydra.util.Opt<hydra.langs.java.syntax.TypeBound> bound;
   
   public TypeParameter (java.util.List<hydra.langs.java.syntax.TypeParameterModifier> modifiers, hydra.langs.java.syntax.TypeIdentifier identifier, hydra.util.Opt<hydra.langs.java.syntax.TypeBound> bound) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
-    if (bound == null) {
-      throw new IllegalArgumentException("null value for 'bound' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
+    java.util.Objects.requireNonNull((identifier));
+    java.util.Objects.requireNonNull((bound));
     this.modifiers = modifiers;
     this.identifier = identifier;
     this.bound = bound;
@@ -43,23 +37,17 @@ public class TypeParameter implements Serializable {
   }
   
   public TypeParameter withModifiers(java.util.List<hydra.langs.java.syntax.TypeParameterModifier> modifiers) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
     return new TypeParameter(modifiers, identifier, bound);
   }
   
   public TypeParameter withIdentifier(hydra.langs.java.syntax.TypeIdentifier identifier) {
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
+    java.util.Objects.requireNonNull((identifier));
     return new TypeParameter(modifiers, identifier, bound);
   }
   
   public TypeParameter withBound(hydra.util.Opt<hydra.langs.java.syntax.TypeBound> bound) {
-    if (bound == null) {
-      throw new IllegalArgumentException("null value for 'bound' argument");
-    }
+    java.util.Objects.requireNonNull((bound));
     return new TypeParameter(modifiers, identifier, bound);
   }
 }

@@ -12,12 +12,8 @@ public class Type_Bounds implements Serializable {
   public final hydra.util.Opt<hydra.langs.scala.meta.Type> hi;
   
   public Type_Bounds (hydra.util.Opt<hydra.langs.scala.meta.Type> lo, hydra.util.Opt<hydra.langs.scala.meta.Type> hi) {
-    if (lo == null) {
-      throw new IllegalArgumentException("null value for 'lo' argument");
-    }
-    if (hi == null) {
-      throw new IllegalArgumentException("null value for 'hi' argument");
-    }
+    java.util.Objects.requireNonNull((lo));
+    java.util.Objects.requireNonNull((hi));
     this.lo = lo;
     this.hi = hi;
   }
@@ -37,16 +33,12 @@ public class Type_Bounds implements Serializable {
   }
   
   public Type_Bounds withLo(hydra.util.Opt<hydra.langs.scala.meta.Type> lo) {
-    if (lo == null) {
-      throw new IllegalArgumentException("null value for 'lo' argument");
-    }
+    java.util.Objects.requireNonNull((lo));
     return new Type_Bounds(lo, hi);
   }
   
   public Type_Bounds withHi(hydra.util.Opt<hydra.langs.scala.meta.Type> hi) {
-    if (hi == null) {
-      throw new IllegalArgumentException("null value for 'hi' argument");
-    }
+    java.util.Objects.requireNonNull((hi));
     return new Type_Bounds(lo, hi);
   }
 }

@@ -12,12 +12,8 @@ public class Projection implements Serializable {
   public final hydra.util.Opt<hydra.langs.tinkerpop.queries.Variable> as;
   
   public Projection (hydra.langs.tinkerpop.queries.Expression value, hydra.util.Opt<hydra.langs.tinkerpop.queries.Variable> as) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
-    if (as == null) {
-      throw new IllegalArgumentException("null value for 'as' argument");
-    }
+    java.util.Objects.requireNonNull((value));
+    java.util.Objects.requireNonNull((as));
     this.value = value;
     this.as = as;
   }
@@ -37,16 +33,12 @@ public class Projection implements Serializable {
   }
   
   public Projection withValue(hydra.langs.tinkerpop.queries.Expression value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     return new Projection(value, as);
   }
   
   public Projection withAs(hydra.util.Opt<hydra.langs.tinkerpop.queries.Variable> as) {
-    if (as == null) {
-      throw new IllegalArgumentException("null value for 'as' argument");
-    }
+    java.util.Objects.requireNonNull((as));
     return new Projection(value, as);
   }
 }

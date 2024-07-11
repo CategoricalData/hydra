@@ -12,12 +12,8 @@ public class TypeCase implements Serializable {
   public final hydra.langs.scala.meta.Type body;
   
   public TypeCase (hydra.langs.scala.meta.Type pat, hydra.langs.scala.meta.Type body) {
-    if (pat == null) {
-      throw new IllegalArgumentException("null value for 'pat' argument");
-    }
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((pat));
+    java.util.Objects.requireNonNull((body));
     this.pat = pat;
     this.body = body;
   }
@@ -37,16 +33,12 @@ public class TypeCase implements Serializable {
   }
   
   public TypeCase withPat(hydra.langs.scala.meta.Type pat) {
-    if (pat == null) {
-      throw new IllegalArgumentException("null value for 'pat' argument");
-    }
+    java.util.Objects.requireNonNull((pat));
     return new TypeCase(pat, body);
   }
   
   public TypeCase withBody(hydra.langs.scala.meta.Type body) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((body));
     return new TypeCase(pat, body);
   }
 }

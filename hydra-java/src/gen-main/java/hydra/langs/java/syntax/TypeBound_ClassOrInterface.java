@@ -12,12 +12,8 @@ public class TypeBound_ClassOrInterface implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.AdditionalBound> additional;
   
   public TypeBound_ClassOrInterface (hydra.langs.java.syntax.ClassOrInterfaceType type, java.util.List<hydra.langs.java.syntax.AdditionalBound> additional) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (additional == null) {
-      throw new IllegalArgumentException("null value for 'additional' argument");
-    }
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((additional));
     this.type = type;
     this.additional = additional;
   }
@@ -37,16 +33,12 @@ public class TypeBound_ClassOrInterface implements Serializable {
   }
   
   public TypeBound_ClassOrInterface withType(hydra.langs.java.syntax.ClassOrInterfaceType type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new TypeBound_ClassOrInterface(type, additional);
   }
   
   public TypeBound_ClassOrInterface withAdditional(java.util.List<hydra.langs.java.syntax.AdditionalBound> additional) {
-    if (additional == null) {
-      throw new IllegalArgumentException("null value for 'additional' argument");
-    }
+    java.util.Objects.requireNonNull((additional));
     return new TypeBound_ClassOrInterface(type, additional);
   }
 }

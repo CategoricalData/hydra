@@ -55,9 +55,7 @@ public abstract class DataType implements Serializable {
     public final hydra.langs.sql.ansi.PredefinedType value;
     
     public Predefined (hydra.langs.sql.ansi.PredefinedType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -85,9 +83,7 @@ public abstract class DataType implements Serializable {
     public final hydra.langs.sql.ansi.RowType value;
     
     public Row (hydra.langs.sql.ansi.RowType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -115,9 +111,7 @@ public abstract class DataType implements Serializable {
     public final hydra.langs.sql.ansi.PathResolvedUserDefinedTypeName value;
     
     public Named (hydra.langs.sql.ansi.PathResolvedUserDefinedTypeName value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -145,9 +139,7 @@ public abstract class DataType implements Serializable {
     public final hydra.langs.sql.ansi.ReferenceType value;
     
     public Reference (hydra.langs.sql.ansi.ReferenceType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -175,9 +167,7 @@ public abstract class DataType implements Serializable {
     public final hydra.langs.sql.ansi.CollectionType value;
     
     public Collection (hydra.langs.sql.ansi.CollectionType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -12,12 +12,8 @@ public class With implements Serializable {
   public final hydra.util.Opt<hydra.langs.cypher.openCypher.Where> where;
   
   public With (hydra.langs.cypher.openCypher.ProjectionBody projection, hydra.util.Opt<hydra.langs.cypher.openCypher.Where> where) {
-    if (projection == null) {
-      throw new IllegalArgumentException("null value for 'projection' argument");
-    }
-    if (where == null) {
-      throw new IllegalArgumentException("null value for 'where' argument");
-    }
+    java.util.Objects.requireNonNull((projection));
+    java.util.Objects.requireNonNull((where));
     this.projection = projection;
     this.where = where;
   }
@@ -37,16 +33,12 @@ public class With implements Serializable {
   }
   
   public With withProjection(hydra.langs.cypher.openCypher.ProjectionBody projection) {
-    if (projection == null) {
-      throw new IllegalArgumentException("null value for 'projection' argument");
-    }
+    java.util.Objects.requireNonNull((projection));
     return new With(projection, where);
   }
   
   public With withWhere(hydra.util.Opt<hydra.langs.cypher.openCypher.Where> where) {
-    if (where == null) {
-      throw new IllegalArgumentException("null value for 'where' argument");
-    }
+    java.util.Objects.requireNonNull((where));
     return new With(projection, where);
   }
 }

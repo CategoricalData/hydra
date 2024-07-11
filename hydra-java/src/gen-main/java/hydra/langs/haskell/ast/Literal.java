@@ -64,9 +64,7 @@ public abstract class Literal implements Serializable {
     public final Character value;
     
     public Char (Character value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -94,9 +92,7 @@ public abstract class Literal implements Serializable {
     public final Double value;
     
     public Double_ (Double value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -124,9 +120,7 @@ public abstract class Literal implements Serializable {
     public final Float value;
     
     public Float_ (Float value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -154,9 +148,7 @@ public abstract class Literal implements Serializable {
     public final Integer value;
     
     public Int (Integer value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -184,9 +176,7 @@ public abstract class Literal implements Serializable {
     public final java.math.BigInteger value;
     
     public Integer_ (java.math.BigInteger value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -214,9 +204,7 @@ public abstract class Literal implements Serializable {
     public final String value;
     
     public String_ (String value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

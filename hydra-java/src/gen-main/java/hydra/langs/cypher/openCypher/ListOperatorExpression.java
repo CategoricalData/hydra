@@ -37,9 +37,7 @@ public abstract class ListOperatorExpression implements Serializable {
     public final hydra.langs.cypher.openCypher.Expression value;
     
     public Single (hydra.langs.cypher.openCypher.Expression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class ListOperatorExpression implements Serializable {
     public final hydra.langs.cypher.openCypher.RangeExpression value;
     
     public Range (hydra.langs.cypher.openCypher.RangeExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

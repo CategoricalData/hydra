@@ -17,18 +17,10 @@ public class Adapter<S1, S2, T1, T2, V1, V2> {
   public final hydra.compute.Coder<S1, S2, V1, V2> coder;
   
   public Adapter (Boolean isLossy, T1 source, T2 target, hydra.compute.Coder<S1, S2, V1, V2> coder) {
-    if (isLossy == null) {
-      throw new IllegalArgumentException("null value for 'isLossy' argument");
-    }
-    if (source == null) {
-      throw new IllegalArgumentException("null value for 'source' argument");
-    }
-    if (target == null) {
-      throw new IllegalArgumentException("null value for 'target' argument");
-    }
-    if (coder == null) {
-      throw new IllegalArgumentException("null value for 'coder' argument");
-    }
+    java.util.Objects.requireNonNull((isLossy));
+    java.util.Objects.requireNonNull((source));
+    java.util.Objects.requireNonNull((target));
+    java.util.Objects.requireNonNull((coder));
     this.isLossy = isLossy;
     this.source = source;
     this.target = target;
@@ -50,30 +42,22 @@ public class Adapter<S1, S2, T1, T2, V1, V2> {
   }
   
   public Adapter withIsLossy(Boolean isLossy) {
-    if (isLossy == null) {
-      throw new IllegalArgumentException("null value for 'isLossy' argument");
-    }
+    java.util.Objects.requireNonNull((isLossy));
     return new Adapter(isLossy, source, target, coder);
   }
   
   public Adapter withSource(T1 source) {
-    if (source == null) {
-      throw new IllegalArgumentException("null value for 'source' argument");
-    }
+    java.util.Objects.requireNonNull((source));
     return new Adapter(isLossy, source, target, coder);
   }
   
   public Adapter withTarget(T2 target) {
-    if (target == null) {
-      throw new IllegalArgumentException("null value for 'target' argument");
-    }
+    java.util.Objects.requireNonNull((target));
     return new Adapter(isLossy, source, target, coder);
   }
   
   public Adapter withCoder(hydra.compute.Coder<S1, S2, V1, V2> coder) {
-    if (coder == null) {
-      throw new IllegalArgumentException("null value for 'coder' argument");
-    }
+    java.util.Objects.requireNonNull((coder));
     return new Adapter(isLossy, source, target, coder);
   }
 }

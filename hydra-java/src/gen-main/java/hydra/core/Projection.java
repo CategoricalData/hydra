@@ -15,12 +15,8 @@ public class Projection implements Serializable {
   public final hydra.core.FieldName field;
   
   public Projection (hydra.core.Name typeName, hydra.core.FieldName field) {
-    if (typeName == null) {
-      throw new IllegalArgumentException("null value for 'typeName' argument");
-    }
-    if (field == null) {
-      throw new IllegalArgumentException("null value for 'field' argument");
-    }
+    java.util.Objects.requireNonNull((typeName));
+    java.util.Objects.requireNonNull((field));
     this.typeName = typeName;
     this.field = field;
   }
@@ -40,16 +36,12 @@ public class Projection implements Serializable {
   }
   
   public Projection withTypeName(hydra.core.Name typeName) {
-    if (typeName == null) {
-      throw new IllegalArgumentException("null value for 'typeName' argument");
-    }
+    java.util.Objects.requireNonNull((typeName));
     return new Projection(typeName, field);
   }
   
   public Projection withField(hydra.core.FieldName field) {
-    if (field == null) {
-      throw new IllegalArgumentException("null value for 'field' argument");
-    }
+    java.util.Objects.requireNonNull((field));
     return new Projection(typeName, field);
   }
 }

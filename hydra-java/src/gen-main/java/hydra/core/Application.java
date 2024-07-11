@@ -21,12 +21,8 @@ public class Application<A> implements Serializable {
   public final hydra.core.Term<A> argument;
   
   public Application (hydra.core.Term<A> function, hydra.core.Term<A> argument) {
-    if (function == null) {
-      throw new IllegalArgumentException("null value for 'function' argument");
-    }
-    if (argument == null) {
-      throw new IllegalArgumentException("null value for 'argument' argument");
-    }
+    java.util.Objects.requireNonNull((function));
+    java.util.Objects.requireNonNull((argument));
     this.function = function;
     this.argument = argument;
   }
@@ -46,16 +42,12 @@ public class Application<A> implements Serializable {
   }
   
   public Application withFunction(hydra.core.Term<A> function) {
-    if (function == null) {
-      throw new IllegalArgumentException("null value for 'function' argument");
-    }
+    java.util.Objects.requireNonNull((function));
     return new Application(function, argument);
   }
   
   public Application withArgument(hydra.core.Term<A> argument) {
-    if (argument == null) {
-      throw new IllegalArgumentException("null value for 'argument' argument");
-    }
+    java.util.Objects.requireNonNull((argument));
     return new Application(function, argument);
   }
 }

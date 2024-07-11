@@ -12,12 +12,8 @@ public class Projection implements Serializable {
   public final hydra.util.Opt<hydra.langs.kusto.kql.ColumnName> alias;
   
   public Projection (hydra.langs.kusto.kql.Expression expression, hydra.util.Opt<hydra.langs.kusto.kql.ColumnName> alias) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
-    if (alias == null) {
-      throw new IllegalArgumentException("null value for 'alias' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
+    java.util.Objects.requireNonNull((alias));
     this.expression = expression;
     this.alias = alias;
   }
@@ -37,16 +33,12 @@ public class Projection implements Serializable {
   }
   
   public Projection withExpression(hydra.langs.kusto.kql.Expression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new Projection(expression, alias);
   }
   
   public Projection withAlias(hydra.util.Opt<hydra.langs.kusto.kql.ColumnName> alias) {
-    if (alias == null) {
-      throw new IllegalArgumentException("null value for 'alias' argument");
-    }
+    java.util.Objects.requireNonNull((alias));
     return new Projection(expression, alias);
   }
 }

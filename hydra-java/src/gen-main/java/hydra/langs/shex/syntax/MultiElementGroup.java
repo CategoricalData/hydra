@@ -14,15 +14,9 @@ public class MultiElementGroup implements Serializable {
   public final hydra.util.Opt<java.lang.Void> semi;
   
   public MultiElementGroup (hydra.langs.shex.syntax.UnaryTripleExpr unaryTripleExpr, java.util.List<hydra.langs.shex.syntax.UnaryTripleExpr> listOfSequence, hydra.util.Opt<java.lang.Void> semi) {
-    if (unaryTripleExpr == null) {
-      throw new IllegalArgumentException("null value for 'unaryTripleExpr' argument");
-    }
-    if (listOfSequence == null) {
-      throw new IllegalArgumentException("null value for 'listOfSequence' argument");
-    }
-    if (semi == null) {
-      throw new IllegalArgumentException("null value for 'semi' argument");
-    }
+    java.util.Objects.requireNonNull((unaryTripleExpr));
+    java.util.Objects.requireNonNull((listOfSequence));
+    java.util.Objects.requireNonNull((semi));
     this.unaryTripleExpr = unaryTripleExpr;
     this.listOfSequence = listOfSequence;
     this.semi = semi;
@@ -43,23 +37,17 @@ public class MultiElementGroup implements Serializable {
   }
   
   public MultiElementGroup withUnaryTripleExpr(hydra.langs.shex.syntax.UnaryTripleExpr unaryTripleExpr) {
-    if (unaryTripleExpr == null) {
-      throw new IllegalArgumentException("null value for 'unaryTripleExpr' argument");
-    }
+    java.util.Objects.requireNonNull((unaryTripleExpr));
     return new MultiElementGroup(unaryTripleExpr, listOfSequence, semi);
   }
   
   public MultiElementGroup withListOfSequence(java.util.List<hydra.langs.shex.syntax.UnaryTripleExpr> listOfSequence) {
-    if (listOfSequence == null) {
-      throw new IllegalArgumentException("null value for 'listOfSequence' argument");
-    }
+    java.util.Objects.requireNonNull((listOfSequence));
     return new MultiElementGroup(unaryTripleExpr, listOfSequence, semi);
   }
   
   public MultiElementGroup withSemi(hydra.util.Opt<java.lang.Void> semi) {
-    if (semi == null) {
-      throw new IllegalArgumentException("null value for 'semi' argument");
-    }
+    java.util.Objects.requireNonNull((semi));
     return new MultiElementGroup(unaryTripleExpr, listOfSequence, semi);
   }
 }

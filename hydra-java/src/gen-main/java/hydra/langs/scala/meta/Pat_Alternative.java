@@ -12,12 +12,8 @@ public class Pat_Alternative implements Serializable {
   public final hydra.langs.scala.meta.Pat rhs;
   
   public Pat_Alternative (hydra.langs.scala.meta.Pat lhs, hydra.langs.scala.meta.Pat rhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
+    java.util.Objects.requireNonNull((rhs));
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -37,16 +33,12 @@ public class Pat_Alternative implements Serializable {
   }
   
   public Pat_Alternative withLhs(hydra.langs.scala.meta.Pat lhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
     return new Pat_Alternative(lhs, rhs);
   }
   
   public Pat_Alternative withRhs(hydra.langs.scala.meta.Pat rhs) {
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((rhs));
     return new Pat_Alternative(lhs, rhs);
   }
 }

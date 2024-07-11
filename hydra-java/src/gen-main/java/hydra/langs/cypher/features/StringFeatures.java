@@ -71,42 +71,18 @@ public class StringFeatures implements Serializable {
   public final Boolean toIntegerOrNull;
   
   public StringFeatures (Boolean char_length, Boolean character_length, Boolean contains, Boolean endsWith, Boolean in, Boolean startsWith, Boolean toBoolean, Boolean toBooleanOrNull, Boolean toFloat, Boolean toFloatOrNull, Boolean toInteger, Boolean toIntegerOrNull) {
-    if (char_length == null) {
-      throw new IllegalArgumentException("null value for 'char_length' argument");
-    }
-    if (character_length == null) {
-      throw new IllegalArgumentException("null value for 'character_length' argument");
-    }
-    if (contains == null) {
-      throw new IllegalArgumentException("null value for 'contains' argument");
-    }
-    if (endsWith == null) {
-      throw new IllegalArgumentException("null value for 'endsWith' argument");
-    }
-    if (in == null) {
-      throw new IllegalArgumentException("null value for 'in' argument");
-    }
-    if (startsWith == null) {
-      throw new IllegalArgumentException("null value for 'startsWith' argument");
-    }
-    if (toBoolean == null) {
-      throw new IllegalArgumentException("null value for 'toBoolean' argument");
-    }
-    if (toBooleanOrNull == null) {
-      throw new IllegalArgumentException("null value for 'toBooleanOrNull' argument");
-    }
-    if (toFloat == null) {
-      throw new IllegalArgumentException("null value for 'toFloat' argument");
-    }
-    if (toFloatOrNull == null) {
-      throw new IllegalArgumentException("null value for 'toFloatOrNull' argument");
-    }
-    if (toInteger == null) {
-      throw new IllegalArgumentException("null value for 'toInteger' argument");
-    }
-    if (toIntegerOrNull == null) {
-      throw new IllegalArgumentException("null value for 'toIntegerOrNull' argument");
-    }
+    java.util.Objects.requireNonNull((char_length));
+    java.util.Objects.requireNonNull((character_length));
+    java.util.Objects.requireNonNull((contains));
+    java.util.Objects.requireNonNull((endsWith));
+    java.util.Objects.requireNonNull((in));
+    java.util.Objects.requireNonNull((startsWith));
+    java.util.Objects.requireNonNull((toBoolean));
+    java.util.Objects.requireNonNull((toBooleanOrNull));
+    java.util.Objects.requireNonNull((toFloat));
+    java.util.Objects.requireNonNull((toFloatOrNull));
+    java.util.Objects.requireNonNull((toInteger));
+    java.util.Objects.requireNonNull((toIntegerOrNull));
     this.char_length = char_length;
     this.character_length = character_length;
     this.contains = contains;
@@ -136,86 +112,62 @@ public class StringFeatures implements Serializable {
   }
   
   public StringFeatures withChar_length(Boolean char_length) {
-    if (char_length == null) {
-      throw new IllegalArgumentException("null value for 'char_length' argument");
-    }
+    java.util.Objects.requireNonNull((char_length));
     return new StringFeatures(char_length, character_length, contains, endsWith, in, startsWith, toBoolean, toBooleanOrNull, toFloat, toFloatOrNull, toInteger, toIntegerOrNull);
   }
   
   public StringFeatures withCharacter_length(Boolean character_length) {
-    if (character_length == null) {
-      throw new IllegalArgumentException("null value for 'character_length' argument");
-    }
+    java.util.Objects.requireNonNull((character_length));
     return new StringFeatures(char_length, character_length, contains, endsWith, in, startsWith, toBoolean, toBooleanOrNull, toFloat, toFloatOrNull, toInteger, toIntegerOrNull);
   }
   
   public StringFeatures withContains(Boolean contains) {
-    if (contains == null) {
-      throw new IllegalArgumentException("null value for 'contains' argument");
-    }
+    java.util.Objects.requireNonNull((contains));
     return new StringFeatures(char_length, character_length, contains, endsWith, in, startsWith, toBoolean, toBooleanOrNull, toFloat, toFloatOrNull, toInteger, toIntegerOrNull);
   }
   
   public StringFeatures withEndsWith(Boolean endsWith) {
-    if (endsWith == null) {
-      throw new IllegalArgumentException("null value for 'endsWith' argument");
-    }
+    java.util.Objects.requireNonNull((endsWith));
     return new StringFeatures(char_length, character_length, contains, endsWith, in, startsWith, toBoolean, toBooleanOrNull, toFloat, toFloatOrNull, toInteger, toIntegerOrNull);
   }
   
   public StringFeatures withIn(Boolean in) {
-    if (in == null) {
-      throw new IllegalArgumentException("null value for 'in' argument");
-    }
+    java.util.Objects.requireNonNull((in));
     return new StringFeatures(char_length, character_length, contains, endsWith, in, startsWith, toBoolean, toBooleanOrNull, toFloat, toFloatOrNull, toInteger, toIntegerOrNull);
   }
   
   public StringFeatures withStartsWith(Boolean startsWith) {
-    if (startsWith == null) {
-      throw new IllegalArgumentException("null value for 'startsWith' argument");
-    }
+    java.util.Objects.requireNonNull((startsWith));
     return new StringFeatures(char_length, character_length, contains, endsWith, in, startsWith, toBoolean, toBooleanOrNull, toFloat, toFloatOrNull, toInteger, toIntegerOrNull);
   }
   
   public StringFeatures withToBoolean(Boolean toBoolean) {
-    if (toBoolean == null) {
-      throw new IllegalArgumentException("null value for 'toBoolean' argument");
-    }
+    java.util.Objects.requireNonNull((toBoolean));
     return new StringFeatures(char_length, character_length, contains, endsWith, in, startsWith, toBoolean, toBooleanOrNull, toFloat, toFloatOrNull, toInteger, toIntegerOrNull);
   }
   
   public StringFeatures withToBooleanOrNull(Boolean toBooleanOrNull) {
-    if (toBooleanOrNull == null) {
-      throw new IllegalArgumentException("null value for 'toBooleanOrNull' argument");
-    }
+    java.util.Objects.requireNonNull((toBooleanOrNull));
     return new StringFeatures(char_length, character_length, contains, endsWith, in, startsWith, toBoolean, toBooleanOrNull, toFloat, toFloatOrNull, toInteger, toIntegerOrNull);
   }
   
   public StringFeatures withToFloat(Boolean toFloat) {
-    if (toFloat == null) {
-      throw new IllegalArgumentException("null value for 'toFloat' argument");
-    }
+    java.util.Objects.requireNonNull((toFloat));
     return new StringFeatures(char_length, character_length, contains, endsWith, in, startsWith, toBoolean, toBooleanOrNull, toFloat, toFloatOrNull, toInteger, toIntegerOrNull);
   }
   
   public StringFeatures withToFloatOrNull(Boolean toFloatOrNull) {
-    if (toFloatOrNull == null) {
-      throw new IllegalArgumentException("null value for 'toFloatOrNull' argument");
-    }
+    java.util.Objects.requireNonNull((toFloatOrNull));
     return new StringFeatures(char_length, character_length, contains, endsWith, in, startsWith, toBoolean, toBooleanOrNull, toFloat, toFloatOrNull, toInteger, toIntegerOrNull);
   }
   
   public StringFeatures withToInteger(Boolean toInteger) {
-    if (toInteger == null) {
-      throw new IllegalArgumentException("null value for 'toInteger' argument");
-    }
+    java.util.Objects.requireNonNull((toInteger));
     return new StringFeatures(char_length, character_length, contains, endsWith, in, startsWith, toBoolean, toBooleanOrNull, toFloat, toFloatOrNull, toInteger, toIntegerOrNull);
   }
   
   public StringFeatures withToIntegerOrNull(Boolean toIntegerOrNull) {
-    if (toIntegerOrNull == null) {
-      throw new IllegalArgumentException("null value for 'toIntegerOrNull' argument");
-    }
+    java.util.Objects.requireNonNull((toIntegerOrNull));
     return new StringFeatures(char_length, character_length, contains, endsWith, in, startsWith, toBoolean, toBooleanOrNull, toFloat, toFloatOrNull, toInteger, toIntegerOrNull);
   }
 }

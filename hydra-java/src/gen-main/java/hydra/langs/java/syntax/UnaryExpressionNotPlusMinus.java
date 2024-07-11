@@ -49,9 +49,7 @@ public abstract class UnaryExpressionNotPlusMinus implements Serializable {
     public final hydra.langs.java.syntax.PostfixExpression value;
     
     public Postfix (hydra.langs.java.syntax.PostfixExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -79,9 +77,7 @@ public abstract class UnaryExpressionNotPlusMinus implements Serializable {
     public final hydra.langs.java.syntax.UnaryExpression value;
     
     public Tilde (hydra.langs.java.syntax.UnaryExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -109,9 +105,7 @@ public abstract class UnaryExpressionNotPlusMinus implements Serializable {
     public final hydra.langs.java.syntax.UnaryExpression value;
     
     public Not (hydra.langs.java.syntax.UnaryExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -139,9 +133,7 @@ public abstract class UnaryExpressionNotPlusMinus implements Serializable {
     public final hydra.langs.java.syntax.CastExpression value;
     
     public Cast (hydra.langs.java.syntax.CastExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

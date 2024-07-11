@@ -15,12 +15,8 @@ public class Element<A> implements Serializable {
   public final hydra.core.Term<A> data;
   
   public Element (hydra.core.Name name, hydra.core.Term<A> data) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (data == null) {
-      throw new IllegalArgumentException("null value for 'data' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((data));
     this.name = name;
     this.data = data;
   }
@@ -40,16 +36,12 @@ public class Element<A> implements Serializable {
   }
   
   public Element withName(hydra.core.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Element(name, data);
   }
   
   public Element withData(hydra.core.Term<A> data) {
-    if (data == null) {
-      throw new IllegalArgumentException("null value for 'data' argument");
-    }
+    java.util.Objects.requireNonNull((data));
     return new Element(name, data);
   }
 }

@@ -21,12 +21,8 @@ public class OptionalCases<A> implements Serializable {
   public final hydra.core.Term<A> just;
   
   public OptionalCases (hydra.core.Term<A> nothing, hydra.core.Term<A> just) {
-    if (nothing == null) {
-      throw new IllegalArgumentException("null value for 'nothing' argument");
-    }
-    if (just == null) {
-      throw new IllegalArgumentException("null value for 'just' argument");
-    }
+    java.util.Objects.requireNonNull((nothing));
+    java.util.Objects.requireNonNull((just));
     this.nothing = nothing;
     this.just = just;
   }
@@ -46,16 +42,12 @@ public class OptionalCases<A> implements Serializable {
   }
   
   public OptionalCases withNothing(hydra.core.Term<A> nothing) {
-    if (nothing == null) {
-      throw new IllegalArgumentException("null value for 'nothing' argument");
-    }
+    java.util.Objects.requireNonNull((nothing));
     return new OptionalCases(nothing, just);
   }
   
   public OptionalCases withJust(hydra.core.Term<A> just) {
-    if (just == null) {
-      throw new IllegalArgumentException("null value for 'just' argument");
-    }
+    java.util.Objects.requireNonNull((just));
     return new OptionalCases(nothing, just);
   }
 }

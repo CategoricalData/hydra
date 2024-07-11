@@ -16,18 +16,10 @@ public class NegativeDataPropertyAssertion implements Serializable {
   public final hydra.langs.owl.syntax.Individual target;
   
   public NegativeDataPropertyAssertion (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, hydra.langs.owl.syntax.DataPropertyExpression property, hydra.langs.owl.syntax.Individual source, hydra.langs.owl.syntax.Individual target) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
-    if (source == null) {
-      throw new IllegalArgumentException("null value for 'source' argument");
-    }
-    if (target == null) {
-      throw new IllegalArgumentException("null value for 'target' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
+    java.util.Objects.requireNonNull((property));
+    java.util.Objects.requireNonNull((source));
+    java.util.Objects.requireNonNull((target));
     this.annotations = annotations;
     this.property = property;
     this.source = source;
@@ -49,30 +41,22 @@ public class NegativeDataPropertyAssertion implements Serializable {
   }
   
   public NegativeDataPropertyAssertion withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new NegativeDataPropertyAssertion(annotations, property, source, target);
   }
   
   public NegativeDataPropertyAssertion withProperty(hydra.langs.owl.syntax.DataPropertyExpression property) {
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
+    java.util.Objects.requireNonNull((property));
     return new NegativeDataPropertyAssertion(annotations, property, source, target);
   }
   
   public NegativeDataPropertyAssertion withSource(hydra.langs.owl.syntax.Individual source) {
-    if (source == null) {
-      throw new IllegalArgumentException("null value for 'source' argument");
-    }
+    java.util.Objects.requireNonNull((source));
     return new NegativeDataPropertyAssertion(annotations, property, source, target);
   }
   
   public NegativeDataPropertyAssertion withTarget(hydra.langs.owl.syntax.Individual target) {
-    if (target == null) {
-      throw new IllegalArgumentException("null value for 'target' argument");
-    }
+    java.util.Objects.requireNonNull((target));
     return new NegativeDataPropertyAssertion(annotations, property, source, target);
   }
 }

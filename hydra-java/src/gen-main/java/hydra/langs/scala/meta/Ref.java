@@ -37,9 +37,7 @@ public abstract class Ref implements Serializable {
     public final hydra.langs.scala.meta.Name value;
     
     public Name (hydra.langs.scala.meta.Name value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class Ref implements Serializable {
     public final hydra.langs.scala.meta.Init value;
     
     public Init (hydra.langs.scala.meta.Init value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -16,18 +16,10 @@ public class VariablesDefinition implements Serializable {
   public final hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives;
   
   public VariablesDefinition (hydra.langs.graphql.syntax.Variable variable, hydra.langs.graphql.syntax.Type type, hydra.util.Opt<hydra.langs.graphql.syntax.DefaultValue> defaultValue, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
-    if (variable == null) {
-      throw new IllegalArgumentException("null value for 'variable' argument");
-    }
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (defaultValue == null) {
-      throw new IllegalArgumentException("null value for 'defaultValue' argument");
-    }
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((variable));
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((defaultValue));
+    java.util.Objects.requireNonNull((directives));
     this.variable = variable;
     this.type = type;
     this.defaultValue = defaultValue;
@@ -49,30 +41,22 @@ public class VariablesDefinition implements Serializable {
   }
   
   public VariablesDefinition withVariable(hydra.langs.graphql.syntax.Variable variable) {
-    if (variable == null) {
-      throw new IllegalArgumentException("null value for 'variable' argument");
-    }
+    java.util.Objects.requireNonNull((variable));
     return new VariablesDefinition(variable, type, defaultValue, directives);
   }
   
   public VariablesDefinition withType(hydra.langs.graphql.syntax.Type type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new VariablesDefinition(variable, type, defaultValue, directives);
   }
   
   public VariablesDefinition withDefaultValue(hydra.util.Opt<hydra.langs.graphql.syntax.DefaultValue> defaultValue) {
-    if (defaultValue == null) {
-      throw new IllegalArgumentException("null value for 'defaultValue' argument");
-    }
+    java.util.Objects.requireNonNull((defaultValue));
     return new VariablesDefinition(variable, type, defaultValue, directives);
   }
   
   public VariablesDefinition withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((directives));
     return new VariablesDefinition(variable, type, defaultValue, directives);
   }
 }

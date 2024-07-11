@@ -14,15 +14,9 @@ public class Pat_ExtractInfix implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Pat> rhs;
   
   public Pat_ExtractInfix (hydra.langs.scala.meta.Pat lhs, hydra.langs.scala.meta.Data_Name op, java.util.List<hydra.langs.scala.meta.Pat> rhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
-    if (op == null) {
-      throw new IllegalArgumentException("null value for 'op' argument");
-    }
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
+    java.util.Objects.requireNonNull((op));
+    java.util.Objects.requireNonNull((rhs));
     this.lhs = lhs;
     this.op = op;
     this.rhs = rhs;
@@ -43,23 +37,17 @@ public class Pat_ExtractInfix implements Serializable {
   }
   
   public Pat_ExtractInfix withLhs(hydra.langs.scala.meta.Pat lhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
     return new Pat_ExtractInfix(lhs, op, rhs);
   }
   
   public Pat_ExtractInfix withOp(hydra.langs.scala.meta.Data_Name op) {
-    if (op == null) {
-      throw new IllegalArgumentException("null value for 'op' argument");
-    }
+    java.util.Objects.requireNonNull((op));
     return new Pat_ExtractInfix(lhs, op, rhs);
   }
   
   public Pat_ExtractInfix withRhs(java.util.List<hydra.langs.scala.meta.Pat> rhs) {
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((rhs));
     return new Pat_ExtractInfix(lhs, op, rhs);
   }
 }

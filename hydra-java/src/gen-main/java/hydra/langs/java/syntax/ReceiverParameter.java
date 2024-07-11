@@ -14,15 +14,9 @@ public class ReceiverParameter implements Serializable {
   public final hydra.util.Opt<hydra.langs.java.syntax.Identifier> identifier;
   
   public ReceiverParameter (java.util.List<hydra.langs.java.syntax.Annotation> annotations, hydra.langs.java.syntax.UnannType unannType, hydra.util.Opt<hydra.langs.java.syntax.Identifier> identifier) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
-    if (unannType == null) {
-      throw new IllegalArgumentException("null value for 'unannType' argument");
-    }
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
+    java.util.Objects.requireNonNull((unannType));
+    java.util.Objects.requireNonNull((identifier));
     this.annotations = annotations;
     this.unannType = unannType;
     this.identifier = identifier;
@@ -43,23 +37,17 @@ public class ReceiverParameter implements Serializable {
   }
   
   public ReceiverParameter withAnnotations(java.util.List<hydra.langs.java.syntax.Annotation> annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new ReceiverParameter(annotations, unannType, identifier);
   }
   
   public ReceiverParameter withUnannType(hydra.langs.java.syntax.UnannType unannType) {
-    if (unannType == null) {
-      throw new IllegalArgumentException("null value for 'unannType' argument");
-    }
+    java.util.Objects.requireNonNull((unannType));
     return new ReceiverParameter(annotations, unannType, identifier);
   }
   
   public ReceiverParameter withIdentifier(hydra.util.Opt<hydra.langs.java.syntax.Identifier> identifier) {
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
+    java.util.Objects.requireNonNull((identifier));
     return new ReceiverParameter(annotations, unannType, identifier);
   }
 }

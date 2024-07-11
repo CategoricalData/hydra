@@ -67,9 +67,7 @@ public abstract class WithOptionKeys implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.ShortestPathConstants value;
     
     public ShortestPath (hydra.langs.tinkerpop.gremlin.ShortestPathConstants value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -97,9 +95,7 @@ public abstract class WithOptionKeys implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.ConnectedComponentConstants value;
     
     public ConnectedComponent (hydra.langs.tinkerpop.gremlin.ConnectedComponentConstants value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -127,9 +123,7 @@ public abstract class WithOptionKeys implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.PageRankConstants value;
     
     public PageRank (hydra.langs.tinkerpop.gremlin.PageRankConstants value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -157,9 +151,7 @@ public abstract class WithOptionKeys implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.PeerPressureConstants value;
     
     public PeerPressure (hydra.langs.tinkerpop.gremlin.PeerPressureConstants value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -187,9 +179,7 @@ public abstract class WithOptionKeys implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.IoOptionsKeys value;
     
     public Io (hydra.langs.tinkerpop.gremlin.IoOptionsKeys value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

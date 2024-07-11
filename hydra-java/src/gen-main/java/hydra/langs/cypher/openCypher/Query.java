@@ -37,9 +37,7 @@ public abstract class Query implements Serializable {
     public final hydra.langs.cypher.openCypher.RegularQuery value;
     
     public Regular (hydra.langs.cypher.openCypher.RegularQuery value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class Query implements Serializable {
     public final hydra.langs.cypher.openCypher.StandaloneCall value;
     
     public Standalone (hydra.langs.cypher.openCypher.StandaloneCall value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

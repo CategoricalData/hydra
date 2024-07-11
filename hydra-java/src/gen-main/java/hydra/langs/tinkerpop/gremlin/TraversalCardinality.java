@@ -43,9 +43,7 @@ public abstract class TraversalCardinality implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.GenericLiteral value;
     
     public Single (hydra.langs.tinkerpop.gremlin.GenericLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class TraversalCardinality implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.GenericLiteral value;
     
     public Set (hydra.langs.tinkerpop.gremlin.GenericLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class TraversalCardinality implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.GenericLiteral value;
     
     public List (hydra.langs.tinkerpop.gremlin.GenericLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -12,12 +12,8 @@ public class UnionMemberTypes_Sequence2 implements Serializable {
   public final hydra.langs.graphql.syntax.NamedType namedType;
   
   public UnionMemberTypes_Sequence2 (hydra.util.Opt<java.lang.Void> or, hydra.langs.graphql.syntax.NamedType namedType) {
-    if (or == null) {
-      throw new IllegalArgumentException("null value for 'or' argument");
-    }
-    if (namedType == null) {
-      throw new IllegalArgumentException("null value for 'namedType' argument");
-    }
+    java.util.Objects.requireNonNull((or));
+    java.util.Objects.requireNonNull((namedType));
     this.or = or;
     this.namedType = namedType;
   }
@@ -37,16 +33,12 @@ public class UnionMemberTypes_Sequence2 implements Serializable {
   }
   
   public UnionMemberTypes_Sequence2 withOr(hydra.util.Opt<java.lang.Void> or) {
-    if (or == null) {
-      throw new IllegalArgumentException("null value for 'or' argument");
-    }
+    java.util.Objects.requireNonNull((or));
     return new UnionMemberTypes_Sequence2(or, namedType);
   }
   
   public UnionMemberTypes_Sequence2 withNamedType(hydra.langs.graphql.syntax.NamedType namedType) {
-    if (namedType == null) {
-      throw new IllegalArgumentException("null value for 'namedType' argument");
-    }
+    java.util.Objects.requireNonNull((namedType));
     return new UnionMemberTypes_Sequence2(or, namedType);
   }
 }

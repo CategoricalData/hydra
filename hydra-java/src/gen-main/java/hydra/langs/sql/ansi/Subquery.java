@@ -10,9 +10,7 @@ public class Subquery implements Serializable {
   public final hydra.langs.sql.ansi.QueryExpression value;
   
   public Subquery (hydra.langs.sql.ansi.QueryExpression value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

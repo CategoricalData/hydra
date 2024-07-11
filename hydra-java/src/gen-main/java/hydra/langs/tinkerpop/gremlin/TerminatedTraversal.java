@@ -12,12 +12,8 @@ public class TerminatedTraversal implements Serializable {
   public final hydra.langs.tinkerpop.gremlin.TraversalTerminalMethod terminal;
   
   public TerminatedTraversal (hydra.langs.tinkerpop.gremlin.RootTraversal root, hydra.langs.tinkerpop.gremlin.TraversalTerminalMethod terminal) {
-    if (root == null) {
-      throw new IllegalArgumentException("null value for 'root' argument");
-    }
-    if (terminal == null) {
-      throw new IllegalArgumentException("null value for 'terminal' argument");
-    }
+    java.util.Objects.requireNonNull((root));
+    java.util.Objects.requireNonNull((terminal));
     this.root = root;
     this.terminal = terminal;
   }
@@ -37,16 +33,12 @@ public class TerminatedTraversal implements Serializable {
   }
   
   public TerminatedTraversal withRoot(hydra.langs.tinkerpop.gremlin.RootTraversal root) {
-    if (root == null) {
-      throw new IllegalArgumentException("null value for 'root' argument");
-    }
+    java.util.Objects.requireNonNull((root));
     return new TerminatedTraversal(root, terminal);
   }
   
   public TerminatedTraversal withTerminal(hydra.langs.tinkerpop.gremlin.TraversalTerminalMethod terminal) {
-    if (terminal == null) {
-      throw new IllegalArgumentException("null value for 'terminal' argument");
-    }
+    java.util.Objects.requireNonNull((terminal));
     return new TerminatedTraversal(root, terminal);
   }
 }

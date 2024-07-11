@@ -37,9 +37,7 @@ public abstract class ByOtherArgs implements Serializable {
     public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalComparatorArgument> value;
     
     public Comparator (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalComparatorArgument> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class ByOtherArgs implements Serializable {
     public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal> value;
     
     public Other (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

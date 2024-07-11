@@ -14,15 +14,9 @@ public class EnumValueDefinition implements Serializable {
   public final hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives;
   
   public EnumValueDefinition (hydra.util.Opt<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.EnumValue enumValue, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
-    if (enumValue == null) {
-      throw new IllegalArgumentException("null value for 'enumValue' argument");
-    }
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((description));
+    java.util.Objects.requireNonNull((enumValue));
+    java.util.Objects.requireNonNull((directives));
     this.description = description;
     this.enumValue = enumValue;
     this.directives = directives;
@@ -43,23 +37,17 @@ public class EnumValueDefinition implements Serializable {
   }
   
   public EnumValueDefinition withDescription(hydra.util.Opt<hydra.langs.graphql.syntax.Description> description) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
+    java.util.Objects.requireNonNull((description));
     return new EnumValueDefinition(description, enumValue, directives);
   }
   
   public EnumValueDefinition withEnumValue(hydra.langs.graphql.syntax.EnumValue enumValue) {
-    if (enumValue == null) {
-      throw new IllegalArgumentException("null value for 'enumValue' argument");
-    }
+    java.util.Objects.requireNonNull((enumValue));
     return new EnumValueDefinition(description, enumValue, directives);
   }
   
   public EnumValueDefinition withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((directives));
     return new EnumValueDefinition(description, enumValue, directives);
   }
 }

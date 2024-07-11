@@ -10,9 +10,7 @@ public class ListLiteral implements Serializable {
   public final java.util.List<hydra.langs.cypher.openCypher.Expression> value;
   
   public ListLiteral (java.util.List<hydra.langs.cypher.openCypher.Expression> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

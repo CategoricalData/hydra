@@ -21,12 +21,8 @@ public class Option implements Serializable {
   public final hydra.langs.protobuf.proto3.Value value;
   
   public Option (String name, hydra.langs.protobuf.proto3.Value value) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((value));
     this.name = name;
     this.value = value;
   }
@@ -46,16 +42,12 @@ public class Option implements Serializable {
   }
   
   public Option withName(String name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Option(name, value);
   }
   
   public Option withValue(hydra.langs.protobuf.proto3.Value value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     return new Option(name, value);
   }
 }

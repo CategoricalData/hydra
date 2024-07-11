@@ -20,24 +20,12 @@ public class NormalClassDeclaration implements Serializable {
   public final hydra.langs.java.syntax.ClassBody body;
   
   public NormalClassDeclaration (java.util.List<hydra.langs.java.syntax.ClassModifier> modifiers, hydra.langs.java.syntax.TypeIdentifier identifier, java.util.List<hydra.langs.java.syntax.TypeParameter> parameters, hydra.util.Opt<hydra.langs.java.syntax.ClassType> extends_, java.util.List<hydra.langs.java.syntax.InterfaceType> implements_, hydra.langs.java.syntax.ClassBody body) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
-    if (parameters == null) {
-      throw new IllegalArgumentException("null value for 'parameters' argument");
-    }
-    if (extends_ == null) {
-      throw new IllegalArgumentException("null value for 'extends' argument");
-    }
-    if (implements_ == null) {
-      throw new IllegalArgumentException("null value for 'implements' argument");
-    }
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
+    java.util.Objects.requireNonNull((identifier));
+    java.util.Objects.requireNonNull((parameters));
+    java.util.Objects.requireNonNull((extends_));
+    java.util.Objects.requireNonNull((implements_));
+    java.util.Objects.requireNonNull((body));
     this.modifiers = modifiers;
     this.identifier = identifier;
     this.parameters = parameters;
@@ -61,44 +49,32 @@ public class NormalClassDeclaration implements Serializable {
   }
   
   public NormalClassDeclaration withModifiers(java.util.List<hydra.langs.java.syntax.ClassModifier> modifiers) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
   
   public NormalClassDeclaration withIdentifier(hydra.langs.java.syntax.TypeIdentifier identifier) {
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
+    java.util.Objects.requireNonNull((identifier));
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
   
   public NormalClassDeclaration withParameters(java.util.List<hydra.langs.java.syntax.TypeParameter> parameters) {
-    if (parameters == null) {
-      throw new IllegalArgumentException("null value for 'parameters' argument");
-    }
+    java.util.Objects.requireNonNull((parameters));
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
   
   public NormalClassDeclaration withExtends(hydra.util.Opt<hydra.langs.java.syntax.ClassType> extends_) {
-    if (extends_ == null) {
-      throw new IllegalArgumentException("null value for 'extends' argument");
-    }
+    java.util.Objects.requireNonNull((extends_));
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
   
   public NormalClassDeclaration withImplements(java.util.List<hydra.langs.java.syntax.InterfaceType> implements_) {
-    if (implements_ == null) {
-      throw new IllegalArgumentException("null value for 'implements' argument");
-    }
+    java.util.Objects.requireNonNull((implements_));
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
   
   public NormalClassDeclaration withBody(hydra.langs.java.syntax.ClassBody body) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((body));
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
 }

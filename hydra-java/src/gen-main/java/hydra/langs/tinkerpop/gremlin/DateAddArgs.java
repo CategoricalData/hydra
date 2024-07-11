@@ -12,12 +12,8 @@ public class DateAddArgs implements Serializable {
   public final hydra.langs.tinkerpop.gremlin.IntegerArgument duration;
   
   public DateAddArgs (hydra.langs.tinkerpop.gremlin.TraversalDTArgument unit, hydra.langs.tinkerpop.gremlin.IntegerArgument duration) {
-    if (unit == null) {
-      throw new IllegalArgumentException("null value for 'unit' argument");
-    }
-    if (duration == null) {
-      throw new IllegalArgumentException("null value for 'duration' argument");
-    }
+    java.util.Objects.requireNonNull((unit));
+    java.util.Objects.requireNonNull((duration));
     this.unit = unit;
     this.duration = duration;
   }
@@ -37,16 +33,12 @@ public class DateAddArgs implements Serializable {
   }
   
   public DateAddArgs withUnit(hydra.langs.tinkerpop.gremlin.TraversalDTArgument unit) {
-    if (unit == null) {
-      throw new IllegalArgumentException("null value for 'unit' argument");
-    }
+    java.util.Objects.requireNonNull((unit));
     return new DateAddArgs(unit, duration);
   }
   
   public DateAddArgs withDuration(hydra.langs.tinkerpop.gremlin.IntegerArgument duration) {
-    if (duration == null) {
-      throw new IllegalArgumentException("null value for 'duration' argument");
-    }
+    java.util.Objects.requireNonNull((duration));
     return new DateAddArgs(unit, duration);
   }
 }

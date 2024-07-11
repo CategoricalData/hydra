@@ -10,9 +10,7 @@ public class Query implements Serializable {
   public final hydra.langs.kusto.kql.TabularExpression value;
   
   public Query (hydra.langs.kusto.kql.TabularExpression value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

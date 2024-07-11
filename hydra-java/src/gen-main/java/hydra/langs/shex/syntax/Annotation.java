@@ -12,12 +12,8 @@ public class Annotation implements Serializable {
   public final hydra.langs.shex.syntax.Annotation_Alts alts;
   
   public Annotation (hydra.langs.shex.syntax.Predicate predicate, hydra.langs.shex.syntax.Annotation_Alts alts) {
-    if (predicate == null) {
-      throw new IllegalArgumentException("null value for 'predicate' argument");
-    }
-    if (alts == null) {
-      throw new IllegalArgumentException("null value for 'alts' argument");
-    }
+    java.util.Objects.requireNonNull((predicate));
+    java.util.Objects.requireNonNull((alts));
     this.predicate = predicate;
     this.alts = alts;
   }
@@ -37,16 +33,12 @@ public class Annotation implements Serializable {
   }
   
   public Annotation withPredicate(hydra.langs.shex.syntax.Predicate predicate) {
-    if (predicate == null) {
-      throw new IllegalArgumentException("null value for 'predicate' argument");
-    }
+    java.util.Objects.requireNonNull((predicate));
     return new Annotation(predicate, alts);
   }
   
   public Annotation withAlts(hydra.langs.shex.syntax.Annotation_Alts alts) {
-    if (alts == null) {
-      throw new IllegalArgumentException("null value for 'alts' argument");
-    }
+    java.util.Objects.requireNonNull((alts));
     return new Annotation(predicate, alts);
   }
 }

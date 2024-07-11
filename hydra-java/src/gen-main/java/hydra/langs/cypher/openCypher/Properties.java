@@ -37,9 +37,7 @@ public abstract class Properties implements Serializable {
     public final hydra.langs.cypher.openCypher.MapLiteral value;
     
     public Map (hydra.langs.cypher.openCypher.MapLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class Properties implements Serializable {
     public final hydra.langs.cypher.openCypher.Parameter value;
     
     public Parameter (hydra.langs.cypher.openCypher.Parameter value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

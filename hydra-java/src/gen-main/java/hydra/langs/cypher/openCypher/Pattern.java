@@ -10,9 +10,7 @@ public class Pattern implements Serializable {
   public final java.util.List<hydra.langs.cypher.openCypher.PatternPart> value;
   
   public Pattern (java.util.List<hydra.langs.cypher.openCypher.PatternPart> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

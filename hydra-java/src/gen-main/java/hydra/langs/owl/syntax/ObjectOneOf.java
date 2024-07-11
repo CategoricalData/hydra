@@ -10,9 +10,7 @@ public class ObjectOneOf implements Serializable {
   public final java.util.List<hydra.langs.owl.syntax.Individual> value;
   
   public ObjectOneOf (java.util.List<hydra.langs.owl.syntax.Individual> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

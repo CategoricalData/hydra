@@ -15,12 +15,8 @@ public class FieldUpdate implements Serializable {
   public final hydra.langs.haskell.ast.Expression value;
   
   public FieldUpdate (hydra.langs.haskell.ast.Name name, hydra.langs.haskell.ast.Expression value) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((value));
     this.name = name;
     this.value = value;
   }
@@ -40,16 +36,12 @@ public class FieldUpdate implements Serializable {
   }
   
   public FieldUpdate withName(hydra.langs.haskell.ast.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new FieldUpdate(name, value);
   }
   
   public FieldUpdate withValue(hydra.langs.haskell.ast.Expression value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     return new FieldUpdate(name, value);
   }
 }

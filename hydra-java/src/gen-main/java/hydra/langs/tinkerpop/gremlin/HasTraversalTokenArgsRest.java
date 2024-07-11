@@ -43,9 +43,7 @@ public abstract class HasTraversalTokenArgsRest implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.GenericLiteralArgument value;
     
     public Literal (hydra.langs.tinkerpop.gremlin.GenericLiteralArgument value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class HasTraversalTokenArgsRest implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalPredicate value;
     
     public Predicate (hydra.langs.tinkerpop.gremlin.TraversalPredicate value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class HasTraversalTokenArgsRest implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.NestedTraversal value;
     
     public Traversal (hydra.langs.tinkerpop.gremlin.NestedTraversal value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

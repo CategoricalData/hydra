@@ -37,9 +37,7 @@ public abstract class WildcardBounds implements Serializable {
     public final hydra.langs.java.syntax.ReferenceType value;
     
     public Extends (hydra.langs.java.syntax.ReferenceType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class WildcardBounds implements Serializable {
     public final hydra.langs.java.syntax.ReferenceType value;
     
     public Super (hydra.langs.java.syntax.ReferenceType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

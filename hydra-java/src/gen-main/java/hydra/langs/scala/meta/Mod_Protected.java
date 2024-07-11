@@ -10,9 +10,7 @@ public class Mod_Protected implements Serializable {
   public final hydra.langs.scala.meta.Ref within;
   
   public Mod_Protected (hydra.langs.scala.meta.Ref within) {
-    if (within == null) {
-      throw new IllegalArgumentException("null value for 'within' argument");
-    }
+    java.util.Objects.requireNonNull((within));
     this.within = within;
   }
   

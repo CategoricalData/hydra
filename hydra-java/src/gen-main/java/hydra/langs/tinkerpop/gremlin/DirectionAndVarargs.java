@@ -12,12 +12,8 @@ public class DirectionAndVarargs implements Serializable {
   public final java.util.List<hydra.langs.tinkerpop.gremlin.StringNullableArgument> varargs;
   
   public DirectionAndVarargs (hydra.langs.tinkerpop.gremlin.TraversalDirectionArgument direction, java.util.List<hydra.langs.tinkerpop.gremlin.StringNullableArgument> varargs) {
-    if (direction == null) {
-      throw new IllegalArgumentException("null value for 'direction' argument");
-    }
-    if (varargs == null) {
-      throw new IllegalArgumentException("null value for 'varargs' argument");
-    }
+    java.util.Objects.requireNonNull((direction));
+    java.util.Objects.requireNonNull((varargs));
     this.direction = direction;
     this.varargs = varargs;
   }
@@ -37,16 +33,12 @@ public class DirectionAndVarargs implements Serializable {
   }
   
   public DirectionAndVarargs withDirection(hydra.langs.tinkerpop.gremlin.TraversalDirectionArgument direction) {
-    if (direction == null) {
-      throw new IllegalArgumentException("null value for 'direction' argument");
-    }
+    java.util.Objects.requireNonNull((direction));
     return new DirectionAndVarargs(direction, varargs);
   }
   
   public DirectionAndVarargs withVarargs(java.util.List<hydra.langs.tinkerpop.gremlin.StringNullableArgument> varargs) {
-    if (varargs == null) {
-      throw new IllegalArgumentException("null value for 'varargs' argument");
-    }
+    java.util.Objects.requireNonNull((varargs));
     return new DirectionAndVarargs(direction, varargs);
   }
 }

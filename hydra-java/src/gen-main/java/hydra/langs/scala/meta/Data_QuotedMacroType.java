@@ -10,9 +10,7 @@ public class Data_QuotedMacroType implements Serializable {
   public final hydra.langs.scala.meta.Type tpe;
   
   public Data_QuotedMacroType (hydra.langs.scala.meta.Type tpe) {
-    if (tpe == null) {
-      throw new IllegalArgumentException("null value for 'tpe' argument");
-    }
+    java.util.Objects.requireNonNull((tpe));
     this.tpe = tpe;
   }
   

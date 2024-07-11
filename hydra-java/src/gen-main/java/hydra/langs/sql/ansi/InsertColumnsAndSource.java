@@ -43,9 +43,7 @@ public abstract class InsertColumnsAndSource implements Serializable {
     public final hydra.langs.sql.ansi.FromSubquery value;
     
     public Subquery (hydra.langs.sql.ansi.FromSubquery value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class InsertColumnsAndSource implements Serializable {
     public final hydra.langs.sql.ansi.FromConstructor value;
     
     public Constructor (hydra.langs.sql.ansi.FromConstructor value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class InsertColumnsAndSource implements Serializable {
     public final hydra.langs.sql.ansi.FromDefault value;
     
     public Default (hydra.langs.sql.ansi.FromDefault value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

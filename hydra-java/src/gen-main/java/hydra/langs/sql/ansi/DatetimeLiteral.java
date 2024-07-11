@@ -43,9 +43,7 @@ public abstract class DatetimeLiteral implements Serializable {
     public final hydra.langs.sql.ansi.DateLiteral value;
     
     public Date (hydra.langs.sql.ansi.DateLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class DatetimeLiteral implements Serializable {
     public final hydra.langs.sql.ansi.TimeLiteral value;
     
     public Time (hydra.langs.sql.ansi.TimeLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class DatetimeLiteral implements Serializable {
     public final hydra.langs.sql.ansi.TimestampLiteral value;
     
     public Timestamp (hydra.langs.sql.ansi.TimestampLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

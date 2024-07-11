@@ -10,9 +10,7 @@ public class Data_Repeated implements Serializable {
   public final hydra.langs.scala.meta.Data expr;
   
   public Data_Repeated (hydra.langs.scala.meta.Data expr) {
-    if (expr == null) {
-      throw new IllegalArgumentException("null value for 'expr' argument");
-    }
+    java.util.Objects.requireNonNull((expr));
     this.expr = expr;
   }
   

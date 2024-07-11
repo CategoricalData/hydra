@@ -43,9 +43,7 @@ public abstract class EqualityExpression implements Serializable {
     public final hydra.langs.java.syntax.RelationalExpression value;
     
     public Unary (hydra.langs.java.syntax.RelationalExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class EqualityExpression implements Serializable {
     public final hydra.langs.java.syntax.EqualityExpression_Binary value;
     
     public Equal (hydra.langs.java.syntax.EqualityExpression_Binary value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class EqualityExpression implements Serializable {
     public final hydra.langs.java.syntax.EqualityExpression_Binary value;
     
     public NotEqual (hydra.langs.java.syntax.EqualityExpression_Binary value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

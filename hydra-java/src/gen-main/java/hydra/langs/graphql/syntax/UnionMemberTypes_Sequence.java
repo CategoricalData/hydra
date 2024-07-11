@@ -12,12 +12,8 @@ public class UnionMemberTypes_Sequence implements Serializable {
   public final hydra.langs.graphql.syntax.NamedType namedType;
   
   public UnionMemberTypes_Sequence (hydra.langs.graphql.syntax.UnionMemberTypes unionMemberTypes, hydra.langs.graphql.syntax.NamedType namedType) {
-    if (unionMemberTypes == null) {
-      throw new IllegalArgumentException("null value for 'unionMemberTypes' argument");
-    }
-    if (namedType == null) {
-      throw new IllegalArgumentException("null value for 'namedType' argument");
-    }
+    java.util.Objects.requireNonNull((unionMemberTypes));
+    java.util.Objects.requireNonNull((namedType));
     this.unionMemberTypes = unionMemberTypes;
     this.namedType = namedType;
   }
@@ -37,16 +33,12 @@ public class UnionMemberTypes_Sequence implements Serializable {
   }
   
   public UnionMemberTypes_Sequence withUnionMemberTypes(hydra.langs.graphql.syntax.UnionMemberTypes unionMemberTypes) {
-    if (unionMemberTypes == null) {
-      throw new IllegalArgumentException("null value for 'unionMemberTypes' argument");
-    }
+    java.util.Objects.requireNonNull((unionMemberTypes));
     return new UnionMemberTypes_Sequence(unionMemberTypes, namedType);
   }
   
   public UnionMemberTypes_Sequence withNamedType(hydra.langs.graphql.syntax.NamedType namedType) {
-    if (namedType == null) {
-      throw new IllegalArgumentException("null value for 'namedType' argument");
-    }
+    java.util.Objects.requireNonNull((namedType));
     return new UnionMemberTypes_Sequence(unionMemberTypes, namedType);
   }
 }

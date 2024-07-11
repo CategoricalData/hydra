@@ -37,9 +37,7 @@ public abstract class FormalParameter implements Serializable {
     public final hydra.langs.java.syntax.FormalParameter_Simple value;
     
     public Simple (hydra.langs.java.syntax.FormalParameter_Simple value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class FormalParameter implements Serializable {
     public final hydra.langs.java.syntax.VariableArityParameter value;
     
     public VariableArity (hydra.langs.java.syntax.VariableArityParameter value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

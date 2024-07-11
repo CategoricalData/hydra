@@ -12,12 +12,8 @@ public class AtpNameLn implements Serializable {
   public final hydra.langs.shex.syntax.PnLocal pnLocal;
   
   public AtpNameLn (hydra.langs.shex.syntax.PnameNs pnameNs, hydra.langs.shex.syntax.PnLocal pnLocal) {
-    if (pnameNs == null) {
-      throw new IllegalArgumentException("null value for 'pnameNs' argument");
-    }
-    if (pnLocal == null) {
-      throw new IllegalArgumentException("null value for 'pnLocal' argument");
-    }
+    java.util.Objects.requireNonNull((pnameNs));
+    java.util.Objects.requireNonNull((pnLocal));
     this.pnameNs = pnameNs;
     this.pnLocal = pnLocal;
   }
@@ -37,16 +33,12 @@ public class AtpNameLn implements Serializable {
   }
   
   public AtpNameLn withPnameNs(hydra.langs.shex.syntax.PnameNs pnameNs) {
-    if (pnameNs == null) {
-      throw new IllegalArgumentException("null value for 'pnameNs' argument");
-    }
+    java.util.Objects.requireNonNull((pnameNs));
     return new AtpNameLn(pnameNs, pnLocal);
   }
   
   public AtpNameLn withPnLocal(hydra.langs.shex.syntax.PnLocal pnLocal) {
-    if (pnLocal == null) {
-      throw new IllegalArgumentException("null value for 'pnLocal' argument");
-    }
+    java.util.Objects.requireNonNull((pnLocal));
     return new AtpNameLn(pnameNs, pnLocal);
   }
 }

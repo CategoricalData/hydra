@@ -43,9 +43,7 @@ public abstract class ChooseArgs implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalFunctionArgument value;
     
     public Function (hydra.langs.tinkerpop.gremlin.TraversalFunctionArgument value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class ChooseArgs implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.PredicateTraversalArgument value;
     
     public PredicateTraversal (hydra.langs.tinkerpop.gremlin.PredicateTraversalArgument value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class ChooseArgs implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.NestedTraversalArgument value;
     
     public Traversal (hydra.langs.tinkerpop.gremlin.NestedTraversalArgument value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

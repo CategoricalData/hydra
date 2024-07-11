@@ -235,9 +235,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Lit value;
     
     public Lit (hydra.langs.scala.meta.Lit value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -265,9 +263,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_Ref value;
     
     public Ref (hydra.langs.scala.meta.Data_Ref value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -295,9 +291,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_Interpolate value;
     
     public Interpolate (hydra.langs.scala.meta.Data_Interpolate value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -325,9 +319,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_Xml value;
     
     public Xml (hydra.langs.scala.meta.Data_Xml value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -355,9 +347,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_Apply value;
     
     public Apply (hydra.langs.scala.meta.Data_Apply value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -385,9 +375,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_ApplyUsing value;
     
     public ApplyUsing (hydra.langs.scala.meta.Data_ApplyUsing value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -415,9 +403,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_ApplyType value;
     
     public ApplyType (hydra.langs.scala.meta.Data_ApplyType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -445,9 +431,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_Assign value;
     
     public Assign (hydra.langs.scala.meta.Data_Assign value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -475,9 +459,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_Return value;
     
     public Return (hydra.langs.scala.meta.Data_Return value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -505,9 +487,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_Throw value;
     
     public Throw (hydra.langs.scala.meta.Data_Throw value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -535,9 +515,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_Ascribe value;
     
     public Ascribe (hydra.langs.scala.meta.Data_Ascribe value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -565,9 +543,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_Annotate value;
     
     public Annotate (hydra.langs.scala.meta.Data_Annotate value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -595,9 +571,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_Tuple value;
     
     public Tuple (hydra.langs.scala.meta.Data_Tuple value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -625,9 +599,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_Block value;
     
     public Block (hydra.langs.scala.meta.Data_Block value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -655,9 +627,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_EndMarker value;
     
     public EndMarker (hydra.langs.scala.meta.Data_EndMarker value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -685,9 +655,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_If value;
     
     public If (hydra.langs.scala.meta.Data_If value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -715,9 +683,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_QuotedMacroExpr value;
     
     public QuotedMacroExpr (hydra.langs.scala.meta.Data_QuotedMacroExpr value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -745,9 +711,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_QuotedMacroType value;
     
     public QuotedMacroType (hydra.langs.scala.meta.Data_QuotedMacroType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -775,9 +739,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_SplicedMacroExpr value;
     
     public SplicedMacroExpr (hydra.langs.scala.meta.Data_SplicedMacroExpr value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -805,9 +767,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_Match value;
     
     public Match (hydra.langs.scala.meta.Data_Match value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -835,9 +795,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_Try value;
     
     public Try (hydra.langs.scala.meta.Data_Try value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -865,9 +823,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_TryWithHandler value;
     
     public TryWithHandler (hydra.langs.scala.meta.Data_TryWithHandler value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -895,9 +851,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_FunctionData value;
     
     public FunctionData (hydra.langs.scala.meta.Data_FunctionData value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -925,9 +879,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_PolyFunction value;
     
     public PolyFunction (hydra.langs.scala.meta.Data_PolyFunction value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -955,9 +907,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_PartialFunction value;
     
     public PartialFunction (hydra.langs.scala.meta.Data_PartialFunction value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -985,9 +935,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_While value;
     
     public While (hydra.langs.scala.meta.Data_While value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -1015,9 +963,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_Do value;
     
     public Do (hydra.langs.scala.meta.Data_Do value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -1045,9 +991,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_For value;
     
     public For (hydra.langs.scala.meta.Data_For value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -1075,9 +1019,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_ForYield value;
     
     public ForYield (hydra.langs.scala.meta.Data_ForYield value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -1105,9 +1047,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_New value;
     
     public New (hydra.langs.scala.meta.Data_New value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -1135,9 +1075,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_NewAnonymous value;
     
     public NewAnonymous (hydra.langs.scala.meta.Data_NewAnonymous value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -1165,9 +1103,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_Placeholder value;
     
     public Placeholder (hydra.langs.scala.meta.Data_Placeholder value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -1195,9 +1131,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_Eta value;
     
     public Eta (hydra.langs.scala.meta.Data_Eta value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -1225,9 +1159,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_Repeated value;
     
     public Repeated (hydra.langs.scala.meta.Data_Repeated value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -1255,9 +1187,7 @@ public abstract class Data implements Serializable {
     public final hydra.langs.scala.meta.Data_Param value;
     
     public Param (hydra.langs.scala.meta.Data_Param value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

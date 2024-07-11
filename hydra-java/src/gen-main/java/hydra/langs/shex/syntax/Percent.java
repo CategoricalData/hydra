@@ -12,12 +12,8 @@ public class Percent implements Serializable {
   public final hydra.langs.shex.syntax.Hex hex2;
   
   public Percent (hydra.langs.shex.syntax.Hex hex, hydra.langs.shex.syntax.Hex hex2) {
-    if (hex == null) {
-      throw new IllegalArgumentException("null value for 'hex' argument");
-    }
-    if (hex2 == null) {
-      throw new IllegalArgumentException("null value for 'hex2' argument");
-    }
+    java.util.Objects.requireNonNull((hex));
+    java.util.Objects.requireNonNull((hex2));
     this.hex = hex;
     this.hex2 = hex2;
   }
@@ -37,16 +33,12 @@ public class Percent implements Serializable {
   }
   
   public Percent withHex(hydra.langs.shex.syntax.Hex hex) {
-    if (hex == null) {
-      throw new IllegalArgumentException("null value for 'hex' argument");
-    }
+    java.util.Objects.requireNonNull((hex));
     return new Percent(hex, hex2);
   }
   
   public Percent withHex2(hydra.langs.shex.syntax.Hex hex2) {
-    if (hex2 == null) {
-      throw new IllegalArgumentException("null value for 'hex2' argument");
-    }
+    java.util.Objects.requireNonNull((hex2));
     return new Percent(hex, hex2);
   }
 }

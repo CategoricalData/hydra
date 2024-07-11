@@ -36,21 +36,11 @@ public class NodePatternFeatures implements Serializable {
   public final Boolean wildcardLabel;
   
   public NodePatternFeatures (Boolean multipleLabels, Boolean parameter, Boolean propertyMap, Boolean variableNode, Boolean wildcardLabel) {
-    if (multipleLabels == null) {
-      throw new IllegalArgumentException("null value for 'multipleLabels' argument");
-    }
-    if (parameter == null) {
-      throw new IllegalArgumentException("null value for 'parameter' argument");
-    }
-    if (propertyMap == null) {
-      throw new IllegalArgumentException("null value for 'propertyMap' argument");
-    }
-    if (variableNode == null) {
-      throw new IllegalArgumentException("null value for 'variableNode' argument");
-    }
-    if (wildcardLabel == null) {
-      throw new IllegalArgumentException("null value for 'wildcardLabel' argument");
-    }
+    java.util.Objects.requireNonNull((multipleLabels));
+    java.util.Objects.requireNonNull((parameter));
+    java.util.Objects.requireNonNull((propertyMap));
+    java.util.Objects.requireNonNull((variableNode));
+    java.util.Objects.requireNonNull((wildcardLabel));
     this.multipleLabels = multipleLabels;
     this.parameter = parameter;
     this.propertyMap = propertyMap;
@@ -73,37 +63,27 @@ public class NodePatternFeatures implements Serializable {
   }
   
   public NodePatternFeatures withMultipleLabels(Boolean multipleLabels) {
-    if (multipleLabels == null) {
-      throw new IllegalArgumentException("null value for 'multipleLabels' argument");
-    }
+    java.util.Objects.requireNonNull((multipleLabels));
     return new NodePatternFeatures(multipleLabels, parameter, propertyMap, variableNode, wildcardLabel);
   }
   
   public NodePatternFeatures withParameter(Boolean parameter) {
-    if (parameter == null) {
-      throw new IllegalArgumentException("null value for 'parameter' argument");
-    }
+    java.util.Objects.requireNonNull((parameter));
     return new NodePatternFeatures(multipleLabels, parameter, propertyMap, variableNode, wildcardLabel);
   }
   
   public NodePatternFeatures withPropertyMap(Boolean propertyMap) {
-    if (propertyMap == null) {
-      throw new IllegalArgumentException("null value for 'propertyMap' argument");
-    }
+    java.util.Objects.requireNonNull((propertyMap));
     return new NodePatternFeatures(multipleLabels, parameter, propertyMap, variableNode, wildcardLabel);
   }
   
   public NodePatternFeatures withVariableNode(Boolean variableNode) {
-    if (variableNode == null) {
-      throw new IllegalArgumentException("null value for 'variableNode' argument");
-    }
+    java.util.Objects.requireNonNull((variableNode));
     return new NodePatternFeatures(multipleLabels, parameter, propertyMap, variableNode, wildcardLabel);
   }
   
   public NodePatternFeatures withWildcardLabel(Boolean wildcardLabel) {
-    if (wildcardLabel == null) {
-      throw new IllegalArgumentException("null value for 'wildcardLabel' argument");
-    }
+    java.util.Objects.requireNonNull((wildcardLabel));
     return new NodePatternFeatures(multipleLabels, parameter, propertyMap, variableNode, wildcardLabel);
   }
 }

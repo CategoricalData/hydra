@@ -12,12 +12,8 @@ public class SwitchStatement implements Serializable {
   public final hydra.langs.java.syntax.SwitchBlock block;
   
   public SwitchStatement (hydra.langs.java.syntax.Expression cond, hydra.langs.java.syntax.SwitchBlock block) {
-    if (cond == null) {
-      throw new IllegalArgumentException("null value for 'cond' argument");
-    }
-    if (block == null) {
-      throw new IllegalArgumentException("null value for 'block' argument");
-    }
+    java.util.Objects.requireNonNull((cond));
+    java.util.Objects.requireNonNull((block));
     this.cond = cond;
     this.block = block;
   }
@@ -37,16 +33,12 @@ public class SwitchStatement implements Serializable {
   }
   
   public SwitchStatement withCond(hydra.langs.java.syntax.Expression cond) {
-    if (cond == null) {
-      throw new IllegalArgumentException("null value for 'cond' argument");
-    }
+    java.util.Objects.requireNonNull((cond));
     return new SwitchStatement(cond, block);
   }
   
   public SwitchStatement withBlock(hydra.langs.java.syntax.SwitchBlock block) {
-    if (block == null) {
-      throw new IllegalArgumentException("null value for 'block' argument");
-    }
+    java.util.Objects.requireNonNull((block));
     return new SwitchStatement(cond, block);
   }
 }

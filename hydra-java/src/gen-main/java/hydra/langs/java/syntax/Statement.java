@@ -61,9 +61,7 @@ public abstract class Statement implements Serializable {
     public final hydra.langs.java.syntax.StatementWithoutTrailingSubstatement value;
     
     public WithoutTrailing (hydra.langs.java.syntax.StatementWithoutTrailingSubstatement value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -91,9 +89,7 @@ public abstract class Statement implements Serializable {
     public final hydra.langs.java.syntax.LabeledStatement value;
     
     public Labeled (hydra.langs.java.syntax.LabeledStatement value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -121,9 +117,7 @@ public abstract class Statement implements Serializable {
     public final hydra.langs.java.syntax.IfThenStatement value;
     
     public IfThen (hydra.langs.java.syntax.IfThenStatement value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -151,9 +145,7 @@ public abstract class Statement implements Serializable {
     public final hydra.langs.java.syntax.IfThenElseStatement value;
     
     public IfThenElse (hydra.langs.java.syntax.IfThenElseStatement value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -181,9 +173,7 @@ public abstract class Statement implements Serializable {
     public final hydra.langs.java.syntax.WhileStatement value;
     
     public While (hydra.langs.java.syntax.WhileStatement value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -211,9 +201,7 @@ public abstract class Statement implements Serializable {
     public final hydra.langs.java.syntax.ForStatement value;
     
     public For (hydra.langs.java.syntax.ForStatement value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

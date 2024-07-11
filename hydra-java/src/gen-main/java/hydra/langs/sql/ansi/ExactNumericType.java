@@ -67,9 +67,7 @@ public abstract class ExactNumericType implements Serializable {
     public final hydra.util.Opt<hydra.langs.sql.ansi.ExactNumericType_Numeric_Option> value;
     
     public Numeric (hydra.util.Opt<hydra.langs.sql.ansi.ExactNumericType_Numeric_Option> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -97,9 +95,7 @@ public abstract class ExactNumericType implements Serializable {
     public final hydra.util.Opt<hydra.langs.sql.ansi.ExactNumericType_Decimal_Option> value;
     
     public Decimal (hydra.util.Opt<hydra.langs.sql.ansi.ExactNumericType_Decimal_Option> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -127,9 +123,7 @@ public abstract class ExactNumericType implements Serializable {
     public final hydra.util.Opt<hydra.langs.sql.ansi.ExactNumericType_Dec_Option> value;
     
     public Dec (hydra.util.Opt<hydra.langs.sql.ansi.ExactNumericType_Dec_Option> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

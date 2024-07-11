@@ -10,9 +10,7 @@ public class SimpleTypeName implements Serializable {
   public final hydra.langs.java.syntax.TypeIdentifier value;
   
   public SimpleTypeName (hydra.langs.java.syntax.TypeIdentifier value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

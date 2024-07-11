@@ -12,12 +12,8 @@ public class PrintCommand implements Serializable {
   public final hydra.langs.kusto.kql.Expression expression;
   
   public PrintCommand (hydra.util.Opt<hydra.langs.kusto.kql.ColumnName> column, hydra.langs.kusto.kql.Expression expression) {
-    if (column == null) {
-      throw new IllegalArgumentException("null value for 'column' argument");
-    }
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((column));
+    java.util.Objects.requireNonNull((expression));
     this.column = column;
     this.expression = expression;
   }
@@ -37,16 +33,12 @@ public class PrintCommand implements Serializable {
   }
   
   public PrintCommand withColumn(hydra.util.Opt<hydra.langs.kusto.kql.ColumnName> column) {
-    if (column == null) {
-      throw new IllegalArgumentException("null value for 'column' argument");
-    }
+    java.util.Objects.requireNonNull((column));
     return new PrintCommand(column, expression);
   }
   
   public PrintCommand withExpression(hydra.langs.kusto.kql.Expression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new PrintCommand(column, expression);
   }
 }

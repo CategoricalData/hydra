@@ -61,9 +61,7 @@ public abstract class NodeConstraint implements Serializable {
     public final java.util.List<hydra.langs.shex.syntax.XsFacet> value;
     
     public Sequence (java.util.List<hydra.langs.shex.syntax.XsFacet> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -91,9 +89,7 @@ public abstract class NodeConstraint implements Serializable {
     public final hydra.langs.shex.syntax.NodeConstraint_Sequence2 value;
     
     public Sequence2 (hydra.langs.shex.syntax.NodeConstraint_Sequence2 value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -121,9 +117,7 @@ public abstract class NodeConstraint implements Serializable {
     public final hydra.langs.shex.syntax.NodeConstraint_Sequence3 value;
     
     public Sequence3 (hydra.langs.shex.syntax.NodeConstraint_Sequence3 value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -151,9 +145,7 @@ public abstract class NodeConstraint implements Serializable {
     public final hydra.langs.shex.syntax.NodeConstraint_Sequence4 value;
     
     public Sequence4 (hydra.langs.shex.syntax.NodeConstraint_Sequence4 value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -181,9 +173,7 @@ public abstract class NodeConstraint implements Serializable {
     public final hydra.langs.shex.syntax.NodeConstraint_Sequence5 value;
     
     public Sequence5 (hydra.langs.shex.syntax.NodeConstraint_Sequence5 value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -211,9 +201,7 @@ public abstract class NodeConstraint implements Serializable {
     public final java.util.List<hydra.langs.shex.syntax.XsFacet> value;
     
     public ListOfXsFacet (java.util.List<hydra.langs.shex.syntax.XsFacet> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -15,12 +15,8 @@ public class Definition<A> implements Serializable {
   public final A target;
   
   public Definition (hydra.langs.rdf.syntax.Iri iri, A target) {
-    if (iri == null) {
-      throw new IllegalArgumentException("null value for 'iri' argument");
-    }
-    if (target == null) {
-      throw new IllegalArgumentException("null value for 'target' argument");
-    }
+    java.util.Objects.requireNonNull((iri));
+    java.util.Objects.requireNonNull((target));
     this.iri = iri;
     this.target = target;
   }
@@ -40,16 +36,12 @@ public class Definition<A> implements Serializable {
   }
   
   public Definition withIri(hydra.langs.rdf.syntax.Iri iri) {
-    if (iri == null) {
-      throw new IllegalArgumentException("null value for 'iri' argument");
-    }
+    java.util.Objects.requireNonNull((iri));
     return new Definition(iri, target);
   }
   
   public Definition withTarget(A target) {
-    if (target == null) {
-      throw new IllegalArgumentException("null value for 'target' argument");
-    }
+    java.util.Objects.requireNonNull((target));
     return new Definition(iri, target);
   }
 }

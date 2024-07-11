@@ -49,9 +49,7 @@ public abstract class SetItem implements Serializable {
     public final hydra.langs.cypher.openCypher.PropertyEquals value;
     
     public Property (hydra.langs.cypher.openCypher.PropertyEquals value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -79,9 +77,7 @@ public abstract class SetItem implements Serializable {
     public final hydra.langs.cypher.openCypher.VariableEquals value;
     
     public VariableEqual (hydra.langs.cypher.openCypher.VariableEquals value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -109,9 +105,7 @@ public abstract class SetItem implements Serializable {
     public final hydra.langs.cypher.openCypher.VariablePlusEquals value;
     
     public VariablePlusEqual (hydra.langs.cypher.openCypher.VariablePlusEquals value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -139,9 +133,7 @@ public abstract class SetItem implements Serializable {
     public final hydra.langs.cypher.openCypher.VariableAndNodeLabels value;
     
     public VariableLabels (hydra.langs.cypher.openCypher.VariableAndNodeLabels value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

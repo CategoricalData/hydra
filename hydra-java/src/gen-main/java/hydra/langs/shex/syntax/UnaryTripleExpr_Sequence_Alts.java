@@ -37,9 +37,7 @@ public abstract class UnaryTripleExpr_Sequence_Alts implements Serializable {
     public final hydra.langs.shex.syntax.TripleConstraint value;
     
     public TripleConstraint (hydra.langs.shex.syntax.TripleConstraint value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class UnaryTripleExpr_Sequence_Alts implements Serializable {
     public final hydra.langs.shex.syntax.BracketedTripleExpr value;
     
     public BracketedTripleExpr (hydra.langs.shex.syntax.BracketedTripleExpr value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

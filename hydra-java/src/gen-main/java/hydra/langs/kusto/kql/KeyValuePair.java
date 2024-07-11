@@ -12,12 +12,8 @@ public class KeyValuePair implements Serializable {
   public final hydra.langs.kusto.kql.Expression value;
   
   public KeyValuePair (String key, hydra.langs.kusto.kql.Expression value) {
-    if (key == null) {
-      throw new IllegalArgumentException("null value for 'key' argument");
-    }
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((key));
+    java.util.Objects.requireNonNull((value));
     this.key = key;
     this.value = value;
   }
@@ -37,16 +33,12 @@ public class KeyValuePair implements Serializable {
   }
   
   public KeyValuePair withKey(String key) {
-    if (key == null) {
-      throw new IllegalArgumentException("null value for 'key' argument");
-    }
+    java.util.Objects.requireNonNull((key));
     return new KeyValuePair(key, value);
   }
   
   public KeyValuePair withValue(hydra.langs.kusto.kql.Expression value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     return new KeyValuePair(key, value);
   }
 }

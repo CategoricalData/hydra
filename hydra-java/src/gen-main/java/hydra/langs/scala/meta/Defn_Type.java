@@ -16,18 +16,10 @@ public class Defn_Type implements Serializable {
   public final hydra.langs.scala.meta.Type body;
   
   public Defn_Type (java.util.List<hydra.langs.scala.meta.Mod> mods, hydra.langs.scala.meta.Type_Name name, java.util.List<hydra.langs.scala.meta.Type_Param> tparams, hydra.langs.scala.meta.Type body) {
-    if (mods == null) {
-      throw new IllegalArgumentException("null value for 'mods' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (tparams == null) {
-      throw new IllegalArgumentException("null value for 'tparams' argument");
-    }
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((mods));
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((tparams));
+    java.util.Objects.requireNonNull((body));
     this.mods = mods;
     this.name = name;
     this.tparams = tparams;
@@ -49,30 +41,22 @@ public class Defn_Type implements Serializable {
   }
   
   public Defn_Type withMods(java.util.List<hydra.langs.scala.meta.Mod> mods) {
-    if (mods == null) {
-      throw new IllegalArgumentException("null value for 'mods' argument");
-    }
+    java.util.Objects.requireNonNull((mods));
     return new Defn_Type(mods, name, tparams, body);
   }
   
   public Defn_Type withName(hydra.langs.scala.meta.Type_Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Defn_Type(mods, name, tparams, body);
   }
   
   public Defn_Type withTparams(java.util.List<hydra.langs.scala.meta.Type_Param> tparams) {
-    if (tparams == null) {
-      throw new IllegalArgumentException("null value for 'tparams' argument");
-    }
+    java.util.Objects.requireNonNull((tparams));
     return new Defn_Type(mods, name, tparams, body);
   }
   
   public Defn_Type withBody(hydra.langs.scala.meta.Type body) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((body));
     return new Defn_Type(mods, name, tparams, body);
   }
 }

@@ -12,12 +12,8 @@ public class CastExpression_Lambda implements Serializable {
   public final hydra.langs.java.syntax.LambdaExpression expression;
   
   public CastExpression_Lambda (hydra.langs.java.syntax.CastExpression_RefAndBounds refAndBounds, hydra.langs.java.syntax.LambdaExpression expression) {
-    if (refAndBounds == null) {
-      throw new IllegalArgumentException("null value for 'refAndBounds' argument");
-    }
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((refAndBounds));
+    java.util.Objects.requireNonNull((expression));
     this.refAndBounds = refAndBounds;
     this.expression = expression;
   }
@@ -37,16 +33,12 @@ public class CastExpression_Lambda implements Serializable {
   }
   
   public CastExpression_Lambda withRefAndBounds(hydra.langs.java.syntax.CastExpression_RefAndBounds refAndBounds) {
-    if (refAndBounds == null) {
-      throw new IllegalArgumentException("null value for 'refAndBounds' argument");
-    }
+    java.util.Objects.requireNonNull((refAndBounds));
     return new CastExpression_Lambda(refAndBounds, expression);
   }
   
   public CastExpression_Lambda withExpression(hydra.langs.java.syntax.LambdaExpression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new CastExpression_Lambda(refAndBounds, expression);
   }
 }

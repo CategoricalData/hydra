@@ -12,12 +12,8 @@ public class ListComprehension implements Serializable {
   public final hydra.util.Opt<hydra.langs.cypher.openCypher.Expression> right;
   
   public ListComprehension (hydra.langs.cypher.openCypher.FilterExpression left, hydra.util.Opt<hydra.langs.cypher.openCypher.Expression> right) {
-    if (left == null) {
-      throw new IllegalArgumentException("null value for 'left' argument");
-    }
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((left));
+    java.util.Objects.requireNonNull((right));
     this.left = left;
     this.right = right;
   }
@@ -37,16 +33,12 @@ public class ListComprehension implements Serializable {
   }
   
   public ListComprehension withLeft(hydra.langs.cypher.openCypher.FilterExpression left) {
-    if (left == null) {
-      throw new IllegalArgumentException("null value for 'left' argument");
-    }
+    java.util.Objects.requireNonNull((left));
     return new ListComprehension(left, right);
   }
   
   public ListComprehension withRight(hydra.util.Opt<hydra.langs.cypher.openCypher.Expression> right) {
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((right));
     return new ListComprehension(left, right);
   }
 }

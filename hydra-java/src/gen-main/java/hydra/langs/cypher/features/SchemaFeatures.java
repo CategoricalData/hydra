@@ -21,12 +21,8 @@ public class SchemaFeatures implements Serializable {
   public final Boolean valueType;
   
   public SchemaFeatures (Boolean type, Boolean valueType) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (valueType == null) {
-      throw new IllegalArgumentException("null value for 'valueType' argument");
-    }
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((valueType));
     this.type = type;
     this.valueType = valueType;
   }
@@ -46,16 +42,12 @@ public class SchemaFeatures implements Serializable {
   }
   
   public SchemaFeatures withType(Boolean type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new SchemaFeatures(type, valueType);
   }
   
   public SchemaFeatures withValueType(Boolean valueType) {
-    if (valueType == null) {
-      throw new IllegalArgumentException("null value for 'valueType' argument");
-    }
+    java.util.Objects.requireNonNull((valueType));
     return new SchemaFeatures(type, valueType);
   }
 }

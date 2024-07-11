@@ -10,9 +10,7 @@ public class Data_Block implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Stat> stats;
   
   public Data_Block (java.util.List<hydra.langs.scala.meta.Stat> stats) {
-    if (stats == null) {
-      throw new IllegalArgumentException("null value for 'stats' argument");
-    }
+    java.util.Objects.requireNonNull((stats));
     this.stats = stats;
   }
   

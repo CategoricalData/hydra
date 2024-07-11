@@ -16,18 +16,10 @@ public class Data_Param implements Serializable {
   public final hydra.util.Opt<hydra.langs.scala.meta.Data> default_;
   
   public Data_Param (java.util.List<hydra.langs.scala.meta.Mod> mods, hydra.langs.scala.meta.Name name, hydra.util.Opt<hydra.langs.scala.meta.Type> decltpe, hydra.util.Opt<hydra.langs.scala.meta.Data> default_) {
-    if (mods == null) {
-      throw new IllegalArgumentException("null value for 'mods' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (decltpe == null) {
-      throw new IllegalArgumentException("null value for 'decltpe' argument");
-    }
-    if (default_ == null) {
-      throw new IllegalArgumentException("null value for 'default' argument");
-    }
+    java.util.Objects.requireNonNull((mods));
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((decltpe));
+    java.util.Objects.requireNonNull((default_));
     this.mods = mods;
     this.name = name;
     this.decltpe = decltpe;
@@ -49,30 +41,22 @@ public class Data_Param implements Serializable {
   }
   
   public Data_Param withMods(java.util.List<hydra.langs.scala.meta.Mod> mods) {
-    if (mods == null) {
-      throw new IllegalArgumentException("null value for 'mods' argument");
-    }
+    java.util.Objects.requireNonNull((mods));
     return new Data_Param(mods, name, decltpe, default_);
   }
   
   public Data_Param withName(hydra.langs.scala.meta.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Data_Param(mods, name, decltpe, default_);
   }
   
   public Data_Param withDecltpe(hydra.util.Opt<hydra.langs.scala.meta.Type> decltpe) {
-    if (decltpe == null) {
-      throw new IllegalArgumentException("null value for 'decltpe' argument");
-    }
+    java.util.Objects.requireNonNull((decltpe));
     return new Data_Param(mods, name, decltpe, default_);
   }
   
   public Data_Param withDefault(hydra.util.Opt<hydra.langs.scala.meta.Data> default_) {
-    if (default_ == null) {
-      throw new IllegalArgumentException("null value for 'default' argument");
-    }
+    java.util.Objects.requireNonNull((default_));
     return new Data_Param(mods, name, decltpe, default_);
   }
 }

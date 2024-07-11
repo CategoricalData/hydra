@@ -14,15 +14,9 @@ public class MapType implements Serializable {
   public final Boolean valueContainsNull;
   
   public MapType (hydra.langs.parquet.delta.DataType keyType, hydra.langs.parquet.delta.DataType valueType, Boolean valueContainsNull) {
-    if (keyType == null) {
-      throw new IllegalArgumentException("null value for 'keyType' argument");
-    }
-    if (valueType == null) {
-      throw new IllegalArgumentException("null value for 'valueType' argument");
-    }
-    if (valueContainsNull == null) {
-      throw new IllegalArgumentException("null value for 'valueContainsNull' argument");
-    }
+    java.util.Objects.requireNonNull((keyType));
+    java.util.Objects.requireNonNull((valueType));
+    java.util.Objects.requireNonNull((valueContainsNull));
     this.keyType = keyType;
     this.valueType = valueType;
     this.valueContainsNull = valueContainsNull;
@@ -43,23 +37,17 @@ public class MapType implements Serializable {
   }
   
   public MapType withKeyType(hydra.langs.parquet.delta.DataType keyType) {
-    if (keyType == null) {
-      throw new IllegalArgumentException("null value for 'keyType' argument");
-    }
+    java.util.Objects.requireNonNull((keyType));
     return new MapType(keyType, valueType, valueContainsNull);
   }
   
   public MapType withValueType(hydra.langs.parquet.delta.DataType valueType) {
-    if (valueType == null) {
-      throw new IllegalArgumentException("null value for 'valueType' argument");
-    }
+    java.util.Objects.requireNonNull((valueType));
     return new MapType(keyType, valueType, valueContainsNull);
   }
   
   public MapType withValueContainsNull(Boolean valueContainsNull) {
-    if (valueContainsNull == null) {
-      throw new IllegalArgumentException("null value for 'valueContainsNull' argument");
-    }
+    java.util.Objects.requireNonNull((valueContainsNull));
     return new MapType(keyType, valueType, valueContainsNull);
   }
 }

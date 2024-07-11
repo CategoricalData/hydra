@@ -12,12 +12,8 @@ public class LetExpression implements Serializable {
   public final hydra.langs.kusto.kql.TabularExpression expression;
   
   public LetExpression (java.util.List<hydra.langs.kusto.kql.LetBinding> bindings, hydra.langs.kusto.kql.TabularExpression expression) {
-    if (bindings == null) {
-      throw new IllegalArgumentException("null value for 'bindings' argument");
-    }
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((bindings));
+    java.util.Objects.requireNonNull((expression));
     this.bindings = bindings;
     this.expression = expression;
   }
@@ -37,16 +33,12 @@ public class LetExpression implements Serializable {
   }
   
   public LetExpression withBindings(java.util.List<hydra.langs.kusto.kql.LetBinding> bindings) {
-    if (bindings == null) {
-      throw new IllegalArgumentException("null value for 'bindings' argument");
-    }
+    java.util.Objects.requireNonNull((bindings));
     return new LetExpression(bindings, expression);
   }
   
   public LetExpression withExpression(hydra.langs.kusto.kql.TabularExpression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new LetExpression(bindings, expression);
   }
 }

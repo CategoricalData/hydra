@@ -14,15 +14,9 @@ public class BlankNodeLabel implements Serializable {
   public final hydra.langs.shex.syntax.PnChars pnChars;
   
   public BlankNodeLabel (hydra.langs.shex.syntax.BlankNodeLabel_Alts alts, hydra.util.Opt<java.util.List<hydra.langs.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt>> listOfAlts, hydra.langs.shex.syntax.PnChars pnChars) {
-    if (alts == null) {
-      throw new IllegalArgumentException("null value for 'alts' argument");
-    }
-    if (listOfAlts == null) {
-      throw new IllegalArgumentException("null value for 'listOfAlts' argument");
-    }
-    if (pnChars == null) {
-      throw new IllegalArgumentException("null value for 'pnChars' argument");
-    }
+    java.util.Objects.requireNonNull((alts));
+    java.util.Objects.requireNonNull((listOfAlts));
+    java.util.Objects.requireNonNull((pnChars));
     this.alts = alts;
     this.listOfAlts = listOfAlts;
     this.pnChars = pnChars;
@@ -43,23 +37,17 @@ public class BlankNodeLabel implements Serializable {
   }
   
   public BlankNodeLabel withAlts(hydra.langs.shex.syntax.BlankNodeLabel_Alts alts) {
-    if (alts == null) {
-      throw new IllegalArgumentException("null value for 'alts' argument");
-    }
+    java.util.Objects.requireNonNull((alts));
     return new BlankNodeLabel(alts, listOfAlts, pnChars);
   }
   
   public BlankNodeLabel withListOfAlts(hydra.util.Opt<java.util.List<hydra.langs.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt>> listOfAlts) {
-    if (listOfAlts == null) {
-      throw new IllegalArgumentException("null value for 'listOfAlts' argument");
-    }
+    java.util.Objects.requireNonNull((listOfAlts));
     return new BlankNodeLabel(alts, listOfAlts, pnChars);
   }
   
   public BlankNodeLabel withPnChars(hydra.langs.shex.syntax.PnChars pnChars) {
-    if (pnChars == null) {
-      throw new IllegalArgumentException("null value for 'pnChars' argument");
-    }
+    java.util.Objects.requireNonNull((pnChars));
     return new BlankNodeLabel(alts, listOfAlts, pnChars);
   }
 }

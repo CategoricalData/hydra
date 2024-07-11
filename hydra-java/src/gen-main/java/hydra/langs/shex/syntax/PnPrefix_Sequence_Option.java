@@ -12,12 +12,8 @@ public class PnPrefix_Sequence_Option implements Serializable {
   public final hydra.langs.shex.syntax.PnChars pnChars;
   
   public PnPrefix_Sequence_Option (hydra.langs.shex.syntax.PnPrefix_Sequence_Option_Alts alts, hydra.langs.shex.syntax.PnChars pnChars) {
-    if (alts == null) {
-      throw new IllegalArgumentException("null value for 'alts' argument");
-    }
-    if (pnChars == null) {
-      throw new IllegalArgumentException("null value for 'pnChars' argument");
-    }
+    java.util.Objects.requireNonNull((alts));
+    java.util.Objects.requireNonNull((pnChars));
     this.alts = alts;
     this.pnChars = pnChars;
   }
@@ -37,16 +33,12 @@ public class PnPrefix_Sequence_Option implements Serializable {
   }
   
   public PnPrefix_Sequence_Option withAlts(hydra.langs.shex.syntax.PnPrefix_Sequence_Option_Alts alts) {
-    if (alts == null) {
-      throw new IllegalArgumentException("null value for 'alts' argument");
-    }
+    java.util.Objects.requireNonNull((alts));
     return new PnPrefix_Sequence_Option(alts, pnChars);
   }
   
   public PnPrefix_Sequence_Option withPnChars(hydra.langs.shex.syntax.PnChars pnChars) {
-    if (pnChars == null) {
-      throw new IllegalArgumentException("null value for 'pnChars' argument");
-    }
+    java.util.Objects.requireNonNull((pnChars));
     return new PnPrefix_Sequence_Option(alts, pnChars);
   }
 }

@@ -12,12 +12,8 @@ public class YieldItem implements Serializable {
   public final hydra.langs.cypher.openCypher.Variable variable;
   
   public YieldItem (hydra.util.Opt<hydra.langs.cypher.openCypher.ProcedureResultField> field, hydra.langs.cypher.openCypher.Variable variable) {
-    if (field == null) {
-      throw new IllegalArgumentException("null value for 'field' argument");
-    }
-    if (variable == null) {
-      throw new IllegalArgumentException("null value for 'variable' argument");
-    }
+    java.util.Objects.requireNonNull((field));
+    java.util.Objects.requireNonNull((variable));
     this.field = field;
     this.variable = variable;
   }
@@ -37,16 +33,12 @@ public class YieldItem implements Serializable {
   }
   
   public YieldItem withField(hydra.util.Opt<hydra.langs.cypher.openCypher.ProcedureResultField> field) {
-    if (field == null) {
-      throw new IllegalArgumentException("null value for 'field' argument");
-    }
+    java.util.Objects.requireNonNull((field));
     return new YieldItem(field, variable);
   }
   
   public YieldItem withVariable(hydra.langs.cypher.openCypher.Variable variable) {
-    if (variable == null) {
-      throw new IllegalArgumentException("null value for 'variable' argument");
-    }
+    java.util.Objects.requireNonNull((variable));
     return new YieldItem(field, variable);
   }
 }

@@ -12,12 +12,8 @@ public class InlineShapeAtom_Sequence2 implements Serializable {
   public final hydra.util.Opt<hydra.langs.shex.syntax.NodeConstraint> nodeConstraint;
   
   public InlineShapeAtom_Sequence2 (hydra.langs.shex.syntax.InlineShapeOrRef inlineShapeOrRef, hydra.util.Opt<hydra.langs.shex.syntax.NodeConstraint> nodeConstraint) {
-    if (inlineShapeOrRef == null) {
-      throw new IllegalArgumentException("null value for 'inlineShapeOrRef' argument");
-    }
-    if (nodeConstraint == null) {
-      throw new IllegalArgumentException("null value for 'nodeConstraint' argument");
-    }
+    java.util.Objects.requireNonNull((inlineShapeOrRef));
+    java.util.Objects.requireNonNull((nodeConstraint));
     this.inlineShapeOrRef = inlineShapeOrRef;
     this.nodeConstraint = nodeConstraint;
   }
@@ -37,16 +33,12 @@ public class InlineShapeAtom_Sequence2 implements Serializable {
   }
   
   public InlineShapeAtom_Sequence2 withInlineShapeOrRef(hydra.langs.shex.syntax.InlineShapeOrRef inlineShapeOrRef) {
-    if (inlineShapeOrRef == null) {
-      throw new IllegalArgumentException("null value for 'inlineShapeOrRef' argument");
-    }
+    java.util.Objects.requireNonNull((inlineShapeOrRef));
     return new InlineShapeAtom_Sequence2(inlineShapeOrRef, nodeConstraint);
   }
   
   public InlineShapeAtom_Sequence2 withNodeConstraint(hydra.util.Opt<hydra.langs.shex.syntax.NodeConstraint> nodeConstraint) {
-    if (nodeConstraint == null) {
-      throw new IllegalArgumentException("null value for 'nodeConstraint' argument");
-    }
+    java.util.Objects.requireNonNull((nodeConstraint));
     return new InlineShapeAtom_Sequence2(inlineShapeOrRef, nodeConstraint);
   }
 }

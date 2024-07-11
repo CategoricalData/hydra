@@ -12,12 +12,8 @@ public class Merge implements Serializable {
   public final java.util.List<hydra.langs.cypher.openCypher.MergeAction> actions;
   
   public Merge (hydra.langs.cypher.openCypher.PatternPart patternPart, java.util.List<hydra.langs.cypher.openCypher.MergeAction> actions) {
-    if (patternPart == null) {
-      throw new IllegalArgumentException("null value for 'patternPart' argument");
-    }
-    if (actions == null) {
-      throw new IllegalArgumentException("null value for 'actions' argument");
-    }
+    java.util.Objects.requireNonNull((patternPart));
+    java.util.Objects.requireNonNull((actions));
     this.patternPart = patternPart;
     this.actions = actions;
   }
@@ -37,16 +33,12 @@ public class Merge implements Serializable {
   }
   
   public Merge withPatternPart(hydra.langs.cypher.openCypher.PatternPart patternPart) {
-    if (patternPart == null) {
-      throw new IllegalArgumentException("null value for 'patternPart' argument");
-    }
+    java.util.Objects.requireNonNull((patternPart));
     return new Merge(patternPart, actions);
   }
   
   public Merge withActions(java.util.List<hydra.langs.cypher.openCypher.MergeAction> actions) {
-    if (actions == null) {
-      throw new IllegalArgumentException("null value for 'actions' argument");
-    }
+    java.util.Objects.requireNonNull((actions));
     return new Merge(patternPart, actions);
   }
 }

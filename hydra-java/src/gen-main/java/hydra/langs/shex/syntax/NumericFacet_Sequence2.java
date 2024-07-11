@@ -12,12 +12,8 @@ public class NumericFacet_Sequence2 implements Serializable {
   public final hydra.langs.shex.syntax.Integer_ integer;
   
   public NumericFacet_Sequence2 (hydra.langs.shex.syntax.NumericLength numericLength, hydra.langs.shex.syntax.Integer_ integer) {
-    if (numericLength == null) {
-      throw new IllegalArgumentException("null value for 'numericLength' argument");
-    }
-    if (integer == null) {
-      throw new IllegalArgumentException("null value for 'integer' argument");
-    }
+    java.util.Objects.requireNonNull((numericLength));
+    java.util.Objects.requireNonNull((integer));
     this.numericLength = numericLength;
     this.integer = integer;
   }
@@ -37,16 +33,12 @@ public class NumericFacet_Sequence2 implements Serializable {
   }
   
   public NumericFacet_Sequence2 withNumericLength(hydra.langs.shex.syntax.NumericLength numericLength) {
-    if (numericLength == null) {
-      throw new IllegalArgumentException("null value for 'numericLength' argument");
-    }
+    java.util.Objects.requireNonNull((numericLength));
     return new NumericFacet_Sequence2(numericLength, integer);
   }
   
   public NumericFacet_Sequence2 withInteger(hydra.langs.shex.syntax.Integer_ integer) {
-    if (integer == null) {
-      throw new IllegalArgumentException("null value for 'integer' argument");
-    }
+    java.util.Objects.requireNonNull((integer));
     return new NumericFacet_Sequence2(numericLength, integer);
   }
 }

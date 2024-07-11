@@ -15,12 +15,8 @@ public class ElementTree<V> implements Serializable {
   public final java.util.List<hydra.langs.tinkerpop.propertyGraph.ElementTree<V>> dependencies;
   
   public ElementTree (hydra.langs.tinkerpop.propertyGraph.Element<V> self, java.util.List<hydra.langs.tinkerpop.propertyGraph.ElementTree<V>> dependencies) {
-    if (self == null) {
-      throw new IllegalArgumentException("null value for 'self' argument");
-    }
-    if (dependencies == null) {
-      throw new IllegalArgumentException("null value for 'dependencies' argument");
-    }
+    java.util.Objects.requireNonNull((self));
+    java.util.Objects.requireNonNull((dependencies));
     this.self = self;
     this.dependencies = dependencies;
   }
@@ -40,16 +36,12 @@ public class ElementTree<V> implements Serializable {
   }
   
   public ElementTree withSelf(hydra.langs.tinkerpop.propertyGraph.Element<V> self) {
-    if (self == null) {
-      throw new IllegalArgumentException("null value for 'self' argument");
-    }
+    java.util.Objects.requireNonNull((self));
     return new ElementTree(self, dependencies);
   }
   
   public ElementTree withDependencies(java.util.List<hydra.langs.tinkerpop.propertyGraph.ElementTree<V>> dependencies) {
-    if (dependencies == null) {
-      throw new IllegalArgumentException("null value for 'dependencies' argument");
-    }
+    java.util.Objects.requireNonNull((dependencies));
     return new ElementTree(self, dependencies);
   }
 }

@@ -37,9 +37,7 @@ public abstract class ListOperatorExpressionOrPropertyLookup implements Serializ
     public final hydra.langs.cypher.openCypher.ListOperatorExpression value;
     
     public List (hydra.langs.cypher.openCypher.ListOperatorExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class ListOperatorExpressionOrPropertyLookup implements Serializ
     public final hydra.langs.cypher.openCypher.PropertyLookup value;
     
     public Property (hydra.langs.cypher.openCypher.PropertyLookup value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

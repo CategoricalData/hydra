@@ -37,9 +37,7 @@ public abstract class Member_Data implements Serializable {
     public final hydra.langs.scala.meta.Pkg value;
     
     public Pkg (hydra.langs.scala.meta.Pkg value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class Member_Data implements Serializable {
     public final hydra.langs.scala.meta.Pkg_Object value;
     
     public Object_ (hydra.langs.scala.meta.Pkg_Object value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

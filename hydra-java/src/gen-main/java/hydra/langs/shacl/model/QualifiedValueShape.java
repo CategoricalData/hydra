@@ -19,18 +19,10 @@ public class QualifiedValueShape implements Serializable {
   public final hydra.util.Opt<Boolean> qualifiedValueShapesDisjoint;
   
   public QualifiedValueShape (hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape> qualifiedValueShape, java.math.BigInteger qualifiedMaxCount, java.math.BigInteger qualifiedMinCount, hydra.util.Opt<Boolean> qualifiedValueShapesDisjoint) {
-    if (qualifiedValueShape == null) {
-      throw new IllegalArgumentException("null value for 'qualifiedValueShape' argument");
-    }
-    if (qualifiedMaxCount == null) {
-      throw new IllegalArgumentException("null value for 'qualifiedMaxCount' argument");
-    }
-    if (qualifiedMinCount == null) {
-      throw new IllegalArgumentException("null value for 'qualifiedMinCount' argument");
-    }
-    if (qualifiedValueShapesDisjoint == null) {
-      throw new IllegalArgumentException("null value for 'qualifiedValueShapesDisjoint' argument");
-    }
+    java.util.Objects.requireNonNull((qualifiedValueShape));
+    java.util.Objects.requireNonNull((qualifiedMaxCount));
+    java.util.Objects.requireNonNull((qualifiedMinCount));
+    java.util.Objects.requireNonNull((qualifiedValueShapesDisjoint));
     this.qualifiedValueShape = qualifiedValueShape;
     this.qualifiedMaxCount = qualifiedMaxCount;
     this.qualifiedMinCount = qualifiedMinCount;
@@ -52,30 +44,22 @@ public class QualifiedValueShape implements Serializable {
   }
   
   public QualifiedValueShape withQualifiedValueShape(hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape> qualifiedValueShape) {
-    if (qualifiedValueShape == null) {
-      throw new IllegalArgumentException("null value for 'qualifiedValueShape' argument");
-    }
+    java.util.Objects.requireNonNull((qualifiedValueShape));
     return new QualifiedValueShape(qualifiedValueShape, qualifiedMaxCount, qualifiedMinCount, qualifiedValueShapesDisjoint);
   }
   
   public QualifiedValueShape withQualifiedMaxCount(java.math.BigInteger qualifiedMaxCount) {
-    if (qualifiedMaxCount == null) {
-      throw new IllegalArgumentException("null value for 'qualifiedMaxCount' argument");
-    }
+    java.util.Objects.requireNonNull((qualifiedMaxCount));
     return new QualifiedValueShape(qualifiedValueShape, qualifiedMaxCount, qualifiedMinCount, qualifiedValueShapesDisjoint);
   }
   
   public QualifiedValueShape withQualifiedMinCount(java.math.BigInteger qualifiedMinCount) {
-    if (qualifiedMinCount == null) {
-      throw new IllegalArgumentException("null value for 'qualifiedMinCount' argument");
-    }
+    java.util.Objects.requireNonNull((qualifiedMinCount));
     return new QualifiedValueShape(qualifiedValueShape, qualifiedMaxCount, qualifiedMinCount, qualifiedValueShapesDisjoint);
   }
   
   public QualifiedValueShape withQualifiedValueShapesDisjoint(hydra.util.Opt<Boolean> qualifiedValueShapesDisjoint) {
-    if (qualifiedValueShapesDisjoint == null) {
-      throw new IllegalArgumentException("null value for 'qualifiedValueShapesDisjoint' argument");
-    }
+    java.util.Objects.requireNonNull((qualifiedValueShapesDisjoint));
     return new QualifiedValueShape(qualifiedValueShape, qualifiedMaxCount, qualifiedMinCount, qualifiedValueShapesDisjoint);
   }
 }

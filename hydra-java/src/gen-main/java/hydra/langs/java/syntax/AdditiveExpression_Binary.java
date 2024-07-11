@@ -12,12 +12,8 @@ public class AdditiveExpression_Binary implements Serializable {
   public final hydra.langs.java.syntax.MultiplicativeExpression rhs;
   
   public AdditiveExpression_Binary (hydra.langs.java.syntax.AdditiveExpression lhs, hydra.langs.java.syntax.MultiplicativeExpression rhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
+    java.util.Objects.requireNonNull((rhs));
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -37,16 +33,12 @@ public class AdditiveExpression_Binary implements Serializable {
   }
   
   public AdditiveExpression_Binary withLhs(hydra.langs.java.syntax.AdditiveExpression lhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
     return new AdditiveExpression_Binary(lhs, rhs);
   }
   
   public AdditiveExpression_Binary withRhs(hydra.langs.java.syntax.MultiplicativeExpression rhs) {
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((rhs));
     return new AdditiveExpression_Binary(lhs, rhs);
   }
 }

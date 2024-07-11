@@ -18,21 +18,11 @@ public class Decl_Given implements Serializable {
   public final hydra.langs.scala.meta.Type decltpe;
   
   public Decl_Given (java.util.List<hydra.langs.scala.meta.Mod> mods, hydra.langs.scala.meta.Data_Name name, java.util.List<hydra.langs.scala.meta.Type_Param> tparams, java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> sparams, hydra.langs.scala.meta.Type decltpe) {
-    if (mods == null) {
-      throw new IllegalArgumentException("null value for 'mods' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (tparams == null) {
-      throw new IllegalArgumentException("null value for 'tparams' argument");
-    }
-    if (sparams == null) {
-      throw new IllegalArgumentException("null value for 'sparams' argument");
-    }
-    if (decltpe == null) {
-      throw new IllegalArgumentException("null value for 'decltpe' argument");
-    }
+    java.util.Objects.requireNonNull((mods));
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((tparams));
+    java.util.Objects.requireNonNull((sparams));
+    java.util.Objects.requireNonNull((decltpe));
     this.mods = mods;
     this.name = name;
     this.tparams = tparams;
@@ -55,37 +45,27 @@ public class Decl_Given implements Serializable {
   }
   
   public Decl_Given withMods(java.util.List<hydra.langs.scala.meta.Mod> mods) {
-    if (mods == null) {
-      throw new IllegalArgumentException("null value for 'mods' argument");
-    }
+    java.util.Objects.requireNonNull((mods));
     return new Decl_Given(mods, name, tparams, sparams, decltpe);
   }
   
   public Decl_Given withName(hydra.langs.scala.meta.Data_Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Decl_Given(mods, name, tparams, sparams, decltpe);
   }
   
   public Decl_Given withTparams(java.util.List<hydra.langs.scala.meta.Type_Param> tparams) {
-    if (tparams == null) {
-      throw new IllegalArgumentException("null value for 'tparams' argument");
-    }
+    java.util.Objects.requireNonNull((tparams));
     return new Decl_Given(mods, name, tparams, sparams, decltpe);
   }
   
   public Decl_Given withSparams(java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> sparams) {
-    if (sparams == null) {
-      throw new IllegalArgumentException("null value for 'sparams' argument");
-    }
+    java.util.Objects.requireNonNull((sparams));
     return new Decl_Given(mods, name, tparams, sparams, decltpe);
   }
   
   public Decl_Given withDecltpe(hydra.langs.scala.meta.Type decltpe) {
-    if (decltpe == null) {
-      throw new IllegalArgumentException("null value for 'decltpe' argument");
-    }
+    java.util.Objects.requireNonNull((decltpe));
     return new Decl_Given(mods, name, tparams, sparams, decltpe);
   }
 }

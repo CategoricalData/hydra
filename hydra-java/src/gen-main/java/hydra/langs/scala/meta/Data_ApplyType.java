@@ -16,18 +16,10 @@ public class Data_ApplyType implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Data> args;
   
   public Data_ApplyType (hydra.langs.scala.meta.Data lhs, hydra.langs.scala.meta.Data_Name op, java.util.List<hydra.langs.scala.meta.Type> targs, java.util.List<hydra.langs.scala.meta.Data> args) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
-    if (op == null) {
-      throw new IllegalArgumentException("null value for 'op' argument");
-    }
-    if (targs == null) {
-      throw new IllegalArgumentException("null value for 'targs' argument");
-    }
-    if (args == null) {
-      throw new IllegalArgumentException("null value for 'args' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
+    java.util.Objects.requireNonNull((op));
+    java.util.Objects.requireNonNull((targs));
+    java.util.Objects.requireNonNull((args));
     this.lhs = lhs;
     this.op = op;
     this.targs = targs;
@@ -49,30 +41,22 @@ public class Data_ApplyType implements Serializable {
   }
   
   public Data_ApplyType withLhs(hydra.langs.scala.meta.Data lhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
     return new Data_ApplyType(lhs, op, targs, args);
   }
   
   public Data_ApplyType withOp(hydra.langs.scala.meta.Data_Name op) {
-    if (op == null) {
-      throw new IllegalArgumentException("null value for 'op' argument");
-    }
+    java.util.Objects.requireNonNull((op));
     return new Data_ApplyType(lhs, op, targs, args);
   }
   
   public Data_ApplyType withTargs(java.util.List<hydra.langs.scala.meta.Type> targs) {
-    if (targs == null) {
-      throw new IllegalArgumentException("null value for 'targs' argument");
-    }
+    java.util.Objects.requireNonNull((targs));
     return new Data_ApplyType(lhs, op, targs, args);
   }
   
   public Data_ApplyType withArgs(java.util.List<hydra.langs.scala.meta.Data> args) {
-    if (args == null) {
-      throw new IllegalArgumentException("null value for 'args' argument");
-    }
+    java.util.Objects.requireNonNull((args));
     return new Data_ApplyType(lhs, op, targs, args);
   }
 }

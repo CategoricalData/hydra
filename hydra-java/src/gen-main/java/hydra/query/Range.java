@@ -15,12 +15,8 @@ public class Range implements Serializable {
   public final Integer max;
   
   public Range (Integer min, Integer max) {
-    if (min == null) {
-      throw new IllegalArgumentException("null value for 'min' argument");
-    }
-    if (max == null) {
-      throw new IllegalArgumentException("null value for 'max' argument");
-    }
+    java.util.Objects.requireNonNull((min));
+    java.util.Objects.requireNonNull((max));
     this.min = min;
     this.max = max;
   }
@@ -40,16 +36,12 @@ public class Range implements Serializable {
   }
   
   public Range withMin(Integer min) {
-    if (min == null) {
-      throw new IllegalArgumentException("null value for 'min' argument");
-    }
+    java.util.Objects.requireNonNull((min));
     return new Range(min, max);
   }
   
   public Range withMax(Integer max) {
-    if (max == null) {
-      throw new IllegalArgumentException("null value for 'max' argument");
-    }
+    java.util.Objects.requireNonNull((max));
     return new Range(min, max);
   }
 }

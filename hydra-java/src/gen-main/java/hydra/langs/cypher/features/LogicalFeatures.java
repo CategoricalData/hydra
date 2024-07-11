@@ -31,18 +31,10 @@ public class LogicalFeatures implements Serializable {
   public final Boolean xor;
   
   public LogicalFeatures (Boolean and, Boolean not, Boolean or, Boolean xor) {
-    if (and == null) {
-      throw new IllegalArgumentException("null value for 'and' argument");
-    }
-    if (not == null) {
-      throw new IllegalArgumentException("null value for 'not' argument");
-    }
-    if (or == null) {
-      throw new IllegalArgumentException("null value for 'or' argument");
-    }
-    if (xor == null) {
-      throw new IllegalArgumentException("null value for 'xor' argument");
-    }
+    java.util.Objects.requireNonNull((and));
+    java.util.Objects.requireNonNull((not));
+    java.util.Objects.requireNonNull((or));
+    java.util.Objects.requireNonNull((xor));
     this.and = and;
     this.not = not;
     this.or = or;
@@ -64,30 +56,22 @@ public class LogicalFeatures implements Serializable {
   }
   
   public LogicalFeatures withAnd(Boolean and) {
-    if (and == null) {
-      throw new IllegalArgumentException("null value for 'and' argument");
-    }
+    java.util.Objects.requireNonNull((and));
     return new LogicalFeatures(and, not, or, xor);
   }
   
   public LogicalFeatures withNot(Boolean not) {
-    if (not == null) {
-      throw new IllegalArgumentException("null value for 'not' argument");
-    }
+    java.util.Objects.requireNonNull((not));
     return new LogicalFeatures(and, not, or, xor);
   }
   
   public LogicalFeatures withOr(Boolean or) {
-    if (or == null) {
-      throw new IllegalArgumentException("null value for 'or' argument");
-    }
+    java.util.Objects.requireNonNull((or));
     return new LogicalFeatures(and, not, or, xor);
   }
   
   public LogicalFeatures withXor(Boolean xor) {
-    if (xor == null) {
-      throw new IllegalArgumentException("null value for 'xor' argument");
-    }
+    java.util.Objects.requireNonNull((xor));
     return new LogicalFeatures(and, not, or, xor);
   }
 }

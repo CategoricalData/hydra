@@ -12,12 +12,8 @@ public class StringListNullPredicateExpression implements Serializable {
   public final java.util.List<hydra.langs.cypher.openCypher.StringListNullPredicateRightHandSide> right;
   
   public StringListNullPredicateExpression (hydra.langs.cypher.openCypher.AddOrSubtractExpression left, java.util.List<hydra.langs.cypher.openCypher.StringListNullPredicateRightHandSide> right) {
-    if (left == null) {
-      throw new IllegalArgumentException("null value for 'left' argument");
-    }
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((left));
+    java.util.Objects.requireNonNull((right));
     this.left = left;
     this.right = right;
   }
@@ -37,16 +33,12 @@ public class StringListNullPredicateExpression implements Serializable {
   }
   
   public StringListNullPredicateExpression withLeft(hydra.langs.cypher.openCypher.AddOrSubtractExpression left) {
-    if (left == null) {
-      throw new IllegalArgumentException("null value for 'left' argument");
-    }
+    java.util.Objects.requireNonNull((left));
     return new StringListNullPredicateExpression(left, right);
   }
   
   public StringListNullPredicateExpression withRight(java.util.List<hydra.langs.cypher.openCypher.StringListNullPredicateRightHandSide> right) {
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((right));
     return new StringListNullPredicateExpression(left, right);
   }
 }

@@ -37,9 +37,7 @@ public abstract class WithArgsKeys implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.WithOptionKeys value;
     
     public WithOption (hydra.langs.tinkerpop.gremlin.WithOptionKeys value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class WithArgsKeys implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.StringArgument value;
     
     public String_ (hydra.langs.tinkerpop.gremlin.StringArgument value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

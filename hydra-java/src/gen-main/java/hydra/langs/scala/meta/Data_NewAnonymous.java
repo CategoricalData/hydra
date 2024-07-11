@@ -10,9 +10,7 @@ public class Data_NewAnonymous implements Serializable {
   public final hydra.langs.scala.meta.Template templ;
   
   public Data_NewAnonymous (hydra.langs.scala.meta.Template templ) {
-    if (templ == null) {
-      throw new IllegalArgumentException("null value for 'templ' argument");
-    }
+    java.util.Objects.requireNonNull((templ));
     this.templ = templ;
   }
   

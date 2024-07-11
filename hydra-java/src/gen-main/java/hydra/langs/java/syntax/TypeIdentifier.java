@@ -10,9 +10,7 @@ public class TypeIdentifier implements Serializable {
   public final hydra.langs.java.syntax.Identifier value;
   
   public TypeIdentifier (hydra.langs.java.syntax.Identifier value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

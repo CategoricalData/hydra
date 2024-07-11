@@ -12,12 +12,8 @@ public class PatternField implements Serializable {
   public final hydra.langs.haskell.ast.Pattern pattern;
   
   public PatternField (hydra.langs.haskell.ast.Name name, hydra.langs.haskell.ast.Pattern pattern) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (pattern == null) {
-      throw new IllegalArgumentException("null value for 'pattern' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((pattern));
     this.name = name;
     this.pattern = pattern;
   }
@@ -37,16 +33,12 @@ public class PatternField implements Serializable {
   }
   
   public PatternField withName(hydra.langs.haskell.ast.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new PatternField(name, pattern);
   }
   
   public PatternField withPattern(hydra.langs.haskell.ast.Pattern pattern) {
-    if (pattern == null) {
-      throw new IllegalArgumentException("null value for 'pattern' argument");
-    }
+    java.util.Objects.requireNonNull((pattern));
     return new PatternField(name, pattern);
   }
 }

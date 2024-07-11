@@ -15,12 +15,8 @@ public class ModuleDirective_ExportsOrOpens implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.ModuleName> modules;
   
   public ModuleDirective_ExportsOrOpens (hydra.langs.java.syntax.PackageName package_, java.util.List<hydra.langs.java.syntax.ModuleName> modules) {
-    if (package_ == null) {
-      throw new IllegalArgumentException("null value for 'package' argument");
-    }
-    if (modules == null) {
-      throw new IllegalArgumentException("null value for 'modules' argument");
-    }
+    java.util.Objects.requireNonNull((package_));
+    java.util.Objects.requireNonNull((modules));
     this.package_ = package_;
     this.modules = modules;
   }
@@ -40,16 +36,12 @@ public class ModuleDirective_ExportsOrOpens implements Serializable {
   }
   
   public ModuleDirective_ExportsOrOpens withPackage(hydra.langs.java.syntax.PackageName package_) {
-    if (package_ == null) {
-      throw new IllegalArgumentException("null value for 'package' argument");
-    }
+    java.util.Objects.requireNonNull((package_));
     return new ModuleDirective_ExportsOrOpens(package_, modules);
   }
   
   public ModuleDirective_ExportsOrOpens withModules(java.util.List<hydra.langs.java.syntax.ModuleName> modules) {
-    if (modules == null) {
-      throw new IllegalArgumentException("null value for 'modules' argument");
-    }
+    java.util.Objects.requireNonNull((modules));
     return new ModuleDirective_ExportsOrOpens(package_, modules);
   }
 }

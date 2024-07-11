@@ -37,9 +37,7 @@ public abstract class Operator implements Serializable {
     public final hydra.langs.haskell.ast.QualifiedName value;
     
     public Backtick (hydra.langs.haskell.ast.QualifiedName value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class Operator implements Serializable {
     public final hydra.langs.haskell.ast.QualifiedName value;
     
     public Normal (hydra.langs.haskell.ast.QualifiedName value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

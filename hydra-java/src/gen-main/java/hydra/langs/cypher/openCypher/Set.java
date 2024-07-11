@@ -10,9 +10,7 @@ public class Set implements Serializable {
   public final java.util.List<hydra.langs.cypher.openCypher.SetItem> value;
   
   public Set (java.util.List<hydra.langs.cypher.openCypher.SetItem> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

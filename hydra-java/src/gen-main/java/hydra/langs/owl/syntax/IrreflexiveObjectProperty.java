@@ -12,12 +12,8 @@ public class IrreflexiveObjectProperty implements Serializable {
   public final hydra.langs.owl.syntax.ObjectPropertyExpression property;
   
   public IrreflexiveObjectProperty (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, hydra.langs.owl.syntax.ObjectPropertyExpression property) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
+    java.util.Objects.requireNonNull((property));
     this.annotations = annotations;
     this.property = property;
   }
@@ -37,16 +33,12 @@ public class IrreflexiveObjectProperty implements Serializable {
   }
   
   public IrreflexiveObjectProperty withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new IrreflexiveObjectProperty(annotations, property);
   }
   
   public IrreflexiveObjectProperty withProperty(hydra.langs.owl.syntax.ObjectPropertyExpression property) {
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
+    java.util.Objects.requireNonNull((property));
     return new IrreflexiveObjectProperty(annotations, property);
   }
 }

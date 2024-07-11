@@ -12,12 +12,8 @@ public class SingleElementGroup implements Serializable {
   public final hydra.util.Opt<java.lang.Void> semi;
   
   public SingleElementGroup (hydra.langs.shex.syntax.UnaryTripleExpr unaryTripleExpr, hydra.util.Opt<java.lang.Void> semi) {
-    if (unaryTripleExpr == null) {
-      throw new IllegalArgumentException("null value for 'unaryTripleExpr' argument");
-    }
-    if (semi == null) {
-      throw new IllegalArgumentException("null value for 'semi' argument");
-    }
+    java.util.Objects.requireNonNull((unaryTripleExpr));
+    java.util.Objects.requireNonNull((semi));
     this.unaryTripleExpr = unaryTripleExpr;
     this.semi = semi;
   }
@@ -37,16 +33,12 @@ public class SingleElementGroup implements Serializable {
   }
   
   public SingleElementGroup withUnaryTripleExpr(hydra.langs.shex.syntax.UnaryTripleExpr unaryTripleExpr) {
-    if (unaryTripleExpr == null) {
-      throw new IllegalArgumentException("null value for 'unaryTripleExpr' argument");
-    }
+    java.util.Objects.requireNonNull((unaryTripleExpr));
     return new SingleElementGroup(unaryTripleExpr, semi);
   }
   
   public SingleElementGroup withSemi(hydra.util.Opt<java.lang.Void> semi) {
-    if (semi == null) {
-      throw new IllegalArgumentException("null value for 'semi' argument");
-    }
+    java.util.Objects.requireNonNull((semi));
     return new SingleElementGroup(unaryTripleExpr, semi);
   }
 }

@@ -10,9 +10,7 @@ public class Import implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Importer> importers;
   
   public Import (java.util.List<hydra.langs.scala.meta.Importer> importers) {
-    if (importers == null) {
-      throw new IllegalArgumentException("null value for 'importers' argument");
-    }
+    java.util.Objects.requireNonNull((importers));
     this.importers = importers;
   }
   

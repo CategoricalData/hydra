@@ -14,15 +14,9 @@ public class RangeArgs implements Serializable {
   public final hydra.langs.tinkerpop.gremlin.IntegerArgument max;
   
   public RangeArgs (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope, hydra.langs.tinkerpop.gremlin.IntegerArgument min, hydra.langs.tinkerpop.gremlin.IntegerArgument max) {
-    if (scope == null) {
-      throw new IllegalArgumentException("null value for 'scope' argument");
-    }
-    if (min == null) {
-      throw new IllegalArgumentException("null value for 'min' argument");
-    }
-    if (max == null) {
-      throw new IllegalArgumentException("null value for 'max' argument");
-    }
+    java.util.Objects.requireNonNull((scope));
+    java.util.Objects.requireNonNull((min));
+    java.util.Objects.requireNonNull((max));
     this.scope = scope;
     this.min = min;
     this.max = max;
@@ -43,23 +37,17 @@ public class RangeArgs implements Serializable {
   }
   
   public RangeArgs withScope(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope) {
-    if (scope == null) {
-      throw new IllegalArgumentException("null value for 'scope' argument");
-    }
+    java.util.Objects.requireNonNull((scope));
     return new RangeArgs(scope, min, max);
   }
   
   public RangeArgs withMin(hydra.langs.tinkerpop.gremlin.IntegerArgument min) {
-    if (min == null) {
-      throw new IllegalArgumentException("null value for 'min' argument");
-    }
+    java.util.Objects.requireNonNull((min));
     return new RangeArgs(scope, min, max);
   }
   
   public RangeArgs withMax(hydra.langs.tinkerpop.gremlin.IntegerArgument max) {
-    if (max == null) {
-      throw new IllegalArgumentException("null value for 'max' argument");
-    }
+    java.util.Objects.requireNonNull((max));
     return new RangeArgs(scope, min, max);
   }
 }

@@ -2,9 +2,6 @@
 
 package hydra.graph;
 
-import hydra.core.Term;
-import hydra.util.Opt;
-
 /**
  * A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph
  */
@@ -19,7 +16,7 @@ public class Graph<A> {
   /**
    * The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)
    */
-  public final java.util.Map<hydra.core.Name, Opt<Term<A>>> environment;
+  public final java.util.Map<hydra.core.Name, hydra.util.Opt<hydra.core.Term<A>>> environment;
   
   /**
    * The body of the term which generated this context
@@ -39,27 +36,15 @@ public class Graph<A> {
   /**
    * The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph.
    */
-  public final Opt<Graph<A>> schema;
+  public final hydra.util.Opt<hydra.graph.Graph<A>> schema;
   
-  public Graph (java.util.Map<hydra.core.Name, hydra.graph.Element<A>> elements, java.util.Map<hydra.core.Name, Opt<Term<A>>> environment, hydra.core.Term<A> body, java.util.Map<hydra.core.Name, hydra.graph.Primitive<A>> primitives, hydra.graph.AnnotationClass<A> annotations, Opt<Graph<A>> schema) {
-    if (elements == null) {
-      throw new IllegalArgumentException("null value for 'elements' argument");
-    }
-    if (environment == null) {
-      throw new IllegalArgumentException("null value for 'environment' argument");
-    }
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
-    if (primitives == null) {
-      throw new IllegalArgumentException("null value for 'primitives' argument");
-    }
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
-    if (schema == null) {
-      throw new IllegalArgumentException("null value for 'schema' argument");
-    }
+  public Graph (java.util.Map<hydra.core.Name, hydra.graph.Element<A>> elements, java.util.Map<hydra.core.Name, hydra.util.Opt<hydra.core.Term<A>>> environment, hydra.core.Term<A> body, java.util.Map<hydra.core.Name, hydra.graph.Primitive<A>> primitives, hydra.graph.AnnotationClass<A> annotations, hydra.util.Opt<hydra.graph.Graph<A>> schema) {
+    java.util.Objects.requireNonNull((elements));
+    java.util.Objects.requireNonNull((environment));
+    java.util.Objects.requireNonNull((body));
+    java.util.Objects.requireNonNull((primitives));
+    java.util.Objects.requireNonNull((annotations));
+    java.util.Objects.requireNonNull((schema));
     this.elements = elements;
     this.environment = environment;
     this.body = body;
@@ -83,44 +68,32 @@ public class Graph<A> {
   }
   
   public Graph withElements(java.util.Map<hydra.core.Name, hydra.graph.Element<A>> elements) {
-    if (elements == null) {
-      throw new IllegalArgumentException("null value for 'elements' argument");
-    }
+    java.util.Objects.requireNonNull((elements));
     return new Graph(elements, environment, body, primitives, annotations, schema);
   }
   
-  public Graph withEnvironment(java.util.Map<hydra.core.Name, Opt<Term<A>>> environment) {
-    if (environment == null) {
-      throw new IllegalArgumentException("null value for 'environment' argument");
-    }
+  public Graph withEnvironment(java.util.Map<hydra.core.Name, hydra.util.Opt<hydra.core.Term<A>>> environment) {
+    java.util.Objects.requireNonNull((environment));
     return new Graph(elements, environment, body, primitives, annotations, schema);
   }
   
   public Graph withBody(hydra.core.Term<A> body) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((body));
     return new Graph(elements, environment, body, primitives, annotations, schema);
   }
   
   public Graph withPrimitives(java.util.Map<hydra.core.Name, hydra.graph.Primitive<A>> primitives) {
-    if (primitives == null) {
-      throw new IllegalArgumentException("null value for 'primitives' argument");
-    }
+    java.util.Objects.requireNonNull((primitives));
     return new Graph(elements, environment, body, primitives, annotations, schema);
   }
   
   public Graph withAnnotations(hydra.graph.AnnotationClass<A> annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new Graph(elements, environment, body, primitives, annotations, schema);
   }
   
-  public Graph withSchema(Opt<Graph<A>> schema) {
-    if (schema == null) {
-      throw new IllegalArgumentException("null value for 'schema' argument");
-    }
+  public Graph withSchema(hydra.util.Opt<hydra.graph.Graph<A>> schema) {
+    java.util.Objects.requireNonNull((schema));
     return new Graph(elements, environment, body, primitives, annotations, schema);
   }
 }

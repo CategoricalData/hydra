@@ -10,9 +10,7 @@ public class RowValueSpecialCase implements Serializable {
   public final hydra.langs.sql.ansi.NonparenthesizedValueExpressionPrimary value;
   
   public RowValueSpecialCase (hydra.langs.sql.ansi.NonparenthesizedValueExpressionPrimary value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

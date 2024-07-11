@@ -21,12 +21,8 @@ public class RandomnessFeatures implements Serializable {
   public final Boolean randomUUID;
   
   public RandomnessFeatures (Boolean rand, Boolean randomUUID) {
-    if (rand == null) {
-      throw new IllegalArgumentException("null value for 'rand' argument");
-    }
-    if (randomUUID == null) {
-      throw new IllegalArgumentException("null value for 'randomUUID' argument");
-    }
+    java.util.Objects.requireNonNull((rand));
+    java.util.Objects.requireNonNull((randomUUID));
     this.rand = rand;
     this.randomUUID = randomUUID;
   }
@@ -46,16 +42,12 @@ public class RandomnessFeatures implements Serializable {
   }
   
   public RandomnessFeatures withRand(Boolean rand) {
-    if (rand == null) {
-      throw new IllegalArgumentException("null value for 'rand' argument");
-    }
+    java.util.Objects.requireNonNull((rand));
     return new RandomnessFeatures(rand, randomUUID);
   }
   
   public RandomnessFeatures withRandomUUID(Boolean randomUUID) {
-    if (randomUUID == null) {
-      throw new IllegalArgumentException("null value for 'randomUUID' argument");
-    }
+    java.util.Objects.requireNonNull((randomUUID));
     return new RandomnessFeatures(rand, randomUUID);
   }
 }

@@ -67,9 +67,7 @@ public abstract class TraversalSourceSelfMethod implements Serializable {
     public final Boolean value;
     
     public WithBulk (Boolean value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -122,9 +120,7 @@ public abstract class TraversalSourceSelfMethod implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument value;
     
     public WithSack (hydra.langs.tinkerpop.gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -152,9 +148,7 @@ public abstract class TraversalSourceSelfMethod implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.StringArgumentAndGenericLiteralArgument value;
     
     public WithSideEffect (hydra.langs.tinkerpop.gremlin.StringArgumentAndGenericLiteralArgument value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -182,9 +176,7 @@ public abstract class TraversalSourceSelfMethod implements Serializable {
     public final java.util.List<hydra.langs.tinkerpop.gremlin.TraversalStrategy> value;
     
     public WithStrategies (java.util.List<hydra.langs.tinkerpop.gremlin.TraversalStrategy> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -212,9 +204,7 @@ public abstract class TraversalSourceSelfMethod implements Serializable {
     public final java.util.List<hydra.langs.tinkerpop.gremlin.Identifier> value;
     
     public WithoutStrategies (java.util.List<hydra.langs.tinkerpop.gremlin.Identifier> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -242,9 +232,7 @@ public abstract class TraversalSourceSelfMethod implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.StringArgumentAndOptionalGenericLiteralArgument value;
     
     public With (hydra.langs.tinkerpop.gremlin.StringArgumentAndOptionalGenericLiteralArgument value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

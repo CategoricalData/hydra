@@ -16,18 +16,10 @@ public class EnumConstant implements Serializable {
   public final hydra.util.Opt<hydra.langs.java.syntax.ClassBody> body;
   
   public EnumConstant (java.util.List<hydra.langs.java.syntax.EnumConstantModifier> modifiers, hydra.langs.java.syntax.Identifier identifier, java.util.List<java.util.List<hydra.langs.java.syntax.Expression>> arguments, hydra.util.Opt<hydra.langs.java.syntax.ClassBody> body) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
-    if (arguments == null) {
-      throw new IllegalArgumentException("null value for 'arguments' argument");
-    }
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
+    java.util.Objects.requireNonNull((identifier));
+    java.util.Objects.requireNonNull((arguments));
+    java.util.Objects.requireNonNull((body));
     this.modifiers = modifiers;
     this.identifier = identifier;
     this.arguments = arguments;
@@ -49,30 +41,22 @@ public class EnumConstant implements Serializable {
   }
   
   public EnumConstant withModifiers(java.util.List<hydra.langs.java.syntax.EnumConstantModifier> modifiers) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
     return new EnumConstant(modifiers, identifier, arguments, body);
   }
   
   public EnumConstant withIdentifier(hydra.langs.java.syntax.Identifier identifier) {
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
+    java.util.Objects.requireNonNull((identifier));
     return new EnumConstant(modifiers, identifier, arguments, body);
   }
   
   public EnumConstant withArguments(java.util.List<java.util.List<hydra.langs.java.syntax.Expression>> arguments) {
-    if (arguments == null) {
-      throw new IllegalArgumentException("null value for 'arguments' argument");
-    }
+    java.util.Objects.requireNonNull((arguments));
     return new EnumConstant(modifiers, identifier, arguments, body);
   }
   
   public EnumConstant withBody(hydra.util.Opt<hydra.langs.java.syntax.ClassBody> body) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((body));
     return new EnumConstant(modifiers, identifier, arguments, body);
   }
 }

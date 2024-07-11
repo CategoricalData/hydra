@@ -12,12 +12,8 @@ public class InlineShapeAnd implements Serializable {
   public final java.util.List<hydra.langs.shex.syntax.InlineShapeNot> listOfSequence;
   
   public InlineShapeAnd (hydra.langs.shex.syntax.InlineShapeNot inlineShapeNot, java.util.List<hydra.langs.shex.syntax.InlineShapeNot> listOfSequence) {
-    if (inlineShapeNot == null) {
-      throw new IllegalArgumentException("null value for 'inlineShapeNot' argument");
-    }
-    if (listOfSequence == null) {
-      throw new IllegalArgumentException("null value for 'listOfSequence' argument");
-    }
+    java.util.Objects.requireNonNull((inlineShapeNot));
+    java.util.Objects.requireNonNull((listOfSequence));
     this.inlineShapeNot = inlineShapeNot;
     this.listOfSequence = listOfSequence;
   }
@@ -37,16 +33,12 @@ public class InlineShapeAnd implements Serializable {
   }
   
   public InlineShapeAnd withInlineShapeNot(hydra.langs.shex.syntax.InlineShapeNot inlineShapeNot) {
-    if (inlineShapeNot == null) {
-      throw new IllegalArgumentException("null value for 'inlineShapeNot' argument");
-    }
+    java.util.Objects.requireNonNull((inlineShapeNot));
     return new InlineShapeAnd(inlineShapeNot, listOfSequence);
   }
   
   public InlineShapeAnd withListOfSequence(java.util.List<hydra.langs.shex.syntax.InlineShapeNot> listOfSequence) {
-    if (listOfSequence == null) {
-      throw new IllegalArgumentException("null value for 'listOfSequence' argument");
-    }
+    java.util.Objects.requireNonNull((listOfSequence));
     return new InlineShapeAnd(inlineShapeNot, listOfSequence);
   }
 }

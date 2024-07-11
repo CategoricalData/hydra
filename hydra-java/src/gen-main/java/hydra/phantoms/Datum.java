@@ -13,9 +13,7 @@ public class Datum<A> implements Serializable {
   public final hydra.core.Term<hydra.compute.Kv> value;
   
   public Datum (hydra.core.Term<hydra.compute.Kv> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

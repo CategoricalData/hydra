@@ -12,12 +12,8 @@ public class LabeledStatementNoShortIf implements Serializable {
   public final hydra.langs.java.syntax.StatementNoShortIf statement;
   
   public LabeledStatementNoShortIf (hydra.langs.java.syntax.Identifier identifier, hydra.langs.java.syntax.StatementNoShortIf statement) {
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
-    if (statement == null) {
-      throw new IllegalArgumentException("null value for 'statement' argument");
-    }
+    java.util.Objects.requireNonNull((identifier));
+    java.util.Objects.requireNonNull((statement));
     this.identifier = identifier;
     this.statement = statement;
   }
@@ -37,16 +33,12 @@ public class LabeledStatementNoShortIf implements Serializable {
   }
   
   public LabeledStatementNoShortIf withIdentifier(hydra.langs.java.syntax.Identifier identifier) {
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
+    java.util.Objects.requireNonNull((identifier));
     return new LabeledStatementNoShortIf(identifier, statement);
   }
   
   public LabeledStatementNoShortIf withStatement(hydra.langs.java.syntax.StatementNoShortIf statement) {
-    if (statement == null) {
-      throw new IllegalArgumentException("null value for 'statement' argument");
-    }
+    java.util.Objects.requireNonNull((statement));
     return new LabeledStatementNoShortIf(identifier, statement);
   }
 }

@@ -37,9 +37,7 @@ public abstract class RdfLiteral_Alts_Option implements Serializable {
     public final hydra.langs.shex.syntax.LangTag value;
     
     public LangTag (hydra.langs.shex.syntax.LangTag value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class RdfLiteral_Alts_Option implements Serializable {
     public final hydra.langs.shex.syntax.Datatype value;
     
     public Sequence (hydra.langs.shex.syntax.Datatype value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

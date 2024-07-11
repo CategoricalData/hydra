@@ -37,9 +37,7 @@ public abstract class ProcedureInvocation implements Serializable {
     public final hydra.langs.cypher.openCypher.ExplicitProcedureInvocation value;
     
     public Explicit (hydra.langs.cypher.openCypher.ExplicitProcedureInvocation value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class ProcedureInvocation implements Serializable {
     public final hydra.langs.cypher.openCypher.ImplicitProcedureInvocation value;
     
     public Implicit (hydra.langs.cypher.openCypher.ImplicitProcedureInvocation value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

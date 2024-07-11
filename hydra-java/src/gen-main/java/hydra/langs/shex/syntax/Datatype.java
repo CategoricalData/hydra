@@ -10,9 +10,7 @@ public class Datatype implements Serializable {
   public final hydra.langs.shex.syntax.Iri value;
   
   public Datatype (hydra.langs.shex.syntax.Iri value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

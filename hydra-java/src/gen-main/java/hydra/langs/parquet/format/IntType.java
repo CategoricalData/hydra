@@ -15,12 +15,8 @@ public class IntType implements Serializable {
   public final Boolean isSigned;
   
   public IntType (Byte bitWidth, Boolean isSigned) {
-    if (bitWidth == null) {
-      throw new IllegalArgumentException("null value for 'bitWidth' argument");
-    }
-    if (isSigned == null) {
-      throw new IllegalArgumentException("null value for 'isSigned' argument");
-    }
+    java.util.Objects.requireNonNull((bitWidth));
+    java.util.Objects.requireNonNull((isSigned));
     this.bitWidth = bitWidth;
     this.isSigned = isSigned;
   }
@@ -40,16 +36,12 @@ public class IntType implements Serializable {
   }
   
   public IntType withBitWidth(Byte bitWidth) {
-    if (bitWidth == null) {
-      throw new IllegalArgumentException("null value for 'bitWidth' argument");
-    }
+    java.util.Objects.requireNonNull((bitWidth));
     return new IntType(bitWidth, isSigned);
   }
   
   public IntType withIsSigned(Boolean isSigned) {
-    if (isSigned == null) {
-      throw new IllegalArgumentException("null value for 'isSigned' argument");
-    }
+    java.util.Objects.requireNonNull((isSigned));
     return new IntType(bitWidth, isSigned);
   }
 }

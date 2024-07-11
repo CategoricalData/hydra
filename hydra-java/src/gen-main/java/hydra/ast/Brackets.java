@@ -15,12 +15,8 @@ public class Brackets implements Serializable {
   public final hydra.ast.Symbol close;
   
   public Brackets (hydra.ast.Symbol open, hydra.ast.Symbol close) {
-    if (open == null) {
-      throw new IllegalArgumentException("null value for 'open' argument");
-    }
-    if (close == null) {
-      throw new IllegalArgumentException("null value for 'close' argument");
-    }
+    java.util.Objects.requireNonNull((open));
+    java.util.Objects.requireNonNull((close));
     this.open = open;
     this.close = close;
   }
@@ -40,16 +36,12 @@ public class Brackets implements Serializable {
   }
   
   public Brackets withOpen(hydra.ast.Symbol open) {
-    if (open == null) {
-      throw new IllegalArgumentException("null value for 'open' argument");
-    }
+    java.util.Objects.requireNonNull((open));
     return new Brackets(open, close);
   }
   
   public Brackets withClose(hydra.ast.Symbol close) {
-    if (close == null) {
-      throw new IllegalArgumentException("null value for 'close' argument");
-    }
+    java.util.Objects.requireNonNull((close));
     return new Brackets(open, close);
   }
 }

@@ -12,12 +12,8 @@ public class EnumField implements Serializable {
   public final hydra.langs.pegasus.pdl.Annotations annotations;
   
   public EnumField (hydra.langs.pegasus.pdl.EnumFieldName name, hydra.langs.pegasus.pdl.Annotations annotations) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((annotations));
     this.name = name;
     this.annotations = annotations;
   }
@@ -37,16 +33,12 @@ public class EnumField implements Serializable {
   }
   
   public EnumField withName(hydra.langs.pegasus.pdl.EnumFieldName name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new EnumField(name, annotations);
   }
   
   public EnumField withAnnotations(hydra.langs.pegasus.pdl.Annotations annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new EnumField(name, annotations);
   }
 }

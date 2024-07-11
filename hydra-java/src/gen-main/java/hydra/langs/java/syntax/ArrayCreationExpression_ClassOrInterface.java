@@ -14,15 +14,9 @@ public class ArrayCreationExpression_ClassOrInterface implements Serializable {
   public final hydra.util.Opt<hydra.langs.java.syntax.Dims> dims;
   
   public ArrayCreationExpression_ClassOrInterface (hydra.langs.java.syntax.ClassOrInterfaceType type, java.util.List<hydra.langs.java.syntax.DimExpr> dimExprs, hydra.util.Opt<hydra.langs.java.syntax.Dims> dims) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (dimExprs == null) {
-      throw new IllegalArgumentException("null value for 'dimExprs' argument");
-    }
-    if (dims == null) {
-      throw new IllegalArgumentException("null value for 'dims' argument");
-    }
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((dimExprs));
+    java.util.Objects.requireNonNull((dims));
     this.type = type;
     this.dimExprs = dimExprs;
     this.dims = dims;
@@ -43,23 +37,17 @@ public class ArrayCreationExpression_ClassOrInterface implements Serializable {
   }
   
   public ArrayCreationExpression_ClassOrInterface withType(hydra.langs.java.syntax.ClassOrInterfaceType type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new ArrayCreationExpression_ClassOrInterface(type, dimExprs, dims);
   }
   
   public ArrayCreationExpression_ClassOrInterface withDimExprs(java.util.List<hydra.langs.java.syntax.DimExpr> dimExprs) {
-    if (dimExprs == null) {
-      throw new IllegalArgumentException("null value for 'dimExprs' argument");
-    }
+    java.util.Objects.requireNonNull((dimExprs));
     return new ArrayCreationExpression_ClassOrInterface(type, dimExprs, dims);
   }
   
   public ArrayCreationExpression_ClassOrInterface withDims(hydra.util.Opt<hydra.langs.java.syntax.Dims> dims) {
-    if (dims == null) {
-      throw new IllegalArgumentException("null value for 'dims' argument");
-    }
+    java.util.Objects.requireNonNull((dims));
     return new ArrayCreationExpression_ClassOrInterface(type, dimExprs, dims);
   }
 }

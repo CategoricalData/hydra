@@ -51,30 +51,14 @@ public class DataPageHeaderV2 implements Serializable {
   public final hydra.util.Opt<hydra.langs.parquet.format.Statistics> statistics;
   
   public DataPageHeaderV2 (Integer numValues, Integer numNulls, Integer numRows, hydra.langs.parquet.format.Encoding encoding, Integer definitionLevelsByteLength, Integer repetitionLevelsByteLength, hydra.util.Opt<Boolean> isCompressed, hydra.util.Opt<hydra.langs.parquet.format.Statistics> statistics) {
-    if (numValues == null) {
-      throw new IllegalArgumentException("null value for 'numValues' argument");
-    }
-    if (numNulls == null) {
-      throw new IllegalArgumentException("null value for 'numNulls' argument");
-    }
-    if (numRows == null) {
-      throw new IllegalArgumentException("null value for 'numRows' argument");
-    }
-    if (encoding == null) {
-      throw new IllegalArgumentException("null value for 'encoding' argument");
-    }
-    if (definitionLevelsByteLength == null) {
-      throw new IllegalArgumentException("null value for 'definitionLevelsByteLength' argument");
-    }
-    if (repetitionLevelsByteLength == null) {
-      throw new IllegalArgumentException("null value for 'repetitionLevelsByteLength' argument");
-    }
-    if (isCompressed == null) {
-      throw new IllegalArgumentException("null value for 'isCompressed' argument");
-    }
-    if (statistics == null) {
-      throw new IllegalArgumentException("null value for 'statistics' argument");
-    }
+    java.util.Objects.requireNonNull((numValues));
+    java.util.Objects.requireNonNull((numNulls));
+    java.util.Objects.requireNonNull((numRows));
+    java.util.Objects.requireNonNull((encoding));
+    java.util.Objects.requireNonNull((definitionLevelsByteLength));
+    java.util.Objects.requireNonNull((repetitionLevelsByteLength));
+    java.util.Objects.requireNonNull((isCompressed));
+    java.util.Objects.requireNonNull((statistics));
     this.numValues = numValues;
     this.numNulls = numNulls;
     this.numRows = numRows;
@@ -100,58 +84,42 @@ public class DataPageHeaderV2 implements Serializable {
   }
   
   public DataPageHeaderV2 withNumValues(Integer numValues) {
-    if (numValues == null) {
-      throw new IllegalArgumentException("null value for 'numValues' argument");
-    }
+    java.util.Objects.requireNonNull((numValues));
     return new DataPageHeaderV2(numValues, numNulls, numRows, encoding, definitionLevelsByteLength, repetitionLevelsByteLength, isCompressed, statistics);
   }
   
   public DataPageHeaderV2 withNumNulls(Integer numNulls) {
-    if (numNulls == null) {
-      throw new IllegalArgumentException("null value for 'numNulls' argument");
-    }
+    java.util.Objects.requireNonNull((numNulls));
     return new DataPageHeaderV2(numValues, numNulls, numRows, encoding, definitionLevelsByteLength, repetitionLevelsByteLength, isCompressed, statistics);
   }
   
   public DataPageHeaderV2 withNumRows(Integer numRows) {
-    if (numRows == null) {
-      throw new IllegalArgumentException("null value for 'numRows' argument");
-    }
+    java.util.Objects.requireNonNull((numRows));
     return new DataPageHeaderV2(numValues, numNulls, numRows, encoding, definitionLevelsByteLength, repetitionLevelsByteLength, isCompressed, statistics);
   }
   
   public DataPageHeaderV2 withEncoding(hydra.langs.parquet.format.Encoding encoding) {
-    if (encoding == null) {
-      throw new IllegalArgumentException("null value for 'encoding' argument");
-    }
+    java.util.Objects.requireNonNull((encoding));
     return new DataPageHeaderV2(numValues, numNulls, numRows, encoding, definitionLevelsByteLength, repetitionLevelsByteLength, isCompressed, statistics);
   }
   
   public DataPageHeaderV2 withDefinitionLevelsByteLength(Integer definitionLevelsByteLength) {
-    if (definitionLevelsByteLength == null) {
-      throw new IllegalArgumentException("null value for 'definitionLevelsByteLength' argument");
-    }
+    java.util.Objects.requireNonNull((definitionLevelsByteLength));
     return new DataPageHeaderV2(numValues, numNulls, numRows, encoding, definitionLevelsByteLength, repetitionLevelsByteLength, isCompressed, statistics);
   }
   
   public DataPageHeaderV2 withRepetitionLevelsByteLength(Integer repetitionLevelsByteLength) {
-    if (repetitionLevelsByteLength == null) {
-      throw new IllegalArgumentException("null value for 'repetitionLevelsByteLength' argument");
-    }
+    java.util.Objects.requireNonNull((repetitionLevelsByteLength));
     return new DataPageHeaderV2(numValues, numNulls, numRows, encoding, definitionLevelsByteLength, repetitionLevelsByteLength, isCompressed, statistics);
   }
   
   public DataPageHeaderV2 withIsCompressed(hydra.util.Opt<Boolean> isCompressed) {
-    if (isCompressed == null) {
-      throw new IllegalArgumentException("null value for 'isCompressed' argument");
-    }
+    java.util.Objects.requireNonNull((isCompressed));
     return new DataPageHeaderV2(numValues, numNulls, numRows, encoding, definitionLevelsByteLength, repetitionLevelsByteLength, isCompressed, statistics);
   }
   
   public DataPageHeaderV2 withStatistics(hydra.util.Opt<hydra.langs.parquet.format.Statistics> statistics) {
-    if (statistics == null) {
-      throw new IllegalArgumentException("null value for 'statistics' argument");
-    }
+    java.util.Objects.requireNonNull((statistics));
     return new DataPageHeaderV2(numValues, numNulls, numRows, encoding, definitionLevelsByteLength, repetitionLevelsByteLength, isCompressed, statistics);
   }
 }

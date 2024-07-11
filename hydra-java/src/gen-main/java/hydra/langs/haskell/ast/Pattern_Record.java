@@ -12,12 +12,8 @@ public class Pattern_Record implements Serializable {
   public final java.util.List<hydra.langs.haskell.ast.PatternField> fields;
   
   public Pattern_Record (hydra.langs.haskell.ast.Name name, java.util.List<hydra.langs.haskell.ast.PatternField> fields) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (fields == null) {
-      throw new IllegalArgumentException("null value for 'fields' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((fields));
     this.name = name;
     this.fields = fields;
   }
@@ -37,16 +33,12 @@ public class Pattern_Record implements Serializable {
   }
   
   public Pattern_Record withName(hydra.langs.haskell.ast.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Pattern_Record(name, fields);
   }
   
   public Pattern_Record withFields(java.util.List<hydra.langs.haskell.ast.PatternField> fields) {
-    if (fields == null) {
-      throw new IllegalArgumentException("null value for 'fields' argument");
-    }
+    java.util.Objects.requireNonNull((fields));
     return new Pattern_Record(name, fields);
   }
 }

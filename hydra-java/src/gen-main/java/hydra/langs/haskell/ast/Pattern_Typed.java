@@ -12,12 +12,8 @@ public class Pattern_Typed implements Serializable {
   public final hydra.langs.haskell.ast.Type type;
   
   public Pattern_Typed (hydra.langs.haskell.ast.Pattern inner, hydra.langs.haskell.ast.Type type) {
-    if (inner == null) {
-      throw new IllegalArgumentException("null value for 'inner' argument");
-    }
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((inner));
+    java.util.Objects.requireNonNull((type));
     this.inner = inner;
     this.type = type;
   }
@@ -37,16 +33,12 @@ public class Pattern_Typed implements Serializable {
   }
   
   public Pattern_Typed withInner(hydra.langs.haskell.ast.Pattern inner) {
-    if (inner == null) {
-      throw new IllegalArgumentException("null value for 'inner' argument");
-    }
+    java.util.Objects.requireNonNull((inner));
     return new Pattern_Typed(inner, type);
   }
   
   public Pattern_Typed withType(hydra.langs.haskell.ast.Type type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new Pattern_Typed(inner, type);
   }
 }

@@ -14,15 +14,9 @@ public class FromConstructor implements Serializable {
   public final hydra.langs.sql.ansi.ContextuallyTypedTableValueConstructor values;
   
   public FromConstructor (hydra.util.Opt<hydra.langs.sql.ansi.InsertColumnList> columns, hydra.util.Opt<hydra.langs.sql.ansi.OverrideClause> override, hydra.langs.sql.ansi.ContextuallyTypedTableValueConstructor values) {
-    if (columns == null) {
-      throw new IllegalArgumentException("null value for 'columns' argument");
-    }
-    if (override == null) {
-      throw new IllegalArgumentException("null value for 'override' argument");
-    }
-    if (values == null) {
-      throw new IllegalArgumentException("null value for 'values' argument");
-    }
+    java.util.Objects.requireNonNull((columns));
+    java.util.Objects.requireNonNull((override));
+    java.util.Objects.requireNonNull((values));
     this.columns = columns;
     this.override = override;
     this.values = values;
@@ -43,23 +37,17 @@ public class FromConstructor implements Serializable {
   }
   
   public FromConstructor withColumns(hydra.util.Opt<hydra.langs.sql.ansi.InsertColumnList> columns) {
-    if (columns == null) {
-      throw new IllegalArgumentException("null value for 'columns' argument");
-    }
+    java.util.Objects.requireNonNull((columns));
     return new FromConstructor(columns, override, values);
   }
   
   public FromConstructor withOverride(hydra.util.Opt<hydra.langs.sql.ansi.OverrideClause> override) {
-    if (override == null) {
-      throw new IllegalArgumentException("null value for 'override' argument");
-    }
+    java.util.Objects.requireNonNull((override));
     return new FromConstructor(columns, override, values);
   }
   
   public FromConstructor withValues(hydra.langs.sql.ansi.ContextuallyTypedTableValueConstructor values) {
-    if (values == null) {
-      throw new IllegalArgumentException("null value for 'values' argument");
-    }
+    java.util.Objects.requireNonNull((values));
     return new FromConstructor(columns, override, values);
   }
 }

@@ -43,9 +43,7 @@ public abstract class ConditionalExpression implements Serializable {
     public final hydra.langs.java.syntax.ConditionalOrExpression value;
     
     public Simple (hydra.langs.java.syntax.ConditionalOrExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class ConditionalExpression implements Serializable {
     public final hydra.langs.java.syntax.ConditionalExpression_TernaryCond value;
     
     public TernaryCond (hydra.langs.java.syntax.ConditionalExpression_TernaryCond value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class ConditionalExpression implements Serializable {
     public final hydra.langs.java.syntax.ConditionalExpression_TernaryLambda value;
     
     public TernaryLambda (hydra.langs.java.syntax.ConditionalExpression_TernaryLambda value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

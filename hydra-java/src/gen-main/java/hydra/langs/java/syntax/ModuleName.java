@@ -12,12 +12,8 @@ public class ModuleName implements Serializable {
   public final hydra.util.Opt<hydra.langs.java.syntax.ModuleName> name;
   
   public ModuleName (hydra.langs.java.syntax.Identifier identifier, hydra.util.Opt<hydra.langs.java.syntax.ModuleName> name) {
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((identifier));
+    java.util.Objects.requireNonNull((name));
     this.identifier = identifier;
     this.name = name;
   }
@@ -37,16 +33,12 @@ public class ModuleName implements Serializable {
   }
   
   public ModuleName withIdentifier(hydra.langs.java.syntax.Identifier identifier) {
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
+    java.util.Objects.requireNonNull((identifier));
     return new ModuleName(identifier, name);
   }
   
   public ModuleName withName(hydra.util.Opt<hydra.langs.java.syntax.ModuleName> name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new ModuleName(identifier, name);
   }
 }

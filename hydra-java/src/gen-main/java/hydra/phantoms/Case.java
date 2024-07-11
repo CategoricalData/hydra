@@ -13,9 +13,7 @@ public class Case<A> implements Serializable {
   public final hydra.core.FieldName value;
   
   public Case (hydra.core.FieldName value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

@@ -14,15 +14,9 @@ public class StructField implements Serializable {
   public final Boolean nullable;
   
   public StructField (String name, hydra.langs.parquet.delta.DataType dataType, Boolean nullable) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (dataType == null) {
-      throw new IllegalArgumentException("null value for 'dataType' argument");
-    }
-    if (nullable == null) {
-      throw new IllegalArgumentException("null value for 'nullable' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((dataType));
+    java.util.Objects.requireNonNull((nullable));
     this.name = name;
     this.dataType = dataType;
     this.nullable = nullable;
@@ -43,23 +37,17 @@ public class StructField implements Serializable {
   }
   
   public StructField withName(String name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new StructField(name, dataType, nullable);
   }
   
   public StructField withDataType(hydra.langs.parquet.delta.DataType dataType) {
-    if (dataType == null) {
-      throw new IllegalArgumentException("null value for 'dataType' argument");
-    }
+    java.util.Objects.requireNonNull((dataType));
     return new StructField(name, dataType, nullable);
   }
   
   public StructField withNullable(Boolean nullable) {
-    if (nullable == null) {
-      throw new IllegalArgumentException("null value for 'nullable' argument");
-    }
+    java.util.Objects.requireNonNull((nullable));
     return new StructField(name, dataType, nullable);
   }
 }

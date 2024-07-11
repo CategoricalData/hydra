@@ -12,12 +12,8 @@ public class InlineShapeDefinition implements Serializable {
   public final hydra.util.Opt<hydra.langs.shex.syntax.TripleExpression> tripleExpression;
   
   public InlineShapeDefinition (java.util.List<hydra.langs.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt> listOfAlts, hydra.util.Opt<hydra.langs.shex.syntax.TripleExpression> tripleExpression) {
-    if (listOfAlts == null) {
-      throw new IllegalArgumentException("null value for 'listOfAlts' argument");
-    }
-    if (tripleExpression == null) {
-      throw new IllegalArgumentException("null value for 'tripleExpression' argument");
-    }
+    java.util.Objects.requireNonNull((listOfAlts));
+    java.util.Objects.requireNonNull((tripleExpression));
     this.listOfAlts = listOfAlts;
     this.tripleExpression = tripleExpression;
   }
@@ -37,16 +33,12 @@ public class InlineShapeDefinition implements Serializable {
   }
   
   public InlineShapeDefinition withListOfAlts(java.util.List<hydra.langs.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt> listOfAlts) {
-    if (listOfAlts == null) {
-      throw new IllegalArgumentException("null value for 'listOfAlts' argument");
-    }
+    java.util.Objects.requireNonNull((listOfAlts));
     return new InlineShapeDefinition(listOfAlts, tripleExpression);
   }
   
   public InlineShapeDefinition withTripleExpression(hydra.util.Opt<hydra.langs.shex.syntax.TripleExpression> tripleExpression) {
-    if (tripleExpression == null) {
-      throw new IllegalArgumentException("null value for 'tripleExpression' argument");
-    }
+    java.util.Objects.requireNonNull((tripleExpression));
     return new InlineShapeDefinition(listOfAlts, tripleExpression);
   }
 }

@@ -97,9 +97,7 @@ public abstract class Atom implements Serializable {
     public final hydra.langs.cypher.openCypher.Literal value;
     
     public Literal (hydra.langs.cypher.openCypher.Literal value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -127,9 +125,7 @@ public abstract class Atom implements Serializable {
     public final hydra.langs.cypher.openCypher.Parameter value;
     
     public Parameter (hydra.langs.cypher.openCypher.Parameter value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -157,9 +153,7 @@ public abstract class Atom implements Serializable {
     public final hydra.langs.cypher.openCypher.CaseExpression value;
     
     public Case (hydra.langs.cypher.openCypher.CaseExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -212,9 +206,7 @@ public abstract class Atom implements Serializable {
     public final hydra.langs.cypher.openCypher.ListComprehension value;
     
     public ListComprehension (hydra.langs.cypher.openCypher.ListComprehension value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -242,9 +234,7 @@ public abstract class Atom implements Serializable {
     public final hydra.langs.cypher.openCypher.PatternComprehension value;
     
     public PatternComprehension (hydra.langs.cypher.openCypher.PatternComprehension value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -272,9 +262,7 @@ public abstract class Atom implements Serializable {
     public final hydra.langs.cypher.openCypher.Quantifier value;
     
     public Quantifier (hydra.langs.cypher.openCypher.Quantifier value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -302,9 +290,7 @@ public abstract class Atom implements Serializable {
     public final hydra.langs.cypher.openCypher.PatternPredicate value;
     
     public PatternPredicate (hydra.langs.cypher.openCypher.PatternPredicate value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -332,9 +318,7 @@ public abstract class Atom implements Serializable {
     public final hydra.langs.cypher.openCypher.ParenthesizedExpression value;
     
     public Parenthesized (hydra.langs.cypher.openCypher.ParenthesizedExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -362,9 +346,7 @@ public abstract class Atom implements Serializable {
     public final hydra.langs.cypher.openCypher.FunctionInvocation value;
     
     public FunctionInvocation (hydra.langs.cypher.openCypher.FunctionInvocation value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -392,9 +374,7 @@ public abstract class Atom implements Serializable {
     public final hydra.langs.cypher.openCypher.ExistentialSubquery value;
     
     public ExistentialSubquery (hydra.langs.cypher.openCypher.ExistentialSubquery value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -422,9 +402,7 @@ public abstract class Atom implements Serializable {
     public final hydra.langs.cypher.openCypher.Variable value;
     
     public Variable (hydra.langs.cypher.openCypher.Variable value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

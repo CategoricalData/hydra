@@ -10,9 +10,7 @@ public class DataPropertyExpression implements Serializable {
   public final hydra.langs.owl.syntax.DataProperty value;
   
   public DataPropertyExpression (hydra.langs.owl.syntax.DataProperty value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

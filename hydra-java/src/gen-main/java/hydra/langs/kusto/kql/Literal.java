@@ -67,9 +67,7 @@ public abstract class Literal implements Serializable {
     public final hydra.langs.kusto.kql.Duration value;
     
     public Duration (hydra.langs.kusto.kql.Duration value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -97,9 +95,7 @@ public abstract class Literal implements Serializable {
     public final hydra.langs.kusto.kql.Datetime value;
     
     public Datetime (hydra.langs.kusto.kql.Datetime value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -127,9 +123,7 @@ public abstract class Literal implements Serializable {
     public final String value;
     
     public String_ (String value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -157,9 +151,7 @@ public abstract class Literal implements Serializable {
     public final Integer value;
     
     public Int (Integer value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -187,9 +179,7 @@ public abstract class Literal implements Serializable {
     public final Long value;
     
     public Long_ (Long value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -217,9 +207,7 @@ public abstract class Literal implements Serializable {
     public final Double value;
     
     public Double_ (Double value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -247,9 +235,7 @@ public abstract class Literal implements Serializable {
     public final Boolean value;
     
     public Boolean_ (Boolean value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

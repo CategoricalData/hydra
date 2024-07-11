@@ -12,12 +12,8 @@ public class Configuration implements Serializable {
   public final hydra.langs.tinkerpop.gremlin.GenericLiteralArgument value;
   
   public Configuration (hydra.langs.tinkerpop.gremlin.KeywordOrIdentifier key, hydra.langs.tinkerpop.gremlin.GenericLiteralArgument value) {
-    if (key == null) {
-      throw new IllegalArgumentException("null value for 'key' argument");
-    }
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((key));
+    java.util.Objects.requireNonNull((value));
     this.key = key;
     this.value = value;
   }
@@ -37,16 +33,12 @@ public class Configuration implements Serializable {
   }
   
   public Configuration withKey(hydra.langs.tinkerpop.gremlin.KeywordOrIdentifier key) {
-    if (key == null) {
-      throw new IllegalArgumentException("null value for 'key' argument");
-    }
+    java.util.Objects.requireNonNull((key));
     return new Configuration(key, value);
   }
   
   public Configuration withValue(hydra.langs.tinkerpop.gremlin.GenericLiteralArgument value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     return new Configuration(key, value);
   }
 }

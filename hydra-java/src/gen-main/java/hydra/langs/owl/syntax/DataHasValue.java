@@ -12,12 +12,8 @@ public class DataHasValue implements Serializable {
   public final hydra.langs.rdf.syntax.Literal value;
   
   public DataHasValue (hydra.langs.owl.syntax.DataPropertyExpression property, hydra.langs.rdf.syntax.Literal value) {
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((property));
+    java.util.Objects.requireNonNull((value));
     this.property = property;
     this.value = value;
   }
@@ -37,16 +33,12 @@ public class DataHasValue implements Serializable {
   }
   
   public DataHasValue withProperty(hydra.langs.owl.syntax.DataPropertyExpression property) {
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
+    java.util.Objects.requireNonNull((property));
     return new DataHasValue(property, value);
   }
   
   public DataHasValue withValue(hydra.langs.rdf.syntax.Literal value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     return new DataHasValue(property, value);
   }
 }

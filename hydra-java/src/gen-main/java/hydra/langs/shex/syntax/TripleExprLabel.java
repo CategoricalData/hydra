@@ -37,9 +37,7 @@ public abstract class TripleExprLabel implements Serializable {
     public final hydra.langs.shex.syntax.Iri value;
     
     public Iri (hydra.langs.shex.syntax.Iri value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class TripleExprLabel implements Serializable {
     public final hydra.langs.shex.syntax.BlankNode value;
     
     public BlankNode (hydra.langs.shex.syntax.BlankNode value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -12,12 +12,8 @@ public class SplitArgs implements Serializable {
   public final hydra.langs.tinkerpop.gremlin.StringNullableArgument delimiter;
   
   public SplitArgs (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope, hydra.langs.tinkerpop.gremlin.StringNullableArgument delimiter) {
-    if (scope == null) {
-      throw new IllegalArgumentException("null value for 'scope' argument");
-    }
-    if (delimiter == null) {
-      throw new IllegalArgumentException("null value for 'delimiter' argument");
-    }
+    java.util.Objects.requireNonNull((scope));
+    java.util.Objects.requireNonNull((delimiter));
     this.scope = scope;
     this.delimiter = delimiter;
   }
@@ -37,16 +33,12 @@ public class SplitArgs implements Serializable {
   }
   
   public SplitArgs withScope(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope) {
-    if (scope == null) {
-      throw new IllegalArgumentException("null value for 'scope' argument");
-    }
+    java.util.Objects.requireNonNull((scope));
     return new SplitArgs(scope, delimiter);
   }
   
   public SplitArgs withDelimiter(hydra.langs.tinkerpop.gremlin.StringNullableArgument delimiter) {
-    if (delimiter == null) {
-      throw new IllegalArgumentException("null value for 'delimiter' argument");
-    }
+    java.util.Objects.requireNonNull((delimiter));
     return new SplitArgs(scope, delimiter);
   }
 }

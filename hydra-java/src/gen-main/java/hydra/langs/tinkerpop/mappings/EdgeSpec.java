@@ -36,21 +36,11 @@ public class EdgeSpec implements Serializable {
   public final java.util.List<hydra.langs.tinkerpop.mappings.PropertySpec> properties;
   
   public EdgeSpec (hydra.langs.tinkerpop.propertyGraph.EdgeLabel label, hydra.langs.tinkerpop.mappings.ValueSpec id, hydra.langs.tinkerpop.mappings.ValueSpec out, hydra.langs.tinkerpop.mappings.ValueSpec in, java.util.List<hydra.langs.tinkerpop.mappings.PropertySpec> properties) {
-    if (label == null) {
-      throw new IllegalArgumentException("null value for 'label' argument");
-    }
-    if (id == null) {
-      throw new IllegalArgumentException("null value for 'id' argument");
-    }
-    if (out == null) {
-      throw new IllegalArgumentException("null value for 'out' argument");
-    }
-    if (in == null) {
-      throw new IllegalArgumentException("null value for 'in' argument");
-    }
-    if (properties == null) {
-      throw new IllegalArgumentException("null value for 'properties' argument");
-    }
+    java.util.Objects.requireNonNull((label));
+    java.util.Objects.requireNonNull((id));
+    java.util.Objects.requireNonNull((out));
+    java.util.Objects.requireNonNull((in));
+    java.util.Objects.requireNonNull((properties));
     this.label = label;
     this.id = id;
     this.out = out;
@@ -73,37 +63,27 @@ public class EdgeSpec implements Serializable {
   }
   
   public EdgeSpec withLabel(hydra.langs.tinkerpop.propertyGraph.EdgeLabel label) {
-    if (label == null) {
-      throw new IllegalArgumentException("null value for 'label' argument");
-    }
+    java.util.Objects.requireNonNull((label));
     return new EdgeSpec(label, id, out, in, properties);
   }
   
   public EdgeSpec withId(hydra.langs.tinkerpop.mappings.ValueSpec id) {
-    if (id == null) {
-      throw new IllegalArgumentException("null value for 'id' argument");
-    }
+    java.util.Objects.requireNonNull((id));
     return new EdgeSpec(label, id, out, in, properties);
   }
   
   public EdgeSpec withOut(hydra.langs.tinkerpop.mappings.ValueSpec out) {
-    if (out == null) {
-      throw new IllegalArgumentException("null value for 'out' argument");
-    }
+    java.util.Objects.requireNonNull((out));
     return new EdgeSpec(label, id, out, in, properties);
   }
   
   public EdgeSpec withIn(hydra.langs.tinkerpop.mappings.ValueSpec in) {
-    if (in == null) {
-      throw new IllegalArgumentException("null value for 'in' argument");
-    }
+    java.util.Objects.requireNonNull((in));
     return new EdgeSpec(label, id, out, in, properties);
   }
   
   public EdgeSpec withProperties(java.util.List<hydra.langs.tinkerpop.mappings.PropertySpec> properties) {
-    if (properties == null) {
-      throw new IllegalArgumentException("null value for 'properties' argument");
-    }
+    java.util.Objects.requireNonNull((properties));
     return new EdgeSpec(label, id, out, in, properties);
   }
 }

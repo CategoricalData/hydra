@@ -14,15 +14,9 @@ public class ExplicitConstructorInvocation implements Serializable {
   public final hydra.langs.java.syntax.ExplicitConstructorInvocation_Variant variant;
   
   public ExplicitConstructorInvocation (java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments, java.util.List<hydra.langs.java.syntax.Expression> arguments, hydra.langs.java.syntax.ExplicitConstructorInvocation_Variant variant) {
-    if (typeArguments == null) {
-      throw new IllegalArgumentException("null value for 'typeArguments' argument");
-    }
-    if (arguments == null) {
-      throw new IllegalArgumentException("null value for 'arguments' argument");
-    }
-    if (variant == null) {
-      throw new IllegalArgumentException("null value for 'variant' argument");
-    }
+    java.util.Objects.requireNonNull((typeArguments));
+    java.util.Objects.requireNonNull((arguments));
+    java.util.Objects.requireNonNull((variant));
     this.typeArguments = typeArguments;
     this.arguments = arguments;
     this.variant = variant;
@@ -43,23 +37,17 @@ public class ExplicitConstructorInvocation implements Serializable {
   }
   
   public ExplicitConstructorInvocation withTypeArguments(java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments) {
-    if (typeArguments == null) {
-      throw new IllegalArgumentException("null value for 'typeArguments' argument");
-    }
+    java.util.Objects.requireNonNull((typeArguments));
     return new ExplicitConstructorInvocation(typeArguments, arguments, variant);
   }
   
   public ExplicitConstructorInvocation withArguments(java.util.List<hydra.langs.java.syntax.Expression> arguments) {
-    if (arguments == null) {
-      throw new IllegalArgumentException("null value for 'arguments' argument");
-    }
+    java.util.Objects.requireNonNull((arguments));
     return new ExplicitConstructorInvocation(typeArguments, arguments, variant);
   }
   
   public ExplicitConstructorInvocation withVariant(hydra.langs.java.syntax.ExplicitConstructorInvocation_Variant variant) {
-    if (variant == null) {
-      throw new IllegalArgumentException("null value for 'variant' argument");
-    }
+    java.util.Objects.requireNonNull((variant));
     return new ExplicitConstructorInvocation(typeArguments, arguments, variant);
   }
 }

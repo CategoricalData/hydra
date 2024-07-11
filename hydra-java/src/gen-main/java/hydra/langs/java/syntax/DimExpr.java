@@ -12,12 +12,8 @@ public class DimExpr implements Serializable {
   public final hydra.util.Opt<hydra.langs.java.syntax.Expression> expression;
   
   public DimExpr (java.util.List<hydra.langs.java.syntax.Annotation> annotations, hydra.util.Opt<hydra.langs.java.syntax.Expression> expression) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
+    java.util.Objects.requireNonNull((expression));
     this.annotations = annotations;
     this.expression = expression;
   }
@@ -37,16 +33,12 @@ public class DimExpr implements Serializable {
   }
   
   public DimExpr withAnnotations(java.util.List<hydra.langs.java.syntax.Annotation> annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new DimExpr(annotations, expression);
   }
   
   public DimExpr withExpression(hydra.util.Opt<hydra.langs.java.syntax.Expression> expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new DimExpr(annotations, expression);
   }
 }

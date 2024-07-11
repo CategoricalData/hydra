@@ -151,9 +151,7 @@ public abstract class Mod implements Serializable {
     public final hydra.langs.scala.meta.Mod_Annot value;
     
     public Annot (hydra.langs.scala.meta.Mod_Annot value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -181,9 +179,7 @@ public abstract class Mod implements Serializable {
     public final hydra.langs.scala.meta.Mod_Private value;
     
     public Private (hydra.langs.scala.meta.Mod_Private value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -211,9 +207,7 @@ public abstract class Mod implements Serializable {
     public final hydra.langs.scala.meta.Mod_Protected value;
     
     public Protected (hydra.langs.scala.meta.Mod_Protected value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

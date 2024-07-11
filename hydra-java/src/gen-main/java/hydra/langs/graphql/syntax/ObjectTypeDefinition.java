@@ -18,21 +18,11 @@ public class ObjectTypeDefinition implements Serializable {
   public final hydra.util.Opt<hydra.langs.graphql.syntax.FieldsDefinition> fieldsDefinition;
   
   public ObjectTypeDefinition (hydra.util.Opt<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.Name name, hydra.util.Opt<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives, hydra.util.Opt<hydra.langs.graphql.syntax.FieldsDefinition> fieldsDefinition) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (implementsInterfaces == null) {
-      throw new IllegalArgumentException("null value for 'implementsInterfaces' argument");
-    }
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
-    if (fieldsDefinition == null) {
-      throw new IllegalArgumentException("null value for 'fieldsDefinition' argument");
-    }
+    java.util.Objects.requireNonNull((description));
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((implementsInterfaces));
+    java.util.Objects.requireNonNull((directives));
+    java.util.Objects.requireNonNull((fieldsDefinition));
     this.description = description;
     this.name = name;
     this.implementsInterfaces = implementsInterfaces;
@@ -55,37 +45,27 @@ public class ObjectTypeDefinition implements Serializable {
   }
   
   public ObjectTypeDefinition withDescription(hydra.util.Opt<hydra.langs.graphql.syntax.Description> description) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
+    java.util.Objects.requireNonNull((description));
     return new ObjectTypeDefinition(description, name, implementsInterfaces, directives, fieldsDefinition);
   }
   
   public ObjectTypeDefinition withName(hydra.langs.graphql.syntax.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new ObjectTypeDefinition(description, name, implementsInterfaces, directives, fieldsDefinition);
   }
   
   public ObjectTypeDefinition withImplementsInterfaces(hydra.util.Opt<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces) {
-    if (implementsInterfaces == null) {
-      throw new IllegalArgumentException("null value for 'implementsInterfaces' argument");
-    }
+    java.util.Objects.requireNonNull((implementsInterfaces));
     return new ObjectTypeDefinition(description, name, implementsInterfaces, directives, fieldsDefinition);
   }
   
   public ObjectTypeDefinition withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((directives));
     return new ObjectTypeDefinition(description, name, implementsInterfaces, directives, fieldsDefinition);
   }
   
   public ObjectTypeDefinition withFieldsDefinition(hydra.util.Opt<hydra.langs.graphql.syntax.FieldsDefinition> fieldsDefinition) {
-    if (fieldsDefinition == null) {
-      throw new IllegalArgumentException("null value for 'fieldsDefinition' argument");
-    }
+    java.util.Objects.requireNonNull((fieldsDefinition));
     return new ObjectTypeDefinition(description, name, implementsInterfaces, directives, fieldsDefinition);
   }
 }

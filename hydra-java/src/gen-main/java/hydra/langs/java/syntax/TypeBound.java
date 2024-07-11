@@ -37,9 +37,7 @@ public abstract class TypeBound implements Serializable {
     public final hydra.langs.java.syntax.TypeVariable value;
     
     public Variable (hydra.langs.java.syntax.TypeVariable value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class TypeBound implements Serializable {
     public final hydra.langs.java.syntax.TypeBound_ClassOrInterface value;
     
     public ClassOrInterface (hydra.langs.java.syntax.TypeBound_ClassOrInterface value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

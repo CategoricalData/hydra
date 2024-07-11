@@ -16,18 +16,10 @@ public class VariableArityParameter implements Serializable {
   public final hydra.langs.java.syntax.Identifier identifier;
   
   public VariableArityParameter (hydra.langs.java.syntax.VariableModifier modifiers, hydra.langs.java.syntax.UnannType type, java.util.List<hydra.langs.java.syntax.Annotation> annotations, hydra.langs.java.syntax.Identifier identifier) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((annotations));
+    java.util.Objects.requireNonNull((identifier));
     this.modifiers = modifiers;
     this.type = type;
     this.annotations = annotations;
@@ -49,30 +41,22 @@ public class VariableArityParameter implements Serializable {
   }
   
   public VariableArityParameter withModifiers(hydra.langs.java.syntax.VariableModifier modifiers) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
     return new VariableArityParameter(modifiers, type, annotations, identifier);
   }
   
   public VariableArityParameter withType(hydra.langs.java.syntax.UnannType type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new VariableArityParameter(modifiers, type, annotations, identifier);
   }
   
   public VariableArityParameter withAnnotations(java.util.List<hydra.langs.java.syntax.Annotation> annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new VariableArityParameter(modifiers, type, annotations, identifier);
   }
   
   public VariableArityParameter withIdentifier(hydra.langs.java.syntax.Identifier identifier) {
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
+    java.util.Objects.requireNonNull((identifier));
     return new VariableArityParameter(modifiers, type, annotations, identifier);
   }
 }

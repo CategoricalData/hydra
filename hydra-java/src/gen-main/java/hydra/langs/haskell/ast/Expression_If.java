@@ -17,15 +17,9 @@ public class Expression_If implements Serializable {
   public final hydra.langs.haskell.ast.Expression else_;
   
   public Expression_If (hydra.langs.haskell.ast.Expression condition, hydra.langs.haskell.ast.Expression then, hydra.langs.haskell.ast.Expression else_) {
-    if (condition == null) {
-      throw new IllegalArgumentException("null value for 'condition' argument");
-    }
-    if (then == null) {
-      throw new IllegalArgumentException("null value for 'then' argument");
-    }
-    if (else_ == null) {
-      throw new IllegalArgumentException("null value for 'else' argument");
-    }
+    java.util.Objects.requireNonNull((condition));
+    java.util.Objects.requireNonNull((then));
+    java.util.Objects.requireNonNull((else_));
     this.condition = condition;
     this.then = then;
     this.else_ = else_;
@@ -46,23 +40,17 @@ public class Expression_If implements Serializable {
   }
   
   public Expression_If withCondition(hydra.langs.haskell.ast.Expression condition) {
-    if (condition == null) {
-      throw new IllegalArgumentException("null value for 'condition' argument");
-    }
+    java.util.Objects.requireNonNull((condition));
     return new Expression_If(condition, then, else_);
   }
   
   public Expression_If withThen(hydra.langs.haskell.ast.Expression then) {
-    if (then == null) {
-      throw new IllegalArgumentException("null value for 'then' argument");
-    }
+    java.util.Objects.requireNonNull((then));
     return new Expression_If(condition, then, else_);
   }
   
   public Expression_If withElse(hydra.langs.haskell.ast.Expression else_) {
-    if (else_ == null) {
-      throw new IllegalArgumentException("null value for 'else' argument");
-    }
+    java.util.Objects.requireNonNull((else_));
     return new Expression_If(condition, then, else_);
   }
 }

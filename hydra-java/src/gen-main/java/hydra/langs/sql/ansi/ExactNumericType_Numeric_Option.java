@@ -12,12 +12,8 @@ public class ExactNumericType_Numeric_Option implements Serializable {
   public final hydra.util.Opt<hydra.langs.sql.ansi.Scale> sequence;
   
   public ExactNumericType_Numeric_Option (hydra.langs.sql.ansi.Precision precision, hydra.util.Opt<hydra.langs.sql.ansi.Scale> sequence) {
-    if (precision == null) {
-      throw new IllegalArgumentException("null value for 'precision' argument");
-    }
-    if (sequence == null) {
-      throw new IllegalArgumentException("null value for 'sequence' argument");
-    }
+    java.util.Objects.requireNonNull((precision));
+    java.util.Objects.requireNonNull((sequence));
     this.precision = precision;
     this.sequence = sequence;
   }
@@ -37,16 +33,12 @@ public class ExactNumericType_Numeric_Option implements Serializable {
   }
   
   public ExactNumericType_Numeric_Option withPrecision(hydra.langs.sql.ansi.Precision precision) {
-    if (precision == null) {
-      throw new IllegalArgumentException("null value for 'precision' argument");
-    }
+    java.util.Objects.requireNonNull((precision));
     return new ExactNumericType_Numeric_Option(precision, sequence);
   }
   
   public ExactNumericType_Numeric_Option withSequence(hydra.util.Opt<hydra.langs.sql.ansi.Scale> sequence) {
-    if (sequence == null) {
-      throw new IllegalArgumentException("null value for 'sequence' argument");
-    }
+    java.util.Objects.requireNonNull((sequence));
     return new ExactNumericType_Numeric_Option(precision, sequence);
   }
 }

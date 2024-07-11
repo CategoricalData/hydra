@@ -12,12 +12,8 @@ public class StringLiteralLong1_Elmt_Sequence implements Serializable {
   public final String regex;
   
   public StringLiteralLong1_Elmt_Sequence (hydra.util.Opt<hydra.langs.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option> alts, String regex) {
-    if (alts == null) {
-      throw new IllegalArgumentException("null value for 'alts' argument");
-    }
-    if (regex == null) {
-      throw new IllegalArgumentException("null value for 'regex' argument");
-    }
+    java.util.Objects.requireNonNull((alts));
+    java.util.Objects.requireNonNull((regex));
     this.alts = alts;
     this.regex = regex;
   }
@@ -37,16 +33,12 @@ public class StringLiteralLong1_Elmt_Sequence implements Serializable {
   }
   
   public StringLiteralLong1_Elmt_Sequence withAlts(hydra.util.Opt<hydra.langs.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option> alts) {
-    if (alts == null) {
-      throw new IllegalArgumentException("null value for 'alts' argument");
-    }
+    java.util.Objects.requireNonNull((alts));
     return new StringLiteralLong1_Elmt_Sequence(alts, regex);
   }
   
   public StringLiteralLong1_Elmt_Sequence withRegex(String regex) {
-    if (regex == null) {
-      throw new IllegalArgumentException("null value for 'regex' argument");
-    }
+    java.util.Objects.requireNonNull((regex));
     return new StringLiteralLong1_Elmt_Sequence(alts, regex);
   }
 }

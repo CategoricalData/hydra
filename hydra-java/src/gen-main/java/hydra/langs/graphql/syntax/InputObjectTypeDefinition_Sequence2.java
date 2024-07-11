@@ -14,15 +14,9 @@ public class InputObjectTypeDefinition_Sequence2 implements Serializable {
   public final hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives;
   
   public InputObjectTypeDefinition_Sequence2 (hydra.util.Opt<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.Name name, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((description));
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((directives));
     this.description = description;
     this.name = name;
     this.directives = directives;
@@ -43,23 +37,17 @@ public class InputObjectTypeDefinition_Sequence2 implements Serializable {
   }
   
   public InputObjectTypeDefinition_Sequence2 withDescription(hydra.util.Opt<hydra.langs.graphql.syntax.Description> description) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
+    java.util.Objects.requireNonNull((description));
     return new InputObjectTypeDefinition_Sequence2(description, name, directives);
   }
   
   public InputObjectTypeDefinition_Sequence2 withName(hydra.langs.graphql.syntax.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new InputObjectTypeDefinition_Sequence2(description, name, directives);
   }
   
   public InputObjectTypeDefinition_Sequence2 withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((directives));
     return new InputObjectTypeDefinition_Sequence2(description, name, directives);
   }
 }

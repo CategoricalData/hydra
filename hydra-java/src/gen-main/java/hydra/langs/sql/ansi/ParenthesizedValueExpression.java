@@ -10,9 +10,7 @@ public class ParenthesizedValueExpression implements Serializable {
   public final hydra.langs.sql.ansi.ValueExpression value;
   
   public ParenthesizedValueExpression (hydra.langs.sql.ansi.ValueExpression value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

@@ -52,9 +52,7 @@ public abstract class Function<A> implements Serializable {
     public final hydra.core.Elimination<A> value;
     
     public Elimination (hydra.core.Elimination<A> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -88,9 +86,7 @@ public abstract class Function<A> implements Serializable {
     public final hydra.core.Lambda<A> value;
     
     public Lambda (hydra.core.Lambda<A> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -124,9 +120,7 @@ public abstract class Function<A> implements Serializable {
     public final hydra.core.Name value;
     
     public Primitive (hydra.core.Name value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

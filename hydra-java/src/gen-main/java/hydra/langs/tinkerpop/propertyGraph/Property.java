@@ -21,12 +21,8 @@ public class Property<V> implements Serializable {
   public final V value;
   
   public Property (hydra.langs.tinkerpop.propertyGraph.PropertyKey key, V value) {
-    if (key == null) {
-      throw new IllegalArgumentException("null value for 'key' argument");
-    }
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((key));
+    java.util.Objects.requireNonNull((value));
     this.key = key;
     this.value = value;
   }
@@ -46,16 +42,12 @@ public class Property<V> implements Serializable {
   }
   
   public Property withKey(hydra.langs.tinkerpop.propertyGraph.PropertyKey key) {
-    if (key == null) {
-      throw new IllegalArgumentException("null value for 'key' argument");
-    }
+    java.util.Objects.requireNonNull((key));
     return new Property(key, value);
   }
   
   public Property withValue(V value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     return new Property(key, value);
   }
 }

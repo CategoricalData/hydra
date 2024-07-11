@@ -12,12 +12,8 @@ public class ColumnAlias implements Serializable {
   public final hydra.langs.kusto.kql.ColumnName alias;
   
   public ColumnAlias (hydra.langs.kusto.kql.ColumnName column, hydra.langs.kusto.kql.ColumnName alias) {
-    if (column == null) {
-      throw new IllegalArgumentException("null value for 'column' argument");
-    }
-    if (alias == null) {
-      throw new IllegalArgumentException("null value for 'alias' argument");
-    }
+    java.util.Objects.requireNonNull((column));
+    java.util.Objects.requireNonNull((alias));
     this.column = column;
     this.alias = alias;
   }
@@ -37,16 +33,12 @@ public class ColumnAlias implements Serializable {
   }
   
   public ColumnAlias withColumn(hydra.langs.kusto.kql.ColumnName column) {
-    if (column == null) {
-      throw new IllegalArgumentException("null value for 'column' argument");
-    }
+    java.util.Objects.requireNonNull((column));
     return new ColumnAlias(column, alias);
   }
   
   public ColumnAlias withAlias(hydra.langs.kusto.kql.ColumnName alias) {
-    if (alias == null) {
-      throw new IllegalArgumentException("null value for 'alias' argument");
-    }
+    java.util.Objects.requireNonNull((alias));
     return new ColumnAlias(column, alias);
   }
 }

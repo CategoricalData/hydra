@@ -10,9 +10,7 @@ public class LocalVariableDeclarationStatement implements Serializable {
   public final hydra.langs.java.syntax.LocalVariableDeclaration value;
   
   public LocalVariableDeclarationStatement (hydra.langs.java.syntax.LocalVariableDeclaration value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

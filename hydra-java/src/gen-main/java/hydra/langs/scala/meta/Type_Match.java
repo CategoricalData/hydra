@@ -12,12 +12,8 @@ public class Type_Match implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.TypeCase> cases;
   
   public Type_Match (hydra.langs.scala.meta.Type tpe, java.util.List<hydra.langs.scala.meta.TypeCase> cases) {
-    if (tpe == null) {
-      throw new IllegalArgumentException("null value for 'tpe' argument");
-    }
-    if (cases == null) {
-      throw new IllegalArgumentException("null value for 'cases' argument");
-    }
+    java.util.Objects.requireNonNull((tpe));
+    java.util.Objects.requireNonNull((cases));
     this.tpe = tpe;
     this.cases = cases;
   }
@@ -37,16 +33,12 @@ public class Type_Match implements Serializable {
   }
   
   public Type_Match withTpe(hydra.langs.scala.meta.Type tpe) {
-    if (tpe == null) {
-      throw new IllegalArgumentException("null value for 'tpe' argument");
-    }
+    java.util.Objects.requireNonNull((tpe));
     return new Type_Match(tpe, cases);
   }
   
   public Type_Match withCases(java.util.List<hydra.langs.scala.meta.TypeCase> cases) {
-    if (cases == null) {
-      throw new IllegalArgumentException("null value for 'cases' argument");
-    }
+    java.util.Objects.requireNonNull((cases));
     return new Type_Match(tpe, cases);
   }
 }

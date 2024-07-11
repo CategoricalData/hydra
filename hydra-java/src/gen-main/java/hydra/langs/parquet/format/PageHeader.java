@@ -59,30 +59,14 @@ public class PageHeader implements Serializable {
   public final hydra.util.Opt<hydra.langs.parquet.format.DataPageHeaderV2> dataPageHeaderV2;
   
   public PageHeader (hydra.langs.parquet.format.PageType type, Integer uncompressedPageSize, Integer compressedPageSize, hydra.util.Opt<Integer> crc, hydra.util.Opt<hydra.langs.parquet.format.DataPageHeader> dataPageHeader, hydra.util.Opt<hydra.langs.parquet.format.IndexPageHeader> indexPageHeader, hydra.util.Opt<hydra.langs.parquet.format.DictionaryPageHeader> dictionaryPageHeader, hydra.util.Opt<hydra.langs.parquet.format.DataPageHeaderV2> dataPageHeaderV2) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (uncompressedPageSize == null) {
-      throw new IllegalArgumentException("null value for 'uncompressedPageSize' argument");
-    }
-    if (compressedPageSize == null) {
-      throw new IllegalArgumentException("null value for 'compressedPageSize' argument");
-    }
-    if (crc == null) {
-      throw new IllegalArgumentException("null value for 'crc' argument");
-    }
-    if (dataPageHeader == null) {
-      throw new IllegalArgumentException("null value for 'dataPageHeader' argument");
-    }
-    if (indexPageHeader == null) {
-      throw new IllegalArgumentException("null value for 'indexPageHeader' argument");
-    }
-    if (dictionaryPageHeader == null) {
-      throw new IllegalArgumentException("null value for 'dictionaryPageHeader' argument");
-    }
-    if (dataPageHeaderV2 == null) {
-      throw new IllegalArgumentException("null value for 'dataPageHeaderV2' argument");
-    }
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((uncompressedPageSize));
+    java.util.Objects.requireNonNull((compressedPageSize));
+    java.util.Objects.requireNonNull((crc));
+    java.util.Objects.requireNonNull((dataPageHeader));
+    java.util.Objects.requireNonNull((indexPageHeader));
+    java.util.Objects.requireNonNull((dictionaryPageHeader));
+    java.util.Objects.requireNonNull((dataPageHeaderV2));
     this.type = type;
     this.uncompressedPageSize = uncompressedPageSize;
     this.compressedPageSize = compressedPageSize;
@@ -108,58 +92,42 @@ public class PageHeader implements Serializable {
   }
   
   public PageHeader withType(hydra.langs.parquet.format.PageType type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new PageHeader(type, uncompressedPageSize, compressedPageSize, crc, dataPageHeader, indexPageHeader, dictionaryPageHeader, dataPageHeaderV2);
   }
   
   public PageHeader withUncompressedPageSize(Integer uncompressedPageSize) {
-    if (uncompressedPageSize == null) {
-      throw new IllegalArgumentException("null value for 'uncompressedPageSize' argument");
-    }
+    java.util.Objects.requireNonNull((uncompressedPageSize));
     return new PageHeader(type, uncompressedPageSize, compressedPageSize, crc, dataPageHeader, indexPageHeader, dictionaryPageHeader, dataPageHeaderV2);
   }
   
   public PageHeader withCompressedPageSize(Integer compressedPageSize) {
-    if (compressedPageSize == null) {
-      throw new IllegalArgumentException("null value for 'compressedPageSize' argument");
-    }
+    java.util.Objects.requireNonNull((compressedPageSize));
     return new PageHeader(type, uncompressedPageSize, compressedPageSize, crc, dataPageHeader, indexPageHeader, dictionaryPageHeader, dataPageHeaderV2);
   }
   
   public PageHeader withCrc(hydra.util.Opt<Integer> crc) {
-    if (crc == null) {
-      throw new IllegalArgumentException("null value for 'crc' argument");
-    }
+    java.util.Objects.requireNonNull((crc));
     return new PageHeader(type, uncompressedPageSize, compressedPageSize, crc, dataPageHeader, indexPageHeader, dictionaryPageHeader, dataPageHeaderV2);
   }
   
   public PageHeader withDataPageHeader(hydra.util.Opt<hydra.langs.parquet.format.DataPageHeader> dataPageHeader) {
-    if (dataPageHeader == null) {
-      throw new IllegalArgumentException("null value for 'dataPageHeader' argument");
-    }
+    java.util.Objects.requireNonNull((dataPageHeader));
     return new PageHeader(type, uncompressedPageSize, compressedPageSize, crc, dataPageHeader, indexPageHeader, dictionaryPageHeader, dataPageHeaderV2);
   }
   
   public PageHeader withIndexPageHeader(hydra.util.Opt<hydra.langs.parquet.format.IndexPageHeader> indexPageHeader) {
-    if (indexPageHeader == null) {
-      throw new IllegalArgumentException("null value for 'indexPageHeader' argument");
-    }
+    java.util.Objects.requireNonNull((indexPageHeader));
     return new PageHeader(type, uncompressedPageSize, compressedPageSize, crc, dataPageHeader, indexPageHeader, dictionaryPageHeader, dataPageHeaderV2);
   }
   
   public PageHeader withDictionaryPageHeader(hydra.util.Opt<hydra.langs.parquet.format.DictionaryPageHeader> dictionaryPageHeader) {
-    if (dictionaryPageHeader == null) {
-      throw new IllegalArgumentException("null value for 'dictionaryPageHeader' argument");
-    }
+    java.util.Objects.requireNonNull((dictionaryPageHeader));
     return new PageHeader(type, uncompressedPageSize, compressedPageSize, crc, dataPageHeader, indexPageHeader, dictionaryPageHeader, dataPageHeaderV2);
   }
   
   public PageHeader withDataPageHeaderV2(hydra.util.Opt<hydra.langs.parquet.format.DataPageHeaderV2> dataPageHeaderV2) {
-    if (dataPageHeaderV2 == null) {
-      throw new IllegalArgumentException("null value for 'dataPageHeaderV2' argument");
-    }
+    java.util.Objects.requireNonNull((dataPageHeaderV2));
     return new PageHeader(type, uncompressedPageSize, compressedPageSize, crc, dataPageHeader, indexPageHeader, dictionaryPageHeader, dataPageHeaderV2);
   }
 }

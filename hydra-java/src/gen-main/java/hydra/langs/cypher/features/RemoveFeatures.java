@@ -21,12 +21,8 @@ public class RemoveFeatures implements Serializable {
   public final Boolean byProperty;
   
   public RemoveFeatures (Boolean byLabel, Boolean byProperty) {
-    if (byLabel == null) {
-      throw new IllegalArgumentException("null value for 'byLabel' argument");
-    }
-    if (byProperty == null) {
-      throw new IllegalArgumentException("null value for 'byProperty' argument");
-    }
+    java.util.Objects.requireNonNull((byLabel));
+    java.util.Objects.requireNonNull((byProperty));
     this.byLabel = byLabel;
     this.byProperty = byProperty;
   }
@@ -46,16 +42,12 @@ public class RemoveFeatures implements Serializable {
   }
   
   public RemoveFeatures withByLabel(Boolean byLabel) {
-    if (byLabel == null) {
-      throw new IllegalArgumentException("null value for 'byLabel' argument");
-    }
+    java.util.Objects.requireNonNull((byLabel));
     return new RemoveFeatures(byLabel, byProperty);
   }
   
   public RemoveFeatures withByProperty(Boolean byProperty) {
-    if (byProperty == null) {
-      throw new IllegalArgumentException("null value for 'byProperty' argument");
-    }
+    java.util.Objects.requireNonNull((byProperty));
     return new RemoveFeatures(byLabel, byProperty);
   }
 }

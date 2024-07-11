@@ -16,9 +16,7 @@ public class LangStrings implements Serializable {
   public final java.util.Map<hydra.util.Opt<hydra.langs.rdf.syntax.LanguageTag>, String> value;
   
   public LangStrings (java.util.Map<hydra.util.Opt<hydra.langs.rdf.syntax.LanguageTag>, String> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

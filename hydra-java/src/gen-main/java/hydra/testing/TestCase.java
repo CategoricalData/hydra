@@ -2,8 +2,6 @@
 
 package hydra.testing;
 
-import hydra.util.Opt;
-
 import java.io.Serializable;
 
 /**
@@ -12,7 +10,7 @@ import java.io.Serializable;
 public class TestCase<A> implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/testing.TestCase");
   
-  public final Opt<String> description;
+  public final hydra.util.Opt<String> description;
   
   public final hydra.testing.EvaluationStyle evaluationStyle;
   
@@ -20,19 +18,11 @@ public class TestCase<A> implements Serializable {
   
   public final hydra.core.Term<A> output;
   
-  public TestCase (Opt<String> description, hydra.testing.EvaluationStyle evaluationStyle, hydra.core.Term<A> input, hydra.core.Term<A> output) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
-    if (evaluationStyle == null) {
-      throw new IllegalArgumentException("null value for 'evaluationStyle' argument");
-    }
-    if (input == null) {
-      throw new IllegalArgumentException("null value for 'input' argument");
-    }
-    if (output == null) {
-      throw new IllegalArgumentException("null value for 'output' argument");
-    }
+  public TestCase (hydra.util.Opt<String> description, hydra.testing.EvaluationStyle evaluationStyle, hydra.core.Term<A> input, hydra.core.Term<A> output) {
+    java.util.Objects.requireNonNull((description));
+    java.util.Objects.requireNonNull((evaluationStyle));
+    java.util.Objects.requireNonNull((input));
+    java.util.Objects.requireNonNull((output));
     this.description = description;
     this.evaluationStyle = evaluationStyle;
     this.input = input;
@@ -53,31 +43,23 @@ public class TestCase<A> implements Serializable {
     return 2 * description.hashCode() + 3 * evaluationStyle.hashCode() + 5 * input.hashCode() + 7 * output.hashCode();
   }
   
-  public TestCase withDescription(Opt<String> description) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
+  public TestCase withDescription(hydra.util.Opt<String> description) {
+    java.util.Objects.requireNonNull((description));
     return new TestCase(description, evaluationStyle, input, output);
   }
   
   public TestCase withEvaluationStyle(hydra.testing.EvaluationStyle evaluationStyle) {
-    if (evaluationStyle == null) {
-      throw new IllegalArgumentException("null value for 'evaluationStyle' argument");
-    }
+    java.util.Objects.requireNonNull((evaluationStyle));
     return new TestCase(description, evaluationStyle, input, output);
   }
   
   public TestCase withInput(hydra.core.Term<A> input) {
-    if (input == null) {
-      throw new IllegalArgumentException("null value for 'input' argument");
-    }
+    java.util.Objects.requireNonNull((input));
     return new TestCase(description, evaluationStyle, input, output);
   }
   
   public TestCase withOutput(hydra.core.Term<A> output) {
-    if (output == null) {
-      throw new IllegalArgumentException("null value for 'output' argument");
-    }
+    java.util.Objects.requireNonNull((output));
     return new TestCase(description, evaluationStyle, input, output);
   }
 }

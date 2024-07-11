@@ -14,15 +14,9 @@ public class DataPropertyDomain implements Serializable {
   public final hydra.langs.owl.syntax.ClassExpression domain;
   
   public DataPropertyDomain (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, hydra.langs.owl.syntax.DataPropertyExpression property, hydra.langs.owl.syntax.ClassExpression domain) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
-    if (domain == null) {
-      throw new IllegalArgumentException("null value for 'domain' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
+    java.util.Objects.requireNonNull((property));
+    java.util.Objects.requireNonNull((domain));
     this.annotations = annotations;
     this.property = property;
     this.domain = domain;
@@ -43,23 +37,17 @@ public class DataPropertyDomain implements Serializable {
   }
   
   public DataPropertyDomain withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new DataPropertyDomain(annotations, property, domain);
   }
   
   public DataPropertyDomain withProperty(hydra.langs.owl.syntax.DataPropertyExpression property) {
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
+    java.util.Objects.requireNonNull((property));
     return new DataPropertyDomain(annotations, property, domain);
   }
   
   public DataPropertyDomain withDomain(hydra.langs.owl.syntax.ClassExpression domain) {
-    if (domain == null) {
-      throw new IllegalArgumentException("null value for 'domain' argument");
-    }
+    java.util.Objects.requireNonNull((domain));
     return new DataPropertyDomain(annotations, property, domain);
   }
 }

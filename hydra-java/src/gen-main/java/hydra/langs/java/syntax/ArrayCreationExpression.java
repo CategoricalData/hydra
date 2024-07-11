@@ -49,9 +49,7 @@ public abstract class ArrayCreationExpression implements Serializable {
     public final hydra.langs.java.syntax.ArrayCreationExpression_Primitive value;
     
     public Primitive (hydra.langs.java.syntax.ArrayCreationExpression_Primitive value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -79,9 +77,7 @@ public abstract class ArrayCreationExpression implements Serializable {
     public final hydra.langs.java.syntax.ArrayCreationExpression_ClassOrInterface value;
     
     public ClassOrInterface (hydra.langs.java.syntax.ArrayCreationExpression_ClassOrInterface value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -109,9 +105,7 @@ public abstract class ArrayCreationExpression implements Serializable {
     public final hydra.langs.java.syntax.ArrayCreationExpression_PrimitiveArray value;
     
     public PrimitiveArray (hydra.langs.java.syntax.ArrayCreationExpression_PrimitiveArray value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -139,9 +133,7 @@ public abstract class ArrayCreationExpression implements Serializable {
     public final hydra.langs.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray value;
     
     public ClassOrInterfaceArray (hydra.langs.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -70,9 +70,7 @@ public abstract class PropertyShapeConstraint implements Serializable {
     public final java.util.Set<hydra.langs.rdf.syntax.Property> value;
     
     public LessThan (java.util.Set<hydra.langs.rdf.syntax.Property> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -106,9 +104,7 @@ public abstract class PropertyShapeConstraint implements Serializable {
     public final java.util.Set<hydra.langs.rdf.syntax.Property> value;
     
     public LessThanOrEquals (java.util.Set<hydra.langs.rdf.syntax.Property> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -142,9 +138,7 @@ public abstract class PropertyShapeConstraint implements Serializable {
     public final java.math.BigInteger value;
     
     public MaxCount (java.math.BigInteger value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -178,9 +172,7 @@ public abstract class PropertyShapeConstraint implements Serializable {
     public final java.math.BigInteger value;
     
     public MinCount (java.math.BigInteger value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -214,9 +206,7 @@ public abstract class PropertyShapeConstraint implements Serializable {
     public final Boolean value;
     
     public UniqueLang (Boolean value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -250,9 +240,7 @@ public abstract class PropertyShapeConstraint implements Serializable {
     public final hydra.langs.shacl.model.QualifiedValueShape value;
     
     public QualifiedValueShape (hydra.langs.shacl.model.QualifiedValueShape value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

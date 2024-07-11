@@ -37,9 +37,7 @@ public abstract class PrimitiveType implements Serializable {
     public final hydra.langs.java.syntax.NumericType value;
     
     public Numeric (hydra.langs.java.syntax.NumericType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

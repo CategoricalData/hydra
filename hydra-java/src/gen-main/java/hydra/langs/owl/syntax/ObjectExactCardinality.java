@@ -17,15 +17,9 @@ public class ObjectExactCardinality implements Serializable {
   public final java.util.List<hydra.langs.owl.syntax.ClassExpression> class_;
   
   public ObjectExactCardinality (java.math.BigInteger bound, hydra.langs.owl.syntax.ObjectPropertyExpression property, java.util.List<hydra.langs.owl.syntax.ClassExpression> class_) {
-    if (bound == null) {
-      throw new IllegalArgumentException("null value for 'bound' argument");
-    }
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
-    if (class_ == null) {
-      throw new IllegalArgumentException("null value for 'class' argument");
-    }
+    java.util.Objects.requireNonNull((bound));
+    java.util.Objects.requireNonNull((property));
+    java.util.Objects.requireNonNull((class_));
     this.bound = bound;
     this.property = property;
     this.class_ = class_;
@@ -46,23 +40,17 @@ public class ObjectExactCardinality implements Serializable {
   }
   
   public ObjectExactCardinality withBound(java.math.BigInteger bound) {
-    if (bound == null) {
-      throw new IllegalArgumentException("null value for 'bound' argument");
-    }
+    java.util.Objects.requireNonNull((bound));
     return new ObjectExactCardinality(bound, property, class_);
   }
   
   public ObjectExactCardinality withProperty(hydra.langs.owl.syntax.ObjectPropertyExpression property) {
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
+    java.util.Objects.requireNonNull((property));
     return new ObjectExactCardinality(bound, property, class_);
   }
   
   public ObjectExactCardinality withClass(java.util.List<hydra.langs.owl.syntax.ClassExpression> class_) {
-    if (class_ == null) {
-      throw new IllegalArgumentException("null value for 'class' argument");
-    }
+    java.util.Objects.requireNonNull((class_));
     return new ObjectExactCardinality(bound, property, class_);
   }
 }

@@ -16,18 +16,10 @@ public class TableDefinition implements Serializable {
   public final hydra.util.Opt<hydra.langs.sql.ansi.TableCommitAction> commitActions;
   
   public TableDefinition (hydra.util.Opt<hydra.langs.sql.ansi.TableScope> scope, hydra.langs.sql.ansi.TableName name, hydra.langs.sql.ansi.TableContentsSource source, hydra.util.Opt<hydra.langs.sql.ansi.TableCommitAction> commitActions) {
-    if (scope == null) {
-      throw new IllegalArgumentException("null value for 'scope' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (source == null) {
-      throw new IllegalArgumentException("null value for 'source' argument");
-    }
-    if (commitActions == null) {
-      throw new IllegalArgumentException("null value for 'commitActions' argument");
-    }
+    java.util.Objects.requireNonNull((scope));
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((source));
+    java.util.Objects.requireNonNull((commitActions));
     this.scope = scope;
     this.name = name;
     this.source = source;
@@ -49,30 +41,22 @@ public class TableDefinition implements Serializable {
   }
   
   public TableDefinition withScope(hydra.util.Opt<hydra.langs.sql.ansi.TableScope> scope) {
-    if (scope == null) {
-      throw new IllegalArgumentException("null value for 'scope' argument");
-    }
+    java.util.Objects.requireNonNull((scope));
     return new TableDefinition(scope, name, source, commitActions);
   }
   
   public TableDefinition withName(hydra.langs.sql.ansi.TableName name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new TableDefinition(scope, name, source, commitActions);
   }
   
   public TableDefinition withSource(hydra.langs.sql.ansi.TableContentsSource source) {
-    if (source == null) {
-      throw new IllegalArgumentException("null value for 'source' argument");
-    }
+    java.util.Objects.requireNonNull((source));
     return new TableDefinition(scope, name, source, commitActions);
   }
   
   public TableDefinition withCommitActions(hydra.util.Opt<hydra.langs.sql.ansi.TableCommitAction> commitActions) {
-    if (commitActions == null) {
-      throw new IllegalArgumentException("null value for 'commitActions' argument");
-    }
+    java.util.Objects.requireNonNull((commitActions));
     return new TableDefinition(scope, name, source, commitActions);
   }
 }

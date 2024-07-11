@@ -2,8 +2,6 @@
 
 package hydra.core;
 
-import hydra.util.Opt;
-
 import java.io.Serializable;
 
 /**
@@ -14,20 +12,14 @@ public class CaseStatement<A> implements Serializable {
   
   public final hydra.core.Name typeName;
   
-  public final Opt<Term<A>> default_;
+  public final hydra.util.Opt<hydra.core.Term<A>> default_;
   
   public final java.util.List<hydra.core.Field<A>> cases;
   
-  public CaseStatement (hydra.core.Name typeName, Opt<Term<A>> default_, java.util.List<hydra.core.Field<A>> cases) {
-    if (typeName == null) {
-      throw new IllegalArgumentException("null value for 'typeName' argument");
-    }
-    if (default_ == null) {
-      throw new IllegalArgumentException("null value for 'default' argument");
-    }
-    if (cases == null) {
-      throw new IllegalArgumentException("null value for 'cases' argument");
-    }
+  public CaseStatement (hydra.core.Name typeName, hydra.util.Opt<hydra.core.Term<A>> default_, java.util.List<hydra.core.Field<A>> cases) {
+    java.util.Objects.requireNonNull((typeName));
+    java.util.Objects.requireNonNull((default_));
+    java.util.Objects.requireNonNull((cases));
     this.typeName = typeName;
     this.default_ = default_;
     this.cases = cases;
@@ -48,23 +40,17 @@ public class CaseStatement<A> implements Serializable {
   }
   
   public CaseStatement withTypeName(hydra.core.Name typeName) {
-    if (typeName == null) {
-      throw new IllegalArgumentException("null value for 'typeName' argument");
-    }
+    java.util.Objects.requireNonNull((typeName));
     return new CaseStatement(typeName, default_, cases);
   }
   
-  public CaseStatement withDefault(Opt<Term<A>> default_) {
-    if (default_ == null) {
-      throw new IllegalArgumentException("null value for 'default' argument");
-    }
+  public CaseStatement withDefault(hydra.util.Opt<hydra.core.Term<A>> default_) {
+    java.util.Objects.requireNonNull((default_));
     return new CaseStatement(typeName, default_, cases);
   }
   
   public CaseStatement withCases(java.util.List<hydra.core.Field<A>> cases) {
-    if (cases == null) {
-      throw new IllegalArgumentException("null value for 'cases' argument");
-    }
+    java.util.Objects.requireNonNull((cases));
     return new CaseStatement(typeName, default_, cases);
   }
 }

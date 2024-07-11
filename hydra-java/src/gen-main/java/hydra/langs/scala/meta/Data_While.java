@@ -12,12 +12,8 @@ public class Data_While implements Serializable {
   public final hydra.langs.scala.meta.Data body;
   
   public Data_While (hydra.langs.scala.meta.Data expr, hydra.langs.scala.meta.Data body) {
-    if (expr == null) {
-      throw new IllegalArgumentException("null value for 'expr' argument");
-    }
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((expr));
+    java.util.Objects.requireNonNull((body));
     this.expr = expr;
     this.body = body;
   }
@@ -37,16 +33,12 @@ public class Data_While implements Serializable {
   }
   
   public Data_While withExpr(hydra.langs.scala.meta.Data expr) {
-    if (expr == null) {
-      throw new IllegalArgumentException("null value for 'expr' argument");
-    }
+    java.util.Objects.requireNonNull((expr));
     return new Data_While(expr, body);
   }
   
   public Data_While withBody(hydra.langs.scala.meta.Data body) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((body));
     return new Data_While(expr, body);
   }
 }

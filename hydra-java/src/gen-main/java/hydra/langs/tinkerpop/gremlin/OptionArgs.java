@@ -55,9 +55,7 @@ public abstract class OptionArgs implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalPredicateAndNestedTraversal value;
     
     public PredicateTraversal (hydra.langs.tinkerpop.gremlin.TraversalPredicateAndNestedTraversal value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -85,9 +83,7 @@ public abstract class OptionArgs implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument value;
     
     public MergeMap (hydra.langs.tinkerpop.gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -115,9 +111,7 @@ public abstract class OptionArgs implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalMergeArgumentAndNestedTraversal value;
     
     public MergeTraversal (hydra.langs.tinkerpop.gremlin.TraversalMergeArgumentAndNestedTraversal value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -145,9 +139,7 @@ public abstract class OptionArgs implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.GenericLiteralArgumentAndNestedTraversal value;
     
     public ObjectTraversal (hydra.langs.tinkerpop.gremlin.GenericLiteralArgumentAndNestedTraversal value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -175,9 +167,7 @@ public abstract class OptionArgs implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.NestedTraversal value;
     
     public Traversal (hydra.langs.tinkerpop.gremlin.NestedTraversal value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

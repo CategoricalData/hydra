@@ -10,9 +10,7 @@ public class Member_Type implements Serializable {
   public final hydra.langs.scala.meta.Type_Name name;
   
   public Member_Type (hydra.langs.scala.meta.Type_Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     this.name = name;
   }
   

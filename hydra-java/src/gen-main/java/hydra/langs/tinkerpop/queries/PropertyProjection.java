@@ -12,12 +12,8 @@ public class PropertyProjection implements Serializable {
   public final hydra.langs.tinkerpop.propertyGraph.PropertyKey key;
   
   public PropertyProjection (hydra.langs.tinkerpop.queries.Expression base, hydra.langs.tinkerpop.propertyGraph.PropertyKey key) {
-    if (base == null) {
-      throw new IllegalArgumentException("null value for 'base' argument");
-    }
-    if (key == null) {
-      throw new IllegalArgumentException("null value for 'key' argument");
-    }
+    java.util.Objects.requireNonNull((base));
+    java.util.Objects.requireNonNull((key));
     this.base = base;
     this.key = key;
   }
@@ -37,16 +33,12 @@ public class PropertyProjection implements Serializable {
   }
   
   public PropertyProjection withBase(hydra.langs.tinkerpop.queries.Expression base) {
-    if (base == null) {
-      throw new IllegalArgumentException("null value for 'base' argument");
-    }
+    java.util.Objects.requireNonNull((base));
     return new PropertyProjection(base, key);
   }
   
   public PropertyProjection withKey(hydra.langs.tinkerpop.propertyGraph.PropertyKey key) {
-    if (key == null) {
-      throw new IllegalArgumentException("null value for 'key' argument");
-    }
+    java.util.Objects.requireNonNull((key));
     return new PropertyProjection(base, key);
   }
 }

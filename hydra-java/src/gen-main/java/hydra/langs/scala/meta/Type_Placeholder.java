@@ -10,9 +10,7 @@ public class Type_Placeholder implements Serializable {
   public final hydra.langs.scala.meta.Type_Bounds bounds;
   
   public Type_Placeholder (hydra.langs.scala.meta.Type_Bounds bounds) {
-    if (bounds == null) {
-      throw new IllegalArgumentException("null value for 'bounds' argument");
-    }
+    java.util.Objects.requireNonNull((bounds));
     this.bounds = bounds;
   }
   

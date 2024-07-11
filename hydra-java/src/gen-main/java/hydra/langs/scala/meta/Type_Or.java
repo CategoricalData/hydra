@@ -12,12 +12,8 @@ public class Type_Or implements Serializable {
   public final hydra.langs.scala.meta.Type rhs;
   
   public Type_Or (hydra.langs.scala.meta.Type lhs, hydra.langs.scala.meta.Type rhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
+    java.util.Objects.requireNonNull((rhs));
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -37,16 +33,12 @@ public class Type_Or implements Serializable {
   }
   
   public Type_Or withLhs(hydra.langs.scala.meta.Type lhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
     return new Type_Or(lhs, rhs);
   }
   
   public Type_Or withRhs(hydra.langs.scala.meta.Type rhs) {
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((rhs));
     return new Type_Or(lhs, rhs);
   }
 }

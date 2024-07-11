@@ -70,9 +70,7 @@ public abstract class Elimination<A> implements Serializable {
     public final hydra.core.Term<A> value;
     
     public List (hydra.core.Term<A> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -106,9 +104,7 @@ public abstract class Elimination<A> implements Serializable {
     public final hydra.core.OptionalCases<A> value;
     
     public Optional (hydra.core.OptionalCases<A> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -142,9 +138,7 @@ public abstract class Elimination<A> implements Serializable {
     public final hydra.core.TupleProjection value;
     
     public Product (hydra.core.TupleProjection value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -178,9 +172,7 @@ public abstract class Elimination<A> implements Serializable {
     public final hydra.core.Projection value;
     
     public Record (hydra.core.Projection value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -214,9 +206,7 @@ public abstract class Elimination<A> implements Serializable {
     public final hydra.core.CaseStatement<A> value;
     
     public Union (hydra.core.CaseStatement<A> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -250,9 +240,7 @@ public abstract class Elimination<A> implements Serializable {
     public final hydra.core.Name value;
     
     public Wrap (hydra.core.Name value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

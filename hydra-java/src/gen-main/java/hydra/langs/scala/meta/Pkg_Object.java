@@ -14,15 +14,9 @@ public class Pkg_Object implements Serializable {
   public final hydra.langs.scala.meta.Template template;
   
   public Pkg_Object (java.util.List<hydra.langs.scala.meta.Mod> mods, hydra.langs.scala.meta.Data_Name name, hydra.langs.scala.meta.Template template) {
-    if (mods == null) {
-      throw new IllegalArgumentException("null value for 'mods' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (template == null) {
-      throw new IllegalArgumentException("null value for 'template' argument");
-    }
+    java.util.Objects.requireNonNull((mods));
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((template));
     this.mods = mods;
     this.name = name;
     this.template = template;
@@ -43,23 +37,17 @@ public class Pkg_Object implements Serializable {
   }
   
   public Pkg_Object withMods(java.util.List<hydra.langs.scala.meta.Mod> mods) {
-    if (mods == null) {
-      throw new IllegalArgumentException("null value for 'mods' argument");
-    }
+    java.util.Objects.requireNonNull((mods));
     return new Pkg_Object(mods, name, template);
   }
   
   public Pkg_Object withName(hydra.langs.scala.meta.Data_Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Pkg_Object(mods, name, template);
   }
   
   public Pkg_Object withTemplate(hydra.langs.scala.meta.Template template) {
-    if (template == null) {
-      throw new IllegalArgumentException("null value for 'template' argument");
-    }
+    java.util.Objects.requireNonNull((template));
     return new Pkg_Object(mods, name, template);
   }
 }

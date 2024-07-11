@@ -12,12 +12,8 @@ public class IntegerRange implements Serializable {
   public final hydra.langs.tinkerpop.gremlin.IntegerLiteral right;
   
   public IntegerRange (hydra.langs.tinkerpop.gremlin.IntegerLiteral left, hydra.langs.tinkerpop.gremlin.IntegerLiteral right) {
-    if (left == null) {
-      throw new IllegalArgumentException("null value for 'left' argument");
-    }
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((left));
+    java.util.Objects.requireNonNull((right));
     this.left = left;
     this.right = right;
   }
@@ -37,16 +33,12 @@ public class IntegerRange implements Serializable {
   }
   
   public IntegerRange withLeft(hydra.langs.tinkerpop.gremlin.IntegerLiteral left) {
-    if (left == null) {
-      throw new IllegalArgumentException("null value for 'left' argument");
-    }
+    java.util.Objects.requireNonNull((left));
     return new IntegerRange(left, right);
   }
   
   public IntegerRange withRight(hydra.langs.tinkerpop.gremlin.IntegerLiteral right) {
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((right));
     return new IntegerRange(left, right);
   }
 }

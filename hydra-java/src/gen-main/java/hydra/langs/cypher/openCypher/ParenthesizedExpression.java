@@ -10,9 +10,7 @@ public class ParenthesizedExpression implements Serializable {
   public final hydra.langs.cypher.openCypher.Expression value;
   
   public ParenthesizedExpression (hydra.langs.cypher.openCypher.Expression value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

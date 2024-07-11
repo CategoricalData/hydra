@@ -14,15 +14,9 @@ public class PredefinedType_String implements Serializable {
   public final hydra.util.Opt<hydra.langs.sql.ansi.CollateClause> collate;
   
   public PredefinedType_String (hydra.langs.sql.ansi.CharacterStringType type, hydra.util.Opt<hydra.langs.sql.ansi.CharacterSetSpecification> characters, hydra.util.Opt<hydra.langs.sql.ansi.CollateClause> collate) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (characters == null) {
-      throw new IllegalArgumentException("null value for 'characters' argument");
-    }
-    if (collate == null) {
-      throw new IllegalArgumentException("null value for 'collate' argument");
-    }
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((characters));
+    java.util.Objects.requireNonNull((collate));
     this.type = type;
     this.characters = characters;
     this.collate = collate;
@@ -43,23 +37,17 @@ public class PredefinedType_String implements Serializable {
   }
   
   public PredefinedType_String withType(hydra.langs.sql.ansi.CharacterStringType type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new PredefinedType_String(type, characters, collate);
   }
   
   public PredefinedType_String withCharacters(hydra.util.Opt<hydra.langs.sql.ansi.CharacterSetSpecification> characters) {
-    if (characters == null) {
-      throw new IllegalArgumentException("null value for 'characters' argument");
-    }
+    java.util.Objects.requireNonNull((characters));
     return new PredefinedType_String(type, characters, collate);
   }
   
   public PredefinedType_String withCollate(hydra.util.Opt<hydra.langs.sql.ansi.CollateClause> collate) {
-    if (collate == null) {
-      throw new IllegalArgumentException("null value for 'collate' argument");
-    }
+    java.util.Objects.requireNonNull((collate));
     return new PredefinedType_String(type, characters, collate);
   }
 }

@@ -12,12 +12,8 @@ public class SymmetricObjectProperty implements Serializable {
   public final hydra.langs.owl.syntax.ObjectPropertyExpression property;
   
   public SymmetricObjectProperty (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, hydra.langs.owl.syntax.ObjectPropertyExpression property) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
+    java.util.Objects.requireNonNull((property));
     this.annotations = annotations;
     this.property = property;
   }
@@ -37,16 +33,12 @@ public class SymmetricObjectProperty implements Serializable {
   }
   
   public SymmetricObjectProperty withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new SymmetricObjectProperty(annotations, property);
   }
   
   public SymmetricObjectProperty withProperty(hydra.langs.owl.syntax.ObjectPropertyExpression property) {
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
+    java.util.Objects.requireNonNull((property));
     return new SymmetricObjectProperty(annotations, property);
   }
 }

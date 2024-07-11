@@ -61,9 +61,7 @@ public abstract class Data_Ref implements Serializable {
     public final hydra.langs.scala.meta.Data_This value;
     
     public This (hydra.langs.scala.meta.Data_This value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -91,9 +89,7 @@ public abstract class Data_Ref implements Serializable {
     public final hydra.langs.scala.meta.Data_Super value;
     
     public Super (hydra.langs.scala.meta.Data_Super value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -121,9 +117,7 @@ public abstract class Data_Ref implements Serializable {
     public final hydra.langs.scala.meta.Data_Name value;
     
     public Name (hydra.langs.scala.meta.Data_Name value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -151,9 +145,7 @@ public abstract class Data_Ref implements Serializable {
     public final hydra.langs.scala.meta.Data_Anonymous value;
     
     public Anonymous (hydra.langs.scala.meta.Data_Anonymous value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -181,9 +173,7 @@ public abstract class Data_Ref implements Serializable {
     public final hydra.langs.scala.meta.Data_Select value;
     
     public Select (hydra.langs.scala.meta.Data_Select value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -211,9 +201,7 @@ public abstract class Data_Ref implements Serializable {
     public final hydra.langs.scala.meta.Data_ApplyUnary value;
     
     public ApplyUnary (hydra.langs.scala.meta.Data_ApplyUnary value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -49,9 +49,7 @@ public abstract class Query implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalSourceQuery value;
     
     public TraversalSource (hydra.langs.tinkerpop.gremlin.TraversalSourceQuery value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -79,9 +77,7 @@ public abstract class Query implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.RootTraversalQuery value;
     
     public RootTraversal (hydra.langs.tinkerpop.gremlin.RootTraversalQuery value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

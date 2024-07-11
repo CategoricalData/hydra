@@ -43,9 +43,7 @@ public abstract class AdditiveExpression implements Serializable {
     public final hydra.langs.java.syntax.MultiplicativeExpression value;
     
     public Unary (hydra.langs.java.syntax.MultiplicativeExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class AdditiveExpression implements Serializable {
     public final hydra.langs.java.syntax.AdditiveExpression_Binary value;
     
     public Plus (hydra.langs.java.syntax.AdditiveExpression_Binary value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class AdditiveExpression implements Serializable {
     public final hydra.langs.java.syntax.AdditiveExpression_Binary value;
     
     public Minus (hydra.langs.java.syntax.AdditiveExpression_Binary value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -36,21 +36,11 @@ public class RangeLiteralFeatures implements Serializable {
   public final Boolean upperBound;
   
   public RangeLiteralFeatures (Boolean bounds, Boolean exactRange, Boolean lowerBound, Boolean starRange, Boolean upperBound) {
-    if (bounds == null) {
-      throw new IllegalArgumentException("null value for 'bounds' argument");
-    }
-    if (exactRange == null) {
-      throw new IllegalArgumentException("null value for 'exactRange' argument");
-    }
-    if (lowerBound == null) {
-      throw new IllegalArgumentException("null value for 'lowerBound' argument");
-    }
-    if (starRange == null) {
-      throw new IllegalArgumentException("null value for 'starRange' argument");
-    }
-    if (upperBound == null) {
-      throw new IllegalArgumentException("null value for 'upperBound' argument");
-    }
+    java.util.Objects.requireNonNull((bounds));
+    java.util.Objects.requireNonNull((exactRange));
+    java.util.Objects.requireNonNull((lowerBound));
+    java.util.Objects.requireNonNull((starRange));
+    java.util.Objects.requireNonNull((upperBound));
     this.bounds = bounds;
     this.exactRange = exactRange;
     this.lowerBound = lowerBound;
@@ -73,37 +63,27 @@ public class RangeLiteralFeatures implements Serializable {
   }
   
   public RangeLiteralFeatures withBounds(Boolean bounds) {
-    if (bounds == null) {
-      throw new IllegalArgumentException("null value for 'bounds' argument");
-    }
+    java.util.Objects.requireNonNull((bounds));
     return new RangeLiteralFeatures(bounds, exactRange, lowerBound, starRange, upperBound);
   }
   
   public RangeLiteralFeatures withExactRange(Boolean exactRange) {
-    if (exactRange == null) {
-      throw new IllegalArgumentException("null value for 'exactRange' argument");
-    }
+    java.util.Objects.requireNonNull((exactRange));
     return new RangeLiteralFeatures(bounds, exactRange, lowerBound, starRange, upperBound);
   }
   
   public RangeLiteralFeatures withLowerBound(Boolean lowerBound) {
-    if (lowerBound == null) {
-      throw new IllegalArgumentException("null value for 'lowerBound' argument");
-    }
+    java.util.Objects.requireNonNull((lowerBound));
     return new RangeLiteralFeatures(bounds, exactRange, lowerBound, starRange, upperBound);
   }
   
   public RangeLiteralFeatures withStarRange(Boolean starRange) {
-    if (starRange == null) {
-      throw new IllegalArgumentException("null value for 'starRange' argument");
-    }
+    java.util.Objects.requireNonNull((starRange));
     return new RangeLiteralFeatures(bounds, exactRange, lowerBound, starRange, upperBound);
   }
   
   public RangeLiteralFeatures withUpperBound(Boolean upperBound) {
-    if (upperBound == null) {
-      throw new IllegalArgumentException("null value for 'upperBound' argument");
-    }
+    java.util.Objects.requireNonNull((upperBound));
     return new RangeLiteralFeatures(bounds, exactRange, lowerBound, starRange, upperBound);
   }
 }

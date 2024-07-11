@@ -15,12 +15,8 @@ public class Expression_PrefixApplication implements Serializable {
   public final hydra.langs.haskell.ast.Expression rhs;
   
   public Expression_PrefixApplication (hydra.langs.haskell.ast.Operator operator, hydra.langs.haskell.ast.Expression rhs) {
-    if (operator == null) {
-      throw new IllegalArgumentException("null value for 'operator' argument");
-    }
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((operator));
+    java.util.Objects.requireNonNull((rhs));
     this.operator = operator;
     this.rhs = rhs;
   }
@@ -40,16 +36,12 @@ public class Expression_PrefixApplication implements Serializable {
   }
   
   public Expression_PrefixApplication withOperator(hydra.langs.haskell.ast.Operator operator) {
-    if (operator == null) {
-      throw new IllegalArgumentException("null value for 'operator' argument");
-    }
+    java.util.Objects.requireNonNull((operator));
     return new Expression_PrefixApplication(operator, rhs);
   }
   
   public Expression_PrefixApplication withRhs(hydra.langs.haskell.ast.Expression rhs) {
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((rhs));
     return new Expression_PrefixApplication(operator, rhs);
   }
 }

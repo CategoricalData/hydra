@@ -15,12 +15,8 @@ public class Padding implements Serializable {
   public final hydra.ast.Ws right;
   
   public Padding (hydra.ast.Ws left, hydra.ast.Ws right) {
-    if (left == null) {
-      throw new IllegalArgumentException("null value for 'left' argument");
-    }
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((left));
+    java.util.Objects.requireNonNull((right));
     this.left = left;
     this.right = right;
   }
@@ -40,16 +36,12 @@ public class Padding implements Serializable {
   }
   
   public Padding withLeft(hydra.ast.Ws left) {
-    if (left == null) {
-      throw new IllegalArgumentException("null value for 'left' argument");
-    }
+    java.util.Objects.requireNonNull((left));
     return new Padding(left, right);
   }
   
   public Padding withRight(hydra.ast.Ws right) {
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((right));
     return new Padding(left, right);
   }
 }

@@ -12,12 +12,8 @@ public class ShapeNot implements Serializable {
   public final hydra.langs.shex.syntax.ShapeAtom shapeAtom;
   
   public ShapeNot (hydra.util.Opt<java.lang.Void> nOT, hydra.langs.shex.syntax.ShapeAtom shapeAtom) {
-    if (nOT == null) {
-      throw new IllegalArgumentException("null value for 'nOT' argument");
-    }
-    if (shapeAtom == null) {
-      throw new IllegalArgumentException("null value for 'shapeAtom' argument");
-    }
+    java.util.Objects.requireNonNull((nOT));
+    java.util.Objects.requireNonNull((shapeAtom));
     this.nOT = nOT;
     this.shapeAtom = shapeAtom;
   }
@@ -37,16 +33,12 @@ public class ShapeNot implements Serializable {
   }
   
   public ShapeNot withNOT(hydra.util.Opt<java.lang.Void> nOT) {
-    if (nOT == null) {
-      throw new IllegalArgumentException("null value for 'nOT' argument");
-    }
+    java.util.Objects.requireNonNull((nOT));
     return new ShapeNot(nOT, shapeAtom);
   }
   
   public ShapeNot withShapeAtom(hydra.langs.shex.syntax.ShapeAtom shapeAtom) {
-    if (shapeAtom == null) {
-      throw new IllegalArgumentException("null value for 'shapeAtom' argument");
-    }
+    java.util.Objects.requireNonNull((shapeAtom));
     return new ShapeNot(nOT, shapeAtom);
   }
 }

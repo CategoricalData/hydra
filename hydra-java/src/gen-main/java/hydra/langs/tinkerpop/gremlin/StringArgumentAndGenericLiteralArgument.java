@@ -12,12 +12,8 @@ public class StringArgumentAndGenericLiteralArgument implements Serializable {
   public final hydra.langs.tinkerpop.gremlin.GenericLiteralArgument literal;
   
   public StringArgumentAndGenericLiteralArgument (hydra.langs.tinkerpop.gremlin.StringArgument string, hydra.langs.tinkerpop.gremlin.GenericLiteralArgument literal) {
-    if (string == null) {
-      throw new IllegalArgumentException("null value for 'string' argument");
-    }
-    if (literal == null) {
-      throw new IllegalArgumentException("null value for 'literal' argument");
-    }
+    java.util.Objects.requireNonNull((string));
+    java.util.Objects.requireNonNull((literal));
     this.string = string;
     this.literal = literal;
   }
@@ -37,16 +33,12 @@ public class StringArgumentAndGenericLiteralArgument implements Serializable {
   }
   
   public StringArgumentAndGenericLiteralArgument withString(hydra.langs.tinkerpop.gremlin.StringArgument string) {
-    if (string == null) {
-      throw new IllegalArgumentException("null value for 'string' argument");
-    }
+    java.util.Objects.requireNonNull((string));
     return new StringArgumentAndGenericLiteralArgument(string, literal);
   }
   
   public StringArgumentAndGenericLiteralArgument withLiteral(hydra.langs.tinkerpop.gremlin.GenericLiteralArgument literal) {
-    if (literal == null) {
-      throw new IllegalArgumentException("null value for 'literal' argument");
-    }
+    java.util.Objects.requireNonNull((literal));
     return new StringArgumentAndGenericLiteralArgument(string, literal);
   }
 }

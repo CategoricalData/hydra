@@ -10,9 +10,7 @@ public class ReturnStatement implements Serializable {
   public final hydra.util.Opt<hydra.langs.java.syntax.Expression> value;
   
   public ReturnStatement (hydra.util.Opt<hydra.langs.java.syntax.Expression> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

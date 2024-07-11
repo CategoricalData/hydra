@@ -14,15 +14,9 @@ public class FieldDeclaration implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.VariableDeclarator> variableDeclarators;
   
   public FieldDeclaration (java.util.List<hydra.langs.java.syntax.FieldModifier> modifiers, hydra.langs.java.syntax.UnannType unannType, java.util.List<hydra.langs.java.syntax.VariableDeclarator> variableDeclarators) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
-    if (unannType == null) {
-      throw new IllegalArgumentException("null value for 'unannType' argument");
-    }
-    if (variableDeclarators == null) {
-      throw new IllegalArgumentException("null value for 'variableDeclarators' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
+    java.util.Objects.requireNonNull((unannType));
+    java.util.Objects.requireNonNull((variableDeclarators));
     this.modifiers = modifiers;
     this.unannType = unannType;
     this.variableDeclarators = variableDeclarators;
@@ -43,23 +37,17 @@ public class FieldDeclaration implements Serializable {
   }
   
   public FieldDeclaration withModifiers(java.util.List<hydra.langs.java.syntax.FieldModifier> modifiers) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
     return new FieldDeclaration(modifiers, unannType, variableDeclarators);
   }
   
   public FieldDeclaration withUnannType(hydra.langs.java.syntax.UnannType unannType) {
-    if (unannType == null) {
-      throw new IllegalArgumentException("null value for 'unannType' argument");
-    }
+    java.util.Objects.requireNonNull((unannType));
     return new FieldDeclaration(modifiers, unannType, variableDeclarators);
   }
   
   public FieldDeclaration withVariableDeclarators(java.util.List<hydra.langs.java.syntax.VariableDeclarator> variableDeclarators) {
-    if (variableDeclarators == null) {
-      throw new IllegalArgumentException("null value for 'variableDeclarators' argument");
-    }
+    java.util.Objects.requireNonNull((variableDeclarators));
     return new FieldDeclaration(modifiers, unannType, variableDeclarators);
   }
 }

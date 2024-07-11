@@ -10,9 +10,7 @@ public class Enumerator_Guard implements Serializable {
   public final hydra.langs.scala.meta.Data cond;
   
   public Enumerator_Guard (hydra.langs.scala.meta.Data cond) {
-    if (cond == null) {
-      throw new IllegalArgumentException("null value for 'cond' argument");
-    }
+    java.util.Objects.requireNonNull((cond));
     this.cond = cond;
   }
   

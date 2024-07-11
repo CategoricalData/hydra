@@ -15,12 +15,8 @@ public class Expression_ConstructRecord implements Serializable {
   public final java.util.List<hydra.langs.haskell.ast.FieldUpdate> fields;
   
   public Expression_ConstructRecord (hydra.langs.haskell.ast.Name name, java.util.List<hydra.langs.haskell.ast.FieldUpdate> fields) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (fields == null) {
-      throw new IllegalArgumentException("null value for 'fields' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((fields));
     this.name = name;
     this.fields = fields;
   }
@@ -40,16 +36,12 @@ public class Expression_ConstructRecord implements Serializable {
   }
   
   public Expression_ConstructRecord withName(hydra.langs.haskell.ast.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Expression_ConstructRecord(name, fields);
   }
   
   public Expression_ConstructRecord withFields(java.util.List<hydra.langs.haskell.ast.FieldUpdate> fields) {
-    if (fields == null) {
-      throw new IllegalArgumentException("null value for 'fields' argument");
-    }
+    java.util.Objects.requireNonNull((fields));
     return new Expression_ConstructRecord(name, fields);
   }
 }

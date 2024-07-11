@@ -10,9 +10,7 @@ public class Map implements Serializable {
   public final hydra.langs.avro.schema.Schema values;
   
   public Map (hydra.langs.avro.schema.Schema values) {
-    if (values == null) {
-      throw new IllegalArgumentException("null value for 'values' argument");
-    }
+    java.util.Objects.requireNonNull((values));
     this.values = values;
   }
   

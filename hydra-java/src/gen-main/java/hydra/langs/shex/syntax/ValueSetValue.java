@@ -37,9 +37,7 @@ public abstract class ValueSetValue implements Serializable {
     public final hydra.langs.shex.syntax.IriRange value;
     
     public IriRange (hydra.langs.shex.syntax.IriRange value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class ValueSetValue implements Serializable {
     public final hydra.langs.shex.syntax.Literal value;
     
     public Literal (hydra.langs.shex.syntax.Literal value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

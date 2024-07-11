@@ -79,9 +79,7 @@ public abstract class MapKey implements Serializable {
     public final String value;
     
     public String_ (String value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -109,9 +107,7 @@ public abstract class MapKey implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.NumericLiteral value;
     
     public Numeric (hydra.langs.tinkerpop.gremlin.NumericLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -139,9 +135,7 @@ public abstract class MapKey implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalToken value;
     
     public TraversalToken (hydra.langs.tinkerpop.gremlin.TraversalToken value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -169,9 +163,7 @@ public abstract class MapKey implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalDirection value;
     
     public TraversalDirection (hydra.langs.tinkerpop.gremlin.TraversalDirection value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -199,9 +191,7 @@ public abstract class MapKey implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.GenericLiteralSet value;
     
     public Set (hydra.langs.tinkerpop.gremlin.GenericLiteralSet value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -229,9 +219,7 @@ public abstract class MapKey implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.GenericLiteralCollection value;
     
     public Collection (hydra.langs.tinkerpop.gremlin.GenericLiteralCollection value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -259,9 +247,7 @@ public abstract class MapKey implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.GenericLiteralMap value;
     
     public Map (hydra.langs.tinkerpop.gremlin.GenericLiteralMap value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -289,9 +275,7 @@ public abstract class MapKey implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.Keyword value;
     
     public Keyword (hydra.langs.tinkerpop.gremlin.Keyword value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -319,9 +303,7 @@ public abstract class MapKey implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.Identifier value;
     
     public Identifier (hydra.langs.tinkerpop.gremlin.Identifier value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

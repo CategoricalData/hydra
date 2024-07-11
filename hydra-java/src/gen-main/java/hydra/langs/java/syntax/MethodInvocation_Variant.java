@@ -55,9 +55,7 @@ public abstract class MethodInvocation_Variant implements Serializable {
     public final hydra.langs.java.syntax.TypeName value;
     
     public Type (hydra.langs.java.syntax.TypeName value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -85,9 +83,7 @@ public abstract class MethodInvocation_Variant implements Serializable {
     public final hydra.langs.java.syntax.ExpressionName value;
     
     public Expression (hydra.langs.java.syntax.ExpressionName value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -115,9 +111,7 @@ public abstract class MethodInvocation_Variant implements Serializable {
     public final hydra.langs.java.syntax.Primary value;
     
     public Primary (hydra.langs.java.syntax.Primary value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -170,9 +164,7 @@ public abstract class MethodInvocation_Variant implements Serializable {
     public final hydra.langs.java.syntax.TypeName value;
     
     public TypeSuper (hydra.langs.java.syntax.TypeName value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

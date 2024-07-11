@@ -12,12 +12,8 @@ public class ContextuallyTypedRowValueExpressionList implements Serializable {
   public final java.util.List<hydra.langs.sql.ansi.ContextuallyTypedRowValueExpression> rest;
   
   public ContextuallyTypedRowValueExpressionList (hydra.langs.sql.ansi.ContextuallyTypedRowValueExpression first, java.util.List<hydra.langs.sql.ansi.ContextuallyTypedRowValueExpression> rest) {
-    if (first == null) {
-      throw new IllegalArgumentException("null value for 'first' argument");
-    }
-    if (rest == null) {
-      throw new IllegalArgumentException("null value for 'rest' argument");
-    }
+    java.util.Objects.requireNonNull((first));
+    java.util.Objects.requireNonNull((rest));
     this.first = first;
     this.rest = rest;
   }
@@ -37,16 +33,12 @@ public class ContextuallyTypedRowValueExpressionList implements Serializable {
   }
   
   public ContextuallyTypedRowValueExpressionList withFirst(hydra.langs.sql.ansi.ContextuallyTypedRowValueExpression first) {
-    if (first == null) {
-      throw new IllegalArgumentException("null value for 'first' argument");
-    }
+    java.util.Objects.requireNonNull((first));
     return new ContextuallyTypedRowValueExpressionList(first, rest);
   }
   
   public ContextuallyTypedRowValueExpressionList withRest(java.util.List<hydra.langs.sql.ansi.ContextuallyTypedRowValueExpression> rest) {
-    if (rest == null) {
-      throw new IllegalArgumentException("null value for 'rest' argument");
-    }
+    java.util.Objects.requireNonNull((rest));
     return new ContextuallyTypedRowValueExpressionList(first, rest);
   }
 }

@@ -64,9 +64,7 @@ public abstract class Pattern<A> implements Serializable {
     public final hydra.query.TriplePattern<A> value;
     
     public Triple (hydra.query.TriplePattern<A> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -100,9 +98,7 @@ public abstract class Pattern<A> implements Serializable {
     public final hydra.query.Pattern<A> value;
     
     public Negation (hydra.query.Pattern<A> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -136,9 +132,7 @@ public abstract class Pattern<A> implements Serializable {
     public final java.util.List<hydra.query.Pattern<A>> value;
     
     public Conjunction (java.util.List<hydra.query.Pattern<A>> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -172,9 +166,7 @@ public abstract class Pattern<A> implements Serializable {
     public final java.util.List<hydra.query.Pattern<A>> value;
     
     public Disjunction (java.util.List<hydra.query.Pattern<A>> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -208,9 +200,7 @@ public abstract class Pattern<A> implements Serializable {
     public final hydra.query.GraphPattern<A> value;
     
     public Graph (hydra.query.GraphPattern<A> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

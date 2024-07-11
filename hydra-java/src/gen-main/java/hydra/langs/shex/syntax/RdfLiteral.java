@@ -12,12 +12,8 @@ public class RdfLiteral implements Serializable {
   public final hydra.util.Opt<hydra.langs.shex.syntax.RdfLiteral_Alts_Option> alts;
   
   public RdfLiteral (hydra.langs.shex.syntax.String_ string, hydra.util.Opt<hydra.langs.shex.syntax.RdfLiteral_Alts_Option> alts) {
-    if (string == null) {
-      throw new IllegalArgumentException("null value for 'string' argument");
-    }
-    if (alts == null) {
-      throw new IllegalArgumentException("null value for 'alts' argument");
-    }
+    java.util.Objects.requireNonNull((string));
+    java.util.Objects.requireNonNull((alts));
     this.string = string;
     this.alts = alts;
   }
@@ -37,16 +33,12 @@ public class RdfLiteral implements Serializable {
   }
   
   public RdfLiteral withString(hydra.langs.shex.syntax.String_ string) {
-    if (string == null) {
-      throw new IllegalArgumentException("null value for 'string' argument");
-    }
+    java.util.Objects.requireNonNull((string));
     return new RdfLiteral(string, alts);
   }
   
   public RdfLiteral withAlts(hydra.util.Opt<hydra.langs.shex.syntax.RdfLiteral_Alts_Option> alts) {
-    if (alts == null) {
-      throw new IllegalArgumentException("null value for 'alts' argument");
-    }
+    java.util.Objects.requireNonNull((alts));
     return new RdfLiteral(string, alts);
   }
 }

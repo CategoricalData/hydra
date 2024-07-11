@@ -37,9 +37,7 @@ public abstract class Individual implements Serializable {
     public final hydra.langs.owl.syntax.NamedIndividual value;
     
     public Named (hydra.langs.owl.syntax.NamedIndividual value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class Individual implements Serializable {
     public final hydra.langs.owl.syntax.AnonymousIndividual value;
     
     public Anonymous (hydra.langs.owl.syntax.AnonymousIndividual value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

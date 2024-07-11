@@ -46,9 +46,7 @@ public abstract class DeclarationHead implements Serializable {
     public final hydra.langs.haskell.ast.DeclarationHead_Application value;
     
     public Application (hydra.langs.haskell.ast.DeclarationHead_Application value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -76,9 +74,7 @@ public abstract class DeclarationHead implements Serializable {
     public final hydra.langs.haskell.ast.DeclarationHead value;
     
     public Parens (hydra.langs.haskell.ast.DeclarationHead value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -106,9 +102,7 @@ public abstract class DeclarationHead implements Serializable {
     public final hydra.langs.haskell.ast.Name value;
     
     public Simple (hydra.langs.haskell.ast.Name value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

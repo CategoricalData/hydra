@@ -12,12 +12,8 @@ public class WhileStatementNoShortIf implements Serializable {
   public final hydra.langs.java.syntax.StatementNoShortIf body;
   
   public WhileStatementNoShortIf (hydra.util.Opt<hydra.langs.java.syntax.Expression> cond, hydra.langs.java.syntax.StatementNoShortIf body) {
-    if (cond == null) {
-      throw new IllegalArgumentException("null value for 'cond' argument");
-    }
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((cond));
+    java.util.Objects.requireNonNull((body));
     this.cond = cond;
     this.body = body;
   }
@@ -37,16 +33,12 @@ public class WhileStatementNoShortIf implements Serializable {
   }
   
   public WhileStatementNoShortIf withCond(hydra.util.Opt<hydra.langs.java.syntax.Expression> cond) {
-    if (cond == null) {
-      throw new IllegalArgumentException("null value for 'cond' argument");
-    }
+    java.util.Objects.requireNonNull((cond));
     return new WhileStatementNoShortIf(cond, body);
   }
   
   public WhileStatementNoShortIf withBody(hydra.langs.java.syntax.StatementNoShortIf body) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((body));
     return new WhileStatementNoShortIf(cond, body);
   }
 }

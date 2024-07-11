@@ -37,9 +37,7 @@ public abstract class LambdaBody implements Serializable {
     public final hydra.langs.java.syntax.Expression value;
     
     public Expression (hydra.langs.java.syntax.Expression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class LambdaBody implements Serializable {
     public final hydra.langs.java.syntax.Block value;
     
     public Block (hydra.langs.java.syntax.Block value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

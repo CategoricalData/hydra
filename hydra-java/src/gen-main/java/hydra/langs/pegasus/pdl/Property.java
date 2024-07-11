@@ -12,12 +12,8 @@ public class Property implements Serializable {
   public final hydra.util.Opt<hydra.json.Value> value;
   
   public Property (hydra.langs.pegasus.pdl.PropertyKey key, hydra.util.Opt<hydra.json.Value> value) {
-    if (key == null) {
-      throw new IllegalArgumentException("null value for 'key' argument");
-    }
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((key));
+    java.util.Objects.requireNonNull((value));
     this.key = key;
     this.value = value;
   }
@@ -37,16 +33,12 @@ public class Property implements Serializable {
   }
   
   public Property withKey(hydra.langs.pegasus.pdl.PropertyKey key) {
-    if (key == null) {
-      throw new IllegalArgumentException("null value for 'key' argument");
-    }
+    java.util.Objects.requireNonNull((key));
     return new Property(key, value);
   }
   
   public Property withValue(hydra.util.Opt<hydra.json.Value> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     return new Property(key, value);
   }
 }

@@ -14,15 +14,9 @@ public class CaseExpression implements Serializable {
   public final hydra.util.Opt<hydra.langs.cypher.openCypher.Expression> else_;
   
   public CaseExpression (hydra.util.Opt<hydra.langs.cypher.openCypher.Expression> expression, java.util.List<hydra.langs.cypher.openCypher.CaseAlternative> alternatives, hydra.util.Opt<hydra.langs.cypher.openCypher.Expression> else_) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
-    if (alternatives == null) {
-      throw new IllegalArgumentException("null value for 'alternatives' argument");
-    }
-    if (else_ == null) {
-      throw new IllegalArgumentException("null value for 'else' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
+    java.util.Objects.requireNonNull((alternatives));
+    java.util.Objects.requireNonNull((else_));
     this.expression = expression;
     this.alternatives = alternatives;
     this.else_ = else_;
@@ -43,23 +37,17 @@ public class CaseExpression implements Serializable {
   }
   
   public CaseExpression withExpression(hydra.util.Opt<hydra.langs.cypher.openCypher.Expression> expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new CaseExpression(expression, alternatives, else_);
   }
   
   public CaseExpression withAlternatives(java.util.List<hydra.langs.cypher.openCypher.CaseAlternative> alternatives) {
-    if (alternatives == null) {
-      throw new IllegalArgumentException("null value for 'alternatives' argument");
-    }
+    java.util.Objects.requireNonNull((alternatives));
     return new CaseExpression(expression, alternatives, else_);
   }
   
   public CaseExpression withElse(hydra.util.Opt<hydra.langs.cypher.openCypher.Expression> else_) {
-    if (else_ == null) {
-      throw new IllegalArgumentException("null value for 'else' argument");
-    }
+    java.util.Objects.requireNonNull((else_));
     return new CaseExpression(expression, alternatives, else_);
   }
 }

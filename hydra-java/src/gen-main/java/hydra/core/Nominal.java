@@ -15,12 +15,8 @@ public class Nominal<X> implements Serializable {
   public final X object;
   
   public Nominal (hydra.core.Name typeName, X object) {
-    if (typeName == null) {
-      throw new IllegalArgumentException("null value for 'typeName' argument");
-    }
-    if (object == null) {
-      throw new IllegalArgumentException("null value for 'object' argument");
-    }
+    java.util.Objects.requireNonNull((typeName));
+    java.util.Objects.requireNonNull((object));
     this.typeName = typeName;
     this.object = object;
   }
@@ -40,16 +36,12 @@ public class Nominal<X> implements Serializable {
   }
   
   public Nominal withTypeName(hydra.core.Name typeName) {
-    if (typeName == null) {
-      throw new IllegalArgumentException("null value for 'typeName' argument");
-    }
+    java.util.Objects.requireNonNull((typeName));
     return new Nominal(typeName, object);
   }
   
   public Nominal withObject(X object) {
-    if (object == null) {
-      throw new IllegalArgumentException("null value for 'object' argument");
-    }
+    java.util.Objects.requireNonNull((object));
     return new Nominal(typeName, object);
   }
 }

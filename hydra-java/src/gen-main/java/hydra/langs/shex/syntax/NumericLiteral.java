@@ -43,9 +43,7 @@ public abstract class NumericLiteral implements Serializable {
     public final hydra.langs.shex.syntax.Integer_ value;
     
     public Integer_ (hydra.langs.shex.syntax.Integer_ value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class NumericLiteral implements Serializable {
     public final hydra.langs.shex.syntax.Decimal value;
     
     public Decimal (hydra.langs.shex.syntax.Decimal value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class NumericLiteral implements Serializable {
     public final hydra.langs.shex.syntax.Double_ value;
     
     public Double_ (hydra.langs.shex.syntax.Double_ value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

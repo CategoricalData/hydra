@@ -12,12 +12,8 @@ public class VariableAndNodeLabels implements Serializable {
   public final hydra.langs.cypher.openCypher.NodeLabels labels;
   
   public VariableAndNodeLabels (hydra.langs.cypher.openCypher.Variable variable, hydra.langs.cypher.openCypher.NodeLabels labels) {
-    if (variable == null) {
-      throw new IllegalArgumentException("null value for 'variable' argument");
-    }
-    if (labels == null) {
-      throw new IllegalArgumentException("null value for 'labels' argument");
-    }
+    java.util.Objects.requireNonNull((variable));
+    java.util.Objects.requireNonNull((labels));
     this.variable = variable;
     this.labels = labels;
   }
@@ -37,16 +33,12 @@ public class VariableAndNodeLabels implements Serializable {
   }
   
   public VariableAndNodeLabels withVariable(hydra.langs.cypher.openCypher.Variable variable) {
-    if (variable == null) {
-      throw new IllegalArgumentException("null value for 'variable' argument");
-    }
+    java.util.Objects.requireNonNull((variable));
     return new VariableAndNodeLabels(variable, labels);
   }
   
   public VariableAndNodeLabels withLabels(hydra.langs.cypher.openCypher.NodeLabels labels) {
-    if (labels == null) {
-      throw new IllegalArgumentException("null value for 'labels' argument");
-    }
+    java.util.Objects.requireNonNull((labels));
     return new VariableAndNodeLabels(variable, labels);
   }
 }

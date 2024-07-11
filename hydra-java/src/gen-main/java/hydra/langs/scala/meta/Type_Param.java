@@ -20,24 +20,12 @@ public class Type_Param implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Type> cbounds;
   
   public Type_Param (java.util.List<hydra.langs.scala.meta.Mod> mods, hydra.langs.scala.meta.Name name, java.util.List<hydra.langs.scala.meta.Type_Param> tparams, java.util.List<hydra.langs.scala.meta.Type_Bounds> tbounds, java.util.List<hydra.langs.scala.meta.Type> vbounds, java.util.List<hydra.langs.scala.meta.Type> cbounds) {
-    if (mods == null) {
-      throw new IllegalArgumentException("null value for 'mods' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (tparams == null) {
-      throw new IllegalArgumentException("null value for 'tparams' argument");
-    }
-    if (tbounds == null) {
-      throw new IllegalArgumentException("null value for 'tbounds' argument");
-    }
-    if (vbounds == null) {
-      throw new IllegalArgumentException("null value for 'vbounds' argument");
-    }
-    if (cbounds == null) {
-      throw new IllegalArgumentException("null value for 'cbounds' argument");
-    }
+    java.util.Objects.requireNonNull((mods));
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((tparams));
+    java.util.Objects.requireNonNull((tbounds));
+    java.util.Objects.requireNonNull((vbounds));
+    java.util.Objects.requireNonNull((cbounds));
     this.mods = mods;
     this.name = name;
     this.tparams = tparams;
@@ -61,44 +49,32 @@ public class Type_Param implements Serializable {
   }
   
   public Type_Param withMods(java.util.List<hydra.langs.scala.meta.Mod> mods) {
-    if (mods == null) {
-      throw new IllegalArgumentException("null value for 'mods' argument");
-    }
+    java.util.Objects.requireNonNull((mods));
     return new Type_Param(mods, name, tparams, tbounds, vbounds, cbounds);
   }
   
   public Type_Param withName(hydra.langs.scala.meta.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Type_Param(mods, name, tparams, tbounds, vbounds, cbounds);
   }
   
   public Type_Param withTparams(java.util.List<hydra.langs.scala.meta.Type_Param> tparams) {
-    if (tparams == null) {
-      throw new IllegalArgumentException("null value for 'tparams' argument");
-    }
+    java.util.Objects.requireNonNull((tparams));
     return new Type_Param(mods, name, tparams, tbounds, vbounds, cbounds);
   }
   
   public Type_Param withTbounds(java.util.List<hydra.langs.scala.meta.Type_Bounds> tbounds) {
-    if (tbounds == null) {
-      throw new IllegalArgumentException("null value for 'tbounds' argument");
-    }
+    java.util.Objects.requireNonNull((tbounds));
     return new Type_Param(mods, name, tparams, tbounds, vbounds, cbounds);
   }
   
   public Type_Param withVbounds(java.util.List<hydra.langs.scala.meta.Type> vbounds) {
-    if (vbounds == null) {
-      throw new IllegalArgumentException("null value for 'vbounds' argument");
-    }
+    java.util.Objects.requireNonNull((vbounds));
     return new Type_Param(mods, name, tparams, tbounds, vbounds, cbounds);
   }
   
   public Type_Param withCbounds(java.util.List<hydra.langs.scala.meta.Type> cbounds) {
-    if (cbounds == null) {
-      throw new IllegalArgumentException("null value for 'cbounds' argument");
-    }
+    java.util.Objects.requireNonNull((cbounds));
     return new Type_Param(mods, name, tparams, tbounds, vbounds, cbounds);
   }
 }

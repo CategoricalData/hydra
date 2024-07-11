@@ -37,9 +37,7 @@ public abstract class Iri implements Serializable {
     public final hydra.langs.shex.syntax.IriRef value;
     
     public IriRef (hydra.langs.shex.syntax.IriRef value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class Iri implements Serializable {
     public final hydra.langs.shex.syntax.PrefixedName value;
     
     public PrefixedName (hydra.langs.shex.syntax.PrefixedName value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

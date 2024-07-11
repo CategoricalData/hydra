@@ -37,9 +37,7 @@ public abstract class TraversalFunction implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalToken value;
     
     public Token (hydra.langs.tinkerpop.gremlin.TraversalToken value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class TraversalFunction implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalColumn value;
     
     public Column (hydra.langs.tinkerpop.gremlin.TraversalColumn value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

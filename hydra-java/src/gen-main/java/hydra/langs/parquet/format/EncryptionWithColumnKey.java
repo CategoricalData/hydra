@@ -15,12 +15,8 @@ public class EncryptionWithColumnKey implements Serializable {
   public final hydra.util.Opt<String> keyMetadata;
   
   public EncryptionWithColumnKey (java.util.List<String> pathInSchema, hydra.util.Opt<String> keyMetadata) {
-    if (pathInSchema == null) {
-      throw new IllegalArgumentException("null value for 'pathInSchema' argument");
-    }
-    if (keyMetadata == null) {
-      throw new IllegalArgumentException("null value for 'keyMetadata' argument");
-    }
+    java.util.Objects.requireNonNull((pathInSchema));
+    java.util.Objects.requireNonNull((keyMetadata));
     this.pathInSchema = pathInSchema;
     this.keyMetadata = keyMetadata;
   }
@@ -40,16 +36,12 @@ public class EncryptionWithColumnKey implements Serializable {
   }
   
   public EncryptionWithColumnKey withPathInSchema(java.util.List<String> pathInSchema) {
-    if (pathInSchema == null) {
-      throw new IllegalArgumentException("null value for 'pathInSchema' argument");
-    }
+    java.util.Objects.requireNonNull((pathInSchema));
     return new EncryptionWithColumnKey(pathInSchema, keyMetadata);
   }
   
   public EncryptionWithColumnKey withKeyMetadata(hydra.util.Opt<String> keyMetadata) {
-    if (keyMetadata == null) {
-      throw new IllegalArgumentException("null value for 'keyMetadata' argument");
-    }
+    java.util.Objects.requireNonNull((keyMetadata));
     return new EncryptionWithColumnKey(pathInSchema, keyMetadata);
   }
 }

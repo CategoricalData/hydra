@@ -109,9 +109,7 @@ public abstract class Expression implements Serializable {
     public final java.util.List<hydra.langs.kusto.kql.Expression> value;
     
     public And (java.util.List<hydra.langs.kusto.kql.Expression> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -164,9 +162,7 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.kusto.kql.BetweenExpression value;
     
     public Between (hydra.langs.kusto.kql.BetweenExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -194,9 +190,7 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.kusto.kql.BinaryExpression value;
     
     public Binary (hydra.langs.kusto.kql.BinaryExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -224,9 +218,7 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.kusto.kql.Expression value;
     
     public Braces (hydra.langs.kusto.kql.Expression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -254,9 +246,7 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.kusto.kql.ColumnName value;
     
     public Column (hydra.langs.kusto.kql.ColumnName value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -284,9 +274,7 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.kusto.kql.TableName value;
     
     public Dataset (hydra.langs.kusto.kql.TableName value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -314,9 +302,7 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.kusto.kql.IndexExpression value;
     
     public Index (hydra.langs.kusto.kql.IndexExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -344,9 +330,7 @@ public abstract class Expression implements Serializable {
     public final java.util.List<hydra.langs.kusto.kql.Expression> value;
     
     public List (java.util.List<hydra.langs.kusto.kql.Expression> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -374,9 +358,7 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.kusto.kql.Literal value;
     
     public Literal (hydra.langs.kusto.kql.Literal value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -404,9 +386,7 @@ public abstract class Expression implements Serializable {
     public final java.util.List<hydra.langs.kusto.kql.Expression> value;
     
     public Or (java.util.List<hydra.langs.kusto.kql.Expression> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -434,9 +414,7 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.kusto.kql.Expression value;
     
     public Parentheses (hydra.langs.kusto.kql.Expression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -464,9 +442,7 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.kusto.kql.PropertyExpression value;
     
     public Property (hydra.langs.kusto.kql.PropertyExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -494,9 +470,7 @@ public abstract class Expression implements Serializable {
     public final hydra.langs.kusto.kql.UnaryExpression value;
     
     public Unary (hydra.langs.kusto.kql.UnaryExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

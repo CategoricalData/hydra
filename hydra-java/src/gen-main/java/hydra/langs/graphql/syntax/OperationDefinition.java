@@ -37,9 +37,7 @@ public abstract class OperationDefinition implements Serializable {
     public final hydra.langs.graphql.syntax.OperationDefinition_Sequence value;
     
     public Sequence (hydra.langs.graphql.syntax.OperationDefinition_Sequence value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class OperationDefinition implements Serializable {
     public final hydra.langs.graphql.syntax.SelectionSet value;
     
     public SelectionSet (hydra.langs.graphql.syntax.SelectionSet value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

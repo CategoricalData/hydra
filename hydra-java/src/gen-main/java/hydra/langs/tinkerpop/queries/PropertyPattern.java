@@ -12,12 +12,8 @@ public class PropertyPattern implements Serializable {
   public final hydra.langs.tinkerpop.queries.PropertyValuePattern value;
   
   public PropertyPattern (hydra.langs.tinkerpop.propertyGraph.PropertyKey key, hydra.langs.tinkerpop.queries.PropertyValuePattern value) {
-    if (key == null) {
-      throw new IllegalArgumentException("null value for 'key' argument");
-    }
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((key));
+    java.util.Objects.requireNonNull((value));
     this.key = key;
     this.value = value;
   }
@@ -37,16 +33,12 @@ public class PropertyPattern implements Serializable {
   }
   
   public PropertyPattern withKey(hydra.langs.tinkerpop.propertyGraph.PropertyKey key) {
-    if (key == null) {
-      throw new IllegalArgumentException("null value for 'key' argument");
-    }
+    java.util.Objects.requireNonNull((key));
     return new PropertyPattern(key, value);
   }
   
   public PropertyPattern withValue(hydra.langs.tinkerpop.queries.PropertyValuePattern value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     return new PropertyPattern(key, value);
   }
 }

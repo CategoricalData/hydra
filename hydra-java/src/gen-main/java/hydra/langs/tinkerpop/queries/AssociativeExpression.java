@@ -12,12 +12,8 @@ public class AssociativeExpression implements Serializable {
   public final java.util.List<hydra.langs.tinkerpop.queries.Expression> operands;
   
   public AssociativeExpression (hydra.langs.tinkerpop.queries.BinaryOperator operator, java.util.List<hydra.langs.tinkerpop.queries.Expression> operands) {
-    if (operator == null) {
-      throw new IllegalArgumentException("null value for 'operator' argument");
-    }
-    if (operands == null) {
-      throw new IllegalArgumentException("null value for 'operands' argument");
-    }
+    java.util.Objects.requireNonNull((operator));
+    java.util.Objects.requireNonNull((operands));
     this.operator = operator;
     this.operands = operands;
   }
@@ -37,16 +33,12 @@ public class AssociativeExpression implements Serializable {
   }
   
   public AssociativeExpression withOperator(hydra.langs.tinkerpop.queries.BinaryOperator operator) {
-    if (operator == null) {
-      throw new IllegalArgumentException("null value for 'operator' argument");
-    }
+    java.util.Objects.requireNonNull((operator));
     return new AssociativeExpression(operator, operands);
   }
   
   public AssociativeExpression withOperands(java.util.List<hydra.langs.tinkerpop.queries.Expression> operands) {
-    if (operands == null) {
-      throw new IllegalArgumentException("null value for 'operands' argument");
-    }
+    java.util.Objects.requireNonNull((operands));
     return new AssociativeExpression(operator, operands);
   }
 }

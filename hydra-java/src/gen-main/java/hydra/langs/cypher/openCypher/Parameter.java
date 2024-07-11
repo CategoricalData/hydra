@@ -37,9 +37,7 @@ public abstract class Parameter implements Serializable {
     public final String value;
     
     public Symbolic (String value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class Parameter implements Serializable {
     public final java.math.BigInteger value;
     
     public Integer_ (java.math.BigInteger value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -15,12 +15,8 @@ public class Expression_Application implements Serializable {
   public final hydra.langs.haskell.ast.Expression argument;
   
   public Expression_Application (hydra.langs.haskell.ast.Expression function, hydra.langs.haskell.ast.Expression argument) {
-    if (function == null) {
-      throw new IllegalArgumentException("null value for 'function' argument");
-    }
-    if (argument == null) {
-      throw new IllegalArgumentException("null value for 'argument' argument");
-    }
+    java.util.Objects.requireNonNull((function));
+    java.util.Objects.requireNonNull((argument));
     this.function = function;
     this.argument = argument;
   }
@@ -40,16 +36,12 @@ public class Expression_Application implements Serializable {
   }
   
   public Expression_Application withFunction(hydra.langs.haskell.ast.Expression function) {
-    if (function == null) {
-      throw new IllegalArgumentException("null value for 'function' argument");
-    }
+    java.util.Objects.requireNonNull((function));
     return new Expression_Application(function, argument);
   }
   
   public Expression_Application withArgument(hydra.langs.haskell.ast.Expression argument) {
-    if (argument == null) {
-      throw new IllegalArgumentException("null value for 'argument' argument");
-    }
+    java.util.Objects.requireNonNull((argument));
     return new Expression_Application(function, argument);
   }
 }

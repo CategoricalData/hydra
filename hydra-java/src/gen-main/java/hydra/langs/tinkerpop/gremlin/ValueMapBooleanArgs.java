@@ -12,12 +12,8 @@ public class ValueMapBooleanArgs implements Serializable {
   public final hydra.util.Opt<java.util.List<hydra.langs.tinkerpop.gremlin.StringNullableArgument>> keys;
   
   public ValueMapBooleanArgs (hydra.langs.tinkerpop.gremlin.BooleanArgument value, hydra.util.Opt<java.util.List<hydra.langs.tinkerpop.gremlin.StringNullableArgument>> keys) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
-    if (keys == null) {
-      throw new IllegalArgumentException("null value for 'keys' argument");
-    }
+    java.util.Objects.requireNonNull((value));
+    java.util.Objects.requireNonNull((keys));
     this.value = value;
     this.keys = keys;
   }
@@ -37,16 +33,12 @@ public class ValueMapBooleanArgs implements Serializable {
   }
   
   public ValueMapBooleanArgs withValue(hydra.langs.tinkerpop.gremlin.BooleanArgument value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     return new ValueMapBooleanArgs(value, keys);
   }
   
   public ValueMapBooleanArgs withKeys(hydra.util.Opt<java.util.List<hydra.langs.tinkerpop.gremlin.StringNullableArgument>> keys) {
-    if (keys == null) {
-      throw new IllegalArgumentException("null value for 'keys' argument");
-    }
+    java.util.Objects.requireNonNull((keys));
     return new ValueMapBooleanArgs(value, keys);
   }
 }

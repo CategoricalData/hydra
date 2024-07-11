@@ -12,12 +12,8 @@ public class ModuleDirective_Requires implements Serializable {
   public final hydra.langs.java.syntax.ModuleName module;
   
   public ModuleDirective_Requires (java.util.List<hydra.langs.java.syntax.RequiresModifier> modifiers, hydra.langs.java.syntax.ModuleName module) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
-    if (module == null) {
-      throw new IllegalArgumentException("null value for 'module' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
+    java.util.Objects.requireNonNull((module));
     this.modifiers = modifiers;
     this.module = module;
   }
@@ -37,16 +33,12 @@ public class ModuleDirective_Requires implements Serializable {
   }
   
   public ModuleDirective_Requires withModifiers(java.util.List<hydra.langs.java.syntax.RequiresModifier> modifiers) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
     return new ModuleDirective_Requires(modifiers, module);
   }
   
   public ModuleDirective_Requires withModule(hydra.langs.java.syntax.ModuleName module) {
-    if (module == null) {
-      throw new IllegalArgumentException("null value for 'module' argument");
-    }
+    java.util.Objects.requireNonNull((module));
     return new ModuleDirective_Requires(modifiers, module);
   }
 }

@@ -12,12 +12,8 @@ public class Type_Application implements Serializable {
   public final hydra.langs.haskell.ast.Type argument;
   
   public Type_Application (hydra.langs.haskell.ast.Type context, hydra.langs.haskell.ast.Type argument) {
-    if (context == null) {
-      throw new IllegalArgumentException("null value for 'context' argument");
-    }
-    if (argument == null) {
-      throw new IllegalArgumentException("null value for 'argument' argument");
-    }
+    java.util.Objects.requireNonNull((context));
+    java.util.Objects.requireNonNull((argument));
     this.context = context;
     this.argument = argument;
   }
@@ -37,16 +33,12 @@ public class Type_Application implements Serializable {
   }
   
   public Type_Application withContext(hydra.langs.haskell.ast.Type context) {
-    if (context == null) {
-      throw new IllegalArgumentException("null value for 'context' argument");
-    }
+    java.util.Objects.requireNonNull((context));
     return new Type_Application(context, argument);
   }
   
   public Type_Application withArgument(hydra.langs.haskell.ast.Type argument) {
-    if (argument == null) {
-      throw new IllegalArgumentException("null value for 'argument' argument");
-    }
+    java.util.Objects.requireNonNull((argument));
     return new Type_Application(context, argument);
   }
 }

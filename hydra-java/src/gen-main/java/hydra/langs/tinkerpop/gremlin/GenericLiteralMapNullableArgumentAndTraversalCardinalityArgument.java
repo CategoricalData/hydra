@@ -12,12 +12,8 @@ public class GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument im
   public final hydra.langs.tinkerpop.gremlin.GenericLiteralMapNullableArgument object;
   
   public GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument (hydra.langs.tinkerpop.gremlin.TraversalCardinalityArgument cardinality, hydra.langs.tinkerpop.gremlin.GenericLiteralMapNullableArgument object) {
-    if (cardinality == null) {
-      throw new IllegalArgumentException("null value for 'cardinality' argument");
-    }
-    if (object == null) {
-      throw new IllegalArgumentException("null value for 'object' argument");
-    }
+    java.util.Objects.requireNonNull((cardinality));
+    java.util.Objects.requireNonNull((object));
     this.cardinality = cardinality;
     this.object = object;
   }
@@ -37,16 +33,12 @@ public class GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument im
   }
   
   public GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument withCardinality(hydra.langs.tinkerpop.gremlin.TraversalCardinalityArgument cardinality) {
-    if (cardinality == null) {
-      throw new IllegalArgumentException("null value for 'cardinality' argument");
-    }
+    java.util.Objects.requireNonNull((cardinality));
     return new GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument(cardinality, object);
   }
   
   public GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument withObject(hydra.langs.tinkerpop.gremlin.GenericLiteralMapNullableArgument object) {
-    if (object == null) {
-      throw new IllegalArgumentException("null value for 'object' argument");
-    }
+    java.util.Objects.requireNonNull((object));
     return new GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument(cardinality, object);
   }
 }

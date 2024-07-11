@@ -28,15 +28,9 @@ public class Features implements Serializable {
   public final hydra.langs.tinkerpop.features.VertexFeatures vertex;
   
   public Features (hydra.langs.tinkerpop.features.EdgeFeatures edge, hydra.langs.tinkerpop.features.GraphFeatures graph, hydra.langs.tinkerpop.features.VertexFeatures vertex) {
-    if (edge == null) {
-      throw new IllegalArgumentException("null value for 'edge' argument");
-    }
-    if (graph == null) {
-      throw new IllegalArgumentException("null value for 'graph' argument");
-    }
-    if (vertex == null) {
-      throw new IllegalArgumentException("null value for 'vertex' argument");
-    }
+    java.util.Objects.requireNonNull((edge));
+    java.util.Objects.requireNonNull((graph));
+    java.util.Objects.requireNonNull((vertex));
     this.edge = edge;
     this.graph = graph;
     this.vertex = vertex;
@@ -57,23 +51,17 @@ public class Features implements Serializable {
   }
   
   public Features withEdge(hydra.langs.tinkerpop.features.EdgeFeatures edge) {
-    if (edge == null) {
-      throw new IllegalArgumentException("null value for 'edge' argument");
-    }
+    java.util.Objects.requireNonNull((edge));
     return new Features(edge, graph, vertex);
   }
   
   public Features withGraph(hydra.langs.tinkerpop.features.GraphFeatures graph) {
-    if (graph == null) {
-      throw new IllegalArgumentException("null value for 'graph' argument");
-    }
+    java.util.Objects.requireNonNull((graph));
     return new Features(edge, graph, vertex);
   }
   
   public Features withVertex(hydra.langs.tinkerpop.features.VertexFeatures vertex) {
-    if (vertex == null) {
-      throw new IllegalArgumentException("null value for 'vertex' argument");
-    }
+    java.util.Objects.requireNonNull((vertex));
     return new Features(edge, graph, vertex);
   }
 }

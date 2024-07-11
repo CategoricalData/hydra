@@ -12,12 +12,8 @@ public class LambdaExpression implements Serializable {
   public final hydra.langs.java.syntax.LambdaBody body;
   
   public LambdaExpression (hydra.langs.java.syntax.LambdaParameters parameters, hydra.langs.java.syntax.LambdaBody body) {
-    if (parameters == null) {
-      throw new IllegalArgumentException("null value for 'parameters' argument");
-    }
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((parameters));
+    java.util.Objects.requireNonNull((body));
     this.parameters = parameters;
     this.body = body;
   }
@@ -37,16 +33,12 @@ public class LambdaExpression implements Serializable {
   }
   
   public LambdaExpression withParameters(hydra.langs.java.syntax.LambdaParameters parameters) {
-    if (parameters == null) {
-      throw new IllegalArgumentException("null value for 'parameters' argument");
-    }
+    java.util.Objects.requireNonNull((parameters));
     return new LambdaExpression(parameters, body);
   }
   
   public LambdaExpression withBody(hydra.langs.java.syntax.LambdaBody body) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((body));
     return new LambdaExpression(parameters, body);
   }
 }

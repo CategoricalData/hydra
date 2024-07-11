@@ -36,21 +36,11 @@ public class QuantifierFeatures implements Serializable {
   public final Boolean single;
   
   public QuantifierFeatures (Boolean all, Boolean any, Boolean exists, Boolean none, Boolean single) {
-    if (all == null) {
-      throw new IllegalArgumentException("null value for 'all' argument");
-    }
-    if (any == null) {
-      throw new IllegalArgumentException("null value for 'any' argument");
-    }
-    if (exists == null) {
-      throw new IllegalArgumentException("null value for 'exists' argument");
-    }
-    if (none == null) {
-      throw new IllegalArgumentException("null value for 'none' argument");
-    }
-    if (single == null) {
-      throw new IllegalArgumentException("null value for 'single' argument");
-    }
+    java.util.Objects.requireNonNull((all));
+    java.util.Objects.requireNonNull((any));
+    java.util.Objects.requireNonNull((exists));
+    java.util.Objects.requireNonNull((none));
+    java.util.Objects.requireNonNull((single));
     this.all = all;
     this.any = any;
     this.exists = exists;
@@ -73,37 +63,27 @@ public class QuantifierFeatures implements Serializable {
   }
   
   public QuantifierFeatures withAll(Boolean all) {
-    if (all == null) {
-      throw new IllegalArgumentException("null value for 'all' argument");
-    }
+    java.util.Objects.requireNonNull((all));
     return new QuantifierFeatures(all, any, exists, none, single);
   }
   
   public QuantifierFeatures withAny(Boolean any) {
-    if (any == null) {
-      throw new IllegalArgumentException("null value for 'any' argument");
-    }
+    java.util.Objects.requireNonNull((any));
     return new QuantifierFeatures(all, any, exists, none, single);
   }
   
   public QuantifierFeatures withExists(Boolean exists) {
-    if (exists == null) {
-      throw new IllegalArgumentException("null value for 'exists' argument");
-    }
+    java.util.Objects.requireNonNull((exists));
     return new QuantifierFeatures(all, any, exists, none, single);
   }
   
   public QuantifierFeatures withNone(Boolean none) {
-    if (none == null) {
-      throw new IllegalArgumentException("null value for 'none' argument");
-    }
+    java.util.Objects.requireNonNull((none));
     return new QuantifierFeatures(all, any, exists, none, single);
   }
   
   public QuantifierFeatures withSingle(Boolean single) {
-    if (single == null) {
-      throw new IllegalArgumentException("null value for 'single' argument");
-    }
+    java.util.Objects.requireNonNull((single));
     return new QuantifierFeatures(all, any, exists, none, single);
   }
 }

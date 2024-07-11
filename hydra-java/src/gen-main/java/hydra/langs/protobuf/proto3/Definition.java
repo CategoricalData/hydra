@@ -37,9 +37,7 @@ public abstract class Definition implements Serializable {
     public final hydra.langs.protobuf.proto3.EnumDefinition value;
     
     public Enum_ (hydra.langs.protobuf.proto3.EnumDefinition value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class Definition implements Serializable {
     public final hydra.langs.protobuf.proto3.MessageDefinition value;
     
     public Message (hydra.langs.protobuf.proto3.MessageDefinition value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

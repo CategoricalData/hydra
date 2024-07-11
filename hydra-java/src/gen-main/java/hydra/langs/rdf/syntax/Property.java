@@ -23,15 +23,9 @@ public class Property implements Serializable {
   public final java.util.Set<hydra.langs.rdf.syntax.Property> subPropertyOf;
   
   public Property (java.util.Set<hydra.langs.rdf.syntax.RdfsClass> domain, java.util.Set<hydra.langs.rdf.syntax.RdfsClass> range, java.util.Set<hydra.langs.rdf.syntax.Property> subPropertyOf) {
-    if (domain == null) {
-      throw new IllegalArgumentException("null value for 'domain' argument");
-    }
-    if (range == null) {
-      throw new IllegalArgumentException("null value for 'range' argument");
-    }
-    if (subPropertyOf == null) {
-      throw new IllegalArgumentException("null value for 'subPropertyOf' argument");
-    }
+    java.util.Objects.requireNonNull((domain));
+    java.util.Objects.requireNonNull((range));
+    java.util.Objects.requireNonNull((subPropertyOf));
     this.domain = domain;
     this.range = range;
     this.subPropertyOf = subPropertyOf;
@@ -52,23 +46,17 @@ public class Property implements Serializable {
   }
   
   public Property withDomain(java.util.Set<hydra.langs.rdf.syntax.RdfsClass> domain) {
-    if (domain == null) {
-      throw new IllegalArgumentException("null value for 'domain' argument");
-    }
+    java.util.Objects.requireNonNull((domain));
     return new Property(domain, range, subPropertyOf);
   }
   
   public Property withRange(java.util.Set<hydra.langs.rdf.syntax.RdfsClass> range) {
-    if (range == null) {
-      throw new IllegalArgumentException("null value for 'range' argument");
-    }
+    java.util.Objects.requireNonNull((range));
     return new Property(domain, range, subPropertyOf);
   }
   
   public Property withSubPropertyOf(java.util.Set<hydra.langs.rdf.syntax.Property> subPropertyOf) {
-    if (subPropertyOf == null) {
-      throw new IllegalArgumentException("null value for 'subPropertyOf' argument");
-    }
+    java.util.Objects.requireNonNull((subPropertyOf));
     return new Property(domain, range, subPropertyOf);
   }
 }

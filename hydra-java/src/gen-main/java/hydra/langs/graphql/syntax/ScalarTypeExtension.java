@@ -12,12 +12,8 @@ public class ScalarTypeExtension implements Serializable {
   public final hydra.langs.graphql.syntax.Directives directives;
   
   public ScalarTypeExtension (hydra.langs.graphql.syntax.Name name, hydra.langs.graphql.syntax.Directives directives) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((directives));
     this.name = name;
     this.directives = directives;
   }
@@ -37,16 +33,12 @@ public class ScalarTypeExtension implements Serializable {
   }
   
   public ScalarTypeExtension withName(hydra.langs.graphql.syntax.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new ScalarTypeExtension(name, directives);
   }
   
   public ScalarTypeExtension withDirectives(hydra.langs.graphql.syntax.Directives directives) {
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((directives));
     return new ScalarTypeExtension(name, directives);
   }
 }

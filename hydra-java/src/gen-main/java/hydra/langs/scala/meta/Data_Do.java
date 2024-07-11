@@ -12,12 +12,8 @@ public class Data_Do implements Serializable {
   public final hydra.langs.scala.meta.Data expr;
   
   public Data_Do (hydra.langs.scala.meta.Data body, hydra.langs.scala.meta.Data expr) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
-    if (expr == null) {
-      throw new IllegalArgumentException("null value for 'expr' argument");
-    }
+    java.util.Objects.requireNonNull((body));
+    java.util.Objects.requireNonNull((expr));
     this.body = body;
     this.expr = expr;
   }
@@ -37,16 +33,12 @@ public class Data_Do implements Serializable {
   }
   
   public Data_Do withBody(hydra.langs.scala.meta.Data body) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((body));
     return new Data_Do(body, expr);
   }
   
   public Data_Do withExpr(hydra.langs.scala.meta.Data expr) {
-    if (expr == null) {
-      throw new IllegalArgumentException("null value for 'expr' argument");
-    }
+    java.util.Objects.requireNonNull((expr));
     return new Data_Do(body, expr);
   }
 }

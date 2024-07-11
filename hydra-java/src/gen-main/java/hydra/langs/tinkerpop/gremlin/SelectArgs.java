@@ -55,9 +55,7 @@ public abstract class SelectArgs implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalColumnArgument value;
     
     public Column (hydra.langs.tinkerpop.gremlin.TraversalColumnArgument value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -85,9 +83,7 @@ public abstract class SelectArgs implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.PopStringsArgument value;
     
     public PopStrings (hydra.langs.tinkerpop.gremlin.PopStringsArgument value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -115,9 +111,7 @@ public abstract class SelectArgs implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalPopArgumentAndNestedTraversal value;
     
     public PopTraversal (hydra.langs.tinkerpop.gremlin.TraversalPopArgumentAndNestedTraversal value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -145,9 +139,7 @@ public abstract class SelectArgs implements Serializable {
     public final java.util.List<hydra.langs.tinkerpop.gremlin.StringArgument> value;
     
     public Strings (java.util.List<hydra.langs.tinkerpop.gremlin.StringArgument> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -175,9 +167,7 @@ public abstract class SelectArgs implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.NestedTraversal value;
     
     public Traversal (hydra.langs.tinkerpop.gremlin.NestedTraversal value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

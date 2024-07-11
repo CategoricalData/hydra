@@ -15,12 +15,8 @@ public class Closed implements Serializable {
   public final hydra.util.Opt<java.util.Set<hydra.langs.rdf.syntax.Property>> ignoredProperties;
   
   public Closed (Boolean isClosed, hydra.util.Opt<java.util.Set<hydra.langs.rdf.syntax.Property>> ignoredProperties) {
-    if (isClosed == null) {
-      throw new IllegalArgumentException("null value for 'isClosed' argument");
-    }
-    if (ignoredProperties == null) {
-      throw new IllegalArgumentException("null value for 'ignoredProperties' argument");
-    }
+    java.util.Objects.requireNonNull((isClosed));
+    java.util.Objects.requireNonNull((ignoredProperties));
     this.isClosed = isClosed;
     this.ignoredProperties = ignoredProperties;
   }
@@ -40,16 +36,12 @@ public class Closed implements Serializable {
   }
   
   public Closed withIsClosed(Boolean isClosed) {
-    if (isClosed == null) {
-      throw new IllegalArgumentException("null value for 'isClosed' argument");
-    }
+    java.util.Objects.requireNonNull((isClosed));
     return new Closed(isClosed, ignoredProperties);
   }
   
   public Closed withIgnoredProperties(hydra.util.Opt<java.util.Set<hydra.langs.rdf.syntax.Property>> ignoredProperties) {
-    if (ignoredProperties == null) {
-      throw new IllegalArgumentException("null value for 'ignoredProperties' argument");
-    }
+    java.util.Objects.requireNonNull((ignoredProperties));
     return new Closed(isClosed, ignoredProperties);
   }
 }

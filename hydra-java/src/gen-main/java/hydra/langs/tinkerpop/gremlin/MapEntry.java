@@ -37,9 +37,7 @@ public abstract class MapEntry implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.MapKey value;
     
     public Key (hydra.langs.tinkerpop.gremlin.MapKey value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class MapEntry implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.GenericLiteral value;
     
     public Value (hydra.langs.tinkerpop.gremlin.GenericLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

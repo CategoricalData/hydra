@@ -12,12 +12,8 @@ public class ProjectionItem implements Serializable {
   public final hydra.util.Opt<hydra.langs.cypher.openCypher.Variable> variable;
   
   public ProjectionItem (hydra.langs.cypher.openCypher.Expression expression, hydra.util.Opt<hydra.langs.cypher.openCypher.Variable> variable) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
-    if (variable == null) {
-      throw new IllegalArgumentException("null value for 'variable' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
+    java.util.Objects.requireNonNull((variable));
     this.expression = expression;
     this.variable = variable;
   }
@@ -37,16 +33,12 @@ public class ProjectionItem implements Serializable {
   }
   
   public ProjectionItem withExpression(hydra.langs.cypher.openCypher.Expression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new ProjectionItem(expression, variable);
   }
   
   public ProjectionItem withVariable(hydra.util.Opt<hydra.langs.cypher.openCypher.Variable> variable) {
-    if (variable == null) {
-      throw new IllegalArgumentException("null value for 'variable' argument");
-    }
+    java.util.Objects.requireNonNull((variable));
     return new ProjectionItem(expression, variable);
   }
 }

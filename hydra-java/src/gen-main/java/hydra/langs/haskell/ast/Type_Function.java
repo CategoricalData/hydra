@@ -12,12 +12,8 @@ public class Type_Function implements Serializable {
   public final hydra.langs.haskell.ast.Type codomain;
   
   public Type_Function (hydra.langs.haskell.ast.Type domain, hydra.langs.haskell.ast.Type codomain) {
-    if (domain == null) {
-      throw new IllegalArgumentException("null value for 'domain' argument");
-    }
-    if (codomain == null) {
-      throw new IllegalArgumentException("null value for 'codomain' argument");
-    }
+    java.util.Objects.requireNonNull((domain));
+    java.util.Objects.requireNonNull((codomain));
     this.domain = domain;
     this.codomain = codomain;
   }
@@ -37,16 +33,12 @@ public class Type_Function implements Serializable {
   }
   
   public Type_Function withDomain(hydra.langs.haskell.ast.Type domain) {
-    if (domain == null) {
-      throw new IllegalArgumentException("null value for 'domain' argument");
-    }
+    java.util.Objects.requireNonNull((domain));
     return new Type_Function(domain, codomain);
   }
   
   public Type_Function withCodomain(hydra.langs.haskell.ast.Type codomain) {
-    if (codomain == null) {
-      throw new IllegalArgumentException("null value for 'codomain' argument");
-    }
+    java.util.Objects.requireNonNull((codomain));
     return new Type_Function(domain, codomain);
   }
 }

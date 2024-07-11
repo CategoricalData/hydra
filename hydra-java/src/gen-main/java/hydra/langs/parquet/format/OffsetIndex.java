@@ -13,9 +13,7 @@ public class OffsetIndex implements Serializable {
   public final java.util.List<hydra.langs.parquet.format.PageLocation> pageLocations;
   
   public OffsetIndex (java.util.List<hydra.langs.parquet.format.PageLocation> pageLocations) {
-    if (pageLocations == null) {
-      throw new IllegalArgumentException("null value for 'pageLocations' argument");
-    }
+    java.util.Objects.requireNonNull((pageLocations));
     this.pageLocations = pageLocations;
   }
   

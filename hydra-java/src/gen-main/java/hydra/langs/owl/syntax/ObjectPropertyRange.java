@@ -17,15 +17,9 @@ public class ObjectPropertyRange implements Serializable {
   public final hydra.langs.owl.syntax.ClassExpression range;
   
   public ObjectPropertyRange (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, hydra.langs.owl.syntax.ObjectPropertyExpression property, hydra.langs.owl.syntax.ClassExpression range) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
-    if (range == null) {
-      throw new IllegalArgumentException("null value for 'range' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
+    java.util.Objects.requireNonNull((property));
+    java.util.Objects.requireNonNull((range));
     this.annotations = annotations;
     this.property = property;
     this.range = range;
@@ -46,23 +40,17 @@ public class ObjectPropertyRange implements Serializable {
   }
   
   public ObjectPropertyRange withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new ObjectPropertyRange(annotations, property, range);
   }
   
   public ObjectPropertyRange withProperty(hydra.langs.owl.syntax.ObjectPropertyExpression property) {
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
+    java.util.Objects.requireNonNull((property));
     return new ObjectPropertyRange(annotations, property, range);
   }
   
   public ObjectPropertyRange withRange(hydra.langs.owl.syntax.ClassExpression range) {
-    if (range == null) {
-      throw new IllegalArgumentException("null value for 'range' argument");
-    }
+    java.util.Objects.requireNonNull((range));
     return new ObjectPropertyRange(annotations, property, range);
   }
 }

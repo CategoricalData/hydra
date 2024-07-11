@@ -119,9 +119,7 @@ public abstract class Pattern implements Serializable {
     public final hydra.grammar.Pattern value;
     
     public Ignored (hydra.grammar.Pattern value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -149,9 +147,7 @@ public abstract class Pattern implements Serializable {
     public final hydra.grammar.LabeledPattern value;
     
     public Labeled (hydra.grammar.LabeledPattern value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -179,9 +175,7 @@ public abstract class Pattern implements Serializable {
     public final hydra.grammar.Constant value;
     
     public Constant (hydra.grammar.Constant value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -209,9 +203,7 @@ public abstract class Pattern implements Serializable {
     public final hydra.grammar.Regex value;
     
     public Regex (hydra.grammar.Regex value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -239,9 +231,7 @@ public abstract class Pattern implements Serializable {
     public final hydra.grammar.Symbol value;
     
     public Nonterminal (hydra.grammar.Symbol value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -269,9 +259,7 @@ public abstract class Pattern implements Serializable {
     public final java.util.List<hydra.grammar.Pattern> value;
     
     public Sequence (java.util.List<hydra.grammar.Pattern> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -299,9 +287,7 @@ public abstract class Pattern implements Serializable {
     public final java.util.List<hydra.grammar.Pattern> value;
     
     public Alternatives (java.util.List<hydra.grammar.Pattern> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -329,9 +315,7 @@ public abstract class Pattern implements Serializable {
     public final hydra.grammar.Pattern value;
     
     public Option (hydra.grammar.Pattern value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -359,9 +343,7 @@ public abstract class Pattern implements Serializable {
     public final hydra.grammar.Pattern value;
     
     public Star (hydra.grammar.Pattern value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -389,9 +371,7 @@ public abstract class Pattern implements Serializable {
     public final hydra.grammar.Pattern value;
     
     public Plus (hydra.grammar.Pattern value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -10,9 +10,7 @@ public class Identifier implements Serializable {
   public final String value;
   
   public Identifier (String value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

@@ -12,12 +12,8 @@ public class ShiftExpression_Binary implements Serializable {
   public final hydra.langs.java.syntax.AdditiveExpression rhs;
   
   public ShiftExpression_Binary (hydra.langs.java.syntax.ShiftExpression lhs, hydra.langs.java.syntax.AdditiveExpression rhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
+    java.util.Objects.requireNonNull((rhs));
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -37,16 +33,12 @@ public class ShiftExpression_Binary implements Serializable {
   }
   
   public ShiftExpression_Binary withLhs(hydra.langs.java.syntax.ShiftExpression lhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
     return new ShiftExpression_Binary(lhs, rhs);
   }
   
   public ShiftExpression_Binary withRhs(hydra.langs.java.syntax.AdditiveExpression rhs) {
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((rhs));
     return new ShiftExpression_Binary(lhs, rhs);
   }
 }

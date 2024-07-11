@@ -14,15 +14,9 @@ public class ArrayCreationExpression_PrimitiveArray implements Serializable {
   public final hydra.langs.java.syntax.ArrayInitializer array;
   
   public ArrayCreationExpression_PrimitiveArray (hydra.langs.java.syntax.PrimitiveTypeWithAnnotations type, java.util.List<hydra.langs.java.syntax.Dims> dims, hydra.langs.java.syntax.ArrayInitializer array) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (dims == null) {
-      throw new IllegalArgumentException("null value for 'dims' argument");
-    }
-    if (array == null) {
-      throw new IllegalArgumentException("null value for 'array' argument");
-    }
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((dims));
+    java.util.Objects.requireNonNull((array));
     this.type = type;
     this.dims = dims;
     this.array = array;
@@ -43,23 +37,17 @@ public class ArrayCreationExpression_PrimitiveArray implements Serializable {
   }
   
   public ArrayCreationExpression_PrimitiveArray withType(hydra.langs.java.syntax.PrimitiveTypeWithAnnotations type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new ArrayCreationExpression_PrimitiveArray(type, dims, array);
   }
   
   public ArrayCreationExpression_PrimitiveArray withDims(java.util.List<hydra.langs.java.syntax.Dims> dims) {
-    if (dims == null) {
-      throw new IllegalArgumentException("null value for 'dims' argument");
-    }
+    java.util.Objects.requireNonNull((dims));
     return new ArrayCreationExpression_PrimitiveArray(type, dims, array);
   }
   
   public ArrayCreationExpression_PrimitiveArray withArray(hydra.langs.java.syntax.ArrayInitializer array) {
-    if (array == null) {
-      throw new IllegalArgumentException("null value for 'array' argument");
-    }
+    java.util.Objects.requireNonNull((array));
     return new ArrayCreationExpression_PrimitiveArray(type, dims, array);
   }
 }

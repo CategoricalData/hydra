@@ -37,9 +37,7 @@ public abstract class CollectionValueExpression implements Serializable {
     public final hydra.langs.sql.ansi.ArrayValueExpression value;
     
     public Array (hydra.langs.sql.ansi.ArrayValueExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class CollectionValueExpression implements Serializable {
     public final hydra.langs.sql.ansi.MultisetValueExpression value;
     
     public Multiset (hydra.langs.sql.ansi.MultisetValueExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -141,84 +141,32 @@ public class CypherFeatures implements Serializable {
   public final hydra.util.Opt<hydra.langs.cypher.features.UpdatingFeatures> updating;
   
   public CypherFeatures (hydra.util.Opt<hydra.langs.cypher.features.AggregateFeatures> aggregate, hydra.util.Opt<hydra.langs.cypher.features.ArithmeticFeatures> arithmetic, hydra.util.Opt<hydra.langs.cypher.features.AtomFeatures> atom, hydra.util.Opt<hydra.langs.cypher.features.ComparisonFeatures> comparison, hydra.util.Opt<hydra.langs.cypher.features.DeleteFeatures> delete, hydra.util.Opt<hydra.langs.cypher.features.ElementFeatures> element, hydra.util.Opt<hydra.langs.cypher.features.LogicalFeatures> logical, hydra.util.Opt<hydra.langs.cypher.features.MapFeatures> map, hydra.util.Opt<hydra.langs.cypher.features.MatchFeatures> match, hydra.util.Opt<hydra.langs.cypher.features.MergeFeatures> merge, hydra.util.Opt<hydra.langs.cypher.features.NodePatternFeatures> nodePattern, hydra.util.Opt<hydra.langs.cypher.features.NullFeatures> null_, hydra.util.Opt<hydra.langs.cypher.features.NumericFeatures> numeric, hydra.util.Opt<hydra.langs.cypher.features.PathFeatures> path, hydra.util.Opt<hydra.langs.cypher.features.ProcedureCallFeatures> procedureCall, hydra.util.Opt<hydra.langs.cypher.features.ProjectionFeatures> projection, hydra.util.Opt<hydra.langs.cypher.features.RandomnessFeatures> randomness, hydra.util.Opt<hydra.langs.cypher.features.RangeLiteralFeatures> rangeLiteral, hydra.util.Opt<hydra.langs.cypher.features.ReadingFeatures> reading, hydra.util.Opt<hydra.langs.cypher.features.RelationshipDirectionFeatures> relationshipDirection, hydra.util.Opt<hydra.langs.cypher.features.RelationshipPatternFeatures> relationshipPattern, hydra.util.Opt<hydra.langs.cypher.features.RemoveFeatures> remove, hydra.util.Opt<hydra.langs.cypher.features.SchemaFeatures> schema, hydra.util.Opt<hydra.langs.cypher.features.SetFeatures> set, hydra.util.Opt<hydra.langs.cypher.features.StringFeatures> string, hydra.util.Opt<hydra.langs.cypher.features.UpdatingFeatures> updating) {
-    if (aggregate == null) {
-      throw new IllegalArgumentException("null value for 'aggregate' argument");
-    }
-    if (arithmetic == null) {
-      throw new IllegalArgumentException("null value for 'arithmetic' argument");
-    }
-    if (atom == null) {
-      throw new IllegalArgumentException("null value for 'atom' argument");
-    }
-    if (comparison == null) {
-      throw new IllegalArgumentException("null value for 'comparison' argument");
-    }
-    if (delete == null) {
-      throw new IllegalArgumentException("null value for 'delete' argument");
-    }
-    if (element == null) {
-      throw new IllegalArgumentException("null value for 'element' argument");
-    }
-    if (logical == null) {
-      throw new IllegalArgumentException("null value for 'logical' argument");
-    }
-    if (map == null) {
-      throw new IllegalArgumentException("null value for 'map' argument");
-    }
-    if (match == null) {
-      throw new IllegalArgumentException("null value for 'match' argument");
-    }
-    if (merge == null) {
-      throw new IllegalArgumentException("null value for 'merge' argument");
-    }
-    if (nodePattern == null) {
-      throw new IllegalArgumentException("null value for 'nodePattern' argument");
-    }
-    if (null_ == null) {
-      throw new IllegalArgumentException("null value for 'null' argument");
-    }
-    if (numeric == null) {
-      throw new IllegalArgumentException("null value for 'numeric' argument");
-    }
-    if (path == null) {
-      throw new IllegalArgumentException("null value for 'path' argument");
-    }
-    if (procedureCall == null) {
-      throw new IllegalArgumentException("null value for 'procedureCall' argument");
-    }
-    if (projection == null) {
-      throw new IllegalArgumentException("null value for 'projection' argument");
-    }
-    if (randomness == null) {
-      throw new IllegalArgumentException("null value for 'randomness' argument");
-    }
-    if (rangeLiteral == null) {
-      throw new IllegalArgumentException("null value for 'rangeLiteral' argument");
-    }
-    if (reading == null) {
-      throw new IllegalArgumentException("null value for 'reading' argument");
-    }
-    if (relationshipDirection == null) {
-      throw new IllegalArgumentException("null value for 'relationshipDirection' argument");
-    }
-    if (relationshipPattern == null) {
-      throw new IllegalArgumentException("null value for 'relationshipPattern' argument");
-    }
-    if (remove == null) {
-      throw new IllegalArgumentException("null value for 'remove' argument");
-    }
-    if (schema == null) {
-      throw new IllegalArgumentException("null value for 'schema' argument");
-    }
-    if (set == null) {
-      throw new IllegalArgumentException("null value for 'set' argument");
-    }
-    if (string == null) {
-      throw new IllegalArgumentException("null value for 'string' argument");
-    }
-    if (updating == null) {
-      throw new IllegalArgumentException("null value for 'updating' argument");
-    }
+    java.util.Objects.requireNonNull((aggregate));
+    java.util.Objects.requireNonNull((arithmetic));
+    java.util.Objects.requireNonNull((atom));
+    java.util.Objects.requireNonNull((comparison));
+    java.util.Objects.requireNonNull((delete));
+    java.util.Objects.requireNonNull((element));
+    java.util.Objects.requireNonNull((logical));
+    java.util.Objects.requireNonNull((map));
+    java.util.Objects.requireNonNull((match));
+    java.util.Objects.requireNonNull((merge));
+    java.util.Objects.requireNonNull((nodePattern));
+    java.util.Objects.requireNonNull((null_));
+    java.util.Objects.requireNonNull((numeric));
+    java.util.Objects.requireNonNull((path));
+    java.util.Objects.requireNonNull((procedureCall));
+    java.util.Objects.requireNonNull((projection));
+    java.util.Objects.requireNonNull((randomness));
+    java.util.Objects.requireNonNull((rangeLiteral));
+    java.util.Objects.requireNonNull((reading));
+    java.util.Objects.requireNonNull((relationshipDirection));
+    java.util.Objects.requireNonNull((relationshipPattern));
+    java.util.Objects.requireNonNull((remove));
+    java.util.Objects.requireNonNull((schema));
+    java.util.Objects.requireNonNull((set));
+    java.util.Objects.requireNonNull((string));
+    java.util.Objects.requireNonNull((updating));
     this.aggregate = aggregate;
     this.arithmetic = arithmetic;
     this.atom = atom;
@@ -262,184 +210,132 @@ public class CypherFeatures implements Serializable {
   }
   
   public CypherFeatures withAggregate(hydra.util.Opt<hydra.langs.cypher.features.AggregateFeatures> aggregate) {
-    if (aggregate == null) {
-      throw new IllegalArgumentException("null value for 'aggregate' argument");
-    }
+    java.util.Objects.requireNonNull((aggregate));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withArithmetic(hydra.util.Opt<hydra.langs.cypher.features.ArithmeticFeatures> arithmetic) {
-    if (arithmetic == null) {
-      throw new IllegalArgumentException("null value for 'arithmetic' argument");
-    }
+    java.util.Objects.requireNonNull((arithmetic));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withAtom(hydra.util.Opt<hydra.langs.cypher.features.AtomFeatures> atom) {
-    if (atom == null) {
-      throw new IllegalArgumentException("null value for 'atom' argument");
-    }
+    java.util.Objects.requireNonNull((atom));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withComparison(hydra.util.Opt<hydra.langs.cypher.features.ComparisonFeatures> comparison) {
-    if (comparison == null) {
-      throw new IllegalArgumentException("null value for 'comparison' argument");
-    }
+    java.util.Objects.requireNonNull((comparison));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withDelete(hydra.util.Opt<hydra.langs.cypher.features.DeleteFeatures> delete) {
-    if (delete == null) {
-      throw new IllegalArgumentException("null value for 'delete' argument");
-    }
+    java.util.Objects.requireNonNull((delete));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withElement(hydra.util.Opt<hydra.langs.cypher.features.ElementFeatures> element) {
-    if (element == null) {
-      throw new IllegalArgumentException("null value for 'element' argument");
-    }
+    java.util.Objects.requireNonNull((element));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withLogical(hydra.util.Opt<hydra.langs.cypher.features.LogicalFeatures> logical) {
-    if (logical == null) {
-      throw new IllegalArgumentException("null value for 'logical' argument");
-    }
+    java.util.Objects.requireNonNull((logical));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withMap(hydra.util.Opt<hydra.langs.cypher.features.MapFeatures> map) {
-    if (map == null) {
-      throw new IllegalArgumentException("null value for 'map' argument");
-    }
+    java.util.Objects.requireNonNull((map));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withMatch(hydra.util.Opt<hydra.langs.cypher.features.MatchFeatures> match) {
-    if (match == null) {
-      throw new IllegalArgumentException("null value for 'match' argument");
-    }
+    java.util.Objects.requireNonNull((match));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withMerge(hydra.util.Opt<hydra.langs.cypher.features.MergeFeatures> merge) {
-    if (merge == null) {
-      throw new IllegalArgumentException("null value for 'merge' argument");
-    }
+    java.util.Objects.requireNonNull((merge));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withNodePattern(hydra.util.Opt<hydra.langs.cypher.features.NodePatternFeatures> nodePattern) {
-    if (nodePattern == null) {
-      throw new IllegalArgumentException("null value for 'nodePattern' argument");
-    }
+    java.util.Objects.requireNonNull((nodePattern));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withNull(hydra.util.Opt<hydra.langs.cypher.features.NullFeatures> null_) {
-    if (null_ == null) {
-      throw new IllegalArgumentException("null value for 'null' argument");
-    }
+    java.util.Objects.requireNonNull((null_));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withNumeric(hydra.util.Opt<hydra.langs.cypher.features.NumericFeatures> numeric) {
-    if (numeric == null) {
-      throw new IllegalArgumentException("null value for 'numeric' argument");
-    }
+    java.util.Objects.requireNonNull((numeric));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withPath(hydra.util.Opt<hydra.langs.cypher.features.PathFeatures> path) {
-    if (path == null) {
-      throw new IllegalArgumentException("null value for 'path' argument");
-    }
+    java.util.Objects.requireNonNull((path));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withProcedureCall(hydra.util.Opt<hydra.langs.cypher.features.ProcedureCallFeatures> procedureCall) {
-    if (procedureCall == null) {
-      throw new IllegalArgumentException("null value for 'procedureCall' argument");
-    }
+    java.util.Objects.requireNonNull((procedureCall));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withProjection(hydra.util.Opt<hydra.langs.cypher.features.ProjectionFeatures> projection) {
-    if (projection == null) {
-      throw new IllegalArgumentException("null value for 'projection' argument");
-    }
+    java.util.Objects.requireNonNull((projection));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withRandomness(hydra.util.Opt<hydra.langs.cypher.features.RandomnessFeatures> randomness) {
-    if (randomness == null) {
-      throw new IllegalArgumentException("null value for 'randomness' argument");
-    }
+    java.util.Objects.requireNonNull((randomness));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withRangeLiteral(hydra.util.Opt<hydra.langs.cypher.features.RangeLiteralFeatures> rangeLiteral) {
-    if (rangeLiteral == null) {
-      throw new IllegalArgumentException("null value for 'rangeLiteral' argument");
-    }
+    java.util.Objects.requireNonNull((rangeLiteral));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withReading(hydra.util.Opt<hydra.langs.cypher.features.ReadingFeatures> reading) {
-    if (reading == null) {
-      throw new IllegalArgumentException("null value for 'reading' argument");
-    }
+    java.util.Objects.requireNonNull((reading));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withRelationshipDirection(hydra.util.Opt<hydra.langs.cypher.features.RelationshipDirectionFeatures> relationshipDirection) {
-    if (relationshipDirection == null) {
-      throw new IllegalArgumentException("null value for 'relationshipDirection' argument");
-    }
+    java.util.Objects.requireNonNull((relationshipDirection));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withRelationshipPattern(hydra.util.Opt<hydra.langs.cypher.features.RelationshipPatternFeatures> relationshipPattern) {
-    if (relationshipPattern == null) {
-      throw new IllegalArgumentException("null value for 'relationshipPattern' argument");
-    }
+    java.util.Objects.requireNonNull((relationshipPattern));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withRemove(hydra.util.Opt<hydra.langs.cypher.features.RemoveFeatures> remove) {
-    if (remove == null) {
-      throw new IllegalArgumentException("null value for 'remove' argument");
-    }
+    java.util.Objects.requireNonNull((remove));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withSchema(hydra.util.Opt<hydra.langs.cypher.features.SchemaFeatures> schema) {
-    if (schema == null) {
-      throw new IllegalArgumentException("null value for 'schema' argument");
-    }
+    java.util.Objects.requireNonNull((schema));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withSet(hydra.util.Opt<hydra.langs.cypher.features.SetFeatures> set) {
-    if (set == null) {
-      throw new IllegalArgumentException("null value for 'set' argument");
-    }
+    java.util.Objects.requireNonNull((set));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withString(hydra.util.Opt<hydra.langs.cypher.features.StringFeatures> string) {
-    if (string == null) {
-      throw new IllegalArgumentException("null value for 'string' argument");
-    }
+    java.util.Objects.requireNonNull((string));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
   
   public CypherFeatures withUpdating(hydra.util.Opt<hydra.langs.cypher.features.UpdatingFeatures> updating) {
-    if (updating == null) {
-      throw new IllegalArgumentException("null value for 'updating' argument");
-    }
+    java.util.Objects.requireNonNull((updating));
     return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
   }
 }

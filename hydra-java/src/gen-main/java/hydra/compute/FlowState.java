@@ -2,8 +2,6 @@
 
 package hydra.compute;
 
-import hydra.util.Opt;
-
 import java.io.Serializable;
 
 /**
@@ -12,22 +10,16 @@ import java.io.Serializable;
 public class FlowState<S, X> implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.FlowState");
   
-  public final Opt<X> value;
+  public final hydra.util.Opt<X> value;
   
   public final S state;
   
   public final hydra.compute.Trace trace;
   
-  public FlowState (Opt<X> value, S state, hydra.compute.Trace trace) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
-    if (state == null) {
-      throw new IllegalArgumentException("null value for 'state' argument");
-    }
-    if (trace == null) {
-      throw new IllegalArgumentException("null value for 'trace' argument");
-    }
+  public FlowState (hydra.util.Opt<X> value, S state, hydra.compute.Trace trace) {
+    java.util.Objects.requireNonNull((value));
+    java.util.Objects.requireNonNull((state));
+    java.util.Objects.requireNonNull((trace));
     this.value = value;
     this.state = state;
     this.trace = trace;
@@ -47,24 +39,18 @@ public class FlowState<S, X> implements Serializable {
     return 2 * value.hashCode() + 3 * state.hashCode() + 5 * trace.hashCode();
   }
   
-  public FlowState withValue(Opt<X> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+  public FlowState withValue(hydra.util.Opt<X> value) {
+    java.util.Objects.requireNonNull((value));
     return new FlowState(value, state, trace);
   }
   
   public FlowState withState(S state) {
-    if (state == null) {
-      throw new IllegalArgumentException("null value for 'state' argument");
-    }
+    java.util.Objects.requireNonNull((state));
     return new FlowState(value, state, trace);
   }
   
   public FlowState withTrace(hydra.compute.Trace trace) {
-    if (trace == null) {
-      throw new IllegalArgumentException("null value for 'trace' argument");
-    }
+    java.util.Objects.requireNonNull((trace));
     return new FlowState(value, state, trace);
   }
 }

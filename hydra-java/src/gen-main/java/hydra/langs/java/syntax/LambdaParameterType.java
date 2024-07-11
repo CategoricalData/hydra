@@ -37,9 +37,7 @@ public abstract class LambdaParameterType implements Serializable {
     public final hydra.langs.java.syntax.UnannType value;
     
     public Type (hydra.langs.java.syntax.UnannType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

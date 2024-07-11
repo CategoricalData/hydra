@@ -12,12 +12,8 @@ public class StandaloneCall implements Serializable {
   public final hydra.util.Opt<hydra.langs.cypher.openCypher.StarOrYieldItems> yieldItems;
   
   public StandaloneCall (hydra.langs.cypher.openCypher.ProcedureInvocation call, hydra.util.Opt<hydra.langs.cypher.openCypher.StarOrYieldItems> yieldItems) {
-    if (call == null) {
-      throw new IllegalArgumentException("null value for 'call' argument");
-    }
-    if (yieldItems == null) {
-      throw new IllegalArgumentException("null value for 'yieldItems' argument");
-    }
+    java.util.Objects.requireNonNull((call));
+    java.util.Objects.requireNonNull((yieldItems));
     this.call = call;
     this.yieldItems = yieldItems;
   }
@@ -37,16 +33,12 @@ public class StandaloneCall implements Serializable {
   }
   
   public StandaloneCall withCall(hydra.langs.cypher.openCypher.ProcedureInvocation call) {
-    if (call == null) {
-      throw new IllegalArgumentException("null value for 'call' argument");
-    }
+    java.util.Objects.requireNonNull((call));
     return new StandaloneCall(call, yieldItems);
   }
   
   public StandaloneCall withYieldItems(hydra.util.Opt<hydra.langs.cypher.openCypher.StarOrYieldItems> yieldItems) {
-    if (yieldItems == null) {
-      throw new IllegalArgumentException("null value for 'yieldItems' argument");
-    }
+    java.util.Objects.requireNonNull((yieldItems));
     return new StandaloneCall(call, yieldItems);
   }
 }

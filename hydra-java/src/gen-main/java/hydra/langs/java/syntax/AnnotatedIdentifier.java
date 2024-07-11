@@ -12,12 +12,8 @@ public class AnnotatedIdentifier implements Serializable {
   public final hydra.langs.java.syntax.Identifier identifier;
   
   public AnnotatedIdentifier (java.util.List<hydra.langs.java.syntax.Annotation> annotations, hydra.langs.java.syntax.Identifier identifier) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
+    java.util.Objects.requireNonNull((identifier));
     this.annotations = annotations;
     this.identifier = identifier;
   }
@@ -37,16 +33,12 @@ public class AnnotatedIdentifier implements Serializable {
   }
   
   public AnnotatedIdentifier withAnnotations(java.util.List<hydra.langs.java.syntax.Annotation> annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new AnnotatedIdentifier(annotations, identifier);
   }
   
   public AnnotatedIdentifier withIdentifier(hydra.langs.java.syntax.Identifier identifier) {
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
+    java.util.Objects.requireNonNull((identifier));
     return new AnnotatedIdentifier(annotations, identifier);
   }
 }

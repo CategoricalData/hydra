@@ -37,9 +37,7 @@ public abstract class ValueExpressionPrimary implements Serializable {
     public final hydra.langs.sql.ansi.ParenthesizedValueExpression value;
     
     public Parens (hydra.langs.sql.ansi.ParenthesizedValueExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class ValueExpressionPrimary implements Serializable {
     public final hydra.langs.sql.ansi.NonparenthesizedValueExpressionPrimary value;
     
     public Noparens (hydra.langs.sql.ansi.NonparenthesizedValueExpressionPrimary value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

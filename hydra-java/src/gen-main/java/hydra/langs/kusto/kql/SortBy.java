@@ -12,12 +12,8 @@ public class SortBy implements Serializable {
   public final hydra.util.Opt<hydra.langs.kusto.kql.Order> order;
   
   public SortBy (hydra.langs.kusto.kql.ColumnName column, hydra.util.Opt<hydra.langs.kusto.kql.Order> order) {
-    if (column == null) {
-      throw new IllegalArgumentException("null value for 'column' argument");
-    }
-    if (order == null) {
-      throw new IllegalArgumentException("null value for 'order' argument");
-    }
+    java.util.Objects.requireNonNull((column));
+    java.util.Objects.requireNonNull((order));
     this.column = column;
     this.order = order;
   }
@@ -37,16 +33,12 @@ public class SortBy implements Serializable {
   }
   
   public SortBy withColumn(hydra.langs.kusto.kql.ColumnName column) {
-    if (column == null) {
-      throw new IllegalArgumentException("null value for 'column' argument");
-    }
+    java.util.Objects.requireNonNull((column));
     return new SortBy(column, order);
   }
   
   public SortBy withOrder(hydra.util.Opt<hydra.langs.kusto.kql.Order> order) {
-    if (order == null) {
-      throw new IllegalArgumentException("null value for 'order' argument");
-    }
+    java.util.Objects.requireNonNull((order));
     return new SortBy(column, order);
   }
 }

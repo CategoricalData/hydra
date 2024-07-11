@@ -37,9 +37,7 @@ public abstract class ClassDeclaration implements Serializable {
     public final hydra.langs.java.syntax.NormalClassDeclaration value;
     
     public Normal (hydra.langs.java.syntax.NormalClassDeclaration value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class ClassDeclaration implements Serializable {
     public final hydra.langs.java.syntax.EnumDeclaration value;
     
     public Enum_ (hydra.langs.java.syntax.EnumDeclaration value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

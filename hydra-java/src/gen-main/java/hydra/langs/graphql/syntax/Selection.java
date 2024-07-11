@@ -43,9 +43,7 @@ public abstract class Selection implements Serializable {
     public final hydra.langs.graphql.syntax.Field value;
     
     public Field (hydra.langs.graphql.syntax.Field value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class Selection implements Serializable {
     public final hydra.langs.graphql.syntax.FragmentSpread value;
     
     public FragmentSpread (hydra.langs.graphql.syntax.FragmentSpread value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class Selection implements Serializable {
     public final hydra.langs.graphql.syntax.InlineFragment value;
     
     public InlineFragment (hydra.langs.graphql.syntax.InlineFragment value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

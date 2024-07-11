@@ -14,15 +14,9 @@ public class InlineFragment implements Serializable {
   public final hydra.langs.graphql.syntax.SelectionSet selectionSet;
   
   public InlineFragment (hydra.util.Opt<hydra.langs.graphql.syntax.TypeCondition> typeCondition, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.SelectionSet selectionSet) {
-    if (typeCondition == null) {
-      throw new IllegalArgumentException("null value for 'typeCondition' argument");
-    }
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
-    if (selectionSet == null) {
-      throw new IllegalArgumentException("null value for 'selectionSet' argument");
-    }
+    java.util.Objects.requireNonNull((typeCondition));
+    java.util.Objects.requireNonNull((directives));
+    java.util.Objects.requireNonNull((selectionSet));
     this.typeCondition = typeCondition;
     this.directives = directives;
     this.selectionSet = selectionSet;
@@ -43,23 +37,17 @@ public class InlineFragment implements Serializable {
   }
   
   public InlineFragment withTypeCondition(hydra.util.Opt<hydra.langs.graphql.syntax.TypeCondition> typeCondition) {
-    if (typeCondition == null) {
-      throw new IllegalArgumentException("null value for 'typeCondition' argument");
-    }
+    java.util.Objects.requireNonNull((typeCondition));
     return new InlineFragment(typeCondition, directives, selectionSet);
   }
   
   public InlineFragment withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((directives));
     return new InlineFragment(typeCondition, directives, selectionSet);
   }
   
   public InlineFragment withSelectionSet(hydra.langs.graphql.syntax.SelectionSet selectionSet) {
-    if (selectionSet == null) {
-      throw new IllegalArgumentException("null value for 'selectionSet' argument");
-    }
+    java.util.Objects.requireNonNull((selectionSet));
     return new InlineFragment(typeCondition, directives, selectionSet);
   }
 }

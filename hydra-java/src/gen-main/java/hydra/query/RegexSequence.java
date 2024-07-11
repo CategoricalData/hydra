@@ -15,12 +15,8 @@ public class RegexSequence implements Serializable {
   public final hydra.query.RegexQuantifier quantifier;
   
   public RegexSequence (hydra.query.Path path, hydra.query.RegexQuantifier quantifier) {
-    if (path == null) {
-      throw new IllegalArgumentException("null value for 'path' argument");
-    }
-    if (quantifier == null) {
-      throw new IllegalArgumentException("null value for 'quantifier' argument");
-    }
+    java.util.Objects.requireNonNull((path));
+    java.util.Objects.requireNonNull((quantifier));
     this.path = path;
     this.quantifier = quantifier;
   }
@@ -40,16 +36,12 @@ public class RegexSequence implements Serializable {
   }
   
   public RegexSequence withPath(hydra.query.Path path) {
-    if (path == null) {
-      throw new IllegalArgumentException("null value for 'path' argument");
-    }
+    java.util.Objects.requireNonNull((path));
     return new RegexSequence(path, quantifier);
   }
   
   public RegexSequence withQuantifier(hydra.query.RegexQuantifier quantifier) {
-    if (quantifier == null) {
-      throw new IllegalArgumentException("null value for 'quantifier' argument");
-    }
+    java.util.Objects.requireNonNull((quantifier));
     return new RegexSequence(path, quantifier);
   }
 }

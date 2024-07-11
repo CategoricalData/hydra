@@ -12,12 +12,8 @@ public class BooleanValueExpression_Or implements Serializable {
   public final hydra.langs.sql.ansi.BooleanTerm rhs;
   
   public BooleanValueExpression_Or (hydra.langs.sql.ansi.BooleanValueExpression lhs, hydra.langs.sql.ansi.BooleanTerm rhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
+    java.util.Objects.requireNonNull((rhs));
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -37,16 +33,12 @@ public class BooleanValueExpression_Or implements Serializable {
   }
   
   public BooleanValueExpression_Or withLhs(hydra.langs.sql.ansi.BooleanValueExpression lhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
     return new BooleanValueExpression_Or(lhs, rhs);
   }
   
   public BooleanValueExpression_Or withRhs(hydra.langs.sql.ansi.BooleanTerm rhs) {
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((rhs));
     return new BooleanValueExpression_Or(lhs, rhs);
   }
 }

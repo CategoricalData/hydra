@@ -12,12 +12,8 @@ public class InQueryCall implements Serializable {
   public final hydra.util.Opt<hydra.langs.cypher.openCypher.YieldItems> yieldItems;
   
   public InQueryCall (hydra.langs.cypher.openCypher.ExplicitProcedureInvocation call, hydra.util.Opt<hydra.langs.cypher.openCypher.YieldItems> yieldItems) {
-    if (call == null) {
-      throw new IllegalArgumentException("null value for 'call' argument");
-    }
-    if (yieldItems == null) {
-      throw new IllegalArgumentException("null value for 'yieldItems' argument");
-    }
+    java.util.Objects.requireNonNull((call));
+    java.util.Objects.requireNonNull((yieldItems));
     this.call = call;
     this.yieldItems = yieldItems;
   }
@@ -37,16 +33,12 @@ public class InQueryCall implements Serializable {
   }
   
   public InQueryCall withCall(hydra.langs.cypher.openCypher.ExplicitProcedureInvocation call) {
-    if (call == null) {
-      throw new IllegalArgumentException("null value for 'call' argument");
-    }
+    java.util.Objects.requireNonNull((call));
     return new InQueryCall(call, yieldItems);
   }
   
   public InQueryCall withYieldItems(hydra.util.Opt<hydra.langs.cypher.openCypher.YieldItems> yieldItems) {
-    if (yieldItems == null) {
-      throw new IllegalArgumentException("null value for 'yieldItems' argument");
-    }
+    java.util.Objects.requireNonNull((yieldItems));
     return new InQueryCall(call, yieldItems);
   }
 }

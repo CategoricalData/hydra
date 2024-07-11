@@ -12,12 +12,8 @@ public class Data_Ascribe implements Serializable {
   public final hydra.langs.scala.meta.Type tpe;
   
   public Data_Ascribe (hydra.langs.scala.meta.Data expr, hydra.langs.scala.meta.Type tpe) {
-    if (expr == null) {
-      throw new IllegalArgumentException("null value for 'expr' argument");
-    }
-    if (tpe == null) {
-      throw new IllegalArgumentException("null value for 'tpe' argument");
-    }
+    java.util.Objects.requireNonNull((expr));
+    java.util.Objects.requireNonNull((tpe));
     this.expr = expr;
     this.tpe = tpe;
   }
@@ -37,16 +33,12 @@ public class Data_Ascribe implements Serializable {
   }
   
   public Data_Ascribe withExpr(hydra.langs.scala.meta.Data expr) {
-    if (expr == null) {
-      throw new IllegalArgumentException("null value for 'expr' argument");
-    }
+    java.util.Objects.requireNonNull((expr));
     return new Data_Ascribe(expr, tpe);
   }
   
   public Data_Ascribe withTpe(hydra.langs.scala.meta.Type tpe) {
-    if (tpe == null) {
-      throw new IllegalArgumentException("null value for 'tpe' argument");
-    }
+    java.util.Objects.requireNonNull((tpe));
     return new Data_Ascribe(expr, tpe);
   }
 }

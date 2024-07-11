@@ -37,9 +37,7 @@ public abstract class CollectionType implements Serializable {
     public final hydra.langs.sql.ansi.ArrayType value;
     
     public Array (hydra.langs.sql.ansi.ArrayType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class CollectionType implements Serializable {
     public final hydra.langs.sql.ansi.MultisetType value;
     
     public Multiset (hydra.langs.sql.ansi.MultisetType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

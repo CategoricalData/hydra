@@ -10,9 +10,7 @@ public class PatternPredicate implements Serializable {
   public final hydra.langs.cypher.openCypher.RelationshipsPattern value;
   
   public PatternPredicate (hydra.langs.cypher.openCypher.RelationshipsPattern value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

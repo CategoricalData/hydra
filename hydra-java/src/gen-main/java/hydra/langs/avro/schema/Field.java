@@ -43,27 +43,13 @@ public class Field implements Serializable {
   public final java.util.Map<String, hydra.json.Value> annotations;
   
   public Field (String name, hydra.util.Opt<String> doc, hydra.langs.avro.schema.Schema type, hydra.util.Opt<hydra.json.Value> default_, hydra.util.Opt<hydra.langs.avro.schema.Order> order, hydra.util.Opt<java.util.List<String>> aliases, java.util.Map<String, hydra.json.Value> annotations) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (doc == null) {
-      throw new IllegalArgumentException("null value for 'doc' argument");
-    }
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (default_ == null) {
-      throw new IllegalArgumentException("null value for 'default' argument");
-    }
-    if (order == null) {
-      throw new IllegalArgumentException("null value for 'order' argument");
-    }
-    if (aliases == null) {
-      throw new IllegalArgumentException("null value for 'aliases' argument");
-    }
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((doc));
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((default_));
+    java.util.Objects.requireNonNull((order));
+    java.util.Objects.requireNonNull((aliases));
+    java.util.Objects.requireNonNull((annotations));
     this.name = name;
     this.doc = doc;
     this.type = type;
@@ -88,51 +74,37 @@ public class Field implements Serializable {
   }
   
   public Field withName(String name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
   public Field withDoc(hydra.util.Opt<String> doc) {
-    if (doc == null) {
-      throw new IllegalArgumentException("null value for 'doc' argument");
-    }
+    java.util.Objects.requireNonNull((doc));
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
   public Field withType(hydra.langs.avro.schema.Schema type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
   public Field withDefault(hydra.util.Opt<hydra.json.Value> default_) {
-    if (default_ == null) {
-      throw new IllegalArgumentException("null value for 'default' argument");
-    }
+    java.util.Objects.requireNonNull((default_));
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
   public Field withOrder(hydra.util.Opt<hydra.langs.avro.schema.Order> order) {
-    if (order == null) {
-      throw new IllegalArgumentException("null value for 'order' argument");
-    }
+    java.util.Objects.requireNonNull((order));
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
   public Field withAliases(hydra.util.Opt<java.util.List<String>> aliases) {
-    if (aliases == null) {
-      throw new IllegalArgumentException("null value for 'aliases' argument");
-    }
+    java.util.Objects.requireNonNull((aliases));
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
   public Field withAnnotations(java.util.Map<String, hydra.json.Value> annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
 }

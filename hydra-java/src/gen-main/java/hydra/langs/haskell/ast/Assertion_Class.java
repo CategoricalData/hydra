@@ -12,12 +12,8 @@ public class Assertion_Class implements Serializable {
   public final java.util.List<hydra.langs.haskell.ast.Type> types;
   
   public Assertion_Class (hydra.langs.haskell.ast.Name name, java.util.List<hydra.langs.haskell.ast.Type> types) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (types == null) {
-      throw new IllegalArgumentException("null value for 'types' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((types));
     this.name = name;
     this.types = types;
   }
@@ -37,16 +33,12 @@ public class Assertion_Class implements Serializable {
   }
   
   public Assertion_Class withName(hydra.langs.haskell.ast.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Assertion_Class(name, types);
   }
   
   public Assertion_Class withTypes(java.util.List<hydra.langs.haskell.ast.Type> types) {
-    if (types == null) {
-      throw new IllegalArgumentException("null value for 'types' argument");
-    }
+    java.util.Objects.requireNonNull((types));
     return new Assertion_Class(name, types);
   }
 }

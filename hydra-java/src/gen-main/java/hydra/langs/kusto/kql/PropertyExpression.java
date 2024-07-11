@@ -12,12 +12,8 @@ public class PropertyExpression implements Serializable {
   public final String property;
   
   public PropertyExpression (hydra.langs.kusto.kql.Expression expression, String property) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
+    java.util.Objects.requireNonNull((property));
     this.expression = expression;
     this.property = property;
   }
@@ -37,16 +33,12 @@ public class PropertyExpression implements Serializable {
   }
   
   public PropertyExpression withExpression(hydra.langs.kusto.kql.Expression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new PropertyExpression(expression, property);
   }
   
   public PropertyExpression withProperty(String property) {
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
+    java.util.Objects.requireNonNull((property));
     return new PropertyExpression(expression, property);
   }
 }

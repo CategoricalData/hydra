@@ -37,9 +37,7 @@ public abstract class Type_FunctionType implements Serializable {
     public final hydra.langs.scala.meta.Type_Function value;
     
     public Function (hydra.langs.scala.meta.Type_Function value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class Type_FunctionType implements Serializable {
     public final hydra.langs.scala.meta.Type_ContextFunction value;
     
     public ContextFunction (hydra.langs.scala.meta.Type_ContextFunction value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

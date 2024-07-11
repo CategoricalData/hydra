@@ -31,18 +31,10 @@ public class RelationSchema<T> implements Serializable {
   public final java.util.List<hydra.langs.relationalModel.ForeignKey> foreignKeys;
   
   public RelationSchema (hydra.langs.relationalModel.RelationName name, java.util.List<hydra.langs.relationalModel.ColumnSchema<T>> columns, java.util.List<hydra.langs.relationalModel.PrimaryKey> primaryKeys, java.util.List<hydra.langs.relationalModel.ForeignKey> foreignKeys) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (columns == null) {
-      throw new IllegalArgumentException("null value for 'columns' argument");
-    }
-    if (primaryKeys == null) {
-      throw new IllegalArgumentException("null value for 'primaryKeys' argument");
-    }
-    if (foreignKeys == null) {
-      throw new IllegalArgumentException("null value for 'foreignKeys' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((columns));
+    java.util.Objects.requireNonNull((primaryKeys));
+    java.util.Objects.requireNonNull((foreignKeys));
     this.name = name;
     this.columns = columns;
     this.primaryKeys = primaryKeys;
@@ -64,30 +56,22 @@ public class RelationSchema<T> implements Serializable {
   }
   
   public RelationSchema withName(hydra.langs.relationalModel.RelationName name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new RelationSchema(name, columns, primaryKeys, foreignKeys);
   }
   
   public RelationSchema withColumns(java.util.List<hydra.langs.relationalModel.ColumnSchema<T>> columns) {
-    if (columns == null) {
-      throw new IllegalArgumentException("null value for 'columns' argument");
-    }
+    java.util.Objects.requireNonNull((columns));
     return new RelationSchema(name, columns, primaryKeys, foreignKeys);
   }
   
   public RelationSchema withPrimaryKeys(java.util.List<hydra.langs.relationalModel.PrimaryKey> primaryKeys) {
-    if (primaryKeys == null) {
-      throw new IllegalArgumentException("null value for 'primaryKeys' argument");
-    }
+    java.util.Objects.requireNonNull((primaryKeys));
     return new RelationSchema(name, columns, primaryKeys, foreignKeys);
   }
   
   public RelationSchema withForeignKeys(java.util.List<hydra.langs.relationalModel.ForeignKey> foreignKeys) {
-    if (foreignKeys == null) {
-      throw new IllegalArgumentException("null value for 'foreignKeys' argument");
-    }
+    java.util.Objects.requireNonNull((foreignKeys));
     return new RelationSchema(name, columns, primaryKeys, foreignKeys);
   }
 }

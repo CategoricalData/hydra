@@ -10,9 +10,7 @@ public class QueryList implements Serializable {
   public final java.util.List<hydra.langs.tinkerpop.gremlin.Query> value;
   
   public QueryList (java.util.List<hydra.langs.tinkerpop.gremlin.Query> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

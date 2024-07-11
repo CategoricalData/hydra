@@ -26,15 +26,9 @@ public class ReadingFeatures implements Serializable {
   public final Boolean unwind;
   
   public ReadingFeatures (Boolean union, Boolean unionAll, Boolean unwind) {
-    if (union == null) {
-      throw new IllegalArgumentException("null value for 'union' argument");
-    }
-    if (unionAll == null) {
-      throw new IllegalArgumentException("null value for 'unionAll' argument");
-    }
-    if (unwind == null) {
-      throw new IllegalArgumentException("null value for 'unwind' argument");
-    }
+    java.util.Objects.requireNonNull((union));
+    java.util.Objects.requireNonNull((unionAll));
+    java.util.Objects.requireNonNull((unwind));
     this.union = union;
     this.unionAll = unionAll;
     this.unwind = unwind;
@@ -55,23 +49,17 @@ public class ReadingFeatures implements Serializable {
   }
   
   public ReadingFeatures withUnion(Boolean union) {
-    if (union == null) {
-      throw new IllegalArgumentException("null value for 'union' argument");
-    }
+    java.util.Objects.requireNonNull((union));
     return new ReadingFeatures(union, unionAll, unwind);
   }
   
   public ReadingFeatures withUnionAll(Boolean unionAll) {
-    if (unionAll == null) {
-      throw new IllegalArgumentException("null value for 'unionAll' argument");
-    }
+    java.util.Objects.requireNonNull((unionAll));
     return new ReadingFeatures(union, unionAll, unwind);
   }
   
   public ReadingFeatures withUnwind(Boolean unwind) {
-    if (unwind == null) {
-      throw new IllegalArgumentException("null value for 'unwind' argument");
-    }
+    java.util.Objects.requireNonNull((unwind));
     return new ReadingFeatures(union, unionAll, unwind);
   }
 }

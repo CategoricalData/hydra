@@ -61,9 +61,7 @@ public abstract class Literal implements Serializable {
     public final Boolean value;
     
     public Boolean_ (Boolean value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -116,9 +114,7 @@ public abstract class Literal implements Serializable {
     public final hydra.langs.cypher.openCypher.NumberLiteral value;
     
     public Number_ (hydra.langs.cypher.openCypher.NumberLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -146,9 +142,7 @@ public abstract class Literal implements Serializable {
     public final hydra.langs.cypher.openCypher.StringLiteral value;
     
     public String_ (hydra.langs.cypher.openCypher.StringLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -176,9 +170,7 @@ public abstract class Literal implements Serializable {
     public final hydra.langs.cypher.openCypher.ListLiteral value;
     
     public List (hydra.langs.cypher.openCypher.ListLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -206,9 +198,7 @@ public abstract class Literal implements Serializable {
     public final hydra.langs.cypher.openCypher.MapLiteral value;
     
     public Map (hydra.langs.cypher.openCypher.MapLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

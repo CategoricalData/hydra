@@ -14,15 +14,9 @@ public class JoinCommand implements Serializable {
   public final hydra.langs.kusto.kql.Expression on;
   
   public JoinCommand (hydra.langs.kusto.kql.JoinKind kind, hydra.langs.kusto.kql.TableName expression, hydra.langs.kusto.kql.Expression on) {
-    if (kind == null) {
-      throw new IllegalArgumentException("null value for 'kind' argument");
-    }
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
-    if (on == null) {
-      throw new IllegalArgumentException("null value for 'on' argument");
-    }
+    java.util.Objects.requireNonNull((kind));
+    java.util.Objects.requireNonNull((expression));
+    java.util.Objects.requireNonNull((on));
     this.kind = kind;
     this.expression = expression;
     this.on = on;
@@ -43,23 +37,17 @@ public class JoinCommand implements Serializable {
   }
   
   public JoinCommand withKind(hydra.langs.kusto.kql.JoinKind kind) {
-    if (kind == null) {
-      throw new IllegalArgumentException("null value for 'kind' argument");
-    }
+    java.util.Objects.requireNonNull((kind));
     return new JoinCommand(kind, expression, on);
   }
   
   public JoinCommand withExpression(hydra.langs.kusto.kql.TableName expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new JoinCommand(kind, expression, on);
   }
   
   public JoinCommand withOn(hydra.langs.kusto.kql.Expression on) {
-    if (on == null) {
-      throw new IllegalArgumentException("null value for 'on' argument");
-    }
+    java.util.Objects.requireNonNull((on));
     return new JoinCommand(kind, expression, on);
   }
 }

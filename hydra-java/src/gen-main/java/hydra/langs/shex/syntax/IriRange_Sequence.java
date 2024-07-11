@@ -12,12 +12,8 @@ public class IriRange_Sequence implements Serializable {
   public final hydra.util.Opt<java.util.List<hydra.langs.shex.syntax.Exclusion>> sequence;
   
   public IriRange_Sequence (hydra.langs.shex.syntax.Iri iri, hydra.util.Opt<java.util.List<hydra.langs.shex.syntax.Exclusion>> sequence) {
-    if (iri == null) {
-      throw new IllegalArgumentException("null value for 'iri' argument");
-    }
-    if (sequence == null) {
-      throw new IllegalArgumentException("null value for 'sequence' argument");
-    }
+    java.util.Objects.requireNonNull((iri));
+    java.util.Objects.requireNonNull((sequence));
     this.iri = iri;
     this.sequence = sequence;
   }
@@ -37,16 +33,12 @@ public class IriRange_Sequence implements Serializable {
   }
   
   public IriRange_Sequence withIri(hydra.langs.shex.syntax.Iri iri) {
-    if (iri == null) {
-      throw new IllegalArgumentException("null value for 'iri' argument");
-    }
+    java.util.Objects.requireNonNull((iri));
     return new IriRange_Sequence(iri, sequence);
   }
   
   public IriRange_Sequence withSequence(hydra.util.Opt<java.util.List<hydra.langs.shex.syntax.Exclusion>> sequence) {
-    if (sequence == null) {
-      throw new IllegalArgumentException("null value for 'sequence' argument");
-    }
+    java.util.Objects.requireNonNull((sequence));
     return new IriRange_Sequence(iri, sequence);
   }
 }

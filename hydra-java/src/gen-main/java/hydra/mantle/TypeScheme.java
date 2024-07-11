@@ -15,12 +15,8 @@ public class TypeScheme<A> implements Serializable {
   public final hydra.core.Type<A> type;
   
   public TypeScheme (java.util.List<hydra.core.Name> variables, hydra.core.Type<A> type) {
-    if (variables == null) {
-      throw new IllegalArgumentException("null value for 'variables' argument");
-    }
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((variables));
+    java.util.Objects.requireNonNull((type));
     this.variables = variables;
     this.type = type;
   }
@@ -40,16 +36,12 @@ public class TypeScheme<A> implements Serializable {
   }
   
   public TypeScheme withVariables(java.util.List<hydra.core.Name> variables) {
-    if (variables == null) {
-      throw new IllegalArgumentException("null value for 'variables' argument");
-    }
+    java.util.Objects.requireNonNull((variables));
     return new TypeScheme(variables, type);
   }
   
   public TypeScheme withType(hydra.core.Type<A> type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new TypeScheme(variables, type);
   }
 }

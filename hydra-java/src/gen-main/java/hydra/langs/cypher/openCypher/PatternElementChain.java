@@ -12,12 +12,8 @@ public class PatternElementChain implements Serializable {
   public final hydra.langs.cypher.openCypher.NodePattern node;
   
   public PatternElementChain (hydra.langs.cypher.openCypher.RelationshipPattern relationship, hydra.langs.cypher.openCypher.NodePattern node) {
-    if (relationship == null) {
-      throw new IllegalArgumentException("null value for 'relationship' argument");
-    }
-    if (node == null) {
-      throw new IllegalArgumentException("null value for 'node' argument");
-    }
+    java.util.Objects.requireNonNull((relationship));
+    java.util.Objects.requireNonNull((node));
     this.relationship = relationship;
     this.node = node;
   }
@@ -37,16 +33,12 @@ public class PatternElementChain implements Serializable {
   }
   
   public PatternElementChain withRelationship(hydra.langs.cypher.openCypher.RelationshipPattern relationship) {
-    if (relationship == null) {
-      throw new IllegalArgumentException("null value for 'relationship' argument");
-    }
+    java.util.Objects.requireNonNull((relationship));
     return new PatternElementChain(relationship, node);
   }
   
   public PatternElementChain withNode(hydra.langs.cypher.openCypher.NodePattern node) {
-    if (node == null) {
-      throw new IllegalArgumentException("null value for 'node' argument");
-    }
+    java.util.Objects.requireNonNull((node));
     return new PatternElementChain(relationship, node);
   }
 }

@@ -101,60 +101,24 @@ public class ListFeatures implements Serializable {
   public final Boolean toStringList;
   
   public ListFeatures (Boolean all, Boolean any, Boolean coalesce, Boolean isEmpty, Boolean head, Boolean last, Boolean listComprehension, Boolean listRange, Boolean none, Boolean reduce, Boolean reverse, Boolean single, Boolean size, Boolean tail, Boolean toBooleanList, Boolean toFloatList, Boolean toIntegerList, Boolean toStringList) {
-    if (all == null) {
-      throw new IllegalArgumentException("null value for 'all' argument");
-    }
-    if (any == null) {
-      throw new IllegalArgumentException("null value for 'any' argument");
-    }
-    if (coalesce == null) {
-      throw new IllegalArgumentException("null value for 'coalesce' argument");
-    }
-    if (isEmpty == null) {
-      throw new IllegalArgumentException("null value for 'isEmpty' argument");
-    }
-    if (head == null) {
-      throw new IllegalArgumentException("null value for 'head' argument");
-    }
-    if (last == null) {
-      throw new IllegalArgumentException("null value for 'last' argument");
-    }
-    if (listComprehension == null) {
-      throw new IllegalArgumentException("null value for 'listComprehension' argument");
-    }
-    if (listRange == null) {
-      throw new IllegalArgumentException("null value for 'listRange' argument");
-    }
-    if (none == null) {
-      throw new IllegalArgumentException("null value for 'none' argument");
-    }
-    if (reduce == null) {
-      throw new IllegalArgumentException("null value for 'reduce' argument");
-    }
-    if (reverse == null) {
-      throw new IllegalArgumentException("null value for 'reverse' argument");
-    }
-    if (single == null) {
-      throw new IllegalArgumentException("null value for 'single' argument");
-    }
-    if (size == null) {
-      throw new IllegalArgumentException("null value for 'size' argument");
-    }
-    if (tail == null) {
-      throw new IllegalArgumentException("null value for 'tail' argument");
-    }
-    if (toBooleanList == null) {
-      throw new IllegalArgumentException("null value for 'toBooleanList' argument");
-    }
-    if (toFloatList == null) {
-      throw new IllegalArgumentException("null value for 'toFloatList' argument");
-    }
-    if (toIntegerList == null) {
-      throw new IllegalArgumentException("null value for 'toIntegerList' argument");
-    }
-    if (toStringList == null) {
-      throw new IllegalArgumentException("null value for 'toStringList' argument");
-    }
+    java.util.Objects.requireNonNull((all));
+    java.util.Objects.requireNonNull((any));
+    java.util.Objects.requireNonNull((coalesce));
+    java.util.Objects.requireNonNull((isEmpty));
+    java.util.Objects.requireNonNull((head));
+    java.util.Objects.requireNonNull((last));
+    java.util.Objects.requireNonNull((listComprehension));
+    java.util.Objects.requireNonNull((listRange));
+    java.util.Objects.requireNonNull((none));
+    java.util.Objects.requireNonNull((reduce));
+    java.util.Objects.requireNonNull((reverse));
+    java.util.Objects.requireNonNull((single));
+    java.util.Objects.requireNonNull((size));
+    java.util.Objects.requireNonNull((tail));
+    java.util.Objects.requireNonNull((toBooleanList));
+    java.util.Objects.requireNonNull((toFloatList));
+    java.util.Objects.requireNonNull((toIntegerList));
+    java.util.Objects.requireNonNull((toStringList));
     this.all = all;
     this.any = any;
     this.coalesce = coalesce;
@@ -190,128 +154,92 @@ public class ListFeatures implements Serializable {
   }
   
   public ListFeatures withAll(Boolean all) {
-    if (all == null) {
-      throw new IllegalArgumentException("null value for 'all' argument");
-    }
+    java.util.Objects.requireNonNull((all));
     return new ListFeatures(all, any, coalesce, isEmpty, head, last, listComprehension, listRange, none, reduce, reverse, single, size, tail, toBooleanList, toFloatList, toIntegerList, toStringList);
   }
   
   public ListFeatures withAny(Boolean any) {
-    if (any == null) {
-      throw new IllegalArgumentException("null value for 'any' argument");
-    }
+    java.util.Objects.requireNonNull((any));
     return new ListFeatures(all, any, coalesce, isEmpty, head, last, listComprehension, listRange, none, reduce, reverse, single, size, tail, toBooleanList, toFloatList, toIntegerList, toStringList);
   }
   
   public ListFeatures withCoalesce(Boolean coalesce) {
-    if (coalesce == null) {
-      throw new IllegalArgumentException("null value for 'coalesce' argument");
-    }
+    java.util.Objects.requireNonNull((coalesce));
     return new ListFeatures(all, any, coalesce, isEmpty, head, last, listComprehension, listRange, none, reduce, reverse, single, size, tail, toBooleanList, toFloatList, toIntegerList, toStringList);
   }
   
   public ListFeatures withIsEmpty(Boolean isEmpty) {
-    if (isEmpty == null) {
-      throw new IllegalArgumentException("null value for 'isEmpty' argument");
-    }
+    java.util.Objects.requireNonNull((isEmpty));
     return new ListFeatures(all, any, coalesce, isEmpty, head, last, listComprehension, listRange, none, reduce, reverse, single, size, tail, toBooleanList, toFloatList, toIntegerList, toStringList);
   }
   
   public ListFeatures withHead(Boolean head) {
-    if (head == null) {
-      throw new IllegalArgumentException("null value for 'head' argument");
-    }
+    java.util.Objects.requireNonNull((head));
     return new ListFeatures(all, any, coalesce, isEmpty, head, last, listComprehension, listRange, none, reduce, reverse, single, size, tail, toBooleanList, toFloatList, toIntegerList, toStringList);
   }
   
   public ListFeatures withLast(Boolean last) {
-    if (last == null) {
-      throw new IllegalArgumentException("null value for 'last' argument");
-    }
+    java.util.Objects.requireNonNull((last));
     return new ListFeatures(all, any, coalesce, isEmpty, head, last, listComprehension, listRange, none, reduce, reverse, single, size, tail, toBooleanList, toFloatList, toIntegerList, toStringList);
   }
   
   public ListFeatures withListComprehension(Boolean listComprehension) {
-    if (listComprehension == null) {
-      throw new IllegalArgumentException("null value for 'listComprehension' argument");
-    }
+    java.util.Objects.requireNonNull((listComprehension));
     return new ListFeatures(all, any, coalesce, isEmpty, head, last, listComprehension, listRange, none, reduce, reverse, single, size, tail, toBooleanList, toFloatList, toIntegerList, toStringList);
   }
   
   public ListFeatures withListRange(Boolean listRange) {
-    if (listRange == null) {
-      throw new IllegalArgumentException("null value for 'listRange' argument");
-    }
+    java.util.Objects.requireNonNull((listRange));
     return new ListFeatures(all, any, coalesce, isEmpty, head, last, listComprehension, listRange, none, reduce, reverse, single, size, tail, toBooleanList, toFloatList, toIntegerList, toStringList);
   }
   
   public ListFeatures withNone(Boolean none) {
-    if (none == null) {
-      throw new IllegalArgumentException("null value for 'none' argument");
-    }
+    java.util.Objects.requireNonNull((none));
     return new ListFeatures(all, any, coalesce, isEmpty, head, last, listComprehension, listRange, none, reduce, reverse, single, size, tail, toBooleanList, toFloatList, toIntegerList, toStringList);
   }
   
   public ListFeatures withReduce(Boolean reduce) {
-    if (reduce == null) {
-      throw new IllegalArgumentException("null value for 'reduce' argument");
-    }
+    java.util.Objects.requireNonNull((reduce));
     return new ListFeatures(all, any, coalesce, isEmpty, head, last, listComprehension, listRange, none, reduce, reverse, single, size, tail, toBooleanList, toFloatList, toIntegerList, toStringList);
   }
   
   public ListFeatures withReverse(Boolean reverse) {
-    if (reverse == null) {
-      throw new IllegalArgumentException("null value for 'reverse' argument");
-    }
+    java.util.Objects.requireNonNull((reverse));
     return new ListFeatures(all, any, coalesce, isEmpty, head, last, listComprehension, listRange, none, reduce, reverse, single, size, tail, toBooleanList, toFloatList, toIntegerList, toStringList);
   }
   
   public ListFeatures withSingle(Boolean single) {
-    if (single == null) {
-      throw new IllegalArgumentException("null value for 'single' argument");
-    }
+    java.util.Objects.requireNonNull((single));
     return new ListFeatures(all, any, coalesce, isEmpty, head, last, listComprehension, listRange, none, reduce, reverse, single, size, tail, toBooleanList, toFloatList, toIntegerList, toStringList);
   }
   
   public ListFeatures withSize(Boolean size) {
-    if (size == null) {
-      throw new IllegalArgumentException("null value for 'size' argument");
-    }
+    java.util.Objects.requireNonNull((size));
     return new ListFeatures(all, any, coalesce, isEmpty, head, last, listComprehension, listRange, none, reduce, reverse, single, size, tail, toBooleanList, toFloatList, toIntegerList, toStringList);
   }
   
   public ListFeatures withTail(Boolean tail) {
-    if (tail == null) {
-      throw new IllegalArgumentException("null value for 'tail' argument");
-    }
+    java.util.Objects.requireNonNull((tail));
     return new ListFeatures(all, any, coalesce, isEmpty, head, last, listComprehension, listRange, none, reduce, reverse, single, size, tail, toBooleanList, toFloatList, toIntegerList, toStringList);
   }
   
   public ListFeatures withToBooleanList(Boolean toBooleanList) {
-    if (toBooleanList == null) {
-      throw new IllegalArgumentException("null value for 'toBooleanList' argument");
-    }
+    java.util.Objects.requireNonNull((toBooleanList));
     return new ListFeatures(all, any, coalesce, isEmpty, head, last, listComprehension, listRange, none, reduce, reverse, single, size, tail, toBooleanList, toFloatList, toIntegerList, toStringList);
   }
   
   public ListFeatures withToFloatList(Boolean toFloatList) {
-    if (toFloatList == null) {
-      throw new IllegalArgumentException("null value for 'toFloatList' argument");
-    }
+    java.util.Objects.requireNonNull((toFloatList));
     return new ListFeatures(all, any, coalesce, isEmpty, head, last, listComprehension, listRange, none, reduce, reverse, single, size, tail, toBooleanList, toFloatList, toIntegerList, toStringList);
   }
   
   public ListFeatures withToIntegerList(Boolean toIntegerList) {
-    if (toIntegerList == null) {
-      throw new IllegalArgumentException("null value for 'toIntegerList' argument");
-    }
+    java.util.Objects.requireNonNull((toIntegerList));
     return new ListFeatures(all, any, coalesce, isEmpty, head, last, listComprehension, listRange, none, reduce, reverse, single, size, tail, toBooleanList, toFloatList, toIntegerList, toStringList);
   }
   
   public ListFeatures withToStringList(Boolean toStringList) {
-    if (toStringList == null) {
-      throw new IllegalArgumentException("null value for 'toStringList' argument");
-    }
+    java.util.Objects.requireNonNull((toStringList));
     return new ListFeatures(all, any, coalesce, isEmpty, head, last, listComprehension, listRange, none, reduce, reverse, single, size, tail, toBooleanList, toFloatList, toIntegerList, toStringList);
   }
 }

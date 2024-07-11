@@ -12,12 +12,8 @@ public class DirectiveLocations_Sequence2 implements Serializable {
   public final hydra.langs.graphql.syntax.DirectiveLocation directiveLocation;
   
   public DirectiveLocations_Sequence2 (hydra.util.Opt<java.lang.Void> or, hydra.langs.graphql.syntax.DirectiveLocation directiveLocation) {
-    if (or == null) {
-      throw new IllegalArgumentException("null value for 'or' argument");
-    }
-    if (directiveLocation == null) {
-      throw new IllegalArgumentException("null value for 'directiveLocation' argument");
-    }
+    java.util.Objects.requireNonNull((or));
+    java.util.Objects.requireNonNull((directiveLocation));
     this.or = or;
     this.directiveLocation = directiveLocation;
   }
@@ -37,16 +33,12 @@ public class DirectiveLocations_Sequence2 implements Serializable {
   }
   
   public DirectiveLocations_Sequence2 withOr(hydra.util.Opt<java.lang.Void> or) {
-    if (or == null) {
-      throw new IllegalArgumentException("null value for 'or' argument");
-    }
+    java.util.Objects.requireNonNull((or));
     return new DirectiveLocations_Sequence2(or, directiveLocation);
   }
   
   public DirectiveLocations_Sequence2 withDirectiveLocation(hydra.langs.graphql.syntax.DirectiveLocation directiveLocation) {
-    if (directiveLocation == null) {
-      throw new IllegalArgumentException("null value for 'directiveLocation' argument");
-    }
+    java.util.Objects.requireNonNull((directiveLocation));
     return new DirectiveLocations_Sequence2(or, directiveLocation);
   }
 }

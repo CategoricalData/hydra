@@ -14,15 +14,9 @@ public class Case implements Serializable {
   public final hydra.langs.scala.meta.Data body;
   
   public Case (hydra.langs.scala.meta.Pat pat, hydra.util.Opt<hydra.langs.scala.meta.Data> cond, hydra.langs.scala.meta.Data body) {
-    if (pat == null) {
-      throw new IllegalArgumentException("null value for 'pat' argument");
-    }
-    if (cond == null) {
-      throw new IllegalArgumentException("null value for 'cond' argument");
-    }
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((pat));
+    java.util.Objects.requireNonNull((cond));
+    java.util.Objects.requireNonNull((body));
     this.pat = pat;
     this.cond = cond;
     this.body = body;
@@ -43,23 +37,17 @@ public class Case implements Serializable {
   }
   
   public Case withPat(hydra.langs.scala.meta.Pat pat) {
-    if (pat == null) {
-      throw new IllegalArgumentException("null value for 'pat' argument");
-    }
+    java.util.Objects.requireNonNull((pat));
     return new Case(pat, cond, body);
   }
   
   public Case withCond(hydra.util.Opt<hydra.langs.scala.meta.Data> cond) {
-    if (cond == null) {
-      throw new IllegalArgumentException("null value for 'cond' argument");
-    }
+    java.util.Objects.requireNonNull((cond));
     return new Case(pat, cond, body);
   }
   
   public Case withBody(hydra.langs.scala.meta.Data body) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((body));
     return new Case(pat, cond, body);
   }
 }

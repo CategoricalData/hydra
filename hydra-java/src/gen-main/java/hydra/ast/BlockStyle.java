@@ -2,8 +2,6 @@
 
 package hydra.ast;
 
-import hydra.util.Opt;
-
 import java.io.Serializable;
 
 /**
@@ -12,22 +10,16 @@ import java.io.Serializable;
 public class BlockStyle implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ast.BlockStyle");
   
-  public final Opt<String> indent;
+  public final hydra.util.Opt<String> indent;
   
   public final Boolean newlineBeforeContent;
   
   public final Boolean newlineAfterContent;
   
-  public BlockStyle (Opt<String> indent, Boolean newlineBeforeContent, Boolean newlineAfterContent) {
-    if (indent == null) {
-      throw new IllegalArgumentException("null value for 'indent' argument");
-    }
-    if (newlineBeforeContent == null) {
-      throw new IllegalArgumentException("null value for 'newlineBeforeContent' argument");
-    }
-    if (newlineAfterContent == null) {
-      throw new IllegalArgumentException("null value for 'newlineAfterContent' argument");
-    }
+  public BlockStyle (hydra.util.Opt<String> indent, Boolean newlineBeforeContent, Boolean newlineAfterContent) {
+    java.util.Objects.requireNonNull((indent));
+    java.util.Objects.requireNonNull((newlineBeforeContent));
+    java.util.Objects.requireNonNull((newlineAfterContent));
     this.indent = indent;
     this.newlineBeforeContent = newlineBeforeContent;
     this.newlineAfterContent = newlineAfterContent;
@@ -47,24 +39,18 @@ public class BlockStyle implements Serializable {
     return 2 * indent.hashCode() + 3 * newlineBeforeContent.hashCode() + 5 * newlineAfterContent.hashCode();
   }
   
-  public BlockStyle withIndent(Opt<String> indent) {
-    if (indent == null) {
-      throw new IllegalArgumentException("null value for 'indent' argument");
-    }
+  public BlockStyle withIndent(hydra.util.Opt<String> indent) {
+    java.util.Objects.requireNonNull((indent));
     return new BlockStyle(indent, newlineBeforeContent, newlineAfterContent);
   }
   
   public BlockStyle withNewlineBeforeContent(Boolean newlineBeforeContent) {
-    if (newlineBeforeContent == null) {
-      throw new IllegalArgumentException("null value for 'newlineBeforeContent' argument");
-    }
+    java.util.Objects.requireNonNull((newlineBeforeContent));
     return new BlockStyle(indent, newlineBeforeContent, newlineAfterContent);
   }
   
   public BlockStyle withNewlineAfterContent(Boolean newlineAfterContent) {
-    if (newlineAfterContent == null) {
-      throw new IllegalArgumentException("null value for 'newlineAfterContent' argument");
-    }
+    java.util.Objects.requireNonNull((newlineAfterContent));
     return new BlockStyle(indent, newlineBeforeContent, newlineAfterContent);
   }
 }

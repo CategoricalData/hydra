@@ -12,12 +12,8 @@ public class ChainedTraversal implements Serializable {
   public final hydra.langs.tinkerpop.gremlin.ChainedTraversalElement rest;
   
   public ChainedTraversal (hydra.langs.tinkerpop.gremlin.TraversalMethod first, hydra.langs.tinkerpop.gremlin.ChainedTraversalElement rest) {
-    if (first == null) {
-      throw new IllegalArgumentException("null value for 'first' argument");
-    }
-    if (rest == null) {
-      throw new IllegalArgumentException("null value for 'rest' argument");
-    }
+    java.util.Objects.requireNonNull((first));
+    java.util.Objects.requireNonNull((rest));
     this.first = first;
     this.rest = rest;
   }
@@ -37,16 +33,12 @@ public class ChainedTraversal implements Serializable {
   }
   
   public ChainedTraversal withFirst(hydra.langs.tinkerpop.gremlin.TraversalMethod first) {
-    if (first == null) {
-      throw new IllegalArgumentException("null value for 'first' argument");
-    }
+    java.util.Objects.requireNonNull((first));
     return new ChainedTraversal(first, rest);
   }
   
   public ChainedTraversal withRest(hydra.langs.tinkerpop.gremlin.ChainedTraversalElement rest) {
-    if (rest == null) {
-      throw new IllegalArgumentException("null value for 'rest' argument");
-    }
+    java.util.Objects.requireNonNull((rest));
     return new ChainedTraversal(first, rest);
   }
 }

@@ -12,12 +12,8 @@ public class Enumerator_CaseGenerator implements Serializable {
   public final hydra.langs.scala.meta.Data rhs;
   
   public Enumerator_CaseGenerator (hydra.langs.scala.meta.Pat pat, hydra.langs.scala.meta.Data rhs) {
-    if (pat == null) {
-      throw new IllegalArgumentException("null value for 'pat' argument");
-    }
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((pat));
+    java.util.Objects.requireNonNull((rhs));
     this.pat = pat;
     this.rhs = rhs;
   }
@@ -37,16 +33,12 @@ public class Enumerator_CaseGenerator implements Serializable {
   }
   
   public Enumerator_CaseGenerator withPat(hydra.langs.scala.meta.Pat pat) {
-    if (pat == null) {
-      throw new IllegalArgumentException("null value for 'pat' argument");
-    }
+    java.util.Objects.requireNonNull((pat));
     return new Enumerator_CaseGenerator(pat, rhs);
   }
   
   public Enumerator_CaseGenerator withRhs(hydra.langs.scala.meta.Data rhs) {
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((rhs));
     return new Enumerator_CaseGenerator(pat, rhs);
   }
 }

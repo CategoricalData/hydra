@@ -14,15 +14,9 @@ public class Data_Interpolate implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Data> args;
   
   public Data_Interpolate (hydra.langs.scala.meta.Data_Name prefix, java.util.List<hydra.langs.scala.meta.Lit> parts, java.util.List<hydra.langs.scala.meta.Data> args) {
-    if (prefix == null) {
-      throw new IllegalArgumentException("null value for 'prefix' argument");
-    }
-    if (parts == null) {
-      throw new IllegalArgumentException("null value for 'parts' argument");
-    }
-    if (args == null) {
-      throw new IllegalArgumentException("null value for 'args' argument");
-    }
+    java.util.Objects.requireNonNull((prefix));
+    java.util.Objects.requireNonNull((parts));
+    java.util.Objects.requireNonNull((args));
     this.prefix = prefix;
     this.parts = parts;
     this.args = args;
@@ -43,23 +37,17 @@ public class Data_Interpolate implements Serializable {
   }
   
   public Data_Interpolate withPrefix(hydra.langs.scala.meta.Data_Name prefix) {
-    if (prefix == null) {
-      throw new IllegalArgumentException("null value for 'prefix' argument");
-    }
+    java.util.Objects.requireNonNull((prefix));
     return new Data_Interpolate(prefix, parts, args);
   }
   
   public Data_Interpolate withParts(java.util.List<hydra.langs.scala.meta.Lit> parts) {
-    if (parts == null) {
-      throw new IllegalArgumentException("null value for 'parts' argument");
-    }
+    java.util.Objects.requireNonNull((parts));
     return new Data_Interpolate(prefix, parts, args);
   }
   
   public Data_Interpolate withArgs(java.util.List<hydra.langs.scala.meta.Data> args) {
-    if (args == null) {
-      throw new IllegalArgumentException("null value for 'args' argument");
-    }
+    java.util.Objects.requireNonNull((args));
     return new Data_Interpolate(prefix, parts, args);
   }
 }

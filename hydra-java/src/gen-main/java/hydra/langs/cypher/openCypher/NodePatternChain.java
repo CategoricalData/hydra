@@ -12,12 +12,8 @@ public class NodePatternChain implements Serializable {
   public final java.util.List<hydra.langs.cypher.openCypher.PatternElementChain> chain;
   
   public NodePatternChain (hydra.langs.cypher.openCypher.NodePattern nodePattern, java.util.List<hydra.langs.cypher.openCypher.PatternElementChain> chain) {
-    if (nodePattern == null) {
-      throw new IllegalArgumentException("null value for 'nodePattern' argument");
-    }
-    if (chain == null) {
-      throw new IllegalArgumentException("null value for 'chain' argument");
-    }
+    java.util.Objects.requireNonNull((nodePattern));
+    java.util.Objects.requireNonNull((chain));
     this.nodePattern = nodePattern;
     this.chain = chain;
   }
@@ -37,16 +33,12 @@ public class NodePatternChain implements Serializable {
   }
   
   public NodePatternChain withNodePattern(hydra.langs.cypher.openCypher.NodePattern nodePattern) {
-    if (nodePattern == null) {
-      throw new IllegalArgumentException("null value for 'nodePattern' argument");
-    }
+    java.util.Objects.requireNonNull((nodePattern));
     return new NodePatternChain(nodePattern, chain);
   }
   
   public NodePatternChain withChain(java.util.List<hydra.langs.cypher.openCypher.PatternElementChain> chain) {
-    if (chain == null) {
-      throw new IllegalArgumentException("null value for 'chain' argument");
-    }
+    java.util.Objects.requireNonNull((chain));
     return new NodePatternChain(nodePattern, chain);
   }
 }

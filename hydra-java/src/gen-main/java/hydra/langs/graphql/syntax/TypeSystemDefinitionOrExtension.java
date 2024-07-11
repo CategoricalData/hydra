@@ -37,9 +37,7 @@ public abstract class TypeSystemDefinitionOrExtension implements Serializable {
     public final hydra.langs.graphql.syntax.TypeSystemDefinition value;
     
     public Definition (hydra.langs.graphql.syntax.TypeSystemDefinition value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class TypeSystemDefinitionOrExtension implements Serializable {
     public final hydra.langs.graphql.syntax.TypeSystemExtension value;
     
     public Extension (hydra.langs.graphql.syntax.TypeSystemExtension value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

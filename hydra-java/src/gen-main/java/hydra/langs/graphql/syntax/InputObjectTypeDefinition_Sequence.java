@@ -16,18 +16,10 @@ public class InputObjectTypeDefinition_Sequence implements Serializable {
   public final hydra.langs.graphql.syntax.InputFieldsDefinition inputFieldsDefinition;
   
   public InputObjectTypeDefinition_Sequence (hydra.util.Opt<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.Name name, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.InputFieldsDefinition inputFieldsDefinition) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
-    if (inputFieldsDefinition == null) {
-      throw new IllegalArgumentException("null value for 'inputFieldsDefinition' argument");
-    }
+    java.util.Objects.requireNonNull((description));
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((directives));
+    java.util.Objects.requireNonNull((inputFieldsDefinition));
     this.description = description;
     this.name = name;
     this.directives = directives;
@@ -49,30 +41,22 @@ public class InputObjectTypeDefinition_Sequence implements Serializable {
   }
   
   public InputObjectTypeDefinition_Sequence withDescription(hydra.util.Opt<hydra.langs.graphql.syntax.Description> description) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
+    java.util.Objects.requireNonNull((description));
     return new InputObjectTypeDefinition_Sequence(description, name, directives, inputFieldsDefinition);
   }
   
   public InputObjectTypeDefinition_Sequence withName(hydra.langs.graphql.syntax.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new InputObjectTypeDefinition_Sequence(description, name, directives, inputFieldsDefinition);
   }
   
   public InputObjectTypeDefinition_Sequence withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((directives));
     return new InputObjectTypeDefinition_Sequence(description, name, directives, inputFieldsDefinition);
   }
   
   public InputObjectTypeDefinition_Sequence withInputFieldsDefinition(hydra.langs.graphql.syntax.InputFieldsDefinition inputFieldsDefinition) {
-    if (inputFieldsDefinition == null) {
-      throw new IllegalArgumentException("null value for 'inputFieldsDefinition' argument");
-    }
+    java.util.Objects.requireNonNull((inputFieldsDefinition));
     return new InputObjectTypeDefinition_Sequence(description, name, directives, inputFieldsDefinition);
   }
 }

@@ -31,18 +31,10 @@ public class SetFeatures implements Serializable {
   public final Boolean variableWithNodeLabels;
   
   public SetFeatures (Boolean propertyEquals, Boolean variableEquals, Boolean variablePlusEquals, Boolean variableWithNodeLabels) {
-    if (propertyEquals == null) {
-      throw new IllegalArgumentException("null value for 'propertyEquals' argument");
-    }
-    if (variableEquals == null) {
-      throw new IllegalArgumentException("null value for 'variableEquals' argument");
-    }
-    if (variablePlusEquals == null) {
-      throw new IllegalArgumentException("null value for 'variablePlusEquals' argument");
-    }
-    if (variableWithNodeLabels == null) {
-      throw new IllegalArgumentException("null value for 'variableWithNodeLabels' argument");
-    }
+    java.util.Objects.requireNonNull((propertyEquals));
+    java.util.Objects.requireNonNull((variableEquals));
+    java.util.Objects.requireNonNull((variablePlusEquals));
+    java.util.Objects.requireNonNull((variableWithNodeLabels));
     this.propertyEquals = propertyEquals;
     this.variableEquals = variableEquals;
     this.variablePlusEquals = variablePlusEquals;
@@ -64,30 +56,22 @@ public class SetFeatures implements Serializable {
   }
   
   public SetFeatures withPropertyEquals(Boolean propertyEquals) {
-    if (propertyEquals == null) {
-      throw new IllegalArgumentException("null value for 'propertyEquals' argument");
-    }
+    java.util.Objects.requireNonNull((propertyEquals));
     return new SetFeatures(propertyEquals, variableEquals, variablePlusEquals, variableWithNodeLabels);
   }
   
   public SetFeatures withVariableEquals(Boolean variableEquals) {
-    if (variableEquals == null) {
-      throw new IllegalArgumentException("null value for 'variableEquals' argument");
-    }
+    java.util.Objects.requireNonNull((variableEquals));
     return new SetFeatures(propertyEquals, variableEquals, variablePlusEquals, variableWithNodeLabels);
   }
   
   public SetFeatures withVariablePlusEquals(Boolean variablePlusEquals) {
-    if (variablePlusEquals == null) {
-      throw new IllegalArgumentException("null value for 'variablePlusEquals' argument");
-    }
+    java.util.Objects.requireNonNull((variablePlusEquals));
     return new SetFeatures(propertyEquals, variableEquals, variablePlusEquals, variableWithNodeLabels);
   }
   
   public SetFeatures withVariableWithNodeLabels(Boolean variableWithNodeLabels) {
-    if (variableWithNodeLabels == null) {
-      throw new IllegalArgumentException("null value for 'variableWithNodeLabels' argument");
-    }
+    java.util.Objects.requireNonNull((variableWithNodeLabels));
     return new SetFeatures(propertyEquals, variableEquals, variablePlusEquals, variableWithNodeLabels);
   }
 }

@@ -20,24 +20,12 @@ public class ColumnDefinition implements Serializable {
   public final hydra.util.Opt<hydra.langs.sql.ansi.CollateClause> collate;
   
   public ColumnDefinition (hydra.langs.sql.ansi.ColumnName name, hydra.util.Opt<hydra.langs.sql.ansi.ColumnDefinition_TypeOrDomain_Option> typeOrDomain, hydra.util.Opt<hydra.langs.sql.ansi.ReferenceScopeCheck> refScope, hydra.util.Opt<hydra.langs.sql.ansi.ColumnDefinition_DefaultOrIdentityOrGeneration_Option> defaultOrIdentityOrGeneration, java.util.List<hydra.langs.sql.ansi.ColumnConstraintDefinition> constraints, hydra.util.Opt<hydra.langs.sql.ansi.CollateClause> collate) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (typeOrDomain == null) {
-      throw new IllegalArgumentException("null value for 'typeOrDomain' argument");
-    }
-    if (refScope == null) {
-      throw new IllegalArgumentException("null value for 'refScope' argument");
-    }
-    if (defaultOrIdentityOrGeneration == null) {
-      throw new IllegalArgumentException("null value for 'defaultOrIdentityOrGeneration' argument");
-    }
-    if (constraints == null) {
-      throw new IllegalArgumentException("null value for 'constraints' argument");
-    }
-    if (collate == null) {
-      throw new IllegalArgumentException("null value for 'collate' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((typeOrDomain));
+    java.util.Objects.requireNonNull((refScope));
+    java.util.Objects.requireNonNull((defaultOrIdentityOrGeneration));
+    java.util.Objects.requireNonNull((constraints));
+    java.util.Objects.requireNonNull((collate));
     this.name = name;
     this.typeOrDomain = typeOrDomain;
     this.refScope = refScope;
@@ -61,44 +49,32 @@ public class ColumnDefinition implements Serializable {
   }
   
   public ColumnDefinition withName(hydra.langs.sql.ansi.ColumnName name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new ColumnDefinition(name, typeOrDomain, refScope, defaultOrIdentityOrGeneration, constraints, collate);
   }
   
   public ColumnDefinition withTypeOrDomain(hydra.util.Opt<hydra.langs.sql.ansi.ColumnDefinition_TypeOrDomain_Option> typeOrDomain) {
-    if (typeOrDomain == null) {
-      throw new IllegalArgumentException("null value for 'typeOrDomain' argument");
-    }
+    java.util.Objects.requireNonNull((typeOrDomain));
     return new ColumnDefinition(name, typeOrDomain, refScope, defaultOrIdentityOrGeneration, constraints, collate);
   }
   
   public ColumnDefinition withRefScope(hydra.util.Opt<hydra.langs.sql.ansi.ReferenceScopeCheck> refScope) {
-    if (refScope == null) {
-      throw new IllegalArgumentException("null value for 'refScope' argument");
-    }
+    java.util.Objects.requireNonNull((refScope));
     return new ColumnDefinition(name, typeOrDomain, refScope, defaultOrIdentityOrGeneration, constraints, collate);
   }
   
   public ColumnDefinition withDefaultOrIdentityOrGeneration(hydra.util.Opt<hydra.langs.sql.ansi.ColumnDefinition_DefaultOrIdentityOrGeneration_Option> defaultOrIdentityOrGeneration) {
-    if (defaultOrIdentityOrGeneration == null) {
-      throw new IllegalArgumentException("null value for 'defaultOrIdentityOrGeneration' argument");
-    }
+    java.util.Objects.requireNonNull((defaultOrIdentityOrGeneration));
     return new ColumnDefinition(name, typeOrDomain, refScope, defaultOrIdentityOrGeneration, constraints, collate);
   }
   
   public ColumnDefinition withConstraints(java.util.List<hydra.langs.sql.ansi.ColumnConstraintDefinition> constraints) {
-    if (constraints == null) {
-      throw new IllegalArgumentException("null value for 'constraints' argument");
-    }
+    java.util.Objects.requireNonNull((constraints));
     return new ColumnDefinition(name, typeOrDomain, refScope, defaultOrIdentityOrGeneration, constraints, collate);
   }
   
   public ColumnDefinition withCollate(hydra.util.Opt<hydra.langs.sql.ansi.CollateClause> collate) {
-    if (collate == null) {
-      throw new IllegalArgumentException("null value for 'collate' argument");
-    }
+    java.util.Objects.requireNonNull((collate));
     return new ColumnDefinition(name, typeOrDomain, refScope, defaultOrIdentityOrGeneration, constraints, collate);
   }
 }

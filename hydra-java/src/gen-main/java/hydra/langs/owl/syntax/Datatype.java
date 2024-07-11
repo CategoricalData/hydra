@@ -46,9 +46,7 @@ public abstract class Datatype implements Serializable {
     public final hydra.langs.xml.schema.Datatype value;
     
     public XmlSchema (hydra.langs.xml.schema.Datatype value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -76,9 +74,7 @@ public abstract class Datatype implements Serializable {
     public final hydra.langs.rdf.syntax.Iri value;
     
     public Other (hydra.langs.rdf.syntax.Iri value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

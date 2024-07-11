@@ -37,9 +37,7 @@ public abstract class RepeatRange_Sequence_Option_Option_Option implements Seria
     public final hydra.langs.shex.syntax.Integer_ value;
     
     public Integer_ (hydra.langs.shex.syntax.Integer_ value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

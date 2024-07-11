@@ -18,12 +18,8 @@ public class FileCryptoMetaData implements Serializable {
   public final hydra.util.Opt<String> keyMetadata;
   
   public FileCryptoMetaData (hydra.langs.parquet.format.EncryptionAlgorithm encryptionAlgorithm, hydra.util.Opt<String> keyMetadata) {
-    if (encryptionAlgorithm == null) {
-      throw new IllegalArgumentException("null value for 'encryptionAlgorithm' argument");
-    }
-    if (keyMetadata == null) {
-      throw new IllegalArgumentException("null value for 'keyMetadata' argument");
-    }
+    java.util.Objects.requireNonNull((encryptionAlgorithm));
+    java.util.Objects.requireNonNull((keyMetadata));
     this.encryptionAlgorithm = encryptionAlgorithm;
     this.keyMetadata = keyMetadata;
   }
@@ -43,16 +39,12 @@ public class FileCryptoMetaData implements Serializable {
   }
   
   public FileCryptoMetaData withEncryptionAlgorithm(hydra.langs.parquet.format.EncryptionAlgorithm encryptionAlgorithm) {
-    if (encryptionAlgorithm == null) {
-      throw new IllegalArgumentException("null value for 'encryptionAlgorithm' argument");
-    }
+    java.util.Objects.requireNonNull((encryptionAlgorithm));
     return new FileCryptoMetaData(encryptionAlgorithm, keyMetadata);
   }
   
   public FileCryptoMetaData withKeyMetadata(hydra.util.Opt<String> keyMetadata) {
-    if (keyMetadata == null) {
-      throw new IllegalArgumentException("null value for 'keyMetadata' argument");
-    }
+    java.util.Objects.requireNonNull((keyMetadata));
     return new FileCryptoMetaData(encryptionAlgorithm, keyMetadata);
   }
 }

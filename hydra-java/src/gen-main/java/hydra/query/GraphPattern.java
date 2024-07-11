@@ -21,12 +21,8 @@ public class GraphPattern<A> implements Serializable {
   public final java.util.List<hydra.query.Pattern<A>> patterns;
   
   public GraphPattern (hydra.core.Name graph, java.util.List<hydra.query.Pattern<A>> patterns) {
-    if (graph == null) {
-      throw new IllegalArgumentException("null value for 'graph' argument");
-    }
-    if (patterns == null) {
-      throw new IllegalArgumentException("null value for 'patterns' argument");
-    }
+    java.util.Objects.requireNonNull((graph));
+    java.util.Objects.requireNonNull((patterns));
     this.graph = graph;
     this.patterns = patterns;
   }
@@ -46,16 +42,12 @@ public class GraphPattern<A> implements Serializable {
   }
   
   public GraphPattern withGraph(hydra.core.Name graph) {
-    if (graph == null) {
-      throw new IllegalArgumentException("null value for 'graph' argument");
-    }
+    java.util.Objects.requireNonNull((graph));
     return new GraphPattern(graph, patterns);
   }
   
   public GraphPattern withPatterns(java.util.List<hydra.query.Pattern<A>> patterns) {
-    if (patterns == null) {
-      throw new IllegalArgumentException("null value for 'patterns' argument");
-    }
+    java.util.Objects.requireNonNull((patterns));
     return new GraphPattern(graph, patterns);
   }
 }

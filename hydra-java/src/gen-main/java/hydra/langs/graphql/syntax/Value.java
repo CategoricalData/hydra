@@ -79,9 +79,7 @@ public abstract class Value implements Serializable {
     public final hydra.langs.graphql.syntax.Variable value;
     
     public Variable (hydra.langs.graphql.syntax.Variable value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -109,9 +107,7 @@ public abstract class Value implements Serializable {
     public final hydra.langs.graphql.syntax.IntValue value;
     
     public Int (hydra.langs.graphql.syntax.IntValue value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -139,9 +135,7 @@ public abstract class Value implements Serializable {
     public final hydra.langs.graphql.syntax.FloatValue value;
     
     public Float_ (hydra.langs.graphql.syntax.FloatValue value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -169,9 +163,7 @@ public abstract class Value implements Serializable {
     public final hydra.langs.graphql.syntax.StringValue value;
     
     public String_ (hydra.langs.graphql.syntax.StringValue value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -199,9 +191,7 @@ public abstract class Value implements Serializable {
     public final hydra.langs.graphql.syntax.BooleanValue value;
     
     public Boolean_ (hydra.langs.graphql.syntax.BooleanValue value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -229,9 +219,7 @@ public abstract class Value implements Serializable {
     public final hydra.langs.graphql.syntax.NullValue value;
     
     public Null (hydra.langs.graphql.syntax.NullValue value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -259,9 +247,7 @@ public abstract class Value implements Serializable {
     public final hydra.langs.graphql.syntax.EnumValue value;
     
     public Enum_ (hydra.langs.graphql.syntax.EnumValue value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -289,9 +275,7 @@ public abstract class Value implements Serializable {
     public final hydra.langs.graphql.syntax.ListValue value;
     
     public List (hydra.langs.graphql.syntax.ListValue value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -319,9 +303,7 @@ public abstract class Value implements Serializable {
     public final hydra.langs.graphql.syntax.ObjectValue value;
     
     public Object_ (hydra.langs.graphql.syntax.ObjectValue value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -16,18 +16,10 @@ public class Template implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Stat> stats;
   
   public Template (java.util.List<hydra.langs.scala.meta.Stat> early, java.util.List<hydra.langs.scala.meta.Init> inits, hydra.langs.scala.meta.Self self, java.util.List<hydra.langs.scala.meta.Stat> stats) {
-    if (early == null) {
-      throw new IllegalArgumentException("null value for 'early' argument");
-    }
-    if (inits == null) {
-      throw new IllegalArgumentException("null value for 'inits' argument");
-    }
-    if (self == null) {
-      throw new IllegalArgumentException("null value for 'self' argument");
-    }
-    if (stats == null) {
-      throw new IllegalArgumentException("null value for 'stats' argument");
-    }
+    java.util.Objects.requireNonNull((early));
+    java.util.Objects.requireNonNull((inits));
+    java.util.Objects.requireNonNull((self));
+    java.util.Objects.requireNonNull((stats));
     this.early = early;
     this.inits = inits;
     this.self = self;
@@ -49,30 +41,22 @@ public class Template implements Serializable {
   }
   
   public Template withEarly(java.util.List<hydra.langs.scala.meta.Stat> early) {
-    if (early == null) {
-      throw new IllegalArgumentException("null value for 'early' argument");
-    }
+    java.util.Objects.requireNonNull((early));
     return new Template(early, inits, self, stats);
   }
   
   public Template withInits(java.util.List<hydra.langs.scala.meta.Init> inits) {
-    if (inits == null) {
-      throw new IllegalArgumentException("null value for 'inits' argument");
-    }
+    java.util.Objects.requireNonNull((inits));
     return new Template(early, inits, self, stats);
   }
   
   public Template withSelf(hydra.langs.scala.meta.Self self) {
-    if (self == null) {
-      throw new IllegalArgumentException("null value for 'self' argument");
-    }
+    java.util.Objects.requireNonNull((self));
     return new Template(early, inits, self, stats);
   }
   
   public Template withStats(java.util.List<hydra.langs.scala.meta.Stat> stats) {
-    if (stats == null) {
-      throw new IllegalArgumentException("null value for 'stats' argument");
-    }
+    java.util.Objects.requireNonNull((stats));
     return new Template(early, inits, self, stats);
   }
 }

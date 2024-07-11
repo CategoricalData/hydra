@@ -37,9 +37,7 @@ public abstract class HasArgs implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargs value;
     
     public String_ (hydra.langs.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargs value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class HasArgs implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.HasTraversalTokenArgs value;
     
     public TraversalToken (hydra.langs.tinkerpop.gremlin.HasTraversalTokenArgs value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

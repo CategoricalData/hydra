@@ -10,9 +10,7 @@ public class ContinueStatement implements Serializable {
   public final hydra.util.Opt<hydra.langs.java.syntax.Identifier> value;
   
   public ContinueStatement (hydra.util.Opt<hydra.langs.java.syntax.Identifier> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

@@ -16,9 +16,7 @@ public class Kv implements Serializable {
   public final java.util.Map<String, hydra.core.Term<hydra.compute.Kv>> annotations;
   
   public Kv (java.util.Map<String, hydra.core.Term<hydra.compute.Kv>> annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     this.annotations = annotations;
   }
   

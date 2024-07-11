@@ -16,18 +16,10 @@ public class UnqualifiedClassInstanceCreationExpression implements Serializable 
   public final hydra.util.Opt<hydra.langs.java.syntax.ClassBody> body;
   
   public UnqualifiedClassInstanceCreationExpression (java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments, hydra.langs.java.syntax.ClassOrInterfaceTypeToInstantiate classOrInterface, java.util.List<hydra.langs.java.syntax.Expression> arguments, hydra.util.Opt<hydra.langs.java.syntax.ClassBody> body) {
-    if (typeArguments == null) {
-      throw new IllegalArgumentException("null value for 'typeArguments' argument");
-    }
-    if (classOrInterface == null) {
-      throw new IllegalArgumentException("null value for 'classOrInterface' argument");
-    }
-    if (arguments == null) {
-      throw new IllegalArgumentException("null value for 'arguments' argument");
-    }
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((typeArguments));
+    java.util.Objects.requireNonNull((classOrInterface));
+    java.util.Objects.requireNonNull((arguments));
+    java.util.Objects.requireNonNull((body));
     this.typeArguments = typeArguments;
     this.classOrInterface = classOrInterface;
     this.arguments = arguments;
@@ -49,30 +41,22 @@ public class UnqualifiedClassInstanceCreationExpression implements Serializable 
   }
   
   public UnqualifiedClassInstanceCreationExpression withTypeArguments(java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments) {
-    if (typeArguments == null) {
-      throw new IllegalArgumentException("null value for 'typeArguments' argument");
-    }
+    java.util.Objects.requireNonNull((typeArguments));
     return new UnqualifiedClassInstanceCreationExpression(typeArguments, classOrInterface, arguments, body);
   }
   
   public UnqualifiedClassInstanceCreationExpression withClassOrInterface(hydra.langs.java.syntax.ClassOrInterfaceTypeToInstantiate classOrInterface) {
-    if (classOrInterface == null) {
-      throw new IllegalArgumentException("null value for 'classOrInterface' argument");
-    }
+    java.util.Objects.requireNonNull((classOrInterface));
     return new UnqualifiedClassInstanceCreationExpression(typeArguments, classOrInterface, arguments, body);
   }
   
   public UnqualifiedClassInstanceCreationExpression withArguments(java.util.List<hydra.langs.java.syntax.Expression> arguments) {
-    if (arguments == null) {
-      throw new IllegalArgumentException("null value for 'arguments' argument");
-    }
+    java.util.Objects.requireNonNull((arguments));
     return new UnqualifiedClassInstanceCreationExpression(typeArguments, classOrInterface, arguments, body);
   }
   
   public UnqualifiedClassInstanceCreationExpression withBody(hydra.util.Opt<hydra.langs.java.syntax.ClassBody> body) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((body));
     return new UnqualifiedClassInstanceCreationExpression(typeArguments, classOrInterface, arguments, body);
   }
 }

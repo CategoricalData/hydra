@@ -12,12 +12,8 @@ public class PatternPart implements Serializable {
   public final hydra.langs.cypher.openCypher.AnonymousPatternPart pattern;
   
   public PatternPart (hydra.util.Opt<hydra.langs.cypher.openCypher.Variable> variable, hydra.langs.cypher.openCypher.AnonymousPatternPart pattern) {
-    if (variable == null) {
-      throw new IllegalArgumentException("null value for 'variable' argument");
-    }
-    if (pattern == null) {
-      throw new IllegalArgumentException("null value for 'pattern' argument");
-    }
+    java.util.Objects.requireNonNull((variable));
+    java.util.Objects.requireNonNull((pattern));
     this.variable = variable;
     this.pattern = pattern;
   }
@@ -37,16 +33,12 @@ public class PatternPart implements Serializable {
   }
   
   public PatternPart withVariable(hydra.util.Opt<hydra.langs.cypher.openCypher.Variable> variable) {
-    if (variable == null) {
-      throw new IllegalArgumentException("null value for 'variable' argument");
-    }
+    java.util.Objects.requireNonNull((variable));
     return new PatternPart(variable, pattern);
   }
   
   public PatternPart withPattern(hydra.langs.cypher.openCypher.AnonymousPatternPart pattern) {
-    if (pattern == null) {
-      throw new IllegalArgumentException("null value for 'pattern' argument");
-    }
+    java.util.Objects.requireNonNull((pattern));
     return new PatternPart(variable, pattern);
   }
 }

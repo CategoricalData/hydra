@@ -15,12 +15,8 @@ public class Definition<A> implements Serializable {
   public final hydra.phantoms.Datum<A> datum;
   
   public Definition (hydra.core.Name name, hydra.phantoms.Datum<A> datum) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (datum == null) {
-      throw new IllegalArgumentException("null value for 'datum' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((datum));
     this.name = name;
     this.datum = datum;
   }
@@ -40,16 +36,12 @@ public class Definition<A> implements Serializable {
   }
   
   public Definition withName(hydra.core.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Definition(name, datum);
   }
   
   public Definition withDatum(hydra.phantoms.Datum<A> datum) {
-    if (datum == null) {
-      throw new IllegalArgumentException("null value for 'datum' argument");
-    }
+    java.util.Objects.requireNonNull((datum));
     return new Definition(name, datum);
   }
 }

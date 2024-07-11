@@ -10,9 +10,7 @@ public class Precision implements Serializable {
   public final hydra.langs.sql.ansi.UnsignedInteger value;
   
   public Precision (hydra.langs.sql.ansi.UnsignedInteger value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

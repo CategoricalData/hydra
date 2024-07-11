@@ -21,12 +21,8 @@ public class NullFeatures implements Serializable {
   public final Boolean isNotNull;
   
   public NullFeatures (Boolean isNull, Boolean isNotNull) {
-    if (isNull == null) {
-      throw new IllegalArgumentException("null value for 'isNull' argument");
-    }
-    if (isNotNull == null) {
-      throw new IllegalArgumentException("null value for 'isNotNull' argument");
-    }
+    java.util.Objects.requireNonNull((isNull));
+    java.util.Objects.requireNonNull((isNotNull));
     this.isNull = isNull;
     this.isNotNull = isNotNull;
   }
@@ -46,16 +42,12 @@ public class NullFeatures implements Serializable {
   }
   
   public NullFeatures withIsNull(Boolean isNull) {
-    if (isNull == null) {
-      throw new IllegalArgumentException("null value for 'isNull' argument");
-    }
+    java.util.Objects.requireNonNull((isNull));
     return new NullFeatures(isNull, isNotNull);
   }
   
   public NullFeatures withIsNotNull(Boolean isNotNull) {
-    if (isNotNull == null) {
-      throw new IllegalArgumentException("null value for 'isNotNull' argument");
-    }
+    java.util.Objects.requireNonNull((isNotNull));
     return new NullFeatures(isNull, isNotNull);
   }
 }

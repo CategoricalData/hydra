@@ -12,12 +12,8 @@ public class Type_Annotate implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Mod_Annot> annots;
   
   public Type_Annotate (hydra.langs.scala.meta.Type tpe, java.util.List<hydra.langs.scala.meta.Mod_Annot> annots) {
-    if (tpe == null) {
-      throw new IllegalArgumentException("null value for 'tpe' argument");
-    }
-    if (annots == null) {
-      throw new IllegalArgumentException("null value for 'annots' argument");
-    }
+    java.util.Objects.requireNonNull((tpe));
+    java.util.Objects.requireNonNull((annots));
     this.tpe = tpe;
     this.annots = annots;
   }
@@ -37,16 +33,12 @@ public class Type_Annotate implements Serializable {
   }
   
   public Type_Annotate withTpe(hydra.langs.scala.meta.Type tpe) {
-    if (tpe == null) {
-      throw new IllegalArgumentException("null value for 'tpe' argument");
-    }
+    java.util.Objects.requireNonNull((tpe));
     return new Type_Annotate(tpe, annots);
   }
   
   public Type_Annotate withAnnots(java.util.List<hydra.langs.scala.meta.Mod_Annot> annots) {
-    if (annots == null) {
-      throw new IllegalArgumentException("null value for 'annots' argument");
-    }
+    java.util.Objects.requireNonNull((annots));
     return new Type_Annotate(tpe, annots);
   }
 }

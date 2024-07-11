@@ -22,18 +22,10 @@ public class VertexPropertyFeatures implements Serializable {
   public final Boolean supportsRemove;
   
   public VertexPropertyFeatures (hydra.langs.tinkerpop.features.DataTypeFeatures dataTypeFeatures, hydra.langs.tinkerpop.features.PropertyFeatures propertyFeatures, hydra.langs.tinkerpop.features.ElementFeatures elementFeatures, Boolean supportsRemove) {
-    if (dataTypeFeatures == null) {
-      throw new IllegalArgumentException("null value for 'dataTypeFeatures' argument");
-    }
-    if (propertyFeatures == null) {
-      throw new IllegalArgumentException("null value for 'propertyFeatures' argument");
-    }
-    if (elementFeatures == null) {
-      throw new IllegalArgumentException("null value for 'elementFeatures' argument");
-    }
-    if (supportsRemove == null) {
-      throw new IllegalArgumentException("null value for 'supportsRemove' argument");
-    }
+    java.util.Objects.requireNonNull((dataTypeFeatures));
+    java.util.Objects.requireNonNull((propertyFeatures));
+    java.util.Objects.requireNonNull((elementFeatures));
+    java.util.Objects.requireNonNull((supportsRemove));
     this.dataTypeFeatures = dataTypeFeatures;
     this.propertyFeatures = propertyFeatures;
     this.elementFeatures = elementFeatures;
@@ -55,30 +47,22 @@ public class VertexPropertyFeatures implements Serializable {
   }
   
   public VertexPropertyFeatures withDataTypeFeatures(hydra.langs.tinkerpop.features.DataTypeFeatures dataTypeFeatures) {
-    if (dataTypeFeatures == null) {
-      throw new IllegalArgumentException("null value for 'dataTypeFeatures' argument");
-    }
+    java.util.Objects.requireNonNull((dataTypeFeatures));
     return new VertexPropertyFeatures(dataTypeFeatures, propertyFeatures, elementFeatures, supportsRemove);
   }
   
   public VertexPropertyFeatures withPropertyFeatures(hydra.langs.tinkerpop.features.PropertyFeatures propertyFeatures) {
-    if (propertyFeatures == null) {
-      throw new IllegalArgumentException("null value for 'propertyFeatures' argument");
-    }
+    java.util.Objects.requireNonNull((propertyFeatures));
     return new VertexPropertyFeatures(dataTypeFeatures, propertyFeatures, elementFeatures, supportsRemove);
   }
   
   public VertexPropertyFeatures withElementFeatures(hydra.langs.tinkerpop.features.ElementFeatures elementFeatures) {
-    if (elementFeatures == null) {
-      throw new IllegalArgumentException("null value for 'elementFeatures' argument");
-    }
+    java.util.Objects.requireNonNull((elementFeatures));
     return new VertexPropertyFeatures(dataTypeFeatures, propertyFeatures, elementFeatures, supportsRemove);
   }
   
   public VertexPropertyFeatures withSupportsRemove(Boolean supportsRemove) {
-    if (supportsRemove == null) {
-      throw new IllegalArgumentException("null value for 'supportsRemove' argument");
-    }
+    java.util.Objects.requireNonNull((supportsRemove));
     return new VertexPropertyFeatures(dataTypeFeatures, propertyFeatures, elementFeatures, supportsRemove);
   }
 }

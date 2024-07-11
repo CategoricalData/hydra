@@ -18,12 +18,8 @@ public class ForeignKey implements Serializable {
   public final java.util.Map<hydra.langs.relationalModel.ColumnName, hydra.langs.relationalModel.ColumnName> keys;
   
   public ForeignKey (hydra.langs.relationalModel.RelationName foreignRelation, java.util.Map<hydra.langs.relationalModel.ColumnName, hydra.langs.relationalModel.ColumnName> keys) {
-    if (foreignRelation == null) {
-      throw new IllegalArgumentException("null value for 'foreignRelation' argument");
-    }
-    if (keys == null) {
-      throw new IllegalArgumentException("null value for 'keys' argument");
-    }
+    java.util.Objects.requireNonNull((foreignRelation));
+    java.util.Objects.requireNonNull((keys));
     this.foreignRelation = foreignRelation;
     this.keys = keys;
   }
@@ -43,16 +39,12 @@ public class ForeignKey implements Serializable {
   }
   
   public ForeignKey withForeignRelation(hydra.langs.relationalModel.RelationName foreignRelation) {
-    if (foreignRelation == null) {
-      throw new IllegalArgumentException("null value for 'foreignRelation' argument");
-    }
+    java.util.Objects.requireNonNull((foreignRelation));
     return new ForeignKey(foreignRelation, keys);
   }
   
   public ForeignKey withKeys(java.util.Map<hydra.langs.relationalModel.ColumnName, hydra.langs.relationalModel.ColumnName> keys) {
-    if (keys == null) {
-      throw new IllegalArgumentException("null value for 'keys' argument");
-    }
+    java.util.Objects.requireNonNull((keys));
     return new ForeignKey(foreignRelation, keys);
   }
 }

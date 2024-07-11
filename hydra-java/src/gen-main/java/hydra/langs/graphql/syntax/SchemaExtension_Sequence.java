@@ -12,12 +12,8 @@ public class SchemaExtension_Sequence implements Serializable {
   public final hydra.langs.graphql.syntax.RootOperationTypeDefinition rootOperationTypeDefinition;
   
   public SchemaExtension_Sequence (hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.RootOperationTypeDefinition rootOperationTypeDefinition) {
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
-    if (rootOperationTypeDefinition == null) {
-      throw new IllegalArgumentException("null value for 'rootOperationTypeDefinition' argument");
-    }
+    java.util.Objects.requireNonNull((directives));
+    java.util.Objects.requireNonNull((rootOperationTypeDefinition));
     this.directives = directives;
     this.rootOperationTypeDefinition = rootOperationTypeDefinition;
   }
@@ -37,16 +33,12 @@ public class SchemaExtension_Sequence implements Serializable {
   }
   
   public SchemaExtension_Sequence withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((directives));
     return new SchemaExtension_Sequence(directives, rootOperationTypeDefinition);
   }
   
   public SchemaExtension_Sequence withRootOperationTypeDefinition(hydra.langs.graphql.syntax.RootOperationTypeDefinition rootOperationTypeDefinition) {
-    if (rootOperationTypeDefinition == null) {
-      throw new IllegalArgumentException("null value for 'rootOperationTypeDefinition' argument");
-    }
+    java.util.Objects.requireNonNull((rootOperationTypeDefinition));
     return new SchemaExtension_Sequence(directives, rootOperationTypeDefinition);
   }
 }

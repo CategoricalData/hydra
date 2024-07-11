@@ -49,9 +49,7 @@ public abstract class AnnotationAxiom implements Serializable {
     public final hydra.langs.owl.syntax.AnnotationAssertion value;
     
     public AnnotationAssertion (hydra.langs.owl.syntax.AnnotationAssertion value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -79,9 +77,7 @@ public abstract class AnnotationAxiom implements Serializable {
     public final hydra.langs.owl.syntax.AnnotationPropertyDomain value;
     
     public AnnotationPropertyDomain (hydra.langs.owl.syntax.AnnotationPropertyDomain value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -109,9 +105,7 @@ public abstract class AnnotationAxiom implements Serializable {
     public final hydra.langs.owl.syntax.AnnotationPropertyRange value;
     
     public AnnotationPropertyRange (hydra.langs.owl.syntax.AnnotationPropertyRange value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -139,9 +133,7 @@ public abstract class AnnotationAxiom implements Serializable {
     public final hydra.langs.owl.syntax.SubAnnotationPropertyOf value;
     
     public SubAnnotationPropertyOf (hydra.langs.owl.syntax.SubAnnotationPropertyOf value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -11,9 +11,7 @@ public class ExtraFeatures<A> {
   public final java.util.function.Function<hydra.core.Type<A>, Boolean> supportsMapKey;
   
   public ExtraFeatures (java.util.function.Function<hydra.core.Type<A>, Boolean> supportsMapKey) {
-    if (supportsMapKey == null) {
-      throw new IllegalArgumentException("null value for 'supportsMapKey' argument");
-    }
+    java.util.Objects.requireNonNull((supportsMapKey));
     this.supportsMapKey = supportsMapKey;
   }
   

@@ -12,12 +12,8 @@ public class ObjectField implements Serializable {
   public final hydra.langs.graphql.syntax.Value value;
   
   public ObjectField (hydra.langs.graphql.syntax.Name name, hydra.langs.graphql.syntax.Value value) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((value));
     this.name = name;
     this.value = value;
   }
@@ -37,16 +33,12 @@ public class ObjectField implements Serializable {
   }
   
   public ObjectField withName(hydra.langs.graphql.syntax.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new ObjectField(name, value);
   }
   
   public ObjectField withValue(hydra.langs.graphql.syntax.Value value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     return new ObjectField(name, value);
   }
 }

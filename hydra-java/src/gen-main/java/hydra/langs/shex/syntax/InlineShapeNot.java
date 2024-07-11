@@ -12,12 +12,8 @@ public class InlineShapeNot implements Serializable {
   public final hydra.langs.shex.syntax.InlineShapeAtom inlineShapeAtom;
   
   public InlineShapeNot (hydra.util.Opt<java.lang.Void> nOT, hydra.langs.shex.syntax.InlineShapeAtom inlineShapeAtom) {
-    if (nOT == null) {
-      throw new IllegalArgumentException("null value for 'nOT' argument");
-    }
-    if (inlineShapeAtom == null) {
-      throw new IllegalArgumentException("null value for 'inlineShapeAtom' argument");
-    }
+    java.util.Objects.requireNonNull((nOT));
+    java.util.Objects.requireNonNull((inlineShapeAtom));
     this.nOT = nOT;
     this.inlineShapeAtom = inlineShapeAtom;
   }
@@ -37,16 +33,12 @@ public class InlineShapeNot implements Serializable {
   }
   
   public InlineShapeNot withNOT(hydra.util.Opt<java.lang.Void> nOT) {
-    if (nOT == null) {
-      throw new IllegalArgumentException("null value for 'nOT' argument");
-    }
+    java.util.Objects.requireNonNull((nOT));
     return new InlineShapeNot(nOT, inlineShapeAtom);
   }
   
   public InlineShapeNot withInlineShapeAtom(hydra.langs.shex.syntax.InlineShapeAtom inlineShapeAtom) {
-    if (inlineShapeAtom == null) {
-      throw new IllegalArgumentException("null value for 'inlineShapeAtom' argument");
-    }
+    java.util.Objects.requireNonNull((inlineShapeAtom));
     return new InlineShapeNot(nOT, inlineShapeAtom);
   }
 }

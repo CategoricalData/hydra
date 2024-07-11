@@ -16,18 +16,10 @@ public class RelationshipDetail implements Serializable {
   public final hydra.util.Opt<hydra.langs.cypher.openCypher.Properties> properties;
   
   public RelationshipDetail (hydra.util.Opt<hydra.langs.cypher.openCypher.Variable> variable, hydra.util.Opt<hydra.langs.cypher.openCypher.RelationshipTypes> types, hydra.util.Opt<hydra.langs.cypher.openCypher.RangeLiteral> range, hydra.util.Opt<hydra.langs.cypher.openCypher.Properties> properties) {
-    if (variable == null) {
-      throw new IllegalArgumentException("null value for 'variable' argument");
-    }
-    if (types == null) {
-      throw new IllegalArgumentException("null value for 'types' argument");
-    }
-    if (range == null) {
-      throw new IllegalArgumentException("null value for 'range' argument");
-    }
-    if (properties == null) {
-      throw new IllegalArgumentException("null value for 'properties' argument");
-    }
+    java.util.Objects.requireNonNull((variable));
+    java.util.Objects.requireNonNull((types));
+    java.util.Objects.requireNonNull((range));
+    java.util.Objects.requireNonNull((properties));
     this.variable = variable;
     this.types = types;
     this.range = range;
@@ -49,30 +41,22 @@ public class RelationshipDetail implements Serializable {
   }
   
   public RelationshipDetail withVariable(hydra.util.Opt<hydra.langs.cypher.openCypher.Variable> variable) {
-    if (variable == null) {
-      throw new IllegalArgumentException("null value for 'variable' argument");
-    }
+    java.util.Objects.requireNonNull((variable));
     return new RelationshipDetail(variable, types, range, properties);
   }
   
   public RelationshipDetail withTypes(hydra.util.Opt<hydra.langs.cypher.openCypher.RelationshipTypes> types) {
-    if (types == null) {
-      throw new IllegalArgumentException("null value for 'types' argument");
-    }
+    java.util.Objects.requireNonNull((types));
     return new RelationshipDetail(variable, types, range, properties);
   }
   
   public RelationshipDetail withRange(hydra.util.Opt<hydra.langs.cypher.openCypher.RangeLiteral> range) {
-    if (range == null) {
-      throw new IllegalArgumentException("null value for 'range' argument");
-    }
+    java.util.Objects.requireNonNull((range));
     return new RelationshipDetail(variable, types, range, properties);
   }
   
   public RelationshipDetail withProperties(hydra.util.Opt<hydra.langs.cypher.openCypher.Properties> properties) {
-    if (properties == null) {
-      throw new IllegalArgumentException("null value for 'properties' argument");
-    }
+    java.util.Objects.requireNonNull((properties));
     return new RelationshipDetail(variable, types, range, properties);
   }
 }

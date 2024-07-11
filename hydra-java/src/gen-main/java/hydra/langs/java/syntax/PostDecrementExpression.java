@@ -10,9 +10,7 @@ public class PostDecrementExpression implements Serializable {
   public final hydra.langs.java.syntax.PostfixExpression value;
   
   public PostDecrementExpression (hydra.langs.java.syntax.PostfixExpression value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

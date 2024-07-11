@@ -12,12 +12,8 @@ public class TraversalMergeArgumentAndNestedTraversal implements Serializable {
   public final hydra.langs.tinkerpop.gremlin.NestedTraversal traversal;
   
   public TraversalMergeArgumentAndNestedTraversal (hydra.langs.tinkerpop.gremlin.TraversalMergeArgument merge, hydra.langs.tinkerpop.gremlin.NestedTraversal traversal) {
-    if (merge == null) {
-      throw new IllegalArgumentException("null value for 'merge' argument");
-    }
-    if (traversal == null) {
-      throw new IllegalArgumentException("null value for 'traversal' argument");
-    }
+    java.util.Objects.requireNonNull((merge));
+    java.util.Objects.requireNonNull((traversal));
     this.merge = merge;
     this.traversal = traversal;
   }
@@ -37,16 +33,12 @@ public class TraversalMergeArgumentAndNestedTraversal implements Serializable {
   }
   
   public TraversalMergeArgumentAndNestedTraversal withMerge(hydra.langs.tinkerpop.gremlin.TraversalMergeArgument merge) {
-    if (merge == null) {
-      throw new IllegalArgumentException("null value for 'merge' argument");
-    }
+    java.util.Objects.requireNonNull((merge));
     return new TraversalMergeArgumentAndNestedTraversal(merge, traversal);
   }
   
   public TraversalMergeArgumentAndNestedTraversal withTraversal(hydra.langs.tinkerpop.gremlin.NestedTraversal traversal) {
-    if (traversal == null) {
-      throw new IllegalArgumentException("null value for 'traversal' argument");
-    }
+    java.util.Objects.requireNonNull((traversal));
     return new TraversalMergeArgumentAndNestedTraversal(merge, traversal);
   }
 }

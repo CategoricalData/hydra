@@ -10,9 +10,7 @@ public class ArrayInitializer implements Serializable {
   public final java.util.List<java.util.List<hydra.langs.java.syntax.VariableInitializer>> value;
   
   public ArrayInitializer (java.util.List<java.util.List<hydra.langs.java.syntax.VariableInitializer>> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

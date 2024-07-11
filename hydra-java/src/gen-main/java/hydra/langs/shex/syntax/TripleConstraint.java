@@ -20,24 +20,12 @@ public class TripleConstraint implements Serializable {
   public final hydra.langs.shex.syntax.SemanticActions semanticActions;
   
   public TripleConstraint (hydra.util.Opt<hydra.langs.shex.syntax.SenseFlags> senseFlags, hydra.langs.shex.syntax.Predicate predicate, hydra.langs.shex.syntax.InlineShapeExpression inlineShapeExpression, hydra.util.Opt<hydra.langs.shex.syntax.Cardinality> cardinality, java.util.List<hydra.langs.shex.syntax.Annotation> listOfAnnotation, hydra.langs.shex.syntax.SemanticActions semanticActions) {
-    if (senseFlags == null) {
-      throw new IllegalArgumentException("null value for 'senseFlags' argument");
-    }
-    if (predicate == null) {
-      throw new IllegalArgumentException("null value for 'predicate' argument");
-    }
-    if (inlineShapeExpression == null) {
-      throw new IllegalArgumentException("null value for 'inlineShapeExpression' argument");
-    }
-    if (cardinality == null) {
-      throw new IllegalArgumentException("null value for 'cardinality' argument");
-    }
-    if (listOfAnnotation == null) {
-      throw new IllegalArgumentException("null value for 'listOfAnnotation' argument");
-    }
-    if (semanticActions == null) {
-      throw new IllegalArgumentException("null value for 'semanticActions' argument");
-    }
+    java.util.Objects.requireNonNull((senseFlags));
+    java.util.Objects.requireNonNull((predicate));
+    java.util.Objects.requireNonNull((inlineShapeExpression));
+    java.util.Objects.requireNonNull((cardinality));
+    java.util.Objects.requireNonNull((listOfAnnotation));
+    java.util.Objects.requireNonNull((semanticActions));
     this.senseFlags = senseFlags;
     this.predicate = predicate;
     this.inlineShapeExpression = inlineShapeExpression;
@@ -61,44 +49,32 @@ public class TripleConstraint implements Serializable {
   }
   
   public TripleConstraint withSenseFlags(hydra.util.Opt<hydra.langs.shex.syntax.SenseFlags> senseFlags) {
-    if (senseFlags == null) {
-      throw new IllegalArgumentException("null value for 'senseFlags' argument");
-    }
+    java.util.Objects.requireNonNull((senseFlags));
     return new TripleConstraint(senseFlags, predicate, inlineShapeExpression, cardinality, listOfAnnotation, semanticActions);
   }
   
   public TripleConstraint withPredicate(hydra.langs.shex.syntax.Predicate predicate) {
-    if (predicate == null) {
-      throw new IllegalArgumentException("null value for 'predicate' argument");
-    }
+    java.util.Objects.requireNonNull((predicate));
     return new TripleConstraint(senseFlags, predicate, inlineShapeExpression, cardinality, listOfAnnotation, semanticActions);
   }
   
   public TripleConstraint withInlineShapeExpression(hydra.langs.shex.syntax.InlineShapeExpression inlineShapeExpression) {
-    if (inlineShapeExpression == null) {
-      throw new IllegalArgumentException("null value for 'inlineShapeExpression' argument");
-    }
+    java.util.Objects.requireNonNull((inlineShapeExpression));
     return new TripleConstraint(senseFlags, predicate, inlineShapeExpression, cardinality, listOfAnnotation, semanticActions);
   }
   
   public TripleConstraint withCardinality(hydra.util.Opt<hydra.langs.shex.syntax.Cardinality> cardinality) {
-    if (cardinality == null) {
-      throw new IllegalArgumentException("null value for 'cardinality' argument");
-    }
+    java.util.Objects.requireNonNull((cardinality));
     return new TripleConstraint(senseFlags, predicate, inlineShapeExpression, cardinality, listOfAnnotation, semanticActions);
   }
   
   public TripleConstraint withListOfAnnotation(java.util.List<hydra.langs.shex.syntax.Annotation> listOfAnnotation) {
-    if (listOfAnnotation == null) {
-      throw new IllegalArgumentException("null value for 'listOfAnnotation' argument");
-    }
+    java.util.Objects.requireNonNull((listOfAnnotation));
     return new TripleConstraint(senseFlags, predicate, inlineShapeExpression, cardinality, listOfAnnotation, semanticActions);
   }
   
   public TripleConstraint withSemanticActions(hydra.langs.shex.syntax.SemanticActions semanticActions) {
-    if (semanticActions == null) {
-      throw new IllegalArgumentException("null value for 'semanticActions' argument");
-    }
+    java.util.Objects.requireNonNull((semanticActions));
     return new TripleConstraint(senseFlags, predicate, inlineShapeExpression, cardinality, listOfAnnotation, semanticActions);
   }
 }

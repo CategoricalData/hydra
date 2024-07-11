@@ -14,15 +14,9 @@ public class TraversalStrategy implements Serializable {
   public final java.util.List<hydra.langs.tinkerpop.gremlin.Configuration> configurations;
   
   public TraversalStrategy (Boolean new_, hydra.langs.tinkerpop.gremlin.Identifier class_, java.util.List<hydra.langs.tinkerpop.gremlin.Configuration> configurations) {
-    if (new_ == null) {
-      throw new IllegalArgumentException("null value for 'new' argument");
-    }
-    if (class_ == null) {
-      throw new IllegalArgumentException("null value for 'class' argument");
-    }
-    if (configurations == null) {
-      throw new IllegalArgumentException("null value for 'configurations' argument");
-    }
+    java.util.Objects.requireNonNull((new_));
+    java.util.Objects.requireNonNull((class_));
+    java.util.Objects.requireNonNull((configurations));
     this.new_ = new_;
     this.class_ = class_;
     this.configurations = configurations;
@@ -43,23 +37,17 @@ public class TraversalStrategy implements Serializable {
   }
   
   public TraversalStrategy withNew(Boolean new_) {
-    if (new_ == null) {
-      throw new IllegalArgumentException("null value for 'new' argument");
-    }
+    java.util.Objects.requireNonNull((new_));
     return new TraversalStrategy(new_, class_, configurations);
   }
   
   public TraversalStrategy withClass(hydra.langs.tinkerpop.gremlin.Identifier class_) {
-    if (class_ == null) {
-      throw new IllegalArgumentException("null value for 'class' argument");
-    }
+    java.util.Objects.requireNonNull((class_));
     return new TraversalStrategy(new_, class_, configurations);
   }
   
   public TraversalStrategy withConfigurations(java.util.List<hydra.langs.tinkerpop.gremlin.Configuration> configurations) {
-    if (configurations == null) {
-      throw new IllegalArgumentException("null value for 'configurations' argument");
-    }
+    java.util.Objects.requireNonNull((configurations));
     return new TraversalStrategy(new_, class_, configurations);
   }
 }

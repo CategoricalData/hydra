@@ -62,9 +62,7 @@ public abstract class TypeCondition implements Serializable {
     public final hydra.langs.graphql.syntax.NamedType value;
     
     public NamedType (hydra.langs.graphql.syntax.NamedType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

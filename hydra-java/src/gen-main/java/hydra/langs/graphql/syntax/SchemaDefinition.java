@@ -14,15 +14,9 @@ public class SchemaDefinition implements Serializable {
   public final hydra.langs.graphql.syntax.RootOperationTypeDefinition rootOperationTypeDefinition;
   
   public SchemaDefinition (hydra.util.Opt<hydra.langs.graphql.syntax.Description> description, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.RootOperationTypeDefinition rootOperationTypeDefinition) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
-    if (rootOperationTypeDefinition == null) {
-      throw new IllegalArgumentException("null value for 'rootOperationTypeDefinition' argument");
-    }
+    java.util.Objects.requireNonNull((description));
+    java.util.Objects.requireNonNull((directives));
+    java.util.Objects.requireNonNull((rootOperationTypeDefinition));
     this.description = description;
     this.directives = directives;
     this.rootOperationTypeDefinition = rootOperationTypeDefinition;
@@ -43,23 +37,17 @@ public class SchemaDefinition implements Serializable {
   }
   
   public SchemaDefinition withDescription(hydra.util.Opt<hydra.langs.graphql.syntax.Description> description) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
+    java.util.Objects.requireNonNull((description));
     return new SchemaDefinition(description, directives, rootOperationTypeDefinition);
   }
   
   public SchemaDefinition withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((directives));
     return new SchemaDefinition(description, directives, rootOperationTypeDefinition);
   }
   
   public SchemaDefinition withRootOperationTypeDefinition(hydra.langs.graphql.syntax.RootOperationTypeDefinition rootOperationTypeDefinition) {
-    if (rootOperationTypeDefinition == null) {
-      throw new IllegalArgumentException("null value for 'rootOperationTypeDefinition' argument");
-    }
+    java.util.Objects.requireNonNull((rootOperationTypeDefinition));
     return new SchemaDefinition(description, directives, rootOperationTypeDefinition);
   }
 }

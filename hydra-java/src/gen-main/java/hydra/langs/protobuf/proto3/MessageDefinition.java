@@ -26,15 +26,9 @@ public class MessageDefinition implements Serializable {
   public final java.util.List<hydra.langs.protobuf.proto3.Option> options;
   
   public MessageDefinition (hydra.langs.protobuf.proto3.TypeName name, java.util.List<hydra.langs.protobuf.proto3.Field> fields, java.util.List<hydra.langs.protobuf.proto3.Option> options) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (fields == null) {
-      throw new IllegalArgumentException("null value for 'fields' argument");
-    }
-    if (options == null) {
-      throw new IllegalArgumentException("null value for 'options' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((fields));
+    java.util.Objects.requireNonNull((options));
     this.name = name;
     this.fields = fields;
     this.options = options;
@@ -55,23 +49,17 @@ public class MessageDefinition implements Serializable {
   }
   
   public MessageDefinition withName(hydra.langs.protobuf.proto3.TypeName name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new MessageDefinition(name, fields, options);
   }
   
   public MessageDefinition withFields(java.util.List<hydra.langs.protobuf.proto3.Field> fields) {
-    if (fields == null) {
-      throw new IllegalArgumentException("null value for 'fields' argument");
-    }
+    java.util.Objects.requireNonNull((fields));
     return new MessageDefinition(name, fields, options);
   }
   
   public MessageDefinition withOptions(java.util.List<hydra.langs.protobuf.proto3.Option> options) {
-    if (options == null) {
-      throw new IllegalArgumentException("null value for 'options' argument");
-    }
+    java.util.Objects.requireNonNull((options));
     return new MessageDefinition(name, fields, options);
   }
 }

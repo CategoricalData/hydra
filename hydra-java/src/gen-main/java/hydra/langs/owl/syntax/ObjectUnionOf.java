@@ -10,9 +10,7 @@ public class ObjectUnionOf implements Serializable {
   public final java.util.List<hydra.langs.owl.syntax.ClassExpression> value;
   
   public ObjectUnionOf (java.util.List<hydra.langs.owl.syntax.ClassExpression> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

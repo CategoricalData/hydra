@@ -15,12 +15,8 @@ public class TypedTerm<A> implements Serializable {
   public final hydra.core.Term<A> term;
   
   public TypedTerm (hydra.core.Type<A> type, hydra.core.Term<A> term) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (term == null) {
-      throw new IllegalArgumentException("null value for 'term' argument");
-    }
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((term));
     this.type = type;
     this.term = term;
   }
@@ -40,16 +36,12 @@ public class TypedTerm<A> implements Serializable {
   }
   
   public TypedTerm withType(hydra.core.Type<A> type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new TypedTerm(type, term);
   }
   
   public TypedTerm withTerm(hydra.core.Term<A> term) {
-    if (term == null) {
-      throw new IllegalArgumentException("null value for 'term' argument");
-    }
+    java.util.Objects.requireNonNull((term));
     return new TypedTerm(type, term);
   }
 }

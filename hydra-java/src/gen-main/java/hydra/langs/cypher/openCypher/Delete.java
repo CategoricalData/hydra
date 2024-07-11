@@ -12,12 +12,8 @@ public class Delete implements Serializable {
   public final java.util.List<hydra.langs.cypher.openCypher.Expression> expressions;
   
   public Delete (Boolean detach, java.util.List<hydra.langs.cypher.openCypher.Expression> expressions) {
-    if (detach == null) {
-      throw new IllegalArgumentException("null value for 'detach' argument");
-    }
-    if (expressions == null) {
-      throw new IllegalArgumentException("null value for 'expressions' argument");
-    }
+    java.util.Objects.requireNonNull((detach));
+    java.util.Objects.requireNonNull((expressions));
     this.detach = detach;
     this.expressions = expressions;
   }
@@ -37,16 +33,12 @@ public class Delete implements Serializable {
   }
   
   public Delete withDetach(Boolean detach) {
-    if (detach == null) {
-      throw new IllegalArgumentException("null value for 'detach' argument");
-    }
+    java.util.Objects.requireNonNull((detach));
     return new Delete(detach, expressions);
   }
   
   public Delete withExpressions(java.util.List<hydra.langs.cypher.openCypher.Expression> expressions) {
-    if (expressions == null) {
-      throw new IllegalArgumentException("null value for 'expressions' argument");
-    }
+    java.util.Objects.requireNonNull((expressions));
     return new Delete(detach, expressions);
   }
 }

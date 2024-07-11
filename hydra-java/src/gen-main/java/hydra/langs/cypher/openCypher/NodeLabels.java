@@ -10,9 +10,7 @@ public class NodeLabels implements Serializable {
   public final java.util.List<hydra.langs.cypher.openCypher.NodeLabel> value;
   
   public NodeLabels (java.util.List<hydra.langs.cypher.openCypher.NodeLabel> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

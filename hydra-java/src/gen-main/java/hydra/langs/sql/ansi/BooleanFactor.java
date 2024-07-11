@@ -12,12 +12,8 @@ public class BooleanFactor implements Serializable {
   public final hydra.langs.sql.ansi.BooleanTest booleanTest;
   
   public BooleanFactor (hydra.util.Opt<java.lang.Void> nOT, hydra.langs.sql.ansi.BooleanTest booleanTest) {
-    if (nOT == null) {
-      throw new IllegalArgumentException("null value for 'nOT' argument");
-    }
-    if (booleanTest == null) {
-      throw new IllegalArgumentException("null value for 'booleanTest' argument");
-    }
+    java.util.Objects.requireNonNull((nOT));
+    java.util.Objects.requireNonNull((booleanTest));
     this.nOT = nOT;
     this.booleanTest = booleanTest;
   }
@@ -37,16 +33,12 @@ public class BooleanFactor implements Serializable {
   }
   
   public BooleanFactor withNOT(hydra.util.Opt<java.lang.Void> nOT) {
-    if (nOT == null) {
-      throw new IllegalArgumentException("null value for 'nOT' argument");
-    }
+    java.util.Objects.requireNonNull((nOT));
     return new BooleanFactor(nOT, booleanTest);
   }
   
   public BooleanFactor withBooleanTest(hydra.langs.sql.ansi.BooleanTest booleanTest) {
-    if (booleanTest == null) {
-      throw new IllegalArgumentException("null value for 'booleanTest' argument");
-    }
+    java.util.Objects.requireNonNull((booleanTest));
     return new BooleanFactor(nOT, booleanTest);
   }
 }

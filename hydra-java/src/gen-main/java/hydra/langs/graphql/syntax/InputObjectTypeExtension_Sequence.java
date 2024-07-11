@@ -14,15 +14,9 @@ public class InputObjectTypeExtension_Sequence implements Serializable {
   public final hydra.langs.graphql.syntax.InputFieldsDefinition inputFieldsDefinition;
   
   public InputObjectTypeExtension_Sequence (hydra.langs.graphql.syntax.Name name, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.InputFieldsDefinition inputFieldsDefinition) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
-    if (inputFieldsDefinition == null) {
-      throw new IllegalArgumentException("null value for 'inputFieldsDefinition' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((directives));
+    java.util.Objects.requireNonNull((inputFieldsDefinition));
     this.name = name;
     this.directives = directives;
     this.inputFieldsDefinition = inputFieldsDefinition;
@@ -43,23 +37,17 @@ public class InputObjectTypeExtension_Sequence implements Serializable {
   }
   
   public InputObjectTypeExtension_Sequence withName(hydra.langs.graphql.syntax.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new InputObjectTypeExtension_Sequence(name, directives, inputFieldsDefinition);
   }
   
   public InputObjectTypeExtension_Sequence withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((directives));
     return new InputObjectTypeExtension_Sequence(name, directives, inputFieldsDefinition);
   }
   
   public InputObjectTypeExtension_Sequence withInputFieldsDefinition(hydra.langs.graphql.syntax.InputFieldsDefinition inputFieldsDefinition) {
-    if (inputFieldsDefinition == null) {
-      throw new IllegalArgumentException("null value for 'inputFieldsDefinition' argument");
-    }
+    java.util.Objects.requireNonNull((inputFieldsDefinition));
     return new InputObjectTypeExtension_Sequence(name, directives, inputFieldsDefinition);
   }
 }

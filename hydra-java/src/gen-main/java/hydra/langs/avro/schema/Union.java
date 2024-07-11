@@ -10,9 +10,7 @@ public class Union implements Serializable {
   public final java.util.List<hydra.langs.avro.schema.Schema> value;
   
   public Union (java.util.List<hydra.langs.avro.schema.Schema> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

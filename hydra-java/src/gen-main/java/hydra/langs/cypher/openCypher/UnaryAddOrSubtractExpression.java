@@ -12,12 +12,8 @@ public class UnaryAddOrSubtractExpression implements Serializable {
   public final hydra.langs.cypher.openCypher.NonArithmeticOperatorExpression expression;
   
   public UnaryAddOrSubtractExpression (hydra.util.Opt<hydra.langs.cypher.openCypher.AddOrSubtractOperator> operator, hydra.langs.cypher.openCypher.NonArithmeticOperatorExpression expression) {
-    if (operator == null) {
-      throw new IllegalArgumentException("null value for 'operator' argument");
-    }
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((operator));
+    java.util.Objects.requireNonNull((expression));
     this.operator = operator;
     this.expression = expression;
   }
@@ -37,16 +33,12 @@ public class UnaryAddOrSubtractExpression implements Serializable {
   }
   
   public UnaryAddOrSubtractExpression withOperator(hydra.util.Opt<hydra.langs.cypher.openCypher.AddOrSubtractOperator> operator) {
-    if (operator == null) {
-      throw new IllegalArgumentException("null value for 'operator' argument");
-    }
+    java.util.Objects.requireNonNull((operator));
     return new UnaryAddOrSubtractExpression(operator, expression);
   }
   
   public UnaryAddOrSubtractExpression withExpression(hydra.langs.cypher.openCypher.NonArithmeticOperatorExpression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new UnaryAddOrSubtractExpression(operator, expression);
   }
 }

@@ -14,15 +14,9 @@ public class Type_ApplyInfix implements Serializable {
   public final hydra.langs.scala.meta.Type rhs;
   
   public Type_ApplyInfix (hydra.langs.scala.meta.Type lhs, hydra.langs.scala.meta.Type_Name op, hydra.langs.scala.meta.Type rhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
-    if (op == null) {
-      throw new IllegalArgumentException("null value for 'op' argument");
-    }
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
+    java.util.Objects.requireNonNull((op));
+    java.util.Objects.requireNonNull((rhs));
     this.lhs = lhs;
     this.op = op;
     this.rhs = rhs;
@@ -43,23 +37,17 @@ public class Type_ApplyInfix implements Serializable {
   }
   
   public Type_ApplyInfix withLhs(hydra.langs.scala.meta.Type lhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
     return new Type_ApplyInfix(lhs, op, rhs);
   }
   
   public Type_ApplyInfix withOp(hydra.langs.scala.meta.Type_Name op) {
-    if (op == null) {
-      throw new IllegalArgumentException("null value for 'op' argument");
-    }
+    java.util.Objects.requireNonNull((op));
     return new Type_ApplyInfix(lhs, op, rhs);
   }
   
   public Type_ApplyInfix withRhs(hydra.langs.scala.meta.Type rhs) {
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((rhs));
     return new Type_ApplyInfix(lhs, op, rhs);
   }
 }

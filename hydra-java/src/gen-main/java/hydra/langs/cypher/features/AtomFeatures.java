@@ -66,39 +66,17 @@ public class AtomFeatures implements Serializable {
   public final Boolean variable;
   
   public AtomFeatures (Boolean caseExpression, Boolean count, Boolean existentialSubquery, Boolean functionInvocation, hydra.util.Opt<hydra.langs.cypher.features.ListFeatures> list, hydra.util.Opt<hydra.langs.cypher.features.LiteralFeatures> literal, Boolean parameter, Boolean patternComprehension, Boolean patternPredicate, hydra.util.Opt<hydra.langs.cypher.features.QuantifierFeatures> quantifier, Boolean variable) {
-    if (caseExpression == null) {
-      throw new IllegalArgumentException("null value for 'caseExpression' argument");
-    }
-    if (count == null) {
-      throw new IllegalArgumentException("null value for 'count' argument");
-    }
-    if (existentialSubquery == null) {
-      throw new IllegalArgumentException("null value for 'existentialSubquery' argument");
-    }
-    if (functionInvocation == null) {
-      throw new IllegalArgumentException("null value for 'functionInvocation' argument");
-    }
-    if (list == null) {
-      throw new IllegalArgumentException("null value for 'list' argument");
-    }
-    if (literal == null) {
-      throw new IllegalArgumentException("null value for 'literal' argument");
-    }
-    if (parameter == null) {
-      throw new IllegalArgumentException("null value for 'parameter' argument");
-    }
-    if (patternComprehension == null) {
-      throw new IllegalArgumentException("null value for 'patternComprehension' argument");
-    }
-    if (patternPredicate == null) {
-      throw new IllegalArgumentException("null value for 'patternPredicate' argument");
-    }
-    if (quantifier == null) {
-      throw new IllegalArgumentException("null value for 'quantifier' argument");
-    }
-    if (variable == null) {
-      throw new IllegalArgumentException("null value for 'variable' argument");
-    }
+    java.util.Objects.requireNonNull((caseExpression));
+    java.util.Objects.requireNonNull((count));
+    java.util.Objects.requireNonNull((existentialSubquery));
+    java.util.Objects.requireNonNull((functionInvocation));
+    java.util.Objects.requireNonNull((list));
+    java.util.Objects.requireNonNull((literal));
+    java.util.Objects.requireNonNull((parameter));
+    java.util.Objects.requireNonNull((patternComprehension));
+    java.util.Objects.requireNonNull((patternPredicate));
+    java.util.Objects.requireNonNull((quantifier));
+    java.util.Objects.requireNonNull((variable));
     this.caseExpression = caseExpression;
     this.count = count;
     this.existentialSubquery = existentialSubquery;
@@ -127,79 +105,57 @@ public class AtomFeatures implements Serializable {
   }
   
   public AtomFeatures withCaseExpression(Boolean caseExpression) {
-    if (caseExpression == null) {
-      throw new IllegalArgumentException("null value for 'caseExpression' argument");
-    }
+    java.util.Objects.requireNonNull((caseExpression));
     return new AtomFeatures(caseExpression, count, existentialSubquery, functionInvocation, list, literal, parameter, patternComprehension, patternPredicate, quantifier, variable);
   }
   
   public AtomFeatures withCount(Boolean count) {
-    if (count == null) {
-      throw new IllegalArgumentException("null value for 'count' argument");
-    }
+    java.util.Objects.requireNonNull((count));
     return new AtomFeatures(caseExpression, count, existentialSubquery, functionInvocation, list, literal, parameter, patternComprehension, patternPredicate, quantifier, variable);
   }
   
   public AtomFeatures withExistentialSubquery(Boolean existentialSubquery) {
-    if (existentialSubquery == null) {
-      throw new IllegalArgumentException("null value for 'existentialSubquery' argument");
-    }
+    java.util.Objects.requireNonNull((existentialSubquery));
     return new AtomFeatures(caseExpression, count, existentialSubquery, functionInvocation, list, literal, parameter, patternComprehension, patternPredicate, quantifier, variable);
   }
   
   public AtomFeatures withFunctionInvocation(Boolean functionInvocation) {
-    if (functionInvocation == null) {
-      throw new IllegalArgumentException("null value for 'functionInvocation' argument");
-    }
+    java.util.Objects.requireNonNull((functionInvocation));
     return new AtomFeatures(caseExpression, count, existentialSubquery, functionInvocation, list, literal, parameter, patternComprehension, patternPredicate, quantifier, variable);
   }
   
   public AtomFeatures withList(hydra.util.Opt<hydra.langs.cypher.features.ListFeatures> list) {
-    if (list == null) {
-      throw new IllegalArgumentException("null value for 'list' argument");
-    }
+    java.util.Objects.requireNonNull((list));
     return new AtomFeatures(caseExpression, count, existentialSubquery, functionInvocation, list, literal, parameter, patternComprehension, patternPredicate, quantifier, variable);
   }
   
   public AtomFeatures withLiteral(hydra.util.Opt<hydra.langs.cypher.features.LiteralFeatures> literal) {
-    if (literal == null) {
-      throw new IllegalArgumentException("null value for 'literal' argument");
-    }
+    java.util.Objects.requireNonNull((literal));
     return new AtomFeatures(caseExpression, count, existentialSubquery, functionInvocation, list, literal, parameter, patternComprehension, patternPredicate, quantifier, variable);
   }
   
   public AtomFeatures withParameter(Boolean parameter) {
-    if (parameter == null) {
-      throw new IllegalArgumentException("null value for 'parameter' argument");
-    }
+    java.util.Objects.requireNonNull((parameter));
     return new AtomFeatures(caseExpression, count, existentialSubquery, functionInvocation, list, literal, parameter, patternComprehension, patternPredicate, quantifier, variable);
   }
   
   public AtomFeatures withPatternComprehension(Boolean patternComprehension) {
-    if (patternComprehension == null) {
-      throw new IllegalArgumentException("null value for 'patternComprehension' argument");
-    }
+    java.util.Objects.requireNonNull((patternComprehension));
     return new AtomFeatures(caseExpression, count, existentialSubquery, functionInvocation, list, literal, parameter, patternComprehension, patternPredicate, quantifier, variable);
   }
   
   public AtomFeatures withPatternPredicate(Boolean patternPredicate) {
-    if (patternPredicate == null) {
-      throw new IllegalArgumentException("null value for 'patternPredicate' argument");
-    }
+    java.util.Objects.requireNonNull((patternPredicate));
     return new AtomFeatures(caseExpression, count, existentialSubquery, functionInvocation, list, literal, parameter, patternComprehension, patternPredicate, quantifier, variable);
   }
   
   public AtomFeatures withQuantifier(hydra.util.Opt<hydra.langs.cypher.features.QuantifierFeatures> quantifier) {
-    if (quantifier == null) {
-      throw new IllegalArgumentException("null value for 'quantifier' argument");
-    }
+    java.util.Objects.requireNonNull((quantifier));
     return new AtomFeatures(caseExpression, count, existentialSubquery, functionInvocation, list, literal, parameter, patternComprehension, patternPredicate, quantifier, variable);
   }
   
   public AtomFeatures withVariable(Boolean variable) {
-    if (variable == null) {
-      throw new IllegalArgumentException("null value for 'variable' argument");
-    }
+    java.util.Objects.requireNonNull((variable));
     return new AtomFeatures(caseExpression, count, existentialSubquery, functionInvocation, list, literal, parameter, patternComprehension, patternPredicate, quantifier, variable);
   }
 }

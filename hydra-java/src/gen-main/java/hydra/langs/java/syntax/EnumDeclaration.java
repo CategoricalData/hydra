@@ -16,18 +16,10 @@ public class EnumDeclaration implements Serializable {
   public final hydra.langs.java.syntax.EnumBody body;
   
   public EnumDeclaration (java.util.List<hydra.langs.java.syntax.ClassModifier> modifiers, hydra.langs.java.syntax.TypeIdentifier identifier, java.util.List<hydra.langs.java.syntax.InterfaceType> implements_, hydra.langs.java.syntax.EnumBody body) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
-    if (implements_ == null) {
-      throw new IllegalArgumentException("null value for 'implements' argument");
-    }
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
+    java.util.Objects.requireNonNull((identifier));
+    java.util.Objects.requireNonNull((implements_));
+    java.util.Objects.requireNonNull((body));
     this.modifiers = modifiers;
     this.identifier = identifier;
     this.implements_ = implements_;
@@ -49,30 +41,22 @@ public class EnumDeclaration implements Serializable {
   }
   
   public EnumDeclaration withModifiers(java.util.List<hydra.langs.java.syntax.ClassModifier> modifiers) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
     return new EnumDeclaration(modifiers, identifier, implements_, body);
   }
   
   public EnumDeclaration withIdentifier(hydra.langs.java.syntax.TypeIdentifier identifier) {
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
+    java.util.Objects.requireNonNull((identifier));
     return new EnumDeclaration(modifiers, identifier, implements_, body);
   }
   
   public EnumDeclaration withImplements(java.util.List<hydra.langs.java.syntax.InterfaceType> implements_) {
-    if (implements_ == null) {
-      throw new IllegalArgumentException("null value for 'implements' argument");
-    }
+    java.util.Objects.requireNonNull((implements_));
     return new EnumDeclaration(modifiers, identifier, implements_, body);
   }
   
   public EnumDeclaration withBody(hydra.langs.java.syntax.EnumBody body) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((body));
     return new EnumDeclaration(modifiers, identifier, implements_, body);
   }
 }

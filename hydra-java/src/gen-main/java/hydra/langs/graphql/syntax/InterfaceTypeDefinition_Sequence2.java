@@ -16,18 +16,10 @@ public class InterfaceTypeDefinition_Sequence2 implements Serializable {
   public final hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives;
   
   public InterfaceTypeDefinition_Sequence2 (hydra.util.Opt<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.Name name, hydra.langs.graphql.syntax.ImplementsInterfaces implementsInterfaces, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (implementsInterfaces == null) {
-      throw new IllegalArgumentException("null value for 'implementsInterfaces' argument");
-    }
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((description));
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((implementsInterfaces));
+    java.util.Objects.requireNonNull((directives));
     this.description = description;
     this.name = name;
     this.implementsInterfaces = implementsInterfaces;
@@ -49,30 +41,22 @@ public class InterfaceTypeDefinition_Sequence2 implements Serializable {
   }
   
   public InterfaceTypeDefinition_Sequence2 withDescription(hydra.util.Opt<hydra.langs.graphql.syntax.Description> description) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
+    java.util.Objects.requireNonNull((description));
     return new InterfaceTypeDefinition_Sequence2(description, name, implementsInterfaces, directives);
   }
   
   public InterfaceTypeDefinition_Sequence2 withName(hydra.langs.graphql.syntax.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new InterfaceTypeDefinition_Sequence2(description, name, implementsInterfaces, directives);
   }
   
   public InterfaceTypeDefinition_Sequence2 withImplementsInterfaces(hydra.langs.graphql.syntax.ImplementsInterfaces implementsInterfaces) {
-    if (implementsInterfaces == null) {
-      throw new IllegalArgumentException("null value for 'implementsInterfaces' argument");
-    }
+    java.util.Objects.requireNonNull((implementsInterfaces));
     return new InterfaceTypeDefinition_Sequence2(description, name, implementsInterfaces, directives);
   }
   
   public InterfaceTypeDefinition_Sequence2 withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((directives));
     return new InterfaceTypeDefinition_Sequence2(description, name, implementsInterfaces, directives);
   }
 }

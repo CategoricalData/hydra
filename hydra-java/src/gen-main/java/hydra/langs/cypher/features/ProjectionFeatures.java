@@ -46,27 +46,13 @@ public class ProjectionFeatures implements Serializable {
   public final Boolean sortOrder;
   
   public ProjectionFeatures (Boolean limit, Boolean orderBy, Boolean projectDistinct, Boolean projectAll, Boolean projectAs, Boolean skip, Boolean sortOrder) {
-    if (limit == null) {
-      throw new IllegalArgumentException("null value for 'limit' argument");
-    }
-    if (orderBy == null) {
-      throw new IllegalArgumentException("null value for 'orderBy' argument");
-    }
-    if (projectDistinct == null) {
-      throw new IllegalArgumentException("null value for 'projectDistinct' argument");
-    }
-    if (projectAll == null) {
-      throw new IllegalArgumentException("null value for 'projectAll' argument");
-    }
-    if (projectAs == null) {
-      throw new IllegalArgumentException("null value for 'projectAs' argument");
-    }
-    if (skip == null) {
-      throw new IllegalArgumentException("null value for 'skip' argument");
-    }
-    if (sortOrder == null) {
-      throw new IllegalArgumentException("null value for 'sortOrder' argument");
-    }
+    java.util.Objects.requireNonNull((limit));
+    java.util.Objects.requireNonNull((orderBy));
+    java.util.Objects.requireNonNull((projectDistinct));
+    java.util.Objects.requireNonNull((projectAll));
+    java.util.Objects.requireNonNull((projectAs));
+    java.util.Objects.requireNonNull((skip));
+    java.util.Objects.requireNonNull((sortOrder));
     this.limit = limit;
     this.orderBy = orderBy;
     this.projectDistinct = projectDistinct;
@@ -91,51 +77,37 @@ public class ProjectionFeatures implements Serializable {
   }
   
   public ProjectionFeatures withLimit(Boolean limit) {
-    if (limit == null) {
-      throw new IllegalArgumentException("null value for 'limit' argument");
-    }
+    java.util.Objects.requireNonNull((limit));
     return new ProjectionFeatures(limit, orderBy, projectDistinct, projectAll, projectAs, skip, sortOrder);
   }
   
   public ProjectionFeatures withOrderBy(Boolean orderBy) {
-    if (orderBy == null) {
-      throw new IllegalArgumentException("null value for 'orderBy' argument");
-    }
+    java.util.Objects.requireNonNull((orderBy));
     return new ProjectionFeatures(limit, orderBy, projectDistinct, projectAll, projectAs, skip, sortOrder);
   }
   
   public ProjectionFeatures withProjectDistinct(Boolean projectDistinct) {
-    if (projectDistinct == null) {
-      throw new IllegalArgumentException("null value for 'projectDistinct' argument");
-    }
+    java.util.Objects.requireNonNull((projectDistinct));
     return new ProjectionFeatures(limit, orderBy, projectDistinct, projectAll, projectAs, skip, sortOrder);
   }
   
   public ProjectionFeatures withProjectAll(Boolean projectAll) {
-    if (projectAll == null) {
-      throw new IllegalArgumentException("null value for 'projectAll' argument");
-    }
+    java.util.Objects.requireNonNull((projectAll));
     return new ProjectionFeatures(limit, orderBy, projectDistinct, projectAll, projectAs, skip, sortOrder);
   }
   
   public ProjectionFeatures withProjectAs(Boolean projectAs) {
-    if (projectAs == null) {
-      throw new IllegalArgumentException("null value for 'projectAs' argument");
-    }
+    java.util.Objects.requireNonNull((projectAs));
     return new ProjectionFeatures(limit, orderBy, projectDistinct, projectAll, projectAs, skip, sortOrder);
   }
   
   public ProjectionFeatures withSkip(Boolean skip) {
-    if (skip == null) {
-      throw new IllegalArgumentException("null value for 'skip' argument");
-    }
+    java.util.Objects.requireNonNull((skip));
     return new ProjectionFeatures(limit, orderBy, projectDistinct, projectAll, projectAs, skip, sortOrder);
   }
   
   public ProjectionFeatures withSortOrder(Boolean sortOrder) {
-    if (sortOrder == null) {
-      throw new IllegalArgumentException("null value for 'sortOrder' argument");
-    }
+    java.util.Objects.requireNonNull((sortOrder));
     return new ProjectionFeatures(limit, orderBy, projectDistinct, projectAll, projectAs, skip, sortOrder);
   }
 }

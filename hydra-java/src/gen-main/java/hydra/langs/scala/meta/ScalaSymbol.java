@@ -10,9 +10,7 @@ public class ScalaSymbol implements Serializable {
   public final String name;
   
   public ScalaSymbol (String name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     this.name = name;
   }
   

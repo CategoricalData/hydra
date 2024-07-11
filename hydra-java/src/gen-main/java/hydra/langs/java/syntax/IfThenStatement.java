@@ -12,12 +12,8 @@ public class IfThenStatement implements Serializable {
   public final hydra.langs.java.syntax.Statement statement;
   
   public IfThenStatement (hydra.langs.java.syntax.Expression expression, hydra.langs.java.syntax.Statement statement) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
-    if (statement == null) {
-      throw new IllegalArgumentException("null value for 'statement' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
+    java.util.Objects.requireNonNull((statement));
     this.expression = expression;
     this.statement = statement;
   }
@@ -37,16 +33,12 @@ public class IfThenStatement implements Serializable {
   }
   
   public IfThenStatement withExpression(hydra.langs.java.syntax.Expression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new IfThenStatement(expression, statement);
   }
   
   public IfThenStatement withStatement(hydra.langs.java.syntax.Statement statement) {
-    if (statement == null) {
-      throw new IllegalArgumentException("null value for 'statement' argument");
-    }
+    java.util.Objects.requireNonNull((statement));
     return new IfThenStatement(expression, statement);
   }
 }

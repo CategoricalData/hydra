@@ -145,9 +145,7 @@ public abstract class GenericLiteral implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.NumericLiteral value;
     
     public Numeric (hydra.langs.tinkerpop.gremlin.NumericLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -175,9 +173,7 @@ public abstract class GenericLiteral implements Serializable {
     public final Boolean value;
     
     public Boolean_ (Boolean value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -205,9 +201,7 @@ public abstract class GenericLiteral implements Serializable {
     public final String value;
     
     public String_ (String value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -235,9 +229,7 @@ public abstract class GenericLiteral implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.DateLiteral value;
     
     public Date (hydra.langs.tinkerpop.gremlin.DateLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -340,9 +332,7 @@ public abstract class GenericLiteral implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalToken value;
     
     public TraversalToken (hydra.langs.tinkerpop.gremlin.TraversalToken value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -370,9 +360,7 @@ public abstract class GenericLiteral implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalCardinality value;
     
     public TraversalCardinality (hydra.langs.tinkerpop.gremlin.TraversalCardinality value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -400,9 +388,7 @@ public abstract class GenericLiteral implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalDirection value;
     
     public TraversalDirection (hydra.langs.tinkerpop.gremlin.TraversalDirection value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -430,9 +416,7 @@ public abstract class GenericLiteral implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalMerge value;
     
     public TraversalMerge (hydra.langs.tinkerpop.gremlin.TraversalMerge value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -460,9 +444,7 @@ public abstract class GenericLiteral implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalPick value;
     
     public TraversalPick (hydra.langs.tinkerpop.gremlin.TraversalPick value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -490,9 +472,7 @@ public abstract class GenericLiteral implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalDT value;
     
     public TraversalDT (hydra.langs.tinkerpop.gremlin.TraversalDT value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -520,9 +500,7 @@ public abstract class GenericLiteral implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.StructureVertex value;
     
     public StructureVertex (hydra.langs.tinkerpop.gremlin.StructureVertex value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -550,9 +528,7 @@ public abstract class GenericLiteral implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.GenericLiteralSet value;
     
     public GenericLiteralSet (hydra.langs.tinkerpop.gremlin.GenericLiteralSet value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -580,9 +556,7 @@ public abstract class GenericLiteral implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.GenericLiteralCollection value;
     
     public GenericLiteralCollection (hydra.langs.tinkerpop.gremlin.GenericLiteralCollection value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -610,9 +584,7 @@ public abstract class GenericLiteral implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.GenericLiteralRange value;
     
     public GenericLiteralRange (hydra.langs.tinkerpop.gremlin.GenericLiteralRange value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -640,9 +612,7 @@ public abstract class GenericLiteral implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.NestedTraversal value;
     
     public NestedTraversal (hydra.langs.tinkerpop.gremlin.NestedTraversal value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -670,9 +640,7 @@ public abstract class GenericLiteral implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TerminatedTraversal value;
     
     public TerminatedTraversal (hydra.langs.tinkerpop.gremlin.TerminatedTraversal value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -700,9 +668,7 @@ public abstract class GenericLiteral implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.GenericLiteralMap value;
     
     public GenericLiteralMap (hydra.langs.tinkerpop.gremlin.GenericLiteralMap value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

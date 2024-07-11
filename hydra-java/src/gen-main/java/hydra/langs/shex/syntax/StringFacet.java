@@ -37,9 +37,7 @@ public abstract class StringFacet implements Serializable {
     public final hydra.langs.shex.syntax.StringFacet_Sequence value;
     
     public Sequence (hydra.langs.shex.syntax.StringFacet_Sequence value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class StringFacet implements Serializable {
     public final hydra.langs.shex.syntax.Regexp value;
     
     public Regexp (hydra.langs.shex.syntax.Regexp value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -40,27 +40,13 @@ public class PropertyShape implements Serializable {
   public final hydra.langs.rdf.syntax.Iri path;
   
   public PropertyShape (hydra.langs.shacl.model.CommonProperties common, java.util.Set<hydra.langs.shacl.model.PropertyShapeConstraint> constraints, hydra.util.Opt<hydra.langs.rdf.syntax.Node> defaultValue, hydra.langs.rdf.syntax.LangStrings description, hydra.langs.rdf.syntax.LangStrings name, hydra.util.Opt<java.math.BigInteger> order, hydra.langs.rdf.syntax.Iri path) {
-    if (common == null) {
-      throw new IllegalArgumentException("null value for 'common' argument");
-    }
-    if (constraints == null) {
-      throw new IllegalArgumentException("null value for 'constraints' argument");
-    }
-    if (defaultValue == null) {
-      throw new IllegalArgumentException("null value for 'defaultValue' argument");
-    }
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (order == null) {
-      throw new IllegalArgumentException("null value for 'order' argument");
-    }
-    if (path == null) {
-      throw new IllegalArgumentException("null value for 'path' argument");
-    }
+    java.util.Objects.requireNonNull((common));
+    java.util.Objects.requireNonNull((constraints));
+    java.util.Objects.requireNonNull((defaultValue));
+    java.util.Objects.requireNonNull((description));
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((order));
+    java.util.Objects.requireNonNull((path));
     this.common = common;
     this.constraints = constraints;
     this.defaultValue = defaultValue;
@@ -85,51 +71,37 @@ public class PropertyShape implements Serializable {
   }
   
   public PropertyShape withCommon(hydra.langs.shacl.model.CommonProperties common) {
-    if (common == null) {
-      throw new IllegalArgumentException("null value for 'common' argument");
-    }
+    java.util.Objects.requireNonNull((common));
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
   
   public PropertyShape withConstraints(java.util.Set<hydra.langs.shacl.model.PropertyShapeConstraint> constraints) {
-    if (constraints == null) {
-      throw new IllegalArgumentException("null value for 'constraints' argument");
-    }
+    java.util.Objects.requireNonNull((constraints));
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
   
   public PropertyShape withDefaultValue(hydra.util.Opt<hydra.langs.rdf.syntax.Node> defaultValue) {
-    if (defaultValue == null) {
-      throw new IllegalArgumentException("null value for 'defaultValue' argument");
-    }
+    java.util.Objects.requireNonNull((defaultValue));
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
   
   public PropertyShape withDescription(hydra.langs.rdf.syntax.LangStrings description) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
+    java.util.Objects.requireNonNull((description));
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
   
   public PropertyShape withName(hydra.langs.rdf.syntax.LangStrings name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
   
   public PropertyShape withOrder(hydra.util.Opt<java.math.BigInteger> order) {
-    if (order == null) {
-      throw new IllegalArgumentException("null value for 'order' argument");
-    }
+    java.util.Objects.requireNonNull((order));
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
   
   public PropertyShape withPath(hydra.langs.rdf.syntax.Iri path) {
-    if (path == null) {
-      throw new IllegalArgumentException("null value for 'path' argument");
-    }
+    java.util.Objects.requireNonNull((path));
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
 }

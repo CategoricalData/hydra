@@ -17,15 +17,9 @@ public class OpExpr implements Serializable {
   public final hydra.ast.Expr rhs;
   
   public OpExpr (hydra.ast.Op op, hydra.ast.Expr lhs, hydra.ast.Expr rhs) {
-    if (op == null) {
-      throw new IllegalArgumentException("null value for 'op' argument");
-    }
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((op));
+    java.util.Objects.requireNonNull((lhs));
+    java.util.Objects.requireNonNull((rhs));
     this.op = op;
     this.lhs = lhs;
     this.rhs = rhs;
@@ -46,23 +40,17 @@ public class OpExpr implements Serializable {
   }
   
   public OpExpr withOp(hydra.ast.Op op) {
-    if (op == null) {
-      throw new IllegalArgumentException("null value for 'op' argument");
-    }
+    java.util.Objects.requireNonNull((op));
     return new OpExpr(op, lhs, rhs);
   }
   
   public OpExpr withLhs(hydra.ast.Expr lhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
     return new OpExpr(op, lhs, rhs);
   }
   
   public OpExpr withRhs(hydra.ast.Expr rhs) {
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((rhs));
     return new OpExpr(op, lhs, rhs);
   }
 }

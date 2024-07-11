@@ -37,9 +37,7 @@ public abstract class BooleanPrimary implements Serializable {
     public final hydra.langs.sql.ansi.Predicate value;
     
     public Predicate (hydra.langs.sql.ansi.Predicate value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class BooleanPrimary implements Serializable {
     public final hydra.langs.sql.ansi.BooleanPredicand value;
     
     public Predicand (hydra.langs.sql.ansi.BooleanPredicand value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -16,9 +16,7 @@ public class PrimaryKey implements Serializable {
   public final java.util.List<hydra.langs.relationalModel.ColumnName> value;
   
   public PrimaryKey (java.util.List<hydra.langs.relationalModel.ColumnName> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

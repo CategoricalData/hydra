@@ -12,12 +12,8 @@ public class Type_Refine implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Stat> stats;
   
   public Type_Refine (hydra.util.Opt<hydra.langs.scala.meta.Type> tpe, java.util.List<hydra.langs.scala.meta.Stat> stats) {
-    if (tpe == null) {
-      throw new IllegalArgumentException("null value for 'tpe' argument");
-    }
-    if (stats == null) {
-      throw new IllegalArgumentException("null value for 'stats' argument");
-    }
+    java.util.Objects.requireNonNull((tpe));
+    java.util.Objects.requireNonNull((stats));
     this.tpe = tpe;
     this.stats = stats;
   }
@@ -37,16 +33,12 @@ public class Type_Refine implements Serializable {
   }
   
   public Type_Refine withTpe(hydra.util.Opt<hydra.langs.scala.meta.Type> tpe) {
-    if (tpe == null) {
-      throw new IllegalArgumentException("null value for 'tpe' argument");
-    }
+    java.util.Objects.requireNonNull((tpe));
     return new Type_Refine(tpe, stats);
   }
   
   public Type_Refine withStats(java.util.List<hydra.langs.scala.meta.Stat> stats) {
-    if (stats == null) {
-      throw new IllegalArgumentException("null value for 'stats' argument");
-    }
+    java.util.Objects.requireNonNull((stats));
     return new Type_Refine(tpe, stats);
   }
 }

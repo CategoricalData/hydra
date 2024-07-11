@@ -49,9 +49,7 @@ public abstract class ClassAxiom implements Serializable {
     public final hydra.langs.owl.syntax.DisjointClasses value;
     
     public DisjointClasses (hydra.langs.owl.syntax.DisjointClasses value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -79,9 +77,7 @@ public abstract class ClassAxiom implements Serializable {
     public final hydra.langs.owl.syntax.DisjointUnion value;
     
     public DisjointUnion (hydra.langs.owl.syntax.DisjointUnion value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -109,9 +105,7 @@ public abstract class ClassAxiom implements Serializable {
     public final hydra.langs.owl.syntax.EquivalentClasses value;
     
     public EquivalentClasses (hydra.langs.owl.syntax.EquivalentClasses value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -139,9 +133,7 @@ public abstract class ClassAxiom implements Serializable {
     public final hydra.langs.owl.syntax.SubClassOf value;
     
     public SubClassOf (hydra.langs.owl.syntax.SubClassOf value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -12,12 +12,8 @@ public class TraversalPredicateAndNestedTraversal implements Serializable {
   public final hydra.langs.tinkerpop.gremlin.NestedTraversal traversal;
   
   public TraversalPredicateAndNestedTraversal (hydra.langs.tinkerpop.gremlin.TraversalPredicate predicate, hydra.langs.tinkerpop.gremlin.NestedTraversal traversal) {
-    if (predicate == null) {
-      throw new IllegalArgumentException("null value for 'predicate' argument");
-    }
-    if (traversal == null) {
-      throw new IllegalArgumentException("null value for 'traversal' argument");
-    }
+    java.util.Objects.requireNonNull((predicate));
+    java.util.Objects.requireNonNull((traversal));
     this.predicate = predicate;
     this.traversal = traversal;
   }
@@ -37,16 +33,12 @@ public class TraversalPredicateAndNestedTraversal implements Serializable {
   }
   
   public TraversalPredicateAndNestedTraversal withPredicate(hydra.langs.tinkerpop.gremlin.TraversalPredicate predicate) {
-    if (predicate == null) {
-      throw new IllegalArgumentException("null value for 'predicate' argument");
-    }
+    java.util.Objects.requireNonNull((predicate));
     return new TraversalPredicateAndNestedTraversal(predicate, traversal);
   }
   
   public TraversalPredicateAndNestedTraversal withTraversal(hydra.langs.tinkerpop.gremlin.NestedTraversal traversal) {
-    if (traversal == null) {
-      throw new IllegalArgumentException("null value for 'traversal' argument");
-    }
+    java.util.Objects.requireNonNull((traversal));
     return new TraversalPredicateAndNestedTraversal(predicate, traversal);
   }
 }

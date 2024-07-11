@@ -14,15 +14,9 @@ public class AnnotationPropertyRange implements Serializable {
   public final hydra.langs.rdf.syntax.Iri iri;
   
   public AnnotationPropertyRange (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, hydra.langs.owl.syntax.AnnotationProperty property, hydra.langs.rdf.syntax.Iri iri) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
-    if (iri == null) {
-      throw new IllegalArgumentException("null value for 'iri' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
+    java.util.Objects.requireNonNull((property));
+    java.util.Objects.requireNonNull((iri));
     this.annotations = annotations;
     this.property = property;
     this.iri = iri;
@@ -43,23 +37,17 @@ public class AnnotationPropertyRange implements Serializable {
   }
   
   public AnnotationPropertyRange withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new AnnotationPropertyRange(annotations, property, iri);
   }
   
   public AnnotationPropertyRange withProperty(hydra.langs.owl.syntax.AnnotationProperty property) {
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
+    java.util.Objects.requireNonNull((property));
     return new AnnotationPropertyRange(annotations, property, iri);
   }
   
   public AnnotationPropertyRange withIri(hydra.langs.rdf.syntax.Iri iri) {
-    if (iri == null) {
-      throw new IllegalArgumentException("null value for 'iri' argument");
-    }
+    java.util.Objects.requireNonNull((iri));
     return new AnnotationPropertyRange(annotations, property, iri);
   }
 }

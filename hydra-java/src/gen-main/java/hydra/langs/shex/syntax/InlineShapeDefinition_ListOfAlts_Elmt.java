@@ -43,9 +43,7 @@ public abstract class InlineShapeDefinition_ListOfAlts_Elmt implements Serializa
     public final hydra.langs.shex.syntax.IncludeSet value;
     
     public IncludeSet (hydra.langs.shex.syntax.IncludeSet value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class InlineShapeDefinition_ListOfAlts_Elmt implements Serializa
     public final hydra.langs.shex.syntax.ExtraPropertySet value;
     
     public ExtraPropertySet (hydra.langs.shex.syntax.ExtraPropertySet value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

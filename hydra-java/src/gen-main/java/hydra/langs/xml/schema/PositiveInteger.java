@@ -10,9 +10,7 @@ public class PositiveInteger implements Serializable {
   public final java.math.BigInteger value;
   
   public PositiveInteger (java.math.BigInteger value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

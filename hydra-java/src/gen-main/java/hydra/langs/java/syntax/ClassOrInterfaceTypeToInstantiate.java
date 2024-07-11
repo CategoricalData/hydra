@@ -12,12 +12,8 @@ public class ClassOrInterfaceTypeToInstantiate implements Serializable {
   public final hydra.util.Opt<hydra.langs.java.syntax.TypeArgumentsOrDiamond> typeArguments;
   
   public ClassOrInterfaceTypeToInstantiate (java.util.List<hydra.langs.java.syntax.AnnotatedIdentifier> identifiers, hydra.util.Opt<hydra.langs.java.syntax.TypeArgumentsOrDiamond> typeArguments) {
-    if (identifiers == null) {
-      throw new IllegalArgumentException("null value for 'identifiers' argument");
-    }
-    if (typeArguments == null) {
-      throw new IllegalArgumentException("null value for 'typeArguments' argument");
-    }
+    java.util.Objects.requireNonNull((identifiers));
+    java.util.Objects.requireNonNull((typeArguments));
     this.identifiers = identifiers;
     this.typeArguments = typeArguments;
   }
@@ -37,16 +33,12 @@ public class ClassOrInterfaceTypeToInstantiate implements Serializable {
   }
   
   public ClassOrInterfaceTypeToInstantiate withIdentifiers(java.util.List<hydra.langs.java.syntax.AnnotatedIdentifier> identifiers) {
-    if (identifiers == null) {
-      throw new IllegalArgumentException("null value for 'identifiers' argument");
-    }
+    java.util.Objects.requireNonNull((identifiers));
     return new ClassOrInterfaceTypeToInstantiate(identifiers, typeArguments);
   }
   
   public ClassOrInterfaceTypeToInstantiate withTypeArguments(hydra.util.Opt<hydra.langs.java.syntax.TypeArgumentsOrDiamond> typeArguments) {
-    if (typeArguments == null) {
-      throw new IllegalArgumentException("null value for 'typeArguments' argument");
-    }
+    java.util.Objects.requireNonNull((typeArguments));
     return new ClassOrInterfaceTypeToInstantiate(identifiers, typeArguments);
   }
 }

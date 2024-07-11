@@ -49,27 +49,13 @@ public class SchemaElement implements Serializable {
   public final hydra.util.Opt<hydra.langs.parquet.format.LogicalType> logicalType;
   
   public SchemaElement (hydra.util.Opt<hydra.langs.parquet.format.Type> type, hydra.util.Opt<Integer> typeLength, hydra.util.Opt<hydra.langs.parquet.format.FieldRepetitionType> repetitionType, String name, hydra.util.Opt<Integer> numChildren, hydra.util.Opt<Integer> fieldId, hydra.util.Opt<hydra.langs.parquet.format.LogicalType> logicalType) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (typeLength == null) {
-      throw new IllegalArgumentException("null value for 'typeLength' argument");
-    }
-    if (repetitionType == null) {
-      throw new IllegalArgumentException("null value for 'repetitionType' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (numChildren == null) {
-      throw new IllegalArgumentException("null value for 'numChildren' argument");
-    }
-    if (fieldId == null) {
-      throw new IllegalArgumentException("null value for 'fieldId' argument");
-    }
-    if (logicalType == null) {
-      throw new IllegalArgumentException("null value for 'logicalType' argument");
-    }
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((typeLength));
+    java.util.Objects.requireNonNull((repetitionType));
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((numChildren));
+    java.util.Objects.requireNonNull((fieldId));
+    java.util.Objects.requireNonNull((logicalType));
     this.type = type;
     this.typeLength = typeLength;
     this.repetitionType = repetitionType;
@@ -94,51 +80,37 @@ public class SchemaElement implements Serializable {
   }
   
   public SchemaElement withType(hydra.util.Opt<hydra.langs.parquet.format.Type> type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new SchemaElement(type, typeLength, repetitionType, name, numChildren, fieldId, logicalType);
   }
   
   public SchemaElement withTypeLength(hydra.util.Opt<Integer> typeLength) {
-    if (typeLength == null) {
-      throw new IllegalArgumentException("null value for 'typeLength' argument");
-    }
+    java.util.Objects.requireNonNull((typeLength));
     return new SchemaElement(type, typeLength, repetitionType, name, numChildren, fieldId, logicalType);
   }
   
   public SchemaElement withRepetitionType(hydra.util.Opt<hydra.langs.parquet.format.FieldRepetitionType> repetitionType) {
-    if (repetitionType == null) {
-      throw new IllegalArgumentException("null value for 'repetitionType' argument");
-    }
+    java.util.Objects.requireNonNull((repetitionType));
     return new SchemaElement(type, typeLength, repetitionType, name, numChildren, fieldId, logicalType);
   }
   
   public SchemaElement withName(String name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new SchemaElement(type, typeLength, repetitionType, name, numChildren, fieldId, logicalType);
   }
   
   public SchemaElement withNumChildren(hydra.util.Opt<Integer> numChildren) {
-    if (numChildren == null) {
-      throw new IllegalArgumentException("null value for 'numChildren' argument");
-    }
+    java.util.Objects.requireNonNull((numChildren));
     return new SchemaElement(type, typeLength, repetitionType, name, numChildren, fieldId, logicalType);
   }
   
   public SchemaElement withFieldId(hydra.util.Opt<Integer> fieldId) {
-    if (fieldId == null) {
-      throw new IllegalArgumentException("null value for 'fieldId' argument");
-    }
+    java.util.Objects.requireNonNull((fieldId));
     return new SchemaElement(type, typeLength, repetitionType, name, numChildren, fieldId, logicalType);
   }
   
   public SchemaElement withLogicalType(hydra.util.Opt<hydra.langs.parquet.format.LogicalType> logicalType) {
-    if (logicalType == null) {
-      throw new IllegalArgumentException("null value for 'logicalType' argument");
-    }
+    java.util.Objects.requireNonNull((logicalType));
     return new SchemaElement(type, typeLength, repetitionType, name, numChildren, fieldId, logicalType);
   }
 }

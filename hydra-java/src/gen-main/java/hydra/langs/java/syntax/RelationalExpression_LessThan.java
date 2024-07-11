@@ -12,12 +12,8 @@ public class RelationalExpression_LessThan implements Serializable {
   public final hydra.langs.java.syntax.ShiftExpression rhs;
   
   public RelationalExpression_LessThan (hydra.langs.java.syntax.RelationalExpression lhs, hydra.langs.java.syntax.ShiftExpression rhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
+    java.util.Objects.requireNonNull((rhs));
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -37,16 +33,12 @@ public class RelationalExpression_LessThan implements Serializable {
   }
   
   public RelationalExpression_LessThan withLhs(hydra.langs.java.syntax.RelationalExpression lhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
     return new RelationalExpression_LessThan(lhs, rhs);
   }
   
   public RelationalExpression_LessThan withRhs(hydra.langs.java.syntax.ShiftExpression rhs) {
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((rhs));
     return new RelationalExpression_LessThan(lhs, rhs);
   }
 }

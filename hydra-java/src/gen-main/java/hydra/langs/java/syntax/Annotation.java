@@ -43,9 +43,7 @@ public abstract class Annotation implements Serializable {
     public final hydra.langs.java.syntax.NormalAnnotation value;
     
     public Normal (hydra.langs.java.syntax.NormalAnnotation value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class Annotation implements Serializable {
     public final hydra.langs.java.syntax.MarkerAnnotation value;
     
     public Marker (hydra.langs.java.syntax.MarkerAnnotation value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class Annotation implements Serializable {
     public final hydra.langs.java.syntax.SingleElementAnnotation value;
     
     public SingleElement (hydra.langs.java.syntax.SingleElementAnnotation value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

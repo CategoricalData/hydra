@@ -10,9 +10,7 @@ public class EnumValue implements Serializable {
   public final hydra.langs.graphql.syntax.Name value;
   
   public EnumValue (hydra.langs.graphql.syntax.Name value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

@@ -16,9 +16,7 @@ public class Grammar implements Serializable {
   public final java.util.List<hydra.grammar.Production> value;
   
   public Grammar (java.util.List<hydra.grammar.Production> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

@@ -10,9 +10,7 @@ public class BaseDecl implements Serializable {
   public final hydra.langs.shex.syntax.IriRef value;
   
   public BaseDecl (hydra.langs.shex.syntax.IriRef value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

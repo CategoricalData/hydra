@@ -10,9 +10,7 @@ public class InlineShapeExpression implements Serializable {
   public final hydra.langs.shex.syntax.InlineShapeOr value;
   
   public InlineShapeExpression (hydra.langs.shex.syntax.InlineShapeOr value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

@@ -14,15 +14,9 @@ public class ConditionalExpression_TernaryCond implements Serializable {
   public final hydra.langs.java.syntax.ConditionalExpression ifFalse;
   
   public ConditionalExpression_TernaryCond (hydra.langs.java.syntax.ConditionalOrExpression cond, hydra.langs.java.syntax.Expression ifTrue, hydra.langs.java.syntax.ConditionalExpression ifFalse) {
-    if (cond == null) {
-      throw new IllegalArgumentException("null value for 'cond' argument");
-    }
-    if (ifTrue == null) {
-      throw new IllegalArgumentException("null value for 'ifTrue' argument");
-    }
-    if (ifFalse == null) {
-      throw new IllegalArgumentException("null value for 'ifFalse' argument");
-    }
+    java.util.Objects.requireNonNull((cond));
+    java.util.Objects.requireNonNull((ifTrue));
+    java.util.Objects.requireNonNull((ifFalse));
     this.cond = cond;
     this.ifTrue = ifTrue;
     this.ifFalse = ifFalse;
@@ -43,23 +37,17 @@ public class ConditionalExpression_TernaryCond implements Serializable {
   }
   
   public ConditionalExpression_TernaryCond withCond(hydra.langs.java.syntax.ConditionalOrExpression cond) {
-    if (cond == null) {
-      throw new IllegalArgumentException("null value for 'cond' argument");
-    }
+    java.util.Objects.requireNonNull((cond));
     return new ConditionalExpression_TernaryCond(cond, ifTrue, ifFalse);
   }
   
   public ConditionalExpression_TernaryCond withIfTrue(hydra.langs.java.syntax.Expression ifTrue) {
-    if (ifTrue == null) {
-      throw new IllegalArgumentException("null value for 'ifTrue' argument");
-    }
+    java.util.Objects.requireNonNull((ifTrue));
     return new ConditionalExpression_TernaryCond(cond, ifTrue, ifFalse);
   }
   
   public ConditionalExpression_TernaryCond withIfFalse(hydra.langs.java.syntax.ConditionalExpression ifFalse) {
-    if (ifFalse == null) {
-      throw new IllegalArgumentException("null value for 'ifFalse' argument");
-    }
+    java.util.Objects.requireNonNull((ifFalse));
     return new ConditionalExpression_TernaryCond(cond, ifTrue, ifFalse);
   }
 }

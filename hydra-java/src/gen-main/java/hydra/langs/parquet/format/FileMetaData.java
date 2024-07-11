@@ -55,33 +55,15 @@ public class FileMetaData implements Serializable {
   public final hydra.util.Opt<String> footerSigningKeyMetadata;
   
   public FileMetaData (Integer version, java.util.List<hydra.langs.parquet.format.SchemaElement> schema, Long numRows, java.util.List<hydra.langs.parquet.format.RowGroup> rowGroups, hydra.util.Opt<java.util.List<hydra.langs.parquet.format.KeyValue>> keyValueMetadata, hydra.util.Opt<String> createdBy, hydra.util.Opt<java.util.List<hydra.langs.parquet.format.ColumnOrder>> columnOrders, hydra.util.Opt<hydra.langs.parquet.format.EncryptionAlgorithm> encryptionAlgorithm, hydra.util.Opt<String> footerSigningKeyMetadata) {
-    if (version == null) {
-      throw new IllegalArgumentException("null value for 'version' argument");
-    }
-    if (schema == null) {
-      throw new IllegalArgumentException("null value for 'schema' argument");
-    }
-    if (numRows == null) {
-      throw new IllegalArgumentException("null value for 'numRows' argument");
-    }
-    if (rowGroups == null) {
-      throw new IllegalArgumentException("null value for 'rowGroups' argument");
-    }
-    if (keyValueMetadata == null) {
-      throw new IllegalArgumentException("null value for 'keyValueMetadata' argument");
-    }
-    if (createdBy == null) {
-      throw new IllegalArgumentException("null value for 'createdBy' argument");
-    }
-    if (columnOrders == null) {
-      throw new IllegalArgumentException("null value for 'columnOrders' argument");
-    }
-    if (encryptionAlgorithm == null) {
-      throw new IllegalArgumentException("null value for 'encryptionAlgorithm' argument");
-    }
-    if (footerSigningKeyMetadata == null) {
-      throw new IllegalArgumentException("null value for 'footerSigningKeyMetadata' argument");
-    }
+    java.util.Objects.requireNonNull((version));
+    java.util.Objects.requireNonNull((schema));
+    java.util.Objects.requireNonNull((numRows));
+    java.util.Objects.requireNonNull((rowGroups));
+    java.util.Objects.requireNonNull((keyValueMetadata));
+    java.util.Objects.requireNonNull((createdBy));
+    java.util.Objects.requireNonNull((columnOrders));
+    java.util.Objects.requireNonNull((encryptionAlgorithm));
+    java.util.Objects.requireNonNull((footerSigningKeyMetadata));
     this.version = version;
     this.schema = schema;
     this.numRows = numRows;
@@ -108,65 +90,47 @@ public class FileMetaData implements Serializable {
   }
   
   public FileMetaData withVersion(Integer version) {
-    if (version == null) {
-      throw new IllegalArgumentException("null value for 'version' argument");
-    }
+    java.util.Objects.requireNonNull((version));
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
   
   public FileMetaData withSchema(java.util.List<hydra.langs.parquet.format.SchemaElement> schema) {
-    if (schema == null) {
-      throw new IllegalArgumentException("null value for 'schema' argument");
-    }
+    java.util.Objects.requireNonNull((schema));
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
   
   public FileMetaData withNumRows(Long numRows) {
-    if (numRows == null) {
-      throw new IllegalArgumentException("null value for 'numRows' argument");
-    }
+    java.util.Objects.requireNonNull((numRows));
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
   
   public FileMetaData withRowGroups(java.util.List<hydra.langs.parquet.format.RowGroup> rowGroups) {
-    if (rowGroups == null) {
-      throw new IllegalArgumentException("null value for 'rowGroups' argument");
-    }
+    java.util.Objects.requireNonNull((rowGroups));
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
   
   public FileMetaData withKeyValueMetadata(hydra.util.Opt<java.util.List<hydra.langs.parquet.format.KeyValue>> keyValueMetadata) {
-    if (keyValueMetadata == null) {
-      throw new IllegalArgumentException("null value for 'keyValueMetadata' argument");
-    }
+    java.util.Objects.requireNonNull((keyValueMetadata));
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
   
   public FileMetaData withCreatedBy(hydra.util.Opt<String> createdBy) {
-    if (createdBy == null) {
-      throw new IllegalArgumentException("null value for 'createdBy' argument");
-    }
+    java.util.Objects.requireNonNull((createdBy));
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
   
   public FileMetaData withColumnOrders(hydra.util.Opt<java.util.List<hydra.langs.parquet.format.ColumnOrder>> columnOrders) {
-    if (columnOrders == null) {
-      throw new IllegalArgumentException("null value for 'columnOrders' argument");
-    }
+    java.util.Objects.requireNonNull((columnOrders));
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
   
   public FileMetaData withEncryptionAlgorithm(hydra.util.Opt<hydra.langs.parquet.format.EncryptionAlgorithm> encryptionAlgorithm) {
-    if (encryptionAlgorithm == null) {
-      throw new IllegalArgumentException("null value for 'encryptionAlgorithm' argument");
-    }
+    java.util.Objects.requireNonNull((encryptionAlgorithm));
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
   
   public FileMetaData withFooterSigningKeyMetadata(hydra.util.Opt<String> footerSigningKeyMetadata) {
-    if (footerSigningKeyMetadata == null) {
-      throw new IllegalArgumentException("null value for 'footerSigningKeyMetadata' argument");
-    }
+    java.util.Objects.requireNonNull((footerSigningKeyMetadata));
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
 }

@@ -15,12 +15,8 @@ public class DatatypeRestriction implements Serializable {
   public final java.util.List<hydra.langs.owl.syntax.DatatypeRestriction_Constraint> constraints;
   
   public DatatypeRestriction (hydra.langs.owl.syntax.Datatype datatype, java.util.List<hydra.langs.owl.syntax.DatatypeRestriction_Constraint> constraints) {
-    if (datatype == null) {
-      throw new IllegalArgumentException("null value for 'datatype' argument");
-    }
-    if (constraints == null) {
-      throw new IllegalArgumentException("null value for 'constraints' argument");
-    }
+    java.util.Objects.requireNonNull((datatype));
+    java.util.Objects.requireNonNull((constraints));
     this.datatype = datatype;
     this.constraints = constraints;
   }
@@ -40,16 +36,12 @@ public class DatatypeRestriction implements Serializable {
   }
   
   public DatatypeRestriction withDatatype(hydra.langs.owl.syntax.Datatype datatype) {
-    if (datatype == null) {
-      throw new IllegalArgumentException("null value for 'datatype' argument");
-    }
+    java.util.Objects.requireNonNull((datatype));
     return new DatatypeRestriction(datatype, constraints);
   }
   
   public DatatypeRestriction withConstraints(java.util.List<hydra.langs.owl.syntax.DatatypeRestriction_Constraint> constraints) {
-    if (constraints == null) {
-      throw new IllegalArgumentException("null value for 'constraints' argument");
-    }
+    java.util.Objects.requireNonNull((constraints));
     return new DatatypeRestriction(datatype, constraints);
   }
 }

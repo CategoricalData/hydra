@@ -14,15 +14,9 @@ public class MatchQuery implements Serializable {
   public final hydra.util.Opt<hydra.langs.tinkerpop.queries.Expression> where;
   
   public MatchQuery (Boolean optional, java.util.List<hydra.langs.tinkerpop.queries.Projection> pattern, hydra.util.Opt<hydra.langs.tinkerpop.queries.Expression> where) {
-    if (optional == null) {
-      throw new IllegalArgumentException("null value for 'optional' argument");
-    }
-    if (pattern == null) {
-      throw new IllegalArgumentException("null value for 'pattern' argument");
-    }
-    if (where == null) {
-      throw new IllegalArgumentException("null value for 'where' argument");
-    }
+    java.util.Objects.requireNonNull((optional));
+    java.util.Objects.requireNonNull((pattern));
+    java.util.Objects.requireNonNull((where));
     this.optional = optional;
     this.pattern = pattern;
     this.where = where;
@@ -43,23 +37,17 @@ public class MatchQuery implements Serializable {
   }
   
   public MatchQuery withOptional(Boolean optional) {
-    if (optional == null) {
-      throw new IllegalArgumentException("null value for 'optional' argument");
-    }
+    java.util.Objects.requireNonNull((optional));
     return new MatchQuery(optional, pattern, where);
   }
   
   public MatchQuery withPattern(java.util.List<hydra.langs.tinkerpop.queries.Projection> pattern) {
-    if (pattern == null) {
-      throw new IllegalArgumentException("null value for 'pattern' argument");
-    }
+    java.util.Objects.requireNonNull((pattern));
     return new MatchQuery(optional, pattern, where);
   }
   
   public MatchQuery withWhere(hydra.util.Opt<hydra.langs.tinkerpop.queries.Expression> where) {
-    if (where == null) {
-      throw new IllegalArgumentException("null value for 'where' argument");
-    }
+    java.util.Objects.requireNonNull((where));
     return new MatchQuery(optional, pattern, where);
   }
 }

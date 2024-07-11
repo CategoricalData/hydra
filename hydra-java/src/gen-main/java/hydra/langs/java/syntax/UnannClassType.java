@@ -16,9 +16,7 @@ public class UnannClassType implements Serializable {
   public final hydra.langs.java.syntax.ClassType value;
   
   public UnannClassType (hydra.langs.java.syntax.ClassType value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

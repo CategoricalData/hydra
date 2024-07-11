@@ -40,9 +40,7 @@ public abstract class Constructor implements Serializable {
     public final hydra.langs.haskell.ast.Constructor_Ordinary value;
     
     public Ordinary (hydra.langs.haskell.ast.Constructor_Ordinary value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -70,9 +68,7 @@ public abstract class Constructor implements Serializable {
     public final hydra.langs.haskell.ast.Constructor_Record value;
     
     public Record (hydra.langs.haskell.ast.Constructor_Record value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -15,12 +15,8 @@ public class Annotations implements Serializable {
   public final Boolean deprecated;
   
   public Annotations (hydra.util.Opt<String> doc, Boolean deprecated) {
-    if (doc == null) {
-      throw new IllegalArgumentException("null value for 'doc' argument");
-    }
-    if (deprecated == null) {
-      throw new IllegalArgumentException("null value for 'deprecated' argument");
-    }
+    java.util.Objects.requireNonNull((doc));
+    java.util.Objects.requireNonNull((deprecated));
     this.doc = doc;
     this.deprecated = deprecated;
   }
@@ -40,16 +36,12 @@ public class Annotations implements Serializable {
   }
   
   public Annotations withDoc(hydra.util.Opt<String> doc) {
-    if (doc == null) {
-      throw new IllegalArgumentException("null value for 'doc' argument");
-    }
+    java.util.Objects.requireNonNull((doc));
     return new Annotations(doc, deprecated);
   }
   
   public Annotations withDeprecated(Boolean deprecated) {
-    if (deprecated == null) {
-      throw new IllegalArgumentException("null value for 'deprecated' argument");
-    }
+    java.util.Objects.requireNonNull((deprecated));
     return new Annotations(doc, deprecated);
   }
 }

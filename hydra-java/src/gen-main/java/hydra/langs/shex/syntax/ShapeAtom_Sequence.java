@@ -12,12 +12,8 @@ public class ShapeAtom_Sequence implements Serializable {
   public final hydra.util.Opt<hydra.langs.shex.syntax.ShapeOrRef> shapeOrRef;
   
   public ShapeAtom_Sequence (hydra.langs.shex.syntax.NodeConstraint nodeConstraint, hydra.util.Opt<hydra.langs.shex.syntax.ShapeOrRef> shapeOrRef) {
-    if (nodeConstraint == null) {
-      throw new IllegalArgumentException("null value for 'nodeConstraint' argument");
-    }
-    if (shapeOrRef == null) {
-      throw new IllegalArgumentException("null value for 'shapeOrRef' argument");
-    }
+    java.util.Objects.requireNonNull((nodeConstraint));
+    java.util.Objects.requireNonNull((shapeOrRef));
     this.nodeConstraint = nodeConstraint;
     this.shapeOrRef = shapeOrRef;
   }
@@ -37,16 +33,12 @@ public class ShapeAtom_Sequence implements Serializable {
   }
   
   public ShapeAtom_Sequence withNodeConstraint(hydra.langs.shex.syntax.NodeConstraint nodeConstraint) {
-    if (nodeConstraint == null) {
-      throw new IllegalArgumentException("null value for 'nodeConstraint' argument");
-    }
+    java.util.Objects.requireNonNull((nodeConstraint));
     return new ShapeAtom_Sequence(nodeConstraint, shapeOrRef);
   }
   
   public ShapeAtom_Sequence withShapeOrRef(hydra.util.Opt<hydra.langs.shex.syntax.ShapeOrRef> shapeOrRef) {
-    if (shapeOrRef == null) {
-      throw new IllegalArgumentException("null value for 'shapeOrRef' argument");
-    }
+    java.util.Objects.requireNonNull((shapeOrRef));
     return new ShapeAtom_Sequence(nodeConstraint, shapeOrRef);
   }
 }
