@@ -10,7 +10,7 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import java.util.List;
-import java.util.Optional;
+import hydra.util.Opt;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -34,27 +34,27 @@ public class Apply<A> extends PrimitiveFunction<A> {
     @Override
     protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
         return args -> map2(Expect.optional(Flows::pure, args.get(0)), Expect.optional(Flows::pure, args.get(1)),
-            (BiFunction<Optional<Term<A>>, Optional<Term<A>>, Term<A>>) (optionalF, optionalArg) ->
+            (BiFunction<Opt<Term<A>>, Opt<Term<A>>, Term<A>>) (optionalF, optionalArg) ->
                 (optionalF.isPresent() && optionalArg.isPresent())
-                    ? Terms.optional(Optional.of(Terms.apply(optionalF.get(), optionalArg.get())))
-                    : Terms.optional(Optional.empty()));
+                    ? Terms.optional(Opt.of(Terms.apply(optionalF.get(), optionalArg.get())))
+                    : Terms.optional(Opt.empty()));
     }
 
-    public static <X, Y> Function<Optional<X>, Optional<Y>> apply(Optional<Function<X, Y>> optionalF) {
+    public static <X, Y> Function<Opt<X>, Opt<Y>> apply(Opt<Function<X, Y>> optionalF) {
         return (optionalArg) -> apply(optionalF, optionalArg);
     }
 
     /**
      * Apply the function to both arguments.
      */
-    public static <X, Y> Optional<Y> apply(Optional<Function<X, Y>> optionalF, Optional<X> optionalArg) {
+    public static <X, Y> Opt<Y> apply(Opt<Function<X, Y>> optionalF, Opt<X> optionalArg) {
         if (!optionalF.isPresent() || !optionalArg.isPresent()) {
-            return Optional.empty();
+            return Opt.empty();
         }
 
         Function<X, Y> f = optionalF.get();
         X arg = optionalArg.get();
 
-        return Optional.of(f.apply(arg));
+        return Opt.of(f.apply(arg));
     }
 }

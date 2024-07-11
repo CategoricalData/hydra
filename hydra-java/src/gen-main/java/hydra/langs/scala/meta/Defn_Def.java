@@ -15,11 +15,11 @@ public class Defn_Def implements Serializable {
   
   public final java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> paramss;
   
-  public final java.util.Optional<hydra.langs.scala.meta.Type> decltpe;
+  public final hydra.util.Opt<hydra.langs.scala.meta.Type> decltpe;
   
   public final hydra.langs.scala.meta.Data body;
   
-  public Defn_Def (java.util.List<hydra.langs.scala.meta.Mod> mods, hydra.langs.scala.meta.Data_Name name, java.util.List<hydra.langs.scala.meta.Type_Param> tparams, java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> paramss, java.util.Optional<hydra.langs.scala.meta.Type> decltpe, hydra.langs.scala.meta.Data body) {
+  public Defn_Def (java.util.List<hydra.langs.scala.meta.Mod> mods, hydra.langs.scala.meta.Data_Name name, java.util.List<hydra.langs.scala.meta.Type_Param> tparams, java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> paramss, hydra.util.Opt<hydra.langs.scala.meta.Type> decltpe, hydra.langs.scala.meta.Data body) {
     if (mods == null) {
       throw new IllegalArgumentException("null value for 'mods' argument");
     }
@@ -88,7 +88,7 @@ public class Defn_Def implements Serializable {
     return new Defn_Def(mods, name, tparams, paramss, decltpe, body);
   }
   
-  public Defn_Def withDecltpe(java.util.Optional<hydra.langs.scala.meta.Type> decltpe) {
+  public Defn_Def withDecltpe(hydra.util.Opt<hydra.langs.scala.meta.Type> decltpe) {
     if (decltpe == null) {
       throw new IllegalArgumentException("null value for 'decltpe' argument");
     }

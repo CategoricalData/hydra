@@ -13,9 +13,9 @@ public class EnumConstant implements Serializable {
   
   public final java.util.List<java.util.List<hydra.langs.java.syntax.Expression>> arguments;
   
-  public final java.util.Optional<hydra.langs.java.syntax.ClassBody> body;
+  public final hydra.util.Opt<hydra.langs.java.syntax.ClassBody> body;
   
-  public EnumConstant (java.util.List<hydra.langs.java.syntax.EnumConstantModifier> modifiers, hydra.langs.java.syntax.Identifier identifier, java.util.List<java.util.List<hydra.langs.java.syntax.Expression>> arguments, java.util.Optional<hydra.langs.java.syntax.ClassBody> body) {
+  public EnumConstant (java.util.List<hydra.langs.java.syntax.EnumConstantModifier> modifiers, hydra.langs.java.syntax.Identifier identifier, java.util.List<java.util.List<hydra.langs.java.syntax.Expression>> arguments, hydra.util.Opt<hydra.langs.java.syntax.ClassBody> body) {
     if (modifiers == null) {
       throw new IllegalArgumentException("null value for 'modifiers' argument");
     }
@@ -69,7 +69,7 @@ public class EnumConstant implements Serializable {
     return new EnumConstant(modifiers, identifier, arguments, body);
   }
   
-  public EnumConstant withBody(java.util.Optional<hydra.langs.java.syntax.ClassBody> body) {
+  public EnumConstant withBody(hydra.util.Opt<hydra.langs.java.syntax.ClassBody> body) {
     if (body == null) {
       throw new IllegalArgumentException("null value for 'body' argument");
     }

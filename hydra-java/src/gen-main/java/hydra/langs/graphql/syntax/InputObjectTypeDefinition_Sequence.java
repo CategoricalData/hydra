@@ -7,15 +7,15 @@ import java.io.Serializable;
 public class InputObjectTypeDefinition_Sequence implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.InputObjectTypeDefinition.Sequence");
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Description> description;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Description> description;
   
   public final hydra.langs.graphql.syntax.Name name;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives;
   
   public final hydra.langs.graphql.syntax.InputFieldsDefinition inputFieldsDefinition;
   
-  public InputObjectTypeDefinition_Sequence (java.util.Optional<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.Name name, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.InputFieldsDefinition inputFieldsDefinition) {
+  public InputObjectTypeDefinition_Sequence (hydra.util.Opt<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.Name name, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.InputFieldsDefinition inputFieldsDefinition) {
     if (description == null) {
       throw new IllegalArgumentException("null value for 'description' argument");
     }
@@ -48,7 +48,7 @@ public class InputObjectTypeDefinition_Sequence implements Serializable {
     return 2 * description.hashCode() + 3 * name.hashCode() + 5 * directives.hashCode() + 7 * inputFieldsDefinition.hashCode();
   }
   
-  public InputObjectTypeDefinition_Sequence withDescription(java.util.Optional<hydra.langs.graphql.syntax.Description> description) {
+  public InputObjectTypeDefinition_Sequence withDescription(hydra.util.Opt<hydra.langs.graphql.syntax.Description> description) {
     if (description == null) {
       throw new IllegalArgumentException("null value for 'description' argument");
     }
@@ -62,7 +62,7 @@ public class InputObjectTypeDefinition_Sequence implements Serializable {
     return new InputObjectTypeDefinition_Sequence(description, name, directives, inputFieldsDefinition);
   }
   
-  public InputObjectTypeDefinition_Sequence withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+  public InputObjectTypeDefinition_Sequence withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
     if (directives == null) {
       throw new IllegalArgumentException("null value for 'directives' argument");
     }

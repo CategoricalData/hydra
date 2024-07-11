@@ -12,7 +12,7 @@ import hydra.tools.PrimitiveFunction;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import hydra.util.Opt;
 import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
@@ -37,12 +37,12 @@ public class Lookup<A> extends PrimitiveFunction<A> {
                 (Function<Map<Term<A>, Term<A>>, Term<A>>) mp -> Terms.optional(apply(args.get(0), mp)));
     }
 
-    public static <K, V> Function<Map<K, V>, Optional<V>> apply(K k) {
+    public static <K, V> Function<Map<K, V>, Opt<V>> apply(K k) {
         return mp -> apply(k, mp);
     }
 
-    public static <K, V> Optional<V> apply(K k, Map<K, V> mp) {
+    public static <K, V> Opt<V> apply(K k, Map<K, V> mp) {
         V v = mp.get(k);
-        return v == null ? Optional.empty() : Optional.of(v);
+        return v == null ? Opt.empty() : Opt.of(v);
     }
 }

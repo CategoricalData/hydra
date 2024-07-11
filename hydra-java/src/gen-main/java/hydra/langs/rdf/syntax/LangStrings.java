@@ -13,9 +13,9 @@ public class LangStrings implements Serializable {
   /**
    * A convenience type which provides at most one string value per language, and optionally a value without a language
    */
-  public final java.util.Map<java.util.Optional<hydra.langs.rdf.syntax.LanguageTag>, String> value;
+  public final java.util.Map<hydra.util.Opt<hydra.langs.rdf.syntax.LanguageTag>, String> value;
   
-  public LangStrings (java.util.Map<java.util.Optional<hydra.langs.rdf.syntax.LanguageTag>, String> value) {
+  public LangStrings (java.util.Map<hydra.util.Opt<hydra.langs.rdf.syntax.LanguageTag>, String> value) {
     if (value == null) {
       throw new IllegalArgumentException("null value for 'value' argument");
     }

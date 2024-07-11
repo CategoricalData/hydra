@@ -13,11 +13,11 @@ public class AnnotationTypeElementDeclaration implements Serializable {
   
   public final hydra.langs.java.syntax.Identifier identifier;
   
-  public final java.util.Optional<hydra.langs.java.syntax.Dims> dims;
+  public final hydra.util.Opt<hydra.langs.java.syntax.Dims> dims;
   
-  public final java.util.Optional<hydra.langs.java.syntax.DefaultValue> default_;
+  public final hydra.util.Opt<hydra.langs.java.syntax.DefaultValue> default_;
   
-  public AnnotationTypeElementDeclaration (java.util.List<hydra.langs.java.syntax.AnnotationTypeElementModifier> modifiers, hydra.langs.java.syntax.UnannType type, hydra.langs.java.syntax.Identifier identifier, java.util.Optional<hydra.langs.java.syntax.Dims> dims, java.util.Optional<hydra.langs.java.syntax.DefaultValue> default_) {
+  public AnnotationTypeElementDeclaration (java.util.List<hydra.langs.java.syntax.AnnotationTypeElementModifier> modifiers, hydra.langs.java.syntax.UnannType type, hydra.langs.java.syntax.Identifier identifier, hydra.util.Opt<hydra.langs.java.syntax.Dims> dims, hydra.util.Opt<hydra.langs.java.syntax.DefaultValue> default_) {
     if (modifiers == null) {
       throw new IllegalArgumentException("null value for 'modifiers' argument");
     }
@@ -75,14 +75,14 @@ public class AnnotationTypeElementDeclaration implements Serializable {
     return new AnnotationTypeElementDeclaration(modifiers, type, identifier, dims, default_);
   }
   
-  public AnnotationTypeElementDeclaration withDims(java.util.Optional<hydra.langs.java.syntax.Dims> dims) {
+  public AnnotationTypeElementDeclaration withDims(hydra.util.Opt<hydra.langs.java.syntax.Dims> dims) {
     if (dims == null) {
       throw new IllegalArgumentException("null value for 'dims' argument");
     }
     return new AnnotationTypeElementDeclaration(modifiers, type, identifier, dims, default_);
   }
   
-  public AnnotationTypeElementDeclaration withDefault(java.util.Optional<hydra.langs.java.syntax.DefaultValue> default_) {
+  public AnnotationTypeElementDeclaration withDefault(hydra.util.Opt<hydra.langs.java.syntax.DefaultValue> default_) {
     if (default_ == null) {
       throw new IllegalArgumentException("null value for 'default' argument");
     }

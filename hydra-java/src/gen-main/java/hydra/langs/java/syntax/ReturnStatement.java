@@ -7,9 +7,9 @@ import java.io.Serializable;
 public class ReturnStatement implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.ReturnStatement");
   
-  public final java.util.Optional<hydra.langs.java.syntax.Expression> value;
+  public final hydra.util.Opt<hydra.langs.java.syntax.Expression> value;
   
-  public ReturnStatement (java.util.Optional<hydra.langs.java.syntax.Expression> value) {
+  public ReturnStatement (hydra.util.Opt<hydra.langs.java.syntax.Expression> value) {
     if (value == null) {
       throw new IllegalArgumentException("null value for 'value' argument");
     }

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import hydra.util.Opt;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -341,18 +341,18 @@ public class Expect {
     /**
      * Decode an optional value.
      */
-    public static <S, A, X> Flow<S, Optional<X>> optional(final Function<Term<A>, Flow<S, X>> elems,
-                                                          final Term<A> term) {
-        return term.accept(new Term.PartialVisitor<A, Flow<S, Optional<X>>>() {
+    public static <S, A, X> Flow<S, Opt<X>> optional(final Function<Term<A>, Flow<S, X>> elems,
+                                                     final Term<A> term) {
+        return term.accept(new Term.PartialVisitor<A, Flow<S, Opt<X>>>() {
             @Override
-            public Flow<S, Optional<X>> otherwise(Term<A> instance) {
+            public Flow<S, Opt<X>> otherwise(Term<A> instance) {
                 return wrongType("optional", term);
             }
 
             @Override
-            public Flow<S, Optional<X>> visit(Term.Optional<A> instance) {
-                return instance.value.isPresent() ? Flows.map(elems.apply(instance.value.get()), Optional::of)
-                    : pure(Optional.empty());
+            public Flow<S, Opt<X>> visit(Term.Optional<A> instance) {
+                return instance.value.isPresent() ? Flows.map(elems.apply(instance.value.get()), Opt::of)
+                    : pure(Opt.empty());
             }
         });
     }

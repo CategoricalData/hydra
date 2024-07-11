@@ -2,6 +2,11 @@
 
 package hydra.extras;
 
+import hydra.compute.Kv;
+import hydra.core.Term;
+import hydra.graph.Primitive;
+import hydra.util.Opt;
+
 /**
  * Basic functions which depend on primitive functions
  */
@@ -27,8 +32,8 @@ public interface Extras {
     });
   }
   
-  static <A> java.util.function.Function<hydra.core.Name, java.util.Optional<hydra.graph.Primitive<A>>> lookupPrimitive(hydra.graph.Graph<A> g) {
-    return (java.util.function.Function<hydra.core.Name, java.util.Optional<hydra.graph.Primitive<A>>>) (name -> hydra.lib.maps.Lookup.apply(
+  static <A> java.util.function.Function<hydra.core.Name, Opt<Primitive<A>>> lookupPrimitive(hydra.graph.Graph<A> g) {
+    return (java.util.function.Function<hydra.core.Name, Opt<Primitive<A>>>) (name -> hydra.lib.maps.Lookup.apply(
       (name),
       ((g)).primitives));
   }
@@ -131,8 +136,8 @@ public interface Extras {
     return new hydra.compute.Kv(hydra.lib.maps.Empty.apply());
   }
   
-  static java.util.function.Function<hydra.compute.Kv, java.util.Optional<hydra.core.Term<hydra.compute.Kv>>> getAnnotation(String key) {
-    return (java.util.function.Function<hydra.compute.Kv, java.util.Optional<hydra.core.Term<hydra.compute.Kv>>>) (ann -> hydra.lib.maps.Lookup.apply(
+  static java.util.function.Function<hydra.compute.Kv, Opt<Term<Kv>>> getAnnotation(String key) {
+    return (java.util.function.Function<hydra.compute.Kv, Opt<Term<Kv>>>) (ann -> hydra.lib.maps.Lookup.apply(
       (key),
       ((ann)).annotations));
   }

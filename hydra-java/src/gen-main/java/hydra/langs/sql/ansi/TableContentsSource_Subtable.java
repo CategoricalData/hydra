@@ -9,11 +9,11 @@ public class TableContentsSource_Subtable implements Serializable {
   
   public final hydra.langs.sql.ansi.PathResolvedUserDefinedTypeName type;
   
-  public final java.util.Optional<hydra.langs.sql.ansi.SubtableClause> subtable;
+  public final hydra.util.Opt<hydra.langs.sql.ansi.SubtableClause> subtable;
   
-  public final java.util.Optional<hydra.langs.sql.ansi.TableElementList> elements;
+  public final hydra.util.Opt<hydra.langs.sql.ansi.TableElementList> elements;
   
-  public TableContentsSource_Subtable (hydra.langs.sql.ansi.PathResolvedUserDefinedTypeName type, java.util.Optional<hydra.langs.sql.ansi.SubtableClause> subtable, java.util.Optional<hydra.langs.sql.ansi.TableElementList> elements) {
+  public TableContentsSource_Subtable (hydra.langs.sql.ansi.PathResolvedUserDefinedTypeName type, hydra.util.Opt<hydra.langs.sql.ansi.SubtableClause> subtable, hydra.util.Opt<hydra.langs.sql.ansi.TableElementList> elements) {
     if (type == null) {
       throw new IllegalArgumentException("null value for 'type' argument");
     }
@@ -49,14 +49,14 @@ public class TableContentsSource_Subtable implements Serializable {
     return new TableContentsSource_Subtable(type, subtable, elements);
   }
   
-  public TableContentsSource_Subtable withSubtable(java.util.Optional<hydra.langs.sql.ansi.SubtableClause> subtable) {
+  public TableContentsSource_Subtable withSubtable(hydra.util.Opt<hydra.langs.sql.ansi.SubtableClause> subtable) {
     if (subtable == null) {
       throw new IllegalArgumentException("null value for 'subtable' argument");
     }
     return new TableContentsSource_Subtable(type, subtable, elements);
   }
   
-  public TableContentsSource_Subtable withElements(java.util.Optional<hydra.langs.sql.ansi.TableElementList> elements) {
+  public TableContentsSource_Subtable withElements(hydra.util.Opt<hydra.langs.sql.ansi.TableElementList> elements) {
     if (elements == null) {
       throw new IllegalArgumentException("null value for 'elements' argument");
     }

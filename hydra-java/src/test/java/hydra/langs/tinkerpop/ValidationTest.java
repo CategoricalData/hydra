@@ -17,14 +17,14 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
+import hydra.util.Opt;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class ValidationTest extends PropertyGraphTestBase {
-    private static final Function<LiteralType, Function<Literal, Optional<String>>> CHECK_LITERAL
+    private static final Function<LiteralType, Function<Literal, Opt<String>>> CHECK_LITERAL
             = type -> value -> Literals.checkLiteral(type, value);
 
     @Test
@@ -72,17 +72,17 @@ public class ValidationTest extends PropertyGraphTestBase {
             put(VERTEX_PERSON_2.id, VERTEX_PERSON_2);
             put(VERTEX_ORGANIZATION_1.id, VERTEX_ORGANIZATION_1);
         }};
-        Function<Literal, Optional<VertexLabel>> labelForVertexId
-                = id -> Optional.ofNullable(vertices.get(id)).map(v -> v.label);
+        Function<Literal, Opt<VertexLabel>> labelForVertexId
+                = id -> Opt.ofNullable(vertices.get(id)).map(v -> v.label);
 
-        assertValid(EDGE_TYPE_WORKSAT_A, EDGE_WORKSAT_1, Optional.of(labelForVertexId));
+        assertValid(EDGE_TYPE_WORKSAT_A, EDGE_WORKSAT_1, Opt.of(labelForVertexId));
     }
 
     @Test
     public void testMissingOutOrInVertexFails() {
-        Function<Literal, Optional<VertexLabel>> labelForVertexId = id -> Optional.empty();
+        Function<Literal, Opt<VertexLabel>> labelForVertexId = id -> Opt.empty();
 
-        assertInvalid(EDGE_TYPE_WORKSAT_A, EDGE_WORKSAT_1, Optional.of(labelForVertexId));
+        assertInvalid(EDGE_TYPE_WORKSAT_A, EDGE_WORKSAT_1, Opt.of(labelForVertexId));
     }
 
     @Test
@@ -93,10 +93,10 @@ public class ValidationTest extends PropertyGraphTestBase {
             put(VERTEX_ORGANIZATION_1.id, VERTEX_PERSON_2);
         }};
 
-        Function<Literal, Optional<VertexLabel>> labelForVertexId
-                = id -> Optional.ofNullable(vertices.get(id)).map(v -> v.label);
+        Function<Literal, Opt<VertexLabel>> labelForVertexId
+                = id -> Opt.ofNullable(vertices.get(id)).map(v -> v.label);
 
-        assertInvalid(EDGE_TYPE_WORKSAT_A, EDGE_WORKSAT_1, Optional.of(labelForVertexId));
+        assertInvalid(EDGE_TYPE_WORKSAT_A, EDGE_WORKSAT_1, Opt.of(labelForVertexId));
     }
 
     @Test
@@ -118,7 +118,7 @@ public class ValidationTest extends PropertyGraphTestBase {
     }
 
     private static void assertInvalid(VertexType<LiteralType> type, Vertex<Literal> element) {
-        Optional<String> result = Validate.validateVertex(CHECK_LITERAL).apply(Literals::showLiteral)
+        Opt<String> result = Validate.validateVertex(CHECK_LITERAL).apply(Literals::showLiteral)
                 .apply(type).apply(element);
         if (!result.isPresent()) {
             fail("Validation succeeded where it should have failed");
@@ -127,8 +127,8 @@ public class ValidationTest extends PropertyGraphTestBase {
 
     private static void assertInvalid(EdgeType<LiteralType> type,
                                       Edge<Literal> element,
-                                      Optional<Function<Literal, Optional<VertexLabel>>> labelForVertexId) {
-        Optional<String> result = Validate.validateEdge(CHECK_LITERAL).apply(Literals::showLiteral)
+                                      Opt<Function<Literal, Opt<VertexLabel>>> labelForVertexId) {
+        Opt<String> result = Validate.validateEdge(CHECK_LITERAL).apply(Literals::showLiteral)
                 .apply(labelForVertexId).apply(type).apply(element);
         if (!result.isPresent()) {
             fail("Validation succeeded where it should have failed");
@@ -137,40 +137,40 @@ public class ValidationTest extends PropertyGraphTestBase {
 
     private static void assertInvalid(EdgeType<LiteralType> type,
                                       Edge<Literal> element) {
-        assertInvalid(type, element, Optional.empty());
+        assertInvalid(type, element, Opt.empty());
     }
 
     private static void assertInvalid(ElementType<LiteralType> type,
                                       Element<Literal> element) {
-        Optional<String> result = Validate.validateElement(CHECK_LITERAL).apply(Literals::showLiteral)
-                .apply(Optional.empty()).apply(type).apply(element);
+        Opt<String> result = Validate.validateElement(CHECK_LITERAL).apply(Literals::showLiteral)
+                .apply(Opt.empty()).apply(type).apply(element);
         if (!result.isPresent()) {
             fail("Validation succeeded where it should have failed");
         }
     }
 
     private static void assertValid(VertexType<LiteralType> type, Vertex<Literal> element) {
-        Optional<String> result = Validate.validateVertex(CHECK_LITERAL).apply(Literals::showLiteral)
+        Opt<String> result = Validate.validateVertex(CHECK_LITERAL).apply(Literals::showLiteral)
                 .apply(type).apply(element);
         result.ifPresent(s -> fail("Validation failed: " + s));
     }
 
     private static void assertValid(EdgeType<LiteralType> type,
                                     Edge<Literal> element,
-                                    Optional<Function<Literal, Optional<VertexLabel>>> labelForVertexId) {
-        Optional<String> result = Validate.validateEdge(CHECK_LITERAL).apply(Literals::showLiteral)
+                                    Opt<Function<Literal, Opt<VertexLabel>>> labelForVertexId) {
+        Opt<String> result = Validate.validateEdge(CHECK_LITERAL).apply(Literals::showLiteral)
                 .apply(labelForVertexId).apply(type).apply(element);
         result.ifPresent(s -> fail("Validation failed: " + s));
     }
 
     private static void assertValid(EdgeType<LiteralType> type,
                                     Edge<Literal> element) {
-        assertValid(type, element, Optional.empty());
+        assertValid(type, element, Opt.empty());
     }
 
     private static void assertValid(ElementType<LiteralType> type, Element<Literal> element) {
-        Optional<String> result = Validate.validateElement(CHECK_LITERAL).apply(Literals::showLiteral)
-                .apply(Optional.empty()).apply(type).apply(element);
+        Opt<String> result = Validate.validateElement(CHECK_LITERAL).apply(Literals::showLiteral)
+                .apply(Opt.empty()).apply(type).apply(element);
         result.ifPresent(s -> fail("Validation failed: " + s));
     }
 }

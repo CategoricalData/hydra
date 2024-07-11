@@ -11,9 +11,9 @@ public class Data_TryWithHandler implements Serializable {
   
   public final hydra.langs.scala.meta.Data catchp;
   
-  public final java.util.Optional<hydra.langs.scala.meta.Data> finallyp;
+  public final hydra.util.Opt<hydra.langs.scala.meta.Data> finallyp;
   
-  public Data_TryWithHandler (hydra.langs.scala.meta.Data expr, hydra.langs.scala.meta.Data catchp, java.util.Optional<hydra.langs.scala.meta.Data> finallyp) {
+  public Data_TryWithHandler (hydra.langs.scala.meta.Data expr, hydra.langs.scala.meta.Data catchp, hydra.util.Opt<hydra.langs.scala.meta.Data> finallyp) {
     if (expr == null) {
       throw new IllegalArgumentException("null value for 'expr' argument");
     }
@@ -56,7 +56,7 @@ public class Data_TryWithHandler implements Serializable {
     return new Data_TryWithHandler(expr, catchp, finallyp);
   }
   
-  public Data_TryWithHandler withFinallyp(java.util.Optional<hydra.langs.scala.meta.Data> finallyp) {
+  public Data_TryWithHandler withFinallyp(hydra.util.Opt<hydra.langs.scala.meta.Data> finallyp) {
     if (finallyp == null) {
       throw new IllegalArgumentException("null value for 'finallyp' argument");
     }

@@ -34,9 +34,9 @@ public abstract class BinaryLargeObjectStringType implements Serializable {
   }
   
   public static final class Binary extends hydra.langs.sql.ansi.BinaryLargeObjectStringType implements Serializable {
-    public final java.util.Optional<hydra.langs.sql.ansi.LargeObjectLength> value;
+    public final hydra.util.Opt<hydra.langs.sql.ansi.LargeObjectLength> value;
     
-    public Binary (java.util.Optional<hydra.langs.sql.ansi.LargeObjectLength> value) {
+    public Binary (hydra.util.Opt<hydra.langs.sql.ansi.LargeObjectLength> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -64,9 +64,9 @@ public abstract class BinaryLargeObjectStringType implements Serializable {
   }
   
   public static final class Blob extends hydra.langs.sql.ansi.BinaryLargeObjectStringType implements Serializable {
-    public final java.util.Optional<hydra.langs.sql.ansi.LargeObjectLength> value;
+    public final hydra.util.Opt<hydra.langs.sql.ansi.LargeObjectLength> value;
     
-    public Blob (java.util.Optional<hydra.langs.sql.ansi.LargeObjectLength> value) {
+    public Blob (hydra.util.Opt<hydra.langs.sql.ansi.LargeObjectLength> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }

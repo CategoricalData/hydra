@@ -9,9 +9,9 @@ public class ProjectionItem implements Serializable {
   
   public final hydra.langs.cypher.openCypher.Expression expression;
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable;
+  public final hydra.util.Opt<hydra.langs.cypher.openCypher.Variable> variable;
   
-  public ProjectionItem (hydra.langs.cypher.openCypher.Expression expression, java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable) {
+  public ProjectionItem (hydra.langs.cypher.openCypher.Expression expression, hydra.util.Opt<hydra.langs.cypher.openCypher.Variable> variable) {
     if (expression == null) {
       throw new IllegalArgumentException("null value for 'expression' argument");
     }
@@ -43,7 +43,7 @@ public class ProjectionItem implements Serializable {
     return new ProjectionItem(expression, variable);
   }
   
-  public ProjectionItem withVariable(java.util.Optional<hydra.langs.cypher.openCypher.Variable> variable) {
+  public ProjectionItem withVariable(hydra.util.Opt<hydra.langs.cypher.openCypher.Variable> variable) {
     if (variable == null) {
       throw new IllegalArgumentException("null value for 'variable' argument");
     }

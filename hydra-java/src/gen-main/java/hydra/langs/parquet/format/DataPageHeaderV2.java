@@ -43,14 +43,14 @@ public class DataPageHeaderV2 implements Serializable {
   /**
    * whether the values are compressed. Which means the section of the page between definition_levels_byte_length + repetition_levels_byte_length + 1 and compressed_page_size (included) is compressed with the compression_codec. If missing it is considered compressed
    */
-  public final java.util.Optional<Boolean> isCompressed;
+  public final hydra.util.Opt<Boolean> isCompressed;
   
   /**
    * optional statistics for the data in this page
    */
-  public final java.util.Optional<hydra.langs.parquet.format.Statistics> statistics;
+  public final hydra.util.Opt<hydra.langs.parquet.format.Statistics> statistics;
   
-  public DataPageHeaderV2 (Integer numValues, Integer numNulls, Integer numRows, hydra.langs.parquet.format.Encoding encoding, Integer definitionLevelsByteLength, Integer repetitionLevelsByteLength, java.util.Optional<Boolean> isCompressed, java.util.Optional<hydra.langs.parquet.format.Statistics> statistics) {
+  public DataPageHeaderV2 (Integer numValues, Integer numNulls, Integer numRows, hydra.langs.parquet.format.Encoding encoding, Integer definitionLevelsByteLength, Integer repetitionLevelsByteLength, hydra.util.Opt<Boolean> isCompressed, hydra.util.Opt<hydra.langs.parquet.format.Statistics> statistics) {
     if (numValues == null) {
       throw new IllegalArgumentException("null value for 'numValues' argument");
     }
@@ -141,14 +141,14 @@ public class DataPageHeaderV2 implements Serializable {
     return new DataPageHeaderV2(numValues, numNulls, numRows, encoding, definitionLevelsByteLength, repetitionLevelsByteLength, isCompressed, statistics);
   }
   
-  public DataPageHeaderV2 withIsCompressed(java.util.Optional<Boolean> isCompressed) {
+  public DataPageHeaderV2 withIsCompressed(hydra.util.Opt<Boolean> isCompressed) {
     if (isCompressed == null) {
       throw new IllegalArgumentException("null value for 'isCompressed' argument");
     }
     return new DataPageHeaderV2(numValues, numNulls, numRows, encoding, definitionLevelsByteLength, repetitionLevelsByteLength, isCompressed, statistics);
   }
   
-  public DataPageHeaderV2 withStatistics(java.util.Optional<hydra.langs.parquet.format.Statistics> statistics) {
+  public DataPageHeaderV2 withStatistics(hydra.util.Opt<hydra.langs.parquet.format.Statistics> statistics) {
     if (statistics == null) {
       throw new IllegalArgumentException("null value for 'statistics' argument");
     }

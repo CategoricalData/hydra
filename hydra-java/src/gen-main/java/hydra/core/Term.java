@@ -2,6 +2,8 @@
 
 package hydra.core;
 
+import hydra.util.Opt;
+
 import java.io.Serializable;
 
 /**
@@ -373,9 +375,9 @@ public abstract class Term<A> implements Serializable {
     /**
      * An optional value
      */
-    public final java.util.Optional<hydra.core.Term<A>> value;
+    public final Opt<Term<A>> value;
     
-    public Optional (java.util.Optional<hydra.core.Term<A>> value) {
+    public Optional (Opt<Term<A>> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }

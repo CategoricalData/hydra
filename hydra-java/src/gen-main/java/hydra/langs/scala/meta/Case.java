@@ -9,11 +9,11 @@ public class Case implements Serializable {
   
   public final hydra.langs.scala.meta.Pat pat;
   
-  public final java.util.Optional<hydra.langs.scala.meta.Data> cond;
+  public final hydra.util.Opt<hydra.langs.scala.meta.Data> cond;
   
   public final hydra.langs.scala.meta.Data body;
   
-  public Case (hydra.langs.scala.meta.Pat pat, java.util.Optional<hydra.langs.scala.meta.Data> cond, hydra.langs.scala.meta.Data body) {
+  public Case (hydra.langs.scala.meta.Pat pat, hydra.util.Opt<hydra.langs.scala.meta.Data> cond, hydra.langs.scala.meta.Data body) {
     if (pat == null) {
       throw new IllegalArgumentException("null value for 'pat' argument");
     }
@@ -49,7 +49,7 @@ public class Case implements Serializable {
     return new Case(pat, cond, body);
   }
   
-  public Case withCond(java.util.Optional<hydra.langs.scala.meta.Data> cond) {
+  public Case withCond(hydra.util.Opt<hydra.langs.scala.meta.Data> cond) {
     if (cond == null) {
       throw new IllegalArgumentException("null value for 'cond' argument");
     }

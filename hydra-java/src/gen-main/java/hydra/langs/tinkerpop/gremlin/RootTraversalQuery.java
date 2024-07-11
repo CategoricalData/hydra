@@ -9,9 +9,9 @@ public class RootTraversalQuery implements Serializable {
   
   public final hydra.langs.tinkerpop.gremlin.RootTraversal root;
   
-  public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalTerminalMethod> terminalMethod;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalTerminalMethod> terminalMethod;
   
-  public RootTraversalQuery (hydra.langs.tinkerpop.gremlin.RootTraversal root, java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalTerminalMethod> terminalMethod) {
+  public RootTraversalQuery (hydra.langs.tinkerpop.gremlin.RootTraversal root, hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalTerminalMethod> terminalMethod) {
     if (root == null) {
       throw new IllegalArgumentException("null value for 'root' argument");
     }
@@ -43,7 +43,7 @@ public class RootTraversalQuery implements Serializable {
     return new RootTraversalQuery(root, terminalMethod);
   }
   
-  public RootTraversalQuery withTerminalMethod(java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalTerminalMethod> terminalMethod) {
+  public RootTraversalQuery withTerminalMethod(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalTerminalMethod> terminalMethod) {
     if (terminalMethod == null) {
       throw new IllegalArgumentException("null value for 'terminalMethod' argument");
     }

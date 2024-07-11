@@ -11,9 +11,9 @@ public class PredicateTraversalArgument implements Serializable {
   
   public final hydra.langs.tinkerpop.gremlin.NestedTraversal traversal1;
   
-  public final java.util.Optional<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal2;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal2;
   
-  public PredicateTraversalArgument (hydra.langs.tinkerpop.gremlin.TraversalPredicate predicate, hydra.langs.tinkerpop.gremlin.NestedTraversal traversal1, java.util.Optional<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal2) {
+  public PredicateTraversalArgument (hydra.langs.tinkerpop.gremlin.TraversalPredicate predicate, hydra.langs.tinkerpop.gremlin.NestedTraversal traversal1, hydra.util.Opt<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal2) {
     if (predicate == null) {
       throw new IllegalArgumentException("null value for 'predicate' argument");
     }
@@ -56,7 +56,7 @@ public class PredicateTraversalArgument implements Serializable {
     return new PredicateTraversalArgument(predicate, traversal1, traversal2);
   }
   
-  public PredicateTraversalArgument withTraversal2(java.util.Optional<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal2) {
+  public PredicateTraversalArgument withTraversal2(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal2) {
     if (traversal2 == null) {
       throw new IllegalArgumentException("null value for 'traversal2' argument");
     }

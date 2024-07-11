@@ -23,9 +23,9 @@ public class Literal implements Serializable {
   /**
    * An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString
    */
-  public final java.util.Optional<hydra.langs.rdf.syntax.LanguageTag> languageTag;
+  public final hydra.util.Opt<hydra.langs.rdf.syntax.LanguageTag> languageTag;
   
-  public Literal (String lexicalForm, hydra.langs.rdf.syntax.Iri datatypeIri, java.util.Optional<hydra.langs.rdf.syntax.LanguageTag> languageTag) {
+  public Literal (String lexicalForm, hydra.langs.rdf.syntax.Iri datatypeIri, hydra.util.Opt<hydra.langs.rdf.syntax.LanguageTag> languageTag) {
     if (lexicalForm == null) {
       throw new IllegalArgumentException("null value for 'lexicalForm' argument");
     }
@@ -68,7 +68,7 @@ public class Literal implements Serializable {
     return new Literal(lexicalForm, datatypeIri, languageTag);
   }
   
-  public Literal withLanguageTag(java.util.Optional<hydra.langs.rdf.syntax.LanguageTag> languageTag) {
+  public Literal withLanguageTag(hydra.util.Opt<hydra.langs.rdf.syntax.LanguageTag> languageTag) {
     if (languageTag == null) {
       throw new IllegalArgumentException("null value for 'languageTag' argument");
     }

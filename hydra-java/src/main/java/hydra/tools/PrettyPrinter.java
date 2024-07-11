@@ -12,7 +12,7 @@ import hydra.core.Term;
 import hydra.lib.literals.ShowString;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+import hydra.util.Opt;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -237,7 +237,7 @@ public class PrettyPrinter {
 
                 @Override
                 public Consumer<StringBuilder> visit(Term.Optional<A> instance) {
-                    Optional<Term<A>> opt = instance.value;
+                    Opt<Term<A>> opt = instance.value;
                     return sb -> {
                         if (opt.isPresent()) {
                             var("just", term(opt.get())).accept(sb);

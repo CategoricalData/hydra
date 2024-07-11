@@ -11,11 +11,11 @@ public class Data_Param implements Serializable {
   
   public final hydra.langs.scala.meta.Name name;
   
-  public final java.util.Optional<hydra.langs.scala.meta.Type> decltpe;
+  public final hydra.util.Opt<hydra.langs.scala.meta.Type> decltpe;
   
-  public final java.util.Optional<hydra.langs.scala.meta.Data> default_;
+  public final hydra.util.Opt<hydra.langs.scala.meta.Data> default_;
   
-  public Data_Param (java.util.List<hydra.langs.scala.meta.Mod> mods, hydra.langs.scala.meta.Name name, java.util.Optional<hydra.langs.scala.meta.Type> decltpe, java.util.Optional<hydra.langs.scala.meta.Data> default_) {
+  public Data_Param (java.util.List<hydra.langs.scala.meta.Mod> mods, hydra.langs.scala.meta.Name name, hydra.util.Opt<hydra.langs.scala.meta.Type> decltpe, hydra.util.Opt<hydra.langs.scala.meta.Data> default_) {
     if (mods == null) {
       throw new IllegalArgumentException("null value for 'mods' argument");
     }
@@ -62,14 +62,14 @@ public class Data_Param implements Serializable {
     return new Data_Param(mods, name, decltpe, default_);
   }
   
-  public Data_Param withDecltpe(java.util.Optional<hydra.langs.scala.meta.Type> decltpe) {
+  public Data_Param withDecltpe(hydra.util.Opt<hydra.langs.scala.meta.Type> decltpe) {
     if (decltpe == null) {
       throw new IllegalArgumentException("null value for 'decltpe' argument");
     }
     return new Data_Param(mods, name, decltpe, default_);
   }
   
-  public Data_Param withDefault(java.util.Optional<hydra.langs.scala.meta.Data> default_) {
+  public Data_Param withDefault(hydra.util.Opt<hydra.langs.scala.meta.Data> default_) {
     if (default_ == null) {
       throw new IllegalArgumentException("null value for 'default' argument");
     }

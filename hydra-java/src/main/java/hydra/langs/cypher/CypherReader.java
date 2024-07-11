@@ -115,16 +115,14 @@ import hydra.langs.cypher.openCypher.YieldItems;
 import hydra.tools.AntlrReaderBase;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.apache.commons.text.StringEscapeUtils;
 import org.neo4j.CypherLexer;
 import org.neo4j.CypherParser;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import hydra.util.Opt;
 
 /**
  * A parser which constructs Cypher queries using the hydra/langs/cypher/openCypher model.
@@ -319,11 +317,11 @@ public class CypherReader extends AntlrReaderBase {
                 required(ctx, CypherParser.OC_ListOperatorExpressionRangeContext::oC_ListOperatorExpressionRangeRHS, CypherReader::read));
     }
 
-    private static Optional<Expression> read(CypherParser.OC_ListOperatorExpressionRangeRHSContext ctx) {
+    private static Opt<Expression> read(CypherParser.OC_ListOperatorExpressionRangeRHSContext ctx) {
         return optional(ctx, CypherParser.OC_ListOperatorExpressionRangeRHSContext::oC_Expression, CypherReader::read);
     }
 
-    private static Optional<Expression> read(CypherParser.OC_ListOperatorExpressionRangeLHSContext ctx) {
+    private static Opt<Expression> read(CypherParser.OC_ListOperatorExpressionRangeLHSContext ctx) {
         return optional(ctx, CypherParser.OC_ListOperatorExpressionRangeLHSContext::oC_Expression, CypherReader::read);
     }
 
@@ -555,7 +553,7 @@ public class CypherReader extends AntlrReaderBase {
     }
 
     private static PatternElement read(CypherParser.OC_PatternElementContext ctx) {
-        Optional<NodePattern> np = optional(ctx, CypherParser.OC_PatternElementContext::oC_NodePattern, CypherReader::read);
+        Opt<NodePattern> np = optional(ctx, CypherParser.OC_PatternElementContext::oC_NodePattern, CypherReader::read);
         return np.isPresent()
                 ? new PatternElement.Chained(
                 new NodePatternChain(np.get(), list(ctx, CypherParser.OC_PatternElementContext::oC_PatternElementChain, CypherReader::read)))
@@ -733,7 +731,7 @@ public class CypherReader extends AntlrReaderBase {
         List<UpdatingClause> uc = list(ctx,
                 CypherParser.OC_SinglePartQueryContext::oC_UpdatingClause,
                 CypherReader::read);
-        Optional<Return> ret = optional(ctx,
+        Opt<Return> ret = optional(ctx,
                 CypherParser.OC_SinglePartQueryContext::oC_Return,
                 CypherReader::read);
         return new SinglePartQuery(rc, uc, ret);

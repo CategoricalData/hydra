@@ -40,9 +40,9 @@ public abstract class ApproximateNumericType implements Serializable {
   }
   
   public static final class Float_ extends hydra.langs.sql.ansi.ApproximateNumericType implements Serializable {
-    public final java.util.Optional<hydra.langs.sql.ansi.Precision> value;
+    public final hydra.util.Opt<hydra.langs.sql.ansi.Precision> value;
     
-    public Float_ (java.util.Optional<hydra.langs.sql.ansi.Precision> value) {
+    public Float_ (hydra.util.Opt<hydra.langs.sql.ansi.Precision> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }

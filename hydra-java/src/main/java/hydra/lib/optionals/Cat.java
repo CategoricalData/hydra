@@ -12,7 +12,7 @@ import hydra.tools.PrimitiveFunction;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import hydra.util.Opt;
 import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
@@ -34,15 +34,15 @@ public class Cat<A> extends PrimitiveFunction<A> {
     @Override
     protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
         return args -> Flows.map(Expect.list(x -> Expect.optional(Flows::pure, x), args.get(0)),
-                (Function<List<Optional<Term<A>>>, Term<A>>) optionals -> Terms.list(apply(optionals)));
+                (Function<List<Opt<Term<A>>>, Term<A>>) optionals -> Terms.list(apply(optionals)));
     }
 
     /**
      * Apply the function to its single argument.
      */
-    public static <X> List<X> apply(List<Optional<X>> opt) {
+    public static <X> List<X> apply(List<Opt<X>> opt) {
         List<X> result = new ArrayList<>();
-        for (Optional<X> x : opt) {
+        for (Opt<X> x : opt) {
             x.ifPresent(result::add);
         }
         return result;

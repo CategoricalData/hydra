@@ -9,9 +9,9 @@ public class QualifiedName implements Serializable {
   
   public final hydra.langs.pegasus.pdl.Name name;
   
-  public final java.util.Optional<hydra.langs.pegasus.pdl.Namespace> namespace;
+  public final hydra.util.Opt<hydra.langs.pegasus.pdl.Namespace> namespace;
   
-  public QualifiedName (hydra.langs.pegasus.pdl.Name name, java.util.Optional<hydra.langs.pegasus.pdl.Namespace> namespace) {
+  public QualifiedName (hydra.langs.pegasus.pdl.Name name, hydra.util.Opt<hydra.langs.pegasus.pdl.Namespace> namespace) {
     if (name == null) {
       throw new IllegalArgumentException("null value for 'name' argument");
     }
@@ -43,7 +43,7 @@ public class QualifiedName implements Serializable {
     return new QualifiedName(name, namespace);
   }
   
-  public QualifiedName withNamespace(java.util.Optional<hydra.langs.pegasus.pdl.Namespace> namespace) {
+  public QualifiedName withNamespace(hydra.util.Opt<hydra.langs.pegasus.pdl.Namespace> namespace) {
     if (namespace == null) {
       throw new IllegalArgumentException("null value for 'namespace' argument");
     }

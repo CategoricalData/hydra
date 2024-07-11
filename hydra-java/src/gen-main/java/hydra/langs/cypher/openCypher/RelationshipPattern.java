@@ -9,11 +9,11 @@ public class RelationshipPattern implements Serializable {
   
   public final Boolean leftArrow;
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.RelationshipDetail> detail;
+  public final hydra.util.Opt<hydra.langs.cypher.openCypher.RelationshipDetail> detail;
   
   public final Boolean rightArrow;
   
-  public RelationshipPattern (Boolean leftArrow, java.util.Optional<hydra.langs.cypher.openCypher.RelationshipDetail> detail, Boolean rightArrow) {
+  public RelationshipPattern (Boolean leftArrow, hydra.util.Opt<hydra.langs.cypher.openCypher.RelationshipDetail> detail, Boolean rightArrow) {
     if (leftArrow == null) {
       throw new IllegalArgumentException("null value for 'leftArrow' argument");
     }
@@ -49,7 +49,7 @@ public class RelationshipPattern implements Serializable {
     return new RelationshipPattern(leftArrow, detail, rightArrow);
   }
   
-  public RelationshipPattern withDetail(java.util.Optional<hydra.langs.cypher.openCypher.RelationshipDetail> detail) {
+  public RelationshipPattern withDetail(hydra.util.Opt<hydra.langs.cypher.openCypher.RelationshipDetail> detail) {
     if (detail == null) {
       throw new IllegalArgumentException("null value for 'detail' argument");
     }

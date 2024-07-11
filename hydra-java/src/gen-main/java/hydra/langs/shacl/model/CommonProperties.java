@@ -18,7 +18,7 @@ public class CommonProperties implements Serializable {
   /**
    * See https://www.w3.org/TR/shacl/#deactivated
    */
-  public final java.util.Optional<Boolean> deactivated;
+  public final hydra.util.Opt<Boolean> deactivated;
   
   /**
    * See https://www.w3.org/TR/shacl/#message
@@ -50,7 +50,7 @@ public class CommonProperties implements Serializable {
    */
   public final java.util.Set<hydra.langs.rdf.syntax.Property> targetSubjectsOf;
   
-  public CommonProperties (java.util.Set<hydra.langs.shacl.model.CommonConstraint> constraints, java.util.Optional<Boolean> deactivated, hydra.langs.rdf.syntax.LangStrings message, hydra.langs.shacl.model.Severity severity, java.util.Set<hydra.langs.rdf.syntax.RdfsClass> targetClass, java.util.Set<hydra.langs.rdf.syntax.IriOrLiteral> targetNode, java.util.Set<hydra.langs.rdf.syntax.Property> targetObjectsOf, java.util.Set<hydra.langs.rdf.syntax.Property> targetSubjectsOf) {
+  public CommonProperties (java.util.Set<hydra.langs.shacl.model.CommonConstraint> constraints, hydra.util.Opt<Boolean> deactivated, hydra.langs.rdf.syntax.LangStrings message, hydra.langs.shacl.model.Severity severity, java.util.Set<hydra.langs.rdf.syntax.RdfsClass> targetClass, java.util.Set<hydra.langs.rdf.syntax.IriOrLiteral> targetNode, java.util.Set<hydra.langs.rdf.syntax.Property> targetObjectsOf, java.util.Set<hydra.langs.rdf.syntax.Property> targetSubjectsOf) {
     if (constraints == null) {
       throw new IllegalArgumentException("null value for 'constraints' argument");
     }
@@ -106,7 +106,7 @@ public class CommonProperties implements Serializable {
     return new CommonProperties(constraints, deactivated, message, severity, targetClass, targetNode, targetObjectsOf, targetSubjectsOf);
   }
   
-  public CommonProperties withDeactivated(java.util.Optional<Boolean> deactivated) {
+  public CommonProperties withDeactivated(hydra.util.Opt<Boolean> deactivated) {
     if (deactivated == null) {
       throw new IllegalArgumentException("null value for 'deactivated' argument");
     }

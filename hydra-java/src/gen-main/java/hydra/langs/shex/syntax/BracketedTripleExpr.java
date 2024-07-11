@@ -9,13 +9,13 @@ public class BracketedTripleExpr implements Serializable {
   
   public final hydra.langs.shex.syntax.InnerTripleExpr innerTripleExpr;
   
-  public final java.util.Optional<hydra.langs.shex.syntax.Cardinality> cardinality;
+  public final hydra.util.Opt<hydra.langs.shex.syntax.Cardinality> cardinality;
   
   public final java.util.List<hydra.langs.shex.syntax.Annotation> listOfAnnotation;
   
   public final hydra.langs.shex.syntax.SemanticActions semanticActions;
   
-  public BracketedTripleExpr (hydra.langs.shex.syntax.InnerTripleExpr innerTripleExpr, java.util.Optional<hydra.langs.shex.syntax.Cardinality> cardinality, java.util.List<hydra.langs.shex.syntax.Annotation> listOfAnnotation, hydra.langs.shex.syntax.SemanticActions semanticActions) {
+  public BracketedTripleExpr (hydra.langs.shex.syntax.InnerTripleExpr innerTripleExpr, hydra.util.Opt<hydra.langs.shex.syntax.Cardinality> cardinality, java.util.List<hydra.langs.shex.syntax.Annotation> listOfAnnotation, hydra.langs.shex.syntax.SemanticActions semanticActions) {
     if (innerTripleExpr == null) {
       throw new IllegalArgumentException("null value for 'innerTripleExpr' argument");
     }
@@ -55,7 +55,7 @@ public class BracketedTripleExpr implements Serializable {
     return new BracketedTripleExpr(innerTripleExpr, cardinality, listOfAnnotation, semanticActions);
   }
   
-  public BracketedTripleExpr withCardinality(java.util.Optional<hydra.langs.shex.syntax.Cardinality> cardinality) {
+  public BracketedTripleExpr withCardinality(hydra.util.Opt<hydra.langs.shex.syntax.Cardinality> cardinality) {
     if (cardinality == null) {
       throw new IllegalArgumentException("null value for 'cardinality' argument");
     }

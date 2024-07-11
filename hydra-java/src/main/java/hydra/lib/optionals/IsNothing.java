@@ -11,7 +11,7 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
 import java.util.List;
-import java.util.Optional;
+import hydra.util.Opt;
 import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
@@ -34,7 +34,7 @@ public class IsNothing<A> extends PrimitiveFunction<A> {
         return args -> Flows.map(Expect.optional(Flows::pure, args.get(0)), x -> Terms.boolean_(IsNothing.apply(x)));
     }
 
-    public static <X> boolean apply(Optional<X> opt) {
+    public static <X> boolean apply(Opt<X> opt) {
         return !opt.isPresent();
     }
 }

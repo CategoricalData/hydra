@@ -9,13 +9,13 @@ public class ObjectTypeExtension_Sequence implements Serializable {
   
   public final hydra.langs.graphql.syntax.Name name;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives;
   
   public final hydra.langs.graphql.syntax.FieldsDefinition fieldsDefinition;
   
-  public ObjectTypeExtension_Sequence (hydra.langs.graphql.syntax.Name name, java.util.Optional<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.FieldsDefinition fieldsDefinition) {
+  public ObjectTypeExtension_Sequence (hydra.langs.graphql.syntax.Name name, hydra.util.Opt<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.FieldsDefinition fieldsDefinition) {
     if (name == null) {
       throw new IllegalArgumentException("null value for 'name' argument");
     }
@@ -55,14 +55,14 @@ public class ObjectTypeExtension_Sequence implements Serializable {
     return new ObjectTypeExtension_Sequence(name, implementsInterfaces, directives, fieldsDefinition);
   }
   
-  public ObjectTypeExtension_Sequence withImplementsInterfaces(java.util.Optional<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces) {
+  public ObjectTypeExtension_Sequence withImplementsInterfaces(hydra.util.Opt<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces) {
     if (implementsInterfaces == null) {
       throw new IllegalArgumentException("null value for 'implementsInterfaces' argument");
     }
     return new ObjectTypeExtension_Sequence(name, implementsInterfaces, directives, fieldsDefinition);
   }
   
-  public ObjectTypeExtension_Sequence withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+  public ObjectTypeExtension_Sequence withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
     if (directives == null) {
       throw new IllegalArgumentException("null value for 'directives' argument");
     }

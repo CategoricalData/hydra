@@ -64,7 +64,7 @@ import hydra.tools.MapperBase;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+import hydra.util.Opt;
 
 import static hydra.langs.tinkerpop.dsl.Queries.apply;
 import static hydra.langs.tinkerpop.dsl.Queries.query;
@@ -287,12 +287,12 @@ public class FromCypher extends MapperBase {
                     ? vp
                     : vp.withEdges(Collections.singletonList(cur));
             Direction dir = directionOf(chain.relationship);
-            Optional<EdgeLabel> label = labelOf(chain.relationship);
-            Optional<Properties> ps = chain.relationship.detail.flatMap(r -> r.properties);
+            Opt<EdgeLabel> label = labelOf(chain.relationship);
+            Opt<Properties> ps = chain.relationship.detail.flatMap(r -> r.properties);
             List<PropertyPattern> props = ps.isPresent()
                     ? from(ps.get())
                     : Collections.emptyList();
-            cur = new EdgeProjectionPattern(dir, label, props, Optional.of(vp));
+            cur = new EdgeProjectionPattern(dir, label, props, Opt.of(vp));
         }
 
         return cur;
@@ -456,7 +456,7 @@ public class FromCypher extends MapperBase {
                 : (cypher.rightArrow ? new Direction.Out() : new Direction.Undirected());
     }
 
-    private static Optional<VertexLabel> labelOf(NodePattern cypher) {
+    private static Opt<VertexLabel> labelOf(NodePattern cypher) {
         if (cypher.labels.isPresent()) {
             List<NodeLabel> labels = cypher.labels.get().value;
             if (labels.size() > 0) {
@@ -464,14 +464,14 @@ public class FromCypher extends MapperBase {
                     return unsupported("multiple vertex labels per pattern not yet supported");
                 }
 
-                return Optional.of(new VertexLabel(labels.get(0).value));
+                return Opt.of(new VertexLabel(labels.get(0).value));
             }
         }
 
-        return Optional.empty();
+        return Opt.empty();
     }
 
-    private static Optional<EdgeLabel> labelOf(RelationshipPattern cypher) {
+    private static Opt<EdgeLabel> labelOf(RelationshipPattern cypher) {
         if (cypher.detail.isPresent()) {
             RelationshipDetail detail = cypher.detail.get();
             if (detail.types.isPresent()) {
@@ -481,11 +481,11 @@ public class FromCypher extends MapperBase {
                         return unsupported("multiple edge labels per pattern not yet supported");
                     }
 
-                    return Optional.of(new EdgeLabel(types.get(0).value));
+                    return Opt.of(new EdgeLabel(types.get(0).value));
                 }
             }
         }
 
-        return Optional.empty();
+        return Opt.empty();
     }
 }

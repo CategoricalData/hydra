@@ -6,6 +6,7 @@ import hydra.compute.Flow;
 import hydra.compute.FlowState;
 import hydra.compute.Trace;
 import hydra.mantle.Either;
+import hydra.util.Opt;
 
 import java.util.function.Function;
 
@@ -135,7 +136,7 @@ public interface Tier1 {
         hydra.compute.FlowState<S, A> f2 = ((((f)).value).apply((s0))).apply((t1));
         return new hydra.compute.FlowState<>(((f2)).value, ((f2)).state, (((restore)).apply((t0))).apply(((f2)).trace));
       };
-      java.util.function.Function<String, hydra.compute.FlowState<S, A>> forLeft = msg -> new hydra.compute.FlowState<>(java.util.Optional.empty(), (s0), (Tier1.pushError((msg))).apply((t0)));
+      java.util.function.Function<String, hydra.compute.FlowState<S, A>> forLeft = msg -> new hydra.compute.FlowState<>(Opt.empty(), (s0), (Tier1.pushError((msg))).apply((t0)));
       return mutate.apply(t0).accept(new Either.Visitor<String, Trace, FlowState<S, A>>() {
         @Override
         public FlowState<S, A> visit(Either.Left<String, Trace> instance) {

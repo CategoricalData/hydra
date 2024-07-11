@@ -12,9 +12,9 @@ public class Pattern implements Serializable {
   
   public final String regex;
   
-  public final java.util.Optional<String> flags;
+  public final hydra.util.Opt<String> flags;
   
-  public Pattern (String regex, java.util.Optional<String> flags) {
+  public Pattern (String regex, hydra.util.Opt<String> flags) {
     if (regex == null) {
       throw new IllegalArgumentException("null value for 'regex' argument");
     }
@@ -46,7 +46,7 @@ public class Pattern implements Serializable {
     return new Pattern(regex, flags);
   }
   
-  public Pattern withFlags(java.util.Optional<String> flags) {
+  public Pattern withFlags(hydra.util.Opt<String> flags) {
     if (flags == null) {
       throw new IllegalArgumentException("null value for 'flags' argument");
     }

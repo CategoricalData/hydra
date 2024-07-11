@@ -9,9 +9,9 @@ public class FragmentSpread implements Serializable {
   
   public final hydra.langs.graphql.syntax.FragmentName fragmentName;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives;
   
-  public FragmentSpread (hydra.langs.graphql.syntax.FragmentName fragmentName, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+  public FragmentSpread (hydra.langs.graphql.syntax.FragmentName fragmentName, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
     if (fragmentName == null) {
       throw new IllegalArgumentException("null value for 'fragmentName' argument");
     }
@@ -43,7 +43,7 @@ public class FragmentSpread implements Serializable {
     return new FragmentSpread(fragmentName, directives);
   }
   
-  public FragmentSpread withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+  public FragmentSpread withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
     if (directives == null) {
       throw new IllegalArgumentException("null value for 'directives' argument");
     }

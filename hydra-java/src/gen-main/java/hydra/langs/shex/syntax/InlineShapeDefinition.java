@@ -9,9 +9,9 @@ public class InlineShapeDefinition implements Serializable {
   
   public final java.util.List<hydra.langs.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt> listOfAlts;
   
-  public final java.util.Optional<hydra.langs.shex.syntax.TripleExpression> tripleExpression;
+  public final hydra.util.Opt<hydra.langs.shex.syntax.TripleExpression> tripleExpression;
   
-  public InlineShapeDefinition (java.util.List<hydra.langs.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt> listOfAlts, java.util.Optional<hydra.langs.shex.syntax.TripleExpression> tripleExpression) {
+  public InlineShapeDefinition (java.util.List<hydra.langs.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt> listOfAlts, hydra.util.Opt<hydra.langs.shex.syntax.TripleExpression> tripleExpression) {
     if (listOfAlts == null) {
       throw new IllegalArgumentException("null value for 'listOfAlts' argument");
     }
@@ -43,7 +43,7 @@ public class InlineShapeDefinition implements Serializable {
     return new InlineShapeDefinition(listOfAlts, tripleExpression);
   }
   
-  public InlineShapeDefinition withTripleExpression(java.util.Optional<hydra.langs.shex.syntax.TripleExpression> tripleExpression) {
+  public InlineShapeDefinition withTripleExpression(hydra.util.Opt<hydra.langs.shex.syntax.TripleExpression> tripleExpression) {
     if (tripleExpression == null) {
       throw new IllegalArgumentException("null value for 'tripleExpression' argument");
     }

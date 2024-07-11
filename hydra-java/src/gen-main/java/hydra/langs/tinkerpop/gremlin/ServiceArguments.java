@@ -34,9 +34,9 @@ public abstract class ServiceArguments implements Serializable {
   }
   
   public static final class Map extends hydra.langs.tinkerpop.gremlin.ServiceArguments implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.GenericLiteralMapArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.GenericLiteralMapArgument> value;
     
-    public Map (java.util.Optional<hydra.langs.tinkerpop.gremlin.GenericLiteralMapArgument> value) {
+    public Map (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.GenericLiteralMapArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -64,9 +64,9 @@ public abstract class ServiceArguments implements Serializable {
   }
   
   public static final class Traversal extends hydra.langs.tinkerpop.gremlin.ServiceArguments implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.NestedTraversal> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.NestedTraversal> value;
     
-    public Traversal (java.util.Optional<hydra.langs.tinkerpop.gremlin.NestedTraversal> value) {
+    public Traversal (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.NestedTraversal> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }

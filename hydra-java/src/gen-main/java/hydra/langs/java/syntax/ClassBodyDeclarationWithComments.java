@@ -9,9 +9,9 @@ public class ClassBodyDeclarationWithComments implements Serializable {
   
   public final hydra.langs.java.syntax.ClassBodyDeclaration value;
   
-  public final java.util.Optional<String> comments;
+  public final hydra.util.Opt<String> comments;
   
-  public ClassBodyDeclarationWithComments (hydra.langs.java.syntax.ClassBodyDeclaration value, java.util.Optional<String> comments) {
+  public ClassBodyDeclarationWithComments (hydra.langs.java.syntax.ClassBodyDeclaration value, hydra.util.Opt<String> comments) {
     if (value == null) {
       throw new IllegalArgumentException("null value for 'value' argument");
     }
@@ -43,7 +43,7 @@ public class ClassBodyDeclarationWithComments implements Serializable {
     return new ClassBodyDeclarationWithComments(value, comments);
   }
   
-  public ClassBodyDeclarationWithComments withComments(java.util.Optional<String> comments) {
+  public ClassBodyDeclarationWithComments withComments(hydra.util.Opt<String> comments) {
     if (comments == null) {
       throw new IllegalArgumentException("null value for 'comments' argument");
     }

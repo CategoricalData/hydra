@@ -7,17 +7,17 @@ import java.io.Serializable;
 public class InterfaceTypeDefinition_Sequence implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.InterfaceTypeDefinition.Sequence");
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Description> description;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Description> description;
   
   public final hydra.langs.graphql.syntax.Name name;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives;
   
   public final hydra.langs.graphql.syntax.FieldsDefinition fieldsDefinition;
   
-  public InterfaceTypeDefinition_Sequence (java.util.Optional<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.Name name, java.util.Optional<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.FieldsDefinition fieldsDefinition) {
+  public InterfaceTypeDefinition_Sequence (hydra.util.Opt<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.Name name, hydra.util.Opt<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.FieldsDefinition fieldsDefinition) {
     if (description == null) {
       throw new IllegalArgumentException("null value for 'description' argument");
     }
@@ -54,7 +54,7 @@ public class InterfaceTypeDefinition_Sequence implements Serializable {
     return 2 * description.hashCode() + 3 * name.hashCode() + 5 * implementsInterfaces.hashCode() + 7 * directives.hashCode() + 11 * fieldsDefinition.hashCode();
   }
   
-  public InterfaceTypeDefinition_Sequence withDescription(java.util.Optional<hydra.langs.graphql.syntax.Description> description) {
+  public InterfaceTypeDefinition_Sequence withDescription(hydra.util.Opt<hydra.langs.graphql.syntax.Description> description) {
     if (description == null) {
       throw new IllegalArgumentException("null value for 'description' argument");
     }
@@ -68,14 +68,14 @@ public class InterfaceTypeDefinition_Sequence implements Serializable {
     return new InterfaceTypeDefinition_Sequence(description, name, implementsInterfaces, directives, fieldsDefinition);
   }
   
-  public InterfaceTypeDefinition_Sequence withImplementsInterfaces(java.util.Optional<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces) {
+  public InterfaceTypeDefinition_Sequence withImplementsInterfaces(hydra.util.Opt<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces) {
     if (implementsInterfaces == null) {
       throw new IllegalArgumentException("null value for 'implementsInterfaces' argument");
     }
     return new InterfaceTypeDefinition_Sequence(description, name, implementsInterfaces, directives, fieldsDefinition);
   }
   
-  public InterfaceTypeDefinition_Sequence withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+  public InterfaceTypeDefinition_Sequence withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
     if (directives == null) {
       throw new IllegalArgumentException("null value for 'directives' argument");
     }

@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class WhereWithPredicateArgs implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.WhereWithPredicateArgs");
   
-  public final java.util.Optional<hydra.langs.tinkerpop.gremlin.StringArgument> leftArg;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> leftArg;
   
   public final hydra.langs.tinkerpop.gremlin.TraversalPredicate predicate;
   
-  public WhereWithPredicateArgs (java.util.Optional<hydra.langs.tinkerpop.gremlin.StringArgument> leftArg, hydra.langs.tinkerpop.gremlin.TraversalPredicate predicate) {
+  public WhereWithPredicateArgs (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> leftArg, hydra.langs.tinkerpop.gremlin.TraversalPredicate predicate) {
     if (leftArg == null) {
       throw new IllegalArgumentException("null value for 'leftArg' argument");
     }
@@ -36,7 +36,7 @@ public class WhereWithPredicateArgs implements Serializable {
     return 2 * leftArg.hashCode() + 3 * predicate.hashCode();
   }
   
-  public WhereWithPredicateArgs withLeftArg(java.util.Optional<hydra.langs.tinkerpop.gremlin.StringArgument> leftArg) {
+  public WhereWithPredicateArgs withLeftArg(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> leftArg) {
     if (leftArg == null) {
       throw new IllegalArgumentException("null value for 'leftArg' argument");
     }

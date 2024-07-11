@@ -9,9 +9,9 @@ public class FilterExpression implements Serializable {
   
   public final hydra.langs.cypher.openCypher.IdInColl idInColl;
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.Where> where;
+  public final hydra.util.Opt<hydra.langs.cypher.openCypher.Where> where;
   
-  public FilterExpression (hydra.langs.cypher.openCypher.IdInColl idInColl, java.util.Optional<hydra.langs.cypher.openCypher.Where> where) {
+  public FilterExpression (hydra.langs.cypher.openCypher.IdInColl idInColl, hydra.util.Opt<hydra.langs.cypher.openCypher.Where> where) {
     if (idInColl == null) {
       throw new IllegalArgumentException("null value for 'idInColl' argument");
     }
@@ -43,7 +43,7 @@ public class FilterExpression implements Serializable {
     return new FilterExpression(idInColl, where);
   }
   
-  public FilterExpression withWhere(java.util.Optional<hydra.langs.cypher.openCypher.Where> where) {
+  public FilterExpression withWhere(hydra.util.Opt<hydra.langs.cypher.openCypher.Where> where) {
     if (where == null) {
       throw new IllegalArgumentException("null value for 'where' argument");
     }

@@ -14,11 +14,11 @@ public class Import implements Serializable {
   
   public final hydra.langs.haskell.ast.ModuleName module;
   
-  public final java.util.Optional<hydra.langs.haskell.ast.ModuleName> as;
+  public final hydra.util.Opt<hydra.langs.haskell.ast.ModuleName> as;
   
-  public final java.util.Optional<hydra.langs.haskell.ast.Import_Spec> spec;
+  public final hydra.util.Opt<hydra.langs.haskell.ast.Import_Spec> spec;
   
-  public Import (Boolean qualified, hydra.langs.haskell.ast.ModuleName module, java.util.Optional<hydra.langs.haskell.ast.ModuleName> as, java.util.Optional<hydra.langs.haskell.ast.Import_Spec> spec) {
+  public Import (Boolean qualified, hydra.langs.haskell.ast.ModuleName module, hydra.util.Opt<hydra.langs.haskell.ast.ModuleName> as, hydra.util.Opt<hydra.langs.haskell.ast.Import_Spec> spec) {
     if (qualified == null) {
       throw new IllegalArgumentException("null value for 'qualified' argument");
     }
@@ -65,14 +65,14 @@ public class Import implements Serializable {
     return new Import(qualified, module, as, spec);
   }
   
-  public Import withAs(java.util.Optional<hydra.langs.haskell.ast.ModuleName> as) {
+  public Import withAs(hydra.util.Opt<hydra.langs.haskell.ast.ModuleName> as) {
     if (as == null) {
       throw new IllegalArgumentException("null value for 'as' argument");
     }
     return new Import(qualified, module, as, spec);
   }
   
-  public Import withSpec(java.util.Optional<hydra.langs.haskell.ast.Import_Spec> spec) {
+  public Import withSpec(hydra.util.Opt<hydra.langs.haskell.ast.Import_Spec> spec) {
     if (spec == null) {
       throw new IllegalArgumentException("null value for 'spec' argument");
     }

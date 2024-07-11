@@ -9,9 +9,9 @@ public class WithArgs implements Serializable {
   
   public final hydra.langs.tinkerpop.gremlin.WithArgsKeys keys;
   
-  public final java.util.Optional<hydra.langs.tinkerpop.gremlin.WithArgsValues> values;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.WithArgsValues> values;
   
-  public WithArgs (hydra.langs.tinkerpop.gremlin.WithArgsKeys keys, java.util.Optional<hydra.langs.tinkerpop.gremlin.WithArgsValues> values) {
+  public WithArgs (hydra.langs.tinkerpop.gremlin.WithArgsKeys keys, hydra.util.Opt<hydra.langs.tinkerpop.gremlin.WithArgsValues> values) {
     if (keys == null) {
       throw new IllegalArgumentException("null value for 'keys' argument");
     }
@@ -43,7 +43,7 @@ public class WithArgs implements Serializable {
     return new WithArgs(keys, values);
   }
   
-  public WithArgs withValues(java.util.Optional<hydra.langs.tinkerpop.gremlin.WithArgsValues> values) {
+  public WithArgs withValues(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.WithArgsValues> values) {
     if (values == null) {
       throw new IllegalArgumentException("null value for 'values' argument");
     }

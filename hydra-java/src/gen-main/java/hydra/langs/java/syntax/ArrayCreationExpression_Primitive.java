@@ -11,9 +11,9 @@ public class ArrayCreationExpression_Primitive implements Serializable {
   
   public final java.util.List<hydra.langs.java.syntax.DimExpr> dimExprs;
   
-  public final java.util.Optional<hydra.langs.java.syntax.Dims> dims;
+  public final hydra.util.Opt<hydra.langs.java.syntax.Dims> dims;
   
-  public ArrayCreationExpression_Primitive (hydra.langs.java.syntax.PrimitiveTypeWithAnnotations type, java.util.List<hydra.langs.java.syntax.DimExpr> dimExprs, java.util.Optional<hydra.langs.java.syntax.Dims> dims) {
+  public ArrayCreationExpression_Primitive (hydra.langs.java.syntax.PrimitiveTypeWithAnnotations type, java.util.List<hydra.langs.java.syntax.DimExpr> dimExprs, hydra.util.Opt<hydra.langs.java.syntax.Dims> dims) {
     if (type == null) {
       throw new IllegalArgumentException("null value for 'type' argument");
     }
@@ -56,7 +56,7 @@ public class ArrayCreationExpression_Primitive implements Serializable {
     return new ArrayCreationExpression_Primitive(type, dimExprs, dims);
   }
   
-  public ArrayCreationExpression_Primitive withDims(java.util.Optional<hydra.langs.java.syntax.Dims> dims) {
+  public ArrayCreationExpression_Primitive withDims(hydra.util.Opt<hydra.langs.java.syntax.Dims> dims) {
     if (dims == null) {
       throw new IllegalArgumentException("null value for 'dims' argument");
     }

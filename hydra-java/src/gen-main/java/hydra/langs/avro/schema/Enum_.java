@@ -15,9 +15,9 @@ public class Enum_ implements Serializable {
   /**
    * A default value for this enumeration, used during resolution when the reader encounters a symbol from the writer that isn’t defined in the reader’s schema. The value provided here must be a JSON string that’s a member of the symbols array
    */
-  public final java.util.Optional<String> default_;
+  public final hydra.util.Opt<String> default_;
   
-  public Enum_ (java.util.List<String> symbols, java.util.Optional<String> default_) {
+  public Enum_ (java.util.List<String> symbols, hydra.util.Opt<String> default_) {
     if (symbols == null) {
       throw new IllegalArgumentException("null value for 'symbols' argument");
     }
@@ -49,7 +49,7 @@ public class Enum_ implements Serializable {
     return new Enum_(symbols, default_);
   }
   
-  public Enum_ withDefault(java.util.Optional<String> default_) {
+  public Enum_ withDefault(hydra.util.Opt<String> default_) {
     if (default_ == null) {
       throw new IllegalArgumentException("null value for 'default' argument");
     }

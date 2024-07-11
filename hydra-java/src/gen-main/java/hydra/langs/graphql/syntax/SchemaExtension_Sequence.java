@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class SchemaExtension_Sequence implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.SchemaExtension.Sequence");
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives;
   
   public final hydra.langs.graphql.syntax.RootOperationTypeDefinition rootOperationTypeDefinition;
   
-  public SchemaExtension_Sequence (java.util.Optional<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.RootOperationTypeDefinition rootOperationTypeDefinition) {
+  public SchemaExtension_Sequence (hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.RootOperationTypeDefinition rootOperationTypeDefinition) {
     if (directives == null) {
       throw new IllegalArgumentException("null value for 'directives' argument");
     }
@@ -36,7 +36,7 @@ public class SchemaExtension_Sequence implements Serializable {
     return 2 * directives.hashCode() + 3 * rootOperationTypeDefinition.hashCode();
   }
   
-  public SchemaExtension_Sequence withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+  public SchemaExtension_Sequence withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
     if (directives == null) {
       throw new IllegalArgumentException("null value for 'directives' argument");
     }

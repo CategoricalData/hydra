@@ -2,6 +2,8 @@
 
 package hydra.core;
 
+import hydra.util.Opt;
+
 import java.io.Serializable;
 
 /**
@@ -18,14 +20,14 @@ public class RowType<A> implements Serializable {
   /**
    * Optionally, the name of another row type which this one extends. If/when field order is preserved, the inherited fields of the extended type precede those of the extension.
    */
-  public final java.util.Optional<hydra.core.Name> extends_;
+  public final Opt<Name> extends_;
   
   /**
    * The fields of this row type, excluding any inherited fields
    */
   public final java.util.List<hydra.core.FieldType<A>> fields;
   
-  public RowType (hydra.core.Name typeName, java.util.Optional<hydra.core.Name> extends_, java.util.List<hydra.core.FieldType<A>> fields) {
+  public RowType (hydra.core.Name typeName, Opt<Name> extends_, java.util.List<hydra.core.FieldType<A>> fields) {
     if (typeName == null) {
       throw new IllegalArgumentException("null value for 'typeName' argument");
     }
@@ -61,7 +63,7 @@ public class RowType<A> implements Serializable {
     return new RowType(typeName, extends_, fields);
   }
   
-  public RowType withExtends(java.util.Optional<hydra.core.Name> extends_) {
+  public RowType withExtends(Opt<Name> extends_) {
     if (extends_ == null) {
       throw new IllegalArgumentException("null value for 'extends' argument");
     }

@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class OptionalTraversalScopeArgumentAndStringArgument implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.OptionalTraversalScopeArgumentAndStringArgument");
   
-  public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope;
   
   public final hydra.langs.tinkerpop.gremlin.StringArgument string;
   
-  public OptionalTraversalScopeArgumentAndStringArgument (java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope, hydra.langs.tinkerpop.gremlin.StringArgument string) {
+  public OptionalTraversalScopeArgumentAndStringArgument (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope, hydra.langs.tinkerpop.gremlin.StringArgument string) {
     if (scope == null) {
       throw new IllegalArgumentException("null value for 'scope' argument");
     }
@@ -36,7 +36,7 @@ public class OptionalTraversalScopeArgumentAndStringArgument implements Serializ
     return 2 * scope.hashCode() + 3 * string.hashCode();
   }
   
-  public OptionalTraversalScopeArgumentAndStringArgument withScope(java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope) {
+  public OptionalTraversalScopeArgumentAndStringArgument withScope(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope) {
     if (scope == null) {
       throw new IllegalArgumentException("null value for 'scope' argument");
     }

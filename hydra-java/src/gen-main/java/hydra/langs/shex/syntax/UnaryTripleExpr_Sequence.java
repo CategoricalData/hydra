@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class UnaryTripleExpr_Sequence implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.UnaryTripleExpr.Sequence");
   
-  public final java.util.Optional<hydra.langs.shex.syntax.TripleExprLabel> sequence;
+  public final hydra.util.Opt<hydra.langs.shex.syntax.TripleExprLabel> sequence;
   
   public final hydra.langs.shex.syntax.UnaryTripleExpr_Sequence_Alts alts;
   
-  public UnaryTripleExpr_Sequence (java.util.Optional<hydra.langs.shex.syntax.TripleExprLabel> sequence, hydra.langs.shex.syntax.UnaryTripleExpr_Sequence_Alts alts) {
+  public UnaryTripleExpr_Sequence (hydra.util.Opt<hydra.langs.shex.syntax.TripleExprLabel> sequence, hydra.langs.shex.syntax.UnaryTripleExpr_Sequence_Alts alts) {
     if (sequence == null) {
       throw new IllegalArgumentException("null value for 'sequence' argument");
     }
@@ -36,7 +36,7 @@ public class UnaryTripleExpr_Sequence implements Serializable {
     return 2 * sequence.hashCode() + 3 * alts.hashCode();
   }
   
-  public UnaryTripleExpr_Sequence withSequence(java.util.Optional<hydra.langs.shex.syntax.TripleExprLabel> sequence) {
+  public UnaryTripleExpr_Sequence withSequence(hydra.util.Opt<hydra.langs.shex.syntax.TripleExprLabel> sequence) {
     if (sequence == null) {
       throw new IllegalArgumentException("null value for 'sequence' argument");
     }

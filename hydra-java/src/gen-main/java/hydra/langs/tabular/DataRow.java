@@ -10,9 +10,9 @@ import java.io.Serializable;
 public class DataRow<V> implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tabular.DataRow");
   
-  public final java.util.List<java.util.Optional<V>> value;
+  public final java.util.List<hydra.util.Opt<V>> value;
   
-  public DataRow (java.util.List<java.util.Optional<V>> value) {
+  public DataRow (java.util.List<hydra.util.Opt<V>> value) {
     if (value == null) {
       throw new IllegalArgumentException("null value for 'value' argument");
     }

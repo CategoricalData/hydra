@@ -11,11 +11,11 @@ public class TryWithResourcesStatement implements Serializable {
   
   public final hydra.langs.java.syntax.Block block;
   
-  public final java.util.Optional<hydra.langs.java.syntax.Catches> catches;
+  public final hydra.util.Opt<hydra.langs.java.syntax.Catches> catches;
   
-  public final java.util.Optional<hydra.langs.java.syntax.Finally> finally_;
+  public final hydra.util.Opt<hydra.langs.java.syntax.Finally> finally_;
   
-  public TryWithResourcesStatement (hydra.langs.java.syntax.ResourceSpecification resourceSpecification, hydra.langs.java.syntax.Block block, java.util.Optional<hydra.langs.java.syntax.Catches> catches, java.util.Optional<hydra.langs.java.syntax.Finally> finally_) {
+  public TryWithResourcesStatement (hydra.langs.java.syntax.ResourceSpecification resourceSpecification, hydra.langs.java.syntax.Block block, hydra.util.Opt<hydra.langs.java.syntax.Catches> catches, hydra.util.Opt<hydra.langs.java.syntax.Finally> finally_) {
     if (resourceSpecification == null) {
       throw new IllegalArgumentException("null value for 'resourceSpecification' argument");
     }
@@ -62,14 +62,14 @@ public class TryWithResourcesStatement implements Serializable {
     return new TryWithResourcesStatement(resourceSpecification, block, catches, finally_);
   }
   
-  public TryWithResourcesStatement withCatches(java.util.Optional<hydra.langs.java.syntax.Catches> catches) {
+  public TryWithResourcesStatement withCatches(hydra.util.Opt<hydra.langs.java.syntax.Catches> catches) {
     if (catches == null) {
       throw new IllegalArgumentException("null value for 'catches' argument");
     }
     return new TryWithResourcesStatement(resourceSpecification, block, catches, finally_);
   }
   
-  public TryWithResourcesStatement withFinally(java.util.Optional<hydra.langs.java.syntax.Finally> finally_) {
+  public TryWithResourcesStatement withFinally(hydra.util.Opt<hydra.langs.java.syntax.Finally> finally_) {
     if (finally_ == null) {
       throw new IllegalArgumentException("null value for 'finally' argument");
     }

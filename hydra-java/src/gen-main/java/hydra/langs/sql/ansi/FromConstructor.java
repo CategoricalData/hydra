@@ -7,13 +7,13 @@ import java.io.Serializable;
 public class FromConstructor implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.FromConstructor");
   
-  public final java.util.Optional<hydra.langs.sql.ansi.InsertColumnList> columns;
+  public final hydra.util.Opt<hydra.langs.sql.ansi.InsertColumnList> columns;
   
-  public final java.util.Optional<hydra.langs.sql.ansi.OverrideClause> override;
+  public final hydra.util.Opt<hydra.langs.sql.ansi.OverrideClause> override;
   
   public final hydra.langs.sql.ansi.ContextuallyTypedTableValueConstructor values;
   
-  public FromConstructor (java.util.Optional<hydra.langs.sql.ansi.InsertColumnList> columns, java.util.Optional<hydra.langs.sql.ansi.OverrideClause> override, hydra.langs.sql.ansi.ContextuallyTypedTableValueConstructor values) {
+  public FromConstructor (hydra.util.Opt<hydra.langs.sql.ansi.InsertColumnList> columns, hydra.util.Opt<hydra.langs.sql.ansi.OverrideClause> override, hydra.langs.sql.ansi.ContextuallyTypedTableValueConstructor values) {
     if (columns == null) {
       throw new IllegalArgumentException("null value for 'columns' argument");
     }
@@ -42,14 +42,14 @@ public class FromConstructor implements Serializable {
     return 2 * columns.hashCode() + 3 * override.hashCode() + 5 * values.hashCode();
   }
   
-  public FromConstructor withColumns(java.util.Optional<hydra.langs.sql.ansi.InsertColumnList> columns) {
+  public FromConstructor withColumns(hydra.util.Opt<hydra.langs.sql.ansi.InsertColumnList> columns) {
     if (columns == null) {
       throw new IllegalArgumentException("null value for 'columns' argument");
     }
     return new FromConstructor(columns, override, values);
   }
   
-  public FromConstructor withOverride(java.util.Optional<hydra.langs.sql.ansi.OverrideClause> override) {
+  public FromConstructor withOverride(hydra.util.Opt<hydra.langs.sql.ansi.OverrideClause> override) {
     if (override == null) {
       throw new IllegalArgumentException("null value for 'override' argument");
     }

@@ -18,7 +18,7 @@ public class Field implements Serializable {
   /**
    * The field JSON name
    */
-  public final java.util.Optional<String> jsonName;
+  public final hydra.util.Opt<String> jsonName;
   
   /**
    * The datatype of the field
@@ -35,7 +35,7 @@ public class Field implements Serializable {
    */
   public final java.util.List<hydra.langs.protobuf.proto3.Option> options;
   
-  public Field (hydra.langs.protobuf.proto3.FieldName name, java.util.Optional<String> jsonName, hydra.langs.protobuf.proto3.FieldType type, Integer number, java.util.List<hydra.langs.protobuf.proto3.Option> options) {
+  public Field (hydra.langs.protobuf.proto3.FieldName name, hydra.util.Opt<String> jsonName, hydra.langs.protobuf.proto3.FieldType type, Integer number, java.util.List<hydra.langs.protobuf.proto3.Option> options) {
     if (name == null) {
       throw new IllegalArgumentException("null value for 'name' argument");
     }
@@ -79,7 +79,7 @@ public class Field implements Serializable {
     return new Field(name, jsonName, type, number, options);
   }
   
-  public Field withJsonName(java.util.Optional<String> jsonName) {
+  public Field withJsonName(hydra.util.Opt<String> jsonName) {
     if (jsonName == null) {
       throw new IllegalArgumentException("null value for 'jsonName' argument");
     }

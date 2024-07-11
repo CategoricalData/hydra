@@ -7,9 +7,9 @@ import java.io.Serializable;
 public class AtpNameNs implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.AtpNameNs");
   
-  public final java.util.Optional<hydra.langs.shex.syntax.PnPrefix> value;
+  public final hydra.util.Opt<hydra.langs.shex.syntax.PnPrefix> value;
   
-  public AtpNameNs (java.util.Optional<hydra.langs.shex.syntax.PnPrefix> value) {
+  public AtpNameNs (hydra.util.Opt<hydra.langs.shex.syntax.PnPrefix> value) {
     if (value == null) {
       throw new IllegalArgumentException("null value for 'value' argument");
     }

@@ -27,9 +27,9 @@ public class ColumnIndex implements Serializable {
   /**
    * A list containing the number of null values for each page
    */
-  public final java.util.Optional<java.util.List<Long>> nullCounts;
+  public final hydra.util.Opt<java.util.List<Long>> nullCounts;
   
-  public ColumnIndex (java.util.List<Boolean> nullPages, java.util.List<String> minValues, java.util.List<String> maxValues, hydra.langs.parquet.format.BoundaryOrder boundaryOrder, java.util.Optional<java.util.List<Long>> nullCounts) {
+  public ColumnIndex (java.util.List<Boolean> nullPages, java.util.List<String> minValues, java.util.List<String> maxValues, hydra.langs.parquet.format.BoundaryOrder boundaryOrder, hydra.util.Opt<java.util.List<Long>> nullCounts) {
     if (nullPages == null) {
       throw new IllegalArgumentException("null value for 'nullPages' argument");
     }
@@ -94,7 +94,7 @@ public class ColumnIndex implements Serializable {
     return new ColumnIndex(nullPages, minValues, maxValues, boundaryOrder, nullCounts);
   }
   
-  public ColumnIndex withNullCounts(java.util.Optional<java.util.List<Long>> nullCounts) {
+  public ColumnIndex withNullCounts(hydra.util.Opt<java.util.List<Long>> nullCounts) {
     if (nullCounts == null) {
       throw new IllegalArgumentException("null value for 'nullCounts' argument");
     }

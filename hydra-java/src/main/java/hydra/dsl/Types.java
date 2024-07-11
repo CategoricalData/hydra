@@ -20,7 +20,7 @@ import hydra.compute.Flow;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+import hydra.util.Opt;
 
 import static hydra.dsl.Core.name;
 
@@ -332,7 +332,7 @@ public interface Types {
      * Construct a row type.
      */
     static <A> RowType<A> row(final Name name, final FieldType<A>... fields) {
-        return new RowType<>(name, Optional.empty(), Arrays.asList(fields));
+        return new RowType<>(name, Opt.empty(), Arrays.asList(fields));
     }
 
     /**

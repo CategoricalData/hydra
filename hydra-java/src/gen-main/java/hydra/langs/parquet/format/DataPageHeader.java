@@ -33,9 +33,9 @@ public class DataPageHeader implements Serializable {
   /**
    * Optional statistics for the data in this page
    */
-  public final java.util.Optional<hydra.langs.parquet.format.Statistics> statistics;
+  public final hydra.util.Opt<hydra.langs.parquet.format.Statistics> statistics;
   
-  public DataPageHeader (Integer numValues, hydra.langs.parquet.format.Encoding encoding, hydra.langs.parquet.format.Encoding definitionLevelEncoding, hydra.langs.parquet.format.Encoding repetitionLevelEncoding, java.util.Optional<hydra.langs.parquet.format.Statistics> statistics) {
+  public DataPageHeader (Integer numValues, hydra.langs.parquet.format.Encoding encoding, hydra.langs.parquet.format.Encoding definitionLevelEncoding, hydra.langs.parquet.format.Encoding repetitionLevelEncoding, hydra.util.Opt<hydra.langs.parquet.format.Statistics> statistics) {
     if (numValues == null) {
       throw new IllegalArgumentException("null value for 'numValues' argument");
     }
@@ -100,7 +100,7 @@ public class DataPageHeader implements Serializable {
     return new DataPageHeader(numValues, encoding, definitionLevelEncoding, repetitionLevelEncoding, statistics);
   }
   
-  public DataPageHeader withStatistics(java.util.Optional<hydra.langs.parquet.format.Statistics> statistics) {
+  public DataPageHeader withStatistics(hydra.util.Opt<hydra.langs.parquet.format.Statistics> statistics) {
     if (statistics == null) {
       throw new IllegalArgumentException("null value for 'statistics' argument");
     }

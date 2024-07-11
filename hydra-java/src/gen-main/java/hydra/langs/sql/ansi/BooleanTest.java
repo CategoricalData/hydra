@@ -9,9 +9,9 @@ public class BooleanTest implements Serializable {
   
   public final hydra.langs.sql.ansi.BooleanPrimary booleanPrimary;
   
-  public final java.util.Optional<hydra.langs.sql.ansi.BooleanTest_Sequence_Option> sequence;
+  public final hydra.util.Opt<hydra.langs.sql.ansi.BooleanTest_Sequence_Option> sequence;
   
-  public BooleanTest (hydra.langs.sql.ansi.BooleanPrimary booleanPrimary, java.util.Optional<hydra.langs.sql.ansi.BooleanTest_Sequence_Option> sequence) {
+  public BooleanTest (hydra.langs.sql.ansi.BooleanPrimary booleanPrimary, hydra.util.Opt<hydra.langs.sql.ansi.BooleanTest_Sequence_Option> sequence) {
     if (booleanPrimary == null) {
       throw new IllegalArgumentException("null value for 'booleanPrimary' argument");
     }
@@ -43,7 +43,7 @@ public class BooleanTest implements Serializable {
     return new BooleanTest(booleanPrimary, sequence);
   }
   
-  public BooleanTest withSequence(java.util.Optional<hydra.langs.sql.ansi.BooleanTest_Sequence_Option> sequence) {
+  public BooleanTest withSequence(hydra.util.Opt<hydra.langs.sql.ansi.BooleanTest_Sequence_Option> sequence) {
     if (sequence == null) {
       throw new IllegalArgumentException("null value for 'sequence' argument");
     }

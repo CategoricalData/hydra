@@ -7,13 +7,13 @@ import java.io.Serializable;
 public class InputObjectTypeDefinition_Sequence2 implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.InputObjectTypeDefinition.Sequence2");
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Description> description;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Description> description;
   
   public final hydra.langs.graphql.syntax.Name name;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives;
   
-  public InputObjectTypeDefinition_Sequence2 (java.util.Optional<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.Name name, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+  public InputObjectTypeDefinition_Sequence2 (hydra.util.Opt<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.Name name, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
     if (description == null) {
       throw new IllegalArgumentException("null value for 'description' argument");
     }
@@ -42,7 +42,7 @@ public class InputObjectTypeDefinition_Sequence2 implements Serializable {
     return 2 * description.hashCode() + 3 * name.hashCode() + 5 * directives.hashCode();
   }
   
-  public InputObjectTypeDefinition_Sequence2 withDescription(java.util.Optional<hydra.langs.graphql.syntax.Description> description) {
+  public InputObjectTypeDefinition_Sequence2 withDescription(hydra.util.Opt<hydra.langs.graphql.syntax.Description> description) {
     if (description == null) {
       throw new IllegalArgumentException("null value for 'description' argument");
     }
@@ -56,7 +56,7 @@ public class InputObjectTypeDefinition_Sequence2 implements Serializable {
     return new InputObjectTypeDefinition_Sequence2(description, name, directives);
   }
   
-  public InputObjectTypeDefinition_Sequence2 withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+  public InputObjectTypeDefinition_Sequence2 withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
     if (directives == null) {
       throw new IllegalArgumentException("null value for 'directives' argument");
     }

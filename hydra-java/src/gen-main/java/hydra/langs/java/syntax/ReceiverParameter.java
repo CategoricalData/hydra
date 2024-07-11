@@ -11,9 +11,9 @@ public class ReceiverParameter implements Serializable {
   
   public final hydra.langs.java.syntax.UnannType unannType;
   
-  public final java.util.Optional<hydra.langs.java.syntax.Identifier> identifier;
+  public final hydra.util.Opt<hydra.langs.java.syntax.Identifier> identifier;
   
-  public ReceiverParameter (java.util.List<hydra.langs.java.syntax.Annotation> annotations, hydra.langs.java.syntax.UnannType unannType, java.util.Optional<hydra.langs.java.syntax.Identifier> identifier) {
+  public ReceiverParameter (java.util.List<hydra.langs.java.syntax.Annotation> annotations, hydra.langs.java.syntax.UnannType unannType, hydra.util.Opt<hydra.langs.java.syntax.Identifier> identifier) {
     if (annotations == null) {
       throw new IllegalArgumentException("null value for 'annotations' argument");
     }
@@ -56,7 +56,7 @@ public class ReceiverParameter implements Serializable {
     return new ReceiverParameter(annotations, unannType, identifier);
   }
   
-  public ReceiverParameter withIdentifier(java.util.Optional<hydra.langs.java.syntax.Identifier> identifier) {
+  public ReceiverParameter withIdentifier(hydra.util.Opt<hydra.langs.java.syntax.Identifier> identifier) {
     if (identifier == null) {
       throw new IllegalArgumentException("null value for 'identifier' argument");
     }

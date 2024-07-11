@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class WhileStatementNoShortIf implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.WhileStatementNoShortIf");
   
-  public final java.util.Optional<hydra.langs.java.syntax.Expression> cond;
+  public final hydra.util.Opt<hydra.langs.java.syntax.Expression> cond;
   
   public final hydra.langs.java.syntax.StatementNoShortIf body;
   
-  public WhileStatementNoShortIf (java.util.Optional<hydra.langs.java.syntax.Expression> cond, hydra.langs.java.syntax.StatementNoShortIf body) {
+  public WhileStatementNoShortIf (hydra.util.Opt<hydra.langs.java.syntax.Expression> cond, hydra.langs.java.syntax.StatementNoShortIf body) {
     if (cond == null) {
       throw new IllegalArgumentException("null value for 'cond' argument");
     }
@@ -36,7 +36,7 @@ public class WhileStatementNoShortIf implements Serializable {
     return 2 * cond.hashCode() + 3 * body.hashCode();
   }
   
-  public WhileStatementNoShortIf withCond(java.util.Optional<hydra.langs.java.syntax.Expression> cond) {
+  public WhileStatementNoShortIf withCond(hydra.util.Opt<hydra.langs.java.syntax.Expression> cond) {
     if (cond == null) {
       throw new IllegalArgumentException("null value for 'cond' argument");
     }

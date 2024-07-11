@@ -7,13 +7,13 @@ import java.io.Serializable;
 public class SubstringArgs implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.SubstringArgs");
   
-  public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope;
   
   public final hydra.langs.tinkerpop.gremlin.IntegerArgument start;
   
-  public final java.util.Optional<hydra.langs.tinkerpop.gremlin.IntegerArgument> end;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.IntegerArgument> end;
   
-  public SubstringArgs (java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope, hydra.langs.tinkerpop.gremlin.IntegerArgument start, java.util.Optional<hydra.langs.tinkerpop.gremlin.IntegerArgument> end) {
+  public SubstringArgs (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope, hydra.langs.tinkerpop.gremlin.IntegerArgument start, hydra.util.Opt<hydra.langs.tinkerpop.gremlin.IntegerArgument> end) {
     if (scope == null) {
       throw new IllegalArgumentException("null value for 'scope' argument");
     }
@@ -42,7 +42,7 @@ public class SubstringArgs implements Serializable {
     return 2 * scope.hashCode() + 3 * start.hashCode() + 5 * end.hashCode();
   }
   
-  public SubstringArgs withScope(java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope) {
+  public SubstringArgs withScope(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope) {
     if (scope == null) {
       throw new IllegalArgumentException("null value for 'scope' argument");
     }
@@ -56,7 +56,7 @@ public class SubstringArgs implements Serializable {
     return new SubstringArgs(scope, start, end);
   }
   
-  public SubstringArgs withEnd(java.util.Optional<hydra.langs.tinkerpop.gremlin.IntegerArgument> end) {
+  public SubstringArgs withEnd(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.IntegerArgument> end) {
     if (end == null) {
       throw new IllegalArgumentException("null value for 'end' argument");
     }

@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import hydra.util.Opt;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -74,30 +74,30 @@ public class Merging {
         });
     }
 
-    private static <A> Optional<String> checkNontrivial(List<A> types) {
+    private static <A> Opt<String> checkNontrivial(List<A> types) {
         return types.isEmpty()
-                ? Optional.of("No types provided")
-                : Optional.empty();
+                ? Opt.of("No types provided")
+                : Opt.empty();
     }
 
-    private static <T> Optional<String> checkNoDuplicatedVertexLabels(List<VertexType<T>> types) {
+    private static <T> Opt<String> checkNoDuplicatedVertexLabels(List<VertexType<T>> types) {
         Set<VertexLabel> labels = new HashSet<>();
         for (VertexType<T> type : types) {
             if (!labels.add(type.label)) {
-                return Optional.of("Duplicate vertex label: " + type.label);
+                return Opt.of("Duplicate vertex label: " + type.label);
             }
         }
-        return Optional.empty();
+        return Opt.empty();
     }
 
-    private static <T> Optional<String> checkNoDuplicatedEdgeLabels(List<EdgeType<T>> types) {
+    private static <T> Opt<String> checkNoDuplicatedEdgeLabels(List<EdgeType<T>> types) {
         Set<EdgeLabel> labels = new HashSet<>();
         for (EdgeType<T> type : types) {
             if (!labels.add(type.label)) {
-                return Optional.of("Duplicate edge label: " + type.label);
+                return Opt.of("Duplicate edge label: " + type.label);
             }
         }
-        return Optional.empty();
+        return Opt.empty();
     }
 
     private static <T, V> StatelessCoder<Vertex<V>, Vertex<V>> constructMergedVertexCoder(

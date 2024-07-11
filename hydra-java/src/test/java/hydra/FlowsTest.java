@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import hydra.util.Opt;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -55,7 +55,7 @@ public class FlowsTest {
         }));
         FlowState<String, Integer> result3 = flow3.value.apply("foo").apply(EMPTY_TRACE);
         assertEquals("foo;42", result3.state);
-        assertEquals(Optional.of(43), result3.value);
+        assertEquals(Opt.of(43), result3.value);
     }
 
     @Test

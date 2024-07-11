@@ -7,13 +7,13 @@ import java.io.Serializable;
 public class InlineFragment implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.InlineFragment");
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.TypeCondition> typeCondition;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.TypeCondition> typeCondition;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives;
   
   public final hydra.langs.graphql.syntax.SelectionSet selectionSet;
   
-  public InlineFragment (java.util.Optional<hydra.langs.graphql.syntax.TypeCondition> typeCondition, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.SelectionSet selectionSet) {
+  public InlineFragment (hydra.util.Opt<hydra.langs.graphql.syntax.TypeCondition> typeCondition, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.SelectionSet selectionSet) {
     if (typeCondition == null) {
       throw new IllegalArgumentException("null value for 'typeCondition' argument");
     }
@@ -42,14 +42,14 @@ public class InlineFragment implements Serializable {
     return 2 * typeCondition.hashCode() + 3 * directives.hashCode() + 5 * selectionSet.hashCode();
   }
   
-  public InlineFragment withTypeCondition(java.util.Optional<hydra.langs.graphql.syntax.TypeCondition> typeCondition) {
+  public InlineFragment withTypeCondition(hydra.util.Opt<hydra.langs.graphql.syntax.TypeCondition> typeCondition) {
     if (typeCondition == null) {
       throw new IllegalArgumentException("null value for 'typeCondition' argument");
     }
     return new InlineFragment(typeCondition, directives, selectionSet);
   }
   
-  public InlineFragment withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+  public InlineFragment withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
     if (directives == null) {
       throw new IllegalArgumentException("null value for 'directives' argument");
     }

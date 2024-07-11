@@ -9,9 +9,9 @@ public class Projection implements Serializable {
   
   public final hydra.langs.tinkerpop.queries.Expression value;
   
-  public final java.util.Optional<hydra.langs.tinkerpop.queries.Variable> as;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.queries.Variable> as;
   
-  public Projection (hydra.langs.tinkerpop.queries.Expression value, java.util.Optional<hydra.langs.tinkerpop.queries.Variable> as) {
+  public Projection (hydra.langs.tinkerpop.queries.Expression value, hydra.util.Opt<hydra.langs.tinkerpop.queries.Variable> as) {
     if (value == null) {
       throw new IllegalArgumentException("null value for 'value' argument");
     }
@@ -43,7 +43,7 @@ public class Projection implements Serializable {
     return new Projection(value, as);
   }
   
-  public Projection withAs(java.util.Optional<hydra.langs.tinkerpop.queries.Variable> as) {
+  public Projection withAs(hydra.util.Opt<hydra.langs.tinkerpop.queries.Variable> as) {
     if (as == null) {
       throw new IllegalArgumentException("null value for 'as' argument");
     }

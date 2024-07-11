@@ -2,6 +2,8 @@
 
 package hydra.core;
 
+import hydra.util.Opt;
+
 import java.io.Serializable;
 
 /**
@@ -12,11 +14,11 @@ public class CaseStatement<A> implements Serializable {
   
   public final hydra.core.Name typeName;
   
-  public final java.util.Optional<hydra.core.Term<A>> default_;
+  public final Opt<Term<A>> default_;
   
   public final java.util.List<hydra.core.Field<A>> cases;
   
-  public CaseStatement (hydra.core.Name typeName, java.util.Optional<hydra.core.Term<A>> default_, java.util.List<hydra.core.Field<A>> cases) {
+  public CaseStatement (hydra.core.Name typeName, Opt<Term<A>> default_, java.util.List<hydra.core.Field<A>> cases) {
     if (typeName == null) {
       throw new IllegalArgumentException("null value for 'typeName' argument");
     }
@@ -52,7 +54,7 @@ public class CaseStatement<A> implements Serializable {
     return new CaseStatement(typeName, default_, cases);
   }
   
-  public CaseStatement withDefault(java.util.Optional<hydra.core.Term<A>> default_) {
+  public CaseStatement withDefault(Opt<Term<A>> default_) {
     if (default_ == null) {
       throw new IllegalArgumentException("null value for 'default' argument");
     }

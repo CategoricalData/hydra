@@ -9,9 +9,9 @@ public class TypeName implements Serializable {
   
   public final hydra.langs.java.syntax.TypeIdentifier identifier;
   
-  public final java.util.Optional<hydra.langs.java.syntax.PackageOrTypeName> qualifier;
+  public final hydra.util.Opt<hydra.langs.java.syntax.PackageOrTypeName> qualifier;
   
-  public TypeName (hydra.langs.java.syntax.TypeIdentifier identifier, java.util.Optional<hydra.langs.java.syntax.PackageOrTypeName> qualifier) {
+  public TypeName (hydra.langs.java.syntax.TypeIdentifier identifier, hydra.util.Opt<hydra.langs.java.syntax.PackageOrTypeName> qualifier) {
     if (identifier == null) {
       throw new IllegalArgumentException("null value for 'identifier' argument");
     }
@@ -43,7 +43,7 @@ public class TypeName implements Serializable {
     return new TypeName(identifier, qualifier);
   }
   
-  public TypeName withQualifier(java.util.Optional<hydra.langs.java.syntax.PackageOrTypeName> qualifier) {
+  public TypeName withQualifier(hydra.util.Opt<hydra.langs.java.syntax.PackageOrTypeName> qualifier) {
     if (qualifier == null) {
       throw new IllegalArgumentException("null value for 'qualifier' argument");
     }

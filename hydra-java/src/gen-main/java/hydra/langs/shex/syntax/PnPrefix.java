@@ -9,9 +9,9 @@ public class PnPrefix implements Serializable {
   
   public final hydra.langs.shex.syntax.PnCharsBase pnCharsBase;
   
-  public final java.util.Optional<hydra.langs.shex.syntax.PnPrefix_Sequence_Option> sequence;
+  public final hydra.util.Opt<hydra.langs.shex.syntax.PnPrefix_Sequence_Option> sequence;
   
-  public PnPrefix (hydra.langs.shex.syntax.PnCharsBase pnCharsBase, java.util.Optional<hydra.langs.shex.syntax.PnPrefix_Sequence_Option> sequence) {
+  public PnPrefix (hydra.langs.shex.syntax.PnCharsBase pnCharsBase, hydra.util.Opt<hydra.langs.shex.syntax.PnPrefix_Sequence_Option> sequence) {
     if (pnCharsBase == null) {
       throw new IllegalArgumentException("null value for 'pnCharsBase' argument");
     }
@@ -43,7 +43,7 @@ public class PnPrefix implements Serializable {
     return new PnPrefix(pnCharsBase, sequence);
   }
   
-  public PnPrefix withSequence(java.util.Optional<hydra.langs.shex.syntax.PnPrefix_Sequence_Option> sequence) {
+  public PnPrefix withSequence(hydra.util.Opt<hydra.langs.shex.syntax.PnPrefix_Sequence_Option> sequence) {
     if (sequence == null) {
       throw new IllegalArgumentException("null value for 'sequence' argument");
     }

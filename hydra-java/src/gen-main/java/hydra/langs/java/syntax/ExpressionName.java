@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class ExpressionName implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.ExpressionName");
   
-  public final java.util.Optional<hydra.langs.java.syntax.AmbiguousName> qualifier;
+  public final hydra.util.Opt<hydra.langs.java.syntax.AmbiguousName> qualifier;
   
   public final hydra.langs.java.syntax.Identifier identifier;
   
-  public ExpressionName (java.util.Optional<hydra.langs.java.syntax.AmbiguousName> qualifier, hydra.langs.java.syntax.Identifier identifier) {
+  public ExpressionName (hydra.util.Opt<hydra.langs.java.syntax.AmbiguousName> qualifier, hydra.langs.java.syntax.Identifier identifier) {
     if (qualifier == null) {
       throw new IllegalArgumentException("null value for 'qualifier' argument");
     }
@@ -36,7 +36,7 @@ public class ExpressionName implements Serializable {
     return 2 * qualifier.hashCode() + 3 * identifier.hashCode();
   }
   
-  public ExpressionName withQualifier(java.util.Optional<hydra.langs.java.syntax.AmbiguousName> qualifier) {
+  public ExpressionName withQualifier(hydra.util.Opt<hydra.langs.java.syntax.AmbiguousName> qualifier) {
     if (qualifier == null) {
       throw new IllegalArgumentException("null value for 'qualifier' argument");
     }

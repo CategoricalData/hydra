@@ -21,7 +21,7 @@ import hydra.dsl.Terms;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import hydra.util.Opt;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
@@ -201,8 +201,8 @@ public interface Rewriting {
 
                     @Override
                     public Flow<S, Term<B>> visit(Term.Optional<A> instance) {
-                        Optional<Term<A>> termA = instance.value;
-                        Flow<S, Optional<Term<B>>> termB = mapM(termA, recurse);
+                        Opt<Term<A>> termA = instance.value;
+                        Flow<S, Opt<Term<B>>> termB = mapM(termA, recurse);
                         return map(termB, Term.Optional::new);
                     }
 

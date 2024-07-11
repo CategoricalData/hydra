@@ -14,9 +14,9 @@ public class Alternative implements Serializable {
   
   public final hydra.langs.haskell.ast.CaseRhs rhs;
   
-  public final java.util.Optional<hydra.langs.haskell.ast.LocalBindings> binds;
+  public final hydra.util.Opt<hydra.langs.haskell.ast.LocalBindings> binds;
   
-  public Alternative (hydra.langs.haskell.ast.Pattern pattern, hydra.langs.haskell.ast.CaseRhs rhs, java.util.Optional<hydra.langs.haskell.ast.LocalBindings> binds) {
+  public Alternative (hydra.langs.haskell.ast.Pattern pattern, hydra.langs.haskell.ast.CaseRhs rhs, hydra.util.Opt<hydra.langs.haskell.ast.LocalBindings> binds) {
     if (pattern == null) {
       throw new IllegalArgumentException("null value for 'pattern' argument");
     }
@@ -59,7 +59,7 @@ public class Alternative implements Serializable {
     return new Alternative(pattern, rhs, binds);
   }
   
-  public Alternative withBinds(java.util.Optional<hydra.langs.haskell.ast.LocalBindings> binds) {
+  public Alternative withBinds(hydra.util.Opt<hydra.langs.haskell.ast.LocalBindings> binds) {
     if (binds == null) {
       throw new IllegalArgumentException("null value for 'binds' argument");
     }

@@ -33,28 +33,28 @@ public class FileMetaData implements Serializable {
   /**
    * Optional key/value metadata
    */
-  public final java.util.Optional<java.util.List<hydra.langs.parquet.format.KeyValue>> keyValueMetadata;
+  public final hydra.util.Opt<java.util.List<hydra.langs.parquet.format.KeyValue>> keyValueMetadata;
   
   /**
    * String for application that wrote this file.  This should be in the format &lt;Application&gt; version &lt;App Version&gt; (build &lt;App Build Hash&gt;). e.g. impala version 1.0 (build 6cf94d29b2b7115df4de2c06e2ab4326d721eb55)
    */
-  public final java.util.Optional<String> createdBy;
+  public final hydra.util.Opt<String> createdBy;
   
   /**
    * Sort order used for the min_value and max_value fields in the Statistics objects and the min_values and max_values fields in the ColumnIndex objects of each column in this file. Sort orders are listed in the order matching the columns in the schema. The indexes are not necessary the same though, because only leaf nodes of the schema are represented in the list of sort orders.
    * Without column_orders, the meaning of the min_value and max_value fields in the Statistics object and the ColumnIndex object is undefined. To ensure well-defined behaviour, if these fields are written to a Parquet file, column_orders must be written as well.
    * The obsolete min and max fields in the Statistics object are always sorted by signed comparison regardless of column_orders.
    */
-  public final java.util.Optional<java.util.List<hydra.langs.parquet.format.ColumnOrder>> columnOrders;
+  public final hydra.util.Opt<java.util.List<hydra.langs.parquet.format.ColumnOrder>> columnOrders;
   
   /**
    * Encryption algorithm. This field is set only in encrypted files with plaintext footer. Files with encrypted footer store algorithm id in FileCryptoMetaData structure.
    */
-  public final java.util.Optional<hydra.langs.parquet.format.EncryptionAlgorithm> encryptionAlgorithm;
+  public final hydra.util.Opt<hydra.langs.parquet.format.EncryptionAlgorithm> encryptionAlgorithm;
   
-  public final java.util.Optional<String> footerSigningKeyMetadata;
+  public final hydra.util.Opt<String> footerSigningKeyMetadata;
   
-  public FileMetaData (Integer version, java.util.List<hydra.langs.parquet.format.SchemaElement> schema, Long numRows, java.util.List<hydra.langs.parquet.format.RowGroup> rowGroups, java.util.Optional<java.util.List<hydra.langs.parquet.format.KeyValue>> keyValueMetadata, java.util.Optional<String> createdBy, java.util.Optional<java.util.List<hydra.langs.parquet.format.ColumnOrder>> columnOrders, java.util.Optional<hydra.langs.parquet.format.EncryptionAlgorithm> encryptionAlgorithm, java.util.Optional<String> footerSigningKeyMetadata) {
+  public FileMetaData (Integer version, java.util.List<hydra.langs.parquet.format.SchemaElement> schema, Long numRows, java.util.List<hydra.langs.parquet.format.RowGroup> rowGroups, hydra.util.Opt<java.util.List<hydra.langs.parquet.format.KeyValue>> keyValueMetadata, hydra.util.Opt<String> createdBy, hydra.util.Opt<java.util.List<hydra.langs.parquet.format.ColumnOrder>> columnOrders, hydra.util.Opt<hydra.langs.parquet.format.EncryptionAlgorithm> encryptionAlgorithm, hydra.util.Opt<String> footerSigningKeyMetadata) {
     if (version == null) {
       throw new IllegalArgumentException("null value for 'version' argument");
     }
@@ -135,35 +135,35 @@ public class FileMetaData implements Serializable {
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
   
-  public FileMetaData withKeyValueMetadata(java.util.Optional<java.util.List<hydra.langs.parquet.format.KeyValue>> keyValueMetadata) {
+  public FileMetaData withKeyValueMetadata(hydra.util.Opt<java.util.List<hydra.langs.parquet.format.KeyValue>> keyValueMetadata) {
     if (keyValueMetadata == null) {
       throw new IllegalArgumentException("null value for 'keyValueMetadata' argument");
     }
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
   
-  public FileMetaData withCreatedBy(java.util.Optional<String> createdBy) {
+  public FileMetaData withCreatedBy(hydra.util.Opt<String> createdBy) {
     if (createdBy == null) {
       throw new IllegalArgumentException("null value for 'createdBy' argument");
     }
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
   
-  public FileMetaData withColumnOrders(java.util.Optional<java.util.List<hydra.langs.parquet.format.ColumnOrder>> columnOrders) {
+  public FileMetaData withColumnOrders(hydra.util.Opt<java.util.List<hydra.langs.parquet.format.ColumnOrder>> columnOrders) {
     if (columnOrders == null) {
       throw new IllegalArgumentException("null value for 'columnOrders' argument");
     }
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
   
-  public FileMetaData withEncryptionAlgorithm(java.util.Optional<hydra.langs.parquet.format.EncryptionAlgorithm> encryptionAlgorithm) {
+  public FileMetaData withEncryptionAlgorithm(hydra.util.Opt<hydra.langs.parquet.format.EncryptionAlgorithm> encryptionAlgorithm) {
     if (encryptionAlgorithm == null) {
       throw new IllegalArgumentException("null value for 'encryptionAlgorithm' argument");
     }
     return new FileMetaData(version, schema, numRows, rowGroups, keyValueMetadata, createdBy, columnOrders, encryptionAlgorithm, footerSigningKeyMetadata);
   }
   
-  public FileMetaData withFooterSigningKeyMetadata(java.util.Optional<String> footerSigningKeyMetadata) {
+  public FileMetaData withFooterSigningKeyMetadata(hydra.util.Opt<String> footerSigningKeyMetadata) {
     if (footerSigningKeyMetadata == null) {
       throw new IllegalArgumentException("null value for 'footerSigningKeyMetadata' argument");
     }

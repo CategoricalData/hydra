@@ -12,9 +12,9 @@ public class Closed implements Serializable {
   
   public final Boolean isClosed;
   
-  public final java.util.Optional<java.util.Set<hydra.langs.rdf.syntax.Property>> ignoredProperties;
+  public final hydra.util.Opt<java.util.Set<hydra.langs.rdf.syntax.Property>> ignoredProperties;
   
-  public Closed (Boolean isClosed, java.util.Optional<java.util.Set<hydra.langs.rdf.syntax.Property>> ignoredProperties) {
+  public Closed (Boolean isClosed, hydra.util.Opt<java.util.Set<hydra.langs.rdf.syntax.Property>> ignoredProperties) {
     if (isClosed == null) {
       throw new IllegalArgumentException("null value for 'isClosed' argument");
     }
@@ -46,7 +46,7 @@ public class Closed implements Serializable {
     return new Closed(isClosed, ignoredProperties);
   }
   
-  public Closed withIgnoredProperties(java.util.Optional<java.util.Set<hydra.langs.rdf.syntax.Property>> ignoredProperties) {
+  public Closed withIgnoredProperties(hydra.util.Opt<java.util.Set<hydra.langs.rdf.syntax.Property>> ignoredProperties) {
     if (ignoredProperties == null) {
       throw new IllegalArgumentException("null value for 'ignoredProperties' argument");
     }

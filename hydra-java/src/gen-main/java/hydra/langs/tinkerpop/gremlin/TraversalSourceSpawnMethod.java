@@ -112,9 +112,9 @@ public abstract class TraversalSourceSpawnMethod implements Serializable {
   }
   
   public static final class AddV extends hydra.langs.tinkerpop.gremlin.TraversalSourceSpawnMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.StringArgumentOrNestedTraversal> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgumentOrNestedTraversal> value;
     
-    public AddV (java.util.Optional<hydra.langs.tinkerpop.gremlin.StringArgumentOrNestedTraversal> value) {
+    public AddV (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgumentOrNestedTraversal> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -322,9 +322,9 @@ public abstract class TraversalSourceSpawnMethod implements Serializable {
   }
   
   public static final class Call extends hydra.langs.tinkerpop.gremlin.TraversalSourceSpawnMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.ServiceCall> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.ServiceCall> value;
     
-    public Call (java.util.Optional<hydra.langs.tinkerpop.gremlin.ServiceCall> value) {
+    public Call (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.ServiceCall> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }

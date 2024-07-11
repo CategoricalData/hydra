@@ -11,9 +11,9 @@ public class NonArithmeticOperatorExpression implements Serializable {
   
   public final java.util.List<hydra.langs.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups;
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.NodeLabels> labels;
+  public final hydra.util.Opt<hydra.langs.cypher.openCypher.NodeLabels> labels;
   
-  public NonArithmeticOperatorExpression (hydra.langs.cypher.openCypher.Atom atom, java.util.List<hydra.langs.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups, java.util.Optional<hydra.langs.cypher.openCypher.NodeLabels> labels) {
+  public NonArithmeticOperatorExpression (hydra.langs.cypher.openCypher.Atom atom, java.util.List<hydra.langs.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups, hydra.util.Opt<hydra.langs.cypher.openCypher.NodeLabels> labels) {
     if (atom == null) {
       throw new IllegalArgumentException("null value for 'atom' argument");
     }
@@ -56,7 +56,7 @@ public class NonArithmeticOperatorExpression implements Serializable {
     return new NonArithmeticOperatorExpression(atom, listsAndLookups, labels);
   }
   
-  public NonArithmeticOperatorExpression withLabels(java.util.Optional<hydra.langs.cypher.openCypher.NodeLabels> labels) {
+  public NonArithmeticOperatorExpression withLabels(hydra.util.Opt<hydra.langs.cypher.openCypher.NodeLabels> labels) {
     if (labels == null) {
       throw new IllegalArgumentException("null value for 'labels' argument");
     }

@@ -7,19 +7,19 @@ import java.io.Serializable;
 public class TripleConstraint implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.TripleConstraint");
   
-  public final java.util.Optional<hydra.langs.shex.syntax.SenseFlags> senseFlags;
+  public final hydra.util.Opt<hydra.langs.shex.syntax.SenseFlags> senseFlags;
   
   public final hydra.langs.shex.syntax.Predicate predicate;
   
   public final hydra.langs.shex.syntax.InlineShapeExpression inlineShapeExpression;
   
-  public final java.util.Optional<hydra.langs.shex.syntax.Cardinality> cardinality;
+  public final hydra.util.Opt<hydra.langs.shex.syntax.Cardinality> cardinality;
   
   public final java.util.List<hydra.langs.shex.syntax.Annotation> listOfAnnotation;
   
   public final hydra.langs.shex.syntax.SemanticActions semanticActions;
   
-  public TripleConstraint (java.util.Optional<hydra.langs.shex.syntax.SenseFlags> senseFlags, hydra.langs.shex.syntax.Predicate predicate, hydra.langs.shex.syntax.InlineShapeExpression inlineShapeExpression, java.util.Optional<hydra.langs.shex.syntax.Cardinality> cardinality, java.util.List<hydra.langs.shex.syntax.Annotation> listOfAnnotation, hydra.langs.shex.syntax.SemanticActions semanticActions) {
+  public TripleConstraint (hydra.util.Opt<hydra.langs.shex.syntax.SenseFlags> senseFlags, hydra.langs.shex.syntax.Predicate predicate, hydra.langs.shex.syntax.InlineShapeExpression inlineShapeExpression, hydra.util.Opt<hydra.langs.shex.syntax.Cardinality> cardinality, java.util.List<hydra.langs.shex.syntax.Annotation> listOfAnnotation, hydra.langs.shex.syntax.SemanticActions semanticActions) {
     if (senseFlags == null) {
       throw new IllegalArgumentException("null value for 'senseFlags' argument");
     }
@@ -60,7 +60,7 @@ public class TripleConstraint implements Serializable {
     return 2 * senseFlags.hashCode() + 3 * predicate.hashCode() + 5 * inlineShapeExpression.hashCode() + 7 * cardinality.hashCode() + 11 * listOfAnnotation.hashCode() + 13 * semanticActions.hashCode();
   }
   
-  public TripleConstraint withSenseFlags(java.util.Optional<hydra.langs.shex.syntax.SenseFlags> senseFlags) {
+  public TripleConstraint withSenseFlags(hydra.util.Opt<hydra.langs.shex.syntax.SenseFlags> senseFlags) {
     if (senseFlags == null) {
       throw new IllegalArgumentException("null value for 'senseFlags' argument");
     }
@@ -81,7 +81,7 @@ public class TripleConstraint implements Serializable {
     return new TripleConstraint(senseFlags, predicate, inlineShapeExpression, cardinality, listOfAnnotation, semanticActions);
   }
   
-  public TripleConstraint withCardinality(java.util.Optional<hydra.langs.shex.syntax.Cardinality> cardinality) {
+  public TripleConstraint withCardinality(hydra.util.Opt<hydra.langs.shex.syntax.Cardinality> cardinality) {
     if (cardinality == null) {
       throw new IllegalArgumentException("null value for 'cardinality' argument");
     }

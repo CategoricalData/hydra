@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class ImplementsInterfaces_Sequence2 implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.ImplementsInterfaces.Sequence2");
   
-  public final java.util.Optional<java.lang.Void> amp;
+  public final hydra.util.Opt<java.lang.Void> amp;
   
   public final hydra.langs.graphql.syntax.NamedType namedType;
   
-  public ImplementsInterfaces_Sequence2 (java.util.Optional<java.lang.Void> amp, hydra.langs.graphql.syntax.NamedType namedType) {
+  public ImplementsInterfaces_Sequence2 (hydra.util.Opt<java.lang.Void> amp, hydra.langs.graphql.syntax.NamedType namedType) {
     if (amp == null) {
       throw new IllegalArgumentException("null value for 'amp' argument");
     }
@@ -36,7 +36,7 @@ public class ImplementsInterfaces_Sequence2 implements Serializable {
     return 2 * amp.hashCode() + 3 * namedType.hashCode();
   }
   
-  public ImplementsInterfaces_Sequence2 withAmp(java.util.Optional<java.lang.Void> amp) {
+  public ImplementsInterfaces_Sequence2 withAmp(hydra.util.Opt<java.lang.Void> amp) {
     if (amp == null) {
       throw new IllegalArgumentException("null value for 'amp' argument");
     }

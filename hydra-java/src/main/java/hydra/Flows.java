@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import hydra.util.Opt;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -48,10 +48,10 @@ public interface Flows {
 
         return new Flow<>(s0 -> t0 -> {
             FlowState<S, Function<A, B>> fs1 = mapping.value.apply(s0).apply(t0);
-            Optional<Function<A, B>> mf = fs1.value;
+            Opt<Function<A, B>> mf = fs1.value;
             return mf.isPresent()
                     ? map(mf.get(), input).value.apply(fs1.state).apply(fs1.trace)
-                    : new FlowState<>(Optional.empty(), fs1.state, fs1.trace);
+                    : new FlowState<>(Opt.empty(), fs1.state, fs1.trace);
         });
     }
 
@@ -64,10 +64,10 @@ public interface Flows {
 
         return new Flow<>(s0 -> t0 -> {
             FlowState<S, A> fs1 = p.value.apply(s0).apply(t0);
-            Optional<A> a = fs1.value;
+            Opt<A> a = fs1.value;
             return a.isPresent()
                     ? f.apply(a.get()).value.apply(fs1.state).apply(fs1.trace)
-                    : new FlowState<>(Optional.empty(), fs1.state, fs1.trace);
+                    : new FlowState<>(Opt.empty(), fs1.state, fs1.trace);
         });
     }
 
@@ -124,12 +124,12 @@ public interface Flows {
      * Check whether a given value satisfies a list of predicates, returning the value itself if all checks are
      * successful, or a failure flow for the first predicate that fails.
      */
-    static <S, A> Flow<S, A> check(A input, Function<A, Optional<String>>... predicates) {
+    static <S, A> Flow<S, A> check(A input, Function<A, Opt<String>>... predicates) {
         nullCheck(input, "input");
         nullCheck(predicates, "predicates");
 
-        for (Function<A, Optional<String>> predicate : predicates) {
-            Optional<String> msg = predicate.apply(input);
+        for (Function<A, Opt<String>> predicate : predicates) {
+            Opt<String> msg = predicate.apply(input);
             if (msg.isPresent()) {
                 return Flows.fail(msg.get());
             }
@@ -171,7 +171,7 @@ public interface Flows {
             String errMsg = "Error: " + msg; // TODO: include stack trace
             List<String> messages = new ArrayList<>(trace.messages);
             messages.add(errMsg);
-            return new FlowState<>(Optional.empty(), s, trace.withMessages(messages));
+            return new FlowState<>(Opt.empty(), s, trace.withMessages(messages));
         });
     }
 
@@ -222,7 +222,7 @@ public interface Flows {
      * Extract the state from a flow.
      */
     static <S> Flow<S, S> getState() {
-        return new Flow<>(s0 -> t0 -> new FlowState<>(Optional.of(s0), s0, t0));
+        return new Flow<>(s0 -> t0 -> new FlowState<>(Opt.of(s0), s0, t0));
     }
 
     /**
@@ -299,11 +299,11 @@ public interface Flows {
     /**
      * Map a monadic function over an optional value, producing a flow of optionals.
      */
-    static <S, A, B> Flow<S, Optional<B>> mapM(Optional<A> xs, Function<A, Flow<S, B>> f) {
+    static <S, A, B> Flow<S, Opt<B>> mapM(Opt<A> xs, Function<A, Flow<S, B>> f) {
         nullCheck(xs, "xs");
         nullCheck(f, "f");
 
-        return xs.map(a -> map(f.apply(a), Optional::of)).orElseGet(() -> pure(Optional.empty()));
+        return xs.map(a -> map(f.apply(a), Opt::of)).orElseGet(() -> pure(Opt.empty()));
     }
 
     /**
@@ -388,7 +388,7 @@ public interface Flows {
     static <S, A> Flow<S, A> pure(A obj) {
         nullCheck(obj, "obj");
 
-        return new Flow<>(s -> trace -> new FlowState<>(Optional.of(obj), s, trace));
+        return new Flow<>(s -> trace -> new FlowState<>(Opt.of(obj), s, trace));
     }
 
     /**
@@ -399,13 +399,13 @@ public interface Flows {
 
         // Note: for lack of a unit value other than null,
         // we use use a boolean as the ignorable value output of putState()
-        return new Flow<>(s0 -> t0 -> new FlowState<>(Optional.of(true), snew, t0));
+        return new Flow<>(s0 -> t0 -> new FlowState<>(Opt.of(true), snew, t0));
     }
 
     /**
      * Test an optional value, producing a flow with the value if present, or an error flow if absent.
      */
-    static <S, A> Flow<S, A> require(Optional<A> optValue, String category) {
+    static <S, A> Flow<S, A> require(Opt<A> optValue, String category) {
         nullCheck(optValue, "optValue");
         nullCheck(category, "category");
 

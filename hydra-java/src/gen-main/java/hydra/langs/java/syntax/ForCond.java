@@ -7,13 +7,13 @@ import java.io.Serializable;
 public class ForCond implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.ForCond");
   
-  public final java.util.Optional<hydra.langs.java.syntax.ForInit> init;
+  public final hydra.util.Opt<hydra.langs.java.syntax.ForInit> init;
   
-  public final java.util.Optional<hydra.langs.java.syntax.Expression> cond;
+  public final hydra.util.Opt<hydra.langs.java.syntax.Expression> cond;
   
-  public final java.util.Optional<hydra.langs.java.syntax.ForUpdate> update;
+  public final hydra.util.Opt<hydra.langs.java.syntax.ForUpdate> update;
   
-  public ForCond (java.util.Optional<hydra.langs.java.syntax.ForInit> init, java.util.Optional<hydra.langs.java.syntax.Expression> cond, java.util.Optional<hydra.langs.java.syntax.ForUpdate> update) {
+  public ForCond (hydra.util.Opt<hydra.langs.java.syntax.ForInit> init, hydra.util.Opt<hydra.langs.java.syntax.Expression> cond, hydra.util.Opt<hydra.langs.java.syntax.ForUpdate> update) {
     if (init == null) {
       throw new IllegalArgumentException("null value for 'init' argument");
     }
@@ -42,21 +42,21 @@ public class ForCond implements Serializable {
     return 2 * init.hashCode() + 3 * cond.hashCode() + 5 * update.hashCode();
   }
   
-  public ForCond withInit(java.util.Optional<hydra.langs.java.syntax.ForInit> init) {
+  public ForCond withInit(hydra.util.Opt<hydra.langs.java.syntax.ForInit> init) {
     if (init == null) {
       throw new IllegalArgumentException("null value for 'init' argument");
     }
     return new ForCond(init, cond, update);
   }
   
-  public ForCond withCond(java.util.Optional<hydra.langs.java.syntax.Expression> cond) {
+  public ForCond withCond(hydra.util.Opt<hydra.langs.java.syntax.Expression> cond) {
     if (cond == null) {
       throw new IllegalArgumentException("null value for 'cond' argument");
     }
     return new ForCond(init, cond, update);
   }
   
-  public ForCond withUpdate(java.util.Optional<hydra.langs.java.syntax.ForUpdate> update) {
+  public ForCond withUpdate(hydra.util.Opt<hydra.langs.java.syntax.ForUpdate> update) {
     if (update == null) {
       throw new IllegalArgumentException("null value for 'update' argument");
     }

@@ -7,16 +7,16 @@ import java.io.Serializable;
 public class AesGcmV1 implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.AesGcmV1");
   
-  public final java.util.Optional<String> aadPrefix;
+  public final hydra.util.Opt<String> aadPrefix;
   
-  public final java.util.Optional<String> aadFileUnique;
+  public final hydra.util.Opt<String> aadFileUnique;
   
   /**
    * In files encrypted with AAD prefix without storing it, readers must supply the prefix
    */
-  public final java.util.Optional<Boolean> supplyAadPrefix;
+  public final hydra.util.Opt<Boolean> supplyAadPrefix;
   
-  public AesGcmV1 (java.util.Optional<String> aadPrefix, java.util.Optional<String> aadFileUnique, java.util.Optional<Boolean> supplyAadPrefix) {
+  public AesGcmV1 (hydra.util.Opt<String> aadPrefix, hydra.util.Opt<String> aadFileUnique, hydra.util.Opt<Boolean> supplyAadPrefix) {
     if (aadPrefix == null) {
       throw new IllegalArgumentException("null value for 'aadPrefix' argument");
     }
@@ -45,21 +45,21 @@ public class AesGcmV1 implements Serializable {
     return 2 * aadPrefix.hashCode() + 3 * aadFileUnique.hashCode() + 5 * supplyAadPrefix.hashCode();
   }
   
-  public AesGcmV1 withAadPrefix(java.util.Optional<String> aadPrefix) {
+  public AesGcmV1 withAadPrefix(hydra.util.Opt<String> aadPrefix) {
     if (aadPrefix == null) {
       throw new IllegalArgumentException("null value for 'aadPrefix' argument");
     }
     return new AesGcmV1(aadPrefix, aadFileUnique, supplyAadPrefix);
   }
   
-  public AesGcmV1 withAadFileUnique(java.util.Optional<String> aadFileUnique) {
+  public AesGcmV1 withAadFileUnique(hydra.util.Opt<String> aadFileUnique) {
     if (aadFileUnique == null) {
       throw new IllegalArgumentException("null value for 'aadFileUnique' argument");
     }
     return new AesGcmV1(aadPrefix, aadFileUnique, supplyAadPrefix);
   }
   
-  public AesGcmV1 withSupplyAadPrefix(java.util.Optional<Boolean> supplyAadPrefix) {
+  public AesGcmV1 withSupplyAadPrefix(hydra.util.Opt<Boolean> supplyAadPrefix) {
     if (supplyAadPrefix == null) {
       throw new IllegalArgumentException("null value for 'supplyAadPrefix' argument");
     }

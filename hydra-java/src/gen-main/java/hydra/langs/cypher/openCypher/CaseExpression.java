@@ -7,13 +7,13 @@ import java.io.Serializable;
 public class CaseExpression implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.CaseExpression");
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.Expression> expression;
+  public final hydra.util.Opt<hydra.langs.cypher.openCypher.Expression> expression;
   
   public final java.util.List<hydra.langs.cypher.openCypher.CaseAlternative> alternatives;
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.Expression> else_;
+  public final hydra.util.Opt<hydra.langs.cypher.openCypher.Expression> else_;
   
-  public CaseExpression (java.util.Optional<hydra.langs.cypher.openCypher.Expression> expression, java.util.List<hydra.langs.cypher.openCypher.CaseAlternative> alternatives, java.util.Optional<hydra.langs.cypher.openCypher.Expression> else_) {
+  public CaseExpression (hydra.util.Opt<hydra.langs.cypher.openCypher.Expression> expression, java.util.List<hydra.langs.cypher.openCypher.CaseAlternative> alternatives, hydra.util.Opt<hydra.langs.cypher.openCypher.Expression> else_) {
     if (expression == null) {
       throw new IllegalArgumentException("null value for 'expression' argument");
     }
@@ -42,7 +42,7 @@ public class CaseExpression implements Serializable {
     return 2 * expression.hashCode() + 3 * alternatives.hashCode() + 5 * else_.hashCode();
   }
   
-  public CaseExpression withExpression(java.util.Optional<hydra.langs.cypher.openCypher.Expression> expression) {
+  public CaseExpression withExpression(hydra.util.Opt<hydra.langs.cypher.openCypher.Expression> expression) {
     if (expression == null) {
       throw new IllegalArgumentException("null value for 'expression' argument");
     }
@@ -56,7 +56,7 @@ public class CaseExpression implements Serializable {
     return new CaseExpression(expression, alternatives, else_);
   }
   
-  public CaseExpression withElse(java.util.Optional<hydra.langs.cypher.openCypher.Expression> else_) {
+  public CaseExpression withElse(hydra.util.Opt<hydra.langs.cypher.openCypher.Expression> else_) {
     if (else_ == null) {
       throw new IllegalArgumentException("null value for 'else' argument");
     }

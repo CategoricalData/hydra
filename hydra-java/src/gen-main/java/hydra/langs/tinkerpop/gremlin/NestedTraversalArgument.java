@@ -9,11 +9,11 @@ public class NestedTraversalArgument implements Serializable {
   
   public final hydra.langs.tinkerpop.gremlin.NestedTraversal traversal1;
   
-  public final java.util.Optional<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal2;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal2;
   
-  public final java.util.Optional<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal3;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal3;
   
-  public NestedTraversalArgument (hydra.langs.tinkerpop.gremlin.NestedTraversal traversal1, java.util.Optional<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal2, java.util.Optional<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal3) {
+  public NestedTraversalArgument (hydra.langs.tinkerpop.gremlin.NestedTraversal traversal1, hydra.util.Opt<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal2, hydra.util.Opt<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal3) {
     if (traversal1 == null) {
       throw new IllegalArgumentException("null value for 'traversal1' argument");
     }
@@ -49,14 +49,14 @@ public class NestedTraversalArgument implements Serializable {
     return new NestedTraversalArgument(traversal1, traversal2, traversal3);
   }
   
-  public NestedTraversalArgument withTraversal2(java.util.Optional<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal2) {
+  public NestedTraversalArgument withTraversal2(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal2) {
     if (traversal2 == null) {
       throw new IllegalArgumentException("null value for 'traversal2' argument");
     }
     return new NestedTraversalArgument(traversal1, traversal2, traversal3);
   }
   
-  public NestedTraversalArgument withTraversal3(java.util.Optional<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal3) {
+  public NestedTraversalArgument withTraversal3(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal3) {
     if (traversal3 == null) {
       throw new IllegalArgumentException("null value for 'traversal3' argument");
     }

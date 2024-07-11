@@ -11,11 +11,11 @@ public class ConstructorDeclaration implements Serializable {
   
   public final hydra.langs.java.syntax.ConstructorDeclarator constructor;
   
-  public final java.util.Optional<hydra.langs.java.syntax.Throws> throws_;
+  public final hydra.util.Opt<hydra.langs.java.syntax.Throws> throws_;
   
   public final hydra.langs.java.syntax.ConstructorBody body;
   
-  public ConstructorDeclaration (java.util.List<hydra.langs.java.syntax.ConstructorModifier> modifiers, hydra.langs.java.syntax.ConstructorDeclarator constructor, java.util.Optional<hydra.langs.java.syntax.Throws> throws_, hydra.langs.java.syntax.ConstructorBody body) {
+  public ConstructorDeclaration (java.util.List<hydra.langs.java.syntax.ConstructorModifier> modifiers, hydra.langs.java.syntax.ConstructorDeclarator constructor, hydra.util.Opt<hydra.langs.java.syntax.Throws> throws_, hydra.langs.java.syntax.ConstructorBody body) {
     if (modifiers == null) {
       throw new IllegalArgumentException("null value for 'modifiers' argument");
     }
@@ -62,7 +62,7 @@ public class ConstructorDeclaration implements Serializable {
     return new ConstructorDeclaration(modifiers, constructor, throws_, body);
   }
   
-  public ConstructorDeclaration withThrows(java.util.Optional<hydra.langs.java.syntax.Throws> throws_) {
+  public ConstructorDeclaration withThrows(hydra.util.Opt<hydra.langs.java.syntax.Throws> throws_) {
     if (throws_ == null) {
       throw new IllegalArgumentException("null value for 'throws' argument");
     }

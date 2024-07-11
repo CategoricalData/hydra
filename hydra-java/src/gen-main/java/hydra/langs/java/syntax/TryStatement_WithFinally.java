@@ -9,11 +9,11 @@ public class TryStatement_WithFinally implements Serializable {
   
   public final hydra.langs.java.syntax.Block block;
   
-  public final java.util.Optional<hydra.langs.java.syntax.Catches> catches;
+  public final hydra.util.Opt<hydra.langs.java.syntax.Catches> catches;
   
   public final hydra.langs.java.syntax.Finally finally_;
   
-  public TryStatement_WithFinally (hydra.langs.java.syntax.Block block, java.util.Optional<hydra.langs.java.syntax.Catches> catches, hydra.langs.java.syntax.Finally finally_) {
+  public TryStatement_WithFinally (hydra.langs.java.syntax.Block block, hydra.util.Opt<hydra.langs.java.syntax.Catches> catches, hydra.langs.java.syntax.Finally finally_) {
     if (block == null) {
       throw new IllegalArgumentException("null value for 'block' argument");
     }
@@ -49,7 +49,7 @@ public class TryStatement_WithFinally implements Serializable {
     return new TryStatement_WithFinally(block, catches, finally_);
   }
   
-  public TryStatement_WithFinally withCatches(java.util.Optional<hydra.langs.java.syntax.Catches> catches) {
+  public TryStatement_WithFinally withCatches(hydra.util.Opt<hydra.langs.java.syntax.Catches> catches) {
     if (catches == null) {
       throw new IllegalArgumentException("null value for 'catches' argument");
     }

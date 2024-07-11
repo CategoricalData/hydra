@@ -2,6 +2,10 @@
 
 package hydra.basics;
 
+import hydra.graph.Graph;
+import hydra.module.Namespace;
+import hydra.util.Opt;
+
 /**
  * A tier-2 module of basic functions for working with types and terms.
  */
@@ -644,11 +648,11 @@ public interface Basics {
   static <A> Boolean isUnitType(hydra.core.Type<A> t) {
     return hydra.lib.equality.EqualType.apply(
       hydra.strip.Strip.stripType((t)),
-      new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra/core.Unit"), java.util.Optional.empty(), java.util.Arrays.asList())));
+      new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra/core.Unit"), Opt.empty(), java.util.Arrays.asList())));
   }
   
-  static <A> java.util.function.Function<java.util.Optional<hydra.graph.Graph<A>>, java.util.function.Function<java.util.List<hydra.graph.Element<A>>, hydra.graph.Graph<A>>> elementsToGraph(hydra.graph.Graph<A> parent) {
-    return (java.util.function.Function<java.util.Optional<hydra.graph.Graph<A>>, java.util.function.Function<java.util.List<hydra.graph.Element<A>>, hydra.graph.Graph<A>>>) (schema -> (java.util.function.Function<java.util.List<hydra.graph.Element<A>>, hydra.graph.Graph<A>>) (elements -> {
+  static <A> java.util.function.Function<Opt<Graph<A>>, java.util.function.Function<java.util.List<hydra.graph.Element<A>>, hydra.graph.Graph<A>>> elementsToGraph(hydra.graph.Graph<A> parent) {
+    return (java.util.function.Function<Opt<Graph<A>>, java.util.function.Function<java.util.List<hydra.graph.Element<A>>, hydra.graph.Graph<A>>>) (schema -> (java.util.function.Function<java.util.List<hydra.graph.Element<A>>, hydra.graph.Graph<A>>) (elements -> {
       java.util.function.Function<hydra.graph.Element<A>, hydra.core.Tuple.Tuple2<hydra.core.Name, hydra.graph.Element<A>>> toPair = (java.util.function.Function<hydra.graph.Element<A>, hydra.core.Tuple.Tuple2<hydra.core.Name, hydra.graph.Element<A>>>) (el -> new hydra.core.Tuple.Tuple2(((el)).name, (el)));
       return new hydra.graph.Graph(hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
         (toPair),
@@ -664,11 +668,11 @@ public interface Basics {
     return (hydra.basics.Basics.qualifyNameLazy((x))).local;
   }
   
-  static java.util.Optional<hydra.module.Namespace> namespaceOfEager(hydra.core.Name x) {
+  static Opt<Namespace> namespaceOfEager(hydra.core.Name x) {
     return (hydra.basics.Basics.qualifyNameEager((x))).namespace;
   }
   
-  static java.util.Optional<hydra.module.Namespace> namespaceOfLazy(hydra.core.Name x) {
+  static Opt<Namespace> namespaceOfLazy(hydra.core.Name x) {
     return (hydra.basics.Basics.qualifyNameLazy((x))).namespace;
   }
   
@@ -697,8 +701,8 @@ public interface Basics {
       ".",
       ((name)).value);
     return hydra.lib.logic.IfElse.apply(
-      new hydra.module.QualifiedName(java.util.Optional.empty(), ((name)).value),
-      new hydra.module.QualifiedName(java.util.Optional.of(new hydra.module.Namespace(hydra.lib.lists.Head.apply((parts)))), hydra.lib.strings.Intercalate.apply(
+      new hydra.module.QualifiedName(Opt.empty(), ((name)).value),
+      new hydra.module.QualifiedName(Opt.of(new hydra.module.Namespace(hydra.lib.lists.Head.apply((parts)))), hydra.lib.strings.Intercalate.apply(
         ".",
         hydra.lib.lists.Tail.apply((parts)))),
       hydra.lib.equality.EqualInt32.apply(
@@ -711,8 +715,8 @@ public interface Basics {
       ".",
       ((name)).value));
     return hydra.lib.logic.IfElse.apply(
-      new hydra.module.QualifiedName(java.util.Optional.empty(), ((name)).value),
-      new hydra.module.QualifiedName(java.util.Optional.of(new hydra.module.Namespace(hydra.lib.strings.Intercalate.apply(
+      new hydra.module.QualifiedName(Opt.empty(), ((name)).value),
+      new hydra.module.QualifiedName(Opt.of(new hydra.module.Namespace(hydra.lib.strings.Intercalate.apply(
         ".",
         hydra.lib.lists.Reverse.apply(hydra.lib.lists.Tail.apply((parts)))))), hydra.lib.lists.Head.apply((parts))),
       hydra.lib.equality.EqualInt32.apply(

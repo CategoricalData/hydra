@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+import hydra.util.Opt;
 
 import static hydra.dsl.Modules.element;
 import static hydra.dsl.Modules.qname;
@@ -18,20 +18,20 @@ import static hydra.dsl.Modules.qname;
 
 public class ModuleBuilder<A> {
   private final Namespace namespace;
-  private final Optional<String> description;
+  private final Opt<String> description;
   private final List<Element<A>> elements = new ArrayList<Element<A>>();
 
-  public ModuleBuilder(Namespace namespace, Optional<String> description) {
+  public ModuleBuilder(Namespace namespace, Opt<String> description) {
     this.namespace = namespace;
     this.description = description;
   }
 
   public ModuleBuilder(Namespace namespace, String description) {
-    this(namespace, Optional.of(description));
+    this(namespace, Opt.of(description));
   }
 
   public ModuleBuilder(Namespace namespace) {
-    this(namespace, Optional.empty());
+    this(namespace, Opt.empty());
   }
 
   public ModuleBuilder(String namespace) {
@@ -44,7 +44,7 @@ public class ModuleBuilder<A> {
 
   public ModuleBuilder<A> recordType(String localName, FieldType<A>... fields) {
     return type(localName, new Type.Record<>(
-        new RowType<>(qname(namespace, localName), Optional.empty(), Arrays.asList(fields))));
+        new RowType<>(qname(namespace, localName), Opt.empty(), Arrays.asList(fields))));
   }
 
   public ModuleBuilder<A> type(String localName, Type<A> type) {
@@ -54,7 +54,7 @@ public class ModuleBuilder<A> {
 
   public ModuleBuilder<A> unionType(String localName, FieldType<A>... fields) {
     return type(localName, new Type.Union<>(
-        new RowType<>(qname(namespace, localName), Optional.empty(), Arrays.asList(fields))));
+        new RowType<>(qname(namespace, localName), Opt.empty(), Arrays.asList(fields))));
   }
 
   public Module<A> build() {

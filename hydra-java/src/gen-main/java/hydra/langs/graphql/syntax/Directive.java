@@ -9,9 +9,9 @@ public class Directive implements Serializable {
   
   public final hydra.langs.graphql.syntax.Name name;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Arguments> arguments;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Arguments> arguments;
   
-  public Directive (hydra.langs.graphql.syntax.Name name, java.util.Optional<hydra.langs.graphql.syntax.Arguments> arguments) {
+  public Directive (hydra.langs.graphql.syntax.Name name, hydra.util.Opt<hydra.langs.graphql.syntax.Arguments> arguments) {
     if (name == null) {
       throw new IllegalArgumentException("null value for 'name' argument");
     }
@@ -43,7 +43,7 @@ public class Directive implements Serializable {
     return new Directive(name, arguments);
   }
   
-  public Directive withArguments(java.util.Optional<hydra.langs.graphql.syntax.Arguments> arguments) {
+  public Directive withArguments(hydra.util.Opt<hydra.langs.graphql.syntax.Arguments> arguments) {
     if (arguments == null) {
       throw new IllegalArgumentException("null value for 'arguments' argument");
     }

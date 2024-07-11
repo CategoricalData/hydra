@@ -9,7 +9,7 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import java.util.List;
-import java.util.Optional;
+import hydra.util.Opt;
 import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
@@ -32,7 +32,7 @@ public class Pure<A> extends PrimitiveFunction<A> {
         return args -> Flows.pure(Terms.optional(apply(args.get(0))));
     }
 
-    public static <X> Optional<X> apply(X arg) {
-        return Optional.of(arg);
+    public static <X> Opt<X> apply(X arg) {
+        return Opt.of(arg);
     }
 }

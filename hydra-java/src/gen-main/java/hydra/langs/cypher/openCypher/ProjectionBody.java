@@ -11,13 +11,13 @@ public class ProjectionBody implements Serializable {
   
   public final hydra.langs.cypher.openCypher.ProjectionItems projectionItems;
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.Order> order;
+  public final hydra.util.Opt<hydra.langs.cypher.openCypher.Order> order;
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.Skip> skip;
+  public final hydra.util.Opt<hydra.langs.cypher.openCypher.Skip> skip;
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.Limit> limit;
+  public final hydra.util.Opt<hydra.langs.cypher.openCypher.Limit> limit;
   
-  public ProjectionBody (Boolean distinct, hydra.langs.cypher.openCypher.ProjectionItems projectionItems, java.util.Optional<hydra.langs.cypher.openCypher.Order> order, java.util.Optional<hydra.langs.cypher.openCypher.Skip> skip, java.util.Optional<hydra.langs.cypher.openCypher.Limit> limit) {
+  public ProjectionBody (Boolean distinct, hydra.langs.cypher.openCypher.ProjectionItems projectionItems, hydra.util.Opt<hydra.langs.cypher.openCypher.Order> order, hydra.util.Opt<hydra.langs.cypher.openCypher.Skip> skip, hydra.util.Opt<hydra.langs.cypher.openCypher.Limit> limit) {
     if (distinct == null) {
       throw new IllegalArgumentException("null value for 'distinct' argument");
     }
@@ -68,21 +68,21 @@ public class ProjectionBody implements Serializable {
     return new ProjectionBody(distinct, projectionItems, order, skip, limit);
   }
   
-  public ProjectionBody withOrder(java.util.Optional<hydra.langs.cypher.openCypher.Order> order) {
+  public ProjectionBody withOrder(hydra.util.Opt<hydra.langs.cypher.openCypher.Order> order) {
     if (order == null) {
       throw new IllegalArgumentException("null value for 'order' argument");
     }
     return new ProjectionBody(distinct, projectionItems, order, skip, limit);
   }
   
-  public ProjectionBody withSkip(java.util.Optional<hydra.langs.cypher.openCypher.Skip> skip) {
+  public ProjectionBody withSkip(hydra.util.Opt<hydra.langs.cypher.openCypher.Skip> skip) {
     if (skip == null) {
       throw new IllegalArgumentException("null value for 'skip' argument");
     }
     return new ProjectionBody(distinct, projectionItems, order, skip, limit);
   }
   
-  public ProjectionBody withLimit(java.util.Optional<hydra.langs.cypher.openCypher.Limit> limit) {
+  public ProjectionBody withLimit(hydra.util.Opt<hydra.langs.cypher.openCypher.Limit> limit) {
     if (limit == null) {
       throw new IllegalArgumentException("null value for 'limit' argument");
     }

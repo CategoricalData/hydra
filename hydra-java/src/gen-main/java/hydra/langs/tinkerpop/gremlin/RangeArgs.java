@@ -7,13 +7,13 @@ import java.io.Serializable;
 public class RangeArgs implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.RangeArgs");
   
-  public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope;
   
   public final hydra.langs.tinkerpop.gremlin.IntegerArgument min;
   
   public final hydra.langs.tinkerpop.gremlin.IntegerArgument max;
   
-  public RangeArgs (java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope, hydra.langs.tinkerpop.gremlin.IntegerArgument min, hydra.langs.tinkerpop.gremlin.IntegerArgument max) {
+  public RangeArgs (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope, hydra.langs.tinkerpop.gremlin.IntegerArgument min, hydra.langs.tinkerpop.gremlin.IntegerArgument max) {
     if (scope == null) {
       throw new IllegalArgumentException("null value for 'scope' argument");
     }
@@ -42,7 +42,7 @@ public class RangeArgs implements Serializable {
     return 2 * scope.hashCode() + 3 * min.hashCode() + 5 * max.hashCode();
   }
   
-  public RangeArgs withScope(java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope) {
+  public RangeArgs withScope(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope) {
     if (scope == null) {
       throw new IllegalArgumentException("null value for 'scope' argument");
     }

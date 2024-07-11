@@ -33,12 +33,12 @@ public class AtomFeatures implements Serializable {
   /**
    * Whether to expect lists, and if so, which specific features
    */
-  public final java.util.Optional<hydra.langs.cypher.features.ListFeatures> list;
+  public final hydra.util.Opt<hydra.langs.cypher.features.ListFeatures> list;
   
   /**
    * Whether to expect literal values, and if so, which specific features
    */
-  public final java.util.Optional<hydra.langs.cypher.features.LiteralFeatures> literal;
+  public final hydra.util.Opt<hydra.langs.cypher.features.LiteralFeatures> literal;
   
   /**
    * Whether to expect parameter expressions.
@@ -58,14 +58,14 @@ public class AtomFeatures implements Serializable {
   /**
    * Whether to expect quantifier expressions, and if so, which specific features
    */
-  public final java.util.Optional<hydra.langs.cypher.features.QuantifierFeatures> quantifier;
+  public final hydra.util.Opt<hydra.langs.cypher.features.QuantifierFeatures> quantifier;
   
   /**
    * Whether to expect variable expressions (note: included by most if not all implementations).
    */
   public final Boolean variable;
   
-  public AtomFeatures (Boolean caseExpression, Boolean count, Boolean existentialSubquery, Boolean functionInvocation, java.util.Optional<hydra.langs.cypher.features.ListFeatures> list, java.util.Optional<hydra.langs.cypher.features.LiteralFeatures> literal, Boolean parameter, Boolean patternComprehension, Boolean patternPredicate, java.util.Optional<hydra.langs.cypher.features.QuantifierFeatures> quantifier, Boolean variable) {
+  public AtomFeatures (Boolean caseExpression, Boolean count, Boolean existentialSubquery, Boolean functionInvocation, hydra.util.Opt<hydra.langs.cypher.features.ListFeatures> list, hydra.util.Opt<hydra.langs.cypher.features.LiteralFeatures> literal, Boolean parameter, Boolean patternComprehension, Boolean patternPredicate, hydra.util.Opt<hydra.langs.cypher.features.QuantifierFeatures> quantifier, Boolean variable) {
     if (caseExpression == null) {
       throw new IllegalArgumentException("null value for 'caseExpression' argument");
     }
@@ -154,14 +154,14 @@ public class AtomFeatures implements Serializable {
     return new AtomFeatures(caseExpression, count, existentialSubquery, functionInvocation, list, literal, parameter, patternComprehension, patternPredicate, quantifier, variable);
   }
   
-  public AtomFeatures withList(java.util.Optional<hydra.langs.cypher.features.ListFeatures> list) {
+  public AtomFeatures withList(hydra.util.Opt<hydra.langs.cypher.features.ListFeatures> list) {
     if (list == null) {
       throw new IllegalArgumentException("null value for 'list' argument");
     }
     return new AtomFeatures(caseExpression, count, existentialSubquery, functionInvocation, list, literal, parameter, patternComprehension, patternPredicate, quantifier, variable);
   }
   
-  public AtomFeatures withLiteral(java.util.Optional<hydra.langs.cypher.features.LiteralFeatures> literal) {
+  public AtomFeatures withLiteral(hydra.util.Opt<hydra.langs.cypher.features.LiteralFeatures> literal) {
     if (literal == null) {
       throw new IllegalArgumentException("null value for 'literal' argument");
     }
@@ -189,7 +189,7 @@ public class AtomFeatures implements Serializable {
     return new AtomFeatures(caseExpression, count, existentialSubquery, functionInvocation, list, literal, parameter, patternComprehension, patternPredicate, quantifier, variable);
   }
   
-  public AtomFeatures withQuantifier(java.util.Optional<hydra.langs.cypher.features.QuantifierFeatures> quantifier) {
+  public AtomFeatures withQuantifier(hydra.util.Opt<hydra.langs.cypher.features.QuantifierFeatures> quantifier) {
     if (quantifier == null) {
       throw new IllegalArgumentException("null value for 'quantifier' argument");
     }

@@ -7,13 +7,13 @@ import java.io.Serializable;
 public class OrdinaryCompilationUnit implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.OrdinaryCompilationUnit");
   
-  public final java.util.Optional<hydra.langs.java.syntax.PackageDeclaration> package_;
+  public final hydra.util.Opt<hydra.langs.java.syntax.PackageDeclaration> package_;
   
   public final java.util.List<hydra.langs.java.syntax.ImportDeclaration> imports;
   
   public final java.util.List<hydra.langs.java.syntax.TypeDeclarationWithComments> types;
   
-  public OrdinaryCompilationUnit (java.util.Optional<hydra.langs.java.syntax.PackageDeclaration> package_, java.util.List<hydra.langs.java.syntax.ImportDeclaration> imports, java.util.List<hydra.langs.java.syntax.TypeDeclarationWithComments> types) {
+  public OrdinaryCompilationUnit (hydra.util.Opt<hydra.langs.java.syntax.PackageDeclaration> package_, java.util.List<hydra.langs.java.syntax.ImportDeclaration> imports, java.util.List<hydra.langs.java.syntax.TypeDeclarationWithComments> types) {
     if (package_ == null) {
       throw new IllegalArgumentException("null value for 'package' argument");
     }
@@ -42,7 +42,7 @@ public class OrdinaryCompilationUnit implements Serializable {
     return 2 * package_.hashCode() + 3 * imports.hashCode() + 5 * types.hashCode();
   }
   
-  public OrdinaryCompilationUnit withPackage(java.util.Optional<hydra.langs.java.syntax.PackageDeclaration> package_) {
+  public OrdinaryCompilationUnit withPackage(hydra.util.Opt<hydra.langs.java.syntax.PackageDeclaration> package_) {
     if (package_ == null) {
       throw new IllegalArgumentException("null value for 'package' argument");
     }

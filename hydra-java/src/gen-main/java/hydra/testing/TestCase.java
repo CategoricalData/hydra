@@ -2,6 +2,8 @@
 
 package hydra.testing;
 
+import hydra.util.Opt;
+
 import java.io.Serializable;
 
 /**
@@ -10,7 +12,7 @@ import java.io.Serializable;
 public class TestCase<A> implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/testing.TestCase");
   
-  public final java.util.Optional<String> description;
+  public final Opt<String> description;
   
   public final hydra.testing.EvaluationStyle evaluationStyle;
   
@@ -18,7 +20,7 @@ public class TestCase<A> implements Serializable {
   
   public final hydra.core.Term<A> output;
   
-  public TestCase (java.util.Optional<String> description, hydra.testing.EvaluationStyle evaluationStyle, hydra.core.Term<A> input, hydra.core.Term<A> output) {
+  public TestCase (Opt<String> description, hydra.testing.EvaluationStyle evaluationStyle, hydra.core.Term<A> input, hydra.core.Term<A> output) {
     if (description == null) {
       throw new IllegalArgumentException("null value for 'description' argument");
     }
@@ -51,7 +53,7 @@ public class TestCase<A> implements Serializable {
     return 2 * description.hashCode() + 3 * evaluationStyle.hashCode() + 5 * input.hashCode() + 7 * output.hashCode();
   }
   
-  public TestCase withDescription(java.util.Optional<String> description) {
+  public TestCase withDescription(Opt<String> description) {
     if (description == null) {
       throw new IllegalArgumentException("null value for 'description' argument");
     }

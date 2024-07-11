@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class ClassInstanceCreationExpression implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.ClassInstanceCreationExpression");
   
-  public final java.util.Optional<hydra.langs.java.syntax.ClassInstanceCreationExpression_Qualifier> qualifier;
+  public final hydra.util.Opt<hydra.langs.java.syntax.ClassInstanceCreationExpression_Qualifier> qualifier;
   
   public final hydra.langs.java.syntax.UnqualifiedClassInstanceCreationExpression expression;
   
-  public ClassInstanceCreationExpression (java.util.Optional<hydra.langs.java.syntax.ClassInstanceCreationExpression_Qualifier> qualifier, hydra.langs.java.syntax.UnqualifiedClassInstanceCreationExpression expression) {
+  public ClassInstanceCreationExpression (hydra.util.Opt<hydra.langs.java.syntax.ClassInstanceCreationExpression_Qualifier> qualifier, hydra.langs.java.syntax.UnqualifiedClassInstanceCreationExpression expression) {
     if (qualifier == null) {
       throw new IllegalArgumentException("null value for 'qualifier' argument");
     }
@@ -36,7 +36,7 @@ public class ClassInstanceCreationExpression implements Serializable {
     return 2 * qualifier.hashCode() + 3 * expression.hashCode();
   }
   
-  public ClassInstanceCreationExpression withQualifier(java.util.Optional<hydra.langs.java.syntax.ClassInstanceCreationExpression_Qualifier> qualifier) {
+  public ClassInstanceCreationExpression withQualifier(hydra.util.Opt<hydra.langs.java.syntax.ClassInstanceCreationExpression_Qualifier> qualifier) {
     if (qualifier == null) {
       throw new IllegalArgumentException("null value for 'qualifier' argument");
     }

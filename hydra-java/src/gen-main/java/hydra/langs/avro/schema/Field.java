@@ -15,7 +15,7 @@ public class Field implements Serializable {
   /**
    * a JSON string describing this field for users
    */
-  public final java.util.Optional<String> doc;
+  public final hydra.util.Opt<String> doc;
   
   /**
    * a schema
@@ -25,24 +25,24 @@ public class Field implements Serializable {
   /**
    * default value for this field, only used when reading instances that lack the field for schema evolution purposes
    */
-  public final java.util.Optional<hydra.json.Value> default_;
+  public final hydra.util.Opt<hydra.json.Value> default_;
   
   /**
    * specifies how this field impacts sort ordering of this record
    */
-  public final java.util.Optional<hydra.langs.avro.schema.Order> order;
+  public final hydra.util.Opt<hydra.langs.avro.schema.Order> order;
   
   /**
    * a JSON array of strings, providing alternate names for this field
    */
-  public final java.util.Optional<java.util.List<String>> aliases;
+  public final hydra.util.Opt<java.util.List<String>> aliases;
   
   /**
    * Any additional key/value pairs attached to the field
    */
   public final java.util.Map<String, hydra.json.Value> annotations;
   
-  public Field (String name, java.util.Optional<String> doc, hydra.langs.avro.schema.Schema type, java.util.Optional<hydra.json.Value> default_, java.util.Optional<hydra.langs.avro.schema.Order> order, java.util.Optional<java.util.List<String>> aliases, java.util.Map<String, hydra.json.Value> annotations) {
+  public Field (String name, hydra.util.Opt<String> doc, hydra.langs.avro.schema.Schema type, hydra.util.Opt<hydra.json.Value> default_, hydra.util.Opt<hydra.langs.avro.schema.Order> order, hydra.util.Opt<java.util.List<String>> aliases, java.util.Map<String, hydra.json.Value> annotations) {
     if (name == null) {
       throw new IllegalArgumentException("null value for 'name' argument");
     }
@@ -94,7 +94,7 @@ public class Field implements Serializable {
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
-  public Field withDoc(java.util.Optional<String> doc) {
+  public Field withDoc(hydra.util.Opt<String> doc) {
     if (doc == null) {
       throw new IllegalArgumentException("null value for 'doc' argument");
     }
@@ -108,21 +108,21 @@ public class Field implements Serializable {
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
-  public Field withDefault(java.util.Optional<hydra.json.Value> default_) {
+  public Field withDefault(hydra.util.Opt<hydra.json.Value> default_) {
     if (default_ == null) {
       throw new IllegalArgumentException("null value for 'default' argument");
     }
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
-  public Field withOrder(java.util.Optional<hydra.langs.avro.schema.Order> order) {
+  public Field withOrder(hydra.util.Opt<hydra.langs.avro.schema.Order> order) {
     if (order == null) {
       throw new IllegalArgumentException("null value for 'order' argument");
     }
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
-  public Field withAliases(java.util.Optional<java.util.List<String>> aliases) {
+  public Field withAliases(hydra.util.Opt<java.util.List<String>> aliases) {
     if (aliases == null) {
       throw new IllegalArgumentException("null value for 'aliases' argument");
     }

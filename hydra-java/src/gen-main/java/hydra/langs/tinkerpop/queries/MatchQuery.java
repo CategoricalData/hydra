@@ -11,9 +11,9 @@ public class MatchQuery implements Serializable {
   
   public final java.util.List<hydra.langs.tinkerpop.queries.Projection> pattern;
   
-  public final java.util.Optional<hydra.langs.tinkerpop.queries.Expression> where;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.queries.Expression> where;
   
-  public MatchQuery (Boolean optional, java.util.List<hydra.langs.tinkerpop.queries.Projection> pattern, java.util.Optional<hydra.langs.tinkerpop.queries.Expression> where) {
+  public MatchQuery (Boolean optional, java.util.List<hydra.langs.tinkerpop.queries.Projection> pattern, hydra.util.Opt<hydra.langs.tinkerpop.queries.Expression> where) {
     if (optional == null) {
       throw new IllegalArgumentException("null value for 'optional' argument");
     }
@@ -56,7 +56,7 @@ public class MatchQuery implements Serializable {
     return new MatchQuery(optional, pattern, where);
   }
   
-  public MatchQuery withWhere(java.util.Optional<hydra.langs.tinkerpop.queries.Expression> where) {
+  public MatchQuery withWhere(hydra.util.Opt<hydra.langs.tinkerpop.queries.Expression> where) {
     if (where == null) {
       throw new IllegalArgumentException("null value for 'where' argument");
     }

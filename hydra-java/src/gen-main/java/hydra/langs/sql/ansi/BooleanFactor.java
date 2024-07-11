@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class BooleanFactor implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.BooleanFactor");
   
-  public final java.util.Optional<java.lang.Void> nOT;
+  public final hydra.util.Opt<java.lang.Void> nOT;
   
   public final hydra.langs.sql.ansi.BooleanTest booleanTest;
   
-  public BooleanFactor (java.util.Optional<java.lang.Void> nOT, hydra.langs.sql.ansi.BooleanTest booleanTest) {
+  public BooleanFactor (hydra.util.Opt<java.lang.Void> nOT, hydra.langs.sql.ansi.BooleanTest booleanTest) {
     if (nOT == null) {
       throw new IllegalArgumentException("null value for 'nOT' argument");
     }
@@ -36,7 +36,7 @@ public class BooleanFactor implements Serializable {
     return 2 * nOT.hashCode() + 3 * booleanTest.hashCode();
   }
   
-  public BooleanFactor withNOT(java.util.Optional<java.lang.Void> nOT) {
+  public BooleanFactor withNOT(hydra.util.Opt<java.lang.Void> nOT) {
     if (nOT == null) {
       throw new IllegalArgumentException("null value for 'nOT' argument");
     }

@@ -7,7 +7,7 @@ import hydra.core.Literal;
 import hydra.core.LiteralType;
 
 import java.math.BigInteger;
-import java.util.Optional;
+import hydra.util.Opt;
 
 
 /**
@@ -182,11 +182,11 @@ public interface Literals {
     /**
      * Check a literal value against an expected type.
      */
-    static Optional<String> checkLiteral(LiteralType type, Literal value) {
+    static Opt<String> checkLiteral(LiteralType type, Literal value) {
         String expected = LiteralTypes.showLiteralType(type);
         String actual = LiteralTypes.showLiteralType(Basics.literalType(value));
         return expected.equals(actual)
-                ? Optional.empty()
-                : Optional.of("Expected literal of type " + expected + ", found " + actual);
+                ? Opt.empty()
+                : Opt.of("Expected literal of type " + expected + ", found " + actual);
     }
 }

@@ -12,7 +12,7 @@ import hydra.tools.PrimitiveFunction;
 
 import java.util.List;
 import java.util.function.Function;
-import java.util.Optional;
+import hydra.util.Opt;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.lambda;
@@ -33,20 +33,20 @@ public class Bind<A> extends PrimitiveFunction<A> {
     @Override
     protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
         return args -> Flows.map(Expect.optional(Flows::pure, args.get(0)),
-            arg -> arg.map(term -> Terms.optional(Optional.of(Terms.apply(args.get(1), term))))
-                .orElseGet(() -> Terms.optional(Optional.empty())));
+            arg -> arg.map(term -> Terms.optional(Opt.of(Terms.apply(args.get(1), term))))
+                .orElseGet(() -> Terms.optional(Opt.empty())));
     }
 
-    public static <X, Y> Function<Function<X, Optional<Y>>, Optional<Y>> apply(Optional<X> optionalArg) {
+    public static <X, Y> Function<Function<X, Opt<Y>>, Opt<Y>> apply(Opt<X> optionalArg) {
         return (f) -> apply(optionalArg, f);
     }
 
     /**
      * Apply the function to both arguments.
      */
-    public static <X, Y> Optional<Y> apply(Optional<X> optionalArg, Function<X, Optional<Y>> f) {
+    public static <X, Y> Opt<Y> apply(Opt<X> optionalArg, Function<X, Opt<Y>> f) {
         return optionalArg.isPresent()
             ? f.apply(optionalArg.get())
-            : Optional.empty();
+            : Opt.empty();
     }
 }

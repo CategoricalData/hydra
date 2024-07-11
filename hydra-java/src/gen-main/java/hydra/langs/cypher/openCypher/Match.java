@@ -11,9 +11,9 @@ public class Match implements Serializable {
   
   public final hydra.langs.cypher.openCypher.Pattern pattern;
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.Where> where;
+  public final hydra.util.Opt<hydra.langs.cypher.openCypher.Where> where;
   
-  public Match (Boolean optional, hydra.langs.cypher.openCypher.Pattern pattern, java.util.Optional<hydra.langs.cypher.openCypher.Where> where) {
+  public Match (Boolean optional, hydra.langs.cypher.openCypher.Pattern pattern, hydra.util.Opt<hydra.langs.cypher.openCypher.Where> where) {
     if (optional == null) {
       throw new IllegalArgumentException("null value for 'optional' argument");
     }
@@ -56,7 +56,7 @@ public class Match implements Serializable {
     return new Match(optional, pattern, where);
   }
   
-  public Match withWhere(java.util.Optional<hydra.langs.cypher.openCypher.Where> where) {
+  public Match withWhere(hydra.util.Opt<hydra.langs.cypher.openCypher.Where> where) {
     if (where == null) {
       throw new IllegalArgumentException("null value for 'where' argument");
     }

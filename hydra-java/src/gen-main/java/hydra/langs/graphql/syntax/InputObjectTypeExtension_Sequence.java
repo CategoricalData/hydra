@@ -9,11 +9,11 @@ public class InputObjectTypeExtension_Sequence implements Serializable {
   
   public final hydra.langs.graphql.syntax.Name name;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives;
   
   public final hydra.langs.graphql.syntax.InputFieldsDefinition inputFieldsDefinition;
   
-  public InputObjectTypeExtension_Sequence (hydra.langs.graphql.syntax.Name name, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.InputFieldsDefinition inputFieldsDefinition) {
+  public InputObjectTypeExtension_Sequence (hydra.langs.graphql.syntax.Name name, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.InputFieldsDefinition inputFieldsDefinition) {
     if (name == null) {
       throw new IllegalArgumentException("null value for 'name' argument");
     }
@@ -49,7 +49,7 @@ public class InputObjectTypeExtension_Sequence implements Serializable {
     return new InputObjectTypeExtension_Sequence(name, directives, inputFieldsDefinition);
   }
   
-  public InputObjectTypeExtension_Sequence withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+  public InputObjectTypeExtension_Sequence withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
     if (directives == null) {
       throw new IllegalArgumentException("null value for 'directives' argument");
     }

@@ -9,9 +9,9 @@ public class GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument implem
   
   public final hydra.langs.tinkerpop.gremlin.GenericLiteralArgument literal;
   
-  public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalBiFunctionArgument> biFunction;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalBiFunctionArgument> biFunction;
   
-  public GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument (hydra.langs.tinkerpop.gremlin.GenericLiteralArgument literal, java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalBiFunctionArgument> biFunction) {
+  public GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument (hydra.langs.tinkerpop.gremlin.GenericLiteralArgument literal, hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalBiFunctionArgument> biFunction) {
     if (literal == null) {
       throw new IllegalArgumentException("null value for 'literal' argument");
     }
@@ -43,7 +43,7 @@ public class GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument implem
     return new GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument(literal, biFunction);
   }
   
-  public GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument withBiFunction(java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalBiFunctionArgument> biFunction) {
+  public GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument withBiFunction(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalBiFunctionArgument> biFunction) {
     if (biFunction == null) {
       throw new IllegalArgumentException("null value for 'biFunction' argument");
     }

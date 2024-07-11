@@ -9,15 +9,15 @@ public class OperationDefinition_Sequence implements Serializable {
   
   public final hydra.langs.graphql.syntax.OperationType operationType;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Name> name;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Name> name;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.VariablesDefinition> variablesDefinition;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.VariablesDefinition> variablesDefinition;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives;
   
   public final hydra.langs.graphql.syntax.SelectionSet selectionSet;
   
-  public OperationDefinition_Sequence (hydra.langs.graphql.syntax.OperationType operationType, java.util.Optional<hydra.langs.graphql.syntax.Name> name, java.util.Optional<hydra.langs.graphql.syntax.VariablesDefinition> variablesDefinition, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.SelectionSet selectionSet) {
+  public OperationDefinition_Sequence (hydra.langs.graphql.syntax.OperationType operationType, hydra.util.Opt<hydra.langs.graphql.syntax.Name> name, hydra.util.Opt<hydra.langs.graphql.syntax.VariablesDefinition> variablesDefinition, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.SelectionSet selectionSet) {
     if (operationType == null) {
       throw new IllegalArgumentException("null value for 'operationType' argument");
     }
@@ -61,21 +61,21 @@ public class OperationDefinition_Sequence implements Serializable {
     return new OperationDefinition_Sequence(operationType, name, variablesDefinition, directives, selectionSet);
   }
   
-  public OperationDefinition_Sequence withName(java.util.Optional<hydra.langs.graphql.syntax.Name> name) {
+  public OperationDefinition_Sequence withName(hydra.util.Opt<hydra.langs.graphql.syntax.Name> name) {
     if (name == null) {
       throw new IllegalArgumentException("null value for 'name' argument");
     }
     return new OperationDefinition_Sequence(operationType, name, variablesDefinition, directives, selectionSet);
   }
   
-  public OperationDefinition_Sequence withVariablesDefinition(java.util.Optional<hydra.langs.graphql.syntax.VariablesDefinition> variablesDefinition) {
+  public OperationDefinition_Sequence withVariablesDefinition(hydra.util.Opt<hydra.langs.graphql.syntax.VariablesDefinition> variablesDefinition) {
     if (variablesDefinition == null) {
       throw new IllegalArgumentException("null value for 'variablesDefinition' argument");
     }
     return new OperationDefinition_Sequence(operationType, name, variablesDefinition, directives, selectionSet);
   }
   
-  public OperationDefinition_Sequence withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+  public OperationDefinition_Sequence withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
     if (directives == null) {
       throw new IllegalArgumentException("null value for 'directives' argument");
     }

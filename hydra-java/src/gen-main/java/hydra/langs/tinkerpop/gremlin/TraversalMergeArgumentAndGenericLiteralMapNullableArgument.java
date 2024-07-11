@@ -11,9 +11,9 @@ public class TraversalMergeArgumentAndGenericLiteralMapNullableArgument implemen
   
   public final hydra.langs.tinkerpop.gremlin.GenericLiteralMapNullableArgument map;
   
-  public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalCardinality> cardinality;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalCardinality> cardinality;
   
-  public TraversalMergeArgumentAndGenericLiteralMapNullableArgument (hydra.langs.tinkerpop.gremlin.TraversalMergeArgument merge, hydra.langs.tinkerpop.gremlin.GenericLiteralMapNullableArgument map, java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalCardinality> cardinality) {
+  public TraversalMergeArgumentAndGenericLiteralMapNullableArgument (hydra.langs.tinkerpop.gremlin.TraversalMergeArgument merge, hydra.langs.tinkerpop.gremlin.GenericLiteralMapNullableArgument map, hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalCardinality> cardinality) {
     if (merge == null) {
       throw new IllegalArgumentException("null value for 'merge' argument");
     }
@@ -56,7 +56,7 @@ public class TraversalMergeArgumentAndGenericLiteralMapNullableArgument implemen
     return new TraversalMergeArgumentAndGenericLiteralMapNullableArgument(merge, map, cardinality);
   }
   
-  public TraversalMergeArgumentAndGenericLiteralMapNullableArgument withCardinality(java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalCardinality> cardinality) {
+  public TraversalMergeArgumentAndGenericLiteralMapNullableArgument withCardinality(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalCardinality> cardinality) {
     if (cardinality == null) {
       throw new IllegalArgumentException("null value for 'cardinality' argument");
     }

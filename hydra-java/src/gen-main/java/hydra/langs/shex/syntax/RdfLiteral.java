@@ -9,9 +9,9 @@ public class RdfLiteral implements Serializable {
   
   public final hydra.langs.shex.syntax.String_ string;
   
-  public final java.util.Optional<hydra.langs.shex.syntax.RdfLiteral_Alts_Option> alts;
+  public final hydra.util.Opt<hydra.langs.shex.syntax.RdfLiteral_Alts_Option> alts;
   
-  public RdfLiteral (hydra.langs.shex.syntax.String_ string, java.util.Optional<hydra.langs.shex.syntax.RdfLiteral_Alts_Option> alts) {
+  public RdfLiteral (hydra.langs.shex.syntax.String_ string, hydra.util.Opt<hydra.langs.shex.syntax.RdfLiteral_Alts_Option> alts) {
     if (string == null) {
       throw new IllegalArgumentException("null value for 'string' argument");
     }
@@ -43,7 +43,7 @@ public class RdfLiteral implements Serializable {
     return new RdfLiteral(string, alts);
   }
   
-  public RdfLiteral withAlts(java.util.Optional<hydra.langs.shex.syntax.RdfLiteral_Alts_Option> alts) {
+  public RdfLiteral withAlts(hydra.util.Opt<hydra.langs.shex.syntax.RdfLiteral_Alts_Option> alts) {
     if (alts == null) {
       throw new IllegalArgumentException("null value for 'alts' argument");
     }

@@ -11,7 +11,7 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
 import java.util.List;
-import java.util.Optional;
+import hydra.util.Opt;
 import java.util.function.Function;
 
 import static hydra.Flows.map;
@@ -39,11 +39,11 @@ public class SafeHead<A> extends PrimitiveFunction<A> {
     /**
      * Apply the function to it single argument.
      */
-    public static <X> Optional<X> apply(List<X> list) {
+    public static <X> Opt<X> apply(List<X> list) {
         if (list.isEmpty()) {
-            return Optional.empty();
+            return Opt.empty();
         } else {
-            return Optional.of(list.get(0));
+            return Opt.of(list.get(0));
         }
     }
 }

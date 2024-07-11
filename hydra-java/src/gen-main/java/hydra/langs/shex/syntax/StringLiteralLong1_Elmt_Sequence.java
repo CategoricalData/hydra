@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class StringLiteralLong1_Elmt_Sequence implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.StringLiteralLong1.Elmt.Sequence");
   
-  public final java.util.Optional<hydra.langs.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option> alts;
+  public final hydra.util.Opt<hydra.langs.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option> alts;
   
   public final String regex;
   
-  public StringLiteralLong1_Elmt_Sequence (java.util.Optional<hydra.langs.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option> alts, String regex) {
+  public StringLiteralLong1_Elmt_Sequence (hydra.util.Opt<hydra.langs.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option> alts, String regex) {
     if (alts == null) {
       throw new IllegalArgumentException("null value for 'alts' argument");
     }
@@ -36,7 +36,7 @@ public class StringLiteralLong1_Elmt_Sequence implements Serializable {
     return 2 * alts.hashCode() + 3 * regex.hashCode();
   }
   
-  public StringLiteralLong1_Elmt_Sequence withAlts(java.util.Optional<hydra.langs.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option> alts) {
+  public StringLiteralLong1_Elmt_Sequence withAlts(hydra.util.Opt<hydra.langs.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option> alts) {
     if (alts == null) {
       throw new IllegalArgumentException("null value for 'alts' argument");
     }

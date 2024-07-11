@@ -9,9 +9,9 @@ public class ShapeAtom_Sequence implements Serializable {
   
   public final hydra.langs.shex.syntax.NodeConstraint nodeConstraint;
   
-  public final java.util.Optional<hydra.langs.shex.syntax.ShapeOrRef> shapeOrRef;
+  public final hydra.util.Opt<hydra.langs.shex.syntax.ShapeOrRef> shapeOrRef;
   
-  public ShapeAtom_Sequence (hydra.langs.shex.syntax.NodeConstraint nodeConstraint, java.util.Optional<hydra.langs.shex.syntax.ShapeOrRef> shapeOrRef) {
+  public ShapeAtom_Sequence (hydra.langs.shex.syntax.NodeConstraint nodeConstraint, hydra.util.Opt<hydra.langs.shex.syntax.ShapeOrRef> shapeOrRef) {
     if (nodeConstraint == null) {
       throw new IllegalArgumentException("null value for 'nodeConstraint' argument");
     }
@@ -43,7 +43,7 @@ public class ShapeAtom_Sequence implements Serializable {
     return new ShapeAtom_Sequence(nodeConstraint, shapeOrRef);
   }
   
-  public ShapeAtom_Sequence withShapeOrRef(java.util.Optional<hydra.langs.shex.syntax.ShapeOrRef> shapeOrRef) {
+  public ShapeAtom_Sequence withShapeOrRef(hydra.util.Opt<hydra.langs.shex.syntax.ShapeOrRef> shapeOrRef) {
     if (shapeOrRef == null) {
       throw new IllegalArgumentException("null value for 'shapeOrRef' argument");
     }

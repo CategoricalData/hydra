@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class CatchClause implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.CatchClause");
   
-  public final java.util.Optional<hydra.langs.java.syntax.CatchFormalParameter> parameter;
+  public final hydra.util.Opt<hydra.langs.java.syntax.CatchFormalParameter> parameter;
   
   public final hydra.langs.java.syntax.Block block;
   
-  public CatchClause (java.util.Optional<hydra.langs.java.syntax.CatchFormalParameter> parameter, hydra.langs.java.syntax.Block block) {
+  public CatchClause (hydra.util.Opt<hydra.langs.java.syntax.CatchFormalParameter> parameter, hydra.langs.java.syntax.Block block) {
     if (parameter == null) {
       throw new IllegalArgumentException("null value for 'parameter' argument");
     }
@@ -36,7 +36,7 @@ public class CatchClause implements Serializable {
     return 2 * parameter.hashCode() + 3 * block.hashCode();
   }
   
-  public CatchClause withParameter(java.util.Optional<hydra.langs.java.syntax.CatchFormalParameter> parameter) {
+  public CatchClause withParameter(hydra.util.Opt<hydra.langs.java.syntax.CatchFormalParameter> parameter) {
     if (parameter == null) {
       throw new IllegalArgumentException("null value for 'parameter' argument");
     }

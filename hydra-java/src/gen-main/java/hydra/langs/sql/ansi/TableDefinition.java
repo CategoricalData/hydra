@@ -7,15 +7,15 @@ import java.io.Serializable;
 public class TableDefinition implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.TableDefinition");
   
-  public final java.util.Optional<hydra.langs.sql.ansi.TableScope> scope;
+  public final hydra.util.Opt<hydra.langs.sql.ansi.TableScope> scope;
   
   public final hydra.langs.sql.ansi.TableName name;
   
   public final hydra.langs.sql.ansi.TableContentsSource source;
   
-  public final java.util.Optional<hydra.langs.sql.ansi.TableCommitAction> commitActions;
+  public final hydra.util.Opt<hydra.langs.sql.ansi.TableCommitAction> commitActions;
   
-  public TableDefinition (java.util.Optional<hydra.langs.sql.ansi.TableScope> scope, hydra.langs.sql.ansi.TableName name, hydra.langs.sql.ansi.TableContentsSource source, java.util.Optional<hydra.langs.sql.ansi.TableCommitAction> commitActions) {
+  public TableDefinition (hydra.util.Opt<hydra.langs.sql.ansi.TableScope> scope, hydra.langs.sql.ansi.TableName name, hydra.langs.sql.ansi.TableContentsSource source, hydra.util.Opt<hydra.langs.sql.ansi.TableCommitAction> commitActions) {
     if (scope == null) {
       throw new IllegalArgumentException("null value for 'scope' argument");
     }
@@ -48,7 +48,7 @@ public class TableDefinition implements Serializable {
     return 2 * scope.hashCode() + 3 * name.hashCode() + 5 * source.hashCode() + 7 * commitActions.hashCode();
   }
   
-  public TableDefinition withScope(java.util.Optional<hydra.langs.sql.ansi.TableScope> scope) {
+  public TableDefinition withScope(hydra.util.Opt<hydra.langs.sql.ansi.TableScope> scope) {
     if (scope == null) {
       throw new IllegalArgumentException("null value for 'scope' argument");
     }
@@ -69,7 +69,7 @@ public class TableDefinition implements Serializable {
     return new TableDefinition(scope, name, source, commitActions);
   }
   
-  public TableDefinition withCommitActions(java.util.Optional<hydra.langs.sql.ansi.TableCommitAction> commitActions) {
+  public TableDefinition withCommitActions(hydra.util.Opt<hydra.langs.sql.ansi.TableCommitAction> commitActions) {
     if (commitActions == null) {
       throw new IllegalArgumentException("null value for 'commitActions' argument");
     }

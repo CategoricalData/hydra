@@ -9,9 +9,9 @@ public class Property implements Serializable {
   
   public final hydra.langs.pegasus.pdl.PropertyKey key;
   
-  public final java.util.Optional<hydra.json.Value> value;
+  public final hydra.util.Opt<hydra.json.Value> value;
   
-  public Property (hydra.langs.pegasus.pdl.PropertyKey key, java.util.Optional<hydra.json.Value> value) {
+  public Property (hydra.langs.pegasus.pdl.PropertyKey key, hydra.util.Opt<hydra.json.Value> value) {
     if (key == null) {
       throw new IllegalArgumentException("null value for 'key' argument");
     }
@@ -43,7 +43,7 @@ public class Property implements Serializable {
     return new Property(key, value);
   }
   
-  public Property withValue(java.util.Optional<hydra.json.Value> value) {
+  public Property withValue(hydra.util.Opt<hydra.json.Value> value) {
     if (value == null) {
       throw new IllegalArgumentException("null value for 'value' argument");
     }

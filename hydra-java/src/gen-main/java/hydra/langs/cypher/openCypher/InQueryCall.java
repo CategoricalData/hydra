@@ -9,9 +9,9 @@ public class InQueryCall implements Serializable {
   
   public final hydra.langs.cypher.openCypher.ExplicitProcedureInvocation call;
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.YieldItems> yieldItems;
+  public final hydra.util.Opt<hydra.langs.cypher.openCypher.YieldItems> yieldItems;
   
-  public InQueryCall (hydra.langs.cypher.openCypher.ExplicitProcedureInvocation call, java.util.Optional<hydra.langs.cypher.openCypher.YieldItems> yieldItems) {
+  public InQueryCall (hydra.langs.cypher.openCypher.ExplicitProcedureInvocation call, hydra.util.Opt<hydra.langs.cypher.openCypher.YieldItems> yieldItems) {
     if (call == null) {
       throw new IllegalArgumentException("null value for 'call' argument");
     }
@@ -43,7 +43,7 @@ public class InQueryCall implements Serializable {
     return new InQueryCall(call, yieldItems);
   }
   
-  public InQueryCall withYieldItems(java.util.Optional<hydra.langs.cypher.openCypher.YieldItems> yieldItems) {
+  public InQueryCall withYieldItems(hydra.util.Opt<hydra.langs.cypher.openCypher.YieldItems> yieldItems) {
     if (yieldItems == null) {
       throw new IllegalArgumentException("null value for 'yieldItems' argument");
     }
