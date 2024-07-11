@@ -5,6 +5,7 @@ package hydra.langs.tinkerpop.validate;
 import hydra.langs.tinkerpop.propertyGraph.EdgeLabel;
 import hydra.langs.tinkerpop.propertyGraph.VertexLabel;
 import hydra.util.Opt;
+import hydra.util.Tuple;
 
 import java.util.function.Function;
 
@@ -103,9 +104,9 @@ public interface Validate {
   static <T, V> java.util.function.Function<java.util.List<hydra.langs.tinkerpop.propertyGraph.PropertyType<T>>, java.util.function.Function<java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, V>, Opt<String>>> validateProperties(java.util.function.Function<T, java.util.function.Function<V, Opt<String>>> checkValue) {
     return (java.util.function.Function<java.util.List<hydra.langs.tinkerpop.propertyGraph.PropertyType<T>>, java.util.function.Function<java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, V>, Opt<String>>>) (types -> (java.util.function.Function<java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, V>, Opt<String>>) (props -> {
       java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, T> checkValues_m = hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.langs.tinkerpop.propertyGraph.PropertyType<T>, hydra.core.Tuple.Tuple2<hydra.langs.tinkerpop.propertyGraph.PropertyKey, T>>) (p -> new hydra.core.Tuple.Tuple2(((p)).key, ((p)).value)),
+        (java.util.function.Function<hydra.langs.tinkerpop.propertyGraph.PropertyType<T>, Tuple.Tuple2<hydra.langs.tinkerpop.propertyGraph.PropertyKey, T>>) (p -> new Tuple.Tuple2(((p)).key, ((p)).value)),
         (types)));
-      java.util.function.Function<hydra.core.Tuple.Tuple2<hydra.langs.tinkerpop.propertyGraph.PropertyKey, V>, Opt<String>> checkValues_checkPair = (java.util.function.Function<hydra.core.Tuple.Tuple2<hydra.langs.tinkerpop.propertyGraph.PropertyKey, V>, Opt<String>>) (pair -> {
+      java.util.function.Function<Tuple.Tuple2<hydra.langs.tinkerpop.propertyGraph.PropertyKey, V>, Opt<String>> checkValues_checkPair = (java.util.function.Function<Tuple.Tuple2<hydra.langs.tinkerpop.propertyGraph.PropertyKey, V>, Opt<String>>) (pair -> {
         V val = ((pair)).object2;
         hydra.langs.tinkerpop.propertyGraph.PropertyKey key = ((pair)).object1;
         return ((hydra.lib.maps.Lookup.apply(

@@ -4,7 +4,7 @@ import hydra.Flows;
 import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
-import hydra.core.Tuple;
+import hydra.util.Tuple;
 import hydra.core.Type;
 import hydra.dsl.Expect;
 import hydra.graph.Graph;

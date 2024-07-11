@@ -681,7 +681,7 @@ encodeTerm aliases term0 = encodeInternal [] term0
 
         TermProduct terms -> do
           jterms <- CM.mapM encode terms
-          let tupleTypeName = "hydra.core.Tuple.Tuple" ++ show (length terms)
+          let tupleTypeName = "hydra.util.Tuple.Tuple" ++ show (length terms)
           return $ javaConstructorCall (javaConstructorName (Java.Identifier tupleTypeName) Nothing) jterms Nothing
 
         TermRecord (Record name fields) -> do

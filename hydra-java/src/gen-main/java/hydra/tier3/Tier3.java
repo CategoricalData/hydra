@@ -2,12 +2,14 @@
 
 package hydra.tier3;
 
+import hydra.util.Tuple;
+
 /**
  * A module for miscellaneous tier-3 functions and constants.
  */
 public interface Tier3 {
   static String traceSummary(hydra.compute.Trace t) {
-    java.util.function.Function<hydra.core.Tuple.Tuple2<String, hydra.core.Term<hydra.compute.Kv>>, String> toLine = (java.util.function.Function<hydra.core.Tuple.Tuple2<String, hydra.core.Term<hydra.compute.Kv>>, String>) (pair -> hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
+    java.util.function.Function<Tuple.Tuple2<String, hydra.core.Term<hydra.compute.Kv>>, String> toLine = (java.util.function.Function<Tuple.Tuple2<String, hydra.core.Term<hydra.compute.Kv>>, String>) (pair -> hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
         hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
           "\t",

@@ -19,7 +19,7 @@ import hydra.core.OptionalCases;
 import hydra.core.Projection;
 import hydra.core.Record;
 import hydra.core.Term;
-import hydra.core.Tuple;
+import hydra.util.Tuple;
 import hydra.core.Unit;
 
 import hydra.core.Nominal;
