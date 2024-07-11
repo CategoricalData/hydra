@@ -17,6 +17,7 @@ import qualified Data.Set as S
 import qualified Text.Read as TR
 import qualified Data.Maybe as Y
 
+-- | Note: follows the Protobuf Style Guide (https://protobuf.dev/programming-guides/style)
 moduleToProtobuf :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
 moduleToProtobuf mod = do
     files <- transformModule protobufLanguage encodeTerm constructModule mod
@@ -135,16 +136,15 @@ encodeEnumDefinition options (RowType tname _ fields) = do
 encodeEnumValueName :: Name -> FieldName -> P3.EnumValueName
 encodeEnumValueName tname fname = P3.EnumValueName (prefix ++ "_" ++ suffix)
   where
-    prefix = toUpperSnake $ localNameOfEager tname
-    suffix = toUpperSnake $ unFieldName fname
-    toUpperSnake = convertCase CaseConventionCamel CaseConventionUpperSnake
+    prefix = convertCaseCamelToUpperSnake $ localNameOfEager tname
+    suffix = convertCaseCamelToUpperSnake $ unFieldName fname
 
 encodeFieldName :: Bool -> FieldName -> P3.FieldName
 encodeFieldName preserve = P3.FieldName . toPname . unFieldName
   where
     toPname = if preserve
       then id
-      else convertCase CaseConventionCamel CaseConventionLowerSnake
+      else convertCaseCamelToLowerSnake
 
 encodeFieldType :: (Ord a, Show a) => Namespace -> FieldType a -> Flow (Graph a) P3.Field
 encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ show (unFieldName fname)) $ do
@@ -272,11 +272,13 @@ isEnumDefinitionReference :: (Eq a, Show a) => Name -> Flow (Graph a) Bool
 isEnumDefinitionReference name = isEnumDefinition <$> ((elementData <$> requireElement name) >>= coreDecodeType)
 
 namespaceToFileReference :: Namespace -> P3.FileReference
-namespaceToFileReference (Namespace ns) = P3.FileReference $ ns ++ ".proto"
+namespaceToFileReference (Namespace ns) = P3.FileReference $ pns ++ ".proto"
+  where
+    pns = Strings.intercalate "/" (convertCaseCamelToLowerSnake <$> (Strings.splitOn "/" ns))
 
 namespaceToPackageName :: Namespace -> P3.PackageName
 namespaceToPackageName (Namespace ns) = P3.PackageName $ Strings.intercalate "." $
-  L.init $ Strings.splitOn "/" ns
+  convertCaseCamelToLowerSnake <$> (L.init $ Strings.splitOn "/" ns)
 
 nextIndex :: Flow s Int
 nextIndex = nextCount "proto_field_index"

@@ -31,6 +31,15 @@ convertCase from to original = case to of
       where
         helper (h:r) c = ["" | C.isUpper c] ++ ((c:h):r)
 
+convertCaseCamelToLowerSnake :: String -> String
+convertCaseCamelToLowerSnake = convertCase CaseConventionCamel CaseConventionLowerSnake
+
+convertCaseCamelToUpperSnake :: String -> String
+convertCaseCamelToUpperSnake = convertCase CaseConventionCamel CaseConventionUpperSnake
+
+convertCasePascalToUpperSnake :: String -> String
+convertCasePascalToUpperSnake = convertCase CaseConventionPascal CaseConventionUpperSnake
+
 escapeWithUnderscore :: S.Set String -> String -> String
 escapeWithUnderscore reserved s = if S.member s reserved then s ++ "_" else s
 
