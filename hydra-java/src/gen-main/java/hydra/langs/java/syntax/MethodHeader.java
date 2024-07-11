@@ -13,9 +13,9 @@ public class MethodHeader implements Serializable {
   
   public final hydra.langs.java.syntax.MethodDeclarator declarator;
   
-  public final java.util.Optional<hydra.langs.java.syntax.Throws> throws_;
+  public final hydra.util.Opt<hydra.langs.java.syntax.Throws> throws_;
   
-  public MethodHeader (java.util.List<hydra.langs.java.syntax.TypeParameter> parameters, hydra.langs.java.syntax.Result result, hydra.langs.java.syntax.MethodDeclarator declarator, java.util.Optional<hydra.langs.java.syntax.Throws> throws_) {
+  public MethodHeader (java.util.List<hydra.langs.java.syntax.TypeParameter> parameters, hydra.langs.java.syntax.Result result, hydra.langs.java.syntax.MethodDeclarator declarator, hydra.util.Opt<hydra.langs.java.syntax.Throws> throws_) {
     if (parameters == null) {
       throw new IllegalArgumentException("null value for 'parameters' argument");
     }
@@ -69,7 +69,7 @@ public class MethodHeader implements Serializable {
     return new MethodHeader(parameters, result, declarator, throws_);
   }
   
-  public MethodHeader withThrows(java.util.Optional<hydra.langs.java.syntax.Throws> throws_) {
+  public MethodHeader withThrows(hydra.util.Opt<hydra.langs.java.syntax.Throws> throws_) {
     if (throws_ == null) {
       throw new IllegalArgumentException("null value for 'throws' argument");
     }

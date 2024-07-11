@@ -9,11 +9,11 @@ public class UnionTypeExtension_Sequence implements Serializable {
   
   public final hydra.langs.graphql.syntax.Name name;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives;
   
   public final hydra.langs.graphql.syntax.UnionMemberTypes unionMemberTypes;
   
-  public UnionTypeExtension_Sequence (hydra.langs.graphql.syntax.Name name, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.UnionMemberTypes unionMemberTypes) {
+  public UnionTypeExtension_Sequence (hydra.langs.graphql.syntax.Name name, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.UnionMemberTypes unionMemberTypes) {
     if (name == null) {
       throw new IllegalArgumentException("null value for 'name' argument");
     }
@@ -49,7 +49,7 @@ public class UnionTypeExtension_Sequence implements Serializable {
     return new UnionTypeExtension_Sequence(name, directives, unionMemberTypes);
   }
   
-  public UnionTypeExtension_Sequence withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+  public UnionTypeExtension_Sequence withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
     if (directives == null) {
       throw new IllegalArgumentException("null value for 'directives' argument");
     }

@@ -8,14 +8,14 @@ import hydra.graph.Element;
 import hydra.module.Module;
 import hydra.module.Namespace;
 import hydra.module.QualifiedName;
-import java.util.Optional;
+import hydra.util.Opt;
 
 import static hydra.coreEncoding.CoreEncoding.coreEncodeType;
 
 
 public class Modules {
   public static <A> Element<A> element(Module<A> module, String localName, Term<A> data) {
-    Name name = Tier1.unqualifyName(new QualifiedName(Optional.of(module.namespace), localName));
+    Name name = Tier1.unqualifyName(new QualifiedName(Opt.of(module.namespace), localName));
     return new Element<>(name, data);
   }
 
@@ -40,6 +40,6 @@ public class Modules {
   }
 
   public static Name qname(Namespace ns, String localName) {
-    return Tier1.unqualifyName(new QualifiedName(Optional.of(ns), localName));
+    return Tier1.unqualifyName(new QualifiedName(Opt.of(ns), localName));
   }
 }

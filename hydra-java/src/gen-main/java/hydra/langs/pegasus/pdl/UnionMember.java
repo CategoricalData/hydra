@@ -7,13 +7,13 @@ import java.io.Serializable;
 public class UnionMember implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/pegasus/pdl.UnionMember");
   
-  public final java.util.Optional<hydra.langs.pegasus.pdl.FieldName> alias;
+  public final hydra.util.Opt<hydra.langs.pegasus.pdl.FieldName> alias;
   
   public final hydra.langs.pegasus.pdl.Schema value;
   
   public final hydra.langs.pegasus.pdl.Annotations annotations;
   
-  public UnionMember (java.util.Optional<hydra.langs.pegasus.pdl.FieldName> alias, hydra.langs.pegasus.pdl.Schema value, hydra.langs.pegasus.pdl.Annotations annotations) {
+  public UnionMember (hydra.util.Opt<hydra.langs.pegasus.pdl.FieldName> alias, hydra.langs.pegasus.pdl.Schema value, hydra.langs.pegasus.pdl.Annotations annotations) {
     if (alias == null) {
       throw new IllegalArgumentException("null value for 'alias' argument");
     }
@@ -42,7 +42,7 @@ public class UnionMember implements Serializable {
     return 2 * alias.hashCode() + 3 * value.hashCode() + 5 * annotations.hashCode();
   }
   
-  public UnionMember withAlias(java.util.Optional<hydra.langs.pegasus.pdl.FieldName> alias) {
+  public UnionMember withAlias(hydra.util.Opt<hydra.langs.pegasus.pdl.FieldName> alias) {
     if (alias == null) {
       throw new IllegalArgumentException("null value for 'alias' argument");
     }

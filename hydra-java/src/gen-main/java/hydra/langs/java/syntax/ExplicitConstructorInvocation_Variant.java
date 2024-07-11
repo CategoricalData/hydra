@@ -65,9 +65,9 @@ public abstract class ExplicitConstructorInvocation_Variant implements Serializa
   }
   
   public static final class Super extends hydra.langs.java.syntax.ExplicitConstructorInvocation_Variant implements Serializable {
-    public final java.util.Optional<hydra.langs.java.syntax.ExpressionName> value;
+    public final hydra.util.Opt<hydra.langs.java.syntax.ExpressionName> value;
     
-    public Super (java.util.Optional<hydra.langs.java.syntax.ExpressionName> value) {
+    public Super (hydra.util.Opt<hydra.langs.java.syntax.ExpressionName> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }

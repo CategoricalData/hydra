@@ -9,11 +9,11 @@ public class MethodDeclarator implements Serializable {
   
   public final hydra.langs.java.syntax.Identifier identifier;
   
-  public final java.util.Optional<hydra.langs.java.syntax.ReceiverParameter> receiverParameter;
+  public final hydra.util.Opt<hydra.langs.java.syntax.ReceiverParameter> receiverParameter;
   
   public final java.util.List<hydra.langs.java.syntax.FormalParameter> formalParameters;
   
-  public MethodDeclarator (hydra.langs.java.syntax.Identifier identifier, java.util.Optional<hydra.langs.java.syntax.ReceiverParameter> receiverParameter, java.util.List<hydra.langs.java.syntax.FormalParameter> formalParameters) {
+  public MethodDeclarator (hydra.langs.java.syntax.Identifier identifier, hydra.util.Opt<hydra.langs.java.syntax.ReceiverParameter> receiverParameter, java.util.List<hydra.langs.java.syntax.FormalParameter> formalParameters) {
     if (identifier == null) {
       throw new IllegalArgumentException("null value for 'identifier' argument");
     }
@@ -49,7 +49,7 @@ public class MethodDeclarator implements Serializable {
     return new MethodDeclarator(identifier, receiverParameter, formalParameters);
   }
   
-  public MethodDeclarator withReceiverParameter(java.util.Optional<hydra.langs.java.syntax.ReceiverParameter> receiverParameter) {
+  public MethodDeclarator withReceiverParameter(hydra.util.Opt<hydra.langs.java.syntax.ReceiverParameter> receiverParameter) {
     if (receiverParameter == null) {
       throw new IllegalArgumentException("null value for 'receiverParameter' argument");
     }

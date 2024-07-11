@@ -16,9 +16,9 @@ public class Quad implements Serializable {
   
   public final hydra.langs.rdf.syntax.Node object;
   
-  public final java.util.Optional<hydra.langs.rdf.syntax.Iri> graph;
+  public final hydra.util.Opt<hydra.langs.rdf.syntax.Iri> graph;
   
-  public Quad (hydra.langs.rdf.syntax.Resource subject, hydra.langs.rdf.syntax.Iri predicate, hydra.langs.rdf.syntax.Node object, java.util.Optional<hydra.langs.rdf.syntax.Iri> graph) {
+  public Quad (hydra.langs.rdf.syntax.Resource subject, hydra.langs.rdf.syntax.Iri predicate, hydra.langs.rdf.syntax.Node object, hydra.util.Opt<hydra.langs.rdf.syntax.Iri> graph) {
     if (subject == null) {
       throw new IllegalArgumentException("null value for 'subject' argument");
     }
@@ -72,7 +72,7 @@ public class Quad implements Serializable {
     return new Quad(subject, predicate, object, graph);
   }
   
-  public Quad withGraph(java.util.Optional<hydra.langs.rdf.syntax.Iri> graph) {
+  public Quad withGraph(hydra.util.Opt<hydra.langs.rdf.syntax.Iri> graph) {
     if (graph == null) {
       throw new IllegalArgumentException("null value for 'graph' argument");
     }

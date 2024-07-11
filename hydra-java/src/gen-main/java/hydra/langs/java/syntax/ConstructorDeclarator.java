@@ -11,11 +11,11 @@ public class ConstructorDeclarator implements Serializable {
   
   public final hydra.langs.java.syntax.SimpleTypeName name;
   
-  public final java.util.Optional<hydra.langs.java.syntax.ReceiverParameter> receiverParameter;
+  public final hydra.util.Opt<hydra.langs.java.syntax.ReceiverParameter> receiverParameter;
   
   public final java.util.List<hydra.langs.java.syntax.FormalParameter> formalParameters;
   
-  public ConstructorDeclarator (java.util.List<hydra.langs.java.syntax.TypeParameter> parameters, hydra.langs.java.syntax.SimpleTypeName name, java.util.Optional<hydra.langs.java.syntax.ReceiverParameter> receiverParameter, java.util.List<hydra.langs.java.syntax.FormalParameter> formalParameters) {
+  public ConstructorDeclarator (java.util.List<hydra.langs.java.syntax.TypeParameter> parameters, hydra.langs.java.syntax.SimpleTypeName name, hydra.util.Opt<hydra.langs.java.syntax.ReceiverParameter> receiverParameter, java.util.List<hydra.langs.java.syntax.FormalParameter> formalParameters) {
     if (parameters == null) {
       throw new IllegalArgumentException("null value for 'parameters' argument");
     }
@@ -62,7 +62,7 @@ public class ConstructorDeclarator implements Serializable {
     return new ConstructorDeclarator(parameters, name, receiverParameter, formalParameters);
   }
   
-  public ConstructorDeclarator withReceiverParameter(java.util.Optional<hydra.langs.java.syntax.ReceiverParameter> receiverParameter) {
+  public ConstructorDeclarator withReceiverParameter(hydra.util.Opt<hydra.langs.java.syntax.ReceiverParameter> receiverParameter) {
     if (receiverParameter == null) {
       throw new IllegalArgumentException("null value for 'receiverParameter' argument");
     }

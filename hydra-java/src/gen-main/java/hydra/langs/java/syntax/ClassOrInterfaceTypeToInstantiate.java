@@ -9,9 +9,9 @@ public class ClassOrInterfaceTypeToInstantiate implements Serializable {
   
   public final java.util.List<hydra.langs.java.syntax.AnnotatedIdentifier> identifiers;
   
-  public final java.util.Optional<hydra.langs.java.syntax.TypeArgumentsOrDiamond> typeArguments;
+  public final hydra.util.Opt<hydra.langs.java.syntax.TypeArgumentsOrDiamond> typeArguments;
   
-  public ClassOrInterfaceTypeToInstantiate (java.util.List<hydra.langs.java.syntax.AnnotatedIdentifier> identifiers, java.util.Optional<hydra.langs.java.syntax.TypeArgumentsOrDiamond> typeArguments) {
+  public ClassOrInterfaceTypeToInstantiate (java.util.List<hydra.langs.java.syntax.AnnotatedIdentifier> identifiers, hydra.util.Opt<hydra.langs.java.syntax.TypeArgumentsOrDiamond> typeArguments) {
     if (identifiers == null) {
       throw new IllegalArgumentException("null value for 'identifiers' argument");
     }
@@ -43,7 +43,7 @@ public class ClassOrInterfaceTypeToInstantiate implements Serializable {
     return new ClassOrInterfaceTypeToInstantiate(identifiers, typeArguments);
   }
   
-  public ClassOrInterfaceTypeToInstantiate withTypeArguments(java.util.Optional<hydra.langs.java.syntax.TypeArgumentsOrDiamond> typeArguments) {
+  public ClassOrInterfaceTypeToInstantiate withTypeArguments(hydra.util.Opt<hydra.langs.java.syntax.TypeArgumentsOrDiamond> typeArguments) {
     if (typeArguments == null) {
       throw new IllegalArgumentException("null value for 'typeArguments' argument");
     }

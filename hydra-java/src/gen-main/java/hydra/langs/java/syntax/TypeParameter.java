@@ -11,9 +11,9 @@ public class TypeParameter implements Serializable {
   
   public final hydra.langs.java.syntax.TypeIdentifier identifier;
   
-  public final java.util.Optional<hydra.langs.java.syntax.TypeBound> bound;
+  public final hydra.util.Opt<hydra.langs.java.syntax.TypeBound> bound;
   
-  public TypeParameter (java.util.List<hydra.langs.java.syntax.TypeParameterModifier> modifiers, hydra.langs.java.syntax.TypeIdentifier identifier, java.util.Optional<hydra.langs.java.syntax.TypeBound> bound) {
+  public TypeParameter (java.util.List<hydra.langs.java.syntax.TypeParameterModifier> modifiers, hydra.langs.java.syntax.TypeIdentifier identifier, hydra.util.Opt<hydra.langs.java.syntax.TypeBound> bound) {
     if (modifiers == null) {
       throw new IllegalArgumentException("null value for 'modifiers' argument");
     }
@@ -56,7 +56,7 @@ public class TypeParameter implements Serializable {
     return new TypeParameter(modifiers, identifier, bound);
   }
   
-  public TypeParameter withBound(java.util.Optional<hydra.langs.java.syntax.TypeBound> bound) {
+  public TypeParameter withBound(hydra.util.Opt<hydra.langs.java.syntax.TypeBound> bound) {
     if (bound == null) {
       throw new IllegalArgumentException("null value for 'bound' argument");
     }

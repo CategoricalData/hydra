@@ -2,6 +2,8 @@
 
 package hydra.testing;
 
+import hydra.util.Opt;
+
 import java.io.Serializable;
 
 /**
@@ -12,13 +14,13 @@ public class TestGroup<A> implements Serializable {
   
   public final String name;
   
-  public final java.util.Optional<String> description;
+  public final Opt<String> description;
   
   public final java.util.List<hydra.testing.TestGroup<A>> subgroups;
   
   public final java.util.List<hydra.testing.TestCase<A>> cases;
   
-  public TestGroup (String name, java.util.Optional<String> description, java.util.List<hydra.testing.TestGroup<A>> subgroups, java.util.List<hydra.testing.TestCase<A>> cases) {
+  public TestGroup (String name, Opt<String> description, java.util.List<hydra.testing.TestGroup<A>> subgroups, java.util.List<hydra.testing.TestCase<A>> cases) {
     if (name == null) {
       throw new IllegalArgumentException("null value for 'name' argument");
     }
@@ -58,7 +60,7 @@ public class TestGroup<A> implements Serializable {
     return new TestGroup(name, description, subgroups, cases);
   }
   
-  public TestGroup withDescription(java.util.Optional<String> description) {
+  public TestGroup withDescription(Opt<String> description) {
     if (description == null) {
       throw new IllegalArgumentException("null value for 'description' argument");
     }

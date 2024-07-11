@@ -9,9 +9,9 @@ public class SortItem implements Serializable {
   
   public final hydra.langs.cypher.openCypher.Expression expression;
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.SortOrder> order;
+  public final hydra.util.Opt<hydra.langs.cypher.openCypher.SortOrder> order;
   
-  public SortItem (hydra.langs.cypher.openCypher.Expression expression, java.util.Optional<hydra.langs.cypher.openCypher.SortOrder> order) {
+  public SortItem (hydra.langs.cypher.openCypher.Expression expression, hydra.util.Opt<hydra.langs.cypher.openCypher.SortOrder> order) {
     if (expression == null) {
       throw new IllegalArgumentException("null value for 'expression' argument");
     }
@@ -43,7 +43,7 @@ public class SortItem implements Serializable {
     return new SortItem(expression, order);
   }
   
-  public SortItem withOrder(java.util.Optional<hydra.langs.cypher.openCypher.SortOrder> order) {
+  public SortItem withOrder(hydra.util.Opt<hydra.langs.cypher.openCypher.SortOrder> order) {
     if (order == null) {
       throw new IllegalArgumentException("null value for 'order' argument");
     }

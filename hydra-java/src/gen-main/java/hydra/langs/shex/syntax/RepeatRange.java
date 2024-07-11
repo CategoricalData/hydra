@@ -9,9 +9,9 @@ public class RepeatRange implements Serializable {
   
   public final hydra.langs.shex.syntax.Integer_ integer;
   
-  public final java.util.Optional<java.util.Optional<java.util.Optional<hydra.langs.shex.syntax.RepeatRange_Sequence_Option_Option_Option>>> sequence;
+  public final hydra.util.Opt<hydra.util.Opt<hydra.util.Opt<hydra.langs.shex.syntax.RepeatRange_Sequence_Option_Option_Option>>> sequence;
   
-  public RepeatRange (hydra.langs.shex.syntax.Integer_ integer, java.util.Optional<java.util.Optional<java.util.Optional<hydra.langs.shex.syntax.RepeatRange_Sequence_Option_Option_Option>>> sequence) {
+  public RepeatRange (hydra.langs.shex.syntax.Integer_ integer, hydra.util.Opt<hydra.util.Opt<hydra.util.Opt<hydra.langs.shex.syntax.RepeatRange_Sequence_Option_Option_Option>>> sequence) {
     if (integer == null) {
       throw new IllegalArgumentException("null value for 'integer' argument");
     }
@@ -43,7 +43,7 @@ public class RepeatRange implements Serializable {
     return new RepeatRange(integer, sequence);
   }
   
-  public RepeatRange withSequence(java.util.Optional<java.util.Optional<java.util.Optional<hydra.langs.shex.syntax.RepeatRange_Sequence_Option_Option_Option>>> sequence) {
+  public RepeatRange withSequence(hydra.util.Opt<hydra.util.Opt<hydra.util.Opt<hydra.langs.shex.syntax.RepeatRange_Sequence_Option_Option_Option>>> sequence) {
     if (sequence == null) {
       throw new IllegalArgumentException("null value for 'sequence' argument");
     }

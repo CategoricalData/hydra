@@ -904,9 +904,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class AddV extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.StringArgumentOrNestedTraversal> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgumentOrNestedTraversal> value;
     
-    public AddV (java.util.Optional<hydra.langs.tinkerpop.gremlin.StringArgumentOrNestedTraversal> value) {
+    public AddV (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgumentOrNestedTraversal> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -934,9 +934,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class MergeE extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal> value;
     
-    public MergeE (java.util.Optional<hydra.langs.tinkerpop.gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal> value) {
+    public MergeE (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -964,9 +964,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class MergeV extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal> value;
     
-    public MergeV (java.util.Optional<hydra.langs.tinkerpop.gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal> value) {
+    public MergeV (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -1144,9 +1144,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class Barrier extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalSackMethodArgumentOrIntegerArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalSackMethodArgumentOrIntegerArgument> value;
     
-    public Barrier (java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalSackMethodArgumentOrIntegerArgument> value) {
+    public Barrier (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalSackMethodArgumentOrIntegerArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -1524,9 +1524,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class Count extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
     
-    public Count (java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
+    public Count (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -1724,9 +1724,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class Emit extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.PredicateOrTraversal> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.PredicateOrTraversal> value;
     
-    public Emit (java.util.Optional<hydra.langs.tinkerpop.gremlin.PredicateOrTraversal> value) {
+    public Emit (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.PredicateOrTraversal> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -1814,9 +1814,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class Fold extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument> value;
     
-    public Fold (java.util.Optional<hydra.langs.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument> value) {
+    public Fold (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -1874,9 +1874,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class Group extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.StringArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> value;
     
-    public Group (java.util.Optional<hydra.langs.tinkerpop.gremlin.StringArgument> value) {
+    public Group (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -1904,9 +1904,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class GroupCount extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.StringArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> value;
     
-    public GroupCount (java.util.Optional<hydra.langs.tinkerpop.gremlin.StringArgument> value) {
+    public GroupCount (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -2474,9 +2474,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class Loops extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.StringArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> value;
     
-    public Loops (java.util.Optional<hydra.langs.tinkerpop.gremlin.StringArgument> value) {
+    public Loops (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -2594,9 +2594,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class Max extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
     
-    public Max (java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
+    public Max (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -2624,9 +2624,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class Mean extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
     
-    public Mean (java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
+    public Mean (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -2654,9 +2654,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class Min extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
     
-    public Min (java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
+    public Min (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -2834,9 +2834,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class Order extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
     
-    public Order (java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
+    public Order (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -2974,9 +2974,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class PageRank extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.FloatArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.FloatArgument> value;
     
-    public PageRank (java.util.Optional<hydra.langs.tinkerpop.gremlin.FloatArgument> value) {
+    public PageRank (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.FloatArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -3054,9 +3054,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class Profile extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.StringArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> value;
     
-    public Profile (java.util.Optional<hydra.langs.tinkerpop.gremlin.StringArgument> value) {
+    public Profile (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -3289,9 +3289,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class Sack extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalBiFunctionArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalBiFunctionArgument> value;
     
-    public Sack (java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalBiFunctionArgument> value) {
+    public Sack (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalBiFunctionArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -3639,9 +3639,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class Sum extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
     
-    public Sum (java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
+    public Sum (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -3669,9 +3669,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class Tail extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TailArgs> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TailArgs> value;
     
-    public Tail (java.util.Optional<hydra.langs.tinkerpop.gremlin.TailArgs> value) {
+    public Tail (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TailArgs> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -3699,9 +3699,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class Fail extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.StringArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> value;
     
-    public Fail (java.util.Optional<hydra.langs.tinkerpop.gremlin.StringArgument> value) {
+    public Fail (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -3849,9 +3849,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class Tree extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.StringArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> value;
     
-    public Tree (java.util.Optional<hydra.langs.tinkerpop.gremlin.StringArgument> value) {
+    public Tree (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -4224,9 +4224,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class AsString extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
     
-    public AsString (java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
+    public AsString (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -4284,9 +4284,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class ToUpper extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
     
-    public ToUpper (java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
+    public ToUpper (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -4314,9 +4314,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class ToLower extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
     
-    public ToLower (java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
+    public ToLower (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -4344,9 +4344,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class Length extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
     
-    public Length (java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
+    public Length (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -4374,9 +4374,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class Trim extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
     
-    public Trim (java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
+    public Trim (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -4404,9 +4404,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class LTrim extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
     
-    public LTrim (java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
+    public LTrim (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -4434,9 +4434,9 @@ public abstract class TraversalMethod implements Serializable {
   }
   
   public static final class RTrim extends hydra.langs.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value;
     
-    public RTrim (java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
+    public RTrim (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }

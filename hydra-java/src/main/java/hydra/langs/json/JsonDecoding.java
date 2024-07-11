@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import hydra.util.Opt;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -97,7 +97,7 @@ public abstract class JsonDecoding {
      */
     public static <A> List<A> decodeListField(String name, Function<Value, A> mapping, Value json) {
         // Note: this allows the field to be omitted, and also allows a null value, both resulting in an empty list
-        Optional<List<A>> opt = decodeOptionalField(name, v -> decodeList(mapping, v), json, Collections.emptyList());
+        Opt<List<A>> opt = decodeOptionalField(name, v -> decodeList(mapping, v), json, Collections.emptyList());
         return opt.orElse(Collections.emptyList());
     }
 
@@ -138,31 +138,31 @@ public abstract class JsonDecoding {
     /**
      * Decode an optional double-valued field from JSON.
      */
-    public static Optional<Double> decodeOptionalDoubleField(String name, Value json) {
+    public static Opt<Double> decodeOptionalDoubleField(String name, Value json) {
         return decodeOptionalField(name, JsonDecoding::decodeDouble, json, null);
     }
 
     /**
      * Decode an optional field from JSON.
      */
-    public static <A> Optional<A> decodeOptionalField(String name,
-                                                      Function<Value, A> mapping,
-                                                      Value json,
-                                                      A defaultValue) {
+    public static <A> Opt<A> decodeOptionalField(String name,
+                                                 Function<Value, A> mapping,
+                                                 Value json,
+                                                 A defaultValue) {
         Map<String, Value> map = decodeObject(json);
         Value fieldValue = map.get(name);
         if (fieldValue == null) {
-            return defaultValue == null ? Optional.empty() : Optional.of(defaultValue);
+            return defaultValue == null ? Opt.empty() : Opt.of(defaultValue);
         } else {
-            return fieldValue.accept(new Value.PartialVisitor<Optional<A>>() {
+            return fieldValue.accept(new Value.PartialVisitor<Opt<A>>() {
                 @Override
-                public Optional<A> otherwise(Value instance) {
-                    return Optional.of(mapping.apply(fieldValue));
+                public Opt<A> otherwise(Value instance) {
+                    return Opt.of(mapping.apply(fieldValue));
                 }
 
                 @Override
-                public Optional<A> visit(Value.Null instance) {
-                    return defaultValue == null ? Optional.empty() : Optional.of(defaultValue);
+                public Opt<A> visit(Value.Null instance) {
+                    return defaultValue == null ? Opt.empty() : Opt.of(defaultValue);
                 }
             });
         }
@@ -171,21 +171,21 @@ public abstract class JsonDecoding {
     /**
      * Decode an optional field from JSON.
      */
-    public static <A> Optional<A> decodeOptionalField(String name, Function<Value, A> mapping, Value json) {
+    public static <A> Opt<A> decodeOptionalField(String name, Function<Value, A> mapping, Value json) {
         return decodeOptionalField(name, mapping, json, null);
     }
 
     /**
      * Decode an optional integer-valued field from JSON.
      */
-    public static Optional<Integer> decodeOptionalIntegerField(String name, Value json) {
+    public static Opt<Integer> decodeOptionalIntegerField(String name, Value json) {
         return decodeOptionalField(name, JsonDecoding::decodeInteger, json, null);
     }
 
     /**
      * Decode an optional set-valued field from JSON.
      */
-    public static <A> Optional<Set<A>> decodeOptionalSetField(String name, Function<Value, A> mapping, Value json) {
+    public static <A> Opt<Set<A>> decodeOptionalSetField(String name, Function<Value, A> mapping, Value json) {
         return decodeOptionalField(name, v -> decodeSet(mapping, v), json);
     }
 
@@ -200,7 +200,7 @@ public abstract class JsonDecoding {
      * Decode a required field from JSON.
      */
     public static <A> A decodeRequiredField(String name, Function<Value, A> mapping, Value json, A defaultValue) {
-        Optional<A> opt = decodeOptionalField(name, mapping, json);
+        Opt<A> opt = decodeOptionalField(name, mapping, json);
         if (opt.isPresent()) {
             return opt.get();
         } else {

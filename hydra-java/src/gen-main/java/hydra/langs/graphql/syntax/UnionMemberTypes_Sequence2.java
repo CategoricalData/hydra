@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class UnionMemberTypes_Sequence2 implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.UnionMemberTypes.Sequence2");
   
-  public final java.util.Optional<java.lang.Void> or;
+  public final hydra.util.Opt<java.lang.Void> or;
   
   public final hydra.langs.graphql.syntax.NamedType namedType;
   
-  public UnionMemberTypes_Sequence2 (java.util.Optional<java.lang.Void> or, hydra.langs.graphql.syntax.NamedType namedType) {
+  public UnionMemberTypes_Sequence2 (hydra.util.Opt<java.lang.Void> or, hydra.langs.graphql.syntax.NamedType namedType) {
     if (or == null) {
       throw new IllegalArgumentException("null value for 'or' argument");
     }
@@ -36,7 +36,7 @@ public class UnionMemberTypes_Sequence2 implements Serializable {
     return 2 * or.hashCode() + 3 * namedType.hashCode();
   }
   
-  public UnionMemberTypes_Sequence2 withOr(java.util.Optional<java.lang.Void> or) {
+  public UnionMemberTypes_Sequence2 withOr(hydra.util.Opt<java.lang.Void> or) {
     if (or == null) {
       throw new IllegalArgumentException("null value for 'or' argument");
     }

@@ -34,9 +34,9 @@ public abstract class GenericLiteralMapNullableArgument implements Serializable 
   }
   
   public static final class Value extends hydra.langs.tinkerpop.gremlin.GenericLiteralMapNullableArgument implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.GenericLiteralMap> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.GenericLiteralMap> value;
     
-    public Value (java.util.Optional<hydra.langs.tinkerpop.gremlin.GenericLiteralMap> value) {
+    public Value (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.GenericLiteralMap> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }

@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class YieldItem implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.YieldItem");
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.ProcedureResultField> field;
+  public final hydra.util.Opt<hydra.langs.cypher.openCypher.ProcedureResultField> field;
   
   public final hydra.langs.cypher.openCypher.Variable variable;
   
-  public YieldItem (java.util.Optional<hydra.langs.cypher.openCypher.ProcedureResultField> field, hydra.langs.cypher.openCypher.Variable variable) {
+  public YieldItem (hydra.util.Opt<hydra.langs.cypher.openCypher.ProcedureResultField> field, hydra.langs.cypher.openCypher.Variable variable) {
     if (field == null) {
       throw new IllegalArgumentException("null value for 'field' argument");
     }
@@ -36,7 +36,7 @@ public class YieldItem implements Serializable {
     return 2 * field.hashCode() + 3 * variable.hashCode();
   }
   
-  public YieldItem withField(java.util.Optional<hydra.langs.cypher.openCypher.ProcedureResultField> field) {
+  public YieldItem withField(hydra.util.Opt<hydra.langs.cypher.openCypher.ProcedureResultField> field) {
     if (field == null) {
       throw new IllegalArgumentException("null value for 'field' argument");
     }

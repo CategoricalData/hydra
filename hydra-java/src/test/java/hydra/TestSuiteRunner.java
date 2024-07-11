@@ -3,13 +3,10 @@ package hydra;
 import hydra.compute.Flow;
 import hydra.compute.FlowState;
 import hydra.compute.Kv;
-import hydra.core.Name;
 import hydra.core.Term;
-import hydra.core.Type;
 import hydra.graph.AnnotationClass;
 import hydra.graph.Comparison;
 import hydra.graph.Graph;
-import hydra.graph.TypeClass;
 import hydra.test.testSuite.TestSuite;
 import hydra.testing.TestCase;
 import hydra.testing.TestGroup;
@@ -18,10 +15,8 @@ import hydra.tools.PrettyPrinter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
+
+import hydra.util.Opt;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -43,7 +38,7 @@ public class TestSuiteRunner extends HydraTestBase {
             a1 -> a2 -> false,
             a1 -> a2 -> new Comparison.EqualTo(),
             a -> "fake",
-            s -> Optional.empty(),
+            s -> Opt.empty(),
             t -> EMPTY_KV,
             t -> EMPTY_KV,
             t -> Flows.fail("fake"),

@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class BooleanTest_Sequence_Option implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.BooleanTest.Sequence.Option");
   
-  public final java.util.Optional<java.lang.Void> nOT;
+  public final hydra.util.Opt<java.lang.Void> nOT;
   
   public final hydra.langs.sql.ansi.TruthValue truthValue;
   
-  public BooleanTest_Sequence_Option (java.util.Optional<java.lang.Void> nOT, hydra.langs.sql.ansi.TruthValue truthValue) {
+  public BooleanTest_Sequence_Option (hydra.util.Opt<java.lang.Void> nOT, hydra.langs.sql.ansi.TruthValue truthValue) {
     if (nOT == null) {
       throw new IllegalArgumentException("null value for 'nOT' argument");
     }
@@ -36,7 +36,7 @@ public class BooleanTest_Sequence_Option implements Serializable {
     return 2 * nOT.hashCode() + 3 * truthValue.hashCode();
   }
   
-  public BooleanTest_Sequence_Option withNOT(java.util.Optional<java.lang.Void> nOT) {
+  public BooleanTest_Sequence_Option withNOT(hydra.util.Opt<java.lang.Void> nOT) {
     if (nOT == null) {
       throw new IllegalArgumentException("null value for 'nOT' argument");
     }

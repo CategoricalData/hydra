@@ -2,6 +2,9 @@
 
 package hydra.query;
 
+import hydra.core.FieldName;
+import hydra.util.Opt;
+
 import java.io.Serializable;
 
 /**
@@ -18,14 +21,14 @@ public class Edge implements Serializable {
   /**
    * The field representing the out-projection of the edge. Defaults to 'out'.
    */
-  public final java.util.Optional<hydra.core.FieldName> out;
+  public final Opt<FieldName> out;
   
   /**
    * The field representing the in-projection of the edge. Defaults to 'in'.
    */
-  public final java.util.Optional<hydra.core.FieldName> in;
+  public final Opt<FieldName> in;
   
-  public Edge (hydra.core.Name type, java.util.Optional<hydra.core.FieldName> out, java.util.Optional<hydra.core.FieldName> in) {
+  public Edge (hydra.core.Name type, Opt<FieldName> out, Opt<FieldName> in) {
     if (type == null) {
       throw new IllegalArgumentException("null value for 'type' argument");
     }
@@ -61,14 +64,14 @@ public class Edge implements Serializable {
     return new Edge(type, out, in);
   }
   
-  public Edge withOut(java.util.Optional<hydra.core.FieldName> out) {
+  public Edge withOut(Opt<FieldName> out) {
     if (out == null) {
       throw new IllegalArgumentException("null value for 'out' argument");
     }
     return new Edge(type, out, in);
   }
   
-  public Edge withIn(java.util.Optional<hydra.core.FieldName> in) {
+  public Edge withIn(Opt<FieldName> in) {
     if (in == null) {
       throw new IllegalArgumentException("null value for 'in' argument");
     }

@@ -10,11 +10,11 @@ import java.io.Serializable;
 public class Annotations implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/pegasus/pdl.Annotations");
   
-  public final java.util.Optional<String> doc;
+  public final hydra.util.Opt<String> doc;
   
   public final Boolean deprecated;
   
-  public Annotations (java.util.Optional<String> doc, Boolean deprecated) {
+  public Annotations (hydra.util.Opt<String> doc, Boolean deprecated) {
     if (doc == null) {
       throw new IllegalArgumentException("null value for 'doc' argument");
     }
@@ -39,7 +39,7 @@ public class Annotations implements Serializable {
     return 2 * doc.hashCode() + 3 * deprecated.hashCode();
   }
   
-  public Annotations withDoc(java.util.Optional<String> doc) {
+  public Annotations withDoc(hydra.util.Opt<String> doc) {
     if (doc == null) {
       throw new IllegalArgumentException("null value for 'doc' argument");
     }

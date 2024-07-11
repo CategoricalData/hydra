@@ -11,9 +11,9 @@ public class SinglePartQuery implements Serializable {
   
   public final java.util.List<hydra.langs.cypher.openCypher.UpdatingClause> updating;
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.Return> return_;
+  public final hydra.util.Opt<hydra.langs.cypher.openCypher.Return> return_;
   
-  public SinglePartQuery (java.util.List<hydra.langs.cypher.openCypher.ReadingClause> reading, java.util.List<hydra.langs.cypher.openCypher.UpdatingClause> updating, java.util.Optional<hydra.langs.cypher.openCypher.Return> return_) {
+  public SinglePartQuery (java.util.List<hydra.langs.cypher.openCypher.ReadingClause> reading, java.util.List<hydra.langs.cypher.openCypher.UpdatingClause> updating, hydra.util.Opt<hydra.langs.cypher.openCypher.Return> return_) {
     if (reading == null) {
       throw new IllegalArgumentException("null value for 'reading' argument");
     }
@@ -56,7 +56,7 @@ public class SinglePartQuery implements Serializable {
     return new SinglePartQuery(reading, updating, return_);
   }
   
-  public SinglePartQuery withReturn(java.util.Optional<hydra.langs.cypher.openCypher.Return> return_) {
+  public SinglePartQuery withReturn(hydra.util.Opt<hydra.langs.cypher.openCypher.Return> return_) {
     if (return_ == null) {
       throw new IllegalArgumentException("null value for 'return' argument");
     }

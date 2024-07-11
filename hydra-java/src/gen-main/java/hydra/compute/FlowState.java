@@ -2,6 +2,8 @@
 
 package hydra.compute;
 
+import hydra.util.Opt;
+
 import java.io.Serializable;
 
 /**
@@ -10,13 +12,13 @@ import java.io.Serializable;
 public class FlowState<S, X> implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.FlowState");
   
-  public final java.util.Optional<X> value;
+  public final Opt<X> value;
   
   public final S state;
   
   public final hydra.compute.Trace trace;
   
-  public FlowState (java.util.Optional<X> value, S state, hydra.compute.Trace trace) {
+  public FlowState (Opt<X> value, S state, hydra.compute.Trace trace) {
     if (value == null) {
       throw new IllegalArgumentException("null value for 'value' argument");
     }
@@ -45,7 +47,7 @@ public class FlowState<S, X> implements Serializable {
     return 2 * value.hashCode() + 3 * state.hashCode() + 5 * trace.hashCode();
   }
   
-  public FlowState withValue(java.util.Optional<X> value) {
+  public FlowState withValue(Opt<X> value) {
     if (value == null) {
       throw new IllegalArgumentException("null value for 'value' argument");
     }

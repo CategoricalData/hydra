@@ -13,13 +13,13 @@ public class NormalClassDeclaration implements Serializable {
   
   public final java.util.List<hydra.langs.java.syntax.TypeParameter> parameters;
   
-  public final java.util.Optional<hydra.langs.java.syntax.ClassType> extends_;
+  public final hydra.util.Opt<hydra.langs.java.syntax.ClassType> extends_;
   
   public final java.util.List<hydra.langs.java.syntax.InterfaceType> implements_;
   
   public final hydra.langs.java.syntax.ClassBody body;
   
-  public NormalClassDeclaration (java.util.List<hydra.langs.java.syntax.ClassModifier> modifiers, hydra.langs.java.syntax.TypeIdentifier identifier, java.util.List<hydra.langs.java.syntax.TypeParameter> parameters, java.util.Optional<hydra.langs.java.syntax.ClassType> extends_, java.util.List<hydra.langs.java.syntax.InterfaceType> implements_, hydra.langs.java.syntax.ClassBody body) {
+  public NormalClassDeclaration (java.util.List<hydra.langs.java.syntax.ClassModifier> modifiers, hydra.langs.java.syntax.TypeIdentifier identifier, java.util.List<hydra.langs.java.syntax.TypeParameter> parameters, hydra.util.Opt<hydra.langs.java.syntax.ClassType> extends_, java.util.List<hydra.langs.java.syntax.InterfaceType> implements_, hydra.langs.java.syntax.ClassBody body) {
     if (modifiers == null) {
       throw new IllegalArgumentException("null value for 'modifiers' argument");
     }
@@ -81,7 +81,7 @@ public class NormalClassDeclaration implements Serializable {
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
   
-  public NormalClassDeclaration withExtends(java.util.Optional<hydra.langs.java.syntax.ClassType> extends_) {
+  public NormalClassDeclaration withExtends(hydra.util.Opt<hydra.langs.java.syntax.ClassType> extends_) {
     if (extends_ == null) {
       throw new IllegalArgumentException("null value for 'extends' argument");
     }

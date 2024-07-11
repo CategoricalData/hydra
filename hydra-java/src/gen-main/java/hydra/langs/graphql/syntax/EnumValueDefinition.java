@@ -7,13 +7,13 @@ import java.io.Serializable;
 public class EnumValueDefinition implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.EnumValueDefinition");
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Description> description;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Description> description;
   
   public final hydra.langs.graphql.syntax.EnumValue enumValue;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives;
   
-  public EnumValueDefinition (java.util.Optional<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.EnumValue enumValue, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+  public EnumValueDefinition (hydra.util.Opt<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.EnumValue enumValue, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
     if (description == null) {
       throw new IllegalArgumentException("null value for 'description' argument");
     }
@@ -42,7 +42,7 @@ public class EnumValueDefinition implements Serializable {
     return 2 * description.hashCode() + 3 * enumValue.hashCode() + 5 * directives.hashCode();
   }
   
-  public EnumValueDefinition withDescription(java.util.Optional<hydra.langs.graphql.syntax.Description> description) {
+  public EnumValueDefinition withDescription(hydra.util.Opt<hydra.langs.graphql.syntax.Description> description) {
     if (description == null) {
       throw new IllegalArgumentException("null value for 'description' argument");
     }
@@ -56,7 +56,7 @@ public class EnumValueDefinition implements Serializable {
     return new EnumValueDefinition(description, enumValue, directives);
   }
   
-  public EnumValueDefinition withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+  public EnumValueDefinition withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
     if (directives == null) {
       throw new IllegalArgumentException("null value for 'directives' argument");
     }

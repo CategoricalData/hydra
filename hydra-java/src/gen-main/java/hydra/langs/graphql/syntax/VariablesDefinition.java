@@ -11,11 +11,11 @@ public class VariablesDefinition implements Serializable {
   
   public final hydra.langs.graphql.syntax.Type type;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.DefaultValue> defaultValue;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.DefaultValue> defaultValue;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives;
   
-  public VariablesDefinition (hydra.langs.graphql.syntax.Variable variable, hydra.langs.graphql.syntax.Type type, java.util.Optional<hydra.langs.graphql.syntax.DefaultValue> defaultValue, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+  public VariablesDefinition (hydra.langs.graphql.syntax.Variable variable, hydra.langs.graphql.syntax.Type type, hydra.util.Opt<hydra.langs.graphql.syntax.DefaultValue> defaultValue, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
     if (variable == null) {
       throw new IllegalArgumentException("null value for 'variable' argument");
     }
@@ -62,14 +62,14 @@ public class VariablesDefinition implements Serializable {
     return new VariablesDefinition(variable, type, defaultValue, directives);
   }
   
-  public VariablesDefinition withDefaultValue(java.util.Optional<hydra.langs.graphql.syntax.DefaultValue> defaultValue) {
+  public VariablesDefinition withDefaultValue(hydra.util.Opt<hydra.langs.graphql.syntax.DefaultValue> defaultValue) {
     if (defaultValue == null) {
       throw new IllegalArgumentException("null value for 'defaultValue' argument");
     }
     return new VariablesDefinition(variable, type, defaultValue, directives);
   }
   
-  public VariablesDefinition withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+  public VariablesDefinition withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
     if (directives == null) {
       throw new IllegalArgumentException("null value for 'directives' argument");
     }

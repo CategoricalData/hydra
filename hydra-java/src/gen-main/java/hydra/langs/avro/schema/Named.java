@@ -15,17 +15,17 @@ public class Named implements Serializable {
   /**
    * a string that qualifies the name
    */
-  public final java.util.Optional<String> namespace;
+  public final hydra.util.Opt<String> namespace;
   
   /**
    * a JSON array of strings, providing alternate names for this schema
    */
-  public final java.util.Optional<java.util.List<String>> aliases;
+  public final hydra.util.Opt<java.util.List<String>> aliases;
   
   /**
    * a JSON string providing documentation to the user of this schema
    */
-  public final java.util.Optional<String> doc;
+  public final hydra.util.Opt<String> doc;
   
   public final hydra.langs.avro.schema.NamedType type;
   
@@ -34,7 +34,7 @@ public class Named implements Serializable {
    */
   public final java.util.Map<String, hydra.json.Value> annotations;
   
-  public Named (String name, java.util.Optional<String> namespace, java.util.Optional<java.util.List<String>> aliases, java.util.Optional<String> doc, hydra.langs.avro.schema.NamedType type, java.util.Map<String, hydra.json.Value> annotations) {
+  public Named (String name, hydra.util.Opt<String> namespace, hydra.util.Opt<java.util.List<String>> aliases, hydra.util.Opt<String> doc, hydra.langs.avro.schema.NamedType type, java.util.Map<String, hydra.json.Value> annotations) {
     if (name == null) {
       throw new IllegalArgumentException("null value for 'name' argument");
     }
@@ -82,21 +82,21 @@ public class Named implements Serializable {
     return new Named(name, namespace, aliases, doc, type, annotations);
   }
   
-  public Named withNamespace(java.util.Optional<String> namespace) {
+  public Named withNamespace(hydra.util.Opt<String> namespace) {
     if (namespace == null) {
       throw new IllegalArgumentException("null value for 'namespace' argument");
     }
     return new Named(name, namespace, aliases, doc, type, annotations);
   }
   
-  public Named withAliases(java.util.Optional<java.util.List<String>> aliases) {
+  public Named withAliases(hydra.util.Opt<java.util.List<String>> aliases) {
     if (aliases == null) {
       throw new IllegalArgumentException("null value for 'aliases' argument");
     }
     return new Named(name, namespace, aliases, doc, type, annotations);
   }
   
-  public Named withDoc(java.util.Optional<String> doc) {
+  public Named withDoc(hydra.util.Opt<String> doc) {
     if (doc == null) {
       throw new IllegalArgumentException("null value for 'doc' argument");
     }

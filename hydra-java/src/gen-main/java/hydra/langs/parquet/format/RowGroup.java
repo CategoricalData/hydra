@@ -25,24 +25,24 @@ public class RowGroup implements Serializable {
   /**
    * If set, specifies a sort ordering of the rows in this RowGroup. The sorting columns can be a subset of all the columns.
    */
-  public final java.util.Optional<java.util.List<hydra.langs.parquet.format.SortingColumn>> sortingColumns;
+  public final hydra.util.Opt<java.util.List<hydra.langs.parquet.format.SortingColumn>> sortingColumns;
   
   /**
    * Byte offset from beginning of file to first page (data or dictionary) in this row group
    */
-  public final java.util.Optional<Long> fileOffset;
+  public final hydra.util.Opt<Long> fileOffset;
   
   /**
    * Total byte size of all compressed (and potentially encrypted) column data in this row group
    */
-  public final java.util.Optional<Long> totalCompressedSize;
+  public final hydra.util.Opt<Long> totalCompressedSize;
   
   /**
    * Row group ordinal in the file
    */
-  public final java.util.Optional<Short> ordinal;
+  public final hydra.util.Opt<Short> ordinal;
   
-  public RowGroup (java.util.List<hydra.langs.parquet.format.ColumnChunk> columns, Long totalByteSize, Long numRows, java.util.Optional<java.util.List<hydra.langs.parquet.format.SortingColumn>> sortingColumns, java.util.Optional<Long> fileOffset, java.util.Optional<Long> totalCompressedSize, java.util.Optional<Short> ordinal) {
+  public RowGroup (java.util.List<hydra.langs.parquet.format.ColumnChunk> columns, Long totalByteSize, Long numRows, hydra.util.Opt<java.util.List<hydra.langs.parquet.format.SortingColumn>> sortingColumns, hydra.util.Opt<Long> fileOffset, hydra.util.Opt<Long> totalCompressedSize, hydra.util.Opt<Short> ordinal) {
     if (columns == null) {
       throw new IllegalArgumentException("null value for 'columns' argument");
     }
@@ -108,28 +108,28 @@ public class RowGroup implements Serializable {
     return new RowGroup(columns, totalByteSize, numRows, sortingColumns, fileOffset, totalCompressedSize, ordinal);
   }
   
-  public RowGroup withSortingColumns(java.util.Optional<java.util.List<hydra.langs.parquet.format.SortingColumn>> sortingColumns) {
+  public RowGroup withSortingColumns(hydra.util.Opt<java.util.List<hydra.langs.parquet.format.SortingColumn>> sortingColumns) {
     if (sortingColumns == null) {
       throw new IllegalArgumentException("null value for 'sortingColumns' argument");
     }
     return new RowGroup(columns, totalByteSize, numRows, sortingColumns, fileOffset, totalCompressedSize, ordinal);
   }
   
-  public RowGroup withFileOffset(java.util.Optional<Long> fileOffset) {
+  public RowGroup withFileOffset(hydra.util.Opt<Long> fileOffset) {
     if (fileOffset == null) {
       throw new IllegalArgumentException("null value for 'fileOffset' argument");
     }
     return new RowGroup(columns, totalByteSize, numRows, sortingColumns, fileOffset, totalCompressedSize, ordinal);
   }
   
-  public RowGroup withTotalCompressedSize(java.util.Optional<Long> totalCompressedSize) {
+  public RowGroup withTotalCompressedSize(hydra.util.Opt<Long> totalCompressedSize) {
     if (totalCompressedSize == null) {
       throw new IllegalArgumentException("null value for 'totalCompressedSize' argument");
     }
     return new RowGroup(columns, totalByteSize, numRows, sortingColumns, fileOffset, totalCompressedSize, ordinal);
   }
   
-  public RowGroup withOrdinal(java.util.Optional<Short> ordinal) {
+  public RowGroup withOrdinal(hydra.util.Opt<Short> ordinal) {
     if (ordinal == null) {
       throw new IllegalArgumentException("null value for 'ordinal' argument");
     }

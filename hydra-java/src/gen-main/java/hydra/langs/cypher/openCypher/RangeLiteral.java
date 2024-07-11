@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class RangeLiteral implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.RangeLiteral");
   
-  public final java.util.Optional<java.math.BigInteger> start;
+  public final hydra.util.Opt<java.math.BigInteger> start;
   
-  public final java.util.Optional<java.math.BigInteger> end;
+  public final hydra.util.Opt<java.math.BigInteger> end;
   
-  public RangeLiteral (java.util.Optional<java.math.BigInteger> start, java.util.Optional<java.math.BigInteger> end) {
+  public RangeLiteral (hydra.util.Opt<java.math.BigInteger> start, hydra.util.Opt<java.math.BigInteger> end) {
     if (start == null) {
       throw new IllegalArgumentException("null value for 'start' argument");
     }
@@ -36,14 +36,14 @@ public class RangeLiteral implements Serializable {
     return 2 * start.hashCode() + 3 * end.hashCode();
   }
   
-  public RangeLiteral withStart(java.util.Optional<java.math.BigInteger> start) {
+  public RangeLiteral withStart(hydra.util.Opt<java.math.BigInteger> start) {
     if (start == null) {
       throw new IllegalArgumentException("null value for 'start' argument");
     }
     return new RangeLiteral(start, end);
   }
   
-  public RangeLiteral withEnd(java.util.Optional<java.math.BigInteger> end) {
+  public RangeLiteral withEnd(hydra.util.Opt<java.math.BigInteger> end) {
     if (end == null) {
       throw new IllegalArgumentException("null value for 'end' argument");
     }

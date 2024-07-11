@@ -430,9 +430,9 @@ public abstract class TraversalPredicate implements Serializable {
   }
   
   public static final class Within extends hydra.langs.tinkerpop.gremlin.TraversalPredicate implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.GenericLiteralArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.GenericLiteralArgument> value;
     
-    public Within (java.util.Optional<hydra.langs.tinkerpop.gremlin.GenericLiteralArgument> value) {
+    public Within (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.GenericLiteralArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -460,9 +460,9 @@ public abstract class TraversalPredicate implements Serializable {
   }
   
   public static final class Without extends hydra.langs.tinkerpop.gremlin.TraversalPredicate implements Serializable {
-    public final java.util.Optional<hydra.langs.tinkerpop.gremlin.GenericLiteralArgument> value;
+    public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.GenericLiteralArgument> value;
     
-    public Without (java.util.Optional<hydra.langs.tinkerpop.gremlin.GenericLiteralArgument> value) {
+    public Without (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.GenericLiteralArgument> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }

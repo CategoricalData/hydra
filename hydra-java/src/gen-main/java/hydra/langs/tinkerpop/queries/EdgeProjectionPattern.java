@@ -9,13 +9,13 @@ public class EdgeProjectionPattern implements Serializable {
   
   public final hydra.langs.tinkerpop.propertyGraph.Direction direction;
   
-  public final java.util.Optional<hydra.langs.tinkerpop.propertyGraph.EdgeLabel> label;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.propertyGraph.EdgeLabel> label;
   
   public final java.util.List<hydra.langs.tinkerpop.queries.PropertyPattern> properties;
   
-  public final java.util.Optional<hydra.langs.tinkerpop.queries.VertexPattern> vertex;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.queries.VertexPattern> vertex;
   
-  public EdgeProjectionPattern (hydra.langs.tinkerpop.propertyGraph.Direction direction, java.util.Optional<hydra.langs.tinkerpop.propertyGraph.EdgeLabel> label, java.util.List<hydra.langs.tinkerpop.queries.PropertyPattern> properties, java.util.Optional<hydra.langs.tinkerpop.queries.VertexPattern> vertex) {
+  public EdgeProjectionPattern (hydra.langs.tinkerpop.propertyGraph.Direction direction, hydra.util.Opt<hydra.langs.tinkerpop.propertyGraph.EdgeLabel> label, java.util.List<hydra.langs.tinkerpop.queries.PropertyPattern> properties, hydra.util.Opt<hydra.langs.tinkerpop.queries.VertexPattern> vertex) {
     if (direction == null) {
       throw new IllegalArgumentException("null value for 'direction' argument");
     }
@@ -55,7 +55,7 @@ public class EdgeProjectionPattern implements Serializable {
     return new EdgeProjectionPattern(direction, label, properties, vertex);
   }
   
-  public EdgeProjectionPattern withLabel(java.util.Optional<hydra.langs.tinkerpop.propertyGraph.EdgeLabel> label) {
+  public EdgeProjectionPattern withLabel(hydra.util.Opt<hydra.langs.tinkerpop.propertyGraph.EdgeLabel> label) {
     if (label == null) {
       throw new IllegalArgumentException("null value for 'label' argument");
     }
@@ -69,7 +69,7 @@ public class EdgeProjectionPattern implements Serializable {
     return new EdgeProjectionPattern(direction, label, properties, vertex);
   }
   
-  public EdgeProjectionPattern withVertex(java.util.Optional<hydra.langs.tinkerpop.queries.VertexPattern> vertex) {
+  public EdgeProjectionPattern withVertex(hydra.util.Opt<hydra.langs.tinkerpop.queries.VertexPattern> vertex) {
     if (vertex == null) {
       throw new IllegalArgumentException("null value for 'vertex' argument");
     }

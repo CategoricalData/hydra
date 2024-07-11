@@ -9,11 +9,11 @@ public class PredefinedType_String implements Serializable {
   
   public final hydra.langs.sql.ansi.CharacterStringType type;
   
-  public final java.util.Optional<hydra.langs.sql.ansi.CharacterSetSpecification> characters;
+  public final hydra.util.Opt<hydra.langs.sql.ansi.CharacterSetSpecification> characters;
   
-  public final java.util.Optional<hydra.langs.sql.ansi.CollateClause> collate;
+  public final hydra.util.Opt<hydra.langs.sql.ansi.CollateClause> collate;
   
-  public PredefinedType_String (hydra.langs.sql.ansi.CharacterStringType type, java.util.Optional<hydra.langs.sql.ansi.CharacterSetSpecification> characters, java.util.Optional<hydra.langs.sql.ansi.CollateClause> collate) {
+  public PredefinedType_String (hydra.langs.sql.ansi.CharacterStringType type, hydra.util.Opt<hydra.langs.sql.ansi.CharacterSetSpecification> characters, hydra.util.Opt<hydra.langs.sql.ansi.CollateClause> collate) {
     if (type == null) {
       throw new IllegalArgumentException("null value for 'type' argument");
     }
@@ -49,14 +49,14 @@ public class PredefinedType_String implements Serializable {
     return new PredefinedType_String(type, characters, collate);
   }
   
-  public PredefinedType_String withCharacters(java.util.Optional<hydra.langs.sql.ansi.CharacterSetSpecification> characters) {
+  public PredefinedType_String withCharacters(hydra.util.Opt<hydra.langs.sql.ansi.CharacterSetSpecification> characters) {
     if (characters == null) {
       throw new IllegalArgumentException("null value for 'characters' argument");
     }
     return new PredefinedType_String(type, characters, collate);
   }
   
-  public PredefinedType_String withCollate(java.util.Optional<hydra.langs.sql.ansi.CollateClause> collate) {
+  public PredefinedType_String withCollate(hydra.util.Opt<hydra.langs.sql.ansi.CollateClause> collate) {
     if (collate == null) {
       throw new IllegalArgumentException("null value for 'collate' argument");
     }

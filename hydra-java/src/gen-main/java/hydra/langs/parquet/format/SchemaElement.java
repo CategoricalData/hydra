@@ -16,17 +16,17 @@ public class SchemaElement implements Serializable {
   /**
    * Data type for this field. Not set if the current element is a non-leaf node
    */
-  public final java.util.Optional<hydra.langs.parquet.format.Type> type;
+  public final hydra.util.Opt<hydra.langs.parquet.format.Type> type;
   
   /**
    * If type is FIXED_LEN_BYTE_ARRAY, this is the byte length of the values. Otherwise, if specified, this is the maximum bit length to store any of the values. (e.g. a low cardinality INT col could have this set to 3).  Note that this is in the schema, and therefore fixed for the entire file.
    */
-  public final java.util.Optional<Integer> typeLength;
+  public final hydra.util.Opt<Integer> typeLength;
   
   /**
    * repetition of the field. The root of the schema does not have a repetition_type. All other nodes must have one
    */
-  public final java.util.Optional<hydra.langs.parquet.format.FieldRepetitionType> repetitionType;
+  public final hydra.util.Opt<hydra.langs.parquet.format.FieldRepetitionType> repetitionType;
   
   /**
    * Name of the field in the schema
@@ -36,19 +36,19 @@ public class SchemaElement implements Serializable {
   /**
    * Nested fields.  Since thrift does not support nested fields, the nesting is flattened to a single list by a depth-first traversal. The children count is used to construct the nested relationship. This field is not set when the element is a primitive type
    */
-  public final java.util.Optional<Integer> numChildren;
+  public final hydra.util.Opt<Integer> numChildren;
   
   /**
    * When the original schema supports field ids, this will save the original field id in the parquet schema
    */
-  public final java.util.Optional<Integer> fieldId;
+  public final hydra.util.Opt<Integer> fieldId;
   
   /**
    * The logical type of this SchemaElement. LogicalType replaces ConvertedType, but ConvertedType is still required for some logical types to ensure forward-compatibility in format v1.
    */
-  public final java.util.Optional<hydra.langs.parquet.format.LogicalType> logicalType;
+  public final hydra.util.Opt<hydra.langs.parquet.format.LogicalType> logicalType;
   
-  public SchemaElement (java.util.Optional<hydra.langs.parquet.format.Type> type, java.util.Optional<Integer> typeLength, java.util.Optional<hydra.langs.parquet.format.FieldRepetitionType> repetitionType, String name, java.util.Optional<Integer> numChildren, java.util.Optional<Integer> fieldId, java.util.Optional<hydra.langs.parquet.format.LogicalType> logicalType) {
+  public SchemaElement (hydra.util.Opt<hydra.langs.parquet.format.Type> type, hydra.util.Opt<Integer> typeLength, hydra.util.Opt<hydra.langs.parquet.format.FieldRepetitionType> repetitionType, String name, hydra.util.Opt<Integer> numChildren, hydra.util.Opt<Integer> fieldId, hydra.util.Opt<hydra.langs.parquet.format.LogicalType> logicalType) {
     if (type == null) {
       throw new IllegalArgumentException("null value for 'type' argument");
     }
@@ -93,21 +93,21 @@ public class SchemaElement implements Serializable {
     return 2 * type.hashCode() + 3 * typeLength.hashCode() + 5 * repetitionType.hashCode() + 7 * name.hashCode() + 11 * numChildren.hashCode() + 13 * fieldId.hashCode() + 17 * logicalType.hashCode();
   }
   
-  public SchemaElement withType(java.util.Optional<hydra.langs.parquet.format.Type> type) {
+  public SchemaElement withType(hydra.util.Opt<hydra.langs.parquet.format.Type> type) {
     if (type == null) {
       throw new IllegalArgumentException("null value for 'type' argument");
     }
     return new SchemaElement(type, typeLength, repetitionType, name, numChildren, fieldId, logicalType);
   }
   
-  public SchemaElement withTypeLength(java.util.Optional<Integer> typeLength) {
+  public SchemaElement withTypeLength(hydra.util.Opt<Integer> typeLength) {
     if (typeLength == null) {
       throw new IllegalArgumentException("null value for 'typeLength' argument");
     }
     return new SchemaElement(type, typeLength, repetitionType, name, numChildren, fieldId, logicalType);
   }
   
-  public SchemaElement withRepetitionType(java.util.Optional<hydra.langs.parquet.format.FieldRepetitionType> repetitionType) {
+  public SchemaElement withRepetitionType(hydra.util.Opt<hydra.langs.parquet.format.FieldRepetitionType> repetitionType) {
     if (repetitionType == null) {
       throw new IllegalArgumentException("null value for 'repetitionType' argument");
     }
@@ -121,21 +121,21 @@ public class SchemaElement implements Serializable {
     return new SchemaElement(type, typeLength, repetitionType, name, numChildren, fieldId, logicalType);
   }
   
-  public SchemaElement withNumChildren(java.util.Optional<Integer> numChildren) {
+  public SchemaElement withNumChildren(hydra.util.Opt<Integer> numChildren) {
     if (numChildren == null) {
       throw new IllegalArgumentException("null value for 'numChildren' argument");
     }
     return new SchemaElement(type, typeLength, repetitionType, name, numChildren, fieldId, logicalType);
   }
   
-  public SchemaElement withFieldId(java.util.Optional<Integer> fieldId) {
+  public SchemaElement withFieldId(hydra.util.Opt<Integer> fieldId) {
     if (fieldId == null) {
       throw new IllegalArgumentException("null value for 'fieldId' argument");
     }
     return new SchemaElement(type, typeLength, repetitionType, name, numChildren, fieldId, logicalType);
   }
   
-  public SchemaElement withLogicalType(java.util.Optional<hydra.langs.parquet.format.LogicalType> logicalType) {
+  public SchemaElement withLogicalType(hydra.util.Opt<hydra.langs.parquet.format.LogicalType> logicalType) {
     if (logicalType == null) {
       throw new IllegalArgumentException("null value for 'logicalType' argument");
     }

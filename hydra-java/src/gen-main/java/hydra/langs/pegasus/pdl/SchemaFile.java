@@ -9,13 +9,13 @@ public class SchemaFile implements Serializable {
   
   public final hydra.langs.pegasus.pdl.Namespace namespace;
   
-  public final java.util.Optional<hydra.langs.pegasus.pdl.Package_> package_;
+  public final hydra.util.Opt<hydra.langs.pegasus.pdl.Package_> package_;
   
   public final java.util.List<hydra.langs.pegasus.pdl.QualifiedName> imports;
   
   public final java.util.List<hydra.langs.pegasus.pdl.NamedSchema> schemas;
   
-  public SchemaFile (hydra.langs.pegasus.pdl.Namespace namespace, java.util.Optional<hydra.langs.pegasus.pdl.Package_> package_, java.util.List<hydra.langs.pegasus.pdl.QualifiedName> imports, java.util.List<hydra.langs.pegasus.pdl.NamedSchema> schemas) {
+  public SchemaFile (hydra.langs.pegasus.pdl.Namespace namespace, hydra.util.Opt<hydra.langs.pegasus.pdl.Package_> package_, java.util.List<hydra.langs.pegasus.pdl.QualifiedName> imports, java.util.List<hydra.langs.pegasus.pdl.NamedSchema> schemas) {
     if (namespace == null) {
       throw new IllegalArgumentException("null value for 'namespace' argument");
     }
@@ -55,7 +55,7 @@ public class SchemaFile implements Serializable {
     return new SchemaFile(namespace, package_, imports, schemas);
   }
   
-  public SchemaFile withPackage(java.util.Optional<hydra.langs.pegasus.pdl.Package_> package_) {
+  public SchemaFile withPackage(hydra.util.Opt<hydra.langs.pegasus.pdl.Package_> package_) {
     if (package_ == null) {
       throw new IllegalArgumentException("null value for 'package' argument");
     }

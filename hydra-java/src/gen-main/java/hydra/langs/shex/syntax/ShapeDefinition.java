@@ -9,13 +9,13 @@ public class ShapeDefinition implements Serializable {
   
   public final java.util.List<hydra.langs.shex.syntax.ShapeDefinition_ListOfAlts_Elmt> listOfAlts;
   
-  public final java.util.Optional<hydra.langs.shex.syntax.TripleExpression> tripleExpression;
+  public final hydra.util.Opt<hydra.langs.shex.syntax.TripleExpression> tripleExpression;
   
   public final java.util.List<hydra.langs.shex.syntax.Annotation> listOfAnnotation;
   
   public final hydra.langs.shex.syntax.SemanticActions semanticActions;
   
-  public ShapeDefinition (java.util.List<hydra.langs.shex.syntax.ShapeDefinition_ListOfAlts_Elmt> listOfAlts, java.util.Optional<hydra.langs.shex.syntax.TripleExpression> tripleExpression, java.util.List<hydra.langs.shex.syntax.Annotation> listOfAnnotation, hydra.langs.shex.syntax.SemanticActions semanticActions) {
+  public ShapeDefinition (java.util.List<hydra.langs.shex.syntax.ShapeDefinition_ListOfAlts_Elmt> listOfAlts, hydra.util.Opt<hydra.langs.shex.syntax.TripleExpression> tripleExpression, java.util.List<hydra.langs.shex.syntax.Annotation> listOfAnnotation, hydra.langs.shex.syntax.SemanticActions semanticActions) {
     if (listOfAlts == null) {
       throw new IllegalArgumentException("null value for 'listOfAlts' argument");
     }
@@ -55,7 +55,7 @@ public class ShapeDefinition implements Serializable {
     return new ShapeDefinition(listOfAlts, tripleExpression, listOfAnnotation, semanticActions);
   }
   
-  public ShapeDefinition withTripleExpression(java.util.Optional<hydra.langs.shex.syntax.TripleExpression> tripleExpression) {
+  public ShapeDefinition withTripleExpression(hydra.util.Opt<hydra.langs.shex.syntax.TripleExpression> tripleExpression) {
     if (tripleExpression == null) {
       throw new IllegalArgumentException("null value for 'tripleExpression' argument");
     }

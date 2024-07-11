@@ -11,9 +11,9 @@ public class Data_Try implements Serializable {
   
   public final java.util.List<hydra.langs.scala.meta.Case> catchp;
   
-  public final java.util.Optional<hydra.langs.scala.meta.Data> finallyp;
+  public final hydra.util.Opt<hydra.langs.scala.meta.Data> finallyp;
   
-  public Data_Try (hydra.langs.scala.meta.Data expr, java.util.List<hydra.langs.scala.meta.Case> catchp, java.util.Optional<hydra.langs.scala.meta.Data> finallyp) {
+  public Data_Try (hydra.langs.scala.meta.Data expr, java.util.List<hydra.langs.scala.meta.Case> catchp, hydra.util.Opt<hydra.langs.scala.meta.Data> finallyp) {
     if (expr == null) {
       throw new IllegalArgumentException("null value for 'expr' argument");
     }
@@ -56,7 +56,7 @@ public class Data_Try implements Serializable {
     return new Data_Try(expr, catchp, finallyp);
   }
   
-  public Data_Try withFinallyp(java.util.Optional<hydra.langs.scala.meta.Data> finallyp) {
+  public Data_Try withFinallyp(hydra.util.Opt<hydra.langs.scala.meta.Data> finallyp) {
     if (finallyp == null) {
       throw new IllegalArgumentException("null value for 'finallyp' argument");
     }

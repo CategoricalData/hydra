@@ -9,11 +9,11 @@ public class ObjectTypeExtension_Sequence2 implements Serializable {
   
   public final hydra.langs.graphql.syntax.Name name;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives;
   
-  public ObjectTypeExtension_Sequence2 (hydra.langs.graphql.syntax.Name name, java.util.Optional<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+  public ObjectTypeExtension_Sequence2 (hydra.langs.graphql.syntax.Name name, hydra.util.Opt<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
     if (name == null) {
       throw new IllegalArgumentException("null value for 'name' argument");
     }
@@ -49,14 +49,14 @@ public class ObjectTypeExtension_Sequence2 implements Serializable {
     return new ObjectTypeExtension_Sequence2(name, implementsInterfaces, directives);
   }
   
-  public ObjectTypeExtension_Sequence2 withImplementsInterfaces(java.util.Optional<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces) {
+  public ObjectTypeExtension_Sequence2 withImplementsInterfaces(hydra.util.Opt<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces) {
     if (implementsInterfaces == null) {
       throw new IllegalArgumentException("null value for 'implementsInterfaces' argument");
     }
     return new ObjectTypeExtension_Sequence2(name, implementsInterfaces, directives);
   }
   
-  public ObjectTypeExtension_Sequence2 withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+  public ObjectTypeExtension_Sequence2 withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
     if (directives == null) {
       throw new IllegalArgumentException("null value for 'directives' argument");
     }

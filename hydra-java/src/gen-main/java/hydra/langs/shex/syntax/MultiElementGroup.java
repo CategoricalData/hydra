@@ -11,9 +11,9 @@ public class MultiElementGroup implements Serializable {
   
   public final java.util.List<hydra.langs.shex.syntax.UnaryTripleExpr> listOfSequence;
   
-  public final java.util.Optional<java.lang.Void> semi;
+  public final hydra.util.Opt<java.lang.Void> semi;
   
-  public MultiElementGroup (hydra.langs.shex.syntax.UnaryTripleExpr unaryTripleExpr, java.util.List<hydra.langs.shex.syntax.UnaryTripleExpr> listOfSequence, java.util.Optional<java.lang.Void> semi) {
+  public MultiElementGroup (hydra.langs.shex.syntax.UnaryTripleExpr unaryTripleExpr, java.util.List<hydra.langs.shex.syntax.UnaryTripleExpr> listOfSequence, hydra.util.Opt<java.lang.Void> semi) {
     if (unaryTripleExpr == null) {
       throw new IllegalArgumentException("null value for 'unaryTripleExpr' argument");
     }
@@ -56,7 +56,7 @@ public class MultiElementGroup implements Serializable {
     return new MultiElementGroup(unaryTripleExpr, listOfSequence, semi);
   }
   
-  public MultiElementGroup withSemi(java.util.Optional<java.lang.Void> semi) {
+  public MultiElementGroup withSemi(hydra.util.Opt<java.lang.Void> semi) {
     if (semi == null) {
       throw new IllegalArgumentException("null value for 'semi' argument");
     }

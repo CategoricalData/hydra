@@ -64,9 +64,9 @@ public abstract class ExactNumericType implements Serializable {
   }
   
   public static final class Numeric extends hydra.langs.sql.ansi.ExactNumericType implements Serializable {
-    public final java.util.Optional<hydra.langs.sql.ansi.ExactNumericType_Numeric_Option> value;
+    public final hydra.util.Opt<hydra.langs.sql.ansi.ExactNumericType_Numeric_Option> value;
     
-    public Numeric (java.util.Optional<hydra.langs.sql.ansi.ExactNumericType_Numeric_Option> value) {
+    public Numeric (hydra.util.Opt<hydra.langs.sql.ansi.ExactNumericType_Numeric_Option> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -94,9 +94,9 @@ public abstract class ExactNumericType implements Serializable {
   }
   
   public static final class Decimal extends hydra.langs.sql.ansi.ExactNumericType implements Serializable {
-    public final java.util.Optional<hydra.langs.sql.ansi.ExactNumericType_Decimal_Option> value;
+    public final hydra.util.Opt<hydra.langs.sql.ansi.ExactNumericType_Decimal_Option> value;
     
-    public Decimal (java.util.Optional<hydra.langs.sql.ansi.ExactNumericType_Decimal_Option> value) {
+    public Decimal (hydra.util.Opt<hydra.langs.sql.ansi.ExactNumericType_Decimal_Option> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }
@@ -124,9 +124,9 @@ public abstract class ExactNumericType implements Serializable {
   }
   
   public static final class Dec extends hydra.langs.sql.ansi.ExactNumericType implements Serializable {
-    public final java.util.Optional<hydra.langs.sql.ansi.ExactNumericType_Dec_Option> value;
+    public final hydra.util.Opt<hydra.langs.sql.ansi.ExactNumericType_Dec_Option> value;
     
-    public Dec (java.util.Optional<hydra.langs.sql.ansi.ExactNumericType_Dec_Option> value) {
+    public Dec (hydra.util.Opt<hydra.langs.sql.ansi.ExactNumericType_Dec_Option> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }

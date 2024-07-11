@@ -11,11 +11,11 @@ public class Defn_Val implements Serializable {
   
   public final java.util.List<hydra.langs.scala.meta.Pat> pats;
   
-  public final java.util.Optional<hydra.langs.scala.meta.Type> decltpe;
+  public final hydra.util.Opt<hydra.langs.scala.meta.Type> decltpe;
   
   public final hydra.langs.scala.meta.Data rhs;
   
-  public Defn_Val (java.util.List<hydra.langs.scala.meta.Mod> mods, java.util.List<hydra.langs.scala.meta.Pat> pats, java.util.Optional<hydra.langs.scala.meta.Type> decltpe, hydra.langs.scala.meta.Data rhs) {
+  public Defn_Val (java.util.List<hydra.langs.scala.meta.Mod> mods, java.util.List<hydra.langs.scala.meta.Pat> pats, hydra.util.Opt<hydra.langs.scala.meta.Type> decltpe, hydra.langs.scala.meta.Data rhs) {
     if (mods == null) {
       throw new IllegalArgumentException("null value for 'mods' argument");
     }
@@ -62,7 +62,7 @@ public class Defn_Val implements Serializable {
     return new Defn_Val(mods, pats, decltpe, rhs);
   }
   
-  public Defn_Val withDecltpe(java.util.Optional<hydra.langs.scala.meta.Type> decltpe) {
+  public Defn_Val withDecltpe(hydra.util.Opt<hydra.langs.scala.meta.Type> decltpe) {
     if (decltpe == null) {
       throw new IllegalArgumentException("null value for 'decltpe' argument");
     }

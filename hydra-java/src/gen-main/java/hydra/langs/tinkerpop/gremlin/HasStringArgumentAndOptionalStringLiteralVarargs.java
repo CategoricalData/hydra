@@ -9,9 +9,9 @@ public class HasStringArgumentAndOptionalStringLiteralVarargs implements Seriali
   
   public final hydra.langs.tinkerpop.gremlin.StringNullableArgument string;
   
-  public final java.util.Optional<hydra.langs.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest> rest;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest> rest;
   
-  public HasStringArgumentAndOptionalStringLiteralVarargs (hydra.langs.tinkerpop.gremlin.StringNullableArgument string, java.util.Optional<hydra.langs.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest> rest) {
+  public HasStringArgumentAndOptionalStringLiteralVarargs (hydra.langs.tinkerpop.gremlin.StringNullableArgument string, hydra.util.Opt<hydra.langs.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest> rest) {
     if (string == null) {
       throw new IllegalArgumentException("null value for 'string' argument");
     }
@@ -43,7 +43,7 @@ public class HasStringArgumentAndOptionalStringLiteralVarargs implements Seriali
     return new HasStringArgumentAndOptionalStringLiteralVarargs(string, rest);
   }
   
-  public HasStringArgumentAndOptionalStringLiteralVarargs withRest(java.util.Optional<hydra.langs.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest> rest) {
+  public HasStringArgumentAndOptionalStringLiteralVarargs withRest(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest> rest) {
     if (rest == null) {
       throw new IllegalArgumentException("null value for 'rest' argument");
     }

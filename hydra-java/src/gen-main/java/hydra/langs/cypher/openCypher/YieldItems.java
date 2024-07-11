@@ -9,9 +9,9 @@ public class YieldItems implements Serializable {
   
   public final java.util.List<hydra.langs.cypher.openCypher.YieldItem> items;
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.Where> where;
+  public final hydra.util.Opt<hydra.langs.cypher.openCypher.Where> where;
   
-  public YieldItems (java.util.List<hydra.langs.cypher.openCypher.YieldItem> items, java.util.Optional<hydra.langs.cypher.openCypher.Where> where) {
+  public YieldItems (java.util.List<hydra.langs.cypher.openCypher.YieldItem> items, hydra.util.Opt<hydra.langs.cypher.openCypher.Where> where) {
     if (items == null) {
       throw new IllegalArgumentException("null value for 'items' argument");
     }
@@ -43,7 +43,7 @@ public class YieldItems implements Serializable {
     return new YieldItems(items, where);
   }
   
-  public YieldItems withWhere(java.util.Optional<hydra.langs.cypher.openCypher.Where> where) {
+  public YieldItems withWhere(hydra.util.Opt<hydra.langs.cypher.openCypher.Where> where) {
     if (where == null) {
       throw new IllegalArgumentException("null value for 'where' argument");
     }

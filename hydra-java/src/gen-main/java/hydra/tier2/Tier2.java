@@ -5,6 +5,8 @@ package hydra.tier2;
 import hydra.Flows;
 import hydra.compute.Flow;
 import hydra.compute.FlowState;
+import hydra.core.Type;
+import hydra.util.Opt;
 
 /**
  * A module for miscellaneous tier-2 functions and constants.
@@ -14,7 +16,7 @@ public interface Tier2 {
     return new hydra.compute.Flow((java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState>>) (s0 -> (java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState>) (t0 -> {
       Flow<Void, S> f1 = Flows.pure(null);
       FlowState<Void, S> fs1 = f1.value.apply(s0).apply(t0);
-      return ((((fs1)).value).map((ignored -> new hydra.compute.FlowState(java.util.Optional.of(((fs1)).state), ((fs1)).state, ((fs1)).trace)))).orElse(new hydra.compute.FlowState(java.util.Optional.empty(), ((fs1)).state, ((fs1)).trace));
+      return ((((fs1)).value).map((ignored -> new hydra.compute.FlowState(Opt.of(((fs1)).state), ((fs1)).state, ((fs1)).trace)))).orElse(new hydra.compute.FlowState(Opt.empty(), ((fs1)).state, ((fs1)).trace));
     })));
   }
 
@@ -27,7 +29,7 @@ public interface Tier2 {
   }
 
   static <A> hydra.compute.Flow<hydra.graph.Graph<A>, hydra.core.Type<A>> requireTypeAnnotation(hydra.core.Term<A> term) {
-    java.util.function.Function<java.util.Optional<hydra.core.Type<A>>, hydra.compute.Flow<hydra.graph.Graph<A>, hydra.core.Type<A>>> checkType = (java.util.function.Function<java.util.Optional<hydra.core.Type<A>>, hydra.compute.Flow<hydra.graph.Graph<A>, hydra.core.Type<A>>>) (v1 -> (((v1)).map((java.util.function.Function<hydra.core.Type<A>, hydra.compute.Flow<hydra.graph.Graph<A>, hydra.core.Type<A>>>) (s0 -> hydra.lib.flows.Pure.apply((s0))))).orElse(hydra.lib.flows.Fail.apply("missing type annotation")));
+    java.util.function.Function<Opt<Type<A>>, hydra.compute.Flow<hydra.graph.Graph<A>, hydra.core.Type<A>>> checkType = (java.util.function.Function<Opt<Type<A>>, hydra.compute.Flow<hydra.graph.Graph<A>, hydra.core.Type<A>>>) (v1 -> (((v1)).map((java.util.function.Function<hydra.core.Type<A>, hydra.compute.Flow<hydra.graph.Graph<A>, hydra.core.Type<A>>>) (s0 -> hydra.lib.flows.Pure.apply((s0))))).orElse(hydra.lib.flows.Fail.apply("missing type annotation")));
     java.util.function.Function<hydra.graph.AnnotationClass<A>, hydra.compute.Flow<hydra.graph.Graph<A>, hydra.core.Type<A>>> annsToType = (java.util.function.Function<hydra.graph.AnnotationClass<A>, hydra.compute.Flow<hydra.graph.Graph<A>, hydra.core.Type<A>>>) (anns -> hydra.lib.flows.Bind.apply(
       (((anns)).termType).apply((term)),
       (checkType)));

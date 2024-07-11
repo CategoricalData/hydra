@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import hydra.util.Opt;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -33,7 +33,7 @@ public abstract class JsonEncoding {
     return new Value.Array(list.stream().map(mapping).collect(Collectors.toList()));
   }
 
-  protected static <L> Value toJson(Optional<L> opt, Function<L, Value> mapping) {
+  protected static <L> Value toJson(Opt<L> opt, Function<L, Value> mapping) {
     return opt.map(mapping).orElse(null);
   }
 
@@ -75,11 +75,11 @@ public abstract class JsonEncoding {
       return put(key, toJson(value, mapping));
     }
 
-    public <L> ObjectBuilder putOpt(String key, Optional<L> value, Function<L, Value> mapping) {
+    public <L> ObjectBuilder putOpt(String key, Opt<L> value, Function<L, Value> mapping) {
       return put(key, toJson(value, mapping));
     }
 
-    public <L> ObjectBuilder putOptSet(String key, Optional<Set<L>> values, Function<L, Value> mapping) {
+    public <L> ObjectBuilder putOptSet(String key, Opt<Set<L>> values, Function<L, Value> mapping) {
       return put(key, toJson(new ArrayList<>(values.orElse(Collections.emptySet())), mapping));
     }
 

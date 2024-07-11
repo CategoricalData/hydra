@@ -11,9 +11,9 @@ public class ValueBinding_Simple implements Serializable {
   
   public final hydra.langs.haskell.ast.RightHandSide rhs;
   
-  public final java.util.Optional<hydra.langs.haskell.ast.LocalBindings> localBindings;
+  public final hydra.util.Opt<hydra.langs.haskell.ast.LocalBindings> localBindings;
   
-  public ValueBinding_Simple (hydra.langs.haskell.ast.Pattern pattern, hydra.langs.haskell.ast.RightHandSide rhs, java.util.Optional<hydra.langs.haskell.ast.LocalBindings> localBindings) {
+  public ValueBinding_Simple (hydra.langs.haskell.ast.Pattern pattern, hydra.langs.haskell.ast.RightHandSide rhs, hydra.util.Opt<hydra.langs.haskell.ast.LocalBindings> localBindings) {
     if (pattern == null) {
       throw new IllegalArgumentException("null value for 'pattern' argument");
     }
@@ -56,7 +56,7 @@ public class ValueBinding_Simple implements Serializable {
     return new ValueBinding_Simple(pattern, rhs, localBindings);
   }
   
-  public ValueBinding_Simple withLocalBindings(java.util.Optional<hydra.langs.haskell.ast.LocalBindings> localBindings) {
+  public ValueBinding_Simple withLocalBindings(hydra.util.Opt<hydra.langs.haskell.ast.LocalBindings> localBindings) {
     if (localBindings == null) {
       throw new IllegalArgumentException("null value for 'localBindings' argument");
     }

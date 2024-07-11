@@ -9,9 +9,9 @@ public class Wildcard implements Serializable {
   
   public final java.util.List<hydra.langs.java.syntax.Annotation> annotations;
   
-  public final java.util.Optional<hydra.langs.java.syntax.WildcardBounds> wildcard;
+  public final hydra.util.Opt<hydra.langs.java.syntax.WildcardBounds> wildcard;
   
-  public Wildcard (java.util.List<hydra.langs.java.syntax.Annotation> annotations, java.util.Optional<hydra.langs.java.syntax.WildcardBounds> wildcard) {
+  public Wildcard (java.util.List<hydra.langs.java.syntax.Annotation> annotations, hydra.util.Opt<hydra.langs.java.syntax.WildcardBounds> wildcard) {
     if (annotations == null) {
       throw new IllegalArgumentException("null value for 'annotations' argument");
     }
@@ -43,7 +43,7 @@ public class Wildcard implements Serializable {
     return new Wildcard(annotations, wildcard);
   }
   
-  public Wildcard withWildcard(java.util.Optional<hydra.langs.java.syntax.WildcardBounds> wildcard) {
+  public Wildcard withWildcard(hydra.util.Opt<hydra.langs.java.syntax.WildcardBounds> wildcard) {
     if (wildcard == null) {
       throw new IllegalArgumentException("null value for 'wildcard' argument");
     }

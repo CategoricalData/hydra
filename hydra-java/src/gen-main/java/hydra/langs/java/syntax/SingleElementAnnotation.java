@@ -9,9 +9,9 @@ public class SingleElementAnnotation implements Serializable {
   
   public final hydra.langs.java.syntax.TypeName name;
   
-  public final java.util.Optional<hydra.langs.java.syntax.ElementValue> value;
+  public final hydra.util.Opt<hydra.langs.java.syntax.ElementValue> value;
   
-  public SingleElementAnnotation (hydra.langs.java.syntax.TypeName name, java.util.Optional<hydra.langs.java.syntax.ElementValue> value) {
+  public SingleElementAnnotation (hydra.langs.java.syntax.TypeName name, hydra.util.Opt<hydra.langs.java.syntax.ElementValue> value) {
     if (name == null) {
       throw new IllegalArgumentException("null value for 'name' argument");
     }
@@ -43,7 +43,7 @@ public class SingleElementAnnotation implements Serializable {
     return new SingleElementAnnotation(name, value);
   }
   
-  public SingleElementAnnotation withValue(java.util.Optional<hydra.langs.java.syntax.ElementValue> value) {
+  public SingleElementAnnotation withValue(hydra.util.Opt<hydra.langs.java.syntax.ElementValue> value) {
     if (value == null) {
       throw new IllegalArgumentException("null value for 'value' argument");
     }

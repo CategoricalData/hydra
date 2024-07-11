@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import hydra.util.Opt;
 import java.util.Set;
 
 import static hydra.dsl.Core.name;
@@ -116,7 +116,7 @@ public interface Terms {
     /**
      * Construct a case (pattern-matching) term.
      */
-    static <A> Term<A> cases(final Name name, final Optional<Term<A>> def, final Field<A>... fields) {
+    static <A> Term<A> cases(final Name name, final Opt<Term<A>> def, final Field<A>... fields) {
         return elimination(new Elimination.Union<>(new CaseStatement<>(name, def, Arrays.asList(fields))));
     }
 
@@ -253,7 +253,7 @@ public interface Terms {
      * Construct a "just" (nonempty) term.
      */
     static <A> Term<A> just(final Term<A> elem) {
-        return optional(Optional.of(elem));
+        return optional(Opt.of(elem));
     }
 
     /**
@@ -335,7 +335,7 @@ public interface Terms {
     /**
      * Construct a match term.
      */
-    static <A> Term<A> match(final Name name, final Optional<Term<A>> def,
+    static <A> Term<A> match(final Name name, final Opt<Term<A>> def,
                              final Map.Entry<String, Term<A>>... casePairs) {
         Field<A>[] fields = new Field[casePairs.length];
         for (int i = 0; i < casePairs.length; i++) {
@@ -348,13 +348,13 @@ public interface Terms {
      * Construct a "nothing" (empty) term.
      */
     static <A> Term<A> nothing() {
-        return optional(Optional.empty());
+        return optional(Opt.empty());
     }
 
     /**
      * Construct an optional term.
      */
-    static <A> Term<A> optional(final Optional<Term<A>> maybeTerm) {
+    static <A> Term<A> optional(final Opt<Term<A>> maybeTerm) {
         return new Term.Optional<>(maybeTerm);
     }
 

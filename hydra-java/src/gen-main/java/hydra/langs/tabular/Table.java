@@ -13,14 +13,14 @@ public class Table<V> implements Serializable {
   /**
    * The optional header row of the table. If present, the header must have the same number of cells as each data row.
    */
-  public final java.util.Optional<hydra.langs.tabular.HeaderRow> header;
+  public final hydra.util.Opt<hydra.langs.tabular.HeaderRow> header;
   
   /**
    * The data rows of the table. Each row must have the same number of cells.
    */
   public final java.util.List<hydra.langs.tabular.DataRow<V>> data;
   
-  public Table (java.util.Optional<hydra.langs.tabular.HeaderRow> header, java.util.List<hydra.langs.tabular.DataRow<V>> data) {
+  public Table (hydra.util.Opt<hydra.langs.tabular.HeaderRow> header, java.util.List<hydra.langs.tabular.DataRow<V>> data) {
     if (header == null) {
       throw new IllegalArgumentException("null value for 'header' argument");
     }
@@ -45,7 +45,7 @@ public class Table<V> implements Serializable {
     return 2 * header.hashCode() + 3 * data.hashCode();
   }
   
-  public Table withHeader(java.util.Optional<hydra.langs.tabular.HeaderRow> header) {
+  public Table withHeader(hydra.util.Opt<hydra.langs.tabular.HeaderRow> header) {
     if (header == null) {
       throw new IllegalArgumentException("null value for 'header' argument");
     }

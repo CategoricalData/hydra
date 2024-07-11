@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class UnaryAddOrSubtractExpression implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.UnaryAddOrSubtractExpression");
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.AddOrSubtractOperator> operator;
+  public final hydra.util.Opt<hydra.langs.cypher.openCypher.AddOrSubtractOperator> operator;
   
   public final hydra.langs.cypher.openCypher.NonArithmeticOperatorExpression expression;
   
-  public UnaryAddOrSubtractExpression (java.util.Optional<hydra.langs.cypher.openCypher.AddOrSubtractOperator> operator, hydra.langs.cypher.openCypher.NonArithmeticOperatorExpression expression) {
+  public UnaryAddOrSubtractExpression (hydra.util.Opt<hydra.langs.cypher.openCypher.AddOrSubtractOperator> operator, hydra.langs.cypher.openCypher.NonArithmeticOperatorExpression expression) {
     if (operator == null) {
       throw new IllegalArgumentException("null value for 'operator' argument");
     }
@@ -36,7 +36,7 @@ public class UnaryAddOrSubtractExpression implements Serializable {
     return 2 * operator.hashCode() + 3 * expression.hashCode();
   }
   
-  public UnaryAddOrSubtractExpression withOperator(java.util.Optional<hydra.langs.cypher.openCypher.AddOrSubtractOperator> operator) {
+  public UnaryAddOrSubtractExpression withOperator(hydra.util.Opt<hydra.langs.cypher.openCypher.AddOrSubtractOperator> operator) {
     if (operator == null) {
       throw new IllegalArgumentException("null value for 'operator' argument");
     }

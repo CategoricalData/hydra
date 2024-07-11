@@ -7,13 +7,13 @@ import java.io.Serializable;
 public class ReplaceArgs implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.ReplaceArgs");
   
-  public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope;
   
   public final hydra.langs.tinkerpop.gremlin.StringNullableArgument from;
   
   public final hydra.langs.tinkerpop.gremlin.StringNullableArgument to;
   
-  public ReplaceArgs (java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope, hydra.langs.tinkerpop.gremlin.StringNullableArgument from, hydra.langs.tinkerpop.gremlin.StringNullableArgument to) {
+  public ReplaceArgs (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope, hydra.langs.tinkerpop.gremlin.StringNullableArgument from, hydra.langs.tinkerpop.gremlin.StringNullableArgument to) {
     if (scope == null) {
       throw new IllegalArgumentException("null value for 'scope' argument");
     }
@@ -42,7 +42,7 @@ public class ReplaceArgs implements Serializable {
     return 2 * scope.hashCode() + 3 * from.hashCode() + 5 * to.hashCode();
   }
   
-  public ReplaceArgs withScope(java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope) {
+  public ReplaceArgs withScope(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope) {
     if (scope == null) {
       throw new IllegalArgumentException("null value for 'scope' argument");
     }

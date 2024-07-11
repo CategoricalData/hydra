@@ -16,9 +16,9 @@ public class QualifiedValueShape implements Serializable {
   
   public final java.math.BigInteger qualifiedMinCount;
   
-  public final java.util.Optional<Boolean> qualifiedValueShapesDisjoint;
+  public final hydra.util.Opt<Boolean> qualifiedValueShapesDisjoint;
   
-  public QualifiedValueShape (hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape> qualifiedValueShape, java.math.BigInteger qualifiedMaxCount, java.math.BigInteger qualifiedMinCount, java.util.Optional<Boolean> qualifiedValueShapesDisjoint) {
+  public QualifiedValueShape (hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape> qualifiedValueShape, java.math.BigInteger qualifiedMaxCount, java.math.BigInteger qualifiedMinCount, hydra.util.Opt<Boolean> qualifiedValueShapesDisjoint) {
     if (qualifiedValueShape == null) {
       throw new IllegalArgumentException("null value for 'qualifiedValueShape' argument");
     }
@@ -72,7 +72,7 @@ public class QualifiedValueShape implements Serializable {
     return new QualifiedValueShape(qualifiedValueShape, qualifiedMaxCount, qualifiedMinCount, qualifiedValueShapesDisjoint);
   }
   
-  public QualifiedValueShape withQualifiedValueShapesDisjoint(java.util.Optional<Boolean> qualifiedValueShapesDisjoint) {
+  public QualifiedValueShape withQualifiedValueShapesDisjoint(hydra.util.Opt<Boolean> qualifiedValueShapesDisjoint) {
     if (qualifiedValueShapesDisjoint == null) {
       throw new IllegalArgumentException("null value for 'qualifiedValueShapesDisjoint' argument");
     }

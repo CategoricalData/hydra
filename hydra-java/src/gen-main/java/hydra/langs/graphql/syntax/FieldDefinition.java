@@ -7,17 +7,17 @@ import java.io.Serializable;
 public class FieldDefinition implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.FieldDefinition");
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Description> description;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Description> description;
   
   public final hydra.langs.graphql.syntax.Name name;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.ArgumentsDefinition> argumentsDefinition;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.ArgumentsDefinition> argumentsDefinition;
   
   public final hydra.langs.graphql.syntax.Type type;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives;
   
-  public FieldDefinition (java.util.Optional<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.Name name, java.util.Optional<hydra.langs.graphql.syntax.ArgumentsDefinition> argumentsDefinition, hydra.langs.graphql.syntax.Type type, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+  public FieldDefinition (hydra.util.Opt<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.Name name, hydra.util.Opt<hydra.langs.graphql.syntax.ArgumentsDefinition> argumentsDefinition, hydra.langs.graphql.syntax.Type type, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
     if (description == null) {
       throw new IllegalArgumentException("null value for 'description' argument");
     }
@@ -54,7 +54,7 @@ public class FieldDefinition implements Serializable {
     return 2 * description.hashCode() + 3 * name.hashCode() + 5 * argumentsDefinition.hashCode() + 7 * type.hashCode() + 11 * directives.hashCode();
   }
   
-  public FieldDefinition withDescription(java.util.Optional<hydra.langs.graphql.syntax.Description> description) {
+  public FieldDefinition withDescription(hydra.util.Opt<hydra.langs.graphql.syntax.Description> description) {
     if (description == null) {
       throw new IllegalArgumentException("null value for 'description' argument");
     }
@@ -68,7 +68,7 @@ public class FieldDefinition implements Serializable {
     return new FieldDefinition(description, name, argumentsDefinition, type, directives);
   }
   
-  public FieldDefinition withArgumentsDefinition(java.util.Optional<hydra.langs.graphql.syntax.ArgumentsDefinition> argumentsDefinition) {
+  public FieldDefinition withArgumentsDefinition(hydra.util.Opt<hydra.langs.graphql.syntax.ArgumentsDefinition> argumentsDefinition) {
     if (argumentsDefinition == null) {
       throw new IllegalArgumentException("null value for 'argumentsDefinition' argument");
     }
@@ -82,7 +82,7 @@ public class FieldDefinition implements Serializable {
     return new FieldDefinition(description, name, argumentsDefinition, type, directives);
   }
   
-  public FieldDefinition withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+  public FieldDefinition withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
     if (directives == null) {
       throw new IllegalArgumentException("null value for 'directives' argument");
     }

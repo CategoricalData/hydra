@@ -2,6 +2,8 @@
 
 package hydra.module;
 
+import hydra.util.Opt;
+
 import java.io.Serializable;
 
 /**
@@ -33,9 +35,9 @@ public class Module<A> implements Serializable {
   /**
    * An optional human-readable description of the module
    */
-  public final java.util.Optional<String> description;
+  public final Opt<String> description;
   
-  public Module (hydra.module.Namespace namespace, java.util.List<hydra.graph.Element<A>> elements, java.util.List<hydra.module.Module<A>> termDependencies, java.util.List<hydra.module.Module<A>> typeDependencies, java.util.Optional<String> description) {
+  public Module (hydra.module.Namespace namespace, java.util.List<hydra.graph.Element<A>> elements, java.util.List<hydra.module.Module<A>> termDependencies, java.util.List<hydra.module.Module<A>> typeDependencies, Opt<String> description) {
     if (namespace == null) {
       throw new IllegalArgumentException("null value for 'namespace' argument");
     }
@@ -100,7 +102,7 @@ public class Module<A> implements Serializable {
     return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }
   
-  public Module withDescription(java.util.Optional<String> description) {
+  public Module withDescription(Opt<String> description) {
     if (description == null) {
       throw new IllegalArgumentException("null value for 'description' argument");
     }

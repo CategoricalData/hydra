@@ -2,6 +2,8 @@
 
 package hydra.module;
 
+import hydra.util.Opt;
+
 import java.io.Serializable;
 
 /**
@@ -10,11 +12,11 @@ import java.io.Serializable;
 public class QualifiedName implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/module.QualifiedName");
   
-  public final java.util.Optional<hydra.module.Namespace> namespace;
+  public final Opt<Namespace> namespace;
   
   public final String local;
   
-  public QualifiedName (java.util.Optional<hydra.module.Namespace> namespace, String local) {
+  public QualifiedName (Opt<Namespace> namespace, String local) {
     if (namespace == null) {
       throw new IllegalArgumentException("null value for 'namespace' argument");
     }
@@ -39,7 +41,7 @@ public class QualifiedName implements Serializable {
     return 2 * namespace.hashCode() + 3 * local.hashCode();
   }
   
-  public QualifiedName withNamespace(java.util.Optional<hydra.module.Namespace> namespace) {
+  public QualifiedName withNamespace(Opt<Namespace> namespace) {
     if (namespace == null) {
       throw new IllegalArgumentException("null value for 'namespace' argument");
     }

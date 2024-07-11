@@ -12,9 +12,9 @@ public class DeclarationWithComments implements Serializable {
   
   public final hydra.langs.haskell.ast.Declaration body;
   
-  public final java.util.Optional<String> comments;
+  public final hydra.util.Opt<String> comments;
   
-  public DeclarationWithComments (hydra.langs.haskell.ast.Declaration body, java.util.Optional<String> comments) {
+  public DeclarationWithComments (hydra.langs.haskell.ast.Declaration body, hydra.util.Opt<String> comments) {
     if (body == null) {
       throw new IllegalArgumentException("null value for 'body' argument");
     }
@@ -46,7 +46,7 @@ public class DeclarationWithComments implements Serializable {
     return new DeclarationWithComments(body, comments);
   }
   
-  public DeclarationWithComments withComments(java.util.Optional<String> comments) {
+  public DeclarationWithComments withComments(hydra.util.Opt<String> comments) {
     if (comments == null) {
       throw new IllegalArgumentException("null value for 'comments' argument");
     }

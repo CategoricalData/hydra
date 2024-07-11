@@ -2,6 +2,8 @@
 
 package hydra.ast;
 
+import hydra.util.Opt;
+
 import java.io.Serializable;
 
 /**
@@ -10,13 +12,13 @@ import java.io.Serializable;
 public class BlockStyle implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ast.BlockStyle");
   
-  public final java.util.Optional<String> indent;
+  public final Opt<String> indent;
   
   public final Boolean newlineBeforeContent;
   
   public final Boolean newlineAfterContent;
   
-  public BlockStyle (java.util.Optional<String> indent, Boolean newlineBeforeContent, Boolean newlineAfterContent) {
+  public BlockStyle (Opt<String> indent, Boolean newlineBeforeContent, Boolean newlineAfterContent) {
     if (indent == null) {
       throw new IllegalArgumentException("null value for 'indent' argument");
     }
@@ -45,7 +47,7 @@ public class BlockStyle implements Serializable {
     return 2 * indent.hashCode() + 3 * newlineBeforeContent.hashCode() + 5 * newlineAfterContent.hashCode();
   }
   
-  public BlockStyle withIndent(java.util.Optional<String> indent) {
+  public BlockStyle withIndent(Opt<String> indent) {
     if (indent == null) {
       throw new IllegalArgumentException("null value for 'indent' argument");
     }

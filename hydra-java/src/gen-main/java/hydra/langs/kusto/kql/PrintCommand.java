@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class PrintCommand implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.PrintCommand");
   
-  public final java.util.Optional<hydra.langs.kusto.kql.ColumnName> column;
+  public final hydra.util.Opt<hydra.langs.kusto.kql.ColumnName> column;
   
   public final hydra.langs.kusto.kql.Expression expression;
   
-  public PrintCommand (java.util.Optional<hydra.langs.kusto.kql.ColumnName> column, hydra.langs.kusto.kql.Expression expression) {
+  public PrintCommand (hydra.util.Opt<hydra.langs.kusto.kql.ColumnName> column, hydra.langs.kusto.kql.Expression expression) {
     if (column == null) {
       throw new IllegalArgumentException("null value for 'column' argument");
     }
@@ -36,7 +36,7 @@ public class PrintCommand implements Serializable {
     return 2 * column.hashCode() + 3 * expression.hashCode();
   }
   
-  public PrintCommand withColumn(java.util.Optional<hydra.langs.kusto.kql.ColumnName> column) {
+  public PrintCommand withColumn(hydra.util.Opt<hydra.langs.kusto.kql.ColumnName> column) {
     if (column == null) {
       throw new IllegalArgumentException("null value for 'column' argument");
     }

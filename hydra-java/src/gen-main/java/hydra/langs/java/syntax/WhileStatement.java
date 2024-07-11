@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class WhileStatement implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.WhileStatement");
   
-  public final java.util.Optional<hydra.langs.java.syntax.Expression> cond;
+  public final hydra.util.Opt<hydra.langs.java.syntax.Expression> cond;
   
   public final hydra.langs.java.syntax.Statement body;
   
-  public WhileStatement (java.util.Optional<hydra.langs.java.syntax.Expression> cond, hydra.langs.java.syntax.Statement body) {
+  public WhileStatement (hydra.util.Opt<hydra.langs.java.syntax.Expression> cond, hydra.langs.java.syntax.Statement body) {
     if (cond == null) {
       throw new IllegalArgumentException("null value for 'cond' argument");
     }
@@ -36,7 +36,7 @@ public class WhileStatement implements Serializable {
     return 2 * cond.hashCode() + 3 * body.hashCode();
   }
   
-  public WhileStatement withCond(java.util.Optional<hydra.langs.java.syntax.Expression> cond) {
+  public WhileStatement withCond(hydra.util.Opt<hydra.langs.java.syntax.Expression> cond) {
     if (cond == null) {
       throw new IllegalArgumentException("null value for 'cond' argument");
     }

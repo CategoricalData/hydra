@@ -34,9 +34,9 @@ public abstract class StringNullableArgument implements Serializable {
   }
   
   public static final class Value extends hydra.langs.tinkerpop.gremlin.StringNullableArgument implements Serializable {
-    public final java.util.Optional<String> value;
+    public final hydra.util.Opt<String> value;
     
-    public Value (java.util.Optional<String> value) {
+    public Value (hydra.util.Opt<String> value) {
       if (value == null) {
         throw new IllegalArgumentException("null value for 'value' argument");
       }

@@ -2,6 +2,9 @@
 
 package hydra.graph;
 
+import hydra.core.Term;
+import hydra.util.Opt;
+
 /**
  * A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph
  */
@@ -16,7 +19,7 @@ public class Graph<A> {
   /**
    * The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)
    */
-  public final java.util.Map<hydra.core.Name, java.util.Optional<hydra.core.Term<A>>> environment;
+  public final java.util.Map<hydra.core.Name, Opt<Term<A>>> environment;
   
   /**
    * The body of the term which generated this context
@@ -36,9 +39,9 @@ public class Graph<A> {
   /**
    * The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph.
    */
-  public final java.util.Optional<hydra.graph.Graph<A>> schema;
+  public final Opt<Graph<A>> schema;
   
-  public Graph (java.util.Map<hydra.core.Name, hydra.graph.Element<A>> elements, java.util.Map<hydra.core.Name, java.util.Optional<hydra.core.Term<A>>> environment, hydra.core.Term<A> body, java.util.Map<hydra.core.Name, hydra.graph.Primitive<A>> primitives, hydra.graph.AnnotationClass<A> annotations, java.util.Optional<hydra.graph.Graph<A>> schema) {
+  public Graph (java.util.Map<hydra.core.Name, hydra.graph.Element<A>> elements, java.util.Map<hydra.core.Name, Opt<Term<A>>> environment, hydra.core.Term<A> body, java.util.Map<hydra.core.Name, hydra.graph.Primitive<A>> primitives, hydra.graph.AnnotationClass<A> annotations, Opt<Graph<A>> schema) {
     if (elements == null) {
       throw new IllegalArgumentException("null value for 'elements' argument");
     }
@@ -86,7 +89,7 @@ public class Graph<A> {
     return new Graph(elements, environment, body, primitives, annotations, schema);
   }
   
-  public Graph withEnvironment(java.util.Map<hydra.core.Name, java.util.Optional<hydra.core.Term<A>>> environment) {
+  public Graph withEnvironment(java.util.Map<hydra.core.Name, Opt<Term<A>>> environment) {
     if (environment == null) {
       throw new IllegalArgumentException("null value for 'environment' argument");
     }
@@ -114,7 +117,7 @@ public class Graph<A> {
     return new Graph(elements, environment, body, primitives, annotations, schema);
   }
   
-  public Graph withSchema(java.util.Optional<hydra.graph.Graph<A>> schema) {
+  public Graph withSchema(Opt<Graph<A>> schema) {
     if (schema == null) {
       throw new IllegalArgumentException("null value for 'schema' argument");
     }

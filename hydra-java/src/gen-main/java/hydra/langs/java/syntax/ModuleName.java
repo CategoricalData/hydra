@@ -9,9 +9,9 @@ public class ModuleName implements Serializable {
   
   public final hydra.langs.java.syntax.Identifier identifier;
   
-  public final java.util.Optional<hydra.langs.java.syntax.ModuleName> name;
+  public final hydra.util.Opt<hydra.langs.java.syntax.ModuleName> name;
   
-  public ModuleName (hydra.langs.java.syntax.Identifier identifier, java.util.Optional<hydra.langs.java.syntax.ModuleName> name) {
+  public ModuleName (hydra.langs.java.syntax.Identifier identifier, hydra.util.Opt<hydra.langs.java.syntax.ModuleName> name) {
     if (identifier == null) {
       throw new IllegalArgumentException("null value for 'identifier' argument");
     }
@@ -43,7 +43,7 @@ public class ModuleName implements Serializable {
     return new ModuleName(identifier, name);
   }
   
-  public ModuleName withName(java.util.Optional<hydra.langs.java.syntax.ModuleName> name) {
+  public ModuleName withName(hydra.util.Opt<hydra.langs.java.syntax.ModuleName> name) {
     if (name == null) {
       throw new IllegalArgumentException("null value for 'name' argument");
     }

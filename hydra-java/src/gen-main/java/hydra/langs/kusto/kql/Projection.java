@@ -9,9 +9,9 @@ public class Projection implements Serializable {
   
   public final hydra.langs.kusto.kql.Expression expression;
   
-  public final java.util.Optional<hydra.langs.kusto.kql.ColumnName> alias;
+  public final hydra.util.Opt<hydra.langs.kusto.kql.ColumnName> alias;
   
-  public Projection (hydra.langs.kusto.kql.Expression expression, java.util.Optional<hydra.langs.kusto.kql.ColumnName> alias) {
+  public Projection (hydra.langs.kusto.kql.Expression expression, hydra.util.Opt<hydra.langs.kusto.kql.ColumnName> alias) {
     if (expression == null) {
       throw new IllegalArgumentException("null value for 'expression' argument");
     }
@@ -43,7 +43,7 @@ public class Projection implements Serializable {
     return new Projection(expression, alias);
   }
   
-  public Projection withAlias(java.util.Optional<hydra.langs.kusto.kql.ColumnName> alias) {
+  public Projection withAlias(hydra.util.Opt<hydra.langs.kusto.kql.ColumnName> alias) {
     if (alias == null) {
       throw new IllegalArgumentException("null value for 'alias' argument");
     }

@@ -9,9 +9,9 @@ public class StandaloneCall implements Serializable {
   
   public final hydra.langs.cypher.openCypher.ProcedureInvocation call;
   
-  public final java.util.Optional<hydra.langs.cypher.openCypher.StarOrYieldItems> yieldItems;
+  public final hydra.util.Opt<hydra.langs.cypher.openCypher.StarOrYieldItems> yieldItems;
   
-  public StandaloneCall (hydra.langs.cypher.openCypher.ProcedureInvocation call, java.util.Optional<hydra.langs.cypher.openCypher.StarOrYieldItems> yieldItems) {
+  public StandaloneCall (hydra.langs.cypher.openCypher.ProcedureInvocation call, hydra.util.Opt<hydra.langs.cypher.openCypher.StarOrYieldItems> yieldItems) {
     if (call == null) {
       throw new IllegalArgumentException("null value for 'call' argument");
     }
@@ -43,7 +43,7 @@ public class StandaloneCall implements Serializable {
     return new StandaloneCall(call, yieldItems);
   }
   
-  public StandaloneCall withYieldItems(java.util.Optional<hydra.langs.cypher.openCypher.StarOrYieldItems> yieldItems) {
+  public StandaloneCall withYieldItems(hydra.util.Opt<hydra.langs.cypher.openCypher.StarOrYieldItems> yieldItems) {
     if (yieldItems == null) {
       throw new IllegalArgumentException("null value for 'yieldItems' argument");
     }

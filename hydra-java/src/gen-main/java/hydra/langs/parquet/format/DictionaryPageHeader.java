@@ -23,9 +23,9 @@ public class DictionaryPageHeader implements Serializable {
   /**
    * If true, the entries in the dictionary are sorted in ascending order
    */
-  public final java.util.Optional<Boolean> isSorted;
+  public final hydra.util.Opt<Boolean> isSorted;
   
-  public DictionaryPageHeader (Integer numValues, hydra.langs.parquet.format.Encoding encoding, java.util.Optional<Boolean> isSorted) {
+  public DictionaryPageHeader (Integer numValues, hydra.langs.parquet.format.Encoding encoding, hydra.util.Opt<Boolean> isSorted) {
     if (numValues == null) {
       throw new IllegalArgumentException("null value for 'numValues' argument");
     }
@@ -68,7 +68,7 @@ public class DictionaryPageHeader implements Serializable {
     return new DictionaryPageHeader(numValues, encoding, isSorted);
   }
   
-  public DictionaryPageHeader withIsSorted(java.util.Optional<Boolean> isSorted) {
+  public DictionaryPageHeader withIsSorted(hydra.util.Opt<Boolean> isSorted) {
     if (isSorted == null) {
       throw new IllegalArgumentException("null value for 'isSorted' argument");
     }

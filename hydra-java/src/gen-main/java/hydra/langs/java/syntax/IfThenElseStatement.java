@@ -7,13 +7,13 @@ import java.io.Serializable;
 public class IfThenElseStatement implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.IfThenElseStatement");
   
-  public final java.util.Optional<hydra.langs.java.syntax.Expression> cond;
+  public final hydra.util.Opt<hydra.langs.java.syntax.Expression> cond;
   
   public final hydra.langs.java.syntax.StatementNoShortIf then;
   
   public final hydra.langs.java.syntax.Statement else_;
   
-  public IfThenElseStatement (java.util.Optional<hydra.langs.java.syntax.Expression> cond, hydra.langs.java.syntax.StatementNoShortIf then, hydra.langs.java.syntax.Statement else_) {
+  public IfThenElseStatement (hydra.util.Opt<hydra.langs.java.syntax.Expression> cond, hydra.langs.java.syntax.StatementNoShortIf then, hydra.langs.java.syntax.Statement else_) {
     if (cond == null) {
       throw new IllegalArgumentException("null value for 'cond' argument");
     }
@@ -42,7 +42,7 @@ public class IfThenElseStatement implements Serializable {
     return 2 * cond.hashCode() + 3 * then.hashCode() + 5 * else_.hashCode();
   }
   
-  public IfThenElseStatement withCond(java.util.Optional<hydra.langs.java.syntax.Expression> cond) {
+  public IfThenElseStatement withCond(hydra.util.Opt<hydra.langs.java.syntax.Expression> cond) {
     if (cond == null) {
       throw new IllegalArgumentException("null value for 'cond' argument");
     }

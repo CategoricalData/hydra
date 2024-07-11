@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class ConstructorBody implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.ConstructorBody");
   
-  public final java.util.Optional<hydra.langs.java.syntax.ExplicitConstructorInvocation> invocation;
+  public final hydra.util.Opt<hydra.langs.java.syntax.ExplicitConstructorInvocation> invocation;
   
   public final java.util.List<hydra.langs.java.syntax.BlockStatement> statements;
   
-  public ConstructorBody (java.util.Optional<hydra.langs.java.syntax.ExplicitConstructorInvocation> invocation, java.util.List<hydra.langs.java.syntax.BlockStatement> statements) {
+  public ConstructorBody (hydra.util.Opt<hydra.langs.java.syntax.ExplicitConstructorInvocation> invocation, java.util.List<hydra.langs.java.syntax.BlockStatement> statements) {
     if (invocation == null) {
       throw new IllegalArgumentException("null value for 'invocation' argument");
     }
@@ -36,7 +36,7 @@ public class ConstructorBody implements Serializable {
     return 2 * invocation.hashCode() + 3 * statements.hashCode();
   }
   
-  public ConstructorBody withInvocation(java.util.Optional<hydra.langs.java.syntax.ExplicitConstructorInvocation> invocation) {
+  public ConstructorBody withInvocation(hydra.util.Opt<hydra.langs.java.syntax.ExplicitConstructorInvocation> invocation) {
     if (invocation == null) {
       throw new IllegalArgumentException("null value for 'invocation' argument");
     }

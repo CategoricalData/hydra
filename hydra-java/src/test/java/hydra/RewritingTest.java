@@ -8,7 +8,7 @@ import hydra.core.Record;
 import hydra.core.Term;
 
 import java.util.List;
-import java.util.Optional;
+import hydra.util.Opt;
 import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
@@ -67,7 +67,7 @@ public class RewritingTest {
         FlowState<Integer, Term<String>> resultState = applyCapitalizeFieldNames(listOfStates);
 
         // Check modified fields
-        Optional<Term<String>> result = resultState.value;
+        Opt<Term<String>> result = resultState.value;
         assertTrue(result.isPresent());
         assertTrue(result.get() instanceof Term.Annotated);
         Term<String> list = ((Term.Annotated<String>) result.get()).value.subject;

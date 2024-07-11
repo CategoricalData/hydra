@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class SplitArgs implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.SplitArgs");
   
-  public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope;
   
   public final hydra.langs.tinkerpop.gremlin.StringNullableArgument delimiter;
   
-  public SplitArgs (java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope, hydra.langs.tinkerpop.gremlin.StringNullableArgument delimiter) {
+  public SplitArgs (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope, hydra.langs.tinkerpop.gremlin.StringNullableArgument delimiter) {
     if (scope == null) {
       throw new IllegalArgumentException("null value for 'scope' argument");
     }
@@ -36,7 +36,7 @@ public class SplitArgs implements Serializable {
     return 2 * scope.hashCode() + 3 * delimiter.hashCode();
   }
   
-  public SplitArgs withScope(java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope) {
+  public SplitArgs withScope(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope) {
     if (scope == null) {
       throw new IllegalArgumentException("null value for 'scope' argument");
     }

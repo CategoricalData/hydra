@@ -9,9 +9,9 @@ public class PnLocal implements Serializable {
   
   public final hydra.langs.shex.syntax.PnLocal_Alts alts;
   
-  public final java.util.Optional<hydra.langs.shex.syntax.PnLocal_Sequence_Option> sequence;
+  public final hydra.util.Opt<hydra.langs.shex.syntax.PnLocal_Sequence_Option> sequence;
   
-  public PnLocal (hydra.langs.shex.syntax.PnLocal_Alts alts, java.util.Optional<hydra.langs.shex.syntax.PnLocal_Sequence_Option> sequence) {
+  public PnLocal (hydra.langs.shex.syntax.PnLocal_Alts alts, hydra.util.Opt<hydra.langs.shex.syntax.PnLocal_Sequence_Option> sequence) {
     if (alts == null) {
       throw new IllegalArgumentException("null value for 'alts' argument");
     }
@@ -43,7 +43,7 @@ public class PnLocal implements Serializable {
     return new PnLocal(alts, sequence);
   }
   
-  public PnLocal withSequence(java.util.Optional<hydra.langs.shex.syntax.PnLocal_Sequence_Option> sequence) {
+  public PnLocal withSequence(hydra.util.Opt<hydra.langs.shex.syntax.PnLocal_Sequence_Option> sequence) {
     if (sequence == null) {
       throw new IllegalArgumentException("null value for 'sequence' argument");
     }

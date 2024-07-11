@@ -17,9 +17,8 @@ import hydra.tools.PrimitiveFunction;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
+import hydra.util.Opt;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import static hydra.Coders.roundTrip;
 import static hydra.Flows.EMPTY_TRACE;
@@ -79,7 +78,7 @@ public class HydraTestBase {
 
     protected static <A> Graph<A> emptyGraph(AnnotationClass<A> anns) {
         Map<Name, Element<A>> elements = Collections.emptyMap();
-        Map<Name, Optional<Term<A>>> environment = Collections.emptyMap();
+        Map<Name, Opt<Term<A>>> environment = Collections.emptyMap();
         Term<A> body = Terms.string("empty graph");
 
         Map<Name, Primitive<A>> primitives = new HashMap<>();
@@ -87,7 +86,7 @@ public class HydraTestBase {
             primitives.put(prim.name(), prim.toNative());
         }
 
-        Optional<Graph<A>> schema = Optional.empty();
+        Opt<Graph<A>> schema = Opt.empty();
 
         return new Graph<>(elements, environment, body, primitives, anns, schema);
     }

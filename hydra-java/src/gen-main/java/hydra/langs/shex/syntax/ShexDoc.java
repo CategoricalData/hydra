@@ -9,11 +9,11 @@ public class ShexDoc implements Serializable {
   
   public final java.util.List<hydra.langs.shex.syntax.Directive> listOfDirective;
   
-  public final java.util.Optional<hydra.langs.shex.syntax.ShexDoc_Sequence_Option> sequence;
+  public final hydra.util.Opt<hydra.langs.shex.syntax.ShexDoc_Sequence_Option> sequence;
   
   public final hydra.langs.shex.syntax.PrefixDecl prefixDecl;
   
-  public ShexDoc (java.util.List<hydra.langs.shex.syntax.Directive> listOfDirective, java.util.Optional<hydra.langs.shex.syntax.ShexDoc_Sequence_Option> sequence, hydra.langs.shex.syntax.PrefixDecl prefixDecl) {
+  public ShexDoc (java.util.List<hydra.langs.shex.syntax.Directive> listOfDirective, hydra.util.Opt<hydra.langs.shex.syntax.ShexDoc_Sequence_Option> sequence, hydra.langs.shex.syntax.PrefixDecl prefixDecl) {
     if (listOfDirective == null) {
       throw new IllegalArgumentException("null value for 'listOfDirective' argument");
     }
@@ -49,7 +49,7 @@ public class ShexDoc implements Serializable {
     return new ShexDoc(listOfDirective, sequence, prefixDecl);
   }
   
-  public ShexDoc withSequence(java.util.Optional<hydra.langs.shex.syntax.ShexDoc_Sequence_Option> sequence) {
+  public ShexDoc withSequence(hydra.util.Opt<hydra.langs.shex.syntax.ShexDoc_Sequence_Option> sequence) {
     if (sequence == null) {
       throw new IllegalArgumentException("null value for 'sequence' argument");
     }

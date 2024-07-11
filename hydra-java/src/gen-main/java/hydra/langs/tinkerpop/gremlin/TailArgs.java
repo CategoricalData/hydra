@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class TailArgs implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TailArgs");
   
-  public final java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope;
   
-  public final java.util.Optional<hydra.langs.tinkerpop.gremlin.IntegerArgument> integer;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.IntegerArgument> integer;
   
-  public TailArgs (java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope, java.util.Optional<hydra.langs.tinkerpop.gremlin.IntegerArgument> integer) {
+  public TailArgs (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope, hydra.util.Opt<hydra.langs.tinkerpop.gremlin.IntegerArgument> integer) {
     if (scope == null) {
       throw new IllegalArgumentException("null value for 'scope' argument");
     }
@@ -36,14 +36,14 @@ public class TailArgs implements Serializable {
     return 2 * scope.hashCode() + 3 * integer.hashCode();
   }
   
-  public TailArgs withScope(java.util.Optional<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope) {
+  public TailArgs withScope(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope) {
     if (scope == null) {
       throw new IllegalArgumentException("null value for 'scope' argument");
     }
     return new TailArgs(scope, integer);
   }
   
-  public TailArgs withInteger(java.util.Optional<hydra.langs.tinkerpop.gremlin.IntegerArgument> integer) {
+  public TailArgs withInteger(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.IntegerArgument> integer) {
     if (integer == null) {
       throw new IllegalArgumentException("null value for 'integer' argument");
     }

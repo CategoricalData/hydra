@@ -11,11 +11,11 @@ public class FragmentDefinition implements Serializable {
   
   public final hydra.langs.graphql.syntax.TypeCondition typeCondition;
   
-  public final java.util.Optional<hydra.langs.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives;
   
   public final hydra.langs.graphql.syntax.SelectionSet selectionSet;
   
-  public FragmentDefinition (hydra.langs.graphql.syntax.FragmentName fragmentName, hydra.langs.graphql.syntax.TypeCondition typeCondition, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.SelectionSet selectionSet) {
+  public FragmentDefinition (hydra.langs.graphql.syntax.FragmentName fragmentName, hydra.langs.graphql.syntax.TypeCondition typeCondition, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.SelectionSet selectionSet) {
     if (fragmentName == null) {
       throw new IllegalArgumentException("null value for 'fragmentName' argument");
     }
@@ -62,7 +62,7 @@ public class FragmentDefinition implements Serializable {
     return new FragmentDefinition(fragmentName, typeCondition, directives, selectionSet);
   }
   
-  public FragmentDefinition withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+  public FragmentDefinition withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
     if (directives == null) {
       throw new IllegalArgumentException("null value for 'directives' argument");
     }

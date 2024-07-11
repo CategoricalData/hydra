@@ -9,9 +9,9 @@ public class ExactNumericType_Numeric_Option implements Serializable {
   
   public final hydra.langs.sql.ansi.Precision precision;
   
-  public final java.util.Optional<hydra.langs.sql.ansi.Scale> sequence;
+  public final hydra.util.Opt<hydra.langs.sql.ansi.Scale> sequence;
   
-  public ExactNumericType_Numeric_Option (hydra.langs.sql.ansi.Precision precision, java.util.Optional<hydra.langs.sql.ansi.Scale> sequence) {
+  public ExactNumericType_Numeric_Option (hydra.langs.sql.ansi.Precision precision, hydra.util.Opt<hydra.langs.sql.ansi.Scale> sequence) {
     if (precision == null) {
       throw new IllegalArgumentException("null value for 'precision' argument");
     }
@@ -43,7 +43,7 @@ public class ExactNumericType_Numeric_Option implements Serializable {
     return new ExactNumericType_Numeric_Option(precision, sequence);
   }
   
-  public ExactNumericType_Numeric_Option withSequence(java.util.Optional<hydra.langs.sql.ansi.Scale> sequence) {
+  public ExactNumericType_Numeric_Option withSequence(hydra.util.Opt<hydra.langs.sql.ansi.Scale> sequence) {
     if (sequence == null) {
       throw new IllegalArgumentException("null value for 'sequence' argument");
     }

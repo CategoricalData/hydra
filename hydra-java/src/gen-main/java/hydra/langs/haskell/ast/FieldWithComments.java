@@ -12,9 +12,9 @@ public class FieldWithComments implements Serializable {
   
   public final hydra.langs.haskell.ast.Field field;
   
-  public final java.util.Optional<String> comments;
+  public final hydra.util.Opt<String> comments;
   
-  public FieldWithComments (hydra.langs.haskell.ast.Field field, java.util.Optional<String> comments) {
+  public FieldWithComments (hydra.langs.haskell.ast.Field field, hydra.util.Opt<String> comments) {
     if (field == null) {
       throw new IllegalArgumentException("null value for 'field' argument");
     }
@@ -46,7 +46,7 @@ public class FieldWithComments implements Serializable {
     return new FieldWithComments(field, comments);
   }
   
-  public FieldWithComments withComments(java.util.Optional<String> comments) {
+  public FieldWithComments withComments(hydra.util.Opt<String> comments) {
     if (comments == null) {
       throw new IllegalArgumentException("null value for 'comments' argument");
     }

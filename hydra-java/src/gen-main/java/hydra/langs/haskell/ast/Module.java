@@ -7,13 +7,13 @@ import java.io.Serializable;
 public class Module implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Module");
   
-  public final java.util.Optional<hydra.langs.haskell.ast.ModuleHead> head;
+  public final hydra.util.Opt<hydra.langs.haskell.ast.ModuleHead> head;
   
   public final java.util.List<hydra.langs.haskell.ast.Import> imports;
   
   public final java.util.List<hydra.langs.haskell.ast.DeclarationWithComments> declarations;
   
-  public Module (java.util.Optional<hydra.langs.haskell.ast.ModuleHead> head, java.util.List<hydra.langs.haskell.ast.Import> imports, java.util.List<hydra.langs.haskell.ast.DeclarationWithComments> declarations) {
+  public Module (hydra.util.Opt<hydra.langs.haskell.ast.ModuleHead> head, java.util.List<hydra.langs.haskell.ast.Import> imports, java.util.List<hydra.langs.haskell.ast.DeclarationWithComments> declarations) {
     if (head == null) {
       throw new IllegalArgumentException("null value for 'head' argument");
     }
@@ -42,7 +42,7 @@ public class Module implements Serializable {
     return 2 * head.hashCode() + 3 * imports.hashCode() + 5 * declarations.hashCode();
   }
   
-  public Module withHead(java.util.Optional<hydra.langs.haskell.ast.ModuleHead> head) {
+  public Module withHead(hydra.util.Opt<hydra.langs.haskell.ast.ModuleHead> head) {
     if (head == null) {
       throw new IllegalArgumentException("null value for 'head' argument");
     }

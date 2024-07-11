@@ -9,9 +9,9 @@ public class DimExpr implements Serializable {
   
   public final java.util.List<hydra.langs.java.syntax.Annotation> annotations;
   
-  public final java.util.Optional<hydra.langs.java.syntax.Expression> expression;
+  public final hydra.util.Opt<hydra.langs.java.syntax.Expression> expression;
   
-  public DimExpr (java.util.List<hydra.langs.java.syntax.Annotation> annotations, java.util.Optional<hydra.langs.java.syntax.Expression> expression) {
+  public DimExpr (java.util.List<hydra.langs.java.syntax.Annotation> annotations, hydra.util.Opt<hydra.langs.java.syntax.Expression> expression) {
     if (annotations == null) {
       throw new IllegalArgumentException("null value for 'annotations' argument");
     }
@@ -43,7 +43,7 @@ public class DimExpr implements Serializable {
     return new DimExpr(annotations, expression);
   }
   
-  public DimExpr withExpression(java.util.Optional<hydra.langs.java.syntax.Expression> expression) {
+  public DimExpr withExpression(hydra.util.Opt<hydra.langs.java.syntax.Expression> expression) {
     if (expression == null) {
       throw new IllegalArgumentException("null value for 'expression' argument");
     }

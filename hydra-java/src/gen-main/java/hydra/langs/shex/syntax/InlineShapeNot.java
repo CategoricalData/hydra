@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class InlineShapeNot implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.InlineShapeNot");
   
-  public final java.util.Optional<java.lang.Void> nOT;
+  public final hydra.util.Opt<java.lang.Void> nOT;
   
   public final hydra.langs.shex.syntax.InlineShapeAtom inlineShapeAtom;
   
-  public InlineShapeNot (java.util.Optional<java.lang.Void> nOT, hydra.langs.shex.syntax.InlineShapeAtom inlineShapeAtom) {
+  public InlineShapeNot (hydra.util.Opt<java.lang.Void> nOT, hydra.langs.shex.syntax.InlineShapeAtom inlineShapeAtom) {
     if (nOT == null) {
       throw new IllegalArgumentException("null value for 'nOT' argument");
     }
@@ -36,7 +36,7 @@ public class InlineShapeNot implements Serializable {
     return 2 * nOT.hashCode() + 3 * inlineShapeAtom.hashCode();
   }
   
-  public InlineShapeNot withNOT(java.util.Optional<java.lang.Void> nOT) {
+  public InlineShapeNot withNOT(hydra.util.Opt<java.lang.Void> nOT) {
     if (nOT == null) {
       throw new IllegalArgumentException("null value for 'nOT' argument");
     }

@@ -13,9 +13,9 @@ public class UnqualifiedClassInstanceCreationExpression implements Serializable 
   
   public final java.util.List<hydra.langs.java.syntax.Expression> arguments;
   
-  public final java.util.Optional<hydra.langs.java.syntax.ClassBody> body;
+  public final hydra.util.Opt<hydra.langs.java.syntax.ClassBody> body;
   
-  public UnqualifiedClassInstanceCreationExpression (java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments, hydra.langs.java.syntax.ClassOrInterfaceTypeToInstantiate classOrInterface, java.util.List<hydra.langs.java.syntax.Expression> arguments, java.util.Optional<hydra.langs.java.syntax.ClassBody> body) {
+  public UnqualifiedClassInstanceCreationExpression (java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments, hydra.langs.java.syntax.ClassOrInterfaceTypeToInstantiate classOrInterface, java.util.List<hydra.langs.java.syntax.Expression> arguments, hydra.util.Opt<hydra.langs.java.syntax.ClassBody> body) {
     if (typeArguments == null) {
       throw new IllegalArgumentException("null value for 'typeArguments' argument");
     }
@@ -69,7 +69,7 @@ public class UnqualifiedClassInstanceCreationExpression implements Serializable 
     return new UnqualifiedClassInstanceCreationExpression(typeArguments, classOrInterface, arguments, body);
   }
   
-  public UnqualifiedClassInstanceCreationExpression withBody(java.util.Optional<hydra.langs.java.syntax.ClassBody> body) {
+  public UnqualifiedClassInstanceCreationExpression withBody(hydra.util.Opt<hydra.langs.java.syntax.ClassBody> body) {
     if (body == null) {
       throw new IllegalArgumentException("null value for 'body' argument");
     }

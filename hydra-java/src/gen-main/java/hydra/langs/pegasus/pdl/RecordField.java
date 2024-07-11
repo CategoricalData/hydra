@@ -13,11 +13,11 @@ public class RecordField implements Serializable {
   
   public final Boolean optional;
   
-  public final java.util.Optional<hydra.json.Value> default_;
+  public final hydra.util.Opt<hydra.json.Value> default_;
   
   public final hydra.langs.pegasus.pdl.Annotations annotations;
   
-  public RecordField (hydra.langs.pegasus.pdl.FieldName name, hydra.langs.pegasus.pdl.Schema value, Boolean optional, java.util.Optional<hydra.json.Value> default_, hydra.langs.pegasus.pdl.Annotations annotations) {
+  public RecordField (hydra.langs.pegasus.pdl.FieldName name, hydra.langs.pegasus.pdl.Schema value, Boolean optional, hydra.util.Opt<hydra.json.Value> default_, hydra.langs.pegasus.pdl.Annotations annotations) {
     if (name == null) {
       throw new IllegalArgumentException("null value for 'name' argument");
     }
@@ -75,7 +75,7 @@ public class RecordField implements Serializable {
     return new RecordField(name, value, optional, default_, annotations);
   }
   
-  public RecordField withDefault(java.util.Optional<hydra.json.Value> default_) {
+  public RecordField withDefault(hydra.util.Opt<hydra.json.Value> default_) {
     if (default_ == null) {
       throw new IllegalArgumentException("null value for 'default' argument");
     }

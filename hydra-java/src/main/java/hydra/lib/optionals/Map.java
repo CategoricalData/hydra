@@ -9,7 +9,7 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import java.util.List;
-import java.util.Optional;
+import hydra.util.Opt;
 import java.util.function.Function;
 
 import static hydra.Flows.bind;
@@ -36,20 +36,20 @@ public class Map<A> extends PrimitiveFunction<A> {
             opt -> pure(Terms.optional(opt)));
     }
 
-    public static <X, Y> Function<Optional<X>, Optional<Y>> apply(Function<X, Y> f) {
+    public static <X, Y> Function<Opt<X>, Opt<Y>> apply(Function<X, Y> f) {
         return (optionalArg) -> apply(f, optionalArg);
     }
 
     /**
      * Apply the function to both arguments.
      */
-    public static <X, Y> Optional<Y> apply(Function<X, Y> f, Optional<X> optionalArg) {
+    public static <X, Y> Opt<Y> apply(Function<X, Y> f, Opt<X> optionalArg) {
         if (!optionalArg.isPresent()) {
-            return Optional.empty();
+            return Opt.empty();
         }
 
         X arg = optionalArg.get();
 
-        return Optional.of(f.apply(arg));
+        return Opt.of(f.apply(arg));
     }
 }

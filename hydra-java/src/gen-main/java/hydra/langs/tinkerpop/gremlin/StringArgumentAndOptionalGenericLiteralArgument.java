@@ -9,9 +9,9 @@ public class StringArgumentAndOptionalGenericLiteralArgument implements Serializ
   
   public final hydra.langs.tinkerpop.gremlin.StringArgument string;
   
-  public final java.util.Optional<hydra.langs.tinkerpop.gremlin.GenericLiteralArgument> literal;
+  public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.GenericLiteralArgument> literal;
   
-  public StringArgumentAndOptionalGenericLiteralArgument (hydra.langs.tinkerpop.gremlin.StringArgument string, java.util.Optional<hydra.langs.tinkerpop.gremlin.GenericLiteralArgument> literal) {
+  public StringArgumentAndOptionalGenericLiteralArgument (hydra.langs.tinkerpop.gremlin.StringArgument string, hydra.util.Opt<hydra.langs.tinkerpop.gremlin.GenericLiteralArgument> literal) {
     if (string == null) {
       throw new IllegalArgumentException("null value for 'string' argument");
     }
@@ -43,7 +43,7 @@ public class StringArgumentAndOptionalGenericLiteralArgument implements Serializ
     return new StringArgumentAndOptionalGenericLiteralArgument(string, literal);
   }
   
-  public StringArgumentAndOptionalGenericLiteralArgument withLiteral(java.util.Optional<hydra.langs.tinkerpop.gremlin.GenericLiteralArgument> literal) {
+  public StringArgumentAndOptionalGenericLiteralArgument withLiteral(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.GenericLiteralArgument> literal) {
     if (literal == null) {
       throw new IllegalArgumentException("null value for 'literal' argument");
     }

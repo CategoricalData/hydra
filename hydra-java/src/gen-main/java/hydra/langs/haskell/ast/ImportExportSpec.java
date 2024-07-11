@@ -10,13 +10,13 @@ import java.io.Serializable;
 public class ImportExportSpec implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.ImportExportSpec");
   
-  public final java.util.Optional<hydra.langs.haskell.ast.ImportModifier> modifier;
+  public final hydra.util.Opt<hydra.langs.haskell.ast.ImportModifier> modifier;
   
   public final hydra.langs.haskell.ast.Name name;
   
-  public final java.util.Optional<hydra.langs.haskell.ast.ImportExportSpec_Subspec> subspec;
+  public final hydra.util.Opt<hydra.langs.haskell.ast.ImportExportSpec_Subspec> subspec;
   
-  public ImportExportSpec (java.util.Optional<hydra.langs.haskell.ast.ImportModifier> modifier, hydra.langs.haskell.ast.Name name, java.util.Optional<hydra.langs.haskell.ast.ImportExportSpec_Subspec> subspec) {
+  public ImportExportSpec (hydra.util.Opt<hydra.langs.haskell.ast.ImportModifier> modifier, hydra.langs.haskell.ast.Name name, hydra.util.Opt<hydra.langs.haskell.ast.ImportExportSpec_Subspec> subspec) {
     if (modifier == null) {
       throw new IllegalArgumentException("null value for 'modifier' argument");
     }
@@ -45,7 +45,7 @@ public class ImportExportSpec implements Serializable {
     return 2 * modifier.hashCode() + 3 * name.hashCode() + 5 * subspec.hashCode();
   }
   
-  public ImportExportSpec withModifier(java.util.Optional<hydra.langs.haskell.ast.ImportModifier> modifier) {
+  public ImportExportSpec withModifier(hydra.util.Opt<hydra.langs.haskell.ast.ImportModifier> modifier) {
     if (modifier == null) {
       throw new IllegalArgumentException("null value for 'modifier' argument");
     }
@@ -59,7 +59,7 @@ public class ImportExportSpec implements Serializable {
     return new ImportExportSpec(modifier, name, subspec);
   }
   
-  public ImportExportSpec withSubspec(java.util.Optional<hydra.langs.haskell.ast.ImportExportSpec_Subspec> subspec) {
+  public ImportExportSpec withSubspec(hydra.util.Opt<hydra.langs.haskell.ast.ImportExportSpec_Subspec> subspec) {
     if (subspec == null) {
       throw new IllegalArgumentException("null value for 'subspec' argument");
     }

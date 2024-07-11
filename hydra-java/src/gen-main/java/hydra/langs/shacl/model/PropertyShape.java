@@ -20,7 +20,7 @@ public class PropertyShape implements Serializable {
   /**
    * See https://www.w3.org/TR/shacl/#defaultValue
    */
-  public final java.util.Optional<hydra.langs.rdf.syntax.Node> defaultValue;
+  public final hydra.util.Opt<hydra.langs.rdf.syntax.Node> defaultValue;
   
   /**
    * See https://www.w3.org/TR/shacl/#name
@@ -35,11 +35,11 @@ public class PropertyShape implements Serializable {
   /**
    * See https://www.w3.org/TR/shacl/#order
    */
-  public final java.util.Optional<java.math.BigInteger> order;
+  public final hydra.util.Opt<java.math.BigInteger> order;
   
   public final hydra.langs.rdf.syntax.Iri path;
   
-  public PropertyShape (hydra.langs.shacl.model.CommonProperties common, java.util.Set<hydra.langs.shacl.model.PropertyShapeConstraint> constraints, java.util.Optional<hydra.langs.rdf.syntax.Node> defaultValue, hydra.langs.rdf.syntax.LangStrings description, hydra.langs.rdf.syntax.LangStrings name, java.util.Optional<java.math.BigInteger> order, hydra.langs.rdf.syntax.Iri path) {
+  public PropertyShape (hydra.langs.shacl.model.CommonProperties common, java.util.Set<hydra.langs.shacl.model.PropertyShapeConstraint> constraints, hydra.util.Opt<hydra.langs.rdf.syntax.Node> defaultValue, hydra.langs.rdf.syntax.LangStrings description, hydra.langs.rdf.syntax.LangStrings name, hydra.util.Opt<java.math.BigInteger> order, hydra.langs.rdf.syntax.Iri path) {
     if (common == null) {
       throw new IllegalArgumentException("null value for 'common' argument");
     }
@@ -98,7 +98,7 @@ public class PropertyShape implements Serializable {
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
   
-  public PropertyShape withDefaultValue(java.util.Optional<hydra.langs.rdf.syntax.Node> defaultValue) {
+  public PropertyShape withDefaultValue(hydra.util.Opt<hydra.langs.rdf.syntax.Node> defaultValue) {
     if (defaultValue == null) {
       throw new IllegalArgumentException("null value for 'defaultValue' argument");
     }
@@ -119,7 +119,7 @@ public class PropertyShape implements Serializable {
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
   
-  public PropertyShape withOrder(java.util.Optional<java.math.BigInteger> order) {
+  public PropertyShape withOrder(hydra.util.Opt<java.math.BigInteger> order) {
     if (order == null) {
       throw new IllegalArgumentException("null value for 'order' argument");
     }
