@@ -55,5 +55,9 @@ pure e = [e]
 reverse :: [a] -> [a]
 reverse = L.reverse
 
+safeHead :: [a] -> Maybe a
+safeHead [] = Nothing
+safeHead (x:_) = Just x
+
 tail :: [a] -> [a]
 tail = L.tail
