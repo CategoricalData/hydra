@@ -118,11 +118,11 @@ encodeEnumDefinition options (RowType tname _ fields) = do
     values <- CM.zipWithM encodeEnumField fields [1..]
     return $ P3.EnumDefinition {
       P3.enumDefinitionName = encodeTypeName tname,
-      P3.enumDefinitionValues = unknownField:values,
+      P3.enumDefinitionValues = unspecifiedField:values,
       P3.enumDefinitionOptions = options}
   where
-    unknownField = P3.EnumValue {
-      P3.enumValueName = encodeEnumValueName tname $ FieldName "unknown",
+    unspecifiedField = P3.EnumValue {
+      P3.enumValueName = encodeEnumValueName tname $ FieldName "unspecified",
       P3.enumValueNumber = 0,
       P3.enumValueOptions = []}
     encodeEnumField (FieldType fname ftype) idx = do
@@ -135,8 +135,9 @@ encodeEnumDefinition options (RowType tname _ fields) = do
 encodeEnumValueName :: Name -> FieldName -> P3.EnumValueName
 encodeEnumValueName tname fname = P3.EnumValueName (prefix ++ "_" ++ suffix)
   where
-    prefix = localNameOfEager tname
-    suffix = convertCase CaseConventionCamel CaseConventionUpperSnake $ unFieldName fname
+    prefix = toUpperSnake $ localNameOfEager tname
+    suffix = toUpperSnake $ unFieldName fname
+    toUpperSnake = convertCase CaseConventionCamel CaseConventionUpperSnake
 
 encodeFieldName :: Bool -> FieldName -> P3.FieldName
 encodeFieldName preserve = P3.FieldName . toPname . unFieldName
