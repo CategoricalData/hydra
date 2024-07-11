@@ -673,11 +673,11 @@ encodeTerm aliases term0 = encodeInternal [] term0
 
         TermOptional mt -> case mt of
           Nothing -> pure $ javaMethodInvocationToJavaExpression $
-            methodInvocationStatic (Java.Identifier "java.util.Optional") (Java.Identifier "empty") []
+            methodInvocationStatic (Java.Identifier "hydra.util.Opt") (Java.Identifier "empty") []
           Just term1 -> do
             expr <- encode term1
             return $ javaMethodInvocationToJavaExpression $
-              methodInvocationStatic (Java.Identifier "java.util.Optional") (Java.Identifier "of") [expr]
+              methodInvocationStatic (Java.Identifier "hydra.util.Opt") (Java.Identifier "of") [expr]
 
         TermProduct terms -> do
           jterms <- CM.mapM encode terms
@@ -752,7 +752,7 @@ encodeType aliases t = case stripType t of
       Java.TypeReference $ nameToJavaReferenceType aliases True (javaTypeArgumentsForType t) name Nothing
     TypeOptional ot -> do
       jot <- encode ot >>= javaTypeToJavaReferenceType
-      return $ javaRefType [jot] javaUtilPackageName "Optional"
+      return $ javaRefType [jot] hydraUtilPackageName "Opt"
     TypeSet st -> do
       jst <- encode st >>= javaTypeToJavaReferenceType
       return $ javaRefType [jst] javaUtilPackageName "Set"
