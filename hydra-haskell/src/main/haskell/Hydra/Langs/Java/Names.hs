@@ -26,6 +26,9 @@ javaPackageName parts = Java.PackageName (Java.Identifier <$> parts)
 hydraCorePackageName :: Maybe Java.PackageName
 hydraCorePackageName = Just $ javaPackageName ["hydra", "core"]
 
+hydraUtilPackageName :: Maybe Java.PackageName
+hydraUtilPackageName = Just $ javaPackageName ["hydra", "util"]
+
 javaLangPackageName :: Maybe Java.PackageName
 javaLangPackageName = Just $ javaPackageName ["java", "lang"]
 
