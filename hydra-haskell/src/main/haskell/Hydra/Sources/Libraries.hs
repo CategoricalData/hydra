@@ -83,6 +83,7 @@ _lists_nub = qname _hydra_lib_lists "nub" :: Name
 _lists_null = qname _hydra_lib_lists "null" :: Name
 _lists_pure = qname _hydra_lib_lists "pure" :: Name
 _lists_reverse = qname _hydra_lib_lists "reverse" :: Name
+_lists_safeHead = qname _hydra_lib_lists "safeHead" :: Name
 _lists_tail = qname _hydra_lib_lists "tail" :: Name
 
 _hydra_lib_literals :: Namespace
@@ -274,6 +275,7 @@ hydraLibListsPrimitives = [
     prim1 _lists_null (list x) boolean Lists.null,
     prim1 _lists_pure x (list x) Lists.pure,
     prim1 _lists_reverse (list x) (list x) Lists.reverse,
+    prim1 _lists_safeHead (list x) (optional x) Lists.safeHead,
     prim1 _lists_tail (list x) (list x) Lists.tail]
   where
     x = variable "x"

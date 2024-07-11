@@ -44,5 +44,8 @@ pure = Datum $ Terms.primitive _lists_pure
 reverse :: Datum ([a] -> [a])
 reverse = Datum $ Terms.primitive _lists_reverse
 
+safeHead :: Datum ([a] -> Maybe a)
+safeHead = Datum $ Terms.primitive _lists_safeHead
+
 tail :: Datum ([a] -> [a])
 tail = Datum $ Terms.primitive _lists_tail
