@@ -5,6 +5,7 @@ package hydra.basics;
 import hydra.graph.Graph;
 import hydra.module.Namespace;
 import hydra.util.Opt;
+import hydra.util.Tuple;
 
 /**
  * A tier-2 module of basic functions for working with types and terms.
@@ -579,14 +580,14 @@ public interface Basics {
   }
   
   static <A> java.util.Map<hydra.core.FieldName, hydra.core.Term<A>> fieldMap(java.util.List<hydra.core.Field<A>> fields) {
-    java.util.function.Function<hydra.core.Field<A>, hydra.core.Tuple.Tuple2<hydra.core.FieldName, hydra.core.Term<A>>> toPair = (java.util.function.Function<hydra.core.Field<A>, hydra.core.Tuple.Tuple2<hydra.core.FieldName, hydra.core.Term<A>>>) (f -> new hydra.core.Tuple.Tuple2(((f)).name, ((f)).term));
+    java.util.function.Function<hydra.core.Field<A>, Tuple.Tuple2<hydra.core.FieldName, hydra.core.Term<A>>> toPair = (java.util.function.Function<hydra.core.Field<A>, Tuple.Tuple2<hydra.core.FieldName, hydra.core.Term<A>>>) (f -> new Tuple.Tuple2(((f)).name, ((f)).term));
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
       (toPair),
       (fields)));
   }
   
   static <A> java.util.Map<hydra.core.FieldName, hydra.core.Type<A>> fieldTypeMap(java.util.List<hydra.core.FieldType<A>> fields) {
-    java.util.function.Function<hydra.core.FieldType<A>, hydra.core.Tuple.Tuple2<hydra.core.FieldName, hydra.core.Type<A>>> toPair = (java.util.function.Function<hydra.core.FieldType<A>, hydra.core.Tuple.Tuple2<hydra.core.FieldName, hydra.core.Type<A>>>) (f -> new hydra.core.Tuple.Tuple2(((f)).name, ((f)).type));
+    java.util.function.Function<hydra.core.FieldType<A>, Tuple.Tuple2<hydra.core.FieldName, hydra.core.Type<A>>> toPair = (java.util.function.Function<hydra.core.FieldType<A>, Tuple.Tuple2<hydra.core.FieldName, hydra.core.Type<A>>>) (f -> new Tuple.Tuple2(((f)).name, ((f)).type));
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
       (toPair),
       (fields)));
@@ -653,7 +654,7 @@ public interface Basics {
   
   static <A> java.util.function.Function<Opt<Graph<A>>, java.util.function.Function<java.util.List<hydra.graph.Element<A>>, hydra.graph.Graph<A>>> elementsToGraph(hydra.graph.Graph<A> parent) {
     return (java.util.function.Function<Opt<Graph<A>>, java.util.function.Function<java.util.List<hydra.graph.Element<A>>, hydra.graph.Graph<A>>>) (schema -> (java.util.function.Function<java.util.List<hydra.graph.Element<A>>, hydra.graph.Graph<A>>) (elements -> {
-      java.util.function.Function<hydra.graph.Element<A>, hydra.core.Tuple.Tuple2<hydra.core.Name, hydra.graph.Element<A>>> toPair = (java.util.function.Function<hydra.graph.Element<A>, hydra.core.Tuple.Tuple2<hydra.core.Name, hydra.graph.Element<A>>>) (el -> new hydra.core.Tuple.Tuple2(((el)).name, (el)));
+      java.util.function.Function<hydra.graph.Element<A>, Tuple.Tuple2<hydra.core.Name, hydra.graph.Element<A>>> toPair = (java.util.function.Function<hydra.graph.Element<A>, Tuple.Tuple2<hydra.core.Name, hydra.graph.Element<A>>>) (el -> new Tuple.Tuple2(((el)).name, (el)));
       return new hydra.graph.Graph(hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
         (toPair),
         (elements))), ((parent)).environment, ((parent)).body, ((parent)).primitives, ((parent)).annotations, (schema));

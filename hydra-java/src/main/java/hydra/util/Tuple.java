@@ -1,4 +1,4 @@
-package hydra.core;
+package hydra.util;
 
 /**
  * A simple class for tuples (instances of product types) in Java.
@@ -47,7 +47,7 @@ public abstract class Tuple {
     }
 
     /**
-     * A four-tuple.
+     * A four-tuple, i.e. a quad.
      */
     public static class Tuple4<T1, T2, T3, T4> extends Tuple3<T1, T2, T3> {
         public final T4 object4;

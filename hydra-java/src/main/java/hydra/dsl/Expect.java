@@ -10,7 +10,7 @@ import hydra.core.IntegerValue;
 import hydra.core.Literal;
 import hydra.core.Name;
 import hydra.core.Term;
-import hydra.core.Tuple;
+import hydra.util.Tuple;
 import hydra.core.Type;
 import hydra.graph.Graph;
 import hydra.tools.PrettyPrinter;
