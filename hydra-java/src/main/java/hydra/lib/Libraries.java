@@ -113,6 +113,7 @@ public class Libraries {
                 new hydra.lib.lists.Null<>(),
                 new hydra.lib.lists.Pure<>(),
                 new hydra.lib.lists.Reverse<>(),
+                new hydra.lib.lists.SafeHead<>(),
                 new hydra.lib.lists.Tail<>());
     }
 
