@@ -10,9 +10,7 @@ public class Data_EndMarker implements Serializable {
   public final hydra.langs.scala.meta.Data_Name name;
   
   public Data_EndMarker (hydra.langs.scala.meta.Data_Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     this.name = name;
   }
   

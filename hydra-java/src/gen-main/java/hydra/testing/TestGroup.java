@@ -2,8 +2,6 @@
 
 package hydra.testing;
 
-import hydra.util.Opt;
-
 import java.io.Serializable;
 
 /**
@@ -14,25 +12,17 @@ public class TestGroup<A> implements Serializable {
   
   public final String name;
   
-  public final Opt<String> description;
+  public final hydra.util.Opt<String> description;
   
   public final java.util.List<hydra.testing.TestGroup<A>> subgroups;
   
   public final java.util.List<hydra.testing.TestCase<A>> cases;
   
-  public TestGroup (String name, Opt<String> description, java.util.List<hydra.testing.TestGroup<A>> subgroups, java.util.List<hydra.testing.TestCase<A>> cases) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
-    if (subgroups == null) {
-      throw new IllegalArgumentException("null value for 'subgroups' argument");
-    }
-    if (cases == null) {
-      throw new IllegalArgumentException("null value for 'cases' argument");
-    }
+  public TestGroup (String name, hydra.util.Opt<String> description, java.util.List<hydra.testing.TestGroup<A>> subgroups, java.util.List<hydra.testing.TestCase<A>> cases) {
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((description));
+    java.util.Objects.requireNonNull((subgroups));
+    java.util.Objects.requireNonNull((cases));
     this.name = name;
     this.description = description;
     this.subgroups = subgroups;
@@ -54,30 +44,22 @@ public class TestGroup<A> implements Serializable {
   }
   
   public TestGroup withName(String name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new TestGroup(name, description, subgroups, cases);
   }
   
-  public TestGroup withDescription(Opt<String> description) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
+  public TestGroup withDescription(hydra.util.Opt<String> description) {
+    java.util.Objects.requireNonNull((description));
     return new TestGroup(name, description, subgroups, cases);
   }
   
   public TestGroup withSubgroups(java.util.List<hydra.testing.TestGroup<A>> subgroups) {
-    if (subgroups == null) {
-      throw new IllegalArgumentException("null value for 'subgroups' argument");
-    }
+    java.util.Objects.requireNonNull((subgroups));
     return new TestGroup(name, description, subgroups, cases);
   }
   
   public TestGroup withCases(java.util.List<hydra.testing.TestCase<A>> cases) {
-    if (cases == null) {
-      throw new IllegalArgumentException("null value for 'cases' argument");
-    }
+    java.util.Objects.requireNonNull((cases));
     return new TestGroup(name, description, subgroups, cases);
   }
 }

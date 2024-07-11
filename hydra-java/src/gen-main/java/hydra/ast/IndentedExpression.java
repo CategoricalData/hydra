@@ -15,12 +15,8 @@ public class IndentedExpression implements Serializable {
   public final hydra.ast.Expr expr;
   
   public IndentedExpression (hydra.ast.IndentStyle style, hydra.ast.Expr expr) {
-    if (style == null) {
-      throw new IllegalArgumentException("null value for 'style' argument");
-    }
-    if (expr == null) {
-      throw new IllegalArgumentException("null value for 'expr' argument");
-    }
+    java.util.Objects.requireNonNull((style));
+    java.util.Objects.requireNonNull((expr));
     this.style = style;
     this.expr = expr;
   }
@@ -40,16 +36,12 @@ public class IndentedExpression implements Serializable {
   }
   
   public IndentedExpression withStyle(hydra.ast.IndentStyle style) {
-    if (style == null) {
-      throw new IllegalArgumentException("null value for 'style' argument");
-    }
+    java.util.Objects.requireNonNull((style));
     return new IndentedExpression(style, expr);
   }
   
   public IndentedExpression withExpr(hydra.ast.Expr expr) {
-    if (expr == null) {
-      throw new IllegalArgumentException("null value for 'expr' argument");
-    }
+    java.util.Objects.requireNonNull((expr));
     return new IndentedExpression(style, expr);
   }
 }

@@ -49,9 +49,7 @@ public abstract class ShiftExpression implements Serializable {
     public final hydra.langs.java.syntax.AdditiveExpression value;
     
     public Unary (hydra.langs.java.syntax.AdditiveExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -79,9 +77,7 @@ public abstract class ShiftExpression implements Serializable {
     public final hydra.langs.java.syntax.ShiftExpression_Binary value;
     
     public ShiftLeft (hydra.langs.java.syntax.ShiftExpression_Binary value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -109,9 +105,7 @@ public abstract class ShiftExpression implements Serializable {
     public final hydra.langs.java.syntax.ShiftExpression_Binary value;
     
     public ShiftRight (hydra.langs.java.syntax.ShiftExpression_Binary value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -139,9 +133,7 @@ public abstract class ShiftExpression implements Serializable {
     public final hydra.langs.java.syntax.ShiftExpression_Binary value;
     
     public ShiftRightZeroFill (hydra.langs.java.syntax.ShiftExpression_Binary value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

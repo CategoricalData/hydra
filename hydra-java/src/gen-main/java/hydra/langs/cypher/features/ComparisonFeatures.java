@@ -46,27 +46,13 @@ public class ComparisonFeatures implements Serializable {
   public final Boolean nullIf;
   
   public ComparisonFeatures (Boolean equal, Boolean greaterThan, Boolean greaterThanOrEqual, Boolean lessThan, Boolean lessThanOrEqual, Boolean notEqual, Boolean nullIf) {
-    if (equal == null) {
-      throw new IllegalArgumentException("null value for 'equal' argument");
-    }
-    if (greaterThan == null) {
-      throw new IllegalArgumentException("null value for 'greaterThan' argument");
-    }
-    if (greaterThanOrEqual == null) {
-      throw new IllegalArgumentException("null value for 'greaterThanOrEqual' argument");
-    }
-    if (lessThan == null) {
-      throw new IllegalArgumentException("null value for 'lessThan' argument");
-    }
-    if (lessThanOrEqual == null) {
-      throw new IllegalArgumentException("null value for 'lessThanOrEqual' argument");
-    }
-    if (notEqual == null) {
-      throw new IllegalArgumentException("null value for 'notEqual' argument");
-    }
-    if (nullIf == null) {
-      throw new IllegalArgumentException("null value for 'nullIf' argument");
-    }
+    java.util.Objects.requireNonNull((equal));
+    java.util.Objects.requireNonNull((greaterThan));
+    java.util.Objects.requireNonNull((greaterThanOrEqual));
+    java.util.Objects.requireNonNull((lessThan));
+    java.util.Objects.requireNonNull((lessThanOrEqual));
+    java.util.Objects.requireNonNull((notEqual));
+    java.util.Objects.requireNonNull((nullIf));
     this.equal = equal;
     this.greaterThan = greaterThan;
     this.greaterThanOrEqual = greaterThanOrEqual;
@@ -91,51 +77,37 @@ public class ComparisonFeatures implements Serializable {
   }
   
   public ComparisonFeatures withEqual(Boolean equal) {
-    if (equal == null) {
-      throw new IllegalArgumentException("null value for 'equal' argument");
-    }
+    java.util.Objects.requireNonNull((equal));
     return new ComparisonFeatures(equal, greaterThan, greaterThanOrEqual, lessThan, lessThanOrEqual, notEqual, nullIf);
   }
   
   public ComparisonFeatures withGreaterThan(Boolean greaterThan) {
-    if (greaterThan == null) {
-      throw new IllegalArgumentException("null value for 'greaterThan' argument");
-    }
+    java.util.Objects.requireNonNull((greaterThan));
     return new ComparisonFeatures(equal, greaterThan, greaterThanOrEqual, lessThan, lessThanOrEqual, notEqual, nullIf);
   }
   
   public ComparisonFeatures withGreaterThanOrEqual(Boolean greaterThanOrEqual) {
-    if (greaterThanOrEqual == null) {
-      throw new IllegalArgumentException("null value for 'greaterThanOrEqual' argument");
-    }
+    java.util.Objects.requireNonNull((greaterThanOrEqual));
     return new ComparisonFeatures(equal, greaterThan, greaterThanOrEqual, lessThan, lessThanOrEqual, notEqual, nullIf);
   }
   
   public ComparisonFeatures withLessThan(Boolean lessThan) {
-    if (lessThan == null) {
-      throw new IllegalArgumentException("null value for 'lessThan' argument");
-    }
+    java.util.Objects.requireNonNull((lessThan));
     return new ComparisonFeatures(equal, greaterThan, greaterThanOrEqual, lessThan, lessThanOrEqual, notEqual, nullIf);
   }
   
   public ComparisonFeatures withLessThanOrEqual(Boolean lessThanOrEqual) {
-    if (lessThanOrEqual == null) {
-      throw new IllegalArgumentException("null value for 'lessThanOrEqual' argument");
-    }
+    java.util.Objects.requireNonNull((lessThanOrEqual));
     return new ComparisonFeatures(equal, greaterThan, greaterThanOrEqual, lessThan, lessThanOrEqual, notEqual, nullIf);
   }
   
   public ComparisonFeatures withNotEqual(Boolean notEqual) {
-    if (notEqual == null) {
-      throw new IllegalArgumentException("null value for 'notEqual' argument");
-    }
+    java.util.Objects.requireNonNull((notEqual));
     return new ComparisonFeatures(equal, greaterThan, greaterThanOrEqual, lessThan, lessThanOrEqual, notEqual, nullIf);
   }
   
   public ComparisonFeatures withNullIf(Boolean nullIf) {
-    if (nullIf == null) {
-      throw new IllegalArgumentException("null value for 'nullIf' argument");
-    }
+    java.util.Objects.requireNonNull((nullIf));
     return new ComparisonFeatures(equal, greaterThan, greaterThanOrEqual, lessThan, lessThanOrEqual, notEqual, nullIf);
   }
 }

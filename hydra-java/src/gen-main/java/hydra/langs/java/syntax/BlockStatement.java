@@ -43,9 +43,7 @@ public abstract class BlockStatement implements Serializable {
     public final hydra.langs.java.syntax.LocalVariableDeclarationStatement value;
     
     public LocalVariableDeclaration (hydra.langs.java.syntax.LocalVariableDeclarationStatement value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class BlockStatement implements Serializable {
     public final hydra.langs.java.syntax.ClassDeclaration value;
     
     public Class_ (hydra.langs.java.syntax.ClassDeclaration value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class BlockStatement implements Serializable {
     public final hydra.langs.java.syntax.Statement value;
     
     public Statement (hydra.langs.java.syntax.Statement value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -10,9 +10,7 @@ public class ObjectComplementOf implements Serializable {
   public final hydra.langs.owl.syntax.ClassExpression value;
   
   public ObjectComplementOf (hydra.langs.owl.syntax.ClassExpression value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

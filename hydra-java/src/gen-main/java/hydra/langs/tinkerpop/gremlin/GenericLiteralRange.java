@@ -37,9 +37,7 @@ public abstract class GenericLiteralRange implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.IntegerRange value;
     
     public Integer_ (hydra.langs.tinkerpop.gremlin.IntegerRange value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class GenericLiteralRange implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.StringRange value;
     
     public String_ (hydra.langs.tinkerpop.gremlin.StringRange value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

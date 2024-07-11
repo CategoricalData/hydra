@@ -21,12 +21,8 @@ public class Query<A> implements Serializable {
   public final java.util.List<hydra.query.Pattern<A>> patterns;
   
   public Query (java.util.List<hydra.query.Variable> variables, java.util.List<hydra.query.Pattern<A>> patterns) {
-    if (variables == null) {
-      throw new IllegalArgumentException("null value for 'variables' argument");
-    }
-    if (patterns == null) {
-      throw new IllegalArgumentException("null value for 'patterns' argument");
-    }
+    java.util.Objects.requireNonNull((variables));
+    java.util.Objects.requireNonNull((patterns));
     this.variables = variables;
     this.patterns = patterns;
   }
@@ -46,16 +42,12 @@ public class Query<A> implements Serializable {
   }
   
   public Query withVariables(java.util.List<hydra.query.Variable> variables) {
-    if (variables == null) {
-      throw new IllegalArgumentException("null value for 'variables' argument");
-    }
+    java.util.Objects.requireNonNull((variables));
     return new Query(variables, patterns);
   }
   
   public Query withPatterns(java.util.List<hydra.query.Pattern<A>> patterns) {
-    if (patterns == null) {
-      throw new IllegalArgumentException("null value for 'patterns' argument");
-    }
+    java.util.Objects.requireNonNull((patterns));
     return new Query(variables, patterns);
   }
 }

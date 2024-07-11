@@ -37,9 +37,7 @@ public abstract class XsFacet implements Serializable {
     public final hydra.langs.shex.syntax.StringFacet value;
     
     public StringFacet (hydra.langs.shex.syntax.StringFacet value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class XsFacet implements Serializable {
     public final hydra.langs.shex.syntax.NumericFacet value;
     
     public NumericFacet (hydra.langs.shex.syntax.NumericFacet value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

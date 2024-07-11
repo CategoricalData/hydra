@@ -67,9 +67,7 @@ public abstract class CommonValueExpression implements Serializable {
     public final hydra.langs.sql.ansi.NumericValueExpression value;
     
     public Numeric (hydra.langs.sql.ansi.NumericValueExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -97,9 +95,7 @@ public abstract class CommonValueExpression implements Serializable {
     public final hydra.langs.sql.ansi.StringValueExpression value;
     
     public String_ (hydra.langs.sql.ansi.StringValueExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -127,9 +123,7 @@ public abstract class CommonValueExpression implements Serializable {
     public final hydra.langs.sql.ansi.DatetimeValueExpression value;
     
     public Datetime (hydra.langs.sql.ansi.DatetimeValueExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -157,9 +151,7 @@ public abstract class CommonValueExpression implements Serializable {
     public final hydra.langs.sql.ansi.IntervalValueExpression value;
     
     public Interval (hydra.langs.sql.ansi.IntervalValueExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -187,9 +179,7 @@ public abstract class CommonValueExpression implements Serializable {
     public final hydra.langs.sql.ansi.UserDefinedTypeValueExpression value;
     
     public UserDefined (hydra.langs.sql.ansi.UserDefinedTypeValueExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -217,9 +207,7 @@ public abstract class CommonValueExpression implements Serializable {
     public final hydra.langs.sql.ansi.ReferenceValueExpression value;
     
     public Reference (hydra.langs.sql.ansi.ReferenceValueExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -247,9 +235,7 @@ public abstract class CommonValueExpression implements Serializable {
     public final hydra.langs.sql.ansi.CollectionValueExpression value;
     
     public Collection (hydra.langs.sql.ansi.CollectionValueExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

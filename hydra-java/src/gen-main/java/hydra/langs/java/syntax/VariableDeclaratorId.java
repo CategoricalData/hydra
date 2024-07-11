@@ -12,12 +12,8 @@ public class VariableDeclaratorId implements Serializable {
   public final hydra.util.Opt<hydra.langs.java.syntax.Dims> dims;
   
   public VariableDeclaratorId (hydra.langs.java.syntax.Identifier identifier, hydra.util.Opt<hydra.langs.java.syntax.Dims> dims) {
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
-    if (dims == null) {
-      throw new IllegalArgumentException("null value for 'dims' argument");
-    }
+    java.util.Objects.requireNonNull((identifier));
+    java.util.Objects.requireNonNull((dims));
     this.identifier = identifier;
     this.dims = dims;
   }
@@ -37,16 +33,12 @@ public class VariableDeclaratorId implements Serializable {
   }
   
   public VariableDeclaratorId withIdentifier(hydra.langs.java.syntax.Identifier identifier) {
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
+    java.util.Objects.requireNonNull((identifier));
     return new VariableDeclaratorId(identifier, dims);
   }
   
   public VariableDeclaratorId withDims(hydra.util.Opt<hydra.langs.java.syntax.Dims> dims) {
-    if (dims == null) {
-      throw new IllegalArgumentException("null value for 'dims' argument");
-    }
+    java.util.Objects.requireNonNull((dims));
     return new VariableDeclaratorId(identifier, dims);
   }
 }

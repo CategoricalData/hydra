@@ -12,12 +12,8 @@ public class TypeDeclarationWithComments implements Serializable {
   public final hydra.util.Opt<String> comments;
   
   public TypeDeclarationWithComments (hydra.langs.java.syntax.TypeDeclaration value, hydra.util.Opt<String> comments) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
-    if (comments == null) {
-      throw new IllegalArgumentException("null value for 'comments' argument");
-    }
+    java.util.Objects.requireNonNull((value));
+    java.util.Objects.requireNonNull((comments));
     this.value = value;
     this.comments = comments;
   }
@@ -37,16 +33,12 @@ public class TypeDeclarationWithComments implements Serializable {
   }
   
   public TypeDeclarationWithComments withValue(hydra.langs.java.syntax.TypeDeclaration value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     return new TypeDeclarationWithComments(value, comments);
   }
   
   public TypeDeclarationWithComments withComments(hydra.util.Opt<String> comments) {
-    if (comments == null) {
-      throw new IllegalArgumentException("null value for 'comments' argument");
-    }
+    java.util.Objects.requireNonNull((comments));
     return new TypeDeclarationWithComments(value, comments);
   }
 }

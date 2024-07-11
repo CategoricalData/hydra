@@ -10,9 +10,7 @@ public class Defn_Object implements Serializable {
   public final hydra.langs.scala.meta.Data_Name name;
   
   public Defn_Object (hydra.langs.scala.meta.Data_Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     this.name = name;
   }
   

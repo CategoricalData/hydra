@@ -40,9 +40,7 @@ public abstract class Import_Spec implements Serializable {
     public final java.util.List<hydra.langs.haskell.ast.ImportExportSpec> value;
     
     public List (java.util.List<hydra.langs.haskell.ast.ImportExportSpec> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -70,9 +68,7 @@ public abstract class Import_Spec implements Serializable {
     public final java.util.List<hydra.langs.haskell.ast.ImportExportSpec> value;
     
     public Hiding (java.util.List<hydra.langs.haskell.ast.ImportExportSpec> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

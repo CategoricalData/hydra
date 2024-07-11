@@ -12,12 +12,8 @@ public class CatchClause implements Serializable {
   public final hydra.langs.java.syntax.Block block;
   
   public CatchClause (hydra.util.Opt<hydra.langs.java.syntax.CatchFormalParameter> parameter, hydra.langs.java.syntax.Block block) {
-    if (parameter == null) {
-      throw new IllegalArgumentException("null value for 'parameter' argument");
-    }
-    if (block == null) {
-      throw new IllegalArgumentException("null value for 'block' argument");
-    }
+    java.util.Objects.requireNonNull((parameter));
+    java.util.Objects.requireNonNull((block));
     this.parameter = parameter;
     this.block = block;
   }
@@ -37,16 +33,12 @@ public class CatchClause implements Serializable {
   }
   
   public CatchClause withParameter(hydra.util.Opt<hydra.langs.java.syntax.CatchFormalParameter> parameter) {
-    if (parameter == null) {
-      throw new IllegalArgumentException("null value for 'parameter' argument");
-    }
+    java.util.Objects.requireNonNull((parameter));
     return new CatchClause(parameter, block);
   }
   
   public CatchClause withBlock(hydra.langs.java.syntax.Block block) {
-    if (block == null) {
-      throw new IllegalArgumentException("null value for 'block' argument");
-    }
+    java.util.Objects.requireNonNull((block));
     return new CatchClause(parameter, block);
   }
 }

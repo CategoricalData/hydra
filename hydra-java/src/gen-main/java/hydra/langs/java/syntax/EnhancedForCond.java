@@ -16,18 +16,10 @@ public class EnhancedForCond implements Serializable {
   public final hydra.langs.java.syntax.Expression expression;
   
   public EnhancedForCond (java.util.List<hydra.langs.java.syntax.VariableModifier> modifiers, hydra.langs.java.syntax.LocalVariableType type, hydra.langs.java.syntax.VariableDeclaratorId id, hydra.langs.java.syntax.Expression expression) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (id == null) {
-      throw new IllegalArgumentException("null value for 'id' argument");
-    }
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((id));
+    java.util.Objects.requireNonNull((expression));
     this.modifiers = modifiers;
     this.type = type;
     this.id = id;
@@ -49,30 +41,22 @@ public class EnhancedForCond implements Serializable {
   }
   
   public EnhancedForCond withModifiers(java.util.List<hydra.langs.java.syntax.VariableModifier> modifiers) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
     return new EnhancedForCond(modifiers, type, id, expression);
   }
   
   public EnhancedForCond withType(hydra.langs.java.syntax.LocalVariableType type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new EnhancedForCond(modifiers, type, id, expression);
   }
   
   public EnhancedForCond withId(hydra.langs.java.syntax.VariableDeclaratorId id) {
-    if (id == null) {
-      throw new IllegalArgumentException("null value for 'id' argument");
-    }
+    java.util.Objects.requireNonNull((id));
     return new EnhancedForCond(modifiers, type, id, expression);
   }
   
   public EnhancedForCond withExpression(hydra.langs.java.syntax.Expression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new EnhancedForCond(modifiers, type, id, expression);
   }
 }

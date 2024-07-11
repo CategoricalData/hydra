@@ -14,15 +14,9 @@ public class OrdinaryCompilationUnit implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.TypeDeclarationWithComments> types;
   
   public OrdinaryCompilationUnit (hydra.util.Opt<hydra.langs.java.syntax.PackageDeclaration> package_, java.util.List<hydra.langs.java.syntax.ImportDeclaration> imports, java.util.List<hydra.langs.java.syntax.TypeDeclarationWithComments> types) {
-    if (package_ == null) {
-      throw new IllegalArgumentException("null value for 'package' argument");
-    }
-    if (imports == null) {
-      throw new IllegalArgumentException("null value for 'imports' argument");
-    }
-    if (types == null) {
-      throw new IllegalArgumentException("null value for 'types' argument");
-    }
+    java.util.Objects.requireNonNull((package_));
+    java.util.Objects.requireNonNull((imports));
+    java.util.Objects.requireNonNull((types));
     this.package_ = package_;
     this.imports = imports;
     this.types = types;
@@ -43,23 +37,17 @@ public class OrdinaryCompilationUnit implements Serializable {
   }
   
   public OrdinaryCompilationUnit withPackage(hydra.util.Opt<hydra.langs.java.syntax.PackageDeclaration> package_) {
-    if (package_ == null) {
-      throw new IllegalArgumentException("null value for 'package' argument");
-    }
+    java.util.Objects.requireNonNull((package_));
     return new OrdinaryCompilationUnit(package_, imports, types);
   }
   
   public OrdinaryCompilationUnit withImports(java.util.List<hydra.langs.java.syntax.ImportDeclaration> imports) {
-    if (imports == null) {
-      throw new IllegalArgumentException("null value for 'imports' argument");
-    }
+    java.util.Objects.requireNonNull((imports));
     return new OrdinaryCompilationUnit(package_, imports, types);
   }
   
   public OrdinaryCompilationUnit withTypes(java.util.List<hydra.langs.java.syntax.TypeDeclarationWithComments> types) {
-    if (types == null) {
-      throw new IllegalArgumentException("null value for 'types' argument");
-    }
+    java.util.Objects.requireNonNull((types));
     return new OrdinaryCompilationUnit(package_, imports, types);
   }
 }

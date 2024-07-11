@@ -37,9 +37,7 @@ public abstract class LocalBinding implements Serializable {
     public final hydra.langs.haskell.ast.TypeSignature value;
     
     public Signature (hydra.langs.haskell.ast.TypeSignature value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class LocalBinding implements Serializable {
     public final hydra.langs.haskell.ast.ValueBinding value;
     
     public Value (hydra.langs.haskell.ast.ValueBinding value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

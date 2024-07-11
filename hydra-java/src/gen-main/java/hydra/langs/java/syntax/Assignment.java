@@ -14,15 +14,9 @@ public class Assignment implements Serializable {
   public final hydra.langs.java.syntax.Expression expression;
   
   public Assignment (hydra.langs.java.syntax.LeftHandSide lhs, hydra.langs.java.syntax.AssignmentOperator op, hydra.langs.java.syntax.Expression expression) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
-    if (op == null) {
-      throw new IllegalArgumentException("null value for 'op' argument");
-    }
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
+    java.util.Objects.requireNonNull((op));
+    java.util.Objects.requireNonNull((expression));
     this.lhs = lhs;
     this.op = op;
     this.expression = expression;
@@ -43,23 +37,17 @@ public class Assignment implements Serializable {
   }
   
   public Assignment withLhs(hydra.langs.java.syntax.LeftHandSide lhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
     return new Assignment(lhs, op, expression);
   }
   
   public Assignment withOp(hydra.langs.java.syntax.AssignmentOperator op) {
-    if (op == null) {
-      throw new IllegalArgumentException("null value for 'op' argument");
-    }
+    java.util.Objects.requireNonNull((op));
     return new Assignment(lhs, op, expression);
   }
   
   public Assignment withExpression(hydra.langs.java.syntax.Expression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new Assignment(lhs, op, expression);
   }
 }

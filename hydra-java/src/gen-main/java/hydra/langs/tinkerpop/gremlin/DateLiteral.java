@@ -10,9 +10,7 @@ public class DateLiteral implements Serializable {
   public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> value;
   
   public DateLiteral (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

@@ -31,9 +31,7 @@ public abstract class ValueBinding implements Serializable {
     public final hydra.langs.haskell.ast.ValueBinding_Simple value;
     
     public Simple (hydra.langs.haskell.ast.ValueBinding_Simple value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

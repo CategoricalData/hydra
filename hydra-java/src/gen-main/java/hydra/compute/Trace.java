@@ -20,15 +20,9 @@ public class Trace implements Serializable {
   public final java.util.Map<String, hydra.core.Term<hydra.compute.Kv>> other;
   
   public Trace (java.util.List<String> stack, java.util.List<String> messages, java.util.Map<String, hydra.core.Term<hydra.compute.Kv>> other) {
-    if (stack == null) {
-      throw new IllegalArgumentException("null value for 'stack' argument");
-    }
-    if (messages == null) {
-      throw new IllegalArgumentException("null value for 'messages' argument");
-    }
-    if (other == null) {
-      throw new IllegalArgumentException("null value for 'other' argument");
-    }
+    java.util.Objects.requireNonNull((stack));
+    java.util.Objects.requireNonNull((messages));
+    java.util.Objects.requireNonNull((other));
     this.stack = stack;
     this.messages = messages;
     this.other = other;
@@ -49,23 +43,17 @@ public class Trace implements Serializable {
   }
   
   public Trace withStack(java.util.List<String> stack) {
-    if (stack == null) {
-      throw new IllegalArgumentException("null value for 'stack' argument");
-    }
+    java.util.Objects.requireNonNull((stack));
     return new Trace(stack, messages, other);
   }
   
   public Trace withMessages(java.util.List<String> messages) {
-    if (messages == null) {
-      throw new IllegalArgumentException("null value for 'messages' argument");
-    }
+    java.util.Objects.requireNonNull((messages));
     return new Trace(stack, messages, other);
   }
   
   public Trace withOther(java.util.Map<String, hydra.core.Term<hydra.compute.Kv>> other) {
-    if (other == null) {
-      throw new IllegalArgumentException("null value for 'other' argument");
-    }
+    java.util.Objects.requireNonNull((other));
     return new Trace(stack, messages, other);
   }
 }

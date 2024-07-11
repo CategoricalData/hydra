@@ -108,9 +108,7 @@ public abstract class LiteralType implements Serializable {
     public final hydra.core.FloatType value;
     
     public Float_ (hydra.core.FloatType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -138,9 +136,7 @@ public abstract class LiteralType implements Serializable {
     public final hydra.core.IntegerType value;
     
     public Integer_ (hydra.core.IntegerType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

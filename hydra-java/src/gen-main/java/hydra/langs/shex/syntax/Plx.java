@@ -37,9 +37,7 @@ public abstract class Plx implements Serializable {
     public final hydra.langs.shex.syntax.Percent value;
     
     public Percent (hydra.langs.shex.syntax.Percent value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class Plx implements Serializable {
     public final hydra.langs.shex.syntax.PnLocalEsc value;
     
     public PnLocalEsc (hydra.langs.shex.syntax.PnLocalEsc value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

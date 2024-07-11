@@ -36,21 +36,11 @@ public class ElementFeatures implements Serializable {
   public final Boolean startNode;
   
   public ElementFeatures (Boolean elementId, Boolean endNode, Boolean labels, Boolean properties, Boolean startNode) {
-    if (elementId == null) {
-      throw new IllegalArgumentException("null value for 'elementId' argument");
-    }
-    if (endNode == null) {
-      throw new IllegalArgumentException("null value for 'endNode' argument");
-    }
-    if (labels == null) {
-      throw new IllegalArgumentException("null value for 'labels' argument");
-    }
-    if (properties == null) {
-      throw new IllegalArgumentException("null value for 'properties' argument");
-    }
-    if (startNode == null) {
-      throw new IllegalArgumentException("null value for 'startNode' argument");
-    }
+    java.util.Objects.requireNonNull((elementId));
+    java.util.Objects.requireNonNull((endNode));
+    java.util.Objects.requireNonNull((labels));
+    java.util.Objects.requireNonNull((properties));
+    java.util.Objects.requireNonNull((startNode));
     this.elementId = elementId;
     this.endNode = endNode;
     this.labels = labels;
@@ -73,37 +63,27 @@ public class ElementFeatures implements Serializable {
   }
   
   public ElementFeatures withElementId(Boolean elementId) {
-    if (elementId == null) {
-      throw new IllegalArgumentException("null value for 'elementId' argument");
-    }
+    java.util.Objects.requireNonNull((elementId));
     return new ElementFeatures(elementId, endNode, labels, properties, startNode);
   }
   
   public ElementFeatures withEndNode(Boolean endNode) {
-    if (endNode == null) {
-      throw new IllegalArgumentException("null value for 'endNode' argument");
-    }
+    java.util.Objects.requireNonNull((endNode));
     return new ElementFeatures(elementId, endNode, labels, properties, startNode);
   }
   
   public ElementFeatures withLabels(Boolean labels) {
-    if (labels == null) {
-      throw new IllegalArgumentException("null value for 'labels' argument");
-    }
+    java.util.Objects.requireNonNull((labels));
     return new ElementFeatures(elementId, endNode, labels, properties, startNode);
   }
   
   public ElementFeatures withProperties(Boolean properties) {
-    if (properties == null) {
-      throw new IllegalArgumentException("null value for 'properties' argument");
-    }
+    java.util.Objects.requireNonNull((properties));
     return new ElementFeatures(elementId, endNode, labels, properties, startNode);
   }
   
   public ElementFeatures withStartNode(Boolean startNode) {
-    if (startNode == null) {
-      throw new IllegalArgumentException("null value for 'startNode' argument");
-    }
+    java.util.Objects.requireNonNull((startNode));
     return new ElementFeatures(elementId, endNode, labels, properties, startNode);
   }
 }

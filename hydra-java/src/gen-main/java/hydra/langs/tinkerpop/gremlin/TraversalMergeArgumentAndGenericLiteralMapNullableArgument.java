@@ -14,15 +14,9 @@ public class TraversalMergeArgumentAndGenericLiteralMapNullableArgument implemen
   public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalCardinality> cardinality;
   
   public TraversalMergeArgumentAndGenericLiteralMapNullableArgument (hydra.langs.tinkerpop.gremlin.TraversalMergeArgument merge, hydra.langs.tinkerpop.gremlin.GenericLiteralMapNullableArgument map, hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalCardinality> cardinality) {
-    if (merge == null) {
-      throw new IllegalArgumentException("null value for 'merge' argument");
-    }
-    if (map == null) {
-      throw new IllegalArgumentException("null value for 'map' argument");
-    }
-    if (cardinality == null) {
-      throw new IllegalArgumentException("null value for 'cardinality' argument");
-    }
+    java.util.Objects.requireNonNull((merge));
+    java.util.Objects.requireNonNull((map));
+    java.util.Objects.requireNonNull((cardinality));
     this.merge = merge;
     this.map = map;
     this.cardinality = cardinality;
@@ -43,23 +37,17 @@ public class TraversalMergeArgumentAndGenericLiteralMapNullableArgument implemen
   }
   
   public TraversalMergeArgumentAndGenericLiteralMapNullableArgument withMerge(hydra.langs.tinkerpop.gremlin.TraversalMergeArgument merge) {
-    if (merge == null) {
-      throw new IllegalArgumentException("null value for 'merge' argument");
-    }
+    java.util.Objects.requireNonNull((merge));
     return new TraversalMergeArgumentAndGenericLiteralMapNullableArgument(merge, map, cardinality);
   }
   
   public TraversalMergeArgumentAndGenericLiteralMapNullableArgument withMap(hydra.langs.tinkerpop.gremlin.GenericLiteralMapNullableArgument map) {
-    if (map == null) {
-      throw new IllegalArgumentException("null value for 'map' argument");
-    }
+    java.util.Objects.requireNonNull((map));
     return new TraversalMergeArgumentAndGenericLiteralMapNullableArgument(merge, map, cardinality);
   }
   
   public TraversalMergeArgumentAndGenericLiteralMapNullableArgument withCardinality(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalCardinality> cardinality) {
-    if (cardinality == null) {
-      throw new IllegalArgumentException("null value for 'cardinality' argument");
-    }
+    java.util.Objects.requireNonNull((cardinality));
     return new TraversalMergeArgumentAndGenericLiteralMapNullableArgument(merge, map, cardinality);
   }
 }

@@ -37,9 +37,7 @@ public abstract class ObjectValue implements Serializable {
     public final hydra.langs.graphql.syntax.ObjectValue_Sequence value;
     
     public Sequence (hydra.langs.graphql.syntax.ObjectValue_Sequence value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class ObjectValue implements Serializable {
     public final java.util.List<hydra.langs.graphql.syntax.ObjectField> value;
     
     public Sequence2 (java.util.List<hydra.langs.graphql.syntax.ObjectField> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

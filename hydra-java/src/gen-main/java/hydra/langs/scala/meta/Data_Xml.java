@@ -12,12 +12,8 @@ public class Data_Xml implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Data> args;
   
   public Data_Xml (java.util.List<hydra.langs.scala.meta.Lit> parts, java.util.List<hydra.langs.scala.meta.Data> args) {
-    if (parts == null) {
-      throw new IllegalArgumentException("null value for 'parts' argument");
-    }
-    if (args == null) {
-      throw new IllegalArgumentException("null value for 'args' argument");
-    }
+    java.util.Objects.requireNonNull((parts));
+    java.util.Objects.requireNonNull((args));
     this.parts = parts;
     this.args = args;
   }
@@ -37,16 +33,12 @@ public class Data_Xml implements Serializable {
   }
   
   public Data_Xml withParts(java.util.List<hydra.langs.scala.meta.Lit> parts) {
-    if (parts == null) {
-      throw new IllegalArgumentException("null value for 'parts' argument");
-    }
+    java.util.Objects.requireNonNull((parts));
     return new Data_Xml(parts, args);
   }
   
   public Data_Xml withArgs(java.util.List<hydra.langs.scala.meta.Data> args) {
-    if (args == null) {
-      throw new IllegalArgumentException("null value for 'args' argument");
-    }
+    java.util.Objects.requireNonNull((args));
     return new Data_Xml(parts, args);
   }
 }

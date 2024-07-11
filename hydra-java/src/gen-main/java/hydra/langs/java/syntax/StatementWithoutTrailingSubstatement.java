@@ -97,9 +97,7 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
     public final hydra.langs.java.syntax.Block value;
     
     public Block (hydra.langs.java.syntax.Block value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -127,9 +125,7 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
     public final hydra.langs.java.syntax.EmptyStatement value;
     
     public Empty (hydra.langs.java.syntax.EmptyStatement value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -157,9 +153,7 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
     public final hydra.langs.java.syntax.ExpressionStatement value;
     
     public Expression (hydra.langs.java.syntax.ExpressionStatement value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -187,9 +181,7 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
     public final hydra.langs.java.syntax.AssertStatement value;
     
     public Assert (hydra.langs.java.syntax.AssertStatement value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -217,9 +209,7 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
     public final hydra.langs.java.syntax.SwitchStatement value;
     
     public Switch (hydra.langs.java.syntax.SwitchStatement value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -247,9 +237,7 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
     public final hydra.langs.java.syntax.DoStatement value;
     
     public Do (hydra.langs.java.syntax.DoStatement value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -277,9 +265,7 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
     public final hydra.langs.java.syntax.BreakStatement value;
     
     public Break (hydra.langs.java.syntax.BreakStatement value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -307,9 +293,7 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
     public final hydra.langs.java.syntax.ContinueStatement value;
     
     public Continue (hydra.langs.java.syntax.ContinueStatement value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -337,9 +321,7 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
     public final hydra.langs.java.syntax.ReturnStatement value;
     
     public Return (hydra.langs.java.syntax.ReturnStatement value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -367,9 +349,7 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
     public final hydra.langs.java.syntax.SynchronizedStatement value;
     
     public Synchronized (hydra.langs.java.syntax.SynchronizedStatement value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -397,9 +377,7 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
     public final hydra.langs.java.syntax.ThrowStatement value;
     
     public Throw (hydra.langs.java.syntax.ThrowStatement value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -427,9 +405,7 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
     public final hydra.langs.java.syntax.TryStatement value;
     
     public Try (hydra.langs.java.syntax.TryStatement value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -12,12 +12,8 @@ public class Quantifier implements Serializable {
   public final hydra.langs.cypher.openCypher.FilterExpression expression;
   
   public Quantifier (hydra.langs.cypher.openCypher.QuantifierOperator operator, hydra.langs.cypher.openCypher.FilterExpression expression) {
-    if (operator == null) {
-      throw new IllegalArgumentException("null value for 'operator' argument");
-    }
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((operator));
+    java.util.Objects.requireNonNull((expression));
     this.operator = operator;
     this.expression = expression;
   }
@@ -37,16 +33,12 @@ public class Quantifier implements Serializable {
   }
   
   public Quantifier withOperator(hydra.langs.cypher.openCypher.QuantifierOperator operator) {
-    if (operator == null) {
-      throw new IllegalArgumentException("null value for 'operator' argument");
-    }
+    java.util.Objects.requireNonNull((operator));
     return new Quantifier(operator, expression);
   }
   
   public Quantifier withExpression(hydra.langs.cypher.openCypher.FilterExpression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new Quantifier(operator, expression);
   }
 }

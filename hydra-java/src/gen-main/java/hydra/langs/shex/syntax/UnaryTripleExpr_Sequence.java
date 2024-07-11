@@ -12,12 +12,8 @@ public class UnaryTripleExpr_Sequence implements Serializable {
   public final hydra.langs.shex.syntax.UnaryTripleExpr_Sequence_Alts alts;
   
   public UnaryTripleExpr_Sequence (hydra.util.Opt<hydra.langs.shex.syntax.TripleExprLabel> sequence, hydra.langs.shex.syntax.UnaryTripleExpr_Sequence_Alts alts) {
-    if (sequence == null) {
-      throw new IllegalArgumentException("null value for 'sequence' argument");
-    }
-    if (alts == null) {
-      throw new IllegalArgumentException("null value for 'alts' argument");
-    }
+    java.util.Objects.requireNonNull((sequence));
+    java.util.Objects.requireNonNull((alts));
     this.sequence = sequence;
     this.alts = alts;
   }
@@ -37,16 +33,12 @@ public class UnaryTripleExpr_Sequence implements Serializable {
   }
   
   public UnaryTripleExpr_Sequence withSequence(hydra.util.Opt<hydra.langs.shex.syntax.TripleExprLabel> sequence) {
-    if (sequence == null) {
-      throw new IllegalArgumentException("null value for 'sequence' argument");
-    }
+    java.util.Objects.requireNonNull((sequence));
     return new UnaryTripleExpr_Sequence(sequence, alts);
   }
   
   public UnaryTripleExpr_Sequence withAlts(hydra.langs.shex.syntax.UnaryTripleExpr_Sequence_Alts alts) {
-    if (alts == null) {
-      throw new IllegalArgumentException("null value for 'alts' argument");
-    }
+    java.util.Objects.requireNonNull((alts));
     return new UnaryTripleExpr_Sequence(sequence, alts);
   }
 }

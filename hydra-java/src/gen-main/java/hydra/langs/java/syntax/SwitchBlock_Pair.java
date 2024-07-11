@@ -12,12 +12,8 @@ public class SwitchBlock_Pair implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.SwitchLabel> labels;
   
   public SwitchBlock_Pair (java.util.List<hydra.langs.java.syntax.SwitchBlockStatementGroup> statements, java.util.List<hydra.langs.java.syntax.SwitchLabel> labels) {
-    if (statements == null) {
-      throw new IllegalArgumentException("null value for 'statements' argument");
-    }
-    if (labels == null) {
-      throw new IllegalArgumentException("null value for 'labels' argument");
-    }
+    java.util.Objects.requireNonNull((statements));
+    java.util.Objects.requireNonNull((labels));
     this.statements = statements;
     this.labels = labels;
   }
@@ -37,16 +33,12 @@ public class SwitchBlock_Pair implements Serializable {
   }
   
   public SwitchBlock_Pair withStatements(java.util.List<hydra.langs.java.syntax.SwitchBlockStatementGroup> statements) {
-    if (statements == null) {
-      throw new IllegalArgumentException("null value for 'statements' argument");
-    }
+    java.util.Objects.requireNonNull((statements));
     return new SwitchBlock_Pair(statements, labels);
   }
   
   public SwitchBlock_Pair withLabels(java.util.List<hydra.langs.java.syntax.SwitchLabel> labels) {
-    if (labels == null) {
-      throw new IllegalArgumentException("null value for 'labels' argument");
-    }
+    java.util.Objects.requireNonNull((labels));
     return new SwitchBlock_Pair(statements, labels);
   }
 }

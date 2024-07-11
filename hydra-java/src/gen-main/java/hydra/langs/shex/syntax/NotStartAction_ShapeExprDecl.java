@@ -12,12 +12,8 @@ public class NotStartAction_ShapeExprDecl implements Serializable {
   public final hydra.langs.shex.syntax.NotStartAction_ShapeExprDecl_Alts alts;
   
   public NotStartAction_ShapeExprDecl (hydra.langs.shex.syntax.ShapeExprLabel shapeExprLabel, hydra.langs.shex.syntax.NotStartAction_ShapeExprDecl_Alts alts) {
-    if (shapeExprLabel == null) {
-      throw new IllegalArgumentException("null value for 'shapeExprLabel' argument");
-    }
-    if (alts == null) {
-      throw new IllegalArgumentException("null value for 'alts' argument");
-    }
+    java.util.Objects.requireNonNull((shapeExprLabel));
+    java.util.Objects.requireNonNull((alts));
     this.shapeExprLabel = shapeExprLabel;
     this.alts = alts;
   }
@@ -37,16 +33,12 @@ public class NotStartAction_ShapeExprDecl implements Serializable {
   }
   
   public NotStartAction_ShapeExprDecl withShapeExprLabel(hydra.langs.shex.syntax.ShapeExprLabel shapeExprLabel) {
-    if (shapeExprLabel == null) {
-      throw new IllegalArgumentException("null value for 'shapeExprLabel' argument");
-    }
+    java.util.Objects.requireNonNull((shapeExprLabel));
     return new NotStartAction_ShapeExprDecl(shapeExprLabel, alts);
   }
   
   public NotStartAction_ShapeExprDecl withAlts(hydra.langs.shex.syntax.NotStartAction_ShapeExprDecl_Alts alts) {
-    if (alts == null) {
-      throw new IllegalArgumentException("null value for 'alts' argument");
-    }
+    java.util.Objects.requireNonNull((alts));
     return new NotStartAction_ShapeExprDecl(shapeExprLabel, alts);
   }
 }

@@ -10,9 +10,7 @@ public class Return implements Serializable {
   public final hydra.langs.cypher.openCypher.ProjectionBody value;
   
   public Return (hydra.langs.cypher.openCypher.ProjectionBody value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

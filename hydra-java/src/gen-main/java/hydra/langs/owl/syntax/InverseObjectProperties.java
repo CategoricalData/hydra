@@ -14,15 +14,9 @@ public class InverseObjectProperties implements Serializable {
   public final hydra.langs.owl.syntax.ObjectPropertyExpression property2;
   
   public InverseObjectProperties (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, hydra.langs.owl.syntax.ObjectPropertyExpression property1, hydra.langs.owl.syntax.ObjectPropertyExpression property2) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
-    if (property1 == null) {
-      throw new IllegalArgumentException("null value for 'property1' argument");
-    }
-    if (property2 == null) {
-      throw new IllegalArgumentException("null value for 'property2' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
+    java.util.Objects.requireNonNull((property1));
+    java.util.Objects.requireNonNull((property2));
     this.annotations = annotations;
     this.property1 = property1;
     this.property2 = property2;
@@ -43,23 +37,17 @@ public class InverseObjectProperties implements Serializable {
   }
   
   public InverseObjectProperties withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new InverseObjectProperties(annotations, property1, property2);
   }
   
   public InverseObjectProperties withProperty1(hydra.langs.owl.syntax.ObjectPropertyExpression property1) {
-    if (property1 == null) {
-      throw new IllegalArgumentException("null value for 'property1' argument");
-    }
+    java.util.Objects.requireNonNull((property1));
     return new InverseObjectProperties(annotations, property1, property2);
   }
   
   public InverseObjectProperties withProperty2(hydra.langs.owl.syntax.ObjectPropertyExpression property2) {
-    if (property2 == null) {
-      throw new IllegalArgumentException("null value for 'property2' argument");
-    }
+    java.util.Objects.requireNonNull((property2));
     return new InverseObjectProperties(annotations, property1, property2);
   }
 }

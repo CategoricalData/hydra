@@ -12,12 +12,8 @@ public class PnLocal_Sequence_Option implements Serializable {
   public final hydra.langs.shex.syntax.PnLocal_Sequence_Option_Alts alts;
   
   public PnLocal_Sequence_Option (java.util.List<hydra.langs.shex.syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt> listOfAlts, hydra.langs.shex.syntax.PnLocal_Sequence_Option_Alts alts) {
-    if (listOfAlts == null) {
-      throw new IllegalArgumentException("null value for 'listOfAlts' argument");
-    }
-    if (alts == null) {
-      throw new IllegalArgumentException("null value for 'alts' argument");
-    }
+    java.util.Objects.requireNonNull((listOfAlts));
+    java.util.Objects.requireNonNull((alts));
     this.listOfAlts = listOfAlts;
     this.alts = alts;
   }
@@ -37,16 +33,12 @@ public class PnLocal_Sequence_Option implements Serializable {
   }
   
   public PnLocal_Sequence_Option withListOfAlts(java.util.List<hydra.langs.shex.syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt> listOfAlts) {
-    if (listOfAlts == null) {
-      throw new IllegalArgumentException("null value for 'listOfAlts' argument");
-    }
+    java.util.Objects.requireNonNull((listOfAlts));
     return new PnLocal_Sequence_Option(listOfAlts, alts);
   }
   
   public PnLocal_Sequence_Option withAlts(hydra.langs.shex.syntax.PnLocal_Sequence_Option_Alts alts) {
-    if (alts == null) {
-      throw new IllegalArgumentException("null value for 'alts' argument");
-    }
+    java.util.Objects.requireNonNull((alts));
     return new PnLocal_Sequence_Option(listOfAlts, alts);
   }
 }

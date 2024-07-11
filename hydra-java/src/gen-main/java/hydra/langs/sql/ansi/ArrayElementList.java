@@ -12,12 +12,8 @@ public class ArrayElementList implements Serializable {
   public final java.util.List<hydra.langs.sql.ansi.ArrayElement> rest;
   
   public ArrayElementList (hydra.langs.sql.ansi.ArrayElement first, java.util.List<hydra.langs.sql.ansi.ArrayElement> rest) {
-    if (first == null) {
-      throw new IllegalArgumentException("null value for 'first' argument");
-    }
-    if (rest == null) {
-      throw new IllegalArgumentException("null value for 'rest' argument");
-    }
+    java.util.Objects.requireNonNull((first));
+    java.util.Objects.requireNonNull((rest));
     this.first = first;
     this.rest = rest;
   }
@@ -37,16 +33,12 @@ public class ArrayElementList implements Serializable {
   }
   
   public ArrayElementList withFirst(hydra.langs.sql.ansi.ArrayElement first) {
-    if (first == null) {
-      throw new IllegalArgumentException("null value for 'first' argument");
-    }
+    java.util.Objects.requireNonNull((first));
     return new ArrayElementList(first, rest);
   }
   
   public ArrayElementList withRest(java.util.List<hydra.langs.sql.ansi.ArrayElement> rest) {
-    if (rest == null) {
-      throw new IllegalArgumentException("null value for 'rest' argument");
-    }
+    java.util.Objects.requireNonNull((rest));
     return new ArrayElementList(first, rest);
   }
 }

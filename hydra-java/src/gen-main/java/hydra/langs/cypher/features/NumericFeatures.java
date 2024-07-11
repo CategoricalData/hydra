@@ -71,42 +71,18 @@ public class NumericFeatures implements Serializable {
   public final Boolean sqrt;
   
   public NumericFeatures (Boolean abs, Boolean ceil, Boolean e, Boolean exp, Boolean floor, Boolean isNaN, Boolean log, Boolean log10, Boolean range, Boolean round, Boolean sign, Boolean sqrt) {
-    if (abs == null) {
-      throw new IllegalArgumentException("null value for 'abs' argument");
-    }
-    if (ceil == null) {
-      throw new IllegalArgumentException("null value for 'ceil' argument");
-    }
-    if (e == null) {
-      throw new IllegalArgumentException("null value for 'e' argument");
-    }
-    if (exp == null) {
-      throw new IllegalArgumentException("null value for 'exp' argument");
-    }
-    if (floor == null) {
-      throw new IllegalArgumentException("null value for 'floor' argument");
-    }
-    if (isNaN == null) {
-      throw new IllegalArgumentException("null value for 'isNaN' argument");
-    }
-    if (log == null) {
-      throw new IllegalArgumentException("null value for 'log' argument");
-    }
-    if (log10 == null) {
-      throw new IllegalArgumentException("null value for 'log10' argument");
-    }
-    if (range == null) {
-      throw new IllegalArgumentException("null value for 'range' argument");
-    }
-    if (round == null) {
-      throw new IllegalArgumentException("null value for 'round' argument");
-    }
-    if (sign == null) {
-      throw new IllegalArgumentException("null value for 'sign' argument");
-    }
-    if (sqrt == null) {
-      throw new IllegalArgumentException("null value for 'sqrt' argument");
-    }
+    java.util.Objects.requireNonNull((abs));
+    java.util.Objects.requireNonNull((ceil));
+    java.util.Objects.requireNonNull((e));
+    java.util.Objects.requireNonNull((exp));
+    java.util.Objects.requireNonNull((floor));
+    java.util.Objects.requireNonNull((isNaN));
+    java.util.Objects.requireNonNull((log));
+    java.util.Objects.requireNonNull((log10));
+    java.util.Objects.requireNonNull((range));
+    java.util.Objects.requireNonNull((round));
+    java.util.Objects.requireNonNull((sign));
+    java.util.Objects.requireNonNull((sqrt));
     this.abs = abs;
     this.ceil = ceil;
     this.e = e;
@@ -136,86 +112,62 @@ public class NumericFeatures implements Serializable {
   }
   
   public NumericFeatures withAbs(Boolean abs) {
-    if (abs == null) {
-      throw new IllegalArgumentException("null value for 'abs' argument");
-    }
+    java.util.Objects.requireNonNull((abs));
     return new NumericFeatures(abs, ceil, e, exp, floor, isNaN, log, log10, range, round, sign, sqrt);
   }
   
   public NumericFeatures withCeil(Boolean ceil) {
-    if (ceil == null) {
-      throw new IllegalArgumentException("null value for 'ceil' argument");
-    }
+    java.util.Objects.requireNonNull((ceil));
     return new NumericFeatures(abs, ceil, e, exp, floor, isNaN, log, log10, range, round, sign, sqrt);
   }
   
   public NumericFeatures withE(Boolean e) {
-    if (e == null) {
-      throw new IllegalArgumentException("null value for 'e' argument");
-    }
+    java.util.Objects.requireNonNull((e));
     return new NumericFeatures(abs, ceil, e, exp, floor, isNaN, log, log10, range, round, sign, sqrt);
   }
   
   public NumericFeatures withExp(Boolean exp) {
-    if (exp == null) {
-      throw new IllegalArgumentException("null value for 'exp' argument");
-    }
+    java.util.Objects.requireNonNull((exp));
     return new NumericFeatures(abs, ceil, e, exp, floor, isNaN, log, log10, range, round, sign, sqrt);
   }
   
   public NumericFeatures withFloor(Boolean floor) {
-    if (floor == null) {
-      throw new IllegalArgumentException("null value for 'floor' argument");
-    }
+    java.util.Objects.requireNonNull((floor));
     return new NumericFeatures(abs, ceil, e, exp, floor, isNaN, log, log10, range, round, sign, sqrt);
   }
   
   public NumericFeatures withIsNaN(Boolean isNaN) {
-    if (isNaN == null) {
-      throw new IllegalArgumentException("null value for 'isNaN' argument");
-    }
+    java.util.Objects.requireNonNull((isNaN));
     return new NumericFeatures(abs, ceil, e, exp, floor, isNaN, log, log10, range, round, sign, sqrt);
   }
   
   public NumericFeatures withLog(Boolean log) {
-    if (log == null) {
-      throw new IllegalArgumentException("null value for 'log' argument");
-    }
+    java.util.Objects.requireNonNull((log));
     return new NumericFeatures(abs, ceil, e, exp, floor, isNaN, log, log10, range, round, sign, sqrt);
   }
   
   public NumericFeatures withLog10(Boolean log10) {
-    if (log10 == null) {
-      throw new IllegalArgumentException("null value for 'log10' argument");
-    }
+    java.util.Objects.requireNonNull((log10));
     return new NumericFeatures(abs, ceil, e, exp, floor, isNaN, log, log10, range, round, sign, sqrt);
   }
   
   public NumericFeatures withRange(Boolean range) {
-    if (range == null) {
-      throw new IllegalArgumentException("null value for 'range' argument");
-    }
+    java.util.Objects.requireNonNull((range));
     return new NumericFeatures(abs, ceil, e, exp, floor, isNaN, log, log10, range, round, sign, sqrt);
   }
   
   public NumericFeatures withRound(Boolean round) {
-    if (round == null) {
-      throw new IllegalArgumentException("null value for 'round' argument");
-    }
+    java.util.Objects.requireNonNull((round));
     return new NumericFeatures(abs, ceil, e, exp, floor, isNaN, log, log10, range, round, sign, sqrt);
   }
   
   public NumericFeatures withSign(Boolean sign) {
-    if (sign == null) {
-      throw new IllegalArgumentException("null value for 'sign' argument");
-    }
+    java.util.Objects.requireNonNull((sign));
     return new NumericFeatures(abs, ceil, e, exp, floor, isNaN, log, log10, range, round, sign, sqrt);
   }
   
   public NumericFeatures withSqrt(Boolean sqrt) {
-    if (sqrt == null) {
-      throw new IllegalArgumentException("null value for 'sqrt' argument");
-    }
+    java.util.Objects.requireNonNull((sqrt));
     return new NumericFeatures(abs, ceil, e, exp, floor, isNaN, log, log10, range, round, sign, sqrt);
   }
 }

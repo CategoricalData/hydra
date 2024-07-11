@@ -14,15 +14,9 @@ public class NodePattern implements Serializable {
   public final hydra.util.Opt<hydra.langs.cypher.openCypher.Properties> properties;
   
   public NodePattern (hydra.util.Opt<hydra.langs.cypher.openCypher.Variable> variable, hydra.util.Opt<hydra.langs.cypher.openCypher.NodeLabels> labels, hydra.util.Opt<hydra.langs.cypher.openCypher.Properties> properties) {
-    if (variable == null) {
-      throw new IllegalArgumentException("null value for 'variable' argument");
-    }
-    if (labels == null) {
-      throw new IllegalArgumentException("null value for 'labels' argument");
-    }
-    if (properties == null) {
-      throw new IllegalArgumentException("null value for 'properties' argument");
-    }
+    java.util.Objects.requireNonNull((variable));
+    java.util.Objects.requireNonNull((labels));
+    java.util.Objects.requireNonNull((properties));
     this.variable = variable;
     this.labels = labels;
     this.properties = properties;
@@ -43,23 +37,17 @@ public class NodePattern implements Serializable {
   }
   
   public NodePattern withVariable(hydra.util.Opt<hydra.langs.cypher.openCypher.Variable> variable) {
-    if (variable == null) {
-      throw new IllegalArgumentException("null value for 'variable' argument");
-    }
+    java.util.Objects.requireNonNull((variable));
     return new NodePattern(variable, labels, properties);
   }
   
   public NodePattern withLabels(hydra.util.Opt<hydra.langs.cypher.openCypher.NodeLabels> labels) {
-    if (labels == null) {
-      throw new IllegalArgumentException("null value for 'labels' argument");
-    }
+    java.util.Objects.requireNonNull((labels));
     return new NodePattern(variable, labels, properties);
   }
   
   public NodePattern withProperties(hydra.util.Opt<hydra.langs.cypher.openCypher.Properties> properties) {
-    if (properties == null) {
-      throw new IllegalArgumentException("null value for 'properties' argument");
-    }
+    java.util.Objects.requireNonNull((properties));
     return new NodePattern(variable, labels, properties);
   }
 }

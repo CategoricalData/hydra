@@ -10,9 +10,7 @@ public class EnumSchema implements Serializable {
   public final java.util.List<hydra.langs.pegasus.pdl.EnumField> fields;
   
   public EnumSchema (java.util.List<hydra.langs.pegasus.pdl.EnumField> fields) {
-    if (fields == null) {
-      throw new IllegalArgumentException("null value for 'fields' argument");
-    }
+    java.util.Objects.requireNonNull((fields));
     this.fields = fields;
   }
   

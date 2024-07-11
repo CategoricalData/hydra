@@ -15,12 +15,8 @@ public class Expression_TypeSignature implements Serializable {
   public final hydra.langs.haskell.ast.Type type;
   
   public Expression_TypeSignature (hydra.langs.haskell.ast.Expression inner, hydra.langs.haskell.ast.Type type) {
-    if (inner == null) {
-      throw new IllegalArgumentException("null value for 'inner' argument");
-    }
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((inner));
+    java.util.Objects.requireNonNull((type));
     this.inner = inner;
     this.type = type;
   }
@@ -40,16 +36,12 @@ public class Expression_TypeSignature implements Serializable {
   }
   
   public Expression_TypeSignature withInner(hydra.langs.haskell.ast.Expression inner) {
-    if (inner == null) {
-      throw new IllegalArgumentException("null value for 'inner' argument");
-    }
+    java.util.Objects.requireNonNull((inner));
     return new Expression_TypeSignature(inner, type);
   }
   
   public Expression_TypeSignature withType(hydra.langs.haskell.ast.Type type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new Expression_TypeSignature(inner, type);
   }
 }

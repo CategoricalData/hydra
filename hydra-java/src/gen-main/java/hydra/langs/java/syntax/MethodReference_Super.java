@@ -14,15 +14,9 @@ public class MethodReference_Super implements Serializable {
   public final Boolean super_;
   
   public MethodReference_Super (java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments, hydra.langs.java.syntax.Identifier identifier, Boolean super_) {
-    if (typeArguments == null) {
-      throw new IllegalArgumentException("null value for 'typeArguments' argument");
-    }
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
-    if (super_ == null) {
-      throw new IllegalArgumentException("null value for 'super' argument");
-    }
+    java.util.Objects.requireNonNull((typeArguments));
+    java.util.Objects.requireNonNull((identifier));
+    java.util.Objects.requireNonNull((super_));
     this.typeArguments = typeArguments;
     this.identifier = identifier;
     this.super_ = super_;
@@ -43,23 +37,17 @@ public class MethodReference_Super implements Serializable {
   }
   
   public MethodReference_Super withTypeArguments(java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments) {
-    if (typeArguments == null) {
-      throw new IllegalArgumentException("null value for 'typeArguments' argument");
-    }
+    java.util.Objects.requireNonNull((typeArguments));
     return new MethodReference_Super(typeArguments, identifier, super_);
   }
   
   public MethodReference_Super withIdentifier(hydra.langs.java.syntax.Identifier identifier) {
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
+    java.util.Objects.requireNonNull((identifier));
     return new MethodReference_Super(typeArguments, identifier, super_);
   }
   
   public MethodReference_Super withSuper(Boolean super_) {
-    if (super_ == null) {
-      throw new IllegalArgumentException("null value for 'super' argument");
-    }
+    java.util.Objects.requireNonNull((super_));
     return new MethodReference_Super(typeArguments, identifier, super_);
   }
 }

@@ -14,15 +14,9 @@ public class Data_If implements Serializable {
   public final hydra.langs.scala.meta.Data elsep;
   
   public Data_If (hydra.langs.scala.meta.Data cond, hydra.langs.scala.meta.Data thenp, hydra.langs.scala.meta.Data elsep) {
-    if (cond == null) {
-      throw new IllegalArgumentException("null value for 'cond' argument");
-    }
-    if (thenp == null) {
-      throw new IllegalArgumentException("null value for 'thenp' argument");
-    }
-    if (elsep == null) {
-      throw new IllegalArgumentException("null value for 'elsep' argument");
-    }
+    java.util.Objects.requireNonNull((cond));
+    java.util.Objects.requireNonNull((thenp));
+    java.util.Objects.requireNonNull((elsep));
     this.cond = cond;
     this.thenp = thenp;
     this.elsep = elsep;
@@ -43,23 +37,17 @@ public class Data_If implements Serializable {
   }
   
   public Data_If withCond(hydra.langs.scala.meta.Data cond) {
-    if (cond == null) {
-      throw new IllegalArgumentException("null value for 'cond' argument");
-    }
+    java.util.Objects.requireNonNull((cond));
     return new Data_If(cond, thenp, elsep);
   }
   
   public Data_If withThenp(hydra.langs.scala.meta.Data thenp) {
-    if (thenp == null) {
-      throw new IllegalArgumentException("null value for 'thenp' argument");
-    }
+    java.util.Objects.requireNonNull((thenp));
     return new Data_If(cond, thenp, elsep);
   }
   
   public Data_If withElsep(hydra.langs.scala.meta.Data elsep) {
-    if (elsep == null) {
-      throw new IllegalArgumentException("null value for 'elsep' argument");
-    }
+    java.util.Objects.requireNonNull((elsep));
     return new Data_If(cond, thenp, elsep);
   }
 }

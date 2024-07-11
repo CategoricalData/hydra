@@ -18,21 +18,11 @@ public class Field implements Serializable {
   public final hydra.util.Opt<hydra.langs.graphql.syntax.SelectionSet> selectionSet;
   
   public Field (hydra.util.Opt<hydra.langs.graphql.syntax.Alias> alias, hydra.langs.graphql.syntax.Name name, hydra.util.Opt<hydra.langs.graphql.syntax.Arguments> arguments, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives, hydra.util.Opt<hydra.langs.graphql.syntax.SelectionSet> selectionSet) {
-    if (alias == null) {
-      throw new IllegalArgumentException("null value for 'alias' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (arguments == null) {
-      throw new IllegalArgumentException("null value for 'arguments' argument");
-    }
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
-    if (selectionSet == null) {
-      throw new IllegalArgumentException("null value for 'selectionSet' argument");
-    }
+    java.util.Objects.requireNonNull((alias));
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((arguments));
+    java.util.Objects.requireNonNull((directives));
+    java.util.Objects.requireNonNull((selectionSet));
     this.alias = alias;
     this.name = name;
     this.arguments = arguments;
@@ -55,37 +45,27 @@ public class Field implements Serializable {
   }
   
   public Field withAlias(hydra.util.Opt<hydra.langs.graphql.syntax.Alias> alias) {
-    if (alias == null) {
-      throw new IllegalArgumentException("null value for 'alias' argument");
-    }
+    java.util.Objects.requireNonNull((alias));
     return new Field(alias, name, arguments, directives, selectionSet);
   }
   
   public Field withName(hydra.langs.graphql.syntax.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Field(alias, name, arguments, directives, selectionSet);
   }
   
   public Field withArguments(hydra.util.Opt<hydra.langs.graphql.syntax.Arguments> arguments) {
-    if (arguments == null) {
-      throw new IllegalArgumentException("null value for 'arguments' argument");
-    }
+    java.util.Objects.requireNonNull((arguments));
     return new Field(alias, name, arguments, directives, selectionSet);
   }
   
   public Field withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((directives));
     return new Field(alias, name, arguments, directives, selectionSet);
   }
   
   public Field withSelectionSet(hydra.util.Opt<hydra.langs.graphql.syntax.SelectionSet> selectionSet) {
-    if (selectionSet == null) {
-      throw new IllegalArgumentException("null value for 'selectionSet' argument");
-    }
+    java.util.Objects.requireNonNull((selectionSet));
     return new Field(alias, name, arguments, directives, selectionSet);
   }
 }

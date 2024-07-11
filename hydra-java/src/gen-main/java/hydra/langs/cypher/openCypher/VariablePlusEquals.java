@@ -12,12 +12,8 @@ public class VariablePlusEquals implements Serializable {
   public final hydra.langs.cypher.openCypher.Expression rhs;
   
   public VariablePlusEquals (hydra.langs.cypher.openCypher.Variable lhs, hydra.langs.cypher.openCypher.Expression rhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
+    java.util.Objects.requireNonNull((rhs));
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -37,16 +33,12 @@ public class VariablePlusEquals implements Serializable {
   }
   
   public VariablePlusEquals withLhs(hydra.langs.cypher.openCypher.Variable lhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
     return new VariablePlusEquals(lhs, rhs);
   }
   
   public VariablePlusEquals withRhs(hydra.langs.cypher.openCypher.Expression rhs) {
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((rhs));
     return new VariablePlusEquals(lhs, rhs);
   }
 }

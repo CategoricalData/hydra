@@ -13,9 +13,7 @@ public class DataRow<V> implements Serializable {
   public final java.util.List<hydra.util.Opt<V>> value;
   
   public DataRow (java.util.List<hydra.util.Opt<V>> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

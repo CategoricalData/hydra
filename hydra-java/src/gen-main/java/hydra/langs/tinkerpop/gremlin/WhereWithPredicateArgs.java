@@ -12,12 +12,8 @@ public class WhereWithPredicateArgs implements Serializable {
   public final hydra.langs.tinkerpop.gremlin.TraversalPredicate predicate;
   
   public WhereWithPredicateArgs (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> leftArg, hydra.langs.tinkerpop.gremlin.TraversalPredicate predicate) {
-    if (leftArg == null) {
-      throw new IllegalArgumentException("null value for 'leftArg' argument");
-    }
-    if (predicate == null) {
-      throw new IllegalArgumentException("null value for 'predicate' argument");
-    }
+    java.util.Objects.requireNonNull((leftArg));
+    java.util.Objects.requireNonNull((predicate));
     this.leftArg = leftArg;
     this.predicate = predicate;
   }
@@ -37,16 +33,12 @@ public class WhereWithPredicateArgs implements Serializable {
   }
   
   public WhereWithPredicateArgs withLeftArg(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> leftArg) {
-    if (leftArg == null) {
-      throw new IllegalArgumentException("null value for 'leftArg' argument");
-    }
+    java.util.Objects.requireNonNull((leftArg));
     return new WhereWithPredicateArgs(leftArg, predicate);
   }
   
   public WhereWithPredicateArgs withPredicate(hydra.langs.tinkerpop.gremlin.TraversalPredicate predicate) {
-    if (predicate == null) {
-      throw new IllegalArgumentException("null value for 'predicate' argument");
-    }
+    java.util.Objects.requireNonNull((predicate));
     return new WhereWithPredicateArgs(leftArg, predicate);
   }
 }

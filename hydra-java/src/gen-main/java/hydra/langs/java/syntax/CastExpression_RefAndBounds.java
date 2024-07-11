@@ -12,12 +12,8 @@ public class CastExpression_RefAndBounds implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.AdditionalBound> bounds;
   
   public CastExpression_RefAndBounds (hydra.langs.java.syntax.ReferenceType type, java.util.List<hydra.langs.java.syntax.AdditionalBound> bounds) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (bounds == null) {
-      throw new IllegalArgumentException("null value for 'bounds' argument");
-    }
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((bounds));
     this.type = type;
     this.bounds = bounds;
   }
@@ -37,16 +33,12 @@ public class CastExpression_RefAndBounds implements Serializable {
   }
   
   public CastExpression_RefAndBounds withType(hydra.langs.java.syntax.ReferenceType type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new CastExpression_RefAndBounds(type, bounds);
   }
   
   public CastExpression_RefAndBounds withBounds(java.util.List<hydra.langs.java.syntax.AdditionalBound> bounds) {
-    if (bounds == null) {
-      throw new IllegalArgumentException("null value for 'bounds' argument");
-    }
+    java.util.Objects.requireNonNull((bounds));
     return new CastExpression_RefAndBounds(type, bounds);
   }
 }

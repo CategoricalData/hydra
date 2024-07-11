@@ -37,9 +37,7 @@ public abstract class MethodInvocation_Header implements Serializable {
     public final hydra.langs.java.syntax.MethodName value;
     
     public Simple (hydra.langs.java.syntax.MethodName value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class MethodInvocation_Header implements Serializable {
     public final hydra.langs.java.syntax.MethodInvocation_Complex value;
     
     public Complex (hydra.langs.java.syntax.MethodInvocation_Complex value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

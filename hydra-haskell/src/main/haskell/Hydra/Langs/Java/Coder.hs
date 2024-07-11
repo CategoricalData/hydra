@@ -746,7 +746,7 @@ encodeType aliases t = case stripType t of
         [] -> unit
         _ -> do
           jtypes <- CM.mapM encode types >>= mapM javaTypeToJavaReferenceType
-          return $ javaRefType jtypes hydraCorePackageName $ "Tuple.Tuple" ++ (show $ length types)
+          return $ javaRefType jtypes hydraUtilPackageName $ "Tuple.Tuple" ++ (show $ length types)
     TypeRecord (RowType _Unit _ []) -> unit
     TypeRecord (RowType name _ _) -> pure $
       Java.TypeReference $ nameToJavaReferenceType aliases True (javaTypeArgumentsForType t) name Nothing
@@ -785,17 +785,11 @@ encodeVariable aliases name = if isRecursiveVariable aliases name
     jid = javaIdentifier $ unName name
 
 fieldToNullCheckStatement :: FieldType a -> Java.BlockStatement
-fieldToNullCheckStatement field = Java.BlockStatementStatement $ Java.StatementIfThen $
-    Java.IfThenStatement cond throw
+fieldToNullCheckStatement field = Java.BlockStatementStatement $ javaMethodInvocationToJavaStatement $ Java.MethodInvocation header [arg]
   where
-    cond = javaEqualityExpressionToJavaExpression $
-        javaEqualsNull $
-        javaRelationalExpressionToJavaEqualityExpression $
-        javaIdentifierToJavaRelationalExpression $ fieldNameToJavaIdentifier $ fieldTypeName field
-
-    throw = javaThrowIllegalArgumentException [
-      javaLiteralToJavaExpression $ Java.LiteralString $ Java.StringLiteral $
-        "null value for '" ++ unFieldName (fieldTypeName field) ++ "' argument"]
+    arg = javaIdentifierToJavaExpression $ fieldNameToJavaIdentifier $ fieldTypeName field
+    header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $
+      Java.Identifier "java.util.Objects.requireNonNull"
 
 fieldTypeToFormalParam aliases (FieldType fname ft) = do
   jt <- adaptTypeToJavaAndEncode aliases ft

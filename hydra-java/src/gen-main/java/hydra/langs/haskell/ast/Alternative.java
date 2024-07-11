@@ -17,15 +17,9 @@ public class Alternative implements Serializable {
   public final hydra.util.Opt<hydra.langs.haskell.ast.LocalBindings> binds;
   
   public Alternative (hydra.langs.haskell.ast.Pattern pattern, hydra.langs.haskell.ast.CaseRhs rhs, hydra.util.Opt<hydra.langs.haskell.ast.LocalBindings> binds) {
-    if (pattern == null) {
-      throw new IllegalArgumentException("null value for 'pattern' argument");
-    }
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
-    if (binds == null) {
-      throw new IllegalArgumentException("null value for 'binds' argument");
-    }
+    java.util.Objects.requireNonNull((pattern));
+    java.util.Objects.requireNonNull((rhs));
+    java.util.Objects.requireNonNull((binds));
     this.pattern = pattern;
     this.rhs = rhs;
     this.binds = binds;
@@ -46,23 +40,17 @@ public class Alternative implements Serializable {
   }
   
   public Alternative withPattern(hydra.langs.haskell.ast.Pattern pattern) {
-    if (pattern == null) {
-      throw new IllegalArgumentException("null value for 'pattern' argument");
-    }
+    java.util.Objects.requireNonNull((pattern));
     return new Alternative(pattern, rhs, binds);
   }
   
   public Alternative withRhs(hydra.langs.haskell.ast.CaseRhs rhs) {
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((rhs));
     return new Alternative(pattern, rhs, binds);
   }
   
   public Alternative withBinds(hydra.util.Opt<hydra.langs.haskell.ast.LocalBindings> binds) {
-    if (binds == null) {
-      throw new IllegalArgumentException("null value for 'binds' argument");
-    }
+    java.util.Objects.requireNonNull((binds));
     return new Alternative(pattern, rhs, binds);
   }
 }

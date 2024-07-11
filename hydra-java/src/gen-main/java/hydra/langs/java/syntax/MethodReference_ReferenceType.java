@@ -14,15 +14,9 @@ public class MethodReference_ReferenceType implements Serializable {
   public final hydra.langs.java.syntax.Identifier identifier;
   
   public MethodReference_ReferenceType (hydra.langs.java.syntax.ReferenceType referenceType, java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments, hydra.langs.java.syntax.Identifier identifier) {
-    if (referenceType == null) {
-      throw new IllegalArgumentException("null value for 'referenceType' argument");
-    }
-    if (typeArguments == null) {
-      throw new IllegalArgumentException("null value for 'typeArguments' argument");
-    }
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
+    java.util.Objects.requireNonNull((referenceType));
+    java.util.Objects.requireNonNull((typeArguments));
+    java.util.Objects.requireNonNull((identifier));
     this.referenceType = referenceType;
     this.typeArguments = typeArguments;
     this.identifier = identifier;
@@ -43,23 +37,17 @@ public class MethodReference_ReferenceType implements Serializable {
   }
   
   public MethodReference_ReferenceType withReferenceType(hydra.langs.java.syntax.ReferenceType referenceType) {
-    if (referenceType == null) {
-      throw new IllegalArgumentException("null value for 'referenceType' argument");
-    }
+    java.util.Objects.requireNonNull((referenceType));
     return new MethodReference_ReferenceType(referenceType, typeArguments, identifier);
   }
   
   public MethodReference_ReferenceType withTypeArguments(java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments) {
-    if (typeArguments == null) {
-      throw new IllegalArgumentException("null value for 'typeArguments' argument");
-    }
+    java.util.Objects.requireNonNull((typeArguments));
     return new MethodReference_ReferenceType(referenceType, typeArguments, identifier);
   }
   
   public MethodReference_ReferenceType withIdentifier(hydra.langs.java.syntax.Identifier identifier) {
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
+    java.util.Objects.requireNonNull((identifier));
     return new MethodReference_ReferenceType(referenceType, typeArguments, identifier);
   }
 }

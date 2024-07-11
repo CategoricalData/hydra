@@ -12,12 +12,8 @@ public class QualifiedName implements Serializable {
   public final String local;
   
   public QualifiedName (String namespace, String local) {
-    if (namespace == null) {
-      throw new IllegalArgumentException("null value for 'namespace' argument");
-    }
-    if (local == null) {
-      throw new IllegalArgumentException("null value for 'local' argument");
-    }
+    java.util.Objects.requireNonNull((namespace));
+    java.util.Objects.requireNonNull((local));
     this.namespace = namespace;
     this.local = local;
   }
@@ -37,16 +33,12 @@ public class QualifiedName implements Serializable {
   }
   
   public QualifiedName withNamespace(String namespace) {
-    if (namespace == null) {
-      throw new IllegalArgumentException("null value for 'namespace' argument");
-    }
+    java.util.Objects.requireNonNull((namespace));
     return new QualifiedName(namespace, local);
   }
   
   public QualifiedName withLocal(String local) {
-    if (local == null) {
-      throw new IllegalArgumentException("null value for 'local' argument");
-    }
+    java.util.Objects.requireNonNull((local));
     return new QualifiedName(namespace, local);
   }
 }

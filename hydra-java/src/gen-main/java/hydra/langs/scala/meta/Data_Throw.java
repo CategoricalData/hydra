@@ -10,9 +10,7 @@ public class Data_Throw implements Serializable {
   public final hydra.langs.scala.meta.Data expr;
   
   public Data_Throw (hydra.langs.scala.meta.Data expr) {
-    if (expr == null) {
-      throw new IllegalArgumentException("null value for 'expr' argument");
-    }
+    java.util.Objects.requireNonNull((expr));
     this.expr = expr;
   }
   

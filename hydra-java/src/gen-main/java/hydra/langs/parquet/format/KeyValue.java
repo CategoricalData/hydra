@@ -15,12 +15,8 @@ public class KeyValue implements Serializable {
   public final hydra.util.Opt<String> value;
   
   public KeyValue (String key, hydra.util.Opt<String> value) {
-    if (key == null) {
-      throw new IllegalArgumentException("null value for 'key' argument");
-    }
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((key));
+    java.util.Objects.requireNonNull((value));
     this.key = key;
     this.value = value;
   }
@@ -40,16 +36,12 @@ public class KeyValue implements Serializable {
   }
   
   public KeyValue withKey(String key) {
-    if (key == null) {
-      throw new IllegalArgumentException("null value for 'key' argument");
-    }
+    java.util.Objects.requireNonNull((key));
     return new KeyValue(key, value);
   }
   
   public KeyValue withValue(hydra.util.Opt<String> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     return new KeyValue(key, value);
   }
 }

@@ -73,9 +73,7 @@ public abstract class Schema implements Serializable {
     public final hydra.langs.pegasus.pdl.Schema value;
     
     public Array (hydra.langs.pegasus.pdl.Schema value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +101,7 @@ public abstract class Schema implements Serializable {
     public final Integer value;
     
     public Fixed (Integer value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -133,9 +129,7 @@ public abstract class Schema implements Serializable {
     public final hydra.langs.pegasus.pdl.NamedSchema value;
     
     public Inline (hydra.langs.pegasus.pdl.NamedSchema value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -163,9 +157,7 @@ public abstract class Schema implements Serializable {
     public final hydra.langs.pegasus.pdl.Schema value;
     
     public Map (hydra.langs.pegasus.pdl.Schema value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -193,9 +185,7 @@ public abstract class Schema implements Serializable {
     public final hydra.langs.pegasus.pdl.QualifiedName value;
     
     public Named (hydra.langs.pegasus.pdl.QualifiedName value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -248,9 +238,7 @@ public abstract class Schema implements Serializable {
     public final hydra.langs.pegasus.pdl.PrimitiveType value;
     
     public Primitive (hydra.langs.pegasus.pdl.PrimitiveType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -278,9 +266,7 @@ public abstract class Schema implements Serializable {
     public final hydra.langs.pegasus.pdl.UnionSchema value;
     
     public Union (hydra.langs.pegasus.pdl.UnionSchema value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

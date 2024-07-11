@@ -12,12 +12,8 @@ public class Data_Match implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Case> cases;
   
   public Data_Match (hydra.langs.scala.meta.Data expr, java.util.List<hydra.langs.scala.meta.Case> cases) {
-    if (expr == null) {
-      throw new IllegalArgumentException("null value for 'expr' argument");
-    }
-    if (cases == null) {
-      throw new IllegalArgumentException("null value for 'cases' argument");
-    }
+    java.util.Objects.requireNonNull((expr));
+    java.util.Objects.requireNonNull((cases));
     this.expr = expr;
     this.cases = cases;
   }
@@ -37,16 +33,12 @@ public class Data_Match implements Serializable {
   }
   
   public Data_Match withExpr(hydra.langs.scala.meta.Data expr) {
-    if (expr == null) {
-      throw new IllegalArgumentException("null value for 'expr' argument");
-    }
+    java.util.Objects.requireNonNull((expr));
     return new Data_Match(expr, cases);
   }
   
   public Data_Match withCases(java.util.List<hydra.langs.scala.meta.Case> cases) {
-    if (cases == null) {
-      throw new IllegalArgumentException("null value for 'cases' argument");
-    }
+    java.util.Objects.requireNonNull((cases));
     return new Data_Match(expr, cases);
   }
 }

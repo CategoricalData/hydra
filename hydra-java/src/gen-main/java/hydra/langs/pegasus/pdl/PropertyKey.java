@@ -10,9 +10,7 @@ public class PropertyKey implements Serializable {
   public final String value;
   
   public PropertyKey (String value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

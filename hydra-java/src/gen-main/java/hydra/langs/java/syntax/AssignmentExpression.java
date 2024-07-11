@@ -37,9 +37,7 @@ public abstract class AssignmentExpression implements Serializable {
     public final hydra.langs.java.syntax.ConditionalExpression value;
     
     public Conditional (hydra.langs.java.syntax.ConditionalExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class AssignmentExpression implements Serializable {
     public final hydra.langs.java.syntax.Assignment value;
     
     public Assignment (hydra.langs.java.syntax.Assignment value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

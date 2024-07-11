@@ -14,15 +14,9 @@ public class SubstringArgs implements Serializable {
   public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.IntegerArgument> end;
   
   public SubstringArgs (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope, hydra.langs.tinkerpop.gremlin.IntegerArgument start, hydra.util.Opt<hydra.langs.tinkerpop.gremlin.IntegerArgument> end) {
-    if (scope == null) {
-      throw new IllegalArgumentException("null value for 'scope' argument");
-    }
-    if (start == null) {
-      throw new IllegalArgumentException("null value for 'start' argument");
-    }
-    if (end == null) {
-      throw new IllegalArgumentException("null value for 'end' argument");
-    }
+    java.util.Objects.requireNonNull((scope));
+    java.util.Objects.requireNonNull((start));
+    java.util.Objects.requireNonNull((end));
     this.scope = scope;
     this.start = start;
     this.end = end;
@@ -43,23 +37,17 @@ public class SubstringArgs implements Serializable {
   }
   
   public SubstringArgs withScope(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope) {
-    if (scope == null) {
-      throw new IllegalArgumentException("null value for 'scope' argument");
-    }
+    java.util.Objects.requireNonNull((scope));
     return new SubstringArgs(scope, start, end);
   }
   
   public SubstringArgs withStart(hydra.langs.tinkerpop.gremlin.IntegerArgument start) {
-    if (start == null) {
-      throw new IllegalArgumentException("null value for 'start' argument");
-    }
+    java.util.Objects.requireNonNull((start));
     return new SubstringArgs(scope, start, end);
   }
   
   public SubstringArgs withEnd(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.IntegerArgument> end) {
-    if (end == null) {
-      throw new IllegalArgumentException("null value for 'end' argument");
-    }
+    java.util.Objects.requireNonNull((end));
     return new SubstringArgs(scope, start, end);
   }
 }

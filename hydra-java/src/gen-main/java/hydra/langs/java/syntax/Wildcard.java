@@ -12,12 +12,8 @@ public class Wildcard implements Serializable {
   public final hydra.util.Opt<hydra.langs.java.syntax.WildcardBounds> wildcard;
   
   public Wildcard (java.util.List<hydra.langs.java.syntax.Annotation> annotations, hydra.util.Opt<hydra.langs.java.syntax.WildcardBounds> wildcard) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
-    if (wildcard == null) {
-      throw new IllegalArgumentException("null value for 'wildcard' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
+    java.util.Objects.requireNonNull((wildcard));
     this.annotations = annotations;
     this.wildcard = wildcard;
   }
@@ -37,16 +33,12 @@ public class Wildcard implements Serializable {
   }
   
   public Wildcard withAnnotations(java.util.List<hydra.langs.java.syntax.Annotation> annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new Wildcard(annotations, wildcard);
   }
   
   public Wildcard withWildcard(hydra.util.Opt<hydra.langs.java.syntax.WildcardBounds> wildcard) {
-    if (wildcard == null) {
-      throw new IllegalArgumentException("null value for 'wildcard' argument");
-    }
+    java.util.Objects.requireNonNull((wildcard));
     return new Wildcard(annotations, wildcard);
   }
 }

@@ -10,9 +10,7 @@ public class PropertyLookup implements Serializable {
   public final hydra.langs.cypher.openCypher.PropertyKeyName value;
   
   public PropertyLookup (hydra.langs.cypher.openCypher.PropertyKeyName value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

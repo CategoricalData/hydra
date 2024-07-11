@@ -51,30 +51,14 @@ public class ElementFeatures implements Serializable {
   public final Boolean supportsUuidIds;
   
   public ElementFeatures (Boolean supportsAddProperty, Boolean supportsAnyIds, Boolean supportsCustomIds, Boolean supportsNumericIds, Boolean supportsRemoveProperty, Boolean supportsStringIds, Boolean supportsUserSuppliedIds, Boolean supportsUuidIds) {
-    if (supportsAddProperty == null) {
-      throw new IllegalArgumentException("null value for 'supportsAddProperty' argument");
-    }
-    if (supportsAnyIds == null) {
-      throw new IllegalArgumentException("null value for 'supportsAnyIds' argument");
-    }
-    if (supportsCustomIds == null) {
-      throw new IllegalArgumentException("null value for 'supportsCustomIds' argument");
-    }
-    if (supportsNumericIds == null) {
-      throw new IllegalArgumentException("null value for 'supportsNumericIds' argument");
-    }
-    if (supportsRemoveProperty == null) {
-      throw new IllegalArgumentException("null value for 'supportsRemoveProperty' argument");
-    }
-    if (supportsStringIds == null) {
-      throw new IllegalArgumentException("null value for 'supportsStringIds' argument");
-    }
-    if (supportsUserSuppliedIds == null) {
-      throw new IllegalArgumentException("null value for 'supportsUserSuppliedIds' argument");
-    }
-    if (supportsUuidIds == null) {
-      throw new IllegalArgumentException("null value for 'supportsUuidIds' argument");
-    }
+    java.util.Objects.requireNonNull((supportsAddProperty));
+    java.util.Objects.requireNonNull((supportsAnyIds));
+    java.util.Objects.requireNonNull((supportsCustomIds));
+    java.util.Objects.requireNonNull((supportsNumericIds));
+    java.util.Objects.requireNonNull((supportsRemoveProperty));
+    java.util.Objects.requireNonNull((supportsStringIds));
+    java.util.Objects.requireNonNull((supportsUserSuppliedIds));
+    java.util.Objects.requireNonNull((supportsUuidIds));
     this.supportsAddProperty = supportsAddProperty;
     this.supportsAnyIds = supportsAnyIds;
     this.supportsCustomIds = supportsCustomIds;
@@ -100,58 +84,42 @@ public class ElementFeatures implements Serializable {
   }
   
   public ElementFeatures withSupportsAddProperty(Boolean supportsAddProperty) {
-    if (supportsAddProperty == null) {
-      throw new IllegalArgumentException("null value for 'supportsAddProperty' argument");
-    }
+    java.util.Objects.requireNonNull((supportsAddProperty));
     return new ElementFeatures(supportsAddProperty, supportsAnyIds, supportsCustomIds, supportsNumericIds, supportsRemoveProperty, supportsStringIds, supportsUserSuppliedIds, supportsUuidIds);
   }
   
   public ElementFeatures withSupportsAnyIds(Boolean supportsAnyIds) {
-    if (supportsAnyIds == null) {
-      throw new IllegalArgumentException("null value for 'supportsAnyIds' argument");
-    }
+    java.util.Objects.requireNonNull((supportsAnyIds));
     return new ElementFeatures(supportsAddProperty, supportsAnyIds, supportsCustomIds, supportsNumericIds, supportsRemoveProperty, supportsStringIds, supportsUserSuppliedIds, supportsUuidIds);
   }
   
   public ElementFeatures withSupportsCustomIds(Boolean supportsCustomIds) {
-    if (supportsCustomIds == null) {
-      throw new IllegalArgumentException("null value for 'supportsCustomIds' argument");
-    }
+    java.util.Objects.requireNonNull((supportsCustomIds));
     return new ElementFeatures(supportsAddProperty, supportsAnyIds, supportsCustomIds, supportsNumericIds, supportsRemoveProperty, supportsStringIds, supportsUserSuppliedIds, supportsUuidIds);
   }
   
   public ElementFeatures withSupportsNumericIds(Boolean supportsNumericIds) {
-    if (supportsNumericIds == null) {
-      throw new IllegalArgumentException("null value for 'supportsNumericIds' argument");
-    }
+    java.util.Objects.requireNonNull((supportsNumericIds));
     return new ElementFeatures(supportsAddProperty, supportsAnyIds, supportsCustomIds, supportsNumericIds, supportsRemoveProperty, supportsStringIds, supportsUserSuppliedIds, supportsUuidIds);
   }
   
   public ElementFeatures withSupportsRemoveProperty(Boolean supportsRemoveProperty) {
-    if (supportsRemoveProperty == null) {
-      throw new IllegalArgumentException("null value for 'supportsRemoveProperty' argument");
-    }
+    java.util.Objects.requireNonNull((supportsRemoveProperty));
     return new ElementFeatures(supportsAddProperty, supportsAnyIds, supportsCustomIds, supportsNumericIds, supportsRemoveProperty, supportsStringIds, supportsUserSuppliedIds, supportsUuidIds);
   }
   
   public ElementFeatures withSupportsStringIds(Boolean supportsStringIds) {
-    if (supportsStringIds == null) {
-      throw new IllegalArgumentException("null value for 'supportsStringIds' argument");
-    }
+    java.util.Objects.requireNonNull((supportsStringIds));
     return new ElementFeatures(supportsAddProperty, supportsAnyIds, supportsCustomIds, supportsNumericIds, supportsRemoveProperty, supportsStringIds, supportsUserSuppliedIds, supportsUuidIds);
   }
   
   public ElementFeatures withSupportsUserSuppliedIds(Boolean supportsUserSuppliedIds) {
-    if (supportsUserSuppliedIds == null) {
-      throw new IllegalArgumentException("null value for 'supportsUserSuppliedIds' argument");
-    }
+    java.util.Objects.requireNonNull((supportsUserSuppliedIds));
     return new ElementFeatures(supportsAddProperty, supportsAnyIds, supportsCustomIds, supportsNumericIds, supportsRemoveProperty, supportsStringIds, supportsUserSuppliedIds, supportsUuidIds);
   }
   
   public ElementFeatures withSupportsUuidIds(Boolean supportsUuidIds) {
-    if (supportsUuidIds == null) {
-      throw new IllegalArgumentException("null value for 'supportsUuidIds' argument");
-    }
+    java.util.Objects.requireNonNull((supportsUuidIds));
     return new ElementFeatures(supportsAddProperty, supportsAnyIds, supportsCustomIds, supportsNumericIds, supportsRemoveProperty, supportsStringIds, supportsUserSuppliedIds, supportsUuidIds);
   }
 }

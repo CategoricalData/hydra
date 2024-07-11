@@ -12,12 +12,8 @@ public class DisjointObjectProperties implements Serializable {
   public final java.util.List<hydra.langs.owl.syntax.ObjectPropertyExpression> properties;
   
   public DisjointObjectProperties (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, java.util.List<hydra.langs.owl.syntax.ObjectPropertyExpression> properties) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
-    if (properties == null) {
-      throw new IllegalArgumentException("null value for 'properties' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
+    java.util.Objects.requireNonNull((properties));
     this.annotations = annotations;
     this.properties = properties;
   }
@@ -37,16 +33,12 @@ public class DisjointObjectProperties implements Serializable {
   }
   
   public DisjointObjectProperties withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new DisjointObjectProperties(annotations, properties);
   }
   
   public DisjointObjectProperties withProperties(java.util.List<hydra.langs.owl.syntax.ObjectPropertyExpression> properties) {
-    if (properties == null) {
-      throw new IllegalArgumentException("null value for 'properties' argument");
-    }
+    java.util.Objects.requireNonNull((properties));
     return new DisjointObjectProperties(annotations, properties);
   }
 }

@@ -37,9 +37,7 @@ public abstract class ForInit implements Serializable {
     public final java.util.List<hydra.langs.java.syntax.StatementExpression> value;
     
     public Statements (java.util.List<hydra.langs.java.syntax.StatementExpression> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class ForInit implements Serializable {
     public final hydra.langs.java.syntax.LocalVariableDeclaration value;
     
     public LocalVariable (hydra.langs.java.syntax.LocalVariableDeclaration value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

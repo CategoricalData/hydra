@@ -10,9 +10,7 @@ public class ObjectHasSelf implements Serializable {
   public final hydra.langs.owl.syntax.ObjectPropertyExpression value;
   
   public ObjectHasSelf (hydra.langs.owl.syntax.ObjectPropertyExpression value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

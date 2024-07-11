@@ -12,12 +12,8 @@ public class DirectiveLocations_Sequence implements Serializable {
   public final hydra.langs.graphql.syntax.DirectiveLocation directiveLocation;
   
   public DirectiveLocations_Sequence (hydra.langs.graphql.syntax.DirectiveLocations directiveLocations, hydra.langs.graphql.syntax.DirectiveLocation directiveLocation) {
-    if (directiveLocations == null) {
-      throw new IllegalArgumentException("null value for 'directiveLocations' argument");
-    }
-    if (directiveLocation == null) {
-      throw new IllegalArgumentException("null value for 'directiveLocation' argument");
-    }
+    java.util.Objects.requireNonNull((directiveLocations));
+    java.util.Objects.requireNonNull((directiveLocation));
     this.directiveLocations = directiveLocations;
     this.directiveLocation = directiveLocation;
   }
@@ -37,16 +33,12 @@ public class DirectiveLocations_Sequence implements Serializable {
   }
   
   public DirectiveLocations_Sequence withDirectiveLocations(hydra.langs.graphql.syntax.DirectiveLocations directiveLocations) {
-    if (directiveLocations == null) {
-      throw new IllegalArgumentException("null value for 'directiveLocations' argument");
-    }
+    java.util.Objects.requireNonNull((directiveLocations));
     return new DirectiveLocations_Sequence(directiveLocations, directiveLocation);
   }
   
   public DirectiveLocations_Sequence withDirectiveLocation(hydra.langs.graphql.syntax.DirectiveLocation directiveLocation) {
-    if (directiveLocation == null) {
-      throw new IllegalArgumentException("null value for 'directiveLocation' argument");
-    }
+    java.util.Objects.requireNonNull((directiveLocation));
     return new DirectiveLocations_Sequence(directiveLocations, directiveLocation);
   }
 }

@@ -10,9 +10,7 @@ public class LocalBindings implements Serializable {
   public final java.util.List<hydra.langs.haskell.ast.LocalBinding> value;
   
   public LocalBindings (java.util.List<hydra.langs.haskell.ast.LocalBinding> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

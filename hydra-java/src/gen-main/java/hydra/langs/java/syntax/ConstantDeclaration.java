@@ -14,15 +14,9 @@ public class ConstantDeclaration implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.VariableDeclarator> variables;
   
   public ConstantDeclaration (java.util.List<hydra.langs.java.syntax.ConstantModifier> modifiers, hydra.langs.java.syntax.UnannType type, java.util.List<hydra.langs.java.syntax.VariableDeclarator> variables) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (variables == null) {
-      throw new IllegalArgumentException("null value for 'variables' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((variables));
     this.modifiers = modifiers;
     this.type = type;
     this.variables = variables;
@@ -43,23 +37,17 @@ public class ConstantDeclaration implements Serializable {
   }
   
   public ConstantDeclaration withModifiers(java.util.List<hydra.langs.java.syntax.ConstantModifier> modifiers) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
     return new ConstantDeclaration(modifiers, type, variables);
   }
   
   public ConstantDeclaration withType(hydra.langs.java.syntax.UnannType type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new ConstantDeclaration(modifiers, type, variables);
   }
   
   public ConstantDeclaration withVariables(java.util.List<hydra.langs.java.syntax.VariableDeclarator> variables) {
-    if (variables == null) {
-      throw new IllegalArgumentException("null value for 'variables' argument");
-    }
+    java.util.Objects.requireNonNull((variables));
     return new ConstantDeclaration(modifiers, type, variables);
   }
 }

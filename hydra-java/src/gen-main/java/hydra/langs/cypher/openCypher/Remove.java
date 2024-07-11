@@ -10,9 +10,7 @@ public class Remove implements Serializable {
   public final java.util.List<hydra.langs.cypher.openCypher.RemoveItem> value;
   
   public Remove (java.util.List<hydra.langs.cypher.openCypher.RemoveItem> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

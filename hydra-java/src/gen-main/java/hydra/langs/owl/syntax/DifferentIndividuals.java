@@ -12,12 +12,8 @@ public class DifferentIndividuals implements Serializable {
   public final java.util.List<hydra.langs.owl.syntax.Individual> individuals;
   
   public DifferentIndividuals (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, java.util.List<hydra.langs.owl.syntax.Individual> individuals) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
-    if (individuals == null) {
-      throw new IllegalArgumentException("null value for 'individuals' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
+    java.util.Objects.requireNonNull((individuals));
     this.annotations = annotations;
     this.individuals = individuals;
   }
@@ -37,16 +33,12 @@ public class DifferentIndividuals implements Serializable {
   }
   
   public DifferentIndividuals withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new DifferentIndividuals(annotations, individuals);
   }
   
   public DifferentIndividuals withIndividuals(java.util.List<hydra.langs.owl.syntax.Individual> individuals) {
-    if (individuals == null) {
-      throw new IllegalArgumentException("null value for 'individuals' argument");
-    }
+    java.util.Objects.requireNonNull((individuals));
     return new DifferentIndividuals(annotations, individuals);
   }
 }

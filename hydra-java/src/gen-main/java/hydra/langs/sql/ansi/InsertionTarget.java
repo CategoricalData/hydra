@@ -10,9 +10,7 @@ public class InsertionTarget implements Serializable {
   public final hydra.langs.sql.ansi.TableName value;
   
   public InsertionTarget (hydra.langs.sql.ansi.TableName value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

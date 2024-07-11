@@ -26,15 +26,9 @@ public class DictionaryPageHeader implements Serializable {
   public final hydra.util.Opt<Boolean> isSorted;
   
   public DictionaryPageHeader (Integer numValues, hydra.langs.parquet.format.Encoding encoding, hydra.util.Opt<Boolean> isSorted) {
-    if (numValues == null) {
-      throw new IllegalArgumentException("null value for 'numValues' argument");
-    }
-    if (encoding == null) {
-      throw new IllegalArgumentException("null value for 'encoding' argument");
-    }
-    if (isSorted == null) {
-      throw new IllegalArgumentException("null value for 'isSorted' argument");
-    }
+    java.util.Objects.requireNonNull((numValues));
+    java.util.Objects.requireNonNull((encoding));
+    java.util.Objects.requireNonNull((isSorted));
     this.numValues = numValues;
     this.encoding = encoding;
     this.isSorted = isSorted;
@@ -55,23 +49,17 @@ public class DictionaryPageHeader implements Serializable {
   }
   
   public DictionaryPageHeader withNumValues(Integer numValues) {
-    if (numValues == null) {
-      throw new IllegalArgumentException("null value for 'numValues' argument");
-    }
+    java.util.Objects.requireNonNull((numValues));
     return new DictionaryPageHeader(numValues, encoding, isSorted);
   }
   
   public DictionaryPageHeader withEncoding(hydra.langs.parquet.format.Encoding encoding) {
-    if (encoding == null) {
-      throw new IllegalArgumentException("null value for 'encoding' argument");
-    }
+    java.util.Objects.requireNonNull((encoding));
     return new DictionaryPageHeader(numValues, encoding, isSorted);
   }
   
   public DictionaryPageHeader withIsSorted(hydra.util.Opt<Boolean> isSorted) {
-    if (isSorted == null) {
-      throw new IllegalArgumentException("null value for 'isSorted' argument");
-    }
+    java.util.Objects.requireNonNull((isSorted));
     return new DictionaryPageHeader(numValues, encoding, isSorted);
   }
 }

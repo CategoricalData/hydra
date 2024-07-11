@@ -12,12 +12,8 @@ public class ObjectTypeExtension_Sequence3 implements Serializable {
   public final hydra.langs.graphql.syntax.ImplementsInterfaces implementsInterfaces;
   
   public ObjectTypeExtension_Sequence3 (hydra.langs.graphql.syntax.Name name, hydra.langs.graphql.syntax.ImplementsInterfaces implementsInterfaces) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (implementsInterfaces == null) {
-      throw new IllegalArgumentException("null value for 'implementsInterfaces' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((implementsInterfaces));
     this.name = name;
     this.implementsInterfaces = implementsInterfaces;
   }
@@ -37,16 +33,12 @@ public class ObjectTypeExtension_Sequence3 implements Serializable {
   }
   
   public ObjectTypeExtension_Sequence3 withName(hydra.langs.graphql.syntax.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new ObjectTypeExtension_Sequence3(name, implementsInterfaces);
   }
   
   public ObjectTypeExtension_Sequence3 withImplementsInterfaces(hydra.langs.graphql.syntax.ImplementsInterfaces implementsInterfaces) {
-    if (implementsInterfaces == null) {
-      throw new IllegalArgumentException("null value for 'implementsInterfaces' argument");
-    }
+    java.util.Objects.requireNonNull((implementsInterfaces));
     return new ObjectTypeExtension_Sequence3(name, implementsInterfaces);
   }
 }

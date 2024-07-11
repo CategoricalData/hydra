@@ -16,18 +16,10 @@ public class PatternComprehension implements Serializable {
   public final hydra.langs.cypher.openCypher.Expression right;
   
   public PatternComprehension (hydra.util.Opt<hydra.langs.cypher.openCypher.Variable> variable, hydra.langs.cypher.openCypher.RelationshipsPattern pattern, hydra.util.Opt<hydra.langs.cypher.openCypher.Where> where, hydra.langs.cypher.openCypher.Expression right) {
-    if (variable == null) {
-      throw new IllegalArgumentException("null value for 'variable' argument");
-    }
-    if (pattern == null) {
-      throw new IllegalArgumentException("null value for 'pattern' argument");
-    }
-    if (where == null) {
-      throw new IllegalArgumentException("null value for 'where' argument");
-    }
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((variable));
+    java.util.Objects.requireNonNull((pattern));
+    java.util.Objects.requireNonNull((where));
+    java.util.Objects.requireNonNull((right));
     this.variable = variable;
     this.pattern = pattern;
     this.where = where;
@@ -49,30 +41,22 @@ public class PatternComprehension implements Serializable {
   }
   
   public PatternComprehension withVariable(hydra.util.Opt<hydra.langs.cypher.openCypher.Variable> variable) {
-    if (variable == null) {
-      throw new IllegalArgumentException("null value for 'variable' argument");
-    }
+    java.util.Objects.requireNonNull((variable));
     return new PatternComprehension(variable, pattern, where, right);
   }
   
   public PatternComprehension withPattern(hydra.langs.cypher.openCypher.RelationshipsPattern pattern) {
-    if (pattern == null) {
-      throw new IllegalArgumentException("null value for 'pattern' argument");
-    }
+    java.util.Objects.requireNonNull((pattern));
     return new PatternComprehension(variable, pattern, where, right);
   }
   
   public PatternComprehension withWhere(hydra.util.Opt<hydra.langs.cypher.openCypher.Where> where) {
-    if (where == null) {
-      throw new IllegalArgumentException("null value for 'where' argument");
-    }
+    java.util.Objects.requireNonNull((where));
     return new PatternComprehension(variable, pattern, where, right);
   }
   
   public PatternComprehension withRight(hydra.langs.cypher.openCypher.Expression right) {
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((right));
     return new PatternComprehension(variable, pattern, where, right);
   }
 }

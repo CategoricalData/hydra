@@ -16,9 +16,7 @@ public class SourceContext implements Serializable {
   public final String fileName;
   
   public SourceContext (String fileName) {
-    if (fileName == null) {
-      throw new IllegalArgumentException("null value for 'fileName' argument");
-    }
+    java.util.Objects.requireNonNull((fileName));
     this.fileName = fileName;
   }
   

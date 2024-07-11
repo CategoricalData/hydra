@@ -16,9 +16,7 @@ public class MapFeatures implements Serializable {
   public final Boolean keys;
   
   public MapFeatures (Boolean keys) {
-    if (keys == null) {
-      throw new IllegalArgumentException("null value for 'keys' argument");
-    }
+    java.util.Objects.requireNonNull((keys));
     this.keys = keys;
   }
   

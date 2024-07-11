@@ -14,15 +14,9 @@ public class DataExactCardinality implements Serializable {
   public final java.util.List<hydra.langs.owl.syntax.DataRange> range;
   
   public DataExactCardinality (java.math.BigInteger bound, hydra.langs.owl.syntax.DataPropertyExpression property, java.util.List<hydra.langs.owl.syntax.DataRange> range) {
-    if (bound == null) {
-      throw new IllegalArgumentException("null value for 'bound' argument");
-    }
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
-    if (range == null) {
-      throw new IllegalArgumentException("null value for 'range' argument");
-    }
+    java.util.Objects.requireNonNull((bound));
+    java.util.Objects.requireNonNull((property));
+    java.util.Objects.requireNonNull((range));
     this.bound = bound;
     this.property = property;
     this.range = range;
@@ -43,23 +37,17 @@ public class DataExactCardinality implements Serializable {
   }
   
   public DataExactCardinality withBound(java.math.BigInteger bound) {
-    if (bound == null) {
-      throw new IllegalArgumentException("null value for 'bound' argument");
-    }
+    java.util.Objects.requireNonNull((bound));
     return new DataExactCardinality(bound, property, range);
   }
   
   public DataExactCardinality withProperty(hydra.langs.owl.syntax.DataPropertyExpression property) {
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
+    java.util.Objects.requireNonNull((property));
     return new DataExactCardinality(bound, property, range);
   }
   
   public DataExactCardinality withRange(java.util.List<hydra.langs.owl.syntax.DataRange> range) {
-    if (range == null) {
-      throw new IllegalArgumentException("null value for 'range' argument");
-    }
+    java.util.Objects.requireNonNull((range));
     return new DataExactCardinality(bound, property, range);
   }
 }

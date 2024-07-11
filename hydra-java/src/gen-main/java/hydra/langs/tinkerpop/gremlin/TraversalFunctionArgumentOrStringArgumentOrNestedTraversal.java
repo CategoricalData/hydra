@@ -43,9 +43,7 @@ public abstract class TraversalFunctionArgumentOrStringArgumentOrNestedTraversal
     public final hydra.langs.tinkerpop.gremlin.TraversalFunctionArgument value;
     
     public Function (hydra.langs.tinkerpop.gremlin.TraversalFunctionArgument value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class TraversalFunctionArgumentOrStringArgumentOrNestedTraversal
     public final hydra.langs.tinkerpop.gremlin.StringArgument value;
     
     public String_ (hydra.langs.tinkerpop.gremlin.StringArgument value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class TraversalFunctionArgumentOrStringArgumentOrNestedTraversal
     public final hydra.langs.tinkerpop.gremlin.NestedTraversal value;
     
     public Traversal (hydra.langs.tinkerpop.gremlin.NestedTraversal value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

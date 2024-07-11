@@ -43,9 +43,7 @@ public abstract class WithArgsValues implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.WithOptionsValues value;
     
     public WithOptions (hydra.langs.tinkerpop.gremlin.WithOptionsValues value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class WithArgsValues implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.IoOptionsValues value;
     
     public Io (hydra.langs.tinkerpop.gremlin.IoOptionsValues value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class WithArgsValues implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.GenericLiteralArgument value;
     
     public Object_ (hydra.langs.tinkerpop.gremlin.GenericLiteralArgument value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

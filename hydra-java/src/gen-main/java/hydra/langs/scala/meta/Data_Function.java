@@ -12,12 +12,8 @@ public class Data_Function implements Serializable {
   public final hydra.langs.scala.meta.Data body;
   
   public Data_Function (java.util.List<hydra.langs.scala.meta.Data_Param> params, hydra.langs.scala.meta.Data body) {
-    if (params == null) {
-      throw new IllegalArgumentException("null value for 'params' argument");
-    }
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((params));
+    java.util.Objects.requireNonNull((body));
     this.params = params;
     this.body = body;
   }
@@ -37,16 +33,12 @@ public class Data_Function implements Serializable {
   }
   
   public Data_Function withParams(java.util.List<hydra.langs.scala.meta.Data_Param> params) {
-    if (params == null) {
-      throw new IllegalArgumentException("null value for 'params' argument");
-    }
+    java.util.Objects.requireNonNull((params));
     return new Data_Function(params, body);
   }
   
   public Data_Function withBody(hydra.langs.scala.meta.Data body) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((body));
     return new Data_Function(params, body);
   }
 }

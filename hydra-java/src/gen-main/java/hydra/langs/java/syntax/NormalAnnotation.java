@@ -12,12 +12,8 @@ public class NormalAnnotation implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.ElementValuePair> pairs;
   
   public NormalAnnotation (hydra.langs.java.syntax.TypeName typeName, java.util.List<hydra.langs.java.syntax.ElementValuePair> pairs) {
-    if (typeName == null) {
-      throw new IllegalArgumentException("null value for 'typeName' argument");
-    }
-    if (pairs == null) {
-      throw new IllegalArgumentException("null value for 'pairs' argument");
-    }
+    java.util.Objects.requireNonNull((typeName));
+    java.util.Objects.requireNonNull((pairs));
     this.typeName = typeName;
     this.pairs = pairs;
   }
@@ -37,16 +33,12 @@ public class NormalAnnotation implements Serializable {
   }
   
   public NormalAnnotation withTypeName(hydra.langs.java.syntax.TypeName typeName) {
-    if (typeName == null) {
-      throw new IllegalArgumentException("null value for 'typeName' argument");
-    }
+    java.util.Objects.requireNonNull((typeName));
     return new NormalAnnotation(typeName, pairs);
   }
   
   public NormalAnnotation withPairs(java.util.List<hydra.langs.java.syntax.ElementValuePair> pairs) {
-    if (pairs == null) {
-      throw new IllegalArgumentException("null value for 'pairs' argument");
-    }
+    java.util.Objects.requireNonNull((pairs));
     return new NormalAnnotation(typeName, pairs);
   }
 }

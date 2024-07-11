@@ -15,12 +15,8 @@ public class Injection<A> implements Serializable {
   public final hydra.core.Field<A> field;
   
   public Injection (hydra.core.Name typeName, hydra.core.Field<A> field) {
-    if (typeName == null) {
-      throw new IllegalArgumentException("null value for 'typeName' argument");
-    }
-    if (field == null) {
-      throw new IllegalArgumentException("null value for 'field' argument");
-    }
+    java.util.Objects.requireNonNull((typeName));
+    java.util.Objects.requireNonNull((field));
     this.typeName = typeName;
     this.field = field;
   }
@@ -40,16 +36,12 @@ public class Injection<A> implements Serializable {
   }
   
   public Injection withTypeName(hydra.core.Name typeName) {
-    if (typeName == null) {
-      throw new IllegalArgumentException("null value for 'typeName' argument");
-    }
+    java.util.Objects.requireNonNull((typeName));
     return new Injection(typeName, field);
   }
   
   public Injection withField(hydra.core.Field<A> field) {
-    if (field == null) {
-      throw new IllegalArgumentException("null value for 'field' argument");
-    }
+    java.util.Objects.requireNonNull((field));
     return new Injection(typeName, field);
   }
 }

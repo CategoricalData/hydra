@@ -12,12 +12,8 @@ public class VariableDeclarator implements Serializable {
   public final hydra.util.Opt<hydra.langs.java.syntax.VariableInitializer> initializer;
   
   public VariableDeclarator (hydra.langs.java.syntax.VariableDeclaratorId id, hydra.util.Opt<hydra.langs.java.syntax.VariableInitializer> initializer) {
-    if (id == null) {
-      throw new IllegalArgumentException("null value for 'id' argument");
-    }
-    if (initializer == null) {
-      throw new IllegalArgumentException("null value for 'initializer' argument");
-    }
+    java.util.Objects.requireNonNull((id));
+    java.util.Objects.requireNonNull((initializer));
     this.id = id;
     this.initializer = initializer;
   }
@@ -37,16 +33,12 @@ public class VariableDeclarator implements Serializable {
   }
   
   public VariableDeclarator withId(hydra.langs.java.syntax.VariableDeclaratorId id) {
-    if (id == null) {
-      throw new IllegalArgumentException("null value for 'id' argument");
-    }
+    java.util.Objects.requireNonNull((id));
     return new VariableDeclarator(id, initializer);
   }
   
   public VariableDeclarator withInitializer(hydra.util.Opt<hydra.langs.java.syntax.VariableInitializer> initializer) {
-    if (initializer == null) {
-      throw new IllegalArgumentException("null value for 'initializer' argument");
-    }
+    java.util.Objects.requireNonNull((initializer));
     return new VariableDeclarator(id, initializer);
   }
 }

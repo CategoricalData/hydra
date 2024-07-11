@@ -12,12 +12,8 @@ public class BooleanTerm_And implements Serializable {
   public final hydra.langs.sql.ansi.BooleanFactor rhs;
   
   public BooleanTerm_And (hydra.langs.sql.ansi.BooleanTerm lhs, hydra.langs.sql.ansi.BooleanFactor rhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
+    java.util.Objects.requireNonNull((rhs));
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -37,16 +33,12 @@ public class BooleanTerm_And implements Serializable {
   }
   
   public BooleanTerm_And withLhs(hydra.langs.sql.ansi.BooleanTerm lhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
     return new BooleanTerm_And(lhs, rhs);
   }
   
   public BooleanTerm_And withRhs(hydra.langs.sql.ansi.BooleanFactor rhs) {
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((rhs));
     return new BooleanTerm_And(lhs, rhs);
   }
 }

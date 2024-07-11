@@ -43,9 +43,7 @@ public abstract class ReadingClause implements Serializable {
     public final hydra.langs.cypher.openCypher.Match value;
     
     public Match (hydra.langs.cypher.openCypher.Match value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class ReadingClause implements Serializable {
     public final hydra.langs.cypher.openCypher.Unwind value;
     
     public Unwind (hydra.langs.cypher.openCypher.Unwind value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class ReadingClause implements Serializable {
     public final hydra.langs.cypher.openCypher.InQueryCall value;
     
     public InQueryCall (hydra.langs.cypher.openCypher.InQueryCall value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -12,12 +12,8 @@ public class ArrayType implements Serializable {
   public final Boolean containsNull;
   
   public ArrayType (hydra.langs.parquet.delta.DataType elementType, Boolean containsNull) {
-    if (elementType == null) {
-      throw new IllegalArgumentException("null value for 'elementType' argument");
-    }
-    if (containsNull == null) {
-      throw new IllegalArgumentException("null value for 'containsNull' argument");
-    }
+    java.util.Objects.requireNonNull((elementType));
+    java.util.Objects.requireNonNull((containsNull));
     this.elementType = elementType;
     this.containsNull = containsNull;
   }
@@ -37,16 +33,12 @@ public class ArrayType implements Serializable {
   }
   
   public ArrayType withElementType(hydra.langs.parquet.delta.DataType elementType) {
-    if (elementType == null) {
-      throw new IllegalArgumentException("null value for 'elementType' argument");
-    }
+    java.util.Objects.requireNonNull((elementType));
     return new ArrayType(elementType, containsNull);
   }
   
   public ArrayType withContainsNull(Boolean containsNull) {
-    if (containsNull == null) {
-      throw new IllegalArgumentException("null value for 'containsNull' argument");
-    }
+    java.util.Objects.requireNonNull((containsNull));
     return new ArrayType(elementType, containsNull);
   }
 }

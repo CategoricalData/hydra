@@ -12,12 +12,8 @@ public class TraversalCardinalityArgumentAndObjects implements Serializable {
   public final java.util.List<hydra.langs.tinkerpop.gremlin.GenericLiteralArgument> objects;
   
   public TraversalCardinalityArgumentAndObjects (hydra.langs.tinkerpop.gremlin.TraversalCardinalityArgument cardinality, java.util.List<hydra.langs.tinkerpop.gremlin.GenericLiteralArgument> objects) {
-    if (cardinality == null) {
-      throw new IllegalArgumentException("null value for 'cardinality' argument");
-    }
-    if (objects == null) {
-      throw new IllegalArgumentException("null value for 'objects' argument");
-    }
+    java.util.Objects.requireNonNull((cardinality));
+    java.util.Objects.requireNonNull((objects));
     this.cardinality = cardinality;
     this.objects = objects;
   }
@@ -37,16 +33,12 @@ public class TraversalCardinalityArgumentAndObjects implements Serializable {
   }
   
   public TraversalCardinalityArgumentAndObjects withCardinality(hydra.langs.tinkerpop.gremlin.TraversalCardinalityArgument cardinality) {
-    if (cardinality == null) {
-      throw new IllegalArgumentException("null value for 'cardinality' argument");
-    }
+    java.util.Objects.requireNonNull((cardinality));
     return new TraversalCardinalityArgumentAndObjects(cardinality, objects);
   }
   
   public TraversalCardinalityArgumentAndObjects withObjects(java.util.List<hydra.langs.tinkerpop.gremlin.GenericLiteralArgument> objects) {
-    if (objects == null) {
-      throw new IllegalArgumentException("null value for 'objects' argument");
-    }
+    java.util.Objects.requireNonNull((objects));
     return new TraversalCardinalityArgumentAndObjects(cardinality, objects);
   }
 }

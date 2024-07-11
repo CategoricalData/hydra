@@ -14,15 +14,9 @@ public class PredicateTraversalArgument implements Serializable {
   public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal2;
   
   public PredicateTraversalArgument (hydra.langs.tinkerpop.gremlin.TraversalPredicate predicate, hydra.langs.tinkerpop.gremlin.NestedTraversal traversal1, hydra.util.Opt<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal2) {
-    if (predicate == null) {
-      throw new IllegalArgumentException("null value for 'predicate' argument");
-    }
-    if (traversal1 == null) {
-      throw new IllegalArgumentException("null value for 'traversal1' argument");
-    }
-    if (traversal2 == null) {
-      throw new IllegalArgumentException("null value for 'traversal2' argument");
-    }
+    java.util.Objects.requireNonNull((predicate));
+    java.util.Objects.requireNonNull((traversal1));
+    java.util.Objects.requireNonNull((traversal2));
     this.predicate = predicate;
     this.traversal1 = traversal1;
     this.traversal2 = traversal2;
@@ -43,23 +37,17 @@ public class PredicateTraversalArgument implements Serializable {
   }
   
   public PredicateTraversalArgument withPredicate(hydra.langs.tinkerpop.gremlin.TraversalPredicate predicate) {
-    if (predicate == null) {
-      throw new IllegalArgumentException("null value for 'predicate' argument");
-    }
+    java.util.Objects.requireNonNull((predicate));
     return new PredicateTraversalArgument(predicate, traversal1, traversal2);
   }
   
   public PredicateTraversalArgument withTraversal1(hydra.langs.tinkerpop.gremlin.NestedTraversal traversal1) {
-    if (traversal1 == null) {
-      throw new IllegalArgumentException("null value for 'traversal1' argument");
-    }
+    java.util.Objects.requireNonNull((traversal1));
     return new PredicateTraversalArgument(predicate, traversal1, traversal2);
   }
   
   public PredicateTraversalArgument withTraversal2(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal2) {
-    if (traversal2 == null) {
-      throw new IllegalArgumentException("null value for 'traversal2' argument");
-    }
+    java.util.Objects.requireNonNull((traversal2));
     return new PredicateTraversalArgument(predicate, traversal1, traversal2);
   }
 }

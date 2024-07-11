@@ -14,15 +14,9 @@ public class Ctor_Primary implements Serializable {
   public final java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> paramss;
   
   public Ctor_Primary (java.util.List<hydra.langs.scala.meta.Mod> mods, hydra.langs.scala.meta.Name name, java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> paramss) {
-    if (mods == null) {
-      throw new IllegalArgumentException("null value for 'mods' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (paramss == null) {
-      throw new IllegalArgumentException("null value for 'paramss' argument");
-    }
+    java.util.Objects.requireNonNull((mods));
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((paramss));
     this.mods = mods;
     this.name = name;
     this.paramss = paramss;
@@ -43,23 +37,17 @@ public class Ctor_Primary implements Serializable {
   }
   
   public Ctor_Primary withMods(java.util.List<hydra.langs.scala.meta.Mod> mods) {
-    if (mods == null) {
-      throw new IllegalArgumentException("null value for 'mods' argument");
-    }
+    java.util.Objects.requireNonNull((mods));
     return new Ctor_Primary(mods, name, paramss);
   }
   
   public Ctor_Primary withName(hydra.langs.scala.meta.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Ctor_Primary(mods, name, paramss);
   }
   
   public Ctor_Primary withParamss(java.util.List<java.util.List<hydra.langs.scala.meta.Data_Param>> paramss) {
-    if (paramss == null) {
-      throw new IllegalArgumentException("null value for 'paramss' argument");
-    }
+    java.util.Objects.requireNonNull((paramss));
     return new Ctor_Primary(mods, name, paramss);
   }
 }

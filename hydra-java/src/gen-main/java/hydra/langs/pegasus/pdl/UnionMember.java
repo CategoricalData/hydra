@@ -14,15 +14,9 @@ public class UnionMember implements Serializable {
   public final hydra.langs.pegasus.pdl.Annotations annotations;
   
   public UnionMember (hydra.util.Opt<hydra.langs.pegasus.pdl.FieldName> alias, hydra.langs.pegasus.pdl.Schema value, hydra.langs.pegasus.pdl.Annotations annotations) {
-    if (alias == null) {
-      throw new IllegalArgumentException("null value for 'alias' argument");
-    }
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((alias));
+    java.util.Objects.requireNonNull((value));
+    java.util.Objects.requireNonNull((annotations));
     this.alias = alias;
     this.value = value;
     this.annotations = annotations;
@@ -43,23 +37,17 @@ public class UnionMember implements Serializable {
   }
   
   public UnionMember withAlias(hydra.util.Opt<hydra.langs.pegasus.pdl.FieldName> alias) {
-    if (alias == null) {
-      throw new IllegalArgumentException("null value for 'alias' argument");
-    }
+    java.util.Objects.requireNonNull((alias));
     return new UnionMember(alias, value, annotations);
   }
   
   public UnionMember withValue(hydra.langs.pegasus.pdl.Schema value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     return new UnionMember(alias, value, annotations);
   }
   
   public UnionMember withAnnotations(hydra.langs.pegasus.pdl.Annotations annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new UnionMember(alias, value, annotations);
   }
 }

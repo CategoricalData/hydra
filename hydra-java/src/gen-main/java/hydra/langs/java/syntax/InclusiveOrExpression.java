@@ -10,9 +10,7 @@ public class InclusiveOrExpression implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.ExclusiveOrExpression> value;
   
   public InclusiveOrExpression (java.util.List<hydra.langs.java.syntax.ExclusiveOrExpression> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

@@ -12,12 +12,8 @@ public class PopStringsArgument implements Serializable {
   public final java.util.List<hydra.langs.tinkerpop.gremlin.StringArgument> string;
   
   public PopStringsArgument (hydra.langs.tinkerpop.gremlin.TraversalPopArgument pop, java.util.List<hydra.langs.tinkerpop.gremlin.StringArgument> string) {
-    if (pop == null) {
-      throw new IllegalArgumentException("null value for 'pop' argument");
-    }
-    if (string == null) {
-      throw new IllegalArgumentException("null value for 'string' argument");
-    }
+    java.util.Objects.requireNonNull((pop));
+    java.util.Objects.requireNonNull((string));
     this.pop = pop;
     this.string = string;
   }
@@ -37,16 +33,12 @@ public class PopStringsArgument implements Serializable {
   }
   
   public PopStringsArgument withPop(hydra.langs.tinkerpop.gremlin.TraversalPopArgument pop) {
-    if (pop == null) {
-      throw new IllegalArgumentException("null value for 'pop' argument");
-    }
+    java.util.Objects.requireNonNull((pop));
     return new PopStringsArgument(pop, string);
   }
   
   public PopStringsArgument withString(java.util.List<hydra.langs.tinkerpop.gremlin.StringArgument> string) {
-    if (string == null) {
-      throw new IllegalArgumentException("null value for 'string' argument");
-    }
+    java.util.Objects.requireNonNull((string));
     return new PopStringsArgument(pop, string);
   }
 }

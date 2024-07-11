@@ -12,12 +12,8 @@ public class CastExpression_NotPlusMinus implements Serializable {
   public final hydra.langs.java.syntax.UnaryExpression expression;
   
   public CastExpression_NotPlusMinus (hydra.langs.java.syntax.CastExpression_RefAndBounds refAndBounds, hydra.langs.java.syntax.UnaryExpression expression) {
-    if (refAndBounds == null) {
-      throw new IllegalArgumentException("null value for 'refAndBounds' argument");
-    }
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((refAndBounds));
+    java.util.Objects.requireNonNull((expression));
     this.refAndBounds = refAndBounds;
     this.expression = expression;
   }
@@ -37,16 +33,12 @@ public class CastExpression_NotPlusMinus implements Serializable {
   }
   
   public CastExpression_NotPlusMinus withRefAndBounds(hydra.langs.java.syntax.CastExpression_RefAndBounds refAndBounds) {
-    if (refAndBounds == null) {
-      throw new IllegalArgumentException("null value for 'refAndBounds' argument");
-    }
+    java.util.Objects.requireNonNull((refAndBounds));
     return new CastExpression_NotPlusMinus(refAndBounds, expression);
   }
   
   public CastExpression_NotPlusMinus withExpression(hydra.langs.java.syntax.UnaryExpression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new CastExpression_NotPlusMinus(refAndBounds, expression);
   }
 }

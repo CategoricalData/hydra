@@ -10,9 +10,7 @@ public class Directives implements Serializable {
   public final java.util.List<hydra.langs.graphql.syntax.Directive> value;
   
   public Directives (java.util.List<hydra.langs.graphql.syntax.Directive> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

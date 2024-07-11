@@ -12,12 +12,8 @@ public class StringPredicateExpression implements Serializable {
   public final hydra.langs.cypher.openCypher.AddOrSubtractExpression expression;
   
   public StringPredicateExpression (hydra.langs.cypher.openCypher.StringPredicateOperator operator, hydra.langs.cypher.openCypher.AddOrSubtractExpression expression) {
-    if (operator == null) {
-      throw new IllegalArgumentException("null value for 'operator' argument");
-    }
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((operator));
+    java.util.Objects.requireNonNull((expression));
     this.operator = operator;
     this.expression = expression;
   }
@@ -37,16 +33,12 @@ public class StringPredicateExpression implements Serializable {
   }
   
   public StringPredicateExpression withOperator(hydra.langs.cypher.openCypher.StringPredicateOperator operator) {
-    if (operator == null) {
-      throw new IllegalArgumentException("null value for 'operator' argument");
-    }
+    java.util.Objects.requireNonNull((operator));
     return new StringPredicateExpression(operator, expression);
   }
   
   public StringPredicateExpression withExpression(hydra.langs.cypher.openCypher.AddOrSubtractExpression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new StringPredicateExpression(operator, expression);
   }
 }

@@ -12,12 +12,8 @@ public class ExpressionName implements Serializable {
   public final hydra.langs.java.syntax.Identifier identifier;
   
   public ExpressionName (hydra.util.Opt<hydra.langs.java.syntax.AmbiguousName> qualifier, hydra.langs.java.syntax.Identifier identifier) {
-    if (qualifier == null) {
-      throw new IllegalArgumentException("null value for 'qualifier' argument");
-    }
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
+    java.util.Objects.requireNonNull((qualifier));
+    java.util.Objects.requireNonNull((identifier));
     this.qualifier = qualifier;
     this.identifier = identifier;
   }
@@ -37,16 +33,12 @@ public class ExpressionName implements Serializable {
   }
   
   public ExpressionName withQualifier(hydra.util.Opt<hydra.langs.java.syntax.AmbiguousName> qualifier) {
-    if (qualifier == null) {
-      throw new IllegalArgumentException("null value for 'qualifier' argument");
-    }
+    java.util.Objects.requireNonNull((qualifier));
     return new ExpressionName(qualifier, identifier);
   }
   
   public ExpressionName withIdentifier(hydra.langs.java.syntax.Identifier identifier) {
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
+    java.util.Objects.requireNonNull((identifier));
     return new ExpressionName(qualifier, identifier);
   }
 }

@@ -12,12 +12,8 @@ public class ShapeOr implements Serializable {
   public final java.util.List<hydra.langs.shex.syntax.ShapeAnd> listOfSequence;
   
   public ShapeOr (hydra.langs.shex.syntax.ShapeAnd shapeAnd, java.util.List<hydra.langs.shex.syntax.ShapeAnd> listOfSequence) {
-    if (shapeAnd == null) {
-      throw new IllegalArgumentException("null value for 'shapeAnd' argument");
-    }
-    if (listOfSequence == null) {
-      throw new IllegalArgumentException("null value for 'listOfSequence' argument");
-    }
+    java.util.Objects.requireNonNull((shapeAnd));
+    java.util.Objects.requireNonNull((listOfSequence));
     this.shapeAnd = shapeAnd;
     this.listOfSequence = listOfSequence;
   }
@@ -37,16 +33,12 @@ public class ShapeOr implements Serializable {
   }
   
   public ShapeOr withShapeAnd(hydra.langs.shex.syntax.ShapeAnd shapeAnd) {
-    if (shapeAnd == null) {
-      throw new IllegalArgumentException("null value for 'shapeAnd' argument");
-    }
+    java.util.Objects.requireNonNull((shapeAnd));
     return new ShapeOr(shapeAnd, listOfSequence);
   }
   
   public ShapeOr withListOfSequence(java.util.List<hydra.langs.shex.syntax.ShapeAnd> listOfSequence) {
-    if (listOfSequence == null) {
-      throw new IllegalArgumentException("null value for 'listOfSequence' argument");
-    }
+    java.util.Objects.requireNonNull((listOfSequence));
     return new ShapeOr(shapeAnd, listOfSequence);
   }
 }

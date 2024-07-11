@@ -12,12 +12,8 @@ public class TailArgs implements Serializable {
   public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.IntegerArgument> integer;
   
   public TailArgs (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope, hydra.util.Opt<hydra.langs.tinkerpop.gremlin.IntegerArgument> integer) {
-    if (scope == null) {
-      throw new IllegalArgumentException("null value for 'scope' argument");
-    }
-    if (integer == null) {
-      throw new IllegalArgumentException("null value for 'integer' argument");
-    }
+    java.util.Objects.requireNonNull((scope));
+    java.util.Objects.requireNonNull((integer));
     this.scope = scope;
     this.integer = integer;
   }
@@ -37,16 +33,12 @@ public class TailArgs implements Serializable {
   }
   
   public TailArgs withScope(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope) {
-    if (scope == null) {
-      throw new IllegalArgumentException("null value for 'scope' argument");
-    }
+    java.util.Objects.requireNonNull((scope));
     return new TailArgs(scope, integer);
   }
   
   public TailArgs withInteger(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.IntegerArgument> integer) {
-    if (integer == null) {
-      throw new IllegalArgumentException("null value for 'integer' argument");
-    }
+    java.util.Objects.requireNonNull((integer));
     return new TailArgs(scope, integer);
   }
 }

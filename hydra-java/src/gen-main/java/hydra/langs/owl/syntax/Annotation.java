@@ -14,15 +14,9 @@ public class Annotation implements Serializable {
   public final hydra.langs.owl.syntax.AnnotationValue value;
   
   public Annotation (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, hydra.langs.owl.syntax.AnnotationProperty property, hydra.langs.owl.syntax.AnnotationValue value) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
+    java.util.Objects.requireNonNull((property));
+    java.util.Objects.requireNonNull((value));
     this.annotations = annotations;
     this.property = property;
     this.value = value;
@@ -43,23 +37,17 @@ public class Annotation implements Serializable {
   }
   
   public Annotation withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new Annotation(annotations, property, value);
   }
   
   public Annotation withProperty(hydra.langs.owl.syntax.AnnotationProperty property) {
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
+    java.util.Objects.requireNonNull((property));
     return new Annotation(annotations, property, value);
   }
   
   public Annotation withValue(hydra.langs.owl.syntax.AnnotationValue value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     return new Annotation(annotations, property, value);
   }
 }

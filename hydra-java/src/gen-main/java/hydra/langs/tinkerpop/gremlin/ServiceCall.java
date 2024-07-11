@@ -12,12 +12,8 @@ public class ServiceCall implements Serializable {
   public final hydra.langs.tinkerpop.gremlin.ServiceArguments arguments;
   
   public ServiceCall (hydra.langs.tinkerpop.gremlin.StringArgument service, hydra.langs.tinkerpop.gremlin.ServiceArguments arguments) {
-    if (service == null) {
-      throw new IllegalArgumentException("null value for 'service' argument");
-    }
-    if (arguments == null) {
-      throw new IllegalArgumentException("null value for 'arguments' argument");
-    }
+    java.util.Objects.requireNonNull((service));
+    java.util.Objects.requireNonNull((arguments));
     this.service = service;
     this.arguments = arguments;
   }
@@ -37,16 +33,12 @@ public class ServiceCall implements Serializable {
   }
   
   public ServiceCall withService(hydra.langs.tinkerpop.gremlin.StringArgument service) {
-    if (service == null) {
-      throw new IllegalArgumentException("null value for 'service' argument");
-    }
+    java.util.Objects.requireNonNull((service));
     return new ServiceCall(service, arguments);
   }
   
   public ServiceCall withArguments(hydra.langs.tinkerpop.gremlin.ServiceArguments arguments) {
-    if (arguments == null) {
-      throw new IllegalArgumentException("null value for 'arguments' argument");
-    }
+    java.util.Objects.requireNonNull((arguments));
     return new ServiceCall(service, arguments);
   }
 }

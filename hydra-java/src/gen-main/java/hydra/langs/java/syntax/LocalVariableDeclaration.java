@@ -14,15 +14,9 @@ public class LocalVariableDeclaration implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.VariableDeclarator> declarators;
   
   public LocalVariableDeclaration (java.util.List<hydra.langs.java.syntax.VariableModifier> modifiers, hydra.langs.java.syntax.LocalVariableType type, java.util.List<hydra.langs.java.syntax.VariableDeclarator> declarators) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (declarators == null) {
-      throw new IllegalArgumentException("null value for 'declarators' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((declarators));
     this.modifiers = modifiers;
     this.type = type;
     this.declarators = declarators;
@@ -43,23 +37,17 @@ public class LocalVariableDeclaration implements Serializable {
   }
   
   public LocalVariableDeclaration withModifiers(java.util.List<hydra.langs.java.syntax.VariableModifier> modifiers) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
     return new LocalVariableDeclaration(modifiers, type, declarators);
   }
   
   public LocalVariableDeclaration withType(hydra.langs.java.syntax.LocalVariableType type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new LocalVariableDeclaration(modifiers, type, declarators);
   }
   
   public LocalVariableDeclaration withDeclarators(java.util.List<hydra.langs.java.syntax.VariableDeclarator> declarators) {
-    if (declarators == null) {
-      throw new IllegalArgumentException("null value for 'declarators' argument");
-    }
+    java.util.Objects.requireNonNull((declarators));
     return new LocalVariableDeclaration(modifiers, type, declarators);
   }
 }

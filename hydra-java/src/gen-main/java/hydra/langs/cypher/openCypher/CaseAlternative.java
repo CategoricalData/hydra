@@ -12,12 +12,8 @@ public class CaseAlternative implements Serializable {
   public final hydra.langs.cypher.openCypher.Expression result;
   
   public CaseAlternative (hydra.langs.cypher.openCypher.Expression condition, hydra.langs.cypher.openCypher.Expression result) {
-    if (condition == null) {
-      throw new IllegalArgumentException("null value for 'condition' argument");
-    }
-    if (result == null) {
-      throw new IllegalArgumentException("null value for 'result' argument");
-    }
+    java.util.Objects.requireNonNull((condition));
+    java.util.Objects.requireNonNull((result));
     this.condition = condition;
     this.result = result;
   }
@@ -37,16 +33,12 @@ public class CaseAlternative implements Serializable {
   }
   
   public CaseAlternative withCondition(hydra.langs.cypher.openCypher.Expression condition) {
-    if (condition == null) {
-      throw new IllegalArgumentException("null value for 'condition' argument");
-    }
+    java.util.Objects.requireNonNull((condition));
     return new CaseAlternative(condition, result);
   }
   
   public CaseAlternative withResult(hydra.langs.cypher.openCypher.Expression result) {
-    if (result == null) {
-      throw new IllegalArgumentException("null value for 'result' argument");
-    }
+    java.util.Objects.requireNonNull((result));
     return new CaseAlternative(condition, result);
   }
 }

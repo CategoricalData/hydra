@@ -21,12 +21,8 @@ public class TupleProjection implements Serializable {
   public final Integer index;
   
   public TupleProjection (Integer arity, Integer index) {
-    if (arity == null) {
-      throw new IllegalArgumentException("null value for 'arity' argument");
-    }
-    if (index == null) {
-      throw new IllegalArgumentException("null value for 'index' argument");
-    }
+    java.util.Objects.requireNonNull((arity));
+    java.util.Objects.requireNonNull((index));
     this.arity = arity;
     this.index = index;
   }
@@ -46,16 +42,12 @@ public class TupleProjection implements Serializable {
   }
   
   public TupleProjection withArity(Integer arity) {
-    if (arity == null) {
-      throw new IllegalArgumentException("null value for 'arity' argument");
-    }
+    java.util.Objects.requireNonNull((arity));
     return new TupleProjection(arity, index);
   }
   
   public TupleProjection withIndex(Integer index) {
-    if (index == null) {
-      throw new IllegalArgumentException("null value for 'index' argument");
-    }
+    java.util.Objects.requireNonNull((index));
     return new TupleProjection(arity, index);
   }
 }

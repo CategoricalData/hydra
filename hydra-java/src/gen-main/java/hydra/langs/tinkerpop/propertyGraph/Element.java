@@ -40,9 +40,7 @@ public abstract class Element<V> implements Serializable {
     public final hydra.langs.tinkerpop.propertyGraph.Vertex<V> value;
     
     public Vertex (hydra.langs.tinkerpop.propertyGraph.Vertex<V> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -70,9 +68,7 @@ public abstract class Element<V> implements Serializable {
     public final hydra.langs.tinkerpop.propertyGraph.Edge<V> value;
     
     public Edge (hydra.langs.tinkerpop.propertyGraph.Edge<V> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

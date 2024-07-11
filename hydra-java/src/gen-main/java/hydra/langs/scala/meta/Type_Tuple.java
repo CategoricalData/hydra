@@ -10,9 +10,7 @@ public class Type_Tuple implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Type> args;
   
   public Type_Tuple (java.util.List<hydra.langs.scala.meta.Type> args) {
-    if (args == null) {
-      throw new IllegalArgumentException("null value for 'args' argument");
-    }
+    java.util.Objects.requireNonNull((args));
     this.args = args;
   }
   

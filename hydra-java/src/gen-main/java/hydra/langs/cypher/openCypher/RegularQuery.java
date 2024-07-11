@@ -12,12 +12,8 @@ public class RegularQuery implements Serializable {
   public final java.util.List<hydra.langs.cypher.openCypher.Union> rest;
   
   public RegularQuery (hydra.langs.cypher.openCypher.SingleQuery head, java.util.List<hydra.langs.cypher.openCypher.Union> rest) {
-    if (head == null) {
-      throw new IllegalArgumentException("null value for 'head' argument");
-    }
-    if (rest == null) {
-      throw new IllegalArgumentException("null value for 'rest' argument");
-    }
+    java.util.Objects.requireNonNull((head));
+    java.util.Objects.requireNonNull((rest));
     this.head = head;
     this.rest = rest;
   }
@@ -37,16 +33,12 @@ public class RegularQuery implements Serializable {
   }
   
   public RegularQuery withHead(hydra.langs.cypher.openCypher.SingleQuery head) {
-    if (head == null) {
-      throw new IllegalArgumentException("null value for 'head' argument");
-    }
+    java.util.Objects.requireNonNull((head));
     return new RegularQuery(head, rest);
   }
   
   public RegularQuery withRest(java.util.List<hydra.langs.cypher.openCypher.Union> rest) {
-    if (rest == null) {
-      throw new IllegalArgumentException("null value for 'rest' argument");
-    }
+    java.util.Objects.requireNonNull((rest));
     return new RegularQuery(head, rest);
   }
 }

@@ -37,9 +37,7 @@ public abstract class PropertyValuePattern implements Serializable {
     public final hydra.langs.tinkerpop.propertyGraph.PropertyKey value;
     
     public Variable (hydra.langs.tinkerpop.propertyGraph.PropertyKey value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class PropertyValuePattern implements Serializable {
     public final String value;
     
     public Value (String value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

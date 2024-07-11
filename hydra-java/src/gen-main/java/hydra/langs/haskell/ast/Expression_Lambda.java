@@ -15,12 +15,8 @@ public class Expression_Lambda implements Serializable {
   public final hydra.langs.haskell.ast.Expression inner;
   
   public Expression_Lambda (java.util.List<hydra.langs.haskell.ast.Pattern> bindings, hydra.langs.haskell.ast.Expression inner) {
-    if (bindings == null) {
-      throw new IllegalArgumentException("null value for 'bindings' argument");
-    }
-    if (inner == null) {
-      throw new IllegalArgumentException("null value for 'inner' argument");
-    }
+    java.util.Objects.requireNonNull((bindings));
+    java.util.Objects.requireNonNull((inner));
     this.bindings = bindings;
     this.inner = inner;
   }
@@ -40,16 +36,12 @@ public class Expression_Lambda implements Serializable {
   }
   
   public Expression_Lambda withBindings(java.util.List<hydra.langs.haskell.ast.Pattern> bindings) {
-    if (bindings == null) {
-      throw new IllegalArgumentException("null value for 'bindings' argument");
-    }
+    java.util.Objects.requireNonNull((bindings));
     return new Expression_Lambda(bindings, inner);
   }
   
   public Expression_Lambda withInner(hydra.langs.haskell.ast.Expression inner) {
-    if (inner == null) {
-      throw new IllegalArgumentException("null value for 'inner' argument");
-    }
+    java.util.Objects.requireNonNull((inner));
     return new Expression_Lambda(bindings, inner);
   }
 }

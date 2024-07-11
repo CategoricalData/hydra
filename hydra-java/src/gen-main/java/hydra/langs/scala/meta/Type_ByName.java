@@ -10,9 +10,7 @@ public class Type_ByName implements Serializable {
   public final hydra.langs.scala.meta.Type tpe;
   
   public Type_ByName (hydra.langs.scala.meta.Type tpe) {
-    if (tpe == null) {
-      throw new IllegalArgumentException("null value for 'tpe' argument");
-    }
+    java.util.Objects.requireNonNull((tpe));
     this.tpe = tpe;
   }
   

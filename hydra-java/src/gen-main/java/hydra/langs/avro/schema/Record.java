@@ -13,9 +13,7 @@ public class Record implements Serializable {
   public final java.util.List<hydra.langs.avro.schema.Field> fields;
   
   public Record (java.util.List<hydra.langs.avro.schema.Field> fields) {
-    if (fields == null) {
-      throw new IllegalArgumentException("null value for 'fields' argument");
-    }
+    java.util.Objects.requireNonNull((fields));
     this.fields = fields;
   }
   

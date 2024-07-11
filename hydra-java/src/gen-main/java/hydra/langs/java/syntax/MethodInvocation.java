@@ -12,12 +12,8 @@ public class MethodInvocation implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.Expression> arguments;
   
   public MethodInvocation (hydra.langs.java.syntax.MethodInvocation_Header header, java.util.List<hydra.langs.java.syntax.Expression> arguments) {
-    if (header == null) {
-      throw new IllegalArgumentException("null value for 'header' argument");
-    }
-    if (arguments == null) {
-      throw new IllegalArgumentException("null value for 'arguments' argument");
-    }
+    java.util.Objects.requireNonNull((header));
+    java.util.Objects.requireNonNull((arguments));
     this.header = header;
     this.arguments = arguments;
   }
@@ -37,16 +33,12 @@ public class MethodInvocation implements Serializable {
   }
   
   public MethodInvocation withHeader(hydra.langs.java.syntax.MethodInvocation_Header header) {
-    if (header == null) {
-      throw new IllegalArgumentException("null value for 'header' argument");
-    }
+    java.util.Objects.requireNonNull((header));
     return new MethodInvocation(header, arguments);
   }
   
   public MethodInvocation withArguments(java.util.List<hydra.langs.java.syntax.Expression> arguments) {
-    if (arguments == null) {
-      throw new IllegalArgumentException("null value for 'arguments' argument");
-    }
+    java.util.Objects.requireNonNull((arguments));
     return new MethodInvocation(header, arguments);
   }
 }

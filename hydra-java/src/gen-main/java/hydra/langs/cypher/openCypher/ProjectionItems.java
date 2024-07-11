@@ -12,12 +12,8 @@ public class ProjectionItems implements Serializable {
   public final java.util.List<hydra.langs.cypher.openCypher.ProjectionItem> explicit;
   
   public ProjectionItems (Boolean star, java.util.List<hydra.langs.cypher.openCypher.ProjectionItem> explicit) {
-    if (star == null) {
-      throw new IllegalArgumentException("null value for 'star' argument");
-    }
-    if (explicit == null) {
-      throw new IllegalArgumentException("null value for 'explicit' argument");
-    }
+    java.util.Objects.requireNonNull((star));
+    java.util.Objects.requireNonNull((explicit));
     this.star = star;
     this.explicit = explicit;
   }
@@ -37,16 +33,12 @@ public class ProjectionItems implements Serializable {
   }
   
   public ProjectionItems withStar(Boolean star) {
-    if (star == null) {
-      throw new IllegalArgumentException("null value for 'star' argument");
-    }
+    java.util.Objects.requireNonNull((star));
     return new ProjectionItems(star, explicit);
   }
   
   public ProjectionItems withExplicit(java.util.List<hydra.langs.cypher.openCypher.ProjectionItem> explicit) {
-    if (explicit == null) {
-      throw new IllegalArgumentException("null value for 'explicit' argument");
-    }
+    java.util.Objects.requireNonNull((explicit));
     return new ProjectionItems(star, explicit);
   }
 }

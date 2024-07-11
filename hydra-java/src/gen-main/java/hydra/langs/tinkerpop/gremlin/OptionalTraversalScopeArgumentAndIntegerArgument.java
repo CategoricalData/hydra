@@ -12,12 +12,8 @@ public class OptionalTraversalScopeArgumentAndIntegerArgument implements Seriali
   public final hydra.langs.tinkerpop.gremlin.IntegerArgument long_;
   
   public OptionalTraversalScopeArgumentAndIntegerArgument (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope, hydra.langs.tinkerpop.gremlin.IntegerArgument long_) {
-    if (scope == null) {
-      throw new IllegalArgumentException("null value for 'scope' argument");
-    }
-    if (long_ == null) {
-      throw new IllegalArgumentException("null value for 'long' argument");
-    }
+    java.util.Objects.requireNonNull((scope));
+    java.util.Objects.requireNonNull((long_));
     this.scope = scope;
     this.long_ = long_;
   }
@@ -37,16 +33,12 @@ public class OptionalTraversalScopeArgumentAndIntegerArgument implements Seriali
   }
   
   public OptionalTraversalScopeArgumentAndIntegerArgument withScope(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope) {
-    if (scope == null) {
-      throw new IllegalArgumentException("null value for 'scope' argument");
-    }
+    java.util.Objects.requireNonNull((scope));
     return new OptionalTraversalScopeArgumentAndIntegerArgument(scope, long_);
   }
   
   public OptionalTraversalScopeArgumentAndIntegerArgument withLong(hydra.langs.tinkerpop.gremlin.IntegerArgument long_) {
-    if (long_ == null) {
-      throw new IllegalArgumentException("null value for 'long' argument");
-    }
+    java.util.Objects.requireNonNull((long_));
     return new OptionalTraversalScopeArgumentAndIntegerArgument(scope, long_);
   }
 }

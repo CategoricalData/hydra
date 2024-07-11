@@ -37,9 +37,7 @@ public abstract class ObjectPropertyExpression implements Serializable {
     public final hydra.langs.owl.syntax.ObjectProperty value;
     
     public Object_ (hydra.langs.owl.syntax.ObjectProperty value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class ObjectPropertyExpression implements Serializable {
     public final hydra.langs.owl.syntax.InverseObjectProperty value;
     
     public InverseObject (hydra.langs.owl.syntax.InverseObjectProperty value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

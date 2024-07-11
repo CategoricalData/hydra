@@ -43,9 +43,7 @@ public abstract class CastExpression implements Serializable {
     public final hydra.langs.java.syntax.CastExpression_Primitive value;
     
     public Primitive (hydra.langs.java.syntax.CastExpression_Primitive value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class CastExpression implements Serializable {
     public final hydra.langs.java.syntax.CastExpression_NotPlusMinus value;
     
     public NotPlusMinus (hydra.langs.java.syntax.CastExpression_NotPlusMinus value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class CastExpression implements Serializable {
     public final hydra.langs.java.syntax.CastExpression_Lambda value;
     
     public Lambda (hydra.langs.java.syntax.CastExpression_Lambda value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

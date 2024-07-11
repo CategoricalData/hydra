@@ -21,12 +21,8 @@ public class DeleteFeatures implements Serializable {
   public final Boolean detachDelete;
   
   public DeleteFeatures (Boolean delete, Boolean detachDelete) {
-    if (delete == null) {
-      throw new IllegalArgumentException("null value for 'delete' argument");
-    }
-    if (detachDelete == null) {
-      throw new IllegalArgumentException("null value for 'detachDelete' argument");
-    }
+    java.util.Objects.requireNonNull((delete));
+    java.util.Objects.requireNonNull((detachDelete));
     this.delete = delete;
     this.detachDelete = detachDelete;
   }
@@ -46,16 +42,12 @@ public class DeleteFeatures implements Serializable {
   }
   
   public DeleteFeatures withDelete(Boolean delete) {
-    if (delete == null) {
-      throw new IllegalArgumentException("null value for 'delete' argument");
-    }
+    java.util.Objects.requireNonNull((delete));
     return new DeleteFeatures(delete, detachDelete);
   }
   
   public DeleteFeatures withDetachDelete(Boolean detachDelete) {
-    if (detachDelete == null) {
-      throw new IllegalArgumentException("null value for 'detachDelete' argument");
-    }
+    java.util.Objects.requireNonNull((detachDelete));
     return new DeleteFeatures(delete, detachDelete);
   }
 }

@@ -14,15 +14,9 @@ public class InterfaceMethodDeclaration implements Serializable {
   public final hydra.langs.java.syntax.MethodBody body;
   
   public InterfaceMethodDeclaration (java.util.List<hydra.langs.java.syntax.InterfaceMethodModifier> modifiers, hydra.langs.java.syntax.MethodHeader header, hydra.langs.java.syntax.MethodBody body) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
-    if (header == null) {
-      throw new IllegalArgumentException("null value for 'header' argument");
-    }
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
+    java.util.Objects.requireNonNull((header));
+    java.util.Objects.requireNonNull((body));
     this.modifiers = modifiers;
     this.header = header;
     this.body = body;
@@ -43,23 +37,17 @@ public class InterfaceMethodDeclaration implements Serializable {
   }
   
   public InterfaceMethodDeclaration withModifiers(java.util.List<hydra.langs.java.syntax.InterfaceMethodModifier> modifiers) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
     return new InterfaceMethodDeclaration(modifiers, header, body);
   }
   
   public InterfaceMethodDeclaration withHeader(hydra.langs.java.syntax.MethodHeader header) {
-    if (header == null) {
-      throw new IllegalArgumentException("null value for 'header' argument");
-    }
+    java.util.Objects.requireNonNull((header));
     return new InterfaceMethodDeclaration(modifiers, header, body);
   }
   
   public InterfaceMethodDeclaration withBody(hydra.langs.java.syntax.MethodBody body) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((body));
     return new InterfaceMethodDeclaration(modifiers, header, body);
   }
 }

@@ -18,21 +18,11 @@ public class AnnotationTypeElementDeclaration implements Serializable {
   public final hydra.util.Opt<hydra.langs.java.syntax.DefaultValue> default_;
   
   public AnnotationTypeElementDeclaration (java.util.List<hydra.langs.java.syntax.AnnotationTypeElementModifier> modifiers, hydra.langs.java.syntax.UnannType type, hydra.langs.java.syntax.Identifier identifier, hydra.util.Opt<hydra.langs.java.syntax.Dims> dims, hydra.util.Opt<hydra.langs.java.syntax.DefaultValue> default_) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
-    if (dims == null) {
-      throw new IllegalArgumentException("null value for 'dims' argument");
-    }
-    if (default_ == null) {
-      throw new IllegalArgumentException("null value for 'default' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((identifier));
+    java.util.Objects.requireNonNull((dims));
+    java.util.Objects.requireNonNull((default_));
     this.modifiers = modifiers;
     this.type = type;
     this.identifier = identifier;
@@ -55,37 +45,27 @@ public class AnnotationTypeElementDeclaration implements Serializable {
   }
   
   public AnnotationTypeElementDeclaration withModifiers(java.util.List<hydra.langs.java.syntax.AnnotationTypeElementModifier> modifiers) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
     return new AnnotationTypeElementDeclaration(modifiers, type, identifier, dims, default_);
   }
   
   public AnnotationTypeElementDeclaration withType(hydra.langs.java.syntax.UnannType type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new AnnotationTypeElementDeclaration(modifiers, type, identifier, dims, default_);
   }
   
   public AnnotationTypeElementDeclaration withIdentifier(hydra.langs.java.syntax.Identifier identifier) {
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
+    java.util.Objects.requireNonNull((identifier));
     return new AnnotationTypeElementDeclaration(modifiers, type, identifier, dims, default_);
   }
   
   public AnnotationTypeElementDeclaration withDims(hydra.util.Opt<hydra.langs.java.syntax.Dims> dims) {
-    if (dims == null) {
-      throw new IllegalArgumentException("null value for 'dims' argument");
-    }
+    java.util.Objects.requireNonNull((dims));
     return new AnnotationTypeElementDeclaration(modifiers, type, identifier, dims, default_);
   }
   
   public AnnotationTypeElementDeclaration withDefault(hydra.util.Opt<hydra.langs.java.syntax.DefaultValue> default_) {
-    if (default_ == null) {
-      throw new IllegalArgumentException("null value for 'default' argument");
-    }
+    java.util.Objects.requireNonNull((default_));
     return new AnnotationTypeElementDeclaration(modifiers, type, identifier, dims, default_);
   }
 }

@@ -124,9 +124,7 @@ public abstract class Cardinality implements Serializable {
     public final hydra.langs.shex.syntax.RepeatRange value;
     
     public RepeatRange (hydra.langs.shex.syntax.RepeatRange value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -37,9 +37,7 @@ public abstract class PrefixedName implements Serializable {
     public final hydra.langs.shex.syntax.PnameLn value;
     
     public PnameLn (hydra.langs.shex.syntax.PnameLn value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class PrefixedName implements Serializable {
     public final hydra.langs.shex.syntax.PnameNs value;
     
     public PnameNs (hydra.langs.shex.syntax.PnameNs value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

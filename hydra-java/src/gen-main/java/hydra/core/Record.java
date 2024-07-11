@@ -15,12 +15,8 @@ public class Record<A> implements Serializable {
   public final java.util.List<hydra.core.Field<A>> fields;
   
   public Record (hydra.core.Name typeName, java.util.List<hydra.core.Field<A>> fields) {
-    if (typeName == null) {
-      throw new IllegalArgumentException("null value for 'typeName' argument");
-    }
-    if (fields == null) {
-      throw new IllegalArgumentException("null value for 'fields' argument");
-    }
+    java.util.Objects.requireNonNull((typeName));
+    java.util.Objects.requireNonNull((fields));
     this.typeName = typeName;
     this.fields = fields;
   }
@@ -40,16 +36,12 @@ public class Record<A> implements Serializable {
   }
   
   public Record withTypeName(hydra.core.Name typeName) {
-    if (typeName == null) {
-      throw new IllegalArgumentException("null value for 'typeName' argument");
-    }
+    java.util.Objects.requireNonNull((typeName));
     return new Record(typeName, fields);
   }
   
   public Record withFields(java.util.List<hydra.core.Field<A>> fields) {
-    if (fields == null) {
-      throw new IllegalArgumentException("null value for 'fields' argument");
-    }
+    java.util.Objects.requireNonNull((fields));
     return new Record(typeName, fields);
   }
 }

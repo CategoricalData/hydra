@@ -115,9 +115,7 @@ public abstract class Tree implements Serializable {
     public final hydra.langs.scala.meta.Ref value;
     
     public Ref (hydra.langs.scala.meta.Ref value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -145,9 +143,7 @@ public abstract class Tree implements Serializable {
     public final hydra.langs.scala.meta.Stat value;
     
     public Stat (hydra.langs.scala.meta.Stat value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -175,9 +171,7 @@ public abstract class Tree implements Serializable {
     public final hydra.langs.scala.meta.Type value;
     
     public Type (hydra.langs.scala.meta.Type value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -205,9 +199,7 @@ public abstract class Tree implements Serializable {
     public final hydra.langs.scala.meta.Type_Bounds value;
     
     public Bounds (hydra.langs.scala.meta.Type_Bounds value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -235,9 +227,7 @@ public abstract class Tree implements Serializable {
     public final hydra.langs.scala.meta.Pat value;
     
     public Pat (hydra.langs.scala.meta.Pat value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -265,9 +255,7 @@ public abstract class Tree implements Serializable {
     public final hydra.langs.scala.meta.Member value;
     
     public Member (hydra.langs.scala.meta.Member value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -295,9 +283,7 @@ public abstract class Tree implements Serializable {
     public final hydra.langs.scala.meta.Ctor value;
     
     public Ctor (hydra.langs.scala.meta.Ctor value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -325,9 +311,7 @@ public abstract class Tree implements Serializable {
     public final hydra.langs.scala.meta.Template value;
     
     public Template (hydra.langs.scala.meta.Template value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -355,9 +339,7 @@ public abstract class Tree implements Serializable {
     public final hydra.langs.scala.meta.Mod value;
     
     public Mod (hydra.langs.scala.meta.Mod value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -385,9 +367,7 @@ public abstract class Tree implements Serializable {
     public final hydra.langs.scala.meta.Enumerator value;
     
     public Enumerator (hydra.langs.scala.meta.Enumerator value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -415,9 +395,7 @@ public abstract class Tree implements Serializable {
     public final hydra.langs.scala.meta.Importer value;
     
     public Importer (hydra.langs.scala.meta.Importer value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -445,9 +423,7 @@ public abstract class Tree implements Serializable {
     public final hydra.langs.scala.meta.Importee value;
     
     public Importee (hydra.langs.scala.meta.Importee value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -475,9 +451,7 @@ public abstract class Tree implements Serializable {
     public final hydra.langs.scala.meta.CaseTree value;
     
     public CaseTree (hydra.langs.scala.meta.CaseTree value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -505,9 +479,7 @@ public abstract class Tree implements Serializable {
     public final hydra.langs.scala.meta.Source value;
     
     public Source (hydra.langs.scala.meta.Source value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -535,9 +507,7 @@ public abstract class Tree implements Serializable {
     public final hydra.langs.scala.meta.Quasi value;
     
     public Quasi (hydra.langs.scala.meta.Quasi value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

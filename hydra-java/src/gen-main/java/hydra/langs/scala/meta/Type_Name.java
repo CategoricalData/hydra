@@ -10,9 +10,7 @@ public class Type_Name implements Serializable {
   public final String value;
   
   public Type_Name (String value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

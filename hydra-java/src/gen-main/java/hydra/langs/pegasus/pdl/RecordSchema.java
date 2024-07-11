@@ -12,12 +12,8 @@ public class RecordSchema implements Serializable {
   public final java.util.List<hydra.langs.pegasus.pdl.NamedSchema> includes;
   
   public RecordSchema (java.util.List<hydra.langs.pegasus.pdl.RecordField> fields, java.util.List<hydra.langs.pegasus.pdl.NamedSchema> includes) {
-    if (fields == null) {
-      throw new IllegalArgumentException("null value for 'fields' argument");
-    }
-    if (includes == null) {
-      throw new IllegalArgumentException("null value for 'includes' argument");
-    }
+    java.util.Objects.requireNonNull((fields));
+    java.util.Objects.requireNonNull((includes));
     this.fields = fields;
     this.includes = includes;
   }
@@ -37,16 +33,12 @@ public class RecordSchema implements Serializable {
   }
   
   public RecordSchema withFields(java.util.List<hydra.langs.pegasus.pdl.RecordField> fields) {
-    if (fields == null) {
-      throw new IllegalArgumentException("null value for 'fields' argument");
-    }
+    java.util.Objects.requireNonNull((fields));
     return new RecordSchema(fields, includes);
   }
   
   public RecordSchema withIncludes(java.util.List<hydra.langs.pegasus.pdl.NamedSchema> includes) {
-    if (includes == null) {
-      throw new IllegalArgumentException("null value for 'includes' argument");
-    }
+    java.util.Objects.requireNonNull((includes));
     return new RecordSchema(fields, includes);
   }
 }

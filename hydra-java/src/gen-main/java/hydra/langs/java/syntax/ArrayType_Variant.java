@@ -43,9 +43,7 @@ public abstract class ArrayType_Variant implements Serializable {
     public final hydra.langs.java.syntax.PrimitiveTypeWithAnnotations value;
     
     public Primitive (hydra.langs.java.syntax.PrimitiveTypeWithAnnotations value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class ArrayType_Variant implements Serializable {
     public final hydra.langs.java.syntax.ClassOrInterfaceType value;
     
     public ClassOrInterface (hydra.langs.java.syntax.ClassOrInterfaceType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class ArrayType_Variant implements Serializable {
     public final hydra.langs.java.syntax.TypeVariable value;
     
     public Variable (hydra.langs.java.syntax.TypeVariable value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -37,9 +37,7 @@ public abstract class ListValue implements Serializable {
     public final hydra.langs.graphql.syntax.ListValue_Sequence value;
     
     public Sequence (hydra.langs.graphql.syntax.ListValue_Sequence value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class ListValue implements Serializable {
     public final java.util.List<hydra.langs.graphql.syntax.Value> value;
     
     public Sequence2 (java.util.List<hydra.langs.graphql.syntax.Value> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

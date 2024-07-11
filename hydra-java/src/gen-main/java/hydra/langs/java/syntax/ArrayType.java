@@ -12,12 +12,8 @@ public class ArrayType implements Serializable {
   public final hydra.langs.java.syntax.ArrayType_Variant variant;
   
   public ArrayType (hydra.langs.java.syntax.Dims dims, hydra.langs.java.syntax.ArrayType_Variant variant) {
-    if (dims == null) {
-      throw new IllegalArgumentException("null value for 'dims' argument");
-    }
-    if (variant == null) {
-      throw new IllegalArgumentException("null value for 'variant' argument");
-    }
+    java.util.Objects.requireNonNull((dims));
+    java.util.Objects.requireNonNull((variant));
     this.dims = dims;
     this.variant = variant;
   }
@@ -37,16 +33,12 @@ public class ArrayType implements Serializable {
   }
   
   public ArrayType withDims(hydra.langs.java.syntax.Dims dims) {
-    if (dims == null) {
-      throw new IllegalArgumentException("null value for 'dims' argument");
-    }
+    java.util.Objects.requireNonNull((dims));
     return new ArrayType(dims, variant);
   }
   
   public ArrayType withVariant(hydra.langs.java.syntax.ArrayType_Variant variant) {
-    if (variant == null) {
-      throw new IllegalArgumentException("null value for 'variant' argument");
-    }
+    java.util.Objects.requireNonNull((variant));
     return new ArrayType(dims, variant);
   }
 }

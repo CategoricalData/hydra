@@ -16,18 +16,10 @@ public class FragmentDefinition implements Serializable {
   public final hydra.langs.graphql.syntax.SelectionSet selectionSet;
   
   public FragmentDefinition (hydra.langs.graphql.syntax.FragmentName fragmentName, hydra.langs.graphql.syntax.TypeCondition typeCondition, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives, hydra.langs.graphql.syntax.SelectionSet selectionSet) {
-    if (fragmentName == null) {
-      throw new IllegalArgumentException("null value for 'fragmentName' argument");
-    }
-    if (typeCondition == null) {
-      throw new IllegalArgumentException("null value for 'typeCondition' argument");
-    }
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
-    if (selectionSet == null) {
-      throw new IllegalArgumentException("null value for 'selectionSet' argument");
-    }
+    java.util.Objects.requireNonNull((fragmentName));
+    java.util.Objects.requireNonNull((typeCondition));
+    java.util.Objects.requireNonNull((directives));
+    java.util.Objects.requireNonNull((selectionSet));
     this.fragmentName = fragmentName;
     this.typeCondition = typeCondition;
     this.directives = directives;
@@ -49,30 +41,22 @@ public class FragmentDefinition implements Serializable {
   }
   
   public FragmentDefinition withFragmentName(hydra.langs.graphql.syntax.FragmentName fragmentName) {
-    if (fragmentName == null) {
-      throw new IllegalArgumentException("null value for 'fragmentName' argument");
-    }
+    java.util.Objects.requireNonNull((fragmentName));
     return new FragmentDefinition(fragmentName, typeCondition, directives, selectionSet);
   }
   
   public FragmentDefinition withTypeCondition(hydra.langs.graphql.syntax.TypeCondition typeCondition) {
-    if (typeCondition == null) {
-      throw new IllegalArgumentException("null value for 'typeCondition' argument");
-    }
+    java.util.Objects.requireNonNull((typeCondition));
     return new FragmentDefinition(fragmentName, typeCondition, directives, selectionSet);
   }
   
   public FragmentDefinition withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((directives));
     return new FragmentDefinition(fragmentName, typeCondition, directives, selectionSet);
   }
   
   public FragmentDefinition withSelectionSet(hydra.langs.graphql.syntax.SelectionSet selectionSet) {
-    if (selectionSet == null) {
-      throw new IllegalArgumentException("null value for 'selectionSet' argument");
-    }
+    java.util.Objects.requireNonNull((selectionSet));
     return new FragmentDefinition(fragmentName, typeCondition, directives, selectionSet);
   }
 }

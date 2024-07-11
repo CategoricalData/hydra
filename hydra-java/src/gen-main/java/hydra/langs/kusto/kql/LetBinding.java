@@ -12,12 +12,8 @@ public class LetBinding implements Serializable {
   public final hydra.langs.kusto.kql.Expression expression;
   
   public LetBinding (hydra.langs.kusto.kql.ColumnName name, hydra.langs.kusto.kql.Expression expression) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((expression));
     this.name = name;
     this.expression = expression;
   }
@@ -37,16 +33,12 @@ public class LetBinding implements Serializable {
   }
   
   public LetBinding withName(hydra.langs.kusto.kql.ColumnName name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new LetBinding(name, expression);
   }
   
   public LetBinding withExpression(hydra.langs.kusto.kql.Expression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new LetBinding(name, expression);
   }
 }

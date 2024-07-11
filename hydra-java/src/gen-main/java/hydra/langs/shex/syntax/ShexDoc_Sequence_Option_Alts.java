@@ -37,9 +37,7 @@ public abstract class ShexDoc_Sequence_Option_Alts implements Serializable {
     public final hydra.langs.shex.syntax.NotStartAction value;
     
     public NotStartAction (hydra.langs.shex.syntax.NotStartAction value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class ShexDoc_Sequence_Option_Alts implements Serializable {
     public final hydra.langs.shex.syntax.StartActions value;
     
     public StartActions (hydra.langs.shex.syntax.StartActions value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

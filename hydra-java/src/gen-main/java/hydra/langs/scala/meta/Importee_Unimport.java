@@ -10,9 +10,7 @@ public class Importee_Unimport implements Serializable {
   public final hydra.langs.scala.meta.Name name;
   
   public Importee_Unimport (hydra.langs.scala.meta.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     this.name = name;
   }
   

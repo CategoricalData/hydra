@@ -37,9 +37,7 @@ public abstract class UnaryTripleExpr implements Serializable {
     public final hydra.langs.shex.syntax.UnaryTripleExpr_Sequence value;
     
     public Sequence (hydra.langs.shex.syntax.UnaryTripleExpr_Sequence value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class UnaryTripleExpr implements Serializable {
     public final hydra.langs.shex.syntax.Include value;
     
     public Include (hydra.langs.shex.syntax.Include value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -12,12 +12,8 @@ public class UnaryExpression implements Serializable {
   public final hydra.langs.kusto.kql.Expression expression;
   
   public UnaryExpression (hydra.langs.kusto.kql.UnaryOperator operator, hydra.langs.kusto.kql.Expression expression) {
-    if (operator == null) {
-      throw new IllegalArgumentException("null value for 'operator' argument");
-    }
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((operator));
+    java.util.Objects.requireNonNull((expression));
     this.operator = operator;
     this.expression = expression;
   }
@@ -37,16 +33,12 @@ public class UnaryExpression implements Serializable {
   }
   
   public UnaryExpression withOperator(hydra.langs.kusto.kql.UnaryOperator operator) {
-    if (operator == null) {
-      throw new IllegalArgumentException("null value for 'operator' argument");
-    }
+    java.util.Objects.requireNonNull((operator));
     return new UnaryExpression(operator, expression);
   }
   
   public UnaryExpression withExpression(hydra.langs.kusto.kql.Expression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new UnaryExpression(operator, expression);
   }
 }

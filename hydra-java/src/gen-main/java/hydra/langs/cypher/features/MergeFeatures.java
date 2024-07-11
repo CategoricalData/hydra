@@ -26,15 +26,9 @@ public class MergeFeatures implements Serializable {
   public final Boolean mergeOnMatch;
   
   public MergeFeatures (Boolean merge, Boolean mergeOnCreate, Boolean mergeOnMatch) {
-    if (merge == null) {
-      throw new IllegalArgumentException("null value for 'merge' argument");
-    }
-    if (mergeOnCreate == null) {
-      throw new IllegalArgumentException("null value for 'mergeOnCreate' argument");
-    }
-    if (mergeOnMatch == null) {
-      throw new IllegalArgumentException("null value for 'mergeOnMatch' argument");
-    }
+    java.util.Objects.requireNonNull((merge));
+    java.util.Objects.requireNonNull((mergeOnCreate));
+    java.util.Objects.requireNonNull((mergeOnMatch));
     this.merge = merge;
     this.mergeOnCreate = mergeOnCreate;
     this.mergeOnMatch = mergeOnMatch;
@@ -55,23 +49,17 @@ public class MergeFeatures implements Serializable {
   }
   
   public MergeFeatures withMerge(Boolean merge) {
-    if (merge == null) {
-      throw new IllegalArgumentException("null value for 'merge' argument");
-    }
+    java.util.Objects.requireNonNull((merge));
     return new MergeFeatures(merge, mergeOnCreate, mergeOnMatch);
   }
   
   public MergeFeatures withMergeOnCreate(Boolean mergeOnCreate) {
-    if (mergeOnCreate == null) {
-      throw new IllegalArgumentException("null value for 'mergeOnCreate' argument");
-    }
+    java.util.Objects.requireNonNull((mergeOnCreate));
     return new MergeFeatures(merge, mergeOnCreate, mergeOnMatch);
   }
   
   public MergeFeatures withMergeOnMatch(Boolean mergeOnMatch) {
-    if (mergeOnMatch == null) {
-      throw new IllegalArgumentException("null value for 'mergeOnMatch' argument");
-    }
+    java.util.Objects.requireNonNull((mergeOnMatch));
     return new MergeFeatures(merge, mergeOnCreate, mergeOnMatch);
   }
 }

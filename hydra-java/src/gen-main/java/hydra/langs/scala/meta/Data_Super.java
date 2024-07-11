@@ -12,12 +12,8 @@ public class Data_Super implements Serializable {
   public final hydra.langs.scala.meta.Name superp;
   
   public Data_Super (hydra.langs.scala.meta.Name thisp, hydra.langs.scala.meta.Name superp) {
-    if (thisp == null) {
-      throw new IllegalArgumentException("null value for 'thisp' argument");
-    }
-    if (superp == null) {
-      throw new IllegalArgumentException("null value for 'superp' argument");
-    }
+    java.util.Objects.requireNonNull((thisp));
+    java.util.Objects.requireNonNull((superp));
     this.thisp = thisp;
     this.superp = superp;
   }
@@ -37,16 +33,12 @@ public class Data_Super implements Serializable {
   }
   
   public Data_Super withThisp(hydra.langs.scala.meta.Name thisp) {
-    if (thisp == null) {
-      throw new IllegalArgumentException("null value for 'thisp' argument");
-    }
+    java.util.Objects.requireNonNull((thisp));
     return new Data_Super(thisp, superp);
   }
   
   public Data_Super withSuperp(hydra.langs.scala.meta.Name superp) {
-    if (superp == null) {
-      throw new IllegalArgumentException("null value for 'superp' argument");
-    }
+    java.util.Objects.requireNonNull((superp));
     return new Data_Super(thisp, superp);
   }
 }

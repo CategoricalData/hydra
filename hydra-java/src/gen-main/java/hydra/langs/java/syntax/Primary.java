@@ -37,9 +37,7 @@ public abstract class Primary implements Serializable {
     public final hydra.langs.java.syntax.PrimaryNoNewArray value;
     
     public NoNewArray (hydra.langs.java.syntax.PrimaryNoNewArray value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class Primary implements Serializable {
     public final hydra.langs.java.syntax.ArrayCreationExpression value;
     
     public ArrayCreation (hydra.langs.java.syntax.ArrayCreationExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

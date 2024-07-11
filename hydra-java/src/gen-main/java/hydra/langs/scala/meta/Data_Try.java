@@ -14,15 +14,9 @@ public class Data_Try implements Serializable {
   public final hydra.util.Opt<hydra.langs.scala.meta.Data> finallyp;
   
   public Data_Try (hydra.langs.scala.meta.Data expr, java.util.List<hydra.langs.scala.meta.Case> catchp, hydra.util.Opt<hydra.langs.scala.meta.Data> finallyp) {
-    if (expr == null) {
-      throw new IllegalArgumentException("null value for 'expr' argument");
-    }
-    if (catchp == null) {
-      throw new IllegalArgumentException("null value for 'catchp' argument");
-    }
-    if (finallyp == null) {
-      throw new IllegalArgumentException("null value for 'finallyp' argument");
-    }
+    java.util.Objects.requireNonNull((expr));
+    java.util.Objects.requireNonNull((catchp));
+    java.util.Objects.requireNonNull((finallyp));
     this.expr = expr;
     this.catchp = catchp;
     this.finallyp = finallyp;
@@ -43,23 +37,17 @@ public class Data_Try implements Serializable {
   }
   
   public Data_Try withExpr(hydra.langs.scala.meta.Data expr) {
-    if (expr == null) {
-      throw new IllegalArgumentException("null value for 'expr' argument");
-    }
+    java.util.Objects.requireNonNull((expr));
     return new Data_Try(expr, catchp, finallyp);
   }
   
   public Data_Try withCatchp(java.util.List<hydra.langs.scala.meta.Case> catchp) {
-    if (catchp == null) {
-      throw new IllegalArgumentException("null value for 'catchp' argument");
-    }
+    java.util.Objects.requireNonNull((catchp));
     return new Data_Try(expr, catchp, finallyp);
   }
   
   public Data_Try withFinallyp(hydra.util.Opt<hydra.langs.scala.meta.Data> finallyp) {
-    if (finallyp == null) {
-      throw new IllegalArgumentException("null value for 'finallyp' argument");
-    }
+    java.util.Objects.requireNonNull((finallyp));
     return new Data_Try(expr, catchp, finallyp);
   }
 }

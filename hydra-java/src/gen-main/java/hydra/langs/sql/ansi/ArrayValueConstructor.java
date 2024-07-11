@@ -37,9 +37,7 @@ public abstract class ArrayValueConstructor implements Serializable {
     public final hydra.langs.sql.ansi.ArrayValueConstructorByEnumeration value;
     
     public Enumeration (hydra.langs.sql.ansi.ArrayValueConstructorByEnumeration value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class ArrayValueConstructor implements Serializable {
     public final hydra.langs.sql.ansi.ArrayValueConstructorByQuery value;
     
     public Query (hydra.langs.sql.ansi.ArrayValueConstructorByQuery value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

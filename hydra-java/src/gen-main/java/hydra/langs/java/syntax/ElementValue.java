@@ -43,9 +43,7 @@ public abstract class ElementValue implements Serializable {
     public final hydra.langs.java.syntax.ConditionalExpression value;
     
     public ConditionalExpression (hydra.langs.java.syntax.ConditionalExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class ElementValue implements Serializable {
     public final hydra.langs.java.syntax.ElementValueArrayInitializer value;
     
     public ElementValueArrayInitializer (hydra.langs.java.syntax.ElementValueArrayInitializer value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class ElementValue implements Serializable {
     public final hydra.langs.java.syntax.Annotation value;
     
     public Annotation (hydra.langs.java.syntax.Annotation value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

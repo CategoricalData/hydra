@@ -12,12 +12,8 @@ public class RangeLiteral implements Serializable {
   public final hydra.util.Opt<java.math.BigInteger> end;
   
   public RangeLiteral (hydra.util.Opt<java.math.BigInteger> start, hydra.util.Opt<java.math.BigInteger> end) {
-    if (start == null) {
-      throw new IllegalArgumentException("null value for 'start' argument");
-    }
-    if (end == null) {
-      throw new IllegalArgumentException("null value for 'end' argument");
-    }
+    java.util.Objects.requireNonNull((start));
+    java.util.Objects.requireNonNull((end));
     this.start = start;
     this.end = end;
   }
@@ -37,16 +33,12 @@ public class RangeLiteral implements Serializable {
   }
   
   public RangeLiteral withStart(hydra.util.Opt<java.math.BigInteger> start) {
-    if (start == null) {
-      throw new IllegalArgumentException("null value for 'start' argument");
-    }
+    java.util.Objects.requireNonNull((start));
     return new RangeLiteral(start, end);
   }
   
   public RangeLiteral withEnd(hydra.util.Opt<java.math.BigInteger> end) {
-    if (end == null) {
-      throw new IllegalArgumentException("null value for 'end' argument");
-    }
+    java.util.Objects.requireNonNull((end));
     return new RangeLiteral(start, end);
   }
 }

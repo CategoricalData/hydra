@@ -37,9 +37,7 @@ public abstract class PnCharsU implements Serializable {
     public final hydra.langs.shex.syntax.PnCharsBase value;
     
     public PnCharsBase (hydra.langs.shex.syntax.PnCharsBase value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -12,12 +12,8 @@ public class RangeExpression implements Serializable {
   public final hydra.util.Opt<hydra.langs.cypher.openCypher.Expression> end;
   
   public RangeExpression (hydra.util.Opt<hydra.langs.cypher.openCypher.Expression> start, hydra.util.Opt<hydra.langs.cypher.openCypher.Expression> end) {
-    if (start == null) {
-      throw new IllegalArgumentException("null value for 'start' argument");
-    }
-    if (end == null) {
-      throw new IllegalArgumentException("null value for 'end' argument");
-    }
+    java.util.Objects.requireNonNull((start));
+    java.util.Objects.requireNonNull((end));
     this.start = start;
     this.end = end;
   }
@@ -37,16 +33,12 @@ public class RangeExpression implements Serializable {
   }
   
   public RangeExpression withStart(hydra.util.Opt<hydra.langs.cypher.openCypher.Expression> start) {
-    if (start == null) {
-      throw new IllegalArgumentException("null value for 'start' argument");
-    }
+    java.util.Objects.requireNonNull((start));
     return new RangeExpression(start, end);
   }
   
   public RangeExpression withEnd(hydra.util.Opt<hydra.langs.cypher.openCypher.Expression> end) {
-    if (end == null) {
-      throw new IllegalArgumentException("null value for 'end' argument");
-    }
+    java.util.Objects.requireNonNull((end));
     return new RangeExpression(start, end);
   }
 }

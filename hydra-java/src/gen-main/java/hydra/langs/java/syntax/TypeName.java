@@ -12,12 +12,8 @@ public class TypeName implements Serializable {
   public final hydra.util.Opt<hydra.langs.java.syntax.PackageOrTypeName> qualifier;
   
   public TypeName (hydra.langs.java.syntax.TypeIdentifier identifier, hydra.util.Opt<hydra.langs.java.syntax.PackageOrTypeName> qualifier) {
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
-    if (qualifier == null) {
-      throw new IllegalArgumentException("null value for 'qualifier' argument");
-    }
+    java.util.Objects.requireNonNull((identifier));
+    java.util.Objects.requireNonNull((qualifier));
     this.identifier = identifier;
     this.qualifier = qualifier;
   }
@@ -37,16 +33,12 @@ public class TypeName implements Serializable {
   }
   
   public TypeName withIdentifier(hydra.langs.java.syntax.TypeIdentifier identifier) {
-    if (identifier == null) {
-      throw new IllegalArgumentException("null value for 'identifier' argument");
-    }
+    java.util.Objects.requireNonNull((identifier));
     return new TypeName(identifier, qualifier);
   }
   
   public TypeName withQualifier(hydra.util.Opt<hydra.langs.java.syntax.PackageOrTypeName> qualifier) {
-    if (qualifier == null) {
-      throw new IllegalArgumentException("null value for 'qualifier' argument");
-    }
+    java.util.Objects.requireNonNull((qualifier));
     return new TypeName(identifier, qualifier);
   }
 }

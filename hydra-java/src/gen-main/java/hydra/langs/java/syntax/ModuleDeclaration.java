@@ -16,18 +16,10 @@ public class ModuleDeclaration implements Serializable {
   public final java.util.List<java.util.List<hydra.langs.java.syntax.ModuleDirective>> directives;
   
   public ModuleDeclaration (java.util.List<hydra.langs.java.syntax.Annotation> annotations, Boolean open, java.util.List<hydra.langs.java.syntax.Identifier> identifiers, java.util.List<java.util.List<hydra.langs.java.syntax.ModuleDirective>> directives) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
-    if (open == null) {
-      throw new IllegalArgumentException("null value for 'open' argument");
-    }
-    if (identifiers == null) {
-      throw new IllegalArgumentException("null value for 'identifiers' argument");
-    }
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
+    java.util.Objects.requireNonNull((open));
+    java.util.Objects.requireNonNull((identifiers));
+    java.util.Objects.requireNonNull((directives));
     this.annotations = annotations;
     this.open = open;
     this.identifiers = identifiers;
@@ -49,30 +41,22 @@ public class ModuleDeclaration implements Serializable {
   }
   
   public ModuleDeclaration withAnnotations(java.util.List<hydra.langs.java.syntax.Annotation> annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new ModuleDeclaration(annotations, open, identifiers, directives);
   }
   
   public ModuleDeclaration withOpen(Boolean open) {
-    if (open == null) {
-      throw new IllegalArgumentException("null value for 'open' argument");
-    }
+    java.util.Objects.requireNonNull((open));
     return new ModuleDeclaration(annotations, open, identifiers, directives);
   }
   
   public ModuleDeclaration withIdentifiers(java.util.List<hydra.langs.java.syntax.Identifier> identifiers) {
-    if (identifiers == null) {
-      throw new IllegalArgumentException("null value for 'identifiers' argument");
-    }
+    java.util.Objects.requireNonNull((identifiers));
     return new ModuleDeclaration(annotations, open, identifiers, directives);
   }
   
   public ModuleDeclaration withDirectives(java.util.List<java.util.List<hydra.langs.java.syntax.ModuleDirective>> directives) {
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((directives));
     return new ModuleDeclaration(annotations, open, identifiers, directives);
   }
 }

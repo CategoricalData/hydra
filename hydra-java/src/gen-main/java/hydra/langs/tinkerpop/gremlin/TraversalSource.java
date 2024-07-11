@@ -10,9 +10,7 @@ public class TraversalSource implements Serializable {
   public final java.util.List<hydra.langs.tinkerpop.gremlin.TraversalSourceSelfMethod> value;
   
   public TraversalSource (java.util.List<hydra.langs.tinkerpop.gremlin.TraversalSourceSelfMethod> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

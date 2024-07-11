@@ -10,9 +10,7 @@ public class FloatLiteral implements Serializable {
   public final Double value;
   
   public FloatLiteral (Double value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

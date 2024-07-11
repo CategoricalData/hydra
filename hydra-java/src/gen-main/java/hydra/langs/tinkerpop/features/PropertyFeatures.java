@@ -18,12 +18,8 @@ public class PropertyFeatures implements Serializable {
   public final Boolean supportsProperties;
   
   public PropertyFeatures (hydra.langs.tinkerpop.features.DataTypeFeatures dataTypeFeatures, Boolean supportsProperties) {
-    if (dataTypeFeatures == null) {
-      throw new IllegalArgumentException("null value for 'dataTypeFeatures' argument");
-    }
-    if (supportsProperties == null) {
-      throw new IllegalArgumentException("null value for 'supportsProperties' argument");
-    }
+    java.util.Objects.requireNonNull((dataTypeFeatures));
+    java.util.Objects.requireNonNull((supportsProperties));
     this.dataTypeFeatures = dataTypeFeatures;
     this.supportsProperties = supportsProperties;
   }
@@ -43,16 +39,12 @@ public class PropertyFeatures implements Serializable {
   }
   
   public PropertyFeatures withDataTypeFeatures(hydra.langs.tinkerpop.features.DataTypeFeatures dataTypeFeatures) {
-    if (dataTypeFeatures == null) {
-      throw new IllegalArgumentException("null value for 'dataTypeFeatures' argument");
-    }
+    java.util.Objects.requireNonNull((dataTypeFeatures));
     return new PropertyFeatures(dataTypeFeatures, supportsProperties);
   }
   
   public PropertyFeatures withSupportsProperties(Boolean supportsProperties) {
-    if (supportsProperties == null) {
-      throw new IllegalArgumentException("null value for 'supportsProperties' argument");
-    }
+    java.util.Objects.requireNonNull((supportsProperties));
     return new PropertyFeatures(dataTypeFeatures, supportsProperties);
   }
 }

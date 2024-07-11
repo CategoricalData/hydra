@@ -12,12 +12,8 @@ public class NotExpression implements Serializable {
   public final hydra.langs.cypher.openCypher.ComparisonExpression expression;
   
   public NotExpression (Boolean not, hydra.langs.cypher.openCypher.ComparisonExpression expression) {
-    if (not == null) {
-      throw new IllegalArgumentException("null value for 'not' argument");
-    }
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((not));
+    java.util.Objects.requireNonNull((expression));
     this.not = not;
     this.expression = expression;
   }
@@ -37,16 +33,12 @@ public class NotExpression implements Serializable {
   }
   
   public NotExpression withNot(Boolean not) {
-    if (not == null) {
-      throw new IllegalArgumentException("null value for 'not' argument");
-    }
+    java.util.Objects.requireNonNull((not));
     return new NotExpression(not, expression);
   }
   
   public NotExpression withExpression(hydra.langs.cypher.openCypher.ComparisonExpression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new NotExpression(not, expression);
   }
 }

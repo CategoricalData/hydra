@@ -14,15 +14,9 @@ public class RootTraversal implements Serializable {
   public final java.util.List<hydra.langs.tinkerpop.gremlin.ChainedTraversalElement> chained;
   
   public RootTraversal (hydra.langs.tinkerpop.gremlin.TraversalSource source, hydra.langs.tinkerpop.gremlin.TraversalSourceSpawnMethod spawnMethod, java.util.List<hydra.langs.tinkerpop.gremlin.ChainedTraversalElement> chained) {
-    if (source == null) {
-      throw new IllegalArgumentException("null value for 'source' argument");
-    }
-    if (spawnMethod == null) {
-      throw new IllegalArgumentException("null value for 'spawnMethod' argument");
-    }
-    if (chained == null) {
-      throw new IllegalArgumentException("null value for 'chained' argument");
-    }
+    java.util.Objects.requireNonNull((source));
+    java.util.Objects.requireNonNull((spawnMethod));
+    java.util.Objects.requireNonNull((chained));
     this.source = source;
     this.spawnMethod = spawnMethod;
     this.chained = chained;
@@ -43,23 +37,17 @@ public class RootTraversal implements Serializable {
   }
   
   public RootTraversal withSource(hydra.langs.tinkerpop.gremlin.TraversalSource source) {
-    if (source == null) {
-      throw new IllegalArgumentException("null value for 'source' argument");
-    }
+    java.util.Objects.requireNonNull((source));
     return new RootTraversal(source, spawnMethod, chained);
   }
   
   public RootTraversal withSpawnMethod(hydra.langs.tinkerpop.gremlin.TraversalSourceSpawnMethod spawnMethod) {
-    if (spawnMethod == null) {
-      throw new IllegalArgumentException("null value for 'spawnMethod' argument");
-    }
+    java.util.Objects.requireNonNull((spawnMethod));
     return new RootTraversal(source, spawnMethod, chained);
   }
   
   public RootTraversal withChained(java.util.List<hydra.langs.tinkerpop.gremlin.ChainedTraversalElement> chained) {
-    if (chained == null) {
-      throw new IllegalArgumentException("null value for 'chained' argument");
-    }
+    java.util.Objects.requireNonNull((chained));
     return new RootTraversal(source, spawnMethod, chained);
   }
 }

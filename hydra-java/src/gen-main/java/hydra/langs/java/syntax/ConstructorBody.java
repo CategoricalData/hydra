@@ -12,12 +12,8 @@ public class ConstructorBody implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.BlockStatement> statements;
   
   public ConstructorBody (hydra.util.Opt<hydra.langs.java.syntax.ExplicitConstructorInvocation> invocation, java.util.List<hydra.langs.java.syntax.BlockStatement> statements) {
-    if (invocation == null) {
-      throw new IllegalArgumentException("null value for 'invocation' argument");
-    }
-    if (statements == null) {
-      throw new IllegalArgumentException("null value for 'statements' argument");
-    }
+    java.util.Objects.requireNonNull((invocation));
+    java.util.Objects.requireNonNull((statements));
     this.invocation = invocation;
     this.statements = statements;
   }
@@ -37,16 +33,12 @@ public class ConstructorBody implements Serializable {
   }
   
   public ConstructorBody withInvocation(hydra.util.Opt<hydra.langs.java.syntax.ExplicitConstructorInvocation> invocation) {
-    if (invocation == null) {
-      throw new IllegalArgumentException("null value for 'invocation' argument");
-    }
+    java.util.Objects.requireNonNull((invocation));
     return new ConstructorBody(invocation, statements);
   }
   
   public ConstructorBody withStatements(java.util.List<hydra.langs.java.syntax.BlockStatement> statements) {
-    if (statements == null) {
-      throw new IllegalArgumentException("null value for 'statements' argument");
-    }
+    java.util.Objects.requireNonNull((statements));
     return new ConstructorBody(invocation, statements);
   }
 }

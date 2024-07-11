@@ -12,12 +12,8 @@ public class Pat_Interpolate implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Lit> parts;
   
   public Pat_Interpolate (hydra.langs.scala.meta.Data_Name prefix, java.util.List<hydra.langs.scala.meta.Lit> parts) {
-    if (prefix == null) {
-      throw new IllegalArgumentException("null value for 'prefix' argument");
-    }
-    if (parts == null) {
-      throw new IllegalArgumentException("null value for 'parts' argument");
-    }
+    java.util.Objects.requireNonNull((prefix));
+    java.util.Objects.requireNonNull((parts));
     this.prefix = prefix;
     this.parts = parts;
   }
@@ -37,16 +33,12 @@ public class Pat_Interpolate implements Serializable {
   }
   
   public Pat_Interpolate withPrefix(hydra.langs.scala.meta.Data_Name prefix) {
-    if (prefix == null) {
-      throw new IllegalArgumentException("null value for 'prefix' argument");
-    }
+    java.util.Objects.requireNonNull((prefix));
     return new Pat_Interpolate(prefix, parts);
   }
   
   public Pat_Interpolate withParts(java.util.List<hydra.langs.scala.meta.Lit> parts) {
-    if (parts == null) {
-      throw new IllegalArgumentException("null value for 'parts' argument");
-    }
+    java.util.Objects.requireNonNull((parts));
     return new Pat_Interpolate(prefix, parts);
   }
 }

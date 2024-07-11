@@ -62,9 +62,7 @@ public abstract class ImportExportSpec_Subspec implements Serializable {
     public final java.util.List<hydra.langs.haskell.ast.Name> value;
     
     public List (java.util.List<hydra.langs.haskell.ast.Name> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

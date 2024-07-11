@@ -12,12 +12,8 @@ public class MethodReference_New implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments;
   
   public MethodReference_New (hydra.langs.java.syntax.ClassType classType, java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments) {
-    if (classType == null) {
-      throw new IllegalArgumentException("null value for 'classType' argument");
-    }
-    if (typeArguments == null) {
-      throw new IllegalArgumentException("null value for 'typeArguments' argument");
-    }
+    java.util.Objects.requireNonNull((classType));
+    java.util.Objects.requireNonNull((typeArguments));
     this.classType = classType;
     this.typeArguments = typeArguments;
   }
@@ -37,16 +33,12 @@ public class MethodReference_New implements Serializable {
   }
   
   public MethodReference_New withClassType(hydra.langs.java.syntax.ClassType classType) {
-    if (classType == null) {
-      throw new IllegalArgumentException("null value for 'classType' argument");
-    }
+    java.util.Objects.requireNonNull((classType));
     return new MethodReference_New(classType, typeArguments);
   }
   
   public MethodReference_New withTypeArguments(java.util.List<hydra.langs.java.syntax.TypeArgument> typeArguments) {
-    if (typeArguments == null) {
-      throw new IllegalArgumentException("null value for 'typeArguments' argument");
-    }
+    java.util.Objects.requireNonNull((typeArguments));
     return new MethodReference_New(classType, typeArguments);
   }
 }

@@ -46,27 +46,13 @@ public class LiteralFeatures implements Serializable {
   public final Boolean string;
   
   public LiteralFeatures (Boolean boolean_, Boolean double_, Boolean integer, Boolean list, Boolean map, Boolean null_, Boolean string) {
-    if (boolean_ == null) {
-      throw new IllegalArgumentException("null value for 'boolean' argument");
-    }
-    if (double_ == null) {
-      throw new IllegalArgumentException("null value for 'double' argument");
-    }
-    if (integer == null) {
-      throw new IllegalArgumentException("null value for 'integer' argument");
-    }
-    if (list == null) {
-      throw new IllegalArgumentException("null value for 'list' argument");
-    }
-    if (map == null) {
-      throw new IllegalArgumentException("null value for 'map' argument");
-    }
-    if (null_ == null) {
-      throw new IllegalArgumentException("null value for 'null' argument");
-    }
-    if (string == null) {
-      throw new IllegalArgumentException("null value for 'string' argument");
-    }
+    java.util.Objects.requireNonNull((boolean_));
+    java.util.Objects.requireNonNull((double_));
+    java.util.Objects.requireNonNull((integer));
+    java.util.Objects.requireNonNull((list));
+    java.util.Objects.requireNonNull((map));
+    java.util.Objects.requireNonNull((null_));
+    java.util.Objects.requireNonNull((string));
     this.boolean_ = boolean_;
     this.double_ = double_;
     this.integer = integer;
@@ -91,51 +77,37 @@ public class LiteralFeatures implements Serializable {
   }
   
   public LiteralFeatures withBoolean(Boolean boolean_) {
-    if (boolean_ == null) {
-      throw new IllegalArgumentException("null value for 'boolean' argument");
-    }
+    java.util.Objects.requireNonNull((boolean_));
     return new LiteralFeatures(boolean_, double_, integer, list, map, null_, string);
   }
   
   public LiteralFeatures withDouble(Boolean double_) {
-    if (double_ == null) {
-      throw new IllegalArgumentException("null value for 'double' argument");
-    }
+    java.util.Objects.requireNonNull((double_));
     return new LiteralFeatures(boolean_, double_, integer, list, map, null_, string);
   }
   
   public LiteralFeatures withInteger(Boolean integer) {
-    if (integer == null) {
-      throw new IllegalArgumentException("null value for 'integer' argument");
-    }
+    java.util.Objects.requireNonNull((integer));
     return new LiteralFeatures(boolean_, double_, integer, list, map, null_, string);
   }
   
   public LiteralFeatures withList(Boolean list) {
-    if (list == null) {
-      throw new IllegalArgumentException("null value for 'list' argument");
-    }
+    java.util.Objects.requireNonNull((list));
     return new LiteralFeatures(boolean_, double_, integer, list, map, null_, string);
   }
   
   public LiteralFeatures withMap(Boolean map) {
-    if (map == null) {
-      throw new IllegalArgumentException("null value for 'map' argument");
-    }
+    java.util.Objects.requireNonNull((map));
     return new LiteralFeatures(boolean_, double_, integer, list, map, null_, string);
   }
   
   public LiteralFeatures withNull(Boolean null_) {
-    if (null_ == null) {
-      throw new IllegalArgumentException("null value for 'null' argument");
-    }
+    java.util.Objects.requireNonNull((null_));
     return new LiteralFeatures(boolean_, double_, integer, list, map, null_, string);
   }
   
   public LiteralFeatures withString(Boolean string) {
-    if (string == null) {
-      throw new IllegalArgumentException("null value for 'string' argument");
-    }
+    java.util.Objects.requireNonNull((string));
     return new LiteralFeatures(boolean_, double_, integer, list, map, null_, string);
   }
 }

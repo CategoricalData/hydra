@@ -15,12 +15,8 @@ public class FieldWithComments implements Serializable {
   public final hydra.util.Opt<String> comments;
   
   public FieldWithComments (hydra.langs.haskell.ast.Field field, hydra.util.Opt<String> comments) {
-    if (field == null) {
-      throw new IllegalArgumentException("null value for 'field' argument");
-    }
-    if (comments == null) {
-      throw new IllegalArgumentException("null value for 'comments' argument");
-    }
+    java.util.Objects.requireNonNull((field));
+    java.util.Objects.requireNonNull((comments));
     this.field = field;
     this.comments = comments;
   }
@@ -40,16 +36,12 @@ public class FieldWithComments implements Serializable {
   }
   
   public FieldWithComments withField(hydra.langs.haskell.ast.Field field) {
-    if (field == null) {
-      throw new IllegalArgumentException("null value for 'field' argument");
-    }
+    java.util.Objects.requireNonNull((field));
     return new FieldWithComments(field, comments);
   }
   
   public FieldWithComments withComments(hydra.util.Opt<String> comments) {
-    if (comments == null) {
-      throw new IllegalArgumentException("null value for 'comments' argument");
-    }
+    java.util.Objects.requireNonNull((comments));
     return new FieldWithComments(field, comments);
   }
 }

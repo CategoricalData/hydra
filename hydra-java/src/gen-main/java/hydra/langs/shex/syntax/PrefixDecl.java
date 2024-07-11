@@ -12,12 +12,8 @@ public class PrefixDecl implements Serializable {
   public final hydra.langs.shex.syntax.IriRef iriRef;
   
   public PrefixDecl (hydra.langs.shex.syntax.PnameNs pnameNs, hydra.langs.shex.syntax.IriRef iriRef) {
-    if (pnameNs == null) {
-      throw new IllegalArgumentException("null value for 'pnameNs' argument");
-    }
-    if (iriRef == null) {
-      throw new IllegalArgumentException("null value for 'iriRef' argument");
-    }
+    java.util.Objects.requireNonNull((pnameNs));
+    java.util.Objects.requireNonNull((iriRef));
     this.pnameNs = pnameNs;
     this.iriRef = iriRef;
   }
@@ -37,16 +33,12 @@ public class PrefixDecl implements Serializable {
   }
   
   public PrefixDecl withPnameNs(hydra.langs.shex.syntax.PnameNs pnameNs) {
-    if (pnameNs == null) {
-      throw new IllegalArgumentException("null value for 'pnameNs' argument");
-    }
+    java.util.Objects.requireNonNull((pnameNs));
     return new PrefixDecl(pnameNs, iriRef);
   }
   
   public PrefixDecl withIriRef(hydra.langs.shex.syntax.IriRef iriRef) {
-    if (iriRef == null) {
-      throw new IllegalArgumentException("null value for 'iriRef' argument");
-    }
+    java.util.Objects.requireNonNull((iriRef));
     return new PrefixDecl(pnameNs, iriRef);
   }
 }

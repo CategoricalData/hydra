@@ -15,12 +15,8 @@ public class FunctionType<A> implements Serializable {
   public final hydra.core.Type<A> codomain;
   
   public FunctionType (hydra.core.Type<A> domain, hydra.core.Type<A> codomain) {
-    if (domain == null) {
-      throw new IllegalArgumentException("null value for 'domain' argument");
-    }
-    if (codomain == null) {
-      throw new IllegalArgumentException("null value for 'codomain' argument");
-    }
+    java.util.Objects.requireNonNull((domain));
+    java.util.Objects.requireNonNull((codomain));
     this.domain = domain;
     this.codomain = codomain;
   }
@@ -40,16 +36,12 @@ public class FunctionType<A> implements Serializable {
   }
   
   public FunctionType withDomain(hydra.core.Type<A> domain) {
-    if (domain == null) {
-      throw new IllegalArgumentException("null value for 'domain' argument");
-    }
+    java.util.Objects.requireNonNull((domain));
     return new FunctionType(domain, codomain);
   }
   
   public FunctionType withCodomain(hydra.core.Type<A> codomain) {
-    if (codomain == null) {
-      throw new IllegalArgumentException("null value for 'codomain' argument");
-    }
+    java.util.Objects.requireNonNull((codomain));
     return new FunctionType(domain, codomain);
   }
 }

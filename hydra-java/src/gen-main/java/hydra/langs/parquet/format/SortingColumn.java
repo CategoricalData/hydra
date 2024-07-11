@@ -26,15 +26,9 @@ public class SortingColumn implements Serializable {
   public final Boolean nullsFirst;
   
   public SortingColumn (Integer columnIdx, Boolean descending, Boolean nullsFirst) {
-    if (columnIdx == null) {
-      throw new IllegalArgumentException("null value for 'columnIdx' argument");
-    }
-    if (descending == null) {
-      throw new IllegalArgumentException("null value for 'descending' argument");
-    }
-    if (nullsFirst == null) {
-      throw new IllegalArgumentException("null value for 'nullsFirst' argument");
-    }
+    java.util.Objects.requireNonNull((columnIdx));
+    java.util.Objects.requireNonNull((descending));
+    java.util.Objects.requireNonNull((nullsFirst));
     this.columnIdx = columnIdx;
     this.descending = descending;
     this.nullsFirst = nullsFirst;
@@ -55,23 +49,17 @@ public class SortingColumn implements Serializable {
   }
   
   public SortingColumn withColumnIdx(Integer columnIdx) {
-    if (columnIdx == null) {
-      throw new IllegalArgumentException("null value for 'columnIdx' argument");
-    }
+    java.util.Objects.requireNonNull((columnIdx));
     return new SortingColumn(columnIdx, descending, nullsFirst);
   }
   
   public SortingColumn withDescending(Boolean descending) {
-    if (descending == null) {
-      throw new IllegalArgumentException("null value for 'descending' argument");
-    }
+    java.util.Objects.requireNonNull((descending));
     return new SortingColumn(columnIdx, descending, nullsFirst);
   }
   
   public SortingColumn withNullsFirst(Boolean nullsFirst) {
-    if (nullsFirst == null) {
-      throw new IllegalArgumentException("null value for 'nullsFirst' argument");
-    }
+    java.util.Objects.requireNonNull((nullsFirst));
     return new SortingColumn(columnIdx, descending, nullsFirst);
   }
 }

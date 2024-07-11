@@ -86,9 +86,7 @@ public abstract class Literal implements Serializable {
     public final hydra.langs.java.syntax.IntegerLiteral value;
     
     public Integer_ (hydra.langs.java.syntax.IntegerLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -116,9 +114,7 @@ public abstract class Literal implements Serializable {
     public final hydra.langs.java.syntax.FloatingPointLiteral value;
     
     public FloatingPoint (hydra.langs.java.syntax.FloatingPointLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -146,9 +142,7 @@ public abstract class Literal implements Serializable {
     public final Boolean value;
     
     public Boolean_ (Boolean value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -176,9 +170,7 @@ public abstract class Literal implements Serializable {
     public final Character value;
     
     public Character_ (Character value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -206,9 +198,7 @@ public abstract class Literal implements Serializable {
     public final hydra.langs.java.syntax.StringLiteral value;
     
     public String_ (hydra.langs.java.syntax.StringLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

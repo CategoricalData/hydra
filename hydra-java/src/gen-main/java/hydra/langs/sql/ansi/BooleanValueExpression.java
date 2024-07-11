@@ -37,9 +37,7 @@ public abstract class BooleanValueExpression implements Serializable {
     public final hydra.langs.sql.ansi.BooleanTerm value;
     
     public Term (hydra.langs.sql.ansi.BooleanTerm value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class BooleanValueExpression implements Serializable {
     public final hydra.langs.sql.ansi.BooleanValueExpression_Or value;
     
     public Or (hydra.langs.sql.ansi.BooleanValueExpression_Or value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

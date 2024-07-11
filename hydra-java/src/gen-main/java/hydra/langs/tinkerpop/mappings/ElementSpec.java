@@ -40,9 +40,7 @@ public abstract class ElementSpec implements Serializable {
     public final hydra.langs.tinkerpop.mappings.VertexSpec value;
     
     public Vertex (hydra.langs.tinkerpop.mappings.VertexSpec value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -70,9 +68,7 @@ public abstract class ElementSpec implements Serializable {
     public final hydra.langs.tinkerpop.mappings.EdgeSpec value;
     
     public Edge (hydra.langs.tinkerpop.mappings.EdgeSpec value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

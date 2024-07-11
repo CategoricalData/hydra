@@ -21,12 +21,8 @@ public class PropertySpec implements Serializable {
   public final hydra.langs.tinkerpop.mappings.ValueSpec value;
   
   public PropertySpec (hydra.langs.tinkerpop.propertyGraph.PropertyKey key, hydra.langs.tinkerpop.mappings.ValueSpec value) {
-    if (key == null) {
-      throw new IllegalArgumentException("null value for 'key' argument");
-    }
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((key));
+    java.util.Objects.requireNonNull((value));
     this.key = key;
     this.value = value;
   }
@@ -46,16 +42,12 @@ public class PropertySpec implements Serializable {
   }
   
   public PropertySpec withKey(hydra.langs.tinkerpop.propertyGraph.PropertyKey key) {
-    if (key == null) {
-      throw new IllegalArgumentException("null value for 'key' argument");
-    }
+    java.util.Objects.requireNonNull((key));
     return new PropertySpec(key, value);
   }
   
   public PropertySpec withValue(hydra.langs.tinkerpop.mappings.ValueSpec value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     return new PropertySpec(key, value);
   }
 }

@@ -14,15 +14,9 @@ public class NonArithmeticOperatorExpression implements Serializable {
   public final hydra.util.Opt<hydra.langs.cypher.openCypher.NodeLabels> labels;
   
   public NonArithmeticOperatorExpression (hydra.langs.cypher.openCypher.Atom atom, java.util.List<hydra.langs.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups, hydra.util.Opt<hydra.langs.cypher.openCypher.NodeLabels> labels) {
-    if (atom == null) {
-      throw new IllegalArgumentException("null value for 'atom' argument");
-    }
-    if (listsAndLookups == null) {
-      throw new IllegalArgumentException("null value for 'listsAndLookups' argument");
-    }
-    if (labels == null) {
-      throw new IllegalArgumentException("null value for 'labels' argument");
-    }
+    java.util.Objects.requireNonNull((atom));
+    java.util.Objects.requireNonNull((listsAndLookups));
+    java.util.Objects.requireNonNull((labels));
     this.atom = atom;
     this.listsAndLookups = listsAndLookups;
     this.labels = labels;
@@ -43,23 +37,17 @@ public class NonArithmeticOperatorExpression implements Serializable {
   }
   
   public NonArithmeticOperatorExpression withAtom(hydra.langs.cypher.openCypher.Atom atom) {
-    if (atom == null) {
-      throw new IllegalArgumentException("null value for 'atom' argument");
-    }
+    java.util.Objects.requireNonNull((atom));
     return new NonArithmeticOperatorExpression(atom, listsAndLookups, labels);
   }
   
   public NonArithmeticOperatorExpression withListsAndLookups(java.util.List<hydra.langs.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups) {
-    if (listsAndLookups == null) {
-      throw new IllegalArgumentException("null value for 'listsAndLookups' argument");
-    }
+    java.util.Objects.requireNonNull((listsAndLookups));
     return new NonArithmeticOperatorExpression(atom, listsAndLookups, labels);
   }
   
   public NonArithmeticOperatorExpression withLabels(hydra.util.Opt<hydra.langs.cypher.openCypher.NodeLabels> labels) {
-    if (labels == null) {
-      throw new IllegalArgumentException("null value for 'labels' argument");
-    }
+    java.util.Objects.requireNonNull((labels));
     return new NonArithmeticOperatorExpression(atom, listsAndLookups, labels);
   }
 }

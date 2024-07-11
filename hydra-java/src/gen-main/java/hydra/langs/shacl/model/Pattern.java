@@ -15,12 +15,8 @@ public class Pattern implements Serializable {
   public final hydra.util.Opt<String> flags;
   
   public Pattern (String regex, hydra.util.Opt<String> flags) {
-    if (regex == null) {
-      throw new IllegalArgumentException("null value for 'regex' argument");
-    }
-    if (flags == null) {
-      throw new IllegalArgumentException("null value for 'flags' argument");
-    }
+    java.util.Objects.requireNonNull((regex));
+    java.util.Objects.requireNonNull((flags));
     this.regex = regex;
     this.flags = flags;
   }
@@ -40,16 +36,12 @@ public class Pattern implements Serializable {
   }
   
   public Pattern withRegex(String regex) {
-    if (regex == null) {
-      throw new IllegalArgumentException("null value for 'regex' argument");
-    }
+    java.util.Objects.requireNonNull((regex));
     return new Pattern(regex, flags);
   }
   
   public Pattern withFlags(hydra.util.Opt<String> flags) {
-    if (flags == null) {
-      throw new IllegalArgumentException("null value for 'flags' argument");
-    }
+    java.util.Objects.requireNonNull((flags));
     return new Pattern(regex, flags);
   }
 }

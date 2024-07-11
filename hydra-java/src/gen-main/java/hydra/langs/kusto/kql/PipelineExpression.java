@@ -10,9 +10,7 @@ public class PipelineExpression implements Serializable {
   public final java.util.List<hydra.langs.kusto.kql.TabularExpression> value;
   
   public PipelineExpression (java.util.List<hydra.langs.kusto.kql.TabularExpression> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

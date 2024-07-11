@@ -31,18 +31,10 @@ public class PathFeatures implements Serializable {
   public final Boolean shortestPath;
   
   public PathFeatures (Boolean length, Boolean nodes, Boolean relationships, Boolean shortestPath) {
-    if (length == null) {
-      throw new IllegalArgumentException("null value for 'length' argument");
-    }
-    if (nodes == null) {
-      throw new IllegalArgumentException("null value for 'nodes' argument");
-    }
-    if (relationships == null) {
-      throw new IllegalArgumentException("null value for 'relationships' argument");
-    }
-    if (shortestPath == null) {
-      throw new IllegalArgumentException("null value for 'shortestPath' argument");
-    }
+    java.util.Objects.requireNonNull((length));
+    java.util.Objects.requireNonNull((nodes));
+    java.util.Objects.requireNonNull((relationships));
+    java.util.Objects.requireNonNull((shortestPath));
     this.length = length;
     this.nodes = nodes;
     this.relationships = relationships;
@@ -64,30 +56,22 @@ public class PathFeatures implements Serializable {
   }
   
   public PathFeatures withLength(Boolean length) {
-    if (length == null) {
-      throw new IllegalArgumentException("null value for 'length' argument");
-    }
+    java.util.Objects.requireNonNull((length));
     return new PathFeatures(length, nodes, relationships, shortestPath);
   }
   
   public PathFeatures withNodes(Boolean nodes) {
-    if (nodes == null) {
-      throw new IllegalArgumentException("null value for 'nodes' argument");
-    }
+    java.util.Objects.requireNonNull((nodes));
     return new PathFeatures(length, nodes, relationships, shortestPath);
   }
   
   public PathFeatures withRelationships(Boolean relationships) {
-    if (relationships == null) {
-      throw new IllegalArgumentException("null value for 'relationships' argument");
-    }
+    java.util.Objects.requireNonNull((relationships));
     return new PathFeatures(length, nodes, relationships, shortestPath);
   }
   
   public PathFeatures withShortestPath(Boolean shortestPath) {
-    if (shortestPath == null) {
-      throw new IllegalArgumentException("null value for 'shortestPath' argument");
-    }
+    java.util.Objects.requireNonNull((shortestPath));
     return new PathFeatures(length, nodes, relationships, shortestPath);
   }
 }

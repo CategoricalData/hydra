@@ -19,18 +19,10 @@ public class Statistics implements Serializable {
   public final hydra.util.Opt<String> minValue;
   
   public Statistics (hydra.util.Opt<java.math.BigInteger> nullCount, hydra.util.Opt<java.math.BigInteger> distinctCount, hydra.util.Opt<String> maxValue, hydra.util.Opt<String> minValue) {
-    if (nullCount == null) {
-      throw new IllegalArgumentException("null value for 'nullCount' argument");
-    }
-    if (distinctCount == null) {
-      throw new IllegalArgumentException("null value for 'distinctCount' argument");
-    }
-    if (maxValue == null) {
-      throw new IllegalArgumentException("null value for 'maxValue' argument");
-    }
-    if (minValue == null) {
-      throw new IllegalArgumentException("null value for 'minValue' argument");
-    }
+    java.util.Objects.requireNonNull((nullCount));
+    java.util.Objects.requireNonNull((distinctCount));
+    java.util.Objects.requireNonNull((maxValue));
+    java.util.Objects.requireNonNull((minValue));
     this.nullCount = nullCount;
     this.distinctCount = distinctCount;
     this.maxValue = maxValue;
@@ -52,30 +44,22 @@ public class Statistics implements Serializable {
   }
   
   public Statistics withNullCount(hydra.util.Opt<java.math.BigInteger> nullCount) {
-    if (nullCount == null) {
-      throw new IllegalArgumentException("null value for 'nullCount' argument");
-    }
+    java.util.Objects.requireNonNull((nullCount));
     return new Statistics(nullCount, distinctCount, maxValue, minValue);
   }
   
   public Statistics withDistinctCount(hydra.util.Opt<java.math.BigInteger> distinctCount) {
-    if (distinctCount == null) {
-      throw new IllegalArgumentException("null value for 'distinctCount' argument");
-    }
+    java.util.Objects.requireNonNull((distinctCount));
     return new Statistics(nullCount, distinctCount, maxValue, minValue);
   }
   
   public Statistics withMaxValue(hydra.util.Opt<String> maxValue) {
-    if (maxValue == null) {
-      throw new IllegalArgumentException("null value for 'maxValue' argument");
-    }
+    java.util.Objects.requireNonNull((maxValue));
     return new Statistics(nullCount, distinctCount, maxValue, minValue);
   }
   
   public Statistics withMinValue(hydra.util.Opt<String> minValue) {
-    if (minValue == null) {
-      throw new IllegalArgumentException("null value for 'minValue' argument");
-    }
+    java.util.Objects.requireNonNull((minValue));
     return new Statistics(nullCount, distinctCount, maxValue, minValue);
   }
 }

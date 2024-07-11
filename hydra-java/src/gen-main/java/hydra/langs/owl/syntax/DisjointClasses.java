@@ -12,12 +12,8 @@ public class DisjointClasses implements Serializable {
   public final java.util.List<hydra.langs.owl.syntax.ClassExpression> classes;
   
   public DisjointClasses (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, java.util.List<hydra.langs.owl.syntax.ClassExpression> classes) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
-    if (classes == null) {
-      throw new IllegalArgumentException("null value for 'classes' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
+    java.util.Objects.requireNonNull((classes));
     this.annotations = annotations;
     this.classes = classes;
   }
@@ -37,16 +33,12 @@ public class DisjointClasses implements Serializable {
   }
   
   public DisjointClasses withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new DisjointClasses(annotations, classes);
   }
   
   public DisjointClasses withClasses(java.util.List<hydra.langs.owl.syntax.ClassExpression> classes) {
-    if (classes == null) {
-      throw new IllegalArgumentException("null value for 'classes' argument");
-    }
+    java.util.Objects.requireNonNull((classes));
     return new DisjointClasses(annotations, classes);
   }
 }

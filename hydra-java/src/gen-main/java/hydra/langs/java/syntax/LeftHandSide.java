@@ -43,9 +43,7 @@ public abstract class LeftHandSide implements Serializable {
     public final hydra.langs.java.syntax.ExpressionName value;
     
     public ExpressionName (hydra.langs.java.syntax.ExpressionName value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class LeftHandSide implements Serializable {
     public final hydra.langs.java.syntax.FieldAccess value;
     
     public FieldAccess (hydra.langs.java.syntax.FieldAccess value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class LeftHandSide implements Serializable {
     public final hydra.langs.java.syntax.ArrayAccess value;
     
     public ArrayAccess (hydra.langs.java.syntax.ArrayAccess value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

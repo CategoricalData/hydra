@@ -40,9 +40,7 @@ public abstract class ElementType<T> implements Serializable {
     public final hydra.langs.tinkerpop.propertyGraph.VertexType<T> value;
     
     public Vertex (hydra.langs.tinkerpop.propertyGraph.VertexType<T> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -70,9 +68,7 @@ public abstract class ElementType<T> implements Serializable {
     public final hydra.langs.tinkerpop.propertyGraph.EdgeType<T> value;
     
     public Edge (hydra.langs.tinkerpop.propertyGraph.EdgeType<T> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

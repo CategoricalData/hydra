@@ -55,9 +55,7 @@ public abstract class UnaryExpression implements Serializable {
     public final hydra.langs.java.syntax.PreIncrementExpression value;
     
     public PreIncrement (hydra.langs.java.syntax.PreIncrementExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -85,9 +83,7 @@ public abstract class UnaryExpression implements Serializable {
     public final hydra.langs.java.syntax.PreDecrementExpression value;
     
     public PreDecrement (hydra.langs.java.syntax.PreDecrementExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -115,9 +111,7 @@ public abstract class UnaryExpression implements Serializable {
     public final hydra.langs.java.syntax.UnaryExpression value;
     
     public Plus (hydra.langs.java.syntax.UnaryExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -145,9 +139,7 @@ public abstract class UnaryExpression implements Serializable {
     public final hydra.langs.java.syntax.UnaryExpression value;
     
     public Minus (hydra.langs.java.syntax.UnaryExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -175,9 +167,7 @@ public abstract class UnaryExpression implements Serializable {
     public final hydra.langs.java.syntax.UnaryExpressionNotPlusMinus value;
     
     public Other (hydra.langs.java.syntax.UnaryExpressionNotPlusMinus value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

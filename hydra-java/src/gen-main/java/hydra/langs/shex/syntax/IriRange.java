@@ -37,9 +37,7 @@ public abstract class IriRange implements Serializable {
     public final hydra.langs.shex.syntax.IriRange_Sequence value;
     
     public Sequence (hydra.langs.shex.syntax.IriRange_Sequence value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class IriRange implements Serializable {
     public final java.util.List<hydra.langs.shex.syntax.Exclusion> value;
     
     public Sequence2 (java.util.List<hydra.langs.shex.syntax.Exclusion> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

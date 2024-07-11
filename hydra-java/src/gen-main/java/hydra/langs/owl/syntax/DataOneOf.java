@@ -16,9 +16,7 @@ public class DataOneOf implements Serializable {
   public final java.util.List<hydra.langs.rdf.syntax.Literal> value;
   
   public DataOneOf (java.util.List<hydra.langs.rdf.syntax.Literal> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

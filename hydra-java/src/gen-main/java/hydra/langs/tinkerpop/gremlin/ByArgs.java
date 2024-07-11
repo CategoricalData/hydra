@@ -43,9 +43,7 @@ public abstract class ByArgs implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalOrderArgument value;
     
     public Order (hydra.langs.tinkerpop.gremlin.TraversalOrderArgument value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class ByArgs implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalTokenArgument value;
     
     public Token (hydra.langs.tinkerpop.gremlin.TraversalTokenArgument value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class ByArgs implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.ByOtherArgs value;
     
     public Other (hydra.langs.tinkerpop.gremlin.ByOtherArgs value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

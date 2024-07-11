@@ -49,9 +49,7 @@ public abstract class InlineShapeOrRef implements Serializable {
     public final hydra.langs.shex.syntax.InlineShapeDefinition value;
     
     public InlineShapeDefinition (hydra.langs.shex.syntax.InlineShapeDefinition value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -79,9 +77,7 @@ public abstract class InlineShapeOrRef implements Serializable {
     public final hydra.langs.shex.syntax.AtpNameLn value;
     
     public AtpNameLn (hydra.langs.shex.syntax.AtpNameLn value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -109,9 +105,7 @@ public abstract class InlineShapeOrRef implements Serializable {
     public final hydra.langs.shex.syntax.AtpNameNs value;
     
     public AtpNameNs (hydra.langs.shex.syntax.AtpNameNs value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -139,9 +133,7 @@ public abstract class InlineShapeOrRef implements Serializable {
     public final hydra.langs.shex.syntax.ShapeExprLabel value;
     
     public Sequence (hydra.langs.shex.syntax.ShapeExprLabel value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

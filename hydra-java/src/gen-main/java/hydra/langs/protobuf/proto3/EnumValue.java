@@ -26,15 +26,9 @@ public class EnumValue implements Serializable {
   public final java.util.List<hydra.langs.protobuf.proto3.Option> options;
   
   public EnumValue (hydra.langs.protobuf.proto3.EnumValueName name, Integer number, java.util.List<hydra.langs.protobuf.proto3.Option> options) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (number == null) {
-      throw new IllegalArgumentException("null value for 'number' argument");
-    }
-    if (options == null) {
-      throw new IllegalArgumentException("null value for 'options' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((number));
+    java.util.Objects.requireNonNull((options));
     this.name = name;
     this.number = number;
     this.options = options;
@@ -55,23 +49,17 @@ public class EnumValue implements Serializable {
   }
   
   public EnumValue withName(hydra.langs.protobuf.proto3.EnumValueName name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new EnumValue(name, number, options);
   }
   
   public EnumValue withNumber(Integer number) {
-    if (number == null) {
-      throw new IllegalArgumentException("null value for 'number' argument");
-    }
+    java.util.Objects.requireNonNull((number));
     return new EnumValue(name, number, options);
   }
   
   public EnumValue withOptions(java.util.List<hydra.langs.protobuf.proto3.Option> options) {
-    if (options == null) {
-      throw new IllegalArgumentException("null value for 'options' argument");
-    }
+    java.util.Objects.requireNonNull((options));
     return new EnumValue(name, number, options);
   }
 }

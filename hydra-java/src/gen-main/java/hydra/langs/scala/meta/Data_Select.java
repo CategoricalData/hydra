@@ -12,12 +12,8 @@ public class Data_Select implements Serializable {
   public final hydra.langs.scala.meta.Data_Name name;
   
   public Data_Select (hydra.langs.scala.meta.Data qual, hydra.langs.scala.meta.Data_Name name) {
-    if (qual == null) {
-      throw new IllegalArgumentException("null value for 'qual' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((qual));
+    java.util.Objects.requireNonNull((name));
     this.qual = qual;
     this.name = name;
   }
@@ -37,16 +33,12 @@ public class Data_Select implements Serializable {
   }
   
   public Data_Select withQual(hydra.langs.scala.meta.Data qual) {
-    if (qual == null) {
-      throw new IllegalArgumentException("null value for 'qual' argument");
-    }
+    java.util.Objects.requireNonNull((qual));
     return new Data_Select(qual, name);
   }
   
   public Data_Select withName(hydra.langs.scala.meta.Data_Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Data_Select(qual, name);
   }
 }

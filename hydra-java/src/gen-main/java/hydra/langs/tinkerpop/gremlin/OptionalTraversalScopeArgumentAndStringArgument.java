@@ -12,12 +12,8 @@ public class OptionalTraversalScopeArgumentAndStringArgument implements Serializ
   public final hydra.langs.tinkerpop.gremlin.StringArgument string;
   
   public OptionalTraversalScopeArgumentAndStringArgument (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope, hydra.langs.tinkerpop.gremlin.StringArgument string) {
-    if (scope == null) {
-      throw new IllegalArgumentException("null value for 'scope' argument");
-    }
-    if (string == null) {
-      throw new IllegalArgumentException("null value for 'string' argument");
-    }
+    java.util.Objects.requireNonNull((scope));
+    java.util.Objects.requireNonNull((string));
     this.scope = scope;
     this.string = string;
   }
@@ -37,16 +33,12 @@ public class OptionalTraversalScopeArgumentAndStringArgument implements Serializ
   }
   
   public OptionalTraversalScopeArgumentAndStringArgument withScope(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope) {
-    if (scope == null) {
-      throw new IllegalArgumentException("null value for 'scope' argument");
-    }
+    java.util.Objects.requireNonNull((scope));
     return new OptionalTraversalScopeArgumentAndStringArgument(scope, string);
   }
   
   public OptionalTraversalScopeArgumentAndStringArgument withString(hydra.langs.tinkerpop.gremlin.StringArgument string) {
-    if (string == null) {
-      throw new IllegalArgumentException("null value for 'string' argument");
-    }
+    java.util.Objects.requireNonNull((string));
     return new OptionalTraversalScopeArgumentAndStringArgument(scope, string);
   }
 }

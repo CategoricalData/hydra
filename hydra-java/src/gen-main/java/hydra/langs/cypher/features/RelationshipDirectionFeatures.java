@@ -31,18 +31,10 @@ public class RelationshipDirectionFeatures implements Serializable {
   public final Boolean right;
   
   public RelationshipDirectionFeatures (Boolean both, Boolean left, Boolean neither, Boolean right) {
-    if (both == null) {
-      throw new IllegalArgumentException("null value for 'both' argument");
-    }
-    if (left == null) {
-      throw new IllegalArgumentException("null value for 'left' argument");
-    }
-    if (neither == null) {
-      throw new IllegalArgumentException("null value for 'neither' argument");
-    }
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((both));
+    java.util.Objects.requireNonNull((left));
+    java.util.Objects.requireNonNull((neither));
+    java.util.Objects.requireNonNull((right));
     this.both = both;
     this.left = left;
     this.neither = neither;
@@ -64,30 +56,22 @@ public class RelationshipDirectionFeatures implements Serializable {
   }
   
   public RelationshipDirectionFeatures withBoth(Boolean both) {
-    if (both == null) {
-      throw new IllegalArgumentException("null value for 'both' argument");
-    }
+    java.util.Objects.requireNonNull((both));
     return new RelationshipDirectionFeatures(both, left, neither, right);
   }
   
   public RelationshipDirectionFeatures withLeft(Boolean left) {
-    if (left == null) {
-      throw new IllegalArgumentException("null value for 'left' argument");
-    }
+    java.util.Objects.requireNonNull((left));
     return new RelationshipDirectionFeatures(both, left, neither, right);
   }
   
   public RelationshipDirectionFeatures withNeither(Boolean neither) {
-    if (neither == null) {
-      throw new IllegalArgumentException("null value for 'neither' argument");
-    }
+    java.util.Objects.requireNonNull((neither));
     return new RelationshipDirectionFeatures(both, left, neither, right);
   }
   
   public RelationshipDirectionFeatures withRight(Boolean right) {
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((right));
     return new RelationshipDirectionFeatures(both, left, neither, right);
   }
 }

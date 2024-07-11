@@ -15,12 +15,8 @@ public class Stream<A> implements Serializable {
   public final hydra.core.Stream<A> rest;
   
   public Stream (hydra.core.Term<A> first, hydra.core.Stream<A> rest) {
-    if (first == null) {
-      throw new IllegalArgumentException("null value for 'first' argument");
-    }
-    if (rest == null) {
-      throw new IllegalArgumentException("null value for 'rest' argument");
-    }
+    java.util.Objects.requireNonNull((first));
+    java.util.Objects.requireNonNull((rest));
     this.first = first;
     this.rest = rest;
   }
@@ -40,16 +36,12 @@ public class Stream<A> implements Serializable {
   }
   
   public Stream withFirst(hydra.core.Term<A> first) {
-    if (first == null) {
-      throw new IllegalArgumentException("null value for 'first' argument");
-    }
+    java.util.Objects.requireNonNull((first));
     return new Stream(first, rest);
   }
   
   public Stream withRest(hydra.core.Stream<A> rest) {
-    if (rest == null) {
-      throw new IllegalArgumentException("null value for 'rest' argument");
-    }
+    java.util.Objects.requireNonNull((rest));
     return new Stream(first, rest);
   }
 }

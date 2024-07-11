@@ -37,9 +37,7 @@ public abstract class CaseTree implements Serializable {
     public final hydra.langs.scala.meta.Case value;
     
     public Case (hydra.langs.scala.meta.Case value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class CaseTree implements Serializable {
     public final hydra.langs.scala.meta.TypeCase value;
     
     public TypeCase (hydra.langs.scala.meta.TypeCase value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

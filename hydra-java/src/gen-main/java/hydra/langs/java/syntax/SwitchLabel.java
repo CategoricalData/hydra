@@ -43,9 +43,7 @@ public abstract class SwitchLabel implements Serializable {
     public final hydra.langs.java.syntax.ConstantExpression value;
     
     public Constant (hydra.langs.java.syntax.ConstantExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class SwitchLabel implements Serializable {
     public final hydra.langs.java.syntax.EnumConstantName value;
     
     public EnumConstant (hydra.langs.java.syntax.EnumConstantName value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

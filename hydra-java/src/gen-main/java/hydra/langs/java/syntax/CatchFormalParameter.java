@@ -14,15 +14,9 @@ public class CatchFormalParameter implements Serializable {
   public final hydra.langs.java.syntax.VariableDeclaratorId id;
   
   public CatchFormalParameter (java.util.List<hydra.langs.java.syntax.VariableModifier> modifiers, hydra.langs.java.syntax.CatchType type, hydra.langs.java.syntax.VariableDeclaratorId id) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (id == null) {
-      throw new IllegalArgumentException("null value for 'id' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((id));
     this.modifiers = modifiers;
     this.type = type;
     this.id = id;
@@ -43,23 +37,17 @@ public class CatchFormalParameter implements Serializable {
   }
   
   public CatchFormalParameter withModifiers(java.util.List<hydra.langs.java.syntax.VariableModifier> modifiers) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
     return new CatchFormalParameter(modifiers, type, id);
   }
   
   public CatchFormalParameter withType(hydra.langs.java.syntax.CatchType type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new CatchFormalParameter(modifiers, type, id);
   }
   
   public CatchFormalParameter withId(hydra.langs.java.syntax.VariableDeclaratorId id) {
-    if (id == null) {
-      throw new IllegalArgumentException("null value for 'id' argument");
-    }
+    java.util.Objects.requireNonNull((id));
     return new CatchFormalParameter(modifiers, type, id);
   }
 }

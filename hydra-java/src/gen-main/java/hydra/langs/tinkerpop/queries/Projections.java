@@ -12,12 +12,8 @@ public class Projections implements Serializable {
   public final java.util.List<hydra.langs.tinkerpop.queries.Projection> explicit;
   
   public Projections (Boolean all, java.util.List<hydra.langs.tinkerpop.queries.Projection> explicit) {
-    if (all == null) {
-      throw new IllegalArgumentException("null value for 'all' argument");
-    }
-    if (explicit == null) {
-      throw new IllegalArgumentException("null value for 'explicit' argument");
-    }
+    java.util.Objects.requireNonNull((all));
+    java.util.Objects.requireNonNull((explicit));
     this.all = all;
     this.explicit = explicit;
   }
@@ -37,16 +33,12 @@ public class Projections implements Serializable {
   }
   
   public Projections withAll(Boolean all) {
-    if (all == null) {
-      throw new IllegalArgumentException("null value for 'all' argument");
-    }
+    java.util.Objects.requireNonNull((all));
     return new Projections(all, explicit);
   }
   
   public Projections withExplicit(java.util.List<hydra.langs.tinkerpop.queries.Projection> explicit) {
-    if (explicit == null) {
-      throw new IllegalArgumentException("null value for 'explicit' argument");
-    }
+    java.util.Objects.requireNonNull((explicit));
     return new Projections(all, explicit);
   }
 }

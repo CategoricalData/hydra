@@ -52,9 +52,7 @@ public abstract class Declaration implements Serializable {
     public final hydra.langs.haskell.ast.DataDeclaration value;
     
     public Data (hydra.langs.haskell.ast.DataDeclaration value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -82,9 +80,7 @@ public abstract class Declaration implements Serializable {
     public final hydra.langs.haskell.ast.TypeDeclaration value;
     
     public Type (hydra.langs.haskell.ast.TypeDeclaration value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -112,9 +108,7 @@ public abstract class Declaration implements Serializable {
     public final hydra.langs.haskell.ast.ValueBinding value;
     
     public ValueBinding (hydra.langs.haskell.ast.ValueBinding value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -142,9 +136,7 @@ public abstract class Declaration implements Serializable {
     public final hydra.langs.haskell.ast.TypedBinding value;
     
     public TypedBinding (hydra.langs.haskell.ast.TypedBinding value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

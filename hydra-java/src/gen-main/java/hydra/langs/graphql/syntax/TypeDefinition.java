@@ -61,9 +61,7 @@ public abstract class TypeDefinition implements Serializable {
     public final hydra.langs.graphql.syntax.ScalarTypeDefinition value;
     
     public Scalar (hydra.langs.graphql.syntax.ScalarTypeDefinition value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -91,9 +89,7 @@ public abstract class TypeDefinition implements Serializable {
     public final hydra.langs.graphql.syntax.ObjectTypeDefinition value;
     
     public Object_ (hydra.langs.graphql.syntax.ObjectTypeDefinition value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -121,9 +117,7 @@ public abstract class TypeDefinition implements Serializable {
     public final hydra.langs.graphql.syntax.InterfaceTypeDefinition value;
     
     public Interface (hydra.langs.graphql.syntax.InterfaceTypeDefinition value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -151,9 +145,7 @@ public abstract class TypeDefinition implements Serializable {
     public final hydra.langs.graphql.syntax.UnionTypeDefinition value;
     
     public Union (hydra.langs.graphql.syntax.UnionTypeDefinition value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -181,9 +173,7 @@ public abstract class TypeDefinition implements Serializable {
     public final hydra.langs.graphql.syntax.EnumTypeDefinition value;
     
     public Enum_ (hydra.langs.graphql.syntax.EnumTypeDefinition value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -211,9 +201,7 @@ public abstract class TypeDefinition implements Serializable {
     public final hydra.langs.graphql.syntax.InputObjectTypeDefinition value;
     
     public InputObject (hydra.langs.graphql.syntax.InputObjectTypeDefinition value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

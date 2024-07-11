@@ -12,12 +12,8 @@ public class MultiplicativeExpression_Binary implements Serializable {
   public final hydra.langs.java.syntax.UnaryExpression rhs;
   
   public MultiplicativeExpression_Binary (hydra.langs.java.syntax.MultiplicativeExpression lhs, hydra.langs.java.syntax.UnaryExpression rhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
+    java.util.Objects.requireNonNull((rhs));
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -37,16 +33,12 @@ public class MultiplicativeExpression_Binary implements Serializable {
   }
   
   public MultiplicativeExpression_Binary withLhs(hydra.langs.java.syntax.MultiplicativeExpression lhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
     return new MultiplicativeExpression_Binary(lhs, rhs);
   }
   
   public MultiplicativeExpression_Binary withRhs(hydra.langs.java.syntax.UnaryExpression rhs) {
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((rhs));
     return new MultiplicativeExpression_Binary(lhs, rhs);
   }
 }

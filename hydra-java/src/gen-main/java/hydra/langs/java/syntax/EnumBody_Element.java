@@ -12,12 +12,8 @@ public class EnumBody_Element implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.ClassBodyDeclaration> bodyDeclarations;
   
   public EnumBody_Element (java.util.List<hydra.langs.java.syntax.EnumConstant> constants, java.util.List<hydra.langs.java.syntax.ClassBodyDeclaration> bodyDeclarations) {
-    if (constants == null) {
-      throw new IllegalArgumentException("null value for 'constants' argument");
-    }
-    if (bodyDeclarations == null) {
-      throw new IllegalArgumentException("null value for 'bodyDeclarations' argument");
-    }
+    java.util.Objects.requireNonNull((constants));
+    java.util.Objects.requireNonNull((bodyDeclarations));
     this.constants = constants;
     this.bodyDeclarations = bodyDeclarations;
   }
@@ -37,16 +33,12 @@ public class EnumBody_Element implements Serializable {
   }
   
   public EnumBody_Element withConstants(java.util.List<hydra.langs.java.syntax.EnumConstant> constants) {
-    if (constants == null) {
-      throw new IllegalArgumentException("null value for 'constants' argument");
-    }
+    java.util.Objects.requireNonNull((constants));
     return new EnumBody_Element(constants, bodyDeclarations);
   }
   
   public EnumBody_Element withBodyDeclarations(java.util.List<hydra.langs.java.syntax.ClassBodyDeclaration> bodyDeclarations) {
-    if (bodyDeclarations == null) {
-      throw new IllegalArgumentException("null value for 'bodyDeclarations' argument");
-    }
+    java.util.Objects.requireNonNull((bodyDeclarations));
     return new EnumBody_Element(constants, bodyDeclarations);
   }
 }

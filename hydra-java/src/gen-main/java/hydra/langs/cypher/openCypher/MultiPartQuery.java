@@ -12,12 +12,8 @@ public class MultiPartQuery implements Serializable {
   public final hydra.langs.cypher.openCypher.SinglePartQuery body;
   
   public MultiPartQuery (java.util.List<hydra.langs.cypher.openCypher.WithClause> with, hydra.langs.cypher.openCypher.SinglePartQuery body) {
-    if (with == null) {
-      throw new IllegalArgumentException("null value for 'with' argument");
-    }
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((with));
+    java.util.Objects.requireNonNull((body));
     this.with = with;
     this.body = body;
   }
@@ -37,16 +33,12 @@ public class MultiPartQuery implements Serializable {
   }
   
   public MultiPartQuery withWith(java.util.List<hydra.langs.cypher.openCypher.WithClause> with) {
-    if (with == null) {
-      throw new IllegalArgumentException("null value for 'with' argument");
-    }
+    java.util.Objects.requireNonNull((with));
     return new MultiPartQuery(with, body);
   }
   
   public MultiPartQuery withBody(hydra.langs.cypher.openCypher.SinglePartQuery body) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((body));
     return new MultiPartQuery(with, body);
   }
 }

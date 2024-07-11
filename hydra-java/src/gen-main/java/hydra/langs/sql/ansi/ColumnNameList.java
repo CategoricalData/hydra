@@ -12,12 +12,8 @@ public class ColumnNameList implements Serializable {
   public final java.util.List<hydra.langs.sql.ansi.ColumnName> rest;
   
   public ColumnNameList (hydra.langs.sql.ansi.ColumnName first, java.util.List<hydra.langs.sql.ansi.ColumnName> rest) {
-    if (first == null) {
-      throw new IllegalArgumentException("null value for 'first' argument");
-    }
-    if (rest == null) {
-      throw new IllegalArgumentException("null value for 'rest' argument");
-    }
+    java.util.Objects.requireNonNull((first));
+    java.util.Objects.requireNonNull((rest));
     this.first = first;
     this.rest = rest;
   }
@@ -37,16 +33,12 @@ public class ColumnNameList implements Serializable {
   }
   
   public ColumnNameList withFirst(hydra.langs.sql.ansi.ColumnName first) {
-    if (first == null) {
-      throw new IllegalArgumentException("null value for 'first' argument");
-    }
+    java.util.Objects.requireNonNull((first));
     return new ColumnNameList(first, rest);
   }
   
   public ColumnNameList withRest(java.util.List<hydra.langs.sql.ansi.ColumnName> rest) {
-    if (rest == null) {
-      throw new IllegalArgumentException("null value for 'rest' argument");
-    }
+    java.util.Objects.requireNonNull((rest));
     return new ColumnNameList(first, rest);
   }
 }

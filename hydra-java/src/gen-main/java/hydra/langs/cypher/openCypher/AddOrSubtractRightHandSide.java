@@ -12,12 +12,8 @@ public class AddOrSubtractRightHandSide implements Serializable {
   public final hydra.langs.cypher.openCypher.MultiplyDivideModuloExpression expression;
   
   public AddOrSubtractRightHandSide (hydra.langs.cypher.openCypher.AddOrSubtractOperator operator, hydra.langs.cypher.openCypher.MultiplyDivideModuloExpression expression) {
-    if (operator == null) {
-      throw new IllegalArgumentException("null value for 'operator' argument");
-    }
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((operator));
+    java.util.Objects.requireNonNull((expression));
     this.operator = operator;
     this.expression = expression;
   }
@@ -37,16 +33,12 @@ public class AddOrSubtractRightHandSide implements Serializable {
   }
   
   public AddOrSubtractRightHandSide withOperator(hydra.langs.cypher.openCypher.AddOrSubtractOperator operator) {
-    if (operator == null) {
-      throw new IllegalArgumentException("null value for 'operator' argument");
-    }
+    java.util.Objects.requireNonNull((operator));
     return new AddOrSubtractRightHandSide(operator, expression);
   }
   
   public AddOrSubtractRightHandSide withExpression(hydra.langs.cypher.openCypher.MultiplyDivideModuloExpression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new AddOrSubtractRightHandSide(operator, expression);
   }
 }

@@ -49,9 +49,7 @@ public abstract class AnnotationTypeMemberDeclaration implements Serializable {
     public final hydra.langs.java.syntax.AnnotationTypeElementDeclaration value;
     
     public AnnotationType (hydra.langs.java.syntax.AnnotationTypeElementDeclaration value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -79,9 +77,7 @@ public abstract class AnnotationTypeMemberDeclaration implements Serializable {
     public final hydra.langs.java.syntax.ConstantDeclaration value;
     
     public Constant (hydra.langs.java.syntax.ConstantDeclaration value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -109,9 +105,7 @@ public abstract class AnnotationTypeMemberDeclaration implements Serializable {
     public final hydra.langs.java.syntax.ClassDeclaration value;
     
     public Class_ (hydra.langs.java.syntax.ClassDeclaration value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -139,9 +133,7 @@ public abstract class AnnotationTypeMemberDeclaration implements Serializable {
     public final hydra.langs.java.syntax.InterfaceDeclaration value;
     
     public Interface (hydra.langs.java.syntax.InterfaceDeclaration value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

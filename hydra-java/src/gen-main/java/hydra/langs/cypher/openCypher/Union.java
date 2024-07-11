@@ -12,12 +12,8 @@ public class Union implements Serializable {
   public final hydra.langs.cypher.openCypher.SingleQuery query;
   
   public Union (Boolean all, hydra.langs.cypher.openCypher.SingleQuery query) {
-    if (all == null) {
-      throw new IllegalArgumentException("null value for 'all' argument");
-    }
-    if (query == null) {
-      throw new IllegalArgumentException("null value for 'query' argument");
-    }
+    java.util.Objects.requireNonNull((all));
+    java.util.Objects.requireNonNull((query));
     this.all = all;
     this.query = query;
   }
@@ -37,16 +33,12 @@ public class Union implements Serializable {
   }
   
   public Union withAll(Boolean all) {
-    if (all == null) {
-      throw new IllegalArgumentException("null value for 'all' argument");
-    }
+    java.util.Objects.requireNonNull((all));
     return new Union(all, query);
   }
   
   public Union withQuery(hydra.langs.cypher.openCypher.SingleQuery query) {
-    if (query == null) {
-      throw new IllegalArgumentException("null value for 'query' argument");
-    }
+    java.util.Objects.requireNonNull((query));
     return new Union(all, query);
   }
 }

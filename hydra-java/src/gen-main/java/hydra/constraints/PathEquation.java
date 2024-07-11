@@ -15,12 +15,8 @@ public class PathEquation implements Serializable {
   public final hydra.query.Path right;
   
   public PathEquation (hydra.query.Path left, hydra.query.Path right) {
-    if (left == null) {
-      throw new IllegalArgumentException("null value for 'left' argument");
-    }
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((left));
+    java.util.Objects.requireNonNull((right));
     this.left = left;
     this.right = right;
   }
@@ -40,16 +36,12 @@ public class PathEquation implements Serializable {
   }
   
   public PathEquation withLeft(hydra.query.Path left) {
-    if (left == null) {
-      throw new IllegalArgumentException("null value for 'left' argument");
-    }
+    java.util.Objects.requireNonNull((left));
     return new PathEquation(left, right);
   }
   
   public PathEquation withRight(hydra.query.Path right) {
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((right));
     return new PathEquation(left, right);
   }
 }

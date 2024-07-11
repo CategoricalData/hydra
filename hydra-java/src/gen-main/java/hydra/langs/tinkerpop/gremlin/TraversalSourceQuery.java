@@ -12,12 +12,8 @@ public class TraversalSourceQuery implements Serializable {
   public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TransactionPart> transactionPart;
   
   public TraversalSourceQuery (hydra.langs.tinkerpop.gremlin.TraversalSource source, hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TransactionPart> transactionPart) {
-    if (source == null) {
-      throw new IllegalArgumentException("null value for 'source' argument");
-    }
-    if (transactionPart == null) {
-      throw new IllegalArgumentException("null value for 'transactionPart' argument");
-    }
+    java.util.Objects.requireNonNull((source));
+    java.util.Objects.requireNonNull((transactionPart));
     this.source = source;
     this.transactionPart = transactionPart;
   }
@@ -37,16 +33,12 @@ public class TraversalSourceQuery implements Serializable {
   }
   
   public TraversalSourceQuery withSource(hydra.langs.tinkerpop.gremlin.TraversalSource source) {
-    if (source == null) {
-      throw new IllegalArgumentException("null value for 'source' argument");
-    }
+    java.util.Objects.requireNonNull((source));
     return new TraversalSourceQuery(source, transactionPart);
   }
   
   public TraversalSourceQuery withTransactionPart(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TransactionPart> transactionPart) {
-    if (transactionPart == null) {
-      throw new IllegalArgumentException("null value for 'transactionPart' argument");
-    }
+    java.util.Objects.requireNonNull((transactionPart));
     return new TraversalSourceQuery(source, transactionPart);
   }
 }

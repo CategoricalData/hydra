@@ -15,12 +15,8 @@ public class LabeledPattern implements Serializable {
   public final hydra.grammar.Pattern pattern;
   
   public LabeledPattern (hydra.grammar.Label label, hydra.grammar.Pattern pattern) {
-    if (label == null) {
-      throw new IllegalArgumentException("null value for 'label' argument");
-    }
-    if (pattern == null) {
-      throw new IllegalArgumentException("null value for 'pattern' argument");
-    }
+    java.util.Objects.requireNonNull((label));
+    java.util.Objects.requireNonNull((pattern));
     this.label = label;
     this.pattern = pattern;
   }
@@ -40,16 +36,12 @@ public class LabeledPattern implements Serializable {
   }
   
   public LabeledPattern withLabel(hydra.grammar.Label label) {
-    if (label == null) {
-      throw new IllegalArgumentException("null value for 'label' argument");
-    }
+    java.util.Objects.requireNonNull((label));
     return new LabeledPattern(label, pattern);
   }
   
   public LabeledPattern withPattern(hydra.grammar.Pattern pattern) {
-    if (pattern == null) {
-      throw new IllegalArgumentException("null value for 'pattern' argument");
-    }
+    java.util.Objects.requireNonNull((pattern));
     return new LabeledPattern(label, pattern);
   }
 }

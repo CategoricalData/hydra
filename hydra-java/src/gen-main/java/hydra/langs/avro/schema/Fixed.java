@@ -13,9 +13,7 @@ public class Fixed implements Serializable {
   public final Integer size;
   
   public Fixed (Integer size) {
-    if (size == null) {
-      throw new IllegalArgumentException("null value for 'size' argument");
-    }
+    java.util.Objects.requireNonNull((size));
     this.size = size;
   }
   

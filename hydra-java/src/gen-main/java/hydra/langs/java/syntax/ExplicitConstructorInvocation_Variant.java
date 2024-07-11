@@ -68,9 +68,7 @@ public abstract class ExplicitConstructorInvocation_Variant implements Serializa
     public final hydra.util.Opt<hydra.langs.java.syntax.ExpressionName> value;
     
     public Super (hydra.util.Opt<hydra.langs.java.syntax.ExpressionName> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -98,9 +96,7 @@ public abstract class ExplicitConstructorInvocation_Variant implements Serializa
     public final hydra.langs.java.syntax.Primary value;
     
     public Primary (hydra.langs.java.syntax.Primary value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

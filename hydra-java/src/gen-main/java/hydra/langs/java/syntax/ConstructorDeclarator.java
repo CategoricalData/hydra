@@ -16,18 +16,10 @@ public class ConstructorDeclarator implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.FormalParameter> formalParameters;
   
   public ConstructorDeclarator (java.util.List<hydra.langs.java.syntax.TypeParameter> parameters, hydra.langs.java.syntax.SimpleTypeName name, hydra.util.Opt<hydra.langs.java.syntax.ReceiverParameter> receiverParameter, java.util.List<hydra.langs.java.syntax.FormalParameter> formalParameters) {
-    if (parameters == null) {
-      throw new IllegalArgumentException("null value for 'parameters' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (receiverParameter == null) {
-      throw new IllegalArgumentException("null value for 'receiverParameter' argument");
-    }
-    if (formalParameters == null) {
-      throw new IllegalArgumentException("null value for 'formalParameters' argument");
-    }
+    java.util.Objects.requireNonNull((parameters));
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((receiverParameter));
+    java.util.Objects.requireNonNull((formalParameters));
     this.parameters = parameters;
     this.name = name;
     this.receiverParameter = receiverParameter;
@@ -49,30 +41,22 @@ public class ConstructorDeclarator implements Serializable {
   }
   
   public ConstructorDeclarator withParameters(java.util.List<hydra.langs.java.syntax.TypeParameter> parameters) {
-    if (parameters == null) {
-      throw new IllegalArgumentException("null value for 'parameters' argument");
-    }
+    java.util.Objects.requireNonNull((parameters));
     return new ConstructorDeclarator(parameters, name, receiverParameter, formalParameters);
   }
   
   public ConstructorDeclarator withName(hydra.langs.java.syntax.SimpleTypeName name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new ConstructorDeclarator(parameters, name, receiverParameter, formalParameters);
   }
   
   public ConstructorDeclarator withReceiverParameter(hydra.util.Opt<hydra.langs.java.syntax.ReceiverParameter> receiverParameter) {
-    if (receiverParameter == null) {
-      throw new IllegalArgumentException("null value for 'receiverParameter' argument");
-    }
+    java.util.Objects.requireNonNull((receiverParameter));
     return new ConstructorDeclarator(parameters, name, receiverParameter, formalParameters);
   }
   
   public ConstructorDeclarator withFormalParameters(java.util.List<hydra.langs.java.syntax.FormalParameter> formalParameters) {
-    if (formalParameters == null) {
-      throw new IllegalArgumentException("null value for 'formalParameters' argument");
-    }
+    java.util.Objects.requireNonNull((formalParameters));
     return new ConstructorDeclarator(parameters, name, receiverParameter, formalParameters);
   }
 }

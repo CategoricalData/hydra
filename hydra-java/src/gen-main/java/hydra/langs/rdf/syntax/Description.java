@@ -15,12 +15,8 @@ public class Description implements Serializable {
   public final hydra.langs.rdf.syntax.Graph graph;
   
   public Description (hydra.langs.rdf.syntax.Node subject, hydra.langs.rdf.syntax.Graph graph) {
-    if (subject == null) {
-      throw new IllegalArgumentException("null value for 'subject' argument");
-    }
-    if (graph == null) {
-      throw new IllegalArgumentException("null value for 'graph' argument");
-    }
+    java.util.Objects.requireNonNull((subject));
+    java.util.Objects.requireNonNull((graph));
     this.subject = subject;
     this.graph = graph;
   }
@@ -40,16 +36,12 @@ public class Description implements Serializable {
   }
   
   public Description withSubject(hydra.langs.rdf.syntax.Node subject) {
-    if (subject == null) {
-      throw new IllegalArgumentException("null value for 'subject' argument");
-    }
+    java.util.Objects.requireNonNull((subject));
     return new Description(subject, graph);
   }
   
   public Description withGraph(hydra.langs.rdf.syntax.Graph graph) {
-    if (graph == null) {
-      throw new IllegalArgumentException("null value for 'graph' argument");
-    }
+    java.util.Objects.requireNonNull((graph));
     return new Description(subject, graph);
   }
 }

@@ -10,9 +10,7 @@ public class Data_Name implements Serializable {
   public final hydra.langs.scala.meta.PredefString value;
   
   public Data_Name (hydra.langs.scala.meta.PredefString value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

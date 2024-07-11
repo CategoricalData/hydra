@@ -12,12 +12,8 @@ public class ObjectSomeValuesFrom implements Serializable {
   public final hydra.langs.owl.syntax.ClassExpression class_;
   
   public ObjectSomeValuesFrom (hydra.langs.owl.syntax.ObjectPropertyExpression property, hydra.langs.owl.syntax.ClassExpression class_) {
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
-    if (class_ == null) {
-      throw new IllegalArgumentException("null value for 'class' argument");
-    }
+    java.util.Objects.requireNonNull((property));
+    java.util.Objects.requireNonNull((class_));
     this.property = property;
     this.class_ = class_;
   }
@@ -37,16 +33,12 @@ public class ObjectSomeValuesFrom implements Serializable {
   }
   
   public ObjectSomeValuesFrom withProperty(hydra.langs.owl.syntax.ObjectPropertyExpression property) {
-    if (property == null) {
-      throw new IllegalArgumentException("null value for 'property' argument");
-    }
+    java.util.Objects.requireNonNull((property));
     return new ObjectSomeValuesFrom(property, class_);
   }
   
   public ObjectSomeValuesFrom withClass(hydra.langs.owl.syntax.ClassExpression class_) {
-    if (class_ == null) {
-      throw new IllegalArgumentException("null value for 'class' argument");
-    }
+    java.util.Objects.requireNonNull((class_));
     return new ObjectSomeValuesFrom(property, class_);
   }
 }

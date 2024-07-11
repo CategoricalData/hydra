@@ -12,12 +12,8 @@ public class Type_Apply implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Type> args;
   
   public Type_Apply (hydra.langs.scala.meta.Type tpe, java.util.List<hydra.langs.scala.meta.Type> args) {
-    if (tpe == null) {
-      throw new IllegalArgumentException("null value for 'tpe' argument");
-    }
-    if (args == null) {
-      throw new IllegalArgumentException("null value for 'args' argument");
-    }
+    java.util.Objects.requireNonNull((tpe));
+    java.util.Objects.requireNonNull((args));
     this.tpe = tpe;
     this.args = args;
   }
@@ -37,16 +33,12 @@ public class Type_Apply implements Serializable {
   }
   
   public Type_Apply withTpe(hydra.langs.scala.meta.Type tpe) {
-    if (tpe == null) {
-      throw new IllegalArgumentException("null value for 'tpe' argument");
-    }
+    java.util.Objects.requireNonNull((tpe));
     return new Type_Apply(tpe, args);
   }
   
   public Type_Apply withArgs(java.util.List<hydra.langs.scala.meta.Type> args) {
-    if (args == null) {
-      throw new IllegalArgumentException("null value for 'args' argument");
-    }
+    java.util.Objects.requireNonNull((args));
     return new Type_Apply(tpe, args);
   }
 }

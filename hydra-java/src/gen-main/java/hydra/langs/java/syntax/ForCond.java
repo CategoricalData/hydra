@@ -14,15 +14,9 @@ public class ForCond implements Serializable {
   public final hydra.util.Opt<hydra.langs.java.syntax.ForUpdate> update;
   
   public ForCond (hydra.util.Opt<hydra.langs.java.syntax.ForInit> init, hydra.util.Opt<hydra.langs.java.syntax.Expression> cond, hydra.util.Opt<hydra.langs.java.syntax.ForUpdate> update) {
-    if (init == null) {
-      throw new IllegalArgumentException("null value for 'init' argument");
-    }
-    if (cond == null) {
-      throw new IllegalArgumentException("null value for 'cond' argument");
-    }
-    if (update == null) {
-      throw new IllegalArgumentException("null value for 'update' argument");
-    }
+    java.util.Objects.requireNonNull((init));
+    java.util.Objects.requireNonNull((cond));
+    java.util.Objects.requireNonNull((update));
     this.init = init;
     this.cond = cond;
     this.update = update;
@@ -43,23 +37,17 @@ public class ForCond implements Serializable {
   }
   
   public ForCond withInit(hydra.util.Opt<hydra.langs.java.syntax.ForInit> init) {
-    if (init == null) {
-      throw new IllegalArgumentException("null value for 'init' argument");
-    }
+    java.util.Objects.requireNonNull((init));
     return new ForCond(init, cond, update);
   }
   
   public ForCond withCond(hydra.util.Opt<hydra.langs.java.syntax.Expression> cond) {
-    if (cond == null) {
-      throw new IllegalArgumentException("null value for 'cond' argument");
-    }
+    java.util.Objects.requireNonNull((cond));
     return new ForCond(init, cond, update);
   }
   
   public ForCond withUpdate(hydra.util.Opt<hydra.langs.java.syntax.ForUpdate> update) {
-    if (update == null) {
-      throw new IllegalArgumentException("null value for 'update' argument");
-    }
+    java.util.Objects.requireNonNull((update));
     return new ForCond(init, cond, update);
   }
 }

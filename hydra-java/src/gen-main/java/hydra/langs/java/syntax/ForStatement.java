@@ -37,9 +37,7 @@ public abstract class ForStatement implements Serializable {
     public final hydra.langs.java.syntax.BasicForStatement value;
     
     public Basic (hydra.langs.java.syntax.BasicForStatement value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class ForStatement implements Serializable {
     public final hydra.langs.java.syntax.EnhancedForStatement value;
     
     public Enhanced (hydra.langs.java.syntax.EnhancedForStatement value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -16,9 +16,7 @@ public class DataComplementOf implements Serializable {
   public final hydra.langs.owl.syntax.DataRange value;
   
   public DataComplementOf (hydra.langs.owl.syntax.DataRange value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

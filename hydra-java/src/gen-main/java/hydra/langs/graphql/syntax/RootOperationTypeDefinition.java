@@ -12,12 +12,8 @@ public class RootOperationTypeDefinition implements Serializable {
   public final hydra.langs.graphql.syntax.NamedType namedType;
   
   public RootOperationTypeDefinition (hydra.langs.graphql.syntax.OperationType operationType, hydra.langs.graphql.syntax.NamedType namedType) {
-    if (operationType == null) {
-      throw new IllegalArgumentException("null value for 'operationType' argument");
-    }
-    if (namedType == null) {
-      throw new IllegalArgumentException("null value for 'namedType' argument");
-    }
+    java.util.Objects.requireNonNull((operationType));
+    java.util.Objects.requireNonNull((namedType));
     this.operationType = operationType;
     this.namedType = namedType;
   }
@@ -37,16 +33,12 @@ public class RootOperationTypeDefinition implements Serializable {
   }
   
   public RootOperationTypeDefinition withOperationType(hydra.langs.graphql.syntax.OperationType operationType) {
-    if (operationType == null) {
-      throw new IllegalArgumentException("null value for 'operationType' argument");
-    }
+    java.util.Objects.requireNonNull((operationType));
     return new RootOperationTypeDefinition(operationType, namedType);
   }
   
   public RootOperationTypeDefinition withNamedType(hydra.langs.graphql.syntax.NamedType namedType) {
-    if (namedType == null) {
-      throw new IllegalArgumentException("null value for 'namedType' argument");
-    }
+    java.util.Objects.requireNonNull((namedType));
     return new RootOperationTypeDefinition(operationType, namedType);
   }
 }

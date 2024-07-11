@@ -10,9 +10,7 @@ public class DefaultValue implements Serializable {
   public final hydra.langs.graphql.syntax.Value value;
   
   public DefaultValue (hydra.langs.graphql.syntax.Value value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

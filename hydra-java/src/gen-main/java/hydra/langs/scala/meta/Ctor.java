@@ -37,9 +37,7 @@ public abstract class Ctor implements Serializable {
     public final hydra.langs.scala.meta.Ctor_Primary value;
     
     public Primary (hydra.langs.scala.meta.Ctor_Primary value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class Ctor implements Serializable {
     public final hydra.langs.scala.meta.Ctor_Secondary value;
     
     public Secondary (hydra.langs.scala.meta.Ctor_Secondary value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

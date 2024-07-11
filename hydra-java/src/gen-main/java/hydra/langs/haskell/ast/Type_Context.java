@@ -12,12 +12,8 @@ public class Type_Context implements Serializable {
   public final hydra.langs.haskell.ast.Type type;
   
   public Type_Context (hydra.langs.haskell.ast.Assertion ctx, hydra.langs.haskell.ast.Type type) {
-    if (ctx == null) {
-      throw new IllegalArgumentException("null value for 'ctx' argument");
-    }
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((ctx));
+    java.util.Objects.requireNonNull((type));
     this.ctx = ctx;
     this.type = type;
   }
@@ -37,16 +33,12 @@ public class Type_Context implements Serializable {
   }
   
   public Type_Context withCtx(hydra.langs.haskell.ast.Assertion ctx) {
-    if (ctx == null) {
-      throw new IllegalArgumentException("null value for 'ctx' argument");
-    }
+    java.util.Objects.requireNonNull((ctx));
     return new Type_Context(ctx, type);
   }
   
   public Type_Context withType(hydra.langs.haskell.ast.Type type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new Type_Context(ctx, type);
   }
 }

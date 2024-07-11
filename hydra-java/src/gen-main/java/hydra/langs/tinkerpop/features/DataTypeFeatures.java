@@ -101,60 +101,24 @@ public class DataTypeFeatures implements Serializable {
   public final Boolean supportsUniformListValues;
   
   public DataTypeFeatures (Boolean supportsBooleanArrayValues, Boolean supportsBooleanValues, Boolean supportsByteArrayValues, Boolean supportsByteValues, Boolean supportsDoubleArrayValues, Boolean supportsDoubleValues, Boolean supportsFloatArrayValues, Boolean supportsFloatValues, Boolean supportsIntegerArrayValues, Boolean supportsIntegerValues, Boolean supportsLongArrayValues, Boolean supportsLongValues, Boolean supportsMapValues, Boolean supportsMixedListValues, Boolean supportsSerializableValues, Boolean supportsStringArrayValues, Boolean supportsStringValues, Boolean supportsUniformListValues) {
-    if (supportsBooleanArrayValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsBooleanArrayValues' argument");
-    }
-    if (supportsBooleanValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsBooleanValues' argument");
-    }
-    if (supportsByteArrayValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsByteArrayValues' argument");
-    }
-    if (supportsByteValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsByteValues' argument");
-    }
-    if (supportsDoubleArrayValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsDoubleArrayValues' argument");
-    }
-    if (supportsDoubleValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsDoubleValues' argument");
-    }
-    if (supportsFloatArrayValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsFloatArrayValues' argument");
-    }
-    if (supportsFloatValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsFloatValues' argument");
-    }
-    if (supportsIntegerArrayValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsIntegerArrayValues' argument");
-    }
-    if (supportsIntegerValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsIntegerValues' argument");
-    }
-    if (supportsLongArrayValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsLongArrayValues' argument");
-    }
-    if (supportsLongValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsLongValues' argument");
-    }
-    if (supportsMapValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsMapValues' argument");
-    }
-    if (supportsMixedListValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsMixedListValues' argument");
-    }
-    if (supportsSerializableValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsSerializableValues' argument");
-    }
-    if (supportsStringArrayValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsStringArrayValues' argument");
-    }
-    if (supportsStringValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsStringValues' argument");
-    }
-    if (supportsUniformListValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsUniformListValues' argument");
-    }
+    java.util.Objects.requireNonNull((supportsBooleanArrayValues));
+    java.util.Objects.requireNonNull((supportsBooleanValues));
+    java.util.Objects.requireNonNull((supportsByteArrayValues));
+    java.util.Objects.requireNonNull((supportsByteValues));
+    java.util.Objects.requireNonNull((supportsDoubleArrayValues));
+    java.util.Objects.requireNonNull((supportsDoubleValues));
+    java.util.Objects.requireNonNull((supportsFloatArrayValues));
+    java.util.Objects.requireNonNull((supportsFloatValues));
+    java.util.Objects.requireNonNull((supportsIntegerArrayValues));
+    java.util.Objects.requireNonNull((supportsIntegerValues));
+    java.util.Objects.requireNonNull((supportsLongArrayValues));
+    java.util.Objects.requireNonNull((supportsLongValues));
+    java.util.Objects.requireNonNull((supportsMapValues));
+    java.util.Objects.requireNonNull((supportsMixedListValues));
+    java.util.Objects.requireNonNull((supportsSerializableValues));
+    java.util.Objects.requireNonNull((supportsStringArrayValues));
+    java.util.Objects.requireNonNull((supportsStringValues));
+    java.util.Objects.requireNonNull((supportsUniformListValues));
     this.supportsBooleanArrayValues = supportsBooleanArrayValues;
     this.supportsBooleanValues = supportsBooleanValues;
     this.supportsByteArrayValues = supportsByteArrayValues;
@@ -190,128 +154,92 @@ public class DataTypeFeatures implements Serializable {
   }
   
   public DataTypeFeatures withSupportsBooleanArrayValues(Boolean supportsBooleanArrayValues) {
-    if (supportsBooleanArrayValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsBooleanArrayValues' argument");
-    }
+    java.util.Objects.requireNonNull((supportsBooleanArrayValues));
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsBooleanValues(Boolean supportsBooleanValues) {
-    if (supportsBooleanValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsBooleanValues' argument");
-    }
+    java.util.Objects.requireNonNull((supportsBooleanValues));
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsByteArrayValues(Boolean supportsByteArrayValues) {
-    if (supportsByteArrayValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsByteArrayValues' argument");
-    }
+    java.util.Objects.requireNonNull((supportsByteArrayValues));
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsByteValues(Boolean supportsByteValues) {
-    if (supportsByteValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsByteValues' argument");
-    }
+    java.util.Objects.requireNonNull((supportsByteValues));
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsDoubleArrayValues(Boolean supportsDoubleArrayValues) {
-    if (supportsDoubleArrayValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsDoubleArrayValues' argument");
-    }
+    java.util.Objects.requireNonNull((supportsDoubleArrayValues));
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsDoubleValues(Boolean supportsDoubleValues) {
-    if (supportsDoubleValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsDoubleValues' argument");
-    }
+    java.util.Objects.requireNonNull((supportsDoubleValues));
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsFloatArrayValues(Boolean supportsFloatArrayValues) {
-    if (supportsFloatArrayValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsFloatArrayValues' argument");
-    }
+    java.util.Objects.requireNonNull((supportsFloatArrayValues));
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsFloatValues(Boolean supportsFloatValues) {
-    if (supportsFloatValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsFloatValues' argument");
-    }
+    java.util.Objects.requireNonNull((supportsFloatValues));
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsIntegerArrayValues(Boolean supportsIntegerArrayValues) {
-    if (supportsIntegerArrayValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsIntegerArrayValues' argument");
-    }
+    java.util.Objects.requireNonNull((supportsIntegerArrayValues));
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsIntegerValues(Boolean supportsIntegerValues) {
-    if (supportsIntegerValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsIntegerValues' argument");
-    }
+    java.util.Objects.requireNonNull((supportsIntegerValues));
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsLongArrayValues(Boolean supportsLongArrayValues) {
-    if (supportsLongArrayValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsLongArrayValues' argument");
-    }
+    java.util.Objects.requireNonNull((supportsLongArrayValues));
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsLongValues(Boolean supportsLongValues) {
-    if (supportsLongValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsLongValues' argument");
-    }
+    java.util.Objects.requireNonNull((supportsLongValues));
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsMapValues(Boolean supportsMapValues) {
-    if (supportsMapValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsMapValues' argument");
-    }
+    java.util.Objects.requireNonNull((supportsMapValues));
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsMixedListValues(Boolean supportsMixedListValues) {
-    if (supportsMixedListValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsMixedListValues' argument");
-    }
+    java.util.Objects.requireNonNull((supportsMixedListValues));
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsSerializableValues(Boolean supportsSerializableValues) {
-    if (supportsSerializableValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsSerializableValues' argument");
-    }
+    java.util.Objects.requireNonNull((supportsSerializableValues));
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsStringArrayValues(Boolean supportsStringArrayValues) {
-    if (supportsStringArrayValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsStringArrayValues' argument");
-    }
+    java.util.Objects.requireNonNull((supportsStringArrayValues));
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsStringValues(Boolean supportsStringValues) {
-    if (supportsStringValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsStringValues' argument");
-    }
+    java.util.Objects.requireNonNull((supportsStringValues));
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
   
   public DataTypeFeatures withSupportsUniformListValues(Boolean supportsUniformListValues) {
-    if (supportsUniformListValues == null) {
-      throw new IllegalArgumentException("null value for 'supportsUniformListValues' argument");
-    }
+    java.util.Objects.requireNonNull((supportsUniformListValues));
     return new DataTypeFeatures(supportsBooleanArrayValues, supportsBooleanValues, supportsByteArrayValues, supportsByteValues, supportsDoubleArrayValues, supportsDoubleValues, supportsFloatArrayValues, supportsFloatValues, supportsIntegerArrayValues, supportsIntegerValues, supportsLongArrayValues, supportsLongValues, supportsMapValues, supportsMixedListValues, supportsSerializableValues, supportsStringArrayValues, supportsStringValues, supportsUniformListValues);
   }
 }

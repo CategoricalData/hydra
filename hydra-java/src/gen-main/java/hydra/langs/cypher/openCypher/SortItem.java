@@ -12,12 +12,8 @@ public class SortItem implements Serializable {
   public final hydra.util.Opt<hydra.langs.cypher.openCypher.SortOrder> order;
   
   public SortItem (hydra.langs.cypher.openCypher.Expression expression, hydra.util.Opt<hydra.langs.cypher.openCypher.SortOrder> order) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
-    if (order == null) {
-      throw new IllegalArgumentException("null value for 'order' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
+    java.util.Objects.requireNonNull((order));
     this.expression = expression;
     this.order = order;
   }
@@ -37,16 +33,12 @@ public class SortItem implements Serializable {
   }
   
   public SortItem withExpression(hydra.langs.cypher.openCypher.Expression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new SortItem(expression, order);
   }
   
   public SortItem withOrder(hydra.util.Opt<hydra.langs.cypher.openCypher.SortOrder> order) {
-    if (order == null) {
-      throw new IllegalArgumentException("null value for 'order' argument");
-    }
+    java.util.Objects.requireNonNull((order));
     return new SortItem(expression, order);
   }
 }

@@ -2,8 +2,6 @@
 
 package hydra.module;
 
-import hydra.util.Opt;
-
 import java.io.Serializable;
 
 /**
@@ -12,17 +10,13 @@ import java.io.Serializable;
 public class QualifiedName implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/module.QualifiedName");
   
-  public final Opt<Namespace> namespace;
+  public final hydra.util.Opt<hydra.module.Namespace> namespace;
   
   public final String local;
   
-  public QualifiedName (Opt<Namespace> namespace, String local) {
-    if (namespace == null) {
-      throw new IllegalArgumentException("null value for 'namespace' argument");
-    }
-    if (local == null) {
-      throw new IllegalArgumentException("null value for 'local' argument");
-    }
+  public QualifiedName (hydra.util.Opt<hydra.module.Namespace> namespace, String local) {
+    java.util.Objects.requireNonNull((namespace));
+    java.util.Objects.requireNonNull((local));
     this.namespace = namespace;
     this.local = local;
   }
@@ -41,17 +35,13 @@ public class QualifiedName implements Serializable {
     return 2 * namespace.hashCode() + 3 * local.hashCode();
   }
   
-  public QualifiedName withNamespace(Opt<Namespace> namespace) {
-    if (namespace == null) {
-      throw new IllegalArgumentException("null value for 'namespace' argument");
-    }
+  public QualifiedName withNamespace(hydra.util.Opt<hydra.module.Namespace> namespace) {
+    java.util.Objects.requireNonNull((namespace));
     return new QualifiedName(namespace, local);
   }
   
   public QualifiedName withLocal(String local) {
-    if (local == null) {
-      throw new IllegalArgumentException("null value for 'local' argument");
-    }
+    java.util.Objects.requireNonNull((local));
     return new QualifiedName(namespace, local);
   }
 }

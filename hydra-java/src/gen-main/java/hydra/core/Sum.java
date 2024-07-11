@@ -17,15 +17,9 @@ public class Sum<A> implements Serializable {
   public final hydra.core.Term<A> term;
   
   public Sum (Integer index, Integer size, hydra.core.Term<A> term) {
-    if (index == null) {
-      throw new IllegalArgumentException("null value for 'index' argument");
-    }
-    if (size == null) {
-      throw new IllegalArgumentException("null value for 'size' argument");
-    }
-    if (term == null) {
-      throw new IllegalArgumentException("null value for 'term' argument");
-    }
+    java.util.Objects.requireNonNull((index));
+    java.util.Objects.requireNonNull((size));
+    java.util.Objects.requireNonNull((term));
     this.index = index;
     this.size = size;
     this.term = term;
@@ -46,23 +40,17 @@ public class Sum<A> implements Serializable {
   }
   
   public Sum withIndex(Integer index) {
-    if (index == null) {
-      throw new IllegalArgumentException("null value for 'index' argument");
-    }
+    java.util.Objects.requireNonNull((index));
     return new Sum(index, size, term);
   }
   
   public Sum withSize(Integer size) {
-    if (size == null) {
-      throw new IllegalArgumentException("null value for 'size' argument");
-    }
+    java.util.Objects.requireNonNull((size));
     return new Sum(index, size, term);
   }
   
   public Sum withTerm(hydra.core.Term<A> term) {
-    if (term == null) {
-      throw new IllegalArgumentException("null value for 'term' argument");
-    }
+    java.util.Objects.requireNonNull((term));
     return new Sum(index, size, term);
   }
 }

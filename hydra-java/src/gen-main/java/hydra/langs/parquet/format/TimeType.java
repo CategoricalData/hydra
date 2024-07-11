@@ -15,12 +15,8 @@ public class TimeType implements Serializable {
   public final hydra.langs.parquet.format.TimeUnit unit;
   
   public TimeType (Boolean isAdjustedToUtc, hydra.langs.parquet.format.TimeUnit unit) {
-    if (isAdjustedToUtc == null) {
-      throw new IllegalArgumentException("null value for 'isAdjustedToUtc' argument");
-    }
-    if (unit == null) {
-      throw new IllegalArgumentException("null value for 'unit' argument");
-    }
+    java.util.Objects.requireNonNull((isAdjustedToUtc));
+    java.util.Objects.requireNonNull((unit));
     this.isAdjustedToUtc = isAdjustedToUtc;
     this.unit = unit;
   }
@@ -40,16 +36,12 @@ public class TimeType implements Serializable {
   }
   
   public TimeType withIsAdjustedToUtc(Boolean isAdjustedToUtc) {
-    if (isAdjustedToUtc == null) {
-      throw new IllegalArgumentException("null value for 'isAdjustedToUtc' argument");
-    }
+    java.util.Objects.requireNonNull((isAdjustedToUtc));
     return new TimeType(isAdjustedToUtc, unit);
   }
   
   public TimeType withUnit(hydra.langs.parquet.format.TimeUnit unit) {
-    if (unit == null) {
-      throw new IllegalArgumentException("null value for 'unit' argument");
-    }
+    java.util.Objects.requireNonNull((unit));
     return new TimeType(isAdjustedToUtc, unit);
   }
 }

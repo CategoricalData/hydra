@@ -12,12 +12,8 @@ public class Pat_Extract implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Pat> args;
   
   public Pat_Extract (hydra.langs.scala.meta.Data fun, java.util.List<hydra.langs.scala.meta.Pat> args) {
-    if (fun == null) {
-      throw new IllegalArgumentException("null value for 'fun' argument");
-    }
-    if (args == null) {
-      throw new IllegalArgumentException("null value for 'args' argument");
-    }
+    java.util.Objects.requireNonNull((fun));
+    java.util.Objects.requireNonNull((args));
     this.fun = fun;
     this.args = args;
   }
@@ -37,16 +33,12 @@ public class Pat_Extract implements Serializable {
   }
   
   public Pat_Extract withFun(hydra.langs.scala.meta.Data fun) {
-    if (fun == null) {
-      throw new IllegalArgumentException("null value for 'fun' argument");
-    }
+    java.util.Objects.requireNonNull((fun));
     return new Pat_Extract(fun, args);
   }
   
   public Pat_Extract withArgs(java.util.List<hydra.langs.scala.meta.Pat> args) {
-    if (args == null) {
-      throw new IllegalArgumentException("null value for 'args' argument");
-    }
+    java.util.Objects.requireNonNull((args));
     return new Pat_Extract(fun, args);
   }
 }

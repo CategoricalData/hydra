@@ -173,9 +173,7 @@ public abstract class TraversalTerminalMethod implements Serializable {
     public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.IntegerLiteral> value;
     
     public Next (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.IntegerLiteral> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

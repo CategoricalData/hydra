@@ -12,12 +12,8 @@ public class RepeatRange implements Serializable {
   public final hydra.util.Opt<hydra.util.Opt<hydra.util.Opt<hydra.langs.shex.syntax.RepeatRange_Sequence_Option_Option_Option>>> sequence;
   
   public RepeatRange (hydra.langs.shex.syntax.Integer_ integer, hydra.util.Opt<hydra.util.Opt<hydra.util.Opt<hydra.langs.shex.syntax.RepeatRange_Sequence_Option_Option_Option>>> sequence) {
-    if (integer == null) {
-      throw new IllegalArgumentException("null value for 'integer' argument");
-    }
-    if (sequence == null) {
-      throw new IllegalArgumentException("null value for 'sequence' argument");
-    }
+    java.util.Objects.requireNonNull((integer));
+    java.util.Objects.requireNonNull((sequence));
     this.integer = integer;
     this.sequence = sequence;
   }
@@ -37,16 +33,12 @@ public class RepeatRange implements Serializable {
   }
   
   public RepeatRange withInteger(hydra.langs.shex.syntax.Integer_ integer) {
-    if (integer == null) {
-      throw new IllegalArgumentException("null value for 'integer' argument");
-    }
+    java.util.Objects.requireNonNull((integer));
     return new RepeatRange(integer, sequence);
   }
   
   public RepeatRange withSequence(hydra.util.Opt<hydra.util.Opt<hydra.util.Opt<hydra.langs.shex.syntax.RepeatRange_Sequence_Option_Option_Option>>> sequence) {
-    if (sequence == null) {
-      throw new IllegalArgumentException("null value for 'sequence' argument");
-    }
+    java.util.Objects.requireNonNull((sequence));
     return new RepeatRange(integer, sequence);
   }
 }

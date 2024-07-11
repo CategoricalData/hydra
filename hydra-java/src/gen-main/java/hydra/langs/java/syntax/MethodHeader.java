@@ -16,18 +16,10 @@ public class MethodHeader implements Serializable {
   public final hydra.util.Opt<hydra.langs.java.syntax.Throws> throws_;
   
   public MethodHeader (java.util.List<hydra.langs.java.syntax.TypeParameter> parameters, hydra.langs.java.syntax.Result result, hydra.langs.java.syntax.MethodDeclarator declarator, hydra.util.Opt<hydra.langs.java.syntax.Throws> throws_) {
-    if (parameters == null) {
-      throw new IllegalArgumentException("null value for 'parameters' argument");
-    }
-    if (result == null) {
-      throw new IllegalArgumentException("null value for 'result' argument");
-    }
-    if (declarator == null) {
-      throw new IllegalArgumentException("null value for 'declarator' argument");
-    }
-    if (throws_ == null) {
-      throw new IllegalArgumentException("null value for 'throws' argument");
-    }
+    java.util.Objects.requireNonNull((parameters));
+    java.util.Objects.requireNonNull((result));
+    java.util.Objects.requireNonNull((declarator));
+    java.util.Objects.requireNonNull((throws_));
     this.parameters = parameters;
     this.result = result;
     this.declarator = declarator;
@@ -49,30 +41,22 @@ public class MethodHeader implements Serializable {
   }
   
   public MethodHeader withParameters(java.util.List<hydra.langs.java.syntax.TypeParameter> parameters) {
-    if (parameters == null) {
-      throw new IllegalArgumentException("null value for 'parameters' argument");
-    }
+    java.util.Objects.requireNonNull((parameters));
     return new MethodHeader(parameters, result, declarator, throws_);
   }
   
   public MethodHeader withResult(hydra.langs.java.syntax.Result result) {
-    if (result == null) {
-      throw new IllegalArgumentException("null value for 'result' argument");
-    }
+    java.util.Objects.requireNonNull((result));
     return new MethodHeader(parameters, result, declarator, throws_);
   }
   
   public MethodHeader withDeclarator(hydra.langs.java.syntax.MethodDeclarator declarator) {
-    if (declarator == null) {
-      throw new IllegalArgumentException("null value for 'declarator' argument");
-    }
+    java.util.Objects.requireNonNull((declarator));
     return new MethodHeader(parameters, result, declarator, throws_);
   }
   
   public MethodHeader withThrows(hydra.util.Opt<hydra.langs.java.syntax.Throws> throws_) {
-    if (throws_ == null) {
-      throw new IllegalArgumentException("null value for 'throws' argument");
-    }
+    java.util.Objects.requireNonNull((throws_));
     return new MethodHeader(parameters, result, declarator, throws_);
   }
 }

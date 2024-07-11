@@ -52,9 +52,7 @@ public abstract class Path implements Serializable {
     public final hydra.query.Step value;
     
     public Step (hydra.query.Step value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -88,9 +86,7 @@ public abstract class Path implements Serializable {
     public final hydra.query.RegexSequence value;
     
     public Regex (hydra.query.RegexSequence value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -124,9 +120,7 @@ public abstract class Path implements Serializable {
     public final hydra.query.Path value;
     
     public Inverse (hydra.query.Path value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

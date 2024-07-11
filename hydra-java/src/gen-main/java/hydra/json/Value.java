@@ -64,9 +64,7 @@ public abstract class Value implements Serializable {
     public final java.util.List<hydra.json.Value> value;
     
     public Array (java.util.List<hydra.json.Value> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -94,9 +92,7 @@ public abstract class Value implements Serializable {
     public final Boolean value;
     
     public Boolean_ (Boolean value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -149,9 +145,7 @@ public abstract class Value implements Serializable {
     public final Double value;
     
     public Number_ (Double value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -179,9 +173,7 @@ public abstract class Value implements Serializable {
     public final java.util.Map<String, hydra.json.Value> value;
     
     public Object_ (java.util.Map<String, hydra.json.Value> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -209,9 +201,7 @@ public abstract class Value implements Serializable {
     public final String value;
     
     public String_ (String value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

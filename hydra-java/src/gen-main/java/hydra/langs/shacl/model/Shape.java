@@ -40,9 +40,7 @@ public abstract class Shape implements Serializable {
     public final hydra.langs.shacl.model.NodeShape value;
     
     public Node (hydra.langs.shacl.model.NodeShape value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -70,9 +68,7 @@ public abstract class Shape implements Serializable {
     public final hydra.langs.shacl.model.PropertyShape value;
     
     public Property (hydra.langs.shacl.model.PropertyShape value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

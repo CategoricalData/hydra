@@ -37,9 +37,7 @@ public abstract class ChainedTraversalElement implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalMethod value;
     
     public Method (hydra.langs.tinkerpop.gremlin.TraversalMethod value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class ChainedTraversalElement implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalSelfMethod value;
     
     public Self (hydra.langs.tinkerpop.gremlin.TraversalSelfMethod value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

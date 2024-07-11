@@ -41,24 +41,12 @@ public class ArithmeticFeatures implements Serializable {
   public final Boolean powerOf;
   
   public ArithmeticFeatures (Boolean plus, Boolean minus, Boolean multiply, Boolean divide, Boolean modulus, Boolean powerOf) {
-    if (plus == null) {
-      throw new IllegalArgumentException("null value for 'plus' argument");
-    }
-    if (minus == null) {
-      throw new IllegalArgumentException("null value for 'minus' argument");
-    }
-    if (multiply == null) {
-      throw new IllegalArgumentException("null value for 'multiply' argument");
-    }
-    if (divide == null) {
-      throw new IllegalArgumentException("null value for 'divide' argument");
-    }
-    if (modulus == null) {
-      throw new IllegalArgumentException("null value for 'modulus' argument");
-    }
-    if (powerOf == null) {
-      throw new IllegalArgumentException("null value for 'powerOf' argument");
-    }
+    java.util.Objects.requireNonNull((plus));
+    java.util.Objects.requireNonNull((minus));
+    java.util.Objects.requireNonNull((multiply));
+    java.util.Objects.requireNonNull((divide));
+    java.util.Objects.requireNonNull((modulus));
+    java.util.Objects.requireNonNull((powerOf));
     this.plus = plus;
     this.minus = minus;
     this.multiply = multiply;
@@ -82,44 +70,32 @@ public class ArithmeticFeatures implements Serializable {
   }
   
   public ArithmeticFeatures withPlus(Boolean plus) {
-    if (plus == null) {
-      throw new IllegalArgumentException("null value for 'plus' argument");
-    }
+    java.util.Objects.requireNonNull((plus));
     return new ArithmeticFeatures(plus, minus, multiply, divide, modulus, powerOf);
   }
   
   public ArithmeticFeatures withMinus(Boolean minus) {
-    if (minus == null) {
-      throw new IllegalArgumentException("null value for 'minus' argument");
-    }
+    java.util.Objects.requireNonNull((minus));
     return new ArithmeticFeatures(plus, minus, multiply, divide, modulus, powerOf);
   }
   
   public ArithmeticFeatures withMultiply(Boolean multiply) {
-    if (multiply == null) {
-      throw new IllegalArgumentException("null value for 'multiply' argument");
-    }
+    java.util.Objects.requireNonNull((multiply));
     return new ArithmeticFeatures(plus, minus, multiply, divide, modulus, powerOf);
   }
   
   public ArithmeticFeatures withDivide(Boolean divide) {
-    if (divide == null) {
-      throw new IllegalArgumentException("null value for 'divide' argument");
-    }
+    java.util.Objects.requireNonNull((divide));
     return new ArithmeticFeatures(plus, minus, multiply, divide, modulus, powerOf);
   }
   
   public ArithmeticFeatures withModulus(Boolean modulus) {
-    if (modulus == null) {
-      throw new IllegalArgumentException("null value for 'modulus' argument");
-    }
+    java.util.Objects.requireNonNull((modulus));
     return new ArithmeticFeatures(plus, minus, multiply, divide, modulus, powerOf);
   }
   
   public ArithmeticFeatures withPowerOf(Boolean powerOf) {
-    if (powerOf == null) {
-      throw new IllegalArgumentException("null value for 'powerOf' argument");
-    }
+    java.util.Objects.requireNonNull((powerOf));
     return new ArithmeticFeatures(plus, minus, multiply, divide, modulus, powerOf);
   }
 }

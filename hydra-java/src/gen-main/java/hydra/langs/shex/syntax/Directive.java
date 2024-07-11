@@ -37,9 +37,7 @@ public abstract class Directive implements Serializable {
     public final hydra.langs.shex.syntax.BaseDecl value;
     
     public BaseDecl (hydra.langs.shex.syntax.BaseDecl value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class Directive implements Serializable {
     public final hydra.langs.shex.syntax.PrefixDecl value;
     
     public PrefixDecl (hydra.langs.shex.syntax.PrefixDecl value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -73,9 +73,7 @@ public abstract class CharacterStringType implements Serializable {
     public final hydra.util.Opt<hydra.langs.sql.ansi.Length> value;
     
     public Character_ (hydra.util.Opt<hydra.langs.sql.ansi.Length> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +101,7 @@ public abstract class CharacterStringType implements Serializable {
     public final hydra.util.Opt<hydra.langs.sql.ansi.Length> value;
     
     public Char (hydra.util.Opt<hydra.langs.sql.ansi.Length> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -133,9 +129,7 @@ public abstract class CharacterStringType implements Serializable {
     public final hydra.langs.sql.ansi.Length value;
     
     public CharacterVarying (hydra.langs.sql.ansi.Length value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -163,9 +157,7 @@ public abstract class CharacterStringType implements Serializable {
     public final hydra.langs.sql.ansi.Length value;
     
     public CharVarying (hydra.langs.sql.ansi.Length value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -193,9 +185,7 @@ public abstract class CharacterStringType implements Serializable {
     public final hydra.langs.sql.ansi.Length value;
     
     public Varchar (hydra.langs.sql.ansi.Length value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -223,9 +213,7 @@ public abstract class CharacterStringType implements Serializable {
     public final hydra.util.Opt<hydra.langs.sql.ansi.LargeObjectLength> value;
     
     public CharacterLargeObject (hydra.util.Opt<hydra.langs.sql.ansi.LargeObjectLength> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -253,9 +241,7 @@ public abstract class CharacterStringType implements Serializable {
     public final hydra.util.Opt<hydra.langs.sql.ansi.LargeObjectLength> value;
     
     public CharLargeObject (hydra.util.Opt<hydra.langs.sql.ansi.LargeObjectLength> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -283,9 +269,7 @@ public abstract class CharacterStringType implements Serializable {
     public final hydra.util.Opt<hydra.langs.sql.ansi.LargeObjectLength> value;
     
     public Clob (hydra.util.Opt<hydra.langs.sql.ansi.LargeObjectLength> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -10,9 +10,7 @@ public class UnsignedInt implements Serializable {
   public final Long value;
   
   public UnsignedInt (Long value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

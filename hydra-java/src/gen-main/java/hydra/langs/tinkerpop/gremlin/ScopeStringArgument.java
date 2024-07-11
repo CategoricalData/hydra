@@ -12,12 +12,8 @@ public class ScopeStringArgument implements Serializable {
   public final java.util.List<hydra.langs.tinkerpop.gremlin.StringNullableArgument> strings;
   
   public ScopeStringArgument (hydra.langs.tinkerpop.gremlin.TraversalScopeArgument scope, java.util.List<hydra.langs.tinkerpop.gremlin.StringNullableArgument> strings) {
-    if (scope == null) {
-      throw new IllegalArgumentException("null value for 'scope' argument");
-    }
-    if (strings == null) {
-      throw new IllegalArgumentException("null value for 'strings' argument");
-    }
+    java.util.Objects.requireNonNull((scope));
+    java.util.Objects.requireNonNull((strings));
     this.scope = scope;
     this.strings = strings;
   }
@@ -37,16 +33,12 @@ public class ScopeStringArgument implements Serializable {
   }
   
   public ScopeStringArgument withScope(hydra.langs.tinkerpop.gremlin.TraversalScopeArgument scope) {
-    if (scope == null) {
-      throw new IllegalArgumentException("null value for 'scope' argument");
-    }
+    java.util.Objects.requireNonNull((scope));
     return new ScopeStringArgument(scope, strings);
   }
   
   public ScopeStringArgument withStrings(java.util.List<hydra.langs.tinkerpop.gremlin.StringNullableArgument> strings) {
-    if (strings == null) {
-      throw new IllegalArgumentException("null value for 'strings' argument");
-    }
+    java.util.Objects.requireNonNull((strings));
     return new ScopeStringArgument(scope, strings);
   }
 }

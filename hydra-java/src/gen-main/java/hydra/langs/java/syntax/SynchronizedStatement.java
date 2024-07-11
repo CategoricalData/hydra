@@ -12,12 +12,8 @@ public class SynchronizedStatement implements Serializable {
   public final hydra.langs.java.syntax.Block block;
   
   public SynchronizedStatement (hydra.langs.java.syntax.Expression expression, hydra.langs.java.syntax.Block block) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
-    if (block == null) {
-      throw new IllegalArgumentException("null value for 'block' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
+    java.util.Objects.requireNonNull((block));
     this.expression = expression;
     this.block = block;
   }
@@ -37,16 +33,12 @@ public class SynchronizedStatement implements Serializable {
   }
   
   public SynchronizedStatement withExpression(hydra.langs.java.syntax.Expression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new SynchronizedStatement(expression, block);
   }
   
   public SynchronizedStatement withBlock(hydra.langs.java.syntax.Block block) {
-    if (block == null) {
-      throw new IllegalArgumentException("null value for 'block' argument");
-    }
+    java.util.Objects.requireNonNull((block));
     return new SynchronizedStatement(expression, block);
   }
 }

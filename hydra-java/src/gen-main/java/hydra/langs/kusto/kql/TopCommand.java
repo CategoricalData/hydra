@@ -12,12 +12,8 @@ public class TopCommand implements Serializable {
   public final java.util.List<hydra.langs.kusto.kql.SortBy> sort;
   
   public TopCommand (Integer count, java.util.List<hydra.langs.kusto.kql.SortBy> sort) {
-    if (count == null) {
-      throw new IllegalArgumentException("null value for 'count' argument");
-    }
-    if (sort == null) {
-      throw new IllegalArgumentException("null value for 'sort' argument");
-    }
+    java.util.Objects.requireNonNull((count));
+    java.util.Objects.requireNonNull((sort));
     this.count = count;
     this.sort = sort;
   }
@@ -37,16 +33,12 @@ public class TopCommand implements Serializable {
   }
   
   public TopCommand withCount(Integer count) {
-    if (count == null) {
-      throw new IllegalArgumentException("null value for 'count' argument");
-    }
+    java.util.Objects.requireNonNull((count));
     return new TopCommand(count, sort);
   }
   
   public TopCommand withSort(java.util.List<hydra.langs.kusto.kql.SortBy> sort) {
-    if (sort == null) {
-      throw new IllegalArgumentException("null value for 'sort' argument");
-    }
+    java.util.Objects.requireNonNull((sort));
     return new TopCommand(count, sort);
   }
 }

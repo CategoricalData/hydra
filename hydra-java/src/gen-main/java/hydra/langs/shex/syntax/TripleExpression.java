@@ -10,9 +10,7 @@ public class TripleExpression implements Serializable {
   public final hydra.langs.shex.syntax.OneOfTripleExpr value;
   
   public TripleExpression (hydra.langs.shex.syntax.OneOfTripleExpr value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

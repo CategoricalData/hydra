@@ -12,12 +12,8 @@ public class UnaryExpression implements Serializable {
   public final hydra.langs.tinkerpop.queries.Expression operand;
   
   public UnaryExpression (hydra.langs.tinkerpop.queries.UnaryOperator operator, hydra.langs.tinkerpop.queries.Expression operand) {
-    if (operator == null) {
-      throw new IllegalArgumentException("null value for 'operator' argument");
-    }
-    if (operand == null) {
-      throw new IllegalArgumentException("null value for 'operand' argument");
-    }
+    java.util.Objects.requireNonNull((operator));
+    java.util.Objects.requireNonNull((operand));
     this.operator = operator;
     this.operand = operand;
   }
@@ -37,16 +33,12 @@ public class UnaryExpression implements Serializable {
   }
   
   public UnaryExpression withOperator(hydra.langs.tinkerpop.queries.UnaryOperator operator) {
-    if (operator == null) {
-      throw new IllegalArgumentException("null value for 'operator' argument");
-    }
+    java.util.Objects.requireNonNull((operator));
     return new UnaryExpression(operator, operand);
   }
   
   public UnaryExpression withOperand(hydra.langs.tinkerpop.queries.Expression operand) {
-    if (operand == null) {
-      throw new IllegalArgumentException("null value for 'operand' argument");
-    }
+    java.util.Objects.requireNonNull((operand));
     return new UnaryExpression(operator, operand);
   }
 }

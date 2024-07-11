@@ -37,9 +37,7 @@ public abstract class BooleanTerm implements Serializable {
     public final hydra.langs.sql.ansi.BooleanFactor value;
     
     public Factor (hydra.langs.sql.ansi.BooleanFactor value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class BooleanTerm implements Serializable {
     public final hydra.langs.sql.ansi.BooleanTerm_And value;
     
     public And (hydra.langs.sql.ansi.BooleanTerm_And value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

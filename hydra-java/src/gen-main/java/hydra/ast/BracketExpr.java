@@ -17,15 +17,9 @@ public class BracketExpr implements Serializable {
   public final hydra.ast.BlockStyle style;
   
   public BracketExpr (hydra.ast.Brackets brackets, hydra.ast.Expr enclosed, hydra.ast.BlockStyle style) {
-    if (brackets == null) {
-      throw new IllegalArgumentException("null value for 'brackets' argument");
-    }
-    if (enclosed == null) {
-      throw new IllegalArgumentException("null value for 'enclosed' argument");
-    }
-    if (style == null) {
-      throw new IllegalArgumentException("null value for 'style' argument");
-    }
+    java.util.Objects.requireNonNull((brackets));
+    java.util.Objects.requireNonNull((enclosed));
+    java.util.Objects.requireNonNull((style));
     this.brackets = brackets;
     this.enclosed = enclosed;
     this.style = style;
@@ -46,23 +40,17 @@ public class BracketExpr implements Serializable {
   }
   
   public BracketExpr withBrackets(hydra.ast.Brackets brackets) {
-    if (brackets == null) {
-      throw new IllegalArgumentException("null value for 'brackets' argument");
-    }
+    java.util.Objects.requireNonNull((brackets));
     return new BracketExpr(brackets, enclosed, style);
   }
   
   public BracketExpr withEnclosed(hydra.ast.Expr enclosed) {
-    if (enclosed == null) {
-      throw new IllegalArgumentException("null value for 'enclosed' argument");
-    }
+    java.util.Objects.requireNonNull((enclosed));
     return new BracketExpr(brackets, enclosed, style);
   }
   
   public BracketExpr withStyle(hydra.ast.BlockStyle style) {
-    if (style == null) {
-      throw new IllegalArgumentException("null value for 'style' argument");
-    }
+    java.util.Objects.requireNonNull((style));
     return new BracketExpr(brackets, enclosed, style);
   }
 }

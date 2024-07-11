@@ -14,15 +14,9 @@ public class BinaryExpression implements Serializable {
   public final hydra.langs.tinkerpop.queries.Expression right;
   
   public BinaryExpression (hydra.langs.tinkerpop.queries.Expression left, hydra.langs.tinkerpop.queries.BinaryOperator operator, hydra.langs.tinkerpop.queries.Expression right) {
-    if (left == null) {
-      throw new IllegalArgumentException("null value for 'left' argument");
-    }
-    if (operator == null) {
-      throw new IllegalArgumentException("null value for 'operator' argument");
-    }
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((left));
+    java.util.Objects.requireNonNull((operator));
+    java.util.Objects.requireNonNull((right));
     this.left = left;
     this.operator = operator;
     this.right = right;
@@ -43,23 +37,17 @@ public class BinaryExpression implements Serializable {
   }
   
   public BinaryExpression withLeft(hydra.langs.tinkerpop.queries.Expression left) {
-    if (left == null) {
-      throw new IllegalArgumentException("null value for 'left' argument");
-    }
+    java.util.Objects.requireNonNull((left));
     return new BinaryExpression(left, operator, right);
   }
   
   public BinaryExpression withOperator(hydra.langs.tinkerpop.queries.BinaryOperator operator) {
-    if (operator == null) {
-      throw new IllegalArgumentException("null value for 'operator' argument");
-    }
+    java.util.Objects.requireNonNull((operator));
     return new BinaryExpression(left, operator, right);
   }
   
   public BinaryExpression withRight(hydra.langs.tinkerpop.queries.Expression right) {
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((right));
     return new BinaryExpression(left, operator, right);
   }
 }

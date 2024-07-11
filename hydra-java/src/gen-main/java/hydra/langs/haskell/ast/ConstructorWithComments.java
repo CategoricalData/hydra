@@ -15,12 +15,8 @@ public class ConstructorWithComments implements Serializable {
   public final hydra.util.Opt<String> comments;
   
   public ConstructorWithComments (hydra.langs.haskell.ast.Constructor body, hydra.util.Opt<String> comments) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
-    if (comments == null) {
-      throw new IllegalArgumentException("null value for 'comments' argument");
-    }
+    java.util.Objects.requireNonNull((body));
+    java.util.Objects.requireNonNull((comments));
     this.body = body;
     this.comments = comments;
   }
@@ -40,16 +36,12 @@ public class ConstructorWithComments implements Serializable {
   }
   
   public ConstructorWithComments withBody(hydra.langs.haskell.ast.Constructor body) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((body));
     return new ConstructorWithComments(body, comments);
   }
   
   public ConstructorWithComments withComments(hydra.util.Opt<String> comments) {
-    if (comments == null) {
-      throw new IllegalArgumentException("null value for 'comments' argument");
-    }
+    java.util.Objects.requireNonNull((comments));
     return new ConstructorWithComments(body, comments);
   }
 }

@@ -18,21 +18,11 @@ public class RecordField implements Serializable {
   public final hydra.langs.pegasus.pdl.Annotations annotations;
   
   public RecordField (hydra.langs.pegasus.pdl.FieldName name, hydra.langs.pegasus.pdl.Schema value, Boolean optional, hydra.util.Opt<hydra.json.Value> default_, hydra.langs.pegasus.pdl.Annotations annotations) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
-    if (optional == null) {
-      throw new IllegalArgumentException("null value for 'optional' argument");
-    }
-    if (default_ == null) {
-      throw new IllegalArgumentException("null value for 'default' argument");
-    }
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((value));
+    java.util.Objects.requireNonNull((optional));
+    java.util.Objects.requireNonNull((default_));
+    java.util.Objects.requireNonNull((annotations));
     this.name = name;
     this.value = value;
     this.optional = optional;
@@ -55,37 +45,27 @@ public class RecordField implements Serializable {
   }
   
   public RecordField withName(hydra.langs.pegasus.pdl.FieldName name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new RecordField(name, value, optional, default_, annotations);
   }
   
   public RecordField withValue(hydra.langs.pegasus.pdl.Schema value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     return new RecordField(name, value, optional, default_, annotations);
   }
   
   public RecordField withOptional(Boolean optional) {
-    if (optional == null) {
-      throw new IllegalArgumentException("null value for 'optional' argument");
-    }
+    java.util.Objects.requireNonNull((optional));
     return new RecordField(name, value, optional, default_, annotations);
   }
   
   public RecordField withDefault(hydra.util.Opt<hydra.json.Value> default_) {
-    if (default_ == null) {
-      throw new IllegalArgumentException("null value for 'default' argument");
-    }
+    java.util.Objects.requireNonNull((default_));
     return new RecordField(name, value, optional, default_, annotations);
   }
   
   public RecordField withAnnotations(hydra.langs.pegasus.pdl.Annotations annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new RecordField(name, value, optional, default_, annotations);
   }
 }

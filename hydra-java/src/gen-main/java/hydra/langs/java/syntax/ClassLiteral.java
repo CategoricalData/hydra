@@ -49,9 +49,7 @@ public abstract class ClassLiteral implements Serializable {
     public final hydra.langs.java.syntax.TypeNameArray value;
     
     public Type (hydra.langs.java.syntax.TypeNameArray value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -79,9 +77,7 @@ public abstract class ClassLiteral implements Serializable {
     public final hydra.langs.java.syntax.NumericTypeArray value;
     
     public NumericType (hydra.langs.java.syntax.NumericTypeArray value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -109,9 +105,7 @@ public abstract class ClassLiteral implements Serializable {
     public final hydra.langs.java.syntax.BooleanArray value;
     
     public Boolean_ (hydra.langs.java.syntax.BooleanArray value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

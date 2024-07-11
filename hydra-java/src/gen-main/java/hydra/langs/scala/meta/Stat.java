@@ -49,9 +49,7 @@ public abstract class Stat implements Serializable {
     public final hydra.langs.scala.meta.Data value;
     
     public Term (hydra.langs.scala.meta.Data value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -79,9 +77,7 @@ public abstract class Stat implements Serializable {
     public final hydra.langs.scala.meta.Decl value;
     
     public Decl (hydra.langs.scala.meta.Decl value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -109,9 +105,7 @@ public abstract class Stat implements Serializable {
     public final hydra.langs.scala.meta.Defn value;
     
     public Defn (hydra.langs.scala.meta.Defn value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -139,9 +133,7 @@ public abstract class Stat implements Serializable {
     public final hydra.langs.scala.meta.ImportExportStat value;
     
     public ImportExport (hydra.langs.scala.meta.ImportExportStat value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

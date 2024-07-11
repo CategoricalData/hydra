@@ -10,9 +10,7 @@ public class GenericLiteralSet implements Serializable {
   public final java.util.List<hydra.langs.tinkerpop.gremlin.GenericLiteral> value;
   
   public GenericLiteralSet (java.util.List<hydra.langs.tinkerpop.gremlin.GenericLiteral> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

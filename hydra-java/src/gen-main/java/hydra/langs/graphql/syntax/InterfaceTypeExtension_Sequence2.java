@@ -14,15 +14,9 @@ public class InterfaceTypeExtension_Sequence2 implements Serializable {
   public final hydra.langs.graphql.syntax.Directives directives;
   
   public InterfaceTypeExtension_Sequence2 (hydra.langs.graphql.syntax.Name name, hydra.util.Opt<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces, hydra.langs.graphql.syntax.Directives directives) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (implementsInterfaces == null) {
-      throw new IllegalArgumentException("null value for 'implementsInterfaces' argument");
-    }
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((implementsInterfaces));
+    java.util.Objects.requireNonNull((directives));
     this.name = name;
     this.implementsInterfaces = implementsInterfaces;
     this.directives = directives;
@@ -43,23 +37,17 @@ public class InterfaceTypeExtension_Sequence2 implements Serializable {
   }
   
   public InterfaceTypeExtension_Sequence2 withName(hydra.langs.graphql.syntax.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new InterfaceTypeExtension_Sequence2(name, implementsInterfaces, directives);
   }
   
   public InterfaceTypeExtension_Sequence2 withImplementsInterfaces(hydra.util.Opt<hydra.langs.graphql.syntax.ImplementsInterfaces> implementsInterfaces) {
-    if (implementsInterfaces == null) {
-      throw new IllegalArgumentException("null value for 'implementsInterfaces' argument");
-    }
+    java.util.Objects.requireNonNull((implementsInterfaces));
     return new InterfaceTypeExtension_Sequence2(name, implementsInterfaces, directives);
   }
   
   public InterfaceTypeExtension_Sequence2 withDirectives(hydra.langs.graphql.syntax.Directives directives) {
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((directives));
     return new InterfaceTypeExtension_Sequence2(name, implementsInterfaces, directives);
   }
 }

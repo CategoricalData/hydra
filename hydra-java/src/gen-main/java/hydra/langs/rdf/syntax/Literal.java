@@ -26,15 +26,9 @@ public class Literal implements Serializable {
   public final hydra.util.Opt<hydra.langs.rdf.syntax.LanguageTag> languageTag;
   
   public Literal (String lexicalForm, hydra.langs.rdf.syntax.Iri datatypeIri, hydra.util.Opt<hydra.langs.rdf.syntax.LanguageTag> languageTag) {
-    if (lexicalForm == null) {
-      throw new IllegalArgumentException("null value for 'lexicalForm' argument");
-    }
-    if (datatypeIri == null) {
-      throw new IllegalArgumentException("null value for 'datatypeIri' argument");
-    }
-    if (languageTag == null) {
-      throw new IllegalArgumentException("null value for 'languageTag' argument");
-    }
+    java.util.Objects.requireNonNull((lexicalForm));
+    java.util.Objects.requireNonNull((datatypeIri));
+    java.util.Objects.requireNonNull((languageTag));
     this.lexicalForm = lexicalForm;
     this.datatypeIri = datatypeIri;
     this.languageTag = languageTag;
@@ -55,23 +49,17 @@ public class Literal implements Serializable {
   }
   
   public Literal withLexicalForm(String lexicalForm) {
-    if (lexicalForm == null) {
-      throw new IllegalArgumentException("null value for 'lexicalForm' argument");
-    }
+    java.util.Objects.requireNonNull((lexicalForm));
     return new Literal(lexicalForm, datatypeIri, languageTag);
   }
   
   public Literal withDatatypeIri(hydra.langs.rdf.syntax.Iri datatypeIri) {
-    if (datatypeIri == null) {
-      throw new IllegalArgumentException("null value for 'datatypeIri' argument");
-    }
+    java.util.Objects.requireNonNull((datatypeIri));
     return new Literal(lexicalForm, datatypeIri, languageTag);
   }
   
   public Literal withLanguageTag(hydra.util.Opt<hydra.langs.rdf.syntax.LanguageTag> languageTag) {
-    if (languageTag == null) {
-      throw new IllegalArgumentException("null value for 'languageTag' argument");
-    }
+    java.util.Objects.requireNonNull((languageTag));
     return new Literal(lexicalForm, datatypeIri, languageTag);
   }
 }

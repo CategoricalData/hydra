@@ -21,12 +21,8 @@ public class MatchFeatures implements Serializable {
   public final Boolean optionalMatch;
   
   public MatchFeatures (Boolean match, Boolean optionalMatch) {
-    if (match == null) {
-      throw new IllegalArgumentException("null value for 'match' argument");
-    }
-    if (optionalMatch == null) {
-      throw new IllegalArgumentException("null value for 'optionalMatch' argument");
-    }
+    java.util.Objects.requireNonNull((match));
+    java.util.Objects.requireNonNull((optionalMatch));
     this.match = match;
     this.optionalMatch = optionalMatch;
   }
@@ -46,16 +42,12 @@ public class MatchFeatures implements Serializable {
   }
   
   public MatchFeatures withMatch(Boolean match) {
-    if (match == null) {
-      throw new IllegalArgumentException("null value for 'match' argument");
-    }
+    java.util.Objects.requireNonNull((match));
     return new MatchFeatures(match, optionalMatch);
   }
   
   public MatchFeatures withOptionalMatch(Boolean optionalMatch) {
-    if (optionalMatch == null) {
-      throw new IllegalArgumentException("null value for 'optionalMatch' argument");
-    }
+    java.util.Objects.requireNonNull((optionalMatch));
     return new MatchFeatures(match, optionalMatch);
   }
 }

@@ -10,9 +10,7 @@ public class Pat_Var implements Serializable {
   public final hydra.langs.scala.meta.Data_Name name;
   
   public Pat_Var (hydra.langs.scala.meta.Data_Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     this.name = name;
   }
   

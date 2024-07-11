@@ -127,9 +127,7 @@ public abstract class ClassExpression implements Serializable {
     public final hydra.langs.owl.syntax.Class_ value;
     
     public Class_ (hydra.langs.owl.syntax.Class_ value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -157,9 +155,7 @@ public abstract class ClassExpression implements Serializable {
     public final hydra.langs.owl.syntax.DataSomeValuesFrom value;
     
     public DataSomeValuesFrom (hydra.langs.owl.syntax.DataSomeValuesFrom value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -187,9 +183,7 @@ public abstract class ClassExpression implements Serializable {
     public final hydra.langs.owl.syntax.DataAllValuesFrom value;
     
     public DataAllValuesFrom (hydra.langs.owl.syntax.DataAllValuesFrom value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -217,9 +211,7 @@ public abstract class ClassExpression implements Serializable {
     public final hydra.langs.owl.syntax.DataHasValue value;
     
     public DataHasValue (hydra.langs.owl.syntax.DataHasValue value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -247,9 +239,7 @@ public abstract class ClassExpression implements Serializable {
     public final hydra.langs.owl.syntax.DataMinCardinality value;
     
     public DataMinCardinality (hydra.langs.owl.syntax.DataMinCardinality value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -277,9 +267,7 @@ public abstract class ClassExpression implements Serializable {
     public final hydra.langs.owl.syntax.DataMaxCardinality value;
     
     public DataMaxCardinality (hydra.langs.owl.syntax.DataMaxCardinality value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -307,9 +295,7 @@ public abstract class ClassExpression implements Serializable {
     public final hydra.langs.owl.syntax.DataExactCardinality value;
     
     public DataExactCardinality (hydra.langs.owl.syntax.DataExactCardinality value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -337,9 +323,7 @@ public abstract class ClassExpression implements Serializable {
     public final hydra.langs.owl.syntax.ObjectAllValuesFrom value;
     
     public ObjectAllValuesFrom (hydra.langs.owl.syntax.ObjectAllValuesFrom value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -367,9 +351,7 @@ public abstract class ClassExpression implements Serializable {
     public final hydra.langs.owl.syntax.ObjectExactCardinality value;
     
     public ObjectExactCardinality (hydra.langs.owl.syntax.ObjectExactCardinality value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -397,9 +379,7 @@ public abstract class ClassExpression implements Serializable {
     public final hydra.langs.owl.syntax.ObjectHasSelf value;
     
     public ObjectHasSelf (hydra.langs.owl.syntax.ObjectHasSelf value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -427,9 +407,7 @@ public abstract class ClassExpression implements Serializable {
     public final hydra.langs.owl.syntax.ObjectHasValue value;
     
     public ObjectHasValue (hydra.langs.owl.syntax.ObjectHasValue value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -457,9 +435,7 @@ public abstract class ClassExpression implements Serializable {
     public final hydra.langs.owl.syntax.ObjectIntersectionOf value;
     
     public ObjectIntersectionOf (hydra.langs.owl.syntax.ObjectIntersectionOf value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -487,9 +463,7 @@ public abstract class ClassExpression implements Serializable {
     public final hydra.langs.owl.syntax.ObjectMaxCardinality value;
     
     public ObjectMaxCardinality (hydra.langs.owl.syntax.ObjectMaxCardinality value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -517,9 +491,7 @@ public abstract class ClassExpression implements Serializable {
     public final hydra.langs.owl.syntax.ObjectMinCardinality value;
     
     public ObjectMinCardinality (hydra.langs.owl.syntax.ObjectMinCardinality value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -547,9 +519,7 @@ public abstract class ClassExpression implements Serializable {
     public final hydra.langs.owl.syntax.ObjectOneOf value;
     
     public ObjectOneOf (hydra.langs.owl.syntax.ObjectOneOf value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -577,9 +547,7 @@ public abstract class ClassExpression implements Serializable {
     public final hydra.langs.owl.syntax.ObjectSomeValuesFrom value;
     
     public ObjectSomeValuesFrom (hydra.langs.owl.syntax.ObjectSomeValuesFrom value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -607,9 +575,7 @@ public abstract class ClassExpression implements Serializable {
     public final hydra.langs.owl.syntax.ObjectUnionOf value;
     
     public ObjectUnionOf (hydra.langs.owl.syntax.ObjectUnionOf value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

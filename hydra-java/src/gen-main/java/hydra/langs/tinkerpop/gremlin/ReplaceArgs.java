@@ -14,15 +14,9 @@ public class ReplaceArgs implements Serializable {
   public final hydra.langs.tinkerpop.gremlin.StringNullableArgument to;
   
   public ReplaceArgs (hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope, hydra.langs.tinkerpop.gremlin.StringNullableArgument from, hydra.langs.tinkerpop.gremlin.StringNullableArgument to) {
-    if (scope == null) {
-      throw new IllegalArgumentException("null value for 'scope' argument");
-    }
-    if (from == null) {
-      throw new IllegalArgumentException("null value for 'from' argument");
-    }
-    if (to == null) {
-      throw new IllegalArgumentException("null value for 'to' argument");
-    }
+    java.util.Objects.requireNonNull((scope));
+    java.util.Objects.requireNonNull((from));
+    java.util.Objects.requireNonNull((to));
     this.scope = scope;
     this.from = from;
     this.to = to;
@@ -43,23 +37,17 @@ public class ReplaceArgs implements Serializable {
   }
   
   public ReplaceArgs withScope(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope) {
-    if (scope == null) {
-      throw new IllegalArgumentException("null value for 'scope' argument");
-    }
+    java.util.Objects.requireNonNull((scope));
     return new ReplaceArgs(scope, from, to);
   }
   
   public ReplaceArgs withFrom(hydra.langs.tinkerpop.gremlin.StringNullableArgument from) {
-    if (from == null) {
-      throw new IllegalArgumentException("null value for 'from' argument");
-    }
+    java.util.Objects.requireNonNull((from));
     return new ReplaceArgs(scope, from, to);
   }
   
   public ReplaceArgs withTo(hydra.langs.tinkerpop.gremlin.StringNullableArgument to) {
-    if (to == null) {
-      throw new IllegalArgumentException("null value for 'to' argument");
-    }
+    java.util.Objects.requireNonNull((to));
     return new ReplaceArgs(scope, from, to);
   }
 }

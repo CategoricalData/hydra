@@ -26,15 +26,9 @@ public class ColumnSchema<T> implements Serializable {
   public final Boolean isPrimaryKey;
   
   public ColumnSchema (hydra.langs.relationalModel.ColumnName name, T domain, Boolean isPrimaryKey) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (domain == null) {
-      throw new IllegalArgumentException("null value for 'domain' argument");
-    }
-    if (isPrimaryKey == null) {
-      throw new IllegalArgumentException("null value for 'isPrimaryKey' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((domain));
+    java.util.Objects.requireNonNull((isPrimaryKey));
     this.name = name;
     this.domain = domain;
     this.isPrimaryKey = isPrimaryKey;
@@ -55,23 +49,17 @@ public class ColumnSchema<T> implements Serializable {
   }
   
   public ColumnSchema withName(hydra.langs.relationalModel.ColumnName name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new ColumnSchema(name, domain, isPrimaryKey);
   }
   
   public ColumnSchema withDomain(T domain) {
-    if (domain == null) {
-      throw new IllegalArgumentException("null value for 'domain' argument");
-    }
+    java.util.Objects.requireNonNull((domain));
     return new ColumnSchema(name, domain, isPrimaryKey);
   }
   
   public ColumnSchema withIsPrimaryKey(Boolean isPrimaryKey) {
-    if (isPrimaryKey == null) {
-      throw new IllegalArgumentException("null value for 'isPrimaryKey' argument");
-    }
+    java.util.Objects.requireNonNull((isPrimaryKey));
     return new ColumnSchema(name, domain, isPrimaryKey);
   }
 }

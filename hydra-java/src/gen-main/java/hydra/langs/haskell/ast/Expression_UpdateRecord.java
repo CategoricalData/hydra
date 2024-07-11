@@ -15,12 +15,8 @@ public class Expression_UpdateRecord implements Serializable {
   public final java.util.List<hydra.langs.haskell.ast.FieldUpdate> fields;
   
   public Expression_UpdateRecord (hydra.langs.haskell.ast.Expression inner, java.util.List<hydra.langs.haskell.ast.FieldUpdate> fields) {
-    if (inner == null) {
-      throw new IllegalArgumentException("null value for 'inner' argument");
-    }
-    if (fields == null) {
-      throw new IllegalArgumentException("null value for 'fields' argument");
-    }
+    java.util.Objects.requireNonNull((inner));
+    java.util.Objects.requireNonNull((fields));
     this.inner = inner;
     this.fields = fields;
   }
@@ -40,16 +36,12 @@ public class Expression_UpdateRecord implements Serializable {
   }
   
   public Expression_UpdateRecord withInner(hydra.langs.haskell.ast.Expression inner) {
-    if (inner == null) {
-      throw new IllegalArgumentException("null value for 'inner' argument");
-    }
+    java.util.Objects.requireNonNull((inner));
     return new Expression_UpdateRecord(inner, fields);
   }
   
   public Expression_UpdateRecord withFields(java.util.List<hydra.langs.haskell.ast.FieldUpdate> fields) {
-    if (fields == null) {
-      throw new IllegalArgumentException("null value for 'fields' argument");
-    }
+    java.util.Objects.requireNonNull((fields));
     return new Expression_UpdateRecord(inner, fields);
   }
 }

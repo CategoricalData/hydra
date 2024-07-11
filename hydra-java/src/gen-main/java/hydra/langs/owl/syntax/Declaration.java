@@ -12,12 +12,8 @@ public class Declaration implements Serializable {
   public final hydra.langs.owl.syntax.Entity entity;
   
   public Declaration (java.util.List<hydra.langs.owl.syntax.Annotation> annotations, hydra.langs.owl.syntax.Entity entity) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
-    if (entity == null) {
-      throw new IllegalArgumentException("null value for 'entity' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
+    java.util.Objects.requireNonNull((entity));
     this.annotations = annotations;
     this.entity = entity;
   }
@@ -37,16 +33,12 @@ public class Declaration implements Serializable {
   }
   
   public Declaration withAnnotations(java.util.List<hydra.langs.owl.syntax.Annotation> annotations) {
-    if (annotations == null) {
-      throw new IllegalArgumentException("null value for 'annotations' argument");
-    }
+    java.util.Objects.requireNonNull((annotations));
     return new Declaration(annotations, entity);
   }
   
   public Declaration withEntity(hydra.langs.owl.syntax.Entity entity) {
-    if (entity == null) {
-      throw new IllegalArgumentException("null value for 'entity' argument");
-    }
+    java.util.Objects.requireNonNull((entity));
     return new Declaration(annotations, entity);
   }
 }

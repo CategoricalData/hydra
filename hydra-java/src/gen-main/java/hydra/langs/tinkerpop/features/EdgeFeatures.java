@@ -30,21 +30,11 @@ public class EdgeFeatures implements Serializable {
   public final Boolean supportsUpsert;
   
   public EdgeFeatures (hydra.langs.tinkerpop.features.ElementFeatures elementFeatures, hydra.langs.tinkerpop.features.EdgePropertyFeatures properties, Boolean supportsAddEdges, Boolean supportsRemoveEdges, Boolean supportsUpsert) {
-    if (elementFeatures == null) {
-      throw new IllegalArgumentException("null value for 'elementFeatures' argument");
-    }
-    if (properties == null) {
-      throw new IllegalArgumentException("null value for 'properties' argument");
-    }
-    if (supportsAddEdges == null) {
-      throw new IllegalArgumentException("null value for 'supportsAddEdges' argument");
-    }
-    if (supportsRemoveEdges == null) {
-      throw new IllegalArgumentException("null value for 'supportsRemoveEdges' argument");
-    }
-    if (supportsUpsert == null) {
-      throw new IllegalArgumentException("null value for 'supportsUpsert' argument");
-    }
+    java.util.Objects.requireNonNull((elementFeatures));
+    java.util.Objects.requireNonNull((properties));
+    java.util.Objects.requireNonNull((supportsAddEdges));
+    java.util.Objects.requireNonNull((supportsRemoveEdges));
+    java.util.Objects.requireNonNull((supportsUpsert));
     this.elementFeatures = elementFeatures;
     this.properties = properties;
     this.supportsAddEdges = supportsAddEdges;
@@ -67,37 +57,27 @@ public class EdgeFeatures implements Serializable {
   }
   
   public EdgeFeatures withElementFeatures(hydra.langs.tinkerpop.features.ElementFeatures elementFeatures) {
-    if (elementFeatures == null) {
-      throw new IllegalArgumentException("null value for 'elementFeatures' argument");
-    }
+    java.util.Objects.requireNonNull((elementFeatures));
     return new EdgeFeatures(elementFeatures, properties, supportsAddEdges, supportsRemoveEdges, supportsUpsert);
   }
   
   public EdgeFeatures withProperties(hydra.langs.tinkerpop.features.EdgePropertyFeatures properties) {
-    if (properties == null) {
-      throw new IllegalArgumentException("null value for 'properties' argument");
-    }
+    java.util.Objects.requireNonNull((properties));
     return new EdgeFeatures(elementFeatures, properties, supportsAddEdges, supportsRemoveEdges, supportsUpsert);
   }
   
   public EdgeFeatures withSupportsAddEdges(Boolean supportsAddEdges) {
-    if (supportsAddEdges == null) {
-      throw new IllegalArgumentException("null value for 'supportsAddEdges' argument");
-    }
+    java.util.Objects.requireNonNull((supportsAddEdges));
     return new EdgeFeatures(elementFeatures, properties, supportsAddEdges, supportsRemoveEdges, supportsUpsert);
   }
   
   public EdgeFeatures withSupportsRemoveEdges(Boolean supportsRemoveEdges) {
-    if (supportsRemoveEdges == null) {
-      throw new IllegalArgumentException("null value for 'supportsRemoveEdges' argument");
-    }
+    java.util.Objects.requireNonNull((supportsRemoveEdges));
     return new EdgeFeatures(elementFeatures, properties, supportsAddEdges, supportsRemoveEdges, supportsUpsert);
   }
   
   public EdgeFeatures withSupportsUpsert(Boolean supportsUpsert) {
-    if (supportsUpsert == null) {
-      throw new IllegalArgumentException("null value for 'supportsUpsert' argument");
-    }
+    java.util.Objects.requireNonNull((supportsUpsert));
     return new EdgeFeatures(elementFeatures, properties, supportsAddEdges, supportsRemoveEdges, supportsUpsert);
   }
 }

@@ -10,9 +10,7 @@ public class AmbiguousName implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.Identifier> value;
   
   public AmbiguousName (java.util.List<hydra.langs.java.syntax.Identifier> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

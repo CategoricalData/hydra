@@ -16,18 +16,10 @@ public class BetweenExpression implements Serializable {
   public final hydra.langs.kusto.kql.Expression upperBound;
   
   public BetweenExpression (Boolean not, hydra.langs.kusto.kql.Expression expression, hydra.langs.kusto.kql.Expression lowerBound, hydra.langs.kusto.kql.Expression upperBound) {
-    if (not == null) {
-      throw new IllegalArgumentException("null value for 'not' argument");
-    }
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
-    if (lowerBound == null) {
-      throw new IllegalArgumentException("null value for 'lowerBound' argument");
-    }
-    if (upperBound == null) {
-      throw new IllegalArgumentException("null value for 'upperBound' argument");
-    }
+    java.util.Objects.requireNonNull((not));
+    java.util.Objects.requireNonNull((expression));
+    java.util.Objects.requireNonNull((lowerBound));
+    java.util.Objects.requireNonNull((upperBound));
     this.not = not;
     this.expression = expression;
     this.lowerBound = lowerBound;
@@ -49,30 +41,22 @@ public class BetweenExpression implements Serializable {
   }
   
   public BetweenExpression withNot(Boolean not) {
-    if (not == null) {
-      throw new IllegalArgumentException("null value for 'not' argument");
-    }
+    java.util.Objects.requireNonNull((not));
     return new BetweenExpression(not, expression, lowerBound, upperBound);
   }
   
   public BetweenExpression withExpression(hydra.langs.kusto.kql.Expression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new BetweenExpression(not, expression, lowerBound, upperBound);
   }
   
   public BetweenExpression withLowerBound(hydra.langs.kusto.kql.Expression lowerBound) {
-    if (lowerBound == null) {
-      throw new IllegalArgumentException("null value for 'lowerBound' argument");
-    }
+    java.util.Objects.requireNonNull((lowerBound));
     return new BetweenExpression(not, expression, lowerBound, upperBound);
   }
   
   public BetweenExpression withUpperBound(hydra.langs.kusto.kql.Expression upperBound) {
-    if (upperBound == null) {
-      throw new IllegalArgumentException("null value for 'upperBound' argument");
-    }
+    java.util.Objects.requireNonNull((upperBound));
     return new BetweenExpression(not, expression, lowerBound, upperBound);
   }
 }

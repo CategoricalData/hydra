@@ -14,15 +14,9 @@ public class TryStatement_WithFinally implements Serializable {
   public final hydra.langs.java.syntax.Finally finally_;
   
   public TryStatement_WithFinally (hydra.langs.java.syntax.Block block, hydra.util.Opt<hydra.langs.java.syntax.Catches> catches, hydra.langs.java.syntax.Finally finally_) {
-    if (block == null) {
-      throw new IllegalArgumentException("null value for 'block' argument");
-    }
-    if (catches == null) {
-      throw new IllegalArgumentException("null value for 'catches' argument");
-    }
-    if (finally_ == null) {
-      throw new IllegalArgumentException("null value for 'finally' argument");
-    }
+    java.util.Objects.requireNonNull((block));
+    java.util.Objects.requireNonNull((catches));
+    java.util.Objects.requireNonNull((finally_));
     this.block = block;
     this.catches = catches;
     this.finally_ = finally_;
@@ -43,23 +37,17 @@ public class TryStatement_WithFinally implements Serializable {
   }
   
   public TryStatement_WithFinally withBlock(hydra.langs.java.syntax.Block block) {
-    if (block == null) {
-      throw new IllegalArgumentException("null value for 'block' argument");
-    }
+    java.util.Objects.requireNonNull((block));
     return new TryStatement_WithFinally(block, catches, finally_);
   }
   
   public TryStatement_WithFinally withCatches(hydra.util.Opt<hydra.langs.java.syntax.Catches> catches) {
-    if (catches == null) {
-      throw new IllegalArgumentException("null value for 'catches' argument");
-    }
+    java.util.Objects.requireNonNull((catches));
     return new TryStatement_WithFinally(block, catches, finally_);
   }
   
   public TryStatement_WithFinally withFinally(hydra.langs.java.syntax.Finally finally_) {
-    if (finally_ == null) {
-      throw new IllegalArgumentException("null value for 'finally' argument");
-    }
+    java.util.Objects.requireNonNull((finally_));
     return new TryStatement_WithFinally(block, catches, finally_);
   }
 }

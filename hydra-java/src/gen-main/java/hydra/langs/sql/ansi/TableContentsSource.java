@@ -43,9 +43,7 @@ public abstract class TableContentsSource implements Serializable {
     public final hydra.langs.sql.ansi.TableElementList value;
     
     public List (hydra.langs.sql.ansi.TableElementList value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class TableContentsSource implements Serializable {
     public final hydra.langs.sql.ansi.TableContentsSource_Subtable value;
     
     public Subtable (hydra.langs.sql.ansi.TableContentsSource_Subtable value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class TableContentsSource implements Serializable {
     public final hydra.langs.sql.ansi.AsSubqueryClause value;
     
     public Subquery (hydra.langs.sql.ansi.AsSubqueryClause value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

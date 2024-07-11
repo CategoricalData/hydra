@@ -40,9 +40,7 @@ public abstract class IndentStyle implements Serializable {
     public final String value;
     
     public AllLines (String value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -70,9 +68,7 @@ public abstract class IndentStyle implements Serializable {
     public final String value;
     
     public SubsequentLines (String value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

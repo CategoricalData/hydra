@@ -10,9 +10,7 @@ public class ScalarSubquery implements Serializable {
   public final hydra.langs.sql.ansi.Subquery value;
   
   public ScalarSubquery (hydra.langs.sql.ansi.Subquery value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

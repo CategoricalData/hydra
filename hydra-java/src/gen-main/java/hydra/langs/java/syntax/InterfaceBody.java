@@ -10,9 +10,7 @@ public class InterfaceBody implements Serializable {
   public final java.util.List<hydra.langs.java.syntax.InterfaceMemberDeclaration> value;
   
   public InterfaceBody (java.util.List<hydra.langs.java.syntax.InterfaceMemberDeclaration> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

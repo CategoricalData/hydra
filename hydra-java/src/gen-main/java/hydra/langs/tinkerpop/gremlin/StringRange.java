@@ -12,12 +12,8 @@ public class StringRange implements Serializable {
   public final String right;
   
   public StringRange (String left, String right) {
-    if (left == null) {
-      throw new IllegalArgumentException("null value for 'left' argument");
-    }
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((left));
+    java.util.Objects.requireNonNull((right));
     this.left = left;
     this.right = right;
   }
@@ -37,16 +33,12 @@ public class StringRange implements Serializable {
   }
   
   public StringRange withLeft(String left) {
-    if (left == null) {
-      throw new IllegalArgumentException("null value for 'left' argument");
-    }
+    java.util.Objects.requireNonNull((left));
     return new StringRange(left, right);
   }
   
   public StringRange withRight(String right) {
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((right));
     return new StringRange(left, right);
   }
 }

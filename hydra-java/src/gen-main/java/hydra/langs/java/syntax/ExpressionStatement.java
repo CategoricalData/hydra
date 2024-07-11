@@ -10,9 +10,7 @@ public class ExpressionStatement implements Serializable {
   public final hydra.langs.java.syntax.StatementExpression value;
   
   public ExpressionStatement (hydra.langs.java.syntax.StatementExpression value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

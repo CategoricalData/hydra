@@ -15,12 +15,8 @@ public class Let<A> implements Serializable {
   public final hydra.core.Term<A> environment;
   
   public Let (java.util.Map<hydra.core.Name, hydra.core.Term<A>> bindings, hydra.core.Term<A> environment) {
-    if (bindings == null) {
-      throw new IllegalArgumentException("null value for 'bindings' argument");
-    }
-    if (environment == null) {
-      throw new IllegalArgumentException("null value for 'environment' argument");
-    }
+    java.util.Objects.requireNonNull((bindings));
+    java.util.Objects.requireNonNull((environment));
     this.bindings = bindings;
     this.environment = environment;
   }
@@ -40,16 +36,12 @@ public class Let<A> implements Serializable {
   }
   
   public Let withBindings(java.util.Map<hydra.core.Name, hydra.core.Term<A>> bindings) {
-    if (bindings == null) {
-      throw new IllegalArgumentException("null value for 'bindings' argument");
-    }
+    java.util.Objects.requireNonNull((bindings));
     return new Let(bindings, environment);
   }
   
   public Let withEnvironment(hydra.core.Term<A> environment) {
-    if (environment == null) {
-      throw new IllegalArgumentException("null value for 'environment' argument");
-    }
+    java.util.Objects.requireNonNull((environment));
     return new Let(bindings, environment);
   }
 }

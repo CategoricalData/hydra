@@ -14,15 +14,9 @@ public class Pkg implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Stat> stats;
   
   public Pkg (hydra.langs.scala.meta.Data_Name name, hydra.langs.scala.meta.Data_Ref ref, java.util.List<hydra.langs.scala.meta.Stat> stats) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (ref == null) {
-      throw new IllegalArgumentException("null value for 'ref' argument");
-    }
-    if (stats == null) {
-      throw new IllegalArgumentException("null value for 'stats' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((ref));
+    java.util.Objects.requireNonNull((stats));
     this.name = name;
     this.ref = ref;
     this.stats = stats;
@@ -43,23 +37,17 @@ public class Pkg implements Serializable {
   }
   
   public Pkg withName(hydra.langs.scala.meta.Data_Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Pkg(name, ref, stats);
   }
   
   public Pkg withRef(hydra.langs.scala.meta.Data_Ref ref) {
-    if (ref == null) {
-      throw new IllegalArgumentException("null value for 'ref' argument");
-    }
+    java.util.Objects.requireNonNull((ref));
     return new Pkg(name, ref, stats);
   }
   
   public Pkg withStats(java.util.List<hydra.langs.scala.meta.Stat> stats) {
-    if (stats == null) {
-      throw new IllegalArgumentException("null value for 'stats' argument");
-    }
+    java.util.Objects.requireNonNull((stats));
     return new Pkg(name, ref, stats);
   }
 }

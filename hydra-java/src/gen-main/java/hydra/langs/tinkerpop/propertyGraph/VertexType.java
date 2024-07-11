@@ -26,15 +26,9 @@ public class VertexType<T> implements Serializable {
   public final java.util.List<hydra.langs.tinkerpop.propertyGraph.PropertyType<T>> properties;
   
   public VertexType (hydra.langs.tinkerpop.propertyGraph.VertexLabel label, T id, java.util.List<hydra.langs.tinkerpop.propertyGraph.PropertyType<T>> properties) {
-    if (label == null) {
-      throw new IllegalArgumentException("null value for 'label' argument");
-    }
-    if (id == null) {
-      throw new IllegalArgumentException("null value for 'id' argument");
-    }
-    if (properties == null) {
-      throw new IllegalArgumentException("null value for 'properties' argument");
-    }
+    java.util.Objects.requireNonNull((label));
+    java.util.Objects.requireNonNull((id));
+    java.util.Objects.requireNonNull((properties));
     this.label = label;
     this.id = id;
     this.properties = properties;
@@ -55,23 +49,17 @@ public class VertexType<T> implements Serializable {
   }
   
   public VertexType withLabel(hydra.langs.tinkerpop.propertyGraph.VertexLabel label) {
-    if (label == null) {
-      throw new IllegalArgumentException("null value for 'label' argument");
-    }
+    java.util.Objects.requireNonNull((label));
     return new VertexType(label, id, properties);
   }
   
   public VertexType withId(T id) {
-    if (id == null) {
-      throw new IllegalArgumentException("null value for 'id' argument");
-    }
+    java.util.Objects.requireNonNull((id));
     return new VertexType(label, id, properties);
   }
   
   public VertexType withProperties(java.util.List<hydra.langs.tinkerpop.propertyGraph.PropertyType<T>> properties) {
-    if (properties == null) {
-      throw new IllegalArgumentException("null value for 'properties' argument");
-    }
+    java.util.Objects.requireNonNull((properties));
     return new VertexType(label, id, properties);
   }
 }

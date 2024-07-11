@@ -15,12 +15,8 @@ public class PatternImplication<A> implements Serializable {
   public final hydra.query.Pattern<A> consequent;
   
   public PatternImplication (hydra.query.Pattern<A> antecedent, hydra.query.Pattern<A> consequent) {
-    if (antecedent == null) {
-      throw new IllegalArgumentException("null value for 'antecedent' argument");
-    }
-    if (consequent == null) {
-      throw new IllegalArgumentException("null value for 'consequent' argument");
-    }
+    java.util.Objects.requireNonNull((antecedent));
+    java.util.Objects.requireNonNull((consequent));
     this.antecedent = antecedent;
     this.consequent = consequent;
   }
@@ -40,16 +36,12 @@ public class PatternImplication<A> implements Serializable {
   }
   
   public PatternImplication withAntecedent(hydra.query.Pattern<A> antecedent) {
-    if (antecedent == null) {
-      throw new IllegalArgumentException("null value for 'antecedent' argument");
-    }
+    java.util.Objects.requireNonNull((antecedent));
     return new PatternImplication(antecedent, consequent);
   }
   
   public PatternImplication withConsequent(hydra.query.Pattern<A> consequent) {
-    if (consequent == null) {
-      throw new IllegalArgumentException("null value for 'consequent' argument");
-    }
+    java.util.Objects.requireNonNull((consequent));
     return new PatternImplication(antecedent, consequent);
   }
 }

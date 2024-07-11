@@ -37,9 +37,7 @@ public abstract class GroupTripleExpr implements Serializable {
     public final hydra.langs.shex.syntax.SingleElementGroup value;
     
     public SingleElementGroup (hydra.langs.shex.syntax.SingleElementGroup value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class GroupTripleExpr implements Serializable {
     public final hydra.langs.shex.syntax.MultiElementGroup value;
     
     public MultiElementGroup (hydra.langs.shex.syntax.MultiElementGroup value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -12,12 +12,8 @@ public class MultiplyDivideModuloExpression implements Serializable {
   public final java.util.List<hydra.langs.cypher.openCypher.MultiplyDivideModuloRightHandSide> right;
   
   public MultiplyDivideModuloExpression (hydra.langs.cypher.openCypher.PowerOfExpression left, java.util.List<hydra.langs.cypher.openCypher.MultiplyDivideModuloRightHandSide> right) {
-    if (left == null) {
-      throw new IllegalArgumentException("null value for 'left' argument");
-    }
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((left));
+    java.util.Objects.requireNonNull((right));
     this.left = left;
     this.right = right;
   }
@@ -37,16 +33,12 @@ public class MultiplyDivideModuloExpression implements Serializable {
   }
   
   public MultiplyDivideModuloExpression withLeft(hydra.langs.cypher.openCypher.PowerOfExpression left) {
-    if (left == null) {
-      throw new IllegalArgumentException("null value for 'left' argument");
-    }
+    java.util.Objects.requireNonNull((left));
     return new MultiplyDivideModuloExpression(left, right);
   }
   
   public MultiplyDivideModuloExpression withRight(java.util.List<hydra.langs.cypher.openCypher.MultiplyDivideModuloRightHandSide> right) {
-    if (right == null) {
-      throw new IllegalArgumentException("null value for 'right' argument");
-    }
+    java.util.Objects.requireNonNull((right));
     return new MultiplyDivideModuloExpression(left, right);
   }
 }

@@ -26,15 +26,9 @@ public class ProcedureCallFeatures implements Serializable {
   public final Boolean yield;
   
   public ProcedureCallFeatures (Boolean inQueryCall, Boolean standaloneCall, Boolean yield) {
-    if (inQueryCall == null) {
-      throw new IllegalArgumentException("null value for 'inQueryCall' argument");
-    }
-    if (standaloneCall == null) {
-      throw new IllegalArgumentException("null value for 'standaloneCall' argument");
-    }
-    if (yield == null) {
-      throw new IllegalArgumentException("null value for 'yield' argument");
-    }
+    java.util.Objects.requireNonNull((inQueryCall));
+    java.util.Objects.requireNonNull((standaloneCall));
+    java.util.Objects.requireNonNull((yield));
     this.inQueryCall = inQueryCall;
     this.standaloneCall = standaloneCall;
     this.yield = yield;
@@ -55,23 +49,17 @@ public class ProcedureCallFeatures implements Serializable {
   }
   
   public ProcedureCallFeatures withInQueryCall(Boolean inQueryCall) {
-    if (inQueryCall == null) {
-      throw new IllegalArgumentException("null value for 'inQueryCall' argument");
-    }
+    java.util.Objects.requireNonNull((inQueryCall));
     return new ProcedureCallFeatures(inQueryCall, standaloneCall, yield);
   }
   
   public ProcedureCallFeatures withStandaloneCall(Boolean standaloneCall) {
-    if (standaloneCall == null) {
-      throw new IllegalArgumentException("null value for 'standaloneCall' argument");
-    }
+    java.util.Objects.requireNonNull((standaloneCall));
     return new ProcedureCallFeatures(inQueryCall, standaloneCall, yield);
   }
   
   public ProcedureCallFeatures withYield(Boolean yield) {
-    if (yield == null) {
-      throw new IllegalArgumentException("null value for 'yield' argument");
-    }
+    java.util.Objects.requireNonNull((yield));
     return new ProcedureCallFeatures(inQueryCall, standaloneCall, yield);
   }
 }

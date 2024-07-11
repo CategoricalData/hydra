@@ -16,18 +16,10 @@ public class ShapeDefinition implements Serializable {
   public final hydra.langs.shex.syntax.SemanticActions semanticActions;
   
   public ShapeDefinition (java.util.List<hydra.langs.shex.syntax.ShapeDefinition_ListOfAlts_Elmt> listOfAlts, hydra.util.Opt<hydra.langs.shex.syntax.TripleExpression> tripleExpression, java.util.List<hydra.langs.shex.syntax.Annotation> listOfAnnotation, hydra.langs.shex.syntax.SemanticActions semanticActions) {
-    if (listOfAlts == null) {
-      throw new IllegalArgumentException("null value for 'listOfAlts' argument");
-    }
-    if (tripleExpression == null) {
-      throw new IllegalArgumentException("null value for 'tripleExpression' argument");
-    }
-    if (listOfAnnotation == null) {
-      throw new IllegalArgumentException("null value for 'listOfAnnotation' argument");
-    }
-    if (semanticActions == null) {
-      throw new IllegalArgumentException("null value for 'semanticActions' argument");
-    }
+    java.util.Objects.requireNonNull((listOfAlts));
+    java.util.Objects.requireNonNull((tripleExpression));
+    java.util.Objects.requireNonNull((listOfAnnotation));
+    java.util.Objects.requireNonNull((semanticActions));
     this.listOfAlts = listOfAlts;
     this.tripleExpression = tripleExpression;
     this.listOfAnnotation = listOfAnnotation;
@@ -49,30 +41,22 @@ public class ShapeDefinition implements Serializable {
   }
   
   public ShapeDefinition withListOfAlts(java.util.List<hydra.langs.shex.syntax.ShapeDefinition_ListOfAlts_Elmt> listOfAlts) {
-    if (listOfAlts == null) {
-      throw new IllegalArgumentException("null value for 'listOfAlts' argument");
-    }
+    java.util.Objects.requireNonNull((listOfAlts));
     return new ShapeDefinition(listOfAlts, tripleExpression, listOfAnnotation, semanticActions);
   }
   
   public ShapeDefinition withTripleExpression(hydra.util.Opt<hydra.langs.shex.syntax.TripleExpression> tripleExpression) {
-    if (tripleExpression == null) {
-      throw new IllegalArgumentException("null value for 'tripleExpression' argument");
-    }
+    java.util.Objects.requireNonNull((tripleExpression));
     return new ShapeDefinition(listOfAlts, tripleExpression, listOfAnnotation, semanticActions);
   }
   
   public ShapeDefinition withListOfAnnotation(java.util.List<hydra.langs.shex.syntax.Annotation> listOfAnnotation) {
-    if (listOfAnnotation == null) {
-      throw new IllegalArgumentException("null value for 'listOfAnnotation' argument");
-    }
+    java.util.Objects.requireNonNull((listOfAnnotation));
     return new ShapeDefinition(listOfAlts, tripleExpression, listOfAnnotation, semanticActions);
   }
   
   public ShapeDefinition withSemanticActions(hydra.langs.shex.syntax.SemanticActions semanticActions) {
-    if (semanticActions == null) {
-      throw new IllegalArgumentException("null value for 'semanticActions' argument");
-    }
+    java.util.Objects.requireNonNull((semanticActions));
     return new ShapeDefinition(listOfAlts, tripleExpression, listOfAnnotation, semanticActions);
   }
 }

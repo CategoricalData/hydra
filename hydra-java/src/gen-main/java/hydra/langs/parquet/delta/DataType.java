@@ -115,9 +115,7 @@ public abstract class DataType implements Serializable {
     public final hydra.langs.parquet.delta.ArrayType value;
     
     public Array (hydra.langs.parquet.delta.ArrayType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -245,9 +243,7 @@ public abstract class DataType implements Serializable {
     public final hydra.langs.parquet.delta.DecimalType value;
     
     public Decimal (hydra.langs.parquet.delta.DecimalType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -375,9 +371,7 @@ public abstract class DataType implements Serializable {
     public final hydra.langs.parquet.delta.MapType value;
     
     public Map (hydra.langs.parquet.delta.MapType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -480,9 +474,7 @@ public abstract class DataType implements Serializable {
     public final hydra.langs.parquet.delta.StructType value;
     
     public Struct (hydra.langs.parquet.delta.StructType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

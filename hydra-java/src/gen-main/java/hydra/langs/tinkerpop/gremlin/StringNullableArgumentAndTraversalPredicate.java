@@ -12,12 +12,8 @@ public class StringNullableArgumentAndTraversalPredicate implements Serializable
   public final hydra.langs.tinkerpop.gremlin.TraversalPredicate predicate;
   
   public StringNullableArgumentAndTraversalPredicate (hydra.langs.tinkerpop.gremlin.StringNullableArgument string, hydra.langs.tinkerpop.gremlin.TraversalPredicate predicate) {
-    if (string == null) {
-      throw new IllegalArgumentException("null value for 'string' argument");
-    }
-    if (predicate == null) {
-      throw new IllegalArgumentException("null value for 'predicate' argument");
-    }
+    java.util.Objects.requireNonNull((string));
+    java.util.Objects.requireNonNull((predicate));
     this.string = string;
     this.predicate = predicate;
   }
@@ -37,16 +33,12 @@ public class StringNullableArgumentAndTraversalPredicate implements Serializable
   }
   
   public StringNullableArgumentAndTraversalPredicate withString(hydra.langs.tinkerpop.gremlin.StringNullableArgument string) {
-    if (string == null) {
-      throw new IllegalArgumentException("null value for 'string' argument");
-    }
+    java.util.Objects.requireNonNull((string));
     return new StringNullableArgumentAndTraversalPredicate(string, predicate);
   }
   
   public StringNullableArgumentAndTraversalPredicate withPredicate(hydra.langs.tinkerpop.gremlin.TraversalPredicate predicate) {
-    if (predicate == null) {
-      throw new IllegalArgumentException("null value for 'predicate' argument");
-    }
+    java.util.Objects.requireNonNull((predicate));
     return new StringNullableArgumentAndTraversalPredicate(string, predicate);
   }
 }

@@ -12,12 +12,8 @@ public class Pat_Bind implements Serializable {
   public final hydra.langs.scala.meta.Pat rhs;
   
   public Pat_Bind (hydra.langs.scala.meta.Pat lhs, hydra.langs.scala.meta.Pat rhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
+    java.util.Objects.requireNonNull((rhs));
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -37,16 +33,12 @@ public class Pat_Bind implements Serializable {
   }
   
   public Pat_Bind withLhs(hydra.langs.scala.meta.Pat lhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
     return new Pat_Bind(lhs, rhs);
   }
   
   public Pat_Bind withRhs(hydra.langs.scala.meta.Pat rhs) {
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((rhs));
     return new Pat_Bind(lhs, rhs);
   }
 }

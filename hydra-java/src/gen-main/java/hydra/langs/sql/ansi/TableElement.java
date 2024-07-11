@@ -55,9 +55,7 @@ public abstract class TableElement implements Serializable {
     public final hydra.langs.sql.ansi.ColumnDefinition value;
     
     public Column (hydra.langs.sql.ansi.ColumnDefinition value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -85,9 +83,7 @@ public abstract class TableElement implements Serializable {
     public final hydra.langs.sql.ansi.TableConstraintDefinition value;
     
     public TableConstraint (hydra.langs.sql.ansi.TableConstraintDefinition value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -115,9 +111,7 @@ public abstract class TableElement implements Serializable {
     public final hydra.langs.sql.ansi.LikeClause value;
     
     public Like (hydra.langs.sql.ansi.LikeClause value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -145,9 +139,7 @@ public abstract class TableElement implements Serializable {
     public final hydra.langs.sql.ansi.SelfReferencingColumnSpecification value;
     
     public SelfReferencingColumn (hydra.langs.sql.ansi.SelfReferencingColumnSpecification value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -175,9 +167,7 @@ public abstract class TableElement implements Serializable {
     public final hydra.langs.sql.ansi.ColumnOptions value;
     
     public ColumOptions (hydra.langs.sql.ansi.ColumnOptions value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

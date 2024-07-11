@@ -21,12 +21,8 @@ public class GraphSchema<T> implements Serializable {
   public final java.util.Map<hydra.langs.tinkerpop.propertyGraph.EdgeLabel, hydra.langs.tinkerpop.propertyGraph.EdgeType<T>> edges;
   
   public GraphSchema (java.util.Map<hydra.langs.tinkerpop.propertyGraph.VertexLabel, hydra.langs.tinkerpop.propertyGraph.VertexType<T>> vertices, java.util.Map<hydra.langs.tinkerpop.propertyGraph.EdgeLabel, hydra.langs.tinkerpop.propertyGraph.EdgeType<T>> edges) {
-    if (vertices == null) {
-      throw new IllegalArgumentException("null value for 'vertices' argument");
-    }
-    if (edges == null) {
-      throw new IllegalArgumentException("null value for 'edges' argument");
-    }
+    java.util.Objects.requireNonNull((vertices));
+    java.util.Objects.requireNonNull((edges));
     this.vertices = vertices;
     this.edges = edges;
   }
@@ -46,16 +42,12 @@ public class GraphSchema<T> implements Serializable {
   }
   
   public GraphSchema withVertices(java.util.Map<hydra.langs.tinkerpop.propertyGraph.VertexLabel, hydra.langs.tinkerpop.propertyGraph.VertexType<T>> vertices) {
-    if (vertices == null) {
-      throw new IllegalArgumentException("null value for 'vertices' argument");
-    }
+    java.util.Objects.requireNonNull((vertices));
     return new GraphSchema(vertices, edges);
   }
   
   public GraphSchema withEdges(java.util.Map<hydra.langs.tinkerpop.propertyGraph.EdgeLabel, hydra.langs.tinkerpop.propertyGraph.EdgeType<T>> edges) {
-    if (edges == null) {
-      throw new IllegalArgumentException("null value for 'edges' argument");
-    }
+    java.util.Objects.requireNonNull((edges));
     return new GraphSchema(vertices, edges);
   }
 }

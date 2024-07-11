@@ -10,9 +10,7 @@ public class IriRef implements Serializable {
   public final java.util.List<hydra.langs.shex.syntax.IriRef_Elmt> value;
   
   public IriRef (java.util.List<hydra.langs.shex.syntax.IriRef_Elmt> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

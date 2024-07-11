@@ -2,8 +2,6 @@
 
 package hydra.core;
 
-import hydra.util.Opt;
-
 import java.io.Serializable;
 
 /**
@@ -20,23 +18,17 @@ public class RowType<A> implements Serializable {
   /**
    * Optionally, the name of another row type which this one extends. If/when field order is preserved, the inherited fields of the extended type precede those of the extension.
    */
-  public final Opt<Name> extends_;
+  public final hydra.util.Opt<hydra.core.Name> extends_;
   
   /**
    * The fields of this row type, excluding any inherited fields
    */
   public final java.util.List<hydra.core.FieldType<A>> fields;
   
-  public RowType (hydra.core.Name typeName, Opt<Name> extends_, java.util.List<hydra.core.FieldType<A>> fields) {
-    if (typeName == null) {
-      throw new IllegalArgumentException("null value for 'typeName' argument");
-    }
-    if (extends_ == null) {
-      throw new IllegalArgumentException("null value for 'extends' argument");
-    }
-    if (fields == null) {
-      throw new IllegalArgumentException("null value for 'fields' argument");
-    }
+  public RowType (hydra.core.Name typeName, hydra.util.Opt<hydra.core.Name> extends_, java.util.List<hydra.core.FieldType<A>> fields) {
+    java.util.Objects.requireNonNull((typeName));
+    java.util.Objects.requireNonNull((extends_));
+    java.util.Objects.requireNonNull((fields));
     this.typeName = typeName;
     this.extends_ = extends_;
     this.fields = fields;
@@ -57,23 +49,17 @@ public class RowType<A> implements Serializable {
   }
   
   public RowType withTypeName(hydra.core.Name typeName) {
-    if (typeName == null) {
-      throw new IllegalArgumentException("null value for 'typeName' argument");
-    }
+    java.util.Objects.requireNonNull((typeName));
     return new RowType(typeName, extends_, fields);
   }
   
-  public RowType withExtends(Opt<Name> extends_) {
-    if (extends_ == null) {
-      throw new IllegalArgumentException("null value for 'extends' argument");
-    }
+  public RowType withExtends(hydra.util.Opt<hydra.core.Name> extends_) {
+    java.util.Objects.requireNonNull((extends_));
     return new RowType(typeName, extends_, fields);
   }
   
   public RowType withFields(java.util.List<hydra.core.FieldType<A>> fields) {
-    if (fields == null) {
-      throw new IllegalArgumentException("null value for 'fields' argument");
-    }
+    java.util.Objects.requireNonNull((fields));
     return new RowType(typeName, extends_, fields);
   }
 }

@@ -12,12 +12,8 @@ public class ImplementsInterfaces_Sequence2 implements Serializable {
   public final hydra.langs.graphql.syntax.NamedType namedType;
   
   public ImplementsInterfaces_Sequence2 (hydra.util.Opt<java.lang.Void> amp, hydra.langs.graphql.syntax.NamedType namedType) {
-    if (amp == null) {
-      throw new IllegalArgumentException("null value for 'amp' argument");
-    }
-    if (namedType == null) {
-      throw new IllegalArgumentException("null value for 'namedType' argument");
-    }
+    java.util.Objects.requireNonNull((amp));
+    java.util.Objects.requireNonNull((namedType));
     this.amp = amp;
     this.namedType = namedType;
   }
@@ -37,16 +33,12 @@ public class ImplementsInterfaces_Sequence2 implements Serializable {
   }
   
   public ImplementsInterfaces_Sequence2 withAmp(hydra.util.Opt<java.lang.Void> amp) {
-    if (amp == null) {
-      throw new IllegalArgumentException("null value for 'amp' argument");
-    }
+    java.util.Objects.requireNonNull((amp));
     return new ImplementsInterfaces_Sequence2(amp, namedType);
   }
   
   public ImplementsInterfaces_Sequence2 withNamedType(hydra.langs.graphql.syntax.NamedType namedType) {
-    if (namedType == null) {
-      throw new IllegalArgumentException("null value for 'namedType' argument");
-    }
+    java.util.Objects.requireNonNull((namedType));
     return new ImplementsInterfaces_Sequence2(amp, namedType);
   }
 }

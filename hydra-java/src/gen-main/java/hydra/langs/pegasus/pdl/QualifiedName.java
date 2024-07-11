@@ -12,12 +12,8 @@ public class QualifiedName implements Serializable {
   public final hydra.util.Opt<hydra.langs.pegasus.pdl.Namespace> namespace;
   
   public QualifiedName (hydra.langs.pegasus.pdl.Name name, hydra.util.Opt<hydra.langs.pegasus.pdl.Namespace> namespace) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (namespace == null) {
-      throw new IllegalArgumentException("null value for 'namespace' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((namespace));
     this.name = name;
     this.namespace = namespace;
   }
@@ -37,16 +33,12 @@ public class QualifiedName implements Serializable {
   }
   
   public QualifiedName withName(hydra.langs.pegasus.pdl.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new QualifiedName(name, namespace);
   }
   
   public QualifiedName withNamespace(hydra.util.Opt<hydra.langs.pegasus.pdl.Namespace> namespace) {
-    if (namespace == null) {
-      throw new IllegalArgumentException("null value for 'namespace' argument");
-    }
+    java.util.Objects.requireNonNull((namespace));
     return new QualifiedName(name, namespace);
   }
 }

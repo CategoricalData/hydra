@@ -12,12 +12,8 @@ public class ShexDoc_Sequence_Option implements Serializable {
   public final java.util.List<hydra.langs.shex.syntax.Statement> listOfStatement;
   
   public ShexDoc_Sequence_Option (hydra.langs.shex.syntax.ShexDoc_Sequence_Option_Alts alts, java.util.List<hydra.langs.shex.syntax.Statement> listOfStatement) {
-    if (alts == null) {
-      throw new IllegalArgumentException("null value for 'alts' argument");
-    }
-    if (listOfStatement == null) {
-      throw new IllegalArgumentException("null value for 'listOfStatement' argument");
-    }
+    java.util.Objects.requireNonNull((alts));
+    java.util.Objects.requireNonNull((listOfStatement));
     this.alts = alts;
     this.listOfStatement = listOfStatement;
   }
@@ -37,16 +33,12 @@ public class ShexDoc_Sequence_Option implements Serializable {
   }
   
   public ShexDoc_Sequence_Option withAlts(hydra.langs.shex.syntax.ShexDoc_Sequence_Option_Alts alts) {
-    if (alts == null) {
-      throw new IllegalArgumentException("null value for 'alts' argument");
-    }
+    java.util.Objects.requireNonNull((alts));
     return new ShexDoc_Sequence_Option(alts, listOfStatement);
   }
   
   public ShexDoc_Sequence_Option withListOfStatement(java.util.List<hydra.langs.shex.syntax.Statement> listOfStatement) {
-    if (listOfStatement == null) {
-      throw new IllegalArgumentException("null value for 'listOfStatement' argument");
-    }
+    java.util.Objects.requireNonNull((listOfStatement));
     return new ShexDoc_Sequence_Option(alts, listOfStatement);
   }
 }

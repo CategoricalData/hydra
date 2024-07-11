@@ -16,18 +16,10 @@ public class ConstructorDeclaration implements Serializable {
   public final hydra.langs.java.syntax.ConstructorBody body;
   
   public ConstructorDeclaration (java.util.List<hydra.langs.java.syntax.ConstructorModifier> modifiers, hydra.langs.java.syntax.ConstructorDeclarator constructor, hydra.util.Opt<hydra.langs.java.syntax.Throws> throws_, hydra.langs.java.syntax.ConstructorBody body) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
-    if (constructor == null) {
-      throw new IllegalArgumentException("null value for 'constructor' argument");
-    }
-    if (throws_ == null) {
-      throw new IllegalArgumentException("null value for 'throws' argument");
-    }
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
+    java.util.Objects.requireNonNull((constructor));
+    java.util.Objects.requireNonNull((throws_));
+    java.util.Objects.requireNonNull((body));
     this.modifiers = modifiers;
     this.constructor = constructor;
     this.throws_ = throws_;
@@ -49,30 +41,22 @@ public class ConstructorDeclaration implements Serializable {
   }
   
   public ConstructorDeclaration withModifiers(java.util.List<hydra.langs.java.syntax.ConstructorModifier> modifiers) {
-    if (modifiers == null) {
-      throw new IllegalArgumentException("null value for 'modifiers' argument");
-    }
+    java.util.Objects.requireNonNull((modifiers));
     return new ConstructorDeclaration(modifiers, constructor, throws_, body);
   }
   
   public ConstructorDeclaration withConstructor(hydra.langs.java.syntax.ConstructorDeclarator constructor) {
-    if (constructor == null) {
-      throw new IllegalArgumentException("null value for 'constructor' argument");
-    }
+    java.util.Objects.requireNonNull((constructor));
     return new ConstructorDeclaration(modifiers, constructor, throws_, body);
   }
   
   public ConstructorDeclaration withThrows(hydra.util.Opt<hydra.langs.java.syntax.Throws> throws_) {
-    if (throws_ == null) {
-      throw new IllegalArgumentException("null value for 'throws' argument");
-    }
+    java.util.Objects.requireNonNull((throws_));
     return new ConstructorDeclaration(modifiers, constructor, throws_, body);
   }
   
   public ConstructorDeclaration withBody(hydra.langs.java.syntax.ConstructorBody body) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((body));
     return new ConstructorDeclaration(modifiers, constructor, throws_, body);
   }
 }

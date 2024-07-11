@@ -18,12 +18,8 @@ public class Enum_ implements Serializable {
   public final hydra.util.Opt<String> default_;
   
   public Enum_ (java.util.List<String> symbols, hydra.util.Opt<String> default_) {
-    if (symbols == null) {
-      throw new IllegalArgumentException("null value for 'symbols' argument");
-    }
-    if (default_ == null) {
-      throw new IllegalArgumentException("null value for 'default' argument");
-    }
+    java.util.Objects.requireNonNull((symbols));
+    java.util.Objects.requireNonNull((default_));
     this.symbols = symbols;
     this.default_ = default_;
   }
@@ -43,16 +39,12 @@ public class Enum_ implements Serializable {
   }
   
   public Enum_ withSymbols(java.util.List<String> symbols) {
-    if (symbols == null) {
-      throw new IllegalArgumentException("null value for 'symbols' argument");
-    }
+    java.util.Objects.requireNonNull((symbols));
     return new Enum_(symbols, default_);
   }
   
   public Enum_ withDefault(hydra.util.Opt<String> default_) {
-    if (default_ == null) {
-      throw new IllegalArgumentException("null value for 'default' argument");
-    }
+    java.util.Objects.requireNonNull((default_));
     return new Enum_(symbols, default_);
   }
 }

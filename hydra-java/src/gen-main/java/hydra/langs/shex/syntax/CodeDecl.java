@@ -12,12 +12,8 @@ public class CodeDecl implements Serializable {
   public final hydra.langs.shex.syntax.CodeDecl_Alts alts;
   
   public CodeDecl (hydra.langs.shex.syntax.Iri iri, hydra.langs.shex.syntax.CodeDecl_Alts alts) {
-    if (iri == null) {
-      throw new IllegalArgumentException("null value for 'iri' argument");
-    }
-    if (alts == null) {
-      throw new IllegalArgumentException("null value for 'alts' argument");
-    }
+    java.util.Objects.requireNonNull((iri));
+    java.util.Objects.requireNonNull((alts));
     this.iri = iri;
     this.alts = alts;
   }
@@ -37,16 +33,12 @@ public class CodeDecl implements Serializable {
   }
   
   public CodeDecl withIri(hydra.langs.shex.syntax.Iri iri) {
-    if (iri == null) {
-      throw new IllegalArgumentException("null value for 'iri' argument");
-    }
+    java.util.Objects.requireNonNull((iri));
     return new CodeDecl(iri, alts);
   }
   
   public CodeDecl withAlts(hydra.langs.shex.syntax.CodeDecl_Alts alts) {
-    if (alts == null) {
-      throw new IllegalArgumentException("null value for 'alts' argument");
-    }
+    java.util.Objects.requireNonNull((alts));
     return new CodeDecl(iri, alts);
   }
 }

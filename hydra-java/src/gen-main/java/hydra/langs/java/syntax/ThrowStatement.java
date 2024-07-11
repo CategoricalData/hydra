@@ -10,9 +10,7 @@ public class ThrowStatement implements Serializable {
   public final hydra.langs.java.syntax.Expression value;
   
   public ThrowStatement (hydra.langs.java.syntax.Expression value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

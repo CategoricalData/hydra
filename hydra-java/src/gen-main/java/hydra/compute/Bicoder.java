@@ -13,12 +13,8 @@ public class Bicoder<S1, S2, T1, T2, V1, V2> {
   public final java.util.function.Function<T2, hydra.compute.Adapter<S2, S1, T2, T1, V2, V1>> decode;
   
   public Bicoder (java.util.function.Function<T1, hydra.compute.Adapter<S1, S2, T1, T2, V1, V2>> encode, java.util.function.Function<T2, hydra.compute.Adapter<S2, S1, T2, T1, V2, V1>> decode) {
-    if (encode == null) {
-      throw new IllegalArgumentException("null value for 'encode' argument");
-    }
-    if (decode == null) {
-      throw new IllegalArgumentException("null value for 'decode' argument");
-    }
+    java.util.Objects.requireNonNull((encode));
+    java.util.Objects.requireNonNull((decode));
     this.encode = encode;
     this.decode = decode;
   }
@@ -38,16 +34,12 @@ public class Bicoder<S1, S2, T1, T2, V1, V2> {
   }
   
   public Bicoder withEncode(java.util.function.Function<T1, hydra.compute.Adapter<S1, S2, T1, T2, V1, V2>> encode) {
-    if (encode == null) {
-      throw new IllegalArgumentException("null value for 'encode' argument");
-    }
+    java.util.Objects.requireNonNull((encode));
     return new Bicoder(encode, decode);
   }
   
   public Bicoder withDecode(java.util.function.Function<T2, hydra.compute.Adapter<S2, S1, T2, T1, V2, V1>> decode) {
-    if (decode == null) {
-      throw new IllegalArgumentException("null value for 'decode' argument");
-    }
+    java.util.Objects.requireNonNull((decode));
     return new Bicoder(encode, decode);
   }
 }

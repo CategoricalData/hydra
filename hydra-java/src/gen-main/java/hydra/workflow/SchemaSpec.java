@@ -52,9 +52,7 @@ public abstract class SchemaSpec implements Serializable {
     public final hydra.workflow.HydraSchemaSpec value;
     
     public Hydra (hydra.workflow.HydraSchemaSpec value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -88,9 +86,7 @@ public abstract class SchemaSpec implements Serializable {
     public final String value;
     
     public File (String value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

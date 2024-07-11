@@ -62,9 +62,7 @@ public abstract class StringLiteralLong2_Elmt_Sequence_Alts_Option implements Se
     public final hydra.langs.shex.syntax.StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence value;
     
     public Sequence (hydra.langs.shex.syntax.StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

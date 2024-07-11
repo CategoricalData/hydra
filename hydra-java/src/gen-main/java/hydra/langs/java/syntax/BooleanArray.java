@@ -62,9 +62,7 @@ public abstract class BooleanArray implements Serializable {
     public final hydra.langs.java.syntax.BooleanArray value;
     
     public Array (hydra.langs.java.syntax.BooleanArray value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

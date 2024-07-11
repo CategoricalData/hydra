@@ -12,12 +12,8 @@ public class NumericFacet_Sequence implements Serializable {
   public final hydra.langs.shex.syntax.NumericLiteral numericLiteral;
   
   public NumericFacet_Sequence (hydra.langs.shex.syntax.NumericRange numericRange, hydra.langs.shex.syntax.NumericLiteral numericLiteral) {
-    if (numericRange == null) {
-      throw new IllegalArgumentException("null value for 'numericRange' argument");
-    }
-    if (numericLiteral == null) {
-      throw new IllegalArgumentException("null value for 'numericLiteral' argument");
-    }
+    java.util.Objects.requireNonNull((numericRange));
+    java.util.Objects.requireNonNull((numericLiteral));
     this.numericRange = numericRange;
     this.numericLiteral = numericLiteral;
   }
@@ -37,16 +33,12 @@ public class NumericFacet_Sequence implements Serializable {
   }
   
   public NumericFacet_Sequence withNumericRange(hydra.langs.shex.syntax.NumericRange numericRange) {
-    if (numericRange == null) {
-      throw new IllegalArgumentException("null value for 'numericRange' argument");
-    }
+    java.util.Objects.requireNonNull((numericRange));
     return new NumericFacet_Sequence(numericRange, numericLiteral);
   }
   
   public NumericFacet_Sequence withNumericLiteral(hydra.langs.shex.syntax.NumericLiteral numericLiteral) {
-    if (numericLiteral == null) {
-      throw new IllegalArgumentException("null value for 'numericLiteral' argument");
-    }
+    java.util.Objects.requireNonNull((numericLiteral));
     return new NumericFacet_Sequence(numericRange, numericLiteral);
   }
 }

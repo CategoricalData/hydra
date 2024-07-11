@@ -10,9 +10,7 @@ public class Data_New implements Serializable {
   public final hydra.langs.scala.meta.Init init;
   
   public Data_New (hydra.langs.scala.meta.Init init) {
-    if (init == null) {
-      throw new IllegalArgumentException("null value for 'init' argument");
-    }
+    java.util.Objects.requireNonNull((init));
     this.init = init;
   }
   

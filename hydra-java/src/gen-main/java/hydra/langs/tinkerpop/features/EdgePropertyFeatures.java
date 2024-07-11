@@ -13,9 +13,7 @@ public class EdgePropertyFeatures implements Serializable {
   public final hydra.langs.tinkerpop.features.PropertyFeatures propertyFeatures;
   
   public EdgePropertyFeatures (hydra.langs.tinkerpop.features.PropertyFeatures propertyFeatures) {
-    if (propertyFeatures == null) {
-      throw new IllegalArgumentException("null value for 'propertyFeatures' argument");
-    }
+    java.util.Objects.requireNonNull((propertyFeatures));
     this.propertyFeatures = propertyFeatures;
   }
   

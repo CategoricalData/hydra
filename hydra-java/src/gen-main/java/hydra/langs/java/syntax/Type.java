@@ -37,9 +37,7 @@ public abstract class Type implements Serializable {
     public final hydra.langs.java.syntax.PrimitiveTypeWithAnnotations value;
     
     public Primitive (hydra.langs.java.syntax.PrimitiveTypeWithAnnotations value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class Type implements Serializable {
     public final hydra.langs.java.syntax.ReferenceType value;
     
     public Reference (hydra.langs.java.syntax.ReferenceType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

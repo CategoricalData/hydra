@@ -12,12 +12,8 @@ public class Type_Project implements Serializable {
   public final hydra.langs.scala.meta.Type_Name name;
   
   public Type_Project (hydra.langs.scala.meta.Type qual, hydra.langs.scala.meta.Type_Name name) {
-    if (qual == null) {
-      throw new IllegalArgumentException("null value for 'qual' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((qual));
+    java.util.Objects.requireNonNull((name));
     this.qual = qual;
     this.name = name;
   }
@@ -37,16 +33,12 @@ public class Type_Project implements Serializable {
   }
   
   public Type_Project withQual(hydra.langs.scala.meta.Type qual) {
-    if (qual == null) {
-      throw new IllegalArgumentException("null value for 'qual' argument");
-    }
+    java.util.Objects.requireNonNull((qual));
     return new Type_Project(qual, name);
   }
   
   public Type_Project withName(hydra.langs.scala.meta.Type_Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Type_Project(qual, name);
   }
 }

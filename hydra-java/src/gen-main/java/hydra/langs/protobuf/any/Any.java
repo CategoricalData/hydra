@@ -18,12 +18,8 @@ public class Any implements Serializable {
   public final String value;
   
   public Any (String typeUrl, String value) {
-    if (typeUrl == null) {
-      throw new IllegalArgumentException("null value for 'typeUrl' argument");
-    }
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((typeUrl));
+    java.util.Objects.requireNonNull((value));
     this.typeUrl = typeUrl;
     this.value = value;
   }
@@ -43,16 +39,12 @@ public class Any implements Serializable {
   }
   
   public Any withTypeUrl(String typeUrl) {
-    if (typeUrl == null) {
-      throw new IllegalArgumentException("null value for 'typeUrl' argument");
-    }
+    java.util.Objects.requireNonNull((typeUrl));
     return new Any(typeUrl, value);
   }
   
   public Any withValue(String value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     return new Any(typeUrl, value);
   }
 }

@@ -37,9 +37,7 @@ public abstract class DirectiveLocations implements Serializable {
     public final hydra.langs.graphql.syntax.DirectiveLocations_Sequence value;
     
     public Sequence (hydra.langs.graphql.syntax.DirectiveLocations_Sequence value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class DirectiveLocations implements Serializable {
     public final hydra.langs.graphql.syntax.DirectiveLocations_Sequence2 value;
     
     public Sequence2 (hydra.langs.graphql.syntax.DirectiveLocations_Sequence2 value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

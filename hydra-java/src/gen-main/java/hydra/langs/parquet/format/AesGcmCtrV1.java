@@ -17,15 +17,9 @@ public class AesGcmCtrV1 implements Serializable {
   public final hydra.util.Opt<Boolean> supplyAadPrefix;
   
   public AesGcmCtrV1 (hydra.util.Opt<String> aadPrefix, hydra.util.Opt<String> aadFileUnique, hydra.util.Opt<Boolean> supplyAadPrefix) {
-    if (aadPrefix == null) {
-      throw new IllegalArgumentException("null value for 'aadPrefix' argument");
-    }
-    if (aadFileUnique == null) {
-      throw new IllegalArgumentException("null value for 'aadFileUnique' argument");
-    }
-    if (supplyAadPrefix == null) {
-      throw new IllegalArgumentException("null value for 'supplyAadPrefix' argument");
-    }
+    java.util.Objects.requireNonNull((aadPrefix));
+    java.util.Objects.requireNonNull((aadFileUnique));
+    java.util.Objects.requireNonNull((supplyAadPrefix));
     this.aadPrefix = aadPrefix;
     this.aadFileUnique = aadFileUnique;
     this.supplyAadPrefix = supplyAadPrefix;
@@ -46,23 +40,17 @@ public class AesGcmCtrV1 implements Serializable {
   }
   
   public AesGcmCtrV1 withAadPrefix(hydra.util.Opt<String> aadPrefix) {
-    if (aadPrefix == null) {
-      throw new IllegalArgumentException("null value for 'aadPrefix' argument");
-    }
+    java.util.Objects.requireNonNull((aadPrefix));
     return new AesGcmCtrV1(aadPrefix, aadFileUnique, supplyAadPrefix);
   }
   
   public AesGcmCtrV1 withAadFileUnique(hydra.util.Opt<String> aadFileUnique) {
-    if (aadFileUnique == null) {
-      throw new IllegalArgumentException("null value for 'aadFileUnique' argument");
-    }
+    java.util.Objects.requireNonNull((aadFileUnique));
     return new AesGcmCtrV1(aadPrefix, aadFileUnique, supplyAadPrefix);
   }
   
   public AesGcmCtrV1 withSupplyAadPrefix(hydra.util.Opt<Boolean> supplyAadPrefix) {
-    if (supplyAadPrefix == null) {
-      throw new IllegalArgumentException("null value for 'supplyAadPrefix' argument");
-    }
+    java.util.Objects.requireNonNull((supplyAadPrefix));
     return new AesGcmCtrV1(aadPrefix, aadFileUnique, supplyAadPrefix);
   }
 }

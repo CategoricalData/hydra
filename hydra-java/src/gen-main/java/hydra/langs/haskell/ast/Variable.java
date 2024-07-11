@@ -10,9 +10,7 @@ public class Variable implements Serializable {
   public final hydra.langs.haskell.ast.Name value;
   
   public Variable (hydra.langs.haskell.ast.Name value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

@@ -12,12 +12,8 @@ public class Defn_RepeatedEnumCase implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Data_Name> cases;
   
   public Defn_RepeatedEnumCase (java.util.List<hydra.langs.scala.meta.Mod> mods, java.util.List<hydra.langs.scala.meta.Data_Name> cases) {
-    if (mods == null) {
-      throw new IllegalArgumentException("null value for 'mods' argument");
-    }
-    if (cases == null) {
-      throw new IllegalArgumentException("null value for 'cases' argument");
-    }
+    java.util.Objects.requireNonNull((mods));
+    java.util.Objects.requireNonNull((cases));
     this.mods = mods;
     this.cases = cases;
   }
@@ -37,16 +33,12 @@ public class Defn_RepeatedEnumCase implements Serializable {
   }
   
   public Defn_RepeatedEnumCase withMods(java.util.List<hydra.langs.scala.meta.Mod> mods) {
-    if (mods == null) {
-      throw new IllegalArgumentException("null value for 'mods' argument");
-    }
+    java.util.Objects.requireNonNull((mods));
     return new Defn_RepeatedEnumCase(mods, cases);
   }
   
   public Defn_RepeatedEnumCase withCases(java.util.List<hydra.langs.scala.meta.Data_Name> cases) {
-    if (cases == null) {
-      throw new IllegalArgumentException("null value for 'cases' argument");
-    }
+    java.util.Objects.requireNonNull((cases));
     return new Defn_RepeatedEnumCase(mods, cases);
   }
 }

@@ -12,12 +12,8 @@ public class HasTraversalTokenArgs implements Serializable {
   public final hydra.langs.tinkerpop.gremlin.HasTraversalTokenArgsRest rest;
   
   public HasTraversalTokenArgs (hydra.langs.tinkerpop.gremlin.TraversalTokenArgument traversalToken, hydra.langs.tinkerpop.gremlin.HasTraversalTokenArgsRest rest) {
-    if (traversalToken == null) {
-      throw new IllegalArgumentException("null value for 'traversalToken' argument");
-    }
-    if (rest == null) {
-      throw new IllegalArgumentException("null value for 'rest' argument");
-    }
+    java.util.Objects.requireNonNull((traversalToken));
+    java.util.Objects.requireNonNull((rest));
     this.traversalToken = traversalToken;
     this.rest = rest;
   }
@@ -37,16 +33,12 @@ public class HasTraversalTokenArgs implements Serializable {
   }
   
   public HasTraversalTokenArgs withTraversalToken(hydra.langs.tinkerpop.gremlin.TraversalTokenArgument traversalToken) {
-    if (traversalToken == null) {
-      throw new IllegalArgumentException("null value for 'traversalToken' argument");
-    }
+    java.util.Objects.requireNonNull((traversalToken));
     return new HasTraversalTokenArgs(traversalToken, rest);
   }
   
   public HasTraversalTokenArgs withRest(hydra.langs.tinkerpop.gremlin.HasTraversalTokenArgsRest rest) {
-    if (rest == null) {
-      throw new IllegalArgumentException("null value for 'rest' argument");
-    }
+    java.util.Objects.requireNonNull((rest));
     return new HasTraversalTokenArgs(traversalToken, rest);
   }
 }

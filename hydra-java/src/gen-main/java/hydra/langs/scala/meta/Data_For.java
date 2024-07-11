@@ -10,9 +10,7 @@ public class Data_For implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Enumerator> enums;
   
   public Data_For (java.util.List<hydra.langs.scala.meta.Enumerator> enums) {
-    if (enums == null) {
-      throw new IllegalArgumentException("null value for 'enums' argument");
-    }
+    java.util.Objects.requireNonNull((enums));
     this.enums = enums;
   }
   

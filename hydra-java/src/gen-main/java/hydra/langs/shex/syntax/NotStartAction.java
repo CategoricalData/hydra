@@ -37,9 +37,7 @@ public abstract class NotStartAction implements Serializable {
     public final hydra.langs.shex.syntax.ShapeExpression value;
     
     public Start (hydra.langs.shex.syntax.ShapeExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class NotStartAction implements Serializable {
     public final hydra.langs.shex.syntax.NotStartAction_ShapeExprDecl value;
     
     public ShapeExprDecl (hydra.langs.shex.syntax.NotStartAction_ShapeExprDecl value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

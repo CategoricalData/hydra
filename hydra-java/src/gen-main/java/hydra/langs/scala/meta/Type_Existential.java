@@ -12,12 +12,8 @@ public class Type_Existential implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Stat> stats;
   
   public Type_Existential (hydra.langs.scala.meta.Type tpe, java.util.List<hydra.langs.scala.meta.Stat> stats) {
-    if (tpe == null) {
-      throw new IllegalArgumentException("null value for 'tpe' argument");
-    }
-    if (stats == null) {
-      throw new IllegalArgumentException("null value for 'stats' argument");
-    }
+    java.util.Objects.requireNonNull((tpe));
+    java.util.Objects.requireNonNull((stats));
     this.tpe = tpe;
     this.stats = stats;
   }
@@ -37,16 +33,12 @@ public class Type_Existential implements Serializable {
   }
   
   public Type_Existential withTpe(hydra.langs.scala.meta.Type tpe) {
-    if (tpe == null) {
-      throw new IllegalArgumentException("null value for 'tpe' argument");
-    }
+    java.util.Objects.requireNonNull((tpe));
     return new Type_Existential(tpe, stats);
   }
   
   public Type_Existential withStats(java.util.List<hydra.langs.scala.meta.Stat> stats) {
-    if (stats == null) {
-      throw new IllegalArgumentException("null value for 'stats' argument");
-    }
+    java.util.Objects.requireNonNull((stats));
     return new Type_Existential(tpe, stats);
   }
 }

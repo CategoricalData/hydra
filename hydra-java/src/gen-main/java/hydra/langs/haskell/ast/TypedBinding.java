@@ -12,12 +12,8 @@ public class TypedBinding implements Serializable {
   public final hydra.langs.haskell.ast.ValueBinding valueBinding;
   
   public TypedBinding (hydra.langs.haskell.ast.TypeSignature typeSignature, hydra.langs.haskell.ast.ValueBinding valueBinding) {
-    if (typeSignature == null) {
-      throw new IllegalArgumentException("null value for 'typeSignature' argument");
-    }
-    if (valueBinding == null) {
-      throw new IllegalArgumentException("null value for 'valueBinding' argument");
-    }
+    java.util.Objects.requireNonNull((typeSignature));
+    java.util.Objects.requireNonNull((valueBinding));
     this.typeSignature = typeSignature;
     this.valueBinding = valueBinding;
   }
@@ -37,16 +33,12 @@ public class TypedBinding implements Serializable {
   }
   
   public TypedBinding withTypeSignature(hydra.langs.haskell.ast.TypeSignature typeSignature) {
-    if (typeSignature == null) {
-      throw new IllegalArgumentException("null value for 'typeSignature' argument");
-    }
+    java.util.Objects.requireNonNull((typeSignature));
     return new TypedBinding(typeSignature, valueBinding);
   }
   
   public TypedBinding withValueBinding(hydra.langs.haskell.ast.ValueBinding valueBinding) {
-    if (valueBinding == null) {
-      throw new IllegalArgumentException("null value for 'valueBinding' argument");
-    }
+    java.util.Objects.requireNonNull((valueBinding));
     return new TypedBinding(typeSignature, valueBinding);
   }
 }

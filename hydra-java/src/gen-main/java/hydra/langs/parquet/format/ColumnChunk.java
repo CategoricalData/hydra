@@ -50,33 +50,15 @@ public class ColumnChunk implements Serializable {
   public final hydra.util.Opt<String> encryptedColumnMetadata;
   
   public ColumnChunk (hydra.util.Opt<String> filePath, Long fileOffset, hydra.util.Opt<hydra.langs.parquet.format.ColumnMetaData> metaData, hydra.util.Opt<Long> offsetIndexOffset, hydra.util.Opt<Integer> offsetIndexLength, hydra.util.Opt<Long> columnIndexOffset, hydra.util.Opt<Integer> columnIndexLength, hydra.util.Opt<hydra.langs.parquet.format.ColumnCryptoMetaData> cryptoMetadata, hydra.util.Opt<String> encryptedColumnMetadata) {
-    if (filePath == null) {
-      throw new IllegalArgumentException("null value for 'filePath' argument");
-    }
-    if (fileOffset == null) {
-      throw new IllegalArgumentException("null value for 'fileOffset' argument");
-    }
-    if (metaData == null) {
-      throw new IllegalArgumentException("null value for 'metaData' argument");
-    }
-    if (offsetIndexOffset == null) {
-      throw new IllegalArgumentException("null value for 'offsetIndexOffset' argument");
-    }
-    if (offsetIndexLength == null) {
-      throw new IllegalArgumentException("null value for 'offsetIndexLength' argument");
-    }
-    if (columnIndexOffset == null) {
-      throw new IllegalArgumentException("null value for 'columnIndexOffset' argument");
-    }
-    if (columnIndexLength == null) {
-      throw new IllegalArgumentException("null value for 'columnIndexLength' argument");
-    }
-    if (cryptoMetadata == null) {
-      throw new IllegalArgumentException("null value for 'cryptoMetadata' argument");
-    }
-    if (encryptedColumnMetadata == null) {
-      throw new IllegalArgumentException("null value for 'encryptedColumnMetadata' argument");
-    }
+    java.util.Objects.requireNonNull((filePath));
+    java.util.Objects.requireNonNull((fileOffset));
+    java.util.Objects.requireNonNull((metaData));
+    java.util.Objects.requireNonNull((offsetIndexOffset));
+    java.util.Objects.requireNonNull((offsetIndexLength));
+    java.util.Objects.requireNonNull((columnIndexOffset));
+    java.util.Objects.requireNonNull((columnIndexLength));
+    java.util.Objects.requireNonNull((cryptoMetadata));
+    java.util.Objects.requireNonNull((encryptedColumnMetadata));
     this.filePath = filePath;
     this.fileOffset = fileOffset;
     this.metaData = metaData;
@@ -103,65 +85,47 @@ public class ColumnChunk implements Serializable {
   }
   
   public ColumnChunk withFilePath(hydra.util.Opt<String> filePath) {
-    if (filePath == null) {
-      throw new IllegalArgumentException("null value for 'filePath' argument");
-    }
+    java.util.Objects.requireNonNull((filePath));
     return new ColumnChunk(filePath, fileOffset, metaData, offsetIndexOffset, offsetIndexLength, columnIndexOffset, columnIndexLength, cryptoMetadata, encryptedColumnMetadata);
   }
   
   public ColumnChunk withFileOffset(Long fileOffset) {
-    if (fileOffset == null) {
-      throw new IllegalArgumentException("null value for 'fileOffset' argument");
-    }
+    java.util.Objects.requireNonNull((fileOffset));
     return new ColumnChunk(filePath, fileOffset, metaData, offsetIndexOffset, offsetIndexLength, columnIndexOffset, columnIndexLength, cryptoMetadata, encryptedColumnMetadata);
   }
   
   public ColumnChunk withMetaData(hydra.util.Opt<hydra.langs.parquet.format.ColumnMetaData> metaData) {
-    if (metaData == null) {
-      throw new IllegalArgumentException("null value for 'metaData' argument");
-    }
+    java.util.Objects.requireNonNull((metaData));
     return new ColumnChunk(filePath, fileOffset, metaData, offsetIndexOffset, offsetIndexLength, columnIndexOffset, columnIndexLength, cryptoMetadata, encryptedColumnMetadata);
   }
   
   public ColumnChunk withOffsetIndexOffset(hydra.util.Opt<Long> offsetIndexOffset) {
-    if (offsetIndexOffset == null) {
-      throw new IllegalArgumentException("null value for 'offsetIndexOffset' argument");
-    }
+    java.util.Objects.requireNonNull((offsetIndexOffset));
     return new ColumnChunk(filePath, fileOffset, metaData, offsetIndexOffset, offsetIndexLength, columnIndexOffset, columnIndexLength, cryptoMetadata, encryptedColumnMetadata);
   }
   
   public ColumnChunk withOffsetIndexLength(hydra.util.Opt<Integer> offsetIndexLength) {
-    if (offsetIndexLength == null) {
-      throw new IllegalArgumentException("null value for 'offsetIndexLength' argument");
-    }
+    java.util.Objects.requireNonNull((offsetIndexLength));
     return new ColumnChunk(filePath, fileOffset, metaData, offsetIndexOffset, offsetIndexLength, columnIndexOffset, columnIndexLength, cryptoMetadata, encryptedColumnMetadata);
   }
   
   public ColumnChunk withColumnIndexOffset(hydra.util.Opt<Long> columnIndexOffset) {
-    if (columnIndexOffset == null) {
-      throw new IllegalArgumentException("null value for 'columnIndexOffset' argument");
-    }
+    java.util.Objects.requireNonNull((columnIndexOffset));
     return new ColumnChunk(filePath, fileOffset, metaData, offsetIndexOffset, offsetIndexLength, columnIndexOffset, columnIndexLength, cryptoMetadata, encryptedColumnMetadata);
   }
   
   public ColumnChunk withColumnIndexLength(hydra.util.Opt<Integer> columnIndexLength) {
-    if (columnIndexLength == null) {
-      throw new IllegalArgumentException("null value for 'columnIndexLength' argument");
-    }
+    java.util.Objects.requireNonNull((columnIndexLength));
     return new ColumnChunk(filePath, fileOffset, metaData, offsetIndexOffset, offsetIndexLength, columnIndexOffset, columnIndexLength, cryptoMetadata, encryptedColumnMetadata);
   }
   
   public ColumnChunk withCryptoMetadata(hydra.util.Opt<hydra.langs.parquet.format.ColumnCryptoMetaData> cryptoMetadata) {
-    if (cryptoMetadata == null) {
-      throw new IllegalArgumentException("null value for 'cryptoMetadata' argument");
-    }
+    java.util.Objects.requireNonNull((cryptoMetadata));
     return new ColumnChunk(filePath, fileOffset, metaData, offsetIndexOffset, offsetIndexLength, columnIndexOffset, columnIndexLength, cryptoMetadata, encryptedColumnMetadata);
   }
   
   public ColumnChunk withEncryptedColumnMetadata(hydra.util.Opt<String> encryptedColumnMetadata) {
-    if (encryptedColumnMetadata == null) {
-      throw new IllegalArgumentException("null value for 'encryptedColumnMetadata' argument");
-    }
+    java.util.Objects.requireNonNull((encryptedColumnMetadata));
     return new ColumnChunk(filePath, fileOffset, metaData, offsetIndexOffset, offsetIndexLength, columnIndexOffset, columnIndexLength, cryptoMetadata, encryptedColumnMetadata);
   }
 }

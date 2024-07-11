@@ -12,12 +12,8 @@ public class InsertStatement implements Serializable {
   public final hydra.langs.sql.ansi.InsertColumnsAndSource columnsAndSource;
   
   public InsertStatement (hydra.langs.sql.ansi.InsertionTarget target, hydra.langs.sql.ansi.InsertColumnsAndSource columnsAndSource) {
-    if (target == null) {
-      throw new IllegalArgumentException("null value for 'target' argument");
-    }
-    if (columnsAndSource == null) {
-      throw new IllegalArgumentException("null value for 'columnsAndSource' argument");
-    }
+    java.util.Objects.requireNonNull((target));
+    java.util.Objects.requireNonNull((columnsAndSource));
     this.target = target;
     this.columnsAndSource = columnsAndSource;
   }
@@ -37,16 +33,12 @@ public class InsertStatement implements Serializable {
   }
   
   public InsertStatement withTarget(hydra.langs.sql.ansi.InsertionTarget target) {
-    if (target == null) {
-      throw new IllegalArgumentException("null value for 'target' argument");
-    }
+    java.util.Objects.requireNonNull((target));
     return new InsertStatement(target, columnsAndSource);
   }
   
   public InsertStatement withColumnsAndSource(hydra.langs.sql.ansi.InsertColumnsAndSource columnsAndSource) {
-    if (columnsAndSource == null) {
-      throw new IllegalArgumentException("null value for 'columnsAndSource' argument");
-    }
+    java.util.Objects.requireNonNull((columnsAndSource));
     return new InsertStatement(target, columnsAndSource);
   }
 }

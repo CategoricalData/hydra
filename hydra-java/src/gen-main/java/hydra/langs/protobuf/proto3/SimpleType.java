@@ -40,9 +40,7 @@ public abstract class SimpleType implements Serializable {
     public final hydra.langs.protobuf.proto3.TypeName value;
     
     public Reference (hydra.langs.protobuf.proto3.TypeName value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -70,9 +68,7 @@ public abstract class SimpleType implements Serializable {
     public final hydra.langs.protobuf.proto3.ScalarType value;
     
     public Scalar (hydra.langs.protobuf.proto3.ScalarType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

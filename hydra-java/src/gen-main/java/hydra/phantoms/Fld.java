@@ -13,9 +13,7 @@ public class Fld<A> implements Serializable {
   public final hydra.core.Field<hydra.compute.Kv> value;
   
   public Fld (hydra.core.Field<hydra.compute.Kv> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

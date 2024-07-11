@@ -40,9 +40,7 @@ public abstract class Export implements Serializable {
     public final hydra.langs.haskell.ast.ImportExportSpec value;
     
     public Declaration (hydra.langs.haskell.ast.ImportExportSpec value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -70,9 +68,7 @@ public abstract class Export implements Serializable {
     public final hydra.langs.haskell.ast.ModuleName value;
     
     public Module (hydra.langs.haskell.ast.ModuleName value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

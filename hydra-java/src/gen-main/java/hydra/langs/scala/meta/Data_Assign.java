@@ -12,12 +12,8 @@ public class Data_Assign implements Serializable {
   public final hydra.langs.scala.meta.Data rhs;
   
   public Data_Assign (hydra.langs.scala.meta.Data lhs, hydra.langs.scala.meta.Data rhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
+    java.util.Objects.requireNonNull((rhs));
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -37,16 +33,12 @@ public class Data_Assign implements Serializable {
   }
   
   public Data_Assign withLhs(hydra.langs.scala.meta.Data lhs) {
-    if (lhs == null) {
-      throw new IllegalArgumentException("null value for 'lhs' argument");
-    }
+    java.util.Objects.requireNonNull((lhs));
     return new Data_Assign(lhs, rhs);
   }
   
   public Data_Assign withRhs(hydra.langs.scala.meta.Data rhs) {
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((rhs));
     return new Data_Assign(lhs, rhs);
   }
 }

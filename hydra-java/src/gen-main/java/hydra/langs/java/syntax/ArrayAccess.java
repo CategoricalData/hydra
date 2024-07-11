@@ -12,12 +12,8 @@ public class ArrayAccess implements Serializable {
   public final hydra.langs.java.syntax.ArrayAccess_Variant variant;
   
   public ArrayAccess (hydra.util.Opt<hydra.langs.java.syntax.Expression> expression, hydra.langs.java.syntax.ArrayAccess_Variant variant) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
-    if (variant == null) {
-      throw new IllegalArgumentException("null value for 'variant' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
+    java.util.Objects.requireNonNull((variant));
     this.expression = expression;
     this.variant = variant;
   }
@@ -37,16 +33,12 @@ public class ArrayAccess implements Serializable {
   }
   
   public ArrayAccess withExpression(hydra.util.Opt<hydra.langs.java.syntax.Expression> expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new ArrayAccess(expression, variant);
   }
   
   public ArrayAccess withVariant(hydra.langs.java.syntax.ArrayAccess_Variant variant) {
-    if (variant == null) {
-      throw new IllegalArgumentException("null value for 'variant' argument");
-    }
+    java.util.Objects.requireNonNull((variant));
     return new ArrayAccess(expression, variant);
   }
 }

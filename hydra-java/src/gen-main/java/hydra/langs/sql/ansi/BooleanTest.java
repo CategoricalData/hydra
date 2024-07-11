@@ -12,12 +12,8 @@ public class BooleanTest implements Serializable {
   public final hydra.util.Opt<hydra.langs.sql.ansi.BooleanTest_Sequence_Option> sequence;
   
   public BooleanTest (hydra.langs.sql.ansi.BooleanPrimary booleanPrimary, hydra.util.Opt<hydra.langs.sql.ansi.BooleanTest_Sequence_Option> sequence) {
-    if (booleanPrimary == null) {
-      throw new IllegalArgumentException("null value for 'booleanPrimary' argument");
-    }
-    if (sequence == null) {
-      throw new IllegalArgumentException("null value for 'sequence' argument");
-    }
+    java.util.Objects.requireNonNull((booleanPrimary));
+    java.util.Objects.requireNonNull((sequence));
     this.booleanPrimary = booleanPrimary;
     this.sequence = sequence;
   }
@@ -37,16 +33,12 @@ public class BooleanTest implements Serializable {
   }
   
   public BooleanTest withBooleanPrimary(hydra.langs.sql.ansi.BooleanPrimary booleanPrimary) {
-    if (booleanPrimary == null) {
-      throw new IllegalArgumentException("null value for 'booleanPrimary' argument");
-    }
+    java.util.Objects.requireNonNull((booleanPrimary));
     return new BooleanTest(booleanPrimary, sequence);
   }
   
   public BooleanTest withSequence(hydra.util.Opt<hydra.langs.sql.ansi.BooleanTest_Sequence_Option> sequence) {
-    if (sequence == null) {
-      throw new IllegalArgumentException("null value for 'sequence' argument");
-    }
+    java.util.Objects.requireNonNull((sequence));
     return new BooleanTest(booleanPrimary, sequence);
   }
 }

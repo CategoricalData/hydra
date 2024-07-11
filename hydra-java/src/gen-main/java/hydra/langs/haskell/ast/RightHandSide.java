@@ -10,9 +10,7 @@ public class RightHandSide implements Serializable {
   public final hydra.langs.haskell.ast.Expression value;
   
   public RightHandSide (hydra.langs.haskell.ast.Expression value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

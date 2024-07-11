@@ -12,12 +12,8 @@ public class Data_Apply implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Data> args;
   
   public Data_Apply (hydra.langs.scala.meta.Data fun, java.util.List<hydra.langs.scala.meta.Data> args) {
-    if (fun == null) {
-      throw new IllegalArgumentException("null value for 'fun' argument");
-    }
-    if (args == null) {
-      throw new IllegalArgumentException("null value for 'args' argument");
-    }
+    java.util.Objects.requireNonNull((fun));
+    java.util.Objects.requireNonNull((args));
     this.fun = fun;
     this.args = args;
   }
@@ -37,16 +33,12 @@ public class Data_Apply implements Serializable {
   }
   
   public Data_Apply withFun(hydra.langs.scala.meta.Data fun) {
-    if (fun == null) {
-      throw new IllegalArgumentException("null value for 'fun' argument");
-    }
+    java.util.Objects.requireNonNull((fun));
     return new Data_Apply(fun, args);
   }
   
   public Data_Apply withArgs(java.util.List<hydra.langs.scala.meta.Data> args) {
-    if (args == null) {
-      throw new IllegalArgumentException("null value for 'args' argument");
-    }
+    java.util.Objects.requireNonNull((args));
     return new Data_Apply(fun, args);
   }
 }

@@ -76,9 +76,7 @@ public abstract class Axiom implements Serializable {
     public final hydra.langs.owl.syntax.AnnotationAxiom value;
     
     public AnnotationAxiom (hydra.langs.owl.syntax.AnnotationAxiom value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -106,9 +104,7 @@ public abstract class Axiom implements Serializable {
     public final hydra.langs.owl.syntax.Assertion value;
     
     public Assertion (hydra.langs.owl.syntax.Assertion value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -136,9 +132,7 @@ public abstract class Axiom implements Serializable {
     public final hydra.langs.owl.syntax.ClassAxiom value;
     
     public ClassAxiom (hydra.langs.owl.syntax.ClassAxiom value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -166,9 +160,7 @@ public abstract class Axiom implements Serializable {
     public final hydra.langs.owl.syntax.DataPropertyAxiom value;
     
     public DataPropertyAxiom (hydra.langs.owl.syntax.DataPropertyAxiom value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -196,9 +188,7 @@ public abstract class Axiom implements Serializable {
     public final hydra.langs.owl.syntax.DatatypeDefinition value;
     
     public DatatypeDefinition (hydra.langs.owl.syntax.DatatypeDefinition value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -226,9 +216,7 @@ public abstract class Axiom implements Serializable {
     public final hydra.langs.owl.syntax.Declaration value;
     
     public Declaration (hydra.langs.owl.syntax.Declaration value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -256,9 +244,7 @@ public abstract class Axiom implements Serializable {
     public final hydra.langs.owl.syntax.HasKey value;
     
     public HasKey (hydra.langs.owl.syntax.HasKey value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -286,9 +272,7 @@ public abstract class Axiom implements Serializable {
     public final hydra.langs.owl.syntax.ObjectPropertyAxiom value;
     
     public ObjectPropertyAxiom (hydra.langs.owl.syntax.ObjectPropertyAxiom value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

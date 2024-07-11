@@ -10,9 +10,7 @@ public class AnnotationTypeBody implements Serializable {
   public final java.util.List<java.util.List<hydra.langs.java.syntax.AnnotationTypeMemberDeclaration>> value;
   
   public AnnotationTypeBody (java.util.List<java.util.List<hydra.langs.java.syntax.AnnotationTypeMemberDeclaration>> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

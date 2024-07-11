@@ -37,9 +37,7 @@ public abstract class ConcatArgs implements Serializable {
     public final java.util.List<hydra.langs.tinkerpop.gremlin.NestedTraversal> value;
     
     public Traversal (java.util.List<hydra.langs.tinkerpop.gremlin.NestedTraversal> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class ConcatArgs implements Serializable {
     public final java.util.List<hydra.langs.tinkerpop.gremlin.StringNullableArgument> value;
     
     public String_ (java.util.List<hydra.langs.tinkerpop.gremlin.StringNullableArgument> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

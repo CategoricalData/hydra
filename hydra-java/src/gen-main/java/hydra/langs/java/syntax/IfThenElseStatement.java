@@ -14,15 +14,9 @@ public class IfThenElseStatement implements Serializable {
   public final hydra.langs.java.syntax.Statement else_;
   
   public IfThenElseStatement (hydra.util.Opt<hydra.langs.java.syntax.Expression> cond, hydra.langs.java.syntax.StatementNoShortIf then, hydra.langs.java.syntax.Statement else_) {
-    if (cond == null) {
-      throw new IllegalArgumentException("null value for 'cond' argument");
-    }
-    if (then == null) {
-      throw new IllegalArgumentException("null value for 'then' argument");
-    }
-    if (else_ == null) {
-      throw new IllegalArgumentException("null value for 'else' argument");
-    }
+    java.util.Objects.requireNonNull((cond));
+    java.util.Objects.requireNonNull((then));
+    java.util.Objects.requireNonNull((else_));
     this.cond = cond;
     this.then = then;
     this.else_ = else_;
@@ -43,23 +37,17 @@ public class IfThenElseStatement implements Serializable {
   }
   
   public IfThenElseStatement withCond(hydra.util.Opt<hydra.langs.java.syntax.Expression> cond) {
-    if (cond == null) {
-      throw new IllegalArgumentException("null value for 'cond' argument");
-    }
+    java.util.Objects.requireNonNull((cond));
     return new IfThenElseStatement(cond, then, else_);
   }
   
   public IfThenElseStatement withThen(hydra.langs.java.syntax.StatementNoShortIf then) {
-    if (then == null) {
-      throw new IllegalArgumentException("null value for 'then' argument");
-    }
+    java.util.Objects.requireNonNull((then));
     return new IfThenElseStatement(cond, then, else_);
   }
   
   public IfThenElseStatement withElse(hydra.langs.java.syntax.Statement else_) {
-    if (else_ == null) {
-      throw new IllegalArgumentException("null value for 'else' argument");
-    }
+    java.util.Objects.requireNonNull((else_));
     return new IfThenElseStatement(cond, then, else_);
   }
 }

@@ -10,9 +10,7 @@ public class Mod_Annot implements Serializable {
   public final hydra.langs.scala.meta.Init init;
   
   public Mod_Annot (hydra.langs.scala.meta.Init init) {
-    if (init == null) {
-      throw new IllegalArgumentException("null value for 'init' argument");
-    }
+    java.util.Objects.requireNonNull((init));
     this.init = init;
   }
   

@@ -14,15 +14,9 @@ public class NestedTraversalArgument implements Serializable {
   public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal3;
   
   public NestedTraversalArgument (hydra.langs.tinkerpop.gremlin.NestedTraversal traversal1, hydra.util.Opt<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal2, hydra.util.Opt<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal3) {
-    if (traversal1 == null) {
-      throw new IllegalArgumentException("null value for 'traversal1' argument");
-    }
-    if (traversal2 == null) {
-      throw new IllegalArgumentException("null value for 'traversal2' argument");
-    }
-    if (traversal3 == null) {
-      throw new IllegalArgumentException("null value for 'traversal3' argument");
-    }
+    java.util.Objects.requireNonNull((traversal1));
+    java.util.Objects.requireNonNull((traversal2));
+    java.util.Objects.requireNonNull((traversal3));
     this.traversal1 = traversal1;
     this.traversal2 = traversal2;
     this.traversal3 = traversal3;
@@ -43,23 +37,17 @@ public class NestedTraversalArgument implements Serializable {
   }
   
   public NestedTraversalArgument withTraversal1(hydra.langs.tinkerpop.gremlin.NestedTraversal traversal1) {
-    if (traversal1 == null) {
-      throw new IllegalArgumentException("null value for 'traversal1' argument");
-    }
+    java.util.Objects.requireNonNull((traversal1));
     return new NestedTraversalArgument(traversal1, traversal2, traversal3);
   }
   
   public NestedTraversalArgument withTraversal2(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal2) {
-    if (traversal2 == null) {
-      throw new IllegalArgumentException("null value for 'traversal2' argument");
-    }
+    java.util.Objects.requireNonNull((traversal2));
     return new NestedTraversalArgument(traversal1, traversal2, traversal3);
   }
   
   public NestedTraversalArgument withTraversal3(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.NestedTraversal> traversal3) {
-    if (traversal3 == null) {
-      throw new IllegalArgumentException("null value for 'traversal3' argument");
-    }
+    java.util.Objects.requireNonNull((traversal3));
     return new NestedTraversalArgument(traversal1, traversal2, traversal3);
   }
 }

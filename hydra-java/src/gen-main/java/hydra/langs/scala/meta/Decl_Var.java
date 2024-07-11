@@ -14,15 +14,9 @@ public class Decl_Var implements Serializable {
   public final hydra.langs.scala.meta.Type decltpe;
   
   public Decl_Var (java.util.List<hydra.langs.scala.meta.Mod> mods, java.util.List<hydra.langs.scala.meta.Pat> pats, hydra.langs.scala.meta.Type decltpe) {
-    if (mods == null) {
-      throw new IllegalArgumentException("null value for 'mods' argument");
-    }
-    if (pats == null) {
-      throw new IllegalArgumentException("null value for 'pats' argument");
-    }
-    if (decltpe == null) {
-      throw new IllegalArgumentException("null value for 'decltpe' argument");
-    }
+    java.util.Objects.requireNonNull((mods));
+    java.util.Objects.requireNonNull((pats));
+    java.util.Objects.requireNonNull((decltpe));
     this.mods = mods;
     this.pats = pats;
     this.decltpe = decltpe;
@@ -43,23 +37,17 @@ public class Decl_Var implements Serializable {
   }
   
   public Decl_Var withMods(java.util.List<hydra.langs.scala.meta.Mod> mods) {
-    if (mods == null) {
-      throw new IllegalArgumentException("null value for 'mods' argument");
-    }
+    java.util.Objects.requireNonNull((mods));
     return new Decl_Var(mods, pats, decltpe);
   }
   
   public Decl_Var withPats(java.util.List<hydra.langs.scala.meta.Pat> pats) {
-    if (pats == null) {
-      throw new IllegalArgumentException("null value for 'pats' argument");
-    }
+    java.util.Objects.requireNonNull((pats));
     return new Decl_Var(mods, pats, decltpe);
   }
   
   public Decl_Var withDecltpe(hydra.langs.scala.meta.Type decltpe) {
-    if (decltpe == null) {
-      throw new IllegalArgumentException("null value for 'decltpe' argument");
-    }
+    java.util.Objects.requireNonNull((decltpe));
     return new Decl_Var(mods, pats, decltpe);
   }
 }

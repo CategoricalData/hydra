@@ -49,9 +49,7 @@ public abstract class InlineShapeAtom implements Serializable {
     public final hydra.langs.shex.syntax.InlineShapeAtom_Sequence value;
     
     public Sequence (hydra.langs.shex.syntax.InlineShapeAtom_Sequence value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -79,9 +77,7 @@ public abstract class InlineShapeAtom implements Serializable {
     public final hydra.langs.shex.syntax.InlineShapeAtom_Sequence2 value;
     
     public Sequence2 (hydra.langs.shex.syntax.InlineShapeAtom_Sequence2 value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -109,9 +105,7 @@ public abstract class InlineShapeAtom implements Serializable {
     public final hydra.langs.shex.syntax.ShapeExpression value;
     
     public Sequence3 (hydra.langs.shex.syntax.ShapeExpression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

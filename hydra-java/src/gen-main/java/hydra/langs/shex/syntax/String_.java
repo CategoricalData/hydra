@@ -49,9 +49,7 @@ public abstract class String_ implements Serializable {
     public final hydra.langs.shex.syntax.StringLiteral1 value;
     
     public StringLiteral1 (hydra.langs.shex.syntax.StringLiteral1 value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -79,9 +77,7 @@ public abstract class String_ implements Serializable {
     public final hydra.langs.shex.syntax.StringLiteralLong1 value;
     
     public StringLiteralLong1 (hydra.langs.shex.syntax.StringLiteralLong1 value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -109,9 +105,7 @@ public abstract class String_ implements Serializable {
     public final hydra.langs.shex.syntax.StringLiteral2 value;
     
     public StringLiteral2 (hydra.langs.shex.syntax.StringLiteral2 value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -139,9 +133,7 @@ public abstract class String_ implements Serializable {
     public final hydra.langs.shex.syntax.StringLiteralLong2 value;
     
     public StringLiteralLong2 (hydra.langs.shex.syntax.StringLiteralLong2 value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

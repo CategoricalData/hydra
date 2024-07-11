@@ -14,15 +14,9 @@ public class Match implements Serializable {
   public final hydra.util.Opt<hydra.langs.cypher.openCypher.Where> where;
   
   public Match (Boolean optional, hydra.langs.cypher.openCypher.Pattern pattern, hydra.util.Opt<hydra.langs.cypher.openCypher.Where> where) {
-    if (optional == null) {
-      throw new IllegalArgumentException("null value for 'optional' argument");
-    }
-    if (pattern == null) {
-      throw new IllegalArgumentException("null value for 'pattern' argument");
-    }
-    if (where == null) {
-      throw new IllegalArgumentException("null value for 'where' argument");
-    }
+    java.util.Objects.requireNonNull((optional));
+    java.util.Objects.requireNonNull((pattern));
+    java.util.Objects.requireNonNull((where));
     this.optional = optional;
     this.pattern = pattern;
     this.where = where;
@@ -43,23 +37,17 @@ public class Match implements Serializable {
   }
   
   public Match withOptional(Boolean optional) {
-    if (optional == null) {
-      throw new IllegalArgumentException("null value for 'optional' argument");
-    }
+    java.util.Objects.requireNonNull((optional));
     return new Match(optional, pattern, where);
   }
   
   public Match withPattern(hydra.langs.cypher.openCypher.Pattern pattern) {
-    if (pattern == null) {
-      throw new IllegalArgumentException("null value for 'pattern' argument");
-    }
+    java.util.Objects.requireNonNull((pattern));
     return new Match(optional, pattern, where);
   }
   
   public Match withWhere(hydra.util.Opt<hydra.langs.cypher.openCypher.Where> where) {
-    if (where == null) {
-      throw new IllegalArgumentException("null value for 'where' argument");
-    }
+    java.util.Objects.requireNonNull((where));
     return new Match(optional, pattern, where);
   }
 }

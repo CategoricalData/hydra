@@ -51,30 +51,14 @@ public class GraphFeatures implements Serializable {
   public final hydra.langs.tinkerpop.features.VariableFeatures variables;
   
   public GraphFeatures (Boolean supportsComputer, Boolean supportsConcurrentAccess, Boolean supportsIoRead, Boolean supportsIoWrite, Boolean supportsPersistence, Boolean supportsThreadedTransactions, Boolean supportsTransactions, hydra.langs.tinkerpop.features.VariableFeatures variables) {
-    if (supportsComputer == null) {
-      throw new IllegalArgumentException("null value for 'supportsComputer' argument");
-    }
-    if (supportsConcurrentAccess == null) {
-      throw new IllegalArgumentException("null value for 'supportsConcurrentAccess' argument");
-    }
-    if (supportsIoRead == null) {
-      throw new IllegalArgumentException("null value for 'supportsIoRead' argument");
-    }
-    if (supportsIoWrite == null) {
-      throw new IllegalArgumentException("null value for 'supportsIoWrite' argument");
-    }
-    if (supportsPersistence == null) {
-      throw new IllegalArgumentException("null value for 'supportsPersistence' argument");
-    }
-    if (supportsThreadedTransactions == null) {
-      throw new IllegalArgumentException("null value for 'supportsThreadedTransactions' argument");
-    }
-    if (supportsTransactions == null) {
-      throw new IllegalArgumentException("null value for 'supportsTransactions' argument");
-    }
-    if (variables == null) {
-      throw new IllegalArgumentException("null value for 'variables' argument");
-    }
+    java.util.Objects.requireNonNull((supportsComputer));
+    java.util.Objects.requireNonNull((supportsConcurrentAccess));
+    java.util.Objects.requireNonNull((supportsIoRead));
+    java.util.Objects.requireNonNull((supportsIoWrite));
+    java.util.Objects.requireNonNull((supportsPersistence));
+    java.util.Objects.requireNonNull((supportsThreadedTransactions));
+    java.util.Objects.requireNonNull((supportsTransactions));
+    java.util.Objects.requireNonNull((variables));
     this.supportsComputer = supportsComputer;
     this.supportsConcurrentAccess = supportsConcurrentAccess;
     this.supportsIoRead = supportsIoRead;
@@ -100,58 +84,42 @@ public class GraphFeatures implements Serializable {
   }
   
   public GraphFeatures withSupportsComputer(Boolean supportsComputer) {
-    if (supportsComputer == null) {
-      throw new IllegalArgumentException("null value for 'supportsComputer' argument");
-    }
+    java.util.Objects.requireNonNull((supportsComputer));
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
   public GraphFeatures withSupportsConcurrentAccess(Boolean supportsConcurrentAccess) {
-    if (supportsConcurrentAccess == null) {
-      throw new IllegalArgumentException("null value for 'supportsConcurrentAccess' argument");
-    }
+    java.util.Objects.requireNonNull((supportsConcurrentAccess));
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
   public GraphFeatures withSupportsIoRead(Boolean supportsIoRead) {
-    if (supportsIoRead == null) {
-      throw new IllegalArgumentException("null value for 'supportsIoRead' argument");
-    }
+    java.util.Objects.requireNonNull((supportsIoRead));
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
   public GraphFeatures withSupportsIoWrite(Boolean supportsIoWrite) {
-    if (supportsIoWrite == null) {
-      throw new IllegalArgumentException("null value for 'supportsIoWrite' argument");
-    }
+    java.util.Objects.requireNonNull((supportsIoWrite));
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
   public GraphFeatures withSupportsPersistence(Boolean supportsPersistence) {
-    if (supportsPersistence == null) {
-      throw new IllegalArgumentException("null value for 'supportsPersistence' argument");
-    }
+    java.util.Objects.requireNonNull((supportsPersistence));
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
   public GraphFeatures withSupportsThreadedTransactions(Boolean supportsThreadedTransactions) {
-    if (supportsThreadedTransactions == null) {
-      throw new IllegalArgumentException("null value for 'supportsThreadedTransactions' argument");
-    }
+    java.util.Objects.requireNonNull((supportsThreadedTransactions));
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
   public GraphFeatures withSupportsTransactions(Boolean supportsTransactions) {
-    if (supportsTransactions == null) {
-      throw new IllegalArgumentException("null value for 'supportsTransactions' argument");
-    }
+    java.util.Objects.requireNonNull((supportsTransactions));
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
   public GraphFeatures withVariables(hydra.langs.tinkerpop.features.VariableFeatures variables) {
-    if (variables == null) {
-      throw new IllegalArgumentException("null value for 'variables' argument");
-    }
+    java.util.Objects.requireNonNull((variables));
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
 }

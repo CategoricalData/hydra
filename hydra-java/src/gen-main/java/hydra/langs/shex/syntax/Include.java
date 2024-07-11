@@ -10,9 +10,7 @@ public class Include implements Serializable {
   public final hydra.langs.shex.syntax.TripleExprLabel value;
   
   public Include (hydra.langs.shex.syntax.TripleExprLabel value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

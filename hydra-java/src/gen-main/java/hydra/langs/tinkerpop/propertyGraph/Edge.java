@@ -36,21 +36,11 @@ public class Edge<V> implements Serializable {
   public final java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, V> properties;
   
   public Edge (hydra.langs.tinkerpop.propertyGraph.EdgeLabel label, V id, V out, V in, java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, V> properties) {
-    if (label == null) {
-      throw new IllegalArgumentException("null value for 'label' argument");
-    }
-    if (id == null) {
-      throw new IllegalArgumentException("null value for 'id' argument");
-    }
-    if (out == null) {
-      throw new IllegalArgumentException("null value for 'out' argument");
-    }
-    if (in == null) {
-      throw new IllegalArgumentException("null value for 'in' argument");
-    }
-    if (properties == null) {
-      throw new IllegalArgumentException("null value for 'properties' argument");
-    }
+    java.util.Objects.requireNonNull((label));
+    java.util.Objects.requireNonNull((id));
+    java.util.Objects.requireNonNull((out));
+    java.util.Objects.requireNonNull((in));
+    java.util.Objects.requireNonNull((properties));
     this.label = label;
     this.id = id;
     this.out = out;
@@ -73,37 +63,27 @@ public class Edge<V> implements Serializable {
   }
   
   public Edge withLabel(hydra.langs.tinkerpop.propertyGraph.EdgeLabel label) {
-    if (label == null) {
-      throw new IllegalArgumentException("null value for 'label' argument");
-    }
+    java.util.Objects.requireNonNull((label));
     return new Edge(label, id, out, in, properties);
   }
   
   public Edge withId(V id) {
-    if (id == null) {
-      throw new IllegalArgumentException("null value for 'id' argument");
-    }
+    java.util.Objects.requireNonNull((id));
     return new Edge(label, id, out, in, properties);
   }
   
   public Edge withOut(V out) {
-    if (out == null) {
-      throw new IllegalArgumentException("null value for 'out' argument");
-    }
+    java.util.Objects.requireNonNull((out));
     return new Edge(label, id, out, in, properties);
   }
   
   public Edge withIn(V in) {
-    if (in == null) {
-      throw new IllegalArgumentException("null value for 'in' argument");
-    }
+    java.util.Objects.requireNonNull((in));
     return new Edge(label, id, out, in, properties);
   }
   
   public Edge withProperties(java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, V> properties) {
-    if (properties == null) {
-      throw new IllegalArgumentException("null value for 'properties' argument");
-    }
+    java.util.Objects.requireNonNull((properties));
     return new Edge(label, id, out, in, properties);
   }
 }

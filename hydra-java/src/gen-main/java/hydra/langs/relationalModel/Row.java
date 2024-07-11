@@ -13,9 +13,7 @@ public class Row<V> implements Serializable {
   public final java.util.List<V> value;
   
   public Row (java.util.List<V> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

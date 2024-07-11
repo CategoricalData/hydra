@@ -10,9 +10,7 @@ public class Type_Repeated implements Serializable {
   public final hydra.langs.scala.meta.Type tpe;
   
   public Type_Repeated (hydra.langs.scala.meta.Type tpe) {
-    if (tpe == null) {
-      throw new IllegalArgumentException("null value for 'tpe' argument");
-    }
+    java.util.Objects.requireNonNull((tpe));
     this.tpe = tpe;
   }
   

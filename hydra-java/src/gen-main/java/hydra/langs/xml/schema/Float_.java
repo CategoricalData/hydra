@@ -10,9 +10,7 @@ public class Float_ implements Serializable {
   public final Float value;
   
   public Float_ (Float value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

@@ -10,9 +10,7 @@ public class Type_Singleton implements Serializable {
   public final hydra.langs.scala.meta.Data_Ref ref;
   
   public Type_Singleton (hydra.langs.scala.meta.Data_Ref ref) {
-    if (ref == null) {
-      throw new IllegalArgumentException("null value for 'ref' argument");
-    }
+    java.util.Objects.requireNonNull((ref));
     this.ref = ref;
   }
   

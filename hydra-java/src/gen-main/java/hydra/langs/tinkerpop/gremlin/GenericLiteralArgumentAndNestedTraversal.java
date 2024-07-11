@@ -12,12 +12,8 @@ public class GenericLiteralArgumentAndNestedTraversal implements Serializable {
   public final hydra.langs.tinkerpop.gremlin.NestedTraversal traversal;
   
   public GenericLiteralArgumentAndNestedTraversal (hydra.langs.tinkerpop.gremlin.GenericLiteralArgument object, hydra.langs.tinkerpop.gremlin.NestedTraversal traversal) {
-    if (object == null) {
-      throw new IllegalArgumentException("null value for 'object' argument");
-    }
-    if (traversal == null) {
-      throw new IllegalArgumentException("null value for 'traversal' argument");
-    }
+    java.util.Objects.requireNonNull((object));
+    java.util.Objects.requireNonNull((traversal));
     this.object = object;
     this.traversal = traversal;
   }
@@ -37,16 +33,12 @@ public class GenericLiteralArgumentAndNestedTraversal implements Serializable {
   }
   
   public GenericLiteralArgumentAndNestedTraversal withObject(hydra.langs.tinkerpop.gremlin.GenericLiteralArgument object) {
-    if (object == null) {
-      throw new IllegalArgumentException("null value for 'object' argument");
-    }
+    java.util.Objects.requireNonNull((object));
     return new GenericLiteralArgumentAndNestedTraversal(object, traversal);
   }
   
   public GenericLiteralArgumentAndNestedTraversal withTraversal(hydra.langs.tinkerpop.gremlin.NestedTraversal traversal) {
-    if (traversal == null) {
-      throw new IllegalArgumentException("null value for 'traversal' argument");
-    }
+    java.util.Objects.requireNonNull((traversal));
     return new GenericLiteralArgumentAndNestedTraversal(object, traversal);
   }
 }

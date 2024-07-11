@@ -67,9 +67,7 @@ public abstract class PredefinedType implements Serializable {
     public final hydra.langs.sql.ansi.PredefinedType_String value;
     
     public String_ (hydra.langs.sql.ansi.PredefinedType_String value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -97,9 +95,7 @@ public abstract class PredefinedType implements Serializable {
     public final hydra.langs.sql.ansi.PredefinedType_NationalString value;
     
     public NationalString (hydra.langs.sql.ansi.PredefinedType_NationalString value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -127,9 +123,7 @@ public abstract class PredefinedType implements Serializable {
     public final hydra.langs.sql.ansi.BinaryLargeObjectStringType value;
     
     public Blob (hydra.langs.sql.ansi.BinaryLargeObjectStringType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -157,9 +151,7 @@ public abstract class PredefinedType implements Serializable {
     public final hydra.langs.sql.ansi.NumericType value;
     
     public Numeric (hydra.langs.sql.ansi.NumericType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -187,9 +179,7 @@ public abstract class PredefinedType implements Serializable {
     public final hydra.langs.sql.ansi.BooleanType value;
     
     public Boolean_ (hydra.langs.sql.ansi.BooleanType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -217,9 +207,7 @@ public abstract class PredefinedType implements Serializable {
     public final hydra.langs.sql.ansi.DatetimeType value;
     
     public Datetime (hydra.langs.sql.ansi.DatetimeType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -247,9 +235,7 @@ public abstract class PredefinedType implements Serializable {
     public final hydra.langs.sql.ansi.IntervalType value;
     
     public Interval (hydra.langs.sql.ansi.IntervalType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -43,9 +43,7 @@ public abstract class InterfaceTypeExtension implements Serializable {
     public final hydra.langs.graphql.syntax.InterfaceTypeExtension_Sequence value;
     
     public Sequence (hydra.langs.graphql.syntax.InterfaceTypeExtension_Sequence value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class InterfaceTypeExtension implements Serializable {
     public final hydra.langs.graphql.syntax.InterfaceTypeExtension_Sequence2 value;
     
     public Sequence2 (hydra.langs.graphql.syntax.InterfaceTypeExtension_Sequence2 value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class InterfaceTypeExtension implements Serializable {
     public final hydra.langs.graphql.syntax.InterfaceTypeExtension_Sequence3 value;
     
     public Sequence3 (hydra.langs.graphql.syntax.InterfaceTypeExtension_Sequence3 value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

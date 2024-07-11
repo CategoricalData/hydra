@@ -10,9 +10,7 @@ public class StringLiteralLong2 implements Serializable {
   public final java.util.List<hydra.langs.shex.syntax.StringLiteralLong2_Elmt> value;
   
   public StringLiteralLong2 (java.util.List<hydra.langs.shex.syntax.StringLiteralLong2_Elmt> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

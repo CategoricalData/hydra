@@ -37,9 +37,7 @@ public abstract class AssertStatement implements Serializable {
     public final hydra.langs.java.syntax.Expression value;
     
     public Single (hydra.langs.java.syntax.Expression value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class AssertStatement implements Serializable {
     public final hydra.langs.java.syntax.AssertStatement_Pair value;
     
     public Pair (hydra.langs.java.syntax.AssertStatement_Pair value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

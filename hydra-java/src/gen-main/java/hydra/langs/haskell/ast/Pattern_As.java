@@ -12,12 +12,8 @@ public class Pattern_As implements Serializable {
   public final hydra.langs.haskell.ast.Pattern inner;
   
   public Pattern_As (hydra.langs.haskell.ast.Name name, hydra.langs.haskell.ast.Pattern inner) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (inner == null) {
-      throw new IllegalArgumentException("null value for 'inner' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((inner));
     this.name = name;
     this.inner = inner;
   }
@@ -37,16 +33,12 @@ public class Pattern_As implements Serializable {
   }
   
   public Pattern_As withName(hydra.langs.haskell.ast.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Pattern_As(name, inner);
   }
   
   public Pattern_As withInner(hydra.langs.haskell.ast.Pattern inner) {
-    if (inner == null) {
-      throw new IllegalArgumentException("null value for 'inner' argument");
-    }
+    java.util.Objects.requireNonNull((inner));
     return new Pattern_As(name, inner);
   }
 }

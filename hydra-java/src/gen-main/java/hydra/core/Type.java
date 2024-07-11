@@ -130,9 +130,7 @@ public abstract class Type<A> implements Serializable {
     public final hydra.core.Annotated<hydra.core.Type<A>, A> value;
     
     public Annotated (hydra.core.Annotated<hydra.core.Type<A>, A> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -160,9 +158,7 @@ public abstract class Type<A> implements Serializable {
     public final hydra.core.ApplicationType<A> value;
     
     public Application (hydra.core.ApplicationType<A> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -190,9 +186,7 @@ public abstract class Type<A> implements Serializable {
     public final hydra.core.FunctionType<A> value;
     
     public Function (hydra.core.FunctionType<A> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -220,9 +214,7 @@ public abstract class Type<A> implements Serializable {
     public final hydra.core.LambdaType<A> value;
     
     public Lambda (hydra.core.LambdaType<A> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -250,9 +242,7 @@ public abstract class Type<A> implements Serializable {
     public final hydra.core.Type<A> value;
     
     public List (hydra.core.Type<A> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -280,9 +270,7 @@ public abstract class Type<A> implements Serializable {
     public final hydra.core.LiteralType value;
     
     public Literal (hydra.core.LiteralType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -310,9 +298,7 @@ public abstract class Type<A> implements Serializable {
     public final hydra.core.MapType<A> value;
     
     public Map (hydra.core.MapType<A> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -340,9 +326,7 @@ public abstract class Type<A> implements Serializable {
     public final hydra.core.Type<A> value;
     
     public Optional (hydra.core.Type<A> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -370,9 +354,7 @@ public abstract class Type<A> implements Serializable {
     public final java.util.List<hydra.core.Type<A>> value;
     
     public Product (java.util.List<hydra.core.Type<A>> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -400,9 +382,7 @@ public abstract class Type<A> implements Serializable {
     public final hydra.core.RowType<A> value;
     
     public Record (hydra.core.RowType<A> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -430,9 +410,7 @@ public abstract class Type<A> implements Serializable {
     public final hydra.core.Type<A> value;
     
     public Set (hydra.core.Type<A> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -460,9 +438,7 @@ public abstract class Type<A> implements Serializable {
     public final hydra.core.Type<A> value;
     
     public Stream (hydra.core.Type<A> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -490,9 +466,7 @@ public abstract class Type<A> implements Serializable {
     public final java.util.List<hydra.core.Type<A>> value;
     
     public Sum (java.util.List<hydra.core.Type<A>> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -520,9 +494,7 @@ public abstract class Type<A> implements Serializable {
     public final hydra.core.RowType<A> value;
     
     public Union (hydra.core.RowType<A> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -550,9 +522,7 @@ public abstract class Type<A> implements Serializable {
     public final hydra.core.Name value;
     
     public Variable (hydra.core.Name value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -580,9 +550,7 @@ public abstract class Type<A> implements Serializable {
     public final hydra.core.Nominal<hydra.core.Type<A>> value;
     
     public Wrap (hydra.core.Nominal<hydra.core.Type<A>> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

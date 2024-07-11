@@ -49,9 +49,7 @@ public abstract class PropertyArgs implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.TraversalCardinalityArgumentAndObjects value;
     
     public CardinalityObjects (hydra.langs.tinkerpop.gremlin.TraversalCardinalityArgumentAndObjects value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -79,9 +77,7 @@ public abstract class PropertyArgs implements Serializable {
     public final java.util.List<hydra.langs.tinkerpop.gremlin.GenericLiteralArgument> value;
     
     public Objects (java.util.List<hydra.langs.tinkerpop.gremlin.GenericLiteralArgument> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -109,9 +105,7 @@ public abstract class PropertyArgs implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.GenericLiteralMapNullableArgument value;
     
     public Object_ (hydra.langs.tinkerpop.gremlin.GenericLiteralMapNullableArgument value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -139,9 +133,7 @@ public abstract class PropertyArgs implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument value;
     
     public CardinalityObject (hydra.langs.tinkerpop.gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

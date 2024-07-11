@@ -12,12 +12,8 @@ public class IdInColl implements Serializable {
   public final hydra.langs.cypher.openCypher.Expression expression;
   
   public IdInColl (hydra.langs.cypher.openCypher.Variable variable, hydra.langs.cypher.openCypher.Expression expression) {
-    if (variable == null) {
-      throw new IllegalArgumentException("null value for 'variable' argument");
-    }
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((variable));
+    java.util.Objects.requireNonNull((expression));
     this.variable = variable;
     this.expression = expression;
   }
@@ -37,16 +33,12 @@ public class IdInColl implements Serializable {
   }
   
   public IdInColl withVariable(hydra.langs.cypher.openCypher.Variable variable) {
-    if (variable == null) {
-      throw new IllegalArgumentException("null value for 'variable' argument");
-    }
+    java.util.Objects.requireNonNull((variable));
     return new IdInColl(variable, expression);
   }
   
   public IdInColl withExpression(hydra.langs.cypher.openCypher.Expression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new IdInColl(variable, expression);
   }
 }

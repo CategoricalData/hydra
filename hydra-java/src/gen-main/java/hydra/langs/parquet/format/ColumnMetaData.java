@@ -81,48 +81,20 @@ public class ColumnMetaData implements Serializable {
   public final hydra.util.Opt<Long> bloomFilterOffset;
   
   public ColumnMetaData (hydra.langs.parquet.format.Type type, java.util.List<hydra.langs.parquet.format.Encoding> encodings, java.util.List<String> pathInSchema, hydra.langs.parquet.format.CompressionCodec codec, Long numValues, Long totalUncompressedSize, Long totalCompressedSize, hydra.util.Opt<java.util.List<hydra.langs.parquet.format.KeyValue>> keyValueMetadata, Long dataPageOffset, hydra.util.Opt<Long> indexPageOffset, hydra.util.Opt<Long> dictionaryPageOffset, hydra.util.Opt<hydra.langs.parquet.format.Statistics> statistics, hydra.util.Opt<java.util.List<hydra.langs.parquet.format.PageEncodingStats>> encodingStats, hydra.util.Opt<Long> bloomFilterOffset) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (encodings == null) {
-      throw new IllegalArgumentException("null value for 'encodings' argument");
-    }
-    if (pathInSchema == null) {
-      throw new IllegalArgumentException("null value for 'pathInSchema' argument");
-    }
-    if (codec == null) {
-      throw new IllegalArgumentException("null value for 'codec' argument");
-    }
-    if (numValues == null) {
-      throw new IllegalArgumentException("null value for 'numValues' argument");
-    }
-    if (totalUncompressedSize == null) {
-      throw new IllegalArgumentException("null value for 'totalUncompressedSize' argument");
-    }
-    if (totalCompressedSize == null) {
-      throw new IllegalArgumentException("null value for 'totalCompressedSize' argument");
-    }
-    if (keyValueMetadata == null) {
-      throw new IllegalArgumentException("null value for 'keyValueMetadata' argument");
-    }
-    if (dataPageOffset == null) {
-      throw new IllegalArgumentException("null value for 'dataPageOffset' argument");
-    }
-    if (indexPageOffset == null) {
-      throw new IllegalArgumentException("null value for 'indexPageOffset' argument");
-    }
-    if (dictionaryPageOffset == null) {
-      throw new IllegalArgumentException("null value for 'dictionaryPageOffset' argument");
-    }
-    if (statistics == null) {
-      throw new IllegalArgumentException("null value for 'statistics' argument");
-    }
-    if (encodingStats == null) {
-      throw new IllegalArgumentException("null value for 'encodingStats' argument");
-    }
-    if (bloomFilterOffset == null) {
-      throw new IllegalArgumentException("null value for 'bloomFilterOffset' argument");
-    }
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((encodings));
+    java.util.Objects.requireNonNull((pathInSchema));
+    java.util.Objects.requireNonNull((codec));
+    java.util.Objects.requireNonNull((numValues));
+    java.util.Objects.requireNonNull((totalUncompressedSize));
+    java.util.Objects.requireNonNull((totalCompressedSize));
+    java.util.Objects.requireNonNull((keyValueMetadata));
+    java.util.Objects.requireNonNull((dataPageOffset));
+    java.util.Objects.requireNonNull((indexPageOffset));
+    java.util.Objects.requireNonNull((dictionaryPageOffset));
+    java.util.Objects.requireNonNull((statistics));
+    java.util.Objects.requireNonNull((encodingStats));
+    java.util.Objects.requireNonNull((bloomFilterOffset));
     this.type = type;
     this.encodings = encodings;
     this.pathInSchema = pathInSchema;
@@ -154,100 +126,72 @@ public class ColumnMetaData implements Serializable {
   }
   
   public ColumnMetaData withType(hydra.langs.parquet.format.Type type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new ColumnMetaData(type, encodings, pathInSchema, codec, numValues, totalUncompressedSize, totalCompressedSize, keyValueMetadata, dataPageOffset, indexPageOffset, dictionaryPageOffset, statistics, encodingStats, bloomFilterOffset);
   }
   
   public ColumnMetaData withEncodings(java.util.List<hydra.langs.parquet.format.Encoding> encodings) {
-    if (encodings == null) {
-      throw new IllegalArgumentException("null value for 'encodings' argument");
-    }
+    java.util.Objects.requireNonNull((encodings));
     return new ColumnMetaData(type, encodings, pathInSchema, codec, numValues, totalUncompressedSize, totalCompressedSize, keyValueMetadata, dataPageOffset, indexPageOffset, dictionaryPageOffset, statistics, encodingStats, bloomFilterOffset);
   }
   
   public ColumnMetaData withPathInSchema(java.util.List<String> pathInSchema) {
-    if (pathInSchema == null) {
-      throw new IllegalArgumentException("null value for 'pathInSchema' argument");
-    }
+    java.util.Objects.requireNonNull((pathInSchema));
     return new ColumnMetaData(type, encodings, pathInSchema, codec, numValues, totalUncompressedSize, totalCompressedSize, keyValueMetadata, dataPageOffset, indexPageOffset, dictionaryPageOffset, statistics, encodingStats, bloomFilterOffset);
   }
   
   public ColumnMetaData withCodec(hydra.langs.parquet.format.CompressionCodec codec) {
-    if (codec == null) {
-      throw new IllegalArgumentException("null value for 'codec' argument");
-    }
+    java.util.Objects.requireNonNull((codec));
     return new ColumnMetaData(type, encodings, pathInSchema, codec, numValues, totalUncompressedSize, totalCompressedSize, keyValueMetadata, dataPageOffset, indexPageOffset, dictionaryPageOffset, statistics, encodingStats, bloomFilterOffset);
   }
   
   public ColumnMetaData withNumValues(Long numValues) {
-    if (numValues == null) {
-      throw new IllegalArgumentException("null value for 'numValues' argument");
-    }
+    java.util.Objects.requireNonNull((numValues));
     return new ColumnMetaData(type, encodings, pathInSchema, codec, numValues, totalUncompressedSize, totalCompressedSize, keyValueMetadata, dataPageOffset, indexPageOffset, dictionaryPageOffset, statistics, encodingStats, bloomFilterOffset);
   }
   
   public ColumnMetaData withTotalUncompressedSize(Long totalUncompressedSize) {
-    if (totalUncompressedSize == null) {
-      throw new IllegalArgumentException("null value for 'totalUncompressedSize' argument");
-    }
+    java.util.Objects.requireNonNull((totalUncompressedSize));
     return new ColumnMetaData(type, encodings, pathInSchema, codec, numValues, totalUncompressedSize, totalCompressedSize, keyValueMetadata, dataPageOffset, indexPageOffset, dictionaryPageOffset, statistics, encodingStats, bloomFilterOffset);
   }
   
   public ColumnMetaData withTotalCompressedSize(Long totalCompressedSize) {
-    if (totalCompressedSize == null) {
-      throw new IllegalArgumentException("null value for 'totalCompressedSize' argument");
-    }
+    java.util.Objects.requireNonNull((totalCompressedSize));
     return new ColumnMetaData(type, encodings, pathInSchema, codec, numValues, totalUncompressedSize, totalCompressedSize, keyValueMetadata, dataPageOffset, indexPageOffset, dictionaryPageOffset, statistics, encodingStats, bloomFilterOffset);
   }
   
   public ColumnMetaData withKeyValueMetadata(hydra.util.Opt<java.util.List<hydra.langs.parquet.format.KeyValue>> keyValueMetadata) {
-    if (keyValueMetadata == null) {
-      throw new IllegalArgumentException("null value for 'keyValueMetadata' argument");
-    }
+    java.util.Objects.requireNonNull((keyValueMetadata));
     return new ColumnMetaData(type, encodings, pathInSchema, codec, numValues, totalUncompressedSize, totalCompressedSize, keyValueMetadata, dataPageOffset, indexPageOffset, dictionaryPageOffset, statistics, encodingStats, bloomFilterOffset);
   }
   
   public ColumnMetaData withDataPageOffset(Long dataPageOffset) {
-    if (dataPageOffset == null) {
-      throw new IllegalArgumentException("null value for 'dataPageOffset' argument");
-    }
+    java.util.Objects.requireNonNull((dataPageOffset));
     return new ColumnMetaData(type, encodings, pathInSchema, codec, numValues, totalUncompressedSize, totalCompressedSize, keyValueMetadata, dataPageOffset, indexPageOffset, dictionaryPageOffset, statistics, encodingStats, bloomFilterOffset);
   }
   
   public ColumnMetaData withIndexPageOffset(hydra.util.Opt<Long> indexPageOffset) {
-    if (indexPageOffset == null) {
-      throw new IllegalArgumentException("null value for 'indexPageOffset' argument");
-    }
+    java.util.Objects.requireNonNull((indexPageOffset));
     return new ColumnMetaData(type, encodings, pathInSchema, codec, numValues, totalUncompressedSize, totalCompressedSize, keyValueMetadata, dataPageOffset, indexPageOffset, dictionaryPageOffset, statistics, encodingStats, bloomFilterOffset);
   }
   
   public ColumnMetaData withDictionaryPageOffset(hydra.util.Opt<Long> dictionaryPageOffset) {
-    if (dictionaryPageOffset == null) {
-      throw new IllegalArgumentException("null value for 'dictionaryPageOffset' argument");
-    }
+    java.util.Objects.requireNonNull((dictionaryPageOffset));
     return new ColumnMetaData(type, encodings, pathInSchema, codec, numValues, totalUncompressedSize, totalCompressedSize, keyValueMetadata, dataPageOffset, indexPageOffset, dictionaryPageOffset, statistics, encodingStats, bloomFilterOffset);
   }
   
   public ColumnMetaData withStatistics(hydra.util.Opt<hydra.langs.parquet.format.Statistics> statistics) {
-    if (statistics == null) {
-      throw new IllegalArgumentException("null value for 'statistics' argument");
-    }
+    java.util.Objects.requireNonNull((statistics));
     return new ColumnMetaData(type, encodings, pathInSchema, codec, numValues, totalUncompressedSize, totalCompressedSize, keyValueMetadata, dataPageOffset, indexPageOffset, dictionaryPageOffset, statistics, encodingStats, bloomFilterOffset);
   }
   
   public ColumnMetaData withEncodingStats(hydra.util.Opt<java.util.List<hydra.langs.parquet.format.PageEncodingStats>> encodingStats) {
-    if (encodingStats == null) {
-      throw new IllegalArgumentException("null value for 'encodingStats' argument");
-    }
+    java.util.Objects.requireNonNull((encodingStats));
     return new ColumnMetaData(type, encodings, pathInSchema, codec, numValues, totalUncompressedSize, totalCompressedSize, keyValueMetadata, dataPageOffset, indexPageOffset, dictionaryPageOffset, statistics, encodingStats, bloomFilterOffset);
   }
   
   public ColumnMetaData withBloomFilterOffset(hydra.util.Opt<Long> bloomFilterOffset) {
-    if (bloomFilterOffset == null) {
-      throw new IllegalArgumentException("null value for 'bloomFilterOffset' argument");
-    }
+    java.util.Objects.requireNonNull((bloomFilterOffset));
     return new ColumnMetaData(type, encodings, pathInSchema, codec, numValues, totalUncompressedSize, totalCompressedSize, keyValueMetadata, dataPageOffset, indexPageOffset, dictionaryPageOffset, statistics, encodingStats, bloomFilterOffset);
   }
 }

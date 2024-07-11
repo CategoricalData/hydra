@@ -43,9 +43,7 @@ public abstract class NamedSchema_Type implements Serializable {
     public final hydra.langs.pegasus.pdl.RecordSchema value;
     
     public Record (hydra.langs.pegasus.pdl.RecordSchema value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class NamedSchema_Type implements Serializable {
     public final hydra.langs.pegasus.pdl.EnumSchema value;
     
     public Enum_ (hydra.langs.pegasus.pdl.EnumSchema value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class NamedSchema_Type implements Serializable {
     public final hydra.langs.pegasus.pdl.Schema value;
     
     public Typeref (hydra.langs.pegasus.pdl.Schema value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

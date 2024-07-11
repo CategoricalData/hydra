@@ -12,12 +12,8 @@ public class QualifiedName implements Serializable {
   public final hydra.langs.haskell.ast.NamePart unqualified;
   
   public QualifiedName (java.util.List<hydra.langs.haskell.ast.NamePart> qualifiers, hydra.langs.haskell.ast.NamePart unqualified) {
-    if (qualifiers == null) {
-      throw new IllegalArgumentException("null value for 'qualifiers' argument");
-    }
-    if (unqualified == null) {
-      throw new IllegalArgumentException("null value for 'unqualified' argument");
-    }
+    java.util.Objects.requireNonNull((qualifiers));
+    java.util.Objects.requireNonNull((unqualified));
     this.qualifiers = qualifiers;
     this.unqualified = unqualified;
   }
@@ -37,16 +33,12 @@ public class QualifiedName implements Serializable {
   }
   
   public QualifiedName withQualifiers(java.util.List<hydra.langs.haskell.ast.NamePart> qualifiers) {
-    if (qualifiers == null) {
-      throw new IllegalArgumentException("null value for 'qualifiers' argument");
-    }
+    java.util.Objects.requireNonNull((qualifiers));
     return new QualifiedName(qualifiers, unqualified);
   }
   
   public QualifiedName withUnqualified(hydra.langs.haskell.ast.NamePart unqualified) {
-    if (unqualified == null) {
-      throw new IllegalArgumentException("null value for 'unqualified' argument");
-    }
+    java.util.Objects.requireNonNull((unqualified));
     return new QualifiedName(qualifiers, unqualified);
   }
 }

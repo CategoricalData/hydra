@@ -15,12 +15,8 @@ public class SearchCommand implements Serializable {
   public final hydra.langs.kusto.kql.Expression pattern;
   
   public SearchCommand (java.util.List<hydra.langs.kusto.kql.TableName> datasets, hydra.langs.kusto.kql.Expression pattern) {
-    if (datasets == null) {
-      throw new IllegalArgumentException("null value for 'datasets' argument");
-    }
-    if (pattern == null) {
-      throw new IllegalArgumentException("null value for 'pattern' argument");
-    }
+    java.util.Objects.requireNonNull((datasets));
+    java.util.Objects.requireNonNull((pattern));
     this.datasets = datasets;
     this.pattern = pattern;
   }
@@ -40,16 +36,12 @@ public class SearchCommand implements Serializable {
   }
   
   public SearchCommand withDatasets(java.util.List<hydra.langs.kusto.kql.TableName> datasets) {
-    if (datasets == null) {
-      throw new IllegalArgumentException("null value for 'datasets' argument");
-    }
+    java.util.Objects.requireNonNull((datasets));
     return new SearchCommand(datasets, pattern);
   }
   
   public SearchCommand withPattern(hydra.langs.kusto.kql.Expression pattern) {
-    if (pattern == null) {
-      throw new IllegalArgumentException("null value for 'pattern' argument");
-    }
+    java.util.Objects.requireNonNull((pattern));
     return new SearchCommand(datasets, pattern);
   }
 }

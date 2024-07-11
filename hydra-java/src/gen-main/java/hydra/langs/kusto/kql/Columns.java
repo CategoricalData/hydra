@@ -62,9 +62,7 @@ public abstract class Columns implements Serializable {
     public final hydra.langs.kusto.kql.ColumnName value;
     
     public Single (hydra.langs.kusto.kql.ColumnName value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -52,9 +52,7 @@ public abstract class Node<A> implements Serializable {
     public final hydra.core.Term<A> value;
     
     public Term (hydra.core.Term<A> value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -88,9 +86,7 @@ public abstract class Node<A> implements Serializable {
     public final hydra.query.Variable value;
     
     public Variable (hydra.query.Variable value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

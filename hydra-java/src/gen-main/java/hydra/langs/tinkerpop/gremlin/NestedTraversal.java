@@ -43,9 +43,7 @@ public abstract class NestedTraversal implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.RootTraversal value;
     
     public Root (hydra.langs.tinkerpop.gremlin.RootTraversal value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class NestedTraversal implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.ChainedTraversal value;
     
     public Chained (hydra.langs.tinkerpop.gremlin.ChainedTraversal value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class NestedTraversal implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.ChainedTraversal value;
     
     public Anonymous (hydra.langs.tinkerpop.gremlin.ChainedTraversal value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

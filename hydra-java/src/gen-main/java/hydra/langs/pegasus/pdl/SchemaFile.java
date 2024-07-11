@@ -16,18 +16,10 @@ public class SchemaFile implements Serializable {
   public final java.util.List<hydra.langs.pegasus.pdl.NamedSchema> schemas;
   
   public SchemaFile (hydra.langs.pegasus.pdl.Namespace namespace, hydra.util.Opt<hydra.langs.pegasus.pdl.Package_> package_, java.util.List<hydra.langs.pegasus.pdl.QualifiedName> imports, java.util.List<hydra.langs.pegasus.pdl.NamedSchema> schemas) {
-    if (namespace == null) {
-      throw new IllegalArgumentException("null value for 'namespace' argument");
-    }
-    if (package_ == null) {
-      throw new IllegalArgumentException("null value for 'package' argument");
-    }
-    if (imports == null) {
-      throw new IllegalArgumentException("null value for 'imports' argument");
-    }
-    if (schemas == null) {
-      throw new IllegalArgumentException("null value for 'schemas' argument");
-    }
+    java.util.Objects.requireNonNull((namespace));
+    java.util.Objects.requireNonNull((package_));
+    java.util.Objects.requireNonNull((imports));
+    java.util.Objects.requireNonNull((schemas));
     this.namespace = namespace;
     this.package_ = package_;
     this.imports = imports;
@@ -49,30 +41,22 @@ public class SchemaFile implements Serializable {
   }
   
   public SchemaFile withNamespace(hydra.langs.pegasus.pdl.Namespace namespace) {
-    if (namespace == null) {
-      throw new IllegalArgumentException("null value for 'namespace' argument");
-    }
+    java.util.Objects.requireNonNull((namespace));
     return new SchemaFile(namespace, package_, imports, schemas);
   }
   
   public SchemaFile withPackage(hydra.util.Opt<hydra.langs.pegasus.pdl.Package_> package_) {
-    if (package_ == null) {
-      throw new IllegalArgumentException("null value for 'package' argument");
-    }
+    java.util.Objects.requireNonNull((package_));
     return new SchemaFile(namespace, package_, imports, schemas);
   }
   
   public SchemaFile withImports(java.util.List<hydra.langs.pegasus.pdl.QualifiedName> imports) {
-    if (imports == null) {
-      throw new IllegalArgumentException("null value for 'imports' argument");
-    }
+    java.util.Objects.requireNonNull((imports));
     return new SchemaFile(namespace, package_, imports, schemas);
   }
   
   public SchemaFile withSchemas(java.util.List<hydra.langs.pegasus.pdl.NamedSchema> schemas) {
-    if (schemas == null) {
-      throw new IllegalArgumentException("null value for 'schemas' argument");
-    }
+    java.util.Objects.requireNonNull((schemas));
     return new SchemaFile(namespace, package_, imports, schemas);
   }
 }

@@ -12,12 +12,8 @@ public class Type_Function implements Serializable {
   public final hydra.langs.scala.meta.Type res;
   
   public Type_Function (java.util.List<hydra.langs.scala.meta.Type> params, hydra.langs.scala.meta.Type res) {
-    if (params == null) {
-      throw new IllegalArgumentException("null value for 'params' argument");
-    }
-    if (res == null) {
-      throw new IllegalArgumentException("null value for 'res' argument");
-    }
+    java.util.Objects.requireNonNull((params));
+    java.util.Objects.requireNonNull((res));
     this.params = params;
     this.res = res;
   }
@@ -37,16 +33,12 @@ public class Type_Function implements Serializable {
   }
   
   public Type_Function withParams(java.util.List<hydra.langs.scala.meta.Type> params) {
-    if (params == null) {
-      throw new IllegalArgumentException("null value for 'params' argument");
-    }
+    java.util.Objects.requireNonNull((params));
     return new Type_Function(params, res);
   }
   
   public Type_Function withRes(hydra.langs.scala.meta.Type res) {
-    if (res == null) {
-      throw new IllegalArgumentException("null value for 'res' argument");
-    }
+    java.util.Objects.requireNonNull((res));
     return new Type_Function(params, res);
   }
 }

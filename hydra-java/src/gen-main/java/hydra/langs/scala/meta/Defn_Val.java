@@ -16,18 +16,10 @@ public class Defn_Val implements Serializable {
   public final hydra.langs.scala.meta.Data rhs;
   
   public Defn_Val (java.util.List<hydra.langs.scala.meta.Mod> mods, java.util.List<hydra.langs.scala.meta.Pat> pats, hydra.util.Opt<hydra.langs.scala.meta.Type> decltpe, hydra.langs.scala.meta.Data rhs) {
-    if (mods == null) {
-      throw new IllegalArgumentException("null value for 'mods' argument");
-    }
-    if (pats == null) {
-      throw new IllegalArgumentException("null value for 'pats' argument");
-    }
-    if (decltpe == null) {
-      throw new IllegalArgumentException("null value for 'decltpe' argument");
-    }
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((mods));
+    java.util.Objects.requireNonNull((pats));
+    java.util.Objects.requireNonNull((decltpe));
+    java.util.Objects.requireNonNull((rhs));
     this.mods = mods;
     this.pats = pats;
     this.decltpe = decltpe;
@@ -49,30 +41,22 @@ public class Defn_Val implements Serializable {
   }
   
   public Defn_Val withMods(java.util.List<hydra.langs.scala.meta.Mod> mods) {
-    if (mods == null) {
-      throw new IllegalArgumentException("null value for 'mods' argument");
-    }
+    java.util.Objects.requireNonNull((mods));
     return new Defn_Val(mods, pats, decltpe, rhs);
   }
   
   public Defn_Val withPats(java.util.List<hydra.langs.scala.meta.Pat> pats) {
-    if (pats == null) {
-      throw new IllegalArgumentException("null value for 'pats' argument");
-    }
+    java.util.Objects.requireNonNull((pats));
     return new Defn_Val(mods, pats, decltpe, rhs);
   }
   
   public Defn_Val withDecltpe(hydra.util.Opt<hydra.langs.scala.meta.Type> decltpe) {
-    if (decltpe == null) {
-      throw new IllegalArgumentException("null value for 'decltpe' argument");
-    }
+    java.util.Objects.requireNonNull((decltpe));
     return new Defn_Val(mods, pats, decltpe, rhs);
   }
   
   public Defn_Val withRhs(hydra.langs.scala.meta.Data rhs) {
-    if (rhs == null) {
-      throw new IllegalArgumentException("null value for 'rhs' argument");
-    }
+    java.util.Objects.requireNonNull((rhs));
     return new Defn_Val(mods, pats, decltpe, rhs);
   }
 }

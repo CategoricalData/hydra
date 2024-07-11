@@ -19,18 +19,10 @@ public class Import implements Serializable {
   public final hydra.util.Opt<hydra.langs.haskell.ast.Import_Spec> spec;
   
   public Import (Boolean qualified, hydra.langs.haskell.ast.ModuleName module, hydra.util.Opt<hydra.langs.haskell.ast.ModuleName> as, hydra.util.Opt<hydra.langs.haskell.ast.Import_Spec> spec) {
-    if (qualified == null) {
-      throw new IllegalArgumentException("null value for 'qualified' argument");
-    }
-    if (module == null) {
-      throw new IllegalArgumentException("null value for 'module' argument");
-    }
-    if (as == null) {
-      throw new IllegalArgumentException("null value for 'as' argument");
-    }
-    if (spec == null) {
-      throw new IllegalArgumentException("null value for 'spec' argument");
-    }
+    java.util.Objects.requireNonNull((qualified));
+    java.util.Objects.requireNonNull((module));
+    java.util.Objects.requireNonNull((as));
+    java.util.Objects.requireNonNull((spec));
     this.qualified = qualified;
     this.module = module;
     this.as = as;
@@ -52,30 +44,22 @@ public class Import implements Serializable {
   }
   
   public Import withQualified(Boolean qualified) {
-    if (qualified == null) {
-      throw new IllegalArgumentException("null value for 'qualified' argument");
-    }
+    java.util.Objects.requireNonNull((qualified));
     return new Import(qualified, module, as, spec);
   }
   
   public Import withModule(hydra.langs.haskell.ast.ModuleName module) {
-    if (module == null) {
-      throw new IllegalArgumentException("null value for 'module' argument");
-    }
+    java.util.Objects.requireNonNull((module));
     return new Import(qualified, module, as, spec);
   }
   
   public Import withAs(hydra.util.Opt<hydra.langs.haskell.ast.ModuleName> as) {
-    if (as == null) {
-      throw new IllegalArgumentException("null value for 'as' argument");
-    }
+    java.util.Objects.requireNonNull((as));
     return new Import(qualified, module, as, spec);
   }
   
   public Import withSpec(hydra.util.Opt<hydra.langs.haskell.ast.Import_Spec> spec) {
-    if (spec == null) {
-      throw new IllegalArgumentException("null value for 'spec' argument");
-    }
+    java.util.Objects.requireNonNull((spec));
     return new Import(qualified, module, as, spec);
   }
 }

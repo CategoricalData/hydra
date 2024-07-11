@@ -10,9 +10,7 @@ public class Data_Tuple implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Data> args;
   
   public Data_Tuple (java.util.List<hydra.langs.scala.meta.Data> args) {
-    if (args == null) {
-      throw new IllegalArgumentException("null value for 'args' argument");
-    }
+    java.util.Objects.requireNonNull((args));
     this.args = args;
   }
   

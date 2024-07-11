@@ -10,9 +10,7 @@ public class OrExpression implements Serializable {
   public final java.util.List<hydra.langs.cypher.openCypher.XorExpression> value;
   
   public OrExpression (java.util.List<hydra.langs.cypher.openCypher.XorExpression> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

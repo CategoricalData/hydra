@@ -18,21 +18,11 @@ public class UnionCommand implements Serializable {
   public final java.util.List<hydra.langs.kusto.kql.TableName> tables;
   
   public UnionCommand (java.util.List<hydra.langs.kusto.kql.Parameter> parameters, hydra.util.Opt<hydra.langs.kusto.kql.UnionKind> kind, hydra.util.Opt<hydra.langs.kusto.kql.ColumnName> withSource, hydra.util.Opt<Boolean> isFuzzy, java.util.List<hydra.langs.kusto.kql.TableName> tables) {
-    if (parameters == null) {
-      throw new IllegalArgumentException("null value for 'parameters' argument");
-    }
-    if (kind == null) {
-      throw new IllegalArgumentException("null value for 'kind' argument");
-    }
-    if (withSource == null) {
-      throw new IllegalArgumentException("null value for 'withSource' argument");
-    }
-    if (isFuzzy == null) {
-      throw new IllegalArgumentException("null value for 'isFuzzy' argument");
-    }
-    if (tables == null) {
-      throw new IllegalArgumentException("null value for 'tables' argument");
-    }
+    java.util.Objects.requireNonNull((parameters));
+    java.util.Objects.requireNonNull((kind));
+    java.util.Objects.requireNonNull((withSource));
+    java.util.Objects.requireNonNull((isFuzzy));
+    java.util.Objects.requireNonNull((tables));
     this.parameters = parameters;
     this.kind = kind;
     this.withSource = withSource;
@@ -55,37 +45,27 @@ public class UnionCommand implements Serializable {
   }
   
   public UnionCommand withParameters(java.util.List<hydra.langs.kusto.kql.Parameter> parameters) {
-    if (parameters == null) {
-      throw new IllegalArgumentException("null value for 'parameters' argument");
-    }
+    java.util.Objects.requireNonNull((parameters));
     return new UnionCommand(parameters, kind, withSource, isFuzzy, tables);
   }
   
   public UnionCommand withKind(hydra.util.Opt<hydra.langs.kusto.kql.UnionKind> kind) {
-    if (kind == null) {
-      throw new IllegalArgumentException("null value for 'kind' argument");
-    }
+    java.util.Objects.requireNonNull((kind));
     return new UnionCommand(parameters, kind, withSource, isFuzzy, tables);
   }
   
   public UnionCommand withWithSource(hydra.util.Opt<hydra.langs.kusto.kql.ColumnName> withSource) {
-    if (withSource == null) {
-      throw new IllegalArgumentException("null value for 'withSource' argument");
-    }
+    java.util.Objects.requireNonNull((withSource));
     return new UnionCommand(parameters, kind, withSource, isFuzzy, tables);
   }
   
   public UnionCommand withIsFuzzy(hydra.util.Opt<Boolean> isFuzzy) {
-    if (isFuzzy == null) {
-      throw new IllegalArgumentException("null value for 'isFuzzy' argument");
-    }
+    java.util.Objects.requireNonNull((isFuzzy));
     return new UnionCommand(parameters, kind, withSource, isFuzzy, tables);
   }
   
   public UnionCommand withTables(java.util.List<hydra.langs.kusto.kql.TableName> tables) {
-    if (tables == null) {
-      throw new IllegalArgumentException("null value for 'tables' argument");
-    }
+    java.util.Objects.requireNonNull((tables));
     return new UnionCommand(parameters, kind, withSource, isFuzzy, tables);
   }
 }

@@ -2,9 +2,6 @@
 
 package hydra.query;
 
-import hydra.core.FieldName;
-import hydra.util.Opt;
-
 import java.io.Serializable;
 
 /**
@@ -21,23 +18,17 @@ public class Edge implements Serializable {
   /**
    * The field representing the out-projection of the edge. Defaults to 'out'.
    */
-  public final Opt<FieldName> out;
+  public final hydra.util.Opt<hydra.core.FieldName> out;
   
   /**
    * The field representing the in-projection of the edge. Defaults to 'in'.
    */
-  public final Opt<FieldName> in;
+  public final hydra.util.Opt<hydra.core.FieldName> in;
   
-  public Edge (hydra.core.Name type, Opt<FieldName> out, Opt<FieldName> in) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (out == null) {
-      throw new IllegalArgumentException("null value for 'out' argument");
-    }
-    if (in == null) {
-      throw new IllegalArgumentException("null value for 'in' argument");
-    }
+  public Edge (hydra.core.Name type, hydra.util.Opt<hydra.core.FieldName> out, hydra.util.Opt<hydra.core.FieldName> in) {
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((out));
+    java.util.Objects.requireNonNull((in));
     this.type = type;
     this.out = out;
     this.in = in;
@@ -58,23 +49,17 @@ public class Edge implements Serializable {
   }
   
   public Edge withType(hydra.core.Name type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new Edge(type, out, in);
   }
   
-  public Edge withOut(Opt<FieldName> out) {
-    if (out == null) {
-      throw new IllegalArgumentException("null value for 'out' argument");
-    }
+  public Edge withOut(hydra.util.Opt<hydra.core.FieldName> out) {
+    java.util.Objects.requireNonNull((out));
     return new Edge(type, out, in);
   }
   
-  public Edge withIn(Opt<FieldName> in) {
-    if (in == null) {
-      throw new IllegalArgumentException("null value for 'in' argument");
-    }
+  public Edge withIn(hydra.util.Opt<hydra.core.FieldName> in) {
+    java.util.Objects.requireNonNull((in));
     return new Edge(type, out, in);
   }
 }

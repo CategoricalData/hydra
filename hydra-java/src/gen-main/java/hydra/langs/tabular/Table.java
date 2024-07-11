@@ -21,12 +21,8 @@ public class Table<V> implements Serializable {
   public final java.util.List<hydra.langs.tabular.DataRow<V>> data;
   
   public Table (hydra.util.Opt<hydra.langs.tabular.HeaderRow> header, java.util.List<hydra.langs.tabular.DataRow<V>> data) {
-    if (header == null) {
-      throw new IllegalArgumentException("null value for 'header' argument");
-    }
-    if (data == null) {
-      throw new IllegalArgumentException("null value for 'data' argument");
-    }
+    java.util.Objects.requireNonNull((header));
+    java.util.Objects.requireNonNull((data));
     this.header = header;
     this.data = data;
   }
@@ -46,16 +42,12 @@ public class Table<V> implements Serializable {
   }
   
   public Table withHeader(hydra.util.Opt<hydra.langs.tabular.HeaderRow> header) {
-    if (header == null) {
-      throw new IllegalArgumentException("null value for 'header' argument");
-    }
+    java.util.Objects.requireNonNull((header));
     return new Table(header, data);
   }
   
   public Table withData(java.util.List<hydra.langs.tabular.DataRow<V>> data) {
-    if (data == null) {
-      throw new IllegalArgumentException("null value for 'data' argument");
-    }
+    java.util.Objects.requireNonNull((data));
     return new Table(header, data);
   }
 }

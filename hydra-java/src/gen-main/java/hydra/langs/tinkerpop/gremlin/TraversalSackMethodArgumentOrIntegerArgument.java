@@ -37,9 +37,7 @@ public abstract class TraversalSackMethodArgumentOrIntegerArgument implements Se
     public final hydra.langs.tinkerpop.gremlin.TraversalSackMethodArgument value;
     
     public Consumer (hydra.langs.tinkerpop.gremlin.TraversalSackMethodArgument value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class TraversalSackMethodArgumentOrIntegerArgument implements Se
     public final hydra.langs.tinkerpop.gremlin.IntegerArgument value;
     
     public Int (hydra.langs.tinkerpop.gremlin.IntegerArgument value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

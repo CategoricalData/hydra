@@ -37,9 +37,7 @@ public abstract class ArrayAccess_Variant implements Serializable {
     public final hydra.langs.java.syntax.ExpressionName value;
     
     public Name (hydra.langs.java.syntax.ExpressionName value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class ArrayAccess_Variant implements Serializable {
     public final hydra.langs.java.syntax.PrimaryNoNewArray value;
     
     public Primary (hydra.langs.java.syntax.PrimaryNoNewArray value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

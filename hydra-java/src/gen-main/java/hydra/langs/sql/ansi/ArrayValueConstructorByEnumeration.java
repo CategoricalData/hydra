@@ -14,15 +14,9 @@ public class ArrayValueConstructorByEnumeration implements Serializable {
   public final hydra.langs.sql.ansi.RightBracketOrTrigraph rightBracketOrTrigraph;
   
   public ArrayValueConstructorByEnumeration (hydra.langs.sql.ansi.LeftBracketOrTrigraph leftBracketOrTrigraph, hydra.langs.sql.ansi.ArrayElementList arrayElementList, hydra.langs.sql.ansi.RightBracketOrTrigraph rightBracketOrTrigraph) {
-    if (leftBracketOrTrigraph == null) {
-      throw new IllegalArgumentException("null value for 'leftBracketOrTrigraph' argument");
-    }
-    if (arrayElementList == null) {
-      throw new IllegalArgumentException("null value for 'arrayElementList' argument");
-    }
-    if (rightBracketOrTrigraph == null) {
-      throw new IllegalArgumentException("null value for 'rightBracketOrTrigraph' argument");
-    }
+    java.util.Objects.requireNonNull((leftBracketOrTrigraph));
+    java.util.Objects.requireNonNull((arrayElementList));
+    java.util.Objects.requireNonNull((rightBracketOrTrigraph));
     this.leftBracketOrTrigraph = leftBracketOrTrigraph;
     this.arrayElementList = arrayElementList;
     this.rightBracketOrTrigraph = rightBracketOrTrigraph;
@@ -43,23 +37,17 @@ public class ArrayValueConstructorByEnumeration implements Serializable {
   }
   
   public ArrayValueConstructorByEnumeration withLeftBracketOrTrigraph(hydra.langs.sql.ansi.LeftBracketOrTrigraph leftBracketOrTrigraph) {
-    if (leftBracketOrTrigraph == null) {
-      throw new IllegalArgumentException("null value for 'leftBracketOrTrigraph' argument");
-    }
+    java.util.Objects.requireNonNull((leftBracketOrTrigraph));
     return new ArrayValueConstructorByEnumeration(leftBracketOrTrigraph, arrayElementList, rightBracketOrTrigraph);
   }
   
   public ArrayValueConstructorByEnumeration withArrayElementList(hydra.langs.sql.ansi.ArrayElementList arrayElementList) {
-    if (arrayElementList == null) {
-      throw new IllegalArgumentException("null value for 'arrayElementList' argument");
-    }
+    java.util.Objects.requireNonNull((arrayElementList));
     return new ArrayValueConstructorByEnumeration(leftBracketOrTrigraph, arrayElementList, rightBracketOrTrigraph);
   }
   
   public ArrayValueConstructorByEnumeration withRightBracketOrTrigraph(hydra.langs.sql.ansi.RightBracketOrTrigraph rightBracketOrTrigraph) {
-    if (rightBracketOrTrigraph == null) {
-      throw new IllegalArgumentException("null value for 'rightBracketOrTrigraph' argument");
-    }
+    java.util.Objects.requireNonNull((rightBracketOrTrigraph));
     return new ArrayValueConstructorByEnumeration(leftBracketOrTrigraph, arrayElementList, rightBracketOrTrigraph);
   }
 }

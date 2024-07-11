@@ -24,15 +24,9 @@ public class Primitive<A> {
   public final java.util.function.Function<java.util.List<hydra.core.Term<A>>, hydra.compute.Flow<hydra.graph.Graph<A>, hydra.core.Term<A>>> implementation;
   
   public Primitive (hydra.core.Name name, hydra.core.Type<A> type, java.util.function.Function<java.util.List<hydra.core.Term<A>>, hydra.compute.Flow<hydra.graph.Graph<A>, hydra.core.Term<A>>> implementation) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (implementation == null) {
-      throw new IllegalArgumentException("null value for 'implementation' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((implementation));
     this.name = name;
     this.type = type;
     this.implementation = implementation;
@@ -53,23 +47,17 @@ public class Primitive<A> {
   }
   
   public Primitive withName(hydra.core.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Primitive(name, type, implementation);
   }
   
   public Primitive withType(hydra.core.Type<A> type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new Primitive(name, type, implementation);
   }
   
   public Primitive withImplementation(java.util.function.Function<java.util.List<hydra.core.Term<A>>, hydra.compute.Flow<hydra.graph.Graph<A>, hydra.core.Term<A>>> implementation) {
-    if (implementation == null) {
-      throw new IllegalArgumentException("null value for 'implementation' argument");
-    }
+    java.util.Objects.requireNonNull((implementation));
     return new Primitive(name, type, implementation);
   }
 }

@@ -12,12 +12,8 @@ public class StringArgumentAndOptionalStringLiteralVarargs implements Serializab
   public final java.util.List<hydra.langs.tinkerpop.gremlin.StringNullableArgument> rest;
   
   public StringArgumentAndOptionalStringLiteralVarargs (hydra.langs.tinkerpop.gremlin.StringArgument first, java.util.List<hydra.langs.tinkerpop.gremlin.StringNullableArgument> rest) {
-    if (first == null) {
-      throw new IllegalArgumentException("null value for 'first' argument");
-    }
-    if (rest == null) {
-      throw new IllegalArgumentException("null value for 'rest' argument");
-    }
+    java.util.Objects.requireNonNull((first));
+    java.util.Objects.requireNonNull((rest));
     this.first = first;
     this.rest = rest;
   }
@@ -37,16 +33,12 @@ public class StringArgumentAndOptionalStringLiteralVarargs implements Serializab
   }
   
   public StringArgumentAndOptionalStringLiteralVarargs withFirst(hydra.langs.tinkerpop.gremlin.StringArgument first) {
-    if (first == null) {
-      throw new IllegalArgumentException("null value for 'first' argument");
-    }
+    java.util.Objects.requireNonNull((first));
     return new StringArgumentAndOptionalStringLiteralVarargs(first, rest);
   }
   
   public StringArgumentAndOptionalStringLiteralVarargs withRest(java.util.List<hydra.langs.tinkerpop.gremlin.StringNullableArgument> rest) {
-    if (rest == null) {
-      throw new IllegalArgumentException("null value for 'rest' argument");
-    }
+    java.util.Objects.requireNonNull((rest));
     return new StringArgumentAndOptionalStringLiteralVarargs(first, rest);
   }
 }

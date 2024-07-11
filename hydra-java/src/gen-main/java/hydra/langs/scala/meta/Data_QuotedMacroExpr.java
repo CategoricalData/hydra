@@ -10,9 +10,7 @@ public class Data_QuotedMacroExpr implements Serializable {
   public final hydra.langs.scala.meta.Data body;
   
   public Data_QuotedMacroExpr (hydra.langs.scala.meta.Data body) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((body));
     this.body = body;
   }
   

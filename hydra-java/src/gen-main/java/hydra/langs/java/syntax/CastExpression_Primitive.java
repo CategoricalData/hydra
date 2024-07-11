@@ -12,12 +12,8 @@ public class CastExpression_Primitive implements Serializable {
   public final hydra.langs.java.syntax.UnaryExpression expression;
   
   public CastExpression_Primitive (hydra.langs.java.syntax.PrimitiveTypeWithAnnotations type, hydra.langs.java.syntax.UnaryExpression expression) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((expression));
     this.type = type;
     this.expression = expression;
   }
@@ -37,16 +33,12 @@ public class CastExpression_Primitive implements Serializable {
   }
   
   public CastExpression_Primitive withType(hydra.langs.java.syntax.PrimitiveTypeWithAnnotations type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new CastExpression_Primitive(type, expression);
   }
   
   public CastExpression_Primitive withExpression(hydra.langs.java.syntax.UnaryExpression expression) {
-    if (expression == null) {
-      throw new IllegalArgumentException("null value for 'expression' argument");
-    }
+    java.util.Objects.requireNonNull((expression));
     return new CastExpression_Primitive(type, expression);
   }
 }

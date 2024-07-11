@@ -14,15 +14,9 @@ public class ShexDoc implements Serializable {
   public final hydra.langs.shex.syntax.PrefixDecl prefixDecl;
   
   public ShexDoc (java.util.List<hydra.langs.shex.syntax.Directive> listOfDirective, hydra.util.Opt<hydra.langs.shex.syntax.ShexDoc_Sequence_Option> sequence, hydra.langs.shex.syntax.PrefixDecl prefixDecl) {
-    if (listOfDirective == null) {
-      throw new IllegalArgumentException("null value for 'listOfDirective' argument");
-    }
-    if (sequence == null) {
-      throw new IllegalArgumentException("null value for 'sequence' argument");
-    }
-    if (prefixDecl == null) {
-      throw new IllegalArgumentException("null value for 'prefixDecl' argument");
-    }
+    java.util.Objects.requireNonNull((listOfDirective));
+    java.util.Objects.requireNonNull((sequence));
+    java.util.Objects.requireNonNull((prefixDecl));
     this.listOfDirective = listOfDirective;
     this.sequence = sequence;
     this.prefixDecl = prefixDecl;
@@ -43,23 +37,17 @@ public class ShexDoc implements Serializable {
   }
   
   public ShexDoc withListOfDirective(java.util.List<hydra.langs.shex.syntax.Directive> listOfDirective) {
-    if (listOfDirective == null) {
-      throw new IllegalArgumentException("null value for 'listOfDirective' argument");
-    }
+    java.util.Objects.requireNonNull((listOfDirective));
     return new ShexDoc(listOfDirective, sequence, prefixDecl);
   }
   
   public ShexDoc withSequence(hydra.util.Opt<hydra.langs.shex.syntax.ShexDoc_Sequence_Option> sequence) {
-    if (sequence == null) {
-      throw new IllegalArgumentException("null value for 'sequence' argument");
-    }
+    java.util.Objects.requireNonNull((sequence));
     return new ShexDoc(listOfDirective, sequence, prefixDecl);
   }
   
   public ShexDoc withPrefixDecl(hydra.langs.shex.syntax.PrefixDecl prefixDecl) {
-    if (prefixDecl == null) {
-      throw new IllegalArgumentException("null value for 'prefixDecl' argument");
-    }
+    java.util.Objects.requireNonNull((prefixDecl));
     return new ShexDoc(listOfDirective, sequence, prefixDecl);
   }
 }

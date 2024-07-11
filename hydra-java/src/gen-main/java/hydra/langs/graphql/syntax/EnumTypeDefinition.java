@@ -16,18 +16,10 @@ public class EnumTypeDefinition implements Serializable {
   public final hydra.util.Opt<hydra.langs.graphql.syntax.EnumValuesDefinition> enumValuesDefinition;
   
   public EnumTypeDefinition (hydra.util.Opt<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.Name name, hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives, hydra.util.Opt<hydra.langs.graphql.syntax.EnumValuesDefinition> enumValuesDefinition) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
-    if (enumValuesDefinition == null) {
-      throw new IllegalArgumentException("null value for 'enumValuesDefinition' argument");
-    }
+    java.util.Objects.requireNonNull((description));
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((directives));
+    java.util.Objects.requireNonNull((enumValuesDefinition));
     this.description = description;
     this.name = name;
     this.directives = directives;
@@ -49,30 +41,22 @@ public class EnumTypeDefinition implements Serializable {
   }
   
   public EnumTypeDefinition withDescription(hydra.util.Opt<hydra.langs.graphql.syntax.Description> description) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
+    java.util.Objects.requireNonNull((description));
     return new EnumTypeDefinition(description, name, directives, enumValuesDefinition);
   }
   
   public EnumTypeDefinition withName(hydra.langs.graphql.syntax.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new EnumTypeDefinition(description, name, directives, enumValuesDefinition);
   }
   
   public EnumTypeDefinition withDirectives(hydra.util.Opt<hydra.langs.graphql.syntax.Directives> directives) {
-    if (directives == null) {
-      throw new IllegalArgumentException("null value for 'directives' argument");
-    }
+    java.util.Objects.requireNonNull((directives));
     return new EnumTypeDefinition(description, name, directives, enumValuesDefinition);
   }
   
   public EnumTypeDefinition withEnumValuesDefinition(hydra.util.Opt<hydra.langs.graphql.syntax.EnumValuesDefinition> enumValuesDefinition) {
-    if (enumValuesDefinition == null) {
-      throw new IllegalArgumentException("null value for 'enumValuesDefinition' argument");
-    }
+    java.util.Objects.requireNonNull((enumValuesDefinition));
     return new EnumTypeDefinition(description, name, directives, enumValuesDefinition);
   }
 }

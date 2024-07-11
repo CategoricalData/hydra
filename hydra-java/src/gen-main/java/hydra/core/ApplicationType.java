@@ -21,12 +21,8 @@ public class ApplicationType<A> implements Serializable {
   public final hydra.core.Type<A> argument;
   
   public ApplicationType (hydra.core.Type<A> function, hydra.core.Type<A> argument) {
-    if (function == null) {
-      throw new IllegalArgumentException("null value for 'function' argument");
-    }
-    if (argument == null) {
-      throw new IllegalArgumentException("null value for 'argument' argument");
-    }
+    java.util.Objects.requireNonNull((function));
+    java.util.Objects.requireNonNull((argument));
     this.function = function;
     this.argument = argument;
   }
@@ -46,16 +42,12 @@ public class ApplicationType<A> implements Serializable {
   }
   
   public ApplicationType withFunction(hydra.core.Type<A> function) {
-    if (function == null) {
-      throw new IllegalArgumentException("null value for 'function' argument");
-    }
+    java.util.Objects.requireNonNull((function));
     return new ApplicationType(function, argument);
   }
   
   public ApplicationType withArgument(hydra.core.Type<A> argument) {
-    if (argument == null) {
-      throw new IllegalArgumentException("null value for 'argument' argument");
-    }
+    java.util.Objects.requireNonNull((argument));
     return new ApplicationType(function, argument);
   }
 }

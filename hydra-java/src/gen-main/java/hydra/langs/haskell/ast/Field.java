@@ -15,12 +15,8 @@ public class Field implements Serializable {
   public final hydra.langs.haskell.ast.Type type;
   
   public Field (hydra.langs.haskell.ast.Name name, hydra.langs.haskell.ast.Type type) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((type));
     this.name = name;
     this.type = type;
   }
@@ -40,16 +36,12 @@ public class Field implements Serializable {
   }
   
   public Field withName(hydra.langs.haskell.ast.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Field(name, type);
   }
   
   public Field withType(hydra.langs.haskell.ast.Type type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new Field(name, type);
   }
 }

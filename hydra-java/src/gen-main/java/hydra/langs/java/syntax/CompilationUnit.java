@@ -37,9 +37,7 @@ public abstract class CompilationUnit implements Serializable {
     public final hydra.langs.java.syntax.OrdinaryCompilationUnit value;
     
     public Ordinary (hydra.langs.java.syntax.OrdinaryCompilationUnit value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class CompilationUnit implements Serializable {
     public final hydra.langs.java.syntax.ModularCompilationUnit value;
     
     public Modular (hydra.langs.java.syntax.ModularCompilationUnit value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

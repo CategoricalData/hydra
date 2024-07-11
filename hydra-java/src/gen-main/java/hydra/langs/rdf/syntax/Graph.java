@@ -10,9 +10,7 @@ public class Graph implements Serializable {
   public final java.util.Set<hydra.langs.rdf.syntax.Triple> value;
   
   public Graph (java.util.Set<hydra.langs.rdf.syntax.Triple> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

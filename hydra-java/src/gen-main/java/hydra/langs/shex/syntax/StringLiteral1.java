@@ -10,9 +10,7 @@ public class StringLiteral1 implements Serializable {
   public final java.util.List<hydra.langs.shex.syntax.StringLiteral1_Elmt> value;
   
   public StringLiteral1 (java.util.List<hydra.langs.shex.syntax.StringLiteral1_Elmt> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

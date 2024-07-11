@@ -12,12 +12,8 @@ public class RangeArgument implements Serializable {
   public final hydra.langs.tinkerpop.gremlin.GenericLiteralArgument max;
   
   public RangeArgument (hydra.langs.tinkerpop.gremlin.GenericLiteralArgument min, hydra.langs.tinkerpop.gremlin.GenericLiteralArgument max) {
-    if (min == null) {
-      throw new IllegalArgumentException("null value for 'min' argument");
-    }
-    if (max == null) {
-      throw new IllegalArgumentException("null value for 'max' argument");
-    }
+    java.util.Objects.requireNonNull((min));
+    java.util.Objects.requireNonNull((max));
     this.min = min;
     this.max = max;
   }
@@ -37,16 +33,12 @@ public class RangeArgument implements Serializable {
   }
   
   public RangeArgument withMin(hydra.langs.tinkerpop.gremlin.GenericLiteralArgument min) {
-    if (min == null) {
-      throw new IllegalArgumentException("null value for 'min' argument");
-    }
+    java.util.Objects.requireNonNull((min));
     return new RangeArgument(min, max);
   }
   
   public RangeArgument withMax(hydra.langs.tinkerpop.gremlin.GenericLiteralArgument max) {
-    if (max == null) {
-      throw new IllegalArgumentException("null value for 'max' argument");
-    }
+    java.util.Objects.requireNonNull((max));
     return new RangeArgument(min, max);
   }
 }

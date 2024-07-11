@@ -12,12 +12,8 @@ public class Regexp implements Serializable {
   public final java.util.List<String> listOfRegex;
   
   public Regexp (java.util.List<hydra.langs.shex.syntax.Regexp_ListOfAlts_Elmt> listOfAlts, java.util.List<String> listOfRegex) {
-    if (listOfAlts == null) {
-      throw new IllegalArgumentException("null value for 'listOfAlts' argument");
-    }
-    if (listOfRegex == null) {
-      throw new IllegalArgumentException("null value for 'listOfRegex' argument");
-    }
+    java.util.Objects.requireNonNull((listOfAlts));
+    java.util.Objects.requireNonNull((listOfRegex));
     this.listOfAlts = listOfAlts;
     this.listOfRegex = listOfRegex;
   }
@@ -37,16 +33,12 @@ public class Regexp implements Serializable {
   }
   
   public Regexp withListOfAlts(java.util.List<hydra.langs.shex.syntax.Regexp_ListOfAlts_Elmt> listOfAlts) {
-    if (listOfAlts == null) {
-      throw new IllegalArgumentException("null value for 'listOfAlts' argument");
-    }
+    java.util.Objects.requireNonNull((listOfAlts));
     return new Regexp(listOfAlts, listOfRegex);
   }
   
   public Regexp withListOfRegex(java.util.List<String> listOfRegex) {
-    if (listOfRegex == null) {
-      throw new IllegalArgumentException("null value for 'listOfRegex' argument");
-    }
+    java.util.Objects.requireNonNull((listOfRegex));
     return new Regexp(listOfAlts, listOfRegex);
   }
 }

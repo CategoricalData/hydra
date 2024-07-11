@@ -13,9 +13,7 @@ public class NodeShape implements Serializable {
   public final hydra.langs.shacl.model.CommonProperties common;
   
   public NodeShape (hydra.langs.shacl.model.CommonProperties common) {
-    if (common == null) {
-      throw new IllegalArgumentException("null value for 'common' argument");
-    }
+    java.util.Objects.requireNonNull((common));
     this.common = common;
   }
   

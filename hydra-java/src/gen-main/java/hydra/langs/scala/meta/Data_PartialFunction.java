@@ -10,9 +10,7 @@ public class Data_PartialFunction implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Case> cases;
   
   public Data_PartialFunction (java.util.List<hydra.langs.scala.meta.Case> cases) {
-    if (cases == null) {
-      throw new IllegalArgumentException("null value for 'cases' argument");
-    }
+    java.util.Objects.requireNonNull((cases));
     this.cases = cases;
   }
   

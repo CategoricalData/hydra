@@ -15,12 +15,8 @@ public class Field<A> implements Serializable {
   public final hydra.core.Term<A> term;
   
   public Field (hydra.core.FieldName name, hydra.core.Term<A> term) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (term == null) {
-      throw new IllegalArgumentException("null value for 'term' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((term));
     this.name = name;
     this.term = term;
   }
@@ -40,16 +36,12 @@ public class Field<A> implements Serializable {
   }
   
   public Field withName(hydra.core.FieldName name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Field(name, term);
   }
   
   public Field withTerm(hydra.core.Term<A> term) {
-    if (term == null) {
-      throw new IllegalArgumentException("null value for 'term' argument");
-    }
+    java.util.Objects.requireNonNull((term));
     return new Field(name, term);
   }
 }

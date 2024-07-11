@@ -16,9 +16,7 @@ public class LanguageName implements Serializable {
   public final String value;
   
   public LanguageName (String value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

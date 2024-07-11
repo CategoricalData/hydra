@@ -43,9 +43,7 @@ public abstract class Literal implements Serializable {
     public final hydra.langs.shex.syntax.RdfLiteral value;
     
     public RdfLiteral (hydra.langs.shex.syntax.RdfLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,9 +71,7 @@ public abstract class Literal implements Serializable {
     public final hydra.langs.shex.syntax.NumericLiteral value;
     
     public NumericLiteral (hydra.langs.shex.syntax.NumericLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -103,9 +99,7 @@ public abstract class Literal implements Serializable {
     public final hydra.langs.shex.syntax.BooleanLiteral value;
     
     public BooleanLiteral (hydra.langs.shex.syntax.BooleanLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

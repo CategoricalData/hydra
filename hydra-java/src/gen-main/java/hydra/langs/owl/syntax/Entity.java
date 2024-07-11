@@ -61,9 +61,7 @@ public abstract class Entity implements Serializable {
     public final hydra.langs.owl.syntax.AnnotationProperty value;
     
     public AnnotationProperty (hydra.langs.owl.syntax.AnnotationProperty value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -91,9 +89,7 @@ public abstract class Entity implements Serializable {
     public final hydra.langs.owl.syntax.Class_ value;
     
     public Class_ (hydra.langs.owl.syntax.Class_ value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -121,9 +117,7 @@ public abstract class Entity implements Serializable {
     public final hydra.langs.owl.syntax.DataProperty value;
     
     public DataProperty (hydra.langs.owl.syntax.DataProperty value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -151,9 +145,7 @@ public abstract class Entity implements Serializable {
     public final hydra.langs.owl.syntax.Datatype value;
     
     public Datatype (hydra.langs.owl.syntax.Datatype value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -181,9 +173,7 @@ public abstract class Entity implements Serializable {
     public final hydra.langs.owl.syntax.NamedIndividual value;
     
     public NamedIndividual (hydra.langs.owl.syntax.NamedIndividual value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -211,9 +201,7 @@ public abstract class Entity implements Serializable {
     public final hydra.langs.owl.syntax.ObjectProperty value;
     
     public ObjectProperty (hydra.langs.owl.syntax.ObjectProperty value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

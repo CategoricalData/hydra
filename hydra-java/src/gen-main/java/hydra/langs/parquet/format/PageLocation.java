@@ -23,15 +23,9 @@ public class PageLocation implements Serializable {
   public final Long firstRowIndex;
   
   public PageLocation (Long offset, Integer compressedPageSize, Long firstRowIndex) {
-    if (offset == null) {
-      throw new IllegalArgumentException("null value for 'offset' argument");
-    }
-    if (compressedPageSize == null) {
-      throw new IllegalArgumentException("null value for 'compressedPageSize' argument");
-    }
-    if (firstRowIndex == null) {
-      throw new IllegalArgumentException("null value for 'firstRowIndex' argument");
-    }
+    java.util.Objects.requireNonNull((offset));
+    java.util.Objects.requireNonNull((compressedPageSize));
+    java.util.Objects.requireNonNull((firstRowIndex));
     this.offset = offset;
     this.compressedPageSize = compressedPageSize;
     this.firstRowIndex = firstRowIndex;
@@ -52,23 +46,17 @@ public class PageLocation implements Serializable {
   }
   
   public PageLocation withOffset(Long offset) {
-    if (offset == null) {
-      throw new IllegalArgumentException("null value for 'offset' argument");
-    }
+    java.util.Objects.requireNonNull((offset));
     return new PageLocation(offset, compressedPageSize, firstRowIndex);
   }
   
   public PageLocation withCompressedPageSize(Integer compressedPageSize) {
-    if (compressedPageSize == null) {
-      throw new IllegalArgumentException("null value for 'compressedPageSize' argument");
-    }
+    java.util.Objects.requireNonNull((compressedPageSize));
     return new PageLocation(offset, compressedPageSize, firstRowIndex);
   }
   
   public PageLocation withFirstRowIndex(Long firstRowIndex) {
-    if (firstRowIndex == null) {
-      throw new IllegalArgumentException("null value for 'firstRowIndex' argument");
-    }
+    java.util.Objects.requireNonNull((firstRowIndex));
     return new PageLocation(offset, compressedPageSize, firstRowIndex);
   }
 }

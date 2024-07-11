@@ -12,12 +12,8 @@ public class DoStatement implements Serializable {
   public final hydra.util.Opt<hydra.langs.java.syntax.Expression> conde;
   
   public DoStatement (hydra.langs.java.syntax.Statement body, hydra.util.Opt<hydra.langs.java.syntax.Expression> conde) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
-    if (conde == null) {
-      throw new IllegalArgumentException("null value for 'conde' argument");
-    }
+    java.util.Objects.requireNonNull((body));
+    java.util.Objects.requireNonNull((conde));
     this.body = body;
     this.conde = conde;
   }
@@ -37,16 +33,12 @@ public class DoStatement implements Serializable {
   }
   
   public DoStatement withBody(hydra.langs.java.syntax.Statement body) {
-    if (body == null) {
-      throw new IllegalArgumentException("null value for 'body' argument");
-    }
+    java.util.Objects.requireNonNull((body));
     return new DoStatement(body, conde);
   }
   
   public DoStatement withConde(hydra.util.Opt<hydra.langs.java.syntax.Expression> conde) {
-    if (conde == null) {
-      throw new IllegalArgumentException("null value for 'conde' argument");
-    }
+    java.util.Objects.requireNonNull((conde));
     return new DoStatement(body, conde);
   }
 }

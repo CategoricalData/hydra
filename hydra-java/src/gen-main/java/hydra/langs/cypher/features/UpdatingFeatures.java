@@ -26,15 +26,9 @@ public class UpdatingFeatures implements Serializable {
   public final Boolean with;
   
   public UpdatingFeatures (Boolean create, Boolean set, Boolean with) {
-    if (create == null) {
-      throw new IllegalArgumentException("null value for 'create' argument");
-    }
-    if (set == null) {
-      throw new IllegalArgumentException("null value for 'set' argument");
-    }
-    if (with == null) {
-      throw new IllegalArgumentException("null value for 'with' argument");
-    }
+    java.util.Objects.requireNonNull((create));
+    java.util.Objects.requireNonNull((set));
+    java.util.Objects.requireNonNull((with));
     this.create = create;
     this.set = set;
     this.with = with;
@@ -55,23 +49,17 @@ public class UpdatingFeatures implements Serializable {
   }
   
   public UpdatingFeatures withCreate(Boolean create) {
-    if (create == null) {
-      throw new IllegalArgumentException("null value for 'create' argument");
-    }
+    java.util.Objects.requireNonNull((create));
     return new UpdatingFeatures(create, set, with);
   }
   
   public UpdatingFeatures withSet(Boolean set) {
-    if (set == null) {
-      throw new IllegalArgumentException("null value for 'set' argument");
-    }
+    java.util.Objects.requireNonNull((set));
     return new UpdatingFeatures(create, set, with);
   }
   
   public UpdatingFeatures withWith(Boolean with) {
-    if (with == null) {
-      throw new IllegalArgumentException("null value for 'with' argument");
-    }
+    java.util.Objects.requireNonNull((with));
     return new UpdatingFeatures(create, set, with);
   }
 }

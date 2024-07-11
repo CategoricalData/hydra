@@ -37,9 +37,7 @@ public abstract class KeywordOrIdentifier implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.Keyword value;
     
     public Keyword (hydra.langs.tinkerpop.gremlin.Keyword value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class KeywordOrIdentifier implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.Identifier value;
     
     public Identifier (hydra.langs.tinkerpop.gremlin.Identifier value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

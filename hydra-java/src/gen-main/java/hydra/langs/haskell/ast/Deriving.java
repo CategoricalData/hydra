@@ -16,9 +16,7 @@ public class Deriving implements Serializable {
   public final java.util.List<hydra.langs.haskell.ast.Name> value;
   
   public Deriving (java.util.List<hydra.langs.haskell.ast.Name> value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null value for 'value' argument");
-    }
+    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   

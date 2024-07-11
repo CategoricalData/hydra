@@ -37,9 +37,7 @@ public abstract class NumericTypeArray implements Serializable {
     public final hydra.langs.java.syntax.NumericType value;
     
     public Simple (hydra.langs.java.syntax.NumericType value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class NumericTypeArray implements Serializable {
     public final hydra.langs.java.syntax.NumericTypeArray value;
     
     public Array (hydra.langs.java.syntax.NumericTypeArray value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

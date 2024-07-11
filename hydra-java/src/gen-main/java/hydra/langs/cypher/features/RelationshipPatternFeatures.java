@@ -26,15 +26,9 @@ public class RelationshipPatternFeatures implements Serializable {
   public final Boolean wildcardType;
   
   public RelationshipPatternFeatures (Boolean multipleTypes, Boolean variableRelationship, Boolean wildcardType) {
-    if (multipleTypes == null) {
-      throw new IllegalArgumentException("null value for 'multipleTypes' argument");
-    }
-    if (variableRelationship == null) {
-      throw new IllegalArgumentException("null value for 'variableRelationship' argument");
-    }
-    if (wildcardType == null) {
-      throw new IllegalArgumentException("null value for 'wildcardType' argument");
-    }
+    java.util.Objects.requireNonNull((multipleTypes));
+    java.util.Objects.requireNonNull((variableRelationship));
+    java.util.Objects.requireNonNull((wildcardType));
     this.multipleTypes = multipleTypes;
     this.variableRelationship = variableRelationship;
     this.wildcardType = wildcardType;
@@ -55,23 +49,17 @@ public class RelationshipPatternFeatures implements Serializable {
   }
   
   public RelationshipPatternFeatures withMultipleTypes(Boolean multipleTypes) {
-    if (multipleTypes == null) {
-      throw new IllegalArgumentException("null value for 'multipleTypes' argument");
-    }
+    java.util.Objects.requireNonNull((multipleTypes));
     return new RelationshipPatternFeatures(multipleTypes, variableRelationship, wildcardType);
   }
   
   public RelationshipPatternFeatures withVariableRelationship(Boolean variableRelationship) {
-    if (variableRelationship == null) {
-      throw new IllegalArgumentException("null value for 'variableRelationship' argument");
-    }
+    java.util.Objects.requireNonNull((variableRelationship));
     return new RelationshipPatternFeatures(multipleTypes, variableRelationship, wildcardType);
   }
   
   public RelationshipPatternFeatures withWildcardType(Boolean wildcardType) {
-    if (wildcardType == null) {
-      throw new IllegalArgumentException("null value for 'wildcardType' argument");
-    }
+    java.util.Objects.requireNonNull((wildcardType));
     return new RelationshipPatternFeatures(multipleTypes, variableRelationship, wildcardType);
   }
 }

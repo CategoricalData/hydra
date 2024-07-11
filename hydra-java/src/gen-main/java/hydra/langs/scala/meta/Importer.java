@@ -12,12 +12,8 @@ public class Importer implements Serializable {
   public final java.util.List<hydra.langs.scala.meta.Importee> importees;
   
   public Importer (hydra.langs.scala.meta.Data_Ref ref, java.util.List<hydra.langs.scala.meta.Importee> importees) {
-    if (ref == null) {
-      throw new IllegalArgumentException("null value for 'ref' argument");
-    }
-    if (importees == null) {
-      throw new IllegalArgumentException("null value for 'importees' argument");
-    }
+    java.util.Objects.requireNonNull((ref));
+    java.util.Objects.requireNonNull((importees));
     this.ref = ref;
     this.importees = importees;
   }
@@ -37,16 +33,12 @@ public class Importer implements Serializable {
   }
   
   public Importer withRef(hydra.langs.scala.meta.Data_Ref ref) {
-    if (ref == null) {
-      throw new IllegalArgumentException("null value for 'ref' argument");
-    }
+    java.util.Objects.requireNonNull((ref));
     return new Importer(ref, importees);
   }
   
   public Importer withImportees(java.util.List<hydra.langs.scala.meta.Importee> importees) {
-    if (importees == null) {
-      throw new IllegalArgumentException("null value for 'importees' argument");
-    }
+    java.util.Objects.requireNonNull((importees));
     return new Importer(ref, importees);
   }
 }

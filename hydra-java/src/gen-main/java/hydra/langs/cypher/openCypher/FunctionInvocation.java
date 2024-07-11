@@ -14,15 +14,9 @@ public class FunctionInvocation implements Serializable {
   public final java.util.List<hydra.langs.cypher.openCypher.Expression> arguments;
   
   public FunctionInvocation (hydra.langs.cypher.openCypher.QualifiedName name, Boolean distinct, java.util.List<hydra.langs.cypher.openCypher.Expression> arguments) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (distinct == null) {
-      throw new IllegalArgumentException("null value for 'distinct' argument");
-    }
-    if (arguments == null) {
-      throw new IllegalArgumentException("null value for 'arguments' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((distinct));
+    java.util.Objects.requireNonNull((arguments));
     this.name = name;
     this.distinct = distinct;
     this.arguments = arguments;
@@ -43,23 +37,17 @@ public class FunctionInvocation implements Serializable {
   }
   
   public FunctionInvocation withName(hydra.langs.cypher.openCypher.QualifiedName name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new FunctionInvocation(name, distinct, arguments);
   }
   
   public FunctionInvocation withDistinct(Boolean distinct) {
-    if (distinct == null) {
-      throw new IllegalArgumentException("null value for 'distinct' argument");
-    }
+    java.util.Objects.requireNonNull((distinct));
     return new FunctionInvocation(name, distinct, arguments);
   }
   
   public FunctionInvocation withArguments(java.util.List<hydra.langs.cypher.openCypher.Expression> arguments) {
-    if (arguments == null) {
-      throw new IllegalArgumentException("null value for 'arguments' argument");
-    }
+    java.util.Objects.requireNonNull((arguments));
     return new FunctionInvocation(name, distinct, arguments);
   }
 }

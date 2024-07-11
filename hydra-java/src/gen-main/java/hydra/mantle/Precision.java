@@ -65,9 +65,7 @@ public abstract class Precision implements Serializable {
     public final Integer value;
     
     public Bits (Integer value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

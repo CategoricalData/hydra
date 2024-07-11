@@ -37,9 +37,7 @@ public abstract class NumericLiteral implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.IntegerLiteral value;
     
     public Integer_ (hydra.langs.tinkerpop.gremlin.IntegerLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class NumericLiteral implements Serializable {
     public final hydra.langs.tinkerpop.gremlin.FloatLiteral value;
     
     public Float_ (hydra.langs.tinkerpop.gremlin.FloatLiteral value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

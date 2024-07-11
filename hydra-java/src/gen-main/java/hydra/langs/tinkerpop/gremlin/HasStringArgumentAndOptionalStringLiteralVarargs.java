@@ -12,12 +12,8 @@ public class HasStringArgumentAndOptionalStringLiteralVarargs implements Seriali
   public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest> rest;
   
   public HasStringArgumentAndOptionalStringLiteralVarargs (hydra.langs.tinkerpop.gremlin.StringNullableArgument string, hydra.util.Opt<hydra.langs.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest> rest) {
-    if (string == null) {
-      throw new IllegalArgumentException("null value for 'string' argument");
-    }
-    if (rest == null) {
-      throw new IllegalArgumentException("null value for 'rest' argument");
-    }
+    java.util.Objects.requireNonNull((string));
+    java.util.Objects.requireNonNull((rest));
     this.string = string;
     this.rest = rest;
   }
@@ -37,16 +33,12 @@ public class HasStringArgumentAndOptionalStringLiteralVarargs implements Seriali
   }
   
   public HasStringArgumentAndOptionalStringLiteralVarargs withString(hydra.langs.tinkerpop.gremlin.StringNullableArgument string) {
-    if (string == null) {
-      throw new IllegalArgumentException("null value for 'string' argument");
-    }
+    java.util.Objects.requireNonNull((string));
     return new HasStringArgumentAndOptionalStringLiteralVarargs(string, rest);
   }
   
   public HasStringArgumentAndOptionalStringLiteralVarargs withRest(hydra.util.Opt<hydra.langs.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest> rest) {
-    if (rest == null) {
-      throw new IllegalArgumentException("null value for 'rest' argument");
-    }
+    java.util.Objects.requireNonNull((rest));
     return new HasStringArgumentAndOptionalStringLiteralVarargs(string, rest);
   }
 }

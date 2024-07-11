@@ -61,9 +61,7 @@ public abstract class Schema implements Serializable {
     public final hydra.langs.avro.schema.Array value;
     
     public Array (hydra.langs.avro.schema.Array value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -91,9 +89,7 @@ public abstract class Schema implements Serializable {
     public final hydra.langs.avro.schema.Map value;
     
     public Map (hydra.langs.avro.schema.Map value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -121,9 +117,7 @@ public abstract class Schema implements Serializable {
     public final hydra.langs.avro.schema.Named value;
     
     public Named (hydra.langs.avro.schema.Named value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -151,9 +145,7 @@ public abstract class Schema implements Serializable {
     public final hydra.langs.avro.schema.Primitive value;
     
     public Primitive (hydra.langs.avro.schema.Primitive value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -187,9 +179,7 @@ public abstract class Schema implements Serializable {
     public final String value;
     
     public Reference (String value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -217,9 +207,7 @@ public abstract class Schema implements Serializable {
     public final hydra.langs.avro.schema.Union value;
     
     public Union (hydra.langs.avro.schema.Union value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

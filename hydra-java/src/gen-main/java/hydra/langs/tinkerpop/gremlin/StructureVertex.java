@@ -14,15 +14,9 @@ public class StructureVertex implements Serializable {
   public final hydra.langs.tinkerpop.gremlin.StringArgument label;
   
   public StructureVertex (Boolean new_, hydra.langs.tinkerpop.gremlin.GenericLiteralArgument id, hydra.langs.tinkerpop.gremlin.StringArgument label) {
-    if (new_ == null) {
-      throw new IllegalArgumentException("null value for 'new' argument");
-    }
-    if (id == null) {
-      throw new IllegalArgumentException("null value for 'id' argument");
-    }
-    if (label == null) {
-      throw new IllegalArgumentException("null value for 'label' argument");
-    }
+    java.util.Objects.requireNonNull((new_));
+    java.util.Objects.requireNonNull((id));
+    java.util.Objects.requireNonNull((label));
     this.new_ = new_;
     this.id = id;
     this.label = label;
@@ -43,23 +37,17 @@ public class StructureVertex implements Serializable {
   }
   
   public StructureVertex withNew(Boolean new_) {
-    if (new_ == null) {
-      throw new IllegalArgumentException("null value for 'new' argument");
-    }
+    java.util.Objects.requireNonNull((new_));
     return new StructureVertex(new_, id, label);
   }
   
   public StructureVertex withId(hydra.langs.tinkerpop.gremlin.GenericLiteralArgument id) {
-    if (id == null) {
-      throw new IllegalArgumentException("null value for 'id' argument");
-    }
+    java.util.Objects.requireNonNull((id));
     return new StructureVertex(new_, id, label);
   }
   
   public StructureVertex withLabel(hydra.langs.tinkerpop.gremlin.StringArgument label) {
-    if (label == null) {
-      throw new IllegalArgumentException("null value for 'label' argument");
-    }
+    java.util.Objects.requireNonNull((label));
     return new StructureVertex(new_, id, label);
   }
 }

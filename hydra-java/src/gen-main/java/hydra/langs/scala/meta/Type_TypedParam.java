@@ -12,12 +12,8 @@ public class Type_TypedParam implements Serializable {
   public final hydra.langs.scala.meta.Type typ;
   
   public Type_TypedParam (hydra.langs.scala.meta.Name name, hydra.langs.scala.meta.Type typ) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (typ == null) {
-      throw new IllegalArgumentException("null value for 'typ' argument");
-    }
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((typ));
     this.name = name;
     this.typ = typ;
   }
@@ -37,16 +33,12 @@ public class Type_TypedParam implements Serializable {
   }
   
   public Type_TypedParam withName(hydra.langs.scala.meta.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new Type_TypedParam(name, typ);
   }
   
   public Type_TypedParam withTyp(hydra.langs.scala.meta.Type typ) {
-    if (typ == null) {
-      throw new IllegalArgumentException("null value for 'typ' argument");
-    }
+    java.util.Objects.requireNonNull((typ));
     return new Type_TypedParam(name, typ);
   }
 }

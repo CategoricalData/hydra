@@ -37,9 +37,7 @@ public abstract class SchemaExtension implements Serializable {
     public final hydra.langs.graphql.syntax.SchemaExtension_Sequence value;
     
     public Sequence (hydra.langs.graphql.syntax.SchemaExtension_Sequence value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class SchemaExtension implements Serializable {
     public final hydra.langs.graphql.syntax.Directives value;
     
     public Sequence2 (hydra.langs.graphql.syntax.Directives value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

@@ -43,9 +43,7 @@ public abstract class PnChars implements Serializable {
     public final hydra.langs.shex.syntax.PnCharsU value;
     
     public PnCharsU (hydra.langs.shex.syntax.PnCharsU value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -98,9 +96,7 @@ public abstract class PnChars implements Serializable {
     public final String value;
     
     public Regex (String value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

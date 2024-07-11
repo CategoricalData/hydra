@@ -18,21 +18,11 @@ public class DirectiveDefinition implements Serializable {
   public final hydra.langs.graphql.syntax.DirectiveLocations directiveLocations;
   
   public DirectiveDefinition (hydra.util.Opt<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.Name name, hydra.util.Opt<hydra.langs.graphql.syntax.ArgumentsDefinition> argumentsDefinition, hydra.util.Opt<java.lang.Void> repeatable, hydra.langs.graphql.syntax.DirectiveLocations directiveLocations) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
-    if (argumentsDefinition == null) {
-      throw new IllegalArgumentException("null value for 'argumentsDefinition' argument");
-    }
-    if (repeatable == null) {
-      throw new IllegalArgumentException("null value for 'repeatable' argument");
-    }
-    if (directiveLocations == null) {
-      throw new IllegalArgumentException("null value for 'directiveLocations' argument");
-    }
+    java.util.Objects.requireNonNull((description));
+    java.util.Objects.requireNonNull((name));
+    java.util.Objects.requireNonNull((argumentsDefinition));
+    java.util.Objects.requireNonNull((repeatable));
+    java.util.Objects.requireNonNull((directiveLocations));
     this.description = description;
     this.name = name;
     this.argumentsDefinition = argumentsDefinition;
@@ -55,37 +45,27 @@ public class DirectiveDefinition implements Serializable {
   }
   
   public DirectiveDefinition withDescription(hydra.util.Opt<hydra.langs.graphql.syntax.Description> description) {
-    if (description == null) {
-      throw new IllegalArgumentException("null value for 'description' argument");
-    }
+    java.util.Objects.requireNonNull((description));
     return new DirectiveDefinition(description, name, argumentsDefinition, repeatable, directiveLocations);
   }
   
   public DirectiveDefinition withName(hydra.langs.graphql.syntax.Name name) {
-    if (name == null) {
-      throw new IllegalArgumentException("null value for 'name' argument");
-    }
+    java.util.Objects.requireNonNull((name));
     return new DirectiveDefinition(description, name, argumentsDefinition, repeatable, directiveLocations);
   }
   
   public DirectiveDefinition withArgumentsDefinition(hydra.util.Opt<hydra.langs.graphql.syntax.ArgumentsDefinition> argumentsDefinition) {
-    if (argumentsDefinition == null) {
-      throw new IllegalArgumentException("null value for 'argumentsDefinition' argument");
-    }
+    java.util.Objects.requireNonNull((argumentsDefinition));
     return new DirectiveDefinition(description, name, argumentsDefinition, repeatable, directiveLocations);
   }
   
   public DirectiveDefinition withRepeatable(hydra.util.Opt<java.lang.Void> repeatable) {
-    if (repeatable == null) {
-      throw new IllegalArgumentException("null value for 'repeatable' argument");
-    }
+    java.util.Objects.requireNonNull((repeatable));
     return new DirectiveDefinition(description, name, argumentsDefinition, repeatable, directiveLocations);
   }
   
   public DirectiveDefinition withDirectiveLocations(hydra.langs.graphql.syntax.DirectiveLocations directiveLocations) {
-    if (directiveLocations == null) {
-      throw new IllegalArgumentException("null value for 'directiveLocations' argument");
-    }
+    java.util.Objects.requireNonNull((directiveLocations));
     return new DirectiveDefinition(description, name, argumentsDefinition, repeatable, directiveLocations);
   }
 }

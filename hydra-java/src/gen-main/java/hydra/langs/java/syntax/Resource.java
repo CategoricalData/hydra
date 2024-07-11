@@ -37,9 +37,7 @@ public abstract class Resource implements Serializable {
     public final hydra.langs.java.syntax.Resource_Local value;
     
     public Local (hydra.langs.java.syntax.Resource_Local value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -67,9 +65,7 @@ public abstract class Resource implements Serializable {
     public final hydra.langs.java.syntax.VariableAccess value;
     
     public Variable (hydra.langs.java.syntax.VariableAccess value) {
-      if (value == null) {
-        throw new IllegalArgumentException("null value for 'value' argument");
-      }
+      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     

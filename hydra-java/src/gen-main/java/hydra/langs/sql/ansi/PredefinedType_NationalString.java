@@ -12,12 +12,8 @@ public class PredefinedType_NationalString implements Serializable {
   public final hydra.util.Opt<hydra.langs.sql.ansi.CollateClause> collate;
   
   public PredefinedType_NationalString (hydra.langs.sql.ansi.NationalCharacterStringType type, hydra.util.Opt<hydra.langs.sql.ansi.CollateClause> collate) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
-    if (collate == null) {
-      throw new IllegalArgumentException("null value for 'collate' argument");
-    }
+    java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((collate));
     this.type = type;
     this.collate = collate;
   }
@@ -37,16 +33,12 @@ public class PredefinedType_NationalString implements Serializable {
   }
   
   public PredefinedType_NationalString withType(hydra.langs.sql.ansi.NationalCharacterStringType type) {
-    if (type == null) {
-      throw new IllegalArgumentException("null value for 'type' argument");
-    }
+    java.util.Objects.requireNonNull((type));
     return new PredefinedType_NationalString(type, collate);
   }
   
   public PredefinedType_NationalString withCollate(hydra.util.Opt<hydra.langs.sql.ansi.CollateClause> collate) {
-    if (collate == null) {
-      throw new IllegalArgumentException("null value for 'collate' argument");
-    }
+    java.util.Objects.requireNonNull((collate));
     return new PredefinedType_NationalString(type, collate);
   }
 }

@@ -12,12 +12,8 @@ public class Type_Lambda implements Serializable {
   public final hydra.langs.scala.meta.Type tpe;
   
   public Type_Lambda (java.util.List<hydra.langs.scala.meta.Type_Param> tparams, hydra.langs.scala.meta.Type tpe) {
-    if (tparams == null) {
-      throw new IllegalArgumentException("null value for 'tparams' argument");
-    }
-    if (tpe == null) {
-      throw new IllegalArgumentException("null value for 'tpe' argument");
-    }
+    java.util.Objects.requireNonNull((tparams));
+    java.util.Objects.requireNonNull((tpe));
     this.tparams = tparams;
     this.tpe = tpe;
   }
@@ -37,16 +33,12 @@ public class Type_Lambda implements Serializable {
   }
   
   public Type_Lambda withTparams(java.util.List<hydra.langs.scala.meta.Type_Param> tparams) {
-    if (tparams == null) {
-      throw new IllegalArgumentException("null value for 'tparams' argument");
-    }
+    java.util.Objects.requireNonNull((tparams));
     return new Type_Lambda(tparams, tpe);
   }
   
   public Type_Lambda withTpe(hydra.langs.scala.meta.Type tpe) {
-    if (tpe == null) {
-      throw new IllegalArgumentException("null value for 'tpe' argument");
-    }
+    java.util.Objects.requireNonNull((tpe));
     return new Type_Lambda(tparams, tpe);
   }
 }
