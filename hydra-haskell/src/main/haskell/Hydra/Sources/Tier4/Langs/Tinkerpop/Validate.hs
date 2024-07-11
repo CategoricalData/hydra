@@ -271,9 +271,7 @@ checkAllDef :: Definition ([Y.Maybe a] -> Y.Maybe a)
 checkAllDef = validateDefinition "checkAll" $
   function (listT $ optionalT aT) (optionalT aT) $
   lambda "checks" (
-    (ifElse (Lists.null @@ var "errors")
-      nothing
-      (just (Lists.head @@ var "errors")))
+    (Lists.safeHead @@ var "errors")
     `with` [
       "errors">: Optionals.cat @@ var "checks"])
 

@@ -1,4 +1,9 @@
+// Note: this is an automatically generated file. Do not edit.
+
 package hydra.langs.tinkerpop.validate;
+
+import hydra.langs.tinkerpop.propertyGraph.EdgeLabel;
+import hydra.langs.tinkerpop.propertyGraph.VertexLabel;
 
 /**
  * Utilities for validating property graphs against property graph schemas
@@ -12,15 +17,15 @@ public interface Validate {
         ((hydra.langs.tinkerpop.validate.Validate.validateProperties((checkValue))).apply(((typ)).properties)).apply(((el)).properties));
       java.util.Optional<String> checkOut = (((labelForVertexId)).map((java.util.function.Function<java.util.function.Function<V, java.util.Optional<hydra.langs.tinkerpop.propertyGraph.VertexLabel>>, java.util.Optional<String>>) (s0 -> ((((s0)).apply(((el)).out)).map((java.util.function.Function<hydra.langs.tinkerpop.propertyGraph.VertexLabel, java.util.Optional<String>>) (s1 -> (hydra.langs.tinkerpop.validate.Validate.verify(hydra.lib.equality.EqualString.apply(
         ((s1)).value,
-        (((typ)).out).value))).apply(((failWith)).apply((hydra.langs.tinkerpop.validate.Validate.prepend("Wrong out-vertex label")).apply((hydra.langs.tinkerpop.validate.Validate.vertexLabelMismatch(((typ)).out.value)).apply((s1)))))))).orElse(java.util.Optional.of(((failWith)).apply((hydra.langs.tinkerpop.validate.Validate.prepend("Out-vertex does not exist")).apply(((showValue)).apply(((el)).out)))))))).orElse(java.util.Optional.empty());
+        (((typ)).out).value))).apply(((failWith)).apply((hydra.langs.tinkerpop.validate.Validate.prepend("Wrong out-vertex label")).apply((hydra.langs.tinkerpop.validate.Validate.vertexLabelMismatch(((typ)).out)).apply((s1)))))))).orElse(java.util.Optional.of(((failWith)).apply((hydra.langs.tinkerpop.validate.Validate.prepend("Out-vertex does not exist")).apply(((showValue)).apply(((el)).out)))))))).orElse(java.util.Optional.empty());
       hydra.langs.tinkerpop.propertyGraph.EdgeLabel checkLabel_expected = ((typ)).label;
       hydra.langs.tinkerpop.propertyGraph.EdgeLabel checkLabel_actual = ((el)).label;
       java.util.Optional<String> checkLabel = (hydra.langs.tinkerpop.validate.Validate.verify(hydra.lib.equality.EqualString.apply(
         ((checkLabel_actual)).value,
-        ((checkLabel_expected)).value))).apply(((failWith)).apply((hydra.langs.tinkerpop.validate.Validate.prepend("Wrong label")).apply((hydra.langs.tinkerpop.validate.Validate.edgeLabelMismatch((checkLabel_expected.value))).apply((checkLabel_actual)))));
+        ((checkLabel_expected)).value))).apply(((failWith)).apply((hydra.langs.tinkerpop.validate.Validate.prepend("Wrong label")).apply((hydra.langs.tinkerpop.validate.Validate.edgeLabelMismatch((checkLabel_expected))).apply((checkLabel_actual)))));
       java.util.Optional<String> checkIn = (((labelForVertexId)).map((java.util.function.Function<java.util.function.Function<V, java.util.Optional<hydra.langs.tinkerpop.propertyGraph.VertexLabel>>, java.util.Optional<String>>) (f -> ((((f)).apply(((el)).in)).map((java.util.function.Function<hydra.langs.tinkerpop.propertyGraph.VertexLabel, java.util.Optional<String>>) (label -> (hydra.langs.tinkerpop.validate.Validate.verify(hydra.lib.equality.EqualString.apply(
         ((label)).value,
-        (((typ)).in).value))).apply(((failWith)).apply((hydra.langs.tinkerpop.validate.Validate.prepend("Wrong in-vertex label")).apply((hydra.langs.tinkerpop.validate.Validate.vertexLabelMismatch(((typ)).in.value)).apply((label)))))))).orElse(java.util.Optional.of(((failWith)).apply((hydra.langs.tinkerpop.validate.Validate.prepend("In-vertex does not exist")).apply(((showValue)).apply(((el)).in)))))))).orElse(java.util.Optional.empty());
+        (((typ)).in).value))).apply(((failWith)).apply((hydra.langs.tinkerpop.validate.Validate.prepend("Wrong in-vertex label")).apply((hydra.langs.tinkerpop.validate.Validate.vertexLabelMismatch(((typ)).in)).apply((label)))))))).orElse(java.util.Optional.of(((failWith)).apply((hydra.langs.tinkerpop.validate.Validate.prepend("In-vertex does not exist")).apply(((showValue)).apply(((el)).in)))))))).orElse(java.util.Optional.empty());
       java.util.Optional<String> checkId = hydra.lib.optionals.Map.apply(
         (java.util.function.Function<String, String>) (x -> ((failWith)).apply((hydra.langs.tinkerpop.validate.Validate.prepend("Invalid id")).apply((x)))),
         (((checkValue)).apply(((typ)).id)).apply(((el)).id));
@@ -28,39 +33,39 @@ public interface Validate {
         (checkLabel),
         (checkId),
         (checkProperties),
-              (checkOut),
-              (checkIn)));
+        (checkOut),
+        (checkIn)));
     }))));
   }
   
   static <T, V> java.util.function.Function<java.util.function.Function<V, String>, java.util.function.Function<java.util.Optional<java.util.function.Function<V, java.util.Optional<hydra.langs.tinkerpop.propertyGraph.VertexLabel>>>, java.util.function.Function<hydra.langs.tinkerpop.propertyGraph.ElementType<T>, java.util.function.Function<hydra.langs.tinkerpop.propertyGraph.Element<V>, java.util.Optional<String>>>>> validateElement(java.util.function.Function<T, java.util.function.Function<V, java.util.Optional<String>>> checkValue) {
     return (java.util.function.Function<java.util.function.Function<V, String>, java.util.function.Function<java.util.Optional<java.util.function.Function<V, java.util.Optional<hydra.langs.tinkerpop.propertyGraph.VertexLabel>>>, java.util.function.Function<hydra.langs.tinkerpop.propertyGraph.ElementType<T>, java.util.function.Function<hydra.langs.tinkerpop.propertyGraph.Element<V>, java.util.Optional<String>>>>>) (showValue -> (java.util.function.Function<java.util.Optional<java.util.function.Function<V, java.util.Optional<hydra.langs.tinkerpop.propertyGraph.VertexLabel>>>, java.util.function.Function<hydra.langs.tinkerpop.propertyGraph.ElementType<T>, java.util.function.Function<hydra.langs.tinkerpop.propertyGraph.Element<V>, java.util.Optional<String>>>>) (labelForVertexId -> (java.util.function.Function<hydra.langs.tinkerpop.propertyGraph.ElementType<T>, java.util.function.Function<hydra.langs.tinkerpop.propertyGraph.Element<V>, java.util.Optional<String>>>) (typ -> (java.util.function.Function<hydra.langs.tinkerpop.propertyGraph.Element<V>, java.util.Optional<String>>) (el -> ((typ)).accept(new hydra.langs.tinkerpop.propertyGraph.ElementType.Visitor<T, java.util.Optional<String>>() {
       @Override
-      public java.util.Optional<String> visit(hydra.langs.tinkerpop.propertyGraph.ElementType.Vertex<T> instanceT) {
+      public java.util.Optional<String> visit(hydra.langs.tinkerpop.propertyGraph.ElementType.Vertex<T> instance) {
         return ((el)).accept(new hydra.langs.tinkerpop.propertyGraph.Element.Visitor<V, java.util.Optional<String>>() {
           @Override
-          public java.util.Optional<String> visit(hydra.langs.tinkerpop.propertyGraph.Element.Edge<V> instance) {
-            return java.util.Optional.of((hydra.langs.tinkerpop.validate.Validate.prepend("Edge instead of vertex")).apply(((showValue)).apply(((instance.value)).id)));
+          public java.util.Optional<String> visit(hydra.langs.tinkerpop.propertyGraph.Element.Edge<V> inst) {
+            return java.util.Optional.of((hydra.langs.tinkerpop.validate.Validate.prepend("Edge instead of vertex")).apply(((showValue)).apply(((inst.value)).id)));
           }
           
           @Override
-          public java.util.Optional<String> visit(hydra.langs.tinkerpop.propertyGraph.Element.Vertex<V> instance) {
-            return (((hydra.langs.tinkerpop.validate.Validate.validateVertex((checkValue))).apply((showValue))).apply((instanceT.value))).apply((instance.value));
+          public java.util.Optional<String> visit(hydra.langs.tinkerpop.propertyGraph.Element.Vertex<V> inst) {
+            return (((hydra.langs.tinkerpop.validate.Validate.validateVertex((checkValue))).apply((showValue))).apply((instance.value))).apply((inst.value));
           }
         });
       }
       
       @Override
-      public java.util.Optional<String> visit(hydra.langs.tinkerpop.propertyGraph.ElementType.Edge<T> instanceT) {
+      public java.util.Optional<String> visit(hydra.langs.tinkerpop.propertyGraph.ElementType.Edge<T> instance) {
         return ((el)).accept(new hydra.langs.tinkerpop.propertyGraph.Element.Visitor<V, java.util.Optional<String>>() {
           @Override
-          public java.util.Optional<String> visit(hydra.langs.tinkerpop.propertyGraph.Element.Vertex<V> instance) {
-            return java.util.Optional.of((hydra.langs.tinkerpop.validate.Validate.prepend("Vertex instead of edge")).apply(((showValue)).apply(((instance.value)).id)));
+          public java.util.Optional<String> visit(hydra.langs.tinkerpop.propertyGraph.Element.Vertex<V> inst) {
+            return java.util.Optional.of((hydra.langs.tinkerpop.validate.Validate.prepend("Vertex instead of edge")).apply(((showValue)).apply(((inst.value)).id)));
           }
           
           @Override
-          public java.util.Optional<String> visit(hydra.langs.tinkerpop.propertyGraph.Element.Edge<V> instance) {
-            return ((((hydra.langs.tinkerpop.validate.Validate.validateEdge((checkValue))).apply((showValue))).apply((labelForVertexId))).apply((instanceT.value))).apply((instance.value));
+          public java.util.Optional<String> visit(hydra.langs.tinkerpop.propertyGraph.Element.Edge<V> inst) {
+            return ((((hydra.langs.tinkerpop.validate.Validate.validateEdge((checkValue))).apply((showValue))).apply((labelForVertexId))).apply((instance.value))).apply((inst.value));
           }
         });
       }
@@ -134,7 +139,7 @@ public interface Validate {
       hydra.langs.tinkerpop.propertyGraph.VertexLabel checkLabel_actual = ((el)).label;
       java.util.Optional<String> checkLabel = (hydra.langs.tinkerpop.validate.Validate.verify(hydra.lib.equality.EqualString.apply(
         ((checkLabel_actual)).value,
-        ((checkLabel_expected)).value))).apply(((failWith)).apply((hydra.langs.tinkerpop.validate.Validate.prepend("Wrong label")).apply((hydra.langs.tinkerpop.validate.Validate.vertexLabelMismatch((checkLabel_expected.value))).apply((checkLabel_actual)))));
+        ((checkLabel_expected)).value))).apply(((failWith)).apply((hydra.langs.tinkerpop.validate.Validate.prepend("Wrong label")).apply((hydra.langs.tinkerpop.validate.Validate.vertexLabelMismatch((checkLabel_expected))).apply((checkLabel_actual)))));
       java.util.Optional<String> checkId = hydra.lib.optionals.Map.apply(
         (java.util.function.Function<String, String>) (x -> ((failWith)).apply((hydra.langs.tinkerpop.validate.Validate.prepend("Invalid id")).apply((x)))),
         (((checkValue)).apply(((typ)).id)).apply(((el)).id));
@@ -147,9 +152,7 @@ public interface Validate {
   
   static <A> java.util.Optional<A> checkAll(java.util.List<java.util.Optional<A>> checks) {
     java.util.List<A> errors = hydra.lib.optionals.Cat.apply((checks));
-    return hydra.lib.lists.Null.apply((errors))
-            ? java.util.Optional.empty()
-            : java.util.Optional.of(hydra.lib.lists.Head.apply((errors)));
+    return hydra.lib.lists.SafeHead.apply(errors);
   }
   
   static <V> java.util.function.Function<hydra.langs.tinkerpop.propertyGraph.Edge<V>, java.util.function.Function<String, String>> edgeError(java.util.function.Function<V, String> a1) {
@@ -158,12 +161,12 @@ public interface Validate {
       ((a1)).apply(((e)).id)))));
   }
   
-  static java.util.function.Function<hydra.langs.tinkerpop.propertyGraph.EdgeLabel, String> edgeLabelMismatch(String expected) {
+  static java.util.function.Function<hydra.langs.tinkerpop.propertyGraph.EdgeLabel, String> edgeLabelMismatch(EdgeLabel expected) {
     return (java.util.function.Function<hydra.langs.tinkerpop.propertyGraph.EdgeLabel, String>) (actual -> hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
         hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
           "expected ",
-          ((expected)))),
+          ((expected)).value)),
         ", found ")),
       ((actual)).value)));
   }
@@ -189,12 +192,12 @@ public interface Validate {
       ((a1)).apply(((v)).id)))));
   }
   
-  static java.util.function.Function<hydra.langs.tinkerpop.propertyGraph.VertexLabel, String> vertexLabelMismatch(String expected) {
+  static java.util.function.Function<hydra.langs.tinkerpop.propertyGraph.VertexLabel, String> vertexLabelMismatch(VertexLabel expected) {
     return (java.util.function.Function<hydra.langs.tinkerpop.propertyGraph.VertexLabel, String>) (actual -> hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
         hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
           "expected ",
-          ((expected)))),
+          ((expected)).value)),
         ", found ")),
       ((actual)).value)));
   }
