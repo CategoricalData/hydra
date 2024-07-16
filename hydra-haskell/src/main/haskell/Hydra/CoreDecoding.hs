@@ -239,7 +239,7 @@ requireRecordType infer = requireRowType "record" infer $ \t -> case t of
 
 requireRowType :: Show a => String -> Bool -> (Type a -> Maybe (RowType a)) -> Name -> Flow (Graph a) (RowType a)
 requireRowType label infer getter name = do
-  t <- withSchemaContext $ requireType name
+  t <- requireType name
   case getter (rawType t) of
     Just rt -> if infer
       then case rowTypeExtends rt of
@@ -266,7 +266,7 @@ requireUnionType infer = requireRowType "union" infer $ \t -> case t of
 
 requireWrappedType :: Show a => Name -> Flow (Graph a) (Type a)
 requireWrappedType name = do
-  typ <- withSchemaContext $ requireType name
+  typ <- requireType name
   case stripType typ of
     TypeWrap (Nominal name t) -> return t
     _ -> return typ -- TODO: stop allowing this "slop" once typedefs are clearly separated from newtypes
