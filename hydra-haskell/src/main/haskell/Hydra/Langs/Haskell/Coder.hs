@@ -147,7 +147,7 @@ encodeLiteral av = case av of
 
 encodeTerm :: Namespaces -> Term Kv -> Flow (Graph Kv) H.Expression
 encodeTerm namespaces term = do
-   case stripTerm term of
+   case fullyStripTerm term of
     TermApplication (Application fun arg) -> hsapp <$> encode fun <*> encode arg
     TermFunction f -> encodeFunction namespaces f
     TermLet (Let bindings env) -> do
@@ -179,11 +179,11 @@ encodeTerm namespaces term = do
             toFieldUpdate (Field fn ft) = H.FieldUpdate (recordFieldReference namespaces sname fn) <$> encode ft
     TermUnion (Injection sname (Field fn ft)) -> do
       let lhs = H.ExpressionVariable $ unionFieldReference namespaces sname fn
-      case stripTerm ft of
+      case fullyStripTerm ft of
         TermRecord (Record _ []) -> pure lhs
         _ -> hsapp lhs <$> encode ft
     TermVariable name -> pure $ H.ExpressionVariable $ elementReference namespaces name --pure $ hsvar v
-    _ -> fail $ "unexpected term: " ++ show term
+    t -> fail $ "unexpected term: " ++ show t
   where
     encode = encodeTerm namespaces
 
@@ -281,7 +281,7 @@ toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term
             (applicationPattern name (args ++ vars)) (H.RightHandSide body) bindings
         _ -> vb
 
-    toDecl hname term coder bindings = case stripTerm term of
+    toDecl hname term coder bindings = case fullyStripTerm term of
       TermLet (Let lbindings env) -> do
           -- A "let" constant cannot be predicted in advance, so we infer its type and construct a coder on the fly
           -- This makes program code with "let" terms more expensive to transform than simple data.

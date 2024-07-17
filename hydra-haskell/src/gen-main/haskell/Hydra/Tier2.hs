@@ -14,7 +14,7 @@ import Data.Set as S
 
 -- | Get the state of the current flow
 getState :: (Compute.Flow s s)
-getState = (Compute.Flow (\s0 -> \t0 ->  
+getState = (Compute.Flow (\s0 -> \t0 ->
   let fs1 = (Compute.unFlow (Flows.pure ()) s0 t0)
   in ((\v -> \s -> \t -> (\x -> case x of
     Nothing -> Compute.FlowState {
@@ -27,14 +27,15 @@ getState = (Compute.Flow (\s0 -> \t0 ->
       Compute.flowStateTrace = t}) v) (Compute.flowStateValue fs1) (Compute.flowStateState fs1) (Compute.flowStateTrace fs1))))
 
 -- | Get the annotated type of a given term, if any
-getTermType :: (Core.Term Core.Kv -> Compute.Flow (Graph.Graph Core.Kv) (Maybe (Core.Type Core.Kv)))
-getTermType term =  
-  let annsToType = (\anns -> Graph.annotationClassTermType anns term)
-  in (Flows.bind (Flows.map Graph.graphAnnotations getState) annsToType)
+getTermType :: (Core.Term Core.Kv -> Maybe (Core.Type Core.Kv))
+getTermType term = case term of
+  Core.TermAnnotated a -> getTermType $ Core.annotatedSubject a
+  Core.TermTyped tt -> Just $ Core.termWithTypeType tt
+  _ -> Nothing
 
 -- | Set the state of a flow
 putState :: (s -> Compute.Flow s ())
-putState cx = (Compute.Flow (\s0 -> \t0 ->  
+putState cx = (Compute.Flow (\s0 -> \t0 ->
   let f1 = (Compute.unFlow (Flows.pure ()) s0 t0)
   in Compute.FlowState {
     Compute.flowStateValue = (Compute.flowStateValue f1),
@@ -43,21 +44,21 @@ putState cx = (Compute.Flow (\s0 -> \t0 ->
 
 -- | Get the annotated type of a given element, or fail if it is missing
 requireElementType :: (Graph.Element Core.Kv -> Compute.Flow (Graph.Graph Core.Kv) (Core.Type Core.Kv))
-requireElementType el =  
+requireElementType el =
   let withType = (\x -> case x of
           Nothing -> (Flows.fail (Strings.cat [
             "missing type annotation for element ",
             (Core.unName (Graph.elementName el))]))
           Just v -> (Flows.pure v))
-  in (Flows.bind (getTermType (Graph.elementData el)) withType)
+  in withType $ getTermType $ Graph.elementData el
 
 -- | Get the annotated type of a given term, or fail if it is missing
 requireTermType :: (Core.Term Core.Kv -> Compute.Flow (Graph.Graph Core.Kv) (Core.Type Core.Kv))
-requireTermType term =  
+requireTermType term =
   let withType = (\x -> case x of
           Nothing -> (Flows.fail "missing type annotation")
           Just v -> (Flows.pure v))
-  in (Flows.bind (getTermType term) withType)
+  in withType $ getTermType term
 
 -- | Fail if an actual value does not match an expected value
 unexpected :: (String -> String -> Compute.Flow s x)

@@ -69,7 +69,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
       return (TermAnnotated $ Annotated term2 ann, constraints)
 
     TermTyped (TermWithType term1 typ) -> do
-      (i, c) <- infer term
+      (i, c) <- infer term1
       return (i, c ++ [(typ, termType i)])
 
     TermApplication (Application fun arg) -> do
@@ -319,7 +319,8 @@ requireName v = do
     Just s  -> instantiate s
 
 termType :: Term Kv -> Type Kv
-termType (TermTyped (TermWithType _ typ)) = typ
+termType term = case stripTerm term of
+  (TermTyped (TermWithType _ typ)) -> typ
 
 -- TODO: limited and temporary
 termTypeScheme :: Term Kv -> TypeScheme Kv

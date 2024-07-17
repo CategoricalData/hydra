@@ -53,7 +53,7 @@ isLambda term = ((\x -> case x of
 
 -- | Convert a qualified name to a dot-separated name
 unqualifyName :: (Module.QualifiedName -> Core.Name)
-unqualifyName qname =  
+unqualifyName qname =
   let prefix = ((\x -> case x of
           Nothing -> ""
           Just v90 -> (Strings.cat [
@@ -77,7 +77,7 @@ foldOverType order fld b0 typ = ((\x -> case x of
 
 -- | Find the free variables (i.e. variables not bound by a lambda or let) in a term
 freeVariablesInTerm :: (Core.Term Core.Kv -> Set Core.Name)
-freeVariablesInTerm term =  
+freeVariablesInTerm term =
   let dfltVars = (L.foldl (\s -> \t -> Sets.union s (freeVariablesInTerm t)) Sets.empty (subterms term))
   in ((\x -> case x of
     Core.TermFunction v95 -> ((\x -> case x of
@@ -88,7 +88,7 @@ freeVariablesInTerm term =
 
 -- | Find the free variables (i.e. variables not bound by a lambda or let) in a type
 freeVariablesInType :: (Core.Type Core.Kv -> Set Core.Name)
-freeVariablesInType typ =  
+freeVariablesInType typ =
   let dfltVars = (L.foldl (\s -> \t -> Sets.union s (freeVariablesInType t)) Sets.empty (subtypes typ))
   in ((\x -> case x of
     Core.TypeLambda v98 -> (Sets.remove (Core.lambdaTypeParameter v98) (freeVariablesInType (Core.lambdaTypeBody v98)))
@@ -134,6 +134,7 @@ subterms x = case x of
   Core.TermStream _ -> []
   Core.TermSum v119 -> [
     Core.sumTerm v119]
+  Core.TermTyped t -> [Core.termWithTypeTerm t]
   Core.TermUnion v120 -> [
     Core.fieldTerm (Core.injectionField v120)]
   Core.TermVariable _ -> []
@@ -188,12 +189,12 @@ fromFlow def cx f = ((\x -> case x of
   Just v138 -> v138) (Compute.flowStateValue (Compute.unFlow f cx emptyTrace)))
 
 mutateTrace :: ((Compute.Trace -> Mantle.Either_ String Compute.Trace) -> (Compute.Trace -> Compute.Trace -> Compute.Trace) -> Compute.Flow s a -> Compute.Flow s a)
-mutateTrace mutate restore f = (Compute.Flow (\s0 -> \t0 ->  
+mutateTrace mutate restore f = (Compute.Flow (\s0 -> \t0 ->
   let forLeft = (\msg -> Compute.FlowState {
           Compute.flowStateValue = Nothing,
           Compute.flowStateState = s0,
-          Compute.flowStateTrace = (pushError msg t0)}) 
-      forRight = (\t1 ->  
+          Compute.flowStateTrace = (pushError msg t0)})
+      forRight = (\t1 ->
               let f2 = (Compute.unFlow f s0 t1)
               in Compute.FlowState {
                 Compute.flowStateValue = (Compute.flowStateValue f2),
@@ -205,7 +206,7 @@ mutateTrace mutate restore f = (Compute.Flow (\s0 -> \t0 ->
 
 -- | Push an error message
 pushError :: (String -> Compute.Trace -> Compute.Trace)
-pushError msg t =  
+pushError msg t =
   let errorMsg = (Strings.cat [
           "Error: ",
           msg,
@@ -219,13 +220,13 @@ pushError msg t =
 
 -- | Continue the current flow after adding a warning message
 warn :: (String -> Compute.Flow s a -> Compute.Flow s a)
-warn msg b = (Compute.Flow (\s0 -> \t0 ->  
+warn msg b = (Compute.Flow (\s0 -> \t0 ->
   let addMessage = (\t -> Compute.Trace {
           Compute.traceStack = (Compute.traceStack t),
           Compute.traceMessages = (Lists.cons (Strings.cat [
             "Warning: ",
             msg]) (Compute.traceMessages t)),
-          Compute.traceOther = (Compute.traceOther t)}) 
+          Compute.traceOther = (Compute.traceOther t)})
       f1 = (Compute.unFlow b s0 t0)
   in Compute.FlowState {
     Compute.flowStateValue = (Compute.flowStateValue f1),
@@ -234,11 +235,11 @@ warn msg b = (Compute.Flow (\s0 -> \t0 ->
 
 -- | Continue the current flow after setting a flag
 withFlag :: (String -> Compute.Flow s a -> Compute.Flow s a)
-withFlag flag =  
+withFlag flag =
   let mutate = (\t -> Mantle.EitherRight (Compute.Trace {
           Compute.traceStack = (Compute.traceStack t),
           Compute.traceMessages = (Compute.traceMessages t),
-          Compute.traceOther = (Maps.insert flag (Core.TermLiteral (Core.LiteralBoolean True)) (Compute.traceOther t))})) 
+          Compute.traceOther = (Maps.insert flag (Core.TermLiteral (Core.LiteralBoolean True)) (Compute.traceOther t))}))
       restore = (\ignored -> \t1 -> Compute.Trace {
               Compute.traceStack = (Compute.traceStack t1),
               Compute.traceMessages = (Compute.traceMessages t1),
@@ -247,7 +248,7 @@ withFlag flag =
 
 -- | Continue a flow using a given state
 withState :: (s1 -> Compute.Flow s1 a -> Compute.Flow s2 a)
-withState cx0 f = (Compute.Flow (\cx1 -> \t1 ->  
+withState cx0 f = (Compute.Flow (\cx1 -> \t1 ->
   let f1 = (Compute.unFlow f cx0 t1)
   in Compute.FlowState {
     Compute.flowStateValue = (Compute.flowStateValue f1),
@@ -256,11 +257,11 @@ withState cx0 f = (Compute.Flow (\cx1 -> \t1 ->
 
 -- | Continue the current flow after augmenting the trace
 withTrace :: (String -> Compute.Flow s a -> Compute.Flow s a)
-withTrace msg =  
+withTrace msg =
   let mutate = (\t -> Logic.ifElse (Mantle.EitherLeft "maximum trace depth exceeded. This may indicate an infinite loop") (Mantle.EitherRight (Compute.Trace {
           Compute.traceStack = (Lists.cons msg (Compute.traceStack t)),
           Compute.traceMessages = (Compute.traceMessages t),
-          Compute.traceOther = (Compute.traceOther t)})) (Equality.gteInt32 (Lists.length (Compute.traceStack t)) Constants.maxTraceDepth)) 
+          Compute.traceOther = (Compute.traceOther t)})) (Equality.gteInt32 (Lists.length (Compute.traceStack t)) Constants.maxTraceDepth))
       restore = (\t0 -> \t1 -> Compute.Trace {
               Compute.traceStack = (Compute.traceStack t0),
               Compute.traceMessages = (Compute.traceMessages t1),

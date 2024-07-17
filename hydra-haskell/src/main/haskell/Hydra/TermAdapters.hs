@@ -92,7 +92,7 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
     ad <- termAdapter ut
     return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ Coder (encode ad) (decode ad)
   where
-    encode ad term = coderEncode (adapterCoder ad) $ case stripTerm term of
+    encode ad term = coderEncode (adapterCoder ad) $ case fullyStripTerm term of
       TermFunction f -> case f of
         FunctionElimination e -> case e of
           EliminationWrap (Name name) -> variant functionProxyName _Elimination_wrap $ string name
@@ -186,7 +186,7 @@ passFunction t@(TypeFunction (FunctionType dom cod)) = do
     let lossy = adapterIsLossy codAd || or (adapterIsLossy . snd <$> M.toList caseAds)
     let target = Types.function (adapterTarget domAd) (adapterTarget codAd)
     return $ Adapter lossy t target
-      $ bidirectional $ \dir term -> case stripTerm term of
+      $ bidirectional $ \dir term -> case fullyStripTerm term of
         TermFunction f -> TermFunction <$> case f of
           FunctionElimination e -> FunctionElimination <$> case e of
             EliminationOptional (OptionalCases nothing just) -> EliminationOptional <$> (
