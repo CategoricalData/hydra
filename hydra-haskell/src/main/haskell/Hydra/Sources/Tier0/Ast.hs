@@ -13,7 +13,7 @@ import           Hydra.Sources.Core
 
 
 hydraAstModule :: Module Kv
-hydraAstModule = Module ns elements [] [hydraCoreModule] $
+hydraAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just "A model which provides a common syntax tree for Hydra serializers"
   where
     ns = Namespace "hydra/ast"
@@ -59,7 +59,7 @@ hydraAstModule = Module ns elements [] [hydraCoreModule] $
         record [
           "style">: ast "IndentStyle",
           "expr">: ast "Expr"],
-          
+
       def "IndentStyle" $
         doc "Any of several indentation styles" $
         union [

@@ -178,6 +178,7 @@ termVariant x = case x of
   Core.TermSet _ -> Mantle.TermVariantSet
   Core.TermStream _ -> Mantle.TermVariantStream
   Core.TermSum _ -> Mantle.TermVariantSum
+  Core.TermTyped _ -> Mantle.TermVariantTyped
   Core.TermUnion _ -> Mantle.TermVariantUnion
   Core.TermVariable _ -> Mantle.TermVariantVariable
   Core.TermWrap _ -> Mantle.TermVariantWrap
@@ -251,19 +252,19 @@ decapitalize = (mapFirstLetter Strings.toLower)
 
 -- | A helper which maps the first letter of a string to another string
 mapFirstLetter :: ((String -> String) -> String -> String)
-mapFirstLetter mapping s =  
-  let firstLetter = (mapping (Strings.fromList (Lists.pure (Lists.head list)))) 
+mapFirstLetter mapping s =
+  let firstLetter = (mapping (Strings.fromList (Lists.pure (Lists.head list))))
       list = (Strings.toList s)
   in (Logic.ifElse s (Strings.cat2 firstLetter (Strings.fromList (Lists.tail list))) (Strings.isEmpty s))
 
 fieldMap :: ([Core.Field Core.Kv] -> Map Core.FieldName (Core.Term Core.Kv))
-fieldMap fields = (Maps.fromList (Lists.map toPair fields)) 
-  where 
+fieldMap fields = (Maps.fromList (Lists.map toPair fields))
+  where
     toPair = (\f -> (Core.fieldName f, (Core.fieldTerm f)))
 
 fieldTypeMap :: ([Core.FieldType Core.Kv] -> Map Core.FieldName (Core.Type Core.Kv))
-fieldTypeMap fields = (Maps.fromList (Lists.map toPair fields)) 
-  where 
+fieldTypeMap fields = (Maps.fromList (Lists.map toPair fields))
+  where
     toPair = (\f -> (Core.fieldTypeName f, (Core.fieldTypeType f)))
 
 isEncodedType :: (Core.Term Core.Kv -> Bool)
@@ -291,7 +292,7 @@ isUnitType t = (Equality.equalType (Strip.stripType t) (Core.TypeRecord (Core.Ro
   Core.rowTypeFields = []})))
 
 elementsToGraph :: (Graph.Graph Core.Kv -> Maybe (Graph.Graph Core.Kv) -> [Graph.Element Core.Kv] -> Graph.Graph Core.Kv)
-elementsToGraph parent schema elements =  
+elementsToGraph parent schema elements =
   let toPair = (\el -> (Graph.elementName el, el))
   in Graph.Graph {
     Graph.graphElements = (Maps.fromList (Lists.map toPair elements)),
@@ -314,7 +315,7 @@ namespaceOfLazy :: (Core.Name -> Maybe Module.Namespace)
 namespaceOfLazy x = (Module.qualifiedNameNamespace (qualifyNameLazy x))
 
 namespaceToFilePath :: (Bool -> Module.FileExtension -> Module.Namespace -> String)
-namespaceToFilePath caps ext ns =  
+namespaceToFilePath caps ext ns =
   let parts = (Lists.map (Logic.ifElse capitalize id_ caps) (Strings.splitOn "/" (Module.unNamespace ns)))
   in (Strings.cat [
     Strings.cat [
@@ -323,7 +324,7 @@ namespaceToFilePath caps ext ns =
     (Module.unFileExtension ext)])
 
 qualifyNameEager :: (Core.Name -> Module.QualifiedName)
-qualifyNameEager name =  
+qualifyNameEager name =
   let parts = (Strings.splitOn "." (Core.unName name))
   in (Logic.ifElse (Module.QualifiedName {
     Module.qualifiedNameNamespace = Nothing,
@@ -332,7 +333,7 @@ qualifyNameEager name =
     Module.qualifiedNameLocal = (Strings.intercalate "." (Lists.tail parts))}) (Equality.equalInt32 1 (Lists.length parts)))
 
 qualifyNameLazy :: (Core.Name -> Module.QualifiedName)
-qualifyNameLazy name =  
+qualifyNameLazy name =
   let parts = (Lists.reverse (Strings.splitOn "." (Core.unName name)))
   in (Logic.ifElse (Module.QualifiedName {
     Module.qualifiedNameNamespace = Nothing,

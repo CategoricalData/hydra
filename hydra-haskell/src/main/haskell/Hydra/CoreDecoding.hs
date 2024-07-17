@@ -16,6 +16,7 @@ module Hydra.CoreDecoding (
   dereferenceType,
   elementAsTypedTerm,
   fieldTypes,
+  fullyStripTerm,
   isSerializable,
   moduleDependencyNamespaces,
   requireRecordType,
@@ -63,7 +64,7 @@ coreDecodeFieldType = matchRecord $ \m -> FieldType
   <*> getField m _FieldType_type coreDecodeType
 
 coreDecodeFieldTypes :: Term Kv -> Flow (Graph Kv) [FieldType Kv]
-coreDecodeFieldTypes term = case stripTerm term of
+coreDecodeFieldTypes term = case fullyStripTerm term of
   TermList els -> CM.mapM coreDecodeFieldType els
   _ -> unexpected "list" $ show term
 
@@ -125,7 +126,7 @@ coreDecodeRowType = matchRecord $ \m -> RowType
   <*> getField m _RowType_fields coreDecodeFieldTypes
 
 coreDecodeString :: Term Kv -> Flow (Graph Kv) String
-coreDecodeString = Expect.string . stripTerm
+coreDecodeString = Expect.string . fullyStripTerm
 
 coreDecodeType :: Term Kv -> Flow (Graph Kv) (Type Kv)
 coreDecodeType dat = case dat of
@@ -192,12 +193,12 @@ matchEnum :: Name -> [(FieldName, b)] -> Term Kv -> Flow (Graph Kv) b
 matchEnum tname = matchUnion tname . fmap (uncurry matchUnitField)
 
 matchRecord :: (M.Map FieldName (Term Kv) -> Flow (Graph Kv) b) -> Term Kv -> Flow (Graph Kv) b
-matchRecord decode term = case stripTerm term of
+matchRecord decode term = case fullyStripTerm term of
   TermRecord (Record _ fields) -> decode $ M.fromList $ fmap (\(Field fname val) -> (fname, val)) fields
   _ -> unexpected "record" $ show term
 
 matchUnion :: Name -> [(FieldName, Term Kv -> Flow (Graph Kv) b)] -> Term Kv -> Flow (Graph Kv) b
-matchUnion tname pairs term = case stripTerm term of
+matchUnion tname pairs term = case fullyStripTerm term of
     TermVariable name -> do
       el <- requireElement name
       matchUnion tname pairs (elementData el)
@@ -206,7 +207,7 @@ matchUnion tname pairs term = case stripTerm term of
         Nothing -> fail $ "no matching case for field " ++ show fname
         Just f -> f val
       else unexpected ("injection for type " ++ show tname) $ show term
-    _ -> unexpected ("union with one of {" ++ L.intercalate ", " (unFieldName . fst <$> pairs) ++ "}") $ show term
+    t -> unexpected ("union with one of {" ++ L.intercalate ", " (unFieldName . fst <$> pairs) ++ "}") $ show t
   where
     mapping = M.fromList pairs
 
@@ -233,7 +234,7 @@ moduleDependencyNamespaces withVars withPrims withNoms withSchema mod = do
       return $ S.unions [dataNames, schemaNames, typeNames]
 
 requireRecordType :: Bool -> Name -> Flow (Graph Kv) (RowType Kv)
-requireRecordType infer = requireRowType "record" infer $ \t -> case t of
+requireRecordType infer = requireRowType "record type" infer $ \t -> case t of
   TypeRecord rt -> Just rt
   _ -> Nothing
 
@@ -280,6 +281,11 @@ resolveType typ = case stripType typ of
         Nothing -> pure Nothing
         Just t -> Just <$> coreDecodeType t
     _ -> pure $ Just typ
+
+fullyStripTerm :: Term Kv -> Term Kv
+fullyStripTerm term = case stripTerm term of
+  TermTyped (TermWithType term1 _) -> fullyStripTerm term1
+  t -> t
 
 typeDependencies :: Name -> Flow (Graph Kv) (M.Map Name (Type Kv))
 typeDependencies name = deps (S.fromList [name]) M.empty
