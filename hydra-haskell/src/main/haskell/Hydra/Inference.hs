@@ -33,52 +33,38 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-annotateElements :: (Ord a, Show a) => Graph a -> [Element a] -> Flow (Graph a) [Element a]
+annotateElements :: Graph Kv -> [Element Kv] -> Flow (Graph Kv) [Element Kv]
 annotateElements g sortedEls = withInferenceContext $ do
-    iels <- annotate sortedEls []
+    iels' <- annotate sortedEls ([])
+    let iels = fst <$> iels'
+    let constraints = snd <$> iels'
 
     -- Note: inference occurs over the entire graph at once,
     --       but unification and substitution occur within elements in isolation
-    let constraints = termConstraints . elementData <$> iels
     subst <- withGraphContext $ withSchemaContext $ CM.mapM solveConstraints constraints
-    r <- CM.zipWithM rewriteElement subst iels
-
-    return r
+    return $ L.zipWith rewriteElement subst iels
   where
-    rewriteElement subst el = do
-        let itm = rewriteDataType (substituteInType subst) $ elementData el
-        term <- rewriteTermMetaM annotType itm
-        return el {
-          elementData = term}
-      where
-        annotType (ann, typ, _) = do
-          let anns = graphAnnotations g
-          mtyp <- withGraphContext $ annotationClassTypeOf anns ann
-          let typ' = Y.fromMaybe typ mtyp
-          return $ annotationClassSetTypeOf anns (Just typ') ann
+    rewriteElement subst el = el {
+          elementData = rewriteDataType (substituteInType subst) $ elementData el}
 
+    annotate :: [Element Kv] -> [(Element Kv, [Constraint])] -> Flow (InferenceContext) [(Element Kv, [Constraint])]
     annotate original annotated = case original of
       [] -> pure $ L.reverse annotated
       (el:r) -> do
-        iel <- inferElementType el
-        withBinding (elementName el) (termTypeScheme $ elementData iel) $ annotate r (iel:annotated)
+        (iel, c1) <- inferElementType el
+        withBinding (elementName el) (termTypeScheme $ elementData iel) $ annotate r ((iel, c1):annotated)
 
-annotateTermWithTypes :: (Ord a, Show a) => Term a -> Flow (Graph a) (Term a)
+annotateTermWithTypes :: Term Kv -> Flow (Graph Kv) (Term Kv)
 annotateTermWithTypes term0 = do
   (term1, _) <- inferTypeAndConstraints term0
+  return term1
 
-  g <- getState
-  let anns = graphAnnotations g
-  let annotType (ann, typ, _) = annotationClassSetTypeOf anns (Just typ) ann
-  let term2 = rewriteTermMeta annotType term1
-  return term2
-
-inferElementType :: (Ord a, Show a) => Element a -> Flow (InferenceContext a) (Element (InfAnn a))
+inferElementType :: Element Kv -> Flow (InferenceContext) (Element Kv, [Constraint])
 inferElementType el = withTrace ("infer type of " ++ unName (elementName el)) $ do
-  iterm <- infer $ elementData el
-  return $ el {elementData = iterm}
+  (iterm, c) <- infer $ elementData el
+  return (el {elementData = iterm}, c)
 
-inferGraphTypes :: (Ord a, Show a) => Flow (Graph a) (Graph a)
+inferGraphTypes :: Flow (Graph Kv) (Graph Kv)
 inferGraphTypes = getState >>= annotateGraph
   where
     annotateGraph g = withTrace ("infer graph types") $ do
@@ -89,15 +75,15 @@ inferGraphTypes = getState >>= annotateGraph
         toPair el = (elementName el, el)
 
 -- TODO: deprecated
-inferType :: (Ord a, Show a) => Term a -> Flow (Graph a) (Type a)
+inferType :: Term Kv -> Flow (Graph Kv) (Type Kv)
 inferType term = typeSchemeType <$> inferTypeScheme term
 
 -- TODO: deprecated
 -- | Solve for the top-level type of an expression in a given environment
-inferTypeAndConstraints :: (Ord a, Show a) => Term a -> Flow (Graph a) (Term (a, Type a, [Constraint a]), TypeScheme a)
+inferTypeAndConstraints :: Term Kv -> Flow (Graph Kv) (Term Kv, TypeScheme Kv)
 inferTypeAndConstraints term = withTrace ("infer type") $ withInferenceContext $ do
-    iterm <- infer term
-    subst <- withGraphContext $ withSchemaContext $ solveConstraints (termConstraints iterm)
+    (iterm, constraints) <- infer term
+    subst <- withGraphContext $ withSchemaContext $ solveConstraints constraints
     let term2 = rewriteDataType (substituteInType subst) iterm
     return (term2, closeOver $ termType term2)
   where
@@ -105,15 +91,17 @@ inferTypeAndConstraints term = withTrace ("infer type") $ withInferenceContext $
     closeOver = normalizeScheme . generalize M.empty . reduceType
 
 -- TODO: deprecated
-inferTypeScheme :: (Ord a, Show a) => Term a -> Flow (Graph a) (TypeScheme a)
+inferTypeScheme :: Term Kv -> Flow (Graph Kv) (TypeScheme Kv)
 inferTypeScheme term = snd <$> inferTypeAndConstraints term
 
-rewriteDataType :: Ord a => (Type a -> Type a) -> Term (a, Type a, [Constraint a]) -> Term (a, Type a, [Constraint a])
-rewriteDataType f = rewriteTermMeta rewrite
+rewriteDataType :: (Type Kv -> Type Kv) -> Term Kv -> Term Kv
+rewriteDataType f = rewriteTerm ff id
   where
-    rewrite (x, typ, c) = (x, f typ, c)
+    ff recurse term = case recurse term of
+      TermTyped (TermWithType term1 type1) -> TermTyped $ TermWithType term1 (f type1)
+      t -> t
 
-sortGraphElements :: (Ord a, Show a) => Graph a -> Flow (Graph a) [Element a]
+sortGraphElements :: Graph Kv -> Flow (Graph Kv) [Element Kv]
 sortGraphElements g = do
     annotated <- S.fromList . Y.catMaybes <$> (CM.mapM ifAnnotated $ M.elems els)
     adjList <- CM.mapM (toAdj annotated) $ M.elems els

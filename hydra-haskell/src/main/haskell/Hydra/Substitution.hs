@@ -13,9 +13,9 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-type Subst a = M.Map Name (Type a)
+type Subst a = M.Map Name (Type Kv)
 
-composeSubst :: Subst a -> Subst a -> Subst a
+composeSubst :: Subst Kv -> Subst Kv -> Subst Kv
 composeSubst s1 s2 = M.union s1 $ M.map (substituteInType s1) s2
 
 normalVariables :: [Name]
@@ -25,7 +25,7 @@ normalVariables = normalVariable <$> [0..]
 normalVariable :: Int -> Name
 normalVariable i = Name $ "t" ++ show i
 
-normalizeScheme :: Show a => TypeScheme a -> TypeScheme a
+normalizeScheme :: TypeScheme Kv -> TypeScheme Kv
 normalizeScheme ts@(TypeScheme _ body) = TypeScheme (fmap snd ord) (normalizeType body)
   where
     ord = L.zip (S.toList $ freeVariablesInType body) normalVariables
@@ -51,12 +51,12 @@ normalizeScheme ts@(TypeScheme _ body) = TypeScheme (fmap snd ord) (normalizeTyp
         Nothing -> error $ "type variable " ++ show v ++ " not in signature of type scheme: " ++ show ts
       TypeWrap _ -> typ
 
-substituteInScheme :: M.Map Name (Type a) -> TypeScheme a -> TypeScheme a
+substituteInScheme :: M.Map Name (Type Kv) -> TypeScheme Kv -> TypeScheme Kv
 substituteInScheme s (TypeScheme as t) = TypeScheme as $ substituteInType s' t
   where
     s' = L.foldr M.delete s as
 
-substituteInType :: M.Map Name (Type a) -> Type a -> Type a
+substituteInType :: M.Map Name (Type Kv) -> Type Kv -> Type Kv
 substituteInType s typ = case typ of
     TypeApplication (ApplicationType lhs rhs) -> TypeApplication (ApplicationType (subst lhs) (subst rhs))
     TypeAnnotated (Annotated t ann) -> TypeAnnotated (Annotated (subst t) ann)
