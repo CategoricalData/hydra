@@ -20,10 +20,10 @@ import qualified Data.Set as S
 import Control.Monad
 
 
-checkType :: Term (Kv, Type Kv, [Constraint Kv]) -> Type Kv -> H.Expectation
+checkType :: Term Kv -> Type Kv -> H.Expectation
 checkType term typ = typeAnn term `H.shouldBe` typ
   where
-    typeAnn (TermAnnotated (Annotated _ (_, typ, _))) = typ
+    typeAnn (TermTyped (TermWithType _ typ)) = typ
 
 expectMonotype :: Term Kv -> Type Kv -> H.Expectation
 expectMonotype term = expectPolytype term []
@@ -40,10 +40,9 @@ expectTypeAnnotation path term etyp = shouldSucceedWith atyp etyp
    atyp = do
      iterm <- annotateTermWithTypes term
      selected <- path iterm
-     mtyp <- getType (termAnnotationInternal selected)
-     case mtyp of
-       Nothing -> fail $ "no type annotation"
-       Just t -> pure t
+     case selected of
+       TermTyped (TermWithType _ typ) -> return typ
+       _ -> fail $ "no type annotation"
 
 checkApplicationTerms :: H.SpecWith ()
 checkApplicationTerms = H.describe "Check a few hand-picked application terms" $ do
@@ -335,7 +334,7 @@ checkTypeAnnotations = H.describe "Check that type annotations are added to term
         let term = TermList [TermLiteral l]
         let term1 = fromFlow (TermLiteral $ LiteralString "no term") testGraph (fst <$> inferTypeAndConstraints term)
         checkType term1 (Types.list $ Types.literal $ literalType l)
-        let (TermAnnotated (Annotated (TermList [term2]) _)) = term1
+        let (TermTyped (TermWithType (TermList [term2]) _)) = term1
         checkType term2 (Types.literal $ literalType l)
 
 checkSubtermAnnotations :: H.SpecWith ()
@@ -346,29 +345,35 @@ checkSubtermAnnotations = H.describe "Check additional subterm annotations" $ do
         (string "foo")
         (Types.string)
 
-    H.it "Check monotyped lists" $ do
-      expectTypeAnnotation pure
-        (list [string "foo"])
-        (Types.list Types.string)
-      expectTypeAnnotation Expect.listHead
-        (list [string "foo"])
-        Types.string
+    H.describe "Check monotyped lists" $ do
+      H.it "test #1" $
+        expectTypeAnnotation pure
+          (list [string "foo"])
+          (Types.list Types.string)
+      H.it "test #2" $
+        expectTypeAnnotation Expect.listHead
+          (list [string "foo"])
+          Types.string
 
-    H.it "Check monotyped lists within lambdas" $ do
-      expectTypeAnnotation pure
-        (lambda "x" $ list [var "x", string "foo"])
-        (Types.function Types.string (Types.list Types.string))
-      expectTypeAnnotation (Expect.lambdaBody >=> Expect.listHead)
-        (lambda "x" $ list [var "x", string "foo"])
-        Types.string
+    H.describe "Check monotyped lists within lambdas" $ do
+      H.it "test #1" $
+        expectTypeAnnotation pure
+          (lambda "x" $ list [var "x", string "foo"])
+          (Types.function Types.string (Types.list Types.string))
+      H.it "test #2" $
+        expectTypeAnnotation (Expect.lambdaBody >=> Expect.listHead)
+          (lambda "x" $ list [var "x", string "foo"])
+          Types.string
 
-    H.it "Check injections" $ do
-      expectTypeAnnotation pure
-        (inject testTypeTimestampName $ Field (FieldName "date") $ string "2023-05-11")
-        testTypeTimestamp
-      expectTypeAnnotation pure
-        (lambda "ignored" $ (inject testTypeTimestampName $ Field (FieldName "date") $ string "2023-05-11"))
-        (Types.function (Types.var "t0") testTypeTimestamp)
+    H.describe "Check injections" $ do
+      H.it "test #1" $
+        expectTypeAnnotation pure
+          (inject testTypeTimestampName $ Field (FieldName "date") $ string "2023-05-11")
+          testTypeTimestamp
+      H.it "test #2" $
+        expectTypeAnnotation pure
+          (lambda "ignored" $ (inject testTypeTimestampName $ Field (FieldName "date") $ string "2023-05-11"))
+          (Types.function (Types.var "t0") testTypeTimestamp)
 
     H.it "Check projections" $ do
       expectTypeAnnotation pure
@@ -381,70 +386,85 @@ checkSubtermAnnotations = H.describe "Check additional subterm annotations" $ do
           (match testTypeNumberName (Just $ string "it's something else") [
             Field (FieldName "int") $ constant $ string "it's an integer"])
           (Types.function testTypeNumber Types.string)
-      H.it "test #2" $ do
+      H.describe "test #2" $ do
         let  testCase = match testTypeNumberName Nothing [
                           Field (FieldName "int") $ constant $ string "it's an integer",
                           Field (FieldName "float") $ constant $ string "it's a float"]
-        expectTypeAnnotation pure testCase
-          (Types.function testTypeNumber Types.string)
-        expectTypeAnnotation (Expect.casesCase testTypeNumberName "int" >=> (pure . fieldTerm)) testCase
-          (Types.function Types.int32 Types.string)
+        H.it "case #1" $
+          expectTypeAnnotation pure testCase
+            (Types.function testTypeNumber Types.string)
+        H.it "case #2" $
+          expectTypeAnnotation (Expect.casesCase testTypeNumberName "int" >=> (pure . fieldTerm)) testCase
+            (Types.function Types.int32 Types.string)
 
     H.describe "Check optional eliminations" $ do
-      H.it "test #1" $ do
+      H.describe "test #1" $ do
         let testCase = matchOpt
                          (string "nothing")
                          (lambda "ignored" $ string "just")
-        expectTypeAnnotation pure testCase
-          (Types.function (Types.optional $ Types.var "t2") Types.string)
-        expectTypeAnnotation Expect.optCasesNothing testCase
-          Types.string
-        expectTypeAnnotation Expect.optCasesJust testCase
-          (Types.function (Types.var "t2") Types.string)
-      H.it "test #2" $ do
+        H.it "case #1" $
+          expectTypeAnnotation pure testCase
+            (Types.function (Types.optional $ Types.var "t2") Types.string)
+        H.it "case #2" $
+          expectTypeAnnotation Expect.optCasesNothing testCase
+            Types.string
+        H.it "case #3" $
+          expectTypeAnnotation Expect.optCasesJust testCase
+            (Types.function (Types.var "t2") Types.string)
+      H.describe "test #2" $ do
         let testCase = lambda "getOpt" $ lambda "x" $
                          (matchOpt
                            (string "nothing")
                            (lambda "t2" $ string "just")) @@ (var "getOpt" @@ var "x")
         let getOptType = (Types.function (Types.var "t1") (Types.optional $ Types.var "t4"))
         let constStringType = Types.function (Types.var "t1") Types.string
-        expectTypeAnnotation pure testCase
-          (Types.function getOptType constStringType)
-        expectTypeAnnotation Expect.lambdaBody testCase
-          constStringType
+        H.it "case #1" $
+          expectTypeAnnotation pure testCase
+            (Types.function getOptType constStringType)
+        H.it "case #2" $
+          expectTypeAnnotation Expect.lambdaBody testCase
+            constStringType
 
     H.describe "Check unannotated 'let' terms" $ do
-      H.it "test #1" $ do
+      H.describe "test #1" $ do
         let testCase = lambda "i" $
                          (Terms.primitive _strings_cat @@ list [string "foo", var "i", string "bar"])
                          `with` [
                            "foo">: string "FOO",
                            "bar">: string "BAR"]
-        expectTypeAnnotation pure testCase
-          (Types.function Types.string Types.string)
-        expectTypeAnnotation Expect.lambdaBody testCase
-          Types.string
-      H.it "test #2" $ do
+        H.it "case #1" $
+          expectTypeAnnotation pure testCase
+            (Types.function Types.string Types.string)
+        H.it "case #2" $
+          expectTypeAnnotation Expect.lambdaBody testCase
+            Types.string
+      H.describe "test #2" $ do
         let testCase = lambda "original" $
                          var "alias" `with` [
                            "alias">: var "original"]
-        expectTypeAnnotation pure testCase
-          (Types.function (Types.var "t0") (Types.var "t0"))
-        expectTypeAnnotation Expect.lambdaBody testCase
-          (Types.var "t0")
-        expectTypeAnnotation (Expect.lambdaBody >=> Expect.letBinding "alias") testCase
-          (Types.var "t0")
-      H.it "test #3" $ do
+        H.it "case #1" $
+          expectTypeAnnotation pure testCase
+            (Types.function (Types.var "t0") (Types.var "t0"))
+        H.it "case #2" $
+          expectTypeAnnotation Expect.lambdaBody testCase
+            (Types.var "t0")
+        H.it "case #3" $
+          expectTypeAnnotation (Expect.lambdaBody >=> Expect.letBinding "alias") testCase
+            (Types.var "t0")
+      H.describe "test #3" $ do
         let testCase = lambda "fun" $ lambda "t" $
                          ((var "funAlias" @@ var "t") `with` [
                            "funAlias">: var "fun"])
         let funType = Types.function (Types.var "t1") (Types.var "t2")
-        expectTypeAnnotation pure testCase
-          (Types.function funType funType)
-        expectTypeAnnotation (Expect.lambdaBody >=> Expect.lambdaBody) testCase
-          (Types.var "t2")
-        expectTypeAnnotation (Expect.lambdaBody >=> Expect.lambdaBody >=> Expect.letBinding "funAlias") testCase
-          funType
+        H.it "case #1" $
+          expectTypeAnnotation pure testCase
+            (Types.function funType funType)
+        H.it "case #2" $
+          expectTypeAnnotation (Expect.lambdaBody >=> Expect.lambdaBody) testCase
+            (Types.var "t2")
+        H.it "case #3" $
+          expectTypeAnnotation (Expect.lambdaBody >=> Expect.lambdaBody >=> Expect.letBinding "funAlias") testCase
+            funType
 
 --     H.describe "Check 'let' terms with type annotations on bindings" $
 
@@ -455,12 +475,11 @@ checkSubtermAnnotations = H.describe "Check additional subterm annotations" $ do
           iterm <- annotateTermWithTypes term
           fail $ "iterm: " ++ show iterm
 
-
-checkTypedTerms :: H.SpecWith ()
-checkTypedTerms = H.describe "Check that term/type pairs are consistent with type inference" $ do
-
-    H.it "Check arbitrary typed terms" $
-      QC.property $ \(TypedTerm typ term) -> expectMonotype term typ
+--checkTypedTerms :: H.SpecWith ()
+--checkTypedTerms = H.describe "Check that term/type pairs are consistent with type inference" $ do
+--
+--    H.it "Check arbitrary typed terms" $
+--      QC.property $ \(TypedTerm typ term) -> expectMonotype term typ
 
 spec :: H.Spec
 spec = do

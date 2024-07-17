@@ -25,9 +25,9 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-type GraphSchema a = M.Map Name (Type a)
+type GraphSchema a = M.Map Name (Type Kv)
 
-elementsWithDependencies :: Ord a => [Element a] -> Flow (Graph a) [Element a]
+elementsWithDependencies :: [Element Kv] -> Flow (Graph Kv) [Element Kv]
 elementsWithDependencies original = CM.mapM requireElement allDepNames
   where
     depNames = S.toList . termDependencyNames True False False . elementData
@@ -36,7 +36,7 @@ elementsWithDependencies original = CM.mapM requireElement allDepNames
 -- | Turn arbitrary terms like 'add 42' into terms like '\x.add 42 x',
 --   whose arity (in the absence of application terms) is equal to the depth of nested lambdas.
 --   This function leaves application terms intact, simply rewriting their left and right subterms.
-expandLambdas :: (Ord a, Show a) => Term a -> Flow (Graph a) (Term a)
+expandLambdas :: Term Kv -> Flow (Graph Kv) (Term Kv)
 expandLambdas term = do
     g <- getState
     rewriteTermM (expand g Nothing []) (pure . id) term
@@ -77,7 +77,7 @@ expandLambdas term = do
                   _ -> throwDebugException $ "expandLambdas: expected function type, got " ++ show t
                 Nothing -> Nothing
 
-flattenLetTerms :: Ord a => Term a -> Term a
+flattenLetTerms :: Term Kv -> Term Kv
 flattenLetTerms = rewriteTerm flatten id
   where
     flatten recurse term = case recurse term of
@@ -104,12 +104,12 @@ flattenLetTerms = rewriteTerm flatten id
             v1 -> ((k0, v1), [])
       term0 -> term0
 
-freeVariablesInScheme :: Show a => TypeScheme a -> S.Set Name
+freeVariablesInScheme :: TypeScheme Kv -> S.Set Name
 freeVariablesInScheme (TypeScheme vars t) = S.difference (freeVariablesInType t) (S.fromList vars)
 
 -- | Inline all type variables in a type using the provided schema.
 --   Note: this function is only appropriate for nonrecursive type definitions.
-inlineType :: Ord a => GraphSchema a -> Type a -> Flow s (Type a)
+inlineType :: GraphSchema Kv -> Type Kv -> Flow s (Type Kv)
 inlineType schema = rewriteTypeM f pure
   where
     f recurse typ = do
@@ -120,11 +120,11 @@ inlineType schema = rewriteTypeM f pure
           Nothing -> fail $ "No such type in schema: " ++ unName v
         t -> return t
 
-isFreeIn :: Ord a => Name -> Term a -> Bool
+isFreeIn :: Name -> Term Kv -> Bool
 isFreeIn v term = not $ S.member v $ freeVariablesInTerm term
 
 -- | Recursively remove term annotations, including within subterms
-removeTermAnnotations :: Ord a => Term a -> Term a
+removeTermAnnotations :: Term Kv -> Term Kv
 removeTermAnnotations = rewriteTerm remove id
   where
     remove recurse term = case term of
@@ -132,14 +132,14 @@ removeTermAnnotations = rewriteTerm remove id
       _ -> recurse term
 
 -- | Recursively remove type annotations, including within subtypes
-removeTypeAnnotations :: Ord a => Type a -> Type a
+removeTypeAnnotations :: Type Kv -> Type Kv
 removeTypeAnnotations = rewriteType remove id
   where
     remove recurse typ = case recurse typ of
       TypeAnnotated (Annotated typ' _) -> remove recurse typ'
       _ -> recurse typ
 
-replaceFreeName :: Ord a => Name -> Type a -> Type a -> Type a
+replaceFreeName :: Name -> Type Kv -> Type Kv -> Type Kv
 replaceFreeName v rep = rewriteType mapExpr id
   where
     mapExpr recurse t = case t of
@@ -154,7 +154,7 @@ rewrite fsub f = recurse
   where
     recurse = f (fsub recurse)
 
-rewriteTerm :: Ord b => ((Term a -> Term b) -> Term a -> Term b) -> (a -> b) -> Term a -> Term b
+rewriteTerm :: ((Term Kv -> Term Kv) -> Term Kv -> Term Kv) -> (Kv -> Kv) -> Term Kv -> Term Kv
 rewriteTerm f mf = rewrite fsub f
   where
     fsub recurse term = case term of
@@ -183,16 +183,17 @@ rewriteTerm f mf = rewrite fsub f
         TermRecord (Record n fields) -> TermRecord $ Record n $ forField <$> fields
         TermSet s -> TermSet $ S.fromList $ recurse <$> S.toList s
         TermSum (Sum i s trm) -> TermSum $ Sum i s $ recurse trm
+        TermTyped (TermWithType term1 type2) -> TermTyped $ TermWithType (recurse term1) type2
         TermUnion (Injection n field) -> TermUnion $ Injection n $ forField field
         TermVariable v -> TermVariable v
       where
         forField f = f {fieldTerm = recurse (fieldTerm f)}
 
-rewriteTermM :: Ord b =>
-  ((Term a -> Flow s (Term b)) -> Term a -> (Flow s (Term b))) ->
-  (a -> Flow s b) ->
-  Term a ->
-  Flow s (Term b)
+rewriteTermM ::
+  ((Term Kv -> Flow s (Term Kv)) -> Term Kv -> (Flow s (Term Kv))) ->
+  (Kv -> Flow s Kv) ->
+  Term Kv ->
+  Flow s (Term Kv)
 rewriteTermM f mf = rewrite fsub f
   where
     fsub recurse term = case term of
@@ -231,6 +232,7 @@ rewriteTermM f mf = rewrite fsub f
         TermRecord (Record n fields) -> TermRecord <$> (Record n <$> (CM.mapM forField fields))
         TermSet s -> TermSet <$> (S.fromList <$> (CM.mapM recurse $ S.toList s))
         TermSum (Sum i s trm) -> TermSum <$> (Sum i s <$> recurse trm)
+        TermTyped (TermWithType term1 type2) -> TermTyped <$> (TermWithType <$> recurse term1 <*> pure type2)
         TermUnion (Injection n field) -> TermUnion <$> (Injection n <$> forField field)
         TermVariable v -> pure $ TermVariable v
         TermWrap (Nominal name t) -> TermWrap <$> (Nominal name <$> recurse t)
@@ -239,17 +241,17 @@ rewriteTermM f mf = rewrite fsub f
           t <- recurse (fieldTerm f)
           return f {fieldTerm = t}
 
-rewriteTermMeta :: Ord b => (a -> b) -> Term a -> Term b
+rewriteTermMeta :: (Kv -> Kv) -> Term Kv -> Term Kv
 rewriteTermMeta = rewriteTerm mapExpr
   where
     mapExpr recurse term = recurse term
 
-rewriteTermMetaM :: Ord b => (a -> Flow s b) -> Term a -> Flow s (Term b)
+rewriteTermMetaM :: (Kv -> Flow s Kv) -> Term Kv -> Flow s (Term Kv)
 rewriteTermMetaM = rewriteTermM mapExpr
   where
     mapExpr recurse term = recurse term
 
-rewriteType :: ((Type a -> Type b) -> Type a -> Type b) -> (a -> b) -> Type a -> Type b
+rewriteType :: ((Type Kv -> Type Kv) -> Type Kv -> Type Kv) -> (Kv -> Kv) -> Type Kv -> Type Kv
 rewriteType f mf = rewrite fsub f
   where
     fsub recurse typ = case typ of
@@ -271,11 +273,11 @@ rewriteType f mf = rewrite fsub f
       where
         forField f = f {fieldTypeType = recurse (fieldTypeType f)}
 
-rewriteTypeM :: Ord b =>
-  ((Type a -> Flow s (Type b)) -> Type a -> (Flow s (Type b))) ->
-  (a -> Flow s b) ->
-  Type a ->
-  Flow s (Type b)
+rewriteTypeM ::
+  ((Type Kv -> Flow s (Type Kv)) -> Type Kv -> (Flow s (Type Kv))) ->
+  (Kv -> Flow s Kv) ->
+  Type Kv ->
+  Flow s (Type Kv)
 rewriteTypeM f mf = rewrite fsub f
   where
     fsub recurse typ = case typ of
@@ -301,12 +303,12 @@ rewriteTypeM f mf = rewrite fsub f
           t <- recurse $ fieldTypeType f
           return f {fieldTypeType = t}
 
-rewriteTypeMeta :: (a -> b) -> Type a -> Type b
+rewriteTypeMeta :: (Kv -> Kv) -> Type Kv -> Type Kv
 rewriteTypeMeta = rewriteType mapExpr
   where
     mapExpr recurse term = recurse term
 
-simplifyTerm :: Ord a => Term a -> Term a
+simplifyTerm :: Term Kv -> Term Kv
 simplifyTerm = rewriteTerm simplify id
   where
     simplify recurse term = recurse $ case stripTerm term of
@@ -320,7 +322,7 @@ simplifyTerm = rewriteTerm simplify id
         _ -> term
       _ -> term
 
-substituteVariable :: Ord a => Name -> Name -> Term a -> Term a
+substituteVariable :: Name -> Name -> Term Kv -> Term Kv
 substituteVariable from to = rewriteTerm replace id
   where
     replace recurse term = case term of
@@ -330,7 +332,7 @@ substituteVariable from to = rewriteTerm replace id
         else recurse term
       _ -> recurse term
 
-substituteVariables :: Ord a => M.Map Name Name -> Term a -> Term a
+substituteVariables :: M.Map Name Name -> Term Kv -> Term Kv
 substituteVariables subst = rewriteTerm replace id
   where
     replace recurse term = case term of
@@ -341,7 +343,7 @@ substituteVariables subst = rewriteTerm replace id
       _ -> recurse term
 
 -- Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that
-termDependencyNames :: Ord a => Bool -> Bool -> Bool -> Term a -> S.Set Name
+termDependencyNames :: Bool -> Bool -> Bool -> Term Kv -> S.Set Name
 termDependencyNames withVars withPrims withNoms = foldOverTerm TraversalOrderPre addNames S.empty
   where
     addNames names term = case term of
@@ -363,17 +365,17 @@ termDependencyNames withVars withPrims withNoms = foldOverTerm TraversalOrderPre
         prim name = if withPrims then S.insert name names else names
         var name = if withVars then S.insert name names else names
 
-topologicalSortElements :: Ord a => [Element a] -> Either [[Name]] [Name]
+topologicalSortElements :: [Element Kv] -> Either [[Name]] [Name]
 topologicalSortElements els = topologicalSort $ adjlist <$> els
   where
     adjlist e = (elementName e, S.toList $ termDependencyNames False True True $ elementData e)
 
-typeDependencyNames :: Type a -> S.Set Name
+typeDependencyNames :: Type Kv -> S.Set Name
 typeDependencyNames = freeVariablesInType
 
 -- | Where non-lambda terms with nonzero arity occur at the top level, turn them into lambdas,
 --   also adding an appropriate type annotation to each new lambda.
-wrapLambdas :: (Ord a, Show a) => Term a -> Flow (Graph a) (Term a)
+wrapLambdas :: Term Kv -> Flow (Graph Kv) (Term Kv)
 wrapLambdas term = do
     typ <- requireTermType term
     anns <- graphAnnotations <$> getState

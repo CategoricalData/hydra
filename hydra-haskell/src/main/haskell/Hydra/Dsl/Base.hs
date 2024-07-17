@@ -179,7 +179,7 @@ opt :: Maybe (Datum a) -> Datum (Maybe a)
 opt mc = Datum $ Terms.optional (unDatum <$> mc)
 
 pair :: (Datum a, Datum b) -> Datum (a, b)
-pair (Datum l, Datum r) = Datum $ Terms.pair (l, r)
+pair (Datum l, Datum r) = Datum $ Terms.pair l r
 
 primitive :: Name -> Datum a
 primitive = Datum . Terms.primitive

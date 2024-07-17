@@ -337,6 +337,9 @@ hydraCoreModule = Module ns elements [] [] $
           "sum">:
             doc "A variant tuple" $
             core "Sum" @@ "a",
+          "typed">:
+            doc "A term annotated with its type" $
+            core "TermWithType",
           "union">:
             doc "An injection; an instance of a union type" $
             core "Injection" @@ "a",
@@ -345,6 +348,12 @@ hydraCoreModule = Module ns elements [] [] $
             core "Name",
           "wrap">:
             core "Nominal" @@ (core "Term" @@ "a")],
+
+      def "TermWithType" $
+        doc "A term annotated with its type" $
+        record [
+          "term">: core "Term" @@ core "Kv",
+          "type">: core "Type" @@ core "Kv"],
 
       def "TupleProjection" $
         doc "A tuple elimination; a projection from an integer-indexed product" $

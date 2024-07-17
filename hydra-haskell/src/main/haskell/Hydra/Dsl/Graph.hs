@@ -6,14 +6,15 @@ import Hydra.Dsl.Base as Base
 import qualified Data.Map as M
 
 
-graph :: Datum (M.Map Name (Element a))
-    -> Datum (M.Map Name (Maybe (Term a)))
-    -> Datum (Term a)
-    -> Datum (M.Map Name (Primitive a))
-    -> Datum (AnnotationClass a)
-    -> Datum (Maybe (Graph a))
-    -> Datum (Graph a)
-graph elements environment body primitives annotations schema = record _Graph [
+graph :: Datum (M.Map Name (Element Kv))
+    -> Datum (M.Map Name (Maybe (Term Kv)))
+    -> Datum (M.Map Name (Type Kv))
+    -> Datum (Term Kv)
+    -> Datum (M.Map Name (Primitive Kv))
+    -> Datum (AnnotationClass Kv)
+    -> Datum (Maybe (Graph Kv))
+    -> Datum (Graph Kv)
+graph elements environment types body primitives annotations schema = record _Graph [
     _Graph_elements>>: elements,
     _Graph_environment>>: environment,
     _Graph_body>>: body,
@@ -21,20 +22,23 @@ graph elements environment body primitives annotations schema = record _Graph [
     _Graph_annotations>>: annotations,
     _Graph_schema>>: schema]
 
-graphElements :: Datum (Graph a -> M.Map Name (Element a))
+graphElements :: Datum (Graph Kv -> M.Map Name (Element Kv))
 graphElements = project _Graph _Graph_elements
 
-graphEnvironment :: Datum (Graph a -> M.Map Name (Maybe (Term a)))
+graphEnvironment :: Datum (Graph Kv -> M.Map Name (Maybe (Term Kv)))
 graphEnvironment = project _Graph _Graph_environment
 
-graphBody :: Datum (Graph a -> Term a)
+graphTypes :: Datum (Graph Kv -> M.Map Name (Type Kv))
+graphTypes = project _Graph _Graph_types
+
+graphBody :: Datum (Graph Kv -> Term Kv)
 graphBody = project _Graph _Graph_body
 
-graphPrimitives :: Datum (Graph a -> M.Map Name (Primitive a))
+graphPrimitives :: Datum (Graph Kv -> M.Map Name (Primitive Kv))
 graphPrimitives = project _Graph _Graph_primitives
 
-graphAnnotations :: Datum (Graph a -> AnnotationClass a)
+graphAnnotations :: Datum (Graph Kv -> AnnotationClass Kv)
 graphAnnotations = project _Graph _Graph_annotations
 
-graphSchema :: Datum (Graph a -> Maybe (Graph a))
+graphSchema :: Datum (Graph Kv -> Maybe (Graph Kv))
 graphSchema = project _Graph _Graph_schema
