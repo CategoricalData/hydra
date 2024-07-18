@@ -30,7 +30,7 @@ import           Hydra.Sources.Tier1.All
 import Hydra.Sources.Tier2.Basics
 
 
-hydraCoreLanguageModule :: Module Kv
+hydraCoreLanguageModule :: Module
 hydraCoreLanguageModule = Module ns elements
     [hydraBasicsModule]
     tier0Modules $
@@ -39,7 +39,7 @@ hydraCoreLanguageModule = Module ns elements
     ns = Namespace "hydra/coreLanguage"
     elements = [el hydraCoreLanguageDef]
 
-hydraCoreLanguageDef :: Definition (Language Kv)
+hydraCoreLanguageDef :: Definition (Language)
 hydraCoreLanguageDef = definitionInModule hydraCoreLanguageModule "hydraCoreLanguage" $
   doc "Language constraints for Java" $
   typed languageA $

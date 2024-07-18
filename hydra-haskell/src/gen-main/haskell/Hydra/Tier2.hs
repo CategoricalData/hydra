@@ -27,7 +27,7 @@ getState = (Compute.Flow (\s0 -> \t0 ->
       Compute.flowStateTrace = t}) v) (Compute.flowStateValue fs1) (Compute.flowStateState fs1) (Compute.flowStateTrace fs1))))
 
 -- | Get the annotated type of a given term, if any
-getTermType :: (Core.Term Core.Kv -> Maybe (Core.Type Core.Kv))
+getTermType :: (Core.Term -> Maybe (Core.Type))
 getTermType term = case term of
   Core.TermAnnotated a -> getTermType $ Core.annotatedSubject a
   Core.TermTyped tt -> Just $ Core.termWithTypeType tt
@@ -43,7 +43,7 @@ putState cx = (Compute.Flow (\s0 -> \t0 ->
     Compute.flowStateTrace = (Compute.flowStateTrace f1)}))
 
 -- | Get the annotated type of a given element, or fail if it is missing
-requireElementType :: (Graph.Element Core.Kv -> Compute.Flow (Graph.Graph Core.Kv) (Core.Type Core.Kv))
+requireElementType :: (Graph.Element -> Compute.Flow (Graph.Graph) (Core.Type))
 requireElementType el =
   let withType = (\x -> case x of
           Nothing -> (Flows.fail (Strings.cat [
@@ -53,7 +53,7 @@ requireElementType el =
   in withType $ getTermType $ Graph.elementData el
 
 -- | Get the annotated type of a given term, or fail if it is missing
-requireTermType :: (Core.Term Core.Kv -> Compute.Flow (Graph.Graph Core.Kv) (Core.Type Core.Kv))
+requireTermType :: (Core.Term -> Compute.Flow (Graph.Graph) (Core.Type))
 requireTermType term =
   let withType = (\x -> case x of
           Nothing -> (Flows.fail "missing type annotation")

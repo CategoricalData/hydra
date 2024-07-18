@@ -41,17 +41,17 @@ import Hydra.Sources.Tier4.Langs.Yaml.Model
 import Hydra.Sources.Tier4.Test.TestSuite
 
 
-allModules :: [Module Kv]
+allModules :: [Module]
 allModules = mainModules ++ testModules
 
-mainModules :: [Module Kv]
+mainModules :: [Module]
 mainModules = kernelModules ++ tier4LangModules
 
-testModules :: [Module Kv]
+testModules :: [Module]
 testModules = [
   testSuiteModule]
 
-tier4LangModules :: [Module Kv]
+tier4LangModules :: [Module]
 tier4LangModules = [
   avroSchemaModule,
   deltaParquetModule,
@@ -87,5 +87,5 @@ tier4LangModules = [
   xmlSchemaModule,
   yamlModelModule]
 
-tier4Modules :: [Module Kv]
+tier4Modules :: [Module]
 tier4Modules = tier4LangModules ++ testModules
