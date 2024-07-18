@@ -31,7 +31,7 @@ import qualified Hydra.Json as Json
 import Hydra.Sources.Tier0.Json
 
 
-jsonDecodingModule :: Module Kv
+jsonDecodingModule :: Module
 jsonDecodingModule = Module (Namespace "hydra/langs/json/decoding") elements
     [jsonModelModule, hydraCoreModule] (jsonModelModule:tier0Modules) $
     Just "Decoding functions for JSON data"

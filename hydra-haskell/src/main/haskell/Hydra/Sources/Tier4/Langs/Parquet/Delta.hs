@@ -8,7 +8,7 @@ import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
 
-deltaParquetModule :: Module Kv
+deltaParquetModule :: Module
 deltaParquetModule = Module ns elements [hydraCoreModule] tier0Modules $
     Just ("A partial Delta Parquet model")
   where

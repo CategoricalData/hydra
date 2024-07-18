@@ -29,7 +29,7 @@ import           Hydra.Sources.Tier0.All
 stripDefinition :: String -> Datum a -> Definition a
 stripDefinition = definitionInModule hydraStripModule
 
-hydraStripModule :: Module Kv
+hydraStripModule :: Module
 hydraStripModule = Module (Namespace "hydra/strip") elements [] tier0Modules $
     Just "Several functions for stripping annotations from types and terms."
   where
@@ -39,7 +39,7 @@ hydraStripModule = Module (Namespace "hydra/strip") elements [] tier0Modules $
      el stripTypeDef,
      el stripTypeParametersDef]
 
-skipAnnotationsDef :: Definition ((a -> Maybe (Annotated a m)) -> a -> a)
+skipAnnotationsDef :: Definition ((a -> Maybe (Annotated a)) -> a -> a)
 skipAnnotationsDef = stripDefinition "skipAnnotations" $
   function getAnnType (Types.function (Types.var "x") (Types.var "x")) $
   lambda "getAnn" $ lambda "t" $
@@ -56,21 +56,21 @@ skipAnnotationsDef = stripDefinition "skipAnnotations" $
       (Types.var "x")
       (Types.optional $ Types.apply (Types.apply (TypeVariable _Annotated) (Types.var "x")) (Types.var "a")))
 
-stripTermDef :: Definition (Term Kv -> Term Kv)
+stripTermDef :: Definition (Term -> Term)
 stripTermDef = stripDefinition "stripTerm" $
     doc "Strip all annotations from a term" $
     function termA termA $
       lambda "x" (ref skipAnnotationsDef @@ (match _Term (Just nothing) [
         Case _Term_annotated --> lambda "ann" (just $ var "ann")]) @@ var "x")
 
-stripTypeDef :: Definition (Type Kv -> Type Kv)
+stripTypeDef :: Definition (Type -> Type)
 stripTypeDef = stripDefinition "stripType" $
     doc "Strip all annotations from a type" $
     function typeA typeA $
       lambda "x" (ref skipAnnotationsDef @@ (match _Type (Just nothing) [
         Case _Type_annotated --> lambda "ann" (just $ var "ann")]) @@ var "x")
-        
-stripTypeParametersDef :: Definition (Type Kv -> Type Kv)
+
+stripTypeParametersDef :: Definition (Type -> Type)
 stripTypeParametersDef = stripDefinition "stripTypeParameters" $
     doc "Strip any top-level type lambdas from a type, extracting the (possibly nested) type body" $
     function typeA typeA $

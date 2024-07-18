@@ -8,7 +8,7 @@ import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
 
-kqlModule :: Module Kv
+kqlModule :: Module
 kqlModule = Module ns elements [hydraCoreModule] tier0Modules $
     Just ("A partial KQL (Kusto Query Language) model, based on examples from the documentation. Not normative.")
   where

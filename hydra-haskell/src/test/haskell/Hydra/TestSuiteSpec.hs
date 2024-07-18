@@ -19,7 +19,7 @@ runTestSuite :: H.SpecWith ()
 runTestSuite = do
     runTestGroup allTests
 
-runTestCase :: Int -> TestCase Kv -> H.SpecWith ()
+runTestCase :: Int -> TestCase -> H.SpecWith ()
 runTestCase idx tc = H.it desc $
   shouldSucceedWith
     (eval $ testCaseInput tc)

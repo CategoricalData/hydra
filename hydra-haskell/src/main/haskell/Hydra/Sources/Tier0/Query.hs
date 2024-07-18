@@ -14,7 +14,7 @@ import           Hydra.Dsl.Types       as Types
 import           Hydra.Sources.Core
 
 
-hydraQueryModule :: Module Kv
+hydraQueryModule :: Module
 hydraQueryModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just "A model for language-agnostic graph pattern queries"
   where
@@ -43,20 +43,20 @@ hydraQueryModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "GraphPattern" $
         doc "A query pattern which matches within a designated component subgraph" $
-        lambda "a" $ record [
+        record [
           "graph">:
             doc "The name of the component graph" $
             core "Name",
           "patterns">:
             doc "The patterns to match within the subgraph" $
-            list (query "Pattern" @@ "a")],
+            list (query "Pattern")],
 
       def "Node" $
         doc "A node in a query expression; it may be a term, a variable, or a wildcard" $
-        lambda "a" $ union [
+        union [
           "term">:
             doc "A graph term; an expression which is valid in the graph being matched" $
-            core "Term" @@ "a",
+            core "Term",
           "variable">:
             doc "A query variable, not to be confused with a variable term" $
             query "Variable",
@@ -78,32 +78,32 @@ hydraQueryModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "Pattern" $
         doc "A query pattern" $
-        lambda "a" $ union [
+        union [
           "triple">:
             doc "A subject/predicate/object pattern" $
-            query "TriplePattern" @@ "a",
+            query "TriplePattern",
           "negation">:
             doc "The negation of another pattern" $
-            query "Pattern" @@ "a",
+            query "Pattern",
           "conjunction">:
             doc "The conjunction ('and') of several other patterns" $
-            list (query "Pattern" @@ "a"),
+            list (query "Pattern"),
           "disjunction">:
             doc "The disjunction (inclusive 'or') of several other patterns" $
-            list (query "Pattern" @@ "a"),
+            list (query "Pattern"),
           "graph">:
             doc "A pattern which matches within a named subgraph" $
-            query "GraphPattern" @@ "a"],
+            query "GraphPattern"],
 
       def "Query" $
         doc "A SELECT-style graph pattern matching query" $
-        lambda "a" $ record [
+        record [
           "variables">:
             doc "The variables selected by the query" $
             list $ query "Variable",
           "patterns">:
             doc "The patterns to be matched" $
-            list (query "Pattern" @@ "a")],
+            list (query "Pattern")],
 
       def "Range" $
         doc "A range from min to max, inclusive" $
@@ -143,10 +143,10 @@ hydraQueryModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "TriplePattern" $
         doc "A subject/predicate/object pattern" $
-        lambda "a" $ record [
-          "subject">: query "Node" @@ "a",
+        record [
+          "subject">: query "Node",
           "predicate">: query "Path",
-          "object">: query "Node" @@ "a"],
+          "object">: query "Node"],
 
       def "Variable" $
         doc "A query variable"

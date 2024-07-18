@@ -20,21 +20,21 @@ import qualified Data.Set as S
 import Control.Monad
 
 
-checkType :: Term Kv -> Type Kv -> H.Expectation
+checkType :: Term -> Type -> H.Expectation
 checkType term typ = typeAnn term `H.shouldBe` typ
   where
     typeAnn (TermTyped (TermWithType _ typ)) = typ
 
-expectMonotype :: Term Kv -> Type Kv -> H.Expectation
+expectMonotype :: Term -> Type -> H.Expectation
 expectMonotype term = expectPolytype term []
 
-expectPolytype :: Term Kv-> [String] -> Type Kv -> H.Expectation
+expectPolytype :: Term-> [String] -> Type -> H.Expectation
 expectPolytype term vars typ = do
     shouldSucceedWith
       (inferTypeScheme term)
       (TypeScheme (Name <$> vars) typ)
 
-expectTypeAnnotation :: (Term Kv -> Flow (Graph Kv) (Term Kv)) -> Term Kv -> Type Kv -> H.Expectation
+expectTypeAnnotation :: (Term -> Flow (Graph) (Term)) -> Term -> Type -> H.Expectation
 expectTypeAnnotation path term etyp = shouldSucceedWith atyp etyp
   where
    atyp = do

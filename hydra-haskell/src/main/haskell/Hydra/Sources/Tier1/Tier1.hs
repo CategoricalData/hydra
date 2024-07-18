@@ -34,7 +34,7 @@ import Hydra.Sources.Tier1.Strip
 tier1Definition :: String -> Datum a -> Definition a
 tier1Definition = definitionInModule hydraTier1Module
 
-hydraTier1Module :: Module Kv
+hydraTier1Module :: Module
 hydraTier1Module = Module (Namespace "hydra/tier1") elements
     [hydraComputeModule, hydraConstantsModule, hydraStripModule] tier0Modules $
     Just ("A module for miscellaneous tier-1 functions and constants.")
@@ -85,7 +85,7 @@ integerValueToBigintDef = tier1Definition "integerValueToBigint" $
     _IntegerValue_uint32>>: Literals.uint32ToBigint,
     _IntegerValue_uint64>>: Literals.uint64ToBigint]
 
-isLambdaDef :: Definition (Term Kv -> Bool)
+isLambdaDef :: Definition (Term -> Bool)
 isLambdaDef = tier1Definition "isLambda" $
   doc "Check whether a term is a lambda, possibly nested within let and/or annotation terms" $
   function termA Types.boolean $
@@ -97,7 +97,7 @@ isLambdaDef = tier1Definition "isLambda" $
 
 -- Rewriting.hs
 
-foldOverTermDef :: Definition (TraversalOrder -> (x -> Term Kv -> x) -> x -> Term Kv -> x)
+foldOverTermDef :: Definition (TraversalOrder -> (x -> Term -> x) -> x -> Term -> x)
 foldOverTermDef = tier1Definition "foldOverTerm" $
   doc "Fold over a term, traversing its subterms in the specified order" $
   functionNWithClasses [TypeVariable _TraversalOrder, functionT xT (functionT termA xT), xT, termA, xT] ordA $
@@ -111,7 +111,7 @@ foldOverTermDef = tier1Definition "foldOverTerm" $
         @@ (ref subtermsDef @@ var "term"))
       @@ var "term")] @@ var "order")
 
-foldOverTypeDef :: Definition (TraversalOrder -> (x -> Type Kv -> x) -> x -> Type Kv -> x)
+foldOverTypeDef :: Definition (TraversalOrder -> (x -> Type -> x) -> x -> Type -> x)
 foldOverTypeDef = tier1Definition "foldOverType" $
   doc "Fold over a type, traversing its subtypes in the specified order" $
   functionN [TypeVariable _TraversalOrder, functionT xT (functionT typeA xT), xT, typeA, xT] $
@@ -125,7 +125,7 @@ foldOverTypeDef = tier1Definition "foldOverType" $
         @@ (ref subtypesDef @@ var "typ"))
       @@ var "typ")] @@ var "order")
 
-freeVariablesInTermDef :: Definition (Term Kv -> S.Set Name)
+freeVariablesInTermDef :: Definition (Term -> S.Set Name)
 freeVariablesInTermDef = tier1Definition "freeVariablesInTerm" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a term" $
   functionWithClasses termA (setT nameT) ordA $
@@ -145,7 +145,7 @@ freeVariablesInTermDef = tier1Definition "freeVariablesInTerm" $
         @@ Sets.empty
         @@ (ref subtermsDef @@ var "term")])
 
-freeVariablesInTypeDef :: Definition (Type Kv -> S.Set Name)
+freeVariablesInTypeDef :: Definition (Type -> S.Set Name)
 freeVariablesInTypeDef = tier1Definition "freeVariablesInType" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a type" $
   function typeA (setT nameT) $
@@ -161,7 +161,7 @@ freeVariablesInTypeDef = tier1Definition "freeVariablesInType" $
         @@ Sets.empty
         @@ (ref subtypesDef @@ var "typ")])
 
-subtermsDef :: Definition (Term Kv -> [Term Kv])
+subtermsDef :: Definition (Term -> [Term])
 subtermsDef = tier1Definition "subterms" $
   doc "Find the children of a given term" $
   functionWithClasses termA (listT termA) ordA $
@@ -198,7 +198,7 @@ subtermsDef = tier1Definition "subterms" $
     _Term_variable>>: constant $ list [],
     _Term_wrap>>: lambda "n" $ list [Core.nominalObject @@ var "n"]]
 
-subtypesDef :: Definition (Type Kv -> [Type Kv])
+subtypesDef :: Definition (Type -> [Type])
 subtypesDef = tier1Definition "subtypes" $
   doc "Find the children of a given type expression" $
   function typeA (listT typeA) $

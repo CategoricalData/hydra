@@ -10,7 +10,7 @@ import Hydra.Sources.Core
 import Hydra.Sources.Tier4.Langs.Tinkerpop.PropertyGraph
 
 
-propertyGraphQueriesModule :: Module Kv
+propertyGraphQueriesModule :: Module
 propertyGraphQueriesModule = Module ns elements [tinkerpopPropertyGraphModule] tier0Modules $
     Just ("A common model for pattern-matching queries over property graphs")
   where

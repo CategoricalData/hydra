@@ -35,10 +35,10 @@ import qualified System.Directory as SD
 import qualified Data.Maybe as Y
 
 
-findType :: Graph Kv -> Term Kv -> Flow (Graph Kv) (Maybe (Type Kv))
+findType :: Graph -> Term -> Flow (Graph) (Maybe (Type))
 findType cx term = annotationClassTermType (graphAnnotations cx) term
 
-generateSources :: (Module Kv -> Flow (Graph Kv) (M.Map FilePath String)) -> FilePath -> [Module Kv] -> IO ()
+generateSources :: (Module -> Flow (Graph) (M.Map FilePath String)) -> FilePath -> [Module] -> IO ()
 generateSources printModule basePath mods = do
     mfiles <- runFlow bootstrapGraph generateFiles
     case mfiles of
@@ -63,7 +63,7 @@ generateSources printModule basePath mods = do
 
     forModule mod = withTrace ("module " ++ unNamespace (moduleNamespace mod)) $ printModule mod
 
-modulesToGraph :: [Module Kv] -> Graph Kv
+modulesToGraph :: [Module] -> Graph
 modulesToGraph mods = elementsToGraph parent (Just schemaGraph) dataElements
   where
     parent = bootstrapGraph
@@ -85,26 +85,26 @@ runFlow cx f = do
   where
     FlowState v _ t = unFlow f cx emptyTrace
 
-writeGraphql :: FP.FilePath -> [Module Kv] -> IO ()
+writeGraphql :: FP.FilePath -> [Module] -> IO ()
 writeGraphql = generateSources moduleToGraphql
 
-writeHaskell :: FilePath -> [Module Kv] -> IO ()
+writeHaskell :: FilePath -> [Module] -> IO ()
 writeHaskell = generateSources moduleToHaskell
 
-writeJava :: FP.FilePath -> [Module Kv] -> IO ()
+writeJava :: FP.FilePath -> [Module] -> IO ()
 writeJava = generateSources moduleToJava
 
--- writeJson :: FP.FilePath -> [Module Kv] -> IO ()
+-- writeJson :: FP.FilePath -> [Module] -> IO ()
 -- writeJson = generateSources Json.printModule
 
-writePdl :: FP.FilePath -> [Module Kv] -> IO ()
+writePdl :: FP.FilePath -> [Module] -> IO ()
 writePdl = generateSources moduleToPdl
 
-writeProtobuf :: FP.FilePath -> [Module Kv] -> IO ()
+writeProtobuf :: FP.FilePath -> [Module] -> IO ()
 writeProtobuf = generateSources moduleToProtobuf
 
-writeScala :: FP.FilePath -> [Module Kv] -> IO ()
+writeScala :: FP.FilePath -> [Module] -> IO ()
 writeScala = generateSources moduleToScala
 
-writeYaml :: FP.FilePath -> [Module Kv] -> IO ()
+writeYaml :: FP.FilePath -> [Module] -> IO ()
 writeYaml = generateSources moduleToYaml
