@@ -11,7 +11,6 @@ import Data.Set as S
 -- | A constant pattern
 newtype Constant = 
   Constant {
-    -- | A constant pattern
     unConstant :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -20,7 +19,6 @@ _Constant = (Core.Name "hydra/grammar.Constant")
 -- | An enhanced Backus-Naur form (BNF) grammar
 newtype Grammar = 
   Grammar {
-    -- | An enhanced Backus-Naur form (BNF) grammar
     unGrammar :: [Production]}
   deriving (Eq, Ord, Read, Show)
 
@@ -29,7 +27,6 @@ _Grammar = (Core.Name "hydra/grammar.Grammar")
 -- | A name for a pattern
 newtype Label = 
   Label {
-    -- | A name for a pattern
     unLabel :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -103,7 +100,6 @@ _Production_pattern = (Core.FieldName "pattern")
 -- | A regular expression
 newtype Regex = 
   Regex {
-    -- | A regular expression
     unRegex :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -112,7 +108,6 @@ _Regex = (Core.Name "hydra/grammar.Regex")
 -- | A nonterminal symbol
 newtype Symbol = 
   Symbol {
-    -- | A nonterminal symbol
     unSymbol :: String}
   deriving (Eq, Ord, Read, Show)
 

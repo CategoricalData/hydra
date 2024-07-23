@@ -8,7 +8,7 @@ import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
 
-openCypherModule :: Module Kv
+openCypherModule :: Module
 openCypherModule = Module ns elements [hydraCoreModule] tier0Modules $
     Just ("A Cypher model based on the OpenCypher specification (version 23), copyright Neo Technology, available at:\n" ++
       "  https://opencypher.org/resources/")

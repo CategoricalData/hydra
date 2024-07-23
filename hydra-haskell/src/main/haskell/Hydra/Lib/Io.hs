@@ -23,24 +23,25 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-noGraph :: Graph Kv
+noGraph :: Graph
 noGraph = Graph {
   graphElements = M.empty,
   graphEnvironment = M.empty,
+  graphTypes = M.empty,
   graphBody = Terms.list [],
   graphPrimitives = M.empty,
   graphAnnotations = kvAnnotationClass,
   graphSchema = Nothing}
 
 
-showTerm :: Term Kv -> String
+showTerm :: Term -> String
 showTerm term = fromFlow "fail" noGraph $ do
     coder <- termStringCoder
     coderEncode coder encoded
   where
     encoded = coreEncodeTerm $ rewriteTermMeta (const $ Kv M.empty) term
 
-termStringCoder :: Flow (Graph Kv) (Coder (Graph Kv) (Graph Kv) (Term Kv) String)
+termStringCoder :: Flow Graph (Coder Graph Graph Term String)
 termStringCoder = do
     termJsonCoder <- jsonCoder $ TypeVariable _Term
     return $ Coder (mout termJsonCoder) (min termJsonCoder)
@@ -50,14 +51,23 @@ termStringCoder = do
       Left msg -> fail $ "failed to parse JSON value: " ++ msg
       Right v -> coderDecode termJsonCoder v
 
-showType :: Type Kv -> String
-showType typ = fromFlow "fail" noGraph $ do
-    coder <- typeStringCoder
-    coderEncode coder encoded
-  where
-    encoded = coreEncodeType $ rewriteTypeMeta (const $ Kv M.empty) typ
+--showType :: Type -> String
+--showType typ = fromFlow "fail" noGraph $ do
+--    coder <- typeStringCoder
+--    coderEncode coder encoded
+--  where
+--    encoded = coreEncodeType $ rewriteTypeMeta (const $ Kv M.empty) typ
 
-typeStringCoder :: Flow (Graph Kv) (Coder (Graph Kv) (Graph Kv) (Term Kv) String)
+-- TODO: for now, we are bypassing the complexity of TermAdapters because of issues yet to be resolved
+showType :: Type -> String
+showType typ = case flowStateValue result of
+    Nothing -> "failed to encode type:\n" ++ show (traceMessages $ flowStateTrace result)
+    Just s -> s
+  where
+    result = unFlow (jsonValueToString <$> untypedTermToJson encoded) noGraph emptyTrace
+    encoded = stripTermRecursive $ coreEncodeType typ
+
+typeStringCoder :: Flow Graph (Coder Graph Graph Term String)
 typeStringCoder = do
     typeJsonCoder <- jsonCoder $ TypeVariable _Type
     return $ Coder (mout typeJsonCoder) (min typeJsonCoder)

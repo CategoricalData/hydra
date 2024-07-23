@@ -165,7 +165,6 @@ _Padding_right = (Core.FieldName "right")
 -- | Operator precedence
 newtype Precedence = 
   Precedence {
-    -- | Operator precedence
     unPrecedence :: Int}
   deriving (Eq, Ord, Read, Show)
 
@@ -174,7 +173,6 @@ _Precedence = (Core.Name "hydra/ast.Precedence")
 -- | Any symbol
 newtype Symbol = 
   Symbol {
-    -- | Any symbol
     unSymbol :: String}
   deriving (Eq, Ord, Read, Show)
 

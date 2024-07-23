@@ -31,7 +31,8 @@ import           Hydra.Sources.Tier2.All
 tier3Definition :: String -> Datum a -> Definition a
 tier3Definition = definitionInModule hydraTier3Module
 
-hydraTier3Module :: Module Kv
+-- TODO: this need not be a tier-3 module; it has no term-level dependencies. It could be a tier-1 module.
+hydraTier3Module :: Module
 hydraTier3Module = Module (Namespace "hydra/tier3") elements [] tier0Modules $
     Just ("A module for miscellaneous tier-3 functions and constants.")
   where
@@ -42,7 +43,7 @@ hydraTier3Module = Module (Namespace "hydra/tier3") elements [] tier0Modules $
 traceSummaryDef :: Definition (Trace -> String)
 traceSummaryDef = tier3Definition "traceSummary" $
   doc "Summarize a trace as a string" $
---  function traceT stringT $
+  function traceT stringT $
   lambda "t" $ (
     (Strings.intercalate @@ "\n" @@ (Lists.concat2 @@ var "messageLines" @@ var "keyvalLines"))
       `with` [

@@ -4,6 +4,7 @@ import Hydra.Coders
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Graph
+import Hydra.Module
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Data.Map as M
@@ -13,53 +14,51 @@ import qualified Data.Set as S
 eqA = (M.fromList [(Name "a", S.fromList [TypeClassEquality])])
 ordA = (M.fromList [(Name "a", S.fromList [TypeClassOrdering])])
 
-aT = Types.var "a" :: Type Kv
-annotatedTermA = Types.apply (Types.apply (TypeVariable _Annotated) termA) (Types.var "a") :: Type Kv
-annotatedTypeA = Types.apply (Types.apply (TypeVariable _Annotated) typeA) (Types.var "a") :: Type Kv
-applicationA = Types.apply (TypeVariable _Application) (Types.var "a") :: Type Kv
-applicationTypeA = Types.apply (TypeVariable _ApplicationType) (Types.var "a") :: Type Kv
+aT = Types.var "a" :: Type
+annotatedTermT = Types.apply (TypeVariable _Annotated) termT :: Type
+annotatedTypeT = Types.apply (TypeVariable _Annotated) typeT :: Type
+applicationT = TypeVariable _Application :: Type
+applicationTypeT = TypeVariable _ApplicationType :: Type
 booleanT = Types.boolean
-caseStatementA = Types.apply (TypeVariable _CaseStatement) (Types.var "a") :: Type Kv
-elementA = Types.apply (TypeVariable _Element) aT :: Type Kv
-eliminationA = Types.apply (TypeVariable _Elimination) (Types.var "a") :: Type Kv
-fieldA = Types.apply (TypeVariable _Field) aT :: Type Kv
-fieldTypeA = Types.apply (TypeVariable _FieldType) aT :: Type Kv
-flowGraphATypeA = Types.apply (Types.apply (TypeVariable _Flow) graphA) typeA :: Type Kv
-flowS1A = flowT (Types.var "s1") (Types.var "a") :: Type Kv
-flowS2A = flowT (Types.var "s2") (Types.var "a") :: Type Kv
-flowSA = flowT (Types.var "s") (Types.var "a") :: Type Kv
-flowSS = flowT (Types.var "s") (Types.var "s") :: Type Kv
-flowSY = flowT (Types.var "s") (Types.var "y") :: Type Kv
-flowStateSS = flowStateT (Types.var "s") (Types.var "s") :: Type Kv
+caseStatementT = TypeVariable _CaseStatement :: Type
+elementT = TypeVariable _Element :: Type
+eliminationT = TypeVariable _Elimination :: Type
+fieldT = TypeVariable _Field :: Type
+fieldTypeT = TypeVariable _FieldType :: Type
+floatValueT = TypeVariable _FloatValue :: Type
+flowS1AT = flowT (Types.var "s1") aT :: Type
+flowS2AT = flowT (Types.var "s2") aT :: Type
+flowSAT = flowT sT aT :: Type
+flowSST = flowT sT sT :: Type
 flowStateT s x = Types.apply (Types.apply (TypeVariable _FlowState) s) x
 flowT s x = Types.apply (Types.apply (TypeVariable _Flow) s) x
-functionA = Types.apply (TypeVariable _Function) (Types.var "a") :: Type Kv
 functionT = Types.function
-functionTypeA = Types.apply (TypeVariable _FunctionType) (Types.var "a") :: Type Kv
-graphA = Types.apply (TypeVariable _Graph) aT :: Type Kv
-injectionA = Types.apply (TypeVariable _Injection) (Types.var "a") :: Type Kv
-lambdaA = Types.apply (TypeVariable _Lambda) (Types.var "a") :: Type Kv
-lambdaTypeA = Types.apply (TypeVariable _LambdaType) aT :: Type Kv
-languageA = Types.apply (TypeVariable _Language) aT :: Type Kv
-letA = Types.apply (TypeVariable _Let) (Types.var "a") :: Type Kv
+graphT = TypeVariable _Graph :: Type
+injectionT = TypeVariable _Injection :: Type
+integerValueT = TypeVariable _IntegerValue :: Type
+kvT = TypeVariable _Kv :: Type
+lambdaT = TypeVariable _Lambda :: Type
+lambdaTypeT = TypeVariable _LambdaType :: Type
+languageT = TypeVariable _Language :: Type
+letT = TypeVariable _Let :: Type
 listT = Types.list
 mapT = Types.map
-mapTypeA = Types.apply (TypeVariable _MapType) (Types.var "a") :: Type Kv
+mapTypeT = TypeVariable _MapType :: Type
 nameT = TypeVariable _Name
-nominalTermA = Types.apply (TypeVariable _Nominal) termA :: Type Kv
-nominalTypeA = Types.apply (TypeVariable _Nominal) typeA :: Type Kv
-optionalCasesA = Types.apply (TypeVariable _OptionalCases) (Types.var "a") :: Type Kv
+namespaceT = TypeVariable _Namespace
 optionalT = Types.optional
 pairT = Types.pair
-recordA = Types.apply (TypeVariable _Record) (Types.var "a") :: Type Kv
-rowTypeA = Types.apply (TypeVariable _RowType) (Types.var "a") :: Type Kv
-sT = Types.var "s" :: Type Kv
+primitiveT = TypeVariable _Primitive :: Type
+qualifiedNameT = TypeVariable _QualifiedName
+recordT = TypeVariable _Record :: Type
+rowTypeT = TypeVariable _RowType :: Type
+sT = Types.var "s" :: Type
 setT = TypeSet
-stringT = Types.string :: Type Kv
-sumA = Types.apply (TypeVariable _Sum) (Types.var "a") :: Type Kv
-termA = Types.apply (TypeVariable _Term) aT :: Type Kv
-termKV = Types.apply (TypeVariable _Term) (TypeVariable _Kv) :: Type Kv
+stringT = Types.string :: Type
+sumT = TypeVariable _Sum :: Type
+termT = TypeVariable _Term :: Type
+termKV = TypeVariable _Term :: Type
 traceT = TypeVariable _Trace
-typeA = Types.apply (TypeVariable _Type) aT :: Type Kv
-unitT = Types.unit :: Type Kv
-xT = Types.var "x" :: Type Kv
+typeT = TypeVariable _Type :: Type
+unitT = Types.unit :: Type
+xT = Types.var "x" :: Type

@@ -33,7 +33,7 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-annotateElements :: Graph Kv -> [Element Kv] -> Flow (Graph Kv) [Element Kv]
+annotateElements :: Graph -> [Element] -> Flow Graph [Element]
 annotateElements g sortedEls = withInferenceContext $ do
     iels' <- annotate sortedEls ([])
     let iels = fst <$> iels'
@@ -44,27 +44,32 @@ annotateElements g sortedEls = withInferenceContext $ do
     subst <- withGraphContext $ withSchemaContext $ CM.mapM solveConstraints constraints
     return $ L.zipWith rewriteElement subst iels
   where
-    rewriteElement subst el = el {
-          elementData = rewriteDataType (substituteInType subst) $ elementData el}
+    -- Note: the following defaults to user-provided type annotations where provided.
+    --       In the future, we should trust unification to perform this defaulting, and not override the inferred type.
+    rewriteElement subst el = el { elementData = setTermType (Just typ) term1 }
+      where
+        term0 = elementData el
+        term1 = rewriteDataType (substituteInType subst) term0
+        typ = Y.fromMaybe (termType term1) $ getTermType term0
 
-    annotate :: [Element Kv] -> [(Element Kv, [Constraint])] -> Flow (InferenceContext) [(Element Kv, [Constraint])]
+    annotate :: [Element] -> [(Element, [Constraint])] -> Flow InferenceContext [(Element, [Constraint])]
     annotate original annotated = case original of
       [] -> pure $ L.reverse annotated
       (el:r) -> do
         (iel, c1) <- inferElementType el
         withBinding (elementName el) (termTypeScheme $ elementData iel) $ annotate r ((iel, c1):annotated)
 
-annotateTermWithTypes :: Term Kv -> Flow (Graph Kv) (Term Kv)
+annotateTermWithTypes :: Term -> Flow Graph Term
 annotateTermWithTypes term0 = do
   (term1, _) <- inferTypeAndConstraints term0
   return term1
 
-inferElementType :: Element Kv -> Flow (InferenceContext) (Element Kv, [Constraint])
+inferElementType :: Element -> Flow InferenceContext (Element, [Constraint])
 inferElementType el = withTrace ("infer type of " ++ unName (elementName el)) $ do
   (iterm, c) <- infer $ elementData el
   return (el {elementData = iterm}, c)
 
-inferGraphTypes :: Flow (Graph Kv) (Graph Kv)
+inferGraphTypes :: Flow Graph Graph
 inferGraphTypes = getState >>= annotateGraph
   where
     annotateGraph g = withTrace ("infer graph types") $ do
@@ -75,33 +80,35 @@ inferGraphTypes = getState >>= annotateGraph
         toPair el = (elementName el, el)
 
 -- TODO: deprecated
-inferType :: Term Kv -> Flow (Graph Kv) (Type Kv)
+inferType :: Term -> Flow Graph Type
 inferType term = typeSchemeType <$> inferTypeScheme term
 
 -- TODO: deprecated
 -- | Solve for the top-level type of an expression in a given environment
-inferTypeAndConstraints :: Term Kv -> Flow (Graph Kv) (Term Kv, TypeScheme Kv)
+inferTypeAndConstraints :: Term -> Flow Graph (Term, TypeScheme)
 inferTypeAndConstraints term = withTrace ("infer type") $ withInferenceContext $ do
     (iterm, constraints) <- infer term
     subst <- withGraphContext $ withSchemaContext $ solveConstraints constraints
     let term2 = rewriteDataType (substituteInType subst) iterm
+--    let typ = Y.fromMaybe (termType term2) $ getTermType term
+--    return (setTermType (Just typ) term2, closeOver $ termType term2)
     return (term2, closeOver $ termType term2)
   where
     -- | Canonicalize and return the polymorphic top-level type.
     closeOver = normalizeScheme . generalize M.empty . reduceType
 
 -- TODO: deprecated
-inferTypeScheme :: Term Kv -> Flow (Graph Kv) (TypeScheme Kv)
+inferTypeScheme :: Term -> Flow Graph TypeScheme
 inferTypeScheme term = snd <$> inferTypeAndConstraints term
 
-rewriteDataType :: (Type Kv -> Type Kv) -> Term Kv -> Term Kv
+rewriteDataType :: (Type -> Type) -> Term -> Term
 rewriteDataType f = rewriteTerm ff id
   where
     ff recurse term = case recurse term of
       TermTyped (TermWithType term1 type1) -> TermTyped $ TermWithType term1 (f type1)
       t -> t
 
-sortGraphElements :: Graph Kv -> Flow (Graph Kv) [Element Kv]
+sortGraphElements :: Graph -> Flow Graph [Element]
 sortGraphElements g = do
     annotated <- S.fromList . Y.catMaybes <$> (CM.mapM ifAnnotated $ M.elems els)
     adjList <- CM.mapM (toAdj annotated) $ M.elems els

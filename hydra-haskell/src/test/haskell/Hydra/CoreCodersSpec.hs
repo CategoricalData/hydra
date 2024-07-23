@@ -19,23 +19,23 @@ individualEncoderTestCases = do
 
     H.it "string literal type" $ do
       H.shouldBe
-        (strip $ coreEncodeLiteralType LiteralTypeString :: Term Kv)
+        (strip $ coreEncodeLiteralType LiteralTypeString :: Term)
         (strip $ unitVariant _LiteralType _LiteralType_string)
 
     H.it "string type" $ do
       H.shouldBe
-        (strip $ coreEncodeType Types.string :: Term Kv)
+        (strip $ coreEncodeType Types.string :: Term)
         (strip $ variant _Type _Type_literal (unitVariant _LiteralType _LiteralType_string))
 
     H.it "int32 type" $ do
       H.shouldBe
-        (strip $ coreEncodeType Types.int32 :: Term Kv)
+        (strip $ coreEncodeType Types.int32 :: Term)
         (strip $ variant _Type _Type_literal (variant _LiteralType _LiteralType_integer $ unitVariant _IntegerType _IntegerType_int32))
 
     H.it "record type" $ do
       H.shouldBe
         (strip $ coreEncodeType (TypeRecord $ RowType (Name "Example") Nothing
-          [Types.field "something" Types.string, Types.field "nothing" Types.unit]) :: Term Kv)
+          [Types.field "something" Types.string, Types.field "nothing" Types.unit]) :: Term)
         (strip $ variant _Type _Type_record $
           record _RowType [
             Field _RowType_typeName $ wrap _Name $ string "Example",
@@ -106,7 +106,7 @@ metadataIsPreserved = do
         (coreDecodeType $ coreEncodeType annotatedStringType)
         annotatedStringType
   where
-    annotatedStringType :: Type Kv
+    annotatedStringType :: Type
     annotatedStringType = TypeAnnotated $ Annotated Types.string $ Kv $ M.fromList [
       (kvDescription, Terms.string "The string literal type"),
       (kvType, coreEncodeType $ TypeVariable _Type)]
