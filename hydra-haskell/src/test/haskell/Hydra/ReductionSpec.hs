@@ -20,35 +20,35 @@ checkAlphaConversion = do
   H.describe "Tests for alpha conversion" $ do
     H.it "Variables are substituted at the top level" $
       QC.property $ \v ->
-        alphaConvert (Name v) (var $ v ++ "'") (var v) == (var (v ++ "'") :: Term Kv)
+        alphaConvert (Name v) (var $ v ++ "'") (var v) == (var (v ++ "'") :: Term)
     H.it "Variables are substituted within subexpressions" $
       QC.property $ \v ->
         alphaConvert (Name v) (var $ v ++ "'") (list [int32 42, var v])
-          == (list [int32 42, var (v ++ "'")] :: Term Kv)
+          == (list [int32 42, var (v ++ "'")] :: Term)
     H.it "Lambdas with unrelated variables are transparent to alpha conversion" $
       QC.property $ \v ->
         alphaConvert (Name v) (var $ v ++ "1") (lambda (v ++ "2") $ list [int32 42, var v, var (v ++ "2")])
-          == (lambda (v ++ "2") $ list [int32 42, var (v ++ "1"), var (v ++ "2")] :: Term Kv)
+          == (lambda (v ++ "2") $ list [int32 42, var (v ++ "1"), var (v ++ "2")] :: Term)
     H.it "Lambdas of the same variable are opaque to alpha conversion" $
       QC.property $ \v ->
         alphaConvert (Name v) (var $ v ++ "1") (lambda v $ list [int32 42, var v, var (v ++ "2")])
-          == (lambda v $ list [int32 42, var v, var (v ++ "2")] :: Term Kv)
+          == (lambda v $ list [int32 42, var v, var (v ++ "2")] :: Term)
 
 checkLiterals :: H.SpecWith ()
 checkLiterals = do
   H.describe "Tests for literal values" $ do
 
     H.it "Literal terms have no free variables" $
-      QC.property $ \av -> termIsClosed (literal av :: Term Kv)
+      QC.property $ \av -> termIsClosed (literal av :: Term)
 
     H.it "Literal terms are fully reduced; check using a dedicated function" $
-      QC.property $ \av -> termIsValue testGraph (literal av :: Term Kv)
+      QC.property $ \av -> termIsValue testGraph (literal av :: Term)
 
     H.it "Literal terms are fully reduced; check by trying to reduce them" $
       QC.property $ \av ->
         shouldSucceedWith
           (eval (literal av))
-          (literal av :: Term Kv)
+          (literal av :: Term)
 
     H.it "Literal terms cannot be applied" $
       QC.property $ \lv -> shouldSucceedWith
@@ -149,15 +149,15 @@ testBetaReduceTypeRecursively = do
 --        (reduce True app5)
 --        (TypeRecord $ RowType (Name "Example") Nothing [Types.field "foo" $ Types.function Types.string Types.string])
   where
-    app1 = Types.apply (Types.lambda "t" $ Types.function (Types.var "t") (Types.var "t")) Types.string :: Type Kv
-    app2 = Types.apply (Types.lambda "x" latLonType) Types.int32 :: Type Kv
-    app3 = Types.apply (Types.lambda "a" $ TypeRecord $ RowType (Name "Example") Nothing [Types.field "foo" $ Types.var "a"]) Types.unit :: Type Kv
+    app1 = Types.apply (Types.lambda "t" $ Types.function (Types.var "t") (Types.var "t")) Types.string :: Type
+    app2 = Types.apply (Types.lambda "x" latLonType) Types.int32 :: Type
+    app3 = Types.apply (Types.lambda "a" $ TypeRecord $ RowType (Name "Example") Nothing [Types.field "foo" $ Types.var "a"]) Types.unit :: Type
     app4 = Types.apply (Types.apply (Types.lambda "x" $ Types.lambda "y" $ TypeRecord $ RowType (Name "Example") Nothing [
       Types.field "f1" $ Types.var "x",
-      Types.field "f2" $ Types.var "y"]) Types.int32) Types.int64 :: Type Kv
+      Types.field "f2" $ Types.var "y"]) Types.int32) Types.int64 :: Type
     app5 = Types.apply (Types.lambda "a" $ TypeRecord $ RowType (Name "Example") Nothing [Types.field "foo" $ Types.var "a"]) app1
 
-reduce :: Type Kv -> Type Kv
+reduce :: Type -> Type
 reduce typ = fromFlow typ (schemaContext testGraph) (betaReduceType typ)
 
 spec :: H.Spec

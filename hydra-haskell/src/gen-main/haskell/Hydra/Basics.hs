@@ -18,7 +18,7 @@ import Data.Map as M
 import Data.Set as S
 
 -- | Find the elimination variant (constructor) for a given elimination term
-eliminationVariant :: (Core.Elimination Core.Kv -> Mantle.EliminationVariant)
+eliminationVariant :: (Core.Elimination -> Mantle.EliminationVariant)
 eliminationVariant x = case x of
   Core.EliminationList _ -> Mantle.EliminationVariantList
   Core.EliminationOptional _ -> Mantle.EliminationVariantOptional
@@ -59,7 +59,7 @@ floatValueType x = case x of
   Core.FloatValueFloat64 _ -> Core.FloatTypeFloat64
 
 -- | Find the function variant (constructor) for a given function
-functionVariant :: (Core.Function Core.Kv -> Mantle.FunctionVariant)
+functionVariant :: (Core.Function -> Mantle.FunctionVariant)
 functionVariant x = case x of
   Core.FunctionElimination _ -> Mantle.FunctionVariantElimination
   Core.FunctionLambda _ -> Mantle.FunctionVariantLambda
@@ -159,11 +159,11 @@ literalVariants = [
   Mantle.LiteralVariantInteger,
   Mantle.LiteralVariantString]
 
-termMeta :: (Graph.Graph Core.Kv -> Core.Term Core.Kv -> Core.Kv)
+termMeta :: (Graph.Graph -> Core.Term -> Core.Kv)
 termMeta x = (Graph.annotationClassTermAnnotation (Graph.graphAnnotations x))
 
 -- | Find the term variant (constructor) for a given term
-termVariant :: (Core.Term Core.Kv -> Mantle.TermVariant)
+termVariant :: (Core.Term -> Mantle.TermVariant)
 termVariant x = case x of
   Core.TermAnnotated _ -> Mantle.TermVariantAnnotated
   Core.TermApplication _ -> Mantle.TermVariantApplication
@@ -203,7 +203,7 @@ termVariants = [
   Mantle.TermVariantWrap]
 
 -- | Find the type variant (constructor) for a given type
-typeVariant :: (Core.Type Core.Kv -> Mantle.TypeVariant)
+typeVariant :: (Core.Type -> Mantle.TypeVariant)
 typeVariant x = case x of
   Core.TypeAnnotated _ -> Mantle.TypeVariantAnnotated
   Core.TypeApplication _ -> Mantle.TypeVariantApplication
@@ -257,41 +257,41 @@ mapFirstLetter mapping s =
       list = (Strings.toList s)
   in (Logic.ifElse s (Strings.cat2 firstLetter (Strings.fromList (Lists.tail list))) (Strings.isEmpty s))
 
-fieldMap :: ([Core.Field Core.Kv] -> Map Core.FieldName (Core.Term Core.Kv))
+fieldMap :: ([Core.Field] -> Map Core.FieldName (Core.Term))
 fieldMap fields = (Maps.fromList (Lists.map toPair fields))
   where
     toPair = (\f -> (Core.fieldName f, (Core.fieldTerm f)))
 
-fieldTypeMap :: ([Core.FieldType Core.Kv] -> Map Core.FieldName (Core.Type Core.Kv))
+fieldTypeMap :: ([Core.FieldType] -> Map Core.FieldName (Core.Type))
 fieldTypeMap fields = (Maps.fromList (Lists.map toPair fields))
   where
     toPair = (\f -> (Core.fieldTypeName f, (Core.fieldTypeType f)))
 
-isEncodedType :: (Core.Term Core.Kv -> Bool)
+isEncodedType :: (Core.Term -> Bool)
 isEncodedType t = ((\x -> case x of
   Core.TermApplication v -> (isEncodedType (Core.applicationFunction v))
   Core.TermUnion v -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.injectionTypeName v)))
   _ -> False) (Strip.stripTerm t))
 
-isType :: (Core.Type Core.Kv -> Bool)
+isType :: (Core.Type -> Bool)
 isType t = ((\x -> case x of
   Core.TypeApplication v -> (isType (Core.applicationTypeFunction v))
   Core.TypeLambda v -> (isType (Core.lambdaTypeBody v))
   Core.TypeUnion v -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.rowTypeTypeName v)))
   _ -> False) (Strip.stripType t))
 
-isUnitTerm :: (Core.Term Core.Kv -> Bool)
+isUnitTerm :: (Core.Term -> Bool)
 isUnitTerm t = (Equality.equalTerm (Strip.stripTerm t) (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra/core.Unit"),
   Core.recordFields = []})))
 
-isUnitType :: (Core.Type Core.Kv -> Bool)
+isUnitType :: (Core.Type -> Bool)
 isUnitType t = (Equality.equalType (Strip.stripType t) (Core.TypeRecord (Core.RowType {
   Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
   Core.rowTypeExtends = Nothing,
   Core.rowTypeFields = []})))
 
-elementsToGraph :: (Graph.Graph Core.Kv -> Maybe (Graph.Graph Core.Kv) -> [Graph.Element Core.Kv] -> Graph.Graph Core.Kv)
+elementsToGraph :: (Graph.Graph -> Maybe (Graph.Graph) -> [Graph.Element] -> Graph.Graph)
 elementsToGraph parent schema elements =
   let toPair = (\el -> (Graph.elementName el, el))
   in Graph.Graph {

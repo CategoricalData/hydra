@@ -18,7 +18,7 @@ import qualified Text.Read as TR
 import qualified Data.Maybe as Y
 
 -- | Note: follows the Protobuf Style Guide (https://protobuf.dev/programming-guides/style)
-moduleToProtobuf :: Module Kv -> Flow (Graph Kv) (M.Map FilePath String)
+moduleToProtobuf :: Module -> Flow (Graph) (M.Map FilePath String)
 moduleToProtobuf mod = do
     files <- transformModule protobufLanguage encodeTerm constructModule mod
     return $ M.fromList (mapPair <$> M.toList files)
@@ -31,7 +31,7 @@ moduleToProtobuf mod = do
 javaMultipleFilesOptionName = "java_multiple_files"
 javaPackageOptionName = "java_package"
 
-checkIsStringType :: Type Kv -> Flow (Graph Kv) ()
+checkIsStringType :: Type -> Flow (Graph) ()
 checkIsStringType typ = case simplifyType typ of
   TypeLiteral lt -> case lt of
     LiteralTypeString -> pure ()
@@ -39,10 +39,10 @@ checkIsStringType typ = case simplifyType typ of
   TypeVariable name -> requireType name >>= checkIsStringType
   _ -> unexpected "literal (string) type" $ show typ
 
-constructModule :: Module Kv
-  -> M.Map (Type Kv) (Coder (Graph Kv) (Graph Kv) (Term Kv) ())
-  -> [(Element Kv, TypedTerm Kv)]
-  -> Flow (Graph Kv) (M.Map FilePath P3.ProtoFile)
+constructModule :: Module
+  -> M.Map (Type) (Coder (Graph) (Graph) (Term) ())
+  -> [(Element, TypedTerm)]
+  -> Flow (Graph) (M.Map FilePath P3.ProtoFile)
 constructModule mod@(Module ns els _ _ desc) _ pairs = do
     schemaImports <- (fmap namespaceToFileReference . S.toList) <$> moduleDependencyNamespaces True False False False mod
     types <- CM.mapM toType pairs
@@ -98,7 +98,7 @@ constructModule mod@(Module ns els _ _ desc) _ pairs = do
           TypeRecord (RowType name _ _) -> name == _Unit
           _ -> False
 
-encodeDefinition :: Namespace -> Name -> Type Kv -> Flow (Graph Kv) P3.Definition
+encodeDefinition :: Namespace -> Name -> Type -> Flow (Graph) P3.Definition
 encodeDefinition localNs name typ = withTrace ("encoding " ++ unName name) $ do
     resetCount "proto_field_index"
     nextIndex
@@ -113,7 +113,7 @@ encodeDefinition localNs name typ = withTrace ("encoding " ++ unName name) $ do
         else encode options $ wrapAsRecordType $ TypeUnion rt
       t -> encode options $ wrapAsRecordType t
 
-encodeEnumDefinition :: [P3.Option] -> RowType Kv -> Flow (Graph Kv) P3.EnumDefinition
+encodeEnumDefinition :: [P3.Option] -> RowType -> Flow (Graph) P3.EnumDefinition
 encodeEnumDefinition options (RowType tname _ fields) = do
     values <- CM.zipWithM encodeEnumField fields [1..]
     return $ P3.EnumDefinition {
@@ -145,7 +145,7 @@ encodeFieldName preserve = P3.FieldName . toPname . unFieldName
       then id
       else convertCaseCamelToLowerSnake
 
-encodeFieldType :: Namespace -> FieldType Kv -> Flow (Graph Kv) P3.Field
+encodeFieldType :: Namespace -> FieldType -> Flow (Graph) P3.Field
 encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ show (unFieldName fname)) $ do
     options <- findOptions ftype
     ft <- encodeType ftype
@@ -183,7 +183,7 @@ encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ 
       where
         forNominal name = pure $ P3.SimpleTypeReference $ encodeTypeReference localNs name
 
-encodeRecordType :: Namespace -> [P3.Option] -> RowType Kv -> Flow (Graph Kv) P3.MessageDefinition
+encodeRecordType :: Namespace -> [P3.Option] -> RowType -> Flow (Graph) P3.MessageDefinition
 encodeRecordType localNs options (RowType tname _ fields) = do
     pfields <- CM.mapM (encodeFieldType localNs) fields
     return P3.MessageDefinition {
@@ -240,7 +240,7 @@ encodeTypeReference localNs name = P3.TypeName $ if nsParts == Just localNsParts
     localNsParts = L.init $ Strings.splitOn "/" $ unNamespace localNs
 
 -- Eliminate type lambdas and type applications, simply replacing type variables with the string type
-flattenType :: Type Kv -> Type Kv
+flattenType :: Type -> Type
 flattenType = rewriteType f id
   where
    f recurse typ = case typ of
@@ -248,7 +248,7 @@ flattenType = rewriteType f id
      TypeApplication (ApplicationType lhs _) -> recurse lhs
      _ -> recurse typ
 
-findOptions :: Type Kv -> Flow (Graph Kv) [P3.Option]
+findOptions :: Type -> Flow (Graph) [P3.Option]
 findOptions typ = do
   anns <- graphAnnotations <$> getState
   mdesc <- annotationClassTypeDescription anns typ
@@ -257,17 +257,17 @@ findOptions typ = do
   let mdepAnn = if bdep then Just (P3.Option deprecatedOptionName $ P3.ValueBoolean True) else Nothing
   return $ Y.catMaybes [mdescAnn, mdepAnn]
 
-isEnumFields :: [FieldType Kv] -> Bool
+isEnumFields :: [FieldType] -> Bool
 isEnumFields fields = L.foldl (&&) True $ fmap isEnumField fields
   where
     isEnumField = isUnitType . simplifyType . fieldTypeType
 
-isEnumDefinition :: Type Kv -> Bool
+isEnumDefinition :: Type -> Bool
 isEnumDefinition typ = case simplifyType typ of
   TypeUnion (RowType _ _ fields) -> isEnumFields fields
   _ -> False
 
-isEnumDefinitionReference :: Name -> Flow (Graph Kv) Bool
+isEnumDefinitionReference :: Name -> Flow (Graph) Bool
 isEnumDefinitionReference name = isEnumDefinition <$> ((elementData <$> requireElement name) >>= coreDecodeType)
 
 namespaceToFileReference :: Namespace -> P3.FileReference
@@ -282,7 +282,7 @@ namespaceToPackageName (Namespace ns) = P3.PackageName $ Strings.intercalate "."
 nextIndex :: Flow s Int
 nextIndex = nextCount "proto_field_index"
 
-readBooleanAnnotation :: String -> Type Kv -> Flow (Graph Kv) Bool
+readBooleanAnnotation :: String -> Type -> Flow (Graph) Bool
 readBooleanAnnotation key typ = do
     anns <- graphAnnotations <$> getState
     let ann = annotationClassTypeAnnotation anns typ
@@ -293,7 +293,7 @@ readBooleanAnnotation key typ = do
       Nothing -> return False
 
 -- Note: this should probably be done in the term adapters
-simplifyType :: Type Kv -> Type Kv
+simplifyType :: Type -> Type
 simplifyType typ = case stripType typ of
   TypeWrap (Nominal _ t) -> simplifyType t
   t -> t

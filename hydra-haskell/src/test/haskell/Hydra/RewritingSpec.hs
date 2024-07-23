@@ -91,17 +91,17 @@ testFoldOverTerm = do
     H.it "Try a simple fold" $ do
       H.shouldBe
         (foldOverTerm TraversalOrderPre addInt32s 0
-          (list [int32 42, apply (lambda "x" $ var "x") (int32 10)] :: Term Kv))
+          (list [int32 42, apply (lambda "x" $ var "x") (int32 10)] :: Term))
         52
 
     H.it "Check that traversal order is respected" $ do
       H.shouldBe
         (foldOverTerm TraversalOrderPre listLengths []
-          (list [list [string "foo", string "bar"], apply (lambda "x" $ var "x") (list [string "quux"])] :: Term Kv))
+          (list [list [string "foo", string "bar"], apply (lambda "x" $ var "x") (list [string "quux"])] :: Term))
         [1, 2, 2]
       H.shouldBe
         (foldOverTerm TraversalOrderPost listLengths []
-          (list [list [string "foo", string "bar"], apply (lambda "x" $ var "x") (list [string "quux"])] :: Term Kv))
+          (list [list [string "foo", string "bar"], apply (lambda "x" $ var "x") (list [string "quux"])] :: Term))
         [2, 1, 2]
   where
     addInt32s sum term = case term of
@@ -118,25 +118,25 @@ testFlattenLetTerms = do
     H.it "Non-let terms are unaffected" $ do
       H.shouldBe
         (flattenLetTerms $ Terms.int32 42)
-        (Terms.int32 42 :: Term Kv)
+        (Terms.int32 42 :: Term)
       H.shouldBe
         (flattenLetTerms $ Terms.list [Terms.string "foo"])
-        (Terms.list [Terms.string "foo"] :: Term Kv)
+        (Terms.list [Terms.string "foo"] :: Term)
 
     H.it "Non-nested let terms are unaffected" $
       H.shouldBe
         (flattenLetTerms letTerm1)
-        (letTerm1 :: Term Kv)
+        (letTerm1 :: Term)
 
     H.it "Nonrecursive, nested bindings are flattened" $
       H.shouldBe
         (flattenLetTerms letTerm2)
-        (letTerm2_flattened :: Term Kv)
+        (letTerm2_flattened :: Term)
 
     H.it "Multiple levels of nesting are flattened appropriately" $
       H.shouldBe
         (flattenLetTerms letTerm3)
-        (letTerm3_flattened :: Term Kv)
+        (letTerm3_flattened :: Term)
   where
     makeLet body pairs = TermLet $ Let (M.fromList (makePair <$> pairs)) body
       where
@@ -174,21 +174,21 @@ testFreeVariablesInTerm = do
 --    H.it "Generated terms never have free variables" $ do
 --      QC.property $ \(TypedTerm _ term) -> do
 --        H.shouldBe
---          (freeVariablesInTerm (term :: Term Kv))
+--          (freeVariablesInTerm (term :: Term))
 --          S.empty
 
     H.it "Free variables in individual terms" $ do
       H.shouldBe
-        (freeVariablesInTerm (string "foo" :: Term Kv))
+        (freeVariablesInTerm (string "foo" :: Term))
         S.empty
       H.shouldBe
-        (freeVariablesInTerm (var "x" :: Term Kv))
+        (freeVariablesInTerm (var "x" :: Term))
         (S.fromList [Name "x"])
       H.shouldBe
-        (freeVariablesInTerm (list [var "x", apply (lambda "y" $ var "y") (int32 42)] :: Term Kv))
+        (freeVariablesInTerm (list [var "x", apply (lambda "y" $ var "y") (int32 42)] :: Term))
         (S.fromList [Name "x"])
       H.shouldBe
-        (freeVariablesInTerm (list [var "x", apply (lambda "y" $ var "y") (var "y")] :: Term Kv))
+        (freeVariablesInTerm (list [var "x", apply (lambda "y" $ var "y") (var "y")] :: Term))
         (S.fromList [Name "x", Name "y"])
 
 --testReplaceFreeName :: H.SpecWith ()
@@ -208,21 +208,21 @@ testReplaceTerm = do
         H.shouldBe
           (rewriteTerm replaceInts keepKv
             (int32 42))
-          (int64 42 :: Term Kv)
+          (int64 42 :: Term)
         H.shouldBe
           (rewriteTerm replaceInts keepKv
             (list [int32 42, apply (lambda "x" $ var "x") (int32 137)]))
-          (list [int64 42, apply (lambda "x" $ var "x") (int64 137)] :: Term Kv)
+          (list [int64 42, apply (lambda "x" $ var "x") (int64 137)] :: Term)
 
       H.it "Check that traversal order is respected" $ do
         H.shouldBe
           (rewriteTerm replaceListsPre keepKv
             (list [list [list []]]))
-          (list [list []] :: Term Kv)
+          (list [list []] :: Term)
         H.shouldBe
           (rewriteTerm replaceListsPost keepKv
             (list [list [list []]]))
-          (list [] :: Term Kv)
+          (list [] :: Term)
 
 --      H.it "Check that metadata is replace recursively" $ do
 --        H.shouldBe
@@ -270,17 +270,17 @@ testSimplifyTerm = do
     H.it "Check that 'const' applications are simplified" $ do
       H.shouldBe
         (simplifyTerm (apply (lambda "x" (string "foo")) (int32 42)))
-        (string "foo" :: Term Kv)
+        (string "foo" :: Term)
       H.shouldBe
         (simplifyTerm (apply (lambda "x" $ list [var "x", var "x"]) (var "y")))
-        (list [var "y", var "y"] :: Term Kv)
+        (list [var "y", var "y"] :: Term)
       H.shouldBe
         (simplifyTerm (apply (lambda "x" $ string "foo") (var "y")))
-        (string "foo" :: Term Kv)
+        (string "foo" :: Term)
       H.shouldBe
         (simplifyTerm (apply (lambda "x"
           (apply (lambda "a" (list [string "foo", var "a"])) (var "x"))) (var "y")))
-        (list [string "foo", var "y"] :: Term Kv)
+        (list [string "foo", var "y"] :: Term)
 
 --testStripKv :: H.SpecWith ()
 --testStripKv = do
@@ -300,7 +300,7 @@ testSimplifyTerm = do
 
 typeOf term = annotationClassTermType (graphAnnotations testGraph) term
 
-withType :: Graph Kv -> Type Kv -> Term Kv -> Term Kv
+withType :: Graph -> Type -> Term -> Term
 withType g typ = annotationClassSetTermType (graphAnnotations g) (Just typ)
 
 spec :: H.Spec

@@ -11,7 +11,7 @@ import qualified Hydra.Grammar as G
 import qualified Data.List as L
 
 
-python3Module :: Module Kv
+python3Module :: Module
 python3Module = grammarToModule ns python3Grammar $
     Just "A Python 3 syntax model, based on the BNF/PEG grammar at https://docs.python.org/3/reference/grammar.html as of 2023-04-03."
   where

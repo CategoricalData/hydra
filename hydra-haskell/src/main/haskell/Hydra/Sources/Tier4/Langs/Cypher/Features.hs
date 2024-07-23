@@ -10,7 +10,7 @@ import Hydra.Dsl.Types as Types
 import qualified Data.Maybe as Y
 
 
-openCypherFeaturesModule :: Module Kv
+openCypherFeaturesModule :: Module
 openCypherFeaturesModule = Module ns elements [hydraCoreModule] tier0Modules $
     Just ("A model for characterizing OpenCypher queries and implementations in terms of included features.")
   where

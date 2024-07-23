@@ -16,7 +16,7 @@ import qualified Data.Maybe as Y
 import Hydra.Sources.Core
 
 
-grammarToModule :: Namespace -> G.Grammar -> Maybe String -> Module Kv
+grammarToModule :: Namespace -> G.Grammar -> Maybe String -> Module
 grammarToModule ns (G.Grammar prods) desc = Module ns elements [hydraCoreModule] [hydraCoreModule] desc
   where
     elements = pairToElement <$> L.concat (L.zipWith (makeElements False) (capitalize . fst <$> prodPairs) (snd <$> prodPairs))

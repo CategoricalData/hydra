@@ -18,7 +18,7 @@ import Hydra.Sources.Tier0.Graph
 import Hydra.Sources.Tier0.Module
 
 
-hydraWorkflowModule :: Module Kv
+hydraWorkflowModule :: Module
 hydraWorkflowModule = Module ns elements [hydraModuleModule, hydraComputeModule, hydraGraphModule] [hydraCoreModule] $
     Just "A model for Hydra transformation workflows"
   where
@@ -37,7 +37,7 @@ hydraWorkflowModule = Module ns elements [hydraModuleModule, hydraComputeModule,
         record [
           "modules">:
             doc "The modules to include in the schema graph" $
-            list $ mod "Module" @@ core "Kv",
+            list $ mod "Module",
           "typeName">:
             doc "The name of the top-level type; all data which passes through the workflow will be instances of this type" $
             core "Name"],
@@ -47,8 +47,8 @@ hydraWorkflowModule = Module ns elements [hydraModuleModule, hydraComputeModule,
         lambda "s" $ lambda "a" $ record [
           "encoder">:
             doc "An encoder for terms to a list of output objects" $
-            core "Type" @@ core "Kv" --> compute "Flow" @@ "s"
-              @@ (core "Term" @@ core "Kv" --> graph "Graph" @@ core "Kv" --> compute "Flow" @@ "s" @@ list "a"),
+            core "Type" --> compute "Flow" @@ "s"
+              @@ (core "Term" --> graph "Graph" --> compute "Flow" @@ "s" @@ list "a"),
           "serializer">:
             doc "A function which serializes a list of output objects to a string representation" $
             list "a" --> compute "Flow" @@ "s" @@ string,

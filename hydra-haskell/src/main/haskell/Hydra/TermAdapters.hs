@@ -42,14 +42,14 @@ _context = FieldName "context"
 _record :: FieldName
 _record = FieldName "record"
 
-fieldAdapter :: FieldType Kv -> Flow (AdapterContext Kv) (SymmetricAdapter (AdapterContext Kv) (FieldType Kv) (Field Kv))
+fieldAdapter :: FieldType -> Flow (AdapterContext) (SymmetricAdapter (AdapterContext) (FieldType) (Field))
 fieldAdapter ftyp = do
   ad <- termAdapter $ fieldTypeType ftyp
   return $ Adapter (adapterIsLossy ad) ftyp (ftyp { fieldTypeType = adapterTarget ad })
     $ bidirectional $ \dir (Field name term) -> Field name <$> encodeDecode dir (adapterCoder ad) term
 
 -- | This function accounts for recursive type definitions
-forTypeReference :: Name -> Flow (AdapterContext Kv) (SymmetricAdapter (AdapterContext Kv) (Type Kv) (Term Kv))
+forTypeReference :: Name -> Flow (AdapterContext) (SymmetricAdapter (AdapterContext) (Type) (Term))
 forTypeReference name = withTrace ("adapt named type " ++ unName name) $ do
   let lossy = False -- Note: we cannot know in advance whether the adapter is lossy or not
   let placeholder = Adapter lossy (TypeVariable name) (TypeVariable name) $ bidirectional $
@@ -76,7 +76,7 @@ forTypeReference name = withTrace ("adapt named type " ++ unName name) $ do
 functionProxyName :: Name
 functionProxyName = Name "hydra/core.FunctionProxy"
 
-functionProxyType :: Type Kv -> Type Kv
+functionProxyType :: Type -> Type
 functionProxyType dom = TypeUnion $ RowType functionProxyName Nothing [
   FieldType _Elimination_wrap Types.string,
   FieldType _Elimination_optional Types.string,
@@ -205,7 +205,6 @@ passFunction t@(TypeFunction (FunctionType dom cod)) = do
                 getCoder fname = Y.maybe idCoder adapterCoder $ M.lookup fname caseAds
           FunctionLambda (Lambda var body) -> FunctionLambda <$> (Lambda var <$> encodeDecode dir (adapterCoder codAd) body)
           FunctionPrimitive name -> pure $ FunctionPrimitive name
-          _ -> unexpected "lambda or elimination" $ show f
         _ -> unexpected "function term" $ show term
 
 passLambda :: TypeAdapter Kv
@@ -383,7 +382,7 @@ unsupportedToString :: TypeAdapter Kv
 unsupportedToString t = pure $ Adapter False t Types.string $ Coder encode decode
   where
     -- TODO: use JSON for encoding and decoding unsupported terms, rather than Haskell's read/show
-    encode = pure . string . show
+    encode term = pure $ string $ "unsupported: " ++ show term
     decode term = do
       s <- Expect.string term
       case TR.readEither s of
@@ -400,7 +399,7 @@ wrapToUnwrapped t@(TypeWrap (Nominal tname typ)) = do
       decoded <- coderDecode (adapterCoder ad) term
       return $ TermWrap $ Nominal tname decoded
 
-withGraphContext :: Flow (Graph Kv) x -> Flow (AdapterContext Kv) x
+withGraphContext :: Flow (Graph) x -> Flow (AdapterContext) x
 withGraphContext f = do
   cx <- getState
   withState (adapterContextGraph cx) f

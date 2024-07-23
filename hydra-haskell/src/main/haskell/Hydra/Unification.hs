@@ -15,19 +15,20 @@ import Hydra.Rewriting
 import Hydra.Substitution
 import Hydra.Tier1
 import Hydra.Dsl.Types as Types
+import Hydra.Lib.Io
 
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-type Constraint = (Type Kv, Type Kv)
+type Constraint = (Type, Type)
 
 type Unifier a = (Subst Kv, [Constraint])
 
 -- Note: type variables in Hydra are allowed to bind to type expressions which contain the variable;
 --       i.e. type recursion by name is allowed.
-bind :: Name -> Type Kv -> Flow s (Subst Kv)
+bind :: Name -> Type -> Flow s (Subst Kv)
 bind name typ = do
   if typ == TypeVariable name
   then return M.empty
@@ -48,7 +49,7 @@ unificationSolver (su, cs) = case cs of
       composeSubst su1 su,
       (\(t1, t2) -> (substituteInType su1 t1, substituteInType su1 t2)) <$> rest)
 
-unify :: Type Kv -> Type Kv -> Flow s (Subst Kv)
+unify :: Type -> Type -> Flow s (Subst Kv)
 unify ltyp rtyp = do
 --     withTrace ("unify " ++ show ltyp ++ " with " ++ show rtyp) $
      case (stripType ltyp, stripType rtyp) of
@@ -88,11 +89,13 @@ unify ltyp rtyp = do
       (_, TypeWrap name) -> return M.empty -- TODO
 
       (l, r) -> fail $ "unification of " ++ show (typeVariant l) ++ " with " ++ show (typeVariant r) ++
-        ":\n  " ++ show l ++
-        "\n  " ++ show r
+        ":\n  " ++ showType l ++
+        "\n  " ++ showType r
   where
     verify b = if b then return M.empty else failUnification
-    failUnification = fail $ "could not unify type " ++ show (stripType ltyp) ++ " with " ++ show (stripType rtyp)
+    failUnification = fail $ "could not unify types:\n\t"
+      ++ showType (stripType ltyp) ++ "\n\t"
+      ++ showType (stripType rtyp) ++ "\n"
 --     failUnification = fail $ "could not unify type " ++ describeType (stripType ltyp) ++ " with " ++ describeType (stripType rtyp)
     bindWeakest v1 v2 = if isWeak v1
         then bind v1 (TypeVariable v2)
@@ -100,7 +103,7 @@ unify ltyp rtyp = do
       where
         isWeak v = L.head (unName v) == 't' -- TODO: use a convention like _xxx for temporarily variables, then normalize and replace them
 
-unifyMany :: [Type Kv] -> [Type Kv] -> Flow s (Subst Kv)
+unifyMany :: [Type] -> [Type] -> Flow s (Subst Kv)
 unifyMany [] [] = return M.empty
 unifyMany (t1 : ts1) (t2 : ts2) =
   do su1 <- unify t1 t2
@@ -108,5 +111,5 @@ unifyMany (t1 : ts1) (t2 : ts2) =
      return (composeSubst su2 su1)
 unifyMany t1 t2 = fail $ "unification mismatch between " ++ show t1 ++ " and " ++ show t2
 
-variableOccursInType :: Name -> Type Kv -> Bool
+variableOccursInType :: Name -> Type -> Bool
 variableOccursInType a t = S.member a $ freeVariablesInType t

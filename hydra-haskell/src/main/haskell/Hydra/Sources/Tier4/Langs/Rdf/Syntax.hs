@@ -6,7 +6,7 @@ import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 
 
-rdfSyntaxModule :: Module Kv
+rdfSyntaxModule :: Module
 rdfSyntaxModule = Module ns elements [hydraCoreModule] tier0Modules $
     Just "An RDF 1.1 syntax model"
   where

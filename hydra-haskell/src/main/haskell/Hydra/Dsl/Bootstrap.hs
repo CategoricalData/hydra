@@ -20,16 +20,17 @@ import qualified Data.Set as S
 
 
 -- | An empty graph (no elements, no primitives, but an annotation class) which is used for bootstrapping Hydra Core
-bootstrapGraph :: Graph Kv
+bootstrapGraph :: Graph
 bootstrapGraph = Graph {
   graphElements = M.empty,
   graphEnvironment = M.empty,
+  graphTypes = M.empty,
   graphBody = Terms.list [], -- Note: the bootstrap body is arbitrary
   graphPrimitives = M.fromList $ fmap (\p -> (primitiveName p, p)) standardPrimitives,
   graphAnnotations = kvAnnotationClass,
   graphSchema = Nothing}
 
-datatype :: Namespace -> String -> Type Kv -> Element Kv
+datatype :: Namespace -> String -> Type -> Element
 datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders id typ
   where
     elName = qualify gname (Name lname)
@@ -49,13 +50,13 @@ datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders 
       where
         rect = rec t
 
-typeref :: Namespace -> String -> Type Kv
+typeref :: Namespace -> String -> Type
 typeref ns = TypeVariable . qualify ns . Name
 
 qualify :: Namespace -> Name -> Name
 qualify (Namespace gname) (Name lname) = Name $ gname ++ "." ++ lname
 
-typeElement :: Name -> Type Kv -> Element Kv
+typeElement :: Name -> Type -> Element
 typeElement name typ = Element {
     elementName = name,
     elementData = dataTerm}

@@ -3,7 +3,6 @@
 module Hydra.Tier3 where
 
 import qualified Hydra.Compute as Compute
-import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Io as Io
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic

@@ -11,6 +11,7 @@ import Hydra.Langs.Haskell.Settings
 import qualified Hydra.Langs.Haskell.Ast as H
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Types as Types
+import Hydra.Lib.Io
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -20,10 +21,10 @@ import qualified Data.Maybe as Y
 import Hydra.Rewriting (removeTypeAnnotations, removeTermAnnotations)
 
 
-adaptTypeToHaskellAndEncode :: Namespaces -> Type Kv -> Flow (Graph Kv) H.Type
+adaptTypeToHaskellAndEncode :: Namespaces -> Type -> Flow Graph H.Type
 adaptTypeToHaskellAndEncode namespaces = adaptAndEncodeType haskellLanguage (encodeType namespaces)
 
-constantDecls :: Graph Kv -> Namespaces -> Name -> Type Kv -> [H.DeclarationWithComments]
+constantDecls :: Graph -> Namespaces -> Name -> Type -> [H.DeclarationWithComments]
 constantDecls g namespaces name@(Name nm) typ = if useCoreImport
     then toDecl (Name "hydra/core.Name") nameDecl:(toDecl (Name "hydra/core.FieldName") <$> fieldDecls)
     else []
@@ -45,9 +46,9 @@ constantDecls g namespaces name@(Name nm) typ = if useCoreImport
     toConstant (FieldType (FieldName fname) _) = ("_" ++ lname ++ "_" ++ fname, fname)
 
 constructModule :: Namespaces
-  -> Module Kv
-  -> M.Map (Type Kv) (Coder (Graph Kv) (Graph Kv) (Term Kv) H.Expression)
-  -> [(Element Kv, TypedTerm Kv)] -> Flow (Graph Kv) H.Module
+  -> Module
+  -> M.Map (Type) (Coder Graph Graph (Term) H.Expression)
+  -> [(Element, TypedTerm)] -> Flow Graph H.Module
 constructModule namespaces mod coders pairs = do
     g <- getState
     decls <- L.concat <$> CM.mapM (createDeclarations g) pairs
@@ -56,7 +57,8 @@ constructModule namespaces mod coders pairs = do
   where
     h (Namespace name) = name
 
-    createDeclarations g pair@(el, TypedTerm typ term) = if isType typ
+    createDeclarations g pair@(el, TypedTerm typ term) = do
+      if isType typ
       then toTypeDeclarations namespaces el term
       else do
         d <- toDataDeclaration coders namespaces pair
@@ -76,7 +78,7 @@ constructModule namespaces mod coders pairs = do
           where
             toImport (name, alias) = H.Import False (H.ModuleName name) (H.ModuleName <$> alias) Nothing
 
-encodeFunction :: Namespaces -> Function Kv -> Flow (Graph Kv) H.Expression
+encodeFunction :: Namespaces -> Function -> Flow Graph H.Expression
 encodeFunction namespaces fun = case fun of
     FunctionElimination e -> case e of
       EliminationList fun -> do
@@ -131,7 +133,7 @@ encodeFunction namespaces fun = case fun of
     FunctionLambda (Lambda (Name v) body) -> hslambda v <$> encodeTerm namespaces body
     FunctionPrimitive name -> pure $ H.ExpressionVariable $ hsPrimitiveReference name
 
-encodeLiteral :: Literal -> Flow (Graph Kv) H.Expression
+encodeLiteral :: Literal -> Flow Graph H.Expression
 encodeLiteral av = case av of
     LiteralBoolean b -> pure $ hsvar $ if b then "True" else "False"
     LiteralFloat fv -> case fv of
@@ -145,7 +147,7 @@ encodeLiteral av = case av of
     LiteralString s -> pure $ hslit $ H.LiteralString s
     _ -> unexpected "literal value" $ show av
 
-encodeTerm :: Namespaces -> Term Kv -> Flow (Graph Kv) H.Expression
+encodeTerm :: Namespaces -> Term -> Flow Graph H.Expression
 encodeTerm namespaces term = do
    case fullyStripTerm term of
     TermApplication (Application fun arg) -> hsapp <$> encode fun <*> encode arg
@@ -187,7 +189,7 @@ encodeTerm namespaces term = do
   where
     encode = encodeTerm namespaces
 
-encodeType :: Namespaces -> Type Kv -> Flow (Graph Kv) H.Type
+encodeType :: Namespaces -> Type -> Flow Graph H.Type
 encodeType namespaces typ = withTrace "encode type" $ case stripType typ of
     TypeApplication (ApplicationType lhs rhs) -> toTypeApplication <$> CM.sequence [encode lhs, encode rhs]
     TypeFunction (FunctionType dom cod) -> H.TypeFunction <$> (H.Type_Function <$> encode dom <*> encode cod)
@@ -233,7 +235,7 @@ encodeType namespaces typ = withTrace "encode type" $ case stripType typ of
     encode = encodeType namespaces
     wrap name = pure $ H.TypeVariable $ elementReference namespaces name
 
-encodeTypeWithClassAssertions :: Namespaces -> M.Map Name (S.Set TypeClass) -> Type Kv -> Flow (Graph Kv) H.Type
+encodeTypeWithClassAssertions :: Namespaces -> M.Map Name (S.Set TypeClass) -> Type -> Flow Graph H.Type
 encodeTypeWithClassAssertions namespaces classes typ = withTrace "encode with assertions" $ do
   htyp <- adaptTypeToHaskellAndEncode namespaces typ
   if L.null assertPairs
@@ -256,19 +258,19 @@ encodeTypeWithClassAssertions namespaces classes typ = withTrace "encode with as
           where
             toPair c = (name, c)
 
-moduleToHaskellModule :: Module Kv -> Flow (Graph Kv) H.Module
+moduleToHaskellModule :: Module -> Flow Graph H.Module
 moduleToHaskellModule mod = do
     namespaces <- namespacesForModule mod
     transformModule haskellLanguage (encodeTerm namespaces) (constructModule namespaces) mod
 
-moduleToHaskell :: Module Kv -> Flow (Graph Kv) (M.Map FilePath String)
+moduleToHaskell :: Module -> Flow Graph (M.Map FilePath String)
 moduleToHaskell mod = do
   hsmod <- moduleToHaskellModule mod
   let s = printExpr $ parenthesize $ toTree hsmod
   return $ M.fromList [(namespaceToFilePath True (FileExtension "hs") $ moduleNamespace mod, s)]
 
-toDataDeclaration :: M.Map (Type Kv) (Coder (Graph Kv) (Graph Kv) (Term Kv) H.Expression) -> Namespaces
-  -> (Element Kv, TypedTerm Kv) -> Flow (Graph Kv) H.DeclarationWithComments
+toDataDeclaration :: M.Map (Type) (Coder Graph Graph (Term) H.Expression) -> Namespaces
+  -> (Element, TypedTerm) -> Flow Graph H.DeclarationWithComments
 toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term coder Nothing
   where
     coder = Y.fromJust $ M.lookup typ coders
@@ -305,7 +307,7 @@ toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term
         comments <- annotationClassTermDescription (graphAnnotations g) term
         return $ H.DeclarationWithComments decl comments
 
-toTypeDeclarations :: Namespaces -> Element Kv -> Term Kv -> Flow (Graph Kv) [H.DeclarationWithComments]
+toTypeDeclarations :: Namespaces -> Element -> Term -> Flow Graph [H.DeclarationWithComments]
 toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (elementName el)) $ do
     g <- getState
     let lname = localNameOfEager $ elementName el

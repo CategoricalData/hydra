@@ -34,7 +34,7 @@ import Hydra.Sources.Tier4.Langs.Tinkerpop.PropertyGraph
 validateDefinition :: String -> Datum a -> Definition a
 validateDefinition = definitionInModule tinkerpopValidateModule
 
-tinkerpopValidateModule :: Module Kv
+tinkerpopValidateModule :: Module
 tinkerpopValidateModule = Module (Namespace "hydra/langs/tinkerpop/validate") elements
     [] [tinkerpopPropertyGraphModule] $
     Just "Utilities for validating property graphs against property graph schemas"

@@ -16,7 +16,7 @@ import           Hydra.Sources.Core
 import Hydra.Sources.Tier0.Query
 
 
-hydraConstraintsModule :: Module Kv
+hydraConstraintsModule :: Module
 hydraConstraintsModule = Module ns elements [hydraQueryModule] [hydraCoreModule] $
     Just "A model for path- and pattern-based graph constraints, which may be considered as part of the schema of a graph"
   where
@@ -27,7 +27,7 @@ hydraConstraintsModule = Module ns elements [hydraQueryModule] [hydraCoreModule]
     def = datatype ns
 
     elements = [
-      
+
       def "PathEquation" $
         doc "A declared equivalence between two abstract paths in a graph" $
         record [
@@ -36,6 +36,6 @@ hydraConstraintsModule = Module ns elements [hydraQueryModule] [hydraCoreModule]
 
       def "PatternImplication" $
         doc "A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns." $
-        lambda "a" $ record [
-          "antecedent">: query "Pattern" @@ "a",
-          "consequent">: query "Pattern" @@ "a"]]
+        record [
+          "antecedent">: query "Pattern",
+          "consequent">: query "Pattern"]]
