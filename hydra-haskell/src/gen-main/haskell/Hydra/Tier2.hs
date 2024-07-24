@@ -52,6 +52,7 @@ requireElementType el =
           Just v3 -> (Flows.pure v3))
   in (withType (getTermType (Graph.elementData el)))
 
+-- | Get the annotated type of a given term, or fail if it is missing
 requireTermType :: (Core.Term -> Compute.Flow Graph.Graph Core.Type)
 requireTermType x = (withType (getTermType x)) 
   where 
