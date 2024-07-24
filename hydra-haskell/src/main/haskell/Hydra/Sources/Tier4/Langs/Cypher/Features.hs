@@ -289,7 +289,7 @@ openCypherFeaturesEnumModule = do
     ns = Namespace "hydra/org/opencypher/features"
     def = datatype ns
     elements enum = [
-      def "CypherFeatures" $
+      def "CypherFeature" $
         doc "An enumeration of (Open)Cypher features."
         enum]
 
