@@ -7,6 +7,9 @@ import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
+import qualified Control.Monad as CM
+import qualified Data.List as L
+import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
@@ -272,3 +275,54 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] tier0Modules $
         feature "create" "the CREATE clause",
         feature "set" "the SET clause",
         feature "with" "multi-part queries using WITH"]]
+
+-- | An alternative model of (Open)Cypher features, flattened into an enumeration.
+-- Usage example:
+--   featuresMod <- fromFlowIo bootstrapGraph openCypherFeaturesEnumModule
+--   writeProtobuf "/tmp/proto" [featuresMod]
+--openCypherFeaturesEnumModule :: Flow Graph Module
+openCypherFeaturesEnumModule = do
+    enum <- openCypherFeaturesEnum
+    return $ Module ns (elements enum) [hydraCoreModule] tier0Modules $
+      Just ("A model with an enumeration of (Open)Cypher features.")
+  where
+    ns = Namespace "hydra/org/opencypher/features"
+    def = datatype ns
+    elements enum = [
+      def "CypherFeatures" $
+        doc "An enumeration of (Open)Cypher features."
+        enum]
+
+--openCypherFeaturesEnum :: Flow Graph Type
+openCypherFeaturesEnum = do
+    let els = moduleElements openCypherFeaturesModule
+    types <- M.fromList <$> (CM.mapM toPair els)
+    pairs <- findPairs types
+    return $ union (toField <$> pairs)
+  where
+    toPair el = do
+      typ <- coreDecodeType $ elementData el
+      return (elementName el, typ)
+
+    findPairs types = forVar "" (Name "hydra/langs/cypher/features.CypherFeatures")
+      where
+        forVar prefix ref = case M.lookup ref types of
+          Just typ -> forType prefix typ
+          Nothing -> fail "unknown type reference"
+        forType prefix features = case stripType features of
+          TypeRecord (RowType _ _ fields) -> do
+            pairs <- CM.mapM (forField prefix) fields
+            return $ L.concat pairs
+        forField prefix ft = do
+          mdesc <- getTypeDescription $ fieldTypeType ft
+          case stripType (fieldTypeType ft) of
+            TypeLiteral LiteralTypeBoolean -> pure [(fname, mdesc)]
+            TypeOptional (TypeVariable ref) -> forVar newPrefix ref
+            _ -> fail $ "unexpected field type: " ++ show ft
+          where
+            fname = prefix ++ (unFieldName $ fieldTypeName ft)
+            newPrefix = fname ++ "_"
+
+    toField (name, mdesc) = FieldType (FieldName name) $ case mdesc of
+        Nothing -> unit
+        Just desc -> doc desc unit
