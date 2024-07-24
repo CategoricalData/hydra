@@ -177,7 +177,6 @@ setTermType mtyp term = case mtyp of
       TermTyped (TermWithType term1 _) -> term1
       _ -> term
 
-setType :: Y.Maybe Type -> Kv -> Kv
 setType mt = setAnnotation kvType (coreEncodeType <$> mt)
 
 setTypeAnnotation :: String -> Y.Maybe (Term) -> Type -> Type
