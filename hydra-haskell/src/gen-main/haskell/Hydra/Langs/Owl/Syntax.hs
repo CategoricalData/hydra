@@ -294,7 +294,6 @@ _DataRange_datatypeRestriction = (Core.FieldName "datatypeRestriction")
 -- | See https://www.w3.org/TR/owl2-syntax/#Intersection_of_Data_Ranges
 newtype DataIntersectionOf = 
   DataIntersectionOf {
-    -- | See https://www.w3.org/TR/owl2-syntax/#Intersection_of_Data_Ranges
     unDataIntersectionOf :: [DataRange]}
   deriving (Eq, Ord, Read, Show)
 
@@ -303,7 +302,6 @@ _DataIntersectionOf = (Core.Name "hydra/langs/owl/syntax.DataIntersectionOf")
 -- | See https://www.w3.org/TR/owl2-syntax/#Union_of_Data_Ranges
 newtype DataUnionOf = 
   DataUnionOf {
-    -- | See https://www.w3.org/TR/owl2-syntax/#Union_of_Data_Ranges
     unDataUnionOf :: [DataRange]}
   deriving (Eq, Ord, Read, Show)
 
@@ -312,7 +310,6 @@ _DataUnionOf = (Core.Name "hydra/langs/owl/syntax.DataUnionOf")
 -- | See https://www.w3.org/TR/owl2-syntax/#Complement_of_Data_Ranges
 newtype DataComplementOf = 
   DataComplementOf {
-    -- | See https://www.w3.org/TR/owl2-syntax/#Complement_of_Data_Ranges
     unDataComplementOf :: DataRange}
   deriving (Eq, Ord, Read, Show)
 
@@ -321,7 +318,6 @@ _DataComplementOf = (Core.Name "hydra/langs/owl/syntax.DataComplementOf")
 -- | See https://www.w3.org/TR/owl2-syntax/#Enumeration_of_Literals
 newtype DataOneOf = 
   DataOneOf {
-    -- | See https://www.w3.org/TR/owl2-syntax/#Enumeration_of_Literals
     unDataOneOf :: [Syntax.Literal]}
   deriving (Eq, Ord, Read, Show)
 

@@ -19,7 +19,6 @@ _DataRow = (Core.Name "hydra/langs/tabular.DataRow")
 -- | A header row, containing column names (but no types or data)
 newtype HeaderRow = 
   HeaderRow {
-    -- | A header row, containing column names (but no types or data)
     unHeaderRow :: [String]}
   deriving (Eq, Ord, Read, Show)
 

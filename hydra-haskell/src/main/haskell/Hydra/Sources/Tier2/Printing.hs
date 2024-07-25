@@ -50,17 +50,20 @@ printingDefinition = definitionInModule hydraPrintingModule
 describeFloatTypeDef :: Definition (FloatType -> String)
 describeFloatTypeDef = printingDefinition "describeFloatType" $
   doc "Display a floating-point type as a string" $
+  function floatTypeT stringT $
   lambda "t" $ (ref describePrecisionDef <.> ref floatTypePrecisionDef @@ var "t") ++ string " floating-point numbers"
 
 describeIntegerTypeDef :: Definition (IntegerType -> String)
 describeIntegerTypeDef = printingDefinition "describeIntegerType" $
   doc "Display an integer type as a string" $
+  function integerTypeT stringT $
   lambda "t" $ (ref describePrecisionDef <.> ref integerTypePrecisionDef @@ var "t")
     ++ string " integers"
 
 describeLiteralTypeDef :: Definition (LiteralType -> String)
 describeLiteralTypeDef = printingDefinition "describeLiteralType" $
   doc "Display a literal type as a string" $
+  function literalTypeT stringT $
   match _LiteralType Nothing [
     Case _LiteralType_binary  --> constant $ string "binary strings",
     Case _LiteralType_boolean --> constant $ string "boolean values",
@@ -71,6 +74,7 @@ describeLiteralTypeDef = printingDefinition "describeLiteralType" $
 describePrecisionDef :: Definition (Precision -> String)
 describePrecisionDef = printingDefinition "describePrecision" $
   doc "Display numeric precision as a string" $
+  function precisionT stringT $
   match _Precision Nothing [
     Case _Precision_arbitrary --> constant $ string "arbitrary-precision",
     Case _Precision_bits      --> lambda "bits" $ Literals.showInt32 @@ var "bits" ++ string "-bit"]
@@ -78,7 +82,7 @@ describePrecisionDef = printingDefinition "describePrecision" $
 describeTypeDef :: Definition (Type -> String)
 describeTypeDef = printingDefinition "describeType" $
   doc "Display a type as a string" $
-  function (Types.apply (TypeVariable _Type) (Types.var "a")) Types.string $
+  function typeT stringT $
     match _Type Nothing [
       Case _Type_annotated   --> lambda "a" $ string "annotated " ++ (ref describeTypeDef @@
         (project _Annotated _Annotated_subject @@ var "a")),

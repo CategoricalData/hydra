@@ -52,7 +52,6 @@ _Graph = (Core.Name "hydra/langs/rdf/syntax.Graph")
 -- | An Internationalized Resource Identifier
 newtype Iri = 
   Iri {
-    -- | An Internationalized Resource Identifier
     unIri :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -73,7 +72,6 @@ _IriOrLiteral_literal = (Core.FieldName "literal")
 -- | A convenience type which provides at most one string value per language, and optionally a value without a language
 newtype LangStrings = 
   LangStrings {
-    -- | A convenience type which provides at most one string value per language, and optionally a value without a language
     unLangStrings :: (Map (Maybe LanguageTag) String)}
   deriving (Eq, Ord, Read, Show)
 
@@ -82,7 +80,6 @@ _LangStrings = (Core.Name "hydra/langs/rdf/syntax.LangStrings")
 -- | A BCP47 language tag
 newtype LanguageTag = 
   LanguageTag {
-    -- | A BCP47 language tag
     unLanguageTag :: String}
   deriving (Eq, Ord, Read, Show)
 

@@ -84,12 +84,12 @@ tinkerpopMappingsModule = Module ns elements
         doc "A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types" $
         lambdas ["s", "t", "v"] $
           record [
-            "vertexIdTypes">: compute "Coder" @@ "s" @@ "s" @@ (core "Type" @@ core "Kv") @@ "t",
-            "vertexIds">: compute "Coder" @@ "s" @@ "s" @@ (core "Term" @@ core "Kv") @@ "v",
-            "edgeIdTypes">: compute "Coder" @@ "s" @@ "s" @@ (core "Type" @@ core "Kv") @@ "t",
-            "edgeIds">: compute "Coder" @@ "s" @@ "s" @@ (core "Term" @@ core "Kv") @@ "v",
-            "propertyTypes">: compute "Coder" @@ "s" @@ "s" @@ (core "Type" @@ core "Kv") @@ "t",
-            "propertyValues">: compute "Coder" @@ "s" @@ "s" @@ (core "Term" @@ core "Kv") @@ "v",
+            "vertexIdTypes">: compute "Coder" @@ "s" @@ "s" @@ core "Type" @@ "t",
+            "vertexIds">: compute "Coder" @@ "s" @@ "s" @@ core "Term" @@ "v",
+            "edgeIdTypes">: compute "Coder" @@ "s" @@ "s" @@ core "Type" @@ "t",
+            "edgeIds">: compute "Coder" @@ "s" @@ "s" @@ core "Term" @@ "v",
+            "propertyTypes">: compute "Coder" @@ "s" @@ "s" @@ core "Type" @@ "t",
+            "propertyValues">: compute "Coder" @@ "s" @@ "s" @@ core "Term" @@ "v",
             "annotations">: mappings "AnnotationSchema",
             "defaultVertexId">: "v",
             "defaultEdgeId">: "v"],

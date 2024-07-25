@@ -11,7 +11,7 @@ import Hydra.Sources.Core
 
 
 tinkerpopPropertyGraphModule :: Module
-tinkerpopPropertyGraphModule = Module ns elements [hydraCoreModule] tier0Modules $
+tinkerpopPropertyGraphModule = Module ns elements [] tier0Modules $
     Just ("A typed property graph data model. " ++
       "Property graphs are parameterized a type for property and id values, " ++
       "while property graph schemas are parameterized by a type for property and id types")

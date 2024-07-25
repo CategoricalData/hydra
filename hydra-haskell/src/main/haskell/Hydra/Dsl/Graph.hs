@@ -17,6 +17,7 @@ graph :: Datum (M.Map Name Element)
 graph elements environment types body primitives annotations schema = record _Graph [
     _Graph_elements>>: elements,
     _Graph_environment>>: environment,
+    _Graph_types>>: types,
     _Graph_body>>: body,
     _Graph_primitives>>: primitives,
     _Graph_annotations>>: annotations,

@@ -19,7 +19,7 @@ javaMaxTupleLength :: Int
 javaMaxTupleLength = 9
 
 -- | Language constraints for Java
-javaLanguage :: (Coders.Language)
+javaLanguage :: Coders.Language
 javaLanguage = Coders.Language {
   Coders.languageName = (Coders.LanguageName "hydra/langs/java"),
   Coders.languageConstraints = Coders.LanguageConstraints {
@@ -70,9 +70,10 @@ javaLanguage = Coders.Language {
       Mantle.TypeVariantVariable,
       Mantle.TypeVariantWrap]),
     Coders.languageConstraintsTypes = (\x -> case x of
-      Core.TypeProduct v -> (Equality.ltInt32 (Lists.length v) javaMaxTupleLength)
+      Core.TypeProduct v279 -> (Equality.ltInt32 (Lists.length v279) javaMaxTupleLength)
       _ -> True)}}
 
+-- | A set of reserved words in Java
 reservedWords :: (Set String)
 reservedWords = (Sets.fromList (Lists.concat [
   specialNames,

@@ -8,65 +8,17 @@ import Data.List as L
 import Data.Map as M
 import Data.Set as S
 
-newtype AndExpression = 
-  AndExpression {
-    unAndExpression :: [BasicExpression]}
-  deriving (Eq, Ord, Read, Show)
-
-_AndExpression = (Core.Name "hydra/langs/kusto/kql.AndExpression")
-
-data BasicExpression = 
-  BasicExpressionAny  |
-  BasicExpressionBetween BetweenExpression |
-  BasicExpressionBinary BinaryExpression |
-  BasicExpressionColumn ColumnName |
-  BasicExpressionIndex IndexExpression |
-  BasicExpressionList [Expression] |
-  BasicExpressionLiteral Literal |
-  BasicExpressionNotBetween BetweenExpression |
-  BasicExpressionParentheses Expression |
-  BasicExpressionPipeline PipelineExpression |
-  BasicExpressionProperty PropertyExpression |
-  BasicExpressionUnary UnaryExpression |
-  BasicExpressionUnion UnionExpression
-  deriving (Eq, Ord, Read, Show)
-
-_BasicExpression = (Core.Name "hydra/langs/kusto/kql.BasicExpression")
-
-_BasicExpression_any = (Core.FieldName "any")
-
-_BasicExpression_between = (Core.FieldName "between")
-
-_BasicExpression_binary = (Core.FieldName "binary")
-
-_BasicExpression_column = (Core.FieldName "column")
-
-_BasicExpression_index = (Core.FieldName "index")
-
-_BasicExpression_list = (Core.FieldName "list")
-
-_BasicExpression_literal = (Core.FieldName "literal")
-
-_BasicExpression_notBetween = (Core.FieldName "notBetween")
-
-_BasicExpression_parentheses = (Core.FieldName "parentheses")
-
-_BasicExpression_pipeline = (Core.FieldName "pipeline")
-
-_BasicExpression_property = (Core.FieldName "property")
-
-_BasicExpression_unary = (Core.FieldName "unary")
-
-_BasicExpression_union = (Core.FieldName "union")
-
 data BetweenExpression = 
   BetweenExpression {
+    betweenExpressionNot :: Bool,
     betweenExpressionExpression :: Expression,
     betweenExpressionLowerBound :: Expression,
     betweenExpressionUpperBound :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _BetweenExpression = (Core.Name "hydra/langs/kusto/kql.BetweenExpression")
+
+_BetweenExpression_not = (Core.FieldName "not")
 
 _BetweenExpression_expression = (Core.FieldName "expression")
 
@@ -236,26 +188,26 @@ _Columns_single = (Core.FieldName "single")
 
 data Command = 
   CommandCount  |
+  -- | See https://learn.microsoft.com/en-us/azure/data-explorer/kusto/query/distinct-operator
   CommandDistinct [ColumnName] |
   CommandExtend [ColumnAssignment] |
   CommandJoin JoinCommand |
-  CommandLet [LetBinding] |
   CommandLimit Int |
   CommandMvexpand ColumnName |
-  CommandOrder_by [SortBy] |
+  CommandOrderBy [SortBy] |
   CommandParse ParseCommand |
   CommandPrint PrintCommand |
   CommandProject [Projection] |
   CommandProjectAway [ColumnName] |
   CommandProjectRename [ColumnAlias] |
-  CommandRender  |
+  CommandRender String |
   CommandSearch SearchCommand |
-  CommandSort [SortBy] |
+  CommandSortBy [SortBy] |
   CommandSummarize SummarizeCommand |
   -- | Limit a search to a specified number of results
   CommandTake Int |
   CommandTop TopCommand |
-  CommandUnion UnionExpression |
+  CommandUnion UnionCommand |
   CommandWhere Expression
   deriving (Eq, Ord, Read, Show)
 
@@ -269,13 +221,11 @@ _Command_extend = (Core.FieldName "extend")
 
 _Command_join = (Core.FieldName "join")
 
-_Command_let = (Core.FieldName "let")
-
 _Command_limit = (Core.FieldName "limit")
 
 _Command_mvexpand = (Core.FieldName "mvexpand")
 
-_Command_order_by = (Core.FieldName "order by")
+_Command_orderBy = (Core.FieldName "orderBy")
 
 _Command_parse = (Core.FieldName "parse")
 
@@ -291,7 +241,7 @@ _Command_render = (Core.FieldName "render")
 
 _Command_search = (Core.FieldName "search")
 
-_Command_sort = (Core.FieldName "sort")
+_Command_sortBy = (Core.FieldName "sortBy")
 
 _Command_summarize = (Core.FieldName "summarize")
 
@@ -303,12 +253,12 @@ _Command_union = (Core.FieldName "union")
 
 _Command_where = (Core.FieldName "where")
 
-newtype DatasetName = 
-  DatasetName {
-    unDatasetName :: String}
+newtype Datetime = 
+  Datetime {
+    unDatetime :: String}
   deriving (Eq, Ord, Read, Show)
 
-_DatasetName = (Core.Name "hydra/langs/kusto/kql.DatasetName")
+_Datetime = (Core.Name "hydra/langs/kusto/kql.Datetime")
 
 data Duration = 
   Duration {
@@ -336,12 +286,52 @@ _DurationUnit_minute = (Core.FieldName "minute")
 
 _DurationUnit_hour = (Core.FieldName "hour")
 
-newtype Expression = 
-  Expression {
-    unExpression :: [OrExpression]}
+data Expression = 
+  ExpressionAnd [Expression] |
+  ExpressionAny  |
+  ExpressionBetween BetweenExpression |
+  ExpressionBinary BinaryExpression |
+  ExpressionBraces Expression |
+  ExpressionColumn ColumnName |
+  ExpressionDataset TableName |
+  ExpressionIndex IndexExpression |
+  ExpressionList [Expression] |
+  ExpressionLiteral Literal |
+  ExpressionOr [Expression] |
+  ExpressionParentheses Expression |
+  ExpressionProperty PropertyExpression |
+  ExpressionUnary UnaryExpression
   deriving (Eq, Ord, Read, Show)
 
 _Expression = (Core.Name "hydra/langs/kusto/kql.Expression")
+
+_Expression_and = (Core.FieldName "and")
+
+_Expression_any = (Core.FieldName "any")
+
+_Expression_between = (Core.FieldName "between")
+
+_Expression_binary = (Core.FieldName "binary")
+
+_Expression_braces = (Core.FieldName "braces")
+
+_Expression_column = (Core.FieldName "column")
+
+_Expression_dataset = (Core.FieldName "dataset")
+
+_Expression_index = (Core.FieldName "index")
+
+_Expression_list = (Core.FieldName "list")
+
+_Expression_literal = (Core.FieldName "literal")
+
+_Expression_or = (Core.FieldName "or")
+
+_Expression_parentheses = (Core.FieldName "parentheses")
+
+_Expression_property = (Core.FieldName "property")
+
+_Expression_unary = (Core.FieldName "unary")
 
 data Function = 
   FunctionBuiltIn BuiltInFunction |
@@ -388,7 +378,7 @@ _IndexExpression_index = (Core.FieldName "index")
 data JoinCommand = 
   JoinCommand {
     joinCommandKind :: JoinKind,
-    joinCommandExpression :: DatasetName,
+    joinCommandExpression :: TableName,
     joinCommandOn :: Expression}
   deriving (Eq, Ord, Read, Show)
 
@@ -401,33 +391,36 @@ _JoinCommand_expression = (Core.FieldName "expression")
 _JoinCommand_on = (Core.FieldName "on")
 
 data JoinKind = 
-  JoinKindInner  |
-  JoinKindLeftanti  |
-  JoinKindLeftantisemi  |
+  JoinKindLeftouter  |
   JoinKindLeftsemi  |
-  JoinKindOuter  |
-  JoinKindRightanti  |
-  JoinKindRightantisemi  |
-  JoinKindRightsemi 
+  JoinKindLeftanti  |
+  JoinKindFullouter  |
+  JoinKindInner  |
+  JoinKindInnerunique  |
+  JoinKindRightouter  |
+  JoinKindRightsemi  |
+  JoinKindRightanti 
   deriving (Eq, Ord, Read, Show)
 
 _JoinKind = (Core.Name "hydra/langs/kusto/kql.JoinKind")
 
-_JoinKind_inner = (Core.FieldName "inner")
-
-_JoinKind_leftanti = (Core.FieldName "leftanti")
-
-_JoinKind_leftantisemi = (Core.FieldName "leftantisemi")
+_JoinKind_leftouter = (Core.FieldName "leftouter")
 
 _JoinKind_leftsemi = (Core.FieldName "leftsemi")
 
-_JoinKind_outer = (Core.FieldName "outer")
+_JoinKind_leftanti = (Core.FieldName "leftanti")
 
-_JoinKind_rightanti = (Core.FieldName "rightanti")
+_JoinKind_fullouter = (Core.FieldName "fullouter")
 
-_JoinKind_rightantisemi = (Core.FieldName "rightantisemi")
+_JoinKind_inner = (Core.FieldName "inner")
+
+_JoinKind_innerunique = (Core.FieldName "innerunique")
+
+_JoinKind_rightouter = (Core.FieldName "rightouter")
 
 _JoinKind_rightsemi = (Core.FieldName "rightsemi")
+
+_JoinKind_rightanti = (Core.FieldName "rightanti")
 
 data KeyValuePair = 
   KeyValuePair {
@@ -453,9 +446,21 @@ _LetBinding_name = (Core.FieldName "name")
 
 _LetBinding_expression = (Core.FieldName "expression")
 
+data LetExpression = 
+  LetExpression {
+    letExpressionBindings :: [LetBinding],
+    letExpressionExpression :: TabularExpression}
+  deriving (Eq, Ord, Read, Show)
+
+_LetExpression = (Core.Name "hydra/langs/kusto/kql.LetExpression")
+
+_LetExpression_bindings = (Core.FieldName "bindings")
+
+_LetExpression_expression = (Core.FieldName "expression")
+
 data Literal = 
   LiteralDuration Duration |
-  LiteralDatetime String |
+  LiteralDatetime Datetime |
   LiteralString String |
   LiteralInt Int |
   LiteralLong Int64 |
@@ -479,13 +484,6 @@ _Literal_double = (Core.FieldName "double")
 
 _Literal_boolean = (Core.FieldName "boolean")
 
-newtype OrExpression = 
-  OrExpression {
-    unOrExpression :: [AndExpression]}
-  deriving (Eq, Ord, Read, Show)
-
-_OrExpression = (Core.Name "hydra/langs/kusto/kql.OrExpression")
-
 data Order = 
   OrderAscending  |
   OrderDescending 
@@ -496,6 +494,18 @@ _Order = (Core.Name "hydra/langs/kusto/kql.Order")
 _Order_ascending = (Core.FieldName "ascending")
 
 _Order_descending = (Core.FieldName "descending")
+
+data Parameter = 
+  Parameter {
+    parameterKey :: String,
+    parameterValue :: Literal}
+  deriving (Eq, Ord, Read, Show)
+
+_Parameter = (Core.Name "hydra/langs/kusto/kql.Parameter")
+
+_Parameter_key = (Core.FieldName "key")
+
+_Parameter_value = (Core.FieldName "value")
 
 data ParseCommand = 
   ParseCommand {
@@ -509,17 +519,12 @@ _ParseCommand_column = (Core.FieldName "column")
 
 _ParseCommand_pairs = (Core.FieldName "pairs")
 
-data PipelineExpression = 
+newtype PipelineExpression = 
   PipelineExpression {
-    pipelineExpressionDataset :: DatasetName,
-    pipelineExpressionCommands :: [Command]}
+    unPipelineExpression :: [TabularExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _PipelineExpression = (Core.Name "hydra/langs/kusto/kql.PipelineExpression")
-
-_PipelineExpression_dataset = (Core.FieldName "dataset")
-
-_PipelineExpression_commands = (Core.FieldName "commands")
 
 data PrintCommand = 
   PrintCommand {
@@ -559,7 +564,7 @@ _PropertyExpression_property = (Core.FieldName "property")
 
 newtype Query = 
   Query {
-    unQuery :: PipelineExpression}
+    unQuery :: TabularExpression}
   deriving (Eq, Ord, Read, Show)
 
 _Query = (Core.Name "hydra/langs/kusto/kql.Query")
@@ -567,7 +572,7 @@ _Query = (Core.Name "hydra/langs/kusto/kql.Query")
 -- | Search across all datasets and columns or, if provided, specific datasets and/or columns
 data SearchCommand = 
   SearchCommand {
-    searchCommandDatasets :: [DatasetName],
+    searchCommandDatasets :: [TableName],
     searchCommandPattern :: Expression}
   deriving (Eq, Ord, Read, Show)
 
@@ -588,6 +593,13 @@ _SummarizeCommand = (Core.Name "hydra/langs/kusto/kql.SummarizeCommand")
 _SummarizeCommand_columns = (Core.FieldName "columns")
 
 _SummarizeCommand_by = (Core.FieldName "by")
+
+newtype TableName = 
+  TableName {
+    unTableName :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_TableName = (Core.Name "hydra/langs/kusto/kql.TableName")
 
 data TopCommand = 
   TopCommand {
@@ -613,6 +625,23 @@ _SortBy_column = (Core.FieldName "column")
 
 _SortBy_order = (Core.FieldName "order")
 
+data TabularExpression = 
+  TabularExpressionCommand Command |
+  TabularExpressionPipeline PipelineExpression |
+  TabularExpressionLet LetExpression |
+  TabularExpressionTable TableName
+  deriving (Eq, Ord, Read, Show)
+
+_TabularExpression = (Core.Name "hydra/langs/kusto/kql.TabularExpression")
+
+_TabularExpression_command = (Core.FieldName "command")
+
+_TabularExpression_pipeline = (Core.FieldName "pipeline")
+
+_TabularExpression_let = (Core.FieldName "let")
+
+_TabularExpression_table = (Core.FieldName "table")
+
 data UnaryExpression = 
   UnaryExpression {
     unaryExpressionOperator :: UnaryOperator,
@@ -633,9 +662,34 @@ _UnaryOperator = (Core.Name "hydra/langs/kusto/kql.UnaryOperator")
 
 _UnaryOperator_not = (Core.FieldName "not")
 
-newtype UnionExpression = 
-  UnionExpression {
-    unUnionExpression :: [Expression]}
+data UnionCommand = 
+  UnionCommand {
+    unionCommandParameters :: [Parameter],
+    unionCommandKind :: (Maybe UnionKind),
+    unionCommandWithSource :: (Maybe ColumnName),
+    unionCommandIsFuzzy :: (Maybe Bool),
+    unionCommandTables :: [TableName]}
   deriving (Eq, Ord, Read, Show)
 
-_UnionExpression = (Core.Name "hydra/langs/kusto/kql.UnionExpression")
+_UnionCommand = (Core.Name "hydra/langs/kusto/kql.UnionCommand")
+
+_UnionCommand_parameters = (Core.FieldName "parameters")
+
+_UnionCommand_kind = (Core.FieldName "kind")
+
+_UnionCommand_withSource = (Core.FieldName "withSource")
+
+_UnionCommand_isFuzzy = (Core.FieldName "isFuzzy")
+
+_UnionCommand_tables = (Core.FieldName "tables")
+
+data UnionKind = 
+  UnionKindInner  |
+  UnionKindOuter 
+  deriving (Eq, Ord, Read, Show)
+
+_UnionKind = (Core.Name "hydra/langs/kusto/kql.UnionKind")
+
+_UnionKind_inner = (Core.FieldName "inner")
+
+_UnionKind_outer = (Core.FieldName "outer")

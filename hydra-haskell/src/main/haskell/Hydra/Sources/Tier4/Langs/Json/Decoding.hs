@@ -70,7 +70,7 @@ decodeBooleanDef  = jsonDecodingDefinition "Boolean" $
 
 decodeArrayDef :: Definition ((Json.Value -> Flow s a) -> Json.Value -> Flow s [a])
 decodeArrayDef  = jsonDecodingDefinition "Array" $
-  function (functionT valueT (flowT sT aT)) (functionT valueT (flowT sT (listT aT))) $
+  function (funT valueT (flowT sT aT)) (funT valueT (flowT sT (listT aT))) $
   lambda "decodeElem" $ match Json._Value (Just $ Flows.fail @@ "expected an array") [
     Json._Value_array>>: Flows.mapList @@ (var "decodeElem")]
 
@@ -82,7 +82,7 @@ decodeObjectDef  = jsonDecodingDefinition "Object" $
 
 decodeFieldDef :: Definition ((Json.Value -> Flow s a) -> String -> (M.Map String Json.Value) -> Flow s a)
 decodeFieldDef  = jsonDecodingDefinition "Field" $
-  function (functionT valueT (flowT sT aT)) (functionT stringT (functionT (mapT stringT valueT) (flowT sT aT))) $
+  function (funT valueT (flowT sT aT)) (funT stringT (funT (mapT stringT valueT) (flowT sT aT))) $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
     Flows.bind
       @@ (ref decodeOptionalFieldDef @@ var "decodeValue" @@ var "name" @@ var "m")
@@ -90,7 +90,7 @@ decodeFieldDef  = jsonDecodingDefinition "Field" $
 
 decodeOptionalFieldDef :: Definition ((Json.Value -> Flow s a) -> String -> (M.Map String Json.Value) -> Flow s (Maybe a))
 decodeOptionalFieldDef  = jsonDecodingDefinition "OptionalField" $
-  function (functionT valueT (flowT sT aT)) (functionT stringT (functionT (mapT stringT valueT) (flowT sT (Types.optional aT)))) $
+  function (funT valueT (flowT sT aT)) (funT stringT (funT (mapT stringT valueT) (flowT sT (Types.optional aT)))) $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
     (matchOpt (Flows.pure @@ nothing) (lambda "v" (Flows.map @@ (lambda "x" (just $ var "x")) @@ (var "decodeValue" @@ var "v"))))
       @@ (Maps.lookup @@ var "name" @@ var "m")
