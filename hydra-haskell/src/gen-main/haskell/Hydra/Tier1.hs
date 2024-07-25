@@ -99,7 +99,7 @@ freeVariablesInType typ =
 subterms :: (Core.Term -> [Core.Term])
 subterms x = case x of
   Core.TermAnnotated v101 -> [
-    Core.annotatedSubject v101]
+    Core.annotatedTermSubject v101]
   Core.TermApplication v102 -> [
     Core.applicationFunction v102,
     (Core.applicationArgument v102)]
@@ -140,13 +140,13 @@ subterms x = case x of
     Core.fieldTerm (Core.injectionField v122)]
   Core.TermVariable _ -> []
   Core.TermWrap v124 -> [
-    Core.nominalObject v124]
+    Core.wrappedTermObject v124]
 
 -- | Find the children of a given type expression
 subtypes :: (Core.Type -> [Core.Type])
 subtypes x = case x of
   Core.TypeAnnotated v125 -> [
-    Core.annotatedSubject v125]
+    Core.annotatedTypeSubject v125]
   Core.TypeApplication v126 -> [
     Core.applicationTypeFunction v126,
     (Core.applicationTypeArgument v126)]
@@ -171,7 +171,7 @@ subtypes x = case x of
   Core.TypeUnion v137 -> (Lists.map Core.fieldTypeType (Core.rowTypeFields v137))
   Core.TypeVariable _ -> []
   Core.TypeWrap v139 -> [
-    Core.nominalObject v139]
+    Core.wrappedTypeObject v139]
 
 emptyTrace :: Compute.Trace
 emptyTrace = Compute.Trace {

@@ -25,10 +25,16 @@ hydraCoreModule = Module ns elements [] [] $
 
     elements = [
 
-      def "Annotated" $
-        doc "An object, such as a type or term, together with an annotation" $
-        lambda "x" $ record [
-          "subject">: "x",
+      def "AnnotatedTerm" $
+        doc "A term together with an annotation" $
+        record [
+          "subject">: core "Term",
+          "annotation">: core "Kv"],
+
+      def "AnnotatedType" $
+        doc "A type together with an annotation" $
+        record [
+          "subject">: core "Type",
           "annotation">: core "Kv"],
 
       def "Application" $
@@ -240,11 +246,17 @@ hydraCoreModule = Module ns elements [] [] $
         doc "A symbol which stands for a term, type, or element"
         $ wrap string,
 
-      def "Nominal" $
-        doc "An object wrapped in a type name" $
-        lambda "x" $ record [
+      def "WrappedTerm" $
+        doc "A term wrapped in a type name" $
+        record [
           "typeName">: core "Name",
-          "object">: "x"],
+          "object">: core "Term"],
+
+      def "WrappedType" $
+        doc "A type wrapped in a type name" $
+        record [
+          "typeName">: core "Name",
+          "object">: core "Type"],
 
       def "OptionalCases" $
         doc "A case statement for matching optional terms" $
@@ -300,7 +312,7 @@ hydraCoreModule = Module ns elements [] [] $
         union [
           "annotated">:
             doc "A term annotated with metadata" $
-            core "Annotated" @@ core "Term",
+            core "AnnotatedTerm",
           "application">:
             doc "A function application" $
             core "Application",
@@ -347,7 +359,7 @@ hydraCoreModule = Module ns elements [] [] $
             doc "A variable reference" $
             core "Name",
           "wrap">:
-            core "Nominal" @@ (core "Term")],
+            core "WrappedTerm"],
 
       def "TermWithType" $
         doc "A term annotated with its type" $
@@ -368,9 +380,7 @@ hydraCoreModule = Module ns elements [] [] $
       def "Type" $
         doc "A data type" $
         union [
-          "annotated">:
-            doc "A type annotated with metadata" $
-            core "Annotated" @@ core "Type",
+          "annotated">: core "AnnotatedType",
           "application">: core "ApplicationType",
           "function">: core "FunctionType",
           "lambda">: core "LambdaType",
@@ -385,7 +395,7 @@ hydraCoreModule = Module ns elements [] [] $
           "sum">: list (core "Type"),
           "union">: core "RowType",
           "variable">: core "Name",
-          "wrap">: core "Nominal" @@ (core "Type")],
+          "wrap">: core "WrappedType"],
 
       def "Unit" $
         doc "An empty record as a canonical unit value" $

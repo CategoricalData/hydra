@@ -7,18 +7,31 @@ import Data.List as L
 import Data.Map as M
 import Data.Set as S
 
--- | An object, such as a type or term, together with an annotation
-data Annotated x = 
-  Annotated {
-    annotatedSubject :: x,
-    annotatedAnnotation :: Kv}
+-- | A term together with an annotation
+data AnnotatedTerm = 
+  AnnotatedTerm {
+    annotatedTermSubject :: Term,
+    annotatedTermAnnotation :: Kv}
   deriving (Eq, Ord, Read, Show)
 
-_Annotated = (Name "hydra/core.Annotated")
+_AnnotatedTerm = (Name "hydra/core.AnnotatedTerm")
 
-_Annotated_subject = (FieldName "subject")
+_AnnotatedTerm_subject = (FieldName "subject")
 
-_Annotated_annotation = (FieldName "annotation")
+_AnnotatedTerm_annotation = (FieldName "annotation")
+
+-- | A type together with an annotation
+data AnnotatedType = 
+  AnnotatedType {
+    annotatedTypeSubject :: Type,
+    annotatedTypeAnnotation :: Kv}
+  deriving (Eq, Ord, Read, Show)
+
+_AnnotatedType = (Name "hydra/core.AnnotatedType")
+
+_AnnotatedType_subject = (FieldName "subject")
+
+_AnnotatedType_annotation = (FieldName "annotation")
 
 -- | A term which applies a function to an argument
 data Application = 
@@ -404,18 +417,31 @@ newtype Name =
 
 _Name = (Name "hydra/core.Name")
 
--- | An object wrapped in a type name
-data Nominal x = 
-  Nominal {
-    nominalTypeName :: Name,
-    nominalObject :: x}
+-- | A term wrapped in a type name
+data WrappedTerm = 
+  WrappedTerm {
+    wrappedTermTypeName :: Name,
+    wrappedTermObject :: Term}
   deriving (Eq, Ord, Read, Show)
 
-_Nominal = (Name "hydra/core.Nominal")
+_WrappedTerm = (Name "hydra/core.WrappedTerm")
 
-_Nominal_typeName = (FieldName "typeName")
+_WrappedTerm_typeName = (FieldName "typeName")
 
-_Nominal_object = (FieldName "object")
+_WrappedTerm_object = (FieldName "object")
+
+-- | A type wrapped in a type name
+data WrappedType = 
+  WrappedType {
+    wrappedTypeTypeName :: Name,
+    wrappedTypeObject :: Type}
+  deriving (Eq, Ord, Read, Show)
+
+_WrappedType = (Name "hydra/core.WrappedType")
+
+_WrappedType_typeName = (FieldName "typeName")
+
+_WrappedType_object = (FieldName "object")
 
 -- | A case statement for matching optional terms
 data OptionalCases = 
@@ -509,7 +535,7 @@ _Sum_term = (FieldName "term")
 -- | A data term
 data Term = 
   -- | A term annotated with metadata
-  TermAnnotated (Annotated Term) |
+  TermAnnotated AnnotatedTerm |
   -- | A function application
   TermApplication Application |
   -- | A function term
@@ -539,7 +565,7 @@ data Term =
   TermUnion Injection |
   -- | A variable reference
   TermVariable Name |
-  TermWrap (Nominal Term)
+  TermWrap WrappedTerm
   deriving (Eq, Ord, Read, Show)
 
 _Term = (Name "hydra/core.Term")
@@ -608,8 +634,7 @@ _TupleProjection_index = (FieldName "index")
 
 -- | A data type
 data Type = 
-  -- | A type annotated with metadata
-  TypeAnnotated (Annotated Type) |
+  TypeAnnotated AnnotatedType |
   TypeApplication ApplicationType |
   TypeFunction FunctionType |
   TypeLambda LambdaType |
@@ -624,7 +649,7 @@ data Type =
   TypeSum [Type] |
   TypeUnion RowType |
   TypeVariable Name |
-  TypeWrap (Nominal Type)
+  TypeWrap WrappedType
   deriving (Eq, Ord, Read, Show)
 
 _Type = (Name "hydra/core.Type")

@@ -53,9 +53,9 @@ generalize env t  = TypeScheme vars t
 
 infer :: Term -> Flow InferenceContext (Term, [Constraint])
 infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
-    TermAnnotated (Annotated term1 ann) -> do
+    TermAnnotated (AnnotatedTerm term1 ann) -> do
       (term2, constraints) <- infer term1
-      return (TermAnnotated $ Annotated term2 ann, constraints)
+      return (TermAnnotated $ AnnotatedTerm term2 ann, constraints)
 
     TermTyped (TermWithType term1 typ) -> do
       (i, c) <- infer term1
@@ -137,7 +137,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
 
         EliminationWrap name -> do
           typ <- withGraphContext $ requireWrappedType name
-          yieldElimination (EliminationWrap name) (Types.function (TypeWrap $ Nominal name typ) typ) []
+          yieldElimination (EliminationWrap name) (Types.function (TypeWrap $ WrappedType name typ) typ) []
 
       FunctionLambda (Lambda v body) -> do
         tv <- freshName
@@ -244,10 +244,10 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
       t <- requireName v
       yield (TermVariable v) t []
 
-    TermWrap (Nominal name term1) -> do
+    TermWrap (WrappedTerm name term1) -> do
       typ <- withGraphContext $ requireWrappedType name
       (i, ci) <- infer term1
-      yield (TermWrap $ Nominal name i) (TypeWrap $ Nominal name typ) (ci ++ [(typ, termType i)])
+      yield (TermWrap $ WrappedTerm name i) (TypeWrap $ WrappedType name typ) (ci ++ [(typ, termType i)])
 
 inferFieldType :: Field -> Flow InferenceContext (Field, [Constraint])
 inferFieldType (Field fname term) = do
@@ -318,7 +318,7 @@ typeOfPrimitive name = primitiveType <$> requirePrimitive name
 
 typeOfTerm :: Term -> Maybe Type
 typeOfTerm term = case term of
-  TermAnnotated (Annotated term1 _) -> typeOfTerm term1
+  TermAnnotated (AnnotatedTerm term1 _) -> typeOfTerm term1
   TermTyped (TermWithType term1 typ) -> Just typ
   _ -> Nothing
 

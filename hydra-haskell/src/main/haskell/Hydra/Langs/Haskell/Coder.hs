@@ -163,7 +163,7 @@ encodeTerm namespaces term = do
           return $ H.LocalBindingValue $ simpleValueBinding hname hexpr Nothing
     TermList els -> H.ExpressionList <$> CM.mapM encode els
     TermLiteral v -> encodeLiteral v
-    TermWrap (Nominal tname term') -> if newtypesNotTypedefs
+    TermWrap (WrappedTerm tname term') -> if newtypesNotTypedefs
       then hsapp <$> pure (H.ExpressionVariable $ elementReference namespaces tname) <*> encode term'
       else encode term'
     TermOptional m -> case m of
@@ -229,7 +229,7 @@ encodeType namespaces typ = withTrace "encode type" $ case stripType typ of
       encode st]
     TypeUnion rt -> ref $ rowTypeTypeName rt
     TypeVariable v -> ref v
-    TypeWrap (Nominal name _) -> ref name
+    TypeWrap (WrappedType name _) -> ref name
     _ -> fail $ "unexpected type: " ++ show typ
   where
     encode = encodeType namespaces
@@ -328,7 +328,7 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
       TypeUnion rt -> do
         cons <- CM.mapM (unionCons lname) $ rowTypeFields rt
         return $ H.DeclarationData $ H.DataDeclaration H.DataDeclaration_KeywordData [] hd cons [deriv]
-      TypeWrap (Nominal tname wt) -> do
+      TypeWrap (WrappedType tname wt) -> do
         cons <- newtypeCons el wt
         return $ H.DeclarationData $ H.DataDeclaration H.DataDeclaration_KeywordNewtype [] hd [cons] [deriv]
       _ -> if newtypesNotTypedefs

@@ -85,7 +85,7 @@ describeTypeDef = printingDefinition "describeType" $
   function typeT stringT $
     match _Type Nothing [
       Case _Type_annotated   --> lambda "a" $ string "annotated " ++ (ref describeTypeDef @@
-        (project _Annotated _Annotated_subject @@ var "a")),
+        (project _AnnotatedType _AnnotatedType_subject @@ var "a")),
       Case _Type_application --> constant $ string "instances of an application type",
       Case _Type_literal     --> ref describeLiteralTypeDef,
       Case _Type_function    --> lambda "ft" $ string "functions from "
@@ -107,4 +107,4 @@ describeTypeDef = printingDefinition "describeType" $
       Case _Type_union       --> constant $ string "unions",
       Case _Type_variable    --> constant $ string "instances of a named type",
       Case _Type_wrap        --> lambda "n" $ string "wrapper for "
-        ++ (ref describeTypeDef @@ (project _Nominal _Nominal_object @@ var "n"))]
+        ++ (ref describeTypeDef @@ (project _WrappedType _WrappedType_object @@ var "n"))]

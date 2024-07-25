@@ -142,7 +142,7 @@ untypedTermToJson term = case stripTerm term of
           return $ Json.ValueObject $ M.fromList $ case mkeyval of
             Nothing -> []
             Just keyval -> [keyval]
-      TermWrap (Nominal _ t) -> untypedTermToJson t
+      TermWrap (WrappedTerm _ t) -> untypedTermToJson t
       t -> unexpected "literal value" $ show t
   where
     fieldToKeyval f = do

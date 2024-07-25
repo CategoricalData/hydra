@@ -87,7 +87,7 @@ encodeTerm aliases term = fail "not yet implemented"
 
 encodeType :: M.Map Namespace String -> Type -> Flow (Graph) (Either PDL.Schema PDL.NamedSchema_Type)
 encodeType aliases typ = case typ of
-    TypeAnnotated (Annotated typ' _) -> encodeType aliases typ'
+    TypeAnnotated (AnnotatedType typ' _) -> encodeType aliases typ'
     TypeList lt -> Left . PDL.SchemaArray <$> encode lt
     TypeLiteral lt -> Left . PDL.SchemaPrimitive <$> case lt of
       LiteralTypeBinary -> pure PDL.PrimitiveTypeBytes

@@ -25,12 +25,12 @@ import qualified Data.Maybe as Y
 
 key_classes = "classes" :: String
 
-aggregateAnnotations :: (x -> Maybe (Annotated x)) -> x -> Kv
-aggregateAnnotations getAnn t = Kv $ M.fromList $ L.concat $ toPairs [] t
+aggregateAnnotations :: (x -> Maybe y) -> (y -> x) -> (y -> Kv) -> x -> Kv
+aggregateAnnotations getAnn getX getKv t = Kv $ M.fromList $ L.concat $ toPairs [] t
   where
     toPairs rest t = case getAnn t of
       Nothing -> rest
-      Just (Annotated t' (Kv other)) -> toPairs ((M.toList other):rest) t'
+      Just yy -> toPairs ((M.toList (kvAnnotations $ getKv yy)):rest) (getX yy)
 
 failOnFlag :: String -> String -> Flow s ()
 failOnFlag flag msg = do
@@ -131,7 +131,7 @@ resetCount attrName = do
 normalizeTermAnnotations :: Term -> Term
 normalizeTermAnnotations term = if M.null (kvAnnotations kv)
     then stripped
-    else TermAnnotated $ Annotated stripped kv
+    else TermAnnotated $ AnnotatedTerm stripped kv
   where
     kv = termAnnotationInternal term
     stripped = stripTerm term
@@ -139,7 +139,7 @@ normalizeTermAnnotations term = if M.null (kvAnnotations kv)
 normalizeTypeAnnotations :: Type -> Type
 normalizeTypeAnnotations typ = if M.null (kvAnnotations kv)
     then stripped
-    else TypeAnnotated $ Annotated stripped kv
+    else TypeAnnotated $ AnnotatedType stripped kv
   where
     kv = typeAnnotationInternal typ
     stripped = stripType typ
@@ -158,7 +158,7 @@ setDescription d = setAnnotation kvDescription (Terms.string <$> d)
 setTermAnnotation :: String -> Y.Maybe (Term) -> Term -> Term
 setTermAnnotation key val term = if kv == Kv M.empty
     then term'
-    else TermAnnotated $ Annotated term' kv
+    else TermAnnotated $ AnnotatedTerm term' kv
   where
     term' = stripTerm term
     kv = setAnnotation key val $ termAnnotationInternal term
@@ -173,7 +173,7 @@ setTermType mtyp term = case mtyp of
     Just typ -> TermTyped $ TermWithType (withoutType term) typ
   where
     withoutType term = case term of
-      TermAnnotated (Annotated term1 ann) -> TermAnnotated $ Annotated (withoutType term1) ann
+      TermAnnotated (AnnotatedTerm term1 ann) -> TermAnnotated $ AnnotatedTerm (withoutType term1) ann
       TermTyped (TermWithType term1 _) -> term1
       _ -> term
 
@@ -182,7 +182,7 @@ setType mt = setAnnotation kvType (coreEncodeType <$> mt)
 setTypeAnnotation :: String -> Y.Maybe (Term) -> Type -> Type
 setTypeAnnotation key val typ = if kv == Kv M.empty
     then typ'
-    else TypeAnnotated $ Annotated typ' kv
+    else TypeAnnotated $ AnnotatedType typ' kv
   where
     typ' = stripType typ
     kv = setAnnotation key val $ typeAnnotationInternal typ
@@ -202,7 +202,7 @@ setTypeDescription :: Y.Maybe String -> Type -> Type
 setTypeDescription d = setTypeAnnotation kvDescription (Terms.string <$> d)
 
 termAnnotationInternal :: Term -> Kv
-termAnnotationInternal = aggregateAnnotations getAnn
+termAnnotationInternal = aggregateAnnotations getAnn annotatedTermSubject annotatedTermAnnotation
   where
     getAnn t = case t of
       TermAnnotated a -> Just a
@@ -210,9 +210,11 @@ termAnnotationInternal = aggregateAnnotations getAnn
       _ -> Nothing
 
 typeAnnotationInternal :: Type -> Kv
-typeAnnotationInternal = aggregateAnnotations $ \t -> case t of
-  TypeAnnotated a -> Just a
-  _ -> Nothing
+typeAnnotationInternal = aggregateAnnotations getAnn annotatedTypeSubject annotatedTypeAnnotation
+  where
+    getAnn t = case t of
+      TypeAnnotated a -> Just a
+      _ -> Nothing
 
 whenFlag :: String -> Flow s a -> Flow s a -> Flow s a
 whenFlag flag fthen felse = do

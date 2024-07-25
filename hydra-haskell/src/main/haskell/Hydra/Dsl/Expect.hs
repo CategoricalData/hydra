@@ -238,7 +238,7 @@ recordWithName :: Name -> Term -> Flow s [Field]
 recordWithName expected term = case strip term of
   TermRecord (Record actual fields) -> if actual == expected
     then pure fields
-    else unexpected ("record of type" ++ unName expected) (unName actual)
+    else unexpected ("record of type " ++ unName expected) (unName actual)
   _ -> unexpected "record" $ show term
 
 set :: Ord x => (Term -> Flow s x) -> Term -> Flow s (S.Set x)
@@ -314,7 +314,7 @@ variant = injectionWithName
 
 wrap :: Name -> Term -> Flow s (Term)
 wrap expected term = case strip term of
-  TermWrap (Nominal actual term) -> if actual == expected
+  TermWrap (WrappedTerm actual term) -> if actual == expected
     then pure term
     else unexpected ("wrapper of type " ++ unName expected) (unName actual)
   _ -> unexpected ("wrap(" ++ unName expected ++ ")") $ show term

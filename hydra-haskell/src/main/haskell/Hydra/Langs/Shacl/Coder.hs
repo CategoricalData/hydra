@@ -102,7 +102,7 @@ encodeLiteralType lt = case lt of
 
 encodeTerm :: Rdf.Resource -> Term -> Flow (Graph) [Rdf.Description]
 encodeTerm subject term = case term of
-  TermAnnotated (Annotated inner ann) -> encodeTerm subject inner -- TODO: extract an rdfs:comment
+  TermAnnotated (AnnotatedTerm inner ann) -> encodeTerm subject inner -- TODO: extract an rdfs:comment
   TermList terms -> encodeList subject terms
     where
       encodeList subj terms = if L.null terms
@@ -133,7 +133,7 @@ encodeTerm subject term = case term of
         let objs = subjectsOf descs
         let triples = forObjects subj pred objs
         return $ triples ++ triplesOf descs
-  TermWrap (Nominal name inner) -> do
+  TermWrap (WrappedTerm name inner) -> do
     descs <- encodeTerm subject inner
     return $ (withType name $ L.head descs):(L.tail descs)
   TermOptional mterm -> case mterm of
