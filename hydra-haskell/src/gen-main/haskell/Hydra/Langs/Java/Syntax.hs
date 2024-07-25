@@ -50,7 +50,6 @@ _Literal_string = (Core.FieldName "string")
 -- | Note: this is an approximation which ignores encoding
 newtype IntegerLiteral = 
   IntegerLiteral {
-    -- | Note: this is an approximation which ignores encoding
     unIntegerLiteral :: Integer}
   deriving (Eq, Ord, Read, Show)
 
@@ -59,7 +58,6 @@ _IntegerLiteral = (Core.Name "hydra/langs/java/syntax.IntegerLiteral")
 -- | Note: this is an approximation which ignores encoding
 newtype FloatingPointLiteral = 
   FloatingPointLiteral {
-    -- | Note: this is an approximation which ignores encoding
     unFloatingPointLiteral :: Double}
   deriving (Eq, Ord, Read, Show)
 
@@ -68,7 +66,6 @@ _FloatingPointLiteral = (Core.Name "hydra/langs/java/syntax.FloatingPointLiteral
 -- | Note: this is an approximation which ignores encoding
 newtype StringLiteral = 
   StringLiteral {
-    -- | Note: this is an approximation which ignores encoding
     unStringLiteral :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -831,7 +828,6 @@ _VariableInitializer_arrayInitializer = (Core.FieldName "arrayInitializer")
 -- | A Type which does not allow annotations
 newtype UnannType = 
   UnannType {
-    -- | A Type which does not allow annotations
     unUnannType :: Type}
   deriving (Eq, Ord, Read, Show)
 
@@ -840,7 +836,6 @@ _UnannType = (Core.Name "hydra/langs/java/syntax.UnannType")
 -- | A ClassType which does not allow annotations
 newtype UnannClassType = 
   UnannClassType {
-    -- | A ClassType which does not allow annotations
     unUnannClassType :: ClassType}
   deriving (Eq, Ord, Read, Show)
 

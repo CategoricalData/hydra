@@ -94,7 +94,6 @@ _Field_options = (Core.FieldName "options")
 -- | The name of a field
 newtype FieldName = 
   FieldName {
-    -- | The name of a field
     unFieldName :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -250,7 +249,6 @@ _SimpleType_scalar = (Core.FieldName "scalar")
 -- | The local name of an enum type or message type
 newtype TypeName = 
   TypeName {
-    -- | The local name of an enum type or message type
     unTypeName :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -259,7 +257,6 @@ _TypeName = (Core.Name "hydra/langs/protobuf/proto3.TypeName")
 -- | A reference to an enum type or message type
 newtype TypeReference = 
   TypeReference {
-    -- | A reference to an enum type or message type
     unTypeReference :: String}
   deriving (Eq, Ord, Read, Show)
 

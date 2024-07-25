@@ -351,7 +351,6 @@ _Shape_property = (Core.FieldName "property")
 -- | An RDF graph containing zero or more shapes that is passed into a SHACL validation process so that a data graph can be validated against the shapes
 newtype ShapesGraph = 
   ShapesGraph {
-    -- | An RDF graph containing zero or more shapes that is passed into a SHACL validation process so that a data graph can be validated against the shapes
     unShapesGraph :: (Set (Definition Shape))}
   deriving (Eq, Ord, Read, Show)
 

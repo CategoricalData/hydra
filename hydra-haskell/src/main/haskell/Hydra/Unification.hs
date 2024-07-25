@@ -59,20 +59,20 @@ unify ltyp rtyp = do
       (TypeFunction (FunctionType dom1 cod1), TypeFunction (FunctionType dom2 cod2)) ->
         unifyMany [dom1, cod1] [dom2, cod2]
       (TypeList lt1, TypeList lt2) -> unify lt1 lt2
-      (TypeLiteral lt1, TypeLiteral lt2) -> verify $ lt1 == lt2
+      (TypeLiteral lt1, TypeLiteral lt2) -> verify "different literal types" $ lt1 == lt2
       (TypeMap (MapType k1 v1), TypeMap (MapType k2 v2)) -> unifyMany [k1, v1] [k2, v2]
       (TypeOptional ot1, TypeOptional ot2) -> unify ot1 ot2
       (TypeProduct types1, TypeProduct types2) -> unifyMany types1 types2
       (TypeRecord rt1, TypeRecord rt2) -> do
-        verify (rowTypeTypeName rt1 == rowTypeTypeName rt2)
-        verify (L.length (rowTypeFields rt1) == L.length (rowTypeFields rt2))
+        verify "different record type names" (rowTypeTypeName rt1 == rowTypeTypeName rt2)
+        verify "different number of record fields" (L.length (rowTypeFields rt1) == L.length (rowTypeFields rt2))
         unifyMany (fieldTypeType <$> rowTypeFields rt1) (fieldTypeType <$> rowTypeFields rt2)
       (TypeSet st1, TypeSet st2) -> unify st1 st2
-      (TypeUnion rt1, TypeUnion rt2) -> verify (rowTypeTypeName rt1 == rowTypeTypeName rt2)
+      (TypeUnion rt1, TypeUnion rt2) -> verify "different union type names" (rowTypeTypeName rt1 == rowTypeTypeName rt2)
       (TypeLambda (LambdaType (Name v1) body1), TypeLambda (LambdaType (Name v2) body2)) ->
         unifyMany [Types.var v1, body1] [Types.var v2, body2]
       (TypeSum types1, TypeSum types2) -> unifyMany types1 types2
-      (TypeWrap n1, TypeWrap n2) -> verify $ n1 == n2
+      (TypeWrap n1, TypeWrap n2) -> verify "different wrapper type names" $ n1 == n2
 
       -- Asymmetric patterns
       (TypeVariable v1, TypeVariable v2) -> bindWeakest v1 v2
@@ -92,8 +92,8 @@ unify ltyp rtyp = do
         ":\n  " ++ showType l ++
         "\n  " ++ showType r
   where
-    verify b = if b then return M.empty else failUnification
-    failUnification = fail $ "could not unify types:\n\t"
+    verify reason b = if b then return M.empty else failUnification reason
+    failUnification reason = fail $ "could not unify types (reason: " ++ reason ++ "):\n\t"
       ++ showType (stripType ltyp) ++ "\n\t"
       ++ showType (stripType rtyp) ++ "\n"
 --     failUnification = fail $ "could not unify type " ++ describeType (stripType ltyp) ++ " with " ++ describeType (stripType rtyp)

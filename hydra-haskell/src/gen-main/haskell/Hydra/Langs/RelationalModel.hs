@@ -11,7 +11,6 @@ import Data.Set as S
 -- | A name for a domain which serves to identify the role played by that domain in the given relation; a 'role name' in Codd
 newtype ColumnName = 
   ColumnName {
-    -- | A name for a domain which serves to identify the role played by that domain in the given relation; a 'role name' in Codd
     unColumnName :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -53,7 +52,6 @@ _ForeignKey_keys = (Core.FieldName "keys")
 -- | A primary key of a relation, specified either as a single column, or as a list of columns
 newtype PrimaryKey = 
   PrimaryKey {
-    -- | A primary key of a relation, specified either as a single column, or as a list of columns
     unPrimaryKey :: [ColumnName]}
   deriving (Eq, Ord, Read, Show)
 
@@ -70,7 +68,6 @@ _Relation = (Core.Name "hydra/langs/relationalModel.Relation")
 -- | A unique relation (table) name
 newtype RelationName = 
   RelationName {
-    -- | A unique relation (table) name
     unRelationName :: String}
   deriving (Eq, Ord, Read, Show)
 

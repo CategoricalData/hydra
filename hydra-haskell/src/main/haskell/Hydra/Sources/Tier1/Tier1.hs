@@ -102,7 +102,7 @@ isLambdaDef = tier1Definition "isLambda" $
 foldOverTermDef :: Definition (TraversalOrder -> (x -> Term -> x) -> x -> Term -> x)
 foldOverTermDef = tier1Definition "foldOverTerm" $
   doc "Fold over a term, traversing its subterms in the specified order" $
-  functionN [TypeVariable _TraversalOrder, functionT xT (functionT termT xT), xT, termT, xT] $
+  functionN [TypeVariable _TraversalOrder, funT xT (funT termT xT), xT, termT, xT] $
   lambda "order" $ lambda "fld" $ lambda "b0" $ lambda "term" $ (match _TraversalOrder Nothing [
     _TraversalOrder_pre>>: constant (Base.fold (ref foldOverTermDef @@ var "order" @@ var "fld")
       @@ (var "fld" @@ var "b0" @@ var "term")
@@ -116,7 +116,7 @@ foldOverTermDef = tier1Definition "foldOverTerm" $
 foldOverTypeDef :: Definition (TraversalOrder -> (x -> Type -> x) -> x -> Type -> x)
 foldOverTypeDef = tier1Definition "foldOverType" $
   doc "Fold over a type, traversing its subtypes in the specified order" $
-  functionN [TypeVariable _TraversalOrder, functionT xT (functionT typeT xT), xT, typeT, xT] $
+  functionN [TypeVariable _TraversalOrder, funT xT (funT typeT xT), xT, typeT, xT] $
   lambda "order" $ lambda "fld" $ lambda "b0" $ lambda "typ" $ (match _TraversalOrder Nothing [
     _TraversalOrder_pre>>: constant (Base.fold (ref foldOverTypeDef @@ var "order" @@ var "fld")
       @@ (var "fld" @@ var "b0" @@ var "typ")

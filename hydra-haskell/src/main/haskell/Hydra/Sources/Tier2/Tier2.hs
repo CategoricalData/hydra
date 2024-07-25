@@ -63,8 +63,8 @@ getStateDef = tier2Definition "getState" $
 
 getTermTypeDef :: Definition (Term -> Flow Graph (Maybe Type))
 getTermTypeDef = tier2Definition "getTermType" $
-  function termT (optionalT typeT) $
   doc "Get the annotated type of a given term, if any" $
+  function termT (optionalT typeT) $
   match _Term (Just nothing) [
     "annotated">: ref getTermTypeDef <.> project _Annotated _Annotated_subject,
     "typed">: lambda "tt" $ just (project _TermWithType _TermWithType_type @@ var "tt")]
@@ -83,8 +83,8 @@ putStateDef = tier2Definition "putState" $
 
 requireElementTypeDef :: Definition (Element -> Flow Graph Type)
 requireElementTypeDef = tier2Definition "requireElementType" $
-  function elementT (flowT graphT typeT) $
   doc "Get the annotated type of a given element, or fail if it is missing" $
+  function elementT (flowT graphT typeT) $
   lambda "el" $ ((var "withType" @@ (ref getTermTypeDef @@ (project _Element _Element_data @@ var "el")))
     `with` [
       "withType">: matchOpt
@@ -93,8 +93,8 @@ requireElementTypeDef = tier2Definition "requireElementType" $
 
 requireTermTypeDef :: Definition (Term -> Flow Graph Type)
 requireTermTypeDef = tier2Definition "requireTermType" $
-  function termT (flowT graphT typeT) $
   doc "Get the annotated type of a given term, or fail if it is missing" $
+  function termT (flowT graphT typeT) $
   (var "withType" <.> ref getTermTypeDef)
     `with` [
       "withType">: matchOpt
@@ -103,6 +103,6 @@ requireTermTypeDef = tier2Definition "requireTermType" $
 
 unexpectedDef :: Definition (String -> String -> Flow s x)
 unexpectedDef = tier2Definition "unexpected" $
-  function stringT (functionT stringT (flowT sT xT)) $
   doc "Fail if an actual value does not match an expected value" $
+  function stringT (funT stringT (flowT sT xT)) $
   lambda "expected" $ lambda "actual" $ Flows.fail @@ ("expected " ++ var "expected" ++ " but found: " ++ var "actual")

@@ -40,7 +40,7 @@ javaMaxTupleLengthDef = javaLanguageDefinition "javaMaxTupleLength" $
 javaLanguageDef :: Definition (Language)
 javaLanguageDef = javaLanguageDefinition "javaLanguage" $
   doc "Language constraints for Java" $
-  typed (Types.apply (TypeVariable _Language) (Types.var "a")) $
+  typed languageT $
   record _Language [
     _Language_name>>: wrap _LanguageName "hydra/langs/java",
     _Language_constraints>>: record _LanguageConstraints [
@@ -98,6 +98,7 @@ javaLanguageDef = javaLanguageDefinition "javaLanguage" $
 reservedWordsDef :: Definition (S.Set String)
 reservedWordsDef = javaLanguageDefinition "reservedWords" $
   doc "A set of reserved words in Java" $
+  typed (setT stringT) $
   (Sets.fromList @@ (Lists.concat @@ list [var "specialNames", var "classNames", var "keywords", var "literals"]))
   `with` [
     "specialNames">:

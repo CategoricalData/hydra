@@ -14,7 +14,7 @@ import Data.Map as M
 import Data.Set as S
 
 -- | Language constraints for Protocol Buffers v3
-protobufLanguage :: (Coders.Language)
+protobufLanguage :: Coders.Language
 protobufLanguage = Coders.Language {
   Coders.languageName = (Coders.LanguageName "hydra/langs/protobuf"),
   Coders.languageConstraints = Coders.LanguageConstraints {
@@ -51,11 +51,12 @@ protobufLanguage = Coders.Language {
       Mantle.TypeVariantUnion,
       Mantle.TypeVariantVariable]),
     Coders.languageConstraintsTypes = (\x -> case x of
-      Core.TypeMap v -> ((\x -> case x of
+      Core.TypeMap v287 -> ((\x -> case x of
         Core.TypeOptional _ -> False
-        _ -> True) (Strip.stripType (Core.mapTypeValues v)))
+        _ -> True) (Strip.stripType (Core.mapTypeValues v287)))
       _ -> True)}}
 
+-- | A set of reserved words in Protobuf
 protobufReservedWords :: (Set String)
 protobufReservedWords = (Sets.fromList (Lists.concat [
   fieldNames])) 

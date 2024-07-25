@@ -17,7 +17,7 @@ import Data.Set as S
 functionArity :: (Core.Function -> Int)
 functionArity x = case x of
   Core.FunctionElimination _ -> 1
-  Core.FunctionLambda v1 -> (Math.add 1 (termArity (Core.lambdaBody v1)))
+  Core.FunctionLambda v234 -> (Math.add 1 (termArity (Core.lambdaBody v234)))
   Core.FunctionPrimitive _ -> 42
 
 lookupPrimitive :: (Graph.Graph -> Core.Name -> Maybe Graph.Primitive)
@@ -36,25 +36,25 @@ qname ns name = (Core.Name (Strings.cat [
 
 termArity :: (Core.Term -> Int)
 termArity x = case x of
-  Core.TermApplication v3 -> ((\x -> Math.sub x 1) (termArity (Core.applicationFunction v3)))
-  Core.TermFunction v4 -> (functionArity v4)
+  Core.TermApplication v236 -> ((\x -> Math.sub x 1) (termArity (Core.applicationFunction v236)))
+  Core.TermFunction v237 -> (functionArity v237)
   _ -> 0
 
 typeArity :: (Core.Type -> Int)
 typeArity x = case x of
-  Core.TypeAnnotated v5 -> (typeArity (Core.annotatedSubject v5))
-  Core.TypeApplication v6 -> (typeArity (Core.applicationTypeFunction v6))
-  Core.TypeLambda v7 -> (typeArity (Core.lambdaTypeBody v7))
-  Core.TypeFunction v8 -> (Math.add 1 (typeArity (Core.functionTypeCodomain v8)))
+  Core.TypeAnnotated v238 -> (typeArity (Core.annotatedSubject v238))
+  Core.TypeApplication v239 -> (typeArity (Core.applicationTypeFunction v239))
+  Core.TypeLambda v240 -> (typeArity (Core.lambdaTypeBody v240))
+  Core.TypeFunction v241 -> (Math.add 1 (typeArity (Core.functionTypeCodomain v241)))
   _ -> 0
 
 -- | Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)
 uncurryType :: (Core.Type -> [Core.Type])
 uncurryType t = ((\x -> case x of
-  Core.TypeAnnotated v9 -> (uncurryType (Core.annotatedSubject v9))
-  Core.TypeApplication v10 -> (uncurryType (Core.applicationTypeFunction v10))
-  Core.TypeLambda v11 -> (uncurryType (Core.lambdaTypeBody v11))
-  Core.TypeFunction v12 -> (Lists.cons (Core.functionTypeDomain v12) (uncurryType (Core.functionTypeCodomain v12)))
+  Core.TypeAnnotated v242 -> (uncurryType (Core.annotatedSubject v242))
+  Core.TypeApplication v243 -> (uncurryType (Core.applicationTypeFunction v243))
+  Core.TypeLambda v244 -> (uncurryType (Core.lambdaTypeBody v244))
+  Core.TypeFunction v245 -> (Lists.cons (Core.functionTypeDomain v245) (uncurryType (Core.functionTypeCodomain v245)))
   _ -> [
     t]) t)
 

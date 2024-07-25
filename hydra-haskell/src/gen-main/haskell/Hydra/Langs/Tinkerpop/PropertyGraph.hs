@@ -8,11 +8,12 @@ import Data.List as L
 import Data.Map as M
 import Data.Set as S
 
--- | The direction of an edge
+-- | The direction of an edge or edge pattern
 data Direction = 
   DirectionOut  |
   DirectionIn  |
-  DirectionBoth 
+  DirectionBoth  |
+  DirectionUndirected 
   deriving (Eq, Ord, Read, Show)
 
 _Direction = (Core.Name "hydra/langs/tinkerpop/propertyGraph.Direction")
@@ -22,6 +23,8 @@ _Direction_out = (Core.FieldName "out")
 _Direction_in = (Core.FieldName "in")
 
 _Direction_both = (Core.FieldName "both")
+
+_Direction_undirected = (Core.FieldName "undirected")
 
 -- | An edge
 data Edge v = 
@@ -53,7 +56,6 @@ _Edge_properties = (Core.FieldName "properties")
 -- | The label of an edge
 newtype EdgeLabel = 
   EdgeLabel {
-    -- | The label of an edge
     unEdgeLabel :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -206,7 +208,6 @@ _Property_value = (Core.FieldName "value")
 -- | A property key
 newtype PropertyKey = 
   PropertyKey {
-    -- | A property key
     unPropertyKey :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -253,7 +254,6 @@ _Vertex_properties = (Core.FieldName "properties")
 -- | The label of a vertex. The default (null) vertex is represented by the empty string
 newtype VertexLabel = 
   VertexLabel {
-    -- | The label of a vertex. The default (null) vertex is represented by the empty string
     unVertexLabel :: String}
   deriving (Eq, Ord, Read, Show)
 

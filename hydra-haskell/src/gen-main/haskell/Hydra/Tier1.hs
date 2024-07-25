@@ -77,7 +77,7 @@ foldOverType order fld b0 typ = ((\x -> case x of
 
 -- | Find the free variables (i.e. variables not bound by a lambda or let) in a term
 freeVariablesInTerm :: (Core.Term -> Set Core.Name)
-freeVariablesInTerm term =
+freeVariablesInTerm term =  
   let dfltVars = (L.foldl (\s -> \t -> Sets.union s (freeVariablesInTerm t)) Sets.empty (subterms term))
   in ((\x -> case x of
     Core.TermFunction v96 -> ((\x -> case x of

@@ -33,17 +33,6 @@ data InferenceContext = InferenceContext {
 
 type TypingEnvironment a = M.Map Name (TypeScheme)
 
--- Decode a type, eliminating nominal types for the sake of unification
-decodeStructuralType :: Term -> Flow (Graph) (Type)
-decodeStructuralType term = do
-  typ <- coreDecodeType term
-  let typ' = stripType typ
-  case typ' of
-    TypeVariable name -> withSchemaContext $ withTrace "decode structural type" $ do
-      el <- requireElement name
-      decodeStructuralType $ elementData el
-    _ -> pure typ
-
 fieldType :: Field -> FieldType
 fieldType (Field fname term) = FieldType fname $ termType term
 
