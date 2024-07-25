@@ -43,8 +43,8 @@ datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders 
         TypeUnion (RowType tname e fields) -> if tname == placeholderName
           then TypeUnion (RowType elName e fields)
           else rect
-        TypeWrap (Nominal tname t) -> if tname == placeholderName
-          then TypeWrap (Nominal elName t)
+        TypeWrap (WrappedType tname t) -> if tname == placeholderName
+          then TypeWrap (WrappedType elName t)
           else rect
         _ -> rect
       where
@@ -62,5 +62,5 @@ typeElement name typ = Element {
     elementData = dataTerm}
   where
     -- These type annotations allow type inference to proceed despite cyclic type definitions, e.g. in Hydra Core
-    dataTerm = normalizeTermAnnotations $ TermAnnotated $ Annotated (coreEncodeType typ) $ Kv $ M.fromList [(kvType, schemaTerm)]
+    dataTerm = normalizeTermAnnotations $ TermAnnotated $ AnnotatedTerm (coreEncodeType typ) $ Kv $ M.fromList [(kvType, schemaTerm)]
     schemaTerm = TermVariable _Type

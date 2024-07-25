@@ -46,7 +46,7 @@ describeType :: (Core.Type -> String)
 describeType x = case x of
   Core.TypeAnnotated v253 -> (Strings.cat [
     "annotated ",
-    (describeType (Core.annotatedSubject v253))])
+    (describeType (Core.annotatedTypeSubject v253))])
   Core.TypeApplication _ -> "instances of an application type"
   Core.TypeLiteral v255 -> (describeLiteralType v255)
   Core.TypeFunction v256 -> (Strings.cat [
@@ -83,4 +83,4 @@ describeType x = case x of
   Core.TypeVariable _ -> "instances of a named type"
   Core.TypeWrap v268 -> (Strings.cat [
     "wrapper for ",
-    (describeType (Core.nominalObject v268))])
+    (describeType (Core.wrappedTypeObject v268))])

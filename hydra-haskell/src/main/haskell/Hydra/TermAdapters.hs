@@ -159,7 +159,7 @@ optionalToList t@(TypeOptional ot) = do
       else Just <$> coderDecode (adapterCoder ad) (L.head l)}
 
 passAnnotated :: TypeAdapter Kv
-passAnnotated t@(TypeAnnotated (Annotated at ann)) = do
+passAnnotated t@(TypeAnnotated (AnnotatedType at ann)) = do
   ad <- termAdapter at
   return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ bidirectional $
     \dir term -> encodeDecode dir (adapterCoder ad) term
@@ -292,10 +292,10 @@ passUnion t@(TypeUnion rt) = do
     nm = rowTypeTypeName rt
 
 passWrapped :: TypeAdapter Kv
-passWrapped wt@(TypeWrap (Nominal tname t)) = do
+passWrapped wt@(TypeWrap (WrappedType tname t)) = do
   adapter <- termAdapter t
   return $ Adapter (adapterIsLossy adapter) wt (Types.wrapWithName tname $ adapterTarget adapter)
-    $ bidirectional $ \dir (TermWrap (Nominal _ term)) -> TermWrap . Nominal tname <$> encodeDecode dir (adapterCoder adapter) term
+    $ bidirectional $ \dir (TermWrap (WrappedTerm _ term)) -> TermWrap . WrappedTerm tname <$> encodeDecode dir (adapterCoder adapter) term
 
 simplifyApplication :: TypeAdapter Kv
 simplifyApplication t@(TypeApplication (ApplicationType lhs _)) = do
@@ -390,14 +390,14 @@ unsupportedToString t = pure $ Adapter False t Types.string $ Coder encode decod
         Right t -> pure t
 
 wrapToUnwrapped :: TypeAdapter Kv
-wrapToUnwrapped t@(TypeWrap (Nominal tname typ)) = do
+wrapToUnwrapped t@(TypeWrap (WrappedType tname typ)) = do
     ad <- termAdapter typ
     return $ Adapter False t (adapterTarget ad) $ Coder (encode ad) (decode ad)
   where
     encode ad term = Expect.wrap tname term >>= coderEncode (adapterCoder ad)
     decode ad term = do
       decoded <- coderDecode (adapterCoder ad) term
-      return $ TermWrap $ Nominal tname decoded
+      return $ TermWrap $ WrappedTerm tname decoded
 
 withGraphContext :: Flow (Graph) x -> Flow (AdapterContext) x
 withGraphContext f = do

@@ -92,7 +92,7 @@ typeArityDef :: Definition (Type -> Int)
 typeArityDef = hydraExtrasDefinition "typeArity" $
   function typeT Types.int32 $
   match _Type (Just $ int32 0) [
-    Case _Type_annotated --> ref typeArityDef <.> Core.annotatedSubject,
+    Case _Type_annotated --> ref typeArityDef <.> Core.annotatedTypeSubject,
     Case _Type_application --> ref typeArityDef <.> (project _ApplicationType _ApplicationType_function),
     Case _Type_lambda --> ref typeArityDef <.> (project _LambdaType _LambdaType_body),
     Case _Type_function --> lambda "f" $
@@ -103,7 +103,7 @@ uncurryTypeDef = hydraExtrasDefinition "uncurryType" $
   function typeT (listT typeT) $
   doc "Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)" $
   lambda "t" ((match _Type (Just $ list [var "t"]) [
-    _Type_annotated>>: ref uncurryTypeDef <.> Core.annotatedSubject,
+    _Type_annotated>>: ref uncurryTypeDef <.> Core.annotatedTypeSubject,
     _Type_application>>: ref uncurryTypeDef <.> Core.applicationTypeFunction,
     _Type_lambda>>: ref uncurryTypeDef <.> Core.lambdaTypeBody,
     _Type_function>>: lambda "ft" $ Lists.cons

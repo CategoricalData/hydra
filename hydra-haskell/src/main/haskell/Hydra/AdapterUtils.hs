@@ -111,7 +111,7 @@ typeIsSupported :: LanguageConstraints -> Type -> Bool
 typeIsSupported constraints t = languageConstraintsTypes constraints t -- these are *additional* type constraints
   && isSupportedVariant (typeVariant t)
   && case t of
-    TypeAnnotated (Annotated at _) -> typeIsSupported constraints at
+    TypeAnnotated (AnnotatedType at _) -> typeIsSupported constraints at
     TypeLiteral at -> literalTypeIsSupported constraints at
     TypeFunction (FunctionType dom cod) -> typeIsSupported constraints dom && typeIsSupported constraints cod
     TypeList lt -> typeIsSupported constraints lt

@@ -10,15 +10,15 @@ import Data.List as L
 import Data.Map as M
 import Data.Set as S
 
-coreEncodeAnnotatedTerm :: (Core.Annotated Core.Term -> Core.Term)
-coreEncodeAnnotatedTerm a = (Core.TermAnnotated (Core.Annotated {
-  Core.annotatedSubject = (coreEncodeTerm (Core.annotatedSubject a)),
-  Core.annotatedAnnotation = (Core.annotatedAnnotation a)}))
+coreEncodeAnnotatedTerm :: (Core.AnnotatedTerm -> Core.Term)
+coreEncodeAnnotatedTerm a = (Core.TermAnnotated (Core.AnnotatedTerm {
+  Core.annotatedTermSubject = (coreEncodeTerm (Core.annotatedTermSubject a)),
+  Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation a)}))
 
-coreEncodeAnnotatedType :: (Core.Annotated Core.Type -> Core.Term)
-coreEncodeAnnotatedType at = (Core.TermAnnotated (Core.Annotated {
-  Core.annotatedSubject = (coreEncodeType (Core.annotatedSubject at)),
-  Core.annotatedAnnotation = (Core.annotatedAnnotation at)}))
+coreEncodeAnnotatedType :: (Core.AnnotatedType -> Core.Term)
+coreEncodeAnnotatedType at = (Core.TermAnnotated (Core.AnnotatedTerm {
+  Core.annotatedTermSubject = (coreEncodeType (Core.annotatedTypeSubject at)),
+  Core.annotatedTermAnnotation = (Core.annotatedTypeAnnotation at)}))
 
 coreEncodeApplication :: (Core.Application -> Core.Term)
 coreEncodeApplication app = (Core.TermRecord (Core.Record {
@@ -95,17 +95,17 @@ coreEncodeField f = (Core.TermRecord (Core.Record {
   Core.recordFields = [
     Core.Field {
       Core.fieldName = (Core.FieldName "name"),
-      Core.fieldTerm = (Core.TermWrap (Core.Nominal {
-        Core.nominalTypeName = (Core.Name "hydra/core.FieldName"),
-        Core.nominalObject = (Core.TermLiteral (Core.LiteralString (Core.unFieldName (Core.fieldName f))))}))},
+      Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+        Core.wrappedTermTypeName = (Core.Name "hydra/core.FieldName"),
+        Core.wrappedTermObject = (Core.TermLiteral (Core.LiteralString (Core.unFieldName (Core.fieldName f))))}))},
     Core.Field {
       Core.fieldName = (Core.FieldName "term"),
       Core.fieldTerm = (coreEncodeTerm (Core.fieldTerm f))}]}))
 
 coreEncodeFieldName :: (Core.FieldName -> Core.Term)
-coreEncodeFieldName fn = (Core.TermWrap (Core.Nominal {
-  Core.nominalTypeName = (Core.Name "hydra/core.FieldName"),
-  Core.nominalObject = (Core.TermLiteral (Core.LiteralString (Core.unFieldName fn)))}))
+coreEncodeFieldName fn = (Core.TermWrap (Core.WrappedTerm {
+  Core.wrappedTermTypeName = (Core.Name "hydra/core.FieldName"),
+  Core.wrappedTermObject = (Core.TermLiteral (Core.LiteralString (Core.unFieldName fn)))}))
 
 coreEncodeFieldType :: (Core.FieldType -> Core.Term)
 coreEncodeFieldType ft = (Core.TermRecord (Core.Record {
@@ -410,31 +410,31 @@ coreEncodeMapType mt = (Core.TermRecord (Core.Record {
       Core.fieldTerm = (coreEncodeType (Core.mapTypeValues mt))}]}))
 
 coreEncodeName :: (Core.Name -> Core.Term)
-coreEncodeName fn = (Core.TermWrap (Core.Nominal {
-  Core.nominalTypeName = (Core.Name "hydra/core.Name"),
-  Core.nominalObject = (Core.TermLiteral (Core.LiteralString (Core.unName fn)))}))
+coreEncodeName fn = (Core.TermWrap (Core.WrappedTerm {
+  Core.wrappedTermTypeName = (Core.Name "hydra/core.Name"),
+  Core.wrappedTermObject = (Core.TermLiteral (Core.LiteralString (Core.unName fn)))}))
 
-coreEncodeNominalTerm :: (Core.Nominal Core.Term -> Core.Term)
-coreEncodeNominalTerm n = (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra/core.Nominal"),
+coreEncodeWrappedTerm :: (Core.WrappedTerm -> Core.Term)
+coreEncodeWrappedTerm n = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra/core.WrappedTerm"),
   Core.recordFields = [
     Core.Field {
       Core.fieldName = (Core.FieldName "typeName"),
-      Core.fieldTerm = (coreEncodeName (Core.nominalTypeName n))},
+      Core.fieldTerm = (coreEncodeName (Core.wrappedTermTypeName n))},
     Core.Field {
       Core.fieldName = (Core.FieldName "object"),
-      Core.fieldTerm = (coreEncodeTerm (Core.nominalObject n))}]}))
+      Core.fieldTerm = (coreEncodeTerm (Core.wrappedTermObject n))}]}))
 
-coreEncodeNominalType :: (Core.Nominal Core.Type -> Core.Term)
-coreEncodeNominalType nt = (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra/core.Nominal"),
+coreEncodeWrappedType :: (Core.WrappedType -> Core.Term)
+coreEncodeWrappedType nt = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra/core.WrappedType"),
   Core.recordFields = [
     Core.Field {
       Core.fieldName = (Core.FieldName "typeName"),
-      Core.fieldTerm = (coreEncodeName (Core.nominalTypeName nt))},
+      Core.fieldTerm = (coreEncodeName (Core.wrappedTypeTypeName nt))},
     Core.Field {
       Core.fieldName = (Core.FieldName "object"),
-      Core.fieldTerm = (coreEncodeType (Core.nominalObject nt))}]}))
+      Core.fieldTerm = (coreEncodeType (Core.wrappedTypeObject nt))}]}))
 
 coreEncodeOptionalCases :: (Core.OptionalCases -> Core.Term)
 coreEncodeOptionalCases oc = (Core.TermRecord (Core.Record {
@@ -558,7 +558,7 @@ coreEncodeTerm x = case x of
     Core.injectionTypeName = (Core.Name "hydra/core.Term"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.FieldName "wrap"),
-      Core.fieldTerm = (coreEncodeNominalTerm v54)}}))
+      Core.fieldTerm = (coreEncodeWrappedTerm v54)}}))
   _ -> (Core.TermLiteral (Core.LiteralString "not implemented"))
 
 coreEncodeTupleProjection :: (Core.TupleProjection -> Core.Term)
@@ -574,9 +574,9 @@ coreEncodeTupleProjection tp = (Core.TermRecord (Core.Record {
 
 coreEncodeType :: (Core.Type -> Core.Term)
 coreEncodeType x = case x of
-  Core.TypeAnnotated v55 -> (Core.TermAnnotated (Core.Annotated {
-    Core.annotatedSubject = (coreEncodeType (Core.annotatedSubject v55)),
-    Core.annotatedAnnotation = (Core.annotatedAnnotation v55)}))
+  Core.TypeAnnotated v55 -> (Core.TermAnnotated (Core.AnnotatedTerm {
+    Core.annotatedTermSubject = (coreEncodeType (Core.annotatedTypeSubject v55)),
+    Core.annotatedTermAnnotation = (Core.annotatedTypeAnnotation v55)}))
   Core.TypeApplication v56 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Type"),
     Core.injectionField = Core.Field {
@@ -651,4 +651,4 @@ coreEncodeType x = case x of
     Core.injectionTypeName = (Core.Name "hydra/core.Type"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.FieldName "wrap"),
-      Core.fieldTerm = (coreEncodeNominalType v70)}}))
+      Core.fieldTerm = (coreEncodeWrappedType v70)}}))

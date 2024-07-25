@@ -55,7 +55,7 @@ addComment decl field = Java.ClassBodyDeclarationWithComments decl <$> commentsF
 
 boundTypeVariables :: Type -> [Name]
 boundTypeVariables typ = case typ of
-  TypeAnnotated (Annotated typ1 _) -> boundTypeVariables typ1
+  TypeAnnotated (AnnotatedType typ1 _) -> boundTypeVariables typ1
   TypeLambda (LambdaType v body) -> v:(boundTypeVariables body)
   _ -> []
 
@@ -643,7 +643,7 @@ encodeTerm aliases term0 = encodeInternal [] term0
     encode = encodeTerm aliases
     failAsLiteral msg = pure $ encodeLiteral $ LiteralString msg
     encodeInternal anns term = case term of
-        TermAnnotated (Annotated term' ann) -> encodeInternal (ann:anns) term'
+        TermAnnotated (AnnotatedTerm term' ann) -> encodeInternal (ann:anns) term'
 
         TermApplication app -> encodeApplication aliases app
 
@@ -702,7 +702,7 @@ encodeTerm aliases term0 = encodeInternal [] term0
 
         TermVariable name -> encodeVariable aliases name
 
-        TermWrap (Nominal tname arg) -> do
+        TermWrap (WrappedTerm tname arg) -> do
           jarg <- encode arg
           return $ javaConstructorCall (javaConstructorName (nameToJavaName aliases tname) Nothing) [jarg] Nothing
 
@@ -751,7 +751,7 @@ encodeType aliases t = case stripType t of
     TypeUnion (RowType name _ _) -> pure $
       Java.TypeReference $ nameToJavaReferenceType aliases True (javaTypeArgumentsForType t) name Nothing
     TypeVariable name -> forReference name
-    TypeWrap (Nominal name _) -> forReference name
+    TypeWrap (WrappedType name _) -> forReference name
     _ -> fail $ "can't encode unsupported type in Java: " ++ show t
   where
     forReference name = pure $ if isLambdaBoundVariable name
@@ -857,7 +857,7 @@ maybeLet aliases term cons = helper [] term
   where
     -- Note: let-flattening could be done at the top level for better efficiency
     helper anns term = case flattenLetTerms term of
-      TermAnnotated (Annotated term' ann) -> helper (ann:anns) term'
+      TermAnnotated (AnnotatedTerm term' ann) -> helper (ann:anns) term'
       TermLet (Let bindings env) -> do
           stmts <- L.concat <$> CM.mapM toDeclStatements sorted
           maybeLet aliasesWithRecursive env $ \aliases' tm stmts' -> cons aliases' (reannotate anns tm) (stmts ++ stmts')
@@ -927,11 +927,11 @@ noComment decl = Java.ClassBodyDeclarationWithComments decl Nothing
 
 reannotate anns term = case anns of
   [] -> term
-  (h:r) -> reannotate r $ TermAnnotated (Annotated term h)
+  (h:r) -> reannotate r $ TermAnnotated (AnnotatedTerm term h)
 
 requireAnnotatedType :: Term -> Flow (Graph) (Type)
 requireAnnotatedType term = case term of
-  TermAnnotated (Annotated _ ann) -> do
+  TermAnnotated (AnnotatedTerm _ ann) -> do
     g <- getState
     mt <- annotationClassTypeOf (graphAnnotations g) ann
     case mt of
@@ -944,7 +944,7 @@ toClassDecl isInner isSer aliases tparams elName t = case stripType t of
     TypeRecord rt -> declarationForRecordType isInner isSer aliases tparams elName $ rowTypeFields rt
     TypeUnion rt -> declarationForUnionType isSer aliases tparams elName $ rowTypeFields rt
     TypeLambda ut -> declarationForLambdaType isSer aliases tparams elName ut
-    TypeWrap (Nominal tname wt) -> declarationForRecordType isInner isSer aliases tparams elName
+    TypeWrap (WrappedType tname wt) -> declarationForRecordType isInner isSer aliases tparams elName
       [FieldType (FieldName "value") wt]
     -- Other types are not supported as class declarations, so we wrap them as record types.
     _ -> wrap t -- TODO: wrap and unwrap the corresponding terms as record terms.

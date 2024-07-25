@@ -16,8 +16,8 @@ eqA = (M.fromList [(Name "a", S.fromList [TypeClassEquality])])
 ordA = (M.fromList [(Name "a", S.fromList [TypeClassOrdering])])
 
 aT = Types.var "a" :: Type
-annotatedTermT = Types.apply (TypeVariable _Annotated) termT :: Type
-annotatedTypeT = Types.apply (TypeVariable _Annotated) typeT :: Type
+annotatedTermT = TypeVariable _AnnotatedTerm :: Type
+annotatedTypeT = TypeVariable _AnnotatedType :: Type
 applicationT = TypeVariable _Application :: Type
 applicationTypeT = TypeVariable _ApplicationType :: Type
 booleanT = Types.boolean
@@ -75,4 +75,6 @@ traceT = TypeVariable _Trace
 typeT = TypeVariable _Type :: Type
 typeVariantT = TypeVariable _TypeVariant :: Type
 unitT = Types.unit :: Type
+wrappedTermT = TypeVariable _WrappedTerm :: Type
+wrappedTypeT = TypeVariable _WrappedType :: Type
 xT = Types.var "x" :: Type

@@ -25,7 +25,7 @@ a --> b = function a b
 f @@ x = apply f x
 
 annot :: Kv -> Type -> Type
-annot ann t = TypeAnnotated $ Annotated t ann
+annot ann t = TypeAnnotated $ AnnotatedType t ann
 
 apply :: Type -> Type -> Type
 apply lhs rhs = TypeApplication (ApplicationType lhs rhs)
@@ -147,4 +147,4 @@ wrap :: Type -> Type
 wrap = wrapWithName placeholderName
 
 wrapWithName :: Name -> Type -> Type
-wrapWithName name t = TypeWrap $ Nominal name t
+wrapWithName name t = TypeWrap $ WrappedType name t

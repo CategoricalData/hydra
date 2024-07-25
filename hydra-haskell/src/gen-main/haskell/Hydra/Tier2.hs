@@ -29,7 +29,7 @@ getState = (Compute.Flow (\s0 -> \t0 ->
 -- | Get the annotated type of a given term, if any
 getTermType :: (Core.Term -> Maybe Core.Type)
 getTermType x = case x of
-  Core.TermAnnotated v275 -> (getTermType (Core.annotatedSubject v275))
+  Core.TermAnnotated v275 -> (getTermType (Core.annotatedTermSubject v275))
   Core.TermTyped v276 -> (Just (Core.termWithTypeType v276))
   _ -> Nothing
 

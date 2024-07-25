@@ -130,9 +130,9 @@ betaReduceType typ = do
           t' -> pure t'
       where
         reduceApp (ApplicationType lhs rhs) = case lhs of
-          TypeAnnotated (Annotated t' ann) -> do
+          TypeAnnotated (AnnotatedType t' ann) -> do
             a <- reduceApp $ ApplicationType t' rhs
-            return $ TypeAnnotated $ Annotated a ann
+            return $ TypeAnnotated $ AnnotatedType a ann
           TypeLambda (LambdaType v body) -> betaReduceType $ replaceFreeName v rhs body
           -- nominal types are transparent
           TypeVariable name -> do
@@ -160,16 +160,16 @@ contractTerm = rewriteTerm rewrite id
 -- Note: unused / untested
 etaReduceTerm :: Term -> Term
 etaReduceTerm term = case term of
-    TermAnnotated (Annotated term1 ann) -> TermAnnotated (Annotated (etaReduceTerm term1) ann)
+    TermAnnotated (AnnotatedTerm term1 ann) -> TermAnnotated (AnnotatedTerm (etaReduceTerm term1) ann)
     TermFunction (FunctionLambda l) -> reduceLambda l
     _ -> noChange
   where
     reduceLambda (Lambda v body) = case etaReduceTerm body of
-      TermAnnotated (Annotated body1 ann) -> reduceLambda (Lambda v body1)
+      TermAnnotated (AnnotatedTerm body1 ann) -> reduceLambda (Lambda v body1)
       TermApplication a -> reduceApplication a
         where
           reduceApplication (Application lhs rhs) = case etaReduceTerm rhs of
-            TermAnnotated (Annotated rhs1 ann) -> reduceApplication (Application lhs rhs1)
+            TermAnnotated (AnnotatedTerm rhs1 ann) -> reduceApplication (Application lhs rhs1)
             TermVariable v1 -> if v == v1 && isFreeIn v lhs
               then etaReduceTerm lhs
               else noChange

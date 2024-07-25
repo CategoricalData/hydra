@@ -41,8 +41,8 @@ coreEncodingModule = Module (Namespace "hydra/coreEncoding") elements [] tier0Mo
      Base.el coreEncodeLiteralTypeDef,
      Base.el coreEncodeMapTypeDef,
      Base.el coreEncodeNameDef,
-     Base.el coreEncodeNominalTermDef,
-     Base.el coreEncodeNominalTypeDef,
+     Base.el coreEncodeWrappedTermDef,
+     Base.el coreEncodeWrappedTypeDef,
      Base.el coreEncodeOptionalCasesDef,
      Base.el coreEncodeProjectionDef,
      Base.el coreEncodeRecordDef,
@@ -105,13 +105,13 @@ encodedMap = variant _Term _Term_map
 encodedName :: Name -> Term
 encodedName = wrap _Name . string . unName
 
-encodedNominal :: Name -> Term -> Term
-encodedNominal name = encodedNominalRaw (encodedName name)
+encodedWrappedTerm :: Name -> Term -> Term
+encodedWrappedTerm name = encodedWrappedTermRaw (encodedName name)
 
-encodedNominalRaw :: Term -> Term -> Term
-encodedNominalRaw name term = variant _Term _Term_wrap $ record _Nominal [
-  Field _Nominal_typeName name,
-  Field _Nominal_object term]
+encodedWrappedTermRaw :: Term -> Term -> Term
+encodedWrappedTermRaw name term = variant _Term _Term_wrap $ record _WrappedTerm [
+  Field _WrappedTerm_typeName name,
+  Field _WrappedTerm_object term]
 
 encodedOptional :: Term -> Term
 encodedOptional = variant _Term _Term_optional
@@ -135,17 +135,17 @@ encodedUnion = variant _Term _Term_union
 encodedVariant :: Name -> FieldName -> Term -> Term
 encodedVariant tname fname term = encodedUnion $ encodedInjection tname fname term
 
-coreEncodeAnnotatedTermDef :: Definition (Annotated Term -> Term)
+coreEncodeAnnotatedTermDef :: Definition (AnnotatedTerm -> Term)
 coreEncodeAnnotatedTermDef = coreEncodingDefinition "AnnotatedTerm" annotatedTermT $
-  lambda "a" $ variant _Term _Term_annotated $ record _Annotated [
-    Field _Annotated_subject $ ref coreEncodeTermDef @@ (project _Annotated _Annotated_subject @@ var "a"),
-    Field _Annotated_annotation $ project _Annotated _Annotated_annotation @@ var "a"]
+  lambda "a" $ variant _Term _Term_annotated $ record _AnnotatedTerm [
+    Field _AnnotatedTerm_subject $ ref coreEncodeTermDef @@ (project _AnnotatedTerm _AnnotatedTerm_subject @@ var "a"),
+    Field _AnnotatedTerm_annotation $ project _AnnotatedTerm _AnnotatedTerm_annotation @@ var "a"]
 
-coreEncodeAnnotatedTypeDef :: Definition (Annotated Type -> Term)
+coreEncodeAnnotatedTypeDef :: Definition (AnnotatedType -> Term)
 coreEncodeAnnotatedTypeDef = coreEncodingDefinition "AnnotatedType" annotatedTypeT $
-  lambda "at" $ variant _Term _Term_annotated $ record _Annotated [
-    Field _Annotated_subject $ ref coreEncodeTypeDef @@ (project _Annotated _Annotated_subject @@ var "at"),
-    Field _Annotated_annotation $ project _Annotated _Annotated_annotation @@ var "at"]
+  lambda "at" $ variant _Term _Term_annotated $ record _AnnotatedTerm [
+    Field _AnnotatedTerm_subject $ ref coreEncodeTypeDef @@ (project _AnnotatedType _AnnotatedType_subject @@ var "at"),
+    Field _AnnotatedTerm_annotation $ project _AnnotatedType _AnnotatedType_annotation @@ var "at"]
 
 coreEncodeApplicationDef :: Definition (Application -> Term)
 coreEncodeApplicationDef = coreEncodingDefinition "Application" applicationT $
@@ -183,12 +183,12 @@ coreEncodeEliminationDef = coreEncodingDefinition "Elimination" eliminationT $
 coreEncodeFieldDef :: Definition (Field -> Term)
 coreEncodeFieldDef = coreEncodingDefinition "Field" fieldT $
   lambda "f" $ encodedRecord _Field [
-    (_Field_name, encodedNominal _FieldName $ encodedString $ (unwrap _FieldName @@ (project _Field _Field_name @@ var "f"))),
+    (_Field_name, encodedWrappedTerm _FieldName $ encodedString $ (unwrap _FieldName @@ (project _Field _Field_name @@ var "f"))),
     (_Field_term, ref coreEncodeTermDef @@ (project _Field _Field_term @@ var "f"))]
 
 coreEncodeFieldNameDef :: Definition (FieldName -> Term)
 coreEncodeFieldNameDef = coreEncodingDefinition "FieldName" (TypeVariable _FieldName) $
-  lambda "fn" $ encodedNominal _FieldName $ encodedString (unwrap _FieldName @@ var "fn")
+  lambda "fn" $ encodedWrappedTerm _FieldName $ encodedString (unwrap _FieldName @@ var "fn")
 
 coreEncodeFieldTypeDef :: Definition (FieldType -> Term)
 coreEncodeFieldTypeDef = coreEncodingDefinition "FieldType" fieldTypeT $
@@ -318,19 +318,19 @@ coreEncodeMapTypeDef = coreEncodingDefinition "MapType" mapTypeT $
 
 coreEncodeNameDef :: Definition (Name -> Term)
 coreEncodeNameDef = coreEncodingDefinition "Name" nameT $
-  lambda "fn" $ encodedNominal _Name $ encodedString (unwrap _Name @@ var "fn")
+  lambda "fn" $ encodedWrappedTerm _Name $ encodedString (unwrap _Name @@ var "fn")
 
-coreEncodeNominalTermDef :: Definition (Nominal Term -> Term)
-coreEncodeNominalTermDef = coreEncodingDefinition "NominalTerm" (Types.apply (TypeVariable _Nominal) termT) $
-  lambda "n" $ encodedRecord _Nominal [
-    (_Nominal_typeName, ref coreEncodeNameDef @@ (project _Nominal _Nominal_typeName @@ var "n")),
-    (_Nominal_object, ref coreEncodeTermDef @@ (project _Nominal _Nominal_object @@ var "n"))]
+coreEncodeWrappedTermDef :: Definition (WrappedTerm -> Term)
+coreEncodeWrappedTermDef = coreEncodingDefinition "WrappedTerm" wrappedTermT $
+  lambda "n" $ encodedRecord _WrappedTerm [
+    (_WrappedTerm_typeName, ref coreEncodeNameDef @@ (project _WrappedTerm _WrappedTerm_typeName @@ var "n")),
+    (_WrappedTerm_object, ref coreEncodeTermDef @@ (project _WrappedTerm _WrappedTerm_object @@ var "n"))]
 
-coreEncodeNominalTypeDef :: Definition (Nominal Type -> Term)
-coreEncodeNominalTypeDef = coreEncodingDefinition "NominalType" (Types.apply (TypeVariable _Nominal) typeT) $
-  lambda "nt" $ encodedRecord _Nominal [
-    (_Nominal_typeName, ref coreEncodeNameDef @@ (project _Nominal _Nominal_typeName @@ var "nt")),
-    (_Nominal_object, ref coreEncodeTypeDef @@ (project _Nominal _Nominal_object @@ var "nt"))]
+coreEncodeWrappedTypeDef :: Definition (WrappedType -> Term)
+coreEncodeWrappedTypeDef = coreEncodingDefinition "WrappedType" wrappedTypeT $
+  lambda "nt" $ encodedRecord _WrappedType [
+    (_WrappedType_typeName, ref coreEncodeNameDef @@ (project _WrappedType _WrappedType_typeName @@ var "nt")),
+    (_WrappedType_object, ref coreEncodeTypeDef @@ (project _WrappedType _WrappedType_object @@ var "nt"))]
 
 coreEncodeOptionalCasesDef :: Definition (OptionalCases -> Term)
 coreEncodeOptionalCasesDef = coreEncodingDefinition "OptionalCases" (TypeVariable _OptionalCases) $
@@ -386,7 +386,7 @@ coreEncodeTermDef = coreEncodingDefinition "Term" termT $
     -- _ Term_stream
     ecase _Term_union (ref coreEncodeInjectionDef),
     ecase _Term_variable (ref coreEncodeNameDef),
-    ecase _Term_wrap (ref coreEncodeNominalTermDef)]
+    ecase _Term_wrap (ref coreEncodeWrappedTermDef)]
   where
     ecase = encodedCase _Term
     ecase' fname = Field fname . lambda "v" . encodedVariant _Term fname
@@ -400,9 +400,9 @@ coreEncodeTupleProjectionDef = coreEncodingDefinition "TupleProjection" (TypeVar
 coreEncodeTypeDef :: Definition (Type -> Term)
 coreEncodeTypeDef = coreEncodingDefinition "Type" typeT $
   match _Type Nothing [
-    Field _Type_annotated $ lambda "v" $ variant _Term _Term_annotated $ record _Annotated [
-      Field _Annotated_subject $ ref coreEncodeTypeDef @@ (project _Annotated _Annotated_subject @@ var "v"),
-      Field _Annotated_annotation $ project _Annotated _Annotated_annotation @@ var "v"],
+    Field _Type_annotated $ lambda "v" $ variant _Term _Term_annotated $ record _AnnotatedTerm [
+      Field _AnnotatedTerm_subject $ ref coreEncodeTypeDef @@ (project _AnnotatedType _AnnotatedType_subject @@ var "v"),
+      Field _AnnotatedTerm_annotation $ project _AnnotatedType _AnnotatedType_annotation @@ var "v"],
     csref _Type_application coreEncodeApplicationTypeDef,
     csref _Type_function coreEncodeFunctionTypeDef,
     csref _Type_lambda coreEncodeLambdaTypeDef,
@@ -417,7 +417,7 @@ coreEncodeTypeDef = coreEncodingDefinition "Type" typeT $
     cs _Type_sum $ encodedList $ primitive _lists_map @@ ref coreEncodeTypeDef @@ var "v",
     csref _Type_union coreEncodeRowTypeDef,
     csref _Type_variable coreEncodeNameDef,
-    csref _Type_wrap coreEncodeNominalTypeDef]
+    csref _Type_wrap coreEncodeWrappedTypeDef]
   where
     cs fname term = Field fname $ lambda "v" $ encodedVariant _Type fname term
     csref fname fun = cs fname (ref fun @@ var "v")

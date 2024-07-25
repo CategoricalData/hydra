@@ -168,7 +168,7 @@ subtermsDef = tier1Definition "subterms" $
   doc "Find the children of a given term" $
   function termT (listT termT) $
   match _Term Nothing [
-    _Term_annotated>>: lambda "at" $ list [Core.annotatedSubject @@ var "at"],
+    _Term_annotated>>: lambda "at" $ list [Core.annotatedTermSubject @@ var "at"],
     _Term_application>>: lambda "p" $ list [
       Core.applicationFunction @@ var "p",
       Core.applicationArgument @@ var "p"],
@@ -198,14 +198,14 @@ subtermsDef = tier1Definition "subterms" $
     _Term_typed>>: lambda "tt" $ list [Core.termWithTypeTerm @@ var "tt"],
     _Term_union>>: lambda "ut" $ list [Core.fieldTerm @@ (Core.injectionField @@ var "ut")],
     _Term_variable>>: constant $ list [],
-    _Term_wrap>>: lambda "n" $ list [Core.nominalObject @@ var "n"]]
+    _Term_wrap>>: lambda "n" $ list [Core.wrappedTermObject @@ var "n"]]
 
 subtypesDef :: Definition (Type -> [Type])
 subtypesDef = tier1Definition "subtypes" $
   doc "Find the children of a given type expression" $
   function typeT (listT typeT) $
   match _Type Nothing [
-    _Type_annotated>>: lambda "at" $ list [Core.annotatedSubject @@ var "at"],
+    _Type_annotated>>: lambda "at" $ list [Core.annotatedTypeSubject @@ var "at"],
     _Type_application>>: lambda "at" $ list [
       Core.applicationTypeFunction @@ var "at",
       Core.applicationTypeArgument @@ var "at"],
@@ -225,7 +225,7 @@ subtypesDef = tier1Definition "subtypes" $
     _Type_sum>>: lambda "st" $ var "st",
     _Type_union>>: lambda "rt" (Lists.map @@ Core.fieldTypeType @@ (Core.rowTypeFields @@ var "rt")),
     _Type_variable>>: constant $ list [],
-    _Type_wrap>>: lambda "nt" $ list [Core.nominalObject @@ var "nt"]]
+    _Type_wrap>>: lambda "nt" $ list [Core.wrappedTypeObject @@ var "nt"]]
 
 unqualifyNameDef :: Definition (QualifiedName -> Name)
 unqualifyNameDef = tier1Definition "unqualifyName" $

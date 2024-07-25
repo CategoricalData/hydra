@@ -21,7 +21,7 @@ graphToSchema g = M.fromList <$> (mapM toPair $ M.toList $ graphElements g)
 --   exactly one subterm is produced for constructors which do not otherwise require one, e.g. in lists and optionals.
 insantiateTemplate :: Bool -> GraphSchema Kv -> Type -> Flow s (Term)
 insantiateTemplate minimal schema t = case t of
-    TypeAnnotated (Annotated t _) -> inst t
+    TypeAnnotated (AnnotatedType t _) -> inst t
     TypeApplication _ -> noPoly
     TypeFunction _ -> noPoly
     TypeLambda _ -> noPoly
@@ -80,9 +80,9 @@ insantiateTemplate minimal schema t = case t of
     TypeVariable tname -> case M.lookup tname schema of
       Just t' -> inst t'
       Nothing -> fail $ "Type variable " ++ show tname ++ " not found in schema"
-    TypeWrap (Nominal tname t') -> do
+    TypeWrap (WrappedType tname t') -> do
       e <- inst t'
-      return $ TermWrap $ Nominal tname e
+      return $ TermWrap $ WrappedTerm tname e
   where
     inst = insantiateTemplate minimal schema
     noPoly = fail "Polymorphic and function types are not currently supported"

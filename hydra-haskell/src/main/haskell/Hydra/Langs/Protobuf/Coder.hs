@@ -295,5 +295,5 @@ readBooleanAnnotation key typ = do
 -- Note: this should probably be done in the term adapters
 simplifyType :: Type -> Type
 simplifyType typ = case stripType typ of
-  TypeWrap (Nominal _ t) -> simplifyType t
+  TypeWrap (WrappedType _ t) -> simplifyType t
   t -> t

@@ -120,7 +120,7 @@ parsePattern pat = withTrace "parse path pattern" $ do
               TermUnion (Injection _ field) -> if unFieldName (fieldName field) == step
                 then evalStep step $ fieldTerm field
                 else pure [] -- Note: not checking the step against the union type; assuming it is correct but that it references a field unused by the injection
-              TermWrap (Nominal _ term') -> evalStep step term'
+              TermWrap (WrappedTerm _ term') -> evalStep step term'
               _ -> fail $ "Can't traverse through term for step " ++ show step ++ ": " ++ show term
 
     -- TODO: replace this with a more standard function

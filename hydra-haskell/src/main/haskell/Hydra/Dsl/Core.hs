@@ -6,16 +6,27 @@ import Hydra.Dsl.Base as Base
 import qualified Data.Map as M
 
 
-annotated :: Datum x -> Datum Kv -> Datum (Annotated x)
-annotated subject annotation = Base.record _Annotated [
-    _Annotated_subject>>: subject,
-    _Annotated_annotation>>: annotation]
+annotatedTerm :: Datum Term -> Datum Kv -> Datum AnnotatedTerm
+annotatedTerm subject annotation = Base.record _AnnotatedTerm [
+    _AnnotatedTerm_subject>>: subject,
+    _AnnotatedTerm_annotation>>: annotation]
 
-annotatedSubject :: Datum (Annotated x -> x)
-annotatedSubject = project _Annotated _Annotated_subject
+annotatedTermSubject :: Datum (AnnotatedTerm -> Term)
+annotatedTermSubject = project _AnnotatedTerm _AnnotatedTerm_subject
 
-annotatedAnnotation :: Datum (Annotated x -> Kv)
-annotatedAnnotation = project _Annotated _Annotated_annotation
+annotatedTermAnnotation :: Datum (AnnotatedTerm -> Kv)
+annotatedTermAnnotation = project _AnnotatedTerm _AnnotatedTerm_annotation
+
+annotatedType :: Datum Type -> Datum Kv -> Datum AnnotatedType
+annotatedType subject annotation = Base.record _AnnotatedType [
+    _AnnotatedType_subject>>: subject,
+    _AnnotatedType_annotation>>: annotation]
+
+annotatedTypeSubject :: Datum (AnnotatedType -> Type)
+annotatedTypeSubject = project _AnnotatedType _AnnotatedType_subject
+
+annotatedTypeAnnotation :: Datum (AnnotatedType -> Kv)
+annotatedTypeAnnotation = project _AnnotatedType _AnnotatedType_annotation
 
 application :: Datum (Term) -> Datum (Term) -> Datum (Application)
 application function argument = Base.record _Application [
@@ -142,17 +153,6 @@ mapTypeKeys = project _MapType _MapType_keys
 mapTypeValues :: Datum (MapType -> Type)
 mapTypeValues = project _MapType _MapType_values
 
-nominal :: Datum Name -> Datum x -> Datum (Nominal x)
-nominal typeName object = Base.record _Nominal [
-    _Nominal_typeName>>: typeName,
-    _Nominal_object>>: object]
-
-nominalTypeName :: Datum (Nominal x -> Name)
-nominalTypeName = project _Nominal _Nominal_typeName
-
-nominalObject :: Datum (Nominal x -> x)
-nominalObject = project _Nominal _Nominal_object
-
 optionalCases :: Datum (Term) -> Datum (Term) -> Datum (OptionalCases)
 optionalCases nothing just = Base.record _OptionalCases [
     _OptionalCases_nothing>>: nothing,
@@ -207,3 +207,25 @@ sumTerm = project _Sum _Sum_term
 
 termWithTypeTerm :: Datum (TermWithType -> Term)
 termWithTypeTerm = project _TermWithType _TermWithType_term
+
+wrappedTerm :: Datum Name -> Datum Term -> Datum WrappedTerm
+wrappedTerm typeName object = Base.record _WrappedTerm [
+    _WrappedTerm_typeName>>: typeName,
+    _WrappedTerm_object>>: object]
+
+wrappedTermTypeName :: Datum (WrappedTerm -> Name)
+wrappedTermTypeName = project _WrappedTerm _WrappedTerm_typeName
+
+wrappedTermObject :: Datum (WrappedTerm -> Term)
+wrappedTermObject = project _WrappedTerm _WrappedTerm_object
+
+wrappedType :: Datum Name -> Datum Type -> Datum WrappedType
+wrappedType typeName object = Base.record _WrappedType [
+    _WrappedType_typeName>>: typeName,
+    _WrappedType_object>>: object]
+
+wrappedTypeTypeName :: Datum (WrappedType -> Name)
+wrappedTypeTypeName = project _WrappedType _WrappedType_typeName
+
+wrappedTypeObject :: Datum (WrappedType -> Type)
+wrappedTypeObject = project _WrappedType _WrappedType_object

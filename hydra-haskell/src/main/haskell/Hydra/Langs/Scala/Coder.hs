@@ -165,7 +165,7 @@ encodeTerm term = case stripTerm term of
     TermMap m -> sapply (sname "Map") <$> CM.mapM toPair (M.toList m)
       where
         toPair (k, v) = sassign <$> encodeTerm k <*> encodeTerm v
-    TermWrap (Nominal _ term') -> encodeTerm term'
+    TermWrap (WrappedTerm _ term') -> encodeTerm term'
     TermOptional m -> case m of
       Nothing -> pure $ sname "None"
       Just t -> (\s -> sapply (sname "Some") [s]) <$> encodeTerm t

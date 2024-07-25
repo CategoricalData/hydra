@@ -32,7 +32,7 @@ infixr 0 >:
 n >: t = field n t
 
 annot :: Kv -> Term -> Term
-annot ann t = TermAnnotated $ Annotated t ann
+annot ann t = TermAnnotated $ AnnotatedTerm t ann
 
 apply :: Term -> Term -> Term
 apply func arg = TermApplication $ Application func arg
@@ -205,4 +205,4 @@ withVariant :: Name -> FieldName -> Term
 withVariant tname = constant . unitVariant tname
 
 wrap :: Name -> Term -> Term
-wrap name term = TermWrap $ Nominal name term
+wrap name term = TermWrap $ WrappedTerm name term

@@ -44,7 +44,7 @@ fullyStripTermDef = stripDefinition "fullyStripTerm" $
     doc "Strip all annotations from a term, including first-class type annotations" $
     function termT termT $
       lambda "t" (match _Term (Just $ var "t") [
-        Case _Term_annotated --> ref fullyStripTermDef <.> (project _Annotated _Annotated_subject),
+        Case _Term_annotated --> ref fullyStripTermDef <.> (project _AnnotatedTerm _AnnotatedTerm_subject),
         Case _Term_typed --> ref fullyStripTermDef <.> (project _TermWithType _TermWithType_term)
         ] @@ (var "t"))
 
@@ -53,7 +53,7 @@ stripTermDef = stripDefinition "stripTerm" $
     doc "Strip all annotations from a term" $
     function termT termT $
       lambda "t" (match _Term (Just $ var "t") [
-        Case _Term_annotated --> ref stripTermDef <.> (project _Annotated _Annotated_subject)
+        Case _Term_annotated --> ref stripTermDef <.> (project _AnnotatedTerm _AnnotatedTerm_subject)
         ] @@ (var "t"))
 
 stripTypeDef :: Definition (Type -> Type)
@@ -61,7 +61,7 @@ stripTypeDef = stripDefinition "stripType" $
     doc "Strip all annotations from a term" $
     function typeT typeT $
       lambda "t" (match _Type (Just $ var "t") [
-        Case _Type_annotated --> ref stripTypeDef <.> (project _Annotated _Annotated_subject)
+        Case _Type_annotated --> ref stripTypeDef <.> (project _AnnotatedType _AnnotatedType_subject)
         ] @@ (var "t"))
 
 stripTypeParametersDef :: Definition (Type -> Type)
