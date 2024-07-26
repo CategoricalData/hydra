@@ -6,11 +6,11 @@ import hydra.lib.literals.ShowString;
 
 
 public interface Literals {
-    static <A> Term<A> showInt32() {
-        return new ShowInt32<A>().term();
+    static Term showInt32() {
+        return new ShowInt32().term();
     }
 
-    static <A> Term<A> showString() {
-        return new ShowString<A>().term();
+    static Term showString() {
+        return new ShowString().term();
     }
 }

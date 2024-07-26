@@ -7,14 +7,14 @@ import java.io.Serializable;
 /**
  * A set of (possibly recursive) 'let' bindings
  */
-public class Let<A> implements Serializable {
+public class Let implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Let");
   
-  public final java.util.Map<hydra.core.Name, hydra.core.Term<A>> bindings;
+  public final java.util.Map<hydra.core.Name, hydra.core.Term> bindings;
   
-  public final hydra.core.Term<A> environment;
+  public final hydra.core.Term environment;
   
-  public Let (java.util.Map<hydra.core.Name, hydra.core.Term<A>> bindings, hydra.core.Term<A> environment) {
+  public Let (java.util.Map<hydra.core.Name, hydra.core.Term> bindings, hydra.core.Term environment) {
     java.util.Objects.requireNonNull((bindings));
     java.util.Objects.requireNonNull((environment));
     this.bindings = bindings;
@@ -35,12 +35,12 @@ public class Let<A> implements Serializable {
     return 2 * bindings.hashCode() + 3 * environment.hashCode();
   }
   
-  public Let withBindings(java.util.Map<hydra.core.Name, hydra.core.Term<A>> bindings) {
+  public Let withBindings(java.util.Map<hydra.core.Name, hydra.core.Term> bindings) {
     java.util.Objects.requireNonNull((bindings));
     return new Let(bindings, environment);
   }
   
-  public Let withEnvironment(hydra.core.Term<A> environment) {
+  public Let withEnvironment(hydra.core.Term environment) {
     java.util.Objects.requireNonNull((environment));
     return new Let(bindings, environment);
   }

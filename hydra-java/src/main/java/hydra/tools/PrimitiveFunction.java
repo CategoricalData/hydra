@@ -11,18 +11,18 @@ import java.util.List;
 import java.util.function.Function;
 
 
-public abstract class PrimitiveFunction<A> {
+public abstract class PrimitiveFunction {
     public abstract Name name();
 
-    public abstract Type<A> type();
+    public abstract Type type();
 
-    protected abstract Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation();
+    protected abstract Function<List<Term>, Flow<Graph, Term>> implementation();
 
-    public Term<A> term() {
+    public Term term() {
         return Terms.primitive(name());
     }
 
-    public Primitive<A> toNative() {
-        return new Primitive<>(name(), type(), implementation());
+    public Primitive toNative() {
+        return new Primitive(name(), type(), implementation());
     }
 }

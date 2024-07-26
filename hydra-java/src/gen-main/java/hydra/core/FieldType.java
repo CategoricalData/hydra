@@ -7,14 +7,14 @@ import java.io.Serializable;
 /**
  * The name and type of a field
  */
-public class FieldType<A> implements Serializable {
+public class FieldType implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.FieldType");
   
   public final hydra.core.FieldName name;
   
-  public final hydra.core.Type<A> type;
+  public final hydra.core.Type type;
   
-  public FieldType (hydra.core.FieldName name, hydra.core.Type<A> type) {
+  public FieldType (hydra.core.FieldName name, hydra.core.Type type) {
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((type));
     this.name = name;
@@ -40,7 +40,7 @@ public class FieldType<A> implements Serializable {
     return new FieldType(name, type);
   }
   
-  public FieldType withType(hydra.core.Type<A> type) {
+  public FieldType withType(hydra.core.Type type) {
     java.util.Objects.requireNonNull((type));
     return new FieldType(name, type);
   }

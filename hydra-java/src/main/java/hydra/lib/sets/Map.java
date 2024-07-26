@@ -20,21 +20,21 @@ import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.set;
 
 
-public class Map<A> extends PrimitiveFunction<A> {
+public class Map extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/sets.map");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("x", lambda("y",
                 function(function("x", "y"), set("x"), set("y"))));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> {
-            Term<A> mapping = args.get(0);
+            Term mapping = args.get(0);
             return Flows.map(Expect.set(Flows::pure, args.get(1)),
                 arg -> Terms.set(arg.stream().map(e -> Terms.apply(mapping, e)).collect(Collectors.toSet())));
         };

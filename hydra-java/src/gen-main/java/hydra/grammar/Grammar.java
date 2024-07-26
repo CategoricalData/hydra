@@ -10,9 +10,6 @@ import java.io.Serializable;
 public class Grammar implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Grammar");
   
-  /**
-   * An enhanced Backus-Naur form (BNF) grammar
-   */
   public final java.util.List<hydra.grammar.Production> value;
   
   public Grammar (java.util.List<hydra.grammar.Production> value) {

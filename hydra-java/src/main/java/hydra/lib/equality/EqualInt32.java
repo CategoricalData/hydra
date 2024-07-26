@@ -5,7 +5,7 @@ import hydra.lib.PrimitiveType;
 import java.util.function.Function;
 
 
-public class EqualInt32<A> extends EqualityFunction<A, Integer> {
+public class EqualInt32 extends EqualityFunction<Integer> {
     public EqualInt32() {
         super(PrimitiveType.int32(), Relation.EQUALS);
     }

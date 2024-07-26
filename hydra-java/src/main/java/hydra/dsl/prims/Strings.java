@@ -8,23 +8,23 @@ import hydra.lib.strings.ToLower;
 import hydra.lib.strings.ToUpper;
 
 public interface Strings {
-    static <A> Term<A> cat() {
+    static Term cat() {
         return new Cat().term();
     }
 
-    static <A> Term<A> length() {
+    static Term length() {
         return new Length().term();
     }
 
-    static <A> Term<A> splitOn() {
+    static Term splitOn() {
         return new SplitOn().term();
     }
 
-    static <A> Term<A> toLower() {
+    static Term toLower() {
         return new ToLower().term();
     }
 
-    static <A> Term<A> toUpper() {
+    static Term toUpper() {
         return new ToUpper().term();
     }
 }

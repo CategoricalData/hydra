@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A function abstraction (lambda)
  */
-public class Lambda<A> implements Serializable {
+public class Lambda implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Lambda");
   
   /**
@@ -18,9 +18,9 @@ public class Lambda<A> implements Serializable {
   /**
    * The body of the lambda
    */
-  public final hydra.core.Term<A> body;
+  public final hydra.core.Term body;
   
-  public Lambda (hydra.core.Name parameter, hydra.core.Term<A> body) {
+  public Lambda (hydra.core.Name parameter, hydra.core.Term body) {
     java.util.Objects.requireNonNull((parameter));
     java.util.Objects.requireNonNull((body));
     this.parameter = parameter;
@@ -46,7 +46,7 @@ public class Lambda<A> implements Serializable {
     return new Lambda(parameter, body);
   }
   
-  public Lambda withBody(hydra.core.Term<A> body) {
+  public Lambda withBody(hydra.core.Term body) {
     java.util.Objects.requireNonNull((body));
     return new Lambda(parameter, body);
   }

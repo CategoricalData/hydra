@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A query pattern which matches within a designated component subgraph
  */
-public class GraphPattern<A> implements Serializable {
+public class GraphPattern implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/query.GraphPattern");
   
   /**
@@ -18,9 +18,9 @@ public class GraphPattern<A> implements Serializable {
   /**
    * The patterns to match within the subgraph
    */
-  public final java.util.List<hydra.query.Pattern<A>> patterns;
+  public final java.util.List<hydra.query.Pattern> patterns;
   
-  public GraphPattern (hydra.core.Name graph, java.util.List<hydra.query.Pattern<A>> patterns) {
+  public GraphPattern (hydra.core.Name graph, java.util.List<hydra.query.Pattern> patterns) {
     java.util.Objects.requireNonNull((graph));
     java.util.Objects.requireNonNull((patterns));
     this.graph = graph;
@@ -46,7 +46,7 @@ public class GraphPattern<A> implements Serializable {
     return new GraphPattern(graph, patterns);
   }
   
-  public GraphPattern withPatterns(java.util.List<hydra.query.Pattern<A>> patterns) {
+  public GraphPattern withPatterns(java.util.List<hydra.query.Pattern> patterns) {
     java.util.Objects.requireNonNull((patterns));
     return new GraphPattern(graph, patterns);
   }

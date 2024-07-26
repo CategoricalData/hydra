@@ -7,14 +7,14 @@ import java.io.Serializable;
 /**
  * A record, or labeled tuple; a map of field names to terms
  */
-public class Record<A> implements Serializable {
+public class Record implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Record");
   
   public final hydra.core.Name typeName;
   
-  public final java.util.List<hydra.core.Field<A>> fields;
+  public final java.util.List<hydra.core.Field> fields;
   
-  public Record (hydra.core.Name typeName, java.util.List<hydra.core.Field<A>> fields) {
+  public Record (hydra.core.Name typeName, java.util.List<hydra.core.Field> fields) {
     java.util.Objects.requireNonNull((typeName));
     java.util.Objects.requireNonNull((fields));
     this.typeName = typeName;
@@ -40,7 +40,7 @@ public class Record<A> implements Serializable {
     return new Record(typeName, fields);
   }
   
-  public Record withFields(java.util.List<hydra.core.Field<A>> fields) {
+  public Record withFields(java.util.List<hydra.core.Field> fields) {
     java.util.Objects.requireNonNull((fields));
     return new Record(typeName, fields);
   }

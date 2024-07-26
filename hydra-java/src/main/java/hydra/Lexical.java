@@ -22,17 +22,17 @@ public class Lexical {
     /**
      * Get a primitive from a graph by name; the primitive is not required to exist.
      */
-    public static <A> Opt<Primitive<A>> lookupPrimitive(Graph<A> g, Name name) {
+    public static  Opt<Primitive> lookupPrimitive(Graph g, Name name) {
         return Opt.ofNullable(g.primitives.get(name));
     }
 
     /**
      * Get a primitive from the current graph by name; the primitive is required to exist.
      */
-    public static <A> Flow<Graph<A>, Primitive<A>> requirePrimitive(Name name) {
+    public static  Flow<Graph, Primitive> requirePrimitive(Name name) {
         return bind(getState(), g -> {
-            Opt<Primitive<A>> mprim = lookupPrimitive(g, name);
-            return mprim.<Flow<Graph<A>, Primitive<A>>>map(Flows::pure)
+            Opt<Primitive> mprim = lookupPrimitive(g, name);
+            return mprim.<Flow<Graph, Primitive>>map(Flows::pure)
                 .orElseGet(() -> fail("no such primitive function: " + name.value));
         });
     }

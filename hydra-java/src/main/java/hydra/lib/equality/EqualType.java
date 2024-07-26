@@ -6,16 +6,16 @@ import hydra.lib.PrimitiveType;
 import java.util.function.Function;
 
 
-public class EqualType<A> extends EqualityFunction<A, Type<A>> {
+public class EqualType extends EqualityFunction<Type> {
     public EqualType() {
         super(PrimitiveType.type(), Relation.EQUALS);
     }
 
-    public static <A> Function<Type<A>, Boolean> apply(Type<A> second) {
+    public static  Function<Type, Boolean> apply(Type second) {
         return first -> apply(first, second);
     }
 
-    public static <A> Boolean apply(Type<A> first, Type<A> second) {
+    public static  Boolean apply(Type first, Type second) {
         return first.equals(second);
     }
 }

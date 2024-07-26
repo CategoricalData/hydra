@@ -6,7 +6,7 @@ import hydra.util.Opt;
  * Test cases for primitive functions
  */
 public interface TestSuite {
-  static hydra.testing.TestGroup<hydra.compute.Kv> allTests() {
+  static hydra.testing.TestGroup allTests() {
     return new hydra.testing.TestGroup("All tests", Opt.empty(), java.util.Arrays.asList(
       new hydra.testing.TestGroup("hydra/lib/lists primitives", Opt.empty(), java.util.Arrays.asList(
         new hydra.testing.TestGroup("apply", Opt.empty(), java.util.Arrays.asList(), java.util.Arrays.asList(new hydra.testing.TestCase(Opt.empty(), new hydra.testing.EvaluationStyle.Eager(), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra/lib/lists.apply"))), new hydra.core.Term.List(java.util.Arrays.asList(

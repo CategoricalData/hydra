@@ -5,7 +5,7 @@ import hydra.lib.PrimitiveType;
 import java.util.function.Function;
 
 
-public class EqualUint8<A> extends EqualityFunction<A, Byte> {
+public class EqualUint8 extends EqualityFunction<Byte> {
     public EqualUint8() {
         super(PrimitiveType.uint8(), Relation.EQUALS);
     }

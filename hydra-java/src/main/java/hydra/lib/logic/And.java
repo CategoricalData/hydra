@@ -17,18 +17,18 @@ import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 
 
-public class And<A> extends PrimitiveFunction<A> {
+public class And extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/logic.and");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return function(boolean_(), boolean_(), boolean_());
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map2(
                 Expect.boolean_(args.get(0)),
                 Expect.boolean_(args.get(1)),

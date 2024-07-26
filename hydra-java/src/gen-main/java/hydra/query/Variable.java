@@ -10,9 +10,6 @@ import java.io.Serializable;
 public class Variable implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/query.Variable");
   
-  /**
-   * A query variable
-   */
   public final String value;
   
   public Variable (String value) {

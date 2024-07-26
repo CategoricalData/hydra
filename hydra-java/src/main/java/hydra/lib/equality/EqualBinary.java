@@ -5,7 +5,7 @@ import hydra.lib.PrimitiveType;
 import java.util.function.Function;
 
 
-public class EqualBinary<A> extends EqualityFunction<A, String> {
+public class EqualBinary extends EqualityFunction<String> {
     public EqualBinary() {
         super(PrimitiveType.binary(), Relation.EQUALS);
     }

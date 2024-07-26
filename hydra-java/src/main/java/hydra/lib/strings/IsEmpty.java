@@ -18,18 +18,18 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.string;
 
 
-public class IsEmpty<A> extends PrimitiveFunction<A> {
+public class IsEmpty extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/strings.isEmpty");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return function(string(), boolean_());
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> map(Expect.string(args.get(0)), s -> Terms.boolean_(apply(s)));
     }
 

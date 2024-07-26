@@ -6,7 +6,7 @@ package hydra.langs.protobuf.language;
  * Language constraints for Protobuf v3
  */
 public interface Language {
-  static <A> hydra.coders.Language<A> protobufLanguage() {
+  static  hydra.coders.Language protobufLanguage() {
     return new hydra.coders.Language(new hydra.coders.LanguageName("hydra/langs/protobuf"), new hydra.coders.LanguageConstraints(hydra.lib.sets.Empty.apply(), hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.mantle.LiteralVariant.Binary(),
       new hydra.mantle.LiteralVariant.Boolean_(),
@@ -32,22 +32,22 @@ public interface Language {
       new hydra.mantle.TypeVariant.Optional(),
       new hydra.mantle.TypeVariant.Record(),
       new hydra.mantle.TypeVariant.Union(),
-      new hydra.mantle.TypeVariant.Variable())), (java.util.function.Function<hydra.core.Type<A>, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<A, Boolean>() {
+      new hydra.mantle.TypeVariant.Variable())), (java.util.function.Function<hydra.core.Type, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<Boolean>() {
       @Override
-      public Boolean otherwise(hydra.core.Type<A> instance) {
+      public Boolean otherwise(hydra.core.Type instance) {
         return true;
       }
       
       @Override
-      public Boolean visit(hydra.core.Type.Map<A> instance) {
-        return (hydra.strip.Strip.stripType(((instance.value)).values)).accept(new hydra.core.Type.PartialVisitor<A, Boolean>() {
+      public Boolean visit(hydra.core.Type.Map instance) {
+        return (hydra.strip.Strip.stripType(((instance.value)).values)).accept(new hydra.core.Type.PartialVisitor<Boolean>() {
           @Override
-          public Boolean otherwise(hydra.core.Type<A> instance) {
+          public Boolean otherwise(hydra.core.Type instance) {
             return true;
           }
           
           @Override
-          public Boolean visit(hydra.core.Type.Optional<A> instance) {
+          public Boolean visit(hydra.core.Type.Optional instance) {
             return false;
           }
         });

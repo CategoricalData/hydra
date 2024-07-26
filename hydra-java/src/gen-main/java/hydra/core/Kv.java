@@ -1,6 +1,6 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.compute;
+package hydra.core;
 
 import java.io.Serializable;
 
@@ -8,14 +8,14 @@ import java.io.Serializable;
  * A key/value map which serves as a built-in metadata container for terms
  */
 public class Kv implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.Kv");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Kv");
   
   /**
    * A map of annotation names to annotation values
    */
-  public final java.util.Map<String, hydra.core.Term<hydra.compute.Kv>> annotations;
+  public final java.util.Map<String, hydra.core.Term> annotations;
   
-  public Kv (java.util.Map<String, hydra.core.Term<hydra.compute.Kv>> annotations) {
+  public Kv (java.util.Map<String, hydra.core.Term> annotations) {
     java.util.Objects.requireNonNull((annotations));
     this.annotations = annotations;
   }

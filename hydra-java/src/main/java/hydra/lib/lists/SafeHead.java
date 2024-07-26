@@ -21,18 +21,18 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.optional;
 
 
-public class SafeHead<A> extends PrimitiveFunction<A> {
+public class SafeHead extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/lists.safeHead");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("a", function(list("a"), optional("a")));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> map(Expect.list(Flows::pure, args.get(0)), l -> Terms.optional(apply(l)));
     }
 

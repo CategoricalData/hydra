@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A type abstraction; the type-level analog of a lambda term
  */
-public class LambdaType<A> implements Serializable {
+public class LambdaType implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.LambdaType");
   
   /**
@@ -18,9 +18,9 @@ public class LambdaType<A> implements Serializable {
   /**
    * The body of the lambda
    */
-  public final hydra.core.Type<A> body;
+  public final hydra.core.Type body;
   
-  public LambdaType (hydra.core.Name parameter, hydra.core.Type<A> body) {
+  public LambdaType (hydra.core.Name parameter, hydra.core.Type body) {
     java.util.Objects.requireNonNull((parameter));
     java.util.Objects.requireNonNull((body));
     this.parameter = parameter;
@@ -46,7 +46,7 @@ public class LambdaType<A> implements Serializable {
     return new LambdaType(parameter, body);
   }
   
-  public LambdaType withBody(hydra.core.Type<A> body) {
+  public LambdaType withBody(hydra.core.Type body) {
     java.util.Objects.requireNonNull((body));
     return new LambdaType(parameter, body);
   }

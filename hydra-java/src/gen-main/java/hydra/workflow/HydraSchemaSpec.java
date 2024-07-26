@@ -13,14 +13,14 @@ public class HydraSchemaSpec implements Serializable {
   /**
    * The modules to include in the schema graph
    */
-  public final java.util.List<hydra.module.Module<hydra.compute.Kv>> modules;
+  public final java.util.List<hydra.module.Module> modules;
   
   /**
    * The name of the top-level type; all data which passes through the workflow will be instances of this type
    */
   public final hydra.core.Name typeName;
   
-  public HydraSchemaSpec (java.util.List<hydra.module.Module<hydra.compute.Kv>> modules, hydra.core.Name typeName) {
+  public HydraSchemaSpec (java.util.List<hydra.module.Module> modules, hydra.core.Name typeName) {
     java.util.Objects.requireNonNull((modules));
     java.util.Objects.requireNonNull((typeName));
     this.modules = modules;
@@ -41,7 +41,7 @@ public class HydraSchemaSpec implements Serializable {
     return 2 * modules.hashCode() + 3 * typeName.hashCode();
   }
   
-  public HydraSchemaSpec withModules(java.util.List<hydra.module.Module<hydra.compute.Kv>> modules) {
+  public HydraSchemaSpec withModules(java.util.List<hydra.module.Module> modules) {
     java.util.Objects.requireNonNull((modules));
     return new HydraSchemaSpec(modules, typeName);
   }

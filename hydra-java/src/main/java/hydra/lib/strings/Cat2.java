@@ -16,18 +16,18 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.string;
 
-public class Cat2<A> extends PrimitiveFunction<A> {
+public class Cat2 extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/strings.cat2");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return function(string(), string(), string());
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map2(
                 Expect.string(args.get(0)),
                 Expect.string(args.get(1)),

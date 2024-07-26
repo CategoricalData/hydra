@@ -7,49 +7,49 @@ import java.io.Serializable;
 /**
  * A query pattern
  */
-public abstract class Pattern<A> implements Serializable {
+public abstract class Pattern implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/query.Pattern");
   
   private Pattern () {
   
   }
   
-  public abstract <R> R accept(Visitor<A, R> visitor) ;
+  public abstract <R> R accept(Visitor<R> visitor) ;
   
-  public interface Visitor<A, R> {
-    R visit(Triple<A> instance) ;
+  public interface Visitor<R> {
+    R visit(Triple instance) ;
     
-    R visit(Negation<A> instance) ;
+    R visit(Negation instance) ;
     
-    R visit(Conjunction<A> instance) ;
+    R visit(Conjunction instance) ;
     
-    R visit(Disjunction<A> instance) ;
+    R visit(Disjunction instance) ;
     
-    R visit(Graph<A> instance) ;
+    R visit(Graph instance) ;
   }
   
-  public interface PartialVisitor<A, R> extends Visitor<A, R> {
-    default R otherwise(Pattern<A> instance) {
+  public interface PartialVisitor<R> extends Visitor<R> {
+    default R otherwise(Pattern instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Triple<A> instance) {
+    default R visit(Triple instance) {
       return otherwise((instance));
     }
     
-    default R visit(Negation<A> instance) {
+    default R visit(Negation instance) {
       return otherwise((instance));
     }
     
-    default R visit(Conjunction<A> instance) {
+    default R visit(Conjunction instance) {
       return otherwise((instance));
     }
     
-    default R visit(Disjunction<A> instance) {
+    default R visit(Disjunction instance) {
       return otherwise((instance));
     }
     
-    default R visit(Graph<A> instance) {
+    default R visit(Graph instance) {
       return otherwise((instance));
     }
   }
@@ -57,13 +57,13 @@ public abstract class Pattern<A> implements Serializable {
   /**
    * A subject/predicate/object pattern
    */
-  public static final class Triple<A> extends hydra.query.Pattern<A> implements Serializable {
+  public static final class Triple extends hydra.query.Pattern implements Serializable {
     /**
      * A subject/predicate/object pattern
      */
-    public final hydra.query.TriplePattern<A> value;
+    public final hydra.query.TriplePattern value;
     
-    public Triple (hydra.query.TriplePattern<A> value) {
+    public Triple (hydra.query.TriplePattern value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -83,7 +83,7 @@ public abstract class Pattern<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -91,13 +91,13 @@ public abstract class Pattern<A> implements Serializable {
   /**
    * The negation of another pattern
    */
-  public static final class Negation<A> extends hydra.query.Pattern<A> implements Serializable {
+  public static final class Negation extends hydra.query.Pattern implements Serializable {
     /**
      * The negation of another pattern
      */
-    public final hydra.query.Pattern<A> value;
+    public final hydra.query.Pattern value;
     
-    public Negation (hydra.query.Pattern<A> value) {
+    public Negation (hydra.query.Pattern value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -117,7 +117,7 @@ public abstract class Pattern<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -125,13 +125,13 @@ public abstract class Pattern<A> implements Serializable {
   /**
    * The conjunction ('and') of several other patterns
    */
-  public static final class Conjunction<A> extends hydra.query.Pattern<A> implements Serializable {
+  public static final class Conjunction extends hydra.query.Pattern implements Serializable {
     /**
      * The conjunction ('and') of several other patterns
      */
-    public final java.util.List<hydra.query.Pattern<A>> value;
+    public final java.util.List<hydra.query.Pattern> value;
     
-    public Conjunction (java.util.List<hydra.query.Pattern<A>> value) {
+    public Conjunction (java.util.List<hydra.query.Pattern> value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -151,7 +151,7 @@ public abstract class Pattern<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -159,13 +159,13 @@ public abstract class Pattern<A> implements Serializable {
   /**
    * The disjunction (inclusive 'or') of several other patterns
    */
-  public static final class Disjunction<A> extends hydra.query.Pattern<A> implements Serializable {
+  public static final class Disjunction extends hydra.query.Pattern implements Serializable {
     /**
      * The disjunction (inclusive 'or') of several other patterns
      */
-    public final java.util.List<hydra.query.Pattern<A>> value;
+    public final java.util.List<hydra.query.Pattern> value;
     
-    public Disjunction (java.util.List<hydra.query.Pattern<A>> value) {
+    public Disjunction (java.util.List<hydra.query.Pattern> value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -185,7 +185,7 @@ public abstract class Pattern<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -193,13 +193,13 @@ public abstract class Pattern<A> implements Serializable {
   /**
    * A pattern which matches within a named subgraph
    */
-  public static final class Graph<A> extends hydra.query.Pattern<A> implements Serializable {
+  public static final class Graph extends hydra.query.Pattern implements Serializable {
     /**
      * A pattern which matches within a named subgraph
      */
-    public final hydra.query.GraphPattern<A> value;
+    public final hydra.query.GraphPattern value;
     
-    public Graph (hydra.query.GraphPattern<A> value) {
+    public Graph (hydra.query.GraphPattern value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -219,7 +219,7 @@ public abstract class Pattern<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }

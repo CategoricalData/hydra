@@ -7,14 +7,14 @@ import java.io.Serializable;
 /**
  * A labeled term
  */
-public class Field<A> implements Serializable {
+public class Field implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Field");
   
   public final hydra.core.FieldName name;
   
-  public final hydra.core.Term<A> term;
+  public final hydra.core.Term term;
   
-  public Field (hydra.core.FieldName name, hydra.core.Term<A> term) {
+  public Field (hydra.core.FieldName name, hydra.core.Term term) {
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((term));
     this.name = name;
@@ -40,7 +40,7 @@ public class Field<A> implements Serializable {
     return new Field(name, term);
   }
   
-  public Field withTerm(hydra.core.Term<A> term) {
+  public Field withTerm(hydra.core.Term term) {
     java.util.Objects.requireNonNull((term));
     return new Field(name, term);
   }

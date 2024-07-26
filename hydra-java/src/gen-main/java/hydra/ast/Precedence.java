@@ -10,9 +10,6 @@ import java.io.Serializable;
 public class Precedence implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ast.Precedence");
   
-  /**
-   * Operator precedence
-   */
   public final Integer value;
   
   public Precedence (Integer value) {

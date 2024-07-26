@@ -10,9 +10,6 @@ import java.io.Serializable;
 public class Regex implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Regex");
   
-  /**
-   * A regular expression
-   */
   public final String value;
   
   public Regex (String value) {

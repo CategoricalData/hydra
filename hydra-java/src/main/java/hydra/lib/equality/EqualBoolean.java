@@ -5,7 +5,7 @@ import hydra.lib.PrimitiveType;
 import java.util.function.Function;
 
 
-public class EqualBoolean<A> extends EqualityFunction<A, Boolean> {
+public class EqualBoolean extends EqualityFunction<Boolean> {
     public EqualBoolean() {
         super(PrimitiveType.boolean_(), Relation.EQUALS);
     }

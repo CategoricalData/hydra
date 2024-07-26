@@ -13,43 +13,43 @@ import hydra.lib.lists.Map;
 import hydra.lib.lists.Pure;
 
 public interface Lists {
-    static <A> Term<A> apply() {
+    static Term apply() {
         return new Apply().term();
     }
 
-    static <A> Term<A> bind() {
+    static Term bind() {
         return new Bind().term();
     }
 
-    static <A> Term<A> concat() {
+    static Term concat() {
         return new Concat().term();
     }
 
-    static <A> Term<A> head() {
+    static Term head() {
         return new Head().term();
     }
 
-    static <A> Term<A> intercalate() {
+    static Term intercalate() {
         return new Intercalate().term();
     }
 
-    static <A> Term<A> intersperse() {
+    static Term intersperse() {
         return new Intersperse().term();
     }
 
-    static <A> Term<A> last() {
+    static Term last() {
         return new Last().term();
     }
 
-    static <A> Term<A> length() {
+    static Term length() {
         return new Length().term();
     }
 
-    static <A> Term<A> map() {
+    static Term map() {
         return new Map().term();
     }
 
-    static <A> Term<A> pure() {
+    static Term pure() {
         return new Pure().term();
     }
 }

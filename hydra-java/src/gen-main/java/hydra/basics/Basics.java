@@ -2,7 +2,10 @@
 
 package hydra.basics;
 
+import hydra.core.Kv;
+import hydra.core.Term;
 import hydra.graph.Graph;
+import hydra.mantle.TermVariant;
 import hydra.module.Namespace;
 import hydra.util.Opt;
 import hydra.util.Tuple;
@@ -11,35 +14,35 @@ import hydra.util.Tuple;
  * A tier-2 module of basic functions for working with types and terms.
  */
 public interface Basics {
-  static <A> hydra.mantle.EliminationVariant eliminationVariant(hydra.core.Elimination<A> v1) {
-    return ((v1)).accept(new hydra.core.Elimination.Visitor<A, hydra.mantle.EliminationVariant>() {
+  static  hydra.mantle.EliminationVariant eliminationVariant(hydra.core.Elimination v1) {
+    return ((v1)).accept(new hydra.core.Elimination.Visitor<hydra.mantle.EliminationVariant>() {
       @Override
-      public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.List<A> instance) {
+      public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.List instance) {
         return new hydra.mantle.EliminationVariant.List();
       }
       
       @Override
-      public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Optional<A> instance) {
+      public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Optional instance) {
         return new hydra.mantle.EliminationVariant.Optional();
       }
       
       @Override
-      public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Product<A> instance) {
+      public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Product instance) {
         return new hydra.mantle.EliminationVariant.Product();
       }
       
       @Override
-      public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Record<A> instance) {
+      public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Record instance) {
         return new hydra.mantle.EliminationVariant.Record();
       }
       
       @Override
-      public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Union<A> instance) {
+      public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Union instance) {
         return new hydra.mantle.EliminationVariant.Union();
       }
       
       @Override
-      public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Wrap<A> instance) {
+      public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Wrap instance) {
         return new hydra.mantle.EliminationVariant.Wrap();
       }
     });
@@ -96,20 +99,20 @@ public interface Basics {
     });
   }
   
-  static <A> hydra.mantle.FunctionVariant functionVariant(hydra.core.Function<A> v1) {
-    return ((v1)).accept(new hydra.core.Function.Visitor<A, hydra.mantle.FunctionVariant>() {
+  static  hydra.mantle.FunctionVariant functionVariant(hydra.core.Function v1) {
+    return ((v1)).accept(new hydra.core.Function.Visitor<hydra.mantle.FunctionVariant>() {
       @Override
-      public hydra.mantle.FunctionVariant visit(hydra.core.Function.Elimination<A> instance) {
+      public hydra.mantle.FunctionVariant visit(hydra.core.Function.Elimination instance) {
         return new hydra.mantle.FunctionVariant.Elimination();
       }
       
       @Override
-      public hydra.mantle.FunctionVariant visit(hydra.core.Function.Lambda<A> instance) {
+      public hydra.mantle.FunctionVariant visit(hydra.core.Function.Lambda instance) {
         return new hydra.mantle.FunctionVariant.Lambda();
       }
       
       @Override
-      public hydra.mantle.FunctionVariant visit(hydra.core.Function.Primitive<A> instance) {
+      public hydra.mantle.FunctionVariant visit(hydra.core.Function.Primitive instance) {
         return new hydra.mantle.FunctionVariant.Primitive();
       }
     });
@@ -351,89 +354,94 @@ public interface Basics {
     new hydra.mantle.LiteralVariant.Integer_(),
     new hydra.mantle.LiteralVariant.String_());
   
-  static <A> java.util.function.Function<hydra.core.Term<A>, A> termMeta(hydra.graph.Graph<A> a1) {
+  static  java.util.function.Function<hydra.core.Term, Kv> termMeta(hydra.graph.Graph a1) {
     return (((a1)).annotations).termAnnotation;
   }
   
-  static <A> hydra.mantle.TermVariant termVariant(hydra.core.Term<A> v1) {
-    return ((v1)).accept(new hydra.core.Term.Visitor<A, hydra.mantle.TermVariant>() {
+  static  hydra.mantle.TermVariant termVariant(hydra.core.Term v1) {
+    return ((v1)).accept(new hydra.core.Term.Visitor<hydra.mantle.TermVariant>() {
       @Override
-      public hydra.mantle.TermVariant visit(hydra.core.Term.Annotated<A> instance) {
+      public hydra.mantle.TermVariant visit(hydra.core.Term.Annotated instance) {
         return new hydra.mantle.TermVariant.Annotated();
       }
       
       @Override
-      public hydra.mantle.TermVariant visit(hydra.core.Term.Application<A> instance) {
+      public hydra.mantle.TermVariant visit(hydra.core.Term.Application instance) {
         return new hydra.mantle.TermVariant.Application();
       }
       
       @Override
-      public hydra.mantle.TermVariant visit(hydra.core.Term.Function<A> instance) {
+      public hydra.mantle.TermVariant visit(hydra.core.Term.Function instance) {
         return new hydra.mantle.TermVariant.Function();
       }
       
       @Override
-      public hydra.mantle.TermVariant visit(hydra.core.Term.Let<A> instance) {
+      public hydra.mantle.TermVariant visit(hydra.core.Term.Let instance) {
         return new hydra.mantle.TermVariant.Let();
       }
       
       @Override
-      public hydra.mantle.TermVariant visit(hydra.core.Term.List<A> instance) {
+      public hydra.mantle.TermVariant visit(hydra.core.Term.List instance) {
         return new hydra.mantle.TermVariant.List();
       }
       
       @Override
-      public hydra.mantle.TermVariant visit(hydra.core.Term.Literal<A> instance) {
+      public hydra.mantle.TermVariant visit(hydra.core.Term.Literal instance) {
         return new hydra.mantle.TermVariant.Literal();
       }
       
       @Override
-      public hydra.mantle.TermVariant visit(hydra.core.Term.Map<A> instance) {
+      public hydra.mantle.TermVariant visit(hydra.core.Term.Map instance) {
         return new hydra.mantle.TermVariant.Map();
       }
       
       @Override
-      public hydra.mantle.TermVariant visit(hydra.core.Term.Optional<A> instance) {
+      public hydra.mantle.TermVariant visit(hydra.core.Term.Optional instance) {
         return new hydra.mantle.TermVariant.Optional();
       }
       
       @Override
-      public hydra.mantle.TermVariant visit(hydra.core.Term.Product<A> instance) {
+      public hydra.mantle.TermVariant visit(hydra.core.Term.Product instance) {
         return new hydra.mantle.TermVariant.Product();
       }
       
       @Override
-      public hydra.mantle.TermVariant visit(hydra.core.Term.Record<A> instance) {
+      public hydra.mantle.TermVariant visit(hydra.core.Term.Record instance) {
         return new hydra.mantle.TermVariant.Record();
       }
       
       @Override
-      public hydra.mantle.TermVariant visit(hydra.core.Term.Set<A> instance) {
+      public hydra.mantle.TermVariant visit(hydra.core.Term.Set instance) {
         return new hydra.mantle.TermVariant.Set();
       }
       
       @Override
-      public hydra.mantle.TermVariant visit(hydra.core.Term.Stream<A> instance) {
+      public hydra.mantle.TermVariant visit(hydra.core.Term.Stream instance) {
         return new hydra.mantle.TermVariant.Stream();
       }
       
       @Override
-      public hydra.mantle.TermVariant visit(hydra.core.Term.Sum<A> instance) {
+      public hydra.mantle.TermVariant visit(hydra.core.Term.Sum instance) {
         return new hydra.mantle.TermVariant.Sum();
       }
-      
+
       @Override
-      public hydra.mantle.TermVariant visit(hydra.core.Term.Union<A> instance) {
+      public TermVariant visit(Term.Typed instance) {
+        return new TermVariant.Typed();
+      }
+
+      @Override
+      public hydra.mantle.TermVariant visit(hydra.core.Term.Union instance) {
         return new hydra.mantle.TermVariant.Union();
       }
       
       @Override
-      public hydra.mantle.TermVariant visit(hydra.core.Term.Variable<A> instance) {
+      public hydra.mantle.TermVariant visit(hydra.core.Term.Variable instance) {
         return new hydra.mantle.TermVariant.Variable();
       }
       
       @Override
-      public hydra.mantle.TermVariant visit(hydra.core.Term.Wrap<A> instance) {
+      public hydra.mantle.TermVariant visit(hydra.core.Term.Wrap instance) {
         return new hydra.mantle.TermVariant.Wrap();
       }
     });
@@ -456,85 +464,85 @@ public interface Basics {
     new hydra.mantle.TermVariant.Variable(),
     new hydra.mantle.TermVariant.Wrap());
   
-  static <A> hydra.mantle.TypeVariant typeVariant(hydra.core.Type<A> v1) {
-    return ((v1)).accept(new hydra.core.Type.Visitor<A, hydra.mantle.TypeVariant>() {
+  static  hydra.mantle.TypeVariant typeVariant(hydra.core.Type v1) {
+    return ((v1)).accept(new hydra.core.Type.Visitor<hydra.mantle.TypeVariant>() {
       @Override
-      public hydra.mantle.TypeVariant visit(hydra.core.Type.Annotated<A> instance) {
+      public hydra.mantle.TypeVariant visit(hydra.core.Type.Annotated instance) {
         return new hydra.mantle.TypeVariant.Annotated();
       }
       
       @Override
-      public hydra.mantle.TypeVariant visit(hydra.core.Type.Application<A> instance) {
+      public hydra.mantle.TypeVariant visit(hydra.core.Type.Application instance) {
         return new hydra.mantle.TypeVariant.Application();
       }
       
       @Override
-      public hydra.mantle.TypeVariant visit(hydra.core.Type.Function<A> instance) {
+      public hydra.mantle.TypeVariant visit(hydra.core.Type.Function instance) {
         return new hydra.mantle.TypeVariant.Function();
       }
       
       @Override
-      public hydra.mantle.TypeVariant visit(hydra.core.Type.Lambda<A> instance) {
+      public hydra.mantle.TypeVariant visit(hydra.core.Type.Lambda instance) {
         return new hydra.mantle.TypeVariant.Lambda();
       }
       
       @Override
-      public hydra.mantle.TypeVariant visit(hydra.core.Type.List<A> instance) {
+      public hydra.mantle.TypeVariant visit(hydra.core.Type.List instance) {
         return new hydra.mantle.TypeVariant.List();
       }
       
       @Override
-      public hydra.mantle.TypeVariant visit(hydra.core.Type.Literal<A> instance) {
+      public hydra.mantle.TypeVariant visit(hydra.core.Type.Literal instance) {
         return new hydra.mantle.TypeVariant.Literal();
       }
       
       @Override
-      public hydra.mantle.TypeVariant visit(hydra.core.Type.Map<A> instance) {
+      public hydra.mantle.TypeVariant visit(hydra.core.Type.Map instance) {
         return new hydra.mantle.TypeVariant.Map();
       }
       
       @Override
-      public hydra.mantle.TypeVariant visit(hydra.core.Type.Optional<A> instance) {
+      public hydra.mantle.TypeVariant visit(hydra.core.Type.Optional instance) {
         return new hydra.mantle.TypeVariant.Optional();
       }
       
       @Override
-      public hydra.mantle.TypeVariant visit(hydra.core.Type.Product<A> instance) {
+      public hydra.mantle.TypeVariant visit(hydra.core.Type.Product instance) {
         return new hydra.mantle.TypeVariant.Product();
       }
       
       @Override
-      public hydra.mantle.TypeVariant visit(hydra.core.Type.Record<A> instance) {
+      public hydra.mantle.TypeVariant visit(hydra.core.Type.Record instance) {
         return new hydra.mantle.TypeVariant.Record();
       }
       
       @Override
-      public hydra.mantle.TypeVariant visit(hydra.core.Type.Set<A> instance) {
+      public hydra.mantle.TypeVariant visit(hydra.core.Type.Set instance) {
         return new hydra.mantle.TypeVariant.Set();
       }
       
       @Override
-      public hydra.mantle.TypeVariant visit(hydra.core.Type.Stream<A> instance) {
+      public hydra.mantle.TypeVariant visit(hydra.core.Type.Stream instance) {
         return new hydra.mantle.TypeVariant.Stream();
       }
       
       @Override
-      public hydra.mantle.TypeVariant visit(hydra.core.Type.Sum<A> instance) {
+      public hydra.mantle.TypeVariant visit(hydra.core.Type.Sum instance) {
         return new hydra.mantle.TypeVariant.Sum();
       }
       
       @Override
-      public hydra.mantle.TypeVariant visit(hydra.core.Type.Union<A> instance) {
+      public hydra.mantle.TypeVariant visit(hydra.core.Type.Union instance) {
         return new hydra.mantle.TypeVariant.Union();
       }
       
       @Override
-      public hydra.mantle.TypeVariant visit(hydra.core.Type.Variable<A> instance) {
+      public hydra.mantle.TypeVariant visit(hydra.core.Type.Variable instance) {
         return new hydra.mantle.TypeVariant.Variable();
       }
       
       @Override
-      public hydra.mantle.TypeVariant visit(hydra.core.Type.Wrap<A> instance) {
+      public hydra.mantle.TypeVariant visit(hydra.core.Type.Wrap instance) {
         return new hydra.mantle.TypeVariant.Wrap();
       }
     });
@@ -579,34 +587,34 @@ public interface Basics {
     });
   }
   
-  static <A> java.util.Map<hydra.core.FieldName, hydra.core.Term<A>> fieldMap(java.util.List<hydra.core.Field<A>> fields) {
-    java.util.function.Function<hydra.core.Field<A>, Tuple.Tuple2<hydra.core.FieldName, hydra.core.Term<A>>> toPair = (java.util.function.Function<hydra.core.Field<A>, Tuple.Tuple2<hydra.core.FieldName, hydra.core.Term<A>>>) (f -> new Tuple.Tuple2(((f)).name, ((f)).term));
+  static  java.util.Map<hydra.core.FieldName, hydra.core.Term> fieldMap(java.util.List<hydra.core.Field> fields) {
+    java.util.function.Function<hydra.core.Field, Tuple.Tuple2<hydra.core.FieldName, hydra.core.Term>> toPair = (java.util.function.Function<hydra.core.Field, Tuple.Tuple2<hydra.core.FieldName, hydra.core.Term>>) (f -> new Tuple.Tuple2(((f)).name, ((f)).term));
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
       (toPair),
       (fields)));
   }
   
-  static <A> java.util.Map<hydra.core.FieldName, hydra.core.Type<A>> fieldTypeMap(java.util.List<hydra.core.FieldType<A>> fields) {
-    java.util.function.Function<hydra.core.FieldType<A>, Tuple.Tuple2<hydra.core.FieldName, hydra.core.Type<A>>> toPair = (java.util.function.Function<hydra.core.FieldType<A>, Tuple.Tuple2<hydra.core.FieldName, hydra.core.Type<A>>>) (f -> new Tuple.Tuple2(((f)).name, ((f)).type));
+  static  java.util.Map<hydra.core.FieldName, hydra.core.Type> fieldTypeMap(java.util.List<hydra.core.FieldType> fields) {
+    java.util.function.Function<hydra.core.FieldType, Tuple.Tuple2<hydra.core.FieldName, hydra.core.Type>> toPair = (java.util.function.Function<hydra.core.FieldType, Tuple.Tuple2<hydra.core.FieldName, hydra.core.Type>>) (f -> new Tuple.Tuple2(((f)).name, ((f)).type));
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
       (toPair),
       (fields)));
   }
   
-  static <A> Boolean isEncodedType(hydra.core.Term<A> t) {
-    return (hydra.strip.Strip.stripTerm((t))).accept(new hydra.core.Term.PartialVisitor<A, Boolean>() {
+  static  Boolean isEncodedType(hydra.core.Term t) {
+    return (hydra.strip.Strip.stripTerm((t))).accept(new hydra.core.Term.PartialVisitor<Boolean>() {
       @Override
-      public Boolean otherwise(hydra.core.Term<A> instance) {
+      public Boolean otherwise(hydra.core.Term instance) {
         return false;
       }
       
       @Override
-      public Boolean visit(hydra.core.Term.Application<A> instance) {
+      public Boolean visit(hydra.core.Term.Application instance) {
         return hydra.basics.Basics.isEncodedType(((instance.value)).function);
       }
       
       @Override
-      public Boolean visit(hydra.core.Term.Union<A> instance) {
+      public Boolean visit(hydra.core.Term.Union instance) {
         return hydra.lib.equality.EqualString.apply(
           "hydra/core.Type",
           (((instance.value)).typeName).value);
@@ -614,25 +622,25 @@ public interface Basics {
     });
   }
   
-  static <A> Boolean isType(hydra.core.Type<A> t) {
-    return (hydra.strip.Strip.stripType((t))).accept(new hydra.core.Type.PartialVisitor<A, Boolean>() {
+  static  Boolean isType(hydra.core.Type t) {
+    return (hydra.strip.Strip.stripType((t))).accept(new hydra.core.Type.PartialVisitor<Boolean>() {
       @Override
-      public Boolean otherwise(hydra.core.Type<A> instance) {
+      public Boolean otherwise(hydra.core.Type instance) {
         return false;
       }
       
       @Override
-      public Boolean visit(hydra.core.Type.Application<A> instance) {
+      public Boolean visit(hydra.core.Type.Application instance) {
         return hydra.basics.Basics.isType(((instance.value)).function);
       }
       
       @Override
-      public Boolean visit(hydra.core.Type.Lambda<A> instance) {
+      public Boolean visit(hydra.core.Type.Lambda instance) {
         return hydra.basics.Basics.isType(((instance.value)).body);
       }
       
       @Override
-      public Boolean visit(hydra.core.Type.Union<A> instance) {
+      public Boolean visit(hydra.core.Type.Union instance) {
         return hydra.lib.equality.EqualString.apply(
           "hydra/core.Type",
           (((instance.value)).typeName).value);
@@ -640,24 +648,24 @@ public interface Basics {
     });
   }
   
-  static <A> Boolean isUnitTerm(hydra.core.Term<A> t) {
+  static  Boolean isUnitTerm(hydra.core.Term t) {
     return hydra.lib.equality.EqualTerm.apply(
       hydra.strip.Strip.stripTerm((t)),
       new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList())));
   }
   
-  static <A> Boolean isUnitType(hydra.core.Type<A> t) {
+  static  Boolean isUnitType(hydra.core.Type t) {
     return hydra.lib.equality.EqualType.apply(
       hydra.strip.Strip.stripType((t)),
       new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra/core.Unit"), Opt.empty(), java.util.Arrays.asList())));
   }
   
-  static <A> java.util.function.Function<Opt<Graph<A>>, java.util.function.Function<java.util.List<hydra.graph.Element<A>>, hydra.graph.Graph<A>>> elementsToGraph(hydra.graph.Graph<A> parent) {
-    return (java.util.function.Function<Opt<Graph<A>>, java.util.function.Function<java.util.List<hydra.graph.Element<A>>, hydra.graph.Graph<A>>>) (schema -> (java.util.function.Function<java.util.List<hydra.graph.Element<A>>, hydra.graph.Graph<A>>) (elements -> {
-      java.util.function.Function<hydra.graph.Element<A>, Tuple.Tuple2<hydra.core.Name, hydra.graph.Element<A>>> toPair = (java.util.function.Function<hydra.graph.Element<A>, Tuple.Tuple2<hydra.core.Name, hydra.graph.Element<A>>>) (el -> new Tuple.Tuple2(((el)).name, (el)));
+  static  java.util.function.Function<Opt<Graph>, java.util.function.Function<java.util.List<hydra.graph.Element>, hydra.graph.Graph>> elementsToGraph(hydra.graph.Graph parent) {
+    return (java.util.function.Function<Opt<Graph>, java.util.function.Function<java.util.List<hydra.graph.Element>, hydra.graph.Graph>>) (schema -> (java.util.function.Function<java.util.List<hydra.graph.Element>, hydra.graph.Graph>) (elements -> {
+      java.util.function.Function<hydra.graph.Element, Tuple.Tuple2<hydra.core.Name, hydra.graph.Element>> toPair = (java.util.function.Function<hydra.graph.Element, Tuple.Tuple2<hydra.core.Name, hydra.graph.Element>>) (el -> new Tuple.Tuple2(((el)).name, (el)));
       return new hydra.graph.Graph(hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
         (toPair),
-        (elements))), ((parent)).environment, ((parent)).body, ((parent)).primitives, ((parent)).annotations, (schema));
+        (elements))), ((parent)).environment, ((parent)).types, ((parent)).body, ((parent)).primitives, ((parent)).annotations, (schema));
     }));
   }
   

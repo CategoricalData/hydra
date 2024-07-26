@@ -5,20 +5,20 @@ package hydra.langs.tinkerpop.mappings;
 /**
  * A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types
  */
-public class Schema<S, A, T, V> {
+public class Schema<S, T, V> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/mappings.Schema");
   
-  public final hydra.compute.Coder<S, S, hydra.core.Type<A>, T> vertexIdTypes;
+  public final hydra.compute.Coder<S, S, hydra.core.Type, T> vertexIdTypes;
   
-  public final hydra.compute.Coder<S, S, hydra.core.Term<A>, V> vertexIds;
+  public final hydra.compute.Coder<S, S, hydra.core.Term, V> vertexIds;
   
-  public final hydra.compute.Coder<S, S, hydra.core.Type<A>, T> edgeIdTypes;
+  public final hydra.compute.Coder<S, S, hydra.core.Type, T> edgeIdTypes;
   
-  public final hydra.compute.Coder<S, S, hydra.core.Term<A>, V> edgeIds;
+  public final hydra.compute.Coder<S, S, hydra.core.Term, V> edgeIds;
   
-  public final hydra.compute.Coder<S, S, hydra.core.Type<A>, T> propertyTypes;
+  public final hydra.compute.Coder<S, S, hydra.core.Type, T> propertyTypes;
   
-  public final hydra.compute.Coder<S, S, hydra.core.Term<A>, V> propertyValues;
+  public final hydra.compute.Coder<S, S, hydra.core.Term, V> propertyValues;
   
   public final hydra.langs.tinkerpop.mappings.AnnotationSchema annotations;
   
@@ -26,7 +26,7 @@ public class Schema<S, A, T, V> {
   
   public final V defaultEdgeId;
   
-  public Schema (hydra.compute.Coder<S, S, hydra.core.Type<A>, T> vertexIdTypes, hydra.compute.Coder<S, S, hydra.core.Term<A>, V> vertexIds, hydra.compute.Coder<S, S, hydra.core.Type<A>, T> edgeIdTypes, hydra.compute.Coder<S, S, hydra.core.Term<A>, V> edgeIds, hydra.compute.Coder<S, S, hydra.core.Type<A>, T> propertyTypes, hydra.compute.Coder<S, S, hydra.core.Term<A>, V> propertyValues, hydra.langs.tinkerpop.mappings.AnnotationSchema annotations, V defaultVertexId, V defaultEdgeId) {
+  public Schema (hydra.compute.Coder<S, S, hydra.core.Type, T> vertexIdTypes, hydra.compute.Coder<S, S, hydra.core.Term, V> vertexIds, hydra.compute.Coder<S, S, hydra.core.Type, T> edgeIdTypes, hydra.compute.Coder<S, S, hydra.core.Term, V> edgeIds, hydra.compute.Coder<S, S, hydra.core.Type, T> propertyTypes, hydra.compute.Coder<S, S, hydra.core.Term, V> propertyValues, hydra.langs.tinkerpop.mappings.AnnotationSchema annotations, V defaultVertexId, V defaultEdgeId) {
     java.util.Objects.requireNonNull((vertexIdTypes));
     java.util.Objects.requireNonNull((vertexIds));
     java.util.Objects.requireNonNull((edgeIdTypes));
@@ -61,32 +61,32 @@ public class Schema<S, A, T, V> {
     return 2 * vertexIdTypes.hashCode() + 3 * vertexIds.hashCode() + 5 * edgeIdTypes.hashCode() + 7 * edgeIds.hashCode() + 11 * propertyTypes.hashCode() + 13 * propertyValues.hashCode() + 17 * annotations.hashCode() + 19 * defaultVertexId.hashCode() + 23 * defaultEdgeId.hashCode();
   }
   
-  public Schema withVertexIdTypes(hydra.compute.Coder<S, S, hydra.core.Type<A>, T> vertexIdTypes) {
+  public Schema withVertexIdTypes(hydra.compute.Coder<S, S, hydra.core.Type, T> vertexIdTypes) {
     java.util.Objects.requireNonNull((vertexIdTypes));
     return new Schema(vertexIdTypes, vertexIds, edgeIdTypes, edgeIds, propertyTypes, propertyValues, annotations, defaultVertexId, defaultEdgeId);
   }
   
-  public Schema withVertexIds(hydra.compute.Coder<S, S, hydra.core.Term<A>, V> vertexIds) {
+  public Schema withVertexIds(hydra.compute.Coder<S, S, hydra.core.Term, V> vertexIds) {
     java.util.Objects.requireNonNull((vertexIds));
     return new Schema(vertexIdTypes, vertexIds, edgeIdTypes, edgeIds, propertyTypes, propertyValues, annotations, defaultVertexId, defaultEdgeId);
   }
   
-  public Schema withEdgeIdTypes(hydra.compute.Coder<S, S, hydra.core.Type<A>, T> edgeIdTypes) {
+  public Schema withEdgeIdTypes(hydra.compute.Coder<S, S, hydra.core.Type, T> edgeIdTypes) {
     java.util.Objects.requireNonNull((edgeIdTypes));
     return new Schema(vertexIdTypes, vertexIds, edgeIdTypes, edgeIds, propertyTypes, propertyValues, annotations, defaultVertexId, defaultEdgeId);
   }
   
-  public Schema withEdgeIds(hydra.compute.Coder<S, S, hydra.core.Term<A>, V> edgeIds) {
+  public Schema withEdgeIds(hydra.compute.Coder<S, S, hydra.core.Term, V> edgeIds) {
     java.util.Objects.requireNonNull((edgeIds));
     return new Schema(vertexIdTypes, vertexIds, edgeIdTypes, edgeIds, propertyTypes, propertyValues, annotations, defaultVertexId, defaultEdgeId);
   }
   
-  public Schema withPropertyTypes(hydra.compute.Coder<S, S, hydra.core.Type<A>, T> propertyTypes) {
+  public Schema withPropertyTypes(hydra.compute.Coder<S, S, hydra.core.Type, T> propertyTypes) {
     java.util.Objects.requireNonNull((propertyTypes));
     return new Schema(vertexIdTypes, vertexIds, edgeIdTypes, edgeIds, propertyTypes, propertyValues, annotations, defaultVertexId, defaultEdgeId);
   }
   
-  public Schema withPropertyValues(hydra.compute.Coder<S, S, hydra.core.Term<A>, V> propertyValues) {
+  public Schema withPropertyValues(hydra.compute.Coder<S, S, hydra.core.Term, V> propertyValues) {
     java.util.Objects.requireNonNull((propertyValues));
     return new Schema(vertexIdTypes, vertexIds, edgeIdTypes, edgeIds, propertyTypes, propertyValues, annotations, defaultVertexId, defaultEdgeId);
   }

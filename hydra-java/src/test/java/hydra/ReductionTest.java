@@ -1,6 +1,5 @@
 package hydra;
 
-import hydra.compute.Kv;
 import hydra.core.Term;
 import hydra.lib.strings.SplitOn;
 import org.junit.jupiter.api.Test;
@@ -31,7 +30,7 @@ public class ReductionTest extends HydraTestBase {
             int32(42));
 
         checkEager(++i,
-            apply(apply((new SplitOn<Kv>()).term(), string("ss")), string("Mississippi")),
+            apply(apply((new SplitOn()).term(), string("ss")), string("Mississippi")),
             list(string("Mi"), string("i"), string("ippi")));
     }
 
@@ -43,7 +42,7 @@ public class ReductionTest extends HydraTestBase {
             apply(int32(42), int32(42)));
     }
 
-    private static void checkEager(int idx, Term<Kv> input, Term<Kv> output) {
+    private static void checkEager(int idx, Term input, Term output) {
         TestSuiteRunner.runReductionTestCase(true, "" + idx, input, output);
     }
 }

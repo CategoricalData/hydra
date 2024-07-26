@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A SELECT-style graph pattern matching query
  */
-public class Query<A> implements Serializable {
+public class Query implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/query.Query");
   
   /**
@@ -18,9 +18,9 @@ public class Query<A> implements Serializable {
   /**
    * The patterns to be matched
    */
-  public final java.util.List<hydra.query.Pattern<A>> patterns;
+  public final java.util.List<hydra.query.Pattern> patterns;
   
-  public Query (java.util.List<hydra.query.Variable> variables, java.util.List<hydra.query.Pattern<A>> patterns) {
+  public Query (java.util.List<hydra.query.Variable> variables, java.util.List<hydra.query.Pattern> patterns) {
     java.util.Objects.requireNonNull((variables));
     java.util.Objects.requireNonNull((patterns));
     this.variables = variables;
@@ -46,7 +46,7 @@ public class Query<A> implements Serializable {
     return new Query(variables, patterns);
   }
   
-  public Query withPatterns(java.util.List<hydra.query.Pattern<A>> patterns) {
+  public Query withPatterns(java.util.List<hydra.query.Pattern> patterns) {
     java.util.Objects.requireNonNull((patterns));
     return new Query(variables, patterns);
   }

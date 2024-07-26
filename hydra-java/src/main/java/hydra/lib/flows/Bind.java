@@ -25,13 +25,13 @@ import static hydra.dsl.Terms.project;
 import static hydra.dsl.Terms.variable;
 
 
-public class Bind<A> extends PrimitiveFunction<A> {
+public class Bind extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/flows.bind");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return Types.lambda("s", "x", "y",
                 Types.function(
                         Types.flow("s", "x"),
@@ -40,17 +40,17 @@ public class Bind<A> extends PrimitiveFunction<A> {
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> {
-            Term<A> input = args.get(0);
-            Term<A> mapping = args.get(1);
-            Term<A> ifNothing = flowState(nothing(),
+            Term input = args.get(0);
+            Term mapping = args.get(1);
+            Term ifNothing = flowState(nothing(),
                     app("fs1", flowStateState()), app("fs1", flowStateTrace()));
-            Term<A> ifJust = lambda("x",
+            Term ifJust = lambda("x",
                     app(mapping, variable("x"), app("fs1", flowStateState()), app("fs2", flowStateTrace())));
-            Term<A> output = lambda("s0", "t0", app(
+            Term output = lambda("s0", "t0", app(
                     lambda("fs1", app(foldOpt(
-                            new OptionalCases<>(ifNothing, ifJust)),
+                            new OptionalCases(ifNothing, ifJust)),
                             project(FlowState.NAME, "value"))),
                     app(input, variable("s0"), variable("s1"))));
             return Flows.pure(output);

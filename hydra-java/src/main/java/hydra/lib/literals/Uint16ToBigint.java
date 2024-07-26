@@ -17,18 +17,18 @@ import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
 
-public class Uint16ToBigint<A> extends PrimitiveFunction<A> {
+public class Uint16ToBigint extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/literals.uint16ToBigint");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return function(Types.uint16(), Types.bigint());
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.uint16(args.get(0)), s -> Terms.bigint(apply(s)));
     }
 

@@ -16,18 +16,18 @@ import static hydra.dsl.Terms.flowState;
 import static hydra.dsl.Terms.just;
 
 
-public class Pure<A> extends PrimitiveFunction<A> {
+public class Pure extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/flows.pure");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return Types.lambda("s", "x", Types.function("x", Types.flow("s", "x")));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.pure(flowState(just(args.get(0)), args.get(1), args.get(2)));
     }
 
