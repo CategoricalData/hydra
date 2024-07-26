@@ -14,32 +14,32 @@ import static hydra.coreEncoding.CoreEncoding.coreEncodeType;
 
 
 public class Modules {
-  public static <A> Element<A> element(Module<A> module, String localName, Term<A> data) {
-    Name name = Tier1.unqualifyName(new QualifiedName(Opt.of(module.namespace), localName));
-    return new Element<>(name, data);
-  }
+    public static Element element(Module module, String localName, Term data) {
+        Name name = Tier1.unqualifyName(new QualifiedName(Opt.of(module.namespace), localName));
+        return new Element(name, data);
+    }
 
-  public static <A> Element<A> element(Module<A> module, String localName, Type<A> type) {
-    return element(module, localName, coreEncodeType(type));
-  }
+    public static Element element(Module module, String localName, Type type) {
+        return element(module, localName, coreEncodeType(type));
+    }
 
-  public static <A> Element<A> element(Name name, Type<A> type) {
-    return new Element<>(name, coreEncodeType(type));
-  }
+    public static Element element(Name name, Type type) {
+        return new Element(name, coreEncodeType(type));
+    }
 
-  public static <A> ModuleBuilder<A> module(Namespace namespace) {
-    return new ModuleBuilder<>(namespace);
-  }
+    public static ModuleBuilder module(Namespace namespace) {
+        return new ModuleBuilder(namespace);
+    }
 
-  public static <A> ModuleBuilder<A> module(Namespace namespace, String description) {
-    return new ModuleBuilder<>(namespace, description);
-  }
+    public static ModuleBuilder module(Namespace namespace, String description) {
+        return new ModuleBuilder(namespace, description);
+    }
 
-  public static <A> Name qname(Module<A> module, String localName) {
-    return qname(module.namespace, localName);
-  }
+    public static Name qname(Module module, String localName) {
+        return qname(module.namespace, localName);
+    }
 
-  public static Name qname(Namespace ns, String localName) {
-    return Tier1.unqualifyName(new QualifiedName(Opt.of(ns), localName));
-  }
+    public static Name qname(Namespace ns, String localName) {
+        return Tier1.unqualifyName(new QualifiedName(Opt.of(ns), localName));
+    }
 }

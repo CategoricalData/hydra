@@ -18,20 +18,20 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.list;
 
-public class Tail<A> extends PrimitiveFunction<A> {
+public class Tail extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/lists.tail");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("a", function(list("a"), list("a")));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> map(Expect.list(Flows::pure, args.get(0)),
-                (Function<List<Term<A>>, Term<A>>) terms -> Terms.list(apply(terms)));
+                (Function<List<Term>, Term>) terms -> Terms.list(apply(terms)));
     }
 
     public static <X> List<X> apply(List<X> list) {

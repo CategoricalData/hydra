@@ -5,7 +5,7 @@ import hydra.lib.PrimitiveType;
 import java.util.function.Function;
 
 
-public class EqualInt16<A> extends EqualityFunction<A, Short> {
+public class EqualInt16 extends EqualityFunction<Short> {
     public EqualInt16() {
         super(PrimitiveType.int16(), Relation.EQUALS);
     }

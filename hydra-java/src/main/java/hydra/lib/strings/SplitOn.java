@@ -20,20 +20,20 @@ import java.util.List;
 import java.util.ArrayList;
 
 
-public class SplitOn<A> extends PrimitiveFunction<A> {
+public class SplitOn extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/strings.splitOn");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return function(string(), string(), list(string()));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> map2(Expect.string(args.get(0)), Expect.string(args.get(1)),
-            (BiFunction<String, String, Term<A>>) (s, s2) -> Terms.listOfStrings(apply(s, s2)));
+            (BiFunction<String, String, Term>) (s, s2) -> Terms.listOfStrings(apply(s, s2)));
     }
 
     public static Function<String, List<String>> apply(String delim) {

@@ -19,21 +19,21 @@ import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.string;
 
-public class ToList<A> extends PrimitiveFunction<A> {
+public class ToList extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/strings.toList");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return function(string(), list(int32()));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
-        return args -> Flows.map(Expect.string(args.get(0)), (Function<String, Term<A>>) s -> {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
+        return args -> Flows.map(Expect.string(args.get(0)), (Function<String, Term>) s -> {
             List<Integer> list = apply(s);
-            List<Term<A>> terms = new ArrayList<>(list.size());
+            List<Term> terms = new ArrayList<>(list.size());
             for (Integer i : list) {
                 terms.add(Terms.int32(i));
             }

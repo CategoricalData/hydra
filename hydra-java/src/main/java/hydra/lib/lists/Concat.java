@@ -19,7 +19,7 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.list;
 
-public class Concat<A> extends PrimitiveFunction<A> {
+public class Concat extends PrimitiveFunction {
     public static final Name NAME = new Name("hydra/lib/lists.concat");
 
     public Name name() {
@@ -27,12 +27,12 @@ public class Concat<A> extends PrimitiveFunction<A> {
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("a", function(list(list("a")), list("a")));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.list(t -> Expect.list(Flows::pure, t), args.get(0)), l -> Terms.list(apply(l)));
     }
 

@@ -5,7 +5,7 @@ import hydra.lib.PrimitiveType;
 import java.util.function.Function;
 
 
-public class EqualString<A> extends EqualityFunction<A, String> {
+public class EqualString extends EqualityFunction<String> {
     public EqualString() {
         super(PrimitiveType.string(), Relation.EQUALS);
     }

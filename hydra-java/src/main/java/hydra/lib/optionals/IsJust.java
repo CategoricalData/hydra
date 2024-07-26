@@ -19,18 +19,18 @@ import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.optional;
 
 
-public class IsJust<A> extends PrimitiveFunction<A> {
+public class IsJust extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/optionals.isJust");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("a", function(optional("a"), "a"));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.optional(Flows::pure, args.get(0)), x -> Terms.boolean_(IsJust.apply(x)));
     }
 

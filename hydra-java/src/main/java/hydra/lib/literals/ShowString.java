@@ -16,19 +16,19 @@ import org.apache.commons.text.StringEscapeUtils;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.string;
 
-public class ShowString<A> extends PrimitiveFunction<A> {
+public class ShowString extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/literals.showString");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return function(string(), string());
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
-        return args -> Flows.map(Expect.string(args.get(0)), (Function<String, Term<A>>) s -> Terms.string(apply(s)));
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
+        return args -> Flows.map(Expect.string(args.get(0)), (Function<String, Term>) s -> Terms.string(apply(s)));
     }
 
     public static String apply(String value) {

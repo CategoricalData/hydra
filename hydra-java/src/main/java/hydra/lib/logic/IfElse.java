@@ -17,19 +17,19 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.lambda;
 
 
-public class IfElse<A> extends PrimitiveFunction<A> {
+public class IfElse extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/logic.ifElse");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("a",
             function("a", "a", function(boolean_(), "a")));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.boolean_(args.get(2)), b -> IfElse.apply(args.get(0), args.get(1), b));
     }
 

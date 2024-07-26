@@ -19,7 +19,7 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.list;
 
-public class Reverse<A> extends PrimitiveFunction<A> {
+public class Reverse extends PrimitiveFunction {
     public static final Name NAME = new Name("hydra/lib/lists.reverse");
 
     public Name name() {
@@ -27,12 +27,12 @@ public class Reverse<A> extends PrimitiveFunction<A> {
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("a", function(list("a"), list("a")));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(
                 Expect.list(Flows::pure, args.get(0)), l -> Terms.list(Reverse.apply(l)));
     }

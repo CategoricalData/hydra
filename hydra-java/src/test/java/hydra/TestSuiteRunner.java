@@ -2,7 +2,7 @@ package hydra;
 
 import hydra.compute.Flow;
 import hydra.compute.FlowState;
-import hydra.compute.Kv;
+import hydra.core.Kv;
 import hydra.core.Term;
 import hydra.graph.AnnotationClass;
 import hydra.graph.Comparison;
@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TestSuiteRunner extends HydraTestBase {
     protected static final Kv EMPTY_KV = new Kv(new HashMap<>());
 
-    protected static final AnnotationClass<Kv> FAKE_KV_ANNOTATION_CLASS = new AnnotationClass<>(
+    protected static final AnnotationClass FAKE_KV_ANNOTATION_CLASS = new AnnotationClass(
             EMPTY_KV,
             a1 -> a2 -> false,
             a1 -> a2 -> new Comparison.EqualTo(),
@@ -53,19 +53,19 @@ public class TestSuiteRunner extends HydraTestBase {
 
     @ParameterizedTest
     @MethodSource("provideTestCases")
-    void runParameterizedTestCase(String name, Term<Kv> input, Term<Kv> output) {
+    void runParameterizedTestCase(String name, Term input, Term output) {
         runReductionTestCase(true, name, input, output);
     }
 
     /**
      * Run a beta-reduction test case.
      */
-    public static void runReductionTestCase(boolean eager, String name, Term<Kv> input, Term<Kv> output) {
-        Graph<Kv> graph = emptyGraph(FAKE_KV_ANNOTATION_CLASS);
+    public static void runReductionTestCase(boolean eager, String name, Term input, Term output) {
+        Graph graph = emptyGraph(FAKE_KV_ANNOTATION_CLASS);
         String suffix = " (" + name + ")";
 
-        Flow<Graph<Kv>, Term<Kv>> reduced = Reduction.reduce(eager, input);
-        FlowState<Graph<Kv>, Term<Kv>> result = reduced.value.apply(graph).apply(EMPTY_TRACE);
+        Flow<Graph, Term> reduced = Reduction.reduce(eager, input);
+        FlowState<Graph, Term> result = reduced.value.apply(graph).apply(EMPTY_TRACE);
         if (result.value.isPresent()) {
             if (!result.value.get().equals(output)) {
                 // First, assert that the pretty-printed strings for the results are the same;
@@ -82,7 +82,7 @@ public class TestSuiteRunner extends HydraTestBase {
         }
     }
 
-    private static <A> String print(Term<A> term) {
+    private static String print(Term term) {
         return PrettyPrinter.printTerm(term);
     }
 
@@ -92,27 +92,27 @@ public class TestSuiteRunner extends HydraTestBase {
         return args;
     }
 
-    private static <A> void addTestCase(TestCase<A> testCase, int idx, String prefix, List<Arguments> args) {
+    private static void addTestCase(TestCase testCase, int idx, String prefix, List<Arguments> args) {
         args.add(Arguments.of(testCaseDescription(testCase, prefix, idx), testCase.input, testCase.output));
     }
 
-    private static <A> void addTestGroup(TestGroup<A> testGroup, String prefix, List<Arguments> args) {
+    private static void addTestGroup(TestGroup testGroup, String prefix, List<Arguments> args) {
         String newPrefix = testGroupDescription(testGroup, prefix);
         int idx = 0;
-        for (TestCase<A> testCase : testGroup.cases) {
+        for (TestCase testCase : testGroup.cases) {
             addTestCase(testCase, ++idx, newPrefix, args);
         }
-        for (TestGroup<A> subgroup : testGroup.subgroups) {
+        for (TestGroup subgroup : testGroup.subgroups) {
             addTestGroup(subgroup, newPrefix, args);
         }
     }
 
-    private static <A> String testCaseDescription(TestCase<A> testCase, String prefix, int idx) {
+    private static String testCaseDescription(TestCase testCase, String prefix, int idx) {
         String name = testCase.description.orElse("test #" + idx);
         return prefix == null ? name : prefix + " > " + name;
     }
 
-    private static <A> String testGroupDescription(TestGroup<A> testGroup, String prefix) {
+    private static String testGroupDescription(TestGroup testGroup, String prefix) {
         String name = testGroup.name + testGroup.description.map(s -> " (" + s + ")").orElse("");
         return prefix == null ? name : prefix + " > " + name;
     }

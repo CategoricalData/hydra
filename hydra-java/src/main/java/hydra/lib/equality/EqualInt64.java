@@ -5,7 +5,7 @@ import hydra.lib.PrimitiveType;
 import java.util.function.Function;
 
 
-public class EqualInt64<A> extends EqualityFunction<A, Long> {
+public class EqualInt64 extends EqualityFunction<Long> {
     public EqualInt64() {
         super(PrimitiveType.int64(), Relation.EQUALS);
     }

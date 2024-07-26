@@ -5,16 +5,16 @@ package hydra.core;
 import java.io.Serializable;
 
 /**
- * An object wrapped in a type name
+ * A term wrapped in a type name
  */
-public class Nominal<X> implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Nominal");
+public class WrappedTerm implements Serializable {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.WrappedTerm");
   
   public final hydra.core.Name typeName;
   
-  public final X object;
+  public final hydra.core.Term object;
   
-  public Nominal (hydra.core.Name typeName, X object) {
+  public WrappedTerm (hydra.core.Name typeName, hydra.core.Term object) {
     java.util.Objects.requireNonNull((typeName));
     java.util.Objects.requireNonNull((object));
     this.typeName = typeName;
@@ -23,10 +23,10 @@ public class Nominal<X> implements Serializable {
   
   @Override
   public boolean equals(Object other) {
-    if (!(other instanceof Nominal)) {
+    if (!(other instanceof WrappedTerm)) {
       return false;
     }
-    Nominal o = (Nominal) (other);
+    WrappedTerm o = (WrappedTerm) (other);
     return typeName.equals(o.typeName) && object.equals(o.object);
   }
   
@@ -35,13 +35,13 @@ public class Nominal<X> implements Serializable {
     return 2 * typeName.hashCode() + 3 * object.hashCode();
   }
   
-  public Nominal withTypeName(hydra.core.Name typeName) {
+  public WrappedTerm withTypeName(hydra.core.Name typeName) {
     java.util.Objects.requireNonNull((typeName));
-    return new Nominal(typeName, object);
+    return new WrappedTerm(typeName, object);
   }
   
-  public Nominal withObject(X object) {
+  public WrappedTerm withObject(hydra.core.Term object) {
     java.util.Objects.requireNonNull((object));
-    return new Nominal(typeName, object);
+    return new WrappedTerm(typeName, object);
   }
 }

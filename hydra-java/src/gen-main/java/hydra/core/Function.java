@@ -7,37 +7,37 @@ import java.io.Serializable;
 /**
  * A function
  */
-public abstract class Function<A> implements Serializable {
+public abstract class Function implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Function");
   
   private Function () {
   
   }
   
-  public abstract <R> R accept(Visitor<A, R> visitor) ;
+  public abstract <R> R accept(Visitor<R> visitor) ;
   
-  public interface Visitor<A, R> {
-    R visit(Elimination<A> instance) ;
+  public interface Visitor<R> {
+    R visit(Elimination instance) ;
     
-    R visit(Lambda<A> instance) ;
+    R visit(Lambda instance) ;
     
-    R visit(Primitive<A> instance) ;
+    R visit(Primitive instance) ;
   }
   
-  public interface PartialVisitor<A, R> extends Visitor<A, R> {
-    default R otherwise(Function<A> instance) {
+  public interface PartialVisitor<R> extends Visitor<R> {
+    default R otherwise(Function instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Elimination<A> instance) {
+    default R visit(Elimination instance) {
       return otherwise((instance));
     }
     
-    default R visit(Lambda<A> instance) {
+    default R visit(Lambda instance) {
       return otherwise((instance));
     }
     
-    default R visit(Primitive<A> instance) {
+    default R visit(Primitive instance) {
       return otherwise((instance));
     }
   }
@@ -45,13 +45,13 @@ public abstract class Function<A> implements Serializable {
   /**
    * An elimination for any of a few term variants
    */
-  public static final class Elimination<A> extends hydra.core.Function<A> implements Serializable {
+  public static final class Elimination extends hydra.core.Function implements Serializable {
     /**
      * An elimination for any of a few term variants
      */
-    public final hydra.core.Elimination<A> value;
+    public final hydra.core.Elimination value;
     
-    public Elimination (hydra.core.Elimination<A> value) {
+    public Elimination (hydra.core.Elimination value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -71,7 +71,7 @@ public abstract class Function<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -79,13 +79,13 @@ public abstract class Function<A> implements Serializable {
   /**
    * A function abstraction (lambda)
    */
-  public static final class Lambda<A> extends hydra.core.Function<A> implements Serializable {
+  public static final class Lambda extends hydra.core.Function implements Serializable {
     /**
      * A function abstraction (lambda)
      */
-    public final hydra.core.Lambda<A> value;
+    public final hydra.core.Lambda value;
     
-    public Lambda (hydra.core.Lambda<A> value) {
+    public Lambda (hydra.core.Lambda value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -105,7 +105,7 @@ public abstract class Function<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -113,7 +113,7 @@ public abstract class Function<A> implements Serializable {
   /**
    * A reference to a built-in (primitive) function
    */
-  public static final class Primitive<A> extends hydra.core.Function<A> implements Serializable {
+  public static final class Primitive extends hydra.core.Function implements Serializable {
     /**
      * A reference to a built-in (primitive) function
      */
@@ -139,7 +139,7 @@ public abstract class Function<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }

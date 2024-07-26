@@ -16,18 +16,18 @@ import static hydra.Flows.map2;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.int32;
 
-public class Mod<A> extends PrimitiveFunction<A> {
+public class Mod extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/math.mod");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return function(int32(), int32(), int32());
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> map2(Expect.int32(args.get(0)), Expect.int32(args.get(1)),
             (arg0, arg1) -> Terms.int32(apply(arg0, arg1)));
     }

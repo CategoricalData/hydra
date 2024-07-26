@@ -7,18 +7,18 @@ import java.io.Serializable;
 /**
  * A collection of test cases with a name and optional description
  */
-public class TestGroup<A> implements Serializable {
+public class TestGroup implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/testing.TestGroup");
   
   public final String name;
   
   public final hydra.util.Opt<String> description;
   
-  public final java.util.List<hydra.testing.TestGroup<A>> subgroups;
+  public final java.util.List<hydra.testing.TestGroup> subgroups;
   
-  public final java.util.List<hydra.testing.TestCase<A>> cases;
+  public final java.util.List<hydra.testing.TestCase> cases;
   
-  public TestGroup (String name, hydra.util.Opt<String> description, java.util.List<hydra.testing.TestGroup<A>> subgroups, java.util.List<hydra.testing.TestCase<A>> cases) {
+  public TestGroup (String name, hydra.util.Opt<String> description, java.util.List<hydra.testing.TestGroup> subgroups, java.util.List<hydra.testing.TestCase> cases) {
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((description));
     java.util.Objects.requireNonNull((subgroups));
@@ -53,12 +53,12 @@ public class TestGroup<A> implements Serializable {
     return new TestGroup(name, description, subgroups, cases);
   }
   
-  public TestGroup withSubgroups(java.util.List<hydra.testing.TestGroup<A>> subgroups) {
+  public TestGroup withSubgroups(java.util.List<hydra.testing.TestGroup> subgroups) {
     java.util.Objects.requireNonNull((subgroups));
     return new TestGroup(name, description, subgroups, cases);
   }
   
-  public TestGroup withCases(java.util.List<hydra.testing.TestCase<A>> cases) {
+  public TestGroup withCases(java.util.List<hydra.testing.TestCase> cases) {
     java.util.Objects.requireNonNull((cases));
     return new TestGroup(name, description, subgroups, cases);
   }

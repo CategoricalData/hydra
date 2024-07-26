@@ -10,9 +10,6 @@ import java.io.Serializable;
 public class Symbol implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ast.Symbol");
   
-  /**
-   * Any symbol
-   */
   public final String value;
   
   public Symbol (String value) {

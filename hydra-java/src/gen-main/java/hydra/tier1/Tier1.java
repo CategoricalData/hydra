@@ -82,30 +82,30 @@ public interface Tier1 {
     });
   }
   
-  static <A> Boolean isLambda(hydra.core.Term<A> term) {
-    return (hydra.strip.Strip.stripTerm((term))).accept(new hydra.core.Term.PartialVisitor<A, Boolean>() {
+  static  Boolean isLambda(hydra.core.Term term) {
+    return (hydra.strip.Strip.stripTerm((term))).accept(new hydra.core.Term.PartialVisitor<Boolean>() {
       @Override
-      public Boolean otherwise(hydra.core.Term<A> instance) {
+      public Boolean otherwise(hydra.core.Term instance) {
         return false;
       }
       
       @Override
-      public Boolean visit(hydra.core.Term.Function<A> instance) {
-        return ((instance.value)).accept(new hydra.core.Function.PartialVisitor<A, Boolean>() {
+      public Boolean visit(hydra.core.Term.Function instance) {
+        return ((instance.value)).accept(new hydra.core.Function.PartialVisitor<Boolean>() {
           @Override
-          public Boolean otherwise(hydra.core.Function<A> instance) {
+          public Boolean otherwise(hydra.core.Function instance) {
             return false;
           }
           
           @Override
-          public Boolean visit(hydra.core.Function.Lambda<A> instance) {
+          public Boolean visit(hydra.core.Function.Lambda instance) {
             return true;
           }
         });
       }
       
       @Override
-      public Boolean visit(hydra.core.Term.Let<A> instance) {
+      public Boolean visit(hydra.core.Term.Let instance) {
         return hydra.tier1.Tier1.isLambda(((instance.value)).environment);
       }
     });

@@ -5,7 +5,7 @@ import hydra.lib.PrimitiveType;
 import java.util.function.Function;
 
 
-public class GteInt32<A> extends EqualityFunction<A, Integer> {
+public class GteInt32 extends EqualityFunction<Integer> {
     public GteInt32() {
         super(PrimitiveType.int32(), Relation.GREATER_THAN_OR_EQUAL);
     }

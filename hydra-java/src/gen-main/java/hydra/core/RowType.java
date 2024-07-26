@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A labeled record or union type
  */
-public class RowType<A> implements Serializable {
+public class RowType implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.RowType");
   
   /**
@@ -23,9 +23,9 @@ public class RowType<A> implements Serializable {
   /**
    * The fields of this row type, excluding any inherited fields
    */
-  public final java.util.List<hydra.core.FieldType<A>> fields;
+  public final java.util.List<hydra.core.FieldType> fields;
   
-  public RowType (hydra.core.Name typeName, hydra.util.Opt<hydra.core.Name> extends_, java.util.List<hydra.core.FieldType<A>> fields) {
+  public RowType (hydra.core.Name typeName, hydra.util.Opt<hydra.core.Name> extends_, java.util.List<hydra.core.FieldType> fields) {
     java.util.Objects.requireNonNull((typeName));
     java.util.Objects.requireNonNull((extends_));
     java.util.Objects.requireNonNull((fields));
@@ -58,7 +58,7 @@ public class RowType<A> implements Serializable {
     return new RowType(typeName, extends_, fields);
   }
   
-  public RowType withFields(java.util.List<hydra.core.FieldType<A>> fields) {
+  public RowType withFields(java.util.List<hydra.core.FieldType> fields) {
     java.util.Objects.requireNonNull((fields));
     return new RowType(typeName, extends_, fields);
   }

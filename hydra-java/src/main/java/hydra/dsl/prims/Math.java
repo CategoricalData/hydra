@@ -10,31 +10,31 @@ import hydra.lib.math.Rem;
 import hydra.lib.math.Sub;
 
 public interface Math {
-    static <A> Term<A> add() {
+    static Term add() {
         return new Add().term();
     }
 
-    static <A> Term<A> div() {
+    static Term div() {
         return new Div().term();
     }
 
-    static <A> Term<A> mod() {
+    static Term mod() {
         return new Mod().term();
     }
 
-    static <A> Term<A> mul() {
+    static Term mul() {
         return new Mul().term();
     }
 
-    static <A> Term<A> neg() {
+    static Term neg() {
         return new Neg().term();
     }
 
-    static <A> Term<A> rem() {
+    static Term rem() {
         return new Rem().term();
     }
 
-    static <A> Term<A> sub() {
+    static Term sub() {
         return new Sub().term();
     }
 }

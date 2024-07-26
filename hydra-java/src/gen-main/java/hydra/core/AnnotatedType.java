@@ -5,16 +5,16 @@ package hydra.core;
 import java.io.Serializable;
 
 /**
- * An object, such as a type or term, together with an annotation
+ * A type together with an annotation
  */
-public class Annotated<X, A> implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Annotated");
+public class AnnotatedType implements Serializable {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.AnnotatedType");
   
-  public final X subject;
+  public final hydra.core.Type subject;
   
-  public final A annotation;
+  public final hydra.core.Kv annotation;
   
-  public Annotated (X subject, A annotation) {
+  public AnnotatedType (hydra.core.Type subject, hydra.core.Kv annotation) {
     java.util.Objects.requireNonNull((subject));
     java.util.Objects.requireNonNull((annotation));
     this.subject = subject;
@@ -23,10 +23,10 @@ public class Annotated<X, A> implements Serializable {
   
   @Override
   public boolean equals(Object other) {
-    if (!(other instanceof Annotated)) {
+    if (!(other instanceof AnnotatedType)) {
       return false;
     }
-    Annotated o = (Annotated) (other);
+    AnnotatedType o = (AnnotatedType) (other);
     return subject.equals(o.subject) && annotation.equals(o.annotation);
   }
   
@@ -35,13 +35,13 @@ public class Annotated<X, A> implements Serializable {
     return 2 * subject.hashCode() + 3 * annotation.hashCode();
   }
   
-  public Annotated withSubject(X subject) {
+  public AnnotatedType withSubject(hydra.core.Type subject) {
     java.util.Objects.requireNonNull((subject));
-    return new Annotated(subject, annotation);
+    return new AnnotatedType(subject, annotation);
   }
   
-  public Annotated withAnnotation(A annotation) {
+  public AnnotatedType withAnnotation(hydra.core.Kv annotation) {
     java.util.Objects.requireNonNull((annotation));
-    return new Annotated(subject, annotation);
+    return new AnnotatedType(subject, annotation);
   }
 }

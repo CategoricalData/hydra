@@ -28,14 +28,14 @@ public interface Tier2 {
     })));
   }
 
-  static <A> hydra.compute.Flow<hydra.graph.Graph<A>, hydra.core.Type<A>> requireTypeAnnotation(hydra.core.Term<A> term) {
-    java.util.function.Function<Opt<Type<A>>, hydra.compute.Flow<hydra.graph.Graph<A>, hydra.core.Type<A>>> checkType = (java.util.function.Function<Opt<Type<A>>, hydra.compute.Flow<hydra.graph.Graph<A>, hydra.core.Type<A>>>) (v1 -> (((v1)).map((java.util.function.Function<hydra.core.Type<A>, hydra.compute.Flow<hydra.graph.Graph<A>, hydra.core.Type<A>>>) (s0 -> hydra.lib.flows.Pure.apply((s0))))).orElse(hydra.lib.flows.Fail.apply("missing type annotation")));
-    java.util.function.Function<hydra.graph.AnnotationClass<A>, hydra.compute.Flow<hydra.graph.Graph<A>, hydra.core.Type<A>>> annsToType = (java.util.function.Function<hydra.graph.AnnotationClass<A>, hydra.compute.Flow<hydra.graph.Graph<A>, hydra.core.Type<A>>>) (anns -> hydra.lib.flows.Bind.apply(
+  static  hydra.compute.Flow<hydra.graph.Graph, hydra.core.Type> requireTypeAnnotation(hydra.core.Term term) {
+    java.util.function.Function<Opt<Type>, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Type>> checkType = (java.util.function.Function<Opt<Type>, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Type>>) (v1 -> (((v1)).map((java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Type>>) (s0 -> hydra.lib.flows.Pure.apply((s0))))).orElse(hydra.lib.flows.Fail.apply("missing type annotation")));
+    java.util.function.Function<hydra.graph.AnnotationClass, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Type>> annsToType = (java.util.function.Function<hydra.graph.AnnotationClass, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Type>>) (anns -> hydra.lib.flows.Bind.apply(
       (((anns)).termType).apply((term)),
       (checkType)));
     return hydra.lib.flows.Bind.apply(
       hydra.lib.flows.Map.apply(
-        (java.util.function.Function<hydra.graph.Graph<A>, hydra.graph.AnnotationClass<A>>) (s1 -> ((s1)).annotations),
+        (java.util.function.Function<hydra.graph.Graph, hydra.graph.AnnotationClass>) (s1 -> ((s1)).annotations),
         (hydra.tier2.Tier2.getState())),
       (annsToType));
   }

@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A logical collection of elements in the same namespace, having dependencies on zero or more other modules
  */
-public class Module<A> implements Serializable {
+public class Module implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/module.Module");
   
   /**
@@ -18,24 +18,24 @@ public class Module<A> implements Serializable {
   /**
    * The elements defined in this module
    */
-  public final java.util.List<hydra.graph.Element<A>> elements;
+  public final java.util.List<hydra.graph.Element> elements;
   
   /**
    * Any modules which the term expressions of this module directly depend upon
    */
-  public final java.util.List<hydra.module.Module<A>> termDependencies;
+  public final java.util.List<hydra.module.Module> termDependencies;
   
   /**
    * Any modules which the type expressions of this module directly depend upon
    */
-  public final java.util.List<hydra.module.Module<A>> typeDependencies;
+  public final java.util.List<hydra.module.Module> typeDependencies;
   
   /**
    * An optional human-readable description of the module
    */
   public final hydra.util.Opt<String> description;
   
-  public Module (hydra.module.Namespace namespace, java.util.List<hydra.graph.Element<A>> elements, java.util.List<hydra.module.Module<A>> termDependencies, java.util.List<hydra.module.Module<A>> typeDependencies, hydra.util.Opt<String> description) {
+  public Module (hydra.module.Namespace namespace, java.util.List<hydra.graph.Element> elements, java.util.List<hydra.module.Module> termDependencies, java.util.List<hydra.module.Module> typeDependencies, hydra.util.Opt<String> description) {
     java.util.Objects.requireNonNull((namespace));
     java.util.Objects.requireNonNull((elements));
     java.util.Objects.requireNonNull((termDependencies));
@@ -67,17 +67,17 @@ public class Module<A> implements Serializable {
     return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }
   
-  public Module withElements(java.util.List<hydra.graph.Element<A>> elements) {
+  public Module withElements(java.util.List<hydra.graph.Element> elements) {
     java.util.Objects.requireNonNull((elements));
     return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }
   
-  public Module withTermDependencies(java.util.List<hydra.module.Module<A>> termDependencies) {
+  public Module withTermDependencies(java.util.List<hydra.module.Module> termDependencies) {
     java.util.Objects.requireNonNull((termDependencies));
     return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }
   
-  public Module withTypeDependencies(java.util.List<hydra.module.Module<A>> typeDependencies) {
+  public Module withTypeDependencies(java.util.List<hydra.module.Module> typeDependencies) {
     java.util.Objects.requireNonNull((typeDependencies));
     return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }

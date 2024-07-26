@@ -17,9 +17,9 @@ public class Trace implements Serializable {
   /**
    * A map of string keys to arbitrary terms as values, for application-specific use
    */
-  public final java.util.Map<String, hydra.core.Term<hydra.compute.Kv>> other;
+  public final java.util.Map<String, hydra.core.Term> other;
   
-  public Trace (java.util.List<String> stack, java.util.List<String> messages, java.util.Map<String, hydra.core.Term<hydra.compute.Kv>> other) {
+  public Trace (java.util.List<String> stack, java.util.List<String> messages, java.util.Map<String, hydra.core.Term> other) {
     java.util.Objects.requireNonNull((stack));
     java.util.Objects.requireNonNull((messages));
     java.util.Objects.requireNonNull((other));
@@ -52,7 +52,7 @@ public class Trace implements Serializable {
     return new Trace(stack, messages, other);
   }
   
-  public Trace withOther(java.util.Map<String, hydra.core.Term<hydra.compute.Kv>> other) {
+  public Trace withOther(java.util.Map<String, hydra.core.Term> other) {
     java.util.Objects.requireNonNull((other));
     return new Trace(stack, messages, other);
   }

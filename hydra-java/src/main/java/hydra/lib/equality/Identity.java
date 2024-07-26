@@ -14,18 +14,18 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.lambda;
 
-public class Identity<A> extends PrimitiveFunction<A> {
+public class Identity extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/equality.identity");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("x", function("x", "x"));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.pure(args.get(0));
     }
 

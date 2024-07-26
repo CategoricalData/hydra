@@ -5,14 +5,14 @@ package hydra.graph;
 /**
  * A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms
  */
-public class TermCoder<A, X> {
+public class TermCoder<X> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/graph.TermCoder");
   
-  public final hydra.core.Type<A> type;
+  public final hydra.core.Type type;
   
-  public final hydra.compute.Coder<hydra.graph.Graph<A>, hydra.graph.Graph<A>, hydra.core.Term<A>, X> coder;
+  public final hydra.compute.Coder<hydra.graph.Graph, hydra.graph.Graph, hydra.core.Term, X> coder;
   
-  public TermCoder (hydra.core.Type<A> type, hydra.compute.Coder<hydra.graph.Graph<A>, hydra.graph.Graph<A>, hydra.core.Term<A>, X> coder) {
+  public TermCoder (hydra.core.Type type, hydra.compute.Coder<hydra.graph.Graph, hydra.graph.Graph, hydra.core.Term, X> coder) {
     java.util.Objects.requireNonNull((type));
     java.util.Objects.requireNonNull((coder));
     this.type = type;
@@ -33,12 +33,12 @@ public class TermCoder<A, X> {
     return 2 * type.hashCode() + 3 * coder.hashCode();
   }
   
-  public TermCoder withType(hydra.core.Type<A> type) {
+  public TermCoder withType(hydra.core.Type type) {
     java.util.Objects.requireNonNull((type));
     return new TermCoder(type, coder);
   }
   
-  public TermCoder withCoder(hydra.compute.Coder<hydra.graph.Graph<A>, hydra.graph.Graph<A>, hydra.core.Term<A>, X> coder) {
+  public TermCoder withCoder(hydra.compute.Coder<hydra.graph.Graph, hydra.graph.Graph, hydra.core.Term, X> coder) {
     java.util.Objects.requireNonNull((coder));
     return new TermCoder(type, coder);
   }

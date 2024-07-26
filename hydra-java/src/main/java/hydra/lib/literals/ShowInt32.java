@@ -17,19 +17,19 @@ import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.string;
 
 
-public class ShowInt32<A> extends PrimitiveFunction<A> {
+public class ShowInt32 extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/literals.showInt32");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return function(int32(), string());
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
-        return args -> Flows.map(Expect.int32(args.get(0)), (Function<Integer, Term<A>>) s -> Terms.string(apply(s)));
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
+        return args -> Flows.map(Expect.int32(args.get(0)), (Function<Integer, Term>) s -> Terms.string(apply(s)));
     }
 
     public static String apply(Integer value) {

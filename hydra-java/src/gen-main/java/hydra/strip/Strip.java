@@ -2,7 +2,8 @@
 
 package hydra.strip;
 
-import hydra.core.Annotated;
+import hydra.core.AnnotatedTerm;
+import hydra.core.AnnotatedType;
 import hydra.core.Term;
 import hydra.core.Type;
 import hydra.util.Opt;
@@ -11,51 +12,59 @@ import hydra.util.Opt;
  * Several functions for stripping annotations from types and terms.
  */
 public interface Strip {
-  static <A, X> java.util.function.Function<X, X> skipAnnotations(java.util.function.Function<X, Opt<Annotated<X, A>>> getAnn) {
-    return (java.util.function.Function<X, X>) (t -> {
-      java.util.concurrent.atomic.AtomicReference<java.util.function.Function<X, X>> skip = new java.util.concurrent.atomic.AtomicReference<>();
-      skip.set((java.util.function.Function<X, X>) (t1 -> ((((getAnn)).apply((t1))).map((java.util.function.Function<hydra.core.Annotated<X, A>, X>) (ann -> (skip.get()).apply(((ann)).subject)))).orElse((t1))));
+  static java.util.function.Function<Term, Term> skipTermAnnotations(java.util.function.Function<Term, Opt<AnnotatedTerm>> getAnn) {
+    return (java.util.function.Function<Term, Term>) (t -> {
+      java.util.concurrent.atomic.AtomicReference<java.util.function.Function<Term, Term>> skip = new java.util.concurrent.atomic.AtomicReference<>();
+      skip.set((java.util.function.Function<Term, Term>) (t1 -> ((((getAnn)).apply((t1))).map((java.util.function.Function<hydra.core.AnnotatedTerm, Term>) (ann -> (skip.get()).apply(((ann)).subject)))).orElse((t1))));
+      return ((skip)).get().apply((t));
+    });
+  }
+
+  static java.util.function.Function<Type, Type> skipTypeAnnotations(java.util.function.Function<Type, Opt<AnnotatedType>> getAnn) {
+    return (java.util.function.Function<Type, Type>) (t -> {
+      java.util.concurrent.atomic.AtomicReference<java.util.function.Function<Type, Type>> skip = new java.util.concurrent.atomic.AtomicReference<>();
+      skip.set((java.util.function.Function<Type, Type>) (t1 -> ((((getAnn)).apply((t1))).map((java.util.function.Function<hydra.core.AnnotatedType, Type>) (ann -> (skip.get()).apply(((ann)).subject)))).orElse((t1))));
       return ((skip)).get().apply((t));
     });
   }
   
-  static <A> hydra.core.Term<A> stripTerm(hydra.core.Term<A> x) {
-    return (hydra.strip.Strip.skipAnnotations((java.util.function.Function<hydra.core.Term<A>, Opt<Annotated<Term<A>, A>>>) (v1 -> ((v1)).accept(new hydra.core.Term.PartialVisitor<A, Opt<Annotated<Term<A>, A>>>() {
+  static  hydra.core.Term stripTerm(hydra.core.Term x) {
+    return (hydra.strip.Strip.skipTermAnnotations((java.util.function.Function<hydra.core.Term, Opt<AnnotatedTerm>>) (v1 -> ((v1)).accept(new hydra.core.Term.PartialVisitor<Opt<AnnotatedTerm>>() {
       @Override
-      public Opt<Annotated<Term<A>, A>> otherwise(hydra.core.Term<A> instance) {
+      public Opt<AnnotatedTerm> otherwise(hydra.core.Term instance) {
         return Opt.empty();
       }
       
       @Override
-      public Opt<Annotated<Term<A>, A>> visit(hydra.core.Term.Annotated<A> instance) {
+      public Opt<AnnotatedTerm> visit(hydra.core.Term.Annotated instance) {
         return Opt.of((instance.value));
       }
     })))).apply((x));
   }
   
-  static <A> hydra.core.Type<A> stripType(hydra.core.Type<A> x) {
-    return (hydra.strip.Strip.skipAnnotations((java.util.function.Function<hydra.core.Type<A>, Opt<Annotated<Type<A>, A>>>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<A, Opt<Annotated<Type<A>, A>>>() {
+  static  hydra.core.Type stripType(hydra.core.Type x) {
+    return (hydra.strip.Strip.skipTypeAnnotations((java.util.function.Function<hydra.core.Type, Opt<AnnotatedType>>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<Opt<AnnotatedType>>() {
       @Override
-      public Opt<Annotated<Type<A>, A>> otherwise(hydra.core.Type<A> instance) {
+      public Opt<AnnotatedType> otherwise(hydra.core.Type instance) {
         return Opt.empty();
       }
       
       @Override
-      public Opt<Annotated<Type<A>, A>> visit(hydra.core.Type.Annotated<A> instance) {
+      public Opt<AnnotatedType> visit(hydra.core.Type.Annotated instance) {
         return Opt.of((instance.value));
       }
     })))).apply((x));
   }
   
-  static <A> hydra.core.Type<A> stripTypeParameters(hydra.core.Type<A> t) {
-    return (hydra.strip.Strip.stripType((t))).accept(new hydra.core.Type.PartialVisitor<A, hydra.core.Type<A>>() {
+  static  hydra.core.Type stripTypeParameters(hydra.core.Type t) {
+    return (hydra.strip.Strip.stripType((t))).accept(new hydra.core.Type.PartialVisitor<hydra.core.Type>() {
       @Override
-      public hydra.core.Type<A> otherwise(hydra.core.Type<A> instance) {
+      public hydra.core.Type otherwise(hydra.core.Type instance) {
         return (t);
       }
       
       @Override
-      public hydra.core.Type<A> visit(hydra.core.Type.Lambda<A> instance) {
+      public hydra.core.Type visit(hydra.core.Type.Lambda instance) {
         return hydra.strip.Strip.stripTypeParameters(((instance.value)).body);
       }
     });

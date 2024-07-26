@@ -18,19 +18,19 @@ import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.list;
 
 
-public class Intercalate<A> extends PrimitiveFunction<A> {
+public class Intercalate extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/lists.intercalate");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("a",
                 function(list("a"), list(list("a")), list("a")));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map2(
             Expect.list(Flows::pure, args.get(0)),
             Expect.list(t -> Expect.list(Flows::pure, t), args.get(1)),
