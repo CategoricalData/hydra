@@ -35,11 +35,13 @@ noGraph = Graph {
 
 
 showTerm :: Term -> String
-showTerm term = fromFlow "fail" noGraph $ do
-    coder <- termStringCoder
-    coderEncode coder encoded
-  where
-    encoded = coreEncodeTerm $ rewriteTermMeta (const $ Kv M.empty) term
+showTerm term = fromFlow "fail" noGraph (jsonValueToString <$> untypedTermToJson term)
+
+--     coder <- termStringCoder
+--     coderEncode coder encoded
+--   where
+--     --encoded = coreEncodeTerm $ rewriteTermMeta (const $ Kv M.empty) term
+--     encoded = rewriteTermMeta (const $ Kv M.empty) term
 
 termStringCoder :: Flow Graph (Coder Graph Graph Term String)
 termStringCoder = do
