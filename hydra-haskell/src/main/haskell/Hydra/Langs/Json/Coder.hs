@@ -124,7 +124,7 @@ termCoder typ = case stripType typ of
 
 -- | A simplistic, unidirectional encoding for terms as JSON values. Not type-aware; best used for human consumption.
 untypedTermToJson :: Term -> Flow s Json.Value
-untypedTermToJson term = case stripTerm term of
+untypedTermToJson term = case fullyStripTerm term of
       TermList terms -> Json.ValueArray <$> (CM.mapM untypedTermToJson terms)
       TermLiteral lit -> pure $ case lit of
         LiteralBinary s -> Json.ValueString s

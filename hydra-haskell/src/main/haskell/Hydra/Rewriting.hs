@@ -25,18 +25,32 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-type GraphSchema a = M.Map Name (Type)
+type GraphSchema a = M.Map Name Type
 
-elementsWithDependencies :: [Element] -> Flow (Graph) [Element]
+-- beneathTermAnnotations :: (Term -> Term) -> Term -> Term
+-- beneathTermAnnotations f term = case term of
+--   TermAnnotated (AnnotatedTerm term1 ann) ->
+--     TermAnnotated (AnnotatedTerm (beneathTermAnnotationsM f term1) ann)
+--   TermTyped (TermWithType term1 typ) ->
+--     TermTyped $ TermWithType (beneathTermAnnotationsM f term1) typ
+--   _ -> f term
+--
+-- beneathTermAnnotationsM :: (Term -> Flow s Term) -> Term -> Flow s Term
+-- beneathTermAnnotationsM f term = case term of
+--   TermAnnotated (AnnotatedTerm term1 ann) ->
+--     TermAnnotated <$> (AnnotatedTerm <$> beneathTermAnnotationsM f term1 <*> pure ann)
+--   TermTyped (TermWithType term1 typ) ->
+--     TermTyped <$> (TermWithType <$> beneathTermAnnotationsM f term1 <*> pure typ)
+--   _ -> f term
+
+elementsWithDependencies :: [Element] -> Flow Graph [Element]
 elementsWithDependencies original = CM.mapM requireElement allDepNames
   where
     depNames = S.toList . termDependencyNames True False False . elementData
     allDepNames = L.nub $ (elementName <$> original) ++ (L.concat $ depNames <$> original)
 
--- | Turn arbitrary terms like 'add 42' into terms like '\x.add 42 x',
---   whose arity (in the absence of application terms) is equal to the depth of nested lambdas.
---   This function leaves application terms intact, simply rewriting their left and right subterms.
-expandLambdas :: Term -> Flow (Graph) (Term)
+-- TODO: deprecated; see expandTypedLambdas
+expandLambdas :: Term -> Flow Graph Term
 expandLambdas term = do
     g <- getState
     rewriteTermM (expand g Nothing []) (pure . id) term
@@ -77,6 +91,48 @@ expandLambdas term = do
                   _ -> throwDebugException $ "expandLambdas: expected function type, got " ++ show t
                 Nothing -> Nothing
 
+-- | Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x',
+--   whose arity (in the absence of application terms) is equal to the depth of nested lambdas.
+--   This is useful for targets like Java with weaker support for currying.
+expandTypedLambdas :: Term -> Term
+expandTypedLambdas = rewriteTerm rewrite id
+  where
+    rewrite recurse term = case getFunType term of
+        Nothing -> recurse term
+        Just (doms, cod) -> expand (doms, cod) term
+      where
+        toNaryFunType typ = case stripType typ of
+          TypeFunction (FunctionType dom0 cod0) -> (dom0 : doms, cod1)
+            where
+              (doms, cod1) = toNaryFunType cod0
+          d -> ([], d)
+        getFunType term = toNaryFunType <$> getTermType term
+
+        expand (doms, cod) term = if L.null doms
+          then recurse term
+          else case term of
+            TermAnnotated (AnnotatedTerm term1 ann) -> TermAnnotated $ AnnotatedTerm (expand (doms, cod) term1) ann
+            TermApplication (Application lhs rhs) -> case getTermType rhs of
+                Nothing -> recurse term
+                Just typ -> TermApplication $ Application (expand (typ:doms, cod) lhs) $ expandTypedLambdas rhs
+            TermFunction f -> case f of
+              FunctionLambda (Lambda var body) -> TermFunction $ FunctionLambda $
+                Lambda var $ expand (L.tail doms, cod) body
+              _ -> pad 1 (doms, cod) term
+            TermLet (Let bindings env) -> TermLet $ Let (expandTypedLambdas <$> bindings) $ expand (doms, cod) env
+            TermTyped (TermWithType term1 typ) -> TermTyped $ TermWithType (expand (doms, cod) term1) typ
+            _ -> recurse term
+
+        pad i (doms, cod) term = typed (toFunctionType doms cod) $ if L.null doms
+            then term
+            else typed (toFunctionType doms cod) $
+              TermFunction $ FunctionLambda $ Lambda var $
+                pad (i+1) (L.tail doms, cod) $ TermApplication $ Application term $ TermVariable var
+          where
+            typed typ term = TermTyped $ TermWithType term typ
+            toFunctionType doms cod = L.foldl (\c d -> TypeFunction $ FunctionType d c) cod doms
+            var = Name $ "v" ++ show i
+
 flattenLetTerms :: Term -> Term
 flattenLetTerms = rewriteTerm flatten id
   where
@@ -109,7 +165,7 @@ freeVariablesInScheme (TypeScheme vars t) = S.difference (freeVariablesInType t)
 
 -- | Inline all type variables in a type using the provided schema.
 --   Note: this function is only appropriate for nonrecursive type definitions.
-inlineType :: GraphSchema Kv -> Type -> Flow s (Type)
+inlineType :: GraphSchema Kv -> Type -> Flow s Type
 inlineType schema = rewriteTypeM f pure
   where
     f recurse typ = do
@@ -129,6 +185,7 @@ removeTermAnnotations = rewriteTerm remove id
   where
     remove recurse term = case term of
       TermAnnotated (AnnotatedTerm term' _) -> remove recurse term'
+      TermTyped (TermWithType term' _) -> remove recurse term'
       _ -> recurse term
 
 -- | Recursively remove type annotations, including within subtypes
@@ -190,10 +247,10 @@ rewriteTerm f mf = rewrite fsub f
         forField f = f {fieldTerm = recurse (fieldTerm f)}
 
 rewriteTermM ::
-  ((Term -> Flow s (Term)) -> Term -> (Flow s (Term))) ->
+  ((Term -> Flow s Term) -> Term -> (Flow s Term)) ->
   (Kv -> Flow s Kv) ->
   Term ->
-  Flow s (Term)
+  Flow s Term
 rewriteTermM f mf = rewrite fsub f
   where
     fsub recurse term = case term of
@@ -246,7 +303,7 @@ rewriteTermMeta = rewriteTerm mapExpr
   where
     mapExpr recurse term = recurse term
 
-rewriteTermMetaM :: (Kv -> Flow s Kv) -> Term -> Flow s (Term)
+rewriteTermMetaM :: (Kv -> Flow s Kv) -> Term -> Flow s Term
 rewriteTermMetaM = rewriteTermM mapExpr
   where
     mapExpr recurse term = recurse term
@@ -274,10 +331,10 @@ rewriteType f mf = rewrite fsub f
         forField f = f {fieldTypeType = recurse (fieldTypeType f)}
 
 rewriteTypeM ::
-  ((Type -> Flow s (Type)) -> Type -> (Flow s (Type))) ->
+  ((Type -> Flow s Type) -> Type -> (Flow s Type)) ->
   (Kv -> Flow s Kv) ->
   Type ->
-  Flow s (Type)
+  Flow s Type
 rewriteTypeM f mf = rewrite fsub f
   where
     fsub recurse typ = case typ of
@@ -383,7 +440,7 @@ typeDependencyNames = freeVariablesInType
 
 -- | Where non-lambda terms with nonzero arity occur at the top level, turn them into lambdas,
 --   also adding an appropriate type annotation to each new lambda.
-wrapLambdas :: Term -> Flow (Graph) (Term)
+wrapLambdas :: Term -> Flow Graph Term
 wrapLambdas term = do
     typ <- requireTermType term
     anns <- graphAnnotations <$> getState

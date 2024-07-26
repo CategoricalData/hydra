@@ -3,9 +3,10 @@
 module Hydra.RewritingSpec where
 
 import Hydra.Kernel
-import Hydra.Dsl.Terms
 import Hydra.Flows
-import qualified Hydra.Dsl.Terms as Terms
+import Hydra.Dsl.Terms as Terms
+import Hydra.Lib.Io
+import qualified Hydra.Dsl.Types as Types
 
 import Hydra.TestUtils
 
@@ -43,6 +44,8 @@ testExpandLambdas = do
         (apply (apply splitOn "foo") "bar")
       noChange
         (lambda "x" $ int32 42)
+      noChange
+        (typed Types.int32 $ int32 42)
 
     H.it "Expand bare function terms" $ do
       expandsTo
@@ -81,6 +84,9 @@ testExpandLambdas = do
     expandsTo termBefore termAfter = do
       result <- fromFlowIo testGraph $ expandLambdas termBefore
       H.shouldBe result termAfter
+--       inf <- fromFlowIo testGraph $ annotateTermWithTypes termBefore
+--       let result = expandTypedLambdas inf
+--       H.shouldBe (showTerm (removeTermAnnotations result)) (showTerm termAfter)
 
     noChange term = expandsTo term term
 
