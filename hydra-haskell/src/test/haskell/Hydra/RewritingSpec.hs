@@ -61,16 +61,16 @@ testExpandLambdas = do
 
     H.it "Expand subterms within applications" $ do
       expandsTo
-        (apply splitOn "bar")
-        (lambda "v1" $ apply (apply splitOn "bar") (var "v1"))
+        (splitOn @@ "bar")
+        (lambda "v1" $ splitOn @@ "bar" @@ var "v1")
       expandsTo
-        (apply (lambda "x" $ var "x") length)
-        (apply (lambda "x" $ var "x") (lambda "v1" $ apply length $ var "v1"))
+        ((lambda "x" $ var "x") @@ length)
+        ((lambda "x" $ var "x") @@ (lambda "v1" $ length @@ var "v1"))
 
     H.it "Expand arbitrary subterms" $ do
       expandsTo
-        (list [lambda "x" "foo", apply splitOn "bar"])
-        (list [lambda "x" "foo", lambda "v1" $ apply (apply splitOn "bar") $ var "v1"])
+        (list [lambda "x" $ list ["foo"], splitOn @@ "bar"])
+        (list [lambda "x" $ list ["foo"], lambda "v1" $ splitOn @@ "bar" @@ var "v1"])
 
     H.it "Check that lambda expansion is idempotent" $ do
       QC.property $ \term -> do
@@ -82,11 +82,11 @@ testExpandLambdas = do
     splitOn = primitive $ Name "hydra/lib/strings.splitOn"
     toLower = primitive $ Name "hydra/lib/strings.toLower"
     expandsTo termBefore termAfter = do
-      result <- fromFlowIo testGraph $ expandLambdas termBefore
-      H.shouldBe result termAfter
---       inf <- fromFlowIo testGraph $ annotateTermWithTypes termBefore
---       let result = expandTypedLambdas inf
---       H.shouldBe (showTerm (removeTermAnnotations result)) (showTerm termAfter)
+--      result <- fromFlowIo testGraph $ expandLambdas termBefore
+--      H.shouldBe result termAfter
+       inf <- fromFlowIo testGraph $ annotateTermWithTypes termBefore
+       let result = expandTypedLambdas inf
+       H.shouldBe (showTerm (removeTermAnnotations result)) (showTerm termAfter)
 
     noChange term = expandsTo term term
 
@@ -97,17 +97,17 @@ testFoldOverTerm = do
     H.it "Try a simple fold" $ do
       H.shouldBe
         (foldOverTerm TraversalOrderPre addInt32s 0
-          (list [int32 42, apply (lambda "x" $ var "x") (int32 10)] :: Term))
+          (list [int32 42, (lambda "x" $ var "x") @@ int32 10]))
         52
 
     H.it "Check that traversal order is respected" $ do
       H.shouldBe
         (foldOverTerm TraversalOrderPre listLengths []
-          (list [list [string "foo", string "bar"], apply (lambda "x" $ var "x") (list [string "quux"])] :: Term))
+          (list [list [string "foo", string "bar"], (lambda "x" $ var "x") @@ (list [string "quux"])]))
         [1, 2, 2]
       H.shouldBe
         (foldOverTerm TraversalOrderPost listLengths []
-          (list [list [string "foo", string "bar"], apply (lambda "x" $ var "x") (list [string "quux"])] :: Term))
+          (list [list [string "foo", string "bar"], (lambda "x" $ var "x") @@ (list [string "quux"])]))
         [2, 1, 2]
   where
     addInt32s sum term = case term of
@@ -124,25 +124,25 @@ testFlattenLetTerms = do
     H.it "Non-let terms are unaffected" $ do
       H.shouldBe
         (flattenLetTerms $ Terms.int32 42)
-        (Terms.int32 42 :: Term)
+        (Terms.int32 42)
       H.shouldBe
         (flattenLetTerms $ Terms.list [Terms.string "foo"])
-        (Terms.list [Terms.string "foo"] :: Term)
+        (Terms.list [Terms.string "foo"])
 
     H.it "Non-nested let terms are unaffected" $
       H.shouldBe
         (flattenLetTerms letTerm1)
-        (letTerm1 :: Term)
+        (letTerm1)
 
     H.it "Nonrecursive, nested bindings are flattened" $
       H.shouldBe
         (flattenLetTerms letTerm2)
-        (letTerm2_flattened :: Term)
+        (letTerm2_flattened)
 
     H.it "Multiple levels of nesting are flattened appropriately" $
       H.shouldBe
         (flattenLetTerms letTerm3)
-        (letTerm3_flattened :: Term)
+        (letTerm3_flattened)
   where
     makeLet body pairs = TermLet $ Let (M.fromList (makePair <$> pairs)) body
       where
@@ -180,21 +180,21 @@ testFreeVariablesInTerm = do
 --    H.it "Generated terms never have free variables" $ do
 --      QC.property $ \(TypedTerm _ term) -> do
 --        H.shouldBe
---          (freeVariablesInTerm (term :: Term))
+--          (freeVariablesInTerm (term))
 --          S.empty
 
     H.it "Free variables in individual terms" $ do
       H.shouldBe
-        (freeVariablesInTerm (string "foo" :: Term))
+        (freeVariablesInTerm (string "foo"))
         S.empty
       H.shouldBe
-        (freeVariablesInTerm (var "x" :: Term))
+        (freeVariablesInTerm (var "x"))
         (S.fromList [Name "x"])
       H.shouldBe
-        (freeVariablesInTerm (list [var "x", apply (lambda "y" $ var "y") (int32 42)] :: Term))
+        (freeVariablesInTerm (list [var "x", (lambda "y" $ var "y") @@ int32 42]))
         (S.fromList [Name "x"])
       H.shouldBe
-        (freeVariablesInTerm (list [var "x", apply (lambda "y" $ var "y") (var "y")] :: Term))
+        (freeVariablesInTerm (list [var "x", (lambda "y" $ var "y") @@ var "y"]))
         (S.fromList [Name "x", Name "y"])
 
 --testReplaceFreeName :: H.SpecWith ()
@@ -214,25 +214,25 @@ testReplaceTerm = do
         H.shouldBe
           (rewriteTerm replaceInts keepKv
             (int32 42))
-          (int64 42 :: Term)
+          (int64 42)
         H.shouldBe
           (rewriteTerm replaceInts keepKv
-            (list [int32 42, apply (lambda "x" $ var "x") (int32 137)]))
-          (list [int64 42, apply (lambda "x" $ var "x") (int64 137)] :: Term)
+            (list [int32 42, (lambda "x" $ var "x") @@ int32 137]))
+          (list [int64 42, (lambda "x" $ var "x") @@ int64 137])
 
       H.it "Check that traversal order is respected" $ do
         H.shouldBe
           (rewriteTerm replaceListsPre keepKv
             (list [list [list []]]))
-          (list [list []] :: Term)
+          (list [list []])
         H.shouldBe
           (rewriteTerm replaceListsPost keepKv
             (list [list [list []]]))
-          (list [] :: Term)
+          (list [])
 
 --      H.it "Check that metadata is replace recursively" $ do
 --        H.shouldBe
---          (rewriteTerm keepTerm replaceKv (list [annot 42 (string "foo")] :: Term Int))
+--          (rewriteTerm keepTerm replaceKv (list [annot 42 (string "foo")] Int))
 --          (list [annot "42" (string "foo")])
   where
     keepTerm recurse term = recurse term
@@ -275,18 +275,18 @@ testSimplifyTerm = do
 
     H.it "Check that 'const' applications are simplified" $ do
       H.shouldBe
-        (simplifyTerm (apply (lambda "x" (string "foo")) (int32 42)))
-        (string "foo" :: Term)
+        (simplifyTerm $ (lambda "x" $ string "foo") @@ int32 42)
+        (string "foo")
       H.shouldBe
-        (simplifyTerm (apply (lambda "x" $ list [var "x", var "x"]) (var "y")))
-        (list [var "y", var "y"] :: Term)
+        (simplifyTerm ((lambda "x" $ list [var "x", var "x"]) @@ var "y"))
+        (list [var "y", var "y"])
       H.shouldBe
-        (simplifyTerm (apply (lambda "x" $ string "foo") (var "y")))
-        (string "foo" :: Term)
+        (simplifyTerm ((lambda "x" $ string "foo") @@ var "y"))
+        (string "foo")
       H.shouldBe
-        (simplifyTerm (apply (lambda "x"
-          (apply (lambda "a" (list [string "foo", var "a"])) (var "x"))) (var "y")))
-        (list [string "foo", var "y"] :: Term)
+        (simplifyTerm ((lambda "x"
+          ((lambda "a" (list [string "foo", var "a"])) @@ var "x")) @@ var "y"))
+        (list [string "foo", var "y"])
 
 --testStripKv :: H.SpecWith ()
 --testStripKv = do

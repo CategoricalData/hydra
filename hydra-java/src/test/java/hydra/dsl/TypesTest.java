@@ -29,71 +29,71 @@ import static org.junit.jupiter.api.Assertions.fail;
 @SuppressWarnings("unchecked")
 public class TypesTest {
 
-  private final Type latLonType = record("LatLon", // record types always have a name
-      field("lat", float32()),
-      field("lon", float32()));
+    private final Type latLonType = record("LatLon", // record types always have a name
+            field("lat", float32()),
+            field("lon", float32()));
 
-  private final Type locationType = union("Location",
-      field("name", string()),
-      field("latlon", wrap("LatLon", float32()))); // refer to named types using nominal(name)
+    private final Type locationType = union("Location",
+            field("name", string()),
+            field("latlon", wrap("LatLon", float32()))); // refer to named types using nominal(name)
 
-  private final Type stringToIntType = function(
-      string(), int32());
+    private final Type stringToIntType = function(
+            string(), int32());
 
-  private final Type pairOfLatLonsToFloatType = function(
-      wrap("LatLon", float32()), wrap("LatLon", float32()), float32());
+    private final Type pairOfLatLonsToFloatType = function(
+            wrap("LatLon", float32()), wrap("LatLon", float32()), float32());
 
-  private final Type annotatedType = annot(
-          "description", Terms.string("this is a string-annotated double type"), float64());
+    private final Type annotatedType = annot(
+            "description", Terms.string("this is a string-annotated double type"), float64());
 
-  @Test
-  public void constructedTypesAreAsExpected() {
-    assertTrue(latLonType instanceof Type.Record);
-    assertEquals(name("LatLon"), ((Type.Record) latLonType).value.typeName);
-    assertEquals(fieldName("lat"), ((Type.Record) latLonType).value.fields.get(0).name);
+    @Test
+    public void constructedTypesAreAsExpected() {
+        assertTrue(latLonType instanceof Type.Record);
+        assertEquals(name("LatLon"), ((Type.Record) latLonType).value.typeName);
+        assertEquals(fieldName("lat"), ((Type.Record) latLonType).value.fields.get(0).name);
 
-    assertTrue(locationType instanceof Type.Union);
-    assertEquals(name("Location"), ((Type.Union) locationType).value.typeName);
-    assertEquals(fieldName("latlon"), ((Type.Union) locationType).value.fields.get(1).name);
+        assertTrue(locationType instanceof Type.Union);
+        assertEquals(name("Location"), ((Type.Union) locationType).value.typeName);
+        assertEquals(fieldName("latlon"), ((Type.Union) locationType).value.fields.get(1).name);
 
-    assertTrue(stringToIntType instanceof Type.Function);
-    assertEquals(string(), ((Type.Function) stringToIntType).value.domain);
-    assertEquals(int32(), ((Type.Function) stringToIntType).value.codomain);
+        assertTrue(stringToIntType instanceof Type.Function);
+        assertEquals(string(), ((Type.Function) stringToIntType).value.domain);
+        assertEquals(int32(), ((Type.Function) stringToIntType).value.codomain);
 
-    assertTrue(pairOfLatLonsToFloatType instanceof Type.Function);
-    assertTrue(((Type.Function) pairOfLatLonsToFloatType).value.domain instanceof Type.Wrap);
-    assertEquals(new WrappedType(name("LatLon"), float32()),
-            ((Type.Wrap) ((Type.Function) pairOfLatLonsToFloatType).value.domain).value);
+        assertTrue(pairOfLatLonsToFloatType instanceof Type.Function);
+        assertTrue(((Type.Function) pairOfLatLonsToFloatType).value.domain instanceof Type.Wrap);
+        assertEquals(new WrappedType(name("LatLon"), float32()),
+                ((Type.Wrap) ((Type.Function) pairOfLatLonsToFloatType).value.domain).value);
 
-    assertTrue(annotatedType instanceof Type.Annotated);
-    // Notice that annotations, here, are String-valued
-      assertHasDescription(annotatedType, "this is a string-annotated double type");
-    assertEquals(float64(), ((Type.Annotated) annotatedType).value.subject);
-  }
+        assertTrue(annotatedType instanceof Type.Annotated);
+        // Notice that annotations, here, are String-valued
+        assertHasDescription(annotatedType, "this is a string-annotated double type");
+        assertEquals(float64(), ((Type.Annotated) annotatedType).value.subject);
+    }
 
-  @Test
-  public void demonstrateVisitor() {
-    Type.PartialVisitor<Integer> countFields = new Type.PartialVisitor<Integer>() {
-        @Override
-        public Integer visit(Type.Record instance) {
-            return instance.value.fields.size();
-        }
+    @Test
+    public void demonstrateVisitor() {
+        Type.PartialVisitor<Integer> countFields = new Type.PartialVisitor<Integer>() {
+            @Override
+            public Integer visit(Type.Record instance) {
+                return instance.value.fields.size();
+            }
 
-        @Override
-        public Integer visit(Type.Union instance) {
-            return instance.value.fields.size();
-        }
+            @Override
+            public Integer visit(Type.Union instance) {
+                return instance.value.fields.size();
+            }
 
-        @Override
-        public Integer otherwise(Type ignored) {
-            return 0;
-        }
-    };
+            @Override
+            public Integer otherwise(Type ignored) {
+                return 0;
+            }
+        };
 
-    assertEquals(2, latLonType.accept(countFields));
-    assertEquals(2, locationType.accept(countFields));
-    assertEquals(0, stringToIntType.accept(countFields));
-  }
+        assertEquals(2, latLonType.accept(countFields));
+        assertEquals(2, locationType.accept(countFields));
+        assertEquals(0, stringToIntType.accept(countFields));
+    }
 
     private void assertHasDescription(Type type, String expected) {
         String desc = type.accept(new Type.PartialVisitor<>() {

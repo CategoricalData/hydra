@@ -60,6 +60,9 @@ expandLambdas term = do
           mt <- annotationClassTermType (graphAnnotations g) term
           expanded <- expand g (Y.maybe mtyp Just mt) args recurse term'
           return $ TermAnnotated $ AnnotatedTerm expanded ann
+        TermTyped (TermWithType term1 typ) -> do
+          expanded <- expand g (Just typ) args recurse term1
+          return $ TermTyped $ TermWithType expanded typ
         TermApplication (Application lhs rhs) -> do
           rhs' <- expandLambdas rhs
           expand g Nothing (rhs':args) recurse lhs
@@ -84,7 +87,9 @@ expandLambdas term = do
           [] -> lhs
           (a:rest) -> app mtyp' (TermApplication $ Application lhs' a) rest
             where
-              lhs' = annotationClassSetTermType (graphAnnotations g) mtyp lhs
+              lhs' = case mtyp of
+                Just typ -> TermTyped $ TermWithType lhs typ
+                Nothing -> lhs
               mtyp' = case mtyp of
                 Just t -> case stripTypeParameters $ stripType t of
                   TypeFunction (FunctionType _ cod) -> Just cod
@@ -127,7 +132,9 @@ expandTypedLambdas = rewriteTerm rewrite id
             then term
             else typed (toFunctionType doms cod) $
               TermFunction $ FunctionLambda $ Lambda var $
-                pad (i+1) (L.tail doms, cod) $ TermApplication $ Application term $ TermVariable var
+                pad (i+1) (L.tail doms, cod) $
+                typed (toFunctionType (L.tail doms) cod) $ -- TODO: omit this type annotation if practical
+                TermApplication $ Application term $ TermVariable var
           where
             typed typ term = TermTyped $ TermWithType term typ
             toFunctionType doms cod = L.foldl (\c d -> TypeFunction $ FunctionType d c) cod doms
@@ -443,11 +450,10 @@ typeDependencyNames = freeVariablesInType
 wrapLambdas :: Term -> Flow Graph Term
 wrapLambdas term = do
     typ <- requireTermType term
-    anns <- graphAnnotations <$> getState
     let types = uncurryType typ
     let argTypes = L.init types
     let missing = missingArity (L.length argTypes) term
-    return $ pad anns term (L.take missing argTypes) (toFunType $ L.drop missing types)
+    return $ pad term (L.take missing argTypes) (toFunType $ L.drop missing types)
   where
     toFunType types = case types of
       [t] -> t
@@ -456,12 +462,13 @@ wrapLambdas term = do
       then 0
       else case term of
         TermAnnotated (AnnotatedTerm term2 _) -> missingArity arity term2
+        TermTyped (TermWithType term2 _) -> missingArity arity term2
         TermLet (Let _ env) -> missingArity arity env
         TermFunction (FunctionLambda (Lambda _ body)) -> missingArity (arity - 1) body
         _ -> arity
-    pad anns term doms cod = fst $ L.foldl newLambda (apps, cod) $ L.reverse variables
+    pad term doms cod = fst $ L.foldl newLambda (apps, cod) $ L.reverse variables
       where
-        newLambda (body, cod) (v, dom) = (annotationClassSetTermType anns (Just ft) $ TermFunction $ FunctionLambda $ Lambda v body, ft)
+        newLambda (body, cod) (v, dom) = (TermTyped $ TermWithType (TermFunction $ FunctionLambda $ Lambda v body) ft, ft)
           where
             ft = TypeFunction $ FunctionType dom cod
         apps = L.foldl (\lhs (v, _) -> TermApplication (Application lhs $ TermVariable v)) term variables
