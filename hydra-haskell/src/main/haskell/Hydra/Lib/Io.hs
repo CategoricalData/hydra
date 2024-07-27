@@ -62,12 +62,13 @@ termStringCoder = do
 
 -- TODO: for now, we are bypassing the complexity of TermAdapters because of issues yet to be resolved
 showType :: Type -> String
-showType typ = case flowStateValue result of
-    Nothing -> "failed to encode type:\n" ++ show (traceMessages $ flowStateTrace result)
-    Just s -> s
-  where
-    result = unFlow (jsonValueToString <$> untypedTermToJson encoded) noGraph emptyTrace
-    encoded = stripTermRecursive $ coreEncodeType typ
+showType = showTerm . coreEncodeType
+--showType typ = case flowStateValue result of
+--    Nothing -> "failed to encode type:\n" ++ show (traceMessages $ flowStateTrace result)
+--    Just s -> s
+--  where
+--    result = unFlow (jsonValueToString <$> untypedTermToJson encoded) noGraph emptyTrace
+--    encoded = stripTermRecursive $ coreEncodeType typ
 
 typeStringCoder :: Flow Graph (Coder Graph Graph Term String)
 typeStringCoder = do
