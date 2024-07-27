@@ -35,6 +35,6 @@ data Table v =
 
 _Table = (Core.Name "hydra/langs/tabular.Table")
 
-_Table_header = (Core.FieldName "header")
+_Table_header = (Core.Name "header")
 
-_Table_data = (Core.FieldName "data")
+_Table_data = (Core.Name "data")

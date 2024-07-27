@@ -85,15 +85,15 @@ checkFunctionTerms = H.describe "Check a few hand-picked function terms" $ do
 
     H.it "Check projections" $ do
       expectMonotype
-        (project testTypePersonName (FieldName "firstName"))
+        (project testTypePersonName (Name "firstName"))
         (Types.function testTypePerson Types.string)
 
     H.it "Check case statements" $ do
       expectMonotype
         (match testTypeFoobarValueName Nothing [
-          Field (FieldName "bool") (lambda "x" (boolean True)),
-          Field (FieldName "string") (lambda "x" (boolean False)),
-          Field (FieldName "unit") (lambda "x" (boolean False))])
+          Field (Name "bool") (lambda "x" (boolean True)),
+          Field (Name "string") (lambda "x" (boolean False)),
+          Field (Name "unit") (lambda "x" (boolean False))])
         (Types.function testTypeFoobarValue Types.boolean)
 
 checkIndividualTerms :: H.SpecWith ()
@@ -129,38 +129,38 @@ checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
     H.it "Check records" $ do
       expectMonotype
         (record latLonName [
-          Field (FieldName "lat") $ float32 37.7749,
-          Field (FieldName "lon") $ float32 $ negate 122.4194])
+          Field (Name "lat") $ float32 37.7749,
+          Field (Name "lon") $ float32 $ negate 122.4194])
         (TypeRecord $ RowType latLonName Nothing [
-          FieldType (FieldName "lat") Types.float32,
-          FieldType (FieldName "lon") Types.float32])
+          FieldType (Name "lat") Types.float32,
+          FieldType (Name "lon") Types.float32])
       expectMonotype
         (record latLonPolyName [
-          Field (FieldName "lat") $ float32 37.7749,
-          Field (FieldName "lon") $ float32 $ negate 122.4194])
+          Field (Name "lat") $ float32 37.7749,
+          Field (Name "lon") $ float32 $ negate 122.4194])
         (TypeRecord $ RowType latLonPolyName Nothing [
-          FieldType (FieldName "lat") Types.float32,
-          FieldType (FieldName "lon") Types.float32])
+          FieldType (Name "lat") Types.float32,
+          FieldType (Name "lon") Types.float32])
       expectMonotype
         (lambda "lon" (record latLonPolyName [
-          Field (FieldName "lat") $ float32 37.7749,
-          Field (FieldName "lon") $ var "lon"]))
+          Field (Name "lat") $ float32 37.7749,
+          Field (Name "lon") $ var "lon"]))
         (Types.function (Types.float32)
           (TypeRecord $ RowType latLonPolyName Nothing [
-            FieldType (FieldName "lat") $ Types.float32,
-            FieldType (FieldName "lon") $ Types.float32]))
+            FieldType (Name "lat") $ Types.float32,
+            FieldType (Name "lon") $ Types.float32]))
       expectPolytype
         (lambda "latlon" (record latLonPolyName [
-          Field (FieldName "lat") $ var "latlon",
-          Field (FieldName "lon") $ var "latlon"]))
+          Field (Name "lat") $ var "latlon",
+          Field (Name "lon") $ var "latlon"]))
         ["t0"] (Types.function (Types.var "t0")
           (TypeRecord $ RowType latLonPolyName Nothing [
-            FieldType (FieldName "lat") $ Types.var "t0",
-            FieldType (FieldName "lon") $ Types.var "t0"]))
+            FieldType (Name "lat") $ Types.var "t0",
+            FieldType (Name "lon") $ Types.var "t0"]))
 
     H.it "Check unions" $ do
       expectMonotype
-        (inject testTypeTimestampName $ Field (FieldName "unixTimeMillis") $ uint64 1638200308368)
+        (inject testTypeTimestampName $ Field (Name "unixTimeMillis") $ uint64 1638200308368)
         testTypeTimestamp
 
     H.it "Check sets" $ do
@@ -368,28 +368,28 @@ checkSubtermAnnotations = H.describe "Check additional subterm annotations" $ do
     H.describe "Check injections" $ do
       H.it "test #1" $
         expectTypeAnnotation pure
-          (inject testTypeTimestampName $ Field (FieldName "date") $ string "2023-05-11")
+          (inject testTypeTimestampName $ Field (Name "date") $ string "2023-05-11")
           testTypeTimestamp
       H.it "test #2" $
         expectTypeAnnotation pure
-          (lambda "ignored" $ (inject testTypeTimestampName $ Field (FieldName "date") $ string "2023-05-11"))
+          (lambda "ignored" $ (inject testTypeTimestampName $ Field (Name "date") $ string "2023-05-11"))
           (Types.function (Types.var "t0") testTypeTimestamp)
 
     H.it "Check projections" $ do
       expectTypeAnnotation pure
-        (project testTypePersonName $ FieldName "firstName")
+        (project testTypePersonName $ Name "firstName")
         (Types.function testTypePerson Types.string)
 
     H.describe "Check case statements" $ do
       H.it "test #1" $ do
         expectTypeAnnotation pure
           (match testTypeNumberName (Just $ string "it's something else") [
-            Field (FieldName "int") $ constant $ string "it's an integer"])
+            Field (Name "int") $ constant $ string "it's an integer"])
           (Types.function testTypeNumber Types.string)
       H.describe "test #2" $ do
         let  testCase = match testTypeNumberName Nothing [
-                          Field (FieldName "int") $ constant $ string "it's an integer",
-                          Field (FieldName "float") $ constant $ string "it's a float"]
+                          Field (Name "int") $ constant $ string "it's an integer",
+                          Field (Name "float") $ constant $ string "it's a float"]
         H.it "case #1" $
           expectTypeAnnotation pure testCase
             (Types.function testTypeNumber Types.string)

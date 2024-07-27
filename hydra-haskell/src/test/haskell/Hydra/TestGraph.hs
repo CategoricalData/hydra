@@ -23,7 +23,7 @@ latLonPolyName :: Name
 latLonPolyName = Name "LatLonPoly"
 
 latlonRecord :: Float -> Float -> Term
-latlonRecord lat lon = record latLonName [Field (FieldName "lat") $ float32 lat, Field (FieldName "lon") $ float32 lon]
+latlonRecord lat lon = record latLonName [Field (Name "lat") $ float32 lat, Field (Name "lon") $ float32 lon]
 
 latLonType :: Type
 latLonType = TypeRecord $ RowType latLonName Nothing [Types.field "lat" Types.float32, Types.field "lon" Types.float32]
@@ -46,7 +46,7 @@ testElementArthur = Element {
 testElementFirstName :: Element
 testElementFirstName = Element {
   elementName = Name "firstName",
-  elementData = project testTypePersonName $ FieldName "firstName"}
+  elementData = project testTypePersonName $ Name "firstName"}
 
 testGraph :: Graph
 testGraph = elementsToGraph hydraCore (Just testSchemaGraph) [testElementArthur, testElementFirstName]
@@ -73,9 +73,9 @@ testSchemaNamespace = Namespace "testSchemaGraph"
 
 testDataArthur :: Term
 testDataArthur = record testTypePersonName [
-  Field (FieldName "firstName") $ string "Arthur",
-  Field (FieldName "lastName") $ string "Dent",
-  Field (FieldName "age") $ int32 42]
+  Field (Name "firstName") $ string "Arthur",
+  Field (Name "lastName") $ string "Dent",
+  Field (Name "age") $ int32 42]
 
 testTypeComparison :: Type
 testTypeComparison = TypeUnion $ RowType testTypeComparisonName Nothing [
@@ -122,8 +122,8 @@ testTypePersonOrSomethingName = Name "PersonOrSomething"
 
 testTypeTimestamp :: Type
 testTypeTimestamp = TypeUnion $ RowType testTypeTimestampName Nothing [
-  FieldType (FieldName "unixTimeMillis") Types.uint64,
-  FieldType (FieldName "date") Types.string]
+  FieldType (Name "unixTimeMillis") Types.uint64,
+  FieldType (Name "date") Types.string]
 
 testTypeTimestampName :: Name
 testTypeTimestampName = Name "Timestamp"

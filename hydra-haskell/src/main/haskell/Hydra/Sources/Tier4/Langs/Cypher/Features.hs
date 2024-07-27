@@ -320,9 +320,9 @@ openCypherFeaturesEnum = do
             TypeOptional (TypeVariable ref) -> forVar newPrefix ref
             _ -> fail $ "unexpected field type: " ++ show ft
           where
-            fname = prefix ++ (unFieldName $ fieldTypeName ft)
+            fname = prefix ++ (unName $ fieldTypeName ft)
             newPrefix = fname ++ "_"
 
-    toField (name, mdesc) = FieldType (FieldName name) $ case mdesc of
+    toField (name, mdesc) = FieldType (Name name) $ case mdesc of
         Nothing -> unit
         Just desc -> doc desc unit

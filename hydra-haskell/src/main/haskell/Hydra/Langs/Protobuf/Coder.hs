@@ -105,7 +105,7 @@ encodeDefinition localNs name typ = withTrace ("encoding " ++ unName name) $ do
     options <- findOptions typ
     encode options typ
   where
-    wrapAsRecordType t = TypeRecord $ RowType name Nothing [FieldType (FieldName "value") t]
+    wrapAsRecordType t = TypeRecord $ RowType name Nothing [FieldType (Name "value") t]
     encode options typ = case simplifyType typ of
       TypeRecord rt -> P3.DefinitionMessage <$> encodeRecordType localNs options rt
       TypeUnion rt -> if isEnumDefinition typ
@@ -122,7 +122,7 @@ encodeEnumDefinition options (RowType tname _ fields) = do
       P3.enumDefinitionOptions = options}
   where
     unspecifiedField = P3.EnumValue {
-      P3.enumValueName = encodeEnumValueName tname $ FieldName "unspecified",
+      P3.enumValueName = encodeEnumValueName tname $ Name "unspecified",
       P3.enumValueNumber = 0,
       P3.enumValueOptions = []}
     encodeEnumField (FieldType fname ftype) idx = do
@@ -132,21 +132,21 @@ encodeEnumDefinition options (RowType tname _ fields) = do
         P3.enumValueNumber = idx,
         P3.enumValueOptions = opts}
 
-encodeEnumValueName :: Name -> FieldName -> P3.EnumValueName
+encodeEnumValueName :: Name -> Name -> P3.EnumValueName
 encodeEnumValueName tname fname = P3.EnumValueName (prefix ++ "_" ++ suffix)
   where
     prefix = convertCaseCamelToUpperSnake $ localNameOfEager tname
-    suffix = convertCaseCamelToUpperSnake $ unFieldName fname
+    suffix = convertCaseCamelToUpperSnake $ unName fname
 
-encodeFieldName :: Bool -> FieldName -> P3.FieldName
-encodeFieldName preserve = P3.FieldName . toPname . unFieldName
+encodeFieldName :: Bool -> Name -> P3.FieldName
+encodeFieldName preserve = P3.FieldName . toPname . unName
   where
     toPname = if preserve
       then id
       else convertCaseCamelToLowerSnake
 
 encodeFieldType :: Namespace -> FieldType -> Flow (Graph) P3.Field
-encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ show (unFieldName fname)) $ do
+encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ show (unName fname)) $ do
     options <- findOptions ftype
     ft <- encodeType ftype
     idx <- nextIndex

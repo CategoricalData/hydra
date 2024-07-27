@@ -61,16 +61,16 @@ cases name term = case strip term of
 casesCase :: Name -> String -> Term -> Flow s (Field)
 casesCase name n term = do
   cs <- cases name term
-  let matching = L.filter (\f -> fieldName f == FieldName n) $ caseStatementCases cs
+  let matching = L.filter (\f -> fieldName f == Name n) $ caseStatementCases cs
   if L.null matching
     then fail $ "not enough cases"
     else pure $ L.head matching
 
-field :: FieldName -> (Term -> Flow s x) -> [Field] -> Flow s x
+field :: Name -> (Term -> Flow s x) -> [Field] -> Flow s x
 field fname mapping fields = case L.filter (\f -> fieldName f == fname) fields of
-  [] -> fail $ "field " ++ unFieldName fname ++ " not found"
+  [] -> fail $ "field " ++ unName fname ++ " not found"
   [f] -> mapping $ fieldTerm f
-  _ -> fail $ "multiple fields named " ++ unFieldName fname
+  _ -> fail $ "multiple fields named " ++ unName fname
 
 float32 :: Term -> Flow s Float
 float32 t = literal t >>= floatLiteral >>= float32Value
@@ -298,7 +298,7 @@ unit term = do
     then pure ()
     else unexpected "unit" $ show term
 
-unitVariant :: Name -> Term -> Flow s FieldName
+unitVariant :: Name -> Term -> Flow s Name
 unitVariant tname term = do
   field <- variant tname term
   unit $ fieldTerm field

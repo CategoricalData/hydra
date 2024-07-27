@@ -15,7 +15,7 @@ data AggregationQuery =
 
 _AggregationQuery = (Core.Name "hydra/langs/tinkerpop/queries.AggregationQuery")
 
-_AggregationQuery_count = (Core.FieldName "count")
+_AggregationQuery_count = (Core.Name "count")
 
 newtype ApplicationQuery = 
   ApplicationQuery {
@@ -32,9 +32,9 @@ data AssociativeExpression =
 
 _AssociativeExpression = (Core.Name "hydra/langs/tinkerpop/queries.AssociativeExpression")
 
-_AssociativeExpression_operator = (Core.FieldName "operator")
+_AssociativeExpression_operator = (Core.Name "operator")
 
-_AssociativeExpression_operands = (Core.FieldName "operands")
+_AssociativeExpression_operands = (Core.Name "operands")
 
 data BinaryExpression = 
   BinaryExpression {
@@ -45,11 +45,11 @@ data BinaryExpression =
 
 _BinaryExpression = (Core.Name "hydra/langs/tinkerpop/queries.BinaryExpression")
 
-_BinaryExpression_left = (Core.FieldName "left")
+_BinaryExpression_left = (Core.Name "left")
 
-_BinaryExpression_operator = (Core.FieldName "operator")
+_BinaryExpression_operator = (Core.Name "operator")
 
-_BinaryExpression_right = (Core.FieldName "right")
+_BinaryExpression_right = (Core.Name "right")
 
 data BinaryBooleanOperator = 
   BinaryBooleanOperatorAnd  |
@@ -59,11 +59,11 @@ data BinaryBooleanOperator =
 
 _BinaryBooleanOperator = (Core.Name "hydra/langs/tinkerpop/queries.BinaryBooleanOperator")
 
-_BinaryBooleanOperator_and = (Core.FieldName "and")
+_BinaryBooleanOperator_and = (Core.Name "and")
 
-_BinaryBooleanOperator_or = (Core.FieldName "or")
+_BinaryBooleanOperator_or = (Core.Name "or")
 
-_BinaryBooleanOperator_xor = (Core.FieldName "xor")
+_BinaryBooleanOperator_xor = (Core.Name "xor")
 
 data BinaryOperator = 
   BinaryOperatorBoolean BinaryBooleanOperator |
@@ -73,11 +73,11 @@ data BinaryOperator =
 
 _BinaryOperator = (Core.Name "hydra/langs/tinkerpop/queries.BinaryOperator")
 
-_BinaryOperator_boolean = (Core.FieldName "boolean")
+_BinaryOperator_boolean = (Core.Name "boolean")
 
-_BinaryOperator_comparison = (Core.FieldName "comparison")
+_BinaryOperator_comparison = (Core.Name "comparison")
 
-_BinaryOperator_power = (Core.FieldName "power")
+_BinaryOperator_power = (Core.Name "power")
 
 data Binding = 
   Binding {
@@ -87,9 +87,9 @@ data Binding =
 
 _Binding = (Core.Name "hydra/langs/tinkerpop/queries.Binding")
 
-_Binding_key = (Core.FieldName "key")
+_Binding_key = (Core.Name "key")
 
-_Binding_value = (Core.FieldName "value")
+_Binding_value = (Core.Name "value")
 
 data ComparisonOperator = 
   ComparisonOperatorEq  |
@@ -102,17 +102,17 @@ data ComparisonOperator =
 
 _ComparisonOperator = (Core.Name "hydra/langs/tinkerpop/queries.ComparisonOperator")
 
-_ComparisonOperator_eq = (Core.FieldName "eq")
+_ComparisonOperator_eq = (Core.Name "eq")
 
-_ComparisonOperator_neq = (Core.FieldName "neq")
+_ComparisonOperator_neq = (Core.Name "neq")
 
-_ComparisonOperator_lt = (Core.FieldName "lt")
+_ComparisonOperator_lt = (Core.Name "lt")
 
-_ComparisonOperator_lte = (Core.FieldName "lte")
+_ComparisonOperator_lte = (Core.Name "lte")
 
-_ComparisonOperator_gt = (Core.FieldName "gt")
+_ComparisonOperator_gt = (Core.Name "gt")
 
-_ComparisonOperator_gte = (Core.FieldName "gte")
+_ComparisonOperator_gte = (Core.Name "gte")
 
 data EdgeProjectionPattern = 
   EdgeProjectionPattern {
@@ -124,13 +124,13 @@ data EdgeProjectionPattern =
 
 _EdgeProjectionPattern = (Core.Name "hydra/langs/tinkerpop/queries.EdgeProjectionPattern")
 
-_EdgeProjectionPattern_direction = (Core.FieldName "direction")
+_EdgeProjectionPattern_direction = (Core.Name "direction")
 
-_EdgeProjectionPattern_label = (Core.FieldName "label")
+_EdgeProjectionPattern_label = (Core.Name "label")
 
-_EdgeProjectionPattern_properties = (Core.FieldName "properties")
+_EdgeProjectionPattern_properties = (Core.Name "properties")
 
-_EdgeProjectionPattern_vertex = (Core.FieldName "vertex")
+_EdgeProjectionPattern_vertex = (Core.Name "vertex")
 
 data Expression = 
   ExpressionAssociative AssociativeExpression |
@@ -143,17 +143,17 @@ data Expression =
 
 _Expression = (Core.Name "hydra/langs/tinkerpop/queries.Expression")
 
-_Expression_associative = (Core.FieldName "associative")
+_Expression_associative = (Core.Name "associative")
 
-_Expression_binary = (Core.FieldName "binary")
+_Expression_binary = (Core.Name "binary")
 
-_Expression_property = (Core.FieldName "property")
+_Expression_property = (Core.Name "property")
 
-_Expression_unary = (Core.FieldName "unary")
+_Expression_unary = (Core.Name "unary")
 
-_Expression_variable = (Core.FieldName "variable")
+_Expression_variable = (Core.Name "variable")
 
-_Expression_vertex = (Core.FieldName "vertex")
+_Expression_vertex = (Core.Name "vertex")
 
 data LetQuery = 
   LetQuery {
@@ -163,9 +163,9 @@ data LetQuery =
 
 _LetQuery = (Core.Name "hydra/langs/tinkerpop/queries.LetQuery")
 
-_LetQuery_bindings = (Core.FieldName "bindings")
+_LetQuery_bindings = (Core.Name "bindings")
 
-_LetQuery_environment = (Core.FieldName "environment")
+_LetQuery_environment = (Core.Name "environment")
 
 data MatchQuery = 
   MatchQuery {
@@ -176,11 +176,11 @@ data MatchQuery =
 
 _MatchQuery = (Core.Name "hydra/langs/tinkerpop/queries.MatchQuery")
 
-_MatchQuery_optional = (Core.FieldName "optional")
+_MatchQuery_optional = (Core.Name "optional")
 
-_MatchQuery_pattern = (Core.FieldName "pattern")
+_MatchQuery_pattern = (Core.Name "pattern")
 
-_MatchQuery_where = (Core.FieldName "where")
+_MatchQuery_where = (Core.Name "where")
 
 data Projection = 
   Projection {
@@ -190,9 +190,9 @@ data Projection =
 
 _Projection = (Core.Name "hydra/langs/tinkerpop/queries.Projection")
 
-_Projection_value = (Core.FieldName "value")
+_Projection_value = (Core.Name "value")
 
-_Projection_as = (Core.FieldName "as")
+_Projection_as = (Core.Name "as")
 
 data Projections = 
   Projections {
@@ -202,9 +202,9 @@ data Projections =
 
 _Projections = (Core.Name "hydra/langs/tinkerpop/queries.Projections")
 
-_Projections_all = (Core.FieldName "all")
+_Projections_all = (Core.Name "all")
 
-_Projections_explicit = (Core.FieldName "explicit")
+_Projections_explicit = (Core.Name "explicit")
 
 data PropertyPattern = 
   PropertyPattern {
@@ -214,9 +214,9 @@ data PropertyPattern =
 
 _PropertyPattern = (Core.Name "hydra/langs/tinkerpop/queries.PropertyPattern")
 
-_PropertyPattern_key = (Core.FieldName "key")
+_PropertyPattern_key = (Core.Name "key")
 
-_PropertyPattern_value = (Core.FieldName "value")
+_PropertyPattern_value = (Core.Name "value")
 
 data PropertyProjection = 
   PropertyProjection {
@@ -226,9 +226,9 @@ data PropertyProjection =
 
 _PropertyProjection = (Core.Name "hydra/langs/tinkerpop/queries.PropertyProjection")
 
-_PropertyProjection_base = (Core.FieldName "base")
+_PropertyProjection_base = (Core.Name "base")
 
-_PropertyProjection_key = (Core.FieldName "key")
+_PropertyProjection_key = (Core.Name "key")
 
 newtype PropertyValue = 
   PropertyValue {
@@ -244,9 +244,9 @@ data PropertyValuePattern =
 
 _PropertyValuePattern = (Core.Name "hydra/langs/tinkerpop/queries.PropertyValuePattern")
 
-_PropertyValuePattern_variable = (Core.FieldName "variable")
+_PropertyValuePattern_variable = (Core.Name "variable")
 
-_PropertyValuePattern_value = (Core.FieldName "value")
+_PropertyValuePattern_value = (Core.Name "value")
 
 data Query = 
   QueryApplication ApplicationQuery |
@@ -259,17 +259,17 @@ data Query =
 
 _Query = (Core.Name "hydra/langs/tinkerpop/queries.Query")
 
-_Query_application = (Core.FieldName "application")
+_Query_application = (Core.Name "application")
 
-_Query_aggregate = (Core.FieldName "aggregate")
+_Query_aggregate = (Core.Name "aggregate")
 
-_Query_LetQuery = (Core.FieldName "LetQuery")
+_Query_LetQuery = (Core.Name "LetQuery")
 
-_Query_match = (Core.FieldName "match")
+_Query_match = (Core.Name "match")
 
-_Query_select = (Core.FieldName "select")
+_Query_select = (Core.Name "select")
 
-_Query_value = (Core.FieldName "value")
+_Query_value = (Core.Name "value")
 
 data SelectQuery = 
   SelectQuery {
@@ -279,9 +279,9 @@ data SelectQuery =
 
 _SelectQuery = (Core.Name "hydra/langs/tinkerpop/queries.SelectQuery")
 
-_SelectQuery_distinct = (Core.FieldName "distinct")
+_SelectQuery_distinct = (Core.Name "distinct")
 
-_SelectQuery_projection = (Core.FieldName "projection")
+_SelectQuery_projection = (Core.Name "projection")
 
 data UnaryExpression = 
   UnaryExpression {
@@ -291,9 +291,9 @@ data UnaryExpression =
 
 _UnaryExpression = (Core.Name "hydra/langs/tinkerpop/queries.UnaryExpression")
 
-_UnaryExpression_operator = (Core.FieldName "operator")
+_UnaryExpression_operator = (Core.Name "operator")
 
-_UnaryExpression_operand = (Core.FieldName "operand")
+_UnaryExpression_operand = (Core.Name "operand")
 
 data UnaryOperator = 
   UnaryOperatorNegate 
@@ -301,7 +301,7 @@ data UnaryOperator =
 
 _UnaryOperator = (Core.Name "hydra/langs/tinkerpop/queries.UnaryOperator")
 
-_UnaryOperator_negate = (Core.FieldName "negate")
+_UnaryOperator_negate = (Core.Name "negate")
 
 newtype Variable = 
   Variable {
@@ -320,10 +320,10 @@ data VertexPattern =
 
 _VertexPattern = (Core.Name "hydra/langs/tinkerpop/queries.VertexPattern")
 
-_VertexPattern_variable = (Core.FieldName "variable")
+_VertexPattern_variable = (Core.Name "variable")
 
-_VertexPattern_label = (Core.FieldName "label")
+_VertexPattern_label = (Core.Name "label")
 
-_VertexPattern_properties = (Core.FieldName "properties")
+_VertexPattern_properties = (Core.Name "properties")
 
-_VertexPattern_edges = (Core.FieldName "edges")
+_VertexPattern_edges = (Core.Name "edges")

@@ -32,11 +32,6 @@ instance QC.Arbitrary Literal
       LiteralInteger <$> QC.arbitrary,
       LiteralString <$> QC.arbitrary]
 
-instance QC.Arbitrary FieldName
-  where
-    arbitrary = FieldName <$> QC.arbitrary
-    shrink (FieldName n) = FieldName <$> QC.shrink n
-
 instance QC.Arbitrary FloatType
   where
     arbitrary = QC.oneof $ pure <$> [

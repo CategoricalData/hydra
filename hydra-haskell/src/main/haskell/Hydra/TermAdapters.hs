@@ -36,11 +36,11 @@ import qualified Text.Read as TR
 import qualified Data.Maybe as Y
 
 
-_context :: FieldName
-_context = FieldName "context"
+_context :: Name
+_context = Name "context"
 
-_record :: FieldName
-_record = FieldName "record"
+_record :: Name
+_record = Name "record"
 
 fieldAdapter :: FieldType -> Flow (AdapterContext) (SymmetricAdapter (AdapterContext) (FieldType) (Field))
 fieldAdapter ftyp = do
@@ -114,7 +114,7 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
           (_Function_primitive, forPrimitive fterm),
           (_Term_variable, forVariable fterm)]
       where
-        notFound fname = fail $ "unexpected field: " ++ unFieldName fname
+        notFound fname = fail $ "unexpected field: " ++ unName fname
         forCases fterm = read <$> Expect.string fterm -- TODO
         forLambda fterm = read <$> Expect.string fterm -- TODO
         forWrapped fterm = unwrap . Name <$> Expect.string fterm
@@ -287,7 +287,7 @@ passUnion t@(TypeUnion rt) = do
         ad <- getAdapter adapters dfield
         TermUnion . Injection nm <$> encodeDecode dir (adapterCoder ad) dfield
   where
-    getAdapter adapters f = Y.maybe (fail $ "no such field: " ++ unFieldName (fieldName f)) pure $ M.lookup (fieldName f) adapters
+    getAdapter adapters f = Y.maybe (fail $ "no such field: " ++ unName (fieldName f)) pure $ M.lookup (fieldName f) adapters
     sfields = rowTypeFields rt
     nm = rowTypeTypeName rt
 

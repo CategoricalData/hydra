@@ -55,12 +55,9 @@ coreDecodeApplicationType = matchRecord $ \m -> ApplicationType
   <$> getField m _ApplicationType_function coreDecodeType
   <*> getField m _ApplicationType_argument coreDecodeType
 
-coreDecodeFieldName :: Term -> Flow Graph FieldName
-coreDecodeFieldName term = FieldName <$> (Expect.wrap _FieldName term >>= Expect.string)
-
 coreDecodeFieldType :: Term -> Flow Graph (FieldType)
 coreDecodeFieldType = matchRecord $ \m -> FieldType
-  <$> getField m _FieldType_name coreDecodeFieldName
+  <$> getField m _FieldType_name coreDecodeName
   <*> getField m _FieldType_type coreDecodeType
 
 coreDecodeFieldTypes :: Term -> Flow Graph [FieldType]
@@ -162,7 +159,7 @@ elementAsTypedTerm el = do
   typ <- requireTermType (elementData el)
   return $ TypedTerm typ (elementData el)
 
-fieldTypes :: Type -> Flow Graph (M.Map FieldName Type)
+fieldTypes :: Type -> Flow Graph (M.Map Name Type)
 fieldTypes t = case stripType t of
     TypeLambda (LambdaType _ body) -> fieldTypes body
     TypeRecord rt -> pure $ toMap $ rowTypeFields rt
@@ -176,7 +173,7 @@ fieldTypes t = case stripType t of
     toMap fields = M.fromList (toPair <$> fields)
     toPair (FieldType fname ftype) = (fname, ftype)
 
-getField :: M.Map FieldName (Term) -> FieldName -> (Term -> Flow Graph b) -> Flow Graph b
+getField :: M.Map Name (Term) -> Name -> (Term -> Flow Graph b) -> Flow Graph b
 getField m fname decode = case M.lookup fname m of
   Nothing -> fail $ "expected field " ++ show fname ++ " not found"
   Just val -> decode val
@@ -189,15 +186,15 @@ isSerializable el = do
   where
     variants typ = typeVariant <$> foldOverType TraversalOrderPre (\m t -> t:m) [] typ
 
-matchEnum :: Name -> [(FieldName, b)] -> Term -> Flow Graph b
+matchEnum :: Name -> [(Name, b)] -> Term -> Flow Graph b
 matchEnum tname = matchUnion tname . fmap (uncurry matchUnitField)
 
-matchRecord :: (M.Map FieldName (Term) -> Flow Graph b) -> Term -> Flow Graph b
+matchRecord :: (M.Map Name (Term) -> Flow Graph b) -> Term -> Flow Graph b
 matchRecord decode term = case fullyStripTerm term of
   TermRecord (Record _ fields) -> decode $ M.fromList $ fmap (\(Field fname val) -> (fname, val)) fields
   _ -> unexpected "record" $ show term
 
-matchUnion :: Name -> [(FieldName, Term -> Flow Graph b)] -> Term -> Flow Graph b
+matchUnion :: Name -> [(Name, Term -> Flow Graph b)] -> Term -> Flow Graph b
 matchUnion tname pairs term = case fullyStripTerm term of
     TermVariable name -> do
       el <- requireElement name
@@ -207,11 +204,11 @@ matchUnion tname pairs term = case fullyStripTerm term of
         Nothing -> fail $ "no matching case for field " ++ show fname
         Just f -> f val
       else unexpected ("injection for type " ++ show tname) $ show term
-    t -> unexpected ("union with one of {" ++ L.intercalate ", " (unFieldName . fst <$> pairs) ++ "}") $ show t
+    t -> unexpected ("union with one of {" ++ L.intercalate ", " (unName . fst <$> pairs) ++ "}") $ show t
   where
     mapping = M.fromList pairs
 
-matchUnitField :: FieldName -> y -> (FieldName, x -> Flow Graph y)
+matchUnitField :: Name -> y -> (Name, x -> Flow Graph y)
 matchUnitField fname x = (fname, \_ -> pure x)
 
 -- | Find dependency namespaces in various dimensions of a term: va

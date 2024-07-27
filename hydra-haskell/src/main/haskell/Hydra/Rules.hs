@@ -36,9 +36,9 @@ type TypingEnvironment a = M.Map Name (TypeScheme)
 fieldType :: Field -> FieldType
 fieldType (Field fname term) = FieldType fname $ termType term
 
-findMatchingField :: FieldName -> [FieldType] -> Flow InferenceContext (FieldType)
+findMatchingField :: Name -> [FieldType] -> Flow InferenceContext (FieldType)
 findMatchingField fname sfields = case L.filter (\f -> fieldTypeName f == fname) sfields of
-  []    -> fail $ "no such field: " ++ unFieldName fname
+  []    -> fail $ "no such field: " ++ unName fname
   (h:_) -> return h
 
 freshName :: Flow InferenceContext (Type)
@@ -131,7 +131,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
             checkCasesAgainstSchema tname icases sfields = if M.null diff
                 then pure ()
                 else fail $ "case(s) in case statement which do not exist in type " ++ unName tname ++ ": "
-                  ++ L.intercalate ", " (unFieldName <$> M.keys diff)
+                  ++ L.intercalate ", " (unName <$> M.keys diff)
               where
                 diff = M.difference icases sfields
 
