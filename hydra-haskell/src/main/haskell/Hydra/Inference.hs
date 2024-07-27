@@ -15,7 +15,7 @@ import Hydra.CoreEncoding
 import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Mantle
-import Hydra.Kv
+import Hydra.Annotations
 import Hydra.Rewriting
 import Hydra.Substitution
 import Hydra.Unification
