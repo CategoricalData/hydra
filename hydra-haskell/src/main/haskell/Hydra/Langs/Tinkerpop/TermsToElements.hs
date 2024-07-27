@@ -17,9 +17,9 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-type PgAdapter s a v = Adapter s s (Type) [PG.Label] (Term) [PG.Element v]
+type PgAdapter s v = Adapter s s Type [PG.Label] Term [PG.Element v]
 
-termToElementsAdapter :: Schema s t v -> Type -> Flow s (PgAdapter s Kv v)
+termToElementsAdapter :: Schema s t v -> Type -> Flow s (PgAdapter s v)
 termToElementsAdapter schema typ = do
     case getTypeAnnotation "elements" typ of
       Nothing -> pure trivialAdapter
@@ -243,7 +243,7 @@ matchInjection cases encoded = do
     [fun] -> fun (fieldTerm f)
     _ -> fail "duplicate field name in cases"
 
-matchRecord :: (M.Map Name (Term) -> Flow s x) -> Term -> Flow s x
+matchRecord :: (M.Map Name Term -> Flow s x) -> Term -> Flow s x
 matchRecord cons term = Expect.map (\k -> Name <$> Expect.string k) pure term >>= cons
 
 readField fields fname fun = case M.lookup fname fields of

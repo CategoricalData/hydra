@@ -92,7 +92,7 @@ field fname (Datum val) = Field fname val
 first :: Datum ((a, b) -> a)
 first = Datum $ Terms.untuple 2 0
 
-fld :: Name -> Datum a -> Fld Kv
+fld :: Name -> Datum a -> Fld a
 fld fname (Datum val) = Fld $ Field fname val
 
 fold :: Datum (b -> a -> b) -> Datum (b -> [a] -> b)

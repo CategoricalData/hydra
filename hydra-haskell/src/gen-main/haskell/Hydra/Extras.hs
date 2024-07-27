@@ -58,9 +58,5 @@ uncurryType t = ((\x -> case x of
   _ -> [
     t]) t)
 
-emptyKv :: Core.Kv
-emptyKv = Core.Kv {
-  Core.kvAnnotations = Maps.empty}
-
-getAnnotation :: (String -> Core.Kv -> Maybe Core.Term)
-getAnnotation key ann = (Maps.lookup key (Core.kvAnnotations ann))
+getAnnotation :: (String -> (M.Map String Core.Term) -> Maybe Core.Term)
+getAnnotation key ann = (Maps.lookup key ann)

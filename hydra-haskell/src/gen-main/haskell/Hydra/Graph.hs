@@ -12,13 +12,13 @@ import Data.Set as S
 -- | A typeclass-like construct providing common functions for working with annotations
 data AnnotationClass = 
   AnnotationClass {
-    annotationClassDefault :: Core.Kv,
-    annotationClassEqual :: (Core.Kv -> Core.Kv -> Bool),
-    annotationClassCompare :: (Core.Kv -> Core.Kv -> Comparison),
-    annotationClassShow :: (Core.Kv -> String),
-    annotationClassRead :: (String -> Maybe Core.Kv),
-    annotationClassTermAnnotation :: (Core.Term -> Core.Kv),
-    annotationClassTypeAnnotation :: (Core.Type -> Core.Kv),
+    annotationClassDefault :: (M.Map String Core.Term),
+    annotationClassEqual :: ((M.Map String Core.Term) -> (M.Map String Core.Term) -> Bool),
+    annotationClassCompare :: ((M.Map String Core.Term) -> (M.Map String Core.Term) -> Comparison),
+    annotationClassShow :: ((M.Map String Core.Term) -> String),
+    annotationClassRead :: (String -> Maybe (M.Map String Core.Term)),
+    annotationClassTermAnnotation :: (Core.Term -> (M.Map String Core.Term)),
+    annotationClassTypeAnnotation :: (Core.Type -> (M.Map String Core.Term)),
     annotationClassTermDescription :: (Core.Term -> Compute.Flow Graph (Maybe String)),
     annotationClassTypeDescription :: (Core.Type -> Compute.Flow Graph (Maybe String)),
     annotationClassTypeClasses :: (Core.Type -> Compute.Flow Graph (Map Core.Name (Set TypeClass))),
@@ -26,8 +26,8 @@ data AnnotationClass =
     annotationClassSetTermDescription :: (Maybe String -> Core.Term -> Core.Term),
     annotationClassSetTermType :: (Maybe Core.Type -> Core.Term -> Core.Term),
     annotationClassSetTypeClasses :: (Map Core.Name (Set TypeClass) -> Core.Type -> Core.Type),
-    annotationClassTypeOf :: (Core.Kv -> Compute.Flow Graph (Maybe Core.Type)),
-    annotationClassSetTypeOf :: (Maybe Core.Type -> Core.Kv -> Core.Kv)}
+    annotationClassTypeOf :: ((M.Map String Core.Term) -> Compute.Flow Graph (Maybe Core.Type)),
+    annotationClassSetTypeOf :: (Maybe Core.Type -> (M.Map String Core.Term) -> (M.Map String Core.Term))}
 
 _AnnotationClass = (Core.Name "hydra/graph.AnnotationClass")
 

@@ -254,7 +254,7 @@ literalVariantsDef = basicsDefinition "literalVariants" $
     _LiteralVariant_integer,
     _LiteralVariant_string]
 
-termMetaDef :: Definition (Graph -> Term -> Kv)
+termMetaDef :: Definition (Graph -> Term -> M.Map String Term)
 termMetaDef = basicsDefinition "termMeta" $
   function graphT (funT termT kvT) $
   (project _AnnotationClass _AnnotationClass_termAnnotation) <.> Graph.graphAnnotations

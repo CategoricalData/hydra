@@ -6,7 +6,7 @@ import Hydra.Dsl.Base as Base
 import qualified Data.Map as M
 
 
-annotatedTerm :: Datum Term -> Datum Kv -> Datum AnnotatedTerm
+annotatedTerm :: Datum Term -> Datum (M.Map String Term) -> Datum AnnotatedTerm
 annotatedTerm subject annotation = Base.record _AnnotatedTerm [
     _AnnotatedTerm_subject>>: subject,
     _AnnotatedTerm_annotation>>: annotation]
@@ -14,10 +14,10 @@ annotatedTerm subject annotation = Base.record _AnnotatedTerm [
 annotatedTermSubject :: Datum (AnnotatedTerm -> Term)
 annotatedTermSubject = project _AnnotatedTerm _AnnotatedTerm_subject
 
-annotatedTermAnnotation :: Datum (AnnotatedTerm -> Kv)
+annotatedTermAnnotation :: Datum (AnnotatedTerm -> M.Map String Term)
 annotatedTermAnnotation = project _AnnotatedTerm _AnnotatedTerm_annotation
 
-annotatedType :: Datum Type -> Datum Kv -> Datum AnnotatedType
+annotatedType :: Datum Type -> Datum (M.Map String Term) -> Datum AnnotatedType
 annotatedType subject annotation = Base.record _AnnotatedType [
     _AnnotatedType_subject>>: subject,
     _AnnotatedType_annotation>>: annotation]
@@ -25,7 +25,7 @@ annotatedType subject annotation = Base.record _AnnotatedType [
 annotatedTypeSubject :: Datum (AnnotatedType -> Type)
 annotatedTypeSubject = project _AnnotatedType _AnnotatedType_subject
 
-annotatedTypeAnnotation :: Datum (AnnotatedType -> Kv)
+annotatedTypeAnnotation :: Datum (AnnotatedType -> M.Map String Term)
 annotatedTypeAnnotation = project _AnnotatedType _AnnotatedType_annotation
 
 application :: Datum (Term) -> Datum (Term) -> Datum (Application)

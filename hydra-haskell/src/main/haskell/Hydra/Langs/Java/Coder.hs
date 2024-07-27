@@ -111,7 +111,7 @@ constructElementsInterface mod members = (elName, cu)
     decl = Java.TypeDeclarationWithComments itf $ moduleDescription mod
 
 constructModule :: Module
-  -> M.Map (Type) (Coder Graph Graph (Term) Java.Expression)
+  -> M.Map Type (Coder Graph Graph (Term) Java.Expression)
   -> [(Element, TypedTerm)]
   -> Flow Graph (M.Map Name Java.CompilationUnit)
 constructModule mod coders pairs = do
@@ -805,10 +805,10 @@ functionCall aliases isPrim name args = do
         let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier isPrim False aliases name
         return $ javaMethodInvocationToJavaExpression $ Java.MethodInvocation header jargs
 
-getCodomain :: Kv -> Flow Graph (Type)
+getCodomain :: M.Map String Term -> Flow Graph Type
 getCodomain ann = functionTypeCodomain <$> getFunctionType ann
 
-getFunctionType :: Kv -> Flow Graph (FunctionType)
+getFunctionType :: M.Map String Term -> Flow Graph FunctionType
 getFunctionType ann = do
   g <- getState
   mt <- annotationClassTypeOf (graphAnnotations g) ann
@@ -935,7 +935,7 @@ reannotate anns term = case anns of
   [] -> term
   (h:r) -> reannotate r $ TermAnnotated (AnnotatedTerm term h)
 
-requireAnnotatedType :: Term -> Flow Graph (Type)
+requireAnnotatedType :: Term -> Flow Graph Type
 requireAnnotatedType term = case term of
   TermAnnotated (AnnotatedTerm _ ann) -> do
     g <- getState
