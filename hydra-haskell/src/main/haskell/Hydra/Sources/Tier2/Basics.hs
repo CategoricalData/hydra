@@ -377,14 +377,14 @@ mapFirstLetterDef = basicsDefinition "mapFirstLetter" $
 
 -- Common.hs
 
-fieldMapDef :: Definition ([Field] -> M.Map FieldName Term)
+fieldMapDef :: Definition ([Field] -> M.Map Name Term)
 fieldMapDef = basicsDefinition "fieldMap" $
   function (TypeList fieldT) (mapT fieldNameT termT) $
   (lambda "fields" $ Maps.fromList @@ (Lists.map @@ var "toPair" @@ var "fields"))
     `with` [
       "toPair">: lambda "f" $ pair (project _Field _Field_name @@ var "f", project _Field _Field_term @@ var "f")]
 
-fieldTypeMapDef :: Definition ([FieldType] -> M.Map FieldName Type)
+fieldTypeMapDef :: Definition ([FieldType] -> M.Map Name Type)
 fieldTypeMapDef = basicsDefinition "fieldTypeMap" $
   function (TypeList fieldTypeT) (mapT fieldNameT typeT) $
     (lambda "fields" $ Maps.fromList @@ (Lists.map @@ var "toPair" @@ var "fields"))

@@ -18,13 +18,13 @@ data BetweenExpression =
 
 _BetweenExpression = (Core.Name "hydra/langs/kusto/kql.BetweenExpression")
 
-_BetweenExpression_not = (Core.FieldName "not")
+_BetweenExpression_not = (Core.Name "not")
 
-_BetweenExpression_expression = (Core.FieldName "expression")
+_BetweenExpression_expression = (Core.Name "expression")
 
-_BetweenExpression_lowerBound = (Core.FieldName "lowerBound")
+_BetweenExpression_lowerBound = (Core.Name "lowerBound")
 
-_BetweenExpression_upperBound = (Core.FieldName "upperBound")
+_BetweenExpression_upperBound = (Core.Name "upperBound")
 
 data BinaryExpression = 
   BinaryExpression {
@@ -35,11 +35,11 @@ data BinaryExpression =
 
 _BinaryExpression = (Core.Name "hydra/langs/kusto/kql.BinaryExpression")
 
-_BinaryExpression_left = (Core.FieldName "left")
+_BinaryExpression_left = (Core.Name "left")
 
-_BinaryExpression_operator = (Core.FieldName "operator")
+_BinaryExpression_operator = (Core.Name "operator")
 
-_BinaryExpression_right = (Core.FieldName "right")
+_BinaryExpression_right = (Core.Name "right")
 
 data BinaryOperator = 
   BinaryOperatorCaseInsensitiveEqual  |
@@ -64,41 +64,41 @@ data BinaryOperator =
 
 _BinaryOperator = (Core.Name "hydra/langs/kusto/kql.BinaryOperator")
 
-_BinaryOperator_caseInsensitiveEqual = (Core.FieldName "caseInsensitiveEqual")
+_BinaryOperator_caseInsensitiveEqual = (Core.Name "caseInsensitiveEqual")
 
-_BinaryOperator_contains = (Core.FieldName "contains")
+_BinaryOperator_contains = (Core.Name "contains")
 
-_BinaryOperator_divide = (Core.FieldName "divide")
+_BinaryOperator_divide = (Core.Name "divide")
 
-_BinaryOperator_endsWith = (Core.FieldName "endsWith")
+_BinaryOperator_endsWith = (Core.Name "endsWith")
 
-_BinaryOperator_equal = (Core.FieldName "equal")
+_BinaryOperator_equal = (Core.Name "equal")
 
-_BinaryOperator_greater = (Core.FieldName "greater")
+_BinaryOperator_greater = (Core.Name "greater")
 
-_BinaryOperator_greaterOrEqual = (Core.FieldName "greaterOrEqual")
+_BinaryOperator_greaterOrEqual = (Core.Name "greaterOrEqual")
 
-_BinaryOperator_has = (Core.FieldName "has")
+_BinaryOperator_has = (Core.Name "has")
 
-_BinaryOperator_hasPrefix = (Core.FieldName "hasPrefix")
+_BinaryOperator_hasPrefix = (Core.Name "hasPrefix")
 
-_BinaryOperator_hasSuffix = (Core.FieldName "hasSuffix")
+_BinaryOperator_hasSuffix = (Core.Name "hasSuffix")
 
-_BinaryOperator_less = (Core.FieldName "less")
+_BinaryOperator_less = (Core.Name "less")
 
-_BinaryOperator_lessOrEqual = (Core.FieldName "lessOrEqual")
+_BinaryOperator_lessOrEqual = (Core.Name "lessOrEqual")
 
-_BinaryOperator_matchesRegex = (Core.FieldName "matchesRegex")
+_BinaryOperator_matchesRegex = (Core.Name "matchesRegex")
 
-_BinaryOperator_minus = (Core.FieldName "minus")
+_BinaryOperator_minus = (Core.Name "minus")
 
-_BinaryOperator_notEqual = (Core.FieldName "notEqual")
+_BinaryOperator_notEqual = (Core.Name "notEqual")
 
-_BinaryOperator_plus = (Core.FieldName "plus")
+_BinaryOperator_plus = (Core.Name "plus")
 
-_BinaryOperator_startsWith = (Core.FieldName "startsWith")
+_BinaryOperator_startsWith = (Core.Name "startsWith")
 
-_BinaryOperator_times = (Core.FieldName "times")
+_BinaryOperator_times = (Core.Name "times")
 
 data BuiltInFunction = 
   BuiltInFunctionAgo  |
@@ -118,31 +118,31 @@ data BuiltInFunction =
 
 _BuiltInFunction = (Core.Name "hydra/langs/kusto/kql.BuiltInFunction")
 
-_BuiltInFunction_ago = (Core.FieldName "ago")
+_BuiltInFunction_ago = (Core.Name "ago")
 
-_BuiltInFunction_bin = (Core.FieldName "bin")
+_BuiltInFunction_bin = (Core.Name "bin")
 
-_BuiltInFunction_count = (Core.FieldName "count")
+_BuiltInFunction_count = (Core.Name "count")
 
-_BuiltInFunction_dcount = (Core.FieldName "dcount")
+_BuiltInFunction_dcount = (Core.Name "dcount")
 
-_BuiltInFunction_endofday = (Core.FieldName "endofday")
+_BuiltInFunction_endofday = (Core.Name "endofday")
 
-_BuiltInFunction_extract = (Core.FieldName "extract")
+_BuiltInFunction_extract = (Core.Name "extract")
 
-_BuiltInFunction_format_datetime = (Core.FieldName "format_datetime")
+_BuiltInFunction_format_datetime = (Core.Name "format_datetime")
 
-_BuiltInFunction_materialize = (Core.FieldName "materialize")
+_BuiltInFunction_materialize = (Core.Name "materialize")
 
-_BuiltInFunction_now = (Core.FieldName "now")
+_BuiltInFunction_now = (Core.Name "now")
 
-_BuiltInFunction_range = (Core.FieldName "range")
+_BuiltInFunction_range = (Core.Name "range")
 
-_BuiltInFunction_startofday = (Core.FieldName "startofday")
+_BuiltInFunction_startofday = (Core.Name "startofday")
 
-_BuiltInFunction_strcat = (Core.FieldName "strcat")
+_BuiltInFunction_strcat = (Core.Name "strcat")
 
-_BuiltInFunction_todynamic = (Core.FieldName "todynamic")
+_BuiltInFunction_todynamic = (Core.Name "todynamic")
 
 data ColumnAlias = 
   ColumnAlias {
@@ -152,9 +152,9 @@ data ColumnAlias =
 
 _ColumnAlias = (Core.Name "hydra/langs/kusto/kql.ColumnAlias")
 
-_ColumnAlias_column = (Core.FieldName "column")
+_ColumnAlias_column = (Core.Name "column")
 
-_ColumnAlias_alias = (Core.FieldName "alias")
+_ColumnAlias_alias = (Core.Name "alias")
 
 data ColumnAssignment = 
   ColumnAssignment {
@@ -164,9 +164,9 @@ data ColumnAssignment =
 
 _ColumnAssignment = (Core.Name "hydra/langs/kusto/kql.ColumnAssignment")
 
-_ColumnAssignment_column = (Core.FieldName "column")
+_ColumnAssignment_column = (Core.Name "column")
 
-_ColumnAssignment_expression = (Core.FieldName "expression")
+_ColumnAssignment_expression = (Core.Name "expression")
 
 newtype ColumnName = 
   ColumnName {
@@ -182,9 +182,9 @@ data Columns =
 
 _Columns = (Core.Name "hydra/langs/kusto/kql.Columns")
 
-_Columns_all = (Core.FieldName "all")
+_Columns_all = (Core.Name "all")
 
-_Columns_single = (Core.FieldName "single")
+_Columns_single = (Core.Name "single")
 
 data Command = 
   CommandCount  |
@@ -213,45 +213,45 @@ data Command =
 
 _Command = (Core.Name "hydra/langs/kusto/kql.Command")
 
-_Command_count = (Core.FieldName "count")
+_Command_count = (Core.Name "count")
 
-_Command_distinct = (Core.FieldName "distinct")
+_Command_distinct = (Core.Name "distinct")
 
-_Command_extend = (Core.FieldName "extend")
+_Command_extend = (Core.Name "extend")
 
-_Command_join = (Core.FieldName "join")
+_Command_join = (Core.Name "join")
 
-_Command_limit = (Core.FieldName "limit")
+_Command_limit = (Core.Name "limit")
 
-_Command_mvexpand = (Core.FieldName "mvexpand")
+_Command_mvexpand = (Core.Name "mvexpand")
 
-_Command_orderBy = (Core.FieldName "orderBy")
+_Command_orderBy = (Core.Name "orderBy")
 
-_Command_parse = (Core.FieldName "parse")
+_Command_parse = (Core.Name "parse")
 
-_Command_print = (Core.FieldName "print")
+_Command_print = (Core.Name "print")
 
-_Command_project = (Core.FieldName "project")
+_Command_project = (Core.Name "project")
 
-_Command_projectAway = (Core.FieldName "projectAway")
+_Command_projectAway = (Core.Name "projectAway")
 
-_Command_projectRename = (Core.FieldName "projectRename")
+_Command_projectRename = (Core.Name "projectRename")
 
-_Command_render = (Core.FieldName "render")
+_Command_render = (Core.Name "render")
 
-_Command_search = (Core.FieldName "search")
+_Command_search = (Core.Name "search")
 
-_Command_sortBy = (Core.FieldName "sortBy")
+_Command_sortBy = (Core.Name "sortBy")
 
-_Command_summarize = (Core.FieldName "summarize")
+_Command_summarize = (Core.Name "summarize")
 
-_Command_take = (Core.FieldName "take")
+_Command_take = (Core.Name "take")
 
-_Command_top = (Core.FieldName "top")
+_Command_top = (Core.Name "top")
 
-_Command_union = (Core.FieldName "union")
+_Command_union = (Core.Name "union")
 
-_Command_where = (Core.FieldName "where")
+_Command_where = (Core.Name "where")
 
 newtype Datetime = 
   Datetime {
@@ -268,9 +268,9 @@ data Duration =
 
 _Duration = (Core.Name "hydra/langs/kusto/kql.Duration")
 
-_Duration_value = (Core.FieldName "value")
+_Duration_value = (Core.Name "value")
 
-_Duration_unit = (Core.FieldName "unit")
+_Duration_unit = (Core.Name "unit")
 
 data DurationUnit = 
   DurationUnitSecond  |
@@ -280,11 +280,11 @@ data DurationUnit =
 
 _DurationUnit = (Core.Name "hydra/langs/kusto/kql.DurationUnit")
 
-_DurationUnit_second = (Core.FieldName "second")
+_DurationUnit_second = (Core.Name "second")
 
-_DurationUnit_minute = (Core.FieldName "minute")
+_DurationUnit_minute = (Core.Name "minute")
 
-_DurationUnit_hour = (Core.FieldName "hour")
+_DurationUnit_hour = (Core.Name "hour")
 
 data Expression = 
   ExpressionAnd [Expression] |
@@ -305,33 +305,33 @@ data Expression =
 
 _Expression = (Core.Name "hydra/langs/kusto/kql.Expression")
 
-_Expression_and = (Core.FieldName "and")
+_Expression_and = (Core.Name "and")
 
-_Expression_any = (Core.FieldName "any")
+_Expression_any = (Core.Name "any")
 
-_Expression_between = (Core.FieldName "between")
+_Expression_between = (Core.Name "between")
 
-_Expression_binary = (Core.FieldName "binary")
+_Expression_binary = (Core.Name "binary")
 
-_Expression_braces = (Core.FieldName "braces")
+_Expression_braces = (Core.Name "braces")
 
-_Expression_column = (Core.FieldName "column")
+_Expression_column = (Core.Name "column")
 
-_Expression_dataset = (Core.FieldName "dataset")
+_Expression_dataset = (Core.Name "dataset")
 
-_Expression_index = (Core.FieldName "index")
+_Expression_index = (Core.Name "index")
 
-_Expression_list = (Core.FieldName "list")
+_Expression_list = (Core.Name "list")
 
-_Expression_literal = (Core.FieldName "literal")
+_Expression_literal = (Core.Name "literal")
 
-_Expression_or = (Core.FieldName "or")
+_Expression_or = (Core.Name "or")
 
-_Expression_parentheses = (Core.FieldName "parentheses")
+_Expression_parentheses = (Core.Name "parentheses")
 
-_Expression_property = (Core.FieldName "property")
+_Expression_property = (Core.Name "property")
 
-_Expression_unary = (Core.FieldName "unary")
+_Expression_unary = (Core.Name "unary")
 
 data Function = 
   FunctionBuiltIn BuiltInFunction |
@@ -340,9 +340,9 @@ data Function =
 
 _Function = (Core.Name "hydra/langs/kusto/kql.Function")
 
-_Function_builtIn = (Core.FieldName "builtIn")
+_Function_builtIn = (Core.Name "builtIn")
 
-_Function_custom = (Core.FieldName "custom")
+_Function_custom = (Core.Name "custom")
 
 data FunctionExpression = 
   FunctionExpression {
@@ -352,9 +352,9 @@ data FunctionExpression =
 
 _FunctionExpression = (Core.Name "hydra/langs/kusto/kql.FunctionExpression")
 
-_FunctionExpression_function = (Core.FieldName "function")
+_FunctionExpression_function = (Core.Name "function")
 
-_FunctionExpression_arguments = (Core.FieldName "arguments")
+_FunctionExpression_arguments = (Core.Name "arguments")
 
 newtype FunctionName = 
   FunctionName {
@@ -371,9 +371,9 @@ data IndexExpression =
 
 _IndexExpression = (Core.Name "hydra/langs/kusto/kql.IndexExpression")
 
-_IndexExpression_expression = (Core.FieldName "expression")
+_IndexExpression_expression = (Core.Name "expression")
 
-_IndexExpression_index = (Core.FieldName "index")
+_IndexExpression_index = (Core.Name "index")
 
 data JoinCommand = 
   JoinCommand {
@@ -384,11 +384,11 @@ data JoinCommand =
 
 _JoinCommand = (Core.Name "hydra/langs/kusto/kql.JoinCommand")
 
-_JoinCommand_kind = (Core.FieldName "kind")
+_JoinCommand_kind = (Core.Name "kind")
 
-_JoinCommand_expression = (Core.FieldName "expression")
+_JoinCommand_expression = (Core.Name "expression")
 
-_JoinCommand_on = (Core.FieldName "on")
+_JoinCommand_on = (Core.Name "on")
 
 data JoinKind = 
   JoinKindLeftouter  |
@@ -404,23 +404,23 @@ data JoinKind =
 
 _JoinKind = (Core.Name "hydra/langs/kusto/kql.JoinKind")
 
-_JoinKind_leftouter = (Core.FieldName "leftouter")
+_JoinKind_leftouter = (Core.Name "leftouter")
 
-_JoinKind_leftsemi = (Core.FieldName "leftsemi")
+_JoinKind_leftsemi = (Core.Name "leftsemi")
 
-_JoinKind_leftanti = (Core.FieldName "leftanti")
+_JoinKind_leftanti = (Core.Name "leftanti")
 
-_JoinKind_fullouter = (Core.FieldName "fullouter")
+_JoinKind_fullouter = (Core.Name "fullouter")
 
-_JoinKind_inner = (Core.FieldName "inner")
+_JoinKind_inner = (Core.Name "inner")
 
-_JoinKind_innerunique = (Core.FieldName "innerunique")
+_JoinKind_innerunique = (Core.Name "innerunique")
 
-_JoinKind_rightouter = (Core.FieldName "rightouter")
+_JoinKind_rightouter = (Core.Name "rightouter")
 
-_JoinKind_rightsemi = (Core.FieldName "rightsemi")
+_JoinKind_rightsemi = (Core.Name "rightsemi")
 
-_JoinKind_rightanti = (Core.FieldName "rightanti")
+_JoinKind_rightanti = (Core.Name "rightanti")
 
 data KeyValuePair = 
   KeyValuePair {
@@ -430,9 +430,9 @@ data KeyValuePair =
 
 _KeyValuePair = (Core.Name "hydra/langs/kusto/kql.KeyValuePair")
 
-_KeyValuePair_key = (Core.FieldName "key")
+_KeyValuePair_key = (Core.Name "key")
 
-_KeyValuePair_value = (Core.FieldName "value")
+_KeyValuePair_value = (Core.Name "value")
 
 data LetBinding = 
   LetBinding {
@@ -442,9 +442,9 @@ data LetBinding =
 
 _LetBinding = (Core.Name "hydra/langs/kusto/kql.LetBinding")
 
-_LetBinding_name = (Core.FieldName "name")
+_LetBinding_name = (Core.Name "name")
 
-_LetBinding_expression = (Core.FieldName "expression")
+_LetBinding_expression = (Core.Name "expression")
 
 data LetExpression = 
   LetExpression {
@@ -454,9 +454,9 @@ data LetExpression =
 
 _LetExpression = (Core.Name "hydra/langs/kusto/kql.LetExpression")
 
-_LetExpression_bindings = (Core.FieldName "bindings")
+_LetExpression_bindings = (Core.Name "bindings")
 
-_LetExpression_expression = (Core.FieldName "expression")
+_LetExpression_expression = (Core.Name "expression")
 
 data Literal = 
   LiteralDuration Duration |
@@ -470,19 +470,19 @@ data Literal =
 
 _Literal = (Core.Name "hydra/langs/kusto/kql.Literal")
 
-_Literal_duration = (Core.FieldName "duration")
+_Literal_duration = (Core.Name "duration")
 
-_Literal_datetime = (Core.FieldName "datetime")
+_Literal_datetime = (Core.Name "datetime")
 
-_Literal_string = (Core.FieldName "string")
+_Literal_string = (Core.Name "string")
 
-_Literal_int = (Core.FieldName "int")
+_Literal_int = (Core.Name "int")
 
-_Literal_long = (Core.FieldName "long")
+_Literal_long = (Core.Name "long")
 
-_Literal_double = (Core.FieldName "double")
+_Literal_double = (Core.Name "double")
 
-_Literal_boolean = (Core.FieldName "boolean")
+_Literal_boolean = (Core.Name "boolean")
 
 data Order = 
   OrderAscending  |
@@ -491,9 +491,9 @@ data Order =
 
 _Order = (Core.Name "hydra/langs/kusto/kql.Order")
 
-_Order_ascending = (Core.FieldName "ascending")
+_Order_ascending = (Core.Name "ascending")
 
-_Order_descending = (Core.FieldName "descending")
+_Order_descending = (Core.Name "descending")
 
 data Parameter = 
   Parameter {
@@ -503,9 +503,9 @@ data Parameter =
 
 _Parameter = (Core.Name "hydra/langs/kusto/kql.Parameter")
 
-_Parameter_key = (Core.FieldName "key")
+_Parameter_key = (Core.Name "key")
 
-_Parameter_value = (Core.FieldName "value")
+_Parameter_value = (Core.Name "value")
 
 data ParseCommand = 
   ParseCommand {
@@ -515,9 +515,9 @@ data ParseCommand =
 
 _ParseCommand = (Core.Name "hydra/langs/kusto/kql.ParseCommand")
 
-_ParseCommand_column = (Core.FieldName "column")
+_ParseCommand_column = (Core.Name "column")
 
-_ParseCommand_pairs = (Core.FieldName "pairs")
+_ParseCommand_pairs = (Core.Name "pairs")
 
 newtype PipelineExpression = 
   PipelineExpression {
@@ -534,9 +534,9 @@ data PrintCommand =
 
 _PrintCommand = (Core.Name "hydra/langs/kusto/kql.PrintCommand")
 
-_PrintCommand_column = (Core.FieldName "column")
+_PrintCommand_column = (Core.Name "column")
 
-_PrintCommand_expression = (Core.FieldName "expression")
+_PrintCommand_expression = (Core.Name "expression")
 
 data Projection = 
   Projection {
@@ -546,9 +546,9 @@ data Projection =
 
 _Projection = (Core.Name "hydra/langs/kusto/kql.Projection")
 
-_Projection_expression = (Core.FieldName "expression")
+_Projection_expression = (Core.Name "expression")
 
-_Projection_alias = (Core.FieldName "alias")
+_Projection_alias = (Core.Name "alias")
 
 data PropertyExpression = 
   PropertyExpression {
@@ -558,9 +558,9 @@ data PropertyExpression =
 
 _PropertyExpression = (Core.Name "hydra/langs/kusto/kql.PropertyExpression")
 
-_PropertyExpression_expression = (Core.FieldName "expression")
+_PropertyExpression_expression = (Core.Name "expression")
 
-_PropertyExpression_property = (Core.FieldName "property")
+_PropertyExpression_property = (Core.Name "property")
 
 newtype Query = 
   Query {
@@ -578,9 +578,9 @@ data SearchCommand =
 
 _SearchCommand = (Core.Name "hydra/langs/kusto/kql.SearchCommand")
 
-_SearchCommand_datasets = (Core.FieldName "datasets")
+_SearchCommand_datasets = (Core.Name "datasets")
 
-_SearchCommand_pattern = (Core.FieldName "pattern")
+_SearchCommand_pattern = (Core.Name "pattern")
 
 data SummarizeCommand = 
   SummarizeCommand {
@@ -590,9 +590,9 @@ data SummarizeCommand =
 
 _SummarizeCommand = (Core.Name "hydra/langs/kusto/kql.SummarizeCommand")
 
-_SummarizeCommand_columns = (Core.FieldName "columns")
+_SummarizeCommand_columns = (Core.Name "columns")
 
-_SummarizeCommand_by = (Core.FieldName "by")
+_SummarizeCommand_by = (Core.Name "by")
 
 newtype TableName = 
   TableName {
@@ -609,9 +609,9 @@ data TopCommand =
 
 _TopCommand = (Core.Name "hydra/langs/kusto/kql.TopCommand")
 
-_TopCommand_count = (Core.FieldName "count")
+_TopCommand_count = (Core.Name "count")
 
-_TopCommand_sort = (Core.FieldName "sort")
+_TopCommand_sort = (Core.Name "sort")
 
 data SortBy = 
   SortBy {
@@ -621,9 +621,9 @@ data SortBy =
 
 _SortBy = (Core.Name "hydra/langs/kusto/kql.SortBy")
 
-_SortBy_column = (Core.FieldName "column")
+_SortBy_column = (Core.Name "column")
 
-_SortBy_order = (Core.FieldName "order")
+_SortBy_order = (Core.Name "order")
 
 data TabularExpression = 
   TabularExpressionCommand Command |
@@ -634,13 +634,13 @@ data TabularExpression =
 
 _TabularExpression = (Core.Name "hydra/langs/kusto/kql.TabularExpression")
 
-_TabularExpression_command = (Core.FieldName "command")
+_TabularExpression_command = (Core.Name "command")
 
-_TabularExpression_pipeline = (Core.FieldName "pipeline")
+_TabularExpression_pipeline = (Core.Name "pipeline")
 
-_TabularExpression_let = (Core.FieldName "let")
+_TabularExpression_let = (Core.Name "let")
 
-_TabularExpression_table = (Core.FieldName "table")
+_TabularExpression_table = (Core.Name "table")
 
 data UnaryExpression = 
   UnaryExpression {
@@ -650,9 +650,9 @@ data UnaryExpression =
 
 _UnaryExpression = (Core.Name "hydra/langs/kusto/kql.UnaryExpression")
 
-_UnaryExpression_operator = (Core.FieldName "operator")
+_UnaryExpression_operator = (Core.Name "operator")
 
-_UnaryExpression_expression = (Core.FieldName "expression")
+_UnaryExpression_expression = (Core.Name "expression")
 
 data UnaryOperator = 
   UnaryOperatorNot 
@@ -660,7 +660,7 @@ data UnaryOperator =
 
 _UnaryOperator = (Core.Name "hydra/langs/kusto/kql.UnaryOperator")
 
-_UnaryOperator_not = (Core.FieldName "not")
+_UnaryOperator_not = (Core.Name "not")
 
 data UnionCommand = 
   UnionCommand {
@@ -673,15 +673,15 @@ data UnionCommand =
 
 _UnionCommand = (Core.Name "hydra/langs/kusto/kql.UnionCommand")
 
-_UnionCommand_parameters = (Core.FieldName "parameters")
+_UnionCommand_parameters = (Core.Name "parameters")
 
-_UnionCommand_kind = (Core.FieldName "kind")
+_UnionCommand_kind = (Core.Name "kind")
 
-_UnionCommand_withSource = (Core.FieldName "withSource")
+_UnionCommand_withSource = (Core.Name "withSource")
 
-_UnionCommand_isFuzzy = (Core.FieldName "isFuzzy")
+_UnionCommand_isFuzzy = (Core.Name "isFuzzy")
 
-_UnionCommand_tables = (Core.FieldName "tables")
+_UnionCommand_tables = (Core.Name "tables")
 
 data UnionKind = 
   UnionKindInner  |
@@ -690,6 +690,6 @@ data UnionKind =
 
 _UnionKind = (Core.Name "hydra/langs/kusto/kql.UnionKind")
 
-_UnionKind_inner = (Core.FieldName "inner")
+_UnionKind_inner = (Core.Name "inner")
 
-_UnionKind_outer = (Core.FieldName "outer")
+_UnionKind_outer = (Core.Name "outer")

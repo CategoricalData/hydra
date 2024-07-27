@@ -26,7 +26,7 @@ adaptTypeToHaskellAndEncode namespaces = adaptAndEncodeType haskellLanguage (enc
 
 constantDecls :: Graph -> Namespaces -> Name -> Type -> [H.DeclarationWithComments]
 constantDecls g namespaces name@(Name nm) typ = if useCoreImport
-    then toDecl (Name "hydra/core.Name") nameDecl:(toDecl (Name "hydra/core.FieldName") <$> fieldDecls)
+    then toDecl (Name "hydra/core.Name") nameDecl:(toDecl (Name "hydra/core.Name") <$> fieldDecls)
     else []
   where
     lname = localNameOfEager name
@@ -43,7 +43,7 @@ constantDecls g namespaces name@(Name nm) typ = if useCoreImport
       TypeUnion rt -> rowTypeFields rt
       _ -> []
     fieldDecls = toConstant <$> fieldsOf (snd $ unpackLambdaType g typ)
-    toConstant (FieldType (FieldName fname) _) = ("_" ++ lname ++ "_" ++ fname, fname)
+    toConstant (FieldType (Name fname) _) = ("_" ++ lname ++ "_" ++ fname, fname)
 
 constructModule :: Namespaces
   -> Module
@@ -359,14 +359,14 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
         hFields <- CM.mapM toField fields
         return $ H.ConstructorWithComments (H.ConstructorRecord $ H.Constructor_Record (simpleName lname) hFields) Nothing
       where
-        toField (FieldType (FieldName fname) ftype) = do
+        toField (FieldType (Name fname) ftype) = do
           let hname = simpleName $ decapitalize lname ++ capitalize fname
           htype <- adaptTypeToHaskellAndEncode namespaces ftype
           g <- getState
           comments <- annotationClassTypeDescription (graphAnnotations g) ftype
           return $ H.FieldWithComments (H.Field hname htype) comments
 
-    unionCons lname (FieldType (FieldName fname) ftype) = do
+    unionCons lname (FieldType (Name fname) ftype) = do
       g <- getState
       comments <- annotationClassTypeDescription (graphAnnotations g) ftype
       let nm = capitalize lname ++ capitalize fname

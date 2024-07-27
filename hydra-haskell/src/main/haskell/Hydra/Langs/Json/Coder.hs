@@ -60,13 +60,13 @@ recordCoder rt = do
         where
           encodeField (ft, coder) (Field fname fv) = case (fieldTypeType ft, fv) of
             (TypeOptional _, TermOptional Nothing) -> pure Nothing
-            _ -> Just <$> ((,) <$> pure (unFieldName fname) <*> coderEncode coder fv)
+            _ -> Just <$> ((,) <$> pure (unName fname) <*> coderEncode coder fv)
       _ -> unexpected "record" $ show term
     decode coders n = case n of
       Json.ValueObject m -> Terms.record (rowTypeTypeName rt) <$> CM.mapM (decodeField m) coders -- Note: unknown fields are ignored
         where
           decodeField a (FieldType fname _, coder) = do
-            v <- coderDecode coder $ Y.fromMaybe Json.ValueNull $ M.lookup (unFieldName fname) m
+            v <- coderDecode coder $ Y.fromMaybe Json.ValueNull $ M.lookup (unName fname) m
             return $ Field fname v
       _ -> unexpected "mapping" $ show n
     getCoder coders fname = Y.maybe error pure $ M.lookup fname coders
@@ -136,7 +136,7 @@ untypedTermToJson term = case fullyStripTerm term of
         keyvals <- CM.mapM fieldToKeyval fields
         return $ Json.ValueObject $ M.fromList $ Y.catMaybes keyvals
       TermUnion (Injection _ field) -> if fieldTerm field == Terms.unit
-        then return $ Json.ValueString $ unFieldName $ fieldName field
+        then return $ Json.ValueString $ unName $ fieldName field
         else do
           mkeyval <- fieldToKeyval field
           return $ Json.ValueObject $ M.fromList $ case mkeyval of
@@ -149,7 +149,7 @@ untypedTermToJson term = case fullyStripTerm term of
         mjson <- forTerm $ fieldTerm f
         return $ case mjson of
           Nothing -> Nothing
-          Just j -> Just (unFieldName $ fieldName f, j)
+          Just j -> Just (unName $ fieldName f, j)
       where
         forTerm t = case t of
           TermOptional mt -> case mt of

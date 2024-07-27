@@ -87,19 +87,15 @@ hydraCoreModule = Module ns elements [] [] $
             core "Name"],
 
       def "Field" $
-        doc "A labeled term" $
+        doc "A name/term pair" $
         record [
-          "name">: core "FieldName",
+          "name">: core "Name",
           "term">: core "Term"],
 
-      def "FieldName" $
-        doc "The name of a field, unique within a record or union type"
-        $ wrap string,
-
       def "FieldType" $
-        doc "The name and type of a field" $
+        doc "A name/type pair" $
         record [
-          "name">: core "FieldName",
+          "name">: core "Name",
           "type">: core "Type"],
 
       def "FloatType" $
@@ -271,8 +267,12 @@ hydraCoreModule = Module ns elements [] [] $
       def "Projection" $
         doc "A record elimination; a projection" $
         record [
-          "typeName">: core "Name",
-          "field">: core "FieldName"],
+          "typeName">:
+            doc "The name of the record type" $
+            core "Name",
+          "field">:
+            doc "The name of the projected field" $
+            core "Name"],
 
       def "Record" $
         doc "A record, or labeled tuple; a map of field names to terms" $
