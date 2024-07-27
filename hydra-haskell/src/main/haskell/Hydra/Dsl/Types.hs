@@ -24,7 +24,7 @@ a --> b = function a b
 (@@) :: Type -> Type -> Type
 f @@ x = apply f x
 
-annot :: Kv -> Type -> Type
+annot :: M.Map String Term -> Type -> Type
 annot ann t = TypeAnnotated $ AnnotatedType t ann
 
 apply :: Type -> Type -> Type

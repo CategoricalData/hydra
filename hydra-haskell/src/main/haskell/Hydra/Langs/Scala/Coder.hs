@@ -73,7 +73,7 @@ constructModule mod coders pairs = do
           where
             namePat = Scala.PatVar $ Scala.Pat_Var $ Scala.Data_Name $ Scala.PredefString lname
 
-encodeFunction :: Kv -> Function -> Y.Maybe (Term) -> Flow (Graph) Scala.Data
+encodeFunction :: M.Map String Term -> Function -> Y.Maybe (Term) -> Flow (Graph) Scala.Data
 encodeFunction meta fun arg = case fun of
     FunctionLambda (Lambda (Name v) body) -> slambda v <$> encodeTerm body <*> findSdom
     FunctionPrimitive name -> pure $ sprim name

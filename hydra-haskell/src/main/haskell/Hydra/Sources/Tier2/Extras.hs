@@ -43,7 +43,6 @@ hydraExtrasModule = Module (Namespace "hydra/extras") elements
       el termArityDef,
       el typeArityDef,
       el uncurryTypeDef,
-      el emptyKvDef,
       el getAnnotationDef
 --      el getAttrDef
       ]
@@ -112,19 +111,14 @@ uncurryTypeDef = hydraExtrasDefinition "uncurryType" $
 
 -- hydra/kv
 
-emptyKvDef :: Definition Kv
-emptyKvDef = hydraExtrasDefinition "emptyKv" $
-  record _Kv [
-    _Kv_annotations>>: Maps.empty]
-
-getAnnotationDef :: Definition (String -> Kv -> Maybe (Term))
+getAnnotationDef :: Definition (String -> M.Map String Term -> Maybe Term)
 getAnnotationDef = hydraExtrasDefinition "getAnnotation" $
   functionN [stringT, kvT, optionalT termT] $
   lambda "key" $ lambda "ann" $
-    Maps.lookup @@ var "key" @@ (project _Kv _Kv_annotations @@ var "ann")
+    Maps.lookup @@ var "key" @@ var "ann"
 
 
---getAttrDef :: Definition (String -> Flow s (Maybe (Term)))
+--getAttrDef :: Definition (String -> Flow s (Maybe Term))
 --getAttrDef = hydraExtrasDefinition "getAttr" $
 --  lambda "key" $ wrap _Flow $
 --    function Types.string (Types.apply (Types.apply (TypeVariable _Flow) (Types.var "s")) (Types.optional $ Types.apply (TypeVariable _Term) (TypeVariable _Kv))) $

@@ -11,7 +11,7 @@ import Data.Set as S
 data AnnotatedTerm = 
   AnnotatedTerm {
     annotatedTermSubject :: Term,
-    annotatedTermAnnotation :: Kv}
+    annotatedTermAnnotation :: M.Map String Term}
   deriving (Eq, Ord, Read, Show)
 
 _AnnotatedTerm = (Name "hydra/core.AnnotatedTerm")
@@ -24,7 +24,7 @@ _AnnotatedTerm_annotation = (Name "annotation")
 data AnnotatedType = 
   AnnotatedType {
     annotatedTypeSubject :: Type,
-    annotatedTypeAnnotation :: Kv}
+    annotatedTypeAnnotation :: M.Map String Term}
   deriving (Eq, Ord, Read, Show)
 
 _AnnotatedType = (Name "hydra/core.AnnotatedType")
@@ -286,17 +286,6 @@ _IntegerValue_uint16 = (Name "uint16")
 _IntegerValue_uint32 = (Name "uint32")
 
 _IntegerValue_uint64 = (Name "uint64")
-
--- | A key/value map which serves as a built-in metadata container for terms
-data Kv = 
-  Kv {
-    -- | A map of annotation names to annotation values
-    kvAnnotations :: (Map String Term)}
-  deriving (Eq, Ord, Read, Show)
-
-_Kv = (Name "hydra/core.Kv")
-
-_Kv_annotations = (Name "annotations")
 
 -- | A function abstraction (lambda)
 data Lambda = 

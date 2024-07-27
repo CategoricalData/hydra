@@ -29,9 +29,9 @@ import qualified Data.Maybe as Y
 
 data InferenceContext = InferenceContext {
   inferenceContextGraph :: Graph,
-  inferenceContextEnvironment :: TypingEnvironment Kv}
+  inferenceContextEnvironment :: TypingEnvironment}
 
-type TypingEnvironment a = M.Map Name (TypeScheme)
+type TypingEnvironment = M.Map Name TypeScheme
 
 fieldType :: Field -> FieldType
 fieldType (Field fname term) = FieldType fname $ termType term
@@ -44,7 +44,7 @@ findMatchingField fname sfields = case L.filter (\f -> fieldTypeName f == fname)
 freshName :: Flow InferenceContext (Type)
 freshName = TypeVariable . normalVariable <$> nextCount "hyInf"
 
-generalize :: TypingEnvironment Kv -> Type -> TypeScheme
+generalize :: TypingEnvironment -> Type -> TypeScheme
 generalize env t  = TypeScheme vars t
   where
     vars = S.toList $ S.difference
@@ -325,10 +325,10 @@ typeOfTerm term = case term of
 withBinding :: Name -> TypeScheme -> Flow InferenceContext x -> Flow InferenceContext x
 withBinding n ts = withEnvironment (M.insert n ts)
 
-withBindings :: M.Map Name (TypeScheme) -> Flow InferenceContext x -> Flow InferenceContext x
+withBindings :: M.Map Name TypeScheme -> Flow InferenceContext x -> Flow InferenceContext x
 withBindings bindings = withEnvironment (\e -> M.union bindings e)
 
-withEnvironment :: (TypingEnvironment Kv -> TypingEnvironment Kv) -> Flow InferenceContext x -> Flow InferenceContext x
+withEnvironment :: (TypingEnvironment -> TypingEnvironment) -> Flow InferenceContext x -> Flow InferenceContext x
 withEnvironment m flow = do
   InferenceContext g e <- getState
   withState (InferenceContext g (m e)) flow

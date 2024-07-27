@@ -9,7 +9,7 @@ import qualified Data.Set as S
 
 
 -- | Create a graph schema from a graph which contains nothing but encoded type definitions.
-graphToSchema :: Graph -> Flow (Graph) (GraphSchema Kv)
+graphToSchema :: Graph -> Flow Graph (M.Map Name Type)
 graphToSchema g = M.fromList <$> (mapM toPair $ M.toList $ graphElements g)
   where
     toPair (name, el) = do
@@ -19,7 +19,7 @@ graphToSchema g = M.fromList <$> (mapM toPair $ M.toList $ graphElements g)
 -- | Given a graph schema and a nonrecursive type, instantiate it with default values.
 --   If the minimal flag is set, the smallest possible term is produced; otherwise,
 --   exactly one subterm is produced for constructors which do not otherwise require one, e.g. in lists and optionals.
-insantiateTemplate :: Bool -> GraphSchema Kv -> Type -> Flow s (Term)
+insantiateTemplate :: Bool -> M.Map Name Type -> Type -> Flow s Term
 insantiateTemplate minimal schema t = case t of
     TypeAnnotated (AnnotatedType t _) -> inst t
     TypeApplication _ -> noPoly

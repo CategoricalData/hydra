@@ -25,8 +25,6 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-type GraphSchema a = M.Map Name Type
-
 -- beneathTermAnnotations :: (Term -> Term) -> Term -> Term
 -- beneathTermAnnotations f term = case term of
 --   TermAnnotated (AnnotatedTerm term1 ann) ->
@@ -172,7 +170,7 @@ freeVariablesInScheme (TypeScheme vars t) = S.difference (freeVariablesInType t)
 
 -- | Inline all type variables in a type using the provided schema.
 --   Note: this function is only appropriate for nonrecursive type definitions.
-inlineType :: GraphSchema Kv -> Type -> Flow s Type
+inlineType :: M.Map Name Type -> Type -> Flow s Type
 inlineType schema = rewriteTypeM f pure
   where
     f recurse typ = do
@@ -218,7 +216,7 @@ rewrite fsub f = recurse
   where
     recurse = f (fsub recurse)
 
-rewriteTerm :: ((Term -> Term) -> Term -> Term) -> (Kv -> Kv) -> Term -> Term
+rewriteTerm :: ((Term -> Term) -> Term -> Term) -> (M.Map String Term -> M.Map String Term) -> Term -> Term
 rewriteTerm f mf = rewrite fsub f
   where
     fsub recurse term = case term of
@@ -255,7 +253,7 @@ rewriteTerm f mf = rewrite fsub f
 
 rewriteTermM ::
   ((Term -> Flow s Term) -> Term -> (Flow s Term)) ->
-  (Kv -> Flow s Kv) ->
+  (M.Map String Term -> Flow s (M.Map String Term)) ->
   Term ->
   Flow s Term
 rewriteTermM f mf = rewrite fsub f
@@ -305,17 +303,17 @@ rewriteTermM f mf = rewrite fsub f
           t <- recurse (fieldTerm f)
           return f {fieldTerm = t}
 
-rewriteTermMeta :: (Kv -> Kv) -> Term -> Term
+rewriteTermMeta :: (M.Map String Term -> M.Map String Term) -> Term -> Term
 rewriteTermMeta = rewriteTerm mapExpr
   where
     mapExpr recurse term = recurse term
 
-rewriteTermMetaM :: (Kv -> Flow s Kv) -> Term -> Flow s Term
+rewriteTermMetaM :: (M.Map String Term -> Flow s (M.Map String Term)) -> Term -> Flow s Term
 rewriteTermMetaM = rewriteTermM mapExpr
   where
     mapExpr recurse term = recurse term
 
-rewriteType :: ((Type -> Type) -> Type -> Type) -> (Kv -> Kv) -> Type -> Type
+rewriteType :: ((Type -> Type) -> Type -> Type) -> (M.Map String Term -> M.Map String Term) -> Type -> Type
 rewriteType f mf = rewrite fsub f
   where
     fsub recurse typ = case typ of
@@ -339,7 +337,7 @@ rewriteType f mf = rewrite fsub f
 
 rewriteTypeM ::
   ((Type -> Flow s Type) -> Type -> (Flow s Type)) ->
-  (Kv -> Flow s Kv) ->
+  (M.Map String Term -> Flow s (M.Map String Term)) ->
   Type ->
   Flow s Type
 rewriteTypeM f mf = rewrite fsub f
@@ -367,7 +365,7 @@ rewriteTypeM f mf = rewrite fsub f
           t <- recurse $ fieldTypeType f
           return f {fieldTypeType = t}
 
-rewriteTypeMeta :: (Kv -> Kv) -> Type -> Type
+rewriteTypeMeta :: (M.Map String Term -> M.Map String Term) -> Type -> Type
 rewriteTypeMeta = rewriteType mapExpr
   where
     mapExpr recurse term = recurse term

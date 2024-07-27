@@ -31,17 +31,17 @@ hydraGraphModule = Module ns elements [hydraComputeModule] [hydraCoreModule] $
       def "AnnotationClass" $
         doc "A typeclass-like construct providing common functions for working with annotations" $
         record [
-          "default">: core "Kv",
-          "equal">: core "Kv" --> core "Kv" --> boolean,
-          "compare">: core "Kv" --> core "Kv" --> graph "Comparison",
-          "show">: core "Kv" --> string,
-          "read">: string --> optional $ core "Kv",
+          "default">: Types.map string (core "Term"),
+          "equal">: Types.map string (core "Term") --> Types.map string (core "Term") --> boolean,
+          "compare">: Types.map string (core "Term") --> Types.map string (core "Term") --> graph "Comparison",
+          "show">: Types.map string (core "Term") --> string,
+          "read">: string --> optional $ Types.map string (core "Term"),
 
           -- TODO: simplify
           "termAnnotation">:
-            core "Term" --> core "Kv",
+            core "Term" --> Types.map string (core "Term"),
           "typeAnnotation">:
-            core "Type" --> core "Kv",
+            core "Type" --> Types.map string (core "Term"),
           "termDescription">:
             core "Term" --> compute "Flow" @@ (graph "Graph") @@ optional string,
           "typeDescription">:
@@ -57,9 +57,9 @@ hydraGraphModule = Module ns elements [hydraComputeModule] [hydraCoreModule] $
           "setTypeClasses">:
             (Types.map (core "Name") (set $ graph "TypeClass")) --> core "Type" --> core "Type",
           "typeOf">:
-            core "Kv" --> compute "Flow" @@ (graph "Graph") @@ optional (core "Type"),
+            Types.map string (core "Term") --> compute "Flow" @@ (graph "Graph") @@ optional (core "Type"),
           "setTypeOf">:
-            optional (core "Type") --> core "Kv" --> core "Kv"],
+            optional (core "Type") --> Types.map string (core "Term") --> Types.map string (core "Term")],
 
       def "Comparison" $
         doc "An equality judgement: less than, equal to, or greater than" $

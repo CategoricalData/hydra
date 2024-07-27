@@ -159,7 +159,7 @@ literalVariants = [
   Mantle.LiteralVariantInteger,
   Mantle.LiteralVariantString]
 
-termMeta :: (Graph.Graph -> Core.Term -> Core.Kv)
+termMeta :: (Graph.Graph -> Core.Term -> (M.Map String Core.Term))
 termMeta x = (Graph.annotationClassTermAnnotation (Graph.graphAnnotations x))
 
 -- | Find the term variant (constructor) for a given term
