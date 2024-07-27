@@ -15,7 +15,7 @@ import Hydra.Rewriting
 import Hydra.Substitution
 import Hydra.Unification
 import Hydra.Tools.Debug
-import Hydra.Kv
+import Hydra.Annotations
 import Hydra.Tier1
 import Hydra.Tier2
 import qualified Hydra.Dsl.Types as Types
