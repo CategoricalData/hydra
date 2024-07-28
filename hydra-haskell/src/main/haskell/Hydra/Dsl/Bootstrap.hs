@@ -27,7 +27,6 @@ bootstrapGraph = Graph {
   graphTypes = M.empty,
   graphBody = Terms.list [], -- Note: the bootstrap body is arbitrary
   graphPrimitives = M.fromList $ fmap (\p -> (primitiveName p, p)) standardPrimitives,
-  graphAnnotations = kvAnnotationClass,
   graphSchema = Nothing}
 
 datatype :: Namespace -> String -> Type -> Element
@@ -62,5 +61,5 @@ typeElement name typ = Element {
     elementData = dataTerm}
   where
     -- These type annotations allow type inference to proceed despite cyclic type definitions, e.g. in Hydra Core
-    dataTerm = normalizeTermAnnotations $ TermAnnotated $ AnnotatedTerm (coreEncodeType typ) $ M.fromList [(kvType, schemaTerm)]
+    dataTerm = normalizeTermAnnotations $ TermAnnotated $ AnnotatedTerm (coreEncodeType typ) $ M.fromList [(key_type, schemaTerm)]
     schemaTerm = TermVariable _Type

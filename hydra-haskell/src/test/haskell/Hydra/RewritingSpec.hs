@@ -295,19 +295,17 @@ testSimplifyTerm = do
 --    H.it "Strip type annotations" $ do
 --      QC.property $ \(TypedTerm typ term) -> do
 --        shouldSucceedWith
---          (typeOf term)
+--          (getTermType term)
 --          Nothing
 --        shouldSucceedWith
---          (typeOf $ withType testGraph typ term)
+--          (getTermType $ withType typ term)
 --          (Just typ)
 --        shouldSucceedWith
---          (typeOf $ strip $ withType testGraph typ term)
+--          (getTermType $ strip $ withType typ term)
 --          Nothing
-
-typeOf term = annotationClassTermType (graphAnnotations testGraph) term
-
-withType :: Graph -> Type -> Term -> Term
-withType g typ = annotationClassSetTermType (graphAnnotations g) (Just typ)
+--
+--withType :: Graph -> Type -> Term -> Term
+--withType typ = setTermType $ Just typ
 
 spec :: H.Spec
 spec = do

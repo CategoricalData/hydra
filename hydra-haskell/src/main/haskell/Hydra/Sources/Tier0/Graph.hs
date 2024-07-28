@@ -28,39 +28,6 @@ hydraGraphModule = Module ns elements [hydraComputeModule] [hydraCoreModule] $
 
     elements = [
 
-      def "AnnotationClass" $
-        doc "A typeclass-like construct providing common functions for working with annotations" $
-        record [
-          "default">: Types.map string (core "Term"),
-          "equal">: Types.map string (core "Term") --> Types.map string (core "Term") --> boolean,
-          "compare">: Types.map string (core "Term") --> Types.map string (core "Term") --> graph "Comparison",
-          "show">: Types.map string (core "Term") --> string,
-          "read">: string --> optional $ Types.map string (core "Term"),
-
-          -- TODO: simplify
-          "termAnnotation">:
-            core "Term" --> Types.map string (core "Term"),
-          "typeAnnotation">:
-            core "Type" --> Types.map string (core "Term"),
-          "termDescription">:
-            core "Term" --> compute "Flow" @@ (graph "Graph") @@ optional string,
-          "typeDescription">:
-            core "Type" --> compute "Flow" @@ (graph "Graph") @@ optional string,
-          "typeClasses">:
-            core"Type" --> compute "Flow" @@ (graph "Graph") @@ (Types.map (core "Name") (set $ graph "TypeClass")),
-          "termType">:
-            core "Term" --> compute "Flow" @@ (graph "Graph") @@ optional (core "Type"),
-          "setTermDescription">:
-            optional string --> core "Term" --> core "Term",
-          "setTermType">:
-            optional (core "Type") --> core "Term" --> core "Term",
-          "setTypeClasses">:
-            (Types.map (core "Name") (set $ graph "TypeClass")) --> core "Type" --> core "Type",
-          "typeOf">:
-            Types.map string (core "Term") --> compute "Flow" @@ (graph "Graph") @@ optional (core "Type"),
-          "setTypeOf">:
-            optional (core "Type") --> Types.map string (core "Term") --> Types.map string (core "Term")],
-
       def "Comparison" $
         doc "An equality judgement: less than, equal to, or greater than" $
         enum [
@@ -89,9 +56,6 @@ hydraGraphModule = Module ns elements [hydraComputeModule] [hydraCoreModule] $
           "primitives">:
             doc "All supported primitive constants and functions, by name" $
             Types.map (core "Name") (graph "Primitive"),
-          "annotations">:
-            doc "The annotation class which is supported in this context" $
-            graph "AnnotationClass",
           "schema">:
             doc "The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph." $
             optional $ graph "Graph"],

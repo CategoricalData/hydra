@@ -108,8 +108,8 @@ metadataIsPreserved = do
   where
     annotatedStringType :: Type
     annotatedStringType = TypeAnnotated $ AnnotatedType Types.string $ M.fromList [
-      (kvDescription, Terms.string "The string literal type"),
-      (kvType, coreEncodeType $ TypeVariable _Type)]
+      (key_description, Terms.string "The string literal type"),
+      (key_type, coreEncodeType $ TypeVariable _Type)]
 
 testRoundTripsFromType :: H.SpecWith ()
 testRoundTripsFromType = do

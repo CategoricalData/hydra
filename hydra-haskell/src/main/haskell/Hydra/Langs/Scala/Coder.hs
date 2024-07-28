@@ -114,7 +114,7 @@ encodeFunction meta fun arg = case fun of
     findSdom = Just <$> (findDomain >>= encodeType)
     findDomain = do
         cx <- getState
-        r <- annotationClassTypeOf (graphAnnotations cx) meta
+        r <- getType meta
         case r of
           Nothing -> fail "expected a typed term"
           Just t -> domainOf t
@@ -152,14 +152,14 @@ encodeTerm term = case stripTerm term of
                 (Scala.Data_Name $ Scala.PredefString fname)
             EliminationUnion _ -> do
               cx <- getState
-              encodeFunction (termMeta cx fun) f (Just arg)
+              encodeFunction (termAnnotationInternal fun) f (Just arg)
           _ -> fallback
         _ -> fallback
       where
         fallback = sapply <$> encodeTerm fun <*> ((: []) <$> encodeTerm arg)
     TermFunction f -> do
       cx <- getState
-      encodeFunction (termMeta cx term) f Nothing
+      encodeFunction (termAnnotationInternal term) f Nothing
     TermList els -> sapply (sname "Seq") <$> CM.mapM encodeTerm els
     TermLiteral v -> Scala.DataLit <$> encodeLiteral v
     TermMap m -> sapply (sname "Map") <$> CM.mapM toPair (M.toList m)

@@ -300,10 +300,9 @@ toDataDeclaration coders namespaces (el, TypedTerm typ term) = do
         where
           toBinding hname' hterm' = H.LocalBindingValue $ simpleValueBinding hname' hterm' Nothing
       _ -> do
-        g <- getState
         hterm <- coderEncode coder term
         let vb = simpleValueBinding hname hterm bindings
-        classes <- annotationClassTypeClasses (graphAnnotations g) typ
+        classes <- getTypeClasses typ
         htype <- encodeTypeWithClassAssertions namespaces classes typ
         let decl = H.DeclarationTypedBinding $ H.TypedBinding (H.TypeSignature hname htype) (rewriteValueBinding vb)
         return $ H.DeclarationWithComments decl comments
@@ -338,7 +337,7 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
         else do
           htype <- adaptTypeToHaskellAndEncode namespaces t
           return $ H.DeclarationType (H.TypeDeclaration hd htype)
-    comments <- annotationClassTermDescription (graphAnnotations g) term
+    comments <- getTermDescription term
     return $ [H.DeclarationWithComments decl comments] ++ constantDecls g namespaces (elementName el) t
   where
     declHead name vars = case vars of
@@ -347,10 +346,9 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
         H.DeclarationHead_Application (declHead name rest) (H.Variable $ simpleName h)
 
     newtypeCons el typ = do
-        g <- getState
         let hname = simpleName $ newtypeAccessorName $ elementName el
         htype <- adaptTypeToHaskellAndEncode namespaces typ
-        comments <- annotationClassTypeDescription (graphAnnotations g) typ
+        comments <- getTypeDescription typ
         let hfield = H.FieldWithComments (H.Field hname htype) comments
         return $ H.ConstructorWithComments
           (H.ConstructorRecord $ H.Constructor_Record (simpleName $ localNameOfEager $ elementName el) [hfield]) Nothing
@@ -362,13 +360,11 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
         toField (FieldType (Name fname) ftype) = do
           let hname = simpleName $ decapitalize lname ++ capitalize fname
           htype <- adaptTypeToHaskellAndEncode namespaces ftype
-          g <- getState
-          comments <- annotationClassTypeDescription (graphAnnotations g) ftype
+          comments <- getTypeDescription ftype
           return $ H.FieldWithComments (H.Field hname htype) comments
 
     unionCons lname (FieldType (Name fname) ftype) = do
-      g <- getState
-      comments <- annotationClassTypeDescription (graphAnnotations g) ftype
+      comments <- getTypeDescription ftype
       let nm = capitalize lname ++ capitalize fname
       typeList <- if stripType ftype == Types.unit
         then pure []
