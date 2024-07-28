@@ -58,5 +58,5 @@ uncurryType t = ((\x -> case x of
   _ -> [
     t]) t)
 
-getAnnotation :: (String -> (M.Map String Core.Term) -> Maybe Core.Term)
+getAnnotation :: (String -> Map String Core.Term -> Maybe Core.Term)
 getAnnotation key ann = (Maps.lookup key ann)

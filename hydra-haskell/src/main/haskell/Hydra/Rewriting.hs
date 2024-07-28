@@ -55,7 +55,7 @@ expandLambdas term = do
   where
     expand g mtyp args recurse term = case term of
         TermAnnotated (AnnotatedTerm term' ann) -> do
-          mt <- annotationClassTermType (graphAnnotations g) term
+          let mt = getTermType term
           expanded <- expand g (Y.maybe mtyp Just mt) args recurse term'
           return $ TermAnnotated $ AnnotatedTerm expanded ann
         TermTyped (TermWithType term1 typ) -> do

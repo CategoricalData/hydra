@@ -177,7 +177,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
 --      [TypeVariantLiteral, TypeVariantAnnotated]
 --      stringAliasType
 --      (TypeAnnotated $ Annotated Types.string $ Kv $
---        M.fromList [(kvDescription, Terms.string "An alias for the string type")])
+--        M.fromList [(key_description, Terms.string "An alias for the string type")])
 --      False
 --      (string s)
 --      (string s)

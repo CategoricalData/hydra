@@ -110,18 +110,16 @@ rewriteDataType f = rewriteTerm ff id
 
 sortGraphElements :: Graph -> Flow Graph [Element]
 sortGraphElements g = do
-    annotated <- S.fromList . Y.catMaybes <$> (CM.mapM ifAnnotated $ M.elems els)
+    let annotated = S.fromList $ Y.catMaybes (ifAnnotated <$> M.elems els)
     adjList <- CM.mapM (toAdj annotated) $ M.elems els
     case topologicalSort adjList of
       Left comps -> fail $ "cyclical dependency not resolved through annotations: " ++ L.intercalate ", " (unName <$> L.head comps)
       Right names -> return $ Y.catMaybes ((\n -> M.lookup n els) <$> names)
   where
     els = graphElements g
-    ifAnnotated el = do
-      mtyp <- annotationClassTermType (graphAnnotations g) $ elementData el
-      return $ case mtyp of
-        Nothing -> Nothing
-        Just _ -> Just $ elementName el
+    ifAnnotated el = case (getTermType $ elementData el) of
+      Nothing -> Nothing
+      Just _ -> Just $ elementName el
     toAdj annotated el = do
         let deps = L.filter isNotAnnotated $ L.filter isElName $ S.toList $ freeVariablesInTerm $ elementData el
 
@@ -134,11 +132,9 @@ sortGraphElements g = do
 
 withInferenceContext flow = do
     g <- getState
-    env <- initialEnv g $ graphAnnotations g
+    let env = initialEnv g
     withState (InferenceContext g env) flow
   where
-    initialEnv g anns = M.fromList . Y.catMaybes <$> (CM.mapM toPair $ M.elems $ graphElements g)
+    initialEnv g = M.fromList $ Y.catMaybes (toPair <$> (M.elems $ graphElements g))
       where
-        toPair el = do
-          mt <- annotationClassTermType anns $ elementData el
-          return $ (\t -> (elementName el, monotype t)) <$> mt
+        toPair el = (\t -> (elementName el, monotype t)) <$> (getTermType $ elementData el)

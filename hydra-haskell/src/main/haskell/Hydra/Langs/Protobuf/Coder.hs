@@ -250,8 +250,7 @@ flattenType = rewriteType f id
 
 findOptions :: Type -> Flow (Graph) [P3.Option]
 findOptions typ = do
-  anns <- graphAnnotations <$> getState
-  mdesc <- annotationClassTypeDescription anns typ
+  mdesc <- getTypeDescription typ
   bdep <- readBooleanAnnotation key_deprecated typ
   let mdescAnn = fmap (\desc -> P3.Option descriptionOptionName $ P3.ValueString desc) mdesc
   let mdepAnn = if bdep then Just (P3.Option deprecatedOptionName $ P3.ValueBoolean True) else Nothing
@@ -284,13 +283,12 @@ nextIndex = nextCount "proto_field_index"
 
 readBooleanAnnotation :: String -> Type -> Flow (Graph) Bool
 readBooleanAnnotation key typ = do
-    anns <- graphAnnotations <$> getState
-    let ann = annotationClassTypeAnnotation anns typ
-    case TR.readMaybe $ annotationClassShow anns ann of
-      Just kv -> case getAnnotation key kv of
-        Just _ -> return True
-        Nothing -> return False
+  let ann = typeAnnotationInternal typ
+  case TR.readMaybe $ show ann of
+    Just kv -> case getAnnotation key kv of
+      Just _ -> return True
       Nothing -> return False
+    Nothing -> return False
 
 -- Note: this should probably be done in the term adapters
 simplifyType :: Type -> Type
