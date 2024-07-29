@@ -5,6 +5,7 @@ import Hydra.Compute
 import Hydra.Graph
 import Hydra.Strip
 import Hydra.Basics
+import Hydra.CoreEncoding
 import Hydra.Tier1
 import Hydra.Tier2
 import Hydra.Adapters
@@ -18,6 +19,7 @@ import qualified Hydra.Dsl.Types as Types
 
 import qualified Control.Monad as CM
 import qualified Data.Map as M
+import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
@@ -124,27 +126,59 @@ termCoder typ = case stripType typ of
 
 -- | A simplistic, unidirectional encoding for terms as JSON values. Not type-aware; best used for human consumption.
 untypedTermToJson :: Term -> Flow s Json.Value
-untypedTermToJson term = case fullyStripTerm term of
-      TermList terms -> Json.ValueArray <$> (CM.mapM untypedTermToJson terms)
-      TermLiteral lit -> pure $ case lit of
-        LiteralBinary s -> Json.ValueString s
-        LiteralBoolean b -> Json.ValueBoolean b
-        LiteralFloat f -> Json.ValueNumber $ floatValueToBigfloat f
-        LiteralInteger i -> Json.ValueNumber $ bigintToBigfloat $ integerValueToBigint i
-        LiteralString s -> Json.ValueString s
-      TermRecord (Record _ fields) -> do
-        keyvals <- CM.mapM fieldToKeyval fields
-        return $ Json.ValueObject $ M.fromList $ Y.catMaybes keyvals
-      TermUnion (Injection _ field) -> if fieldTerm field == Terms.unit
-        then return $ Json.ValueString $ unName $ fieldName field
-        else do
-          mkeyval <- fieldToKeyval field
-          return $ Json.ValueObject $ M.fromList $ case mkeyval of
-            Nothing -> []
-            Just keyval -> [keyval]
-      TermWrap (WrappedTerm _ t) -> untypedTermToJson t
-      t -> unexpected "literal value" $ show t
+untypedTermToJson term = case stripTerm term of
+    TermApplication (Application lhs rhs) -> asRecord [
+      Field _Application_function lhs,
+      Field _Application_argument rhs]
+    TermFunction f -> case f of
+      FunctionElimination elm -> case elm of
+        EliminationList term1 -> asVariant "fold" term1
+        EliminationRecord (Projection _ fname) -> asVariant "project" $ TermVariable fname
+        _ -> fail $ "unexpected elimination variant: " ++ show (eliminationVariant elm)
+      FunctionLambda (Lambda v body) -> asRecord [
+        Field _Lambda_parameter $ TermVariable v,
+        Field _Lambda_body body]
+      FunctionPrimitive name -> pure $ Json.ValueString $ unName name
+    TermLet (Let bindings env) -> asRecord [
+        Field _Let_bindings $ TermRecord $ Record (Name "") (fromBinding <$> M.toList bindings),
+        Field _Let_environment env]
+      where
+        fromBinding (k, v) = Field k v
+    TermList terms -> Json.ValueArray <$> (CM.mapM untypedTermToJson terms)
+    TermLiteral lit -> pure $ case lit of
+      LiteralBinary s -> Json.ValueString s
+      LiteralBoolean b -> Json.ValueBoolean b
+      LiteralFloat f -> Json.ValueNumber $ floatValueToBigfloat f
+      LiteralInteger i -> Json.ValueNumber $ bigintToBigfloat $ integerValueToBigint i
+      LiteralString s -> Json.ValueString s
+    TermOptional mt -> case mt of
+      Nothing -> pure Json.ValueNull
+      Just t -> untypedTermToJson t
+    TermProduct els -> untypedTermToJson $ TermList els
+    TermRecord (Record _ fields) -> do
+      keyvals <- CM.mapM fieldToKeyval fields
+      return $ Json.ValueObject $ M.fromList $ Y.catMaybes keyvals
+    TermSet vals -> untypedTermToJson $ TermList $ S.toList vals
+    TermSum (Sum idx size term1) -> asRecord [
+      Field _Sum_index $ TermLiteral $ LiteralInteger $ IntegerValueInt32 idx,
+      Field _Sum_size $ TermLiteral $ LiteralInteger $ IntegerValueInt32 size,
+      Field _Sum_term term1]
+    TermTyped (TermWithType term1 typ) -> asRecord [
+      Field _TermWithType_term term1,
+      Field _TermWithType_type $ coreEncodeType typ]
+    TermUnion (Injection _ field) -> if fieldTerm field == Terms.unit
+      then return $ Json.ValueString $ unName $ fieldName field
+      else do
+        mkeyval <- fieldToKeyval field
+        return $ Json.ValueObject $ M.fromList $ case mkeyval of
+          Nothing -> []
+          Just keyval -> [keyval]
+    TermVariable v -> pure $ Json.ValueString $ unName v
+    TermWrap (WrappedTerm _ t) -> untypedTermToJson t
+    t -> fail $ "unexpected term variant: " ++ show (termVariant t)
   where
+    asRecord = untypedTermToJson . TermRecord . Record (Name "")
+    asVariant name term = untypedTermToJson $ TermUnion $ Injection (Name "") $ Field (Name name) term
     fieldToKeyval f = do
         mjson <- forTerm $ fieldTerm f
         return $ case mjson of

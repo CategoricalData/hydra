@@ -131,7 +131,9 @@ expandTypedLambdas = rewriteTerm rewrite id
             else typed (toFunctionType doms cod) $
               TermFunction $ FunctionLambda $ Lambda var $
                 pad (i+1) (L.tail doms, cod) $
-                typed (toFunctionType (L.tail doms) cod) $ -- TODO: omit this type annotation if practical
+                -- TODO: omit this type annotation if practical; a type annotation on application terms
+                --       shouldn't really be necessary.
+                typed (toFunctionType (L.tail doms) cod) $
                 TermApplication $ Application term $ TermVariable var
           where
             typed typ term = TermTyped $ TermWithType term typ
@@ -446,28 +448,29 @@ typeDependencyNames = freeVariablesInType
 -- | Where non-lambda terms with nonzero arity occur at the top level, turn them into lambdas,
 --   also adding an appropriate type annotation to each new lambda.
 wrapLambdas :: Term -> Flow Graph Term
-wrapLambdas term = do
-    typ <- requireTermType term
-    let types = uncurryType typ
-    let argTypes = L.init types
-    let missing = missingArity (L.length argTypes) term
-    return $ pad term (L.take missing argTypes) (toFunType $ L.drop missing types)
-  where
-    toFunType types = case types of
-      [t] -> t
-      (dom:rest) -> TypeFunction $ FunctionType dom $ toFunType rest
-    missingArity arity term = if arity == 0
-      then 0
-      else case term of
-        TermAnnotated (AnnotatedTerm term2 _) -> missingArity arity term2
-        TermTyped (TermWithType term2 _) -> missingArity arity term2
-        TermLet (Let _ env) -> missingArity arity env
-        TermFunction (FunctionLambda (Lambda _ body)) -> missingArity (arity - 1) body
-        _ -> arity
-    pad term doms cod = fst $ L.foldl newLambda (apps, cod) $ L.reverse variables
-      where
-        newLambda (body, cod) (v, dom) = (TermTyped $ TermWithType (TermFunction $ FunctionLambda $ Lambda v body) ft, ft)
-          where
-            ft = TypeFunction $ FunctionType dom cod
-        apps = L.foldl (\lhs (v, _) -> TermApplication (Application lhs $ TermVariable v)) term variables
-        variables = L.zip ((\i -> Name $ "a" ++ show i) <$> [1..]) doms
+wrapLambdas = pure
+--wrapLambdas term = do
+--    typ <- requireTermType term
+--    let types = uncurryType typ
+--    let argTypes = L.init types
+--    let missing = missingArity (L.length argTypes) term
+--    return $ pad term (L.take missing argTypes) (toFunType $ L.drop missing types)
+--  where
+--    toFunType types = case types of
+--      [t] -> t
+--      (dom:rest) -> TypeFunction $ FunctionType dom $ toFunType rest
+--    missingArity arity term = if arity == 0
+--      then 0
+--      else case term of
+--        TermAnnotated (AnnotatedTerm term2 _) -> missingArity arity term2
+--        TermTyped (TermWithType term2 _) -> missingArity arity term2
+--        TermLet (Let _ env) -> missingArity arity env
+--        TermFunction (FunctionLambda (Lambda _ body)) -> missingArity (arity - 1) body
+--        _ -> arity
+--    pad term doms cod = fst $ L.foldl newLambda (apps, cod) $ L.reverse variables
+--      where
+--        newLambda (body, cod) (v, dom) = (TermTyped $ TermWithType (TermFunction $ FunctionLambda $ Lambda v body) ft, ft)
+--          where
+--            ft = TypeFunction $ FunctionType dom cod
+--        apps = L.foldl (\lhs (v, _) -> TermApplication (Application lhs $ TermVariable v)) term variables
+--        variables = L.zip ((\i -> Name $ "a" ++ show i) <$> [1..]) doms

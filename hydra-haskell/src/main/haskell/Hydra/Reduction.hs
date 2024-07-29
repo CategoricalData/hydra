@@ -148,7 +148,7 @@ contractTerm :: Term -> Term
 contractTerm = rewriteTerm rewrite id
   where
     rewrite recurse term = case rec of
-        TermApplication (Application lhs rhs) -> case stripTerm lhs of
+        TermApplication (Application lhs rhs) -> case fullyStripTerm lhs of
           TermFunction (FunctionLambda (Lambda v body)) -> if isFreeIn v body
             then body
             else alphaConvert v rhs body
