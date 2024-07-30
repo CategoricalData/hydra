@@ -20,6 +20,7 @@ import Hydra.Dsl.ShorthandTypes
 import Hydra.Sources.Core
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
+import qualified Hydra.Dsl.Lib.Lists as Lists
 import Hydra.Sources.Libraries
 
 import Prelude hiding ((++))
@@ -96,10 +97,7 @@ fld :: Name -> Datum a -> Fld a
 fld fname (Datum val) = Fld $ Field fname val
 
 fold :: Datum (b -> a -> b) -> Datum (b -> [a] -> b)
-fold (Datum f) = Datum $ TermFunction $ FunctionElimination $ EliminationList f
-
---foldl :: Datum ((b -> a -> b) -> b -> [a] -> b) -> Datum b -> Datum ([a] -> b)
---foldl (Datum f) (Datum arg) = Datum (Terms.apply (TermFunction $ FunctionElimination $ EliminationList f) arg)
+fold f = Lists.foldl @@ f
 
 function :: Type -> Type -> Datum a -> Datum a
 function dom cod = typed (Types.function dom cod)
