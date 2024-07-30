@@ -176,7 +176,7 @@ public class Expect {
     /**
      * Decode a function.
      */
-    public static <A, X, Y> Function<X, Flow<Graph, Y>> function(
+    public static <X, Y> Function<X, Flow<Graph, Y>> function(
         final Function<X, Term> fin,
         final Function<Term, Flow<Graph, Y>> fout,
         final Term func) {
@@ -309,7 +309,7 @@ public class Expect {
     /**
      * Decode a map of keys to values.
      */
-    public static <S, A, K, V> Flow<S, Map<K, V>> map(
+    public static <S, K, V> Flow<S, Map<K, V>> map(
             final Function<Term, Flow<S, K>> keys,
             final Function<Term, Flow<S, V>> values,
             final Term term) {
@@ -360,7 +360,7 @@ public class Expect {
     /**
      * Decode a pair of values.
      */
-    public static <S, A, T1, T2> Flow<S, Tuple.Tuple2<T1, T2>> pair(
+    public static <S, T1, T2> Flow<S, Tuple.Tuple2<T1, T2>> pair(
             final Function<Term, Flow<S, T1>> first,
             final Function<Term, Flow<S, T2>> second,
             final Term term) {
