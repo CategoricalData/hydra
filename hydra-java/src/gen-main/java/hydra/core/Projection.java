@@ -10,11 +10,17 @@ import java.io.Serializable;
 public class Projection implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Projection");
   
+  /**
+   * The name of the record type
+   */
   public final hydra.core.Name typeName;
   
-  public final hydra.core.FieldName field;
+  /**
+   * The name of the projected field
+   */
+  public final hydra.core.Name field;
   
-  public Projection (hydra.core.Name typeName, hydra.core.FieldName field) {
+  public Projection (hydra.core.Name typeName, hydra.core.Name field) {
     java.util.Objects.requireNonNull((typeName));
     java.util.Objects.requireNonNull((field));
     this.typeName = typeName;
@@ -40,7 +46,7 @@ public class Projection implements Serializable {
     return new Projection(typeName, field);
   }
   
-  public Projection withField(hydra.core.FieldName field) {
+  public Projection withField(hydra.core.Name field) {
     java.util.Objects.requireNonNull((field));
     return new Projection(typeName, field);
   }

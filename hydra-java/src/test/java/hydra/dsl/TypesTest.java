@@ -99,7 +99,7 @@ public class TypesTest {
         String desc = type.accept(new Type.PartialVisitor<>() {
             @Override
             public String visit(Type.Annotated instance) {
-                Term desc = instance.value.annotation.annotations.get("description");
+                Term desc = instance.value.annotation.get("description");
                 return Flows.fromFlow(Expect.string(desc));
             }
 

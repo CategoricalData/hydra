@@ -3,12 +3,10 @@ package hydra.dsl;
 import hydra.compute.Flow;
 import hydra.core.AnnotatedType;
 import hydra.core.ApplicationType;
-import hydra.core.FieldName;
 import hydra.core.FieldType;
 import hydra.core.FloatType;
 import hydra.core.FunctionType;
 import hydra.core.IntegerType;
-import hydra.core.Kv;
 import hydra.core.LambdaType;
 import hydra.core.LiteralType;
 import hydra.core.MapType;
@@ -19,14 +17,13 @@ import hydra.core.Type;
 import hydra.core.Unit;
 import hydra.core.WrappedType;
 import hydra.util.Opt;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static hydra.dsl.Core.name;
+import static hydra.dsl.Core.*;
 
 
 /**
@@ -38,7 +35,7 @@ public interface Types {
     /**
      * Construct an annotated type.
      */
-    static Type annot(final Kv ann, final Type base) {
+    static Type annot(final Map<String, Term> ann, final Type base) {
         return new Type.Annotated(new AnnotatedType(base, ann));
     }
 
@@ -48,7 +45,7 @@ public interface Types {
     static Type annot(final String key, final Term value, final Type base) {
         Map<String, Term> mp = new HashMap<>();
         mp.put(key, value);
-        return annot(new Kv(mp), base);
+        return annot(mp, base);
     }
 
     /**
@@ -106,7 +103,7 @@ public interface Types {
      * Construct a field type.
      */
     static FieldType field(final String name, final Type t) {
-        return new FieldType(new FieldName(name), t);
+        return new FieldType(new Name(name), t);
     }
 
     /**

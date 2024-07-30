@@ -7,7 +7,6 @@ import hydra.core.CaseStatement;
 import hydra.core.Elimination;
 import hydra.core.Field;
 import hydra.core.Injection;
-import hydra.core.Kv;
 import hydra.core.Lambda;
 import hydra.core.Let;
 import hydra.core.Name;
@@ -20,19 +19,14 @@ import hydra.core.TermWithType;
 import hydra.core.Unit;
 import hydra.core.WrappedTerm;
 import hydra.dsl.Terms;
-
+import hydra.util.Opt;
 import java.util.List;
 import java.util.Map;
-import hydra.util.Opt;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
-import static hydra.Flows.fromFlow;
-import static hydra.Flows.map;
-import static hydra.Flows.map2;
-import static hydra.Flows.mapM;
-import static hydra.Flows.pure;
+import static hydra.Flows.*;
 
 
 /**
@@ -132,14 +126,14 @@ public interface Rewriting {
      * This is a workaround for a non-monadic rewriting function; the latter would be more efficient.
      */
     static Term rewriteTerm(Function<Function<Term, Term>, Function<Term, Term>> f,
-                                      Function<Kv, Kv> mf, Term original) {
+                                      Function<Map<String, Term>, Map<String, Term>> mf, Term original) {
         Function<Function<Term, Flow<Unit, Term>>, Function<Term, Flow<Unit, Term>>> fflow =
                 recurse -> (Function<Term, Flow<Unit, Term>>) term -> {
                     Term result = f.apply(t -> fromFlow(Flows.UNIT, recurse.apply(t))).apply(term);
                     return pure(result);
                 };
 
-        Function<Kv, Flow<Unit, Kv>> mfflow = a -> pure(mf.apply(a));
+        Function<Map<String, Term>, Flow<Unit, Map<String, Term>>> mfflow = a -> pure(mf.apply(a));
         return fromFlow(Flows.UNIT, rewriteTermM(fflow, mfflow, original));
     }
 
@@ -148,7 +142,7 @@ public interface Rewriting {
      */
     static <S> Flow<S, Term> rewriteTermM(
             Function<Function<Term, Flow<S, Term>>, Function<Term, Flow<S, Term>>> f,
-            Function<Kv, Flow<S, Kv>> mf,
+            Function<Map<String, Term>, Flow<S, Map<String, Term>>> mf,
             Term original) {
         Function<Function<Term, Flow<S, Term>>, Function<Term, Flow<S, Term>>> fsub =
                 recurse -> term -> term.accept(new Term.Visitor<Flow<S, Term>>() {

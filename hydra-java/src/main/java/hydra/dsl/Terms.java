@@ -6,12 +6,10 @@ import hydra.core.Application;
 import hydra.core.CaseStatement;
 import hydra.core.Elimination;
 import hydra.core.Field;
-import hydra.core.FieldName;
 import hydra.core.FloatValue;
 import hydra.core.Function;
 import hydra.core.Injection;
 import hydra.core.IntegerValue;
-import hydra.core.Kv;
 import hydra.core.Lambda;
 import hydra.core.Let;
 import hydra.core.Literal;
@@ -24,7 +22,6 @@ import hydra.core.Unit;
 import hydra.core.WrappedTerm;
 import hydra.util.Opt;
 import hydra.util.Tuple;
-
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static hydra.dsl.Core.name;
+import static hydra.dsl.Core.*;
+
 
 /**
  * DSL utilities for constructing Hydra terms based on native Java objects.
@@ -42,7 +40,7 @@ public interface Terms {
     /**
      * Construct an annotation term.
      */
-    static Term annot(final Kv ann, final Term base) {
+    static Term annot(final Map<String, Term> ann, final Term base) {
         return new Term.Annotated(new AnnotatedTerm(base, ann));
     }
 
@@ -52,7 +50,7 @@ public interface Terms {
     static Term annot(final String key, final Term value, final Term base) {
         Map<String, Term> mp = new HashMap<>();
         mp.put(key, value);
-        return annot(new Kv(mp), base);
+        return annot(mp, base);
     }
 
     /**
@@ -147,7 +145,7 @@ public interface Terms {
      * Construct a field.
      */
     static Field field(final String fname, final Term term) {
-        return new Field(new FieldName(fname), term);
+        return new Field(new Name(fname), term);
     }
 
     /**
@@ -405,7 +403,7 @@ public interface Terms {
     /**
      * Construct a projection term.
      */
-    static Term project(final Name recordName, final FieldName fname) {
+    static Term project(final Name recordName, final Name fname) {
         return elimination(new Elimination.Record(new Projection(recordName, fname)));
     }
 
@@ -413,14 +411,14 @@ public interface Terms {
      * Construct a projection term.
      */
     static Term project(final String recordName, final String fname) {
-        return project(name(recordName), new FieldName(fname));
+        return project(name(recordName), new Name(fname));
     }
 
     /**
      * Construct a projection term.
      */
     static Term project(final Name recordName, final String fname) {
-        return project(recordName, new FieldName(fname));
+        return project(recordName, new Name(fname));
     }
 
     /**

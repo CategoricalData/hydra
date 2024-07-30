@@ -4,7 +4,7 @@ import hydra.Flows;
 import hydra.Reduction;
 import hydra.compute.Flow;
 import hydra.core.Field;
-import hydra.core.FieldName;
+import hydra.core.Name;
 import hydra.core.FloatValue;
 import hydra.core.IntegerValue;
 import hydra.core.Literal;
@@ -111,9 +111,9 @@ public class Expect {
     /**
      * Retrieve and decode a field from a map of field names to terms.
      */
-    public static <S, X> Flow<S, X> field(final FieldName fname,
+    public static <S, X> Flow<S, X> field(final Name fname,
                                              final Function<Term, Flow<S, X>> accessor,
-                                             final Map<FieldName, Term> fields) {
+                                             final Map<Name, Term> fields) {
         Term term = fields.get(fname);
         if (term == null) {
             return Flows.fail("field " + fname + " not found");
@@ -405,9 +405,9 @@ public class Expect {
     /**
      * Decode a record as a map from field names to terms.
      */
-    public static <S> Flow<S, Map<FieldName, Term>> recordAsMap(final Name tname, final Term term) {
+    public static <S> Flow<S, Map<Name, Term>> recordAsMap(final Name tname, final Term term) {
         return Flows.map(record(tname, term), fields -> {
-            Map<FieldName, Term> result = new HashMap<>();
+            Map<Name, Term> result = new HashMap<>();
             for (Field f : fields) {
                 result.put(f.name, f.term);
             }
