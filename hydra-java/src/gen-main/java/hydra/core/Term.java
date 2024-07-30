@@ -7,115 +7,121 @@ import java.io.Serializable;
 /**
  * A data term
  */
-public abstract class Term<A> implements Serializable {
+public abstract class Term implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Term");
   
   private Term () {
   
   }
   
-  public abstract <R> R accept(Visitor<A, R> visitor) ;
+  public abstract <R> R accept(Visitor<R> visitor) ;
   
-  public interface Visitor<A, R> {
-    R visit(Annotated<A> instance) ;
+  public interface Visitor<R> {
+    R visit(Annotated instance) ;
     
-    R visit(Application<A> instance) ;
+    R visit(Application instance) ;
     
-    R visit(Function<A> instance) ;
+    R visit(Function instance) ;
     
-    R visit(Let<A> instance) ;
+    R visit(Let instance) ;
     
-    R visit(List<A> instance) ;
+    R visit(List instance) ;
     
-    R visit(Literal<A> instance) ;
+    R visit(Literal instance) ;
     
-    R visit(Map<A> instance) ;
+    R visit(Map instance) ;
     
-    R visit(Optional<A> instance) ;
+    R visit(Optional instance) ;
     
-    R visit(Product<A> instance) ;
+    R visit(Product instance) ;
     
-    R visit(Record<A> instance) ;
+    R visit(Record instance) ;
     
-    R visit(Set<A> instance) ;
+    R visit(Set instance) ;
     
-    R visit(Stream<A> instance) ;
+    R visit(Stream instance) ;
     
-    R visit(Sum<A> instance) ;
+    R visit(Sum instance) ;
     
-    R visit(Union<A> instance) ;
+    R visit(Typed instance) ;
     
-    R visit(Variable<A> instance) ;
+    R visit(Union instance) ;
     
-    R visit(Wrap<A> instance) ;
+    R visit(Variable instance) ;
+    
+    R visit(Wrap instance) ;
   }
   
-  public interface PartialVisitor<A, R> extends Visitor<A, R> {
-    default R otherwise(Term<A> instance) {
+  public interface PartialVisitor<R> extends Visitor<R> {
+    default R otherwise(Term instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Annotated<A> instance) {
+    default R visit(Annotated instance) {
       return otherwise((instance));
     }
     
-    default R visit(Application<A> instance) {
+    default R visit(Application instance) {
       return otherwise((instance));
     }
     
-    default R visit(Function<A> instance) {
+    default R visit(Function instance) {
       return otherwise((instance));
     }
     
-    default R visit(Let<A> instance) {
+    default R visit(Let instance) {
       return otherwise((instance));
     }
     
-    default R visit(List<A> instance) {
+    default R visit(List instance) {
       return otherwise((instance));
     }
     
-    default R visit(Literal<A> instance) {
+    default R visit(Literal instance) {
       return otherwise((instance));
     }
     
-    default R visit(Map<A> instance) {
+    default R visit(Map instance) {
       return otherwise((instance));
     }
     
-    default R visit(Optional<A> instance) {
+    default R visit(Optional instance) {
       return otherwise((instance));
     }
     
-    default R visit(Product<A> instance) {
+    default R visit(Product instance) {
       return otherwise((instance));
     }
     
-    default R visit(Record<A> instance) {
+    default R visit(Record instance) {
       return otherwise((instance));
     }
     
-    default R visit(Set<A> instance) {
+    default R visit(Set instance) {
       return otherwise((instance));
     }
     
-    default R visit(Stream<A> instance) {
+    default R visit(Stream instance) {
       return otherwise((instance));
     }
     
-    default R visit(Sum<A> instance) {
+    default R visit(Sum instance) {
       return otherwise((instance));
     }
     
-    default R visit(Union<A> instance) {
+    default R visit(Typed instance) {
       return otherwise((instance));
     }
     
-    default R visit(Variable<A> instance) {
+    default R visit(Union instance) {
       return otherwise((instance));
     }
     
-    default R visit(Wrap<A> instance) {
+    default R visit(Variable instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Wrap instance) {
       return otherwise((instance));
     }
   }
@@ -123,13 +129,13 @@ public abstract class Term<A> implements Serializable {
   /**
    * A term annotated with metadata
    */
-  public static final class Annotated<A> extends hydra.core.Term<A> implements Serializable {
+  public static final class Annotated extends hydra.core.Term implements Serializable {
     /**
      * A term annotated with metadata
      */
-    public final hydra.core.Annotated<hydra.core.Term<A>, A> value;
+    public final hydra.core.AnnotatedTerm value;
     
-    public Annotated (hydra.core.Annotated<hydra.core.Term<A>, A> value) {
+    public Annotated (hydra.core.AnnotatedTerm value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -149,7 +155,7 @@ public abstract class Term<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -157,13 +163,13 @@ public abstract class Term<A> implements Serializable {
   /**
    * A function application
    */
-  public static final class Application<A> extends hydra.core.Term<A> implements Serializable {
+  public static final class Application extends hydra.core.Term implements Serializable {
     /**
      * A function application
      */
-    public final hydra.core.Application<A> value;
+    public final hydra.core.Application value;
     
-    public Application (hydra.core.Application<A> value) {
+    public Application (hydra.core.Application value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -183,7 +189,7 @@ public abstract class Term<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -191,13 +197,13 @@ public abstract class Term<A> implements Serializable {
   /**
    * A function term
    */
-  public static final class Function<A> extends hydra.core.Term<A> implements Serializable {
+  public static final class Function extends hydra.core.Term implements Serializable {
     /**
      * A function term
      */
-    public final hydra.core.Function<A> value;
+    public final hydra.core.Function value;
     
-    public Function (hydra.core.Function<A> value) {
+    public Function (hydra.core.Function value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -217,15 +223,15 @@ public abstract class Term<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
   
-  public static final class Let<A> extends hydra.core.Term<A> implements Serializable {
-    public final hydra.core.Let<A> value;
+  public static final class Let extends hydra.core.Term implements Serializable {
+    public final hydra.core.Let value;
     
-    public Let (hydra.core.Let<A> value) {
+    public Let (hydra.core.Let value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -245,7 +251,7 @@ public abstract class Term<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -253,13 +259,13 @@ public abstract class Term<A> implements Serializable {
   /**
    * A list
    */
-  public static final class List<A> extends hydra.core.Term<A> implements Serializable {
+  public static final class List extends hydra.core.Term implements Serializable {
     /**
      * A list
      */
-    public final java.util.List<hydra.core.Term<A>> value;
+    public final java.util.List<hydra.core.Term> value;
     
-    public List (java.util.List<hydra.core.Term<A>> value) {
+    public List (java.util.List<hydra.core.Term> value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -279,7 +285,7 @@ public abstract class Term<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -287,7 +293,7 @@ public abstract class Term<A> implements Serializable {
   /**
    * A literal value
    */
-  public static final class Literal<A> extends hydra.core.Term<A> implements Serializable {
+  public static final class Literal extends hydra.core.Term implements Serializable {
     /**
      * A literal value
      */
@@ -313,7 +319,7 @@ public abstract class Term<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -321,13 +327,13 @@ public abstract class Term<A> implements Serializable {
   /**
    * A map of keys to values
    */
-  public static final class Map<A> extends hydra.core.Term<A> implements Serializable {
+  public static final class Map extends hydra.core.Term implements Serializable {
     /**
      * A map of keys to values
      */
-    public final java.util.Map<hydra.core.Term<A>, hydra.core.Term<A>> value;
+    public final java.util.Map<hydra.core.Term, hydra.core.Term> value;
     
-    public Map (java.util.Map<hydra.core.Term<A>, hydra.core.Term<A>> value) {
+    public Map (java.util.Map<hydra.core.Term, hydra.core.Term> value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -347,7 +353,7 @@ public abstract class Term<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -355,13 +361,13 @@ public abstract class Term<A> implements Serializable {
   /**
    * An optional value
    */
-  public static final class Optional<A> extends hydra.core.Term<A> implements Serializable {
+  public static final class Optional extends hydra.core.Term implements Serializable {
     /**
      * An optional value
      */
-    public final hydra.util.Opt<hydra.core.Term<A>> value;
+    public final hydra.util.Opt<hydra.core.Term> value;
     
-    public Optional (hydra.util.Opt<hydra.core.Term<A>> value) {
+    public Optional (hydra.util.Opt<hydra.core.Term> value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -381,7 +387,7 @@ public abstract class Term<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -389,13 +395,13 @@ public abstract class Term<A> implements Serializable {
   /**
    * A tuple
    */
-  public static final class Product<A> extends hydra.core.Term<A> implements Serializable {
+  public static final class Product extends hydra.core.Term implements Serializable {
     /**
      * A tuple
      */
-    public final java.util.List<hydra.core.Term<A>> value;
+    public final java.util.List<hydra.core.Term> value;
     
-    public Product (java.util.List<hydra.core.Term<A>> value) {
+    public Product (java.util.List<hydra.core.Term> value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -415,7 +421,7 @@ public abstract class Term<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -423,13 +429,13 @@ public abstract class Term<A> implements Serializable {
   /**
    * A record term
    */
-  public static final class Record<A> extends hydra.core.Term<A> implements Serializable {
+  public static final class Record extends hydra.core.Term implements Serializable {
     /**
      * A record term
      */
-    public final hydra.core.Record<A> value;
+    public final hydra.core.Record value;
     
-    public Record (hydra.core.Record<A> value) {
+    public Record (hydra.core.Record value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -449,7 +455,7 @@ public abstract class Term<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -457,13 +463,13 @@ public abstract class Term<A> implements Serializable {
   /**
    * A set of values
    */
-  public static final class Set<A> extends hydra.core.Term<A> implements Serializable {
+  public static final class Set extends hydra.core.Term implements Serializable {
     /**
      * A set of values
      */
-    public final java.util.Set<hydra.core.Term<A>> value;
+    public final java.util.Set<hydra.core.Term> value;
     
-    public Set (java.util.Set<hydra.core.Term<A>> value) {
+    public Set (java.util.Set<hydra.core.Term> value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -483,7 +489,7 @@ public abstract class Term<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -491,13 +497,13 @@ public abstract class Term<A> implements Serializable {
   /**
    * An infinite stream of terms
    */
-  public static final class Stream<A> extends hydra.core.Term<A> implements Serializable {
+  public static final class Stream extends hydra.core.Term implements Serializable {
     /**
      * An infinite stream of terms
      */
-    public final hydra.core.Stream<A> value;
+    public final hydra.core.Stream value;
     
-    public Stream (hydra.core.Stream<A> value) {
+    public Stream (hydra.core.Stream value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -517,7 +523,7 @@ public abstract class Term<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -525,13 +531,13 @@ public abstract class Term<A> implements Serializable {
   /**
    * A variant tuple
    */
-  public static final class Sum<A> extends hydra.core.Term<A> implements Serializable {
+  public static final class Sum extends hydra.core.Term implements Serializable {
     /**
      * A variant tuple
      */
-    public final hydra.core.Sum<A> value;
+    public final hydra.core.Sum value;
     
-    public Sum (hydra.core.Sum<A> value) {
+    public Sum (hydra.core.Sum value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -551,7 +557,41 @@ public abstract class Term<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A term annotated with its type
+   */
+  public static final class Typed extends hydra.core.Term implements Serializable {
+    /**
+     * A term annotated with its type
+     */
+    public final hydra.core.TermWithType value;
+    
+    public Typed (hydra.core.TermWithType value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Typed)) {
+        return false;
+      }
+      Typed o = (Typed) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -559,13 +599,13 @@ public abstract class Term<A> implements Serializable {
   /**
    * An injection; an instance of a union type
    */
-  public static final class Union<A> extends hydra.core.Term<A> implements Serializable {
+  public static final class Union extends hydra.core.Term implements Serializable {
     /**
      * An injection; an instance of a union type
      */
-    public final hydra.core.Injection<A> value;
+    public final hydra.core.Injection value;
     
-    public Union (hydra.core.Injection<A> value) {
+    public Union (hydra.core.Injection value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -585,7 +625,7 @@ public abstract class Term<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -593,7 +633,7 @@ public abstract class Term<A> implements Serializable {
   /**
    * A variable reference
    */
-  public static final class Variable<A> extends hydra.core.Term<A> implements Serializable {
+  public static final class Variable extends hydra.core.Term implements Serializable {
     /**
      * A variable reference
      */
@@ -619,15 +659,15 @@ public abstract class Term<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
   
-  public static final class Wrap<A> extends hydra.core.Term<A> implements Serializable {
-    public final hydra.core.Nominal<hydra.core.Term<A>> value;
+  public static final class Wrap extends hydra.core.Term implements Serializable {
+    public final hydra.core.WrappedTerm value;
     
-    public Wrap (hydra.core.Nominal<hydra.core.Term<A>> value) {
+    public Wrap (hydra.core.WrappedTerm value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -647,7 +687,7 @@ public abstract class Term<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }

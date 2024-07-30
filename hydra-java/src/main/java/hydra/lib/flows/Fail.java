@@ -23,18 +23,18 @@ import static hydra.dsl.Terms.unwrap;
 import static hydra.dsl.Terms.variable;
 
 
-public class Fail<A> extends PrimitiveFunction<A> {
+public class Fail extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/flows.fail");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return Types.lambda("s", "x", Types.function(Types.string(), Types.flow("s", "x")));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.pure(app(unwrap(Flow.NAME), lambda("q", flowState(
                 Terms.nothing(),
                 app(project(FlowState.NAME, "state"), variable("q")),

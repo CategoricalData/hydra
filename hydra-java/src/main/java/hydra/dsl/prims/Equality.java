@@ -21,71 +21,71 @@ import hydra.lib.equality.EqualUint8;
 
 
 public interface Equality {
-    static <A> Term<A> equalBigfloat() {
-        return new EqualBigfloat<A>().term();
+    static Term equalBigfloat() {
+        return new EqualBigfloat().term();
     }
 
-    static <A> Term<A> equalBigint() {
-        return new EqualBigint<A>().term();
+    static Term equalBigint() {
+        return new EqualBigint().term();
     }
 
-    static <A> Term<A> equalBinary() {
-        return new EqualBinary<A>().term();
+    static Term equalBinary() {
+        return new EqualBinary().term();
     }
 
-    static <A> Term<A> equalBoolean() {
-        return new EqualBoolean<A>().term();
+    static Term equalBoolean() {
+        return new EqualBoolean().term();
     }
 
-    static <A> Term<A> equalFloat32() {
-        return new EqualFloat32<A>().term();
+    static Term equalFloat32() {
+        return new EqualFloat32().term();
     }
 
-    static <A> Term<A> equalFloat64() {
-        return new EqualFloat64<A>().term();
+    static Term equalFloat64() {
+        return new EqualFloat64().term();
     }
 
-    static <A> Term<A> equalInt8() {
-        return new EqualInt8<A>().term();
+    static Term equalInt8() {
+        return new EqualInt8().term();
     }
 
-    static <A> Term<A> equalInt16() {
-        return new EqualInt16<A>().term();
+    static Term equalInt16() {
+        return new EqualInt16().term();
     }
 
-    static <A> Term<A> equalInt32() {
-        return new EqualInt32<A>().term();
+    static Term equalInt32() {
+        return new EqualInt32().term();
     }
 
-    static <A> Term<A> equalInt64() {
-        return new EqualInt64<A>().term();
+    static Term equalInt64() {
+        return new EqualInt64().term();
     }
 
-    static <A> Term<A> equalString() {
-        return new EqualString<A>().term();
+    static Term equalString() {
+        return new EqualString().term();
     }
 
-    static <A> Term<A> equalTerm() {
-        return new EqualTerm<A>().term();
+    static Term equalTerm() {
+        return new EqualTerm().term();
     }
 
-    static <A> Term<A> equalType() {
-        return new EqualType<A>().term();
+    static Term equalType() {
+        return new EqualType().term();
     }
 
-    static <A> Term<A> equalUint8() {
-        return new EqualUint8<A>().term();
+    static Term equalUint8() {
+        return new EqualUint8().term();
     }
 
-    static <A> Term<A> equalUint16() {
-        return new EqualUint16<A>().term();
+    static Term equalUint16() {
+        return new EqualUint16().term();
     }
 
-    static <A> Term<A> equalUint32() {
-        return new EqualUint32<A>().term();
+    static Term equalUint32() {
+        return new EqualUint32().term();
     }
 
-    static <A> Term<A> equalUint64() {
-        return new EqualUint64<A>().term();
+    static Term equalUint64() {
+        return new EqualUint64().term();
     }
 }

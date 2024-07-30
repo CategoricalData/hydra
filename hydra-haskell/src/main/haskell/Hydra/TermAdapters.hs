@@ -36,20 +36,20 @@ import qualified Text.Read as TR
 import qualified Data.Maybe as Y
 
 
-_context :: FieldName
-_context = FieldName "context"
+_context :: Name
+_context = Name "context"
 
-_record :: FieldName
-_record = FieldName "record"
+_record :: Name
+_record = Name "record"
 
-fieldAdapter :: (Ord a, Read a, Show a) => FieldType a -> Flow (AdapterContext a) (SymmetricAdapter (AdapterContext a) (FieldType a) (Field a))
+fieldAdapter :: FieldType -> Flow (AdapterContext) (SymmetricAdapter (AdapterContext) (FieldType) (Field))
 fieldAdapter ftyp = do
   ad <- termAdapter $ fieldTypeType ftyp
   return $ Adapter (adapterIsLossy ad) ftyp (ftyp { fieldTypeType = adapterTarget ad })
     $ bidirectional $ \dir (Field name term) -> Field name <$> encodeDecode dir (adapterCoder ad) term
 
 -- | This function accounts for recursive type definitions
-forTypeReference :: (Ord a, Read a, Show a) => Name -> Flow (AdapterContext a) (SymmetricAdapter (AdapterContext a) (Type a) (Term a))
+forTypeReference :: Name -> Flow (AdapterContext) (SymmetricAdapter (AdapterContext) (Type) (Term))
 forTypeReference name = withTrace ("adapt named type " ++ unName name) $ do
   let lossy = False -- Note: we cannot know in advance whether the adapter is lossy or not
   let placeholder = Adapter lossy (TypeVariable name) (TypeVariable name) $ bidirectional $
@@ -76,7 +76,7 @@ forTypeReference name = withTrace ("adapt named type " ++ unName name) $ do
 functionProxyName :: Name
 functionProxyName = Name "hydra/core.FunctionProxy"
 
-functionProxyType :: Type a -> Type a
+functionProxyType :: Type -> Type
 functionProxyType dom = TypeUnion $ RowType functionProxyName Nothing [
   FieldType _Elimination_wrap Types.string,
   FieldType _Elimination_optional Types.string,
@@ -86,13 +86,13 @@ functionProxyType dom = TypeUnion $ RowType functionProxyName Nothing [
   FieldType _Function_primitive Types.string,
   FieldType _Term_variable Types.string]
 
-functionToUnion :: (Ord a, Read a, Show a) => TypeAdapter a
+functionToUnion :: TypeAdapter
 functionToUnion t@(TypeFunction (FunctionType dom _)) = do
     ut <- unionType
     ad <- termAdapter ut
     return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ Coder (encode ad) (decode ad)
   where
-    encode ad term = coderEncode (adapterCoder ad) $ case stripTerm term of
+    encode ad term = coderEncode (adapterCoder ad) $ case fullyStripTerm term of
       TermFunction f -> case f of
         FunctionElimination e -> case e of
           EliminationWrap (Name name) -> variant functionProxyName _Elimination_wrap $ string name
@@ -114,7 +114,7 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
           (_Function_primitive, forPrimitive fterm),
           (_Term_variable, forVariable fterm)]
       where
-        notFound fname = fail $ "unexpected field: " ++ unFieldName fname
+        notFound fname = fail $ "unexpected field: " ++ unName fname
         forCases fterm = read <$> Expect.string fterm -- TODO
         forLambda fterm = read <$> Expect.string fterm -- TODO
         forWrapped fterm = unwrap . Name <$> Expect.string fterm
@@ -134,12 +134,12 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
         FieldType _Function_primitive Types.string,
         FieldType _Term_variable Types.string]
 
-lambdaToMonotype :: (Ord a, Read a, Show a) => TypeAdapter a
+lambdaToMonotype :: TypeAdapter
 lambdaToMonotype t@(TypeLambda (LambdaType _ body)) = do
   ad <- termAdapter body
   return ad {adapterSource = t}
 
-listToSet :: (Ord a, Read a, Show a) => TypeAdapter a
+listToSet :: TypeAdapter
 listToSet t@(TypeSet st) = do
     ad <- termAdapter $ Types.list st
     return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ Coder (encode ad) (decode ad)
@@ -147,7 +147,7 @@ listToSet t@(TypeSet st) = do
     encode ad (TermSet s) = coderEncode (adapterCoder ad) $ TermList $ S.toList s
     decode ad term = TermSet . S.fromList . (\(TermList l') -> l') <$> coderDecode (adapterCoder ad) term
 
-optionalToList :: (Ord a, Read a, Show a) => TypeAdapter a
+optionalToList :: TypeAdapter
 optionalToList t@(TypeOptional ot) = do
   ad <- termAdapter ot
   return $ Adapter False t (Types.list $ adapterTarget ad) $ Coder {
@@ -158,21 +158,21 @@ optionalToList t@(TypeOptional ot) = do
       pure Nothing
       else Just <$> coderDecode (adapterCoder ad) (L.head l)}
 
-passAnnotated :: (Ord a, Read a, Show a) => TypeAdapter a
-passAnnotated t@(TypeAnnotated (Annotated at ann)) = do
+passAnnotated :: TypeAdapter
+passAnnotated t@(TypeAnnotated (AnnotatedType at ann)) = do
   ad <- termAdapter at
   return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ bidirectional $
     \dir term -> encodeDecode dir (adapterCoder ad) term
 
 -- TODO: only tested for type mappings; not yet for types+terms
-passApplication :: (Ord a, Read a, Show a) => TypeAdapter a
+passApplication :: TypeAdapter
 passApplication t = do
     reduced <- withGraphContext $ betaReduceType t
     ad <- termAdapter reduced
     return $ Adapter (adapterIsLossy ad) t reduced $ bidirectional $
       \dir term -> encodeDecode dir (adapterCoder ad) term
 
-passFunction :: (Ord a, Read a, Show a) => TypeAdapter a
+passFunction :: TypeAdapter
 passFunction t@(TypeFunction (FunctionType dom cod)) = do
     domAd <- termAdapter dom
     codAd <- termAdapter cod
@@ -186,7 +186,7 @@ passFunction t@(TypeFunction (FunctionType dom cod)) = do
     let lossy = adapterIsLossy codAd || or (adapterIsLossy . snd <$> M.toList caseAds)
     let target = Types.function (adapterTarget domAd) (adapterTarget codAd)
     return $ Adapter lossy t target
-      $ bidirectional $ \dir term -> case stripTerm term of
+      $ bidirectional $ \dir term -> case fullyStripTerm term of
         TermFunction f -> TermFunction <$> case f of
           FunctionElimination e -> FunctionElimination <$> case e of
             EliminationOptional (OptionalCases nothing just) -> EliminationOptional <$> (
@@ -205,16 +205,15 @@ passFunction t@(TypeFunction (FunctionType dom cod)) = do
                 getCoder fname = Y.maybe idCoder adapterCoder $ M.lookup fname caseAds
           FunctionLambda (Lambda var body) -> FunctionLambda <$> (Lambda var <$> encodeDecode dir (adapterCoder codAd) body)
           FunctionPrimitive name -> pure $ FunctionPrimitive name
-          _ -> unexpected "lambda or elimination" $ show f
         _ -> unexpected "function term" $ show term
 
-passLambda :: (Ord a, Read a, Show a) => TypeAdapter a
+passLambda :: TypeAdapter
 passLambda t@(TypeLambda (LambdaType (Name v) body)) = do
   ad <- termAdapter body
   return $ Adapter (adapterIsLossy ad) t (Types.lambda v $ adapterTarget ad)
     $ bidirectional $ \dir term -> encodeDecode dir (adapterCoder ad) term
 
-passLiteral :: (Ord a, Show a) => TypeAdapter a
+passLiteral :: TypeAdapter
 passLiteral (TypeLiteral at) = do
   ad <- literalAdapter at
   let step = bidirectional $ \dir term -> do
@@ -222,13 +221,13 @@ passLiteral (TypeLiteral at) = do
         literal <$> encodeDecode dir (adapterCoder ad) l
   return $ Adapter (adapterIsLossy ad) (Types.literal $ adapterSource ad) (Types.literal $ adapterTarget ad) step
 
-passList :: (Ord a, Read a, Show a) => TypeAdapter a
+passList :: TypeAdapter
 passList t@(TypeList lt) = do
   ad <- termAdapter lt
   return $ Adapter (adapterIsLossy ad) t (Types.list $ adapterTarget ad)
     $ bidirectional $ \dir (TermList terms) -> list <$> CM.mapM (encodeDecode dir $ adapterCoder ad) terms
 
-passMap :: (Ord a, Read a, Show a) => TypeAdapter a
+passMap :: TypeAdapter
 passMap t@(TypeMap (MapType kt vt)) = do
   kad <- termAdapter kt
   vad <- termAdapter vt
@@ -238,7 +237,7 @@ passMap t@(TypeMap (MapType kt vt)) = do
       <$> CM.mapM (\(k, v) -> (,) <$> encodeDecode dir (adapterCoder kad) k <*> encodeDecode dir (adapterCoder vad) v)
         (M.toList m)
 
-passOptional :: (Ord a, Read a, Show a) => TypeAdapter a
+passOptional :: TypeAdapter
 passOptional t@(TypeOptional ot) = do
   ad <- termAdapter ot
   return $ Adapter (adapterIsLossy ad) t (Types.optional $ adapterTarget ad) $
@@ -248,14 +247,14 @@ passOptional t@(TypeOptional ot) = do
         Just term' -> Just <$> encodeDecode dir (adapterCoder ad) term'
       _ -> fail $ "expected optional term, found: " ++ show term
 
-passProduct :: (Ord a, Read a, Show a) => TypeAdapter a
+passProduct :: TypeAdapter
 passProduct t@(TypeProduct types) = do
   ads <- CM.mapM termAdapter types
   let lossy = L.foldl (\b ad -> b || adapterIsLossy ad) False ads
   return $ Adapter lossy t (Types.product (adapterTarget <$> ads))
     $ bidirectional $ \dir (TermProduct tuple) -> TermProduct <$> (CM.zipWithM (\term ad -> encodeDecode dir (adapterCoder ad) term) tuple ads)
 
-passRecord :: (Ord a, Read a, Show a) => TypeAdapter a
+passRecord :: TypeAdapter
 passRecord t@(TypeRecord rt) = do
   adapters <- CM.mapM fieldAdapter (rowTypeFields rt)
   let lossy = or $ adapterIsLossy <$> adapters
@@ -263,21 +262,21 @@ passRecord t@(TypeRecord rt) = do
   return $ Adapter lossy t (TypeRecord $ rt {rowTypeFields = sfields'}) $ bidirectional
     $ \dir (TermRecord (Record _ dfields)) -> record (rowTypeTypeName rt) <$> CM.zipWithM (encodeDecode dir . adapterCoder) adapters dfields
 
-passSet :: (Ord a, Read a, Show a) => TypeAdapter a
+passSet :: TypeAdapter
 passSet t@(TypeSet st) = do
   ad <- termAdapter st
   return $ Adapter (adapterIsLossy ad) t (Types.set $ adapterTarget ad)
     $ bidirectional $ \dir (TermSet terms) -> set . S.fromList
       <$> CM.mapM (encodeDecode dir (adapterCoder ad)) (S.toList terms)
 
-passSum :: (Ord a, Read a, Show a) => TypeAdapter a
+passSum :: TypeAdapter
 passSum t@(TypeSum types) = do
   ads <- CM.mapM termAdapter types
   let lossy = L.foldl (\b ad -> b || adapterIsLossy ad) False ads
   return $ Adapter lossy t (Types.sum (adapterTarget <$> ads))
     $ bidirectional $ \dir (TermSum (Sum i n term)) -> TermSum . Sum i n <$> encodeDecode dir (adapterCoder $ ads !! i) term
 
-passUnion :: (Ord a, Read a, Show a) => TypeAdapter a
+passUnion :: TypeAdapter
 passUnion t@(TypeUnion rt) = do
     adapters <- M.fromList <$> CM.mapM (\f -> pure ((,) (fieldTypeName f)) <*> fieldAdapter f) sfields
     let lossy = or $ adapterIsLossy <$> adapters
@@ -288,24 +287,24 @@ passUnion t@(TypeUnion rt) = do
         ad <- getAdapter adapters dfield
         TermUnion . Injection nm <$> encodeDecode dir (adapterCoder ad) dfield
   where
-    getAdapter adapters f = Y.maybe (fail $ "no such field: " ++ unFieldName (fieldName f)) pure $ M.lookup (fieldName f) adapters
+    getAdapter adapters f = Y.maybe (fail $ "no such field: " ++ unName (fieldName f)) pure $ M.lookup (fieldName f) adapters
     sfields = rowTypeFields rt
     nm = rowTypeTypeName rt
 
-passWrapped :: (Ord a, Read a, Show a) => TypeAdapter a
-passWrapped wt@(TypeWrap (Nominal tname t)) = do
+passWrapped :: TypeAdapter
+passWrapped wt@(TypeWrap (WrappedType tname t)) = do
   adapter <- termAdapter t
   return $ Adapter (adapterIsLossy adapter) wt (Types.wrapWithName tname $ adapterTarget adapter)
-    $ bidirectional $ \dir (TermWrap (Nominal _ term)) -> TermWrap . Nominal tname <$> encodeDecode dir (adapterCoder adapter) term
+    $ bidirectional $ \dir (TermWrap (WrappedTerm _ term)) -> TermWrap . WrappedTerm tname <$> encodeDecode dir (adapterCoder adapter) term
 
-simplifyApplication :: (Ord a, Read a, Show a) => TypeAdapter a
+simplifyApplication :: TypeAdapter
 simplifyApplication t@(TypeApplication (ApplicationType lhs _)) = do
   ad <- termAdapter lhs
   return $ Adapter False t (adapterTarget ad) $ bidirectional $ \dir term -> encodeDecode dir (adapterCoder ad) term
 
 -- Note: those constructors which cannot be mapped meaningfully at this time are simply
 --       preserved as strings using Haskell's derived show/read format.
-termAdapter :: (Ord a, Read a, Show a) => TypeAdapter a
+termAdapter :: TypeAdapter
 termAdapter typ = withTrace ("adapter for " ++ describeType typ ) $ do
   case typ of
     -- Account for let-bound variables
@@ -352,7 +351,7 @@ termAdapter typ = withTrace ("adapter for " ++ describeType typ ) $ do
     variantIsSupported g t = S.member (typeVariant t) $ languageConstraintsTypeVariants (constraints g)
 
 ---- Caution: possibility of an infinite loop if neither unions, optionals, nor lists are supported
-unionToRecord :: (Ord a, Read a, Show a) => TypeAdapter a
+unionToRecord :: TypeAdapter
 unionToRecord t@(TypeUnion rt) = do
     let target = TypeRecord $ rt {rowTypeFields = makeOptional <$> sfields}
     ad <- termAdapter target
@@ -373,34 +372,34 @@ unionToRecord t@(TypeUnion rt) = do
       TermOptional $ if fn' == fn then Just term else Nothing
 
     fromRecordFields term term' t' fields = if L.null matches
-        then fail $ "cannot convert term back to union: " ++ show term ++ " -- becomes " ++ show term'
+        then fail $ "cannot convert term back to union: " ++ show term
           ++ " where type = " ++ show t ++ "    and target type = " ++ show t'
         else pure $ L.head matches
       where
         matches = Y.mapMaybe (\(Field fn (TermOptional opt)) -> (Just . Field fn) =<< opt) fields
 
-unsupportedToString :: (Ord a, Read a, Show a) => TypeAdapter a
+unsupportedToString :: TypeAdapter
 unsupportedToString t = pure $ Adapter False t Types.string $ Coder encode decode
   where
     -- TODO: use JSON for encoding and decoding unsupported terms, rather than Haskell's read/show
-    encode = pure . string . show
+    encode term = pure $ string $ "unsupported: " ++ show term
     decode term = do
       s <- Expect.string term
       case TR.readEither s of
         Left msg -> fail $ "could not decode unsupported term: " ++ s
         Right t -> pure t
 
-wrapToUnwrapped :: (Ord a, Read a, Show a) => TypeAdapter a
-wrapToUnwrapped t@(TypeWrap (Nominal tname typ)) = do
+wrapToUnwrapped :: TypeAdapter
+wrapToUnwrapped t@(TypeWrap (WrappedType tname typ)) = do
     ad <- termAdapter typ
     return $ Adapter False t (adapterTarget ad) $ Coder (encode ad) (decode ad)
   where
     encode ad term = Expect.wrap tname term >>= coderEncode (adapterCoder ad)
     decode ad term = do
       decoded <- coderDecode (adapterCoder ad) term
-      return $ TermWrap $ Nominal tname decoded
+      return $ TermWrap $ WrappedTerm tname decoded
 
-withGraphContext :: Flow (Graph a) x -> Flow (AdapterContext a) x
+withGraphContext :: Flow (Graph) x -> Flow (AdapterContext) x
 withGraphContext f = do
   cx <- getState
   withState (adapterContextGraph cx) f

@@ -7,14 +7,14 @@ import java.io.Serializable;
 /**
  * A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns.
  */
-public class PatternImplication<A> implements Serializable {
+public class PatternImplication implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/constraints.PatternImplication");
   
-  public final hydra.query.Pattern<A> antecedent;
+  public final hydra.query.Pattern antecedent;
   
-  public final hydra.query.Pattern<A> consequent;
+  public final hydra.query.Pattern consequent;
   
-  public PatternImplication (hydra.query.Pattern<A> antecedent, hydra.query.Pattern<A> consequent) {
+  public PatternImplication (hydra.query.Pattern antecedent, hydra.query.Pattern consequent) {
     java.util.Objects.requireNonNull((antecedent));
     java.util.Objects.requireNonNull((consequent));
     this.antecedent = antecedent;
@@ -35,12 +35,12 @@ public class PatternImplication<A> implements Serializable {
     return 2 * antecedent.hashCode() + 3 * consequent.hashCode();
   }
   
-  public PatternImplication withAntecedent(hydra.query.Pattern<A> antecedent) {
+  public PatternImplication withAntecedent(hydra.query.Pattern antecedent) {
     java.util.Objects.requireNonNull((antecedent));
     return new PatternImplication(antecedent, consequent);
   }
   
-  public PatternImplication withConsequent(hydra.query.Pattern<A> consequent) {
+  public PatternImplication withConsequent(hydra.query.Pattern consequent) {
     java.util.Objects.requireNonNull((consequent));
     return new PatternImplication(antecedent, consequent);
   }

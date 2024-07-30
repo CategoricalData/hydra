@@ -43,9 +43,9 @@ data Program_Elmt =
 
 _Program_Elmt = (Core.Name "hydra/langs/datalog/syntax.Program.Elmt")
 
-_Program_Elmt_fact = (Core.FieldName "fact")
+_Program_Elmt_fact = (Core.Name "fact")
 
-_Program_Elmt_rule = (Core.FieldName "rule")
+_Program_Elmt_rule = (Core.Name "rule")
 
 data Fact = 
   Fact {
@@ -55,9 +55,9 @@ data Fact =
 
 _Fact = (Core.Name "hydra/langs/datalog/syntax.Fact")
 
-_Fact_relation = (Core.FieldName "relation")
+_Fact_relation = (Core.Name "relation")
 
-_Fact_constantList = (Core.FieldName "constantList")
+_Fact_constantList = (Core.Name "constantList")
 
 data Rule = 
   Rule {
@@ -67,9 +67,9 @@ data Rule =
 
 _Rule = (Core.Name "hydra/langs/datalog/syntax.Rule")
 
-_Rule_atom = (Core.FieldName "atom")
+_Rule_atom = (Core.Name "atom")
 
-_Rule_atomList = (Core.FieldName "atomList")
+_Rule_atomList = (Core.Name "atomList")
 
 data Atom = 
   Atom {
@@ -79,9 +79,9 @@ data Atom =
 
 _Atom = (Core.Name "hydra/langs/datalog/syntax.Atom")
 
-_Atom_relation = (Core.FieldName "relation")
+_Atom_relation = (Core.Name "relation")
 
-_Atom_termList = (Core.FieldName "termList")
+_Atom_termList = (Core.Name "termList")
 
 data AtomList = 
   AtomListSingle Atom |
@@ -90,9 +90,9 @@ data AtomList =
 
 _AtomList = (Core.Name "hydra/langs/datalog/syntax.AtomList")
 
-_AtomList_single = (Core.FieldName "single")
+_AtomList_single = (Core.Name "single")
 
-_AtomList_multiple = (Core.FieldName "multiple")
+_AtomList_multiple = (Core.Name "multiple")
 
 data AtomList_Multiple = 
   AtomList_Multiple {
@@ -102,9 +102,9 @@ data AtomList_Multiple =
 
 _AtomList_Multiple = (Core.Name "hydra/langs/datalog/syntax.AtomList.Multiple")
 
-_AtomList_Multiple_atom = (Core.FieldName "atom")
+_AtomList_Multiple_atom = (Core.Name "atom")
 
-_AtomList_Multiple_atomList = (Core.FieldName "atomList")
+_AtomList_Multiple_atomList = (Core.Name "atomList")
 
 data Term = 
   TermConstant Constant |
@@ -113,9 +113,9 @@ data Term =
 
 _Term = (Core.Name "hydra/langs/datalog/syntax.Term")
 
-_Term_constant = (Core.FieldName "constant")
+_Term_constant = (Core.Name "constant")
 
-_Term_variable = (Core.FieldName "variable")
+_Term_variable = (Core.Name "variable")
 
 data TermList = 
   TermListSingle Term |
@@ -124,9 +124,9 @@ data TermList =
 
 _TermList = (Core.Name "hydra/langs/datalog/syntax.TermList")
 
-_TermList_single = (Core.FieldName "single")
+_TermList_single = (Core.Name "single")
 
-_TermList_multiple = (Core.FieldName "multiple")
+_TermList_multiple = (Core.Name "multiple")
 
 data TermList_Multiple = 
   TermList_Multiple {
@@ -136,9 +136,9 @@ data TermList_Multiple =
 
 _TermList_Multiple = (Core.Name "hydra/langs/datalog/syntax.TermList.Multiple")
 
-_TermList_Multiple_term = (Core.FieldName "term")
+_TermList_Multiple_term = (Core.Name "term")
 
-_TermList_Multiple_termList = (Core.FieldName "termList")
+_TermList_Multiple_termList = (Core.Name "termList")
 
 data ConstantList = 
   ConstantListSingle Constant |
@@ -147,9 +147,9 @@ data ConstantList =
 
 _ConstantList = (Core.Name "hydra/langs/datalog/syntax.ConstantList")
 
-_ConstantList_single = (Core.FieldName "single")
+_ConstantList_single = (Core.Name "single")
 
-_ConstantList_multiple = (Core.FieldName "multiple")
+_ConstantList_multiple = (Core.Name "multiple")
 
 data ConstantList_Multiple = 
   ConstantList_Multiple {
@@ -159,6 +159,6 @@ data ConstantList_Multiple =
 
 _ConstantList_Multiple = (Core.Name "hydra/langs/datalog/syntax.ConstantList.Multiple")
 
-_ConstantList_Multiple_constant = (Core.FieldName "constant")
+_ConstantList_Multiple_constant = (Core.Name "constant")
 
-_ConstantList_Multiple_constantList = (Core.FieldName "constantList")
+_ConstantList_Multiple_constantList = (Core.Name "constantList")

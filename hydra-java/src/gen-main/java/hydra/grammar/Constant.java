@@ -10,9 +10,6 @@ import java.io.Serializable;
 public class Constant implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Constant");
   
-  /**
-   * A constant pattern
-   */
   public final String value;
   
   public Constant (String value) {

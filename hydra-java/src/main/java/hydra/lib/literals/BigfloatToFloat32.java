@@ -16,18 +16,18 @@ import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
 
-public class BigfloatToFloat32<A> extends PrimitiveFunction<A> {
+public class BigfloatToFloat32 extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/literals.bigfloatToFloat32");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return function(Types.bigfloat(), Types.float32());
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.bigfloat(args.get(0)), s -> Terms.float32(apply(s)));
     }
 

@@ -18,18 +18,18 @@ import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.list;
 
-public class Length<A> extends PrimitiveFunction<A> {
+public class Length extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/lists.length");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("a", function(list("a"), int32()));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.list(Flows::pure, args.get(0)), l -> Terms.int32(apply(l)));
     }
 

@@ -31,7 +31,7 @@ import System.FilePath.Posix
 import System.Directory
 
 
-emptyInstanceContext :: Graph Kv -> Graph Kv
+emptyInstanceContext :: Graph -> Graph
 emptyInstanceContext scx = elementsToGraph scx (Just scx) []
 
 -- | A convenience for osvJsonDirectoryToNtriples, bundling all of the input parameters together as a workflow
@@ -46,7 +46,7 @@ executeOsvToRdfWorkflow (TransformWorkflow name schemaSpec srcDir destDir) = do
 -- Replace all lists with sets, for better query performance.
 -- This is a last-mile step which breaks type/term conformance
 -- (a more robust solution would modify the target language in the SHACL coder, so that list types are also transformed to set types).
-listsToSets :: Term Kv -> Term Kv
+listsToSets :: Term -> Term
 listsToSets = rewriteTerm mapExpr id
   where
     mapExpr recurse = recurse . replaceLists
@@ -77,7 +77,7 @@ osvContext = modulesToGraph [osvSchemaModule]
 
 osvInstanceContext = emptyInstanceContext osvContext
 
-osvJsonToNtriples :: Coder (Graph Kv) (Graph Kv) (Term Kv) Json.Value -> FilePath -> FilePath -> IO ()
+osvJsonToNtriples :: Coder (Graph) (Graph) (Term) Json.Value -> FilePath -> FilePath -> IO ()
 osvJsonToNtriples coder inFile outFile = do
     contents <- readFile inFile
     case stringToJsonValue contents of

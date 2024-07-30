@@ -5,6 +5,7 @@ import Hydra.Compute
 import Hydra.Graph
 import Hydra.Strip
 import Hydra.Basics
+import Hydra.CoreEncoding
 import Hydra.Tier1
 import Hydra.Tier2
 import Hydra.Adapters
@@ -18,16 +19,17 @@ import qualified Hydra.Dsl.Types as Types
 
 import qualified Control.Monad as CM
 import qualified Data.Map as M
+import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-jsonCoder :: (Eq a, Ord a, Read a, Show a) => Type a -> Flow (Graph a) (Coder (Graph a) (Graph a) (Term a) Json.Value)
+jsonCoder :: Type -> Flow Graph (Coder Graph Graph Term Json.Value)
 jsonCoder typ = do
   adapter <- languageAdapter jsonLanguage typ
   coder <- termCoder $ adapterTarget adapter
   return $ composeCoders (adapterCoder adapter) coder
 
-literalJsonCoder :: LiteralType -> Flow (Graph a) (Coder (Graph a) (Graph a) Literal Json.Value)
+literalJsonCoder :: LiteralType -> Flow Graph (Coder Graph Graph Literal Json.Value)
 literalJsonCoder at = pure $ case at of
   LiteralTypeBoolean -> Coder {
     coderEncode = \(LiteralBoolean b) -> pure $ Json.ValueBoolean b,
@@ -50,7 +52,7 @@ literalJsonCoder at = pure $ case at of
       Json.ValueString s' -> pure $ LiteralString s'
       _ -> unexpected "string" $ show s}
 
-recordCoder :: (Eq a, Ord a, Read a, Show a) => RowType a -> Flow (Graph a) (Coder (Graph a) (Graph a) (Term a) Json.Value)
+recordCoder :: RowType -> Flow Graph (Coder Graph Graph Term Json.Value)
 recordCoder rt = do
     coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder (fieldTypeType f)) (rowTypeFields rt)
     return $ Coder (encode coders) (decode coders)
@@ -60,20 +62,20 @@ recordCoder rt = do
         where
           encodeField (ft, coder) (Field fname fv) = case (fieldTypeType ft, fv) of
             (TypeOptional _, TermOptional Nothing) -> pure Nothing
-            _ -> Just <$> ((,) <$> pure (unFieldName fname) <*> coderEncode coder fv)
+            _ -> Just <$> ((,) <$> pure (unName fname) <*> coderEncode coder fv)
       _ -> unexpected "record" $ show term
     decode coders n = case n of
       Json.ValueObject m -> Terms.record (rowTypeTypeName rt) <$> CM.mapM (decodeField m) coders -- Note: unknown fields are ignored
         where
           decodeField a (FieldType fname _, coder) = do
-            v <- coderDecode coder $ Y.fromMaybe Json.ValueNull $ M.lookup (unFieldName fname) m
+            v <- coderDecode coder $ Y.fromMaybe Json.ValueNull $ M.lookup (unName fname) m
             return $ Field fname v
       _ -> unexpected "mapping" $ show n
     getCoder coders fname = Y.maybe error pure $ M.lookup fname coders
       where
         error = fail $ "no such field: " ++ fname
 
-termCoder :: (Eq a, Ord a, Read a, Show a) => Type a -> Flow (Graph a) (Coder (Graph a) (Graph a) (Term a) Json.Value)
+termCoder :: Type -> Flow Graph (Coder Graph Graph Term Json.Value)
 termCoder typ = case stripType typ of
   TypeLiteral at -> do
     ac <- literalJsonCoder at
@@ -118,35 +120,72 @@ termCoder typ = case stripType typ of
   TypeRecord rt -> recordCoder rt
   TypeVariable name -> return $ Coder encode decode
     where
-      encode term = pure $ Json.ValueString $ show term
+      encode term = pure $ Json.ValueString $ "variable '" ++ unName name ++ "' for: " ++ show term
       decode term = fail $ "type variable " ++ unName name ++ " does not support decoding"
   _ -> fail $ "unsupported type in JSON: " ++ show (typeVariant typ)
 
 -- | A simplistic, unidirectional encoding for terms as JSON values. Not type-aware; best used for human consumption.
-untypedTermToJson :: Show a => Term a -> Flow s Json.Value
+untypedTermToJson :: Term -> Flow s Json.Value
 untypedTermToJson term = case stripTerm term of
-      TermList terms -> Json.ValueArray <$> (CM.mapM untypedTermToJson terms)
-      TermLiteral lit -> pure $ case lit of
-        LiteralBinary s -> Json.ValueString s
-        LiteralBoolean b -> Json.ValueBoolean b
-        LiteralFloat f -> Json.ValueNumber $ floatValueToBigfloat f
-        LiteralInteger i -> Json.ValueNumber $ bigintToBigfloat $ integerValueToBigint i
-        LiteralString s -> Json.ValueString s
-      TermRecord (Record _ fields) -> do
-        keyvals <- CM.mapM fieldToKeyval fields
-        return $ Json.ValueObject $ M.fromList $ Y.catMaybes keyvals
-      TermUnion (Injection _ field) -> do
+    TermApplication (Application lhs rhs) -> asRecord [
+      Field _Application_function lhs,
+      Field _Application_argument rhs]
+    TermFunction f -> case f of
+      FunctionElimination elm -> case elm of
+        EliminationList term1 -> asVariant "fold" term1
+        EliminationRecord (Projection _ fname) -> asVariant "project" $ TermVariable fname
+        _ -> unexp $ "unexpected elimination variant: " ++ show (eliminationVariant elm)
+      FunctionLambda (Lambda v body) -> asRecord [
+        Field _Lambda_parameter $ TermVariable v,
+        Field _Lambda_body body]
+      FunctionPrimitive name -> pure $ Json.ValueString $ unName name
+    TermLet (Let bindings env) -> asRecord [
+        Field _Let_bindings $ TermRecord $ Record (Name "") (fromBinding <$> M.toList bindings),
+        Field _Let_environment env]
+      where
+        fromBinding (k, v) = Field k v
+    TermList terms -> Json.ValueArray <$> (CM.mapM untypedTermToJson terms)
+    TermLiteral lit -> pure $ case lit of
+      LiteralBinary s -> Json.ValueString s
+      LiteralBoolean b -> Json.ValueBoolean b
+      LiteralFloat f -> Json.ValueNumber $ floatValueToBigfloat f
+      LiteralInteger i -> Json.ValueNumber $ bigintToBigfloat $ integerValueToBigint i
+      LiteralString s -> Json.ValueString s
+    TermOptional mt -> case mt of
+      Nothing -> pure Json.ValueNull
+      Just t -> untypedTermToJson t
+    TermProduct els -> untypedTermToJson $ TermList els
+    TermRecord (Record _ fields) -> do
+      keyvals <- CM.mapM fieldToKeyval fields
+      return $ Json.ValueObject $ M.fromList $ Y.catMaybes keyvals
+    TermSet vals -> untypedTermToJson $ TermList $ S.toList vals
+    TermSum (Sum idx size term1) -> asRecord [
+      Field _Sum_index $ TermLiteral $ LiteralInteger $ IntegerValueInt32 idx,
+      Field _Sum_size $ TermLiteral $ LiteralInteger $ IntegerValueInt32 size,
+      Field _Sum_term term1]
+    TermTyped (TermWithType term1 typ) -> asRecord [
+      Field _TermWithType_term term1,
+      Field _TermWithType_type $ coreEncodeType typ]
+    TermUnion (Injection _ field) -> if fieldTerm field == Terms.unit
+      then return $ Json.ValueString $ unName $ fieldName field
+      else do
         mkeyval <- fieldToKeyval field
         return $ Json.ValueObject $ M.fromList $ case mkeyval of
           Nothing -> []
           Just keyval -> [keyval]
-      t -> unexpected "literal value" $ show t
+    TermVariable v -> pure $ Json.ValueString $ unName v
+    TermWrap (WrappedTerm _ t) -> untypedTermToJson t
+    t -> unexp $ "unsupported term variant: " ++ show (termVariant t)
+--     t -> fail $ "unexpected term variant: " ++ show (termVariant t)
   where
+    unexp msg = pure $ Json.ValueString $ "FAIL: " ++ msg
+    asRecord = untypedTermToJson . TermRecord . Record (Name "")
+    asVariant name term = untypedTermToJson $ TermUnion $ Injection (Name "") $ Field (Name name) term
     fieldToKeyval f = do
         mjson <- forTerm $ fieldTerm f
         return $ case mjson of
           Nothing -> Nothing
-          Just j -> Just (unFieldName $ fieldName f, j)
+          Just j -> Just (unName $ fieldName f, j)
       where
         forTerm t = case t of
           TermOptional mt -> case mt of

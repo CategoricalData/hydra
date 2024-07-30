@@ -5,16 +5,16 @@ package hydra.core;
 import java.io.Serializable;
 
 /**
- * A labeled term
+ * A name/term pair
  */
-public class Field<A> implements Serializable {
+public class Field implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Field");
   
-  public final hydra.core.FieldName name;
+  public final hydra.core.Name name;
   
-  public final hydra.core.Term<A> term;
+  public final hydra.core.Term term;
   
-  public Field (hydra.core.FieldName name, hydra.core.Term<A> term) {
+  public Field (hydra.core.Name name, hydra.core.Term term) {
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((term));
     this.name = name;
@@ -35,12 +35,12 @@ public class Field<A> implements Serializable {
     return 2 * name.hashCode() + 3 * term.hashCode();
   }
   
-  public Field withName(hydra.core.FieldName name) {
+  public Field withName(hydra.core.Name name) {
     java.util.Objects.requireNonNull((name));
     return new Field(name, term);
   }
   
-  public Field withTerm(hydra.core.Term<A> term) {
+  public Field withTerm(hydra.core.Term term) {
     java.util.Objects.requireNonNull((term));
     return new Field(name, term);
   }

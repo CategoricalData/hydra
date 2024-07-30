@@ -18,7 +18,7 @@ import Data.Map as M
 import Data.Set as S
 
 -- | Find the elimination variant (constructor) for a given elimination term
-eliminationVariant :: (Core.Elimination a -> Mantle.EliminationVariant)
+eliminationVariant :: (Core.Elimination -> Mantle.EliminationVariant)
 eliminationVariant x = case x of
   Core.EliminationList _ -> Mantle.EliminationVariantList
   Core.EliminationOptional _ -> Mantle.EliminationVariantOptional
@@ -59,7 +59,7 @@ floatValueType x = case x of
   Core.FloatValueFloat64 _ -> Core.FloatTypeFloat64
 
 -- | Find the function variant (constructor) for a given function
-functionVariant :: (Core.Function a -> Mantle.FunctionVariant)
+functionVariant :: (Core.Function -> Mantle.FunctionVariant)
 functionVariant x = case x of
   Core.FunctionElimination _ -> Mantle.FunctionVariantElimination
   Core.FunctionLambda _ -> Mantle.FunctionVariantLambda
@@ -133,8 +133,8 @@ literalType :: (Core.Literal -> Core.LiteralType)
 literalType x = case x of
   Core.LiteralBinary _ -> Core.LiteralTypeBinary
   Core.LiteralBoolean _ -> Core.LiteralTypeBoolean
-  Core.LiteralFloat v -> ((\x2 -> Core.LiteralTypeFloat x2) (floatValueType v))
-  Core.LiteralInteger v -> ((\x2 -> Core.LiteralTypeInteger x2) (integerValueType v))
+  Core.LiteralFloat v187 -> ((\x2 -> Core.LiteralTypeFloat x2) (floatValueType v187))
+  Core.LiteralInteger v188 -> ((\x2 -> Core.LiteralTypeInteger x2) (integerValueType v188))
   Core.LiteralString _ -> Core.LiteralTypeString
 
 -- | Find the literal type variant (constructor) for a given literal value
@@ -159,11 +159,8 @@ literalVariants = [
   Mantle.LiteralVariantInteger,
   Mantle.LiteralVariantString]
 
-termMeta :: (Graph.Graph a -> Core.Term a -> a)
-termMeta x = (Graph.annotationClassTermAnnotation (Graph.graphAnnotations x))
-
 -- | Find the term variant (constructor) for a given term
-termVariant :: (Core.Term a -> Mantle.TermVariant)
+termVariant :: (Core.Term -> Mantle.TermVariant)
 termVariant x = case x of
   Core.TermAnnotated _ -> Mantle.TermVariantAnnotated
   Core.TermApplication _ -> Mantle.TermVariantApplication
@@ -178,6 +175,7 @@ termVariant x = case x of
   Core.TermSet _ -> Mantle.TermVariantSet
   Core.TermStream _ -> Mantle.TermVariantStream
   Core.TermSum _ -> Mantle.TermVariantSum
+  Core.TermTyped _ -> Mantle.TermVariantTyped
   Core.TermUnion _ -> Mantle.TermVariantUnion
   Core.TermVariable _ -> Mantle.TermVariantVariable
   Core.TermWrap _ -> Mantle.TermVariantWrap
@@ -197,12 +195,13 @@ termVariants = [
   Mantle.TermVariantSet,
   Mantle.TermVariantStream,
   Mantle.TermVariantSum,
+  Mantle.TermVariantTyped,
   Mantle.TermVariantUnion,
   Mantle.TermVariantVariable,
   Mantle.TermVariantWrap]
 
 -- | Find the type variant (constructor) for a given type
-typeVariant :: (Core.Type a -> Mantle.TypeVariant)
+typeVariant :: (Core.Type -> Mantle.TypeVariant)
 typeVariant x = case x of
   Core.TypeAnnotated _ -> Mantle.TypeVariantAnnotated
   Core.TypeApplication _ -> Mantle.TypeVariantApplication
@@ -256,49 +255,49 @@ mapFirstLetter mapping s =
       list = (Strings.toList s)
   in (Logic.ifElse s (Strings.cat2 firstLetter (Strings.fromList (Lists.tail list))) (Strings.isEmpty s))
 
-fieldMap :: ([Core.Field a] -> Map Core.FieldName (Core.Term a))
+fieldMap :: ([Core.Field] -> Map Core.Name Core.Term)
 fieldMap fields = (Maps.fromList (Lists.map toPair fields)) 
   where 
     toPair = (\f -> (Core.fieldName f, (Core.fieldTerm f)))
 
-fieldTypeMap :: ([Core.FieldType a] -> Map Core.FieldName (Core.Type a))
+fieldTypeMap :: ([Core.FieldType] -> Map Core.Name Core.Type)
 fieldTypeMap fields = (Maps.fromList (Lists.map toPair fields)) 
   where 
     toPair = (\f -> (Core.fieldTypeName f, (Core.fieldTypeType f)))
 
-isEncodedType :: (Core.Term a -> Bool)
+isEncodedType :: (Core.Term -> Bool)
 isEncodedType t = ((\x -> case x of
-  Core.TermApplication v -> (isEncodedType (Core.applicationFunction v))
-  Core.TermUnion v -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.injectionTypeName v)))
+  Core.TermApplication v228 -> (isEncodedType (Core.applicationFunction v228))
+  Core.TermUnion v229 -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.injectionTypeName v229)))
   _ -> False) (Strip.stripTerm t))
 
-isType :: (Eq a) => (Core.Type a -> Bool)
+isType :: (Core.Type -> Bool)
 isType t = ((\x -> case x of
-  Core.TypeApplication v -> (isType (Core.applicationTypeFunction v))
-  Core.TypeLambda v -> (isType (Core.lambdaTypeBody v))
-  Core.TypeUnion v -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.rowTypeTypeName v)))
+  Core.TypeApplication v230 -> (isType (Core.applicationTypeFunction v230))
+  Core.TypeLambda v231 -> (isType (Core.lambdaTypeBody v231))
+  Core.TypeUnion v232 -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.rowTypeTypeName v232)))
   _ -> False) (Strip.stripType t))
 
-isUnitTerm :: (Eq a) => (Core.Term a -> Bool)
-isUnitTerm t = (Equality.equalTerm (Strip.stripTerm t) (Core.TermRecord (Core.Record {
+isUnitTerm :: (Core.Term -> Bool)
+isUnitTerm t = (Equality.equalTerm (Strip.fullyStripTerm t) (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra/core.Unit"),
   Core.recordFields = []})))
 
-isUnitType :: (Eq a) => (Core.Type a -> Bool)
+isUnitType :: (Core.Type -> Bool)
 isUnitType t = (Equality.equalType (Strip.stripType t) (Core.TypeRecord (Core.RowType {
   Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
   Core.rowTypeExtends = Nothing,
   Core.rowTypeFields = []})))
 
-elementsToGraph :: (Graph.Graph a -> Maybe (Graph.Graph a) -> [Graph.Element a] -> Graph.Graph a)
+elementsToGraph :: (Graph.Graph -> Maybe Graph.Graph -> [Graph.Element] -> Graph.Graph)
 elementsToGraph parent schema elements =  
   let toPair = (\el -> (Graph.elementName el, el))
   in Graph.Graph {
     Graph.graphElements = (Maps.fromList (Lists.map toPair elements)),
     Graph.graphEnvironment = (Graph.graphEnvironment parent),
+    Graph.graphTypes = (Graph.graphTypes parent),
     Graph.graphBody = (Graph.graphBody parent),
     Graph.graphPrimitives = (Graph.graphPrimitives parent),
-    Graph.graphAnnotations = (Graph.graphAnnotations parent),
     Graph.graphSchema = schema}
 
 localNameOfEager :: (Core.Name -> String)

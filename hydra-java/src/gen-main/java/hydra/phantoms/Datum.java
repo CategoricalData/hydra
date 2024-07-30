@@ -10,9 +10,9 @@ import java.io.Serializable;
 public class Datum<A> implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/phantoms.Datum");
   
-  public final hydra.core.Term<hydra.compute.Kv> value;
+  public final hydra.core.Term value;
   
-  public Datum (hydra.core.Term<hydra.compute.Kv> value) {
+  public Datum (hydra.core.Term value) {
     java.util.Objects.requireNonNull((value));
     this.value = value;
   }

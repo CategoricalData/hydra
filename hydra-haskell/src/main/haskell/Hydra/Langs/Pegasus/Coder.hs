@@ -16,19 +16,19 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-moduleToPdl :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
+moduleToPdl :: Module -> Flow (Graph) (M.Map FilePath String)
 moduleToPdl mod = do
     files <- moduleToPegasusSchemas mod
     return $ M.fromList (mapPair <$> M.toList files)
   where
     mapPair (path, sf) = (path, printExpr $ parenthesize $ exprSchemaFile sf)
 
-constructModule :: (Ord a, Read a, Show a)
-  => M.Map Namespace String
-  -> Module a
-  -> M.Map (Type a) (Coder (Graph a) (Graph a) (Term a) ())
-  -> [(Element a, TypedTerm a)]
-  -> Flow (Graph a) (M.Map FilePath PDL.SchemaFile)
+constructModule ::
+  M.Map Namespace String
+  -> Module
+  -> M.Map (Type) (Coder (Graph) (Graph) (Term) ())
+  -> [(Element, TypedTerm)]
+  -> Flow (Graph) (M.Map FilePath PDL.SchemaFile)
 constructModule aliases mod coders pairs = do
     sortedPairs <- case (topologicalSortElements $ fst <$> pairs) of
       Left comps -> fail $ "types form a cycle (unsupported in PDL): " ++ show (L.head comps)
@@ -53,8 +53,7 @@ constructModule aliases mod coders pairs = do
         let ptype = case res of
               Left schema -> PDL.NamedSchema_TypeTyperef schema
               Right t -> t
-        cx <- getState
-        r <- annotationClassTermDescription (graphAnnotations cx) $ elementData el
+        r <- getTermDescription $ elementData el
         let anns = doc r
         return (PDL.NamedSchema qname ptype anns, imports)
       where
@@ -65,7 +64,7 @@ constructModule aliases mod coders pairs = do
 --            deps = S.toList $ termDependencyNames False False False $ elementData el
 --            isExternal qn = PDL.qualifiedNameNamespace qn /= PDL.qualifiedNameNamespace qname
 
-moduleToPegasusSchemas :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath PDL.SchemaFile)
+moduleToPegasusSchemas :: Module -> Flow (Graph) (M.Map FilePath PDL.SchemaFile)
 moduleToPegasusSchemas mod = do
   aliases <- importAliasesForModule mod
   transformModule pdlLanguage (encodeTerm aliases) (constructModule aliases) mod
@@ -73,21 +72,21 @@ moduleToPegasusSchemas mod = do
 doc :: Y.Maybe String -> PDL.Annotations
 doc s = PDL.Annotations s False
 
-encodeAdaptedType :: (Ord a, Read a, Show a)
-  => M.Map Namespace String -> Type a
-  -> Flow (Graph a) (Either PDL.Schema PDL.NamedSchema_Type)
+encodeAdaptedType ::
+  M.Map Namespace String -> Type
+  -> Flow (Graph) (Either PDL.Schema PDL.NamedSchema_Type)
 encodeAdaptedType aliases typ = do
   g <- getState
   let cx = AdapterContext g pdlLanguage M.empty
   ad <- withState cx $ termAdapter typ
   encodeType aliases $ adapterTarget ad
 
-encodeTerm :: (Eq a, Ord a, Read a, Show a) => M.Map Namespace String -> Term a -> Flow (Graph a) ()
+encodeTerm :: M.Map Namespace String -> Term -> Flow (Graph) ()
 encodeTerm aliases term = fail "not yet implemented"
 
-encodeType :: (Eq a, Show a) => M.Map Namespace String -> Type a -> Flow (Graph a) (Either PDL.Schema PDL.NamedSchema_Type)
+encodeType :: M.Map Namespace String -> Type -> Flow (Graph) (Either PDL.Schema PDL.NamedSchema_Type)
 encodeType aliases typ = case typ of
-    TypeAnnotated (Annotated typ' _) -> encodeType aliases typ'
+    TypeAnnotated (AnnotatedType typ' _) -> encodeType aliases typ'
     TypeList lt -> Left . PDL.SchemaArray <$> encode lt
     TypeLiteral lt -> Left . PDL.SchemaPrimitive <$> case lt of
       LiteralTypeBinary -> pure PDL.PrimitiveTypeBytes
@@ -124,7 +123,7 @@ encodeType aliases typ = case typ of
         case res of
           Left schema -> pure schema
           Right _ -> fail $ "type resolved to an unsupported nested named schema: " ++ show t
-    encodeRecordField (FieldType (FieldName name) typ) = do
+    encodeRecordField (FieldType (Name name) typ) = do
       anns <- getAnns typ
       (schema, optional) <- encodePossiblyOptionalType typ
       return PDL.RecordField {
@@ -133,7 +132,7 @@ encodeType aliases typ = case typ of
         PDL.recordFieldOptional = optional,
         PDL.recordFieldDefault = Nothing,
         PDL.recordFieldAnnotations = anns}
-    encodeUnionField (FieldType (FieldName name) typ) = do
+    encodeUnionField (FieldType (Name name) typ) = do
       anns <- getAnns typ
       (s, optional) <- encodePossiblyOptionalType typ
       let schema = if optional
@@ -143,7 +142,7 @@ encodeType aliases typ = case typ of
         PDL.unionMemberAlias = Just $ PDL.FieldName name,
         PDL.unionMemberValue = schema,
         PDL.unionMemberAnnotations = anns}
-    encodeEnumField (FieldType (FieldName name) typ) = do
+    encodeEnumField (FieldType (Name name) typ) = do
       anns <- getAnns typ
       return PDL.EnumField {
         PDL.enumFieldName = PDL.EnumFieldName $ convertCase CaseConventionCamel CaseConventionUpperSnake name,
@@ -156,8 +155,7 @@ encodeType aliases typ = case typ of
         t <- encode typ
         return (t, False)
     getAnns typ = do
-      cx <- getState
-      r <- annotationClassTypeDescription (graphAnnotations cx) typ
+      r <- getTypeDescription typ
       return $ doc r
 
 importAliasesForModule mod = do
@@ -178,7 +176,7 @@ pdlNameForElement aliases withNs name = PDL.QualifiedName (PDL.Name local)
     QualifiedName (Just ns) local = qualifyNameEager name
     alias = M.lookup ns aliases
 
-pdlNameForModule :: Module a -> PDL.Namespace
+pdlNameForModule :: Module -> PDL.Namespace
 pdlNameForModule = PDL.Namespace . slashesToDots . h . moduleNamespace
   where
     h (Namespace n) = n

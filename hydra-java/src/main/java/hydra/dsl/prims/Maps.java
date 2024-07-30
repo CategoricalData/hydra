@@ -5,7 +5,7 @@ import hydra.lib.maps.Empty;
 
 
 public interface Maps {
-    static <A> Term<A> add() {
-        return new Empty<A>().term();
+    static Term add() {
+        return new Empty().term();
     }
 }

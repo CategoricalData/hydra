@@ -8,7 +8,11 @@ import hydra.core.Record;
 import hydra.core.Term;
 
 import java.util.List;
+
+import hydra.dsl.Terms;
 import hydra.util.Opt;
+
+import java.util.Map;
 import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
@@ -27,6 +31,7 @@ import static hydra.dsl.Terms.list;
 import static hydra.dsl.Terms.record;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -35,7 +40,7 @@ public class RewritingTest {
     private static final Name geoPointName = new Name("GeoPoint");
     private static final Name stateGeoName = new Name("StateGeometry");
 
-    private static final Term<String> caBbox = annot("Bounding box for California",
+    private static final Term caBbox = annot("Bounding box for California",
             record(bboxName, field("southwest",
                             record(geoPointName, field("lat", float32(32.534156f)),
                                     field("lon", float32(-124.409591f)))),
@@ -44,19 +49,19 @@ public class RewritingTest {
                                     field("lat", float32(42.009518f)),
                                     field("lon", float32(-114.131211f))))));
 
-    private static final Term<String> caCapital = annot("Coordinates of Sacramento",
+    private static final Term caCapital = annot("Coordinates of Sacramento",
             record(geoPointName,
                     field("lat", float32(38.5816f)),
                     field("lon", annot("fail here", float32(-121.4944f)))));
 
-    private static final Term<String> caGeom = annot("Geometry of California",
+    private static final Term caGeom = annot("Geometry of California",
             record(stateGeoName, field("boundingBox", caBbox), field("capital", caCapital)));
 
-    private static final Term<String> listOfStates = annot("A list of states", list(caGeom, caGeom, caGeom));
+    private static final Term listOfStates = annot("A list of states", list(caGeom, caGeom, caGeom));
 
     @Test
     public void checkFailure() {
-        FlowState<Integer, Term<String>> resultState = applyFailOnSpecialAnnotation(listOfStates, 0);
+        FlowState<Integer, Term> resultState = applyFailOnSpecialAnnotation(listOfStates, 0);
         assertFalse(resultState.value.isPresent());
         assertEquals(1, resultState.trace.messages.size());
         assertTrue(resultState.trace.messages.get(0).startsWith("Error: "));
@@ -64,25 +69,25 @@ public class RewritingTest {
 
     @Test
     public void checkSimpleRewritingScenarios() {
-        FlowState<Integer, Term<String>> resultState = applyCapitalizeFieldNames(listOfStates);
+        FlowState<Integer, Term> resultState = applyCapitalizeFieldNames(listOfStates);
 
         // Check modified fields
-        Opt<Term<String>> result = resultState.value;
+        Opt<Term> result = resultState.value;
         assertTrue(result.isPresent());
         assertTrue(result.get() instanceof Term.Annotated);
-        Term<String> list = ((Term.Annotated<String>) result.get()).value.subject;
+        Term list = ((Term.Annotated) result.get()).value.subject;
         assertTrue(list instanceof Term.List);
-        List<Term<String>> vals = ((Term.List<String>) list).value;
+        List<Term> vals = ((Term.List) list).value;
         assertEquals(3, vals.size());
-        Term<String> stateAnn = vals.get(2);
+        Term stateAnn = vals.get(2);
         assertTrue(stateAnn instanceof Term.Annotated);
-        Term<String> state = ((Term.Annotated<String>) stateAnn).value.subject;
+        Term state = ((Term.Annotated) stateAnn).value.subject;
         assertTrue(state instanceof Term.Record);
-        List<Field<String>> fields = ((Term.Record<String>) state).value.fields;
+        List<Field> fields = ((Term.Record) state).value.fields;
         assertEquals(2, fields.size());
-        Field<String> bboxfield = fields.get(0);
+        Field bboxfield = fields.get(0);
         assertEquals("BOUNDINGBOX", bboxfield.name.value);
-        Field<String> capitalField = fields.get(1);
+        Field capitalField = fields.get(1);
         assertEquals("CAPITAL", capitalField.name.value);
 
         // Check modified state
@@ -95,55 +100,60 @@ public class RewritingTest {
     }
 
     // Capitalizes record field names, and also counts the number of fields mutated
-    private static <A> Flow<Integer, Term<A>> capitalizeFieldNames(
-            Function<Term<A>, Flow<Integer, Term<A>>> recurse,
-            Term<A> original) {
-        return original.accept(new Term.PartialVisitor<A, Flow<Integer, Term<A>>>() {
+    private static  Flow<Integer, Term> capitalizeFieldNames(
+            Function<Term, Flow<Integer, Term>> recurse,
+            Term original) {
+        return original.accept(new Term.PartialVisitor<Flow<Integer, Term>>() {
             @Override
-            public Flow<Integer, Term<A>> otherwise(Term instance) {
-                Term<A> inst = instance;
+            public Flow<Integer, Term> otherwise(Term instance) {
+                Term inst = instance;
                 return recurse.apply(inst);
             }
 
             @Override
-            public Flow<Integer, Term<A>> visit(Term.Record instance) {
-                Record<A> rec = instance.value;
-                Flow<Integer, List<Field<A>>> modFields = mapM(rec.fields, field -> bind(getState(),
+            public Flow<Integer, Term> visit(Term.Record instance) {
+                Record rec = instance.value;
+                Flow<Integer, List<Field>> modFields = mapM(rec.fields, field -> bind(getState(),
                         count -> bind(putState(count + 1),
                                 ignore -> map(capitalizeFieldNames(recurse, field.term),
                                 term -> field(field.name.value.toUpperCase(), term)))));
-                return map(modFields, fields -> new Term.Record<>(new Record<>(instance.value.typeName, fields)));
+                return map(modFields, fields -> new Term.Record(new Record(instance.value.typeName, fields)));
             }
         });
     }
 
-    private static FlowState<Integer, Term<String>> applyCapitalizeFieldNames(Term<String> source) {
-        Flow<Integer, Term<String>> flow1 = rewriteTermM(recurse -> t -> capitalizeFieldNames(recurse, t),
+    private static FlowState<Integer, Term> applyCapitalizeFieldNames(Term source) {
+        Flow<Integer, Term> flow1 = rewriteTermM(recurse -> t -> capitalizeFieldNames(recurse, t),
                 Flows::pure, source);
         return flow1.value.apply(0).apply(EMPTY_TRACE);
     }
 
-    private static <S> Flow<S, Term<String>> failOnSpecialAnnotation(
-            Function<Term<String>, Flow<S, Term<String>>> recurse,
-            Term<String> original) {
-        return original.accept(new Term.PartialVisitor<String, Flow<S, Term<String>>>() {
+    private static <S> Flow<S, Term> failOnSpecialAnnotation(
+            Function<Term, Flow<S, Term>> recurse,
+            Term original) {
+        return original.accept(new Term.PartialVisitor<Flow<S, Term>>() {
             @Override
-            public Flow<S, Term<String>> otherwise(Term instance) {
+            public Flow<S, Term> otherwise(Term instance) {
                 return recurse.apply(instance);
             }
 
             @Override
-            public Flow<S, Term<String>> visit(Term.Annotated instance) {
-                Term.Annotated<String> t = instance;
-                return t.value.annotation.equals("fail here")
-                        ? Flows.fail("Bad annotation!")
-                        : recurse.apply(instance);
+            public Flow<S, Term> visit(Term.Annotated instance) {
+                Map<String, Term> mp = instance.value.annotation;
+                assertEquals(1, mp.size());
+                Term desc = mp.get("description");
+                assertNotNull(desc);
+                if (desc.equals(Terms.string("fail here"))) {
+                    return Flows.fail("failed");
+                } else {
+                    return recurse.apply(instance);
+                }
             }
         });
     }
 
-    private static <S> FlowState<S, Term<String>> applyFailOnSpecialAnnotation(Term<String> source, S seed) {
-        Flow<S, Term<String>> flow1 = rewriteTermM(
+    private static <S> FlowState<S, Term> applyFailOnSpecialAnnotation(Term source, S seed) {
+        Flow<S, Term> flow1 = rewriteTermM(
                 recurse -> t -> failOnSpecialAnnotation(recurse, t), Flows::pure, source);
         return flow1.value.apply(seed).apply(EMPTY_TRACE);
     }

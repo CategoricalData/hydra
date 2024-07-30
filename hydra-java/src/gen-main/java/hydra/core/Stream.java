@@ -7,14 +7,14 @@ import java.io.Serializable;
 /**
  * An infinite stream of terms
  */
-public class Stream<A> implements Serializable {
+public class Stream implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Stream");
   
-  public final hydra.core.Term<A> first;
+  public final hydra.core.Term first;
   
-  public final hydra.core.Stream<A> rest;
+  public final hydra.core.Stream rest;
   
-  public Stream (hydra.core.Term<A> first, hydra.core.Stream<A> rest) {
+  public Stream (hydra.core.Term first, hydra.core.Stream rest) {
     java.util.Objects.requireNonNull((first));
     java.util.Objects.requireNonNull((rest));
     this.first = first;
@@ -35,12 +35,12 @@ public class Stream<A> implements Serializable {
     return 2 * first.hashCode() + 3 * rest.hashCode();
   }
   
-  public Stream withFirst(hydra.core.Term<A> first) {
+  public Stream withFirst(hydra.core.Term first) {
     java.util.Objects.requireNonNull((first));
     return new Stream(first, rest);
   }
   
-  public Stream withRest(hydra.core.Stream<A> rest) {
+  public Stream withRest(hydra.core.Stream rest) {
     java.util.Objects.requireNonNull((rest));
     return new Stream(first, rest);
   }

@@ -17,36 +17,35 @@ newtype FileExtension =
 _FileExtension = (Core.Name "hydra/module.FileExtension")
 
 -- | A logical collection of elements in the same namespace, having dependencies on zero or more other modules
-data Module a = 
+data Module = 
   Module {
     -- | A common prefix for all element names in the module
     moduleNamespace :: Namespace,
     -- | The elements defined in this module
-    moduleElements :: [Graph.Element a],
+    moduleElements :: [Graph.Element],
     -- | Any modules which the term expressions of this module directly depend upon
-    moduleTermDependencies :: [Module a],
+    moduleTermDependencies :: [Module],
     -- | Any modules which the type expressions of this module directly depend upon
-    moduleTypeDependencies :: [Module a],
+    moduleTypeDependencies :: [Module],
     -- | An optional human-readable description of the module
     moduleDescription :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
 _Module = (Core.Name "hydra/module.Module")
 
-_Module_namespace = (Core.FieldName "namespace")
+_Module_namespace = (Core.Name "namespace")
 
-_Module_elements = (Core.FieldName "elements")
+_Module_elements = (Core.Name "elements")
 
-_Module_termDependencies = (Core.FieldName "termDependencies")
+_Module_termDependencies = (Core.Name "termDependencies")
 
-_Module_typeDependencies = (Core.FieldName "typeDependencies")
+_Module_typeDependencies = (Core.Name "typeDependencies")
 
-_Module_description = (Core.FieldName "description")
+_Module_description = (Core.Name "description")
 
 -- | A prefix for element names
 newtype Namespace = 
   Namespace {
-    -- | A prefix for element names
     unNamespace :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -61,6 +60,6 @@ data QualifiedName =
 
 _QualifiedName = (Core.Name "hydra/module.QualifiedName")
 
-_QualifiedName_namespace = (Core.FieldName "namespace")
+_QualifiedName_namespace = (Core.Name "namespace")
 
-_QualifiedName_local = (Core.FieldName "local")
+_QualifiedName_local = (Core.Name "local")

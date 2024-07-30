@@ -7,20 +7,20 @@ import java.io.Serializable;
 /**
  * The type-level analog of an application term
  */
-public class ApplicationType<A> implements Serializable {
+public class ApplicationType implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.ApplicationType");
   
   /**
    * The left-hand side of the application
    */
-  public final hydra.core.Type<A> function;
+  public final hydra.core.Type function;
   
   /**
    * The right-hand side of the application
    */
-  public final hydra.core.Type<A> argument;
+  public final hydra.core.Type argument;
   
-  public ApplicationType (hydra.core.Type<A> function, hydra.core.Type<A> argument) {
+  public ApplicationType (hydra.core.Type function, hydra.core.Type argument) {
     java.util.Objects.requireNonNull((function));
     java.util.Objects.requireNonNull((argument));
     this.function = function;
@@ -41,12 +41,12 @@ public class ApplicationType<A> implements Serializable {
     return 2 * function.hashCode() + 3 * argument.hashCode();
   }
   
-  public ApplicationType withFunction(hydra.core.Type<A> function) {
+  public ApplicationType withFunction(hydra.core.Type function) {
     java.util.Objects.requireNonNull((function));
     return new ApplicationType(function, argument);
   }
   
-  public ApplicationType withArgument(hydra.core.Type<A> argument) {
+  public ApplicationType withArgument(hydra.core.Type argument) {
     java.util.Objects.requireNonNull((argument));
     return new ApplicationType(function, argument);
   }

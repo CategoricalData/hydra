@@ -16,18 +16,18 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.int32;
 
 
-public class Neg<A> extends PrimitiveFunction<A> {
+public class Neg extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/math.neg");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return function(int32(), int32());
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.int32(args.get(0)),
             (arg0) -> Terms.int32(apply(arg0)));
     }

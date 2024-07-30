@@ -31,7 +31,7 @@ import           Hydra.Sources.Tier1.All
 basicsDefinition :: String -> Datum a -> Definition a
 basicsDefinition = definitionInModule hydraBasicsModule
 
-hydraBasicsModule :: Module Kv
+hydraBasicsModule :: Module
 hydraBasicsModule = Module (Namespace "hydra/basics") elements
     [hydraTier1Module]
     tier0Modules $
@@ -54,7 +54,6 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements
      el literalTypeVariantDef,
      el literalVariantDef,
      el literalVariantsDef,
-     el termMetaDef,
      el termVariantDef,
      el termVariantsDef,
      el typeVariantDef,
@@ -80,10 +79,10 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements
      el qualifyNameLazyDef
      ]
 
-eliminationVariantDef :: Definition (Elimination a -> EliminationVariant)
+eliminationVariantDef :: Definition (Elimination -> EliminationVariant)
 eliminationVariantDef = basicsDefinition "eliminationVariant" $
   doc "Find the elimination variant (constructor) for a given elimination term" $
-  typed (functionT (Types.apply (TypeVariable _Elimination) (Types.var "a")) (TypeVariable _EliminationVariant)) $
+  function eliminationT eliminationVariantT $
   matchToEnum _Elimination _EliminationVariant Nothing [
     _Elimination_list     @-> _EliminationVariant_list,
     _Elimination_optional @-> _EliminationVariant_optional,
@@ -95,6 +94,7 @@ eliminationVariantDef = basicsDefinition "eliminationVariant" $
 eliminationVariantsDef :: Definition [EliminationVariant]
 eliminationVariantsDef = basicsDefinition "eliminationVariants" $
   doc "All elimination variants (constructors), in a canonical order" $
+  typed (listT eliminationVariantT) $
   list $ unitVariant _EliminationVariant <$> [
     _EliminationVariant_list,
     _EliminationVariant_wrap,
@@ -106,6 +106,7 @@ eliminationVariantsDef = basicsDefinition "eliminationVariants" $
 floatTypePrecisionDef :: Definition (FloatType -> Precision)
 floatTypePrecisionDef = basicsDefinition "floatTypePrecision" $
   doc "Find the precision of a given floating-point type" $
+  function floatTypeT precisionT $
   matchToUnion _FloatType _Precision Nothing [
     _FloatType_bigfloat @-> field _Precision_arbitrary unit,
     _FloatType_float32  @-> field _Precision_bits $ int 32,
@@ -114,6 +115,7 @@ floatTypePrecisionDef = basicsDefinition "floatTypePrecision" $
 floatTypesDef :: Definition [FloatType]
 floatTypesDef = basicsDefinition "floatTypes" $
   doc "All floating-point types in a canonical order" $
+  typed (listT floatTypeT) $
   list $ unitVariant _FloatType <$> [
     _FloatType_bigfloat,
     _FloatType_float32,
@@ -122,15 +124,16 @@ floatTypesDef = basicsDefinition "floatTypes" $
 floatValueTypeDef :: Definition (FloatValue -> FloatType)
 floatValueTypeDef = basicsDefinition "floatValueType" $
   doc "Find the float type for a given floating-point value" $
+  function floatValueT floatTypeT $
   matchToEnum _FloatValue _FloatType Nothing [
     _FloatValue_bigfloat @-> _FloatType_bigfloat,
     _FloatValue_float32  @-> _FloatType_float32,
     _FloatValue_float64  @-> _FloatType_float64]
 
-functionVariantDef :: Definition (Function a -> FunctionVariant)
+functionVariantDef :: Definition (Function -> FunctionVariant)
 functionVariantDef = basicsDefinition "functionVariant" $
   doc "Find the function variant (constructor) for a given function" $
-  typed (functionT (Types.apply (TypeVariable _Function) (Types.var "a")) (TypeVariable _FunctionVariant)) $
+  function functionT functionVariantT $
   matchToEnum _Function _FunctionVariant Nothing [
     _Function_elimination @-> _FunctionVariant_elimination,
     _Function_lambda      @-> _FunctionVariant_lambda,
@@ -139,6 +142,7 @@ functionVariantDef = basicsDefinition "functionVariant" $
 functionVariantsDef :: Definition [FunctionVariant]
 functionVariantsDef = basicsDefinition "functionVariants" $
   doc "All function variants (constructors), in a canonical order" $
+  typed (listT functionVariantT) $
   list $ unitVariant _FunctionVariant <$> [
     _FunctionVariant_elimination,
     _FunctionVariant_lambda,
@@ -147,12 +151,13 @@ functionVariantsDef = basicsDefinition "functionVariants" $
 idDef :: Definition (a -> a)
 idDef = basicsDefinition "id" $
   doc "The identity function" $
-  typed (functionT (Types.var "a") (Types.var "a")) $
+  function aT aT $
   lambda "x" $ var "x"
 
 integerTypeIsSignedDef :: Definition (IntegerType -> Bool)
 integerTypeIsSignedDef = basicsDefinition "integerTypeIsSigned" $
   doc "Find whether a given integer type is signed (true) or unsigned (false)" $
+  function integerTypeT booleanT $
   matchData _IntegerType Nothing [
     _IntegerType_bigint @-> constant true,
     _IntegerType_int8   @-> constant true,
@@ -167,6 +172,7 @@ integerTypeIsSignedDef = basicsDefinition "integerTypeIsSigned" $
 integerTypePrecisionDef :: Definition (IntegerType -> Precision)
 integerTypePrecisionDef = basicsDefinition "integerTypePrecision" $
   doc "Find the precision of a given integer type" $
+  function integerTypeT precisionT $
   matchToUnion _IntegerType _Precision Nothing [
     _IntegerType_bigint @-> field _Precision_arbitrary unit,
     _IntegerType_int8   @-> field _Precision_bits $ int 8,
@@ -180,21 +186,23 @@ integerTypePrecisionDef = basicsDefinition "integerTypePrecision" $
 
 integerTypesDef :: Definition [IntegerType]
 integerTypesDef = basicsDefinition "integerTypes" $
-    doc "All integer types, in a canonical order" $
-    list $ unitVariant _IntegerType <$> [
-      _IntegerType_bigint,
-      _IntegerType_int8,
-      _IntegerType_int16,
-      _IntegerType_int32,
-      _IntegerType_int64,
-      _IntegerType_uint8,
-      _IntegerType_uint16,
-      _IntegerType_uint32,
-      _IntegerType_uint64]
+  doc "All integer types, in a canonical order" $
+  typed (listT integerTypeT) $
+  list $ unitVariant _IntegerType <$> [
+    _IntegerType_bigint,
+    _IntegerType_int8,
+    _IntegerType_int16,
+    _IntegerType_int32,
+    _IntegerType_int64,
+    _IntegerType_uint8,
+    _IntegerType_uint16,
+    _IntegerType_uint32,
+    _IntegerType_uint64]
 
 integerValueTypeDef :: Definition (IntegerValue -> IntegerType)
 integerValueTypeDef = basicsDefinition "integerValueType" $
   doc "Find the integer type for a given integer value" $
+  function integerValueT integerTypeT $
   matchToEnum _IntegerValue _IntegerType Nothing [
     _IntegerValue_bigint @-> _IntegerType_bigint,
     _IntegerValue_int8   @-> _IntegerType_int8,
@@ -209,6 +217,7 @@ integerValueTypeDef = basicsDefinition "integerValueType" $
 literalTypeDef :: Definition (Literal -> LiteralType)
 literalTypeDef = basicsDefinition "literalType" $
   doc "Find the literal type for a given literal value" $
+  function literalT literalTypeT $
   match _Literal Nothing [
     Case _Literal_binary  --> constant $ variant _LiteralType _LiteralType_binary unit,
     Case _Literal_boolean --> constant $ variant _LiteralType _LiteralType_boolean unit,
@@ -219,6 +228,7 @@ literalTypeDef = basicsDefinition "literalType" $
 literalTypeVariantDef :: Definition (LiteralType -> LiteralVariant)
 literalTypeVariantDef = basicsDefinition "literalTypeVariant" $
   doc "Find the literal type variant (constructor) for a given literal value" $
+  function literalTypeT literalVariantT $
   matchToEnum _LiteralType _LiteralVariant Nothing [
     _LiteralType_binary  @-> _LiteralVariant_binary,
     _LiteralType_boolean @-> _LiteralVariant_boolean,
@@ -229,12 +239,13 @@ literalTypeVariantDef = basicsDefinition "literalTypeVariant" $
 literalVariantDef :: Definition (Literal -> LiteralVariant)
 literalVariantDef = basicsDefinition "literalVariant" $
   doc "Find the literal variant (constructor) for a given literal value" $
-  function (TypeVariable _Literal) (TypeVariable _LiteralVariant) $
+  function literalT literalVariantT $
   ref literalTypeVariantDef <.> ref literalTypeDef
 
 literalVariantsDef :: Definition [LiteralVariant]
 literalVariantsDef = basicsDefinition "literalVariants" $
   doc "All literal variants, in a canonical order" $
+  typed (listT literalVariantT) $
   list $ unitVariant _LiteralVariant <$> [
     _LiteralVariant_binary,
     _LiteralVariant_boolean,
@@ -242,36 +253,33 @@ literalVariantsDef = basicsDefinition "literalVariants" $
     _LiteralVariant_integer,
     _LiteralVariant_string]
 
-termMetaDef :: Definition (Graph a -> Term a -> a)
-termMetaDef = basicsDefinition "termMeta" $
-  function graphA (functionT termA aT) $
-  (project _AnnotationClass _AnnotationClass_termAnnotation) <.> Graph.graphAnnotations
-
-termVariantDef :: Definition (Term a -> TermVariant)
+termVariantDef :: Definition (Term -> TermVariant)
 termVariantDef = basicsDefinition "termVariant" $
   doc "Find the term variant (constructor) for a given term" $
-  function termA (TypeVariable _TermVariant) $
-    matchToEnum _Term _TermVariant Nothing [
-      _Term_annotated   @-> _TermVariant_annotated,
-      _Term_application @-> _TermVariant_application,
-      _Term_function    @-> _TermVariant_function,
-      _Term_let         @-> _TermVariant_let,
-      _Term_list        @-> _TermVariant_list,
-      _Term_literal     @-> _TermVariant_literal,
-      _Term_map         @-> _TermVariant_map,
-      _Term_optional    @-> _TermVariant_optional,
-      _Term_product     @-> _TermVariant_product,
-      _Term_record      @-> _TermVariant_record,
-      _Term_set         @-> _TermVariant_set,
-      _Term_stream      @-> _TermVariant_stream,
-      _Term_sum         @-> _TermVariant_sum,
-      _Term_union       @-> _TermVariant_union,
-      _Term_variable    @-> _TermVariant_variable,
-      _Term_wrap        @-> _TermVariant_wrap]
+  function termT termVariantT $
+  matchToEnum _Term _TermVariant Nothing [
+    _Term_annotated   @-> _TermVariant_annotated,
+    _Term_application @-> _TermVariant_application,
+    _Term_function    @-> _TermVariant_function,
+    _Term_let         @-> _TermVariant_let,
+    _Term_list        @-> _TermVariant_list,
+    _Term_literal     @-> _TermVariant_literal,
+    _Term_map         @-> _TermVariant_map,
+    _Term_optional    @-> _TermVariant_optional,
+    _Term_product     @-> _TermVariant_product,
+    _Term_record      @-> _TermVariant_record,
+    _Term_set         @-> _TermVariant_set,
+    _Term_stream      @-> _TermVariant_stream,
+    _Term_sum         @-> _TermVariant_sum,
+    _Term_typed       @-> _TermVariant_typed,
+    _Term_union       @-> _TermVariant_union,
+    _Term_variable    @-> _TermVariant_variable,
+    _Term_wrap        @-> _TermVariant_wrap]
 
 termVariantsDef :: Definition [TermVariant]
 termVariantsDef = basicsDefinition "termVariants" $
   doc "All term (expression) variants, in a canonical order" $
+  typed (listT termVariantT) $
   list $ unitVariant _TermVariant <$> [
     _TermVariant_annotated,
     _TermVariant_application,
@@ -285,35 +293,37 @@ termVariantsDef = basicsDefinition "termVariants" $
     _TermVariant_set,
     _TermVariant_stream,
     _TermVariant_sum,
+    _TermVariant_typed,
     _TermVariant_union,
     _TermVariant_variable,
     _TermVariant_wrap]
 
-typeVariantDef :: Definition (Type a -> TypeVariant)
+typeVariantDef :: Definition (Type -> TypeVariant)
 typeVariantDef = basicsDefinition "typeVariant" $
   doc "Find the type variant (constructor) for a given type" $
-  function typeA (TypeVariable _TypeVariant) $
-    matchToEnum _Type _TypeVariant Nothing [
-      _Type_annotated   @-> _TypeVariant_annotated,
-      _Type_application @-> _TypeVariant_application,
-      _Type_function    @-> _TypeVariant_function,
-      _Type_lambda      @-> _TypeVariant_lambda,
-      _Type_list        @-> _TypeVariant_list,
-      _Type_literal     @-> _TypeVariant_literal,
-      _Type_map         @-> _TypeVariant_map,
-      _Type_optional    @-> _TypeVariant_optional,
-      _Type_product     @-> _TypeVariant_product,
-      _Type_record      @-> _TypeVariant_record,
-      _Type_set         @-> _TypeVariant_set,
-      _Type_stream      @-> _TypeVariant_stream,
-      _Type_sum         @-> _TypeVariant_sum,
-      _Type_union       @-> _TypeVariant_union,
-      _Type_variable    @-> _TypeVariant_variable,
-      _Type_wrap        @-> _TypeVariant_wrap]
+  function typeT typeVariantT $
+  matchToEnum _Type _TypeVariant Nothing [
+    _Type_annotated   @-> _TypeVariant_annotated,
+    _Type_application @-> _TypeVariant_application,
+    _Type_function    @-> _TypeVariant_function,
+    _Type_lambda      @-> _TypeVariant_lambda,
+    _Type_list        @-> _TypeVariant_list,
+    _Type_literal     @-> _TypeVariant_literal,
+    _Type_map         @-> _TypeVariant_map,
+    _Type_optional    @-> _TypeVariant_optional,
+    _Type_product     @-> _TypeVariant_product,
+    _Type_record      @-> _TypeVariant_record,
+    _Type_set         @-> _TypeVariant_set,
+    _Type_stream      @-> _TypeVariant_stream,
+    _Type_sum         @-> _TypeVariant_sum,
+    _Type_union       @-> _TypeVariant_union,
+    _Type_variable    @-> _TypeVariant_variable,
+    _Type_wrap        @-> _TypeVariant_wrap]
 
 typeVariantsDef :: Definition [TypeVariant]
 typeVariantsDef = basicsDefinition "typeVariants" $
   doc "All type variants, in a canonical order" $
+  typed (listT typeVariantT) $
   list $ unitVariant _TypeVariant <$> [
     _TypeVariant_annotated,
     _TypeVariant_application,
@@ -337,46 +347,47 @@ typeVariantsDef = basicsDefinition "typeVariants" $
 capitalizeDef :: Definition (String -> String)
 capitalizeDef = basicsDefinition "capitalize" $
   doc "Capitalize the first letter of a string" $
-  function Types.string Types.string $
+  function stringT stringT $
   ref mapFirstLetterDef @@ Strings.toUpper
 
 decapitalizeDef :: Definition (String -> String)
 decapitalizeDef = basicsDefinition "decapitalize" $
   doc "Decapitalize the first letter of a string" $
-  function Types.string Types.string $
+  function stringT stringT $
   ref mapFirstLetterDef @@ Strings.toLower
 
 -- TODO: simplify this helper
 mapFirstLetterDef :: Definition ((String -> String) -> String -> String)
 mapFirstLetterDef = basicsDefinition "mapFirstLetter" $
   doc "A helper which maps the first letter of a string to another string" $
+  function (funT stringT stringT) (funT stringT stringT) $
   lambda "mapping" $ lambda "s" ((Logic.ifElse
        @@ var "s"
        @@ (Strings.cat2 @@ var "firstLetter" @@ (Strings.fromList @@ (Lists.tail @@ var "list")))
        @@ (Strings.isEmpty @@ var "s"))
     `with` [
       "firstLetter">: var "mapping" @@ (Strings.fromList @@ (Lists.pure @@ (Lists.head @@ var "list"))),
-      "list">: typed (TypeList $ Types.int32) $ Strings.toList @@ var "s"])
+      "list">: typed (listT int32T) $ Strings.toList @@ var "s"])
 
 -- Common.hs
 
-fieldMapDef :: Definition ([Field a] -> M.Map FieldName (Term a))
+fieldMapDef :: Definition ([Field] -> M.Map Name Term)
 fieldMapDef = basicsDefinition "fieldMap" $
-  function (TypeList fieldA) (Types.map (TypeVariable _FieldName) termA) $
-    (lambda "fields" $ Maps.fromList @@ (Lists.map @@ var "toPair" @@ var "fields"))
-  `with` [
-    "toPair">: lambda "f" $ pair (project _Field _Field_name @@ var "f", project _Field _Field_term @@ var "f")]
+  function (TypeList fieldT) (mapT fieldNameT termT) $
+  (lambda "fields" $ Maps.fromList @@ (Lists.map @@ var "toPair" @@ var "fields"))
+    `with` [
+      "toPair">: lambda "f" $ pair (project _Field _Field_name @@ var "f", project _Field _Field_term @@ var "f")]
 
-fieldTypeMapDef :: Definition ([FieldType a] -> M.Map FieldName (Type a))
+fieldTypeMapDef :: Definition ([FieldType] -> M.Map Name Type)
 fieldTypeMapDef = basicsDefinition "fieldTypeMap" $
-  function (TypeList fieldTypeA) (Types.map (TypeVariable _FieldName) typeA) $
+  function (TypeList fieldTypeT) (mapT fieldNameT typeT) $
     (lambda "fields" $ Maps.fromList @@ (Lists.map @@ var "toPair" @@ var "fields"))
   `with` [
     "toPair">: lambda "f" $ pair (project _FieldType _FieldType_name @@ var "f", project _FieldType _FieldType_type @@ var "f")]
 
-isEncodedTypeDef :: Definition (Term a -> Bool)
+isEncodedTypeDef :: Definition (Term -> Bool)
 isEncodedTypeDef = basicsDefinition "isEncodedType" $
-  function termA booleanT $
+  function termT booleanT $
   lambda "t" $ (match _Term (Just false) [
       Case _Term_application --> lambda "a" $
         ref isEncodedTypeDef @@ (project _Application _Application_function @@ var "a"),
@@ -384,9 +395,9 @@ isEncodedTypeDef = basicsDefinition "isEncodedType" $
         Equality.equalString @@ (string $ unName _Type) @@ (unwrap _Name @@ (project _Injection _Injection_typeName @@ var "i"))
     ]) @@ (ref stripTermDef @@ var "t")
 
-isTypeDef :: Definition (Type a -> Bool)
+isTypeDef :: Definition (Type -> Bool)
 isTypeDef = basicsDefinition "isType" $
-  functionWithClasses typeA booleanT eqA $
+  function typeT booleanT $
   lambda "t" $ (match _Type (Just false) [
       Case _Type_application --> lambda "a" $
         ref isTypeDef @@ (project _ApplicationType _ApplicationType_function @@ var "a"),
@@ -397,53 +408,53 @@ isTypeDef = basicsDefinition "isType" $
 --      Case _Type_variable --> constant true
     ]) @@ (ref stripTypeDef @@ var "t")
 
-isUnitTermDef :: Definition (Term a -> Bool)
+isUnitTermDef :: Definition (Term -> Bool)
 isUnitTermDef = basicsDefinition "isUnitTerm" $
-  functionWithClasses termA booleanT eqA $
-  lambda "t" $ Equality.equalTerm @@ (ref stripTermDef @@ var "t") @@ Datum (coreEncodeTerm Terms.unit)
+  function termT booleanT $
+  lambda "t" $ Equality.equalTerm @@ (ref fullyStripTermDef @@ var "t") @@ Datum (coreEncodeTerm Terms.unit)
 
-isUnitTypeDef :: Definition (Term a -> Bool)
+isUnitTypeDef :: Definition (Term -> Bool)
 isUnitTypeDef = basicsDefinition "isUnitType" $
-  functionWithClasses typeA booleanT eqA $
-  lambda "t" $ Equality.equalType @@ (ref stripTypeDef @@ var "t") @@ Datum (coreEncodeType Types.unit)
+  function typeT booleanT $
+  lambda "t" $ Equality.equalType @@ (ref stripTypeDef @@ var "t") @@ Datum (coreEncodeType unitT)
 
-elementsToGraphDef :: Definition (Graph a -> Maybe (Graph a) -> [Element a] -> Graph a)
+elementsToGraphDef :: Definition (Graph -> Maybe Graph -> [Element] -> Graph)
 elementsToGraphDef = basicsDefinition "elementsToGraph" $
-  function graphA (functionT (Types.optional graphA) (functionT (TypeList elementA) graphA)) $
+  function graphT (funT (optionalT graphT) (funT (TypeList elementT) graphT)) $
   lambda "parent" $ lambda "schema" $ lambda "elements" $
     Graph.graph
       (Maps.fromList @@ (Lists.map @@ var "toPair" @@ var "elements"))
       (Graph.graphEnvironment @@ var "parent")
+      (Graph.graphTypes @@ var "parent")
       (Graph.graphBody @@ var "parent")
       (Graph.graphPrimitives @@ var "parent")
-      (Graph.graphAnnotations @@ var "parent")
       (var "schema")
   `with` [
     "toPair" >: lambda "el" $ pair (project _Element _Element_name @@ var "el", var "el")]
 
 localNameOfEagerDef :: Definition (Name -> String)
 localNameOfEagerDef = basicsDefinition "localNameOfEager" $
-  function (TypeVariable _Name) (Types.string) $
+  function nameT stringT $
   Module.qualifiedNameLocal <.> ref qualifyNameEagerDef
 
 localNameOfLazyDef :: Definition (Name -> String)
 localNameOfLazyDef = basicsDefinition "localNameOfLazy" $
-  function (TypeVariable _Name) (Types.string) $
+  function nameT stringT $
   Module.qualifiedNameLocal <.> ref qualifyNameLazyDef
 
 namespaceOfEagerDef :: Definition (Name -> Maybe Namespace)
 namespaceOfEagerDef = basicsDefinition "namespaceOfEager" $
-  function (TypeVariable _Name) (Types.optional $ TypeVariable _Namespace) $
+  function nameT (optionalT namespaceT) $
   Module.qualifiedNameNamespace <.> ref qualifyNameEagerDef
 
 namespaceOfLazyDef :: Definition (Name -> Maybe Namespace)
 namespaceOfLazyDef = basicsDefinition "namespaceOfLazy" $
-  function (TypeVariable _Name) (Types.optional $ TypeVariable _Namespace) $
+  function nameT (optionalT namespaceT) $
   Module.qualifiedNameNamespace <.> ref qualifyNameLazyDef
 
 namespaceToFilePathDef :: Definition (Bool -> FileExtension -> Namespace -> String)
 namespaceToFilePathDef = basicsDefinition "namespaceToFilePath" $
-  function booleanT (functionT (TypeVariable _FileExtension) (functionT (TypeVariable _Namespace) Types.string)) $
+  function booleanT (funT fileExtensionT (funT namespaceT stringT)) $
   lambda "caps" $ lambda "ext" $ lambda "ns" $
     (((Strings.intercalate @@ "/" @@ var "parts") ++ "." ++ (unwrap _FileExtension @@ var "ext"))
     `with` [
@@ -451,6 +462,7 @@ namespaceToFilePathDef = basicsDefinition "namespaceToFilePath" $
 
 qualifyNameEagerDef :: Definition (Name -> QualifiedName)
 qualifyNameEagerDef = basicsDefinition "qualifyNameEager" $
+  function nameT qualifiedNameT $
   lambda "name" $ ((Logic.ifElse
       @@ Module.qualifiedName nothing (unwrap _Name @@ var "name")
       @@ Module.qualifiedName
@@ -462,6 +474,7 @@ qualifyNameEagerDef = basicsDefinition "qualifyNameEager" $
 
 qualifyNameLazyDef :: Definition (Name -> QualifiedName)
 qualifyNameLazyDef = basicsDefinition "qualifyNameLazy" $
+  function nameT qualifiedNameT $
   lambda "name" $ (Logic.ifElse
       @@ Module.qualifiedName nothing (unwrap _Name @@ var "name")
       @@ Module.qualifiedName

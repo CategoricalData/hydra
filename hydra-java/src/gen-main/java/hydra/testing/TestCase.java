@@ -7,18 +7,18 @@ import java.io.Serializable;
 /**
  * A simple test case with an input and an expected output
  */
-public class TestCase<A> implements Serializable {
+public class TestCase implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/testing.TestCase");
   
   public final hydra.util.Opt<String> description;
   
   public final hydra.testing.EvaluationStyle evaluationStyle;
   
-  public final hydra.core.Term<A> input;
+  public final hydra.core.Term input;
   
-  public final hydra.core.Term<A> output;
+  public final hydra.core.Term output;
   
-  public TestCase (hydra.util.Opt<String> description, hydra.testing.EvaluationStyle evaluationStyle, hydra.core.Term<A> input, hydra.core.Term<A> output) {
+  public TestCase (hydra.util.Opt<String> description, hydra.testing.EvaluationStyle evaluationStyle, hydra.core.Term input, hydra.core.Term output) {
     java.util.Objects.requireNonNull((description));
     java.util.Objects.requireNonNull((evaluationStyle));
     java.util.Objects.requireNonNull((input));
@@ -53,12 +53,12 @@ public class TestCase<A> implements Serializable {
     return new TestCase(description, evaluationStyle, input, output);
   }
   
-  public TestCase withInput(hydra.core.Term<A> input) {
+  public TestCase withInput(hydra.core.Term input) {
     java.util.Objects.requireNonNull((input));
     return new TestCase(description, evaluationStyle, input, output);
   }
   
-  public TestCase withOutput(hydra.core.Term<A> output) {
+  public TestCase withOutput(hydra.core.Term output) {
     java.util.Objects.requireNonNull((output));
     return new TestCase(description, evaluationStyle, input, output);
   }

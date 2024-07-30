@@ -5,14 +5,14 @@ package hydra.coders;
 /**
  * A named language together with language-specific constraints
  */
-public class Language<A> {
+public class Language {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/coders.Language");
   
   public final hydra.coders.LanguageName name;
   
-  public final hydra.coders.LanguageConstraints<A> constraints;
+  public final hydra.coders.LanguageConstraints constraints;
   
-  public Language (hydra.coders.LanguageName name, hydra.coders.LanguageConstraints<A> constraints) {
+  public Language (hydra.coders.LanguageName name, hydra.coders.LanguageConstraints constraints) {
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((constraints));
     this.name = name;
@@ -38,7 +38,7 @@ public class Language<A> {
     return new Language(name, constraints);
   }
   
-  public Language withConstraints(hydra.coders.LanguageConstraints<A> constraints) {
+  public Language withConstraints(hydra.coders.LanguageConstraints constraints) {
     java.util.Objects.requireNonNull((constraints));
     return new Language(name, constraints);
   }

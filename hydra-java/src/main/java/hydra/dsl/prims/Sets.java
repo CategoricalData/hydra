@@ -13,43 +13,43 @@ import hydra.lib.sets.Size;
 import hydra.lib.sets.ToList;
 
 public interface Sets {
-    static <A> Term<A> contains() {
+    static Term contains() {
         return new Contains().term();
     }
 
-    static <A> Term<A> empty() {
+    static Term empty() {
         return new Empty().term();
     }
 
-    static <A> Term<A> fromList() {
+    static Term fromList() {
         return new FromList().term();
     }
 
-    static <A> Term<A> insert() {
+    static Term insert() {
         return new Insert().term();
     }
 
-    static <A> Term<A> isEmpty() {
+    static Term isEmpty() {
         return new IsEmpty().term();
     }
 
-    static <A> Term<A> map() {
+    static Term map() {
         return new Map().term();
     }
 
-    static <A> Term<A> remove() {
+    static Term remove() {
         return new Remove().term();
     }
 
-    static <A> Term<A> singleton() {
+    static Term singleton() {
         return new Singleton().term();
     }
 
-    static <A> Term<A> size() {
+    static Term size() {
         return new Size().term();
     }
 
-    static <A> Term<A> toList() {
+    static Term toList() {
         return new ToList().term();
     }
 }

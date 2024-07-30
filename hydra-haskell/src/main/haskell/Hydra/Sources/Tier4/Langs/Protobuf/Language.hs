@@ -31,7 +31,7 @@ import           Hydra.Sources.Tier3.All
 protobufLanguageDefinition :: String -> Datum a -> Definition a
 protobufLanguageDefinition = definitionInModule protobufLanguageModule
 
-protobufLanguageModule :: Module Kv
+protobufLanguageModule :: Module
 protobufLanguageModule = Module ns elements [hydraCodersModule, hydraBasicsModule, hydraStripModule] tier0Modules $
     Just "Language constraints for Protobuf v3"
   where
@@ -40,10 +40,10 @@ protobufLanguageModule = Module ns elements [hydraCodersModule, hydraBasicsModul
       el protobufLanguageDef,
       el protobufReservedWordsDef]
 
-protobufLanguageDef :: Definition (Language a)
+protobufLanguageDef :: Definition (Language)
 protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
   doc "Language constraints for Protocol Buffers v3" $
-  typed (Types.apply (TypeVariable _Language) (Types.var "a")) $
+  typed languageT $
   record _Language [
     _Language_name>>: wrap _LanguageName "hydra/langs/protobuf",
     _Language_constraints>>: record _LanguageConstraints [
@@ -86,6 +86,7 @@ protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
 protobufReservedWordsDef :: Definition (S.Set String)
 protobufReservedWordsDef = protobufLanguageDefinition "protobufReservedWords" $
   doc "A set of reserved words in Protobuf" $
+  typed (setT stringT) $
   (Sets.fromList @@ (Lists.concat @@ list [var "fieldNames"]))
   `with` [
     "fieldNames">:

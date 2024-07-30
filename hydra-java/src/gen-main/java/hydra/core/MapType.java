@@ -7,14 +7,14 @@ import java.io.Serializable;
 /**
  * A map type
  */
-public class MapType<A> implements Serializable {
+public class MapType implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.MapType");
   
-  public final hydra.core.Type<A> keys;
+  public final hydra.core.Type keys;
   
-  public final hydra.core.Type<A> values;
+  public final hydra.core.Type values;
   
-  public MapType (hydra.core.Type<A> keys, hydra.core.Type<A> values) {
+  public MapType (hydra.core.Type keys, hydra.core.Type values) {
     java.util.Objects.requireNonNull((keys));
     java.util.Objects.requireNonNull((values));
     this.keys = keys;
@@ -35,12 +35,12 @@ public class MapType<A> implements Serializable {
     return 2 * keys.hashCode() + 3 * values.hashCode();
   }
   
-  public MapType withKeys(hydra.core.Type<A> keys) {
+  public MapType withKeys(hydra.core.Type keys) {
     java.util.Objects.requireNonNull((keys));
     return new MapType(keys, values);
   }
   
-  public MapType withValues(hydra.core.Type<A> values) {
+  public MapType withValues(hydra.core.Type values) {
     java.util.Objects.requireNonNull((values));
     return new MapType(keys, values);
   }

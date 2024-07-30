@@ -23,25 +23,25 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-data AvroEnvironment a = AvroEnvironment {
-  avroEnvironmentNamedAdapters :: M.Map AvroQualifiedName (AvroHydraAdapter a),
+data AvroEnvironment = AvroEnvironment {
+  avroEnvironmentNamedAdapters :: M.Map AvroQualifiedName AvroHydraAdapter,
   avroEnvironmentNamespace :: Maybe String,
-  avroEnvironmentElements :: M.Map Name (Element a), -- note: only used in the term coders
-  avroEnvironmentCreateAnnotation :: M.Map String (Term a) -> a}
-type AvroHydraAdapter a = Adapter (AvroEnvironment a) (AvroEnvironment a) Avro.Schema (Type a) Json.Value (Term a)
+  avroEnvironmentElements :: M.Map Name Element, -- note: only used in the term coders
+  avroEnvironmentCreateAnnotation :: M.Map String Term -> M.Map String Term}
+type AvroHydraAdapter = Adapter AvroEnvironment AvroEnvironment Avro.Schema (Type) Json.Value Term
 
 data AvroQualifiedName = AvroQualifiedName (Maybe String) String deriving (Eq, Ord, Show)
 
 data ForeignKey = ForeignKey Name (String -> Name)
 
-data PrimaryKey = PrimaryKey FieldName (String -> Name)
+data PrimaryKey = PrimaryKey Name (String -> Name)
 
 emptyAvroEnvironment = AvroEnvironment M.empty Nothing M.empty
 
 avro_foreignKey = "@foreignKey"
 avro_primaryKey = "@primaryKey"
 
-avroHydraAdapter :: (Ord a, Show a) => Avro.Schema -> Flow (AvroEnvironment a) (AvroHydraAdapter a)
+avroHydraAdapter :: Avro.Schema -> Flow AvroEnvironment AvroHydraAdapter
 avroHydraAdapter schema = case schema of
     Avro.SchemaArray (Avro.Array s) -> do
       ad <- avroHydraAdapter s
@@ -82,10 +82,10 @@ avroHydraAdapter schema = case schema of
                 where
                   typ = TypeUnion (RowType hydraName Nothing $ toField <$> syms)
                     where
-                      toField s = FieldType (FieldName s) Types.unit
-                  encode (Json.ValueString s) = pure $ TermUnion (Injection hydraName $ Field (FieldName s) Terms.unit)
+                      toField s = FieldType (Name s) Types.unit
+                  encode (Json.ValueString s) = pure $ TermUnion (Injection hydraName $ Field (Name s) Terms.unit)
                   -- Note: we simply trust that data coming from the Hydra side is correct
-                  decode (TermUnion (Injection _ (Field fn _))) = return $ Json.ValueString $ unFieldName fn
+                  decode (TermUnion (Injection _ (Field fn _))) = return $ Json.ValueString $ unName fn
               Avro.NamedTypeFixed (Avro.Fixed size) -> simpleAdapter Types.binary encode decode
                 where
                   encode (Json.ValueString s) = pure $ Terms.binary s
@@ -99,8 +99,8 @@ avroHydraAdapter schema = case schema of
                         Nothing -> fail $ "unrecognized field for " ++ showQname qname ++ ": " ++ show k
                         Just (f, ad) -> do
                           v' <- coderEncode (adapterCoder ad) v
-                          return $ Field (FieldName k) v'
-                  let decodeField (Field (FieldName k) v) = case M.lookup k adaptersByFieldName of
+                          return $ Field (Name k) v'
+                  let decodeField (Field (Name k) v) = case M.lookup k adaptersByFieldName of
                         Nothing -> fail $ "unrecognized field for " ++ showQname qname ++ ": " ++ show k
                         Just (f, ad) -> do
                           v' <- coderDecode (adapterCoder ad) v
@@ -118,7 +118,7 @@ avroHydraAdapter schema = case schema of
                     coderDecode = \(TermRecord (Record _ fields)) -> Json.ValueObject . M.fromList <$> (CM.mapM decodeField fields)}
                   return $ Adapter lossy schema target coder
                 where
-                  toHydraField (f, ad) = FieldType (FieldName $ Avro.fieldName f) $ adapterTarget ad
+                  toHydraField (f, ad) = FieldType (Name $ Avro.fieldName f) $ adapterTarget ad
             env <- getState
             putState $ putAvroHydraAdapter qname ad env
             return $ annotate ann ad
@@ -138,7 +138,7 @@ avroHydraAdapter schema = case schema of
                   env <- getState
                   putState $ env {avroEnvironmentElements = M.insert name el (avroEnvironmentElements env)}
                   return ()
-              _ -> fail $ "multiple fields named " ++ unFieldName fname
+              _ -> fail $ "multiple fields named " ++ unName fname
             where
               isPkField field = fieldName field == fname
         findPrimaryKeyField qname avroFields = do
@@ -264,7 +264,7 @@ avroNameToHydraName (AvroQualifiedName mns local) = unqualifyName $ QualifiedNam
 
 -- TODO: use me (for encoding annotations for which the type is not know) or lose me
 --       A more robust solution would use jsonCoder together with an expected type
-encodeAnnotationValue :: Ord a => Json.Value -> Term a
+encodeAnnotationValue :: Json.Value -> Term
 encodeAnnotationValue v = case v of
   Json.ValueArray vals -> Terms.list (encodeAnnotationValue <$> vals)
   Json.ValueBoolean b -> Terms.boolean b
@@ -276,17 +276,17 @@ encodeAnnotationValue v = case v of
       toEntry (k, v) = (Terms.string k, encodeAnnotationValue v)
   Json.ValueString s -> Terms.string s
 
-fieldAnnotationsToCore :: Ord a => Avro.Field -> M.Map String (Term a)
+fieldAnnotationsToCore :: Avro.Field -> M.Map String Term
 fieldAnnotationsToCore f = M.fromList (toCore <$> (M.toList $ Avro.fieldAnnotations f))
   where
     toCore (k, v) = (k, encodeAnnotationValue v)
 
-namedAnnotationsToCore :: Ord a => Avro.Named -> M.Map String (Term a)
+namedAnnotationsToCore :: Avro.Named -> M.Map String Term
 namedAnnotationsToCore n = M.fromList (toCore <$> (M.toList $ Avro.namedAnnotations n))
   where
     toCore (k, v) = (k, encodeAnnotationValue v)
 
-getAvroHydraAdapter :: AvroQualifiedName -> AvroEnvironment a -> Y.Maybe (AvroHydraAdapter a)
+getAvroHydraAdapter :: AvroQualifiedName -> AvroEnvironment -> Y.Maybe AvroHydraAdapter
 getAvroHydraAdapter qname = M.lookup qname . avroEnvironmentNamedAdapters
 
 foreignKey :: Avro.Field -> Flow s (Maybe ForeignKey)
@@ -310,14 +310,14 @@ primaryKey f = do
     Nothing -> pure Nothing
     Just v -> do
       s <- expectString v
-      return $ Just $ PrimaryKey (FieldName $ Avro.fieldName f) $ patternToNameConstructor s
+      return $ Just $ PrimaryKey (Name $ Avro.fieldName f) $ patternToNameConstructor s
 
 parseAvroName :: Maybe String -> String -> AvroQualifiedName
 parseAvroName mns name = case L.reverse $ Strings.splitOn "." name of
   [local] -> AvroQualifiedName mns local
   (local:rest) -> AvroQualifiedName (Just $ L.intercalate "." $ L.reverse rest) local
 
-putAvroHydraAdapter :: AvroQualifiedName -> AvroHydraAdapter a -> AvroEnvironment a -> AvroEnvironment a
+putAvroHydraAdapter :: AvroQualifiedName -> AvroHydraAdapter -> AvroEnvironment -> AvroEnvironment
 putAvroHydraAdapter qname ad env = env {avroEnvironmentNamedAdapters = M.insert qname ad $ avroEnvironmentNamedAdapters env}
 
 rewriteAvroSchemaM :: ((Avro.Schema -> Flow s Avro.Schema) -> Avro.Schema -> Flow s Avro.Schema) -> Avro.Schema -> Flow s Avro.Schema
@@ -350,7 +350,7 @@ jsonToString v = case v of
 showQname :: AvroQualifiedName -> String
 showQname (AvroQualifiedName mns local) = (Y.maybe "" (\ns -> ns ++ ".") mns) ++ local
 
-stringToTerm :: Show a => Type a -> String -> Flow s (Term a)
+stringToTerm :: Type -> String -> Flow s Term
 stringToTerm typ s = case stripType typ of
     TypeLiteral lt -> TermLiteral <$> case lt of
       LiteralTypeBoolean -> LiteralBoolean <$> doRead s
@@ -371,7 +371,7 @@ stringToTerm typ s = case stripType typ of
       Left msg -> fail $ "failed to read value: " ++ msg
       Right term -> pure term
 
-termToString :: Show a => Term a -> Flow s String
+termToString :: Term -> Flow s String
 termToString term = case stripTerm term of
   TermLiteral l -> case l of
     LiteralBoolean b -> pure $ show b

@@ -5,12 +5,12 @@ package hydra.langs.tinkerpop.features;
 /**
  * Additional features which are needed for the complete specification of language constraints in Hydra, above and beyond TinkerPop Graph.Features
  */
-public class ExtraFeatures<A> {
+public class ExtraFeatures {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/features.ExtraFeatures");
   
-  public final java.util.function.Function<hydra.core.Type<A>, Boolean> supportsMapKey;
+  public final java.util.function.Function<hydra.core.Type, Boolean> supportsMapKey;
   
-  public ExtraFeatures (java.util.function.Function<hydra.core.Type<A>, Boolean> supportsMapKey) {
+  public ExtraFeatures (java.util.function.Function<hydra.core.Type, Boolean> supportsMapKey) {
     java.util.Objects.requireNonNull((supportsMapKey));
     this.supportsMapKey = supportsMapKey;
   }

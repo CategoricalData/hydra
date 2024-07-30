@@ -24,22 +24,22 @@ import static hydra.dsl.Types.pair;
 import static hydra.dsl.Types.variable;
 
 
-public class ToList<A> extends PrimitiveFunction<A> {
+public class ToList extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/maps.toList");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("k", "v", function(
                 map("k", "v"),
                 list(pair(variable("k"), variable("v")))));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> {
-            Flow<Graph<A>, Map<Term<A>, Term<A>>> r = Expect.map(Flows::pure, Flows::pure, args.get(0));
+            Flow<Graph, Map<Term, Term>> r = Expect.map(Flows::pure, Flows::pure, args.get(0));
             return Flows.map(r, map -> Terms.list(apply(map).stream().map(Terms::pair).collect(Collectors.toList())));
         };
     }

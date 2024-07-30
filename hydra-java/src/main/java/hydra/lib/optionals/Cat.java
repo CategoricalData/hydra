@@ -21,20 +21,20 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.optional;
 
 
-public class Cat<A> extends PrimitiveFunction<A> {
+public class Cat extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/optionals.cat");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("a", function(list(optional("a")), list("a")));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.list(x -> Expect.optional(Flows::pure, x), args.get(0)),
-                (Function<List<Opt<Term<A>>>, Term<A>>) optionals -> Terms.list(apply(optionals)));
+                (Function<List<Opt<Term>>, Term>) optionals -> Terms.list(apply(optionals)));
     }
 
     /**

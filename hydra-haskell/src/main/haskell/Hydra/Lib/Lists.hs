@@ -25,6 +25,9 @@ concat2 l1 l2 = l1 ++ l2
 cons :: a -> [a] -> [a]
 cons = (:)
 
+foldl :: (b -> a -> b) -> b -> [a] -> b
+foldl = L.foldl
+
 head :: [a] -> a
 head = L.head
 

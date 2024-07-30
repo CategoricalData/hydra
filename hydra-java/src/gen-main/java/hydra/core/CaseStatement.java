@@ -7,16 +7,16 @@ import java.io.Serializable;
 /**
  * A union elimination; a case statement
  */
-public class CaseStatement<A> implements Serializable {
+public class CaseStatement implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.CaseStatement");
   
   public final hydra.core.Name typeName;
   
-  public final hydra.util.Opt<hydra.core.Term<A>> default_;
+  public final hydra.util.Opt<hydra.core.Term> default_;
   
-  public final java.util.List<hydra.core.Field<A>> cases;
+  public final java.util.List<hydra.core.Field> cases;
   
-  public CaseStatement (hydra.core.Name typeName, hydra.util.Opt<hydra.core.Term<A>> default_, java.util.List<hydra.core.Field<A>> cases) {
+  public CaseStatement (hydra.core.Name typeName, hydra.util.Opt<hydra.core.Term> default_, java.util.List<hydra.core.Field> cases) {
     java.util.Objects.requireNonNull((typeName));
     java.util.Objects.requireNonNull((default_));
     java.util.Objects.requireNonNull((cases));
@@ -44,12 +44,12 @@ public class CaseStatement<A> implements Serializable {
     return new CaseStatement(typeName, default_, cases);
   }
   
-  public CaseStatement withDefault(hydra.util.Opt<hydra.core.Term<A>> default_) {
+  public CaseStatement withDefault(hydra.util.Opt<hydra.core.Term> default_) {
     java.util.Objects.requireNonNull((default_));
     return new CaseStatement(typeName, default_, cases);
   }
   
-  public CaseStatement withCases(java.util.List<hydra.core.Field<A>> cases) {
+  public CaseStatement withCases(java.util.List<hydra.core.Field> cases) {
     java.util.Objects.requireNonNull((cases));
     return new CaseStatement(typeName, default_, cases);
   }

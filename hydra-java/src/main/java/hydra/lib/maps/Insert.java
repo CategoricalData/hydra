@@ -19,22 +19,22 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.map;
 
-public class Insert<A> extends PrimitiveFunction<A> {
+public class Insert extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/maps.insert");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("k", "v",
                 function("k", "v", map("k", "v"), map("k", "v")));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> {
-            Term<A> key = args.get(0);
-            Term<A> value = args.get(1);
+            Term key = args.get(0);
+            Term value = args.get(1);
             return Flows.map(Expect.map(Flows::pure, Flows::pure, args.get(2)),
                     before -> Terms.map(apply(key, value, before)));
         };

@@ -11,18 +11,36 @@ import java.util.List;
 import java.util.function.Function;
 
 
-public abstract class PrimitiveFunction<A> {
+/**
+ * Any of Hydra's primitive functions, implemented in Java
+ */
+public abstract class PrimitiveFunction {
+    /**
+     * The unique name of the primitive function
+     */
     public abstract Name name();
 
-    public abstract Type<A> type();
+    /**
+     * The datatype of the primitive function
+     */
+    public abstract Type type();
 
-    protected abstract Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation();
+    /**
+     * A dynamic/interpreted implementation of the function
+     */
+    protected abstract Function<List<Term>, Flow<Graph, Term>> implementation();
 
-    public Term<A> term() {
+    /**
+     * The primitive function as a term
+     */
+    public Term term() {
         return Terms.primitive(name());
     }
 
-    public Primitive<A> toNative() {
-        return new Primitive<>(name(), type(), implementation());
+    /**
+     * The primitive function as a native Hydra Primitive object
+     */
+    public Primitive toNative() {
+        return new Primitive(name(), type(), implementation());
     }
 }

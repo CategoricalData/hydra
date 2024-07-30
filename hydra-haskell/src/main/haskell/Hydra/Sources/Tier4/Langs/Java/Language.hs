@@ -20,7 +20,7 @@ import qualified Data.Set as S
 javaLanguageDefinition :: String -> Datum a -> Definition a
 javaLanguageDefinition = definitionInModule javaLanguageModule
 
-javaLanguageModule :: Module Kv
+javaLanguageModule :: Module
 javaLanguageModule = Module ns elements [hydraCodersModule, hydraBasicsModule] tier0Modules $
     Just "Language constraints for Java"
   where
@@ -37,10 +37,10 @@ javaMaxTupleLengthDef = javaLanguageDefinition "javaMaxTupleLength" $
     <> "Note: if this constant is changed, also change Tuples.java correspondingly") $
   int32 9
 
-javaLanguageDef :: Definition (Language a)
+javaLanguageDef :: Definition (Language)
 javaLanguageDef = javaLanguageDefinition "javaLanguage" $
   doc "Language constraints for Java" $
-  typed (Types.apply (TypeVariable _Language) (Types.var "a")) $
+  typed languageT $
   record _Language [
     _Language_name>>: wrap _LanguageName "hydra/langs/java",
     _Language_constraints>>: record _LanguageConstraints [
@@ -98,6 +98,7 @@ javaLanguageDef = javaLanguageDefinition "javaLanguage" $
 reservedWordsDef :: Definition (S.Set String)
 reservedWordsDef = javaLanguageDefinition "reservedWords" $
   doc "A set of reserved words in Java" $
+  typed (setT stringT) $
   (Sets.fromList @@ (Lists.concat @@ list [var "specialNames", var "classNames", var "keywords", var "literals"]))
   `with` [
     "specialNames">:

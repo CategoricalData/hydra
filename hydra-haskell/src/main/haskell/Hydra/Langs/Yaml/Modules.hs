@@ -12,11 +12,11 @@ import qualified Data.List as L
 import qualified Data.Map as M
 
 
-constructModule :: (Ord a, Read a, Show a)
-  => Module a
-  -> M.Map (Type a) (Coder (Graph a) (Graph a) (Term a) YM.Node)
-  -> [(Element a, TypedTerm a)]
-  -> Flow (Graph a) YM.Node
+constructModule ::
+  Module
+  -> M.Map (Type) (Coder (Graph) (Graph) (Term) YM.Node)
+  -> [(Element, TypedTerm)]
+  -> Flow (Graph) YM.Node
 constructModule mod coders pairs = do
     keyvals <- withTrace "encoding terms" (CM.mapM toYaml pairs)
     return $ YM.NodeMapping $ M.fromList keyvals
@@ -30,7 +30,7 @@ constructModule mod coders pairs = do
     ns = unNamespace $ moduleNamespace mod
     localNameOf name = L.drop (1 + L.length ns) $ unName name
 
-moduleToYaml :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
+moduleToYaml :: Module -> Flow (Graph) (M.Map FilePath String)
 moduleToYaml mod = withTrace ("print module " ++ (unNamespace $ moduleNamespace mod)) $ do
     node <- transformModule yamlLanguage encodeTerm constructModule mod
     return $ M.fromList [(path, hydraYamlToString node)]

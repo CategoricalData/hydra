@@ -20,13 +20,13 @@ import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.map;
 
-public class Values<A> extends PrimitiveFunction<A> {
+public class Values extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/maps.values");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("k", "v",
                 function(
                         map("k", "v"),
@@ -34,9 +34,9 @@ public class Values<A> extends PrimitiveFunction<A> {
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> {
-            Flow<Graph<A>, Map<Term<A>, Term<A>>> r = Expect.map(Flows::pure, Flows::pure, args.get(0));
+            Flow<Graph, Map<Term, Term>> r = Expect.map(Flows::pure, Flows::pure, args.get(0));
             return Flows.map(r, map -> Terms.list(apply(map)));
         };
     }

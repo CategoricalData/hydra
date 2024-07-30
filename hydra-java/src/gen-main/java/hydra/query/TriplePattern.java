@@ -7,16 +7,16 @@ import java.io.Serializable;
 /**
  * A subject/predicate/object pattern
  */
-public class TriplePattern<A> implements Serializable {
+public class TriplePattern implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/query.TriplePattern");
   
-  public final hydra.query.Node<A> subject;
+  public final hydra.query.Node subject;
   
   public final hydra.query.Path predicate;
   
-  public final hydra.query.Node<A> object;
+  public final hydra.query.Node object;
   
-  public TriplePattern (hydra.query.Node<A> subject, hydra.query.Path predicate, hydra.query.Node<A> object) {
+  public TriplePattern (hydra.query.Node subject, hydra.query.Path predicate, hydra.query.Node object) {
     java.util.Objects.requireNonNull((subject));
     java.util.Objects.requireNonNull((predicate));
     java.util.Objects.requireNonNull((object));
@@ -39,7 +39,7 @@ public class TriplePattern<A> implements Serializable {
     return 2 * subject.hashCode() + 3 * predicate.hashCode() + 5 * object.hashCode();
   }
   
-  public TriplePattern withSubject(hydra.query.Node<A> subject) {
+  public TriplePattern withSubject(hydra.query.Node subject) {
     java.util.Objects.requireNonNull((subject));
     return new TriplePattern(subject, predicate, object);
   }
@@ -49,7 +49,7 @@ public class TriplePattern<A> implements Serializable {
     return new TriplePattern(subject, predicate, object);
   }
   
-  public TriplePattern withObject(hydra.query.Node<A> object) {
+  public TriplePattern withObject(hydra.query.Node object) {
     java.util.Objects.requireNonNull((object));
     return new TriplePattern(subject, predicate, object);
   }

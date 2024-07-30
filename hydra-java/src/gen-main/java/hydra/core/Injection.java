@@ -7,14 +7,14 @@ import java.io.Serializable;
 /**
  * An instance of a union type; i.e. a string-indexed generalization of inl() or inr()
  */
-public class Injection<A> implements Serializable {
+public class Injection implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Injection");
   
   public final hydra.core.Name typeName;
   
-  public final hydra.core.Field<A> field;
+  public final hydra.core.Field field;
   
-  public Injection (hydra.core.Name typeName, hydra.core.Field<A> field) {
+  public Injection (hydra.core.Name typeName, hydra.core.Field field) {
     java.util.Objects.requireNonNull((typeName));
     java.util.Objects.requireNonNull((field));
     this.typeName = typeName;
@@ -40,7 +40,7 @@ public class Injection<A> implements Serializable {
     return new Injection(typeName, field);
   }
   
-  public Injection withField(hydra.core.Field<A> field) {
+  public Injection withField(hydra.core.Field field) {
     java.util.Objects.requireNonNull((field));
     return new Injection(typeName, field);
   }

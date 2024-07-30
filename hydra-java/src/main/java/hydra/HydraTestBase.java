@@ -5,25 +5,23 @@ import hydra.compute.Flow;
 import hydra.compute.FlowState;
 import hydra.core.Name;
 import hydra.core.Term;
+import hydra.core.Type;
 import hydra.core.Unit;
 import hydra.dsl.Terms;
-import hydra.graph.AnnotationClass;
 import hydra.graph.Element;
 import hydra.graph.Graph;
 import hydra.graph.Primitive;
 import hydra.lib.Libraries;
 import hydra.tools.PrimitiveFunction;
-
+import hydra.util.Opt;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import hydra.util.Opt;
 import java.util.function.Consumer;
 
-import static hydra.Coders.roundTrip;
-import static hydra.Flows.EMPTY_TRACE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static hydra.Coders.*;
+import static hydra.Flows.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class HydraTestBase {
@@ -76,18 +74,19 @@ public class HydraTestBase {
         checkFlow(flow, new Unit(), consumer);
     }
 
-    protected static <A> Graph<A> emptyGraph(AnnotationClass<A> anns) {
-        Map<Name, Element<A>> elements = Collections.emptyMap();
-        Map<Name, Opt<Term<A>>> environment = Collections.emptyMap();
-        Term<A> body = Terms.string("empty graph");
+    protected static  Graph emptyGraph() {
+        Map<Name, Element> elements = Collections.emptyMap();
+        Map<Name, Type> types = Collections.emptyMap();
+        Map<Name, Opt<Term>> environment = Collections.emptyMap();
+        Term body = Terms.string("empty graph");
 
-        Map<Name, Primitive<A>> primitives = new HashMap<>();
+        Map<Name, Primitive> primitives = new HashMap<>();
         for (PrimitiveFunction prim : Libraries.standardPrimitives()) {
             primitives.put(prim.name(), prim.toNative());
         }
 
-        Opt<Graph<A>> schema = Opt.empty();
+        Opt<Graph> schema = Opt.empty();
 
-        return new Graph<>(elements, environment, body, primitives, anns, schema);
+        return new Graph(elements, environment, types, body, primitives, schema);
     }
 }

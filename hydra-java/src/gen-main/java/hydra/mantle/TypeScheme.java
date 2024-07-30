@@ -7,14 +7,14 @@ import java.io.Serializable;
 /**
  * A type expression together with free type variables occurring in the expression
  */
-public class TypeScheme<A> implements Serializable {
+public class TypeScheme implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/mantle.TypeScheme");
   
   public final java.util.List<hydra.core.Name> variables;
   
-  public final hydra.core.Type<A> type;
+  public final hydra.core.Type type;
   
-  public TypeScheme (java.util.List<hydra.core.Name> variables, hydra.core.Type<A> type) {
+  public TypeScheme (java.util.List<hydra.core.Name> variables, hydra.core.Type type) {
     java.util.Objects.requireNonNull((variables));
     java.util.Objects.requireNonNull((type));
     this.variables = variables;
@@ -40,7 +40,7 @@ public class TypeScheme<A> implements Serializable {
     return new TypeScheme(variables, type);
   }
   
-  public TypeScheme withType(hydra.core.Type<A> type) {
+  public TypeScheme withType(hydra.core.Type type) {
     java.util.Objects.requireNonNull((type));
     return new TypeScheme(variables, type);
   }

@@ -17,18 +17,18 @@ import java.util.function.Function;
 import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.map;
 
-public class Empty<A> extends PrimitiveFunction<A> {
+public class Empty extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/maps.empty");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("k", "v", map("k", "v"));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return ignored -> Flows.pure(Terms.map(apply()));
     }
 

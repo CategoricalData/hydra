@@ -7,37 +7,37 @@ import java.io.Serializable;
 /**
  * A node in a query expression; it may be a term, a variable, or a wildcard
  */
-public abstract class Node<A> implements Serializable {
+public abstract class Node implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/query.Node");
   
   private Node () {
   
   }
   
-  public abstract <R> R accept(Visitor<A, R> visitor) ;
+  public abstract <R> R accept(Visitor<R> visitor) ;
   
-  public interface Visitor<A, R> {
-    R visit(Term<A> instance) ;
+  public interface Visitor<R> {
+    R visit(Term instance) ;
     
-    R visit(Variable<A> instance) ;
+    R visit(Variable instance) ;
     
-    R visit(Wildcard<A> instance) ;
+    R visit(Wildcard instance) ;
   }
   
-  public interface PartialVisitor<A, R> extends Visitor<A, R> {
-    default R otherwise(Node<A> instance) {
+  public interface PartialVisitor<R> extends Visitor<R> {
+    default R otherwise(Node instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Term<A> instance) {
+    default R visit(Term instance) {
       return otherwise((instance));
     }
     
-    default R visit(Variable<A> instance) {
+    default R visit(Variable instance) {
       return otherwise((instance));
     }
     
-    default R visit(Wildcard<A> instance) {
+    default R visit(Wildcard instance) {
       return otherwise((instance));
     }
   }
@@ -45,13 +45,13 @@ public abstract class Node<A> implements Serializable {
   /**
    * A graph term; an expression which is valid in the graph being matched
    */
-  public static final class Term<A> extends hydra.query.Node<A> implements Serializable {
+  public static final class Term extends hydra.query.Node implements Serializable {
     /**
      * A graph term; an expression which is valid in the graph being matched
      */
-    public final hydra.core.Term<A> value;
+    public final hydra.core.Term value;
     
-    public Term (hydra.core.Term<A> value) {
+    public Term (hydra.core.Term value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -71,7 +71,7 @@ public abstract class Node<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -79,7 +79,7 @@ public abstract class Node<A> implements Serializable {
   /**
    * A query variable, not to be confused with a variable term
    */
-  public static final class Variable<A> extends hydra.query.Node<A> implements Serializable {
+  public static final class Variable extends hydra.query.Node implements Serializable {
     /**
      * A query variable, not to be confused with a variable term
      */
@@ -105,7 +105,7 @@ public abstract class Node<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -113,7 +113,7 @@ public abstract class Node<A> implements Serializable {
   /**
    * An anonymous variable which we do not care to join across patterns
    */
-  public static final class Wildcard<A> extends hydra.query.Node<A> implements Serializable {
+  public static final class Wildcard extends hydra.query.Node implements Serializable {
     public Wildcard () {
     
     }
@@ -133,7 +133,7 @@ public abstract class Node<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }

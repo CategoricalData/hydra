@@ -7,14 +7,14 @@ import java.io.Serializable;
 /**
  * A graph element, having a name, data term (value), and schema term (type)
  */
-public class Element<A> implements Serializable {
+public class Element implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/graph.Element");
   
   public final hydra.core.Name name;
   
-  public final hydra.core.Term<A> data;
+  public final hydra.core.Term data;
   
-  public Element (hydra.core.Name name, hydra.core.Term<A> data) {
+  public Element (hydra.core.Name name, hydra.core.Term data) {
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((data));
     this.name = name;
@@ -40,7 +40,7 @@ public class Element<A> implements Serializable {
     return new Element(name, data);
   }
   
-  public Element withData(hydra.core.Term<A> data) {
+  public Element withData(hydra.core.Term data) {
     java.util.Objects.requireNonNull((data));
     return new Element(name, data);
   }

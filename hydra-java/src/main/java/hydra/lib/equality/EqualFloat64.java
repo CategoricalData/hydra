@@ -5,7 +5,7 @@ import hydra.lib.PrimitiveType;
 import java.util.function.Function;
 
 
-public class EqualFloat64<A> extends EqualityFunction<A, Double> {
+public class EqualFloat64 extends EqualityFunction<Double> {
     public EqualFloat64() {
         super(PrimitiveType.float64(), Relation.EQUALS);
     }

@@ -10,9 +10,6 @@ import java.io.Serializable;
 public class Label implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Label");
   
-  /**
-   * A name for a pattern
-   */
   public final String value;
   
   public Label (String value) {

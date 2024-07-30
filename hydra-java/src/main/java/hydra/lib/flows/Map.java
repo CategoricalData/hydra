@@ -22,23 +22,23 @@ import static hydra.dsl.Terms.unwrap;
 import static hydra.dsl.Terms.variable;
 
 
-public class Map<A> extends PrimitiveFunction<A> {
+public class Map extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/flows.map");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return Types.lambda("s", "x", "y",
                 Types.function(Types.function("x", "y"), Types.flow("s", "x"), Types.flow("s", "y")));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> {
-            Term<A> mapping = args.get(0);
-            Term<A> input = args.get(1);
-            Term<A> output = lambda("s", "t",
+            Term mapping = args.get(0);
+            Term input = args.get(1);
+            Term output = lambda("s", "t",
                     app(lambda("q", flowState(
                                     app(Optionals.map(), mapping, app(project(FlowState.NAME, "value"), variable("q"))),
                                     app(project(FlowState.NAME, "state"), variable("q")),

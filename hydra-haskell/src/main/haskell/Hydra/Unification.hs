@@ -15,19 +15,20 @@ import Hydra.Rewriting
 import Hydra.Substitution
 import Hydra.Tier1
 import Hydra.Dsl.Types as Types
+import Hydra.Lib.Io
 
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-type Constraint a = (Type a, Type a)
+type Constraint = (Type, Type)
 
-type Unifier a = (Subst a, [Constraint a])
+type Unifier = (Subst, [Constraint])
 
 -- Note: type variables in Hydra are allowed to bind to type expressions which contain the variable;
 --       i.e. type recursion by name is allowed.
-bind :: (Eq a, Show a) => Name -> Type a -> Flow s (Subst a)
+bind :: Name -> Type -> Flow s Subst
 bind name typ = do
   if typ == TypeVariable name
   then return M.empty
@@ -36,10 +37,10 @@ bind name typ = do
     then return M.empty
     else return $ M.singleton name typ
 
-solveConstraints :: (Eq a, Show a) => [Constraint a] -> Flow s (Subst a)
+solveConstraints :: [Constraint] -> Flow s Subst
 solveConstraints cs = unificationSolver (M.empty, cs)
 
-unificationSolver :: (Eq a, Show a) => Unifier a -> Flow s (Subst a)
+unificationSolver :: Unifier -> Flow s Subst
 unificationSolver (su, cs) = case cs of
   [] -> return su
   ((t1, t2):rest) -> do
@@ -48,7 +49,7 @@ unificationSolver (su, cs) = case cs of
       composeSubst su1 su,
       (\(t1, t2) -> (substituteInType su1 t1, substituteInType su1 t2)) <$> rest)
 
-unify :: (Eq a, Show a) => Type a -> Type a -> Flow s (Subst a)
+unify :: Type -> Type -> Flow s Subst
 unify ltyp rtyp = do
 --     withTrace ("unify " ++ show ltyp ++ " with " ++ show rtyp) $
      case (stripType ltyp, stripType rtyp) of
@@ -58,20 +59,20 @@ unify ltyp rtyp = do
       (TypeFunction (FunctionType dom1 cod1), TypeFunction (FunctionType dom2 cod2)) ->
         unifyMany [dom1, cod1] [dom2, cod2]
       (TypeList lt1, TypeList lt2) -> unify lt1 lt2
-      (TypeLiteral lt1, TypeLiteral lt2) -> verify $ lt1 == lt2
+      (TypeLiteral lt1, TypeLiteral lt2) -> verify "different literal types" $ lt1 == lt2
       (TypeMap (MapType k1 v1), TypeMap (MapType k2 v2)) -> unifyMany [k1, v1] [k2, v2]
       (TypeOptional ot1, TypeOptional ot2) -> unify ot1 ot2
       (TypeProduct types1, TypeProduct types2) -> unifyMany types1 types2
       (TypeRecord rt1, TypeRecord rt2) -> do
-        verify (rowTypeTypeName rt1 == rowTypeTypeName rt2)
-        verify (L.length (rowTypeFields rt1) == L.length (rowTypeFields rt2))
+        verify "different record type names" (rowTypeTypeName rt1 == rowTypeTypeName rt2)
+        verify "different number of record fields" (L.length (rowTypeFields rt1) == L.length (rowTypeFields rt2))
         unifyMany (fieldTypeType <$> rowTypeFields rt1) (fieldTypeType <$> rowTypeFields rt2)
       (TypeSet st1, TypeSet st2) -> unify st1 st2
-      (TypeUnion rt1, TypeUnion rt2) -> verify (rowTypeTypeName rt1 == rowTypeTypeName rt2)
+      (TypeUnion rt1, TypeUnion rt2) -> verify "different union type names" (rowTypeTypeName rt1 == rowTypeTypeName rt2)
       (TypeLambda (LambdaType (Name v1) body1), TypeLambda (LambdaType (Name v2) body2)) ->
         unifyMany [Types.var v1, body1] [Types.var v2, body2]
       (TypeSum types1, TypeSum types2) -> unifyMany types1 types2
-      (TypeWrap n1, TypeWrap n2) -> verify $ n1 == n2
+      (TypeWrap n1, TypeWrap n2) -> verify "different wrapper type names" $ n1 == n2
 
       -- Asymmetric patterns
       (TypeVariable v1, TypeVariable v2) -> bindWeakest v1 v2
@@ -88,11 +89,13 @@ unify ltyp rtyp = do
       (_, TypeWrap name) -> return M.empty -- TODO
 
       (l, r) -> fail $ "unification of " ++ show (typeVariant l) ++ " with " ++ show (typeVariant r) ++
-        ":\n  " ++ show l ++
-        "\n  " ++ show r
+        ":\n  " ++ showType l ++
+        "\n  " ++ showType r
   where
-    verify b = if b then return M.empty else failUnification
-    failUnification = fail $ "could not unify type " ++ show (stripType ltyp) ++ " with " ++ show (stripType rtyp)
+    verify reason b = if b then return M.empty else failUnification reason
+    failUnification reason = fail $ "could not unify types (reason: " ++ reason ++ "):\n\t"
+      ++ showType (stripType ltyp) ++ "\n\t"
+      ++ showType (stripType rtyp) ++ "\n"
 --     failUnification = fail $ "could not unify type " ++ describeType (stripType ltyp) ++ " with " ++ describeType (stripType rtyp)
     bindWeakest v1 v2 = if isWeak v1
         then bind v1 (TypeVariable v2)
@@ -100,7 +103,7 @@ unify ltyp rtyp = do
       where
         isWeak v = L.head (unName v) == 't' -- TODO: use a convention like _xxx for temporarily variables, then normalize and replace them
 
-unifyMany :: (Eq a, Show a) => [Type a] -> [Type a] -> Flow s (Subst a)
+unifyMany :: [Type] -> [Type] -> Flow s Subst
 unifyMany [] [] = return M.empty
 unifyMany (t1 : ts1) (t2 : ts2) =
   do su1 <- unify t1 t2
@@ -108,5 +111,5 @@ unifyMany (t1 : ts1) (t2 : ts2) =
      return (composeSubst su2 su1)
 unifyMany t1 t2 = fail $ "unification mismatch between " ++ show t1 ++ " and " ++ show t2
 
-variableOccursInType ::  Show a => Name -> Type a -> Bool
+variableOccursInType :: Name -> Type -> Bool
 variableOccursInType a t = S.member a $ freeVariablesInType t

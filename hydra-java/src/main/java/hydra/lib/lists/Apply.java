@@ -20,13 +20,13 @@ import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.list;
 
 
-public class Apply<A> extends PrimitiveFunction<A> {
+public class Apply extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/lists.apply");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("a",
                 lambda("b", function(list(function("a", "b")), list("a"), list("b"))));
     }
@@ -35,14 +35,14 @@ public class Apply<A> extends PrimitiveFunction<A> {
     //       as actually applying the mapping function would require beta reduction,
     //       which would make the mapping function monadic.
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> map2(Expect.list(Flows::pure, args.get(0)), Expect.list(Flows::pure, args.get(1)),
-                new BiFunction<List<Term<A>>, List<Term<A>>, Term<A>>() {
+                new BiFunction<List<Term>, List<Term>, Term>() {
                 @Override
-                public Term<A> apply(List<Term<A>> functions, List<Term<A>> arguments) {
-                    List<Term<A>> apps = new LinkedList<>();
-                    for (Term<A> f : functions) {
-                        for (Term<A> a : arguments) {
+                public Term apply(List<Term> functions, List<Term> arguments) {
+                    List<Term> apps = new LinkedList<>();
+                    for (Term f : functions) {
+                        for (Term a : arguments) {
                             apps.add(Terms.apply(f, a));
                         }
                     }

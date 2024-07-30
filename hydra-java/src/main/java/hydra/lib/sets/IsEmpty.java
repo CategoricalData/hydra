@@ -20,18 +20,18 @@ import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.set;
 
 
-public class IsEmpty<A> extends PrimitiveFunction<A> {
+public class IsEmpty extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/sets.isEmpty");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("x", function(set("x"), boolean_()));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.set(Flows::pure, args.get(0)), arg -> Terms.boolean_(apply(arg)));
     }
 

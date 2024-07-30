@@ -12,7 +12,7 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-literalCoder :: LiteralType -> Flow (Graph a) (Coder (Graph a) (Graph a) Literal YM.Scalar)
+literalCoder :: LiteralType -> Flow (Graph) (Coder (Graph) (Graph) Literal YM.Scalar)
 literalCoder at = pure $ case at of
   LiteralTypeBoolean -> Coder {
     coderEncode = \(LiteralBoolean b) -> pure $ YM.ScalarBool b,
@@ -35,7 +35,7 @@ literalCoder at = pure $ case at of
       YM.ScalarStr s' -> pure $ LiteralString s'
       _ -> unexpected "string" $ show s}
 
-recordCoder :: (Eq a, Ord a, Read a, Show a) => RowType a -> Flow (Graph a) (Coder (Graph a) (Graph a) (Term a) YM.Node)
+recordCoder :: RowType -> Flow (Graph) (Coder (Graph) (Graph) (Term) YM.Node)
 recordCoder rt = do
     coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder (fieldTypeType f)) (rowTypeFields rt)
     return $ Coder (encode coders) (decode coders)
@@ -43,7 +43,7 @@ recordCoder rt = do
     encode coders term = case stripTerm term of
       TermRecord (Record _ fields) -> YM.NodeMapping . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
         where
-          encodeField (ft, coder) (Field (FieldName fn) fv) = case (fieldTypeType ft, fv) of
+          encodeField (ft, coder) (Field (Name fn) fv) = case (fieldTypeType ft, fv) of
             (TypeOptional _, TermOptional Nothing) -> pure Nothing
             _ -> Just <$> ((,) <$> pure (yamlString fn) <*> coderEncode coder fv)
       _ -> unexpected "record" $ show term
@@ -51,7 +51,7 @@ recordCoder rt = do
       YM.NodeMapping m -> Terms.record (rowTypeTypeName rt) <$>
           CM.mapM (decodeField m) coders -- Note: unknown fields are ignored
         where
-          decodeField a (FieldType fname@(FieldName fn) ft, coder) = do
+          decodeField a (FieldType fname@(Name fn) ft, coder) = do
             v <- coderDecode coder $ Y.fromMaybe yamlNull $ M.lookup (yamlString fn) m
             return $ Field fname v
       _ -> unexpected "mapping" $ show n
@@ -59,7 +59,7 @@ recordCoder rt = do
       where
         error = fail $ "no such field: " ++ fname
 
-termCoder :: (Eq a, Ord a, Read a, Show a) => Type a -> Flow (Graph a) (Coder (Graph a) (Graph a) (Term a) YM.Node)
+termCoder :: Type -> Flow (Graph) (Coder (Graph) (Graph) (Term) YM.Node)
 termCoder typ = case stripType typ of
   TypeLiteral at -> do
     ac <- literalCoder at
@@ -103,7 +103,7 @@ termCoder typ = case stripType typ of
   TypeRecord rt -> recordCoder rt
   _ -> fail $ "unsupported type variant: " ++ show (typeVariant typ)
 
-yamlCoder :: (Eq a, Ord a, Read a, Show a) => Type a -> Flow (Graph a) (Coder (Graph a) (Graph a) (Term a) YM.Node)
+yamlCoder :: Type -> Flow (Graph) (Coder (Graph) (Graph) (Term) YM.Node)
 yamlCoder typ = do
   adapter <- languageAdapter yamlLanguage typ
   coder <- termCoder $ adapterTarget adapter

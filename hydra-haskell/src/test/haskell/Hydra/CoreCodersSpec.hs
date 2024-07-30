@@ -19,33 +19,33 @@ individualEncoderTestCases = do
 
     H.it "string literal type" $ do
       H.shouldBe
-        (strip $ coreEncodeLiteralType LiteralTypeString :: Term Kv)
+        (strip $ coreEncodeLiteralType LiteralTypeString :: Term)
         (strip $ unitVariant _LiteralType _LiteralType_string)
 
     H.it "string type" $ do
       H.shouldBe
-        (strip $ coreEncodeType Types.string :: Term Kv)
+        (strip $ coreEncodeType Types.string :: Term)
         (strip $ variant _Type _Type_literal (unitVariant _LiteralType _LiteralType_string))
 
     H.it "int32 type" $ do
       H.shouldBe
-        (strip $ coreEncodeType Types.int32 :: Term Kv)
+        (strip $ coreEncodeType Types.int32 :: Term)
         (strip $ variant _Type _Type_literal (variant _LiteralType _LiteralType_integer $ unitVariant _IntegerType _IntegerType_int32))
 
     H.it "record type" $ do
       H.shouldBe
         (strip $ coreEncodeType (TypeRecord $ RowType (Name "Example") Nothing
-          [Types.field "something" Types.string, Types.field "nothing" Types.unit]) :: Term Kv)
+          [Types.field "something" Types.string, Types.field "nothing" Types.unit]) :: Term)
         (strip $ variant _Type _Type_record $
           record _RowType [
             Field _RowType_typeName $ wrap _Name $ string "Example",
             Field _RowType_extends $ optional Nothing,
             Field _RowType_fields $ list [
               record _FieldType [
-                Field _FieldType_name $ wrap _FieldName $ string "something",
+                Field _FieldType_name $ wrap _Name $ string "something",
                 Field _FieldType_type $ variant _Type _Type_literal $ unitVariant _LiteralType _LiteralType_string],
               record _FieldType [
-                Field _FieldType_name $ wrap _FieldName $ string "nothing",
+                Field _FieldType_name $ wrap _Name $ string "nothing",
                 Field _FieldType_type $ variant _Type _Type_record $ record _RowType [
                   Field _RowType_typeName $ wrap _Name $ string "hydra/core.Unit",
                   Field _RowType_extends $ optional Nothing,
@@ -76,11 +76,11 @@ individualDecoderTestCases = do
             Field _RowType_fields $
               list [
                 record _FieldType [
-                  Field _FieldType_name $ wrap _FieldName $ string "left",
+                  Field _FieldType_name $ wrap _Name $ string "left",
                   Field _FieldType_type $ variant _Type _Type_literal $ variant _LiteralType _LiteralType_integer $
                     unitVariant _IntegerType _IntegerType_int64],
                 record _FieldType [
-                  Field _FieldType_name $ wrap _FieldName $ string "right",
+                  Field _FieldType_name $ wrap _Name $ string "right",
                   Field _FieldType_type $ variant _Type _Type_literal $ variant _LiteralType _LiteralType_float $
                     unitVariant _FloatType _FloatType_float64]]])
           (TypeUnion $ RowType testTypeName Nothing [
@@ -92,7 +92,7 @@ decodeInvalidTerms = do
   H.describe "Decode invalid terms" $ do
 
     H.it "Try to decode a term with wrong fields for Type" $ do
-      shouldFail (coreDecodeType $ variant untyped (FieldName "unknownField") $ list [])
+      shouldFail (coreDecodeType $ variant untyped (Name "unknownField") $ list [])
 
     H.it "Try to decode an incomplete representation of a Type" $ do
       shouldFail (coreDecodeType $ variant _Type _Type_literal $ unitVariant _LiteralType _LiteralType_integer)
@@ -106,10 +106,10 @@ metadataIsPreserved = do
         (coreDecodeType $ coreEncodeType annotatedStringType)
         annotatedStringType
   where
-    annotatedStringType :: Type Kv
-    annotatedStringType = TypeAnnotated $ Annotated Types.string $ Kv $ M.fromList [
-      (kvDescription, Terms.string "The string literal type"),
-      (kvType, coreEncodeType $ TypeVariable _Type)]
+    annotatedStringType :: Type
+    annotatedStringType = TypeAnnotated $ AnnotatedType Types.string $ M.fromList [
+      (key_description, Terms.string "The string literal type"),
+      (key_type, coreEncodeType $ TypeVariable _Type)]
 
 testRoundTripsFromType :: H.SpecWith ()
 testRoundTripsFromType = do

@@ -24,13 +24,13 @@ data Query =
 
 _Query = (Core.Name "hydra/langs/tinkerpop/gremlin.Query")
 
-_Query_traversalSource = (Core.FieldName "traversalSource")
+_Query_traversalSource = (Core.Name "traversalSource")
 
-_Query_rootTraversal = (Core.FieldName "rootTraversal")
+_Query_rootTraversal = (Core.Name "rootTraversal")
 
-_Query_toString = (Core.FieldName "toString")
+_Query_toString = (Core.Name "toString")
 
-_Query_empty = (Core.FieldName "empty")
+_Query_empty = (Core.Name "empty")
 
 data TraversalSourceQuery = 
   TraversalSourceQuery {
@@ -40,9 +40,9 @@ data TraversalSourceQuery =
 
 _TraversalSourceQuery = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalSourceQuery")
 
-_TraversalSourceQuery_source = (Core.FieldName "source")
+_TraversalSourceQuery_source = (Core.Name "source")
 
-_TraversalSourceQuery_transactionPart = (Core.FieldName "transactionPart")
+_TraversalSourceQuery_transactionPart = (Core.Name "transactionPart")
 
 data RootTraversalQuery = 
   RootTraversalQuery {
@@ -52,9 +52,9 @@ data RootTraversalQuery =
 
 _RootTraversalQuery = (Core.Name "hydra/langs/tinkerpop/gremlin.RootTraversalQuery")
 
-_RootTraversalQuery_root = (Core.FieldName "root")
+_RootTraversalQuery_root = (Core.Name "root")
 
-_RootTraversalQuery_terminalMethod = (Core.FieldName "terminalMethod")
+_RootTraversalQuery_terminalMethod = (Core.Name "terminalMethod")
 
 newtype TraversalSource = 
   TraversalSource {
@@ -71,11 +71,11 @@ data TransactionPart =
 
 _TransactionPart = (Core.Name "hydra/langs/tinkerpop/gremlin.TransactionPart")
 
-_TransactionPart_begin = (Core.FieldName "begin")
+_TransactionPart_begin = (Core.Name "begin")
 
-_TransactionPart_commit = (Core.FieldName "commit")
+_TransactionPart_commit = (Core.Name "commit")
 
-_TransactionPart_rollback = (Core.FieldName "rollback")
+_TransactionPart_rollback = (Core.Name "rollback")
 
 data RootTraversal = 
   RootTraversal {
@@ -86,11 +86,11 @@ data RootTraversal =
 
 _RootTraversal = (Core.Name "hydra/langs/tinkerpop/gremlin.RootTraversal")
 
-_RootTraversal_source = (Core.FieldName "source")
+_RootTraversal_source = (Core.Name "source")
 
-_RootTraversal_spawnMethod = (Core.FieldName "spawnMethod")
+_RootTraversal_spawnMethod = (Core.Name "spawnMethod")
 
-_RootTraversal_chained = (Core.FieldName "chained")
+_RootTraversal_chained = (Core.Name "chained")
 
 data TraversalSourceSelfMethod = 
   TraversalSourceSelfMethodWithBulk Bool |
@@ -104,19 +104,19 @@ data TraversalSourceSelfMethod =
 
 _TraversalSourceSelfMethod = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalSourceSelfMethod")
 
-_TraversalSourceSelfMethod_withBulk = (Core.FieldName "withBulk")
+_TraversalSourceSelfMethod_withBulk = (Core.Name "withBulk")
 
-_TraversalSourceSelfMethod_withPath = (Core.FieldName "withPath")
+_TraversalSourceSelfMethod_withPath = (Core.Name "withPath")
 
-_TraversalSourceSelfMethod_withSack = (Core.FieldName "withSack")
+_TraversalSourceSelfMethod_withSack = (Core.Name "withSack")
 
-_TraversalSourceSelfMethod_withSideEffect = (Core.FieldName "withSideEffect")
+_TraversalSourceSelfMethod_withSideEffect = (Core.Name "withSideEffect")
 
-_TraversalSourceSelfMethod_withStrategies = (Core.FieldName "withStrategies")
+_TraversalSourceSelfMethod_withStrategies = (Core.Name "withStrategies")
 
-_TraversalSourceSelfMethod_withoutStrategies = (Core.FieldName "withoutStrategies")
+_TraversalSourceSelfMethod_withoutStrategies = (Core.Name "withoutStrategies")
 
-_TraversalSourceSelfMethod_with = (Core.FieldName "with")
+_TraversalSourceSelfMethod_with = (Core.Name "with")
 
 data GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument = 
   GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument {
@@ -126,9 +126,9 @@ data GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument =
 
 _GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument")
 
-_GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument_literal = (Core.FieldName "literal")
+_GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument_literal = (Core.Name "literal")
 
-_GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument_biFunction = (Core.FieldName "biFunction")
+_GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument_biFunction = (Core.Name "biFunction")
 
 data StringArgumentAndGenericLiteralArgument = 
   StringArgumentAndGenericLiteralArgument {
@@ -138,9 +138,9 @@ data StringArgumentAndGenericLiteralArgument =
 
 _StringArgumentAndGenericLiteralArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.StringArgumentAndGenericLiteralArgument")
 
-_StringArgumentAndGenericLiteralArgument_string = (Core.FieldName "string")
+_StringArgumentAndGenericLiteralArgument_string = (Core.Name "string")
 
-_StringArgumentAndGenericLiteralArgument_literal = (Core.FieldName "literal")
+_StringArgumentAndGenericLiteralArgument_literal = (Core.Name "literal")
 
 data StringArgumentAndOptionalGenericLiteralArgument = 
   StringArgumentAndOptionalGenericLiteralArgument {
@@ -150,9 +150,9 @@ data StringArgumentAndOptionalGenericLiteralArgument =
 
 _StringArgumentAndOptionalGenericLiteralArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.StringArgumentAndOptionalGenericLiteralArgument")
 
-_StringArgumentAndOptionalGenericLiteralArgument_string = (Core.FieldName "string")
+_StringArgumentAndOptionalGenericLiteralArgument_string = (Core.Name "string")
 
-_StringArgumentAndOptionalGenericLiteralArgument_literal = (Core.FieldName "literal")
+_StringArgumentAndOptionalGenericLiteralArgument_literal = (Core.Name "literal")
 
 data TraversalSourceSpawnMethod = 
   TraversalSourceSpawnMethodAddE StringArgumentOrNestedTraversal |
@@ -169,25 +169,25 @@ data TraversalSourceSpawnMethod =
 
 _TraversalSourceSpawnMethod = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalSourceSpawnMethod")
 
-_TraversalSourceSpawnMethod_addE = (Core.FieldName "addE")
+_TraversalSourceSpawnMethod_addE = (Core.Name "addE")
 
-_TraversalSourceSpawnMethod_addV = (Core.FieldName "addV")
+_TraversalSourceSpawnMethod_addV = (Core.Name "addV")
 
-_TraversalSourceSpawnMethod_e = (Core.FieldName "e")
+_TraversalSourceSpawnMethod_e = (Core.Name "e")
 
-_TraversalSourceSpawnMethod_v = (Core.FieldName "v")
+_TraversalSourceSpawnMethod_v = (Core.Name "v")
 
-_TraversalSourceSpawnMethod_mergeV = (Core.FieldName "mergeV")
+_TraversalSourceSpawnMethod_mergeV = (Core.Name "mergeV")
 
-_TraversalSourceSpawnMethod_mergeE = (Core.FieldName "mergeE")
+_TraversalSourceSpawnMethod_mergeE = (Core.Name "mergeE")
 
-_TraversalSourceSpawnMethod_inject = (Core.FieldName "inject")
+_TraversalSourceSpawnMethod_inject = (Core.Name "inject")
 
-_TraversalSourceSpawnMethod_io = (Core.FieldName "io")
+_TraversalSourceSpawnMethod_io = (Core.Name "io")
 
-_TraversalSourceSpawnMethod_call = (Core.FieldName "call")
+_TraversalSourceSpawnMethod_call = (Core.Name "call")
 
-_TraversalSourceSpawnMethod_union = (Core.FieldName "union")
+_TraversalSourceSpawnMethod_union = (Core.Name "union")
 
 data GenericLiteralMapNullableArgumentOrNestedTraversal = 
   GenericLiteralMapNullableArgumentOrNestedTraversalMap GenericLiteralMapNullableArgument |
@@ -196,9 +196,9 @@ data GenericLiteralMapNullableArgumentOrNestedTraversal =
 
 _GenericLiteralMapNullableArgumentOrNestedTraversal = (Core.Name "hydra/langs/tinkerpop/gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal")
 
-_GenericLiteralMapNullableArgumentOrNestedTraversal_map = (Core.FieldName "map")
+_GenericLiteralMapNullableArgumentOrNestedTraversal_map = (Core.Name "map")
 
-_GenericLiteralMapNullableArgumentOrNestedTraversal_traversal = (Core.FieldName "traversal")
+_GenericLiteralMapNullableArgumentOrNestedTraversal_traversal = (Core.Name "traversal")
 
 data ServiceCall = 
   ServiceCall {
@@ -208,9 +208,9 @@ data ServiceCall =
 
 _ServiceCall = (Core.Name "hydra/langs/tinkerpop/gremlin.ServiceCall")
 
-_ServiceCall_service = (Core.FieldName "service")
+_ServiceCall_service = (Core.Name "service")
 
-_ServiceCall_arguments = (Core.FieldName "arguments")
+_ServiceCall_arguments = (Core.Name "arguments")
 
 data ServiceArguments = 
   ServiceArgumentsMap (Maybe GenericLiteralMapArgument) |
@@ -219,9 +219,9 @@ data ServiceArguments =
 
 _ServiceArguments = (Core.Name "hydra/langs/tinkerpop/gremlin.ServiceArguments")
 
-_ServiceArguments_map = (Core.FieldName "map")
+_ServiceArguments_map = (Core.Name "map")
 
-_ServiceArguments_traversal = (Core.FieldName "traversal")
+_ServiceArguments_traversal = (Core.Name "traversal")
 
 data ChainedTraversal = 
   ChainedTraversal {
@@ -231,9 +231,9 @@ data ChainedTraversal =
 
 _ChainedTraversal = (Core.Name "hydra/langs/tinkerpop/gremlin.ChainedTraversal")
 
-_ChainedTraversal_first = (Core.FieldName "first")
+_ChainedTraversal_first = (Core.Name "first")
 
-_ChainedTraversal_rest = (Core.FieldName "rest")
+_ChainedTraversal_rest = (Core.Name "rest")
 
 data ChainedTraversalElement = 
   ChainedTraversalElementMethod TraversalMethod |
@@ -242,9 +242,9 @@ data ChainedTraversalElement =
 
 _ChainedTraversalElement = (Core.Name "hydra/langs/tinkerpop/gremlin.ChainedTraversalElement")
 
-_ChainedTraversalElement_method = (Core.FieldName "method")
+_ChainedTraversalElement_method = (Core.Name "method")
 
-_ChainedTraversalElement_self = (Core.FieldName "self")
+_ChainedTraversalElement_self = (Core.Name "self")
 
 data NestedTraversal = 
   NestedTraversalRoot RootTraversal |
@@ -254,11 +254,11 @@ data NestedTraversal =
 
 _NestedTraversal = (Core.Name "hydra/langs/tinkerpop/gremlin.NestedTraversal")
 
-_NestedTraversal_root = (Core.FieldName "root")
+_NestedTraversal_root = (Core.Name "root")
 
-_NestedTraversal_chained = (Core.FieldName "chained")
+_NestedTraversal_chained = (Core.Name "chained")
 
-_NestedTraversal_anonymous = (Core.FieldName "anonymous")
+_NestedTraversal_anonymous = (Core.Name "anonymous")
 
 data TerminatedTraversal = 
   TerminatedTraversal {
@@ -268,9 +268,9 @@ data TerminatedTraversal =
 
 _TerminatedTraversal = (Core.Name "hydra/langs/tinkerpop/gremlin.TerminatedTraversal")
 
-_TerminatedTraversal_root = (Core.FieldName "root")
+_TerminatedTraversal_root = (Core.Name "root")
 
-_TerminatedTraversal_terminal = (Core.FieldName "terminal")
+_TerminatedTraversal_terminal = (Core.Name "terminal")
 
 data TraversalMethod = 
   TraversalMethodV [GenericLiteralArgument] |
@@ -409,269 +409,269 @@ data TraversalMethod =
 
 _TraversalMethod = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalMethod")
 
-_TraversalMethod_v = (Core.FieldName "v")
+_TraversalMethod_v = (Core.Name "v")
 
-_TraversalMethod_e = (Core.FieldName "e")
+_TraversalMethod_e = (Core.Name "e")
 
-_TraversalMethod_addE = (Core.FieldName "addE")
+_TraversalMethod_addE = (Core.Name "addE")
 
-_TraversalMethod_addV = (Core.FieldName "addV")
+_TraversalMethod_addV = (Core.Name "addV")
 
-_TraversalMethod_mergeE = (Core.FieldName "mergeE")
+_TraversalMethod_mergeE = (Core.Name "mergeE")
 
-_TraversalMethod_mergeV = (Core.FieldName "mergeV")
+_TraversalMethod_mergeV = (Core.Name "mergeV")
 
-_TraversalMethod_aggregate = (Core.FieldName "aggregate")
+_TraversalMethod_aggregate = (Core.Name "aggregate")
 
-_TraversalMethod_all = (Core.FieldName "all")
+_TraversalMethod_all = (Core.Name "all")
 
-_TraversalMethod_and = (Core.FieldName "and")
+_TraversalMethod_and = (Core.Name "and")
 
-_TraversalMethod_any = (Core.FieldName "any")
+_TraversalMethod_any = (Core.Name "any")
 
-_TraversalMethod_as = (Core.FieldName "as")
+_TraversalMethod_as = (Core.Name "as")
 
-_TraversalMethod_barrier = (Core.FieldName "barrier")
+_TraversalMethod_barrier = (Core.Name "barrier")
 
-_TraversalMethod_both = (Core.FieldName "both")
+_TraversalMethod_both = (Core.Name "both")
 
-_TraversalMethod_bothE = (Core.FieldName "bothE")
+_TraversalMethod_bothE = (Core.Name "bothE")
 
-_TraversalMethod_bothV = (Core.FieldName "bothV")
+_TraversalMethod_bothV = (Core.Name "bothV")
 
-_TraversalMethod_branch = (Core.FieldName "branch")
+_TraversalMethod_branch = (Core.Name "branch")
 
-_TraversalMethod_by = (Core.FieldName "by")
+_TraversalMethod_by = (Core.Name "by")
 
-_TraversalMethod_cap = (Core.FieldName "cap")
+_TraversalMethod_cap = (Core.Name "cap")
 
-_TraversalMethod_choose = (Core.FieldName "choose")
+_TraversalMethod_choose = (Core.Name "choose")
 
-_TraversalMethod_coalesce = (Core.FieldName "coalesce")
+_TraversalMethod_coalesce = (Core.Name "coalesce")
 
-_TraversalMethod_coin = (Core.FieldName "coin")
+_TraversalMethod_coin = (Core.Name "coin")
 
-_TraversalMethod_conjoin = (Core.FieldName "conjoin")
+_TraversalMethod_conjoin = (Core.Name "conjoin")
 
-_TraversalMethod_connectedComponent = (Core.FieldName "connectedComponent")
+_TraversalMethod_connectedComponent = (Core.Name "connectedComponent")
 
-_TraversalMethod_constant = (Core.FieldName "constant")
+_TraversalMethod_constant = (Core.Name "constant")
 
-_TraversalMethod_count = (Core.FieldName "count")
+_TraversalMethod_count = (Core.Name "count")
 
-_TraversalMethod_cyclicPath = (Core.FieldName "cyclicPath")
+_TraversalMethod_cyclicPath = (Core.Name "cyclicPath")
 
-_TraversalMethod_dedup = (Core.FieldName "dedup")
+_TraversalMethod_dedup = (Core.Name "dedup")
 
-_TraversalMethod_difference = (Core.FieldName "difference")
+_TraversalMethod_difference = (Core.Name "difference")
 
-_TraversalMethod_disjunct = (Core.FieldName "disjunct")
+_TraversalMethod_disjunct = (Core.Name "disjunct")
 
-_TraversalMethod_drop = (Core.FieldName "drop")
+_TraversalMethod_drop = (Core.Name "drop")
 
-_TraversalMethod_elementMap = (Core.FieldName "elementMap")
+_TraversalMethod_elementMap = (Core.Name "elementMap")
 
-_TraversalMethod_emit = (Core.FieldName "emit")
+_TraversalMethod_emit = (Core.Name "emit")
 
-_TraversalMethod_filter = (Core.FieldName "filter")
+_TraversalMethod_filter = (Core.Name "filter")
 
-_TraversalMethod_flatMap = (Core.FieldName "flatMap")
+_TraversalMethod_flatMap = (Core.Name "flatMap")
 
-_TraversalMethod_fold = (Core.FieldName "fold")
+_TraversalMethod_fold = (Core.Name "fold")
 
-_TraversalMethod_from = (Core.FieldName "from")
+_TraversalMethod_from = (Core.Name "from")
 
-_TraversalMethod_group = (Core.FieldName "group")
+_TraversalMethod_group = (Core.Name "group")
 
-_TraversalMethod_groupCount = (Core.FieldName "groupCount")
+_TraversalMethod_groupCount = (Core.Name "groupCount")
 
-_TraversalMethod_has = (Core.FieldName "has")
+_TraversalMethod_has = (Core.Name "has")
 
-_TraversalMethod_hasId = (Core.FieldName "hasId")
+_TraversalMethod_hasId = (Core.Name "hasId")
 
-_TraversalMethod_hasKey = (Core.FieldName "hasKey")
+_TraversalMethod_hasKey = (Core.Name "hasKey")
 
-_TraversalMethod_hasLabel = (Core.FieldName "hasLabel")
+_TraversalMethod_hasLabel = (Core.Name "hasLabel")
 
-_TraversalMethod_hasNot = (Core.FieldName "hasNot")
+_TraversalMethod_hasNot = (Core.Name "hasNot")
 
-_TraversalMethod_hasValue = (Core.FieldName "hasValue")
+_TraversalMethod_hasValue = (Core.Name "hasValue")
 
-_TraversalMethod_id = (Core.FieldName "id")
+_TraversalMethod_id = (Core.Name "id")
 
-_TraversalMethod_identity = (Core.FieldName "identity")
+_TraversalMethod_identity = (Core.Name "identity")
 
-_TraversalMethod_in = (Core.FieldName "in")
+_TraversalMethod_in = (Core.Name "in")
 
-_TraversalMethod_inE = (Core.FieldName "inE")
+_TraversalMethod_inE = (Core.Name "inE")
 
-_TraversalMethod_intersect = (Core.FieldName "intersect")
+_TraversalMethod_intersect = (Core.Name "intersect")
 
-_TraversalMethod_inV = (Core.FieldName "inV")
+_TraversalMethod_inV = (Core.Name "inV")
 
-_TraversalMethod_index = (Core.FieldName "index")
+_TraversalMethod_index = (Core.Name "index")
 
-_TraversalMethod_inject = (Core.FieldName "inject")
+_TraversalMethod_inject = (Core.Name "inject")
 
-_TraversalMethod_is = (Core.FieldName "is")
+_TraversalMethod_is = (Core.Name "is")
 
-_TraversalMethod_key = (Core.FieldName "key")
+_TraversalMethod_key = (Core.Name "key")
 
-_TraversalMethod_label = (Core.FieldName "label")
+_TraversalMethod_label = (Core.Name "label")
 
-_TraversalMethod_limit = (Core.FieldName "limit")
+_TraversalMethod_limit = (Core.Name "limit")
 
-_TraversalMethod_local = (Core.FieldName "local")
+_TraversalMethod_local = (Core.Name "local")
 
-_TraversalMethod_loops = (Core.FieldName "loops")
+_TraversalMethod_loops = (Core.Name "loops")
 
-_TraversalMethod_map = (Core.FieldName "map")
+_TraversalMethod_map = (Core.Name "map")
 
-_TraversalMethod_match = (Core.FieldName "match")
+_TraversalMethod_match = (Core.Name "match")
 
-_TraversalMethod_math = (Core.FieldName "math")
+_TraversalMethod_math = (Core.Name "math")
 
-_TraversalMethod_max = (Core.FieldName "max")
+_TraversalMethod_max = (Core.Name "max")
 
-_TraversalMethod_mean = (Core.FieldName "mean")
+_TraversalMethod_mean = (Core.Name "mean")
 
-_TraversalMethod_min = (Core.FieldName "min")
+_TraversalMethod_min = (Core.Name "min")
 
-_TraversalMethod_none = (Core.FieldName "none")
+_TraversalMethod_none = (Core.Name "none")
 
-_TraversalMethod_not = (Core.FieldName "not")
+_TraversalMethod_not = (Core.Name "not")
 
-_TraversalMethod_option = (Core.FieldName "option")
+_TraversalMethod_option = (Core.Name "option")
 
-_TraversalMethod_optional = (Core.FieldName "optional")
+_TraversalMethod_optional = (Core.Name "optional")
 
-_TraversalMethod_or = (Core.FieldName "or")
+_TraversalMethod_or = (Core.Name "or")
 
-_TraversalMethod_order = (Core.FieldName "order")
+_TraversalMethod_order = (Core.Name "order")
 
-_TraversalMethod_otherV = (Core.FieldName "otherV")
+_TraversalMethod_otherV = (Core.Name "otherV")
 
-_TraversalMethod_out = (Core.FieldName "out")
+_TraversalMethod_out = (Core.Name "out")
 
-_TraversalMethod_outE = (Core.FieldName "outE")
+_TraversalMethod_outE = (Core.Name "outE")
 
-_TraversalMethod_outV = (Core.FieldName "outV")
+_TraversalMethod_outV = (Core.Name "outV")
 
-_TraversalMethod_pageRank = (Core.FieldName "pageRank")
+_TraversalMethod_pageRank = (Core.Name "pageRank")
 
-_TraversalMethod_path = (Core.FieldName "path")
+_TraversalMethod_path = (Core.Name "path")
 
-_TraversalMethod_peerPressure = (Core.FieldName "peerPressure")
+_TraversalMethod_peerPressure = (Core.Name "peerPressure")
 
-_TraversalMethod_profile = (Core.FieldName "profile")
+_TraversalMethod_profile = (Core.Name "profile")
 
-_TraversalMethod_project = (Core.FieldName "project")
+_TraversalMethod_project = (Core.Name "project")
 
-_TraversalMethod_properties = (Core.FieldName "properties")
+_TraversalMethod_properties = (Core.Name "properties")
 
-_TraversalMethod_property = (Core.FieldName "property")
+_TraversalMethod_property = (Core.Name "property")
 
-_TraversalMethod_propertyMap = (Core.FieldName "propertyMap")
+_TraversalMethod_propertyMap = (Core.Name "propertyMap")
 
-_TraversalMethod_range = (Core.FieldName "range")
+_TraversalMethod_range = (Core.Name "range")
 
-_TraversalMethod_read = (Core.FieldName "read")
+_TraversalMethod_read = (Core.Name "read")
 
-_TraversalMethod_repeat = (Core.FieldName "repeat")
+_TraversalMethod_repeat = (Core.Name "repeat")
 
-_TraversalMethod_sack = (Core.FieldName "sack")
+_TraversalMethod_sack = (Core.Name "sack")
 
-_TraversalMethod_sample = (Core.FieldName "sample")
+_TraversalMethod_sample = (Core.Name "sample")
 
-_TraversalMethod_select = (Core.FieldName "select")
+_TraversalMethod_select = (Core.Name "select")
 
-_TraversalMethod_combine = (Core.FieldName "combine")
+_TraversalMethod_combine = (Core.Name "combine")
 
-_TraversalMethod_product = (Core.FieldName "product")
+_TraversalMethod_product = (Core.Name "product")
 
-_TraversalMethod_merge = (Core.FieldName "merge")
+_TraversalMethod_merge = (Core.Name "merge")
 
-_TraversalMethod_shortestPath = (Core.FieldName "shortestPath")
+_TraversalMethod_shortestPath = (Core.Name "shortestPath")
 
-_TraversalMethod_sideEffect = (Core.FieldName "sideEffect")
+_TraversalMethod_sideEffect = (Core.Name "sideEffect")
 
-_TraversalMethod_simplePath = (Core.FieldName "simplePath")
+_TraversalMethod_simplePath = (Core.Name "simplePath")
 
-_TraversalMethod_skip = (Core.FieldName "skip")
+_TraversalMethod_skip = (Core.Name "skip")
 
-_TraversalMethod_store = (Core.FieldName "store")
+_TraversalMethod_store = (Core.Name "store")
 
-_TraversalMethod_subgraph = (Core.FieldName "subgraph")
+_TraversalMethod_subgraph = (Core.Name "subgraph")
 
-_TraversalMethod_sum = (Core.FieldName "sum")
+_TraversalMethod_sum = (Core.Name "sum")
 
-_TraversalMethod_tail = (Core.FieldName "tail")
+_TraversalMethod_tail = (Core.Name "tail")
 
-_TraversalMethod_fail = (Core.FieldName "fail")
+_TraversalMethod_fail = (Core.Name "fail")
 
-_TraversalMethod_times = (Core.FieldName "times")
+_TraversalMethod_times = (Core.Name "times")
 
-_TraversalMethod_to = (Core.FieldName "to")
+_TraversalMethod_to = (Core.Name "to")
 
-_TraversalMethod_toE = (Core.FieldName "toE")
+_TraversalMethod_toE = (Core.Name "toE")
 
-_TraversalMethod_toV = (Core.FieldName "toV")
+_TraversalMethod_toV = (Core.Name "toV")
 
-_TraversalMethod_tree = (Core.FieldName "tree")
+_TraversalMethod_tree = (Core.Name "tree")
 
-_TraversalMethod_unfold = (Core.FieldName "unfold")
+_TraversalMethod_unfold = (Core.Name "unfold")
 
-_TraversalMethod_union = (Core.FieldName "union")
+_TraversalMethod_union = (Core.Name "union")
 
-_TraversalMethod_until = (Core.FieldName "until")
+_TraversalMethod_until = (Core.Name "until")
 
-_TraversalMethod_value = (Core.FieldName "value")
+_TraversalMethod_value = (Core.Name "value")
 
-_TraversalMethod_valueMap = (Core.FieldName "valueMap")
+_TraversalMethod_valueMap = (Core.Name "valueMap")
 
-_TraversalMethod_values = (Core.FieldName "values")
+_TraversalMethod_values = (Core.Name "values")
 
-_TraversalMethod_where = (Core.FieldName "where")
+_TraversalMethod_where = (Core.Name "where")
 
-_TraversalMethod_with = (Core.FieldName "with")
+_TraversalMethod_with = (Core.Name "with")
 
-_TraversalMethod_write = (Core.FieldName "write")
+_TraversalMethod_write = (Core.Name "write")
 
-_TraversalMethod_element = (Core.FieldName "element")
+_TraversalMethod_element = (Core.Name "element")
 
-_TraversalMethod_call = (Core.FieldName "call")
+_TraversalMethod_call = (Core.Name "call")
 
-_TraversalMethod_concat = (Core.FieldName "concat")
+_TraversalMethod_concat = (Core.Name "concat")
 
-_TraversalMethod_asString = (Core.FieldName "asString")
+_TraversalMethod_asString = (Core.Name "asString")
 
-_TraversalMethod_format = (Core.FieldName "format")
+_TraversalMethod_format = (Core.Name "format")
 
-_TraversalMethod_toUpper = (Core.FieldName "toUpper")
+_TraversalMethod_toUpper = (Core.Name "toUpper")
 
-_TraversalMethod_toLower = (Core.FieldName "toLower")
+_TraversalMethod_toLower = (Core.Name "toLower")
 
-_TraversalMethod_length = (Core.FieldName "length")
+_TraversalMethod_length = (Core.Name "length")
 
-_TraversalMethod_trim = (Core.FieldName "trim")
+_TraversalMethod_trim = (Core.Name "trim")
 
-_TraversalMethod_lTrim = (Core.FieldName "lTrim")
+_TraversalMethod_lTrim = (Core.Name "lTrim")
 
-_TraversalMethod_rTrim = (Core.FieldName "rTrim")
+_TraversalMethod_rTrim = (Core.Name "rTrim")
 
-_TraversalMethod_reverse = (Core.FieldName "reverse")
+_TraversalMethod_reverse = (Core.Name "reverse")
 
-_TraversalMethod_replace = (Core.FieldName "replace")
+_TraversalMethod_replace = (Core.Name "replace")
 
-_TraversalMethod_split = (Core.FieldName "split")
+_TraversalMethod_split = (Core.Name "split")
 
-_TraversalMethod_substring = (Core.FieldName "substring")
+_TraversalMethod_substring = (Core.Name "substring")
 
-_TraversalMethod_asDate = (Core.FieldName "asDate")
+_TraversalMethod_asDate = (Core.Name "asDate")
 
-_TraversalMethod_dateAdd = (Core.FieldName "dateAdd")
+_TraversalMethod_dateAdd = (Core.Name "dateAdd")
 
-_TraversalMethod_dateDiff = (Core.FieldName "dateDiff")
+_TraversalMethod_dateDiff = (Core.Name "dateDiff")
 
 data StringArgumentOrNestedTraversal = 
   StringArgumentOrNestedTraversalString StringArgument |
@@ -680,9 +680,9 @@ data StringArgumentOrNestedTraversal =
 
 _StringArgumentOrNestedTraversal = (Core.Name "hydra/langs/tinkerpop/gremlin.StringArgumentOrNestedTraversal")
 
-_StringArgumentOrNestedTraversal_string = (Core.FieldName "string")
+_StringArgumentOrNestedTraversal_string = (Core.Name "string")
 
-_StringArgumentOrNestedTraversal_traversal = (Core.FieldName "traversal")
+_StringArgumentOrNestedTraversal_traversal = (Core.Name "traversal")
 
 data OptionalTraversalScopeArgumentAndStringArgument = 
   OptionalTraversalScopeArgumentAndStringArgument {
@@ -692,9 +692,9 @@ data OptionalTraversalScopeArgumentAndStringArgument =
 
 _OptionalTraversalScopeArgumentAndStringArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.OptionalTraversalScopeArgumentAndStringArgument")
 
-_OptionalTraversalScopeArgumentAndStringArgument_scope = (Core.FieldName "scope")
+_OptionalTraversalScopeArgumentAndStringArgument_scope = (Core.Name "scope")
 
-_OptionalTraversalScopeArgumentAndStringArgument_string = (Core.FieldName "string")
+_OptionalTraversalScopeArgumentAndStringArgument_string = (Core.Name "string")
 
 data StringArgumentAndOptionalStringLiteralVarargs = 
   StringArgumentAndOptionalStringLiteralVarargs {
@@ -704,9 +704,9 @@ data StringArgumentAndOptionalStringLiteralVarargs =
 
 _StringArgumentAndOptionalStringLiteralVarargs = (Core.Name "hydra/langs/tinkerpop/gremlin.StringArgumentAndOptionalStringLiteralVarargs")
 
-_StringArgumentAndOptionalStringLiteralVarargs_first = (Core.FieldName "first")
+_StringArgumentAndOptionalStringLiteralVarargs_first = (Core.Name "first")
 
-_StringArgumentAndOptionalStringLiteralVarargs_rest = (Core.FieldName "rest")
+_StringArgumentAndOptionalStringLiteralVarargs_rest = (Core.Name "rest")
 
 data TraversalSackMethodArgumentOrIntegerArgument = 
   TraversalSackMethodArgumentOrIntegerArgumentConsumer TraversalSackMethodArgument |
@@ -715,9 +715,9 @@ data TraversalSackMethodArgumentOrIntegerArgument =
 
 _TraversalSackMethodArgumentOrIntegerArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalSackMethodArgumentOrIntegerArgument")
 
-_TraversalSackMethodArgumentOrIntegerArgument_consumer = (Core.FieldName "consumer")
+_TraversalSackMethodArgumentOrIntegerArgument_consumer = (Core.Name "consumer")
 
-_TraversalSackMethodArgumentOrIntegerArgument_int = (Core.FieldName "int")
+_TraversalSackMethodArgumentOrIntegerArgument_int = (Core.Name "int")
 
 data ByArgs = 
   ByArgsOrder TraversalOrderArgument |
@@ -727,11 +727,11 @@ data ByArgs =
 
 _ByArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.ByArgs")
 
-_ByArgs_order = (Core.FieldName "order")
+_ByArgs_order = (Core.Name "order")
 
-_ByArgs_token = (Core.FieldName "token")
+_ByArgs_token = (Core.Name "token")
 
-_ByArgs_other = (Core.FieldName "other")
+_ByArgs_other = (Core.Name "other")
 
 data ByOtherArgs = 
   ByOtherArgsComparator (Maybe TraversalComparatorArgument) |
@@ -740,9 +740,9 @@ data ByOtherArgs =
 
 _ByOtherArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.ByOtherArgs")
 
-_ByOtherArgs_comparator = (Core.FieldName "comparator")
+_ByOtherArgs_comparator = (Core.Name "comparator")
 
-_ByOtherArgs_other = (Core.FieldName "other")
+_ByOtherArgs_other = (Core.Name "other")
 
 data TraversalFunctionArgumentOrStringArgumentOrNestedTraversal = 
   TraversalFunctionArgumentOrStringArgumentOrNestedTraversalFunction TraversalFunctionArgument |
@@ -752,11 +752,11 @@ data TraversalFunctionArgumentOrStringArgumentOrNestedTraversal =
 
 _TraversalFunctionArgumentOrStringArgumentOrNestedTraversal = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal")
 
-_TraversalFunctionArgumentOrStringArgumentOrNestedTraversal_function = (Core.FieldName "function")
+_TraversalFunctionArgumentOrStringArgumentOrNestedTraversal_function = (Core.Name "function")
 
-_TraversalFunctionArgumentOrStringArgumentOrNestedTraversal_string = (Core.FieldName "string")
+_TraversalFunctionArgumentOrStringArgumentOrNestedTraversal_string = (Core.Name "string")
 
-_TraversalFunctionArgumentOrStringArgumentOrNestedTraversal_traversal = (Core.FieldName "traversal")
+_TraversalFunctionArgumentOrStringArgumentOrNestedTraversal_traversal = (Core.Name "traversal")
 
 data ChooseArgs = 
   ChooseArgsFunction TraversalFunctionArgument |
@@ -766,11 +766,11 @@ data ChooseArgs =
 
 _ChooseArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.ChooseArgs")
 
-_ChooseArgs_function = (Core.FieldName "function")
+_ChooseArgs_function = (Core.Name "function")
 
-_ChooseArgs_predicateTraversal = (Core.FieldName "predicateTraversal")
+_ChooseArgs_predicateTraversal = (Core.Name "predicateTraversal")
 
-_ChooseArgs_traversal = (Core.FieldName "traversal")
+_ChooseArgs_traversal = (Core.Name "traversal")
 
 data PredicateTraversalArgument = 
   PredicateTraversalArgument {
@@ -781,11 +781,11 @@ data PredicateTraversalArgument =
 
 _PredicateTraversalArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.PredicateTraversalArgument")
 
-_PredicateTraversalArgument_predicate = (Core.FieldName "predicate")
+_PredicateTraversalArgument_predicate = (Core.Name "predicate")
 
-_PredicateTraversalArgument_traversal1 = (Core.FieldName "traversal1")
+_PredicateTraversalArgument_traversal1 = (Core.Name "traversal1")
 
-_PredicateTraversalArgument_traversal2 = (Core.FieldName "traversal2")
+_PredicateTraversalArgument_traversal2 = (Core.Name "traversal2")
 
 data NestedTraversalArgument = 
   NestedTraversalArgument {
@@ -796,11 +796,11 @@ data NestedTraversalArgument =
 
 _NestedTraversalArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.NestedTraversalArgument")
 
-_NestedTraversalArgument_traversal1 = (Core.FieldName "traversal1")
+_NestedTraversalArgument_traversal1 = (Core.Name "traversal1")
 
-_NestedTraversalArgument_traversal2 = (Core.FieldName "traversal2")
+_NestedTraversalArgument_traversal2 = (Core.Name "traversal2")
 
-_NestedTraversalArgument_traversal3 = (Core.FieldName "traversal3")
+_NestedTraversalArgument_traversal3 = (Core.Name "traversal3")
 
 data DedupArgs = 
   DedupArgsScopeString ScopeStringArgument |
@@ -809,9 +809,9 @@ data DedupArgs =
 
 _DedupArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.DedupArgs")
 
-_DedupArgs_scopeString = (Core.FieldName "scopeString")
+_DedupArgs_scopeString = (Core.Name "scopeString")
 
-_DedupArgs_string = (Core.FieldName "string")
+_DedupArgs_string = (Core.Name "string")
 
 data ScopeStringArgument = 
   ScopeStringArgument {
@@ -821,9 +821,9 @@ data ScopeStringArgument =
 
 _ScopeStringArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.ScopeStringArgument")
 
-_ScopeStringArgument_scope = (Core.FieldName "scope")
+_ScopeStringArgument_scope = (Core.Name "scope")
 
-_ScopeStringArgument_strings = (Core.FieldName "strings")
+_ScopeStringArgument_strings = (Core.Name "strings")
 
 data PredicateOrTraversal = 
   PredicateOrTraversalPredicate TraversalPredicate |
@@ -832,9 +832,9 @@ data PredicateOrTraversal =
 
 _PredicateOrTraversal = (Core.Name "hydra/langs/tinkerpop/gremlin.PredicateOrTraversal")
 
-_PredicateOrTraversal_predicate = (Core.FieldName "predicate")
+_PredicateOrTraversal_predicate = (Core.Name "predicate")
 
-_PredicateOrTraversal_traversal = (Core.FieldName "traversal")
+_PredicateOrTraversal_traversal = (Core.Name "traversal")
 
 data GenericLiteralArgumentAndTraversalBiFunctionArgument = 
   GenericLiteralArgumentAndTraversalBiFunctionArgument {
@@ -844,9 +844,9 @@ data GenericLiteralArgumentAndTraversalBiFunctionArgument =
 
 _GenericLiteralArgumentAndTraversalBiFunctionArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument")
 
-_GenericLiteralArgumentAndTraversalBiFunctionArgument_literal = (Core.FieldName "literal")
+_GenericLiteralArgumentAndTraversalBiFunctionArgument_literal = (Core.Name "literal")
 
-_GenericLiteralArgumentAndTraversalBiFunctionArgument_biFunction = (Core.FieldName "biFunction")
+_GenericLiteralArgumentAndTraversalBiFunctionArgument_biFunction = (Core.Name "biFunction")
 
 data FromArgs = 
   FromArgsString StringArgument |
@@ -856,11 +856,11 @@ data FromArgs =
 
 _FromArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.FromArgs")
 
-_FromArgs_string = (Core.FieldName "string")
+_FromArgs_string = (Core.Name "string")
 
-_FromArgs_vertex = (Core.FieldName "vertex")
+_FromArgs_vertex = (Core.Name "vertex")
 
-_FromArgs_traversal = (Core.FieldName "traversal")
+_FromArgs_traversal = (Core.Name "traversal")
 
 data HasArgs = 
   HasArgsString HasStringArgumentAndOptionalStringLiteralVarargs |
@@ -869,9 +869,9 @@ data HasArgs =
 
 _HasArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.HasArgs")
 
-_HasArgs_string = (Core.FieldName "string")
+_HasArgs_string = (Core.Name "string")
 
-_HasArgs_traversalToken = (Core.FieldName "traversalToken")
+_HasArgs_traversalToken = (Core.Name "traversalToken")
 
 data HasStringArgumentAndOptionalStringLiteralVarargs = 
   HasStringArgumentAndOptionalStringLiteralVarargs {
@@ -881,9 +881,9 @@ data HasStringArgumentAndOptionalStringLiteralVarargs =
 
 _HasStringArgumentAndOptionalStringLiteralVarargs = (Core.Name "hydra/langs/tinkerpop/gremlin.HasStringArgumentAndOptionalStringLiteralVarargs")
 
-_HasStringArgumentAndOptionalStringLiteralVarargs_string = (Core.FieldName "string")
+_HasStringArgumentAndOptionalStringLiteralVarargs_string = (Core.Name "string")
 
-_HasStringArgumentAndOptionalStringLiteralVarargs_rest = (Core.FieldName "rest")
+_HasStringArgumentAndOptionalStringLiteralVarargs_rest = (Core.Name "rest")
 
 data HasStringArgumentAndOptionalStringLiteralVarargsRest = 
   HasStringArgumentAndOptionalStringLiteralVarargsRestObject GenericLiteralArgument |
@@ -895,15 +895,15 @@ data HasStringArgumentAndOptionalStringLiteralVarargsRest =
 
 _HasStringArgumentAndOptionalStringLiteralVarargsRest = (Core.Name "hydra/langs/tinkerpop/gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest")
 
-_HasStringArgumentAndOptionalStringLiteralVarargsRest_object = (Core.FieldName "object")
+_HasStringArgumentAndOptionalStringLiteralVarargsRest_object = (Core.Name "object")
 
-_HasStringArgumentAndOptionalStringLiteralVarargsRest_predicate = (Core.FieldName "predicate")
+_HasStringArgumentAndOptionalStringLiteralVarargsRest_predicate = (Core.Name "predicate")
 
-_HasStringArgumentAndOptionalStringLiteralVarargsRest_stringObject = (Core.FieldName "stringObject")
+_HasStringArgumentAndOptionalStringLiteralVarargsRest_stringObject = (Core.Name "stringObject")
 
-_HasStringArgumentAndOptionalStringLiteralVarargsRest_stringPredicate = (Core.FieldName "stringPredicate")
+_HasStringArgumentAndOptionalStringLiteralVarargsRest_stringPredicate = (Core.Name "stringPredicate")
 
-_HasStringArgumentAndOptionalStringLiteralVarargsRest_traversal = (Core.FieldName "traversal")
+_HasStringArgumentAndOptionalStringLiteralVarargsRest_traversal = (Core.Name "traversal")
 
 data StringNullableArgumentAndGenericLiteralArgument = 
   StringNullableArgumentAndGenericLiteralArgument {
@@ -913,9 +913,9 @@ data StringNullableArgumentAndGenericLiteralArgument =
 
 _StringNullableArgumentAndGenericLiteralArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.StringNullableArgumentAndGenericLiteralArgument")
 
-_StringNullableArgumentAndGenericLiteralArgument_string = (Core.FieldName "string")
+_StringNullableArgumentAndGenericLiteralArgument_string = (Core.Name "string")
 
-_StringNullableArgumentAndGenericLiteralArgument_literal = (Core.FieldName "literal")
+_StringNullableArgumentAndGenericLiteralArgument_literal = (Core.Name "literal")
 
 data StringNullableArgumentAndTraversalPredicate = 
   StringNullableArgumentAndTraversalPredicate {
@@ -925,9 +925,9 @@ data StringNullableArgumentAndTraversalPredicate =
 
 _StringNullableArgumentAndTraversalPredicate = (Core.Name "hydra/langs/tinkerpop/gremlin.StringNullableArgumentAndTraversalPredicate")
 
-_StringNullableArgumentAndTraversalPredicate_string = (Core.FieldName "string")
+_StringNullableArgumentAndTraversalPredicate_string = (Core.Name "string")
 
-_StringNullableArgumentAndTraversalPredicate_predicate = (Core.FieldName "predicate")
+_StringNullableArgumentAndTraversalPredicate_predicate = (Core.Name "predicate")
 
 data HasTraversalTokenArgs = 
   HasTraversalTokenArgs {
@@ -937,9 +937,9 @@ data HasTraversalTokenArgs =
 
 _HasTraversalTokenArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.HasTraversalTokenArgs")
 
-_HasTraversalTokenArgs_traversalToken = (Core.FieldName "traversalToken")
+_HasTraversalTokenArgs_traversalToken = (Core.Name "traversalToken")
 
-_HasTraversalTokenArgs_rest = (Core.FieldName "rest")
+_HasTraversalTokenArgs_rest = (Core.Name "rest")
 
 data HasTraversalTokenArgsRest = 
   HasTraversalTokenArgsRestLiteral GenericLiteralArgument |
@@ -949,11 +949,11 @@ data HasTraversalTokenArgsRest =
 
 _HasTraversalTokenArgsRest = (Core.Name "hydra/langs/tinkerpop/gremlin.HasTraversalTokenArgsRest")
 
-_HasTraversalTokenArgsRest_literal = (Core.FieldName "literal")
+_HasTraversalTokenArgsRest_literal = (Core.Name "literal")
 
-_HasTraversalTokenArgsRest_predicate = (Core.FieldName "predicate")
+_HasTraversalTokenArgsRest_predicate = (Core.Name "predicate")
 
-_HasTraversalTokenArgsRest_traversal = (Core.FieldName "traversal")
+_HasTraversalTokenArgsRest_traversal = (Core.Name "traversal")
 
 data GenericLiteralArgumentAndTraversalPredicate = 
   GenericLiteralArgumentAndTraversalPredicateLiteral GenericLiteralArgument |
@@ -962,9 +962,9 @@ data GenericLiteralArgumentAndTraversalPredicate =
 
 _GenericLiteralArgumentAndTraversalPredicate = (Core.Name "hydra/langs/tinkerpop/gremlin.GenericLiteralArgumentAndTraversalPredicate")
 
-_GenericLiteralArgumentAndTraversalPredicate_literal = (Core.FieldName "literal")
+_GenericLiteralArgumentAndTraversalPredicate_literal = (Core.Name "literal")
 
-_GenericLiteralArgumentAndTraversalPredicate_predicate = (Core.FieldName "predicate")
+_GenericLiteralArgumentAndTraversalPredicate_predicate = (Core.Name "predicate")
 
 data TraversalPredicateOrStringLiteralVarargs = 
   TraversalPredicateOrStringLiteralVarargsPredicate TraversalPredicate |
@@ -973,9 +973,9 @@ data TraversalPredicateOrStringLiteralVarargs =
 
 _TraversalPredicateOrStringLiteralVarargs = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalPredicateOrStringLiteralVarargs")
 
-_TraversalPredicateOrStringLiteralVarargs_predicate = (Core.FieldName "predicate")
+_TraversalPredicateOrStringLiteralVarargs_predicate = (Core.Name "predicate")
 
-_TraversalPredicateOrStringLiteralVarargs_string = (Core.FieldName "string")
+_TraversalPredicateOrStringLiteralVarargs_string = (Core.Name "string")
 
 data TraversalPredicateOrGenericLiteralArgument = 
   TraversalPredicateOrGenericLiteralArgumentPredicate TraversalPredicate |
@@ -984,9 +984,9 @@ data TraversalPredicateOrGenericLiteralArgument =
 
 _TraversalPredicateOrGenericLiteralArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalPredicateOrGenericLiteralArgument")
 
-_TraversalPredicateOrGenericLiteralArgument_predicate = (Core.FieldName "predicate")
+_TraversalPredicateOrGenericLiteralArgument_predicate = (Core.Name "predicate")
 
-_TraversalPredicateOrGenericLiteralArgument_literal = (Core.FieldName "literal")
+_TraversalPredicateOrGenericLiteralArgument_literal = (Core.Name "literal")
 
 data OptionArgs = 
   OptionArgsPredicateTraversal TraversalPredicateAndNestedTraversal |
@@ -998,15 +998,15 @@ data OptionArgs =
 
 _OptionArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.OptionArgs")
 
-_OptionArgs_predicateTraversal = (Core.FieldName "predicateTraversal")
+_OptionArgs_predicateTraversal = (Core.Name "predicateTraversal")
 
-_OptionArgs_mergeMap = (Core.FieldName "mergeMap")
+_OptionArgs_mergeMap = (Core.Name "mergeMap")
 
-_OptionArgs_mergeTraversal = (Core.FieldName "mergeTraversal")
+_OptionArgs_mergeTraversal = (Core.Name "mergeTraversal")
 
-_OptionArgs_objectTraversal = (Core.FieldName "objectTraversal")
+_OptionArgs_objectTraversal = (Core.Name "objectTraversal")
 
-_OptionArgs_traversal = (Core.FieldName "traversal")
+_OptionArgs_traversal = (Core.Name "traversal")
 
 data TraversalPredicateAndNestedTraversal = 
   TraversalPredicateAndNestedTraversal {
@@ -1016,9 +1016,9 @@ data TraversalPredicateAndNestedTraversal =
 
 _TraversalPredicateAndNestedTraversal = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalPredicateAndNestedTraversal")
 
-_TraversalPredicateAndNestedTraversal_predicate = (Core.FieldName "predicate")
+_TraversalPredicateAndNestedTraversal_predicate = (Core.Name "predicate")
 
-_TraversalPredicateAndNestedTraversal_traversal = (Core.FieldName "traversal")
+_TraversalPredicateAndNestedTraversal_traversal = (Core.Name "traversal")
 
 data TraversalMergeArgumentAndGenericLiteralMapNullableArgument = 
   TraversalMergeArgumentAndGenericLiteralMapNullableArgument {
@@ -1029,11 +1029,11 @@ data TraversalMergeArgumentAndGenericLiteralMapNullableArgument =
 
 _TraversalMergeArgumentAndGenericLiteralMapNullableArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument")
 
-_TraversalMergeArgumentAndGenericLiteralMapNullableArgument_merge = (Core.FieldName "merge")
+_TraversalMergeArgumentAndGenericLiteralMapNullableArgument_merge = (Core.Name "merge")
 
-_TraversalMergeArgumentAndGenericLiteralMapNullableArgument_map = (Core.FieldName "map")
+_TraversalMergeArgumentAndGenericLiteralMapNullableArgument_map = (Core.Name "map")
 
-_TraversalMergeArgumentAndGenericLiteralMapNullableArgument_cardinality = (Core.FieldName "cardinality")
+_TraversalMergeArgumentAndGenericLiteralMapNullableArgument_cardinality = (Core.Name "cardinality")
 
 data TraversalMergeArgumentAndNestedTraversal = 
   TraversalMergeArgumentAndNestedTraversal {
@@ -1043,9 +1043,9 @@ data TraversalMergeArgumentAndNestedTraversal =
 
 _TraversalMergeArgumentAndNestedTraversal = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalMergeArgumentAndNestedTraversal")
 
-_TraversalMergeArgumentAndNestedTraversal_merge = (Core.FieldName "merge")
+_TraversalMergeArgumentAndNestedTraversal_merge = (Core.Name "merge")
 
-_TraversalMergeArgumentAndNestedTraversal_traversal = (Core.FieldName "traversal")
+_TraversalMergeArgumentAndNestedTraversal_traversal = (Core.Name "traversal")
 
 data GenericLiteralArgumentAndNestedTraversal = 
   GenericLiteralArgumentAndNestedTraversal {
@@ -1055,9 +1055,9 @@ data GenericLiteralArgumentAndNestedTraversal =
 
 _GenericLiteralArgumentAndNestedTraversal = (Core.Name "hydra/langs/tinkerpop/gremlin.GenericLiteralArgumentAndNestedTraversal")
 
-_GenericLiteralArgumentAndNestedTraversal_object = (Core.FieldName "object")
+_GenericLiteralArgumentAndNestedTraversal_object = (Core.Name "object")
 
-_GenericLiteralArgumentAndNestedTraversal_traversal = (Core.FieldName "traversal")
+_GenericLiteralArgumentAndNestedTraversal_traversal = (Core.Name "traversal")
 
 data PropertyArgs = 
   PropertyArgsCardinalityObjects TraversalCardinalityArgumentAndObjects |
@@ -1068,13 +1068,13 @@ data PropertyArgs =
 
 _PropertyArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.PropertyArgs")
 
-_PropertyArgs_cardinalityObjects = (Core.FieldName "cardinalityObjects")
+_PropertyArgs_cardinalityObjects = (Core.Name "cardinalityObjects")
 
-_PropertyArgs_objects = (Core.FieldName "objects")
+_PropertyArgs_objects = (Core.Name "objects")
 
-_PropertyArgs_object = (Core.FieldName "object")
+_PropertyArgs_object = (Core.Name "object")
 
-_PropertyArgs_cardinalityObject = (Core.FieldName "cardinalityObject")
+_PropertyArgs_cardinalityObject = (Core.Name "cardinalityObject")
 
 data TraversalCardinalityArgumentAndObjects = 
   TraversalCardinalityArgumentAndObjects {
@@ -1084,9 +1084,9 @@ data TraversalCardinalityArgumentAndObjects =
 
 _TraversalCardinalityArgumentAndObjects = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalCardinalityArgumentAndObjects")
 
-_TraversalCardinalityArgumentAndObjects_cardinality = (Core.FieldName "cardinality")
+_TraversalCardinalityArgumentAndObjects_cardinality = (Core.Name "cardinality")
 
-_TraversalCardinalityArgumentAndObjects_objects = (Core.FieldName "objects")
+_TraversalCardinalityArgumentAndObjects_objects = (Core.Name "objects")
 
 data GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument = 
   GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument {
@@ -1096,9 +1096,9 @@ data GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument =
 
 _GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument")
 
-_GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument_cardinality = (Core.FieldName "cardinality")
+_GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument_cardinality = (Core.Name "cardinality")
 
-_GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument_object = (Core.FieldName "object")
+_GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument_object = (Core.Name "object")
 
 data RangeArgs = 
   RangeArgs {
@@ -1109,11 +1109,11 @@ data RangeArgs =
 
 _RangeArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.RangeArgs")
 
-_RangeArgs_scope = (Core.FieldName "scope")
+_RangeArgs_scope = (Core.Name "scope")
 
-_RangeArgs_min = (Core.FieldName "min")
+_RangeArgs_min = (Core.Name "min")
 
-_RangeArgs_max = (Core.FieldName "max")
+_RangeArgs_max = (Core.Name "max")
 
 data OptionalStringArgumentAndNestedTraversal = 
   OptionalStringArgumentAndNestedTraversal {
@@ -1123,9 +1123,9 @@ data OptionalStringArgumentAndNestedTraversal =
 
 _OptionalStringArgumentAndNestedTraversal = (Core.Name "hydra/langs/tinkerpop/gremlin.OptionalStringArgumentAndNestedTraversal")
 
-_OptionalStringArgumentAndNestedTraversal_string = (Core.FieldName "string")
+_OptionalStringArgumentAndNestedTraversal_string = (Core.Name "string")
 
-_OptionalStringArgumentAndNestedTraversal_traversal = (Core.FieldName "traversal")
+_OptionalStringArgumentAndNestedTraversal_traversal = (Core.Name "traversal")
 
 data SelectArgs = 
   SelectArgsColumn TraversalColumnArgument |
@@ -1137,15 +1137,15 @@ data SelectArgs =
 
 _SelectArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.SelectArgs")
 
-_SelectArgs_column = (Core.FieldName "column")
+_SelectArgs_column = (Core.Name "column")
 
-_SelectArgs_popStrings = (Core.FieldName "popStrings")
+_SelectArgs_popStrings = (Core.Name "popStrings")
 
-_SelectArgs_popTraversal = (Core.FieldName "popTraversal")
+_SelectArgs_popTraversal = (Core.Name "popTraversal")
 
-_SelectArgs_strings = (Core.FieldName "strings")
+_SelectArgs_strings = (Core.Name "strings")
 
-_SelectArgs_traversal = (Core.FieldName "traversal")
+_SelectArgs_traversal = (Core.Name "traversal")
 
 data PopStringsArgument = 
   PopStringsArgument {
@@ -1155,9 +1155,9 @@ data PopStringsArgument =
 
 _PopStringsArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.PopStringsArgument")
 
-_PopStringsArgument_pop = (Core.FieldName "pop")
+_PopStringsArgument_pop = (Core.Name "pop")
 
-_PopStringsArgument_string = (Core.FieldName "string")
+_PopStringsArgument_string = (Core.Name "string")
 
 data TraversalPopArgumentAndNestedTraversal = 
   TraversalPopArgumentAndNestedTraversal {
@@ -1167,9 +1167,9 @@ data TraversalPopArgumentAndNestedTraversal =
 
 _TraversalPopArgumentAndNestedTraversal = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalPopArgumentAndNestedTraversal")
 
-_TraversalPopArgumentAndNestedTraversal_pop = (Core.FieldName "pop")
+_TraversalPopArgumentAndNestedTraversal_pop = (Core.Name "pop")
 
-_TraversalPopArgumentAndNestedTraversal_traversal = (Core.FieldName "traversal")
+_TraversalPopArgumentAndNestedTraversal_traversal = (Core.Name "traversal")
 
 data OptionalTraversalScopeArgumentAndIntegerArgument = 
   OptionalTraversalScopeArgumentAndIntegerArgument {
@@ -1179,9 +1179,9 @@ data OptionalTraversalScopeArgumentAndIntegerArgument =
 
 _OptionalTraversalScopeArgumentAndIntegerArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.OptionalTraversalScopeArgumentAndIntegerArgument")
 
-_OptionalTraversalScopeArgumentAndIntegerArgument_scope = (Core.FieldName "scope")
+_OptionalTraversalScopeArgumentAndIntegerArgument_scope = (Core.Name "scope")
 
-_OptionalTraversalScopeArgumentAndIntegerArgument_long = (Core.FieldName "long")
+_OptionalTraversalScopeArgumentAndIntegerArgument_long = (Core.Name "long")
 
 data TailArgs = 
   TailArgs {
@@ -1191,9 +1191,9 @@ data TailArgs =
 
 _TailArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.TailArgs")
 
-_TailArgs_scope = (Core.FieldName "scope")
+_TailArgs_scope = (Core.Name "scope")
 
-_TailArgs_integer = (Core.FieldName "integer")
+_TailArgs_integer = (Core.Name "integer")
 
 data ToArgs = 
   ToArgsDirection DirectionAndVarargs |
@@ -1204,13 +1204,13 @@ data ToArgs =
 
 _ToArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.ToArgs")
 
-_ToArgs_direction = (Core.FieldName "direction")
+_ToArgs_direction = (Core.Name "direction")
 
-_ToArgs_string = (Core.FieldName "string")
+_ToArgs_string = (Core.Name "string")
 
-_ToArgs_vertex = (Core.FieldName "vertex")
+_ToArgs_vertex = (Core.Name "vertex")
 
-_ToArgs_traversal = (Core.FieldName "traversal")
+_ToArgs_traversal = (Core.Name "traversal")
 
 data DirectionAndVarargs = 
   DirectionAndVarargs {
@@ -1220,9 +1220,9 @@ data DirectionAndVarargs =
 
 _DirectionAndVarargs = (Core.Name "hydra/langs/tinkerpop/gremlin.DirectionAndVarargs")
 
-_DirectionAndVarargs_direction = (Core.FieldName "direction")
+_DirectionAndVarargs_direction = (Core.Name "direction")
 
-_DirectionAndVarargs_varargs = (Core.FieldName "varargs")
+_DirectionAndVarargs_varargs = (Core.Name "varargs")
 
 data ValueMapArgs = 
   ValueMapArgsString [StringNullableArgument] |
@@ -1231,9 +1231,9 @@ data ValueMapArgs =
 
 _ValueMapArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.ValueMapArgs")
 
-_ValueMapArgs_string = (Core.FieldName "string")
+_ValueMapArgs_string = (Core.Name "string")
 
-_ValueMapArgs_boolean = (Core.FieldName "boolean")
+_ValueMapArgs_boolean = (Core.Name "boolean")
 
 data ValueMapBooleanArgs = 
   ValueMapBooleanArgs {
@@ -1243,9 +1243,9 @@ data ValueMapBooleanArgs =
 
 _ValueMapBooleanArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.ValueMapBooleanArgs")
 
-_ValueMapBooleanArgs_value = (Core.FieldName "value")
+_ValueMapBooleanArgs_value = (Core.Name "value")
 
-_ValueMapBooleanArgs_keys = (Core.FieldName "keys")
+_ValueMapBooleanArgs_keys = (Core.Name "keys")
 
 data WhereArgs = 
   WhereArgsPredicate WhereWithPredicateArgs |
@@ -1255,11 +1255,11 @@ data WhereArgs =
 
 _WhereArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.WhereArgs")
 
-_WhereArgs_predicate = (Core.FieldName "predicate")
+_WhereArgs_predicate = (Core.Name "predicate")
 
-_WhereArgs_string = (Core.FieldName "string")
+_WhereArgs_string = (Core.Name "string")
 
-_WhereArgs_traversal = (Core.FieldName "traversal")
+_WhereArgs_traversal = (Core.Name "traversal")
 
 data WhereWithPredicateArgs = 
   WhereWithPredicateArgs {
@@ -1269,9 +1269,9 @@ data WhereWithPredicateArgs =
 
 _WhereWithPredicateArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.WhereWithPredicateArgs")
 
-_WhereWithPredicateArgs_leftArg = (Core.FieldName "leftArg")
+_WhereWithPredicateArgs_leftArg = (Core.Name "leftArg")
 
-_WhereWithPredicateArgs_predicate = (Core.FieldName "predicate")
+_WhereWithPredicateArgs_predicate = (Core.Name "predicate")
 
 data WithArgs = 
   WithArgs {
@@ -1281,9 +1281,9 @@ data WithArgs =
 
 _WithArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.WithArgs")
 
-_WithArgs_keys = (Core.FieldName "keys")
+_WithArgs_keys = (Core.Name "keys")
 
-_WithArgs_values = (Core.FieldName "values")
+_WithArgs_values = (Core.Name "values")
 
 data WithArgsKeys = 
   WithArgsKeysWithOption WithOptionKeys |
@@ -1292,9 +1292,9 @@ data WithArgsKeys =
 
 _WithArgsKeys = (Core.Name "hydra/langs/tinkerpop/gremlin.WithArgsKeys")
 
-_WithArgsKeys_withOption = (Core.FieldName "withOption")
+_WithArgsKeys_withOption = (Core.Name "withOption")
 
-_WithArgsKeys_string = (Core.FieldName "string")
+_WithArgsKeys_string = (Core.Name "string")
 
 data WithArgsValues = 
   WithArgsValuesWithOptions WithOptionsValues |
@@ -1304,11 +1304,11 @@ data WithArgsValues =
 
 _WithArgsValues = (Core.Name "hydra/langs/tinkerpop/gremlin.WithArgsValues")
 
-_WithArgsValues_withOptions = (Core.FieldName "withOptions")
+_WithArgsValues_withOptions = (Core.Name "withOptions")
 
-_WithArgsValues_io = (Core.FieldName "io")
+_WithArgsValues_io = (Core.Name "io")
 
-_WithArgsValues_object = (Core.FieldName "object")
+_WithArgsValues_object = (Core.Name "object")
 
 data ConcatArgs = 
   ConcatArgsTraversal [NestedTraversal] |
@@ -1317,9 +1317,9 @@ data ConcatArgs =
 
 _ConcatArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.ConcatArgs")
 
-_ConcatArgs_traversal = (Core.FieldName "traversal")
+_ConcatArgs_traversal = (Core.Name "traversal")
 
-_ConcatArgs_string = (Core.FieldName "string")
+_ConcatArgs_string = (Core.Name "string")
 
 data ReplaceArgs = 
   ReplaceArgs {
@@ -1330,11 +1330,11 @@ data ReplaceArgs =
 
 _ReplaceArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.ReplaceArgs")
 
-_ReplaceArgs_scope = (Core.FieldName "scope")
+_ReplaceArgs_scope = (Core.Name "scope")
 
-_ReplaceArgs_from = (Core.FieldName "from")
+_ReplaceArgs_from = (Core.Name "from")
 
-_ReplaceArgs_to = (Core.FieldName "to")
+_ReplaceArgs_to = (Core.Name "to")
 
 data SplitArgs = 
   SplitArgs {
@@ -1344,9 +1344,9 @@ data SplitArgs =
 
 _SplitArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.SplitArgs")
 
-_SplitArgs_scope = (Core.FieldName "scope")
+_SplitArgs_scope = (Core.Name "scope")
 
-_SplitArgs_delimiter = (Core.FieldName "delimiter")
+_SplitArgs_delimiter = (Core.Name "delimiter")
 
 data SubstringArgs = 
   SubstringArgs {
@@ -1357,11 +1357,11 @@ data SubstringArgs =
 
 _SubstringArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.SubstringArgs")
 
-_SubstringArgs_scope = (Core.FieldName "scope")
+_SubstringArgs_scope = (Core.Name "scope")
 
-_SubstringArgs_start = (Core.FieldName "start")
+_SubstringArgs_start = (Core.Name "start")
 
-_SubstringArgs_end = (Core.FieldName "end")
+_SubstringArgs_end = (Core.Name "end")
 
 data DateAddArgs = 
   DateAddArgs {
@@ -1371,9 +1371,9 @@ data DateAddArgs =
 
 _DateAddArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.DateAddArgs")
 
-_DateAddArgs_unit = (Core.FieldName "unit")
+_DateAddArgs_unit = (Core.Name "unit")
 
-_DateAddArgs_duration = (Core.FieldName "duration")
+_DateAddArgs_duration = (Core.Name "duration")
 
 data DateDiffArgs = 
   DateDiffArgsTraversal NestedTraversal |
@@ -1382,9 +1382,9 @@ data DateDiffArgs =
 
 _DateDiffArgs = (Core.Name "hydra/langs/tinkerpop/gremlin.DateDiffArgs")
 
-_DateDiffArgs_traversal = (Core.FieldName "traversal")
+_DateDiffArgs_traversal = (Core.Name "traversal")
 
-_DateDiffArgs_date = (Core.FieldName "date")
+_DateDiffArgs_date = (Core.Name "date")
 
 data StructureVertex = 
   StructureVertex {
@@ -1395,11 +1395,11 @@ data StructureVertex =
 
 _StructureVertex = (Core.Name "hydra/langs/tinkerpop/gremlin.StructureVertex")
 
-_StructureVertex_new = (Core.FieldName "new")
+_StructureVertex_new = (Core.Name "new")
 
-_StructureVertex_id = (Core.FieldName "id")
+_StructureVertex_id = (Core.Name "id")
 
-_StructureVertex_label = (Core.FieldName "label")
+_StructureVertex_label = (Core.Name "label")
 
 data TraversalStrategy = 
   TraversalStrategy {
@@ -1410,11 +1410,11 @@ data TraversalStrategy =
 
 _TraversalStrategy = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalStrategy")
 
-_TraversalStrategy_new = (Core.FieldName "new")
+_TraversalStrategy_new = (Core.Name "new")
 
-_TraversalStrategy_class = (Core.FieldName "class")
+_TraversalStrategy_class = (Core.Name "class")
 
-_TraversalStrategy_configurations = (Core.FieldName "configurations")
+_TraversalStrategy_configurations = (Core.Name "configurations")
 
 data Configuration = 
   Configuration {
@@ -1424,9 +1424,9 @@ data Configuration =
 
 _Configuration = (Core.Name "hydra/langs/tinkerpop/gremlin.Configuration")
 
-_Configuration_key = (Core.FieldName "key")
+_Configuration_key = (Core.Name "key")
 
-_Configuration_value = (Core.FieldName "value")
+_Configuration_value = (Core.Name "value")
 
 data KeywordOrIdentifier = 
   KeywordOrIdentifierKeyword Keyword |
@@ -1435,9 +1435,9 @@ data KeywordOrIdentifier =
 
 _KeywordOrIdentifier = (Core.Name "hydra/langs/tinkerpop/gremlin.KeywordOrIdentifier")
 
-_KeywordOrIdentifier_keyword = (Core.FieldName "keyword")
+_KeywordOrIdentifier_keyword = (Core.Name "keyword")
 
-_KeywordOrIdentifier_identifier = (Core.FieldName "identifier")
+_KeywordOrIdentifier_identifier = (Core.Name "identifier")
 
 data TraversalScope = 
   TraversalScopeLocal  |
@@ -1446,9 +1446,9 @@ data TraversalScope =
 
 _TraversalScope = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalScope")
 
-_TraversalScope_local = (Core.FieldName "local")
+_TraversalScope_local = (Core.Name "local")
 
-_TraversalScope_global = (Core.FieldName "global")
+_TraversalScope_global = (Core.Name "global")
 
 data TraversalToken = 
   TraversalTokenId  |
@@ -1459,13 +1459,13 @@ data TraversalToken =
 
 _TraversalToken = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalToken")
 
-_TraversalToken_id = (Core.FieldName "id")
+_TraversalToken_id = (Core.Name "id")
 
-_TraversalToken_label = (Core.FieldName "label")
+_TraversalToken_label = (Core.Name "label")
 
-_TraversalToken_key = (Core.FieldName "key")
+_TraversalToken_key = (Core.Name "key")
 
-_TraversalToken_value = (Core.FieldName "value")
+_TraversalToken_value = (Core.Name "value")
 
 data TraversalMerge = 
   TraversalMergeOnCreate  |
@@ -1476,13 +1476,13 @@ data TraversalMerge =
 
 _TraversalMerge = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalMerge")
 
-_TraversalMerge_onCreate = (Core.FieldName "onCreate")
+_TraversalMerge_onCreate = (Core.Name "onCreate")
 
-_TraversalMerge_onMatch = (Core.FieldName "onMatch")
+_TraversalMerge_onMatch = (Core.Name "onMatch")
 
-_TraversalMerge_outV = (Core.FieldName "outV")
+_TraversalMerge_outV = (Core.Name "outV")
 
-_TraversalMerge_inV = (Core.FieldName "inV")
+_TraversalMerge_inV = (Core.Name "inV")
 
 data TraversalOrder = 
   TraversalOrderIncr  |
@@ -1494,15 +1494,15 @@ data TraversalOrder =
 
 _TraversalOrder = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalOrder")
 
-_TraversalOrder_incr = (Core.FieldName "incr")
+_TraversalOrder_incr = (Core.Name "incr")
 
-_TraversalOrder_decr = (Core.FieldName "decr")
+_TraversalOrder_decr = (Core.Name "decr")
 
-_TraversalOrder_asc = (Core.FieldName "asc")
+_TraversalOrder_asc = (Core.Name "asc")
 
-_TraversalOrder_desc = (Core.FieldName "desc")
+_TraversalOrder_desc = (Core.Name "desc")
 
-_TraversalOrder_shuffle = (Core.FieldName "shuffle")
+_TraversalOrder_shuffle = (Core.Name "shuffle")
 
 data TraversalDirection = 
   TraversalDirectionIn  |
@@ -1512,11 +1512,11 @@ data TraversalDirection =
 
 _TraversalDirection = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalDirection")
 
-_TraversalDirection_in = (Core.FieldName "in")
+_TraversalDirection_in = (Core.Name "in")
 
-_TraversalDirection_out = (Core.FieldName "out")
+_TraversalDirection_out = (Core.Name "out")
 
-_TraversalDirection_both = (Core.FieldName "both")
+_TraversalDirection_both = (Core.Name "both")
 
 data TraversalCardinality = 
   TraversalCardinalitySingle GenericLiteral |
@@ -1526,11 +1526,11 @@ data TraversalCardinality =
 
 _TraversalCardinality = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalCardinality")
 
-_TraversalCardinality_single = (Core.FieldName "single")
+_TraversalCardinality_single = (Core.Name "single")
 
-_TraversalCardinality_set = (Core.FieldName "set")
+_TraversalCardinality_set = (Core.Name "set")
 
-_TraversalCardinality_list = (Core.FieldName "list")
+_TraversalCardinality_list = (Core.Name "list")
 
 data TraversalColumn = 
   TraversalColumnKeys  |
@@ -1539,9 +1539,9 @@ data TraversalColumn =
 
 _TraversalColumn = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalColumn")
 
-_TraversalColumn_keys = (Core.FieldName "keys")
+_TraversalColumn_keys = (Core.Name "keys")
 
-_TraversalColumn_values = (Core.FieldName "values")
+_TraversalColumn_values = (Core.Name "values")
 
 data TraversalPop = 
   TraversalPopFirst  |
@@ -1552,13 +1552,13 @@ data TraversalPop =
 
 _TraversalPop = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalPop")
 
-_TraversalPop_first = (Core.FieldName "first")
+_TraversalPop_first = (Core.Name "first")
 
-_TraversalPop_last = (Core.FieldName "last")
+_TraversalPop_last = (Core.Name "last")
 
-_TraversalPop_all = (Core.FieldName "all")
+_TraversalPop_all = (Core.Name "all")
 
-_TraversalPop_mixed = (Core.FieldName "mixed")
+_TraversalPop_mixed = (Core.Name "mixed")
 
 data TraversalOperator = 
   TraversalOperatorAddAll  |
@@ -1576,27 +1576,27 @@ data TraversalOperator =
 
 _TraversalOperator = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalOperator")
 
-_TraversalOperator_addAll = (Core.FieldName "addAll")
+_TraversalOperator_addAll = (Core.Name "addAll")
 
-_TraversalOperator_and = (Core.FieldName "and")
+_TraversalOperator_and = (Core.Name "and")
 
-_TraversalOperator_assign = (Core.FieldName "assign")
+_TraversalOperator_assign = (Core.Name "assign")
 
-_TraversalOperator_div = (Core.FieldName "div")
+_TraversalOperator_div = (Core.Name "div")
 
-_TraversalOperator_max = (Core.FieldName "max")
+_TraversalOperator_max = (Core.Name "max")
 
-_TraversalOperator_min = (Core.FieldName "min")
+_TraversalOperator_min = (Core.Name "min")
 
-_TraversalOperator_minus = (Core.FieldName "minus")
+_TraversalOperator_minus = (Core.Name "minus")
 
-_TraversalOperator_mult = (Core.FieldName "mult")
+_TraversalOperator_mult = (Core.Name "mult")
 
-_TraversalOperator_or = (Core.FieldName "or")
+_TraversalOperator_or = (Core.Name "or")
 
-_TraversalOperator_sum = (Core.FieldName "sum")
+_TraversalOperator_sum = (Core.Name "sum")
 
-_TraversalOperator_sumLong = (Core.FieldName "sumLong")
+_TraversalOperator_sumLong = (Core.Name "sumLong")
 
 data TraversalPick = 
   TraversalPickAny  |
@@ -1605,9 +1605,9 @@ data TraversalPick =
 
 _TraversalPick = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalPick")
 
-_TraversalPick_any = (Core.FieldName "any")
+_TraversalPick_any = (Core.Name "any")
 
-_TraversalPick_none = (Core.FieldName "none")
+_TraversalPick_none = (Core.Name "none")
 
 data TraversalDT = 
   TraversalDTSecond  |
@@ -1618,13 +1618,13 @@ data TraversalDT =
 
 _TraversalDT = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalDT")
 
-_TraversalDT_second = (Core.FieldName "second")
+_TraversalDT_second = (Core.Name "second")
 
-_TraversalDT_minute = (Core.FieldName "minute")
+_TraversalDT_minute = (Core.Name "minute")
 
-_TraversalDT_hour = (Core.FieldName "hour")
+_TraversalDT_hour = (Core.Name "hour")
 
-_TraversalDT_day = (Core.FieldName "day")
+_TraversalDT_day = (Core.Name "day")
 
 data TraversalPredicate = 
   TraversalPredicateEq GenericLiteralArgument |
@@ -1654,51 +1654,51 @@ data TraversalPredicate =
 
 _TraversalPredicate = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalPredicate")
 
-_TraversalPredicate_eq = (Core.FieldName "eq")
+_TraversalPredicate_eq = (Core.Name "eq")
 
-_TraversalPredicate_neq = (Core.FieldName "neq")
+_TraversalPredicate_neq = (Core.Name "neq")
 
-_TraversalPredicate_lt = (Core.FieldName "lt")
+_TraversalPredicate_lt = (Core.Name "lt")
 
-_TraversalPredicate_lte = (Core.FieldName "lte")
+_TraversalPredicate_lte = (Core.Name "lte")
 
-_TraversalPredicate_gt = (Core.FieldName "gt")
+_TraversalPredicate_gt = (Core.Name "gt")
 
-_TraversalPredicate_gte = (Core.FieldName "gte")
+_TraversalPredicate_gte = (Core.Name "gte")
 
-_TraversalPredicate_inside = (Core.FieldName "inside")
+_TraversalPredicate_inside = (Core.Name "inside")
 
-_TraversalPredicate_outside = (Core.FieldName "outside")
+_TraversalPredicate_outside = (Core.Name "outside")
 
-_TraversalPredicate_between = (Core.FieldName "between")
+_TraversalPredicate_between = (Core.Name "between")
 
-_TraversalPredicate_within = (Core.FieldName "within")
+_TraversalPredicate_within = (Core.Name "within")
 
-_TraversalPredicate_without = (Core.FieldName "without")
+_TraversalPredicate_without = (Core.Name "without")
 
-_TraversalPredicate_not = (Core.FieldName "not")
+_TraversalPredicate_not = (Core.Name "not")
 
-_TraversalPredicate_startingWith = (Core.FieldName "startingWith")
+_TraversalPredicate_startingWith = (Core.Name "startingWith")
 
-_TraversalPredicate_notStartingWith = (Core.FieldName "notStartingWith")
+_TraversalPredicate_notStartingWith = (Core.Name "notStartingWith")
 
-_TraversalPredicate_endingWith = (Core.FieldName "endingWith")
+_TraversalPredicate_endingWith = (Core.Name "endingWith")
 
-_TraversalPredicate_notEndingWith = (Core.FieldName "notEndingWith")
+_TraversalPredicate_notEndingWith = (Core.Name "notEndingWith")
 
-_TraversalPredicate_containing = (Core.FieldName "containing")
+_TraversalPredicate_containing = (Core.Name "containing")
 
-_TraversalPredicate_notContaining = (Core.FieldName "notContaining")
+_TraversalPredicate_notContaining = (Core.Name "notContaining")
 
-_TraversalPredicate_regex = (Core.FieldName "regex")
+_TraversalPredicate_regex = (Core.Name "regex")
 
-_TraversalPredicate_notRegex = (Core.FieldName "notRegex")
+_TraversalPredicate_notRegex = (Core.Name "notRegex")
 
-_TraversalPredicate_and = (Core.FieldName "and")
+_TraversalPredicate_and = (Core.Name "and")
 
-_TraversalPredicate_or = (Core.FieldName "or")
+_TraversalPredicate_or = (Core.Name "or")
 
-_TraversalPredicate_negate = (Core.FieldName "negate")
+_TraversalPredicate_negate = (Core.Name "negate")
 
 data TwoTraversalPredicates = 
   TwoTraversalPredicates {
@@ -1708,9 +1708,9 @@ data TwoTraversalPredicates =
 
 _TwoTraversalPredicates = (Core.Name "hydra/langs/tinkerpop/gremlin.TwoTraversalPredicates")
 
-_TwoTraversalPredicates_left = (Core.FieldName "left")
+_TwoTraversalPredicates_left = (Core.Name "left")
 
-_TwoTraversalPredicates_right = (Core.FieldName "right")
+_TwoTraversalPredicates_right = (Core.Name "right")
 
 data TraversalTerminalMethod = 
   TraversalTerminalMethodExplain  |
@@ -1725,21 +1725,21 @@ data TraversalTerminalMethod =
 
 _TraversalTerminalMethod = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalTerminalMethod")
 
-_TraversalTerminalMethod_explain = (Core.FieldName "explain")
+_TraversalTerminalMethod_explain = (Core.Name "explain")
 
-_TraversalTerminalMethod_iterate = (Core.FieldName "iterate")
+_TraversalTerminalMethod_iterate = (Core.Name "iterate")
 
-_TraversalTerminalMethod_hasNext = (Core.FieldName "hasNext")
+_TraversalTerminalMethod_hasNext = (Core.Name "hasNext")
 
-_TraversalTerminalMethod_tryNext = (Core.FieldName "tryNext")
+_TraversalTerminalMethod_tryNext = (Core.Name "tryNext")
 
-_TraversalTerminalMethod_next = (Core.FieldName "next")
+_TraversalTerminalMethod_next = (Core.Name "next")
 
-_TraversalTerminalMethod_toList = (Core.FieldName "toList")
+_TraversalTerminalMethod_toList = (Core.Name "toList")
 
-_TraversalTerminalMethod_toSet = (Core.FieldName "toSet")
+_TraversalTerminalMethod_toSet = (Core.Name "toSet")
 
-_TraversalTerminalMethod_toBulkSet = (Core.FieldName "toBulkSet")
+_TraversalTerminalMethod_toBulkSet = (Core.Name "toBulkSet")
 
 data TraversalSelfMethod = 
   TraversalSelfMethodDiscard 
@@ -1747,7 +1747,7 @@ data TraversalSelfMethod =
 
 _TraversalSelfMethod = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalSelfMethod")
 
-_TraversalSelfMethod_discard = (Core.FieldName "discard")
+_TraversalSelfMethod_discard = (Core.Name "discard")
 
 data TraversalFunction = 
   TraversalFunctionToken TraversalToken |
@@ -1756,9 +1756,9 @@ data TraversalFunction =
 
 _TraversalFunction = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalFunction")
 
-_TraversalFunction_token = (Core.FieldName "token")
+_TraversalFunction_token = (Core.Name "token")
 
-_TraversalFunction_column = (Core.FieldName "column")
+_TraversalFunction_column = (Core.Name "column")
 
 data RangeArgument = 
   RangeArgument {
@@ -1768,9 +1768,9 @@ data RangeArgument =
 
 _RangeArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.RangeArgument")
 
-_RangeArgument_min = (Core.FieldName "min")
+_RangeArgument_min = (Core.Name "min")
 
-_RangeArgument_max = (Core.FieldName "max")
+_RangeArgument_max = (Core.Name "max")
 
 data WithOptionKeys = 
   WithOptionKeysShortestPath ShortestPathConstants |
@@ -1784,19 +1784,19 @@ data WithOptionKeys =
 
 _WithOptionKeys = (Core.Name "hydra/langs/tinkerpop/gremlin.WithOptionKeys")
 
-_WithOptionKeys_shortestPath = (Core.FieldName "shortestPath")
+_WithOptionKeys_shortestPath = (Core.Name "shortestPath")
 
-_WithOptionKeys_connectedComponent = (Core.FieldName "connectedComponent")
+_WithOptionKeys_connectedComponent = (Core.Name "connectedComponent")
 
-_WithOptionKeys_pageRank = (Core.FieldName "pageRank")
+_WithOptionKeys_pageRank = (Core.Name "pageRank")
 
-_WithOptionKeys_peerPressure = (Core.FieldName "peerPressure")
+_WithOptionKeys_peerPressure = (Core.Name "peerPressure")
 
-_WithOptionKeys_io = (Core.FieldName "io")
+_WithOptionKeys_io = (Core.Name "io")
 
-_WithOptionKeys_withOptionsTokens = (Core.FieldName "withOptionsTokens")
+_WithOptionKeys_withOptionsTokens = (Core.Name "withOptionsTokens")
 
-_WithOptionKeys_withOptionsIndexer = (Core.FieldName "withOptionsIndexer")
+_WithOptionKeys_withOptionsIndexer = (Core.Name "withOptionsIndexer")
 
 data ConnectedComponentConstants = 
   ConnectedComponentConstantsComponent  |
@@ -1806,11 +1806,11 @@ data ConnectedComponentConstants =
 
 _ConnectedComponentConstants = (Core.Name "hydra/langs/tinkerpop/gremlin.ConnectedComponentConstants")
 
-_ConnectedComponentConstants_component = (Core.FieldName "component")
+_ConnectedComponentConstants_component = (Core.Name "component")
 
-_ConnectedComponentConstants_edges = (Core.FieldName "edges")
+_ConnectedComponentConstants_edges = (Core.Name "edges")
 
-_ConnectedComponentConstants_propertyName = (Core.FieldName "propertyName")
+_ConnectedComponentConstants_propertyName = (Core.Name "propertyName")
 
 data PageRankConstants = 
   PageRankConstantsEdges  |
@@ -1820,11 +1820,11 @@ data PageRankConstants =
 
 _PageRankConstants = (Core.Name "hydra/langs/tinkerpop/gremlin.PageRankConstants")
 
-_PageRankConstants_edges = (Core.FieldName "edges")
+_PageRankConstants_edges = (Core.Name "edges")
 
-_PageRankConstants_times = (Core.FieldName "times")
+_PageRankConstants_times = (Core.Name "times")
 
-_PageRankConstants_propertyName = (Core.FieldName "propertyName")
+_PageRankConstants_propertyName = (Core.Name "propertyName")
 
 data PeerPressureConstants = 
   PeerPressureConstantsEdges  |
@@ -1834,11 +1834,11 @@ data PeerPressureConstants =
 
 _PeerPressureConstants = (Core.Name "hydra/langs/tinkerpop/gremlin.PeerPressureConstants")
 
-_PeerPressureConstants_edges = (Core.FieldName "edges")
+_PeerPressureConstants_edges = (Core.Name "edges")
 
-_PeerPressureConstants_times = (Core.FieldName "times")
+_PeerPressureConstants_times = (Core.Name "times")
 
-_PeerPressureConstants_propertyName = (Core.FieldName "propertyName")
+_PeerPressureConstants_propertyName = (Core.Name "propertyName")
 
 data ShortestPathConstants = 
   ShortestPathConstantsTarget  |
@@ -1850,15 +1850,15 @@ data ShortestPathConstants =
 
 _ShortestPathConstants = (Core.Name "hydra/langs/tinkerpop/gremlin.ShortestPathConstants")
 
-_ShortestPathConstants_target = (Core.FieldName "target")
+_ShortestPathConstants_target = (Core.Name "target")
 
-_ShortestPathConstants_edges = (Core.FieldName "edges")
+_ShortestPathConstants_edges = (Core.Name "edges")
 
-_ShortestPathConstants_distance = (Core.FieldName "distance")
+_ShortestPathConstants_distance = (Core.Name "distance")
 
-_ShortestPathConstants_maxDistance = (Core.FieldName "maxDistance")
+_ShortestPathConstants_maxDistance = (Core.Name "maxDistance")
 
-_ShortestPathConstants_includeEdges = (Core.FieldName "includeEdges")
+_ShortestPathConstants_includeEdges = (Core.Name "includeEdges")
 
 data WithOptionsValues = 
   WithOptionsValuesTokens  |
@@ -1874,23 +1874,23 @@ data WithOptionsValues =
 
 _WithOptionsValues = (Core.Name "hydra/langs/tinkerpop/gremlin.WithOptionsValues")
 
-_WithOptionsValues_tokens = (Core.FieldName "tokens")
+_WithOptionsValues_tokens = (Core.Name "tokens")
 
-_WithOptionsValues_none = (Core.FieldName "none")
+_WithOptionsValues_none = (Core.Name "none")
 
-_WithOptionsValues_ids = (Core.FieldName "ids")
+_WithOptionsValues_ids = (Core.Name "ids")
 
-_WithOptionsValues_labels = (Core.FieldName "labels")
+_WithOptionsValues_labels = (Core.Name "labels")
 
-_WithOptionsValues_keys = (Core.FieldName "keys")
+_WithOptionsValues_keys = (Core.Name "keys")
 
-_WithOptionsValues_values = (Core.FieldName "values")
+_WithOptionsValues_values = (Core.Name "values")
 
-_WithOptionsValues_all = (Core.FieldName "all")
+_WithOptionsValues_all = (Core.Name "all")
 
-_WithOptionsValues_list = (Core.FieldName "list")
+_WithOptionsValues_list = (Core.Name "list")
 
-_WithOptionsValues_map = (Core.FieldName "map")
+_WithOptionsValues_map = (Core.Name "map")
 
 data IoOptionsKeys = 
   IoOptionsKeysReader  |
@@ -1899,9 +1899,9 @@ data IoOptionsKeys =
 
 _IoOptionsKeys = (Core.Name "hydra/langs/tinkerpop/gremlin.IoOptionsKeys")
 
-_IoOptionsKeys_reader = (Core.FieldName "reader")
+_IoOptionsKeys_reader = (Core.Name "reader")
 
-_IoOptionsKeys_writer = (Core.FieldName "writer")
+_IoOptionsKeys_writer = (Core.Name "writer")
 
 data IoOptionsValues = 
   IoOptionsValuesGryo  |
@@ -1911,11 +1911,11 @@ data IoOptionsValues =
 
 _IoOptionsValues = (Core.Name "hydra/langs/tinkerpop/gremlin.IoOptionsValues")
 
-_IoOptionsValues_gryo = (Core.FieldName "gryo")
+_IoOptionsValues_gryo = (Core.Name "gryo")
 
-_IoOptionsValues_graphson = (Core.FieldName "graphson")
+_IoOptionsValues_graphson = (Core.Name "graphson")
 
-_IoOptionsValues_graphml = (Core.FieldName "graphml")
+_IoOptionsValues_graphml = (Core.Name "graphml")
 
 data BooleanArgument = 
   BooleanArgumentValue Bool |
@@ -1924,9 +1924,9 @@ data BooleanArgument =
 
 _BooleanArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.BooleanArgument")
 
-_BooleanArgument_value = (Core.FieldName "value")
+_BooleanArgument_value = (Core.Name "value")
 
-_BooleanArgument_variable = (Core.FieldName "variable")
+_BooleanArgument_variable = (Core.Name "variable")
 
 data IntegerArgument = 
   IntegerArgumentValue IntegerLiteral |
@@ -1935,9 +1935,9 @@ data IntegerArgument =
 
 _IntegerArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.IntegerArgument")
 
-_IntegerArgument_value = (Core.FieldName "value")
+_IntegerArgument_value = (Core.Name "value")
 
-_IntegerArgument_variable = (Core.FieldName "variable")
+_IntegerArgument_variable = (Core.Name "variable")
 
 data FloatArgument = 
   FloatArgumentValue FloatLiteral |
@@ -1946,9 +1946,9 @@ data FloatArgument =
 
 _FloatArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.FloatArgument")
 
-_FloatArgument_value = (Core.FieldName "value")
+_FloatArgument_value = (Core.Name "value")
 
-_FloatArgument_variable = (Core.FieldName "variable")
+_FloatArgument_variable = (Core.Name "variable")
 
 data StringArgument = 
   StringArgumentValue String |
@@ -1957,9 +1957,9 @@ data StringArgument =
 
 _StringArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.StringArgument")
 
-_StringArgument_value = (Core.FieldName "value")
+_StringArgument_value = (Core.Name "value")
 
-_StringArgument_variable = (Core.FieldName "variable")
+_StringArgument_variable = (Core.Name "variable")
 
 data StringNullableArgument = 
   StringNullableArgumentValue (Maybe String) |
@@ -1968,9 +1968,9 @@ data StringNullableArgument =
 
 _StringNullableArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.StringNullableArgument")
 
-_StringNullableArgument_value = (Core.FieldName "value")
+_StringNullableArgument_value = (Core.Name "value")
 
-_StringNullableArgument_variable = (Core.FieldName "variable")
+_StringNullableArgument_variable = (Core.Name "variable")
 
 data DateArgument = 
   DateArgumentValue DateLiteral |
@@ -1979,9 +1979,9 @@ data DateArgument =
 
 _DateArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.DateArgument")
 
-_DateArgument_value = (Core.FieldName "value")
+_DateArgument_value = (Core.Name "value")
 
-_DateArgument_variable = (Core.FieldName "variable")
+_DateArgument_variable = (Core.Name "variable")
 
 data GenericLiteralArgument = 
   GenericLiteralArgumentValue GenericLiteral |
@@ -1990,9 +1990,9 @@ data GenericLiteralArgument =
 
 _GenericLiteralArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.GenericLiteralArgument")
 
-_GenericLiteralArgument_value = (Core.FieldName "value")
+_GenericLiteralArgument_value = (Core.Name "value")
 
-_GenericLiteralArgument_variable = (Core.FieldName "variable")
+_GenericLiteralArgument_variable = (Core.Name "variable")
 
 data GenericLiteralListArgument = 
   GenericLiteralListArgumentValue GenericLiteralList |
@@ -2001,9 +2001,9 @@ data GenericLiteralListArgument =
 
 _GenericLiteralListArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.GenericLiteralListArgument")
 
-_GenericLiteralListArgument_value = (Core.FieldName "value")
+_GenericLiteralListArgument_value = (Core.Name "value")
 
-_GenericLiteralListArgument_variable = (Core.FieldName "variable")
+_GenericLiteralListArgument_variable = (Core.Name "variable")
 
 data GenericLiteralMapArgument = 
   GenericLiteralMapArgumentValue GenericLiteralMap |
@@ -2012,9 +2012,9 @@ data GenericLiteralMapArgument =
 
 _GenericLiteralMapArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.GenericLiteralMapArgument")
 
-_GenericLiteralMapArgument_value = (Core.FieldName "value")
+_GenericLiteralMapArgument_value = (Core.Name "value")
 
-_GenericLiteralMapArgument_variable = (Core.FieldName "variable")
+_GenericLiteralMapArgument_variable = (Core.Name "variable")
 
 data GenericLiteralMapNullableArgument = 
   GenericLiteralMapNullableArgumentValue (Maybe GenericLiteralMap) |
@@ -2023,9 +2023,9 @@ data GenericLiteralMapNullableArgument =
 
 _GenericLiteralMapNullableArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.GenericLiteralMapNullableArgument")
 
-_GenericLiteralMapNullableArgument_value = (Core.FieldName "value")
+_GenericLiteralMapNullableArgument_value = (Core.Name "value")
 
-_GenericLiteralMapNullableArgument_variable = (Core.FieldName "variable")
+_GenericLiteralMapNullableArgument_variable = (Core.Name "variable")
 
 data StructureVertexArgument = 
   StructureVertexArgumentValue StructureVertex |
@@ -2034,9 +2034,9 @@ data StructureVertexArgument =
 
 _StructureVertexArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.StructureVertexArgument")
 
-_StructureVertexArgument_value = (Core.FieldName "value")
+_StructureVertexArgument_value = (Core.Name "value")
 
-_StructureVertexArgument_variable = (Core.FieldName "variable")
+_StructureVertexArgument_variable = (Core.Name "variable")
 
 data TraversalCardinalityArgument = 
   TraversalCardinalityArgumentValue TraversalCardinality |
@@ -2045,9 +2045,9 @@ data TraversalCardinalityArgument =
 
 _TraversalCardinalityArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalCardinalityArgument")
 
-_TraversalCardinalityArgument_value = (Core.FieldName "value")
+_TraversalCardinalityArgument_value = (Core.Name "value")
 
-_TraversalCardinalityArgument_variable = (Core.FieldName "variable")
+_TraversalCardinalityArgument_variable = (Core.Name "variable")
 
 data TraversalColumnArgument = 
   TraversalColumnArgumentValue TraversalColumn |
@@ -2056,9 +2056,9 @@ data TraversalColumnArgument =
 
 _TraversalColumnArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalColumnArgument")
 
-_TraversalColumnArgument_value = (Core.FieldName "value")
+_TraversalColumnArgument_value = (Core.Name "value")
 
-_TraversalColumnArgument_variable = (Core.FieldName "variable")
+_TraversalColumnArgument_variable = (Core.Name "variable")
 
 data TraversalDirectionArgument = 
   TraversalDirectionArgumentValue TraversalDirection |
@@ -2067,9 +2067,9 @@ data TraversalDirectionArgument =
 
 _TraversalDirectionArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalDirectionArgument")
 
-_TraversalDirectionArgument_value = (Core.FieldName "value")
+_TraversalDirectionArgument_value = (Core.Name "value")
 
-_TraversalDirectionArgument_variable = (Core.FieldName "variable")
+_TraversalDirectionArgument_variable = (Core.Name "variable")
 
 data TraversalMergeArgument = 
   TraversalMergeArgumentValue TraversalMerge |
@@ -2078,9 +2078,9 @@ data TraversalMergeArgument =
 
 _TraversalMergeArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalMergeArgument")
 
-_TraversalMergeArgument_value = (Core.FieldName "value")
+_TraversalMergeArgument_value = (Core.Name "value")
 
-_TraversalMergeArgument_variable = (Core.FieldName "variable")
+_TraversalMergeArgument_variable = (Core.Name "variable")
 
 data TraversalOrderArgument = 
   TraversalOrderArgumentValue TraversalOrder |
@@ -2089,9 +2089,9 @@ data TraversalOrderArgument =
 
 _TraversalOrderArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalOrderArgument")
 
-_TraversalOrderArgument_value = (Core.FieldName "value")
+_TraversalOrderArgument_value = (Core.Name "value")
 
-_TraversalOrderArgument_variable = (Core.FieldName "variable")
+_TraversalOrderArgument_variable = (Core.Name "variable")
 
 data TraversalPopArgument = 
   TraversalPopArgumentValue TraversalPop |
@@ -2100,9 +2100,9 @@ data TraversalPopArgument =
 
 _TraversalPopArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalPopArgument")
 
-_TraversalPopArgument_value = (Core.FieldName "value")
+_TraversalPopArgument_value = (Core.Name "value")
 
-_TraversalPopArgument_variable = (Core.FieldName "variable")
+_TraversalPopArgument_variable = (Core.Name "variable")
 
 data TraversalSackMethodArgument = 
   TraversalSackMethodArgumentValue  |
@@ -2111,9 +2111,9 @@ data TraversalSackMethodArgument =
 
 _TraversalSackMethodArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalSackMethodArgument")
 
-_TraversalSackMethodArgument_value = (Core.FieldName "value")
+_TraversalSackMethodArgument_value = (Core.Name "value")
 
-_TraversalSackMethodArgument_variable = (Core.FieldName "variable")
+_TraversalSackMethodArgument_variable = (Core.Name "variable")
 
 data TraversalScopeArgument = 
   TraversalScopeArgumentValue TraversalScope |
@@ -2122,9 +2122,9 @@ data TraversalScopeArgument =
 
 _TraversalScopeArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalScopeArgument")
 
-_TraversalScopeArgument_value = (Core.FieldName "value")
+_TraversalScopeArgument_value = (Core.Name "value")
 
-_TraversalScopeArgument_variable = (Core.FieldName "variable")
+_TraversalScopeArgument_variable = (Core.Name "variable")
 
 data TraversalTokenArgument = 
   TraversalTokenArgumentValue TraversalToken |
@@ -2133,9 +2133,9 @@ data TraversalTokenArgument =
 
 _TraversalTokenArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalTokenArgument")
 
-_TraversalTokenArgument_value = (Core.FieldName "value")
+_TraversalTokenArgument_value = (Core.Name "value")
 
-_TraversalTokenArgument_variable = (Core.FieldName "variable")
+_TraversalTokenArgument_variable = (Core.Name "variable")
 
 data TraversalComparatorArgument = 
   TraversalComparatorArgumentValue TraversalOrder |
@@ -2144,9 +2144,9 @@ data TraversalComparatorArgument =
 
 _TraversalComparatorArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalComparatorArgument")
 
-_TraversalComparatorArgument_value = (Core.FieldName "value")
+_TraversalComparatorArgument_value = (Core.Name "value")
 
-_TraversalComparatorArgument_variable = (Core.FieldName "variable")
+_TraversalComparatorArgument_variable = (Core.Name "variable")
 
 data TraversalFunctionArgument = 
   TraversalFunctionArgumentValue TraversalFunction |
@@ -2155,9 +2155,9 @@ data TraversalFunctionArgument =
 
 _TraversalFunctionArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalFunctionArgument")
 
-_TraversalFunctionArgument_value = (Core.FieldName "value")
+_TraversalFunctionArgument_value = (Core.Name "value")
 
-_TraversalFunctionArgument_variable = (Core.FieldName "variable")
+_TraversalFunctionArgument_variable = (Core.Name "variable")
 
 data TraversalBiFunctionArgument = 
   TraversalBiFunctionArgumentValue TraversalOperator |
@@ -2166,9 +2166,9 @@ data TraversalBiFunctionArgument =
 
 _TraversalBiFunctionArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalBiFunctionArgument")
 
-_TraversalBiFunctionArgument_value = (Core.FieldName "value")
+_TraversalBiFunctionArgument_value = (Core.Name "value")
 
-_TraversalBiFunctionArgument_variable = (Core.FieldName "variable")
+_TraversalBiFunctionArgument_variable = (Core.Name "variable")
 
 data TraversalDTArgument = 
   TraversalDTArgumentValue TraversalDT |
@@ -2177,9 +2177,9 @@ data TraversalDTArgument =
 
 _TraversalDTArgument = (Core.Name "hydra/langs/tinkerpop/gremlin.TraversalDTArgument")
 
-_TraversalDTArgument_value = (Core.FieldName "value")
+_TraversalDTArgument_value = (Core.Name "value")
 
-_TraversalDTArgument_variable = (Core.FieldName "variable")
+_TraversalDTArgument_variable = (Core.Name "variable")
 
 newtype GenericLiteralList = 
   GenericLiteralList {
@@ -2195,9 +2195,9 @@ data GenericLiteralRange =
 
 _GenericLiteralRange = (Core.Name "hydra/langs/tinkerpop/gremlin.GenericLiteralRange")
 
-_GenericLiteralRange_integer = (Core.FieldName "integer")
+_GenericLiteralRange_integer = (Core.Name "integer")
 
-_GenericLiteralRange_string = (Core.FieldName "string")
+_GenericLiteralRange_string = (Core.Name "string")
 
 data IntegerRange = 
   IntegerRange {
@@ -2207,9 +2207,9 @@ data IntegerRange =
 
 _IntegerRange = (Core.Name "hydra/langs/tinkerpop/gremlin.IntegerRange")
 
-_IntegerRange_left = (Core.FieldName "left")
+_IntegerRange_left = (Core.Name "left")
 
-_IntegerRange_right = (Core.FieldName "right")
+_IntegerRange_right = (Core.Name "right")
 
 data StringRange = 
   StringRange {
@@ -2219,9 +2219,9 @@ data StringRange =
 
 _StringRange = (Core.Name "hydra/langs/tinkerpop/gremlin.StringRange")
 
-_StringRange_left = (Core.FieldName "left")
+_StringRange_left = (Core.Name "left")
 
-_StringRange_right = (Core.FieldName "right")
+_StringRange_right = (Core.Name "right")
 
 newtype GenericLiteralSet = 
   GenericLiteralSet {
@@ -2262,45 +2262,45 @@ data GenericLiteral =
 
 _GenericLiteral = (Core.Name "hydra/langs/tinkerpop/gremlin.GenericLiteral")
 
-_GenericLiteral_numeric = (Core.FieldName "numeric")
+_GenericLiteral_numeric = (Core.Name "numeric")
 
-_GenericLiteral_boolean = (Core.FieldName "boolean")
+_GenericLiteral_boolean = (Core.Name "boolean")
 
-_GenericLiteral_string = (Core.FieldName "string")
+_GenericLiteral_string = (Core.Name "string")
 
-_GenericLiteral_date = (Core.FieldName "date")
+_GenericLiteral_date = (Core.Name "date")
 
-_GenericLiteral_null = (Core.FieldName "null")
+_GenericLiteral_null = (Core.Name "null")
 
-_GenericLiteral_nan = (Core.FieldName "nan")
+_GenericLiteral_nan = (Core.Name "nan")
 
-_GenericLiteral_inf = (Core.FieldName "inf")
+_GenericLiteral_inf = (Core.Name "inf")
 
-_GenericLiteral_traversalToken = (Core.FieldName "traversalToken")
+_GenericLiteral_traversalToken = (Core.Name "traversalToken")
 
-_GenericLiteral_traversalCardinality = (Core.FieldName "traversalCardinality")
+_GenericLiteral_traversalCardinality = (Core.Name "traversalCardinality")
 
-_GenericLiteral_traversalDirection = (Core.FieldName "traversalDirection")
+_GenericLiteral_traversalDirection = (Core.Name "traversalDirection")
 
-_GenericLiteral_traversalMerge = (Core.FieldName "traversalMerge")
+_GenericLiteral_traversalMerge = (Core.Name "traversalMerge")
 
-_GenericLiteral_traversalPick = (Core.FieldName "traversalPick")
+_GenericLiteral_traversalPick = (Core.Name "traversalPick")
 
-_GenericLiteral_traversalDT = (Core.FieldName "traversalDT")
+_GenericLiteral_traversalDT = (Core.Name "traversalDT")
 
-_GenericLiteral_structureVertex = (Core.FieldName "structureVertex")
+_GenericLiteral_structureVertex = (Core.Name "structureVertex")
 
-_GenericLiteral_genericLiteralSet = (Core.FieldName "genericLiteralSet")
+_GenericLiteral_genericLiteralSet = (Core.Name "genericLiteralSet")
 
-_GenericLiteral_genericLiteralCollection = (Core.FieldName "genericLiteralCollection")
+_GenericLiteral_genericLiteralCollection = (Core.Name "genericLiteralCollection")
 
-_GenericLiteral_genericLiteralRange = (Core.FieldName "genericLiteralRange")
+_GenericLiteral_genericLiteralRange = (Core.Name "genericLiteralRange")
 
-_GenericLiteral_nestedTraversal = (Core.FieldName "nestedTraversal")
+_GenericLiteral_nestedTraversal = (Core.Name "nestedTraversal")
 
-_GenericLiteral_terminatedTraversal = (Core.FieldName "terminatedTraversal")
+_GenericLiteral_terminatedTraversal = (Core.Name "terminatedTraversal")
 
-_GenericLiteral_genericLiteralMap = (Core.FieldName "genericLiteralMap")
+_GenericLiteral_genericLiteralMap = (Core.Name "genericLiteralMap")
 
 newtype GenericLiteralMap = 
   GenericLiteralMap {
@@ -2316,9 +2316,9 @@ data MapEntry =
 
 _MapEntry = (Core.Name "hydra/langs/tinkerpop/gremlin.MapEntry")
 
-_MapEntry_key = (Core.FieldName "key")
+_MapEntry_key = (Core.Name "key")
 
-_MapEntry_value = (Core.FieldName "value")
+_MapEntry_value = (Core.Name "value")
 
 data MapKey = 
   MapKeyString String |
@@ -2334,23 +2334,23 @@ data MapKey =
 
 _MapKey = (Core.Name "hydra/langs/tinkerpop/gremlin.MapKey")
 
-_MapKey_string = (Core.FieldName "string")
+_MapKey_string = (Core.Name "string")
 
-_MapKey_numeric = (Core.FieldName "numeric")
+_MapKey_numeric = (Core.Name "numeric")
 
-_MapKey_traversalToken = (Core.FieldName "traversalToken")
+_MapKey_traversalToken = (Core.Name "traversalToken")
 
-_MapKey_traversalDirection = (Core.FieldName "traversalDirection")
+_MapKey_traversalDirection = (Core.Name "traversalDirection")
 
-_MapKey_set = (Core.FieldName "set")
+_MapKey_set = (Core.Name "set")
 
-_MapKey_collection = (Core.FieldName "collection")
+_MapKey_collection = (Core.Name "collection")
 
-_MapKey_map = (Core.FieldName "map")
+_MapKey_map = (Core.Name "map")
 
-_MapKey_keyword = (Core.FieldName "keyword")
+_MapKey_keyword = (Core.Name "keyword")
 
-_MapKey_identifier = (Core.FieldName "identifier")
+_MapKey_identifier = (Core.Name "identifier")
 
 newtype IntegerLiteral = 
   IntegerLiteral {
@@ -2373,9 +2373,9 @@ data NumericLiteral =
 
 _NumericLiteral = (Core.Name "hydra/langs/tinkerpop/gremlin.NumericLiteral")
 
-_NumericLiteral_integer = (Core.FieldName "integer")
+_NumericLiteral_integer = (Core.Name "integer")
 
-_NumericLiteral_float = (Core.FieldName "float")
+_NumericLiteral_float = (Core.Name "float")
 
 newtype DateLiteral = 
   DateLiteral {
@@ -2393,13 +2393,13 @@ data Keyword =
 
 _Keyword = (Core.Name "hydra/langs/tinkerpop/gremlin.Keyword")
 
-_Keyword_edges = (Core.FieldName "edges")
+_Keyword_edges = (Core.Name "edges")
 
-_Keyword_keys = (Core.FieldName "keys")
+_Keyword_keys = (Core.Name "keys")
 
-_Keyword_new = (Core.FieldName "new")
+_Keyword_new = (Core.Name "new")
 
-_Keyword_values = (Core.FieldName "values")
+_Keyword_values = (Core.Name "values")
 
 newtype Identifier = 
   Identifier {

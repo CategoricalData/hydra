@@ -18,21 +18,21 @@ import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.list;
 
 
-public class Bind<A> extends PrimitiveFunction<A> {
+public class Bind extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/lists.bind");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("a", lambda("b",
             function(list("a"), function("a", list("b")), list("b"))));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.list(Flows::pure, args.get(0)), argsArg -> {
-            Term<A> mapping = args.get(1);
+            Term mapping = args.get(1);
             return Terms.apply(
                 Terms.primitive(Concat.NAME),
                 Terms.list(argsArg.stream().map(a -> Terms.apply(mapping, a)).collect(Collectors.toList())));

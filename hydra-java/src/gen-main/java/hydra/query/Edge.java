@@ -18,14 +18,14 @@ public class Edge implements Serializable {
   /**
    * The field representing the out-projection of the edge. Defaults to 'out'.
    */
-  public final hydra.util.Opt<hydra.core.FieldName> out;
+  public final hydra.util.Opt<hydra.core.Name> out;
   
   /**
    * The field representing the in-projection of the edge. Defaults to 'in'.
    */
-  public final hydra.util.Opt<hydra.core.FieldName> in;
+  public final hydra.util.Opt<hydra.core.Name> in;
   
-  public Edge (hydra.core.Name type, hydra.util.Opt<hydra.core.FieldName> out, hydra.util.Opt<hydra.core.FieldName> in) {
+  public Edge (hydra.core.Name type, hydra.util.Opt<hydra.core.Name> out, hydra.util.Opt<hydra.core.Name> in) {
     java.util.Objects.requireNonNull((type));
     java.util.Objects.requireNonNull((out));
     java.util.Objects.requireNonNull((in));
@@ -53,12 +53,12 @@ public class Edge implements Serializable {
     return new Edge(type, out, in);
   }
   
-  public Edge withOut(hydra.util.Opt<hydra.core.FieldName> out) {
+  public Edge withOut(hydra.util.Opt<hydra.core.Name> out) {
     java.util.Objects.requireNonNull((out));
     return new Edge(type, out, in);
   }
   
-  public Edge withIn(hydra.util.Opt<hydra.core.FieldName> in) {
+  public Edge withIn(hydra.util.Opt<hydra.core.Name> in) {
     java.util.Objects.requireNonNull((in));
     return new Edge(type, out, in);
   }

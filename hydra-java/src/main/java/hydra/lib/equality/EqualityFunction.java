@@ -20,7 +20,7 @@ import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 
 
-public abstract class EqualityFunction<A, T> extends PrimitiveFunction<A> {
+public abstract class EqualityFunction<T> extends PrimitiveFunction {
     public enum Relation {
         EQUALS("equal"),
         NOT_EQUALS("notEqual"),
@@ -37,17 +37,17 @@ public abstract class EqualityFunction<A, T> extends PrimitiveFunction<A> {
     }
 
     protected final Name name;
-    protected final Type<A> type;
-    protected final Function<Term<A>, Flow<Graph<A>, T>> expect;
+    protected final Type type;
+    protected final Function<Term, Flow<Graph, T>> expect;
     protected final BiFunction<T, T, Boolean> criterion;
 
-    public EqualityFunction(PrimitiveType<A, T> type, Relation relation) {
+    public EqualityFunction(PrimitiveType<T> type, Relation relation) {
         this(type.name, type.type, type.expect, type.comparator, relation);
     }
 
     private EqualityFunction(String typeName,
-                             Type<A> datatype,
-                             Function<Term<A>, Flow<Graph<A>, T>> expect,
+                             Type datatype,
+                             Function<Term, Flow<Graph, T>> expect,
                              Comparator<T> comparator,
                              Relation relation) {
         this.name = new Name("hydra/lib/equality." + relation.prefix + capitalize(typeName));
@@ -82,12 +82,12 @@ public abstract class EqualityFunction<A, T> extends PrimitiveFunction<A> {
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return type;
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> map2(expect.apply(args.get(0)), expect.apply(args.get(1)),
                 (arg0, arg1) -> Terms.boolean_(criterion.apply(arg0, arg1)));
     }
