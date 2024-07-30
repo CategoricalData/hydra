@@ -41,7 +41,7 @@ testExpandLambdas = do
       noChange (int32 42)
       noChange (list ["foo", "bar"])
       noChange
-        (apply (apply splitOn "foo") "bar")
+        (splitOn @@ "foo" @@ "bar")
       noChange
         (lambda "x" $ int32 42)
       noChange
@@ -50,14 +50,14 @@ testExpandLambdas = do
     H.it "Expand bare function terms" $ do
       expandsTo
         toLower
-        (lambda "v1" $ apply toLower (var "v1"))
+        (lambda "v1" $ toLower @@ var "v1")
       expandsTo
         splitOn
-        (lambda "v1" $ lambda "v2" $ apply (apply splitOn (var "v1")) (var "v2"))
+        (lambda "v1" $ lambda "v2" $ splitOn @@ var "v1" @@ var "v2")
       expandsTo
         (matchOpt (int32 42) length)
         -- Note two levels of lambda expansion
-        (lambda "v1" $ apply (matchOpt (int32 42) (lambda "v1" $ apply length $ var "v1")) (var "v1"))
+        (lambda "v1" $ (matchOpt (int32 42) $ lambda "v1" $ length @@ var "v1") @@ var "v1")
 
     H.it "Expand subterms within applications" $ do
       expandsTo
@@ -77,6 +77,12 @@ testExpandLambdas = do
         once <- fromFlowIo testGraph $ expandLambdas term
         twice <- fromFlowIo testGraph $ expandLambdas once
         H.shouldBe once twice
+
+
+    H.it "test..." $ do
+      expandsTo2
+        app
+
   where
     length = primitive $ Name "hydra/lib/strings.length"
     splitOn = primitive $ Name "hydra/lib/strings.splitOn"
@@ -88,7 +94,92 @@ testExpandLambdas = do
        let result = expandTypedLambdas inf
        H.shouldBe (showTerm (removeTermAnnotations result)) (showTerm termAfter)
 
+    expandsTo2 termBefore = do
+      inf <- fromFlowIo testGraph $ annotateTermWithTypes termBefore
+      let result = expandTypedLambdas inf
+      H.shouldBe ("ignore me") ("after: " ++ showTerm result)
+
     noChange term = expandsTo term term
+
+    app = lambda "a" $ project testTypePersonName (Name "firstName") @@ var "a"
+
+
+{-
+{
+  "argument": {
+    "term": "a",
+    "type": {
+      "record": {
+        "fields": [
+          {
+            "name": "subject",
+            "type": {
+              "variable": "hydra/core.Term"
+            }
+          },
+          {
+            "name": "annotation",
+            "type": {
+              "map": {
+                "keys": {
+                  "literal": "string"
+                },
+                "values": {
+                  "variable": "hydra/core.Term"
+                }
+              }
+            }
+          }
+        ],
+        "typeName": "hydra/core.AnnotatedTerm"
+      }
+    }
+  },
+  "function": {
+    "term": {
+      "project": "subject"
+    },
+    "type": {
+      "function": {
+        "codomain": {
+          "variable": "hydra/core.Term"
+        },
+        "domain": {
+          "record": {
+            "fields": [
+              {
+                "name": "subject",
+                "type": {
+                  "variable": "hydra/core.Term"
+                }
+              },
+              {
+                "name": "annotation",
+                "type": {
+                  "map": {
+                    "keys": {
+                      "literal": "string"
+                    },
+                    "values": {
+                      "variable": "hydra/core.Term"
+                    }
+                  }
+                }
+              }
+            ],
+            "typeName": "hydra/core.AnnotatedTerm"
+          }
+        }
+      }
+    }
+  }
+}
+
+-}
+
+
+
+
 
 testFoldOverTerm :: H.SpecWith ()
 testFoldOverTerm = do

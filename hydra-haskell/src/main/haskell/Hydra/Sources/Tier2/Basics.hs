@@ -411,7 +411,7 @@ isTypeDef = basicsDefinition "isType" $
 isUnitTermDef :: Definition (Term -> Bool)
 isUnitTermDef = basicsDefinition "isUnitTerm" $
   function termT booleanT $
-  lambda "t" $ Equality.equalTerm @@ (ref stripTermDef @@ var "t") @@ Datum (coreEncodeTerm Terms.unit)
+  lambda "t" $ Equality.equalTerm @@ (ref fullyStripTermDef @@ var "t") @@ Datum (coreEncodeTerm Terms.unit)
 
 isUnitTypeDef :: Definition (Term -> Bool)
 isUnitTypeDef = basicsDefinition "isUnitType" $

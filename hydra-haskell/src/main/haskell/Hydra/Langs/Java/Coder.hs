@@ -84,7 +84,7 @@ classifyDataTerm typ term = if isLambda term
       else JavaSymbolClassConstant
   where
     hasTypeParameters = not $ S.null $ freeVariablesInType typ
-    isUnsupportedVariant = case stripTerm term of
+    isUnsupportedVariant = case fullyStripTerm term of
       TermLet _ -> True
       _ -> False
 
@@ -137,7 +137,7 @@ constructModule mod coders pairs = do
     -- * Lambdas with nested let terms, such as \x y -> let z = x + y in z + 42
     -- * Let terms with nested lambdas, such as let z = 42 in \x y -> x + y + z
     termToInterfaceMember coders pair = withTrace ("element " ++ unName (elementName el)) $ do
-        expanded <- contractTerm . unshadowVariables <$> (wrapLambdas $ expandTypedLambdas (typedTermTerm $ snd pair))
+        let expanded = contractTerm $ unshadowVariables $ expandTypedLambdas $ typedTermTerm $ snd pair
         case classifyDataTerm typ expanded of
           JavaSymbolClassConstant -> termToConstant coders el expanded
           JavaSymbolClassNullaryFunction -> termToNullaryMethod coders el expanded
@@ -165,7 +165,7 @@ constructModule mod coders pairs = do
               return $ interfaceMethodDeclaration mods tparams mname [] result (Just $ stmts ++ [returnSt])
 
         termToUnaryMethod coders el term = case stripType typ of
-          TypeFunction (FunctionType dom cod) -> maybeLet aliases term $ \aliases2 term2 stmts2 -> case stripTerm term2 of
+          TypeFunction (FunctionType dom cod) -> maybeLet aliases term $ \aliases2 term2 stmts2 -> case fullyStripTerm term2 of
             TermFunction (FunctionLambda (Lambda v body)) -> do
               jdom <- adaptTypeToJavaAndEncode aliases2 dom
               jcod <- adaptTypeToJavaAndEncode aliases2 cod
@@ -433,6 +433,11 @@ encodeApplication aliases app@(Application lhs rhs) = case fullyStripTerm fun of
          _ -> (lhs, (rhs:args))
 
     fallback = withTrace "fallback" $ do
+        if Y.isNothing (getTermType lhs)
+          -- then fail $ "app: " ++ showTerm (TermApplication app)
+          then fail $ "lhs: " ++ showTerm lhs
+          else pure ()
+
         t <- requireTermType lhs
         (dom, cod) <- case stripTypeParameters $ stripType t of
             TypeFunction (FunctionType dom cod) -> pure (dom, cod)
@@ -654,7 +659,7 @@ encodeTerm aliases term0 = encodeInternal [] term0
               encodeFunction aliases dom cod f
             _ -> encodeNullaryConstant aliases t f
 
-        TermLet _ -> fail $ "nested let is unsupported for Java: " ++ show term
+        TermLet _ -> fail $ "nested let is unsupported for Java: " ++ showTerm term
 
         TermList els -> do
           jels <- CM.mapM encode els
@@ -853,14 +858,15 @@ javaTypeParametersForType typ = toParam <$> vars
     freeVars = L.filter isLambdaBoundVariable $ S.toList $ freeVariablesInType typ
 
 maybeLet :: Aliases -> Term -> (Aliases -> Term -> [Java.BlockStatement] -> Flow Graph x) -> Flow Graph x
-maybeLet aliases term cons = helper [] term
+maybeLet aliases term cons = helper Nothing [] term
   where
     -- Note: let-flattening could be done at the top level for better efficiency
-    helper anns term = case flattenLetTerms term of
-      TermAnnotated (AnnotatedTerm term' ann) -> helper (ann:anns) term'
+    helper mtyp anns term = case flattenLetTerms term of
+      TermAnnotated (AnnotatedTerm term' ann) -> helper mtyp (ann:anns) term'
+      TermTyped (TermWithType term' typ) -> helper (Just typ) anns term'
       TermLet (Let bindings env) -> do
           stmts <- L.concat <$> CM.mapM toDeclStatements sorted
-          maybeLet aliasesWithRecursive env $ \aliases' tm stmts' -> cons aliases' (reannotate anns tm) (stmts ++ stmts')
+          maybeLet aliasesWithRecursive env $ \aliases' tm stmts' -> cons aliases' (reannotate mtyp anns tm) (stmts ++ stmts')
         where
           aliasesWithRecursive = aliases { aliasesRecursiveVars = recursiveVars }
           toDeclStatements names = do
@@ -872,7 +878,7 @@ maybeLet aliases term cons = helper [] term
             then do
               -- TODO: repeated
               let value = Y.fromJust $ M.lookup name bindings
-              typ <- requireAnnotatedType value
+              typ <- requireTermType value
               jtype <- adaptTypeToJavaAndEncode aliasesWithRecursive typ
               let id = variableToJavaIdentifier name
 
@@ -890,7 +896,7 @@ maybeLet aliases term cons = helper [] term
           toDeclStatement name = do
             -- TODO: repeated
             let value = Y.fromJust $ M.lookup name bindings
-            typ <- requireAnnotatedType value
+            typ <- requireTermType value
             jtype <- adaptTypeToJavaAndEncode aliasesWithRecursive typ
             let id = variableToJavaIdentifier name
             rhs <- encodeTerm aliasesWithRecursive value
@@ -914,7 +920,7 @@ maybeLet aliases term cons = helper [] term
           sorted = topologicalSortComponents (toDeps <$> M.toList allDeps)
             where
               toDeps (key, deps) = (key, S.toList deps)
-      _ -> cons aliases (reannotate anns term) []
+      _ -> cons aliases (reannotate mtyp anns term) []
 
 moduleToJavaCompilationUnit :: Module -> Flow Graph (M.Map Name Java.CompilationUnit)
 moduleToJavaCompilationUnit mod = transformModule javaLanguage encode constructModule mod
@@ -925,17 +931,14 @@ moduleToJavaCompilationUnit mod = transformModule javaLanguage encode constructM
 noComment :: Java.ClassBodyDeclaration -> Java.ClassBodyDeclarationWithComments
 noComment decl = Java.ClassBodyDeclarationWithComments decl Nothing
 
-reannotate anns term = case anns of
-  [] -> term
-  (h:r) -> reannotate r $ TermAnnotated (AnnotatedTerm term h)
-
-requireAnnotatedType :: Term -> Flow Graph Type
-requireAnnotatedType term = case term of
-  TermAnnotated (AnnotatedTerm _ ann) -> do
-    mt <- getType ann
-    case mt of
-      Nothing -> fail $ "expected a type annotation for term: " ++ show term
-      Just t -> pure t
+reannotate mtyp anns term = case mtyp of
+    Nothing -> base
+    Just typ -> TermTyped (TermWithType base typ)
+  where
+    base = reann anns term
+    reann anns term = case anns of
+      [] -> term
+      (h:r) -> reann r $ TermAnnotated (AnnotatedTerm term h)
 
 toClassDecl :: Bool -> Bool -> Aliases -> [Java.TypeParameter]
   -> Name -> Type -> Flow Graph Java.ClassDeclaration

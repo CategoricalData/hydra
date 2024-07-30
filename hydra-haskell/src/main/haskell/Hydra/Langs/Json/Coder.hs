@@ -134,7 +134,7 @@ untypedTermToJson term = case stripTerm term of
       FunctionElimination elm -> case elm of
         EliminationList term1 -> asVariant "fold" term1
         EliminationRecord (Projection _ fname) -> asVariant "project" $ TermVariable fname
-        _ -> fail $ "unexpected elimination variant: " ++ show (eliminationVariant elm)
+        _ -> unexp $ "unexpected elimination variant: " ++ show (eliminationVariant elm)
       FunctionLambda (Lambda v body) -> asRecord [
         Field _Lambda_parameter $ TermVariable v,
         Field _Lambda_body body]
@@ -175,8 +175,10 @@ untypedTermToJson term = case stripTerm term of
           Just keyval -> [keyval]
     TermVariable v -> pure $ Json.ValueString $ unName v
     TermWrap (WrappedTerm _ t) -> untypedTermToJson t
-    t -> fail $ "unexpected term variant: " ++ show (termVariant t)
+    t -> unexp $ "unsupported term variant: " ++ show (termVariant t)
+--     t -> fail $ "unexpected term variant: " ++ show (termVariant t)
   where
+    unexp msg = pure $ Json.ValueString $ "FAIL: " ++ msg
     asRecord = untypedTermToJson . TermRecord . Record (Name "")
     asVariant name term = untypedTermToJson $ TermUnion $ Injection (Name "") $ Field (Name name) term
     fieldToKeyval f = do
