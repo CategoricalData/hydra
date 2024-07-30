@@ -20,21 +20,21 @@ import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.optional;
 
-public class Lookup<A> extends PrimitiveFunction<A> {
+public class Lookup extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/maps.lookup");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("k", "v",
                 function("k", map("k", "v"), optional("v")));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.map(Flows::pure, Flows::pure, args.get(1)),
-                (Function<Map<Term<A>, Term<A>>, Term<A>>) mp -> Terms.optional(apply(args.get(0), mp)));
+                (Function<Map<Term, Term>, Term>) mp -> Terms.optional(apply(args.get(0), mp)));
     }
 
     public static <K, V> Function<Map<K, V>, Opt<V>> apply(K k) {

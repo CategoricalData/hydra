@@ -7,55 +7,55 @@ import java.io.Serializable;
 /**
  * A corresponding elimination for an introduction term
  */
-public abstract class Elimination<A> implements Serializable {
+public abstract class Elimination implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Elimination");
   
   private Elimination () {
   
   }
   
-  public abstract <R> R accept(Visitor<A, R> visitor) ;
+  public abstract <R> R accept(Visitor<R> visitor) ;
   
-  public interface Visitor<A, R> {
-    R visit(List<A> instance) ;
+  public interface Visitor<R> {
+    R visit(List instance) ;
     
-    R visit(Optional<A> instance) ;
+    R visit(Optional instance) ;
     
-    R visit(Product<A> instance) ;
+    R visit(Product instance) ;
     
-    R visit(Record<A> instance) ;
+    R visit(Record instance) ;
     
-    R visit(Union<A> instance) ;
+    R visit(Union instance) ;
     
-    R visit(Wrap<A> instance) ;
+    R visit(Wrap instance) ;
   }
   
-  public interface PartialVisitor<A, R> extends Visitor<A, R> {
-    default R otherwise(Elimination<A> instance) {
+  public interface PartialVisitor<R> extends Visitor<R> {
+    default R otherwise(Elimination instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(List<A> instance) {
+    default R visit(List instance) {
       return otherwise((instance));
     }
     
-    default R visit(Optional<A> instance) {
+    default R visit(Optional instance) {
       return otherwise((instance));
     }
     
-    default R visit(Product<A> instance) {
+    default R visit(Product instance) {
       return otherwise((instance));
     }
     
-    default R visit(Record<A> instance) {
+    default R visit(Record instance) {
       return otherwise((instance));
     }
     
-    default R visit(Union<A> instance) {
+    default R visit(Union instance) {
       return otherwise((instance));
     }
     
-    default R visit(Wrap<A> instance) {
+    default R visit(Wrap instance) {
       return otherwise((instance));
     }
   }
@@ -63,13 +63,13 @@ public abstract class Elimination<A> implements Serializable {
   /**
    * Eliminates a list using a fold function; this function has the signature b -&gt; [a] -&gt; b
    */
-  public static final class List<A> extends hydra.core.Elimination<A> implements Serializable {
+  public static final class List extends hydra.core.Elimination implements Serializable {
     /**
      * Eliminates a list using a fold function; this function has the signature b -&gt; [a] -&gt; b
      */
-    public final hydra.core.Term<A> value;
+    public final hydra.core.Term value;
     
-    public List (hydra.core.Term<A> value) {
+    public List (hydra.core.Term value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -89,7 +89,7 @@ public abstract class Elimination<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -97,13 +97,13 @@ public abstract class Elimination<A> implements Serializable {
   /**
    * Eliminates an optional term by matching over the two possible cases
    */
-  public static final class Optional<A> extends hydra.core.Elimination<A> implements Serializable {
+  public static final class Optional extends hydra.core.Elimination implements Serializable {
     /**
      * Eliminates an optional term by matching over the two possible cases
      */
-    public final hydra.core.OptionalCases<A> value;
+    public final hydra.core.OptionalCases value;
     
-    public Optional (hydra.core.OptionalCases<A> value) {
+    public Optional (hydra.core.OptionalCases value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -123,7 +123,7 @@ public abstract class Elimination<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -131,7 +131,7 @@ public abstract class Elimination<A> implements Serializable {
   /**
    * Eliminates a tuple by projecting the component at a given 0-indexed offset
    */
-  public static final class Product<A> extends hydra.core.Elimination<A> implements Serializable {
+  public static final class Product extends hydra.core.Elimination implements Serializable {
     /**
      * Eliminates a tuple by projecting the component at a given 0-indexed offset
      */
@@ -157,7 +157,7 @@ public abstract class Elimination<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -165,7 +165,7 @@ public abstract class Elimination<A> implements Serializable {
   /**
    * Eliminates a record by projecting a given field
    */
-  public static final class Record<A> extends hydra.core.Elimination<A> implements Serializable {
+  public static final class Record extends hydra.core.Elimination implements Serializable {
     /**
      * Eliminates a record by projecting a given field
      */
@@ -191,7 +191,7 @@ public abstract class Elimination<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -199,13 +199,13 @@ public abstract class Elimination<A> implements Serializable {
   /**
    * Eliminates a union term by matching over the fields of the union. This is a case statement.
    */
-  public static final class Union<A> extends hydra.core.Elimination<A> implements Serializable {
+  public static final class Union extends hydra.core.Elimination implements Serializable {
     /**
      * Eliminates a union term by matching over the fields of the union. This is a case statement.
      */
-    public final hydra.core.CaseStatement<A> value;
+    public final hydra.core.CaseStatement value;
     
-    public Union (hydra.core.CaseStatement<A> value) {
+    public Union (hydra.core.CaseStatement value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -225,7 +225,7 @@ public abstract class Elimination<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -233,7 +233,7 @@ public abstract class Elimination<A> implements Serializable {
   /**
    * Unwrap a wrapped term
    */
-  public static final class Wrap<A> extends hydra.core.Elimination<A> implements Serializable {
+  public static final class Wrap extends hydra.core.Elimination implements Serializable {
     /**
      * Unwrap a wrapped term
      */
@@ -259,7 +259,7 @@ public abstract class Elimination<A> implements Serializable {
     }
     
     @Override
-    public <R> R accept(Visitor<A, R> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }

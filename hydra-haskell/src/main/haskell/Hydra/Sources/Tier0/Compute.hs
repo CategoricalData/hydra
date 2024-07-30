@@ -14,7 +14,7 @@ import           Hydra.Dsl.Types       as Types
 import           Hydra.Sources.Core
 
 
-hydraComputeModule :: Module Kv
+hydraComputeModule :: Module
 hydraComputeModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just "Abstractions for single- and bidirectional transformations"
   where
@@ -39,7 +39,7 @@ hydraComputeModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
         lambda "s1" $ lambda "s2" $ lambda "t1" $ lambda "t2" $ lambda "v1" $ lambda "v2" $ record [
           "encode">: "t1" --> compute "Adapter" @@ "s1" @@ "s2" @@ "t1" @@ "t2" @@ "v1" @@ "v2",
           "decode">: "t2" --> compute "Adapter" @@ "s2" @@ "s1" @@ "t2" @@ "t1" @@ "v2" @@ "v1"],
-          
+
       def "Coder" $
         doc "An encoder and decoder; a bidirectional flow between two types" $
         lambda "s1" $ lambda "s2" $ lambda "v1" $ lambda "v2" $ record [
@@ -58,13 +58,6 @@ hydraComputeModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "state">: "s",
           "trace">: compute "Trace"],
 
-      def "Kv" $
-        doc "A key/value map which serves as a built-in metadata container for terms" $
-        record [
-          "annotations">:
-            doc "A map of annotation names to annotation values" $
-            Types.map string (core "Term" @@ compute "Kv")],
-
       def "Trace" $
         doc "A container for logging and error information" $
         record [
@@ -72,4 +65,4 @@ hydraComputeModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "messages">: list string,
           "other">:
             doc "A map of string keys to arbitrary terms as values, for application-specific use" $
-            Types.map string (core "Term" @@ compute "Kv")]]
+            Types.map string (core "Term")]]

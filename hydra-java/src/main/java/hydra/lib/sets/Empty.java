@@ -18,18 +18,18 @@ import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.set;
 
 
-public class Empty<A> extends PrimitiveFunction<A> {
+public class Empty extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/sets.empty");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("x", set("x"));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return ignored -> Flows.pure(Terms.set(apply()));
     }
 

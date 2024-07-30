@@ -30,7 +30,7 @@ import           Hydra.Sources.Tier1.All
 import Hydra.Sources.Tier2.Basics
 
 
-hydraPrintingModule :: Module Kv
+hydraPrintingModule :: Module
 hydraPrintingModule = Module (Namespace "hydra/printing") elements
     [hydraBasicsModule]
     tier0Modules $
@@ -50,17 +50,20 @@ printingDefinition = definitionInModule hydraPrintingModule
 describeFloatTypeDef :: Definition (FloatType -> String)
 describeFloatTypeDef = printingDefinition "describeFloatType" $
   doc "Display a floating-point type as a string" $
+  function floatTypeT stringT $
   lambda "t" $ (ref describePrecisionDef <.> ref floatTypePrecisionDef @@ var "t") ++ string " floating-point numbers"
 
 describeIntegerTypeDef :: Definition (IntegerType -> String)
 describeIntegerTypeDef = printingDefinition "describeIntegerType" $
   doc "Display an integer type as a string" $
+  function integerTypeT stringT $
   lambda "t" $ (ref describePrecisionDef <.> ref integerTypePrecisionDef @@ var "t")
     ++ string " integers"
 
 describeLiteralTypeDef :: Definition (LiteralType -> String)
 describeLiteralTypeDef = printingDefinition "describeLiteralType" $
   doc "Display a literal type as a string" $
+  function literalTypeT stringT $
   match _LiteralType Nothing [
     Case _LiteralType_binary  --> constant $ string "binary strings",
     Case _LiteralType_boolean --> constant $ string "boolean values",
@@ -71,17 +74,18 @@ describeLiteralTypeDef = printingDefinition "describeLiteralType" $
 describePrecisionDef :: Definition (Precision -> String)
 describePrecisionDef = printingDefinition "describePrecision" $
   doc "Display numeric precision as a string" $
+  function precisionT stringT $
   match _Precision Nothing [
     Case _Precision_arbitrary --> constant $ string "arbitrary-precision",
     Case _Precision_bits      --> lambda "bits" $ Literals.showInt32 @@ var "bits" ++ string "-bit"]
 
-describeTypeDef :: Definition (Type a -> String)
+describeTypeDef :: Definition (Type -> String)
 describeTypeDef = printingDefinition "describeType" $
   doc "Display a type as a string" $
-  function (Types.apply (TypeVariable _Type) (Types.var "a")) Types.string $
+  function typeT stringT $
     match _Type Nothing [
       Case _Type_annotated   --> lambda "a" $ string "annotated " ++ (ref describeTypeDef @@
-        (project _Annotated _Annotated_subject @@ var "a")),
+        (project _AnnotatedType _AnnotatedType_subject @@ var "a")),
       Case _Type_application --> constant $ string "instances of an application type",
       Case _Type_literal     --> ref describeLiteralTypeDef,
       Case _Type_function    --> lambda "ft" $ string "functions from "
@@ -103,4 +107,4 @@ describeTypeDef = printingDefinition "describeType" $
       Case _Type_union       --> constant $ string "unions",
       Case _Type_variable    --> constant $ string "instances of a named type",
       Case _Type_wrap        --> lambda "n" $ string "wrapper for "
-        ++ (ref describeTypeDef @@ (project _Nominal _Nominal_object @@ var "n"))]
+        ++ (ref describeTypeDef @@ (project _WrappedType _WrappedType_object @@ var "n"))]

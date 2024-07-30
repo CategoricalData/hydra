@@ -34,7 +34,7 @@ import Hydra.Sources.Tier4.Langs.Tinkerpop.PropertyGraph
 validateDefinition :: String -> Datum a -> Definition a
 validateDefinition = definitionInModule tinkerpopValidateModule
 
-tinkerpopValidateModule :: Module Kv
+tinkerpopValidateModule :: Module
 tinkerpopValidateModule = Module (Namespace "hydra/langs/tinkerpop/validate") elements
     [] [tinkerpopPropertyGraphModule] $
     Just "Utilities for validating property graphs against property graph schemas"
@@ -45,7 +45,7 @@ tinkerpopValidateModule = Module (Namespace "hydra/langs/tinkerpop/validate") el
      el validateGraphDef,
      el validatePropertiesDef,
      el validateVertexDef,
-     ----
+     --
      el checkAllDef,
      el edgeErrorDef,
      el edgeLabelMismatchDef,
@@ -63,16 +63,16 @@ validateEdgeDef :: Definition (
   -> Y.Maybe String)
 validateEdgeDef = validateDefinition "validateEdge" $
   functionN [
-    functionT tT (functionT vT (optionalT stringT)),
-    functionT vT stringT,
-    optionalT (functionT vT (optionalT vertexLabelT)),
+    funT tT (funT vT (optionalT stringT)),
+    funT vT stringT,
+    optionalT (funT vT (optionalT vertexLabelT)),
     edgeTypeTT,
     edgeVT,
     optionalT stringT] $
   lambda "checkValue" $ lambda "showValue" $ lambda "labelForVertexId" $ lambda "typ" $ lambda "el" $
     (ref checkAllDef @@ list [var "checkLabel", var "checkId", var "checkProperties", var "checkOut", var "checkIn"]
     `with` [
-      "failWith">: typed (functionT stringT stringT) $
+      "failWith">: typed (funT stringT stringT) $
         ref edgeErrorDef @@ var "showValue" @@ var "el",
       "checkLabel">: (ref verifyDef
         @@ (Equality.equalString
@@ -119,9 +119,9 @@ validateElementDef :: Definition (
   -> Y.Maybe String)
 validateElementDef = validateDefinition "validateElement" $
   functionN [
-    functionT tT (functionT vT (optionalT stringT)),
-    functionT vT stringT,
-    optionalT (functionT vT (optionalT vertexLabelT)),
+    funT tT (funT vT (optionalT stringT)),
+    funT vT stringT,
+    optionalT (funT vT (optionalT vertexLabelT)),
     elementTypeTT,
     elementVT,
     optionalT stringT] $
@@ -152,8 +152,8 @@ validateGraphDef :: Definition (
   -> Y.Maybe String)
 validateGraphDef = validateDefinition "validateGraph" $
   functionNWithClasses [
-    functionT tT (functionT vT (optionalT stringT)),
-    functionT vT stringT,
+    funT tT (funT vT (optionalT stringT)),
+    funT vT stringT,
     graphSchemaTT,
     graphVT,
     optionalT stringT] ordV $
@@ -187,7 +187,7 @@ validateGraphDef = validateDefinition "validateGraph" $
               @@ var "labelForVertexId"
               @@ var "t"
               @@ var "el"),
-          "labelForVertexId">: typed (optionalT (functionT vT (optionalT vertexLabelT))) $
+          "labelForVertexId">: typed (optionalT (funT vT (optionalT vertexLabelT))) $
             just $ lambda "i" $ Optionals.map @@ (project _Vertex _Vertex_label) @@ (Maps.lookup @@ var "i" @@ (project _Graph _Graph_vertices @@ var "graph"))]]
 
 validatePropertiesDef :: Definition (
@@ -197,7 +197,7 @@ validatePropertiesDef :: Definition (
   -> Y.Maybe String)
 validatePropertiesDef = validateDefinition "validateProperties" $
   functionN [
-    functionT tT (functionT vT (optionalT stringT)),
+    funT tT (funT vT (optionalT stringT)),
     listT propertyTypeTT,
     mapT propertyKeyT vT,
     optionalT stringT] $
@@ -206,7 +206,7 @@ validatePropertiesDef = validateDefinition "validateProperties" $
     `with` [
       "checkTypes">: ref checkAllDef @@ (Lists.map @@ var "checkType" @@ var "types"),
       "checkType">:
-        typed (functionT propertyTypeTT $ optionalT stringT) $
+        typed (funT propertyTypeTT $ optionalT stringT) $
         lambda "t" $ ifElse (project _PropertyType _PropertyType_required @@ var "t")
           (ifOpt (Maps.lookup @@ (project _PropertyType _PropertyType_key @@ var "t") @@ var "props")
             (just (ref prependDef @@ "Missing value for " @@ (unwrap _PropertyKey @@ (project _PropertyType _PropertyType_key @@ var "t"))))
@@ -237,15 +237,15 @@ validateVertexDef :: Definition (
   -> Y.Maybe String)
 validateVertexDef = validateDefinition "validateVertex" $
   functionN [
-    functionT tT (functionT vT (optionalT stringT)),
-    functionT vT stringT,
+    funT tT (funT vT (optionalT stringT)),
+    funT vT stringT,
     vertexTypeTT,
     vertexVT,
     optionalT stringT] $
   lambda "checkValue" $ lambda "showValue" $ lambda "typ" $ lambda "el" $
     ((ref checkAllDef @@ list [var "checkLabel", var "checkId", var "checkProperties"])
     `with` [
-      "failWith">: typed (functionT stringT stringT) $
+      "failWith">: typed (funT stringT stringT) $
         ref vertexErrorDef @@ var "showValue" @@ var "el",
       "checkLabel">: (ref verifyDef
         @@ (Equality.equalString
@@ -277,7 +277,7 @@ checkAllDef = validateDefinition "checkAll" $
 
 edgeErrorDef :: Definition ((v -> String) -> PG.Edge v -> String -> String)
 edgeErrorDef = validateDefinition "edgeError" $
-  functionN [functionT vT stringT, edgeVT, stringT, stringT] $
+  functionN [funT vT stringT, edgeVT, stringT, stringT] $
   lambda "showValue" $ lambda "e" $
     ref prependDef @@ ("Invalid edge with id " ++ (var "showValue" @@ (project _Edge _Edge_id @@ var "e")))
 
@@ -303,7 +303,7 @@ verifyDef = validateDefinition "verify" $
 
 vertexErrorDef :: Definition ((v -> String) -> PG.Vertex v -> String -> String)
 vertexErrorDef = validateDefinition "vertexError" $
-  functionN [functionT vT stringT, vertexVT, stringT, stringT] $
+  functionN [funT vT stringT, vertexVT, stringT, stringT] $
   lambda "showValue" $ lambda "v" $
     ref prependDef @@ ("Invalid vertex with id " ++ (var "showValue" @@ (project _Vertex _Vertex_id @@ var "v")))
 

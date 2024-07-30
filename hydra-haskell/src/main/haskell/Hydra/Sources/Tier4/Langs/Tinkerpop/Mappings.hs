@@ -11,7 +11,7 @@ import Hydra.Dsl.Types as Types
 import Hydra.Sources.Tier4.Langs.Tinkerpop.PropertyGraph
 
 
-tinkerpopMappingsModule :: Module Kv
+tinkerpopMappingsModule :: Module
 tinkerpopMappingsModule = Module ns elements
     [tinkerpopPropertyGraphModule, hydraCoreModule, hydraComputeModule] tier0Modules $
     Just "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs"
@@ -82,14 +82,14 @@ tinkerpopMappingsModule = Module ns elements
 
       def "Schema" $
         doc "A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types" $
-        lambdas ["s", "a", "t", "v"] $
+        lambdas ["s", "t", "v"] $
           record [
-            "vertexIdTypes">: compute "Coder" @@ "s" @@ "s" @@ (core "Type" @@ "a") @@ "t",
-            "vertexIds">: compute "Coder" @@ "s" @@ "s" @@ (core "Term" @@ "a") @@ "v",
-            "edgeIdTypes">: compute "Coder" @@ "s" @@ "s" @@ (core "Type" @@ "a") @@ "t",
-            "edgeIds">: compute "Coder" @@ "s" @@ "s" @@ (core "Term" @@ "a") @@ "v",
-            "propertyTypes">: compute "Coder" @@ "s" @@ "s" @@ (core "Type" @@ "a") @@ "t",
-            "propertyValues">: compute "Coder" @@ "s" @@ "s" @@ (core "Term" @@ "a") @@ "v",
+            "vertexIdTypes">: compute "Coder" @@ "s" @@ "s" @@ core "Type" @@ "t",
+            "vertexIds">: compute "Coder" @@ "s" @@ "s" @@ core "Term" @@ "v",
+            "edgeIdTypes">: compute "Coder" @@ "s" @@ "s" @@ core "Type" @@ "t",
+            "edgeIds">: compute "Coder" @@ "s" @@ "s" @@ core "Term" @@ "v",
+            "propertyTypes">: compute "Coder" @@ "s" @@ "s" @@ core "Type" @@ "t",
+            "propertyValues">: compute "Coder" @@ "s" @@ "s" @@ core "Term" @@ "v",
             "annotations">: mappings "AnnotationSchema",
             "defaultVertexId">: "v",
             "defaultEdgeId">: "v"],

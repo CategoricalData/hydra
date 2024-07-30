@@ -18,18 +18,18 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.string;
 
 
-public class Cat<A> extends PrimitiveFunction<A> {
+public class Cat extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/strings.cat");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return function(list(string()), string());
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.list(Expect::string, args.get(0)),
             strings -> Terms.string(apply(strings)));
     }

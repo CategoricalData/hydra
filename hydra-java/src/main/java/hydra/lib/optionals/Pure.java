@@ -17,18 +17,18 @@ import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.optional;
 
 
-public class Pure<A> extends PrimitiveFunction<A> {
+public class Pure extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/optionals.pure");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("a", function("a", optional("a")));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.pure(Terms.optional(apply(args.get(0))));
     }
 

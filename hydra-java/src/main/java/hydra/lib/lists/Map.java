@@ -1,5 +1,6 @@
 package hydra.lib.lists;
 
+import hydra.Flows;
 import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
@@ -8,32 +9,31 @@ import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-
-import java.util.function.Function;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static hydra.Flows.bind;
 import static hydra.Flows.pure;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.list;
 
-public class Map<A> extends PrimitiveFunction<A> {
+
+public class Map extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/lists.map");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("a", lambda("b",
                 function(function("a", "b"), list("a"), list("b"))));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
-        return args -> bind(Expect.list(instance -> pure(Terms.apply(args.get(0), instance)), args.get(1)),
-            l -> pure(Terms.list(l)));
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
+        return args -> Flows.map(Expect.list(instance -> pure(Terms.apply(args.get(0), instance)), args.get(1)),
+            Terms::list);
     }
 
     public static <X, Y> Function<List<X>, List<Y>> apply(Function<X, Y> mapping) {

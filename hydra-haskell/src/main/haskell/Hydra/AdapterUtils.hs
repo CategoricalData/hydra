@@ -12,7 +12,7 @@ import Hydra.Basics
 import Hydra.Module
 import Hydra.Printing
 import Hydra.Mantle
-import Hydra.Kv
+import Hydra.Annotations
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
@@ -25,7 +25,7 @@ import Control.Monad
 
 type SymmetricAdapter s t v = Adapter s s t t v v
 
-type TypeAdapter a = Type a -> Flow (AdapterContext a) (SymmetricAdapter (AdapterContext a) (Type a) (Term a))
+type TypeAdapter = Type -> Flow AdapterContext (SymmetricAdapter AdapterContext Type Term)
 
 bidirectional :: (CoderDirection -> b -> Flow s b) -> Coder s s b b
 bidirectional f = Coder (f CoderDirectionEncode) (f CoderDirectionDecode)
@@ -82,7 +82,7 @@ encodeDecode dir = case dir of
   CoderDirectionEncode -> coderEncode
   CoderDirectionDecode -> coderDecode
 
-floatTypeIsSupported :: LanguageConstraints a -> FloatType -> Bool
+floatTypeIsSupported :: LanguageConstraints -> FloatType -> Bool
 floatTypeIsSupported constraints ft = S.member ft $ languageConstraintsFloatTypes constraints
 
 idAdapter :: t -> SymmetricAdapter s t v
@@ -91,10 +91,10 @@ idAdapter t = Adapter False t t idCoder
 idCoder :: Coder s s a a
 idCoder = Coder pure pure
 
-integerTypeIsSupported :: LanguageConstraints a -> IntegerType -> Bool
+integerTypeIsSupported :: LanguageConstraints -> IntegerType -> Bool
 integerTypeIsSupported constraints it = S.member it $ languageConstraintsIntegerTypes constraints
 
-literalTypeIsSupported :: LanguageConstraints a -> LiteralType -> Bool
+literalTypeIsSupported :: LanguageConstraints -> LiteralType -> Bool
 literalTypeIsSupported constraints at = S.member (literalTypeVariant at) (languageConstraintsLiteralVariants constraints)
   && case at of
     LiteralTypeFloat ft -> floatTypeIsSupported constraints ft
@@ -107,11 +107,11 @@ nameToFilePath caps ext name = namespaceToFilePath caps ext $ Namespace $ prefix
     QualifiedName ns local = qualifyNameEager name
     prefix = Y.maybe "" (\(Namespace gname) -> gname ++ "/") ns
 
-typeIsSupported :: LanguageConstraints a -> Type a -> Bool
+typeIsSupported :: LanguageConstraints -> Type -> Bool
 typeIsSupported constraints t = languageConstraintsTypes constraints t -- these are *additional* type constraints
   && isSupportedVariant (typeVariant t)
   && case t of
-    TypeAnnotated (Annotated at _) -> typeIsSupported constraints at
+    TypeAnnotated (AnnotatedType at _) -> typeIsSupported constraints at
     TypeLiteral at -> literalTypeIsSupported constraints at
     TypeFunction (FunctionType dom cod) -> typeIsSupported constraints dom && typeIsSupported constraints cod
     TypeList lt -> typeIsSupported constraints lt

@@ -8,27 +8,27 @@ import Data.List as L
 import Data.Map as M
 import Data.Set as S
 
-skipAnnotations :: ((x -> Maybe (Core.Annotated x a)) -> x -> x)
-skipAnnotations getAnn t =  
-  let skip = (\t1 -> (\x -> case x of
-          Nothing -> t1
-          Just v71 -> (skip (Core.annotatedSubject v71))) (getAnn t1))
-  in (skip t)
+-- | Strip all annotations from a term, including first-class type annotations
+fullyStripTerm :: (Core.Term -> Core.Term)
+fullyStripTerm t = ((\x -> case x of
+  Core.TermAnnotated v269 -> (fullyStripTerm (Core.annotatedTermSubject v269))
+  Core.TermTyped v270 -> (fullyStripTerm (Core.termWithTypeTerm v270))
+  _ -> t) t)
 
 -- | Strip all annotations from a term
-stripTerm :: (Core.Term a -> Core.Term a)
-stripTerm x = (skipAnnotations (\x -> case x of
-  Core.TermAnnotated v72 -> (Just v72)
-  _ -> Nothing) x)
+stripTerm :: (Core.Term -> Core.Term)
+stripTerm t = ((\x -> case x of
+  Core.TermAnnotated v271 -> (stripTerm (Core.annotatedTermSubject v271))
+  _ -> t) t)
 
--- | Strip all annotations from a type
-stripType :: (Core.Type a -> Core.Type a)
-stripType x = (skipAnnotations (\x -> case x of
-  Core.TypeAnnotated v73 -> (Just v73)
-  _ -> Nothing) x)
+-- | Strip all annotations from a term
+stripType :: (Core.Type -> Core.Type)
+stripType t = ((\x -> case x of
+  Core.TypeAnnotated v272 -> (stripType (Core.annotatedTypeSubject v272))
+  _ -> t) t)
 
 -- | Strip any top-level type lambdas from a type, extracting the (possibly nested) type body
-stripTypeParameters :: (Core.Type a -> Core.Type a)
+stripTypeParameters :: (Core.Type -> Core.Type)
 stripTypeParameters t = ((\x -> case x of
-  Core.TypeLambda v74 -> (stripTypeParameters (Core.lambdaTypeBody v74))
+  Core.TypeLambda v273 -> (stripTypeParameters (Core.lambdaTypeBody v273))
   _ -> t) (stripType t))

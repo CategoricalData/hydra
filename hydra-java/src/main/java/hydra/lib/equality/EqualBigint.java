@@ -6,7 +6,7 @@ import java.math.BigInteger;
 import java.util.function.Function;
 
 
-public class EqualBigint<A> extends EqualityFunction<A, BigInteger> {
+public class EqualBigint extends EqualityFunction<BigInteger> {
     public EqualBigint() {
         super(PrimitiveType.bigint(), Relation.EQUALS);
     }

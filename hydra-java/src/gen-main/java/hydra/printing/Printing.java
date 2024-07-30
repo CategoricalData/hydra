@@ -19,7 +19,7 @@ public interface Printing {
   }
   
   static String describeLiteralType(hydra.core.LiteralType v1) {
-    return ((v1)).accept(new hydra.core.LiteralType.Visitor<String>() {
+    return ((v1)).accept(new hydra.core.LiteralType.Visitor<>() {
       @Override
       public String visit(hydra.core.LiteralType.Binary instance) {
         return "binary strings";
@@ -48,7 +48,7 @@ public interface Printing {
   }
   
   static String describePrecision(hydra.mantle.Precision v1) {
-    return ((v1)).accept(new hydra.mantle.Precision.Visitor<String>() {
+    return ((v1)).accept(new hydra.mantle.Precision.Visitor<>() {
       @Override
       public String visit(hydra.mantle.Precision.Arbitrary instance) {
         return "arbitrary-precision";
@@ -63,27 +63,27 @@ public interface Printing {
     });
   }
   
-  static <A> String describeType(hydra.core.Type<A> v1) {
-    return ((v1)).accept(new hydra.core.Type.Visitor<A, String>() {
+  static String describeType(hydra.core.Type v1) {
+    return ((v1)).accept(new hydra.core.Type.Visitor<>() {
       @Override
-      public String visit(hydra.core.Type.Annotated<A> instance) {
+      public String visit(hydra.core.Type.Annotated instance) {
         return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
           "annotated ",
           hydra.printing.Printing.describeType(((instance.value)).subject)));
       }
       
       @Override
-      public String visit(hydra.core.Type.Application<A> instance) {
+      public String visit(hydra.core.Type.Application instance) {
         return "instances of an application type";
       }
       
       @Override
-      public String visit(hydra.core.Type.Literal<A> instance) {
+      public String visit(hydra.core.Type.Literal instance) {
         return hydra.printing.Printing.describeLiteralType((instance.value));
       }
       
       @Override
-      public String visit(hydra.core.Type.Function<A> instance) {
+      public String visit(hydra.core.Type.Function instance) {
         return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
           hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
             hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
@@ -94,19 +94,19 @@ public interface Printing {
       }
       
       @Override
-      public String visit(hydra.core.Type.Lambda<A> instance) {
+      public String visit(hydra.core.Type.Lambda instance) {
         return "polymorphic terms";
       }
       
       @Override
-      public String visit(hydra.core.Type.List<A> instance) {
+      public String visit(hydra.core.Type.List instance) {
         return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
           "lists of ",
           hydra.printing.Printing.describeType((instance.value))));
       }
       
       @Override
-      public String visit(hydra.core.Type.Map<A> instance) {
+      public String visit(hydra.core.Type.Map instance) {
         return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
           hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
             hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
@@ -117,53 +117,53 @@ public interface Printing {
       }
       
       @Override
-      public String visit(hydra.core.Type.Optional<A> instance) {
+      public String visit(hydra.core.Type.Optional instance) {
         return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
           "optional ",
           hydra.printing.Printing.describeType((instance.value))));
       }
       
       @Override
-      public String visit(hydra.core.Type.Product<A> instance) {
+      public String visit(hydra.core.Type.Product instance) {
         return "tuples";
       }
       
       @Override
-      public String visit(hydra.core.Type.Record<A> instance) {
+      public String visit(hydra.core.Type.Record instance) {
         return "records";
       }
       
       @Override
-      public String visit(hydra.core.Type.Set<A> instance) {
+      public String visit(hydra.core.Type.Set instance) {
         return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
           "sets of ",
           hydra.printing.Printing.describeType((instance.value))));
       }
       
       @Override
-      public String visit(hydra.core.Type.Stream<A> instance) {
+      public String visit(hydra.core.Type.Stream instance) {
         return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
           "streams of ",
           hydra.printing.Printing.describeType((instance.value))));
       }
       
       @Override
-      public String visit(hydra.core.Type.Sum<A> instance) {
+      public String visit(hydra.core.Type.Sum instance) {
         return "variant tuples";
       }
       
       @Override
-      public String visit(hydra.core.Type.Union<A> instance) {
+      public String visit(hydra.core.Type.Union instance) {
         return "unions";
       }
       
       @Override
-      public String visit(hydra.core.Type.Variable<A> instance) {
+      public String visit(hydra.core.Type.Variable instance) {
         return "instances of a named type";
       }
       
       @Override
-      public String visit(hydra.core.Type.Wrap<A> instance) {
+      public String visit(hydra.core.Type.Wrap instance) {
         return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
           "wrapper for ",
           hydra.printing.Printing.describeType(((instance.value)).object)));

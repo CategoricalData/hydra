@@ -17,18 +17,18 @@ import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
 
-public class Int32ToBigint<A> extends PrimitiveFunction<A> {
+public class Int32ToBigint extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/literals.int32ToBigint");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return function(Types.int32(), Types.bigint());
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.int32(args.get(0)), s -> Terms.bigint(apply(s)));
     }
 

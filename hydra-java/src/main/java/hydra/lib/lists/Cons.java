@@ -18,7 +18,7 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.list;
 
-public class Cons<A> extends PrimitiveFunction<A> {
+public class Cons extends PrimitiveFunction {
     public static final Name NAME = new Name("hydra/lib/lists.cons");
 
     public Name name() {
@@ -26,12 +26,12 @@ public class Cons<A> extends PrimitiveFunction<A> {
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("a", function("a", list("a"), list("a")));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(
                 Expect.list(Flows::pure, args.get(1)),
                 l -> Terms.list(Cons.apply(args.get(0), l)));

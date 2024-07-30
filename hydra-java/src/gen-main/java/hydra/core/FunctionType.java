@@ -7,14 +7,14 @@ import java.io.Serializable;
 /**
  * A function type, also known as an arrow type
  */
-public class FunctionType<A> implements Serializable {
+public class FunctionType implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.FunctionType");
   
-  public final hydra.core.Type<A> domain;
+  public final hydra.core.Type domain;
   
-  public final hydra.core.Type<A> codomain;
+  public final hydra.core.Type codomain;
   
-  public FunctionType (hydra.core.Type<A> domain, hydra.core.Type<A> codomain) {
+  public FunctionType (hydra.core.Type domain, hydra.core.Type codomain) {
     java.util.Objects.requireNonNull((domain));
     java.util.Objects.requireNonNull((codomain));
     this.domain = domain;
@@ -35,12 +35,12 @@ public class FunctionType<A> implements Serializable {
     return 2 * domain.hashCode() + 3 * codomain.hashCode();
   }
   
-  public FunctionType withDomain(hydra.core.Type<A> domain) {
+  public FunctionType withDomain(hydra.core.Type domain) {
     java.util.Objects.requireNonNull((domain));
     return new FunctionType(domain, codomain);
   }
   
-  public FunctionType withCodomain(hydra.core.Type<A> codomain) {
+  public FunctionType withCodomain(hydra.core.Type codomain) {
     java.util.Objects.requireNonNull((codomain));
     return new FunctionType(domain, codomain);
   }

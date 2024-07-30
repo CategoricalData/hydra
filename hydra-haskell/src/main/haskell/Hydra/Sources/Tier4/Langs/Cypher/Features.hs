@@ -13,7 +13,7 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-openCypherFeaturesModule :: Module Kv
+openCypherFeaturesModule :: Module
 openCypherFeaturesModule = Module ns elements [hydraCoreModule] tier0Modules $
     Just ("A model for characterizing OpenCypher queries and implementations in terms of included features.")
   where
@@ -289,7 +289,7 @@ openCypherFeaturesEnumModule = do
     ns = Namespace "hydra/org/opencypher/features"
     def = datatype ns
     elements enum = [
-      def "CypherFeatures" $
+      def "CypherFeature" $
         doc "An enumeration of (Open)Cypher features."
         enum]
 
@@ -320,9 +320,9 @@ openCypherFeaturesEnum = do
             TypeOptional (TypeVariable ref) -> forVar newPrefix ref
             _ -> fail $ "unexpected field type: " ++ show ft
           where
-            fname = prefix ++ (unFieldName $ fieldTypeName ft)
+            fname = prefix ++ (unName $ fieldTypeName ft)
             newPrefix = fname ++ "_"
 
-    toField (name, mdesc) = FieldType (FieldName name) $ case mdesc of
+    toField (name, mdesc) = FieldType (Name name) $ case mdesc of
         Nothing -> unit
         Just desc -> doc desc unit

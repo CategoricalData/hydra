@@ -7,19 +7,19 @@ import hydra.lib.optionals.Map;
 import hydra.lib.optionals.Pure;
 
 public interface Optionals {
-    static <A> Term<A> apply() {
+    static Term apply() {
         return new Apply().term();
     }
 
-    static <A> Term<A> bind() {
+    static Term bind() {
         return new Bind().term();
     }
 
-    static <A> Term<A> map() {
+    static Term map() {
         return new Map().term();
     }
 
-    static <A> Term<A> pure() {
+    static Term pure() {
         return new Pure().term();
     }
 }

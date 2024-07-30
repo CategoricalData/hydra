@@ -21,18 +21,18 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.set;
 
 
-public class ToList<A> extends PrimitiveFunction<A> {
+public class ToList extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/sets.toList");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("x", function(set("x"), list("x")));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.set(Flows::pure, args.get(0)), terms -> Terms.list(apply(terms)));
     }
 

@@ -31,7 +31,7 @@ import           Hydra.Sources.Tier0.All
 messagesDefinition :: String -> Datum a -> Definition a
 messagesDefinition = definitionInModule hydraMessagesModule
 
-hydraMessagesModule :: Module Kv
+hydraMessagesModule :: Module
 hydraMessagesModule = Module (Namespace "hydra/messages") elements [] tier0Modules $
     Just "A collection of standard error and warning messages"
   where

@@ -7,16 +7,16 @@ import java.io.Serializable;
 /**
  * The unlabeled equivalent of an Injection term
  */
-public class Sum<A> implements Serializable {
+public class Sum implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Sum");
   
   public final Integer index;
   
   public final Integer size;
   
-  public final hydra.core.Term<A> term;
+  public final hydra.core.Term term;
   
-  public Sum (Integer index, Integer size, hydra.core.Term<A> term) {
+  public Sum (Integer index, Integer size, hydra.core.Term term) {
     java.util.Objects.requireNonNull((index));
     java.util.Objects.requireNonNull((size));
     java.util.Objects.requireNonNull((term));
@@ -49,7 +49,7 @@ public class Sum<A> implements Serializable {
     return new Sum(index, size, term);
   }
   
-  public Sum withTerm(hydra.core.Term<A> term) {
+  public Sum withTerm(hydra.core.Term term) {
     java.util.Objects.requireNonNull((term));
     return new Sum(index, size, term);
   }

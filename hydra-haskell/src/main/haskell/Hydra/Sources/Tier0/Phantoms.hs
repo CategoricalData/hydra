@@ -16,24 +16,23 @@ import           Hydra.Sources.Core
 import Hydra.Sources.Tier0.Compute
 
 
-hydraPhantomsModule :: Module Kv
+hydraPhantomsModule :: Module
 hydraPhantomsModule = Module ns elements [hydraComputeModule] [hydraCoreModule] $
     Just "Phantom types for use in model definitions"
   where
     ns = Namespace "hydra/phantoms"
     core = typeref $ moduleNamespace hydraCoreModule
-    evaluation = typeref $ moduleNamespace hydraComputeModule
     phantoms = typeref ns
     def = datatype ns
 
     elements = [
       def "Case" $
         doc "An association of a field name (as in a case statement) with a phantom type" $
-        lambda "a" $ core "FieldName",
+        lambda "a" $ core "Name",
 
       def "Datum" $
         doc "An association of a term with a phantom type" $
-        lambda "a" $ (core "Term") @@ (evaluation "Kv"),
+        lambda "a" $ core "Term",
 
       def "Definition" $
         doc "An association with a named term with a phantom type" $
@@ -43,7 +42,7 @@ hydraPhantomsModule = Module ns elements [hydraComputeModule] [hydraCoreModule] 
 
       def "Fld" $
         doc "An association with a term-level field with a phantom type" $
-        lambda "a" $ (core "Field") @@ (evaluation "Kv"),
+        lambda "a" $ core "Field",
 
       def "Reference" $
         doc "A pure association with a phantom type" $

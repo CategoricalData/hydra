@@ -8,7 +8,7 @@ package hydra.langs.java.language;
 public interface Language {
   Integer javaMaxTupleLength = 9;
   
-  static <A> hydra.coders.Language<A> javaLanguage() {
+  static  hydra.coders.Language javaLanguage() {
     return new hydra.coders.Language(new hydra.coders.LanguageName("hydra/langs/java"), new hydra.coders.LanguageConstraints(hydra.lib.sets.FromList.apply((hydra.basics.Basics.eliminationVariants)), hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.mantle.LiteralVariant.Boolean_(),
       new hydra.mantle.LiteralVariant.Float_(),
@@ -48,14 +48,14 @@ public interface Language {
       new hydra.mantle.TypeVariant.Set(),
       new hydra.mantle.TypeVariant.Union(),
       new hydra.mantle.TypeVariant.Variable(),
-      new hydra.mantle.TypeVariant.Wrap())), (java.util.function.Function<hydra.core.Type<A>, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<A, Boolean>() {
+      new hydra.mantle.TypeVariant.Wrap())), (java.util.function.Function<hydra.core.Type, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<Boolean>() {
       @Override
-      public Boolean otherwise(hydra.core.Type<A> instance) {
+      public Boolean otherwise(hydra.core.Type instance) {
         return true;
       }
       
       @Override
-      public Boolean visit(hydra.core.Type.Product<A> instance) {
+      public Boolean visit(hydra.core.Type.Product instance) {
         return hydra.lib.equality.LtInt32.apply(
           hydra.lib.lists.Length.apply((instance.value)),
           (hydra.langs.java.language.Language.javaMaxTupleLength));

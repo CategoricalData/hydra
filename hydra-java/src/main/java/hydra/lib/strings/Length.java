@@ -17,18 +17,18 @@ import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.string;
 
 
-public class Length<A> extends PrimitiveFunction<A> {
+public class Length extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/strings.length");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return function(string(), int32());
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> map(Expect.string(args.get(0)), s -> Terms.int32(apply(s)));
     }
 

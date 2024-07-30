@@ -16,9 +16,9 @@ data Query =
 
 _Query = (Core.Name "hydra/langs/cypher/openCypher.Query")
 
-_Query_regular = (Core.FieldName "regular")
+_Query_regular = (Core.Name "regular")
 
-_Query_standalone = (Core.FieldName "standalone")
+_Query_standalone = (Core.Name "standalone")
 
 data RegularQuery = 
   RegularQuery {
@@ -28,9 +28,9 @@ data RegularQuery =
 
 _RegularQuery = (Core.Name "hydra/langs/cypher/openCypher.RegularQuery")
 
-_RegularQuery_head = (Core.FieldName "head")
+_RegularQuery_head = (Core.Name "head")
 
-_RegularQuery_rest = (Core.FieldName "rest")
+_RegularQuery_rest = (Core.Name "rest")
 
 data Union = 
   Union {
@@ -40,70 +40,82 @@ data Union =
 
 _Union = (Core.Name "hydra/langs/cypher/openCypher.Union")
 
-_Union_all = (Core.FieldName "all")
+_Union_all = (Core.Name "all")
 
-_Union_query = (Core.FieldName "query")
+_Union_query = (Core.Name "query")
 
-data ReadsAndUpdates = 
-  ReadsAndUpdates {
-    readsAndUpdatesReading :: [ReadingClause],
-    readsAndUpdatesUpdating :: [UpdatingClause]}
-  deriving (Eq, Ord, Read, Show)
-
-_ReadsAndUpdates = (Core.Name "hydra/langs/cypher/openCypher.ReadsAndUpdates")
-
-_ReadsAndUpdates_reading = (Core.FieldName "reading")
-
-_ReadsAndUpdates_updating = (Core.FieldName "updating")
-
--- | Note: a query without updating clauses in the body must have a return clause
 data SingleQuery = 
-  SingleQuery {
-    -- | Optional WITH clauses which make this a multi-part query
-    singleQueryWith :: [WithClause],
-    singleQueryBody :: ReadsAndUpdates,
-    singleQueryReturn :: (Maybe ProjectionBody)}
+  SingleQuerySinglePart SinglePartQuery |
+  SingleQueryMultiPart MultiPartQuery
   deriving (Eq, Ord, Read, Show)
 
 _SingleQuery = (Core.Name "hydra/langs/cypher/openCypher.SingleQuery")
 
-_SingleQuery_with = (Core.FieldName "with")
+_SingleQuery_singlePart = (Core.Name "singlePart")
 
-_SingleQuery_body = (Core.FieldName "body")
+_SingleQuery_multiPart = (Core.Name "multiPart")
 
-_SingleQuery_return = (Core.FieldName "return")
+data SinglePartQuery = 
+  SinglePartQuery {
+    singlePartQueryReading :: [ReadingClause],
+    singlePartQueryUpdating :: [UpdatingClause],
+    singlePartQueryReturn :: (Maybe Return)}
+  deriving (Eq, Ord, Read, Show)
+
+_SinglePartQuery = (Core.Name "hydra/langs/cypher/openCypher.SinglePartQuery")
+
+_SinglePartQuery_reading = (Core.Name "reading")
+
+_SinglePartQuery_updating = (Core.Name "updating")
+
+_SinglePartQuery_return = (Core.Name "return")
 
 data WithClause = 
   WithClause {
-    withClauseBody :: ReadsAndUpdates,
+    withClauseReading :: [ReadingClause],
+    withClauseUpdating :: [UpdatingClause],
     withClauseWith :: With}
   deriving (Eq, Ord, Read, Show)
 
 _WithClause = (Core.Name "hydra/langs/cypher/openCypher.WithClause")
 
-_WithClause_body = (Core.FieldName "body")
+_WithClause_reading = (Core.Name "reading")
 
-_WithClause_with = (Core.FieldName "with")
+_WithClause_updating = (Core.Name "updating")
+
+_WithClause_with = (Core.Name "with")
+
+data MultiPartQuery = 
+  MultiPartQuery {
+    multiPartQueryWith :: [WithClause],
+    multiPartQueryBody :: SinglePartQuery}
+  deriving (Eq, Ord, Read, Show)
+
+_MultiPartQuery = (Core.Name "hydra/langs/cypher/openCypher.MultiPartQuery")
+
+_MultiPartQuery_with = (Core.Name "with")
+
+_MultiPartQuery_body = (Core.Name "body")
 
 data UpdatingClause = 
-  UpdatingClauseCreate [PatternPart] |
+  UpdatingClauseCreate Create |
   UpdatingClauseMerge Merge |
   UpdatingClauseDelete Delete |
-  UpdatingClauseSet [SetItem] |
-  UpdatingClauseRemove [RemoveItem]
+  UpdatingClauseSet Set_ |
+  UpdatingClauseRemove Remove
   deriving (Eq, Ord, Read, Show)
 
 _UpdatingClause = (Core.Name "hydra/langs/cypher/openCypher.UpdatingClause")
 
-_UpdatingClause_create = (Core.FieldName "create")
+_UpdatingClause_create = (Core.Name "create")
 
-_UpdatingClause_merge = (Core.FieldName "merge")
+_UpdatingClause_merge = (Core.Name "merge")
 
-_UpdatingClause_delete = (Core.FieldName "delete")
+_UpdatingClause_delete = (Core.Name "delete")
 
-_UpdatingClause_set = (Core.FieldName "set")
+_UpdatingClause_set = (Core.Name "set")
 
-_UpdatingClause_remove = (Core.FieldName "remove")
+_UpdatingClause_remove = (Core.Name "remove")
 
 data ReadingClause = 
   ReadingClauseMatch Match |
@@ -113,38 +125,38 @@ data ReadingClause =
 
 _ReadingClause = (Core.Name "hydra/langs/cypher/openCypher.ReadingClause")
 
-_ReadingClause_match = (Core.FieldName "match")
+_ReadingClause_match = (Core.Name "match")
 
-_ReadingClause_unwind = (Core.FieldName "unwind")
+_ReadingClause_unwind = (Core.Name "unwind")
 
-_ReadingClause_inQueryCall = (Core.FieldName "inQueryCall")
+_ReadingClause_inQueryCall = (Core.Name "inQueryCall")
 
 data Match = 
   Match {
     matchOptional :: Bool,
-    matchPattern :: [PatternPart],
-    matchWhere :: (Maybe Expression)}
+    matchPattern :: Pattern,
+    matchWhere :: (Maybe Where)}
   deriving (Eq, Ord, Read, Show)
 
 _Match = (Core.Name "hydra/langs/cypher/openCypher.Match")
 
-_Match_optional = (Core.FieldName "optional")
+_Match_optional = (Core.Name "optional")
 
-_Match_pattern = (Core.FieldName "pattern")
+_Match_pattern = (Core.Name "pattern")
 
-_Match_where = (Core.FieldName "where")
+_Match_where = (Core.Name "where")
 
 data Unwind = 
   Unwind {
     unwindExpression :: Expression,
-    unwindVariable :: String}
+    unwindVariable :: Variable}
   deriving (Eq, Ord, Read, Show)
 
 _Unwind = (Core.Name "hydra/langs/cypher/openCypher.Unwind")
 
-_Unwind_expression = (Core.FieldName "expression")
+_Unwind_expression = (Core.Name "expression")
 
-_Unwind_variable = (Core.FieldName "variable")
+_Unwind_variable = (Core.Name "variable")
 
 data Merge = 
   Merge {
@@ -154,32 +166,46 @@ data Merge =
 
 _Merge = (Core.Name "hydra/langs/cypher/openCypher.Merge")
 
-_Merge_patternPart = (Core.FieldName "patternPart")
+_Merge_patternPart = (Core.Name "patternPart")
 
-_Merge_actions = (Core.FieldName "actions")
+_Merge_actions = (Core.Name "actions")
 
-data CreateOrMatch = 
-  CreateOrMatchCreate  |
-  CreateOrMatchMatch 
+data MatchOrCreate = 
+  MatchOrCreateMatch  |
+  MatchOrCreateCreate 
   deriving (Eq, Ord, Read, Show)
 
-_CreateOrMatch = (Core.Name "hydra/langs/cypher/openCypher.CreateOrMatch")
+_MatchOrCreate = (Core.Name "hydra/langs/cypher/openCypher.MatchOrCreate")
 
-_CreateOrMatch_create = (Core.FieldName "create")
+_MatchOrCreate_match = (Core.Name "match")
 
-_CreateOrMatch_match = (Core.FieldName "match")
+_MatchOrCreate_create = (Core.Name "create")
 
 data MergeAction = 
   MergeAction {
-    mergeActionAction :: CreateOrMatch,
-    mergeActionSet :: [SetItem]}
+    mergeActionAction :: MatchOrCreate,
+    mergeActionSet :: Set_}
   deriving (Eq, Ord, Read, Show)
 
 _MergeAction = (Core.Name "hydra/langs/cypher/openCypher.MergeAction")
 
-_MergeAction_action = (Core.FieldName "action")
+_MergeAction_action = (Core.Name "action")
 
-_MergeAction_set = (Core.FieldName "set")
+_MergeAction_set = (Core.Name "set")
+
+newtype Create = 
+  Create {
+    unCreate :: Pattern}
+  deriving (Eq, Ord, Read, Show)
+
+_Create = (Core.Name "hydra/langs/cypher/openCypher.Create")
+
+newtype Set_ = 
+  Set_ {
+    unSet :: [SetItem]}
+  deriving (Eq, Ord, Read, Show)
+
+_Set = (Core.Name "hydra/langs/cypher/openCypher.Set")
 
 data SetItem = 
   SetItemProperty PropertyEquals |
@@ -190,13 +216,13 @@ data SetItem =
 
 _SetItem = (Core.Name "hydra/langs/cypher/openCypher.SetItem")
 
-_SetItem_property = (Core.FieldName "property")
+_SetItem_property = (Core.Name "property")
 
-_SetItem_variableEqual = (Core.FieldName "variableEqual")
+_SetItem_variableEqual = (Core.Name "variableEqual")
 
-_SetItem_variablePlusEqual = (Core.FieldName "variablePlusEqual")
+_SetItem_variablePlusEqual = (Core.Name "variablePlusEqual")
 
-_SetItem_variableLabels = (Core.FieldName "variableLabels")
+_SetItem_variableLabels = (Core.Name "variableLabels")
 
 data PropertyEquals = 
   PropertyEquals {
@@ -206,45 +232,45 @@ data PropertyEquals =
 
 _PropertyEquals = (Core.Name "hydra/langs/cypher/openCypher.PropertyEquals")
 
-_PropertyEquals_lhs = (Core.FieldName "lhs")
+_PropertyEquals_lhs = (Core.Name "lhs")
 
-_PropertyEquals_rhs = (Core.FieldName "rhs")
+_PropertyEquals_rhs = (Core.Name "rhs")
 
 data VariableEquals = 
   VariableEquals {
-    variableEqualsLhs :: String,
+    variableEqualsLhs :: Variable,
     variableEqualsRhs :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _VariableEquals = (Core.Name "hydra/langs/cypher/openCypher.VariableEquals")
 
-_VariableEquals_lhs = (Core.FieldName "lhs")
+_VariableEquals_lhs = (Core.Name "lhs")
 
-_VariableEquals_rhs = (Core.FieldName "rhs")
+_VariableEquals_rhs = (Core.Name "rhs")
 
 data VariablePlusEquals = 
   VariablePlusEquals {
-    variablePlusEqualsLhs :: String,
+    variablePlusEqualsLhs :: Variable,
     variablePlusEqualsRhs :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _VariablePlusEquals = (Core.Name "hydra/langs/cypher/openCypher.VariablePlusEquals")
 
-_VariablePlusEquals_lhs = (Core.FieldName "lhs")
+_VariablePlusEquals_lhs = (Core.Name "lhs")
 
-_VariablePlusEquals_rhs = (Core.FieldName "rhs")
+_VariablePlusEquals_rhs = (Core.Name "rhs")
 
 data VariableAndNodeLabels = 
   VariableAndNodeLabels {
-    variableAndNodeLabelsVariable :: String,
-    variableAndNodeLabelsLabels :: [NodeLabel]}
+    variableAndNodeLabelsVariable :: Variable,
+    variableAndNodeLabelsLabels :: NodeLabels}
   deriving (Eq, Ord, Read, Show)
 
 _VariableAndNodeLabels = (Core.Name "hydra/langs/cypher/openCypher.VariableAndNodeLabels")
 
-_VariableAndNodeLabels_variable = (Core.FieldName "variable")
+_VariableAndNodeLabels_variable = (Core.Name "variable")
 
-_VariableAndNodeLabels_labels = (Core.FieldName "labels")
+_VariableAndNodeLabels_labels = (Core.Name "labels")
 
 data Delete = 
   Delete {
@@ -254,9 +280,16 @@ data Delete =
 
 _Delete = (Core.Name "hydra/langs/cypher/openCypher.Delete")
 
-_Delete_detach = (Core.FieldName "detach")
+_Delete_detach = (Core.Name "detach")
 
-_Delete_expressions = (Core.FieldName "expressions")
+_Delete_expressions = (Core.Name "expressions")
+
+newtype Remove = 
+  Remove {
+    unRemove :: [RemoveItem]}
+  deriving (Eq, Ord, Read, Show)
+
+_Remove = (Core.Name "hydra/langs/cypher/openCypher.Remove")
 
 data RemoveItem = 
   RemoveItemVariableLabels VariableAndNodeLabels |
@@ -265,9 +298,9 @@ data RemoveItem =
 
 _RemoveItem = (Core.Name "hydra/langs/cypher/openCypher.RemoveItem")
 
-_RemoveItem_variableLabels = (Core.FieldName "variableLabels")
+_RemoveItem_variableLabels = (Core.Name "variableLabels")
 
-_RemoveItem_property = (Core.FieldName "property")
+_RemoveItem_property = (Core.Name "property")
 
 data InQueryCall = 
   InQueryCall {
@@ -277,89 +310,107 @@ data InQueryCall =
 
 _InQueryCall = (Core.Name "hydra/langs/cypher/openCypher.InQueryCall")
 
-_InQueryCall_call = (Core.FieldName "call")
+_InQueryCall_call = (Core.Name "call")
 
-_InQueryCall_yieldItems = (Core.FieldName "yieldItems")
+_InQueryCall_yieldItems = (Core.Name "yieldItems")
 
 data ProcedureInvocation = 
   ProcedureInvocationExplicit ExplicitProcedureInvocation |
-  ProcedureInvocationImplicit QualifiedName
+  ProcedureInvocationImplicit ImplicitProcedureInvocation
   deriving (Eq, Ord, Read, Show)
 
 _ProcedureInvocation = (Core.Name "hydra/langs/cypher/openCypher.ProcedureInvocation")
 
-_ProcedureInvocation_explicit = (Core.FieldName "explicit")
+_ProcedureInvocation_explicit = (Core.Name "explicit")
 
-_ProcedureInvocation_implicit = (Core.FieldName "implicit")
+_ProcedureInvocation_implicit = (Core.Name "implicit")
+
+data StarOrYieldItems = 
+  StarOrYieldItemsStar  |
+  StarOrYieldItemsItems YieldItems
+  deriving (Eq, Ord, Read, Show)
+
+_StarOrYieldItems = (Core.Name "hydra/langs/cypher/openCypher.StarOrYieldItems")
+
+_StarOrYieldItems_star = (Core.Name "star")
+
+_StarOrYieldItems_items = (Core.Name "items")
 
 data StandaloneCall = 
   StandaloneCall {
     standaloneCallCall :: ProcedureInvocation,
-    standaloneCallYieldItems :: (Maybe YieldItems)}
+    standaloneCallYieldItems :: (Maybe StarOrYieldItems)}
   deriving (Eq, Ord, Read, Show)
 
 _StandaloneCall = (Core.Name "hydra/langs/cypher/openCypher.StandaloneCall")
 
-_StandaloneCall_call = (Core.FieldName "call")
+_StandaloneCall_call = (Core.Name "call")
 
-_StandaloneCall_yieldItems = (Core.FieldName "yieldItems")
+_StandaloneCall_yieldItems = (Core.Name "yieldItems")
 
 data YieldItems = 
   YieldItems {
     yieldItemsItems :: [YieldItem],
-    yieldItemsWhere :: (Maybe Expression)}
+    yieldItemsWhere :: (Maybe Where)}
   deriving (Eq, Ord, Read, Show)
 
 _YieldItems = (Core.Name "hydra/langs/cypher/openCypher.YieldItems")
 
-_YieldItems_items = (Core.FieldName "items")
+_YieldItems_items = (Core.Name "items")
 
-_YieldItems_where = (Core.FieldName "where")
+_YieldItems_where = (Core.Name "where")
 
 data YieldItem = 
   YieldItem {
-    yieldItemField :: (Maybe String),
-    yieldItemVariable :: String}
+    yieldItemField :: (Maybe ProcedureResultField),
+    yieldItemVariable :: Variable}
   deriving (Eq, Ord, Read, Show)
 
 _YieldItem = (Core.Name "hydra/langs/cypher/openCypher.YieldItem")
 
-_YieldItem_field = (Core.FieldName "field")
+_YieldItem_field = (Core.Name "field")
 
-_YieldItem_variable = (Core.FieldName "variable")
+_YieldItem_variable = (Core.Name "variable")
 
 data With = 
   With {
     withProjection :: ProjectionBody,
-    withWhere :: (Maybe Expression)}
+    withWhere :: (Maybe Where)}
   deriving (Eq, Ord, Read, Show)
 
 _With = (Core.Name "hydra/langs/cypher/openCypher.With")
 
-_With_projection = (Core.FieldName "projection")
+_With_projection = (Core.Name "projection")
 
-_With_where = (Core.FieldName "where")
+_With_where = (Core.Name "where")
+
+newtype Return = 
+  Return {
+    unReturn :: ProjectionBody}
+  deriving (Eq, Ord, Read, Show)
+
+_Return = (Core.Name "hydra/langs/cypher/openCypher.Return")
 
 data ProjectionBody = 
   ProjectionBody {
     projectionBodyDistinct :: Bool,
-    projectionBodyProjectionItems :: [ProjectionItem],
-    projectionBodyOrder :: [SortItem],
-    projectionBodySkip :: (Maybe Expression),
-    projectionBodyLimit :: (Maybe Expression)}
+    projectionBodyProjectionItems :: ProjectionItems,
+    projectionBodyOrder :: (Maybe Order),
+    projectionBodySkip :: (Maybe Skip),
+    projectionBodyLimit :: (Maybe Limit)}
   deriving (Eq, Ord, Read, Show)
 
 _ProjectionBody = (Core.Name "hydra/langs/cypher/openCypher.ProjectionBody")
 
-_ProjectionBody_distinct = (Core.FieldName "distinct")
+_ProjectionBody_distinct = (Core.Name "distinct")
 
-_ProjectionBody_projectionItems = (Core.FieldName "projectionItems")
+_ProjectionBody_projectionItems = (Core.Name "projectionItems")
 
-_ProjectionBody_order = (Core.FieldName "order")
+_ProjectionBody_order = (Core.Name "order")
 
-_ProjectionBody_skip = (Core.FieldName "skip")
+_ProjectionBody_skip = (Core.Name "skip")
 
-_ProjectionBody_limit = (Core.FieldName "limit")
+_ProjectionBody_limit = (Core.Name "limit")
 
 data ProjectionItems = 
   ProjectionItems {
@@ -369,21 +420,42 @@ data ProjectionItems =
 
 _ProjectionItems = (Core.Name "hydra/langs/cypher/openCypher.ProjectionItems")
 
-_ProjectionItems_star = (Core.FieldName "star")
+_ProjectionItems_star = (Core.Name "star")
 
-_ProjectionItems_explicit = (Core.FieldName "explicit")
+_ProjectionItems_explicit = (Core.Name "explicit")
 
 data ProjectionItem = 
   ProjectionItem {
     projectionItemExpression :: Expression,
-    projectionItemVariable :: (Maybe String)}
+    projectionItemVariable :: (Maybe Variable)}
   deriving (Eq, Ord, Read, Show)
 
 _ProjectionItem = (Core.Name "hydra/langs/cypher/openCypher.ProjectionItem")
 
-_ProjectionItem_expression = (Core.FieldName "expression")
+_ProjectionItem_expression = (Core.Name "expression")
 
-_ProjectionItem_variable = (Core.FieldName "variable")
+_ProjectionItem_variable = (Core.Name "variable")
+
+newtype Order = 
+  Order {
+    unOrder :: [SortItem]}
+  deriving (Eq, Ord, Read, Show)
+
+_Order = (Core.Name "hydra/langs/cypher/openCypher.Order")
+
+newtype Skip = 
+  Skip {
+    unSkip :: Expression}
+  deriving (Eq, Ord, Read, Show)
+
+_Skip = (Core.Name "hydra/langs/cypher/openCypher.Skip")
+
+newtype Limit = 
+  Limit {
+    unLimit :: Expression}
+  deriving (Eq, Ord, Read, Show)
+
+_Limit = (Core.Name "hydra/langs/cypher/openCypher.Limit")
 
 data SortOrder = 
   SortOrderAscending  |
@@ -392,9 +464,9 @@ data SortOrder =
 
 _SortOrder = (Core.Name "hydra/langs/cypher/openCypher.SortOrder")
 
-_SortOrder_ascending = (Core.FieldName "ascending")
+_SortOrder_ascending = (Core.Name "ascending")
 
-_SortOrder_descending = (Core.FieldName "descending")
+_SortOrder_descending = (Core.Name "descending")
 
 data SortItem = 
   SortItem {
@@ -404,21 +476,42 @@ data SortItem =
 
 _SortItem = (Core.Name "hydra/langs/cypher/openCypher.SortItem")
 
-_SortItem_expression = (Core.FieldName "expression")
+_SortItem_expression = (Core.Name "expression")
 
-_SortItem_order = (Core.FieldName "order")
+_SortItem_order = (Core.Name "order")
+
+newtype Where = 
+  Where {
+    unWhere :: Expression}
+  deriving (Eq, Ord, Read, Show)
+
+_Where = (Core.Name "hydra/langs/cypher/openCypher.Where")
+
+newtype Pattern = 
+  Pattern {
+    unPattern :: [PatternPart]}
+  deriving (Eq, Ord, Read, Show)
+
+_Pattern = (Core.Name "hydra/langs/cypher/openCypher.Pattern")
 
 data PatternPart = 
   PatternPart {
-    patternPartVariable :: (Maybe String),
-    patternPartPattern :: PatternElement}
+    patternPartVariable :: (Maybe Variable),
+    patternPartPattern :: AnonymousPatternPart}
   deriving (Eq, Ord, Read, Show)
 
 _PatternPart = (Core.Name "hydra/langs/cypher/openCypher.PatternPart")
 
-_PatternPart_variable = (Core.FieldName "variable")
+_PatternPart_variable = (Core.Name "variable")
 
-_PatternPart_pattern = (Core.FieldName "pattern")
+_PatternPart_pattern = (Core.Name "pattern")
+
+newtype AnonymousPatternPart = 
+  AnonymousPatternPart {
+    unAnonymousPatternPart :: PatternElement}
+  deriving (Eq, Ord, Read, Show)
+
+_AnonymousPatternPart = (Core.Name "hydra/langs/cypher/openCypher.AnonymousPatternPart")
 
 data NodePatternChain = 
   NodePatternChain {
@@ -428,9 +521,9 @@ data NodePatternChain =
 
 _NodePatternChain = (Core.Name "hydra/langs/cypher/openCypher.NodePatternChain")
 
-_NodePatternChain_nodePattern = (Core.FieldName "nodePattern")
+_NodePatternChain_nodePattern = (Core.Name "nodePattern")
 
-_NodePatternChain_chain = (Core.FieldName "chain")
+_NodePatternChain_chain = (Core.Name "chain")
 
 data PatternElement = 
   PatternElementChained NodePatternChain |
@@ -439,9 +532,9 @@ data PatternElement =
 
 _PatternElement = (Core.Name "hydra/langs/cypher/openCypher.PatternElement")
 
-_PatternElement_chained = (Core.FieldName "chained")
+_PatternElement_chained = (Core.Name "chained")
 
-_PatternElement_parenthesized = (Core.FieldName "parenthesized")
+_PatternElement_parenthesized = (Core.Name "parenthesized")
 
 data RelationshipsPattern = 
   RelationshipsPattern {
@@ -451,24 +544,24 @@ data RelationshipsPattern =
 
 _RelationshipsPattern = (Core.Name "hydra/langs/cypher/openCypher.RelationshipsPattern")
 
-_RelationshipsPattern_nodePattern = (Core.FieldName "nodePattern")
+_RelationshipsPattern_nodePattern = (Core.Name "nodePattern")
 
-_RelationshipsPattern_chain = (Core.FieldName "chain")
+_RelationshipsPattern_chain = (Core.Name "chain")
 
 data NodePattern = 
   NodePattern {
-    nodePatternVariable :: (Maybe String),
-    nodePatternLabels :: [NodeLabel],
+    nodePatternVariable :: (Maybe Variable),
+    nodePatternLabels :: (Maybe NodeLabels),
     nodePatternProperties :: (Maybe Properties)}
   deriving (Eq, Ord, Read, Show)
 
 _NodePattern = (Core.Name "hydra/langs/cypher/openCypher.NodePattern")
 
-_NodePattern_variable = (Core.FieldName "variable")
+_NodePattern_variable = (Core.Name "variable")
 
-_NodePattern_labels = (Core.FieldName "labels")
+_NodePattern_labels = (Core.Name "labels")
 
-_NodePattern_properties = (Core.FieldName "properties")
+_NodePattern_properties = (Core.Name "properties")
 
 data PatternElementChain = 
   PatternElementChain {
@@ -478,27 +571,28 @@ data PatternElementChain =
 
 _PatternElementChain = (Core.Name "hydra/langs/cypher/openCypher.PatternElementChain")
 
-_PatternElementChain_relationship = (Core.FieldName "relationship")
+_PatternElementChain_relationship = (Core.Name "relationship")
 
-_PatternElementChain_node = (Core.FieldName "node")
+_PatternElementChain_node = (Core.Name "node")
 
 data RelationshipPattern = 
-  RelationshipPatternLeftArrow Bool |
-  RelationshipPatternDetail (Maybe RelationshipDetail) |
-  RelationshipPatternRightArrow Bool
+  RelationshipPattern {
+    relationshipPatternLeftArrow :: Bool,
+    relationshipPatternDetail :: (Maybe RelationshipDetail),
+    relationshipPatternRightArrow :: Bool}
   deriving (Eq, Ord, Read, Show)
 
 _RelationshipPattern = (Core.Name "hydra/langs/cypher/openCypher.RelationshipPattern")
 
-_RelationshipPattern_leftArrow = (Core.FieldName "leftArrow")
+_RelationshipPattern_leftArrow = (Core.Name "leftArrow")
 
-_RelationshipPattern_detail = (Core.FieldName "detail")
+_RelationshipPattern_detail = (Core.Name "detail")
 
-_RelationshipPattern_rightArrow = (Core.FieldName "rightArrow")
+_RelationshipPattern_rightArrow = (Core.Name "rightArrow")
 
 data RelationshipDetail = 
   RelationshipDetail {
-    relationshipDetailVariable :: (Maybe String),
+    relationshipDetailVariable :: (Maybe Variable),
     relationshipDetailTypes :: (Maybe RelationshipTypes),
     relationshipDetailRange :: (Maybe RangeLiteral),
     relationshipDetailProperties :: (Maybe Properties)}
@@ -506,24 +600,24 @@ data RelationshipDetail =
 
 _RelationshipDetail = (Core.Name "hydra/langs/cypher/openCypher.RelationshipDetail")
 
-_RelationshipDetail_variable = (Core.FieldName "variable")
+_RelationshipDetail_variable = (Core.Name "variable")
 
-_RelationshipDetail_types = (Core.FieldName "types")
+_RelationshipDetail_types = (Core.Name "types")
 
-_RelationshipDetail_range = (Core.FieldName "range")
+_RelationshipDetail_range = (Core.Name "range")
 
-_RelationshipDetail_properties = (Core.FieldName "properties")
+_RelationshipDetail_properties = (Core.Name "properties")
 
 data Properties = 
-  PropertiesMap [KeyValuePair] |
+  PropertiesMap MapLiteral |
   PropertiesParameter Parameter
   deriving (Eq, Ord, Read, Show)
 
 _Properties = (Core.Name "hydra/langs/cypher/openCypher.Properties")
 
-_Properties_map = (Core.FieldName "map")
+_Properties_map = (Core.Name "map")
 
-_Properties_parameter = (Core.FieldName "parameter")
+_Properties_parameter = (Core.Name "parameter")
 
 newtype RelationshipTypes = 
   RelationshipTypes {
@@ -531,6 +625,13 @@ newtype RelationshipTypes =
   deriving (Eq, Ord, Read, Show)
 
 _RelationshipTypes = (Core.Name "hydra/langs/cypher/openCypher.RelationshipTypes")
+
+newtype NodeLabels = 
+  NodeLabels {
+    unNodeLabels :: [NodeLabel]}
+  deriving (Eq, Ord, Read, Show)
+
+_NodeLabels = (Core.Name "hydra/langs/cypher/openCypher.NodeLabels")
 
 newtype NodeLabel = 
   NodeLabel {
@@ -547,9 +648,9 @@ data RangeLiteral =
 
 _RangeLiteral = (Core.Name "hydra/langs/cypher/openCypher.RangeLiteral")
 
-_RangeLiteral_start = (Core.FieldName "start")
+_RangeLiteral_start = (Core.Name "start")
 
-_RangeLiteral_end = (Core.FieldName "end")
+_RangeLiteral_end = (Core.Name "end")
 
 newtype RelTypeName = 
   RelTypeName {
@@ -561,14 +662,14 @@ _RelTypeName = (Core.Name "hydra/langs/cypher/openCypher.RelTypeName")
 data PropertyExpression = 
   PropertyExpression {
     propertyExpressionAtom :: Atom,
-    propertyExpressionLookups :: [String]}
+    propertyExpressionLookups :: [PropertyLookup]}
   deriving (Eq, Ord, Read, Show)
 
 _PropertyExpression = (Core.Name "hydra/langs/cypher/openCypher.PropertyExpression")
 
-_PropertyExpression_atom = (Core.FieldName "atom")
+_PropertyExpression_atom = (Core.Name "atom")
 
-_PropertyExpression_lookups = (Core.FieldName "lookups")
+_PropertyExpression_lookups = (Core.Name "lookups")
 
 newtype Expression = 
   Expression {
@@ -606,9 +707,9 @@ data NotExpression =
 
 _NotExpression = (Core.Name "hydra/langs/cypher/openCypher.NotExpression")
 
-_NotExpression_not = (Core.FieldName "not")
+_NotExpression_not = (Core.Name "not")
 
-_NotExpression_expression = (Core.FieldName "expression")
+_NotExpression_expression = (Core.Name "expression")
 
 data ComparisonExpression = 
   ComparisonExpression {
@@ -618,9 +719,9 @@ data ComparisonExpression =
 
 _ComparisonExpression = (Core.Name "hydra/langs/cypher/openCypher.ComparisonExpression")
 
-_ComparisonExpression_left = (Core.FieldName "left")
+_ComparisonExpression_left = (Core.Name "left")
 
-_ComparisonExpression_right = (Core.FieldName "right")
+_ComparisonExpression_right = (Core.Name "right")
 
 data ComparisonOperator = 
   ComparisonOperatorEq  |
@@ -633,17 +734,17 @@ data ComparisonOperator =
 
 _ComparisonOperator = (Core.Name "hydra/langs/cypher/openCypher.ComparisonOperator")
 
-_ComparisonOperator_eq = (Core.FieldName "eq")
+_ComparisonOperator_eq = (Core.Name "eq")
 
-_ComparisonOperator_neq = (Core.FieldName "neq")
+_ComparisonOperator_neq = (Core.Name "neq")
 
-_ComparisonOperator_lt = (Core.FieldName "lt")
+_ComparisonOperator_lt = (Core.Name "lt")
 
-_ComparisonOperator_gt = (Core.FieldName "gt")
+_ComparisonOperator_gt = (Core.Name "gt")
 
-_ComparisonOperator_lte = (Core.FieldName "lte")
+_ComparisonOperator_lte = (Core.Name "lte")
 
-_ComparisonOperator_gte = (Core.FieldName "gte")
+_ComparisonOperator_gte = (Core.Name "gte")
 
 data PartialComparisonExpression = 
   PartialComparisonExpression {
@@ -653,9 +754,9 @@ data PartialComparisonExpression =
 
 _PartialComparisonExpression = (Core.Name "hydra/langs/cypher/openCypher.PartialComparisonExpression")
 
-_PartialComparisonExpression_operator = (Core.FieldName "operator")
+_PartialComparisonExpression_operator = (Core.Name "operator")
 
-_PartialComparisonExpression_right = (Core.FieldName "right")
+_PartialComparisonExpression_right = (Core.Name "right")
 
 data StringListNullPredicateExpression = 
   StringListNullPredicateExpression {
@@ -665,23 +766,23 @@ data StringListNullPredicateExpression =
 
 _StringListNullPredicateExpression = (Core.Name "hydra/langs/cypher/openCypher.StringListNullPredicateExpression")
 
-_StringListNullPredicateExpression_left = (Core.FieldName "left")
+_StringListNullPredicateExpression_left = (Core.Name "left")
 
-_StringListNullPredicateExpression_right = (Core.FieldName "right")
+_StringListNullPredicateExpression_right = (Core.Name "right")
 
 data StringListNullPredicateRightHandSide = 
   StringListNullPredicateRightHandSideString StringPredicateExpression |
-  StringListNullPredicateRightHandSideList AddOrSubtractExpression |
-  StringListNullPredicateRightHandSideNull Bool
+  StringListNullPredicateRightHandSideList ListPredicateExpression |
+  StringListNullPredicateRightHandSideNull NullPredicateExpression
   deriving (Eq, Ord, Read, Show)
 
 _StringListNullPredicateRightHandSide = (Core.Name "hydra/langs/cypher/openCypher.StringListNullPredicateRightHandSide")
 
-_StringListNullPredicateRightHandSide_string = (Core.FieldName "string")
+_StringListNullPredicateRightHandSide_string = (Core.Name "string")
 
-_StringListNullPredicateRightHandSide_list = (Core.FieldName "list")
+_StringListNullPredicateRightHandSide_list = (Core.Name "list")
 
-_StringListNullPredicateRightHandSide_null = (Core.FieldName "null")
+_StringListNullPredicateRightHandSide_null = (Core.Name "null")
 
 data StringPredicateExpression = 
   StringPredicateExpression {
@@ -691,23 +792,37 @@ data StringPredicateExpression =
 
 _StringPredicateExpression = (Core.Name "hydra/langs/cypher/openCypher.StringPredicateExpression")
 
-_StringPredicateExpression_operator = (Core.FieldName "operator")
+_StringPredicateExpression_operator = (Core.Name "operator")
 
-_StringPredicateExpression_expression = (Core.FieldName "expression")
+_StringPredicateExpression_expression = (Core.Name "expression")
 
 data StringPredicateOperator = 
-  StringPredicateOperatorStarts  |
-  StringPredicateOperatorEnds  |
+  StringPredicateOperatorStartsWith  |
+  StringPredicateOperatorEndsWith  |
   StringPredicateOperatorContains 
   deriving (Eq, Ord, Read, Show)
 
 _StringPredicateOperator = (Core.Name "hydra/langs/cypher/openCypher.StringPredicateOperator")
 
-_StringPredicateOperator_starts = (Core.FieldName "starts")
+_StringPredicateOperator_startsWith = (Core.Name "startsWith")
 
-_StringPredicateOperator_ends = (Core.FieldName "ends")
+_StringPredicateOperator_endsWith = (Core.Name "endsWith")
 
-_StringPredicateOperator_contains = (Core.FieldName "contains")
+_StringPredicateOperator_contains = (Core.Name "contains")
+
+newtype ListPredicateExpression = 
+  ListPredicateExpression {
+    unListPredicateExpression :: AddOrSubtractExpression}
+  deriving (Eq, Ord, Read, Show)
+
+_ListPredicateExpression = (Core.Name "hydra/langs/cypher/openCypher.ListPredicateExpression")
+
+newtype NullPredicateExpression = 
+  NullPredicateExpression {
+    unNullPredicateExpression :: Bool}
+  deriving (Eq, Ord, Read, Show)
+
+_NullPredicateExpression = (Core.Name "hydra/langs/cypher/openCypher.NullPredicateExpression")
 
 data AddOrSubtractExpression = 
   AddOrSubtractExpression {
@@ -717,9 +832,9 @@ data AddOrSubtractExpression =
 
 _AddOrSubtractExpression = (Core.Name "hydra/langs/cypher/openCypher.AddOrSubtractExpression")
 
-_AddOrSubtractExpression_left = (Core.FieldName "left")
+_AddOrSubtractExpression_left = (Core.Name "left")
 
-_AddOrSubtractExpression_right = (Core.FieldName "right")
+_AddOrSubtractExpression_right = (Core.Name "right")
 
 data AddOrSubtractRightHandSide = 
   AddOrSubtractRightHandSide {
@@ -729,9 +844,9 @@ data AddOrSubtractRightHandSide =
 
 _AddOrSubtractRightHandSide = (Core.Name "hydra/langs/cypher/openCypher.AddOrSubtractRightHandSide")
 
-_AddOrSubtractRightHandSide_operator = (Core.FieldName "operator")
+_AddOrSubtractRightHandSide_operator = (Core.Name "operator")
 
-_AddOrSubtractRightHandSide_expression = (Core.FieldName "expression")
+_AddOrSubtractRightHandSide_expression = (Core.Name "expression")
 
 data AddOrSubtractOperator = 
   AddOrSubtractOperatorAdd  |
@@ -740,9 +855,9 @@ data AddOrSubtractOperator =
 
 _AddOrSubtractOperator = (Core.Name "hydra/langs/cypher/openCypher.AddOrSubtractOperator")
 
-_AddOrSubtractOperator_add = (Core.FieldName "add")
+_AddOrSubtractOperator_add = (Core.Name "add")
 
-_AddOrSubtractOperator_subtract = (Core.FieldName "subtract")
+_AddOrSubtractOperator_subtract = (Core.Name "subtract")
 
 data MultiplyDivideModuloExpression = 
   MultiplyDivideModuloExpression {
@@ -752,9 +867,9 @@ data MultiplyDivideModuloExpression =
 
 _MultiplyDivideModuloExpression = (Core.Name "hydra/langs/cypher/openCypher.MultiplyDivideModuloExpression")
 
-_MultiplyDivideModuloExpression_left = (Core.FieldName "left")
+_MultiplyDivideModuloExpression_left = (Core.Name "left")
 
-_MultiplyDivideModuloExpression_right = (Core.FieldName "right")
+_MultiplyDivideModuloExpression_right = (Core.Name "right")
 
 data MultiplyDivideModuloRightHandSide = 
   MultiplyDivideModuloRightHandSide {
@@ -764,9 +879,9 @@ data MultiplyDivideModuloRightHandSide =
 
 _MultiplyDivideModuloRightHandSide = (Core.Name "hydra/langs/cypher/openCypher.MultiplyDivideModuloRightHandSide")
 
-_MultiplyDivideModuloRightHandSide_operator = (Core.FieldName "operator")
+_MultiplyDivideModuloRightHandSide_operator = (Core.Name "operator")
 
-_MultiplyDivideModuloRightHandSide_expression = (Core.FieldName "expression")
+_MultiplyDivideModuloRightHandSide_expression = (Core.Name "expression")
 
 data MultiplyDivideModuloOperator = 
   MultiplyDivideModuloOperatorMultiply  |
@@ -776,11 +891,11 @@ data MultiplyDivideModuloOperator =
 
 _MultiplyDivideModuloOperator = (Core.Name "hydra/langs/cypher/openCypher.MultiplyDivideModuloOperator")
 
-_MultiplyDivideModuloOperator_multiply = (Core.FieldName "multiply")
+_MultiplyDivideModuloOperator_multiply = (Core.Name "multiply")
 
-_MultiplyDivideModuloOperator_divide = (Core.FieldName "divide")
+_MultiplyDivideModuloOperator_divide = (Core.Name "divide")
 
-_MultiplyDivideModuloOperator_modulo = (Core.FieldName "modulo")
+_MultiplyDivideModuloOperator_modulo = (Core.Name "modulo")
 
 newtype PowerOfExpression = 
   PowerOfExpression {
@@ -797,47 +912,47 @@ data UnaryAddOrSubtractExpression =
 
 _UnaryAddOrSubtractExpression = (Core.Name "hydra/langs/cypher/openCypher.UnaryAddOrSubtractExpression")
 
-_UnaryAddOrSubtractExpression_operator = (Core.FieldName "operator")
+_UnaryAddOrSubtractExpression_operator = (Core.Name "operator")
 
-_UnaryAddOrSubtractExpression_expression = (Core.FieldName "expression")
+_UnaryAddOrSubtractExpression_expression = (Core.Name "expression")
 
 data ListOperatorExpressionOrPropertyLookup = 
   ListOperatorExpressionOrPropertyLookupList ListOperatorExpression |
-  ListOperatorExpressionOrPropertyLookupProperty String
+  ListOperatorExpressionOrPropertyLookupProperty PropertyLookup
   deriving (Eq, Ord, Read, Show)
 
 _ListOperatorExpressionOrPropertyLookup = (Core.Name "hydra/langs/cypher/openCypher.ListOperatorExpressionOrPropertyLookup")
 
-_ListOperatorExpressionOrPropertyLookup_list = (Core.FieldName "list")
+_ListOperatorExpressionOrPropertyLookup_list = (Core.Name "list")
 
-_ListOperatorExpressionOrPropertyLookup_property = (Core.FieldName "property")
+_ListOperatorExpressionOrPropertyLookup_property = (Core.Name "property")
 
 data NonArithmeticOperatorExpression = 
   NonArithmeticOperatorExpression {
     nonArithmeticOperatorExpressionAtom :: Atom,
     nonArithmeticOperatorExpressionListsAndLookups :: [ListOperatorExpressionOrPropertyLookup],
-    nonArithmeticOperatorExpressionLabels :: [NodeLabel]}
+    nonArithmeticOperatorExpressionLabels :: (Maybe NodeLabels)}
   deriving (Eq, Ord, Read, Show)
 
 _NonArithmeticOperatorExpression = (Core.Name "hydra/langs/cypher/openCypher.NonArithmeticOperatorExpression")
 
-_NonArithmeticOperatorExpression_atom = (Core.FieldName "atom")
+_NonArithmeticOperatorExpression_atom = (Core.Name "atom")
 
-_NonArithmeticOperatorExpression_listsAndLookups = (Core.FieldName "listsAndLookups")
+_NonArithmeticOperatorExpression_listsAndLookups = (Core.Name "listsAndLookups")
 
-_NonArithmeticOperatorExpression_labels = (Core.FieldName "labels")
+_NonArithmeticOperatorExpression_labels = (Core.Name "labels")
 
 data RangeExpression = 
   RangeExpression {
-    rangeExpressionStart :: Expression,
-    rangeExpressionEnd :: Expression}
+    rangeExpressionStart :: (Maybe Expression),
+    rangeExpressionEnd :: (Maybe Expression)}
   deriving (Eq, Ord, Read, Show)
 
 _RangeExpression = (Core.Name "hydra/langs/cypher/openCypher.RangeExpression")
 
-_RangeExpression_start = (Core.FieldName "start")
+_RangeExpression_start = (Core.Name "start")
 
-_RangeExpression_end = (Core.FieldName "end")
+_RangeExpression_end = (Core.Name "end")
 
 data ListOperatorExpression = 
   ListOperatorExpressionSingle Expression |
@@ -846,9 +961,16 @@ data ListOperatorExpression =
 
 _ListOperatorExpression = (Core.Name "hydra/langs/cypher/openCypher.ListOperatorExpression")
 
-_ListOperatorExpression_single = (Core.FieldName "single")
+_ListOperatorExpression_single = (Core.Name "single")
 
-_ListOperatorExpression_range = (Core.FieldName "range")
+_ListOperatorExpression_range = (Core.Name "range")
+
+newtype PropertyLookup = 
+  PropertyLookup {
+    unPropertyLookup :: PropertyKeyName}
+  deriving (Eq, Ord, Read, Show)
+
+_PropertyLookup = (Core.Name "hydra/langs/cypher/openCypher.PropertyLookup")
 
 data Atom = 
   AtomLiteral Literal |
@@ -858,38 +980,38 @@ data Atom =
   AtomListComprehension ListComprehension |
   AtomPatternComprehension PatternComprehension |
   AtomQuantifier Quantifier |
-  AtomPatternPredicate RelationshipsPattern |
-  AtomParenthesized Expression |
+  AtomPatternPredicate PatternPredicate |
+  AtomParenthesized ParenthesizedExpression |
   AtomFunctionInvocation FunctionInvocation |
   AtomExistentialSubquery ExistentialSubquery |
-  AtomVariable String
+  AtomVariable Variable
   deriving (Eq, Ord, Read, Show)
 
 _Atom = (Core.Name "hydra/langs/cypher/openCypher.Atom")
 
-_Atom_literal = (Core.FieldName "literal")
+_Atom_literal = (Core.Name "literal")
 
-_Atom_parameter = (Core.FieldName "parameter")
+_Atom_parameter = (Core.Name "parameter")
 
-_Atom_case = (Core.FieldName "case")
+_Atom_case = (Core.Name "case")
 
-_Atom_countStar = (Core.FieldName "countStar")
+_Atom_countStar = (Core.Name "countStar")
 
-_Atom_listComprehension = (Core.FieldName "listComprehension")
+_Atom_listComprehension = (Core.Name "listComprehension")
 
-_Atom_patternComprehension = (Core.FieldName "patternComprehension")
+_Atom_patternComprehension = (Core.Name "patternComprehension")
 
-_Atom_quantifier = (Core.FieldName "quantifier")
+_Atom_quantifier = (Core.Name "quantifier")
 
-_Atom_patternPredicate = (Core.FieldName "patternPredicate")
+_Atom_patternPredicate = (Core.Name "patternPredicate")
 
-_Atom_parenthesized = (Core.FieldName "parenthesized")
+_Atom_parenthesized = (Core.Name "parenthesized")
 
-_Atom_functionInvocation = (Core.FieldName "functionInvocation")
+_Atom_functionInvocation = (Core.Name "functionInvocation")
 
-_Atom_existentialSubquery = (Core.FieldName "existentialSubquery")
+_Atom_existentialSubquery = (Core.Name "existentialSubquery")
 
-_Atom_variable = (Core.FieldName "variable")
+_Atom_variable = (Core.Name "variable")
 
 data CaseExpression = 
   CaseExpression {
@@ -900,11 +1022,11 @@ data CaseExpression =
 
 _CaseExpression = (Core.Name "hydra/langs/cypher/openCypher.CaseExpression")
 
-_CaseExpression_expression = (Core.FieldName "expression")
+_CaseExpression_expression = (Core.Name "expression")
 
-_CaseExpression_alternatives = (Core.FieldName "alternatives")
+_CaseExpression_alternatives = (Core.Name "alternatives")
 
-_CaseExpression_else = (Core.FieldName "else")
+_CaseExpression_else = (Core.Name "else")
 
 data CaseAlternative = 
   CaseAlternative {
@@ -914,9 +1036,9 @@ data CaseAlternative =
 
 _CaseAlternative = (Core.Name "hydra/langs/cypher/openCypher.CaseAlternative")
 
-_CaseAlternative_condition = (Core.FieldName "condition")
+_CaseAlternative_condition = (Core.Name "condition")
 
-_CaseAlternative_result = (Core.FieldName "result")
+_CaseAlternative_result = (Core.Name "result")
 
 data ListComprehension = 
   ListComprehension {
@@ -926,27 +1048,27 @@ data ListComprehension =
 
 _ListComprehension = (Core.Name "hydra/langs/cypher/openCypher.ListComprehension")
 
-_ListComprehension_left = (Core.FieldName "left")
+_ListComprehension_left = (Core.Name "left")
 
-_ListComprehension_right = (Core.FieldName "right")
+_ListComprehension_right = (Core.Name "right")
 
 data PatternComprehension = 
   PatternComprehension {
-    patternComprehensionVariable :: (Maybe String),
+    patternComprehensionVariable :: (Maybe Variable),
     patternComprehensionPattern :: RelationshipsPattern,
-    patternComprehensionWhere :: (Maybe Expression),
+    patternComprehensionWhere :: (Maybe Where),
     patternComprehensionRight :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _PatternComprehension = (Core.Name "hydra/langs/cypher/openCypher.PatternComprehension")
 
-_PatternComprehension_variable = (Core.FieldName "variable")
+_PatternComprehension_variable = (Core.Name "variable")
 
-_PatternComprehension_pattern = (Core.FieldName "pattern")
+_PatternComprehension_pattern = (Core.Name "pattern")
 
-_PatternComprehension_where = (Core.FieldName "where")
+_PatternComprehension_where = (Core.Name "where")
 
-_PatternComprehension_right = (Core.FieldName "right")
+_PatternComprehension_right = (Core.Name "right")
 
 data Quantifier = 
   Quantifier {
@@ -956,9 +1078,9 @@ data Quantifier =
 
 _Quantifier = (Core.Name "hydra/langs/cypher/openCypher.Quantifier")
 
-_Quantifier_operator = (Core.FieldName "operator")
+_Quantifier_operator = (Core.Name "operator")
 
-_Quantifier_expression = (Core.FieldName "expression")
+_Quantifier_expression = (Core.Name "expression")
 
 data QuantifierOperator = 
   QuantifierOperatorAll  |
@@ -969,37 +1091,51 @@ data QuantifierOperator =
 
 _QuantifierOperator = (Core.Name "hydra/langs/cypher/openCypher.QuantifierOperator")
 
-_QuantifierOperator_all = (Core.FieldName "all")
+_QuantifierOperator_all = (Core.Name "all")
 
-_QuantifierOperator_any = (Core.FieldName "any")
+_QuantifierOperator_any = (Core.Name "any")
 
-_QuantifierOperator_none = (Core.FieldName "none")
+_QuantifierOperator_none = (Core.Name "none")
 
-_QuantifierOperator_single = (Core.FieldName "single")
+_QuantifierOperator_single = (Core.Name "single")
 
 data FilterExpression = 
   FilterExpression {
     filterExpressionIdInColl :: IdInColl,
-    filterExpressionWhere :: (Maybe Expression)}
+    filterExpressionWhere :: (Maybe Where)}
   deriving (Eq, Ord, Read, Show)
 
 _FilterExpression = (Core.Name "hydra/langs/cypher/openCypher.FilterExpression")
 
-_FilterExpression_idInColl = (Core.FieldName "idInColl")
+_FilterExpression_idInColl = (Core.Name "idInColl")
 
-_FilterExpression_where = (Core.FieldName "where")
+_FilterExpression_where = (Core.Name "where")
+
+newtype PatternPredicate = 
+  PatternPredicate {
+    unPatternPredicate :: RelationshipsPattern}
+  deriving (Eq, Ord, Read, Show)
+
+_PatternPredicate = (Core.Name "hydra/langs/cypher/openCypher.PatternPredicate")
+
+newtype ParenthesizedExpression = 
+  ParenthesizedExpression {
+    unParenthesizedExpression :: Expression}
+  deriving (Eq, Ord, Read, Show)
+
+_ParenthesizedExpression = (Core.Name "hydra/langs/cypher/openCypher.ParenthesizedExpression")
 
 data IdInColl = 
   IdInColl {
-    idInCollVariable :: String,
+    idInCollVariable :: Variable,
     idInCollExpression :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _IdInColl = (Core.Name "hydra/langs/cypher/openCypher.IdInColl")
 
-_IdInColl_variable = (Core.FieldName "variable")
+_IdInColl_variable = (Core.Name "variable")
 
-_IdInColl_expression = (Core.FieldName "expression")
+_IdInColl_expression = (Core.Name "expression")
 
 data FunctionInvocation = 
   FunctionInvocation {
@@ -1010,11 +1146,11 @@ data FunctionInvocation =
 
 _FunctionInvocation = (Core.Name "hydra/langs/cypher/openCypher.FunctionInvocation")
 
-_FunctionInvocation_name = (Core.FieldName "name")
+_FunctionInvocation_name = (Core.Name "name")
 
-_FunctionInvocation_distinct = (Core.FieldName "distinct")
+_FunctionInvocation_distinct = (Core.Name "distinct")
 
-_FunctionInvocation_arguments = (Core.FieldName "arguments")
+_FunctionInvocation_arguments = (Core.Name "arguments")
 
 data QualifiedName = 
   QualifiedName {
@@ -1024,21 +1160,21 @@ data QualifiedName =
 
 _QualifiedName = (Core.Name "hydra/langs/cypher/openCypher.QualifiedName")
 
-_QualifiedName_namespace = (Core.FieldName "namespace")
+_QualifiedName_namespace = (Core.Name "namespace")
 
-_QualifiedName_local = (Core.FieldName "local")
+_QualifiedName_local = (Core.Name "local")
 
 data PatternWhere = 
   PatternWhere {
-    patternWherePattern :: [PatternPart],
-    patternWhereWhere :: (Maybe Expression)}
+    patternWherePattern :: Pattern,
+    patternWhereWhere :: (Maybe Where)}
   deriving (Eq, Ord, Read, Show)
 
 _PatternWhere = (Core.Name "hydra/langs/cypher/openCypher.PatternWhere")
 
-_PatternWhere_pattern = (Core.FieldName "pattern")
+_PatternWhere_pattern = (Core.Name "pattern")
 
-_PatternWhere_where = (Core.FieldName "where")
+_PatternWhere_where = (Core.Name "where")
 
 data ExistentialSubquery = 
   ExistentialSubqueryRegular RegularQuery |
@@ -1047,9 +1183,9 @@ data ExistentialSubquery =
 
 _ExistentialSubquery = (Core.Name "hydra/langs/cypher/openCypher.ExistentialSubquery")
 
-_ExistentialSubquery_regular = (Core.FieldName "regular")
+_ExistentialSubquery_regular = (Core.Name "regular")
 
-_ExistentialSubquery_pattern = (Core.FieldName "pattern")
+_ExistentialSubquery_pattern = (Core.Name "pattern")
 
 data ExplicitProcedureInvocation = 
   ExplicitProcedureInvocation {
@@ -1059,32 +1195,53 @@ data ExplicitProcedureInvocation =
 
 _ExplicitProcedureInvocation = (Core.Name "hydra/langs/cypher/openCypher.ExplicitProcedureInvocation")
 
-_ExplicitProcedureInvocation_name = (Core.FieldName "name")
+_ExplicitProcedureInvocation_name = (Core.Name "name")
 
-_ExplicitProcedureInvocation_arguments = (Core.FieldName "arguments")
+_ExplicitProcedureInvocation_arguments = (Core.Name "arguments")
+
+newtype ImplicitProcedureInvocation = 
+  ImplicitProcedureInvocation {
+    unImplicitProcedureInvocation :: QualifiedName}
+  deriving (Eq, Ord, Read, Show)
+
+_ImplicitProcedureInvocation = (Core.Name "hydra/langs/cypher/openCypher.ImplicitProcedureInvocation")
+
+newtype ProcedureResultField = 
+  ProcedureResultField {
+    unProcedureResultField :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_ProcedureResultField = (Core.Name "hydra/langs/cypher/openCypher.ProcedureResultField")
+
+newtype Variable = 
+  Variable {
+    unVariable :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_Variable = (Core.Name "hydra/langs/cypher/openCypher.Variable")
 
 data Literal = 
   LiteralBoolean Bool |
   LiteralNull  |
   LiteralNumber NumberLiteral |
-  LiteralString String |
-  LiteralList [Expression] |
-  LiteralMap [KeyValuePair]
+  LiteralString StringLiteral |
+  LiteralList ListLiteral |
+  LiteralMap MapLiteral
   deriving (Eq, Ord, Read, Show)
 
 _Literal = (Core.Name "hydra/langs/cypher/openCypher.Literal")
 
-_Literal_boolean = (Core.FieldName "boolean")
+_Literal_boolean = (Core.Name "boolean")
 
-_Literal_null = (Core.FieldName "null")
+_Literal_null = (Core.Name "null")
 
-_Literal_number = (Core.FieldName "number")
+_Literal_number = (Core.Name "number")
 
-_Literal_string = (Core.FieldName "string")
+_Literal_string = (Core.Name "string")
 
-_Literal_list = (Core.FieldName "list")
+_Literal_list = (Core.Name "list")
 
-_Literal_map = (Core.FieldName "map")
+_Literal_map = (Core.Name "map")
 
 data NumberLiteral = 
   NumberLiteralDouble Double |
@@ -1093,21 +1250,49 @@ data NumberLiteral =
 
 _NumberLiteral = (Core.Name "hydra/langs/cypher/openCypher.NumberLiteral")
 
-_NumberLiteral_double = (Core.FieldName "double")
+_NumberLiteral_double = (Core.Name "double")
 
-_NumberLiteral_integer = (Core.FieldName "integer")
+_NumberLiteral_integer = (Core.Name "integer")
+
+newtype StringLiteral = 
+  StringLiteral {
+    unStringLiteral :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_StringLiteral = (Core.Name "hydra/langs/cypher/openCypher.StringLiteral")
+
+newtype ListLiteral = 
+  ListLiteral {
+    unListLiteral :: [Expression]}
+  deriving (Eq, Ord, Read, Show)
+
+_ListLiteral = (Core.Name "hydra/langs/cypher/openCypher.ListLiteral")
+
+newtype MapLiteral = 
+  MapLiteral {
+    unMapLiteral :: [KeyValuePair]}
+  deriving (Eq, Ord, Read, Show)
+
+_MapLiteral = (Core.Name "hydra/langs/cypher/openCypher.MapLiteral")
 
 data KeyValuePair = 
   KeyValuePair {
-    keyValuePairKey :: String,
+    keyValuePairKey :: PropertyKeyName,
     keyValuePairValue :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _KeyValuePair = (Core.Name "hydra/langs/cypher/openCypher.KeyValuePair")
 
-_KeyValuePair_key = (Core.FieldName "key")
+_KeyValuePair_key = (Core.Name "key")
 
-_KeyValuePair_value = (Core.FieldName "value")
+_KeyValuePair_value = (Core.Name "value")
+
+newtype PropertyKeyName = 
+  PropertyKeyName {
+    unPropertyKeyName :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_PropertyKeyName = (Core.Name "hydra/langs/cypher/openCypher.PropertyKeyName")
 
 data Parameter = 
   ParameterSymbolic String |
@@ -1116,6 +1301,6 @@ data Parameter =
 
 _Parameter = (Core.Name "hydra/langs/cypher/openCypher.Parameter")
 
-_Parameter_symbolic = (Core.FieldName "symbolic")
+_Parameter_symbolic = (Core.Name "symbolic")
 
-_Parameter_integer = (Core.FieldName "integer")
+_Parameter_integer = (Core.Name "integer")

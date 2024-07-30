@@ -11,6 +11,7 @@ import Hydra.Langs.Haskell.Settings
 import qualified Hydra.Langs.Haskell.Ast as H
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Types as Types
+import Hydra.Lib.Io
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -20,12 +21,12 @@ import qualified Data.Maybe as Y
 import Hydra.Rewriting (removeTypeAnnotations, removeTermAnnotations)
 
 
-adaptTypeToHaskellAndEncode :: (Ord a, Read a, Show a) => Namespaces -> Type a -> Flow (Graph a) H.Type
+adaptTypeToHaskellAndEncode :: Namespaces -> Type -> Flow Graph H.Type
 adaptTypeToHaskellAndEncode namespaces = adaptAndEncodeType haskellLanguage (encodeType namespaces)
 
-constantDecls :: Graph a -> Namespaces -> Name -> Type a -> [H.DeclarationWithComments]
+constantDecls :: Graph -> Namespaces -> Name -> Type -> [H.DeclarationWithComments]
 constantDecls g namespaces name@(Name nm) typ = if useCoreImport
-    then toDecl (Name "hydra/core.Name") nameDecl:(toDecl (Name "hydra/core.FieldName") <$> fieldDecls)
+    then toDecl (Name "hydra/core.Name") nameDecl:(toDecl (Name "hydra/core.Name") <$> fieldDecls)
     else []
   where
     lname = localNameOfEager name
@@ -42,13 +43,12 @@ constantDecls g namespaces name@(Name nm) typ = if useCoreImport
       TypeUnion rt -> rowTypeFields rt
       _ -> []
     fieldDecls = toConstant <$> fieldsOf (snd $ unpackLambdaType g typ)
-    toConstant (FieldType (FieldName fname) _) = ("_" ++ lname ++ "_" ++ fname, fname)
+    toConstant (FieldType (Name fname) _) = ("_" ++ lname ++ "_" ++ fname, fname)
 
-constructModule :: (Ord a, Read a, Show a)
-  => Namespaces
-  -> Module a
-  -> M.Map (Type a) (Coder (Graph a) (Graph a) (Term a) H.Expression)
-  -> [(Element a, TypedTerm a)] -> Flow (Graph a) H.Module
+constructModule :: Namespaces
+  -> Module
+  -> M.Map Type (Coder Graph Graph Term H.Expression)
+  -> [(Element, TypedTerm)] -> Flow Graph H.Module
 constructModule namespaces mod coders pairs = do
     g <- getState
     decls <- L.concat <$> CM.mapM (createDeclarations g) pairs
@@ -57,11 +57,12 @@ constructModule namespaces mod coders pairs = do
   where
     h (Namespace name) = name
 
-    createDeclarations g pair@(el, TypedTerm typ term) = if isType typ
-      then toTypeDeclarations namespaces el term
-      else do
-        d <- toDataDeclaration coders namespaces pair
-        return [d]
+    createDeclarations g pair@(el, TypedTerm typ term) = do
+      if isType typ
+        then toTypeDeclarations namespaces el term
+        else do
+          d <- toDataDeclaration coders namespaces pair
+          return [d]
 
     importName name = H.ModuleName $ L.intercalate "." (capitalize <$> Strings.splitOn "/" name)
     imports = domainImports ++ standardImports
@@ -77,7 +78,7 @@ constructModule namespaces mod coders pairs = do
           where
             toImport (name, alias) = H.Import False (H.ModuleName name) (H.ModuleName <$> alias) Nothing
 
-encodeFunction :: (Eq a, Ord a, Read a, Show a) => Namespaces -> Function a -> Flow (Graph a) H.Expression
+encodeFunction :: Namespaces -> Function -> Flow Graph H.Expression
 encodeFunction namespaces fun = case fun of
     FunctionElimination e -> case e of
       EliminationList fun -> do
@@ -132,7 +133,7 @@ encodeFunction namespaces fun = case fun of
     FunctionLambda (Lambda (Name v) body) -> hslambda v <$> encodeTerm namespaces body
     FunctionPrimitive name -> pure $ H.ExpressionVariable $ hsPrimitiveReference name
 
-encodeLiteral :: Literal -> Flow (Graph a) H.Expression
+encodeLiteral :: Literal -> Flow Graph H.Expression
 encodeLiteral av = case av of
     LiteralBoolean b -> pure $ hsvar $ if b then "True" else "False"
     LiteralFloat fv -> case fv of
@@ -146,9 +147,9 @@ encodeLiteral av = case av of
     LiteralString s -> pure $ hslit $ H.LiteralString s
     _ -> unexpected "literal value" $ show av
 
-encodeTerm :: (Eq a, Ord a, Read a, Show a) => Namespaces -> Term a -> Flow (Graph a) H.Expression
+encodeTerm :: Namespaces -> Term -> Flow Graph H.Expression
 encodeTerm namespaces term = do
-   case stripTerm term of
+   case fullyStripTerm term of
     TermApplication (Application fun arg) -> hsapp <$> encode fun <*> encode arg
     TermFunction f -> encodeFunction namespaces f
     TermLet (Let bindings env) -> do
@@ -162,7 +163,7 @@ encodeTerm namespaces term = do
           return $ H.LocalBindingValue $ simpleValueBinding hname hexpr Nothing
     TermList els -> H.ExpressionList <$> CM.mapM encode els
     TermLiteral v -> encodeLiteral v
-    TermWrap (Nominal tname term') -> if newtypesNotTypedefs
+    TermWrap (WrappedTerm tname term') -> if newtypesNotTypedefs
       then hsapp <$> pure (H.ExpressionVariable $ elementReference namespaces tname) <*> encode term'
       else encode term'
     TermOptional m -> case m of
@@ -180,15 +181,15 @@ encodeTerm namespaces term = do
             toFieldUpdate (Field fn ft) = H.FieldUpdate (recordFieldReference namespaces sname fn) <$> encode ft
     TermUnion (Injection sname (Field fn ft)) -> do
       let lhs = H.ExpressionVariable $ unionFieldReference namespaces sname fn
-      case stripTerm ft of
+      case fullyStripTerm ft of
         TermRecord (Record _ []) -> pure lhs
         _ -> hsapp lhs <$> encode ft
     TermVariable name -> pure $ H.ExpressionVariable $ elementReference namespaces name --pure $ hsvar v
-    _ -> fail $ "unexpected term: " ++ show term
+    t -> fail $ "unexpected term: " ++ show t
   where
     encode = encodeTerm namespaces
 
-encodeType :: Show a => Namespaces -> Type a -> Flow (Graph a) H.Type
+encodeType :: Namespaces -> Type -> Flow Graph H.Type
 encodeType namespaces typ = withTrace "encode type" $ case stripType typ of
     TypeApplication (ApplicationType lhs rhs) -> toTypeApplication <$> CM.sequence [encode lhs, encode rhs]
     TypeFunction (FunctionType dom cod) -> H.TypeFunction <$> (H.Type_Function <$> encode dom <*> encode cod)
@@ -222,19 +223,19 @@ encodeType namespaces typ = withTrace "encode type" $ case stripType typ of
     TypeProduct types -> H.TypeTuple <$> (CM.mapM encode types)
     TypeRecord rt -> case rowTypeFields rt of
       [] -> pure $ H.TypeTuple []  -- TODO: too permissive; not all empty record types are the unit type
-      _ -> wrap $ rowTypeTypeName rt
+      _ -> ref $ rowTypeTypeName rt
     TypeSet st -> toTypeApplication <$> CM.sequence [
       pure $ H.TypeVariable $ rawName "Set",
       encode st]
-    TypeUnion rt -> wrap $ rowTypeTypeName rt
-    TypeVariable v -> wrap v
-    TypeWrap (Nominal name _) -> wrap name
+    TypeUnion rt -> ref $ rowTypeTypeName rt
+    TypeVariable v -> ref v
+    TypeWrap (WrappedType name _) -> ref name
     _ -> fail $ "unexpected type: " ++ show typ
   where
     encode = encodeType namespaces
-    wrap name = pure $ H.TypeVariable $ elementReference namespaces name
+    ref name = pure $ H.TypeVariable $ elementReference namespaces name
 
-encodeTypeWithClassAssertions :: (Ord a, Read a, Show a) => Namespaces -> M.Map Name (S.Set TypeClass) -> Type a -> Flow (Graph a) H.Type
+encodeTypeWithClassAssertions :: Namespaces -> M.Map Name (S.Set TypeClass) -> Type -> Flow Graph H.Type
 encodeTypeWithClassAssertions namespaces classes typ = withTrace "encode with assertions" $ do
   htyp <- adaptTypeToHaskellAndEncode namespaces typ
   if L.null assertPairs
@@ -257,21 +258,22 @@ encodeTypeWithClassAssertions namespaces classes typ = withTrace "encode with as
           where
             toPair c = (name, c)
 
-moduleToHaskellModule :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) H.Module
+moduleToHaskellModule :: Module -> Flow Graph H.Module
 moduleToHaskellModule mod = do
     namespaces <- namespacesForModule mod
     transformModule haskellLanguage (encodeTerm namespaces) (constructModule namespaces) mod
 
-moduleToHaskell :: (Ord a, Read a, Show a) => Module a -> Flow (Graph a) (M.Map FilePath String)
+moduleToHaskell :: Module -> Flow Graph (M.Map FilePath String)
 moduleToHaskell mod = do
   hsmod <- moduleToHaskellModule mod
   let s = printExpr $ parenthesize $ toTree hsmod
   return $ M.fromList [(namespaceToFilePath True (FileExtension "hs") $ moduleNamespace mod, s)]
 
-toDataDeclaration :: (Ord a, Read a, Show a)
-  => M.Map (Type a) (Coder (Graph a) (Graph a) (Term a) H.Expression) -> Namespaces
-  -> (Element a, TypedTerm a) -> Flow (Graph a) H.DeclarationWithComments
-toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term coder Nothing
+toDataDeclaration :: M.Map Type (Coder Graph Graph Term H.Expression) -> Namespaces
+  -> (Element, TypedTerm) -> Flow Graph H.DeclarationWithComments
+toDataDeclaration coders namespaces (el, TypedTerm typ term) = do
+  comments <- getTermDescription term
+  toDecl comments hname term coder Nothing
   where
     coder = Y.fromJust $ M.lookup typ coders
     hname = simpleName $ localNameOfEager $ elementName el
@@ -283,7 +285,7 @@ toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term
             (applicationPattern name (args ++ vars)) (H.RightHandSide body) bindings
         _ -> vb
 
-    toDecl hname term coder bindings = case stripTerm term of
+    toDecl comments hname term coder bindings = case fullyStripTerm term of
       TermLet (Let lbindings env) -> do
           -- A "let" constant cannot be predicted in advance, so we infer its type and construct a coder on the fly
           -- This makes program code with "let" terms more expensive to transform than simple data.
@@ -294,26 +296,24 @@ toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term
           hterms <- CM.zipWithM coderEncode coders (snd <$> bl)
 
           let hbindings = L.zipWith toBinding hnames hterms
-          toDecl hname env coder (Just $ H.LocalBindings hbindings)
+          toDecl comments hname env coder (Just $ H.LocalBindings hbindings)
         where
           toBinding hname' hterm' = H.LocalBindingValue $ simpleValueBinding hname' hterm' Nothing
       _ -> do
-        g <- getState
         hterm <- coderEncode coder term
         let vb = simpleValueBinding hname hterm bindings
-        classes <- annotationClassTypeClasses (graphAnnotations g) typ
+        classes <- getTypeClasses typ
         htype <- encodeTypeWithClassAssertions namespaces classes typ
         let decl = H.DeclarationTypedBinding $ H.TypedBinding (H.TypeSignature hname htype) (rewriteValueBinding vb)
-        comments <- annotationClassTermDescription (graphAnnotations g) term
         return $ H.DeclarationWithComments decl comments
 
-toTypeDeclarations :: (Ord a, Read a, Show a)
-  => Namespaces -> Element a -> Term a -> Flow (Graph a) [H.DeclarationWithComments]
+toTypeDeclarations :: Namespaces -> Element -> Term -> Flow Graph [H.DeclarationWithComments]
 toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (elementName el)) $ do
     g <- getState
     let lname = localNameOfEager $ elementName el
     let hname = simpleName lname
     t <- coreDecodeType term
+
     isSer <- isSerializable el
     let deriv = H.Deriving $ if isSer
                   then rawName <$> ["Eq", "Ord", "Read", "Show"]
@@ -327,7 +327,7 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
       TypeUnion rt -> do
         cons <- CM.mapM (unionCons lname) $ rowTypeFields rt
         return $ H.DeclarationData $ H.DataDeclaration H.DataDeclaration_KeywordData [] hd cons [deriv]
-      TypeWrap (Nominal tname wt) -> do
+      TypeWrap (WrappedType tname wt) -> do
         cons <- newtypeCons el wt
         return $ H.DeclarationData $ H.DataDeclaration H.DataDeclaration_KeywordNewtype [] hd [cons] [deriv]
       _ -> if newtypesNotTypedefs
@@ -337,7 +337,7 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
         else do
           htype <- adaptTypeToHaskellAndEncode namespaces t
           return $ H.DeclarationType (H.TypeDeclaration hd htype)
-    comments <- annotationClassTermDescription (graphAnnotations g) term
+    comments <- getTermDescription term
     return $ [H.DeclarationWithComments decl comments] ++ constantDecls g namespaces (elementName el) t
   where
     declHead name vars = case vars of
@@ -346,10 +346,9 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
         H.DeclarationHead_Application (declHead name rest) (H.Variable $ simpleName h)
 
     newtypeCons el typ = do
-        g <- getState
         let hname = simpleName $ newtypeAccessorName $ elementName el
         htype <- adaptTypeToHaskellAndEncode namespaces typ
-        comments <- annotationClassTypeDescription (graphAnnotations g) typ
+        comments <- getTypeDescription typ
         let hfield = H.FieldWithComments (H.Field hname htype) comments
         return $ H.ConstructorWithComments
           (H.ConstructorRecord $ H.Constructor_Record (simpleName $ localNameOfEager $ elementName el) [hfield]) Nothing
@@ -358,16 +357,14 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
         hFields <- CM.mapM toField fields
         return $ H.ConstructorWithComments (H.ConstructorRecord $ H.Constructor_Record (simpleName lname) hFields) Nothing
       where
-        toField (FieldType (FieldName fname) ftype) = do
+        toField (FieldType (Name fname) ftype) = do
           let hname = simpleName $ decapitalize lname ++ capitalize fname
           htype <- adaptTypeToHaskellAndEncode namespaces ftype
-          g <- getState
-          comments <- annotationClassTypeDescription (graphAnnotations g) ftype
+          comments <- getTypeDescription ftype
           return $ H.FieldWithComments (H.Field hname htype) comments
 
-    unionCons lname (FieldType (FieldName fname) ftype) = do
-      g <- getState
-      comments <- annotationClassTypeDescription (graphAnnotations g) ftype
+    unionCons lname (FieldType (Name fname) ftype) = do
+      comments <- getTypeDescription ftype
       let nm = capitalize lname ++ capitalize fname
       typeList <- if stripType ftype == Types.unit
         then pure []

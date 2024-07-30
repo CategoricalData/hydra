@@ -48,7 +48,7 @@ hsPrimitiveReference name = H.NameNormal $ H.QualifiedName [prefix] $ H.NamePart
 hsvar :: String -> H.Expression
 hsvar s = H.ExpressionVariable $ rawName s
 
-namespacesForModule :: (Ord a, Show a) => Module a -> Flow (Graph a) Namespaces
+namespacesForModule :: Module -> Flow (Graph) Namespaces
 namespacesForModule mod = do
     nss <- moduleDependencyNamespaces True True True True mod
     return $ Namespaces focusPair $ fst $ L.foldl addPair (M.empty, S.empty) (toPair <$> S.toList nss)
@@ -67,8 +67,8 @@ newtypeAccessorName name = "un" ++ localNameOfEager name
 rawName :: String -> H.Name
 rawName n = H.NameNormal $ H.QualifiedName [] $ H.NamePart n
 
-recordFieldReference :: Namespaces -> Name -> FieldName -> H.Name
-recordFieldReference namespaces sname (FieldName fname) = elementReference namespaces $
+recordFieldReference :: Namespaces -> Name -> Name -> H.Name
+recordFieldReference namespaces sname (Name fname) = elementReference namespaces $
     unqualifyName $ QualifiedName (qualifiedNameNamespace $ qualifyNameEager sname) nm
   where
     nm = decapitalize (typeNameForRecord sname) ++ capitalize fname
@@ -94,14 +94,14 @@ toTypeApplication = app . L.reverse
 typeNameForRecord :: Name -> String
 typeNameForRecord (Name sname) = L.last (Strings.splitOn "." sname)
 
-unionFieldReference :: Namespaces -> Name -> FieldName -> H.Name
-unionFieldReference namespaces sname (FieldName fname) = elementReference namespaces $
+unionFieldReference :: Namespaces -> Name -> Name -> H.Name
+unionFieldReference namespaces sname (Name fname) = elementReference namespaces $
     unqualifyName $ QualifiedName ns nm
   where
     ns = qualifiedNameNamespace $ qualifyNameEager sname
     nm = capitalize (typeNameForRecord sname) ++ capitalize fname
 
-unpackLambdaType :: Graph a -> Type a -> ([Name], Type a)
+unpackLambdaType :: Graph -> Type -> ([Name], Type)
 unpackLambdaType cx t = case stripType t of
   TypeLambda (LambdaType v tbody) -> (v:vars, t')
     where

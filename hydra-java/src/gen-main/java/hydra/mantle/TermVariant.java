@@ -43,6 +43,8 @@ public abstract class TermVariant implements Serializable {
     
     R visit(Sum instance) ;
     
+    R visit(Typed instance) ;
+    
     R visit(Union instance) ;
     
     R visit(Variable instance) ;
@@ -104,6 +106,10 @@ public abstract class TermVariant implements Serializable {
     }
     
     default R visit(Sum instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Typed instance) {
       return otherwise((instance));
     }
     
@@ -431,6 +437,31 @@ public abstract class TermVariant implements Serializable {
         return false;
       }
       Sum o = (Sum) (other);
+      return true;
+    }
+    
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Typed extends hydra.mantle.TermVariant implements Serializable {
+    public Typed () {
+    
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Typed)) {
+        return false;
+      }
+      Typed o = (Typed) (other);
       return true;
     }
     

@@ -19,19 +19,19 @@ import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.optional;
 
 
-public class Map<A> extends PrimitiveFunction<A> {
+public class Map extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/optionals.map");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("a", lambda("b",
                 function(function("a", "b"), optional("a"), optional("b"))));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> bind(Expect.optional(instance -> pure(Terms.apply(args.get(0), instance)), args.get(1)),
             opt -> pure(Terms.optional(opt)));
     }

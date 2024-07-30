@@ -1,5 +1,6 @@
 -- | A DSL for constructing Hydra terms
 
+{-# LANGUAGE FlexibleInstances #-} -- TODO: temporary, for IsString Term
 module Hydra.Dsl.Terms where
 
 import Hydra.Compute
@@ -18,190 +19,193 @@ import Data.Int
 import Data.String(IsString(..))
 
 
-instance IsString (Term a) where fromString = string
+instance IsString Term where fromString = string
 
-(@@) :: Term a -> Term a -> Term a
+(@@) :: Term -> Term -> Term
 f @@ x = apply f x
 
-(<.>) :: Term a -> Term a -> Term a
+(<.>) :: Term -> Term -> Term
 f <.> g = compose f g
 
 infixr 0 >:
-(>:) :: String -> Term a -> Field a
+(>:) :: String -> Term -> Field
 n >: t = field n t
 
-annot :: a -> Term a -> Term a
-annot ann t = TermAnnotated $ Annotated t ann
+annot :: M.Map String Term -> Term -> Term
+annot ann t = TermAnnotated $ AnnotatedTerm t ann
 
-apply :: Term a -> Term a -> Term a
+apply :: Term -> Term -> Term
 apply func arg = TermApplication $ Application func arg
 
-bigfloat :: Double -> Term a
+bigfloat :: Double -> Term
 bigfloat = literal . Literals.bigfloat
 
-bigint :: Integer -> Term a
+bigint :: Integer -> Term
 bigint = literal . Literals.bigint
 
-binary :: String -> Term a
+binary :: String -> Term
 binary = literal . Literals.binary
 
-boolean :: Bool -> Term a
+boolean :: Bool -> Term
 boolean = literal . Literals.boolean
 
-compose :: Term a -> Term a -> Term a
+compose :: Term -> Term -> Term
 compose f g = lambda "x" $ apply f (apply g $ var "x")
 
-constant :: Term a -> Term a
+constant :: Term -> Term
 constant = lambda ignoredVariable
 
-elimination :: Elimination a -> Term a
+elimination :: Elimination -> Term
 elimination = TermFunction . FunctionElimination
 
-false :: Term a
+false :: Term
 false = boolean False
 
-field :: String -> Term a -> Field a
-field n = Field (FieldName n)
+field :: String -> Term -> Field
+field n = Field (Name n)
 
-fieldsToMap :: [Field a] -> M.Map FieldName (Term a)
+fieldsToMap :: [Field] -> M.Map Name Term
 fieldsToMap fields = M.fromList $ (\(Field name term) -> (name, term)) <$> fields
 
-float32 :: Float -> Term a
+float32 :: Float -> Term
 float32 = literal . Literals.float32
 
-float64 :: Double -> Term a
+float64 :: Double -> Term
 float64 = literal . Literals.float64
 
-float :: FloatValue -> Term a
+float :: FloatValue -> Term
 float = literal . Literals.float
 
-fold :: Term a -> Term a
+fold :: Term -> Term
 fold = TermFunction . FunctionElimination . EliminationList
 
-identity :: Term a
+identity :: Term
 identity = lambda "x" $ var "x"
 
-inject :: Name -> Field a -> Term a
+inject :: Name -> Field -> Term
 inject tname = TermUnion . Injection tname
 
-int16 :: Int16 -> Term a
+int16 :: Int16 -> Term
 int16 = literal . Literals.int16
 
-int32 :: Int -> Term a
+int32 :: Int -> Term
 int32 = literal . Literals.int32
 
-int64 :: Int64 -> Term a
+int64 :: Int64 -> Term
 int64 = literal . Literals.int64
 
-int8 :: Int8 -> Term a
+int8 :: Int8 -> Term
 int8 = literal . Literals.int8
 
-integer :: IntegerValue -> Term a
+integer :: IntegerValue -> Term
 integer = literal . Literals.integer
 
-just :: Term a -> Term a
+just :: Term -> Term
 just = optional . Just
 
-lambda :: String -> Term a -> Term a
+lambda :: String -> Term -> Term
 lambda param body = TermFunction $ FunctionLambda $ Lambda (Name param) body
 
 -- Construct a 'let' term with a single binding
-letTerm :: Name -> Term a -> Term a -> Term a
+letTerm :: Name -> Term -> Term -> Term
 letTerm v t1 t2 = TermLet $ Let (M.fromList [(v, t1)]) t2
 
-list :: [Term a] -> Term a
+list :: [Term] -> Term
 list = TermList
 
-literal :: Literal -> Term a
+literal :: Literal -> Term
 literal = TermLiteral
 
-map :: M.Map (Term a) (Term a) -> Term a
+map :: M.Map Term Term -> Term
 map = TermMap
 
-mapTerm :: M.Map (Term a) (Term a) -> Term a
+mapTerm :: M.Map Term Term -> Term
 mapTerm = TermMap
 
-match :: Name -> Maybe (Term a) -> [Field a] -> Term a
+match :: Name -> Maybe Term -> [Field] -> Term
 match tname def fields = TermFunction $ FunctionElimination $ EliminationUnion $ CaseStatement tname def fields
 
-matchOpt :: Term a -> Term a -> Term a
+matchOpt :: Term -> Term -> Term
 matchOpt n j = TermFunction $ FunctionElimination $ EliminationOptional $ OptionalCases n j
 
-matchWithVariants :: Name -> Maybe (Term a) -> [(FieldName, FieldName)] -> Term a
+matchWithVariants :: Name -> Maybe Term -> [(Name, Name)] -> Term
 matchWithVariants tname def pairs = match tname def (toField <$> pairs)
   where
     toField (from, to) = Field from $ constant $ unitVariant tname to
 
-nothing :: Term a
+nothing :: Term
 nothing = optional Nothing
 
-optional :: Y.Maybe (Term a) -> Term a
+optional :: Y.Maybe Term -> Term
 optional = TermOptional
 
-pair :: (Term a, Term a) -> Term a
-pair (a, b) = TermProduct [a, b]
+pair :: Term -> Term -> Term
+pair a b = TermProduct [a, b]
 
-primitive :: Name -> Term a
+primitive :: Name -> Term
 primitive = TermFunction . FunctionPrimitive
 
-product :: [Term a] -> Term a
+product :: [Term] -> Term
 product = TermProduct
 
-project :: Name -> FieldName -> Term a
+project :: Name -> Name -> Term
 project tname fname = TermFunction $ FunctionElimination $ EliminationRecord $ Projection tname fname
 
-record :: Name -> [Field a] -> Term a
+record :: Name -> [Field] -> Term
 record tname fields = TermRecord $ Record tname fields
 
-set :: S.Set (Term a) -> Term a
+set :: S.Set Term -> Term
 set = TermSet
 
-string :: String -> Term a
+string :: String -> Term
 string = TermLiteral . LiteralString
 
-sum :: Int -> Int -> Term a -> Term a
+sum :: Int -> Int -> Term -> Term
 sum i s term = TermSum $ Sum i s term
 
-true :: Term a
+true :: Term
 true = boolean True
 
-uint16 :: Int -> Term a
+typed :: Type -> Term -> Term
+typed typ term = TermTyped $ TermWithType term typ
+
+uint16 :: Int -> Term
 uint16 = literal . Literals.uint16
 
-uint32 :: Int64 -> Term a
+uint32 :: Int64 -> Term
 uint32 = literal . Literals.uint32
 
-uint64 :: Integer -> Term a
+uint64 :: Integer -> Term
 uint64 = literal . Literals.uint64
 
-uint8 :: Int16 -> Term a
+uint8 :: Int16 -> Term
 uint8 = literal . Literals.uint8
 
-unit :: Term a
+unit :: Term
 unit = TermRecord $ Record _Unit []
 
-unitVariant :: Name -> FieldName -> Term a
+unitVariant :: Name -> Name -> Term
 unitVariant tname fname = variant tname fname unit
 
-untuple :: Int -> Int -> Term a
+untuple :: Int -> Int -> Term
 untuple arity idx = TermFunction $ FunctionElimination $ EliminationProduct $ TupleProjection arity idx
 
-unwrap :: Name -> Term a
+unwrap :: Name -> Term
 unwrap = TermFunction . FunctionElimination . EliminationWrap
 
-var :: String -> Term a
+var :: String -> Term
 var = TermVariable . Name
 
-variant :: Name -> FieldName -> Term a -> Term a
+variant :: Name -> Name -> Term -> Term
 variant tname fname term = TermUnion $ Injection tname $ Field fname term
 
-with :: Term a -> [Field a] -> Term a
+with :: Term -> [Field] -> Term
 env `with` bindings = TermLet $ Let (M.fromList $ toPair <$> bindings) env
   where
-     toPair (Field name value) = (Name $ unFieldName name, value)
+     toPair (Field name value) = (Name $ unName name, value)
 
-withVariant :: Name -> FieldName -> Term a
+withVariant :: Name -> Name -> Term
 withVariant tname = constant . unitVariant tname
 
-wrap :: Name -> Term a -> Term a
-wrap name term = TermWrap $ Nominal name term
+wrap :: Name -> Term -> Term
+wrap name term = TermWrap $ WrappedTerm name term

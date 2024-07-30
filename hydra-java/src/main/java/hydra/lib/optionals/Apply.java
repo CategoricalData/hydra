@@ -20,21 +20,21 @@ import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.optional;
 
 
-public class Apply<A> extends PrimitiveFunction<A> {
+public class Apply extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/optionals.apply");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return lambda("a", lambda("b",
             function(optional(function("a", "b")), optional("a"), optional("b"))));
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> map2(Expect.optional(Flows::pure, args.get(0)), Expect.optional(Flows::pure, args.get(1)),
-            (BiFunction<Opt<Term<A>>, Opt<Term<A>>, Term<A>>) (optionalF, optionalArg) ->
+            (BiFunction<Opt<Term>, Opt<Term>, Term>) (optionalF, optionalArg) ->
                 (optionalF.isPresent() && optionalArg.isPresent())
                     ? Terms.optional(Opt.of(Terms.apply(optionalF.get(), optionalArg.get())))
                     : Terms.optional(Opt.empty()));

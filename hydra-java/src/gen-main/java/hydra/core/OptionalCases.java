@@ -7,20 +7,20 @@ import java.io.Serializable;
 /**
  * A case statement for matching optional terms
  */
-public class OptionalCases<A> implements Serializable {
+public class OptionalCases implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.OptionalCases");
   
   /**
    * A term provided if the optional value is nothing
    */
-  public final hydra.core.Term<A> nothing;
+  public final hydra.core.Term nothing;
   
   /**
    * A function which is applied if the optional value is non-nothing
    */
-  public final hydra.core.Term<A> just;
+  public final hydra.core.Term just;
   
-  public OptionalCases (hydra.core.Term<A> nothing, hydra.core.Term<A> just) {
+  public OptionalCases (hydra.core.Term nothing, hydra.core.Term just) {
     java.util.Objects.requireNonNull((nothing));
     java.util.Objects.requireNonNull((just));
     this.nothing = nothing;
@@ -41,12 +41,12 @@ public class OptionalCases<A> implements Serializable {
     return 2 * nothing.hashCode() + 3 * just.hashCode();
   }
   
-  public OptionalCases withNothing(hydra.core.Term<A> nothing) {
+  public OptionalCases withNothing(hydra.core.Term nothing) {
     java.util.Objects.requireNonNull((nothing));
     return new OptionalCases(nothing, just);
   }
   
-  public OptionalCases withJust(hydra.core.Term<A> just) {
+  public OptionalCases withJust(hydra.core.Term just) {
     java.util.Objects.requireNonNull((just));
     return new OptionalCases(nothing, just);
   }

@@ -11,14 +11,14 @@ import Hydra.Sources.Tier4.Test.Lib.Strings
 
 testSuiteNs = Namespace "hydra/test/testSuite"
 
-testSuiteModule :: Module Kv
+testSuiteModule :: Module
 testSuiteModule = Module testSuiteNs elements [] tier0Modules $
     Just "Test cases for primitive functions"
   where
     elements = [
       groupElement "allTests" allTests]
 
-groupElement :: String -> TestGroup Kv -> Element Kv
+groupElement :: String -> TestGroup -> Element
 groupElement lname group = Element name $ setTermType (Just typ) $ encodeGroup group
   where
     encodeGroup (TestGroup name desc groups cases) = Terms.record _TestGroup [
@@ -34,9 +34,9 @@ groupElement lname group = Element name $ setTermType (Just typ) $ encodeGroup g
       Field _TestCase_input $ coreEncodeTerm input,
       Field _TestCase_output $ coreEncodeTerm output]
     name = unqualifyName $ QualifiedName (Just testSuiteNs) lname
-    typ = Types.apply (TypeVariable _TestGroup) (TypeVariable _Kv)
+    typ = TypeVariable _TestGroup
 
-allTests :: TestGroup Kv
+allTests :: TestGroup
 allTests = TestGroup "All tests" Nothing primTests []
   where
     primTests = [

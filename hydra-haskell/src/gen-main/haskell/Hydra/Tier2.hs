@@ -27,10 +27,11 @@ getState = (Compute.Flow (\s0 -> \t0 ->
       Compute.flowStateTrace = t}) v) (Compute.flowStateValue fs1) (Compute.flowStateState fs1) (Compute.flowStateTrace fs1))))
 
 -- | Get the annotated type of a given term, if any
-getTermType :: (Core.Term a -> Compute.Flow (Graph.Graph a) (Maybe (Core.Type a)))
-getTermType term =  
-  let annsToType = (\anns -> Graph.annotationClassTermType anns term)
-  in (Flows.bind (Flows.map Graph.graphAnnotations getState) annsToType)
+getTermType :: (Core.Term -> Maybe Core.Type)
+getTermType x = case x of
+  Core.TermAnnotated v275 -> (getTermType (Core.annotatedTermSubject v275))
+  Core.TermTyped v276 -> (Just (Core.termWithTypeType v276))
+  _ -> Nothing
 
 -- | Set the state of a flow
 putState :: (s -> Compute.Flow s ())
@@ -42,22 +43,22 @@ putState cx = (Compute.Flow (\s0 -> \t0 ->
     Compute.flowStateTrace = (Compute.flowStateTrace f1)}))
 
 -- | Get the annotated type of a given element, or fail if it is missing
-requireElementType :: (Graph.Element a -> Compute.Flow (Graph.Graph a) (Core.Type a))
+requireElementType :: (Graph.Element -> Compute.Flow Graph.Graph Core.Type)
 requireElementType el =  
   let withType = (\x -> case x of
           Nothing -> (Flows.fail (Strings.cat [
             "missing type annotation for element ",
             (Core.unName (Graph.elementName el))]))
-          Just v -> (Flows.pure v))
-  in (Flows.bind (getTermType (Graph.elementData el)) withType)
+          Just v277 -> (Flows.pure v277))
+  in (withType (getTermType (Graph.elementData el)))
 
 -- | Get the annotated type of a given term, or fail if it is missing
-requireTermType :: (Core.Term a -> Compute.Flow (Graph.Graph a) (Core.Type a))
-requireTermType term =  
-  let withType = (\x -> case x of
-          Nothing -> (Flows.fail "missing type annotation")
-          Just v -> (Flows.pure v))
-  in (Flows.bind (getTermType term) withType)
+requireTermType :: (Core.Term -> Compute.Flow Graph.Graph Core.Type)
+requireTermType x = (withType (getTermType x)) 
+  where 
+    withType = (\x -> case x of
+      Nothing -> (Flows.fail "missing type annotation")
+      Just v278 -> (Flows.pure v278))
 
 -- | Fail if an actual value does not match an expected value
 unexpected :: (String -> String -> Compute.Flow s x)

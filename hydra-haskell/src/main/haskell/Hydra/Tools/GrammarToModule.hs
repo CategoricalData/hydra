@@ -16,7 +16,7 @@ import qualified Data.Maybe as Y
 import Hydra.Sources.Core
 
 
-grammarToModule :: Namespace -> G.Grammar -> Maybe String -> Module Kv
+grammarToModule :: Namespace -> G.Grammar -> Maybe String -> Module
 grammarToModule ns (G.Grammar prods) desc = Module ns elements [hydraCoreModule] [hydraCoreModule] desc
   where
     elements = pairToElement <$> L.concat (L.zipWith (makeElements False) (capitalize . fst <$> prodPairs) (snd <$> prodPairs))
@@ -98,7 +98,7 @@ grammarToModule ns (G.Grammar prods) desc = Module ns elements [hydraCoreModule]
 
         toField n p = descend n f2 p
           where
-            f2 ((lname, typ):rest) = (FieldType (FieldName n) typ, rest)
+            f2 ((lname, typ):rest) = (FieldType (Name n) typ, rest)
 
         mod n f p = descend n f2 p
           where

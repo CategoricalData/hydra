@@ -6,7 +6,7 @@ import java.math.BigInteger;
 import java.util.function.Function;
 
 
-public class EqualUint64<A> extends EqualityFunction<A, BigInteger> {
+public class EqualUint64 extends EqualityFunction<BigInteger> {
     public EqualUint64() {
         super(PrimitiveType.uint64(), Relation.EQUALS);
     }

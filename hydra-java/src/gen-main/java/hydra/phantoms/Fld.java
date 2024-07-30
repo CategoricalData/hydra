@@ -10,9 +10,9 @@ import java.io.Serializable;
 public class Fld<A> implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/phantoms.Fld");
   
-  public final hydra.core.Field<hydra.compute.Kv> value;
+  public final hydra.core.Field value;
   
-  public Fld (hydra.core.Field<hydra.compute.Kv> value) {
+  public Fld (hydra.core.Field value) {
     java.util.Objects.requireNonNull((value));
     this.value = value;
   }

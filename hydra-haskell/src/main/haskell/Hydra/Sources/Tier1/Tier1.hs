@@ -34,7 +34,7 @@ import Hydra.Sources.Tier1.Strip
 tier1Definition :: String -> Datum a -> Definition a
 tier1Definition = definitionInModule hydraTier1Module
 
-hydraTier1Module :: Module Kv
+hydraTier1Module :: Module
 hydraTier1Module = Module (Namespace "hydra/tier1") elements
     [hydraComputeModule, hydraConstantsModule, hydraStripModule] tier0Modules $
     Just ("A module for miscellaneous tier-1 functions and constants.")
@@ -66,14 +66,16 @@ hydraTier1Module = Module (Namespace "hydra/tier1") elements
 floatValueToBigfloatDef :: Definition (Double -> Double)
 floatValueToBigfloatDef = tier1Definition "floatValueToBigfloat" $
   doc "Convert a floating-point value of any precision to a bigfloat" $
+  function floatValueT Types.bigfloat $
   match _FloatValue Nothing [
     _FloatValue_bigfloat>>: Equality.identity,
     _FloatValue_float32>>: Literals.float32ToBigfloat,
     _FloatValue_float64>>: Literals.float64ToBigfloat]
 
-integerValueToBigintDef :: Definition (Integer -> Integer)
+integerValueToBigintDef :: Definition (IntegerValue -> Integer)
 integerValueToBigintDef = tier1Definition "integerValueToBigint" $
   doc "Convert an integer value of any precision to a bigint" $
+  function integerValueT Types.bigint $
   match _IntegerValue Nothing [
     _IntegerValue_bigint>>: Equality.identity,
     _IntegerValue_int8>>: Literals.int8ToBigint,
@@ -85,22 +87,22 @@ integerValueToBigintDef = tier1Definition "integerValueToBigint" $
     _IntegerValue_uint32>>: Literals.uint32ToBigint,
     _IntegerValue_uint64>>: Literals.uint64ToBigint]
 
-isLambdaDef :: Definition (Term a -> Bool)
+isLambdaDef :: Definition (Term -> Bool)
 isLambdaDef = tier1Definition "isLambda" $
   doc "Check whether a term is a lambda, possibly nested within let and/or annotation terms" $
-  function termA Types.boolean $
+  function termT Types.boolean $
   lambda "term" $ (match _Term (Just false) [
       _Term_function>>: match _Function (Just false) [
         _Function_lambda>>: constant true],
       _Term_let>>: lambda "lt" (ref isLambdaDef @@ (project _Let _Let_environment @@ var "lt"))])
-    @@ (ref stripTermDef @@ var "term")
+    @@ (ref fullyStripTermDef @@ var "term")
 
 -- Rewriting.hs
 
-foldOverTermDef :: Definition (TraversalOrder -> (x -> Term a -> x) -> x -> Term a -> x)
+foldOverTermDef :: Definition (TraversalOrder -> (x -> Term -> x) -> x -> Term -> x)
 foldOverTermDef = tier1Definition "foldOverTerm" $
   doc "Fold over a term, traversing its subterms in the specified order" $
-  functionNWithClasses [TypeVariable _TraversalOrder, functionT xT (functionT termA xT), xT, termA, xT] ordA $
+  functionN [TypeVariable _TraversalOrder, funT xT (funT termT xT), xT, termT, xT] $
   lambda "order" $ lambda "fld" $ lambda "b0" $ lambda "term" $ (match _TraversalOrder Nothing [
     _TraversalOrder_pre>>: constant (Base.fold (ref foldOverTermDef @@ var "order" @@ var "fld")
       @@ (var "fld" @@ var "b0" @@ var "term")
@@ -111,10 +113,10 @@ foldOverTermDef = tier1Definition "foldOverTerm" $
         @@ (ref subtermsDef @@ var "term"))
       @@ var "term")] @@ var "order")
 
-foldOverTypeDef :: Definition (TraversalOrder -> (x -> Type a -> x) -> x -> Type a -> x)
+foldOverTypeDef :: Definition (TraversalOrder -> (x -> Type -> x) -> x -> Type -> x)
 foldOverTypeDef = tier1Definition "foldOverType" $
   doc "Fold over a type, traversing its subtypes in the specified order" $
-  functionN [TypeVariable _TraversalOrder, functionT xT (functionT typeA xT), xT, typeA, xT] $
+  functionN [TypeVariable _TraversalOrder, funT xT (funT typeT xT), xT, typeT, xT] $
   lambda "order" $ lambda "fld" $ lambda "b0" $ lambda "typ" $ (match _TraversalOrder Nothing [
     _TraversalOrder_pre>>: constant (Base.fold (ref foldOverTypeDef @@ var "order" @@ var "fld")
       @@ (var "fld" @@ var "b0" @@ var "typ")
@@ -125,10 +127,10 @@ foldOverTypeDef = tier1Definition "foldOverType" $
         @@ (ref subtypesDef @@ var "typ"))
       @@ var "typ")] @@ var "order")
 
-freeVariablesInTermDef :: Definition (Term a -> S.Set Name)
+freeVariablesInTermDef :: Definition (Term -> S.Set Name)
 freeVariablesInTermDef = tier1Definition "freeVariablesInTerm" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a term" $
-  functionWithClasses termA (setT nameT) ordA $
+  function termT (setT nameT) $
   lambda "term" (
     (match _Term (Just $ var "dfltVars") [
       _Term_function>>: match _Function (Just $ var "dfltVars") [
@@ -145,10 +147,10 @@ freeVariablesInTermDef = tier1Definition "freeVariablesInTerm" $
         @@ Sets.empty
         @@ (ref subtermsDef @@ var "term")])
 
-freeVariablesInTypeDef :: Definition (Type a -> S.Set Name)
+freeVariablesInTypeDef :: Definition (Type -> S.Set Name)
 freeVariablesInTypeDef = tier1Definition "freeVariablesInType" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a type" $
-  function typeA (setT nameT) $
+  function typeT (setT nameT) $
   lambda "typ" (
     (match _Type (Just $ var "dfltVars") [
       _Type_lambda>>: lambda "lt" (Sets.remove
@@ -161,12 +163,12 @@ freeVariablesInTypeDef = tier1Definition "freeVariablesInType" $
         @@ Sets.empty
         @@ (ref subtypesDef @@ var "typ")])
 
-subtermsDef :: Definition (Term a -> [Term a])
+subtermsDef :: Definition (Term -> [Term])
 subtermsDef = tier1Definition "subterms" $
   doc "Find the children of a given term" $
-  functionWithClasses termA (listT termA) ordA $
+  function termT (listT termT) $
   match _Term Nothing [
-    _Term_annotated>>: lambda "at" $ list [Core.annotatedSubject @@ var "at"],
+    _Term_annotated>>: lambda "at" $ list [Core.annotatedTermSubject @@ var "at"],
     _Term_application>>: lambda "p" $ list [
       Core.applicationFunction @@ var "p",
       Core.applicationArgument @@ var "p"],
@@ -193,16 +195,17 @@ subtermsDef = tier1Definition "subterms" $
     _Term_set>>: Sets.toList,
     _Term_stream>>: constant $ list [],
     _Term_sum>>: lambda "st" $ list [Core.sumTerm @@ var "st"],
+    _Term_typed>>: lambda "tt" $ list [Core.termWithTypeTerm @@ var "tt"],
     _Term_union>>: lambda "ut" $ list [Core.fieldTerm @@ (Core.injectionField @@ var "ut")],
     _Term_variable>>: constant $ list [],
-    _Term_wrap>>: lambda "n" $ list [Core.nominalObject @@ var "n"]]
+    _Term_wrap>>: lambda "n" $ list [Core.wrappedTermObject @@ var "n"]]
 
-subtypesDef :: Definition (Type a -> [Type a])
+subtypesDef :: Definition (Type -> [Type])
 subtypesDef = tier1Definition "subtypes" $
   doc "Find the children of a given type expression" $
-  function typeA (listT typeA) $
+  function typeT (listT typeT) $
   match _Type Nothing [
-    _Type_annotated>>: lambda "at" $ list [Core.annotatedSubject @@ var "at"],
+    _Type_annotated>>: lambda "at" $ list [Core.annotatedTypeSubject @@ var "at"],
     _Type_application>>: lambda "at" $ list [
       Core.applicationTypeFunction @@ var "at",
       Core.applicationTypeArgument @@ var "at"],
@@ -222,11 +225,12 @@ subtypesDef = tier1Definition "subtypes" $
     _Type_sum>>: lambda "st" $ var "st",
     _Type_union>>: lambda "rt" (Lists.map @@ Core.fieldTypeType @@ (Core.rowTypeFields @@ var "rt")),
     _Type_variable>>: constant $ list [],
-    _Type_wrap>>: lambda "nt" $ list [Core.nominalObject @@ var "nt"]]
+    _Type_wrap>>: lambda "nt" $ list [Core.wrappedTypeObject @@ var "nt"]]
 
 unqualifyNameDef :: Definition (QualifiedName -> Name)
 unqualifyNameDef = tier1Definition "unqualifyName" $
   doc "Convert a qualified name to a dot-separated name" $
+  function qualifiedNameT nameT $
   lambda "qname" $ (wrap _Name $ var "prefix" ++ (project _QualifiedName _QualifiedName_local @@ var "qname"))
     `with` [
       "prefix">: matchOpt (string "") (lambda "n" $ (unwrap _Namespace @@ var "n") ++ string ".")
@@ -244,14 +248,14 @@ emptyTraceDef = tier1Definition "emptyTrace" $
 flowSucceedsDef :: Definition (Flow s a -> Bool)
 flowSucceedsDef = tier1Definition "flowSucceeds" $
   doc "Check whether a flow succeeds" $
-  function (Types.var "s") (Types.function flowSA Types.boolean) $
+  function (Types.var "s") (Types.function flowSAT Types.boolean) $
   lambda "cx" $ lambda "f" $
     Optionals.isJust @@ (Flows.flowStateValue @@ (Flows.unFlow @@ var "f" @@ var "cx" @@ ref emptyTraceDef))
 
 fromFlowDef :: Definition (a -> s -> Flow s a -> a)
 fromFlowDef = tier1Definition "fromFlow" $
   doc "Get the value of a flow, or a default value if the flow fails" $
-  function (Types.var "a") (Types.function (Types.var "s") (Types.function flowSA (Types.var "a"))) $
+  function (Types.var "a") (Types.function (Types.var "s") (Types.function flowSAT (Types.var "a"))) $
   lambda "def" $ lambda "cx" $ lambda "f" $
       matchOpt (var "def") (lambda "x" $ var "x")
         @@ (Flows.flowStateValue @@ (Flows.unFlow @@ var "f" @@ var "cx" @@ ref emptyTraceDef))
@@ -261,8 +265,8 @@ mutateTraceDef = tier1Definition "mutateTrace" $
     functionN [
       Types.function traceT (eitherT Types.string traceT),
       Types.functionN [traceT, traceT, traceT],
-      flowSA,
-      flowSA] $
+      flowSAT,
+      flowSAT] $
     lambda "mutate" $ lambda "restore" $ lambda "f" $ wrap _Flow (
       lambda "s0" $ lambda "t0" (
         ((match _Either Nothing [
@@ -289,6 +293,7 @@ mutateTraceDef = tier1Definition "mutateTrace" $
 pushErrorDef :: Definition (String -> Trace -> Trace)
 pushErrorDef = tier1Definition "pushError" $
   doc "Push an error message" $
+  functionN [Types.string, traceT, traceT] $
   lambda "msg" $ lambda "t" $ ((Flows.trace
       (Flows.traceStack @@ var "t")
       (Lists.cons @@ var "errorMsg" @@ (Flows.traceMessages @@ var "t"))
@@ -299,7 +304,7 @@ pushErrorDef = tier1Definition "pushError" $
 warnDef :: Definition (String -> Flow s a -> Flow s a)
 warnDef = tier1Definition "warn" $
   doc "Continue the current flow after adding a warning message" $
-  functionN [Types.string, flowSA, flowSA] $
+  functionN [Types.string, flowSAT, flowSAT] $
   lambda "msg" $ lambda "b" $ wrap _Flow $ lambda "s0" $ lambda "t0" (
     (Flows.flowState
       (Flows.flowStateValue @@ var "f1")
@@ -315,7 +320,7 @@ warnDef = tier1Definition "warn" $
 withFlagDef :: Definition (String -> Flow s a -> Flow s a)
 withFlagDef = tier1Definition "withFlag" $
   doc "Continue the current flow after setting a flag" $
-  function Types.string (Types.function flowSA flowSA) $
+  function Types.string (Types.function flowSAT flowSAT) $
   lambda "flag" ((ref mutateTraceDef @@ var "mutate" @@ var "restore")
   `with` [
     "mutate">: lambda "t" $ inject _Either _Either_right $ (Flows.trace
@@ -330,7 +335,7 @@ withFlagDef = tier1Definition "withFlag" $
 withStateDef :: Definition (s1 -> Flow s1 a -> Flow s2 a)
 withStateDef = tier1Definition "withState" $
   doc "Continue a flow using a given state" $
-  function (Types.var "s1") (Types.function flowS1A flowS2A) $
+  function (Types.var "s1") (Types.function flowS1AT flowS2AT) $
   lambda "cx0" $ lambda "f" $
     wrap _Flow $ lambda "cx1" $ lambda "t1" (
       (Flows.flowState (Flows.flowStateValue @@ var "f1") (var "cx1") (Flows.flowStateTrace @@ var "f1"))
@@ -342,7 +347,7 @@ withStateDef = tier1Definition "withState" $
 withTraceDef :: Definition (String -> Flow s a -> Flow s a)
 withTraceDef = tier1Definition "withTrace" $
   doc "Continue the current flow after augmenting the trace" $
-  functionN [Types.string, flowSA, flowSA] $
+  functionN [Types.string, flowSAT, flowSAT] $
   lambda "msg" ((ref mutateTraceDef @@ var "mutate" @@ var "restore")
     `with` [
       -- augment the trace

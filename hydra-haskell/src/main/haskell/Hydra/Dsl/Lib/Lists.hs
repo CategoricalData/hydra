@@ -14,6 +14,9 @@ concat2 = Datum $ Terms.primitive _lists_concat2
 cons :: Datum (a -> [a] -> [a])
 cons = Datum $ Terms.primitive _lists_cons
 
+foldl :: Datum ((b -> a -> b) -> b -> [a] -> b)
+foldl = Datum $ Terms.primitive _lists_foldl
+
 head :: Datum ([a] -> a)
 head = Datum $ Terms.primitive _lists_head
 

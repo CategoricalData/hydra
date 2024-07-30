@@ -8,7 +8,7 @@ import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
 
-tinkerpopFeaturesModule :: Module Kv
+tinkerpopFeaturesModule :: Module
 tinkerpopFeaturesModule = Module ns elements [hydraCoreModule] tier0Modules $
     Just ("A model derived from TinkerPop's Graph.Features. See\n" ++
       "  https://tinkerpop.apache.org/javadocs/current/core/org/apache/tinkerpop/gremlin/structure/Graph.Features.html\n" ++
@@ -83,7 +83,7 @@ tinkerpopFeaturesModule = Module ns elements [hydraCoreModule] tier0Modules $
         doc ("Additional features which are needed for the complete specification of language constraints in Hydra, "
           ++ "above and beyond TinkerPop Graph.Features") $
         lambda "a" $ record [
-          "supportsMapKey">: function (core "Type" @@ "a") boolean],
+          "supportsMapKey">: function (core "Type") boolean],
 
       def "Features" $
         doc ("An interface that represents the capabilities of a Graph implementation. By default all methods of " ++

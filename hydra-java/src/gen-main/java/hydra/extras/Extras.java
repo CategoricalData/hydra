@@ -6,34 +6,34 @@ package hydra.extras;
  * Basic functions which depend on primitive functions
  */
 public interface Extras {
-  static <A> Integer functionArity(hydra.core.Function<A> v1) {
-    return ((v1)).accept(new hydra.core.Function.Visitor<A, Integer>() {
+  static Integer functionArity(hydra.core.Function v1) {
+    return ((v1)).accept(new hydra.core.Function.Visitor<>() {
       @Override
-      public Integer visit(hydra.core.Function.Elimination<A> instance) {
+      public Integer visit(hydra.core.Function.Elimination instance) {
         return 1;
       }
       
       @Override
-      public Integer visit(hydra.core.Function.Lambda<A> instance) {
+      public Integer visit(hydra.core.Function.Lambda instance) {
         return hydra.lib.math.Add.apply(
           1,
           hydra.extras.Extras.termArity(((instance.value)).body));
       }
       
       @Override
-      public Integer visit(hydra.core.Function.Primitive<A> instance) {
+      public Integer visit(hydra.core.Function.Primitive instance) {
         return 42;
       }
     });
   }
   
-  static <A> java.util.function.Function<hydra.core.Name, hydra.util.Opt<hydra.graph.Primitive<A>>> lookupPrimitive(hydra.graph.Graph<A> g) {
-    return (java.util.function.Function<hydra.core.Name, hydra.util.Opt<hydra.graph.Primitive<A>>>) (name -> hydra.lib.maps.Lookup.apply(
+  static java.util.function.Function<hydra.core.Name, hydra.util.Opt<hydra.graph.Primitive>> lookupPrimitive(hydra.graph.Graph g) {
+    return (java.util.function.Function<hydra.core.Name, hydra.util.Opt<hydra.graph.Primitive>>) (name -> hydra.lib.maps.Lookup.apply(
       (name),
       ((g)).primitives));
   }
   
-  static <A> Integer primitiveArity(hydra.graph.Primitive<A> x) {
+  static Integer primitiveArity(hydra.graph.Primitive x) {
     return hydra.extras.Extras.typeArity(((x)).type);
   }
   
@@ -44,51 +44,51 @@ public interface Extras {
       (name)))));
   }
   
-  static <A> Integer termArity(hydra.core.Term<A> v1) {
-    return ((v1)).accept(new hydra.core.Term.PartialVisitor<A, Integer>() {
+  static Integer termArity(hydra.core.Term v1) {
+    return ((v1)).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public Integer otherwise(hydra.core.Term<A> instance) {
+      public Integer otherwise(hydra.core.Term instance) {
         return 0;
       }
       
       @Override
-      public Integer visit(hydra.core.Term.Application<A> instance) {
+      public Integer visit(hydra.core.Term.Application instance) {
         return hydra.lib.math.Sub.apply(
           hydra.extras.Extras.termArity(((instance.value)).function),
           1);
       }
       
       @Override
-      public Integer visit(hydra.core.Term.Function<A> instance) {
+      public Integer visit(hydra.core.Term.Function instance) {
         return hydra.extras.Extras.functionArity((instance.value));
       }
     });
   }
   
-  static <A> Integer typeArity(hydra.core.Type<A> v1) {
-    return ((v1)).accept(new hydra.core.Type.PartialVisitor<A, Integer>() {
+  static Integer typeArity(hydra.core.Type v1) {
+    return ((v1)).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public Integer otherwise(hydra.core.Type<A> instance) {
+      public Integer otherwise(hydra.core.Type instance) {
         return 0;
       }
       
       @Override
-      public Integer visit(hydra.core.Type.Annotated<A> instance) {
+      public Integer visit(hydra.core.Type.Annotated instance) {
         return hydra.extras.Extras.typeArity(((instance.value)).subject);
       }
       
       @Override
-      public Integer visit(hydra.core.Type.Application<A> instance) {
+      public Integer visit(hydra.core.Type.Application instance) {
         return hydra.extras.Extras.typeArity(((instance.value)).function);
       }
       
       @Override
-      public Integer visit(hydra.core.Type.Lambda<A> instance) {
+      public Integer visit(hydra.core.Type.Lambda instance) {
         return hydra.extras.Extras.typeArity(((instance.value)).body);
       }
       
       @Override
-      public Integer visit(hydra.core.Type.Function<A> instance) {
+      public Integer visit(hydra.core.Type.Function instance) {
         return hydra.lib.math.Add.apply(
           1,
           hydra.extras.Extras.typeArity(((instance.value)).codomain));
@@ -96,30 +96,30 @@ public interface Extras {
     });
   }
   
-  static <A> java.util.List<hydra.core.Type<A>> uncurryType(hydra.core.Type<A> t) {
-    return ((t)).accept(new hydra.core.Type.PartialVisitor<A, java.util.List<hydra.core.Type<A>>>() {
+  static java.util.List<hydra.core.Type> uncurryType(hydra.core.Type t) {
+    return ((t)).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public java.util.List<hydra.core.Type<A>> otherwise(hydra.core.Type<A> instance) {
+      public java.util.List<hydra.core.Type> otherwise(hydra.core.Type instance) {
         return java.util.Arrays.asList((t));
       }
       
       @Override
-      public java.util.List<hydra.core.Type<A>> visit(hydra.core.Type.Annotated<A> instance) {
+      public java.util.List<hydra.core.Type> visit(hydra.core.Type.Annotated instance) {
         return hydra.extras.Extras.uncurryType(((instance.value)).subject);
       }
       
       @Override
-      public java.util.List<hydra.core.Type<A>> visit(hydra.core.Type.Application<A> instance) {
+      public java.util.List<hydra.core.Type> visit(hydra.core.Type.Application instance) {
         return hydra.extras.Extras.uncurryType(((instance.value)).function);
       }
       
       @Override
-      public java.util.List<hydra.core.Type<A>> visit(hydra.core.Type.Lambda<A> instance) {
+      public java.util.List<hydra.core.Type> visit(hydra.core.Type.Lambda instance) {
         return hydra.extras.Extras.uncurryType(((instance.value)).body);
       }
       
       @Override
-      public java.util.List<hydra.core.Type<A>> visit(hydra.core.Type.Function<A> instance) {
+      public java.util.List<hydra.core.Type> visit(hydra.core.Type.Function instance) {
         return hydra.lib.lists.Cons.apply(
           ((instance.value)).domain,
           hydra.extras.Extras.uncurryType(((instance.value)).codomain));
@@ -127,13 +127,9 @@ public interface Extras {
     });
   }
   
-  static hydra.compute.Kv emptyKv() {
-    return new hydra.compute.Kv(hydra.lib.maps.Empty.apply());
-  }
-  
-  static java.util.function.Function<hydra.compute.Kv, hydra.util.Opt<hydra.core.Term<hydra.compute.Kv>>> getAnnotation(String key) {
-    return (java.util.function.Function<hydra.compute.Kv, hydra.util.Opt<hydra.core.Term<hydra.compute.Kv>>>) (ann -> hydra.lib.maps.Lookup.apply(
+  static java.util.function.Function<java.util.Map<String, hydra.core.Term>, hydra.util.Opt<hydra.core.Term>> getAnnotation(String key) {
+    return (java.util.function.Function<java.util.Map<String, hydra.core.Term>, hydra.util.Opt<hydra.core.Term>>) (ann -> hydra.lib.maps.Lookup.apply(
       (key),
-      ((ann)).annotations));
+      (ann)));
   }
 }

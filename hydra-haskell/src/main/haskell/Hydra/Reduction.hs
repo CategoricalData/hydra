@@ -9,7 +9,7 @@ import Hydra.Core
 import Hydra.CoreDecoding
 import Hydra.Extras
 import Hydra.Graph
-import Hydra.Kv
+import Hydra.Annotations
 import Hydra.Lexical
 import Hydra.Rewriting
 import Hydra.Tier1
@@ -24,7 +24,7 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-alphaConvert :: Ord a => Name -> Term a -> Term a -> Term a
+alphaConvert :: Name -> Term -> Term -> Term
 alphaConvert vold tnew = rewriteTerm rewrite id
   where
     rewrite recurse term = case term of
@@ -39,7 +39,7 @@ countPrimitiveInvocations :: Bool
 countPrimitiveInvocations = True
 
 -- A term evaluation function which is alternatively lazy or eager
-reduceTerm :: (Ord a, Show a) => Bool -> M.Map Name (Term a) -> Term a -> Flow (Graph a) (Term a)
+reduceTerm :: Bool -> M.Map Name (Term) -> Term -> Flow (Graph) (Term)
 reduceTerm eager env = rewriteTermM mapping pure
   where
     reduce eager = reduceTerm eager M.empty
@@ -104,7 +104,7 @@ reduceTerm eager env = rewriteTermM mapping pure
         fields <- Expect.recordWithName (projectionTypeName proj) $ stripTerm reducedArg
         let matchingFields = L.filter (\f -> fieldName f == projectionField proj) fields
         if L.null matchingFields
-          then fail $ "no such field: " ++ unFieldName (projectionField proj) ++ " in " ++ unName (projectionTypeName proj) ++ " record"
+          then fail $ "no such field: " ++ unName (projectionField proj) ++ " in " ++ unName (projectionTypeName proj) ++ " record"
           else pure $ fieldTerm $ L.head matchingFields
       EliminationUnion (CaseStatement name def fields) -> do
         field <- Expect.injectionWithName name reducedArg
@@ -112,15 +112,15 @@ reduceTerm eager env = rewriteTermM mapping pure
         if L.null matchingFields
           then case def of
             Just d -> pure d
-            Nothing -> fail $ "no such field " ++ unFieldName (fieldName field) ++ " in " ++ unName name ++ " case statement"
+            Nothing -> fail $ "no such field " ++ unName (fieldName field) ++ " in " ++ unName name ++ " case statement"
           else pure $ Terms.apply (fieldTerm $ L.head matchingFields) (fieldTerm field)
       EliminationWrap name -> Expect.wrap name reducedArg
 
 -- Note: this is eager beta reduction, in that we always descend into subtypes,
 --       and always reduce the right-hand side of an application prior to substitution
-betaReduceType :: (Ord a, Show a) => Type a -> Flow (Graph a) (Type a)
+betaReduceType :: Type -> Flow (Graph) (Type)
 betaReduceType typ = do
-    g <- getState :: Flow (Graph a) (Graph a)
+    g <- getState :: Flow (Graph) (Graph)
     rewriteTypeM mapExpr (pure . id) typ
   where
     mapExpr recurse t = do
@@ -130,9 +130,9 @@ betaReduceType typ = do
           t' -> pure t'
       where
         reduceApp (ApplicationType lhs rhs) = case lhs of
-          TypeAnnotated (Annotated t' ann) -> do
+          TypeAnnotated (AnnotatedType t' ann) -> do
             a <- reduceApp $ ApplicationType t' rhs
-            return $ TypeAnnotated $ Annotated a ann
+            return $ TypeAnnotated $ AnnotatedType a ann
           TypeLambda (LambdaType v body) -> betaReduceType $ replaceFreeName v rhs body
           -- nominal types are transparent
           TypeVariable name -> do
@@ -144,11 +144,11 @@ betaReduceType typ = do
 --   and
 --     ((\x.e1) e2) = e1[x/e2]
 --  These are both limited forms of beta reduction which help to "clean up" a term without fully evaluating it.
-contractTerm :: Ord a => Term a -> Term a
+contractTerm :: Term -> Term
 contractTerm = rewriteTerm rewrite id
   where
     rewrite recurse term = case rec of
-        TermApplication (Application lhs rhs) -> case stripTerm lhs of
+        TermApplication (Application lhs rhs) -> case fullyStripTerm lhs of
           TermFunction (FunctionLambda (Lambda v body)) -> if isFreeIn v body
             then body
             else alphaConvert v rhs body
@@ -158,18 +158,18 @@ contractTerm = rewriteTerm rewrite id
         rec = recurse term
 
 -- Note: unused / untested
-etaReduceTerm :: Ord a => Term a -> Term a
+etaReduceTerm :: Term -> Term
 etaReduceTerm term = case term of
-    TermAnnotated (Annotated term1 ann) -> TermAnnotated (Annotated (etaReduceTerm term1) ann)
+    TermAnnotated (AnnotatedTerm term1 ann) -> TermAnnotated (AnnotatedTerm (etaReduceTerm term1) ann)
     TermFunction (FunctionLambda l) -> reduceLambda l
     _ -> noChange
   where
     reduceLambda (Lambda v body) = case etaReduceTerm body of
-      TermAnnotated (Annotated body1 ann) -> reduceLambda (Lambda v body1)
+      TermAnnotated (AnnotatedTerm body1 ann) -> reduceLambda (Lambda v body1)
       TermApplication a -> reduceApplication a
         where
           reduceApplication (Application lhs rhs) = case etaReduceTerm rhs of
-            TermAnnotated (Annotated rhs1 ann) -> reduceApplication (Application lhs rhs1)
+            TermAnnotated (AnnotatedTerm rhs1 ann) -> reduceApplication (Application lhs rhs1)
             TermVariable v1 -> if v == v1 && isFreeIn v lhs
               then etaReduceTerm lhs
               else noChange
@@ -178,11 +178,11 @@ etaReduceTerm term = case term of
     noChange = term
 
 -- | Whether a term is closed, i.e. represents a complete program
-termIsClosed :: Ord a => Term a -> Bool
+termIsClosed :: Term -> Bool
 termIsClosed = S.null . freeVariablesInTerm
 
 -- | Whether a term has been fully reduced to a "value"
-termIsValue :: Graph a -> Term a -> Bool
+termIsValue :: Graph -> Term -> Bool
 termIsValue g term = case stripTerm term of
     TermApplication _ -> False
     TermLiteral _ -> True

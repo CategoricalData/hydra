@@ -10,9 +10,6 @@ import java.io.Serializable;
 public class LanguageName implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/coders.LanguageName");
   
-  /**
-   * The unique name of a language
-   */
   public final String value;
   
   public LanguageName (String value) {

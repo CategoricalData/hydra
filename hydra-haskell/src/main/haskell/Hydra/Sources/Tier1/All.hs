@@ -15,7 +15,7 @@ import Hydra.Sources.Tier1.Messages
 import Hydra.Sources.Tier1.Strip
 import Hydra.Sources.Tier1.Tier1
 
-tier1Modules :: [Module Kv]
+tier1Modules :: [Module]
 tier1Modules = [
   coreEncodingModule,
   hydraConstantsModule,

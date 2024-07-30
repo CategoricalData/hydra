@@ -18,20 +18,20 @@ import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.string;
 
-public class FromList<A> extends PrimitiveFunction<A> {
+public class FromList extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra/lib/strings.fromList");
     }
 
     @Override
-    public Type<A> type() {
+    public Type type() {
         return function(list(int32()), string());
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> {
-            Flow<Graph<A>, List<Integer>> list = Expect.list(Expect::int32, args.get(0));
+            Flow<Graph, List<Integer>> list = Expect.list(Expect::int32, args.get(0));
             return Flows.map(list, l -> Terms.string(FromList.apply(l)));
         };
     }

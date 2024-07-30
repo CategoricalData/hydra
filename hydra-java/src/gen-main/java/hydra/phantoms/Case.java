@@ -10,9 +10,9 @@ import java.io.Serializable;
 public class Case<A> implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/phantoms.Case");
   
-  public final hydra.core.FieldName value;
+  public final hydra.core.Name value;
   
-  public Case (hydra.core.FieldName value) {
+  public Case (hydra.core.Name value) {
     java.util.Objects.requireNonNull((value));
     this.value = value;
   }
