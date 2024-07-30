@@ -12,7 +12,7 @@ import Data.Set as S
 fullyStripTerm :: (Core.Term -> Core.Term)
 fullyStripTerm t = ((\x -> case x of
   Core.TermAnnotated v269 -> (fullyStripTerm (Core.annotatedTermSubject v269))
-  Core.TermTyped v270 -> (fullyStripTerm (Core.termWithTypeTerm v270))
+  Core.TermTyped v270 -> (fullyStripTerm (Core.typedTermTerm v270))
   _ -> t) t)
 
 -- | Strip all annotations from a term

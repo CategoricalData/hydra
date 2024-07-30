@@ -308,7 +308,7 @@ declarationForRecordType isInner isSer aliases tparams elName fields = do
                 first20Primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71]
 
 declarationForType :: Bool -> Aliases -> (Element, TypedTerm) -> Flow Graph Java.TypeDeclarationWithComments
-declarationForType isSer aliases (el, TypedTerm _ term) = withTrace ("element " ++ unName (elementName el)) $ do
+declarationForType isSer aliases (el, TypedTerm term _) = withTrace ("element " ++ unName (elementName el)) $ do
     t <- coreDecodeType term >>= adaptType javaLanguage
     cd <- toClassDecl False isSer aliases [] (elementName el) t
     comments <- commentsFromElement el
@@ -695,7 +695,7 @@ encodeTerm aliases term0 = encodeInternal [] term0
           return $ javaMethodInvocationToJavaExpression $
             methodInvocation (Just $ Right prim) (Java.Identifier "collect") [coll]
 
-        TermTyped (TermWithType term1 _) -> encodeInternal anns term1
+        TermTyped (TypedTerm term1 _) -> encodeInternal anns term1
 
         TermUnion (Injection name (Field (Name fname) v)) -> do
           let (Java.Identifier typeId) = nameToJavaName aliases name
@@ -863,7 +863,7 @@ maybeLet aliases term cons = helper Nothing [] term
     -- Note: let-flattening could be done at the top level for better efficiency
     helper mtyp anns term = case flattenLetTerms term of
       TermAnnotated (AnnotatedTerm term' ann) -> helper mtyp (ann:anns) term'
-      TermTyped (TermWithType term' typ) -> helper (Just typ) anns term'
+      TermTyped (TypedTerm term' typ) -> helper (Just typ) anns term'
       TermLet (Let bindings env) -> do
           stmts <- L.concat <$> CM.mapM toDeclStatements sorted
           maybeLet aliasesWithRecursive env $ \aliases' tm stmts' -> cons aliases' (reannotate mtyp anns tm) (stmts ++ stmts')
@@ -933,7 +933,7 @@ noComment decl = Java.ClassBodyDeclarationWithComments decl Nothing
 
 reannotate mtyp anns term = case mtyp of
     Nothing -> base
-    Just typ -> TermTyped (TermWithType base typ)
+    Just typ -> TermTyped (TypedTerm base typ)
   where
     base = reann anns term
     reann anns term = case anns of
@@ -954,7 +954,7 @@ toClassDecl isInner isSer aliases tparams elName t = case stripType t of
     wrap t' = declarationForRecordType isInner isSer aliases tparams elName [Types.field valueFieldName t']
 
 toDataDeclaration :: Aliases -> (a, TypedTerm) -> Flow Graph a
-toDataDeclaration aliases (el, TypedTerm typ term) = do
+toDataDeclaration aliases (el, TypedTerm term typ) = do
   fail "not implemented" -- TODO
 
 typeArgsOrDiamond :: [Java.TypeArgument] -> Java.TypeArgumentsOrDiamond

@@ -78,10 +78,10 @@ transformModule :: Language
   -> (Module -> M.Map Type (Coder Graph Graph Term e) -> [(Element, TypedTerm)] -> Flow Graph d)
   -> Module -> Flow Graph d
 transformModule lang encodeTerm createModule mod = withTrace ("transform module " ++ unNamespace (moduleNamespace mod)) $ do
-    pairs <- withSchemaContext $ CM.mapM elementAsTypedTerm els
-    let types = L.nub (typedTermType <$> pairs)
+    tterms <- withSchemaContext $ CM.mapM elementAsTypedTerm els
+    let types = L.nub (typedTermType <$> tterms)
     coders <- codersFor types
-    createModule mod coders $ L.zip els pairs
+    createModule mod coders $ L.zip els tterms
   where
     els = moduleElements mod
 

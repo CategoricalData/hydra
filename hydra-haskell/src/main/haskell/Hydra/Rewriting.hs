@@ -29,16 +29,16 @@ import qualified Data.Maybe as Y
 -- beneathTermAnnotations f term = case term of
 --   TermAnnotated (AnnotatedTerm term1 ann) ->
 --     TermAnnotated (AnnotatedTerm (beneathTermAnnotationsM f term1) ann)
---   TermTyped (TermWithType term1 typ) ->
---     TermTyped $ TermWithType (beneathTermAnnotationsM f term1) typ
+--   TermTyped (TypedTerm term1 typ) ->
+--     TermTyped $ TypedTerm (beneathTermAnnotationsM f term1) typ
 --   _ -> f term
 --
 -- beneathTermAnnotationsM :: (Term -> Flow s Term) -> Term -> Flow s Term
 -- beneathTermAnnotationsM f term = case term of
 --   TermAnnotated (AnnotatedTerm term1 ann) ->
 --     TermAnnotated <$> (AnnotatedTerm <$> beneathTermAnnotationsM f term1 <*> pure ann)
---   TermTyped (TermWithType term1 typ) ->
---     TermTyped <$> (TermWithType <$> beneathTermAnnotationsM f term1 <*> pure typ)
+--   TermTyped (TypedTerm term1 typ) ->
+--     TermTyped <$> (TypedTerm <$> beneathTermAnnotationsM f term1 <*> pure typ)
 --   _ -> f term
 
 elementsWithDependencies :: [Element] -> Flow Graph [Element]
@@ -74,7 +74,7 @@ expandTypedLambdas = rewriteTerm rewrite id
               expand (L.tail doms) cod body
             _ -> pad 1 doms cod term
           TermLet (Let bindings env) -> TermLet $ Let (expandTypedLambdas <$> bindings) $ expand doms cod env
-          TermTyped (TermWithType term1 typ) -> TermTyped $ TermWithType (expand doms cod term1) typ
+          TermTyped (TypedTerm term1 typ) -> TermTyped $ TypedTerm (expand doms cod term1) typ
           _ -> recurse term
 
         pad i doms cod term = if L.null doms
@@ -86,7 +86,7 @@ expandTypedLambdas = rewriteTerm rewrite id
               typed (toFunctionType (L.tail doms) cod) $
               TermApplication $ Application (typed (toFunctionType doms cod) term) $ TermVariable var
           where
-            typed typ term = TermTyped $ TermWithType term typ
+            typed typ term = TermTyped $ TypedTerm term typ
             toFunctionType doms cod = L.foldl (\c d -> TypeFunction $ FunctionType d c) cod doms
             var = Name $ "v" ++ show i
 
@@ -142,7 +142,7 @@ removeTermAnnotations = rewriteTerm remove id
   where
     remove recurse term = case term of
       TermAnnotated (AnnotatedTerm term' _) -> remove recurse term'
-      TermTyped (TermWithType term' _) -> remove recurse term'
+      TermTyped (TypedTerm term' _) -> remove recurse term'
       _ -> recurse term
 
 -- | Recursively remove type annotations, including within subtypes
@@ -197,7 +197,7 @@ rewriteTerm f mf = rewrite fsub f
         TermRecord (Record n fields) -> TermRecord $ Record n $ forField <$> fields
         TermSet s -> TermSet $ S.fromList $ recurse <$> S.toList s
         TermSum (Sum i s trm) -> TermSum $ Sum i s $ recurse trm
-        TermTyped (TermWithType term1 type2) -> TermTyped $ TermWithType (recurse term1) type2
+        TermTyped (TypedTerm term1 type2) -> TermTyped $ TypedTerm (recurse term1) type2
         TermUnion (Injection n field) -> TermUnion $ Injection n $ forField field
         TermVariable v -> TermVariable v
       where
@@ -246,7 +246,7 @@ rewriteTermM f mf = rewrite fsub f
         TermRecord (Record n fields) -> TermRecord <$> (Record n <$> (CM.mapM forField fields))
         TermSet s -> TermSet <$> (S.fromList <$> (CM.mapM recurse $ S.toList s))
         TermSum (Sum i s trm) -> TermSum <$> (Sum i s <$> recurse trm)
-        TermTyped (TermWithType term1 type2) -> TermTyped <$> (TermWithType <$> recurse term1 <*> pure type2)
+        TermTyped (TypedTerm term1 type2) -> TermTyped <$> (TypedTerm <$> recurse term1 <*> pure type2)
         TermUnion (Injection n field) -> TermUnion <$> (Injection n <$> forField field)
         TermVariable v -> pure $ TermVariable v
         TermWrap (WrappedTerm name t) -> TermWrap <$> (WrappedTerm name <$> recurse t)
@@ -341,7 +341,7 @@ stripTermRecursive = rewriteTerm strip id
   where
     strip recurse term = case recurse term of
       TermAnnotated (AnnotatedTerm t _) -> t
-      TermTyped (TermWithType t _) -> t
+      TermTyped (TypedTerm t _) -> t
       t -> t
 
 substituteVariable :: Name -> Name -> Term -> Term
@@ -413,13 +413,13 @@ wrapLambdas = pure
 --      then 0
 --      else case term of
 --        TermAnnotated (AnnotatedTerm term2 _) -> missingArity arity term2
---        TermTyped (TermWithType term2 _) -> missingArity arity term2
+--        TermTyped (TypedTerm term2 _) -> missingArity arity term2
 --        TermLet (Let _ env) -> missingArity arity env
 --        TermFunction (FunctionLambda (Lambda _ body)) -> missingArity (arity - 1) body
 --        _ -> arity
 --    pad term doms cod = fst $ L.foldl newLambda (apps, cod) $ L.reverse variables
 --      where
---        newLambda (body, cod) (v, dom) = (TermTyped $ TermWithType (TermFunction $ FunctionLambda $ Lambda v body) ft, ft)
+--        newLambda (body, cod) (v, dom) = (TermTyped $ TypedTerm (TermFunction $ FunctionLambda $ Lambda v body) ft, ft)
 --          where
 --            ft = TypeFunction $ FunctionType dom cod
 --        apps = L.foldl (\lhs (v, _) -> TermApplication (Application lhs $ TermVariable v)) term variables

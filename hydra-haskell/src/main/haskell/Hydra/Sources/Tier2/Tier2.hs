@@ -67,7 +67,7 @@ getTermTypeDef = tier2Definition "getTermType" $
   function termT (optionalT typeT) $
   match _Term (Just nothing) [
     "annotated">: ref getTermTypeDef <.> project _AnnotatedTerm _AnnotatedTerm_subject,
-    "typed">: lambda "tt" $ just (project _TermWithType _TermWithType_type @@ var "tt")]
+    "typed">: lambda "tt" $ just (project _TypedTerm _TypedTerm_type @@ var "tt")]
 
 putStateDef :: Definition (s -> Flow s ())
 putStateDef = tier2Definition "putState" $

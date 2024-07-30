@@ -44,7 +44,7 @@ constructModule aliases mod coders pairs = do
         local = PDL.unName $ PDL.qualifiedNameName $ PDL.namedSchemaQualifiedName schema
 
     pairByName = L.foldl (\m p -> M.insert (elementName $ fst p) p m) M.empty pairs
-    toSchema (el, TypedTerm typ term) = do
+    toSchema (el, TypedTerm term typ) = do
       if isType typ
         then coreDecodeType term >>= typeToSchema el
         else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ unName (elementName el)

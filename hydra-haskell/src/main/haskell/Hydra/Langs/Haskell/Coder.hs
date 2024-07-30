@@ -57,7 +57,7 @@ constructModule namespaces mod coders pairs = do
   where
     h (Namespace name) = name
 
-    createDeclarations g pair@(el, TypedTerm typ term) = do
+    createDeclarations g pair@(el, TypedTerm term typ) = do
       if isType typ
         then toTypeDeclarations namespaces el term
         else do
@@ -271,7 +271,7 @@ moduleToHaskell mod = do
 
 toDataDeclaration :: M.Map Type (Coder Graph Graph Term H.Expression) -> Namespaces
   -> (Element, TypedTerm) -> Flow Graph H.DeclarationWithComments
-toDataDeclaration coders namespaces (el, TypedTerm typ term) = do
+toDataDeclaration coders namespaces (el, TypedTerm term typ) = do
   comments <- getTermDescription term
   toDecl comments hname term coder Nothing
   where

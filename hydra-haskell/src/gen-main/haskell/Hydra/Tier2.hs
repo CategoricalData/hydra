@@ -30,7 +30,7 @@ getState = (Compute.Flow (\s0 -> \t0 ->
 getTermType :: (Core.Term -> Maybe Core.Type)
 getTermType x = case x of
   Core.TermAnnotated v275 -> (getTermType (Core.annotatedTermSubject v275))
-  Core.TermTyped v276 -> (Just (Core.termWithTypeType v276))
+  Core.TermTyped v276 -> (Just (Core.typedTermType v276))
   _ -> Nothing
 
 -- | Set the state of a flow

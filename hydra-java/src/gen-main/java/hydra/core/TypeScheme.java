@@ -1,6 +1,6 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.mantle;
+package hydra.core;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A type expression together with free type variables occurring in the expression
  */
 public class TypeScheme implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/mantle.TypeScheme");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.TypeScheme");
   
   public final java.util.List<hydra.core.Name> variables;
   

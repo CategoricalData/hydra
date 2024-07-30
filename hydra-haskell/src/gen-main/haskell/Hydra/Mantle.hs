@@ -149,19 +149,6 @@ _TermVariant_variable = (Core.Name "variable")
 
 _TermVariant_wrap = (Core.Name "wrap")
 
--- | A type expression together with free type variables occurring in the expression
-data TypeScheme = 
-  TypeScheme {
-    typeSchemeVariables :: [Core.Name],
-    typeSchemeType :: Core.Type}
-  deriving (Eq, Ord, Read, Show)
-
-_TypeScheme = (Core.Name "hydra/mantle.TypeScheme")
-
-_TypeScheme_variables = (Core.Name "variables")
-
-_TypeScheme_type = (Core.Name "type")
-
 -- | The identifier of a type constructor
 data TypeVariant = 
   TypeVariantAnnotated  |
@@ -215,16 +202,3 @@ _TypeVariant_union = (Core.Name "union")
 _TypeVariant_variable = (Core.Name "variable")
 
 _TypeVariant_wrap = (Core.Name "wrap")
-
--- | A type together with an instance of the type
-data TypedTerm = 
-  TypedTerm {
-    typedTermType :: Core.Type,
-    typedTermTerm :: Core.Term}
-  deriving (Eq, Ord, Read, Show)
-
-_TypedTerm = (Core.Name "hydra/mantle.TypedTerm")
-
-_TypedTerm_type = (Core.Name "type")
-
-_TypedTerm_term = (Core.Name "term")

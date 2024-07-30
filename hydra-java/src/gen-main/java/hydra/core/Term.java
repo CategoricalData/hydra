@@ -569,9 +569,9 @@ public abstract class Term implements Serializable {
     /**
      * A term annotated with its type
      */
-    public final hydra.core.TermWithType value;
+    public final hydra.core.TypedTerm value;
     
-    public Typed (hydra.core.TermWithType value) {
+    public Typed (hydra.core.TypedTerm value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

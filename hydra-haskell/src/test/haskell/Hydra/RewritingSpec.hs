@@ -74,7 +74,7 @@ testExpandLambdas = do
 
     H.it "Check that lambda expansion is idempotent" $ do
       QC.property $ \term -> do
-        inf <- fromFlowIo testGraph $ annotateTermWithTypes term
+        inf <- fromFlowIo testGraph $ annotateTypedTerms term
         let once = expandTypedLambdas term
         let twice = expandTypedLambdas once
         H.shouldBe once twice
@@ -86,7 +86,7 @@ testExpandLambdas = do
     expandsTo termBefore termAfter = do
 --      result <- fromFlowIo testGraph $ expandLambdas termBefore
 --      H.shouldBe result termAfter
-       inf <- fromFlowIo testGraph $ annotateTermWithTypes termBefore
+       inf <- fromFlowIo testGraph $ annotateTypedTerms termBefore
        let result = expandTypedLambdas inf
        H.shouldBe (showTerm (removeTermAnnotations result)) (showTerm termAfter)
 
@@ -182,7 +182,7 @@ testFreeVariablesInTerm = do
   H.describe "Test free variables" $ do
 
 --    H.it "Generated terms never have free variables" $ do
---      QC.property $ \(TypedTerm _ term) -> do
+--      QC.property $ \(TypedTerm term _) -> do
 --        H.shouldBe
 --          (freeVariablesInTerm (term))
 --          S.empty
@@ -297,7 +297,7 @@ testSimplifyTerm = do
 --  H.describe "Test stripping metadata from terms" $ do
 --
 --    H.it "Strip type annotations" $ do
---      QC.property $ \(TypedTerm typ term) -> do
+--      QC.property $ \(TypedTerm term typ) -> do
 --        shouldSucceedWith
 --          (getTermType term)
 --          Nothing

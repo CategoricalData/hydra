@@ -84,12 +84,6 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "variable",
           "wrap"],
 
-      def "TypeScheme" $
-        doc "A type expression together with free type variables occurring in the expression" $
-        record [
-          "variables">: list $ core "Name",
-          "type">: core "Type"],
-
       def "TypeVariant" $
         doc "The identifier of a type constructor" $
         enum [
@@ -108,10 +102,4 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "sum",
           "union",
           "variable",
-          "wrap"],
-
-      def "TypedTerm" $
-        doc "A type together with an instance of the type" $
-        record [
-          "type">: core "Type",
-          "term">: core "Term"]]
+          "wrap"]]
