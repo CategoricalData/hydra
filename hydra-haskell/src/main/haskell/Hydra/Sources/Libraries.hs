@@ -73,6 +73,7 @@ _lists_bind = qname _hydra_lib_lists "bind" :: Name
 _lists_concat = qname _hydra_lib_lists "concat" :: Name
 _lists_concat2 = qname _hydra_lib_lists "concat2" :: Name
 _lists_cons = qname _hydra_lib_lists "cons" :: Name
+_lists_foldl = qname _hydra_lib_lists "foldl" :: Name
 _lists_head = qname _hydra_lib_lists "head" :: Name
 _lists_intercalate = qname _hydra_lib_lists "intercalate" :: Name
 _lists_intersperse = qname _hydra_lib_lists "intersperse" :: Name
@@ -265,6 +266,7 @@ hydraLibListsPrimitives = [
     prim1 _lists_concat (list (list x)) (list x) Lists.concat,
     prim2 _lists_concat2 (list x) (list x) (list x) Lists.concat2,
     prim2 _lists_cons x (list x) (list x) Lists.cons,
+    prim3 _lists_foldl (function y (function x y)) y (list x) y Lists.foldl,
     prim1 _lists_head (list x) x Lists.head,
     prim2 _lists_intercalate (list x) (list (list x)) (list x) Lists.intercalate,
     prim2 _lists_intersperse x (list x) (list x) Lists.intersperse,

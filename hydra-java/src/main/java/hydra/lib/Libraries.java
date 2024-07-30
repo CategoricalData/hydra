@@ -103,6 +103,7 @@ public class Libraries {
                 new hydra.lib.lists.Concat(),
                 new hydra.lib.lists.Concat2(),
                 new hydra.lib.lists.Cons(),
+                new hydra.lib.lists.Foldl(),
                 new hydra.lib.lists.Head(),
                 new hydra.lib.lists.Intercalate(),
                 new hydra.lib.lists.Intersperse(),
