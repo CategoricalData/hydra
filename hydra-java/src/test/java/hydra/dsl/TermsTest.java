@@ -134,7 +134,7 @@ public class TermsTest {
       String desc = term.accept(new Term.PartialVisitor<>() {
           @Override
           public String visit(Term.Annotated instance) {
-              Term desc = instance.value.annotation.annotations.get("description");
+              Term desc = instance.value.annotation.get("description");
               return Flows.fromFlow(Expect.string(desc));
           }
 

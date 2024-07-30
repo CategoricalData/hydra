@@ -139,7 +139,7 @@ public class RewritingTest {
 
             @Override
             public Flow<S, Term> visit(Term.Annotated instance) {
-                Map<String, Term> mp = instance.value.annotation.annotations;
+                Map<String, Term> mp = instance.value.annotation;
                 assertEquals(1, mp.size());
                 Term desc = mp.get("description");
                 assertNotNull(desc);

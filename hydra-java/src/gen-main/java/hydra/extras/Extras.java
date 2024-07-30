@@ -6,8 +6,8 @@ package hydra.extras;
  * Basic functions which depend on primitive functions
  */
 public interface Extras {
-  static  Integer functionArity(hydra.core.Function v1) {
-    return ((v1)).accept(new hydra.core.Function.Visitor<Integer>() {
+  static Integer functionArity(hydra.core.Function v1) {
+    return ((v1)).accept(new hydra.core.Function.Visitor<>() {
       @Override
       public Integer visit(hydra.core.Function.Elimination instance) {
         return 1;
@@ -27,13 +27,13 @@ public interface Extras {
     });
   }
   
-  static  java.util.function.Function<hydra.core.Name, hydra.util.Opt<hydra.graph.Primitive>> lookupPrimitive(hydra.graph.Graph g) {
+  static java.util.function.Function<hydra.core.Name, hydra.util.Opt<hydra.graph.Primitive>> lookupPrimitive(hydra.graph.Graph g) {
     return (java.util.function.Function<hydra.core.Name, hydra.util.Opt<hydra.graph.Primitive>>) (name -> hydra.lib.maps.Lookup.apply(
       (name),
       ((g)).primitives));
   }
   
-  static  Integer primitiveArity(hydra.graph.Primitive x) {
+  static Integer primitiveArity(hydra.graph.Primitive x) {
     return hydra.extras.Extras.typeArity(((x)).type);
   }
   
@@ -44,8 +44,8 @@ public interface Extras {
       (name)))));
   }
   
-  static  Integer termArity(hydra.core.Term v1) {
-    return ((v1)).accept(new hydra.core.Term.PartialVisitor<Integer>() {
+  static Integer termArity(hydra.core.Term v1) {
+    return ((v1)).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public Integer otherwise(hydra.core.Term instance) {
         return 0;
@@ -65,8 +65,8 @@ public interface Extras {
     });
   }
   
-  static  Integer typeArity(hydra.core.Type v1) {
-    return ((v1)).accept(new hydra.core.Type.PartialVisitor<Integer>() {
+  static Integer typeArity(hydra.core.Type v1) {
+    return ((v1)).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public Integer otherwise(hydra.core.Type instance) {
         return 0;
@@ -96,8 +96,8 @@ public interface Extras {
     });
   }
   
-  static  java.util.List<hydra.core.Type> uncurryType(hydra.core.Type t) {
-    return ((t)).accept(new hydra.core.Type.PartialVisitor<java.util.List<hydra.core.Type>>() {
+  static java.util.List<hydra.core.Type> uncurryType(hydra.core.Type t) {
+    return ((t)).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public java.util.List<hydra.core.Type> otherwise(hydra.core.Type instance) {
         return java.util.Arrays.asList((t));
@@ -127,13 +127,9 @@ public interface Extras {
     });
   }
   
-  static hydra.core.Kv emptyKv() {
-    return new hydra.core.Kv(hydra.lib.maps.Empty.apply());
-  }
-  
-  static java.util.function.Function<hydra.core.Kv, hydra.util.Opt<hydra.core.Term>> getAnnotation(String key) {
-    return (java.util.function.Function<hydra.core.Kv, hydra.util.Opt<hydra.core.Term>>) (ann -> hydra.lib.maps.Lookup.apply(
+  static java.util.function.Function<java.util.Map<String, hydra.core.Term>, hydra.util.Opt<hydra.core.Term>> getAnnotation(String key) {
+    return (java.util.function.Function<java.util.Map<String, hydra.core.Term>, hydra.util.Opt<hydra.core.Term>>) (ann -> hydra.lib.maps.Lookup.apply(
       (key),
-      ((ann)).annotations));
+      (ann)));
   }
 }
