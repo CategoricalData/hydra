@@ -95,7 +95,7 @@ isLambdaDef = tier1Definition "isLambda" $
       _Term_function>>: match _Function (Just false) [
         _Function_lambda>>: constant true],
       _Term_let>>: lambda "lt" (ref isLambdaDef @@ (project _Let _Let_environment @@ var "lt"))])
-    @@ (ref stripTermDef @@ var "term")
+    @@ (ref fullyStripTermDef @@ var "term")
 
 -- Rewriting.hs
 

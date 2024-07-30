@@ -47,53 +47,6 @@ elementsWithDependencies original = CM.mapM requireElement allDepNames
     depNames = S.toList . termDependencyNames True False False . elementData
     allDepNames = L.nub $ (elementName <$> original) ++ (L.concat $ depNames <$> original)
 
--- TODO: deprecated; see expandTypedLambdas
-expandLambdas :: Term -> Flow Graph Term
-expandLambdas term = do
-    g <- getState
-    rewriteTermM (expand g Nothing []) (pure . id) term
-  where
-    expand g mtyp args recurse term = case term of
-        TermAnnotated (AnnotatedTerm term' ann) -> do
-          let mt = getTermType term
-          expanded <- expand g (Y.maybe mtyp Just mt) args recurse term'
-          return $ TermAnnotated $ AnnotatedTerm expanded ann
-        TermTyped (TermWithType term1 typ) -> do
-          expanded <- expand g (Just typ) args recurse term1
-          return $ TermTyped $ TermWithType expanded typ
-        TermApplication (Application lhs rhs) -> do
-          rhs' <- expandLambdas rhs
-          expand g Nothing (rhs':args) recurse lhs
-        TermFunction f -> case f of
-          FunctionElimination _ -> pad g mtyp args 1 <$> recurse term
-          FunctionPrimitive name -> do
-            prim <- requirePrimitive name
-            return $ pad g mtyp args (primitiveArity prim) term
-          _ -> passThrough
-        _ -> passThrough
-      where
-        passThrough = pad g mtyp args 0 <$> recurse term
-
-    pad g mtyp args arity term = L.foldl lam (app mtyp term args') $ L.reverse variables
-      where
-        variables = L.take (max 0 (arity - L.length args)) ((\i -> Name $ "v" ++ show i) <$> [1..])
-        args' = args ++ (TermVariable <$> variables)
-
-        lam body v = TermFunction $ FunctionLambda $ Lambda v body
-
-        app mtyp lhs args = case args of
-          [] -> lhs
-          (a:rest) -> app mtyp' (TermApplication $ Application lhs' a) rest
-            where
-              lhs' = case mtyp of
-                Just typ -> TermTyped $ TermWithType lhs typ
-                Nothing -> lhs
-              mtyp' = case mtyp of
-                Just t -> case stripTypeParameters $ stripType t of
-                  TypeFunction (FunctionType _ cod) -> Just cod
-                  _ -> throwDebugException $ "expandLambdas: expected function type, got " ++ show t
-                Nothing -> Nothing
-
 -- | Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x',
 --   whose arity (in the absence of application terms) is equal to the depth of nested lambdas.
 --   This is useful for targets like Java with weaker support for currying.
@@ -102,7 +55,7 @@ expandTypedLambdas = rewriteTerm rewrite id
   where
     rewrite recurse term = case getFunType term of
         Nothing -> recurse term
-        Just (doms, cod) -> expand (doms, cod) term
+        Just (doms, cod) -> expand doms cod term
       where
         toNaryFunType typ = case stripType typ of
           TypeFunction (FunctionType dom0 cod0) -> (dom0 : doms, cod1)
@@ -111,30 +64,27 @@ expandTypedLambdas = rewriteTerm rewrite id
           d -> ([], d)
         getFunType term = toNaryFunType <$> getTermType term
 
-        expand (doms, cod) term = if L.null doms
-          then recurse term
-          else case term of
-            TermAnnotated (AnnotatedTerm term1 ann) -> TermAnnotated $ AnnotatedTerm (expand (doms, cod) term1) ann
-            TermApplication (Application lhs rhs) -> case getTermType rhs of
-                Nothing -> recurse term
-                Just typ -> TermApplication $ Application (expand (typ:doms, cod) lhs) $ expandTypedLambdas rhs
-            TermFunction f -> case f of
-              FunctionLambda (Lambda var body) -> TermFunction $ FunctionLambda $
-                Lambda var $ expand (L.tail doms, cod) body
-              _ -> pad 1 (doms, cod) term
-            TermLet (Let bindings env) -> TermLet $ Let (expandTypedLambdas <$> bindings) $ expand (doms, cod) env
-            TermTyped (TermWithType term1 typ) -> TermTyped $ TermWithType (expand (doms, cod) term1) typ
-            _ -> recurse term
+        expand doms cod term = case term of
+          TermAnnotated (AnnotatedTerm term1 ann) -> TermAnnotated $ AnnotatedTerm (expand doms cod term1) ann
+          TermApplication (Application lhs rhs) -> case getTermType rhs of
+            Nothing -> recurse term
+            Just typ -> TermApplication $ Application (expand (typ:doms) cod lhs) $ expandTypedLambdas rhs
+          TermFunction f -> case f of
+            FunctionLambda (Lambda var body) -> TermFunction $ FunctionLambda $ Lambda var $
+              expand (L.tail doms) cod body
+            _ -> pad 1 doms cod term
+          TermLet (Let bindings env) -> TermLet $ Let (expandTypedLambdas <$> bindings) $ expand doms cod env
+          TermTyped (TermWithType term1 typ) -> TermTyped $ TermWithType (expand doms cod term1) typ
+          _ -> recurse term
 
-        pad i (doms, cod) term = typed (toFunctionType doms cod) $ if L.null doms
+        pad i doms cod term = if L.null doms
             then term
-            else typed (toFunctionType doms cod) $
-              TermFunction $ FunctionLambda $ Lambda var $
-                pad (i+1) (L.tail doms, cod) $
-                -- TODO: omit this type annotation if practical; a type annotation on application terms
-                --       shouldn't really be necessary.
-                typed (toFunctionType (L.tail doms) cod) $
-                TermApplication $ Application term $ TermVariable var
+            else TermFunction $ FunctionLambda $ Lambda var $
+              pad (i+1) (L.tail doms) cod $
+              -- TODO: omit this type annotation if practical; a type annotation on application terms
+              --       shouldn't really be necessary.
+              typed (toFunctionType (L.tail doms) cod) $
+              TermApplication $ Application (typed (toFunctionType doms cod) term) $ TermVariable var
           where
             typed typ term = TermTyped $ TermWithType term typ
             toFunctionType doms cod = L.foldl (\c d -> TypeFunction $ FunctionType d c) cod doms
