@@ -91,7 +91,7 @@ checkDataAdapter = checkAdapter stripTerm termAdapter termTestContext
 
 checkSerdeRoundTrip :: (Type -> Flow Graph (Coder Graph Graph Term BS.ByteString))
   -> TypedTerm -> H.Expectation
-checkSerdeRoundTrip mkSerde (TypedTerm typ term) = do
+checkSerdeRoundTrip mkSerde (TypedTerm term typ) = do
     case mserde of
       Nothing -> HL.assertFailure (traceSummary trace)
       Just serde -> shouldSucceedWith
@@ -102,7 +102,7 @@ checkSerdeRoundTrip mkSerde (TypedTerm typ term) = do
 
 checkSerialization :: (Type -> Flow Graph (Coder Graph Graph Term String))
   -> TypedTerm -> String -> H.Expectation
-checkSerialization mkSerdeStr (TypedTerm typ term) expected = do
+checkSerialization mkSerdeStr (TypedTerm term typ) expected = do
     case mserde of
       Nothing -> HL.assertFailure (traceSummary trace)
       Just serde -> shouldSucceedWith

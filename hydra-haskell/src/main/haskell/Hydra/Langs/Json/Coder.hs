@@ -163,9 +163,9 @@ untypedTermToJson term = case stripTerm term of
       Field _Sum_index $ TermLiteral $ LiteralInteger $ IntegerValueInt32 idx,
       Field _Sum_size $ TermLiteral $ LiteralInteger $ IntegerValueInt32 size,
       Field _Sum_term term1]
-    TermTyped (TermWithType term1 typ) -> asRecord [
-      Field _TermWithType_term term1,
-      Field _TermWithType_type $ coreEncodeType typ]
+    TermTyped (TypedTerm term1 typ) -> asRecord [
+      Field _TypedTerm_term term1,
+      Field _TypedTerm_type $ coreEncodeType typ]
     TermUnion (Injection _ field) -> if fieldTerm field == Terms.unit
       then return $ Json.ValueString $ unName $ fieldName field
       else do

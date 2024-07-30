@@ -167,7 +167,7 @@ true :: Term
 true = boolean True
 
 typed :: Type -> Term -> Term
-typed typ term = TermTyped $ TermWithType term typ
+typed typ term = TermTyped $ TypedTerm term typ
 
 uint16 :: Int -> Term
 uint16 = literal . Literals.uint16

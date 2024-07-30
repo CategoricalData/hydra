@@ -256,7 +256,7 @@ stringLiteral v = case v of
 
 strip :: Term -> Term
 strip term = case stripTerm term of
-  TermTyped (TermWithType term1 _) -> strip term1
+  TermTyped (TypedTerm term1 _) -> strip term1
   t -> t
 
 uint8 :: Term -> Flow s Int16

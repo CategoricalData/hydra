@@ -241,7 +241,7 @@ roundTripsPreserveSelectedTypes = H.describe "Verify that the adapter is informa
 --roundTripsPreserveArbitraryTypes = H.describe "Verify that the adapter is information preserving for arbitrary typed terms" $ do
 --
 --  H.it "Check arbitrary type/term pairs" $
---    QC.property $ \(TypedTerm typ term) -> roundTripIsNoop typ term
+--    QC.property $ \(TypedTerm term typ) -> roundTripIsNoop typ term
 
 fieldAdaptersAreAsExpected :: H.SpecWith ()
 fieldAdaptersAreAsExpected = H.describe "Check that field adapters are as expected" $ do

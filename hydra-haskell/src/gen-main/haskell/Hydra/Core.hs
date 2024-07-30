@@ -543,7 +543,7 @@ data Term =
   -- | A variant tuple
   TermSum Sum |
   -- | A term annotated with its type
-  TermTyped TermWithType |
+  TermTyped TypedTerm |
   -- | An injection; an instance of a union type
   TermUnion Injection |
   -- | A variable reference
@@ -586,19 +586,6 @@ _Term_union = (Name "union")
 _Term_variable = (Name "variable")
 
 _Term_wrap = (Name "wrap")
-
--- | A term annotated with its type
-data TermWithType = 
-  TermWithType {
-    termWithTypeTerm :: Term,
-    termWithTypeType :: Type}
-  deriving (Eq, Ord, Read, Show)
-
-_TermWithType = (Name "hydra/core.TermWithType")
-
-_TermWithType_term = (Name "term")
-
-_TermWithType_type = (Name "type")
 
 -- | A tuple elimination; a projection from an integer-indexed product
 data TupleProjection = 
@@ -668,6 +655,32 @@ _Type_union = (Name "union")
 _Type_variable = (Name "variable")
 
 _Type_wrap = (Name "wrap")
+
+-- | A type expression together with free type variables occurring in the expression
+data TypeScheme = 
+  TypeScheme {
+    typeSchemeVariables :: [Name],
+    typeSchemeType :: Type}
+  deriving (Eq, Ord, Read, Show)
+
+_TypeScheme = (Name "hydra/core.TypeScheme")
+
+_TypeScheme_variables = (Name "variables")
+
+_TypeScheme_type = (Name "type")
+
+-- | A term together with its type
+data TypedTerm = 
+  TypedTerm {
+    typedTermTerm :: Term,
+    typedTermType :: Type}
+  deriving (Eq, Ord, Read, Show)
+
+_TypedTerm = (Name "hydra/core.TypedTerm")
+
+_TypedTerm_term = (Name "term")
+
+_TypedTerm_type = (Name "type")
 
 -- | An empty record as a canonical unit value
 data Unit = 

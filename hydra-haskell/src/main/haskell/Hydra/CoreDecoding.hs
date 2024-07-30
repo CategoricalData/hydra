@@ -154,10 +154,10 @@ dereferenceType name = do
     Nothing -> return Nothing
     Just el -> Just <$> coreDecodeType (elementData el)
 
-elementAsTypedTerm :: Element -> Flow Graph (TypedTerm)
+elementAsTypedTerm :: Element -> Flow Graph TypedTerm
 elementAsTypedTerm el = do
-  typ <- requireTermType (elementData el)
-  return $ TypedTerm typ (elementData el)
+  typ <- requireTermType $ elementData el
+  return $ TypedTerm (elementData el) typ
 
 fieldTypes :: Type -> Flow Graph (M.Map Name Type)
 fieldTypes t = case stripType t of

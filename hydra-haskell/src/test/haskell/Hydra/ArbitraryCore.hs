@@ -73,7 +73,7 @@ instance QC.Arbitrary IntegerValue
       IntegerValueUint64 <$> QC.arbitrary]
 
 instance QC.Arbitrary (Term) where
-  arbitrary = (\(TypedTerm _ term) -> term) <$> QC.sized arbitraryTypedTerm
+  arbitrary = (\(TypedTerm term _) -> term) <$> QC.sized arbitraryTypedTerm
 
 instance QC.Arbitrary Name
   where
@@ -91,7 +91,7 @@ instance QC.Arbitrary (Type) where
 
 instance QC.Arbitrary (TypedTerm) where
   arbitrary = QC.sized arbitraryTypedTerm
-  shrink (TypedTerm typ term) = L.concat ((\(t, m) -> TypedTerm t <$> m term) <$> shrinkers typ)
+  shrink (TypedTerm term typ) = L.concat ((\(t, m) -> TypedTerm <$> m term <*> pure t) <$> shrinkers typ)
 
 arbitraryLiteral :: LiteralType -> QC.Gen Literal
 arbitraryLiteral at = case at of

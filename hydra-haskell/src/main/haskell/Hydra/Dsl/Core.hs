@@ -205,8 +205,8 @@ sumSize = project _Sum _Sum_size
 sumTerm :: Datum (Sum -> Term)
 sumTerm = project _Sum _Sum_term
 
-termWithTypeTerm :: Datum (TermWithType -> Term)
-termWithTypeTerm = project _TermWithType _TermWithType_term
+typedTermTerm :: Datum (TypedTerm -> Term)
+typedTermTerm = project _TypedTerm _TypedTerm_term
 
 wrappedTerm :: Datum Name -> Datum Term -> Datum WrappedTerm
 wrappedTerm typeName object = Base.record _WrappedTerm [

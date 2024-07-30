@@ -5,16 +5,16 @@ package hydra.core;
 import java.io.Serializable;
 
 /**
- * A term annotated with its type
+ * A term together with its type
  */
-public class TermWithType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.TermWithType");
+public class TypedTerm implements Serializable {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.TypedTerm");
   
   public final hydra.core.Term term;
   
   public final hydra.core.Type type;
   
-  public TermWithType (hydra.core.Term term, hydra.core.Type type) {
+  public TypedTerm (hydra.core.Term term, hydra.core.Type type) {
     java.util.Objects.requireNonNull((term));
     java.util.Objects.requireNonNull((type));
     this.term = term;
@@ -23,10 +23,10 @@ public class TermWithType implements Serializable {
   
   @Override
   public boolean equals(Object other) {
-    if (!(other instanceof TermWithType)) {
+    if (!(other instanceof TypedTerm)) {
       return false;
     }
-    TermWithType o = (TermWithType) (other);
+    TypedTerm o = (TypedTerm) (other);
     return term.equals(o.term) && type.equals(o.type);
   }
   
@@ -35,13 +35,13 @@ public class TermWithType implements Serializable {
     return 2 * term.hashCode() + 3 * type.hashCode();
   }
   
-  public TermWithType withTerm(hydra.core.Term term) {
+  public TypedTerm withTerm(hydra.core.Term term) {
     java.util.Objects.requireNonNull((term));
-    return new TermWithType(term, type);
+    return new TypedTerm(term, type);
   }
   
-  public TermWithType withType(hydra.core.Type type) {
+  public TypedTerm withType(hydra.core.Type type) {
     java.util.Objects.requireNonNull((type));
-    return new TermWithType(term, type);
+    return new TypedTerm(term, type);
   }
 }

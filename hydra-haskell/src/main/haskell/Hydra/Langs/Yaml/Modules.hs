@@ -21,7 +21,7 @@ constructModule mod coders pairs = do
     keyvals <- withTrace "encoding terms" (CM.mapM toYaml pairs)
     return $ YM.NodeMapping $ M.fromList keyvals
   where
-    toYaml (el, (TypedTerm typ term)) = withTrace ("element " ++ unName (elementName el)) $ do
+    toYaml (el, (TypedTerm term typ)) = withTrace ("element " ++ unName (elementName el)) $ do
       encode <- case M.lookup typ coders of
         Nothing -> fail $ "no coder found for type " ++ show typ
         Just coder -> pure $ coderEncode coder

@@ -15,7 +15,7 @@ import hydra.core.Projection;
 import hydra.core.Record;
 import hydra.core.Sum;
 import hydra.core.Term;
-import hydra.core.TermWithType;
+import hydra.core.TypedTerm;
 import hydra.core.Unit;
 import hydra.core.WrappedTerm;
 import hydra.dsl.Terms;
@@ -240,7 +240,7 @@ public interface Rewriting {
                     public Flow<S, Term> visit(Term.Typed instance) {
                         Term t0 = instance.value.term;
                         Flow<S, Term> t1 = recurse.apply(t0);
-                        return map(t1, t2 -> new Term.Typed(new TermWithType(t2, instance.value.type)));
+                        return map(t1, t2 -> new Term.Typed(new TypedTerm(t2, instance.value.type)));
                     }
 
                     @Override

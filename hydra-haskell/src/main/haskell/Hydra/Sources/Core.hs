@@ -344,7 +344,7 @@ hydraCoreModule = Module ns elements [] [] $
             core "Sum",
           "typed">:
             doc "A term annotated with its type" $
-            core "TermWithType",
+            core "TypedTerm",
           "union">:
             doc "An injection; an instance of a union type" $
             core "Injection",
@@ -353,12 +353,6 @@ hydraCoreModule = Module ns elements [] [] $
             core "Name",
           "wrap">:
             core "WrappedTerm"],
-
-      def "TermWithType" $
-        doc "A term annotated with its type" $
-        record [
-          "term">: core "Term",
-          "type">: core "Type"],
 
       def "TupleProjection" $
         doc "A tuple elimination; a projection from an integer-indexed product" $
@@ -389,6 +383,18 @@ hydraCoreModule = Module ns elements [] [] $
           "union">: core "RowType",
           "variable">: core "Name",
           "wrap">: core "WrappedType"],
+
+      def "TypeScheme" $
+        doc "A type expression together with free type variables occurring in the expression" $
+        record [
+          "variables">: list $ core "Name",
+          "type">: core "Type"],
+
+      def "TypedTerm" $
+        doc "A term together with its type" $
+        record [
+          "term">: core "Term",
+          "type">: core "Type"],
 
       def "Unit" $
         doc "An empty record as a canonical unit value" $

@@ -57,7 +57,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
       (term2, constraints) <- infer term1
       return (TermAnnotated $ AnnotatedTerm term2 ann, constraints)
 
-    TermTyped (TermWithType term1 typ) -> do
+    TermTyped (TypedTerm term1 typ) -> do
       (i, c) <- infer term1
       return (setTermType (Just typ) i, c ++ [(typ, termType i)])
 
@@ -307,7 +307,7 @@ requireName v = do
 
 termType :: Term -> Type
 termType term = case stripTerm term of
-  (TermTyped (TermWithType _ typ)) -> typ
+  (TermTyped (TypedTerm _ typ)) -> typ
 
 -- TODO: limited and temporary
 termTypeScheme :: Term -> TypeScheme
@@ -319,7 +319,7 @@ typeOfPrimitive name = primitiveType <$> requirePrimitive name
 typeOfTerm :: Term -> Maybe Type
 typeOfTerm term = case term of
   TermAnnotated (AnnotatedTerm term1 _) -> typeOfTerm term1
-  TermTyped (TermWithType term1 typ) -> Just typ
+  TermTyped (TypedTerm term1 typ) -> Just typ
   _ -> Nothing
 
 withBinding :: Name -> TypeScheme -> Flow InferenceContext x -> Flow InferenceContext x
@@ -340,7 +340,7 @@ withGraphContext f = do
 
 yield :: Term -> Type -> [Constraint] -> Flow InferenceContext (Term, [Constraint])
 yield term typ constraints = do
-  return (TermTyped $ TermWithType term typ, constraints)
+  return (TermTyped $ TypedTerm term typ, constraints)
 
 yieldFunction :: Function -> Type -> [Constraint] -> Flow InferenceContext (Term, [Constraint])
 yieldFunction fun = yield (TermFunction fun)

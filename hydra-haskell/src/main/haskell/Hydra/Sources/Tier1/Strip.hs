@@ -45,7 +45,7 @@ fullyStripTermDef = stripDefinition "fullyStripTerm" $
     function termT termT $
       lambda "t" (match _Term (Just $ var "t") [
         Case _Term_annotated --> ref fullyStripTermDef <.> (project _AnnotatedTerm _AnnotatedTerm_subject),
-        Case _Term_typed --> ref fullyStripTermDef <.> (project _TermWithType _TermWithType_term)
+        Case _Term_typed --> ref fullyStripTermDef <.> (project _TypedTerm _TypedTerm_term)
         ] @@ (var "t"))
 
 stripTermDef :: Definition (Term -> Term)

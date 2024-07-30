@@ -47,7 +47,7 @@ constructModule mod coders pairs = do
         toPrimImport (Namespace ns) = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
           Scala.Importer (Scala.Data_RefName $ toScalaName ns) []]
     toScalaName name = Scala.Data_Name $ Scala.PredefString $ L.intercalate "." $ Strings.splitOn "/" name
-    toDef (el, TypedTerm typ term) = withTrace ("element " ++ unName (elementName el)) $ do
+    toDef (el, TypedTerm term typ) = withTrace ("element " ++ unName (elementName el)) $ do
         let coder = Y.fromJust $ M.lookup typ coders
         rhs <- coderEncode coder term
         Scala.StatDefn <$> case rhs of
@@ -224,4 +224,4 @@ encodeType t = case stripType t of
   _ -> fail $ "can't encode unsupported type in Scala: " ++ show t
 
 encodeUntypedTerm :: Term -> Flow (Graph) Scala.Data
-encodeUntypedTerm term = annotateTermWithTypes term >>= encodeTerm
+encodeUntypedTerm term = annotateTypedTerms term >>= encodeTerm

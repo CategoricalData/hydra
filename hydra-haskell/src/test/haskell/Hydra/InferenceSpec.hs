@@ -23,7 +23,7 @@ import Control.Monad
 checkType :: Term -> Type -> H.Expectation
 checkType term typ = typeAnn term `H.shouldBe` typ
   where
-    typeAnn (TermTyped (TermWithType _ typ)) = typ
+    typeAnn (TermTyped (TypedTerm _ typ)) = typ
 
 expectMonotype :: Term -> Type -> H.Expectation
 expectMonotype term = expectPolytype term []
@@ -38,10 +38,10 @@ expectTypeAnnotation :: (Term -> Flow (Graph) (Term)) -> Term -> Type -> H.Expec
 expectTypeAnnotation path term etyp = shouldSucceedWith atyp etyp
   where
    atyp = do
-     iterm <- annotateTermWithTypes term
+     iterm <- annotateTypedTerms term
      selected <- path iterm
      case selected of
-       TermTyped (TermWithType _ typ) -> return typ
+       TermTyped (TypedTerm _ typ) -> return typ
        _ -> fail $ "no type annotation"
 
 checkApplicationTerms :: H.SpecWith ()
@@ -334,7 +334,7 @@ checkTypeAnnotations = H.describe "Check that type annotations are added to term
         let term = TermList [TermLiteral l]
         let term1 = fromFlow (TermLiteral $ LiteralString "no term") testGraph (fst <$> inferTypeAndConstraints term)
         checkType term1 (Types.list $ Types.literal $ literalType l)
-        let (TermTyped (TermWithType (TermList [term2]) _)) = term1
+        let (TermTyped (TypedTerm (TermList [term2]) _)) = term1
         checkType term2 (Types.literal $ literalType l)
 
 checkSubtermAnnotations :: H.SpecWith ()
@@ -472,14 +472,14 @@ checkSubtermAnnotations = H.describe "Check additional subterm annotations" $ do
     tmp term = shouldSucceedWith flow ()
       where
         flow = do
-          iterm <- annotateTermWithTypes term
+          iterm <- annotateTypedTerms term
           fail $ "iterm: " ++ show iterm
 
 --checkTypedTerms :: H.SpecWith ()
 --checkTypedTerms = H.describe "Check that term/type pairs are consistent with type inference" $ do
 --
 --    H.it "Check arbitrary typed terms" $
---      QC.property $ \(TypedTerm typ term) -> expectMonotype term typ
+--      QC.property $ \(TypedTerm term typ) -> expectMonotype term typ
 
 spec :: H.Spec
 spec = do

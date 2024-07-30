@@ -135,7 +135,7 @@ subterms x = case x of
   Core.TermSum v120 -> [
     Core.sumTerm v120]
   Core.TermTyped v121 -> [
-    Core.termWithTypeTerm v121]
+    Core.typedTermTerm v121]
   Core.TermUnion v122 -> [
     Core.fieldTerm (Core.injectionField v122)]
   Core.TermVariable _ -> []

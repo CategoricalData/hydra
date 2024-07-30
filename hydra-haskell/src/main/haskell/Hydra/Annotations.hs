@@ -140,11 +140,11 @@ setTermDescription d = setTermAnnotation key_description (Terms.string <$> d)
 setTermType :: Y.Maybe Type -> Term -> Term
 setTermType mtyp term = case mtyp of
     Nothing -> withoutType term
-    Just typ -> TermTyped $ TermWithType (withoutType term) typ
+    Just typ -> TermTyped $ TypedTerm (withoutType term) typ
   where
     withoutType term = case term of
       TermAnnotated (AnnotatedTerm term1 ann) -> TermAnnotated $ AnnotatedTerm (withoutType term1) ann
-      TermTyped (TermWithType term1 _) -> term1
+      TermTyped (TypedTerm term1 _) -> term1
       _ -> term
 
 setType mt = setAnnotation key_type (coreEncodeType <$> mt)
@@ -176,7 +176,7 @@ termAnnotationInternal = aggregateAnnotations getAnn annotatedTermSubject annota
   where
     getAnn t = case t of
       TermAnnotated a -> Just a
-      TermTyped (TermWithType t1 _) -> getAnn t1
+      TermTyped (TypedTerm t1 _) -> getAnn t1
       _ -> Nothing
 
 typeAnnotationInternal :: Type -> M.Map String Term

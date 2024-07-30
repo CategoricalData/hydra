@@ -1,7 +1,7 @@
 -- | Entry point for Hydra type inference, which is a variation on on Hindley-Milner
 
 module Hydra.Inference (
-  annotateTermWithTypes,
+  annotateTypedTerms,
   inferGraphTypes,
   inferType,
   inferTypeScheme,
@@ -59,8 +59,8 @@ annotateElements g sortedEls = withInferenceContext $ do
         (iel, c1) <- inferElementType el
         withBinding (elementName el) (termTypeScheme $ elementData iel) $ annotate r ((iel, c1):annotated)
 
-annotateTermWithTypes :: Term -> Flow Graph Term
-annotateTermWithTypes term0 = do
+annotateTypedTerms :: Term -> Flow Graph Term
+annotateTypedTerms term0 = do
   (term1, _) <- inferTypeAndConstraints term0
   return term1
 
@@ -105,7 +105,7 @@ rewriteDataType :: (Type -> Type) -> Term -> Term
 rewriteDataType f = rewriteTerm ff id
   where
     ff recurse term = case recurse term of
-      TermTyped (TermWithType term1 type1) -> TermTyped $ TermWithType term1 (f type1)
+      TermTyped (TypedTerm term1 type1) -> TermTyped $ TypedTerm term1 (f type1)
       t -> t
 
 sortGraphElements :: Graph -> Flow Graph [Element]
