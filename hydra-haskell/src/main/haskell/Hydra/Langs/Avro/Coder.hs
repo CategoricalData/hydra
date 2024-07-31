@@ -26,9 +26,8 @@ import qualified Data.Maybe as Y
 data AvroEnvironment = AvroEnvironment {
   avroEnvironmentNamedAdapters :: M.Map AvroQualifiedName AvroHydraAdapter,
   avroEnvironmentNamespace :: Maybe String,
-  avroEnvironmentElements :: M.Map Name Element, -- note: only used in the term coders
-  avroEnvironmentCreateAnnotation :: M.Map String Term -> M.Map String Term}
-type AvroHydraAdapter = Adapter AvroEnvironment AvroEnvironment Avro.Schema (Type) Json.Value Term
+  avroEnvironmentElements :: M.Map Name Element} -- note: only used in the term coders
+type AvroHydraAdapter = Adapter AvroEnvironment AvroEnvironment Avro.Schema Type Json.Value Term
 
 data AvroQualifiedName = AvroQualifiedName (Maybe String) String deriving (Eq, Ord, Show)
 
@@ -63,7 +62,7 @@ avroHydraAdapter schema = case schema of
         env <- getState
 
         let manns = namedAnnotationsToCore n
-        let ann = if M.null manns then Nothing else (Just $ avroEnvironmentCreateAnnotation env manns)
+        let ann = if M.null manns then Nothing else (Just manns)
 
         let lastNs = avroEnvironmentNamespace env
         let nextNs = Y.maybe lastNs Just ns
@@ -150,9 +149,8 @@ avroHydraAdapter schema = case schema of
         prepareField f = do
           fk <- foreignKey f
 
-          env <- getState
           let manns = fieldAnnotationsToCore f
-          let ann = if M.null manns then Nothing else (Just $ avroEnvironmentCreateAnnotation env manns)
+          let ann = if M.null manns then Nothing else (Just manns)
 
           ad <- case fk of
             Nothing -> avroHydraAdapter $ Avro.fieldType f
