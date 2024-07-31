@@ -262,6 +262,23 @@ public interface CoreEncoding {
       new hydra.core.Field(new hydra.core.Name("body"), hydra.coreEncoding.CoreEncoding.coreEncodeType(((lt)).body)))));
   }
   
+  static hydra.core.Term coreEncodeLet(hydra.core.Let l) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.Let"), java.util.Arrays.asList(
+      new hydra.core.Field(new hydra.core.Name("bindings"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+        (hydra.coreEncoding.CoreEncoding::coreEncodeLetBinding),
+        ((l)).bindings))),
+      new hydra.core.Field(new hydra.core.Name("environment"), hydra.coreEncoding.CoreEncoding.coreEncodeTerm(((l)).environment)))));
+  }
+  
+  static hydra.core.Term coreEncodeLetBinding(hydra.core.LetBinding b) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.LetBinding"), java.util.Arrays.asList(
+      new hydra.core.Field(new hydra.core.Name("name"), hydra.coreEncoding.CoreEncoding.coreEncodeName(((b)).name)),
+      new hydra.core.Field(new hydra.core.Name("term"), hydra.coreEncoding.CoreEncoding.coreEncodeTerm(((b)).term)),
+      new hydra.core.Field(new hydra.core.Name("type"), new hydra.core.Term.Optional(hydra.lib.optionals.Map.apply(
+        (hydra.coreEncoding.CoreEncoding::coreEncodeTypeScheme),
+        ((b)).type))))));
+  }
+  
   static hydra.core.Term coreEncodeLiteral(hydra.core.Literal v1) {
     return ((v1)).accept(new hydra.core.Literal.Visitor<>() {
       @Override
@@ -330,18 +347,6 @@ public interface CoreEncoding {
     return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra/core.Name"), new hydra.core.Term.Literal(new hydra.core.Literal.String_(((fn)).value))));
   }
   
-  static hydra.core.Term coreEncodeWrappedTerm(hydra.core.WrappedTerm n) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.WrappedTerm"), java.util.Arrays.asList(
-      new hydra.core.Field(new hydra.core.Name("typeName"), hydra.coreEncoding.CoreEncoding.coreEncodeName(((n)).typeName)),
-      new hydra.core.Field(new hydra.core.Name("object"), hydra.coreEncoding.CoreEncoding.coreEncodeTerm(((n)).object)))));
-  }
-  
-  static hydra.core.Term coreEncodeWrappedType(hydra.core.WrappedType nt) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.WrappedType"), java.util.Arrays.asList(
-      new hydra.core.Field(new hydra.core.Name("typeName"), hydra.coreEncoding.CoreEncoding.coreEncodeName(((nt)).typeName)),
-      new hydra.core.Field(new hydra.core.Name("object"), hydra.coreEncoding.CoreEncoding.coreEncodeType(((nt)).object)))));
-  }
-  
   static hydra.core.Term coreEncodeOptionalCases(hydra.core.OptionalCases oc) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.OptionalCases"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("nothing"), hydra.coreEncoding.CoreEncoding.coreEncodeTerm(((oc)).nothing)),
@@ -403,6 +408,11 @@ public interface CoreEncoding {
       }
       
       @Override
+      public hydra.core.Term visit(hydra.core.Term.Let instance) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.Term"), new hydra.core.Field(new hydra.core.Name("let"), hydra.coreEncoding.CoreEncoding.coreEncodeLet((instance.value)))));
+      }
+      
+      @Override
       public hydra.core.Term visit(hydra.core.Term.Literal instance) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.Term"), new hydra.core.Field(new hydra.core.Name("literal"), hydra.coreEncoding.CoreEncoding.coreEncodeLiteral((instance.value)))));
       }
@@ -431,6 +441,13 @@ public interface CoreEncoding {
       @Override
       public hydra.core.Term visit(hydra.core.Term.Record instance) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.Term"), new hydra.core.Field(new hydra.core.Name("record"), hydra.coreEncoding.CoreEncoding.coreEncodeRecord((instance.value)))));
+      }
+      
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.Set instance) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.Term"), new hydra.core.Field(new hydra.core.Name("set"), new hydra.core.Term.Set(hydra.lib.sets.Map.apply(
+          (hydra.coreEncoding.CoreEncoding::coreEncodeTerm),
+          (instance.value))))));
       }
       
       @Override
@@ -547,5 +564,25 @@ public interface CoreEncoding {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.Type"), new hydra.core.Field(new hydra.core.Name("wrap"), hydra.coreEncoding.CoreEncoding.coreEncodeWrappedType((instance.value)))));
       }
     });
+  }
+  
+  static hydra.core.Term coreEncodeTypeScheme(hydra.core.TypeScheme ts) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.TypeScheme"), java.util.Arrays.asList(
+      new hydra.core.Field(new hydra.core.Name("variables"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+        (hydra.coreEncoding.CoreEncoding::coreEncodeName),
+        ((ts)).variables))),
+      new hydra.core.Field(new hydra.core.Name("type"), hydra.coreEncoding.CoreEncoding.coreEncodeType(((ts)).type)))));
+  }
+  
+  static hydra.core.Term coreEncodeWrappedTerm(hydra.core.WrappedTerm n) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.WrappedTerm"), java.util.Arrays.asList(
+      new hydra.core.Field(new hydra.core.Name("typeName"), hydra.coreEncoding.CoreEncoding.coreEncodeName(((n)).typeName)),
+      new hydra.core.Field(new hydra.core.Name("object"), hydra.coreEncoding.CoreEncoding.coreEncodeTerm(((n)).object)))));
+  }
+  
+  static hydra.core.Term coreEncodeWrappedType(hydra.core.WrappedType nt) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.WrappedType"), java.util.Arrays.asList(
+      new hydra.core.Field(new hydra.core.Name("typeName"), hydra.coreEncoding.CoreEncoding.coreEncodeName(((nt)).typeName)),
+      new hydra.core.Field(new hydra.core.Name("object"), hydra.coreEncoding.CoreEncoding.coreEncodeType(((nt)).object)))));
   }
 }

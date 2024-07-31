@@ -218,7 +218,7 @@ arbitraryTypedTerm :: Int -> QC.Gen (TypedTerm)
 arbitraryTypedTerm n = do
     typ <- arbitraryType n'
     term <- arbitraryTerm typ n'
-    return $ TypedTerm typ term
+    return $ TypedTerm term typ
   where
     n' = div n 2 -- TODO: a term is usually bigger than its type
 

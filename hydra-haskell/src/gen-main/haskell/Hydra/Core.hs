@@ -317,10 +317,10 @@ _LambdaType_parameter = (Name "parameter")
 
 _LambdaType_body = (Name "body")
 
--- | A set of (possibly recursive) 'let' bindings
+-- | A set of (possibly recursive) 'let' bindings together with an environment in which they are bound
 data Let = 
   Let {
-    letBindings :: (Map Name Term),
+    letBindings :: [LetBinding],
     letEnvironment :: Term}
   deriving (Eq, Ord, Read, Show)
 
@@ -329,6 +329,22 @@ _Let = (Name "hydra/core.Let")
 _Let_bindings = (Name "bindings")
 
 _Let_environment = (Name "environment")
+
+-- | A field with an optional type scheme, used to bind variables to terms in a 'let' expression
+data LetBinding = 
+  LetBinding {
+    letBindingName :: Name,
+    letBindingTerm :: Term,
+    letBindingType :: (Maybe TypeScheme)}
+  deriving (Eq, Ord, Read, Show)
+
+_LetBinding = (Name "hydra/core.LetBinding")
+
+_LetBinding_name = (Name "name")
+
+_LetBinding_term = (Name "term")
+
+_LetBinding_type = (Name "type")
 
 -- | A term constant; an instance of a literal type
 data Literal = 

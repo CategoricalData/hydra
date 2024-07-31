@@ -5,16 +5,16 @@ package hydra.core;
 import java.io.Serializable;
 
 /**
- * A set of (possibly recursive) 'let' bindings
+ * A set of (possibly recursive) 'let' bindings together with an environment in which they are bound
  */
 public class Let implements Serializable {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Let");
   
-  public final java.util.Map<hydra.core.Name, hydra.core.Term> bindings;
+  public final java.util.List<hydra.core.LetBinding> bindings;
   
   public final hydra.core.Term environment;
   
-  public Let (java.util.Map<hydra.core.Name, hydra.core.Term> bindings, hydra.core.Term environment) {
+  public Let (java.util.List<hydra.core.LetBinding> bindings, hydra.core.Term environment) {
     java.util.Objects.requireNonNull((bindings));
     java.util.Objects.requireNonNull((environment));
     this.bindings = bindings;
@@ -35,7 +35,7 @@ public class Let implements Serializable {
     return 2 * bindings.hashCode() + 3 * environment.hashCode();
   }
   
-  public Let withBindings(java.util.Map<hydra.core.Name, hydra.core.Term> bindings) {
+  public Let withBindings(java.util.List<hydra.core.LetBinding> bindings) {
     java.util.Objects.requireNonNull((bindings));
     return new Let(bindings, environment);
   }

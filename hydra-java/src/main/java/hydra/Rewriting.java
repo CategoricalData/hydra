@@ -9,6 +9,7 @@ import hydra.core.Field;
 import hydra.core.Injection;
 import hydra.core.Lambda;
 import hydra.core.Let;
+import hydra.core.LetBinding;
 import hydra.core.Name;
 import hydra.core.OptionalCases;
 import hydra.core.Projection;
@@ -169,9 +170,10 @@ public interface Rewriting {
 
                     @Override
                     public Flow<S, Term> visit(Term.Let instance) {
-                        Map<Name, Term> bindingsA = instance.value.bindings;
+                        List<LetBinding> bindingsA = instance.value.bindings;
                         Term envA = instance.value.environment;
-                        Flow<S, Map<Name, Term>> bindingsB = mapM(bindingsA, Flows::pure, recurse);
+                        Flow<S, List<LetBinding>> bindingsB = mapM(bindingsA,
+                            b -> Flows.map(recurse.apply(b.term), b::withTerm));
                         Flow<S, Term> envB = recurse.apply(envA);
                         return map2(bindingsB, envB, (b, e) -> new Term.Let(new Let(b, e)));
                     }
