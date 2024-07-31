@@ -190,7 +190,7 @@ transformAvroJson format adapter lastMile inFile outFile = do
 
     jsonToTarget inFile adapter lmEncoder index payload = case stringToJsonValue payload of
         Left msg -> fail $ "Failed to read JSON payload #" ++ show index ++ " in file " ++ inFile ++ ": " ++ msg
-        Right json -> withState emptyEnv $ do
+        Right json -> withState emptyAvroEnvironment $ do
           -- TODO; the core graph is neither the data nor the schema graph
           let dataGraph = hydraCore
           let schemaGraph = Just hydraCore
@@ -216,7 +216,7 @@ transformAvroJsonDirectory lastMile schemaPath srcDir destDir = do
   where
     loadAdapter schemaStr = do
       avroSchema <- coderDecode avroSchemaStringCoder schemaStr
-      withState emptyEnv $ avroHydraAdapter avroSchema
+      withState emptyAvroEnvironment $ avroHydraAdapter avroSchema
 
     transformFile adapter srcFile = do
       case jsonPayloadFormat srcFile of
@@ -233,7 +233,3 @@ transformAvroJsonDirectory lastMile schemaPath srcDir destDir = do
         else Nothing
       where
         ext = takeExtension fileName
-
-emptyEnv = emptyAvroEnvironment createAnn
-  where
-    createAnn = id
