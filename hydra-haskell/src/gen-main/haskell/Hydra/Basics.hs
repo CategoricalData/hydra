@@ -133,8 +133,8 @@ literalType :: (Core.Literal -> Core.LiteralType)
 literalType x = case x of
   Core.LiteralBinary _ -> Core.LiteralTypeBinary
   Core.LiteralBoolean _ -> Core.LiteralTypeBoolean
-  Core.LiteralFloat v189 -> ((\x2 -> Core.LiteralTypeFloat x2) (floatValueType v189))
-  Core.LiteralInteger v190 -> ((\x2 -> Core.LiteralTypeInteger x2) (integerValueType v190))
+  Core.LiteralFloat v187 -> ((\x2 -> Core.LiteralTypeFloat x2) (floatValueType v187))
+  Core.LiteralInteger v188 -> ((\x2 -> Core.LiteralTypeInteger x2) (integerValueType v188))
   Core.LiteralString _ -> Core.LiteralTypeString
 
 -- | Find the literal type variant (constructor) for a given literal value
@@ -173,7 +173,6 @@ termVariant x = case x of
   Core.TermProduct _ -> Mantle.TermVariantProduct
   Core.TermRecord _ -> Mantle.TermVariantRecord
   Core.TermSet _ -> Mantle.TermVariantSet
-  Core.TermStream _ -> Mantle.TermVariantStream
   Core.TermSum _ -> Mantle.TermVariantSum
   Core.TermTyped _ -> Mantle.TermVariantTyped
   Core.TermUnion _ -> Mantle.TermVariantUnion
@@ -193,7 +192,6 @@ termVariants = [
   Mantle.TermVariantProduct,
   Mantle.TermVariantRecord,
   Mantle.TermVariantSet,
-  Mantle.TermVariantStream,
   Mantle.TermVariantSum,
   Mantle.TermVariantTyped,
   Mantle.TermVariantUnion,
@@ -214,7 +212,6 @@ typeVariant x = case x of
   Core.TypeProduct _ -> Mantle.TypeVariantProduct
   Core.TypeRecord _ -> Mantle.TypeVariantRecord
   Core.TypeSet _ -> Mantle.TypeVariantSet
-  Core.TypeStream _ -> Mantle.TypeVariantStream
   Core.TypeSum _ -> Mantle.TypeVariantSum
   Core.TypeUnion _ -> Mantle.TypeVariantUnion
   Core.TypeVariable _ -> Mantle.TypeVariantVariable
@@ -235,7 +232,6 @@ typeVariants = [
   Mantle.TypeVariantProduct,
   Mantle.TypeVariantRecord,
   Mantle.TypeVariantSet,
-  Mantle.TypeVariantStream,
   Mantle.TypeVariantSum,
   Mantle.TypeVariantUnion,
   Mantle.TypeVariantVariable]
@@ -267,15 +263,15 @@ fieldTypeMap fields = (Maps.fromList (Lists.map toPair fields))
 
 isEncodedType :: (Core.Term -> Bool)
 isEncodedType t = ((\x -> case x of
-  Core.TermApplication v230 -> (isEncodedType (Core.applicationFunction v230))
-  Core.TermUnion v231 -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.injectionTypeName v231)))
+  Core.TermApplication v226 -> (isEncodedType (Core.applicationFunction v226))
+  Core.TermUnion v227 -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.injectionTypeName v227)))
   _ -> False) (Strip.stripTerm t))
 
 isType :: (Core.Type -> Bool)
 isType t = ((\x -> case x of
-  Core.TypeApplication v232 -> (isType (Core.applicationTypeFunction v232))
-  Core.TypeLambda v233 -> (isType (Core.lambdaTypeBody v233))
-  Core.TypeUnion v234 -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.rowTypeTypeName v234)))
+  Core.TypeApplication v228 -> (isType (Core.applicationTypeFunction v228))
+  Core.TypeLambda v229 -> (isType (Core.lambdaTypeBody v229))
+  Core.TypeUnion v230 -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.rowTypeTypeName v230)))
   _ -> False) (Strip.stripType t))
 
 isUnitTerm :: (Core.Term -> Bool)

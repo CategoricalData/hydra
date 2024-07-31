@@ -404,11 +404,6 @@ public interface Basics {
       }
 
       @Override
-      public hydra.mantle.TermVariant visit(hydra.core.Term.Stream instance) {
-        return new hydra.mantle.TermVariant.Stream();
-      }
-
-      @Override
       public hydra.mantle.TermVariant visit(hydra.core.Term.Sum instance) {
         return new hydra.mantle.TermVariant.Sum();
       }
@@ -446,7 +441,6 @@ public interface Basics {
       new hydra.mantle.TermVariant.Product(),
       new hydra.mantle.TermVariant.Record(),
       new hydra.mantle.TermVariant.Set(),
-      new hydra.mantle.TermVariant.Stream(),
       new hydra.mantle.TermVariant.Sum(),
       new hydra.mantle.TermVariant.Typed(),
       new hydra.mantle.TermVariant.Union(),
@@ -511,11 +505,6 @@ public interface Basics {
       }
 
       @Override
-      public hydra.mantle.TypeVariant visit(hydra.core.Type.Stream instance) {
-        return new hydra.mantle.TypeVariant.Stream();
-      }
-
-      @Override
       public hydra.mantle.TypeVariant visit(hydra.core.Type.Sum instance) {
         return new hydra.mantle.TypeVariant.Sum();
       }
@@ -550,7 +539,6 @@ public interface Basics {
       new hydra.mantle.TypeVariant.Product(),
       new hydra.mantle.TypeVariant.Record(),
       new hydra.mantle.TypeVariant.Set(),
-      new hydra.mantle.TypeVariant.Stream(),
       new hydra.mantle.TypeVariant.Sum(),
       new hydra.mantle.TypeVariant.Union(),
       new hydra.mantle.TypeVariant.Variable());

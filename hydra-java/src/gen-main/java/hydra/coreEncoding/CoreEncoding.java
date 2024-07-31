@@ -536,12 +536,7 @@ public interface CoreEncoding {
       public hydra.core.Term visit(hydra.core.Type.Set instance) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.Type"), new hydra.core.Field(new hydra.core.Name("set"), hydra.coreEncoding.CoreEncoding.coreEncodeType((instance.value)))));
       }
-      
-      @Override
-      public hydra.core.Term visit(hydra.core.Type.Stream instance) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.Type"), new hydra.core.Field(new hydra.core.Name("stream"), hydra.coreEncoding.CoreEncoding.coreEncodeType((instance.value)))));
-      }
-      
+
       @Override
       public hydra.core.Term visit(hydra.core.Type.Sum instance) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.Type"), new hydra.core.Field(new hydra.core.Name("sum"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(

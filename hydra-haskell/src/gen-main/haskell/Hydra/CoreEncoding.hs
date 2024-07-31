@@ -636,31 +636,26 @@ coreEncodeType x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "set"),
       Core.fieldTerm = (coreEncodeType v67)}}))
-  Core.TypeStream v68 -> (Core.TermUnion (Core.Injection {
-    Core.injectionTypeName = (Core.Name "hydra/core.Type"),
-    Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "stream"),
-      Core.fieldTerm = (coreEncodeType v68)}}))
-  Core.TypeSum v69 -> (Core.TermUnion (Core.Injection {
+  Core.TypeSum v68 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Type"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "sum"),
-      Core.fieldTerm = (Core.TermList (Lists.map coreEncodeType v69))}}))
-  Core.TypeUnion v70 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (Core.TermList (Lists.map coreEncodeType v68))}}))
+  Core.TypeUnion v69 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Type"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "union"),
-      Core.fieldTerm = (coreEncodeRowType v70)}}))
-  Core.TypeVariable v71 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (coreEncodeRowType v69)}}))
+  Core.TypeVariable v70 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Type"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "variable"),
-      Core.fieldTerm = (coreEncodeName v71)}}))
-  Core.TypeWrap v72 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (coreEncodeName v70)}}))
+  Core.TypeWrap v71 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Type"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "wrap"),
-      Core.fieldTerm = (coreEncodeWrappedType v72)}}))
+      Core.fieldTerm = (coreEncodeWrappedType v71)}}))
 
 coreEncodeTypeScheme :: (Core.TypeScheme -> Core.Term)
 coreEncodeTypeScheme ts = (Core.TermRecord (Core.Record {

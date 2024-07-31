@@ -39,8 +39,6 @@ public abstract class Type implements Serializable {
     
     R visit(Set instance) ;
     
-    R visit(Stream instance) ;
-    
     R visit(Sum instance) ;
     
     R visit(Union instance) ;
@@ -96,10 +94,6 @@ public abstract class Type implements Serializable {
     }
     
     default R visit(Set instance) {
-      return otherwise((instance));
-    }
-    
-    default R visit(Stream instance) {
       return otherwise((instance));
     }
     
@@ -414,34 +408,6 @@ public abstract class Type implements Serializable {
         return false;
       }
       Set o = (Set) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  public static final class Stream extends hydra.core.Type implements Serializable {
-    public final hydra.core.Type value;
-    
-    public Stream (hydra.core.Type value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Stream)) {
-        return false;
-      }
-      Stream o = (Stream) (other);
       return value.equals(o.value);
     }
     

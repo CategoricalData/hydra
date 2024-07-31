@@ -502,19 +502,6 @@ _RowType_extends = (Name "extends")
 
 _RowType_fields = (Name "fields")
 
--- | An infinite stream of terms
-data Stream = 
-  Stream {
-    streamFirst :: Term,
-    streamRest :: Stream}
-  deriving (Eq, Ord, Read, Show)
-
-_Stream = (Name "hydra/core.Stream")
-
-_Stream_first = (Name "first")
-
-_Stream_rest = (Name "rest")
-
 -- | The unlabeled equivalent of an Injection term
 data Sum = 
   Sum {
@@ -554,8 +541,6 @@ data Term =
   TermRecord Record |
   -- | A set of values
   TermSet (Set Term) |
-  -- | An infinite stream of terms
-  TermStream Stream |
   -- | A variant tuple
   TermSum Sum |
   -- | A term annotated with its type
@@ -590,8 +575,6 @@ _Term_product = (Name "product")
 _Term_record = (Name "record")
 
 _Term_set = (Name "set")
-
-_Term_stream = (Name "stream")
 
 _Term_sum = (Name "sum")
 
@@ -631,7 +614,6 @@ data Type =
   TypeProduct [Type] |
   TypeRecord RowType |
   TypeSet Type |
-  TypeStream Type |
   TypeSum [Type] |
   TypeUnion RowType |
   TypeVariable Name |
@@ -661,8 +643,6 @@ _Type_product = (Name "product")
 _Type_record = (Name "record")
 
 _Type_set = (Name "set")
-
-_Type_stream = (Name "stream")
 
 _Type_sum = (Name "sum")
 

@@ -226,11 +226,6 @@ public interface Rewriting {
                     }
 
                     @Override
-                    public Flow<S, Term> visit(Term.Stream instance) {
-                        throw new UnsupportedOperationException();
-                    }
-
-                    @Override
                     public Flow<S, Term> visit(Term.Sum instance) {
                         Term t0 = instance.value.term;
                         Flow<S, Term> t1 = recurse.apply(t0);

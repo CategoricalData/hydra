@@ -294,12 +294,6 @@ hydraCoreModule = Module ns elements [] [] $
             doc "The fields of this row type, excluding any inherited fields" $
             list $ core "FieldType"],
 
-      def "Stream" $
-        doc "An infinite stream of terms" $
-        record [
-          "first">: core "Term",
-          "rest">: core "Stream"],
-
       def "Sum" $
         doc "The unlabeled equivalent of an Injection term" $
         record [
@@ -343,9 +337,6 @@ hydraCoreModule = Module ns elements [] [] $
           "set">:
             doc "A set of values" $
             set $ core "Term",
-          "stream">:
-            doc "An infinite stream of terms" $
-            core "Stream",
           "sum">:
             doc "A variant tuple" $
             core "Sum",
@@ -385,7 +376,6 @@ hydraCoreModule = Module ns elements [] [] $
           "product">: list (core "Type"),
           "record">: core "RowType",
           "set">: core "Type",
-          "stream">: core "Type",
           "sum">: list (core "Type"),
           "union">: core "RowType",
           "variable">: core "Name",
