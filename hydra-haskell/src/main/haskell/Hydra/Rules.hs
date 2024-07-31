@@ -255,29 +255,28 @@ inferFieldType (Field fname term) = do
   return (Field fname i, c)
 
 inferLet :: Let -> Flow InferenceContext (Term, [Constraint])
-inferLet (Let bindings env) = withTrace ("let(" ++ L.intercalate "," (unName . fst <$> M.toList bindings) ++ ")") $ do
+inferLet (Let bindings env) = withTrace ("let(" ++ L.intercalate "," (unName . letBindingName <$> bindings) ++ ")") $ do
     state0 <- getState
     let e = preExtendEnv bindings $ inferenceContextEnvironment state0
     let state1 = state0 {inferenceContextEnvironment = e}
     withState state1 $ do
-      -- TODO: perform a topological sort on these bindings; this process should be unified with that of elements in a graph
-      let bl = M.toList bindings
+      -- TODO: perform a topological sort on the bindings; this process should be unified with that of elements in a graph
 
       -- Infer types of bindings in the pre-extended environment
-      ivalues' <- CM.mapM infer (snd <$> bl)
+      ivalues' <- CM.mapM infer (letBindingTerm <$> bindings)
       let ivalues = fst <$> ivalues'
-      let ibindings = M.fromList (L.zip (fst <$> bl) ivalues)
+      let ibindings = L.zipWith (\(LetBinding k v t) i -> LetBinding k i t) bindings ivalues
       let bc = L.concat (snd <$> ivalues')
 
-      let tbindings = M.map termTypeScheme ibindings
+      let tbindings = M.fromList $ fmap (\(LetBinding k i t) -> (k, termTypeScheme i)) ibindings
       (ienv, cenv) <- withBindings tbindings $ infer env
 
       yield (TermLet $ Let ibindings ienv) (termType ienv) (bc ++ cenv)
   where
     -- Add any manual type annotations for the bindings to the environment, enabling type inference over recursive definitions
-    preExtendEnv bindings e = foldl addPair e $ M.toList bindings
+    preExtendEnv bindings e = foldl addPair e bindings
       where
-        addPair e (name, term) = case typeOfTerm term of
+        addPair e (LetBinding name term _) = case typeOfTerm term of
           Nothing -> e
           Just typ -> M.insert name (monotype typ) e
 

@@ -70,7 +70,7 @@ javaLanguage = Coders.Language {
       Mantle.TypeVariantVariable,
       Mantle.TypeVariantWrap]),
     Coders.languageConstraintsTypes = (\x -> case x of
-      Core.TypeProduct v279 -> (Equality.ltInt32 (Lists.length v279) javaMaxTupleLength)
+      Core.TypeProduct v281 -> (Equality.ltInt32 (Lists.length v281) javaMaxTupleLength)
       _ -> True)}}
 
 -- | A set of reserved words in Java
@@ -81,6 +81,8 @@ reservedWords = (Sets.fromList (Lists.concat [
   keywords,
   literals])) 
   where 
+    specialNames = [
+      "Elements"]
     classNames = [
       "AbstractMethodError",
       "Appendable",
@@ -233,5 +235,3 @@ reservedWords = (Sets.fromList (Lists.concat [
       "false",
       "null",
       "true"]
-    specialNames = [
-      "Elements"]

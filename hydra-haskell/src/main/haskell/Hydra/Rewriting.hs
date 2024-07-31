@@ -73,7 +73,9 @@ expandTypedLambdas = rewriteTerm rewrite id
             FunctionLambda (Lambda var body) -> TermFunction $ FunctionLambda $ Lambda var $
               expand (L.tail doms) cod body
             _ -> pad 1 doms cod term
-          TermLet (Let bindings env) -> TermLet $ Let (expandTypedLambdas <$> bindings) $ expand doms cod env
+          TermLet (Let bindings env) -> TermLet $ Let (expandBinding <$> bindings) $ expand doms cod env
+            where
+              expandBinding (LetBinding name term1 typ) = LetBinding name (expandTypedLambdas term1) typ
           TermTyped (TypedTerm term1 typ) -> TermTyped $ TypedTerm (expand doms cod term1) typ
           _ -> recurse term
 
@@ -96,25 +98,24 @@ flattenLetTerms = rewriteTerm flatten id
     flatten recurse term = case recurse term of
       TermLet (Let bindings body) -> TermLet $ Let newBindings body
         where
-          newBindings = M.fromList $ L.concat (forResult . rewriteBinding <$> M.toList bindings)
+          newBindings = L.concat (forResult . rewriteBinding <$> bindings)
             where
               forResult (h, rest) = (h:rest)
-          rewriteBinding (k0, v0) = case v0 of
-            TermAnnotated (AnnotatedTerm v1 ann) -> ((k0, TermAnnotated $ AnnotatedTerm v2 ann), deps)
+          rewriteBinding (LetBinding k0 v0 t) = case v0 of
+            TermAnnotated (AnnotatedTerm v1 ann) -> ((LetBinding k0 (TermAnnotated $ AnnotatedTerm v2 ann) t), deps)
               where
-                ((_, v2), deps) = rewriteBinding (k0, v1)
-            TermLet (Let bindings1 body1) -> ((k0, newBody), newBinding <$> bindingsList)
+                ((LetBinding _ v2 _), deps) = rewriteBinding (LetBinding k0 v1 t)
+            TermLet (Let bindings1 body1) -> ((LetBinding k0 newBody t), newBinding <$> bindings1)
               where
-                bindingsList = M.toList bindings1
                 newBody = replaceVars body1
-                newBinding (kn, vn) = (qualify kn, replaceVars vn)
+                newBinding (LetBinding kn vn t) = LetBinding (qualify kn) (replaceVars vn) t
                 qualify n = Name $ prefix ++ unName n
                 replaceVars = substituteVariables subst
-                subst = M.fromList (toSubstPair <$> bindingsList)
+                subst = M.fromList (toSubstPair <$> bindings1)
                   where
-                    toSubstPair (n, _) = (n, qualify n)
+                    toSubstPair (LetBinding n _ _) = (n, qualify n)
                 prefix = unName k0 ++ "_"
-            v1 -> ((k0, v1), [])
+            v1 -> ((LetBinding k0 v1 t), [])
       term0 -> term0
 
 freeVariablesInScheme :: TypeScheme -> S.Set Name
@@ -185,9 +186,9 @@ rewriteTerm f mf = rewrite fsub f
             EliminationWrap name -> EliminationWrap name
           FunctionLambda (Lambda v body) -> FunctionLambda $ Lambda v $ recurse body
           FunctionPrimitive name -> FunctionPrimitive name
-        TermLet (Let bindings env) -> TermLet $ Let (M.fromList (mapBinding <$> M.toList bindings)) (recurse env)
+        TermLet (Let bindings env) -> TermLet $ Let (mapBinding <$> bindings) (recurse env)
           where
-            mapBinding (k, t) = (k, recurse t)
+            mapBinding (LetBinding k v t) = LetBinding k (recurse v) t
         TermList els -> TermList $ recurse <$> els
         TermLiteral v -> TermLiteral v
         TermMap m -> TermMap $ M.fromList $ (\(k, v) -> (recurse k, recurse v)) <$> M.toList m
@@ -228,11 +229,11 @@ rewriteTermM f mf = rewrite fsub f
             EliminationWrap name -> pure $ EliminationWrap name
           FunctionLambda (Lambda v body) -> FunctionLambda <$> (Lambda v <$> recurse body)
           FunctionPrimitive name -> pure $ FunctionPrimitive name
-        TermLet (Let bindings env) -> TermLet <$> (Let <$> (M.fromList <$> (CM.mapM mapBinding $ M.toList bindings)) <*> recurse env)
+        TermLet (Let bindings env) -> TermLet <$> (Let <$> (CM.mapM mapBinding bindings) <*> recurse env)
           where
-            mapBinding (k, t) = do
-              t' <- recurse t
-              return (k, t')
+            mapBinding (LetBinding k v t) = do
+              v' <- recurse v
+              return $ LetBinding k v' t
         TermList els -> TermList <$> (CM.mapM recurse els)
         TermLiteral v -> pure $ TermLiteral v
         TermMap m -> TermMap <$> (M.fromList <$> CM.mapM forPair (M.toList m))

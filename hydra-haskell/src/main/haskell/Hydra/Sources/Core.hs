@@ -196,10 +196,17 @@ hydraCoreModule = Module ns elements [] [] $
             core "Type"],
 
       def "Let" $
-        doc "A set of (possibly recursive) 'let' bindings" $
+        doc "A set of (possibly recursive) 'let' bindings together with an environment in which they are bound" $
         record [
-          "bindings">: Types.map (core "Name") (core "Term"),
+          "bindings">: list $ core "LetBinding",
           "environment">: core "Term"],
+
+      def "LetBinding" $
+        doc "A field with an optional type scheme, used to bind variables to terms in a 'let' expression" $
+        record [
+          "name">: core "Name",
+          "term">: core "Term",
+          "type">: optional $ core "TypeScheme"],
 
       def "Literal" $
         doc "A term constant; an instance of a literal type" $

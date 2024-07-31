@@ -140,10 +140,10 @@ untypedTermToJson term = case stripTerm term of
         Field _Lambda_body body]
       FunctionPrimitive name -> pure $ Json.ValueString $ unName name
     TermLet (Let bindings env) -> asRecord [
-        Field _Let_bindings $ TermRecord $ Record (Name "") (fromBinding <$> M.toList bindings),
+        Field _Let_bindings $ TermRecord $ Record (Name "") (fromBinding <$> bindings),
         Field _Let_environment env]
       where
-        fromBinding (k, v) = Field k v
+        fromBinding (LetBinding k v _) = Field k v
     TermList terms -> Json.ValueArray <$> (CM.mapM untypedTermToJson terms)
     TermLiteral lit -> pure $ case lit of
       LiteralBinary s -> Json.ValueString s

@@ -153,11 +153,11 @@ encodeTerm namespaces term = do
     TermApplication (Application fun arg) -> hsapp <$> encode fun <*> encode arg
     TermFunction f -> encodeFunction namespaces f
     TermLet (Let bindings env) -> do
-        hbindings <- CM.mapM encodeBinding $ M.toList bindings
+        hbindings <- CM.mapM encodeBinding bindings
         hinner <- encode env
         return $ H.ExpressionLet $ H.Expression_Let hbindings hinner
       where
-        encodeBinding (name, term) = do
+        encodeBinding (LetBinding name term _) = do
           let hname = simpleName $ unName name
           hexpr <- encode term
           return $ H.LocalBindingValue $ simpleValueBinding hname hexpr Nothing
@@ -289,11 +289,10 @@ toDataDeclaration coders namespaces (el, TypedTerm term typ) = do
       TermLet (Let lbindings env) -> do
           -- A "let" constant cannot be predicted in advance, so we infer its type and construct a coder on the fly
           -- This makes program code with "let" terms more expensive to transform than simple data.
-          let bl = M.toList lbindings
-          ts <- (CM.mapM inferType (snd <$> bl))
+          ts <- (CM.mapM inferType (letBindingTerm <$> lbindings))
           coders <- CM.mapM (constructCoder haskellLanguage (encodeTerm namespaces)) ts
-          let hnames = simpleName <$> (unName . fst <$> bl)
-          hterms <- CM.zipWithM coderEncode coders (snd <$> bl)
+          let hnames = simpleName <$> (unName . letBindingName <$> lbindings)
+          hterms <- CM.zipWithM coderEncode coders (letBindingTerm <$> lbindings)
 
           let hbindings = L.zipWith toBinding hnames hterms
           toDecl comments hname env coder (Just $ H.LocalBindings hbindings)

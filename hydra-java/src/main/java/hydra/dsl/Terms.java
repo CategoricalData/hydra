@@ -12,6 +12,7 @@ import hydra.core.Injection;
 import hydra.core.IntegerValue;
 import hydra.core.Lambda;
 import hydra.core.Let;
+import hydra.core.LetBinding;
 import hydra.core.Literal;
 import hydra.core.Name;
 import hydra.core.OptionalCases;
@@ -25,6 +26,7 @@ import hydra.util.Tuple;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -302,9 +304,8 @@ public interface Terms {
      * Construct a 'let' term.
      */
     static Term let(final String var, final Term defined, final Term definedIn) {
-        Map<Name, Term> bindings = new HashMap();
-        bindings.put(new Name(var), defined);
-        return new Term.Let(new Let(bindings, definedIn));
+        LetBinding b = new LetBinding(new Name(var), defined, Opt.empty());
+        return new Term.Let(new Let(Collections.singletonList(b), definedIn));
     }
 
     /**

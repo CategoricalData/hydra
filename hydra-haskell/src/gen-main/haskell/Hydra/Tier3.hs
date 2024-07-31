@@ -16,8 +16,8 @@ import Data.Set as S
 -- | Summarize a trace as a string
 traceSummary :: (Compute.Trace -> String)
 traceSummary t =  
-  let keyvalLines = (Logic.ifElse [] (Lists.cons "key/value pairs: " (Lists.map toLine (Maps.toList (Compute.traceOther t)))) (Maps.isEmpty (Compute.traceOther t))) 
-      messageLines = (Lists.nub (Compute.traceMessages t))
+  let messageLines = (Lists.nub (Compute.traceMessages t)) 
+      keyvalLines = (Logic.ifElse [] (Lists.cons "key/value pairs: " (Lists.map toLine (Maps.toList (Compute.traceOther t)))) (Maps.isEmpty (Compute.traceOther t)))
       toLine = (\pair -> Strings.cat [
               Strings.cat [
                 Strings.cat [

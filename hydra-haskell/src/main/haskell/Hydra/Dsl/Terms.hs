@@ -108,7 +108,7 @@ lambda param body = TermFunction $ FunctionLambda $ Lambda (Name param) body
 
 -- Construct a 'let' term with a single binding
 letTerm :: Name -> Term -> Term -> Term
-letTerm v t1 t2 = TermLet $ Let (M.fromList [(v, t1)]) t2
+letTerm v t1 t2 = TermLet $ Let [LetBinding v t1 Nothing] t2
 
 list :: [Term] -> Term
 list = TermList
@@ -200,9 +200,9 @@ variant :: Name -> Name -> Term -> Term
 variant tname fname term = TermUnion $ Injection tname $ Field fname term
 
 with :: Term -> [Field] -> Term
-env `with` bindings = TermLet $ Let (M.fromList $ toPair <$> bindings) env
+env `with` bindings = TermLet $ Let (toBinding <$> bindings) env
   where
-     toPair (Field name value) = (Name $ unName name, value)
+     toBinding (Field name value) = LetBinding name value Nothing
 
 withVariant :: Name -> Name -> Term
 withVariant tname = constant . unitVariant tname

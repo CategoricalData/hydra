@@ -148,9 +148,9 @@ testFlattenLetTerms = do
         (flattenLetTerms letTerm3)
         (letTerm3_flattened)
   where
-    makeLet body pairs = TermLet $ Let (M.fromList (makePair <$> pairs)) body
+    makeLet body pairs = TermLet $ Let (makeBinding <$> pairs) body
       where
-        makePair (k, v) = (Name k, v)
+        makeBinding (k, v) = LetBinding (Name k) v Nothing
     letTerm1 = makeLet (TermList [Terms.var "x", Terms.var "y"]) [
       ("x", Terms.int32 1),
       ("y", Terms.int32 2)]

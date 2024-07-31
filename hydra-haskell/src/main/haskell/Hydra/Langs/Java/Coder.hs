@@ -877,7 +877,7 @@ maybeLet aliases term cons = helper Nothing [] term
           toDeclInit name = if S.member name recursiveVars
             then do
               -- TODO: repeated
-              let value = Y.fromJust $ M.lookup name bindings
+              let value = letBindingTerm $ L.head $ L.filter (\b -> letBindingName b == name) bindings
               typ <- requireTermType value
               jtype <- adaptTypeToJavaAndEncode aliasesWithRecursive typ
               let id = variableToJavaIdentifier name
@@ -895,7 +895,7 @@ maybeLet aliases term cons = helper Nothing [] term
 
           toDeclStatement name = do
             -- TODO: repeated
-            let value = Y.fromJust $ M.lookup name bindings
+            let value = letBindingTerm $ L.head $ L.filter (\b -> letBindingName b == name) bindings
             typ <- requireTermType value
             jtype <- adaptTypeToJavaAndEncode aliasesWithRecursive typ
             let id = variableToJavaIdentifier name
@@ -904,7 +904,7 @@ maybeLet aliases term cons = helper Nothing [] term
               then Java.BlockStatementStatement $ javaMethodInvocationToJavaStatement $
                 methodInvocation (Just $ Left $ Java.ExpressionName Nothing id) (Java.Identifier setMethodName) [rhs]
               else variableDeclarationStatement aliasesWithRecursive jtype id rhs
-          bindingVars = S.fromList $ M.keys bindings
+          bindingVars = S.fromList (letBindingName <$> bindings)
           recursiveVars = S.fromList $ L.concat (ifRec <$> sorted)
             where
               ifRec names = case names of
@@ -914,9 +914,9 @@ maybeLet aliases term cons = helper Nothing [] term
                     then [name]
                     else []
                 _ -> names
-          allDeps = M.fromList (toDeps <$> M.toList bindings)
+          allDeps = M.fromList (toDeps <$> bindings)
             where
-              toDeps (key, value) = (key, S.filter (\n -> S.member n bindingVars) $ freeVariablesInTerm value)
+              toDeps (LetBinding key value _) = (key, S.filter (\n -> S.member n bindingVars) $ freeVariablesInTerm value)
           sorted = topologicalSortComponents (toDeps <$> M.toList allDeps)
             where
               toDeps (key, deps) = (key, S.toList deps)
