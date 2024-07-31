@@ -102,7 +102,6 @@ describeTypeDef = printingDefinition "describeType" $
       Case _Type_product     --> constant $ string "tuples",
       Case _Type_record      --> constant $ string "records",
       Case _Type_set         --> lambda "st" $ string "sets of " ++ (ref describeTypeDef @@ var "st"),
-      Case _Type_stream      --> lambda "t" $ string "streams of " ++ (ref describeTypeDef @@ var "t"),
       Case _Type_sum         --> constant $ string "variant tuples",
       Case _Type_union       --> constant $ string "unions",
       Case _Type_variable    --> constant $ string "instances of a named type",

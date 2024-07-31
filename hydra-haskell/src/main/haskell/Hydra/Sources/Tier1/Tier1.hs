@@ -193,7 +193,6 @@ subtermsDef = tier1Definition "subterms" $
     _Term_product>>: lambda "tuple" $ var "tuple",
     _Term_record>>: lambda "rt" (Lists.map @@ Core.fieldTerm @@ (Core.recordFields @@ var "rt")),
     _Term_set>>: Sets.toList,
-    _Term_stream>>: constant $ list [],
     _Term_sum>>: lambda "st" $ list [Core.sumTerm @@ var "st"],
     _Term_typed>>: lambda "tt" $ list [Core.typedTermTerm @@ var "tt"],
     _Term_union>>: lambda "ut" $ list [Core.fieldTerm @@ (Core.injectionField @@ var "ut")],

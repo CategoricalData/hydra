@@ -70,7 +70,7 @@ javaLanguage = Coders.Language {
       Mantle.TypeVariantVariable,
       Mantle.TypeVariantWrap]),
     Coders.languageConstraintsTypes = (\x -> case x of
-      Core.TypeProduct v281 -> (Equality.ltInt32 (Lists.length v281) javaMaxTupleLength)
+      Core.TypeProduct v276 -> (Equality.ltInt32 (Lists.length v276) javaMaxTupleLength)
       _ -> True)}}
 
 -- | A set of reserved words in Java

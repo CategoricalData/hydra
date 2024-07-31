@@ -105,7 +105,6 @@ data TermVariant =
   TermVariantProduct  |
   TermVariantRecord  |
   TermVariantSet  |
-  TermVariantStream  |
   TermVariantSum  |
   TermVariantTyped  |
   TermVariantUnion  |
@@ -137,8 +136,6 @@ _TermVariant_record = (Core.Name "record")
 
 _TermVariant_set = (Core.Name "set")
 
-_TermVariant_stream = (Core.Name "stream")
-
 _TermVariant_sum = (Core.Name "sum")
 
 _TermVariant_typed = (Core.Name "typed")
@@ -162,7 +159,6 @@ data TypeVariant =
   TypeVariantProduct  |
   TypeVariantRecord  |
   TypeVariantSet  |
-  TypeVariantStream  |
   TypeVariantSum  |
   TypeVariantUnion  |
   TypeVariantVariable  |
@@ -192,8 +188,6 @@ _TypeVariant_product = (Core.Name "product")
 _TypeVariant_record = (Core.Name "record")
 
 _TypeVariant_set = (Core.Name "set")
-
-_TypeVariant_stream = (Core.Name "stream")
 
 _TypeVariant_sum = (Core.Name "sum")
 

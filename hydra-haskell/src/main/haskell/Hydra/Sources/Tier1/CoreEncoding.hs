@@ -368,8 +368,6 @@ coreEncodeTermDef = coreEncodingDefinition "Term" termT $
     ecase _Term_record (ref coreEncodeRecordDef),
     ecase' _Term_set $ encodedSet $ primitive _sets_map @@ (ref coreEncodeTermDef) @@ var "v",
     ecase _Term_sum (ref coreEncodeSumDef),
---     -- TODO: determine whether streams have a sigma encoding
---     -- _ Term_stream
     ecase _Term_union (ref coreEncodeInjectionDef),
     ecase _Term_variable $ ref coreEncodeNameDef,
     ecase _Term_wrap $ ref coreEncodeWrappedTermDef]
@@ -399,7 +397,6 @@ coreEncodeTypeDef = coreEncodingDefinition "Type" typeT $
     cs _Type_product $ encodedList $ primitive _lists_map @@ ref coreEncodeTypeDef @@ var "v",
     csref _Type_record coreEncodeRowTypeDef,
     csref _Type_set coreEncodeTypeDef,
-    csref _Type_stream coreEncodeTypeDef,
     cs _Type_sum $ encodedList $ primitive _lists_map @@ ref coreEncodeTypeDef @@ var "v",
     csref _Type_union coreEncodeRowTypeDef,
     csref _Type_variable coreEncodeNameDef,

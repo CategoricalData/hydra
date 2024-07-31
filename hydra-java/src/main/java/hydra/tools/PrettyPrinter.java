@@ -264,11 +264,6 @@ public class PrettyPrinter {
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Stream instance) {
-                    return notImplemented("stream");
-                }
-
-                @Override
                 public Consumer<StringBuilder> visit(Term.Sum instance) {
                     return notImplemented("sum");
                 }

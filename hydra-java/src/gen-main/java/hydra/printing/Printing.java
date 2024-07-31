@@ -139,14 +139,7 @@ public interface Printing {
           "sets of ",
           hydra.printing.Printing.describeType((instance.value))));
       }
-      
-      @Override
-      public String visit(hydra.core.Type.Stream instance) {
-        return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
-          "streams of ",
-          hydra.printing.Printing.describeType((instance.value))));
-      }
-      
+
       @Override
       public String visit(hydra.core.Type.Sum instance) {
         return "variant tuples";

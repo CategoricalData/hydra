@@ -39,8 +39,6 @@ public abstract class TypeVariant implements Serializable {
     
     R visit(Set instance) ;
     
-    R visit(Stream instance) ;
-    
     R visit(Sum instance) ;
     
     R visit(Union instance) ;
@@ -96,10 +94,6 @@ public abstract class TypeVariant implements Serializable {
     }
     
     default R visit(Set instance) {
-      return otherwise((instance));
-    }
-    
-    default R visit(Stream instance) {
       return otherwise((instance));
     }
     
@@ -381,31 +375,6 @@ public abstract class TypeVariant implements Serializable {
         return false;
       }
       Set o = (Set) (other);
-      return true;
-    }
-    
-    @Override
-    public int hashCode() {
-      return 0;
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  public static final class Stream extends hydra.mantle.TypeVariant implements Serializable {
-    public Stream () {
-    
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Stream)) {
-        return false;
-      }
-      Stream o = (Stream) (other);
       return true;
     }
     
