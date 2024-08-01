@@ -1,15 +1,14 @@
 name:         hydra
-version:      0.5.0
+version:      0.5.1
 author:       Joshua Shinavier <josh@fortytwo.net>
 license:      Apache-2.0
 license-file: LICENSE
 category:     Data
 synopsis:     Type-aware transformations for data and programs
 description:  >
-  Hydra is a transformation toolkit along the lines of Dragon (Uber), but open source,
-  and with a more advanced type system and other new features.
-  Hydra maps data and schemas between languages in a way which maintains type conformance.
-  It will even map functional programs between selected languages, including parts of its own source code.
+  Hydra is a domain-specific language for data models and data transformations.
+  It is based on a typed lambda calculus, and transforms data and schemas between languages in a way which maintains type conformance.
+  Hydra will even transform functional programs between selected languages, including much of its own source code.
 github:       CategoricalData/hydra
 
 extra-source-files:
@@ -22,15 +21,14 @@ dependencies:
   - HsYAML                        >= 0.2.1 && < 0.3
   - aeson                         >= 2.0.0 && < 2.2
   - aeson-pretty                  >= 0.8.9 && < 0.9
-  - base                          >= 4.16.3 && < 4.17
+  - base                          >= 4.18.0 && < 4.19
   - bytestring                    >= 0.11.3 && < 0.12
   - containers                    >= 0.6.5 && < 0.7
   - directory                     >= 1.3.6 && < 1.4
   - filepath                      >= 1.4.2 && < 1.5
   - scientific                    >= 0.3.7 && < 0.4
   - split                         >= 0.2.3 && < 0.3
-  - text                          >= 1.2.5 && < 1.3
-  - unordered-containers          >= 0.2.19 && < 0.3
+  - text                          >= 2.0.2 && < 2.1
   - vector                        >= 0.12.0 && < 0.14
 
 library:
