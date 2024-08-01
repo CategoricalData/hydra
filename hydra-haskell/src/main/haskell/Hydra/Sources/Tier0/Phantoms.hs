@@ -42,8 +42,4 @@ hydraPhantomsModule = Module ns elements [hydraComputeModule] [hydraCoreModule] 
 
       def "Fld" $
         doc "An association with a term-level field with a phantom type" $
-        lambda "a" $ core "Field",
-
-      def "Reference" $
-        doc "A pure association with a phantom type" $
-        lambda "a" $ unit]
+        lambda "a" $ core "Field"]

@@ -32,9 +32,6 @@ import qualified Data.Set as S
 
 instance IsString (Datum a) where fromString = Datum . Terms.string
 
-el :: Definition a -> Element
-el (Definition name (Datum term)) = Element name term
-
 infixr 0 >:
 (>:) :: String -> Datum a -> Field
 n >: d = Field (Name n) (unDatum d)
@@ -86,6 +83,9 @@ doc70 = doc . wrapLine 70
 
 doc80 :: String -> Datum a -> Datum a
 doc80 = doc . wrapLine 80
+
+el :: Definition a -> Element
+el (Definition name (Datum term)) = Element name term
 
 field :: Name -> Datum a -> Field
 field fname (Datum val) = Field fname val
