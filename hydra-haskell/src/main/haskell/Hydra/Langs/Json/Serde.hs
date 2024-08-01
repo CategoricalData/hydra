@@ -16,7 +16,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Text as T
 import qualified Data.Vector as V
-import qualified Data.HashMap.Strict as HS
 import qualified Data.Scientific as SC
 import qualified Data.Char as C
 import qualified Data.String as String
