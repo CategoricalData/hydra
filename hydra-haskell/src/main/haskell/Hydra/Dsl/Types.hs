@@ -101,6 +101,9 @@ literal = TypeLiteral
 map :: Type -> Type -> Type
 map kt vt = TypeMap $ MapType kt vt
 
+mono :: Type -> TypeScheme
+mono = TypeScheme []
+
 optional :: Type -> Type
 optional = TypeOptional
 

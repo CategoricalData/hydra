@@ -37,10 +37,13 @@ data Inferred a = Inferred {
   -- The inferred type
   inferredType :: Type,
   -- Any constraints introduced by the inference process
-  inferredConstraints :: [Constraint]
+  inferredConstraints :: [TypeConstraint]
 } deriving Show
 
 type TypingEnvironment = M.Map Name TypeScheme
+
+constraint :: Type -> Type -> TypeConstraint
+constraint t1 t2 = TypeConstraint t1 t2 Nothing
 
 fieldType :: Field -> FieldType
 fieldType (Field fname term) = FieldType fname $ termType term
@@ -68,13 +71,13 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
 
     TermTyped (TypedTerm term1 typ) -> do
       (Inferred i typ c) <- infer term1
-      return (Inferred (setTermType (Just typ) i) typ $ c ++ [(typ, termType i)])
+      return (Inferred (setTermType (Just typ) i) typ $ c ++ [constraint typ $ termType i])
 
     TermApplication (Application fun arg) -> do
       (Inferred ifun ityp funconst) <- infer fun
       (Inferred iarg atyp argconst) <- infer arg
       cod <- freshName
-      let constraints = funconst ++ argconst ++ [(ityp, Types.function atyp cod)]
+      let constraints = funconst ++ argconst ++ [constraint ityp $ Types.function atyp cod]
       yield (TermApplication $ Application ifun iarg) cod constraints
 
     TermFunction f -> case f of
@@ -87,7 +90,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
           let expected = Types.functionN [b, a, b]
           (Inferred i t c) <- infer fun
           let elim = Types.functionN [b, Types.list a, b]
-          yieldElimination (EliminationList i) elim (c ++ [(expected, t)])
+          yieldElimination (EliminationList i) elim (c ++ [constraint expected t])
 
         EliminationOptional (OptionalCases n j) -> do
           dom <- freshName
@@ -96,7 +99,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
           (Inferred ji jt jconst) <- infer j
           let t = Types.function (Types.optional dom) cod
           let constraints = nconst ++ jconst
-                              ++ [(cod, nt), (Types.function dom cod, jt)]
+                              ++ [constraint cod nt, constraint (Types.function dom cod) jt]
           yieldElimination (EliminationOptional $ OptionalCases ni ji) t constraints
 
         EliminationProduct (TupleProjection arity idx) -> do
@@ -130,7 +133,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
             let pairMap = productOfMaps icasesMap sfields
 
             cod <- freshName
-            let outerConstraints = (\(d, s) -> (termType d, Types.function s cod)) <$> M.elems pairMap
+            let outerConstraints = (\(d, s) -> constraint (termType d) $ Types.function s cod) <$> M.elems pairMap
             let innerConstraints = dfltConstraints ++ L.concat casesconst
 
             yieldElimination (EliminationUnion (CaseStatement tname idef icases))
@@ -177,7 +180,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
             iels' <- CM.mapM infer els
             let iels = inferredObject <$> iels'
             let elsconst = inferredConstraints <$> iels'
-            let co = (\e -> (v, termType e)) <$> iels
+            let co = (\e -> constraint v $ termType e) <$> iels
             let ci = L.concat elsconst
             yield (TermList iels) (Types.list v) (co ++ ci)
 
@@ -191,7 +194,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
           else do
             triples <- CM.mapM toTriple $ M.toList m
             let pairs = (\(k, v, _) -> (k, v)) <$> triples
-            let co = L.concat ((\(k, v, c) -> c ++ [(kv, termType k), (vv, termType v)]) <$> triples)
+            let co = L.concat ((\(k, v, c) -> c ++ [constraint kv $ termType k, constraint vv $ termType v]) <$> triples)
             yield (TermMap $ M.fromList pairs) (Types.map kv vv) co
       where
         toTriple (k, v) = do
@@ -205,7 +208,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
         Nothing -> yield (TermOptional Nothing) (Types.optional v) []
         Just e -> do
           (Inferred i t ci) <- infer e
-          yield (TermOptional $ Just i) (Types.optional v) ((v, t):ci)
+          yield (TermOptional $ Just i) (Types.optional v) ((constraint v t):ci)
 
     TermProduct tuple -> do
       is' <- CM.mapM infer tuple
@@ -219,7 +222,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
         let ifields = inferredObject <$> ifields'
         let ci = L.concat (inferredConstraints <$> ifields')
         let irt = TypeRecord $ RowType n Nothing (fieldType <$> ifields)
-        yield (TermRecord $ Record n ifields) irt ((TypeRecord rt, irt):ci)
+        yield (TermRecord $ Record n ifields) irt ((constraint irt $ TypeRecord rt):ci)
 
     TermSet els -> do
       v <- freshName
@@ -228,7 +231,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
         else do
           iels' <- CM.mapM infer $ S.toList els
           let iels = inferredObject <$> iels'
-          let co = (\e -> (v, termType e)) <$> iels
+          let co = (\e -> (constraint v $ termType e)) <$> iels
           let ci = L.concat (inferredConstraints <$> iels')
           yield (TermSet $ S.fromList iels) (Types.set v) (co ++ ci)
 
@@ -245,7 +248,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
         rt <- withGraphContext $ requireUnionType True n
         sfield <- findMatchingField (fieldName field) (rowTypeFields rt)
         (Inferred ifield t ci) <- inferFieldType field
-        let co = (t, fieldTypeType sfield)
+        let co = constraint t $fieldTypeType sfield
 
         yield (TermUnion $ Injection n ifield) (TypeUnion rt) (co:ci)
 
@@ -256,7 +259,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
     TermWrap (WrappedTerm name term1) -> do
       typ <- withGraphContext $ requireWrappedType name
       (Inferred i t ci) <- infer term1
-      yield (TermWrap $ WrappedTerm name i) (TypeWrap $ WrappedType name typ) (ci ++ [(typ, t)])
+      yield (TermWrap $ WrappedTerm name i) (TypeWrap $ WrappedType name typ) (ci ++ [constraint typ t])
 
 inferFieldType :: Field -> Flow InferenceContext (Inferred Field)
 inferFieldType (Field fname term) = do
@@ -346,12 +349,12 @@ withGraphContext f = do
   cx <- inferenceContextGraph <$> getState
   withState cx f
 
-yield :: Term -> Type -> [Constraint] -> Flow InferenceContext (Inferred Term)
+yield :: Term -> Type -> [TypeConstraint] -> Flow InferenceContext (Inferred Term)
 yield term typ constraints = do
   return (Inferred (TermTyped $ TypedTerm term typ) typ constraints)
 
-yieldFunction :: Function -> Type -> [Constraint] -> Flow InferenceContext (Inferred Term)
+yieldFunction :: Function -> Type -> [TypeConstraint] -> Flow InferenceContext (Inferred Term)
 yieldFunction fun = yield (TermFunction fun)
 
-yieldElimination :: Elimination -> Type -> [Constraint] -> Flow InferenceContext (Inferred Term)
+yieldElimination :: Elimination -> Type -> [TypeConstraint] -> Flow InferenceContext (Inferred Term)
 yieldElimination e = yield (TermFunction $ FunctionElimination e)

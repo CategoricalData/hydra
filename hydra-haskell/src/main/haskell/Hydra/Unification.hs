@@ -1,8 +1,7 @@
 -- | Hindley-Milner style type unification
 
 module Hydra.Unification (
-  Constraint,
-  solveConstraints,
+  solveConstraints
 ) where
 
 import Hydra.Basics
@@ -10,6 +9,7 @@ import Hydra.Strip
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Lexical
+import Hydra.Mantle
 import Hydra.Printing
 import Hydra.Rewriting
 import Hydra.Substitution
@@ -22,10 +22,6 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-type Constraint = (Type, Type)
-
-type Unifier = (Subst, [Constraint])
-
 -- Note: type variables in Hydra are allowed to bind to type expressions which contain the variable;
 --       i.e. type recursion by name is allowed.
 bind :: Name -> Type -> Flow s Subst
@@ -37,17 +33,17 @@ bind name typ = do
     then return M.empty
     else return $ M.singleton name typ
 
-solveConstraints :: [Constraint] -> Flow s Subst
-solveConstraints cs = unificationSolver (M.empty, cs)
+solveConstraints :: [TypeConstraint] -> Flow s Subst
+solveConstraints cs = unificationSolver M.empty cs
 
-unificationSolver :: Unifier -> Flow s Subst
-unificationSolver (su, cs) = case cs of
+unificationSolver :: Subst -> [TypeConstraint] -> Flow s Subst
+unificationSolver su cs = case cs of
   [] -> return su
-  ((t1, t2):rest) -> do
+  ((TypeConstraint t1 t2 _):rest) -> do
     su1  <- unify t1 t2
-    unificationSolver (
-      composeSubst su1 su,
-      (\(t1, t2) -> (substituteInType su1 t1, substituteInType su1 t2)) <$> rest)
+    unificationSolver
+      (composeSubst su1 su)
+      ((\(TypeConstraint t1 t2 ctx) -> (TypeConstraint (substituteInType su1 t1) (substituteInType su1 t2) ctx)) <$> rest)
 
 unify :: Type -> Type -> Flow s Subst
 unify ltyp rtyp = do

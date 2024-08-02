@@ -7,7 +7,6 @@ module Hydra.Inference (
   inferTypeScheme,
   inferTypeAndConstraints,
   withInferenceContext,
-  Constraint,
 ) where
 
 import Hydra.Compute
@@ -53,7 +52,7 @@ annotateElements g sortedEls = withInferenceContext $ do
         term1 = rewriteDataType (substituteInType subst) term0
         typ = Y.fromMaybe (termType term1) $ getTermType term0
 
-    annotate :: [Element] -> [(Element, [Constraint])] -> Flow InferenceContext [(Element, [Constraint])]
+    annotate :: [Element] -> [(Element, [TypeConstraint])] -> Flow InferenceContext [(Element, [TypeConstraint])]
     annotate original annotated = case original of
       [] -> pure $ L.reverse annotated
       (el:r) -> do
