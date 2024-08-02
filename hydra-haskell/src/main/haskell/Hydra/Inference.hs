@@ -1,11 +1,12 @@
 -- | Entry point for Hydra type inference, which is a variation on on Hindley-Milner
 
 module Hydra.Inference (
-  annotateTypedTerms,
+  inferTermType,
   inferGraphTypes,
-  inferType,
+  inferredTypeOf,
   inferTypeScheme,
   inferTypeAndConstraints,
+  withInferenceContext,
   Constraint,
 ) where
 
@@ -56,18 +57,18 @@ annotateElements g sortedEls = withInferenceContext $ do
     annotate original annotated = case original of
       [] -> pure $ L.reverse annotated
       (el:r) -> do
-        (iel, c1) <- inferElementType el
-        withBinding (elementName el) (termTypeScheme $ elementData iel) $ annotate r ((iel, c1):annotated)
+        (Inferred iel t c1) <- inferElementType el
+        withBinding (elementName el) (monotype t) $ annotate r ((iel, c1):annotated)
 
-annotateTypedTerms :: Term -> Flow Graph Term
-annotateTypedTerms term0 = do
+inferTermType :: Term -> Flow Graph Term
+inferTermType term0 = do
   (term1, _) <- inferTypeAndConstraints term0
   return term1
 
-inferElementType :: Element -> Flow InferenceContext (Element, [Constraint])
+inferElementType :: Element -> Flow InferenceContext (Inferred Element)
 inferElementType el = withTrace ("infer type of " ++ unName (elementName el)) $ do
-  (iterm, c) <- infer $ elementData el
-  return (el {elementData = iterm}, c)
+  (Inferred iterm t c) <- infer $ elementData el
+  return (Inferred (el {elementData = iterm}) t c)
 
 inferGraphTypes :: Flow Graph Graph
 inferGraphTypes = getState >>= annotateGraph
@@ -80,14 +81,14 @@ inferGraphTypes = getState >>= annotateGraph
         toPair el = (elementName el, el)
 
 -- TODO: deprecated
-inferType :: Term -> Flow Graph Type
-inferType term = typeSchemeType <$> inferTypeScheme term
+inferredTypeOf :: Term -> Flow Graph Type
+inferredTypeOf term = typeSchemeType <$> inferTypeScheme term
 
 -- TODO: deprecated
 -- | Solve for the top-level type of an expression in a given environment
 inferTypeAndConstraints :: Term -> Flow Graph (Term, TypeScheme)
 inferTypeAndConstraints term = withTrace ("infer type") $ withInferenceContext $ do
-    (iterm, constraints) <- infer term
+    (Inferred iterm _ constraints) <- infer term
     subst <- withGraphContext $ withSchemaContext $ solveConstraints constraints
     let term2 = rewriteDataType (substituteInType subst) iterm
 --    let typ = Y.fromMaybe (termType term2) $ getTermType term

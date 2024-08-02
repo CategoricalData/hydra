@@ -107,6 +107,9 @@ optional = TypeOptional
 pair :: Type -> Type -> Type
 pair a b = TypeProduct [a, b]
 
+poly :: [String] -> Type -> TypeScheme
+poly vs t = TypeScheme (Name <$> vs) t
+
 product :: [Type] -> Type
 product = TypeProduct
 
