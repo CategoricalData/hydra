@@ -83,6 +83,13 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "variable",
           "wrap"],
 
+      def "TypeConstraint" $
+        doc "An assertion that two types can be unified into a single type" $
+        record [
+          "left">: core "Type",
+          "right">: core "Type",
+          "context">: optional string],
+
       def "TypeVariant" $
         doc "The identifier of a type constructor" $
         enum [

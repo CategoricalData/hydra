@@ -146,6 +146,22 @@ _TermVariant_variable = (Core.Name "variable")
 
 _TermVariant_wrap = (Core.Name "wrap")
 
+-- | An assertion that two types can be unified into a single type
+data TypeConstraint = 
+  TypeConstraint {
+    typeConstraintLeft :: Core.Type,
+    typeConstraintRight :: Core.Type,
+    typeConstraintContext :: (Maybe String)}
+  deriving (Eq, Ord, Read, Show)
+
+_TypeConstraint = (Core.Name "hydra/mantle.TypeConstraint")
+
+_TypeConstraint_left = (Core.Name "left")
+
+_TypeConstraint_right = (Core.Name "right")
+
+_TypeConstraint_context = (Core.Name "context")
+
 -- | The identifier of a type constructor
 data TypeVariant = 
   TypeVariantAnnotated  |
