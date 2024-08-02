@@ -28,7 +28,7 @@ import qualified Hydra.Dsl.Types           as Types
 import           Hydra.Sources.Tier2.All
 
 
-tier3Definition :: String -> Datum a -> Definition a
+tier3Definition :: String -> TTerm a -> TElement a
 tier3Definition = definitionInModule hydraTier3Module
 
 -- TODO: this need not be a tier-3 module; it has no term-level dependencies. It could be a tier-1 module.
@@ -40,7 +40,7 @@ hydraTier3Module = Module (Namespace "hydra/tier3") elements [] tier0Modules $
      el traceSummaryDef
      ]
 
-traceSummaryDef :: Definition (Trace -> String)
+traceSummaryDef :: TElement (Trace -> String)
 traceSummaryDef = tier3Definition "traceSummary" $
   doc "Summarize a trace as a string" $
   function traceT stringT $

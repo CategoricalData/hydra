@@ -43,67 +43,67 @@ hydraPrintingModule = Module (Namespace "hydra/printing") elements
      el describePrecisionDef,
      el describeTypeDef]
 
-printingDefinition :: String -> Datum a -> Definition a
+printingDefinition :: String -> TTerm a -> TElement a
 printingDefinition = definitionInModule hydraPrintingModule
 
 
-describeFloatTypeDef :: Definition (FloatType -> String)
+describeFloatTypeDef :: TElement (FloatType -> String)
 describeFloatTypeDef = printingDefinition "describeFloatType" $
   doc "Display a floating-point type as a string" $
   function floatTypeT stringT $
   lambda "t" $ (ref describePrecisionDef <.> ref floatTypePrecisionDef @@ var "t") ++ string " floating-point numbers"
 
-describeIntegerTypeDef :: Definition (IntegerType -> String)
+describeIntegerTypeDef :: TElement (IntegerType -> String)
 describeIntegerTypeDef = printingDefinition "describeIntegerType" $
   doc "Display an integer type as a string" $
   function integerTypeT stringT $
   lambda "t" $ (ref describePrecisionDef <.> ref integerTypePrecisionDef @@ var "t")
     ++ string " integers"
 
-describeLiteralTypeDef :: Definition (LiteralType -> String)
+describeLiteralTypeDef :: TElement (LiteralType -> String)
 describeLiteralTypeDef = printingDefinition "describeLiteralType" $
   doc "Display a literal type as a string" $
   function literalTypeT stringT $
   match _LiteralType Nothing [
-    Case _LiteralType_binary  --> constant $ string "binary strings",
-    Case _LiteralType_boolean --> constant $ string "boolean values",
-    Case _LiteralType_float   --> ref describeFloatTypeDef,
-    Case _LiteralType_integer --> ref describeIntegerTypeDef,
-    Case _LiteralType_string  --> constant $ string "character strings"]
+    TCase _LiteralType_binary  --> constant $ string "binary strings",
+    TCase _LiteralType_boolean --> constant $ string "boolean values",
+    TCase _LiteralType_float   --> ref describeFloatTypeDef,
+    TCase _LiteralType_integer --> ref describeIntegerTypeDef,
+    TCase _LiteralType_string  --> constant $ string "character strings"]
 
-describePrecisionDef :: Definition (Precision -> String)
+describePrecisionDef :: TElement (Precision -> String)
 describePrecisionDef = printingDefinition "describePrecision" $
   doc "Display numeric precision as a string" $
   function precisionT stringT $
   match _Precision Nothing [
-    Case _Precision_arbitrary --> constant $ string "arbitrary-precision",
-    Case _Precision_bits      --> lambda "bits" $ Literals.showInt32 @@ var "bits" ++ string "-bit"]
+    TCase _Precision_arbitrary --> constant $ string "arbitrary-precision",
+    TCase _Precision_bits      --> lambda "bits" $ Literals.showInt32 @@ var "bits" ++ string "-bit"]
 
-describeTypeDef :: Definition (Type -> String)
+describeTypeDef :: TElement (Type -> String)
 describeTypeDef = printingDefinition "describeType" $
   doc "Display a type as a string" $
   function typeT stringT $
     match _Type Nothing [
-      Case _Type_annotated   --> lambda "a" $ string "annotated " ++ (ref describeTypeDef @@
+      TCase _Type_annotated   --> lambda "a" $ string "annotated " ++ (ref describeTypeDef @@
         (project _AnnotatedType _AnnotatedType_subject @@ var "a")),
-      Case _Type_application --> constant $ string "instances of an application type",
-      Case _Type_literal     --> ref describeLiteralTypeDef,
-      Case _Type_function    --> lambda "ft" $ string "functions from "
+      TCase _Type_application --> constant $ string "instances of an application type",
+      TCase _Type_literal     --> ref describeLiteralTypeDef,
+      TCase _Type_function    --> lambda "ft" $ string "functions from "
         ++ (ref describeTypeDef @@ (project _FunctionType _FunctionType_domain @@ var "ft"))
         ++ string " to "
         ++ (ref describeTypeDef @@ (project _FunctionType _FunctionType_codomain @@ var "ft")),
-      Case _Type_lambda      --> constant $ string "polymorphic terms",
-      Case _Type_list        --> lambda "t" $ string "lists of " ++ (ref describeTypeDef @@ var "t"),
-      Case _Type_map         --> lambda "mt" $ string "maps from "
+      TCase _Type_lambda      --> constant $ string "polymorphic terms",
+      TCase _Type_list        --> lambda "t" $ string "lists of " ++ (ref describeTypeDef @@ var "t"),
+      TCase _Type_map         --> lambda "mt" $ string "maps from "
         ++ (ref describeTypeDef @@ (project _MapType _MapType_keys @@ var "mt"))
         ++ string " to "
         ++ (ref describeTypeDef @@ (project _MapType _MapType_values  @@ var "mt")),
-      Case _Type_optional    --> lambda "ot" $ string "optional " ++ (ref describeTypeDef @@ var "ot"),
-      Case _Type_product     --> constant $ string "tuples",
-      Case _Type_record      --> constant $ string "records",
-      Case _Type_set         --> lambda "st" $ string "sets of " ++ (ref describeTypeDef @@ var "st"),
-      Case _Type_sum         --> constant $ string "variant tuples",
-      Case _Type_union       --> constant $ string "unions",
-      Case _Type_variable    --> constant $ string "instances of a named type",
-      Case _Type_wrap        --> lambda "n" $ string "wrapper for "
+      TCase _Type_optional    --> lambda "ot" $ string "optional " ++ (ref describeTypeDef @@ var "ot"),
+      TCase _Type_product     --> constant $ string "tuples",
+      TCase _Type_record      --> constant $ string "records",
+      TCase _Type_set         --> lambda "st" $ string "sets of " ++ (ref describeTypeDef @@ var "st"),
+      TCase _Type_sum         --> constant $ string "variant tuples",
+      TCase _Type_union       --> constant $ string "unions",
+      TCase _Type_variable    --> constant $ string "instances of a named type",
+      TCase _Type_wrap        --> lambda "n" $ string "wrapper for "
         ++ (ref describeTypeDef @@ (project _WrappedType _WrappedType_object @@ var "n"))]

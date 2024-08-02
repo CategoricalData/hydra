@@ -7,41 +7,41 @@ import qualified Hydra.Dsl.Terms as Terms
 import Data.Set
 
 
-contains :: Datum (a -> Set a -> Bool)
-contains = Datum $ Terms.primitive _sets_contains
+contains :: TTerm (a -> Set a -> Bool)
+contains = TTerm $ Terms.primitive _sets_contains
 
-difference :: Datum (Set a -> Set a -> Set a)
-difference = Datum $ Terms.primitive _sets_difference
+difference :: TTerm (Set a -> Set a -> Set a)
+difference = TTerm $ Terms.primitive _sets_difference
 
-empty :: Datum (Set a)
-empty = Datum $ Terms.primitive _sets_empty
+empty :: TTerm (Set a)
+empty = TTerm $ Terms.primitive _sets_empty
 
-fromList :: Datum ([a] -> Set a)
-fromList = Datum $ Terms.primitive _sets_fromList
+fromList :: TTerm ([a] -> Set a)
+fromList = TTerm $ Terms.primitive _sets_fromList
 
-insert :: Datum (a -> Set a -> Set a)
-insert = Datum $ Terms.primitive _sets_insert
+insert :: TTerm (a -> Set a -> Set a)
+insert = TTerm $ Terms.primitive _sets_insert
 
-intersection :: Datum (Set a -> Set a -> Set a)
-intersection = Datum $ Terms.primitive _sets_intersection
+intersection :: TTerm (Set a -> Set a -> Set a)
+intersection = TTerm $ Terms.primitive _sets_intersection
 
-isEmpty :: Datum (Set a -> Bool)
-isEmpty = Datum $ Terms.primitive _sets_isEmpty
+isEmpty :: TTerm (Set a -> Bool)
+isEmpty = TTerm $ Terms.primitive _sets_isEmpty
 
-map :: Datum ((a -> b) -> Set a -> Set b)
-map = Datum $ Terms.primitive _sets_map
+map :: TTerm ((a -> b) -> Set a -> Set b)
+map = TTerm $ Terms.primitive _sets_map
 
-remove :: Datum (a -> Set a -> Set a)
-remove = Datum $ Terms.primitive _sets_remove
+remove :: TTerm (a -> Set a -> Set a)
+remove = TTerm $ Terms.primitive _sets_remove
 
-singleton :: Datum (a -> Set a)
-singleton = Datum $ Terms.primitive _sets_singleton
+singleton :: TTerm (a -> Set a)
+singleton = TTerm $ Terms.primitive _sets_singleton
 
-size :: Datum (Set a -> Int)
-size = Datum $ Terms.primitive _sets_size
+size :: TTerm (Set a -> Int)
+size = TTerm $ Terms.primitive _sets_size
 
-toList :: Datum (Set a -> [a])
-toList = Datum $ Terms.primitive _sets_toList
+toList :: TTerm (Set a -> [a])
+toList = TTerm $ Terms.primitive _sets_toList
 
-union :: Datum (Set a -> Set a -> Set a)
-union = Datum $ Terms.primitive _sets_union
+union :: TTerm (Set a -> Set a -> Set a)
+union = TTerm $ Terms.primitive _sets_union

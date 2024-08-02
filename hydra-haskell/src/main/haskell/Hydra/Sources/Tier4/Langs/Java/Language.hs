@@ -17,7 +17,7 @@ import qualified Hydra.Dsl.Types as Types
 import qualified Data.Set as S
 
 
-javaLanguageDefinition :: String -> Datum a -> Definition a
+javaLanguageDefinition :: String -> TTerm a -> TElement a
 javaLanguageDefinition = definitionInModule javaLanguageModule
 
 javaLanguageModule :: Module
@@ -31,13 +31,13 @@ javaLanguageModule = Module ns elements [hydraCodersModule, hydraBasicsModule] t
       el reservedWordsDef
       ]
 
-javaMaxTupleLengthDef :: Definition Int
+javaMaxTupleLengthDef :: TElement Int
 javaMaxTupleLengthDef = javaLanguageDefinition "javaMaxTupleLength" $
   doc ("The maximum supported length of a tuple in Hydra-Java. "
     <> "Note: if this constant is changed, also change Tuples.java correspondingly") $
   int32 9
 
-javaLanguageDef :: Definition (Language)
+javaLanguageDef :: TElement (Language)
 javaLanguageDef = javaLanguageDefinition "javaLanguage" $
   doc "Language constraints for Java" $
   typed languageT $
@@ -95,7 +95,7 @@ javaLanguageDef = javaLanguageDefinition "javaLanguage" $
         _Type_product>>: lambda "types" $ Equality.ltInt32 @@ (Lists.length @@ var "types") @@ (ref javaMaxTupleLengthDef)
       ]]]
 
-reservedWordsDef :: Definition (S.Set String)
+reservedWordsDef :: TElement (S.Set String)
 reservedWordsDef = javaLanguageDefinition "reservedWords" $
   doc "A set of reserved words in Java" $
   typed (setT stringT) $

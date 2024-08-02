@@ -6,13 +6,13 @@ import Hydra.Dsl.Base as Base
 import qualified Data.Map as M
 
 
-graph :: Datum (M.Map Name Element)
-    -> Datum (M.Map Name (Maybe Term))
-    -> Datum (M.Map Name Type)
-    -> Datum Term
-    -> Datum (M.Map Name Primitive)
-    -> Datum (Maybe Graph)
-    -> Datum Graph
+graph :: TTerm (M.Map Name Element)
+    -> TTerm (M.Map Name (Maybe Term))
+    -> TTerm (M.Map Name Type)
+    -> TTerm Term
+    -> TTerm (M.Map Name Primitive)
+    -> TTerm (Maybe Graph)
+    -> TTerm Graph
 graph elements environment types body primitives schema = record _Graph [
     _Graph_elements>>: elements,
     _Graph_environment>>: environment,
@@ -21,20 +21,20 @@ graph elements environment types body primitives schema = record _Graph [
     _Graph_primitives>>: primitives,
     _Graph_schema>>: schema]
 
-graphElements :: Datum (Graph -> M.Map Name Element)
+graphElements :: TTerm (Graph -> M.Map Name Element)
 graphElements = project _Graph _Graph_elements
 
-graphEnvironment :: Datum (Graph -> M.Map Name (Maybe Term))
+graphEnvironment :: TTerm (Graph -> M.Map Name (Maybe Term))
 graphEnvironment = project _Graph _Graph_environment
 
-graphTypes :: Datum (Graph -> M.Map Name Type)
+graphTypes :: TTerm (Graph -> M.Map Name Type)
 graphTypes = project _Graph _Graph_types
 
-graphBody :: Datum (Graph -> Term)
+graphBody :: TTerm (Graph -> Term)
 graphBody = project _Graph _Graph_body
 
-graphPrimitives :: Datum (Graph -> M.Map Name Primitive)
+graphPrimitives :: TTerm (Graph -> M.Map Name Primitive)
 graphPrimitives = project _Graph _Graph_primitives
 
-graphSchema :: Datum (Graph -> Maybe Graph)
+graphSchema :: TTerm (Graph -> Maybe Graph)
 graphSchema = project _Graph _Graph_schema

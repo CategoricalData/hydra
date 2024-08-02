@@ -18,7 +18,7 @@ import Hydra.Sources.Tier0.Compute
 
 hydraPhantomsModule :: Module
 hydraPhantomsModule = Module ns elements [hydraComputeModule] [hydraCoreModule] $
-    Just "Phantom types for use in model definitions"
+    Just "Phantom types for use with Hydra DSLs"
   where
     ns = Namespace "hydra/phantoms"
     core = typeref $ moduleNamespace hydraCoreModule
@@ -26,20 +26,21 @@ hydraPhantomsModule = Module ns elements [hydraComputeModule] [hydraCoreModule] 
     def = datatype ns
 
     elements = [
-      def "Case" $
+
+      def "TCase" $
         doc "An association of a field name (as in a case statement) with a phantom type" $
         lambda "a" $ core "Name",
 
-      def "Datum" $
-        doc "An association of a term with a phantom type" $
-        lambda "a" $ core "Term",
-
-      def "Definition" $
-        doc "An association with a named term with a phantom type" $
+      def "TElement" $
+        doc "An association with a named term (element) with a phantom type" $
         lambda "a" $ record [
           "name">: core "Name",
-          "datum">: phantoms "Datum" @@ "a"],
+          "term">: phantoms "TTerm" @@ "a"],
 
-      def "Fld" $
+      def "TField" $
         doc "An association with a term-level field with a phantom type" $
-        lambda "a" $ core "Field"]
+        lambda "a" $ core "Field",
+
+      def "TTerm" $
+        doc "An association of a term with a phantom type" $
+        lambda "a" $ core "Term"]

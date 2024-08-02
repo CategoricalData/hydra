@@ -31,7 +31,7 @@ import Hydra.Langs.Tinkerpop.PropertyGraph as PG
 import Hydra.Sources.Tier4.Langs.Tinkerpop.PropertyGraph
 
 
-validateDefinition :: String -> Datum a -> Definition a
+validateDefinition :: String -> TTerm a -> TElement a
 validateDefinition = definitionInModule tinkerpopValidateModule
 
 tinkerpopValidateModule :: Module
@@ -54,7 +54,7 @@ tinkerpopValidateModule = Module (Namespace "hydra/langs/tinkerpop/validate") el
      el vertexErrorDef,
      el vertexLabelMismatchDef]
 
-validateEdgeDef :: Definition (
+validateEdgeDef :: TElement (
      (t -> v -> Maybe String)
   -> (v -> String)
   -> Y.Maybe (v -> Y.Maybe PG.VertexLabel)
@@ -110,7 +110,7 @@ validateEdgeDef = validateDefinition "validateEdge" $
               @@ (unwrap _VertexLabel @@ (project _EdgeType _EdgeType_in @@ var "typ")))
             @@ (var "failWith" @@ (ref prependDef @@ "Wrong in-vertex label" @@ (ref vertexLabelMismatchDef @@ (project _EdgeType _EdgeType_in @@ var "typ") @@ var "label")))))])
 
-validateElementDef :: Definition (
+validateElementDef :: TElement (
      (t -> v -> Maybe String)
   -> (v -> String)
   -> Y.Maybe (v -> Y.Maybe PG.VertexLabel)
@@ -144,7 +144,7 @@ validateElementDef = validateDefinition "validateElement" $
               @@ var "et"
               @@ var "edge"]) @@ var "el"]) @@ var "typ"
 
-validateGraphDef :: Definition (
+validateGraphDef :: TElement (
      (t -> v -> Maybe String)
   -> (v -> String)
   -> PG.GraphSchema t
@@ -190,7 +190,7 @@ validateGraphDef = validateDefinition "validateGraph" $
           "labelForVertexId">: typed (optionalT (funT vT (optionalT vertexLabelT))) $
             just $ lambda "i" $ Optionals.map @@ (project _Vertex _Vertex_label) @@ (Maps.lookup @@ var "i" @@ (project _Graph _Graph_vertices @@ var "graph"))]]
 
-validatePropertiesDef :: Definition (
+validatePropertiesDef :: TElement (
      (t -> v -> Maybe String)
   -> [PG.PropertyType t]
   -> M.Map PG.PropertyKey v
@@ -229,7 +229,7 @@ validatePropertiesDef = validateDefinition "validateProperties" $
               "key">: first @@ var "pair",
               "val">: second @@ var "pair"])])])
 
-validateVertexDef :: Definition (
+validateVertexDef :: TElement (
      (t -> v -> Maybe String)
   -> (v -> String)
   -> PG.VertexType t
@@ -267,7 +267,7 @@ validateVertexDef = validateDefinition "validateVertex" $
 
 ----
 
-checkAllDef :: Definition ([Y.Maybe a] -> Y.Maybe a)
+checkAllDef :: TElement ([Y.Maybe a] -> Y.Maybe a)
 checkAllDef = validateDefinition "checkAll" $
   function (listT $ optionalT aT) (optionalT aT) $
   lambda "checks" (
@@ -275,25 +275,25 @@ checkAllDef = validateDefinition "checkAll" $
     `with` [
       "errors">: Optionals.cat @@ var "checks"])
 
-edgeErrorDef :: Definition ((v -> String) -> PG.Edge v -> String -> String)
+edgeErrorDef :: TElement ((v -> String) -> PG.Edge v -> String -> String)
 edgeErrorDef = validateDefinition "edgeError" $
   functionN [funT vT stringT, edgeVT, stringT, stringT] $
   lambda "showValue" $ lambda "e" $
     ref prependDef @@ ("Invalid edge with id " ++ (var "showValue" @@ (project _Edge _Edge_id @@ var "e")))
 
-edgeLabelMismatchDef :: Definition (PG.EdgeLabel -> PG.EdgeLabel -> String)
+edgeLabelMismatchDef :: TElement (PG.EdgeLabel -> PG.EdgeLabel -> String)
 edgeLabelMismatchDef = validateDefinition "edgeLabelMismatch" $
   functionN [edgeLabelT, edgeLabelT, stringT] $
   lambda "expected" $ lambda "actual" $
     "expected " ++ (unwrap _EdgeLabel @@ var "expected") ++ ", found " ++ (unwrap _EdgeLabel @@ var "actual")
 
-prependDef :: Definition (String -> String -> String)
+prependDef :: TElement (String -> String -> String)
 prependDef = validateDefinition "prepend" $
   functionN [stringT, stringT, stringT] $
   lambda "prefix" $ lambda "msg" $
     (var "prefix") ++ ": " ++ (var "msg")
 
-verifyDef :: Definition (Bool -> String -> Maybe String)
+verifyDef :: TElement (Bool -> String -> Maybe String)
 verifyDef = validateDefinition "verify" $
   functionN [booleanT, stringT, optionalT stringT] $
   lambda "b" $ lambda "err" $
@@ -301,13 +301,13 @@ verifyDef = validateDefinition "verify" $
       nothing
       (just $ var "err")
 
-vertexErrorDef :: Definition ((v -> String) -> PG.Vertex v -> String -> String)
+vertexErrorDef :: TElement ((v -> String) -> PG.Vertex v -> String -> String)
 vertexErrorDef = validateDefinition "vertexError" $
   functionN [funT vT stringT, vertexVT, stringT, stringT] $
   lambda "showValue" $ lambda "v" $
     ref prependDef @@ ("Invalid vertex with id " ++ (var "showValue" @@ (project _Vertex _Vertex_id @@ var "v")))
 
-vertexLabelMismatchDef :: Definition (PG.VertexLabel -> PG.VertexLabel -> String)
+vertexLabelMismatchDef :: TElement (PG.VertexLabel -> PG.VertexLabel -> String)
 vertexLabelMismatchDef = validateDefinition "vertexLabelMismatch" $
   functionN [vertexLabelT, vertexLabelT, stringT] $
   lambda "expected" $ lambda "actual" $

@@ -26,7 +26,7 @@ import qualified Hydra.Dsl.Types           as Types
 import           Hydra.Sources.Tier0.All
 
 
-stripDefinition :: String -> Datum a -> Definition a
+stripDefinition :: String -> TTerm a -> TElement a
 stripDefinition = definitionInModule hydraStripModule
 
 hydraStripModule :: Module
@@ -39,35 +39,35 @@ hydraStripModule = Module (Namespace "hydra/strip") elements [] tier0Modules $
      el stripTypeDef,
      el stripTypeParametersDef]
 
-fullyStripTermDef :: Definition (Term -> Term)
+fullyStripTermDef :: TElement (Term -> Term)
 fullyStripTermDef = stripDefinition "fullyStripTerm" $
     doc "Strip all annotations from a term, including first-class type annotations" $
     function termT termT $
       lambda "t" (match _Term (Just $ var "t") [
-        Case _Term_annotated --> ref fullyStripTermDef <.> (project _AnnotatedTerm _AnnotatedTerm_subject),
-        Case _Term_typed --> ref fullyStripTermDef <.> (project _TypedTerm _TypedTerm_term)
+        TCase _Term_annotated --> ref fullyStripTermDef <.> (project _AnnotatedTerm _AnnotatedTerm_subject),
+        TCase _Term_typed --> ref fullyStripTermDef <.> (project _TypedTerm _TypedTerm_term)
         ] @@ (var "t"))
 
-stripTermDef :: Definition (Term -> Term)
+stripTermDef :: TElement (Term -> Term)
 stripTermDef = stripDefinition "stripTerm" $
     doc "Strip all annotations from a term" $
     function termT termT $
       lambda "t" (match _Term (Just $ var "t") [
-        Case _Term_annotated --> ref stripTermDef <.> (project _AnnotatedTerm _AnnotatedTerm_subject)
+        TCase _Term_annotated --> ref stripTermDef <.> (project _AnnotatedTerm _AnnotatedTerm_subject)
         ] @@ (var "t"))
 
-stripTypeDef :: Definition (Type -> Type)
+stripTypeDef :: TElement (Type -> Type)
 stripTypeDef = stripDefinition "stripType" $
     doc "Strip all annotations from a term" $
     function typeT typeT $
       lambda "t" (match _Type (Just $ var "t") [
-        Case _Type_annotated --> ref stripTypeDef <.> (project _AnnotatedType _AnnotatedType_subject)
+        TCase _Type_annotated --> ref stripTypeDef <.> (project _AnnotatedType _AnnotatedType_subject)
         ] @@ (var "t"))
 
-stripTypeParametersDef :: Definition (Type -> Type)
+stripTypeParametersDef :: TElement (Type -> Type)
 stripTypeParametersDef = stripDefinition "stripTypeParameters" $
     doc "Strip any top-level type lambdas from a type, extracting the (possibly nested) type body" $
     function typeT typeT $
       lambda "t" $ match _Type (Just $ var "t") [
-        Case _Type_lambda --> lambda "lt" (ref stripTypeParametersDef @@ (project _LambdaType _LambdaType_body @@ var "lt"))
+        TCase _Type_lambda --> lambda "lt" (ref stripTypeParametersDef @@ (project _LambdaType _LambdaType_body @@ var "lt"))
         ] @@ (ref stripTypeDef @@ var "t")

@@ -5,29 +5,29 @@ import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
 
 
-apply :: Datum (Maybe (a -> b) -> Maybe a -> Maybe b)
-apply = Datum $ Terms.primitive _optionals_apply
+apply :: TTerm (Maybe (a -> b) -> Maybe a -> Maybe b)
+apply = TTerm $ Terms.primitive _optionals_apply
 
-bind :: Datum (Maybe a -> (a -> Maybe b) -> Maybe b)
-bind = Datum $ Terms.primitive _optionals_bind
+bind :: TTerm (Maybe a -> (a -> Maybe b) -> Maybe b)
+bind = TTerm $ Terms.primitive _optionals_bind
 
-cat :: Datum ([Maybe a] -> [a])
-cat = Datum $ Terms.primitive _optionals_cat
+cat :: TTerm ([Maybe a] -> [a])
+cat = TTerm $ Terms.primitive _optionals_cat
 
-fromMaybe :: Datum (a -> Maybe a -> a)
-fromMaybe = Datum $ Terms.primitive _optionals_fromMaybe
+fromMaybe :: TTerm (a -> Maybe a -> a)
+fromMaybe = TTerm $ Terms.primitive _optionals_fromMaybe
 
-isJust :: Datum (Maybe a -> Bool)
-isJust = Datum $ Terms.primitive _optionals_isJust
+isJust :: TTerm (Maybe a -> Bool)
+isJust = TTerm $ Terms.primitive _optionals_isJust
 
-isNothing :: Datum (Maybe a -> Bool)
-isNothing = Datum $ Terms.primitive _optionals_isNothing
+isNothing :: TTerm (Maybe a -> Bool)
+isNothing = TTerm $ Terms.primitive _optionals_isNothing
 
-map :: Datum ((a -> b) -> Maybe a -> Maybe b)
-map = Datum $ Terms.primitive _optionals_map
+map :: TTerm ((a -> b) -> Maybe a -> Maybe b)
+map = TTerm $ Terms.primitive _optionals_map
 
-maybe :: Datum (b -> (a -> b) -> Maybe a -> b)
-maybe = Datum $ Terms.primitive _optionals_maybe
+maybe :: TTerm (b -> (a -> b) -> Maybe a -> b)
+maybe = TTerm $ Terms.primitive _optionals_maybe
 
-pure :: Datum (a -> Maybe a)
-pure = Datum $ Terms.primitive _optionals_pure
+pure :: TTerm (a -> Maybe a)
+pure = TTerm $ Terms.primitive _optionals_pure

@@ -45,42 +45,42 @@ jsonDecodingModule = Module (Namespace "hydra/langs/json/decoding") elements
      Base.el decodeFieldDef,
      Base.el decodeOptionalFieldDef]
 
-jsonDecodingDefinition :: String -> Datum a -> Definition a
+jsonDecodingDefinition :: String -> TTerm a -> TElement a
 jsonDecodingDefinition label = definitionInModule jsonDecodingModule ("decode" <> label)
 
 valueT = TypeVariable Json._Value
 
-decodeStringDef :: Definition (Json.Value -> Flow s String)
+decodeStringDef :: TElement (Json.Value -> Flow s String)
 decodeStringDef  = jsonDecodingDefinition "String" $
   function valueT (flowT sT stringT) $
   match Json._Value (Just $ Flows.fail @@ "expected a string") [
     Json._Value_string>>: Flows.pure]
 
-decodeNumberDef :: Definition (Json.Value -> Flow s Double)
+decodeNumberDef :: TElement (Json.Value -> Flow s Double)
 decodeNumberDef  = jsonDecodingDefinition "Number" $
   function valueT (flowT sT Types.bigfloat) $
   match Json._Value (Just $ Flows.fail @@ "expected a number") [
     Json._Value_number>>: Flows.pure]
 
-decodeBooleanDef :: Definition (Json.Value -> Flow s Bool)
+decodeBooleanDef :: TElement (Json.Value -> Flow s Bool)
 decodeBooleanDef  = jsonDecodingDefinition "Boolean" $
   function valueT (flowT sT booleanT) $
   match Json._Value (Just $ Flows.fail @@ "expected a boolean") [
     Json._Value_boolean>>: Flows.pure]
 
-decodeArrayDef :: Definition ((Json.Value -> Flow s a) -> Json.Value -> Flow s [a])
+decodeArrayDef :: TElement ((Json.Value -> Flow s a) -> Json.Value -> Flow s [a])
 decodeArrayDef  = jsonDecodingDefinition "Array" $
   function (funT valueT (flowT sT aT)) (funT valueT (flowT sT (listT aT))) $
   lambda "decodeElem" $ match Json._Value (Just $ Flows.fail @@ "expected an array") [
     Json._Value_array>>: Flows.mapList @@ (var "decodeElem")]
 
-decodeObjectDef :: Definition (Json.Value -> Flow s (M.Map String Json.Value))
+decodeObjectDef :: TElement (Json.Value -> Flow s (M.Map String Json.Value))
 decodeObjectDef  = jsonDecodingDefinition "Object" $
   function valueT (flowT sT (mapT stringT valueT)) $
   match Json._Value (Just $ Flows.fail @@ "expected an object") [
     Json._Value_object>>: Flows.pure]
 
-decodeFieldDef :: Definition ((Json.Value -> Flow s a) -> String -> (M.Map String Json.Value) -> Flow s a)
+decodeFieldDef :: TElement ((Json.Value -> Flow s a) -> String -> (M.Map String Json.Value) -> Flow s a)
 decodeFieldDef  = jsonDecodingDefinition "Field" $
   function (funT valueT (flowT sT aT)) (funT stringT (funT (mapT stringT valueT) (flowT sT aT))) $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
@@ -88,7 +88,7 @@ decodeFieldDef  = jsonDecodingDefinition "Field" $
       @@ (ref decodeOptionalFieldDef @@ var "decodeValue" @@ var "name" @@ var "m")
       @@ (matchOpt (Flows.fail @@ ("missing field: " ++ var "name")) Flows.pure)
 
-decodeOptionalFieldDef :: Definition ((Json.Value -> Flow s a) -> String -> (M.Map String Json.Value) -> Flow s (Maybe a))
+decodeOptionalFieldDef :: TElement ((Json.Value -> Flow s a) -> String -> (M.Map String Json.Value) -> Flow s (Maybe a))
 decodeOptionalFieldDef  = jsonDecodingDefinition "OptionalField" $
   function (funT valueT (flowT sT aT)) (funT stringT (funT (mapT stringT valueT) (flowT sT (Types.optional aT)))) $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
