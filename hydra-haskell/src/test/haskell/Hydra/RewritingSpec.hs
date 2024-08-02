@@ -74,7 +74,7 @@ testExpandLambdas = do
 
     H.it "Check that lambda expansion is idempotent" $ do
       QC.property $ \term -> do
-        inf <- fromFlowIo testGraph $ annotateTypedTerms term
+        inf <- fromFlowIo testGraph $ inferTermType term
         let once = expandTypedLambdas term
         let twice = expandTypedLambdas once
         H.shouldBe once twice
@@ -86,7 +86,7 @@ testExpandLambdas = do
     expandsTo termBefore termAfter = do
 --      result <- fromFlowIo testGraph $ expandLambdas termBefore
 --      H.shouldBe result termAfter
-       inf <- fromFlowIo testGraph $ annotateTypedTerms termBefore
+       inf <- fromFlowIo testGraph $ inferTermType termBefore
        let result = expandTypedLambdas inf
        H.shouldBe (showTerm (removeTermAnnotations result)) (showTerm termAfter)
 
