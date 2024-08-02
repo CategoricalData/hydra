@@ -64,7 +64,7 @@ supportedTypesPassThrough = H.describe "Verify that supported types are mapped d
       (Terms.optional $ Terms.string <$> ms) (Y.maybe Json.ValueNull Json.ValueString ms)
 
   H.it "Records become JSON objects" $
-    QC.property $ \lat lon -> checkJsonCoder latLonType
+    QC.property $ \lat lon -> checkJsonCoder testTypeLatLon
       (latlonRecord lat lon) (jsonMap [
         ("lat", jsonFloat $ realToFrac lat),
         ("lon", jsonFloat $ realToFrac lon)])
@@ -80,8 +80,8 @@ unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are t
       (Json.ValueArray $ Json.ValueString <$> S.toList strings)
 
   H.it "Nominal types are dereferenced" $
-    QC.property $ \s -> checkJsonCoder stringAliasType
-      (Terms.wrap stringAliasTypeName $ Terms.string s)
+    QC.property $ \s -> checkJsonCoder testTypeStringAlias
+      (Terms.wrap testTypeStringAliasName $ Terms.string s)
       (Json.ValueString s)
 
   H.it "Unions become JSON objects (as records)" $

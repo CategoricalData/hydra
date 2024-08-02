@@ -224,4 +224,4 @@ encodeType t = case stripType t of
   _ -> fail $ "can't encode unsupported type in Scala: " ++ show t
 
 encodeUntypedTerm :: Term -> Flow (Graph) Scala.Data
-encodeUntypedTerm term = annotateTypedTerms term >>= encodeTerm
+encodeUntypedTerm term = inferTermType term >>= encodeTerm

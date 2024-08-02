@@ -74,7 +74,7 @@ checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. 
 
   H.it "Simple records become simple objects" $
     QC.property $ \() -> checkSerialization jsonStringCoder
-      (TypedTerm (latlonRecord 37 (negate 122)) latLonType)
+      (TypedTerm (latlonRecord 37 (negate 122)) testTypeLatLon)
       "{\"lat\":37,\"lon\":-122}"
 
   H.it "Optionals are omitted from record objects if 'nothing'" $
