@@ -28,7 +28,7 @@ import qualified Hydra.Dsl.Types           as Types
 import           Hydra.Sources.Tier3.All
 
 
-protobufLanguageDefinition :: String -> Datum a -> Definition a
+protobufLanguageDefinition :: String -> TTerm a -> TElement a
 protobufLanguageDefinition = definitionInModule protobufLanguageModule
 
 protobufLanguageModule :: Module
@@ -40,7 +40,7 @@ protobufLanguageModule = Module ns elements [hydraCodersModule, hydraBasicsModul
       el protobufLanguageDef,
       el protobufReservedWordsDef]
 
-protobufLanguageDef :: Definition (Language)
+protobufLanguageDef :: TElement (Language)
 protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
   doc "Language constraints for Protocol Buffers v3" $
   typed languageT $
@@ -83,7 +83,7 @@ protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
         _Type_map>>: lambda "mt" (match _Type (Just true) [
           _Type_optional>>: constant false] @@ (ref stripTypeDef @@ (Core.mapTypeValues @@ var "mt")))]]]
 
-protobufReservedWordsDef :: Definition (S.Set String)
+protobufReservedWordsDef :: TElement (S.Set String)
 protobufReservedWordsDef = protobufLanguageDefinition "protobufReservedWords" $
   doc "A set of reserved words in Protobuf" $
   typed (setT stringT) $

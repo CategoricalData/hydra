@@ -7,22 +7,22 @@ import java.io.Serializable;
 /**
  * An association of a field name (as in a case statement) with a phantom type
  */
-public class Case<A> implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/phantoms.Case");
+public class TCase<A> implements Serializable {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/phantoms.TCase");
   
   public final hydra.core.Name value;
   
-  public Case (hydra.core.Name value) {
+  public TCase (hydra.core.Name value) {
     java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   
   @Override
   public boolean equals(Object other) {
-    if (!(other instanceof Case)) {
+    if (!(other instanceof TCase)) {
       return false;
     }
-    Case o = (Case) (other);
+    TCase o = (TCase) (other);
     return value.equals(o.value);
   }
   

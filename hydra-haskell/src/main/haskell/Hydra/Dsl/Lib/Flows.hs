@@ -13,55 +13,55 @@ import qualified Data.Map as M
 
 -- Primitives
 
-apply :: Datum (Flow s (x -> y) -> Flow s x -> Flow s y)
-apply = Datum $ Terms.primitive _flows_apply
+apply :: TTerm (Flow s (x -> y) -> Flow s x -> Flow s y)
+apply = TTerm $ Terms.primitive _flows_apply
 
-bind :: Datum (Flow s x -> (x -> Flow s y) -> Flow s y)
-bind = Datum $ Terms.primitive _flows_bind
+bind :: TTerm (Flow s x -> (x -> Flow s y) -> Flow s y)
+bind = TTerm $ Terms.primitive _flows_bind
 
-fail :: Datum (String -> Flow s x)
-fail = Datum $ Terms.primitive _flows_fail
+fail :: TTerm (String -> Flow s x)
+fail = TTerm $ Terms.primitive _flows_fail
 
-map :: Datum ((x -> y) -> Flow s x -> Flow s y)
-map = Datum $ Terms.primitive _flows_map
+map :: TTerm ((x -> y) -> Flow s x -> Flow s y)
+map = TTerm $ Terms.primitive _flows_map
 
-mapList :: Datum ((x -> Flow s y) -> [x] -> Flow s [y])
-mapList = Datum $ Terms.primitive _flows_mapList
+mapList :: TTerm ((x -> Flow s y) -> [x] -> Flow s [y])
+mapList = TTerm $ Terms.primitive _flows_mapList
 
-pure :: Datum (x -> Flow s x)
-pure = Datum $ Terms.primitive _flows_pure
+pure :: TTerm (x -> Flow s x)
+pure = TTerm $ Terms.primitive _flows_pure
 
 -- Accessors
 
-flowState :: Datum (Maybe x) -> Datum s -> Datum Trace -> Datum (FlowState s x)
+flowState :: TTerm (Maybe x) -> TTerm s -> TTerm Trace -> TTerm (FlowState s x)
 flowState value state trace = record _FlowState [
     _FlowState_value>>: value,
     _FlowState_state>>: state,
     _FlowState_trace>>: trace]
 
-flowStateState :: Datum (FlowState s x -> s)
+flowStateState :: TTerm (FlowState s x -> s)
 flowStateState = project _FlowState _FlowState_state
 
-flowStateTrace :: Datum (FlowState s x -> Trace)
+flowStateTrace :: TTerm (FlowState s x -> Trace)
 flowStateTrace = project _FlowState _FlowState_trace
 
-flowStateValue :: Datum (FlowState s x -> Maybe x)
+flowStateValue :: TTerm (FlowState s x -> Maybe x)
 flowStateValue = project _FlowState _FlowState_value
 
-trace :: Datum [String] -> Datum [String] -> Datum (M.Map String (Term)) -> Datum Trace
+trace :: TTerm [String] -> TTerm [String] -> TTerm (M.Map String (Term)) -> TTerm Trace
 trace stack messages other = record _Trace [
     _Trace_stack>>: stack,
     _Trace_messages>>: messages,
     _Trace_other>>: other]
     
-traceStack :: Datum (Trace -> [String])
+traceStack :: TTerm (Trace -> [String])
 traceStack = project _Trace _Trace_stack
 
-traceMessages :: Datum (Trace -> [String])
+traceMessages :: TTerm (Trace -> [String])
 traceMessages = project _Trace _Trace_messages
 
-traceOther :: Datum (Trace -> M.Map String (Term))
+traceOther :: TTerm (Trace -> M.Map String (Term))
 traceOther = project _Trace _Trace_other
 
-unFlow :: Datum (Flow s x -> s -> Trace -> FlowState s x)
+unFlow :: TTerm (Flow s x -> s -> Trace -> FlowState s x)
 unFlow = unwrap _Flow

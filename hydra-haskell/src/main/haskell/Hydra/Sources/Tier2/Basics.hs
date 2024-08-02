@@ -28,7 +28,7 @@ import qualified Hydra.Dsl.Types           as Types
 import           Hydra.Sources.Tier1.All
 
 
-basicsDefinition :: String -> Datum a -> Definition a
+basicsDefinition :: String -> TTerm a -> TElement a
 basicsDefinition = definitionInModule hydraBasicsModule
 
 hydraBasicsModule :: Module
@@ -79,7 +79,7 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements
      el qualifyNameLazyDef
      ]
 
-eliminationVariantDef :: Definition (Elimination -> EliminationVariant)
+eliminationVariantDef :: TElement (Elimination -> EliminationVariant)
 eliminationVariantDef = basicsDefinition "eliminationVariant" $
   doc "Find the elimination variant (constructor) for a given elimination term" $
   function eliminationT eliminationVariantT $
@@ -91,7 +91,7 @@ eliminationVariantDef = basicsDefinition "eliminationVariant" $
     _Elimination_union    @-> _EliminationVariant_union,
     _Elimination_wrap     @-> _EliminationVariant_wrap]
 
-eliminationVariantsDef :: Definition [EliminationVariant]
+eliminationVariantsDef :: TElement [EliminationVariant]
 eliminationVariantsDef = basicsDefinition "eliminationVariants" $
   doc "All elimination variants (constructors), in a canonical order" $
   typed (listT eliminationVariantT) $
@@ -103,7 +103,7 @@ eliminationVariantsDef = basicsDefinition "eliminationVariants" $
     _EliminationVariant_record,
     _EliminationVariant_union]
 
-floatTypePrecisionDef :: Definition (FloatType -> Precision)
+floatTypePrecisionDef :: TElement (FloatType -> Precision)
 floatTypePrecisionDef = basicsDefinition "floatTypePrecision" $
   doc "Find the precision of a given floating-point type" $
   function floatTypeT precisionT $
@@ -112,7 +112,7 @@ floatTypePrecisionDef = basicsDefinition "floatTypePrecision" $
     _FloatType_float32  @-> field _Precision_bits $ int 32,
     _FloatType_float64  @-> field _Precision_bits $ int 64]
 
-floatTypesDef :: Definition [FloatType]
+floatTypesDef :: TElement [FloatType]
 floatTypesDef = basicsDefinition "floatTypes" $
   doc "All floating-point types in a canonical order" $
   typed (listT floatTypeT) $
@@ -121,7 +121,7 @@ floatTypesDef = basicsDefinition "floatTypes" $
     _FloatType_float32,
     _FloatType_float64]
 
-floatValueTypeDef :: Definition (FloatValue -> FloatType)
+floatValueTypeDef :: TElement (FloatValue -> FloatType)
 floatValueTypeDef = basicsDefinition "floatValueType" $
   doc "Find the float type for a given floating-point value" $
   function floatValueT floatTypeT $
@@ -130,7 +130,7 @@ floatValueTypeDef = basicsDefinition "floatValueType" $
     _FloatValue_float32  @-> _FloatType_float32,
     _FloatValue_float64  @-> _FloatType_float64]
 
-functionVariantDef :: Definition (Function -> FunctionVariant)
+functionVariantDef :: TElement (Function -> FunctionVariant)
 functionVariantDef = basicsDefinition "functionVariant" $
   doc "Find the function variant (constructor) for a given function" $
   function functionT functionVariantT $
@@ -139,7 +139,7 @@ functionVariantDef = basicsDefinition "functionVariant" $
     _Function_lambda      @-> _FunctionVariant_lambda,
     _Function_primitive   @-> _FunctionVariant_primitive]
 
-functionVariantsDef :: Definition [FunctionVariant]
+functionVariantsDef :: TElement [FunctionVariant]
 functionVariantsDef = basicsDefinition "functionVariants" $
   doc "All function variants (constructors), in a canonical order" $
   typed (listT functionVariantT) $
@@ -148,13 +148,13 @@ functionVariantsDef = basicsDefinition "functionVariants" $
     _FunctionVariant_lambda,
     _FunctionVariant_primitive]
 
-idDef :: Definition (a -> a)
+idDef :: TElement (a -> a)
 idDef = basicsDefinition "id" $
   doc "The identity function" $
   function aT aT $
   lambda "x" $ var "x"
 
-integerTypeIsSignedDef :: Definition (IntegerType -> Bool)
+integerTypeIsSignedDef :: TElement (IntegerType -> Bool)
 integerTypeIsSignedDef = basicsDefinition "integerTypeIsSigned" $
   doc "Find whether a given integer type is signed (true) or unsigned (false)" $
   function integerTypeT booleanT $
@@ -169,7 +169,7 @@ integerTypeIsSignedDef = basicsDefinition "integerTypeIsSigned" $
     _IntegerType_uint32 @-> constant false,
     _IntegerType_uint64 @-> constant false]
 
-integerTypePrecisionDef :: Definition (IntegerType -> Precision)
+integerTypePrecisionDef :: TElement (IntegerType -> Precision)
 integerTypePrecisionDef = basicsDefinition "integerTypePrecision" $
   doc "Find the precision of a given integer type" $
   function integerTypeT precisionT $
@@ -184,7 +184,7 @@ integerTypePrecisionDef = basicsDefinition "integerTypePrecision" $
     _IntegerType_uint32 @-> field _Precision_bits $ int 32,
     _IntegerType_uint64 @-> field _Precision_bits $ int 64]
 
-integerTypesDef :: Definition [IntegerType]
+integerTypesDef :: TElement [IntegerType]
 integerTypesDef = basicsDefinition "integerTypes" $
   doc "All integer types, in a canonical order" $
   typed (listT integerTypeT) $
@@ -199,7 +199,7 @@ integerTypesDef = basicsDefinition "integerTypes" $
     _IntegerType_uint32,
     _IntegerType_uint64]
 
-integerValueTypeDef :: Definition (IntegerValue -> IntegerType)
+integerValueTypeDef :: TElement (IntegerValue -> IntegerType)
 integerValueTypeDef = basicsDefinition "integerValueType" $
   doc "Find the integer type for a given integer value" $
   function integerValueT integerTypeT $
@@ -214,18 +214,18 @@ integerValueTypeDef = basicsDefinition "integerValueType" $
     _IntegerValue_uint32 @-> _IntegerType_uint32,
     _IntegerValue_uint64 @-> _IntegerType_uint64]
 
-literalTypeDef :: Definition (Literal -> LiteralType)
+literalTypeDef :: TElement (Literal -> LiteralType)
 literalTypeDef = basicsDefinition "literalType" $
   doc "Find the literal type for a given literal value" $
   function literalT literalTypeT $
   match _Literal Nothing [
-    Case _Literal_binary  --> constant $ variant _LiteralType _LiteralType_binary unit,
-    Case _Literal_boolean --> constant $ variant _LiteralType _LiteralType_boolean unit,
-    Case _Literal_float   --> inject2 _LiteralType _LiteralType_float <.> ref floatValueTypeDef,
-    Case _Literal_integer --> inject2 _LiteralType _LiteralType_integer <.> ref integerValueTypeDef,
-    Case _Literal_string  --> constant $ variant _LiteralType _LiteralType_string unit]
+    TCase _Literal_binary  --> constant $ variant _LiteralType _LiteralType_binary unit,
+    TCase _Literal_boolean --> constant $ variant _LiteralType _LiteralType_boolean unit,
+    TCase _Literal_float   --> inject2 _LiteralType _LiteralType_float <.> ref floatValueTypeDef,
+    TCase _Literal_integer --> inject2 _LiteralType _LiteralType_integer <.> ref integerValueTypeDef,
+    TCase _Literal_string  --> constant $ variant _LiteralType _LiteralType_string unit]
 
-literalTypeVariantDef :: Definition (LiteralType -> LiteralVariant)
+literalTypeVariantDef :: TElement (LiteralType -> LiteralVariant)
 literalTypeVariantDef = basicsDefinition "literalTypeVariant" $
   doc "Find the literal type variant (constructor) for a given literal value" $
   function literalTypeT literalVariantT $
@@ -236,13 +236,13 @@ literalTypeVariantDef = basicsDefinition "literalTypeVariant" $
     _LiteralType_integer @-> _LiteralVariant_integer,
     _LiteralType_string  @-> _LiteralVariant_string]
 
-literalVariantDef :: Definition (Literal -> LiteralVariant)
+literalVariantDef :: TElement (Literal -> LiteralVariant)
 literalVariantDef = basicsDefinition "literalVariant" $
   doc "Find the literal variant (constructor) for a given literal value" $
   function literalT literalVariantT $
   ref literalTypeVariantDef <.> ref literalTypeDef
 
-literalVariantsDef :: Definition [LiteralVariant]
+literalVariantsDef :: TElement [LiteralVariant]
 literalVariantsDef = basicsDefinition "literalVariants" $
   doc "All literal variants, in a canonical order" $
   typed (listT literalVariantT) $
@@ -253,7 +253,7 @@ literalVariantsDef = basicsDefinition "literalVariants" $
     _LiteralVariant_integer,
     _LiteralVariant_string]
 
-termVariantDef :: Definition (Term -> TermVariant)
+termVariantDef :: TElement (Term -> TermVariant)
 termVariantDef = basicsDefinition "termVariant" $
   doc "Find the term variant (constructor) for a given term" $
   function termT termVariantT $
@@ -275,7 +275,7 @@ termVariantDef = basicsDefinition "termVariant" $
     _Term_variable    @-> _TermVariant_variable,
     _Term_wrap        @-> _TermVariant_wrap]
 
-termVariantsDef :: Definition [TermVariant]
+termVariantsDef :: TElement [TermVariant]
 termVariantsDef = basicsDefinition "termVariants" $
   doc "All term (expression) variants, in a canonical order" $
   typed (listT termVariantT) $
@@ -296,7 +296,7 @@ termVariantsDef = basicsDefinition "termVariants" $
     _TermVariant_variable,
     _TermVariant_wrap]
 
-typeVariantDef :: Definition (Type -> TypeVariant)
+typeVariantDef :: TElement (Type -> TypeVariant)
 typeVariantDef = basicsDefinition "typeVariant" $
   doc "Find the type variant (constructor) for a given type" $
   function typeT typeVariantT $
@@ -317,7 +317,7 @@ typeVariantDef = basicsDefinition "typeVariant" $
     _Type_variable    @-> _TypeVariant_variable,
     _Type_wrap        @-> _TypeVariant_wrap]
 
-typeVariantsDef :: Definition [TypeVariant]
+typeVariantsDef :: TElement [TypeVariant]
 typeVariantsDef = basicsDefinition "typeVariants" $
   doc "All type variants, in a canonical order" $
   typed (listT typeVariantT) $
@@ -340,20 +340,20 @@ typeVariantsDef = basicsDefinition "typeVariants" $
 
 -- Formatting.hs
 
-capitalizeDef :: Definition (String -> String)
+capitalizeDef :: TElement (String -> String)
 capitalizeDef = basicsDefinition "capitalize" $
   doc "Capitalize the first letter of a string" $
   function stringT stringT $
   ref mapFirstLetterDef @@ Strings.toUpper
 
-decapitalizeDef :: Definition (String -> String)
+decapitalizeDef :: TElement (String -> String)
 decapitalizeDef = basicsDefinition "decapitalize" $
   doc "Decapitalize the first letter of a string" $
   function stringT stringT $
   ref mapFirstLetterDef @@ Strings.toLower
 
 -- TODO: simplify this helper
-mapFirstLetterDef :: Definition ((String -> String) -> String -> String)
+mapFirstLetterDef :: TElement ((String -> String) -> String -> String)
 mapFirstLetterDef = basicsDefinition "mapFirstLetter" $
   doc "A helper which maps the first letter of a string to another string" $
   function (funT stringT stringT) (funT stringT stringT) $
@@ -367,54 +367,54 @@ mapFirstLetterDef = basicsDefinition "mapFirstLetter" $
 
 -- Common.hs
 
-fieldMapDef :: Definition ([Field] -> M.Map Name Term)
+fieldMapDef :: TElement ([Field] -> M.Map Name Term)
 fieldMapDef = basicsDefinition "fieldMap" $
   function (TypeList fieldT) (mapT fieldNameT termT) $
   (lambda "fields" $ Maps.fromList @@ (Lists.map @@ var "toPair" @@ var "fields"))
     `with` [
       "toPair">: lambda "f" $ pair (project _Field _Field_name @@ var "f", project _Field _Field_term @@ var "f")]
 
-fieldTypeMapDef :: Definition ([FieldType] -> M.Map Name Type)
+fieldTypeMapDef :: TElement ([FieldType] -> M.Map Name Type)
 fieldTypeMapDef = basicsDefinition "fieldTypeMap" $
   function (TypeList fieldTypeT) (mapT fieldNameT typeT) $
     (lambda "fields" $ Maps.fromList @@ (Lists.map @@ var "toPair" @@ var "fields"))
   `with` [
     "toPair">: lambda "f" $ pair (project _FieldType _FieldType_name @@ var "f", project _FieldType _FieldType_type @@ var "f")]
 
-isEncodedTypeDef :: Definition (Term -> Bool)
+isEncodedTypeDef :: TElement (Term -> Bool)
 isEncodedTypeDef = basicsDefinition "isEncodedType" $
   function termT booleanT $
   lambda "t" $ (match _Term (Just false) [
-      Case _Term_application --> lambda "a" $
+      TCase _Term_application --> lambda "a" $
         ref isEncodedTypeDef @@ (project _Application _Application_function @@ var "a"),
-      Case _Term_union       --> lambda "i" $
+      TCase _Term_union       --> lambda "i" $
         Equality.equalString @@ (string $ unName _Type) @@ (unwrap _Name @@ (project _Injection _Injection_typeName @@ var "i"))
     ]) @@ (ref stripTermDef @@ var "t")
 
-isTypeDef :: Definition (Type -> Bool)
+isTypeDef :: TElement (Type -> Bool)
 isTypeDef = basicsDefinition "isType" $
   function typeT booleanT $
   lambda "t" $ (match _Type (Just false) [
-      Case _Type_application --> lambda "a" $
+      TCase _Type_application --> lambda "a" $
         ref isTypeDef @@ (project _ApplicationType _ApplicationType_function @@ var "a"),
-      Case _Type_lambda --> lambda "l" $
+      TCase _Type_lambda --> lambda "l" $
         ref isTypeDef @@ (project _LambdaType _LambdaType_body @@ var "l"),
-      Case _Type_union --> lambda "rt" $
+      TCase _Type_union --> lambda "rt" $
         Equality.equalString @@ (string $ unName _Type) @@ (unwrap _Name @@ (project _RowType _RowType_typeName @@ var "rt"))
---      Case _Type_variable --> constant true
+--      TCase _Type_variable --> constant true
     ]) @@ (ref stripTypeDef @@ var "t")
 
-isUnitTermDef :: Definition (Term -> Bool)
+isUnitTermDef :: TElement (Term -> Bool)
 isUnitTermDef = basicsDefinition "isUnitTerm" $
   function termT booleanT $
-  lambda "t" $ Equality.equalTerm @@ (ref fullyStripTermDef @@ var "t") @@ Datum (coreEncodeTerm Terms.unit)
+  lambda "t" $ Equality.equalTerm @@ (ref fullyStripTermDef @@ var "t") @@ TTerm (coreEncodeTerm Terms.unit)
 
-isUnitTypeDef :: Definition (Term -> Bool)
+isUnitTypeDef :: TElement (Term -> Bool)
 isUnitTypeDef = basicsDefinition "isUnitType" $
   function typeT booleanT $
-  lambda "t" $ Equality.equalType @@ (ref stripTypeDef @@ var "t") @@ Datum (coreEncodeType unitT)
+  lambda "t" $ Equality.equalType @@ (ref stripTypeDef @@ var "t") @@ TTerm (coreEncodeType unitT)
 
-elementsToGraphDef :: Definition (Graph -> Maybe Graph -> [Element] -> Graph)
+elementsToGraphDef :: TElement (Graph -> Maybe Graph -> [Element] -> Graph)
 elementsToGraphDef = basicsDefinition "elementsToGraph" $
   function graphT (funT (optionalT graphT) (funT (TypeList elementT) graphT)) $
   lambda "parent" $ lambda "schema" $ lambda "elements" $
@@ -428,27 +428,27 @@ elementsToGraphDef = basicsDefinition "elementsToGraph" $
   `with` [
     "toPair" >: lambda "el" $ pair (project _Element _Element_name @@ var "el", var "el")]
 
-localNameOfEagerDef :: Definition (Name -> String)
+localNameOfEagerDef :: TElement (Name -> String)
 localNameOfEagerDef = basicsDefinition "localNameOfEager" $
   function nameT stringT $
   Module.qualifiedNameLocal <.> ref qualifyNameEagerDef
 
-localNameOfLazyDef :: Definition (Name -> String)
+localNameOfLazyDef :: TElement (Name -> String)
 localNameOfLazyDef = basicsDefinition "localNameOfLazy" $
   function nameT stringT $
   Module.qualifiedNameLocal <.> ref qualifyNameLazyDef
 
-namespaceOfEagerDef :: Definition (Name -> Maybe Namespace)
+namespaceOfEagerDef :: TElement (Name -> Maybe Namespace)
 namespaceOfEagerDef = basicsDefinition "namespaceOfEager" $
   function nameT (optionalT namespaceT) $
   Module.qualifiedNameNamespace <.> ref qualifyNameEagerDef
 
-namespaceOfLazyDef :: Definition (Name -> Maybe Namespace)
+namespaceOfLazyDef :: TElement (Name -> Maybe Namespace)
 namespaceOfLazyDef = basicsDefinition "namespaceOfLazy" $
   function nameT (optionalT namespaceT) $
   Module.qualifiedNameNamespace <.> ref qualifyNameLazyDef
 
-namespaceToFilePathDef :: Definition (Bool -> FileExtension -> Namespace -> String)
+namespaceToFilePathDef :: TElement (Bool -> FileExtension -> Namespace -> String)
 namespaceToFilePathDef = basicsDefinition "namespaceToFilePath" $
   function booleanT (funT fileExtensionT (funT namespaceT stringT)) $
   lambda "caps" $ lambda "ext" $ lambda "ns" $
@@ -456,7 +456,7 @@ namespaceToFilePathDef = basicsDefinition "namespaceToFilePath" $
     `with` [
       "parts">: Lists.map @@ (Logic.ifElse @@ ref capitalizeDef @@ ref idDef @@ var "caps") @@ (Strings.splitOn @@ "/" @@ (unwrap _Namespace @@ var "ns"))])
 
-qualifyNameEagerDef :: Definition (Name -> QualifiedName)
+qualifyNameEagerDef :: TElement (Name -> QualifiedName)
 qualifyNameEagerDef = basicsDefinition "qualifyNameEager" $
   function nameT qualifiedNameT $
   lambda "name" $ ((Logic.ifElse
@@ -468,7 +468,7 @@ qualifyNameEagerDef = basicsDefinition "qualifyNameEager" $
     `with` [
       "parts">: Strings.splitOn @@ "." @@ (unwrap _Name @@ var "name")])
 
-qualifyNameLazyDef :: Definition (Name -> QualifiedName)
+qualifyNameLazyDef :: TElement (Name -> QualifiedName)
 qualifyNameLazyDef = basicsDefinition "qualifyNameLazy" $
   function nameT qualifiedNameT $
   lambda "name" $ (Logic.ifElse

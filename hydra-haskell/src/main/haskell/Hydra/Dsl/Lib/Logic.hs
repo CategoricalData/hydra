@@ -6,14 +6,14 @@ import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
 
 
-and :: Datum (Bool -> Bool -> Bool)
-and = Datum $ Terms.primitive _logic_and
+and :: TTerm (Bool -> Bool -> Bool)
+and = TTerm $ Terms.primitive _logic_and
 
-ifElse :: Datum (a -> a -> Bool -> a)
-ifElse = Datum $ Terms.primitive _logic_ifElse
+ifElse :: TTerm (a -> a -> Bool -> a)
+ifElse = TTerm $ Terms.primitive _logic_ifElse
 
-not :: Datum (Bool -> Bool)
-not = Datum $ Terms.primitive _logic_not
+not :: TTerm (Bool -> Bool)
+not = TTerm $ Terms.primitive _logic_not
 
-or :: Datum (Bool -> Bool -> Bool)
-or = Datum $ Terms.primitive _logic_or
+or :: TTerm (Bool -> Bool -> Bool)
+or = TTerm $ Terms.primitive _logic_or

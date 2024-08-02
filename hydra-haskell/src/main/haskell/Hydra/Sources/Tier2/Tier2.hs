@@ -28,7 +28,7 @@ import qualified Hydra.Dsl.Types           as Types
 import           Hydra.Sources.Tier1.All
 
 
-tier2Definition :: String -> Datum a -> Definition a
+tier2Definition :: String -> TTerm a -> TElement a
 tier2Definition = definitionInModule hydraTier2Module
 
 hydraTier2Module :: Module
@@ -45,7 +45,7 @@ hydraTier2Module = Module (Namespace "hydra/tier2") elements
      el unexpectedDef
      ]
 
-getStateDef :: Definition (Flow s s)
+getStateDef :: TElement (Flow s s)
 getStateDef = tier2Definition "getState" $
   doc "Get the state of the current flow" $
   typed flowSST $
@@ -61,7 +61,7 @@ getStateDef = tier2Definition "getState" $
       typed (Types.apply (Types.apply (TypeVariable _FlowState) sT) unitT) $
       Flows.unFlow @@ (Flows.pure @@ unit) @@ var "s0" @@ var "t0"])
 
-getTermTypeDef :: Definition (Term -> Flow Graph (Maybe Type))
+getTermTypeDef :: TElement (Term -> Flow Graph (Maybe Type))
 getTermTypeDef = tier2Definition "getTermType" $
   doc "Get the annotated type of a given term, if any" $
   function termT (optionalT typeT) $
@@ -69,7 +69,7 @@ getTermTypeDef = tier2Definition "getTermType" $
     "annotated">: ref getTermTypeDef <.> project _AnnotatedTerm _AnnotatedTerm_subject,
     "typed">: lambda "tt" $ just (project _TypedTerm _TypedTerm_type @@ var "tt")]
 
-putStateDef :: Definition (s -> Flow s ())
+putStateDef :: TElement (s -> Flow s ())
 putStateDef = tier2Definition "putState" $
   doc "Set the state of a flow" $
   function sT (flowT sT unitT) $
@@ -81,7 +81,7 @@ putStateDef = tier2Definition "putState" $
     `with` [
       "f1">: Flows.unFlow @@ (Flows.pure @@ unit) @@ var "s0" @@ var "t0"])
 
-requireElementTypeDef :: Definition (Element -> Flow Graph Type)
+requireElementTypeDef :: TElement (Element -> Flow Graph Type)
 requireElementTypeDef = tier2Definition "requireElementType" $
   doc "Get the annotated type of a given element, or fail if it is missing" $
   function elementT (flowT graphT typeT) $
@@ -91,7 +91,7 @@ requireElementTypeDef = tier2Definition "requireElementType" $
        (Flows.fail @@ ("missing type annotation for element " ++ (unwrap _Name @@ (project _Element _Element_name @@ var "el"))))
        Flows.pure])
 
-requireTermTypeDef :: Definition (Term -> Flow Graph Type)
+requireTermTypeDef :: TElement (Term -> Flow Graph Type)
 requireTermTypeDef = tier2Definition "requireTermType" $
   doc "Get the annotated type of a given term, or fail if it is missing" $
   function termT (flowT graphT typeT) $
@@ -101,7 +101,7 @@ requireTermTypeDef = tier2Definition "requireTermType" $
        (Flows.fail @@ "missing type annotation")
        Flows.pure]
 
-unexpectedDef :: Definition (String -> String -> Flow s x)
+unexpectedDef :: TElement (String -> String -> Flow s x)
 unexpectedDef = tier2Definition "unexpected" $
   doc "Fail if an actual value does not match an expected value" $
   function stringT (funT stringT (flowT sT xT)) $

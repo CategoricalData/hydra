@@ -6,40 +6,40 @@ import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
 
 
-(++) :: Datum String -> Datum String -> Datum String
-l ++ r = (Datum $ Terms.primitive _strings_cat) @@ (list [l, r])
+(++) :: TTerm String -> TTerm String -> TTerm String
+l ++ r = (TTerm $ Terms.primitive _strings_cat) @@ (list [l, r])
 
-cat :: Datum ([String] -> String)
-cat = Datum $ Terms.primitive _strings_cat
+cat :: TTerm ([String] -> String)
+cat = TTerm $ Terms.primitive _strings_cat
 
-cat2 :: Datum (String -> String -> String)
-cat2 = Datum $ Terms.primitive _strings_cat2
+cat2 :: TTerm (String -> String -> String)
+cat2 = TTerm $ Terms.primitive _strings_cat2
 
-fromList :: Datum ([Int] -> String)
-fromList = Datum $ Terms.primitive _strings_fromList
+fromList :: TTerm ([Int] -> String)
+fromList = TTerm $ Terms.primitive _strings_fromList
 
-intercalate :: Datum (String -> [String] -> String)
-intercalate = Datum $ Terms.primitive _strings_intercalate
+intercalate :: TTerm (String -> [String] -> String)
+intercalate = TTerm $ Terms.primitive _strings_intercalate
 
-isEmpty :: Datum (String -> Bool)
-isEmpty = Datum $ Terms.primitive _strings_isEmpty
+isEmpty :: TTerm (String -> Bool)
+isEmpty = TTerm $ Terms.primitive _strings_isEmpty
 
-length :: Datum (String -> Int)
-length = Datum $ Terms.primitive _strings_length
+length :: TTerm (String -> Int)
+length = TTerm $ Terms.primitive _strings_length
 
-splitOn :: Datum (String -> String -> [String])
-splitOn = Datum $ Terms.primitive _strings_splitOn
+splitOn :: TTerm (String -> String -> [String])
+splitOn = TTerm $ Terms.primitive _strings_splitOn
 
-toList :: Datum (String -> [Int])
-toList = Datum $ Terms.primitive _strings_toList
+toList :: TTerm (String -> [Int])
+toList = TTerm $ Terms.primitive _strings_toList
 
-toLower :: Datum (String -> String)
-toLower = Datum $ Terms.primitive _strings_toLower
+toLower :: TTerm (String -> String)
+toLower = TTerm $ Terms.primitive _strings_toLower
 
-toUpper :: Datum (String -> String)
-toUpper = Datum $ Terms.primitive _strings_toUpper
+toUpper :: TTerm (String -> String)
+toUpper = TTerm $ Terms.primitive _strings_toUpper
 
 -- Helpers
 
-concat :: [Datum String] -> Datum String
-concat strings = (Datum $ Terms.primitive _strings_cat) @@ list strings
+concat :: [TTerm String] -> TTerm String
+concat strings = (TTerm $ Terms.primitive _strings_cat) @@ list strings

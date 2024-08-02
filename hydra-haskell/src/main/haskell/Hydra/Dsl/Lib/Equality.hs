@@ -8,68 +8,68 @@ import qualified Hydra.Dsl.Terms as Terms
 import Data.Int
 
 
-equalBinary :: Datum (String -> String -> Bool)
-equalBinary = Datum $ Terms.primitive _equality_equalBinary
+equalBinary :: TTerm (String -> String -> Bool)
+equalBinary = TTerm $ Terms.primitive _equality_equalBinary
 
-equalBoolean :: Datum (Bool -> Bool -> Bool)
-equalBoolean = Datum $ Terms.primitive _equality_equalBoolean
+equalBoolean :: TTerm (Bool -> Bool -> Bool)
+equalBoolean = TTerm $ Terms.primitive _equality_equalBoolean
 
-equalBigfloat :: Datum (Double -> Double -> Bool)
-equalBigfloat = Datum $ Terms.primitive _equality_equalBigfloat
+equalBigfloat :: TTerm (Double -> Double -> Bool)
+equalBigfloat = TTerm $ Terms.primitive _equality_equalBigfloat
 
-equalFloat32 :: Datum (Float -> Float -> Bool)
-equalFloat32 = Datum $ Terms.primitive _equality_equalFloat32
+equalFloat32 :: TTerm (Float -> Float -> Bool)
+equalFloat32 = TTerm $ Terms.primitive _equality_equalFloat32
 
-equalFloat64 :: Datum (Double -> Double -> Bool)
-equalFloat64 = Datum $ Terms.primitive _equality_equalFloat64
+equalFloat64 :: TTerm (Double -> Double -> Bool)
+equalFloat64 = TTerm $ Terms.primitive _equality_equalFloat64
 
-equalBigint :: Datum (Integer -> Integer -> Bool)
-equalBigint = Datum $ Terms.primitive _equality_equalBigint
+equalBigint :: TTerm (Integer -> Integer -> Bool)
+equalBigint = TTerm $ Terms.primitive _equality_equalBigint
 
-equalInt8 :: Datum (Int8 -> Int8 -> Bool)
-equalInt8 = Datum $ Terms.primitive _equality_equalInt8
+equalInt8 :: TTerm (Int8 -> Int8 -> Bool)
+equalInt8 = TTerm $ Terms.primitive _equality_equalInt8
 
-equalInt16 :: Datum (Int16 -> Int16 -> Bool)
-equalInt16 = Datum $ Terms.primitive _equality_equalInt16
+equalInt16 :: TTerm (Int16 -> Int16 -> Bool)
+equalInt16 = TTerm $ Terms.primitive _equality_equalInt16
 
-equalInt32 :: Datum (Int -> Int -> Bool)
-equalInt32 = Datum $ Terms.primitive _equality_equalInt32
+equalInt32 :: TTerm (Int -> Int -> Bool)
+equalInt32 = TTerm $ Terms.primitive _equality_equalInt32
 
-equalInt64 :: Datum (Int64 -> Int64 -> Bool)
-equalInt64 = Datum $ Terms.primitive _equality_equalInt64
+equalInt64 :: TTerm (Int64 -> Int64 -> Bool)
+equalInt64 = TTerm $ Terms.primitive _equality_equalInt64
 
-equalString :: Datum (String -> String -> Bool)
-equalString = Datum $ Terms.primitive _equality_equalString
+equalString :: TTerm (String -> String -> Bool)
+equalString = TTerm $ Terms.primitive _equality_equalString
 
-equalTerm :: Datum (Term -> Term -> Bool)
-equalTerm = Datum $ Terms.primitive _equality_equalTerm
+equalTerm :: TTerm (Term -> Term -> Bool)
+equalTerm = TTerm $ Terms.primitive _equality_equalTerm
 
-equalType :: Datum (Type -> Type -> Bool)
-equalType = Datum $ Terms.primitive _equality_equalType
+equalType :: TTerm (Type -> Type -> Bool)
+equalType = TTerm $ Terms.primitive _equality_equalType
 
-equalUint8 :: Datum (Int16 -> Int16 -> Bool)
-equalUint8 = Datum $ Terms.primitive _equality_equalUint8
+equalUint8 :: TTerm (Int16 -> Int16 -> Bool)
+equalUint8 = TTerm $ Terms.primitive _equality_equalUint8
 
-equalUint16 :: Datum (Int -> Int -> Bool)
-equalUint16 = Datum $ Terms.primitive _equality_equalUint16
+equalUint16 :: TTerm (Int -> Int -> Bool)
+equalUint16 = TTerm $ Terms.primitive _equality_equalUint16
 
-equalUint32 :: Datum (Int64 -> Int64 -> Bool)
-equalUint32 = Datum $ Terms.primitive _equality_equalUint32
+equalUint32 :: TTerm (Int64 -> Int64 -> Bool)
+equalUint32 = TTerm $ Terms.primitive _equality_equalUint32
 
-equalUint64 :: Datum (Integer -> Integer -> Bool)
-equalUint64 = Datum $ Terms.primitive _equality_equalUint64
+equalUint64 :: TTerm (Integer -> Integer -> Bool)
+equalUint64 = TTerm $ Terms.primitive _equality_equalUint64
 
-identity :: Datum (x -> x)
-identity = Datum $ Terms.primitive _equality_identity
+identity :: TTerm (x -> x)
+identity = TTerm $ Terms.primitive _equality_identity
 
-gtInt32 :: Datum (Int -> Int -> Bool)
-gtInt32 = Datum $ Terms.primitive _equality_gtInt32
+gtInt32 :: TTerm (Int -> Int -> Bool)
+gtInt32 = TTerm $ Terms.primitive _equality_gtInt32
 
-gteInt32 :: Datum (Int -> Int -> Bool)
-gteInt32 = Datum $ Terms.primitive _equality_gteInt32
+gteInt32 :: TTerm (Int -> Int -> Bool)
+gteInt32 = TTerm $ Terms.primitive _equality_gteInt32
 
-ltInt32 :: Datum (Int -> Int -> Bool)
-ltInt32 = Datum $ Terms.primitive _equality_ltInt32
+ltInt32 :: TTerm (Int -> Int -> Bool)
+ltInt32 = TTerm $ Terms.primitive _equality_ltInt32
 
-lteInt32 :: Datum (Int -> Int -> Bool)
-lteInt32 = Datum $ Terms.primitive _equality_lteInt32
+lteInt32 :: TTerm (Int -> Int -> Bool)
+lteInt32 = TTerm $ Terms.primitive _equality_lteInt32

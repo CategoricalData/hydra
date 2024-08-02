@@ -26,7 +26,7 @@ import qualified Hydra.Dsl.Types           as Types
 import           Hydra.Sources.Tier0.All
 
 
-constantsDefinition :: String -> Datum a -> Definition a
+constantsDefinition :: String -> TTerm a -> TElement a
 constantsDefinition = definitionInModule hydraConstantsModule
 
 hydraConstantsModule :: Module
@@ -38,14 +38,14 @@ hydraConstantsModule = Module (Namespace "hydra/constants") elements [] tier0Mod
      el placeholderNameDef,
      el maxTraceDepthDef]
 
-ignoredVariableDef :: Definition String
+ignoredVariableDef :: TElement String
 ignoredVariableDef = constantsDefinition "ignoredVariable" $
   string "_"
 
-placeholderNameDef :: Definition Name
+placeholderNameDef :: TElement Name
 placeholderNameDef = constantsDefinition "placeholderName" $
   doc "A placeholder name for row types as they are being constructed" $
   wrap _Name $ string "Placeholder"
 
-maxTraceDepthDef :: Definition Int
+maxTraceDepthDef :: TElement Int
 maxTraceDepthDef = constantsDefinition "maxTraceDepth" $ int32 50

@@ -15,64 +15,64 @@ type Bigfloat = Double
 -- Note: does not distinguish Binary from String, because code generation does not.
 type Binary = String
 
-bigfloat :: Bigfloat -> Datum Bigfloat
-bigfloat = Datum . Terms.bigfloat
+bigfloat :: Bigfloat -> TTerm Bigfloat
+bigfloat = TTerm . Terms.bigfloat
 
-bigint :: Integer -> Datum Integer
-bigint = Datum . Terms.bigint
+bigint :: Integer -> TTerm Integer
+bigint = TTerm . Terms.bigint
 
-binary :: Binary -> Datum Binary
-binary = Datum . Terms.binary
+binary :: Binary -> TTerm Binary
+binary = TTerm . Terms.binary
 
-bool :: Bool -> Datum Bool
-bool = Datum . Terms.boolean
+bool :: Bool -> TTerm Bool
+bool = TTerm . Terms.boolean
 
-boolean :: Bool -> Datum Bool
+boolean :: Bool -> TTerm Bool
 boolean = bool
 
-double :: Double -> Datum Double
+double :: Double -> TTerm Double
 double = float64
 
-false :: Datum Bool
+false :: TTerm Bool
 false = bool False
 
-float :: Float -> Datum Float
+float :: Float -> TTerm Float
 float = float32
 
-float32 :: Float -> Datum Float
-float32 = Datum . Terms.float32
+float32 :: Float -> TTerm Float
+float32 = TTerm . Terms.float32
 
-float64 :: Double -> Datum Double
-float64 = Datum . Terms.float64
+float64 :: Double -> TTerm Double
+float64 = TTerm . Terms.float64
 
-int :: Int -> Datum Int
+int :: Int -> TTerm Int
 int = int32
 
-int8 :: Int8 -> Datum Int8
-int8 = Datum . Terms.int8
+int8 :: Int8 -> TTerm Int8
+int8 = TTerm . Terms.int8
 
-int16 :: Int16 -> Datum Int16
-int16 = Datum . Terms.int16
+int16 :: Int16 -> TTerm Int16
+int16 = TTerm . Terms.int16
 
-int32 :: Int -> Datum Int
-int32 = Datum . Terms.int32
+int32 :: Int -> TTerm Int
+int32 = TTerm . Terms.int32
 
-int64 :: Int64 -> Datum Int64
-int64 = Datum . Terms.int64
+int64 :: Int64 -> TTerm Int64
+int64 = TTerm . Terms.int64
 
-string :: String -> Datum String
-string = Datum . Terms.string
+string :: String -> TTerm String
+string = TTerm . Terms.string
 
-true :: Datum Bool
+true :: TTerm Bool
 true = bool True
 
 -- Note: untyped integers are not yet properly supported by the DSL,
 --       because they are not properly supported by code generation.
-uint8 :: Int8 -> Datum Int8
+uint8 :: Int8 -> TTerm Int8
 uint8 = int8
-uint16 :: Int16 -> Datum Int16
+uint16 :: Int16 -> TTerm Int16
 uint16 = int16
-uint32 :: Int -> Datum Int
+uint32 :: Int -> TTerm Int
 uint32 = int
-uint64 :: Int64 -> Datum Int64
+uint64 :: Int64 -> TTerm Int64
 uint64 = int64

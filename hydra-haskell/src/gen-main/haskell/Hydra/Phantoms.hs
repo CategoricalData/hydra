@@ -1,4 +1,4 @@
--- | Phantom types for use in model definitions
+-- | Phantom types for use with Hydra DSLs
 
 module Hydra.Phantoms where
 
@@ -9,38 +9,38 @@ import Data.Map as M
 import Data.Set as S
 
 -- | An association of a field name (as in a case statement) with a phantom type
-newtype Case a =
-  Case {
-    unCase :: Core.Name}
+newtype TCase a = 
+  TCase {
+    unTCase :: Core.Name}
   deriving (Eq, Ord, Read, Show)
 
-_Case = (Core.Name "hydra/phantoms.Case")
+_TCase = (Core.Name "hydra/phantoms.TCase")
 
--- | An association of a term with a phantom type
-newtype Datum a =
-  Datum {
-    unDatum :: Core.Term}
+-- | An association with a named term (element) with a phantom type
+data TElement a = 
+  TElement {
+    tElementName :: Core.Name,
+    tElementTerm :: (TTerm a)}
   deriving (Eq, Ord, Read, Show)
 
-_Datum = (Core.Name "hydra/phantoms.Datum")
+_TElement = (Core.Name "hydra/phantoms.TElement")
 
--- | An association with a named term with a phantom type
-data Definition a =
-  Definition {
-    definitionName :: Core.Name,
-    definitionDatum :: (Datum a)}
-  deriving (Eq, Ord, Read, Show)
+_TElement_name = (Core.Name "name")
 
-_Definition = (Core.Name "hydra/phantoms.Definition")
-
-_Definition_name = (Core.Name "name")
-
-_Definition_datum = (Core.Name "datum")
+_TElement_term = (Core.Name "term")
 
 -- | An association with a term-level field with a phantom type
-newtype Fld a =
-  Fld {
-    unFld :: Core.Field}
+newtype TField a = 
+  TField {
+    unTField :: Core.Field}
   deriving (Eq, Ord, Read, Show)
 
-_Fld = (Core.Name "hydra/phantoms.Fld")
+_TField = (Core.Name "hydra/phantoms.TField")
+
+-- | An association of a term with a phantom type
+newtype TTerm a = 
+  TTerm {
+    unTTerm :: Core.Term}
+  deriving (Eq, Ord, Read, Show)
+
+_TTerm = (Core.Name "hydra/phantoms.TTerm")

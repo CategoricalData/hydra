@@ -5,24 +5,24 @@ package hydra.phantoms;
 import java.io.Serializable;
 
 /**
- * An association with a term-level field with a phantom type
+ * An association of a term with a phantom type
  */
-public class Fld<A> implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/phantoms.Fld");
+public class TTerm<A> implements Serializable {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/phantoms.TTerm");
   
-  public final hydra.core.Field value;
+  public final hydra.core.Term value;
   
-  public Fld (hydra.core.Field value) {
+  public TTerm (hydra.core.Term value) {
     java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   
   @Override
   public boolean equals(Object other) {
-    if (!(other instanceof Fld)) {
+    if (!(other instanceof TTerm)) {
       return false;
     }
-    Fld o = (Fld) (other);
+    TTerm o = (TTerm) (other);
     return value.equals(o.value);
   }
   
