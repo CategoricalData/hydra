@@ -31,17 +31,26 @@ data InferenceContext = InferenceContext {
   inferenceContextGraph :: Graph,
   inferenceContextEnvironment :: TypingEnvironment}
 
+data Inferred a = Inferred {
+  -- The original term, possibly annotated with the inferred type
+  inferredObject :: a,
+  -- The inferred type
+  inferredType :: Type,
+  -- Any constraints introduced by the inference process
+  inferredConstraints :: [Constraint]
+} deriving Show
+
 type TypingEnvironment = M.Map Name TypeScheme
 
 fieldType :: Field -> FieldType
 fieldType (Field fname term) = FieldType fname $ termType term
 
-findMatchingField :: Name -> [FieldType] -> Flow InferenceContext (FieldType)
+findMatchingField :: Name -> [FieldType] -> Flow InferenceContext FieldType
 findMatchingField fname sfields = case L.filter (\f -> fieldTypeName f == fname) sfields of
   []    -> fail $ "no such field: " ++ unName fname
   (h:_) -> return h
 
-freshName :: Flow InferenceContext (Type)
+freshName :: Flow InferenceContext Type
 freshName = TypeVariable . normalVariable <$> nextCount "hyInf"
 
 generalize :: TypingEnvironment -> Type -> TypeScheme
@@ -51,21 +60,21 @@ generalize env t  = TypeScheme vars t
       (freeVariablesInType t)
       (L.foldr (S.union . freeVariablesInScheme) S.empty $ M.elems env)
 
-infer :: Term -> Flow InferenceContext (Term, [Constraint])
+infer :: Term -> Flow InferenceContext (Inferred Term)
 infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
     TermAnnotated (AnnotatedTerm term1 ann) -> do
-      (term2, constraints) <- infer term1
-      return (TermAnnotated $ AnnotatedTerm term2 ann, constraints)
+      (Inferred term2 typ constraints) <- infer term1
+      return (Inferred (TermAnnotated $ AnnotatedTerm term2 ann) typ constraints)
 
     TermTyped (TypedTerm term1 typ) -> do
-      (i, c) <- infer term1
-      return (setTermType (Just typ) i, c ++ [(typ, termType i)])
+      (Inferred i typ c) <- infer term1
+      return (Inferred (setTermType (Just typ) i) typ $ c ++ [(typ, termType i)])
 
     TermApplication (Application fun arg) -> do
-      (ifun, funconst) <- infer fun
-      (iarg, argconst) <- infer arg
+      (Inferred ifun ityp funconst) <- infer fun
+      (Inferred iarg atyp argconst) <- infer arg
       cod <- freshName
-      let constraints = funconst ++ argconst ++ [(termType ifun, Types.function (termType iarg) cod)]
+      let constraints = funconst ++ argconst ++ [(ityp, Types.function atyp cod)]
       yield (TermApplication $ Application ifun iarg) cod constraints
 
     TermFunction f -> case f of
@@ -76,18 +85,18 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
           a <- freshName
           b <- freshName
           let expected = Types.functionN [b, a, b]
-          (i, c) <- infer fun
+          (Inferred i t c) <- infer fun
           let elim = Types.functionN [b, Types.list a, b]
-          yieldElimination (EliminationList i) elim (c ++ [(expected, termType i)])
+          yieldElimination (EliminationList i) elim (c ++ [(expected, t)])
 
         EliminationOptional (OptionalCases n j) -> do
           dom <- freshName
           cod <- freshName
-          (ni, nconst) <- infer n
-          (ji, jconst) <- infer j
+          (Inferred ni nt nconst) <- infer n
+          (Inferred ji jt jconst) <- infer j
           let t = Types.function (Types.optional dom) cod
           let constraints = nconst ++ jconst
-                              ++ [(cod, termType ni), (Types.function dom cod, termType ji)]
+                              ++ [(cod, nt), (Types.function dom cod, jt)]
           yieldElimination (EliminationOptional $ OptionalCases ni ji) t constraints
 
         EliminationProduct (TupleProjection arity idx) -> do
@@ -107,13 +116,13 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
             (idef, dfltConstraints) <- case def of
               Nothing -> pure (Nothing, [])
               Just d -> do
-                (i, c) <- infer d
+                (Inferred i _ c) <- infer d
                 return (Just i, c)
 
             -- Cases
             icases' <- CM.mapM inferFieldType cases
-            let icases = fst <$> icases'
-            let casesconst = snd <$> icases'
+            let icases = inferredObject <$> icases'
+            let casesconst = inferredConstraints <$> icases'
             let icasesMap = fieldMap icases
             rt <- withGraphContext $ requireUnionType True tname
             let sfields = fieldTypeMap  $ rowTypeFields rt
@@ -141,8 +150,8 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
 
       FunctionLambda (Lambda v body) -> do
         tv <- freshName
-        (i, iconst) <- withBinding v (monotype tv) $ infer body
-        yieldFunction (FunctionLambda $ Lambda v i) (Types.function tv (termType i)) iconst
+        (Inferred i t iconst) <- withBinding v (monotype tv) $ infer body
+        yieldFunction (FunctionLambda $ Lambda v i) (Types.function tv t) iconst
 
       FunctionPrimitive name -> do
           t <- (withGraphContext $ typeOfPrimitive name) >>= replaceFreeVariables
@@ -166,8 +175,8 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
           then yield (TermList []) (Types.list v) []
           else do
             iels' <- CM.mapM infer els
-            let iels = fst <$> iels'
-            let elsconst = snd <$> iels'
+            let iels = inferredObject <$> iels'
+            let elsconst = inferredConstraints <$> iels'
             let co = (\e -> (v, termType e)) <$> iels
             let ci = L.concat elsconst
             yield (TermList iels) (Types.list v) (co ++ ci)
@@ -186,8 +195,8 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
             yield (TermMap $ M.fromList pairs) (Types.map kv vv) co
       where
         toTriple (k, v) = do
-          (ik, kc) <- infer k
-          (iv, vc) <- infer v
+          (Inferred ik _ kc) <- infer k
+          (Inferred iv _ vc) <- infer v
           return (ik, iv, kc ++ vc)
 
     TermOptional m -> do
@@ -195,20 +204,20 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
       case m of
         Nothing -> yield (TermOptional Nothing) (Types.optional v) []
         Just e -> do
-          (i, ci) <- infer e
-          yield (TermOptional $ Just i) (Types.optional v) ((v, termType i):ci)
+          (Inferred i t ci) <- infer e
+          yield (TermOptional $ Just i) (Types.optional v) ((v, t):ci)
 
     TermProduct tuple -> do
       is' <- CM.mapM infer tuple
-      let is = fst <$> is'
-      let co = L.concat (snd <$> is')
+      let is = inferredObject <$> is'
+      let co = L.concat (inferredConstraints <$> is')
       yield (TermProduct is) (TypeProduct $ fmap termType is) co
 
     TermRecord (Record n fields) -> do
         rt <- withGraphContext $ requireRecordType True n
         ifields' <- CM.mapM inferFieldType fields
-        let ifields = fst <$> ifields'
-        let ci = L.concat (snd <$> ifields')
+        let ifields = inferredObject <$> ifields'
+        let ci = L.concat (inferredConstraints <$> ifields')
         let irt = TypeRecord $ RowType n Nothing (fieldType <$> ifields)
         yield (TermRecord $ Record n ifields) irt ((TypeRecord rt, irt):ci)
 
@@ -218,25 +227,25 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
         then yield (TermSet S.empty) (Types.set v) []
         else do
           iels' <- CM.mapM infer $ S.toList els
-          let iels = fst <$> iels'
+          let iels = inferredObject <$> iels'
           let co = (\e -> (v, termType e)) <$> iels
-          let ci = L.concat (snd <$> iels')
+          let ci = L.concat (inferredConstraints <$> iels')
           yield (TermSet $ S.fromList iels) (Types.set v) (co ++ ci)
 
     TermSum (Sum i s trm) -> do
-        (it, co) <- infer trm
-        types <- CM.sequence (varOrTerm it <$> [0..(s-1)])
+        (Inferred it t co) <- infer trm
+        types <- CM.sequence (varOrTerm t <$> [0..(s-1)])
         yield (TermSum $ Sum i s it) (TypeSum types) co
       where
-        varOrTerm it j = if i == j
-          then pure $ termType it
+        varOrTerm t j = if i == j
+          then pure t
           else freshName
 
     TermUnion (Injection n field) -> do
         rt <- withGraphContext $ requireUnionType True n
         sfield <- findMatchingField (fieldName field) (rowTypeFields rt)
-        (ifield, ci) <- inferFieldType field
-        let co = (termType $ fieldTerm ifield, fieldTypeType sfield)
+        (Inferred ifield t ci) <- inferFieldType field
+        let co = (t, fieldTypeType sfield)
 
         yield (TermUnion $ Injection n ifield) (TypeUnion rt) (co:ci)
 
@@ -246,15 +255,15 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
 
     TermWrap (WrappedTerm name term1) -> do
       typ <- withGraphContext $ requireWrappedType name
-      (i, ci) <- infer term1
-      yield (TermWrap $ WrappedTerm name i) (TypeWrap $ WrappedType name typ) (ci ++ [(typ, termType i)])
+      (Inferred i t ci) <- infer term1
+      yield (TermWrap $ WrappedTerm name i) (TypeWrap $ WrappedType name typ) (ci ++ [(typ, t)])
 
-inferFieldType :: Field -> Flow InferenceContext (Field, [Constraint])
+inferFieldType :: Field -> Flow InferenceContext (Inferred Field)
 inferFieldType (Field fname term) = do
-  (i, c) <- infer term
-  return (Field fname i, c)
+  (Inferred i t c) <- infer term
+  return (Inferred (Field fname i) t c)
 
-inferLet :: Let -> Flow InferenceContext (Term, [Constraint])
+inferLet :: Let -> Flow InferenceContext (Inferred Term)
 inferLet (Let bindings env) = withTrace ("let(" ++ L.intercalate "," (unName . letBindingName <$> bindings) ++ ")") $ do
     state0 <- getState
     let e = preExtendEnv bindings $ inferenceContextEnvironment state0
@@ -264,14 +273,14 @@ inferLet (Let bindings env) = withTrace ("let(" ++ L.intercalate "," (unName . l
 
       -- Infer types of bindings in the pre-extended environment
       ivalues' <- CM.mapM infer (letBindingTerm <$> bindings)
-      let ivalues = fst <$> ivalues'
+      let ivalues = inferredObject <$> ivalues'
       let ibindings = L.zipWith (\(LetBinding k v t) i -> LetBinding k i t) bindings ivalues
-      let bc = L.concat (snd <$> ivalues')
+      let bc = L.concat (inferredConstraints <$> ivalues')
 
       let tbindings = M.fromList $ fmap (\(LetBinding k i t) -> (k, termTypeScheme i)) ibindings
-      (ienv, cenv) <- withBindings tbindings $ infer env
+      (Inferred ienv t cenv) <- withBindings tbindings $ infer env
 
-      yield (TermLet $ Let ibindings ienv) (termType ienv) (bc ++ cenv)
+      yield (TermLet $ Let ibindings ienv) t (bc ++ cenv)
   where
     -- Add any manual type annotations for the bindings to the environment, enabling type inference over recursive definitions
     preExtendEnv bindings e = foldl addPair e bindings
@@ -280,7 +289,7 @@ inferLet (Let bindings env) = withTrace ("let(" ++ L.intercalate "," (unName . l
           Nothing -> e
           Just typ -> M.insert name (monotype typ) e
 
-instantiate :: TypeScheme -> Flow InferenceContext (Type)
+instantiate :: TypeScheme -> Flow InferenceContext Type
 instantiate (TypeScheme vars t) = do
     vars1 <- mapM (const freshName) vars
     return $ substituteInType (M.fromList $ zip vars vars1) t
@@ -296,7 +305,7 @@ productOfMaps ml mr = M.fromList $ Y.catMaybes (toPair <$> M.toList mr)
 reduceType :: Type -> Type
 reduceType t = t -- betaReduceType cx t
 
-requireName :: Name -> Flow InferenceContext (Type)
+requireName :: Name -> Flow InferenceContext Type
 requireName v = do
   env <- inferenceContextEnvironment <$> getState
   case M.lookup v env of
@@ -312,7 +321,7 @@ termType term = case stripTerm term of
 termTypeScheme :: Term -> TypeScheme
 termTypeScheme = monotype . termType
 
-typeOfPrimitive :: Name -> Flow (Graph) (Type)
+typeOfPrimitive :: Name -> Flow Graph Type
 typeOfPrimitive name = primitiveType <$> requirePrimitive name
 
 typeOfTerm :: Term -> Maybe Type
@@ -332,17 +341,17 @@ withEnvironment m flow = do
   InferenceContext g e <- getState
   withState (InferenceContext g (m e)) flow
 
-withGraphContext :: Flow (Graph) x -> Flow InferenceContext x
+withGraphContext :: Flow Graph x -> Flow InferenceContext x
 withGraphContext f = do
   cx <- inferenceContextGraph <$> getState
   withState cx f
 
-yield :: Term -> Type -> [Constraint] -> Flow InferenceContext (Term, [Constraint])
+yield :: Term -> Type -> [Constraint] -> Flow InferenceContext (Inferred Term)
 yield term typ constraints = do
-  return (TermTyped $ TypedTerm term typ, constraints)
+  return (Inferred (TermTyped $ TypedTerm term typ) typ constraints)
 
-yieldFunction :: Function -> Type -> [Constraint] -> Flow InferenceContext (Term, [Constraint])
+yieldFunction :: Function -> Type -> [Constraint] -> Flow InferenceContext (Inferred Term)
 yieldFunction fun = yield (TermFunction fun)
 
-yieldElimination :: Elimination -> Type -> [Constraint] -> Flow InferenceContext (Term, [Constraint])
+yieldElimination :: Elimination -> Type -> [Constraint] -> Flow InferenceContext (Inferred Term)
 yieldElimination e = yield (TermFunction $ FunctionElimination e)
