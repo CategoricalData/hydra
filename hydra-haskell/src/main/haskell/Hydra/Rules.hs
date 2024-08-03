@@ -69,10 +69,6 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
       (Inferred term2 typ constraints) <- infer term1
       return (Inferred (TermAnnotated $ AnnotatedTerm term2 ann) typ constraints)
 
-    TermTyped (TypedTerm term1 typ) -> do
-      (Inferred i typ c) <- infer term1
-      return (Inferred (setTermType (Just typ) i) typ $ c ++ [constraint typ $ termType i])
-
     TermApplication (Application fun arg) -> do
       (Inferred ifun ityp funconst) <- infer fun
       (Inferred iarg atyp argconst) <- infer arg
@@ -151,10 +147,10 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
           typ <- withGraphContext $ requireWrappedType name
           yieldElimination (EliminationWrap name) (Types.function (TypeWrap $ WrappedType name typ) typ) []
 
-      FunctionLambda (Lambda v body) -> do
+      FunctionLambda (Lambda v _ body) -> do
         tv <- freshName
         (Inferred i t iconst) <- withBinding v (monotype tv) $ infer body
-        yieldFunction (FunctionLambda $ Lambda v i) (Types.function tv t) iconst
+        yieldFunction (FunctionLambda $ Lambda v (Just tv) i) (Types.function tv t) iconst
 
       FunctionPrimitive name -> do
           t <- (withGraphContext $ typeOfPrimitive name) >>= replaceFreeVariables
@@ -244,11 +240,15 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
           then pure t
           else freshName
 
+    TermTyped (TypedTerm term1 typ) -> do
+      (Inferred i t c) <- infer term1
+      return $ Inferred (setTermType (Just typ) i) typ $ c ++ [constraint typ t]
+
     TermUnion (Injection n field) -> do
         rt <- withGraphContext $ requireUnionType True n
         sfield <- findMatchingField (fieldName field) (rowTypeFields rt)
         (Inferred ifield t ci) <- inferFieldType field
-        let co = constraint t $fieldTypeType sfield
+        let co = constraint t $ fieldTypeType sfield
 
         yield (TermUnion $ Injection n ifield) (TypeUnion rt) (co:ci)
 

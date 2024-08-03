@@ -70,7 +70,7 @@ expandTypedLambdas = rewriteTerm rewrite id
             Nothing -> recurse term
             Just typ -> TermApplication $ Application (expand (typ:doms) cod lhs) $ expandTypedLambdas rhs
           TermFunction f -> case f of
-            FunctionLambda (Lambda var body) -> TermFunction $ FunctionLambda $ Lambda var $
+            FunctionLambda (Lambda var d body) -> TermFunction $ FunctionLambda $ Lambda var d $
               expand (L.tail doms) cod body
             _ -> pad 1 doms cod term
           TermLet (Let bindings env) -> TermLet $ Let (expandBinding <$> bindings) $ expand doms cod env
@@ -81,13 +81,14 @@ expandTypedLambdas = rewriteTerm rewrite id
 
         pad i doms cod term = if L.null doms
             then term
-            else TermFunction $ FunctionLambda $ Lambda var $
+            else TermFunction $ FunctionLambda $ Lambda var (Just dom) $
               pad (i+1) (L.tail doms) cod $
               -- TODO: omit this type annotation if practical; a type annotation on application terms
               --       shouldn't really be necessary.
               typed (toFunctionType (L.tail doms) cod) $
               TermApplication $ Application (typed (toFunctionType doms cod) term) $ TermVariable var
           where
+            dom = L.head doms
             typed typ term = TermTyped $ TypedTerm term typ
             toFunctionType doms cod = L.foldl (\c d -> TypeFunction $ FunctionType d c) cod doms
             var = Name $ "v" ++ show i
@@ -184,7 +185,7 @@ rewriteTerm f mf = rewrite fsub f
             EliminationRecord p -> EliminationRecord p
             EliminationUnion (CaseStatement n def cases) -> EliminationUnion $ CaseStatement n (recurse <$> def) (forField <$> cases)
             EliminationWrap name -> EliminationWrap name
-          FunctionLambda (Lambda v body) -> FunctionLambda $ Lambda v $ recurse body
+          FunctionLambda (Lambda v d body) -> FunctionLambda $ Lambda v d $ recurse body
           FunctionPrimitive name -> FunctionPrimitive name
         TermLet (Let bindings env) -> TermLet $ Let (mapBinding <$> bindings) (recurse env)
           where
@@ -227,7 +228,7 @@ rewriteTermM f mf = rewrite fsub f
                 Just t -> Just <$> recurse t
               EliminationUnion <$> (CaseStatement n rdef <$> (CM.mapM forField cases))
             EliminationWrap name -> pure $ EliminationWrap name
-          FunctionLambda (Lambda v body) -> FunctionLambda <$> (Lambda v <$> recurse body)
+          FunctionLambda (Lambda v d body) -> FunctionLambda <$> (Lambda v d <$> recurse body)
           FunctionPrimitive name -> pure $ FunctionPrimitive name
         TermLet (Let bindings env) -> TermLet <$> (Let <$> (CM.mapM mapBinding bindings) <*> recurse env)
           where
@@ -328,7 +329,7 @@ simplifyTerm = rewriteTerm simplify id
   where
     simplify recurse term = recurse $ case fullyStripTerm term of
       TermApplication (Application lhs rhs) -> case fullyStripTerm lhs of
-        TermFunction (FunctionLambda (Lambda var body)) ->
+        TermFunction (FunctionLambda (Lambda var d body)) ->
           if S.member var (freeVariablesInTerm body)
             then case fullyStripTerm rhs of
               TermVariable v -> simplifyTerm $ substituteVariable var v body
@@ -350,7 +351,7 @@ substituteVariable from to = rewriteTerm replace id
   where
     replace recurse term = case term of
       TermVariable x -> (TermVariable $ if x == from then to else x)
-      TermFunction (FunctionLambda (Lambda var _)) -> if var == from
+      TermFunction (FunctionLambda (Lambda var _ _)) -> if var == from
         then term
         else recurse term
       _ -> recurse term
@@ -360,7 +361,7 @@ substituteVariables subst = rewriteTerm replace id
   where
     replace recurse term = case term of
       TermVariable n -> TermVariable $ Y.fromMaybe n $ M.lookup n subst
-      TermFunction (FunctionLambda (Lambda v _ )) -> case M.lookup v subst of
+      TermFunction (FunctionLambda (Lambda v _ _ )) -> case M.lookup v subst of
         Nothing -> recurse term
         Just _ -> term
       _ -> recurse term
@@ -416,7 +417,7 @@ wrapLambdas = pure
 --        TermAnnotated (AnnotatedTerm term2 _) -> missingArity arity term2
 --        TermTyped (TypedTerm term2 _) -> missingArity arity term2
 --        TermLet (Let _ env) -> missingArity arity env
---        TermFunction (FunctionLambda (Lambda _ body)) -> missingArity (arity - 1) body
+--        TermFunction (FunctionLambda (Lambda _ _ body)) -> missingArity (arity - 1) body
 --        _ -> arity
 --    pad term doms cod = fst $ L.foldl newLambda (apps, cod) $ L.reverse variables
 --      where

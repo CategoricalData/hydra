@@ -283,7 +283,7 @@ public interface Terms {
      * Construct a lambda (anonymous function) term.
      */
     static Term lambda(final String var, final Term body) {
-        return function(new Function.Lambda(new Lambda(new Name(var), body)));
+        return function(new Function.Lambda(new Lambda(new Name(var), Opt.empty(), body)));
     }
 
     /**

@@ -166,7 +166,7 @@ constructModule mod coders pairs = do
 
         termToUnaryMethod coders el term = case stripType typ of
           TypeFunction (FunctionType dom cod) -> maybeLet aliases term $ \aliases2 term2 stmts2 -> case fullyStripTerm term2 of
-            TermFunction (FunctionLambda (Lambda v body)) -> do
+            TermFunction (FunctionLambda (Lambda v _ body)) -> do
               jdom <- adaptTypeToJavaAndEncode aliases2 dom
               jcod <- adaptTypeToJavaAndEncode aliases2 cod
               let mods = [Java.InterfaceMethodModifierStatic]
@@ -572,7 +572,7 @@ encodeFunction :: Aliases -> Type -> Type -> Function -> Flow Graph Java.Express
 encodeFunction aliases dom cod fun = case fun of
     FunctionElimination elm -> withTrace ("elimination (" ++ show (eliminationVariant elm) ++ ")") $ do
       encodeElimination aliases Nothing dom cod elm
-    FunctionLambda (Lambda var body) -> withTrace ("lambda " ++ unName var) $ do
+    FunctionLambda (Lambda var _ body) -> withTrace ("lambda " ++ unName var) $ do
         lam <- toLambda var body
         if needsCast body
           then do

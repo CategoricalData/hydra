@@ -181,6 +181,9 @@ hydraCoreModule = Module ns elements [] [] $
           "parameter">:
             doc "The parameter of the lambda" $
             core "Name",
+          "domain">:
+            doc "An optional domain type for the lambda" $
+            optional $ core "Type",
           "body">:
             doc "The body of the lambda" $
             core "Term"],

@@ -113,7 +113,8 @@ public interface Rewriting {
             public Flow<S, hydra.core.Function> visit(hydra.core.Function.Lambda instance) {
                 Term bodyA = instance.value.body;
                 return map(recurse.apply(bodyA),
-                        term -> new hydra.core.Function.Lambda(new Lambda(instance.value.parameter, term)));
+                        term -> new hydra.core.Function.Lambda(
+                                new Lambda(instance.value.parameter, Opt.empty(), term)));
             }
 
             @Override

@@ -75,7 +75,7 @@ constructModule mod coders pairs = do
 
 encodeFunction :: M.Map String Term -> Function -> Y.Maybe (Term) -> Flow (Graph) Scala.Data
 encodeFunction meta fun arg = case fun of
-    FunctionLambda (Lambda (Name v) body) -> slambda v <$> encodeTerm body <*> findSdom
+    FunctionLambda (Lambda (Name v) _ body) -> slambda v <$> encodeTerm body <*> findSdom
     FunctionPrimitive name -> pure $ sprim name
     FunctionElimination e -> case e of
       EliminationWrap name -> pure $ sname $ "ELIM-NOMINAL(" ++ show name ++ ")" -- TODO
@@ -106,7 +106,7 @@ encodeFunction meta fun arg = case fun of
             where
               v = Name "y"
           applyVar fterm avar@(Name v) = case stripTerm fterm of
-            TermFunction (FunctionLambda (Lambda v1 body)) -> if isFreeIn v1 body
+            TermFunction (FunctionLambda (Lambda v1 _ body)) -> if isFreeIn v1 body
               then body
               else substituteVariable v1 avar body
             _ -> apply fterm (var v)

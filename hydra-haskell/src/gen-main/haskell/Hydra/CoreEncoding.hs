@@ -318,6 +318,9 @@ coreEncodeLambda l = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "parameter"),
       Core.fieldTerm = (coreEncodeName (Core.lambdaParameter l))},
     Core.Field {
+      Core.fieldName = (Core.Name "domain"),
+      Core.fieldTerm = (Core.TermOptional (Optionals.map coreEncodeType (Core.lambdaDomain l)))},
+    Core.Field {
       Core.fieldName = (Core.Name "body"),
       Core.fieldTerm = (coreEncodeTerm (Core.lambdaBody l))}]}))
 

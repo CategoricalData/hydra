@@ -132,13 +132,14 @@ pair kCoder vCoder = TermCoder (Types.product [termCoderType kCoder, termCoderTy
 prim0 :: [String] -> Name -> TermCoder x -> x -> Primitive
 prim0 vars name output value = Primitive name typ impl
   where
-    typ = Types.lambdas vars $ termCoderType output
+    typ = --Types.lambdas vars $
+      termCoderType output
     impl _ = coderDecode (termCoderCoder output) value
 
 prim1 :: [String] -> Name -> TermCoder x -> TermCoder y -> (x -> y) -> Primitive
 prim1 vars name input1 output compute = Primitive name typ impl
   where
-    typ = Types.lambdas vars $
+    typ = --Types.lambdas vars $
       TypeFunction $ FunctionType (termCoderType input1) $ termCoderType output
     impl args = do
       Expect.nArgs 1 args
@@ -148,7 +149,7 @@ prim1 vars name input1 output compute = Primitive name typ impl
 prim2 :: [String] -> Name -> TermCoder x -> TermCoder y -> TermCoder z -> (x -> y -> z) -> Primitive
 prim2 vars name input1 input2 output compute = Primitive name typ impl
   where
-    typ = Types.lambdas vars $
+    typ = --Types.lambdas vars $
       TypeFunction $ FunctionType (termCoderType input1) (Types.function (termCoderType input2) (termCoderType output))
     impl args = do
       Expect.nArgs 2 args
@@ -159,7 +160,7 @@ prim2 vars name input1 input2 output compute = Primitive name typ impl
 prim2Interp :: [String] -> Name -> TermCoder x -> TermCoder y -> TermCoder z -> (Term -> Term -> Flow (Graph) (Term)) -> Primitive
 prim2Interp vars name input1 input2 output compute = Primitive name typ impl
   where
-    typ = Types.lambdas vars $
+    typ = --Types.lambdas vars $
       TypeFunction $ FunctionType (termCoderType input1) (Types.function (termCoderType input2) (termCoderType output))
     impl args = do
       Expect.nArgs 2 args
@@ -168,7 +169,7 @@ prim2Interp vars name input1 input2 output compute = Primitive name typ impl
 prim3 :: [String] -> Name -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> (w -> x -> y -> z) -> Primitive
 prim3 vars name input1 input2 input3 output compute = Primitive name typ impl
   where
-    typ = Types.lambdas vars $
+    typ = --Types.lambdas vars $
       TypeFunction $ FunctionType
         (termCoderType input1)
         (Types.function (termCoderType input2)
