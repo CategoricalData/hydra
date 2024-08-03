@@ -201,16 +201,16 @@ unshadowVariables term = Y.fromJust $ flowStateValue $ unFlow (rewriteTermM rewr
       (reserved, subst) <- getState
       case term of
         TermVariable v -> pure $ TermVariable $ Y.fromMaybe v $ M.lookup v subst
-        TermFunction (FunctionLambda (Lambda v body)) -> if S.member v reserved
+        TermFunction (FunctionLambda (Lambda v d body)) -> if S.member v reserved
           then do
             v' <- freshName
             putState (S.insert v' reserved, M.insert v v' subst)
             body' <- recurse body
             putState (reserved, subst)
-            pure $ TermFunction $ FunctionLambda $ Lambda v' body'
+            pure $ TermFunction $ FunctionLambda $ Lambda v' d body'
           else do
             putState (S.insert v reserved, subst)
             body' <- recurse body
-            return $ TermFunction $ FunctionLambda $ Lambda v body'
+            return $ TermFunction $ FunctionLambda $ Lambda v d body'
         _ -> recurse term
     freshName = (\n -> Name $ "s" ++ show n) <$> nextCount "unshadow"

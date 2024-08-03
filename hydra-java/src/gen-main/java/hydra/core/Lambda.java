@@ -16,14 +16,21 @@ public class Lambda implements Serializable {
   public final hydra.core.Name parameter;
   
   /**
+   * An optional domain type for the lambda
+   */
+  public final hydra.util.Opt<hydra.core.Type> domain;
+  
+  /**
    * The body of the lambda
    */
   public final hydra.core.Term body;
   
-  public Lambda (hydra.core.Name parameter, hydra.core.Term body) {
+  public Lambda (hydra.core.Name parameter, hydra.util.Opt<hydra.core.Type> domain, hydra.core.Term body) {
     java.util.Objects.requireNonNull((parameter));
+    java.util.Objects.requireNonNull((domain));
     java.util.Objects.requireNonNull((body));
     this.parameter = parameter;
+    this.domain = domain;
     this.body = body;
   }
   
@@ -33,21 +40,26 @@ public class Lambda implements Serializable {
       return false;
     }
     Lambda o = (Lambda) (other);
-    return parameter.equals(o.parameter) && body.equals(o.body);
+    return parameter.equals(o.parameter) && domain.equals(o.domain) && body.equals(o.body);
   }
   
   @Override
   public int hashCode() {
-    return 2 * parameter.hashCode() + 3 * body.hashCode();
+    return 2 * parameter.hashCode() + 3 * domain.hashCode() + 5 * body.hashCode();
   }
   
   public Lambda withParameter(hydra.core.Name parameter) {
     java.util.Objects.requireNonNull((parameter));
-    return new Lambda(parameter, body);
+    return new Lambda(parameter, domain, body);
+  }
+  
+  public Lambda withDomain(hydra.util.Opt<hydra.core.Type> domain) {
+    java.util.Objects.requireNonNull((domain));
+    return new Lambda(parameter, domain, body);
   }
   
   public Lambda withBody(hydra.core.Term body) {
     java.util.Objects.requireNonNull((body));
-    return new Lambda(parameter, body);
+    return new Lambda(parameter, domain, body);
   }
 }

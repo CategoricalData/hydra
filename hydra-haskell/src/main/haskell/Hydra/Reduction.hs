@@ -28,7 +28,7 @@ alphaConvert :: Name -> Term -> Term -> Term
 alphaConvert vold tnew = rewriteTerm rewrite id
   where
     rewrite recurse term = case term of
-      TermFunction (FunctionLambda (Lambda v body)) -> if v == vold
+      TermFunction (FunctionLambda (Lambda v _ _)) -> if v == vold
         then term
         else recurse term
       TermVariable v -> if v == vold then tnew else TermVariable v
@@ -62,7 +62,7 @@ reduceTerm eager env = rewriteTermM mapping pure
     replaceFreeName toReplace replacement = rewriteTerm mapping id
       where
         mapping recurse inner = case inner of
-          TermFunction (FunctionLambda (Lambda param body)) -> if param == toReplace then inner else recurse inner
+          TermFunction (FunctionLambda (Lambda param _ _)) -> if param == toReplace then inner else recurse inner
           TermVariable name -> if name == toReplace then replacement else inner
           _ -> recurse inner
 
@@ -76,7 +76,7 @@ reduceTerm eager env = rewriteTermM mapping pure
             reducedArg <- reduceArg eager $ stripTerm arg
             reducedResult <- applyElimination elm reducedArg >>= reduce eager
             applyIfNullary eager reducedResult remainingArgs
-        FunctionLambda (Lambda param body) -> case args of
+        FunctionLambda (Lambda param _ body) -> case args of
           [] -> pure original
           (arg:remainingArgs) -> do
             reducedArg <- reduce eager $ stripTerm arg
@@ -149,7 +149,7 @@ contractTerm = rewriteTerm rewrite id
   where
     rewrite recurse term = case rec of
         TermApplication (Application lhs rhs) -> case fullyStripTerm lhs of
-          TermFunction (FunctionLambda (Lambda v body)) -> if isFreeIn v body
+          TermFunction (FunctionLambda (Lambda v _ body)) -> if isFreeIn v body
             then body
             else alphaConvert v rhs body
           _ -> rec
@@ -164,8 +164,8 @@ etaReduceTerm term = case term of
     TermFunction (FunctionLambda l) -> reduceLambda l
     _ -> noChange
   where
-    reduceLambda (Lambda v body) = case etaReduceTerm body of
-      TermAnnotated (AnnotatedTerm body1 ann) -> reduceLambda (Lambda v body1)
+    reduceLambda (Lambda v d body) = case etaReduceTerm body of
+      TermAnnotated (AnnotatedTerm body1 ann) -> reduceLambda (Lambda v d body1)
       TermApplication a -> reduceApplication a
         where
           reduceApplication (Application lhs rhs) = case etaReduceTerm rhs of
@@ -210,5 +210,5 @@ termIsValue g term = case stripTerm term of
           && termIsValue g just
         EliminationRecord _ -> True
         EliminationUnion (CaseStatement _ def cases) -> checkFields cases && (Y.maybe True (termIsValue g) def)
-      FunctionLambda (Lambda _ body) -> termIsValue g body
+      FunctionLambda (Lambda _ _ body) -> termIsValue g body
       FunctionPrimitive _ -> True

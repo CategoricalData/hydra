@@ -230,6 +230,7 @@ hydraLibFlowsPrimitives = [
     prim2 ["s", "x", "y"] _flows_bind  (flow s x) (function x (flow s y)) (flow s y) Flows.bind,
     prim1 ["s", "x"]      _flows_fail  string (flow s x) Flows.fail,
     prim2 ["s", "x", "y"] _flows_map   (function x y) (flow s x) (flow s y) Flows.map,
+    prim2 ["s", "x", "y"] _flows_mapList (function x (flow s y)) (list x) (flow s (list y)) Flows.mapList,
     prim1 ["s", "x"]      _flows_pure  x (flow s x) Flows.pure,
     prim1 ["s", "x"]      _flows_sequence (list (flow s x)) (flow s (list x)) Flows.sequence]
   where
@@ -237,7 +238,7 @@ hydraLibFlowsPrimitives = [
     x = variable "x"
     y = variable "y"
 
-applyInterp :: Term -> Term -> Flow (Graph) (Term)
+applyInterp :: Term -> Term -> Flow Graph Term
 applyInterp funs' args' = do
     funs <- Expect.list Prelude.pure funs'
     args <- Expect.list Prelude.pure args'
@@ -245,12 +246,12 @@ applyInterp funs' args' = do
   where
     helper args f = Terms.apply f <$> args
 
-bindInterp :: Term -> Term -> Flow (Graph) (Term)
+bindInterp :: Term -> Term -> Flow Graph Term
 bindInterp args' fun = do
     args <- Expect.list Prelude.pure args'
     return $ Terms.apply (Terms.primitive $ Name "hydra/lib/lists.concat") (Terms.list $ Terms.apply fun <$> args)
 
-mapInterp :: Term -> Term -> Flow (Graph) (Term)
+mapInterp :: Term -> Term -> Flow Graph Term
 mapInterp fun args' = do
     args <- Expect.list Prelude.pure args'
     return $ Terms.list (Terms.apply fun <$> args)
@@ -267,7 +268,7 @@ hydraLibListsPrimitives = [
     prim1 ["x"] _lists_concat (list (list x)) (list x) Lists.concat,
     prim2 ["x"] _lists_concat2 (list x) (list x) (list x) Lists.concat2,
     prim2 ["x"] _lists_cons x (list x) (list x) Lists.cons,
-    prim3 ["x"] _lists_foldl (function y (function x y)) y (list x) y Lists.foldl,
+    prim3 ["x", "y"] _lists_foldl (function y (function x y)) y (list x) y Lists.foldl,
     prim1 ["x"] _lists_head (list x) x Lists.head,
     prim2 ["x"] _lists_intercalate (list x) (list (list x)) (list x) Lists.intercalate,
     prim2 ["x"] _lists_intersperse x (list x) (list x) Lists.intersperse,

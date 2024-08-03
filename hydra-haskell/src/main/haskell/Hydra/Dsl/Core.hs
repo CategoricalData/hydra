@@ -121,6 +121,9 @@ lambdaParameter = project _Lambda _Lambda_parameter
 lambdaBody :: TTerm (Lambda -> Term)
 lambdaBody = project _Lambda _Lambda_body
 
+lambdaDomain :: TTerm (Lambda -> Maybe Type)
+lambdaDomain = project _Lambda _Lambda_domain
+
 lambdaType :: TTerm Name -> TTerm Type -> TTerm LambdaType
 lambdaType parameter body = Base.record _LambdaType [
     _LambdaType_parameter>>: parameter,

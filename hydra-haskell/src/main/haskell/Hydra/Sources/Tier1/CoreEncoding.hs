@@ -266,6 +266,7 @@ coreEncodeLambdaDef :: TElement (Lambda -> Term)
 coreEncodeLambdaDef = coreEncodingDefinition "Lambda" lambdaT $
   lambda "l" $ encodedRecord _Lambda [
     field _Lambda_parameter $ ref coreEncodeNameDef @@ (Core.lambdaParameter @@ var "l"),
+    field _Lambda_domain $ encodedOptional $ primitive _optionals_map @@ ref coreEncodeTypeDef @@ (Core.lambdaDomain @@ var "l"),
     field _Lambda_body $ ref coreEncodeTermDef @@ (Core.lambdaBody @@ var "l")]
 
 coreEncodeLambdaTypeDef :: TElement (LambdaType -> Term)

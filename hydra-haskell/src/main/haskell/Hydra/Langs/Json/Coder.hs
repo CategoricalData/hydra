@@ -135,8 +135,9 @@ untypedTermToJson term = case stripTerm term of
         EliminationList term1 -> asVariant "fold" term1
         EliminationRecord (Projection _ fname) -> asVariant "project" $ TermVariable fname
         _ -> unexp $ "unexpected elimination variant: " ++ show (eliminationVariant elm)
-      FunctionLambda (Lambda v body) -> asRecord [
+      FunctionLambda (Lambda v d body) -> asRecord [
         Field _Lambda_parameter $ TermVariable v,
+        Field _Lambda_domain $ TermOptional (coreEncodeType <$> d),
         Field _Lambda_body body]
       FunctionPrimitive name -> pure $ Json.ValueString $ unName name
     TermLet (Let bindings env) -> asRecord [

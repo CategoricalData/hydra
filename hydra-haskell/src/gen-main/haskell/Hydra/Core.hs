@@ -292,6 +292,8 @@ data Lambda =
   Lambda {
     -- | The parameter of the lambda
     lambdaParameter :: Name,
+    -- | An optional domain type for the lambda
+    lambdaDomain :: (Maybe Type),
     -- | The body of the lambda
     lambdaBody :: Term}
   deriving (Eq, Ord, Read, Show)
@@ -299,6 +301,8 @@ data Lambda =
 _Lambda = (Name "hydra/core.Lambda")
 
 _Lambda_parameter = (Name "parameter")
+
+_Lambda_domain = (Name "domain")
 
 _Lambda_body = (Name "body")
 
