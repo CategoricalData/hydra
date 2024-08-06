@@ -2,7 +2,7 @@ package hydra.langs.json;
 
 import hydra.json.Value;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import hydra.util.Opt;
@@ -20,7 +20,7 @@ public abstract class JsonDecoding {
      * Decode a list from JSON.
      */
     public static <A> List<A> decodeList(Function<Value, A> mapping, Value json) {
-        return json.accept(new Value.PartialVisitor<List<A>>() {
+        return json.accept(new Value.PartialVisitor<>() {
             @Override
             public List<A> otherwise(Value instance) {
                 throw unexpected("array", instance);
@@ -42,7 +42,7 @@ public abstract class JsonDecoding {
      * Decode a boolean value from JSON.
      */
     public static boolean decodeBoolean(Value json) {
-        return json.accept(new Value.PartialVisitor<Boolean>() {
+        return json.accept(new Value.PartialVisitor<>() {
             @Override
             public Boolean otherwise(Value instance) {
                 throw unexpected("boolean", instance);
@@ -105,7 +105,7 @@ public abstract class JsonDecoding {
      * Decode a number from JSON.
      */
     public static double decodeNumber(Value json) {
-        return json.accept(new Value.PartialVisitor<Double>() {
+        return json.accept(new Value.PartialVisitor<>() {
             @Override
             public Double otherwise(Value instance) {
                 throw unexpected("number", instance);
@@ -122,7 +122,7 @@ public abstract class JsonDecoding {
      * Decode an object (key/value map) from JSON.
      */
     public static Map<String, Value> decodeObject(Value json) {
-        return json.accept(new Value.PartialVisitor<Map<String, Value>>() {
+        return json.accept(new Value.PartialVisitor<>() {
             @Override
             public Map<String, Value> otherwise(Value instance) {
                 throw unexpected("object", instance);
@@ -154,7 +154,7 @@ public abstract class JsonDecoding {
         if (fieldValue == null) {
             return defaultValue == null ? Opt.empty() : Opt.of(defaultValue);
         } else {
-            return fieldValue.accept(new Value.PartialVisitor<Opt<A>>() {
+            return fieldValue.accept(new Value.PartialVisitor<>() {
                 @Override
                 public Opt<A> otherwise(Value instance) {
                     return Opt.of(mapping.apply(fieldValue));
@@ -204,7 +204,7 @@ public abstract class JsonDecoding {
         if (opt.isPresent()) {
             return opt.get();
         } else {
-            throw new RuntimeException("missing required field \"" + name + "\"");
+            return defaultValue;
         }
     }
 
@@ -212,7 +212,12 @@ public abstract class JsonDecoding {
      * Decode a required field from JSON.
      */
     public static <A> A decodeRequiredField(String name, Function<Value, A> mapping, Value json) {
-        return decodeRequiredField(name, mapping, json, null);
+        Opt<A> opt = decodeOptionalField(name, mapping, json);
+        if (opt.isPresent()) {
+            return opt.get();
+        } else {
+            throw new RuntimeException("missing required field \"" + name + "\"");
+        }
     }
 
     /**
@@ -233,14 +238,15 @@ public abstract class JsonDecoding {
      * Decode a set from JSON.
      */
     public static <A> Set<A> decodeSet(Function<Value, A> mapping, Value json) {
-        return new HashSet<>(decodeList(mapping, json));
+        // Note: use LinkedHashSet for the sake of predictable ordering
+        return new LinkedHashSet<>(decodeList(mapping, json));
     }
 
     /**
      * Decode a string value from JSON.
      */
     public static String decodeString(Value json) {
-        return json.accept(new Value.PartialVisitor<String>() {
+        return json.accept(new Value.PartialVisitor<>() {
             @Override
             public String otherwise(Value instance) {
                 throw unexpected("string", instance);
