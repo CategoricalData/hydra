@@ -3,7 +3,7 @@ package hydra.langs.json;
 import hydra.json.Value;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import hydra.util.Opt;
@@ -54,7 +54,8 @@ public abstract class JsonEncoding {
   }
 
   public static class ObjectBuilder {
-    private final Map<String, Value> map = new HashMap<>();
+    // Note: use LinkedHashMap for the sake of predictable ordering
+    private final Map<String, Value> map = new LinkedHashMap<>();
 
     public ObjectBuilder put(String key, String value) {
       return put(key, new Value.String_(value));
