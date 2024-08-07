@@ -1,5 +1,6 @@
 package hydra.lib;
 
+import hydra.lib.equality.Equal;
 import hydra.lib.equality.EqualBigfloat;
 import hydra.lib.equality.EqualBigint;
 import hydra.lib.equality.EqualBinary;
@@ -59,6 +60,7 @@ public class Libraries {
 
     private static List<PrimitiveFunction> equalityPrimitives() {
         return Arrays.asList(
+                new Equal(),
                 new EqualBigfloat(),
                 new EqualBigint(),
                 new EqualBinary(),
