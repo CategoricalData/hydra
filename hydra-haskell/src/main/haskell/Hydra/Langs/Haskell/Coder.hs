@@ -11,6 +11,7 @@ import Hydra.Langs.Haskell.Settings
 import qualified Hydra.Langs.Haskell.Ast as H
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Types as Types
+import Hydra.Dsl.ShorthandTypes
 import Hydra.Lib.Io
 
 import qualified Control.Monad as CM
@@ -23,27 +24,6 @@ import Hydra.Rewriting (removeTypeAnnotations, removeTermAnnotations)
 
 adaptTypeToHaskellAndEncode :: Namespaces -> Type -> Flow Graph H.Type
 adaptTypeToHaskellAndEncode namespaces = adaptAndEncodeType haskellLanguage (encodeType namespaces)
-
-constantDecls :: Graph -> Namespaces -> Name -> Type -> [H.DeclarationWithComments]
-constantDecls g namespaces name@(Name nm) typ = if useCoreImport
-    then toDecl (Name "hydra/core.Name") nameDecl:(toDecl (Name "hydra/core.Name") <$> fieldDecls)
-    else []
-  where
-    lname = localNameOfEager name
-    toDecl n (k, v) = H.DeclarationWithComments decl Nothing
-      where
-        decl = H.DeclarationValueBinding $ H.ValueBindingSimple $ H.ValueBinding_Simple pat rhs Nothing
-        pat = applicationPattern (simpleName k) []
-        rhs = H.RightHandSide $ H.ExpressionApplication $ H.Expression_Application
-          (H.ExpressionVariable $ elementReference namespaces n)
-          (H.ExpressionLiteral $ H.LiteralString v)
-    nameDecl = ("_" ++ lname, nm)
-    fieldsOf t = case stripType t of
-      TypeRecord rt -> rowTypeFields rt
-      TypeUnion rt -> rowTypeFields rt
-      _ -> []
-    fieldDecls = toConstant <$> fieldsOf (snd $ unpackLambdaType g typ)
-    toConstant (FieldType (Name fname) _) = ("_" ++ lname ++ "_" ++ fname, fname)
 
 constructModule :: Namespaces
   -> Module
@@ -269,6 +249,27 @@ moduleToHaskell mod = do
   let s = printExpr $ parenthesize $ toTree hsmod
   return $ M.fromList [(namespaceToFilePath True (FileExtension "hs") $ moduleNamespace mod, s)]
 
+nameDecls :: Graph -> Namespaces -> Name -> Type -> [H.DeclarationWithComments]
+nameDecls g namespaces name@(Name nm) typ = if useCoreImport
+    then (toDecl (Name "hydra/core.Name") nameDecl):(toDecl (Name "hydra/core.Name") <$> fieldDecls)
+    else []
+  where
+    lname = localNameOfEager name
+    toDecl n (k, v) = H.DeclarationWithComments decl Nothing
+      where
+        decl = H.DeclarationValueBinding $ H.ValueBindingSimple $ H.ValueBinding_Simple pat rhs Nothing
+        pat = applicationPattern (simpleName k) []
+        rhs = H.RightHandSide $ H.ExpressionApplication $ H.Expression_Application
+          (H.ExpressionVariable $ elementReference namespaces n)
+          (H.ExpressionLiteral $ H.LiteralString v)
+    nameDecl = ("_" ++ lname, nm)
+    fieldsOf t = case stripType t of
+      TypeRecord rt -> rowTypeFields rt
+      TypeUnion rt -> rowTypeFields rt
+      _ -> []
+    fieldDecls = toConstant <$> fieldsOf (snd $ unpackLambdaType g typ)
+    toConstant (FieldType (Name fname) _) = ("_" ++ lname ++ "_" ++ fname, fname)
+
 toDataDeclaration :: M.Map Type (Coder Graph Graph Term H.Expression) -> Namespaces
   -> (Element, TypedTerm) -> Flow Graph H.DeclarationWithComments
 toDataDeclaration coders namespaces (el, TypedTerm term typ) = do
@@ -337,7 +338,10 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
           htype <- adaptTypeToHaskellAndEncode namespaces t
           return $ H.DeclarationType (H.TypeDeclaration hd htype)
     comments <- getTermDescription term
-    return $ [H.DeclarationWithComments decl comments] ++ constantDecls g namespaces (elementName el) t
+    tdecl <- typeDecl namespaces (elementName el) t
+    return $ [H.DeclarationWithComments decl comments]
+      ++ nameDecls g namespaces (elementName el) t
+      ++ [tdecl]
   where
     declHead name vars = case vars of
       [] -> H.DeclarationHeadSimple name
@@ -371,3 +375,36 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
           htype <- adaptTypeToHaskellAndEncode namespaces ftype
           return [htype]
       return $ H.ConstructorWithComments (H.ConstructorOrdinary $ H.Constructor_Ordinary (simpleName nm) typeList) comments
+
+typeDecl :: Namespaces -> Name -> Type -> Flow Graph H.DeclarationWithComments
+typeDecl namespaces name typ = do
+    -- Note: consider constructing this coder just once, then reusing it
+    coder <- constructCoder haskellLanguage (encodeTerm namespaces) typeT
+    expr <- coderEncode coder term
+    let rhs = H.RightHandSide expr
+    let hname = simpleName $ typeNameLocal name
+    let pat = applicationPattern hname []
+    let decl = H.DeclarationValueBinding $ H.ValueBindingSimple $ H.ValueBinding_Simple pat rhs Nothing
+    return $ H.DeclarationWithComments decl Nothing
+  where
+    typeName ns name = qname ns (typeNameLocal name)
+      where
+        ns = Y.fromMaybe (Namespace "NONAMESPACE") $ namespaceOfEager name
+    typeNameLocal name = "_" ++ localNameOfEager name ++ "_type_"
+    rawTerm = coreEncodeType typ
+    term = rewriteTerm rewrite id rawTerm
+      where
+        rewrite recurse term = case term of
+            TermUnion (Injection tname (Field fname t)) -> if tname == _Type && fname == _Type_variable
+              then case t of
+                TermWrap (WrappedTerm tname2 (TermLiteral (LiteralString name2))) -> if tname2 == _Name
+                  then case (namespaceOfEager $ Name name2) of
+                    Nothing -> dflt
+                    Just ns -> TermVariable $ typeName ns $ Name name2
+                  else dflt
+                _ -> dflt
+              else dflt
+            _ -> dflt
+          where
+            dflt = recurse term
+    isDomainName n = n == fst (namespacesFocus namespaces) || M.member n (namespacesMapping namespaces)
