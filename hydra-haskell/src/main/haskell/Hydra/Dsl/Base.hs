@@ -170,7 +170,7 @@ matchToUnion domName codName dflt pairs = matchData domName dflt (toCase <$> pai
 nom :: Name -> TTerm a -> TTerm b
 nom name (TTerm term) = TTerm $ Terms.wrap name term
 
-nothing :: TTerm x
+nothing :: TTerm a
 nothing = TTerm Terms.nothing
 
 opt :: Maybe (TTerm a) -> TTerm (Maybe a)

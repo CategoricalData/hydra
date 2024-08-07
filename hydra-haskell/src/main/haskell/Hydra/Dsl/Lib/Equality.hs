@@ -8,6 +8,9 @@ import qualified Hydra.Dsl.Terms as Terms
 import Data.Int
 
 
+equal :: TTerm (a -> a -> Bool)
+equal = TTerm $ Terms.primitive _equality_equal
+
 equalBinary :: TTerm (String -> String -> Bool)
 equalBinary = TTerm $ Terms.primitive _equality_equalBinary
 

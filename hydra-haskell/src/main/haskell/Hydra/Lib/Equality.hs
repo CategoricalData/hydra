@@ -7,6 +7,9 @@ import Hydra.Core
 import Data.Int
 
 
+equal :: Eq a => a -> a -> Bool
+equal = (==)
+
 equalBinary :: String -> String -> Bool
 equalBinary = (==)
 
