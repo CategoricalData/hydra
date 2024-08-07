@@ -1,4 +1,4 @@
--- | A DSL for constructing Hydra terms
+-- | A DSL for decoding Hydra terms
 
 module Hydra.Dsl.Expect where
 

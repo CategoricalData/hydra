@@ -26,6 +26,7 @@ import qualified Data.List as L
 _hydra_lib_equality :: Namespace
 _hydra_lib_equality = Namespace "hydra/lib/equality"
 
+_equality_equal = qname _hydra_lib_equality "equal" :: Name
 _equality_equalBinary = qname _hydra_lib_equality "equalBinary" :: Name
 _equality_equalBoolean = qname _hydra_lib_equality "equalBoolean" :: Name
 _equality_equalBigfloat = qname _hydra_lib_equality "equalBigfloat" :: Name
@@ -199,6 +200,7 @@ _strings_toUpper = qname _hydra_lib_strings "toUpper" :: Name
 
 hydraLibEqualityPrimitives :: [Primitive]
 hydraLibEqualityPrimitives = [
+    prim2 [] _equality_equal x x boolean Equality.equal,
     prim2 [] _equality_equalBinary binary binary boolean Equality.equalBinary,
     prim2 [] _equality_equalBoolean boolean boolean boolean Equality.equalBoolean,
     prim2 [] _equality_equalBigfloat bigfloat bigfloat boolean Equality.equalBigfloat,
