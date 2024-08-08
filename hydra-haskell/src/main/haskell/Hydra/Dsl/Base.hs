@@ -176,8 +176,8 @@ nothing = TTerm Terms.nothing
 opt :: Maybe (TTerm a) -> TTerm (Maybe a)
 opt mc = TTerm $ Terms.optional (unTTerm <$> mc)
 
-pair :: (TTerm a, TTerm b) -> TTerm (a, b)
-pair (TTerm l, TTerm r) = TTerm $ Terms.pair l r
+pair :: (TTerm a) -> (TTerm b) -> TTerm (a, b)
+pair (TTerm l) (TTerm r) = TTerm $ Terms.pair l r
 
 primitive :: Name -> TTerm a
 primitive = TTerm . Terms.primitive

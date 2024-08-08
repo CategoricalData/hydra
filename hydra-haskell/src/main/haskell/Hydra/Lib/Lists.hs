@@ -13,6 +13,9 @@ import qualified Data.List as L
 apply :: [a -> b] -> [a] -> [b]
 apply = (<*>)
 
+at :: Int -> [a] -> a
+at i l = l !! i
+
 bind :: [a] -> (a -> [b]) -> [b]
 bind = (>>=)
 
@@ -24,6 +27,9 @@ concat2 l1 l2 = l1 ++ l2
 
 cons :: a -> [a] -> [a]
 cons = (:)
+
+filter :: (a -> Bool) -> [a] -> [a]
+filter = L.filter
 
 foldl :: (b -> a -> b) -> b -> [a] -> b
 foldl = L.foldl

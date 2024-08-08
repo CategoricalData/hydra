@@ -178,6 +178,9 @@ mapTypeKeys = project _MapType _MapType_keys
 mapTypeValues :: TTerm (MapType -> Type)
 mapTypeValues = project _MapType _MapType_values
 
+name :: Name -> TTerm Name
+name nm = TTerm $ coreEncodeName nm
+
 optionalCases :: TTerm Term -> TTerm Term -> TTerm OptionalCases
 optionalCases nothing just = Base.record _OptionalCases [
     _OptionalCases_nothing>>: nothing,

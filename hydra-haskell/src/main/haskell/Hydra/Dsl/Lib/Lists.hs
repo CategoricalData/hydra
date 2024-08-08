@@ -5,6 +5,15 @@ import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
 
 
+apply :: TTerm ([a -> b] -> [a] -> [b])
+apply = TTerm $ Terms.primitive _lists_apply
+
+at :: TTerm (Int -> [a] -> a)
+at = TTerm $ Terms.primitive _lists_at
+
+bind :: TTerm ([a] -> (a -> [b]) -> [b])
+bind = TTerm $ Terms.primitive _lists_bind
+
 concat :: TTerm ([[a]] -> [a])
 concat = TTerm $ Terms.primitive _lists_concat
 
@@ -13,6 +22,9 @@ concat2 = TTerm $ Terms.primitive _lists_concat2
 
 cons :: TTerm (a -> [a] -> [a])
 cons = TTerm $ Terms.primitive _lists_cons
+
+filter :: TTerm ((a -> Bool) -> [a] -> [a])
+filter = TTerm $ Terms.primitive _lists_filter
 
 foldl :: TTerm ((b -> a -> b) -> b -> [a] -> b)
 foldl = TTerm $ Terms.primitive _lists_foldl

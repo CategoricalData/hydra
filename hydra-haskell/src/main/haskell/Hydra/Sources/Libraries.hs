@@ -71,10 +71,12 @@ _hydra_lib_lists :: Namespace
 _hydra_lib_lists = Namespace "hydra/lib/lists"
 
 _lists_apply = qname _hydra_lib_lists "apply" :: Name
+_lists_at = qname _hydra_lib_lists "at" :: Name
 _lists_bind = qname _hydra_lib_lists "bind" :: Name
 _lists_concat = qname _hydra_lib_lists "concat" :: Name
 _lists_concat2 = qname _hydra_lib_lists "concat2" :: Name
 _lists_cons = qname _hydra_lib_lists "cons" :: Name
+_lists_filter = qname _hydra_lib_lists "filter" :: Name
 _lists_foldl = qname _hydra_lib_lists "foldl" :: Name
 _lists_head = qname _hydra_lib_lists "head" :: Name
 _lists_intercalate = qname _hydra_lib_lists "intercalate" :: Name
@@ -160,6 +162,7 @@ _optionals_apply :: Name
 _optionals_apply = qname _hydra_lib_optionals "apply" :: Name
 _optionals_bind = qname _hydra_lib_optionals "bind" :: Name
 _optionals_cat = qname _hydra_lib_optionals "cat" :: Name
+_optionals_compose = qname _hydra_lib_optionals "compose" :: Name
 _optionals_fromMaybe = qname _hydra_lib_optionals "fromMaybe" :: Name
 _optionals_isJust = qname _hydra_lib_optionals "isJust" :: Name
 _optionals_isNothing = qname _hydra_lib_optionals "isNothing" :: Name
@@ -266,10 +269,12 @@ hydraLibIoPrimitives = [
 hydraLibListsPrimitives :: [Primitive]
 hydraLibListsPrimitives = [
     prim2Interp ["x", "y"] _lists_apply (list $ function x y) (list x) (list y) applyInterp,
+    prim2 ["x"] _lists_at int32 (list x) x Lists.at,
     prim2Interp ["x", "y"] _lists_bind (list x) (function x (list y)) (list y) bindInterp,
     prim1 ["x"] _lists_concat (list (list x)) (list x) Lists.concat,
     prim2 ["x"] _lists_concat2 (list x) (list x) (list x) Lists.concat2,
     prim2 ["x"] _lists_cons x (list x) (list x) Lists.cons,
+    prim2 ["x"] _lists_filter (function x boolean) (list x) (list x) Lists.filter,
     prim3 ["x", "y"] _lists_foldl (function y (function x y)) y (list x) y Lists.foldl,
     prim1 ["x"] _lists_head (list x) x Lists.head,
     prim2 ["x"] _lists_intercalate (list x) (list (list x)) (list x) Lists.intercalate,
@@ -363,6 +368,7 @@ hydraLibOptionalsPrimitives = [
     prim2 ["x", "y"] _optionals_apply (optional $ function x y) (optional x) (optional y) Optionals.apply,
     prim2 ["x", "y"] _optionals_bind (optional x) (function x (optional y)) (optional y) Optionals.bind,
     prim1 ["x"] _optionals_cat (list $ optional x) (list x) Optionals.cat,
+    prim2 ["x", "y", "z"] _optionals_compose (function x $ optional y) (function y $ optional z) (function x $ optional z) Optionals.compose,
     prim2 ["x"] _optionals_fromMaybe x (optional x) x Optionals.fromMaybe,
     prim1 ["x"] _optionals_isJust (optional x) boolean Optionals.isJust,
     prim1 ["x"] _optionals_isNothing (optional x) boolean Optionals.isNothing,
@@ -372,6 +378,7 @@ hydraLibOptionalsPrimitives = [
   where
     x = variable "x"
     y = variable "y"
+    z = variable "z"
 
 hydraLibSetsPrimitives :: [Primitive]
 hydraLibSetsPrimitives = [
