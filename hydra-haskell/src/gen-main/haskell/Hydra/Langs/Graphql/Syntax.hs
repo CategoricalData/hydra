@@ -16,12 +16,16 @@ newtype Name =
 
 _Name = (Core.Name "hydra/langs/graphql/syntax.Name")
 
+_Name_type_ = (Core.TypeLiteral Core.LiteralTypeString)
+
 newtype IntValue = 
   IntValue {
     unIntValue :: String}
   deriving (Eq, Ord, Read, Show)
 
 _IntValue = (Core.Name "hydra/langs/graphql/syntax.IntValue")
+
+_IntValue_type_ = (Core.TypeLiteral Core.LiteralTypeString)
 
 newtype FloatValue = 
   FloatValue {
@@ -30,6 +34,8 @@ newtype FloatValue =
 
 _FloatValue = (Core.Name "hydra/langs/graphql/syntax.FloatValue")
 
+_FloatValue_type_ = (Core.TypeLiteral Core.LiteralTypeString)
+
 newtype StringValue = 
   StringValue {
     unStringValue :: String}
@@ -37,12 +43,16 @@ newtype StringValue =
 
 _StringValue = (Core.Name "hydra/langs/graphql/syntax.StringValue")
 
+_StringValue_type_ = (Core.TypeLiteral Core.LiteralTypeString)
+
 newtype Document = 
   Document {
     unDocument :: [Definition]}
   deriving (Eq, Ord, Read, Show)
 
 _Document = (Core.Name "hydra/langs/graphql/syntax.Document")
+
+_Document_type_ = (Core.TypeList _Definition_type_)
 
 data Definition = 
   DefinitionExecutable ExecutableDefinition |
@@ -55,12 +65,25 @@ _Definition_executable = (Core.Name "executable")
 
 _Definition_typeSystem = (Core.Name "typeSystem")
 
+_Definition_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "executable"),
+      Core.fieldTypeType = _ExecutableDefinition_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "typeSystem"),
+      Core.fieldTypeType = _TypeSystemDefinitionOrExtension_type_}]}))
+
 newtype ExecutableDocument = 
   ExecutableDocument {
     unExecutableDocument :: [ExecutableDefinition]}
   deriving (Eq, Ord, Read, Show)
 
 _ExecutableDocument = (Core.Name "hydra/langs/graphql/syntax.ExecutableDocument")
+
+_ExecutableDocument_type_ = (Core.TypeList _ExecutableDefinition_type_)
 
 data ExecutableDefinition = 
   ExecutableDefinitionOperation OperationDefinition |
@@ -73,6 +96,17 @@ _ExecutableDefinition_operation = (Core.Name "operation")
 
 _ExecutableDefinition_fragment = (Core.Name "fragment")
 
+_ExecutableDefinition_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "operation"),
+      Core.fieldTypeType = _OperationDefinition_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "fragment"),
+      Core.fieldTypeType = _FragmentDefinition_type_}]}))
+
 data OperationDefinition = 
   OperationDefinitionSequence OperationDefinition_Sequence |
   OperationDefinitionSelectionSet SelectionSet
@@ -83,6 +117,17 @@ _OperationDefinition = (Core.Name "hydra/langs/graphql/syntax.OperationDefinitio
 _OperationDefinition_sequence = (Core.Name "sequence")
 
 _OperationDefinition_selectionSet = (Core.Name "selectionSet")
+
+_OperationDefinition_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence"),
+      Core.fieldTypeType = _OperationDefinition_Sequence_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "selectionSet"),
+      Core.fieldTypeType = _SelectionSet_type_}]}))
 
 data OperationDefinition_Sequence = 
   OperationDefinition_Sequence {
@@ -105,6 +150,26 @@ _OperationDefinition_Sequence_directives = (Core.Name "directives")
 
 _OperationDefinition_Sequence_selectionSet = (Core.Name "selectionSet")
 
+_OperationDefinition_Sequence_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "operationType"),
+      Core.fieldTypeType = _OperationType_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = (Core.TypeOptional _Name_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "variablesDefinition"),
+      Core.fieldTypeType = (Core.TypeOptional _VariablesDefinition_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "selectionSet"),
+      Core.fieldTypeType = _SelectionSet_type_}]}))
+
 data OperationType = 
   OperationTypeQuery  |
   OperationTypeMutation  |
@@ -119,12 +184,37 @@ _OperationType_mutation = (Core.Name "mutation")
 
 _OperationType_subscription = (Core.Name "subscription")
 
+_OperationType_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "query"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "mutation"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "subscription"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))}]}))
+
 newtype SelectionSet = 
   SelectionSet {
     unSelectionSet :: [Selection]}
   deriving (Eq, Ord, Read, Show)
 
 _SelectionSet = (Core.Name "hydra/langs/graphql/syntax.SelectionSet")
+
+_SelectionSet_type_ = (Core.TypeList _Selection_type_)
 
 data Selection = 
   SelectionField Field |
@@ -139,6 +229,20 @@ _Selection_field = (Core.Name "field")
 _Selection_fragmentSpread = (Core.Name "fragmentSpread")
 
 _Selection_inlineFragment = (Core.Name "inlineFragment")
+
+_Selection_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "field"),
+      Core.fieldTypeType = _Field_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "fragmentSpread"),
+      Core.fieldTypeType = _FragmentSpread_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "inlineFragment"),
+      Core.fieldTypeType = _InlineFragment_type_}]}))
 
 data Field = 
   Field {
@@ -161,6 +265,26 @@ _Field_directives = (Core.Name "directives")
 
 _Field_selectionSet = (Core.Name "selectionSet")
 
+_Field_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "alias"),
+      Core.fieldTypeType = (Core.TypeOptional _Alias_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "arguments"),
+      Core.fieldTypeType = (Core.TypeOptional _Arguments_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "selectionSet"),
+      Core.fieldTypeType = (Core.TypeOptional _SelectionSet_type_)}]}))
+
 data Alias = 
   AliasName Name |
   AliasColon 
@@ -172,12 +296,28 @@ _Alias_name = (Core.Name "name")
 
 _Alias_colon = (Core.Name "colon")
 
+_Alias_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "colon"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))}]}))
+
 newtype Arguments = 
   Arguments {
     unArguments :: [Argument]}
   deriving (Eq, Ord, Read, Show)
 
 _Arguments = (Core.Name "hydra/langs/graphql/syntax.Arguments")
+
+_Arguments_type_ = (Core.TypeList _Argument_type_)
 
 data Argument = 
   Argument {
@@ -191,6 +331,17 @@ _Argument_name = (Core.Name "name")
 
 _Argument_value = (Core.Name "value")
 
+_Argument_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "value"),
+      Core.fieldTypeType = _Value_type_}]}))
+
 data FragmentSpread = 
   FragmentSpread {
     fragmentSpreadFragmentName :: FragmentName,
@@ -202,6 +353,17 @@ _FragmentSpread = (Core.Name "hydra/langs/graphql/syntax.FragmentSpread")
 _FragmentSpread_fragmentName = (Core.Name "fragmentName")
 
 _FragmentSpread_directives = (Core.Name "directives")
+
+_FragmentSpread_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "fragmentName"),
+      Core.fieldTypeType = _FragmentName_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)}]}))
 
 data InlineFragment = 
   InlineFragment {
@@ -217,6 +379,20 @@ _InlineFragment_typeCondition = (Core.Name "typeCondition")
 _InlineFragment_directives = (Core.Name "directives")
 
 _InlineFragment_selectionSet = (Core.Name "selectionSet")
+
+_InlineFragment_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "typeCondition"),
+      Core.fieldTypeType = (Core.TypeOptional _TypeCondition_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "selectionSet"),
+      Core.fieldTypeType = _SelectionSet_type_}]}))
 
 data FragmentDefinition = 
   FragmentDefinition {
@@ -236,12 +412,31 @@ _FragmentDefinition_directives = (Core.Name "directives")
 
 _FragmentDefinition_selectionSet = (Core.Name "selectionSet")
 
+_FragmentDefinition_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "fragmentName"),
+      Core.fieldTypeType = _FragmentName_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "typeCondition"),
+      Core.fieldTypeType = _TypeCondition_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "selectionSet"),
+      Core.fieldTypeType = _SelectionSet_type_}]}))
+
 newtype FragmentName = 
   FragmentName {
     unFragmentName :: Name}
   deriving (Eq, Ord, Read, Show)
 
 _FragmentName = (Core.Name "hydra/langs/graphql/syntax.FragmentName")
+
+_FragmentName_type_ = _Name_type_
 
 data TypeCondition = 
   TypeConditionOn  |
@@ -253,6 +448,20 @@ _TypeCondition = (Core.Name "hydra/langs/graphql/syntax.TypeCondition")
 _TypeCondition_on = (Core.Name "on")
 
 _TypeCondition_namedType = (Core.Name "namedType")
+
+_TypeCondition_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "on"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "namedType"),
+      Core.fieldTypeType = _NamedType_type_}]}))
 
 data Value = 
   ValueVariable Variable |
@@ -286,6 +495,38 @@ _Value_list = (Core.Name "list")
 
 _Value_object = (Core.Name "object")
 
+_Value_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "variable"),
+      Core.fieldTypeType = _Variable_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "int"),
+      Core.fieldTypeType = _IntValue_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "float"),
+      Core.fieldTypeType = _FloatValue_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "string"),
+      Core.fieldTypeType = _StringValue_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "boolean"),
+      Core.fieldTypeType = _BooleanValue_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "null"),
+      Core.fieldTypeType = _NullValue_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "enum"),
+      Core.fieldTypeType = _EnumValue_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "list"),
+      Core.fieldTypeType = _ListValue_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "object"),
+      Core.fieldTypeType = _ObjectValue_type_}]}))
+
 data BooleanValue = 
   BooleanValueTrue  |
   BooleanValueFalse 
@@ -297,11 +538,33 @@ _BooleanValue_true = (Core.Name "true")
 
 _BooleanValue_false = (Core.Name "false")
 
+_BooleanValue_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "true"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "false"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))}]}))
+
 data NullValue = 
   NullValue {}
   deriving (Eq, Ord, Read, Show)
 
 _NullValue = (Core.Name "hydra/langs/graphql/syntax.NullValue")
+
+_NullValue_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = []}))
 
 newtype EnumValue = 
   EnumValue {
@@ -309,6 +572,8 @@ newtype EnumValue =
   deriving (Eq, Ord, Read, Show)
 
 _EnumValue = (Core.Name "hydra/langs/graphql/syntax.EnumValue")
+
+_EnumValue_type_ = _Name_type_
 
 data ListValue = 
   ListValueSequence ListValue_Sequence |
@@ -321,11 +586,27 @@ _ListValue_sequence = (Core.Name "sequence")
 
 _ListValue_sequence2 = (Core.Name "sequence2")
 
+_ListValue_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence"),
+      Core.fieldTypeType = _ListValue_Sequence_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence2"),
+      Core.fieldTypeType = (Core.TypeList _Value_type_)}]}))
+
 data ListValue_Sequence = 
   ListValue_Sequence {}
   deriving (Eq, Ord, Read, Show)
 
 _ListValue_Sequence = (Core.Name "hydra/langs/graphql/syntax.ListValue.Sequence")
+
+_ListValue_Sequence_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = []}))
 
 data ObjectValue = 
   ObjectValueSequence ObjectValue_Sequence |
@@ -338,11 +619,27 @@ _ObjectValue_sequence = (Core.Name "sequence")
 
 _ObjectValue_sequence2 = (Core.Name "sequence2")
 
+_ObjectValue_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence"),
+      Core.fieldTypeType = _ObjectValue_Sequence_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence2"),
+      Core.fieldTypeType = (Core.TypeList _ObjectField_type_)}]}))
+
 data ObjectValue_Sequence = 
   ObjectValue_Sequence {}
   deriving (Eq, Ord, Read, Show)
 
 _ObjectValue_Sequence = (Core.Name "hydra/langs/graphql/syntax.ObjectValue.Sequence")
+
+_ObjectValue_Sequence_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = []}))
 
 data ObjectField = 
   ObjectField {
@@ -355,6 +652,17 @@ _ObjectField = (Core.Name "hydra/langs/graphql/syntax.ObjectField")
 _ObjectField_name = (Core.Name "name")
 
 _ObjectField_value = (Core.Name "value")
+
+_ObjectField_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "value"),
+      Core.fieldTypeType = _Value_type_}]}))
 
 data VariablesDefinition = 
   VariablesDefinition {
@@ -374,6 +682,23 @@ _VariablesDefinition_defaultValue = (Core.Name "defaultValue")
 
 _VariablesDefinition_directives = (Core.Name "directives")
 
+_VariablesDefinition_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "variable"),
+      Core.fieldTypeType = _Variable_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "type"),
+      Core.fieldTypeType = _Type_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "defaultValue"),
+      Core.fieldTypeType = (Core.TypeOptional _DefaultValue_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)}]}))
+
 newtype Variable = 
   Variable {
     unVariable :: Name}
@@ -381,12 +706,16 @@ newtype Variable =
 
 _Variable = (Core.Name "hydra/langs/graphql/syntax.Variable")
 
+_Variable_type_ = _Name_type_
+
 newtype DefaultValue = 
   DefaultValue {
     unDefaultValue :: Value}
   deriving (Eq, Ord, Read, Show)
 
 _DefaultValue = (Core.Name "hydra/langs/graphql/syntax.DefaultValue")
+
+_DefaultValue_type_ = _Value_type_
 
 data Type = 
   TypeNamed NamedType |
@@ -402,6 +731,20 @@ _Type_list = (Core.Name "list")
 
 _Type_nonNull = (Core.Name "nonNull")
 
+_Type_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "named"),
+      Core.fieldTypeType = _NamedType_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "list"),
+      Core.fieldTypeType = _ListType_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "nonNull"),
+      Core.fieldTypeType = _NonNullType_type_}]}))
+
 newtype NamedType = 
   NamedType {
     unNamedType :: Name}
@@ -409,12 +752,16 @@ newtype NamedType =
 
 _NamedType = (Core.Name "hydra/langs/graphql/syntax.NamedType")
 
+_NamedType_type_ = _Name_type_
+
 newtype ListType = 
   ListType {
     unListType :: Type}
   deriving (Eq, Ord, Read, Show)
 
 _ListType = (Core.Name "hydra/langs/graphql/syntax.ListType")
+
+_ListType_type_ = _Type_type_
 
 data NonNullType = 
   NonNullTypeNamed NamedType |
@@ -427,12 +774,25 @@ _NonNullType_named = (Core.Name "named")
 
 _NonNullType_list = (Core.Name "list")
 
+_NonNullType_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "named"),
+      Core.fieldTypeType = _NamedType_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "list"),
+      Core.fieldTypeType = _ListType_type_}]}))
+
 newtype Directives = 
   Directives {
     unDirectives :: [Directive]}
   deriving (Eq, Ord, Read, Show)
 
 _Directives = (Core.Name "hydra/langs/graphql/syntax.Directives")
+
+_Directives_type_ = (Core.TypeList _Directive_type_)
 
 data Directive = 
   Directive {
@@ -446,12 +806,25 @@ _Directive_name = (Core.Name "name")
 
 _Directive_arguments = (Core.Name "arguments")
 
+_Directive_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "arguments"),
+      Core.fieldTypeType = (Core.TypeOptional _Arguments_type_)}]}))
+
 newtype TypeSystemDocment = 
   TypeSystemDocment {
     unTypeSystemDocment :: [TypeSystemDefinition]}
   deriving (Eq, Ord, Read, Show)
 
 _TypeSystemDocment = (Core.Name "hydra/langs/graphql/syntax.TypeSystemDocment")
+
+_TypeSystemDocment_type_ = (Core.TypeList _TypeSystemDefinition_type_)
 
 data TypeSystemDefinition = 
   TypeSystemDefinitionSchema SchemaDefinition |
@@ -467,12 +840,28 @@ _TypeSystemDefinition_type = (Core.Name "type")
 
 _TypeSystemDefinition_directive = (Core.Name "directive")
 
+_TypeSystemDefinition_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "schema"),
+      Core.fieldTypeType = _SchemaDefinition_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "type"),
+      Core.fieldTypeType = _TypeDefinition_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directive"),
+      Core.fieldTypeType = _DirectiveDefinition_type_}]}))
+
 newtype TypeSystemExtensionDocument = 
   TypeSystemExtensionDocument {
     unTypeSystemExtensionDocument :: [TypeSystemDefinitionOrExtension]}
   deriving (Eq, Ord, Read, Show)
 
 _TypeSystemExtensionDocument = (Core.Name "hydra/langs/graphql/syntax.TypeSystemExtensionDocument")
+
+_TypeSystemExtensionDocument_type_ = (Core.TypeList _TypeSystemDefinitionOrExtension_type_)
 
 data TypeSystemDefinitionOrExtension = 
   TypeSystemDefinitionOrExtensionDefinition TypeSystemDefinition |
@@ -485,6 +874,17 @@ _TypeSystemDefinitionOrExtension_definition = (Core.Name "definition")
 
 _TypeSystemDefinitionOrExtension_extension = (Core.Name "extension")
 
+_TypeSystemDefinitionOrExtension_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "definition"),
+      Core.fieldTypeType = _TypeSystemDefinition_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "extension"),
+      Core.fieldTypeType = _TypeSystemExtension_type_}]}))
+
 data TypeSystemExtension = 
   TypeSystemExtensionSchema SchemaExtension |
   TypeSystemExtensionType TypeExtension
@@ -495,6 +895,17 @@ _TypeSystemExtension = (Core.Name "hydra/langs/graphql/syntax.TypeSystemExtensio
 _TypeSystemExtension_schema = (Core.Name "schema")
 
 _TypeSystemExtension_type = (Core.Name "type")
+
+_TypeSystemExtension_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "schema"),
+      Core.fieldTypeType = _SchemaExtension_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "type"),
+      Core.fieldTypeType = _TypeExtension_type_}]}))
 
 data SchemaDefinition = 
   SchemaDefinition {
@@ -511,6 +922,20 @@ _SchemaDefinition_directives = (Core.Name "directives")
 
 _SchemaDefinition_rootOperationTypeDefinition = (Core.Name "rootOperationTypeDefinition")
 
+_SchemaDefinition_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "description"),
+      Core.fieldTypeType = (Core.TypeOptional _Description_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "rootOperationTypeDefinition"),
+      Core.fieldTypeType = _RootOperationTypeDefinition_type_}]}))
+
 data SchemaExtension = 
   SchemaExtensionSequence SchemaExtension_Sequence |
   SchemaExtensionSequence2 Directives
@@ -521,6 +946,17 @@ _SchemaExtension = (Core.Name "hydra/langs/graphql/syntax.SchemaExtension")
 _SchemaExtension_sequence = (Core.Name "sequence")
 
 _SchemaExtension_sequence2 = (Core.Name "sequence2")
+
+_SchemaExtension_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence"),
+      Core.fieldTypeType = _SchemaExtension_Sequence_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence2"),
+      Core.fieldTypeType = _Directives_type_}]}))
 
 data SchemaExtension_Sequence = 
   SchemaExtension_Sequence {
@@ -534,6 +970,17 @@ _SchemaExtension_Sequence_directives = (Core.Name "directives")
 
 _SchemaExtension_Sequence_rootOperationTypeDefinition = (Core.Name "rootOperationTypeDefinition")
 
+_SchemaExtension_Sequence_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "rootOperationTypeDefinition"),
+      Core.fieldTypeType = _RootOperationTypeDefinition_type_}]}))
+
 data RootOperationTypeDefinition = 
   RootOperationTypeDefinition {
     rootOperationTypeDefinitionOperationType :: OperationType,
@@ -546,12 +993,25 @@ _RootOperationTypeDefinition_operationType = (Core.Name "operationType")
 
 _RootOperationTypeDefinition_namedType = (Core.Name "namedType")
 
+_RootOperationTypeDefinition_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "operationType"),
+      Core.fieldTypeType = _OperationType_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "namedType"),
+      Core.fieldTypeType = _NamedType_type_}]}))
+
 newtype Description = 
   Description {
     unDescription :: StringValue}
   deriving (Eq, Ord, Read, Show)
 
 _Description = (Core.Name "hydra/langs/graphql/syntax.Description")
+
+_Description_type_ = _StringValue_type_
 
 data TypeDefinition = 
   TypeDefinitionScalar ScalarTypeDefinition |
@@ -576,6 +1036,29 @@ _TypeDefinition_enum = (Core.Name "enum")
 
 _TypeDefinition_inputObject = (Core.Name "inputObject")
 
+_TypeDefinition_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "scalar"),
+      Core.fieldTypeType = _ScalarTypeDefinition_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "object"),
+      Core.fieldTypeType = _ObjectTypeDefinition_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "interface"),
+      Core.fieldTypeType = _InterfaceTypeDefinition_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "union"),
+      Core.fieldTypeType = _UnionTypeDefinition_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "enum"),
+      Core.fieldTypeType = _EnumTypeDefinition_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "inputObject"),
+      Core.fieldTypeType = _InputObjectTypeDefinition_type_}]}))
+
 data TypeExtension = 
   TypeExtensionScalar ScalarTypeExtension |
   TypeExtensionObject ObjectTypeExtension |
@@ -599,6 +1082,29 @@ _TypeExtension_enum = (Core.Name "enum")
 
 _TypeExtension_inputObject = (Core.Name "inputObject")
 
+_TypeExtension_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "scalar"),
+      Core.fieldTypeType = _ScalarTypeExtension_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "object"),
+      Core.fieldTypeType = _ObjectTypeExtension_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "interface"),
+      Core.fieldTypeType = _InterfaceTypeExtension_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "union"),
+      Core.fieldTypeType = _UnionTypeExtension_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "enum"),
+      Core.fieldTypeType = _EnumTypeExtension_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "inputObject"),
+      Core.fieldTypeType = _InputObjectTypeExtension_type_}]}))
+
 data ScalarTypeDefinition = 
   ScalarTypeDefinition {
     scalarTypeDefinitionDescription :: (Maybe Description),
@@ -614,6 +1120,20 @@ _ScalarTypeDefinition_name = (Core.Name "name")
 
 _ScalarTypeDefinition_directives = (Core.Name "directives")
 
+_ScalarTypeDefinition_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "description"),
+      Core.fieldTypeType = (Core.TypeOptional _Description_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)}]}))
+
 data ScalarTypeExtension = 
   ScalarTypeExtension {
     scalarTypeExtensionName :: Name,
@@ -625,6 +1145,17 @@ _ScalarTypeExtension = (Core.Name "hydra/langs/graphql/syntax.ScalarTypeExtensio
 _ScalarTypeExtension_name = (Core.Name "name")
 
 _ScalarTypeExtension_directives = (Core.Name "directives")
+
+_ScalarTypeExtension_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = _Directives_type_}]}))
 
 data ObjectTypeDefinition = 
   ObjectTypeDefinition {
@@ -647,6 +1178,26 @@ _ObjectTypeDefinition_directives = (Core.Name "directives")
 
 _ObjectTypeDefinition_fieldsDefinition = (Core.Name "fieldsDefinition")
 
+_ObjectTypeDefinition_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "description"),
+      Core.fieldTypeType = (Core.TypeOptional _Description_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "implementsInterfaces"),
+      Core.fieldTypeType = (Core.TypeOptional _ImplementsInterfaces_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "fieldsDefinition"),
+      Core.fieldTypeType = (Core.TypeOptional _FieldsDefinition_type_)}]}))
+
 data ObjectTypeExtension = 
   ObjectTypeExtensionSequence ObjectTypeExtension_Sequence |
   ObjectTypeExtensionSequence2 ObjectTypeExtension_Sequence2 |
@@ -660,6 +1211,20 @@ _ObjectTypeExtension_sequence = (Core.Name "sequence")
 _ObjectTypeExtension_sequence2 = (Core.Name "sequence2")
 
 _ObjectTypeExtension_sequence3 = (Core.Name "sequence3")
+
+_ObjectTypeExtension_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence"),
+      Core.fieldTypeType = _ObjectTypeExtension_Sequence_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence2"),
+      Core.fieldTypeType = _ObjectTypeExtension_Sequence2_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence3"),
+      Core.fieldTypeType = _ObjectTypeExtension_Sequence3_type_}]}))
 
 data ObjectTypeExtension_Sequence = 
   ObjectTypeExtension_Sequence {
@@ -679,6 +1244,23 @@ _ObjectTypeExtension_Sequence_directives = (Core.Name "directives")
 
 _ObjectTypeExtension_Sequence_fieldsDefinition = (Core.Name "fieldsDefinition")
 
+_ObjectTypeExtension_Sequence_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "implementsInterfaces"),
+      Core.fieldTypeType = (Core.TypeOptional _ImplementsInterfaces_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "fieldsDefinition"),
+      Core.fieldTypeType = _FieldsDefinition_type_}]}))
+
 data ObjectTypeExtension_Sequence2 = 
   ObjectTypeExtension_Sequence2 {
     objectTypeExtension_Sequence2Name :: Name,
@@ -694,6 +1276,20 @@ _ObjectTypeExtension_Sequence2_implementsInterfaces = (Core.Name "implementsInte
 
 _ObjectTypeExtension_Sequence2_directives = (Core.Name "directives")
 
+_ObjectTypeExtension_Sequence2_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "implementsInterfaces"),
+      Core.fieldTypeType = (Core.TypeOptional _ImplementsInterfaces_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)}]}))
+
 data ObjectTypeExtension_Sequence3 = 
   ObjectTypeExtension_Sequence3 {
     objectTypeExtension_Sequence3Name :: Name,
@@ -706,6 +1302,17 @@ _ObjectTypeExtension_Sequence3_name = (Core.Name "name")
 
 _ObjectTypeExtension_Sequence3_implementsInterfaces = (Core.Name "implementsInterfaces")
 
+_ObjectTypeExtension_Sequence3_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "implementsInterfaces"),
+      Core.fieldTypeType = _ImplementsInterfaces_type_}]}))
+
 data ImplementsInterfaces = 
   ImplementsInterfacesSequence ImplementsInterfaces_Sequence |
   ImplementsInterfacesSequence2 ImplementsInterfaces_Sequence2
@@ -716,6 +1323,17 @@ _ImplementsInterfaces = (Core.Name "hydra/langs/graphql/syntax.ImplementsInterfa
 _ImplementsInterfaces_sequence = (Core.Name "sequence")
 
 _ImplementsInterfaces_sequence2 = (Core.Name "sequence2")
+
+_ImplementsInterfaces_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence"),
+      Core.fieldTypeType = _ImplementsInterfaces_Sequence_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence2"),
+      Core.fieldTypeType = _ImplementsInterfaces_Sequence2_type_}]}))
 
 data ImplementsInterfaces_Sequence = 
   ImplementsInterfaces_Sequence {
@@ -729,6 +1347,17 @@ _ImplementsInterfaces_Sequence_implementsInterfaces = (Core.Name "implementsInte
 
 _ImplementsInterfaces_Sequence_namedType = (Core.Name "namedType")
 
+_ImplementsInterfaces_Sequence_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "implementsInterfaces"),
+      Core.fieldTypeType = _ImplementsInterfaces_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "namedType"),
+      Core.fieldTypeType = _NamedType_type_}]}))
+
 data ImplementsInterfaces_Sequence2 = 
   ImplementsInterfaces_Sequence2 {
     implementsInterfaces_Sequence2Amp :: (Maybe ()),
@@ -741,12 +1370,28 @@ _ImplementsInterfaces_Sequence2_amp = (Core.Name "amp")
 
 _ImplementsInterfaces_Sequence2_namedType = (Core.Name "namedType")
 
+_ImplementsInterfaces_Sequence2_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "amp"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []})))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "namedType"),
+      Core.fieldTypeType = _NamedType_type_}]}))
+
 newtype FieldsDefinition = 
   FieldsDefinition {
     unFieldsDefinition :: [FieldDefinition]}
   deriving (Eq, Ord, Read, Show)
 
 _FieldsDefinition = (Core.Name "hydra/langs/graphql/syntax.FieldsDefinition")
+
+_FieldsDefinition_type_ = (Core.TypeList _FieldDefinition_type_)
 
 data FieldDefinition = 
   FieldDefinition {
@@ -769,12 +1414,34 @@ _FieldDefinition_type = (Core.Name "type")
 
 _FieldDefinition_directives = (Core.Name "directives")
 
+_FieldDefinition_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "description"),
+      Core.fieldTypeType = (Core.TypeOptional _Description_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "argumentsDefinition"),
+      Core.fieldTypeType = (Core.TypeOptional _ArgumentsDefinition_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "type"),
+      Core.fieldTypeType = _Type_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)}]}))
+
 newtype ArgumentsDefinition = 
   ArgumentsDefinition {
     unArgumentsDefinition :: [InputValueDefinition]}
   deriving (Eq, Ord, Read, Show)
 
 _ArgumentsDefinition = (Core.Name "hydra/langs/graphql/syntax.ArgumentsDefinition")
+
+_ArgumentsDefinition_type_ = (Core.TypeList _InputValueDefinition_type_)
 
 data InputValueDefinition = 
   InputValueDefinition {
@@ -797,6 +1464,26 @@ _InputValueDefinition_defaultValue = (Core.Name "defaultValue")
 
 _InputValueDefinition_directives = (Core.Name "directives")
 
+_InputValueDefinition_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "description"),
+      Core.fieldTypeType = (Core.TypeOptional _Description_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "type"),
+      Core.fieldTypeType = _Type_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "defaultValue"),
+      Core.fieldTypeType = (Core.TypeOptional _DefaultValue_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)}]}))
+
 data InterfaceTypeDefinition = 
   InterfaceTypeDefinitionSequence InterfaceTypeDefinition_Sequence |
   InterfaceTypeDefinitionSequence2 InterfaceTypeDefinition_Sequence2
@@ -807,6 +1494,17 @@ _InterfaceTypeDefinition = (Core.Name "hydra/langs/graphql/syntax.InterfaceTypeD
 _InterfaceTypeDefinition_sequence = (Core.Name "sequence")
 
 _InterfaceTypeDefinition_sequence2 = (Core.Name "sequence2")
+
+_InterfaceTypeDefinition_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence"),
+      Core.fieldTypeType = _InterfaceTypeDefinition_Sequence_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence2"),
+      Core.fieldTypeType = _InterfaceTypeDefinition_Sequence2_type_}]}))
 
 data InterfaceTypeDefinition_Sequence = 
   InterfaceTypeDefinition_Sequence {
@@ -829,6 +1527,26 @@ _InterfaceTypeDefinition_Sequence_directives = (Core.Name "directives")
 
 _InterfaceTypeDefinition_Sequence_fieldsDefinition = (Core.Name "fieldsDefinition")
 
+_InterfaceTypeDefinition_Sequence_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "description"),
+      Core.fieldTypeType = (Core.TypeOptional _Description_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "implementsInterfaces"),
+      Core.fieldTypeType = (Core.TypeOptional _ImplementsInterfaces_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "fieldsDefinition"),
+      Core.fieldTypeType = _FieldsDefinition_type_}]}))
+
 data InterfaceTypeDefinition_Sequence2 = 
   InterfaceTypeDefinition_Sequence2 {
     interfaceTypeDefinition_Sequence2Description :: (Maybe Description),
@@ -847,6 +1565,23 @@ _InterfaceTypeDefinition_Sequence2_implementsInterfaces = (Core.Name "implements
 
 _InterfaceTypeDefinition_Sequence2_directives = (Core.Name "directives")
 
+_InterfaceTypeDefinition_Sequence2_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "description"),
+      Core.fieldTypeType = (Core.TypeOptional _Description_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "implementsInterfaces"),
+      Core.fieldTypeType = _ImplementsInterfaces_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)}]}))
+
 data InterfaceTypeExtension = 
   InterfaceTypeExtensionSequence InterfaceTypeExtension_Sequence |
   InterfaceTypeExtensionSequence2 InterfaceTypeExtension_Sequence2 |
@@ -860,6 +1595,20 @@ _InterfaceTypeExtension_sequence = (Core.Name "sequence")
 _InterfaceTypeExtension_sequence2 = (Core.Name "sequence2")
 
 _InterfaceTypeExtension_sequence3 = (Core.Name "sequence3")
+
+_InterfaceTypeExtension_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence"),
+      Core.fieldTypeType = _InterfaceTypeExtension_Sequence_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence2"),
+      Core.fieldTypeType = _InterfaceTypeExtension_Sequence2_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence3"),
+      Core.fieldTypeType = _InterfaceTypeExtension_Sequence3_type_}]}))
 
 data InterfaceTypeExtension_Sequence = 
   InterfaceTypeExtension_Sequence {
@@ -879,6 +1628,23 @@ _InterfaceTypeExtension_Sequence_directives = (Core.Name "directives")
 
 _InterfaceTypeExtension_Sequence_fieldsDefinition = (Core.Name "fieldsDefinition")
 
+_InterfaceTypeExtension_Sequence_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "implementsInterfaces"),
+      Core.fieldTypeType = (Core.TypeOptional _ImplementsInterfaces_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "fieldsDefinition"),
+      Core.fieldTypeType = _FieldsDefinition_type_}]}))
+
 data InterfaceTypeExtension_Sequence2 = 
   InterfaceTypeExtension_Sequence2 {
     interfaceTypeExtension_Sequence2Name :: Name,
@@ -894,6 +1660,20 @@ _InterfaceTypeExtension_Sequence2_implementsInterfaces = (Core.Name "implementsI
 
 _InterfaceTypeExtension_Sequence2_directives = (Core.Name "directives")
 
+_InterfaceTypeExtension_Sequence2_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "implementsInterfaces"),
+      Core.fieldTypeType = (Core.TypeOptional _ImplementsInterfaces_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = _Directives_type_}]}))
+
 data InterfaceTypeExtension_Sequence3 = 
   InterfaceTypeExtension_Sequence3 {
     interfaceTypeExtension_Sequence3Name :: Name,
@@ -905,6 +1685,17 @@ _InterfaceTypeExtension_Sequence3 = (Core.Name "hydra/langs/graphql/syntax.Inter
 _InterfaceTypeExtension_Sequence3_name = (Core.Name "name")
 
 _InterfaceTypeExtension_Sequence3_implementsInterfaces = (Core.Name "implementsInterfaces")
+
+_InterfaceTypeExtension_Sequence3_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "implementsInterfaces"),
+      Core.fieldTypeType = _ImplementsInterfaces_type_}]}))
 
 data UnionTypeDefinition = 
   UnionTypeDefinition {
@@ -924,6 +1715,23 @@ _UnionTypeDefinition_directives = (Core.Name "directives")
 
 _UnionTypeDefinition_unionMemberTypes = (Core.Name "unionMemberTypes")
 
+_UnionTypeDefinition_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "description"),
+      Core.fieldTypeType = (Core.TypeOptional _Description_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "unionMemberTypes"),
+      Core.fieldTypeType = (Core.TypeOptional _UnionMemberTypes_type_)}]}))
+
 data UnionMemberTypes = 
   UnionMemberTypesSequence UnionMemberTypes_Sequence |
   UnionMemberTypesSequence2 UnionMemberTypes_Sequence2
@@ -934,6 +1742,17 @@ _UnionMemberTypes = (Core.Name "hydra/langs/graphql/syntax.UnionMemberTypes")
 _UnionMemberTypes_sequence = (Core.Name "sequence")
 
 _UnionMemberTypes_sequence2 = (Core.Name "sequence2")
+
+_UnionMemberTypes_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence"),
+      Core.fieldTypeType = _UnionMemberTypes_Sequence_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence2"),
+      Core.fieldTypeType = _UnionMemberTypes_Sequence2_type_}]}))
 
 data UnionMemberTypes_Sequence = 
   UnionMemberTypes_Sequence {
@@ -947,6 +1766,17 @@ _UnionMemberTypes_Sequence_unionMemberTypes = (Core.Name "unionMemberTypes")
 
 _UnionMemberTypes_Sequence_namedType = (Core.Name "namedType")
 
+_UnionMemberTypes_Sequence_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "unionMemberTypes"),
+      Core.fieldTypeType = _UnionMemberTypes_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "namedType"),
+      Core.fieldTypeType = _NamedType_type_}]}))
+
 data UnionMemberTypes_Sequence2 = 
   UnionMemberTypes_Sequence2 {
     unionMemberTypes_Sequence2Or :: (Maybe ()),
@@ -959,6 +1789,20 @@ _UnionMemberTypes_Sequence2_or = (Core.Name "or")
 
 _UnionMemberTypes_Sequence2_namedType = (Core.Name "namedType")
 
+_UnionMemberTypes_Sequence2_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "or"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []})))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "namedType"),
+      Core.fieldTypeType = _NamedType_type_}]}))
+
 data UnionTypeExtension = 
   UnionTypeExtensionSequence UnionTypeExtension_Sequence |
   UnionTypeExtensionSequence2 UnionTypeExtension_Sequence2
@@ -969,6 +1813,17 @@ _UnionTypeExtension = (Core.Name "hydra/langs/graphql/syntax.UnionTypeExtension"
 _UnionTypeExtension_sequence = (Core.Name "sequence")
 
 _UnionTypeExtension_sequence2 = (Core.Name "sequence2")
+
+_UnionTypeExtension_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence"),
+      Core.fieldTypeType = _UnionTypeExtension_Sequence_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence2"),
+      Core.fieldTypeType = _UnionTypeExtension_Sequence2_type_}]}))
 
 data UnionTypeExtension_Sequence = 
   UnionTypeExtension_Sequence {
@@ -985,6 +1840,20 @@ _UnionTypeExtension_Sequence_directives = (Core.Name "directives")
 
 _UnionTypeExtension_Sequence_unionMemberTypes = (Core.Name "unionMemberTypes")
 
+_UnionTypeExtension_Sequence_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "unionMemberTypes"),
+      Core.fieldTypeType = _UnionMemberTypes_type_}]}))
+
 data UnionTypeExtension_Sequence2 = 
   UnionTypeExtension_Sequence2 {
     unionTypeExtension_Sequence2Name :: Name,
@@ -996,6 +1865,17 @@ _UnionTypeExtension_Sequence2 = (Core.Name "hydra/langs/graphql/syntax.UnionType
 _UnionTypeExtension_Sequence2_name = (Core.Name "name")
 
 _UnionTypeExtension_Sequence2_directives = (Core.Name "directives")
+
+_UnionTypeExtension_Sequence2_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = _Directives_type_}]}))
 
 data EnumTypeDefinition = 
   EnumTypeDefinition {
@@ -1015,12 +1895,31 @@ _EnumTypeDefinition_directives = (Core.Name "directives")
 
 _EnumTypeDefinition_enumValuesDefinition = (Core.Name "enumValuesDefinition")
 
+_EnumTypeDefinition_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "description"),
+      Core.fieldTypeType = (Core.TypeOptional _Description_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "enumValuesDefinition"),
+      Core.fieldTypeType = (Core.TypeOptional _EnumValuesDefinition_type_)}]}))
+
 newtype EnumValuesDefinition = 
   EnumValuesDefinition {
     unEnumValuesDefinition :: [EnumValueDefinition]}
   deriving (Eq, Ord, Read, Show)
 
 _EnumValuesDefinition = (Core.Name "hydra/langs/graphql/syntax.EnumValuesDefinition")
+
+_EnumValuesDefinition_type_ = (Core.TypeList _EnumValueDefinition_type_)
 
 data EnumValueDefinition = 
   EnumValueDefinition {
@@ -1037,6 +1936,20 @@ _EnumValueDefinition_enumValue = (Core.Name "enumValue")
 
 _EnumValueDefinition_directives = (Core.Name "directives")
 
+_EnumValueDefinition_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "description"),
+      Core.fieldTypeType = (Core.TypeOptional _Description_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "enumValue"),
+      Core.fieldTypeType = _EnumValue_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)}]}))
+
 data EnumTypeExtension = 
   EnumTypeExtensionSequence EnumTypeExtension_Sequence |
   EnumTypeExtensionSequence2 EnumTypeExtension_Sequence2
@@ -1047,6 +1960,17 @@ _EnumTypeExtension = (Core.Name "hydra/langs/graphql/syntax.EnumTypeExtension")
 _EnumTypeExtension_sequence = (Core.Name "sequence")
 
 _EnumTypeExtension_sequence2 = (Core.Name "sequence2")
+
+_EnumTypeExtension_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence"),
+      Core.fieldTypeType = _EnumTypeExtension_Sequence_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence2"),
+      Core.fieldTypeType = _EnumTypeExtension_Sequence2_type_}]}))
 
 data EnumTypeExtension_Sequence = 
   EnumTypeExtension_Sequence {
@@ -1063,6 +1987,20 @@ _EnumTypeExtension_Sequence_directives = (Core.Name "directives")
 
 _EnumTypeExtension_Sequence_enumValuesDefinition = (Core.Name "enumValuesDefinition")
 
+_EnumTypeExtension_Sequence_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "enumValuesDefinition"),
+      Core.fieldTypeType = _EnumValuesDefinition_type_}]}))
+
 data EnumTypeExtension_Sequence2 = 
   EnumTypeExtension_Sequence2 {
     enumTypeExtension_Sequence2Name :: Name,
@@ -1075,6 +2013,17 @@ _EnumTypeExtension_Sequence2_name = (Core.Name "name")
 
 _EnumTypeExtension_Sequence2_directives = (Core.Name "directives")
 
+_EnumTypeExtension_Sequence2_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = _Directives_type_}]}))
+
 data InputObjectTypeDefinition = 
   InputObjectTypeDefinitionSequence InputObjectTypeDefinition_Sequence |
   InputObjectTypeDefinitionSequence2 InputObjectTypeDefinition_Sequence2
@@ -1085,6 +2034,17 @@ _InputObjectTypeDefinition = (Core.Name "hydra/langs/graphql/syntax.InputObjectT
 _InputObjectTypeDefinition_sequence = (Core.Name "sequence")
 
 _InputObjectTypeDefinition_sequence2 = (Core.Name "sequence2")
+
+_InputObjectTypeDefinition_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence"),
+      Core.fieldTypeType = _InputObjectTypeDefinition_Sequence_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence2"),
+      Core.fieldTypeType = _InputObjectTypeDefinition_Sequence2_type_}]}))
 
 data InputObjectTypeDefinition_Sequence = 
   InputObjectTypeDefinition_Sequence {
@@ -1104,6 +2064,23 @@ _InputObjectTypeDefinition_Sequence_directives = (Core.Name "directives")
 
 _InputObjectTypeDefinition_Sequence_inputFieldsDefinition = (Core.Name "inputFieldsDefinition")
 
+_InputObjectTypeDefinition_Sequence_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "description"),
+      Core.fieldTypeType = (Core.TypeOptional _Description_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "inputFieldsDefinition"),
+      Core.fieldTypeType = _InputFieldsDefinition_type_}]}))
+
 data InputObjectTypeDefinition_Sequence2 = 
   InputObjectTypeDefinition_Sequence2 {
     inputObjectTypeDefinition_Sequence2Description :: (Maybe Description),
@@ -1119,12 +2096,28 @@ _InputObjectTypeDefinition_Sequence2_name = (Core.Name "name")
 
 _InputObjectTypeDefinition_Sequence2_directives = (Core.Name "directives")
 
+_InputObjectTypeDefinition_Sequence2_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "description"),
+      Core.fieldTypeType = (Core.TypeOptional _Description_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)}]}))
+
 newtype InputFieldsDefinition = 
   InputFieldsDefinition {
     unInputFieldsDefinition :: [InputValueDefinition]}
   deriving (Eq, Ord, Read, Show)
 
 _InputFieldsDefinition = (Core.Name "hydra/langs/graphql/syntax.InputFieldsDefinition")
+
+_InputFieldsDefinition_type_ = (Core.TypeList _InputValueDefinition_type_)
 
 data InputObjectTypeExtension = 
   InputObjectTypeExtensionSequence InputObjectTypeExtension_Sequence |
@@ -1136,6 +2129,17 @@ _InputObjectTypeExtension = (Core.Name "hydra/langs/graphql/syntax.InputObjectTy
 _InputObjectTypeExtension_sequence = (Core.Name "sequence")
 
 _InputObjectTypeExtension_sequence2 = (Core.Name "sequence2")
+
+_InputObjectTypeExtension_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence"),
+      Core.fieldTypeType = _InputObjectTypeExtension_Sequence_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence2"),
+      Core.fieldTypeType = _InputObjectTypeExtension_Sequence2_type_}]}))
 
 data InputObjectTypeExtension_Sequence = 
   InputObjectTypeExtension_Sequence {
@@ -1152,6 +2156,20 @@ _InputObjectTypeExtension_Sequence_directives = (Core.Name "directives")
 
 _InputObjectTypeExtension_Sequence_inputFieldsDefinition = (Core.Name "inputFieldsDefinition")
 
+_InputObjectTypeExtension_Sequence_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = (Core.TypeOptional _Directives_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "inputFieldsDefinition"),
+      Core.fieldTypeType = _InputFieldsDefinition_type_}]}))
+
 data InputObjectTypeExtension_Sequence2 = 
   InputObjectTypeExtension_Sequence2 {
     inputObjectTypeExtension_Sequence2Name :: Name,
@@ -1163,6 +2181,17 @@ _InputObjectTypeExtension_Sequence2 = (Core.Name "hydra/langs/graphql/syntax.Inp
 _InputObjectTypeExtension_Sequence2_name = (Core.Name "name")
 
 _InputObjectTypeExtension_Sequence2_directives = (Core.Name "directives")
+
+_InputObjectTypeExtension_Sequence2_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directives"),
+      Core.fieldTypeType = _Directives_type_}]}))
 
 data DirectiveDefinition = 
   DirectiveDefinition {
@@ -1185,6 +2214,29 @@ _DirectiveDefinition_repeatable = (Core.Name "repeatable")
 
 _DirectiveDefinition_directiveLocations = (Core.Name "directiveLocations")
 
+_DirectiveDefinition_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "description"),
+      Core.fieldTypeType = (Core.TypeOptional _Description_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = _Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "argumentsDefinition"),
+      Core.fieldTypeType = (Core.TypeOptional _ArgumentsDefinition_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "repeatable"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []})))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directiveLocations"),
+      Core.fieldTypeType = _DirectiveLocations_type_}]}))
+
 data DirectiveLocations = 
   DirectiveLocationsSequence DirectiveLocations_Sequence |
   DirectiveLocationsSequence2 DirectiveLocations_Sequence2
@@ -1195,6 +2247,17 @@ _DirectiveLocations = (Core.Name "hydra/langs/graphql/syntax.DirectiveLocations"
 _DirectiveLocations_sequence = (Core.Name "sequence")
 
 _DirectiveLocations_sequence2 = (Core.Name "sequence2")
+
+_DirectiveLocations_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence"),
+      Core.fieldTypeType = _DirectiveLocations_Sequence_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sequence2"),
+      Core.fieldTypeType = _DirectiveLocations_Sequence2_type_}]}))
 
 data DirectiveLocations_Sequence = 
   DirectiveLocations_Sequence {
@@ -1208,6 +2271,17 @@ _DirectiveLocations_Sequence_directiveLocations = (Core.Name "directiveLocations
 
 _DirectiveLocations_Sequence_directiveLocation = (Core.Name "directiveLocation")
 
+_DirectiveLocations_Sequence_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directiveLocations"),
+      Core.fieldTypeType = _DirectiveLocations_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directiveLocation"),
+      Core.fieldTypeType = _DirectiveLocation_type_}]}))
+
 data DirectiveLocations_Sequence2 = 
   DirectiveLocations_Sequence2 {
     directiveLocations_Sequence2Or :: (Maybe ()),
@@ -1220,6 +2294,20 @@ _DirectiveLocations_Sequence2_or = (Core.Name "or")
 
 _DirectiveLocations_Sequence2_directiveLocation = (Core.Name "directiveLocation")
 
+_DirectiveLocations_Sequence2_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "or"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []})))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "directiveLocation"),
+      Core.fieldTypeType = _DirectiveLocation_type_}]}))
+
 data DirectiveLocation = 
   DirectiveLocationExecutable ExecutableDirectiveLocation |
   DirectiveLocationTypeSystem TypeSystemDirectiveLocation
@@ -1230,6 +2318,17 @@ _DirectiveLocation = (Core.Name "hydra/langs/graphql/syntax.DirectiveLocation")
 _DirectiveLocation_executable = (Core.Name "executable")
 
 _DirectiveLocation_typeSystem = (Core.Name "typeSystem")
+
+_DirectiveLocation_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "executable"),
+      Core.fieldTypeType = _ExecutableDirectiveLocation_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "typeSystem"),
+      Core.fieldTypeType = _TypeSystemDirectiveLocation_type_}]}))
 
 data ExecutableDirectiveLocation = 
   ExecutableDirectiveLocationQUERY  |
@@ -1259,6 +2358,59 @@ _ExecutableDirectiveLocation_fRAGMENTLowbarSPREAD = (Core.Name "fRAGMENTLowbarSP
 _ExecutableDirectiveLocation_iNLINELowbarFRAGMENT = (Core.Name "iNLINELowbarFRAGMENT")
 
 _ExecutableDirectiveLocation_vARIABLELowbarDEFINITION = (Core.Name "vARIABLELowbarDEFINITION")
+
+_ExecutableDirectiveLocation_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "qUERY"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "mUTATION"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sUBSCRIPTION"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "fIELD"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "fRAGMENTLowbarDEFINITION"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "fRAGMENTLowbarSPREAD"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "iNLINELowbarFRAGMENT"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "vARIABLELowbarDEFINITION"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))}]}))
 
 data TypeSystemDirectiveLocation = 
   TypeSystemDirectiveLocationSCHEMA  |
@@ -1297,3 +2449,74 @@ _TypeSystemDirectiveLocation_eNUMLowbarVALUE = (Core.Name "eNUMLowbarVALUE")
 _TypeSystemDirectiveLocation_iNPUTLowbarOBJECT = (Core.Name "iNPUTLowbarOBJECT")
 
 _TypeSystemDirectiveLocation_iNPUTLowbarFIELDLowbarDEFINITION = (Core.Name "iNPUTLowbarFIELDLowbarDEFINITION")
+
+_TypeSystemDirectiveLocation_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "Placeholder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sCHEMA"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sCALAR"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "oBJECT"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "fIELDLowbarDEFINITION"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "aRGUMENTLowbarDEFINITION"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "iNTERFACE"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "uNION"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "eNUM"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "eNUMLowbarVALUE"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "iNPUTLowbarOBJECT"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "iNPUTLowbarFIELDLowbarDEFINITION"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))}]}))

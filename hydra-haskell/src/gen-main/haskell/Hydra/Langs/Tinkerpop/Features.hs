@@ -93,6 +93,65 @@ _DataTypeFeatures_supportsStringValues = (Core.Name "supportsStringValues")
 
 _DataTypeFeatures_supportsUniformListValues = (Core.Name "supportsUniformListValues")
 
+_DataTypeFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/features.DataTypeFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsBooleanArrayValues"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsBooleanValues"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsByteArrayValues"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsByteValues"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsDoubleArrayValues"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsDoubleValues"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsFloatArrayValues"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsFloatValues"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsIntegerArrayValues"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsIntegerValues"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsLongArrayValues"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsLongValues"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsMapValues"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsMixedListValues"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsSerializableValues"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsStringArrayValues"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsStringValues"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsUniformListValues"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
+
 -- | Features that are related to Edge operations.
 data EdgeFeatures = 
   EdgeFeatures {
@@ -118,6 +177,26 @@ _EdgeFeatures_supportsRemoveEdges = (Core.Name "supportsRemoveEdges")
 
 _EdgeFeatures_supportsUpsert = (Core.Name "supportsUpsert")
 
+_EdgeFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/features.EdgeFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "elementFeatures"),
+      Core.fieldTypeType = _ElementFeatures_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "properties"),
+      Core.fieldTypeType = _EdgePropertyFeatures_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsAddEdges"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsRemoveEdges"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsUpsert"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
+
 -- | Features that are related to Edge Property objects.
 data EdgePropertyFeatures = 
   EdgePropertyFeatures {
@@ -127,6 +206,14 @@ data EdgePropertyFeatures =
 _EdgePropertyFeatures = (Core.Name "hydra/langs/tinkerpop/features.EdgePropertyFeatures")
 
 _EdgePropertyFeatures_propertyFeatures = (Core.Name "propertyFeatures")
+
+_EdgePropertyFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/features.EdgePropertyFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "propertyFeatures"),
+      Core.fieldTypeType = _PropertyFeatures_type_}]}))
 
 -- | Features that are related to Element objects.
 data ElementFeatures = 
@@ -167,6 +254,35 @@ _ElementFeatures_supportsUserSuppliedIds = (Core.Name "supportsUserSuppliedIds")
 
 _ElementFeatures_supportsUuidIds = (Core.Name "supportsUuidIds")
 
+_ElementFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/features.ElementFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsAddProperty"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsAnyIds"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsCustomIds"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsNumericIds"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsRemoveProperty"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsStringIds"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsUserSuppliedIds"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsUuidIds"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
+
 -- | Additional features which are needed for the complete specification of language constraints in Hydra, above and beyond TinkerPop Graph.Features
 data ExtraFeatures a = 
   ExtraFeatures {
@@ -175,6 +291,18 @@ data ExtraFeatures a =
 _ExtraFeatures = (Core.Name "hydra/langs/tinkerpop/features.ExtraFeatures")
 
 _ExtraFeatures_supportsMapKey = (Core.Name "supportsMapKey")
+
+_ExtraFeatures_type_ = (Core.TypeLambda (Core.LambdaType {
+  Core.lambdaTypeParameter = (Core.Name "a"),
+  Core.lambdaTypeBody = (Core.TypeRecord (Core.RowType {
+    Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/features.ExtraFeatures"),
+    Core.rowTypeExtends = Nothing,
+    Core.rowTypeFields = [
+      Core.FieldType {
+        Core.fieldTypeName = (Core.Name "supportsMapKey"),
+        Core.fieldTypeType = (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = Core._Type_type_,
+          Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeBoolean)}))}]}))}))
 
 -- | An interface that represents the capabilities of a Graph implementation. By default all methods of features return true and it is up to implementers to disable feature they don't support. Users should check features prior to using various functions of TinkerPop to help ensure code portability across implementations. For example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().
 -- | 
@@ -196,6 +324,20 @@ _Features_edge = (Core.Name "edge")
 _Features_graph = (Core.Name "graph")
 
 _Features_vertex = (Core.Name "vertex")
+
+_Features_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/features.Features"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "edge"),
+      Core.fieldTypeType = _EdgeFeatures_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "graph"),
+      Core.fieldTypeType = _GraphFeatures_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "vertex"),
+      Core.fieldTypeType = _VertexFeatures_type_}]}))
 
 -- | Features specific to a operations of a graph.
 data GraphFeatures = 
@@ -236,6 +378,35 @@ _GraphFeatures_supportsTransactions = (Core.Name "supportsTransactions")
 
 _GraphFeatures_variables = (Core.Name "variables")
 
+_GraphFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/features.GraphFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsComputer"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsConcurrentAccess"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsIoRead"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsIoWrite"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsPersistence"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsThreadedTransactions"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsTransactions"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "variables"),
+      Core.fieldTypeType = _VariableFeatures_type_}]}))
+
 -- | A base interface for Edge or Vertex Property features.
 data PropertyFeatures = 
   PropertyFeatures {
@@ -250,6 +421,17 @@ _PropertyFeatures_dataTypeFeatures = (Core.Name "dataTypeFeatures")
 
 _PropertyFeatures_supportsProperties = (Core.Name "supportsProperties")
 
+_PropertyFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/features.PropertyFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "dataTypeFeatures"),
+      Core.fieldTypeType = _DataTypeFeatures_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsProperties"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
+
 -- | Features for Graph.Variables.
 data VariableFeatures = 
   VariableFeatures {
@@ -263,6 +445,17 @@ _VariableFeatures = (Core.Name "hydra/langs/tinkerpop/features.VariableFeatures"
 _VariableFeatures_dataTypeFeatures = (Core.Name "dataTypeFeatures")
 
 _VariableFeatures_supportsVariables = (Core.Name "supportsVariables")
+
+_VariableFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/features.VariableFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "dataTypeFeatures"),
+      Core.fieldTypeType = _DataTypeFeatures_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsVariables"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
 
 -- | Features that are related to Vertex operations.
 data VertexFeatures = 
@@ -301,6 +494,35 @@ _VertexFeatures_supportsRemoveVertices = (Core.Name "supportsRemoveVertices")
 
 _VertexFeatures_supportsUpsert = (Core.Name "supportsUpsert")
 
+_VertexFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/features.VertexFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "elementFeatures"),
+      Core.fieldTypeType = _ElementFeatures_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "properties"),
+      Core.fieldTypeType = _VertexPropertyFeatures_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsAddVertices"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsDuplicateMultiProperties"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsMetaProperties"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsMultiProperties"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsRemoveVertices"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsUpsert"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
+
 -- | Features that are related to Vertex Property objects.
 data VertexPropertyFeatures = 
   VertexPropertyFeatures {
@@ -320,3 +542,20 @@ _VertexPropertyFeatures_propertyFeatures = (Core.Name "propertyFeatures")
 _VertexPropertyFeatures_elementFeatures = (Core.Name "elementFeatures")
 
 _VertexPropertyFeatures_supportsRemove = (Core.Name "supportsRemove")
+
+_VertexPropertyFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/features.VertexPropertyFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "dataTypeFeatures"),
+      Core.fieldTypeType = _DataTypeFeatures_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "propertyFeatures"),
+      Core.fieldTypeType = _PropertyFeatures_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "elementFeatures"),
+      Core.fieldTypeType = _ElementFeatures_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supportsRemove"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))

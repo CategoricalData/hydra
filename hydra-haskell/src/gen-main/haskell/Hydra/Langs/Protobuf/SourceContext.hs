@@ -18,3 +18,11 @@ data SourceContext =
 _SourceContext = (Core.Name "hydra/langs/protobuf/sourceContext.SourceContext")
 
 _SourceContext_fileName = (Core.Name "fileName")
+
+_SourceContext_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/protobuf/sourceContext.SourceContext"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "fileName"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)}]}))

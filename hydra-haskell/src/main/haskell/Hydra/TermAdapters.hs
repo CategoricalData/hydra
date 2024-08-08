@@ -205,7 +205,8 @@ passFunction t@(TypeFunction (FunctionType dom cod)) = do
                 getCoder fname = Y.maybe idCoder adapterCoder $ M.lookup fname caseAds
           FunctionLambda (Lambda var d body) -> FunctionLambda <$> (Lambda var d <$> encodeDecode dir (adapterCoder codAd) body)
           FunctionPrimitive name -> pure $ FunctionPrimitive name
-        _ -> unexpected "function term" $ show term
+--        _ -> unexpected "function term" $ show term
+        t -> pure t
 
 passLambda :: TypeAdapter
 passLambda t@(TypeLambda (LambdaType (Name v) body)) = do
@@ -241,11 +242,12 @@ passOptional :: TypeAdapter
 passOptional t@(TypeOptional ot) = do
   ad <- termAdapter ot
   return $ Adapter (adapterIsLossy ad) t (Types.optional $ adapterTarget ad) $
-    bidirectional $ \dir term -> case term of
+    bidirectional $ \dir term -> case fullyStripTerm term of
       (TermOptional m) -> TermOptional <$> case m of
         Nothing -> pure Nothing
         Just term' -> Just <$> encodeDecode dir (adapterCoder ad) term'
-      _ -> fail $ "expected optional term, found: " ++ show term
+      t -> pure term
+--      t -> fail $ "expected optional term, found: " ++ show t
 
 passProduct :: TypeAdapter
 passProduct t@(TypeProduct types) = do

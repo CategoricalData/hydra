@@ -32,6 +32,47 @@ _ComparisonConstraint_lessThanOrEqual = (Core.Name "lessThanOrEqual")
 
 _ComparisonConstraint_greaterThanOrEqual = (Core.Name "greaterThanOrEqual")
 
+_ComparisonConstraint_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/query.ComparisonConstraint"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "equal"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "notEqual"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "lessThan"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "greaterThan"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "lessThanOrEqual"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "greaterThanOrEqual"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))}]}))
+
 -- | An abstract edge based on a record type
 data Edge = 
   Edge {
@@ -51,6 +92,20 @@ _Edge_out = (Core.Name "out")
 
 _Edge_in = (Core.Name "in")
 
+_Edge_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/query.Edge"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "type"),
+      Core.fieldTypeType = Core._Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "out"),
+      Core.fieldTypeType = (Core.TypeOptional Core._Name_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "in"),
+      Core.fieldTypeType = (Core.TypeOptional Core._Name_type_)}]}))
+
 -- | A query pattern which matches within a designated component subgraph
 data GraphPattern = 
   GraphPattern {
@@ -65,6 +120,17 @@ _GraphPattern = (Core.Name "hydra/query.GraphPattern")
 _GraphPattern_graph = (Core.Name "graph")
 
 _GraphPattern_patterns = (Core.Name "patterns")
+
+_GraphPattern_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/query.GraphPattern"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "graph"),
+      Core.fieldTypeType = Core._Name_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "patterns"),
+      Core.fieldTypeType = (Core.TypeList _Pattern_type_)}]}))
 
 -- | A node in a query expression; it may be a term, a variable, or a wildcard
 data Node = 
@@ -84,6 +150,23 @@ _Node_variable = (Core.Name "variable")
 
 _Node_wildcard = (Core.Name "wildcard")
 
+_Node_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/query.Node"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "term"),
+      Core.fieldTypeType = Core._Term_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "variable"),
+      Core.fieldTypeType = _Variable_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "wildcard"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))}]}))
+
 -- | A query path
 data Path = 
   -- | A path given by a single step
@@ -101,6 +184,20 @@ _Path_step = (Core.Name "step")
 _Path_regex = (Core.Name "regex")
 
 _Path_inverse = (Core.Name "inverse")
+
+_Path_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/query.Path"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "step"),
+      Core.fieldTypeType = _Step_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "regex"),
+      Core.fieldTypeType = _RegexSequence_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "inverse"),
+      Core.fieldTypeType = _Path_type_}]}))
 
 -- | A query pattern
 data Pattern = 
@@ -128,6 +225,26 @@ _Pattern_disjunction = (Core.Name "disjunction")
 
 _Pattern_graph = (Core.Name "graph")
 
+_Pattern_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/query.Pattern"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "triple"),
+      Core.fieldTypeType = _TriplePattern_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "negation"),
+      Core.fieldTypeType = _Pattern_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "conjunction"),
+      Core.fieldTypeType = (Core.TypeList _Pattern_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "disjunction"),
+      Core.fieldTypeType = (Core.TypeList _Pattern_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "graph"),
+      Core.fieldTypeType = _GraphPattern_type_}]}))
+
 -- | A SELECT-style graph pattern matching query
 data Query = 
   Query {
@@ -143,6 +260,17 @@ _Query_variables = (Core.Name "variables")
 
 _Query_patterns = (Core.Name "patterns")
 
+_Query_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/query.Query"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "variables"),
+      Core.fieldTypeType = (Core.TypeList _Variable_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "patterns"),
+      Core.fieldTypeType = (Core.TypeList _Pattern_type_)}]}))
+
 -- | A range from min to max, inclusive
 data Range = 
   Range {
@@ -155,6 +283,17 @@ _Range = (Core.Name "hydra/query.Range")
 _Range_min = (Core.Name "min")
 
 _Range_max = (Core.Name "max")
+
+_Range_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/query.Range"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "min"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "max"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}]}))
 
 -- | A regular expression quantifier
 data RegexQuantifier = 
@@ -190,6 +329,44 @@ _RegexQuantifier_atLeast = (Core.Name "atLeast")
 
 _RegexQuantifier_range = (Core.Name "range")
 
+_RegexQuantifier_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/query.RegexQuantifier"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "one"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "zeroOrOne"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "zeroOrMore"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "oneOrMore"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "exactly"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "atLeast"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "range"),
+      Core.fieldTypeType = _Range_type_}]}))
+
 -- | A path with a regex quantifier
 data RegexSequence = 
   RegexSequence {
@@ -202,6 +379,17 @@ _RegexSequence = (Core.Name "hydra/query.RegexSequence")
 _RegexSequence_path = (Core.Name "path")
 
 _RegexSequence_quantifier = (Core.Name "quantifier")
+
+_RegexSequence_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/query.RegexSequence"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "path"),
+      Core.fieldTypeType = _Path_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "quantifier"),
+      Core.fieldTypeType = _RegexQuantifier_type_}]}))
 
 -- | An atomic function as part of a query. When applied to a graph, steps are typed by function types.
 data Step = 
@@ -221,6 +409,20 @@ _Step_project = (Core.Name "project")
 
 _Step_compare = (Core.Name "compare")
 
+_Step_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/query.Step"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "edge"),
+      Core.fieldTypeType = _Edge_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "project"),
+      Core.fieldTypeType = Core._Projection_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "compare"),
+      Core.fieldTypeType = _ComparisonConstraint_type_}]}))
+
 -- | A subject/predicate/object pattern
 data TriplePattern = 
   TriplePattern {
@@ -237,6 +439,20 @@ _TriplePattern_predicate = (Core.Name "predicate")
 
 _TriplePattern_object = (Core.Name "object")
 
+_TriplePattern_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/query.TriplePattern"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "subject"),
+      Core.fieldTypeType = _Node_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "predicate"),
+      Core.fieldTypeType = _Path_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "object"),
+      Core.fieldTypeType = _Node_type_}]}))
+
 -- | A query variable
 newtype Variable = 
   Variable {
@@ -244,3 +460,5 @@ newtype Variable =
   deriving (Eq, Ord, Read, Show)
 
 _Variable = (Core.Name "hydra/query.Variable")
+
+_Variable_type_ = (Core.TypeLiteral Core.LiteralTypeString)
