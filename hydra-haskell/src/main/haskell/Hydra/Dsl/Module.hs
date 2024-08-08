@@ -14,3 +14,6 @@ qualifiedNameLocal = project _QualifiedName _QualifiedName_local
 
 qualifiedNameNamespace :: TTerm (QualifiedName -> Maybe Namespace)
 qualifiedNameNamespace = project _QualifiedName _QualifiedName_namespace
+
+unFileExtension :: TTerm (FileExtension -> String)
+unFileExtension = unwrap _FileExtension

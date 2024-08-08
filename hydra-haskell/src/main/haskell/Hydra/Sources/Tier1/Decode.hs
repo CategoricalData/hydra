@@ -79,6 +79,7 @@ decodeModule = Module (Namespace "hydra/decode") elements [hydraStripModule] tie
     el listDef,
     el literalDef,
     el mapDef,
+    el nameDef,
     el nominalDef,
     el optCasesDef,
     el optCasesJustDef,
@@ -276,6 +277,17 @@ literalDef = decodeFunctionDefinition "literal" termT literalT $
 mapDef :: TElement (Term -> Maybe (M.Map Term Term))
 mapDef = decodeFunctionDefinition "map" termT (mapT termT termT) $
   matchTermVariant _Term_map
+
+nameDef :: TElement (Term -> Name)
+nameDef = decodeFunctionDefinition "name" termT nameT $
+  lambda "term" $ Optionals.map
+    @@ nm
+    @@ (Optionals.bind
+      @@ (ref wrapDef @@ Core.name _Name @@ var "term")
+      @@ ref stringDef)
+  where
+    nm :: TTerm (String -> Name)
+    nm = TTerm $ Terms.lambda "s" $ TermWrap $ WrappedTerm _Name $ Terms.var "s"
 
 nominalDef :: TElement ((a -> Name) -> (a -> b) -> (c -> Maybe a) -> Name -> c -> Maybe b)
 nominalDef = decodeDefinition "nominal" $

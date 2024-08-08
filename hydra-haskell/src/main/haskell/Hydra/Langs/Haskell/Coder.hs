@@ -13,7 +13,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.ShorthandTypes
 import Hydra.Lib.Io
-import qualified Hydra.Dsl.Decode as Decode
+import qualified Hydra.Decode as Decode
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -407,72 +407,3 @@ typeDecl namespaces name typ = do
             forVariableType name = (\ns -> TermVariable $ qname ns $ "_" ++ local ++ "_type_") <$> mns
               where
                 (QualifiedName mns local) = qualifyNameEager name
-
-{-
-typeDecl :: Namespaces -> Name -> Type -> Flow Graph H.DeclarationWithComments
-typeDecl namespaces name typ = do
-    -- Note: consider constructing this coder just once, then reusing it
-    coder <- constructCoder haskellLanguage (encodeTerm namespaces) typeT
-    expr <- coderEncode coder term
-    let rhs = H.RightHandSide expr
-    let hname = simpleName $ typeNameLocal name
-    let pat = applicationPattern hname []
-    let decl = H.DeclarationValueBinding $ H.ValueBindingSimple $ H.ValueBinding_Simple pat rhs Nothing
-    return $ H.DeclarationWithComments decl Nothing
-  where
-    typeName ns name = qname ns (typeNameLocal name)
-    typeNameLocal name = "_" ++ localNameOfEager name ++ "_type_"
-    rawTerm = coreEncodeType typ
-    term = rewriteTerm rewrite id rawTerm
-      where
-        rewrite recurse term = case fullyStripTerm term of
---            TermRecord (Record tname fields)) -> if tname == _FieldType
---              && L.length fields == 2
---              && fieldName (L.head fields) == _FieldType_name
---              then replaceName (\ns n -> TermRecord (Record tname [
---                Field _FieldType_name $ TermVariable ...,
---                fields !! 1])) $ fieldTerm (L.head fields)
---              else dflt
-            TermUnion (Injection tname (Field fname t)) -> if tname == _Type
-              then
-                if fname == _Type_variable
-                then replaceName (\ns n -> TermVariable $ typeName ns $ Name n) t
-                else if fname == _Type_record
-                then rewriteRecordType t
-                else dflt
-              else dflt
-            _ -> dflt
-          where
-            dflt = recurse term
-            replaceName f t = case fullyStripTerm t of
-              TermWrap (WrappedTerm tname2 (TermLiteral (LiteralString name2))) -> if tname2 == _Name
-                then case (namespaceOfEager $ Name name2) of
-                  Nothing -> dflt
-                  Just ns -> f ns name2
-                else dflt
-              _ -> dflt
-            rewriteRecordType t = case fullyStripTerm t of
-              TermRecord (Record tname fields) -> if tname == _RecordType
-                && L.length fields == 2
-                && fieldName (L.head fields) == _RecordType_typeName
-                && fieldName (fields !! 1) == _RecordType_fields
-                then case fullyStripTerm (fieldTerm $ L.head fields) of
-                  TermList fieldTerms -> TermRecord (Record tname (rewriteFieldType tname <$> fields))
-                  _ -> dflt
-                else dflt
-              _ -> dflt
-            rewriteFieldType tname t = case fullyStripTerm t of
-              TermRecord (Record tname2) fields -> if L.length fields == 2
-                && tname2 == _FieldType
-                && fieldName (fields !! 0) == _FieldType_name
-                && fieldName (fields !! 1) == _FieldType_type
-              _ -> dflt
--}
-
---    isDomainName n = n == fst (namespacesFocus namespaces) || M.member n (namespacesMapping namespaces)
---    annotateType typ = rewriteType rewrite id
---      where
---        rewrite recurse typ = case typ of
---          TypeVariable var -> TypeAnnotated $ AnnotatedType (TypeVariable var) $ M.fromList [(annKey, Terms.boolean True)]
---          _ -> recurse typ
---        annKey = "hyTypRef"
