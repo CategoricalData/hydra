@@ -93,7 +93,7 @@ termCoder typ = case stripType typ of
   TypeOptional ot -> do
     oc <- termCoder ot
     return Coder {
-      coderEncode = \t -> case t of
+      coderEncode = \t -> case fullyStripTerm t of
         TermOptional el -> Y.maybe (pure Json.ValueNull) (coderEncode oc) el
         _ -> unexpected "optional term" $ show t,
       coderDecode = \n -> case n of

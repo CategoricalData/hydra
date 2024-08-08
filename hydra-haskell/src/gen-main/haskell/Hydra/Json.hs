@@ -31,3 +31,31 @@ _Value_number = (Core.Name "number")
 _Value_object = (Core.Name "object")
 
 _Value_string = (Core.Name "string")
+
+_Value_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/json.Value"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "array"),
+      Core.fieldTypeType = (Core.TypeList _Value_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "boolean"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "null"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "number"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeBigfloat))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "object"),
+      Core.fieldTypeType = (Core.TypeMap (Core.MapType {
+        Core.mapTypeKeys = (Core.TypeLiteral Core.LiteralTypeString),
+        Core.mapTypeValues = _Value_type_}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "string"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)}]}))

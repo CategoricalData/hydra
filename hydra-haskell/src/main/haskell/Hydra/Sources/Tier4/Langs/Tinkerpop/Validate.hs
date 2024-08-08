@@ -216,9 +216,9 @@ validatePropertiesDef = validateDefinition "validateProperties" $
         `with` [
           "m">: typed (mapT propertyKeyT tT) $
             Maps.fromList @@ (Lists.map
-              @@ (lambda "p" $ pair (
-                project _PropertyType _PropertyType_key @@ var "p",
-                project _PropertyType _PropertyType_value @@ var "p"))
+              @@ (lambda "p" $ pair
+                (project _PropertyType _PropertyType_key @@ var "p")
+                (project _PropertyType _PropertyType_value @@ var "p"))
               @@ var "types"),
           "checkPair">: lambda "pair" $ ((ifOpt (Maps.lookup @@ var "key" @@ var "m")
               (just (ref prependDef @@ "Unexpected key" @@ (unwrap _PropertyKey @@ var "key")))

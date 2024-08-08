@@ -36,6 +36,53 @@ _Type_byteArray = (Core.Name "byteArray")
 
 _Type_fixedLenByteArray = (Core.Name "fixedLenByteArray")
 
+_Type_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.Type"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "boolean"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "int32"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "int64"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "float"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "double"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "byteArray"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "fixedLenByteArray"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))}]}))
+
 -- | Representation of Schemas
 data FieldRepetitionType = 
   -- | This field is required (can not be null) and each record has exactly 1 value.
@@ -53,6 +100,29 @@ _FieldRepetitionType_required = (Core.Name "required")
 _FieldRepetitionType_optional = (Core.Name "optional")
 
 _FieldRepetitionType_repeated = (Core.Name "repeated")
+
+_FieldRepetitionType_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.FieldRepetitionType"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "required"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "optional"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "repeated"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))}]}))
 
 -- | Statistics per row group and per page. All fields are optional.
 data Statistics = 
@@ -75,6 +145,23 @@ _Statistics_maxValue = (Core.Name "maxValue")
 
 _Statistics_minValue = (Core.Name "minValue")
 
+_Statistics_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.Statistics"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "nullCount"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint64)))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "distinctCount"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint64)))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "maxValue"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeBinary))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "minValue"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeBinary))}]}))
+
 -- | Decimal logical type annotation. To maintain forward-compatibility in v1, implementations using this logical type must also set scale and precision on the annotated SchemaElement. Allowed for physical types: INT32, INT64, FIXED, and BINARY
 data DecimalType = 
   DecimalType {
@@ -87,6 +174,17 @@ _DecimalType = (Core.Name "hydra/langs/parquet/format.DecimalType")
 _DecimalType_scale = (Core.Name "scale")
 
 _DecimalType_precision = (Core.Name "precision")
+
+_DecimalType_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.DecimalType"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "scale"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "precision"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}]}))
 
 data TimeUnit = 
   TimeUnitMillis  |
@@ -102,6 +200,29 @@ _TimeUnit_micros = (Core.Name "micros")
 
 _TimeUnit_nanos = (Core.Name "nanos")
 
+_TimeUnit_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.TimeUnit"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "millis"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "micros"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "nanos"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))}]}))
+
 -- | Timestamp logical type annotation. Allowed for physical types: INT64
 data TimestampType = 
   TimestampType {
@@ -114,6 +235,17 @@ _TimestampType = (Core.Name "hydra/langs/parquet/format.TimestampType")
 _TimestampType_isAdjustedToUtc = (Core.Name "isAdjustedToUtc")
 
 _TimestampType_unit = (Core.Name "unit")
+
+_TimestampType_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.TimestampType"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "isAdjustedToUtc"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "unit"),
+      Core.fieldTypeType = _TimeUnit_type_}]}))
 
 -- | Time logical type annotation. Allowed for physical types: INT32 (millis), INT64 (micros, nanos)
 data TimeType = 
@@ -128,6 +260,17 @@ _TimeType_isAdjustedToUtc = (Core.Name "isAdjustedToUtc")
 
 _TimeType_unit = (Core.Name "unit")
 
+_TimeType_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.TimeType"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "isAdjustedToUtc"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "unit"),
+      Core.fieldTypeType = _TimeUnit_type_}]}))
+
 -- | Integer logical type annotation. bitWidth must be 8, 16, 32, or 64. Allowed for physical types: INT32, INT64
 data IntType = 
   IntType {
@@ -140,6 +283,17 @@ _IntType = (Core.Name "hydra/langs/parquet/format.IntType")
 _IntType_bitWidth = (Core.Name "bitWidth")
 
 _IntType_isSigned = (Core.Name "isSigned")
+
+_IntType_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.IntType"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "bitWidth"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint8))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "isSigned"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
 
 -- | LogicalType annotations to replace ConvertedType. To maintain compatibility, implementations using LogicalType for a SchemaElement aust also set the corresponding ConvertedType (if any) from the following table.
 data LogicalType = 
@@ -199,6 +353,77 @@ _LogicalType_bson = (Core.Name "bson")
 
 _LogicalType_uuid = (Core.Name "uuid")
 
+_LogicalType_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.LogicalType"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "string"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "map"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "list"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "enum"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "decimal"),
+      Core.fieldTypeType = _DecimalType_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "date"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "time"),
+      Core.fieldTypeType = _TimeType_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "timestamp"),
+      Core.fieldTypeType = _TimestampType_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "integer"),
+      Core.fieldTypeType = _IntType_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "unknown"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "json"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "bson"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "uuid"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))}]}))
+
 -- | Represents a element inside a schema definition.
 -- | - if it is a group (inner node) then type is undefined and num_children is defined
 -- | - if it is a primitive type (leaf) then type is defined and num_children is undefined
@@ -236,6 +461,32 @@ _SchemaElement_numChildren = (Core.Name "numChildren")
 _SchemaElement_fieldId = (Core.Name "fieldId")
 
 _SchemaElement_logicalType = (Core.Name "logicalType")
+
+_SchemaElement_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.SchemaElement"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "type"),
+      Core.fieldTypeType = (Core.TypeOptional _Type_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "typeLength"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "repetitionType"),
+      Core.fieldTypeType = (Core.TypeOptional _FieldRepetitionType_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "name"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "numChildren"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "fieldId"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "logicalType"),
+      Core.fieldTypeType = (Core.TypeOptional _LogicalType_type_)}]}))
 
 -- | Encodings supported by Parquet.  Not all encodings are valid for all types.  These enums are also used to specify the encoding of definition and repetition levels. See the accompanying doc for the details of the more complicated encodings.
 data Encoding = 
@@ -282,6 +533,59 @@ _Encoding_rleDictionary = (Core.Name "rleDictionary")
 
 _Encoding_byteStreamSplit = (Core.Name "byteStreamSplit")
 
+_Encoding_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.Encoding"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "plain"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "rle"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "bitPacked"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "deltaBinaryPacked"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "deltaLengthByteArray"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "deltaByteArray"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "rleDictionary"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "byteStreamSplit"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))}]}))
+
 -- | Supported compression algorithms. Codecs added in format version X.Y can be read by readers based on X.Y and later. Codec support may vary between readers based on the format version and libraries available at runtime. See Compression.md for a detailed specification of these algorithms.
 data CompressionCodec = 
   CompressionCodecUncompressed  |
@@ -312,6 +616,53 @@ _CompressionCodec_zstd = (Core.Name "zstd")
 
 _CompressionCodec_lz4Raw = (Core.Name "lz4Raw")
 
+_CompressionCodec_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.CompressionCodec"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "uncompressed"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "snappy"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "gzip"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "lzo"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "brotli"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "zstd"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "lz4Raw"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))}]}))
+
 data PageType = 
   PageTypeDataPage  |
   PageTypeIndexPage  |
@@ -329,6 +680,35 @@ _PageType_dictionaryPage = (Core.Name "dictionaryPage")
 
 _PageType_dataPageV2 = (Core.Name "dataPageV2")
 
+_PageType_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.PageType"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "dataPage"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "indexPage"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "dictionaryPage"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "dataPageV2"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))}]}))
+
 -- | Enum to annotate whether lists of min/max elements inside ColumnIndex are ordered and if so, in which direction.
 data BoundaryOrder = 
   BoundaryOrderUnordered  |
@@ -343,6 +723,29 @@ _BoundaryOrder_unordered = (Core.Name "unordered")
 _BoundaryOrder_ascending = (Core.Name "ascending")
 
 _BoundaryOrder_descending = (Core.Name "descending")
+
+_BoundaryOrder_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.BoundaryOrder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "unordered"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "ascending"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "descending"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))}]}))
 
 -- | Data page header
 data DataPageHeader = 
@@ -371,11 +774,36 @@ _DataPageHeader_repetitionLevelEncoding = (Core.Name "repetitionLevelEncoding")
 
 _DataPageHeader_statistics = (Core.Name "statistics")
 
+_DataPageHeader_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.DataPageHeader"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "numValues"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "encoding"),
+      Core.fieldTypeType = _Encoding_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "definitionLevelEncoding"),
+      Core.fieldTypeType = _Encoding_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "repetitionLevelEncoding"),
+      Core.fieldTypeType = _Encoding_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "statistics"),
+      Core.fieldTypeType = (Core.TypeOptional _Statistics_type_)}]}))
+
 data IndexPageHeader = 
   IndexPageHeader {}
   deriving (Eq, Ord, Read, Show)
 
 _IndexPageHeader = (Core.Name "hydra/langs/parquet/format.IndexPageHeader")
+
+_IndexPageHeader_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.IndexPageHeader"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = []}))
 
 -- | The dictionary page must be placed at the first position of the column chunk if it is partly or completely dictionary encoded. At most one dictionary page can be placed in a column chunk.
 data DictionaryPageHeader = 
@@ -395,6 +823,20 @@ _DictionaryPageHeader_numValues = (Core.Name "numValues")
 _DictionaryPageHeader_encoding = (Core.Name "encoding")
 
 _DictionaryPageHeader_isSorted = (Core.Name "isSorted")
+
+_DictionaryPageHeader_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.DictionaryPageHeader"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "numValues"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "encoding"),
+      Core.fieldTypeType = _Encoding_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "isSorted"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeBoolean))}]}))
 
 -- | New page format allowing reading levels without decompressing the data Repetition and definition levels are uncompressed The remaining section containing the data is compressed if is_compressed is true
 data DataPageHeaderV2 = 
@@ -435,6 +877,35 @@ _DataPageHeaderV2_isCompressed = (Core.Name "isCompressed")
 
 _DataPageHeaderV2_statistics = (Core.Name "statistics")
 
+_DataPageHeaderV2_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.DataPageHeaderV2"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "numValues"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "numNulls"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "numRows"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "encoding"),
+      Core.fieldTypeType = _Encoding_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "definitionLevelsByteLength"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "repetitionLevelsByteLength"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "isCompressed"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeBoolean))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "statistics"),
+      Core.fieldTypeType = (Core.TypeOptional _Statistics_type_)}]}))
+
 -- | The algorithm used in Bloom filter.
 data BloomFilterAlgorithm = 
   -- | Block-based Bloom filter.
@@ -444,6 +915,17 @@ data BloomFilterAlgorithm =
 _BloomFilterAlgorithm = (Core.Name "hydra/langs/parquet/format.BloomFilterAlgorithm")
 
 _BloomFilterAlgorithm_block = (Core.Name "block")
+
+_BloomFilterAlgorithm_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.BloomFilterAlgorithm"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "block"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))}]}))
 
 -- | The hash function used in Bloom filter. This function takes the hash of a column value using plain encoding.
 data BloomFilterHash = 
@@ -455,6 +937,17 @@ _BloomFilterHash = (Core.Name "hydra/langs/parquet/format.BloomFilterHash")
 
 _BloomFilterHash_xxhash = (Core.Name "xxhash")
 
+_BloomFilterHash_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.BloomFilterHash"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "xxhash"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))}]}))
+
 -- | The compression used in the Bloom filter.
 data BloomFilterCompression = 
   BloomFilterCompressionUncompressed 
@@ -463,6 +956,17 @@ data BloomFilterCompression =
 _BloomFilterCompression = (Core.Name "hydra/langs/parquet/format.BloomFilterCompression")
 
 _BloomFilterCompression_uncompressed = (Core.Name "uncompressed")
+
+_BloomFilterCompression_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.BloomFilterCompression"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "uncompressed"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))}]}))
 
 -- | Bloom filter header is stored at beginning of Bloom filter data of each column and followed by its bitset.
 data BloomFilterHeader = 
@@ -486,6 +990,23 @@ _BloomFilterHeader_algorithm = (Core.Name "algorithm")
 _BloomFilterHeader_hash = (Core.Name "hash")
 
 _BloomFilterHeader_compression = (Core.Name "compression")
+
+_BloomFilterHeader_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.BloomFilterHeader"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "numBytes"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "algorithm"),
+      Core.fieldTypeType = _BloomFilterAlgorithm_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "hash"),
+      Core.fieldTypeType = _BloomFilterHash_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "compression"),
+      Core.fieldTypeType = _BloomFilterCompression_type_}]}))
 
 data PageHeader = 
   PageHeader {
@@ -544,6 +1065,35 @@ _PageHeader_dictionaryPageHeader = (Core.Name "dictionaryPageHeader")
 
 _PageHeader_dataPageHeaderV2 = (Core.Name "dataPageHeaderV2")
 
+_PageHeader_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.PageHeader"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "type"),
+      Core.fieldTypeType = _PageType_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "uncompressedPageSize"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "compressedPageSize"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "crc"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "dataPageHeader"),
+      Core.fieldTypeType = (Core.TypeOptional _DataPageHeader_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "indexPageHeader"),
+      Core.fieldTypeType = (Core.TypeOptional _IndexPageHeader_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "dictionaryPageHeader"),
+      Core.fieldTypeType = (Core.TypeOptional _DictionaryPageHeader_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "dataPageHeaderV2"),
+      Core.fieldTypeType = (Core.TypeOptional _DataPageHeaderV2_type_)}]}))
+
 -- | Wrapper struct to store key values
 data KeyValue = 
   KeyValue {
@@ -556,6 +1106,17 @@ _KeyValue = (Core.Name "hydra/langs/parquet/format.KeyValue")
 _KeyValue_key = (Core.Name "key")
 
 _KeyValue_value = (Core.Name "value")
+
+_KeyValue_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.KeyValue"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "key"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "value"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString))}]}))
 
 -- | Wrapper struct to specify sort order
 data SortingColumn = 
@@ -576,6 +1137,20 @@ _SortingColumn_descending = (Core.Name "descending")
 
 _SortingColumn_nullsFirst = (Core.Name "nullsFirst")
 
+_SortingColumn_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.SortingColumn"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "columnIdx"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "descending"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "nullsFirst"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
+
 -- | statistics of a given page type and encoding
 data PageEncodingStats = 
   PageEncodingStats {
@@ -594,6 +1169,20 @@ _PageEncodingStats_pageType = (Core.Name "pageType")
 _PageEncodingStats_encoding = (Core.Name "encoding")
 
 _PageEncodingStats_count = (Core.Name "count")
+
+_PageEncodingStats_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.PageEncodingStats"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "pageType"),
+      Core.fieldTypeType = _PageType_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "encoding"),
+      Core.fieldTypeType = _Encoding_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "count"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}]}))
 
 -- | Description for column metadata
 data ColumnMetaData = 
@@ -658,11 +1247,63 @@ _ColumnMetaData_encodingStats = (Core.Name "encodingStats")
 
 _ColumnMetaData_bloomFilterOffset = (Core.Name "bloomFilterOffset")
 
+_ColumnMetaData_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.ColumnMetaData"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "type"),
+      Core.fieldTypeType = _Type_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "encodings"),
+      Core.fieldTypeType = (Core.TypeList _Encoding_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "pathInSchema"),
+      Core.fieldTypeType = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "codec"),
+      Core.fieldTypeType = _CompressionCodec_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "numValues"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "totalUncompressedSize"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "totalCompressedSize"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "keyValueMetadata"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeList _KeyValue_type_))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "dataPageOffset"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "indexPageOffset"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "dictionaryPageOffset"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "statistics"),
+      Core.fieldTypeType = (Core.TypeOptional _Statistics_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "encodingStats"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeList _PageEncodingStats_type_))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "bloomFilterOffset"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)))}]}))
+
 data EncryptionWithFooterKey = 
   EncryptionWithFooterKey {}
   deriving (Eq, Ord, Read, Show)
 
 _EncryptionWithFooterKey = (Core.Name "hydra/langs/parquet/format.EncryptionWithFooterKey")
+
+_EncryptionWithFooterKey_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.EncryptionWithFooterKey"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = []}))
 
 data EncryptionWithColumnKey = 
   EncryptionWithColumnKey {
@@ -678,6 +1319,17 @@ _EncryptionWithColumnKey_pathInSchema = (Core.Name "pathInSchema")
 
 _EncryptionWithColumnKey_keyMetadata = (Core.Name "keyMetadata")
 
+_EncryptionWithColumnKey_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.EncryptionWithColumnKey"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "pathInSchema"),
+      Core.fieldTypeType = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "keyMetadata"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeBinary))}]}))
+
 data ColumnCryptoMetaData = 
   ColumnCryptoMetaDataEncryptionWithFooterKey EncryptionWithFooterKey |
   ColumnCryptoMetaDataEncryptionWithColumnKey EncryptionWithColumnKey
@@ -688,6 +1340,17 @@ _ColumnCryptoMetaData = (Core.Name "hydra/langs/parquet/format.ColumnCryptoMetaD
 _ColumnCryptoMetaData_encryptionWithFooterKey = (Core.Name "encryptionWithFooterKey")
 
 _ColumnCryptoMetaData_encryptionWithColumnKey = (Core.Name "encryptionWithColumnKey")
+
+_ColumnCryptoMetaData_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.ColumnCryptoMetaData"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "encryptionWithFooterKey"),
+      Core.fieldTypeType = _EncryptionWithFooterKey_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "encryptionWithColumnKey"),
+      Core.fieldTypeType = _EncryptionWithColumnKey_type_}]}))
 
 data ColumnChunk = 
   ColumnChunk {
@@ -731,6 +1394,38 @@ _ColumnChunk_cryptoMetadata = (Core.Name "cryptoMetadata")
 
 _ColumnChunk_encryptedColumnMetadata = (Core.Name "encryptedColumnMetadata")
 
+_ColumnChunk_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.ColumnChunk"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "filePath"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "fileOffset"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "metaData"),
+      Core.fieldTypeType = (Core.TypeOptional _ColumnMetaData_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "offsetIndexOffset"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "offsetIndexLength"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "columnIndexOffset"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "columnIndexLength"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "cryptoMetadata"),
+      Core.fieldTypeType = (Core.TypeOptional _ColumnCryptoMetaData_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "encryptedColumnMetadata"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeBinary))}]}))
+
 data RowGroup = 
   RowGroup {
     -- | Metadata for each column chunk in this row group. This list must have the same order as the SchemaElement list in FileMetaData.
@@ -764,6 +1459,32 @@ _RowGroup_fileOffset = (Core.Name "fileOffset")
 _RowGroup_totalCompressedSize = (Core.Name "totalCompressedSize")
 
 _RowGroup_ordinal = (Core.Name "ordinal")
+
+_RowGroup_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.RowGroup"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "columns"),
+      Core.fieldTypeType = (Core.TypeList _ColumnChunk_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "totalByteSize"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "numRows"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sortingColumns"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeList _SortingColumn_type_))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "fileOffset"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "totalCompressedSize"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "ordinal"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt16)))}]}))
 
 -- | Union to specify the order used for the min_value and max_value fields for a column. This union takes the role of an enhanced enum that allows rich elements (which will be needed for a collation-based ordering in the future). Possible values are:
 -- | * TypeDefinedOrder - the column uses the order defined by its logical or physical type (if there is no logical type).
@@ -815,6 +1536,17 @@ _ColumnOrder = (Core.Name "hydra/langs/parquet/format.ColumnOrder")
 
 _ColumnOrder_typeOrder = (Core.Name "typeOrder")
 
+_ColumnOrder_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.ColumnOrder"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "typeOrder"),
+      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeExtends = Nothing,
+        Core.rowTypeFields = []}))}]}))
+
 data PageLocation = 
   PageLocation {
     -- | Offset of the page in the file
@@ -833,6 +1565,20 @@ _PageLocation_compressedPageSize = (Core.Name "compressedPageSize")
 
 _PageLocation_firstRowIndex = (Core.Name "firstRowIndex")
 
+_PageLocation_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.PageLocation"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "offset"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "compressedPageSize"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "firstRowIndex"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))}]}))
+
 data OffsetIndex = 
   OffsetIndex {
     -- | PageLocations, ordered by increasing PageLocation.offset. It is required that page_locations[i].first_row_index < page_locations[i+1].first_row_index.
@@ -842,6 +1588,14 @@ data OffsetIndex =
 _OffsetIndex = (Core.Name "hydra/langs/parquet/format.OffsetIndex")
 
 _OffsetIndex_pageLocations = (Core.Name "pageLocations")
+
+_OffsetIndex_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.OffsetIndex"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "pageLocations"),
+      Core.fieldTypeType = (Core.TypeList _PageLocation_type_)}]}))
 
 -- | Description for ColumnIndex. Each <array-field>[i] refers to the page at OffsetIndex.page_locations[i]
 data ColumnIndex = 
@@ -869,6 +1623,26 @@ _ColumnIndex_boundaryOrder = (Core.Name "boundaryOrder")
 
 _ColumnIndex_nullCounts = (Core.Name "nullCounts")
 
+_ColumnIndex_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.ColumnIndex"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "nullPages"),
+      Core.fieldTypeType = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeBoolean))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "minValues"),
+      Core.fieldTypeType = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeBinary))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "maxValues"),
+      Core.fieldTypeType = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeBinary))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "boundaryOrder"),
+      Core.fieldTypeType = _BoundaryOrder_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "nullCounts"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))))}]}))
+
 data AesGcmV1 = 
   AesGcmV1 {
     -- | AAD prefix
@@ -886,6 +1660,20 @@ _AesGcmV1_aadPrefix = (Core.Name "aadPrefix")
 _AesGcmV1_aadFileUnique = (Core.Name "aadFileUnique")
 
 _AesGcmV1_supplyAadPrefix = (Core.Name "supplyAadPrefix")
+
+_AesGcmV1_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.AesGcmV1"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "aadPrefix"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeBinary))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "aadFileUnique"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeBinary))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supplyAadPrefix"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeBoolean))}]}))
 
 data AesGcmCtrV1 = 
   AesGcmCtrV1 {
@@ -905,6 +1693,20 @@ _AesGcmCtrV1_aadFileUnique = (Core.Name "aadFileUnique")
 
 _AesGcmCtrV1_supplyAadPrefix = (Core.Name "supplyAadPrefix")
 
+_AesGcmCtrV1_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.AesGcmCtrV1"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "aadPrefix"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeBinary))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "aadFileUnique"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeBinary))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "supplyAadPrefix"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeBoolean))}]}))
+
 data EncryptionAlgorithm = 
   EncryptionAlgorithmAesGcmV1 AesGcmV1 |
   EncryptionAlgorithmAesGcmCtrV1 AesGcmCtrV1
@@ -915,6 +1717,17 @@ _EncryptionAlgorithm = (Core.Name "hydra/langs/parquet/format.EncryptionAlgorith
 _EncryptionAlgorithm_aesGcmV1 = (Core.Name "aesGcmV1")
 
 _EncryptionAlgorithm_aesGcmCtrV1 = (Core.Name "aesGcmCtrV1")
+
+_EncryptionAlgorithm_type_ = (Core.TypeUnion (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.EncryptionAlgorithm"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "aesGcmV1"),
+      Core.fieldTypeType = _AesGcmV1_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "aesGcmCtrV1"),
+      Core.fieldTypeType = _AesGcmCtrV1_type_}]}))
 
 -- | Description for file metadata
 data FileMetaData = 
@@ -961,6 +1774,38 @@ _FileMetaData_encryptionAlgorithm = (Core.Name "encryptionAlgorithm")
 
 _FileMetaData_footerSigningKeyMetadata = (Core.Name "footerSigningKeyMetadata")
 
+_FileMetaData_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.FileMetaData"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "version"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "schema"),
+      Core.fieldTypeType = (Core.TypeList _SchemaElement_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "numRows"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "rowGroups"),
+      Core.fieldTypeType = (Core.TypeList _RowGroup_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "keyValueMetadata"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeList _KeyValue_type_))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "createdBy"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "columnOrders"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeList _ColumnOrder_type_))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "encryptionAlgorithm"),
+      Core.fieldTypeType = (Core.TypeOptional _EncryptionAlgorithm_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "footerSigningKeyMetadata"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeBinary))}]}))
+
 -- | Crypto metadata for files with encrypted footer
 data FileCryptoMetaData = 
   FileCryptoMetaData {
@@ -975,3 +1820,14 @@ _FileCryptoMetaData = (Core.Name "hydra/langs/parquet/format.FileCryptoMetaData"
 _FileCryptoMetaData_encryptionAlgorithm = (Core.Name "encryptionAlgorithm")
 
 _FileCryptoMetaData_keyMetadata = (Core.Name "keyMetadata")
+
+_FileCryptoMetaData_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/parquet/format.FileCryptoMetaData"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "encryptionAlgorithm"),
+      Core.fieldTypeType = _EncryptionAlgorithm_type_},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "keyMetadata"),
+      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeBinary))}]}))

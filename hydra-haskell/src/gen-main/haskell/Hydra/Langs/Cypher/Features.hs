@@ -51,6 +51,38 @@ _AggregateFeatures_stdev = (Core.Name "stdev")
 
 _AggregateFeatures_sum = (Core.Name "sum")
 
+_AggregateFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.AggregateFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "avg"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "collect"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "count"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "max"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "min"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "percentileCont"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "percentileDisc"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "stdev"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sum"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
+
 -- | A set of features for arithmetic operations.
 data ArithmeticFeatures = 
   ArithmeticFeatures {
@@ -81,6 +113,29 @@ _ArithmeticFeatures_divide = (Core.Name "divide")
 _ArithmeticFeatures_modulus = (Core.Name "modulus")
 
 _ArithmeticFeatures_powerOf = (Core.Name "powerOf")
+
+_ArithmeticFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.ArithmeticFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "plus"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "minus"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "multiply"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "divide"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "modulus"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "powerOf"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
 
 -- | A set of features for various kinds of atomic expressions.
 data AtomFeatures = 
@@ -133,6 +188,44 @@ _AtomFeatures_quantifier = (Core.Name "quantifier")
 
 _AtomFeatures_variable = (Core.Name "variable")
 
+_AtomFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.AtomFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "caseExpression"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "count"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "existentialSubquery"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "functionInvocation"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "list"),
+      Core.fieldTypeType = (Core.TypeOptional _ListFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "literal"),
+      Core.fieldTypeType = (Core.TypeOptional _LiteralFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "parameter"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "patternComprehension"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "patternPredicate"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "quantifier"),
+      Core.fieldTypeType = (Core.TypeOptional _QuantifierFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "variable"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
+
 -- | A set of features for comparison operators and functions.
 data ComparisonFeatures = 
   ComparisonFeatures {
@@ -167,6 +260,32 @@ _ComparisonFeatures_lessThanOrEqual = (Core.Name "lessThanOrEqual")
 _ComparisonFeatures_notEqual = (Core.Name "notEqual")
 
 _ComparisonFeatures_nullIf = (Core.Name "nullIf")
+
+_ComparisonFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.ComparisonFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "equal"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "greaterThan"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "greaterThanOrEqual"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "lessThan"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "lessThanOrEqual"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "notEqual"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "nullIf"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
 
 -- | A set of features which characterize an OpenCypher query or implementation. Any features which are omitted from the set are assumed to be unsupported or nonrequired.
 data CypherFeatures = 
@@ -279,6 +398,89 @@ _CypherFeatures_string = (Core.Name "string")
 
 _CypherFeatures_updating = (Core.Name "updating")
 
+_CypherFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.CypherFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "aggregate"),
+      Core.fieldTypeType = (Core.TypeOptional _AggregateFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "arithmetic"),
+      Core.fieldTypeType = (Core.TypeOptional _ArithmeticFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "atom"),
+      Core.fieldTypeType = (Core.TypeOptional _AtomFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "comparison"),
+      Core.fieldTypeType = (Core.TypeOptional _ComparisonFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "delete"),
+      Core.fieldTypeType = (Core.TypeOptional _DeleteFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "element"),
+      Core.fieldTypeType = (Core.TypeOptional _ElementFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "logical"),
+      Core.fieldTypeType = (Core.TypeOptional _LogicalFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "map"),
+      Core.fieldTypeType = (Core.TypeOptional _MapFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "match"),
+      Core.fieldTypeType = (Core.TypeOptional _MatchFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "merge"),
+      Core.fieldTypeType = (Core.TypeOptional _MergeFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "nodePattern"),
+      Core.fieldTypeType = (Core.TypeOptional _NodePatternFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "null"),
+      Core.fieldTypeType = (Core.TypeOptional _NullFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "numeric"),
+      Core.fieldTypeType = (Core.TypeOptional _NumericFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "path"),
+      Core.fieldTypeType = (Core.TypeOptional _PathFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "procedureCall"),
+      Core.fieldTypeType = (Core.TypeOptional _ProcedureCallFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "projection"),
+      Core.fieldTypeType = (Core.TypeOptional _ProjectionFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "randomness"),
+      Core.fieldTypeType = (Core.TypeOptional _RandomnessFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "rangeLiteral"),
+      Core.fieldTypeType = (Core.TypeOptional _RangeLiteralFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "reading"),
+      Core.fieldTypeType = (Core.TypeOptional _ReadingFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "relationshipDirection"),
+      Core.fieldTypeType = (Core.TypeOptional _RelationshipDirectionFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "relationshipPattern"),
+      Core.fieldTypeType = (Core.TypeOptional _RelationshipPatternFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "remove"),
+      Core.fieldTypeType = (Core.TypeOptional _RemoveFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "schema"),
+      Core.fieldTypeType = (Core.TypeOptional _SchemaFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "set"),
+      Core.fieldTypeType = (Core.TypeOptional _SetFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "string"),
+      Core.fieldTypeType = (Core.TypeOptional _StringFeatures_type_)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "updating"),
+      Core.fieldTypeType = (Core.TypeOptional _UpdatingFeatures_type_)}]}))
+
 -- | A set of features for delete operations.
 data DeleteFeatures = 
   DeleteFeatures {
@@ -293,6 +495,17 @@ _DeleteFeatures = (Core.Name "hydra/langs/cypher/features.DeleteFeatures")
 _DeleteFeatures_delete = (Core.Name "delete")
 
 _DeleteFeatures_detachDelete = (Core.Name "detachDelete")
+
+_DeleteFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.DeleteFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "delete"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "detachDelete"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
 
 -- | A set of features for element functions.
 data ElementFeatures = 
@@ -320,6 +533,26 @@ _ElementFeatures_labels = (Core.Name "labels")
 _ElementFeatures_properties = (Core.Name "properties")
 
 _ElementFeatures_startNode = (Core.Name "startNode")
+
+_ElementFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.ElementFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "elementId"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "endNode"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "labels"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "properties"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "startNode"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
 
 -- | A set of features for list functionality.
 data ListFeatures = 
@@ -400,6 +633,65 @@ _ListFeatures_toIntegerList = (Core.Name "toIntegerList")
 
 _ListFeatures_toStringList = (Core.Name "toStringList")
 
+_ListFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.ListFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "all"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "any"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "coalesce"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "isEmpty"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "head"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "last"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "listComprehension"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "listRange"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "none"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "reduce"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "reverse"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "single"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "size"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "tail"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "toBooleanList"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "toFloatList"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "toIntegerList"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "toStringList"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
+
 -- | A set of features for various types of literal values.
 data LiteralFeatures = 
   LiteralFeatures {
@@ -435,6 +727,32 @@ _LiteralFeatures_null = (Core.Name "null")
 
 _LiteralFeatures_string = (Core.Name "string")
 
+_LiteralFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.LiteralFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "boolean"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "double"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "integer"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "list"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "map"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "null"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "string"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
+
 -- | A set of features for logical operations.
 data LogicalFeatures = 
   LogicalFeatures {
@@ -458,6 +776,23 @@ _LogicalFeatures_or = (Core.Name "or")
 
 _LogicalFeatures_xor = (Core.Name "xor")
 
+_LogicalFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.LogicalFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "and"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "not"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "or"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "xor"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
+
 -- | A set of features for property map functions.
 data MapFeatures = 
   MapFeatures {
@@ -468,6 +803,14 @@ data MapFeatures =
 _MapFeatures = (Core.Name "hydra/langs/cypher/features.MapFeatures")
 
 _MapFeatures_keys = (Core.Name "keys")
+
+_MapFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.MapFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "keys"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
 
 -- | A set of features for match queries.
 data MatchFeatures = 
@@ -483,6 +826,17 @@ _MatchFeatures = (Core.Name "hydra/langs/cypher/features.MatchFeatures")
 _MatchFeatures_match = (Core.Name "match")
 
 _MatchFeatures_optionalMatch = (Core.Name "optionalMatch")
+
+_MatchFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.MatchFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "match"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "optionalMatch"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
 
 -- | A set of features for merge operations.
 data MergeFeatures = 
@@ -502,6 +856,20 @@ _MergeFeatures_merge = (Core.Name "merge")
 _MergeFeatures_mergeOnCreate = (Core.Name "mergeOnCreate")
 
 _MergeFeatures_mergeOnMatch = (Core.Name "mergeOnMatch")
+
+_MergeFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.MergeFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "merge"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "mergeOnCreate"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "mergeOnMatch"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
 
 -- | A set of features for node patterns.
 data NodePatternFeatures = 
@@ -530,6 +898,26 @@ _NodePatternFeatures_variableNode = (Core.Name "variableNode")
 
 _NodePatternFeatures_wildcardLabel = (Core.Name "wildcardLabel")
 
+_NodePatternFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.NodePatternFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "multipleLabels"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "parameter"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "propertyMap"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "variableNode"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "wildcardLabel"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
+
 -- | A set of features for IS NULL / IS NOT NULL checks.
 data NullFeatures = 
   NullFeatures {
@@ -544,6 +932,17 @@ _NullFeatures = (Core.Name "hydra/langs/cypher/features.NullFeatures")
 _NullFeatures_isNull = (Core.Name "isNull")
 
 _NullFeatures_isNotNull = (Core.Name "isNotNull")
+
+_NullFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.NullFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "isNull"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "isNotNull"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
 
 -- | A set of features for numeric functions.
 data NumericFeatures = 
@@ -600,6 +999,47 @@ _NumericFeatures_sign = (Core.Name "sign")
 
 _NumericFeatures_sqrt = (Core.Name "sqrt")
 
+_NumericFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.NumericFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "abs"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "ceil"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "e"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "exp"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "floor"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "isNaN"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "log"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "log10"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "range"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "round"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sign"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sqrt"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
+
 -- | A set of features for path functions.
 data PathFeatures = 
   PathFeatures {
@@ -623,6 +1063,23 @@ _PathFeatures_relationships = (Core.Name "relationships")
 
 _PathFeatures_shortestPath = (Core.Name "shortestPath")
 
+_PathFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.PathFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "length"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "nodes"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "relationships"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "shortestPath"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
+
 -- | A set of features for procedure calls.
 data ProcedureCallFeatures = 
   ProcedureCallFeatures {
@@ -641,6 +1098,20 @@ _ProcedureCallFeatures_inQueryCall = (Core.Name "inQueryCall")
 _ProcedureCallFeatures_standaloneCall = (Core.Name "standaloneCall")
 
 _ProcedureCallFeatures_yield = (Core.Name "yield")
+
+_ProcedureCallFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.ProcedureCallFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "inQueryCall"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "standaloneCall"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "yield"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
 
 -- | A set of features for projections.
 data ProjectionFeatures = 
@@ -677,6 +1148,32 @@ _ProjectionFeatures_skip = (Core.Name "skip")
 
 _ProjectionFeatures_sortOrder = (Core.Name "sortOrder")
 
+_ProjectionFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.ProjectionFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "limit"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "orderBy"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "projectDistinct"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "projectAll"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "projectAs"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "skip"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "sortOrder"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
+
 -- | A set of features for quantifier expressions.
 data QuantifierFeatures = 
   QuantifierFeatures {
@@ -704,6 +1201,26 @@ _QuantifierFeatures_none = (Core.Name "none")
 
 _QuantifierFeatures_single = (Core.Name "single")
 
+_QuantifierFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.QuantifierFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "all"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "any"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "exists"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "none"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "single"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
+
 -- | A set of features for random value generation.
 data RandomnessFeatures = 
   RandomnessFeatures {
@@ -718,6 +1235,17 @@ _RandomnessFeatures = (Core.Name "hydra/langs/cypher/features.RandomnessFeatures
 _RandomnessFeatures_rand = (Core.Name "rand")
 
 _RandomnessFeatures_randomUUID = (Core.Name "randomUUID")
+
+_RandomnessFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.RandomnessFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "rand"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "randomUUID"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
 
 -- | A set of features for range literals within relationship patterns.
 data RangeLiteralFeatures = 
@@ -746,6 +1274,26 @@ _RangeLiteralFeatures_starRange = (Core.Name "starRange")
 
 _RangeLiteralFeatures_upperBound = (Core.Name "upperBound")
 
+_RangeLiteralFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.RangeLiteralFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "bounds"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "exactRange"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "lowerBound"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "starRange"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "upperBound"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
+
 -- | A set of features for specific syntax related to reading data from the graph..
 data ReadingFeatures = 
   ReadingFeatures {
@@ -764,6 +1312,20 @@ _ReadingFeatures_union = (Core.Name "union")
 _ReadingFeatures_unionAll = (Core.Name "unionAll")
 
 _ReadingFeatures_unwind = (Core.Name "unwind")
+
+_ReadingFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.ReadingFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "union"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "unionAll"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "unwind"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
 
 -- | A set of features for relationship directions / arrow patterns.
 data RelationshipDirectionFeatures = 
@@ -788,6 +1350,23 @@ _RelationshipDirectionFeatures_neither = (Core.Name "neither")
 
 _RelationshipDirectionFeatures_right = (Core.Name "right")
 
+_RelationshipDirectionFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.RelationshipDirectionFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "both"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "left"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "neither"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "right"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
+
 -- | A set of features for relationship patterns.
 data RelationshipPatternFeatures = 
   RelationshipPatternFeatures {
@@ -807,6 +1386,20 @@ _RelationshipPatternFeatures_variableRelationship = (Core.Name "variableRelation
 
 _RelationshipPatternFeatures_wildcardType = (Core.Name "wildcardType")
 
+_RelationshipPatternFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.RelationshipPatternFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "multipleTypes"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "variableRelationship"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "wildcardType"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
+
 -- | A set of features for REMOVE operations.
 data RemoveFeatures = 
   RemoveFeatures {
@@ -822,6 +1415,17 @@ _RemoveFeatures_byLabel = (Core.Name "byLabel")
 
 _RemoveFeatures_byProperty = (Core.Name "byProperty")
 
+_RemoveFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.RemoveFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "byLabel"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "byProperty"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
+
 -- | A set of features for schema functions.
 data SchemaFeatures = 
   SchemaFeatures {
@@ -836,6 +1440,17 @@ _SchemaFeatures = (Core.Name "hydra/langs/cypher/features.SchemaFeatures")
 _SchemaFeatures_type = (Core.Name "type")
 
 _SchemaFeatures_valueType = (Core.Name "valueType")
+
+_SchemaFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.SchemaFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "type"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "valueType"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
 
 -- | A set of features for set definitions.
 data SetFeatures = 
@@ -859,6 +1474,23 @@ _SetFeatures_variableEquals = (Core.Name "variableEquals")
 _SetFeatures_variablePlusEquals = (Core.Name "variablePlusEquals")
 
 _SetFeatures_variableWithNodeLabels = (Core.Name "variableWithNodeLabels")
+
+_SetFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.SetFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "propertyEquals"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "variableEquals"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "variablePlusEquals"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "variableWithNodeLabels"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
 
 -- | A set of features for string functions.
 data StringFeatures = 
@@ -915,6 +1547,47 @@ _StringFeatures_toInteger = (Core.Name "toInteger")
 
 _StringFeatures_toIntegerOrNull = (Core.Name "toIntegerOrNull")
 
+_StringFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.StringFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "char_length"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "character_length"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "contains"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "endsWith"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "in"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "startsWith"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "toBoolean"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "toBooleanOrNull"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "toFloat"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "toFloatOrNull"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "toInteger"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "toIntegerOrNull"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
+
 -- | A set of features for specific syntax related to updating data in the graph.
 data UpdatingFeatures = 
   UpdatingFeatures {
@@ -933,3 +1606,17 @@ _UpdatingFeatures_create = (Core.Name "create")
 _UpdatingFeatures_set = (Core.Name "set")
 
 _UpdatingFeatures_with = (Core.Name "with")
+
+_UpdatingFeatures_type_ = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/langs/cypher/features.UpdatingFeatures"),
+  Core.rowTypeExtends = Nothing,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "create"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "set"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "with"),
+      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))
