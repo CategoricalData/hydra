@@ -101,6 +101,7 @@ public class Libraries {
     private static List<PrimitiveFunction> listsPrimitives() {
         return Arrays.asList(
                 new hydra.lib.lists.Apply(),
+                new hydra.lib.lists.At(),
                 new hydra.lib.lists.Bind(),
                 new hydra.lib.lists.Concat(),
                 new hydra.lib.lists.Concat2(),
@@ -188,6 +189,7 @@ public class Libraries {
                 new hydra.lib.optionals.Apply(),
                 new hydra.lib.optionals.Bind(),
                 new hydra.lib.optionals.Cat(),
+                new hydra.lib.optionals.Compose(),
                 new hydra.lib.optionals.IsJust(),
                 new hydra.lib.optionals.IsNothing(),
                 new hydra.lib.optionals.Map(),

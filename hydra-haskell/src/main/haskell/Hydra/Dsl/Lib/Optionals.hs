@@ -14,6 +14,9 @@ bind = TTerm $ Terms.primitive _optionals_bind
 cat :: TTerm ([Maybe a] -> [a])
 cat = TTerm $ Terms.primitive _optionals_cat
 
+compose :: TTerm ((a -> Maybe b) -> (b -> Maybe c) -> (a -> Maybe c))
+compose = TTerm $ Terms.primitive _optionals_compose
+
 fromMaybe :: TTerm (a -> Maybe a -> a)
 fromMaybe = TTerm $ Terms.primitive _optionals_fromMaybe
 
