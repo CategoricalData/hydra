@@ -155,6 +155,9 @@ map x = ((\x -> case x of
   Core.TermMap v20 -> (Optionals.pure v20)
   _ -> Nothing) (Strip.fullyStripTerm x))
 
+name :: (Core.Term -> Maybe Core.Name)
+name term = (Optionals.map (\s -> Core.Name s) (Optionals.bind (wrap (Core.Name "hydra/core.Name") term) string))
+
 nominal :: ((a -> Core.Name) -> (a -> b) -> (c -> Maybe a) -> Core.Name -> c -> Maybe b)
 nominal getName getB getA expected = (Optionals.compose getA (\a -> Logic.ifElse (Just (getB a)) Nothing (Equality.equal (getName a) expected)))
 

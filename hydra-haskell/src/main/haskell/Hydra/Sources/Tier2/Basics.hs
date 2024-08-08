@@ -372,23 +372,23 @@ fieldMapDef = basicsDefinition "fieldMap" $
   function (TypeList fieldT) (mapT fieldNameT termT) $
   (lambda "fields" $ Maps.fromList @@ (Lists.map @@ var "toPair" @@ var "fields"))
     `with` [
-      "toPair">: lambda "f" $ pair (project _Field _Field_name @@ var "f") (project _Field _Field_term @@ var "f")]
+      "toPair">: lambda "f" $ pair (Core.fieldName @@ var "f") (Core.fieldTerm @@ var "f")]
 
 fieldTypeMapDef :: TElement ([FieldType] -> M.Map Name Type)
 fieldTypeMapDef = basicsDefinition "fieldTypeMap" $
   function (TypeList fieldTypeT) (mapT fieldNameT typeT) $
     (lambda "fields" $ Maps.fromList @@ (Lists.map @@ var "toPair" @@ var "fields"))
   `with` [
-    "toPair">: lambda "f" $ pair (project _FieldType _FieldType_name @@ var "f") (project _FieldType _FieldType_type @@ var "f")]
+    "toPair">: lambda "f" $ pair (Core.fieldTypeName @@ var "f") (Core.fieldTypeType @@ var "f")]
 
 isEncodedTypeDef :: TElement (Term -> Bool)
 isEncodedTypeDef = basicsDefinition "isEncodedType" $
   function termT booleanT $
   lambda "t" $ (match _Term (Just false) [
       TCase _Term_application --> lambda "a" $
-        ref isEncodedTypeDef @@ (project _Application _Application_function @@ var "a"),
+        ref isEncodedTypeDef @@ (Core.applicationFunction @@ var "a"),
       TCase _Term_union       --> lambda "i" $
-        Equality.equalString @@ (string $ unName _Type) @@ (unwrap _Name @@ (project _Injection _Injection_typeName @@ var "i"))
+        Equality.equalString @@ (string $ unName _Type) @@ (Core.unName @@ (Core.injectionTypeName @@ var "i"))
     ]) @@ (ref stripTermDef @@ var "t")
 
 isTypeDef :: TElement (Type -> Bool)
@@ -396,11 +396,11 @@ isTypeDef = basicsDefinition "isType" $
   function typeT booleanT $
   lambda "t" $ (match _Type (Just false) [
       TCase _Type_application --> lambda "a" $
-        ref isTypeDef @@ (project _ApplicationType _ApplicationType_function @@ var "a"),
+        ref isTypeDef @@ (Core.applicationTypeFunction @@ var "a"),
       TCase _Type_lambda --> lambda "l" $
-        ref isTypeDef @@ (project _LambdaType _LambdaType_body @@ var "l"),
+        ref isTypeDef @@ (Core.lambdaTypeBody @@ var "l"),
       TCase _Type_union --> lambda "rt" $
-        Equality.equalString @@ (string $ unName _Type) @@ (unwrap _Name @@ (project _RowType _RowType_typeName @@ var "rt"))
+        Equality.equalString @@ (string $ unName _Type) @@ (Core.unName @@ (Core.rowTypeTypeName @@ var "rt"))
 --      TCase _Type_variable --> constant true
     ]) @@ (ref stripTypeDef @@ var "t")
 
@@ -426,7 +426,7 @@ elementsToGraphDef = basicsDefinition "elementsToGraph" $
       (Graph.graphPrimitives @@ var "parent")
       (var "schema")
   `with` [
-    "toPair" >: lambda "el" $ pair (project _Element _Element_name @@ var "el") (var "el")]
+    "toPair" >: lambda "el" $ pair (Graph.elementName @@ var "el") (var "el")]
 
 localNameOfEagerDef :: TElement (Name -> String)
 localNameOfEagerDef = basicsDefinition "localNameOfEager" $
@@ -452,30 +452,35 @@ namespaceToFilePathDef :: TElement (Bool -> FileExtension -> Namespace -> String
 namespaceToFilePathDef = basicsDefinition "namespaceToFilePath" $
   function booleanT (funT fileExtensionT (funT namespaceT stringT)) $
   lambda "caps" $ lambda "ext" $ lambda "ns" $
-    (((Strings.intercalate @@ "/" @@ var "parts") ++ "." ++ (unwrap _FileExtension @@ var "ext"))
+    (((Strings.intercalate @@ "/" @@ var "parts") ++ "." ++ (Module.unFileExtension @@ var "ext"))
     `with` [
-      "parts">: Lists.map @@ (Logic.ifElse @@ ref capitalizeDef @@ ref idDef @@ var "caps") @@ (Strings.splitOn @@ "/" @@ (unwrap _Namespace @@ var "ns"))])
+      "parts">: Lists.map
+        @@ (Logic.ifElse
+          @@ ref capitalizeDef
+          @@ ref idDef
+          @@ var "caps")
+        @@ (Strings.splitOn @@ "/" @@ (Core.unNamespace @@ var "ns"))])
 
 qualifyNameEagerDef :: TElement (Name -> QualifiedName)
 qualifyNameEagerDef = basicsDefinition "qualifyNameEager" $
   function nameT qualifiedNameT $
   lambda "name" $ ((Logic.ifElse
-      @@ Module.qualifiedName nothing (unwrap _Name @@ var "name")
+      @@ Module.qualifiedName nothing (Core.unName @@ var "name")
       @@ Module.qualifiedName
         (just $ wrap _Namespace (Lists.head @@ var "parts"))
         (Strings.intercalate @@ "." @@ (Lists.tail @@ var "parts"))
       @@ (Equality.equalInt32 @@ int32 1 @@ (Lists.length @@ var "parts")))
     `with` [
-      "parts">: Strings.splitOn @@ "." @@ (unwrap _Name @@ var "name")])
+      "parts">: Strings.splitOn @@ "." @@ (Core.unName @@ var "name")])
 
 qualifyNameLazyDef :: TElement (Name -> QualifiedName)
 qualifyNameLazyDef = basicsDefinition "qualifyNameLazy" $
   function nameT qualifiedNameT $
   lambda "name" $ (Logic.ifElse
-      @@ Module.qualifiedName nothing (unwrap _Name @@ var "name")
+      @@ Module.qualifiedName nothing (Core.unName @@ var "name")
       @@ Module.qualifiedName
         (just $ wrap _Namespace (Strings.intercalate @@ "." @@ (Lists.reverse @@ (Lists.tail @@ var "parts"))))
         (Lists.head @@ var "parts")
       @@ (Equality.equalInt32 @@ int32 1 @@ (Lists.length @@ var "parts")))
     `with` [
-      "parts">: Lists.reverse @@ (Strings.splitOn @@ "." @@ (unwrap _Name @@ var "name"))]
+      "parts">: Lists.reverse @@ (Strings.splitOn @@ "." @@ (Core.unName @@ var "name"))]

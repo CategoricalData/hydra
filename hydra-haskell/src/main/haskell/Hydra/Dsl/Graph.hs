@@ -6,6 +6,9 @@ import Hydra.Dsl.Base as Base
 import qualified Data.Map as M
 
 
+elementName :: TTerm (Element -> Name)
+elementName = project _Element _Element_name
+
 graph :: TTerm (M.Map Name Element)
     -> TTerm (M.Map Name (Maybe Term))
     -> TTerm (M.Map Name Type)

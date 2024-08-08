@@ -257,6 +257,12 @@ typeSchemeType = project _TypeScheme _TypeScheme_type
 typedTermTerm :: TTerm (TypedTerm -> Term)
 typedTermTerm = project _TypedTerm _TypedTerm_term
 
+unName :: TTerm (Name -> String)
+unName = unwrap _Name
+
+unNamespace :: TTerm (Namespace -> String)
+unNamespace = unwrap _Namespace
+
 wrappedTerm :: TTerm Name -> TTerm Term -> TTerm WrappedTerm
 wrappedTerm typeName object = Base.record _WrappedTerm [
     _WrappedTerm_typeName>>: typeName,
