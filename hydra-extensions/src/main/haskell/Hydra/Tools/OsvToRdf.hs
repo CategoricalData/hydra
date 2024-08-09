@@ -47,7 +47,7 @@ executeOsvToRdfWorkflow (TransformWorkflow name schemaSpec srcDir destDir) = do
 -- This is a last-mile step which breaks type/term conformance
 -- (a more robust solution would modify the target language in the SHACL coder, so that list types are also transformed to set types).
 listsToSets :: Term -> Term
-listsToSets = rewriteTerm mapExpr id
+listsToSets = rewriteTerm mapExpr
   where
     mapExpr recurse = recurse . replaceLists
     replaceLists term = case term of

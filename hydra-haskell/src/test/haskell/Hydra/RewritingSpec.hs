@@ -216,21 +216,21 @@ testReplaceTerm = do
 
       H.it "Check that the correct subterms are replaced" $ do
         H.shouldBe
-          (rewriteTerm replaceInts keepKv
+          (rewriteTerm replaceInts
             (int32 42))
           (int64 42)
         H.shouldBe
-          (rewriteTerm replaceInts keepKv
+          (rewriteTerm replaceInts
             (list [int32 42, (lambda "x" $ var "x") @@ int32 137]))
           (list [int64 42, (lambda "x" $ var "x") @@ int64 137])
 
       H.it "Check that traversal order is respected" $ do
         H.shouldBe
-          (rewriteTerm replaceListsPre keepKv
+          (rewriteTerm replaceListsPre
             (list [list [list []]]))
           (list [list []])
         H.shouldBe
-          (rewriteTerm replaceListsPost keepKv
+          (rewriteTerm replaceListsPost
             (list [list [list []]]))
           (list [])
 
@@ -240,8 +240,6 @@ testReplaceTerm = do
 --          (list [annot "42" (string "foo")])
   where
     keepTerm recurse term = recurse term
-
-    keepKv = id
 
     replaceInts recurse term = case term2 of
         TermLiteral (LiteralInteger (IntegerValueInt32 v)) -> int64 $ fromIntegral v

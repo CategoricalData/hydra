@@ -195,7 +195,7 @@ whenFlag flag fthen felse = do
 
 -- TODO: move out of Annotations and into Rewriting
 unshadowVariables :: Term -> Term
-unshadowVariables term = Y.fromJust $ flowStateValue $ unFlow (rewriteTermM rewrite (pure . id) term) (S.empty, M.empty) emptyTrace
+unshadowVariables term = Y.fromJust $ flowStateValue $ unFlow (rewriteTermM rewrite term) (S.empty, M.empty) emptyTrace
   where
     rewrite recurse term = do
       (reserved, subst) <- getState
