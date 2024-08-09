@@ -241,7 +241,7 @@ encodeTypeReference localNs name = P3.TypeName $ if nsParts == Just localNsParts
 
 -- Eliminate type lambdas and type applications, simply replacing type variables with the string type
 flattenType :: Type -> Type
-flattenType = rewriteType f id
+flattenType = rewriteType f
   where
    f recurse typ = case typ of
      TypeLambda (LambdaType v body) -> recurse $ replaceFreeName v Types.string body

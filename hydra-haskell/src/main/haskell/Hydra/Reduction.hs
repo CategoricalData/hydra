@@ -25,7 +25,7 @@ import qualified Data.Maybe as Y
 
 
 alphaConvert :: Name -> Term -> Term -> Term
-alphaConvert vold tnew = rewriteTerm rewrite id
+alphaConvert vold tnew = rewriteTerm rewrite
   where
     rewrite recurse term = case term of
       TermFunction (FunctionLambda (Lambda v _ _)) -> if v == vold
@@ -39,8 +39,8 @@ countPrimitiveInvocations :: Bool
 countPrimitiveInvocations = True
 
 -- A term evaluation function which is alternatively lazy or eager
-reduceTerm :: Bool -> M.Map Name (Term) -> Term -> Flow (Graph) (Term)
-reduceTerm eager env = rewriteTermM mapping pure
+reduceTerm :: Bool -> M.Map Name Term -> Term -> Flow Graph Term
+reduceTerm eager env = rewriteTermM mapping
   where
     reduce eager = reduceTerm eager M.empty
 
@@ -59,7 +59,7 @@ reduceTerm eager env = rewriteTermM mapping pure
       [] -> fun
       (h:r) -> applyToArguments (Terms.apply fun h) r
 
-    replaceFreeName toReplace replacement = rewriteTerm mapping id
+    replaceFreeName toReplace replacement = rewriteTerm mapping
       where
         mapping recurse inner = case inner of
           TermFunction (FunctionLambda (Lambda param _ _)) -> if param == toReplace then inner else recurse inner
@@ -118,10 +118,10 @@ reduceTerm eager env = rewriteTermM mapping pure
 
 -- Note: this is eager beta reduction, in that we always descend into subtypes,
 --       and always reduce the right-hand side of an application prior to substitution
-betaReduceType :: Type -> Flow (Graph) (Type)
+betaReduceType :: Type -> Flow Graph (Type)
 betaReduceType typ = do
-    g <- getState :: Flow (Graph) (Graph)
-    rewriteTypeM mapExpr (pure . id) typ
+    g <- getState :: Flow Graph Graph
+    rewriteTypeM mapExpr typ
   where
     mapExpr recurse t = do
         r <- recurse t
@@ -145,7 +145,7 @@ betaReduceType typ = do
 --     ((\x.e1) e2) = e1[x/e2]
 --  These are both limited forms of beta reduction which help to "clean up" a term without fully evaluating it.
 contractTerm :: Term -> Term
-contractTerm = rewriteTerm rewrite id
+contractTerm = rewriteTerm rewrite
   where
     rewrite recurse term = case rec of
         TermApplication (Application lhs rhs) -> case fullyStripTerm lhs of

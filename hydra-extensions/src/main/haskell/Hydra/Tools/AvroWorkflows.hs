@@ -72,15 +72,19 @@ defaultTinkerpopAnnotations = PGM.AnnotationSchema {
 
 examplePgSchema :: PGM.Schema s () String
 examplePgSchema = PGM.Schema {
+    PGM.schemaVertexIdTypes = mkCoder "encode vertex id type" encodeType decodeType,
     PGM.schemaVertexIds = mkCoder "encode vertex id" Expect.string (pure . Terms.string),
+    PGM.schemaEdgeIdTypes = mkCoder "encode edge id type" encodeType decodeType,
     PGM.schemaEdgeIds = mkCoder "encode edge id" Expect.string (pure . Terms.string),
-    PGM.schemaPropertyTypes = mkCoder "encode property type" (\_ -> pure ()) (\_ -> pure Types.unit),
+    PGM.schemaPropertyTypes = mkCoder "encode property type" encodeType decodeType,
     PGM.schemaPropertyValues = mkCoder "encode property value" Expect.string (pure . Terms.string),
     PGM.schemaAnnotations = defaultTinkerpopAnnotations,
     PGM.schemaDefaultVertexId = "defaultVertexId",
     PGM.schemaDefaultEdgeId = "defaultEdgeId"}
   where
     mkCoder lab encode decode = Coder (withTrace lab . encode) decode
+    encodeType _ = pure ()
+    decodeType _ = pure Types.unit
 
 -- | A convenience for transformAvroJsonDirectory, bundling all of the input parameters together as a workflow
 executeAvroTransformWorkflow :: LastMile Graph x -> TransformWorkflow -> IO ()
@@ -95,7 +99,7 @@ executeAvroTransformWorkflow lastMile (TransformWorkflow name schemaSpec srcDir 
 -- This is a last-mile step which breaks type/term conformance
 -- (a more robust solution would modify the target language in the SHACL coder, so that list types are also transformed to set types).
 listsToSets :: Term -> Term
-listsToSets = rewriteTerm mapExpr id
+listsToSets = rewriteTerm mapExpr
   where
     mapExpr recurse = recurse . replaceLists
     replaceLists term = case term of

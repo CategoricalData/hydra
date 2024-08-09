@@ -379,7 +379,6 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
           return [htype]
       return $ H.ConstructorWithComments (H.ConstructorOrdinary $ H.Constructor_Ordinary (simpleName nm) typeList) comments
 
-
 typeDecl :: Namespaces -> Name -> Type -> Flow Graph H.DeclarationWithComments
 typeDecl namespaces name typ = do
     -- Note: consider constructing this coder just once, then reusing it
@@ -394,7 +393,7 @@ typeDecl namespaces name typ = do
     typeName ns name = qname ns (typeNameLocal name)
     typeNameLocal name = "_" ++ localNameOfEager name ++ "_type_"
     rawTerm = coreEncodeType typ
-    finalTerm = rewriteTerm rewrite id rawTerm
+    finalTerm = rewriteTerm rewrite rawTerm
       where
         rewrite :: (Term -> Term) -> Term -> Term
         rewrite recurse term = Y.fromMaybe (recurse term) (Decode.variant _Type term >>= forType)

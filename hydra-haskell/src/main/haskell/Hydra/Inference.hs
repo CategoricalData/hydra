@@ -102,7 +102,7 @@ inferTypeScheme :: Term -> Flow Graph TypeScheme
 inferTypeScheme term = snd <$> inferTypeAndConstraints term
 
 rewriteDataType :: (Type -> Type) -> Term -> Term
-rewriteDataType f = rewriteTerm ff id
+rewriteDataType f = rewriteTerm ff
   where
     ff recurse term = case recurse term of
       TermTyped (TypedTerm term1 type1) -> TermTyped $ TypedTerm term1 (f type1)

@@ -51,7 +51,7 @@ elementsWithDependencies original = CM.mapM requireElement allDepNames
 --   whose arity (in the absence of application terms) is equal to the depth of nested lambdas.
 --   This is useful for targets like Java with weaker support for currying.
 expandTypedLambdas :: Term -> Term
-expandTypedLambdas = rewriteTerm rewrite id
+expandTypedLambdas = rewriteTerm rewrite
   where
     rewrite recurse term = case getFunType term of
         Nothing -> recurse term
@@ -94,7 +94,7 @@ expandTypedLambdas = rewriteTerm rewrite id
             var = Name $ "v" ++ show i
 
 flattenLetTerms :: Term -> Term
-flattenLetTerms = rewriteTerm flatten id
+flattenLetTerms = rewriteTerm flatten
   where
     flatten recurse term = case recurse term of
       TermLet (Let bindings body) -> TermLet $ Let newBindings body
@@ -125,7 +125,7 @@ freeVariablesInScheme (TypeScheme vars t) = S.difference (freeVariablesInType t)
 -- | Inline all type variables in a type using the provided schema.
 --   Note: this function is only appropriate for nonrecursive type definitions.
 inlineType :: M.Map Name Type -> Type -> Flow s Type
-inlineType schema = rewriteTypeM f pure
+inlineType schema = rewriteTypeM f
   where
     f recurse typ = do
       tr <- recurse typ
@@ -140,23 +140,23 @@ isFreeIn v term = not $ S.member v $ freeVariablesInTerm term
 
 -- | Recursively remove term annotations, including within subterms
 removeTermAnnotations :: Term -> Term
-removeTermAnnotations = rewriteTerm remove id
+removeTermAnnotations = rewriteTerm remove
   where
-    remove recurse term = case term of
-      TermAnnotated (AnnotatedTerm term' _) -> remove recurse term'
-      TermTyped (TypedTerm term' _) -> remove recurse term'
-      _ -> recurse term
+    remove recurse term = case recurse term of
+      TermAnnotated (AnnotatedTerm term1 _) -> term1
+      TermTyped (TypedTerm term1 _) -> term1
+      t -> t
 
 -- | Recursively remove type annotations, including within subtypes
 removeTypeAnnotations :: Type -> Type
-removeTypeAnnotations = rewriteType remove id
+removeTypeAnnotations = rewriteType remove
   where
     remove recurse typ = case recurse typ of
-      TypeAnnotated (AnnotatedType typ' _) -> remove recurse typ'
-      _ -> recurse typ
+      TypeAnnotated (AnnotatedType typ' _) -> typ'
+      t -> t
 
 replaceFreeName :: Name -> Type -> Type -> Type
-replaceFreeName v rep = rewriteType mapExpr id
+replaceFreeName v rep = rewriteType mapExpr
   where
     mapExpr recurse t = case t of
       TypeLambda (LambdaType v' body) -> if v == v'
@@ -170,11 +170,11 @@ rewrite fsub f = recurse
   where
     recurse = f (fsub recurse)
 
-rewriteTerm :: ((Term -> Term) -> Term -> Term) -> (M.Map String Term -> M.Map String Term) -> Term -> Term
-rewriteTerm f mf = rewrite fsub f
+rewriteTerm :: ((Term -> Term) -> Term -> Term) -> Term -> Term
+rewriteTerm f = rewrite fsub f
   where
     fsub recurse term = case term of
-        TermAnnotated (AnnotatedTerm ex ann) -> TermAnnotated $ AnnotatedTerm (recurse ex) (mf ann)
+        TermAnnotated (AnnotatedTerm ex ann) -> TermAnnotated $ AnnotatedTerm (recurse ex) ann
         TermApplication (Application lhs rhs) -> TermApplication $ Application (recurse lhs) (recurse rhs)
         TermFunction fun -> TermFunction $ case fun of
           FunctionElimination e -> FunctionElimination $ case e of
@@ -207,13 +207,12 @@ rewriteTerm f mf = rewrite fsub f
 
 rewriteTermM ::
   ((Term -> Flow s Term) -> Term -> (Flow s Term)) ->
-  (M.Map String Term -> Flow s (M.Map String Term)) ->
   Term ->
   Flow s Term
-rewriteTermM f mf = rewrite fsub f
+rewriteTermM f = rewrite fsub f
   where
     fsub recurse term = case term of
-        TermAnnotated (AnnotatedTerm ex ma) -> TermAnnotated <$> (AnnotatedTerm <$> recurse ex <*> mf ma)
+        TermAnnotated (AnnotatedTerm ex ma) -> TermAnnotated <$> (AnnotatedTerm <$> recurse ex <*> pure ma)
         TermApplication (Application lhs rhs) -> TermApplication <$> (Application <$> recurse lhs <*> recurse rhs)
         TermFunction fun -> TermFunction <$> case fun of
           FunctionElimination e -> FunctionElimination <$> case e of
@@ -258,20 +257,26 @@ rewriteTermM f mf = rewrite fsub f
           return f {fieldTerm = t}
 
 rewriteTermMeta :: (M.Map String Term -> M.Map String Term) -> Term -> Term
-rewriteTermMeta = rewriteTerm mapExpr
+rewriteTermMeta mapping = rewriteTerm rewrite
   where
-    mapExpr recurse term = recurse term
+    rewrite recurse term = case recurse term of
+      TermAnnotated (AnnotatedTerm term1 ann) -> TermAnnotated $ AnnotatedTerm term1 $ mapping ann
+      t -> t
 
 rewriteTermMetaM :: (M.Map String Term -> Flow s (M.Map String Term)) -> Term -> Flow s Term
-rewriteTermMetaM = rewriteTermM mapExpr
+rewriteTermMetaM mapping = rewriteTermM rewrite
   where
-    mapExpr recurse term = recurse term
+    rewrite recurse term = do
+      r <- recurse term
+      case r of
+        TermAnnotated (AnnotatedTerm term1 ann) -> TermAnnotated <$> (AnnotatedTerm <$> pure term1 <*> mapping ann)
+        t -> pure t
 
-rewriteType :: ((Type -> Type) -> Type -> Type) -> (M.Map String Term -> M.Map String Term) -> Type -> Type
-rewriteType f mf = rewrite fsub f
+rewriteType :: ((Type -> Type) -> Type -> Type) -> Type -> Type
+rewriteType f = rewrite fsub f
   where
     fsub recurse typ = case typ of
-        TypeAnnotated (AnnotatedType t ann) -> TypeAnnotated $ AnnotatedType (recurse t) (mf ann)
+        TypeAnnotated (AnnotatedType t ann) -> TypeAnnotated $ AnnotatedType (recurse t) ann
         TypeApplication (ApplicationType lhs rhs) -> TypeApplication $ ApplicationType (recurse lhs) (recurse rhs)
         TypeFunction (FunctionType dom cod) -> TypeFunction (FunctionType (recurse dom) (recurse cod))
         TypeLambda (LambdaType v b) -> TypeLambda (LambdaType v $ recurse b)
@@ -291,13 +296,12 @@ rewriteType f mf = rewrite fsub f
 
 rewriteTypeM ::
   ((Type -> Flow s Type) -> Type -> (Flow s Type)) ->
-  (M.Map String Term -> Flow s (M.Map String Term)) ->
   Type ->
   Flow s Type
-rewriteTypeM f mf = rewrite fsub f
+rewriteTypeM f = rewrite fsub f
   where
     fsub recurse typ = case typ of
-        TypeAnnotated (AnnotatedType t ann) -> TypeAnnotated <$> (AnnotatedType <$> recurse t <*> mf ann)
+        TypeAnnotated (AnnotatedType t ann) -> TypeAnnotated <$> (AnnotatedType <$> recurse t <*> pure ann)
         TypeApplication (ApplicationType lhs rhs) -> TypeApplication <$> (ApplicationType <$> recurse lhs <*> recurse rhs)
         TypeFunction (FunctionType dom cod) -> TypeFunction <$> (FunctionType <$> recurse dom <*> recurse cod)
         TypeLambda (LambdaType v b) -> TypeLambda <$> (LambdaType <$> pure v <*> recurse b)
@@ -320,12 +324,14 @@ rewriteTypeM f mf = rewrite fsub f
           return f {fieldTypeType = t}
 
 rewriteTypeMeta :: (M.Map String Term -> M.Map String Term) -> Type -> Type
-rewriteTypeMeta = rewriteType mapExpr
+rewriteTypeMeta mapping = rewriteType rewrite
   where
-    mapExpr recurse term = recurse term
+    rewrite recurse typ = case recurse typ of
+      TypeAnnotated (AnnotatedType typ1 ann) -> TypeAnnotated $ AnnotatedType typ1 $ mapping ann
+      t -> t
 
 simplifyTerm :: Term -> Term
-simplifyTerm = rewriteTerm simplify id
+simplifyTerm = rewriteTerm simplify
   where
     simplify recurse term = recurse $ case fullyStripTerm term of
       TermApplication (Application lhs rhs) -> case fullyStripTerm lhs of
@@ -339,7 +345,7 @@ simplifyTerm = rewriteTerm simplify id
       _ -> term
 
 stripTermRecursive :: Term -> Term
-stripTermRecursive = rewriteTerm strip id
+stripTermRecursive = rewriteTerm strip
   where
     strip recurse term = case recurse term of
       TermAnnotated (AnnotatedTerm t _) -> t
@@ -347,7 +353,7 @@ stripTermRecursive = rewriteTerm strip id
       t -> t
 
 substituteVariable :: Name -> Name -> Term -> Term
-substituteVariable from to = rewriteTerm replace id
+substituteVariable from to = rewriteTerm replace
   where
     replace recurse term = case term of
       TermVariable x -> (TermVariable $ if x == from then to else x)
@@ -357,7 +363,7 @@ substituteVariable from to = rewriteTerm replace id
       _ -> recurse term
 
 substituteVariables :: M.Map Name Name -> Term -> Term
-substituteVariables subst = rewriteTerm replace id
+substituteVariables subst = rewriteTerm replace
   where
     replace recurse term = case term of
       TermVariable n -> TermVariable $ Y.fromMaybe n $ M.lookup n subst
@@ -396,33 +402,3 @@ topologicalSortElements els = topologicalSort $ adjlist <$> els
 
 typeDependencyNames :: Type -> S.Set Name
 typeDependencyNames = freeVariablesInType
-
--- | Where non-lambda terms with nonzero arity occur at the top level, turn them into lambdas,
---   also adding an appropriate type annotation to each new lambda.
-wrapLambdas :: Term -> Flow Graph Term
-wrapLambdas = pure
---wrapLambdas term = do
---    typ <- requireTermType term
---    let types = uncurryType typ
---    let argTypes = L.init types
---    let missing = missingArity (L.length argTypes) term
---    return $ pad term (L.take missing argTypes) (toFunType $ L.drop missing types)
---  where
---    toFunType types = case types of
---      [t] -> t
---      (dom:rest) -> TypeFunction $ FunctionType dom $ toFunType rest
---    missingArity arity term = if arity == 0
---      then 0
---      else case term of
---        TermAnnotated (AnnotatedTerm term2 _) -> missingArity arity term2
---        TermTyped (TypedTerm term2 _) -> missingArity arity term2
---        TermLet (Let _ env) -> missingArity arity env
---        TermFunction (FunctionLambda (Lambda _ _ body)) -> missingArity (arity - 1) body
---        _ -> arity
---    pad term doms cod = fst $ L.foldl newLambda (apps, cod) $ L.reverse variables
---      where
---        newLambda (body, cod) (v, dom) = (TermTyped $ TypedTerm (TermFunction $ FunctionLambda $ Lambda v body) ft, ft)
---          where
---            ft = TypeFunction $ FunctionType dom cod
---        apps = L.foldl (\lhs (v, _) -> TermApplication (Application lhs $ TermVariable v)) term variables
---        variables = L.zip ((\i -> Name $ "a" ++ show i) <$> [1..]) doms
