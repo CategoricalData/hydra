@@ -13,6 +13,7 @@ import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.ShorthandTypes
 import Hydra.Substitution
+import Hydra.Rules
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
@@ -27,11 +28,11 @@ checkInstantiation = H.describe "Check type instantiation" $ do
 
   H.describe "Lambdas" $ do
     H.it "test #1" $ shouldSucceedWith
-      (instantiate $ Types.lambda "x" $ Types.var "x")
-      (Types.lambda "tv_0" $ Types.var "tv_0")
+      (withInferenceContext $ instantiate $ Types.scheme ["x"] $ Types.var "x")
+      (Types.var "t0")
     H.it "test #2" $ shouldSucceedWith
-      (instantiate $ Types.lambda "x" $ Types.list $ Types.var "x")
-      (Types.lambda "tv_0" $ Types.list $ Types.var "tv_0")
+      (withInferenceContext $ instantiate $ Types.scheme ["x"] $ Types.list $ Types.var "x")
+      (Types.list $ Types.var "t0")
 
 spec :: H.Spec
 spec = do
