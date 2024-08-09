@@ -16,8 +16,6 @@ newtype Constant =
 
 _Constant = (Core.Name "hydra/grammar.Constant")
 
-_Constant_type_ = (Core.TypeLiteral Core.LiteralTypeString)
-
 -- | An enhanced Backus-Naur form (BNF) grammar
 newtype Grammar = 
   Grammar {
@@ -26,8 +24,6 @@ newtype Grammar =
 
 _Grammar = (Core.Name "hydra/grammar.Grammar")
 
-_Grammar_type_ = (Core.TypeList _Production_type_)
-
 -- | A name for a pattern
 newtype Label = 
   Label {
@@ -35,8 +31,6 @@ newtype Label =
   deriving (Eq, Ord, Read, Show)
 
 _Label = (Core.Name "hydra/grammar.Label")
-
-_Label_type_ = (Core.TypeLiteral Core.LiteralTypeString)
 
 -- | A pattern together with a name (label)
 data LabeledPattern = 
@@ -50,17 +44,6 @@ _LabeledPattern = (Core.Name "hydra/grammar.LabeledPattern")
 _LabeledPattern_label = (Core.Name "label")
 
 _LabeledPattern_pattern = (Core.Name "pattern")
-
-_LabeledPattern_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/grammar.LabeledPattern"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "label"),
-      Core.fieldTypeType = _Label_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "pattern"),
-      Core.fieldTypeType = _Pattern_type_}]}))
 
 -- | A pattern which matches valid expressions in the language
 data Pattern = 
@@ -101,47 +84,6 @@ _Pattern_star = (Core.Name "star")
 
 _Pattern_plus = (Core.Name "plus")
 
-_Pattern_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/grammar.Pattern"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "nil"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "ignored"),
-      Core.fieldTypeType = _Pattern_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "labeled"),
-      Core.fieldTypeType = _LabeledPattern_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "constant"),
-      Core.fieldTypeType = _Constant_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "regex"),
-      Core.fieldTypeType = _Regex_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "nonterminal"),
-      Core.fieldTypeType = _Symbol_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "sequence"),
-      Core.fieldTypeType = (Core.TypeList _Pattern_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "alternatives"),
-      Core.fieldTypeType = (Core.TypeList _Pattern_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "option"),
-      Core.fieldTypeType = _Pattern_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "star"),
-      Core.fieldTypeType = _Pattern_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "plus"),
-      Core.fieldTypeType = _Pattern_type_}]}))
-
 -- | A BNF production
 data Production = 
   Production {
@@ -155,17 +97,6 @@ _Production_symbol = (Core.Name "symbol")
 
 _Production_pattern = (Core.Name "pattern")
 
-_Production_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/grammar.Production"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "symbol"),
-      Core.fieldTypeType = _Symbol_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "pattern"),
-      Core.fieldTypeType = _Pattern_type_}]}))
-
 -- | A regular expression
 newtype Regex = 
   Regex {
@@ -174,8 +105,6 @@ newtype Regex =
 
 _Regex = (Core.Name "hydra/grammar.Regex")
 
-_Regex_type_ = (Core.TypeLiteral Core.LiteralTypeString)
-
 -- | A nonterminal symbol
 newtype Symbol = 
   Symbol {
@@ -183,5 +112,3 @@ newtype Symbol =
   deriving (Eq, Ord, Read, Show)
 
 _Symbol = (Core.Name "hydra/grammar.Symbol")
-
-_Symbol_type_ = (Core.TypeLiteral Core.LiteralTypeString)

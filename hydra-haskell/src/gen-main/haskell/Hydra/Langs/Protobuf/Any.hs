@@ -22,14 +22,3 @@ _Any = (Core.Name "hydra/langs/protobuf/any.Any")
 _Any_typeUrl = (Core.Name "typeUrl")
 
 _Any_value = (Core.Name "value")
-
-_Any_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/protobuf/any.Any"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "typeUrl"),
-      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "value"),
-      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBinary)}]}))

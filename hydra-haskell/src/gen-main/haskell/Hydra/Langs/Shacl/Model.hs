@@ -22,17 +22,6 @@ _Closed_isClosed = (Core.Name "isClosed")
 
 _Closed_ignoredProperties = (Core.Name "ignoredProperties")
 
-_Closed_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/shacl/model.Closed"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "isClosed"),
-      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "ignoredProperties"),
-      Core.fieldTypeType = (Core.TypeOptional (Core.TypeSet Syntax._Property_type_))}]}))
-
 -- | Any of a number of constraint parameters which can be applied either to node or property shapes
 data CommonConstraint = 
   -- | See https://www.w3.org/TR/shacl/#AndConstraintComponent
@@ -127,89 +116,6 @@ _CommonConstraint_or = (Core.Name "or")
 
 _CommonConstraint_xone = (Core.Name "xone")
 
-_CommonConstraint_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/shacl/model.CommonConstraint"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "and"),
-      Core.fieldTypeType = (Core.TypeSet (Core.TypeApplication (Core.ApplicationType {
-        Core.applicationTypeFunction = _Reference_type_,
-        Core.applicationTypeArgument = _Shape_type_})))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "closed"),
-      Core.fieldTypeType = _Closed_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "class"),
-      Core.fieldTypeType = (Core.TypeSet Syntax._RdfsClass_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "datatype"),
-      Core.fieldTypeType = Syntax._Iri_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "disjoint"),
-      Core.fieldTypeType = (Core.TypeSet Syntax._Property_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "equals"),
-      Core.fieldTypeType = (Core.TypeSet Syntax._Property_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "hasValue"),
-      Core.fieldTypeType = (Core.TypeSet Syntax._Node_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "in"),
-      Core.fieldTypeType = (Core.TypeList Syntax._Node_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "languageIn"),
-      Core.fieldTypeType = (Core.TypeSet Syntax._LanguageTag_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "nodeKind"),
-      Core.fieldTypeType = _NodeKind_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "node"),
-      Core.fieldTypeType = (Core.TypeSet (Core.TypeApplication (Core.ApplicationType {
-        Core.applicationTypeFunction = _Reference_type_,
-        Core.applicationTypeArgument = _NodeShape_type_})))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "not"),
-      Core.fieldTypeType = (Core.TypeSet (Core.TypeApplication (Core.ApplicationType {
-        Core.applicationTypeFunction = _Reference_type_,
-        Core.applicationTypeArgument = _Shape_type_})))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "maxExclusive"),
-      Core.fieldTypeType = Syntax._Literal_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "maxInclusive"),
-      Core.fieldTypeType = Syntax._Literal_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "maxLength"),
-      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "minExclusive"),
-      Core.fieldTypeType = Syntax._Literal_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "minInclusive"),
-      Core.fieldTypeType = Syntax._Literal_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "minLength"),
-      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "pattern"),
-      Core.fieldTypeType = _Pattern_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "property"),
-      Core.fieldTypeType = (Core.TypeSet (Core.TypeApplication (Core.ApplicationType {
-        Core.applicationTypeFunction = _Reference_type_,
-        Core.applicationTypeArgument = _PropertyShape_type_})))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "or"),
-      Core.fieldTypeType = (Core.TypeSet (Core.TypeApplication (Core.ApplicationType {
-        Core.applicationTypeFunction = _Reference_type_,
-        Core.applicationTypeArgument = _Shape_type_})))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "xone"),
-      Core.fieldTypeType = (Core.TypeSet (Core.TypeApplication (Core.ApplicationType {
-        Core.applicationTypeFunction = _Reference_type_,
-        Core.applicationTypeArgument = _Shape_type_})))}]}))
-
 -- | Common constraint parameters and other properties for SHACL shapes
 data CommonProperties = 
   CommonProperties {
@@ -249,35 +155,6 @@ _CommonProperties_targetObjectsOf = (Core.Name "targetObjectsOf")
 
 _CommonProperties_targetSubjectsOf = (Core.Name "targetSubjectsOf")
 
-_CommonProperties_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/shacl/model.CommonProperties"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "constraints"),
-      Core.fieldTypeType = (Core.TypeSet _CommonConstraint_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "deactivated"),
-      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeBoolean))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "message"),
-      Core.fieldTypeType = Syntax._LangStrings_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "severity"),
-      Core.fieldTypeType = _Severity_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "targetClass"),
-      Core.fieldTypeType = (Core.TypeSet Syntax._RdfsClass_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "targetNode"),
-      Core.fieldTypeType = (Core.TypeSet Syntax._IriOrLiteral_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "targetObjectsOf"),
-      Core.fieldTypeType = (Core.TypeSet Syntax._Property_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "targetSubjectsOf"),
-      Core.fieldTypeType = (Core.TypeSet Syntax._Property_type_)}]}))
-
 -- | An instance of a type like sh:Shape or sh:NodeShape, together with a unique IRI for that instance
 data Definition a = 
   Definition {
@@ -290,19 +167,6 @@ _Definition = (Core.Name "hydra/langs/shacl/model.Definition")
 _Definition_iri = (Core.Name "iri")
 
 _Definition_target = (Core.Name "target")
-
-_Definition_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "a"),
-  Core.lambdaTypeBody = (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = (Core.Name "hydra/langs/shacl/model.Definition"),
-    Core.rowTypeExtends = Nothing,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "iri"),
-        Core.fieldTypeType = Syntax._Iri_type_},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "target"),
-        Core.fieldTypeType = (Core.TypeVariable (Core.Name "a"))}]}))}))
 
 data NodeKind = 
   -- | A blank node
@@ -333,47 +197,6 @@ _NodeKind_blankNodeOrLiteral = (Core.Name "blankNodeOrLiteral")
 
 _NodeKind_iriOrLiteral = (Core.Name "iriOrLiteral")
 
-_NodeKind_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/shacl/model.NodeKind"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "blankNode"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "iri"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "literal"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "blankNodeOrIri"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "blankNodeOrLiteral"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "iriOrLiteral"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))}]}))
-
 -- | A SHACL node shape. See https://www.w3.org/TR/shacl/#node-shapes
 data NodeShape = 
   NodeShape {
@@ -383,14 +206,6 @@ data NodeShape =
 _NodeShape = (Core.Name "hydra/langs/shacl/model.NodeShape")
 
 _NodeShape_common = (Core.Name "common")
-
-_NodeShape_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/shacl/model.NodeShape"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "common"),
-      Core.fieldTypeType = _CommonProperties_type_}]}))
 
 -- | A SHACL pattern. See https://www.w3.org/TR/shacl/#PatternConstraintComponent
 data Pattern = 
@@ -404,17 +219,6 @@ _Pattern = (Core.Name "hydra/langs/shacl/model.Pattern")
 _Pattern_regex = (Core.Name "regex")
 
 _Pattern_flags = (Core.Name "flags")
-
-_Pattern_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/shacl/model.Pattern"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "regex"),
-      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "flags"),
-      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString))}]}))
 
 -- | A SHACL property shape. See https://www.w3.org/TR/shacl/#property-shapes
 data PropertyShape = 
@@ -449,32 +253,6 @@ _PropertyShape_order = (Core.Name "order")
 
 _PropertyShape_path = (Core.Name "path")
 
-_PropertyShape_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/shacl/model.PropertyShape"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "common"),
-      Core.fieldTypeType = _CommonProperties_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "constraints"),
-      Core.fieldTypeType = (Core.TypeSet _PropertyShapeConstraint_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "defaultValue"),
-      Core.fieldTypeType = (Core.TypeOptional Syntax._Node_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "description"),
-      Core.fieldTypeType = Syntax._LangStrings_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = Syntax._LangStrings_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "order"),
-      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint)))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "path"),
-      Core.fieldTypeType = Syntax._Iri_type_}]}))
-
 -- | A number of constraint parameters which are specific to property shapes, and cannot be applied to node shapes
 data PropertyShapeConstraint = 
   -- | See https://www.w3.org/TR/shacl/#LessThanConstraintComponent
@@ -505,29 +283,6 @@ _PropertyShapeConstraint_uniqueLang = (Core.Name "uniqueLang")
 
 _PropertyShapeConstraint_qualifiedValueShape = (Core.Name "qualifiedValueShape")
 
-_PropertyShapeConstraint_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/shacl/model.PropertyShapeConstraint"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "lessThan"),
-      Core.fieldTypeType = (Core.TypeSet Syntax._Property_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "lessThanOrEquals"),
-      Core.fieldTypeType = (Core.TypeSet Syntax._Property_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "maxCount"),
-      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "minCount"),
-      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "uniqueLang"),
-      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "qualifiedValueShape"),
-      Core.fieldTypeType = _QualifiedValueShape_type_}]}))
-
 -- | See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent
 data QualifiedValueShape = 
   QualifiedValueShape {
@@ -547,25 +302,6 @@ _QualifiedValueShape_qualifiedMinCount = (Core.Name "qualifiedMinCount")
 
 _QualifiedValueShape_qualifiedValueShapesDisjoint = (Core.Name "qualifiedValueShapesDisjoint")
 
-_QualifiedValueShape_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/shacl/model.QualifiedValueShape"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "qualifiedValueShape"),
-      Core.fieldTypeType = (Core.TypeApplication (Core.ApplicationType {
-        Core.applicationTypeFunction = _Reference_type_,
-        Core.applicationTypeArgument = _Shape_type_}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "qualifiedMaxCount"),
-      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "qualifiedMinCount"),
-      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "qualifiedValueShapesDisjoint"),
-      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeBoolean))}]}))
-
 -- | Either an instance of a type like sh:Shape or sh:NodeShape, or an IRI which refers to an instance of that type
 data Reference a = 
   ReferenceNamed Syntax.Iri |
@@ -582,24 +318,6 @@ _Reference_named = (Core.Name "named")
 _Reference_anonymous = (Core.Name "anonymous")
 
 _Reference_definition = (Core.Name "definition")
-
-_Reference_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "a"),
-  Core.lambdaTypeBody = (Core.TypeUnion (Core.RowType {
-    Core.rowTypeTypeName = (Core.Name "hydra/langs/shacl/model.Reference"),
-    Core.rowTypeExtends = Nothing,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "named"),
-        Core.fieldTypeType = Syntax._Iri_type_},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "anonymous"),
-        Core.fieldTypeType = (Core.TypeVariable (Core.Name "a"))},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "definition"),
-        Core.fieldTypeType = (Core.TypeApplication (Core.ApplicationType {
-          Core.applicationTypeFunction = _Definition_type_,
-          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))}))}]}))}))
 
 data Severity = 
   -- | A non-critical constraint violation indicating an informative message
@@ -618,29 +336,6 @@ _Severity_warning = (Core.Name "warning")
 
 _Severity_violation = (Core.Name "violation")
 
-_Severity_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/shacl/model.Severity"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "info"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "warning"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "violation"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))}]}))
-
 -- | A SHACL node or property shape. See https://www.w3.org/TR/shacl/#shapes
 data Shape = 
   ShapeNode NodeShape |
@@ -653,17 +348,6 @@ _Shape_node = (Core.Name "node")
 
 _Shape_property = (Core.Name "property")
 
-_Shape_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/shacl/model.Shape"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "node"),
-      Core.fieldTypeType = _NodeShape_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "property"),
-      Core.fieldTypeType = _PropertyShape_type_}]}))
-
 -- | An RDF graph containing zero or more shapes that is passed into a SHACL validation process so that a data graph can be validated against the shapes
 newtype ShapesGraph = 
   ShapesGraph {
@@ -671,7 +355,3 @@ newtype ShapesGraph =
   deriving (Eq, Ord, Read, Show)
 
 _ShapesGraph = (Core.Name "hydra/langs/shacl/model.ShapesGraph")
-
-_ShapesGraph_type_ = (Core.TypeSet (Core.TypeApplication (Core.ApplicationType {
-  Core.applicationTypeFunction = _Definition_type_,
-  Core.applicationTypeArgument = _Shape_type_})))

@@ -51,9 +51,9 @@ protobufLanguage = Coders.Language {
       Mantle.TypeVariantUnion,
       Mantle.TypeVariantVariable]),
     Coders.languageConstraintsTypes = (\x -> case x of
-      Core.TypeMap v284 -> ((\x -> case x of
+      Core.TypeMap v320 -> ((\x -> case x of
         Core.TypeOptional _ -> False
-        _ -> True) (Strip.stripType (Core.mapTypeValues v284)))
+        _ -> True) (Strip.stripType (Core.mapTypeValues v320)))
       _ -> True)}}
 
 -- | A set of reserved words in Protobuf

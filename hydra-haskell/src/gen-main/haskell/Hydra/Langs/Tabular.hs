@@ -16,10 +16,6 @@ newtype DataRow v =
 
 _DataRow = (Core.Name "hydra/langs/tabular.DataRow")
 
-_DataRow_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "v"),
-  Core.lambdaTypeBody = (Core.TypeList (Core.TypeOptional (Core.TypeVariable (Core.Name "v"))))}))
-
 -- | A header row, containing column names (but no types or data)
 newtype HeaderRow = 
   HeaderRow {
@@ -27,8 +23,6 @@ newtype HeaderRow =
   deriving (Eq, Ord, Read, Show)
 
 _HeaderRow = (Core.Name "hydra/langs/tabular.HeaderRow")
-
-_HeaderRow_type_ = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))
 
 -- | A simple table as in a CSV file, having an optional header row and any number of data rows
 data Table v = 
@@ -44,18 +38,3 @@ _Table = (Core.Name "hydra/langs/tabular.Table")
 _Table_header = (Core.Name "header")
 
 _Table_data = (Core.Name "data")
-
-_Table_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "v"),
-  Core.lambdaTypeBody = (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = (Core.Name "hydra/langs/tabular.Table"),
-    Core.rowTypeExtends = Nothing,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "header"),
-        Core.fieldTypeType = (Core.TypeOptional _HeaderRow_type_)},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "data"),
-        Core.fieldTypeType = (Core.TypeList (Core.TypeApplication (Core.ApplicationType {
-          Core.applicationTypeFunction = _DataRow_type_,
-          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))})))}]}))}))

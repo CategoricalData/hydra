@@ -16,8 +16,6 @@ newtype FileExtension =
 
 _FileExtension = (Core.Name "hydra/module.FileExtension")
 
-_FileExtension_type_ = (Core.TypeLiteral Core.LiteralTypeString)
-
 -- | A logical collection of elements in the same namespace, having dependencies on zero or more other modules
 data Module = 
   Module {
@@ -45,26 +43,6 @@ _Module_typeDependencies = (Core.Name "typeDependencies")
 
 _Module_description = (Core.Name "description")
 
-_Module_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/module.Module"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "namespace"),
-      Core.fieldTypeType = _Namespace_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "elements"),
-      Core.fieldTypeType = (Core.TypeList Graph._Element_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "termDependencies"),
-      Core.fieldTypeType = (Core.TypeList _Module_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "typeDependencies"),
-      Core.fieldTypeType = (Core.TypeList _Module_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "description"),
-      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString))}]}))
-
 -- | A prefix for element names
 newtype Namespace = 
   Namespace {
@@ -72,8 +50,6 @@ newtype Namespace =
   deriving (Eq, Ord, Read, Show)
 
 _Namespace = (Core.Name "hydra/module.Namespace")
-
-_Namespace_type_ = (Core.TypeLiteral Core.LiteralTypeString)
 
 -- | A qualified name consisting of an optional namespace together with a mandatory local name
 data QualifiedName = 
@@ -87,14 +63,3 @@ _QualifiedName = (Core.Name "hydra/module.QualifiedName")
 _QualifiedName_namespace = (Core.Name "namespace")
 
 _QualifiedName_local = (Core.Name "local")
-
-_QualifiedName_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/module.QualifiedName"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "namespace"),
-      Core.fieldTypeType = (Core.TypeOptional _Namespace_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "local"),
-      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)}]}))

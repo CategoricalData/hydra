@@ -15,8 +15,6 @@ newtype PredefString =
 
 _PredefString = (Core.Name "hydra/langs/scala/meta.PredefString")
 
-_PredefString_type_ = (Core.TypeLiteral Core.LiteralTypeString)
-
 data ScalaSymbol = 
   ScalaSymbol {
     scalaSymbolName :: String}
@@ -25,14 +23,6 @@ data ScalaSymbol =
 _ScalaSymbol = (Core.Name "hydra/langs/scala/meta.ScalaSymbol")
 
 _ScalaSymbol_name = (Core.Name "name")
-
-_ScalaSymbol_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.ScalaSymbol"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)}]}))
 
 data Tree = 
   TreeRef Ref |
@@ -84,56 +74,6 @@ _Tree_source = (Core.Name "source")
 
 _Tree_quasi = (Core.Name "quasi")
 
-_Tree_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Tree"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "ref"),
-      Core.fieldTypeType = _Ref_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "stat"),
-      Core.fieldTypeType = _Stat_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "type"),
-      Core.fieldTypeType = _Type_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "bounds"),
-      Core.fieldTypeType = _Type_Bounds_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "pat"),
-      Core.fieldTypeType = _Pat_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "member"),
-      Core.fieldTypeType = _Member_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "ctor"),
-      Core.fieldTypeType = _Ctor_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "template"),
-      Core.fieldTypeType = _Template_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mod"),
-      Core.fieldTypeType = _Mod_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "enumerator"),
-      Core.fieldTypeType = _Enumerator_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "importer"),
-      Core.fieldTypeType = _Importer_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "importee"),
-      Core.fieldTypeType = _Importee_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "caseTree"),
-      Core.fieldTypeType = _CaseTree_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "source"),
-      Core.fieldTypeType = _Source_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "quasi"),
-      Core.fieldTypeType = _Quasi_type_}]}))
-
 data Ref = 
   RefName Name |
   RefInit Init
@@ -144,17 +84,6 @@ _Ref = (Core.Name "hydra/langs/scala/meta.Ref")
 _Ref_name = (Core.Name "name")
 
 _Ref_init = (Core.Name "init")
-
-_Ref_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Ref"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "init"),
-      Core.fieldTypeType = _Init_type_}]}))
 
 data Stat = 
   StatTerm Data |
@@ -173,23 +102,6 @@ _Stat_defn = (Core.Name "defn")
 
 _Stat_importExport = (Core.Name "importExport")
 
-_Stat_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Stat"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "term"),
-      Core.fieldTypeType = _Data_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "decl"),
-      Core.fieldTypeType = _Decl_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "defn"),
-      Core.fieldTypeType = _Defn_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "importExport"),
-      Core.fieldTypeType = _ImportExportStat_type_}]}))
-
 data Name = 
   NameValue String |
   NameAnonymous  |
@@ -203,23 +115,6 @@ _Name_value = (Core.Name "value")
 _Name_anonymous = (Core.Name "anonymous")
 
 _Name_indeterminate = (Core.Name "indeterminate")
-
-_Name_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Name"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "value"),
-      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "anonymous"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "indeterminate"),
-      Core.fieldTypeType = _PredefString_type_}]}))
 
 data Lit = 
   LitNull  |
@@ -261,53 +156,6 @@ _Lit_unit = (Core.Name "unit")
 _Lit_string = (Core.Name "string")
 
 _Lit_symbol = (Core.Name "symbol")
-
-_Lit_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Lit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "null"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "int"),
-      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "double"),
-      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "float"),
-      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "byte"),
-      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt8))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "short"),
-      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt16))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "char"),
-      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint16))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "long"),
-      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "boolean"),
-      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "unit"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "string"),
-      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "symbol"),
-      Core.fieldTypeType = _ScalaSymbol_type_}]}))
 
 data Data = 
   DataLit Lit |
@@ -419,116 +267,6 @@ _Data_repeated = (Core.Name "repeated")
 
 _Data_param = (Core.Name "param")
 
-_Data_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "lit"),
-      Core.fieldTypeType = _Lit_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "ref"),
-      Core.fieldTypeType = _Data_Ref_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "interpolate"),
-      Core.fieldTypeType = _Data_Interpolate_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "xml"),
-      Core.fieldTypeType = _Data_Xml_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "apply"),
-      Core.fieldTypeType = _Data_Apply_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "applyUsing"),
-      Core.fieldTypeType = _Data_ApplyUsing_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "applyType"),
-      Core.fieldTypeType = _Data_ApplyType_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "assign"),
-      Core.fieldTypeType = _Data_Assign_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "return"),
-      Core.fieldTypeType = _Data_Return_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "throw"),
-      Core.fieldTypeType = _Data_Throw_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "ascribe"),
-      Core.fieldTypeType = _Data_Ascribe_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "annotate"),
-      Core.fieldTypeType = _Data_Annotate_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tuple"),
-      Core.fieldTypeType = _Data_Tuple_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "block"),
-      Core.fieldTypeType = _Data_Block_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "endMarker"),
-      Core.fieldTypeType = _Data_EndMarker_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "if"),
-      Core.fieldTypeType = _Data_If_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "quotedMacroExpr"),
-      Core.fieldTypeType = _Data_QuotedMacroExpr_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "quotedMacroType"),
-      Core.fieldTypeType = _Data_QuotedMacroType_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "splicedMacroExpr"),
-      Core.fieldTypeType = _Data_SplicedMacroExpr_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "match"),
-      Core.fieldTypeType = _Data_Match_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "try"),
-      Core.fieldTypeType = _Data_Try_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tryWithHandler"),
-      Core.fieldTypeType = _Data_TryWithHandler_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "functionData"),
-      Core.fieldTypeType = _Data_FunctionData_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "polyFunction"),
-      Core.fieldTypeType = _Data_PolyFunction_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "partialFunction"),
-      Core.fieldTypeType = _Data_PartialFunction_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "while"),
-      Core.fieldTypeType = _Data_While_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "do"),
-      Core.fieldTypeType = _Data_Do_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "for"),
-      Core.fieldTypeType = _Data_For_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "forYield"),
-      Core.fieldTypeType = _Data_ForYield_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "new"),
-      Core.fieldTypeType = _Data_New_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "newAnonymous"),
-      Core.fieldTypeType = _Data_NewAnonymous_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "placeholder"),
-      Core.fieldTypeType = _Data_Placeholder_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "eta"),
-      Core.fieldTypeType = _Data_Eta_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "repeated"),
-      Core.fieldTypeType = _Data_Repeated_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "param"),
-      Core.fieldTypeType = _Data_Param_type_}]}))
-
 data Data_Ref = 
   Data_RefThis Data_This |
   Data_RefSuper Data_Super |
@@ -552,39 +290,11 @@ _Data_Ref_select = (Core.Name "select")
 
 _Data_Ref_applyUnary = (Core.Name "applyUnary")
 
-_Data_Ref_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.Ref"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "this"),
-      Core.fieldTypeType = _Data_This_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "super"),
-      Core.fieldTypeType = _Data_Super_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Data_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "anonymous"),
-      Core.fieldTypeType = _Data_Anonymous_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "select"),
-      Core.fieldTypeType = _Data_Select_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "applyUnary"),
-      Core.fieldTypeType = _Data_ApplyUnary_type_}]}))
-
 data Data_This = 
   Data_This {}
   deriving (Eq, Ord, Read, Show)
 
 _Data_This = (Core.Name "hydra/langs/scala/meta.Data.This")
-
-_Data_This_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data Data_Super = 
   Data_Super {
@@ -598,17 +308,6 @@ _Data_Super_thisp = (Core.Name "thisp")
 
 _Data_Super_superp = (Core.Name "superp")
 
-_Data_Super_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.Super"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "thisp"),
-      Core.fieldTypeType = _Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "superp"),
-      Core.fieldTypeType = _Name_type_}]}))
-
 data Data_Name = 
   Data_Name {
     data_NameValue :: PredefString}
@@ -618,24 +317,11 @@ _Data_Name = (Core.Name "hydra/langs/scala/meta.Data.Name")
 
 _Data_Name_value = (Core.Name "value")
 
-_Data_Name_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.Name"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "value"),
-      Core.fieldTypeType = _PredefString_type_}]}))
-
 data Data_Anonymous = 
   Data_Anonymous {}
   deriving (Eq, Ord, Read, Show)
 
 _Data_Anonymous = (Core.Name "hydra/langs/scala/meta.Data.Anonymous")
-
-_Data_Anonymous_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data Data_Select = 
   Data_Select {
@@ -648,17 +334,6 @@ _Data_Select = (Core.Name "hydra/langs/scala/meta.Data.Select")
 _Data_Select_qual = (Core.Name "qual")
 
 _Data_Select_name = (Core.Name "name")
-
-_Data_Select_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.Select"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "qual"),
-      Core.fieldTypeType = _Data_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Data_Name_type_}]}))
 
 data Data_Interpolate = 
   Data_Interpolate {
@@ -675,20 +350,6 @@ _Data_Interpolate_parts = (Core.Name "parts")
 
 _Data_Interpolate_args = (Core.Name "args")
 
-_Data_Interpolate_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.Interpolate"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "prefix"),
-      Core.fieldTypeType = _Data_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "parts"),
-      Core.fieldTypeType = (Core.TypeList _Lit_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "args"),
-      Core.fieldTypeType = (Core.TypeList _Data_type_)}]}))
-
 data Data_Xml = 
   Data_Xml {
     data_XmlParts :: [Lit],
@@ -700,17 +361,6 @@ _Data_Xml = (Core.Name "hydra/langs/scala/meta.Data.Xml")
 _Data_Xml_parts = (Core.Name "parts")
 
 _Data_Xml_args = (Core.Name "args")
-
-_Data_Xml_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.Xml"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "parts"),
-      Core.fieldTypeType = (Core.TypeList _Lit_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "args"),
-      Core.fieldTypeType = (Core.TypeList _Data_type_)}]}))
 
 data Data_Apply = 
   Data_Apply {
@@ -724,17 +374,6 @@ _Data_Apply_fun = (Core.Name "fun")
 
 _Data_Apply_args = (Core.Name "args")
 
-_Data_Apply_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.Apply"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "fun"),
-      Core.fieldTypeType = _Data_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "args"),
-      Core.fieldTypeType = (Core.TypeList _Data_type_)}]}))
-
 data Data_ApplyUsing = 
   Data_ApplyUsing {
     data_ApplyUsingFun :: Data,
@@ -746,17 +385,6 @@ _Data_ApplyUsing = (Core.Name "hydra/langs/scala/meta.Data.ApplyUsing")
 _Data_ApplyUsing_fun = (Core.Name "fun")
 
 _Data_ApplyUsing_targs = (Core.Name "targs")
-
-_Data_ApplyUsing_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.ApplyUsing"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "fun"),
-      Core.fieldTypeType = _Data_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "targs"),
-      Core.fieldTypeType = (Core.TypeList _Data_type_)}]}))
 
 data Data_ApplyType = 
   Data_ApplyType {
@@ -776,23 +404,6 @@ _Data_ApplyType_targs = (Core.Name "targs")
 
 _Data_ApplyType_args = (Core.Name "args")
 
-_Data_ApplyType_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.ApplyType"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "lhs"),
-      Core.fieldTypeType = _Data_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "op"),
-      Core.fieldTypeType = _Data_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "targs"),
-      Core.fieldTypeType = (Core.TypeList _Type_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "args"),
-      Core.fieldTypeType = (Core.TypeList _Data_type_)}]}))
-
 data Data_ApplyInfix = 
   Data_ApplyInfix {
     data_ApplyInfixLhs :: Data,
@@ -811,23 +422,6 @@ _Data_ApplyInfix_targs = (Core.Name "targs")
 
 _Data_ApplyInfix_args = (Core.Name "args")
 
-_Data_ApplyInfix_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.ApplyInfix"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "lhs"),
-      Core.fieldTypeType = _Data_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "op"),
-      Core.fieldTypeType = _Data_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "targs"),
-      Core.fieldTypeType = (Core.TypeList _Type_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "args"),
-      Core.fieldTypeType = (Core.TypeList _Data_type_)}]}))
-
 data Data_ApplyUnary = 
   Data_ApplyUnary {
     data_ApplyUnaryOp :: Data_Name,
@@ -839,17 +433,6 @@ _Data_ApplyUnary = (Core.Name "hydra/langs/scala/meta.Data.ApplyUnary")
 _Data_ApplyUnary_op = (Core.Name "op")
 
 _Data_ApplyUnary_arg = (Core.Name "arg")
-
-_Data_ApplyUnary_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.ApplyUnary"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "op"),
-      Core.fieldTypeType = _Data_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "arg"),
-      Core.fieldTypeType = _Data_type_}]}))
 
 data Data_Assign = 
   Data_Assign {
@@ -863,17 +446,6 @@ _Data_Assign_lhs = (Core.Name "lhs")
 
 _Data_Assign_rhs = (Core.Name "rhs")
 
-_Data_Assign_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.Assign"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "lhs"),
-      Core.fieldTypeType = _Data_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rhs"),
-      Core.fieldTypeType = _Data_type_}]}))
-
 data Data_Return = 
   Data_Return {
     data_ReturnExpr :: Data}
@@ -883,14 +455,6 @@ _Data_Return = (Core.Name "hydra/langs/scala/meta.Data.Return")
 
 _Data_Return_expr = (Core.Name "expr")
 
-_Data_Return_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.Return"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "expr"),
-      Core.fieldTypeType = _Data_type_}]}))
-
 data Data_Throw = 
   Data_Throw {
     data_ThrowExpr :: Data}
@@ -899,14 +463,6 @@ data Data_Throw =
 _Data_Throw = (Core.Name "hydra/langs/scala/meta.Data.Throw")
 
 _Data_Throw_expr = (Core.Name "expr")
-
-_Data_Throw_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.Throw"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "expr"),
-      Core.fieldTypeType = _Data_type_}]}))
 
 data Data_Ascribe = 
   Data_Ascribe {
@@ -920,17 +476,6 @@ _Data_Ascribe_expr = (Core.Name "expr")
 
 _Data_Ascribe_tpe = (Core.Name "tpe")
 
-_Data_Ascribe_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.Ascribe"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "expr"),
-      Core.fieldTypeType = _Data_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tpe"),
-      Core.fieldTypeType = _Type_type_}]}))
-
 data Data_Annotate = 
   Data_Annotate {
     data_AnnotateExpr :: Data,
@@ -943,17 +488,6 @@ _Data_Annotate_expr = (Core.Name "expr")
 
 _Data_Annotate_annots = (Core.Name "annots")
 
-_Data_Annotate_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.Annotate"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "expr"),
-      Core.fieldTypeType = _Data_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "annots"),
-      Core.fieldTypeType = (Core.TypeList _Mod_Annot_type_)}]}))
-
 data Data_Tuple = 
   Data_Tuple {
     data_TupleArgs :: [Data]}
@@ -962,14 +496,6 @@ data Data_Tuple =
 _Data_Tuple = (Core.Name "hydra/langs/scala/meta.Data.Tuple")
 
 _Data_Tuple_args = (Core.Name "args")
-
-_Data_Tuple_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.Tuple"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "args"),
-      Core.fieldTypeType = (Core.TypeList _Data_type_)}]}))
 
 data Data_Block = 
   Data_Block {
@@ -980,14 +506,6 @@ _Data_Block = (Core.Name "hydra/langs/scala/meta.Data.Block")
 
 _Data_Block_stats = (Core.Name "stats")
 
-_Data_Block_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.Block"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "stats"),
-      Core.fieldTypeType = (Core.TypeList _Stat_type_)}]}))
-
 data Data_EndMarker = 
   Data_EndMarker {
     data_EndMarkerName :: Data_Name}
@@ -996,14 +514,6 @@ data Data_EndMarker =
 _Data_EndMarker = (Core.Name "hydra/langs/scala/meta.Data.EndMarker")
 
 _Data_EndMarker_name = (Core.Name "name")
-
-_Data_EndMarker_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.EndMarker"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Data_Name_type_}]}))
 
 data Data_If = 
   Data_If {
@@ -1020,20 +530,6 @@ _Data_If_thenp = (Core.Name "thenp")
 
 _Data_If_elsep = (Core.Name "elsep")
 
-_Data_If_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.If"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "cond"),
-      Core.fieldTypeType = _Data_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "thenp"),
-      Core.fieldTypeType = _Data_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "elsep"),
-      Core.fieldTypeType = _Data_type_}]}))
-
 data Data_QuotedMacroExpr = 
   Data_QuotedMacroExpr {
     data_QuotedMacroExprBody :: Data}
@@ -1042,14 +538,6 @@ data Data_QuotedMacroExpr =
 _Data_QuotedMacroExpr = (Core.Name "hydra/langs/scala/meta.Data.QuotedMacroExpr")
 
 _Data_QuotedMacroExpr_body = (Core.Name "body")
-
-_Data_QuotedMacroExpr_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.QuotedMacroExpr"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "body"),
-      Core.fieldTypeType = _Data_type_}]}))
 
 data Data_QuotedMacroType = 
   Data_QuotedMacroType {
@@ -1060,14 +548,6 @@ _Data_QuotedMacroType = (Core.Name "hydra/langs/scala/meta.Data.QuotedMacroType"
 
 _Data_QuotedMacroType_tpe = (Core.Name "tpe")
 
-_Data_QuotedMacroType_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.QuotedMacroType"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tpe"),
-      Core.fieldTypeType = _Type_type_}]}))
-
 data Data_SplicedMacroExpr = 
   Data_SplicedMacroExpr {
     data_SplicedMacroExprBody :: Data}
@@ -1076,14 +556,6 @@ data Data_SplicedMacroExpr =
 _Data_SplicedMacroExpr = (Core.Name "hydra/langs/scala/meta.Data.SplicedMacroExpr")
 
 _Data_SplicedMacroExpr_body = (Core.Name "body")
-
-_Data_SplicedMacroExpr_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.SplicedMacroExpr"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "body"),
-      Core.fieldTypeType = _Data_type_}]}))
 
 data Data_Match = 
   Data_Match {
@@ -1096,17 +568,6 @@ _Data_Match = (Core.Name "hydra/langs/scala/meta.Data.Match")
 _Data_Match_expr = (Core.Name "expr")
 
 _Data_Match_cases = (Core.Name "cases")
-
-_Data_Match_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.Match"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "expr"),
-      Core.fieldTypeType = _Data_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "cases"),
-      Core.fieldTypeType = (Core.TypeList _Case_type_)}]}))
 
 data Data_Try = 
   Data_Try {
@@ -1123,20 +584,6 @@ _Data_Try_catchp = (Core.Name "catchp")
 
 _Data_Try_finallyp = (Core.Name "finallyp")
 
-_Data_Try_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.Try"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "expr"),
-      Core.fieldTypeType = _Data_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "catchp"),
-      Core.fieldTypeType = (Core.TypeList _Case_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "finallyp"),
-      Core.fieldTypeType = (Core.TypeOptional _Data_type_)}]}))
-
 data Data_TryWithHandler = 
   Data_TryWithHandler {
     data_TryWithHandlerExpr :: Data,
@@ -1152,20 +599,6 @@ _Data_TryWithHandler_catchp = (Core.Name "catchp")
 
 _Data_TryWithHandler_finallyp = (Core.Name "finallyp")
 
-_Data_TryWithHandler_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.TryWithHandler"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "expr"),
-      Core.fieldTypeType = _Data_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "catchp"),
-      Core.fieldTypeType = _Data_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "finallyp"),
-      Core.fieldTypeType = (Core.TypeOptional _Data_type_)}]}))
-
 data Data_FunctionData = 
   Data_FunctionDataContextFunction Data_ContextFunction |
   Data_FunctionDataFunction Data_Function
@@ -1176,17 +609,6 @@ _Data_FunctionData = (Core.Name "hydra/langs/scala/meta.Data.FunctionData")
 _Data_FunctionData_contextFunction = (Core.Name "contextFunction")
 
 _Data_FunctionData_function = (Core.Name "function")
-
-_Data_FunctionData_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.FunctionData"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "contextFunction"),
-      Core.fieldTypeType = _Data_ContextFunction_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "function"),
-      Core.fieldTypeType = _Data_Function_type_}]}))
 
 data Data_ContextFunction = 
   Data_ContextFunction {
@@ -1200,17 +622,6 @@ _Data_ContextFunction_params = (Core.Name "params")
 
 _Data_ContextFunction_body = (Core.Name "body")
 
-_Data_ContextFunction_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.ContextFunction"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "params"),
-      Core.fieldTypeType = (Core.TypeList _Data_Param_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "body"),
-      Core.fieldTypeType = _Data_type_}]}))
-
 data Data_Function = 
   Data_Function {
     data_FunctionParams :: [Data_Param],
@@ -1222,17 +633,6 @@ _Data_Function = (Core.Name "hydra/langs/scala/meta.Data.Function")
 _Data_Function_params = (Core.Name "params")
 
 _Data_Function_body = (Core.Name "body")
-
-_Data_Function_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.Function"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "params"),
-      Core.fieldTypeType = (Core.TypeList _Data_Param_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "body"),
-      Core.fieldTypeType = _Data_type_}]}))
 
 data Data_PolyFunction = 
   Data_PolyFunction {
@@ -1246,17 +646,6 @@ _Data_PolyFunction_tparams = (Core.Name "tparams")
 
 _Data_PolyFunction_body = (Core.Name "body")
 
-_Data_PolyFunction_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.PolyFunction"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tparams"),
-      Core.fieldTypeType = (Core.TypeList _Type_Param_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "body"),
-      Core.fieldTypeType = _Data_type_}]}))
-
 data Data_PartialFunction = 
   Data_PartialFunction {
     data_PartialFunctionCases :: [Case]}
@@ -1265,14 +654,6 @@ data Data_PartialFunction =
 _Data_PartialFunction = (Core.Name "hydra/langs/scala/meta.Data.PartialFunction")
 
 _Data_PartialFunction_cases = (Core.Name "cases")
-
-_Data_PartialFunction_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.PartialFunction"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "cases"),
-      Core.fieldTypeType = (Core.TypeList _Case_type_)}]}))
 
 data Data_While = 
   Data_While {
@@ -1286,17 +667,6 @@ _Data_While_expr = (Core.Name "expr")
 
 _Data_While_body = (Core.Name "body")
 
-_Data_While_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.While"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "expr"),
-      Core.fieldTypeType = _Data_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "body"),
-      Core.fieldTypeType = _Data_type_}]}))
-
 data Data_Do = 
   Data_Do {
     data_DoBody :: Data,
@@ -1309,17 +679,6 @@ _Data_Do_body = (Core.Name "body")
 
 _Data_Do_expr = (Core.Name "expr")
 
-_Data_Do_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.Do"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "body"),
-      Core.fieldTypeType = _Data_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "expr"),
-      Core.fieldTypeType = _Data_type_}]}))
-
 data Data_For = 
   Data_For {
     data_ForEnums :: [Enumerator]}
@@ -1328,14 +687,6 @@ data Data_For =
 _Data_For = (Core.Name "hydra/langs/scala/meta.Data.For")
 
 _Data_For_enums = (Core.Name "enums")
-
-_Data_For_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.For"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "enums"),
-      Core.fieldTypeType = (Core.TypeList _Enumerator_type_)}]}))
 
 data Data_ForYield = 
   Data_ForYield {
@@ -1346,14 +697,6 @@ _Data_ForYield = (Core.Name "hydra/langs/scala/meta.Data.ForYield")
 
 _Data_ForYield_enums = (Core.Name "enums")
 
-_Data_ForYield_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.ForYield"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "enums"),
-      Core.fieldTypeType = (Core.TypeList _Enumerator_type_)}]}))
-
 data Data_New = 
   Data_New {
     data_NewInit :: Init}
@@ -1362,14 +705,6 @@ data Data_New =
 _Data_New = (Core.Name "hydra/langs/scala/meta.Data.New")
 
 _Data_New_init = (Core.Name "init")
-
-_Data_New_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.New"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "init"),
-      Core.fieldTypeType = _Init_type_}]}))
 
 data Data_NewAnonymous = 
   Data_NewAnonymous {
@@ -1380,24 +715,11 @@ _Data_NewAnonymous = (Core.Name "hydra/langs/scala/meta.Data.NewAnonymous")
 
 _Data_NewAnonymous_templ = (Core.Name "templ")
 
-_Data_NewAnonymous_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.NewAnonymous"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "templ"),
-      Core.fieldTypeType = _Template_type_}]}))
-
 data Data_Placeholder = 
   Data_Placeholder {}
   deriving (Eq, Ord, Read, Show)
 
 _Data_Placeholder = (Core.Name "hydra/langs/scala/meta.Data.Placeholder")
-
-_Data_Placeholder_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data Data_Eta = 
   Data_Eta {
@@ -1408,14 +730,6 @@ _Data_Eta = (Core.Name "hydra/langs/scala/meta.Data.Eta")
 
 _Data_Eta_expr = (Core.Name "expr")
 
-_Data_Eta_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.Eta"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "expr"),
-      Core.fieldTypeType = _Data_type_}]}))
-
 data Data_Repeated = 
   Data_Repeated {
     data_RepeatedExpr :: Data}
@@ -1424,14 +738,6 @@ data Data_Repeated =
 _Data_Repeated = (Core.Name "hydra/langs/scala/meta.Data.Repeated")
 
 _Data_Repeated_expr = (Core.Name "expr")
-
-_Data_Repeated_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.Repeated"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "expr"),
-      Core.fieldTypeType = _Data_type_}]}))
 
 data Data_Param = 
   Data_Param {
@@ -1450,23 +756,6 @@ _Data_Param_name = (Core.Name "name")
 _Data_Param_decltpe = (Core.Name "decltpe")
 
 _Data_Param_default = (Core.Name "default")
-
-_Data_Param_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Data.Param"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "decltpe"),
-      Core.fieldTypeType = (Core.TypeOptional _Type_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "default"),
-      Core.fieldTypeType = (Core.TypeOptional _Data_type_)}]}))
 
 data Type = 
   TypeRef Type_Ref |
@@ -1542,80 +831,6 @@ _Type_typedParam = (Core.Name "typedParam")
 
 _Type_match = (Core.Name "match")
 
-_Type_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "ref"),
-      Core.fieldTypeType = _Type_Ref_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "anonymousName"),
-      Core.fieldTypeType = _Type_AnonymousName_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "apply"),
-      Core.fieldTypeType = _Type_Apply_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "applyInfix"),
-      Core.fieldTypeType = _Type_ApplyInfix_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "functionType"),
-      Core.fieldTypeType = _Type_FunctionType_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "polyFunction"),
-      Core.fieldTypeType = _Type_PolyFunction_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "implicitFunction"),
-      Core.fieldTypeType = _Type_ImplicitFunction_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tuple"),
-      Core.fieldTypeType = _Type_Tuple_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "with"),
-      Core.fieldTypeType = _Type_With_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "and"),
-      Core.fieldTypeType = _Type_And_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "or"),
-      Core.fieldTypeType = _Type_Or_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "refine"),
-      Core.fieldTypeType = _Type_Refine_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "existential"),
-      Core.fieldTypeType = _Type_Existential_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "annotate"),
-      Core.fieldTypeType = _Type_Annotate_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "lambda"),
-      Core.fieldTypeType = _Type_Lambda_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "macro"),
-      Core.fieldTypeType = _Type_Macro_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "method"),
-      Core.fieldTypeType = _Type_Method_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "placeholder"),
-      Core.fieldTypeType = _Type_Placeholder_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "byName"),
-      Core.fieldTypeType = _Type_ByName_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "repeated"),
-      Core.fieldTypeType = _Type_Repeated_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "var"),
-      Core.fieldTypeType = _Type_Var_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "typedParam"),
-      Core.fieldTypeType = _Type_TypedParam_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "match"),
-      Core.fieldTypeType = _Type_Match_type_}]}))
-
 data Type_Ref = 
   Type_RefName Type_Name |
   Type_RefSelect Type_Select |
@@ -1633,23 +848,6 @@ _Type_Ref_project = (Core.Name "project")
 
 _Type_Ref_singleton = (Core.Name "singleton")
 
-_Type_Ref_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.Ref"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Type_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "select"),
-      Core.fieldTypeType = _Type_Select_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "project"),
-      Core.fieldTypeType = _Type_Project_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "singleton"),
-      Core.fieldTypeType = _Type_Singleton_type_}]}))
-
 data Type_Name = 
   Type_Name {
     type_NameValue :: String}
@@ -1659,24 +857,11 @@ _Type_Name = (Core.Name "hydra/langs/scala/meta.Type.Name")
 
 _Type_Name_value = (Core.Name "value")
 
-_Type_Name_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.Name"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "value"),
-      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)}]}))
-
 data Type_AnonymousName = 
   Type_AnonymousName {}
   deriving (Eq, Ord, Read, Show)
 
 _Type_AnonymousName = (Core.Name "hydra/langs/scala/meta.Type.AnonymousName")
-
-_Type_AnonymousName_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data Type_Select = 
   Type_Select {
@@ -1690,17 +875,6 @@ _Type_Select_qual = (Core.Name "qual")
 
 _Type_Select_name = (Core.Name "name")
 
-_Type_Select_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.Select"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "qual"),
-      Core.fieldTypeType = _Data_Ref_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Type_Name_type_}]}))
-
 data Type_Project = 
   Type_Project {
     type_ProjectQual :: Type,
@@ -1713,17 +887,6 @@ _Type_Project_qual = (Core.Name "qual")
 
 _Type_Project_name = (Core.Name "name")
 
-_Type_Project_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.Project"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "qual"),
-      Core.fieldTypeType = _Type_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Type_Name_type_}]}))
-
 data Type_Singleton = 
   Type_Singleton {
     type_SingletonRef :: Data_Ref}
@@ -1732,14 +895,6 @@ data Type_Singleton =
 _Type_Singleton = (Core.Name "hydra/langs/scala/meta.Type.Singleton")
 
 _Type_Singleton_ref = (Core.Name "ref")
-
-_Type_Singleton_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.Singleton"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "ref"),
-      Core.fieldTypeType = _Data_Ref_type_}]}))
 
 data Type_Apply = 
   Type_Apply {
@@ -1752,17 +907,6 @@ _Type_Apply = (Core.Name "hydra/langs/scala/meta.Type.Apply")
 _Type_Apply_tpe = (Core.Name "tpe")
 
 _Type_Apply_args = (Core.Name "args")
-
-_Type_Apply_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.Apply"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tpe"),
-      Core.fieldTypeType = _Type_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "args"),
-      Core.fieldTypeType = (Core.TypeList _Type_type_)}]}))
 
 data Type_ApplyInfix = 
   Type_ApplyInfix {
@@ -1779,20 +923,6 @@ _Type_ApplyInfix_op = (Core.Name "op")
 
 _Type_ApplyInfix_rhs = (Core.Name "rhs")
 
-_Type_ApplyInfix_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.ApplyInfix"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "lhs"),
-      Core.fieldTypeType = _Type_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "op"),
-      Core.fieldTypeType = _Type_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rhs"),
-      Core.fieldTypeType = _Type_type_}]}))
-
 data Type_FunctionType = 
   Type_FunctionTypeFunction Type_Function |
   Type_FunctionTypeContextFunction Type_ContextFunction
@@ -1803,17 +933,6 @@ _Type_FunctionType = (Core.Name "hydra/langs/scala/meta.Type.FunctionType")
 _Type_FunctionType_function = (Core.Name "function")
 
 _Type_FunctionType_contextFunction = (Core.Name "contextFunction")
-
-_Type_FunctionType_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.FunctionType"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "function"),
-      Core.fieldTypeType = _Type_Function_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "contextFunction"),
-      Core.fieldTypeType = _Type_ContextFunction_type_}]}))
 
 data Type_Function = 
   Type_Function {
@@ -1827,17 +946,6 @@ _Type_Function_params = (Core.Name "params")
 
 _Type_Function_res = (Core.Name "res")
 
-_Type_Function_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.Function"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "params"),
-      Core.fieldTypeType = (Core.TypeList _Type_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "res"),
-      Core.fieldTypeType = _Type_type_}]}))
-
 data Type_PolyFunction = 
   Type_PolyFunction {
     type_PolyFunctionTparams :: [Type_Param],
@@ -1849,17 +957,6 @@ _Type_PolyFunction = (Core.Name "hydra/langs/scala/meta.Type.PolyFunction")
 _Type_PolyFunction_tparams = (Core.Name "tparams")
 
 _Type_PolyFunction_tpe = (Core.Name "tpe")
-
-_Type_PolyFunction_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.PolyFunction"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tparams"),
-      Core.fieldTypeType = (Core.TypeList _Type_Param_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tpe"),
-      Core.fieldTypeType = _Type_type_}]}))
 
 data Type_ContextFunction = 
   Type_ContextFunction {
@@ -1873,17 +970,6 @@ _Type_ContextFunction_params = (Core.Name "params")
 
 _Type_ContextFunction_res = (Core.Name "res")
 
-_Type_ContextFunction_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.ContextFunction"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "params"),
-      Core.fieldTypeType = (Core.TypeList _Type_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "res"),
-      Core.fieldTypeType = _Type_type_}]}))
-
 data Type_ImplicitFunction = 
   Type_ImplicitFunction {
     type_ImplicitFunctionParams :: [Type],
@@ -1896,17 +982,6 @@ _Type_ImplicitFunction_params = (Core.Name "params")
 
 _Type_ImplicitFunction_res = (Core.Name "res")
 
-_Type_ImplicitFunction_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.ImplicitFunction"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "params"),
-      Core.fieldTypeType = (Core.TypeList _Type_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "res"),
-      Core.fieldTypeType = _Type_type_}]}))
-
 data Type_Tuple = 
   Type_Tuple {
     type_TupleArgs :: [Type]}
@@ -1915,14 +990,6 @@ data Type_Tuple =
 _Type_Tuple = (Core.Name "hydra/langs/scala/meta.Type.Tuple")
 
 _Type_Tuple_args = (Core.Name "args")
-
-_Type_Tuple_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.Tuple"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "args"),
-      Core.fieldTypeType = (Core.TypeList _Type_type_)}]}))
 
 data Type_With = 
   Type_With {
@@ -1936,17 +1003,6 @@ _Type_With_lhs = (Core.Name "lhs")
 
 _Type_With_rhs = (Core.Name "rhs")
 
-_Type_With_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.With"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "lhs"),
-      Core.fieldTypeType = _Type_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rhs"),
-      Core.fieldTypeType = _Type_type_}]}))
-
 data Type_And = 
   Type_And {
     type_AndLhs :: Type,
@@ -1958,17 +1014,6 @@ _Type_And = (Core.Name "hydra/langs/scala/meta.Type.And")
 _Type_And_lhs = (Core.Name "lhs")
 
 _Type_And_rhs = (Core.Name "rhs")
-
-_Type_And_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.And"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "lhs"),
-      Core.fieldTypeType = _Type_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rhs"),
-      Core.fieldTypeType = _Type_type_}]}))
 
 data Type_Or = 
   Type_Or {
@@ -1982,17 +1027,6 @@ _Type_Or_lhs = (Core.Name "lhs")
 
 _Type_Or_rhs = (Core.Name "rhs")
 
-_Type_Or_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.Or"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "lhs"),
-      Core.fieldTypeType = _Type_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rhs"),
-      Core.fieldTypeType = _Type_type_}]}))
-
 data Type_Refine = 
   Type_Refine {
     type_RefineTpe :: (Maybe Type),
@@ -2004,17 +1038,6 @@ _Type_Refine = (Core.Name "hydra/langs/scala/meta.Type.Refine")
 _Type_Refine_tpe = (Core.Name "tpe")
 
 _Type_Refine_stats = (Core.Name "stats")
-
-_Type_Refine_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.Refine"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tpe"),
-      Core.fieldTypeType = (Core.TypeOptional _Type_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "stats"),
-      Core.fieldTypeType = (Core.TypeList _Stat_type_)}]}))
 
 data Type_Existential = 
   Type_Existential {
@@ -2028,17 +1051,6 @@ _Type_Existential_tpe = (Core.Name "tpe")
 
 _Type_Existential_stats = (Core.Name "stats")
 
-_Type_Existential_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.Existential"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tpe"),
-      Core.fieldTypeType = _Type_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "stats"),
-      Core.fieldTypeType = (Core.TypeList _Stat_type_)}]}))
-
 data Type_Annotate = 
   Type_Annotate {
     type_AnnotateTpe :: Type,
@@ -2050,17 +1062,6 @@ _Type_Annotate = (Core.Name "hydra/langs/scala/meta.Type.Annotate")
 _Type_Annotate_tpe = (Core.Name "tpe")
 
 _Type_Annotate_annots = (Core.Name "annots")
-
-_Type_Annotate_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.Annotate"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tpe"),
-      Core.fieldTypeType = _Type_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "annots"),
-      Core.fieldTypeType = (Core.TypeList _Mod_Annot_type_)}]}))
 
 data Type_Lambda = 
   Type_Lambda {
@@ -2074,17 +1075,6 @@ _Type_Lambda_tparams = (Core.Name "tparams")
 
 _Type_Lambda_tpe = (Core.Name "tpe")
 
-_Type_Lambda_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.Lambda"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tparams"),
-      Core.fieldTypeType = (Core.TypeList _Type_Param_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tpe"),
-      Core.fieldTypeType = _Type_type_}]}))
-
 data Type_Macro = 
   Type_Macro {
     type_MacroBody :: Data}
@@ -2093,14 +1083,6 @@ data Type_Macro =
 _Type_Macro = (Core.Name "hydra/langs/scala/meta.Type.Macro")
 
 _Type_Macro_body = (Core.Name "body")
-
-_Type_Macro_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.Macro"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "body"),
-      Core.fieldTypeType = _Data_type_}]}))
 
 data Type_Method = 
   Type_Method {
@@ -2114,17 +1096,6 @@ _Type_Method_paramss = (Core.Name "paramss")
 
 _Type_Method_tpe = (Core.Name "tpe")
 
-_Type_Method_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.Method"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "paramss"),
-      Core.fieldTypeType = (Core.TypeList (Core.TypeList _Data_Param_type_))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tpe"),
-      Core.fieldTypeType = _Type_type_}]}))
-
 data Type_Placeholder = 
   Type_Placeholder {
     type_PlaceholderBounds :: Type_Bounds}
@@ -2133,14 +1104,6 @@ data Type_Placeholder =
 _Type_Placeholder = (Core.Name "hydra/langs/scala/meta.Type.Placeholder")
 
 _Type_Placeholder_bounds = (Core.Name "bounds")
-
-_Type_Placeholder_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "bounds"),
-      Core.fieldTypeType = _Type_Bounds_type_}]}))
 
 data Type_Bounds = 
   Type_Bounds {
@@ -2154,17 +1117,6 @@ _Type_Bounds_lo = (Core.Name "lo")
 
 _Type_Bounds_hi = (Core.Name "hi")
 
-_Type_Bounds_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.Bounds"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "lo"),
-      Core.fieldTypeType = (Core.TypeOptional _Type_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "hi"),
-      Core.fieldTypeType = (Core.TypeOptional _Type_type_)}]}))
-
 data Type_ByName = 
   Type_ByName {
     type_ByNameTpe :: Type}
@@ -2173,14 +1125,6 @@ data Type_ByName =
 _Type_ByName = (Core.Name "hydra/langs/scala/meta.Type.ByName")
 
 _Type_ByName_tpe = (Core.Name "tpe")
-
-_Type_ByName_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.ByName"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tpe"),
-      Core.fieldTypeType = _Type_type_}]}))
 
 data Type_Repeated = 
   Type_Repeated {
@@ -2191,14 +1135,6 @@ _Type_Repeated = (Core.Name "hydra/langs/scala/meta.Type.Repeated")
 
 _Type_Repeated_tpe = (Core.Name "tpe")
 
-_Type_Repeated_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.Repeated"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tpe"),
-      Core.fieldTypeType = _Type_type_}]}))
-
 data Type_Var = 
   Type_Var {
     type_VarName :: Type_Name}
@@ -2207,14 +1143,6 @@ data Type_Var =
 _Type_Var = (Core.Name "hydra/langs/scala/meta.Type.Var")
 
 _Type_Var_name = (Core.Name "name")
-
-_Type_Var_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.Var"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Type_Name_type_}]}))
 
 data Type_TypedParam = 
   Type_TypedParam {
@@ -2227,17 +1155,6 @@ _Type_TypedParam = (Core.Name "hydra/langs/scala/meta.Type.TypedParam")
 _Type_TypedParam_name = (Core.Name "name")
 
 _Type_TypedParam_typ = (Core.Name "typ")
-
-_Type_TypedParam_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.TypedParam"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "typ"),
-      Core.fieldTypeType = _Type_type_}]}))
 
 data Type_Param = 
   Type_Param {
@@ -2263,29 +1180,6 @@ _Type_Param_vbounds = (Core.Name "vbounds")
 
 _Type_Param_cbounds = (Core.Name "cbounds")
 
-_Type_Param_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.Param"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tparams"),
-      Core.fieldTypeType = (Core.TypeList _Type_Param_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tbounds"),
-      Core.fieldTypeType = (Core.TypeList _Type_Bounds_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "vbounds"),
-      Core.fieldTypeType = (Core.TypeList _Type_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "cbounds"),
-      Core.fieldTypeType = (Core.TypeList _Type_type_)}]}))
-
 data Type_Match = 
   Type_Match {
     type_MatchTpe :: Type,
@@ -2297,17 +1191,6 @@ _Type_Match = (Core.Name "hydra/langs/scala/meta.Type.Match")
 _Type_Match_tpe = (Core.Name "tpe")
 
 _Type_Match_cases = (Core.Name "cases")
-
-_Type_Match_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Type.Match"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tpe"),
-      Core.fieldTypeType = _Type_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "cases"),
-      Core.fieldTypeType = (Core.TypeList _TypeCase_type_)}]}))
 
 data Pat = 
   PatVar Pat_Var |
@@ -2356,59 +1239,6 @@ _Pat_macro = (Core.Name "macro")
 
 _Pat_given = (Core.Name "given")
 
-_Pat_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Pat"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "var"),
-      Core.fieldTypeType = _Pat_Var_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "wildcard"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "seqWildcard"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "bind"),
-      Core.fieldTypeType = _Pat_Bind_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "alternative"),
-      Core.fieldTypeType = _Pat_Alternative_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tuple"),
-      Core.fieldTypeType = _Pat_Tuple_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "repeated"),
-      Core.fieldTypeType = _Pat_Repeated_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "extract"),
-      Core.fieldTypeType = _Pat_Extract_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "extractInfix"),
-      Core.fieldTypeType = _Pat_ExtractInfix_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "interpolate"),
-      Core.fieldTypeType = _Pat_Interpolate_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "xml"),
-      Core.fieldTypeType = _Pat_Xml_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "typed"),
-      Core.fieldTypeType = _Pat_Typed_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "macro"),
-      Core.fieldTypeType = _Pat_Macro_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "given"),
-      Core.fieldTypeType = _Pat_Given_type_}]}))
-
 data Pat_Var = 
   Pat_Var {
     pat_VarName :: Data_Name}
@@ -2417,14 +1247,6 @@ data Pat_Var =
 _Pat_Var = (Core.Name "hydra/langs/scala/meta.Pat.Var")
 
 _Pat_Var_name = (Core.Name "name")
-
-_Pat_Var_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Pat.Var"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Data_Name_type_}]}))
 
 data Pat_Bind = 
   Pat_Bind {
@@ -2438,17 +1260,6 @@ _Pat_Bind_lhs = (Core.Name "lhs")
 
 _Pat_Bind_rhs = (Core.Name "rhs")
 
-_Pat_Bind_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Pat.Bind"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "lhs"),
-      Core.fieldTypeType = _Pat_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rhs"),
-      Core.fieldTypeType = _Pat_type_}]}))
-
 data Pat_Alternative = 
   Pat_Alternative {
     pat_AlternativeLhs :: Pat,
@@ -2461,17 +1272,6 @@ _Pat_Alternative_lhs = (Core.Name "lhs")
 
 _Pat_Alternative_rhs = (Core.Name "rhs")
 
-_Pat_Alternative_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Pat.Alternative"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "lhs"),
-      Core.fieldTypeType = _Pat_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rhs"),
-      Core.fieldTypeType = _Pat_type_}]}))
-
 data Pat_Tuple = 
   Pat_Tuple {
     pat_TupleArgs :: [Pat]}
@@ -2481,14 +1281,6 @@ _Pat_Tuple = (Core.Name "hydra/langs/scala/meta.Pat.Tuple")
 
 _Pat_Tuple_args = (Core.Name "args")
 
-_Pat_Tuple_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Pat.Tuple"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "args"),
-      Core.fieldTypeType = (Core.TypeList _Pat_type_)}]}))
-
 data Pat_Repeated = 
   Pat_Repeated {
     pat_RepeatedName :: Data_Name}
@@ -2497,14 +1289,6 @@ data Pat_Repeated =
 _Pat_Repeated = (Core.Name "hydra/langs/scala/meta.Pat.Repeated")
 
 _Pat_Repeated_name = (Core.Name "name")
-
-_Pat_Repeated_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Pat.Repeated"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Data_Name_type_}]}))
 
 data Pat_Extract = 
   Pat_Extract {
@@ -2517,17 +1301,6 @@ _Pat_Extract = (Core.Name "hydra/langs/scala/meta.Pat.Extract")
 _Pat_Extract_fun = (Core.Name "fun")
 
 _Pat_Extract_args = (Core.Name "args")
-
-_Pat_Extract_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Pat.Extract"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "fun"),
-      Core.fieldTypeType = _Data_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "args"),
-      Core.fieldTypeType = (Core.TypeList _Pat_type_)}]}))
 
 data Pat_ExtractInfix = 
   Pat_ExtractInfix {
@@ -2544,20 +1317,6 @@ _Pat_ExtractInfix_op = (Core.Name "op")
 
 _Pat_ExtractInfix_rhs = (Core.Name "rhs")
 
-_Pat_ExtractInfix_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Pat.ExtractInfix"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "lhs"),
-      Core.fieldTypeType = _Pat_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "op"),
-      Core.fieldTypeType = _Data_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rhs"),
-      Core.fieldTypeType = (Core.TypeList _Pat_type_)}]}))
-
 data Pat_Interpolate = 
   Pat_Interpolate {
     pat_InterpolatePrefix :: Data_Name,
@@ -2569,17 +1328,6 @@ _Pat_Interpolate = (Core.Name "hydra/langs/scala/meta.Pat.Interpolate")
 _Pat_Interpolate_prefix = (Core.Name "prefix")
 
 _Pat_Interpolate_parts = (Core.Name "parts")
-
-_Pat_Interpolate_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Pat.Interpolate"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "prefix"),
-      Core.fieldTypeType = _Data_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "parts"),
-      Core.fieldTypeType = (Core.TypeList _Lit_type_)}]}))
 
 data Pat_Xml = 
   Pat_Xml {
@@ -2593,17 +1341,6 @@ _Pat_Xml_parts = (Core.Name "parts")
 
 _Pat_Xml_args = (Core.Name "args")
 
-_Pat_Xml_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Pat.Xml"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "parts"),
-      Core.fieldTypeType = (Core.TypeList _Lit_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "args"),
-      Core.fieldTypeType = (Core.TypeList _Pat_type_)}]}))
-
 data Pat_Typed = 
   Pat_Typed {
     pat_TypedLhs :: Pat,
@@ -2616,17 +1353,6 @@ _Pat_Typed_lhs = (Core.Name "lhs")
 
 _Pat_Typed_rhs = (Core.Name "rhs")
 
-_Pat_Typed_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Pat.Typed"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "lhs"),
-      Core.fieldTypeType = _Pat_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rhs"),
-      Core.fieldTypeType = _Type_type_}]}))
-
 data Pat_Macro = 
   Pat_Macro {
     pat_MacroBody :: Data}
@@ -2636,14 +1362,6 @@ _Pat_Macro = (Core.Name "hydra/langs/scala/meta.Pat.Macro")
 
 _Pat_Macro_body = (Core.Name "body")
 
-_Pat_Macro_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Pat.Macro"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "body"),
-      Core.fieldTypeType = _Data_type_}]}))
-
 data Pat_Given = 
   Pat_Given {
     pat_GivenTpe :: Type}
@@ -2652,14 +1370,6 @@ data Pat_Given =
 _Pat_Given = (Core.Name "hydra/langs/scala/meta.Pat.Given")
 
 _Pat_Given_tpe = (Core.Name "tpe")
-
-_Pat_Given_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Pat.Given"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tpe"),
-      Core.fieldTypeType = _Type_type_}]}))
 
 data Member = 
   MemberTerm Member_Data |
@@ -2681,26 +1391,6 @@ _Member_typeParam = (Core.Name "typeParam")
 
 _Member_self = (Core.Name "self")
 
-_Member_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Member"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "term"),
-      Core.fieldTypeType = _Member_Data_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "type"),
-      Core.fieldTypeType = _Member_Type_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "termParam"),
-      Core.fieldTypeType = _Data_Param_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "typeParam"),
-      Core.fieldTypeType = _Type_Param_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "self"),
-      Core.fieldTypeType = _Self_type_}]}))
-
 data Member_Data = 
   Member_DataPkg Pkg |
   Member_DataObject Pkg_Object
@@ -2712,17 +1402,6 @@ _Member_Data_pkg = (Core.Name "pkg")
 
 _Member_Data_object = (Core.Name "object")
 
-_Member_Data_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Member.Data"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "pkg"),
-      Core.fieldTypeType = _Pkg_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "object"),
-      Core.fieldTypeType = _Pkg_Object_type_}]}))
-
 data Member_Type = 
   Member_Type {
     member_TypeName :: Type_Name}
@@ -2731,14 +1410,6 @@ data Member_Type =
 _Member_Type = (Core.Name "hydra/langs/scala/meta.Member.Type")
 
 _Member_Type_name = (Core.Name "name")
-
-_Member_Type_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Member.Type"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Type_Name_type_}]}))
 
 data Decl = 
   DeclVal Decl_Val |
@@ -2760,26 +1431,6 @@ _Decl_type = (Core.Name "type")
 
 _Decl_given = (Core.Name "given")
 
-_Decl_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Decl"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "val"),
-      Core.fieldTypeType = _Decl_Val_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "var"),
-      Core.fieldTypeType = _Decl_Var_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "def"),
-      Core.fieldTypeType = _Decl_Def_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "type"),
-      Core.fieldTypeType = _Decl_Type_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "given"),
-      Core.fieldTypeType = _Decl_Given_type_}]}))
-
 data Decl_Val = 
   Decl_Val {
     decl_ValMods :: [Mod],
@@ -2795,20 +1446,6 @@ _Decl_Val_pats = (Core.Name "pats")
 
 _Decl_Val_decltpe = (Core.Name "decltpe")
 
-_Decl_Val_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Decl.Val"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "pats"),
-      Core.fieldTypeType = (Core.TypeList _Pat_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "decltpe"),
-      Core.fieldTypeType = _Type_type_}]}))
-
 data Decl_Var = 
   Decl_Var {
     decl_VarMods :: [Mod],
@@ -2823,20 +1460,6 @@ _Decl_Var_mods = (Core.Name "mods")
 _Decl_Var_pats = (Core.Name "pats")
 
 _Decl_Var_decltpe = (Core.Name "decltpe")
-
-_Decl_Var_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Decl.Var"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "pats"),
-      Core.fieldTypeType = (Core.TypeList _Pat_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "decltpe"),
-      Core.fieldTypeType = _Type_type_}]}))
 
 data Decl_Def = 
   Decl_Def {
@@ -2859,26 +1482,6 @@ _Decl_Def_paramss = (Core.Name "paramss")
 
 _Decl_Def_decltpe = (Core.Name "decltpe")
 
-_Decl_Def_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Decl.Def"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Data_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tparams"),
-      Core.fieldTypeType = (Core.TypeList _Type_Param_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "paramss"),
-      Core.fieldTypeType = (Core.TypeList (Core.TypeList _Data_Param_type_))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "decltpe"),
-      Core.fieldTypeType = _Type_type_}]}))
-
 data Decl_Type = 
   Decl_Type {
     decl_TypeMods :: [Mod],
@@ -2896,23 +1499,6 @@ _Decl_Type_name = (Core.Name "name")
 _Decl_Type_tparams = (Core.Name "tparams")
 
 _Decl_Type_bounds = (Core.Name "bounds")
-
-_Decl_Type_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Decl.Type"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Type_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tparams"),
-      Core.fieldTypeType = (Core.TypeList _Type_Param_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "bounds"),
-      Core.fieldTypeType = _Type_Bounds_type_}]}))
 
 data Decl_Given = 
   Decl_Given {
@@ -2934,26 +1520,6 @@ _Decl_Given_tparams = (Core.Name "tparams")
 _Decl_Given_sparams = (Core.Name "sparams")
 
 _Decl_Given_decltpe = (Core.Name "decltpe")
-
-_Decl_Given_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Decl.Given"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Data_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tparams"),
-      Core.fieldTypeType = (Core.TypeList _Type_Param_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "sparams"),
-      Core.fieldTypeType = (Core.TypeList (Core.TypeList _Data_Param_type_))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "decltpe"),
-      Core.fieldTypeType = _Type_type_}]}))
 
 data Defn = 
   DefnVal Defn_Val |
@@ -3002,53 +1568,6 @@ _Defn_trait = (Core.Name "trait")
 
 _Defn_object = (Core.Name "object")
 
-_Defn_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Defn"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "val"),
-      Core.fieldTypeType = _Defn_Val_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "var"),
-      Core.fieldTypeType = _Defn_Var_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "given"),
-      Core.fieldTypeType = _Defn_Given_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "enum"),
-      Core.fieldTypeType = _Defn_Enum_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "enumCase"),
-      Core.fieldTypeType = _Defn_EnumCase_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "repeatedEnumCase"),
-      Core.fieldTypeType = _Defn_RepeatedEnumCase_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "givenAlias"),
-      Core.fieldTypeType = _Defn_GivenAlias_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "extensionGroup"),
-      Core.fieldTypeType = _Defn_ExtensionGroup_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "def"),
-      Core.fieldTypeType = _Defn_Def_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "macro"),
-      Core.fieldTypeType = _Defn_Macro_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "type"),
-      Core.fieldTypeType = _Defn_Type_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "class"),
-      Core.fieldTypeType = _Defn_Class_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "trait"),
-      Core.fieldTypeType = _Defn_Trait_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "object"),
-      Core.fieldTypeType = _Defn_Object_type_}]}))
-
 data Defn_Val = 
   Defn_Val {
     defn_ValMods :: [Mod],
@@ -3067,23 +1586,6 @@ _Defn_Val_decltpe = (Core.Name "decltpe")
 
 _Defn_Val_rhs = (Core.Name "rhs")
 
-_Defn_Val_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Defn.Val"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "pats"),
-      Core.fieldTypeType = (Core.TypeList _Pat_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "decltpe"),
-      Core.fieldTypeType = (Core.TypeOptional _Type_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rhs"),
-      Core.fieldTypeType = _Data_type_}]}))
-
 data Defn_Var = 
   Defn_Var {
     defn_VarMods :: [Mod],
@@ -3101,23 +1603,6 @@ _Defn_Var_pats = (Core.Name "pats")
 _Defn_Var_decltpe = (Core.Name "decltpe")
 
 _Defn_Var_rhs = (Core.Name "rhs")
-
-_Defn_Var_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Defn.Var"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "pats"),
-      Core.fieldTypeType = (Core.TypeList _Pat_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "decltpe"),
-      Core.fieldTypeType = _Type_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rhs"),
-      Core.fieldTypeType = (Core.TypeOptional _Data_type_)}]}))
 
 data Defn_Given = 
   Defn_Given {
@@ -3140,26 +1625,6 @@ _Defn_Given_sparams = (Core.Name "sparams")
 
 _Defn_Given_templ = (Core.Name "templ")
 
-_Defn_Given_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Defn.Given"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tparams"),
-      Core.fieldTypeType = (Core.TypeList (Core.TypeList _Type_Param_type_))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "sparams"),
-      Core.fieldTypeType = (Core.TypeList (Core.TypeList _Data_Param_type_))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "templ"),
-      Core.fieldTypeType = _Template_type_}]}))
-
 data Defn_Enum = 
   Defn_Enum {
     defn_EnumMods :: [Mod],
@@ -3180,26 +1645,6 @@ _Defn_Enum_tparams = (Core.Name "tparams")
 _Defn_Enum_ctor = (Core.Name "ctor")
 
 _Defn_Enum_template = (Core.Name "template")
-
-_Defn_Enum_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Defn.Enum"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Type_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tparams"),
-      Core.fieldTypeType = (Core.TypeList _Type_Param_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "ctor"),
-      Core.fieldTypeType = _Ctor_Primary_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "template"),
-      Core.fieldTypeType = _Template_type_}]}))
 
 data Defn_EnumCase = 
   Defn_EnumCase {
@@ -3222,26 +1667,6 @@ _Defn_EnumCase_ctor = (Core.Name "ctor")
 
 _Defn_EnumCase_inits = (Core.Name "inits")
 
-_Defn_EnumCase_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Defn.EnumCase"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Data_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tparams"),
-      Core.fieldTypeType = (Core.TypeList _Type_Param_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "ctor"),
-      Core.fieldTypeType = _Ctor_Primary_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "inits"),
-      Core.fieldTypeType = (Core.TypeList _Init_type_)}]}))
-
 data Defn_RepeatedEnumCase = 
   Defn_RepeatedEnumCase {
     defn_RepeatedEnumCaseMods :: [Mod],
@@ -3253,17 +1678,6 @@ _Defn_RepeatedEnumCase = (Core.Name "hydra/langs/scala/meta.Defn.RepeatedEnumCas
 _Defn_RepeatedEnumCase_mods = (Core.Name "mods")
 
 _Defn_RepeatedEnumCase_cases = (Core.Name "cases")
-
-_Defn_RepeatedEnumCase_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Defn.RepeatedEnumCase"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "cases"),
-      Core.fieldTypeType = (Core.TypeList _Data_Name_type_)}]}))
 
 data Defn_GivenAlias = 
   Defn_GivenAlias {
@@ -3289,29 +1703,6 @@ _Defn_GivenAlias_decltpe = (Core.Name "decltpe")
 
 _Defn_GivenAlias_body = (Core.Name "body")
 
-_Defn_GivenAlias_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Defn.GivenAlias"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tparams"),
-      Core.fieldTypeType = (Core.TypeList (Core.TypeList _Type_Param_type_))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "sparams"),
-      Core.fieldTypeType = (Core.TypeList (Core.TypeList _Data_Param_type_))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "decltpe"),
-      Core.fieldTypeType = _Type_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "body"),
-      Core.fieldTypeType = _Data_type_}]}))
-
 data Defn_ExtensionGroup = 
   Defn_ExtensionGroup {
     defn_ExtensionGroupTparams :: [Type_Param],
@@ -3326,20 +1717,6 @@ _Defn_ExtensionGroup_tparams = (Core.Name "tparams")
 _Defn_ExtensionGroup_parmss = (Core.Name "parmss")
 
 _Defn_ExtensionGroup_body = (Core.Name "body")
-
-_Defn_ExtensionGroup_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Defn.ExtensionGroup"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tparams"),
-      Core.fieldTypeType = (Core.TypeList _Type_Param_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "parmss"),
-      Core.fieldTypeType = (Core.TypeList (Core.TypeList _Data_Param_type_))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "body"),
-      Core.fieldTypeType = _Stat_type_}]}))
 
 data Defn_Def = 
   Defn_Def {
@@ -3365,29 +1742,6 @@ _Defn_Def_decltpe = (Core.Name "decltpe")
 
 _Defn_Def_body = (Core.Name "body")
 
-_Defn_Def_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Defn.Def"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Data_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tparams"),
-      Core.fieldTypeType = (Core.TypeList _Type_Param_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "paramss"),
-      Core.fieldTypeType = (Core.TypeList (Core.TypeList _Data_Param_type_))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "decltpe"),
-      Core.fieldTypeType = (Core.TypeOptional _Type_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "body"),
-      Core.fieldTypeType = _Data_type_}]}))
-
 data Defn_Macro = 
   Defn_Macro {
     defn_MacroMods :: [Mod],
@@ -3412,29 +1766,6 @@ _Defn_Macro_decltpe = (Core.Name "decltpe")
 
 _Defn_Macro_body = (Core.Name "body")
 
-_Defn_Macro_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Defn.Macro"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Data_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tparams"),
-      Core.fieldTypeType = (Core.TypeList _Type_Param_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "paramss"),
-      Core.fieldTypeType = (Core.TypeList (Core.TypeList _Data_Param_type_))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "decltpe"),
-      Core.fieldTypeType = (Core.TypeOptional _Type_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "body"),
-      Core.fieldTypeType = _Data_type_}]}))
-
 data Defn_Type = 
   Defn_Type {
     defn_TypeMods :: [Mod],
@@ -3452,23 +1783,6 @@ _Defn_Type_name = (Core.Name "name")
 _Defn_Type_tparams = (Core.Name "tparams")
 
 _Defn_Type_body = (Core.Name "body")
-
-_Defn_Type_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Defn.Type"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Type_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tparams"),
-      Core.fieldTypeType = (Core.TypeList _Type_Param_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "body"),
-      Core.fieldTypeType = _Type_type_}]}))
 
 data Defn_Class = 
   Defn_Class {
@@ -3491,26 +1805,6 @@ _Defn_Class_ctor = (Core.Name "ctor")
 
 _Defn_Class_template = (Core.Name "template")
 
-_Defn_Class_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Defn.Class"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Type_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tparams"),
-      Core.fieldTypeType = (Core.TypeList _Type_Param_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "ctor"),
-      Core.fieldTypeType = _Ctor_Primary_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "template"),
-      Core.fieldTypeType = _Template_type_}]}))
-
 data Defn_Trait = 
   Defn_Trait {
     defn_TraitMods :: [Mod],
@@ -3532,26 +1826,6 @@ _Defn_Trait_ctor = (Core.Name "ctor")
 
 _Defn_Trait_template = (Core.Name "template")
 
-_Defn_Trait_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Defn.Trait"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Type_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tparams"),
-      Core.fieldTypeType = (Core.TypeList _Type_Param_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "ctor"),
-      Core.fieldTypeType = _Ctor_Primary_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "template"),
-      Core.fieldTypeType = _Template_type_}]}))
-
 data Defn_Object = 
   Defn_Object {
     defn_ObjectName :: Data_Name}
@@ -3560,14 +1834,6 @@ data Defn_Object =
 _Defn_Object = (Core.Name "hydra/langs/scala/meta.Defn.Object")
 
 _Defn_Object_name = (Core.Name "name")
-
-_Defn_Object_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Defn.Object"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Data_Name_type_}]}))
 
 data Pkg = 
   Pkg {
@@ -3584,20 +1850,6 @@ _Pkg_ref = (Core.Name "ref")
 
 _Pkg_stats = (Core.Name "stats")
 
-_Pkg_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Pkg"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Data_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "ref"),
-      Core.fieldTypeType = _Data_Ref_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "stats"),
-      Core.fieldTypeType = (Core.TypeList _Stat_type_)}]}))
-
 data Pkg_Object = 
   Pkg_Object {
     pkg_ObjectMods :: [Mod],
@@ -3613,20 +1865,6 @@ _Pkg_Object_name = (Core.Name "name")
 
 _Pkg_Object_template = (Core.Name "template")
 
-_Pkg_Object_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Pkg.Object"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Data_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "template"),
-      Core.fieldTypeType = _Template_type_}]}))
-
 data Ctor = 
   CtorPrimary Ctor_Primary |
   CtorSecondary Ctor_Secondary
@@ -3637,17 +1875,6 @@ _Ctor = (Core.Name "hydra/langs/scala/meta.Ctor")
 _Ctor_primary = (Core.Name "primary")
 
 _Ctor_secondary = (Core.Name "secondary")
-
-_Ctor_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Ctor"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "primary"),
-      Core.fieldTypeType = _Ctor_Primary_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "secondary"),
-      Core.fieldTypeType = _Ctor_Secondary_type_}]}))
 
 data Ctor_Primary = 
   Ctor_Primary {
@@ -3663,20 +1890,6 @@ _Ctor_Primary_mods = (Core.Name "mods")
 _Ctor_Primary_name = (Core.Name "name")
 
 _Ctor_Primary_paramss = (Core.Name "paramss")
-
-_Ctor_Primary_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Ctor.Primary"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "paramss"),
-      Core.fieldTypeType = (Core.TypeList (Core.TypeList _Data_Param_type_))}]}))
 
 data Ctor_Secondary = 
   Ctor_Secondary {
@@ -3699,26 +1912,6 @@ _Ctor_Secondary_init = (Core.Name "init")
 
 _Ctor_Secondary_stats = (Core.Name "stats")
 
-_Ctor_Secondary_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Ctor.Secondary"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "mods"),
-      Core.fieldTypeType = (Core.TypeList _Mod_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "paramss"),
-      Core.fieldTypeType = (Core.TypeList (Core.TypeList _Data_Param_type_))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "init"),
-      Core.fieldTypeType = _Init_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "stats"),
-      Core.fieldTypeType = (Core.TypeList _Stat_type_)}]}))
-
 data Init = 
   Init {
     initTpe :: Type,
@@ -3734,30 +1927,11 @@ _Init_name = (Core.Name "name")
 
 _Init_argss = (Core.Name "argss")
 
-_Init_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Init"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tpe"),
-      Core.fieldTypeType = _Type_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "argss"),
-      Core.fieldTypeType = (Core.TypeList (Core.TypeList _Data_type_))}]}))
-
 data Self = 
   Self {}
   deriving (Eq, Ord, Read, Show)
 
 _Self = (Core.Name "hydra/langs/scala/meta.Self")
-
-_Self_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data Template = 
   Template {
@@ -3776,23 +1950,6 @@ _Template_inits = (Core.Name "inits")
 _Template_self = (Core.Name "self")
 
 _Template_stats = (Core.Name "stats")
-
-_Template_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Template"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "early"),
-      Core.fieldTypeType = (Core.TypeList _Stat_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "inits"),
-      Core.fieldTypeType = (Core.TypeList _Init_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "self"),
-      Core.fieldTypeType = _Self_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "stats"),
-      Core.fieldTypeType = (Core.TypeList _Stat_type_)}]}))
 
 data Mod = 
   ModAnnot Mod_Annot |
@@ -3862,128 +2019,6 @@ _Mod_opaque = (Core.Name "opaque")
 
 _Mod_transparent = (Core.Name "transparent")
 
-_Mod_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Mod"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "annot"),
-      Core.fieldTypeType = _Mod_Annot_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "private"),
-      Core.fieldTypeType = _Mod_Private_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "protected"),
-      Core.fieldTypeType = _Mod_Protected_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "implicit"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "final"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "sealed"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "open"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "super"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "override"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "case"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "abstract"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "covariant"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "contravariant"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "lazy"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "valParam"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "varParam"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "infix"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "inline"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "using"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "opaque"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "transparent"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))}]}))
-
 data Mod_Annot = 
   Mod_Annot {
     mod_AnnotInit :: Init}
@@ -3992,14 +2027,6 @@ data Mod_Annot =
 _Mod_Annot = (Core.Name "hydra/langs/scala/meta.Mod.Annot")
 
 _Mod_Annot_init = (Core.Name "init")
-
-_Mod_Annot_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Mod.Annot"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "init"),
-      Core.fieldTypeType = _Init_type_}]}))
 
 data Mod_Private = 
   Mod_Private {
@@ -4010,14 +2037,6 @@ _Mod_Private = (Core.Name "hydra/langs/scala/meta.Mod.Private")
 
 _Mod_Private_within = (Core.Name "within")
 
-_Mod_Private_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Mod.Private"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "within"),
-      Core.fieldTypeType = _Ref_type_}]}))
-
 data Mod_Protected = 
   Mod_Protected {
     mod_ProtectedWithin :: Ref}
@@ -4026,14 +2045,6 @@ data Mod_Protected =
 _Mod_Protected = (Core.Name "hydra/langs/scala/meta.Mod.Protected")
 
 _Mod_Protected_within = (Core.Name "within")
-
-_Mod_Protected_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Mod.Protected"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "within"),
-      Core.fieldTypeType = _Ref_type_}]}))
 
 data Enumerator = 
   EnumeratorGenerator Enumerator_Generator |
@@ -4052,23 +2063,6 @@ _Enumerator_val = (Core.Name "val")
 
 _Enumerator_guard = (Core.Name "guard")
 
-_Enumerator_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Enumerator"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "generator"),
-      Core.fieldTypeType = _Enumerator_Generator_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "caseGenerator"),
-      Core.fieldTypeType = _Enumerator_CaseGenerator_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "val"),
-      Core.fieldTypeType = _Enumerator_Val_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "guard"),
-      Core.fieldTypeType = _Enumerator_Guard_type_}]}))
-
 data Enumerator_Generator = 
   Enumerator_Generator {
     enumerator_GeneratorPat :: Pat,
@@ -4080,17 +2074,6 @@ _Enumerator_Generator = (Core.Name "hydra/langs/scala/meta.Enumerator.Generator"
 _Enumerator_Generator_pat = (Core.Name "pat")
 
 _Enumerator_Generator_rhs = (Core.Name "rhs")
-
-_Enumerator_Generator_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Enumerator.Generator"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "pat"),
-      Core.fieldTypeType = _Pat_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rhs"),
-      Core.fieldTypeType = _Data_type_}]}))
 
 data Enumerator_CaseGenerator = 
   Enumerator_CaseGenerator {
@@ -4104,17 +2087,6 @@ _Enumerator_CaseGenerator_pat = (Core.Name "pat")
 
 _Enumerator_CaseGenerator_rhs = (Core.Name "rhs")
 
-_Enumerator_CaseGenerator_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Enumerator.CaseGenerator"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "pat"),
-      Core.fieldTypeType = _Pat_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rhs"),
-      Core.fieldTypeType = _Data_type_}]}))
-
 data Enumerator_Val = 
   Enumerator_Val {
     enumerator_ValPat :: Pat,
@@ -4127,17 +2099,6 @@ _Enumerator_Val_pat = (Core.Name "pat")
 
 _Enumerator_Val_rhs = (Core.Name "rhs")
 
-_Enumerator_Val_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Enumerator.Val"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "pat"),
-      Core.fieldTypeType = _Pat_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rhs"),
-      Core.fieldTypeType = _Data_type_}]}))
-
 data Enumerator_Guard = 
   Enumerator_Guard {
     enumerator_GuardCond :: Data}
@@ -4146,14 +2107,6 @@ data Enumerator_Guard =
 _Enumerator_Guard = (Core.Name "hydra/langs/scala/meta.Enumerator.Guard")
 
 _Enumerator_Guard_cond = (Core.Name "cond")
-
-_Enumerator_Guard_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Enumerator.Guard"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "cond"),
-      Core.fieldTypeType = _Data_type_}]}))
 
 data ImportExportStat = 
   ImportExportStatImport Import |
@@ -4166,17 +2119,6 @@ _ImportExportStat_import = (Core.Name "import")
 
 _ImportExportStat_export = (Core.Name "export")
 
-_ImportExportStat_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.ImportExportStat"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "import"),
-      Core.fieldTypeType = _Import_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "export"),
-      Core.fieldTypeType = _Export_type_}]}))
-
 data Import = 
   Import {
     importImporters :: [Importer]}
@@ -4186,14 +2128,6 @@ _Import = (Core.Name "hydra/langs/scala/meta.Import")
 
 _Import_importers = (Core.Name "importers")
 
-_Import_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Import"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "importers"),
-      Core.fieldTypeType = (Core.TypeList _Importer_type_)}]}))
-
 data Export = 
   Export {
     exportImporters :: [Importer]}
@@ -4202,14 +2136,6 @@ data Export =
 _Export = (Core.Name "hydra/langs/scala/meta.Export")
 
 _Export_importers = (Core.Name "importers")
-
-_Export_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Export"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "importers"),
-      Core.fieldTypeType = (Core.TypeList _Importer_type_)}]}))
 
 data Importer = 
   Importer {
@@ -4222,17 +2148,6 @@ _Importer = (Core.Name "hydra/langs/scala/meta.Importer")
 _Importer_ref = (Core.Name "ref")
 
 _Importer_importees = (Core.Name "importees")
-
-_Importer_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Importer"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "ref"),
-      Core.fieldTypeType = _Data_Ref_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "importees"),
-      Core.fieldTypeType = (Core.TypeList _Importee_type_)}]}))
 
 data Importee = 
   ImporteeWildcard  |
@@ -4257,35 +2172,6 @@ _Importee_rename = (Core.Name "rename")
 
 _Importee_unimport = (Core.Name "unimport")
 
-_Importee_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Importee"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "wildcard"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "given"),
-      Core.fieldTypeType = _Importee_Given_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "givenAll"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Importee_Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rename"),
-      Core.fieldTypeType = _Importee_Rename_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "unimport"),
-      Core.fieldTypeType = _Importee_Unimport_type_}]}))
-
 data Importee_Given = 
   Importee_Given {
     importee_GivenTpe :: Type}
@@ -4295,14 +2181,6 @@ _Importee_Given = (Core.Name "hydra/langs/scala/meta.Importee.Given")
 
 _Importee_Given_tpe = (Core.Name "tpe")
 
-_Importee_Given_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Importee.Given"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tpe"),
-      Core.fieldTypeType = _Type_type_}]}))
-
 data Importee_Name = 
   Importee_Name {
     importee_NameName :: Name}
@@ -4311,14 +2189,6 @@ data Importee_Name =
 _Importee_Name = (Core.Name "hydra/langs/scala/meta.Importee.Name")
 
 _Importee_Name_name = (Core.Name "name")
-
-_Importee_Name_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Importee.Name"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Name_type_}]}))
 
 data Importee_Rename = 
   Importee_Rename {
@@ -4332,17 +2202,6 @@ _Importee_Rename_name = (Core.Name "name")
 
 _Importee_Rename_rename = (Core.Name "rename")
 
-_Importee_Rename_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Importee.Rename"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rename"),
-      Core.fieldTypeType = _Name_type_}]}))
-
 data Importee_Unimport = 
   Importee_Unimport {
     importee_UnimportName :: Name}
@@ -4351,14 +2210,6 @@ data Importee_Unimport =
 _Importee_Unimport = (Core.Name "hydra/langs/scala/meta.Importee.Unimport")
 
 _Importee_Unimport_name = (Core.Name "name")
-
-_Importee_Unimport_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Importee.Unimport"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _Name_type_}]}))
 
 data CaseTree = 
   CaseTreeCase Case |
@@ -4370,17 +2221,6 @@ _CaseTree = (Core.Name "hydra/langs/scala/meta.CaseTree")
 _CaseTree_case = (Core.Name "case")
 
 _CaseTree_typeCase = (Core.Name "typeCase")
-
-_CaseTree_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.CaseTree"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "case"),
-      Core.fieldTypeType = _Case_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "typeCase"),
-      Core.fieldTypeType = _TypeCase_type_}]}))
 
 data Case = 
   Case {
@@ -4397,20 +2237,6 @@ _Case_cond = (Core.Name "cond")
 
 _Case_body = (Core.Name "body")
 
-_Case_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Case"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "pat"),
-      Core.fieldTypeType = _Pat_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "cond"),
-      Core.fieldTypeType = (Core.TypeOptional _Data_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "body"),
-      Core.fieldTypeType = _Data_type_}]}))
-
 data TypeCase = 
   TypeCase {
     typeCasePat :: Type,
@@ -4423,17 +2249,6 @@ _TypeCase_pat = (Core.Name "pat")
 
 _TypeCase_body = (Core.Name "body")
 
-_TypeCase_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.TypeCase"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "pat"),
-      Core.fieldTypeType = _Type_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "body"),
-      Core.fieldTypeType = _Type_type_}]}))
-
 data Source = 
   Source {
     sourceStats :: [Stat]}
@@ -4443,21 +2258,8 @@ _Source = (Core.Name "hydra/langs/scala/meta.Source")
 
 _Source_stats = (Core.Name "stats")
 
-_Source_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/scala/meta.Source"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "stats"),
-      Core.fieldTypeType = (Core.TypeList _Stat_type_)}]}))
-
 data Quasi = 
   Quasi {}
   deriving (Eq, Ord, Read, Show)
 
 _Quasi = (Core.Name "hydra/langs/scala/meta.Quasi")
-
-_Quasi_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))

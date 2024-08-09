@@ -133,8 +133,8 @@ literalType :: (Core.Literal -> Core.LiteralType)
 literalType x = case x of
   Core.LiteralBinary _ -> Core.LiteralTypeBinary
   Core.LiteralBoolean _ -> Core.LiteralTypeBoolean
-  Core.LiteralFloat v187 -> ((\x2 -> Core.LiteralTypeFloat x2) (floatValueType v187))
-  Core.LiteralInteger v188 -> ((\x2 -> Core.LiteralTypeInteger x2) (integerValueType v188))
+  Core.LiteralFloat v223 -> ((\x2 -> Core.LiteralTypeFloat x2) (floatValueType v223))
+  Core.LiteralInteger v224 -> ((\x2 -> Core.LiteralTypeInteger x2) (integerValueType v224))
   Core.LiteralString _ -> Core.LiteralTypeString
 
 -- | Find the literal type variant (constructor) for a given literal value
@@ -263,15 +263,15 @@ fieldTypeMap fields = (Maps.fromList (Lists.map toPair fields))
 
 isEncodedType :: (Core.Term -> Bool)
 isEncodedType t = ((\x -> case x of
-  Core.TermApplication v226 -> (isEncodedType (Core.applicationFunction v226))
-  Core.TermUnion v227 -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.injectionTypeName v227)))
+  Core.TermApplication v262 -> (isEncodedType (Core.applicationFunction v262))
+  Core.TermUnion v263 -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.injectionTypeName v263)))
   _ -> False) (Strip.stripTerm t))
 
 isType :: (Core.Type -> Bool)
 isType t = ((\x -> case x of
-  Core.TypeApplication v228 -> (isType (Core.applicationTypeFunction v228))
-  Core.TypeLambda v229 -> (isType (Core.lambdaTypeBody v229))
-  Core.TypeUnion v230 -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.rowTypeTypeName v230)))
+  Core.TypeApplication v264 -> (isType (Core.applicationTypeFunction v264))
+  Core.TypeLambda v265 -> (isType (Core.lambdaTypeBody v265))
+  Core.TypeUnion v266 -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.rowTypeTypeName v266)))
   _ -> False) (Strip.stripType t))
 
 isUnitTerm :: (Core.Term -> Bool)
