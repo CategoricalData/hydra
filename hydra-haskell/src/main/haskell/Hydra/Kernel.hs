@@ -27,6 +27,7 @@ module Hydra.Kernel (
   module Hydra.Query,
   module Hydra.Reduction,
   module Hydra.Rewriting,
+  module Hydra.Schemas,
   module Hydra.Strip,
   module Hydra.TermAdapters,
   module Hydra.Tier1,
@@ -65,6 +66,7 @@ import Hydra.Printing
 import Hydra.Query
 import Hydra.Reduction
 import Hydra.Rewriting
+import Hydra.Schemas
 import Hydra.Strip
 import Hydra.TermAdapters
 import Hydra.Tier1
