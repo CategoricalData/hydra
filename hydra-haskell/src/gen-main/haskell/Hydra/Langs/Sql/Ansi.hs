@@ -15,18 +15,11 @@ newtype ApproximateNumericLiteral =
 
 _ApproximateNumericLiteral = (Core.Name "hydra/langs/sql/ansi.ApproximateNumericLiteral")
 
-_ApproximateNumericLiteral_type_ = (Core.TypeLiteral Core.LiteralTypeString)
-
 data BinaryStringLiteral = 
   BinaryStringLiteral {}
   deriving (Eq, Ord, Read, Show)
 
 _BinaryStringLiteral = (Core.Name "hydra/langs/sql/ansi.BinaryStringLiteral")
-
-_BinaryStringLiteral_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 newtype CharacterStringLiteral = 
   CharacterStringLiteral {
@@ -35,8 +28,6 @@ newtype CharacterStringLiteral =
 
 _CharacterStringLiteral = (Core.Name "hydra/langs/sql/ansi.CharacterStringLiteral")
 
-_CharacterStringLiteral_type_ = (Core.TypeLiteral Core.LiteralTypeString)
-
 newtype ColumnName = 
   ColumnName {
     unColumnName :: String}
@@ -44,18 +35,11 @@ newtype ColumnName =
 
 _ColumnName = (Core.Name "hydra/langs/sql/ansi.ColumnName")
 
-_ColumnName_type_ = (Core.TypeLiteral Core.LiteralTypeString)
-
 data DateString = 
   DateString {}
   deriving (Eq, Ord, Read, Show)
 
 _DateString = (Core.Name "hydra/langs/sql/ansi.DateString")
-
-_DateString_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 newtype DomainName = 
   DomainName {
@@ -64,16 +48,12 @@ newtype DomainName =
 
 _DomainName = (Core.Name "hydra/langs/sql/ansi.DomainName")
 
-_DomainName_type_ = (Core.TypeLiteral Core.LiteralTypeString)
-
 newtype ExactNumericLiteral = 
   ExactNumericLiteral {
     unExactNumericLiteral :: String}
   deriving (Eq, Ord, Read, Show)
 
 _ExactNumericLiteral = (Core.Name "hydra/langs/sql/ansi.ExactNumericLiteral")
-
-_ExactNumericLiteral_type_ = (Core.TypeLiteral Core.LiteralTypeString)
 
 newtype LeftBracketOrTrigraph = 
   LeftBracketOrTrigraph {
@@ -82,8 +62,6 @@ newtype LeftBracketOrTrigraph =
 
 _LeftBracketOrTrigraph = (Core.Name "hydra/langs/sql/ansi.LeftBracketOrTrigraph")
 
-_LeftBracketOrTrigraph_type_ = (Core.TypeLiteral Core.LiteralTypeString)
-
 newtype RightBracketOrTrigraph = 
   RightBracketOrTrigraph {
     unRightBracketOrTrigraph :: String}
@@ -91,18 +69,11 @@ newtype RightBracketOrTrigraph =
 
 _RightBracketOrTrigraph = (Core.Name "hydra/langs/sql/ansi.RightBracketOrTrigraph")
 
-_RightBracketOrTrigraph_type_ = (Core.TypeLiteral Core.LiteralTypeString)
-
 data NationalCharacterStringLiteral = 
   NationalCharacterStringLiteral {}
   deriving (Eq, Ord, Read, Show)
 
 _NationalCharacterStringLiteral = (Core.Name "hydra/langs/sql/ansi.NationalCharacterStringLiteral")
-
-_NationalCharacterStringLiteral_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 newtype PathResolvedUserDefinedTypeName = 
   PathResolvedUserDefinedTypeName {
@@ -111,8 +82,6 @@ newtype PathResolvedUserDefinedTypeName =
 
 _PathResolvedUserDefinedTypeName = (Core.Name "hydra/langs/sql/ansi.PathResolvedUserDefinedTypeName")
 
-_PathResolvedUserDefinedTypeName_type_ = (Core.TypeLiteral Core.LiteralTypeString)
-
 newtype TableName = 
   TableName {
     unTableName :: String}
@@ -120,18 +89,11 @@ newtype TableName =
 
 _TableName = (Core.Name "hydra/langs/sql/ansi.TableName")
 
-_TableName_type_ = (Core.TypeLiteral Core.LiteralTypeString)
-
 data TimeString = 
   TimeString {}
   deriving (Eq, Ord, Read, Show)
 
 _TimeString = (Core.Name "hydra/langs/sql/ansi.TimeString")
-
-_TimeString_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data TimestampLiteral = 
   TimestampLiteral {}
@@ -139,21 +101,11 @@ data TimestampLiteral =
 
 _TimestampLiteral = (Core.Name "hydra/langs/sql/ansi.TimestampLiteral")
 
-_TimestampLiteral_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
-
 data UnicodeCharacterStringLiteral = 
   UnicodeCharacterStringLiteral {}
   deriving (Eq, Ord, Read, Show)
 
 _UnicodeCharacterStringLiteral = (Core.Name "hydra/langs/sql/ansi.UnicodeCharacterStringLiteral")
-
-_UnicodeCharacterStringLiteral_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 newtype UnsignedInteger = 
   UnsignedInteger {
@@ -161,8 +113,6 @@ newtype UnsignedInteger =
   deriving (Eq, Ord, Read, Show)
 
 _UnsignedInteger = (Core.Name "hydra/langs/sql/ansi.UnsignedInteger")
-
-_UnsignedInteger_type_ = (Core.TypeLiteral Core.LiteralTypeString)
 
 data ApproximateNumericType = 
   ApproximateNumericTypeFloat (Maybe Precision) |
@@ -178,34 +128,12 @@ _ApproximateNumericType_real = (Core.Name "real")
 
 _ApproximateNumericType_double = (Core.Name "double")
 
-_ApproximateNumericType_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "float"),
-      Core.fieldTypeType = (Core.TypeOptional _Precision_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "real"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "double"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))}]}))
-
 newtype ArrayElement = 
   ArrayElement {
     unArrayElement :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
 _ArrayElement = (Core.Name "hydra/langs/sql/ansi.ArrayElement")
-
-_ArrayElement_type_ = _ValueExpression_type_
 
 data ArrayElementList = 
   ArrayElementList {
@@ -219,38 +147,17 @@ _ArrayElementList_first = (Core.Name "first")
 
 _ArrayElementList_rest = (Core.Name "rest")
 
-_ArrayElementList_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "first"),
-      Core.fieldTypeType = _ArrayElement_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rest"),
-      Core.fieldTypeType = (Core.TypeList _ArrayElement_type_)}]}))
-
 data ArrayElementReference = 
   ArrayElementReference {}
   deriving (Eq, Ord, Read, Show)
 
 _ArrayElementReference = (Core.Name "hydra/langs/sql/ansi.ArrayElementReference")
 
-_ArrayElementReference_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
-
 data ArrayType = 
   ArrayType {}
   deriving (Eq, Ord, Read, Show)
 
 _ArrayType = (Core.Name "hydra/langs/sql/ansi.ArrayType")
-
-_ArrayType_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data ArrayValueConstructor = 
   ArrayValueConstructorEnumeration ArrayValueConstructorByEnumeration |
@@ -263,27 +170,11 @@ _ArrayValueConstructor_enumeration = (Core.Name "enumeration")
 
 _ArrayValueConstructor_query = (Core.Name "query")
 
-_ArrayValueConstructor_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "enumeration"),
-      Core.fieldTypeType = _ArrayValueConstructorByEnumeration_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "query"),
-      Core.fieldTypeType = _ArrayValueConstructorByQuery_type_}]}))
-
 data ArrayValueConstructorByQuery = 
   ArrayValueConstructorByQuery {}
   deriving (Eq, Ord, Read, Show)
 
 _ArrayValueConstructorByQuery = (Core.Name "hydra/langs/sql/ansi.ArrayValueConstructorByQuery")
-
-_ArrayValueConstructorByQuery_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data ArrayValueConstructorByEnumeration = 
   ArrayValueConstructorByEnumeration {
@@ -300,30 +191,11 @@ _ArrayValueConstructorByEnumeration_arrayElementList = (Core.Name "arrayElementL
 
 _ArrayValueConstructorByEnumeration_rightBracketOrTrigraph = (Core.Name "rightBracketOrTrigraph")
 
-_ArrayValueConstructorByEnumeration_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "leftBracketOrTrigraph"),
-      Core.fieldTypeType = _LeftBracketOrTrigraph_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "arrayElementList"),
-      Core.fieldTypeType = _ArrayElementList_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rightBracketOrTrigraph"),
-      Core.fieldTypeType = _RightBracketOrTrigraph_type_}]}))
-
 data ArrayValueExpression = 
   ArrayValueExpression {}
   deriving (Eq, Ord, Read, Show)
 
 _ArrayValueExpression = (Core.Name "hydra/langs/sql/ansi.ArrayValueExpression")
-
-_ArrayValueExpression_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data AsSubqueryClause = 
   AsSubqueryClause {}
@@ -331,21 +203,11 @@ data AsSubqueryClause =
 
 _AsSubqueryClause = (Core.Name "hydra/langs/sql/ansi.AsSubqueryClause")
 
-_AsSubqueryClause_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
-
 data AttributeOrMethodReference = 
   AttributeOrMethodReference {}
   deriving (Eq, Ord, Read, Show)
 
 _AttributeOrMethodReference = (Core.Name "hydra/langs/sql/ansi.AttributeOrMethodReference")
-
-_AttributeOrMethodReference_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data BinaryLargeObjectStringType = 
   BinaryLargeObjectStringTypeBinary (Maybe LargeObjectLength) |
@@ -358,17 +220,6 @@ _BinaryLargeObjectStringType_binary = (Core.Name "binary")
 
 _BinaryLargeObjectStringType_blob = (Core.Name "blob")
 
-_BinaryLargeObjectStringType_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "binary"),
-      Core.fieldTypeType = (Core.TypeOptional _LargeObjectLength_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "blob"),
-      Core.fieldTypeType = (Core.TypeOptional _LargeObjectLength_type_)}]}))
-
 data BooleanFactor = 
   BooleanFactor {
     booleanFactorNOT :: (Maybe ()),
@@ -380,20 +231,6 @@ _BooleanFactor = (Core.Name "hydra/langs/sql/ansi.BooleanFactor")
 _BooleanFactor_nOT = (Core.Name "nOT")
 
 _BooleanFactor_booleanTest = (Core.Name "booleanTest")
-
-_BooleanFactor_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "nOT"),
-      Core.fieldTypeType = (Core.TypeOptional (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []})))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "booleanTest"),
-      Core.fieldTypeType = _BooleanTest_type_}]}))
 
 data BooleanLiteral = 
   BooleanLiteralTRUE  |
@@ -409,39 +246,11 @@ _BooleanLiteral_fALSE = (Core.Name "fALSE")
 
 _BooleanLiteral_uNKNOWN = (Core.Name "uNKNOWN")
 
-_BooleanLiteral_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tRUE"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "fALSE"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "uNKNOWN"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))}]}))
-
 data BooleanPredicand = 
   BooleanPredicand {}
   deriving (Eq, Ord, Read, Show)
 
 _BooleanPredicand = (Core.Name "hydra/langs/sql/ansi.BooleanPredicand")
-
-_BooleanPredicand_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data BooleanPrimary = 
   BooleanPrimaryPredicate Predicate |
@@ -454,17 +263,6 @@ _BooleanPrimary_predicate = (Core.Name "predicate")
 
 _BooleanPrimary_predicand = (Core.Name "predicand")
 
-_BooleanPrimary_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "predicate"),
-      Core.fieldTypeType = _Predicate_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "predicand"),
-      Core.fieldTypeType = _BooleanPredicand_type_}]}))
-
 data BooleanTerm = 
   BooleanTermFactor BooleanFactor |
   BooleanTermAnd BooleanTerm_And
@@ -475,17 +273,6 @@ _BooleanTerm = (Core.Name "hydra/langs/sql/ansi.BooleanTerm")
 _BooleanTerm_factor = (Core.Name "factor")
 
 _BooleanTerm_and = (Core.Name "and")
-
-_BooleanTerm_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "factor"),
-      Core.fieldTypeType = _BooleanFactor_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "and"),
-      Core.fieldTypeType = _BooleanTerm_And_type_}]}))
 
 data BooleanTerm_And = 
   BooleanTerm_And {
@@ -499,17 +286,6 @@ _BooleanTerm_And_lhs = (Core.Name "lhs")
 
 _BooleanTerm_And_rhs = (Core.Name "rhs")
 
-_BooleanTerm_And_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "lhs"),
-      Core.fieldTypeType = _BooleanTerm_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rhs"),
-      Core.fieldTypeType = _BooleanFactor_type_}]}))
-
 data BooleanTest = 
   BooleanTest {
     booleanTestBooleanPrimary :: BooleanPrimary,
@@ -521,17 +297,6 @@ _BooleanTest = (Core.Name "hydra/langs/sql/ansi.BooleanTest")
 _BooleanTest_booleanPrimary = (Core.Name "booleanPrimary")
 
 _BooleanTest_sequence = (Core.Name "sequence")
-
-_BooleanTest_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "booleanPrimary"),
-      Core.fieldTypeType = _BooleanPrimary_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "sequence"),
-      Core.fieldTypeType = (Core.TypeOptional _BooleanTest_Sequence_Option_type_)}]}))
 
 data BooleanTest_Sequence_Option = 
   BooleanTest_Sequence_Option {
@@ -545,30 +310,11 @@ _BooleanTest_Sequence_Option_nOT = (Core.Name "nOT")
 
 _BooleanTest_Sequence_Option_truthValue = (Core.Name "truthValue")
 
-_BooleanTest_Sequence_Option_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "nOT"),
-      Core.fieldTypeType = (Core.TypeOptional (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []})))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "truthValue"),
-      Core.fieldTypeType = _TruthValue_type_}]}))
-
 data BooleanType = 
   BooleanType {}
   deriving (Eq, Ord, Read, Show)
 
 _BooleanType = (Core.Name "hydra/langs/sql/ansi.BooleanType")
-
-_BooleanType_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data BooleanValueExpression = 
   BooleanValueExpressionTerm BooleanTerm |
@@ -580,17 +326,6 @@ _BooleanValueExpression = (Core.Name "hydra/langs/sql/ansi.BooleanValueExpressio
 _BooleanValueExpression_term = (Core.Name "term")
 
 _BooleanValueExpression_or = (Core.Name "or")
-
-_BooleanValueExpression_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "term"),
-      Core.fieldTypeType = _BooleanTerm_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "or"),
-      Core.fieldTypeType = _BooleanValueExpression_Or_type_}]}))
 
 data BooleanValueExpression_Or = 
   BooleanValueExpression_Or {
@@ -604,27 +339,11 @@ _BooleanValueExpression_Or_lhs = (Core.Name "lhs")
 
 _BooleanValueExpression_Or_rhs = (Core.Name "rhs")
 
-_BooleanValueExpression_Or_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "lhs"),
-      Core.fieldTypeType = _BooleanValueExpression_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rhs"),
-      Core.fieldTypeType = _BooleanTerm_type_}]}))
-
 data CaseExpression = 
   CaseExpression {}
   deriving (Eq, Ord, Read, Show)
 
 _CaseExpression = (Core.Name "hydra/langs/sql/ansi.CaseExpression")
-
-_CaseExpression_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data CastSpecification = 
   CastSpecification {}
@@ -632,21 +351,11 @@ data CastSpecification =
 
 _CastSpecification = (Core.Name "hydra/langs/sql/ansi.CastSpecification")
 
-_CastSpecification_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
-
 data CharacterSetSpecification = 
   CharacterSetSpecification {}
   deriving (Eq, Ord, Read, Show)
 
 _CharacterSetSpecification = (Core.Name "hydra/langs/sql/ansi.CharacterSetSpecification")
-
-_CharacterSetSpecification_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data CharacterStringType = 
   CharacterStringTypeCharacter (Maybe Length) |
@@ -677,45 +386,11 @@ _CharacterStringType_charLargeObject = (Core.Name "charLargeObject")
 
 _CharacterStringType_clob = (Core.Name "clob")
 
-_CharacterStringType_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "character"),
-      Core.fieldTypeType = (Core.TypeOptional _Length_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "char"),
-      Core.fieldTypeType = (Core.TypeOptional _Length_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "characterVarying"),
-      Core.fieldTypeType = _Length_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "charVarying"),
-      Core.fieldTypeType = _Length_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "varchar"),
-      Core.fieldTypeType = _Length_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "characterLargeObject"),
-      Core.fieldTypeType = (Core.TypeOptional _LargeObjectLength_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "charLargeObject"),
-      Core.fieldTypeType = (Core.TypeOptional _LargeObjectLength_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "clob"),
-      Core.fieldTypeType = (Core.TypeOptional _LargeObjectLength_type_)}]}))
-
 data CollateClause = 
   CollateClause {}
   deriving (Eq, Ord, Read, Show)
 
 _CollateClause = (Core.Name "hydra/langs/sql/ansi.CollateClause")
-
-_CollateClause_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data CollectionType = 
   CollectionTypeArray ArrayType |
@@ -728,17 +403,6 @@ _CollectionType_array = (Core.Name "array")
 
 _CollectionType_multiset = (Core.Name "multiset")
 
-_CollectionType_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "array"),
-      Core.fieldTypeType = _ArrayType_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "multiset"),
-      Core.fieldTypeType = _MultisetType_type_}]}))
-
 data CollectionValueConstructor = 
   CollectionValueConstructorArray ArrayValueConstructor |
   CollectionValueConstructorMultiset MultisetValueConstructor
@@ -749,17 +413,6 @@ _CollectionValueConstructor = (Core.Name "hydra/langs/sql/ansi.CollectionValueCo
 _CollectionValueConstructor_array = (Core.Name "array")
 
 _CollectionValueConstructor_multiset = (Core.Name "multiset")
-
-_CollectionValueConstructor_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "array"),
-      Core.fieldTypeType = _ArrayValueConstructor_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "multiset"),
-      Core.fieldTypeType = _MultisetValueConstructor_type_}]}))
 
 data CollectionValueExpression = 
   CollectionValueExpressionArray ArrayValueExpression |
@@ -772,27 +425,11 @@ _CollectionValueExpression_array = (Core.Name "array")
 
 _CollectionValueExpression_multiset = (Core.Name "multiset")
 
-_CollectionValueExpression_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "array"),
-      Core.fieldTypeType = _ArrayValueExpression_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "multiset"),
-      Core.fieldTypeType = _MultisetValueExpression_type_}]}))
-
 data ColumnConstraintDefinition = 
   ColumnConstraintDefinition {}
   deriving (Eq, Ord, Read, Show)
 
 _ColumnConstraintDefinition = (Core.Name "hydra/langs/sql/ansi.ColumnConstraintDefinition")
-
-_ColumnConstraintDefinition_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data ColumnDefinition = 
   ColumnDefinition {
@@ -818,29 +455,6 @@ _ColumnDefinition_constraints = (Core.Name "constraints")
 
 _ColumnDefinition_collate = (Core.Name "collate")
 
-_ColumnDefinition_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _ColumnName_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "typeOrDomain"),
-      Core.fieldTypeType = (Core.TypeOptional _ColumnDefinition_TypeOrDomain_Option_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "refScope"),
-      Core.fieldTypeType = (Core.TypeOptional _ReferenceScopeCheck_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "defaultOrIdentityOrGeneration"),
-      Core.fieldTypeType = (Core.TypeOptional _ColumnDefinition_DefaultOrIdentityOrGeneration_Option_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "constraints"),
-      Core.fieldTypeType = (Core.TypeList _ColumnConstraintDefinition_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "collate"),
-      Core.fieldTypeType = (Core.TypeOptional _CollateClause_type_)}]}))
-
 data ColumnDefinition_TypeOrDomain_Option = 
   ColumnDefinition_TypeOrDomain_OptionDataType DataType |
   ColumnDefinition_TypeOrDomain_OptionDomainName DomainName
@@ -851,17 +465,6 @@ _ColumnDefinition_TypeOrDomain_Option = (Core.Name "hydra/langs/sql/ansi.ColumnD
 _ColumnDefinition_TypeOrDomain_Option_dataType = (Core.Name "dataType")
 
 _ColumnDefinition_TypeOrDomain_Option_domainName = (Core.Name "domainName")
-
-_ColumnDefinition_TypeOrDomain_Option_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "dataType"),
-      Core.fieldTypeType = _DataType_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "domainName"),
-      Core.fieldTypeType = _DomainName_type_}]}))
 
 data ColumnDefinition_DefaultOrIdentityOrGeneration_Option = 
   ColumnDefinition_DefaultOrIdentityOrGeneration_OptionDefaultClause DefaultClause |
@@ -877,20 +480,6 @@ _ColumnDefinition_DefaultOrIdentityOrGeneration_Option_identityColumnSpecificati
 
 _ColumnDefinition_DefaultOrIdentityOrGeneration_Option_generationClause = (Core.Name "generationClause")
 
-_ColumnDefinition_DefaultOrIdentityOrGeneration_Option_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "defaultClause"),
-      Core.fieldTypeType = _DefaultClause_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "identityColumnSpecification"),
-      Core.fieldTypeType = _IdentityColumnSpecification_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "generationClause"),
-      Core.fieldTypeType = _GenerationClause_type_}]}))
-
 data ColumnNameList = 
   ColumnNameList {
     columnNameListFirst :: ColumnName,
@@ -903,38 +492,17 @@ _ColumnNameList_first = (Core.Name "first")
 
 _ColumnNameList_rest = (Core.Name "rest")
 
-_ColumnNameList_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "first"),
-      Core.fieldTypeType = _ColumnName_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rest"),
-      Core.fieldTypeType = (Core.TypeList _ColumnName_type_)}]}))
-
 data ColumnOptions = 
   ColumnOptions {}
   deriving (Eq, Ord, Read, Show)
 
 _ColumnOptions = (Core.Name "hydra/langs/sql/ansi.ColumnOptions")
 
-_ColumnOptions_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
-
 data ColumnReference = 
   ColumnReference {}
   deriving (Eq, Ord, Read, Show)
 
 _ColumnReference = (Core.Name "hydra/langs/sql/ansi.ColumnReference")
-
-_ColumnReference_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data CommonValueExpression = 
   CommonValueExpressionNumeric NumericValueExpression |
@@ -962,32 +530,6 @@ _CommonValueExpression_reference = (Core.Name "reference")
 
 _CommonValueExpression_collection = (Core.Name "collection")
 
-_CommonValueExpression_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "numeric"),
-      Core.fieldTypeType = _NumericValueExpression_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "string"),
-      Core.fieldTypeType = _StringValueExpression_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "datetime"),
-      Core.fieldTypeType = _DatetimeValueExpression_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "interval"),
-      Core.fieldTypeType = _IntervalValueExpression_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "userDefined"),
-      Core.fieldTypeType = _UserDefinedTypeValueExpression_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "reference"),
-      Core.fieldTypeType = _ReferenceValueExpression_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "collection"),
-      Core.fieldTypeType = _CollectionValueExpression_type_}]}))
-
 data ContextuallyTypedRowValueExpression = 
   ContextuallyTypedRowValueExpressionSpecialCase RowValueSpecialCase |
   ContextuallyTypedRowValueExpressionConstructor ContextuallyTypedRowValueConstructor
@@ -999,27 +541,11 @@ _ContextuallyTypedRowValueExpression_specialCase = (Core.Name "specialCase")
 
 _ContextuallyTypedRowValueExpression_constructor = (Core.Name "constructor")
 
-_ContextuallyTypedRowValueExpression_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "specialCase"),
-      Core.fieldTypeType = _RowValueSpecialCase_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "constructor"),
-      Core.fieldTypeType = _ContextuallyTypedRowValueConstructor_type_}]}))
-
 data ContextuallyTypedRowValueConstructor = 
   ContextuallyTypedRowValueConstructor {}
   deriving (Eq, Ord, Read, Show)
 
 _ContextuallyTypedRowValueConstructor = (Core.Name "hydra/langs/sql/ansi.ContextuallyTypedRowValueConstructor")
-
-_ContextuallyTypedRowValueConstructor_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data ContextuallyTypedRowValueExpressionList = 
   ContextuallyTypedRowValueExpressionList {
@@ -1033,25 +559,12 @@ _ContextuallyTypedRowValueExpressionList_first = (Core.Name "first")
 
 _ContextuallyTypedRowValueExpressionList_rest = (Core.Name "rest")
 
-_ContextuallyTypedRowValueExpressionList_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "first"),
-      Core.fieldTypeType = _ContextuallyTypedRowValueExpression_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rest"),
-      Core.fieldTypeType = (Core.TypeList _ContextuallyTypedRowValueExpression_type_)}]}))
-
 newtype ContextuallyTypedTableValueConstructor = 
   ContextuallyTypedTableValueConstructor {
     unContextuallyTypedTableValueConstructor :: ContextuallyTypedRowValueExpressionList}
   deriving (Eq, Ord, Read, Show)
 
 _ContextuallyTypedTableValueConstructor = (Core.Name "hydra/langs/sql/ansi.ContextuallyTypedTableValueConstructor")
-
-_ContextuallyTypedTableValueConstructor_type_ = _ContextuallyTypedRowValueExpressionList_type_
 
 data DataType = 
   DataTypePredefined PredefinedType |
@@ -1073,34 +586,12 @@ _DataType_reference = (Core.Name "reference")
 
 _DataType_collection = (Core.Name "collection")
 
-_DataType_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "predefined"),
-      Core.fieldTypeType = _PredefinedType_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "row"),
-      Core.fieldTypeType = _RowType_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "named"),
-      Core.fieldTypeType = _PathResolvedUserDefinedTypeName_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "reference"),
-      Core.fieldTypeType = _ReferenceType_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "collection"),
-      Core.fieldTypeType = _CollectionType_type_}]}))
-
 newtype DateLiteral = 
   DateLiteral {
     unDateLiteral :: DateString}
   deriving (Eq, Ord, Read, Show)
 
 _DateLiteral = (Core.Name "hydra/langs/sql/ansi.DateLiteral")
-
-_DateLiteral_type_ = _DateString_type_
 
 data DatetimeLiteral = 
   DatetimeLiteralDate DateLiteral |
@@ -1116,30 +607,11 @@ _DatetimeLiteral_time = (Core.Name "time")
 
 _DatetimeLiteral_timestamp = (Core.Name "timestamp")
 
-_DatetimeLiteral_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "date"),
-      Core.fieldTypeType = _DateLiteral_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "time"),
-      Core.fieldTypeType = _TimeLiteral_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "timestamp"),
-      Core.fieldTypeType = _TimestampLiteral_type_}]}))
-
 data DatetimeType = 
   DatetimeType {}
   deriving (Eq, Ord, Read, Show)
 
 _DatetimeType = (Core.Name "hydra/langs/sql/ansi.DatetimeType")
-
-_DatetimeType_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data DatetimeValueExpression = 
   DatetimeValueExpression {}
@@ -1147,21 +619,11 @@ data DatetimeValueExpression =
 
 _DatetimeValueExpression = (Core.Name "hydra/langs/sql/ansi.DatetimeValueExpression")
 
-_DatetimeValueExpression_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
-
 data DefaultClause = 
   DefaultClause {}
   deriving (Eq, Ord, Read, Show)
 
 _DefaultClause = (Core.Name "hydra/langs/sql/ansi.DefaultClause")
-
-_DefaultClause_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data ExactNumericType = 
   ExactNumericTypeNumeric (Maybe ExactNumericType_Numeric_Option) |
@@ -1189,44 +651,6 @@ _ExactNumericType_int = (Core.Name "int")
 
 _ExactNumericType_bigint = (Core.Name "bigint")
 
-_ExactNumericType_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "numeric"),
-      Core.fieldTypeType = (Core.TypeOptional _ExactNumericType_Numeric_Option_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "decimal"),
-      Core.fieldTypeType = (Core.TypeOptional _ExactNumericType_Decimal_Option_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "dec"),
-      Core.fieldTypeType = (Core.TypeOptional _ExactNumericType_Dec_Option_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "smallint"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "integer"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "int"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "bigint"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))}]}))
-
 data ExactNumericType_Numeric_Option = 
   ExactNumericType_Numeric_Option {
     exactNumericType_Numeric_OptionPrecision :: Precision,
@@ -1238,17 +662,6 @@ _ExactNumericType_Numeric_Option = (Core.Name "hydra/langs/sql/ansi.ExactNumeric
 _ExactNumericType_Numeric_Option_precision = (Core.Name "precision")
 
 _ExactNumericType_Numeric_Option_sequence = (Core.Name "sequence")
-
-_ExactNumericType_Numeric_Option_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "precision"),
-      Core.fieldTypeType = _Precision_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "sequence"),
-      Core.fieldTypeType = (Core.TypeOptional _Scale_type_)}]}))
 
 data ExactNumericType_Decimal_Option = 
   ExactNumericType_Decimal_Option {
@@ -1262,17 +675,6 @@ _ExactNumericType_Decimal_Option_precision = (Core.Name "precision")
 
 _ExactNumericType_Decimal_Option_sequence = (Core.Name "sequence")
 
-_ExactNumericType_Decimal_Option_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "precision"),
-      Core.fieldTypeType = _Precision_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "sequence"),
-      Core.fieldTypeType = (Core.TypeOptional _Scale_type_)}]}))
-
 data ExactNumericType_Dec_Option = 
   ExactNumericType_Dec_Option {
     exactNumericType_Dec_OptionPrecision :: Precision,
@@ -1285,27 +687,11 @@ _ExactNumericType_Dec_Option_precision = (Core.Name "precision")
 
 _ExactNumericType_Dec_Option_sequence = (Core.Name "sequence")
 
-_ExactNumericType_Dec_Option_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "precision"),
-      Core.fieldTypeType = _Precision_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "sequence"),
-      Core.fieldTypeType = (Core.TypeOptional _Scale_type_)}]}))
-
 data FieldReference = 
   FieldReference {}
   deriving (Eq, Ord, Read, Show)
 
 _FieldReference = (Core.Name "hydra/langs/sql/ansi.FieldReference")
-
-_FieldReference_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data FromConstructor = 
   FromConstructor {
@@ -1322,41 +708,17 @@ _FromConstructor_override = (Core.Name "override")
 
 _FromConstructor_values = (Core.Name "values")
 
-_FromConstructor_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "columns"),
-      Core.fieldTypeType = (Core.TypeOptional _InsertColumnList_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "override"),
-      Core.fieldTypeType = (Core.TypeOptional _OverrideClause_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "values"),
-      Core.fieldTypeType = _ContextuallyTypedTableValueConstructor_type_}]}))
-
 data FromDefault = 
   FromDefault {}
   deriving (Eq, Ord, Read, Show)
 
 _FromDefault = (Core.Name "hydra/langs/sql/ansi.FromDefault")
 
-_FromDefault_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
-
 data FromSubquery = 
   FromSubquery {}
   deriving (Eq, Ord, Read, Show)
 
 _FromSubquery = (Core.Name "hydra/langs/sql/ansi.FromSubquery")
-
-_FromSubquery_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data GeneralLiteral = 
   GeneralLiteralString CharacterStringLiteral |
@@ -1384,53 +746,17 @@ _GeneralLiteral_interval = (Core.Name "interval")
 
 _GeneralLiteral_boolean = (Core.Name "boolean")
 
-_GeneralLiteral_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "string"),
-      Core.fieldTypeType = _CharacterStringLiteral_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "nationalString"),
-      Core.fieldTypeType = _NationalCharacterStringLiteral_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "unicode"),
-      Core.fieldTypeType = _UnicodeCharacterStringLiteral_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "binary"),
-      Core.fieldTypeType = _BinaryStringLiteral_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "dateTime"),
-      Core.fieldTypeType = _DatetimeLiteral_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "interval"),
-      Core.fieldTypeType = _IntervalLiteral_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "boolean"),
-      Core.fieldTypeType = _BooleanLiteral_type_}]}))
-
 data GeneralValueSpecification = 
   GeneralValueSpecification {}
   deriving (Eq, Ord, Read, Show)
 
 _GeneralValueSpecification = (Core.Name "hydra/langs/sql/ansi.GeneralValueSpecification")
 
-_GeneralValueSpecification_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
-
 data GenerationClause = 
   GenerationClause {}
   deriving (Eq, Ord, Read, Show)
 
 _GenerationClause = (Core.Name "hydra/langs/sql/ansi.GenerationClause")
-
-_GenerationClause_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data GlobalOrLocal = 
   GlobalOrLocalGlobal  |
@@ -1443,33 +769,11 @@ _GlobalOrLocal_global = (Core.Name "global")
 
 _GlobalOrLocal_local = (Core.Name "local")
 
-_GlobalOrLocal_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "global"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "local"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))}]}))
-
 data IdentityColumnSpecification = 
   IdentityColumnSpecification {}
   deriving (Eq, Ord, Read, Show)
 
 _IdentityColumnSpecification = (Core.Name "hydra/langs/sql/ansi.IdentityColumnSpecification")
-
-_IdentityColumnSpecification_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 newtype InsertColumnList = 
   InsertColumnList {
@@ -1477,8 +781,6 @@ newtype InsertColumnList =
   deriving (Eq, Ord, Read, Show)
 
 _InsertColumnList = (Core.Name "hydra/langs/sql/ansi.InsertColumnList")
-
-_InsertColumnList_type_ = _ColumnNameList_type_
 
 data InsertColumnsAndSource = 
   InsertColumnsAndSourceSubquery FromSubquery |
@@ -1494,20 +796,6 @@ _InsertColumnsAndSource_constructor = (Core.Name "constructor")
 
 _InsertColumnsAndSource_default = (Core.Name "default")
 
-_InsertColumnsAndSource_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "subquery"),
-      Core.fieldTypeType = _FromSubquery_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "constructor"),
-      Core.fieldTypeType = _FromConstructor_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "default"),
-      Core.fieldTypeType = _FromDefault_type_}]}))
-
 data InsertStatement = 
   InsertStatement {
     insertStatementTarget :: InsertionTarget,
@@ -1520,17 +808,6 @@ _InsertStatement_target = (Core.Name "target")
 
 _InsertStatement_columnsAndSource = (Core.Name "columnsAndSource")
 
-_InsertStatement_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "target"),
-      Core.fieldTypeType = _InsertionTarget_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "columnsAndSource"),
-      Core.fieldTypeType = _InsertColumnsAndSource_type_}]}))
-
 newtype InsertionTarget = 
   InsertionTarget {
     unInsertionTarget :: TableName}
@@ -1538,18 +815,11 @@ newtype InsertionTarget =
 
 _InsertionTarget = (Core.Name "hydra/langs/sql/ansi.InsertionTarget")
 
-_InsertionTarget_type_ = _TableName_type_
-
 data IntervalLiteral = 
   IntervalLiteral {}
   deriving (Eq, Ord, Read, Show)
 
 _IntervalLiteral = (Core.Name "hydra/langs/sql/ansi.IntervalLiteral")
-
-_IntervalLiteral_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data IntervalType = 
   IntervalType {}
@@ -1557,32 +827,17 @@ data IntervalType =
 
 _IntervalType = (Core.Name "hydra/langs/sql/ansi.IntervalType")
 
-_IntervalType_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
-
 data IntervalValueExpression = 
   IntervalValueExpression {}
   deriving (Eq, Ord, Read, Show)
 
 _IntervalValueExpression = (Core.Name "hydra/langs/sql/ansi.IntervalValueExpression")
 
-_IntervalValueExpression_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
-
 data LargeObjectLength = 
   LargeObjectLength {}
   deriving (Eq, Ord, Read, Show)
 
 _LargeObjectLength = (Core.Name "hydra/langs/sql/ansi.LargeObjectLength")
-
-_LargeObjectLength_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 newtype Length = 
   Length {
@@ -1591,18 +846,11 @@ newtype Length =
 
 _Length = (Core.Name "hydra/langs/sql/ansi.Length")
 
-_Length_type_ = _UnsignedInteger_type_
-
 data LikeClause = 
   LikeClause {}
   deriving (Eq, Ord, Read, Show)
 
 _LikeClause = (Core.Name "hydra/langs/sql/ansi.LikeClause")
-
-_LikeClause_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data MethodInvocation = 
   MethodInvocation {}
@@ -1610,21 +858,11 @@ data MethodInvocation =
 
 _MethodInvocation = (Core.Name "hydra/langs/sql/ansi.MethodInvocation")
 
-_MethodInvocation_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
-
 data MultisetElementReference = 
   MultisetElementReference {}
   deriving (Eq, Ord, Read, Show)
 
 _MultisetElementReference = (Core.Name "hydra/langs/sql/ansi.MultisetElementReference")
-
-_MultisetElementReference_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 newtype MultisetType = 
   MultisetType {
@@ -1633,18 +871,11 @@ newtype MultisetType =
 
 _MultisetType = (Core.Name "hydra/langs/sql/ansi.MultisetType")
 
-_MultisetType_type_ = _DataType_type_
-
 data MultisetValueConstructor = 
   MultisetValueConstructor {}
   deriving (Eq, Ord, Read, Show)
 
 _MultisetValueConstructor = (Core.Name "hydra/langs/sql/ansi.MultisetValueConstructor")
-
-_MultisetValueConstructor_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data MultisetValueExpression = 
   MultisetValueExpression {}
@@ -1652,21 +883,11 @@ data MultisetValueExpression =
 
 _MultisetValueExpression = (Core.Name "hydra/langs/sql/ansi.MultisetValueExpression")
 
-_MultisetValueExpression_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
-
 data NationalCharacterStringType = 
   NationalCharacterStringType {}
   deriving (Eq, Ord, Read, Show)
 
 _NationalCharacterStringType = (Core.Name "hydra/langs/sql/ansi.NationalCharacterStringType")
-
-_NationalCharacterStringType_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data NewSpecification = 
   NewSpecification {}
@@ -1674,21 +895,11 @@ data NewSpecification =
 
 _NewSpecification = (Core.Name "hydra/langs/sql/ansi.NewSpecification")
 
-_NewSpecification_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
-
 data NextValueExpression = 
   NextValueExpression {}
   deriving (Eq, Ord, Read, Show)
 
 _NextValueExpression = (Core.Name "hydra/langs/sql/ansi.NextValueExpression")
-
-_NextValueExpression_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data NumericType = 
   NumericTypeExact ExactNumericType |
@@ -1701,27 +912,11 @@ _NumericType_exact = (Core.Name "exact")
 
 _NumericType_approximate = (Core.Name "approximate")
 
-_NumericType_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "exact"),
-      Core.fieldTypeType = _ExactNumericType_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "approximate"),
-      Core.fieldTypeType = _ApproximateNumericType_type_}]}))
-
 data NumericValueExpression = 
   NumericValueExpression {}
   deriving (Eq, Ord, Read, Show)
 
 _NumericValueExpression = (Core.Name "hydra/langs/sql/ansi.NumericValueExpression")
-
-_NumericValueExpression_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data OverrideClause = 
   OverrideClauseOVERRIDINGSpUSERSpVALUE  |
@@ -1734,23 +929,6 @@ _OverrideClause_oVERRIDINGSpUSERSpVALUE = (Core.Name "oVERRIDINGSpUSERSpVALUE")
 
 _OverrideClause_oVERRIDINGSpSYSTEMSpVALUE = (Core.Name "oVERRIDINGSpSYSTEMSpVALUE")
 
-_OverrideClause_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "oVERRIDINGSpUSERSpVALUE"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "oVERRIDINGSpSYSTEMSpVALUE"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))}]}))
-
 newtype ParenthesizedValueExpression = 
   ParenthesizedValueExpression {
     unParenthesizedValueExpression :: ValueExpression}
@@ -1758,16 +936,12 @@ newtype ParenthesizedValueExpression =
 
 _ParenthesizedValueExpression = (Core.Name "hydra/langs/sql/ansi.ParenthesizedValueExpression")
 
-_ParenthesizedValueExpression_type_ = _ValueExpression_type_
-
 newtype Precision = 
   Precision {
     unPrecision :: UnsignedInteger}
   deriving (Eq, Ord, Read, Show)
 
 _Precision = (Core.Name "hydra/langs/sql/ansi.Precision")
-
-_Precision_type_ = _UnsignedInteger_type_
 
 data PredefinedType = 
   PredefinedTypeString PredefinedType_String |
@@ -1795,32 +969,6 @@ _PredefinedType_datetime = (Core.Name "datetime")
 
 _PredefinedType_interval = (Core.Name "interval")
 
-_PredefinedType_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "string"),
-      Core.fieldTypeType = _PredefinedType_String_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "nationalString"),
-      Core.fieldTypeType = _PredefinedType_NationalString_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "blob"),
-      Core.fieldTypeType = _BinaryLargeObjectStringType_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "numeric"),
-      Core.fieldTypeType = _NumericType_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "boolean"),
-      Core.fieldTypeType = _BooleanType_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "datetime"),
-      Core.fieldTypeType = _DatetimeType_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "interval"),
-      Core.fieldTypeType = _IntervalType_type_}]}))
-
 data PredefinedType_String = 
   PredefinedType_String {
     predefinedType_StringType :: CharacterStringType,
@@ -1836,20 +984,6 @@ _PredefinedType_String_characters = (Core.Name "characters")
 
 _PredefinedType_String_collate = (Core.Name "collate")
 
-_PredefinedType_String_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "type"),
-      Core.fieldTypeType = _CharacterStringType_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "characters"),
-      Core.fieldTypeType = (Core.TypeOptional _CharacterSetSpecification_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "collate"),
-      Core.fieldTypeType = (Core.TypeOptional _CollateClause_type_)}]}))
-
 data PredefinedType_NationalString = 
   PredefinedType_NationalString {
     predefinedType_NationalStringType :: NationalCharacterStringType,
@@ -1862,27 +996,11 @@ _PredefinedType_NationalString_type = (Core.Name "type")
 
 _PredefinedType_NationalString_collate = (Core.Name "collate")
 
-_PredefinedType_NationalString_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "type"),
-      Core.fieldTypeType = _NationalCharacterStringType_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "collate"),
-      Core.fieldTypeType = (Core.TypeOptional _CollateClause_type_)}]}))
-
 data Predicate = 
   Predicate {}
   deriving (Eq, Ord, Read, Show)
 
 _Predicate = (Core.Name "hydra/langs/sql/ansi.Predicate")
-
-_Predicate_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data QueryExpression = 
   QueryExpression {}
@@ -1890,21 +1008,11 @@ data QueryExpression =
 
 _QueryExpression = (Core.Name "hydra/langs/sql/ansi.QueryExpression")
 
-_QueryExpression_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
-
 data ReferenceScopeCheck = 
   ReferenceScopeCheck {}
   deriving (Eq, Ord, Read, Show)
 
 _ReferenceScopeCheck = (Core.Name "hydra/langs/sql/ansi.ReferenceScopeCheck")
-
-_ReferenceScopeCheck_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data ReferenceType = 
   ReferenceType {}
@@ -1912,21 +1020,11 @@ data ReferenceType =
 
 _ReferenceType = (Core.Name "hydra/langs/sql/ansi.ReferenceType")
 
-_ReferenceType_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
-
 data RowType = 
   RowType {}
   deriving (Eq, Ord, Read, Show)
 
 _RowType = (Core.Name "hydra/langs/sql/ansi.RowType")
-
-_RowType_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 newtype RowValueSpecialCase = 
   RowValueSpecialCase {
@@ -1934,8 +1032,6 @@ newtype RowValueSpecialCase =
   deriving (Eq, Ord, Read, Show)
 
 _RowValueSpecialCase = (Core.Name "hydra/langs/sql/ansi.RowValueSpecialCase")
-
-_RowValueSpecialCase_type_ = _NonparenthesizedValueExpressionPrimary_type_
 
 data NonparenthesizedValueExpressionPrimary = 
   NonparenthesizedValueExpressionPrimaryUnsigned UnsignedValueSpecification |
@@ -1999,78 +1095,11 @@ _NonparenthesizedValueExpressionPrimary_routine = (Core.Name "routine")
 
 _NonparenthesizedValueExpressionPrimary_next = (Core.Name "next")
 
-_NonparenthesizedValueExpressionPrimary_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "unsigned"),
-      Core.fieldTypeType = _UnsignedValueSpecification_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "column"),
-      Core.fieldTypeType = _ColumnReference_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "setFunction"),
-      Core.fieldTypeType = _SetFunctionSpecification_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "windowFunction"),
-      Core.fieldTypeType = _WindowFunction_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "scalarSubquery"),
-      Core.fieldTypeType = _ScalarSubquery_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "cases"),
-      Core.fieldTypeType = _CaseExpression_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "cast"),
-      Core.fieldTypeType = _CastSpecification_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "field"),
-      Core.fieldTypeType = _FieldReference_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "subtype"),
-      Core.fieldTypeType = _SubtypeTreatment_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "method"),
-      Core.fieldTypeType = _MethodInvocation_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "staticMethod"),
-      Core.fieldTypeType = _StaticMethodInvocation_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "new"),
-      Core.fieldTypeType = _NewSpecification_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "attributeOrMethod"),
-      Core.fieldTypeType = _AttributeOrMethodReference_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "reference"),
-      Core.fieldTypeType = _ReferenceResolution_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "collection"),
-      Core.fieldTypeType = _CollectionValueConstructor_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "arrayElement"),
-      Core.fieldTypeType = _ArrayElementReference_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "multisetElement"),
-      Core.fieldTypeType = _MultisetElementReference_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "routine"),
-      Core.fieldTypeType = _RoutineInvocation_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "next"),
-      Core.fieldTypeType = _NextValueExpression_type_}]}))
-
 data ReferenceResolution = 
   ReferenceResolution {}
   deriving (Eq, Ord, Read, Show)
 
 _ReferenceResolution = (Core.Name "hydra/langs/sql/ansi.ReferenceResolution")
-
-_ReferenceResolution_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 newtype ReferenceValueExpression = 
   ReferenceValueExpression {
@@ -2079,29 +1108,17 @@ newtype ReferenceValueExpression =
 
 _ReferenceValueExpression = (Core.Name "hydra/langs/sql/ansi.ReferenceValueExpression")
 
-_ReferenceValueExpression_type_ = _ValueExpressionPrimary_type_
-
 data RowValueExpression = 
   RowValueExpression {}
   deriving (Eq, Ord, Read, Show)
 
 _RowValueExpression = (Core.Name "hydra/langs/sql/ansi.RowValueExpression")
 
-_RowValueExpression_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
-
 data RoutineInvocation = 
   RoutineInvocation {}
   deriving (Eq, Ord, Read, Show)
 
 _RoutineInvocation = (Core.Name "hydra/langs/sql/ansi.RoutineInvocation")
-
-_RoutineInvocation_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 newtype ScalarSubquery = 
   ScalarSubquery {
@@ -2110,8 +1127,6 @@ newtype ScalarSubquery =
 
 _ScalarSubquery = (Core.Name "hydra/langs/sql/ansi.ScalarSubquery")
 
-_ScalarSubquery_type_ = _Subquery_type_
-
 newtype Scale = 
   Scale {
     unScale :: UnsignedInteger}
@@ -2119,18 +1134,11 @@ newtype Scale =
 
 _Scale = (Core.Name "hydra/langs/sql/ansi.Scale")
 
-_Scale_type_ = _UnsignedInteger_type_
-
 data SelfReferencingColumnSpecification = 
   SelfReferencingColumnSpecification {}
   deriving (Eq, Ord, Read, Show)
 
 _SelfReferencingColumnSpecification = (Core.Name "hydra/langs/sql/ansi.SelfReferencingColumnSpecification")
-
-_SelfReferencingColumnSpecification_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data SetFunctionSpecification = 
   SetFunctionSpecification {}
@@ -2138,32 +1146,17 @@ data SetFunctionSpecification =
 
 _SetFunctionSpecification = (Core.Name "hydra/langs/sql/ansi.SetFunctionSpecification")
 
-_SetFunctionSpecification_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
-
 data StaticMethodInvocation = 
   StaticMethodInvocation {}
   deriving (Eq, Ord, Read, Show)
 
 _StaticMethodInvocation = (Core.Name "hydra/langs/sql/ansi.StaticMethodInvocation")
 
-_StaticMethodInvocation_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
-
 data StringValueExpression = 
   StringValueExpression {}
   deriving (Eq, Ord, Read, Show)
 
 _StringValueExpression = (Core.Name "hydra/langs/sql/ansi.StringValueExpression")
-
-_StringValueExpression_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 newtype Subquery = 
   Subquery {
@@ -2172,29 +1165,17 @@ newtype Subquery =
 
 _Subquery = (Core.Name "hydra/langs/sql/ansi.Subquery")
 
-_Subquery_type_ = _QueryExpression_type_
-
 data SubtableClause = 
   SubtableClause {}
   deriving (Eq, Ord, Read, Show)
 
 _SubtableClause = (Core.Name "hydra/langs/sql/ansi.SubtableClause")
 
-_SubtableClause_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
-
 data SubtypeTreatment = 
   SubtypeTreatment {}
   deriving (Eq, Ord, Read, Show)
 
 _SubtypeTreatment = (Core.Name "hydra/langs/sql/ansi.SubtypeTreatment")
-
-_SubtypeTreatment_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data TableCommitAction = 
   TableCommitActionPreserve  |
@@ -2207,33 +1188,11 @@ _TableCommitAction_preserve = (Core.Name "preserve")
 
 _TableCommitAction_delete = (Core.Name "delete")
 
-_TableCommitAction_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "preserve"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "delete"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))}]}))
-
 data TableConstraintDefinition = 
   TableConstraintDefinition {}
   deriving (Eq, Ord, Read, Show)
 
 _TableConstraintDefinition = (Core.Name "hydra/langs/sql/ansi.TableConstraintDefinition")
-
-_TableConstraintDefinition_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))
 
 data TableContentsSource = 
   TableContentsSourceList TableElementList |
@@ -2249,20 +1208,6 @@ _TableContentsSource_subtable = (Core.Name "subtable")
 
 _TableContentsSource_subquery = (Core.Name "subquery")
 
-_TableContentsSource_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "list"),
-      Core.fieldTypeType = _TableElementList_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "subtable"),
-      Core.fieldTypeType = _TableContentsSource_Subtable_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "subquery"),
-      Core.fieldTypeType = _AsSubqueryClause_type_}]}))
-
 data TableContentsSource_Subtable = 
   TableContentsSource_Subtable {
     tableContentsSource_SubtableType :: PathResolvedUserDefinedTypeName,
@@ -2277,20 +1222,6 @@ _TableContentsSource_Subtable_type = (Core.Name "type")
 _TableContentsSource_Subtable_subtable = (Core.Name "subtable")
 
 _TableContentsSource_Subtable_elements = (Core.Name "elements")
-
-_TableContentsSource_Subtable_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "type"),
-      Core.fieldTypeType = _PathResolvedUserDefinedTypeName_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "subtable"),
-      Core.fieldTypeType = (Core.TypeOptional _SubtableClause_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "elements"),
-      Core.fieldTypeType = (Core.TypeOptional _TableElementList_type_)}]}))
 
 data TableDefinition = 
   TableDefinition {
@@ -2309,23 +1240,6 @@ _TableDefinition_name = (Core.Name "name")
 _TableDefinition_source = (Core.Name "source")
 
 _TableDefinition_commitActions = (Core.Name "commitActions")
-
-_TableDefinition_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "scope"),
-      Core.fieldTypeType = (Core.TypeOptional _TableScope_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _TableName_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "source"),
-      Core.fieldTypeType = _TableContentsSource_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "commitActions"),
-      Core.fieldTypeType = (Core.TypeOptional _TableCommitAction_type_)}]}))
 
 data TableElement = 
   TableElementColumn ColumnDefinition |
@@ -2347,26 +1261,6 @@ _TableElement_selfReferencingColumn = (Core.Name "selfReferencingColumn")
 
 _TableElement_columOptions = (Core.Name "columOptions")
 
-_TableElement_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "column"),
-      Core.fieldTypeType = _ColumnDefinition_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tableConstraint"),
-      Core.fieldTypeType = _TableConstraintDefinition_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "like"),
-      Core.fieldTypeType = _LikeClause_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "selfReferencingColumn"),
-      Core.fieldTypeType = _SelfReferencingColumnSpecification_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "columOptions"),
-      Core.fieldTypeType = _ColumnOptions_type_}]}))
-
 data TableElementList = 
   TableElementList {
     tableElementListFirst :: TableElement,
@@ -2379,17 +1273,6 @@ _TableElementList_first = (Core.Name "first")
 
 _TableElementList_rest = (Core.Name "rest")
 
-_TableElementList_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "first"),
-      Core.fieldTypeType = _TableElement_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "rest"),
-      Core.fieldTypeType = (Core.TypeList _TableElement_type_)}]}))
-
 newtype TableScope = 
   TableScope {
     unTableScope :: GlobalOrLocal}
@@ -2397,16 +1280,12 @@ newtype TableScope =
 
 _TableScope = (Core.Name "hydra/langs/sql/ansi.TableScope")
 
-_TableScope_type_ = _GlobalOrLocal_type_
-
 newtype TimeLiteral = 
   TimeLiteral {
     unTimeLiteral :: TimeString}
   deriving (Eq, Ord, Read, Show)
 
 _TimeLiteral = (Core.Name "hydra/langs/sql/ansi.TimeLiteral")
-
-_TimeLiteral_type_ = _TimeString_type_
 
 data TruthValue = 
   TruthValueTRUE  |
@@ -2422,29 +1301,6 @@ _TruthValue_fALSE = (Core.Name "fALSE")
 
 _TruthValue_uNKNOWN = (Core.Name "uNKNOWN")
 
-_TruthValue_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "tRUE"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "fALSE"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "uNKNOWN"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))}]}))
-
 data UnsignedLiteral = 
   UnsignedLiteralNumeric UnsignedNumericLiteral |
   UnsignedLiteralGeneral GeneralLiteral
@@ -2455,17 +1311,6 @@ _UnsignedLiteral = (Core.Name "hydra/langs/sql/ansi.UnsignedLiteral")
 _UnsignedLiteral_numeric = (Core.Name "numeric")
 
 _UnsignedLiteral_general = (Core.Name "general")
-
-_UnsignedLiteral_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "numeric"),
-      Core.fieldTypeType = _UnsignedNumericLiteral_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "general"),
-      Core.fieldTypeType = _GeneralLiteral_type_}]}))
 
 data UnsignedNumericLiteral = 
   UnsignedNumericLiteralExact ExactNumericLiteral |
@@ -2478,17 +1323,6 @@ _UnsignedNumericLiteral_exact = (Core.Name "exact")
 
 _UnsignedNumericLiteral_approximate = (Core.Name "approximate")
 
-_UnsignedNumericLiteral_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "exact"),
-      Core.fieldTypeType = _ExactNumericLiteral_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "approximate"),
-      Core.fieldTypeType = _ApproximateNumericLiteral_type_}]}))
-
 data UnsignedValueSpecification = 
   UnsignedValueSpecificationLiteral UnsignedLiteral |
   UnsignedValueSpecificationGeneral GeneralValueSpecification
@@ -2500,25 +1334,12 @@ _UnsignedValueSpecification_literal = (Core.Name "literal")
 
 _UnsignedValueSpecification_general = (Core.Name "general")
 
-_UnsignedValueSpecification_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "literal"),
-      Core.fieldTypeType = _UnsignedLiteral_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "general"),
-      Core.fieldTypeType = _GeneralValueSpecification_type_}]}))
-
 newtype UserDefinedTypeValueExpression = 
   UserDefinedTypeValueExpression {
     unUserDefinedTypeValueExpression :: ValueExpressionPrimary}
   deriving (Eq, Ord, Read, Show)
 
 _UserDefinedTypeValueExpression = (Core.Name "hydra/langs/sql/ansi.UserDefinedTypeValueExpression")
-
-_UserDefinedTypeValueExpression_type_ = _ValueExpressionPrimary_type_
 
 data ValueExpression = 
   ValueExpressionCommon CommonValueExpression |
@@ -2534,20 +1355,6 @@ _ValueExpression_boolean = (Core.Name "boolean")
 
 _ValueExpression_row = (Core.Name "row")
 
-_ValueExpression_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "common"),
-      Core.fieldTypeType = _CommonValueExpression_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "boolean"),
-      Core.fieldTypeType = _BooleanValueExpression_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "row"),
-      Core.fieldTypeType = _RowValueExpression_type_}]}))
-
 data ValueExpressionPrimary = 
   ValueExpressionPrimaryParens ParenthesizedValueExpression |
   ValueExpressionPrimaryNoparens NonparenthesizedValueExpressionPrimary
@@ -2559,24 +1366,8 @@ _ValueExpressionPrimary_parens = (Core.Name "parens")
 
 _ValueExpressionPrimary_noparens = (Core.Name "noparens")
 
-_ValueExpressionPrimary_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "Placeholder"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "parens"),
-      Core.fieldTypeType = _ParenthesizedValueExpression_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "noparens"),
-      Core.fieldTypeType = _NonparenthesizedValueExpressionPrimary_type_}]}))
-
 data WindowFunction = 
   WindowFunction {}
   deriving (Eq, Ord, Read, Show)
 
 _WindowFunction = (Core.Name "hydra/langs/sql/ansi.WindowFunction")
-
-_WindowFunction_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = []}))

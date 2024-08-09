@@ -29,8 +29,8 @@ getState = (Compute.Flow (\s0 -> \t0 ->
 -- | Get the annotated type of a given term, if any
 getTermType :: (Core.Term -> Maybe Core.Type)
 getTermType x = case x of
-  Core.TermAnnotated v272 -> (getTermType (Core.annotatedTermSubject v272))
-  Core.TermTyped v273 -> (Just (Core.typedTermType v273))
+  Core.TermAnnotated v308 -> (getTermType (Core.annotatedTermSubject v308))
+  Core.TermTyped v309 -> (Just (Core.typedTermType v309))
   _ -> Nothing
 
 -- | Set the state of a flow
@@ -49,7 +49,7 @@ requireElementType el =
           Nothing -> (Flows.fail (Strings.cat [
             "missing type annotation for element ",
             (Core.unName (Graph.elementName el))]))
-          Just v274 -> (Flows.pure v274))
+          Just v310 -> (Flows.pure v310))
   in (withType (getTermType (Graph.elementData el)))
 
 -- | Get the annotated type of a given term, or fail if it is missing
@@ -58,7 +58,7 @@ requireTermType x = (withType (getTermType x))
   where 
     withType = (\x -> case x of
       Nothing -> (Flows.fail "missing type annotation")
-      Just v275 -> (Flows.pure v275))
+      Just v311 -> (Flows.pure v311))
 
 -- | Fail if an actual value does not match an expected value
 unexpected :: (String -> String -> Compute.Flow s x)

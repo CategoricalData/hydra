@@ -16,8 +16,6 @@ newtype ColumnName =
 
 _ColumnName = (Core.Name "hydra/langs/relationalModel.ColumnName")
 
-_ColumnName_type_ = (Core.TypeLiteral Core.LiteralTypeString)
-
 -- | An abstract specification of the domain represented by a column in a relation; a role
 data ColumnSchema t = 
   ColumnSchema {
@@ -37,22 +35,6 @@ _ColumnSchema_domain = (Core.Name "domain")
 
 _ColumnSchema_isPrimaryKey = (Core.Name "isPrimaryKey")
 
-_ColumnSchema_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "t"),
-  Core.lambdaTypeBody = (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = (Core.Name "hydra/langs/relationalModel.ColumnSchema"),
-    Core.rowTypeExtends = Nothing,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "name"),
-        Core.fieldTypeType = _ColumnName_type_},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "domain"),
-        Core.fieldTypeType = (Core.TypeVariable (Core.Name "t"))},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "isPrimaryKey"),
-        Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))}))
-
 -- | A mapping from certain columns of a source relation to primary key columns of a target relation
 data ForeignKey = 
   ForeignKey {
@@ -67,19 +49,6 @@ _ForeignKey_foreignRelation = (Core.Name "foreignRelation")
 
 _ForeignKey_keys = (Core.Name "keys")
 
-_ForeignKey_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/relationalModel.ForeignKey"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "foreignRelation"),
-      Core.fieldTypeType = _RelationName_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "keys"),
-      Core.fieldTypeType = (Core.TypeMap (Core.MapType {
-        Core.mapTypeKeys = _ColumnName_type_,
-        Core.mapTypeValues = _ColumnName_type_}))}]}))
-
 -- | A primary key of a relation, specified either as a single column, or as a list of columns
 newtype PrimaryKey = 
   PrimaryKey {
@@ -87,8 +56,6 @@ newtype PrimaryKey =
   deriving (Eq, Ord, Read, Show)
 
 _PrimaryKey = (Core.Name "hydra/langs/relationalModel.PrimaryKey")
-
-_PrimaryKey_type_ = (Core.TypeList _ColumnName_type_)
 
 -- | A set of distinct n-tuples; a table
 newtype Relation v = 
@@ -98,10 +65,6 @@ newtype Relation v =
 
 _Relation = (Core.Name "hydra/langs/relationalModel.Relation")
 
-_Relation_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "v"),
-  Core.lambdaTypeBody = (Core.TypeSet (Core.TypeList (Core.TypeVariable (Core.Name "v"))))}))
-
 -- | A unique relation (table) name
 newtype RelationName = 
   RelationName {
@@ -109,8 +72,6 @@ newtype RelationName =
   deriving (Eq, Ord, Read, Show)
 
 _RelationName = (Core.Name "hydra/langs/relationalModel.RelationName")
-
-_RelationName_type_ = (Core.TypeLiteral Core.LiteralTypeString)
 
 -- | An abstract relation; the name and columns of a relation without its actual data
 data RelationSchema t = 
@@ -135,27 +96,6 @@ _RelationSchema_primaryKeys = (Core.Name "primaryKeys")
 
 _RelationSchema_foreignKeys = (Core.Name "foreignKeys")
 
-_RelationSchema_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "t"),
-  Core.lambdaTypeBody = (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = (Core.Name "hydra/langs/relationalModel.RelationSchema"),
-    Core.rowTypeExtends = Nothing,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "name"),
-        Core.fieldTypeType = _RelationName_type_},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "columns"),
-        Core.fieldTypeType = (Core.TypeList (Core.TypeApplication (Core.ApplicationType {
-          Core.applicationTypeFunction = _ColumnSchema_type_,
-          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t"))})))},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "primaryKeys"),
-        Core.fieldTypeType = (Core.TypeList _PrimaryKey_type_)},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "foreignKeys"),
-        Core.fieldTypeType = (Core.TypeList _ForeignKey_type_)}]}))}))
-
 -- | A domain-unordered (string-indexed, rather than position-indexed) relation
 newtype Relationship v = 
   Relationship {
@@ -164,12 +104,6 @@ newtype Relationship v =
 
 _Relationship = (Core.Name "hydra/langs/relationalModel.Relationship")
 
-_Relationship_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "v"),
-  Core.lambdaTypeBody = (Core.TypeSet (Core.TypeMap (Core.MapType {
-    Core.mapTypeKeys = _ColumnName_type_,
-    Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))})))}))
-
 -- | An n-tuple which is an element of a given relation
 newtype Row v = 
   Row {
@@ -177,7 +111,3 @@ newtype Row v =
   deriving (Eq, Ord, Read, Show)
 
 _Row = (Core.Name "hydra/langs/relationalModel.Row")
-
-_Row_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "v"),
-  Core.lambdaTypeBody = (Core.TypeList (Core.TypeVariable (Core.Name "v")))}))

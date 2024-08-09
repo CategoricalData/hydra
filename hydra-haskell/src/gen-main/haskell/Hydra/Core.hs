@@ -20,19 +20,6 @@ _AnnotatedTerm_subject = (Name "subject")
 
 _AnnotatedTerm_annotation = (Name "annotation")
 
-_AnnotatedTerm_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.AnnotatedTerm"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "subject"),
-      fieldTypeType = _Term_type_},
-    FieldType {
-      fieldTypeName = (Name "annotation"),
-      fieldTypeType = (TypeMap (MapType {
-        mapTypeKeys = (TypeLiteral LiteralTypeString),
-        mapTypeValues = _Term_type_}))}]}))
-
 -- | A type together with an annotation
 data AnnotatedType = 
   AnnotatedType {
@@ -45,19 +32,6 @@ _AnnotatedType = (Name "hydra/core.AnnotatedType")
 _AnnotatedType_subject = (Name "subject")
 
 _AnnotatedType_annotation = (Name "annotation")
-
-_AnnotatedType_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.AnnotatedType"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "subject"),
-      fieldTypeType = _Type_type_},
-    FieldType {
-      fieldTypeName = (Name "annotation"),
-      fieldTypeType = (TypeMap (MapType {
-        mapTypeKeys = (TypeLiteral LiteralTypeString),
-        mapTypeValues = _Term_type_}))}]}))
 
 -- | A term which applies a function to an argument
 data Application = 
@@ -74,17 +48,6 @@ _Application_function = (Name "function")
 
 _Application_argument = (Name "argument")
 
-_Application_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.Application"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "function"),
-      fieldTypeType = _Term_type_},
-    FieldType {
-      fieldTypeName = (Name "argument"),
-      fieldTypeType = _Term_type_}]}))
-
 -- | The type-level analog of an application term
 data ApplicationType = 
   ApplicationType {
@@ -99,17 +62,6 @@ _ApplicationType = (Name "hydra/core.ApplicationType")
 _ApplicationType_function = (Name "function")
 
 _ApplicationType_argument = (Name "argument")
-
-_ApplicationType_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.ApplicationType"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "function"),
-      fieldTypeType = _Type_type_},
-    FieldType {
-      fieldTypeName = (Name "argument"),
-      fieldTypeType = _Type_type_}]}))
 
 -- | A union elimination; a case statement
 data CaseStatement = 
@@ -126,20 +78,6 @@ _CaseStatement_typeName = (Name "typeName")
 _CaseStatement_default = (Name "default")
 
 _CaseStatement_cases = (Name "cases")
-
-_CaseStatement_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.CaseStatement"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "typeName"),
-      fieldTypeType = _Name_type_},
-    FieldType {
-      fieldTypeName = (Name "default"),
-      fieldTypeType = (TypeOptional _Term_type_)},
-    FieldType {
-      fieldTypeName = (Name "cases"),
-      fieldTypeType = (TypeList _Field_type_)}]}))
 
 -- | A corresponding elimination for an introduction term
 data Elimination = 
@@ -171,29 +109,6 @@ _Elimination_union = (Name "union")
 
 _Elimination_wrap = (Name "wrap")
 
-_Elimination_type_ = (TypeUnion (RowType {
-  rowTypeTypeName = (Name "hydra/core.Elimination"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "list"),
-      fieldTypeType = _Term_type_},
-    FieldType {
-      fieldTypeName = (Name "optional"),
-      fieldTypeType = _OptionalCases_type_},
-    FieldType {
-      fieldTypeName = (Name "product"),
-      fieldTypeType = _TupleProjection_type_},
-    FieldType {
-      fieldTypeName = (Name "record"),
-      fieldTypeType = _Projection_type_},
-    FieldType {
-      fieldTypeName = (Name "union"),
-      fieldTypeType = _CaseStatement_type_},
-    FieldType {
-      fieldTypeName = (Name "wrap"),
-      fieldTypeType = _Name_type_}]}))
-
 -- | A name/term pair
 data Field = 
   Field {
@@ -207,17 +122,6 @@ _Field_name = (Name "name")
 
 _Field_term = (Name "term")
 
-_Field_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.Field"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "name"),
-      fieldTypeType = _Name_type_},
-    FieldType {
-      fieldTypeName = (Name "term"),
-      fieldTypeType = _Term_type_}]}))
-
 -- | A name/type pair
 data FieldType = 
   FieldType {
@@ -230,17 +134,6 @@ _FieldType = (Name "hydra/core.FieldType")
 _FieldType_name = (Name "name")
 
 _FieldType_type = (Name "type")
-
-_FieldType_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.FieldType"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "name"),
-      fieldTypeType = _Name_type_},
-    FieldType {
-      fieldTypeName = (Name "type"),
-      fieldTypeType = _Type_type_}]}))
 
 -- | A floating-point type
 data FloatType = 
@@ -256,29 +149,6 @@ _FloatType_bigfloat = (Name "bigfloat")
 _FloatType_float32 = (Name "float32")
 
 _FloatType_float64 = (Name "float64")
-
-_FloatType_type_ = (TypeUnion (RowType {
-  rowTypeTypeName = (Name "hydra/core.FloatType"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "bigfloat"),
-      fieldTypeType = (TypeRecord (RowType {
-        rowTypeTypeName = (Name "hydra/core.Unit"),
-        rowTypeExtends = Nothing,
-        rowTypeFields = []}))},
-    FieldType {
-      fieldTypeName = (Name "float32"),
-      fieldTypeType = (TypeRecord (RowType {
-        rowTypeTypeName = (Name "hydra/core.Unit"),
-        rowTypeExtends = Nothing,
-        rowTypeFields = []}))},
-    FieldType {
-      fieldTypeName = (Name "float64"),
-      fieldTypeType = (TypeRecord (RowType {
-        rowTypeTypeName = (Name "hydra/core.Unit"),
-        rowTypeExtends = Nothing,
-        rowTypeFields = []}))}]}))
 
 -- | A floating-point literal value
 data FloatValue = 
@@ -298,20 +168,6 @@ _FloatValue_float32 = (Name "float32")
 
 _FloatValue_float64 = (Name "float64")
 
-_FloatValue_type_ = (TypeUnion (RowType {
-  rowTypeTypeName = (Name "hydra/core.FloatValue"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "bigfloat"),
-      fieldTypeType = (TypeLiteral (LiteralTypeFloat FloatTypeBigfloat))},
-    FieldType {
-      fieldTypeName = (Name "float32"),
-      fieldTypeType = (TypeLiteral (LiteralTypeFloat FloatTypeFloat32))},
-    FieldType {
-      fieldTypeName = (Name "float64"),
-      fieldTypeType = (TypeLiteral (LiteralTypeFloat FloatTypeFloat64))}]}))
-
 -- | A function
 data Function = 
   -- | An elimination for any of a few term variants
@@ -330,20 +186,6 @@ _Function_lambda = (Name "lambda")
 
 _Function_primitive = (Name "primitive")
 
-_Function_type_ = (TypeUnion (RowType {
-  rowTypeTypeName = (Name "hydra/core.Function"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "elimination"),
-      fieldTypeType = _Elimination_type_},
-    FieldType {
-      fieldTypeName = (Name "lambda"),
-      fieldTypeType = _Lambda_type_},
-    FieldType {
-      fieldTypeName = (Name "primitive"),
-      fieldTypeType = _Name_type_}]}))
-
 -- | A function type, also known as an arrow type
 data FunctionType = 
   FunctionType {
@@ -357,17 +199,6 @@ _FunctionType_domain = (Name "domain")
 
 _FunctionType_codomain = (Name "codomain")
 
-_FunctionType_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.FunctionType"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "domain"),
-      fieldTypeType = _Type_type_},
-    FieldType {
-      fieldTypeName = (Name "codomain"),
-      fieldTypeType = _Type_type_}]}))
-
 -- | An instance of a union type; i.e. a string-indexed generalization of inl() or inr()
 data Injection = 
   Injection {
@@ -380,17 +211,6 @@ _Injection = (Name "hydra/core.Injection")
 _Injection_typeName = (Name "typeName")
 
 _Injection_field = (Name "field")
-
-_Injection_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.Injection"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "typeName"),
-      fieldTypeType = _Name_type_},
-    FieldType {
-      fieldTypeName = (Name "field"),
-      fieldTypeType = _Field_type_}]}))
 
 -- | An integer type
 data IntegerType = 
@@ -424,65 +244,6 @@ _IntegerType_uint16 = (Name "uint16")
 _IntegerType_uint32 = (Name "uint32")
 
 _IntegerType_uint64 = (Name "uint64")
-
-_IntegerType_type_ = (TypeUnion (RowType {
-  rowTypeTypeName = (Name "hydra/core.IntegerType"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "bigint"),
-      fieldTypeType = (TypeRecord (RowType {
-        rowTypeTypeName = (Name "hydra/core.Unit"),
-        rowTypeExtends = Nothing,
-        rowTypeFields = []}))},
-    FieldType {
-      fieldTypeName = (Name "int8"),
-      fieldTypeType = (TypeRecord (RowType {
-        rowTypeTypeName = (Name "hydra/core.Unit"),
-        rowTypeExtends = Nothing,
-        rowTypeFields = []}))},
-    FieldType {
-      fieldTypeName = (Name "int16"),
-      fieldTypeType = (TypeRecord (RowType {
-        rowTypeTypeName = (Name "hydra/core.Unit"),
-        rowTypeExtends = Nothing,
-        rowTypeFields = []}))},
-    FieldType {
-      fieldTypeName = (Name "int32"),
-      fieldTypeType = (TypeRecord (RowType {
-        rowTypeTypeName = (Name "hydra/core.Unit"),
-        rowTypeExtends = Nothing,
-        rowTypeFields = []}))},
-    FieldType {
-      fieldTypeName = (Name "int64"),
-      fieldTypeType = (TypeRecord (RowType {
-        rowTypeTypeName = (Name "hydra/core.Unit"),
-        rowTypeExtends = Nothing,
-        rowTypeFields = []}))},
-    FieldType {
-      fieldTypeName = (Name "uint8"),
-      fieldTypeType = (TypeRecord (RowType {
-        rowTypeTypeName = (Name "hydra/core.Unit"),
-        rowTypeExtends = Nothing,
-        rowTypeFields = []}))},
-    FieldType {
-      fieldTypeName = (Name "uint16"),
-      fieldTypeType = (TypeRecord (RowType {
-        rowTypeTypeName = (Name "hydra/core.Unit"),
-        rowTypeExtends = Nothing,
-        rowTypeFields = []}))},
-    FieldType {
-      fieldTypeName = (Name "uint32"),
-      fieldTypeType = (TypeRecord (RowType {
-        rowTypeTypeName = (Name "hydra/core.Unit"),
-        rowTypeExtends = Nothing,
-        rowTypeFields = []}))},
-    FieldType {
-      fieldTypeName = (Name "uint64"),
-      fieldTypeType = (TypeRecord (RowType {
-        rowTypeTypeName = (Name "hydra/core.Unit"),
-        rowTypeExtends = Nothing,
-        rowTypeFields = []}))}]}))
 
 -- | An integer literal value
 data IntegerValue = 
@@ -526,38 +287,6 @@ _IntegerValue_uint32 = (Name "uint32")
 
 _IntegerValue_uint64 = (Name "uint64")
 
-_IntegerValue_type_ = (TypeUnion (RowType {
-  rowTypeTypeName = (Name "hydra/core.IntegerValue"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "bigint"),
-      fieldTypeType = (TypeLiteral (LiteralTypeInteger IntegerTypeBigint))},
-    FieldType {
-      fieldTypeName = (Name "int8"),
-      fieldTypeType = (TypeLiteral (LiteralTypeInteger IntegerTypeInt8))},
-    FieldType {
-      fieldTypeName = (Name "int16"),
-      fieldTypeType = (TypeLiteral (LiteralTypeInteger IntegerTypeInt16))},
-    FieldType {
-      fieldTypeName = (Name "int32"),
-      fieldTypeType = (TypeLiteral (LiteralTypeInteger IntegerTypeInt32))},
-    FieldType {
-      fieldTypeName = (Name "int64"),
-      fieldTypeType = (TypeLiteral (LiteralTypeInteger IntegerTypeInt64))},
-    FieldType {
-      fieldTypeName = (Name "uint8"),
-      fieldTypeType = (TypeLiteral (LiteralTypeInteger IntegerTypeUint8))},
-    FieldType {
-      fieldTypeName = (Name "uint16"),
-      fieldTypeType = (TypeLiteral (LiteralTypeInteger IntegerTypeUint16))},
-    FieldType {
-      fieldTypeName = (Name "uint32"),
-      fieldTypeType = (TypeLiteral (LiteralTypeInteger IntegerTypeUint32))},
-    FieldType {
-      fieldTypeName = (Name "uint64"),
-      fieldTypeType = (TypeLiteral (LiteralTypeInteger IntegerTypeUint64))}]}))
-
 -- | A function abstraction (lambda)
 data Lambda = 
   Lambda {
@@ -577,20 +306,6 @@ _Lambda_domain = (Name "domain")
 
 _Lambda_body = (Name "body")
 
-_Lambda_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.Lambda"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "parameter"),
-      fieldTypeType = _Name_type_},
-    FieldType {
-      fieldTypeName = (Name "domain"),
-      fieldTypeType = (TypeOptional _Type_type_)},
-    FieldType {
-      fieldTypeName = (Name "body"),
-      fieldTypeType = _Term_type_}]}))
-
 -- | A type abstraction; the type-level analog of a lambda term
 data LambdaType = 
   LambdaType {
@@ -606,17 +321,6 @@ _LambdaType_parameter = (Name "parameter")
 
 _LambdaType_body = (Name "body")
 
-_LambdaType_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.LambdaType"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "parameter"),
-      fieldTypeType = _Name_type_},
-    FieldType {
-      fieldTypeName = (Name "body"),
-      fieldTypeType = _Type_type_}]}))
-
 -- | A set of (possibly recursive) 'let' bindings together with an environment in which they are bound
 data Let = 
   Let {
@@ -629,17 +333,6 @@ _Let = (Name "hydra/core.Let")
 _Let_bindings = (Name "bindings")
 
 _Let_environment = (Name "environment")
-
-_Let_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.Let"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "bindings"),
-      fieldTypeType = (TypeList _LetBinding_type_)},
-    FieldType {
-      fieldTypeName = (Name "environment"),
-      fieldTypeType = _Term_type_}]}))
 
 -- | A field with an optional type scheme, used to bind variables to terms in a 'let' expression
 data LetBinding = 
@@ -656,20 +349,6 @@ _LetBinding_name = (Name "name")
 _LetBinding_term = (Name "term")
 
 _LetBinding_type = (Name "type")
-
-_LetBinding_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.LetBinding"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "name"),
-      fieldTypeType = _Name_type_},
-    FieldType {
-      fieldTypeName = (Name "term"),
-      fieldTypeType = _Term_type_},
-    FieldType {
-      fieldTypeName = (Name "type"),
-      fieldTypeType = (TypeOptional _TypeScheme_type_)}]}))
 
 -- | A term constant; an instance of a literal type
 data Literal = 
@@ -697,26 +376,6 @@ _Literal_integer = (Name "integer")
 
 _Literal_string = (Name "string")
 
-_Literal_type_ = (TypeUnion (RowType {
-  rowTypeTypeName = (Name "hydra/core.Literal"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "binary"),
-      fieldTypeType = (TypeLiteral LiteralTypeBinary)},
-    FieldType {
-      fieldTypeName = (Name "boolean"),
-      fieldTypeType = (TypeLiteral LiteralTypeBoolean)},
-    FieldType {
-      fieldTypeName = (Name "float"),
-      fieldTypeType = _FloatValue_type_},
-    FieldType {
-      fieldTypeName = (Name "integer"),
-      fieldTypeType = _IntegerValue_type_},
-    FieldType {
-      fieldTypeName = (Name "string"),
-      fieldTypeType = (TypeLiteral LiteralTypeString)}]}))
-
 -- | Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants
 data LiteralType = 
   LiteralTypeBinary  |
@@ -738,35 +397,6 @@ _LiteralType_integer = (Name "integer")
 
 _LiteralType_string = (Name "string")
 
-_LiteralType_type_ = (TypeUnion (RowType {
-  rowTypeTypeName = (Name "hydra/core.LiteralType"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "binary"),
-      fieldTypeType = (TypeRecord (RowType {
-        rowTypeTypeName = (Name "hydra/core.Unit"),
-        rowTypeExtends = Nothing,
-        rowTypeFields = []}))},
-    FieldType {
-      fieldTypeName = (Name "boolean"),
-      fieldTypeType = (TypeRecord (RowType {
-        rowTypeTypeName = (Name "hydra/core.Unit"),
-        rowTypeExtends = Nothing,
-        rowTypeFields = []}))},
-    FieldType {
-      fieldTypeName = (Name "float"),
-      fieldTypeType = _FloatType_type_},
-    FieldType {
-      fieldTypeName = (Name "integer"),
-      fieldTypeType = _IntegerType_type_},
-    FieldType {
-      fieldTypeName = (Name "string"),
-      fieldTypeType = (TypeRecord (RowType {
-        rowTypeTypeName = (Name "hydra/core.Unit"),
-        rowTypeExtends = Nothing,
-        rowTypeFields = []}))}]}))
-
 -- | A map type
 data MapType = 
   MapType {
@@ -780,17 +410,6 @@ _MapType_keys = (Name "keys")
 
 _MapType_values = (Name "values")
 
-_MapType_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.MapType"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "keys"),
-      fieldTypeType = _Type_type_},
-    FieldType {
-      fieldTypeName = (Name "values"),
-      fieldTypeType = _Type_type_}]}))
-
 -- | A symbol which stands for a term, type, or element
 newtype Name = 
   Name {
@@ -798,10 +417,6 @@ newtype Name =
   deriving (Eq, Ord, Read, Show)
 
 _Name = (Name "hydra/core.Name")
-
-_Name_type_ = (TypeWrap (WrappedType {
-  wrappedTypeTypeName = (Name "hydra/core.Name"),
-  wrappedTypeObject = (TypeLiteral LiteralTypeString)}))
 
 -- | A term wrapped in a type name
 data WrappedTerm = 
@@ -816,17 +431,6 @@ _WrappedTerm_typeName = (Name "typeName")
 
 _WrappedTerm_object = (Name "object")
 
-_WrappedTerm_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.WrappedTerm"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "typeName"),
-      fieldTypeType = _Name_type_},
-    FieldType {
-      fieldTypeName = (Name "object"),
-      fieldTypeType = _Term_type_}]}))
-
 -- | A type wrapped in a type name
 data WrappedType = 
   WrappedType {
@@ -839,17 +443,6 @@ _WrappedType = (Name "hydra/core.WrappedType")
 _WrappedType_typeName = (Name "typeName")
 
 _WrappedType_object = (Name "object")
-
-_WrappedType_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.WrappedType"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "typeName"),
-      fieldTypeType = _Name_type_},
-    FieldType {
-      fieldTypeName = (Name "object"),
-      fieldTypeType = _Type_type_}]}))
 
 -- | A case statement for matching optional terms
 data OptionalCases = 
@@ -866,17 +459,6 @@ _OptionalCases_nothing = (Name "nothing")
 
 _OptionalCases_just = (Name "just")
 
-_OptionalCases_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.OptionalCases"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "nothing"),
-      fieldTypeType = _Term_type_},
-    FieldType {
-      fieldTypeName = (Name "just"),
-      fieldTypeType = _Term_type_}]}))
-
 -- | A record elimination; a projection
 data Projection = 
   Projection {
@@ -892,17 +474,6 @@ _Projection_typeName = (Name "typeName")
 
 _Projection_field = (Name "field")
 
-_Projection_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.Projection"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "typeName"),
-      fieldTypeType = _Name_type_},
-    FieldType {
-      fieldTypeName = (Name "field"),
-      fieldTypeType = _Name_type_}]}))
-
 -- | A record, or labeled tuple; a map of field names to terms
 data Record = 
   Record {
@@ -915,17 +486,6 @@ _Record = (Name "hydra/core.Record")
 _Record_typeName = (Name "typeName")
 
 _Record_fields = (Name "fields")
-
-_Record_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.Record"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "typeName"),
-      fieldTypeType = _Name_type_},
-    FieldType {
-      fieldTypeName = (Name "fields"),
-      fieldTypeType = (TypeList _Field_type_)}]}))
 
 -- | A labeled record or union type
 data RowType = 
@@ -946,20 +506,6 @@ _RowType_extends = (Name "extends")
 
 _RowType_fields = (Name "fields")
 
-_RowType_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.RowType"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "typeName"),
-      fieldTypeType = _Name_type_},
-    FieldType {
-      fieldTypeName = (Name "extends"),
-      fieldTypeType = (TypeOptional _Name_type_)},
-    FieldType {
-      fieldTypeName = (Name "fields"),
-      fieldTypeType = (TypeList _FieldType_type_)}]}))
-
 -- | The unlabeled equivalent of an Injection term
 data Sum = 
   Sum {
@@ -975,20 +521,6 @@ _Sum_index = (Name "index")
 _Sum_size = (Name "size")
 
 _Sum_term = (Name "term")
-
-_Sum_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.Sum"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "index"),
-      fieldTypeType = (TypeLiteral (LiteralTypeInteger IntegerTypeInt32))},
-    FieldType {
-      fieldTypeName = (Name "size"),
-      fieldTypeType = (TypeLiteral (LiteralTypeInteger IntegerTypeInt32))},
-    FieldType {
-      fieldTypeName = (Name "term"),
-      fieldTypeType = _Term_type_}]}))
 
 -- | A data term
 data Term = 
@@ -1058,61 +590,6 @@ _Term_variable = (Name "variable")
 
 _Term_wrap = (Name "wrap")
 
-_Term_type_ = (TypeUnion (RowType {
-  rowTypeTypeName = (Name "hydra/core.Term"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "annotated"),
-      fieldTypeType = _AnnotatedTerm_type_},
-    FieldType {
-      fieldTypeName = (Name "application"),
-      fieldTypeType = _Application_type_},
-    FieldType {
-      fieldTypeName = (Name "function"),
-      fieldTypeType = _Function_type_},
-    FieldType {
-      fieldTypeName = (Name "let"),
-      fieldTypeType = _Let_type_},
-    FieldType {
-      fieldTypeName = (Name "list"),
-      fieldTypeType = (TypeList _Term_type_)},
-    FieldType {
-      fieldTypeName = (Name "literal"),
-      fieldTypeType = _Literal_type_},
-    FieldType {
-      fieldTypeName = (Name "map"),
-      fieldTypeType = (TypeMap (MapType {
-        mapTypeKeys = _Term_type_,
-        mapTypeValues = _Term_type_}))},
-    FieldType {
-      fieldTypeName = (Name "optional"),
-      fieldTypeType = (TypeOptional _Term_type_)},
-    FieldType {
-      fieldTypeName = (Name "product"),
-      fieldTypeType = (TypeList _Term_type_)},
-    FieldType {
-      fieldTypeName = (Name "record"),
-      fieldTypeType = _Record_type_},
-    FieldType {
-      fieldTypeName = (Name "set"),
-      fieldTypeType = (TypeSet _Term_type_)},
-    FieldType {
-      fieldTypeName = (Name "sum"),
-      fieldTypeType = _Sum_type_},
-    FieldType {
-      fieldTypeName = (Name "typed"),
-      fieldTypeType = _TypedTerm_type_},
-    FieldType {
-      fieldTypeName = (Name "union"),
-      fieldTypeType = _Injection_type_},
-    FieldType {
-      fieldTypeName = (Name "variable"),
-      fieldTypeType = _Name_type_},
-    FieldType {
-      fieldTypeName = (Name "wrap"),
-      fieldTypeType = _WrappedTerm_type_}]}))
-
 -- | A tuple elimination; a projection from an integer-indexed product
 data TupleProjection = 
   TupleProjection {
@@ -1127,17 +604,6 @@ _TupleProjection = (Name "hydra/core.TupleProjection")
 _TupleProjection_arity = (Name "arity")
 
 _TupleProjection_index = (Name "index")
-
-_TupleProjection_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.TupleProjection"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "arity"),
-      fieldTypeType = (TypeLiteral (LiteralTypeInteger IntegerTypeInt32))},
-    FieldType {
-      fieldTypeName = (Name "index"),
-      fieldTypeType = (TypeLiteral (LiteralTypeInteger IntegerTypeInt32))}]}))
 
 -- | A data type
 data Type = 
@@ -1190,56 +656,6 @@ _Type_variable = (Name "variable")
 
 _Type_wrap = (Name "wrap")
 
-_Type_type_ = (TypeUnion (RowType {
-  rowTypeTypeName = (Name "hydra/core.Type"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "annotated"),
-      fieldTypeType = _AnnotatedType_type_},
-    FieldType {
-      fieldTypeName = (Name "application"),
-      fieldTypeType = _ApplicationType_type_},
-    FieldType {
-      fieldTypeName = (Name "function"),
-      fieldTypeType = _FunctionType_type_},
-    FieldType {
-      fieldTypeName = (Name "lambda"),
-      fieldTypeType = _LambdaType_type_},
-    FieldType {
-      fieldTypeName = (Name "list"),
-      fieldTypeType = _Type_type_},
-    FieldType {
-      fieldTypeName = (Name "literal"),
-      fieldTypeType = _LiteralType_type_},
-    FieldType {
-      fieldTypeName = (Name "map"),
-      fieldTypeType = _MapType_type_},
-    FieldType {
-      fieldTypeName = (Name "optional"),
-      fieldTypeType = _Type_type_},
-    FieldType {
-      fieldTypeName = (Name "product"),
-      fieldTypeType = (TypeList _Type_type_)},
-    FieldType {
-      fieldTypeName = (Name "record"),
-      fieldTypeType = _RowType_type_},
-    FieldType {
-      fieldTypeName = (Name "set"),
-      fieldTypeType = _Type_type_},
-    FieldType {
-      fieldTypeName = (Name "sum"),
-      fieldTypeType = (TypeList _Type_type_)},
-    FieldType {
-      fieldTypeName = (Name "union"),
-      fieldTypeType = _RowType_type_},
-    FieldType {
-      fieldTypeName = (Name "variable"),
-      fieldTypeType = _Name_type_},
-    FieldType {
-      fieldTypeName = (Name "wrap"),
-      fieldTypeType = _WrappedType_type_}]}))
-
 -- | A type expression together with free type variables occurring in the expression
 data TypeScheme = 
   TypeScheme {
@@ -1252,17 +668,6 @@ _TypeScheme = (Name "hydra/core.TypeScheme")
 _TypeScheme_variables = (Name "variables")
 
 _TypeScheme_type = (Name "type")
-
-_TypeScheme_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.TypeScheme"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "variables"),
-      fieldTypeType = (TypeList _Name_type_)},
-    FieldType {
-      fieldTypeName = (Name "type"),
-      fieldTypeType = _Type_type_}]}))
 
 -- | A term together with its type
 data TypedTerm = 
@@ -1277,25 +682,9 @@ _TypedTerm_term = (Name "term")
 
 _TypedTerm_type = (Name "type")
 
-_TypedTerm_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.TypedTerm"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = [
-    FieldType {
-      fieldTypeName = (Name "term"),
-      fieldTypeType = _Term_type_},
-    FieldType {
-      fieldTypeName = (Name "type"),
-      fieldTypeType = _Type_type_}]}))
-
 -- | An empty record as a canonical unit value
 data Unit = 
   Unit {}
   deriving (Eq, Ord, Read, Show)
 
 _Unit = (Name "hydra/core.Unit")
-
-_Unit_type_ = (TypeRecord (RowType {
-  rowTypeTypeName = (Name "hydra/core.Unit"),
-  rowTypeExtends = Nothing,
-  rowTypeFields = []}))

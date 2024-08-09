@@ -24,29 +24,6 @@ _Comparison_equalTo = (Core.Name "equalTo")
 
 _Comparison_greaterThan = (Core.Name "greaterThan")
 
-_Comparison_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/graph.Comparison"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "lessThan"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "equalTo"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "greaterThan"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))}]}))
-
 -- | A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph
 data Graph = 
   Graph {
@@ -77,37 +54,6 @@ _Graph_primitives = (Core.Name "primitives")
 
 _Graph_schema = (Core.Name "schema")
 
-_Graph_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/graph.Graph"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "elements"),
-      Core.fieldTypeType = (Core.TypeMap (Core.MapType {
-        Core.mapTypeKeys = Core._Name_type_,
-        Core.mapTypeValues = _Element_type_}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "environment"),
-      Core.fieldTypeType = (Core.TypeMap (Core.MapType {
-        Core.mapTypeKeys = Core._Name_type_,
-        Core.mapTypeValues = (Core.TypeOptional Core._Term_type_)}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "types"),
-      Core.fieldTypeType = (Core.TypeMap (Core.MapType {
-        Core.mapTypeKeys = Core._Name_type_,
-        Core.mapTypeValues = Core._Type_type_}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "body"),
-      Core.fieldTypeType = Core._Term_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "primitives"),
-      Core.fieldTypeType = (Core.TypeMap (Core.MapType {
-        Core.mapTypeKeys = Core._Name_type_,
-        Core.mapTypeValues = _Primitive_type_}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "schema"),
-      Core.fieldTypeType = (Core.TypeOptional _Graph_type_)}]}))
-
 -- | A graph element, having a name, data term (value), and schema term (type)
 data Element = 
   Element {
@@ -120,17 +66,6 @@ _Element = (Core.Name "hydra/graph.Element")
 _Element_name = (Core.Name "name")
 
 _Element_data = (Core.Name "data")
-
-_Element_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/graph.Element"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = Core._Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "data"),
-      Core.fieldTypeType = Core._Term_type_}]}))
 
 -- | A built-in function
 data Primitive = 
@@ -150,26 +85,6 @@ _Primitive_type = (Core.Name "type")
 
 _Primitive_implementation = (Core.Name "implementation")
 
-_Primitive_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/graph.Primitive"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = Core._Name_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "type"),
-      Core.fieldTypeType = Core._Type_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "implementation"),
-      Core.fieldTypeType = (Core.TypeFunction (Core.FunctionType {
-        Core.functionTypeDomain = (Core.TypeList Core._Term_type_),
-        Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
-          Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
-            Core.applicationTypeFunction = Compute._Flow_type_,
-            Core.applicationTypeArgument = _Graph_type_})),
-          Core.applicationTypeArgument = Core._Term_type_}))}))}]}))
-
 -- | A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms
 data TermCoder x = 
   TermCoder {
@@ -182,27 +97,6 @@ _TermCoder_type = (Core.Name "type")
 
 _TermCoder_coder = (Core.Name "coder")
 
-_TermCoder_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "x"),
-  Core.lambdaTypeBody = (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = (Core.Name "hydra/graph.TermCoder"),
-    Core.rowTypeExtends = Nothing,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "type"),
-        Core.fieldTypeType = Core._Type_type_},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "coder"),
-        Core.fieldTypeType = (Core.TypeApplication (Core.ApplicationType {
-          Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
-            Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
-              Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
-                Core.applicationTypeFunction = Compute._Coder_type_,
-                Core.applicationTypeArgument = _Graph_type_})),
-              Core.applicationTypeArgument = _Graph_type_})),
-            Core.applicationTypeArgument = Core._Term_type_})),
-          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "x"))}))}]}))}))
-
 -- | Any of a small number of built-in type classes
 data TypeClass = 
   TypeClassEquality  |
@@ -214,20 +108,3 @@ _TypeClass = (Core.Name "hydra/graph.TypeClass")
 _TypeClass_equality = (Core.Name "equality")
 
 _TypeClass_ordering = (Core.Name "ordering")
-
-_TypeClass_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/graph.TypeClass"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "equality"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "ordering"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))}]}))

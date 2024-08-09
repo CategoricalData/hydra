@@ -22,17 +22,6 @@ _PathEquation_left = (Core.Name "left")
 
 _PathEquation_right = (Core.Name "right")
 
-_PathEquation_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/constraints.PathEquation"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "left"),
-      Core.fieldTypeType = Query._Path_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "right"),
-      Core.fieldTypeType = Query._Path_type_}]}))
-
 -- | A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns.
 data PatternImplication = 
   PatternImplication {
@@ -45,14 +34,3 @@ _PatternImplication = (Core.Name "hydra/constraints.PatternImplication")
 _PatternImplication_antecedent = (Core.Name "antecedent")
 
 _PatternImplication_consequent = (Core.Name "consequent")
-
-_PatternImplication_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/constraints.PatternImplication"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "antecedent"),
-      Core.fieldTypeType = Query._Pattern_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "consequent"),
-      Core.fieldTypeType = Query._Pattern_type_}]}))

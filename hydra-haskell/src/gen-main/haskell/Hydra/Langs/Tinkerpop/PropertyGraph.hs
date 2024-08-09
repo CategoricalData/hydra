@@ -26,35 +26,6 @@ _Direction_both = (Core.Name "both")
 
 _Direction_undirected = (Core.Name "undirected")
 
-_Direction_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/propertyGraph.Direction"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "out"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "in"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "both"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "undirected"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))}]}))
-
 -- | An edge
 data Edge v = 
   Edge {
@@ -82,30 +53,6 @@ _Edge_in = (Core.Name "in")
 
 _Edge_properties = (Core.Name "properties")
 
-_Edge_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "v"),
-  Core.lambdaTypeBody = (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/propertyGraph.Edge"),
-    Core.rowTypeExtends = Nothing,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "label"),
-        Core.fieldTypeType = _EdgeLabel_type_},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "id"),
-        Core.fieldTypeType = (Core.TypeVariable (Core.Name "v"))},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "out"),
-        Core.fieldTypeType = (Core.TypeVariable (Core.Name "v"))},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "in"),
-        Core.fieldTypeType = (Core.TypeVariable (Core.Name "v"))},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "properties"),
-        Core.fieldTypeType = (Core.TypeMap (Core.MapType {
-          Core.mapTypeKeys = _PropertyKey_type_,
-          Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}]}))}))
-
 -- | The label of an edge
 newtype EdgeLabel = 
   EdgeLabel {
@@ -113,8 +60,6 @@ newtype EdgeLabel =
   deriving (Eq, Ord, Read, Show)
 
 _EdgeLabel = (Core.Name "hydra/langs/tinkerpop/propertyGraph.EdgeLabel")
-
-_EdgeLabel_type_ = (Core.TypeLiteral Core.LiteralTypeString)
 
 -- | The type of an edge
 data EdgeType t = 
@@ -143,30 +88,6 @@ _EdgeType_in = (Core.Name "in")
 
 _EdgeType_properties = (Core.Name "properties")
 
-_EdgeType_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "t"),
-  Core.lambdaTypeBody = (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/propertyGraph.EdgeType"),
-    Core.rowTypeExtends = Nothing,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "label"),
-        Core.fieldTypeType = _EdgeLabel_type_},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "id"),
-        Core.fieldTypeType = (Core.TypeVariable (Core.Name "t"))},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "out"),
-        Core.fieldTypeType = _VertexLabel_type_},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "in"),
-        Core.fieldTypeType = _VertexLabel_type_},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "properties"),
-        Core.fieldTypeType = (Core.TypeList (Core.TypeApplication (Core.ApplicationType {
-          Core.applicationTypeFunction = _PropertyType_type_,
-          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t"))})))}]}))}))
-
 -- | Either a vertex or an edge
 data Element v = 
   ElementVertex (Vertex v) |
@@ -179,23 +100,6 @@ _Element_vertex = (Core.Name "vertex")
 
 _Element_edge = (Core.Name "edge")
 
-_Element_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "v"),
-  Core.lambdaTypeBody = (Core.TypeUnion (Core.RowType {
-    Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/propertyGraph.Element"),
-    Core.rowTypeExtends = Nothing,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "vertex"),
-        Core.fieldTypeType = (Core.TypeApplication (Core.ApplicationType {
-          Core.applicationTypeFunction = _Vertex_type_,
-          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))}))},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "edge"),
-        Core.fieldTypeType = (Core.TypeApplication (Core.ApplicationType {
-          Core.applicationTypeFunction = _Edge_type_,
-          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))}))}]}))}))
-
 -- | The kind of an element: vertex or edge
 data ElementKind = 
   ElementKindVertex  |
@@ -207,23 +111,6 @@ _ElementKind = (Core.Name "hydra/langs/tinkerpop/propertyGraph.ElementKind")
 _ElementKind_vertex = (Core.Name "vertex")
 
 _ElementKind_edge = (Core.Name "edge")
-
-_ElementKind_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/propertyGraph.ElementKind"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "vertex"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "edge"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))}]}))
 
 -- | An element together with its dependencies in some context
 data ElementTree v = 
@@ -238,23 +125,6 @@ _ElementTree_self = (Core.Name "self")
 
 _ElementTree_dependencies = (Core.Name "dependencies")
 
-_ElementTree_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "v"),
-  Core.lambdaTypeBody = (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/propertyGraph.ElementTree"),
-    Core.rowTypeExtends = Nothing,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "self"),
-        Core.fieldTypeType = (Core.TypeApplication (Core.ApplicationType {
-          Core.applicationTypeFunction = _Element_type_,
-          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))}))},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "dependencies"),
-        Core.fieldTypeType = (Core.TypeList (Core.TypeApplication (Core.ApplicationType {
-          Core.applicationTypeFunction = _ElementTree_type_,
-          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))})))}]}))}))
-
 -- | The type of a vertex or edge
 data ElementType t = 
   ElementTypeVertex (VertexType t) |
@@ -266,23 +136,6 @@ _ElementType = (Core.Name "hydra/langs/tinkerpop/propertyGraph.ElementType")
 _ElementType_vertex = (Core.Name "vertex")
 
 _ElementType_edge = (Core.Name "edge")
-
-_ElementType_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "t"),
-  Core.lambdaTypeBody = (Core.TypeUnion (Core.RowType {
-    Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/propertyGraph.ElementType"),
-    Core.rowTypeExtends = Nothing,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "vertex"),
-        Core.fieldTypeType = (Core.TypeApplication (Core.ApplicationType {
-          Core.applicationTypeFunction = _VertexType_type_,
-          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t"))}))},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "edge"),
-        Core.fieldTypeType = (Core.TypeApplication (Core.ApplicationType {
-          Core.applicationTypeFunction = _EdgeType_type_,
-          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t"))}))}]}))}))
 
 -- | An element type together with its dependencies in some context
 data ElementTypeTree t = 
@@ -297,23 +150,6 @@ _ElementTypeTree_self = (Core.Name "self")
 
 _ElementTypeTree_dependencies = (Core.Name "dependencies")
 
-_ElementTypeTree_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "t"),
-  Core.lambdaTypeBody = (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/propertyGraph.ElementTypeTree"),
-    Core.rowTypeExtends = Nothing,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "self"),
-        Core.fieldTypeType = (Core.TypeApplication (Core.ApplicationType {
-          Core.applicationTypeFunction = _ElementType_type_,
-          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t"))}))},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "dependencies"),
-        Core.fieldTypeType = (Core.TypeList (Core.TypeApplication (Core.ApplicationType {
-          Core.applicationTypeFunction = _ElementTypeTree_type_,
-          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t"))})))}]}))}))
-
 -- | A graph; a self-contained collection of vertices and edges
 data Graph v = 
   Graph {
@@ -326,27 +162,6 @@ _Graph = (Core.Name "hydra/langs/tinkerpop/propertyGraph.Graph")
 _Graph_vertices = (Core.Name "vertices")
 
 _Graph_edges = (Core.Name "edges")
-
-_Graph_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "v"),
-  Core.lambdaTypeBody = (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/propertyGraph.Graph"),
-    Core.rowTypeExtends = Nothing,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "vertices"),
-        Core.fieldTypeType = (Core.TypeMap (Core.MapType {
-          Core.mapTypeKeys = (Core.TypeVariable (Core.Name "v")),
-          Core.mapTypeValues = (Core.TypeApplication (Core.ApplicationType {
-            Core.applicationTypeFunction = _Vertex_type_,
-            Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))}))}))},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "edges"),
-        Core.fieldTypeType = (Core.TypeMap (Core.MapType {
-          Core.mapTypeKeys = (Core.TypeVariable (Core.Name "v")),
-          Core.mapTypeValues = (Core.TypeApplication (Core.ApplicationType {
-            Core.applicationTypeFunction = _Edge_type_,
-            Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))}))}))}]}))}))
 
 -- | A graph schema; a vertex and edge types for the vertices and edges of a graph conforming to the schema
 data GraphSchema t = 
@@ -363,27 +178,6 @@ _GraphSchema_vertices = (Core.Name "vertices")
 
 _GraphSchema_edges = (Core.Name "edges")
 
-_GraphSchema_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "t"),
-  Core.lambdaTypeBody = (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/propertyGraph.GraphSchema"),
-    Core.rowTypeExtends = Nothing,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "vertices"),
-        Core.fieldTypeType = (Core.TypeMap (Core.MapType {
-          Core.mapTypeKeys = _VertexLabel_type_,
-          Core.mapTypeValues = (Core.TypeApplication (Core.ApplicationType {
-            Core.applicationTypeFunction = _VertexType_type_,
-            Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t"))}))}))},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "edges"),
-        Core.fieldTypeType = (Core.TypeMap (Core.MapType {
-          Core.mapTypeKeys = _EdgeLabel_type_,
-          Core.mapTypeValues = (Core.TypeApplication (Core.ApplicationType {
-            Core.applicationTypeFunction = _EdgeType_type_,
-            Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t"))}))}))}]}))}))
-
 -- | Either a vertex or edge label
 data Label = 
   LabelVertex VertexLabel |
@@ -395,17 +189,6 @@ _Label = (Core.Name "hydra/langs/tinkerpop/propertyGraph.Label")
 _Label_vertex = (Core.Name "vertex")
 
 _Label_edge = (Core.Name "edge")
-
-_Label_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/propertyGraph.Label"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "vertex"),
-      Core.fieldTypeType = _VertexLabel_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "edge"),
-      Core.fieldTypeType = _EdgeLabel_type_}]}))
 
 -- | A key/value property
 data Property v = 
@@ -422,19 +205,6 @@ _Property_key = (Core.Name "key")
 
 _Property_value = (Core.Name "value")
 
-_Property_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "v"),
-  Core.lambdaTypeBody = (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/propertyGraph.Property"),
-    Core.rowTypeExtends = Nothing,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "key"),
-        Core.fieldTypeType = _PropertyKey_type_},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "value"),
-        Core.fieldTypeType = (Core.TypeVariable (Core.Name "v"))}]}))}))
-
 -- | A property key
 newtype PropertyKey = 
   PropertyKey {
@@ -442,8 +212,6 @@ newtype PropertyKey =
   deriving (Eq, Ord, Read, Show)
 
 _PropertyKey = (Core.Name "hydra/langs/tinkerpop/propertyGraph.PropertyKey")
-
-_PropertyKey_type_ = (Core.TypeLiteral Core.LiteralTypeString)
 
 -- | The type of a property
 data PropertyType t = 
@@ -464,22 +232,6 @@ _PropertyType_value = (Core.Name "value")
 
 _PropertyType_required = (Core.Name "required")
 
-_PropertyType_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "t"),
-  Core.lambdaTypeBody = (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/propertyGraph.PropertyType"),
-    Core.rowTypeExtends = Nothing,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "key"),
-        Core.fieldTypeType = _PropertyKey_type_},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "value"),
-        Core.fieldTypeType = (Core.TypeVariable (Core.Name "t"))},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "required"),
-        Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}]}))}))
-
 -- | A vertex
 data Vertex v = 
   Vertex {
@@ -499,24 +251,6 @@ _Vertex_id = (Core.Name "id")
 
 _Vertex_properties = (Core.Name "properties")
 
-_Vertex_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "v"),
-  Core.lambdaTypeBody = (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/propertyGraph.Vertex"),
-    Core.rowTypeExtends = Nothing,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "label"),
-        Core.fieldTypeType = _VertexLabel_type_},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "id"),
-        Core.fieldTypeType = (Core.TypeVariable (Core.Name "v"))},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "properties"),
-        Core.fieldTypeType = (Core.TypeMap (Core.MapType {
-          Core.mapTypeKeys = _PropertyKey_type_,
-          Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}]}))}))
-
 -- | The label of a vertex. The default (null) vertex is represented by the empty string
 newtype VertexLabel = 
   VertexLabel {
@@ -524,8 +258,6 @@ newtype VertexLabel =
   deriving (Eq, Ord, Read, Show)
 
 _VertexLabel = (Core.Name "hydra/langs/tinkerpop/propertyGraph.VertexLabel")
-
-_VertexLabel_type_ = (Core.TypeLiteral Core.LiteralTypeString)
 
 -- | The type of a vertex
 data VertexType t = 
@@ -545,21 +277,3 @@ _VertexType_label = (Core.Name "label")
 _VertexType_id = (Core.Name "id")
 
 _VertexType_properties = (Core.Name "properties")
-
-_VertexType_type_ = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "t"),
-  Core.lambdaTypeBody = (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = (Core.Name "hydra/langs/tinkerpop/propertyGraph.VertexType"),
-    Core.rowTypeExtends = Nothing,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "label"),
-        Core.fieldTypeType = _VertexLabel_type_},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "id"),
-        Core.fieldTypeType = (Core.TypeVariable (Core.Name "t"))},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "properties"),
-        Core.fieldTypeType = (Core.TypeList (Core.TypeApplication (Core.ApplicationType {
-          Core.applicationTypeFunction = _PropertyType_type_,
-          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t"))})))}]}))}))

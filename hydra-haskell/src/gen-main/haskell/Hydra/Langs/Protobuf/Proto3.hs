@@ -19,17 +19,6 @@ _Definition_enum = (Core.Name "enum")
 
 _Definition_message = (Core.Name "message")
 
-_Definition_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/protobuf/proto3.Definition"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "enum"),
-      Core.fieldTypeType = _EnumDefinition_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "message"),
-      Core.fieldTypeType = _MessageDefinition_type_}]}))
-
 -- | Enum type definition
 data EnumDefinition = 
   EnumDefinition {
@@ -48,20 +37,6 @@ _EnumDefinition_name = (Core.Name "name")
 _EnumDefinition_values = (Core.Name "values")
 
 _EnumDefinition_options = (Core.Name "options")
-
-_EnumDefinition_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/protobuf/proto3.EnumDefinition"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _TypeName_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "values"),
-      Core.fieldTypeType = (Core.TypeList _EnumValue_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "options"),
-      Core.fieldTypeType = (Core.TypeList _Option_type_)}]}))
 
 -- | Enum value definition
 data EnumValue = 
@@ -82,28 +57,12 @@ _EnumValue_number = (Core.Name "number")
 
 _EnumValue_options = (Core.Name "options")
 
-_EnumValue_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/protobuf/proto3.EnumValue"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _EnumValueName_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "number"),
-      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "options"),
-      Core.fieldTypeType = (Core.TypeList _Option_type_)}]}))
-
 newtype EnumValueName = 
   EnumValueName {
     unEnumValueName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _EnumValueName = (Core.Name "hydra/langs/protobuf/proto3.EnumValueName")
-
-_EnumValueName_type_ = (Core.TypeLiteral Core.LiteralTypeString)
 
 -- | A single field of a message type
 data Field = 
@@ -132,26 +91,6 @@ _Field_number = (Core.Name "number")
 
 _Field_options = (Core.Name "options")
 
-_Field_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/protobuf/proto3.Field"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _FieldName_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "jsonName"),
-      Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "type"),
-      Core.fieldTypeType = _FieldType_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "number"),
-      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "options"),
-      Core.fieldTypeType = (Core.TypeList _Option_type_)}]}))
-
 -- | The name of a field
 newtype FieldName = 
   FieldName {
@@ -159,8 +98,6 @@ newtype FieldName =
   deriving (Eq, Ord, Read, Show)
 
 _FieldName = (Core.Name "hydra/langs/protobuf/proto3.FieldName")
-
-_FieldName_type_ = (Core.TypeLiteral Core.LiteralTypeString)
 
 data FieldType = 
   FieldTypeMap SimpleType |
@@ -179,31 +116,12 @@ _FieldType_repeated = (Core.Name "repeated")
 
 _FieldType_simple = (Core.Name "simple")
 
-_FieldType_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/protobuf/proto3.FieldType"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "map"),
-      Core.fieldTypeType = _SimpleType_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "oneof"),
-      Core.fieldTypeType = (Core.TypeList _Field_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "repeated"),
-      Core.fieldTypeType = _SimpleType_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "simple"),
-      Core.fieldTypeType = _SimpleType_type_}]}))
-
 newtype FileReference = 
   FileReference {
     unFileReference :: String}
   deriving (Eq, Ord, Read, Show)
 
 _FileReference = (Core.Name "hydra/langs/protobuf/proto3.FileReference")
-
-_FileReference_type_ = (Core.TypeLiteral Core.LiteralTypeString)
 
 -- | A protocol buffer message type
 data MessageDefinition = 
@@ -224,20 +142,6 @@ _MessageDefinition_fields = (Core.Name "fields")
 
 _MessageDefinition_options = (Core.Name "options")
 
-_MessageDefinition_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/protobuf/proto3.MessageDefinition"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = _TypeName_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "fields"),
-      Core.fieldTypeType = (Core.TypeList _Field_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "options"),
-      Core.fieldTypeType = (Core.TypeList _Option_type_)}]}))
-
 -- | A protocol buffer option, which can be attached to a message, field, enumeration, etc
 data Option = 
   Option {
@@ -253,25 +157,12 @@ _Option_name = (Core.Name "name")
 
 _Option_value = (Core.Name "value")
 
-_Option_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/protobuf/proto3.Option"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "name"),
-      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "value"),
-      Core.fieldTypeType = _Value_type_}]}))
-
 newtype PackageName = 
   PackageName {
     unPackageName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _PackageName = (Core.Name "hydra/langs/protobuf/proto3.PackageName")
-
-_PackageName_type_ = (Core.TypeLiteral Core.LiteralTypeString)
 
 -- | A .proto file, usually containing one or more enum or message type definitions
 data ProtoFile = 
@@ -291,23 +182,6 @@ _ProtoFile_imports = (Core.Name "imports")
 _ProtoFile_types = (Core.Name "types")
 
 _ProtoFile_options = (Core.Name "options")
-
-_ProtoFile_type_ = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/protobuf/proto3.ProtoFile"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "package"),
-      Core.fieldTypeType = _PackageName_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "imports"),
-      Core.fieldTypeType = (Core.TypeList _FileReference_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "types"),
-      Core.fieldTypeType = (Core.TypeList _Definition_type_)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "options"),
-      Core.fieldTypeType = (Core.TypeList _Option_type_)}]}))
 
 -- | One of several Proto3 scalar types
 data ScalarType = 
@@ -360,101 +234,6 @@ _ScalarType_uint32 = (Core.Name "uint32")
 
 _ScalarType_uint64 = (Core.Name "uint64")
 
-_ScalarType_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/protobuf/proto3.ScalarType"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "bool"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "bytes"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "double"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "fixed32"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "fixed64"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "float"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "int32"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "int64"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "sfixed32"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "sfixed64"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "sint32"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "sint64"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "string"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "uint32"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "uint64"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-        Core.rowTypeExtends = Nothing,
-        Core.rowTypeFields = []}))}]}))
-
 -- | A scalar type or a reference to an enum type or message type
 data SimpleType = 
   SimpleTypeReference TypeName |
@@ -467,17 +246,6 @@ _SimpleType_reference = (Core.Name "reference")
 
 _SimpleType_scalar = (Core.Name "scalar")
 
-_SimpleType_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/protobuf/proto3.SimpleType"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "reference"),
-      Core.fieldTypeType = _TypeName_type_},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "scalar"),
-      Core.fieldTypeType = _ScalarType_type_}]}))
-
 -- | The local name of an enum type or message type
 newtype TypeName = 
   TypeName {
@@ -486,8 +254,6 @@ newtype TypeName =
 
 _TypeName = (Core.Name "hydra/langs/protobuf/proto3.TypeName")
 
-_TypeName_type_ = (Core.TypeLiteral Core.LiteralTypeString)
-
 -- | A reference to an enum type or message type
 newtype TypeReference = 
   TypeReference {
@@ -495,8 +261,6 @@ newtype TypeReference =
   deriving (Eq, Ord, Read, Show)
 
 _TypeReference = (Core.Name "hydra/langs/protobuf/proto3.TypeReference")
-
-_TypeReference_type_ = (Core.TypeLiteral Core.LiteralTypeString)
 
 -- | A scalar value
 data Value = 
@@ -509,14 +273,3 @@ _Value = (Core.Name "hydra/langs/protobuf/proto3.Value")
 _Value_boolean = (Core.Name "boolean")
 
 _Value_string = (Core.Name "string")
-
-_Value_type_ = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = (Core.Name "hydra/langs/protobuf/proto3.Value"),
-  Core.rowTypeExtends = Nothing,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "boolean"),
-      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "string"),
-      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)}]}))
