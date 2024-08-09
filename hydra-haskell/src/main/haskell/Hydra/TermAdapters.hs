@@ -14,7 +14,7 @@ import Hydra.Strip
 import Hydra.Coders
 import Hydra.Compute
 import Hydra.Core
-import Hydra.CoreDecoding
+import Hydra.Schemas
 import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Mantle
