@@ -23,6 +23,13 @@ import qualified Data.Maybe as Y
 import Hydra.Rewriting (removeTypeAnnotations, removeTermAnnotations)
 
 
+data HaskellGenerationOptions = HaskellGenerationOptions {
+  haskellGenerationOptionsIncludeTypeDefinitions :: Bool
+}
+
+-- TODO: make these settings configurable
+defaultHaskellGenerationOptions = HaskellGenerationOptions False
+
 adaptTypeToHaskellAndEncode :: Namespaces -> Type -> Flow Graph H.Type
 adaptTypeToHaskellAndEncode namespaces = adaptAndEncodeType haskellLanguage (encodeType namespaces)
 
@@ -341,10 +348,14 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
           htype <- adaptTypeToHaskellAndEncode namespaces t
           return $ H.DeclarationType (H.TypeDeclaration hd htype)
     comments <- getTermDescription term
-    tdecl <- typeDecl namespaces (elementName el) t
+    tdecls <- if haskellGenerationOptionsIncludeTypeDefinitions defaultHaskellGenerationOptions
+       then do
+         decl <- typeDecl namespaces (elementName el) t
+         pure [decl]
+       else pure []
     return $ [H.DeclarationWithComments decl comments]
       ++ nameDecls g namespaces (elementName el) t
-      ++ [tdecl]
+      ++ tdecls
   where
     declHead name vars = case vars of
       [] -> H.DeclarationHeadSimple name
@@ -379,6 +390,7 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
           return [htype]
       return $ H.ConstructorWithComments (H.ConstructorOrdinary $ H.Constructor_Ordinary (simpleName nm) typeList) comments
 
+-- | Constructs a Hydra Type definition which can be included along with the nativized Haskell type definition
 typeDecl :: Namespaces -> Name -> Type -> Flow Graph H.DeclarationWithComments
 typeDecl namespaces name typ = do
     -- Note: consider constructing this coder just once, then reusing it

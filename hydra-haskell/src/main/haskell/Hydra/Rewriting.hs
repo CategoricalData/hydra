@@ -206,9 +206,7 @@ rewriteTerm f = rewrite fsub f
         forField f = f {fieldTerm = recurse (fieldTerm f)}
 
 rewriteTermM ::
-  ((Term -> Flow s Term) -> Term -> (Flow s Term)) ->
-  Term ->
-  Flow s Term
+  ((Term -> Flow s Term) -> Term -> (Flow s Term)) -> Term -> Flow s Term
 rewriteTermM f = rewrite fsub f
   where
     fsub recurse term = case term of
