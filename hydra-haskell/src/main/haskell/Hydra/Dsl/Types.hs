@@ -119,6 +119,9 @@ product = TypeProduct
 record :: [FieldType] -> Type
 record fields = TypeRecord $ RowType placeholderName Nothing fields
 
+scheme :: [String] -> Type -> TypeScheme
+scheme vars body = TypeScheme (Name <$> vars) body
+
 set :: Type -> Type
 set = TypeSet
 
