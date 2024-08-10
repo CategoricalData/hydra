@@ -41,3 +41,12 @@ graphPrimitives = project _Graph _Graph_primitives
 
 graphSchema :: TTerm (Graph -> Maybe Graph)
 graphSchema = project _Graph _Graph_schema
+
+primitiveName :: TTerm (Primitive -> Name)
+primitiveName = project _Primitive _Primitive_name
+
+primitiveType :: TTerm (Primitive -> TypeScheme)
+primitiveType = project _Primitive _Primitive_type
+
+primitiveImplementation :: TTerm (Primitive -> ([Term] -> Flow Graph Term))
+primitiveImplementation = project _Primitive _Primitive_type

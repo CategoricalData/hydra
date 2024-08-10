@@ -4,7 +4,7 @@ import hydra.Flows;
 import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
-import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
@@ -15,8 +15,8 @@ import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.int32;
-import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.list;
+import static hydra.dsl.Types.scheme;
 
 public class Length extends PrimitiveFunction {
     public Name name() {
@@ -24,8 +24,8 @@ public class Length extends PrimitiveFunction {
     }
 
     @Override
-    public Type type() {
-        return lambda("a", function(list("a"), int32()));
+    public TypeScheme type() {
+        return scheme("a", function(list("a"), int32()));
     }
 
     @Override

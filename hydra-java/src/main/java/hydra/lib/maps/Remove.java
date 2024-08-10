@@ -4,7 +4,7 @@ import hydra.Flows;
 import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
-import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
@@ -16,8 +16,8 @@ import java.util.Map;
 import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
-import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.map;
+import static hydra.dsl.Types.scheme;
 
 public class Remove extends PrimitiveFunction {
     public Name name() {
@@ -25,8 +25,8 @@ public class Remove extends PrimitiveFunction {
     }
 
     @Override
-    public Type type() {
-        return lambda("k", "v",
+    public TypeScheme type() {
+        return scheme("k", "v",
                 function("k", map("k", "v"), map("k", "v")));
     }
 

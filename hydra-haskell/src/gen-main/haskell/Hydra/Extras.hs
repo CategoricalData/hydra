@@ -25,7 +25,7 @@ lookupPrimitive g name = (Maps.lookup name (Graph.graphPrimitives g))
 
 -- | Find the arity (expected number of arguments) of a primitive constant or function
 primitiveArity :: (Graph.Primitive -> Int)
-primitiveArity x = (typeArity (Graph.primitiveType x))
+primitiveArity x = ((\x -> typeArity (Core.typeSchemeType x)) (Graph.primitiveType x))
 
 -- | Construct a qualified (dot-separated) name
 qname :: (Module.Namespace -> String -> Core.Name)
@@ -36,7 +36,7 @@ qname ns name = (Core.Name (Strings.cat [
 
 termArity :: (Core.Term -> Int)
 termArity x = case x of
-  Core.TermApplication v270 -> ((\x -> Math.sub x 1) (termArity (Core.applicationFunction v270)))
+  Core.TermApplication v270 -> ((\x -> (\x -> Math.sub x 1) (termArity x)) (Core.applicationFunction v270))
   Core.TermFunction v271 -> (functionArity v271)
   _ -> 0
 

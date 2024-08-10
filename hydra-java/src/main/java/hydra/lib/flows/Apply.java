@@ -6,7 +6,7 @@ import hydra.compute.FlowState;
 import hydra.core.Name;
 import hydra.core.OptionalCases;
 import hydra.core.Term;
-import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -31,8 +31,8 @@ public class Apply extends PrimitiveFunction {
     }
 
     @Override
-    public Type type() {
-        return Types.lambda("s", "x", "y",
+    public TypeScheme type() {
+        return Types.scheme("s", "x", "y",
                 Types.function(
                         Types.flow("s", Types.function("x", "y")),
                         Types.flow("s", "x"),

@@ -53,8 +53,11 @@ findMatchingField fname sfields = case L.filter (\f -> fieldTypeName f == fname)
   []    -> fail $ "no such field: " ++ unName fname
   (h:_) -> return h
 
-freshName :: Flow InferenceContext Type
-freshName = TypeVariable . normalVariable <$> nextCount "hyInf"
+freshName :: Flow InferenceContext Name
+freshName = normalVariable <$> nextCount "hyInf"
+
+freshVariableType :: Flow InferenceContext Type
+freshVariableType = TypeVariable <$> freshName
 
 generalize :: TypingEnvironment -> Type -> TypeScheme
 generalize env t  = TypeScheme vars t
@@ -72,7 +75,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
     TermApplication (Application fun arg) -> do
       (Inferred ifun ityp funconst) <- infer fun
       (Inferred iarg atyp argconst) <- infer arg
-      cod <- freshName
+      cod <- freshVariableType
       let constraints = funconst ++ argconst ++ [constraint ityp $ Types.function atyp cod]
       yield (TermApplication $ Application ifun iarg) cod constraints
 
@@ -81,16 +84,16 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
       FunctionElimination e -> case e of
 
         EliminationList fun -> do
-          a <- freshName
-          b <- freshName
+          a <- freshVariableType
+          b <- freshVariableType
           let expected = Types.functionN [b, a, b]
           (Inferred i t c) <- infer fun
           let elim = Types.functionN [b, Types.list a, b]
           yieldElimination (EliminationList i) elim (c ++ [constraint expected t])
 
         EliminationOptional (OptionalCases n j) -> do
-          dom <- freshName
-          cod <- freshName
+          dom <- freshVariableType
+          cod <- freshVariableType
           (Inferred ni nt nconst) <- infer n
           (Inferred ji jt jconst) <- infer j
           let t = Types.function (Types.optional dom) cod
@@ -99,7 +102,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
           yieldElimination (EliminationOptional $ OptionalCases ni ji) t constraints
 
         EliminationProduct (TupleProjection arity idx) -> do
-          types <- CM.replicateM arity freshName
+          types <- CM.replicateM arity freshVariableType
           let cod = types !! idx
           let t = Types.function (Types.product types) cod
           yieldElimination (EliminationProduct $ TupleProjection arity idx) t []
@@ -128,7 +131,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
             checkCasesAgainstSchema tname icasesMap sfields
             let pairMap = productOfMaps icasesMap sfields
 
-            cod <- freshName
+            cod <- freshVariableType
             let outerConstraints = (\(d, s) -> constraint (termType d) $ Types.function s cod) <$> M.elems pairMap
             let innerConstraints = dfltConstraints ++ L.concat casesconst
 
@@ -148,28 +151,19 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
           yieldElimination (EliminationWrap name) (Types.function (TypeWrap $ WrappedType name typ) typ) []
 
       FunctionLambda (Lambda v _ body) -> do
-        tv <- freshName
+        tv <- freshVariableType
         (Inferred i t iconst) <- withBinding v (monotype tv) $ infer body
         yieldFunction (FunctionLambda $ Lambda v (Just tv) i) (Types.function tv t) iconst
 
       FunctionPrimitive name -> do
-          t <- (withGraphContext $ typeOfPrimitive name) >>= replaceFreeVariables
-          yieldFunction (FunctionPrimitive name) t []
-        where
-          -- This prevents type variables from being reused across multiple instantiations of a primitive within a single element,
-          -- which would lead to false unification.
-          replaceFreeVariables t = do
-              pairs <- CM.mapM toPair $ S.toList $ freeVariablesInType t
-              return $ substituteInType (M.fromList pairs) t
-            where
-              toPair v = do
-                v' <- freshName
-                return (v, v')
+          ts <- (withGraphContext $ typeOfPrimitive name) >>= instantiate
+          -- TODO: propagate the entire type scheme, not only the body
+          yieldFunction (FunctionPrimitive name) (typeSchemeType ts) []
 
     TermLet lt -> inferLet lt
 
     TermList els -> do
-        v <- freshName
+        v <- freshVariableType
         if L.null els
           then yield (TermList []) (Types.list v) []
           else do
@@ -183,8 +177,8 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
     TermLiteral l -> yield (TermLiteral l) (Types.literal $ literalType l) []
 
     TermMap m -> do
-        kv <- freshName
-        vv <- freshName
+        kv <- freshVariableType
+        vv <- freshVariableType
         if M.null m
           then yield (TermMap M.empty) (Types.map kv vv) []
           else do
@@ -199,7 +193,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
           return (ik, iv, kc ++ vc)
 
     TermOptional m -> do
-      v <- freshName
+      v <- freshVariableType
       case m of
         Nothing -> yield (TermOptional Nothing) (Types.optional v) []
         Just e -> do
@@ -221,7 +215,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
         yield (TermRecord $ Record n ifields) irt ((constraint irt $ TypeRecord rt):ci)
 
     TermSet els -> do
-      v <- freshName
+      v <- freshVariableType
       if S.null els
         then yield (TermSet S.empty) (Types.set v) []
         else do
@@ -238,7 +232,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
       where
         varOrTerm t j = if i == j
           then pure t
-          else freshName
+          else freshVariableType
 
     TermTyped (TypedTerm term1 typ) -> do
       (Inferred i t c) <- infer term1
@@ -253,8 +247,9 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
         yield (TermUnion $ Injection n ifield) (TypeUnion rt) (co:ci)
 
     TermVariable v -> do
-      t <- requireName v
-      yield (TermVariable v) t []
+      ts <- requireName v
+      -- TODO: propagate the entire type scheme, not only the body
+      yield (TermVariable v) (typeSchemeType ts) []
 
     TermWrap (WrappedTerm name term1) -> do
       typ <- withGraphContext $ requireWrappedType name
@@ -292,10 +287,10 @@ inferLet (Let bindings env) = withTrace ("let(" ++ L.intercalate "," (unName . l
           Nothing -> e
           Just typ -> M.insert name (monotype typ) e
 
-instantiate :: TypeScheme -> Flow InferenceContext Type
+instantiate :: TypeScheme -> Flow InferenceContext TypeScheme
 instantiate (TypeScheme vars t) = do
     vars1 <- mapM (const freshName) vars
-    return $ substituteInType (M.fromList $ zip vars vars1) t
+    return $ TypeScheme vars1 $ substituteInType (M.fromList $ L.zip vars (TypeVariable <$> vars1)) t
 
 monotype :: Type -> TypeScheme
 monotype typ = TypeScheme [] typ
@@ -308,13 +303,13 @@ productOfMaps ml mr = M.fromList $ Y.catMaybes (toPair <$> M.toList mr)
 reduceType :: Type -> Type
 reduceType t = t -- betaReduceType cx t
 
-requireName :: Name -> Flow InferenceContext Type
+requireName :: Name -> Flow InferenceContext TypeScheme
 requireName v = do
   env <- inferenceContextEnvironment <$> getState
   case M.lookup v env of
     Nothing -> fail $ "variable not bound in environment: " ++ unName v ++ ". Environment: "
       ++ L.intercalate ", " (unName <$> M.keys env)
-    Just s  -> instantiate s
+    Just s -> instantiate s
 
 termType :: Term -> Type
 termType term = case stripTerm term of
@@ -324,7 +319,7 @@ termType term = case stripTerm term of
 termTypeScheme :: Term -> TypeScheme
 termTypeScheme = monotype . termType
 
-typeOfPrimitive :: Name -> Flow Graph Type
+typeOfPrimitive :: Name -> Flow Graph TypeScheme
 typeOfPrimitive name = primitiveType <$> requirePrimitive name
 
 typeOfTerm :: Term -> Maybe Type

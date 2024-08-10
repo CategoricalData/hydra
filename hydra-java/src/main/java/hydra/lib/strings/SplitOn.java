@@ -3,21 +3,22 @@ package hydra.lib.strings;
 import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
-import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
 import static hydra.Flows.map2;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
+import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
-
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.List;
-import java.util.ArrayList;
 
 
 public class SplitOn extends PrimitiveFunction {
@@ -26,8 +27,8 @@ public class SplitOn extends PrimitiveFunction {
     }
 
     @Override
-    public Type type() {
-        return function(string(), string(), list(string()));
+    public TypeScheme type() {
+        return scheme(function(string(), string(), list(string())));
     }
 
     @Override

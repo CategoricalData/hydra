@@ -5,6 +5,7 @@ import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.dsl.Types;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.scheme;
 
 public class Uint32ToBigint extends PrimitiveFunction {
     public Name name() {
@@ -23,8 +25,8 @@ public class Uint32ToBigint extends PrimitiveFunction {
     }
 
     @Override
-    public Type type() {
-        return function(Types.uint32(), Types.bigint());
+    public TypeScheme type() {
+        return scheme(function(Types.uint32(), Types.bigint()));
     }
 
     @Override

@@ -16,14 +16,14 @@ public class Primitive {
   /**
    * The type signature of the primitive function
    */
-  public final hydra.core.Type type;
+  public final hydra.core.TypeScheme type;
   
   /**
    * A concrete implementation of the primitive function
    */
   public final java.util.function.Function<java.util.List<hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Term>> implementation;
   
-  public Primitive (hydra.core.Name name, hydra.core.Type type, java.util.function.Function<java.util.List<hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Term>> implementation) {
+  public Primitive (hydra.core.Name name, hydra.core.TypeScheme type, java.util.function.Function<java.util.List<hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Term>> implementation) {
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((type));
     java.util.Objects.requireNonNull((implementation));
@@ -51,7 +51,7 @@ public class Primitive {
     return new Primitive(name, type, implementation);
   }
   
-  public Primitive withType(hydra.core.Type type) {
+  public Primitive withType(hydra.core.TypeScheme type) {
     java.util.Objects.requireNonNull((type));
     return new Primitive(name, type, implementation);
   }

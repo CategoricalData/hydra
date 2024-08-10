@@ -4,7 +4,7 @@ import hydra.Flows;
 import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
-import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -14,7 +14,7 @@ import java.util.function.Function;
 
 import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
-import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.scheme;
 
 
 public class Equal extends PrimitiveFunction {
@@ -23,8 +23,8 @@ public class Equal extends PrimitiveFunction {
     }
 
     @Override
-    public Type type() {
-        return lambda("x", function("x", "x", boolean_()));
+    public TypeScheme type() {
+        return scheme("x", function("x", "x", boolean_()));
     }
 
     @Override

@@ -44,7 +44,6 @@ hydraExtrasModule = Module (Namespace "hydra/extras") elements
       el typeArityDef,
       el uncurryTypeDef,
       el getAnnotationDef
---      el getAttrDef
       ]
 
 functionArityDef :: TElement (Function -> Int)
@@ -52,7 +51,7 @@ functionArityDef = hydraExtrasDefinition "functionArity" $
   function (TypeVariable _Function) Types.int32 $
   match _Function Nothing [
     TCase _Function_elimination --> constant (int32 1),
-    TCase _Function_lambda --> (Math.add @@ int32 1) <.> (ref termArityDef <.> project _Lambda _Lambda_body),
+    TCase _Function_lambda --> (Math.add @@ int32 1) <.> (ref termArityDef <.> Core.lambdaBody),
     TCase _Function_primitive --> constant $
       doc "TODO: This function needs to be monadic, so we can look up the primitive" (int32 42)]
 
@@ -62,13 +61,13 @@ lookupPrimitiveDef = hydraExtrasDefinition "lookupPrimitive" $
     graphT
     (Types.function nameT (optionalT primitiveT)) $
   lambda "g" $ lambda "name" $
-    apply (Maps.lookup @@ var "name") (project _Graph _Graph_primitives @@ var "g")
+    apply (Maps.lookup @@ var "name") (Graph.graphPrimitives @@ var "g")
 
 primitiveArityDef :: TElement (Primitive -> Int)
 primitiveArityDef = hydraExtrasDefinition "primitiveArity" $
   doc "Find the arity (expected number of arguments) of a primitive constant or function" $
   function primitiveT Types.int32 $
-  (ref typeArityDef <.> (project _Primitive _Primitive_type))
+  (ref typeArityDef <.> Core.typeSchemeType <.> Graph.primitiveType)
 
 qnameDef :: TElement (Namespace -> String -> Name)
 qnameDef = hydraExtrasDefinition "qname" $
@@ -83,7 +82,7 @@ termArityDef :: TElement (Term -> Int)
 termArityDef = hydraExtrasDefinition "termArity" $
   function termT Types.int32 $
   match _Term (Just $ int32 0) [
-    TCase _Term_application --> (lambda "x" $ Math.sub @@ var "x" @@ int32 1) <.> (ref termArityDef <.> (project _Application _Application_function)),
+    TCase _Term_application --> (lambda "x" $ Math.sub @@ var "x" @@ int32 1) <.> ref termArityDef <.> Core.applicationFunction,
     TCase _Term_function --> ref functionArityDef]
     -- Note: ignoring variables which might resolve to functions
 
@@ -92,10 +91,10 @@ typeArityDef = hydraExtrasDefinition "typeArity" $
   function typeT Types.int32 $
   match _Type (Just $ int32 0) [
     TCase _Type_annotated --> ref typeArityDef <.> Core.annotatedTypeSubject,
-    TCase _Type_application --> ref typeArityDef <.> (project _ApplicationType _ApplicationType_function),
-    TCase _Type_lambda --> ref typeArityDef <.> (project _LambdaType _LambdaType_body),
+    TCase _Type_application --> ref typeArityDef <.> Core.applicationTypeFunction,
+    TCase _Type_lambda --> ref typeArityDef <.> Core.lambdaTypeBody,
     TCase _Type_function --> lambda "f" $
-      Math.add @@ (int32 1) @@ (ref typeArityDef @@ (apply (project _FunctionType _FunctionType_codomain) (var "f")))]
+      Math.add @@ (int32 1) @@ (ref typeArityDef @@ (Core.functionTypeCodomain @@ var "f"))]
 
 uncurryTypeDef :: TElement (Type -> [Type])
 uncurryTypeDef = hydraExtrasDefinition "uncurryType" $
@@ -109,20 +108,10 @@ uncurryTypeDef = hydraExtrasDefinition "uncurryType" $
       @@ (Core.functionTypeDomain @@ var "ft")
       @@ (ref uncurryTypeDef @@ (Core.functionTypeCodomain @@ var "ft"))]) @@ var "t")
 
--- hydra/kv
+-- hydra/annotations
 
 getAnnotationDef :: TElement (String -> M.Map String Term -> Maybe Term)
 getAnnotationDef = hydraExtrasDefinition "getAnnotation" $
   functionN [stringT, kvT, optionalT termT] $
   lambda "key" $ lambda "ann" $
     Maps.lookup @@ var "key" @@ var "ann"
-
-
---getAttrDef :: TElement (String -> Flow s (Maybe Term))
---getAttrDef = hydraExtrasDefinition "getAttr" $
---  lambda "key" $ wrap _Flow $
---    function Types.string (Types.apply (Types.apply (TypeVariable _Flow) (Types.var "s")) (Types.optional $ Types.apply (TypeVariable _Term) (TypeVariable _Kv))) $
---    lambda "s0" $ lambda "t0" $ record _FlowState [
---      fld _FlowState_value (just (Maps.lookup @@ var "key" @@ (project _Trace _Trace_other @@ var "t0"))),
---      fld _FlowState_state $ var "s0",
---      fld _FlowState_trace $ var "t0"]

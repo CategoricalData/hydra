@@ -73,7 +73,7 @@ data Primitive =
     -- | The unique name of the primitive function
     primitiveName :: Core.Name,
     -- | The type signature of the primitive function
-    primitiveType :: Core.Type,
+    primitiveType :: Core.TypeScheme,
     -- | A concrete implementation of the primitive function
     primitiveImplementation :: ([Core.Term] -> Compute.Flow Graph Core.Term)}
 

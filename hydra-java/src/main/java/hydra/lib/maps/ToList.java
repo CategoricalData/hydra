@@ -4,12 +4,12 @@ import hydra.Flows;
 import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
-import hydra.util.Tuple;
-import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
+import hydra.util.Tuple;
 
 import java.util.List;
 import java.util.Map;
@@ -17,10 +17,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static hydra.dsl.Types.function;
-import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.pair;
+import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.variable;
 
 
@@ -30,8 +30,8 @@ public class ToList extends PrimitiveFunction {
     }
 
     @Override
-    public Type type() {
-        return lambda("k", "v", function(
+    public TypeScheme type() {
+        return scheme("k", "v", function(
                 map("k", "v"),
                 list(pair(variable("k"), variable("v")))));
     }

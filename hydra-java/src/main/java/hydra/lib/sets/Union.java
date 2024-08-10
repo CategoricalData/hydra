@@ -4,7 +4,7 @@ import hydra.Flows;
 import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
-import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
-import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.set;
 
 public class Union extends PrimitiveFunction {
@@ -25,8 +25,8 @@ public class Union extends PrimitiveFunction {
     }
 
     @Override
-    public Type type() {
-        return lambda("x", function(set("x"), set("x"), set("x")));
+    public TypeScheme type() {
+        return scheme("x", function(set("x"), set("x"), set("x")));
     }
 
     @Override

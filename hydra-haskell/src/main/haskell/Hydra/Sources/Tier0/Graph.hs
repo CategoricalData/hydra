@@ -74,7 +74,7 @@ hydraGraphModule = Module ns elements [hydraComputeModule] [hydraCoreModule] $
             core "Name",
           "type">:
             doc "The type signature of the primitive function" $
-            core "Type",
+            core "TypeScheme",
           "implementation">:
             doc "A concrete implementation of the primitive function" $
             list (core "Term") --> compute "Flow" @@ (graph "Graph") @@ (core "Term")],
