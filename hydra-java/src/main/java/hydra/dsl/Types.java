@@ -14,11 +14,13 @@ import hydra.core.Name;
 import hydra.core.RowType;
 import hydra.core.Term;
 import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.core.Unit;
 import hydra.core.WrappedType;
 import hydra.util.Opt;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -343,6 +345,34 @@ public interface Types {
      */
     static RowType row(final Name name, final FieldType... fields) {
         return new RowType(name, Opt.empty(), Arrays.asList(fields));
+    }
+
+    /**
+     * Construct a type scheme with no type variable
+     */
+    static TypeScheme scheme(final Type body) {
+        return new TypeScheme(Collections.emptyList(), body);
+    }
+
+    /**
+     * Construct a type scheme with one type variable
+     */
+    static TypeScheme scheme(final String var1, final Type body) {
+        return new TypeScheme(Collections.singletonList(new Name(var1)), body);
+    }
+
+    /**
+     * Construct a type scheme with two type variables
+     */
+    static TypeScheme scheme(final String var1, String var2, final Type body) {
+        return new TypeScheme(Arrays.asList(new Name(var1), new Name(var2)), body);
+    }
+
+    /**
+     * Construct a type scheme with three type variables
+     */
+    static TypeScheme scheme(final String var1, String var2, String var3, final Type body) {
+        return new TypeScheme(Arrays.asList(new Name(var1), new Name(var2), new Name(var3)), body);
     }
 
     /**

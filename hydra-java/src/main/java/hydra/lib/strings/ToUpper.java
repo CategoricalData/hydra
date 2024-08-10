@@ -4,15 +4,17 @@ import hydra.Flows;
 import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
-import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
+
 import java.util.List;
 import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 
 
@@ -22,8 +24,8 @@ public class ToUpper extends PrimitiveFunction {
     }
 
     @Override
-    public Type type() {
-        return function(string(), string());
+    public TypeScheme type() {
+        return scheme(function(string(), string()));
     }
 
     @Override

@@ -5,6 +5,7 @@ import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.dsl.Types;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.scheme;
 
 public class Float64ToBigfloat extends PrimitiveFunction {
     public Name name() {
@@ -22,8 +24,8 @@ public class Float64ToBigfloat extends PrimitiveFunction {
     }
 
     @Override
-    public Type type() {
-        return function(Types.float64(), Types.bigfloat());
+    public TypeScheme type() {
+        return scheme(function(Types.float64(), Types.bigfloat()));
     }
 
     @Override

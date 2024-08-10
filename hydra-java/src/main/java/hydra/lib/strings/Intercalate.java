@@ -3,7 +3,7 @@ package hydra.lib.strings;
 import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
-import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
@@ -15,6 +15,7 @@ import java.util.function.Function;
 import static hydra.Flows.map2;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
+import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 
 public class Intercalate extends PrimitiveFunction {
@@ -23,8 +24,8 @@ public class Intercalate extends PrimitiveFunction {
     }
 
     @Override
-    public Type type() {
-        return function(string(), list(string()), string());
+    public TypeScheme type() {
+        return scheme(function(string(), list(string()), string()));
     }
 
     @Override

@@ -4,7 +4,7 @@ import hydra.Flows;
 import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
-import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.dsl.Types;
@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 import static hydra.dsl.Terms.app;
 import static hydra.dsl.Terms.lambda;
 import static hydra.dsl.Terms.list;
-import static hydra.dsl.Terms.project;
 import static hydra.dsl.Terms.variable;
 
 
@@ -36,8 +35,8 @@ public class MapList extends PrimitiveFunction {
                         lambda("y1", app(pure, app("f", "a1", "b1")))))))));
 
     @Override
-    public Type type() {
-        return Types.lambda("s", "x", "y",
+    public TypeScheme type() {
+        return Types.scheme("s", "x", "y",
                 Types.function(
                         Types.function("x", Types.flow("s", "y")),
                         Types.list("x"),

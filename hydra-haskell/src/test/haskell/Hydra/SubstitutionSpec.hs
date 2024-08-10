@@ -29,10 +29,10 @@ checkInstantiation = H.describe "Check type instantiation" $ do
   H.describe "Lambdas" $ do
     H.it "test #1" $ shouldSucceedWith
       (withInferenceContext $ instantiate $ Types.scheme ["x"] $ Types.var "x")
-      (Types.var "t0")
+      (Types.scheme ["t0"] $ Types.var "t0")
     H.it "test #2" $ shouldSucceedWith
       (withInferenceContext $ instantiate $ Types.scheme ["x"] $ Types.list $ Types.var "x")
-      (Types.list $ Types.var "t0")
+      (Types.scheme ["t0"] $ Types.list $ Types.var "t0")
 
 spec :: H.Spec
 spec = do

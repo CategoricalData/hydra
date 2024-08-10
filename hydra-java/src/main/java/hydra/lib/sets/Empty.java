@@ -4,7 +4,7 @@ import hydra.Flows;
 import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
-import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.set;
 
 
@@ -24,8 +24,8 @@ public class Empty extends PrimitiveFunction {
     }
 
     @Override
-    public Type type() {
-        return lambda("x", set("x"));
+    public TypeScheme type() {
+        return scheme("x", set("x"));
     }
 
     @Override

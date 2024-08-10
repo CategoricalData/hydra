@@ -4,7 +4,7 @@ import hydra.Flows;
 import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
-import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
-import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 import static hydra.dsl.Types.variable;
 
@@ -24,10 +24,8 @@ public class ShowTerm extends PrimitiveFunction {
     }
 
     @Override
-    public Type type() {
-        return lambda("a", function(
-                hydra.dsl.Types.apply(variable(Term.NAME), variable("a")),
-                string()));
+    public TypeScheme type() {
+        return scheme(function(variable(Term.NAME), string()));
     }
 
     @Override

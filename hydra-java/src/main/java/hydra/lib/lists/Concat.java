@@ -4,7 +4,7 @@ import hydra.Flows;
 import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
-import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
@@ -16,8 +16,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static hydra.dsl.Types.function;
-import static hydra.dsl.Types.lambda;
 import static hydra.dsl.Types.list;
+import static hydra.dsl.Types.scheme;
 
 public class Concat extends PrimitiveFunction {
     public static final Name NAME = new Name("hydra/lib/lists.concat");
@@ -27,8 +27,8 @@ public class Concat extends PrimitiveFunction {
     }
 
     @Override
-    public Type type() {
-        return lambda("a", function(list(list("a")), list("a")));
+    public TypeScheme type() {
+        return scheme("a", function(list(list("a")), list("a")));
     }
 
     @Override

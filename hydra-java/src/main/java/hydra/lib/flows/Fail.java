@@ -5,7 +5,7 @@ import hydra.compute.Flow;
 import hydra.compute.FlowState;
 import hydra.core.Name;
 import hydra.core.Term;
-import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
@@ -29,8 +29,8 @@ public class Fail extends PrimitiveFunction {
     }
 
     @Override
-    public Type type() {
-        return Types.lambda("s", "x", Types.function(Types.string(), Types.flow("s", "x")));
+    public TypeScheme type() {
+        return Types.scheme("s", "x", Types.function(Types.string(), Types.flow("s", "x")));
     }
 
     @Override

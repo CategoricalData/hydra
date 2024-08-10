@@ -5,6 +5,7 @@ import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
@@ -15,6 +16,7 @@ import java.util.function.Function;
 
 import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.scheme;
 
 
 public class Or extends PrimitiveFunction {
@@ -23,8 +25,8 @@ public class Or extends PrimitiveFunction {
     }
 
     @Override
-    public Type type() {
-        return function(boolean_(), boolean_(), boolean_());
+    public TypeScheme type() {
+        return scheme(function(boolean_(), boolean_(), boolean_()));
     }
 
     @Override

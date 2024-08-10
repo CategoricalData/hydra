@@ -4,7 +4,7 @@ import hydra.Flows;
 import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
-import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -22,8 +22,8 @@ public class Pure extends PrimitiveFunction {
     }
 
     @Override
-    public Type type() {
-        return Types.lambda("s", "x", Types.function("x", Types.flow("s", "x")));
+    public TypeScheme type() {
+        return Types.scheme("s", "x", Types.function("x", Types.flow("s", "x")));
     }
 
     @Override

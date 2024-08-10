@@ -3,10 +3,11 @@ package hydra.tools;
 import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
-import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.graph.Primitive;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -23,7 +24,7 @@ public abstract class PrimitiveFunction {
     /**
      * The datatype of the primitive function
      */
-    public abstract Type type();
+    public abstract TypeScheme type();
 
     /**
      * A dynamic/interpreted implementation of the function

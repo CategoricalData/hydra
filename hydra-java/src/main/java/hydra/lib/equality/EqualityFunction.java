@@ -4,6 +4,7 @@ import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.lib.PrimitiveType;
@@ -18,6 +19,7 @@ import static hydra.Flows.map2;
 import static hydra.basics.Basics.capitalize;
 import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.scheme;
 
 
 public abstract class EqualityFunction<T> extends PrimitiveFunction {
@@ -37,7 +39,7 @@ public abstract class EqualityFunction<T> extends PrimitiveFunction {
     }
 
     protected final Name name;
-    protected final Type type;
+    protected final TypeScheme type;
     protected final Function<Term, Flow<Graph, T>> expect;
     protected final BiFunction<T, T, Boolean> criterion;
 
@@ -51,7 +53,7 @@ public abstract class EqualityFunction<T> extends PrimitiveFunction {
                              Comparator<T> comparator,
                              Relation relation) {
         this.name = new Name("hydra/lib/equality." + relation.prefix + capitalize(typeName));
-        this.type = function(datatype, datatype, boolean_());
+        this.type = scheme(function(datatype, datatype, boolean_()));
         this.expect = expect;
         switch (relation) {
             case EQUALS:
@@ -82,7 +84,7 @@ public abstract class EqualityFunction<T> extends PrimitiveFunction {
     }
 
     @Override
-    public Type type() {
+    public TypeScheme type() {
         return type;
     }
 
