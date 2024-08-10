@@ -92,22 +92,16 @@ moduleDependencyNamespaces withVars withPrims withNoms withSchema mod = do
 
       return $ S.unions [dataNames, schemaNames, typeNames]
 
-requireRecordType :: Bool -> Name -> Flow Graph (RowType)
-requireRecordType infer = requireRowType "record type" infer $ \t -> case t of
+requireRecordType :: Name -> Flow Graph RowType
+requireRecordType = requireRowType "record type" $ \t -> case t of
   TypeRecord rt -> Just rt
   _ -> Nothing
 
-requireRowType :: String -> Bool -> (Type -> Maybe (RowType)) -> Name -> Flow Graph (RowType)
-requireRowType label infer getter name = do
+requireRowType :: String -> (Type -> Maybe RowType) -> Name -> Flow Graph RowType
+requireRowType label getter name = do
   t <- requireType name
   case getter (rawType t) of
-    Just rt -> if infer
-      then case rowTypeExtends rt of
-        Nothing -> return rt
-        Just name' -> do
-          rt' <- requireRowType label True getter name'
-          return $ RowType name Nothing (rowTypeFields rt' ++ rowTypeFields rt)
-      else return rt
+    Just rt -> return rt
     Nothing -> fail $ show name ++ " does not resolve to a " ++ label ++ " type: " ++ show t
   where
     rawType t = case t of
@@ -119,8 +113,8 @@ requireType :: Name -> Flow Graph Type
 requireType name = withTrace ("require type " ++ unName name) $
   (withSchemaContext $ requireElement name) >>= (coreDecodeType . elementData)
 
-requireUnionType :: Bool -> Name -> Flow Graph (RowType)
-requireUnionType infer = requireRowType "union" infer $ \t -> case t of
+requireUnionType :: Name -> Flow Graph RowType
+requireUnionType = requireRowType "union" $ \t -> case t of
   TypeUnion rt -> Just rt
   _ -> Nothing
 

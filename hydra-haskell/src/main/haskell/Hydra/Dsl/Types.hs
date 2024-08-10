@@ -117,7 +117,7 @@ product :: [Type] -> Type
 product = TypeProduct
 
 record :: [FieldType] -> Type
-record fields = TypeRecord $ RowType placeholderName Nothing fields
+record fields = TypeRecord $ RowType placeholderName fields
 
 scheme :: [String] -> Type -> TypeScheme
 scheme vars body = TypeScheme (Name <$> vars) body
@@ -144,10 +144,10 @@ uint8 :: Type
 uint8 = integer IntegerTypeUint8
 
 union :: [FieldType] -> Type
-union fields = TypeUnion $ RowType placeholderName Nothing fields
+union fields = TypeUnion $ RowType placeholderName fields
 
 unit :: Type
-unit = TypeRecord $ RowType (Name "hydra/core.Unit") Nothing []
+unit = TypeRecord $ RowType (Name "hydra/core.Unit") []
 
 var :: String -> Type
 var = TypeVariable . Name

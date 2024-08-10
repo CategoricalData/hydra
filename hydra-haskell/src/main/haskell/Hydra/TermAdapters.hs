@@ -77,7 +77,7 @@ functionProxyName :: Name
 functionProxyName = Name "hydra/core.FunctionProxy"
 
 functionProxyType :: Type -> Type
-functionProxyType dom = TypeUnion $ RowType functionProxyName Nothing [
+functionProxyType dom = TypeUnion $ RowType functionProxyName [
   FieldType _Elimination_wrap Types.string,
   FieldType _Elimination_optional Types.string,
   FieldType _Elimination_record Types.string,
@@ -125,7 +125,7 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
 
     unionType = do
       domAd <- termAdapter dom
-      return $ TypeUnion $ RowType functionProxyName Nothing [
+      return $ TypeUnion $ RowType functionProxyName [
         FieldType _Elimination_wrap Types.string,
         FieldType _Elimination_optional Types.string,
         FieldType _Elimination_record Types.string,

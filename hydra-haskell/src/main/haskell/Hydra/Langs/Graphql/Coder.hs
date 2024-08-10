@@ -121,7 +121,7 @@ encodeNamedType prefixes el typ = do
       TypeVariable _ -> wrapAsRecord
       t -> unexpected "record or union type" $ show t
   where
-    wrapAsRecord = encodeNamedType prefixes el $ TypeRecord $ RowType (elementName el) Nothing [
+    wrapAsRecord = encodeNamedType prefixes el $ TypeRecord $ RowType (elementName el) [
       FieldType (Name "value") typ]
 
 encodeTerm :: Term -> Flow (Graph) ()

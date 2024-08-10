@@ -79,7 +79,7 @@ avroHydraAdapter schema = case schema of
             ad <- case Avro.namedType n of
               Avro.NamedTypeEnum (Avro.Enum_ syms mdefault) -> simpleAdapter typ encode decode  -- TODO: use default value
                 where
-                  typ = TypeUnion (RowType hydraName Nothing $ toField <$> syms)
+                  typ = TypeUnion (RowType hydraName $ toField <$> syms)
                     where
                       toField s = FieldType (Name s) Types.unit
                   encode (Json.ValueString s) = pure $ TermUnion (Injection hydraName $ Field (Name s) Terms.unit)
@@ -106,7 +106,7 @@ avroHydraAdapter schema = case schema of
                           return (k, v')
                   let lossy = L.foldl (\b (_, ad) -> b || adapterIsLossy ad) False $ M.elems adaptersByFieldName
                   let hfields = toHydraField <$> M.elems adaptersByFieldName
-                  let target = TypeRecord $ RowType hydraName Nothing hfields
+                  let target = TypeRecord $ RowType hydraName hfields
                   let coder = Coder {
                     -- Note: the order of the fields is changed
                     coderEncode = \(Json.ValueObject m) -> do

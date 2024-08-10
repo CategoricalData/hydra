@@ -492,8 +492,6 @@ data RowType =
   RowType {
     -- | The name of the row type, which must correspond to the name of a Type element
     rowTypeTypeName :: Name,
-    -- | Optionally, the name of another row type which this one extends. If/when field order is preserved, the inherited fields of the extended type precede those of the extension.
-    rowTypeExtends :: (Maybe Name),
     -- | The fields of this row type, excluding any inherited fields
     rowTypeFields :: [FieldType]}
   deriving (Eq, Ord, Read, Show)
@@ -501,8 +499,6 @@ data RowType =
 _RowType = (Name "hydra/core.RowType")
 
 _RowType_typeName = (Name "typeName")
-
-_RowType_extends = (Name "extends")
 
 _RowType_fields = (Name "fields")
 

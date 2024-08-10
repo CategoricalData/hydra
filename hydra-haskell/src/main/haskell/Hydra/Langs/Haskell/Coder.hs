@@ -97,7 +97,7 @@ encodeFunction namespaces fun = case fun of
       EliminationUnion (CaseStatement dn def fields) -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
         where
           caseExpr = do
-            rt <- withSchemaContext $ requireUnionType False dn
+            rt <- withSchemaContext $ requireUnionType dn
             let fieldMap = M.fromList $ (\f -> (fieldTypeName f, f)) <$> rowTypeFields rt
             ecases <- CM.mapM (toAlt fieldMap) fields
             dcases <- case def of
@@ -115,7 +115,7 @@ encodeFunction namespaces fun = case fun of
             let hname = unionFieldReference namespaces dn fn
             args <- case M.lookup fn fieldMap of
               Just (FieldType _ ft) -> case stripType ft of
-                TypeRecord (RowType _ Nothing []) -> pure []
+                TypeRecord (RowType _ []) -> pure []
                 _ -> pure [H.PatternName $ rawName v1]
               Nothing -> fail $ "field " ++ show fn ++ " not found in " ++ show dn
             let lhs = applicationPattern hname args

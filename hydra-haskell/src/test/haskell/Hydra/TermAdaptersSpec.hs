@@ -34,10 +34,10 @@ constraintsAreAsExpected = H.describe "Verify that the language constraints incl
 
     H.it "Records are supported if and only if each of their fields are supported" $ do
       typeIsSupported (context [TypeVariantLiteral, TypeVariantRecord])
-        (TypeRecord $ RowType (Name "Example") Nothing [Types.field "first" Types.string, Types.field "second" Types.int16])
+        (TypeRecord $ RowType (Name "Example") [Types.field "first" Types.string, Types.field "second" Types.int16])
         `H.shouldBe` True
       typeIsSupported (context [TypeVariantLiteral, TypeVariantRecord])
-        (TypeRecord $ RowType (Name "Example") Nothing [Types.field "first" Types.string, Types.field "second" Types.int8])
+        (TypeRecord $ RowType (Name "Example") [Types.field "first" Types.string, Types.field "second" Types.int8])
         `H.shouldBe` False
 
     H.it "Lists are supported if the list element type is supported" $ do
@@ -90,8 +90,8 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
   H.it "Records (when supported) pass through without change" $
     QC.property $ \a1 a2 -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantRecord]
-      (TypeRecord $ RowType testTypeName Nothing [Types.field "first" Types.string, Types.field "second" Types.int8])
-      (TypeRecord $ RowType testTypeName Nothing [Types.field "first" Types.string, Types.field "second" Types.int16])
+      (TypeRecord $ RowType testTypeName [Types.field "first" Types.string, Types.field "second" Types.int8])
+      (TypeRecord $ RowType testTypeName [Types.field "first" Types.string, Types.field "second" Types.int16])
       False
       (record testTypeName [field "first" $ string a1, field "second" $ int8 a2])
       (record testTypeName [field "first" $ string a1, field "second" $ int16 $ fromIntegral a2])
@@ -186,7 +186,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
     QC.property $ \i -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantOptional, TypeVariantRecord]
       eitherStringOrInt8Type
-      (TypeRecord $ RowType eitherStringOrInt8TypeName Nothing [
+      (TypeRecord $ RowType eitherStringOrInt8TypeName [
         Types.field "left" $ Types.optional Types.string,
         Types.field "right" $ Types.optional Types.int16])
       False

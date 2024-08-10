@@ -78,7 +78,7 @@ elementCoder :: (Show t, Show v) => Y.Maybe (PG.Direction, PG.VertexLabel)
   -> Flow s (ElementAdapter s t v)
 elementCoder mparent schema source vidType eidType = case stripType source of
     TypeOptional ot -> elementCoder mparent schema ot vidType eidType
-    TypeRecord (RowType name _ fields) -> withTrace ("adapter for " ++ unName name) $ do
+    TypeRecord (RowType name fields) -> withTrace ("adapter for " ++ unName name) $ do
       mOutSpec <- findProjectionSpec name outVertexKey outVertexLabelKey fields
       mInSpec <- findProjectionSpec name inVertexKey inVertexLabelKey fields
 

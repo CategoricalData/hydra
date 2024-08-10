@@ -62,7 +62,7 @@ insantiateTemplate minimal schema t = case t of
     TypeProduct types -> do
       es <- mapM inst types
       return $ TermProduct es
-    TypeRecord (RowType tname _ fields) -> do
+    TypeRecord (RowType tname fields) -> do
       dfields <- mapM toField fields
       return $ TermRecord $ Record tname dfields
       where

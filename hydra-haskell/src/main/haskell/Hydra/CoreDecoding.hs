@@ -106,7 +106,6 @@ coreDecodeWrappedType term = do
 coreDecodeRowType :: Term -> Flow Graph (RowType)
 coreDecodeRowType = matchRecord $ \m -> RowType
   <$> getField m _RowType_typeName coreDecodeName
-  <*> getField m _RowType_extends (Expect.optional coreDecodeName)
   <*> getField m _RowType_fields coreDecodeFieldTypes
 
 coreDecodeString :: Term -> Flow Graph String

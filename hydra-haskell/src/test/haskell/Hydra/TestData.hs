@@ -16,7 +16,7 @@ compareStringsType :: Type
 compareStringsType = Types.function Types.string Types.string
 
 eitherStringOrInt8Type :: Type
-eitherStringOrInt8Type = TypeUnion $ RowType eitherStringOrInt8TypeName Nothing
+eitherStringOrInt8Type = TypeUnion $ RowType eitherStringOrInt8TypeName
   [Types.field "left" Types.string, Types.field "right" Types.int8]
 
 eitherStringOrInt8TypeName :: Name
@@ -62,7 +62,7 @@ stringOrIntName :: Name
 stringOrIntName = Name "StringOrInt"
 
 stringOrIntType :: Type
-stringOrIntType = TypeUnion $ RowType stringOrIntName Nothing [Types.field "left" Types.string, Types.field "right" Types.int32]
+stringOrIntType = TypeUnion $ RowType stringOrIntName [Types.field "left" Types.string, Types.field "right" Types.int32]
 
 testTypeName :: Name
 testTypeName = unqualifyName $ QualifiedName (Just testNamespace) "TestType"
