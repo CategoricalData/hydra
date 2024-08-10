@@ -34,12 +34,11 @@ individualEncoderTestCases = do
 
     H.it "record type" $ do
       H.shouldBe
-        (strip $ coreEncodeType (TypeRecord $ RowType (Name "Example") Nothing
+        (strip $ coreEncodeType (TypeRecord $ RowType (Name "Example")
           [Types.field "something" Types.string, Types.field "nothing" Types.unit]) :: Term)
         (strip $ variant _Type _Type_record $
           record _RowType [
             Field _RowType_typeName $ wrap _Name $ string "Example",
-            Field _RowType_extends $ optional Nothing,
             Field _RowType_fields $ list [
               record _FieldType [
                 Field _FieldType_name $ wrap _Name $ string "something",
@@ -48,7 +47,6 @@ individualEncoderTestCases = do
                 Field _FieldType_name $ wrap _Name $ string "nothing",
                 Field _FieldType_type $ variant _Type _Type_record $ record _RowType [
                   Field _RowType_typeName $ wrap _Name $ string "hydra/core.Unit",
-                  Field _RowType_extends $ optional Nothing,
                   Field _RowType_fields $ list []]]]])
 
 individualDecoderTestCases :: H.SpecWith ()
@@ -72,7 +70,6 @@ individualDecoderTestCases = do
         (coreDecodeType $
           variant _Type _Type_union $ record _RowType [
             Field _RowType_typeName $ wrap _Name $ string (unName testTypeName),
-            Field _RowType_extends $ optional Nothing,
             Field _RowType_fields $
               list [
                 record _FieldType [
@@ -83,7 +80,7 @@ individualDecoderTestCases = do
                   Field _FieldType_name $ wrap _Name $ string "right",
                   Field _FieldType_type $ variant _Type _Type_literal $ variant _LiteralType _LiteralType_float $
                     unitVariant _FloatType _FloatType_float64]]])
-          (TypeUnion $ RowType testTypeName Nothing [
+          (TypeUnion $ RowType testTypeName [
             Types.field "left" Types.int64,
             Types.field "right" Types.float64])
 

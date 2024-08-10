@@ -344,7 +344,7 @@ public interface Types {
      * Construct a row type.
      */
     static RowType row(final Name name, final FieldType... fields) {
-        return new RowType(name, Opt.empty(), Arrays.asList(fields));
+        return new RowType(name, Arrays.asList(fields));
     }
 
     /**

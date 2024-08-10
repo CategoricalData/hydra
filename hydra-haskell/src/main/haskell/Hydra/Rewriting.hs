@@ -283,10 +283,10 @@ rewriteType f = rewrite fsub f
         TypeMap (MapType kt vt) -> TypeMap (MapType (recurse kt) (recurse vt))
         TypeOptional t -> TypeOptional $ recurse t
         TypeProduct types -> TypeProduct (recurse <$> types)
-        TypeRecord (RowType name extends fields) -> TypeRecord $ RowType name extends (forField <$> fields)
+        TypeRecord (RowType name fields) -> TypeRecord $ RowType name (forField <$> fields)
         TypeSet t -> TypeSet $ recurse t
         TypeSum types -> TypeSum (recurse <$> types)
-        TypeUnion (RowType name extends fields) -> TypeUnion $ RowType name extends (forField <$> fields)
+        TypeUnion (RowType name fields) -> TypeUnion $ RowType name (forField <$> fields)
         TypeVariable v -> TypeVariable v
         TypeWrap (WrappedType name t) -> TypeWrap $ WrappedType name $ recurse t
       where
@@ -308,12 +308,12 @@ rewriteTypeM f = rewrite fsub f
         TypeMap (MapType kt vt) -> TypeMap <$> (MapType <$> recurse kt <*> recurse vt)
         TypeOptional t -> TypeOptional <$> recurse t
         TypeProduct types -> TypeProduct <$> CM.mapM recurse types
-        TypeRecord (RowType name extends fields) ->
-          TypeRecord <$> (RowType <$> pure name <*> pure extends <*> CM.mapM forField fields)
+        TypeRecord (RowType name fields) ->
+          TypeRecord <$> (RowType <$> pure name <*> CM.mapM forField fields)
         TypeSet t -> TypeSet <$> recurse t
         TypeSum types -> TypeSum <$> CM.mapM recurse types
-        TypeUnion (RowType name extends fields) ->
-          TypeUnion <$> (RowType <$> pure name <*> pure extends <*> CM.mapM forField fields)
+        TypeUnion (RowType name fields) ->
+          TypeUnion <$> (RowType <$> pure name <*> CM.mapM forField fields)
         TypeVariable v -> pure $ TypeVariable v
         TypeWrap (WrappedType name t) -> TypeWrap <$> (WrappedType <$> pure name <*> recurse t)
       where

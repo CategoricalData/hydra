@@ -745,8 +745,8 @@ encodeType aliases t = case stripType t of
       _ -> do
         jtypes <- CM.mapM encode types >>= mapM javaTypeToJavaReferenceType
         return $ javaRefType jtypes hydraUtilPackageName $ "Tuple.Tuple" ++ (show $ length types)
-    TypeRecord (RowType _Unit _ []) -> unit
-    TypeRecord (RowType name _ _) -> pure $
+    TypeRecord (RowType _Unit []) -> unit
+    TypeRecord (RowType name _) -> pure $
       Java.TypeReference $ nameToJavaReferenceType aliases True (javaTypeArgumentsForType t) name Nothing
     TypeOptional ot -> do
       jot <- encode ot >>= javaTypeToJavaReferenceType
@@ -754,7 +754,7 @@ encodeType aliases t = case stripType t of
     TypeSet st -> do
       jst <- encode st >>= javaTypeToJavaReferenceType
       return $ javaRefType [jst] javaUtilPackageName "Set"
-    TypeUnion (RowType name _ _) -> pure $
+    TypeUnion (RowType name _) -> pure $
       Java.TypeReference $ nameToJavaReferenceType aliases True (javaTypeArgumentsForType t) name Nothing
     TypeVariable name -> forReference name
     TypeWrap (WrappedType name _) -> forReference name

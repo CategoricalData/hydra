@@ -343,7 +343,6 @@ coreEncodeRowTypeDef :: TElement (RowType -> Term)
 coreEncodeRowTypeDef = coreEncodingDefinition "RowType" rowTypeT $
   lambda "rt" $ encodedRecord _RowType [
     field _RowType_typeName $ ref coreEncodeNameDef @@ (Core.rowTypeTypeName @@ var "rt"),
-    field _RowType_extends $ encodedOptional (primitive _optionals_map @@ ref coreEncodeNameDef @@ (Core.rowTypeExtends @@ var "rt")),
     field _RowType_fields $ encodedList (primitive _lists_map @@ ref coreEncodeFieldTypeDef @@ (Core.rowTypeFields @@ var "rt"))]
 
 coreEncodeSumDef :: TElement (Sum -> Term)

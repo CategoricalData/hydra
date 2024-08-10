@@ -81,14 +81,14 @@ checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. 
     QC.property $ \() -> checkSerialization jsonStringCoder
       (TypedTerm
         (record testTypeName [Field (Name "one") $ optional $ Just $ string "test", Field (Name "two") $ optional Nothing])
-        (TypeRecord $ RowType testTypeName Nothing [Types.field "one" $ Types.optional Types.string, Types.field "two" $ Types.optional Types.int32]))
+        (TypeRecord $ RowType testTypeName [Types.field "one" $ Types.optional Types.string, Types.field "two" $ Types.optional Types.int32]))
       "{\"one\":\"test\"}"
 
   H.it "Simple unions become simple objects, via records" $
     QC.property $ \() -> checkSerialization jsonStringCoder
       (TypedTerm
         (inject testTypeName $ Field (Name "left") $ string "test")
-        (TypeUnion $ RowType testTypeName Nothing [Types.field "left" Types.string, Types.field "right" Types.int32]))
+        (TypeUnion $ RowType testTypeName [Types.field "left" Types.string, Types.field "right" Types.int32]))
       "{\"left\":\"test\"}"
 
 jsonByteStringCoderIsInformationPreserving :: H.SpecWith ()

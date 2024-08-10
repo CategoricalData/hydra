@@ -131,14 +131,14 @@ checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
         (record testTypeLatLonName [
           Field (Name "lat") $ float32 37.7749,
           Field (Name "lon") $ float32 $ negate 122.4194])
-        (TypeRecord $ RowType testTypeLatLonName Nothing [
+        (TypeRecord $ RowType testTypeLatLonName [
           FieldType (Name "lat") Types.float32,
           FieldType (Name "lon") Types.float32])
       expectMonotype
         (record testTypeLatLonPolyName [
           Field (Name "lat") $ float32 37.7749,
           Field (Name "lon") $ float32 $ negate 122.4194])
-        (TypeRecord $ RowType testTypeLatLonPolyName Nothing [
+        (TypeRecord $ RowType testTypeLatLonPolyName [
           FieldType (Name "lat") Types.float32,
           FieldType (Name "lon") Types.float32])
       expectMonotype
@@ -146,7 +146,7 @@ checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
           Field (Name "lat") $ float32 37.7749,
           Field (Name "lon") $ var "lon"]))
         (Types.function (Types.float32)
-          (TypeRecord $ RowType testTypeLatLonPolyName Nothing [
+          (TypeRecord $ RowType testTypeLatLonPolyName [
             FieldType (Name "lat") $ Types.float32,
             FieldType (Name "lon") $ Types.float32]))
       expectPolytype
@@ -154,7 +154,7 @@ checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
           Field (Name "lat") $ var "latlon",
           Field (Name "lon") $ var "latlon"]))
         ["t0"] (Types.function (Types.var "t0")
-          (TypeRecord $ RowType testTypeLatLonPolyName Nothing [
+          (TypeRecord $ RowType testTypeLatLonPolyName [
             FieldType (Name "lat") $ Types.var "t0",
             FieldType (Name "lon") $ Types.var "t0"]))
 

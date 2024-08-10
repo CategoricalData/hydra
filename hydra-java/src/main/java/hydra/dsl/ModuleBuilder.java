@@ -46,7 +46,7 @@ public class ModuleBuilder {
 
     public ModuleBuilder recordType(String localName, FieldType... fields) {
         return type(localName, new Type.Record(
-                new RowType(qname(namespace, localName), Opt.empty(), Arrays.asList(fields))));
+                new RowType(qname(namespace, localName), Arrays.asList(fields))));
     }
 
     public ModuleBuilder type(String localName, Type type) {
@@ -56,7 +56,7 @@ public class ModuleBuilder {
 
     public ModuleBuilder unionType(String localName, FieldType... fields) {
         return type(localName, new Type.Union(
-                new RowType(qname(namespace, localName), Opt.empty(), Arrays.asList(fields))));
+                new RowType(qname(namespace, localName), Arrays.asList(fields))));
     }
 
     public Module build() {

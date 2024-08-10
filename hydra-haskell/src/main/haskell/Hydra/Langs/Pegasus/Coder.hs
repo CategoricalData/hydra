@@ -117,7 +117,7 @@ encodeType aliases typ = case typ of
     _ -> unexpected "PDL-supported type" $ show typ
   where
     encode t = case stripType t of
-      TypeRecord (RowType _ Nothing []) -> encode Types.int32 -- special case for the unit type
+      TypeRecord (RowType _ []) -> encode Types.int32 -- special case for the unit type
       _ -> do
         res <- encodeType aliases t
         case res of

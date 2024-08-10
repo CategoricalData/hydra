@@ -370,9 +370,6 @@ public interface CoreEncoding {
   static hydra.core.Term coreEncodeRowType(hydra.core.RowType rt) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.RowType"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("typeName"), hydra.coreEncoding.CoreEncoding.coreEncodeName(((rt)).typeName)),
-      new hydra.core.Field(new hydra.core.Name("extends"), new hydra.core.Term.Optional(hydra.lib.optionals.Map.apply(
-        (hydra.coreEncoding.CoreEncoding::coreEncodeName),
-        ((rt)).extends_))),
       new hydra.core.Field(new hydra.core.Name("fields"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         (hydra.coreEncoding.CoreEncoding::coreEncodeFieldType),
         ((rt)).fields))))));

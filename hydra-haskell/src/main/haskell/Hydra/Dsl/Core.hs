@@ -209,17 +209,13 @@ recordTypeName = project _Record _Record_typeName
 recordFields :: TTerm (Record -> [Field])
 recordFields = project _Record _Record_fields
 
-rowType :: TTerm Name -> TTerm (Maybe Name) -> TTerm [FieldType] -> TTerm (RowType)
-rowType typeName extends fields = Base.record _RowType [
+rowType :: TTerm Name -> TTerm [FieldType] -> TTerm (RowType)
+rowType typeName fields = Base.record _RowType [
     _RowType_typeName>>: typeName,
-    _RowType_extends>>: extends,
     _RowType_fields>>: fields]
 
 rowTypeTypeName :: TTerm (RowType -> Name)
 rowTypeTypeName = project _RowType _RowType_typeName
-
-rowTypeExtends :: TTerm (RowType -> Maybe Name)
-rowTypeExtends = project _RowType _RowType_extends
 
 rowTypeFields :: TTerm (RowType -> [FieldType])
 rowTypeFields = project _RowType _RowType_fields

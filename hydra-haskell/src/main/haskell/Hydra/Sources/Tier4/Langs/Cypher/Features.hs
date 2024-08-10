@@ -310,7 +310,7 @@ openCypherFeaturesEnum = do
           Just typ -> forType prefix typ
           Nothing -> fail "unknown type reference"
         forType prefix features = case stripType features of
-          TypeRecord (RowType _ _ fields) -> do
+          TypeRecord (RowType _ fields) -> do
             pairs <- CM.mapM (forField prefix) fields
             return $ L.concat pairs
         forField prefix ft = do

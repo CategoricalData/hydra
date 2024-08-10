@@ -39,7 +39,7 @@ graphqlLanguage = Language (LanguageName "hydra/langs/graphql") $ LanguageConstr
     TypeUnion rt -> L.foldl (\b f -> b && isEnumField f) True $ rowTypeFields rt
       where
         isUnitType t = case stripType t of
-          TypeRecord (RowType name _ fields) -> L.null fields || name == _Unit
+          TypeRecord (RowType name fields) -> L.null fields || name == _Unit
           _ -> False
         isEnumField = isUnitType . fieldTypeType
     TypeOptional et -> case stripType et of

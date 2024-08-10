@@ -76,7 +76,7 @@ constructModule mod@(Module ns els _ _ desc) _ pairs = do
             TypeRecord rt -> checkRowType rt
             TypeUnion rt -> checkRowType rt
             _ -> False
-        checkRowType (RowType _ _ fields) = L.foldl (||) False (checkField <$> fields)
+        checkRowType (RowType _ fields) = L.foldl (||) False (checkField <$> fields)
         checkField (FieldType _ typ) = checkFieldType $ stripType typ
     wrapperImport types = if checkFields (const Nothing) isOptionalScalarField types
         then [P3.FileReference "google/protobuf/wrappers.proto"]
@@ -95,7 +95,7 @@ constructModule mod@(Module ns els _ _ desc) _ pairs = do
           then Just False
           else Nothing
         isUnitField typ = case typ of
-          TypeRecord (RowType name _ _) -> name == _Unit
+          TypeRecord (RowType name _) -> name == _Unit
           _ -> False
 
 encodeDefinition :: Namespace -> Name -> Type -> Flow (Graph) P3.Definition
@@ -105,7 +105,7 @@ encodeDefinition localNs name typ = withTrace ("encoding " ++ unName name) $ do
     options <- findOptions typ
     encode options typ
   where
-    wrapAsRecordType t = TypeRecord $ RowType name Nothing [FieldType (Name "value") t]
+    wrapAsRecordType t = TypeRecord $ RowType name [FieldType (Name "value") t]
     encode options typ = case simplifyType typ of
       TypeRecord rt -> P3.DefinitionMessage <$> encodeRecordType localNs options rt
       TypeUnion rt -> if isEnumDefinition typ
@@ -114,7 +114,7 @@ encodeDefinition localNs name typ = withTrace ("encoding " ++ unName name) $ do
       t -> encode options $ wrapAsRecordType t
 
 encodeEnumDefinition :: [P3.Option] -> RowType -> Flow (Graph) P3.EnumDefinition
-encodeEnumDefinition options (RowType tname _ fields) = do
+encodeEnumDefinition options (RowType tname fields) = do
     values <- CM.zipWithM encodeEnumField fields [1..]
     return $ P3.EnumDefinition {
       P3.enumDefinitionName = encodeTypeName tname,
@@ -167,24 +167,24 @@ encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ 
       TypeOptional ot -> case stripType ot of
         TypeLiteral lt -> P3.FieldTypeSimple <$> encodeScalarTypeWrapped lt
         _ -> encodeType ot -- TODO
-      TypeUnion (RowType _ _ fields) -> do
+      TypeUnion (RowType _ fields) -> do
         pfields <- CM.mapM (encodeFieldType localNs) fields
         return $ P3.FieldTypeOneof pfields
       _ -> do
         P3.FieldTypeSimple <$> encodeSimpleType typ
     encodeSimpleType typ = case simplifyType typ of
       TypeLiteral lt -> P3.SimpleTypeScalar <$> encodeScalarType lt
-      TypeRecord (RowType name _ _) -> if name == _Unit
+      TypeRecord (RowType name _) -> if name == _Unit
         then pure $ P3.SimpleTypeReference $ P3.TypeName $ "google.protobuf.Empty"
         else forNominal name
-      TypeUnion (RowType name _ _) -> forNominal name
+      TypeUnion (RowType name _) -> forNominal name
       TypeVariable name -> forNominal name
       t -> unexpected "simple type" $ show $ removeTypeAnnotations t
       where
         forNominal name = pure $ P3.SimpleTypeReference $ encodeTypeReference localNs name
 
 encodeRecordType :: Namespace -> [P3.Option] -> RowType -> Flow (Graph) P3.MessageDefinition
-encodeRecordType localNs options (RowType tname _ fields) = do
+encodeRecordType localNs options (RowType tname fields) = do
     pfields <- CM.mapM (encodeFieldType localNs) fields
     return P3.MessageDefinition {
       P3.messageDefinitionName = encodeTypeName tname,
@@ -263,7 +263,7 @@ isEnumFields fields = L.foldl (&&) True $ fmap isEnumField fields
 
 isEnumDefinition :: Type -> Bool
 isEnumDefinition typ = case simplifyType typ of
-  TypeUnion (RowType _ _ fields) -> isEnumFields fields
+  TypeUnion (RowType _ fields) -> isEnumFields fields
   _ -> False
 
 isEnumDefinitionReference :: Name -> Flow (Graph) Bool

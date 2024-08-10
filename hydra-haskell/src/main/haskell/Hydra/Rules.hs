@@ -108,7 +108,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
           yieldElimination (EliminationProduct $ TupleProjection arity idx) t []
 
         EliminationRecord (Projection name fname) -> do
-          rt <- withGraphContext $ requireRecordType True name
+          rt <- withGraphContext $ requireRecordType name
           sfield <- findMatchingField fname (rowTypeFields rt)
           yieldElimination (EliminationRecord $ Projection name fname)
             (Types.function (TypeRecord rt) $ fieldTypeType sfield) []
@@ -126,7 +126,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
             let icases = inferredObject <$> icases'
             let casesconst = inferredConstraints <$> icases'
             let icasesMap = fieldMap icases
-            rt <- withGraphContext $ requireUnionType True tname
+            rt <- withGraphContext $ requireUnionType tname
             let sfields = fieldTypeMap  $ rowTypeFields rt
             checkCasesAgainstSchema tname icasesMap sfields
             let pairMap = productOfMaps icasesMap sfields
@@ -207,11 +207,11 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
       yield (TermProduct is) (TypeProduct $ fmap termType is) co
 
     TermRecord (Record n fields) -> do
-        rt <- withGraphContext $ requireRecordType True n
+        rt <- withGraphContext $ requireRecordType n
         ifields' <- CM.mapM inferFieldType fields
         let ifields = inferredObject <$> ifields'
         let ci = L.concat (inferredConstraints <$> ifields')
-        let irt = TypeRecord $ RowType n Nothing (fieldType <$> ifields)
+        let irt = TypeRecord $ RowType n (fieldType <$> ifields)
         yield (TermRecord $ Record n ifields) irt ((constraint irt $ TypeRecord rt):ci)
 
     TermSet els -> do
@@ -239,7 +239,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
       return $ Inferred (setTermType (Just typ) i) typ $ c ++ [constraint typ t]
 
     TermUnion (Injection n field) -> do
-        rt <- withGraphContext $ requireUnionType True n
+        rt <- withGraphContext $ requireUnionType n
         sfield <- findMatchingField (fieldName field) (rowTypeFields rt)
         (Inferred ifield t ci) <- inferFieldType field
         let co = constraint t $ fieldTypeType sfield

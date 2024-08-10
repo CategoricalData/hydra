@@ -479,9 +479,6 @@ coreEncodeRowType rt = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "typeName"),
       Core.fieldTerm = (coreEncodeName (Core.rowTypeTypeName rt))},
     Core.Field {
-      Core.fieldName = (Core.Name "extends"),
-      Core.fieldTerm = (Core.TermOptional (Optionals.map coreEncodeName (Core.rowTypeExtends rt)))},
-    Core.Field {
       Core.fieldName = (Core.Name "fields"),
       Core.fieldTerm = (Core.TermList (Lists.map coreEncodeFieldType (Core.rowTypeFields rt)))}]}))
 

@@ -634,7 +634,7 @@ public interface Basics {
   static Boolean isUnitType(hydra.core.Type t) {
     return hydra.lib.equality.EqualType.apply(
       hydra.strip.Strip.stripType((t)),
-      new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra/core.Unit"), hydra.util.Opt.empty(), java.util.Arrays.asList())));
+      new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList())));
   }
 
   static java.util.function.Function<hydra.util.Opt<hydra.graph.Graph>, java.util.function.Function<java.util.List<hydra.graph.Element>, hydra.graph.Graph>> elementsToGraph(hydra.graph.Graph parent) {

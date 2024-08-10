@@ -282,7 +282,6 @@ isUnitTerm t = (Equality.equalTerm (Strip.fullyStripTerm t) (Core.TermRecord (Co
 isUnitType :: (Core.Type -> Bool)
 isUnitType t = (Equality.equalType (Strip.stripType t) (Core.TypeRecord (Core.RowType {
   Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
-  Core.rowTypeExtends = Nothing,
   Core.rowTypeFields = []})))
 
 elementsToGraph :: (Graph.Graph -> Maybe Graph.Graph -> [Graph.Element] -> Graph.Graph)
