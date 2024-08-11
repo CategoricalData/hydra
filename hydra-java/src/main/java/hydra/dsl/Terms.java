@@ -233,7 +233,7 @@ public interface Terms {
     /**
      * Construct an int8 literal term.
      */
-    static Term int8(final short value) {
+    static Term int8(final byte value) {
         return literal(Literals.int8(value));
     }
 
@@ -453,7 +453,7 @@ public interface Terms {
     /**
      * Construct a uint8 literal term.
      */
-    static Term uint8(final byte value) {
+    static Term uint8(final char value) {
         return literal(Literals.uint8(value));
     }
 

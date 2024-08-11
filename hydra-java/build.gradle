@@ -8,7 +8,7 @@ plugins {
 }
 
 group 'net.fortytwo.hydra'
-version '0.5.3'
+version '0.6.0'
 
 apply plugin: 'antlr'
 

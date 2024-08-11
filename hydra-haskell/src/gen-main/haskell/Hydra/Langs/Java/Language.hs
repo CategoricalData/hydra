@@ -35,10 +35,10 @@ javaLanguage = Coders.Language {
     Coders.languageConstraintsFunctionVariants = (Sets.fromList Basics.functionVariants),
     Coders.languageConstraintsIntegerTypes = (Sets.fromList [
       Core.IntegerTypeBigint,
+      Core.IntegerTypeInt8,
       Core.IntegerTypeInt16,
       Core.IntegerTypeInt32,
       Core.IntegerTypeInt64,
-      Core.IntegerTypeUint8,
       Core.IntegerTypeUint16]),
     Coders.languageConstraintsTermVariants = (Sets.fromList [
       Mantle.TermVariantApplication,
