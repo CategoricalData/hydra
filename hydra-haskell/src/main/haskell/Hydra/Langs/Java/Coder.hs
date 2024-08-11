@@ -605,10 +605,10 @@ encodeLiteral lit = javaLiteralToJavaExpression $ case lit of
     FloatValueFloat64 v -> v
   LiteralInteger i -> case i of
       IntegerValueBigint v -> integer v -- BigInteger
+      IntegerValueInt8 v -> integer $ fromIntegral v -- byte
       IntegerValueInt16 v -> integer $ fromIntegral v -- short
       IntegerValueInt32 v -> integer $ fromIntegral v -- int
       IntegerValueInt64 v -> integer $ fromIntegral v -- long
-      IntegerValueUint8 v -> integer $ fromIntegral v -- byte
       IntegerValueUint16 v -> Java.LiteralCharacter $ fromIntegral v -- char
     where
       integer = Java.LiteralInteger . Java.IntegerLiteral
@@ -626,10 +626,10 @@ encodeLiteralType lt = case lt of
 --      _ -> fail $ "unexpected float type: " ++ show ft
     LiteralTypeInteger it -> case it of
       IntegerTypeBigint -> pure $ javaRefType [] (Just $ javaPackageName ["java", "math"]) "BigInteger"
+      IntegerTypeInt8 -> simple "Byte"
       IntegerTypeInt16 -> simple "Short"
       IntegerTypeInt32 -> simple "Integer"
       IntegerTypeInt64 -> simple "Long"
-      IntegerTypeUint8 -> simple "Byte"
       IntegerTypeUint16 -> simple "Character"
       _ -> fail $ "unexpected integer type: " ++ show it
     LiteralTypeString -> simple "String"

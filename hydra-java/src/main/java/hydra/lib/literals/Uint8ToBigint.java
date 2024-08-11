@@ -34,7 +34,7 @@ public class Uint8ToBigint extends PrimitiveFunction {
         return args -> Flows.map(Expect.uint8(args.get(0)), s -> Terms.bigint(apply(s)));
     }
 
-    public static BigInteger apply(Byte value) {
+    public static BigInteger apply(Character value) {
         return BigInteger.valueOf(value);
     }
 }

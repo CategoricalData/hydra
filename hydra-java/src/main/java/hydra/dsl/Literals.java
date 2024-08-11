@@ -43,7 +43,7 @@ public interface Literals {
         return float_(new FloatValue.Float64(value));
     }
 
-    static Literal int8(final short value) {
+    static Literal int8(final byte value) {
         return integer(new IntegerValue.Int8(value));
     }
 
@@ -67,7 +67,7 @@ public interface Literals {
         return new Literal.String_(value);
     }
 
-    static Literal uint8(final byte value) {
+    static Literal uint8(final char value) {
         return integer(new IntegerValue.Uint8(value));
     }
 

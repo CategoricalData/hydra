@@ -57,11 +57,11 @@ javaLanguageDef = javaLanguageDefinition "javaLanguage" $
       _LanguageConstraints_functionVariants>>: Sets.fromList @@ ref functionVariantsDef,
       _LanguageConstraints_integerTypes>>: Sets.fromList @@ list (unitVariant _IntegerType <$> [
         _IntegerType_bigint, -- BigInteger
-        _IntegerType_int16, -- short
-        _IntegerType_int32, -- int
-        _IntegerType_int64, -- long
-        _IntegerType_uint8, -- byte
-        _IntegerType_uint16]), -- char
+        _IntegerType_int8, -- byte (signed, 8-bit)
+        _IntegerType_int16, -- short (signed, 16-bit)
+        _IntegerType_int32, -- int (signed, 32-bit)
+        _IntegerType_int64, -- long (signed, 64-bit)
+        _IntegerType_uint16]), -- char (unsigned, 16-bit)
       _LanguageConstraints_termVariants>>: Sets.fromList @@ list (unitVariant _TermVariant <$> [
         _TermVariant_application,
         _TermVariant_function,

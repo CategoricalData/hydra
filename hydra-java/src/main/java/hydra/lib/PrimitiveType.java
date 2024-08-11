@@ -80,8 +80,8 @@ public class PrimitiveType<T> {
     /**
      * The primitive type for int8 literal values.
      */
-    public static  PrimitiveType<Short> int8() {
-        return new PrimitiveType<>("int8", Types.int8(), Expect::int8, Short::compareTo);
+    public static  PrimitiveType<Byte> int8() {
+        return new PrimitiveType<>("int8", Types.int8(), Expect::int8, Byte::compareTo);
     }
 
     /**
@@ -141,8 +141,8 @@ public class PrimitiveType<T> {
     /**
      * The primitive type for uint8 literal values.
      */
-    public static  PrimitiveType<Byte> uint8() {
-        return new PrimitiveType<>("uint8", Types.uint8(), Expect::uint8, Byte::compareTo);
+    public static  PrimitiveType<Character> uint8() {
+        return new PrimitiveType<>("uint8", Types.uint8(), Expect::uint8, Character::compareTo);
     }
 
     /**

@@ -214,10 +214,16 @@ public abstract class IntegerValue implements Serializable {
     }
   }
   
+  /**
+   * An 8-bit signed integer value
+   */
   public static final class Int8 extends hydra.core.IntegerValue implements Serializable {
-    public final Short value;
+    /**
+     * An 8-bit signed integer value
+     */
+    public final Byte value;
     
-    public Int8 (Short value) {
+    public Int8 (Byte value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -332,16 +338,10 @@ public abstract class IntegerValue implements Serializable {
     }
   }
   
-  /**
-   * An 8-bit unsigned integer value (byte)
-   */
   public static final class Uint8 extends hydra.core.IntegerValue implements Serializable {
-    /**
-     * An 8-bit unsigned integer value (byte)
-     */
-    public final Byte value;
+    public final Character value;
     
-    public Uint8 (Byte value) {
+    public Uint8 (Character value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
