@@ -328,7 +328,7 @@ declarationForUnionType isSer aliases tparams elName fields = do
   where
     privateConstructor = makeConstructor aliases elName True [] []
     unionFieldClass (FieldType fname ftype) = do
-      let rtype = Types.record $ if isUnitType ftype then [] else [FieldType (Name valueFieldName) ftype]
+      let rtype = Types.record $ if isUnitType ftype then [] else [FieldType (Name valueFieldName) $ stripType ftype]
       toClassDecl True isSer aliases [] (variantClassName False elName fname) rtype
     augmentVariantClass (Java.ClassDeclarationNormal cd) = Java.ClassDeclarationNormal $ cd {
         Java.normalClassDeclarationModifiers = [Java.ClassModifierPublic, Java.ClassModifierStatic, Java.ClassModifierFinal],
