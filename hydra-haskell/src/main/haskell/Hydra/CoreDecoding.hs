@@ -114,6 +114,7 @@ coreDecodeString = Expect.string . fullyStripTerm
 coreDecodeType :: Term -> Flow Graph Type
 coreDecodeType dat = case dat of
   TermAnnotated (AnnotatedTerm term ann) -> (\t -> TypeAnnotated $ AnnotatedType t ann) <$> coreDecodeType term
+  TermTyped (TypedTerm term _) -> coreDecodeType term
   _ -> matchUnion _Type [
 --    (_Type_annotated, fmap TypeAnnotated . coreDecodeAnnotated),
     (_Type_application, fmap TypeApplication . coreDecodeApplicationType),
