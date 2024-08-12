@@ -60,6 +60,9 @@ public abstract class Value implements Serializable {
     }
   }
   
+  /**
+   * A JSON array
+   */
   public static final class Array extends hydra.json.Value implements Serializable {
     public final java.util.List<hydra.json.Value> value;
     
@@ -88,6 +91,9 @@ public abstract class Value implements Serializable {
     }
   }
   
+  /**
+   * A boolean value
+   */
   public static final class Boolean_ extends hydra.json.Value implements Serializable {
     public final Boolean value;
     
@@ -116,6 +122,9 @@ public abstract class Value implements Serializable {
     }
   }
   
+  /**
+   * JSON's null value
+   */
   public static final class Null extends hydra.json.Value implements Serializable {
     public Null () {
     
@@ -141,6 +150,9 @@ public abstract class Value implements Serializable {
     }
   }
   
+  /**
+   * A numeric value
+   */
   public static final class Number_ extends hydra.json.Value implements Serializable {
     public final Double value;
     
@@ -169,6 +181,9 @@ public abstract class Value implements Serializable {
     }
   }
   
+  /**
+   * A JSON object as a set of key/value pairs
+   */
   public static final class Object_ extends hydra.json.Value implements Serializable {
     public final java.util.Map<String, hydra.json.Value> value;
     
@@ -197,6 +212,9 @@ public abstract class Value implements Serializable {
     }
   }
   
+  /**
+   * A string value
+   */
   public static final class String_ extends hydra.json.Value implements Serializable {
     public final String value;
     

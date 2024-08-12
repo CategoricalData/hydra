@@ -46,9 +46,6 @@ public abstract class Path implements Serializable {
    * A path given by a single step
    */
   public static final class Step extends hydra.query.Path implements Serializable {
-    /**
-     * A path given by a single step
-     */
     public final hydra.query.Step value;
     
     public Step (hydra.query.Step value) {
@@ -80,9 +77,6 @@ public abstract class Path implements Serializable {
    * A path given by a regular expression quantifier applied to another path
    */
   public static final class Regex extends hydra.query.Path implements Serializable {
-    /**
-     * A path given by a regular expression quantifier applied to another path
-     */
     public final hydra.query.RegexSequence value;
     
     public Regex (hydra.query.RegexSequence value) {
@@ -114,9 +108,6 @@ public abstract class Path implements Serializable {
    * A path given by the inverse of another path
    */
   public static final class Inverse extends hydra.query.Path implements Serializable {
-    /**
-     * A path given by the inverse of another path
-     */
     public final hydra.query.Path value;
     
     public Inverse (hydra.query.Path value) {

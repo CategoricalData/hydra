@@ -54,6 +54,9 @@ public abstract class Literal implements Serializable {
     }
   }
   
+  /**
+   * A binary literal
+   */
   public static final class Binary extends hydra.core.Literal implements Serializable {
     public final String value;
     
@@ -86,9 +89,6 @@ public abstract class Literal implements Serializable {
    * A boolean literal
    */
   public static final class Boolean_ extends hydra.core.Literal implements Serializable {
-    /**
-     * A boolean literal
-     */
     public final Boolean value;
     
     public Boolean_ (Boolean value) {
@@ -120,9 +120,6 @@ public abstract class Literal implements Serializable {
    * A floating-point literal
    */
   public static final class Float_ extends hydra.core.Literal implements Serializable {
-    /**
-     * A floating-point literal
-     */
     public final hydra.core.FloatValue value;
     
     public Float_ (hydra.core.FloatValue value) {
@@ -154,9 +151,6 @@ public abstract class Literal implements Serializable {
    * An integer literal
    */
   public static final class Integer_ extends hydra.core.Literal implements Serializable {
-    /**
-     * An integer literal
-     */
     public final hydra.core.IntegerValue value;
     
     public Integer_ (hydra.core.IntegerValue value) {
@@ -188,9 +182,6 @@ public abstract class Literal implements Serializable {
    * A string literal
    */
   public static final class String_ extends hydra.core.Literal implements Serializable {
-    /**
-     * A string literal
-     */
     public final String value;
     
     public String_ (String value) {

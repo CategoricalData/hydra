@@ -46,9 +46,6 @@ public abstract class Step implements Serializable {
    * An out-to-in traversal of an abstract edge
    */
   public static final class Edge extends hydra.query.Step implements Serializable {
-    /**
-     * An out-to-in traversal of an abstract edge
-     */
     public final hydra.query.Edge value;
     
     public Edge (hydra.query.Edge value) {
@@ -80,9 +77,6 @@ public abstract class Step implements Serializable {
    * A projection from a record through one of its fields
    */
   public static final class Project extends hydra.query.Step implements Serializable {
-    /**
-     * A projection from a record through one of its fields
-     */
     public final hydra.core.Projection value;
     
     public Project (hydra.core.Projection value) {
@@ -114,9 +108,6 @@ public abstract class Step implements Serializable {
    * A comparison of two terms
    */
   public static final class Compare extends hydra.query.Step implements Serializable {
-    /**
-     * A comparison of two terms
-     */
     public final hydra.query.ComparisonConstraint value;
     
     public Compare (hydra.query.ComparisonConstraint value) {

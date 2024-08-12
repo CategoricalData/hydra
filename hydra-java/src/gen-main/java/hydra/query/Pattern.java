@@ -58,9 +58,6 @@ public abstract class Pattern implements Serializable {
    * A subject/predicate/object pattern
    */
   public static final class Triple extends hydra.query.Pattern implements Serializable {
-    /**
-     * A subject/predicate/object pattern
-     */
     public final hydra.query.TriplePattern value;
     
     public Triple (hydra.query.TriplePattern value) {
@@ -92,9 +89,6 @@ public abstract class Pattern implements Serializable {
    * The negation of another pattern
    */
   public static final class Negation extends hydra.query.Pattern implements Serializable {
-    /**
-     * The negation of another pattern
-     */
     public final hydra.query.Pattern value;
     
     public Negation (hydra.query.Pattern value) {
@@ -126,9 +120,6 @@ public abstract class Pattern implements Serializable {
    * The conjunction ('and') of several other patterns
    */
   public static final class Conjunction extends hydra.query.Pattern implements Serializable {
-    /**
-     * The conjunction ('and') of several other patterns
-     */
     public final java.util.List<hydra.query.Pattern> value;
     
     public Conjunction (java.util.List<hydra.query.Pattern> value) {
@@ -160,9 +151,6 @@ public abstract class Pattern implements Serializable {
    * The disjunction (inclusive 'or') of several other patterns
    */
   public static final class Disjunction extends hydra.query.Pattern implements Serializable {
-    /**
-     * The disjunction (inclusive 'or') of several other patterns
-     */
     public final java.util.List<hydra.query.Pattern> value;
     
     public Disjunction (java.util.List<hydra.query.Pattern> value) {
@@ -194,9 +182,6 @@ public abstract class Pattern implements Serializable {
    * A pattern which matches within a named subgraph
    */
   public static final class Graph extends hydra.query.Pattern implements Serializable {
-    /**
-     * A pattern which matches within a named subgraph
-     */
     public final hydra.query.GraphPattern value;
     
     public Graph (hydra.query.GraphPattern value) {

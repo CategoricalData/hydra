@@ -46,9 +46,6 @@ public abstract class Node implements Serializable {
    * A graph term; an expression which is valid in the graph being matched
    */
   public static final class Term extends hydra.query.Node implements Serializable {
-    /**
-     * A graph term; an expression which is valid in the graph being matched
-     */
     public final hydra.core.Term value;
     
     public Term (hydra.core.Term value) {
@@ -80,9 +77,6 @@ public abstract class Node implements Serializable {
    * A query variable, not to be confused with a variable term
    */
   public static final class Variable extends hydra.query.Node implements Serializable {
-    /**
-     * A query variable, not to be confused with a variable term
-     */
     public final hydra.query.Variable value;
     
     public Variable (hydra.query.Variable value) {
