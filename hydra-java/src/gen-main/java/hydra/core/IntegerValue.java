@@ -82,9 +82,6 @@ public abstract class IntegerValue implements Serializable {
    * An arbitrary-precision integer value
    */
   public static final class Bigint extends hydra.core.IntegerValue implements Serializable {
-    /**
-     * An arbitrary-precision integer value
-     */
     public final java.math.BigInteger value;
     
     public Bigint (java.math.BigInteger value) {
@@ -116,9 +113,6 @@ public abstract class IntegerValue implements Serializable {
    * A 16-bit signed integer value (short value)
    */
   public static final class Int16 extends hydra.core.IntegerValue implements Serializable {
-    /**
-     * A 16-bit signed integer value (short value)
-     */
     public final Short value;
     
     public Int16 (Short value) {
@@ -150,9 +144,6 @@ public abstract class IntegerValue implements Serializable {
    * A 32-bit signed integer value (int value)
    */
   public static final class Int32 extends hydra.core.IntegerValue implements Serializable {
-    /**
-     * A 32-bit signed integer value (int value)
-     */
     public final Integer value;
     
     public Int32 (Integer value) {
@@ -184,9 +175,6 @@ public abstract class IntegerValue implements Serializable {
    * A 64-bit signed integer value (long value)
    */
   public static final class Int64 extends hydra.core.IntegerValue implements Serializable {
-    /**
-     * A 64-bit signed integer value (long value)
-     */
     public final Long value;
     
     public Int64 (Long value) {
@@ -218,9 +206,6 @@ public abstract class IntegerValue implements Serializable {
    * An 8-bit signed integer value
    */
   public static final class Int8 extends hydra.core.IntegerValue implements Serializable {
-    /**
-     * An 8-bit signed integer value
-     */
     public final Byte value;
     
     public Int8 (Byte value) {
@@ -252,9 +237,6 @@ public abstract class IntegerValue implements Serializable {
    * A 16-bit unsigned integer value
    */
   public static final class Uint16 extends hydra.core.IntegerValue implements Serializable {
-    /**
-     * A 16-bit unsigned integer value
-     */
     public final Character value;
     
     public Uint16 (Character value) {
@@ -282,6 +264,9 @@ public abstract class IntegerValue implements Serializable {
     }
   }
   
+  /**
+   * A 32-bit unsigned integer value (unsigned int)
+   */
   public static final class Uint32 extends hydra.core.IntegerValue implements Serializable {
     public final Long value;
     
@@ -310,6 +295,9 @@ public abstract class IntegerValue implements Serializable {
     }
   }
   
+  /**
+   * A 64-bit unsigned integer value (unsigned long)
+   */
   public static final class Uint64 extends hydra.core.IntegerValue implements Serializable {
     public final java.math.BigInteger value;
     
@@ -338,6 +326,9 @@ public abstract class IntegerValue implements Serializable {
     }
   }
   
+  /**
+   * An 8-bit unsigned integer value (byte)
+   */
   public static final class Uint8 extends hydra.core.IntegerValue implements Serializable {
     public final Character value;
     

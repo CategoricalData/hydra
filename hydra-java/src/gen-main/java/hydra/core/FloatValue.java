@@ -42,6 +42,9 @@ public abstract class FloatValue implements Serializable {
     }
   }
   
+  /**
+   * An arbitrary-precision floating-point value
+   */
   public static final class Bigfloat extends hydra.core.FloatValue implements Serializable {
     public final Double value;
     
@@ -74,9 +77,6 @@ public abstract class FloatValue implements Serializable {
    * A 32-bit floating-point value
    */
   public static final class Float32 extends hydra.core.FloatValue implements Serializable {
-    /**
-     * A 32-bit floating-point value
-     */
     public final Float value;
     
     public Float32 (Float value) {
@@ -108,9 +108,6 @@ public abstract class FloatValue implements Serializable {
    * A 64-bit floating-point value
    */
   public static final class Float64 extends hydra.core.FloatValue implements Serializable {
-    /**
-     * A 64-bit floating-point value
-     */
     public final Double value;
     
     public Float64 (Double value) {

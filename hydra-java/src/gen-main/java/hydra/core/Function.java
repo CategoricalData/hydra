@@ -46,9 +46,6 @@ public abstract class Function implements Serializable {
    * An elimination for any of a few term variants
    */
   public static final class Elimination extends hydra.core.Function implements Serializable {
-    /**
-     * An elimination for any of a few term variants
-     */
     public final hydra.core.Elimination value;
     
     public Elimination (hydra.core.Elimination value) {
@@ -80,9 +77,6 @@ public abstract class Function implements Serializable {
    * A function abstraction (lambda)
    */
   public static final class Lambda extends hydra.core.Function implements Serializable {
-    /**
-     * A function abstraction (lambda)
-     */
     public final hydra.core.Lambda value;
     
     public Lambda (hydra.core.Lambda value) {
@@ -114,9 +108,6 @@ public abstract class Function implements Serializable {
    * A reference to a built-in (primitive) function
    */
   public static final class Primitive extends hydra.core.Function implements Serializable {
-    /**
-     * A reference to a built-in (primitive) function
-     */
     public final hydra.core.Name value;
     
     public Primitive (hydra.core.Name value) {

@@ -124,9 +124,6 @@ public abstract class Term implements Serializable {
    * A term annotated with metadata
    */
   public static final class Annotated extends hydra.core.Term implements Serializable {
-    /**
-     * A term annotated with metadata
-     */
     public final hydra.core.AnnotatedTerm value;
     
     public Annotated (hydra.core.AnnotatedTerm value) {
@@ -158,9 +155,6 @@ public abstract class Term implements Serializable {
    * A function application
    */
   public static final class Application extends hydra.core.Term implements Serializable {
-    /**
-     * A function application
-     */
     public final hydra.core.Application value;
     
     public Application (hydra.core.Application value) {
@@ -192,9 +186,6 @@ public abstract class Term implements Serializable {
    * A function term
    */
   public static final class Function extends hydra.core.Term implements Serializable {
-    /**
-     * A function term
-     */
     public final hydra.core.Function value;
     
     public Function (hydra.core.Function value) {
@@ -254,9 +245,6 @@ public abstract class Term implements Serializable {
    * A list
    */
   public static final class List extends hydra.core.Term implements Serializable {
-    /**
-     * A list
-     */
     public final java.util.List<hydra.core.Term> value;
     
     public List (java.util.List<hydra.core.Term> value) {
@@ -288,9 +276,6 @@ public abstract class Term implements Serializable {
    * A literal value
    */
   public static final class Literal extends hydra.core.Term implements Serializable {
-    /**
-     * A literal value
-     */
     public final hydra.core.Literal value;
     
     public Literal (hydra.core.Literal value) {
@@ -322,9 +307,6 @@ public abstract class Term implements Serializable {
    * A map of keys to values
    */
   public static final class Map extends hydra.core.Term implements Serializable {
-    /**
-     * A map of keys to values
-     */
     public final java.util.Map<hydra.core.Term, hydra.core.Term> value;
     
     public Map (java.util.Map<hydra.core.Term, hydra.core.Term> value) {
@@ -356,9 +338,6 @@ public abstract class Term implements Serializable {
    * An optional value
    */
   public static final class Optional extends hydra.core.Term implements Serializable {
-    /**
-     * An optional value
-     */
     public final hydra.util.Opt<hydra.core.Term> value;
     
     public Optional (hydra.util.Opt<hydra.core.Term> value) {
@@ -390,9 +369,6 @@ public abstract class Term implements Serializable {
    * A tuple
    */
   public static final class Product extends hydra.core.Term implements Serializable {
-    /**
-     * A tuple
-     */
     public final java.util.List<hydra.core.Term> value;
     
     public Product (java.util.List<hydra.core.Term> value) {
@@ -424,9 +400,6 @@ public abstract class Term implements Serializable {
    * A record term
    */
   public static final class Record extends hydra.core.Term implements Serializable {
-    /**
-     * A record term
-     */
     public final hydra.core.Record value;
     
     public Record (hydra.core.Record value) {
@@ -458,9 +431,6 @@ public abstract class Term implements Serializable {
    * A set of values
    */
   public static final class Set extends hydra.core.Term implements Serializable {
-    /**
-     * A set of values
-     */
     public final java.util.Set<hydra.core.Term> value;
     
     public Set (java.util.Set<hydra.core.Term> value) {
@@ -492,9 +462,6 @@ public abstract class Term implements Serializable {
    * A variant tuple
    */
   public static final class Sum extends hydra.core.Term implements Serializable {
-    /**
-     * A variant tuple
-     */
     public final hydra.core.Sum value;
     
     public Sum (hydra.core.Sum value) {
@@ -526,9 +493,6 @@ public abstract class Term implements Serializable {
    * A term annotated with its type
    */
   public static final class Typed extends hydra.core.Term implements Serializable {
-    /**
-     * A term annotated with its type
-     */
     public final hydra.core.TypedTerm value;
     
     public Typed (hydra.core.TypedTerm value) {
@@ -560,9 +524,6 @@ public abstract class Term implements Serializable {
    * An injection; an instance of a union type
    */
   public static final class Union extends hydra.core.Term implements Serializable {
-    /**
-     * An injection; an instance of a union type
-     */
     public final hydra.core.Injection value;
     
     public Union (hydra.core.Injection value) {
@@ -594,9 +555,6 @@ public abstract class Term implements Serializable {
    * A variable reference
    */
   public static final class Variable extends hydra.core.Term implements Serializable {
-    /**
-     * A variable reference
-     */
     public final hydra.core.Name value;
     
     public Variable (hydra.core.Name value) {

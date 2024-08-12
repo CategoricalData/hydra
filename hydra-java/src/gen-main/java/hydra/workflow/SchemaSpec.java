@@ -46,9 +46,6 @@ public abstract class SchemaSpec implements Serializable {
    * A native Hydra schema
    */
   public static final class Hydra extends hydra.workflow.SchemaSpec implements Serializable {
-    /**
-     * A native Hydra schema
-     */
     public final hydra.workflow.HydraSchemaSpec value;
     
     public Hydra (hydra.workflow.HydraSchemaSpec value) {
@@ -80,9 +77,6 @@ public abstract class SchemaSpec implements Serializable {
    * A schema provided as a file, available at the given file path
    */
   public static final class File extends hydra.workflow.SchemaSpec implements Serializable {
-    /**
-     * A schema provided as a file, available at the given file path
-     */
     public final String value;
     
     public File (String value) {

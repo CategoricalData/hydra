@@ -64,9 +64,6 @@ public abstract class Elimination implements Serializable {
    * Eliminates a list using a fold function; this function has the signature b -&gt; [a] -&gt; b
    */
   public static final class List extends hydra.core.Elimination implements Serializable {
-    /**
-     * Eliminates a list using a fold function; this function has the signature b -&gt; [a] -&gt; b
-     */
     public final hydra.core.Term value;
     
     public List (hydra.core.Term value) {
@@ -98,9 +95,6 @@ public abstract class Elimination implements Serializable {
    * Eliminates an optional term by matching over the two possible cases
    */
   public static final class Optional extends hydra.core.Elimination implements Serializable {
-    /**
-     * Eliminates an optional term by matching over the two possible cases
-     */
     public final hydra.core.OptionalCases value;
     
     public Optional (hydra.core.OptionalCases value) {
@@ -132,9 +126,6 @@ public abstract class Elimination implements Serializable {
    * Eliminates a tuple by projecting the component at a given 0-indexed offset
    */
   public static final class Product extends hydra.core.Elimination implements Serializable {
-    /**
-     * Eliminates a tuple by projecting the component at a given 0-indexed offset
-     */
     public final hydra.core.TupleProjection value;
     
     public Product (hydra.core.TupleProjection value) {
@@ -166,9 +157,6 @@ public abstract class Elimination implements Serializable {
    * Eliminates a record by projecting a given field
    */
   public static final class Record extends hydra.core.Elimination implements Serializable {
-    /**
-     * Eliminates a record by projecting a given field
-     */
     public final hydra.core.Projection value;
     
     public Record (hydra.core.Projection value) {
@@ -200,9 +188,6 @@ public abstract class Elimination implements Serializable {
    * Eliminates a union term by matching over the fields of the union. This is a case statement.
    */
   public static final class Union extends hydra.core.Elimination implements Serializable {
-    /**
-     * Eliminates a union term by matching over the fields of the union. This is a case statement.
-     */
     public final hydra.core.CaseStatement value;
     
     public Union (hydra.core.CaseStatement value) {
@@ -234,9 +219,6 @@ public abstract class Elimination implements Serializable {
    * Unwrap a wrapped term
    */
   public static final class Wrap extends hydra.core.Elimination implements Serializable {
-    /**
-     * Unwrap a wrapped term
-     */
     public final hydra.core.Name value;
     
     public Wrap (hydra.core.Name value) {
