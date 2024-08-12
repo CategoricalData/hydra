@@ -28,9 +28,9 @@ import qualified Data.Maybe as Y
 -- beneathTermAnnotations :: (Term -> Term) -> Term -> Term
 -- beneathTermAnnotations f term = case term of
 --   TermAnnotated (AnnotatedTerm term1 ann) ->
---     TermAnnotated (AnnotatedTerm (beneathTermAnnotationsM f term1) ann)
+--     TermAnnotated (AnnotatedTerm (beneathTermAnnotations f term1) ann)
 --   TermTyped (TypedTerm term1 typ) ->
---     TermTyped $ TypedTerm (beneathTermAnnotationsM f term1) typ
+--     TermTyped $ TypedTerm (beneathTermAnnotations f term1) typ
 --   _ -> f term
 --
 -- beneathTermAnnotationsM :: (Term -> Flow s Term) -> Term -> Flow s Term
@@ -40,6 +40,12 @@ import qualified Data.Maybe as Y
 --   TermTyped (TypedTerm term1 typ) ->
 --     TermTyped <$> (TypedTerm <$> beneathTermAnnotationsM f term1 <*> pure typ)
 --   _ -> f term
+
+-- | Apply a transformation to the first type beneath a chain of annotations
+beneathTypeAnnotations :: (Type -> Type) -> Type -> Type
+beneathTypeAnnotations f t = case t of
+  TypeAnnotated (AnnotatedType t1 ann) -> TypeAnnotated (AnnotatedType (beneathTypeAnnotations f t1) ann)
+  _ -> f t
 
 elementsWithDependencies :: [Element] -> Flow Graph [Element]
 elementsWithDependencies original = CM.mapM requireElement allDepNames

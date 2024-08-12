@@ -27,9 +27,21 @@ jsonModelModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "Value" $
         doc "A JSON value" $
         union [
-          "array">: list $ json "Value",
-          "boolean">: boolean,
-          "null">: unit,
-          "number">: bigfloat, -- TODO: JSON numbers are decimal-encoded
-          "object">: Types.map string (json "Value"),
-          "string">: string]]
+          "array">:
+            doc "A JSON array" $
+            list $ json "Value",
+          "boolean">:
+            doc "A boolean value"
+            boolean,
+          "null">:
+            doc "JSON's null value"
+            unit,
+          "number">:
+            doc "A numeric value"
+            bigfloat, -- TODO: JSON numbers are decimal-encoded
+          "object">:
+            doc "A JSON object as a set of key/value pairs" $
+            Types.map string (json "Value"),
+          "string">:
+            doc "A string value"
+            string]]

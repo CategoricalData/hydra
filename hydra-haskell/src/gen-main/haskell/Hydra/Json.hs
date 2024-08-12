@@ -10,11 +10,17 @@ import Data.Set as S
 
 -- | A JSON value
 data Value = 
+  -- | A JSON array
   ValueArray [Value] |
+  -- | A boolean value
   ValueBoolean Bool |
+  -- | JSON's null value
   ValueNull  |
+  -- | A numeric value
   ValueNumber Double |
+  -- | A JSON object as a set of key/value pairs
   ValueObject (Map String Value) |
+  -- | A string value
   ValueString String
   deriving (Eq, Ord, Read, Show)
 

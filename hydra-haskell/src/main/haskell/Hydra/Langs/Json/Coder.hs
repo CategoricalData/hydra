@@ -126,7 +126,17 @@ termCoder typ = case stripType typ of
 
 -- | A simplistic, unidirectional encoding for terms as JSON values. Not type-aware; best used for human consumption.
 untypedTermToJson :: Term -> Flow s Json.Value
-untypedTermToJson term = case stripTerm term of
+untypedTermToJson term = case term of
+    TermAnnotated (AnnotatedTerm term1 ann) -> do
+        json <- untypedTermToJson term1
+        pairs <- CM.mapM encodePair $ M.toList ann
+        return $ Json.ValueObject $ M.fromList $ [
+          ("term", json),
+          ("annotations", Json.ValueObject $ M.fromList pairs)]
+      where
+        encodePair (k, v) = do
+          json <- untypedTermToJson v
+          return (k, json)
     TermApplication (Application lhs rhs) -> asRecord [
       Field _Application_function lhs,
       Field _Application_argument rhs]
