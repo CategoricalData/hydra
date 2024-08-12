@@ -4,26 +4,22 @@ import hydra.Flows;
 import hydra.Reduction;
 import hydra.compute.Flow;
 import hydra.core.Field;
-import hydra.core.Name;
 import hydra.core.FloatValue;
 import hydra.core.IntegerValue;
 import hydra.core.Literal;
 import hydra.core.Name;
 import hydra.core.Term;
-import hydra.util.Tuple;
 import hydra.core.Type;
 import hydra.graph.Graph;
 import hydra.tools.PrettyPrinter;
-
+import hydra.util.Opt;
+import hydra.util.Tuple;
 import java.math.BigInteger;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import hydra.util.Opt;
-
 import java.util.Set;
 import java.util.function.Function;
 
@@ -323,8 +319,7 @@ public class Expect {
 
             @Override
             public Flow<S, Map<K, V>> visit(Term.Map instance) {
-                Term.Map mp = instance;
-                return Flows.map(Flows.mapM(new ArrayList<>(mp.value.entrySet()),
+                return Flows.map(Flows.mapM(new ArrayList<>(instance.value.entrySet()),
                                 entry -> Flows.map2(
                                         keys.apply(entry.getKey()),
                                         values.apply(entry.getValue()),
