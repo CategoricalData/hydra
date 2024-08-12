@@ -158,12 +158,6 @@ optionalToList t@(TypeOptional ot) = do
       pure Nothing
       else Just <$> coderDecode (adapterCoder ad) (L.head l)}
 
-passAnnotated :: TypeAdapter
-passAnnotated t@(TypeAnnotated (AnnotatedType at ann)) = do
-  ad <- termAdapter at
-  return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ bidirectional $
-    \dir term -> encodeDecode dir (adapterCoder ad) term
-
 -- TODO: only tested for type mappings; not yet for types+terms
 passApplication :: TypeAdapter
 passApplication t = do
@@ -324,8 +318,7 @@ termAdapter typ = case typ of
                 else trySubstitution t
             where
               supportedAtTopLevel g t = variantIsSupported g t && languageConstraintsTypes (constraints g) t
-              pass t = case typeVariant t of
-                TypeVariantAnnotated -> [passAnnotated]
+              pass t = case typeVariant (stripType t) of
                 TypeVariantApplication -> [passApplication]
                 TypeVariantFunction ->  [passFunction]
                 TypeVariantLambda -> [passLambda]
@@ -341,7 +334,6 @@ termAdapter typ = case typ of
                 TypeVariantWrap -> [passWrapped]
                 _ -> []
               trySubstitution t = case typeVariant t of
-                TypeVariantAnnotated -> [passAnnotated]
                 TypeVariantApplication -> [simplifyApplication]
                 TypeVariantFunction -> [functionToUnion]
                 TypeVariantLambda -> [lambdaToMonotype]

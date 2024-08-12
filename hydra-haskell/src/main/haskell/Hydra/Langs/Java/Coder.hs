@@ -951,7 +951,7 @@ toClassDecl isInner isSer aliases tparams elName t = case stripType t of
     -- Other types are not supported as class declarations, so we wrap them as record types.
     _ -> wrap t -- TODO: wrap and unwrap the corresponding terms as record terms.
   where
-    wrap t' = declarationForRecordType isInner isSer aliases tparams elName [Types.field valueFieldName t']
+    wrap t' = declarationForRecordType isInner isSer aliases tparams elName [Types.field valueFieldName $ stripType t']
 
 toDataDeclaration :: Aliases -> (a, TypedTerm) -> Flow Graph a
 toDataDeclaration aliases (el, TypedTerm term typ) = do
