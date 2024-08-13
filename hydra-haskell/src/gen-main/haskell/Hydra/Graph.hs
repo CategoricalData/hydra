@@ -32,7 +32,7 @@ data Graph =
     -- | The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)
     graphEnvironment :: (Map Core.Name (Maybe Core.Term)),
     -- | The typing environment of the graph
-    graphTypes :: (Map Core.Name Core.Type),
+    graphTypes :: (Map Core.Name Core.TypeScheme),
     -- | The body of the term which generated this context
     graphBody :: Core.Term,
     -- | All supported primitive constants and functions, by name

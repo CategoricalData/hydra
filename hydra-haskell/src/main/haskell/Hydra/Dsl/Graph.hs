@@ -11,7 +11,7 @@ elementName = project _Element _Element_name
 
 graph :: TTerm (M.Map Name Element)
     -> TTerm (M.Map Name (Maybe Term))
-    -> TTerm (M.Map Name Type)
+    -> TTerm (M.Map Name TypeScheme)
     -> TTerm Term
     -> TTerm (M.Map Name Primitive)
     -> TTerm (Maybe Graph)
@@ -30,7 +30,7 @@ graphElements = project _Graph _Graph_elements
 graphEnvironment :: TTerm (Graph -> M.Map Name (Maybe Term))
 graphEnvironment = project _Graph _Graph_environment
 
-graphTypes :: TTerm (Graph -> M.Map Name Type)
+graphTypes :: TTerm (Graph -> M.Map Name TypeScheme)
 graphTypes = project _Graph _Graph_types
 
 graphBody :: TTerm (Graph -> Term)

@@ -49,7 +49,7 @@ hydraGraphModule = Module ns elements [hydraComputeModule] [hydraCoreModule] $
             Types.map (core "Name") (optional $ core "Term"),
           "types">:
             doc "The typing environment of the graph" $
-            Types.map (core "Name") (core "Type"),
+            Types.map (core "Name") (core "TypeScheme"),
           "body">:
             doc "The body of the term which generated this context" $
             core "Term",
