@@ -12,7 +12,7 @@ import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Printing
 import Hydra.Rewriting
-import Hydra.Substitution
+import Hydra.Inference.Substitution
 import Hydra.Tier1
 import Hydra.Dsl.Types as Types
 import Hydra.Lib.Io

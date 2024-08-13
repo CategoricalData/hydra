@@ -12,6 +12,7 @@ import Hydra.Basics
 import Hydra.Module
 import Hydra.Printing
 import Hydra.Mantle
+import Hydra.Strip
 import Hydra.Annotations
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Expect as Expect
@@ -108,10 +109,9 @@ nameToFilePath caps ext name = namespaceToFilePath caps ext $ Namespace $ prefix
     prefix = Y.maybe "" (\(Namespace gname) -> gname ++ "/") ns
 
 typeIsSupported :: LanguageConstraints -> Type -> Bool
-typeIsSupported constraints t = languageConstraintsTypes constraints t -- these are *additional* type constraints
-  && isSupportedVariant (typeVariant t)
-  && case t of
-    TypeAnnotated (AnnotatedType at _) -> typeIsSupported constraints at
+typeIsSupported constraints t = languageConstraintsTypes constraints base -- these are *additional* type constraints
+  && isSupportedVariant (typeVariant base)
+  && case base of
     TypeLiteral at -> literalTypeIsSupported constraints at
     TypeFunction (FunctionType dom cod) -> typeIsSupported constraints dom && typeIsSupported constraints cod
     TypeList lt -> typeIsSupported constraints lt
@@ -124,6 +124,7 @@ typeIsSupported constraints t = languageConstraintsTypes constraints t -- these 
     _ -> True
   where
     isSupportedVariant v = v == TypeVariantVariable || S.member v (languageConstraintsTypeVariants constraints)
+    base = stripType t
 
 unidirectionalCoder :: (a -> Flow s b) -> Coder s s a b
 unidirectionalCoder m = Coder {

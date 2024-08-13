@@ -1,10 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.InferenceSpec where
+module Hydra.Inference.InferenceSpec where
 
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import Hydra.Inference
+import Hydra.Inference.Inference
 import Hydra.TestUtils
 import Hydra.TestData
 import qualified Hydra.Dsl.Expect as Expect
