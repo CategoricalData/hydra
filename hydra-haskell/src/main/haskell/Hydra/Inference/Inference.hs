@@ -41,7 +41,7 @@ annotateElements g sortedEls = withInferenceContext $ do
 
     -- Note: inference occurs over the entire graph at once,
     --       but unification and substitution occur within elements in isolation
-    subst <- withGraphContext $ withSchemaContext $ CM.mapM solveConstraints constraints
+    subst <- withSchemaContext $ CM.mapM solveConstraints constraints
     return $ L.zipWith rewriteElement subst iels
   where
     -- Note: the following defaults to user-provided type annotations where provided.
@@ -52,7 +52,7 @@ annotateElements g sortedEls = withInferenceContext $ do
         term1 = rewriteDataType (substituteInType subst) term0
         typ = Y.fromMaybe (termType term1) $ getTermType term0
 
-    annotate :: [Element] -> [(Element, [TypeConstraint])] -> Flow InferenceContext [(Element, [TypeConstraint])]
+    annotate :: [Element] -> [(Element, [TypeConstraint])] -> Flow Graph [(Element, [TypeConstraint])]
     annotate original annotated = case original of
       [] -> pure $ L.reverse annotated
       (el:r) -> do
@@ -64,7 +64,7 @@ inferTermType term0 = do
   (term1, _) <- inferTypeAndConstraints term0
   return term1
 
-inferElementType :: Element -> Flow InferenceContext (Inferred Element)
+inferElementType :: Element -> Flow Graph (Inferred Element)
 inferElementType el = withTrace ("infer type of " ++ unName (elementName el)) $ do
   (Inferred iterm t c) <- infer $ elementData el
   return (Inferred (el {elementData = iterm}) t c)
@@ -88,7 +88,7 @@ inferredTypeOf term = typeSchemeType <$> inferTypeScheme term
 inferTypeAndConstraints :: Term -> Flow Graph (Term, TypeScheme)
 inferTypeAndConstraints term = withTrace ("infer type") $ withInferenceContext $ do
     (Inferred iterm _ constraints) <- infer term
-    subst <- withGraphContext $ withSchemaContext $ solveConstraints constraints
+    subst <- withSchemaContext $ solveConstraints constraints
     let term2 = rewriteDataType (substituteInType subst) iterm
 --    let typ = Y.fromMaybe (termType term2) $ getTermType term
 --    return (setTermType (Just typ) term2, closeOver $ termType term2)
@@ -133,7 +133,7 @@ sortGraphElements g = do
 withInferenceContext flow = do
     g <- getState
     let env = initialEnv g
-    withState (InferenceContext g env) flow
+    withState (g {graphTypes = env}) flow
   where
     initialEnv g = M.fromList $ Y.catMaybes (toPair <$> (M.elems $ graphElements g))
       where

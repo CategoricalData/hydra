@@ -253,6 +253,9 @@ public interface CoreEncoding {
   static hydra.core.Term coreEncodeLambda(hydra.core.Lambda l) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.Lambda"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("parameter"), hydra.coreEncoding.CoreEncoding.coreEncodeName(((l)).parameter)),
+      new hydra.core.Field(new hydra.core.Name("domain"), new hydra.core.Term.Optional(hydra.lib.optionals.Map.apply(
+        (hydra.coreEncoding.CoreEncoding::coreEncodeType),
+        ((l)).domain))),
       new hydra.core.Field(new hydra.core.Name("body"), hydra.coreEncoding.CoreEncoding.coreEncodeTerm(((l)).body)))));
   }
   
@@ -533,7 +536,7 @@ public interface CoreEncoding {
       public hydra.core.Term visit(hydra.core.Type.Set instance) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.Type"), new hydra.core.Field(new hydra.core.Name("set"), hydra.coreEncoding.CoreEncoding.coreEncodeType((instance.value)))));
       }
-
+      
       @Override
       public hydra.core.Term visit(hydra.core.Type.Sum instance) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra/core.Type"), new hydra.core.Field(new hydra.core.Name("sum"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
