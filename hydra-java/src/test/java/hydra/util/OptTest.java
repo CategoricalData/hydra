@@ -1,6 +1,7 @@
 package hydra.util;
 
 import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
@@ -25,8 +26,12 @@ public class OptTest {
         assertFalse(opt.isPresent());
         assertThrows(NoSuchElementException.class, optional::get);
         assertThrows(NoSuchElementException.class, opt::get);
-        optional.ifPresent(s -> { throw new RuntimeException(); });
-        opt.ifPresent(s -> { throw new RuntimeException(); });
+        optional.ifPresent(s -> {
+            throw new RuntimeException();
+        });
+        opt.ifPresent(s -> {
+            throw new RuntimeException();
+        });
 
         optional = java.util.Optional.of("foo");
         opt = Optional.of("foo");
@@ -38,8 +43,12 @@ public class OptTest {
         assertEquals("foo", optional.get());
         final java.util.Optional optional2 = optional;
         final Optional<String> opt2 = opt;
-        assertThrows(RuntimeException.class, () -> optional2.ifPresent(s -> { throw new RuntimeException(); }));
-        assertThrows(RuntimeException.class, () -> opt2.ifPresent(s -> { throw new RuntimeException(); }));
+        assertThrows(RuntimeException.class, () -> optional2.ifPresent(s -> {
+            throw new RuntimeException();
+        }));
+        assertThrows(RuntimeException.class, () -> opt2.ifPresent(s -> {
+            throw new RuntimeException();
+        }));
 
         assertThrows(NullPointerException.class, () -> java.util.Optional.of(null));
         assertThrows(NullPointerException.class, () -> Optional.of(null));

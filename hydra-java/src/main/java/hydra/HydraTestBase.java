@@ -6,6 +6,7 @@ import hydra.compute.FlowState;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
+import hydra.core.TypeScheme;
 import hydra.core.Unit;
 import hydra.dsl.Terms;
 import hydra.graph.Element;
@@ -76,7 +77,7 @@ public class HydraTestBase {
 
     protected static  Graph emptyGraph() {
         Map<Name, Element> elements = Collections.emptyMap();
-        Map<Name, Type> types = Collections.emptyMap();
+        Map<Name, TypeScheme> types = Collections.emptyMap();
         Map<Name, Opt<Term>> environment = Collections.emptyMap();
         Term body = Terms.string("empty graph");
 

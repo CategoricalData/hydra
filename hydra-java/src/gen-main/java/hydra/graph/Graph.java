@@ -21,7 +21,7 @@ public class Graph {
   /**
    * The typing environment of the graph
    */
-  public final java.util.Map<hydra.core.Name, hydra.core.Type> types;
+  public final java.util.Map<hydra.core.Name, hydra.core.TypeScheme> types;
   
   /**
    * The body of the term which generated this context
@@ -38,7 +38,7 @@ public class Graph {
    */
   public final hydra.util.Opt<hydra.graph.Graph> schema;
   
-  public Graph (java.util.Map<hydra.core.Name, hydra.graph.Element> elements, java.util.Map<hydra.core.Name, hydra.util.Opt<hydra.core.Term>> environment, java.util.Map<hydra.core.Name, hydra.core.Type> types, hydra.core.Term body, java.util.Map<hydra.core.Name, hydra.graph.Primitive> primitives, hydra.util.Opt<hydra.graph.Graph> schema) {
+  public Graph (java.util.Map<hydra.core.Name, hydra.graph.Element> elements, java.util.Map<hydra.core.Name, hydra.util.Opt<hydra.core.Term>> environment, java.util.Map<hydra.core.Name, hydra.core.TypeScheme> types, hydra.core.Term body, java.util.Map<hydra.core.Name, hydra.graph.Primitive> primitives, hydra.util.Opt<hydra.graph.Graph> schema) {
     java.util.Objects.requireNonNull((elements));
     java.util.Objects.requireNonNull((environment));
     java.util.Objects.requireNonNull((types));
@@ -77,7 +77,7 @@ public class Graph {
     return new Graph(elements, environment, types, body, primitives, schema);
   }
   
-  public Graph withTypes(java.util.Map<hydra.core.Name, hydra.core.Type> types) {
+  public Graph withTypes(java.util.Map<hydra.core.Name, hydra.core.TypeScheme> types) {
     java.util.Objects.requireNonNull((types));
     return new Graph(elements, environment, types, body, primitives, schema);
   }

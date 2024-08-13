@@ -2,21 +2,32 @@ package hydra;
 
 import hydra.compute.Flow;
 import hydra.compute.FlowState;
+import hydra.core.Unit;
+import hydra.util.Opt;
+import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import hydra.util.Opt;
 import java.util.Set;
 import java.util.function.Function;
 
-import hydra.core.Unit;
-import org.junit.jupiter.api.Test;
-
-import static hydra.Flows.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static hydra.Flows.EMPTY_TRACE;
+import static hydra.Flows.MAX_MAPM_SIZE;
+import static hydra.Flows.UNIT;
+import static hydra.Flows.bind;
+import static hydra.Flows.getState;
+import static hydra.Flows.map;
+import static hydra.Flows.mapM;
+import static hydra.Flows.pure;
+import static hydra.Flows.putState;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class FlowsTest {
