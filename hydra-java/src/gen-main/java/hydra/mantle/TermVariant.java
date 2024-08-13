@@ -41,6 +41,10 @@ public abstract class TermVariant implements Serializable {
     
     R visit(Sum instance) ;
     
+    R visit(TypeAbstraction instance) ;
+    
+    R visit(TypeApplication instance) ;
+    
     R visit(Typed instance) ;
     
     R visit(Union instance) ;
@@ -100,6 +104,14 @@ public abstract class TermVariant implements Serializable {
     }
     
     default R visit(Sum instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(TypeAbstraction instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(TypeApplication instance) {
       return otherwise((instance));
     }
     
@@ -406,6 +418,56 @@ public abstract class TermVariant implements Serializable {
         return false;
       }
       Sum o = (Sum) (other);
+      return true;
+    }
+    
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class TypeAbstraction extends hydra.mantle.TermVariant implements Serializable {
+    public TypeAbstraction () {
+    
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof TypeAbstraction)) {
+        return false;
+      }
+      TypeAbstraction o = (TypeAbstraction) (other);
+      return true;
+    }
+    
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class TypeApplication extends hydra.mantle.TermVariant implements Serializable {
+    public TypeApplication () {
+    
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof TypeApplication)) {
+        return false;
+      }
+      TypeApplication o = (TypeApplication) (other);
       return true;
     }
     

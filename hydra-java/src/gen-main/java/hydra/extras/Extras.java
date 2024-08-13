@@ -34,7 +34,7 @@ public interface Extras {
   }
   
   static Integer primitiveArity(hydra.graph.Primitive x) {
-    return hydra.extras.Extras.typeArity(((x)).type.type);
+    return hydra.extras.Extras.typeArity((((x)).type).type);
   }
   
   static java.util.function.Function<String, hydra.core.Name> qname(hydra.module.Namespace ns) {
