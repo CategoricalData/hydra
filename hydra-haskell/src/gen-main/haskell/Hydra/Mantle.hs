@@ -106,6 +106,8 @@ data TermVariant =
   TermVariantRecord  |
   TermVariantSet  |
   TermVariantSum  |
+  TermVariantTypeAbstraction  |
+  TermVariantTypeApplication  |
   TermVariantTyped  |
   TermVariantUnion  |
   TermVariantVariable  |
@@ -137,6 +139,10 @@ _TermVariant_record = (Core.Name "record")
 _TermVariant_set = (Core.Name "set")
 
 _TermVariant_sum = (Core.Name "sum")
+
+_TermVariant_typeAbstraction = (Core.Name "typeAbstraction")
+
+_TermVariant_typeApplication = (Core.Name "typeApplication")
 
 _TermVariant_typed = (Core.Name "typed")
 

@@ -339,6 +339,12 @@ hydraCoreModule = Module ns elements [] [] $
           "sum">:
             doc "A variant tuple" $
             core "Sum",
+          "typeAbstraction">:
+            doc "A System F type abstraction term" $
+            core "TypeAbstraction",
+          "typeApplication">:
+            doc "A System F type application term" $
+            core "TypedTerm",
           "typed">:
             doc "A term annotated with its type" $
             core "TypedTerm",
@@ -379,6 +385,16 @@ hydraCoreModule = Module ns elements [] [] $
           "union">: core "RowType",
           "variable">: core "Name",
           "wrap">: core "WrappedType"],
+
+      def "TypeAbstraction" $
+        doc "A System F type abstraction term" $
+        record [
+          "parameter">:
+            doc "The type variable introduced by the abstraction" $
+            core "Name",
+          "body">:
+            doc "The body of the abstraction" $
+            core "Term"],
 
       def "TypeScheme" $
         doc "A type expression together with free type variables occurring in the expression" $

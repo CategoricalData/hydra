@@ -205,6 +205,8 @@ rewriteTerm f = rewrite fsub f
         TermRecord (Record n fields) -> TermRecord $ Record n $ forField <$> fields
         TermSet s -> TermSet $ S.fromList $ recurse <$> S.toList s
         TermSum (Sum i s trm) -> TermSum $ Sum i s $ recurse trm
+        TermTypeAbstraction (TypeAbstraction v t) -> TermTypeAbstraction $ TypeAbstraction v $ recurse t
+        TermTypeApplication (TypedTerm term1 type2) -> TermTypeApplication $ TypedTerm (recurse term1) type2
         TermTyped (TypedTerm term1 type2) -> TermTyped $ TypedTerm (recurse term1) type2
         TermUnion (Injection n field) -> TermUnion $ Injection n $ forField field
         TermVariable v -> TermVariable v

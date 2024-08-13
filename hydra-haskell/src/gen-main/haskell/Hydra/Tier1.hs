@@ -25,30 +25,30 @@ import Data.Set as S
 -- | Convert a floating-point value of any precision to a bigfloat
 floatValueToBigfloat :: (Core.FloatValue -> Double)
 floatValueToBigfloat x = case x of
-  Core.FloatValueBigfloat v113 -> (Equality.identity v113)
-  Core.FloatValueFloat32 v114 -> (Literals.float32ToBigfloat v114)
-  Core.FloatValueFloat64 v115 -> (Literals.float64ToBigfloat v115)
+  Core.FloatValueBigfloat v116 -> (Equality.identity v116)
+  Core.FloatValueFloat32 v117 -> (Literals.float32ToBigfloat v117)
+  Core.FloatValueFloat64 v118 -> (Literals.float64ToBigfloat v118)
 
 -- | Convert an integer value of any precision to a bigint
 integerValueToBigint :: (Core.IntegerValue -> Integer)
 integerValueToBigint x = case x of
-  Core.IntegerValueBigint v116 -> (Equality.identity v116)
-  Core.IntegerValueInt8 v117 -> (Literals.int8ToBigint v117)
-  Core.IntegerValueInt16 v118 -> (Literals.int16ToBigint v118)
-  Core.IntegerValueInt32 v119 -> (Literals.int32ToBigint v119)
-  Core.IntegerValueInt64 v120 -> (Literals.int64ToBigint v120)
-  Core.IntegerValueUint8 v121 -> (Literals.uint8ToBigint v121)
-  Core.IntegerValueUint16 v122 -> (Literals.uint16ToBigint v122)
-  Core.IntegerValueUint32 v123 -> (Literals.uint32ToBigint v123)
-  Core.IntegerValueUint64 v124 -> (Literals.uint64ToBigint v124)
+  Core.IntegerValueBigint v119 -> (Equality.identity v119)
+  Core.IntegerValueInt8 v120 -> (Literals.int8ToBigint v120)
+  Core.IntegerValueInt16 v121 -> (Literals.int16ToBigint v121)
+  Core.IntegerValueInt32 v122 -> (Literals.int32ToBigint v122)
+  Core.IntegerValueInt64 v123 -> (Literals.int64ToBigint v123)
+  Core.IntegerValueUint8 v124 -> (Literals.uint8ToBigint v124)
+  Core.IntegerValueUint16 v125 -> (Literals.uint16ToBigint v125)
+  Core.IntegerValueUint32 v126 -> (Literals.uint32ToBigint v126)
+  Core.IntegerValueUint64 v127 -> (Literals.uint64ToBigint v127)
 
 -- | Check whether a term is a lambda, possibly nested within let and/or annotation terms
 isLambda :: (Core.Term -> Bool)
 isLambda term = ((\x -> case x of
-  Core.TermFunction v125 -> ((\x -> case x of
+  Core.TermFunction v128 -> ((\x -> case x of
     Core.FunctionLambda _ -> True
-    _ -> False) v125)
-  Core.TermLet v127 -> (isLambda (Core.letEnvironment v127))
+    _ -> False) v128)
+  Core.TermLet v130 -> (isLambda (Core.letEnvironment v130))
   _ -> False) (Strip.fullyStripTerm term))
 
 -- | Convert a qualified name to a dot-separated name
@@ -56,8 +56,8 @@ unqualifyName :: (Module.QualifiedName -> Core.Name)
 unqualifyName qname =  
   let prefix = ((\x -> case x of
           Nothing -> ""
-          Just v128 -> (Strings.cat [
-            Module.unNamespace v128,
+          Just v131 -> (Strings.cat [
+            Module.unNamespace v131,
             "."])) (Module.qualifiedNameNamespace qname))
   in (Core.Name (Strings.cat [
     prefix,
@@ -80,10 +80,10 @@ freeVariablesInTerm :: (Core.Term -> Set Core.Name)
 freeVariablesInTerm term =  
   let dfltVars = (Lists.foldl (\s -> \t -> Sets.union s (freeVariablesInTerm t)) Sets.empty (subterms term))
   in ((\x -> case x of
-    Core.TermFunction v133 -> ((\x -> case x of
-      Core.FunctionLambda v134 -> (Sets.remove (Core.lambdaParameter v134) (freeVariablesInTerm (Core.lambdaBody v134)))
-      _ -> dfltVars) v133)
-    Core.TermVariable v135 -> (Sets.singleton v135)
+    Core.TermFunction v136 -> ((\x -> case x of
+      Core.FunctionLambda v137 -> (Sets.remove (Core.lambdaParameter v137) (freeVariablesInTerm (Core.lambdaBody v137)))
+      _ -> dfltVars) v136)
+    Core.TermVariable v138 -> (Sets.singleton v138)
     _ -> dfltVars) term)
 
 -- | Find the free variables (i.e. variables not bound by a lambda or let) in a type
@@ -91,86 +91,90 @@ freeVariablesInType :: (Core.Type -> Set Core.Name)
 freeVariablesInType typ =  
   let dfltVars = (Lists.foldl (\s -> \t -> Sets.union s (freeVariablesInType t)) Sets.empty (subtypes typ))
   in ((\x -> case x of
-    Core.TypeLambda v136 -> (Sets.remove (Core.lambdaTypeParameter v136) (freeVariablesInType (Core.lambdaTypeBody v136)))
-    Core.TypeVariable v137 -> (Sets.singleton v137)
+    Core.TypeLambda v139 -> (Sets.remove (Core.lambdaTypeParameter v139) (freeVariablesInType (Core.lambdaTypeBody v139)))
+    Core.TypeVariable v140 -> (Sets.singleton v140)
     _ -> dfltVars) typ)
 
 -- | Find the children of a given term
 subterms :: (Core.Term -> [Core.Term])
 subterms x = case x of
-  Core.TermAnnotated v138 -> [
-    Core.annotatedTermSubject v138]
-  Core.TermApplication v139 -> [
-    Core.applicationFunction v139,
-    (Core.applicationArgument v139)]
-  Core.TermFunction v140 -> ((\x -> case x of
-    Core.FunctionElimination v141 -> ((\x -> case x of
-      Core.EliminationList v142 -> [
-        v142]
-      Core.EliminationOptional v143 -> [
-        Core.optionalCasesNothing v143,
-        (Core.optionalCasesJust v143)]
-      Core.EliminationUnion v144 -> (Lists.concat2 ((\x -> case x of
+  Core.TermAnnotated v141 -> [
+    Core.annotatedTermSubject v141]
+  Core.TermApplication v142 -> [
+    Core.applicationFunction v142,
+    (Core.applicationArgument v142)]
+  Core.TermFunction v143 -> ((\x -> case x of
+    Core.FunctionElimination v144 -> ((\x -> case x of
+      Core.EliminationList v145 -> [
+        v145]
+      Core.EliminationOptional v146 -> [
+        Core.optionalCasesNothing v146,
+        (Core.optionalCasesJust v146)]
+      Core.EliminationUnion v147 -> (Lists.concat2 ((\x -> case x of
         Nothing -> []
-        Just v145 -> [
-          v145]) (Core.caseStatementDefault v144)) (Lists.map Core.fieldTerm (Core.caseStatementCases v144)))
-      _ -> []) v141)
-    Core.FunctionLambda v146 -> [
-      Core.lambdaBody v146]
-    _ -> []) v140)
-  Core.TermLet v147 -> (Lists.cons (Core.letEnvironment v147) (Lists.map Core.letBindingTerm (Core.letBindings v147)))
-  Core.TermList v148 -> v148
+        Just v148 -> [
+          v148]) (Core.caseStatementDefault v147)) (Lists.map Core.fieldTerm (Core.caseStatementCases v147)))
+      _ -> []) v144)
+    Core.FunctionLambda v149 -> [
+      Core.lambdaBody v149]
+    _ -> []) v143)
+  Core.TermLet v150 -> (Lists.cons (Core.letEnvironment v150) (Lists.map Core.letBindingTerm (Core.letBindings v150)))
+  Core.TermList v151 -> v151
   Core.TermLiteral _ -> []
-  Core.TermMap v150 -> (Lists.concat (Lists.map (\p -> [
+  Core.TermMap v153 -> (Lists.concat (Lists.map (\p -> [
     fst p,
-    (snd p)]) (Maps.toList v150)))
-  Core.TermOptional v151 -> ((\x -> case x of
+    (snd p)]) (Maps.toList v153)))
+  Core.TermOptional v154 -> ((\x -> case x of
     Nothing -> []
-    Just v152 -> [
-      v152]) v151)
-  Core.TermProduct v153 -> v153
-  Core.TermRecord v154 -> (Lists.map Core.fieldTerm (Core.recordFields v154))
-  Core.TermSet v155 -> (Sets.toList v155)
-  Core.TermSum v156 -> [
-    Core.sumTerm v156]
-  Core.TermTyped v157 -> [
-    Core.typedTermTerm v157]
-  Core.TermUnion v158 -> [
-    Core.fieldTerm (Core.injectionField v158)]
+    Just v155 -> [
+      v155]) v154)
+  Core.TermProduct v156 -> v156
+  Core.TermRecord v157 -> (Lists.map Core.fieldTerm (Core.recordFields v157))
+  Core.TermSet v158 -> (Sets.toList v158)
+  Core.TermSum v159 -> [
+    Core.sumTerm v159]
+  Core.TermTypeAbstraction v160 -> [
+    Core.typeAbstractionBody v160]
+  Core.TermTypeApplication v161 -> [
+    Core.typedTermTerm v161]
+  Core.TermTyped v162 -> [
+    Core.typedTermTerm v162]
+  Core.TermUnion v163 -> [
+    Core.fieldTerm (Core.injectionField v163)]
   Core.TermVariable _ -> []
-  Core.TermWrap v160 -> [
-    Core.wrappedTermObject v160]
+  Core.TermWrap v165 -> [
+    Core.wrappedTermObject v165]
 
 -- | Find the children of a given type expression
 subtypes :: (Core.Type -> [Core.Type])
 subtypes x = case x of
-  Core.TypeAnnotated v161 -> [
-    Core.annotatedTypeSubject v161]
-  Core.TypeApplication v162 -> [
-    Core.applicationTypeFunction v162,
-    (Core.applicationTypeArgument v162)]
-  Core.TypeFunction v163 -> [
-    Core.functionTypeDomain v163,
-    (Core.functionTypeCodomain v163)]
-  Core.TypeLambda v164 -> [
-    Core.lambdaTypeBody v164]
-  Core.TypeList v165 -> [
-    v165]
+  Core.TypeAnnotated v166 -> [
+    Core.annotatedTypeSubject v166]
+  Core.TypeApplication v167 -> [
+    Core.applicationTypeFunction v167,
+    (Core.applicationTypeArgument v167)]
+  Core.TypeFunction v168 -> [
+    Core.functionTypeDomain v168,
+    (Core.functionTypeCodomain v168)]
+  Core.TypeLambda v169 -> [
+    Core.lambdaTypeBody v169]
+  Core.TypeList v170 -> [
+    v170]
   Core.TypeLiteral _ -> []
-  Core.TypeMap v167 -> [
-    Core.mapTypeKeys v167,
-    (Core.mapTypeValues v167)]
-  Core.TypeOptional v168 -> [
-    v168]
-  Core.TypeProduct v169 -> v169
-  Core.TypeRecord v170 -> (Lists.map Core.fieldTypeType (Core.rowTypeFields v170))
-  Core.TypeSet v171 -> [
-    v171]
-  Core.TypeSum v172 -> v172
-  Core.TypeUnion v173 -> (Lists.map Core.fieldTypeType (Core.rowTypeFields v173))
+  Core.TypeMap v172 -> [
+    Core.mapTypeKeys v172,
+    (Core.mapTypeValues v172)]
+  Core.TypeOptional v173 -> [
+    v173]
+  Core.TypeProduct v174 -> v174
+  Core.TypeRecord v175 -> (Lists.map Core.fieldTypeType (Core.rowTypeFields v175))
+  Core.TypeSet v176 -> [
+    v176]
+  Core.TypeSum v177 -> v177
+  Core.TypeUnion v178 -> (Lists.map Core.fieldTypeType (Core.rowTypeFields v178))
   Core.TypeVariable _ -> []
-  Core.TypeWrap v175 -> [
-    Core.wrappedTypeObject v175]
+  Core.TypeWrap v180 -> [
+    Core.wrappedTypeObject v180]
 
 emptyTrace :: Compute.Trace
 emptyTrace = Compute.Trace {
@@ -186,7 +190,7 @@ flowSucceeds cx f = (Optionals.isJust (Compute.flowStateValue (Compute.unFlow f 
 fromFlow :: (a -> s -> Compute.Flow s a -> a)
 fromFlow def cx f = ((\x -> case x of
   Nothing -> def
-  Just v176 -> v176) (Compute.flowStateValue (Compute.unFlow f cx emptyTrace)))
+  Just v181 -> v181) (Compute.flowStateValue (Compute.unFlow f cx emptyTrace)))
 
 mutateTrace :: ((Compute.Trace -> Mantle.Either_ String Compute.Trace) -> (Compute.Trace -> Compute.Trace -> Compute.Trace) -> Compute.Flow s a -> Compute.Flow s a)
 mutateTrace mutate restore f = (Compute.Flow (\s0 -> \t0 ->  
@@ -201,8 +205,8 @@ mutateTrace mutate restore f = (Compute.Flow (\s0 -> \t0 ->
                 Compute.flowStateState = (Compute.flowStateState f2),
                 Compute.flowStateTrace = (restore t0 (Compute.flowStateTrace f2))})
   in ((\x -> case x of
-    Mantle.EitherLeft v177 -> (forLeft v177)
-    Mantle.EitherRight v178 -> (forRight v178)) (mutate t0))))
+    Mantle.EitherLeft v182 -> (forLeft v182)
+    Mantle.EitherRight v183 -> (forRight v183)) (mutate t0))))
 
 -- | Push an error message
 pushError :: (String -> Compute.Trace -> Compute.Trace)

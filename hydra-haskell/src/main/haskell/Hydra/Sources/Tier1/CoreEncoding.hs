@@ -53,7 +53,9 @@ coreEncodingModule = Module (Namespace "hydra/coreEncoding") elements [] tier0Mo
      el coreEncodeTermDef,
      el coreEncodeTupleProjectionDef,
      el coreEncodeTypeDef,
+     el coreEncodeTypeAbstractionDef,
      el coreEncodeTypeSchemeDef,
+     el coreEncodeTypedTermDef,
      el coreEncodeWrappedTermDef,
      el coreEncodeWrappedTypeDef]
 
@@ -368,6 +370,9 @@ coreEncodeTermDef = coreEncodingDefinition "Term" termT $
     ecase _Term_record (ref coreEncodeRecordDef),
     ecase' _Term_set $ encodedSet $ primitive _sets_map @@ (ref coreEncodeTermDef) @@ var "v",
     ecase _Term_sum (ref coreEncodeSumDef),
+    ecase _Term_typeAbstraction $ ref coreEncodeTypeAbstractionDef,
+    ecase _Term_typeApplication $ ref coreEncodeTypedTermDef,
+    ecase _Term_typed $ ref coreEncodeTypedTermDef,
     ecase _Term_union (ref coreEncodeInjectionDef),
     ecase _Term_variable $ ref coreEncodeNameDef,
     ecase _Term_wrap $ ref coreEncodeWrappedTermDef]
@@ -405,11 +410,23 @@ coreEncodeTypeDef = coreEncodingDefinition "Type" typeT $
     cs fname term = field fname $ lambda "v" $ encodedVariant _Type fname term
     csref fname fun = cs fname (ref fun @@ var "v")
 
+coreEncodeTypeAbstractionDef :: TElement (TypeAbstraction -> Term)
+coreEncodeTypeAbstractionDef = coreEncodingDefinition "TypeAbstraction" typeAbstractionT $
+  lambda "l" $ encodedRecord _TypeAbstraction [
+    field _TypeAbstraction_parameter $ ref coreEncodeNameDef @@ (project _TypeAbstraction _TypeAbstraction_parameter @@ var "l"),
+    field _TypeAbstraction_body $ ref coreEncodeTermDef @@ (project _TypeAbstraction _TypeAbstraction_body @@ var "l")]
+
 coreEncodeTypeSchemeDef :: TElement (TypeScheme -> Term)
 coreEncodeTypeSchemeDef = coreEncodingDefinition "TypeScheme" typeSchemeT $
   lambda "ts" $ encodedRecord _TypeScheme [
     field _TypeScheme_variables $ encodedList (primitive _lists_map @@ ref coreEncodeNameDef @@ (Core.typeSchemeVariables @@ var "ts")),
     field _TypeScheme_type $ ref coreEncodeTypeDef @@ (Core.typeSchemeType @@ var "ts")]
+
+coreEncodeTypedTermDef :: TElement (TypedTerm -> Term)
+coreEncodeTypedTermDef = coreEncodingDefinition "TypedTerm" typedTermT $
+  lambda "tt" $ encodedRecord _TypedTerm [
+    field _TypedTerm_term $ ref coreEncodeTermDef @@ (project _TypedTerm _TypedTerm_term @@ var "tt"),
+    field _TypedTerm_type $ ref coreEncodeTypeDef @@ (project _TypedTerm _TypedTerm_type @@ var "tt")]
 
 coreEncodeWrappedTermDef :: TElement (WrappedTerm -> Term)
 coreEncodeWrappedTermDef = coreEncodingDefinition "WrappedTerm" wrappedTermT $

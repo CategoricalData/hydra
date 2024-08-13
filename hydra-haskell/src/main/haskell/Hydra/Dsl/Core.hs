@@ -244,6 +244,12 @@ tupleProjectionArity = project _TupleProjection _TupleProjection_arity
 tupleProjectionIndex :: TTerm (TupleProjection -> Int)
 tupleProjectionIndex = project _TupleProjection _TupleProjection_index
 
+typeAbstractionParameter :: TTerm (TypeAbstraction -> Name)
+typeAbstractionParameter = project _TypeAbstraction _TypeAbstraction_parameter
+
+typeAbstractionBody :: TTerm (TypeAbstraction -> Type)
+typeAbstractionBody = project _TypeAbstraction _TypeAbstraction_body
+
 typeSchemeVariables :: TTerm (TypeScheme -> [Name])
 typeSchemeVariables = project _TypeScheme _TypeScheme_variables
 

@@ -553,21 +553,36 @@ coreEncodeTerm x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "sum"),
       Core.fieldTerm = (coreEncodeSum v53)}}))
-  Core.TermUnion v54 -> (Core.TermUnion (Core.Injection {
+  Core.TermTypeAbstraction v54 -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra/core.Term"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "typeAbstraction"),
+      Core.fieldTerm = (coreEncodeTypeAbstraction v54)}}))
+  Core.TermTypeApplication v55 -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra/core.Term"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "typeApplication"),
+      Core.fieldTerm = (coreEncodeTypedTerm v55)}}))
+  Core.TermTyped v56 -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra/core.Term"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "typed"),
+      Core.fieldTerm = (coreEncodeTypedTerm v56)}}))
+  Core.TermUnion v57 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Term"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "union"),
-      Core.fieldTerm = (coreEncodeInjection v54)}}))
-  Core.TermVariable v55 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (coreEncodeInjection v57)}}))
+  Core.TermVariable v58 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Term"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "variable"),
-      Core.fieldTerm = (coreEncodeName v55)}}))
-  Core.TermWrap v56 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (coreEncodeName v58)}}))
+  Core.TermWrap v59 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Term"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "wrap"),
-      Core.fieldTerm = (coreEncodeWrappedTerm v56)}}))
+      Core.fieldTerm = (coreEncodeWrappedTerm v59)}}))
   _ -> (Core.TermLiteral (Core.LiteralString "not implemented"))
 
 coreEncodeTupleProjection :: (Core.TupleProjection -> Core.Term)
@@ -583,79 +598,90 @@ coreEncodeTupleProjection tp = (Core.TermRecord (Core.Record {
 
 coreEncodeType :: (Core.Type -> Core.Term)
 coreEncodeType x = case x of
-  Core.TypeAnnotated v57 -> (Core.TermAnnotated (Core.AnnotatedTerm {
-    Core.annotatedTermSubject = (coreEncodeType (Core.annotatedTypeSubject v57)),
-    Core.annotatedTermAnnotation = (Core.annotatedTypeAnnotation v57)}))
-  Core.TypeApplication v58 -> (Core.TermUnion (Core.Injection {
+  Core.TypeAnnotated v60 -> (Core.TermAnnotated (Core.AnnotatedTerm {
+    Core.annotatedTermSubject = (coreEncodeType (Core.annotatedTypeSubject v60)),
+    Core.annotatedTermAnnotation = (Core.annotatedTypeAnnotation v60)}))
+  Core.TypeApplication v61 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Type"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "application"),
-      Core.fieldTerm = (coreEncodeApplicationType v58)}}))
-  Core.TypeFunction v59 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (coreEncodeApplicationType v61)}}))
+  Core.TypeFunction v62 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Type"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "function"),
-      Core.fieldTerm = (coreEncodeFunctionType v59)}}))
-  Core.TypeLambda v60 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (coreEncodeFunctionType v62)}}))
+  Core.TypeLambda v63 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Type"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "lambda"),
-      Core.fieldTerm = (coreEncodeLambdaType v60)}}))
-  Core.TypeList v61 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (coreEncodeLambdaType v63)}}))
+  Core.TypeList v64 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Type"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "list"),
-      Core.fieldTerm = (coreEncodeType v61)}}))
-  Core.TypeLiteral v62 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (coreEncodeType v64)}}))
+  Core.TypeLiteral v65 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Type"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "literal"),
-      Core.fieldTerm = (coreEncodeLiteralType v62)}}))
-  Core.TypeMap v63 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (coreEncodeLiteralType v65)}}))
+  Core.TypeMap v66 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Type"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "map"),
-      Core.fieldTerm = (coreEncodeMapType v63)}}))
-  Core.TypeOptional v64 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (coreEncodeMapType v66)}}))
+  Core.TypeOptional v67 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Type"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "optional"),
-      Core.fieldTerm = (coreEncodeType v64)}}))
-  Core.TypeProduct v65 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (coreEncodeType v67)}}))
+  Core.TypeProduct v68 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Type"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "product"),
-      Core.fieldTerm = (Core.TermList (Lists.map coreEncodeType v65))}}))
-  Core.TypeRecord v66 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (Core.TermList (Lists.map coreEncodeType v68))}}))
+  Core.TypeRecord v69 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Type"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "record"),
-      Core.fieldTerm = (coreEncodeRowType v66)}}))
-  Core.TypeSet v67 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (coreEncodeRowType v69)}}))
+  Core.TypeSet v70 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Type"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "set"),
-      Core.fieldTerm = (coreEncodeType v67)}}))
-  Core.TypeSum v68 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (coreEncodeType v70)}}))
+  Core.TypeSum v71 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Type"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "sum"),
-      Core.fieldTerm = (Core.TermList (Lists.map coreEncodeType v68))}}))
-  Core.TypeUnion v69 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (Core.TermList (Lists.map coreEncodeType v71))}}))
+  Core.TypeUnion v72 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Type"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "union"),
-      Core.fieldTerm = (coreEncodeRowType v69)}}))
-  Core.TypeVariable v70 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (coreEncodeRowType v72)}}))
+  Core.TypeVariable v73 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Type"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "variable"),
-      Core.fieldTerm = (coreEncodeName v70)}}))
-  Core.TypeWrap v71 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (coreEncodeName v73)}}))
+  Core.TypeWrap v74 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra/core.Type"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "wrap"),
-      Core.fieldTerm = (coreEncodeWrappedType v71)}}))
+      Core.fieldTerm = (coreEncodeWrappedType v74)}}))
+
+coreEncodeTypeAbstraction :: (Core.TypeAbstraction -> Core.Term)
+coreEncodeTypeAbstraction l = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra/core.TypeAbstraction"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "parameter"),
+      Core.fieldTerm = (coreEncodeName (Core.typeAbstractionParameter l))},
+    Core.Field {
+      Core.fieldName = (Core.Name "body"),
+      Core.fieldTerm = (coreEncodeTerm (Core.typeAbstractionBody l))}]}))
 
 coreEncodeTypeScheme :: (Core.TypeScheme -> Core.Term)
 coreEncodeTypeScheme ts = (Core.TermRecord (Core.Record {
@@ -667,6 +693,17 @@ coreEncodeTypeScheme ts = (Core.TermRecord (Core.Record {
     Core.Field {
       Core.fieldName = (Core.Name "type"),
       Core.fieldTerm = (coreEncodeType (Core.typeSchemeType ts))}]}))
+
+coreEncodeTypedTerm :: (Core.TypedTerm -> Core.Term)
+coreEncodeTypedTerm tt = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra/core.TypedTerm"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "term"),
+      Core.fieldTerm = (coreEncodeTerm (Core.typedTermTerm tt))},
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (coreEncodeType (Core.typedTermType tt))}]}))
 
 coreEncodeWrappedTerm :: (Core.WrappedTerm -> Core.Term)
 coreEncodeWrappedTerm n = (Core.TermRecord (Core.Record {

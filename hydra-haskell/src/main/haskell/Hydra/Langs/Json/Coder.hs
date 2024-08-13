@@ -174,6 +174,12 @@ untypedTermToJson term = case term of
       Field _Sum_index $ TermLiteral $ LiteralInteger $ IntegerValueInt32 idx,
       Field _Sum_size $ TermLiteral $ LiteralInteger $ IntegerValueInt32 size,
       Field _Sum_term term1]
+    TermTypeAbstraction (TypeAbstraction v term) -> asRecord [
+      Field _TypeAbstraction_parameter $ TermVariable v,
+      Field _TypeAbstraction_body term]
+    TermTypeApplication (TypedTerm term1 typ) -> asRecord [ -- Note: TermTypeApplication and TermTyped appear identical
+      Field _TypedTerm_term term1,
+      Field _TypedTerm_type $ coreEncodeType typ]
     TermTyped (TypedTerm term1 typ) -> asRecord [
       Field _TypedTerm_term term1,
       Field _TypedTerm_type $ coreEncodeType typ]
