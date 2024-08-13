@@ -2,6 +2,10 @@
 
 package hydra.basics;
 
+import hydra.core.Term;
+import hydra.mantle.TermVariant;
+
+
 /**
  * A tier-2 module of basic functions for working with types and terms.
  */
@@ -406,6 +410,16 @@ public interface Basics {
       @Override
       public hydra.mantle.TermVariant visit(hydra.core.Term.Sum instance) {
         return new hydra.mantle.TermVariant.Sum();
+      }
+
+      @Override
+      public TermVariant visit(Term.TypeAbstraction instance) {
+        return new hydra.mantle.TermVariant.TypeAbstraction();
+      }
+
+      @Override
+      public TermVariant visit(Term.TypeApplication instance) {
+        return new hydra.mantle.TermVariant.TypeApplication();
       }
 
       @Override

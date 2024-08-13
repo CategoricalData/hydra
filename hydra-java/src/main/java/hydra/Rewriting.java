@@ -234,7 +234,17 @@ public interface Rewriting {
                                 new Sum(instance.value.index, instance.value.size, t2)));
                     }
 
-                    @Override
+                  @Override
+                  public Flow<S, Term> visit(Term.TypeAbstraction instance) {
+                    throw new UnsupportedOperationException();
+                  }
+
+                  @Override
+                  public Flow<S, Term> visit(Term.TypeApplication instance) {
+                    throw new UnsupportedOperationException();
+                  }
+
+                  @Override
                     public Flow<S, Term> visit(Term.Typed instance) {
                         Term t0 = instance.value.term;
                         Flow<S, Term> t1 = recurse.apply(t0);

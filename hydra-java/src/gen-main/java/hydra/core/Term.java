@@ -41,6 +41,10 @@ public abstract class Term implements Serializable {
     
     R visit(Sum instance) ;
     
+    R visit(TypeAbstraction instance) ;
+    
+    R visit(TypeApplication instance) ;
+    
     R visit(Typed instance) ;
     
     R visit(Union instance) ;
@@ -100,6 +104,14 @@ public abstract class Term implements Serializable {
     }
     
     default R visit(Sum instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(TypeAbstraction instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(TypeApplication instance) {
       return otherwise((instance));
     }
     
@@ -475,6 +487,68 @@ public abstract class Term implements Serializable {
         return false;
       }
       Sum o = (Sum) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A System F type abstraction term
+   */
+  public static final class TypeAbstraction extends hydra.core.Term implements Serializable {
+    public final hydra.core.TypeAbstraction value;
+    
+    public TypeAbstraction (hydra.core.TypeAbstraction value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof TypeAbstraction)) {
+        return false;
+      }
+      TypeAbstraction o = (TypeAbstraction) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A System F type application term
+   */
+  public static final class TypeApplication extends hydra.core.Term implements Serializable {
+    public final hydra.core.TypedTerm value;
+    
+    public TypeApplication (hydra.core.TypedTerm value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof TypeApplication)) {
+        return false;
+      }
+      TypeApplication o = (TypeApplication) (other);
       return value.equals(o.value);
     }
     

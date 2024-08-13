@@ -269,6 +269,16 @@ public class PrettyPrinter {
                 }
 
                 @Override
+                public Consumer<StringBuilder> visit(Term.TypeAbstraction instance) {
+                    return notImplemented("typeAbstraction");
+                }
+
+                @Override
+                public Consumer<StringBuilder> visit(Term.TypeApplication instance) {
+                    return notImplemented("typeApplication");
+                }
+
+                @Override
                 public Consumer<StringBuilder> visit(Term.Typed instance) {
                     return notImplemented("typed");
                 }
