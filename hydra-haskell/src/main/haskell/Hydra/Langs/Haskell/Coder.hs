@@ -365,8 +365,7 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
     newtypeCons el typ = do
         let hname = simpleName $ newtypeAccessorName $ elementName el
         htype <- adaptTypeToHaskellAndEncode namespaces typ
-        comments <- getTypeDescription typ
-        let hfield = H.FieldWithComments (H.Field hname htype) comments
+        let hfield = H.FieldWithComments (H.Field hname htype) Nothing
         return $ H.ConstructorWithComments
           (H.ConstructorRecord $ H.Constructor_Record (simpleName $ localNameOfEager $ elementName el) [hfield]) Nothing
 
