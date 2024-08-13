@@ -543,6 +543,10 @@ data Term =
   TermSet (Set Term) |
   -- | A variant tuple
   TermSum Sum |
+  -- | A System F type abstraction term
+  TermTypeAbstraction TypeAbstraction |
+  -- | A System F type application term
+  TermTypeApplication TypedTerm |
   -- | A term annotated with its type
   TermTyped TypedTerm |
   -- | An injection; an instance of a union type
@@ -577,6 +581,10 @@ _Term_record = (Name "record")
 _Term_set = (Name "set")
 
 _Term_sum = (Name "sum")
+
+_Term_typeAbstraction = (Name "typeAbstraction")
+
+_Term_typeApplication = (Name "typeApplication")
 
 _Term_typed = (Name "typed")
 
@@ -651,6 +659,21 @@ _Type_union = (Name "union")
 _Type_variable = (Name "variable")
 
 _Type_wrap = (Name "wrap")
+
+-- | A System F type abstraction term
+data TypeAbstraction = 
+  TypeAbstraction {
+    -- | The type variable introduced by the abstraction
+    typeAbstractionParameter :: Name,
+    -- | The body of the abstraction
+    typeAbstractionBody :: Term}
+  deriving (Eq, Ord, Read, Show)
+
+_TypeAbstraction = (Name "hydra/core.TypeAbstraction")
+
+_TypeAbstraction_parameter = (Name "parameter")
+
+_TypeAbstraction_body = (Name "body")
 
 -- | A type expression together with free type variables occurring in the expression
 data TypeScheme = 

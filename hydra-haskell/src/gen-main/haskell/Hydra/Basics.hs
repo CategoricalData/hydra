@@ -133,8 +133,8 @@ literalType :: (Core.Literal -> Core.LiteralType)
 literalType x = case x of
   Core.LiteralBinary _ -> Core.LiteralTypeBinary
   Core.LiteralBoolean _ -> Core.LiteralTypeBoolean
-  Core.LiteralFloat v223 -> ((\x2 -> Core.LiteralTypeFloat x2) (floatValueType v223))
-  Core.LiteralInteger v224 -> ((\x2 -> Core.LiteralTypeInteger x2) (integerValueType v224))
+  Core.LiteralFloat v228 -> ((\x2 -> Core.LiteralTypeFloat x2) (floatValueType v228))
+  Core.LiteralInteger v229 -> ((\x2 -> Core.LiteralTypeInteger x2) (integerValueType v229))
   Core.LiteralString _ -> Core.LiteralTypeString
 
 -- | Find the literal type variant (constructor) for a given literal value
@@ -174,6 +174,8 @@ termVariant x = case x of
   Core.TermRecord _ -> Mantle.TermVariantRecord
   Core.TermSet _ -> Mantle.TermVariantSet
   Core.TermSum _ -> Mantle.TermVariantSum
+  Core.TermTypeAbstraction _ -> Mantle.TermVariantTypeAbstraction
+  Core.TermTypeApplication _ -> Mantle.TermVariantTypeApplication
   Core.TermTyped _ -> Mantle.TermVariantTyped
   Core.TermUnion _ -> Mantle.TermVariantUnion
   Core.TermVariable _ -> Mantle.TermVariantVariable
@@ -193,6 +195,8 @@ termVariants = [
   Mantle.TermVariantRecord,
   Mantle.TermVariantSet,
   Mantle.TermVariantSum,
+  Mantle.TermVariantTypeAbstraction,
+  Mantle.TermVariantTypeApplication,
   Mantle.TermVariantTyped,
   Mantle.TermVariantUnion,
   Mantle.TermVariantVariable,
@@ -263,15 +267,15 @@ fieldTypeMap fields = (Maps.fromList (Lists.map toPair fields))
 
 isEncodedType :: (Core.Term -> Bool)
 isEncodedType t = ((\x -> case x of
-  Core.TermApplication v262 -> (isEncodedType (Core.applicationFunction v262))
-  Core.TermUnion v263 -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.injectionTypeName v263)))
+  Core.TermApplication v269 -> (isEncodedType (Core.applicationFunction v269))
+  Core.TermUnion v270 -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.injectionTypeName v270)))
   _ -> False) (Strip.stripTerm t))
 
 isType :: (Core.Type -> Bool)
 isType t = ((\x -> case x of
-  Core.TypeApplication v264 -> (isType (Core.applicationTypeFunction v264))
-  Core.TypeLambda v265 -> (isType (Core.lambdaTypeBody v265))
-  Core.TypeUnion v266 -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.rowTypeTypeName v266)))
+  Core.TypeApplication v271 -> (isType (Core.applicationTypeFunction v271))
+  Core.TypeLambda v272 -> (isType (Core.lambdaTypeBody v272))
+  Core.TypeUnion v273 -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.rowTypeTypeName v273)))
   _ -> False) (Strip.stripType t))
 
 isUnitTerm :: (Core.Term -> Bool)

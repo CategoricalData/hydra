@@ -11,24 +11,24 @@ import Data.Set as S
 -- | Strip all annotations from a term, including first-class type annotations
 fullyStripTerm :: (Core.Term -> Core.Term)
 fullyStripTerm t = ((\x -> case x of
-  Core.TermAnnotated v302 -> (fullyStripTerm (Core.annotatedTermSubject v302))
-  Core.TermTyped v303 -> (fullyStripTerm (Core.typedTermTerm v303))
+  Core.TermAnnotated v309 -> (fullyStripTerm (Core.annotatedTermSubject v309))
+  Core.TermTyped v310 -> (fullyStripTerm (Core.typedTermTerm v310))
   _ -> t) t)
 
 -- | Strip all annotations from a term
 stripTerm :: (Core.Term -> Core.Term)
 stripTerm t = ((\x -> case x of
-  Core.TermAnnotated v304 -> (stripTerm (Core.annotatedTermSubject v304))
+  Core.TermAnnotated v311 -> (stripTerm (Core.annotatedTermSubject v311))
   _ -> t) t)
 
 -- | Strip all annotations from a term
 stripType :: (Core.Type -> Core.Type)
 stripType t = ((\x -> case x of
-  Core.TypeAnnotated v305 -> (stripType (Core.annotatedTypeSubject v305))
+  Core.TypeAnnotated v312 -> (stripType (Core.annotatedTypeSubject v312))
   _ -> t) t)
 
 -- | Strip any top-level type lambdas from a type, extracting the (possibly nested) type body
 stripTypeParameters :: (Core.Type -> Core.Type)
 stripTypeParameters t = ((\x -> case x of
-  Core.TypeLambda v306 -> (stripTypeParameters (Core.lambdaTypeBody v306))
+  Core.TypeLambda v313 -> (stripTypeParameters (Core.lambdaTypeBody v313))
   _ -> t) (stripType t))

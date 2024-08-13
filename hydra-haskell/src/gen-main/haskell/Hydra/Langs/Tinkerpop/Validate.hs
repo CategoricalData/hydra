@@ -25,14 +25,14 @@ validateEdge checkValue showValue labelForVertexId typ el =
       checkProperties = (Optionals.map (\x -> failWith (prepend "Invalid property" x)) (validateProperties checkValue (PropertyGraph.edgeTypeProperties typ) (PropertyGraph.edgeProperties el)))
       checkOut = ((\x -> case x of
               Nothing -> Nothing
-              Just v322 -> ((\x -> case x of
+              Just v329 -> ((\x -> case x of
                 Nothing -> (Just (failWith (prepend "Out-vertex does not exist" (showValue (PropertyGraph.edgeOut el)))))
-                Just v323 -> (verify (Equality.equalString (PropertyGraph.unVertexLabel v323) (PropertyGraph.unVertexLabel (PropertyGraph.edgeTypeOut typ))) (failWith (prepend "Wrong out-vertex label" (vertexLabelMismatch (PropertyGraph.edgeTypeOut typ) v323))))) (v322 (PropertyGraph.edgeOut el)))) labelForVertexId)
+                Just v330 -> (verify (Equality.equalString (PropertyGraph.unVertexLabel v330) (PropertyGraph.unVertexLabel (PropertyGraph.edgeTypeOut typ))) (failWith (prepend "Wrong out-vertex label" (vertexLabelMismatch (PropertyGraph.edgeTypeOut typ) v330))))) (v329 (PropertyGraph.edgeOut el)))) labelForVertexId)
       checkIn = ((\x -> case x of
               Nothing -> Nothing
-              Just v324 -> ((\x -> case x of
+              Just v331 -> ((\x -> case x of
                 Nothing -> (Just (failWith (prepend "In-vertex does not exist" (showValue (PropertyGraph.edgeIn el)))))
-                Just v325 -> (verify (Equality.equalString (PropertyGraph.unVertexLabel v325) (PropertyGraph.unVertexLabel (PropertyGraph.edgeTypeIn typ))) (failWith (prepend "Wrong in-vertex label" (vertexLabelMismatch (PropertyGraph.edgeTypeIn typ) v325))))) (v324 (PropertyGraph.edgeIn el)))) labelForVertexId)
+                Just v332 -> (verify (Equality.equalString (PropertyGraph.unVertexLabel v332) (PropertyGraph.unVertexLabel (PropertyGraph.edgeTypeIn typ))) (failWith (prepend "Wrong in-vertex label" (vertexLabelMismatch (PropertyGraph.edgeTypeIn typ) v332))))) (v331 (PropertyGraph.edgeIn el)))) labelForVertexId)
   in (checkAll [
     checkLabel,
     checkId,
@@ -42,24 +42,24 @@ validateEdge checkValue showValue labelForVertexId typ el =
 
 validateElement :: ((t -> v -> Maybe String) -> (v -> String) -> Maybe (v -> Maybe PropertyGraph.VertexLabel) -> PropertyGraph.ElementType t -> PropertyGraph.Element v -> Maybe String)
 validateElement checkValue showValue labelForVertexId typ el = ((\x -> case x of
-  PropertyGraph.ElementTypeVertex v326 -> ((\x -> case x of
-    PropertyGraph.ElementEdge v327 -> (Just (prepend "Edge instead of vertex" (showValue (PropertyGraph.edgeId v327))))
-    PropertyGraph.ElementVertex v328 -> (validateVertex checkValue showValue v326 v328)) el)
-  PropertyGraph.ElementTypeEdge v329 -> ((\x -> case x of
-    PropertyGraph.ElementVertex v330 -> (Just (prepend "Vertex instead of edge" (showValue (PropertyGraph.vertexId v330))))
-    PropertyGraph.ElementEdge v331 -> (validateEdge checkValue showValue labelForVertexId v329 v331)) el)) typ)
+  PropertyGraph.ElementTypeVertex v333 -> ((\x -> case x of
+    PropertyGraph.ElementEdge v334 -> (Just (prepend "Edge instead of vertex" (showValue (PropertyGraph.edgeId v334))))
+    PropertyGraph.ElementVertex v335 -> (validateVertex checkValue showValue v333 v335)) el)
+  PropertyGraph.ElementTypeEdge v336 -> ((\x -> case x of
+    PropertyGraph.ElementVertex v337 -> (Just (prepend "Vertex instead of edge" (showValue (PropertyGraph.vertexId v337))))
+    PropertyGraph.ElementEdge v338 -> (validateEdge checkValue showValue labelForVertexId v336 v338)) el)) typ)
 
 validateGraph :: (Ord v) => ((t -> v -> Maybe String) -> (v -> String) -> PropertyGraph.GraphSchema t -> PropertyGraph.Graph v -> Maybe String)
 validateGraph checkValue showValue schema graph =  
   let checkVertices =  
           let checkVertex = (\el -> (\x -> case x of
                   Nothing -> (Just (vertexError showValue el (prepend "Unexpected label" (PropertyGraph.unVertexLabel (PropertyGraph.vertexLabel el)))))
-                  Just v332 -> (validateVertex checkValue showValue v332 el)) (Maps.lookup (PropertyGraph.vertexLabel el) (PropertyGraph.graphSchemaVertices schema)))
+                  Just v339 -> (validateVertex checkValue showValue v339 el)) (Maps.lookup (PropertyGraph.vertexLabel el) (PropertyGraph.graphSchemaVertices schema)))
           in (checkAll (Lists.map checkVertex (Maps.values (PropertyGraph.graphVertices graph)))) 
       checkEdges =  
               let checkEdge = (\el -> (\x -> case x of
                       Nothing -> (Just (edgeError showValue el (prepend "Unexpected label" (PropertyGraph.unEdgeLabel (PropertyGraph.edgeLabel el)))))
-                      Just v333 -> (validateEdge checkValue showValue labelForVertexId v333 el)) (Maps.lookup (PropertyGraph.edgeLabel el) (PropertyGraph.graphSchemaEdges schema))) 
+                      Just v340 -> (validateEdge checkValue showValue labelForVertexId v340 el)) (Maps.lookup (PropertyGraph.edgeLabel el) (PropertyGraph.graphSchemaEdges schema))) 
                   labelForVertexId = (Just (\i -> Optionals.map PropertyGraph.vertexLabel (Maps.lookup i (PropertyGraph.graphVertices graph))))
               in (checkAll (Lists.map checkEdge (Maps.values (PropertyGraph.graphEdges graph))))
   in (checkAll [
@@ -79,7 +79,7 @@ validateProperties checkValue types props =
                               val = (snd pair)
                           in ((\x -> case x of
                             Nothing -> (Just (prepend "Unexpected key" (PropertyGraph.unPropertyKey key)))
-                            Just v335 -> (Optionals.map (prepend "Invalid value") (checkValue v335 val))) (Maps.lookup key m)))
+                            Just v342 -> (Optionals.map (prepend "Invalid value") (checkValue v342 val))) (Maps.lookup key m)))
               in (checkAll (Lists.map checkPair (Maps.toList props)))
   in (checkAll [
     checkTypes,
