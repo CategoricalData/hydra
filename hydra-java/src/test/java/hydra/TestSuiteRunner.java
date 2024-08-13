@@ -8,16 +8,16 @@ import hydra.test.testSuite.TestSuite;
 import hydra.testing.TestCase;
 import hydra.testing.TestGroup;
 import hydra.tools.PrettyPrinter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import static hydra.Flows.*;
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static hydra.Flows.EMPTY_TRACE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 /**
