@@ -3,8 +3,8 @@ module Hydra.Inference.InferenceTestUtils where
 import Hydra.Kernel
 import qualified Hydra.Dsl.Types as Types
 import Hydra.TestUtils
-import Hydra.Inference
-import Hydra.Rules
+import Hydra.Inference.Inference
+import Hydra.Inference.Rules
 
 import qualified Test.Hspec as H
 

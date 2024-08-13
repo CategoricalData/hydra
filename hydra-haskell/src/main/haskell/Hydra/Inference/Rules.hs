@@ -1,6 +1,6 @@
 -- | Inference rules
 
-module Hydra.Rules where
+module Hydra.Inference.Rules where
 
 import Hydra.Basics
 import Hydra.Strip
@@ -12,7 +12,7 @@ import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Rewriting
-import Hydra.Substitution
+import Hydra.Inference.Substitution
 import Hydra.Unification
 import Hydra.Tools.Debug
 import Hydra.Annotations

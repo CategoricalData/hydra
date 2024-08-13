@@ -15,7 +15,7 @@ module Hydra.Kernel (
   module Hydra.CoreLanguage,
   module Hydra.Extras,
   module Hydra.Graph,
-  module Hydra.Inference,
+  module Hydra.Inference.Inference,
   module Hydra.Annotations,
   module Hydra.Lexical,
   module Hydra.LiteralAdapters,
@@ -54,7 +54,7 @@ import Hydra.CoreEncoding
 import Hydra.CoreLanguage
 import Hydra.Extras
 import Hydra.Graph
-import Hydra.Inference
+import Hydra.Inference.Inference
 import Hydra.Annotations
 import Hydra.Lexical
 import Hydra.LiteralAdapters
