@@ -8,6 +8,8 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
+key_rdfBlankNodeCounter = Name "rdfBlankNodeCounter"
+
 descriptionsToGraph :: [Rdf.Description] -> Rdf.Graph
 descriptionsToGraph ds = Rdf.Graph $ S.fromList $ triplesOf ds
 
@@ -60,7 +62,7 @@ nameToIri name = Rdf.Iri $ "urn:" ++ unName name
 
 nextBlankNode :: Flow (Graph) Rdf.Resource
 nextBlankNode = do
-  count <- nextCount "rdfBlankNodeCounter"
+  count <- nextCount key_rdfBlankNodeCounter
   return $ Rdf.ResourceBnode $ Rdf.BlankNode $ "b" ++ show count
 
 -- Note: these are not "proper" URNs, as they do not use an established URN scheme

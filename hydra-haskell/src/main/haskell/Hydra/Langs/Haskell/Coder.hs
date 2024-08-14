@@ -27,6 +27,8 @@ data HaskellGenerationOptions = HaskellGenerationOptions {
   haskellGenerationOptionsIncludeTypeDefinitions :: Bool
 }
 
+key_haskellVar = Name "haskellVar"
+
 -- TODO: make these settings configurable
 defaultHaskellGenerationOptions = HaskellGenerationOptions False
 
@@ -83,7 +85,7 @@ encodeFunction namespaces fun = case fun of
         let nothingAlt = H.Alternative (H.PatternName $ rawName "Nothing") nothingRhs Nothing
         justAlt <- do
           -- Note: some of the following could be brought together with FunctionCases
-          v0 <- (\i -> "v" ++ show i) <$> nextCount "haskellVar"
+          v0 <- (\i -> "v" ++ show i) <$> nextCount key_haskellVar
           let rhsTerm = simplifyTerm $ apply just (var v0)
           let v1 = if S.member (Name v0) $ freeVariablesInTerm rhsTerm then v0 else ignoredVariable
           let lhs = applicationPattern (rawName "Just") [H.PatternName $ rawName v1]
@@ -108,7 +110,7 @@ encodeFunction namespaces fun = case fun of
                 return [H.Alternative lhs cs Nothing]
             return $ H.ExpressionCase $ H.Expression_Case (hsvar "x") $ ecases ++ dcases
           toAlt fieldMap (Field fn fun') = do
-            v0 <- (\i -> "v" ++ show i) <$> nextCount "haskellVar"
+            v0 <- (\i -> "v" ++ show i) <$> nextCount key_haskellVar
             let raw = apply fun' (var v0)
             let rhsTerm = simplifyTerm raw
             let v1 = if isFreeIn (Name v0) rhsTerm then ignoredVariable else v0

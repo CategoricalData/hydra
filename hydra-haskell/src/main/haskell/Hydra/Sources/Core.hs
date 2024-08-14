@@ -29,13 +29,13 @@ hydraCoreModule = Module ns elements [] [] $
         doc "A term together with an annotation" $
         record [
           "subject">: core "Term",
-          "annotation">: Types.map string $ core "Term"],
+          "annotation">: Types.map (core "Name") $ core "Term"],
 
       def "AnnotatedType" $
         doc "A type together with an annotation" $
         record [
           "subject">: core "Type",
-          "annotation">: Types.map string $ core "Term"],
+          "annotation">: Types.map (core "Name") $ core "Term"],
 
       def "Application" $
         doc "A term which applies a function to an argument" $
@@ -242,7 +242,7 @@ hydraCoreModule = Module ns elements [] [] $
           "values">: core "Type"],
 
       def "Name" $
-        doc "A symbol which stands for a term, type, or element"
+        doc "A unique identifier in some context; a string-valued key"
         $ wrap string,
 
       def "WrappedTerm" $

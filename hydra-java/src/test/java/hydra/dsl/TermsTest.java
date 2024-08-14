@@ -55,7 +55,7 @@ public class TermsTest {
     private final Term longitude = project("LatLon", "lon");
 
     private final Term longitudeAnnotated = annot(
-            "description", Terms.string("Gets the longitude from a LatLon"),
+            new Name("description"), Terms.string("Gets the longitude from a LatLon"),
             longitude);
 
     private Term.PartialVisitor<Integer> countBoundVariables() {
@@ -134,7 +134,7 @@ public class TermsTest {
         String desc = term.accept(new Term.PartialVisitor<>() {
             @Override
             public String visit(Term.Annotated instance) {
-                Term desc = instance.value.annotation.get("description");
+                Term desc = instance.value.annotation.get(new Name("description"));
                 return Flows.fromFlow(Expect.string(desc));
             }
 

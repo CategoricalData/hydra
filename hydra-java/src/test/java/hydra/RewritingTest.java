@@ -131,7 +131,7 @@ public class RewritingTest {
     private static <S> Flow<S, Term> failOnSpecialAnnotation(
             Function<Term, Flow<S, Term>> recurse,
             Term original) {
-        return original.accept(new Term.PartialVisitor<Flow<S, Term>>() {
+        return original.accept(new Term.PartialVisitor<>() {
             @Override
             public Flow<S, Term> otherwise(Term instance) {
                 return recurse.apply(instance);
@@ -139,9 +139,9 @@ public class RewritingTest {
 
             @Override
             public Flow<S, Term> visit(Term.Annotated instance) {
-                Map<String, Term> mp = instance.value.annotation;
+                Map<Name, Term> mp = instance.value.annotation;
                 assertEquals(1, mp.size());
-                Term desc = mp.get("description");
+                Term desc = mp.get(new Name("description"));
                 assertNotNull(desc);
                 if (desc.equals(Terms.string("fail here"))) {
                     return Flows.fail("failed");

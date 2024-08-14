@@ -33,7 +33,7 @@ tier3Definition = definitionInModule hydraTier3Module
 
 -- TODO: this need not be a tier-3 module; it has no term-level dependencies. It could be a tier-1 module.
 hydraTier3Module :: Module
-hydraTier3Module = Module (Namespace "hydra/tier3") elements [] tier0Modules $
+hydraTier3Module = Module (Namespace "hydra/tier3") elements [hydraCoreModule] tier0Modules $
     Just ("A module for miscellaneous tier-3 functions and constants.")
   where
    elements = [
@@ -55,4 +55,4 @@ traceSummaryDef = tier3Definition "traceSummary" $
           @@ (Maps.isEmpty @@ (Flows.traceOther @@ var "t")),
         "toLine">:
           function (pairT stringT termT) stringT $
-          lambda "pair" $ "\t" ++ (first @@ var "pair") ++ ": " ++ (Io.showTerm @@ (second @@ var "pair"))])
+          lambda "pair" $ "\t" ++ (Core.unName @@ (first @@ var "pair")) ++ ": " ++ (Io.showTerm @@ (second @@ var "pair"))])

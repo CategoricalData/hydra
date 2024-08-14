@@ -1,6 +1,7 @@
 package hydra.dsl;
 
 import hydra.Flows;
+import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
 import hydra.core.WrappedType;
@@ -44,7 +45,7 @@ public class TypesTest {
             wrap("LatLon", float32()), wrap("LatLon", float32()), float32());
 
     private final Type annotatedType = annot(
-            "description", Terms.string("this is a string-annotated double type"), float64());
+            new Name("description"), Terms.string("this is a string-annotated double type"), float64());
 
     @Test
     public void constructedTypesAreAsExpected() {
@@ -99,7 +100,7 @@ public class TypesTest {
         String desc = type.accept(new Type.PartialVisitor<>() {
             @Override
             public String visit(Type.Annotated instance) {
-                Term desc = instance.value.annotation.get("description");
+                Term desc = instance.value.annotation.get(new Name("description"));
                 return Flows.fromFlow(Expect.string(desc));
             }
 

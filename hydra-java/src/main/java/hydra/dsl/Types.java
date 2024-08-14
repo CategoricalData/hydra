@@ -17,7 +17,7 @@ import hydra.core.Type;
 import hydra.core.TypeScheme;
 import hydra.core.Unit;
 import hydra.core.WrappedType;
-import hydra.util.Opt;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static hydra.dsl.Core.*;
+import static hydra.dsl.Core.name;
 
 
 /**
@@ -37,15 +37,15 @@ public interface Types {
     /**
      * Construct an annotated type.
      */
-    static Type annot(final Map<String, Term> ann, final Type base) {
+    static Type annot(final Map<Name, Term> ann, final Type base) {
         return new Type.Annotated(new AnnotatedType(base, ann));
     }
 
     /**
      * Construct an annotation type with a single key/value pair.
      */
-    static Type annot(final String key, final Term value, final Type base) {
-        Map<String, Term> mp = new HashMap<>();
+    static Type annot(final Name key, final Term value, final Type base) {
+        Map<Name, Term> mp = new HashMap<>();
         mp.put(key, value);
         return annot(mp, base);
     }

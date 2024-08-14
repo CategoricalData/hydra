@@ -32,6 +32,9 @@ data ProjectionSpec a = ProjectionSpec {
   projectionSpecValues :: ValueSpec,
   projectionSpecAlias :: Maybe String}
 
+-- TODO: deprecate "kind"
+key_kind = Name "kind"
+
 check :: Bool -> Flow s () -> Flow s ()
 check b err = if b then pure () else err
 
@@ -82,8 +85,7 @@ elementCoder mparent schema source vidType eidType = case stripType source of
       mOutSpec <- findProjectionSpec name outVertexKey outVertexLabelKey fields
       mInSpec <- findProjectionSpec name inVertexKey inVertexLabelKey fields
 
-      -- TODO: deprecate "kind"
-      kind <- case getTypeAnnotation "kind" source of
+      kind <- case getTypeAnnotation key_kind source of
         Nothing -> pure $ if hasVertexAdapters mOutSpec mInSpec
           then PG.ElementKindEdge
           else PG.ElementKindVertex
@@ -139,19 +141,19 @@ elementCoder mparent schema source vidType eidType = case stripType source of
       PG.DirectionIn -> Y.isJust mOutSpec
       PG.DirectionBoth -> Y.isJust mOutSpec && Y.isJust mInSpec
 
-    vertexLabelKey = annotationSchemaVertexLabel $ schemaAnnotations schema
-    edgeLabelKey = annotationSchemaEdgeLabel $ schemaAnnotations schema
-    vertexIdKey = annotationSchemaVertexId $ schemaAnnotations schema
-    edgeIdKey = annotationSchemaEdgeId $ schemaAnnotations schema
-    propertyKeyKey = annotationSchemaPropertyKey $ schemaAnnotations schema
-    propertyValueKey = annotationSchemaPropertyValue $ schemaAnnotations schema
-    outVertexKey = annotationSchemaOutVertex $ schemaAnnotations schema
-    outVertexLabelKey = annotationSchemaOutVertexLabel $ schemaAnnotations schema
-    inVertexKey = annotationSchemaInVertex $ schemaAnnotations schema
-    inVertexLabelKey = annotationSchemaInVertexLabel $ schemaAnnotations schema
-    outEdgeLabelKey = annotationSchemaOutEdgeLabel $ schemaAnnotations schema
-    inEdgeLabelKey = annotationSchemaInEdgeLabel $ schemaAnnotations schema
-    ignoreKey = annotationSchemaIgnore $ schemaAnnotations schema
+    vertexLabelKey = Name $ annotationSchemaVertexLabel $ schemaAnnotations schema
+    edgeLabelKey = Name $ annotationSchemaEdgeLabel $ schemaAnnotations schema
+    vertexIdKey = Name $ annotationSchemaVertexId $ schemaAnnotations schema
+    edgeIdKey = Name $ annotationSchemaEdgeId $ schemaAnnotations schema
+    propertyKeyKey = Name $ annotationSchemaPropertyKey $ schemaAnnotations schema
+    propertyValueKey = Name $ annotationSchemaPropertyValue $ schemaAnnotations schema
+    outVertexKey = Name $ annotationSchemaOutVertex $ schemaAnnotations schema
+    outVertexLabelKey = Name $ annotationSchemaOutVertexLabel $ schemaAnnotations schema
+    inVertexKey = Name $ annotationSchemaInVertex $ schemaAnnotations schema
+    inVertexLabelKey = Name $ annotationSchemaInVertexLabel $ schemaAnnotations schema
+    outEdgeLabelKey = Name $ annotationSchemaOutEdgeLabel $ schemaAnnotations schema
+    inEdgeLabelKey = Name $ annotationSchemaInEdgeLabel $ schemaAnnotations schema
+    ignoreKey = Name $ annotationSchemaIgnore $ schemaAnnotations schema
 
     findLabelString tname labelKey = case getTypeAnnotation labelKey source of
       Nothing -> pure $ unName tname
@@ -161,7 +163,7 @@ elementCoder mparent schema source vidType eidType = case stripType source of
       mid <- findField tname idKey fields
       case mid of
         Nothing -> if required
-          then fail $ "no " ++ idKey ++ " field"
+          then fail $ "no " ++ unName idKey ++ " field"
           else pure Nothing
         Just mi -> do
           spec <- case getTypeAnnotation idKey (fieldTypeType mi) of
@@ -183,7 +185,7 @@ elementCoder mparent schema source vidType eidType = case stripType source of
     findField tname key fields = withTrace ("find " ++ show key ++ " field") $ do
       let matches = L.filter (\f -> Y.isJust $ getTypeAnnotation key $ fieldTypeType f) fields
       if L.length matches > 1
-        then fail $ "Multiple fields marked as '" ++ key ++ "' in record type " ++ unName tname ++ ": "
+        then fail $ "Multiple fields marked as '" ++ unName key ++ "' in record type " ++ unName tname ++ ": "
           ++ (L.intercalate ", " (unName . fieldTypeName <$> matches))
         else return $ if L.null matches then Nothing else Just $ L.head matches
 
@@ -197,7 +199,7 @@ elementCoder mparent schema source vidType eidType = case stripType source of
               PG.ElementKindVertex -> [vertexIdKey, outEdgeLabelKey, inEdgeLabelKey]
               PG.ElementKindEdge -> [edgeIdKey, outVertexKey, inVertexKey]
             hasAnnotation key = Y.isJust $ getTypeAnnotation key $ fieldTypeType field
-            hasName fname = fieldTypeName field == Name fname
+            hasName fname = fieldTypeName field == fname
         toSpec field = do
           alias <- case (getTypeAnnotation propertyKeyKey $ fieldTypeType field) of
             Nothing -> pure Nothing

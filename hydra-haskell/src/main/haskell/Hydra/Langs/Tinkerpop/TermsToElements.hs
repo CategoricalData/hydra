@@ -19,9 +19,11 @@ import qualified Data.Maybe as Y
 
 type PgAdapter s v = Adapter s s Type [PG.Label] Term [PG.Element v]
 
+key_elements = Name "elements"
+
 termToElementsAdapter :: Schema s t v -> Type -> Flow s (PgAdapter s v)
 termToElementsAdapter schema typ = do
-    case getTypeAnnotation "elements" typ of
+    case getTypeAnnotation key_elements typ of
       Nothing -> pure trivialAdapter
       Just term -> do
         specs <- Expect.list decodeElementSpec term >>= CM.mapM (parseElementSpec schema)

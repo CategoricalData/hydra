@@ -7,11 +7,11 @@ package hydra.tier3;
  */
 public interface Tier3 {
   static String traceSummary(hydra.compute.Trace t) {
-    java.util.function.Function<hydra.util.Tuple.Tuple2<String, hydra.core.Term>, String> toLine = (java.util.function.Function<hydra.util.Tuple.Tuple2<String, hydra.core.Term>, String>) (pair -> hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
+    java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>, String> toLine = (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>, String>) (pair -> hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
         hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
           "\t",
-          ((pair)).object1)),
+          ((pair)).object1.value)),
         ": ")),
       hydra.lib.io.ShowTerm.apply(((pair)).object2))));
     java.util.List<String> messageLines = hydra.lib.lists.Nub.apply(((t)).messages);

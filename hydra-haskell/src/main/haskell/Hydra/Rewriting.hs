@@ -262,14 +262,14 @@ rewriteTermM f = rewrite fsub f
           t <- recurse (fieldTerm f)
           return f {fieldTerm = t}
 
-rewriteTermMeta :: (M.Map String Term -> M.Map String Term) -> Term -> Term
+rewriteTermMeta :: (M.Map Name Term -> M.Map Name Term) -> Term -> Term
 rewriteTermMeta mapping = rewriteTerm rewrite
   where
     rewrite recurse term = case recurse term of
       TermAnnotated (AnnotatedTerm term1 ann) -> TermAnnotated $ AnnotatedTerm term1 $ mapping ann
       t -> t
 
-rewriteTermMetaM :: (M.Map String Term -> Flow s (M.Map String Term)) -> Term -> Flow s Term
+rewriteTermMetaM :: (M.Map Name Term -> Flow s (M.Map Name Term)) -> Term -> Flow s Term
 rewriteTermMetaM mapping = rewriteTermM rewrite
   where
     rewrite recurse term = do
@@ -329,7 +329,7 @@ rewriteTypeM f = rewrite fsub f
           t <- recurse $ fieldTypeType f
           return f {fieldTypeType = t}
 
-rewriteTypeMeta :: (M.Map String Term -> M.Map String Term) -> Type -> Type
+rewriteTypeMeta :: (M.Map Name Term -> M.Map Name Term) -> Type -> Type
 rewriteTypeMeta mapping = rewriteType rewrite
   where
     rewrite recurse typ = case recurse typ of

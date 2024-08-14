@@ -13,15 +13,15 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-key_deprecated = "_deprecated"
-key_maxLength = "_maxLength"
-key_minLength = "_minLength"
-key_preserveFieldName = "_preserveFieldName"
+key_deprecated = Name "_deprecated"
+key_maxLength = Name "_maxLength"
+key_minLength = Name "_minLength"
+key_preserveFieldName = Name "_preserveFieldName"
 
-annotateTerm :: String -> Y.Maybe (Term) -> Term -> Term
+annotateTerm :: Name -> Y.Maybe Term -> Term -> Term
 annotateTerm = setTermAnnotation
 
-annotateType :: String -> Y.Maybe (Term) -> Type -> Type
+annotateType :: Name -> Y.Maybe Term -> Type -> Type
 annotateType = setTypeAnnotation
 
 bounded :: Maybe Int -> Maybe Int -> Type -> Type

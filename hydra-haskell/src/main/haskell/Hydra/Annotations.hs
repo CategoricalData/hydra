@@ -23,52 +23,52 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-key_classes = "classes" :: String
-key_description = "description"
-key_type = "type"
+key_classes = Name "classes"
+key_description = Name "description"
+key_type = Name "type"
 
 
-aggregateAnnotations :: (x -> Maybe y) -> (y -> x) -> (y -> M.Map String Term) -> x -> M.Map String Term
+aggregateAnnotations :: (x -> Maybe y) -> (y -> x) -> (y -> M.Map Name Term) -> x -> M.Map Name Term
 aggregateAnnotations getValue getX getAnns t = M.fromList $ L.concat $ toPairs [] t
   where
     toPairs rest t = case getValue t of
       Nothing -> rest
       Just yy -> toPairs ((M.toList (getAnns yy)):rest) (getX yy)
 
-failOnFlag :: String -> String -> Flow s ()
+failOnFlag :: Name -> String -> Flow s ()
 failOnFlag flag msg = do
   val <- hasFlag flag
   if val
     then fail msg
     else pure ()
 
-getAttr :: String -> Flow s (Maybe Term)
+getAttr :: Name -> Flow s (Maybe Term)
 getAttr key = Flow q
   where
     q s0 t0 = FlowState (Just $ M.lookup key $ traceOther t0) s0 t0
 
-getAttrWithDefault :: String -> Term -> Flow s Term
+getAttrWithDefault :: Name -> Term -> Flow s Term
 getAttrWithDefault key def = Y.fromMaybe def <$> getAttr key
 
-getDescription :: M.Map String Term -> Flow Graph (Y.Maybe String)
+getDescription :: M.Map Name Term -> Flow Graph (Y.Maybe String)
 getDescription anns = case getAnnotation key_description anns of
   Nothing -> pure Nothing
   Just term -> case term of
     TermLiteral (LiteralString s) -> pure $ Just s
     _ -> fail $ "unexpected value for " ++ show key_description ++ ": " ++ show term
 
-getTermAnnotation :: String -> Term -> Y.Maybe Term
+getTermAnnotation :: Name -> Term -> Y.Maybe Term
 getTermAnnotation key = getAnnotation key . termAnnotationInternal
 
 getTermDescription :: Term -> Flow Graph (Y.Maybe String)
 getTermDescription = getDescription . termAnnotationInternal
 
-getType :: M.Map String Term -> Flow Graph (Y.Maybe Type)
+getType :: M.Map Name Term -> Flow Graph (Y.Maybe Type)
 getType anns = case getAnnotation key_type anns of
   Nothing -> pure Nothing
   Just dat -> Just <$> coreDecodeType dat
 
-getTypeAnnotation :: String -> Type -> Y.Maybe Term
+getTypeAnnotation :: Name -> Type -> Y.Maybe Term
 getTypeAnnotation key = getAnnotation key . typeAnnotationInternal
 
 getTypeClasses :: Type -> Flow Graph (M.Map Name (S.Set TypeClass))
@@ -83,17 +83,17 @@ getTypeClasses typ = case getTypeAnnotation key_classes typ of
 getTypeDescription :: Type -> Flow Graph (Y.Maybe String)
 getTypeDescription = getDescription . typeAnnotationInternal
 
-hasFlag :: String -> Flow s Bool
+hasFlag :: Name -> Flow s Bool
 hasFlag flag = getAttrWithDefault flag (Terms.boolean False) >>= Expect.boolean
 
 -- | Return a zero-indexed counter for the given key: 0, 1, 2, ...
-nextCount :: String -> Flow s Int
+nextCount :: Name -> Flow s Int
 nextCount attrName = do
   count <- getAttrWithDefault attrName (Terms.int32 0) >>= Expect.int32
   putAttr attrName (Terms.int32 $ count + 1)
   return count
 
-resetCount :: String -> Flow s ()
+resetCount :: Name -> Flow s ()
 resetCount attrName = do
   putAttr attrName (Terms.int32 0)
   return ()
@@ -114,18 +114,18 @@ normalizeTypeAnnotations typ = if M.null anns
     anns = typeAnnotationInternal typ
     stripped = stripType typ
 
-putAttr :: String -> Term -> Flow s ()
+putAttr :: Name -> Term -> Flow s ()
 putAttr key val = Flow q
   where
     q s0 t0 = FlowState (Just ()) s0 (t0 {traceOther = M.insert key val $ traceOther t0})
 
-setAnnotation :: String -> Y.Maybe Term -> M.Map String Term -> M.Map String Term
+setAnnotation :: Name -> Y.Maybe Term -> M.Map Name Term -> M.Map Name Term
 setAnnotation key val m = M.alter (const val) key m
 
-setDescription :: Y.Maybe String -> M.Map String Term -> M.Map String Term
+setDescription :: Y.Maybe String -> M.Map Name Term -> M.Map Name Term
 setDescription d = setAnnotation key_description (Terms.string <$> d)
 
-setTermAnnotation :: String -> Y.Maybe Term -> Term -> Term
+setTermAnnotation :: Name -> Y.Maybe Term -> Term -> Term
 setTermAnnotation key val term = if anns == M.empty
     then term'
     else TermAnnotated $ AnnotatedTerm term' anns
@@ -149,7 +149,7 @@ setTermType mtyp term = case mtyp of
 
 setType mt = setAnnotation key_type (coreEncodeType <$> mt)
 
-setTypeAnnotation :: String -> Y.Maybe Term -> Type -> Type
+setTypeAnnotation :: Name -> Y.Maybe Term -> Type -> Type
 setTypeAnnotation key val typ = if anns == M.empty
     then typ'
     else TypeAnnotated $ AnnotatedType typ' anns
@@ -171,7 +171,7 @@ setTypeClasses m = setTypeAnnotation key_classes encoded
 setTypeDescription :: Y.Maybe String -> Type -> Type
 setTypeDescription d = setTypeAnnotation key_description (Terms.string <$> d)
 
-termAnnotationInternal :: Term -> M.Map String Term
+termAnnotationInternal :: Term -> M.Map Name Term
 termAnnotationInternal = aggregateAnnotations getAnn annotatedTermSubject annotatedTermAnnotation
   where
     getAnn t = case t of
@@ -179,14 +179,14 @@ termAnnotationInternal = aggregateAnnotations getAnn annotatedTermSubject annota
       TermTyped (TypedTerm t1 _) -> getAnn t1
       _ -> Nothing
 
-typeAnnotationInternal :: Type -> M.Map String Term
+typeAnnotationInternal :: Type -> M.Map Name Term
 typeAnnotationInternal = aggregateAnnotations getAnn annotatedTypeSubject annotatedTypeAnnotation
   where
     getAnn t = case t of
       TypeAnnotated a -> Just a
       _ -> Nothing
 
-whenFlag :: String -> Flow s a -> Flow s a -> Flow s a
+whenFlag :: Name -> Flow s a -> Flow s a -> Flow s a
 whenFlag flag fthen felse = do
   b <- hasFlag flag
   if b
@@ -213,4 +213,4 @@ unshadowVariables term = Y.fromJust $ flowStateValue $ unFlow (rewriteTermM rewr
             body' <- recurse body
             return $ TermFunction $ FunctionLambda $ Lambda v d body'
         _ -> recurse term
-    freshName = (\n -> Name $ "s" ++ show n) <$> nextCount "unshadow"
+    freshName = (\n -> Name $ "s" ++ show n) <$> nextCount (Name "unshadow")

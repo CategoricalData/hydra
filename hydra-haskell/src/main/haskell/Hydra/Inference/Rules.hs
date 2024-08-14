@@ -36,6 +36,8 @@ data Inferred a = Inferred {
   inferredConstraints :: [TypeConstraint]
 } deriving Show
 
+key_vcount = Name "vcount"
+
 constraint :: Type -> Type -> TypeConstraint
 constraint t1 t2 = TypeConstraint t1 t2 Nothing
 
@@ -48,7 +50,7 @@ findMatchingField fname sfields = case L.filter (\f -> fieldTypeName f == fname)
   (h:_) -> return h
 
 freshName :: Flow Graph Name
-freshName = normalVariable <$> nextCount "hyInf"
+freshName = normalVariable <$> nextCount key_vcount
 
 freshVariableType :: Flow Graph Type
 freshVariableType = TypeVariable <$> freshName

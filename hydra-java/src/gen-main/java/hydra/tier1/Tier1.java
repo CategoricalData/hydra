@@ -179,7 +179,7 @@ public interface Tier1 {
     }))));
   }
 
-  static <A, S> java.util.function.Function<hydra.compute.Flow<S, A>, hydra.compute.Flow<S, A>> withFlag(String a1) {
+  static <A, S> java.util.function.Function<hydra.compute.Flow<S, A>, hydra.compute.Flow<S, A>> withFlag(hydra.core.Name a1) {
     java.util.function.Function<hydra.compute.Trace, java.util.function.Function<hydra.compute.Trace, hydra.compute.Trace>> restore = (java.util.function.Function<hydra.compute.Trace, java.util.function.Function<hydra.compute.Trace, hydra.compute.Trace>>) (ignored -> (java.util.function.Function<hydra.compute.Trace, hydra.compute.Trace>) (t1 -> new hydra.compute.Trace(((t1)).stack, ((t1)).messages, hydra.lib.maps.Remove.apply(
         (a1),
         ((t1)).other))));

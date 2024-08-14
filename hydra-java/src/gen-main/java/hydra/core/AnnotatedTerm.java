@@ -12,9 +12,9 @@ public class AnnotatedTerm implements Serializable {
   
   public final hydra.core.Term subject;
   
-  public final java.util.Map<String, hydra.core.Term> annotation;
+  public final java.util.Map<hydra.core.Name, hydra.core.Term> annotation;
   
-  public AnnotatedTerm (hydra.core.Term subject, java.util.Map<String, hydra.core.Term> annotation) {
+  public AnnotatedTerm (hydra.core.Term subject, java.util.Map<hydra.core.Name, hydra.core.Term> annotation) {
     java.util.Objects.requireNonNull((subject));
     java.util.Objects.requireNonNull((annotation));
     this.subject = subject;
@@ -40,7 +40,7 @@ public class AnnotatedTerm implements Serializable {
     return new AnnotatedTerm(subject, annotation);
   }
   
-  public AnnotatedTerm withAnnotation(java.util.Map<String, hydra.core.Term> annotation) {
+  public AnnotatedTerm withAnnotation(java.util.Map<hydra.core.Name, hydra.core.Term> annotation) {
     java.util.Objects.requireNonNull((annotation));
     return new AnnotatedTerm(subject, annotation);
   }

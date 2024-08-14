@@ -127,8 +127,8 @@ public interface Extras {
     });
   }
   
-  static java.util.function.Function<java.util.Map<String, hydra.core.Term>, hydra.util.Opt<hydra.core.Term>> getAnnotation(String key) {
-    return (java.util.function.Function<java.util.Map<String, hydra.core.Term>, hydra.util.Opt<hydra.core.Term>>) (ann -> hydra.lib.maps.Lookup.apply(
+  static java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Term>, hydra.util.Opt<hydra.core.Term>> getAnnotation(hydra.core.Name key) {
+    return (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Term>, hydra.util.Opt<hydra.core.Term>>) (ann -> hydra.lib.maps.Lookup.apply(
       (key),
       (ann)));
   }

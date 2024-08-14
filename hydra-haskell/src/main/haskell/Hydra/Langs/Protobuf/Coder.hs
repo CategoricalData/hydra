@@ -18,6 +18,9 @@ import qualified Data.Set as S
 import qualified Text.Read as TR
 import qualified Data.Maybe as Y
 
+
+key_proto_field_index = Name "proto_field_index"
+
 -- | Note: follows the Protobuf Style Guide (https://protobuf.dev/programming-guides/style)
 moduleToProtobuf :: Module -> Flow Graph (M.Map FilePath String)
 moduleToProtobuf mod = do
@@ -103,7 +106,7 @@ constructModule mod@(Module ns els _ _ desc) _ pairs = do
 
 encodeDefinition :: Namespace -> Name -> Type -> Flow Graph P3.Definition
 encodeDefinition localNs name typ = withTrace ("encoding " ++ unName name) $ do
-    resetCount "proto_field_index"
+    resetCount key_proto_field_index
     nextIndex
     options <- findOptions typ
     encode options typ
@@ -282,9 +285,9 @@ namespaceToPackageName (Namespace ns) = P3.PackageName $ Strings.intercalate "."
   convertCaseCamelToLowerSnake <$> (L.init $ Strings.splitOn "/" ns)
 
 nextIndex :: Flow s Int
-nextIndex = nextCount "proto_field_index"
+nextIndex = nextCount key_proto_field_index
 
-readBooleanAnnotation :: String -> Type -> Flow Graph Bool
+readBooleanAnnotation :: Name -> Type -> Flow Graph Bool
 readBooleanAnnotation key typ = do
   let ann = typeAnnotationInternal typ
   case TR.readMaybe $ show ann of

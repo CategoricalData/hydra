@@ -28,6 +28,8 @@ type SymmetricAdapter s t v = Adapter s s t t v v
 
 type TypeAdapter = Type -> Flow AdapterContext (SymmetricAdapter AdapterContext Type Term)
 
+key_types = Name "types"
+
 bidirectional :: (CoderDirection -> b -> Flow s b) -> Coder s s b b
 bidirectional f = Coder (f CoderDirectionEncode) (f CoderDirectionDecode)
 
@@ -65,18 +67,18 @@ composeCoders c1 c2 = Coder {
 debugCheckType :: (Eq t, Ord t, Show t) => t -> Flow s ()
 debugCheckType typ = do
   let s = show typ
-  types <- getAttrWithDefault "types" (Terms.set S.empty) >>= Expect.set Expect.string
+  types <- getAttrWithDefault key_types (Terms.set S.empty) >>= Expect.set Expect.string
   if S.member s types
     then fail $ "detected a cycle; type has already been encountered: " ++ show typ
-    else putAttr "types" $ Terms.set $ S.fromList (Terms.string <$> (S.toList $ S.insert s types))
+    else putAttr key_types $ Terms.set $ S.fromList (Terms.string <$> (S.toList $ S.insert s types))
   return ()
 
 debugRemoveType :: (Eq t, Ord t, Show t) => t -> Flow s ()
 debugRemoveType typ = do
   let s = show typ
-  types <- getAttrWithDefault "types" (Terms.set S.empty) >>= Expect.set Expect.string
+  types <- getAttrWithDefault key_types (Terms.set S.empty) >>= Expect.set Expect.string
   let types' = S.delete s types
-  putAttr "types" $ Terms.set $ S.fromList (Terms.string <$> (S.toList $ S.insert s types'))
+  putAttr key_types $ Terms.set $ S.fromList (Terms.string <$> (S.toList $ S.insert s types'))
 
 encodeDecode :: CoderDirection -> Coder s s x x -> x -> Flow s x
 encodeDecode dir = case dir of

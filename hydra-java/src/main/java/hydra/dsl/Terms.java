@@ -42,15 +42,15 @@ public interface Terms {
     /**
      * Construct an annotation term.
      */
-    static Term annot(final Map<String, Term> ann, final Term base) {
+    static Term annot(final Map<Name, Term> ann, final Term base) {
         return new Term.Annotated(new AnnotatedTerm(base, ann));
     }
 
     /**
      * Construct an annotation term with a single key/value pair.
      */
-    static Term annot(final String key, final Term value, final Term base) {
-        Map<String, Term> mp = new HashMap<>();
+    static Term annot(final Name key, final Term value, final Term base) {
+        Map<Name, Term> mp = new HashMap<>();
         mp.put(key, value);
         return annot(mp, base);
     }
@@ -59,7 +59,7 @@ public interface Terms {
      * Construct an annotation term with "description" annotation.
      */
     static Term annot(final String description, final Term base) {
-        return annot("description", Terms.string(description), base);
+        return annot(new Name("description"), Terms.string(description), base);
     }
 
     /**

@@ -11,7 +11,7 @@ import Data.Set as S
 data AnnotatedTerm = 
   AnnotatedTerm {
     annotatedTermSubject :: Term,
-    annotatedTermAnnotation :: (Map String Term)}
+    annotatedTermAnnotation :: (Map Name Term)}
   deriving (Eq, Ord, Read, Show)
 
 _AnnotatedTerm = (Name "hydra/core.AnnotatedTerm")
@@ -24,7 +24,7 @@ _AnnotatedTerm_annotation = (Name "annotation")
 data AnnotatedType = 
   AnnotatedType {
     annotatedTypeSubject :: Type,
-    annotatedTypeAnnotation :: (Map String Term)}
+    annotatedTypeAnnotation :: (Map Name Term)}
   deriving (Eq, Ord, Read, Show)
 
 _AnnotatedType = (Name "hydra/core.AnnotatedType")

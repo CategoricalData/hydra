@@ -110,8 +110,8 @@ uncurryTypeDef = hydraExtrasDefinition "uncurryType" $
 
 -- hydra/annotations
 
-getAnnotationDef :: TElement (String -> M.Map String Term -> Maybe Term)
+getAnnotationDef :: TElement (Name -> M.Map Name Term -> Maybe Term)
 getAnnotationDef = hydraExtrasDefinition "getAnnotation" $
-  functionN [stringT, kvT, optionalT termT] $
+  functionN [nameT, kvT, optionalT termT] $
   lambda "key" $ lambda "ann" $
     Maps.lookup @@ var "key" @@ var "ann"
