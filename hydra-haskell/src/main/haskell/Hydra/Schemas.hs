@@ -122,7 +122,7 @@ requireWrappedType :: Name -> Flow Graph Type
 requireWrappedType name = do
   typ <- requireType name
   case stripType typ of
-    TypeWrap (WrappedType name t) -> return t
+    TypeWrap t -> return t
     _ -> return typ -- TODO: stop allowing this "slop" once typedefs are clearly separated from newtypes
 --     _ -> fail $ "expected wrapped type for " ++ unName name ++ " but got " ++ show typ
 

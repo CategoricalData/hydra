@@ -251,12 +251,6 @@ hydraCoreModule = Module ns elements [] [] $
           "typeName">: core "Name",
           "object">: core "Term"],
 
-      def "WrappedType" $
-        doc "A type wrapped in a type name" $
-        record [
-          "typeName">: core "Name",
-          "object">: core "Type"],
-
       def "OptionalCases" $
         doc "A case statement for matching optional terms" $
         record [
@@ -384,7 +378,7 @@ hydraCoreModule = Module ns elements [] [] $
           "sum">: list (core "Type"),
           "union">: core "RowType",
           "variable">: core "Name",
-          "wrap">: core "WrappedType"],
+          "wrap">: core "Type"],
 
       def "TypeAbstraction" $
         doc "A System F type abstraction term" $

@@ -153,7 +153,4 @@ var :: String -> Type
 var = TypeVariable . Name
 
 wrap :: Type -> Type
-wrap = wrapWithName placeholderName
-
-wrapWithName :: Name -> Type -> Type
-wrapWithName name t = TypeWrap $ WrappedType name t
+wrap = TypeWrap

@@ -222,7 +222,7 @@ encodeType namespaces typ = withTrace "encode type" $ case stripType typ of
       encode st]
     TypeUnion rt -> ref $ rowTypeTypeName rt
     TypeVariable v -> ref v
-    TypeWrap (WrappedType name _) -> ref name
+--    TypeWrap (WrappedType name _) -> ref name
     _ -> fail $ "unexpected type: " ++ show typ
   where
     encode = encodeType namespaces
@@ -339,7 +339,7 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
       TypeUnion rt -> do
         cons <- CM.mapM (unionCons lname) $ rowTypeFields rt
         return $ H.DeclarationData $ H.DataDeclaration H.DataDeclaration_KeywordData [] hd cons [deriv]
-      TypeWrap (WrappedType tname wt) -> do
+      TypeWrap wt -> do
         cons <- newtypeCons el wt
         return $ H.DeclarationData $ H.DataDeclaration H.DataDeclaration_KeywordNewtype [] hd [cons] [deriv]
       _ -> if newtypesNotTypedefs

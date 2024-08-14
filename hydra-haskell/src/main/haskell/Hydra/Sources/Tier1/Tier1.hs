@@ -226,7 +226,7 @@ subtypesDef = tier1Definition "subtypes" $
     _Type_sum>>: lambda "st" $ var "st",
     _Type_union>>: lambda "rt" (Lists.map @@ Core.fieldTypeType @@ (Core.rowTypeFields @@ var "rt")),
     _Type_variable>>: constant $ list [],
-    _Type_wrap>>: lambda "nt" $ list [Core.wrappedTypeObject @@ var "nt"]]
+    _Type_wrap>>: Equality.identity]
 
 unqualifyNameDef :: TElement (QualifiedName -> Name)
 unqualifyNameDef = tier1Definition "unqualifyName" $

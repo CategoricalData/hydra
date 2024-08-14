@@ -256,7 +256,7 @@ passRecord t@(TypeRecord rt) = do
   let lossy = or $ adapterIsLossy <$> adapters
   let sfields' = adapterTarget <$> adapters
   return $ Adapter lossy t (TypeRecord $ rt {rowTypeFields = sfields'}) $ bidirectional
-    $ \dir (TermRecord (Record _ dfields)) -> record (rowTypeTypeName rt) <$> CM.zipWithM (encodeDecode dir . adapterCoder) adapters dfields
+    $ \dir (TermRecord (Record tname dfields)) -> record tname <$> CM.zipWithM (encodeDecode dir . adapterCoder) adapters dfields
 
 passSet :: TypeAdapter
 passSet t@(TypeSet st) = do
@@ -279,19 +279,19 @@ passUnion t@(TypeUnion rt) = do
     let sfields' = adapterTarget . snd <$> M.toList adapters
     return $ Adapter lossy t (TypeUnion $ rt {rowTypeFields = sfields'})
       $ bidirectional $ \dir term -> do
-        dfield <- Expect.injection term
+        let (TermUnion (Injection nm dfield)) = term
         ad <- getAdapter adapters dfield
         TermUnion . Injection nm <$> encodeDecode dir (adapterCoder ad) dfield
   where
     getAdapter adapters f = Y.maybe (fail $ "no such field: " ++ unName (fieldName f)) pure $ M.lookup (fieldName f) adapters
     sfields = rowTypeFields rt
-    nm = rowTypeTypeName rt
 
 passWrapped :: TypeAdapter
-passWrapped wt@(TypeWrap (WrappedType tname t)) = do
+passWrapped wt@(TypeWrap t) = do
   adapter <- termAdapter t
-  return $ Adapter (adapterIsLossy adapter) wt (Types.wrapWithName tname $ adapterTarget adapter)
-    $ bidirectional $ \dir (TermWrap (WrappedTerm _ term)) -> TermWrap . WrappedTerm tname <$> encodeDecode dir (adapterCoder adapter) term
+  return $ Adapter (adapterIsLossy adapter) wt (adapterTarget adapter)
+    $ bidirectional $ \dir (TermWrap (WrappedTerm tname term)) ->
+      TermWrap . WrappedTerm tname <$> encodeDecode dir (adapterCoder adapter) term
 
 simplifyApplication :: TypeAdapter
 simplifyApplication t@(TypeApplication (ApplicationType lhs _)) = do
@@ -340,7 +340,7 @@ termAdapter typ = case typ of
                 TypeVariantOptional -> [optionalToList]
                 TypeVariantSet ->  [listToSet]
                 TypeVariantUnion -> [unionToRecord]
-                TypeVariantWrap -> [wrapToUnwrapped]
+                TypeVariantWrap -> [wrapToRecord] -- [wrapToUnwrapped]
                 _ -> [unsupportedToString]
     where
       constraints = languageConstraints . adapterContextLanguage
@@ -354,13 +354,12 @@ unionToRecord t@(TypeUnion rt) = do
     ad <- termAdapter target
     return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ Coder {
       coderEncode = \term' -> do
-        (Field fn term) <- Expect.injectionWithName (rowTypeTypeName rt) term'
+        let (TermUnion (Injection nm (Field fn term))) = term'
         coderEncode (adapterCoder ad) $ record nm (toRecordField term fn <$> sfields),
       coderDecode = \term -> do
-        TermRecord (Record _ fields) <- coderDecode (adapterCoder ad) term
+        TermRecord (Record nm fields) <- coderDecode (adapterCoder ad) term
         inject nm <$> fromRecordFields term (TermRecord (Record nm fields)) (adapterTarget ad) fields}
   where
-    nm = rowTypeTypeName rt
     sfields = rowTypeFields rt
 
     makeOptional (FieldType fn ft) = FieldType fn $ beneathTypeAnnotations Types.optional ft
@@ -386,15 +385,20 @@ unsupportedToString t = pure $ Adapter False t Types.string $ Coder encode decod
         Left msg -> fail $ "could not decode unsupported term: " ++ s
         Right t -> pure t
 
-wrapToUnwrapped :: TypeAdapter
-wrapToUnwrapped t@(TypeWrap (WrappedType tname typ)) = do
+wrapToRecord :: TypeAdapter
+wrapToRecord t@(TypeWrap typ) = do
     ad <- termAdapter typ
-    return $ Adapter False t (adapterTarget ad) $ Coder (encode ad) (decode ad)
+    return $ Adapter False t (asRecordType $ adapterTarget ad) $ Coder (encode ad) (decode ad)
   where
-    encode ad term = Expect.wrap tname term >>= coderEncode (adapterCoder ad)
-    decode ad term = do
-      decoded <- coderDecode (adapterCoder ad) term
-      return $ TermWrap $ WrappedTerm tname decoded
+    asRecordType t = TypeRecord $ RowType (Name "WrappedAsRecord") [FieldType (Name "value") t]
+    encode ad (TermWrap (WrappedTerm tname term1)) = do
+      term2 <- coderEncode (adapterCoder ad) term1
+      return $ TermRecord $ Record tname [Field (Name "value") term2]
+    decode ad term@(TermRecord (Record tname fields)) = case fields of
+      [Field _ term1] -> do
+        term2 <- coderDecode (adapterCoder ad) term1
+        return $ TermWrap $ WrappedTerm tname term2
+      _ -> unexpected "single field" $ show term
 
 withGraphContext :: Flow (Graph) x -> Flow (AdapterContext) x
 withGraphContext f = do

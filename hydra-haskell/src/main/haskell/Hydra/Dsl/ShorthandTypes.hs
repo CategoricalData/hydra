@@ -98,5 +98,4 @@ uint32T = Types.uint32
 uint64T = Types.uint64
 unitT = Types.unit :: Type
 wrappedTermT = TypeVariable _WrappedTerm :: Type
-wrappedTypeT = TypeVariable _WrappedType :: Type
 xT = Types.var "x" :: Type

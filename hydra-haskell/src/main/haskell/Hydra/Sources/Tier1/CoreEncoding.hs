@@ -56,8 +56,7 @@ coreEncodingModule = Module (Namespace "hydra/coreEncoding") elements [] tier0Mo
      el coreEncodeTypeAbstractionDef,
      el coreEncodeTypeSchemeDef,
      el coreEncodeTypedTermDef,
-     el coreEncodeWrappedTermDef,
-     el coreEncodeWrappedTypeDef]
+     el coreEncodeWrappedTermDef]
 
 coreEncodingDefinition :: String -> Type -> TTerm x -> TElement x
 coreEncodingDefinition label dom datum = definitionInModule coreEncodingModule ("coreEncode" ++ label) $
@@ -405,7 +404,7 @@ coreEncodeTypeDef = coreEncodingDefinition "Type" typeT $
     cs _Type_sum $ encodedList $ primitive _lists_map @@ ref coreEncodeTypeDef @@ var "v",
     csref _Type_union coreEncodeRowTypeDef,
     csref _Type_variable coreEncodeNameDef,
-    csref _Type_wrap coreEncodeWrappedTypeDef]
+    csref _Type_wrap coreEncodeTypeDef]
   where
     cs fname term = field fname $ lambda "v" $ encodedVariant _Type fname term
     csref fname fun = cs fname (ref fun @@ var "v")
@@ -433,9 +432,3 @@ coreEncodeWrappedTermDef = coreEncodingDefinition "WrappedTerm" wrappedTermT $
   lambda "n" $ encodedRecord _WrappedTerm [
     field _WrappedTerm_typeName $ ref coreEncodeNameDef @@ (Core.wrappedTermTypeName @@ var "n"),
     field _WrappedTerm_object $ ref coreEncodeTermDef @@ (Core.wrappedTermObject @@ var "n")]
-
-coreEncodeWrappedTypeDef :: TElement (WrappedType -> Term)
-coreEncodeWrappedTypeDef = coreEncodingDefinition "WrappedType" wrappedTypeT $
-  lambda "nt" $ encodedRecord _WrappedType [
-    field _WrappedType_typeName $ ref coreEncodeNameDef @@ (Core.wrappedTypeTypeName @@ var "nt"),
-    field _WrappedType_object $ ref coreEncodeTypeDef @@ (Core.wrappedTypeObject @@ var "nt")]

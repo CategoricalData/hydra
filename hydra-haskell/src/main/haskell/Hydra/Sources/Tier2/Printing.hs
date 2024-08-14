@@ -106,4 +106,4 @@ describeTypeDef = printingDefinition "describeType" $
       TCase _Type_union       --> constant $ string "unions",
       TCase _Type_variable    --> constant $ string "instances of a named type",
       TCase _Type_wrap        --> lambda "n" $ string "wrapper for "
-        ++ (ref describeTypeDef @@ (project _WrappedType _WrappedType_object @@ var "n"))]
+        ++ (ref describeTypeDef @@ var "n")]

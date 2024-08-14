@@ -144,7 +144,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
 
         EliminationWrap name -> do
           typ <- requireWrappedType name
-          yieldElimination (EliminationWrap name) (Types.function (TypeWrap $ WrappedType name typ) typ) []
+          yieldElimination (EliminationWrap name) (Types.function (TypeWrap typ) typ) []
 
       FunctionLambda (Lambda v _ body) -> do
         tv <- freshVariableType
@@ -250,7 +250,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
     TermWrap (WrappedTerm name term1) -> do
       typ <- requireWrappedType name
       (Inferred i t ci) <- infer term1
-      yield (TermWrap $ WrappedTerm name i) (TypeWrap $ WrappedType name typ) (ci ++ [constraint typ t])
+      yield (TermWrap $ WrappedTerm name i) (TypeWrap typ) (ci ++ [constraint typ t])
 
 inferFieldType :: Field -> Flow Graph (Inferred Field)
 inferFieldType (Field fname term) = do

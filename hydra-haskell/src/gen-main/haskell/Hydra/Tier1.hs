@@ -173,8 +173,7 @@ subtypes x = case x of
   Core.TypeSum v177 -> v177
   Core.TypeUnion v178 -> (Lists.map Core.fieldTypeType (Core.rowTypeFields v178))
   Core.TypeVariable _ -> []
-  Core.TypeWrap v180 -> [
-    Core.wrappedTypeObject v180]
+  Core.TypeWrap v180 -> [v180]
 
 emptyTrace :: Compute.Trace
 emptyTrace = Compute.Trace {

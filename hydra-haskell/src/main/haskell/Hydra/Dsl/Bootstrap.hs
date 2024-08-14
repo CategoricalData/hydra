@@ -42,9 +42,6 @@ datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders 
         TypeUnion (RowType tname fields) -> if tname == placeholderName
           then TypeUnion (RowType elName fields)
           else rect
-        TypeWrap (WrappedType tname t) -> if tname == placeholderName
-          then TypeWrap (WrappedType elName t)
-          else rect
         _ -> rect
       where
         rect = rec t

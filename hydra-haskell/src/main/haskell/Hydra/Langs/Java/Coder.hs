@@ -757,7 +757,6 @@ encodeType aliases t = case stripType t of
     TypeUnion (RowType name _) -> pure $
       Java.TypeReference $ nameToJavaReferenceType aliases True (javaTypeArgumentsForType t) name Nothing
     TypeVariable name -> forReference name
-    TypeWrap (WrappedType name _) -> forReference name
     _ -> fail $ "can't encode unsupported type in Java: " ++ show t
   where
     forReference name = pure $ if isLambdaBoundVariable name
@@ -946,7 +945,7 @@ toClassDecl isInner isSer aliases tparams elName t = case stripType t of
     TypeRecord rt -> declarationForRecordType isInner isSer aliases tparams elName $ rowTypeFields rt
     TypeUnion rt -> declarationForUnionType isSer aliases tparams elName $ rowTypeFields rt
     TypeLambda ut -> declarationForLambdaType isSer aliases tparams elName ut
-    TypeWrap (WrappedType tname wt) -> declarationForRecordType isInner isSer aliases tparams elName
+    TypeWrap wt -> declarationForRecordType isInner isSer aliases tparams elName
       [FieldType (Name "value") wt]
     -- Other types are not supported as class declarations, so we wrap them as record types.
     _ -> wrap t -- TODO: wrap and unwrap the corresponding terms as record terms.

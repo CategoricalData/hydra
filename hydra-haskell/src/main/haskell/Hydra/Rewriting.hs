@@ -296,7 +296,7 @@ rewriteType f = rewrite fsub f
         TypeSum types -> TypeSum (recurse <$> types)
         TypeUnion (RowType name fields) -> TypeUnion $ RowType name (forField <$> fields)
         TypeVariable v -> TypeVariable v
-        TypeWrap (WrappedType name t) -> TypeWrap $ WrappedType name $ recurse t
+        TypeWrap t -> TypeWrap $ recurse t
       where
         forField f = f {fieldTypeType = recurse (fieldTypeType f)}
 
@@ -323,7 +323,7 @@ rewriteTypeM f = rewrite fsub f
         TypeUnion (RowType name fields) ->
           TypeUnion <$> (RowType <$> pure name <*> CM.mapM forField fields)
         TypeVariable v -> pure $ TypeVariable v
-        TypeWrap (WrappedType name t) -> TypeWrap <$> (WrappedType <$> pure name <*> recurse t)
+        TypeWrap t -> TypeWrap <$> recurse t
       where
         forField f = do
           t <- recurse $ fieldTypeType f

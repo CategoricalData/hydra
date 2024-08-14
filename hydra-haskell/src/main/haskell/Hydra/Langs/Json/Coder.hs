@@ -80,7 +80,9 @@ termCoder typ = case stripType typ of
   TypeLiteral at -> do
     ac <- literalJsonCoder at
     return Coder {
-      coderEncode = \(TermLiteral av) -> coderEncode ac av,
+      coderEncode = \term -> case term of
+       TermLiteral av -> coderEncode ac av
+       _ -> unexpected "literal term" $ show term,
       coderDecode = \n -> case n of
         s -> Terms.literal <$> coderDecode ac s}
   TypeList lt -> do

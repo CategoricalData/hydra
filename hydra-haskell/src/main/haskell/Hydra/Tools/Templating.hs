@@ -6,6 +6,7 @@ import Hydra.Kernel
 
 import qualified Data.Map as M
 import qualified Data.Set as S
+import qualified Data.Maybe as Y
 
 
 -- | Create a graph schema from a graph which contains nothing but encoded type definitions.
@@ -19,8 +20,8 @@ graphToSchema g = M.fromList <$> (mapM toPair $ M.toList $ graphElements g)
 -- | Given a graph schema and a nonrecursive type, instantiate it with default values.
 --   If the minimal flag is set, the smallest possible term is produced; otherwise,
 --   exactly one subterm is produced for constructors which do not otherwise require one, e.g. in lists and optionals.
-insantiateTemplate :: Bool -> M.Map Name Type -> Type -> Flow s Term
-insantiateTemplate minimal schema t = case t of
+instantiateTemplate :: Bool -> M.Map Name Type -> Y.Maybe Name -> Type -> Flow s Term
+instantiateTemplate minimal schema mname t = case t of
     TypeAnnotated (AnnotatedType t _) -> inst t
     TypeApplication _ -> noPoly
     TypeFunction _ -> noPoly
@@ -78,14 +79,18 @@ insantiateTemplate minimal schema t = case t of
 --     TypeSum types -> ...
 --     TypeUnion (RowType tname _ fields) -> ...
     TypeVariable tname -> case M.lookup tname schema of
-      Just t' -> inst t'
+      Just t' -> instantiateTemplate minimal schema (Just tname) t'
       Nothing -> fail $ "Type variable " ++ show tname ++ " not found in schema"
-    TypeWrap (WrappedType tname t') -> do
+    TypeWrap t' -> do
       e <- inst t'
+      tname <- requireName
       return $ TermWrap $ WrappedTerm tname e
   where
-    inst = insantiateTemplate minimal schema
+    inst = instantiateTemplate minimal schema mname
     noPoly = fail "Polymorphic and function types are not currently supported"
+    requireName = case mname of
+      Just n -> pure n
+      Nothing -> fail "no name for nominal term"
 
 
 {-
@@ -102,7 +107,7 @@ ff = fromFlowIo bootstrapGraph
 schema <- ff $ graphToSchema $ modulesToGraph [openCypherFeaturesModule]
 
 typ <- ff $ inlineType schema $ Y.fromJust $ M.lookup _CypherFeatures schema
-term <- ff $ insantiateTemplate False schema typ
+term <- ff $ instantiateTemplate False schema typ
 
 encoder <- ff (coderEncode <$> yamlCoder typ)
 yaml <- ff $ encoder term

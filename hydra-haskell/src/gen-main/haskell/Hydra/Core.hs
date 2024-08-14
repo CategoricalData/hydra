@@ -431,19 +431,6 @@ _WrappedTerm_typeName = (Name "typeName")
 
 _WrappedTerm_object = (Name "object")
 
--- | A type wrapped in a type name
-data WrappedType = 
-  WrappedType {
-    wrappedTypeTypeName :: Name,
-    wrappedTypeObject :: Type}
-  deriving (Eq, Ord, Read, Show)
-
-_WrappedType = (Name "hydra/core.WrappedType")
-
-_WrappedType_typeName = (Name "typeName")
-
-_WrappedType_object = (Name "object")
-
 -- | A case statement for matching optional terms
 data OptionalCases = 
   OptionalCases {
@@ -625,7 +612,7 @@ data Type =
   TypeSum [Type] |
   TypeUnion RowType |
   TypeVariable Name |
-  TypeWrap WrappedType
+  TypeWrap Type
   deriving (Eq, Ord, Read, Show)
 
 _Type = (Name "hydra/core.Type")

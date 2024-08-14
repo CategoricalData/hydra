@@ -275,14 +275,3 @@ wrappedTermTypeName = project _WrappedTerm _WrappedTerm_typeName
 
 wrappedTermObject :: TTerm (WrappedTerm -> Term)
 wrappedTermObject = project _WrappedTerm _WrappedTerm_object
-
-wrappedType :: TTerm Name -> TTerm Type -> TTerm WrappedType
-wrappedType typeName object = Base.record _WrappedType [
-    _WrappedType_typeName>>: typeName,
-    _WrappedType_object>>: object]
-
-wrappedTypeTypeName :: TTerm (WrappedType -> Name)
-wrappedTypeTypeName = project _WrappedType _WrappedType_typeName
-
-wrappedTypeObject :: TTerm (WrappedType -> Type)
-wrappedTypeObject = project _WrappedType _WrappedType_object

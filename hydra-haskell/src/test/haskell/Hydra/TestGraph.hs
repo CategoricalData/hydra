@@ -33,7 +33,7 @@ testTypeLatLonPoly = TypeLambda $ LambdaType (Name "a") $
   TypeRecord $ RowType testTypeLatLonPolyName [Types.field "lat" $ Types.var "a", Types.field "lon" $ Types.var "a"]
 
 testTypeStringAlias :: Type
-testTypeStringAlias = TypeWrap $ WrappedType testTypeStringAliasName Types.string
+testTypeStringAlias = TypeWrap Types.string
 
 testTypeStringAliasName :: Name
 testTypeStringAliasName = Name "StringTypeAlias"

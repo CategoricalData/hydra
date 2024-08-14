@@ -96,13 +96,6 @@ coreDecodeMapType = matchRecord $ \m -> MapType
 coreDecodeName :: Term -> Flow Graph Name
 coreDecodeName term = Name <$> (Expect.wrap _Name term >>= Expect.string)
 
-coreDecodeWrappedType :: Term -> Flow Graph WrappedType
-coreDecodeWrappedType term = do
-  fields <- Expect.recordWithName _WrappedType term
-  name <- Expect.field _WrappedType_typeName coreDecodeName fields
-  obj <- Expect.field _WrappedType_object coreDecodeType fields
-  pure $ WrappedType name obj
-
 coreDecodeRowType :: Term -> Flow Graph (RowType)
 coreDecodeRowType = matchRecord $ \m -> RowType
   <$> getField m _RowType_typeName coreDecodeName
@@ -132,7 +125,7 @@ coreDecodeType dat = case dat of
     (_Type_sum, \(TermList types) -> TypeSum <$> (CM.mapM coreDecodeType types)),
     (_Type_union, fmap TypeUnion . coreDecodeRowType),
     (_Type_variable, fmap TypeVariable . coreDecodeName),
-    (_Type_wrap, fmap TypeWrap . (coreDecodeWrappedType))] dat
+    (_Type_wrap, fmap TypeWrap . (coreDecodeType))] dat
 
 getField :: M.Map Name (Term) -> Name -> (Term -> Flow Graph b) -> Flow Graph b
 getField m fname decode = case M.lookup fname m of
