@@ -238,7 +238,7 @@ warn msg b = (Compute.Flow (\s0 -> \t0 ->
     Compute.flowStateTrace = (addMessage (Compute.flowStateTrace f1))}))
 
 -- | Continue the current flow after setting a flag
-withFlag :: (String -> Compute.Flow s a -> Compute.Flow s a)
+withFlag :: (Core.Name -> Compute.Flow s a -> Compute.Flow s a)
 withFlag flag =  
   let mutate = (\t -> Mantle.EitherRight (Compute.Trace {
           Compute.traceStack = (Compute.traceStack t),

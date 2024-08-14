@@ -150,7 +150,7 @@ avroHydraAdapter schema = case schema of
           fk <- foreignKey f
 
           let manns = fieldAnnotationsToCore f
-          let ann = if M.null manns then Nothing else (Just manns)
+          let ann = if M.null manns then Nothing else (Just manns) :: Y.Maybe (M.Map Name Term)
 
           ad <- case fk of
             Nothing -> avroHydraAdapter $ Avro.fieldType f
@@ -274,15 +274,15 @@ encodeAnnotationValue v = case v of
       toEntry (k, v) = (Terms.string k, encodeAnnotationValue v)
   Json.ValueString s -> Terms.string s
 
-fieldAnnotationsToCore :: Avro.Field -> M.Map String Term
+fieldAnnotationsToCore :: Avro.Field -> M.Map Name Term
 fieldAnnotationsToCore f = M.fromList (toCore <$> (M.toList $ Avro.fieldAnnotations f))
   where
-    toCore (k, v) = (k, encodeAnnotationValue v)
+    toCore (k, v) = (Name k, encodeAnnotationValue v)
 
-namedAnnotationsToCore :: Avro.Named -> M.Map String Term
+namedAnnotationsToCore :: Avro.Named -> M.Map Name Term
 namedAnnotationsToCore n = M.fromList (toCore <$> (M.toList $ Avro.namedAnnotations n))
   where
-    toCore (k, v) = (k, encodeAnnotationValue v)
+    toCore (k, v) = (Name k, encodeAnnotationValue v)
 
 getAvroHydraAdapter :: AvroQualifiedName -> AvroEnvironment -> Y.Maybe AvroHydraAdapter
 getAvroHydraAdapter qname = M.lookup qname . avroEnvironmentNamedAdapters

@@ -321,7 +321,7 @@ warnDef = tier1Definition "warn" $
 withFlagDef :: TElement (String -> Flow s a -> Flow s a)
 withFlagDef = tier1Definition "withFlag" $
   doc "Continue the current flow after setting a flag" $
-  function Types.string (Types.function flowSAT flowSAT) $
+  function nameT (Types.function flowSAT flowSAT) $
   lambda "flag" ((ref mutateTraceDef @@ var "mutate" @@ var "restore")
   `with` [
     "mutate">: lambda "t" $ inject _Either _Either_right $ (Flows.trace

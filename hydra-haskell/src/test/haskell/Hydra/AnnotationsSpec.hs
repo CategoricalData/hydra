@@ -9,6 +9,11 @@ import qualified Test.QuickCheck as QC
 import qualified Data.Map as M
 
 
+key_k1 = Name "k1"
+key_k2 = Name "k2"
+key_one = Name "one"
+key_two = Name "two"
+
 checkArbitraryAnnotations :: H.SpecWith ()
 checkArbitraryAnnotations = H.describe "Check getting/setting of arbitrary annotations" $ do
 
@@ -29,10 +34,10 @@ checkArbitraryAnnotations = H.describe "Check getting/setting of arbitrary annot
 
     H.it "Set multiple values" $
       QC.property $ \v1 v2 -> H.shouldBe
-        (setAnn "k2" (Just $ Terms.int32 v2) $
-          setAnn "k1" (Just $ Terms.string v1) $
+        (setAnn key_k2 (Just $ Terms.int32 v2) $
+          setAnn key_k1 (Just $ Terms.string v1) $
           Terms.boolean True)
-        (TermAnnotated $ AnnotatedTerm (Terms.boolean True) $ M.fromList [("k1", Terms.string v1), ("k2", Terms.int32 v2)])
+        (TermAnnotated $ AnnotatedTerm (Terms.boolean True) $ M.fromList [(key_k1, Terms.string v1), (key_k2, Terms.int32 v2)])
 
     H.it "An outer annotation overrides an inner one" $
       QC.property $ \k v1 v2 -> H.shouldBe
@@ -46,11 +51,11 @@ checkArbitraryAnnotations = H.describe "Check getting/setting of arbitrary annot
 
     H.it "Unset one of multiple annotations" $
       QC.property $ \v1 v2 -> H.shouldBe
-        (setAnn "k1" Nothing $
-          setAnn "k2" (Just $ Terms.int32 v2) $
-          setAnn "k1" (Just $ Terms.string v1) $
+        (setAnn key_k1 Nothing $
+          setAnn key_k2 (Just $ Terms.int32 v2) $
+          setAnn key_k1 (Just $ Terms.string v1) $
           Terms.int64 137)
-        (TermAnnotated $ AnnotatedTerm (Terms.int64 137) $ M.fromList [("k2", Terms.int32 v2)])
+        (TermAnnotated $ AnnotatedTerm (Terms.int64 137) $ M.fromList [(key_k2, Terms.int32 v2)])
 
 checkDescriptions :: H.SpecWith ()
 checkDescriptions = H.describe "Check getting/setting of descriptions" $ do
@@ -58,7 +63,7 @@ checkDescriptions = H.describe "Check getting/setting of descriptions" $ do
     H.it "Set a single description" $
       QC.property $ \d -> H.shouldBe
         (setDesc (Just d) $ Terms.string "foo")
-        (TermAnnotated $ AnnotatedTerm (Terms.string "foo") $ M.fromList [("description", Terms.string d)])
+        (TermAnnotated $ AnnotatedTerm (Terms.string "foo") $ M.fromList [(key_description, Terms.string d)])
 
     H.it "Retrieve a single description" $
       QC.property $ \d -> H.shouldBe
@@ -73,7 +78,7 @@ checkDescriptions = H.describe "Check getting/setting of descriptions" $ do
     H.it "An outer description overrides an inner one" $
       QC.property $ \d1 d2 -> H.shouldBe
         (setDesc (Just d2) $ setDesc (Just d1) $ Terms.string "bar")
-        (TermAnnotated $ AnnotatedTerm (Terms.string "bar") $ M.fromList [("description", Terms.string d2)])
+        (TermAnnotated $ AnnotatedTerm (Terms.string "bar") $ M.fromList [(key_description, Terms.string d2)])
 
     H.it "Unset a description" $
       QC.property $ \d -> H.shouldBe
@@ -85,31 +90,31 @@ checkNoncompactAnnotations = H.describe "Check non-compact (i.e. layered) annota
 
     H.it "Annotations at different levels, with different keys, are all available" $ do
       H.shouldBe
-        (getTermAnnotation "one" term0)
+        (getTermAnnotation key_one term0)
         Nothing
       H.shouldBe
-        (getTermAnnotation "one" term1)
+        (getTermAnnotation key_one term1)
         (Just $ Terms.int32 1)
       H.shouldBe
-        (getTermAnnotation "one" term2)
+        (getTermAnnotation key_one term2)
         (Just $ Terms.int32 1)
       H.shouldBe
-        (getTermAnnotation "two" term2)
+        (getTermAnnotation key_two term2)
         (Just $ Terms.int32 2)
       H.shouldBe
-        (getTermAnnotation "two" term3)
+        (getTermAnnotation key_two term3)
         (Just $ Terms.int32 2)
 
     H.it "Outer annotations override inner ones" $
       H.shouldBe
-        (getTermAnnotation "one" term3)
+        (getTermAnnotation key_one term3)
         (Just $ Terms.int32 42)
 
   where
     term0 = Terms.int32 42
-    term1 = Terms.annot (M.fromList [("one", Terms.int32 1)]) term0
-    term2 = Terms.annot (M.fromList [("two", Terms.int32 2)]) term1
-    term3 = Terms.annot (M.fromList [("one", Terms.int32 42)]) term2
+    term1 = Terms.annot (M.fromList [(key_one, Terms.int32 1)]) term0
+    term2 = Terms.annot (M.fromList [(key_two, Terms.int32 2)]) term1
+    term3 = Terms.annot (M.fromList [(key_one, Terms.int32 42)]) term2
 
 getAnn = getTermAnnotation
 

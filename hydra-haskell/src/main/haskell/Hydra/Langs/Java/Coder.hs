@@ -805,10 +805,10 @@ functionCall aliases isPrim name args = do
         let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier isPrim False aliases name
         return $ javaMethodInvocationToJavaExpression $ Java.MethodInvocation header jargs
 
-getCodomain :: M.Map String Term -> Flow Graph Type
+getCodomain :: M.Map Name Term -> Flow Graph Type
 getCodomain ann = functionTypeCodomain <$> getFunctionType ann
 
-getFunctionType :: M.Map String Term -> Flow Graph FunctionType
+getFunctionType :: M.Map Name Term -> Flow Graph FunctionType
 getFunctionType ann = do
   mt <- getType ann
   case mt of

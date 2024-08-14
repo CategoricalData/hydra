@@ -12,9 +12,9 @@ public class AnnotatedType implements Serializable {
   
   public final hydra.core.Type subject;
   
-  public final java.util.Map<String, hydra.core.Term> annotation;
+  public final java.util.Map<hydra.core.Name, hydra.core.Term> annotation;
   
-  public AnnotatedType (hydra.core.Type subject, java.util.Map<String, hydra.core.Term> annotation) {
+  public AnnotatedType (hydra.core.Type subject, java.util.Map<hydra.core.Name, hydra.core.Term> annotation) {
     java.util.Objects.requireNonNull((subject));
     java.util.Objects.requireNonNull((annotation));
     this.subject = subject;
@@ -40,7 +40,7 @@ public class AnnotatedType implements Serializable {
     return new AnnotatedType(subject, annotation);
   }
   
-  public AnnotatedType withAnnotation(java.util.Map<String, hydra.core.Term> annotation) {
+  public AnnotatedType withAnnotation(java.util.Map<hydra.core.Name, hydra.core.Term> annotation) {
     java.util.Objects.requireNonNull((annotation));
     return new AnnotatedType(subject, annotation);
   }

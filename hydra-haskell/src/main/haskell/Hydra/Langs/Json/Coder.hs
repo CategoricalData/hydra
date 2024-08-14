@@ -134,7 +134,7 @@ untypedTermToJson term = case term of
           ("term", json),
           ("annotations", Json.ValueObject $ M.fromList pairs)]
       where
-        encodePair (k, v) = do
+        encodePair (Name k, v) = do
           json <- untypedTermToJson v
           return (k, json)
     TermApplication (Application lhs rhs) -> asRecord [

@@ -65,4 +65,4 @@ hydraComputeModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "messages">: list string,
           "other">:
             doc "A map of string keys to arbitrary terms as values, for application-specific use" $
-            Types.map string (core "Term")]]
+            Types.map (core "Name") (core "Term")]]

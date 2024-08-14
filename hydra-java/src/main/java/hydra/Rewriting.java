@@ -128,14 +128,14 @@ public interface Rewriting {
      * This is a workaround for a non-monadic rewriting function; the latter would be more efficient.
      */
     static Term rewriteTerm(Function<Function<Term, Term>, Function<Term, Term>> f,
-                                      Function<Map<String, Term>, Map<String, Term>> mf, Term original) {
+                                      Function<Map<Name, Term>, Map<Name, Term>> mf, Term original) {
         Function<Function<Term, Flow<Unit, Term>>, Function<Term, Flow<Unit, Term>>> fflow =
                 recurse -> (Function<Term, Flow<Unit, Term>>) term -> {
                     Term result = f.apply(t -> fromFlow(Flows.UNIT, recurse.apply(t))).apply(term);
                     return pure(result);
                 };
 
-        Function<Map<String, Term>, Flow<Unit, Map<String, Term>>> mfflow = a -> pure(mf.apply(a));
+        Function<Map<Name, Term>, Flow<Unit, Map<Name, Term>>> mfflow = a -> pure(mf.apply(a));
         return fromFlow(Flows.UNIT, rewriteTermM(fflow, mfflow, original));
     }
 
@@ -144,7 +144,7 @@ public interface Rewriting {
      */
     static <S> Flow<S, Term> rewriteTermM(
             Function<Function<Term, Flow<S, Term>>, Function<Term, Flow<S, Term>>> f,
-            Function<Map<String, Term>, Flow<S, Map<String, Term>>> mf,
+            Function<Map<Name, Term>, Flow<S, Map<Name, Term>>> mf,
             Term original) {
         Function<Function<Term, Flow<S, Term>>, Function<Term, Flow<S, Term>>> fsub =
                 recurse -> term -> term.accept(new Term.Visitor<Flow<S, Term>>() {

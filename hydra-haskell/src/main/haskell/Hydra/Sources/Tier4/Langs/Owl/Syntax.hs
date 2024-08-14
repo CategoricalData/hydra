@@ -9,8 +9,7 @@ import Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Terms as Terms
 
 
-key_iri :: String
-key_iri = "iri"
+key_iri = Name "iri"
 
 withIri :: String -> Type -> Type
 withIri iriStr = annotateType key_iri (Just $ Terms.string iriStr)
