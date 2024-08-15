@@ -275,11 +275,7 @@ nameDecls g namespaces name@(Name nm) typ = if useCoreImport
           (H.ExpressionVariable $ elementReference namespaces n)
           (H.ExpressionLiteral $ H.LiteralString v)
     nameDecl = (constantForTypeName name, nm)
-    fieldsOf t = case stripType t of
-      TypeRecord rt -> rowTypeFields rt
-      TypeUnion rt -> rowTypeFields rt
-      _ -> []
-    fieldDecls = toConstant <$> fieldsOf (snd $ unpackLambdaType g typ)
+    fieldDecls = toConstant <$> fieldsOf typ
     toConstant (FieldType fname _) = (constantForFieldName name fname, unName fname)
 
 toDataDeclaration :: M.Map Type (Coder Graph Graph Term H.Expression) -> Namespaces
