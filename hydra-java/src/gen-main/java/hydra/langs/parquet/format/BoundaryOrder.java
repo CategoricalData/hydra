@@ -8,7 +8,13 @@ import java.io.Serializable;
  * Enum to annotate whether lists of min/max elements inside ColumnIndex are ordered and if so, in which direction.
  */
 public abstract class BoundaryOrder implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.BoundaryOrder");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.BoundaryOrder");
+  
+  public static final hydra.core.Name FIELD_NAME_UNORDERED = new hydra.core.Name("unordered");
+  
+  public static final hydra.core.Name FIELD_NAME_ASCENDING = new hydra.core.Name("ascending");
+  
+  public static final hydra.core.Name FIELD_NAME_DESCENDING = new hydra.core.Name("descending");
   
   private BoundaryOrder () {
   

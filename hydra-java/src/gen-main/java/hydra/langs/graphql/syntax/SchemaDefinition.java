@@ -5,7 +5,13 @@ package hydra.langs.graphql.syntax;
 import java.io.Serializable;
 
 public class SchemaDefinition implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.SchemaDefinition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/graphql/syntax.SchemaDefinition");
+  
+  public static final hydra.core.Name FIELD_NAME_DESCRIPTION = new hydra.core.Name("description");
+  
+  public static final hydra.core.Name FIELD_NAME_DIRECTIVES = new hydra.core.Name("directives");
+  
+  public static final hydra.core.Name FIELD_NAME_ROOT_OPERATION_TYPE_DEFINITION = new hydra.core.Name("rootOperationTypeDefinition");
   
   public final hydra.util.Opt<hydra.langs.graphql.syntax.Description> description;
   

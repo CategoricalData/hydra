@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A mapping from certain columns of a source relation to primary key columns of a target relation
  */
 public class ForeignKey implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/relationalModel.ForeignKey");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/relationalModel.ForeignKey");
+  
+  public static final hydra.core.Name FIELD_NAME_FOREIGN_RELATION = new hydra.core.Name("foreignRelation");
+  
+  public static final hydra.core.Name FIELD_NAME_KEYS = new hydra.core.Name("keys");
   
   /**
    * The name of the target relation

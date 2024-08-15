@@ -5,7 +5,7 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public class BinaryStringLiteral implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.BinaryStringLiteral");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.BinaryStringLiteral");
   
   public BinaryStringLiteral () {
   

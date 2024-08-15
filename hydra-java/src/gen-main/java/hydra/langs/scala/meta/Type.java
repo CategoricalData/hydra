@@ -5,7 +5,53 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public abstract class Type implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Type");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Type");
+  
+  public static final hydra.core.Name FIELD_NAME_REF = new hydra.core.Name("ref");
+  
+  public static final hydra.core.Name FIELD_NAME_ANONYMOUS_NAME = new hydra.core.Name("anonymousName");
+  
+  public static final hydra.core.Name FIELD_NAME_APPLY = new hydra.core.Name("apply");
+  
+  public static final hydra.core.Name FIELD_NAME_APPLY_INFIX = new hydra.core.Name("applyInfix");
+  
+  public static final hydra.core.Name FIELD_NAME_FUNCTION_TYPE = new hydra.core.Name("functionType");
+  
+  public static final hydra.core.Name FIELD_NAME_POLY_FUNCTION = new hydra.core.Name("polyFunction");
+  
+  public static final hydra.core.Name FIELD_NAME_IMPLICIT_FUNCTION = new hydra.core.Name("implicitFunction");
+  
+  public static final hydra.core.Name FIELD_NAME_TUPLE = new hydra.core.Name("tuple");
+  
+  public static final hydra.core.Name FIELD_NAME_WITH = new hydra.core.Name("with");
+  
+  public static final hydra.core.Name FIELD_NAME_AND = new hydra.core.Name("and");
+  
+  public static final hydra.core.Name FIELD_NAME_OR = new hydra.core.Name("or");
+  
+  public static final hydra.core.Name FIELD_NAME_REFINE = new hydra.core.Name("refine");
+  
+  public static final hydra.core.Name FIELD_NAME_EXISTENTIAL = new hydra.core.Name("existential");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATE = new hydra.core.Name("annotate");
+  
+  public static final hydra.core.Name FIELD_NAME_LAMBDA = new hydra.core.Name("lambda");
+  
+  public static final hydra.core.Name FIELD_NAME_MACRO = new hydra.core.Name("macro");
+  
+  public static final hydra.core.Name FIELD_NAME_METHOD = new hydra.core.Name("method");
+  
+  public static final hydra.core.Name FIELD_NAME_PLACEHOLDER = new hydra.core.Name("placeholder");
+  
+  public static final hydra.core.Name FIELD_NAME_BY_NAME = new hydra.core.Name("byName");
+  
+  public static final hydra.core.Name FIELD_NAME_REPEATED = new hydra.core.Name("repeated");
+  
+  public static final hydra.core.Name FIELD_NAME_VAR = new hydra.core.Name("var");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPED_PARAM = new hydra.core.Name("typedParam");
+  
+  public static final hydra.core.Name FIELD_NAME_MATCH = new hydra.core.Name("match");
   
   private Type () {
   

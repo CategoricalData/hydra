@@ -8,7 +8,13 @@ import java.io.Serializable;
  * See https://www.w3.org/TR/owl2-syntax/#Disjoint_Union_of_Class_Expressions
  */
 public class DisjointUnion implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.DisjointUnion");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.DisjointUnion");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
+  
+  public static final hydra.core.Name FIELD_NAME_CLASS = new hydra.core.Name("class");
+  
+  public static final hydra.core.Name FIELD_NAME_CLASSES = new hydra.core.Name("classes");
   
   public final java.util.List<hydra.langs.owl.syntax.Annotation> annotations;
   

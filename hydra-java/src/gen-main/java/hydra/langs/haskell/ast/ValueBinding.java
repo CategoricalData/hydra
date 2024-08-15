@@ -5,7 +5,9 @@ package hydra.langs.haskell.ast;
 import java.io.Serializable;
 
 public abstract class ValueBinding implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.ValueBinding");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.ValueBinding");
+  
+  public static final hydra.core.Name FIELD_NAME_SIMPLE = new hydra.core.Name("simple");
   
   private ValueBinding () {
   

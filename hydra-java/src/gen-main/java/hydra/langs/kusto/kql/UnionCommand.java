@@ -5,7 +5,17 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public class UnionCommand implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.UnionCommand");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.UnionCommand");
+  
+  public static final hydra.core.Name FIELD_NAME_PARAMETERS = new hydra.core.Name("parameters");
+  
+  public static final hydra.core.Name FIELD_NAME_KIND = new hydra.core.Name("kind");
+  
+  public static final hydra.core.Name FIELD_NAME_WITH_SOURCE = new hydra.core.Name("withSource");
+  
+  public static final hydra.core.Name FIELD_NAME_IS_FUZZY = new hydra.core.Name("isFuzzy");
+  
+  public static final hydra.core.Name FIELD_NAME_TABLES = new hydra.core.Name("tables");
   
   public final java.util.List<hydra.langs.kusto.kql.Parameter> parameters;
   

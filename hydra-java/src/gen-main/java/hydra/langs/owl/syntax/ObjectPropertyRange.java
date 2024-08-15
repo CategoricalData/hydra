@@ -8,7 +8,13 @@ import java.io.Serializable;
  * See https://www.w3.org/TR/owl2-syntax/#Object_Property_Range
  */
 public class ObjectPropertyRange implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.ObjectPropertyRange");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.ObjectPropertyRange");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTY = new hydra.core.Name("property");
+  
+  public static final hydra.core.Name FIELD_NAME_RANGE = new hydra.core.Name("range");
   
   public final java.util.List<hydra.langs.owl.syntax.Annotation> annotations;
   

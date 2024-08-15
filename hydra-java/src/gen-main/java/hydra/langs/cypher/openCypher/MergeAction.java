@@ -5,7 +5,11 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public class MergeAction implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.MergeAction");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.MergeAction");
+  
+  public static final hydra.core.Name FIELD_NAME_ACTION = new hydra.core.Name("action");
+  
+  public static final hydra.core.Name FIELD_NAME_SET = new hydra.core.Name("set");
   
   public final hydra.langs.cypher.openCypher.MatchOrCreate action;
   

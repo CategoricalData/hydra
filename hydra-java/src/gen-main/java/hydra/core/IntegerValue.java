@@ -8,7 +8,25 @@ import java.io.Serializable;
  * An integer literal value
  */
 public abstract class IntegerValue implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.IntegerValue");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.IntegerValue");
+  
+  public static final hydra.core.Name FIELD_NAME_BIGINT = new hydra.core.Name("bigint");
+  
+  public static final hydra.core.Name FIELD_NAME_INT16 = new hydra.core.Name("int16");
+  
+  public static final hydra.core.Name FIELD_NAME_INT32 = new hydra.core.Name("int32");
+  
+  public static final hydra.core.Name FIELD_NAME_INT64 = new hydra.core.Name("int64");
+  
+  public static final hydra.core.Name FIELD_NAME_INT8 = new hydra.core.Name("int8");
+  
+  public static final hydra.core.Name FIELD_NAME_UINT16 = new hydra.core.Name("uint16");
+  
+  public static final hydra.core.Name FIELD_NAME_UINT32 = new hydra.core.Name("uint32");
+  
+  public static final hydra.core.Name FIELD_NAME_UINT64 = new hydra.core.Name("uint64");
+  
+  public static final hydra.core.Name FIELD_NAME_UINT8 = new hydra.core.Name("uint8");
   
   private IntegerValue () {
   

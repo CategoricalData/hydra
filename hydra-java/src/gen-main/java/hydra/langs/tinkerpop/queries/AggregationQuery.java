@@ -5,7 +5,9 @@ package hydra.langs.tinkerpop.queries;
 import java.io.Serializable;
 
 public abstract class AggregationQuery implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.AggregationQuery");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.AggregationQuery");
+  
+  public static final hydra.core.Name FIELD_NAME_COUNT = new hydra.core.Name("count");
   
   private AggregationQuery () {
   

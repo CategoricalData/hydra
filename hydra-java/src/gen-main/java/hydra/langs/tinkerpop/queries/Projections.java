@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.queries;
 import java.io.Serializable;
 
 public class Projections implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.Projections");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.Projections");
+  
+  public static final hydra.core.Name FIELD_NAME_ALL = new hydra.core.Name("all");
+  
+  public static final hydra.core.Name FIELD_NAME_EXPLICIT = new hydra.core.Name("explicit");
   
   public final Boolean all;
   

@@ -5,7 +5,15 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public class BracketedTripleExpr implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.BracketedTripleExpr");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.BracketedTripleExpr");
+  
+  public static final hydra.core.Name FIELD_NAME_INNER_TRIPLE_EXPR = new hydra.core.Name("innerTripleExpr");
+  
+  public static final hydra.core.Name FIELD_NAME_CARDINALITY = new hydra.core.Name("cardinality");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST_OF_ANNOTATION = new hydra.core.Name("listOfAnnotation");
+  
+  public static final hydra.core.Name FIELD_NAME_SEMANTIC_ACTIONS = new hydra.core.Name("semanticActions");
   
   public final hydra.langs.shex.syntax.InnerTripleExpr innerTripleExpr;
   

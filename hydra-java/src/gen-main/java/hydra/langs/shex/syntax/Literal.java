@@ -5,7 +5,13 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public abstract class Literal implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.Literal");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.Literal");
+  
+  public static final hydra.core.Name FIELD_NAME_RDF_LITERAL = new hydra.core.Name("rdfLiteral");
+  
+  public static final hydra.core.Name FIELD_NAME_NUMERIC_LITERAL = new hydra.core.Name("numericLiteral");
+  
+  public static final hydra.core.Name FIELD_NAME_BOOLEAN_LITERAL = new hydra.core.Name("booleanLiteral");
   
   private Literal () {
   

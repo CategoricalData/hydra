@@ -5,7 +5,11 @@ package hydra.langs.graphql.syntax;
 import java.io.Serializable;
 
 public abstract class BooleanValue implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.BooleanValue");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/graphql/syntax.BooleanValue");
+  
+  public static final hydra.core.Name FIELD_NAME_TRUE = new hydra.core.Name("true");
+  
+  public static final hydra.core.Name FIELD_NAME_FALSE = new hydra.core.Name("false");
   
   private BooleanValue () {
   

@@ -5,7 +5,11 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public class BooleanTest_Sequence_Option implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.BooleanTest.Sequence.Option");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.BooleanTest.Sequence.Option");
+  
+  public static final hydra.core.Name FIELD_NAME_N_O_T = new hydra.core.Name("nOT");
+  
+  public static final hydra.core.Name FIELD_NAME_TRUTH_VALUE = new hydra.core.Name("truthValue");
   
   public final hydra.util.Opt<java.lang.Void> nOT;
   

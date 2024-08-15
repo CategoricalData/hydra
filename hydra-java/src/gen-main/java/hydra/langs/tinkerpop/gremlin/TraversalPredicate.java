@@ -5,7 +5,53 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class TraversalPredicate implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalPredicate");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalPredicate");
+  
+  public static final hydra.core.Name FIELD_NAME_EQ = new hydra.core.Name("eq");
+  
+  public static final hydra.core.Name FIELD_NAME_NEQ = new hydra.core.Name("neq");
+  
+  public static final hydra.core.Name FIELD_NAME_LT = new hydra.core.Name("lt");
+  
+  public static final hydra.core.Name FIELD_NAME_LTE = new hydra.core.Name("lte");
+  
+  public static final hydra.core.Name FIELD_NAME_GT = new hydra.core.Name("gt");
+  
+  public static final hydra.core.Name FIELD_NAME_GTE = new hydra.core.Name("gte");
+  
+  public static final hydra.core.Name FIELD_NAME_INSIDE = new hydra.core.Name("inside");
+  
+  public static final hydra.core.Name FIELD_NAME_OUTSIDE = new hydra.core.Name("outside");
+  
+  public static final hydra.core.Name FIELD_NAME_BETWEEN = new hydra.core.Name("between");
+  
+  public static final hydra.core.Name FIELD_NAME_WITHIN = new hydra.core.Name("within");
+  
+  public static final hydra.core.Name FIELD_NAME_WITHOUT = new hydra.core.Name("without");
+  
+  public static final hydra.core.Name FIELD_NAME_NOT = new hydra.core.Name("not");
+  
+  public static final hydra.core.Name FIELD_NAME_STARTING_WITH = new hydra.core.Name("startingWith");
+  
+  public static final hydra.core.Name FIELD_NAME_NOT_STARTING_WITH = new hydra.core.Name("notStartingWith");
+  
+  public static final hydra.core.Name FIELD_NAME_ENDING_WITH = new hydra.core.Name("endingWith");
+  
+  public static final hydra.core.Name FIELD_NAME_NOT_ENDING_WITH = new hydra.core.Name("notEndingWith");
+  
+  public static final hydra.core.Name FIELD_NAME_CONTAINING = new hydra.core.Name("containing");
+  
+  public static final hydra.core.Name FIELD_NAME_NOT_CONTAINING = new hydra.core.Name("notContaining");
+  
+  public static final hydra.core.Name FIELD_NAME_REGEX = new hydra.core.Name("regex");
+  
+  public static final hydra.core.Name FIELD_NAME_NOT_REGEX = new hydra.core.Name("notRegex");
+  
+  public static final hydra.core.Name FIELD_NAME_AND = new hydra.core.Name("and");
+  
+  public static final hydra.core.Name FIELD_NAME_OR = new hydra.core.Name("or");
+  
+  public static final hydra.core.Name FIELD_NAME_NEGATE = new hydra.core.Name("negate");
   
   private TraversalPredicate () {
   

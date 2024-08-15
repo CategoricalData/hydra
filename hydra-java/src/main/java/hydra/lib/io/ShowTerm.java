@@ -25,7 +25,7 @@ public class ShowTerm extends PrimitiveFunction {
 
     @Override
     public TypeScheme type() {
-        return scheme(function(variable(Term.NAME), string()));
+        return scheme(function(variable(Term.TYPE_NAME), string()));
     }
 
     @Override

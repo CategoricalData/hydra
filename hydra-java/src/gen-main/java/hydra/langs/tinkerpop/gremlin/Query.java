@@ -5,7 +5,15 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class Query implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.Query");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.Query");
+  
+  public static final hydra.core.Name FIELD_NAME_TRAVERSAL_SOURCE = new hydra.core.Name("traversalSource");
+  
+  public static final hydra.core.Name FIELD_NAME_ROOT_TRAVERSAL = new hydra.core.Name("rootTraversal");
+  
+  public static final hydra.core.Name FIELD_NAME_TO_STRING = new hydra.core.Name("toString");
+  
+  public static final hydra.core.Name FIELD_NAME_EMPTY = new hydra.core.Name("empty");
   
   private Query () {
   

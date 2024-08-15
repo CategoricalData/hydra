@@ -5,7 +5,9 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public class PredefString implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.PredefString");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.PredefString");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   public final String value;
   

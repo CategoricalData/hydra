@@ -5,7 +5,11 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public class VariablePlusEquals implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.VariablePlusEquals");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.VariablePlusEquals");
+  
+  public static final hydra.core.Name FIELD_NAME_LHS = new hydra.core.Name("lhs");
+  
+  public static final hydra.core.Name FIELD_NAME_RHS = new hydra.core.Name("rhs");
   
   public final hydra.langs.cypher.openCypher.Variable lhs;
   

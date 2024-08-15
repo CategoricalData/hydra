@@ -5,7 +5,11 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public class InsertStatement implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.InsertStatement");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.InsertStatement");
+  
+  public static final hydra.core.Name FIELD_NAME_TARGET = new hydra.core.Name("target");
+  
+  public static final hydra.core.Name FIELD_NAME_COLUMNS_AND_SOURCE = new hydra.core.Name("columnsAndSource");
   
   public final hydra.langs.sql.ansi.InsertionTarget target;
   

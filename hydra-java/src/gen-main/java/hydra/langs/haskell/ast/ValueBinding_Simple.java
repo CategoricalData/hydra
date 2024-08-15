@@ -5,7 +5,13 @@ package hydra.langs.haskell.ast;
 import java.io.Serializable;
 
 public class ValueBinding_Simple implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.ValueBinding.Simple");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.ValueBinding.Simple");
+  
+  public static final hydra.core.Name FIELD_NAME_PATTERN = new hydra.core.Name("pattern");
+  
+  public static final hydra.core.Name FIELD_NAME_RHS = new hydra.core.Name("rhs");
+  
+  public static final hydra.core.Name FIELD_NAME_LOCAL_BINDINGS = new hydra.core.Name("localBindings");
   
   public final hydra.langs.haskell.ast.Pattern pattern;
   

@@ -5,7 +5,13 @@ package hydra.langs.haskell.ast;
 import java.io.Serializable;
 
 public class Type_Infix implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Type.Infix");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.Type.Infix");
+  
+  public static final hydra.core.Name FIELD_NAME_LHS = new hydra.core.Name("lhs");
+  
+  public static final hydra.core.Name FIELD_NAME_OPERATOR = new hydra.core.Name("operator");
+  
+  public static final hydra.core.Name FIELD_NAME_RHS = new hydra.core.Name("rhs");
   
   public final hydra.langs.haskell.ast.Type lhs;
   

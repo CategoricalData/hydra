@@ -5,7 +5,15 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public abstract class Type_Ref implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Type.Ref");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Type.Ref");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_SELECT = new hydra.core.Name("select");
+  
+  public static final hydra.core.Name FIELD_NAME_PROJECT = new hydra.core.Name("project");
+  
+  public static final hydra.core.Name FIELD_NAME_SINGLETON = new hydra.core.Name("singleton");
   
   private Type_Ref () {
   

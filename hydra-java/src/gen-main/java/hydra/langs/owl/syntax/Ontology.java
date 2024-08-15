@@ -5,7 +5,13 @@ package hydra.langs.owl.syntax;
 import java.io.Serializable;
 
 public class Ontology implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.Ontology");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.Ontology");
+  
+  public static final hydra.core.Name FIELD_NAME_DIRECT_IMPORTS = new hydra.core.Name("directImports");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
+  
+  public static final hydra.core.Name FIELD_NAME_AXIOMS = new hydra.core.Name("axioms");
   
   public final java.util.List<hydra.langs.owl.syntax.Ontology> directImports;
   

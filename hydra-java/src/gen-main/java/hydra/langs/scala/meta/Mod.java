@@ -5,7 +5,49 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public abstract class Mod implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Mod");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Mod");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOT = new hydra.core.Name("annot");
+  
+  public static final hydra.core.Name FIELD_NAME_PRIVATE = new hydra.core.Name("private");
+  
+  public static final hydra.core.Name FIELD_NAME_PROTECTED = new hydra.core.Name("protected");
+  
+  public static final hydra.core.Name FIELD_NAME_IMPLICIT = new hydra.core.Name("implicit");
+  
+  public static final hydra.core.Name FIELD_NAME_FINAL = new hydra.core.Name("final");
+  
+  public static final hydra.core.Name FIELD_NAME_SEALED = new hydra.core.Name("sealed");
+  
+  public static final hydra.core.Name FIELD_NAME_OPEN = new hydra.core.Name("open");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPER = new hydra.core.Name("super");
+  
+  public static final hydra.core.Name FIELD_NAME_OVERRIDE = new hydra.core.Name("override");
+  
+  public static final hydra.core.Name FIELD_NAME_CASE = new hydra.core.Name("case");
+  
+  public static final hydra.core.Name FIELD_NAME_ABSTRACT = new hydra.core.Name("abstract");
+  
+  public static final hydra.core.Name FIELD_NAME_COVARIANT = new hydra.core.Name("covariant");
+  
+  public static final hydra.core.Name FIELD_NAME_CONTRAVARIANT = new hydra.core.Name("contravariant");
+  
+  public static final hydra.core.Name FIELD_NAME_LAZY = new hydra.core.Name("lazy");
+  
+  public static final hydra.core.Name FIELD_NAME_VAL_PARAM = new hydra.core.Name("valParam");
+  
+  public static final hydra.core.Name FIELD_NAME_VAR_PARAM = new hydra.core.Name("varParam");
+  
+  public static final hydra.core.Name FIELD_NAME_INFIX = new hydra.core.Name("infix");
+  
+  public static final hydra.core.Name FIELD_NAME_INLINE = new hydra.core.Name("inline");
+  
+  public static final hydra.core.Name FIELD_NAME_USING = new hydra.core.Name("using");
+  
+  public static final hydra.core.Name FIELD_NAME_OPAQUE = new hydra.core.Name("opaque");
+  
+  public static final hydra.core.Name FIELD_NAME_TRANSPARENT = new hydra.core.Name("transparent");
   
   private Mod () {
   

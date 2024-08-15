@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.queries;
 import java.io.Serializable;
 
 public class SelectQuery implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.SelectQuery");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.SelectQuery");
+  
+  public static final hydra.core.Name FIELD_NAME_DISTINCT = new hydra.core.Name("distinct");
+  
+  public static final hydra.core.Name FIELD_NAME_PROJECTION = new hydra.core.Name("projection");
   
   public final Boolean distinct;
   

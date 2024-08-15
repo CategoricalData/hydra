@@ -5,7 +5,35 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public abstract class Expression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.Expression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.Expression");
+  
+  public static final hydra.core.Name FIELD_NAME_AND = new hydra.core.Name("and");
+  
+  public static final hydra.core.Name FIELD_NAME_ANY = new hydra.core.Name("any");
+  
+  public static final hydra.core.Name FIELD_NAME_BETWEEN = new hydra.core.Name("between");
+  
+  public static final hydra.core.Name FIELD_NAME_BINARY = new hydra.core.Name("binary");
+  
+  public static final hydra.core.Name FIELD_NAME_BRACES = new hydra.core.Name("braces");
+  
+  public static final hydra.core.Name FIELD_NAME_COLUMN = new hydra.core.Name("column");
+  
+  public static final hydra.core.Name FIELD_NAME_DATASET = new hydra.core.Name("dataset");
+  
+  public static final hydra.core.Name FIELD_NAME_INDEX = new hydra.core.Name("index");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
+  
+  public static final hydra.core.Name FIELD_NAME_LITERAL = new hydra.core.Name("literal");
+  
+  public static final hydra.core.Name FIELD_NAME_OR = new hydra.core.Name("or");
+  
+  public static final hydra.core.Name FIELD_NAME_PARENTHESES = new hydra.core.Name("parentheses");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTY = new hydra.core.Name("property");
+  
+  public static final hydra.core.Name FIELD_NAME_UNARY = new hydra.core.Name("unary");
   
   private Expression () {
   

@@ -5,7 +5,13 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class NestedTraversal implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.NestedTraversal");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.NestedTraversal");
+  
+  public static final hydra.core.Name FIELD_NAME_ROOT = new hydra.core.Name("root");
+  
+  public static final hydra.core.Name FIELD_NAME_CHAINED = new hydra.core.Name("chained");
+  
+  public static final hydra.core.Name FIELD_NAME_ANONYMOUS = new hydra.core.Name("anonymous");
   
   private NestedTraversal () {
   

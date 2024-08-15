@@ -5,7 +5,13 @@ package hydra.langs.rdf.syntax;
 import java.io.Serializable;
 
 public abstract class Node implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/rdf/syntax.Node");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/rdf/syntax.Node");
+  
+  public static final hydra.core.Name FIELD_NAME_IRI = new hydra.core.Name("iri");
+  
+  public static final hydra.core.Name FIELD_NAME_BNODE = new hydra.core.Name("bnode");
+  
+  public static final hydra.core.Name FIELD_NAME_LITERAL = new hydra.core.Name("literal");
   
   private Node () {
   

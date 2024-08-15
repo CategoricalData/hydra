@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public abstract class Predicate implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.Predicate");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.Predicate");
+  
+  public static final hydra.core.Name FIELD_NAME_IRI = new hydra.core.Name("iri");
+  
+  public static final hydra.core.Name FIELD_NAME_RDF_TYPE = new hydra.core.Name("rdfType");
   
   private Predicate () {
   

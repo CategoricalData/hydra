@@ -5,7 +5,11 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public class ListComprehension implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.ListComprehension");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.ListComprehension");
+  
+  public static final hydra.core.Name FIELD_NAME_LEFT = new hydra.core.Name("left");
+  
+  public static final hydra.core.Name FIELD_NAME_RIGHT = new hydra.core.Name("right");
   
   public final hydra.langs.cypher.openCypher.FilterExpression left;
   

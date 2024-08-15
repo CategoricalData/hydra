@@ -5,7 +5,37 @@ package hydra.langs.parquet.delta;
 import java.io.Serializable;
 
 public abstract class DataType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/delta.DataType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/delta.DataType");
+  
+  public static final hydra.core.Name FIELD_NAME_ARRAY = new hydra.core.Name("array");
+  
+  public static final hydra.core.Name FIELD_NAME_BINARY = new hydra.core.Name("binary");
+  
+  public static final hydra.core.Name FIELD_NAME_BOOLEAN = new hydra.core.Name("boolean");
+  
+  public static final hydra.core.Name FIELD_NAME_BYTE = new hydra.core.Name("byte");
+  
+  public static final hydra.core.Name FIELD_NAME_DATE = new hydra.core.Name("date");
+  
+  public static final hydra.core.Name FIELD_NAME_DECIMAL = new hydra.core.Name("decimal");
+  
+  public static final hydra.core.Name FIELD_NAME_DOUBLE = new hydra.core.Name("double");
+  
+  public static final hydra.core.Name FIELD_NAME_FLOAT = new hydra.core.Name("float");
+  
+  public static final hydra.core.Name FIELD_NAME_INTEGER = new hydra.core.Name("integer");
+  
+  public static final hydra.core.Name FIELD_NAME_LONG = new hydra.core.Name("long");
+  
+  public static final hydra.core.Name FIELD_NAME_MAP = new hydra.core.Name("map");
+  
+  public static final hydra.core.Name FIELD_NAME_NULL = new hydra.core.Name("null");
+  
+  public static final hydra.core.Name FIELD_NAME_SHORT = new hydra.core.Name("short");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
+  
+  public static final hydra.core.Name FIELD_NAME_STRUCT = new hydra.core.Name("struct");
   
   private DataType () {
   

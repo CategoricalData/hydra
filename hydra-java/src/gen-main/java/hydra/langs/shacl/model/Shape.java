@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A SHACL node or property shape. See https://www.w3.org/TR/shacl/#shapes
  */
 public abstract class Shape implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shacl/model.Shape");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shacl/model.Shape");
+  
+  public static final hydra.core.Name FIELD_NAME_NODE = new hydra.core.Name("node");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTY = new hydra.core.Name("property");
   
   private Shape () {
   

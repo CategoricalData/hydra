@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.queries;
 import java.io.Serializable;
 
 public class AssociativeExpression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.AssociativeExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.AssociativeExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_OPERATOR = new hydra.core.Name("operator");
+  
+  public static final hydra.core.Name FIELD_NAME_OPERANDS = new hydra.core.Name("operands");
   
   public final hydra.langs.tinkerpop.queries.BinaryOperator operator;
   

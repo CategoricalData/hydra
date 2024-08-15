@@ -5,7 +5,13 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class IoOptionsValues implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.IoOptionsValues");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.IoOptionsValues");
+  
+  public static final hydra.core.Name FIELD_NAME_GRYO = new hydra.core.Name("gryo");
+  
+  public static final hydra.core.Name FIELD_NAME_GRAPHSON = new hydra.core.Name("graphson");
+  
+  public static final hydra.core.Name FIELD_NAME_GRAPHML = new hydra.core.Name("graphml");
   
   private IoOptionsValues () {
   

@@ -6,7 +6,13 @@ package hydra.graph;
  * A built-in function
  */
 public class Primitive {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/graph.Primitive");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/graph.Primitive");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  
+  public static final hydra.core.Name FIELD_NAME_IMPLEMENTATION = new hydra.core.Name("implementation");
   
   /**
    * The unique name of the primitive function

@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public abstract class CodeDecl_Alts implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.CodeDecl.Alts");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.CodeDecl.Alts");
+  
+  public static final hydra.core.Name FIELD_NAME_CODE = new hydra.core.Name("code");
+  
+  public static final hydra.core.Name FIELD_NAME_PERCNT = new hydra.core.Name("percnt");
   
   private CodeDecl_Alts () {
   

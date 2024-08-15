@@ -5,7 +5,23 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public abstract class CharacterStringType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.CharacterStringType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.CharacterStringType");
+  
+  public static final hydra.core.Name FIELD_NAME_CHARACTER = new hydra.core.Name("character");
+  
+  public static final hydra.core.Name FIELD_NAME_CHAR = new hydra.core.Name("char");
+  
+  public static final hydra.core.Name FIELD_NAME_CHARACTER_VARYING = new hydra.core.Name("characterVarying");
+  
+  public static final hydra.core.Name FIELD_NAME_CHAR_VARYING = new hydra.core.Name("charVarying");
+  
+  public static final hydra.core.Name FIELD_NAME_VARCHAR = new hydra.core.Name("varchar");
+  
+  public static final hydra.core.Name FIELD_NAME_CHARACTER_LARGE_OBJECT = new hydra.core.Name("characterLargeObject");
+  
+  public static final hydra.core.Name FIELD_NAME_CHAR_LARGE_OBJECT = new hydra.core.Name("charLargeObject");
+  
+  public static final hydra.core.Name FIELD_NAME_CLOB = new hydra.core.Name("clob");
   
   private CharacterStringType () {
   

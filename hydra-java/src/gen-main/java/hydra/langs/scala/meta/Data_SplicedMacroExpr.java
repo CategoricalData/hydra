@@ -5,7 +5,9 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public class Data_SplicedMacroExpr implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Data.SplicedMacroExpr");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Data.SplicedMacroExpr");
+  
+  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
   
   public final hydra.langs.scala.meta.Data body;
   

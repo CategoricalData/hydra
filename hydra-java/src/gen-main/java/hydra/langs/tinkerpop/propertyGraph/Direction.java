@@ -8,7 +8,15 @@ import java.io.Serializable;
  * The direction of an edge or edge pattern
  */
 public abstract class Direction implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.Direction");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.Direction");
+  
+  public static final hydra.core.Name FIELD_NAME_OUT = new hydra.core.Name("out");
+  
+  public static final hydra.core.Name FIELD_NAME_IN = new hydra.core.Name("in");
+  
+  public static final hydra.core.Name FIELD_NAME_BOTH = new hydra.core.Name("both");
+  
+  public static final hydra.core.Name FIELD_NAME_UNDIRECTED = new hydra.core.Name("undirected");
   
   private Direction () {
   

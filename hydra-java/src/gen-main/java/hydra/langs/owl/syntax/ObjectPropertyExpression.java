@@ -5,7 +5,11 @@ package hydra.langs.owl.syntax;
 import java.io.Serializable;
 
 public abstract class ObjectPropertyExpression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.ObjectPropertyExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.ObjectPropertyExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT = new hydra.core.Name("object");
+  
+  public static final hydra.core.Name FIELD_NAME_INVERSE_OBJECT = new hydra.core.Name("inverseObject");
   
   private ObjectPropertyExpression () {
   

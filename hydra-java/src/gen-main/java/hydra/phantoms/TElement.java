@@ -8,7 +8,11 @@ import java.io.Serializable;
  * An association with a named term (element) with a phantom type
  */
 public class TElement<A> implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/phantoms.TElement");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/phantoms.TElement");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
   
   public final hydra.core.Name name;
   

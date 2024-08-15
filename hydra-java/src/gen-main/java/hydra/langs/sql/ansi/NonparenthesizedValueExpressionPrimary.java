@@ -5,7 +5,45 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public abstract class NonparenthesizedValueExpressionPrimary implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.NonparenthesizedValueExpressionPrimary");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.NonparenthesizedValueExpressionPrimary");
+  
+  public static final hydra.core.Name FIELD_NAME_UNSIGNED = new hydra.core.Name("unsigned");
+  
+  public static final hydra.core.Name FIELD_NAME_COLUMN = new hydra.core.Name("column");
+  
+  public static final hydra.core.Name FIELD_NAME_SET_FUNCTION = new hydra.core.Name("setFunction");
+  
+  public static final hydra.core.Name FIELD_NAME_WINDOW_FUNCTION = new hydra.core.Name("windowFunction");
+  
+  public static final hydra.core.Name FIELD_NAME_SCALAR_SUBQUERY = new hydra.core.Name("scalarSubquery");
+  
+  public static final hydra.core.Name FIELD_NAME_CASES = new hydra.core.Name("cases");
+  
+  public static final hydra.core.Name FIELD_NAME_CAST = new hydra.core.Name("cast");
+  
+  public static final hydra.core.Name FIELD_NAME_FIELD = new hydra.core.Name("field");
+  
+  public static final hydra.core.Name FIELD_NAME_SUBTYPE = new hydra.core.Name("subtype");
+  
+  public static final hydra.core.Name FIELD_NAME_METHOD = new hydra.core.Name("method");
+  
+  public static final hydra.core.Name FIELD_NAME_STATIC_METHOD = new hydra.core.Name("staticMethod");
+  
+  public static final hydra.core.Name FIELD_NAME_NEW = new hydra.core.Name("new");
+  
+  public static final hydra.core.Name FIELD_NAME_ATTRIBUTE_OR_METHOD = new hydra.core.Name("attributeOrMethod");
+  
+  public static final hydra.core.Name FIELD_NAME_REFERENCE = new hydra.core.Name("reference");
+  
+  public static final hydra.core.Name FIELD_NAME_COLLECTION = new hydra.core.Name("collection");
+  
+  public static final hydra.core.Name FIELD_NAME_ARRAY_ELEMENT = new hydra.core.Name("arrayElement");
+  
+  public static final hydra.core.Name FIELD_NAME_MULTISET_ELEMENT = new hydra.core.Name("multisetElement");
+  
+  public static final hydra.core.Name FIELD_NAME_ROUTINE = new hydra.core.Name("routine");
+  
+  public static final hydra.core.Name FIELD_NAME_NEXT = new hydra.core.Name("next");
   
   private NonparenthesizedValueExpressionPrimary () {
   

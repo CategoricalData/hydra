@@ -5,7 +5,13 @@ package hydra.langs.tinkerpop.queries;
 import java.io.Serializable;
 
 public class MatchQuery implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.MatchQuery");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.MatchQuery");
+  
+  public static final hydra.core.Name FIELD_NAME_OPTIONAL = new hydra.core.Name("optional");
+  
+  public static final hydra.core.Name FIELD_NAME_PATTERN = new hydra.core.Name("pattern");
+  
+  public static final hydra.core.Name FIELD_NAME_WHERE = new hydra.core.Name("where");
   
   public final Boolean optional;
   

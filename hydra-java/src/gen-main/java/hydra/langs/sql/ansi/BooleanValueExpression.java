@@ -5,7 +5,11 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public abstract class BooleanValueExpression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.BooleanValueExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.BooleanValueExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
+  
+  public static final hydra.core.Name FIELD_NAME_OR = new hydra.core.Name("or");
   
   private BooleanValueExpression () {
   

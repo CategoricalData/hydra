@@ -5,7 +5,13 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class PageRankConstants implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.PageRankConstants");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.PageRankConstants");
+  
+  public static final hydra.core.Name FIELD_NAME_EDGES = new hydra.core.Name("edges");
+  
+  public static final hydra.core.Name FIELD_NAME_TIMES = new hydra.core.Name("times");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTY_NAME = new hydra.core.Name("propertyName");
   
   private PageRankConstants () {
   

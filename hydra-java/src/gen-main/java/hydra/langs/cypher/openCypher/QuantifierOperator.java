@@ -5,7 +5,15 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public abstract class QuantifierOperator implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.QuantifierOperator");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.QuantifierOperator");
+  
+  public static final hydra.core.Name FIELD_NAME_ALL = new hydra.core.Name("all");
+  
+  public static final hydra.core.Name FIELD_NAME_ANY = new hydra.core.Name("any");
+  
+  public static final hydra.core.Name FIELD_NAME_NONE = new hydra.core.Name("none");
+  
+  public static final hydra.core.Name FIELD_NAME_SINGLE = new hydra.core.Name("single");
   
   private QuantifierOperator () {
   

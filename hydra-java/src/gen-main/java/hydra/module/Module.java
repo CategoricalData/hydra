@@ -8,7 +8,17 @@ import java.io.Serializable;
  * A logical collection of elements in the same namespace, having dependencies on zero or more other modules
  */
 public class Module implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/module.Module");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/module.Module");
+  
+  public static final hydra.core.Name FIELD_NAME_NAMESPACE = new hydra.core.Name("namespace");
+  
+  public static final hydra.core.Name FIELD_NAME_ELEMENTS = new hydra.core.Name("elements");
+  
+  public static final hydra.core.Name FIELD_NAME_TERM_DEPENDENCIES = new hydra.core.Name("termDependencies");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE_DEPENDENCIES = new hydra.core.Name("typeDependencies");
+  
+  public static final hydra.core.Name FIELD_NAME_DESCRIPTION = new hydra.core.Name("description");
   
   /**
    * A common prefix for all element names in the module

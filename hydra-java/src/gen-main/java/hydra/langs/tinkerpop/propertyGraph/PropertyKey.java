@@ -8,11 +8,10 @@ import java.io.Serializable;
  * A property key
  */
 public class PropertyKey implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.PropertyKey");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.PropertyKey");
   
-  /**
-   * A property key
-   */
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  
   public final String value;
   
   public PropertyKey (String value) {

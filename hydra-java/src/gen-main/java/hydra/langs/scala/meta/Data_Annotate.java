@@ -5,7 +5,11 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public class Data_Annotate implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Data.Annotate");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Data.Annotate");
+  
+  public static final hydra.core.Name FIELD_NAME_EXPR = new hydra.core.Name("expr");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTS = new hydra.core.Name("annots");
   
   public final hydra.langs.scala.meta.Data expr;
   

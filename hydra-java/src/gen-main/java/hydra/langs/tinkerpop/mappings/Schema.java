@@ -6,7 +6,25 @@ package hydra.langs.tinkerpop.mappings;
  * A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types
  */
 public class Schema<S, T, V> {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/mappings.Schema");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/mappings.Schema");
+  
+  public static final hydra.core.Name FIELD_NAME_VERTEX_ID_TYPES = new hydra.core.Name("vertexIdTypes");
+  
+  public static final hydra.core.Name FIELD_NAME_VERTEX_IDS = new hydra.core.Name("vertexIds");
+  
+  public static final hydra.core.Name FIELD_NAME_EDGE_ID_TYPES = new hydra.core.Name("edgeIdTypes");
+  
+  public static final hydra.core.Name FIELD_NAME_EDGE_IDS = new hydra.core.Name("edgeIds");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTY_TYPES = new hydra.core.Name("propertyTypes");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTY_VALUES = new hydra.core.Name("propertyValues");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
+  
+  public static final hydra.core.Name FIELD_NAME_DEFAULT_VERTEX_ID = new hydra.core.Name("defaultVertexId");
+  
+  public static final hydra.core.Name FIELD_NAME_DEFAULT_EDGE_ID = new hydra.core.Name("defaultEdgeId");
   
   public final hydra.compute.Coder<S, S, hydra.core.Type, T> vertexIdTypes;
   

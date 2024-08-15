@@ -5,7 +5,11 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public abstract class UnsignedLiteral implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.UnsignedLiteral");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.UnsignedLiteral");
+  
+  public static final hydra.core.Name FIELD_NAME_NUMERIC = new hydra.core.Name("numeric");
+  
+  public static final hydra.core.Name FIELD_NAME_GENERAL = new hydra.core.Name("general");
   
   private UnsignedLiteral () {
   

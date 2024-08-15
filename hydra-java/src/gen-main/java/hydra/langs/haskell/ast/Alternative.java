@@ -8,7 +8,13 @@ import java.io.Serializable;
  * A pattern-matching alternative
  */
 public class Alternative implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Alternative");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.Alternative");
+  
+  public static final hydra.core.Name FIELD_NAME_PATTERN = new hydra.core.Name("pattern");
+  
+  public static final hydra.core.Name FIELD_NAME_RHS = new hydra.core.Name("rhs");
+  
+  public static final hydra.core.Name FIELD_NAME_BINDS = new hydra.core.Name("binds");
   
   public final hydra.langs.haskell.ast.Pattern pattern;
   

@@ -5,7 +5,11 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public class DoStatement implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.DoStatement");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.DoStatement");
+  
+  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  
+  public static final hydra.core.Name FIELD_NAME_CONDE = new hydra.core.Name("conde");
   
   public final hydra.langs.java.syntax.Statement body;
   

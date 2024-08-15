@@ -8,7 +8,13 @@ import java.io.Serializable;
  * The result of evaluating a Flow
  */
 public class FlowState<S, X> implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.FlowState");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/compute.FlowState");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  
+  public static final hydra.core.Name FIELD_NAME_STATE = new hydra.core.Name("state");
+  
+  public static final hydra.core.Name FIELD_NAME_TRACE = new hydra.core.Name("trace");
   
   public final hydra.util.Opt<X> value;
   

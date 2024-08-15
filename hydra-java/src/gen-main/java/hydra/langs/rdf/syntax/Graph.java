@@ -5,7 +5,9 @@ package hydra.langs.rdf.syntax;
 import java.io.Serializable;
 
 public class Graph implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/rdf/syntax.Graph");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/rdf/syntax.Graph");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   public final java.util.Set<hydra.langs.rdf.syntax.Triple> value;
   

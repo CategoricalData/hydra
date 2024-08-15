@@ -8,7 +8,15 @@ import java.io.Serializable;
  * A set of features for set definitions.
  */
 public class SetFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.SetFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.SetFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTY_EQUALS = new hydra.core.Name("propertyEquals");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLE_EQUALS = new hydra.core.Name("variableEquals");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLE_PLUS_EQUALS = new hydra.core.Name("variablePlusEquals");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLE_WITH_NODE_LABELS = new hydra.core.Name("variableWithNodeLabels");
   
   /**
    * Whether to expect defining a set using PropertyExpression = Expression.

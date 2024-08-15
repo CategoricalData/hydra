@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A scalar type or a reference to an enum type or message type
  */
 public abstract class SimpleType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/protobuf/proto3.SimpleType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/protobuf/proto3.SimpleType");
+  
+  public static final hydra.core.Name FIELD_NAME_REFERENCE = new hydra.core.Name("reference");
+  
+  public static final hydra.core.Name FIELD_NAME_SCALAR = new hydra.core.Name("scalar");
   
   private SimpleType () {
   

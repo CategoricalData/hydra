@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A query pattern which matches within a designated component subgraph
  */
 public class GraphPattern implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/query.GraphPattern");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/query.GraphPattern");
+  
+  public static final hydra.core.Name FIELD_NAME_GRAPH = new hydra.core.Name("graph");
+  
+  public static final hydra.core.Name FIELD_NAME_PATTERNS = new hydra.core.Name("patterns");
   
   /**
    * The name of the component graph

@@ -5,7 +5,9 @@ package hydra.langs.xml.schema;
 import java.io.Serializable;
 
 public class NonPositiveInteger implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/xml/schema.NonPositiveInteger");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/xml/schema.NonPositiveInteger");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   public final java.math.BigInteger value;
   

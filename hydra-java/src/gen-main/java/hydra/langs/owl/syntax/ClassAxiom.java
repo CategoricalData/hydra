@@ -5,7 +5,15 @@ package hydra.langs.owl.syntax;
 import java.io.Serializable;
 
 public abstract class ClassAxiom implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.ClassAxiom");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.ClassAxiom");
+  
+  public static final hydra.core.Name FIELD_NAME_DISJOINT_CLASSES = new hydra.core.Name("disjointClasses");
+  
+  public static final hydra.core.Name FIELD_NAME_DISJOINT_UNION = new hydra.core.Name("disjointUnion");
+  
+  public static final hydra.core.Name FIELD_NAME_EQUIVALENT_CLASSES = new hydra.core.Name("equivalentClasses");
+  
+  public static final hydra.core.Name FIELD_NAME_SUB_CLASS_OF = new hydra.core.Name("subClassOf");
   
   private ClassAxiom () {
   

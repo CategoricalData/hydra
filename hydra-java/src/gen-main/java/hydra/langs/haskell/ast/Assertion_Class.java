@@ -5,7 +5,11 @@ package hydra.langs.haskell.ast;
 import java.io.Serializable;
 
 public class Assertion_Class implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Assertion.Class");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.Assertion.Class");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPES = new hydra.core.Name("types");
   
   public final hydra.langs.haskell.ast.Name name;
   

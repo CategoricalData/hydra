@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A pattern together with a name (label)
  */
 public class LabeledPattern implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.LabeledPattern");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/grammar.LabeledPattern");
+  
+  public static final hydra.core.Name FIELD_NAME_LABEL = new hydra.core.Name("label");
+  
+  public static final hydra.core.Name FIELD_NAME_PATTERN = new hydra.core.Name("pattern");
   
   public final hydra.grammar.Label label;
   

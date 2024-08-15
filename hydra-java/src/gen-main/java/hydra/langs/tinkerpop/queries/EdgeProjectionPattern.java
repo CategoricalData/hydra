@@ -5,7 +5,15 @@ package hydra.langs.tinkerpop.queries;
 import java.io.Serializable;
 
 public class EdgeProjectionPattern implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.EdgeProjectionPattern");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.EdgeProjectionPattern");
+  
+  public static final hydra.core.Name FIELD_NAME_DIRECTION = new hydra.core.Name("direction");
+  
+  public static final hydra.core.Name FIELD_NAME_LABEL = new hydra.core.Name("label");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTIES = new hydra.core.Name("properties");
+  
+  public static final hydra.core.Name FIELD_NAME_VERTEX = new hydra.core.Name("vertex");
   
   public final hydra.langs.tinkerpop.propertyGraph.Direction direction;
   

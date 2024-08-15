@@ -5,7 +5,15 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public abstract class InlineShapeOrRef implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.InlineShapeOrRef");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.InlineShapeOrRef");
+  
+  public static final hydra.core.Name FIELD_NAME_INLINE_SHAPE_DEFINITION = new hydra.core.Name("inlineShapeDefinition");
+  
+  public static final hydra.core.Name FIELD_NAME_ATP_NAME_LN = new hydra.core.Name("atpNameLn");
+  
+  public static final hydra.core.Name FIELD_NAME_ATP_NAME_NS = new hydra.core.Name("atpNameNs");
+  
+  public static final hydra.core.Name FIELD_NAME_SEQUENCE = new hydra.core.Name("sequence");
   
   private InlineShapeOrRef () {
   

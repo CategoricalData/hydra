@@ -8,7 +8,17 @@ import java.io.Serializable;
  * A single field of a message type
  */
 public class Field implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/protobuf/proto3.Field");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/protobuf/proto3.Field");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_JSON_NAME = new hydra.core.Name("jsonName");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  
+  public static final hydra.core.Name FIELD_NAME_NUMBER = new hydra.core.Name("number");
+  
+  public static final hydra.core.Name FIELD_NAME_OPTIONS = new hydra.core.Name("options");
   
   /**
    * The field name

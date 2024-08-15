@@ -8,7 +8,13 @@ import java.io.Serializable;
  * A set of features for merge operations.
  */
 public class MergeFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.MergeFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.MergeFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_MERGE = new hydra.core.Name("merge");
+  
+  public static final hydra.core.Name FIELD_NAME_MERGE_ON_CREATE = new hydra.core.Name("mergeOnCreate");
+  
+  public static final hydra.core.Name FIELD_NAME_MERGE_ON_MATCH = new hydra.core.Name("mergeOnMatch");
   
   /**
    * Whether to expect the basic MERGE clause.

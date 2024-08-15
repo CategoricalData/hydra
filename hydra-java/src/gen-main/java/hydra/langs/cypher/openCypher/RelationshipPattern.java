@@ -5,7 +5,13 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public class RelationshipPattern implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.RelationshipPattern");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.RelationshipPattern");
+  
+  public static final hydra.core.Name FIELD_NAME_LEFT_ARROW = new hydra.core.Name("leftArrow");
+  
+  public static final hydra.core.Name FIELD_NAME_DETAIL = new hydra.core.Name("detail");
+  
+  public static final hydra.core.Name FIELD_NAME_RIGHT_ARROW = new hydra.core.Name("rightArrow");
   
   public final Boolean leftArrow;
   

@@ -5,7 +5,13 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public abstract class StringLiteralLong2_Elmt implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.StringLiteralLong2.Elmt");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.StringLiteralLong2.Elmt");
+  
+  public static final hydra.core.Name FIELD_NAME_SEQUENCE = new hydra.core.Name("sequence");
+  
+  public static final hydra.core.Name FIELD_NAME_ECHAR = new hydra.core.Name("echar");
+  
+  public static final hydra.core.Name FIELD_NAME_UCHAR = new hydra.core.Name("uchar");
   
   private StringLiteralLong2_Elmt () {
   

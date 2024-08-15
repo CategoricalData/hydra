@@ -5,7 +5,21 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class StatementExpression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.StatementExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.StatementExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_ASSIGNMENT = new hydra.core.Name("assignment");
+  
+  public static final hydra.core.Name FIELD_NAME_PRE_INCREMENT = new hydra.core.Name("preIncrement");
+  
+  public static final hydra.core.Name FIELD_NAME_PRE_DECREMENT = new hydra.core.Name("preDecrement");
+  
+  public static final hydra.core.Name FIELD_NAME_POST_INCREMENT = new hydra.core.Name("postIncrement");
+  
+  public static final hydra.core.Name FIELD_NAME_POST_DECREMENT = new hydra.core.Name("postDecrement");
+  
+  public static final hydra.core.Name FIELD_NAME_METHOD_INVOCATION = new hydra.core.Name("methodInvocation");
+  
+  public static final hydra.core.Name FIELD_NAME_CLASS_INSTANCE_CREATION = new hydra.core.Name("classInstanceCreation");
   
   private StatementExpression () {
   

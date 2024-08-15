@@ -133,21 +133,21 @@ public interface Types {
      * Construct a flow type.
      */
     static Type flow(final Type states, final Type elements) {
-        return apply(variable(Flow.NAME), states, elements);
+        return apply(variable(Flow.TYPE_NAME), states, elements);
     }
 
     /**
      * Construct a flow type.
      */
     static Type flow(final Type states, final String elements) {
-        return apply(variable(Flow.NAME), states, variable(elements));
+        return apply(variable(Flow.TYPE_NAME), states, variable(elements));
     }
 
     /**
      * Construct a flow type.
      */
     static Type flow(final String states, final Type elements) {
-        return apply(variable(Flow.NAME), variable(states), elements);
+        return apply(variable(Flow.TYPE_NAME), variable(states), elements);
     }
 
     /**
@@ -449,7 +449,7 @@ public interface Types {
      * Construct the unit type.
      */
     static Type unit() {
-        return record(Unit.NAME);
+        return record(Unit.TYPE_NAME);
     }
 
     /**

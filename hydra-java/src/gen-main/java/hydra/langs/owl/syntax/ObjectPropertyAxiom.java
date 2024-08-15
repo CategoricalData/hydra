@@ -5,7 +5,33 @@ package hydra.langs.owl.syntax;
 import java.io.Serializable;
 
 public abstract class ObjectPropertyAxiom implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.ObjectPropertyAxiom");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.ObjectPropertyAxiom");
+  
+  public static final hydra.core.Name FIELD_NAME_ASYMMETRIC_OBJECT_PROPERTY = new hydra.core.Name("asymmetricObjectProperty");
+  
+  public static final hydra.core.Name FIELD_NAME_DISJOINT_OBJECT_PROPERTIES = new hydra.core.Name("disjointObjectProperties");
+  
+  public static final hydra.core.Name FIELD_NAME_EQUIVALENT_OBJECT_PROPERTIES = new hydra.core.Name("equivalentObjectProperties");
+  
+  public static final hydra.core.Name FIELD_NAME_FUNCTIONAL_OBJECT_PROPERTY = new hydra.core.Name("functionalObjectProperty");
+  
+  public static final hydra.core.Name FIELD_NAME_INVERSE_FUNCTIONAL_OBJECT_PROPERTY = new hydra.core.Name("inverseFunctionalObjectProperty");
+  
+  public static final hydra.core.Name FIELD_NAME_INVERSE_OBJECT_PROPERTIES = new hydra.core.Name("inverseObjectProperties");
+  
+  public static final hydra.core.Name FIELD_NAME_IRREFLEXIVE_OBJECT_PROPERTY = new hydra.core.Name("irreflexiveObjectProperty");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT_PROPERTY_DOMAIN = new hydra.core.Name("objectPropertyDomain");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT_PROPERTY_RANGE = new hydra.core.Name("objectPropertyRange");
+  
+  public static final hydra.core.Name FIELD_NAME_REFLEXIVE_OBJECT_PROPERTY = new hydra.core.Name("reflexiveObjectProperty");
+  
+  public static final hydra.core.Name FIELD_NAME_SUB_OBJECT_PROPERTY_OF = new hydra.core.Name("subObjectPropertyOf");
+  
+  public static final hydra.core.Name FIELD_NAME_SYMMETRIC_OBJECT_PROPERTY = new hydra.core.Name("symmetricObjectProperty");
+  
+  public static final hydra.core.Name FIELD_NAME_TRANSITIVE_OBJECT_PROPERTY = new hydra.core.Name("transitiveObjectProperty");
   
   private ObjectPropertyAxiom () {
   

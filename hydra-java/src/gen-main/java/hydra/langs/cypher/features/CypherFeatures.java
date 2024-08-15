@@ -8,7 +8,59 @@ import java.io.Serializable;
  * A set of features which characterize an OpenCypher query or implementation. Any features which are omitted from the set are assumed to be unsupported or nonrequired.
  */
 public class CypherFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.CypherFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.CypherFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_AGGREGATE = new hydra.core.Name("aggregate");
+  
+  public static final hydra.core.Name FIELD_NAME_ARITHMETIC = new hydra.core.Name("arithmetic");
+  
+  public static final hydra.core.Name FIELD_NAME_ATOM = new hydra.core.Name("atom");
+  
+  public static final hydra.core.Name FIELD_NAME_COMPARISON = new hydra.core.Name("comparison");
+  
+  public static final hydra.core.Name FIELD_NAME_DELETE = new hydra.core.Name("delete");
+  
+  public static final hydra.core.Name FIELD_NAME_ELEMENT = new hydra.core.Name("element");
+  
+  public static final hydra.core.Name FIELD_NAME_LOGICAL = new hydra.core.Name("logical");
+  
+  public static final hydra.core.Name FIELD_NAME_MAP = new hydra.core.Name("map");
+  
+  public static final hydra.core.Name FIELD_NAME_MATCH = new hydra.core.Name("match");
+  
+  public static final hydra.core.Name FIELD_NAME_MERGE = new hydra.core.Name("merge");
+  
+  public static final hydra.core.Name FIELD_NAME_NODE_PATTERN = new hydra.core.Name("nodePattern");
+  
+  public static final hydra.core.Name FIELD_NAME_NULL = new hydra.core.Name("null");
+  
+  public static final hydra.core.Name FIELD_NAME_NUMERIC = new hydra.core.Name("numeric");
+  
+  public static final hydra.core.Name FIELD_NAME_PATH = new hydra.core.Name("path");
+  
+  public static final hydra.core.Name FIELD_NAME_PROCEDURE_CALL = new hydra.core.Name("procedureCall");
+  
+  public static final hydra.core.Name FIELD_NAME_PROJECTION = new hydra.core.Name("projection");
+  
+  public static final hydra.core.Name FIELD_NAME_RANDOMNESS = new hydra.core.Name("randomness");
+  
+  public static final hydra.core.Name FIELD_NAME_RANGE_LITERAL = new hydra.core.Name("rangeLiteral");
+  
+  public static final hydra.core.Name FIELD_NAME_READING = new hydra.core.Name("reading");
+  
+  public static final hydra.core.Name FIELD_NAME_RELATIONSHIP_DIRECTION = new hydra.core.Name("relationshipDirection");
+  
+  public static final hydra.core.Name FIELD_NAME_RELATIONSHIP_PATTERN = new hydra.core.Name("relationshipPattern");
+  
+  public static final hydra.core.Name FIELD_NAME_REMOVE = new hydra.core.Name("remove");
+  
+  public static final hydra.core.Name FIELD_NAME_SCHEMA = new hydra.core.Name("schema");
+  
+  public static final hydra.core.Name FIELD_NAME_SET = new hydra.core.Name("set");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
+  
+  public static final hydra.core.Name FIELD_NAME_UPDATING = new hydra.core.Name("updating");
   
   /**
    * Whether to expect aggregate functions, and if so, which specific features

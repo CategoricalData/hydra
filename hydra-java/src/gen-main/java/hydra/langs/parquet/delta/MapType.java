@@ -5,7 +5,13 @@ package hydra.langs.parquet.delta;
 import java.io.Serializable;
 
 public class MapType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/delta.MapType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/delta.MapType");
+  
+  public static final hydra.core.Name FIELD_NAME_KEY_TYPE = new hydra.core.Name("keyType");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE_TYPE = new hydra.core.Name("valueType");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE_CONTAINS_NULL = new hydra.core.Name("valueContainsNull");
   
   public final hydra.langs.parquet.delta.DataType keyType;
   

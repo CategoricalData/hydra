@@ -5,7 +5,11 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public abstract class TableCommitAction implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.TableCommitAction");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.TableCommitAction");
+  
+  public static final hydra.core.Name FIELD_NAME_PRESERVE = new hydra.core.Name("preserve");
+  
+  public static final hydra.core.Name FIELD_NAME_DELETE = new hydra.core.Name("delete");
   
   private TableCommitAction () {
   

@@ -5,7 +5,11 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class ForStatementNoShortIf implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.ForStatementNoShortIf");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.ForStatementNoShortIf");
+  
+  public static final hydra.core.Name FIELD_NAME_BASIC = new hydra.core.Name("basic");
+  
+  public static final hydra.core.Name FIELD_NAME_ENHANCED = new hydra.core.Name("enhanced");
   
   private ForStatementNoShortIf () {
   

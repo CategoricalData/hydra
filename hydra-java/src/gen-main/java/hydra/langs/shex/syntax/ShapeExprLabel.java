@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public abstract class ShapeExprLabel implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.ShapeExprLabel");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.ShapeExprLabel");
+  
+  public static final hydra.core.Name FIELD_NAME_IRI = new hydra.core.Name("iri");
+  
+  public static final hydra.core.Name FIELD_NAME_BLANK_NODE = new hydra.core.Name("blankNode");
   
   private ShapeExprLabel () {
   

@@ -5,7 +5,17 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class TraversalOrder implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalOrder");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalOrder");
+  
+  public static final hydra.core.Name FIELD_NAME_INCR = new hydra.core.Name("incr");
+  
+  public static final hydra.core.Name FIELD_NAME_DECR = new hydra.core.Name("decr");
+  
+  public static final hydra.core.Name FIELD_NAME_ASC = new hydra.core.Name("asc");
+  
+  public static final hydra.core.Name FIELD_NAME_DESC = new hydra.core.Name("desc");
+  
+  public static final hydra.core.Name FIELD_NAME_SHUFFLE = new hydra.core.Name("shuffle");
   
   private TraversalOrder () {
   

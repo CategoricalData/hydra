@@ -5,7 +5,7 @@ package hydra.langs.graphql.syntax;
 import java.io.Serializable;
 
 public class ListValue_Sequence implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.ListValue.Sequence");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/graphql/syntax.ListValue.Sequence");
   
   public ListValue_Sequence () {
   

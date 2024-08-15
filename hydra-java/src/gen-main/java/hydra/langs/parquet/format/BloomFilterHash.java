@@ -8,7 +8,9 @@ import java.io.Serializable;
  * The hash function used in Bloom filter. This function takes the hash of a column value using plain encoding.
  */
 public abstract class BloomFilterHash implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.BloomFilterHash");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.BloomFilterHash");
+  
+  public static final hydra.core.Name FIELD_NAME_XXHASH = new hydra.core.Name("xxhash");
   
   private BloomFilterHash () {
   

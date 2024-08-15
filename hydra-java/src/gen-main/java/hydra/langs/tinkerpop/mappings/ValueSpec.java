@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A mapping specification producing values (usually literal values) whose type is understood in context
  */
 public abstract class ValueSpec implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/mappings.ValueSpec");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/mappings.ValueSpec");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  
+  public static final hydra.core.Name FIELD_NAME_PATTERN = new hydra.core.Name("pattern");
   
   private ValueSpec () {
   
@@ -68,9 +72,6 @@ public abstract class ValueSpec implements Serializable {
    * A compact path representing the function, e.g. engine-${engineInfo/model/name}
    */
   public static final class Pattern extends hydra.langs.tinkerpop.mappings.ValueSpec implements Serializable {
-    /**
-     * A compact path representing the function, e.g. engine-${engineInfo/model/name}
-     */
     public final String value;
     
     public Pattern (String value) {

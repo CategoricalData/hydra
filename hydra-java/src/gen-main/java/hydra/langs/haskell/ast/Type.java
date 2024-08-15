@@ -5,7 +5,23 @@ package hydra.langs.haskell.ast;
 import java.io.Serializable;
 
 public abstract class Type implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Type");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.Type");
+  
+  public static final hydra.core.Name FIELD_NAME_APPLICATION = new hydra.core.Name("application");
+  
+  public static final hydra.core.Name FIELD_NAME_CTX = new hydra.core.Name("ctx");
+  
+  public static final hydra.core.Name FIELD_NAME_FUNCTION = new hydra.core.Name("function");
+  
+  public static final hydra.core.Name FIELD_NAME_INFIX = new hydra.core.Name("infix");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
+  
+  public static final hydra.core.Name FIELD_NAME_PARENS = new hydra.core.Name("parens");
+  
+  public static final hydra.core.Name FIELD_NAME_TUPLE = new hydra.core.Name("tuple");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
   
   private Type () {
   

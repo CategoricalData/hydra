@@ -5,7 +5,15 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public abstract class Cardinality implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.Cardinality");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.Cardinality");
+  
+  public static final hydra.core.Name FIELD_NAME_AST = new hydra.core.Name("ast");
+  
+  public static final hydra.core.Name FIELD_NAME_PLUS = new hydra.core.Name("plus");
+  
+  public static final hydra.core.Name FIELD_NAME_QUEST = new hydra.core.Name("quest");
+  
+  public static final hydra.core.Name FIELD_NAME_REPEAT_RANGE = new hydra.core.Name("repeatRange");
   
   private Cardinality () {
   

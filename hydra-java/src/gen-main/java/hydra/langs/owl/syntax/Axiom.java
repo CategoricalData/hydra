@@ -8,7 +8,23 @@ import java.io.Serializable;
  * See https://www.w3.org/TR/owl2-syntax/#Axioms
  */
 public abstract class Axiom implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.Axiom");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.Axiom");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATION_AXIOM = new hydra.core.Name("annotationAxiom");
+  
+  public static final hydra.core.Name FIELD_NAME_ASSERTION = new hydra.core.Name("assertion");
+  
+  public static final hydra.core.Name FIELD_NAME_CLASS_AXIOM = new hydra.core.Name("classAxiom");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_PROPERTY_AXIOM = new hydra.core.Name("dataPropertyAxiom");
+  
+  public static final hydra.core.Name FIELD_NAME_DATATYPE_DEFINITION = new hydra.core.Name("datatypeDefinition");
+  
+  public static final hydra.core.Name FIELD_NAME_DECLARATION = new hydra.core.Name("declaration");
+  
+  public static final hydra.core.Name FIELD_NAME_HAS_KEY = new hydra.core.Name("hasKey");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT_PROPERTY_AXIOM = new hydra.core.Name("objectPropertyAxiom");
   
   private Axiom () {
   

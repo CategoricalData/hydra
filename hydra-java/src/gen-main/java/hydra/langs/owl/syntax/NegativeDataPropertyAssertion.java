@@ -5,7 +5,15 @@ package hydra.langs.owl.syntax;
 import java.io.Serializable;
 
 public class NegativeDataPropertyAssertion implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.NegativeDataPropertyAssertion");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.NegativeDataPropertyAssertion");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTY = new hydra.core.Name("property");
+  
+  public static final hydra.core.Name FIELD_NAME_SOURCE = new hydra.core.Name("source");
+  
+  public static final hydra.core.Name FIELD_NAME_TARGET = new hydra.core.Name("target");
   
   public final java.util.List<hydra.langs.owl.syntax.Annotation> annotations;
   

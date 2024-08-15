@@ -5,7 +5,11 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public class ColumnAssignment implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.ColumnAssignment");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.ColumnAssignment");
+  
+  public static final hydra.core.Name FIELD_NAME_COLUMN = new hydra.core.Name("column");
+  
+  public static final hydra.core.Name FIELD_NAME_EXPRESSION = new hydra.core.Name("expression");
   
   public final hydra.langs.kusto.kql.ColumnName column;
   

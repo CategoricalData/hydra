@@ -8,7 +8,11 @@ import java.io.Serializable;
  * Annotations which can be applied to record fields, aliased union members, enum symbols, or named schemas
  */
 public class Annotations implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/pegasus/pdl.Annotations");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/pegasus/pdl.Annotations");
+  
+  public static final hydra.core.Name FIELD_NAME_DOC = new hydra.core.Name("doc");
+  
+  public static final hydra.core.Name FIELD_NAME_DEPRECATED = new hydra.core.Name("deprecated");
   
   public final hydra.util.Opt<String> doc;
   

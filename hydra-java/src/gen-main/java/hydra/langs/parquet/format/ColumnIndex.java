@@ -8,13 +8,26 @@ import java.io.Serializable;
  * Description for ColumnIndex. Each &lt;array-field&gt;[i] refers to the page at OffsetIndex.page_locations[i]
  */
 public class ColumnIndex implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.ColumnIndex");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.ColumnIndex");
+  
+  public static final hydra.core.Name FIELD_NAME_NULL_PAGES = new hydra.core.Name("nullPages");
+  
+  public static final hydra.core.Name FIELD_NAME_MIN_VALUES = new hydra.core.Name("minValues");
+  
+  public static final hydra.core.Name FIELD_NAME_MAX_VALUES = new hydra.core.Name("maxValues");
+  
+  public static final hydra.core.Name FIELD_NAME_BOUNDARY_ORDER = new hydra.core.Name("boundaryOrder");
+  
+  public static final hydra.core.Name FIELD_NAME_NULL_COUNTS = new hydra.core.Name("nullCounts");
   
   /**
    * A list of Boolean values to determine the validity of the corresponding min and max values. If true, a page contains only null values, and writers have to set the corresponding entries in min_values and max_values to byte[0], so that all lists have the same length. If false, the corresponding entries in min_values and max_values must be valid.
    */
   public final java.util.List<Boolean> nullPages;
   
+  /**
+   * minValues and maxValues are lists containing lower and upper bounds for the values of each page determined by the ColumnOrder of the column. These may be the actual minimum and maximum values found on a page, but can also be (more compact) values that do not exist on a page. For example, instead of storing "Blart Versenwald III", a writer may set min_values[i]="B", max_values[i]="C". Such more compact values must still be valid values within the column's logical type. Readers must make sure that list entries are populated before using them by inspecting null_pages.
+   */
   public final java.util.List<String> minValues;
   
   public final java.util.List<String> maxValues;

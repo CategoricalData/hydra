@@ -5,7 +5,9 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public class Catches implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.Catches");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.Catches");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   public final java.util.List<hydra.langs.java.syntax.CatchClause> value;
   

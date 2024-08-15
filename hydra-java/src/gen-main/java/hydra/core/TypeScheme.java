@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A type expression together with free type variables occurring in the expression
  */
 public class TypeScheme implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.TypeScheme");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.TypeScheme");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLES = new hydra.core.Name("variables");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
   
   public final java.util.List<hydra.core.Name> variables;
   

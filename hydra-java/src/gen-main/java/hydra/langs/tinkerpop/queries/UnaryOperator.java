@@ -5,7 +5,9 @@ package hydra.langs.tinkerpop.queries;
 import java.io.Serializable;
 
 public abstract class UnaryOperator implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.UnaryOperator");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.UnaryOperator");
+  
+  public static final hydra.core.Name FIELD_NAME_NEGATE = new hydra.core.Name("negate");
   
   private UnaryOperator () {
   

@@ -5,7 +5,11 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public class ModuleDirective_Provides implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.ModuleDirective.Provides");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.ModuleDirective.Provides");
+  
+  public static final hydra.core.Name FIELD_NAME_TO = new hydra.core.Name("to");
+  
+  public static final hydra.core.Name FIELD_NAME_WITH = new hydra.core.Name("with");
   
   public final hydra.langs.java.syntax.TypeName to;
   

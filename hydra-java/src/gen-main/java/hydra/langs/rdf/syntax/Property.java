@@ -8,7 +8,13 @@ import java.io.Serializable;
  * A type representing an RDF property, and encapsulating its domain, range, and subclass relationships
  */
 public class Property implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/rdf/syntax.Property");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/rdf/syntax.Property");
+  
+  public static final hydra.core.Name FIELD_NAME_DOMAIN = new hydra.core.Name("domain");
+  
+  public static final hydra.core.Name FIELD_NAME_RANGE = new hydra.core.Name("range");
+  
+  public static final hydra.core.Name FIELD_NAME_SUB_PROPERTY_OF = new hydra.core.Name("subPropertyOf");
   
   /**
    * State that any resource that has a given property is an instance of one or more classes

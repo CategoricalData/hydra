@@ -5,7 +5,15 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public abstract class Enumerator implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Enumerator");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Enumerator");
+  
+  public static final hydra.core.Name FIELD_NAME_GENERATOR = new hydra.core.Name("generator");
+  
+  public static final hydra.core.Name FIELD_NAME_CASE_GENERATOR = new hydra.core.Name("caseGenerator");
+  
+  public static final hydra.core.Name FIELD_NAME_VAL = new hydra.core.Name("val");
+  
+  public static final hydra.core.Name FIELD_NAME_GUARD = new hydra.core.Name("guard");
   
   private Enumerator () {
   

@@ -5,7 +5,11 @@ package hydra.langs.haskell.ast;
 import java.io.Serializable;
 
 public class TypedBinding implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.TypedBinding");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.TypedBinding");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE_SIGNATURE = new hydra.core.Name("typeSignature");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE_BINDING = new hydra.core.Name("valueBinding");
   
   public final hydra.langs.haskell.ast.TypeSignature typeSignature;
   

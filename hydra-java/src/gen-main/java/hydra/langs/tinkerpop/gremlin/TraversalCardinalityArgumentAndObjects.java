@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public class TraversalCardinalityArgumentAndObjects implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalCardinalityArgumentAndObjects");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalCardinalityArgumentAndObjects");
+  
+  public static final hydra.core.Name FIELD_NAME_CARDINALITY = new hydra.core.Name("cardinality");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECTS = new hydra.core.Name("objects");
   
   public final hydra.langs.tinkerpop.gremlin.TraversalCardinalityArgument cardinality;
   

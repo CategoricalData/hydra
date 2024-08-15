@@ -5,7 +5,13 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class TransactionPart implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TransactionPart");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TransactionPart");
+  
+  public static final hydra.core.Name FIELD_NAME_BEGIN = new hydra.core.Name("begin");
+  
+  public static final hydra.core.Name FIELD_NAME_COMMIT = new hydra.core.Name("commit");
+  
+  public static final hydra.core.Name FIELD_NAME_ROLLBACK = new hydra.core.Name("rollback");
   
   private TransactionPart () {
   

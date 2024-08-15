@@ -8,7 +8,23 @@ import java.io.Serializable;
  * Features that are related to Element objects.
  */
 public class ElementFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/features.ElementFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/features.ElementFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_ADD_PROPERTY = new hydra.core.Name("supportsAddProperty");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_ANY_IDS = new hydra.core.Name("supportsAnyIds");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_CUSTOM_IDS = new hydra.core.Name("supportsCustomIds");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_NUMERIC_IDS = new hydra.core.Name("supportsNumericIds");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_REMOVE_PROPERTY = new hydra.core.Name("supportsRemoveProperty");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_STRING_IDS = new hydra.core.Name("supportsStringIds");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_USER_SUPPLIED_IDS = new hydra.core.Name("supportsUserSuppliedIds");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_UUID_IDS = new hydra.core.Name("supportsUuidIds");
   
   /**
    * Determines if an Element allows properties to be added.

@@ -8,7 +8,9 @@ import java.io.Serializable;
  * A data row, containing optional-valued cells; one per column
  */
 public class DataRow<V> implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tabular.DataRow");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tabular.DataRow");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   public final java.util.List<hydra.util.Opt<V>> value;
   

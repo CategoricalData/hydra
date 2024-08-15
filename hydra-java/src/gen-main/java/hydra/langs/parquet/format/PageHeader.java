@@ -5,7 +5,23 @@ package hydra.langs.parquet.format;
 import java.io.Serializable;
 
 public class PageHeader implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.PageHeader");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.PageHeader");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  
+  public static final hydra.core.Name FIELD_NAME_UNCOMPRESSED_PAGE_SIZE = new hydra.core.Name("uncompressedPageSize");
+  
+  public static final hydra.core.Name FIELD_NAME_COMPRESSED_PAGE_SIZE = new hydra.core.Name("compressedPageSize");
+  
+  public static final hydra.core.Name FIELD_NAME_CRC = new hydra.core.Name("crc");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_PAGE_HEADER = new hydra.core.Name("dataPageHeader");
+  
+  public static final hydra.core.Name FIELD_NAME_INDEX_PAGE_HEADER = new hydra.core.Name("indexPageHeader");
+  
+  public static final hydra.core.Name FIELD_NAME_DICTIONARY_PAGE_HEADER = new hydra.core.Name("dictionaryPageHeader");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_PAGE_HEADER_V2 = new hydra.core.Name("dataPageHeaderV2");
   
   /**
    * the type of the page: indicates which of the *_header fields is set

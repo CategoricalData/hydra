@@ -5,7 +5,13 @@ package hydra.langs.tinkerpop.queries;
 import java.io.Serializable;
 
 public abstract class BinaryBooleanOperator implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.BinaryBooleanOperator");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.BinaryBooleanOperator");
+  
+  public static final hydra.core.Name FIELD_NAME_AND = new hydra.core.Name("and");
+  
+  public static final hydra.core.Name FIELD_NAME_OR = new hydra.core.Name("or");
+  
+  public static final hydra.core.Name FIELD_NAME_XOR = new hydra.core.Name("xor");
   
   private BinaryBooleanOperator () {
   

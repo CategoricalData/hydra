@@ -5,7 +5,23 @@ package hydra.langs.pegasus.pdl;
 import java.io.Serializable;
 
 public abstract class Schema implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/pegasus/pdl.Schema");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/pegasus/pdl.Schema");
+  
+  public static final hydra.core.Name FIELD_NAME_ARRAY = new hydra.core.Name("array");
+  
+  public static final hydra.core.Name FIELD_NAME_FIXED = new hydra.core.Name("fixed");
+  
+  public static final hydra.core.Name FIELD_NAME_INLINE = new hydra.core.Name("inline");
+  
+  public static final hydra.core.Name FIELD_NAME_MAP = new hydra.core.Name("map");
+  
+  public static final hydra.core.Name FIELD_NAME_NAMED = new hydra.core.Name("named");
+  
+  public static final hydra.core.Name FIELD_NAME_NULL = new hydra.core.Name("null");
+  
+  public static final hydra.core.Name FIELD_NAME_PRIMITIVE = new hydra.core.Name("primitive");
+  
+  public static final hydra.core.Name FIELD_NAME_UNION = new hydra.core.Name("union");
   
   private Schema () {
   

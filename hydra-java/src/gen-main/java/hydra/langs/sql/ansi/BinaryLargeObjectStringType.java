@@ -5,7 +5,11 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public abstract class BinaryLargeObjectStringType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.BinaryLargeObjectStringType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.BinaryLargeObjectStringType");
+  
+  public static final hydra.core.Name FIELD_NAME_BINARY = new hydra.core.Name("binary");
+  
+  public static final hydra.core.Name FIELD_NAME_BLOB = new hydra.core.Name("blob");
   
   private BinaryLargeObjectStringType () {
   

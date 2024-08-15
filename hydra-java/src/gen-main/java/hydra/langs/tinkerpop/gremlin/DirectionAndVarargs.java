@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public class DirectionAndVarargs implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.DirectionAndVarargs");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.DirectionAndVarargs");
+  
+  public static final hydra.core.Name FIELD_NAME_DIRECTION = new hydra.core.Name("direction");
+  
+  public static final hydra.core.Name FIELD_NAME_VARARGS = new hydra.core.Name("varargs");
   
   public final hydra.langs.tinkerpop.gremlin.TraversalDirectionArgument direction;
   

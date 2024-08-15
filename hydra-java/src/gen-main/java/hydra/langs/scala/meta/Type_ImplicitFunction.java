@@ -5,7 +5,11 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public class Type_ImplicitFunction implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Type.ImplicitFunction");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Type.ImplicitFunction");
+  
+  public static final hydra.core.Name FIELD_NAME_PARAMS = new hydra.core.Name("params");
+  
+  public static final hydra.core.Name FIELD_NAME_RES = new hydra.core.Name("res");
   
   public final java.util.List<hydra.langs.scala.meta.Type> params;
   

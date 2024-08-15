@@ -5,7 +5,13 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public class ConditionalExpression_TernaryLambda implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.ConditionalExpression.TernaryLambda");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.ConditionalExpression.TernaryLambda");
+  
+  public static final hydra.core.Name FIELD_NAME_COND = new hydra.core.Name("cond");
+  
+  public static final hydra.core.Name FIELD_NAME_IF_TRUE = new hydra.core.Name("ifTrue");
+  
+  public static final hydra.core.Name FIELD_NAME_IF_FALSE = new hydra.core.Name("ifFalse");
   
   public final hydra.langs.java.syntax.ConditionalOrExpression cond;
   

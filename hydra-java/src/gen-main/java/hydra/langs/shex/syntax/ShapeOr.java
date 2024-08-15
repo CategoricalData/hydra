@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public class ShapeOr implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.ShapeOr");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.ShapeOr");
+  
+  public static final hydra.core.Name FIELD_NAME_SHAPE_AND = new hydra.core.Name("shapeAnd");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST_OF_SEQUENCE = new hydra.core.Name("listOfSequence");
   
   public final hydra.langs.shex.syntax.ShapeAnd shapeAnd;
   

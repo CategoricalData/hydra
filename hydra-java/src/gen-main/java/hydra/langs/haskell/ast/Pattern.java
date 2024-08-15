@@ -5,7 +5,27 @@ package hydra.langs.haskell.ast;
 import java.io.Serializable;
 
 public abstract class Pattern implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Pattern");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.Pattern");
+  
+  public static final hydra.core.Name FIELD_NAME_APPLICATION = new hydra.core.Name("application");
+  
+  public static final hydra.core.Name FIELD_NAME_AS = new hydra.core.Name("as");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
+  
+  public static final hydra.core.Name FIELD_NAME_LITERAL = new hydra.core.Name("literal");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_PARENS = new hydra.core.Name("parens");
+  
+  public static final hydra.core.Name FIELD_NAME_RECORD = new hydra.core.Name("record");
+  
+  public static final hydra.core.Name FIELD_NAME_TUPLE = new hydra.core.Name("tuple");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPED = new hydra.core.Name("typed");
+  
+  public static final hydra.core.Name FIELD_NAME_WILDCARD = new hydra.core.Name("wildcard");
   
   private Pattern () {
   

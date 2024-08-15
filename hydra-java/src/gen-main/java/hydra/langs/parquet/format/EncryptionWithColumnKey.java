@@ -5,13 +5,20 @@ package hydra.langs.parquet.format;
 import java.io.Serializable;
 
 public class EncryptionWithColumnKey implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.EncryptionWithColumnKey");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.EncryptionWithColumnKey");
+  
+  public static final hydra.core.Name FIELD_NAME_PATH_IN_SCHEMA = new hydra.core.Name("pathInSchema");
+  
+  public static final hydra.core.Name FIELD_NAME_KEY_METADATA = new hydra.core.Name("keyMetadata");
   
   /**
    * Column path in schema
    */
   public final java.util.List<String> pathInSchema;
   
+  /**
+   * Retrieval metadata of column encryption key
+   */
   public final hydra.util.Opt<String> keyMetadata;
   
   public EncryptionWithColumnKey (java.util.List<String> pathInSchema, hydra.util.Opt<String> keyMetadata) {

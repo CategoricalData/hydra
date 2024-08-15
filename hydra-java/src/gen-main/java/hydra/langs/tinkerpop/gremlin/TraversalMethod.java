@@ -5,7 +5,271 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class TraversalMethod implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalMethod");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalMethod");
+  
+  public static final hydra.core.Name FIELD_NAME_V = new hydra.core.Name("v");
+  
+  public static final hydra.core.Name FIELD_NAME_E = new hydra.core.Name("e");
+  
+  public static final hydra.core.Name FIELD_NAME_ADD_E = new hydra.core.Name("addE");
+  
+  public static final hydra.core.Name FIELD_NAME_ADD_V = new hydra.core.Name("addV");
+  
+  public static final hydra.core.Name FIELD_NAME_MERGE_E = new hydra.core.Name("mergeE");
+  
+  public static final hydra.core.Name FIELD_NAME_MERGE_V = new hydra.core.Name("mergeV");
+  
+  public static final hydra.core.Name FIELD_NAME_AGGREGATE = new hydra.core.Name("aggregate");
+  
+  public static final hydra.core.Name FIELD_NAME_ALL = new hydra.core.Name("all");
+  
+  public static final hydra.core.Name FIELD_NAME_AND = new hydra.core.Name("and");
+  
+  public static final hydra.core.Name FIELD_NAME_ANY = new hydra.core.Name("any");
+  
+  public static final hydra.core.Name FIELD_NAME_AS = new hydra.core.Name("as");
+  
+  public static final hydra.core.Name FIELD_NAME_BARRIER = new hydra.core.Name("barrier");
+  
+  public static final hydra.core.Name FIELD_NAME_BOTH = new hydra.core.Name("both");
+  
+  public static final hydra.core.Name FIELD_NAME_BOTH_E = new hydra.core.Name("bothE");
+  
+  public static final hydra.core.Name FIELD_NAME_BOTH_V = new hydra.core.Name("bothV");
+  
+  public static final hydra.core.Name FIELD_NAME_BRANCH = new hydra.core.Name("branch");
+  
+  public static final hydra.core.Name FIELD_NAME_BY = new hydra.core.Name("by");
+  
+  public static final hydra.core.Name FIELD_NAME_CAP = new hydra.core.Name("cap");
+  
+  public static final hydra.core.Name FIELD_NAME_CHOOSE = new hydra.core.Name("choose");
+  
+  public static final hydra.core.Name FIELD_NAME_COALESCE = new hydra.core.Name("coalesce");
+  
+  public static final hydra.core.Name FIELD_NAME_COIN = new hydra.core.Name("coin");
+  
+  public static final hydra.core.Name FIELD_NAME_CONJOIN = new hydra.core.Name("conjoin");
+  
+  public static final hydra.core.Name FIELD_NAME_CONNECTED_COMPONENT = new hydra.core.Name("connectedComponent");
+  
+  public static final hydra.core.Name FIELD_NAME_CONSTANT = new hydra.core.Name("constant");
+  
+  public static final hydra.core.Name FIELD_NAME_COUNT = new hydra.core.Name("count");
+  
+  public static final hydra.core.Name FIELD_NAME_CYCLIC_PATH = new hydra.core.Name("cyclicPath");
+  
+  public static final hydra.core.Name FIELD_NAME_DEDUP = new hydra.core.Name("dedup");
+  
+  public static final hydra.core.Name FIELD_NAME_DIFFERENCE = new hydra.core.Name("difference");
+  
+  public static final hydra.core.Name FIELD_NAME_DISJUNCT = new hydra.core.Name("disjunct");
+  
+  public static final hydra.core.Name FIELD_NAME_DROP = new hydra.core.Name("drop");
+  
+  public static final hydra.core.Name FIELD_NAME_ELEMENT_MAP = new hydra.core.Name("elementMap");
+  
+  public static final hydra.core.Name FIELD_NAME_EMIT = new hydra.core.Name("emit");
+  
+  public static final hydra.core.Name FIELD_NAME_FILTER = new hydra.core.Name("filter");
+  
+  public static final hydra.core.Name FIELD_NAME_FLAT_MAP = new hydra.core.Name("flatMap");
+  
+  public static final hydra.core.Name FIELD_NAME_FOLD = new hydra.core.Name("fold");
+  
+  public static final hydra.core.Name FIELD_NAME_FROM = new hydra.core.Name("from");
+  
+  public static final hydra.core.Name FIELD_NAME_GROUP = new hydra.core.Name("group");
+  
+  public static final hydra.core.Name FIELD_NAME_GROUP_COUNT = new hydra.core.Name("groupCount");
+  
+  public static final hydra.core.Name FIELD_NAME_HAS = new hydra.core.Name("has");
+  
+  public static final hydra.core.Name FIELD_NAME_HAS_ID = new hydra.core.Name("hasId");
+  
+  public static final hydra.core.Name FIELD_NAME_HAS_KEY = new hydra.core.Name("hasKey");
+  
+  public static final hydra.core.Name FIELD_NAME_HAS_LABEL = new hydra.core.Name("hasLabel");
+  
+  public static final hydra.core.Name FIELD_NAME_HAS_NOT = new hydra.core.Name("hasNot");
+  
+  public static final hydra.core.Name FIELD_NAME_HAS_VALUE = new hydra.core.Name("hasValue");
+  
+  public static final hydra.core.Name FIELD_NAME_ID = new hydra.core.Name("id");
+  
+  public static final hydra.core.Name FIELD_NAME_IDENTITY = new hydra.core.Name("identity");
+  
+  public static final hydra.core.Name FIELD_NAME_IN = new hydra.core.Name("in");
+  
+  public static final hydra.core.Name FIELD_NAME_IN_E = new hydra.core.Name("inE");
+  
+  public static final hydra.core.Name FIELD_NAME_INTERSECT = new hydra.core.Name("intersect");
+  
+  public static final hydra.core.Name FIELD_NAME_IN_V = new hydra.core.Name("inV");
+  
+  public static final hydra.core.Name FIELD_NAME_INDEX = new hydra.core.Name("index");
+  
+  public static final hydra.core.Name FIELD_NAME_INJECT = new hydra.core.Name("inject");
+  
+  public static final hydra.core.Name FIELD_NAME_IS = new hydra.core.Name("is");
+  
+  public static final hydra.core.Name FIELD_NAME_KEY = new hydra.core.Name("key");
+  
+  public static final hydra.core.Name FIELD_NAME_LABEL = new hydra.core.Name("label");
+  
+  public static final hydra.core.Name FIELD_NAME_LIMIT = new hydra.core.Name("limit");
+  
+  public static final hydra.core.Name FIELD_NAME_LOCAL = new hydra.core.Name("local");
+  
+  public static final hydra.core.Name FIELD_NAME_LOOPS = new hydra.core.Name("loops");
+  
+  public static final hydra.core.Name FIELD_NAME_MAP = new hydra.core.Name("map");
+  
+  public static final hydra.core.Name FIELD_NAME_MATCH = new hydra.core.Name("match");
+  
+  public static final hydra.core.Name FIELD_NAME_MATH = new hydra.core.Name("math");
+  
+  public static final hydra.core.Name FIELD_NAME_MAX = new hydra.core.Name("max");
+  
+  public static final hydra.core.Name FIELD_NAME_MEAN = new hydra.core.Name("mean");
+  
+  public static final hydra.core.Name FIELD_NAME_MIN = new hydra.core.Name("min");
+  
+  public static final hydra.core.Name FIELD_NAME_NONE = new hydra.core.Name("none");
+  
+  public static final hydra.core.Name FIELD_NAME_NOT = new hydra.core.Name("not");
+  
+  public static final hydra.core.Name FIELD_NAME_OPTION = new hydra.core.Name("option");
+  
+  public static final hydra.core.Name FIELD_NAME_OPTIONAL = new hydra.core.Name("optional");
+  
+  public static final hydra.core.Name FIELD_NAME_OR = new hydra.core.Name("or");
+  
+  public static final hydra.core.Name FIELD_NAME_ORDER = new hydra.core.Name("order");
+  
+  public static final hydra.core.Name FIELD_NAME_OTHER_V = new hydra.core.Name("otherV");
+  
+  public static final hydra.core.Name FIELD_NAME_OUT = new hydra.core.Name("out");
+  
+  public static final hydra.core.Name FIELD_NAME_OUT_E = new hydra.core.Name("outE");
+  
+  public static final hydra.core.Name FIELD_NAME_OUT_V = new hydra.core.Name("outV");
+  
+  public static final hydra.core.Name FIELD_NAME_PAGE_RANK = new hydra.core.Name("pageRank");
+  
+  public static final hydra.core.Name FIELD_NAME_PATH = new hydra.core.Name("path");
+  
+  public static final hydra.core.Name FIELD_NAME_PEER_PRESSURE = new hydra.core.Name("peerPressure");
+  
+  public static final hydra.core.Name FIELD_NAME_PROFILE = new hydra.core.Name("profile");
+  
+  public static final hydra.core.Name FIELD_NAME_PROJECT = new hydra.core.Name("project");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTIES = new hydra.core.Name("properties");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTY = new hydra.core.Name("property");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTY_MAP = new hydra.core.Name("propertyMap");
+  
+  public static final hydra.core.Name FIELD_NAME_RANGE = new hydra.core.Name("range");
+  
+  public static final hydra.core.Name FIELD_NAME_READ = new hydra.core.Name("read");
+  
+  public static final hydra.core.Name FIELD_NAME_REPEAT = new hydra.core.Name("repeat");
+  
+  public static final hydra.core.Name FIELD_NAME_SACK = new hydra.core.Name("sack");
+  
+  public static final hydra.core.Name FIELD_NAME_SAMPLE = new hydra.core.Name("sample");
+  
+  public static final hydra.core.Name FIELD_NAME_SELECT = new hydra.core.Name("select");
+  
+  public static final hydra.core.Name FIELD_NAME_COMBINE = new hydra.core.Name("combine");
+  
+  public static final hydra.core.Name FIELD_NAME_PRODUCT = new hydra.core.Name("product");
+  
+  public static final hydra.core.Name FIELD_NAME_MERGE = new hydra.core.Name("merge");
+  
+  public static final hydra.core.Name FIELD_NAME_SHORTEST_PATH = new hydra.core.Name("shortestPath");
+  
+  public static final hydra.core.Name FIELD_NAME_SIDE_EFFECT = new hydra.core.Name("sideEffect");
+  
+  public static final hydra.core.Name FIELD_NAME_SIMPLE_PATH = new hydra.core.Name("simplePath");
+  
+  public static final hydra.core.Name FIELD_NAME_SKIP = new hydra.core.Name("skip");
+  
+  public static final hydra.core.Name FIELD_NAME_STORE = new hydra.core.Name("store");
+  
+  public static final hydra.core.Name FIELD_NAME_SUBGRAPH = new hydra.core.Name("subgraph");
+  
+  public static final hydra.core.Name FIELD_NAME_SUM = new hydra.core.Name("sum");
+  
+  public static final hydra.core.Name FIELD_NAME_TAIL = new hydra.core.Name("tail");
+  
+  public static final hydra.core.Name FIELD_NAME_FAIL = new hydra.core.Name("fail");
+  
+  public static final hydra.core.Name FIELD_NAME_TIMES = new hydra.core.Name("times");
+  
+  public static final hydra.core.Name FIELD_NAME_TO = new hydra.core.Name("to");
+  
+  public static final hydra.core.Name FIELD_NAME_TO_E = new hydra.core.Name("toE");
+  
+  public static final hydra.core.Name FIELD_NAME_TO_V = new hydra.core.Name("toV");
+  
+  public static final hydra.core.Name FIELD_NAME_TREE = new hydra.core.Name("tree");
+  
+  public static final hydra.core.Name FIELD_NAME_UNFOLD = new hydra.core.Name("unfold");
+  
+  public static final hydra.core.Name FIELD_NAME_UNION = new hydra.core.Name("union");
+  
+  public static final hydra.core.Name FIELD_NAME_UNTIL = new hydra.core.Name("until");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE_MAP = new hydra.core.Name("valueMap");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUES = new hydra.core.Name("values");
+  
+  public static final hydra.core.Name FIELD_NAME_WHERE = new hydra.core.Name("where");
+  
+  public static final hydra.core.Name FIELD_NAME_WITH = new hydra.core.Name("with");
+  
+  public static final hydra.core.Name FIELD_NAME_WRITE = new hydra.core.Name("write");
+  
+  public static final hydra.core.Name FIELD_NAME_ELEMENT = new hydra.core.Name("element");
+  
+  public static final hydra.core.Name FIELD_NAME_CALL = new hydra.core.Name("call");
+  
+  public static final hydra.core.Name FIELD_NAME_CONCAT = new hydra.core.Name("concat");
+  
+  public static final hydra.core.Name FIELD_NAME_AS_STRING = new hydra.core.Name("asString");
+  
+  public static final hydra.core.Name FIELD_NAME_FORMAT = new hydra.core.Name("format");
+  
+  public static final hydra.core.Name FIELD_NAME_TO_UPPER = new hydra.core.Name("toUpper");
+  
+  public static final hydra.core.Name FIELD_NAME_TO_LOWER = new hydra.core.Name("toLower");
+  
+  public static final hydra.core.Name FIELD_NAME_LENGTH = new hydra.core.Name("length");
+  
+  public static final hydra.core.Name FIELD_NAME_TRIM = new hydra.core.Name("trim");
+  
+  public static final hydra.core.Name FIELD_NAME_L_TRIM = new hydra.core.Name("lTrim");
+  
+  public static final hydra.core.Name FIELD_NAME_R_TRIM = new hydra.core.Name("rTrim");
+  
+  public static final hydra.core.Name FIELD_NAME_REVERSE = new hydra.core.Name("reverse");
+  
+  public static final hydra.core.Name FIELD_NAME_REPLACE = new hydra.core.Name("replace");
+  
+  public static final hydra.core.Name FIELD_NAME_SPLIT = new hydra.core.Name("split");
+  
+  public static final hydra.core.Name FIELD_NAME_SUBSTRING = new hydra.core.Name("substring");
+  
+  public static final hydra.core.Name FIELD_NAME_AS_DATE = new hydra.core.Name("asDate");
+  
+  public static final hydra.core.Name FIELD_NAME_DATE_ADD = new hydra.core.Name("dateAdd");
+  
+  public static final hydra.core.Name FIELD_NAME_DATE_DIFF = new hydra.core.Name("dateDiff");
   
   private TraversalMethod () {
   

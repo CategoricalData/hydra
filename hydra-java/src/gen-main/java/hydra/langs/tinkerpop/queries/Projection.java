@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.queries;
 import java.io.Serializable;
 
 public class Projection implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.Projection");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.Projection");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  
+  public static final hydra.core.Name FIELD_NAME_AS = new hydra.core.Name("as");
   
   public final hydra.langs.tinkerpop.queries.Expression value;
   

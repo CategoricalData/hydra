@@ -5,7 +5,11 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public class Data_PolyFunction implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Data.PolyFunction");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Data.PolyFunction");
+  
+  public static final hydra.core.Name FIELD_NAME_TPARAMS = new hydra.core.Name("tparams");
+  
+  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
   
   public final java.util.List<hydra.langs.scala.meta.Type_Param> tparams;
   

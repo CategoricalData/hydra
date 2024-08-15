@@ -5,7 +5,17 @@ package hydra.langs.graphql.syntax;
 import java.io.Serializable;
 
 public class Field implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.Field");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/graphql/syntax.Field");
+  
+  public static final hydra.core.Name FIELD_NAME_ALIAS = new hydra.core.Name("alias");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_ARGUMENTS = new hydra.core.Name("arguments");
+  
+  public static final hydra.core.Name FIELD_NAME_DIRECTIVES = new hydra.core.Name("directives");
+  
+  public static final hydra.core.Name FIELD_NAME_SELECTION_SET = new hydra.core.Name("selectionSet");
   
   public final hydra.util.Opt<hydra.langs.graphql.syntax.Alias> alias;
   

@@ -5,7 +5,19 @@ package hydra.langs.owl.syntax;
 import java.io.Serializable;
 
 public abstract class Entity implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.Entity");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.Entity");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATION_PROPERTY = new hydra.core.Name("annotationProperty");
+  
+  public static final hydra.core.Name FIELD_NAME_CLASS = new hydra.core.Name("class");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_PROPERTY = new hydra.core.Name("dataProperty");
+  
+  public static final hydra.core.Name FIELD_NAME_DATATYPE = new hydra.core.Name("datatype");
+  
+  public static final hydra.core.Name FIELD_NAME_NAMED_INDIVIDUAL = new hydra.core.Name("namedIndividual");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT_PROPERTY = new hydra.core.Name("objectProperty");
   
   private Entity () {
   

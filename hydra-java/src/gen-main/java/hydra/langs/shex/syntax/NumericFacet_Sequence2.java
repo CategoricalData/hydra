@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public class NumericFacet_Sequence2 implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.NumericFacet.Sequence2");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.NumericFacet.Sequence2");
+  
+  public static final hydra.core.Name FIELD_NAME_NUMERIC_LENGTH = new hydra.core.Name("numericLength");
+  
+  public static final hydra.core.Name FIELD_NAME_INTEGER = new hydra.core.Name("integer");
   
   public final hydra.langs.shex.syntax.NumericLength numericLength;
   

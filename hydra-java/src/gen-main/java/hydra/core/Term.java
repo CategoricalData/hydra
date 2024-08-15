@@ -8,7 +8,43 @@ import java.io.Serializable;
  * A data term
  */
 public abstract class Term implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Term");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.Term");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATED = new hydra.core.Name("annotated");
+  
+  public static final hydra.core.Name FIELD_NAME_APPLICATION = new hydra.core.Name("application");
+  
+  public static final hydra.core.Name FIELD_NAME_FUNCTION = new hydra.core.Name("function");
+  
+  public static final hydra.core.Name FIELD_NAME_LET = new hydra.core.Name("let");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
+  
+  public static final hydra.core.Name FIELD_NAME_LITERAL = new hydra.core.Name("literal");
+  
+  public static final hydra.core.Name FIELD_NAME_MAP = new hydra.core.Name("map");
+  
+  public static final hydra.core.Name FIELD_NAME_OPTIONAL = new hydra.core.Name("optional");
+  
+  public static final hydra.core.Name FIELD_NAME_PRODUCT = new hydra.core.Name("product");
+  
+  public static final hydra.core.Name FIELD_NAME_RECORD = new hydra.core.Name("record");
+  
+  public static final hydra.core.Name FIELD_NAME_SET = new hydra.core.Name("set");
+  
+  public static final hydra.core.Name FIELD_NAME_SUM = new hydra.core.Name("sum");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE_ABSTRACTION = new hydra.core.Name("typeAbstraction");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE_APPLICATION = new hydra.core.Name("typeApplication");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPED = new hydra.core.Name("typed");
+  
+  public static final hydra.core.Name FIELD_NAME_UNION = new hydra.core.Name("union");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
+  
+  public static final hydra.core.Name FIELD_NAME_WRAP = new hydra.core.Name("wrap");
   
   private Term () {
   

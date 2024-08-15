@@ -5,7 +5,11 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public class Data_ApplyUsing implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Data.ApplyUsing");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Data.ApplyUsing");
+  
+  public static final hydra.core.Name FIELD_NAME_FUN = new hydra.core.Name("fun");
+  
+  public static final hydra.core.Name FIELD_NAME_TARGS = new hydra.core.Name("targs");
   
   public final hydra.langs.scala.meta.Data fun;
   

@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A set of features for delete operations.
  */
 public class DeleteFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.DeleteFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.DeleteFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_DELETE = new hydra.core.Name("delete");
+  
+  public static final hydra.core.Name FIELD_NAME_DETACH_DELETE = new hydra.core.Name("detachDelete");
   
   /**
    * Whether to expect the basic DELETE clause.

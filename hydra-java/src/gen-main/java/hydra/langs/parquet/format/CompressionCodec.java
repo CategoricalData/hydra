@@ -8,7 +8,21 @@ import java.io.Serializable;
  * Supported compression algorithms. Codecs added in format version X.Y can be read by readers based on X.Y and later. Codec support may vary between readers based on the format version and libraries available at runtime. See Compression.md for a detailed specification of these algorithms.
  */
 public abstract class CompressionCodec implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.CompressionCodec");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.CompressionCodec");
+  
+  public static final hydra.core.Name FIELD_NAME_UNCOMPRESSED = new hydra.core.Name("uncompressed");
+  
+  public static final hydra.core.Name FIELD_NAME_SNAPPY = new hydra.core.Name("snappy");
+  
+  public static final hydra.core.Name FIELD_NAME_GZIP = new hydra.core.Name("gzip");
+  
+  public static final hydra.core.Name FIELD_NAME_LZO = new hydra.core.Name("lzo");
+  
+  public static final hydra.core.Name FIELD_NAME_BROTLI = new hydra.core.Name("brotli");
+  
+  public static final hydra.core.Name FIELD_NAME_ZSTD = new hydra.core.Name("zstd");
+  
+  public static final hydra.core.Name FIELD_NAME_LZ4_RAW = new hydra.core.Name("lz4Raw");
   
   private CompressionCodec () {
   

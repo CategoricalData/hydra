@@ -5,7 +5,11 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public abstract class OverrideClause implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.OverrideClause");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.OverrideClause");
+  
+  public static final hydra.core.Name FIELD_NAME_O_V_E_R_R_I_D_I_N_G_SP_U_S_E_R_SP_V_A_L_U_E = new hydra.core.Name("oVERRIDINGSpUSERSpVALUE");
+  
+  public static final hydra.core.Name FIELD_NAME_O_V_E_R_R_I_D_I_N_G_SP_S_Y_S_T_E_M_SP_V_A_L_U_E = new hydra.core.Name("oVERRIDINGSpSYSTEMSpVALUE");
   
   private OverrideClause () {
   

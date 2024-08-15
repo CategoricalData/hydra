@@ -5,7 +5,9 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public class TableName implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.TableName");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.TableName");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   public final String value;
   

@@ -5,7 +5,21 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public abstract class Literal implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.Literal");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.Literal");
+  
+  public static final hydra.core.Name FIELD_NAME_DURATION = new hydra.core.Name("duration");
+  
+  public static final hydra.core.Name FIELD_NAME_DATETIME = new hydra.core.Name("datetime");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
+  
+  public static final hydra.core.Name FIELD_NAME_INT = new hydra.core.Name("int");
+  
+  public static final hydra.core.Name FIELD_NAME_LONG = new hydra.core.Name("long");
+  
+  public static final hydra.core.Name FIELD_NAME_DOUBLE = new hydra.core.Name("double");
+  
+  public static final hydra.core.Name FIELD_NAME_BOOLEAN = new hydra.core.Name("boolean");
   
   private Literal () {
   

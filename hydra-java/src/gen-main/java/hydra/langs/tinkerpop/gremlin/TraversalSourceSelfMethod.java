@@ -5,7 +5,21 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class TraversalSourceSelfMethod implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalSourceSelfMethod");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalSourceSelfMethod");
+  
+  public static final hydra.core.Name FIELD_NAME_WITH_BULK = new hydra.core.Name("withBulk");
+  
+  public static final hydra.core.Name FIELD_NAME_WITH_PATH = new hydra.core.Name("withPath");
+  
+  public static final hydra.core.Name FIELD_NAME_WITH_SACK = new hydra.core.Name("withSack");
+  
+  public static final hydra.core.Name FIELD_NAME_WITH_SIDE_EFFECT = new hydra.core.Name("withSideEffect");
+  
+  public static final hydra.core.Name FIELD_NAME_WITH_STRATEGIES = new hydra.core.Name("withStrategies");
+  
+  public static final hydra.core.Name FIELD_NAME_WITHOUT_STRATEGIES = new hydra.core.Name("withoutStrategies");
+  
+  public static final hydra.core.Name FIELD_NAME_WITH = new hydra.core.Name("with");
   
   private TraversalSourceSelfMethod () {
   

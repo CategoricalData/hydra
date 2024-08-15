@@ -5,7 +5,33 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public abstract class BuiltInFunction implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.BuiltInFunction");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.BuiltInFunction");
+  
+  public static final hydra.core.Name FIELD_NAME_AGO = new hydra.core.Name("ago");
+  
+  public static final hydra.core.Name FIELD_NAME_BIN = new hydra.core.Name("bin");
+  
+  public static final hydra.core.Name FIELD_NAME_COUNT = new hydra.core.Name("count");
+  
+  public static final hydra.core.Name FIELD_NAME_DCOUNT = new hydra.core.Name("dcount");
+  
+  public static final hydra.core.Name FIELD_NAME_ENDOFDAY = new hydra.core.Name("endofday");
+  
+  public static final hydra.core.Name FIELD_NAME_EXTRACT = new hydra.core.Name("extract");
+  
+  public static final hydra.core.Name FIELD_NAME_FORMAT_DATETIME = new hydra.core.Name("format_datetime");
+  
+  public static final hydra.core.Name FIELD_NAME_MATERIALIZE = new hydra.core.Name("materialize");
+  
+  public static final hydra.core.Name FIELD_NAME_NOW = new hydra.core.Name("now");
+  
+  public static final hydra.core.Name FIELD_NAME_RANGE = new hydra.core.Name("range");
+  
+  public static final hydra.core.Name FIELD_NAME_STARTOFDAY = new hydra.core.Name("startofday");
+  
+  public static final hydra.core.Name FIELD_NAME_STRCAT = new hydra.core.Name("strcat");
+  
+  public static final hydra.core.Name FIELD_NAME_TODYNAMIC = new hydra.core.Name("todynamic");
   
   private BuiltInFunction () {
   

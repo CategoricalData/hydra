@@ -5,7 +5,13 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public class FromConstructor implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.FromConstructor");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.FromConstructor");
+  
+  public static final hydra.core.Name FIELD_NAME_COLUMNS = new hydra.core.Name("columns");
+  
+  public static final hydra.core.Name FIELD_NAME_OVERRIDE = new hydra.core.Name("override");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUES = new hydra.core.Name("values");
   
   public final hydra.util.Opt<hydra.langs.sql.ansi.InsertColumnList> columns;
   

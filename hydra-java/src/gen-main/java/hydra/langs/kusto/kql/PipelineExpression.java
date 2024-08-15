@@ -5,7 +5,9 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public class PipelineExpression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.PipelineExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.PipelineExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   public final java.util.List<hydra.langs.kusto.kql.TabularExpression> value;
   

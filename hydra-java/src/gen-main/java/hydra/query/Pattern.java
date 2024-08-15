@@ -8,7 +8,17 @@ import java.io.Serializable;
  * A query pattern
  */
 public abstract class Pattern implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/query.Pattern");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/query.Pattern");
+  
+  public static final hydra.core.Name FIELD_NAME_TRIPLE = new hydra.core.Name("triple");
+  
+  public static final hydra.core.Name FIELD_NAME_NEGATION = new hydra.core.Name("negation");
+  
+  public static final hydra.core.Name FIELD_NAME_CONJUNCTION = new hydra.core.Name("conjunction");
+  
+  public static final hydra.core.Name FIELD_NAME_DISJUNCTION = new hydra.core.Name("disjunction");
+  
+  public static final hydra.core.Name FIELD_NAME_GRAPH = new hydra.core.Name("graph");
   
   private Pattern () {
   

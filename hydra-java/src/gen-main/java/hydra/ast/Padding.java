@@ -8,7 +8,11 @@ import java.io.Serializable;
  * Left and right padding for an operator
  */
 public class Padding implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ast.Padding");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ast.Padding");
+  
+  public static final hydra.core.Name FIELD_NAME_LEFT = new hydra.core.Name("left");
+  
+  public static final hydra.core.Name FIELD_NAME_RIGHT = new hydra.core.Name("right");
   
   public final hydra.ast.Ws left;
   

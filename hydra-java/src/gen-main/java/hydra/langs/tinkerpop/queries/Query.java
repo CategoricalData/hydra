@@ -5,7 +5,19 @@ package hydra.langs.tinkerpop.queries;
 import java.io.Serializable;
 
 public abstract class Query implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.Query");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.Query");
+  
+  public static final hydra.core.Name FIELD_NAME_APPLICATION = new hydra.core.Name("application");
+  
+  public static final hydra.core.Name FIELD_NAME_AGGREGATE = new hydra.core.Name("aggregate");
+  
+  public static final hydra.core.Name FIELD_NAME_LET_QUERY = new hydra.core.Name("LetQuery");
+  
+  public static final hydra.core.Name FIELD_NAME_MATCH = new hydra.core.Name("match");
+  
+  public static final hydra.core.Name FIELD_NAME_SELECT = new hydra.core.Name("select");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   private Query () {
   

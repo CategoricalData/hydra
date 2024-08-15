@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public class ServiceCall implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.ServiceCall");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.ServiceCall");
+  
+  public static final hydra.core.Name FIELD_NAME_SERVICE = new hydra.core.Name("service");
+  
+  public static final hydra.core.Name FIELD_NAME_ARGUMENTS = new hydra.core.Name("arguments");
   
   public final hydra.langs.tinkerpop.gremlin.StringArgument service;
   

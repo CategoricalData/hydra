@@ -8,7 +8,13 @@ import java.io.Serializable;
  * An infix application expression
  */
 public class Expression_InfixApplication implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Expression.InfixApplication");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.Expression.InfixApplication");
+  
+  public static final hydra.core.Name FIELD_NAME_LHS = new hydra.core.Name("lhs");
+  
+  public static final hydra.core.Name FIELD_NAME_OPERATOR = new hydra.core.Name("operator");
+  
+  public static final hydra.core.Name FIELD_NAME_RHS = new hydra.core.Name("rhs");
   
   public final hydra.langs.haskell.ast.Expression lhs;
   

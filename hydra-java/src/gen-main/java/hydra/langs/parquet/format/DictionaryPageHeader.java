@@ -8,7 +8,13 @@ import java.io.Serializable;
  * The dictionary page must be placed at the first position of the column chunk if it is partly or completely dictionary encoded. At most one dictionary page can be placed in a column chunk.
  */
 public class DictionaryPageHeader implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.DictionaryPageHeader");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.DictionaryPageHeader");
+  
+  public static final hydra.core.Name FIELD_NAME_NUM_VALUES = new hydra.core.Name("numValues");
+  
+  public static final hydra.core.Name FIELD_NAME_ENCODING = new hydra.core.Name("encoding");
+  
+  public static final hydra.core.Name FIELD_NAME_IS_SORTED = new hydra.core.Name("isSorted");
   
   /**
    * Number of values in the dictionary

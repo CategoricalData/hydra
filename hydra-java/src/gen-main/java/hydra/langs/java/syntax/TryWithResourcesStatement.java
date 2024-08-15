@@ -5,7 +5,15 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public class TryWithResourcesStatement implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.TryWithResourcesStatement");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.TryWithResourcesStatement");
+  
+  public static final hydra.core.Name FIELD_NAME_RESOURCE_SPECIFICATION = new hydra.core.Name("resourceSpecification");
+  
+  public static final hydra.core.Name FIELD_NAME_BLOCK = new hydra.core.Name("block");
+  
+  public static final hydra.core.Name FIELD_NAME_CATCHES = new hydra.core.Name("catches");
+  
+  public static final hydra.core.Name FIELD_NAME_FINALLY = new hydra.core.Name("finally");
   
   public final hydra.langs.java.syntax.ResourceSpecification resourceSpecification;
   

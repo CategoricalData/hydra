@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public abstract class XsFacet implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.XsFacet");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.XsFacet");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING_FACET = new hydra.core.Name("stringFacet");
+  
+  public static final hydra.core.Name FIELD_NAME_NUMERIC_FACET = new hydra.core.Name("numericFacet");
   
   private XsFacet () {
   

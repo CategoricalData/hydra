@@ -5,7 +5,15 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class ShiftExpression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.ShiftExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.ShiftExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_UNARY = new hydra.core.Name("unary");
+  
+  public static final hydra.core.Name FIELD_NAME_SHIFT_LEFT = new hydra.core.Name("shiftLeft");
+  
+  public static final hydra.core.Name FIELD_NAME_SHIFT_RIGHT = new hydra.core.Name("shiftRight");
+  
+  public static final hydra.core.Name FIELD_NAME_SHIFT_RIGHT_ZERO_FILL = new hydra.core.Name("shiftRightZeroFill");
   
   private ShiftExpression () {
   

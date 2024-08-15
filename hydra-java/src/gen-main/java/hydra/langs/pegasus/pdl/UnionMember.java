@@ -5,7 +5,13 @@ package hydra.langs.pegasus.pdl;
 import java.io.Serializable;
 
 public class UnionMember implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/pegasus/pdl.UnionMember");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/pegasus/pdl.UnionMember");
+  
+  public static final hydra.core.Name FIELD_NAME_ALIAS = new hydra.core.Name("alias");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
   
   public final hydra.util.Opt<hydra.langs.pegasus.pdl.FieldName> alias;
   

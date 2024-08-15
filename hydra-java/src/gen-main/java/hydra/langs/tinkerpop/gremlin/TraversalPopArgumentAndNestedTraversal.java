@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public class TraversalPopArgumentAndNestedTraversal implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalPopArgumentAndNestedTraversal");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalPopArgumentAndNestedTraversal");
+  
+  public static final hydra.core.Name FIELD_NAME_POP = new hydra.core.Name("pop");
+  
+  public static final hydra.core.Name FIELD_NAME_TRAVERSAL = new hydra.core.Name("traversal");
   
   public final hydra.langs.tinkerpop.gremlin.TraversalPopArgument pop;
   

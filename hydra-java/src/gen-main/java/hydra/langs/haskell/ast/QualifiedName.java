@@ -5,7 +5,11 @@ package hydra.langs.haskell.ast;
 import java.io.Serializable;
 
 public class QualifiedName implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.QualifiedName");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.QualifiedName");
+  
+  public static final hydra.core.Name FIELD_NAME_QUALIFIERS = new hydra.core.Name("qualifiers");
+  
+  public static final hydra.core.Name FIELD_NAME_UNQUALIFIED = new hydra.core.Name("unqualified");
   
   public final java.util.List<hydra.langs.haskell.ast.NamePart> qualifiers;
   

@@ -5,7 +5,7 @@ package hydra.langs.owl.syntax;
 import java.io.Serializable;
 
 public class AnonymousIndividual implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.AnonymousIndividual");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.AnonymousIndividual");
   
   public AnonymousIndividual () {
   

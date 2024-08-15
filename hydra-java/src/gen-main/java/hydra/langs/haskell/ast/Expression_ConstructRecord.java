@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A record constructor expression
  */
 public class Expression_ConstructRecord implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Expression.ConstructRecord");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.Expression.ConstructRecord");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_FIELDS = new hydra.core.Name("fields");
   
   public final hydra.langs.haskell.ast.Name name;
   

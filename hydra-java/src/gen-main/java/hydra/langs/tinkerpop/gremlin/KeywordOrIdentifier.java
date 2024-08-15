@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class KeywordOrIdentifier implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.KeywordOrIdentifier");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.KeywordOrIdentifier");
+  
+  public static final hydra.core.Name FIELD_NAME_KEYWORD = new hydra.core.Name("keyword");
+  
+  public static final hydra.core.Name FIELD_NAME_IDENTIFIER = new hydra.core.Name("identifier");
   
   private KeywordOrIdentifier () {
   

@@ -5,7 +5,9 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public class IriRef implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.IriRef");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.IriRef");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   public final java.util.List<hydra.langs.shex.syntax.IriRef_Elmt> value;
   

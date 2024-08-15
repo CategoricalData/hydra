@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public class NodeConstraint_Sequence2 implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.NodeConstraint.Sequence2");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.NodeConstraint.Sequence2");
+  
+  public static final hydra.core.Name FIELD_NAME_NON_LITERAL_KIND = new hydra.core.Name("nonLiteralKind");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST_OF_STRING_FACET = new hydra.core.Name("listOfStringFacet");
   
   public final hydra.langs.shex.syntax.NonLiteralKind nonLiteralKind;
   

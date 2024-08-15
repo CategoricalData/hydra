@@ -5,7 +5,15 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class ClassBodyDeclaration implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.ClassBodyDeclaration");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.ClassBodyDeclaration");
+  
+  public static final hydra.core.Name FIELD_NAME_CLASS_MEMBER = new hydra.core.Name("classMember");
+  
+  public static final hydra.core.Name FIELD_NAME_INSTANCE_INITIALIZER = new hydra.core.Name("instanceInitializer");
+  
+  public static final hydra.core.Name FIELD_NAME_STATIC_INITIALIZER = new hydra.core.Name("staticInitializer");
+  
+  public static final hydra.core.Name FIELD_NAME_CONSTRUCTOR_DECLARATION = new hydra.core.Name("constructorDeclaration");
   
   private ClassBodyDeclaration () {
   

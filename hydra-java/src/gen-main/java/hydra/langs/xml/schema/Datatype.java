@@ -5,7 +5,95 @@ package hydra.langs.xml.schema;
 import java.io.Serializable;
 
 public abstract class Datatype implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/xml/schema.Datatype");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/xml/schema.Datatype");
+  
+  public static final hydra.core.Name FIELD_NAME_ANY_SIMPLE_TYPE = new hydra.core.Name("anySimpleType");
+  
+  public static final hydra.core.Name FIELD_NAME_ANY_TYPE = new hydra.core.Name("anyType");
+  
+  public static final hydra.core.Name FIELD_NAME_ANY_U_R_I = new hydra.core.Name("anyURI");
+  
+  public static final hydra.core.Name FIELD_NAME_BASE64_BINARY = new hydra.core.Name("base64Binary");
+  
+  public static final hydra.core.Name FIELD_NAME_BOOLEAN = new hydra.core.Name("boolean");
+  
+  public static final hydra.core.Name FIELD_NAME_BYTE = new hydra.core.Name("byte");
+  
+  public static final hydra.core.Name FIELD_NAME_DATE = new hydra.core.Name("date");
+  
+  public static final hydra.core.Name FIELD_NAME_DATE_TIME = new hydra.core.Name("dateTime");
+  
+  public static final hydra.core.Name FIELD_NAME_DECIMAL = new hydra.core.Name("decimal");
+  
+  public static final hydra.core.Name FIELD_NAME_DOUBLE = new hydra.core.Name("double");
+  
+  public static final hydra.core.Name FIELD_NAME_DURATION = new hydra.core.Name("duration");
+  
+  public static final hydra.core.Name FIELD_NAME_E_N_T_I_T_I_E_S = new hydra.core.Name("ENTITIES");
+  
+  public static final hydra.core.Name FIELD_NAME_E_N_T_I_T_Y = new hydra.core.Name("ENTITY");
+  
+  public static final hydra.core.Name FIELD_NAME_FLOAT = new hydra.core.Name("float");
+  
+  public static final hydra.core.Name FIELD_NAME_G_DAY = new hydra.core.Name("gDay");
+  
+  public static final hydra.core.Name FIELD_NAME_G_MONTH = new hydra.core.Name("gMonth");
+  
+  public static final hydra.core.Name FIELD_NAME_G_MONTH_DAY = new hydra.core.Name("gMonthDay");
+  
+  public static final hydra.core.Name FIELD_NAME_G_YEAR = new hydra.core.Name("gYear");
+  
+  public static final hydra.core.Name FIELD_NAME_G_YEAR_MONTH = new hydra.core.Name("gYearMonth");
+  
+  public static final hydra.core.Name FIELD_NAME_HEX_BINARY = new hydra.core.Name("hexBinary");
+  
+  public static final hydra.core.Name FIELD_NAME_I_D = new hydra.core.Name("ID");
+  
+  public static final hydra.core.Name FIELD_NAME_I_D_R_E_F = new hydra.core.Name("IDREF");
+  
+  public static final hydra.core.Name FIELD_NAME_I_D_R_E_F_S = new hydra.core.Name("IDREFS");
+  
+  public static final hydra.core.Name FIELD_NAME_INT = new hydra.core.Name("int");
+  
+  public static final hydra.core.Name FIELD_NAME_INTEGER = new hydra.core.Name("integer");
+  
+  public static final hydra.core.Name FIELD_NAME_LANGUAGE = new hydra.core.Name("language");
+  
+  public static final hydra.core.Name FIELD_NAME_LONG = new hydra.core.Name("long");
+  
+  public static final hydra.core.Name FIELD_NAME_N_M_T_O_K_E_N = new hydra.core.Name("NMTOKEN");
+  
+  public static final hydra.core.Name FIELD_NAME_N_O_T_A_T_I_O_N = new hydra.core.Name("NOTATION");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_NEGATIVE_INTEGER = new hydra.core.Name("negativeInteger");
+  
+  public static final hydra.core.Name FIELD_NAME_NON_NEGATIVE_INTEGER = new hydra.core.Name("nonNegativeInteger");
+  
+  public static final hydra.core.Name FIELD_NAME_NON_POSITIVE_INTEGER = new hydra.core.Name("nonPositiveInteger");
+  
+  public static final hydra.core.Name FIELD_NAME_NORMALIZED_STRING = new hydra.core.Name("normalizedString");
+  
+  public static final hydra.core.Name FIELD_NAME_POSITIVE_INTEGER = new hydra.core.Name("positiveInteger");
+  
+  public static final hydra.core.Name FIELD_NAME_Q_NAME = new hydra.core.Name("qName");
+  
+  public static final hydra.core.Name FIELD_NAME_SHORT = new hydra.core.Name("short");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
+  
+  public static final hydra.core.Name FIELD_NAME_TIME = new hydra.core.Name("time");
+  
+  public static final hydra.core.Name FIELD_NAME_TOKEN = new hydra.core.Name("token");
+  
+  public static final hydra.core.Name FIELD_NAME_UNSIGNED_BYTE = new hydra.core.Name("unsignedByte");
+  
+  public static final hydra.core.Name FIELD_NAME_UNSIGNED_INT = new hydra.core.Name("unsignedInt");
+  
+  public static final hydra.core.Name FIELD_NAME_UNSIGNED_LONG = new hydra.core.Name("unsignedLong");
+  
+  public static final hydra.core.Name FIELD_NAME_UNSIGNED_SHORT = new hydra.core.Name("unsignedShort");
   
   private Datatype () {
   

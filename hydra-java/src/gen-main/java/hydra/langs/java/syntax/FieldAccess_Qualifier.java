@@ -5,7 +5,13 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class FieldAccess_Qualifier implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.FieldAccess.Qualifier");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.FieldAccess.Qualifier");
+  
+  public static final hydra.core.Name FIELD_NAME_PRIMARY = new hydra.core.Name("primary");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPER = new hydra.core.Name("super");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPED = new hydra.core.Name("typed");
   
   private FieldAccess_Qualifier () {
   

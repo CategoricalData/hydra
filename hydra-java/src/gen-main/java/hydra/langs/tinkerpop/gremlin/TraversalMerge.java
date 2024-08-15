@@ -5,7 +5,15 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class TraversalMerge implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalMerge");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalMerge");
+  
+  public static final hydra.core.Name FIELD_NAME_ON_CREATE = new hydra.core.Name("onCreate");
+  
+  public static final hydra.core.Name FIELD_NAME_ON_MATCH = new hydra.core.Name("onMatch");
+  
+  public static final hydra.core.Name FIELD_NAME_OUT_V = new hydra.core.Name("outV");
+  
+  public static final hydra.core.Name FIELD_NAME_IN_V = new hydra.core.Name("inV");
   
   private TraversalMerge () {
   

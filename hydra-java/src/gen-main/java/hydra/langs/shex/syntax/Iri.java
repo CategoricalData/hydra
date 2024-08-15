@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public abstract class Iri implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.Iri");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.Iri");
+  
+  public static final hydra.core.Name FIELD_NAME_IRI_REF = new hydra.core.Name("iriRef");
+  
+  public static final hydra.core.Name FIELD_NAME_PREFIXED_NAME = new hydra.core.Name("prefixedName");
   
   private Iri () {
   

@@ -5,7 +5,11 @@ package hydra.langs.graphql.syntax;
 import java.io.Serializable;
 
 public abstract class ExecutableDefinition implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.ExecutableDefinition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/graphql/syntax.ExecutableDefinition");
+  
+  public static final hydra.core.Name FIELD_NAME_OPERATION = new hydra.core.Name("operation");
+  
+  public static final hydra.core.Name FIELD_NAME_FRAGMENT = new hydra.core.Name("fragment");
   
   private ExecutableDefinition () {
   

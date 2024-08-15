@@ -8,7 +8,15 @@ import java.io.Serializable;
  * An abstract relation; the name and columns of a relation without its actual data
  */
 public class RelationSchema<T> implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/relationalModel.RelationSchema");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/relationalModel.RelationSchema");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_COLUMNS = new hydra.core.Name("columns");
+  
+  public static final hydra.core.Name FIELD_NAME_PRIMARY_KEYS = new hydra.core.Name("primaryKeys");
+  
+  public static final hydra.core.Name FIELD_NAME_FOREIGN_KEYS = new hydra.core.Name("foreignKeys");
   
   /**
    * A unique name for the relation

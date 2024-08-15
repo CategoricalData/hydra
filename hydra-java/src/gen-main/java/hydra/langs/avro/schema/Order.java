@@ -5,7 +5,13 @@ package hydra.langs.avro.schema;
 import java.io.Serializable;
 
 public abstract class Order implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/avro/schema.Order");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/avro/schema.Order");
+  
+  public static final hydra.core.Name FIELD_NAME_ASCENDING = new hydra.core.Name("ascending");
+  
+  public static final hydra.core.Name FIELD_NAME_DESCENDING = new hydra.core.Name("descending");
+  
+  public static final hydra.core.Name FIELD_NAME_IGNORE = new hydra.core.Name("ignore");
   
   private Order () {
   

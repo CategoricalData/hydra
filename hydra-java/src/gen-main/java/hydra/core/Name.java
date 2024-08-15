@@ -8,7 +8,9 @@ import java.io.Serializable;
  * A unique identifier in some context; a string-valued key
  */
 public class Name implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Name");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.Name");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   public final String value;
   

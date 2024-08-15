@@ -5,7 +5,21 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public abstract class ExactNumericType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.ExactNumericType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.ExactNumericType");
+  
+  public static final hydra.core.Name FIELD_NAME_NUMERIC = new hydra.core.Name("numeric");
+  
+  public static final hydra.core.Name FIELD_NAME_DECIMAL = new hydra.core.Name("decimal");
+  
+  public static final hydra.core.Name FIELD_NAME_DEC = new hydra.core.Name("dec");
+  
+  public static final hydra.core.Name FIELD_NAME_SMALLINT = new hydra.core.Name("smallint");
+  
+  public static final hydra.core.Name FIELD_NAME_INTEGER = new hydra.core.Name("integer");
+  
+  public static final hydra.core.Name FIELD_NAME_INT = new hydra.core.Name("int");
+  
+  public static final hydra.core.Name FIELD_NAME_BIGINT = new hydra.core.Name("bigint");
   
   private ExactNumericType () {
   

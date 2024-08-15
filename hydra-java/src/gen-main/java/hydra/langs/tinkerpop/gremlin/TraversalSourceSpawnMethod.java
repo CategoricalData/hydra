@@ -5,7 +5,27 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class TraversalSourceSpawnMethod implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalSourceSpawnMethod");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalSourceSpawnMethod");
+  
+  public static final hydra.core.Name FIELD_NAME_ADD_E = new hydra.core.Name("addE");
+  
+  public static final hydra.core.Name FIELD_NAME_ADD_V = new hydra.core.Name("addV");
+  
+  public static final hydra.core.Name FIELD_NAME_E = new hydra.core.Name("e");
+  
+  public static final hydra.core.Name FIELD_NAME_V = new hydra.core.Name("v");
+  
+  public static final hydra.core.Name FIELD_NAME_MERGE_V = new hydra.core.Name("mergeV");
+  
+  public static final hydra.core.Name FIELD_NAME_MERGE_E = new hydra.core.Name("mergeE");
+  
+  public static final hydra.core.Name FIELD_NAME_INJECT = new hydra.core.Name("inject");
+  
+  public static final hydra.core.Name FIELD_NAME_IO = new hydra.core.Name("io");
+  
+  public static final hydra.core.Name FIELD_NAME_CALL = new hydra.core.Name("call");
+  
+  public static final hydra.core.Name FIELD_NAME_UNION = new hydra.core.Name("union");
   
   private TraversalSourceSpawnMethod () {
   

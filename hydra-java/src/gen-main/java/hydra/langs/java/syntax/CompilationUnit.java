@@ -5,7 +5,11 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class CompilationUnit implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.CompilationUnit");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.CompilationUnit");
+  
+  public static final hydra.core.Name FIELD_NAME_ORDINARY = new hydra.core.Name("ordinary");
+  
+  public static final hydra.core.Name FIELD_NAME_MODULAR = new hydra.core.Name("modular");
   
   private CompilationUnit () {
   

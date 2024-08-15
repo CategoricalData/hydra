@@ -5,7 +5,13 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public class RootTraversal implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.RootTraversal");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.RootTraversal");
+  
+  public static final hydra.core.Name FIELD_NAME_SOURCE = new hydra.core.Name("source");
+  
+  public static final hydra.core.Name FIELD_NAME_SPAWN_METHOD = new hydra.core.Name("spawnMethod");
+  
+  public static final hydra.core.Name FIELD_NAME_CHAINED = new hydra.core.Name("chained");
   
   public final hydra.langs.tinkerpop.gremlin.TraversalSource source;
   

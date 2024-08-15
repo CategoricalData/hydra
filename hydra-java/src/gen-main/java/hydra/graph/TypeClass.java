@@ -8,7 +8,11 @@ import java.io.Serializable;
  * Any of a small number of built-in type classes
  */
 public abstract class TypeClass implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/graph.TypeClass");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/graph.TypeClass");
+  
+  public static final hydra.core.Name FIELD_NAME_EQUALITY = new hydra.core.Name("equality");
+  
+  public static final hydra.core.Name FIELD_NAME_ORDERING = new hydra.core.Name("ordering");
   
   private TypeClass () {
   

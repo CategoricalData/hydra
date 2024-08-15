@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public abstract class NotStartAction_ShapeExprDecl_Alts implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.NotStartAction.ShapeExprDecl.Alts");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.NotStartAction.ShapeExprDecl.Alts");
+  
+  public static final hydra.core.Name FIELD_NAME_SHAPE_EXPRESSION = new hydra.core.Name("shapeExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_E_X_T_E_R_N_A_L = new hydra.core.Name("eXTERNAL");
   
   private NotStartAction_ShapeExprDecl_Alts () {
   

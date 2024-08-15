@@ -5,7 +5,11 @@ package hydra.langs.graphql.syntax;
 import java.io.Serializable;
 
 public class DirectiveLocations_Sequence implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.DirectiveLocations.Sequence");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/graphql/syntax.DirectiveLocations.Sequence");
+  
+  public static final hydra.core.Name FIELD_NAME_DIRECTIVE_LOCATIONS = new hydra.core.Name("directiveLocations");
+  
+  public static final hydra.core.Name FIELD_NAME_DIRECTIVE_LOCATION = new hydra.core.Name("directiveLocation");
   
   public final hydra.langs.graphql.syntax.DirectiveLocations directiveLocations;
   

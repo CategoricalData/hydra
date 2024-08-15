@@ -5,7 +5,9 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public abstract class UnaryOperator implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.UnaryOperator");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.UnaryOperator");
+  
+  public static final hydra.core.Name FIELD_NAME_NOT = new hydra.core.Name("not");
   
   private UnaryOperator () {
   

@@ -8,7 +8,11 @@ import java.io.Serializable;
  * The kind of an element: vertex or edge
  */
 public abstract class ElementKind implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.ElementKind");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.ElementKind");
+  
+  public static final hydra.core.Name FIELD_NAME_VERTEX = new hydra.core.Name("vertex");
+  
+  public static final hydra.core.Name FIELD_NAME_EDGE = new hydra.core.Name("edge");
   
   private ElementKind () {
   

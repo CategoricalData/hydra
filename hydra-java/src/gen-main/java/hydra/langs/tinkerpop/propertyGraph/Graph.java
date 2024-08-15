@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A graph; a self-contained collection of vertices and edges
  */
 public class Graph<V> implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.Graph");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.Graph");
+  
+  public static final hydra.core.Name FIELD_NAME_VERTICES = new hydra.core.Name("vertices");
+  
+  public static final hydra.core.Name FIELD_NAME_EDGES = new hydra.core.Name("edges");
   
   public final java.util.Map<V, hydra.langs.tinkerpop.propertyGraph.Vertex<V>> vertices;
   

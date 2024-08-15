@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public class ShapeAtom_Sequence implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.ShapeAtom.Sequence");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.ShapeAtom.Sequence");
+  
+  public static final hydra.core.Name FIELD_NAME_NODE_CONSTRAINT = new hydra.core.Name("nodeConstraint");
+  
+  public static final hydra.core.Name FIELD_NAME_SHAPE_OR_REF = new hydra.core.Name("shapeOrRef");
   
   public final hydra.langs.shex.syntax.NodeConstraint nodeConstraint;
   

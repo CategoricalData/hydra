@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public class PnameLn implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.PnameLn");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.PnameLn");
+  
+  public static final hydra.core.Name FIELD_NAME_PNAME_NS = new hydra.core.Name("pnameNs");
+  
+  public static final hydra.core.Name FIELD_NAME_PN_LOCAL = new hydra.core.Name("pnLocal");
   
   public final hydra.langs.shex.syntax.PnameNs pnameNs;
   

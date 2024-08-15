@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public class PrefixDecl implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.PrefixDecl");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.PrefixDecl");
+  
+  public static final hydra.core.Name FIELD_NAME_PNAME_NS = new hydra.core.Name("pnameNs");
+  
+  public static final hydra.core.Name FIELD_NAME_IRI_REF = new hydra.core.Name("iriRef");
   
   public final hydra.langs.shex.syntax.PnameNs pnameNs;
   

@@ -8,7 +8,11 @@ import java.io.Serializable;
  * An application expression
  */
 public class Expression_Application implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Expression.Application");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.Expression.Application");
+  
+  public static final hydra.core.Name FIELD_NAME_FUNCTION = new hydra.core.Name("function");
+  
+  public static final hydra.core.Name FIELD_NAME_ARGUMENT = new hydra.core.Name("argument");
   
   public final hydra.langs.haskell.ast.Expression function;
   

@@ -5,7 +5,17 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class OptionArgs implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.OptionArgs");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.OptionArgs");
+  
+  public static final hydra.core.Name FIELD_NAME_PREDICATE_TRAVERSAL = new hydra.core.Name("predicateTraversal");
+  
+  public static final hydra.core.Name FIELD_NAME_MERGE_MAP = new hydra.core.Name("mergeMap");
+  
+  public static final hydra.core.Name FIELD_NAME_MERGE_TRAVERSAL = new hydra.core.Name("mergeTraversal");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT_TRAVERSAL = new hydra.core.Name("objectTraversal");
+  
+  public static final hydra.core.Name FIELD_NAME_TRAVERSAL = new hydra.core.Name("traversal");
   
   private OptionArgs () {
   

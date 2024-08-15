@@ -5,7 +5,17 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class HasStringArgumentAndOptionalStringLiteralVarargsRest implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT = new hydra.core.Name("object");
+  
+  public static final hydra.core.Name FIELD_NAME_PREDICATE = new hydra.core.Name("predicate");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING_OBJECT = new hydra.core.Name("stringObject");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING_PREDICATE = new hydra.core.Name("stringPredicate");
+  
+  public static final hydra.core.Name FIELD_NAME_TRAVERSAL = new hydra.core.Name("traversal");
   
   private HasStringArgumentAndOptionalStringLiteralVarargsRest () {
   

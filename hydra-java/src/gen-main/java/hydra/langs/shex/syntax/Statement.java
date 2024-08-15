@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public abstract class Statement implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.Statement");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.Statement");
+  
+  public static final hydra.core.Name FIELD_NAME_DIRECTIVE = new hydra.core.Name("directive");
+  
+  public static final hydra.core.Name FIELD_NAME_NOT_START_ACTION = new hydra.core.Name("notStartAction");
   
   private Statement () {
   

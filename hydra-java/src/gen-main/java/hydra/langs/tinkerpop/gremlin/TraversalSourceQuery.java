@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public class TraversalSourceQuery implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalSourceQuery");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalSourceQuery");
+  
+  public static final hydra.core.Name FIELD_NAME_SOURCE = new hydra.core.Name("source");
+  
+  public static final hydra.core.Name FIELD_NAME_TRANSACTION_PART = new hydra.core.Name("transactionPart");
   
   public final hydra.langs.tinkerpop.gremlin.TraversalSource source;
   

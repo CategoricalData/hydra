@@ -5,7 +5,11 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public abstract class RemoveItem implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.RemoveItem");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.RemoveItem");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLE_LABELS = new hydra.core.Name("variableLabels");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTY = new hydra.core.Name("property");
   
   private RemoveItem () {
   

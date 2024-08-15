@@ -10,7 +10,9 @@ import java.io.Serializable;
  * If the reader does not support the value of this union, min and max stats for this column should be ignored. 
  */
 public abstract class ColumnOrder implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.ColumnOrder");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.ColumnOrder");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE_ORDER = new hydra.core.Name("typeOrder");
   
   private ColumnOrder () {
   

@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public abstract class BlankNodeLabel_ListOfAlts_Option_Elmt implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.BlankNodeLabel.ListOfAlts.Option.Elmt");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.BlankNodeLabel.ListOfAlts.Option.Elmt");
+  
+  public static final hydra.core.Name FIELD_NAME_PN_CHARS = new hydra.core.Name("pnChars");
+  
+  public static final hydra.core.Name FIELD_NAME_PERIOD = new hydra.core.Name("period");
   
   private BlankNodeLabel_ListOfAlts_Option_Elmt () {
   

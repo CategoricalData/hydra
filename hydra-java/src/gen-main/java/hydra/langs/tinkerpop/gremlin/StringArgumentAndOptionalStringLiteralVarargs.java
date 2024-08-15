@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public class StringArgumentAndOptionalStringLiteralVarargs implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.StringArgumentAndOptionalStringLiteralVarargs");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.StringArgumentAndOptionalStringLiteralVarargs");
+  
+  public static final hydra.core.Name FIELD_NAME_FIRST = new hydra.core.Name("first");
+  
+  public static final hydra.core.Name FIELD_NAME_REST = new hydra.core.Name("rest");
   
   public final hydra.langs.tinkerpop.gremlin.StringArgument first;
   

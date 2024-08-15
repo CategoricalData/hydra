@@ -5,7 +5,19 @@ package hydra.langs.tinkerpop.queries;
 import java.io.Serializable;
 
 public abstract class Expression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.Expression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.Expression");
+  
+  public static final hydra.core.Name FIELD_NAME_ASSOCIATIVE = new hydra.core.Name("associative");
+  
+  public static final hydra.core.Name FIELD_NAME_BINARY = new hydra.core.Name("binary");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTY = new hydra.core.Name("property");
+  
+  public static final hydra.core.Name FIELD_NAME_UNARY = new hydra.core.Name("unary");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
+  
+  public static final hydra.core.Name FIELD_NAME_VERTEX = new hydra.core.Name("vertex");
   
   private Expression () {
   

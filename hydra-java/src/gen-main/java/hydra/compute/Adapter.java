@@ -6,7 +6,15 @@ package hydra.compute;
  * A two-level bidirectional encoder which adapts types to types and terms to terms
  */
 public class Adapter<S1, S2, T1, T2, V1, V2> {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.Adapter");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/compute.Adapter");
+  
+  public static final hydra.core.Name FIELD_NAME_IS_LOSSY = new hydra.core.Name("isLossy");
+  
+  public static final hydra.core.Name FIELD_NAME_SOURCE = new hydra.core.Name("source");
+  
+  public static final hydra.core.Name FIELD_NAME_TARGET = new hydra.core.Name("target");
+  
+  public static final hydra.core.Name FIELD_NAME_CODER = new hydra.core.Name("coder");
   
   public final Boolean isLossy;
   

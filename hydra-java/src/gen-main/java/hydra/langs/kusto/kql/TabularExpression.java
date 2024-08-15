@@ -5,7 +5,15 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public abstract class TabularExpression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.TabularExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.TabularExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_COMMAND = new hydra.core.Name("command");
+  
+  public static final hydra.core.Name FIELD_NAME_PIPELINE = new hydra.core.Name("pipeline");
+  
+  public static final hydra.core.Name FIELD_NAME_LET = new hydra.core.Name("let");
+  
+  public static final hydra.core.Name FIELD_NAME_TABLE = new hydra.core.Name("table");
   
   private TabularExpression () {
   

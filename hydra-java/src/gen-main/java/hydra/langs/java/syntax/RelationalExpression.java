@@ -5,7 +5,19 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class RelationalExpression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.RelationalExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.RelationalExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_SIMPLE = new hydra.core.Name("simple");
+  
+  public static final hydra.core.Name FIELD_NAME_LESS_THAN = new hydra.core.Name("lessThan");
+  
+  public static final hydra.core.Name FIELD_NAME_GREATER_THAN = new hydra.core.Name("greaterThan");
+  
+  public static final hydra.core.Name FIELD_NAME_LESS_THAN_EQUAL = new hydra.core.Name("lessThanEqual");
+  
+  public static final hydra.core.Name FIELD_NAME_GREATER_THAN_EQUAL = new hydra.core.Name("greaterThanEqual");
+  
+  public static final hydra.core.Name FIELD_NAME_INSTANCEOF = new hydra.core.Name("instanceof");
   
   private RelationalExpression () {
   

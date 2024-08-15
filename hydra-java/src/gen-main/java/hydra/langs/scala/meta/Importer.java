@@ -5,7 +5,11 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public class Importer implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Importer");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Importer");
+  
+  public static final hydra.core.Name FIELD_NAME_REF = new hydra.core.Name("ref");
+  
+  public static final hydra.core.Name FIELD_NAME_IMPORTEES = new hydra.core.Name("importees");
   
   public final hydra.langs.scala.meta.Data_Ref ref;
   

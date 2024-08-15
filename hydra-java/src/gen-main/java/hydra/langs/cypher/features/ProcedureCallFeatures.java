@@ -8,7 +8,13 @@ import java.io.Serializable;
  * A set of features for procedure calls.
  */
 public class ProcedureCallFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.ProcedureCallFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.ProcedureCallFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_IN_QUERY_CALL = new hydra.core.Name("inQueryCall");
+  
+  public static final hydra.core.Name FIELD_NAME_STANDALONE_CALL = new hydra.core.Name("standaloneCall");
+  
+  public static final hydra.core.Name FIELD_NAME_YIELD = new hydra.core.Name("yield");
   
   /**
    * Whether to expect CALL within a query.

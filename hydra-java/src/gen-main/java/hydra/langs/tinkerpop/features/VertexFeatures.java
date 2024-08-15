@@ -8,7 +8,23 @@ import java.io.Serializable;
  * Features that are related to Vertex operations.
  */
 public class VertexFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/features.VertexFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/features.VertexFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_ELEMENT_FEATURES = new hydra.core.Name("elementFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTIES = new hydra.core.Name("properties");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_ADD_VERTICES = new hydra.core.Name("supportsAddVertices");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_DUPLICATE_MULTI_PROPERTIES = new hydra.core.Name("supportsDuplicateMultiProperties");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_META_PROPERTIES = new hydra.core.Name("supportsMetaProperties");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_MULTI_PROPERTIES = new hydra.core.Name("supportsMultiProperties");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_REMOVE_VERTICES = new hydra.core.Name("supportsRemoveVertices");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_UPSERT = new hydra.core.Name("supportsUpsert");
   
   public final hydra.langs.tinkerpop.features.ElementFeatures elementFeatures;
   

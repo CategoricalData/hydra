@@ -5,7 +5,19 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public abstract class ComparisonOperator implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.ComparisonOperator");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.ComparisonOperator");
+  
+  public static final hydra.core.Name FIELD_NAME_EQ = new hydra.core.Name("eq");
+  
+  public static final hydra.core.Name FIELD_NAME_NEQ = new hydra.core.Name("neq");
+  
+  public static final hydra.core.Name FIELD_NAME_LT = new hydra.core.Name("lt");
+  
+  public static final hydra.core.Name FIELD_NAME_GT = new hydra.core.Name("gt");
+  
+  public static final hydra.core.Name FIELD_NAME_LTE = new hydra.core.Name("lte");
+  
+  public static final hydra.core.Name FIELD_NAME_GTE = new hydra.core.Name("gte");
   
   private ComparisonOperator () {
   

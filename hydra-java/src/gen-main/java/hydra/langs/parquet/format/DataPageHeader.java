@@ -8,7 +8,17 @@ import java.io.Serializable;
  * Data page header
  */
 public class DataPageHeader implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.DataPageHeader");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.DataPageHeader");
+  
+  public static final hydra.core.Name FIELD_NAME_NUM_VALUES = new hydra.core.Name("numValues");
+  
+  public static final hydra.core.Name FIELD_NAME_ENCODING = new hydra.core.Name("encoding");
+  
+  public static final hydra.core.Name FIELD_NAME_DEFINITION_LEVEL_ENCODING = new hydra.core.Name("definitionLevelEncoding");
+  
+  public static final hydra.core.Name FIELD_NAME_REPETITION_LEVEL_ENCODING = new hydra.core.Name("repetitionLevelEncoding");
+  
+  public static final hydra.core.Name FIELD_NAME_STATISTICS = new hydra.core.Name("statistics");
   
   /**
    * Number of values, including NULLs, in this data page.

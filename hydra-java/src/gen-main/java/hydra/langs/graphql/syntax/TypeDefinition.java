@@ -5,7 +5,19 @@ package hydra.langs.graphql.syntax;
 import java.io.Serializable;
 
 public abstract class TypeDefinition implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.TypeDefinition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/graphql/syntax.TypeDefinition");
+  
+  public static final hydra.core.Name FIELD_NAME_SCALAR = new hydra.core.Name("scalar");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT = new hydra.core.Name("object");
+  
+  public static final hydra.core.Name FIELD_NAME_INTERFACE = new hydra.core.Name("interface");
+  
+  public static final hydra.core.Name FIELD_NAME_UNION = new hydra.core.Name("union");
+  
+  public static final hydra.core.Name FIELD_NAME_ENUM = new hydra.core.Name("enum");
+  
+  public static final hydra.core.Name FIELD_NAME_INPUT_OBJECT = new hydra.core.Name("inputObject");
   
   private TypeDefinition () {
   

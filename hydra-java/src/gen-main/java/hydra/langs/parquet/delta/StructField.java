@@ -5,7 +5,13 @@ package hydra.langs.parquet.delta;
 import java.io.Serializable;
 
 public class StructField implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/delta.StructField");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/delta.StructField");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_TYPE = new hydra.core.Name("dataType");
+  
+  public static final hydra.core.Name FIELD_NAME_NULLABLE = new hydra.core.Name("nullable");
   
   public final String name;
   

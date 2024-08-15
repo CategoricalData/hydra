@@ -5,7 +5,11 @@ package hydra.langs.owl.syntax;
 import java.io.Serializable;
 
 public abstract class DatatypeRestriction_ConstrainingFacet implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.DatatypeRestriction.ConstrainingFacet");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.DatatypeRestriction.ConstrainingFacet");
+  
+  public static final hydra.core.Name FIELD_NAME_XML_SCHEMA = new hydra.core.Name("xmlSchema");
+  
+  public static final hydra.core.Name FIELD_NAME_OTHER = new hydra.core.Name("other");
   
   private DatatypeRestriction_ConstrainingFacet () {
   
@@ -37,9 +41,6 @@ public abstract class DatatypeRestriction_ConstrainingFacet implements Serializa
    * Note: XML Schema constraining facets are treated as a special case in this model (not in the OWL 2 specification itself) because they are particularly common
    */
   public static final class XmlSchema extends hydra.langs.owl.syntax.DatatypeRestriction_ConstrainingFacet implements Serializable {
-    /**
-     * Note: XML Schema constraining facets are treated as a special case in this model (not in the OWL 2 specification itself) because they are particularly common
-     */
     public final hydra.langs.xml.schema.ConstrainingFacet value;
     
     public XmlSchema (hydra.langs.xml.schema.ConstrainingFacet value) {

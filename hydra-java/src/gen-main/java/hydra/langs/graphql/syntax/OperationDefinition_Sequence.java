@@ -5,7 +5,17 @@ package hydra.langs.graphql.syntax;
 import java.io.Serializable;
 
 public class OperationDefinition_Sequence implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.OperationDefinition.Sequence");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/graphql/syntax.OperationDefinition.Sequence");
+  
+  public static final hydra.core.Name FIELD_NAME_OPERATION_TYPE = new hydra.core.Name("operationType");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLES_DEFINITION = new hydra.core.Name("variablesDefinition");
+  
+  public static final hydra.core.Name FIELD_NAME_DIRECTIVES = new hydra.core.Name("directives");
+  
+  public static final hydra.core.Name FIELD_NAME_SELECTION_SET = new hydra.core.Name("selectionSet");
   
   public final hydra.langs.graphql.syntax.OperationType operationType;
   

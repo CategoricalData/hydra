@@ -8,7 +8,19 @@ import java.io.Serializable;
  * See https://www.w3.org/TR/owl2-syntax/#Data_Ranges
  */
 public abstract class DataRange implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.DataRange");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.DataRange");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_COMPLEMENT_OF = new hydra.core.Name("dataComplementOf");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_INTERSECTION_OF = new hydra.core.Name("dataIntersectionOf");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_ONE_OF = new hydra.core.Name("dataOneOf");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_UNION_OF = new hydra.core.Name("dataUnionOf");
+  
+  public static final hydra.core.Name FIELD_NAME_DATATYPE = new hydra.core.Name("datatype");
+  
+  public static final hydra.core.Name FIELD_NAME_DATATYPE_RESTRICTION = new hydra.core.Name("datatypeRestriction");
   
   private DataRange () {
   

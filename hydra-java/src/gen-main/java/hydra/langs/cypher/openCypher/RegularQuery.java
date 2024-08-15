@@ -5,7 +5,11 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public class RegularQuery implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.RegularQuery");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.RegularQuery");
+  
+  public static final hydra.core.Name FIELD_NAME_HEAD = new hydra.core.Name("head");
+  
+  public static final hydra.core.Name FIELD_NAME_REST = new hydra.core.Name("rest");
   
   public final hydra.langs.cypher.openCypher.SingleQuery head;
   

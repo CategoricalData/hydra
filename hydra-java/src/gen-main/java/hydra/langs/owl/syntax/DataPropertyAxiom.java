@@ -5,7 +5,19 @@ package hydra.langs.owl.syntax;
 import java.io.Serializable;
 
 public abstract class DataPropertyAxiom implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.DataPropertyAxiom");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.DataPropertyAxiom");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_PROPERTY_AXIOM = new hydra.core.Name("dataPropertyAxiom");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_PROPERTY_RANGE = new hydra.core.Name("dataPropertyRange");
+  
+  public static final hydra.core.Name FIELD_NAME_DISJOINT_DATA_PROPERTIES = new hydra.core.Name("disjointDataProperties");
+  
+  public static final hydra.core.Name FIELD_NAME_EQUIVALENT_DATA_PROPERTIES = new hydra.core.Name("equivalentDataProperties");
+  
+  public static final hydra.core.Name FIELD_NAME_FUNCTIONAL_DATA_PROPERTY = new hydra.core.Name("functionalDataProperty");
+  
+  public static final hydra.core.Name FIELD_NAME_SUB_DATA_PROPERTY_OF = new hydra.core.Name("subDataPropertyOf");
   
   private DataPropertyAxiom () {
   

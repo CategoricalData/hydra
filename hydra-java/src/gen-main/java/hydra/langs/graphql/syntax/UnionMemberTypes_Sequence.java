@@ -5,7 +5,11 @@ package hydra.langs.graphql.syntax;
 import java.io.Serializable;
 
 public class UnionMemberTypes_Sequence implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.UnionMemberTypes.Sequence");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/graphql/syntax.UnionMemberTypes.Sequence");
+  
+  public static final hydra.core.Name FIELD_NAME_UNION_MEMBER_TYPES = new hydra.core.Name("unionMemberTypes");
+  
+  public static final hydra.core.Name FIELD_NAME_NAMED_TYPE = new hydra.core.Name("namedType");
   
   public final hydra.langs.graphql.syntax.UnionMemberTypes unionMemberTypes;
   

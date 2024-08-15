@@ -8,7 +8,23 @@ import java.io.Serializable;
  * New page format allowing reading levels without decompressing the data Repetition and definition levels are uncompressed The remaining section containing the data is compressed if is_compressed is true
  */
 public class DataPageHeaderV2 implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.DataPageHeaderV2");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.DataPageHeaderV2");
+  
+  public static final hydra.core.Name FIELD_NAME_NUM_VALUES = new hydra.core.Name("numValues");
+  
+  public static final hydra.core.Name FIELD_NAME_NUM_NULLS = new hydra.core.Name("numNulls");
+  
+  public static final hydra.core.Name FIELD_NAME_NUM_ROWS = new hydra.core.Name("numRows");
+  
+  public static final hydra.core.Name FIELD_NAME_ENCODING = new hydra.core.Name("encoding");
+  
+  public static final hydra.core.Name FIELD_NAME_DEFINITION_LEVELS_BYTE_LENGTH = new hydra.core.Name("definitionLevelsByteLength");
+  
+  public static final hydra.core.Name FIELD_NAME_REPETITION_LEVELS_BYTE_LENGTH = new hydra.core.Name("repetitionLevelsByteLength");
+  
+  public static final hydra.core.Name FIELD_NAME_IS_COMPRESSED = new hydra.core.Name("isCompressed");
+  
+  public static final hydra.core.Name FIELD_NAME_STATISTICS = new hydra.core.Name("statistics");
   
   /**
    * Number of values, including NULLs, in this data page.

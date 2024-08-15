@@ -8,7 +8,15 @@ import java.io.Serializable;
  * See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent
  */
 public class QualifiedValueShape implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shacl/model.QualifiedValueShape");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shacl/model.QualifiedValueShape");
+  
+  public static final hydra.core.Name FIELD_NAME_QUALIFIED_VALUE_SHAPE = new hydra.core.Name("qualifiedValueShape");
+  
+  public static final hydra.core.Name FIELD_NAME_QUALIFIED_MAX_COUNT = new hydra.core.Name("qualifiedMaxCount");
+  
+  public static final hydra.core.Name FIELD_NAME_QUALIFIED_MIN_COUNT = new hydra.core.Name("qualifiedMinCount");
+  
+  public static final hydra.core.Name FIELD_NAME_QUALIFIED_VALUE_SHAPES_DISJOINT = new hydra.core.Name("qualifiedValueShapesDisjoint");
   
   public final hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape> qualifiedValueShape;
   

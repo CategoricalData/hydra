@@ -5,7 +5,13 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public class Decl_Var implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Decl.Var");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Decl.Var");
+  
+  public static final hydra.core.Name FIELD_NAME_MODS = new hydra.core.Name("mods");
+  
+  public static final hydra.core.Name FIELD_NAME_PATS = new hydra.core.Name("pats");
+  
+  public static final hydra.core.Name FIELD_NAME_DECLTPE = new hydra.core.Name("decltpe");
   
   public final java.util.List<hydra.langs.scala.meta.Mod> mods;
   

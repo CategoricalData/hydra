@@ -5,7 +5,11 @@ package hydra.langs.haskell.ast;
 import java.io.Serializable;
 
 public class Type_Function implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Type.Function");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.Type.Function");
+  
+  public static final hydra.core.Name FIELD_NAME_DOMAIN = new hydra.core.Name("domain");
+  
+  public static final hydra.core.Name FIELD_NAME_CODOMAIN = new hydra.core.Name("codomain");
   
   public final hydra.langs.haskell.ast.Type domain;
   

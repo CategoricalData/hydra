@@ -5,7 +5,13 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class Annotation implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.Annotation");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.Annotation");
+  
+  public static final hydra.core.Name FIELD_NAME_NORMAL = new hydra.core.Name("normal");
+  
+  public static final hydra.core.Name FIELD_NAME_MARKER = new hydra.core.Name("marker");
+  
+  public static final hydra.core.Name FIELD_NAME_SINGLE_ELEMENT = new hydra.core.Name("singleElement");
   
   private Annotation () {
   

@@ -5,7 +5,11 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class TypeArgumentsOrDiamond implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.TypeArgumentsOrDiamond");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.TypeArgumentsOrDiamond");
+  
+  public static final hydra.core.Name FIELD_NAME_ARGUMENTS = new hydra.core.Name("arguments");
+  
+  public static final hydra.core.Name FIELD_NAME_DIAMOND = new hydra.core.Name("diamond");
   
   private TypeArgumentsOrDiamond () {
   

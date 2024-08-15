@@ -8,7 +8,11 @@ import java.io.Serializable;
  * See https://www.w3.org/TR/shacl/#ClosedPatterConstraintComponent
  */
 public class Closed implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shacl/model.Closed");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shacl/model.Closed");
+  
+  public static final hydra.core.Name FIELD_NAME_IS_CLOSED = new hydra.core.Name("isClosed");
+  
+  public static final hydra.core.Name FIELD_NAME_IGNORED_PROPERTIES = new hydra.core.Name("ignoredProperties");
   
   public final Boolean isClosed;
   

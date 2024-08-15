@@ -5,7 +5,19 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public class NormalClassDeclaration implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.NormalClassDeclaration");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.NormalClassDeclaration");
+  
+  public static final hydra.core.Name FIELD_NAME_MODIFIERS = new hydra.core.Name("modifiers");
+  
+  public static final hydra.core.Name FIELD_NAME_IDENTIFIER = new hydra.core.Name("identifier");
+  
+  public static final hydra.core.Name FIELD_NAME_PARAMETERS = new hydra.core.Name("parameters");
+  
+  public static final hydra.core.Name FIELD_NAME_EXTENDS = new hydra.core.Name("extends");
+  
+  public static final hydra.core.Name FIELD_NAME_IMPLEMENTS = new hydra.core.Name("implements");
+  
+  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
   
   public final java.util.List<hydra.langs.java.syntax.ClassModifier> modifiers;
   

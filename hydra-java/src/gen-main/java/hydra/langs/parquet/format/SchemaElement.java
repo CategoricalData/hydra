@@ -11,7 +11,21 @@ import java.io.Serializable;
  * the nodes are listed in depth first traversal order.
  */
 public class SchemaElement implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.SchemaElement");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.SchemaElement");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE_LENGTH = new hydra.core.Name("typeLength");
+  
+  public static final hydra.core.Name FIELD_NAME_REPETITION_TYPE = new hydra.core.Name("repetitionType");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_NUM_CHILDREN = new hydra.core.Name("numChildren");
+  
+  public static final hydra.core.Name FIELD_NAME_FIELD_ID = new hydra.core.Name("fieldId");
+  
+  public static final hydra.core.Name FIELD_NAME_LOGICAL_TYPE = new hydra.core.Name("logicalType");
   
   /**
    * Data type for this field. Not set if the current element is a non-leaf node

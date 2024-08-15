@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public class HasTraversalTokenArgs implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.HasTraversalTokenArgs");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.HasTraversalTokenArgs");
+  
+  public static final hydra.core.Name FIELD_NAME_TRAVERSAL_TOKEN = new hydra.core.Name("traversalToken");
+  
+  public static final hydra.core.Name FIELD_NAME_REST = new hydra.core.Name("rest");
   
   public final hydra.langs.tinkerpop.gremlin.TraversalTokenArgument traversalToken;
   

@@ -8,7 +8,15 @@ import java.io.Serializable;
  * An import statement
  */
 public class Import implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Import");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.Import");
+  
+  public static final hydra.core.Name FIELD_NAME_QUALIFIED = new hydra.core.Name("qualified");
+  
+  public static final hydra.core.Name FIELD_NAME_MODULE = new hydra.core.Name("module");
+  
+  public static final hydra.core.Name FIELD_NAME_AS = new hydra.core.Name("as");
+  
+  public static final hydra.core.Name FIELD_NAME_SPEC = new hydra.core.Name("spec");
   
   public final Boolean qualified;
   

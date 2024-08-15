@@ -5,7 +5,11 @@ package hydra.langs.parquet.format;
 import java.io.Serializable;
 
 public abstract class EncryptionAlgorithm implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.EncryptionAlgorithm");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.EncryptionAlgorithm");
+  
+  public static final hydra.core.Name FIELD_NAME_AES_GCM_V1 = new hydra.core.Name("aesGcmV1");
+  
+  public static final hydra.core.Name FIELD_NAME_AES_GCM_CTR_V1 = new hydra.core.Name("aesGcmCtrV1");
   
   private EncryptionAlgorithm () {
   

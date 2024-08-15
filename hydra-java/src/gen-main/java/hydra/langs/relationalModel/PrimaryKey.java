@@ -8,11 +8,10 @@ import java.io.Serializable;
  * A primary key of a relation, specified either as a single column, or as a list of columns
  */
 public class PrimaryKey implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/relationalModel.PrimaryKey");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/relationalModel.PrimaryKey");
   
-  /**
-   * A primary key of a relation, specified either as a single column, or as a list of columns
-   */
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  
   public final java.util.List<hydra.langs.relationalModel.ColumnName> value;
   
   public PrimaryKey (java.util.List<hydra.langs.relationalModel.ColumnName> value) {

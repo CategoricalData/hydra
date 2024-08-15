@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public abstract class InnerTripleExpr implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.InnerTripleExpr");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.InnerTripleExpr");
+  
+  public static final hydra.core.Name FIELD_NAME_MULTI_ELEMENT_GROUP = new hydra.core.Name("multiElementGroup");
+  
+  public static final hydra.core.Name FIELD_NAME_MULTI_ELEMENT_ONE_OF = new hydra.core.Name("multiElementOneOf");
   
   private InnerTripleExpr () {
   

@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public class StringLiteralLong1_Elmt_Sequence implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.StringLiteralLong1.Elmt.Sequence");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.StringLiteralLong1.Elmt.Sequence");
+  
+  public static final hydra.core.Name FIELD_NAME_ALTS = new hydra.core.Name("alts");
+  
+  public static final hydra.core.Name FIELD_NAME_REGEX = new hydra.core.Name("regex");
   
   public final hydra.util.Opt<hydra.langs.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option> alts;
   

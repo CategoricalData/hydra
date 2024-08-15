@@ -5,7 +5,13 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public abstract class PnLocal_Sequence_Option_Alts implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.PnLocal.Sequence.Option.Alts");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.PnLocal.Sequence.Option.Alts");
+  
+  public static final hydra.core.Name FIELD_NAME_PN_CHARS = new hydra.core.Name("pnChars");
+  
+  public static final hydra.core.Name FIELD_NAME_COLON = new hydra.core.Name("colon");
+  
+  public static final hydra.core.Name FIELD_NAME_PLX = new hydra.core.Name("plx");
   
   private PnLocal_Sequence_Option_Alts () {
   

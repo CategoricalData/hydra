@@ -8,7 +8,15 @@ import java.io.Serializable;
  * A .proto file, usually containing one or more enum or message type definitions
  */
 public class ProtoFile implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/protobuf/proto3.ProtoFile");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/protobuf/proto3.ProtoFile");
+  
+  public static final hydra.core.Name FIELD_NAME_PACKAGE = new hydra.core.Name("package");
+  
+  public static final hydra.core.Name FIELD_NAME_IMPORTS = new hydra.core.Name("imports");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPES = new hydra.core.Name("types");
+  
+  public static final hydra.core.Name FIELD_NAME_OPTIONS = new hydra.core.Name("options");
   
   public final hydra.langs.protobuf.proto3.PackageName package_;
   

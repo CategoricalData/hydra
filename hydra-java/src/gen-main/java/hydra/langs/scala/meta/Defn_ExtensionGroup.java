@@ -5,7 +5,13 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public class Defn_ExtensionGroup implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Defn.ExtensionGroup");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Defn.ExtensionGroup");
+  
+  public static final hydra.core.Name FIELD_NAME_TPARAMS = new hydra.core.Name("tparams");
+  
+  public static final hydra.core.Name FIELD_NAME_PARMSS = new hydra.core.Name("parmss");
+  
+  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
   
   public final java.util.List<hydra.langs.scala.meta.Type_Param> tparams;
   

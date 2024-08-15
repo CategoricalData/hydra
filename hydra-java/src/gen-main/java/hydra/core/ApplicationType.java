@@ -8,7 +8,11 @@ import java.io.Serializable;
  * The type-level analog of an application term
  */
 public class ApplicationType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.ApplicationType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.ApplicationType");
+  
+  public static final hydra.core.Name FIELD_NAME_FUNCTION = new hydra.core.Name("function");
+  
+  public static final hydra.core.Name FIELD_NAME_ARGUMENT = new hydra.core.Name("argument");
   
   /**
    * The left-hand side of the application

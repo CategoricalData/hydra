@@ -5,7 +5,13 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class ClassTypeQualifier implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.ClassTypeQualifier");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.ClassTypeQualifier");
+  
+  public static final hydra.core.Name FIELD_NAME_NONE = new hydra.core.Name("none");
+  
+  public static final hydra.core.Name FIELD_NAME_PACKAGE = new hydra.core.Name("package");
+  
+  public static final hydra.core.Name FIELD_NAME_PARENT = new hydra.core.Name("parent");
   
   private ClassTypeQualifier () {
   

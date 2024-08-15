@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A set of features for IS NULL / IS NOT NULL checks.
  */
 public class NullFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.NullFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.NullFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_IS_NULL = new hydra.core.Name("isNull");
+  
+  public static final hydra.core.Name FIELD_NAME_IS_NOT_NULL = new hydra.core.Name("isNotNull");
   
   /**
    * Whether to expect the IS NULL operator.

@@ -5,7 +5,13 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public abstract class TruthValue implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.TruthValue");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.TruthValue");
+  
+  public static final hydra.core.Name FIELD_NAME_T_R_U_E = new hydra.core.Name("tRUE");
+  
+  public static final hydra.core.Name FIELD_NAME_F_A_L_S_E = new hydra.core.Name("fALSE");
+  
+  public static final hydra.core.Name FIELD_NAME_U_N_K_N_O_W_N = new hydra.core.Name("uNKNOWN");
   
   private TruthValue () {
   

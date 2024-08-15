@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public class WhereWithPredicateArgs implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.WhereWithPredicateArgs");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.WhereWithPredicateArgs");
+  
+  public static final hydra.core.Name FIELD_NAME_LEFT_ARG = new hydra.core.Name("leftArg");
+  
+  public static final hydra.core.Name FIELD_NAME_PREDICATE = new hydra.core.Name("predicate");
   
   public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.StringArgument> leftArg;
   

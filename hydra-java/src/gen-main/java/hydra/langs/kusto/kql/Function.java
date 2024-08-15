@@ -5,7 +5,11 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public abstract class Function implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.Function");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.Function");
+  
+  public static final hydra.core.Name FIELD_NAME_BUILT_IN = new hydra.core.Name("builtIn");
+  
+  public static final hydra.core.Name FIELD_NAME_CUSTOM = new hydra.core.Name("custom");
   
   private Function () {
   

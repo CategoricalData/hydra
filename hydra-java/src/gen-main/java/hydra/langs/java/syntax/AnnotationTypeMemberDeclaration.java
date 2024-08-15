@@ -5,7 +5,15 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class AnnotationTypeMemberDeclaration implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.AnnotationTypeMemberDeclaration");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.AnnotationTypeMemberDeclaration");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATION_TYPE = new hydra.core.Name("annotationType");
+  
+  public static final hydra.core.Name FIELD_NAME_CONSTANT = new hydra.core.Name("constant");
+  
+  public static final hydra.core.Name FIELD_NAME_CLASS = new hydra.core.Name("class");
+  
+  public static final hydra.core.Name FIELD_NAME_INTERFACE = new hydra.core.Name("interface");
   
   private AnnotationTypeMemberDeclaration () {
   

@@ -8,7 +8,11 @@ import java.io.Serializable;
  * An update record expression
  */
 public class Expression_UpdateRecord implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Expression.UpdateRecord");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.Expression.UpdateRecord");
+  
+  public static final hydra.core.Name FIELD_NAME_INNER = new hydra.core.Name("inner");
+  
+  public static final hydra.core.Name FIELD_NAME_FIELDS = new hydra.core.Name("fields");
   
   public final hydra.langs.haskell.ast.Expression inner;
   

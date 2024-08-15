@@ -5,7 +5,11 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public abstract class GlobalOrLocal implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.GlobalOrLocal");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.GlobalOrLocal");
+  
+  public static final hydra.core.Name FIELD_NAME_GLOBAL = new hydra.core.Name("global");
+  
+  public static final hydra.core.Name FIELD_NAME_LOCAL = new hydra.core.Name("local");
   
   private GlobalOrLocal () {
   

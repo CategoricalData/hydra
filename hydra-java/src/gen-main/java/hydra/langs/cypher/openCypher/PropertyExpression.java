@@ -5,7 +5,11 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public class PropertyExpression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.PropertyExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.PropertyExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_ATOM = new hydra.core.Name("atom");
+  
+  public static final hydra.core.Name FIELD_NAME_LOOKUPS = new hydra.core.Name("lookups");
   
   public final hydra.langs.cypher.openCypher.Atom atom;
   

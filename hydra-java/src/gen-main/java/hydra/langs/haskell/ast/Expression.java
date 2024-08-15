@@ -8,7 +8,43 @@ import java.io.Serializable;
  * A data expression
  */
 public abstract class Expression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Expression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.Expression");
+  
+  public static final hydra.core.Name FIELD_NAME_APPLICATION = new hydra.core.Name("application");
+  
+  public static final hydra.core.Name FIELD_NAME_CASE = new hydra.core.Name("case");
+  
+  public static final hydra.core.Name FIELD_NAME_CONSTRUCT_RECORD = new hydra.core.Name("constructRecord");
+  
+  public static final hydra.core.Name FIELD_NAME_DO = new hydra.core.Name("do");
+  
+  public static final hydra.core.Name FIELD_NAME_IF = new hydra.core.Name("if");
+  
+  public static final hydra.core.Name FIELD_NAME_INFIX_APPLICATION = new hydra.core.Name("infixApplication");
+  
+  public static final hydra.core.Name FIELD_NAME_LITERAL = new hydra.core.Name("literal");
+  
+  public static final hydra.core.Name FIELD_NAME_LAMBDA = new hydra.core.Name("lambda");
+  
+  public static final hydra.core.Name FIELD_NAME_LEFT_SECTION = new hydra.core.Name("leftSection");
+  
+  public static final hydra.core.Name FIELD_NAME_LET = new hydra.core.Name("let");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
+  
+  public static final hydra.core.Name FIELD_NAME_PARENS = new hydra.core.Name("parens");
+  
+  public static final hydra.core.Name FIELD_NAME_PREFIX_APPLICATION = new hydra.core.Name("prefixApplication");
+  
+  public static final hydra.core.Name FIELD_NAME_RIGHT_SECTION = new hydra.core.Name("rightSection");
+  
+  public static final hydra.core.Name FIELD_NAME_TUPLE = new hydra.core.Name("tuple");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE_SIGNATURE = new hydra.core.Name("typeSignature");
+  
+  public static final hydra.core.Name FIELD_NAME_UPDATE_RECORD = new hydra.core.Name("updateRecord");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
   
   private Expression () {
   

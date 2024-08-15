@@ -5,7 +5,21 @@ package hydra.langs.parquet.format;
 import java.io.Serializable;
 
 public class RowGroup implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.RowGroup");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.RowGroup");
+  
+  public static final hydra.core.Name FIELD_NAME_COLUMNS = new hydra.core.Name("columns");
+  
+  public static final hydra.core.Name FIELD_NAME_TOTAL_BYTE_SIZE = new hydra.core.Name("totalByteSize");
+  
+  public static final hydra.core.Name FIELD_NAME_NUM_ROWS = new hydra.core.Name("numRows");
+  
+  public static final hydra.core.Name FIELD_NAME_SORTING_COLUMNS = new hydra.core.Name("sortingColumns");
+  
+  public static final hydra.core.Name FIELD_NAME_FILE_OFFSET = new hydra.core.Name("fileOffset");
+  
+  public static final hydra.core.Name FIELD_NAME_TOTAL_COMPRESSED_SIZE = new hydra.core.Name("totalCompressedSize");
+  
+  public static final hydra.core.Name FIELD_NAME_ORDINAL = new hydra.core.Name("ordinal");
   
   /**
    * Metadata for each column chunk in this row group. This list must have the same order as the SchemaElement list in FileMetaData.

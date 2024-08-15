@@ -10,7 +10,13 @@ import java.io.Serializable;
  * As an additional notice to Graph Providers, feature methods will be used by the test suite to determine which tests will be ignored and which will be executed, therefore proper setting of these features is essential to maximizing the amount of testing performed by the suite. Further note, that these methods may be called by the TinkerPop core code to determine what operations may be appropriately executed which will have impact on features utilized by users.
  */
 public class Features implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/features.Features");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/features.Features");
+  
+  public static final hydra.core.Name FIELD_NAME_EDGE = new hydra.core.Name("edge");
+  
+  public static final hydra.core.Name FIELD_NAME_GRAPH = new hydra.core.Name("graph");
+  
+  public static final hydra.core.Name FIELD_NAME_VERTEX = new hydra.core.Name("vertex");
   
   /**
    * Gets the features related to edge operation.
