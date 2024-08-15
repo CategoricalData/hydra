@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public class MultiElementOneOf implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.MultiElementOneOf");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.MultiElementOneOf");
+  
+  public static final hydra.core.Name FIELD_NAME_GROUP_TRIPLE_EXPR = new hydra.core.Name("groupTripleExpr");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST_OF_SEQUENCE = new hydra.core.Name("listOfSequence");
   
   public final hydra.langs.shex.syntax.GroupTripleExpr groupTripleExpr;
   

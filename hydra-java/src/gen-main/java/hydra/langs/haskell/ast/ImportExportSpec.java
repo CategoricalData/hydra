@@ -8,7 +8,13 @@ import java.io.Serializable;
  * An import or export specification
  */
 public class ImportExportSpec implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.ImportExportSpec");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.ImportExportSpec");
+  
+  public static final hydra.core.Name FIELD_NAME_MODIFIER = new hydra.core.Name("modifier");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_SUBSPEC = new hydra.core.Name("subspec");
   
   public final hydra.util.Opt<hydra.langs.haskell.ast.ImportModifier> modifier;
   

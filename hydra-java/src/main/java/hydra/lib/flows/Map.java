@@ -40,10 +40,10 @@ public class Map extends PrimitiveFunction {
             Term input = args.get(1);
             Term output = lambda("s", "t",
                     app(lambda("q", flowState(
-                                    app(Optionals.map(), mapping, app(project(FlowState.NAME, "value"), variable("q"))),
-                                    app(project(FlowState.NAME, "state"), variable("q")),
-                                    app(project(FlowState.NAME, "trace"), variable("q")))),
-                            (app(unwrap(Flow.NAME), input, variable("s"), variable("t")))));
+                                    app(Optionals.map(), mapping, app(project(FlowState.TYPE_NAME, "value"), variable("q"))),
+                                    app(project(FlowState.TYPE_NAME, "state"), variable("q")),
+                                    app(project(FlowState.TYPE_NAME, "trace"), variable("q")))),
+                            (app(unwrap(Flow.TYPE_NAME), input, variable("s"), variable("t")))));
             return Flows.pure(output);
         };
     }

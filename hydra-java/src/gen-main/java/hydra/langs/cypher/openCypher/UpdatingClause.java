@@ -5,7 +5,17 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public abstract class UpdatingClause implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.UpdatingClause");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.UpdatingClause");
+  
+  public static final hydra.core.Name FIELD_NAME_CREATE = new hydra.core.Name("create");
+  
+  public static final hydra.core.Name FIELD_NAME_MERGE = new hydra.core.Name("merge");
+  
+  public static final hydra.core.Name FIELD_NAME_DELETE = new hydra.core.Name("delete");
+  
+  public static final hydra.core.Name FIELD_NAME_SET = new hydra.core.Name("set");
+  
+  public static final hydra.core.Name FIELD_NAME_REMOVE = new hydra.core.Name("remove");
   
   private UpdatingClause () {
   

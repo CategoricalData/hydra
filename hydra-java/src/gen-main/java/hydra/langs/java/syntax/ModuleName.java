@@ -5,7 +5,11 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public class ModuleName implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.ModuleName");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.ModuleName");
+  
+  public static final hydra.core.Name FIELD_NAME_IDENTIFIER = new hydra.core.Name("identifier");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   
   public final hydra.langs.java.syntax.Identifier identifier;
   

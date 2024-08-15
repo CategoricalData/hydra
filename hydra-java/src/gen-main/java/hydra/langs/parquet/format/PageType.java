@@ -5,7 +5,15 @@ package hydra.langs.parquet.format;
 import java.io.Serializable;
 
 public abstract class PageType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.PageType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.PageType");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_PAGE = new hydra.core.Name("dataPage");
+  
+  public static final hydra.core.Name FIELD_NAME_INDEX_PAGE = new hydra.core.Name("indexPage");
+  
+  public static final hydra.core.Name FIELD_NAME_DICTIONARY_PAGE = new hydra.core.Name("dictionaryPage");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_PAGE_V2 = new hydra.core.Name("dataPageV2");
   
   private PageType () {
   

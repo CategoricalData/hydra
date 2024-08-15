@@ -5,7 +5,21 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class InterfaceMethodModifier implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.InterfaceMethodModifier");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.InterfaceMethodModifier");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATION = new hydra.core.Name("annotation");
+  
+  public static final hydra.core.Name FIELD_NAME_PUBLIC = new hydra.core.Name("public");
+  
+  public static final hydra.core.Name FIELD_NAME_PRIVATE = new hydra.core.Name("private");
+  
+  public static final hydra.core.Name FIELD_NAME_ABSTRACT = new hydra.core.Name("abstract");
+  
+  public static final hydra.core.Name FIELD_NAME_DEFAULT = new hydra.core.Name("default");
+  
+  public static final hydra.core.Name FIELD_NAME_STATIC = new hydra.core.Name("static");
+  
+  public static final hydra.core.Name FIELD_NAME_STRICTFP = new hydra.core.Name("strictfp");
   
   private InterfaceMethodModifier () {
   

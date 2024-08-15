@@ -5,7 +5,19 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public abstract class Literal implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.Literal");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.Literal");
+  
+  public static final hydra.core.Name FIELD_NAME_BOOLEAN = new hydra.core.Name("boolean");
+  
+  public static final hydra.core.Name FIELD_NAME_NULL = new hydra.core.Name("null");
+  
+  public static final hydra.core.Name FIELD_NAME_NUMBER = new hydra.core.Name("number");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
+  
+  public static final hydra.core.Name FIELD_NAME_MAP = new hydra.core.Name("map");
   
   private Literal () {
   

@@ -5,7 +5,23 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class FieldModifier implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.FieldModifier");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.FieldModifier");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATION = new hydra.core.Name("annotation");
+  
+  public static final hydra.core.Name FIELD_NAME_PUBLIC = new hydra.core.Name("public");
+  
+  public static final hydra.core.Name FIELD_NAME_PROTECTED = new hydra.core.Name("protected");
+  
+  public static final hydra.core.Name FIELD_NAME_PRIVATE = new hydra.core.Name("private");
+  
+  public static final hydra.core.Name FIELD_NAME_STATIC = new hydra.core.Name("static");
+  
+  public static final hydra.core.Name FIELD_NAME_FINAL = new hydra.core.Name("final");
+  
+  public static final hydra.core.Name FIELD_NAME_TRANSIENT = new hydra.core.Name("transient");
+  
+  public static final hydra.core.Name FIELD_NAME_VOLATILE = new hydra.core.Name("volatile");
   
   private FieldModifier () {
   

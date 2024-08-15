@@ -8,7 +8,19 @@ import java.io.Serializable;
  * A corresponding elimination for an introduction term
  */
 public abstract class Elimination implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Elimination");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.Elimination");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
+  
+  public static final hydra.core.Name FIELD_NAME_OPTIONAL = new hydra.core.Name("optional");
+  
+  public static final hydra.core.Name FIELD_NAME_PRODUCT = new hydra.core.Name("product");
+  
+  public static final hydra.core.Name FIELD_NAME_RECORD = new hydra.core.Name("record");
+  
+  public static final hydra.core.Name FIELD_NAME_UNION = new hydra.core.Name("union");
+  
+  public static final hydra.core.Name FIELD_NAME_WRAP = new hydra.core.Name("wrap");
   
   private Elimination () {
   

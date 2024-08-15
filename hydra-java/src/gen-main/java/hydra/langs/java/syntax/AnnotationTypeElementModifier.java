@@ -5,7 +5,11 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class AnnotationTypeElementModifier implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.AnnotationTypeElementModifier");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.AnnotationTypeElementModifier");
+  
+  public static final hydra.core.Name FIELD_NAME_PUBLIC = new hydra.core.Name("public");
+  
+  public static final hydra.core.Name FIELD_NAME_ABSTRACT = new hydra.core.Name("abstract");
   
   private AnnotationTypeElementModifier () {
   

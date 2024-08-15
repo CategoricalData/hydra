@@ -5,7 +5,11 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public abstract class CaseTree implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.CaseTree");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.CaseTree");
+  
+  public static final hydra.core.Name FIELD_NAME_CASE = new hydra.core.Name("case");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE_CASE = new hydra.core.Name("typeCase");
   
   private CaseTree () {
   

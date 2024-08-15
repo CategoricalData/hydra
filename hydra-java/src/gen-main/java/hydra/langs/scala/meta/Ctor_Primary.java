@@ -5,7 +5,13 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public class Ctor_Primary implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Ctor.Primary");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Ctor.Primary");
+  
+  public static final hydra.core.Name FIELD_NAME_MODS = new hydra.core.Name("mods");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_PARAMSS = new hydra.core.Name("paramss");
   
   public final java.util.List<hydra.langs.scala.meta.Mod> mods;
   

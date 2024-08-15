@@ -8,7 +8,17 @@ import java.io.Serializable;
  * Features that are related to Edge operations.
  */
 public class EdgeFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/features.EdgeFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/features.EdgeFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_ELEMENT_FEATURES = new hydra.core.Name("elementFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTIES = new hydra.core.Name("properties");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_ADD_EDGES = new hydra.core.Name("supportsAddEdges");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_REMOVE_EDGES = new hydra.core.Name("supportsRemoveEdges");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_UPSERT = new hydra.core.Name("supportsUpsert");
   
   public final hydra.langs.tinkerpop.features.ElementFeatures elementFeatures;
   

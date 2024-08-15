@@ -5,7 +5,11 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public class RelationalExpression_GreaterThanEqual implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.RelationalExpression.GreaterThanEqual");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.RelationalExpression.GreaterThanEqual");
+  
+  public static final hydra.core.Name FIELD_NAME_LHS = new hydra.core.Name("lhs");
+  
+  public static final hydra.core.Name FIELD_NAME_RHS = new hydra.core.Name("rhs");
   
   public final hydra.langs.java.syntax.RelationalExpression lhs;
   

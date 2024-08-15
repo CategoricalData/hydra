@@ -5,7 +5,47 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class GenericLiteral implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.GenericLiteral");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.GenericLiteral");
+  
+  public static final hydra.core.Name FIELD_NAME_NUMERIC = new hydra.core.Name("numeric");
+  
+  public static final hydra.core.Name FIELD_NAME_BOOLEAN = new hydra.core.Name("boolean");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
+  
+  public static final hydra.core.Name FIELD_NAME_DATE = new hydra.core.Name("date");
+  
+  public static final hydra.core.Name FIELD_NAME_NULL = new hydra.core.Name("null");
+  
+  public static final hydra.core.Name FIELD_NAME_NAN = new hydra.core.Name("nan");
+  
+  public static final hydra.core.Name FIELD_NAME_INF = new hydra.core.Name("inf");
+  
+  public static final hydra.core.Name FIELD_NAME_TRAVERSAL_TOKEN = new hydra.core.Name("traversalToken");
+  
+  public static final hydra.core.Name FIELD_NAME_TRAVERSAL_CARDINALITY = new hydra.core.Name("traversalCardinality");
+  
+  public static final hydra.core.Name FIELD_NAME_TRAVERSAL_DIRECTION = new hydra.core.Name("traversalDirection");
+  
+  public static final hydra.core.Name FIELD_NAME_TRAVERSAL_MERGE = new hydra.core.Name("traversalMerge");
+  
+  public static final hydra.core.Name FIELD_NAME_TRAVERSAL_PICK = new hydra.core.Name("traversalPick");
+  
+  public static final hydra.core.Name FIELD_NAME_TRAVERSAL_D_T = new hydra.core.Name("traversalDT");
+  
+  public static final hydra.core.Name FIELD_NAME_STRUCTURE_VERTEX = new hydra.core.Name("structureVertex");
+  
+  public static final hydra.core.Name FIELD_NAME_GENERIC_LITERAL_SET = new hydra.core.Name("genericLiteralSet");
+  
+  public static final hydra.core.Name FIELD_NAME_GENERIC_LITERAL_COLLECTION = new hydra.core.Name("genericLiteralCollection");
+  
+  public static final hydra.core.Name FIELD_NAME_GENERIC_LITERAL_RANGE = new hydra.core.Name("genericLiteralRange");
+  
+  public static final hydra.core.Name FIELD_NAME_NESTED_TRAVERSAL = new hydra.core.Name("nestedTraversal");
+  
+  public static final hydra.core.Name FIELD_NAME_TERMINATED_TRAVERSAL = new hydra.core.Name("terminatedTraversal");
+  
+  public static final hydra.core.Name FIELD_NAME_GENERIC_LITERAL_MAP = new hydra.core.Name("genericLiteralMap");
   
   private GenericLiteral () {
   

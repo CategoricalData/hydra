@@ -5,7 +5,15 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public abstract class Stat implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Stat");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Stat");
+  
+  public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
+  
+  public static final hydra.core.Name FIELD_NAME_DECL = new hydra.core.Name("decl");
+  
+  public static final hydra.core.Name FIELD_NAME_DEFN = new hydra.core.Name("defn");
+  
+  public static final hydra.core.Name FIELD_NAME_IMPORT_EXPORT = new hydra.core.Name("importExport");
   
   private Stat () {
   

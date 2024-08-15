@@ -5,7 +5,9 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public class Pat_Var implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Pat.Var");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Pat.Var");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   
   public final hydra.langs.scala.meta.Data_Name name;
   

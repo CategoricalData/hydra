@@ -5,7 +5,7 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public class SenseFlags implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.SenseFlags");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.SenseFlags");
   
   public SenseFlags () {
   

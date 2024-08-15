@@ -5,7 +5,13 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public class Type_ApplyInfix implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Type.ApplyInfix");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Type.ApplyInfix");
+  
+  public static final hydra.core.Name FIELD_NAME_LHS = new hydra.core.Name("lhs");
+  
+  public static final hydra.core.Name FIELD_NAME_OP = new hydra.core.Name("op");
+  
+  public static final hydra.core.Name FIELD_NAME_RHS = new hydra.core.Name("rhs");
   
   public final hydra.langs.scala.meta.Type lhs;
   

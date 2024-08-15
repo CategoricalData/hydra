@@ -5,7 +5,23 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class TraversalTerminalMethod implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalTerminalMethod");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalTerminalMethod");
+  
+  public static final hydra.core.Name FIELD_NAME_EXPLAIN = new hydra.core.Name("explain");
+  
+  public static final hydra.core.Name FIELD_NAME_ITERATE = new hydra.core.Name("iterate");
+  
+  public static final hydra.core.Name FIELD_NAME_HAS_NEXT = new hydra.core.Name("hasNext");
+  
+  public static final hydra.core.Name FIELD_NAME_TRY_NEXT = new hydra.core.Name("tryNext");
+  
+  public static final hydra.core.Name FIELD_NAME_NEXT = new hydra.core.Name("next");
+  
+  public static final hydra.core.Name FIELD_NAME_TO_LIST = new hydra.core.Name("toList");
+  
+  public static final hydra.core.Name FIELD_NAME_TO_SET = new hydra.core.Name("toSet");
+  
+  public static final hydra.core.Name FIELD_NAME_TO_BULK_SET = new hydra.core.Name("toBulkSet");
   
   private TraversalTerminalMethod () {
   

@@ -5,7 +5,13 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public abstract class ApproximateNumericType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.ApproximateNumericType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.ApproximateNumericType");
+  
+  public static final hydra.core.Name FIELD_NAME_FLOAT = new hydra.core.Name("float");
+  
+  public static final hydra.core.Name FIELD_NAME_REAL = new hydra.core.Name("real");
+  
+  public static final hydra.core.Name FIELD_NAME_DOUBLE = new hydra.core.Name("double");
   
   private ApproximateNumericType () {
   

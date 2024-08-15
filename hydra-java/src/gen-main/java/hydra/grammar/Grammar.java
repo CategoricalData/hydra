@@ -8,7 +8,9 @@ import java.io.Serializable;
  * An enhanced Backus-Naur form (BNF) grammar
  */
 public class Grammar implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Grammar");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/grammar.Grammar");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   public final java.util.List<hydra.grammar.Production> value;
   

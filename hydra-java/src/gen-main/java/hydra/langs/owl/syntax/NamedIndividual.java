@@ -5,7 +5,7 @@ package hydra.langs.owl.syntax;
 import java.io.Serializable;
 
 public class NamedIndividual implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.NamedIndividual");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.NamedIndividual");
   
   public NamedIndividual () {
   

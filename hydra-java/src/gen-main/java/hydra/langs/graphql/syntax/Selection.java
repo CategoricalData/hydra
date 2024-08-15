@@ -5,7 +5,13 @@ package hydra.langs.graphql.syntax;
 import java.io.Serializable;
 
 public abstract class Selection implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.Selection");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/graphql/syntax.Selection");
+  
+  public static final hydra.core.Name FIELD_NAME_FIELD = new hydra.core.Name("field");
+  
+  public static final hydra.core.Name FIELD_NAME_FRAGMENT_SPREAD = new hydra.core.Name("fragmentSpread");
+  
+  public static final hydra.core.Name FIELD_NAME_INLINE_FRAGMENT = new hydra.core.Name("inlineFragment");
   
   private Selection () {
   

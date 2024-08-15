@@ -8,7 +8,25 @@ import java.io.Serializable;
  * Description for file metadata
  */
 public class FileMetaData implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.FileMetaData");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.FileMetaData");
+  
+  public static final hydra.core.Name FIELD_NAME_VERSION = new hydra.core.Name("version");
+  
+  public static final hydra.core.Name FIELD_NAME_SCHEMA = new hydra.core.Name("schema");
+  
+  public static final hydra.core.Name FIELD_NAME_NUM_ROWS = new hydra.core.Name("numRows");
+  
+  public static final hydra.core.Name FIELD_NAME_ROW_GROUPS = new hydra.core.Name("rowGroups");
+  
+  public static final hydra.core.Name FIELD_NAME_KEY_VALUE_METADATA = new hydra.core.Name("keyValueMetadata");
+  
+  public static final hydra.core.Name FIELD_NAME_CREATED_BY = new hydra.core.Name("createdBy");
+  
+  public static final hydra.core.Name FIELD_NAME_COLUMN_ORDERS = new hydra.core.Name("columnOrders");
+  
+  public static final hydra.core.Name FIELD_NAME_ENCRYPTION_ALGORITHM = new hydra.core.Name("encryptionAlgorithm");
+  
+  public static final hydra.core.Name FIELD_NAME_FOOTER_SIGNING_KEY_METADATA = new hydra.core.Name("footerSigningKeyMetadata");
   
   /**
    * Version of this file
@@ -52,6 +70,9 @@ public class FileMetaData implements Serializable {
    */
   public final hydra.util.Opt<hydra.langs.parquet.format.EncryptionAlgorithm> encryptionAlgorithm;
   
+  /**
+   * Retrieval metadata of key used for signing the footer. Used only in encrypted files with plaintext footer.
+   */
   public final hydra.util.Opt<String> footerSigningKeyMetadata;
   
   public FileMetaData (Integer version, java.util.List<hydra.langs.parquet.format.SchemaElement> schema, Long numRows, java.util.List<hydra.langs.parquet.format.RowGroup> rowGroups, hydra.util.Opt<java.util.List<hydra.langs.parquet.format.KeyValue>> keyValueMetadata, hydra.util.Opt<String> createdBy, hydra.util.Opt<java.util.List<hydra.langs.parquet.format.ColumnOrder>> columnOrders, hydra.util.Opt<hydra.langs.parquet.format.EncryptionAlgorithm> encryptionAlgorithm, hydra.util.Opt<String> footerSigningKeyMetadata) {

@@ -8,7 +8,11 @@ import java.io.Serializable;
  * An element together with its dependencies in some context
  */
 public class ElementTree<V> implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.ElementTree");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.ElementTree");
+  
+  public static final hydra.core.Name FIELD_NAME_SELF = new hydra.core.Name("self");
+  
+  public static final hydra.core.Name FIELD_NAME_DEPENDENCIES = new hydra.core.Name("dependencies");
   
   public final hydra.langs.tinkerpop.propertyGraph.Element<V> self;
   

@@ -5,7 +5,37 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public abstract class Tree implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Tree");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Tree");
+  
+  public static final hydra.core.Name FIELD_NAME_REF = new hydra.core.Name("ref");
+  
+  public static final hydra.core.Name FIELD_NAME_STAT = new hydra.core.Name("stat");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  
+  public static final hydra.core.Name FIELD_NAME_BOUNDS = new hydra.core.Name("bounds");
+  
+  public static final hydra.core.Name FIELD_NAME_PAT = new hydra.core.Name("pat");
+  
+  public static final hydra.core.Name FIELD_NAME_MEMBER = new hydra.core.Name("member");
+  
+  public static final hydra.core.Name FIELD_NAME_CTOR = new hydra.core.Name("ctor");
+  
+  public static final hydra.core.Name FIELD_NAME_TEMPLATE = new hydra.core.Name("template");
+  
+  public static final hydra.core.Name FIELD_NAME_MOD = new hydra.core.Name("mod");
+  
+  public static final hydra.core.Name FIELD_NAME_ENUMERATOR = new hydra.core.Name("enumerator");
+  
+  public static final hydra.core.Name FIELD_NAME_IMPORTER = new hydra.core.Name("importer");
+  
+  public static final hydra.core.Name FIELD_NAME_IMPORTEE = new hydra.core.Name("importee");
+  
+  public static final hydra.core.Name FIELD_NAME_CASE_TREE = new hydra.core.Name("caseTree");
+  
+  public static final hydra.core.Name FIELD_NAME_SOURCE = new hydra.core.Name("source");
+  
+  public static final hydra.core.Name FIELD_NAME_QUASI = new hydra.core.Name("quasi");
   
   private Tree () {
   

@@ -5,7 +5,15 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public class TableDefinition implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.TableDefinition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.TableDefinition");
+  
+  public static final hydra.core.Name FIELD_NAME_SCOPE = new hydra.core.Name("scope");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_SOURCE = new hydra.core.Name("source");
+  
+  public static final hydra.core.Name FIELD_NAME_COMMIT_ACTIONS = new hydra.core.Name("commitActions");
   
   public final hydra.util.Opt<hydra.langs.sql.ansi.TableScope> scope;
   

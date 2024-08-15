@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class MapEntry implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.MapEntry");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.MapEntry");
+  
+  public static final hydra.core.Name FIELD_NAME_KEY = new hydra.core.Name("key");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   private MapEntry () {
   

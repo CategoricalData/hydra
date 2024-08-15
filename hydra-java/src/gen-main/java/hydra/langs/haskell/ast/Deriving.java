@@ -8,11 +8,10 @@ import java.io.Serializable;
  * A 'deriving' statement
  */
 public class Deriving implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Deriving");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.Deriving");
   
-  /**
-   * A 'deriving' statement
-   */
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  
   public final java.util.List<hydra.langs.haskell.ast.Name> value;
   
   public Deriving (java.util.List<hydra.langs.haskell.ast.Name> value) {

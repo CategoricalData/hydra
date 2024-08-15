@@ -5,7 +5,13 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public abstract class TableContentsSource implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.TableContentsSource");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.TableContentsSource");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
+  
+  public static final hydra.core.Name FIELD_NAME_SUBTABLE = new hydra.core.Name("subtable");
+  
+  public static final hydra.core.Name FIELD_NAME_SUBQUERY = new hydra.core.Name("subquery");
   
   private TableContentsSource () {
   

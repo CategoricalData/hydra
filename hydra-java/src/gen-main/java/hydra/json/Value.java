@@ -8,7 +8,19 @@ import java.io.Serializable;
  * A JSON value
  */
 public abstract class Value implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/json.Value");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/json.Value");
+  
+  public static final hydra.core.Name FIELD_NAME_ARRAY = new hydra.core.Name("array");
+  
+  public static final hydra.core.Name FIELD_NAME_BOOLEAN = new hydra.core.Name("boolean");
+  
+  public static final hydra.core.Name FIELD_NAME_NULL = new hydra.core.Name("null");
+  
+  public static final hydra.core.Name FIELD_NAME_NUMBER = new hydra.core.Name("number");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT = new hydra.core.Name("object");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
   
   private Value () {
   

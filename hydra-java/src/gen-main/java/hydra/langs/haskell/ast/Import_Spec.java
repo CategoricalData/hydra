@@ -8,7 +8,11 @@ import java.io.Serializable;
  * An import specification
  */
 public abstract class Import_Spec implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Import.Spec");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.Import.Spec");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
+  
+  public static final hydra.core.Name FIELD_NAME_HIDING = new hydra.core.Name("hiding");
   
   private Import_Spec () {
   

@@ -8,7 +8,19 @@ import java.io.Serializable;
  * A set of features for arithmetic operations.
  */
 public class ArithmeticFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.ArithmeticFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.ArithmeticFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_PLUS = new hydra.core.Name("plus");
+  
+  public static final hydra.core.Name FIELD_NAME_MINUS = new hydra.core.Name("minus");
+  
+  public static final hydra.core.Name FIELD_NAME_MULTIPLY = new hydra.core.Name("multiply");
+  
+  public static final hydra.core.Name FIELD_NAME_DIVIDE = new hydra.core.Name("divide");
+  
+  public static final hydra.core.Name FIELD_NAME_MODULUS = new hydra.core.Name("modulus");
+  
+  public static final hydra.core.Name FIELD_NAME_POWER_OF = new hydra.core.Name("powerOf");
   
   /**
    * Whether to expect the + operator.

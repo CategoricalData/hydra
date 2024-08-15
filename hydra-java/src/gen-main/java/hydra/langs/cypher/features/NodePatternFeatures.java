@@ -8,7 +8,17 @@ import java.io.Serializable;
  * A set of features for node patterns.
  */
 public class NodePatternFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.NodePatternFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.NodePatternFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_MULTIPLE_LABELS = new hydra.core.Name("multipleLabels");
+  
+  public static final hydra.core.Name FIELD_NAME_PARAMETER = new hydra.core.Name("parameter");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTY_MAP = new hydra.core.Name("propertyMap");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLE_NODE = new hydra.core.Name("variableNode");
+  
+  public static final hydra.core.Name FIELD_NAME_WILDCARD_LABEL = new hydra.core.Name("wildcardLabel");
   
   /**
    * Whether to expect specifying multiple labels in a node pattern.

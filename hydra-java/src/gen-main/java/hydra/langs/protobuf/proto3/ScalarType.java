@@ -8,7 +8,37 @@ import java.io.Serializable;
  * One of several Proto3 scalar types
  */
 public abstract class ScalarType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/protobuf/proto3.ScalarType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/protobuf/proto3.ScalarType");
+  
+  public static final hydra.core.Name FIELD_NAME_BOOL = new hydra.core.Name("bool");
+  
+  public static final hydra.core.Name FIELD_NAME_BYTES = new hydra.core.Name("bytes");
+  
+  public static final hydra.core.Name FIELD_NAME_DOUBLE = new hydra.core.Name("double");
+  
+  public static final hydra.core.Name FIELD_NAME_FIXED32 = new hydra.core.Name("fixed32");
+  
+  public static final hydra.core.Name FIELD_NAME_FIXED64 = new hydra.core.Name("fixed64");
+  
+  public static final hydra.core.Name FIELD_NAME_FLOAT = new hydra.core.Name("float");
+  
+  public static final hydra.core.Name FIELD_NAME_INT32 = new hydra.core.Name("int32");
+  
+  public static final hydra.core.Name FIELD_NAME_INT64 = new hydra.core.Name("int64");
+  
+  public static final hydra.core.Name FIELD_NAME_SFIXED32 = new hydra.core.Name("sfixed32");
+  
+  public static final hydra.core.Name FIELD_NAME_SFIXED64 = new hydra.core.Name("sfixed64");
+  
+  public static final hydra.core.Name FIELD_NAME_SINT32 = new hydra.core.Name("sint32");
+  
+  public static final hydra.core.Name FIELD_NAME_SINT64 = new hydra.core.Name("sint64");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
+  
+  public static final hydra.core.Name FIELD_NAME_UINT32 = new hydra.core.Name("uint32");
+  
+  public static final hydra.core.Name FIELD_NAME_UINT64 = new hydra.core.Name("uint64");
   
   private ScalarType () {
   

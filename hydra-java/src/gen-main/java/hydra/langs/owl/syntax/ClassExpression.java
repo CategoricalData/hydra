@@ -5,7 +5,41 @@ package hydra.langs.owl.syntax;
 import java.io.Serializable;
 
 public abstract class ClassExpression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.ClassExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.ClassExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_CLASS = new hydra.core.Name("class");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_SOME_VALUES_FROM = new hydra.core.Name("dataSomeValuesFrom");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_ALL_VALUES_FROM = new hydra.core.Name("dataAllValuesFrom");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_HAS_VALUE = new hydra.core.Name("dataHasValue");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_MIN_CARDINALITY = new hydra.core.Name("dataMinCardinality");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_MAX_CARDINALITY = new hydra.core.Name("dataMaxCardinality");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_EXACT_CARDINALITY = new hydra.core.Name("dataExactCardinality");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT_ALL_VALUES_FROM = new hydra.core.Name("objectAllValuesFrom");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT_EXACT_CARDINALITY = new hydra.core.Name("objectExactCardinality");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT_HAS_SELF = new hydra.core.Name("objectHasSelf");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT_HAS_VALUE = new hydra.core.Name("objectHasValue");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT_INTERSECTION_OF = new hydra.core.Name("objectIntersectionOf");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT_MAX_CARDINALITY = new hydra.core.Name("objectMaxCardinality");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT_MIN_CARDINALITY = new hydra.core.Name("objectMinCardinality");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT_ONE_OF = new hydra.core.Name("objectOneOf");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT_SOME_VALUES_FROM = new hydra.core.Name("objectSomeValuesFrom");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT_UNION_OF = new hydra.core.Name("objectUnionOf");
   
   private ClassExpression () {
   

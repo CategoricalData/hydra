@@ -5,7 +5,13 @@ package hydra.langs.haskell.ast;
 import java.io.Serializable;
 
 public class ModuleHead implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.ModuleHead");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.ModuleHead");
+  
+  public static final hydra.core.Name FIELD_NAME_COMMENTS = new hydra.core.Name("comments");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_EXPORTS = new hydra.core.Name("exports");
   
   public final hydra.util.Opt<String> comments;
   

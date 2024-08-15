@@ -5,7 +5,11 @@ package hydra.langs.parquet.delta;
 import java.io.Serializable;
 
 public class ArrayType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/delta.ArrayType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/delta.ArrayType");
+  
+  public static final hydra.core.Name FIELD_NAME_ELEMENT_TYPE = new hydra.core.Name("elementType");
+  
+  public static final hydra.core.Name FIELD_NAME_CONTAINS_NULL = new hydra.core.Name("containsNull");
   
   public final hydra.langs.parquet.delta.DataType elementType;
   

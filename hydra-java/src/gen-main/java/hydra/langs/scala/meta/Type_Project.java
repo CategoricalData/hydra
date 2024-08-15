@@ -5,7 +5,11 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public class Type_Project implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Type.Project");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Type.Project");
+  
+  public static final hydra.core.Name FIELD_NAME_QUAL = new hydra.core.Name("qual");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   
   public final hydra.langs.scala.meta.Type qual;
   

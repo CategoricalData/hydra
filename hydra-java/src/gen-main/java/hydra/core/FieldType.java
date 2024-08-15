@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A name/type pair
  */
 public class FieldType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.FieldType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.FieldType");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
   
   public final hydra.core.Name name;
   

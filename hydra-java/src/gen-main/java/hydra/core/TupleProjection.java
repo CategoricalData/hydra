@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A tuple elimination; a projection from an integer-indexed product
  */
 public class TupleProjection implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.TupleProjection");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.TupleProjection");
+  
+  public static final hydra.core.Name FIELD_NAME_ARITY = new hydra.core.Name("arity");
+  
+  public static final hydra.core.Name FIELD_NAME_INDEX = new hydra.core.Name("index");
   
   /**
    * The arity of the tuple

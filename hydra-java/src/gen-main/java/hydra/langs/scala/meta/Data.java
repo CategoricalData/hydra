@@ -5,7 +5,77 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public abstract class Data implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Data");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Data");
+  
+  public static final hydra.core.Name FIELD_NAME_LIT = new hydra.core.Name("lit");
+  
+  public static final hydra.core.Name FIELD_NAME_REF = new hydra.core.Name("ref");
+  
+  public static final hydra.core.Name FIELD_NAME_INTERPOLATE = new hydra.core.Name("interpolate");
+  
+  public static final hydra.core.Name FIELD_NAME_XML = new hydra.core.Name("xml");
+  
+  public static final hydra.core.Name FIELD_NAME_APPLY = new hydra.core.Name("apply");
+  
+  public static final hydra.core.Name FIELD_NAME_APPLY_USING = new hydra.core.Name("applyUsing");
+  
+  public static final hydra.core.Name FIELD_NAME_APPLY_TYPE = new hydra.core.Name("applyType");
+  
+  public static final hydra.core.Name FIELD_NAME_ASSIGN = new hydra.core.Name("assign");
+  
+  public static final hydra.core.Name FIELD_NAME_RETURN = new hydra.core.Name("return");
+  
+  public static final hydra.core.Name FIELD_NAME_THROW = new hydra.core.Name("throw");
+  
+  public static final hydra.core.Name FIELD_NAME_ASCRIBE = new hydra.core.Name("ascribe");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATE = new hydra.core.Name("annotate");
+  
+  public static final hydra.core.Name FIELD_NAME_TUPLE = new hydra.core.Name("tuple");
+  
+  public static final hydra.core.Name FIELD_NAME_BLOCK = new hydra.core.Name("block");
+  
+  public static final hydra.core.Name FIELD_NAME_END_MARKER = new hydra.core.Name("endMarker");
+  
+  public static final hydra.core.Name FIELD_NAME_IF = new hydra.core.Name("if");
+  
+  public static final hydra.core.Name FIELD_NAME_QUOTED_MACRO_EXPR = new hydra.core.Name("quotedMacroExpr");
+  
+  public static final hydra.core.Name FIELD_NAME_QUOTED_MACRO_TYPE = new hydra.core.Name("quotedMacroType");
+  
+  public static final hydra.core.Name FIELD_NAME_SPLICED_MACRO_EXPR = new hydra.core.Name("splicedMacroExpr");
+  
+  public static final hydra.core.Name FIELD_NAME_MATCH = new hydra.core.Name("match");
+  
+  public static final hydra.core.Name FIELD_NAME_TRY = new hydra.core.Name("try");
+  
+  public static final hydra.core.Name FIELD_NAME_TRY_WITH_HANDLER = new hydra.core.Name("tryWithHandler");
+  
+  public static final hydra.core.Name FIELD_NAME_FUNCTION_DATA = new hydra.core.Name("functionData");
+  
+  public static final hydra.core.Name FIELD_NAME_POLY_FUNCTION = new hydra.core.Name("polyFunction");
+  
+  public static final hydra.core.Name FIELD_NAME_PARTIAL_FUNCTION = new hydra.core.Name("partialFunction");
+  
+  public static final hydra.core.Name FIELD_NAME_WHILE = new hydra.core.Name("while");
+  
+  public static final hydra.core.Name FIELD_NAME_DO = new hydra.core.Name("do");
+  
+  public static final hydra.core.Name FIELD_NAME_FOR = new hydra.core.Name("for");
+  
+  public static final hydra.core.Name FIELD_NAME_FOR_YIELD = new hydra.core.Name("forYield");
+  
+  public static final hydra.core.Name FIELD_NAME_NEW = new hydra.core.Name("new");
+  
+  public static final hydra.core.Name FIELD_NAME_NEW_ANONYMOUS = new hydra.core.Name("newAnonymous");
+  
+  public static final hydra.core.Name FIELD_NAME_PLACEHOLDER = new hydra.core.Name("placeholder");
+  
+  public static final hydra.core.Name FIELD_NAME_ETA = new hydra.core.Name("eta");
+  
+  public static final hydra.core.Name FIELD_NAME_REPEATED = new hydra.core.Name("repeated");
+  
+  public static final hydra.core.Name FIELD_NAME_PARAM = new hydra.core.Name("param");
   
   private Data () {
   

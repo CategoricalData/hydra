@@ -5,7 +5,11 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public class CaseAlternative implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.CaseAlternative");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.CaseAlternative");
+  
+  public static final hydra.core.Name FIELD_NAME_CONDITION = new hydra.core.Name("condition");
+  
+  public static final hydra.core.Name FIELD_NAME_RESULT = new hydra.core.Name("result");
   
   public final hydra.langs.cypher.openCypher.Expression condition;
   

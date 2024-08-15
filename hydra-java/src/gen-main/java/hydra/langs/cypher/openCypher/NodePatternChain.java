@@ -5,7 +5,11 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public class NodePatternChain implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.NodePatternChain");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.NodePatternChain");
+  
+  public static final hydra.core.Name FIELD_NAME_NODE_PATTERN = new hydra.core.Name("nodePattern");
+  
+  public static final hydra.core.Name FIELD_NAME_CHAIN = new hydra.core.Name("chain");
   
   public final hydra.langs.cypher.openCypher.NodePattern nodePattern;
   

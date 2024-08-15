@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public class GenericLiteralArgumentAndTraversalBiFunctionArgument implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument");
+  
+  public static final hydra.core.Name FIELD_NAME_LITERAL = new hydra.core.Name("literal");
+  
+  public static final hydra.core.Name FIELD_NAME_BI_FUNCTION = new hydra.core.Name("biFunction");
   
   public final hydra.langs.tinkerpop.gremlin.GenericLiteralArgument literal;
   

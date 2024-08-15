@@ -8,11 +8,10 @@ import java.io.Serializable;
  * Note: this is an approximation which ignores encoding
  */
 public class IntegerLiteral implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.IntegerLiteral");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.IntegerLiteral");
   
-  /**
-   * Note: this is an approximation which ignores encoding
-   */
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  
   public final java.math.BigInteger value;
   
   public IntegerLiteral (java.math.BigInteger value) {

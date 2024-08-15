@@ -8,7 +8,43 @@ import java.io.Serializable;
  * Base interface for features that relate to supporting different data types.
  */
 public class DataTypeFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/features.DataTypeFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/features.DataTypeFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_BOOLEAN_ARRAY_VALUES = new hydra.core.Name("supportsBooleanArrayValues");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_BOOLEAN_VALUES = new hydra.core.Name("supportsBooleanValues");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_BYTE_ARRAY_VALUES = new hydra.core.Name("supportsByteArrayValues");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_BYTE_VALUES = new hydra.core.Name("supportsByteValues");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_DOUBLE_ARRAY_VALUES = new hydra.core.Name("supportsDoubleArrayValues");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_DOUBLE_VALUES = new hydra.core.Name("supportsDoubleValues");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_FLOAT_ARRAY_VALUES = new hydra.core.Name("supportsFloatArrayValues");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_FLOAT_VALUES = new hydra.core.Name("supportsFloatValues");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_INTEGER_ARRAY_VALUES = new hydra.core.Name("supportsIntegerArrayValues");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_INTEGER_VALUES = new hydra.core.Name("supportsIntegerValues");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_LONG_ARRAY_VALUES = new hydra.core.Name("supportsLongArrayValues");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_LONG_VALUES = new hydra.core.Name("supportsLongValues");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_MAP_VALUES = new hydra.core.Name("supportsMapValues");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_MIXED_LIST_VALUES = new hydra.core.Name("supportsMixedListValues");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_SERIALIZABLE_VALUES = new hydra.core.Name("supportsSerializableValues");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_STRING_ARRAY_VALUES = new hydra.core.Name("supportsStringArrayValues");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_STRING_VALUES = new hydra.core.Name("supportsStringValues");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_UNIFORM_LIST_VALUES = new hydra.core.Name("supportsUniformListValues");
   
   /**
    * Supports setting of an array of boolean values.

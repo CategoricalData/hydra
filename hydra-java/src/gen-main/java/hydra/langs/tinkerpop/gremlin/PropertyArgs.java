@@ -5,7 +5,15 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class PropertyArgs implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.PropertyArgs");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.PropertyArgs");
+  
+  public static final hydra.core.Name FIELD_NAME_CARDINALITY_OBJECTS = new hydra.core.Name("cardinalityObjects");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECTS = new hydra.core.Name("objects");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT = new hydra.core.Name("object");
+  
+  public static final hydra.core.Name FIELD_NAME_CARDINALITY_OBJECT = new hydra.core.Name("cardinalityObject");
   
   private PropertyArgs () {
   

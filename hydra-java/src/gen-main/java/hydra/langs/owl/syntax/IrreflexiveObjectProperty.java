@@ -5,7 +5,11 @@ package hydra.langs.owl.syntax;
 import java.io.Serializable;
 
 public class IrreflexiveObjectProperty implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.IrreflexiveObjectProperty");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.IrreflexiveObjectProperty");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTY = new hydra.core.Name("property");
   
   public final java.util.List<hydra.langs.owl.syntax.Annotation> annotations;
   

@@ -5,7 +5,11 @@ package hydra.langs.graphql.syntax;
 import java.io.Serializable;
 
 public class ObjectField implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.ObjectField");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/graphql/syntax.ObjectField");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   public final hydra.langs.graphql.syntax.Name name;
   

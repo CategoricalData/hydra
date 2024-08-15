@@ -8,7 +8,11 @@ import java.io.Serializable;
  * The 'data' versus 'newtype keyword
  */
 public abstract class DataDeclaration_Keyword implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.DataDeclaration.Keyword");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.DataDeclaration.Keyword");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA = new hydra.core.Name("data");
+  
+  public static final hydra.core.Name FIELD_NAME_NEWTYPE = new hydra.core.Name("newtype");
   
   private DataDeclaration_Keyword () {
   

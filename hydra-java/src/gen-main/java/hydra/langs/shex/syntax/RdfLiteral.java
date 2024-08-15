@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public class RdfLiteral implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.RdfLiteral");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.RdfLiteral");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
+  
+  public static final hydra.core.Name FIELD_NAME_ALTS = new hydra.core.Name("alts");
   
   public final hydra.langs.shex.syntax.String_ string;
   

@@ -5,7 +5,11 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public class ArrayAccess implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.ArrayAccess");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.ArrayAccess");
+  
+  public static final hydra.core.Name FIELD_NAME_EXPRESSION = new hydra.core.Name("expression");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIANT = new hydra.core.Name("variant");
   
   public final hydra.util.Opt<hydra.langs.java.syntax.Expression> expression;
   

@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A term together with its type
  */
 public class TypedTerm implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.TypedTerm");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.TypedTerm");
+  
+  public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
   
   public final hydra.core.Term term;
   

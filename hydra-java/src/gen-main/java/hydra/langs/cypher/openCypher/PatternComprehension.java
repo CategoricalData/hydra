@@ -5,7 +5,15 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public class PatternComprehension implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.PatternComprehension");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.PatternComprehension");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
+  
+  public static final hydra.core.Name FIELD_NAME_PATTERN = new hydra.core.Name("pattern");
+  
+  public static final hydra.core.Name FIELD_NAME_WHERE = new hydra.core.Name("where");
+  
+  public static final hydra.core.Name FIELD_NAME_RIGHT = new hydra.core.Name("right");
   
   public final hydra.util.Opt<hydra.langs.cypher.openCypher.Variable> variable;
   

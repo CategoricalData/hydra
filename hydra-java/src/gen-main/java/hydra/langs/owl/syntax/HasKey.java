@@ -8,7 +8,15 @@ import java.io.Serializable;
  * See https://www.w3.org/TR/owl2-syntax/#Keys
  */
 public class HasKey implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.HasKey");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.HasKey");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
+  
+  public static final hydra.core.Name FIELD_NAME_CLASS = new hydra.core.Name("class");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT_PROPERTIES = new hydra.core.Name("objectProperties");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_PROPERTIES = new hydra.core.Name("dataProperties");
   
   public final java.util.List<hydra.langs.owl.syntax.Annotation> annotations;
   

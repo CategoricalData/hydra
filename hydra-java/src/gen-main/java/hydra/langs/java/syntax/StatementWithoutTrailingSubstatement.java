@@ -5,7 +5,31 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class StatementWithoutTrailingSubstatement implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.StatementWithoutTrailingSubstatement");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.StatementWithoutTrailingSubstatement");
+  
+  public static final hydra.core.Name FIELD_NAME_BLOCK = new hydra.core.Name("block");
+  
+  public static final hydra.core.Name FIELD_NAME_EMPTY = new hydra.core.Name("empty");
+  
+  public static final hydra.core.Name FIELD_NAME_EXPRESSION = new hydra.core.Name("expression");
+  
+  public static final hydra.core.Name FIELD_NAME_ASSERT = new hydra.core.Name("assert");
+  
+  public static final hydra.core.Name FIELD_NAME_SWITCH = new hydra.core.Name("switch");
+  
+  public static final hydra.core.Name FIELD_NAME_DO = new hydra.core.Name("do");
+  
+  public static final hydra.core.Name FIELD_NAME_BREAK = new hydra.core.Name("break");
+  
+  public static final hydra.core.Name FIELD_NAME_CONTINUE = new hydra.core.Name("continue");
+  
+  public static final hydra.core.Name FIELD_NAME_RETURN = new hydra.core.Name("return");
+  
+  public static final hydra.core.Name FIELD_NAME_SYNCHRONIZED = new hydra.core.Name("synchronized");
+  
+  public static final hydra.core.Name FIELD_NAME_THROW = new hydra.core.Name("throw");
+  
+  public static final hydra.core.Name FIELD_NAME_TRY = new hydra.core.Name("try");
   
   private StatementWithoutTrailingSubstatement () {
   

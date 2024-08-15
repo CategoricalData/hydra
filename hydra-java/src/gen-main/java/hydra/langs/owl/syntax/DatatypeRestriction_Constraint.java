@@ -5,7 +5,11 @@ package hydra.langs.owl.syntax;
 import java.io.Serializable;
 
 public class DatatypeRestriction_Constraint implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.DatatypeRestriction.Constraint");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.DatatypeRestriction.Constraint");
+  
+  public static final hydra.core.Name FIELD_NAME_CONSTRAINING_FACET = new hydra.core.Name("constrainingFacet");
+  
+  public static final hydra.core.Name FIELD_NAME_RESTRICTION_VALUE = new hydra.core.Name("restrictionValue");
   
   public final hydra.langs.owl.syntax.DatatypeRestriction_ConstrainingFacet constrainingFacet;
   

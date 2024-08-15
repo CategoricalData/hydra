@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A declared equivalence between two abstract paths in a graph
  */
 public class PathEquation implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/constraints.PathEquation");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/constraints.PathEquation");
+  
+  public static final hydra.core.Name FIELD_NAME_LEFT = new hydra.core.Name("left");
+  
+  public static final hydra.core.Name FIELD_NAME_RIGHT = new hydra.core.Name("right");
   
   public final hydra.query.Path left;
   

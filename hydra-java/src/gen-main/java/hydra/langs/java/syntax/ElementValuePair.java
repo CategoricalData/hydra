@@ -5,7 +5,11 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public class ElementValuePair implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.ElementValuePair");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.ElementValuePair");
+  
+  public static final hydra.core.Name FIELD_NAME_KEY = new hydra.core.Name("key");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   public final hydra.langs.java.syntax.Identifier key;
   

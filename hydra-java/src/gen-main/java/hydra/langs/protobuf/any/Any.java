@@ -8,13 +8,20 @@ import java.io.Serializable;
  * `Any` contains an arbitrary serialized protocol buffer message along with a URL that describes the type of the serialized message.
  */
 public class Any implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/protobuf/any.Any");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/protobuf/any.Any");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE_URL = new hydra.core.Name("typeUrl");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   /**
    * A URL/resource name that uniquely identifies the type of the serialized protocol buffer message.
    */
   public final String typeUrl;
   
+  /**
+   * Must be a valid serialized protocol buffer of the above specified type.
+   */
   public final String value;
   
   public Any (String typeUrl, String value) {

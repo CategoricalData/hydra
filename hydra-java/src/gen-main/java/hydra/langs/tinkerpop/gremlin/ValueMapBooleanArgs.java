@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public class ValueMapBooleanArgs implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.ValueMapBooleanArgs");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.ValueMapBooleanArgs");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  
+  public static final hydra.core.Name FIELD_NAME_KEYS = new hydra.core.Name("keys");
   
   public final hydra.langs.tinkerpop.gremlin.BooleanArgument value;
   

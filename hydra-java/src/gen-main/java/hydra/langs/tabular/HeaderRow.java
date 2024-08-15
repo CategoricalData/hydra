@@ -8,11 +8,10 @@ import java.io.Serializable;
  * A header row, containing column names (but no types or data)
  */
 public class HeaderRow implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tabular.HeaderRow");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tabular.HeaderRow");
   
-  /**
-   * A header row, containing column names (but no types or data)
-   */
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  
   public final java.util.List<String> value;
   
   public HeaderRow (java.util.List<String> value) {

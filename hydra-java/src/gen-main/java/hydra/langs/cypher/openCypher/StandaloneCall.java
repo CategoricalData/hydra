@@ -5,7 +5,11 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public class StandaloneCall implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.StandaloneCall");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.StandaloneCall");
+  
+  public static final hydra.core.Name FIELD_NAME_CALL = new hydra.core.Name("call");
+  
+  public static final hydra.core.Name FIELD_NAME_YIELD_ITEMS = new hydra.core.Name("yieldItems");
   
   public final hydra.langs.cypher.openCypher.ProcedureInvocation call;
   

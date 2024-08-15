@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public abstract class Directive implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.Directive");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.Directive");
+  
+  public static final hydra.core.Name FIELD_NAME_BASE_DECL = new hydra.core.Name("baseDecl");
+  
+  public static final hydra.core.Name FIELD_NAME_PREFIX_DECL = new hydra.core.Name("prefixDecl");
   
   private Directive () {
   

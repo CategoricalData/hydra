@@ -5,7 +5,17 @@ package hydra.langs.graphql.syntax;
 import java.io.Serializable;
 
 public class InputValueDefinition implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.InputValueDefinition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/graphql/syntax.InputValueDefinition");
+  
+  public static final hydra.core.Name FIELD_NAME_DESCRIPTION = new hydra.core.Name("description");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  
+  public static final hydra.core.Name FIELD_NAME_DEFAULT_VALUE = new hydra.core.Name("defaultValue");
+  
+  public static final hydra.core.Name FIELD_NAME_DIRECTIVES = new hydra.core.Name("directives");
   
   public final hydra.util.Opt<hydra.langs.graphql.syntax.Description> description;
   

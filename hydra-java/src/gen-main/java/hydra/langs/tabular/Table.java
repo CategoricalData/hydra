@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A simple table as in a CSV file, having an optional header row and any number of data rows
  */
 public class Table<V> implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tabular.Table");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tabular.Table");
+  
+  public static final hydra.core.Name FIELD_NAME_HEADER = new hydra.core.Name("header");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA = new hydra.core.Name("data");
   
   /**
    * The optional header row of the table. If present, the header must have the same number of cells as each data row.

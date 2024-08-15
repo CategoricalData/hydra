@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class TraversalPick implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalPick");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalPick");
+  
+  public static final hydra.core.Name FIELD_NAME_ANY = new hydra.core.Name("any");
+  
+  public static final hydra.core.Name FIELD_NAME_NONE = new hydra.core.Name("none");
   
   private TraversalPick () {
   

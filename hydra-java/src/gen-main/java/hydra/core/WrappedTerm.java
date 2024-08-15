@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A term wrapped in a type name
  */
 public class WrappedTerm implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.WrappedTerm");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.WrappedTerm");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE_NAME = new hydra.core.Name("typeName");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT = new hydra.core.Name("object");
   
   public final hydra.core.Name typeName;
   

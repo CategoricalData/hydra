@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public class RangeArgument implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.RangeArgument");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.RangeArgument");
+  
+  public static final hydra.core.Name FIELD_NAME_MIN = new hydra.core.Name("min");
+  
+  public static final hydra.core.Name FIELD_NAME_MAX = new hydra.core.Name("max");
   
   public final hydra.langs.tinkerpop.gremlin.GenericLiteralArgument min;
   

@@ -8,7 +8,37 @@ import java.io.Serializable;
  * Configurable annotation keys for property graph mapping specifications
  */
 public class AnnotationSchema implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/mappings.AnnotationSchema");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/mappings.AnnotationSchema");
+  
+  public static final hydra.core.Name FIELD_NAME_VERTEX_LABEL = new hydra.core.Name("vertexLabel");
+  
+  public static final hydra.core.Name FIELD_NAME_EDGE_LABEL = new hydra.core.Name("edgeLabel");
+  
+  public static final hydra.core.Name FIELD_NAME_VERTEX_ID = new hydra.core.Name("vertexId");
+  
+  public static final hydra.core.Name FIELD_NAME_EDGE_ID = new hydra.core.Name("edgeId");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTY_KEY = new hydra.core.Name("propertyKey");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTY_VALUE = new hydra.core.Name("propertyValue");
+  
+  public static final hydra.core.Name FIELD_NAME_OUT_VERTEX = new hydra.core.Name("outVertex");
+  
+  public static final hydra.core.Name FIELD_NAME_OUT_VERTEX_LABEL = new hydra.core.Name("outVertexLabel");
+  
+  public static final hydra.core.Name FIELD_NAME_IN_VERTEX = new hydra.core.Name("inVertex");
+  
+  public static final hydra.core.Name FIELD_NAME_IN_VERTEX_LABEL = new hydra.core.Name("inVertexLabel");
+  
+  public static final hydra.core.Name FIELD_NAME_OUT_EDGE = new hydra.core.Name("outEdge");
+  
+  public static final hydra.core.Name FIELD_NAME_OUT_EDGE_LABEL = new hydra.core.Name("outEdgeLabel");
+  
+  public static final hydra.core.Name FIELD_NAME_IN_EDGE = new hydra.core.Name("inEdge");
+  
+  public static final hydra.core.Name FIELD_NAME_IN_EDGE_LABEL = new hydra.core.Name("inEdgeLabel");
+  
+  public static final hydra.core.Name FIELD_NAME_IGNORE = new hydra.core.Name("ignore");
   
   public final String vertexLabel;
   

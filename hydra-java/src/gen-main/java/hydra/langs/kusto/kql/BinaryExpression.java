@@ -5,7 +5,13 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public class BinaryExpression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.BinaryExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.BinaryExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_LEFT = new hydra.core.Name("left");
+  
+  public static final hydra.core.Name FIELD_NAME_OPERATOR = new hydra.core.Name("operator");
+  
+  public static final hydra.core.Name FIELD_NAME_RIGHT = new hydra.core.Name("right");
   
   public final hydra.langs.kusto.kql.Expression left;
   

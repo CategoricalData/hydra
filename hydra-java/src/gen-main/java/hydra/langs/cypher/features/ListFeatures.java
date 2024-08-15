@@ -8,7 +8,43 @@ import java.io.Serializable;
  * A set of features for list functionality.
  */
 public class ListFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.ListFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.ListFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_ALL = new hydra.core.Name("all");
+  
+  public static final hydra.core.Name FIELD_NAME_ANY = new hydra.core.Name("any");
+  
+  public static final hydra.core.Name FIELD_NAME_COALESCE = new hydra.core.Name("coalesce");
+  
+  public static final hydra.core.Name FIELD_NAME_IS_EMPTY = new hydra.core.Name("isEmpty");
+  
+  public static final hydra.core.Name FIELD_NAME_HEAD = new hydra.core.Name("head");
+  
+  public static final hydra.core.Name FIELD_NAME_LAST = new hydra.core.Name("last");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST_COMPREHENSION = new hydra.core.Name("listComprehension");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST_RANGE = new hydra.core.Name("listRange");
+  
+  public static final hydra.core.Name FIELD_NAME_NONE = new hydra.core.Name("none");
+  
+  public static final hydra.core.Name FIELD_NAME_REDUCE = new hydra.core.Name("reduce");
+  
+  public static final hydra.core.Name FIELD_NAME_REVERSE = new hydra.core.Name("reverse");
+  
+  public static final hydra.core.Name FIELD_NAME_SINGLE = new hydra.core.Name("single");
+  
+  public static final hydra.core.Name FIELD_NAME_SIZE = new hydra.core.Name("size");
+  
+  public static final hydra.core.Name FIELD_NAME_TAIL = new hydra.core.Name("tail");
+  
+  public static final hydra.core.Name FIELD_NAME_TO_BOOLEAN_LIST = new hydra.core.Name("toBooleanList");
+  
+  public static final hydra.core.Name FIELD_NAME_TO_FLOAT_LIST = new hydra.core.Name("toFloatList");
+  
+  public static final hydra.core.Name FIELD_NAME_TO_INTEGER_LIST = new hydra.core.Name("toIntegerList");
+  
+  public static final hydra.core.Name FIELD_NAME_TO_STRING_LIST = new hydra.core.Name("toStringList");
   
   /**
    * Whether to expect the all() function.

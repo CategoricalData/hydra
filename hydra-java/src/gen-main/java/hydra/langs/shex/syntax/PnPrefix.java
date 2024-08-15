@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public class PnPrefix implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.PnPrefix");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.PnPrefix");
+  
+  public static final hydra.core.Name FIELD_NAME_PN_CHARS_BASE = new hydra.core.Name("pnCharsBase");
+  
+  public static final hydra.core.Name FIELD_NAME_SEQUENCE = new hydra.core.Name("sequence");
   
   public final hydra.langs.shex.syntax.PnCharsBase pnCharsBase;
   

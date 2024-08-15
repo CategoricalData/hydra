@@ -5,7 +5,11 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public abstract class UnionKind implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.UnionKind");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.UnionKind");
+  
+  public static final hydra.core.Name FIELD_NAME_INNER = new hydra.core.Name("inner");
+  
+  public static final hydra.core.Name FIELD_NAME_OUTER = new hydra.core.Name("outer");
   
   private UnionKind () {
   

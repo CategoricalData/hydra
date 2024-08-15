@@ -5,7 +5,9 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public class NodeLabels implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.NodeLabels");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.NodeLabels");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   public final java.util.List<hydra.langs.cypher.openCypher.NodeLabel> value;
   

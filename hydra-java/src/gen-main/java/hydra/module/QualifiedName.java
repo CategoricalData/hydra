@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A qualified name consisting of an optional namespace together with a mandatory local name
  */
 public class QualifiedName implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/module.QualifiedName");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/module.QualifiedName");
+  
+  public static final hydra.core.Name FIELD_NAME_NAMESPACE = new hydra.core.Name("namespace");
+  
+  public static final hydra.core.Name FIELD_NAME_LOCAL = new hydra.core.Name("local");
   
   public final hydra.util.Opt<hydra.module.Namespace> namespace;
   

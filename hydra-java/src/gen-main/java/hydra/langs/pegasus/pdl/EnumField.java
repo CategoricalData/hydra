@@ -5,7 +5,11 @@ package hydra.langs.pegasus.pdl;
 import java.io.Serializable;
 
 public class EnumField implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/pegasus/pdl.EnumField");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/pegasus/pdl.EnumField");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
   
   public final hydra.langs.pegasus.pdl.EnumFieldName name;
   

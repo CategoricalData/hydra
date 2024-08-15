@@ -5,7 +5,31 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public abstract class Atom implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.Atom");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.Atom");
+  
+  public static final hydra.core.Name FIELD_NAME_LITERAL = new hydra.core.Name("literal");
+  
+  public static final hydra.core.Name FIELD_NAME_PARAMETER = new hydra.core.Name("parameter");
+  
+  public static final hydra.core.Name FIELD_NAME_CASE = new hydra.core.Name("case");
+  
+  public static final hydra.core.Name FIELD_NAME_COUNT_STAR = new hydra.core.Name("countStar");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST_COMPREHENSION = new hydra.core.Name("listComprehension");
+  
+  public static final hydra.core.Name FIELD_NAME_PATTERN_COMPREHENSION = new hydra.core.Name("patternComprehension");
+  
+  public static final hydra.core.Name FIELD_NAME_QUANTIFIER = new hydra.core.Name("quantifier");
+  
+  public static final hydra.core.Name FIELD_NAME_PATTERN_PREDICATE = new hydra.core.Name("patternPredicate");
+  
+  public static final hydra.core.Name FIELD_NAME_PARENTHESIZED = new hydra.core.Name("parenthesized");
+  
+  public static final hydra.core.Name FIELD_NAME_FUNCTION_INVOCATION = new hydra.core.Name("functionInvocation");
+  
+  public static final hydra.core.Name FIELD_NAME_EXISTENTIAL_SUBQUERY = new hydra.core.Name("existentialSubquery");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
   
   private Atom () {
   

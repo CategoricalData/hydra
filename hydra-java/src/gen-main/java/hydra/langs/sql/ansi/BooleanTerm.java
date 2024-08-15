@@ -5,7 +5,11 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public abstract class BooleanTerm implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.BooleanTerm");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.BooleanTerm");
+  
+  public static final hydra.core.Name FIELD_NAME_FACTOR = new hydra.core.Name("factor");
+  
+  public static final hydra.core.Name FIELD_NAME_AND = new hydra.core.Name("and");
   
   private BooleanTerm () {
   

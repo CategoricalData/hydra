@@ -5,7 +5,13 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public class ConstantDeclaration implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.ConstantDeclaration");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.ConstantDeclaration");
+  
+  public static final hydra.core.Name FIELD_NAME_MODIFIERS = new hydra.core.Name("modifiers");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLES = new hydra.core.Name("variables");
   
   public final java.util.List<hydra.langs.java.syntax.ConstantModifier> modifiers;
   

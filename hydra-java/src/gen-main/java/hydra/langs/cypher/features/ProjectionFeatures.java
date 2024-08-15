@@ -8,7 +8,21 @@ import java.io.Serializable;
  * A set of features for projections.
  */
 public class ProjectionFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.ProjectionFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.ProjectionFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_LIMIT = new hydra.core.Name("limit");
+  
+  public static final hydra.core.Name FIELD_NAME_ORDER_BY = new hydra.core.Name("orderBy");
+  
+  public static final hydra.core.Name FIELD_NAME_PROJECT_DISTINCT = new hydra.core.Name("projectDistinct");
+  
+  public static final hydra.core.Name FIELD_NAME_PROJECT_ALL = new hydra.core.Name("projectAll");
+  
+  public static final hydra.core.Name FIELD_NAME_PROJECT_AS = new hydra.core.Name("projectAs");
+  
+  public static final hydra.core.Name FIELD_NAME_SKIP = new hydra.core.Name("skip");
+  
+  public static final hydra.core.Name FIELD_NAME_SORT_ORDER = new hydra.core.Name("sortOrder");
   
   /**
    * Whether to expect the LIMIT clause.

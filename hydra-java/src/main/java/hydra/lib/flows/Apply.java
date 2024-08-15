@@ -52,7 +52,7 @@ public class Apply extends PrimitiveFunction {
             Term output = lambda("s0", "t0", app(
                     lambda("fs1", app(foldOpt(
                             new OptionalCases(ifNothing, ifJust)),
-                            project(FlowState.NAME, "value"))),
+                            project(FlowState.TYPE_NAME, "value"))),
                     app(mapping, variable("s0"), variable("s1"))));
             return Flows.pure(output);
         };

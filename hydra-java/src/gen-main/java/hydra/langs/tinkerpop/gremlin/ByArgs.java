@@ -5,7 +5,13 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class ByArgs implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.ByArgs");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.ByArgs");
+  
+  public static final hydra.core.Name FIELD_NAME_ORDER = new hydra.core.Name("order");
+  
+  public static final hydra.core.Name FIELD_NAME_TOKEN = new hydra.core.Name("token");
+  
+  public static final hydra.core.Name FIELD_NAME_OTHER = new hydra.core.Name("other");
   
   private ByArgs () {
   

@@ -8,7 +8,15 @@ import java.io.Serializable;
  * A set of features for path functions.
  */
 public class PathFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.PathFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.PathFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_LENGTH = new hydra.core.Name("length");
+  
+  public static final hydra.core.Name FIELD_NAME_NODES = new hydra.core.Name("nodes");
+  
+  public static final hydra.core.Name FIELD_NAME_RELATIONSHIPS = new hydra.core.Name("relationships");
+  
+  public static final hydra.core.Name FIELD_NAME_SHORTEST_PATH = new hydra.core.Name("shortestPath");
   
   /**
    * Whether to expect the length() function.

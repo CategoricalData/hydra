@@ -5,7 +5,15 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public class BetweenExpression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.BetweenExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.BetweenExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_NOT = new hydra.core.Name("not");
+  
+  public static final hydra.core.Name FIELD_NAME_EXPRESSION = new hydra.core.Name("expression");
+  
+  public static final hydra.core.Name FIELD_NAME_LOWER_BOUND = new hydra.core.Name("lowerBound");
+  
+  public static final hydra.core.Name FIELD_NAME_UPPER_BOUND = new hydra.core.Name("upperBound");
   
   public final Boolean not;
   

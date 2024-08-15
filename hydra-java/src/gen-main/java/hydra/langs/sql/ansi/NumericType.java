@@ -5,7 +5,11 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public abstract class NumericType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.NumericType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.NumericType");
+  
+  public static final hydra.core.Name FIELD_NAME_EXACT = new hydra.core.Name("exact");
+  
+  public static final hydra.core.Name FIELD_NAME_APPROXIMATE = new hydra.core.Name("approximate");
   
   private NumericType () {
   

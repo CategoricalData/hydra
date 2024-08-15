@@ -5,7 +5,21 @@ package hydra.langs.avro.schema;
 import java.io.Serializable;
 
 public class Field implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/avro/schema.Field");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/avro/schema.Field");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_DOC = new hydra.core.Name("doc");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  
+  public static final hydra.core.Name FIELD_NAME_DEFAULT = new hydra.core.Name("default");
+  
+  public static final hydra.core.Name FIELD_NAME_ORDER = new hydra.core.Name("order");
+  
+  public static final hydra.core.Name FIELD_NAME_ALIASES = new hydra.core.Name("aliases");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
   
   /**
    * a JSON string providing the name of the field

@@ -5,7 +5,11 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public class Importee_Rename implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Importee.Rename");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Importee.Rename");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_RENAME = new hydra.core.Name("rename");
   
   public final hydra.langs.scala.meta.Name name;
   

@@ -5,7 +5,11 @@ package hydra.langs.protobuf.proto3;
 import java.io.Serializable;
 
 public abstract class Definition implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/protobuf/proto3.Definition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/protobuf/proto3.Definition");
+  
+  public static final hydra.core.Name FIELD_NAME_ENUM = new hydra.core.Name("enum");
+  
+  public static final hydra.core.Name FIELD_NAME_MESSAGE = new hydra.core.Name("message");
   
   private Definition () {
   

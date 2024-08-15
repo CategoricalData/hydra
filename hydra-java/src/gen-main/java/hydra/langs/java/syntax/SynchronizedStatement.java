@@ -5,7 +5,11 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public class SynchronizedStatement implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.SynchronizedStatement");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.SynchronizedStatement");
+  
+  public static final hydra.core.Name FIELD_NAME_EXPRESSION = new hydra.core.Name("expression");
+  
+  public static final hydra.core.Name FIELD_NAME_BLOCK = new hydra.core.Name("block");
   
   public final hydra.langs.java.syntax.Expression expression;
   

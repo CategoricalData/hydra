@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A term together with an annotation
  */
 public class AnnotatedTerm implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.AnnotatedTerm");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.AnnotatedTerm");
+  
+  public static final hydra.core.Name FIELD_NAME_SUBJECT = new hydra.core.Name("subject");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATION = new hydra.core.Name("annotation");
   
   public final hydra.core.Term subject;
   

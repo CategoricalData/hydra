@@ -5,11 +5,13 @@ package hydra.langs.xml.schema;
 import java.io.Serializable;
 
 public class UnsignedByte implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/xml/schema.UnsignedByte");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/xml/schema.UnsignedByte");
   
-  public final Byte value;
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
-  public UnsignedByte (Byte value) {
+  public final Character value;
+  
+  public UnsignedByte (Character value) {
     java.util.Objects.requireNonNull((value));
     this.value = value;
   }

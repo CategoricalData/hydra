@@ -5,7 +5,23 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public class Uchar_Sequence2 implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.Uchar.Sequence2");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.Uchar.Sequence2");
+  
+  public static final hydra.core.Name FIELD_NAME_HEX = new hydra.core.Name("hex");
+  
+  public static final hydra.core.Name FIELD_NAME_HEX2 = new hydra.core.Name("hex2");
+  
+  public static final hydra.core.Name FIELD_NAME_HEX3 = new hydra.core.Name("hex3");
+  
+  public static final hydra.core.Name FIELD_NAME_HEX4 = new hydra.core.Name("hex4");
+  
+  public static final hydra.core.Name FIELD_NAME_HEX5 = new hydra.core.Name("hex5");
+  
+  public static final hydra.core.Name FIELD_NAME_HEX6 = new hydra.core.Name("hex6");
+  
+  public static final hydra.core.Name FIELD_NAME_HEX7 = new hydra.core.Name("hex7");
+  
+  public static final hydra.core.Name FIELD_NAME_HEX8 = new hydra.core.Name("hex8");
   
   public final hydra.langs.shex.syntax.Hex hex;
   

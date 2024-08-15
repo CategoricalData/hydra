@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A function type, also known as an arrow type
  */
 public class FunctionType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.FunctionType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.FunctionType");
+  
+  public static final hydra.core.Name FIELD_NAME_DOMAIN = new hydra.core.Name("domain");
+  
+  public static final hydra.core.Name FIELD_NAME_CODOMAIN = new hydra.core.Name("codomain");
   
   public final hydra.core.Type domain;
   

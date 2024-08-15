@@ -8,7 +8,17 @@ import java.io.Serializable;
  * A set of features for range literals within relationship patterns.
  */
 public class RangeLiteralFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.RangeLiteralFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.RangeLiteralFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_BOUNDS = new hydra.core.Name("bounds");
+  
+  public static final hydra.core.Name FIELD_NAME_EXACT_RANGE = new hydra.core.Name("exactRange");
+  
+  public static final hydra.core.Name FIELD_NAME_LOWER_BOUND = new hydra.core.Name("lowerBound");
+  
+  public static final hydra.core.Name FIELD_NAME_STAR_RANGE = new hydra.core.Name("starRange");
+  
+  public static final hydra.core.Name FIELD_NAME_UPPER_BOUND = new hydra.core.Name("upperBound");
   
   /**
    * Whether to expect range literals with both lower and upper bounds.

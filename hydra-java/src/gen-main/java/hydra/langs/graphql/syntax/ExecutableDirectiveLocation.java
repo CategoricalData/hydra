@@ -5,7 +5,23 @@ package hydra.langs.graphql.syntax;
 import java.io.Serializable;
 
 public abstract class ExecutableDirectiveLocation implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.ExecutableDirectiveLocation");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/graphql/syntax.ExecutableDirectiveLocation");
+  
+  public static final hydra.core.Name FIELD_NAME_Q_U_E_R_Y = new hydra.core.Name("qUERY");
+  
+  public static final hydra.core.Name FIELD_NAME_M_U_T_A_T_I_O_N = new hydra.core.Name("mUTATION");
+  
+  public static final hydra.core.Name FIELD_NAME_S_U_B_S_C_R_I_P_T_I_O_N = new hydra.core.Name("sUBSCRIPTION");
+  
+  public static final hydra.core.Name FIELD_NAME_F_I_E_L_D = new hydra.core.Name("fIELD");
+  
+  public static final hydra.core.Name FIELD_NAME_F_R_A_G_M_E_N_T_LOWBAR_D_E_F_I_N_I_T_I_O_N = new hydra.core.Name("fRAGMENTLowbarDEFINITION");
+  
+  public static final hydra.core.Name FIELD_NAME_F_R_A_G_M_E_N_T_LOWBAR_S_P_R_E_A_D = new hydra.core.Name("fRAGMENTLowbarSPREAD");
+  
+  public static final hydra.core.Name FIELD_NAME_I_N_L_I_N_E_LOWBAR_F_R_A_G_M_E_N_T = new hydra.core.Name("iNLINELowbarFRAGMENT");
+  
+  public static final hydra.core.Name FIELD_NAME_V_A_R_I_A_B_L_E_LOWBAR_D_E_F_I_N_I_T_I_O_N = new hydra.core.Name("vARIABLELowbarDEFINITION");
   
   private ExecutableDirectiveLocation () {
   

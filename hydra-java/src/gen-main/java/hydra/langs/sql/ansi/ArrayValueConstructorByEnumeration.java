@@ -5,7 +5,13 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public class ArrayValueConstructorByEnumeration implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.ArrayValueConstructorByEnumeration");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.ArrayValueConstructorByEnumeration");
+  
+  public static final hydra.core.Name FIELD_NAME_LEFT_BRACKET_OR_TRIGRAPH = new hydra.core.Name("leftBracketOrTrigraph");
+  
+  public static final hydra.core.Name FIELD_NAME_ARRAY_ELEMENT_LIST = new hydra.core.Name("arrayElementList");
+  
+  public static final hydra.core.Name FIELD_NAME_RIGHT_BRACKET_OR_TRIGRAPH = new hydra.core.Name("rightBracketOrTrigraph");
   
   public final hydra.langs.sql.ansi.LeftBracketOrTrigraph leftBracketOrTrigraph;
   

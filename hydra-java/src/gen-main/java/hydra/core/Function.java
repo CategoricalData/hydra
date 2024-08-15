@@ -8,7 +8,13 @@ import java.io.Serializable;
  * A function
  */
 public abstract class Function implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Function");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.Function");
+  
+  public static final hydra.core.Name FIELD_NAME_ELIMINATION = new hydra.core.Name("elimination");
+  
+  public static final hydra.core.Name FIELD_NAME_LAMBDA = new hydra.core.Name("lambda");
+  
+  public static final hydra.core.Name FIELD_NAME_PRIMITIVE = new hydra.core.Name("primitive");
   
   private Function () {
   

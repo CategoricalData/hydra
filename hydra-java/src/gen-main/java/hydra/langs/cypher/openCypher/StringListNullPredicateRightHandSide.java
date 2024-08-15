@@ -5,7 +5,13 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public abstract class StringListNullPredicateRightHandSide implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.StringListNullPredicateRightHandSide");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.StringListNullPredicateRightHandSide");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
+  
+  public static final hydra.core.Name FIELD_NAME_NULL = new hydra.core.Name("null");
   
   private StringListNullPredicateRightHandSide () {
   

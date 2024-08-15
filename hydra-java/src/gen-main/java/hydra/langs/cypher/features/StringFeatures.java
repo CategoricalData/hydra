@@ -8,7 +8,31 @@ import java.io.Serializable;
  * A set of features for string functions.
  */
 public class StringFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.StringFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.StringFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_CHAR_LENGTH = new hydra.core.Name("char_length");
+  
+  public static final hydra.core.Name FIELD_NAME_CHARACTER_LENGTH = new hydra.core.Name("character_length");
+  
+  public static final hydra.core.Name FIELD_NAME_CONTAINS = new hydra.core.Name("contains");
+  
+  public static final hydra.core.Name FIELD_NAME_ENDS_WITH = new hydra.core.Name("endsWith");
+  
+  public static final hydra.core.Name FIELD_NAME_IN = new hydra.core.Name("in");
+  
+  public static final hydra.core.Name FIELD_NAME_STARTS_WITH = new hydra.core.Name("startsWith");
+  
+  public static final hydra.core.Name FIELD_NAME_TO_BOOLEAN = new hydra.core.Name("toBoolean");
+  
+  public static final hydra.core.Name FIELD_NAME_TO_BOOLEAN_OR_NULL = new hydra.core.Name("toBooleanOrNull");
+  
+  public static final hydra.core.Name FIELD_NAME_TO_FLOAT = new hydra.core.Name("toFloat");
+  
+  public static final hydra.core.Name FIELD_NAME_TO_FLOAT_OR_NULL = new hydra.core.Name("toFloatOrNull");
+  
+  public static final hydra.core.Name FIELD_NAME_TO_INTEGER = new hydra.core.Name("toInteger");
+  
+  public static final hydra.core.Name FIELD_NAME_TO_INTEGER_OR_NULL = new hydra.core.Name("toIntegerOrNull");
   
   /**
    * Whether to expect the char_length() function.

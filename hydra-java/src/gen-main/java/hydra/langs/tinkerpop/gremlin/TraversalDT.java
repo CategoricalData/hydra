@@ -5,7 +5,15 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class TraversalDT implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalDT");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalDT");
+  
+  public static final hydra.core.Name FIELD_NAME_SECOND = new hydra.core.Name("second");
+  
+  public static final hydra.core.Name FIELD_NAME_MINUTE = new hydra.core.Name("minute");
+  
+  public static final hydra.core.Name FIELD_NAME_HOUR = new hydra.core.Name("hour");
+  
+  public static final hydra.core.Name FIELD_NAME_DAY = new hydra.core.Name("day");
   
   private TraversalDT () {
   

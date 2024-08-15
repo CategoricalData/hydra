@@ -5,7 +5,15 @@ package hydra.langs.pegasus.pdl;
 import java.io.Serializable;
 
 public class SchemaFile implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/pegasus/pdl.SchemaFile");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/pegasus/pdl.SchemaFile");
+  
+  public static final hydra.core.Name FIELD_NAME_NAMESPACE = new hydra.core.Name("namespace");
+  
+  public static final hydra.core.Name FIELD_NAME_PACKAGE = new hydra.core.Name("package");
+  
+  public static final hydra.core.Name FIELD_NAME_IMPORTS = new hydra.core.Name("imports");
+  
+  public static final hydra.core.Name FIELD_NAME_SCHEMAS = new hydra.core.Name("schemas");
   
   public final hydra.langs.pegasus.pdl.Namespace namespace;
   

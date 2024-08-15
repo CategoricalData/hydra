@@ -8,7 +8,13 @@ import java.io.Serializable;
  * An equality judgement: less than, equal to, or greater than
  */
 public abstract class Comparison implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/graph.Comparison");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/graph.Comparison");
+  
+  public static final hydra.core.Name FIELD_NAME_LESS_THAN = new hydra.core.Name("lessThan");
+  
+  public static final hydra.core.Name FIELD_NAME_EQUAL_TO = new hydra.core.Name("equalTo");
+  
+  public static final hydra.core.Name FIELD_NAME_GREATER_THAN = new hydra.core.Name("greaterThan");
   
   private Comparison () {
   

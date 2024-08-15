@@ -5,7 +5,11 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public class PartialComparisonExpression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.PartialComparisonExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.PartialComparisonExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_OPERATOR = new hydra.core.Name("operator");
+  
+  public static final hydra.core.Name FIELD_NAME_RIGHT = new hydra.core.Name("right");
   
   public final hydra.langs.cypher.openCypher.ComparisonOperator operator;
   

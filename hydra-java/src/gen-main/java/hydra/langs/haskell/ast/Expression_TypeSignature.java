@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A type signature expression
  */
 public class Expression_TypeSignature implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Expression.TypeSignature");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.Expression.TypeSignature");
+  
+  public static final hydra.core.Name FIELD_NAME_INNER = new hydra.core.Name("inner");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
   
   public final hydra.langs.haskell.ast.Expression inner;
   

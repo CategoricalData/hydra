@@ -5,7 +5,19 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public class TripleConstraint implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.TripleConstraint");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.TripleConstraint");
+  
+  public static final hydra.core.Name FIELD_NAME_SENSE_FLAGS = new hydra.core.Name("senseFlags");
+  
+  public static final hydra.core.Name FIELD_NAME_PREDICATE = new hydra.core.Name("predicate");
+  
+  public static final hydra.core.Name FIELD_NAME_INLINE_SHAPE_EXPRESSION = new hydra.core.Name("inlineShapeExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_CARDINALITY = new hydra.core.Name("cardinality");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST_OF_ANNOTATION = new hydra.core.Name("listOfAnnotation");
+  
+  public static final hydra.core.Name FIELD_NAME_SEMANTIC_ACTIONS = new hydra.core.Name("semanticActions");
   
   public final hydra.util.Opt<hydra.langs.shex.syntax.SenseFlags> senseFlags;
   

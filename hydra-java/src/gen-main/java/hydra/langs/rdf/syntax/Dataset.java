@@ -5,7 +5,9 @@ package hydra.langs.rdf.syntax;
 import java.io.Serializable;
 
 public class Dataset implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/rdf/syntax.Dataset");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/rdf/syntax.Dataset");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   public final java.util.Set<hydra.langs.rdf.syntax.Quad> value;
   

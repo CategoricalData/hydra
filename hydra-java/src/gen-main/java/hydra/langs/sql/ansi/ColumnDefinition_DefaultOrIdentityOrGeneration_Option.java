@@ -5,7 +5,13 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public abstract class ColumnDefinition_DefaultOrIdentityOrGeneration_Option implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.ColumnDefinition.DefaultOrIdentityOrGeneration.Option");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.ColumnDefinition.DefaultOrIdentityOrGeneration.Option");
+  
+  public static final hydra.core.Name FIELD_NAME_DEFAULT_CLAUSE = new hydra.core.Name("defaultClause");
+  
+  public static final hydra.core.Name FIELD_NAME_IDENTITY_COLUMN_SPECIFICATION = new hydra.core.Name("identityColumnSpecification");
+  
+  public static final hydra.core.Name FIELD_NAME_GENERATION_CLAUSE = new hydra.core.Name("generationClause");
   
   private ColumnDefinition_DefaultOrIdentityOrGeneration_Option () {
   

@@ -5,7 +5,29 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class TraversalOperator implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalOperator");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalOperator");
+  
+  public static final hydra.core.Name FIELD_NAME_ADD_ALL = new hydra.core.Name("addAll");
+  
+  public static final hydra.core.Name FIELD_NAME_AND = new hydra.core.Name("and");
+  
+  public static final hydra.core.Name FIELD_NAME_ASSIGN = new hydra.core.Name("assign");
+  
+  public static final hydra.core.Name FIELD_NAME_DIV = new hydra.core.Name("div");
+  
+  public static final hydra.core.Name FIELD_NAME_MAX = new hydra.core.Name("max");
+  
+  public static final hydra.core.Name FIELD_NAME_MIN = new hydra.core.Name("min");
+  
+  public static final hydra.core.Name FIELD_NAME_MINUS = new hydra.core.Name("minus");
+  
+  public static final hydra.core.Name FIELD_NAME_MULT = new hydra.core.Name("mult");
+  
+  public static final hydra.core.Name FIELD_NAME_OR = new hydra.core.Name("or");
+  
+  public static final hydra.core.Name FIELD_NAME_SUM = new hydra.core.Name("sum");
+  
+  public static final hydra.core.Name FIELD_NAME_SUM_LONG = new hydra.core.Name("sumLong");
   
   private TraversalOperator () {
   

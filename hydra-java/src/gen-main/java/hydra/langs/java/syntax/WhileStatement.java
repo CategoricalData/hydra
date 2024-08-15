@@ -5,7 +5,11 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public class WhileStatement implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.WhileStatement");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.WhileStatement");
+  
+  public static final hydra.core.Name FIELD_NAME_COND = new hydra.core.Name("cond");
+  
+  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
   
   public final hydra.util.Opt<hydra.langs.java.syntax.Expression> cond;
   

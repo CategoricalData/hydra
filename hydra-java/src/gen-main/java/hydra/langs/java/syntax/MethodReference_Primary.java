@@ -5,7 +5,13 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public class MethodReference_Primary implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.MethodReference.Primary");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.MethodReference.Primary");
+  
+  public static final hydra.core.Name FIELD_NAME_PRIMARY = new hydra.core.Name("primary");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE_ARGUMENTS = new hydra.core.Name("typeArguments");
+  
+  public static final hydra.core.Name FIELD_NAME_IDENTIFIER = new hydra.core.Name("identifier");
   
   public final hydra.langs.java.syntax.Primary primary;
   

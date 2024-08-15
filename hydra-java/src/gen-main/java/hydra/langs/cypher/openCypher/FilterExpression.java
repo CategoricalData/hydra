@@ -5,7 +5,11 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public class FilterExpression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.FilterExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.FilterExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_ID_IN_COLL = new hydra.core.Name("idInColl");
+  
+  public static final hydra.core.Name FIELD_NAME_WHERE = new hydra.core.Name("where");
   
   public final hydra.langs.cypher.openCypher.IdInColl idInColl;
   

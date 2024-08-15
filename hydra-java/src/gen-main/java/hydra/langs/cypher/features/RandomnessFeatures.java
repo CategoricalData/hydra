@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A set of features for random value generation.
  */
 public class RandomnessFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.RandomnessFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.RandomnessFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_RAND = new hydra.core.Name("rand");
+  
+  public static final hydra.core.Name FIELD_NAME_RANDOM_U_U_I_D = new hydra.core.Name("randomUUID");
   
   /**
    * Whether to expect the rand() function.

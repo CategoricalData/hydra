@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class TraversalScope implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalScope");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalScope");
+  
+  public static final hydra.core.Name FIELD_NAME_LOCAL = new hydra.core.Name("local");
+  
+  public static final hydra.core.Name FIELD_NAME_GLOBAL = new hydra.core.Name("global");
   
   private TraversalScope () {
   

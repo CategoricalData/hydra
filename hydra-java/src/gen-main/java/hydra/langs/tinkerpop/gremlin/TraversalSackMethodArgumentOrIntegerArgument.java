@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class TraversalSackMethodArgumentOrIntegerArgument implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalSackMethodArgumentOrIntegerArgument");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalSackMethodArgumentOrIntegerArgument");
+  
+  public static final hydra.core.Name FIELD_NAME_CONSUMER = new hydra.core.Name("consumer");
+  
+  public static final hydra.core.Name FIELD_NAME_INT = new hydra.core.Name("int");
   
   private TraversalSackMethodArgumentOrIntegerArgument () {
   

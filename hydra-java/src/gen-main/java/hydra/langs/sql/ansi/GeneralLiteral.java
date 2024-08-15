@@ -5,7 +5,21 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public abstract class GeneralLiteral implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.GeneralLiteral");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.GeneralLiteral");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
+  
+  public static final hydra.core.Name FIELD_NAME_NATIONAL_STRING = new hydra.core.Name("nationalString");
+  
+  public static final hydra.core.Name FIELD_NAME_UNICODE = new hydra.core.Name("unicode");
+  
+  public static final hydra.core.Name FIELD_NAME_BINARY = new hydra.core.Name("binary");
+  
+  public static final hydra.core.Name FIELD_NAME_DATE_TIME = new hydra.core.Name("dateTime");
+  
+  public static final hydra.core.Name FIELD_NAME_INTERVAL = new hydra.core.Name("interval");
+  
+  public static final hydra.core.Name FIELD_NAME_BOOLEAN = new hydra.core.Name("boolean");
   
   private GeneralLiteral () {
   

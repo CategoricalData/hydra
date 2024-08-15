@@ -5,7 +5,13 @@ package hydra.langs.parquet.format;
 import java.io.Serializable;
 
 public abstract class TimeUnit implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.TimeUnit");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.TimeUnit");
+  
+  public static final hydra.core.Name FIELD_NAME_MILLIS = new hydra.core.Name("millis");
+  
+  public static final hydra.core.Name FIELD_NAME_MICROS = new hydra.core.Name("micros");
+  
+  public static final hydra.core.Name FIELD_NAME_NANOS = new hydra.core.Name("nanos");
   
   private TimeUnit () {
   

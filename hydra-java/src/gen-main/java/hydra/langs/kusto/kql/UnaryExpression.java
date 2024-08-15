@@ -5,7 +5,11 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public class UnaryExpression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.UnaryExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.UnaryExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_OPERATOR = new hydra.core.Name("operator");
+  
+  public static final hydra.core.Name FIELD_NAME_EXPRESSION = new hydra.core.Name("expression");
   
   public final hydra.langs.kusto.kql.UnaryOperator operator;
   

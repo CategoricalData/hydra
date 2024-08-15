@@ -5,7 +5,43 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public abstract class BinaryOperator implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.BinaryOperator");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.BinaryOperator");
+  
+  public static final hydra.core.Name FIELD_NAME_CASE_INSENSITIVE_EQUAL = new hydra.core.Name("caseInsensitiveEqual");
+  
+  public static final hydra.core.Name FIELD_NAME_CONTAINS = new hydra.core.Name("contains");
+  
+  public static final hydra.core.Name FIELD_NAME_DIVIDE = new hydra.core.Name("divide");
+  
+  public static final hydra.core.Name FIELD_NAME_ENDS_WITH = new hydra.core.Name("endsWith");
+  
+  public static final hydra.core.Name FIELD_NAME_EQUAL = new hydra.core.Name("equal");
+  
+  public static final hydra.core.Name FIELD_NAME_GREATER = new hydra.core.Name("greater");
+  
+  public static final hydra.core.Name FIELD_NAME_GREATER_OR_EQUAL = new hydra.core.Name("greaterOrEqual");
+  
+  public static final hydra.core.Name FIELD_NAME_HAS = new hydra.core.Name("has");
+  
+  public static final hydra.core.Name FIELD_NAME_HAS_PREFIX = new hydra.core.Name("hasPrefix");
+  
+  public static final hydra.core.Name FIELD_NAME_HAS_SUFFIX = new hydra.core.Name("hasSuffix");
+  
+  public static final hydra.core.Name FIELD_NAME_LESS = new hydra.core.Name("less");
+  
+  public static final hydra.core.Name FIELD_NAME_LESS_OR_EQUAL = new hydra.core.Name("lessOrEqual");
+  
+  public static final hydra.core.Name FIELD_NAME_MATCHES_REGEX = new hydra.core.Name("matchesRegex");
+  
+  public static final hydra.core.Name FIELD_NAME_MINUS = new hydra.core.Name("minus");
+  
+  public static final hydra.core.Name FIELD_NAME_NOT_EQUAL = new hydra.core.Name("notEqual");
+  
+  public static final hydra.core.Name FIELD_NAME_PLUS = new hydra.core.Name("plus");
+  
+  public static final hydra.core.Name FIELD_NAME_STARTS_WITH = new hydra.core.Name("startsWith");
+  
+  public static final hydra.core.Name FIELD_NAME_TIMES = new hydra.core.Name("times");
   
   private BinaryOperator () {
   

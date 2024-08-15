@@ -5,7 +5,13 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public abstract class DurationUnit implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.DurationUnit");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.DurationUnit");
+  
+  public static final hydra.core.Name FIELD_NAME_SECOND = new hydra.core.Name("second");
+  
+  public static final hydra.core.Name FIELD_NAME_MINUTE = new hydra.core.Name("minute");
+  
+  public static final hydra.core.Name FIELD_NAME_HOUR = new hydra.core.Name("hour");
   
   private DurationUnit () {
   

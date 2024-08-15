@@ -5,7 +5,13 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public class JoinCommand implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.JoinCommand");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.JoinCommand");
+  
+  public static final hydra.core.Name FIELD_NAME_KIND = new hydra.core.Name("kind");
+  
+  public static final hydra.core.Name FIELD_NAME_EXPRESSION = new hydra.core.Name("expression");
+  
+  public static final hydra.core.Name FIELD_NAME_ON = new hydra.core.Name("on");
   
   public final hydra.langs.kusto.kql.JoinKind kind;
   

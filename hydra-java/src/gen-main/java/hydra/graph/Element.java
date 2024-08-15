@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A graph element, having a name, data term (value), and schema term (type)
  */
 public class Element implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/graph.Element");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/graph.Element");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA = new hydra.core.Name("data");
   
   public final hydra.core.Name name;
   

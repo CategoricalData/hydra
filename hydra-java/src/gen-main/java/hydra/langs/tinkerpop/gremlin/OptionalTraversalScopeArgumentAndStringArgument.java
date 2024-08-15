@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public class OptionalTraversalScopeArgumentAndStringArgument implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.OptionalTraversalScopeArgumentAndStringArgument");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.OptionalTraversalScopeArgumentAndStringArgument");
+  
+  public static final hydra.core.Name FIELD_NAME_SCOPE = new hydra.core.Name("scope");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
   
   public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope;
   

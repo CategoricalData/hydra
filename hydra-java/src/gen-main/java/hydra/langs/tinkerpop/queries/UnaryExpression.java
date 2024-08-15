@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.queries;
 import java.io.Serializable;
 
 public class UnaryExpression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.UnaryExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.UnaryExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_OPERATOR = new hydra.core.Name("operator");
+  
+  public static final hydra.core.Name FIELD_NAME_OPERAND = new hydra.core.Name("operand");
   
   public final hydra.langs.tinkerpop.queries.UnaryOperator operator;
   

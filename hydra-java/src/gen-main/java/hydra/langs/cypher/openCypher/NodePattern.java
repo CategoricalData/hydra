@@ -5,7 +5,13 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public class NodePattern implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.NodePattern");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.NodePattern");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
+  
+  public static final hydra.core.Name FIELD_NAME_LABELS = new hydra.core.Name("labels");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTIES = new hydra.core.Name("properties");
   
   public final hydra.util.Opt<hydra.langs.cypher.openCypher.Variable> variable;
   

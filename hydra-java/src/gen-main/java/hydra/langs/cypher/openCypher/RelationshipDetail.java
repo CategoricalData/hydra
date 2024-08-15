@@ -5,7 +5,15 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public class RelationshipDetail implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.RelationshipDetail");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.RelationshipDetail");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPES = new hydra.core.Name("types");
+  
+  public static final hydra.core.Name FIELD_NAME_RANGE = new hydra.core.Name("range");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTIES = new hydra.core.Name("properties");
   
   public final hydra.util.Opt<hydra.langs.cypher.openCypher.Variable> variable;
   

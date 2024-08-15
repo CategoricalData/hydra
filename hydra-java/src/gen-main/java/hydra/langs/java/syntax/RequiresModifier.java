@@ -5,7 +5,11 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class RequiresModifier implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.RequiresModifier");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.RequiresModifier");
+  
+  public static final hydra.core.Name FIELD_NAME_TRANSITIVE = new hydra.core.Name("transitive");
+  
+  public static final hydra.core.Name FIELD_NAME_STATIC = new hydra.core.Name("static");
   
   private RequiresModifier () {
   

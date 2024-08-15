@@ -5,7 +5,11 @@ package hydra.langs.haskell.ast;
 import java.io.Serializable;
 
 public class TypeDeclaration implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.TypeDeclaration");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.TypeDeclaration");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
   
   public final hydra.langs.haskell.ast.DeclarationHead name;
   

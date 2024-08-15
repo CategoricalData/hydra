@@ -8,7 +8,13 @@ import java.io.Serializable;
  * Formatting option for code blocks
  */
 public class BlockStyle implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ast.BlockStyle");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ast.BlockStyle");
+  
+  public static final hydra.core.Name FIELD_NAME_INDENT = new hydra.core.Name("indent");
+  
+  public static final hydra.core.Name FIELD_NAME_NEWLINE_BEFORE_CONTENT = new hydra.core.Name("newlineBeforeContent");
+  
+  public static final hydra.core.Name FIELD_NAME_NEWLINE_AFTER_CONTENT = new hydra.core.Name("newlineAfterContent");
   
   public final hydra.util.Opt<String> indent;
   

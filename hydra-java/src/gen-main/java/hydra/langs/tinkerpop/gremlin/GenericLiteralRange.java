@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class GenericLiteralRange implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.GenericLiteralRange");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.GenericLiteralRange");
+  
+  public static final hydra.core.Name FIELD_NAME_INTEGER = new hydra.core.Name("integer");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
   
   private GenericLiteralRange () {
   

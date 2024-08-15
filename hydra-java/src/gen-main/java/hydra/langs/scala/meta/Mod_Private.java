@@ -5,7 +5,9 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public class Mod_Private implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Mod.Private");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Mod.Private");
+  
+  public static final hydra.core.Name FIELD_NAME_WITHIN = new hydra.core.Name("within");
   
   public final hydra.langs.scala.meta.Ref within;
   

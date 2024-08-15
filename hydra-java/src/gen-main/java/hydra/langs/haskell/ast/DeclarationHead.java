@@ -8,7 +8,13 @@ import java.io.Serializable;
  * The left-hand side of a declaration
  */
 public abstract class DeclarationHead implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.DeclarationHead");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.DeclarationHead");
+  
+  public static final hydra.core.Name FIELD_NAME_APPLICATION = new hydra.core.Name("application");
+  
+  public static final hydra.core.Name FIELD_NAME_PARENS = new hydra.core.Name("parens");
+  
+  public static final hydra.core.Name FIELD_NAME_SIMPLE = new hydra.core.Name("simple");
   
   private DeclarationHead () {
   

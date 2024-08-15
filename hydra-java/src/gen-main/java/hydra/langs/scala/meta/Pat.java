@@ -5,7 +5,35 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public abstract class Pat implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Pat");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Pat");
+  
+  public static final hydra.core.Name FIELD_NAME_VAR = new hydra.core.Name("var");
+  
+  public static final hydra.core.Name FIELD_NAME_WILDCARD = new hydra.core.Name("wildcard");
+  
+  public static final hydra.core.Name FIELD_NAME_SEQ_WILDCARD = new hydra.core.Name("seqWildcard");
+  
+  public static final hydra.core.Name FIELD_NAME_BIND = new hydra.core.Name("bind");
+  
+  public static final hydra.core.Name FIELD_NAME_ALTERNATIVE = new hydra.core.Name("alternative");
+  
+  public static final hydra.core.Name FIELD_NAME_TUPLE = new hydra.core.Name("tuple");
+  
+  public static final hydra.core.Name FIELD_NAME_REPEATED = new hydra.core.Name("repeated");
+  
+  public static final hydra.core.Name FIELD_NAME_EXTRACT = new hydra.core.Name("extract");
+  
+  public static final hydra.core.Name FIELD_NAME_EXTRACT_INFIX = new hydra.core.Name("extractInfix");
+  
+  public static final hydra.core.Name FIELD_NAME_INTERPOLATE = new hydra.core.Name("interpolate");
+  
+  public static final hydra.core.Name FIELD_NAME_XML = new hydra.core.Name("xml");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPED = new hydra.core.Name("typed");
+  
+  public static final hydra.core.Name FIELD_NAME_MACRO = new hydra.core.Name("macro");
+  
+  public static final hydra.core.Name FIELD_NAME_GIVEN = new hydra.core.Name("given");
   
   private Pat () {
   

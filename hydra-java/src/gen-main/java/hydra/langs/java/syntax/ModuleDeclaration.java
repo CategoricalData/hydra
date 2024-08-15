@@ -5,7 +5,15 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public class ModuleDeclaration implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.ModuleDeclaration");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.ModuleDeclaration");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
+  
+  public static final hydra.core.Name FIELD_NAME_OPEN = new hydra.core.Name("open");
+  
+  public static final hydra.core.Name FIELD_NAME_IDENTIFIERS = new hydra.core.Name("identifiers");
+  
+  public static final hydra.core.Name FIELD_NAME_DIRECTIVES = new hydra.core.Name("directives");
   
   public final java.util.List<hydra.langs.java.syntax.Annotation> annotations;
   

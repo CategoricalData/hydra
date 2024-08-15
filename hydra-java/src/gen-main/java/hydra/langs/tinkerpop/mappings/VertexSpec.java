@@ -8,7 +8,13 @@ import java.io.Serializable;
  * A mapping specification producing vertices of a specified label
  */
 public class VertexSpec implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/mappings.VertexSpec");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/mappings.VertexSpec");
+  
+  public static final hydra.core.Name FIELD_NAME_LABEL = new hydra.core.Name("label");
+  
+  public static final hydra.core.Name FIELD_NAME_ID = new hydra.core.Name("id");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTIES = new hydra.core.Name("properties");
   
   /**
    * The label of the target vertices, which must conform to the vertex type associated with that label.

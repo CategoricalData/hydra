@@ -5,7 +5,13 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public class ShexDoc implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.ShexDoc");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.ShexDoc");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST_OF_DIRECTIVE = new hydra.core.Name("listOfDirective");
+  
+  public static final hydra.core.Name FIELD_NAME_SEQUENCE = new hydra.core.Name("sequence");
+  
+  public static final hydra.core.Name FIELD_NAME_PREFIX_DECL = new hydra.core.Name("prefixDecl");
   
   public final java.util.List<hydra.langs.shex.syntax.Directive> listOfDirective;
   

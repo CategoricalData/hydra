@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public class Regexp implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.Regexp");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.Regexp");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST_OF_ALTS = new hydra.core.Name("listOfAlts");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST_OF_REGEX = new hydra.core.Name("listOfRegex");
   
   public final java.util.List<hydra.langs.shex.syntax.Regexp_ListOfAlts_Elmt> listOfAlts;
   

@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class NumericLiteral implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.NumericLiteral");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.NumericLiteral");
+  
+  public static final hydra.core.Name FIELD_NAME_INTEGER = new hydra.core.Name("integer");
+  
+  public static final hydra.core.Name FIELD_NAME_FLOAT = new hydra.core.Name("float");
   
   private NumericLiteral () {
   

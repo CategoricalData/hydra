@@ -5,7 +5,19 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public abstract class Data_Ref implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Data.Ref");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Data.Ref");
+  
+  public static final hydra.core.Name FIELD_NAME_THIS = new hydra.core.Name("this");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPER = new hydra.core.Name("super");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_ANONYMOUS = new hydra.core.Name("anonymous");
+  
+  public static final hydra.core.Name FIELD_NAME_SELECT = new hydra.core.Name("select");
+  
+  public static final hydra.core.Name FIELD_NAME_APPLY_UNARY = new hydra.core.Name("applyUnary");
   
   private Data_Ref () {
   

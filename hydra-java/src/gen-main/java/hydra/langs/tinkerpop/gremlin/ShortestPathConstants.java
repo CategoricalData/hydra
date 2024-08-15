@@ -5,7 +5,17 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class ShortestPathConstants implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.ShortestPathConstants");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.ShortestPathConstants");
+  
+  public static final hydra.core.Name FIELD_NAME_TARGET = new hydra.core.Name("target");
+  
+  public static final hydra.core.Name FIELD_NAME_EDGES = new hydra.core.Name("edges");
+  
+  public static final hydra.core.Name FIELD_NAME_DISTANCE = new hydra.core.Name("distance");
+  
+  public static final hydra.core.Name FIELD_NAME_MAX_DISTANCE = new hydra.core.Name("maxDistance");
+  
+  public static final hydra.core.Name FIELD_NAME_INCLUDE_EDGES = new hydra.core.Name("includeEdges");
   
   private ShortestPathConstants () {
   

@@ -5,7 +5,11 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public abstract class ImportExportStat implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.ImportExportStat");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.ImportExportStat");
+  
+  public static final hydra.core.Name FIELD_NAME_IMPORT = new hydra.core.Name("import");
+  
+  public static final hydra.core.Name FIELD_NAME_EXPORT = new hydra.core.Name("export");
   
   private ImportExportStat () {
   

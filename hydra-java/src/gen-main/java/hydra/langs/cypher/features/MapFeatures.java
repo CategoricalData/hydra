@@ -8,7 +8,9 @@ import java.io.Serializable;
  * A set of features for property map functions.
  */
 public class MapFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.MapFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.MapFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_KEYS = new hydra.core.Name("keys");
   
   /**
    * Whether to expect the keys() function.

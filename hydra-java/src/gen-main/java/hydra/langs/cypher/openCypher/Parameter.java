@@ -5,7 +5,11 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public abstract class Parameter implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.Parameter");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.Parameter");
+  
+  public static final hydra.core.Name FIELD_NAME_SYMBOLIC = new hydra.core.Name("symbolic");
+  
+  public static final hydra.core.Name FIELD_NAME_INTEGER = new hydra.core.Name("integer");
   
   private Parameter () {
   

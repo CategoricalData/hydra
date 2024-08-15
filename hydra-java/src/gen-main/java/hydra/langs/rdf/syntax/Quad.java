@@ -8,7 +8,15 @@ import java.io.Serializable;
  * An RDF triple with an optional named graph component
  */
 public class Quad implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/rdf/syntax.Quad");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/rdf/syntax.Quad");
+  
+  public static final hydra.core.Name FIELD_NAME_SUBJECT = new hydra.core.Name("subject");
+  
+  public static final hydra.core.Name FIELD_NAME_PREDICATE = new hydra.core.Name("predicate");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT = new hydra.core.Name("object");
+  
+  public static final hydra.core.Name FIELD_NAME_GRAPH = new hydra.core.Name("graph");
   
   public final hydra.langs.rdf.syntax.Resource subject;
   

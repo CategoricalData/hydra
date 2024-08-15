@@ -5,7 +5,21 @@ package hydra.langs.owl.syntax;
 import java.io.Serializable;
 
 public abstract class Assertion implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.Assertion");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.Assertion");
+  
+  public static final hydra.core.Name FIELD_NAME_CLASS_ASSERTION = new hydra.core.Name("classAssertion");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_PROPERTY_ASSERTION = new hydra.core.Name("dataPropertyAssertion");
+  
+  public static final hydra.core.Name FIELD_NAME_DIFFERENT_INDIVIDUALS = new hydra.core.Name("differentIndividuals");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT_PROPERTY_ASSERTION = new hydra.core.Name("objectPropertyAssertion");
+  
+  public static final hydra.core.Name FIELD_NAME_NEGATIVE_DATA_PROPERTY_ASSERTION = new hydra.core.Name("negativeDataPropertyAssertion");
+  
+  public static final hydra.core.Name FIELD_NAME_NEGATIVE_OBJECT_PROPERTY_ASSERTION = new hydra.core.Name("negativeObjectPropertyAssertion");
+  
+  public static final hydra.core.Name FIELD_NAME_SAME_INDIVIDUAL = new hydra.core.Name("sameIndividual");
   
   private Assertion () {
   

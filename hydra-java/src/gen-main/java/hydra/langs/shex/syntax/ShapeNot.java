@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public class ShapeNot implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.ShapeNot");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.ShapeNot");
+  
+  public static final hydra.core.Name FIELD_NAME_N_O_T = new hydra.core.Name("nOT");
+  
+  public static final hydra.core.Name FIELD_NAME_SHAPE_ATOM = new hydra.core.Name("shapeAtom");
   
   public final hydra.util.Opt<java.lang.Void> nOT;
   

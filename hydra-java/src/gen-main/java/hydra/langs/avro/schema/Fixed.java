@@ -5,7 +5,9 @@ package hydra.langs.avro.schema;
 import java.io.Serializable;
 
 public class Fixed implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/avro/schema.Fixed");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/avro/schema.Fixed");
+  
+  public static final hydra.core.Name FIELD_NAME_SIZE = new hydra.core.Name("size");
   
   /**
    * an integer, specifying the number of bytes per value

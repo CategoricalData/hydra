@@ -5,7 +5,13 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public class StructureVertex implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.StructureVertex");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.StructureVertex");
+  
+  public static final hydra.core.Name FIELD_NAME_NEW = new hydra.core.Name("new");
+  
+  public static final hydra.core.Name FIELD_NAME_ID = new hydra.core.Name("id");
+  
+  public static final hydra.core.Name FIELD_NAME_LABEL = new hydra.core.Name("label");
   
   public final Boolean new_;
   

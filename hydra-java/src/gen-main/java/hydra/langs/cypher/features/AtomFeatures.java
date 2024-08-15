@@ -8,7 +8,29 @@ import java.io.Serializable;
  * A set of features for various kinds of atomic expressions.
  */
 public class AtomFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.AtomFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.AtomFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_CASE_EXPRESSION = new hydra.core.Name("caseExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_COUNT = new hydra.core.Name("count");
+  
+  public static final hydra.core.Name FIELD_NAME_EXISTENTIAL_SUBQUERY = new hydra.core.Name("existentialSubquery");
+  
+  public static final hydra.core.Name FIELD_NAME_FUNCTION_INVOCATION = new hydra.core.Name("functionInvocation");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
+  
+  public static final hydra.core.Name FIELD_NAME_LITERAL = new hydra.core.Name("literal");
+  
+  public static final hydra.core.Name FIELD_NAME_PARAMETER = new hydra.core.Name("parameter");
+  
+  public static final hydra.core.Name FIELD_NAME_PATTERN_COMPREHENSION = new hydra.core.Name("patternComprehension");
+  
+  public static final hydra.core.Name FIELD_NAME_PATTERN_PREDICATE = new hydra.core.Name("patternPredicate");
+  
+  public static final hydra.core.Name FIELD_NAME_QUANTIFIER = new hydra.core.Name("quantifier");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
   
   /**
    * Whether to expect CASE expressions.

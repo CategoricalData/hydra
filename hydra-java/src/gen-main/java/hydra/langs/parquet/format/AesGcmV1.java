@@ -5,10 +5,22 @@ package hydra.langs.parquet.format;
 import java.io.Serializable;
 
 public class AesGcmV1 implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.AesGcmV1");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.AesGcmV1");
   
+  public static final hydra.core.Name FIELD_NAME_AAD_PREFIX = new hydra.core.Name("aadPrefix");
+  
+  public static final hydra.core.Name FIELD_NAME_AAD_FILE_UNIQUE = new hydra.core.Name("aadFileUnique");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPLY_AAD_PREFIX = new hydra.core.Name("supplyAadPrefix");
+  
+  /**
+   * AAD prefix
+   */
   public final hydra.util.Opt<String> aadPrefix;
   
+  /**
+   * Unique file identifier part of AAD suffix
+   */
   public final hydra.util.Opt<String> aadFileUnique;
   
   /**

@@ -5,7 +5,11 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public class PatternWhere implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.PatternWhere");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.PatternWhere");
+  
+  public static final hydra.core.Name FIELD_NAME_PATTERN = new hydra.core.Name("pattern");
+  
+  public static final hydra.core.Name FIELD_NAME_WHERE = new hydra.core.Name("where");
   
   public final hydra.langs.cypher.openCypher.Pattern pattern;
   

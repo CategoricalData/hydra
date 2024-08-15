@@ -5,7 +5,15 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public abstract class SetItem implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.SetItem");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.SetItem");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTY = new hydra.core.Name("property");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLE_EQUAL = new hydra.core.Name("variableEqual");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLE_PLUS_EQUAL = new hydra.core.Name("variablePlusEqual");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLE_LABELS = new hydra.core.Name("variableLabels");
   
   private SetItem () {
   

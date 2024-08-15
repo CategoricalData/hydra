@@ -5,7 +5,13 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public abstract class DatetimeLiteral implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.DatetimeLiteral");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.DatetimeLiteral");
+  
+  public static final hydra.core.Name FIELD_NAME_DATE = new hydra.core.Name("date");
+  
+  public static final hydra.core.Name FIELD_NAME_TIME = new hydra.core.Name("time");
+  
+  public static final hydra.core.Name FIELD_NAME_TIMESTAMP = new hydra.core.Name("timestamp");
   
   private DatetimeLiteral () {
   

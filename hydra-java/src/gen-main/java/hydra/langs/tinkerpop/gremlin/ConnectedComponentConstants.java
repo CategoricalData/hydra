@@ -5,7 +5,13 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class ConnectedComponentConstants implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.ConnectedComponentConstants");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.ConnectedComponentConstants");
+  
+  public static final hydra.core.Name FIELD_NAME_COMPONENT = new hydra.core.Name("component");
+  
+  public static final hydra.core.Name FIELD_NAME_EDGES = new hydra.core.Name("edges");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTY_NAME = new hydra.core.Name("propertyName");
   
   private ConnectedComponentConstants () {
   

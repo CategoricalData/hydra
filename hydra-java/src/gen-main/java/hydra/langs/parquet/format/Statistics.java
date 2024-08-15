@@ -8,14 +8,28 @@ import java.io.Serializable;
  * Statistics per row group and per page. All fields are optional.
  */
 public class Statistics implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.Statistics");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.Statistics");
+  
+  public static final hydra.core.Name FIELD_NAME_NULL_COUNT = new hydra.core.Name("nullCount");
+  
+  public static final hydra.core.Name FIELD_NAME_DISTINCT_COUNT = new hydra.core.Name("distinctCount");
+  
+  public static final hydra.core.Name FIELD_NAME_MAX_VALUE = new hydra.core.Name("maxValue");
+  
+  public static final hydra.core.Name FIELD_NAME_MIN_VALUE = new hydra.core.Name("minValue");
   
   public final hydra.util.Opt<java.math.BigInteger> nullCount;
   
   public final hydra.util.Opt<java.math.BigInteger> distinctCount;
   
+  /**
+   * Max value for the column, determined by its ColumnOrder. Values are encoded using PLAIN encoding, except that variable-length byte arrays do not include a length prefix.
+   */
   public final hydra.util.Opt<String> maxValue;
   
+  /**
+   * Max value for the column, determined by its ColumnOrder. Values are encoded using PLAIN encoding, except that variable-length byte arrays do not include a length prefix.
+   */
   public final hydra.util.Opt<String> minValue;
   
   public Statistics (hydra.util.Opt<java.math.BigInteger> nullCount, hydra.util.Opt<java.math.BigInteger> distinctCount, hydra.util.Opt<String> maxValue, hydra.util.Opt<String> minValue) {

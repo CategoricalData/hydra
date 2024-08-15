@@ -5,7 +5,11 @@ package hydra.langs.parquet.delta;
 import java.io.Serializable;
 
 public class DecimalType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/delta.DecimalType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/delta.DecimalType");
+  
+  public static final hydra.core.Name FIELD_NAME_PRECISION = new hydra.core.Name("precision");
+  
+  public static final hydra.core.Name FIELD_NAME_SCALE = new hydra.core.Name("scale");
   
   public final Integer precision;
   

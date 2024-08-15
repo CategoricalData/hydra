@@ -5,7 +5,13 @@ package hydra.langs.shacl.model;
 import java.io.Serializable;
 
 public abstract class Severity implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shacl/model.Severity");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shacl/model.Severity");
+  
+  public static final hydra.core.Name FIELD_NAME_INFO = new hydra.core.Name("info");
+  
+  public static final hydra.core.Name FIELD_NAME_WARNING = new hydra.core.Name("warning");
+  
+  public static final hydra.core.Name FIELD_NAME_VIOLATION = new hydra.core.Name("violation");
   
   private Severity () {
   

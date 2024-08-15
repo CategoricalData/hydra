@@ -8,7 +8,15 @@ import java.io.Serializable;
  * A simple test case with an input and an expected output
  */
 public class TestCase implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/testing.TestCase");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/testing.TestCase");
+  
+  public static final hydra.core.Name FIELD_NAME_DESCRIPTION = new hydra.core.Name("description");
+  
+  public static final hydra.core.Name FIELD_NAME_EVALUATION_STYLE = new hydra.core.Name("evaluationStyle");
+  
+  public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
+  
+  public static final hydra.core.Name FIELD_NAME_OUTPUT = new hydra.core.Name("output");
   
   public final hydra.util.Opt<String> description;
   

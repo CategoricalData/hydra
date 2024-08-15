@@ -35,10 +35,10 @@ public class Fail extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.pure(app(unwrap(Flow.NAME), lambda("q", flowState(
+        return args -> Flows.pure(app(unwrap(Flow.TYPE_NAME), lambda("q", flowState(
                 Terms.nothing(),
-                app(project(FlowState.NAME, "state"), variable("q")),
-                app((new Cons().term()), args.get(0), app(project(FlowState.NAME, "trace"), variable("q")))))));
+                app(project(FlowState.TYPE_NAME, "state"), variable("q")),
+                app((new Cons().term()), args.get(0), app(project(FlowState.TYPE_NAME, "trace"), variable("q")))))));
     }
 
     public static <S, X> Flow<S, X> apply(String msg) {

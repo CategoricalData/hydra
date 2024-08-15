@@ -8,11 +8,10 @@ import java.io.Serializable;
  * An RDF graph containing zero or more shapes that is passed into a SHACL validation process so that a data graph can be validated against the shapes
  */
 public class ShapesGraph implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shacl/model.ShapesGraph");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shacl/model.ShapesGraph");
   
-  /**
-   * An RDF graph containing zero or more shapes that is passed into a SHACL validation process so that a data graph can be validated against the shapes
-   */
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  
   public final java.util.Set<hydra.langs.shacl.model.Definition<hydra.langs.shacl.model.Shape>> value;
   
   public ShapesGraph (java.util.Set<hydra.langs.shacl.model.Definition<hydra.langs.shacl.model.Shape>> value) {

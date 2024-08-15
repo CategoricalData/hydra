@@ -8,7 +8,17 @@ import java.io.Serializable;
  * A term constant; an instance of a literal type
  */
 public abstract class Literal implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Literal");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.Literal");
+  
+  public static final hydra.core.Name FIELD_NAME_BINARY = new hydra.core.Name("binary");
+  
+  public static final hydra.core.Name FIELD_NAME_BOOLEAN = new hydra.core.Name("boolean");
+  
+  public static final hydra.core.Name FIELD_NAME_FLOAT = new hydra.core.Name("float");
+  
+  public static final hydra.core.Name FIELD_NAME_INTEGER = new hydra.core.Name("integer");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
   
   private Literal () {
   

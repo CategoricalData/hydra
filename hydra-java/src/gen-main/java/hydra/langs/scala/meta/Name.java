@@ -5,7 +5,13 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public abstract class Name implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Name");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Name");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  
+  public static final hydra.core.Name FIELD_NAME_ANONYMOUS = new hydra.core.Name("anonymous");
+  
+  public static final hydra.core.Name FIELD_NAME_INDETERMINATE = new hydra.core.Name("indeterminate");
   
   private Name () {
   

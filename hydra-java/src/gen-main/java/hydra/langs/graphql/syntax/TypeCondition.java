@@ -5,7 +5,11 @@ package hydra.langs.graphql.syntax;
 import java.io.Serializable;
 
 public abstract class TypeCondition implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.TypeCondition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/graphql/syntax.TypeCondition");
+  
+  public static final hydra.core.Name FIELD_NAME_ON = new hydra.core.Name("on");
+  
+  public static final hydra.core.Name FIELD_NAME_NAMED_TYPE = new hydra.core.Name("namedType");
   
   private TypeCondition () {
   

@@ -5,7 +5,11 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public abstract class ProcedureInvocation implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.ProcedureInvocation");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.ProcedureInvocation");
+  
+  public static final hydra.core.Name FIELD_NAME_EXPLICIT = new hydra.core.Name("explicit");
+  
+  public static final hydra.core.Name FIELD_NAME_IMPLICIT = new hydra.core.Name("implicit");
   
   private ProcedureInvocation () {
   

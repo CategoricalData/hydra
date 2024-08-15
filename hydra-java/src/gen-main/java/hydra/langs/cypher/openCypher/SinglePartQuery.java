@@ -5,7 +5,13 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public class SinglePartQuery implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.SinglePartQuery");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.SinglePartQuery");
+  
+  public static final hydra.core.Name FIELD_NAME_READING = new hydra.core.Name("reading");
+  
+  public static final hydra.core.Name FIELD_NAME_UPDATING = new hydra.core.Name("updating");
+  
+  public static final hydra.core.Name FIELD_NAME_RETURN = new hydra.core.Name("return");
   
   public final java.util.List<hydra.langs.cypher.openCypher.ReadingClause> reading;
   

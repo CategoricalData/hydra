@@ -5,7 +5,13 @@ package hydra.langs.owl.syntax;
 import java.io.Serializable;
 
 public abstract class AnnotationValue implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.AnnotationValue");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.AnnotationValue");
+  
+  public static final hydra.core.Name FIELD_NAME_ANONYMOUS_INDIVIDUAL = new hydra.core.Name("anonymousIndividual");
+  
+  public static final hydra.core.Name FIELD_NAME_IRI = new hydra.core.Name("iri");
+  
+  public static final hydra.core.Name FIELD_NAME_LITERAL = new hydra.core.Name("literal");
   
   private AnnotationValue () {
   

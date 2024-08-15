@@ -5,7 +5,11 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public abstract class SingleQuery implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.SingleQuery");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.SingleQuery");
+  
+  public static final hydra.core.Name FIELD_NAME_SINGLE_PART = new hydra.core.Name("singlePart");
+  
+  public static final hydra.core.Name FIELD_NAME_MULTI_PART = new hydra.core.Name("multiPart");
   
   private SingleQuery () {
   

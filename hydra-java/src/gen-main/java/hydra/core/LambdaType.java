@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A type abstraction; the type-level analog of a lambda term
  */
 public class LambdaType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.LambdaType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.LambdaType");
+  
+  public static final hydra.core.Name FIELD_NAME_PARAMETER = new hydra.core.Name("parameter");
+  
+  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
   
   /**
    * The variable which is bound by the lambda

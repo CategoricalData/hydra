@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Stand-in for rdfs:Class
  */
 public class RdfsClass implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/rdf/syntax.RdfsClass");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/rdf/syntax.RdfsClass");
   
   public RdfsClass () {
   

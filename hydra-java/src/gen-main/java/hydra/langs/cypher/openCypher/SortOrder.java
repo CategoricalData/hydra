@@ -5,7 +5,11 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public abstract class SortOrder implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.SortOrder");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.SortOrder");
+  
+  public static final hydra.core.Name FIELD_NAME_ASCENDING = new hydra.core.Name("ascending");
+  
+  public static final hydra.core.Name FIELD_NAME_DESCENDING = new hydra.core.Name("descending");
   
   private SortOrder () {
   

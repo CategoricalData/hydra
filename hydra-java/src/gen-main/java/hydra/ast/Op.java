@@ -8,7 +8,15 @@ import java.io.Serializable;
  * An operator symbol
  */
 public class Op implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ast.Op");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ast.Op");
+  
+  public static final hydra.core.Name FIELD_NAME_SYMBOL = new hydra.core.Name("symbol");
+  
+  public static final hydra.core.Name FIELD_NAME_PADDING = new hydra.core.Name("padding");
+  
+  public static final hydra.core.Name FIELD_NAME_PRECEDENCE = new hydra.core.Name("precedence");
+  
+  public static final hydra.core.Name FIELD_NAME_ASSOCIATIVITY = new hydra.core.Name("associativity");
   
   public final hydra.ast.Symbol symbol;
   

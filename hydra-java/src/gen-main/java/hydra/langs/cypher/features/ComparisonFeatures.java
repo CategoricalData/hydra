@@ -8,7 +8,21 @@ import java.io.Serializable;
  * A set of features for comparison operators and functions.
  */
 public class ComparisonFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.ComparisonFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.ComparisonFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_EQUAL = new hydra.core.Name("equal");
+  
+  public static final hydra.core.Name FIELD_NAME_GREATER_THAN = new hydra.core.Name("greaterThan");
+  
+  public static final hydra.core.Name FIELD_NAME_GREATER_THAN_OR_EQUAL = new hydra.core.Name("greaterThanOrEqual");
+  
+  public static final hydra.core.Name FIELD_NAME_LESS_THAN = new hydra.core.Name("lessThan");
+  
+  public static final hydra.core.Name FIELD_NAME_LESS_THAN_OR_EQUAL = new hydra.core.Name("lessThanOrEqual");
+  
+  public static final hydra.core.Name FIELD_NAME_NOT_EQUAL = new hydra.core.Name("notEqual");
+  
+  public static final hydra.core.Name FIELD_NAME_NULL_IF = new hydra.core.Name("nullIf");
   
   /**
    * Whether to expect the = comparison operator.

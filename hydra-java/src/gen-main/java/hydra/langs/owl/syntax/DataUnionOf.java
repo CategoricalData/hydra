@@ -8,11 +8,10 @@ import java.io.Serializable;
  * See https://www.w3.org/TR/owl2-syntax/#Union_of_Data_Ranges
  */
 public class DataUnionOf implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.DataUnionOf");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.DataUnionOf");
   
-  /**
-   * See https://www.w3.org/TR/owl2-syntax/#Union_of_Data_Ranges
-   */
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  
   public final java.util.List<hydra.langs.owl.syntax.DataRange> value;
   
   public DataUnionOf (java.util.List<hydra.langs.owl.syntax.DataRange> value) {

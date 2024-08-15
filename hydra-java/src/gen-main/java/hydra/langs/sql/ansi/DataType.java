@@ -5,7 +5,17 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public abstract class DataType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.DataType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.DataType");
+  
+  public static final hydra.core.Name FIELD_NAME_PREDEFINED = new hydra.core.Name("predefined");
+  
+  public static final hydra.core.Name FIELD_NAME_ROW = new hydra.core.Name("row");
+  
+  public static final hydra.core.Name FIELD_NAME_NAMED = new hydra.core.Name("named");
+  
+  public static final hydra.core.Name FIELD_NAME_REFERENCE = new hydra.core.Name("reference");
+  
+  public static final hydra.core.Name FIELD_NAME_COLLECTION = new hydra.core.Name("collection");
   
   private DataType () {
   

@@ -5,7 +5,15 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public abstract class String_ implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.String");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.String");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING_LITERAL1 = new hydra.core.Name("stringLiteral1");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING_LITERAL_LONG1 = new hydra.core.Name("stringLiteralLong1");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING_LITERAL2 = new hydra.core.Name("stringLiteral2");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING_LITERAL_LONG2 = new hydra.core.Name("stringLiteralLong2");
   
   private String_ () {
   

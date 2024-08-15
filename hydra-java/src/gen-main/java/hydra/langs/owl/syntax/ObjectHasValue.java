@@ -5,7 +5,11 @@ package hydra.langs.owl.syntax;
 import java.io.Serializable;
 
 public class ObjectHasValue implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.ObjectHasValue");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.ObjectHasValue");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTY = new hydra.core.Name("property");
+  
+  public static final hydra.core.Name FIELD_NAME_INDIVIDUAL = new hydra.core.Name("individual");
   
   public final hydra.langs.owl.syntax.ObjectPropertyExpression property;
   

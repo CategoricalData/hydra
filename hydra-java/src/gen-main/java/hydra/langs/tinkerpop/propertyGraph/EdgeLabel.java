@@ -8,11 +8,10 @@ import java.io.Serializable;
  * The label of an edge
  */
 public class EdgeLabel implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.EdgeLabel");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.EdgeLabel");
   
-  /**
-   * The label of an edge
-   */
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  
   public final String value;
   
   public EdgeLabel (String value) {

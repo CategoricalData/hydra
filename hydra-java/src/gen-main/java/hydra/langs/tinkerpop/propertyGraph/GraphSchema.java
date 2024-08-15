@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A graph schema; a vertex and edge types for the vertices and edges of a graph conforming to the schema
  */
 public class GraphSchema<T> implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.GraphSchema");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.GraphSchema");
+  
+  public static final hydra.core.Name FIELD_NAME_VERTICES = new hydra.core.Name("vertices");
+  
+  public static final hydra.core.Name FIELD_NAME_EDGES = new hydra.core.Name("edges");
   
   /**
    * A unique vertex type for each vertex label which may occur in a graph

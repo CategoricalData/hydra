@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class IoOptionsKeys implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.IoOptionsKeys");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.IoOptionsKeys");
+  
+  public static final hydra.core.Name FIELD_NAME_READER = new hydra.core.Name("reader");
+  
+  public static final hydra.core.Name FIELD_NAME_WRITER = new hydra.core.Name("writer");
   
   private IoOptionsKeys () {
   

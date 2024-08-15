@@ -5,7 +5,11 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public class MultiPartQuery implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.MultiPartQuery");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.MultiPartQuery");
+  
+  public static final hydra.core.Name FIELD_NAME_WITH = new hydra.core.Name("with");
+  
+  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
   
   public final java.util.List<hydra.langs.cypher.openCypher.WithClause> with;
   

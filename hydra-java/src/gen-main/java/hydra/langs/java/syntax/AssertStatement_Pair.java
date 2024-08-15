@@ -5,7 +5,11 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public class AssertStatement_Pair implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.AssertStatement.Pair");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.AssertStatement.Pair");
+  
+  public static final hydra.core.Name FIELD_NAME_FIRST = new hydra.core.Name("first");
+  
+  public static final hydra.core.Name FIELD_NAME_SECOND = new hydra.core.Name("second");
   
   public final hydra.langs.java.syntax.Expression first;
   

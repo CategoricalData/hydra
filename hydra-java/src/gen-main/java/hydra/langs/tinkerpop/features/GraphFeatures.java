@@ -8,7 +8,23 @@ import java.io.Serializable;
  * Features specific to a operations of a graph.
  */
 public class GraphFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/features.GraphFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/features.GraphFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_COMPUTER = new hydra.core.Name("supportsComputer");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_CONCURRENT_ACCESS = new hydra.core.Name("supportsConcurrentAccess");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_IO_READ = new hydra.core.Name("supportsIoRead");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_IO_WRITE = new hydra.core.Name("supportsIoWrite");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_PERSISTENCE = new hydra.core.Name("supportsPersistence");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_THREADED_TRANSACTIONS = new hydra.core.Name("supportsThreadedTransactions");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_TRANSACTIONS = new hydra.core.Name("supportsTransactions");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLES = new hydra.core.Name("variables");
   
   /**
    * Determines if the Graph implementation supports GraphComputer based processing.

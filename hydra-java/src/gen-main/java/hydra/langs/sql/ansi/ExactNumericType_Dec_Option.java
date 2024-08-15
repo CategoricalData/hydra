@@ -5,7 +5,11 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public class ExactNumericType_Dec_Option implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.ExactNumericType.Dec.Option");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.ExactNumericType.Dec.Option");
+  
+  public static final hydra.core.Name FIELD_NAME_PRECISION = new hydra.core.Name("precision");
+  
+  public static final hydra.core.Name FIELD_NAME_SEQUENCE = new hydra.core.Name("sequence");
   
   public final hydra.langs.sql.ansi.Precision precision;
   

@@ -5,7 +5,25 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public abstract class JoinKind implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.JoinKind");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.JoinKind");
+  
+  public static final hydra.core.Name FIELD_NAME_LEFTOUTER = new hydra.core.Name("leftouter");
+  
+  public static final hydra.core.Name FIELD_NAME_LEFTSEMI = new hydra.core.Name("leftsemi");
+  
+  public static final hydra.core.Name FIELD_NAME_LEFTANTI = new hydra.core.Name("leftanti");
+  
+  public static final hydra.core.Name FIELD_NAME_FULLOUTER = new hydra.core.Name("fullouter");
+  
+  public static final hydra.core.Name FIELD_NAME_INNER = new hydra.core.Name("inner");
+  
+  public static final hydra.core.Name FIELD_NAME_INNERUNIQUE = new hydra.core.Name("innerunique");
+  
+  public static final hydra.core.Name FIELD_NAME_RIGHTOUTER = new hydra.core.Name("rightouter");
+  
+  public static final hydra.core.Name FIELD_NAME_RIGHTSEMI = new hydra.core.Name("rightsemi");
+  
+  public static final hydra.core.Name FIELD_NAME_RIGHTANTI = new hydra.core.Name("rightanti");
   
   private JoinKind () {
   

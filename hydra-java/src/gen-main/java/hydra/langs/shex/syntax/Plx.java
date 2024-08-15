@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public abstract class Plx implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.Plx");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.Plx");
+  
+  public static final hydra.core.Name FIELD_NAME_PERCENT = new hydra.core.Name("percent");
+  
+  public static final hydra.core.Name FIELD_NAME_PN_LOCAL_ESC = new hydra.core.Name("pnLocalEsc");
   
   private Plx () {
   

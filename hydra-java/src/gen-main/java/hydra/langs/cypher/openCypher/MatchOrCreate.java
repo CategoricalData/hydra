@@ -5,7 +5,11 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public abstract class MatchOrCreate implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.MatchOrCreate");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.MatchOrCreate");
+  
+  public static final hydra.core.Name FIELD_NAME_MATCH = new hydra.core.Name("match");
+  
+  public static final hydra.core.Name FIELD_NAME_CREATE = new hydra.core.Name("create");
   
   private MatchOrCreate () {
   

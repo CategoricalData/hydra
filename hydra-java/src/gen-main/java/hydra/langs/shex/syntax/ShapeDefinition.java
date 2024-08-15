@@ -5,7 +5,15 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public class ShapeDefinition implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.ShapeDefinition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.ShapeDefinition");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST_OF_ALTS = new hydra.core.Name("listOfAlts");
+  
+  public static final hydra.core.Name FIELD_NAME_TRIPLE_EXPRESSION = new hydra.core.Name("tripleExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST_OF_ANNOTATION = new hydra.core.Name("listOfAnnotation");
+  
+  public static final hydra.core.Name FIELD_NAME_SEMANTIC_ACTIONS = new hydra.core.Name("semanticActions");
   
   public final java.util.List<hydra.langs.shex.syntax.ShapeDefinition_ListOfAlts_Elmt> listOfAlts;
   

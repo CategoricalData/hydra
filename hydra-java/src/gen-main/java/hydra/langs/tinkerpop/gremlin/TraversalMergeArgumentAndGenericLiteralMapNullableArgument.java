@@ -5,7 +5,13 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public class TraversalMergeArgumentAndGenericLiteralMapNullableArgument implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument");
+  
+  public static final hydra.core.Name FIELD_NAME_MERGE = new hydra.core.Name("merge");
+  
+  public static final hydra.core.Name FIELD_NAME_MAP = new hydra.core.Name("map");
+  
+  public static final hydra.core.Name FIELD_NAME_CARDINALITY = new hydra.core.Name("cardinality");
   
   public final hydra.langs.tinkerpop.gremlin.TraversalMergeArgument merge;
   

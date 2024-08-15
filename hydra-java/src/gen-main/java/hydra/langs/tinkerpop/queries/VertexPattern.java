@@ -5,7 +5,15 @@ package hydra.langs.tinkerpop.queries;
 import java.io.Serializable;
 
 public class VertexPattern implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.VertexPattern");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/queries.VertexPattern");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
+  
+  public static final hydra.core.Name FIELD_NAME_LABEL = new hydra.core.Name("label");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTIES = new hydra.core.Name("properties");
+  
+  public static final hydra.core.Name FIELD_NAME_EDGES = new hydra.core.Name("edges");
   
   public final hydra.util.Opt<hydra.langs.tinkerpop.queries.Variable> variable;
   

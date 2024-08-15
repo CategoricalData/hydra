@@ -5,7 +5,13 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public abstract class StringPredicateOperator implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.StringPredicateOperator");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.StringPredicateOperator");
+  
+  public static final hydra.core.Name FIELD_NAME_STARTS_WITH = new hydra.core.Name("startsWith");
+  
+  public static final hydra.core.Name FIELD_NAME_ENDS_WITH = new hydra.core.Name("endsWith");
+  
+  public static final hydra.core.Name FIELD_NAME_CONTAINS = new hydra.core.Name("contains");
   
   private StringPredicateOperator () {
   

@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class GenericLiteralMapNullableArgumentOrNestedTraversal implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal");
+  
+  public static final hydra.core.Name FIELD_NAME_MAP = new hydra.core.Name("map");
+  
+  public static final hydra.core.Name FIELD_NAME_TRAVERSAL = new hydra.core.Name("traversal");
   
   private GenericLiteralMapNullableArgumentOrNestedTraversal () {
   

@@ -8,11 +8,10 @@ import java.io.Serializable;
  * See https://www.w3.org/TR/owl2-syntax/#Intersection_of_Data_Ranges
  */
 public class DataIntersectionOf implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.DataIntersectionOf");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.DataIntersectionOf");
   
-  /**
-   * See https://www.w3.org/TR/owl2-syntax/#Intersection_of_Data_Ranges
-   */
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  
   public final java.util.List<hydra.langs.owl.syntax.DataRange> value;
   
   public DataIntersectionOf (java.util.List<hydra.langs.owl.syntax.DataRange> value) {

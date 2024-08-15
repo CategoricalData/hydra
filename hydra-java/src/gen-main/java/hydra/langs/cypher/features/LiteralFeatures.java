@@ -8,7 +8,21 @@ import java.io.Serializable;
  * A set of features for various types of literal values.
  */
 public class LiteralFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.LiteralFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.LiteralFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_BOOLEAN = new hydra.core.Name("boolean");
+  
+  public static final hydra.core.Name FIELD_NAME_DOUBLE = new hydra.core.Name("double");
+  
+  public static final hydra.core.Name FIELD_NAME_INTEGER = new hydra.core.Name("integer");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
+  
+  public static final hydra.core.Name FIELD_NAME_MAP = new hydra.core.Name("map");
+  
+  public static final hydra.core.Name FIELD_NAME_NULL = new hydra.core.Name("null");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
   
   /**
    * Whether to expect boolean literals (note: included by most if not all implementations).

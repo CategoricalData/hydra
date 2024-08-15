@@ -5,7 +5,11 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public class FunctionExpression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.FunctionExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.FunctionExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_FUNCTION = new hydra.core.Name("function");
+  
+  public static final hydra.core.Name FIELD_NAME_ARGUMENTS = new hydra.core.Name("arguments");
   
   public final hydra.langs.kusto.kql.Function function;
   

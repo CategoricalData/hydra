@@ -8,7 +8,13 @@ import java.io.Serializable;
  * A set of features for relationship patterns.
  */
 public class RelationshipPatternFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.RelationshipPatternFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.RelationshipPatternFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_MULTIPLE_TYPES = new hydra.core.Name("multipleTypes");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLE_RELATIONSHIP = new hydra.core.Name("variableRelationship");
+  
+  public static final hydra.core.Name FIELD_NAME_WILDCARD_TYPE = new hydra.core.Name("wildcardType");
   
   /**
    * Whether to expect specifying a disjunction of multiple types in a relationship pattern.

@@ -5,7 +5,13 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public class SubstringArgs implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.SubstringArgs");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.SubstringArgs");
+  
+  public static final hydra.core.Name FIELD_NAME_SCOPE = new hydra.core.Name("scope");
+  
+  public static final hydra.core.Name FIELD_NAME_START = new hydra.core.Name("start");
+  
+  public static final hydra.core.Name FIELD_NAME_END = new hydra.core.Name("end");
   
   public final hydra.util.Opt<hydra.langs.tinkerpop.gremlin.TraversalScopeArgument> scope;
   

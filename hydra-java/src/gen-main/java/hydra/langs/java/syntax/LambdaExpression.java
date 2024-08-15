@@ -5,7 +5,11 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public class LambdaExpression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.LambdaExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.LambdaExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_PARAMETERS = new hydra.core.Name("parameters");
+  
+  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
   
   public final hydra.langs.java.syntax.LambdaParameters parameters;
   

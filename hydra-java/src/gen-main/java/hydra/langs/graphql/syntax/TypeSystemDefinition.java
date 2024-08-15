@@ -5,7 +5,13 @@ package hydra.langs.graphql.syntax;
 import java.io.Serializable;
 
 public abstract class TypeSystemDefinition implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.TypeSystemDefinition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/graphql/syntax.TypeSystemDefinition");
+  
+  public static final hydra.core.Name FIELD_NAME_SCHEMA = new hydra.core.Name("schema");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  
+  public static final hydra.core.Name FIELD_NAME_DIRECTIVE = new hydra.core.Name("directive");
   
   private TypeSystemDefinition () {
   

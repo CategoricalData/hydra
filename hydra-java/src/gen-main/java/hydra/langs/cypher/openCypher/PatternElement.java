@@ -5,7 +5,11 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public abstract class PatternElement implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.PatternElement");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.PatternElement");
+  
+  public static final hydra.core.Name FIELD_NAME_CHAINED = new hydra.core.Name("chained");
+  
+  public static final hydra.core.Name FIELD_NAME_PARENTHESIZED = new hydra.core.Name("parenthesized");
   
   private PatternElement () {
   

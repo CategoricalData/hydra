@@ -5,7 +5,13 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public class Data_If implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Data.If");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Data.If");
+  
+  public static final hydra.core.Name FIELD_NAME_COND = new hydra.core.Name("cond");
+  
+  public static final hydra.core.Name FIELD_NAME_THENP = new hydra.core.Name("thenp");
+  
+  public static final hydra.core.Name FIELD_NAME_ELSEP = new hydra.core.Name("elsep");
   
   public final hydra.langs.scala.meta.Data cond;
   

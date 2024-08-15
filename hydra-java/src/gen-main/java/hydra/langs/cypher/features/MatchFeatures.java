@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A set of features for match queries.
  */
 public class MatchFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.MatchFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.MatchFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_MATCH = new hydra.core.Name("match");
+  
+  public static final hydra.core.Name FIELD_NAME_OPTIONAL_MATCH = new hydra.core.Name("optionalMatch");
   
   /**
    * Whether to expect the basic (non-optional) MATCH clause.

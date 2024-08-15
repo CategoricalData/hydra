@@ -5,7 +5,15 @@ package hydra.langs.owl.syntax;
 import java.io.Serializable;
 
 public abstract class AnnotationAxiom implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.AnnotationAxiom");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.AnnotationAxiom");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATION_ASSERTION = new hydra.core.Name("annotationAssertion");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATION_PROPERTY_DOMAIN = new hydra.core.Name("annotationPropertyDomain");
+  
+  public static final hydra.core.Name FIELD_NAME_ANNOTATION_PROPERTY_RANGE = new hydra.core.Name("annotationPropertyRange");
+  
+  public static final hydra.core.Name FIELD_NAME_SUB_ANNOTATION_PROPERTY_OF = new hydra.core.Name("subAnnotationPropertyOf");
   
   private AnnotationAxiom () {
   

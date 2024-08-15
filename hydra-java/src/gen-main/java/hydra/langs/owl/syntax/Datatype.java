@@ -8,7 +8,11 @@ import java.io.Serializable;
  * See https://www.w3.org/TR/owl2-syntax/#Datatypes
  */
 public abstract class Datatype implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.Datatype");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.Datatype");
+  
+  public static final hydra.core.Name FIELD_NAME_XML_SCHEMA = new hydra.core.Name("xmlSchema");
+  
+  public static final hydra.core.Name FIELD_NAME_OTHER = new hydra.core.Name("other");
   
   private Datatype () {
   
@@ -40,9 +44,6 @@ public abstract class Datatype implements Serializable {
    * Note: XML Schema datatypes are treated as a special case in this model (not in the OWL 2 specification itself) because they are particularly common
    */
   public static final class XmlSchema extends hydra.langs.owl.syntax.Datatype implements Serializable {
-    /**
-     * Note: XML Schema datatypes are treated as a special case in this model (not in the OWL 2 specification itself) because they are particularly common
-     */
     public final hydra.langs.xml.schema.Datatype value;
     
     public XmlSchema (hydra.langs.xml.schema.Datatype value) {

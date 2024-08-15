@@ -5,7 +5,11 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public class MethodInvocation implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.MethodInvocation");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.MethodInvocation");
+  
+  public static final hydra.core.Name FIELD_NAME_HEADER = new hydra.core.Name("header");
+  
+  public static final hydra.core.Name FIELD_NAME_ARGUMENTS = new hydra.core.Name("arguments");
   
   public final hydra.langs.java.syntax.MethodInvocation_Header header;
   

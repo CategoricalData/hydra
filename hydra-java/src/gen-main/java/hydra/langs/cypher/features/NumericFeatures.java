@@ -8,7 +8,31 @@ import java.io.Serializable;
  * A set of features for numeric functions.
  */
 public class NumericFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.NumericFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.NumericFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_ABS = new hydra.core.Name("abs");
+  
+  public static final hydra.core.Name FIELD_NAME_CEIL = new hydra.core.Name("ceil");
+  
+  public static final hydra.core.Name FIELD_NAME_E = new hydra.core.Name("e");
+  
+  public static final hydra.core.Name FIELD_NAME_EXP = new hydra.core.Name("exp");
+  
+  public static final hydra.core.Name FIELD_NAME_FLOOR = new hydra.core.Name("floor");
+  
+  public static final hydra.core.Name FIELD_NAME_IS_NA_N = new hydra.core.Name("isNaN");
+  
+  public static final hydra.core.Name FIELD_NAME_LOG = new hydra.core.Name("log");
+  
+  public static final hydra.core.Name FIELD_NAME_LOG10 = new hydra.core.Name("log10");
+  
+  public static final hydra.core.Name FIELD_NAME_RANGE = new hydra.core.Name("range");
+  
+  public static final hydra.core.Name FIELD_NAME_ROUND = new hydra.core.Name("round");
+  
+  public static final hydra.core.Name FIELD_NAME_SIGN = new hydra.core.Name("sign");
+  
+  public static final hydra.core.Name FIELD_NAME_SQRT = new hydra.core.Name("sqrt");
   
   /**
    * Whether to expect the abs() function.

@@ -8,7 +8,19 @@ import java.io.Serializable;
  * A number of constraint parameters which are specific to property shapes, and cannot be applied to node shapes
  */
 public abstract class PropertyShapeConstraint implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shacl/model.PropertyShapeConstraint");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shacl/model.PropertyShapeConstraint");
+  
+  public static final hydra.core.Name FIELD_NAME_LESS_THAN = new hydra.core.Name("lessThan");
+  
+  public static final hydra.core.Name FIELD_NAME_LESS_THAN_OR_EQUALS = new hydra.core.Name("lessThanOrEquals");
+  
+  public static final hydra.core.Name FIELD_NAME_MAX_COUNT = new hydra.core.Name("maxCount");
+  
+  public static final hydra.core.Name FIELD_NAME_MIN_COUNT = new hydra.core.Name("minCount");
+  
+  public static final hydra.core.Name FIELD_NAME_UNIQUE_LANG = new hydra.core.Name("uniqueLang");
+  
+  public static final hydra.core.Name FIELD_NAME_QUALIFIED_VALUE_SHAPE = new hydra.core.Name("qualifiedValueShape");
   
   private PropertyShapeConstraint () {
   
@@ -64,9 +76,6 @@ public abstract class PropertyShapeConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#LessThanConstraintComponent
    */
   public static final class LessThan extends hydra.langs.shacl.model.PropertyShapeConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#LessThanConstraintComponent
-     */
     public final java.util.Set<hydra.langs.rdf.syntax.Property> value;
     
     public LessThan (java.util.Set<hydra.langs.rdf.syntax.Property> value) {
@@ -98,9 +107,6 @@ public abstract class PropertyShapeConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#LessThanOrEqualsConstraintComponent
    */
   public static final class LessThanOrEquals extends hydra.langs.shacl.model.PropertyShapeConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#LessThanOrEqualsConstraintComponent
-     */
     public final java.util.Set<hydra.langs.rdf.syntax.Property> value;
     
     public LessThanOrEquals (java.util.Set<hydra.langs.rdf.syntax.Property> value) {
@@ -132,9 +138,6 @@ public abstract class PropertyShapeConstraint implements Serializable {
    * The maximum cardinality. Node shapes cannot have any value for sh:maxCount. See https://www.w3.org/TR/shacl/#MaxCountConstraintComponent
    */
   public static final class MaxCount extends hydra.langs.shacl.model.PropertyShapeConstraint implements Serializable {
-    /**
-     * The maximum cardinality. Node shapes cannot have any value for sh:maxCount. See https://www.w3.org/TR/shacl/#MaxCountConstraintComponent
-     */
     public final java.math.BigInteger value;
     
     public MaxCount (java.math.BigInteger value) {
@@ -166,9 +169,6 @@ public abstract class PropertyShapeConstraint implements Serializable {
    * The minimum cardinality. Node shapes cannot have any value for sh:minCount. See https://www.w3.org/TR/shacl/#MinCountConstraintComponent
    */
   public static final class MinCount extends hydra.langs.shacl.model.PropertyShapeConstraint implements Serializable {
-    /**
-     * The minimum cardinality. Node shapes cannot have any value for sh:minCount. See https://www.w3.org/TR/shacl/#MinCountConstraintComponent
-     */
     public final java.math.BigInteger value;
     
     public MinCount (java.math.BigInteger value) {
@@ -200,9 +200,6 @@ public abstract class PropertyShapeConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#UniqueLangConstraintComponent
    */
   public static final class UniqueLang extends hydra.langs.shacl.model.PropertyShapeConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#UniqueLangConstraintComponent
-     */
     public final Boolean value;
     
     public UniqueLang (Boolean value) {
@@ -234,9 +231,6 @@ public abstract class PropertyShapeConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent
    */
   public static final class QualifiedValueShape extends hydra.langs.shacl.model.PropertyShapeConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent
-     */
     public final hydra.langs.shacl.model.QualifiedValueShape value;
     
     public QualifiedValueShape (hydra.langs.shacl.model.QualifiedValueShape value) {

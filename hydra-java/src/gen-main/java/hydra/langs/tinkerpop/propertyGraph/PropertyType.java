@@ -8,7 +8,13 @@ import java.io.Serializable;
  * The type of a property
  */
 public class PropertyType<T> implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.PropertyType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.PropertyType");
+  
+  public static final hydra.core.Name FIELD_NAME_KEY = new hydra.core.Name("key");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  
+  public static final hydra.core.Name FIELD_NAME_REQUIRED = new hydra.core.Name("required");
   
   /**
    * A property's key

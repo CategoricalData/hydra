@@ -5,7 +5,29 @@ package hydra.langs.graphql.syntax;
 import java.io.Serializable;
 
 public abstract class TypeSystemDirectiveLocation implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.TypeSystemDirectiveLocation");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/graphql/syntax.TypeSystemDirectiveLocation");
+  
+  public static final hydra.core.Name FIELD_NAME_S_C_H_E_M_A = new hydra.core.Name("sCHEMA");
+  
+  public static final hydra.core.Name FIELD_NAME_S_C_A_L_A_R = new hydra.core.Name("sCALAR");
+  
+  public static final hydra.core.Name FIELD_NAME_O_B_J_E_C_T = new hydra.core.Name("oBJECT");
+  
+  public static final hydra.core.Name FIELD_NAME_F_I_E_L_D_LOWBAR_D_E_F_I_N_I_T_I_O_N = new hydra.core.Name("fIELDLowbarDEFINITION");
+  
+  public static final hydra.core.Name FIELD_NAME_A_R_G_U_M_E_N_T_LOWBAR_D_E_F_I_N_I_T_I_O_N = new hydra.core.Name("aRGUMENTLowbarDEFINITION");
+  
+  public static final hydra.core.Name FIELD_NAME_I_N_T_E_R_F_A_C_E = new hydra.core.Name("iNTERFACE");
+  
+  public static final hydra.core.Name FIELD_NAME_U_N_I_O_N = new hydra.core.Name("uNION");
+  
+  public static final hydra.core.Name FIELD_NAME_E_N_U_M = new hydra.core.Name("eNUM");
+  
+  public static final hydra.core.Name FIELD_NAME_E_N_U_M_LOWBAR_V_A_L_U_E = new hydra.core.Name("eNUMLowbarVALUE");
+  
+  public static final hydra.core.Name FIELD_NAME_I_N_P_U_T_LOWBAR_O_B_J_E_C_T = new hydra.core.Name("iNPUTLowbarOBJECT");
+  
+  public static final hydra.core.Name FIELD_NAME_I_N_P_U_T_LOWBAR_F_I_E_L_D_LOWBAR_D_E_F_I_N_I_T_I_O_N = new hydra.core.Name("iNPUTLowbarFIELDLowbarDEFINITION");
   
   private TypeSystemDirectiveLocation () {
   

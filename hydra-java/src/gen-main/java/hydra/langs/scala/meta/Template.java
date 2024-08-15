@@ -5,7 +5,15 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public class Template implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Template");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Template");
+  
+  public static final hydra.core.Name FIELD_NAME_EARLY = new hydra.core.Name("early");
+  
+  public static final hydra.core.Name FIELD_NAME_INITS = new hydra.core.Name("inits");
+  
+  public static final hydra.core.Name FIELD_NAME_SELF = new hydra.core.Name("self");
+  
+  public static final hydra.core.Name FIELD_NAME_STATS = new hydra.core.Name("stats");
   
   public final java.util.List<hydra.langs.scala.meta.Stat> early;
   

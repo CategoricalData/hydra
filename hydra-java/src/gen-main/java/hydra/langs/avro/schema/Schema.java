@@ -5,7 +5,19 @@ package hydra.langs.avro.schema;
 import java.io.Serializable;
 
 public abstract class Schema implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/avro/schema.Schema");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/avro/schema.Schema");
+  
+  public static final hydra.core.Name FIELD_NAME_ARRAY = new hydra.core.Name("array");
+  
+  public static final hydra.core.Name FIELD_NAME_MAP = new hydra.core.Name("map");
+  
+  public static final hydra.core.Name FIELD_NAME_NAMED = new hydra.core.Name("named");
+  
+  public static final hydra.core.Name FIELD_NAME_PRIMITIVE = new hydra.core.Name("primitive");
+  
+  public static final hydra.core.Name FIELD_NAME_REFERENCE = new hydra.core.Name("reference");
+  
+  public static final hydra.core.Name FIELD_NAME_UNION = new hydra.core.Name("union");
   
   private Schema () {
   
@@ -173,9 +185,6 @@ public abstract class Schema implements Serializable {
    * A reference by name to a previously defined type
    */
   public static final class Reference extends hydra.langs.avro.schema.Schema implements Serializable {
-    /**
-     * A reference by name to a previously defined type
-     */
     public final String value;
     
     public Reference (String value) {

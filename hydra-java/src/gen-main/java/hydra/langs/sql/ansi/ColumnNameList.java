@@ -5,7 +5,11 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public class ColumnNameList implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.ColumnNameList");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.ColumnNameList");
+  
+  public static final hydra.core.Name FIELD_NAME_FIRST = new hydra.core.Name("first");
+  
+  public static final hydra.core.Name FIELD_NAME_REST = new hydra.core.Name("rest");
   
   public final hydra.langs.sql.ansi.ColumnName first;
   

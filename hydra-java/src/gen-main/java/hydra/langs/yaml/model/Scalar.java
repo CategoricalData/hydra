@@ -8,7 +8,17 @@ import java.io.Serializable;
  * A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here
  */
 public abstract class Scalar implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/yaml/model.Scalar");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/yaml/model.Scalar");
+  
+  public static final hydra.core.Name FIELD_NAME_BOOL = new hydra.core.Name("bool");
+  
+  public static final hydra.core.Name FIELD_NAME_FLOAT = new hydra.core.Name("float");
+  
+  public static final hydra.core.Name FIELD_NAME_INT = new hydra.core.Name("int");
+  
+  public static final hydra.core.Name FIELD_NAME_NULL = new hydra.core.Name("null");
+  
+  public static final hydra.core.Name FIELD_NAME_STR = new hydra.core.Name("str");
   
   private Scalar () {
   
@@ -58,9 +68,6 @@ public abstract class Scalar implements Serializable {
    * Represents a true/false value
    */
   public static final class Bool extends hydra.langs.yaml.model.Scalar implements Serializable {
-    /**
-     * Represents a true/false value
-     */
     public final Boolean value;
     
     public Bool (Boolean value) {
@@ -88,6 +95,9 @@ public abstract class Scalar implements Serializable {
     }
   }
   
+  /**
+   * Represents an approximation to real numbers
+   */
   public static final class Float_ extends hydra.langs.yaml.model.Scalar implements Serializable {
     public final Double value;
     
@@ -120,9 +130,6 @@ public abstract class Scalar implements Serializable {
    * Represents arbitrary sized finite mathematical integers
    */
   public static final class Int extends hydra.langs.yaml.model.Scalar implements Serializable {
-    /**
-     * Represents arbitrary sized finite mathematical integers
-     */
     public final java.math.BigInteger value;
     
     public Int (java.math.BigInteger value) {
@@ -182,9 +189,6 @@ public abstract class Scalar implements Serializable {
    * A string value
    */
   public static final class Str extends hydra.langs.yaml.model.Scalar implements Serializable {
-    /**
-     * A string value
-     */
     public final String value;
     
     public Str (String value) {

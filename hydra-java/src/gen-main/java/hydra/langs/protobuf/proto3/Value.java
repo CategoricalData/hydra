@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A scalar value
  */
 public abstract class Value implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/protobuf/proto3.Value");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/protobuf/proto3.Value");
+  
+  public static final hydra.core.Name FIELD_NAME_BOOLEAN = new hydra.core.Name("boolean");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
   
   private Value () {
   

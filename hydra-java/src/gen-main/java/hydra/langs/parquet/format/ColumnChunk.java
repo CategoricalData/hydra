@@ -5,7 +5,25 @@ package hydra.langs.parquet.format;
 import java.io.Serializable;
 
 public class ColumnChunk implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.ColumnChunk");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.ColumnChunk");
+  
+  public static final hydra.core.Name FIELD_NAME_FILE_PATH = new hydra.core.Name("filePath");
+  
+  public static final hydra.core.Name FIELD_NAME_FILE_OFFSET = new hydra.core.Name("fileOffset");
+  
+  public static final hydra.core.Name FIELD_NAME_META_DATA = new hydra.core.Name("metaData");
+  
+  public static final hydra.core.Name FIELD_NAME_OFFSET_INDEX_OFFSET = new hydra.core.Name("offsetIndexOffset");
+  
+  public static final hydra.core.Name FIELD_NAME_OFFSET_INDEX_LENGTH = new hydra.core.Name("offsetIndexLength");
+  
+  public static final hydra.core.Name FIELD_NAME_COLUMN_INDEX_OFFSET = new hydra.core.Name("columnIndexOffset");
+  
+  public static final hydra.core.Name FIELD_NAME_COLUMN_INDEX_LENGTH = new hydra.core.Name("columnIndexLength");
+  
+  public static final hydra.core.Name FIELD_NAME_CRYPTO_METADATA = new hydra.core.Name("cryptoMetadata");
+  
+  public static final hydra.core.Name FIELD_NAME_ENCRYPTED_COLUMN_METADATA = new hydra.core.Name("encryptedColumnMetadata");
   
   /**
    * File where column data is stored.  If not set, assumed to be same file as metadata.  This path is relative to the current file.
@@ -47,6 +65,9 @@ public class ColumnChunk implements Serializable {
    */
   public final hydra.util.Opt<hydra.langs.parquet.format.ColumnCryptoMetaData> cryptoMetadata;
   
+  /**
+   * Encrypted column metadata for this chunk
+   */
   public final hydra.util.Opt<String> encryptedColumnMetadata;
   
   public ColumnChunk (hydra.util.Opt<String> filePath, Long fileOffset, hydra.util.Opt<hydra.langs.parquet.format.ColumnMetaData> metaData, hydra.util.Opt<Long> offsetIndexOffset, hydra.util.Opt<Integer> offsetIndexLength, hydra.util.Opt<Long> columnIndexOffset, hydra.util.Opt<Integer> columnIndexLength, hydra.util.Opt<hydra.langs.parquet.format.ColumnCryptoMetaData> cryptoMetadata, hydra.util.Opt<String> encryptedColumnMetadata) {

@@ -5,7 +5,11 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public abstract class AddOrSubtractOperator implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.AddOrSubtractOperator");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.AddOrSubtractOperator");
+  
+  public static final hydra.core.Name FIELD_NAME_ADD = new hydra.core.Name("add");
+  
+  public static final hydra.core.Name FIELD_NAME_SUBTRACT = new hydra.core.Name("subtract");
   
   private AddOrSubtractOperator () {
   

@@ -6,7 +6,19 @@ package hydra.graph;
  * A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph
  */
 public class Graph {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/graph.Graph");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/graph.Graph");
+  
+  public static final hydra.core.Name FIELD_NAME_ELEMENTS = new hydra.core.Name("elements");
+  
+  public static final hydra.core.Name FIELD_NAME_ENVIRONMENT = new hydra.core.Name("environment");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPES = new hydra.core.Name("types");
+  
+  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  
+  public static final hydra.core.Name FIELD_NAME_PRIMITIVES = new hydra.core.Name("primitives");
+  
+  public static final hydra.core.Name FIELD_NAME_SCHEMA = new hydra.core.Name("schema");
   
   /**
    * All of the elements in the graph

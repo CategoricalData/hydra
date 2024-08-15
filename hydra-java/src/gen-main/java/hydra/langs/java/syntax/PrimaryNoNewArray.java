@@ -5,7 +5,27 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class PrimaryNoNewArray implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.PrimaryNoNewArray");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.PrimaryNoNewArray");
+  
+  public static final hydra.core.Name FIELD_NAME_LITERAL = new hydra.core.Name("literal");
+  
+  public static final hydra.core.Name FIELD_NAME_CLASS_LITERAL = new hydra.core.Name("classLiteral");
+  
+  public static final hydra.core.Name FIELD_NAME_THIS = new hydra.core.Name("this");
+  
+  public static final hydra.core.Name FIELD_NAME_DOT_THIS = new hydra.core.Name("dotThis");
+  
+  public static final hydra.core.Name FIELD_NAME_PARENS = new hydra.core.Name("parens");
+  
+  public static final hydra.core.Name FIELD_NAME_CLASS_INSTANCE = new hydra.core.Name("classInstance");
+  
+  public static final hydra.core.Name FIELD_NAME_FIELD_ACCESS = new hydra.core.Name("fieldAccess");
+  
+  public static final hydra.core.Name FIELD_NAME_ARRAY_ACCESS = new hydra.core.Name("arrayAccess");
+  
+  public static final hydra.core.Name FIELD_NAME_METHOD_INVOCATION = new hydra.core.Name("methodInvocation");
+  
+  public static final hydra.core.Name FIELD_NAME_METHOD_REFERENCE = new hydra.core.Name("methodReference");
   
   private PrimaryNoNewArray () {
   

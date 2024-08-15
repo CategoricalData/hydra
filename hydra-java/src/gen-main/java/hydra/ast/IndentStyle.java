@@ -8,7 +8,11 @@ import java.io.Serializable;
  * Any of several indentation styles
  */
 public abstract class IndentStyle implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ast.IndentStyle");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ast.IndentStyle");
+  
+  public static final hydra.core.Name FIELD_NAME_ALL_LINES = new hydra.core.Name("allLines");
+  
+  public static final hydra.core.Name FIELD_NAME_SUBSEQUENT_LINES = new hydra.core.Name("subsequentLines");
   
   private IndentStyle () {
   

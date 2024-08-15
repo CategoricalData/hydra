@@ -5,7 +5,13 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public abstract class PnChars implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.PnChars");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.PnChars");
+  
+  public static final hydra.core.Name FIELD_NAME_PN_CHARS_U = new hydra.core.Name("pnCharsU");
+  
+  public static final hydra.core.Name FIELD_NAME_MINUS = new hydra.core.Name("minus");
+  
+  public static final hydra.core.Name FIELD_NAME_REGEX = new hydra.core.Name("regex");
   
   private PnChars () {
   

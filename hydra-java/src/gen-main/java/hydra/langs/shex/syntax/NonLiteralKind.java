@@ -5,7 +5,13 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public abstract class NonLiteralKind implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.NonLiteralKind");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.NonLiteralKind");
+  
+  public static final hydra.core.Name FIELD_NAME_I_R_I = new hydra.core.Name("iRI");
+  
+  public static final hydra.core.Name FIELD_NAME_B_N_O_D_E = new hydra.core.Name("bNODE");
+  
+  public static final hydra.core.Name FIELD_NAME_N_O_N_L_I_T_E_R_A_L = new hydra.core.Name("nONLITERAL");
   
   private NonLiteralKind () {
   

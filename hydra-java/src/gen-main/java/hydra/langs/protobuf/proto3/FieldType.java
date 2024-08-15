@@ -5,7 +5,15 @@ package hydra.langs.protobuf.proto3;
 import java.io.Serializable;
 
 public abstract class FieldType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/protobuf/proto3.FieldType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/protobuf/proto3.FieldType");
+  
+  public static final hydra.core.Name FIELD_NAME_MAP = new hydra.core.Name("map");
+  
+  public static final hydra.core.Name FIELD_NAME_ONEOF = new hydra.core.Name("oneof");
+  
+  public static final hydra.core.Name FIELD_NAME_REPEATED = new hydra.core.Name("repeated");
+  
+  public static final hydra.core.Name FIELD_NAME_SIMPLE = new hydra.core.Name("simple");
   
   private FieldType () {
   

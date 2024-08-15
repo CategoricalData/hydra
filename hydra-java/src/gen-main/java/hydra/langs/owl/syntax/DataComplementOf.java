@@ -8,11 +8,10 @@ import java.io.Serializable;
  * See https://www.w3.org/TR/owl2-syntax/#Complement_of_Data_Ranges
  */
 public class DataComplementOf implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.DataComplementOf");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.DataComplementOf");
   
-  /**
-   * See https://www.w3.org/TR/owl2-syntax/#Complement_of_Data_Ranges
-   */
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  
   public final hydra.langs.owl.syntax.DataRange value;
   
   public DataComplementOf (hydra.langs.owl.syntax.DataRange value) {

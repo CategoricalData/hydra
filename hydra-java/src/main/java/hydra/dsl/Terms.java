@@ -182,7 +182,7 @@ public interface Terms {
      * Construct a flow state term (used with the Flow monad).
      */
     static Term flowState(Term value, Term state, Term trace) {
-        return record(FlowState.NAME,
+        return record(FlowState.TYPE_NAME,
                 field("value", value),
                 field("state", state),
                 field("trace", trace));
@@ -192,21 +192,21 @@ public interface Terms {
      * Construct a value term (used with the Flow monad).
      */
     static Term flowStateValue() {
-        return project(FlowState.NAME, "value");
+        return project(FlowState.TYPE_NAME, "value");
     }
 
     /**
      * Construct a state term (used with the Flow monad).
      */
     static Term flowStateState() {
-        return project(FlowState.NAME, "state");
+        return project(FlowState.TYPE_NAME, "state");
     }
 
     /**
      * Construct a trace term (used with the Flow monad).
      */
     static Term flowStateTrace() {
-        return project(FlowState.NAME, "trace");
+        return project(FlowState.TYPE_NAME, "trace");
     }
 
     /**
@@ -496,7 +496,7 @@ public interface Terms {
      * Construct a unit term.
      */
     static Term unit() {
-        return record(Unit.NAME);
+        return record(Unit.TYPE_NAME);
     }
 
     /**

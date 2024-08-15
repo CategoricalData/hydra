@@ -5,7 +5,13 @@ package hydra.langs.graphql.syntax;
 import java.io.Serializable;
 
 public abstract class Type implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.Type");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/graphql/syntax.Type");
+  
+  public static final hydra.core.Name FIELD_NAME_NAMED = new hydra.core.Name("named");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
+  
+  public static final hydra.core.Name FIELD_NAME_NON_NULL = new hydra.core.Name("nonNull");
   
   private Type () {
   

@@ -5,7 +5,13 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public abstract class InlineShapeDefinition_ListOfAlts_Elmt implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.InlineShapeDefinition.ListOfAlts.Elmt");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.InlineShapeDefinition.ListOfAlts.Elmt");
+  
+  public static final hydra.core.Name FIELD_NAME_INCLUDE_SET = new hydra.core.Name("includeSet");
+  
+  public static final hydra.core.Name FIELD_NAME_EXTRA_PROPERTY_SET = new hydra.core.Name("extraPropertySet");
+  
+  public static final hydra.core.Name FIELD_NAME_C_L_O_S_E_D = new hydra.core.Name("cLOSED");
   
   private InlineShapeDefinition_ListOfAlts_Elmt () {
   

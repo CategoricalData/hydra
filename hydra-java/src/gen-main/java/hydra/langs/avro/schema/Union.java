@@ -5,7 +5,9 @@ package hydra.langs.avro.schema;
 import java.io.Serializable;
 
 public class Union implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/avro/schema.Union");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/avro/schema.Union");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   public final java.util.List<hydra.langs.avro.schema.Schema> value;
   

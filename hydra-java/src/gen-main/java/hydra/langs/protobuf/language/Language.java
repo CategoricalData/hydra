@@ -6,7 +6,7 @@ package hydra.langs.protobuf.language;
  * Language constraints for Protobuf v3
  */
 public interface Language {
-  static  hydra.coders.Language protobufLanguage() {
+  static hydra.coders.Language protobufLanguage() {
     return new hydra.coders.Language(new hydra.coders.LanguageName("hydra/langs/protobuf"), new hydra.coders.LanguageConstraints(hydra.lib.sets.Empty.apply(), hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.mantle.LiteralVariant.Binary(),
       new hydra.mantle.LiteralVariant.Boolean_(),
@@ -32,7 +32,7 @@ public interface Language {
       new hydra.mantle.TypeVariant.Optional(),
       new hydra.mantle.TypeVariant.Record(),
       new hydra.mantle.TypeVariant.Union(),
-      new hydra.mantle.TypeVariant.Variable())), (java.util.function.Function<hydra.core.Type, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<Boolean>() {
+      new hydra.mantle.TypeVariant.Variable())), (java.util.function.Function<hydra.core.Type, Boolean>) (s4 -> ((s4)).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Type instance) {
         return true;
@@ -40,7 +40,7 @@ public interface Language {
       
       @Override
       public Boolean visit(hydra.core.Type.Map instance) {
-        return (hydra.strip.Strip.stripType(((instance.value)).values)).accept(new hydra.core.Type.PartialVisitor<Boolean>() {
+        return (hydra.strip.Strip.stripType(((instance.value)).values)).accept(new hydra.core.Type.PartialVisitor<>() {
           @Override
           public Boolean otherwise(hydra.core.Type instance) {
             return true;

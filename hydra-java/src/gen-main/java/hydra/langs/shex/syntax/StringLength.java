@@ -5,7 +5,13 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public abstract class StringLength implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.StringLength");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.StringLength");
+  
+  public static final hydra.core.Name FIELD_NAME_L_E_N_G_T_H = new hydra.core.Name("lENGTH");
+  
+  public static final hydra.core.Name FIELD_NAME_M_I_N_L_E_N_G_T_H = new hydra.core.Name("mINLENGTH");
+  
+  public static final hydra.core.Name FIELD_NAME_M_A_X_L_E_N_G_T_H = new hydra.core.Name("mAXLENGTH");
   
   private StringLength () {
   

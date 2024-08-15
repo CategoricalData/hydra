@@ -8,11 +8,10 @@ import java.io.Serializable;
  * A ClassType which does not allow annotations
  */
 public class UnannClassType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.UnannClassType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.UnannClassType");
   
-  /**
-   * A ClassType which does not allow annotations
-   */
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  
   public final hydra.langs.java.syntax.ClassType value;
   
   public UnannClassType (hydra.langs.java.syntax.ClassType value) {

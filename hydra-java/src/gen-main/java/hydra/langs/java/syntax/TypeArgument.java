@@ -5,7 +5,11 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class TypeArgument implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.TypeArgument");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.TypeArgument");
+  
+  public static final hydra.core.Name FIELD_NAME_REFERENCE = new hydra.core.Name("reference");
+  
+  public static final hydra.core.Name FIELD_NAME_WILDCARD = new hydra.core.Name("wildcard");
   
   private TypeArgument () {
   

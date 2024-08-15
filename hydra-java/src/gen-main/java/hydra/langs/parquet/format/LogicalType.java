@@ -8,7 +8,33 @@ import java.io.Serializable;
  * LogicalType annotations to replace ConvertedType. To maintain compatibility, implementations using LogicalType for a SchemaElement aust also set the corresponding ConvertedType (if any) from the following table.
  */
 public abstract class LogicalType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.LogicalType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.LogicalType");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
+  
+  public static final hydra.core.Name FIELD_NAME_MAP = new hydra.core.Name("map");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
+  
+  public static final hydra.core.Name FIELD_NAME_ENUM = new hydra.core.Name("enum");
+  
+  public static final hydra.core.Name FIELD_NAME_DECIMAL = new hydra.core.Name("decimal");
+  
+  public static final hydra.core.Name FIELD_NAME_DATE = new hydra.core.Name("date");
+  
+  public static final hydra.core.Name FIELD_NAME_TIME = new hydra.core.Name("time");
+  
+  public static final hydra.core.Name FIELD_NAME_TIMESTAMP = new hydra.core.Name("timestamp");
+  
+  public static final hydra.core.Name FIELD_NAME_INTEGER = new hydra.core.Name("integer");
+  
+  public static final hydra.core.Name FIELD_NAME_UNKNOWN = new hydra.core.Name("unknown");
+  
+  public static final hydra.core.Name FIELD_NAME_JSON = new hydra.core.Name("json");
+  
+  public static final hydra.core.Name FIELD_NAME_BSON = new hydra.core.Name("bson");
+  
+  public static final hydra.core.Name FIELD_NAME_UUID = new hydra.core.Name("uuid");
   
   private LogicalType () {
   
@@ -218,9 +244,6 @@ public abstract class LogicalType implements Serializable {
    * use ConvertedType DECIMAL + SchemaElement.{scale, precision}
    */
   public static final class Decimal extends hydra.langs.parquet.format.LogicalType implements Serializable {
-    /**
-     * use ConvertedType DECIMAL + SchemaElement.{scale, precision}
-     */
     public final hydra.langs.parquet.format.DecimalType value;
     
     public Decimal (hydra.langs.parquet.format.DecimalType value) {
@@ -280,9 +303,6 @@ public abstract class LogicalType implements Serializable {
    * use ConvertedType TIME_MICROS for TIME(isAdjustedToUTC = *, unit = MICROS). use ConvertedType TIME_MILLIS for TIME(isAdjustedToUTC = *, unit = MILLIS)
    */
   public static final class Time extends hydra.langs.parquet.format.LogicalType implements Serializable {
-    /**
-     * use ConvertedType TIME_MICROS for TIME(isAdjustedToUTC = *, unit = MICROS). use ConvertedType TIME_MILLIS for TIME(isAdjustedToUTC = *, unit = MILLIS)
-     */
     public final hydra.langs.parquet.format.TimeType value;
     
     public Time (hydra.langs.parquet.format.TimeType value) {
@@ -314,9 +334,6 @@ public abstract class LogicalType implements Serializable {
    * use ConvertedType TIMESTAMP_MICROS for TIMESTAMP(isAdjustedToUTC = *, unit = MICROS). use ConvertedType TIMESTAMP_MILLIS for TIMESTAMP(isAdjustedToUTC = *, unit = MILLIS)
    */
   public static final class Timestamp extends hydra.langs.parquet.format.LogicalType implements Serializable {
-    /**
-     * use ConvertedType TIMESTAMP_MICROS for TIMESTAMP(isAdjustedToUTC = *, unit = MICROS). use ConvertedType TIMESTAMP_MILLIS for TIMESTAMP(isAdjustedToUTC = *, unit = MILLIS)
-     */
     public final hydra.langs.parquet.format.TimestampType value;
     
     public Timestamp (hydra.langs.parquet.format.TimestampType value) {
@@ -348,9 +365,6 @@ public abstract class LogicalType implements Serializable {
    * use ConvertedType INT_* or UINT_*
    */
   public static final class Integer_ extends hydra.langs.parquet.format.LogicalType implements Serializable {
-    /**
-     * use ConvertedType INT_* or UINT_*
-     */
     public final hydra.langs.parquet.format.IntType value;
     
     public Integer_ (hydra.langs.parquet.format.IntType value) {

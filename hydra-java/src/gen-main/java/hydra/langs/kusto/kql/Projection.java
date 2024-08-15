@@ -5,7 +5,11 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public class Projection implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.Projection");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.Projection");
+  
+  public static final hydra.core.Name FIELD_NAME_EXPRESSION = new hydra.core.Name("expression");
+  
+  public static final hydra.core.Name FIELD_NAME_ALIAS = new hydra.core.Name("alias");
   
   public final hydra.langs.kusto.kql.Expression expression;
   

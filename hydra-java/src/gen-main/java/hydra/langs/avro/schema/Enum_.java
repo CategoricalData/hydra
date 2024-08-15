@@ -5,7 +5,11 @@ package hydra.langs.avro.schema;
 import java.io.Serializable;
 
 public class Enum_ implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/avro/schema.Enum");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/avro/schema.Enum");
+  
+  public static final hydra.core.Name FIELD_NAME_SYMBOLS = new hydra.core.Name("symbols");
+  
+  public static final hydra.core.Name FIELD_NAME_DEFAULT = new hydra.core.Name("default");
   
   /**
    * a JSON array, listing symbols, as JSON strings. All symbols in an enum must be unique; duplicates are prohibited. Every symbol must match the regular expression [A-Za-z_][A-Za-z0-9_]* (the same requirement as for names)

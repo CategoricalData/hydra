@@ -8,7 +8,15 @@ import java.io.Serializable;
  * A set of features for logical operations.
  */
 public class LogicalFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.LogicalFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.LogicalFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_AND = new hydra.core.Name("and");
+  
+  public static final hydra.core.Name FIELD_NAME_NOT = new hydra.core.Name("not");
+  
+  public static final hydra.core.Name FIELD_NAME_OR = new hydra.core.Name("or");
+  
+  public static final hydra.core.Name FIELD_NAME_XOR = new hydra.core.Name("xor");
   
   /**
    * Whether to expect the AND operator.

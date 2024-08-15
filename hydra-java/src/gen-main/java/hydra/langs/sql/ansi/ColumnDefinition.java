@@ -5,7 +5,19 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public class ColumnDefinition implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.ColumnDefinition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.ColumnDefinition");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE_OR_DOMAIN = new hydra.core.Name("typeOrDomain");
+  
+  public static final hydra.core.Name FIELD_NAME_REF_SCOPE = new hydra.core.Name("refScope");
+  
+  public static final hydra.core.Name FIELD_NAME_DEFAULT_OR_IDENTITY_OR_GENERATION = new hydra.core.Name("defaultOrIdentityOrGeneration");
+  
+  public static final hydra.core.Name FIELD_NAME_CONSTRAINTS = new hydra.core.Name("constraints");
+  
+  public static final hydra.core.Name FIELD_NAME_COLLATE = new hydra.core.Name("collate");
   
   public final hydra.langs.sql.ansi.ColumnName name;
   

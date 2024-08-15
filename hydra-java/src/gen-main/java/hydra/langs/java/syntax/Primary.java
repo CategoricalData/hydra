@@ -5,7 +5,11 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class Primary implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.Primary");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.Primary");
+  
+  public static final hydra.core.Name FIELD_NAME_NO_NEW_ARRAY = new hydra.core.Name("noNewArray");
+  
+  public static final hydra.core.Name FIELD_NAME_ARRAY_CREATION = new hydra.core.Name("arrayCreation");
   
   private Primary () {
   

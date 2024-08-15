@@ -5,7 +5,11 @@ package hydra.langs.graphql.syntax;
 import java.io.Serializable;
 
 public class FragmentSpread implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.FragmentSpread");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/graphql/syntax.FragmentSpread");
+  
+  public static final hydra.core.Name FIELD_NAME_FRAGMENT_NAME = new hydra.core.Name("fragmentName");
+  
+  public static final hydra.core.Name FIELD_NAME_DIRECTIVES = new hydra.core.Name("directives");
   
   public final hydra.langs.graphql.syntax.FragmentName fragmentName;
   

@@ -5,7 +5,11 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public class Pat_Interpolate implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Pat.Interpolate");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Pat.Interpolate");
+  
+  public static final hydra.core.Name FIELD_NAME_PREFIX = new hydra.core.Name("prefix");
+  
+  public static final hydra.core.Name FIELD_NAME_PARTS = new hydra.core.Name("parts");
   
   public final hydra.langs.scala.meta.Data_Name prefix;
   

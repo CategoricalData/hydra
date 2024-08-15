@@ -5,7 +5,47 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public abstract class Command implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.Command");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.Command");
+  
+  public static final hydra.core.Name FIELD_NAME_COUNT = new hydra.core.Name("count");
+  
+  public static final hydra.core.Name FIELD_NAME_DISTINCT = new hydra.core.Name("distinct");
+  
+  public static final hydra.core.Name FIELD_NAME_EXTEND = new hydra.core.Name("extend");
+  
+  public static final hydra.core.Name FIELD_NAME_JOIN = new hydra.core.Name("join");
+  
+  public static final hydra.core.Name FIELD_NAME_LIMIT = new hydra.core.Name("limit");
+  
+  public static final hydra.core.Name FIELD_NAME_MVEXPAND = new hydra.core.Name("mvexpand");
+  
+  public static final hydra.core.Name FIELD_NAME_ORDER_BY = new hydra.core.Name("orderBy");
+  
+  public static final hydra.core.Name FIELD_NAME_PARSE = new hydra.core.Name("parse");
+  
+  public static final hydra.core.Name FIELD_NAME_PRINT = new hydra.core.Name("print");
+  
+  public static final hydra.core.Name FIELD_NAME_PROJECT = new hydra.core.Name("project");
+  
+  public static final hydra.core.Name FIELD_NAME_PROJECT_AWAY = new hydra.core.Name("projectAway");
+  
+  public static final hydra.core.Name FIELD_NAME_PROJECT_RENAME = new hydra.core.Name("projectRename");
+  
+  public static final hydra.core.Name FIELD_NAME_RENDER = new hydra.core.Name("render");
+  
+  public static final hydra.core.Name FIELD_NAME_SEARCH = new hydra.core.Name("search");
+  
+  public static final hydra.core.Name FIELD_NAME_SORT_BY = new hydra.core.Name("sortBy");
+  
+  public static final hydra.core.Name FIELD_NAME_SUMMARIZE = new hydra.core.Name("summarize");
+  
+  public static final hydra.core.Name FIELD_NAME_TAKE = new hydra.core.Name("take");
+  
+  public static final hydra.core.Name FIELD_NAME_TOP = new hydra.core.Name("top");
+  
+  public static final hydra.core.Name FIELD_NAME_UNION = new hydra.core.Name("union");
+  
+  public static final hydra.core.Name FIELD_NAME_WHERE = new hydra.core.Name("where");
   
   private Command () {
   
@@ -170,9 +210,6 @@ public abstract class Command implements Serializable {
    * See https://learn.microsoft.com/en-us/azure/data-explorer/kusto/query/distinct-operator
    */
   public static final class Distinct extends hydra.langs.kusto.kql.Command implements Serializable {
-    /**
-     * See https://learn.microsoft.com/en-us/azure/data-explorer/kusto/query/distinct-operator
-     */
     public final java.util.List<hydra.langs.kusto.kql.ColumnName> value;
     
     public Distinct (java.util.List<hydra.langs.kusto.kql.ColumnName> value) {
@@ -596,9 +633,6 @@ public abstract class Command implements Serializable {
    * Limit a search to a specified number of results
    */
   public static final class Take extends hydra.langs.kusto.kql.Command implements Serializable {
-    /**
-     * Limit a search to a specified number of results
-     */
     public final Integer value;
     
     public Take (Integer value) {

@@ -5,7 +5,21 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public abstract class CommonValueExpression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.CommonValueExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.CommonValueExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_NUMERIC = new hydra.core.Name("numeric");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
+  
+  public static final hydra.core.Name FIELD_NAME_DATETIME = new hydra.core.Name("datetime");
+  
+  public static final hydra.core.Name FIELD_NAME_INTERVAL = new hydra.core.Name("interval");
+  
+  public static final hydra.core.Name FIELD_NAME_USER_DEFINED = new hydra.core.Name("userDefined");
+  
+  public static final hydra.core.Name FIELD_NAME_REFERENCE = new hydra.core.Name("reference");
+  
+  public static final hydra.core.Name FIELD_NAME_COLLECTION = new hydra.core.Name("collection");
   
   private CommonValueExpression () {
   

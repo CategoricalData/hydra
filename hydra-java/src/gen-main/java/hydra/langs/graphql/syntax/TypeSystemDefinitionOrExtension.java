@@ -5,7 +5,11 @@ package hydra.langs.graphql.syntax;
 import java.io.Serializable;
 
 public abstract class TypeSystemDefinitionOrExtension implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.TypeSystemDefinitionOrExtension");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/graphql/syntax.TypeSystemDefinitionOrExtension");
+  
+  public static final hydra.core.Name FIELD_NAME_DEFINITION = new hydra.core.Name("definition");
+  
+  public static final hydra.core.Name FIELD_NAME_EXTENSION = new hydra.core.Name("extension");
   
   private TypeSystemDefinitionOrExtension () {
   

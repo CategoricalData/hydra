@@ -8,7 +8,11 @@ import java.io.Serializable;
  * See https://www.w3.org/TR/owl2-syntax/#Datatype_Restrictions
  */
 public class DatatypeRestriction implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.DatatypeRestriction");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.DatatypeRestriction");
+  
+  public static final hydra.core.Name FIELD_NAME_DATATYPE = new hydra.core.Name("datatype");
+  
+  public static final hydra.core.Name FIELD_NAME_CONSTRAINTS = new hydra.core.Name("constraints");
   
   public final hydra.langs.owl.syntax.Datatype datatype;
   

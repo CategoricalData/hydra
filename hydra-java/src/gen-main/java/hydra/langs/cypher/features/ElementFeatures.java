@@ -8,7 +8,17 @@ import java.io.Serializable;
  * A set of features for element functions.
  */
 public class ElementFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.ElementFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.ElementFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_ELEMENT_ID = new hydra.core.Name("elementId");
+  
+  public static final hydra.core.Name FIELD_NAME_END_NODE = new hydra.core.Name("endNode");
+  
+  public static final hydra.core.Name FIELD_NAME_LABELS = new hydra.core.Name("labels");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTIES = new hydra.core.Name("properties");
+  
+  public static final hydra.core.Name FIELD_NAME_START_NODE = new hydra.core.Name("startNode");
   
   /**
    * Whether to expect the elementId() function.

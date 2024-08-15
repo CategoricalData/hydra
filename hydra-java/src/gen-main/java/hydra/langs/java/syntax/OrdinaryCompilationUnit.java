@@ -5,7 +5,13 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public class OrdinaryCompilationUnit implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.OrdinaryCompilationUnit");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.OrdinaryCompilationUnit");
+  
+  public static final hydra.core.Name FIELD_NAME_PACKAGE = new hydra.core.Name("package");
+  
+  public static final hydra.core.Name FIELD_NAME_IMPORTS = new hydra.core.Name("imports");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPES = new hydra.core.Name("types");
   
   public final hydra.util.Opt<hydra.langs.java.syntax.PackageDeclaration> package_;
   

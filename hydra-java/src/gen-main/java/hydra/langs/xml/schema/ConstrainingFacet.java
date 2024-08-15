@@ -8,7 +8,7 @@ import java.io.Serializable;
  * See https://www.w3.org/TR/xmlschema-2/#non-fundamental
  */
 public class ConstrainingFacet implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/xml/schema.ConstrainingFacet");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/xml/schema.ConstrainingFacet");
   
   public ConstrainingFacet () {
   

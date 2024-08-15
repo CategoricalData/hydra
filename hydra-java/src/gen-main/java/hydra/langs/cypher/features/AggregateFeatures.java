@@ -8,7 +8,25 @@ import java.io.Serializable;
  * A set of features for aggregation functions.
  */
 public class AggregateFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.AggregateFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.AggregateFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_AVG = new hydra.core.Name("avg");
+  
+  public static final hydra.core.Name FIELD_NAME_COLLECT = new hydra.core.Name("collect");
+  
+  public static final hydra.core.Name FIELD_NAME_COUNT = new hydra.core.Name("count");
+  
+  public static final hydra.core.Name FIELD_NAME_MAX = new hydra.core.Name("max");
+  
+  public static final hydra.core.Name FIELD_NAME_MIN = new hydra.core.Name("min");
+  
+  public static final hydra.core.Name FIELD_NAME_PERCENTILE_CONT = new hydra.core.Name("percentileCont");
+  
+  public static final hydra.core.Name FIELD_NAME_PERCENTILE_DISC = new hydra.core.Name("percentileDisc");
+  
+  public static final hydra.core.Name FIELD_NAME_STDEV = new hydra.core.Name("stdev");
+  
+  public static final hydra.core.Name FIELD_NAME_SUM = new hydra.core.Name("sum");
   
   /**
    * Whether to expect the avg() / AVG aggregate function.

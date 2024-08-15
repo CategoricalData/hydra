@@ -5,7 +5,23 @@ package hydra.langs.avro.schema;
 import java.io.Serializable;
 
 public abstract class Primitive implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/avro/schema.Primitive");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/avro/schema.Primitive");
+  
+  public static final hydra.core.Name FIELD_NAME_NULL = new hydra.core.Name("null");
+  
+  public static final hydra.core.Name FIELD_NAME_BOOLEAN = new hydra.core.Name("boolean");
+  
+  public static final hydra.core.Name FIELD_NAME_INT = new hydra.core.Name("int");
+  
+  public static final hydra.core.Name FIELD_NAME_LONG = new hydra.core.Name("long");
+  
+  public static final hydra.core.Name FIELD_NAME_FLOAT = new hydra.core.Name("float");
+  
+  public static final hydra.core.Name FIELD_NAME_DOUBLE = new hydra.core.Name("double");
+  
+  public static final hydra.core.Name FIELD_NAME_BYTES = new hydra.core.Name("bytes");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
   
   private Primitive () {
   

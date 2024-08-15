@@ -5,7 +5,9 @@ package hydra.langs.haskell.ast;
 import java.io.Serializable;
 
 public class LocalBindings implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.LocalBindings");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.LocalBindings");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   public final java.util.List<hydra.langs.haskell.ast.LocalBinding> value;
   

@@ -8,7 +8,13 @@ import java.io.Serializable;
  * Enum value definition
  */
 public class EnumValue implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/protobuf/proto3.EnumValue");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/protobuf/proto3.EnumValue");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_NUMBER = new hydra.core.Name("number");
+  
+  public static final hydra.core.Name FIELD_NAME_OPTIONS = new hydra.core.Name("options");
   
   /**
    * Enum value name

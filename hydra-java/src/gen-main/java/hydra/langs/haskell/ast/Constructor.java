@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A data constructor
  */
 public abstract class Constructor implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Constructor");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.Constructor");
+  
+  public static final hydra.core.Name FIELD_NAME_ORDINARY = new hydra.core.Name("ordinary");
+  
+  public static final hydra.core.Name FIELD_NAME_RECORD = new hydra.core.Name("record");
   
   private Constructor () {
   

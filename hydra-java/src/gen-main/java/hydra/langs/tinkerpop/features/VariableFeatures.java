@@ -8,7 +8,11 @@ import java.io.Serializable;
  * Features for Graph.Variables.
  */
 public class VariableFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/features.VariableFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/features.VariableFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_TYPE_FEATURES = new hydra.core.Name("dataTypeFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPPORTS_VARIABLES = new hydra.core.Name("supportsVariables");
   
   public final hydra.langs.tinkerpop.features.DataTypeFeatures dataTypeFeatures;
   

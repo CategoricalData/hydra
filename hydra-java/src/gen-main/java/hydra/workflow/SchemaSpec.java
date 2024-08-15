@@ -8,7 +8,13 @@ import java.io.Serializable;
  * The specification of a schema at the source end of a workflow
  */
 public abstract class SchemaSpec implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/workflow.SchemaSpec");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/workflow.SchemaSpec");
+  
+  public static final hydra.core.Name FIELD_NAME_HYDRA = new hydra.core.Name("hydra");
+  
+  public static final hydra.core.Name FIELD_NAME_FILE = new hydra.core.Name("file");
+  
+  public static final hydra.core.Name FIELD_NAME_PROVIDED = new hydra.core.Name("provided");
   
   private SchemaSpec () {
   

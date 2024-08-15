@@ -5,7 +5,13 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class ExplicitConstructorInvocation_Variant implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.ExplicitConstructorInvocation.Variant");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.ExplicitConstructorInvocation.Variant");
+  
+  public static final hydra.core.Name FIELD_NAME_THIS = new hydra.core.Name("this");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPER = new hydra.core.Name("super");
+  
+  public static final hydra.core.Name FIELD_NAME_PRIMARY = new hydra.core.Name("primary");
   
   private ExplicitConstructorInvocation_Variant () {
   

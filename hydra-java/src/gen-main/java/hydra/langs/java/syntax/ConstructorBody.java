@@ -5,7 +5,11 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public class ConstructorBody implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.ConstructorBody");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.ConstructorBody");
+  
+  public static final hydra.core.Name FIELD_NAME_INVOCATION = new hydra.core.Name("invocation");
+  
+  public static final hydra.core.Name FIELD_NAME_STATEMENTS = new hydra.core.Name("statements");
   
   public final hydra.util.Opt<hydra.langs.java.syntax.ExplicitConstructorInvocation> invocation;
   

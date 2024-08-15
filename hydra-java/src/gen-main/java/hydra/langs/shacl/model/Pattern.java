@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A SHACL pattern. See https://www.w3.org/TR/shacl/#PatternConstraintComponent
  */
 public class Pattern implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shacl/model.Pattern");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shacl/model.Pattern");
+  
+  public static final hydra.core.Name FIELD_NAME_REGEX = new hydra.core.Name("regex");
+  
+  public static final hydra.core.Name FIELD_NAME_FLAGS = new hydra.core.Name("flags");
   
   public final String regex;
   

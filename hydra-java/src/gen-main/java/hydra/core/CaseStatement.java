@@ -8,7 +8,13 @@ import java.io.Serializable;
  * A union elimination; a case statement
  */
 public class CaseStatement implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.CaseStatement");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.CaseStatement");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE_NAME = new hydra.core.Name("typeName");
+  
+  public static final hydra.core.Name FIELD_NAME_DEFAULT = new hydra.core.Name("default");
+  
+  public static final hydra.core.Name FIELD_NAME_CASES = new hydra.core.Name("cases");
   
   public final hydra.core.Name typeName;
   

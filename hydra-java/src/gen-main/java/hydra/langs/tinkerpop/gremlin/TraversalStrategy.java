@@ -5,7 +5,13 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public class TraversalStrategy implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalStrategy");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalStrategy");
+  
+  public static final hydra.core.Name FIELD_NAME_NEW = new hydra.core.Name("new");
+  
+  public static final hydra.core.Name FIELD_NAME_CLASS = new hydra.core.Name("class");
+  
+  public static final hydra.core.Name FIELD_NAME_CONFIGURATIONS = new hydra.core.Name("configurations");
   
   public final Boolean new_;
   

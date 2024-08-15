@@ -5,7 +5,13 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public class PredicateTraversalArgument implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.PredicateTraversalArgument");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.PredicateTraversalArgument");
+  
+  public static final hydra.core.Name FIELD_NAME_PREDICATE = new hydra.core.Name("predicate");
+  
+  public static final hydra.core.Name FIELD_NAME_TRAVERSAL1 = new hydra.core.Name("traversal1");
+  
+  public static final hydra.core.Name FIELD_NAME_TRAVERSAL2 = new hydra.core.Name("traversal2");
   
   public final hydra.langs.tinkerpop.gremlin.TraversalPredicate predicate;
   

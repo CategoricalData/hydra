@@ -5,7 +5,21 @@ package hydra.langs.pegasus.pdl;
 import java.io.Serializable;
 
 public abstract class PrimitiveType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/pegasus/pdl.PrimitiveType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/pegasus/pdl.PrimitiveType");
+  
+  public static final hydra.core.Name FIELD_NAME_BOOLEAN = new hydra.core.Name("boolean");
+  
+  public static final hydra.core.Name FIELD_NAME_BYTES = new hydra.core.Name("bytes");
+  
+  public static final hydra.core.Name FIELD_NAME_DOUBLE = new hydra.core.Name("double");
+  
+  public static final hydra.core.Name FIELD_NAME_FLOAT = new hydra.core.Name("float");
+  
+  public static final hydra.core.Name FIELD_NAME_INT = new hydra.core.Name("int");
+  
+  public static final hydra.core.Name FIELD_NAME_LONG = new hydra.core.Name("long");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
   
   private PrimitiveType () {
   

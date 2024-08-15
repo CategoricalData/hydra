@@ -5,7 +5,19 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public abstract class Importee implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Importee");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Importee");
+  
+  public static final hydra.core.Name FIELD_NAME_WILDCARD = new hydra.core.Name("wildcard");
+  
+  public static final hydra.core.Name FIELD_NAME_GIVEN = new hydra.core.Name("given");
+  
+  public static final hydra.core.Name FIELD_NAME_GIVEN_ALL = new hydra.core.Name("givenAll");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_RENAME = new hydra.core.Name("rename");
+  
+  public static final hydra.core.Name FIELD_NAME_UNIMPORT = new hydra.core.Name("unimport");
   
   private Importee () {
   

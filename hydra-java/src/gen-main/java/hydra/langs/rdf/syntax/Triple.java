@@ -8,7 +8,13 @@ import java.io.Serializable;
  * An RDF triple defined by a subject, predicate, and object
  */
 public class Triple implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/rdf/syntax.Triple");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/rdf/syntax.Triple");
+  
+  public static final hydra.core.Name FIELD_NAME_SUBJECT = new hydra.core.Name("subject");
+  
+  public static final hydra.core.Name FIELD_NAME_PREDICATE = new hydra.core.Name("predicate");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT = new hydra.core.Name("object");
   
   public final hydra.langs.rdf.syntax.Resource subject;
   

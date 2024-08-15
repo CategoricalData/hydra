@@ -8,13 +8,20 @@ import java.io.Serializable;
  * Crypto metadata for files with encrypted footer
  */
 public class FileCryptoMetaData implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.FileCryptoMetaData");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.FileCryptoMetaData");
+  
+  public static final hydra.core.Name FIELD_NAME_ENCRYPTION_ALGORITHM = new hydra.core.Name("encryptionAlgorithm");
+  
+  public static final hydra.core.Name FIELD_NAME_KEY_METADATA = new hydra.core.Name("keyMetadata");
   
   /**
    * Encryption algorithm. This field is only used for files with encrypted footer. Files with plaintext footer store algorithm id inside footer (FileMetaData structure).
    */
   public final hydra.langs.parquet.format.EncryptionAlgorithm encryptionAlgorithm;
   
+  /**
+   * Retrieval metadata of key used for encryption of footer, and (possibly) columns
+   */
   public final hydra.util.Opt<String> keyMetadata;
   
   public FileCryptoMetaData (hydra.langs.parquet.format.EncryptionAlgorithm encryptionAlgorithm, hydra.util.Opt<String> keyMetadata) {

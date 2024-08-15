@@ -5,7 +5,11 @@ package hydra.langs.kusto.kql;
 import java.io.Serializable;
 
 public abstract class Order implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/kusto/kql.Order");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/kusto/kql.Order");
+  
+  public static final hydra.core.Name FIELD_NAME_ASCENDING = new hydra.core.Name("ascending");
+  
+  public static final hydra.core.Name FIELD_NAME_DESCENDING = new hydra.core.Name("descending");
   
   private Order () {
   

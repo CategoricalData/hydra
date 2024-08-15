@@ -8,7 +8,15 @@ import java.io.Serializable;
  * A data or value declaration
  */
 public abstract class Declaration implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Declaration");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.Declaration");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA = new hydra.core.Name("data");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE_BINDING = new hydra.core.Name("valueBinding");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPED_BINDING = new hydra.core.Name("typedBinding");
   
   private Declaration () {
   

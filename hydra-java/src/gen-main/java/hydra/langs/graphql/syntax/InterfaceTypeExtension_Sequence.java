@@ -5,7 +5,15 @@ package hydra.langs.graphql.syntax;
 import java.io.Serializable;
 
 public class InterfaceTypeExtension_Sequence implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.InterfaceTypeExtension.Sequence");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/graphql/syntax.InterfaceTypeExtension.Sequence");
+  
+  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  
+  public static final hydra.core.Name FIELD_NAME_IMPLEMENTS_INTERFACES = new hydra.core.Name("implementsInterfaces");
+  
+  public static final hydra.core.Name FIELD_NAME_DIRECTIVES = new hydra.core.Name("directives");
+  
+  public static final hydra.core.Name FIELD_NAME_FIELDS_DEFINITION = new hydra.core.Name("fieldsDefinition");
   
   public final hydra.langs.graphql.syntax.Name name;
   

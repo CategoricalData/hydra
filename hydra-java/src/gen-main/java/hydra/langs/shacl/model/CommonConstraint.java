@@ -8,7 +8,51 @@ import java.io.Serializable;
  * Any of a number of constraint parameters which can be applied either to node or property shapes
  */
 public abstract class CommonConstraint implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shacl/model.CommonConstraint");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shacl/model.CommonConstraint");
+  
+  public static final hydra.core.Name FIELD_NAME_AND = new hydra.core.Name("and");
+  
+  public static final hydra.core.Name FIELD_NAME_CLOSED = new hydra.core.Name("closed");
+  
+  public static final hydra.core.Name FIELD_NAME_CLASS = new hydra.core.Name("class");
+  
+  public static final hydra.core.Name FIELD_NAME_DATATYPE = new hydra.core.Name("datatype");
+  
+  public static final hydra.core.Name FIELD_NAME_DISJOINT = new hydra.core.Name("disjoint");
+  
+  public static final hydra.core.Name FIELD_NAME_EQUALS = new hydra.core.Name("equals");
+  
+  public static final hydra.core.Name FIELD_NAME_HAS_VALUE = new hydra.core.Name("hasValue");
+  
+  public static final hydra.core.Name FIELD_NAME_IN = new hydra.core.Name("in");
+  
+  public static final hydra.core.Name FIELD_NAME_LANGUAGE_IN = new hydra.core.Name("languageIn");
+  
+  public static final hydra.core.Name FIELD_NAME_NODE_KIND = new hydra.core.Name("nodeKind");
+  
+  public static final hydra.core.Name FIELD_NAME_NODE = new hydra.core.Name("node");
+  
+  public static final hydra.core.Name FIELD_NAME_NOT = new hydra.core.Name("not");
+  
+  public static final hydra.core.Name FIELD_NAME_MAX_EXCLUSIVE = new hydra.core.Name("maxExclusive");
+  
+  public static final hydra.core.Name FIELD_NAME_MAX_INCLUSIVE = new hydra.core.Name("maxInclusive");
+  
+  public static final hydra.core.Name FIELD_NAME_MAX_LENGTH = new hydra.core.Name("maxLength");
+  
+  public static final hydra.core.Name FIELD_NAME_MIN_EXCLUSIVE = new hydra.core.Name("minExclusive");
+  
+  public static final hydra.core.Name FIELD_NAME_MIN_INCLUSIVE = new hydra.core.Name("minInclusive");
+  
+  public static final hydra.core.Name FIELD_NAME_MIN_LENGTH = new hydra.core.Name("minLength");
+  
+  public static final hydra.core.Name FIELD_NAME_PATTERN = new hydra.core.Name("pattern");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTY = new hydra.core.Name("property");
+  
+  public static final hydra.core.Name FIELD_NAME_OR = new hydra.core.Name("or");
+  
+  public static final hydra.core.Name FIELD_NAME_XONE = new hydra.core.Name("xone");
   
   private CommonConstraint () {
   
@@ -160,9 +204,6 @@ public abstract class CommonConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#AndConstraintComponent
    */
   public static final class And extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#AndConstraintComponent
-     */
     public final java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape>> value;
     
     public And (java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape>> value) {
@@ -194,9 +235,6 @@ public abstract class CommonConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#ClosedConstraintComponent
    */
   public static final class Closed extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#ClosedConstraintComponent
-     */
     public final hydra.langs.shacl.model.Closed value;
     
     public Closed (hydra.langs.shacl.model.Closed value) {
@@ -228,9 +266,6 @@ public abstract class CommonConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#ClassConstraintComponent
    */
   public static final class Class_ extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#ClassConstraintComponent
-     */
     public final java.util.Set<hydra.langs.rdf.syntax.RdfsClass> value;
     
     public Class_ (java.util.Set<hydra.langs.rdf.syntax.RdfsClass> value) {
@@ -262,9 +297,6 @@ public abstract class CommonConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#DatatypeConstraintComponent
    */
   public static final class Datatype extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#DatatypeConstraintComponent
-     */
     public final hydra.langs.rdf.syntax.Iri value;
     
     public Datatype (hydra.langs.rdf.syntax.Iri value) {
@@ -296,9 +328,6 @@ public abstract class CommonConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#DisjointConstraintComponent
    */
   public static final class Disjoint extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#DisjointConstraintComponent
-     */
     public final java.util.Set<hydra.langs.rdf.syntax.Property> value;
     
     public Disjoint (java.util.Set<hydra.langs.rdf.syntax.Property> value) {
@@ -330,9 +359,6 @@ public abstract class CommonConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#EqualsConstraintComponent
    */
   public static final class Equals extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#EqualsConstraintComponent
-     */
     public final java.util.Set<hydra.langs.rdf.syntax.Property> value;
     
     public Equals (java.util.Set<hydra.langs.rdf.syntax.Property> value) {
@@ -364,9 +390,6 @@ public abstract class CommonConstraint implements Serializable {
    * Specifies the condition that at least one value node is equal to the given RDF term. See https://www.w3.org/TR/shacl/#HasValueConstraintComponent
    */
   public static final class HasValue extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * Specifies the condition that at least one value node is equal to the given RDF term. See https://www.w3.org/TR/shacl/#HasValueConstraintComponent
-     */
     public final java.util.Set<hydra.langs.rdf.syntax.Node> value;
     
     public HasValue (java.util.Set<hydra.langs.rdf.syntax.Node> value) {
@@ -398,9 +421,6 @@ public abstract class CommonConstraint implements Serializable {
    * Specifies the condition that each value node is a member of a provided SHACL list. See https://www.w3.org/TR/shacl/#InConstraintComponent
    */
   public static final class In extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * Specifies the condition that each value node is a member of a provided SHACL list. See https://www.w3.org/TR/shacl/#InConstraintComponent
-     */
     public final java.util.List<hydra.langs.rdf.syntax.Node> value;
     
     public In (java.util.List<hydra.langs.rdf.syntax.Node> value) {
@@ -432,9 +452,6 @@ public abstract class CommonConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#LanguageInConstraintComponent
    */
   public static final class LanguageIn extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#LanguageInConstraintComponent
-     */
     public final java.util.Set<hydra.langs.rdf.syntax.LanguageTag> value;
     
     public LanguageIn (java.util.Set<hydra.langs.rdf.syntax.LanguageTag> value) {
@@ -466,9 +483,6 @@ public abstract class CommonConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#NodeKindConstraintComponent
    */
   public static final class NodeKind extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#NodeKindConstraintComponent
-     */
     public final hydra.langs.shacl.model.NodeKind value;
     
     public NodeKind (hydra.langs.shacl.model.NodeKind value) {
@@ -500,9 +514,6 @@ public abstract class CommonConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#NodeConstraintComponent
    */
   public static final class Node extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#NodeConstraintComponent
-     */
     public final java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.NodeShape>> value;
     
     public Node (java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.NodeShape>> value) {
@@ -534,9 +545,6 @@ public abstract class CommonConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#NotConstraintComponent
    */
   public static final class Not extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#NotConstraintComponent
-     */
     public final java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape>> value;
     
     public Not (java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape>> value) {
@@ -568,9 +576,6 @@ public abstract class CommonConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#MaxExclusiveConstraintComponent
    */
   public static final class MaxExclusive extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#MaxExclusiveConstraintComponent
-     */
     public final hydra.langs.rdf.syntax.Literal value;
     
     public MaxExclusive (hydra.langs.rdf.syntax.Literal value) {
@@ -602,9 +607,6 @@ public abstract class CommonConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#MaxInclusiveConstraintComponent
    */
   public static final class MaxInclusive extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#MaxInclusiveConstraintComponent
-     */
     public final hydra.langs.rdf.syntax.Literal value;
     
     public MaxInclusive (hydra.langs.rdf.syntax.Literal value) {
@@ -636,9 +638,6 @@ public abstract class CommonConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#MaxLengthConstraintComponent
    */
   public static final class MaxLength extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#MaxLengthConstraintComponent
-     */
     public final java.math.BigInteger value;
     
     public MaxLength (java.math.BigInteger value) {
@@ -670,9 +669,6 @@ public abstract class CommonConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#MinExclusiveConstraintComponent
    */
   public static final class MinExclusive extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#MinExclusiveConstraintComponent
-     */
     public final hydra.langs.rdf.syntax.Literal value;
     
     public MinExclusive (hydra.langs.rdf.syntax.Literal value) {
@@ -704,9 +700,6 @@ public abstract class CommonConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#MinInclusiveConstraintComponent
    */
   public static final class MinInclusive extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#MinInclusiveConstraintComponent
-     */
     public final hydra.langs.rdf.syntax.Literal value;
     
     public MinInclusive (hydra.langs.rdf.syntax.Literal value) {
@@ -738,9 +731,6 @@ public abstract class CommonConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#MinLengthConstraintComponent
    */
   public static final class MinLength extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#MinLengthConstraintComponent
-     */
     public final java.math.BigInteger value;
     
     public MinLength (java.math.BigInteger value) {
@@ -772,9 +762,6 @@ public abstract class CommonConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#PatternConstraintComponent
    */
   public static final class Pattern extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#PatternConstraintComponent
-     */
     public final hydra.langs.shacl.model.Pattern value;
     
     public Pattern (hydra.langs.shacl.model.Pattern value) {
@@ -806,9 +793,6 @@ public abstract class CommonConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#PropertyConstraintComponent
    */
   public static final class Property extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#PropertyConstraintComponent
-     */
     public final java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.PropertyShape>> value;
     
     public Property (java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.PropertyShape>> value) {
@@ -840,9 +824,6 @@ public abstract class CommonConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#OrConstraintComponent
    */
   public static final class Or extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#OrConstraintComponent
-     */
     public final java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape>> value;
     
     public Or (java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape>> value) {
@@ -874,9 +855,6 @@ public abstract class CommonConstraint implements Serializable {
    * See https://www.w3.org/TR/shacl/#XoneConstraintComponent
    */
   public static final class Xone extends hydra.langs.shacl.model.CommonConstraint implements Serializable {
-    /**
-     * See https://www.w3.org/TR/shacl/#XoneConstraintComponent
-     */
     public final java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape>> value;
     
     public Xone (java.util.Set<hydra.langs.shacl.model.Reference<hydra.langs.shacl.model.Shape>> value) {

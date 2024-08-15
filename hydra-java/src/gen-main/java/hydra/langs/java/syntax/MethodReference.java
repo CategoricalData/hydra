@@ -5,7 +5,19 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class MethodReference implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.MethodReference");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.MethodReference");
+  
+  public static final hydra.core.Name FIELD_NAME_EXPRESSION = new hydra.core.Name("expression");
+  
+  public static final hydra.core.Name FIELD_NAME_PRIMARY = new hydra.core.Name("primary");
+  
+  public static final hydra.core.Name FIELD_NAME_REFERENCE_TYPE = new hydra.core.Name("referenceType");
+  
+  public static final hydra.core.Name FIELD_NAME_SUPER = new hydra.core.Name("super");
+  
+  public static final hydra.core.Name FIELD_NAME_NEW = new hydra.core.Name("new");
+  
+  public static final hydra.core.Name FIELD_NAME_ARRAY = new hydra.core.Name("array");
   
   private MethodReference () {
   

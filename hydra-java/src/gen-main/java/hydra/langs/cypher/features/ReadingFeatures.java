@@ -8,7 +8,13 @@ import java.io.Serializable;
  * A set of features for specific syntax related to reading data from the graph..
  */
 public class ReadingFeatures implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/features.ReadingFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.ReadingFeatures");
+  
+  public static final hydra.core.Name FIELD_NAME_UNION = new hydra.core.Name("union");
+  
+  public static final hydra.core.Name FIELD_NAME_UNION_ALL = new hydra.core.Name("unionAll");
+  
+  public static final hydra.core.Name FIELD_NAME_UNWIND = new hydra.core.Name("unwind");
   
   /**
    * Whether to expect the UNION operator.

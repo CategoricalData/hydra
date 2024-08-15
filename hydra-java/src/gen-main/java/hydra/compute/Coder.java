@@ -6,7 +6,11 @@ package hydra.compute;
  * An encoder and decoder; a bidirectional flow between two types
  */
 public class Coder<S1, S2, V1, V2> {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.Coder");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/compute.Coder");
+  
+  public static final hydra.core.Name FIELD_NAME_ENCODE = new hydra.core.Name("encode");
+  
+  public static final hydra.core.Name FIELD_NAME_DECODE = new hydra.core.Name("decode");
   
   public final java.util.function.Function<V1, hydra.compute.Flow<S1, V2>> encode;
   

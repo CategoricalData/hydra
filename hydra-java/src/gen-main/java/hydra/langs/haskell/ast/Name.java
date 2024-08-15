@@ -5,7 +5,13 @@ package hydra.langs.haskell.ast;
 import java.io.Serializable;
 
 public abstract class Name implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Name");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.Name");
+  
+  public static final hydra.core.Name FIELD_NAME_IMPLICIT = new hydra.core.Name("implicit");
+  
+  public static final hydra.core.Name FIELD_NAME_NORMAL = new hydra.core.Name("normal");
+  
+  public static final hydra.core.Name FIELD_NAME_PARENS = new hydra.core.Name("parens");
   
   private Name () {
   

@@ -5,7 +5,9 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public class Enumerator_Guard implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Enumerator.Guard");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Enumerator.Guard");
+  
+  public static final hydra.core.Name FIELD_NAME_COND = new hydra.core.Name("cond");
   
   public final hydra.langs.scala.meta.Data cond;
   

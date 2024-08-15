@@ -5,7 +5,11 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public class YieldItems implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.YieldItems");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.YieldItems");
+  
+  public static final hydra.core.Name FIELD_NAME_ITEMS = new hydra.core.Name("items");
+  
+  public static final hydra.core.Name FIELD_NAME_WHERE = new hydra.core.Name("where");
   
   public final java.util.List<hydra.langs.cypher.openCypher.YieldItem> items;
   

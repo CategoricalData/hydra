@@ -5,7 +5,17 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public abstract class TableElement implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.TableElement");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.TableElement");
+  
+  public static final hydra.core.Name FIELD_NAME_COLUMN = new hydra.core.Name("column");
+  
+  public static final hydra.core.Name FIELD_NAME_TABLE_CONSTRAINT = new hydra.core.Name("tableConstraint");
+  
+  public static final hydra.core.Name FIELD_NAME_LIKE = new hydra.core.Name("like");
+  
+  public static final hydra.core.Name FIELD_NAME_SELF_REFERENCING_COLUMN = new hydra.core.Name("selfReferencingColumn");
+  
+  public static final hydra.core.Name FIELD_NAME_COLUM_OPTIONS = new hydra.core.Name("columOptions");
   
   private TableElement () {
   

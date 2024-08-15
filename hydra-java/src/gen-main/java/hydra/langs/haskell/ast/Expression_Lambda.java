@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A lambda expression
  */
 public class Expression_Lambda implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Expression.Lambda");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.Expression.Lambda");
+  
+  public static final hydra.core.Name FIELD_NAME_BINDINGS = new hydra.core.Name("bindings");
+  
+  public static final hydra.core.Name FIELD_NAME_INNER = new hydra.core.Name("inner");
   
   public final java.util.List<hydra.langs.haskell.ast.Pattern> bindings;
   

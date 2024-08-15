@@ -5,7 +5,13 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public class PredefinedType_String implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.PredefinedType.String");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.PredefinedType.String");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  
+  public static final hydra.core.Name FIELD_NAME_CHARACTERS = new hydra.core.Name("characters");
+  
+  public static final hydra.core.Name FIELD_NAME_COLLATE = new hydra.core.Name("collate");
   
   public final hydra.langs.sql.ansi.CharacterStringType type;
   

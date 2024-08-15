@@ -5,7 +5,11 @@ package hydra.langs.shex.syntax;
 import java.io.Serializable;
 
 public class SingleElementGroup implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shex/syntax.SingleElementGroup");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shex/syntax.SingleElementGroup");
+  
+  public static final hydra.core.Name FIELD_NAME_UNARY_TRIPLE_EXPR = new hydra.core.Name("unaryTripleExpr");
+  
+  public static final hydra.core.Name FIELD_NAME_SEMI = new hydra.core.Name("semi");
   
   public final hydra.langs.shex.syntax.UnaryTripleExpr unaryTripleExpr;
   

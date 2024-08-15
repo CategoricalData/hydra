@@ -5,7 +5,13 @@ package hydra.langs.graphql.syntax;
 import java.io.Serializable;
 
 public abstract class OperationType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.OperationType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/graphql/syntax.OperationType");
+  
+  public static final hydra.core.Name FIELD_NAME_QUERY = new hydra.core.Name("query");
+  
+  public static final hydra.core.Name FIELD_NAME_MUTATION = new hydra.core.Name("mutation");
+  
+  public static final hydra.core.Name FIELD_NAME_SUBSCRIPTION = new hydra.core.Name("subscription");
   
   private OperationType () {
   

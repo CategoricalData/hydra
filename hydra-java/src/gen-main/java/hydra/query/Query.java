@@ -8,7 +8,11 @@ import java.io.Serializable;
  * A SELECT-style graph pattern matching query
  */
 public class Query implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/query.Query");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/query.Query");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLES = new hydra.core.Name("variables");
+  
+  public static final hydra.core.Name FIELD_NAME_PATTERNS = new hydra.core.Name("patterns");
   
   /**
    * The variables selected by the query

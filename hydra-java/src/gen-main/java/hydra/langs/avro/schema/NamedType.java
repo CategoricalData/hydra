@@ -5,7 +5,13 @@ package hydra.langs.avro.schema;
 import java.io.Serializable;
 
 public abstract class NamedType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/avro/schema.NamedType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/avro/schema.NamedType");
+  
+  public static final hydra.core.Name FIELD_NAME_ENUM = new hydra.core.Name("enum");
+  
+  public static final hydra.core.Name FIELD_NAME_FIXED = new hydra.core.Name("fixed");
+  
+  public static final hydra.core.Name FIELD_NAME_RECORD = new hydra.core.Name("record");
   
   private NamedType () {
   

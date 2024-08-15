@@ -5,7 +5,11 @@ package hydra.langs.haskell.ast;
 import java.io.Serializable;
 
 public abstract class LocalBinding implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.LocalBinding");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.LocalBinding");
+  
+  public static final hydra.core.Name FIELD_NAME_SIGNATURE = new hydra.core.Name("signature");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   private LocalBinding () {
   

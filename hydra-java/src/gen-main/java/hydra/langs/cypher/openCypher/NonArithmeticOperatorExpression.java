@@ -5,7 +5,13 @@ package hydra.langs.cypher.openCypher;
 import java.io.Serializable;
 
 public class NonArithmeticOperatorExpression implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.NonArithmeticOperatorExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/openCypher.NonArithmeticOperatorExpression");
+  
+  public static final hydra.core.Name FIELD_NAME_ATOM = new hydra.core.Name("atom");
+  
+  public static final hydra.core.Name FIELD_NAME_LISTS_AND_LOOKUPS = new hydra.core.Name("listsAndLookups");
+  
+  public static final hydra.core.Name FIELD_NAME_LABELS = new hydra.core.Name("labels");
   
   public final hydra.langs.cypher.openCypher.Atom atom;
   

@@ -5,7 +5,13 @@ package hydra.langs.owl.syntax;
 import java.io.Serializable;
 
 public class DataMinCardinality implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/owl/syntax.DataMinCardinality");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/owl/syntax.DataMinCardinality");
+  
+  public static final hydra.core.Name FIELD_NAME_BOUND = new hydra.core.Name("bound");
+  
+  public static final hydra.core.Name FIELD_NAME_PROPERTY = new hydra.core.Name("property");
+  
+  public static final hydra.core.Name FIELD_NAME_RANGE = new hydra.core.Name("range");
   
   public final java.math.BigInteger bound;
   

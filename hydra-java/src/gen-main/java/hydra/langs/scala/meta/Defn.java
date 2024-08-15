@@ -5,7 +5,35 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public abstract class Defn implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Defn");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Defn");
+  
+  public static final hydra.core.Name FIELD_NAME_VAL = new hydra.core.Name("val");
+  
+  public static final hydra.core.Name FIELD_NAME_VAR = new hydra.core.Name("var");
+  
+  public static final hydra.core.Name FIELD_NAME_GIVEN = new hydra.core.Name("given");
+  
+  public static final hydra.core.Name FIELD_NAME_ENUM = new hydra.core.Name("enum");
+  
+  public static final hydra.core.Name FIELD_NAME_ENUM_CASE = new hydra.core.Name("enumCase");
+  
+  public static final hydra.core.Name FIELD_NAME_REPEATED_ENUM_CASE = new hydra.core.Name("repeatedEnumCase");
+  
+  public static final hydra.core.Name FIELD_NAME_GIVEN_ALIAS = new hydra.core.Name("givenAlias");
+  
+  public static final hydra.core.Name FIELD_NAME_EXTENSION_GROUP = new hydra.core.Name("extensionGroup");
+  
+  public static final hydra.core.Name FIELD_NAME_DEF = new hydra.core.Name("def");
+  
+  public static final hydra.core.Name FIELD_NAME_MACRO = new hydra.core.Name("macro");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  
+  public static final hydra.core.Name FIELD_NAME_CLASS = new hydra.core.Name("class");
+  
+  public static final hydra.core.Name FIELD_NAME_TRAIT = new hydra.core.Name("trait");
+  
+  public static final hydra.core.Name FIELD_NAME_OBJECT = new hydra.core.Name("object");
   
   private Defn () {
   

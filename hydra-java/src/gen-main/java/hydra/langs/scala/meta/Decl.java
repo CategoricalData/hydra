@@ -5,7 +5,17 @@ package hydra.langs.scala.meta;
 import java.io.Serializable;
 
 public abstract class Decl implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/scala/meta.Decl");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/scala/meta.Decl");
+  
+  public static final hydra.core.Name FIELD_NAME_VAL = new hydra.core.Name("val");
+  
+  public static final hydra.core.Name FIELD_NAME_VAR = new hydra.core.Name("var");
+  
+  public static final hydra.core.Name FIELD_NAME_DEF = new hydra.core.Name("def");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  
+  public static final hydra.core.Name FIELD_NAME_GIVEN = new hydra.core.Name("given");
   
   private Decl () {
   

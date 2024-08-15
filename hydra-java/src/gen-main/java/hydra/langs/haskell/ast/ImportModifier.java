@@ -8,7 +8,11 @@ import java.io.Serializable;
  * An import modifier ('pattern' or 'type')
  */
 public abstract class ImportModifier implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.ImportModifier");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.ImportModifier");
+  
+  public static final hydra.core.Name FIELD_NAME_PATTERN = new hydra.core.Name("pattern");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
   
   private ImportModifier () {
   

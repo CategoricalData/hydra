@@ -5,7 +5,9 @@ package hydra.langs.haskell.ast;
 import java.io.Serializable;
 
 public class RightHandSide implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.RightHandSide");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/haskell/ast.RightHandSide");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   public final hydra.langs.haskell.ast.Expression value;
   

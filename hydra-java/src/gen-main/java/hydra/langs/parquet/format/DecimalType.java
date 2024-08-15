@@ -8,7 +8,11 @@ import java.io.Serializable;
  * Decimal logical type annotation. To maintain forward-compatibility in v1, implementations using this logical type must also set scale and precision on the annotated SchemaElement. Allowed for physical types: INT32, INT64, FIXED, and BINARY
  */
 public class DecimalType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.DecimalType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.DecimalType");
+  
+  public static final hydra.core.Name FIELD_NAME_SCALE = new hydra.core.Name("scale");
+  
+  public static final hydra.core.Name FIELD_NAME_PRECISION = new hydra.core.Name("precision");
   
   public final Integer scale;
   

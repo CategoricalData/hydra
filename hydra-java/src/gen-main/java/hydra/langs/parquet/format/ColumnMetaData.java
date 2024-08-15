@@ -8,7 +8,35 @@ import java.io.Serializable;
  * Description for column metadata
  */
 public class ColumnMetaData implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.ColumnMetaData");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/format.ColumnMetaData");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  
+  public static final hydra.core.Name FIELD_NAME_ENCODINGS = new hydra.core.Name("encodings");
+  
+  public static final hydra.core.Name FIELD_NAME_PATH_IN_SCHEMA = new hydra.core.Name("pathInSchema");
+  
+  public static final hydra.core.Name FIELD_NAME_CODEC = new hydra.core.Name("codec");
+  
+  public static final hydra.core.Name FIELD_NAME_NUM_VALUES = new hydra.core.Name("numValues");
+  
+  public static final hydra.core.Name FIELD_NAME_TOTAL_UNCOMPRESSED_SIZE = new hydra.core.Name("totalUncompressedSize");
+  
+  public static final hydra.core.Name FIELD_NAME_TOTAL_COMPRESSED_SIZE = new hydra.core.Name("totalCompressedSize");
+  
+  public static final hydra.core.Name FIELD_NAME_KEY_VALUE_METADATA = new hydra.core.Name("keyValueMetadata");
+  
+  public static final hydra.core.Name FIELD_NAME_DATA_PAGE_OFFSET = new hydra.core.Name("dataPageOffset");
+  
+  public static final hydra.core.Name FIELD_NAME_INDEX_PAGE_OFFSET = new hydra.core.Name("indexPageOffset");
+  
+  public static final hydra.core.Name FIELD_NAME_DICTIONARY_PAGE_OFFSET = new hydra.core.Name("dictionaryPageOffset");
+  
+  public static final hydra.core.Name FIELD_NAME_STATISTICS = new hydra.core.Name("statistics");
+  
+  public static final hydra.core.Name FIELD_NAME_ENCODING_STATS = new hydra.core.Name("encodingStats");
+  
+  public static final hydra.core.Name FIELD_NAME_BLOOM_FILTER_OFFSET = new hydra.core.Name("bloomFilterOffset");
   
   /**
    * Type of this column

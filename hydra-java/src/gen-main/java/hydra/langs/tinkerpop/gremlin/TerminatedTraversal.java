@@ -5,7 +5,11 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public class TerminatedTraversal implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TerminatedTraversal");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TerminatedTraversal");
+  
+  public static final hydra.core.Name FIELD_NAME_ROOT = new hydra.core.Name("root");
+  
+  public static final hydra.core.Name FIELD_NAME_TERMINAL = new hydra.core.Name("terminal");
   
   public final hydra.langs.tinkerpop.gremlin.RootTraversal root;
   

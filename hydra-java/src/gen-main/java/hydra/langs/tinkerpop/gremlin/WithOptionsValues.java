@@ -5,7 +5,25 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class WithOptionsValues implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.WithOptionsValues");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.WithOptionsValues");
+  
+  public static final hydra.core.Name FIELD_NAME_TOKENS = new hydra.core.Name("tokens");
+  
+  public static final hydra.core.Name FIELD_NAME_NONE = new hydra.core.Name("none");
+  
+  public static final hydra.core.Name FIELD_NAME_IDS = new hydra.core.Name("ids");
+  
+  public static final hydra.core.Name FIELD_NAME_LABELS = new hydra.core.Name("labels");
+  
+  public static final hydra.core.Name FIELD_NAME_KEYS = new hydra.core.Name("keys");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUES = new hydra.core.Name("values");
+  
+  public static final hydra.core.Name FIELD_NAME_ALL = new hydra.core.Name("all");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
+  
+  public static final hydra.core.Name FIELD_NAME_MAP = new hydra.core.Name("map");
   
   private WithOptionsValues () {
   

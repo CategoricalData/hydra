@@ -5,7 +5,21 @@ package hydra.langs.sql.ansi;
 import java.io.Serializable;
 
 public abstract class PredefinedType implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/sql/ansi.PredefinedType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/sql/ansi.PredefinedType");
+  
+  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
+  
+  public static final hydra.core.Name FIELD_NAME_NATIONAL_STRING = new hydra.core.Name("nationalString");
+  
+  public static final hydra.core.Name FIELD_NAME_BLOB = new hydra.core.Name("blob");
+  
+  public static final hydra.core.Name FIELD_NAME_NUMERIC = new hydra.core.Name("numeric");
+  
+  public static final hydra.core.Name FIELD_NAME_BOOLEAN = new hydra.core.Name("boolean");
+  
+  public static final hydra.core.Name FIELD_NAME_DATETIME = new hydra.core.Name("datetime");
+  
+  public static final hydra.core.Name FIELD_NAME_INTERVAL = new hydra.core.Name("interval");
   
   private PredefinedType () {
   

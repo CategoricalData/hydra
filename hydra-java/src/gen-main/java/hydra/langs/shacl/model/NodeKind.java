@@ -5,7 +5,19 @@ package hydra.langs.shacl.model;
 import java.io.Serializable;
 
 public abstract class NodeKind implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/shacl/model.NodeKind");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/shacl/model.NodeKind");
+  
+  public static final hydra.core.Name FIELD_NAME_BLANK_NODE = new hydra.core.Name("blankNode");
+  
+  public static final hydra.core.Name FIELD_NAME_IRI = new hydra.core.Name("iri");
+  
+  public static final hydra.core.Name FIELD_NAME_LITERAL = new hydra.core.Name("literal");
+  
+  public static final hydra.core.Name FIELD_NAME_BLANK_NODE_OR_IRI = new hydra.core.Name("blankNodeOrIri");
+  
+  public static final hydra.core.Name FIELD_NAME_BLANK_NODE_OR_LITERAL = new hydra.core.Name("blankNodeOrLiteral");
+  
+  public static final hydra.core.Name FIELD_NAME_IRI_OR_LITERAL = new hydra.core.Name("iriOrLiteral");
   
   private NodeKind () {
   

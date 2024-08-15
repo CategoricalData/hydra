@@ -5,7 +5,11 @@ package hydra.langs.java.syntax;
 import java.io.Serializable;
 
 public abstract class MethodBody implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/java/syntax.MethodBody");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/java/syntax.MethodBody");
+  
+  public static final hydra.core.Name FIELD_NAME_BLOCK = new hydra.core.Name("block");
+  
+  public static final hydra.core.Name FIELD_NAME_NONE = new hydra.core.Name("none");
   
   private MethodBody () {
   

@@ -5,7 +5,15 @@ package hydra.langs.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class TraversalToken implements Serializable {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalToken");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/tinkerpop/gremlin.TraversalToken");
+  
+  public static final hydra.core.Name FIELD_NAME_ID = new hydra.core.Name("id");
+  
+  public static final hydra.core.Name FIELD_NAME_LABEL = new hydra.core.Name("label");
+  
+  public static final hydra.core.Name FIELD_NAME_KEY = new hydra.core.Name("key");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
   private TraversalToken () {
   
