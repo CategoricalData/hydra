@@ -1,5 +1,6 @@
 package hydra.langs.json;
 
+import hydra.core.Name;
 import hydra.json.Value;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,8 +58,20 @@ public abstract class JsonEncoding {
     // Note: use LinkedHashMap for the sake of predictable ordering
     private final Map<String, Value> map = new LinkedHashMap<>();
 
+    public ObjectBuilder put(String key, boolean value) {
+      return put(key, new Value.Boolean_(value));
+    }
+
+    public ObjectBuilder put(Name key, boolean value) {
+      return put(key.value, value);
+    }
+
     public ObjectBuilder put(String key, String value) {
       return put(key, new Value.String_(value));
+    }
+
+    public ObjectBuilder put(Name key, String value) {
+      return put(key.value, value);
     }
 
     public ObjectBuilder put(String key, Value value) {
@@ -68,20 +81,40 @@ public abstract class JsonEncoding {
       return this;
     }
 
+    public ObjectBuilder put(Name key, Value value) {
+      return put(key.value, value);
+    }
+
     public <L> ObjectBuilder put(String key, L value, Function<L, Value> mapping) {
       return put(key, mapping.apply(value));
+    }
+
+    public <L> ObjectBuilder put(Name key, L value, Function<L, Value> mapping) {
+      return put(key.value, value, mapping);
     }
 
     public <L> ObjectBuilder putList(String key, List<L> value, Function<L, Value> mapping) {
       return put(key, toJson(value, mapping));
     }
 
+    public <L> ObjectBuilder putList(Name key, List<L> value, Function<L, Value> mapping) {
+      return putList(key.value, value, mapping);
+    }
+
     public <L> ObjectBuilder putOpt(String key, Opt<L> value, Function<L, Value> mapping) {
       return put(key, toJson(value, mapping));
     }
 
+    public <L> ObjectBuilder putOpt(Name key, Opt<L> value, Function<L, Value> mapping) {
+      return putOpt(key.value, value, mapping);
+    }
+
     public <L> ObjectBuilder putOptSet(String key, Opt<Set<L>> values, Function<L, Value> mapping) {
       return put(key, toJson(new ArrayList<>(values.orElse(Collections.emptySet())), mapping));
+    }
+
+    public <L> ObjectBuilder putOptSet(Name key, Opt<Set<L>> values, Function<L, Value> mapping) {
+      return putOptSet(key.value, values, mapping);
     }
 
     public Value build() {
