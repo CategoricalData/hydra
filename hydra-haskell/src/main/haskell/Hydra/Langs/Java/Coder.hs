@@ -94,6 +94,26 @@ commentsFromElement = getTermDescription . elementData
 commentsFromFieldType :: FieldType -> Flow Graph (Maybe String)
 commentsFromFieldType = getTypeDescription . fieldTypeType
 
+constantDecl :: String -> Aliases -> Name -> Flow Graph Java.ClassBodyDeclarationWithComments
+constantDecl javaName aliases name = do
+  jt <- adaptTypeToJavaAndEncode aliases $ TypeVariable _Name
+  arg <- encodeTerm aliases $ Terms.string $ unName name
+  let init = Java.VariableInitializerExpression $ javaConstructorCall (javaConstructorName nameName Nothing) [arg] Nothing
+  let var = javaVariableDeclarator (Java.Identifier javaName) (Just init)
+  return $ noComment $ javaMemberField mods jt var
+  where
+    mods = [Java.FieldModifierPublic, Java.FieldModifierStatic, Java.FieldModifierFinal]
+    nameName = nameToJavaName aliases _Name
+
+constantDeclForFieldType :: Aliases -> FieldType -> Flow Graph Java.ClassBodyDeclarationWithComments
+constantDeclForFieldType aliases ftyp = constantDecl javaName aliases name
+  where
+    name = fieldTypeName ftyp
+    javaName = "FIELD_NAME_" ++ (convertCase CaseConventionCamel CaseConventionUpperSnake $ unName name)
+
+constantDeclForTypeName :: Aliases -> Name -> Flow Graph Java.ClassBodyDeclarationWithComments
+constantDeclForTypeName = constantDecl "TYPE_NAME"
+
 constructElementsInterface :: Module -> [Java.InterfaceMemberDeclaration] -> (Name, Java.CompilationUnit)
 constructElementsInterface mod members = (elName, cu)
   where
@@ -198,8 +218,9 @@ declarationForRecordType isInner isSer aliases tparams elName fields = do
       else pure []
     cons <- constructor
     tn <- if isInner then pure [] else do
-      d <- typeNameDecl aliases elName
-      return [d]
+      d <- constantDeclForTypeName aliases elName
+      dfields <- CM.mapM (constantDeclForFieldType aliases) fields
+      return (d:dfields)
     let bodyDecls = tn ++ memberVars' ++ (noComment <$> [cons, equalsMethod, hashCodeMethod] ++ withMethods)
     return $ javaClassDeclaration aliases tparams elName classModsPublic Nothing (interfaceTypes isSer) bodyDecls
   where
@@ -321,8 +342,11 @@ declarationForUnionType isSer aliases tparams elName fields = do
     let variantDecls = Java.ClassBodyDeclarationClassMember . Java.ClassMemberDeclarationClass <$> variantClasses
     variantDecls' <- CM.zipWithM addComment variantDecls fields
     let otherDecls = noComment <$> [privateConstructor, toAcceptMethod True tparams, visitor, partialVisitor]
-    tn <- typeNameDecl aliases elName
-    let bodyDecls = [tn] ++ otherDecls ++ variantDecls'
+    tn <- do
+      d <- constantDeclForTypeName aliases elName
+      dfields <- CM.mapM (constantDeclForFieldType aliases) fields
+      return (d:dfields)
+    let bodyDecls = tn ++ otherDecls ++ variantDecls'
     let mods = classModsPublic ++ [Java.ClassModifierAbstract]
     return $ javaClassDeclaration aliases tparams elName mods Nothing (interfaceTypes isSer) bodyDecls
   where
@@ -961,14 +985,3 @@ typeArgsOrDiamond :: [Java.TypeArgument] -> Java.TypeArgumentsOrDiamond
 typeArgsOrDiamond args = if supportsDiamondOperator javaFeatures
   then Java.TypeArgumentsOrDiamondDiamond
   else Java.TypeArgumentsOrDiamondArguments args
-
-typeNameDecl :: Aliases -> Name -> Flow Graph Java.ClassBodyDeclarationWithComments
-typeNameDecl aliases name = do
-  jt <- adaptTypeToJavaAndEncode aliases $ TypeVariable _Name
-  arg <- encodeTerm aliases $ Terms.string $ unName name
-  let init = Java.VariableInitializerExpression $ javaConstructorCall (javaConstructorName nameName Nothing) [arg] Nothing
-  let var = javaVariableDeclarator (Java.Identifier "NAME") (Just init)
-  return $ noComment $ javaMemberField mods jt var
-  where
-    mods = [Java.FieldModifierPublic, Java.FieldModifierStatic, Java.FieldModifierFinal]
-    nameName = nameToJavaName aliases _Name
