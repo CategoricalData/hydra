@@ -137,7 +137,6 @@ _Component_displayName = (Core.Name "displayName")
 -- | A digital twin model identifier
 newtype Dtmi = 
   Dtmi {
-    -- | A digital twin model identifier
     unDtmi :: String}
   deriving (Eq, Ord, Read, Show)
 
