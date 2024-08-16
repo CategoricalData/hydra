@@ -16,6 +16,24 @@ newtype FileExtension =
 
 _FileExtension = (Core.Name "hydra/module.FileExtension")
 
+-- | A library of primitive functions
+data Library = 
+  Library {
+    -- | A common prefix for all primitive function names in the library
+    libraryNamespace :: Namespace,
+    -- | A preferred namespace prefix for function names in the library
+    libraryPrefix :: String,
+    -- | The primitives defined in this library
+    libraryPrimitives :: [Graph.Primitive]}
+
+_Library = (Core.Name "hydra/module.Library")
+
+_Library_namespace = (Core.Name "namespace")
+
+_Library_prefix = (Core.Name "prefix")
+
+_Library_primitives = (Core.Name "primitives")
+
 -- | A logical collection of elements in the same namespace, having dependencies on zero or more other modules
 data Module = 
   Module {

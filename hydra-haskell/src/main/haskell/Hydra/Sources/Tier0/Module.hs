@@ -29,6 +29,19 @@ hydraModuleModule = Module ns elements [hydraGraphModule] [hydraCoreModule] $
 
       def "FileExtension" string,
 
+      def "Library" $
+        doc "A library of primitive functions" $
+        record [
+          "namespace">:
+            doc "A common prefix for all primitive function names in the library" $
+            mod "Namespace",
+          "prefix">:
+            doc "A preferred namespace prefix for function names in the library"
+            string,
+          "primitives">:
+            doc "The primitives defined in this library" $
+            list $ graph "Primitive"],
+
       def "Module" $
         doc "A logical collection of elements in the same namespace, having dependencies on zero or more other modules" $
         record [

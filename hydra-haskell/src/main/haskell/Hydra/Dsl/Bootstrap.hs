@@ -15,6 +15,7 @@ import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Tools.Debug
 
+import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
@@ -26,7 +27,7 @@ bootstrapGraph = Graph {
   graphEnvironment = M.empty,
   graphTypes = M.empty,
   graphBody = Terms.list [], -- Note: the bootstrap body is arbitrary
-  graphPrimitives = M.fromList $ fmap (\p -> (primitiveName p, p)) standardPrimitives,
+  graphPrimitives = M.fromList $ fmap (\p -> (primitiveName p, p)) (L.concat (libraryPrimitives <$> standardLibraries)),
   graphSchema = Nothing}
 
 datatype :: Namespace -> String -> Type -> Element
