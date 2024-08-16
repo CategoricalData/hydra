@@ -2,6 +2,7 @@ module Hydra.Extensions where
 
 import Hydra.Kernel
 
+import Hydra.Ext.Graphviz.Src.Dot
 import Hydra.Models.Atlas
 import Hydra.Models.AzureDtld
 import Hydra.Models.Coq
@@ -17,6 +18,7 @@ hydraExtensionsModules = [
   atlasModelModule,
   coqSyntaxModule,
   datalogSyntaxModule,
+  dotModule,
   dtldModule,
   geoJsonModule,
   ianaRelationsModule,
