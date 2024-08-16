@@ -410,7 +410,7 @@ _MapType_keys = (Name "keys")
 
 _MapType_values = (Name "values")
 
--- | A symbol which stands for a term, type, or element
+-- | A unique identifier in some context; a string-valued key
 newtype Name = 
   Name {
     unName :: String}
