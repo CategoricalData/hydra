@@ -527,7 +527,6 @@ _Name = (Core.Name "hydra/langs/coq/syntax.Name")
 -- | A non-negative arbitrary-precision integer
 newtype Natural = 
   Natural {
-    -- | A non-negative arbitrary-precision integer
     unNatural :: Integer}
   deriving (Eq, Ord, Read, Show)
 

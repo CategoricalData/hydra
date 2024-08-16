@@ -23,7 +23,6 @@ _Credited_contact = (Core.Name "contact")
 -- | One of a limited set of defined ecosystems, currently Go, npm, OSS-Fuzz, PyPI, RubyGems, crates.io, Packagist, Maven, NuGet, Linux, Debian, Hex, Android, GitHub Actions, or Pub
 newtype Ecosystem = 
   Ecosystem {
-    -- | One of a limited set of defined ecosystems, currently Go, npm, OSS-Fuzz, PyPI, RubyGems, crates.io, Packagist, Maven, NuGet, Linux, Debian, Hex, Android, GitHub Actions, or Pub
     unEcosystem :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -95,7 +94,6 @@ _Event_limit = (Core.Name "limit")
 -- | A string of the format <DB>-<ENTRYID>, where DB names the database and ENTRYID is in the format used by the database. For example: OSV-2020-111, CVE-2021-3114, or GHSA-vp9c-fpxx-744v
 newtype Id = 
   Id {
-    -- | A string of the format <DB>-<ENTRYID>, where DB names the database and ENTRYID is in the format used by the database. For example: OSV-2020-111, CVE-2021-3114, or GHSA-vp9c-fpxx-744v
     unId :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -104,7 +102,6 @@ _Id = (Core.Name "dev/osv/schema.Id")
 -- | CommonMark markdown text
 newtype Markdown = 
   Markdown {
-    -- | CommonMark markdown text
     unMarkdown :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -113,7 +110,6 @@ _Markdown = (Core.Name "dev/osv/schema.Markdown")
 -- | A string which follows the SemVer 2.0.0 format, with no leading 'v' prefix
 newtype OsvVersion = 
   OsvVersion {
-    -- | A string which follows the SemVer 2.0.0 format, with no leading 'v' prefix
     unOsvVersion :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -164,7 +160,6 @@ _Reference_url = (Core.Name "url")
 -- | One of ADVISORY, ARTICLE, REPORT, FIX, GIT, PACKAGE, EVIDENCE, or WEB
 newtype ReferenceType = 
   ReferenceType {
-    -- | One of ADVISORY, ARTICLE, REPORT, FIX, GIT, PACKAGE, EVIDENCE, or WEB
     unReferenceType :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -192,7 +187,6 @@ _SeverityScore = (Core.Name "dev/osv/schema.SeverityScore")
 -- | The value CVSS_V3, or future supported types
 newtype SeverityType = 
   SeverityType {
-    -- | The value CVSS_V3, or future supported types
     unSeverityType :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -201,7 +195,6 @@ _SeverityType = (Core.Name "dev/osv/schema.SeverityType")
 -- | An RFC3339-formatted timestamp in UTC (ending in 'Z')
 newtype Timestamp = 
   Timestamp {
-    -- | An RFC3339-formatted timestamp in UTC (ending in 'Z')
     unTimestamp :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -217,7 +210,6 @@ _Url = (Core.Name "dev/osv/schema.Url")
 -- | A version number in an ecosystem-specific format
 newtype Version = 
   Version {
-    -- | A version number in an ecosystem-specific format
     unVersion :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -226,7 +218,6 @@ _Version = (Core.Name "dev/osv/schema.Version")
 -- | An ecosystem-specific version number, or the string '*' representing infinity
 newtype VersionOrStar = 
   VersionOrStar {
-    -- | An ecosystem-specific version number, or the string '*' representing infinity
     unVersionOrStar :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -235,7 +226,6 @@ _VersionOrStar = (Core.Name "dev/osv/schema.VersionOrStar")
 -- | An ecosystem-specific version number, or the string '0' representing a version that sorts before any other version
 newtype VersionOrZero = 
   VersionOrZero {
-    -- | An ecosystem-specific version number, or the string '0' representing a version that sorts before any other version
     unVersionOrZero :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -259,7 +249,6 @@ _VersionRange_events = (Core.Name "events")
 -- | One of the values 'SEMVER', 'ECOSYSTEM', or 'GIT
 newtype VersionType = 
   VersionType {
-    -- | One of the values 'SEMVER', 'ECOSYSTEM', or 'GIT
     unVersionType :: String}
   deriving (Eq, Ord, Read, Show)
 
