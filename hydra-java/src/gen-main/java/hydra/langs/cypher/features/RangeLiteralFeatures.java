@@ -5,7 +5,7 @@ package hydra.langs.cypher.features;
 import java.io.Serializable;
 
 /**
- * A set of features for range literals within relationship patterns.
+ * Range literals within relationship patterns
  */
 public class RangeLiteralFeatures implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.RangeLiteralFeatures");
@@ -21,27 +21,27 @@ public class RangeLiteralFeatures implements Serializable {
   public static final hydra.core.Name FIELD_NAME_UPPER_BOUND = new hydra.core.Name("upperBound");
   
   /**
-   * Whether to expect range literals with both lower and upper bounds.
+   * Range literals with both lower and upper bounds
    */
   public final Boolean bounds;
   
   /**
-   * Whether to expect range literals providing an exact number of repetitions.
+   * Range literals providing an exact number of repetitions
    */
   public final Boolean exactRange;
   
   /**
-   * Whether to expect range literals with a lower bound (only).
+   * Range literals with a lower bound (only)
    */
   public final Boolean lowerBound;
   
   /**
-   * Whether to expect the * range literal.
+   * The * range literal
    */
   public final Boolean starRange;
   
   /**
-   * Whether to expect range literals with an upper bound (only).
+   * Range literals with an upper bound (only)
    */
   public final Boolean upperBound;
   

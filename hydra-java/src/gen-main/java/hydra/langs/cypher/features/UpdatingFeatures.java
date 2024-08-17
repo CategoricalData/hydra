@@ -5,7 +5,7 @@ package hydra.langs.cypher.features;
 import java.io.Serializable;
 
 /**
- * A set of features for specific syntax related to updating data in the graph.
+ * Specific syntax related to updating data in the graph
  */
 public class UpdatingFeatures implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.UpdatingFeatures");
@@ -17,17 +17,17 @@ public class UpdatingFeatures implements Serializable {
   public static final hydra.core.Name FIELD_NAME_WITH = new hydra.core.Name("with");
   
   /**
-   * Whether to expect the CREATE clause.
+   * The CREATE clause
    */
   public final Boolean create;
   
   /**
-   * Whether to expect the SET clause.
+   * The SET clause
    */
   public final Boolean set;
   
   /**
-   * Whether to expect multi-part queries using WITH.
+   * Multi-part queries using WITH
    */
   public final Boolean with;
   

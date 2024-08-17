@@ -5,7 +5,7 @@ package hydra.langs.cypher.features;
 import java.io.Serializable;
 
 /**
- * A set of features for set definitions.
+ * Set definitions
  */
 public class SetFeatures implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.SetFeatures");
@@ -19,22 +19,22 @@ public class SetFeatures implements Serializable {
   public static final hydra.core.Name FIELD_NAME_VARIABLE_WITH_NODE_LABELS = new hydra.core.Name("variableWithNodeLabels");
   
   /**
-   * Whether to expect defining a set using PropertyExpression = Expression.
+   * Defining a set using PropertyExpression = Expression
    */
   public final Boolean propertyEquals;
   
   /**
-   * Whether to expect defining a set using Variable = Expression.
+   * Defining a set using Variable = Expression
    */
   public final Boolean variableEquals;
   
   /**
-   * Whether to expect defining a set using Variable += Expression.
+   * Defining a set using Variable += Expression
    */
   public final Boolean variablePlusEquals;
   
   /**
-   * Whether to expect defining a set using Variable:NodeLabels.
+   * Defining a set using Variable:NodeLabels
    */
   public final Boolean variableWithNodeLabels;
   

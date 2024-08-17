@@ -5,7 +5,7 @@ package hydra.langs.cypher.features;
 import java.io.Serializable;
 
 /**
- * A set of features for REMOVE operations.
+ * REMOVE operations
  */
 public class RemoveFeatures implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.RemoveFeatures");
@@ -15,12 +15,12 @@ public class RemoveFeatures implements Serializable {
   public static final hydra.core.Name FIELD_NAME_BY_PROPERTY = new hydra.core.Name("byProperty");
   
   /**
-   * Whether to expect REMOVE Variable:NodeLabels.
+   * REMOVE Variable:NodeLabels
    */
   public final Boolean byLabel;
   
   /**
-   * Whether to expect REMOVE PropertyExpression.
+   * REMOVE PropertyExpression
    */
   public final Boolean byProperty;
   

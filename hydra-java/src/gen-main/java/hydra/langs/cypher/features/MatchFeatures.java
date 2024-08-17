@@ -5,7 +5,7 @@ package hydra.langs.cypher.features;
 import java.io.Serializable;
 
 /**
- * A set of features for match queries.
+ * Match queries
  */
 public class MatchFeatures implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.MatchFeatures");
@@ -15,12 +15,12 @@ public class MatchFeatures implements Serializable {
   public static final hydra.core.Name FIELD_NAME_OPTIONAL_MATCH = new hydra.core.Name("optionalMatch");
   
   /**
-   * Whether to expect the basic (non-optional) MATCH clause.
+   * The basic (non-optional) MATCH clause
    */
   public final Boolean match;
   
   /**
-   * Whether to expect OPTIONAL MATCH.
+   * OPTIONAL MATCH
    */
   public final Boolean optionalMatch;
   

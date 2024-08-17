@@ -5,7 +5,7 @@ package hydra.langs.cypher.features;
 import java.io.Serializable;
 
 /**
- * A set of features for arithmetic operations.
+ * Arithmetic operations
  */
 public class ArithmeticFeatures implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.ArithmeticFeatures");
@@ -23,32 +23,32 @@ public class ArithmeticFeatures implements Serializable {
   public static final hydra.core.Name FIELD_NAME_POWER_OF = new hydra.core.Name("powerOf");
   
   /**
-   * Whether to expect the + operator.
+   * The + operator
    */
   public final Boolean plus;
   
   /**
-   * Whether to expect the - operator.
+   * The - operator
    */
   public final Boolean minus;
   
   /**
-   * Whether to expect the * operator.
+   * The * operator
    */
   public final Boolean multiply;
   
   /**
-   * Whether to expect the / operator.
+   * The / operator
    */
   public final Boolean divide;
   
   /**
-   * Whether to expect the % operator.
+   * The % operator
    */
   public final Boolean modulus;
   
   /**
-   * Whether to expect the ^ operator.
+   * The ^ operator
    */
   public final Boolean powerOf;
   

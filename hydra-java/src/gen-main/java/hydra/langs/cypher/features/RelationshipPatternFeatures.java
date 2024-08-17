@@ -5,7 +5,7 @@ package hydra.langs.cypher.features;
 import java.io.Serializable;
 
 /**
- * A set of features for relationship patterns.
+ * Relationship patterns
  */
 public class RelationshipPatternFeatures implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.RelationshipPatternFeatures");
@@ -17,17 +17,17 @@ public class RelationshipPatternFeatures implements Serializable {
   public static final hydra.core.Name FIELD_NAME_WILDCARD_TYPE = new hydra.core.Name("wildcardType");
   
   /**
-   * Whether to expect specifying a disjunction of multiple types in a relationship pattern.
+   * Specifying a disjunction of multiple types in a relationship pattern
    */
   public final Boolean multipleTypes;
   
   /**
-   * Whether to expect binding a variable to a relationship in a relationship pattern (note: included by most if not all implementations).
+   * Binding a variable to a relationship in a relationship pattern (note: included by most if not all implementations).
    */
   public final Boolean variableRelationship;
   
   /**
-   * Whether to expect omitting types from a relationship pattern.
+   * Omitting types from a relationship pattern
    */
   public final Boolean wildcardType;
   

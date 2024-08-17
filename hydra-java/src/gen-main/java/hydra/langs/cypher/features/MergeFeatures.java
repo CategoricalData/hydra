@@ -5,7 +5,7 @@ package hydra.langs.cypher.features;
 import java.io.Serializable;
 
 /**
- * A set of features for merge operations.
+ * Merge operations
  */
 public class MergeFeatures implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.MergeFeatures");
@@ -17,17 +17,17 @@ public class MergeFeatures implements Serializable {
   public static final hydra.core.Name FIELD_NAME_MERGE_ON_MATCH = new hydra.core.Name("mergeOnMatch");
   
   /**
-   * Whether to expect the basic MERGE clause.
+   * The basic MERGE clause
    */
   public final Boolean merge;
   
   /**
-   * Whether to expect MERGE with the ON CREATE action.
+   * MERGE with the ON CREATE action
    */
   public final Boolean mergeOnCreate;
   
   /**
-   * Whether to expect MERGE with the ON MATCH action.
+   * MERGE with the ON MATCH action
    */
   public final Boolean mergeOnMatch;
   
