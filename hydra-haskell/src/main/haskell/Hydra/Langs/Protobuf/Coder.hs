@@ -141,8 +141,8 @@ encodeEnumDefinition options (RowType tname fields) = do
 encodeEnumValueName :: Name -> Name -> P3.EnumValueName
 encodeEnumValueName tname fname = P3.EnumValueName (prefix ++ "_" ++ suffix)
   where
-    prefix = convertCaseCamelToUpperSnake $ localNameOfEager tname
-    suffix = convertCaseCamelToUpperSnake $ unName fname
+    prefix = nonAlnumToUnderscores $ convertCaseCamelToUpperSnake $ localNameOfEager tname
+    suffix = nonAlnumToUnderscores $ convertCaseCamelToUpperSnake $ unName fname
 
 encodeFieldName :: Bool -> Name -> P3.FieldName
 encodeFieldName preserve = P3.FieldName . toPname . unName
