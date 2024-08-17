@@ -5,7 +5,7 @@ package hydra.langs.cypher.features;
 import java.io.Serializable;
 
 /**
- * A set of features for IS NULL / IS NOT NULL checks.
+ * IS NULL / IS NOT NULL checks
  */
 public class NullFeatures implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.NullFeatures");
@@ -15,12 +15,12 @@ public class NullFeatures implements Serializable {
   public static final hydra.core.Name FIELD_NAME_IS_NOT_NULL = new hydra.core.Name("isNotNull");
   
   /**
-   * Whether to expect the IS NULL operator.
+   * The IS NULL operator
    */
   public final Boolean isNull;
   
   /**
-   * Whether to expect the IS NOT NULL operator.
+   * The IS NOT NULL operator
    */
   public final Boolean isNotNull;
   

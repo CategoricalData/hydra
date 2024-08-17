@@ -5,7 +5,7 @@ package hydra.langs.cypher.features;
 import java.io.Serializable;
 
 /**
- * A set of features for delete operations.
+ * Delete operations
  */
 public class DeleteFeatures implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.DeleteFeatures");
@@ -15,12 +15,12 @@ public class DeleteFeatures implements Serializable {
   public static final hydra.core.Name FIELD_NAME_DETACH_DELETE = new hydra.core.Name("detachDelete");
   
   /**
-   * Whether to expect the basic DELETE clause.
+   * The basic DELETE clause
    */
   public final Boolean delete;
   
   /**
-   * Whether to expect the DETACH DELETE clause.
+   * The DETACH DELETE clause
    */
   public final Boolean detachDelete;
   

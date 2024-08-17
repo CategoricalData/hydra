@@ -5,7 +5,7 @@ package hydra.langs.cypher.features;
 import java.io.Serializable;
 
 /**
- * A set of features for various types of literal values.
+ * Various types of literal values
  */
 public class LiteralFeatures implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.LiteralFeatures");
@@ -25,37 +25,37 @@ public class LiteralFeatures implements Serializable {
   public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
   
   /**
-   * Whether to expect boolean literals (note: included by most if not all implementations).
+   * Boolean literals (note: included by most if not all implementations).
    */
   public final Boolean boolean_;
   
   /**
-   * Whether to expect double-precision floating-point literals.
+   * Double-precision floating-point literals
    */
   public final Boolean double_;
   
   /**
-   * Whether to expect integer literals.
+   * Integer literals
    */
   public final Boolean integer;
   
   /**
-   * Whether to expect list literals.
+   * List literals
    */
   public final Boolean list;
   
   /**
-   * Whether to expect map literals.
+   * Map literals
    */
   public final Boolean map;
   
   /**
-   * Whether to expect the NULL literal.
+   * The NULL literal
    */
   public final Boolean null_;
   
   /**
-   * Whether to expect string literals (note: included by most if not all implementations).
+   * String literals (note: included by most if not all implementations).
    */
   public final Boolean string;
   

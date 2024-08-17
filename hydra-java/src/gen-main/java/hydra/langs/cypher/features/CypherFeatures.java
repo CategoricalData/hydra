@@ -10,8 +10,6 @@ import java.io.Serializable;
 public class CypherFeatures implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.CypherFeatures");
   
-  public static final hydra.core.Name FIELD_NAME_AGGREGATE = new hydra.core.Name("aggregate");
-  
   public static final hydra.core.Name FIELD_NAME_ARITHMETIC = new hydra.core.Name("arithmetic");
   
   public static final hydra.core.Name FIELD_NAME_ATOM = new hydra.core.Name("atom");
@@ -20,11 +18,13 @@ public class CypherFeatures implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_DELETE = new hydra.core.Name("delete");
   
-  public static final hydra.core.Name FIELD_NAME_ELEMENT = new hydra.core.Name("element");
+  public static final hydra.core.Name FIELD_NAME_FUNCTION = new hydra.core.Name("function");
+  
+  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
+  
+  public static final hydra.core.Name FIELD_NAME_LITERAL = new hydra.core.Name("literal");
   
   public static final hydra.core.Name FIELD_NAME_LOGICAL = new hydra.core.Name("logical");
-  
-  public static final hydra.core.Name FIELD_NAME_MAP = new hydra.core.Name("map");
   
   public static final hydra.core.Name FIELD_NAME_MATCH = new hydra.core.Name("match");
   
@@ -34,15 +34,13 @@ public class CypherFeatures implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_NULL = new hydra.core.Name("null");
   
-  public static final hydra.core.Name FIELD_NAME_NUMERIC = new hydra.core.Name("numeric");
-  
   public static final hydra.core.Name FIELD_NAME_PATH = new hydra.core.Name("path");
   
   public static final hydra.core.Name FIELD_NAME_PROCEDURE_CALL = new hydra.core.Name("procedureCall");
   
   public static final hydra.core.Name FIELD_NAME_PROJECTION = new hydra.core.Name("projection");
   
-  public static final hydra.core.Name FIELD_NAME_RANDOMNESS = new hydra.core.Name("randomness");
+  public static final hydra.core.Name FIELD_NAME_QUANTIFIER = new hydra.core.Name("quantifier");
   
   public static final hydra.core.Name FIELD_NAME_RANGE_LITERAL = new hydra.core.Name("rangeLiteral");
   
@@ -54,8 +52,6 @@ public class CypherFeatures implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_REMOVE = new hydra.core.Name("remove");
   
-  public static final hydra.core.Name FIELD_NAME_SCHEMA = new hydra.core.Name("schema");
-  
   public static final hydra.core.Name FIELD_NAME_SET = new hydra.core.Name("set");
   
   public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
@@ -63,185 +59,171 @@ public class CypherFeatures implements Serializable {
   public static final hydra.core.Name FIELD_NAME_UPDATING = new hydra.core.Name("updating");
   
   /**
-   * Whether to expect aggregate functions, and if so, which specific features
+   * Arithmetic operations
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.AggregateFeatures> aggregate;
+  public final hydra.langs.cypher.features.ArithmeticFeatures arithmetic;
   
   /**
-   * Whether to expect arithmetic operations, and if so, which specific features
+   * Various kinds of atomic expressions
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.ArithmeticFeatures> arithmetic;
+  public final hydra.langs.cypher.features.AtomFeatures atom;
   
   /**
-   * Whether to expect atomic expressions, and if so, which specific features
+   * Comparison operators and functions
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.AtomFeatures> atom;
+  public final hydra.langs.cypher.features.ComparisonFeatures comparison;
   
   /**
-   * Whether to expect comparison operations, and if so, which specific features
+   * Delete operations
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.ComparisonFeatures> comparison;
+  public final hydra.langs.cypher.features.DeleteFeatures delete;
   
   /**
-   * Whether to expect delete operations, and if so, which specific features
+   * Standard Cypher functions
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.DeleteFeatures> delete;
+  public final hydra.langs.cypher.features.FunctionFeatures function;
   
   /**
-   * Whether to expect element functions, and if so, which specific features
+   * List functionality
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.ElementFeatures> element;
+  public final hydra.langs.cypher.features.ListFeatures list;
   
   /**
-   * Whether to expect logical operations, and if so, which specific features
+   * Various types of literal values
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.LogicalFeatures> logical;
+  public final hydra.langs.cypher.features.LiteralFeatures literal;
   
   /**
-   * Whether to expect property map functions, and if so, which specific features
+   * Logical operations
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.MapFeatures> map;
+  public final hydra.langs.cypher.features.LogicalFeatures logical;
   
   /**
-   * Whether to expect match queries, and if so, which specific features
+   * Match queries
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.MatchFeatures> match;
+  public final hydra.langs.cypher.features.MatchFeatures match;
   
   /**
-   * Whether to expect merge operations, and if so, which specific features
+   * Merge operations
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.MergeFeatures> merge;
+  public final hydra.langs.cypher.features.MergeFeatures merge;
   
   /**
-   * Whether to expect node patterns, and if so, which specific features
+   * Node patterns
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.NodePatternFeatures> nodePattern;
+  public final hydra.langs.cypher.features.NodePatternFeatures nodePattern;
   
   /**
-   * Whether to expect IS NULL / IS NOT NULL checks, and if so, which specific features
+   * IS NULL / IS NOT NULL checks
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.NullFeatures> null_;
+  public final hydra.langs.cypher.features.NullFeatures null_;
   
   /**
-   * Whether to expect numeric functions, and if so, which specific features
+   * Path functions only found in OpenCypher
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.NumericFeatures> numeric;
+  public final hydra.langs.cypher.features.PathFeatures path;
   
   /**
-   * Whether to expect path functions, and if so, which specific features
+   * Procedure calls
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.PathFeatures> path;
+  public final hydra.langs.cypher.features.ProcedureCallFeatures procedureCall;
   
   /**
-   * Whether to expect procedure calls, and if so, which specific features
+   * Projections
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.ProcedureCallFeatures> procedureCall;
+  public final hydra.langs.cypher.features.ProjectionFeatures projection;
   
   /**
-   * Whether to expect projection operations, and if so, which specific features
+   * Quantifier expressions
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.ProjectionFeatures> projection;
+  public final hydra.langs.cypher.features.QuantifierFeatures quantifier;
   
   /**
-   * Whether to expect random value generation, and if so, which specific features
+   * Range literals within relationship patterns
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.RandomnessFeatures> randomness;
+  public final hydra.langs.cypher.features.RangeLiteralFeatures rangeLiteral;
   
   /**
-   * Whether to expect range literals, and if so, which specific features
+   * Specific syntax related to reading data from the graph.
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.RangeLiteralFeatures> rangeLiteral;
+  public final hydra.langs.cypher.features.ReadingFeatures reading;
   
   /**
-   * Whether to expect reading operations, and if so, which specific features
+   * Relationship directions / arrow patterns
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.ReadingFeatures> reading;
+  public final hydra.langs.cypher.features.RelationshipDirectionFeatures relationshipDirection;
   
   /**
-   * Whether to expect relationship directions, and if so, which specific features
+   * Relationship patterns
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.RelationshipDirectionFeatures> relationshipDirection;
+  public final hydra.langs.cypher.features.RelationshipPatternFeatures relationshipPattern;
   
   /**
-   * Whether to expect relationship patterns, and if so, which specific features
+   * REMOVE operations
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.RelationshipPatternFeatures> relationshipPattern;
+  public final hydra.langs.cypher.features.RemoveFeatures remove;
   
   /**
-   * Whether to expect remove operations, and if so, which specific features
+   * Set definitions
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.RemoveFeatures> remove;
+  public final hydra.langs.cypher.features.SetFeatures set;
   
   /**
-   * Whether to expect schema functions, and if so, which specific features
+   * String functions/keywords only found in OpenCypher
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.SchemaFeatures> schema;
+  public final hydra.langs.cypher.features.StringFeatures string;
   
   /**
-   * Whether to expect set operations, and if so, which specific features
+   * Specific syntax related to updating data in the graph
    */
-  public final hydra.util.Opt<hydra.langs.cypher.features.SetFeatures> set;
+  public final hydra.langs.cypher.features.UpdatingFeatures updating;
   
-  /**
-   * Whether to expect string operations, and if so, which specific features
-   */
-  public final hydra.util.Opt<hydra.langs.cypher.features.StringFeatures> string;
-  
-  /**
-   * Whether to expect updating operations, and if so, which specific features
-   */
-  public final hydra.util.Opt<hydra.langs.cypher.features.UpdatingFeatures> updating;
-  
-  public CypherFeatures (hydra.util.Opt<hydra.langs.cypher.features.AggregateFeatures> aggregate, hydra.util.Opt<hydra.langs.cypher.features.ArithmeticFeatures> arithmetic, hydra.util.Opt<hydra.langs.cypher.features.AtomFeatures> atom, hydra.util.Opt<hydra.langs.cypher.features.ComparisonFeatures> comparison, hydra.util.Opt<hydra.langs.cypher.features.DeleteFeatures> delete, hydra.util.Opt<hydra.langs.cypher.features.ElementFeatures> element, hydra.util.Opt<hydra.langs.cypher.features.LogicalFeatures> logical, hydra.util.Opt<hydra.langs.cypher.features.MapFeatures> map, hydra.util.Opt<hydra.langs.cypher.features.MatchFeatures> match, hydra.util.Opt<hydra.langs.cypher.features.MergeFeatures> merge, hydra.util.Opt<hydra.langs.cypher.features.NodePatternFeatures> nodePattern, hydra.util.Opt<hydra.langs.cypher.features.NullFeatures> null_, hydra.util.Opt<hydra.langs.cypher.features.NumericFeatures> numeric, hydra.util.Opt<hydra.langs.cypher.features.PathFeatures> path, hydra.util.Opt<hydra.langs.cypher.features.ProcedureCallFeatures> procedureCall, hydra.util.Opt<hydra.langs.cypher.features.ProjectionFeatures> projection, hydra.util.Opt<hydra.langs.cypher.features.RandomnessFeatures> randomness, hydra.util.Opt<hydra.langs.cypher.features.RangeLiteralFeatures> rangeLiteral, hydra.util.Opt<hydra.langs.cypher.features.ReadingFeatures> reading, hydra.util.Opt<hydra.langs.cypher.features.RelationshipDirectionFeatures> relationshipDirection, hydra.util.Opt<hydra.langs.cypher.features.RelationshipPatternFeatures> relationshipPattern, hydra.util.Opt<hydra.langs.cypher.features.RemoveFeatures> remove, hydra.util.Opt<hydra.langs.cypher.features.SchemaFeatures> schema, hydra.util.Opt<hydra.langs.cypher.features.SetFeatures> set, hydra.util.Opt<hydra.langs.cypher.features.StringFeatures> string, hydra.util.Opt<hydra.langs.cypher.features.UpdatingFeatures> updating) {
-    java.util.Objects.requireNonNull((aggregate));
+  public CypherFeatures (hydra.langs.cypher.features.ArithmeticFeatures arithmetic, hydra.langs.cypher.features.AtomFeatures atom, hydra.langs.cypher.features.ComparisonFeatures comparison, hydra.langs.cypher.features.DeleteFeatures delete, hydra.langs.cypher.features.FunctionFeatures function, hydra.langs.cypher.features.ListFeatures list, hydra.langs.cypher.features.LiteralFeatures literal, hydra.langs.cypher.features.LogicalFeatures logical, hydra.langs.cypher.features.MatchFeatures match, hydra.langs.cypher.features.MergeFeatures merge, hydra.langs.cypher.features.NodePatternFeatures nodePattern, hydra.langs.cypher.features.NullFeatures null_, hydra.langs.cypher.features.PathFeatures path, hydra.langs.cypher.features.ProcedureCallFeatures procedureCall, hydra.langs.cypher.features.ProjectionFeatures projection, hydra.langs.cypher.features.QuantifierFeatures quantifier, hydra.langs.cypher.features.RangeLiteralFeatures rangeLiteral, hydra.langs.cypher.features.ReadingFeatures reading, hydra.langs.cypher.features.RelationshipDirectionFeatures relationshipDirection, hydra.langs.cypher.features.RelationshipPatternFeatures relationshipPattern, hydra.langs.cypher.features.RemoveFeatures remove, hydra.langs.cypher.features.SetFeatures set, hydra.langs.cypher.features.StringFeatures string, hydra.langs.cypher.features.UpdatingFeatures updating) {
     java.util.Objects.requireNonNull((arithmetic));
     java.util.Objects.requireNonNull((atom));
     java.util.Objects.requireNonNull((comparison));
     java.util.Objects.requireNonNull((delete));
-    java.util.Objects.requireNonNull((element));
+    java.util.Objects.requireNonNull((function));
+    java.util.Objects.requireNonNull((list));
+    java.util.Objects.requireNonNull((literal));
     java.util.Objects.requireNonNull((logical));
-    java.util.Objects.requireNonNull((map));
     java.util.Objects.requireNonNull((match));
     java.util.Objects.requireNonNull((merge));
     java.util.Objects.requireNonNull((nodePattern));
     java.util.Objects.requireNonNull((null_));
-    java.util.Objects.requireNonNull((numeric));
     java.util.Objects.requireNonNull((path));
     java.util.Objects.requireNonNull((procedureCall));
     java.util.Objects.requireNonNull((projection));
-    java.util.Objects.requireNonNull((randomness));
+    java.util.Objects.requireNonNull((quantifier));
     java.util.Objects.requireNonNull((rangeLiteral));
     java.util.Objects.requireNonNull((reading));
     java.util.Objects.requireNonNull((relationshipDirection));
     java.util.Objects.requireNonNull((relationshipPattern));
     java.util.Objects.requireNonNull((remove));
-    java.util.Objects.requireNonNull((schema));
     java.util.Objects.requireNonNull((set));
     java.util.Objects.requireNonNull((string));
     java.util.Objects.requireNonNull((updating));
-    this.aggregate = aggregate;
     this.arithmetic = arithmetic;
     this.atom = atom;
     this.comparison = comparison;
     this.delete = delete;
-    this.element = element;
+    this.function = function;
+    this.list = list;
+    this.literal = literal;
     this.logical = logical;
-    this.map = map;
     this.match = match;
     this.merge = merge;
     this.nodePattern = nodePattern;
     this.null_ = null_;
-    this.numeric = numeric;
     this.path = path;
     this.procedureCall = procedureCall;
     this.projection = projection;
-    this.randomness = randomness;
+    this.quantifier = quantifier;
     this.rangeLiteral = rangeLiteral;
     this.reading = reading;
     this.relationshipDirection = relationshipDirection;
     this.relationshipPattern = relationshipPattern;
     this.remove = remove;
-    this.schema = schema;
     this.set = set;
     this.string = string;
     this.updating = updating;
@@ -253,141 +235,131 @@ public class CypherFeatures implements Serializable {
       return false;
     }
     CypherFeatures o = (CypherFeatures) (other);
-    return aggregate.equals(o.aggregate) && arithmetic.equals(o.arithmetic) && atom.equals(o.atom) && comparison.equals(o.comparison) && delete.equals(o.delete) && element.equals(o.element) && logical.equals(o.logical) && map.equals(o.map) && match.equals(o.match) && merge.equals(o.merge) && nodePattern.equals(o.nodePattern) && null_.equals(o.null_) && numeric.equals(o.numeric) && path.equals(o.path) && procedureCall.equals(o.procedureCall) && projection.equals(o.projection) && randomness.equals(o.randomness) && rangeLiteral.equals(o.rangeLiteral) && reading.equals(o.reading) && relationshipDirection.equals(o.relationshipDirection) && relationshipPattern.equals(o.relationshipPattern) && remove.equals(o.remove) && schema.equals(o.schema) && set.equals(o.set) && string.equals(o.string) && updating.equals(o.updating);
+    return arithmetic.equals(o.arithmetic) && atom.equals(o.atom) && comparison.equals(o.comparison) && delete.equals(o.delete) && function.equals(o.function) && list.equals(o.list) && literal.equals(o.literal) && logical.equals(o.logical) && match.equals(o.match) && merge.equals(o.merge) && nodePattern.equals(o.nodePattern) && null_.equals(o.null_) && path.equals(o.path) && procedureCall.equals(o.procedureCall) && projection.equals(o.projection) && quantifier.equals(o.quantifier) && rangeLiteral.equals(o.rangeLiteral) && reading.equals(o.reading) && relationshipDirection.equals(o.relationshipDirection) && relationshipPattern.equals(o.relationshipPattern) && remove.equals(o.remove) && set.equals(o.set) && string.equals(o.string) && updating.equals(o.updating);
   }
   
   @Override
   public int hashCode() {
-    return 2 * aggregate.hashCode() + 3 * arithmetic.hashCode() + 5 * atom.hashCode() + 7 * comparison.hashCode() + 11 * delete.hashCode() + 13 * element.hashCode() + 17 * logical.hashCode() + 19 * map.hashCode() + 23 * match.hashCode() + 29 * merge.hashCode() + 31 * nodePattern.hashCode() + 37 * null_.hashCode() + 41 * numeric.hashCode() + 43 * path.hashCode() + 47 * procedureCall.hashCode() + 53 * projection.hashCode() + 59 * randomness.hashCode() + 61 * rangeLiteral.hashCode() + 67 * reading.hashCode() + 71 * relationshipDirection.hashCode() + 2 * relationshipPattern.hashCode() + 3 * remove.hashCode() + 5 * schema.hashCode() + 7 * set.hashCode() + 11 * string.hashCode() + 13 * updating.hashCode();
+    return 2 * arithmetic.hashCode() + 3 * atom.hashCode() + 5 * comparison.hashCode() + 7 * delete.hashCode() + 11 * function.hashCode() + 13 * list.hashCode() + 17 * literal.hashCode() + 19 * logical.hashCode() + 23 * match.hashCode() + 29 * merge.hashCode() + 31 * nodePattern.hashCode() + 37 * null_.hashCode() + 41 * path.hashCode() + 43 * procedureCall.hashCode() + 47 * projection.hashCode() + 53 * quantifier.hashCode() + 59 * rangeLiteral.hashCode() + 61 * reading.hashCode() + 67 * relationshipDirection.hashCode() + 71 * relationshipPattern.hashCode() + 2 * remove.hashCode() + 3 * set.hashCode() + 5 * string.hashCode() + 7 * updating.hashCode();
   }
   
-  public CypherFeatures withAggregate(hydra.util.Opt<hydra.langs.cypher.features.AggregateFeatures> aggregate) {
-    java.util.Objects.requireNonNull((aggregate));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
-  }
-  
-  public CypherFeatures withArithmetic(hydra.util.Opt<hydra.langs.cypher.features.ArithmeticFeatures> arithmetic) {
+  public CypherFeatures withArithmetic(hydra.langs.cypher.features.ArithmeticFeatures arithmetic) {
     java.util.Objects.requireNonNull((arithmetic));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
   
-  public CypherFeatures withAtom(hydra.util.Opt<hydra.langs.cypher.features.AtomFeatures> atom) {
+  public CypherFeatures withAtom(hydra.langs.cypher.features.AtomFeatures atom) {
     java.util.Objects.requireNonNull((atom));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
   
-  public CypherFeatures withComparison(hydra.util.Opt<hydra.langs.cypher.features.ComparisonFeatures> comparison) {
+  public CypherFeatures withComparison(hydra.langs.cypher.features.ComparisonFeatures comparison) {
     java.util.Objects.requireNonNull((comparison));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
   
-  public CypherFeatures withDelete(hydra.util.Opt<hydra.langs.cypher.features.DeleteFeatures> delete) {
+  public CypherFeatures withDelete(hydra.langs.cypher.features.DeleteFeatures delete) {
     java.util.Objects.requireNonNull((delete));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
   
-  public CypherFeatures withElement(hydra.util.Opt<hydra.langs.cypher.features.ElementFeatures> element) {
-    java.util.Objects.requireNonNull((element));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+  public CypherFeatures withFunction(hydra.langs.cypher.features.FunctionFeatures function) {
+    java.util.Objects.requireNonNull((function));
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
   
-  public CypherFeatures withLogical(hydra.util.Opt<hydra.langs.cypher.features.LogicalFeatures> logical) {
+  public CypherFeatures withList(hydra.langs.cypher.features.ListFeatures list) {
+    java.util.Objects.requireNonNull((list));
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
+  }
+  
+  public CypherFeatures withLiteral(hydra.langs.cypher.features.LiteralFeatures literal) {
+    java.util.Objects.requireNonNull((literal));
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
+  }
+  
+  public CypherFeatures withLogical(hydra.langs.cypher.features.LogicalFeatures logical) {
     java.util.Objects.requireNonNull((logical));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
   
-  public CypherFeatures withMap(hydra.util.Opt<hydra.langs.cypher.features.MapFeatures> map) {
-    java.util.Objects.requireNonNull((map));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
-  }
-  
-  public CypherFeatures withMatch(hydra.util.Opt<hydra.langs.cypher.features.MatchFeatures> match) {
+  public CypherFeatures withMatch(hydra.langs.cypher.features.MatchFeatures match) {
     java.util.Objects.requireNonNull((match));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
   
-  public CypherFeatures withMerge(hydra.util.Opt<hydra.langs.cypher.features.MergeFeatures> merge) {
+  public CypherFeatures withMerge(hydra.langs.cypher.features.MergeFeatures merge) {
     java.util.Objects.requireNonNull((merge));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
   
-  public CypherFeatures withNodePattern(hydra.util.Opt<hydra.langs.cypher.features.NodePatternFeatures> nodePattern) {
+  public CypherFeatures withNodePattern(hydra.langs.cypher.features.NodePatternFeatures nodePattern) {
     java.util.Objects.requireNonNull((nodePattern));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
   
-  public CypherFeatures withNull(hydra.util.Opt<hydra.langs.cypher.features.NullFeatures> null_) {
+  public CypherFeatures withNull(hydra.langs.cypher.features.NullFeatures null_) {
     java.util.Objects.requireNonNull((null_));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
   
-  public CypherFeatures withNumeric(hydra.util.Opt<hydra.langs.cypher.features.NumericFeatures> numeric) {
-    java.util.Objects.requireNonNull((numeric));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
-  }
-  
-  public CypherFeatures withPath(hydra.util.Opt<hydra.langs.cypher.features.PathFeatures> path) {
+  public CypherFeatures withPath(hydra.langs.cypher.features.PathFeatures path) {
     java.util.Objects.requireNonNull((path));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
   
-  public CypherFeatures withProcedureCall(hydra.util.Opt<hydra.langs.cypher.features.ProcedureCallFeatures> procedureCall) {
+  public CypherFeatures withProcedureCall(hydra.langs.cypher.features.ProcedureCallFeatures procedureCall) {
     java.util.Objects.requireNonNull((procedureCall));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
   
-  public CypherFeatures withProjection(hydra.util.Opt<hydra.langs.cypher.features.ProjectionFeatures> projection) {
+  public CypherFeatures withProjection(hydra.langs.cypher.features.ProjectionFeatures projection) {
     java.util.Objects.requireNonNull((projection));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
   
-  public CypherFeatures withRandomness(hydra.util.Opt<hydra.langs.cypher.features.RandomnessFeatures> randomness) {
-    java.util.Objects.requireNonNull((randomness));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+  public CypherFeatures withQuantifier(hydra.langs.cypher.features.QuantifierFeatures quantifier) {
+    java.util.Objects.requireNonNull((quantifier));
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
   
-  public CypherFeatures withRangeLiteral(hydra.util.Opt<hydra.langs.cypher.features.RangeLiteralFeatures> rangeLiteral) {
+  public CypherFeatures withRangeLiteral(hydra.langs.cypher.features.RangeLiteralFeatures rangeLiteral) {
     java.util.Objects.requireNonNull((rangeLiteral));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
   
-  public CypherFeatures withReading(hydra.util.Opt<hydra.langs.cypher.features.ReadingFeatures> reading) {
+  public CypherFeatures withReading(hydra.langs.cypher.features.ReadingFeatures reading) {
     java.util.Objects.requireNonNull((reading));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
   
-  public CypherFeatures withRelationshipDirection(hydra.util.Opt<hydra.langs.cypher.features.RelationshipDirectionFeatures> relationshipDirection) {
+  public CypherFeatures withRelationshipDirection(hydra.langs.cypher.features.RelationshipDirectionFeatures relationshipDirection) {
     java.util.Objects.requireNonNull((relationshipDirection));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
   
-  public CypherFeatures withRelationshipPattern(hydra.util.Opt<hydra.langs.cypher.features.RelationshipPatternFeatures> relationshipPattern) {
+  public CypherFeatures withRelationshipPattern(hydra.langs.cypher.features.RelationshipPatternFeatures relationshipPattern) {
     java.util.Objects.requireNonNull((relationshipPattern));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
   
-  public CypherFeatures withRemove(hydra.util.Opt<hydra.langs.cypher.features.RemoveFeatures> remove) {
+  public CypherFeatures withRemove(hydra.langs.cypher.features.RemoveFeatures remove) {
     java.util.Objects.requireNonNull((remove));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
   
-  public CypherFeatures withSchema(hydra.util.Opt<hydra.langs.cypher.features.SchemaFeatures> schema) {
-    java.util.Objects.requireNonNull((schema));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
-  }
-  
-  public CypherFeatures withSet(hydra.util.Opt<hydra.langs.cypher.features.SetFeatures> set) {
+  public CypherFeatures withSet(hydra.langs.cypher.features.SetFeatures set) {
     java.util.Objects.requireNonNull((set));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
   
-  public CypherFeatures withString(hydra.util.Opt<hydra.langs.cypher.features.StringFeatures> string) {
+  public CypherFeatures withString(hydra.langs.cypher.features.StringFeatures string) {
     java.util.Objects.requireNonNull((string));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
   
-  public CypherFeatures withUpdating(hydra.util.Opt<hydra.langs.cypher.features.UpdatingFeatures> updating) {
+  public CypherFeatures withUpdating(hydra.langs.cypher.features.UpdatingFeatures updating) {
     java.util.Objects.requireNonNull((updating));
-    return new CypherFeatures(aggregate, arithmetic, atom, comparison, delete, element, logical, map, match, merge, nodePattern, null_, numeric, path, procedureCall, projection, randomness, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, schema, set, string, updating);
+    return new CypherFeatures(arithmetic, atom, comparison, delete, function, list, literal, logical, match, merge, nodePattern, null_, path, procedureCall, projection, quantifier, rangeLiteral, reading, relationshipDirection, relationshipPattern, remove, set, string, updating);
   }
 }

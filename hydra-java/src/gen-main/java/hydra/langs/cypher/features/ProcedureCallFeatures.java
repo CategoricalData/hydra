@@ -5,7 +5,7 @@ package hydra.langs.cypher.features;
 import java.io.Serializable;
 
 /**
- * A set of features for procedure calls.
+ * Procedure calls
  */
 public class ProcedureCallFeatures implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.ProcedureCallFeatures");
@@ -17,17 +17,17 @@ public class ProcedureCallFeatures implements Serializable {
   public static final hydra.core.Name FIELD_NAME_YIELD = new hydra.core.Name("yield");
   
   /**
-   * Whether to expect CALL within a query.
+   * CALL within a query
    */
   public final Boolean inQueryCall;
   
   /**
-   * Whether to expect standalone / top-level CALL.
+   * Standalone / top-level CALL
    */
   public final Boolean standaloneCall;
   
   /**
-   * Whether to expect the YIELD clause in CALL.
+   * The YIELD clause in CALL
    */
   public final Boolean yield;
   

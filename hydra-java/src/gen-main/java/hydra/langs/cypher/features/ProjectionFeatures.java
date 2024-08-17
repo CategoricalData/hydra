@@ -5,7 +5,7 @@ package hydra.langs.cypher.features;
 import java.io.Serializable;
 
 /**
- * A set of features for projections.
+ * Projections
  */
 public class ProjectionFeatures implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.ProjectionFeatures");
@@ -25,37 +25,37 @@ public class ProjectionFeatures implements Serializable {
   public static final hydra.core.Name FIELD_NAME_SORT_ORDER = new hydra.core.Name("sortOrder");
   
   /**
-   * Whether to expect the LIMIT clause.
+   * The LIMIT clause
    */
   public final Boolean limit;
   
   /**
-   * Whether to expect the ORDER BY clause.
+   * The ORDER BY clause
    */
   public final Boolean orderBy;
   
   /**
-   * Whether to expect the DISTINCT keyword.
+   * The DISTINCT keyword
    */
   public final Boolean projectDistinct;
   
   /**
-   * Whether to expect the * projection.
+   * The * projection
    */
   public final Boolean projectAll;
   
   /**
-   * Whether to expect the AS keyword.
+   * The AS keyword
    */
   public final Boolean projectAs;
   
   /**
-   * Whether to expect the SKIP clause.
+   * The SKIP clause
    */
   public final Boolean skip;
   
   /**
-   * Whether to expect the ASC/ASCENDING and DESC/DESCENDING keywords.
+   * The ASC/ASCENDING and DESC/DESCENDING keywords
    */
   public final Boolean sortOrder;
   

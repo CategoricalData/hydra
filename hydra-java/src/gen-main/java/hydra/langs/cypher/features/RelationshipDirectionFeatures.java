@@ -5,7 +5,7 @@ package hydra.langs.cypher.features;
 import java.io.Serializable;
 
 /**
- * A set of features for relationship directions / arrow patterns.
+ * Relationship directions / arrow patterns
  */
 public class RelationshipDirectionFeatures implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.RelationshipDirectionFeatures");
@@ -19,22 +19,22 @@ public class RelationshipDirectionFeatures implements Serializable {
   public static final hydra.core.Name FIELD_NAME_RIGHT = new hydra.core.Name("right");
   
   /**
-   * Whether to expect the two-headed arrow (&lt;-[]-&gt;) relationship direction.
+   * The two-headed arrow (&lt;-[]-&gt;) relationship direction
    */
   public final Boolean both;
   
   /**
-   * Whether to expect the left arrow (&lt;-[]-) relationship direction.
+   * The left arrow (&lt;-[]-) relationship direction
    */
   public final Boolean left;
   
   /**
-   * Whether to expect the headless arrow (-[]-) relationship direction.
+   * The headless arrow (-[]-) relationship direction
    */
   public final Boolean neither;
   
   /**
-   * Whether to expect the right arrow (-[]-&gt;) relationship direction.
+   * The right arrow (-[]-&gt;) relationship direction
    */
   public final Boolean right;
   

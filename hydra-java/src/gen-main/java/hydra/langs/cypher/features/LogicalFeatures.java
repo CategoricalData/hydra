@@ -5,7 +5,7 @@ package hydra.langs.cypher.features;
 import java.io.Serializable;
 
 /**
- * A set of features for logical operations.
+ * Logical operations
  */
 public class LogicalFeatures implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.LogicalFeatures");
@@ -19,22 +19,22 @@ public class LogicalFeatures implements Serializable {
   public static final hydra.core.Name FIELD_NAME_XOR = new hydra.core.Name("xor");
   
   /**
-   * Whether to expect the AND operator.
+   * The AND operator
    */
   public final Boolean and;
   
   /**
-   * Whether to expect the NOT operator.
+   * The NOT operator
    */
   public final Boolean not;
   
   /**
-   * Whether to expect the OR operator.
+   * The OR operator
    */
   public final Boolean or;
   
   /**
-   * Whether to expect the XOR operator.
+   * The XOR operator
    */
   public final Boolean xor;
   

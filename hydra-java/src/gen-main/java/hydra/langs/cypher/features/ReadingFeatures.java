@@ -5,7 +5,7 @@ package hydra.langs.cypher.features;
 import java.io.Serializable;
 
 /**
- * A set of features for specific syntax related to reading data from the graph..
+ * Specific syntax related to reading data from the graph.
  */
 public class ReadingFeatures implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.ReadingFeatures");
@@ -17,17 +17,17 @@ public class ReadingFeatures implements Serializable {
   public static final hydra.core.Name FIELD_NAME_UNWIND = new hydra.core.Name("unwind");
   
   /**
-   * Whether to expect the UNION operator.
+   * The UNION operator
    */
   public final Boolean union;
   
   /**
-   * Whether to expect the UNION ALL operator.
+   * The UNION ALL operator
    */
   public final Boolean unionAll;
   
   /**
-   * Whether to expect the UNWIND clause.
+   * The UNWIND clause
    */
   public final Boolean unwind;
   
