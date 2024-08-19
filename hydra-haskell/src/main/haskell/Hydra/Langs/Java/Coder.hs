@@ -109,7 +109,7 @@ constantDeclForFieldType :: Aliases -> FieldType -> Flow Graph Java.ClassBodyDec
 constantDeclForFieldType aliases ftyp = constantDecl javaName aliases name
   where
     name = fieldTypeName ftyp
-    javaName = "FIELD_NAME_" ++ (convertCase CaseConventionCamel CaseConventionUpperSnake $ unName name)
+    javaName = "FIELD_NAME_" ++ nonAlnumToUnderscores (convertCase CaseConventionCamel CaseConventionUpperSnake $ unName name)
 
 constantDeclForTypeName :: Aliases -> Name -> Flow Graph Java.ClassBodyDeclarationWithComments
 constantDeclForTypeName = constantDecl "TYPE_NAME"
@@ -246,7 +246,7 @@ declarationForRecordType isInner isSer aliases tparams elName fields = do
       where
         anns = [] -- TODO
         mods = [Java.MethodModifierPublic]
-        methodName = "with" ++ capitalize (unName $ fieldTypeName field)
+        methodName = "with" ++ nonAlnumToUnderscores (capitalize (unName $ fieldTypeName field))
         nullCheck = fieldToNullCheckStatement field
         result = referenceTypeToResult $ nameToJavaReferenceType aliases False [] elName Nothing
         consId = Java.Identifier $ sanitizeJavaName $ localNameOfEager elName
