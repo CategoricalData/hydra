@@ -12,13 +12,13 @@ public class TemporalDurationFunctionFeatures implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_DURATION = new hydra.core.Name("duration");
   
-  public static final hydra.core.Name FIELD_NAME_DURATION.BETWEEN = new hydra.core.Name("duration.between");
+  public static final hydra.core.Name FIELD_NAME_DURATION_BETWEEN = new hydra.core.Name("duration.between");
   
-  public static final hydra.core.Name FIELD_NAME_DURATION.IN_DAYS = new hydra.core.Name("duration.inDays");
+  public static final hydra.core.Name FIELD_NAME_DURATION_IN_DAYS = new hydra.core.Name("duration.inDays");
   
-  public static final hydra.core.Name FIELD_NAME_DURATION.IN_MONTHS = new hydra.core.Name("duration.inMonths");
+  public static final hydra.core.Name FIELD_NAME_DURATION_IN_MONTHS = new hydra.core.Name("duration.inMonths");
   
-  public static final hydra.core.Name FIELD_NAME_DURATION.IN_SECONDS = new hydra.core.Name("duration.inSeconds");
+  public static final hydra.core.Name FIELD_NAME_DURATION_IN_SECONDS = new hydra.core.Name("duration.inSeconds");
   
   /**
    * The duration() function. Constructs a DURATION value.
@@ -77,22 +77,22 @@ public class TemporalDurationFunctionFeatures implements Serializable {
     return new TemporalDurationFunctionFeatures(duration, duration_between, duration_inDays, duration_inMonths, duration_inSeconds);
   }
   
-  public TemporalDurationFunctionFeatures withDuration.between(Boolean duration_between) {
+  public TemporalDurationFunctionFeatures withDuration_between(Boolean duration_between) {
     java.util.Objects.requireNonNull((duration_between));
     return new TemporalDurationFunctionFeatures(duration, duration_between, duration_inDays, duration_inMonths, duration_inSeconds);
   }
   
-  public TemporalDurationFunctionFeatures withDuration.inDays(Boolean duration_inDays) {
+  public TemporalDurationFunctionFeatures withDuration_inDays(Boolean duration_inDays) {
     java.util.Objects.requireNonNull((duration_inDays));
     return new TemporalDurationFunctionFeatures(duration, duration_between, duration_inDays, duration_inMonths, duration_inSeconds);
   }
   
-  public TemporalDurationFunctionFeatures withDuration.inMonths(Boolean duration_inMonths) {
+  public TemporalDurationFunctionFeatures withDuration_inMonths(Boolean duration_inMonths) {
     java.util.Objects.requireNonNull((duration_inMonths));
     return new TemporalDurationFunctionFeatures(duration, duration_between, duration_inDays, duration_inMonths, duration_inSeconds);
   }
   
-  public TemporalDurationFunctionFeatures withDuration.inSeconds(Boolean duration_inSeconds) {
+  public TemporalDurationFunctionFeatures withDuration_inSeconds(Boolean duration_inSeconds) {
     java.util.Objects.requireNonNull((duration_inSeconds));
     return new TemporalDurationFunctionFeatures(duration, duration_between, duration_inDays, duration_inMonths, duration_inSeconds);
   }

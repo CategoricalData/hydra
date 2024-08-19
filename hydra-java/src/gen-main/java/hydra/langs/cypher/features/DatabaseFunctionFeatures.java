@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class DatabaseFunctionFeatures implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.DatabaseFunctionFeatures");
   
-  public static final hydra.core.Name FIELD_NAME_DB.NAME_FROM_ELEMENT_ID = new hydra.core.Name("db.nameFromElementId");
+  public static final hydra.core.Name FIELD_NAME_DB_NAME_FROM_ELEMENT_ID = new hydra.core.Name("db.nameFromElementId");
   
   /**
    * The db.nameFromElementId() function. Resolves the database name from the given element id. Introduced in 5.12.
