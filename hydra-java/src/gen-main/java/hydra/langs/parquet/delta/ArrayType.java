@@ -4,6 +4,9 @@ package hydra.langs.parquet.delta;
 
 import java.io.Serializable;
 
+/**
+ * Represent array data type.
+ */
 public class ArrayType implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/delta.ArrayType");
   

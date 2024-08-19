@@ -4,6 +4,9 @@ package hydra.langs.parquet.delta;
 
 import java.io.Serializable;
 
+/**
+ * Struct type which contains one or more columns.
+ */
 public class StructType implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/delta.StructType");
   
