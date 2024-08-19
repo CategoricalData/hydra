@@ -4,6 +4,9 @@ package hydra.langs.parquet.delta;
 
 import java.io.Serializable;
 
+/**
+ * Data type representing a map type.
+ */
 public class MapType implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/delta.MapType");
   
