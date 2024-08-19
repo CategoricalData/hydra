@@ -26,6 +26,10 @@ public abstract class JsonEncoding {
     return new Value.Number_(d);
   }
 
+  protected static Value toJson(int i) {
+    return new Value.Number_((double) i);
+  }
+
   protected static Value toJson(String value) {
     return new Value.String_(value);
   }
@@ -59,15 +63,31 @@ public abstract class JsonEncoding {
     private final Map<String, Value> map = new LinkedHashMap<>();
 
     public ObjectBuilder put(String key, boolean value) {
-      return put(key, new Value.Boolean_(value));
+      return put(key, toJson(value));
     }
 
     public ObjectBuilder put(Name key, boolean value) {
       return put(key.value, value);
     }
 
+    public ObjectBuilder put(String key, double value) {
+      return put(key, toJson(value));
+    }
+
+    public ObjectBuilder put(Name key, double value) {
+      return put(key.value, value);
+    }
+
+    public ObjectBuilder put(String key, int value) {
+      return put(key, toJson(value));
+    }
+
+    public ObjectBuilder put(Name key, int value) {
+      return put(key.value, value);
+    }
+
     public ObjectBuilder put(String key, String value) {
-      return put(key, new Value.String_(value));
+      return put(key, toJson(value));
     }
 
     public ObjectBuilder put(Name key, String value) {
