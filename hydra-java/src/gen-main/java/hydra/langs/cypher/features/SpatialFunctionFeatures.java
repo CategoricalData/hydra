@@ -10,11 +10,11 @@ import java.io.Serializable;
 public class SpatialFunctionFeatures implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.SpatialFunctionFeatures");
   
-  public static final hydra.core.Name FIELD_NAME_POINT.DISTANCE = new hydra.core.Name("point.distance");
+  public static final hydra.core.Name FIELD_NAME_POINT_DISTANCE = new hydra.core.Name("point.distance");
   
   public static final hydra.core.Name FIELD_NAME_POINT = new hydra.core.Name("point");
   
-  public static final hydra.core.Name FIELD_NAME_POINT.WITHIN_B_BOX = new hydra.core.Name("point.withinBBox");
+  public static final hydra.core.Name FIELD_NAME_POINT_WITHIN_B_BOX = new hydra.core.Name("point.withinBBox");
   
   /**
    * The point.distance() function. Returns a FLOAT representing the geodesic distance between any two points in the same CRS.
@@ -54,7 +54,7 @@ public class SpatialFunctionFeatures implements Serializable {
     return 2 * point_distance.hashCode() + 3 * point.hashCode() + 5 * point_withinBBox.hashCode();
   }
   
-  public SpatialFunctionFeatures withPoint.distance(Boolean point_distance) {
+  public SpatialFunctionFeatures withPoint_distance(Boolean point_distance) {
     java.util.Objects.requireNonNull((point_distance));
     return new SpatialFunctionFeatures(point_distance, point, point_withinBBox);
   }
@@ -64,7 +64,7 @@ public class SpatialFunctionFeatures implements Serializable {
     return new SpatialFunctionFeatures(point_distance, point, point_withinBBox);
   }
   
-  public SpatialFunctionFeatures withPoint.withinBBox(Boolean point_withinBBox) {
+  public SpatialFunctionFeatures withPoint_withinBBox(Boolean point_withinBBox) {
     java.util.Objects.requireNonNull((point_withinBBox));
     return new SpatialFunctionFeatures(point_distance, point, point_withinBBox);
   }

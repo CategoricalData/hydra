@@ -12,57 +12,57 @@ public class TemporalInstantFunctionFeatures implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_DATE = new hydra.core.Name("date");
   
-  public static final hydra.core.Name FIELD_NAME_DATE.REALTIME = new hydra.core.Name("date.realtime");
+  public static final hydra.core.Name FIELD_NAME_DATE_REALTIME = new hydra.core.Name("date.realtime");
   
-  public static final hydra.core.Name FIELD_NAME_DATE.STATEMENT = new hydra.core.Name("date.statement");
+  public static final hydra.core.Name FIELD_NAME_DATE_STATEMENT = new hydra.core.Name("date.statement");
   
-  public static final hydra.core.Name FIELD_NAME_DATE.TRANSACTION = new hydra.core.Name("date.transaction");
+  public static final hydra.core.Name FIELD_NAME_DATE_TRANSACTION = new hydra.core.Name("date.transaction");
   
-  public static final hydra.core.Name FIELD_NAME_DATE.TRUNCATE = new hydra.core.Name("date.truncate");
+  public static final hydra.core.Name FIELD_NAME_DATE_TRUNCATE = new hydra.core.Name("date.truncate");
   
   public static final hydra.core.Name FIELD_NAME_DATETIME = new hydra.core.Name("datetime");
   
-  public static final hydra.core.Name FIELD_NAME_DATETIME.FROMEPOCH = new hydra.core.Name("datetime.fromepoch");
+  public static final hydra.core.Name FIELD_NAME_DATETIME_FROMEPOCH = new hydra.core.Name("datetime.fromepoch");
   
-  public static final hydra.core.Name FIELD_NAME_DATETIME.FROMEPOCHMILLIS = new hydra.core.Name("datetime.fromepochmillis");
+  public static final hydra.core.Name FIELD_NAME_DATETIME_FROMEPOCHMILLIS = new hydra.core.Name("datetime.fromepochmillis");
   
-  public static final hydra.core.Name FIELD_NAME_DATETIME.REALTIME = new hydra.core.Name("datetime.realtime");
+  public static final hydra.core.Name FIELD_NAME_DATETIME_REALTIME = new hydra.core.Name("datetime.realtime");
   
-  public static final hydra.core.Name FIELD_NAME_DATETIME.STATEMENT = new hydra.core.Name("datetime.statement");
+  public static final hydra.core.Name FIELD_NAME_DATETIME_STATEMENT = new hydra.core.Name("datetime.statement");
   
-  public static final hydra.core.Name FIELD_NAME_DATETIME.TRANSACTION = new hydra.core.Name("datetime.transaction");
+  public static final hydra.core.Name FIELD_NAME_DATETIME_TRANSACTION = new hydra.core.Name("datetime.transaction");
   
-  public static final hydra.core.Name FIELD_NAME_DATETIME.TRUNCATE = new hydra.core.Name("datetime.truncate");
+  public static final hydra.core.Name FIELD_NAME_DATETIME_TRUNCATE = new hydra.core.Name("datetime.truncate");
   
   public static final hydra.core.Name FIELD_NAME_LOCALDATETIME = new hydra.core.Name("localdatetime");
   
-  public static final hydra.core.Name FIELD_NAME_LOCALDATETIME.REALTIME = new hydra.core.Name("localdatetime.realtime");
+  public static final hydra.core.Name FIELD_NAME_LOCALDATETIME_REALTIME = new hydra.core.Name("localdatetime.realtime");
   
-  public static final hydra.core.Name FIELD_NAME_LOCALDATETIME.STATEMENT = new hydra.core.Name("localdatetime.statement");
+  public static final hydra.core.Name FIELD_NAME_LOCALDATETIME_STATEMENT = new hydra.core.Name("localdatetime.statement");
   
-  public static final hydra.core.Name FIELD_NAME_LOCALDATETIME.TRANSACTION = new hydra.core.Name("localdatetime.transaction");
+  public static final hydra.core.Name FIELD_NAME_LOCALDATETIME_TRANSACTION = new hydra.core.Name("localdatetime.transaction");
   
-  public static final hydra.core.Name FIELD_NAME_LOCALDATETIME.TRUNCATE = new hydra.core.Name("localdatetime.truncate");
+  public static final hydra.core.Name FIELD_NAME_LOCALDATETIME_TRUNCATE = new hydra.core.Name("localdatetime.truncate");
   
   public static final hydra.core.Name FIELD_NAME_LOCALTIME = new hydra.core.Name("localtime");
   
-  public static final hydra.core.Name FIELD_NAME_LOCALTIME.REALTIME = new hydra.core.Name("localtime.realtime");
+  public static final hydra.core.Name FIELD_NAME_LOCALTIME_REALTIME = new hydra.core.Name("localtime.realtime");
   
-  public static final hydra.core.Name FIELD_NAME_LOCALTIME.STATEMENT = new hydra.core.Name("localtime.statement");
+  public static final hydra.core.Name FIELD_NAME_LOCALTIME_STATEMENT = new hydra.core.Name("localtime.statement");
   
-  public static final hydra.core.Name FIELD_NAME_LOCALTIME.TRANSACTION = new hydra.core.Name("localtime.transaction");
+  public static final hydra.core.Name FIELD_NAME_LOCALTIME_TRANSACTION = new hydra.core.Name("localtime.transaction");
   
-  public static final hydra.core.Name FIELD_NAME_LOCALTIME.TRUNCATE = new hydra.core.Name("localtime.truncate");
+  public static final hydra.core.Name FIELD_NAME_LOCALTIME_TRUNCATE = new hydra.core.Name("localtime.truncate");
   
   public static final hydra.core.Name FIELD_NAME_TIME = new hydra.core.Name("time");
   
-  public static final hydra.core.Name FIELD_NAME_TIME.REALTIME = new hydra.core.Name("time.realtime");
+  public static final hydra.core.Name FIELD_NAME_TIME_REALTIME = new hydra.core.Name("time.realtime");
   
-  public static final hydra.core.Name FIELD_NAME_TIME.STATEMENT = new hydra.core.Name("time.statement");
+  public static final hydra.core.Name FIELD_NAME_TIME_STATEMENT = new hydra.core.Name("time.statement");
   
-  public static final hydra.core.Name FIELD_NAME_TIME.TRANSACTION = new hydra.core.Name("time.transaction");
+  public static final hydra.core.Name FIELD_NAME_TIME_TRANSACTION = new hydra.core.Name("time.transaction");
   
-  public static final hydra.core.Name FIELD_NAME_TIME.TRUNCATE = new hydra.core.Name("time.truncate");
+  public static final hydra.core.Name FIELD_NAME_TIME_TRUNCATE = new hydra.core.Name("time.truncate");
   
   /**
    * The date() function. Creates a DATE instant.
@@ -275,22 +275,22 @@ public class TemporalInstantFunctionFeatures implements Serializable {
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withDate.realtime(Boolean date_realtime) {
+  public TemporalInstantFunctionFeatures withDate_realtime(Boolean date_realtime) {
     java.util.Objects.requireNonNull((date_realtime));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withDate.statement(Boolean date_statement) {
+  public TemporalInstantFunctionFeatures withDate_statement(Boolean date_statement) {
     java.util.Objects.requireNonNull((date_statement));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withDate.transaction(Boolean date_transaction) {
+  public TemporalInstantFunctionFeatures withDate_transaction(Boolean date_transaction) {
     java.util.Objects.requireNonNull((date_transaction));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withDate.truncate(Boolean date_truncate) {
+  public TemporalInstantFunctionFeatures withDate_truncate(Boolean date_truncate) {
     java.util.Objects.requireNonNull((date_truncate));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
@@ -300,32 +300,32 @@ public class TemporalInstantFunctionFeatures implements Serializable {
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withDatetime.fromepoch(Boolean datetime_fromepoch) {
+  public TemporalInstantFunctionFeatures withDatetime_fromepoch(Boolean datetime_fromepoch) {
     java.util.Objects.requireNonNull((datetime_fromepoch));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withDatetime.fromepochmillis(Boolean datetime_fromepochmillis) {
+  public TemporalInstantFunctionFeatures withDatetime_fromepochmillis(Boolean datetime_fromepochmillis) {
     java.util.Objects.requireNonNull((datetime_fromepochmillis));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withDatetime.realtime(Boolean datetime_realtime) {
+  public TemporalInstantFunctionFeatures withDatetime_realtime(Boolean datetime_realtime) {
     java.util.Objects.requireNonNull((datetime_realtime));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withDatetime.statement(Boolean datetime_statement) {
+  public TemporalInstantFunctionFeatures withDatetime_statement(Boolean datetime_statement) {
     java.util.Objects.requireNonNull((datetime_statement));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withDatetime.transaction(Boolean datetime_transaction) {
+  public TemporalInstantFunctionFeatures withDatetime_transaction(Boolean datetime_transaction) {
     java.util.Objects.requireNonNull((datetime_transaction));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withDatetime.truncate(Boolean datetime_truncate) {
+  public TemporalInstantFunctionFeatures withDatetime_truncate(Boolean datetime_truncate) {
     java.util.Objects.requireNonNull((datetime_truncate));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
@@ -335,22 +335,22 @@ public class TemporalInstantFunctionFeatures implements Serializable {
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withLocaldatetime.realtime(Boolean localdatetime_realtime) {
+  public TemporalInstantFunctionFeatures withLocaldatetime_realtime(Boolean localdatetime_realtime) {
     java.util.Objects.requireNonNull((localdatetime_realtime));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withLocaldatetime.statement(Boolean localdatetime_statement) {
+  public TemporalInstantFunctionFeatures withLocaldatetime_statement(Boolean localdatetime_statement) {
     java.util.Objects.requireNonNull((localdatetime_statement));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withLocaldatetime.transaction(Boolean localdatetime_transaction) {
+  public TemporalInstantFunctionFeatures withLocaldatetime_transaction(Boolean localdatetime_transaction) {
     java.util.Objects.requireNonNull((localdatetime_transaction));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withLocaldatetime.truncate(Boolean localdatetime_truncate) {
+  public TemporalInstantFunctionFeatures withLocaldatetime_truncate(Boolean localdatetime_truncate) {
     java.util.Objects.requireNonNull((localdatetime_truncate));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
@@ -360,22 +360,22 @@ public class TemporalInstantFunctionFeatures implements Serializable {
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withLocaltime.realtime(Boolean localtime_realtime) {
+  public TemporalInstantFunctionFeatures withLocaltime_realtime(Boolean localtime_realtime) {
     java.util.Objects.requireNonNull((localtime_realtime));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withLocaltime.statement(Boolean localtime_statement) {
+  public TemporalInstantFunctionFeatures withLocaltime_statement(Boolean localtime_statement) {
     java.util.Objects.requireNonNull((localtime_statement));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withLocaltime.transaction(Boolean localtime_transaction) {
+  public TemporalInstantFunctionFeatures withLocaltime_transaction(Boolean localtime_transaction) {
     java.util.Objects.requireNonNull((localtime_transaction));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withLocaltime.truncate(Boolean localtime_truncate) {
+  public TemporalInstantFunctionFeatures withLocaltime_truncate(Boolean localtime_truncate) {
     java.util.Objects.requireNonNull((localtime_truncate));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
@@ -385,22 +385,22 @@ public class TemporalInstantFunctionFeatures implements Serializable {
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withTime.realtime(Boolean time_realtime) {
+  public TemporalInstantFunctionFeatures withTime_realtime(Boolean time_realtime) {
     java.util.Objects.requireNonNull((time_realtime));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withTime.statement(Boolean time_statement) {
+  public TemporalInstantFunctionFeatures withTime_statement(Boolean time_statement) {
     java.util.Objects.requireNonNull((time_statement));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withTime.transaction(Boolean time_transaction) {
+  public TemporalInstantFunctionFeatures withTime_transaction(Boolean time_transaction) {
     java.util.Objects.requireNonNull((time_transaction));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }
   
-  public TemporalInstantFunctionFeatures withTime.truncate(Boolean time_truncate) {
+  public TemporalInstantFunctionFeatures withTime_truncate(Boolean time_truncate) {
     java.util.Objects.requireNonNull((time_truncate));
     return new TemporalInstantFunctionFeatures(date, date_realtime, date_statement, date_transaction, date_truncate, datetime, datetime_fromepoch, datetime_fromepochmillis, datetime_realtime, datetime_statement, datetime_transaction, datetime_truncate, localdatetime, localdatetime_realtime, localdatetime_statement, localdatetime_transaction, localdatetime_truncate, localtime, localtime_realtime, localtime_statement, localtime_transaction, localtime_truncate, time, time_realtime, time_statement, time_transaction, time_truncate);
   }

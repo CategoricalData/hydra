@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class GenAIFunctionFeatures implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/cypher/features.GenAIFunctionFeatures");
   
-  public static final hydra.core.Name FIELD_NAME_GENAI.VECTOR.ENCODE = new hydra.core.Name("genai.vector.encode");
+  public static final hydra.core.Name FIELD_NAME_GENAI_VECTOR_ENCODE = new hydra.core.Name("genai.vector.encode");
   
   /**
    * The genai.vector.encode() function. Encode a given resource as a vector using the named provider. Introduced in 5.17.
