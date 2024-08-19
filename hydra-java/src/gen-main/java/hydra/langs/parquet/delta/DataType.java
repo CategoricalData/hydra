@@ -92,6 +92,9 @@ public abstract class DataType implements Serializable {
     }
   }
   
+  /**
+   * Base class for all primitive types DataType.
+   */
   public static final class Base extends hydra.langs.parquet.delta.DataType implements Serializable {
     public final hydra.langs.parquet.delta.BasePrimitiveType value;
     

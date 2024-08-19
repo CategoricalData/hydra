@@ -51,7 +51,9 @@ deltaParquetModule = Module ns elements [hydraCoreModule] tier0Modules $
           "array">:
             doc "Represent array data type." $
             delta "ArrayType",
-          "base">: delta "BasePrimitiveType",
+          "base">:
+            doc "Base class for all primitive types DataType." $
+            delta "BasePrimitiveType",
           "decimal">:
             doc "A decimal data type." $
             delta "DecimalType",
