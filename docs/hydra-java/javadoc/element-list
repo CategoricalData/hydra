@@ -72,7 +72,6 @@ hydra.phantoms
 hydra.printing
 hydra.query
 hydra.strip
-hydra.test.testSuite
 hydra.testing
 hydra.tier1
 hydra.tier2
