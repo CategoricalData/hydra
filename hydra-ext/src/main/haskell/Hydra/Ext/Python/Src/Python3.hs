@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier4.Ext.Python.Python3 (python3Module) where
+module Hydra.Ext.Python.Src.Python3 (python3Module) where
 
 import Hydra.Kernel
 import Hydra.Dsl.Grammars
