@@ -1,4 +1,4 @@
-module Hydra.Models.Atlas where
+module Hydra.Ext.Other.Atlas where
 
 import Hydra.Kernel
 import Hydra.Dsl.Types as Types

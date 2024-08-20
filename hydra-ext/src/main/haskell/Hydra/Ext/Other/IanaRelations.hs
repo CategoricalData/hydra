@@ -1,4 +1,4 @@
-module Hydra.Models.IanaRelations where
+module Hydra.Ext.Other.IanaRelations where
 
 import Hydra.Sources.Tier4.All
 import Hydra.Dsl.Types as Types

@@ -18,7 +18,7 @@ import Hydra.Ext.Rdf.Serde
 import Hydra.Workflow
 import qualified Hydra.Ext.Rdf.Utils as RdfUt
 
-import Hydra.Models.Osv
+import Hydra.Ext.Other.Osv
 import qualified Dev.Osv.Schema as Osv
 
 import System.IO

@@ -1,4 +1,4 @@
-module Hydra.Models.AzureDtld (dtldModule) where
+module Hydra.Ext.Other.AzureDtld (dtldModule) where
 
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Bootstrap

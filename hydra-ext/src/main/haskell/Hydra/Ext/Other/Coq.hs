@@ -1,4 +1,4 @@
-module Hydra.Models.Coq where
+module Hydra.Ext.Other.Coq where
 
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Bootstrap

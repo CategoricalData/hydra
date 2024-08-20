@@ -1,4 +1,4 @@
-module Hydra.Models.GeoJson where
+module Hydra.Ext.Other.GeoJson where
 
 import Hydra.Sources.Tier4.All
 import Hydra.Dsl.Types as Types
