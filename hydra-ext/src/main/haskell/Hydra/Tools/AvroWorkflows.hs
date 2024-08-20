@@ -18,7 +18,7 @@ module Hydra.Tools.AvroWorkflows (
 import Hydra.Kernel
 import Hydra.Flows
 import Hydra.Dsl.Annotations
-import qualified Hydra.Ext.Avro.Schema as Avro
+import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro
 import qualified Hydra.Json as Json
 import Hydra.Ext.Json.Coder
 import Hydra.Ext.Json.Eliminate
