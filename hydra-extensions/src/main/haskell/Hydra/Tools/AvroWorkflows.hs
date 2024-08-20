@@ -18,23 +18,23 @@ module Hydra.Tools.AvroWorkflows (
 import Hydra.Kernel
 import Hydra.Flows
 import Hydra.Dsl.Annotations
-import qualified Hydra.Langs.Avro.Schema as Avro
+import qualified Hydra.Ext.Avro.Schema as Avro
 import qualified Hydra.Json as Json
-import Hydra.Langs.Json.Coder
-import Hydra.Langs.Json.Eliminate
-import Hydra.Langs.Json.Serde
-import Hydra.Langs.Avro.Coder
-import Hydra.Langs.Avro.SchemaJson
-import Hydra.Langs.Tinkerpop.Coder
-import qualified Hydra.Langs.Shacl.Coder as Shacl
-import qualified Hydra.Langs.Rdf.Syntax as Rdf
-import qualified Hydra.Langs.Rdf.Utils as RdfUt
-import qualified Hydra.Langs.Tinkerpop.PropertyGraph as PG
-import qualified Hydra.Langs.Tinkerpop.Mappings as PGM
+import Hydra.Ext.Json.Coder
+import Hydra.Ext.Json.Eliminate
+import Hydra.Ext.Json.Serde
+import Hydra.Ext.Avro.Coder
+import Hydra.Ext.Avro.SchemaJson
+import Hydra.Ext.Tinkerpop.Coder
+import qualified Hydra.Ext.Shacl.Coder as Shacl
+import qualified Hydra.Ext.Rdf.Syntax as Rdf
+import qualified Hydra.Ext.Rdf.Utils as RdfUt
+import qualified Hydra.Ext.Tinkerpop.PropertyGraph as PG
+import qualified Hydra.Ext.Tinkerpop.Mappings as PGM
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Expect as Expect
-import Hydra.Langs.Rdf.Serde
+import Hydra.Ext.Rdf.Serde
 import Hydra.Sources.Core
 
 import qualified Control.Monad as CM

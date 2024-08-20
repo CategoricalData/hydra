@@ -1,7 +1,7 @@
 package hydra;
 
-import hydra.langs.yaml.model.Node;
-import hydra.langs.yaml.model.Scalar;
+import hydra.ext.yaml.model.Node;
+import hydra.ext.yaml.model.Scalar;
 
 import java.math.BigInteger;
 import java.util.Arrays;

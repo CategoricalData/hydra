@@ -15,14 +15,14 @@ module Hydra.Codegen (
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
-import Hydra.Langs.Graphql.Coder
-import Hydra.Langs.Haskell.Coder
-import Hydra.Langs.Java.Coder
-import Hydra.Langs.Json.Coder
-import Hydra.Langs.Pegasus.Coder
-import Hydra.Langs.Protobuf.Coder
-import Hydra.Langs.Scala.Coder
-import Hydra.Langs.Yaml.Modules
+import Hydra.Ext.Graphql.Coder
+import Hydra.Ext.Haskell.Coder
+import Hydra.Ext.Java.Coder
+import Hydra.Ext.Json.Coder
+import Hydra.Ext.Pegasus.Coder
+import Hydra.Ext.Protobuf.Coder
+import Hydra.Ext.Scala.Coder
+import Hydra.Ext.Yaml.Modules
 
 import Hydra.Sources.Libraries
 import Hydra.Sources.Tier4.All

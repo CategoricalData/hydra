@@ -2,8 +2,8 @@
 
 module Hydra.Tier3 where
 
-import qualified Hydra.Core as Core
 import qualified Hydra.Compute as Compute
+import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Io as Io
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
@@ -23,7 +23,7 @@ traceSummary t =
               Strings.cat [
                 Strings.cat [
                   "\t",
-                  (Core.unName $ fst pair)],
+                  (Core.unName (fst pair))],
                 ": "],
               (Io.showTerm (snd pair))])
   in (Strings.intercalate "\n" (Lists.concat2 messageLines keyvalLines))
