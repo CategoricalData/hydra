@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier4.Ext.Parquet.Format where
+module Hydra.Ext.Parquet.Src.Format where
 
 import Hydra.Sources.Tier3.All
 import Hydra.Dsl.Annotations

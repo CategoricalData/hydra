@@ -13,15 +13,12 @@ import Hydra.Sources.Tier4.Ext.Haskell.Ast
 import Hydra.Sources.Tier4.Ext.Java.Language
 import Hydra.Sources.Tier4.Ext.Java.Syntax
 import Hydra.Sources.Tier4.Ext.Json.Decoding
-import Hydra.Sources.Tier4.Ext.Kusto.Kql
 import Hydra.Sources.Tier4.Ext.Owl.Syntax
-import Hydra.Sources.Tier4.Ext.Parquet.Format
 import Hydra.Sources.Tier4.Ext.Pegasus.Pdl
 import Hydra.Sources.Tier4.Ext.Protobuf.Any
 import Hydra.Sources.Tier4.Ext.Protobuf.Language
 import Hydra.Sources.Tier4.Ext.Protobuf.Proto3
 import Hydra.Sources.Tier4.Ext.Protobuf.SourceContext
-import Hydra.Sources.Tier4.Ext.Python.Python3
 import Hydra.Sources.Tier4.Ext.Rdf.Syntax
 import Hydra.Sources.Tier4.Ext.RelationalModel
 import Hydra.Sources.Tier4.Ext.Scala.Meta
@@ -59,17 +56,14 @@ tier4LangModules = [
   javaLanguageModule,
   javaSyntaxModule,
   jsonDecodingModule,
-  kqlModule,
   openCypherModule,
   openCypherFeaturesModule,
   owlSyntaxModule,
-  parquetFormatModule,
   pegasusPdlModule,
   proto3Module,
   protobufAnyModule,
   protobufLanguageModule,
   protobufSourceContextModule,
---  python3Module,
   rdfSyntaxModule,
   relationalModelModule,
   scalaMetaModule,

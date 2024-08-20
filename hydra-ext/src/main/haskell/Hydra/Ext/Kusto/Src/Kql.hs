@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier4.Ext.Kusto.Kql where
+module Hydra.Ext.Kusto.Src.Kql where
 
 import Hydra.Sources.Tier3.All
 import Hydra.Dsl.Annotations

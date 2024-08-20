@@ -4,6 +4,9 @@ import Hydra.Kernel
 
 import Hydra.Ext.Delta.Src.Parquet
 import Hydra.Ext.Graphviz.Src.Dot
+import Hydra.Ext.Kusto.Src.Kql
+import Hydra.Ext.Parquet.Src.Format
+import Hydra.Ext.Python.Src.Python3
 
 import Hydra.Models.Atlas
 import Hydra.Models.AzureDtld
@@ -25,5 +28,8 @@ hydraExtModules = [
   dtldModule,
   geoJsonModule,
   ianaRelationsModule,
+  kqlModule,
   osvSchemaModule,
+  parquetFormatModule,
+  -- python3Module,
   stacModule]

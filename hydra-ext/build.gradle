@@ -5,3 +5,8 @@ plugins {
 dependencies {
     implementation project(':hydra-java')
 }
+
+// Avoids duplicate KqlWriter.java
+tasks.named('sourcesJar') {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
