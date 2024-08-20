@@ -1,6 +1,6 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.langs.parquet.delta;
+package hydra.ext.delta.parquet;
 
 import java.io.Serializable;
 
@@ -8,17 +8,17 @@ import java.io.Serializable;
  * Represent array data type.
  */
 public class ArrayType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/delta.ArrayType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/delta/parquet.ArrayType");
   
   public static final hydra.core.Name FIELD_NAME_ELEMENT_TYPE = new hydra.core.Name("elementType");
   
   public static final hydra.core.Name FIELD_NAME_CONTAINS_NULL = new hydra.core.Name("containsNull");
   
-  public final hydra.langs.parquet.delta.DataType elementType;
+  public final hydra.ext.delta.parquet.DataType elementType;
   
   public final Boolean containsNull;
   
-  public ArrayType (hydra.langs.parquet.delta.DataType elementType, Boolean containsNull) {
+  public ArrayType (hydra.ext.delta.parquet.DataType elementType, Boolean containsNull) {
     java.util.Objects.requireNonNull((elementType));
     java.util.Objects.requireNonNull((containsNull));
     this.elementType = elementType;
@@ -39,7 +39,7 @@ public class ArrayType implements Serializable {
     return 2 * elementType.hashCode() + 3 * containsNull.hashCode();
   }
   
-  public ArrayType withElementType(hydra.langs.parquet.delta.DataType elementType) {
+  public ArrayType withElementType(hydra.ext.delta.parquet.DataType elementType) {
     java.util.Objects.requireNonNull((elementType));
     return new ArrayType(elementType, containsNull);
   }

@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier4.Langs.Parquet.Delta where
+module Hydra.Sources.Tier4.Langs.Delta.Parquet where
 
 import Hydra.Sources.Tier3.All
 import Hydra.Dsl.Annotations
@@ -13,7 +13,7 @@ deltaParquetModule = Module ns elements [hydraCoreModule] tier0Modules $
     Just ("A partial Delta Parquet model, based on DataType and its subclasses as specified in the 3.0.0 Java API:"
       ++ " https://docs.delta.io/3.0.0/api/java/kernel/io/delta/kernel/types/DataType.html")
   where
-    ns = Namespace "hydra/langs/parquet/delta"
+    ns = Namespace "hydra/ext/delta/parquet"
     def = datatype ns
     enumVal name desc = name>: doc desc unit
     delta = typeref ns

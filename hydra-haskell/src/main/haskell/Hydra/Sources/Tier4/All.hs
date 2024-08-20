@@ -8,6 +8,7 @@ import Hydra.Sources.Tier3.All
 import Hydra.Sources.Tier4.Langs.Avro.Schema
 import Hydra.Sources.Tier4.Langs.Cypher.Features
 import Hydra.Sources.Tier4.Langs.Cypher.OpenCypher
+import Hydra.Sources.Tier4.Langs.Delta.Parquet
 import Hydra.Sources.Tier4.Langs.Graphql.Syntax
 import Hydra.Sources.Tier4.Langs.Haskell.Ast
 import Hydra.Sources.Tier4.Langs.Java.Language
@@ -15,7 +16,6 @@ import Hydra.Sources.Tier4.Langs.Java.Syntax
 import Hydra.Sources.Tier4.Langs.Json.Decoding
 import Hydra.Sources.Tier4.Langs.Kusto.Kql
 import Hydra.Sources.Tier4.Langs.Owl.Syntax
-import Hydra.Sources.Tier4.Langs.Parquet.Delta
 import Hydra.Sources.Tier4.Langs.Parquet.Format
 import Hydra.Sources.Tier4.Langs.Pegasus.Pdl
 import Hydra.Sources.Tier4.Langs.Protobuf.Any

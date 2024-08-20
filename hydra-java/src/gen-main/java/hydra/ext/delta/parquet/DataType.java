@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.langs.parquet.delta;
+package hydra.ext.delta.parquet;
 
 import java.io.Serializable;
 
 public abstract class DataType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/delta.DataType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/delta/parquet.DataType");
   
   public static final hydra.core.Name FIELD_NAME_ARRAY = new hydra.core.Name("array");
   
@@ -64,10 +64,10 @@ public abstract class DataType implements Serializable {
   /**
    * Represent array data type.
    */
-  public static final class Array extends hydra.langs.parquet.delta.DataType implements Serializable {
-    public final hydra.langs.parquet.delta.ArrayType value;
+  public static final class Array extends hydra.ext.delta.parquet.DataType implements Serializable {
+    public final hydra.ext.delta.parquet.ArrayType value;
     
-    public Array (hydra.langs.parquet.delta.ArrayType value) {
+    public Array (hydra.ext.delta.parquet.ArrayType value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -95,10 +95,10 @@ public abstract class DataType implements Serializable {
   /**
    * Base class for all primitive types DataType.
    */
-  public static final class Base extends hydra.langs.parquet.delta.DataType implements Serializable {
-    public final hydra.langs.parquet.delta.BasePrimitiveType value;
+  public static final class Base extends hydra.ext.delta.parquet.DataType implements Serializable {
+    public final hydra.ext.delta.parquet.BasePrimitiveType value;
     
-    public Base (hydra.langs.parquet.delta.BasePrimitiveType value) {
+    public Base (hydra.ext.delta.parquet.BasePrimitiveType value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -126,10 +126,10 @@ public abstract class DataType implements Serializable {
   /**
    * A decimal data type.
    */
-  public static final class Decimal extends hydra.langs.parquet.delta.DataType implements Serializable {
-    public final hydra.langs.parquet.delta.DecimalType value;
+  public static final class Decimal extends hydra.ext.delta.parquet.DataType implements Serializable {
+    public final hydra.ext.delta.parquet.DecimalType value;
     
-    public Decimal (hydra.langs.parquet.delta.DecimalType value) {
+    public Decimal (hydra.ext.delta.parquet.DecimalType value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -157,10 +157,10 @@ public abstract class DataType implements Serializable {
   /**
    * Data type representing a map type.
    */
-  public static final class Map extends hydra.langs.parquet.delta.DataType implements Serializable {
-    public final hydra.langs.parquet.delta.MapType value;
+  public static final class Map extends hydra.ext.delta.parquet.DataType implements Serializable {
+    public final hydra.ext.delta.parquet.MapType value;
     
-    public Map (hydra.langs.parquet.delta.MapType value) {
+    public Map (hydra.ext.delta.parquet.MapType value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -188,10 +188,10 @@ public abstract class DataType implements Serializable {
   /**
    * Struct type which contains one or more columns.
    */
-  public static final class Struct extends hydra.langs.parquet.delta.DataType implements Serializable {
-    public final hydra.langs.parquet.delta.StructType value;
+  public static final class Struct extends hydra.ext.delta.parquet.DataType implements Serializable {
+    public final hydra.ext.delta.parquet.StructType value;
     
-    public Struct (hydra.langs.parquet.delta.StructType value) {
+    public Struct (hydra.ext.delta.parquet.StructType value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

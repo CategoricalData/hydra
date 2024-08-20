@@ -1,6 +1,6 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.langs.parquet.delta;
+package hydra.ext.delta.parquet;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Data type representing a map type.
  */
 public class MapType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/delta.MapType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/delta/parquet.MapType");
   
   public static final hydra.core.Name FIELD_NAME_KEY_TYPE = new hydra.core.Name("keyType");
   
@@ -16,13 +16,13 @@ public class MapType implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_VALUE_CONTAINS_NULL = new hydra.core.Name("valueContainsNull");
   
-  public final hydra.langs.parquet.delta.DataType keyType;
+  public final hydra.ext.delta.parquet.DataType keyType;
   
-  public final hydra.langs.parquet.delta.DataType valueType;
+  public final hydra.ext.delta.parquet.DataType valueType;
   
   public final Boolean valueContainsNull;
   
-  public MapType (hydra.langs.parquet.delta.DataType keyType, hydra.langs.parquet.delta.DataType valueType, Boolean valueContainsNull) {
+  public MapType (hydra.ext.delta.parquet.DataType keyType, hydra.ext.delta.parquet.DataType valueType, Boolean valueContainsNull) {
     java.util.Objects.requireNonNull((keyType));
     java.util.Objects.requireNonNull((valueType));
     java.util.Objects.requireNonNull((valueContainsNull));
@@ -45,12 +45,12 @@ public class MapType implements Serializable {
     return 2 * keyType.hashCode() + 3 * valueType.hashCode() + 5 * valueContainsNull.hashCode();
   }
   
-  public MapType withKeyType(hydra.langs.parquet.delta.DataType keyType) {
+  public MapType withKeyType(hydra.ext.delta.parquet.DataType keyType) {
     java.util.Objects.requireNonNull((keyType));
     return new MapType(keyType, valueType, valueContainsNull);
   }
   
-  public MapType withValueType(hydra.langs.parquet.delta.DataType valueType) {
+  public MapType withValueType(hydra.ext.delta.parquet.DataType valueType) {
     java.util.Objects.requireNonNull((valueType));
     return new MapType(keyType, valueType, valueContainsNull);
   }

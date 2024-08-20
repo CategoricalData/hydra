@@ -54,8 +54,16 @@ public abstract class JsonEncoding {
     return variant(key, unit());
   }
 
+  protected static Value unitVariant(Name key) {
+    return variant(key.value, unit());
+  }
+
   protected static Value variant(String key, Value value) {
     return new ObjectBuilder().put(key, value).build();
+  }
+
+  protected static Value variant(Name key, Value value) {
+    return new ObjectBuilder().put(key.value, value).build();
   }
 
   public static class ObjectBuilder {
