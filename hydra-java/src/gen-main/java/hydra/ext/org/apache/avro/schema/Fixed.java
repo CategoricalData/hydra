@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.avro.schema;
+package hydra.ext.org.apache.avro.schema;
 
 import java.io.Serializable;
 
 public class Fixed implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/avro/schema.Fixed");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/avro/schema.Fixed");
   
   public static final hydra.core.Name FIELD_NAME_SIZE = new hydra.core.Name("size");
   

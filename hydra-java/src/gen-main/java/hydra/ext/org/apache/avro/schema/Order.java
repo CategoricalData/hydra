@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.avro.schema;
+package hydra.ext.org.apache.avro.schema;
 
 import java.io.Serializable;
 
 public abstract class Order implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/avro/schema.Order");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/avro/schema.Order");
   
   public static final hydra.core.Name FIELD_NAME_ASCENDING = new hydra.core.Name("ascending");
   
@@ -45,7 +45,7 @@ public abstract class Order implements Serializable {
     }
   }
   
-  public static final class Ascending extends hydra.ext.avro.schema.Order implements Serializable {
+  public static final class Ascending extends hydra.ext.org.apache.avro.schema.Order implements Serializable {
     public Ascending () {
     
     }
@@ -70,7 +70,7 @@ public abstract class Order implements Serializable {
     }
   }
   
-  public static final class Descending extends hydra.ext.avro.schema.Order implements Serializable {
+  public static final class Descending extends hydra.ext.org.apache.avro.schema.Order implements Serializable {
     public Descending () {
     
     }
@@ -95,7 +95,7 @@ public abstract class Order implements Serializable {
     }
   }
   
-  public static final class Ignore extends hydra.ext.avro.schema.Order implements Serializable {
+  public static final class Ignore extends hydra.ext.org.apache.avro.schema.Order implements Serializable {
     public Ignore () {
     
     }

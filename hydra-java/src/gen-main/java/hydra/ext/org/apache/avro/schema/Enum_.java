@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.avro.schema;
+package hydra.ext.org.apache.avro.schema;
 
 import java.io.Serializable;
 
 public class Enum_ implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/avro/schema.Enum");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/avro/schema.Enum");
   
   public static final hydra.core.Name FIELD_NAME_SYMBOLS = new hydra.core.Name("symbols");
   
@@ -17,7 +17,7 @@ public class Enum_ implements Serializable {
   public final java.util.List<String> symbols;
   
   /**
-   * A default value for this enumeration, used during resolution when the reader encounters a symbol from the writer that isn’t defined in the reader’s schema. The value provided here must be a JSON string that’s a member of the symbols array
+   * A default value for this enumeration, used during resolution when the reader encounters a symbol from the writer that isn't defined in the reader's schema. The value provided here must be a JSON string that's a member of the symbols array
    */
   public final hydra.util.Opt<String> default_;
   

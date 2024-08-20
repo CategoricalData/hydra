@@ -1,6 +1,6 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.yaml.model;
+package hydra.ext.org.yaml.model;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A YAML node (value)
  */
 public abstract class Node implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/yaml/model.Node");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/yaml/model.Node");
   
   public static final hydra.core.Name FIELD_NAME_MAPPING = new hydra.core.Name("mapping");
   
@@ -48,10 +48,10 @@ public abstract class Node implements Serializable {
     }
   }
   
-  public static final class Mapping extends hydra.ext.yaml.model.Node implements Serializable {
-    public final java.util.Map<hydra.ext.yaml.model.Node, hydra.ext.yaml.model.Node> value;
+  public static final class Mapping extends hydra.ext.org.yaml.model.Node implements Serializable {
+    public final java.util.Map<hydra.ext.org.yaml.model.Node, hydra.ext.org.yaml.model.Node> value;
     
-    public Mapping (java.util.Map<hydra.ext.yaml.model.Node, hydra.ext.yaml.model.Node> value) {
+    public Mapping (java.util.Map<hydra.ext.org.yaml.model.Node, hydra.ext.org.yaml.model.Node> value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -76,10 +76,10 @@ public abstract class Node implements Serializable {
     }
   }
   
-  public static final class Scalar extends hydra.ext.yaml.model.Node implements Serializable {
-    public final hydra.ext.yaml.model.Scalar value;
+  public static final class Scalar extends hydra.ext.org.yaml.model.Node implements Serializable {
+    public final hydra.ext.org.yaml.model.Scalar value;
     
-    public Scalar (hydra.ext.yaml.model.Scalar value) {
+    public Scalar (hydra.ext.org.yaml.model.Scalar value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -104,10 +104,10 @@ public abstract class Node implements Serializable {
     }
   }
   
-  public static final class Sequence extends hydra.ext.yaml.model.Node implements Serializable {
-    public final java.util.List<hydra.ext.yaml.model.Node> value;
+  public static final class Sequence extends hydra.ext.org.yaml.model.Node implements Serializable {
+    public final java.util.List<hydra.ext.org.yaml.model.Node> value;
     
-    public Sequence (java.util.List<hydra.ext.yaml.model.Node> value) {
+    public Sequence (java.util.List<hydra.ext.org.yaml.model.Node> value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

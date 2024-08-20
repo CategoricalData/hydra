@@ -372,7 +372,7 @@ cypherLibraries = [
       "Returns a STRING containing the specified number (INTEGER) of leftmost characters in the given STRING."],
     CypherFunction "lower" Nothing [CypherFunctionForm
       "lower(input :: STRING) :: STRING"
-      "Returns the given STRING in lowercase. This function is an alias to the toLower() function, and it was introduced as part of Cypher’s GQL conformance. Introduced in 5.21."],
+      "Returns the given STRING in lowercase. This function is an alias to the toLower() function, and it was introduced as part of Cypher's GQL conformance. Introduced in 5.21."],
     CypherFunction "ltrim" Nothing [
       CypherFunctionForm
         "ltrim(input :: STRING) :: STRING"
@@ -438,7 +438,7 @@ cypherLibraries = [
         "Returns the given STRING with the leading and/or trailing trimCharacterString character removed. Introduced in 5.20."],
     CypherFunction "upper" Nothing [CypherFunctionForm
       "upper(input :: STRING) :: STRING"
-      "Returns the given STRING in uppercase. This function is an alias to the toUpper() function, and it was introduced as part of Cypher’s GQL conformance. Introduced in 5.21."]],
+      "Returns the given STRING in uppercase. This function is an alias to the toUpper() function, and it was introduced as part of Cypher's GQL conformance. Introduced in 5.21."]],
 
   CypherLibrary "TemporalDuration" "temporal duration functions" [
     CypherFunction "duration" Nothing [CypherFunctionForm

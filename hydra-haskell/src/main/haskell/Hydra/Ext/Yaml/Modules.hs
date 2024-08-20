@@ -4,7 +4,7 @@ import Hydra.Kernel
 import Hydra.Adapters
 import Hydra.Ext.Yaml.Serde
 import Hydra.Ext.Yaml.Language
-import qualified Hydra.Ext.Yaml.Model as YM
+import qualified Hydra.Ext.Org.Yaml.Model as YM
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Control.Monad as CM

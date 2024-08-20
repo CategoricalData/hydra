@@ -55,7 +55,7 @@ public class StringFunctionFeatures implements Serializable {
   public final Boolean left;
   
   /**
-   * The lower() function. Returns the given STRING in lowercase. This function is an alias to the toLower() function, and it was introduced as part of Cypher’s GQL conformance. Introduced in 5.21.
+   * The lower() function. Returns the given STRING in lowercase. This function is an alias to the toLower() function, and it was introduced as part of Cypher's GQL conformance. Introduced in 5.21.
    */
   public final Boolean lower;
   
@@ -125,7 +125,7 @@ public class StringFunctionFeatures implements Serializable {
   public final Boolean trim;
   
   /**
-   * The upper() function. Returns the given STRING in uppercase. This function is an alias to the toUpper() function, and it was introduced as part of Cypher’s GQL conformance. Introduced in 5.21.
+   * The upper() function. Returns the given STRING in uppercase. This function is an alias to the toUpper() function, and it was introduced as part of Cypher's GQL conformance. Introduced in 5.21.
    */
   public final Boolean upper;
   

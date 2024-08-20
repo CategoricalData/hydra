@@ -32,8 +32,8 @@ avroSchemaModule = Module ns elements [jsonModelModule] tier0Modules $
             list string,
           "default">:
             doc ("A default value for this enumeration, used during resolution when the reader encounters " ++
-              "a symbol from the writer that isn’t defined in the reader’s schema. " ++
-              "The value provided here must be a JSON string that’s a member of the symbols array") $
+              "a symbol from the writer that isn't defined in the reader's schema. " ++
+              "The value provided here must be a JSON string that's a member of the symbols array") $
             optional string],
 
       def "Field" $
