@@ -3,7 +3,7 @@ module Hydra.Ext.Graphql.Serde (exprDocument) where
 import Hydra.Tools.Serialization
 import Hydra.Tools.Formatting
 import qualified Hydra.Ast as CT
-import qualified Hydra.Ext.Graphql.Syntax as G
+import qualified Hydra.Ext.Org.Graphql.Syntax as G
 
 import qualified Data.List as L
 import qualified Data.Maybe as Y
@@ -36,11 +36,11 @@ exprEnumTypeDefinition def = withDescription (G.enumTypeDefinitionDescription de
 
 exprEnumValue :: G.EnumValue -> CT.Expr
 exprEnumValue = exprName . G.unEnumValue
-  
+
 exprEnumValueDefinition :: G.EnumValueDefinition -> CT.Expr
 exprEnumValueDefinition def = withDescription (G.enumValueDefinitionDescription def) $
   exprEnumValue $ G.enumValueDefinitionEnumValue def
-  
+
 exprFieldDefinition :: G.FieldDefinition -> CT.Expr
 exprFieldDefinition def = withDescription (G.fieldDefinitionDescription def) $
     spaceSep [namePart, typePart]
