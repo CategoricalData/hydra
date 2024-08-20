@@ -3,7 +3,7 @@ module Hydra.Ext.Yaml.Serde where
 import Hydra.Kernel
 import Hydra.Ext.Yaml.Coder
 import Hydra.Tools.Bytestrings
-import qualified Hydra.Ext.Yaml.Model as YM
+import qualified Hydra.Ext.Org.Yaml.Model as YM
 
 import qualified Data.ByteString.Lazy as BS
 import qualified Control.Monad as CM

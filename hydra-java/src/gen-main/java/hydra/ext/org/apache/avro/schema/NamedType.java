@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.avro.schema;
+package hydra.ext.org.apache.avro.schema;
 
 import java.io.Serializable;
 
 public abstract class NamedType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/avro/schema.NamedType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/avro/schema.NamedType");
   
   public static final hydra.core.Name FIELD_NAME_ENUM = new hydra.core.Name("enum");
   
@@ -45,10 +45,10 @@ public abstract class NamedType implements Serializable {
     }
   }
   
-  public static final class Enum_ extends hydra.ext.avro.schema.NamedType implements Serializable {
-    public final hydra.ext.avro.schema.Enum_ value;
+  public static final class Enum_ extends hydra.ext.org.apache.avro.schema.NamedType implements Serializable {
+    public final hydra.ext.org.apache.avro.schema.Enum_ value;
     
-    public Enum_ (hydra.ext.avro.schema.Enum_ value) {
+    public Enum_ (hydra.ext.org.apache.avro.schema.Enum_ value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -73,10 +73,10 @@ public abstract class NamedType implements Serializable {
     }
   }
   
-  public static final class Fixed extends hydra.ext.avro.schema.NamedType implements Serializable {
-    public final hydra.ext.avro.schema.Fixed value;
+  public static final class Fixed extends hydra.ext.org.apache.avro.schema.NamedType implements Serializable {
+    public final hydra.ext.org.apache.avro.schema.Fixed value;
     
-    public Fixed (hydra.ext.avro.schema.Fixed value) {
+    public Fixed (hydra.ext.org.apache.avro.schema.Fixed value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -101,10 +101,10 @@ public abstract class NamedType implements Serializable {
     }
   }
   
-  public static final class Record extends hydra.ext.avro.schema.NamedType implements Serializable {
-    public final hydra.ext.avro.schema.Record value;
+  public static final class Record extends hydra.ext.org.apache.avro.schema.NamedType implements Serializable {
+    public final hydra.ext.org.apache.avro.schema.Record value;
     
-    public Record (hydra.ext.avro.schema.Record value) {
+    public Record (hydra.ext.org.apache.avro.schema.Record value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

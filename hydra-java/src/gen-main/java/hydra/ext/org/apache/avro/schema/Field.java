@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.avro.schema;
+package hydra.ext.org.apache.avro.schema;
 
 import java.io.Serializable;
 
 public class Field implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/avro/schema.Field");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/avro/schema.Field");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   
@@ -34,7 +34,7 @@ public class Field implements Serializable {
   /**
    * a schema
    */
-  public final hydra.ext.avro.schema.Schema type;
+  public final hydra.ext.org.apache.avro.schema.Schema type;
   
   /**
    * default value for this field, only used when reading instances that lack the field for schema evolution purposes
@@ -44,7 +44,7 @@ public class Field implements Serializable {
   /**
    * specifies how this field impacts sort ordering of this record
    */
-  public final hydra.util.Opt<hydra.ext.avro.schema.Order> order;
+  public final hydra.util.Opt<hydra.ext.org.apache.avro.schema.Order> order;
   
   /**
    * a JSON array of strings, providing alternate names for this field
@@ -56,7 +56,7 @@ public class Field implements Serializable {
    */
   public final java.util.Map<String, hydra.json.Value> annotations;
   
-  public Field (String name, hydra.util.Opt<String> doc, hydra.ext.avro.schema.Schema type, hydra.util.Opt<hydra.json.Value> default_, hydra.util.Opt<hydra.ext.avro.schema.Order> order, hydra.util.Opt<java.util.List<String>> aliases, java.util.Map<String, hydra.json.Value> annotations) {
+  public Field (String name, hydra.util.Opt<String> doc, hydra.ext.org.apache.avro.schema.Schema type, hydra.util.Opt<hydra.json.Value> default_, hydra.util.Opt<hydra.ext.org.apache.avro.schema.Order> order, hydra.util.Opt<java.util.List<String>> aliases, java.util.Map<String, hydra.json.Value> annotations) {
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((doc));
     java.util.Objects.requireNonNull((type));
@@ -97,7 +97,7 @@ public class Field implements Serializable {
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
-  public Field withType(hydra.ext.avro.schema.Schema type) {
+  public Field withType(hydra.ext.org.apache.avro.schema.Schema type) {
     java.util.Objects.requireNonNull((type));
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
@@ -107,7 +107,7 @@ public class Field implements Serializable {
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
-  public Field withOrder(hydra.util.Opt<hydra.ext.avro.schema.Order> order) {
+  public Field withOrder(hydra.util.Opt<hydra.ext.org.apache.avro.schema.Order> order) {
     java.util.Objects.requireNonNull((order));
     return new Field(name, doc, type, default_, order, aliases, annotations);
   }

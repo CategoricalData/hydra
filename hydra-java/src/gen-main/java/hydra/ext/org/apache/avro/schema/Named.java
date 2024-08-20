@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.avro.schema;
+package hydra.ext.org.apache.avro.schema;
 
 import java.io.Serializable;
 
 public class Named implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/avro/schema.Named");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/avro/schema.Named");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   
@@ -39,14 +39,14 @@ public class Named implements Serializable {
    */
   public final hydra.util.Opt<String> doc;
   
-  public final hydra.ext.avro.schema.NamedType type;
+  public final hydra.ext.org.apache.avro.schema.NamedType type;
   
   /**
    * Any additional key/value pairs attached to the type
    */
   public final java.util.Map<String, hydra.json.Value> annotations;
   
-  public Named (String name, hydra.util.Opt<String> namespace, hydra.util.Opt<java.util.List<String>> aliases, hydra.util.Opt<String> doc, hydra.ext.avro.schema.NamedType type, java.util.Map<String, hydra.json.Value> annotations) {
+  public Named (String name, hydra.util.Opt<String> namespace, hydra.util.Opt<java.util.List<String>> aliases, hydra.util.Opt<String> doc, hydra.ext.org.apache.avro.schema.NamedType type, java.util.Map<String, hydra.json.Value> annotations) {
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((namespace));
     java.util.Objects.requireNonNull((aliases));
@@ -95,7 +95,7 @@ public class Named implements Serializable {
     return new Named(name, namespace, aliases, doc, type, annotations);
   }
   
-  public Named withType(hydra.ext.avro.schema.NamedType type) {
+  public Named withType(hydra.ext.org.apache.avro.schema.NamedType type) {
     java.util.Objects.requireNonNull((type));
     return new Named(name, namespace, aliases, doc, type, annotations);
   }

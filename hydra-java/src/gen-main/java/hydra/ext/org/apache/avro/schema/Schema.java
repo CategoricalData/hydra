@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.avro.schema;
+package hydra.ext.org.apache.avro.schema;
 
 import java.io.Serializable;
 
 public abstract class Schema implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/avro/schema.Schema");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/avro/schema.Schema");
   
   public static final hydra.core.Name FIELD_NAME_ARRAY = new hydra.core.Name("array");
   
@@ -69,10 +69,10 @@ public abstract class Schema implements Serializable {
     }
   }
   
-  public static final class Array extends hydra.ext.avro.schema.Schema implements Serializable {
-    public final hydra.ext.avro.schema.Array value;
+  public static final class Array extends hydra.ext.org.apache.avro.schema.Schema implements Serializable {
+    public final hydra.ext.org.apache.avro.schema.Array value;
     
-    public Array (hydra.ext.avro.schema.Array value) {
+    public Array (hydra.ext.org.apache.avro.schema.Array value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -97,10 +97,10 @@ public abstract class Schema implements Serializable {
     }
   }
   
-  public static final class Map extends hydra.ext.avro.schema.Schema implements Serializable {
-    public final hydra.ext.avro.schema.Map value;
+  public static final class Map extends hydra.ext.org.apache.avro.schema.Schema implements Serializable {
+    public final hydra.ext.org.apache.avro.schema.Map value;
     
-    public Map (hydra.ext.avro.schema.Map value) {
+    public Map (hydra.ext.org.apache.avro.schema.Map value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -125,10 +125,10 @@ public abstract class Schema implements Serializable {
     }
   }
   
-  public static final class Named extends hydra.ext.avro.schema.Schema implements Serializable {
-    public final hydra.ext.avro.schema.Named value;
+  public static final class Named extends hydra.ext.org.apache.avro.schema.Schema implements Serializable {
+    public final hydra.ext.org.apache.avro.schema.Named value;
     
-    public Named (hydra.ext.avro.schema.Named value) {
+    public Named (hydra.ext.org.apache.avro.schema.Named value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -153,10 +153,10 @@ public abstract class Schema implements Serializable {
     }
   }
   
-  public static final class Primitive extends hydra.ext.avro.schema.Schema implements Serializable {
-    public final hydra.ext.avro.schema.Primitive value;
+  public static final class Primitive extends hydra.ext.org.apache.avro.schema.Schema implements Serializable {
+    public final hydra.ext.org.apache.avro.schema.Primitive value;
     
-    public Primitive (hydra.ext.avro.schema.Primitive value) {
+    public Primitive (hydra.ext.org.apache.avro.schema.Primitive value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -184,7 +184,7 @@ public abstract class Schema implements Serializable {
   /**
    * A reference by name to a previously defined type
    */
-  public static final class Reference extends hydra.ext.avro.schema.Schema implements Serializable {
+  public static final class Reference extends hydra.ext.org.apache.avro.schema.Schema implements Serializable {
     public final String value;
     
     public Reference (String value) {
@@ -212,10 +212,10 @@ public abstract class Schema implements Serializable {
     }
   }
   
-  public static final class Union extends hydra.ext.avro.schema.Schema implements Serializable {
-    public final hydra.ext.avro.schema.Union value;
+  public static final class Union extends hydra.ext.org.apache.avro.schema.Schema implements Serializable {
+    public final hydra.ext.org.apache.avro.schema.Union value;
     
-    public Union (hydra.ext.avro.schema.Union value) {
+    public Union (hydra.ext.org.apache.avro.schema.Union value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

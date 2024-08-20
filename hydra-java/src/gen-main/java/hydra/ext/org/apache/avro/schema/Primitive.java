@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.avro.schema;
+package hydra.ext.org.apache.avro.schema;
 
 import java.io.Serializable;
 
 public abstract class Primitive implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/avro/schema.Primitive");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/avro/schema.Primitive");
   
   public static final hydra.core.Name FIELD_NAME_NULL = new hydra.core.Name("null");
   
@@ -88,7 +88,7 @@ public abstract class Primitive implements Serializable {
   /**
    * no value
    */
-  public static final class Null extends hydra.ext.avro.schema.Primitive implements Serializable {
+  public static final class Null extends hydra.ext.org.apache.avro.schema.Primitive implements Serializable {
     public Null () {
     
     }
@@ -116,7 +116,7 @@ public abstract class Primitive implements Serializable {
   /**
    * A binary value
    */
-  public static final class Boolean_ extends hydra.ext.avro.schema.Primitive implements Serializable {
+  public static final class Boolean_ extends hydra.ext.org.apache.avro.schema.Primitive implements Serializable {
     public Boolean_ () {
     
     }
@@ -144,7 +144,7 @@ public abstract class Primitive implements Serializable {
   /**
    * 32-bit signed integer
    */
-  public static final class Int extends hydra.ext.avro.schema.Primitive implements Serializable {
+  public static final class Int extends hydra.ext.org.apache.avro.schema.Primitive implements Serializable {
     public Int () {
     
     }
@@ -172,7 +172,7 @@ public abstract class Primitive implements Serializable {
   /**
    * 64-bit signed integer
    */
-  public static final class Long_ extends hydra.ext.avro.schema.Primitive implements Serializable {
+  public static final class Long_ extends hydra.ext.org.apache.avro.schema.Primitive implements Serializable {
     public Long_ () {
     
     }
@@ -200,7 +200,7 @@ public abstract class Primitive implements Serializable {
   /**
    * single precision (32-bit) IEEE 754 floating-point number
    */
-  public static final class Float_ extends hydra.ext.avro.schema.Primitive implements Serializable {
+  public static final class Float_ extends hydra.ext.org.apache.avro.schema.Primitive implements Serializable {
     public Float_ () {
     
     }
@@ -228,7 +228,7 @@ public abstract class Primitive implements Serializable {
   /**
    * double precision (64-bit) IEEE 754 floating-point number
    */
-  public static final class Double_ extends hydra.ext.avro.schema.Primitive implements Serializable {
+  public static final class Double_ extends hydra.ext.org.apache.avro.schema.Primitive implements Serializable {
     public Double_ () {
     
     }
@@ -256,7 +256,7 @@ public abstract class Primitive implements Serializable {
   /**
    * sequence of 8-bit unsigned bytes
    */
-  public static final class Bytes extends hydra.ext.avro.schema.Primitive implements Serializable {
+  public static final class Bytes extends hydra.ext.org.apache.avro.schema.Primitive implements Serializable {
     public Bytes () {
     
     }
@@ -284,7 +284,7 @@ public abstract class Primitive implements Serializable {
   /**
    * unicode character sequence
    */
-  public static final class String_ extends hydra.ext.avro.schema.Primitive implements Serializable {
+  public static final class String_ extends hydra.ext.org.apache.avro.schema.Primitive implements Serializable {
     public String_ () {
     
     }

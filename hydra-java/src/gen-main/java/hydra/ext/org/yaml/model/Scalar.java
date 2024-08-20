@@ -1,6 +1,6 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.yaml.model;
+package hydra.ext.org.yaml.model;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here
  */
 public abstract class Scalar implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/yaml/model.Scalar");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/yaml/model.Scalar");
   
   public static final hydra.core.Name FIELD_NAME_BOOL = new hydra.core.Name("bool");
   
@@ -67,7 +67,7 @@ public abstract class Scalar implements Serializable {
   /**
    * Represents a true/false value
    */
-  public static final class Bool extends hydra.ext.yaml.model.Scalar implements Serializable {
+  public static final class Bool extends hydra.ext.org.yaml.model.Scalar implements Serializable {
     public final Boolean value;
     
     public Bool (Boolean value) {
@@ -98,7 +98,7 @@ public abstract class Scalar implements Serializable {
   /**
    * Represents an approximation to real numbers
    */
-  public static final class Float_ extends hydra.ext.yaml.model.Scalar implements Serializable {
+  public static final class Float_ extends hydra.ext.org.yaml.model.Scalar implements Serializable {
     public final Double value;
     
     public Float_ (Double value) {
@@ -129,7 +129,7 @@ public abstract class Scalar implements Serializable {
   /**
    * Represents arbitrary sized finite mathematical integers
    */
-  public static final class Int extends hydra.ext.yaml.model.Scalar implements Serializable {
+  public static final class Int extends hydra.ext.org.yaml.model.Scalar implements Serializable {
     public final java.math.BigInteger value;
     
     public Int (java.math.BigInteger value) {
@@ -160,7 +160,7 @@ public abstract class Scalar implements Serializable {
   /**
    * Represents the lack of a value
    */
-  public static final class Null extends hydra.ext.yaml.model.Scalar implements Serializable {
+  public static final class Null extends hydra.ext.org.yaml.model.Scalar implements Serializable {
     public Null () {
     
     }
@@ -188,7 +188,7 @@ public abstract class Scalar implements Serializable {
   /**
    * A string value
    */
-  public static final class Str extends hydra.ext.yaml.model.Scalar implements Serializable {
+  public static final class Str extends hydra.ext.org.yaml.model.Scalar implements Serializable {
     public final String value;
     
     public Str (String value) {

@@ -1,17 +1,17 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.avro.schema;
+package hydra.ext.org.apache.avro.schema;
 
 import java.io.Serializable;
 
 public class Map implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/avro/schema.Map");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/avro/schema.Map");
   
   public static final hydra.core.Name FIELD_NAME_VALUES = new hydra.core.Name("values");
   
-  public final hydra.ext.avro.schema.Schema values;
+  public final hydra.ext.org.apache.avro.schema.Schema values;
   
-  public Map (hydra.ext.avro.schema.Schema values) {
+  public Map (hydra.ext.org.apache.avro.schema.Schema values) {
     java.util.Objects.requireNonNull((values));
     this.values = values;
   }

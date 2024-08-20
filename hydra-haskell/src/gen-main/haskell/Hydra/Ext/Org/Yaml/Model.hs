@@ -4,7 +4,7 @@
 -- | including directives, comments, anchors, style, formatting, and aliases, are not supported by this model.
 -- | In addition, tags are omitted from this model, and non-standard scalars are unsupported.
 
-module Hydra.Ext.Yaml.Model where
+module Hydra.Ext.Org.Yaml.Model where
 
 import qualified Hydra.Core as Core
 import Data.Int
@@ -19,7 +19,7 @@ data Node =
   NodeSequence [Node]
   deriving (Eq, Ord, Read, Show)
 
-_Node = (Core.Name "hydra/ext/yaml/model.Node")
+_Node = (Core.Name "hydra/ext/org/yaml/model.Node")
 
 _Node_mapping = (Core.Name "mapping")
 
@@ -41,7 +41,7 @@ data Scalar =
   ScalarStr String
   deriving (Eq, Ord, Read, Show)
 
-_Scalar = (Core.Name "hydra/ext/yaml/model.Scalar")
+_Scalar = (Core.Name "hydra/ext/org/yaml/model.Scalar")
 
 _Scalar_bool = (Core.Name "bool")
 
