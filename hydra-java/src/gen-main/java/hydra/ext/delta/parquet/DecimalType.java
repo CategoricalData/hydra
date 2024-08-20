@@ -1,6 +1,6 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.langs.parquet.delta;
+package hydra.ext.delta.parquet;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A decimal data type with fixed precision (the maximum number of digits) and scale (the number of digits on right side of dot). The precision can be up to 38, scale can also be up to 38 (less or equal to precision).
  */
 public class DecimalType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/delta.DecimalType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/delta/parquet.DecimalType");
   
   public static final hydra.core.Name FIELD_NAME_PRECISION = new hydra.core.Name("precision");
   

@@ -1,6 +1,6 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.langs.parquet.delta;
+package hydra.ext.delta.parquet;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Represents a subfield of StructType with additional properties and metadata.
  */
 public class StructField implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/delta.StructField");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/delta/parquet.StructField");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   
@@ -18,11 +18,11 @@ public class StructField implements Serializable {
   
   public final String name;
   
-  public final hydra.langs.parquet.delta.DataType dataType;
+  public final hydra.ext.delta.parquet.DataType dataType;
   
   public final Boolean nullable;
   
-  public StructField (String name, hydra.langs.parquet.delta.DataType dataType, Boolean nullable) {
+  public StructField (String name, hydra.ext.delta.parquet.DataType dataType, Boolean nullable) {
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((dataType));
     java.util.Objects.requireNonNull((nullable));
@@ -50,7 +50,7 @@ public class StructField implements Serializable {
     return new StructField(name, dataType, nullable);
   }
   
-  public StructField withDataType(hydra.langs.parquet.delta.DataType dataType) {
+  public StructField withDataType(hydra.ext.delta.parquet.DataType dataType) {
     java.util.Objects.requireNonNull((dataType));
     return new StructField(name, dataType, nullable);
   }

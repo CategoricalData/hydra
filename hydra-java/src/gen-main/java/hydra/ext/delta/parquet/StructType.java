@@ -1,6 +1,6 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.langs.parquet.delta;
+package hydra.ext.delta.parquet;
 
 import java.io.Serializable;
 
@@ -8,13 +8,13 @@ import java.io.Serializable;
  * Struct type which contains one or more columns.
  */
 public class StructType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/langs/parquet/delta.StructType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/delta/parquet.StructType");
   
   public static final hydra.core.Name FIELD_NAME_FIELDS = new hydra.core.Name("fields");
   
-  public final java.util.List<hydra.langs.parquet.delta.StructField> fields;
+  public final java.util.List<hydra.ext.delta.parquet.StructField> fields;
   
-  public StructType (java.util.List<hydra.langs.parquet.delta.StructField> fields) {
+  public StructType (java.util.List<hydra.ext.delta.parquet.StructField> fields) {
     java.util.Objects.requireNonNull((fields));
     this.fields = fields;
   }

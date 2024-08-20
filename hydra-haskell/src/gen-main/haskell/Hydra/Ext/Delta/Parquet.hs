@@ -1,6 +1,6 @@
 -- | A partial Delta Parquet model, based on DataType and its subclasses as specified in the 3.0.0 Java API: https://docs.delta.io/3.0.0/api/java/kernel/io/delta/kernel/types/DataType.html
 
-module Hydra.Langs.Parquet.Delta where
+module Hydra.Ext.Delta.Parquet where
 
 import qualified Hydra.Core as Core
 import Data.Int
@@ -15,7 +15,7 @@ data ArrayType =
     arrayTypeContainsNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_ArrayType = (Core.Name "hydra/langs/parquet/delta.ArrayType")
+_ArrayType = (Core.Name "hydra/ext/delta/parquet.ArrayType")
 
 _ArrayType_elementType = (Core.Name "elementType")
 
@@ -47,7 +47,7 @@ data BasePrimitiveType =
   BasePrimitiveTypeTimestamp 
   deriving (Eq, Ord, Read, Show)
 
-_BasePrimitiveType = (Core.Name "hydra/langs/parquet/delta.BasePrimitiveType")
+_BasePrimitiveType = (Core.Name "hydra/ext/delta/parquet.BasePrimitiveType")
 
 _BasePrimitiveType_binary = (Core.Name "binary")
 
@@ -74,6 +74,7 @@ _BasePrimitiveType_timestamp = (Core.Name "timestamp")
 data DataType = 
   -- | Represent array data type.
   DataTypeArray ArrayType |
+  -- | Base class for all primitive types DataType.
   DataTypeBase BasePrimitiveType |
   -- | A decimal data type.
   DataTypeDecimal DecimalType |
@@ -83,7 +84,7 @@ data DataType =
   DataTypeStruct StructType
   deriving (Eq, Ord, Read, Show)
 
-_DataType = (Core.Name "hydra/langs/parquet/delta.DataType")
+_DataType = (Core.Name "hydra/ext/delta/parquet.DataType")
 
 _DataType_array = (Core.Name "array")
 
@@ -102,7 +103,7 @@ data DecimalType =
     decimalTypeScale :: Int}
   deriving (Eq, Ord, Read, Show)
 
-_DecimalType = (Core.Name "hydra/langs/parquet/delta.DecimalType")
+_DecimalType = (Core.Name "hydra/ext/delta/parquet.DecimalType")
 
 _DecimalType_precision = (Core.Name "precision")
 
@@ -116,7 +117,7 @@ data MapType =
     mapTypeValueContainsNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_MapType = (Core.Name "hydra/langs/parquet/delta.MapType")
+_MapType = (Core.Name "hydra/ext/delta/parquet.MapType")
 
 _MapType_keyType = (Core.Name "keyType")
 
@@ -132,7 +133,7 @@ data StructField =
     structFieldNullable :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_StructField = (Core.Name "hydra/langs/parquet/delta.StructField")
+_StructField = (Core.Name "hydra/ext/delta/parquet.StructField")
 
 _StructField_name = (Core.Name "name")
 
@@ -146,6 +147,6 @@ data StructType =
     structTypeFields :: [StructField]}
   deriving (Eq, Ord, Read, Show)
 
-_StructType = (Core.Name "hydra/langs/parquet/delta.StructType")
+_StructType = (Core.Name "hydra/ext/delta/parquet.StructType")
 
 _StructType_fields = (Core.Name "fields")
