@@ -11,7 +11,7 @@ osvSchemaModule :: Module
 osvSchemaModule = Module ns elements [] [] $
     Just "See https://ossf.github.io/osv-schema"
   where
-    ns = Namespace "dev/osv/schema"
+    ns = Namespace "hydra/ext/dev/osv/schema"
     def = datatype ns
     osv = typeref ns
 

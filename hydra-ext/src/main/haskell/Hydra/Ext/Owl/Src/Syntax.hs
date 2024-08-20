@@ -24,7 +24,7 @@ owlSyntaxModule :: Module
 owlSyntaxModule = Module ns elements [hydraCoreModule, rdfSyntaxModule, xmlSchemaModule] tier0Modules $
     Just "An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax"
   where
-    ns = Namespace "hydra/ext/owl/syntax"
+    ns = Namespace "hydra/ext/org/w3/owl/syntax"
     def = datatype ns
 
     owl = typeref ns

@@ -17,14 +17,14 @@ dotModule = Module ns elements [] [hydraCoreModule] $
     Just ("A model from the Graphviz DOT graph description language."
       ++ " Based on the grammar at https://graphviz.org/doc/info/lang.html")
   where
-    ns = Namespace "hydra/ext/graphviz/dot"
+    ns = Namespace "hydra/ext/org/graphviz/dot"
     def = datatype ns
     dot = typeref ns
 
     elements = [
 
       def "Id" string,
-      
+
 --graph	:	[ strict ] (graph | digraph) [ ID ] '{' stmt_list '}'
       def "Graph" $
         record [
@@ -60,7 +60,7 @@ dotModule = Module ns elements [] [hydraCoreModule] $
           "attributes">: nonemptyList $ list $ dot "EqualityPair"],
       def "AttrType" $
         enum ["graph", "node", "edge"],
-        
+
 --edge_stmt	:	(node_id | subgraph) edgeRHS [ attr_list ]
 --edgeRHS	:	edgeop (node_id | subgraph) [ edgeRHS ]
       def "EdgeStmt" $

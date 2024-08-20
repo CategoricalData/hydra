@@ -15,7 +15,7 @@ python3Module :: Module
 python3Module = grammarToModule ns python3Grammar $
     Just "A Python 3 syntax model, based on the BNF/PEG grammar at https://docs.python.org/3/reference/grammar.html as of 2023-04-03."
   where
-    ns = Namespace "hydra/ext/python/python3"
+    ns = Namespace "hydra/ext/org/python/python3"
 
 python3Grammar :: G.Grammar
 python3Grammar = G.Grammar $ tokens ++ productions
@@ -785,7 +785,7 @@ productions = [
 --     | NAME '=' pattern
   define "KeywordPattern" [
     list["Name", equal_, "Pattern"]],
-    
+
 -- # EXPRESSIONS
 -- # -----------
 
@@ -802,13 +802,13 @@ productions = [
     list["Disjunction", terminal "if", "Disjunction", terminal "else", "Expression"],
     "Disjunction",
     "Lambdef"],
-    
+
 -- yield_expr:
 --     | 'yield' 'from' expression
 --     | 'yield' [star_expressions]
   define "YieldExpr" [
     list[terminal "yield", alts[list[terminal "from", "Expression"], opt(sepp comma_ "StarExpression")]]],
-    
+
 -- star_expressions:
 --     | star_expression (',' star_expression )+ [',']
 --     | star_expression ','
@@ -820,7 +820,7 @@ productions = [
   define "StarExpression" [
     list[star_, "BitwiseOr"],
     "Expression"],
-    
+
 -- star_named_expressions: ','.star_named_expression+ [',']
 --
 -- star_named_expression:
@@ -829,38 +829,38 @@ productions = [
   define "StarNamedExpression" [
     list[star_, "BitwiseOr"],
     "NamedExpression"],
-    
+
 -- assignment_expression:
 --     | NAME ':=' ~ expression
   define "AssignmentExpression" [
     list["Name", assign_, tilde_, "Expression"]],
-    
+
 -- named_expression:
 --     | assignment_expression
 --     | expression !':='
   define "NamedExpression" [
     "AssignmentExpression",
     "Expression"],
-    
+
 -- disjunction:
 --     | conjunction ('or' conjunction )+
 --     | conjunction
   define "Disjunction" [
     sep (terminal "or") "Conjunction"],
- 
+
 -- conjunction:
 --     | inversion ('and' inversion )+
 --     | inversion
   define "Conjunction" [
     sep (terminal "and") "Inversion"],
-    
+
 -- inversion:
 --     | 'not' inversion
 --     | comparison
   define "Inversion" [
     list[terminal "not", "Inversion"],
     "Comparison"],
-    
+
 -- # Comparison operators
 -- # --------------------
 
@@ -869,7 +869,7 @@ productions = [
 --     | bitwise_or
   define "Comparison" [
     list["BitwiseOr", star("CompareOpBitwiseOrPair")]],
-    
+
 -- compare_op_bitwise_or_pair:
 --     | eq_bitwise_or
 --     | noteq_bitwise_or
@@ -892,11 +892,11 @@ productions = [
     "InBitwiseOr",
     "IsnotBitwiseOr",
     "IsBitwiseOr"],
-    
+
 -- eq_bitwise_or: '==' bitwise_or
   define "EqBitwiseOr" [
     list[double_equal_, "BitwiseOr"]],
-    
+
 -- noteq_bitwise_or:
 --     | ('!=' ) bitwise_or
   define "NoteqBitwiseOr" [
@@ -948,13 +948,13 @@ productions = [
 --     | bitwise_and
   define "BitwiseXor" [
     list[opt(list["BitwiseXor", hat_]), "BitwiseAnd"]],
-    
+
 -- bitwise_and:
 --     | bitwise_and '&' shift_expr
 --     | shift_expr
   define "BitwiseAnd" [
     list[opt(list["BitwiseAnd", amp_]), "ShiftExpr"]],
-    
+
 -- shift_expr:
 --     | shift_expr '<<' sum
 --     | shift_expr '>>' sum
@@ -963,7 +963,7 @@ productions = [
     list[
       opt(list["ShiftExpr", alts[double_lt_, double_gt_]]),
       "Sum"]],
-    
+
 -- # Arithmetic operators
 -- # --------------------
 
@@ -973,7 +973,7 @@ productions = [
 --     | term
   define "Sum" [
     list[opt(list["Sum", alts[plus_, minus_]]), "Term"]],
-    
+
 -- term:
 --     | term '*' factor
 --     | term '/' factor
@@ -983,7 +983,7 @@ productions = [
 --     | factor
   define "Term" [
     list[opt(list["Term", alts[star_, slash_, double_slash_, percent_, at_]]), "Factor"]],
-    
+
 -- factor:
 --     | '+' factor
 --     | '-' factor
@@ -1204,12 +1204,12 @@ productions = [
 --     | '[' named_expression for_if_clauses ']'
   define "Listcomp" [
     list[open_square_, "NamedExpression", plus("ForIfClause"), close_square_]],
-    
+
 -- setcomp:
 --     | '{' named_expression for_if_clauses '}'
   define "Setcomp" [
     list[open_curly_, "NamedExpression", plus("ForIfClause"), close_curly_]],
-    
+
 -- genexp:
 --     | '(' ( assignment_expression | expression !':=') for_if_clauses ')'
   define "Genexp" [
@@ -1219,7 +1219,7 @@ productions = [
 --     | '{' kvpair for_if_clauses '}'
   define "Dictcomp" [
     list[open_curly_, "Kvpair", plus("ForIfClause"), close_curly_]],
-    
+
 -- # FUNCTION CALL ARGUMENTS
 -- # =======================
 --

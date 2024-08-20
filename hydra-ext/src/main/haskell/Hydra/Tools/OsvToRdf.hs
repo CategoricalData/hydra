@@ -19,7 +19,7 @@ import Hydra.Workflow
 import qualified Hydra.Ext.Rdf.Utils as RdfUt
 
 import Hydra.Ext.Other.Osv
-import qualified Dev.Osv.Schema as Osv
+import qualified Hydra.Ext.Dev.Osv.Schema as Osv
 
 import System.IO
 import System.FilePath

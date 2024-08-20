@@ -70,7 +70,7 @@ dtld :: String -> Type
 dtld = typeref dtldNs
 
 dtldNs :: Namespace
-dtldNs = Namespace "com/azure/dtld"
+dtldNs = Namespace "hydra/ext/com/microsoft/azure/dtld"
 
 dtldModule :: Module
 dtldModule = Module dtldNs elements [hydraCoreModule] [] $
