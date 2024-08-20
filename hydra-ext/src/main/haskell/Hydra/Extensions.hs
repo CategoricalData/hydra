@@ -5,8 +5,12 @@ import Hydra.Kernel
 import Hydra.Ext.Delta.Src.Parquet
 import Hydra.Ext.Graphviz.Src.Dot
 import Hydra.Ext.Kusto.Src.Kql
+import Hydra.Ext.Owl.Src.Syntax
 import Hydra.Ext.Parquet.Src.Format
 import Hydra.Ext.Python.Src.Python3
+import Hydra.Ext.Shex.Src.Syntax
+import Hydra.Ext.Sql.Src.Ansi
+import Hydra.Ext.Xml.Src.Schema
 
 import Hydra.Models.Atlas
 import Hydra.Models.AzureDtld
@@ -30,6 +34,10 @@ hydraExtModules = [
   ianaRelationsModule,
   kqlModule,
   osvSchemaModule,
+  owlSyntaxModule,
   parquetFormatModule,
   -- python3Module,
-  stacModule]
+  shexSyntaxModule,
+  sqlModule,
+  stacModule,
+  xmlSchemaModule]

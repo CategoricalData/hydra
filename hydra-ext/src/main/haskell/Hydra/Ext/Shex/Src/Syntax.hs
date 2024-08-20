@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier4.Ext.Shex.Syntax where
+module Hydra.Ext.Shex.Src.Syntax where
 
 import Hydra.Sources.Tier3.All
 import Hydra.Dsl.Grammars
