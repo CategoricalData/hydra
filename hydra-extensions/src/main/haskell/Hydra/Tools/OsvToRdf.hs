@@ -7,16 +7,16 @@ module Hydra.Tools.OsvToRdf (
 
 import Hydra.Kernel
 import Hydra.Flows
-import Hydra.Langs.Json.Serde
-import Hydra.Langs.Json.Coder
+import Hydra.Ext.Json.Serde
+import Hydra.Ext.Json.Coder
 import Hydra.CoreDecoding
 import Hydra.Codegen
 import Hydra.Tools.Formatting
 import qualified Hydra.Json as Json
-import qualified Hydra.Langs.Shacl.Coder as Shacl
-import Hydra.Langs.Rdf.Serde
+import qualified Hydra.Ext.Shacl.Coder as Shacl
+import Hydra.Ext.Rdf.Serde
 import Hydra.Workflow
-import qualified Hydra.Langs.Rdf.Utils as RdfUt
+import qualified Hydra.Ext.Rdf.Utils as RdfUt
 
 import Hydra.Models.Osv
 import qualified Dev.Osv.Schema as Osv

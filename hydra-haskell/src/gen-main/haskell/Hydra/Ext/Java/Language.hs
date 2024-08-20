@@ -1,0 +1,237 @@
+-- | Language constraints for Java
+
+module Hydra.Ext.Java.Language where
+
+import qualified Hydra.Basics as Basics
+import qualified Hydra.Coders as Coders
+import qualified Hydra.Core as Core
+import qualified Hydra.Lib.Equality as Equality
+import qualified Hydra.Lib.Lists as Lists
+import qualified Hydra.Lib.Sets as Sets
+import qualified Hydra.Mantle as Mantle
+import Data.Int
+import Data.List as L
+import Data.Map as M
+import Data.Set as S
+
+-- | The maximum supported length of a tuple in Hydra-Java. Note: if this constant is changed, also change Tuples.java correspondingly
+javaMaxTupleLength :: Int
+javaMaxTupleLength = 9
+
+-- | Language constraints for Java
+javaLanguage :: Coders.Language
+javaLanguage = Coders.Language {
+  Coders.languageName = (Coders.LanguageName "hydra/ext/java"),
+  Coders.languageConstraints = Coders.LanguageConstraints {
+    Coders.languageConstraintsEliminationVariants = (Sets.fromList Basics.eliminationVariants),
+    Coders.languageConstraintsLiteralVariants = (Sets.fromList [
+      Mantle.LiteralVariantBoolean,
+      Mantle.LiteralVariantFloat,
+      Mantle.LiteralVariantInteger,
+      Mantle.LiteralVariantString]),
+    Coders.languageConstraintsFloatTypes = (Sets.fromList [
+      Core.FloatTypeFloat32,
+      Core.FloatTypeFloat64]),
+    Coders.languageConstraintsFunctionVariants = (Sets.fromList Basics.functionVariants),
+    Coders.languageConstraintsIntegerTypes = (Sets.fromList [
+      Core.IntegerTypeBigint,
+      Core.IntegerTypeInt8,
+      Core.IntegerTypeInt16,
+      Core.IntegerTypeInt32,
+      Core.IntegerTypeInt64,
+      Core.IntegerTypeUint16]),
+    Coders.languageConstraintsTermVariants = (Sets.fromList [
+      Mantle.TermVariantApplication,
+      Mantle.TermVariantFunction,
+      Mantle.TermVariantLet,
+      Mantle.TermVariantList,
+      Mantle.TermVariantLiteral,
+      Mantle.TermVariantMap,
+      Mantle.TermVariantOptional,
+      Mantle.TermVariantProduct,
+      Mantle.TermVariantRecord,
+      Mantle.TermVariantSet,
+      Mantle.TermVariantUnion,
+      Mantle.TermVariantVariable,
+      Mantle.TermVariantWrap]),
+    Coders.languageConstraintsTypeVariants = (Sets.fromList [
+      Mantle.TypeVariantAnnotated,
+      Mantle.TypeVariantApplication,
+      Mantle.TypeVariantFunction,
+      Mantle.TypeVariantLambda,
+      Mantle.TypeVariantList,
+      Mantle.TypeVariantLiteral,
+      Mantle.TypeVariantMap,
+      Mantle.TypeVariantOptional,
+      Mantle.TypeVariantProduct,
+      Mantle.TypeVariantRecord,
+      Mantle.TypeVariantSet,
+      Mantle.TypeVariantUnion,
+      Mantle.TypeVariantVariable,
+      Mantle.TypeVariantWrap]),
+    Coders.languageConstraintsTypes = (\x -> case x of
+      Core.TypeProduct v319 -> (Equality.ltInt32 (Lists.length v319) javaMaxTupleLength)
+      _ -> True)}}
+
+-- | A set of reserved words in Java
+reservedWords :: (Set String)
+reservedWords = (Sets.fromList (Lists.concat [
+  specialNames,
+  classNames,
+  keywords,
+  literals])) 
+  where 
+    specialNames = [
+      "Elements"]
+    classNames = [
+      "AbstractMethodError",
+      "Appendable",
+      "ArithmeticException",
+      "ArrayIndexOutOfBoundsException",
+      "ArrayStoreException",
+      "AssertionError",
+      "AutoCloseable",
+      "Boolean",
+      "BootstrapMethodError",
+      "Byte",
+      "CharSequence",
+      "Character",
+      "Class",
+      "ClassCastException",
+      "ClassCircularityError",
+      "ClassFormatError",
+      "ClassLoader",
+      "ClassNotFoundException",
+      "ClassValue",
+      "CloneNotSupportedException",
+      "Cloneable",
+      "Comparable",
+      "Compiler",
+      "Deprecated",
+      "Double",
+      "Enum",
+      "EnumConstantNotPresentException",
+      "Error",
+      "Exception",
+      "ExceptionInInitializerError",
+      "Float",
+      "IllegalAccessError",
+      "IllegalAccessException",
+      "IllegalArgumentException",
+      "IllegalMonitorStateException",
+      "IllegalStateException",
+      "IllegalThreadStateException",
+      "IncompatibleClassChangeError",
+      "IndexOutOfBoundsException",
+      "InheritableThreadLocal",
+      "InstantiationError",
+      "InstantiationException",
+      "Integer",
+      "InternalError",
+      "InterruptedException",
+      "Iterable",
+      "LinkageError",
+      "Long",
+      "Math",
+      "NegativeArraySizeException",
+      "NoClassDefFoundError",
+      "NoSuchFieldError",
+      "NoSuchFieldException",
+      "NoSuchMethodError",
+      "NoSuchMethodException",
+      "NullPointerException",
+      "Number",
+      "NumberFormatException",
+      "Object",
+      "OutOfMemoryError",
+      "Override",
+      "Package",
+      "Process",
+      "ProcessBuilder",
+      "Readable",
+      "ReflectiveOperationException",
+      "Runnable",
+      "Runtime",
+      "RuntimeException",
+      "RuntimePermission",
+      "SafeVarargs",
+      "SecurityException",
+      "SecurityManager",
+      "Short",
+      "StackOverflowError",
+      "StackTraceElement",
+      "StrictMath",
+      "String",
+      "StringBuffer",
+      "StringBuilder",
+      "StringIndexOutOfBoundsException",
+      "SuppressWarnings",
+      "System",
+      "Thread",
+      "ThreadDeath",
+      "ThreadGroup",
+      "ThreadLocal",
+      "Throwable",
+      "TypeNotPresentException",
+      "UnknownError",
+      "UnsatisfiedLinkError",
+      "UnsupportedClassVersionError",
+      "UnsupportedOperationException",
+      "VerifyError",
+      "VirtualMachineError",
+      "Void"]
+    keywords = [
+      "abstract",
+      "assert",
+      "boolean",
+      "break",
+      "byte",
+      "case",
+      "catch",
+      "char",
+      "class",
+      "const",
+      "continue",
+      "default",
+      "do",
+      "double",
+      "else",
+      "enum",
+      "extends",
+      "final",
+      "finally",
+      "float",
+      "for",
+      "goto",
+      "if",
+      "implements",
+      "import",
+      "instanceof",
+      "int",
+      "interface",
+      "long",
+      "native",
+      "new",
+      "package",
+      "private",
+      "protected",
+      "public",
+      "return",
+      "short",
+      "static",
+      "strictfp",
+      "super",
+      "switch",
+      "synchronized",
+      "this",
+      "throw",
+      "throws",
+      "transient",
+      "try",
+      "void",
+      "volatile",
+      "while"]
+    literals = [
+      "false",
+      "null",
+      "true"]

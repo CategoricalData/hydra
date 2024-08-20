@@ -8,9 +8,9 @@ module Hydra.Lib.Io (
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Graph
-import Hydra.Langs.Json.Coder
+import Hydra.Ext.Json.Coder
 import Hydra.Dsl.Annotations
-import Hydra.Langs.Json.Serde
+import Hydra.Ext.Json.Serde
 import Hydra.CoreEncoding
 import Hydra.Rewriting
 import Hydra.Annotations
