@@ -12,7 +12,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Terms as Terms
-import qualified Hydra.Ext.Avro.Schema as Avro
+import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro
 import qualified Hydra.Json as Json
 
 import qualified Text.Read as TR

@@ -3,7 +3,7 @@ module Hydra.Ext.Avro.SchemaJson where
 import Hydra.Kernel
 import Hydra.Ext.Json.Serde
 import Hydra.Ext.Json.Eliminate
-import qualified Hydra.Ext.Avro.Schema as Avro
+import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro
 import qualified Hydra.Json as Json
 
 import qualified Control.Monad as CM
