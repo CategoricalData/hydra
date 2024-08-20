@@ -1,0 +1,125 @@
+plugins {
+    id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
+    id 'java-library'
+    id 'signing'
+    id 'maven-publish'
+    id 'checkstyle'
+}
+
+subprojects {
+    group = 'net.fortytwo.hydra'
+    version = '0.7.0'
+
+    apply plugin: 'java-library'
+    apply plugin: 'signing'
+    apply plugin: 'maven-publish'
+    apply plugin: 'checkstyle'
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        maven {
+            url "https://linkedin.jfrog.io/artifactory/open-source/" // For Pegasus dependencies
+        }
+    }
+
+    sourceSets {
+        main {
+            java {
+                srcDirs 'src/main/java'
+                srcDirs 'src/gen-main/java'
+            }
+        }
+        test {
+            java {
+                srcDirs 'src/test/java'
+                srcDirs 'src/gen-test/java'
+            }
+        }
+    }
+
+    java {
+        withJavadocJar()
+        withSourcesJar()
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    checkstyle {
+        toolVersion = '8.29'
+        configFile = file("$projectDir/../hydra-java/config/checkstyle/checkstyle.xml")
+    }
+
+    checkstyleMain {
+        source = 'src/main'
+        include '**/*.java'
+    }
+
+    checkstyleTest {
+        source = 'src/test'
+        include '**/*.java'
+    }
+
+    tasks.withType(Checkstyle) {
+        reports {
+            xml.required = false
+            html.required = true
+        }
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from(components.java)
+
+                pom {
+                    name = 'hydra'
+                    description = 'The Hydra language for strongly-typed transformations'
+                    url = 'https://github.com/CategoricalData/hydra'
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'joshsh'
+                            name = 'Joshua Shinavier'
+                        }
+                    }
+                    scm {
+                        url = 'https://github.com/CategoricalData/hydra'
+                        connection = 'scm:git://github.com/ConnectedData/hydra.git'
+                        developerConnection = 'scm:git://github.com/CategoricalData/hydra.git'
+                    }
+                }
+            }
+        }
+
+        // Uncomment the below to enable local publishing
+        // repositories {
+        //     mavenLocal()
+        // }
+    }
+
+    signing {
+        sign publishing.publications.mavenJava
+    }
+}
+
+nexusPublishing {
+    repositories {
+        sonatype()
+    }
+}
+
+task buildAll {
+    dependsOn subprojects*.build
+}
+
+task publishAll {
+    dependsOn subprojects*.publish
+}

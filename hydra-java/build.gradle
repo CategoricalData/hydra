@@ -1,14 +1,6 @@
 plugins {
-    id 'java-library'
-    id 'signing'
-    id 'maven-publish'
-    id('io.github.gradle-nexus.publish-plugin') version '1.1.0'
-    id 'checkstyle'
     id 'antlr'
 }
-
-group 'net.fortytwo.hydra'
-version '0.7.0'
 
 apply plugin: 'antlr'
 
@@ -17,132 +9,27 @@ dependencies {
 
     implementation group: 'org.apache.commons', name: 'commons-text', version: '1.10.0'
     implementation group: 'com.cedarsoftware', name: 'json-io', version: '4.14.1'
-    // We previously used RDF 3.x rather than 4.x or 5.x for compatibility with Java 8, and haven't upgraded yet.
     implementation 'org.eclipse.rdf4j:rdf4j-rio-ntriples:3.7.7'
 
-    // Temporarily including HydraTestBase and the unit testing dependencies in main,
-    // until we have a separately published artifact for the test framework.
     implementation(platform('org.junit:junit-bom:5.9.2'))
     implementation('org.junit.jupiter:junit-jupiter')
     implementation('org.junit.jupiter:junit-jupiter-params:5.9.2')
 
-    // These dependencies only need to be in the test environment
     testImplementation 'org.apache.commons:commons-csv:1.10.0'
 }
 
-sourceSets {
-    main {
-        java {
-            srcDirs 'src/main/java'
-            srcDirs 'src/gen-main/java'
-        }
-    }
-    test {
-        java {
-            srcDirs 'src/test/java'
-            srcDirs 'src/gen-test/java'
-        }
-    }
-}
-
-// This is a workaround for an issue in Gradle 7, which manifests on `./gradlew publishToSonatype`
-// After upgrading to Gradle 8, try deleting this.
-// See: https://github.com/gradle/gradle/issues/17236
-task sourcesJar(type: Jar) {
-    duplicatesStrategy = 'include'
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
-
-test {
-    useJUnitPlatform()
-}
-
-repositories {
-    mavenCentral()
-    mavenLocal()
-    maven {
-        url "https://linkedin.jfrog.io/artifactory/open-source/" // For Pegasus dependencies
-    }
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from(components.java)
-
-            pom {
-                name = 'hydra'
-                description = 'The Hydra language for strongly-typed transformations'
-                url = 'https://github.com/CategoricalData/hydra'
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'joshsh'
-                        name = 'Joshua Shinavier'
-                    }
-                }
-                scm {
-                    url = 'https://github.com/CategoricalData/hydra'
-                    connection = 'scm:git://github.com/ConnectedData/hydra.git'
-                    developerConnection = 'scm:git://github.com/CategoricalData/hydra.git'
-                }
-            }
-        }
-    }
-
-    // RESTORE ME
-//    repositories {
-//        mavenLocal()
-//    }
-}
-
-nexusPublishing {
-    repositories {
-        sonatype()
-    }
-}
-
-signing {
-    sign publishing.publications.mavenJava
-}
-
-checkstyle {
-    toolVersion = '8.29' // Temporary, due to the Java 1.8 limitation. A more recent version of Checkstyle is 10.12.4
-}
-
-checkstyleMain {
-    source = 'src/main'
-    include '**/*.java'
-}
-
-checkstyleTest {
-    source = 'src/test'
-    include '**/*.java'
-}
-
-tasks.withType(Checkstyle) {
-    reports {
-        xml.required = false
-        html.required = true
-    }
+// Avoid duplicate MapperBase.java
+tasks.named('sourcesJar') {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    dependsOn generateGrammarSource // Ensure grammar is generated before sourcesJar
 }
 
 generateGrammarSource {
-    arguments += ["-package", "org.neo4j"] // Cypher only
+    arguments += ["-package", "org.neo4j"]
     arguments += ["-visitor"]
     arguments += ["-no-listener"]
 }
+
 compileJava {
     dependsOn generateGrammarSource
 }

@@ -1,4 +1,17 @@
+# Haskell / Stack / Cabal
 .stack-work
 stack.yaml.lock
+*.cabal
 
+# Java / Gradle
+.gradle
+gradle.properties`
+build
+
+# IDEs
 .idea
+*.iml
+.vscode
+
+# Other
+*.swp
