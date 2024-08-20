@@ -2,7 +2,9 @@ module Hydra.Extensions where
 
 import Hydra.Kernel
 
+import Hydra.Ext.Delta.Src.Parquet
 import Hydra.Ext.Graphviz.Src.Dot
+
 import Hydra.Models.Atlas
 import Hydra.Models.AzureDtld
 import Hydra.Models.Coq
@@ -13,11 +15,12 @@ import Hydra.Models.Osv
 import Hydra.Models.StacItems
 
 
-hydraExtensionsModules :: [Module]
-hydraExtensionsModules = [
+hydraExtModules :: [Module]
+hydraExtModules = [
   atlasModelModule,
   coqSyntaxModule,
   datalogSyntaxModule,
+  deltaParquetModule,
   dotModule,
   dtldModule,
   geoJsonModule,

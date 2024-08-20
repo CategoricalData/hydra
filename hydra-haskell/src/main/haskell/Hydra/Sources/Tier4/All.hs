@@ -8,7 +8,6 @@ import Hydra.Sources.Tier3.All
 import Hydra.Sources.Tier4.Ext.Avro.Schema
 import Hydra.Sources.Tier4.Ext.Cypher.Features
 import Hydra.Sources.Tier4.Ext.Cypher.OpenCypher
-import Hydra.Sources.Tier4.Ext.Delta.Parquet
 import Hydra.Sources.Tier4.Ext.Graphql.Syntax
 import Hydra.Sources.Tier4.Ext.Haskell.Ast
 import Hydra.Sources.Tier4.Ext.Java.Language
@@ -54,7 +53,6 @@ testModules = [
 tier4LangModules :: [Module]
 tier4LangModules = [
   avroSchemaModule,
-  deltaParquetModule,
   graphqlSyntaxModule,
   gremlinModule,
   haskellAstModule,
