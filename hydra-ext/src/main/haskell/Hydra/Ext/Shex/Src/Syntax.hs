@@ -64,7 +64,7 @@ shexSyntaxModule = grammarToModule ns shexGrammar $
     Just ("A Shex model. Based on the BNF at:\n" ++
         "  https://github.com/shexSpec/grammar/blob/master/bnf")
     where
-        ns = Namespace "hydra/ext/shex/syntax"
+        ns = Namespace "hydra/ext/io/shex/syntax"
 
 shexGrammar :: G.Grammar
 shexGrammar = G.Grammar [

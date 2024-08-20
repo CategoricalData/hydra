@@ -11,7 +11,7 @@ coqSyntaxModule = Module ns elements [] [] $
     Just ("A model for Coq core and extensions. Based on the Coq 8.15 grammar:\n" ++
       "  https://coq.github.io/doc/v8.15/refman/language/core/basic.html#essential-vocabulary")
   where
-    ns = Namespace "hydra/ext/coq/syntax"
+    ns = Namespace "hydra/ext/fr/inria/coq/syntax"
     def = datatype ns
     coq = typeref ns
 

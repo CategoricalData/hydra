@@ -14,7 +14,7 @@ atlasModelModule = Module ns elements [xmlSchemaModule] [] $
       "Based on the the org.apache.atlas.model package in the master branch as of 2022-06-01\n" ++
       "  https://github.com/apache/atlas/tree/master/intg/src/main/java/org/apache/atlas/model")
   where
-    ns = Namespace "org/apache/atlas"
+    ns = Namespace "hydra/ext/org/apache/atlas"
     def = datatype ns
     atlas = typeref ns
     xsd = typeref (moduleNamespace xmlSchemaModule)

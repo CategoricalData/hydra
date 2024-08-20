@@ -12,7 +12,7 @@ kqlModule :: Module
 kqlModule = Module ns elements [hydraCoreModule] tier0Modules $
     Just ("A partial KQL (Kusto Query Language) model, based on examples from the documentation. Not normative.")
   where
-    ns = Namespace "hydra/ext/kusto/kql"
+    ns = Namespace "hydra/ext/com/microsoft/kusto/kql"
     def = datatype ns
     kql = typeref ns
 
@@ -24,7 +24,7 @@ kqlModule = Module ns elements [hydraCoreModule] tier0Modules $
           "expression">: kql "Expression",
           "lowerBound">: kql "Expression",
           "upperBound">: kql "Expression"],
-          
+
       def "BinaryExpression" $
         record [
           "left">: kql "Expression",
@@ -143,7 +143,7 @@ kqlModule = Module ns elements [hydraCoreModule] tier0Modules $
         union [
           "builtIn">: kql "BuiltInFunction",
           "custom">: kql "FunctionName"],
-      
+
       def "FunctionExpression" $
         record [
           "function">: kql "Function",

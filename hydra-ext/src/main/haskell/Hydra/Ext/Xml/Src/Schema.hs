@@ -14,7 +14,7 @@ xmlSchemaModule = Module ns elements [hydraCoreModule] tier0Modules $
       "      the string type. Exceptions are made for xsd:boolean and most of the numeric types, where there is a clearly\n" ++
       "      corresponding Hydra literal type.")
   where
-    ns = Namespace "hydra/ext/xml/schema"
+    ns = Namespace "hydra/ext/org/w3/xml/schema"
     def = datatype ns
 
     elements = datatypes ++ others

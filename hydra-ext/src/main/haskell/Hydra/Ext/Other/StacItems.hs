@@ -14,7 +14,7 @@ stacModule = Module ns elements [geoJsonModule, ianaRelationsModule] [hydraCoreM
     Just ("A model for SpatioTemporal Asset Catalog (STAC) Items. " ++
           "See https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md")
   where
-    ns = Namespace "org/stacspec/items"
+    ns = Namespace "hydra/ext/org/stacspec/items"
     def = datatype ns
 
     geoj = typeref $ moduleNamespace geoJsonModule
