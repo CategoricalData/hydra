@@ -1,0 +1,5 @@
+rootProject.name = 'hydra'
+
+include 'hydra-java'
+include 'hydra-ext'
+
