@@ -1,12 +1,12 @@
-module Hydra.Models.StacItems where
+module Hydra.Ext.Other.StacItems where
 
 import Hydra.Sources.Tier4.All
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Annotations
 
-import Hydra.Models.GeoJson
-import Hydra.Models.IanaRelations
+import Hydra.Ext.Other.GeoJson
+import Hydra.Ext.Other.IanaRelations
 
 
 stacModule :: Module

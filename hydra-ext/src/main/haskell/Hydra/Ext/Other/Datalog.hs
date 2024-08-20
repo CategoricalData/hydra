@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Models.Datalog where
+module Hydra.Ext.Other.Datalog where
 
 import Hydra.Sources.Tier4.All
 import Hydra.Dsl.Grammars
