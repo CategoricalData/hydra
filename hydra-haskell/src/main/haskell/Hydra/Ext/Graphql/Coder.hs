@@ -3,7 +3,7 @@ module Hydra.Ext.Graphql.Coder (moduleToGraphql) where
 import Hydra.Kernel
 import Hydra.Ext.Graphql.Language
 import Hydra.Ext.Graphql.Serde
-import qualified Hydra.Ext.Graphql.Syntax as G
+import qualified Hydra.Ext.Org.Graphql.Syntax as G
 import Hydra.Tools.Serialization
 import Hydra.Tools.Formatting
 
