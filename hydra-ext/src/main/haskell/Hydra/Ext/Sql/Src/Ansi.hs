@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier4.Ext.Sql.Ansi where
+module Hydra.Ext.Sql.Src.Ansi where
 
 import Hydra.Sources.Tier3.All
 import Hydra.Dsl.Grammars

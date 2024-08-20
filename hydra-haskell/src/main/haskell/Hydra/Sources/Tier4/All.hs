@@ -13,7 +13,6 @@ import Hydra.Sources.Tier4.Ext.Haskell.Ast
 import Hydra.Sources.Tier4.Ext.Java.Language
 import Hydra.Sources.Tier4.Ext.Java.Syntax
 import Hydra.Sources.Tier4.Ext.Json.Decoding
-import Hydra.Sources.Tier4.Ext.Owl.Syntax
 import Hydra.Sources.Tier4.Ext.Pegasus.Pdl
 import Hydra.Sources.Tier4.Ext.Protobuf.Any
 import Hydra.Sources.Tier4.Ext.Protobuf.Language
@@ -23,8 +22,6 @@ import Hydra.Sources.Tier4.Ext.Rdf.Syntax
 import Hydra.Sources.Tier4.Ext.RelationalModel
 import Hydra.Sources.Tier4.Ext.Scala.Meta
 import Hydra.Sources.Tier4.Ext.Shacl.Model
-import Hydra.Sources.Tier4.Ext.Shex.Syntax
-import Hydra.Sources.Tier4.Ext.Sql.Ansi
 import Hydra.Sources.Tier4.Ext.Tabular
 import Hydra.Sources.Tier4.Ext.Tinkerpop.Features
 import Hydra.Sources.Tier4.Ext.Tinkerpop.Gremlin
@@ -32,7 +29,6 @@ import Hydra.Sources.Tier4.Ext.Tinkerpop.Mappings
 import Hydra.Sources.Tier4.Ext.Tinkerpop.PropertyGraph
 import Hydra.Sources.Tier4.Ext.Tinkerpop.Queries
 import Hydra.Sources.Tier4.Ext.Tinkerpop.Validate
-import Hydra.Sources.Tier4.Ext.Xml.Schema
 import Hydra.Sources.Tier4.Ext.Yaml.Model
 import Hydra.Sources.Tier4.Test.TestSuite
 
@@ -58,7 +54,6 @@ tier4LangModules = [
   jsonDecodingModule,
   openCypherModule,
   openCypherFeaturesModule,
-  owlSyntaxModule,
   pegasusPdlModule,
   proto3Module,
   protobufAnyModule,
@@ -68,13 +63,10 @@ tier4LangModules = [
   relationalModelModule,
   scalaMetaModule,
   shaclModelModule,
-  shexSyntaxModule,
-  sqlModule,
   tabularModule,
   tinkerpopFeaturesModule,
   tinkerpopMappingsModule,
   tinkerpopPropertyGraphModule,
   propertyGraphQueriesModule,
   tinkerpopValidateModule,
-  xmlSchemaModule,
   yamlModelModule]

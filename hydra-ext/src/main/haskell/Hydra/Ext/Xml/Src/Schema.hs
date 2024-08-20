@@ -1,4 +1,4 @@
-module Hydra.Sources.Tier4.Ext.Xml.Schema where
+module Hydra.Ext.Xml.Src.Schema where
 
 import Hydra.Sources.Tier3.All
 import Hydra.Dsl.Annotations
