@@ -1,9 +1,9 @@
-name:       hydra-extensions
+name:       hydra-ext
 version:    0.7.0
 author:     josh@fortytwo.net
 license:    Apache-2.0
 category:   Data
-synopsis:   Built-in extensions to Hydra, including additional models and utilities
+synopsis:   Built-in extensions to Hydra, including models, coders, and utilities
 github:     CategoricalData/hydra
 
 extra-source-files:

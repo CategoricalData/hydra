@@ -25,7 +25,7 @@ It includes a substantial portion of the Hydra kernel, though none of the coders
 JavaDocs are available [here](https://categoricaldata.github.io/hydra/hydra-java/javadoc).
 * [Hydra-Scala](https://github.com/CategoricalData/hydra/tree/main/hydra-scala) is an experimental Scala implementation which has been on the back burner for a little while;
 Java has been getting most of the attention lately.
-* [hydra-extensions](https://github.com/CategoricalData/hydra/tree/main/hydra-extensions) is Haskell project which includes a collection of less-essential, and less thoroughly documented, Hydra models and tools, which nonetheless can be useful for building applications.
+* [hydra-ext](https://github.com/CategoricalData/hydra/tree/main/hydra-ext) is Haskell project which includes a large collection of Hydra models, coders, and utilities which can be useful for building applications.
 For example, there is a GeoJson model, a Coq model, and an AvroWorkflows tool which has been used at LinkedIn for ingestion of Avro-formatted data into RDF triple stores.
 
 Both of the active language variants (Haskell and Java) contain a complete copy of Hydra's built-in generated APIs, including:
