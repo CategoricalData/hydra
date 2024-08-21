@@ -16,7 +16,7 @@ tinkerpopPropertyGraphModule = Module ns elements [] tier0Modules $
       "Property graphs are parameterized a type for property and id values, " ++
       "while property graph schemas are parameterized by a type for property and id types")
   where
-    ns = Namespace "hydra/ext/tinkerpop/propertyGraph"
+    ns = Namespace "hydra/ext/org/apache/tinkerpop/propertyGraph"
     pg = typeref ns
     def = datatype ns
 

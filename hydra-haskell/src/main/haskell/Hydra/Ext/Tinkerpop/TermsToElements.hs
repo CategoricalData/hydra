@@ -5,8 +5,8 @@ module Hydra.Ext.Tinkerpop.TermsToElements (
 ) where
 
 import Hydra.Kernel
-import Hydra.Ext.Tinkerpop.Mappings
-import qualified Hydra.Ext.Tinkerpop.PropertyGraph as PG
+import Hydra.Ext.Org.Apache.Tinkerpop.Mappings
+import qualified Hydra.Ext.Org.Apache.Tinkerpop.PropertyGraph as PG
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 

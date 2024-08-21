@@ -3,9 +3,9 @@ module Hydra.Ext.Tinkerpop.Coder (
 ) where
 
 import Hydra.Kernel
-import Hydra.Ext.Tinkerpop.Mappings
+import Hydra.Ext.Org.Apache.Tinkerpop.Mappings
 import Hydra.Ext.Tinkerpop.TermsToElements
-import qualified Hydra.Ext.Tinkerpop.PropertyGraph as PG
+import qualified Hydra.Ext.Org.Apache.Tinkerpop.PropertyGraph as PG
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
@@ -215,7 +215,7 @@ elementCoder mparent schema source vidType eidType = case stripType source of
           Nothing -> pure Nothing
           Just a -> do
             label <- PG.EdgeLabel <$> Expect.string a
-            elad <- elementCoder (Just (dir, vlabel)) schema (fieldTypeType field) vidType eidType 
+            elad <- elementCoder (Just (dir, vlabel)) schema (fieldTypeType field) vidType eidType
             return $ Just $ AdjacentEdgeAdapter dir field label elad
         key = case dir of
           PG.DirectionOut -> outEdgeLabelKey

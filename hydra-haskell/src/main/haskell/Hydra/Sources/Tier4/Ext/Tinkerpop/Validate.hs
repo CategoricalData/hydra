@@ -27,7 +27,7 @@ import qualified Hydra.Dsl.Types           as Types
 
 import Hydra.Kernel hiding (Edge(..), _Edge, _Edge_in, _Edge_out, Element(..), _Element, Graph(..), _Graph)
 
-import Hydra.Ext.Tinkerpop.PropertyGraph as PG
+import Hydra.Ext.Org.Apache.Tinkerpop.PropertyGraph as PG
 import Hydra.Sources.Tier4.Ext.Tinkerpop.PropertyGraph
 
 
@@ -35,7 +35,7 @@ validateDefinition :: String -> TTerm a -> TElement a
 validateDefinition = definitionInModule tinkerpopValidateModule
 
 tinkerpopValidateModule :: Module
-tinkerpopValidateModule = Module (Namespace "hydra/ext/tinkerpop/validate") elements
+tinkerpopValidateModule = Module (Namespace "hydra/ext/org/apache/tinkerpop/validate") elements
     [] [tinkerpopPropertyGraphModule] $
     Just "Utilities for validating property graphs against property graph schemas"
   where

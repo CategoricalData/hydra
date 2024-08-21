@@ -5,7 +5,7 @@ module Hydra.Sources.Tier4.Ext.Tinkerpop.Mappings where
 import Hydra.Sources.Tier3.All
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
-import Hydra.Ext.Tinkerpop.Mappings
+import Hydra.Ext.Org.Apache.Tinkerpop.Mappings
 import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Dsl.Types as Types
 import Hydra.Sources.Tier4.Ext.Tinkerpop.PropertyGraph
@@ -16,7 +16,7 @@ tinkerpopMappingsModule = Module ns elements
     [tinkerpopPropertyGraphModule, hydraCoreModule, hydraComputeModule] tier0Modules $
     Just "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs"
   where
-    ns = Namespace "hydra/ext/tinkerpop/mappings"
+    ns = Namespace "hydra/ext/org/apache/tinkerpop/mappings"
     mappings = typeref ns
     compute = typeref $ moduleNamespace hydraComputeModule
     core = typeref $ moduleNamespace hydraCoreModule

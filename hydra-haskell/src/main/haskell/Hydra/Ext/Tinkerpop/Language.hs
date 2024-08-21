@@ -1,7 +1,7 @@
 module Hydra.Ext.Tinkerpop.Language where
 
 import Hydra.Kernel
-import Hydra.Ext.Tinkerpop.Features
+import Hydra.Ext.Org.Apache.Tinkerpop.Features
 
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
