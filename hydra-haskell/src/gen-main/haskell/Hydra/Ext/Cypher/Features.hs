@@ -674,7 +674,7 @@ data StringFunctionFeatures =
     stringFunctionFeaturesBtrim :: Bool,
     -- | The left() function. Returns a STRING containing the specified number (INTEGER) of leftmost characters in the given STRING.
     stringFunctionFeaturesLeft :: Bool,
-    -- | The lower() function. Returns the given STRING in lowercase. This function is an alias to the toLower() function, and it was introduced as part of Cypher’s GQL conformance. Introduced in 5.21.
+    -- | The lower() function. Returns the given STRING in lowercase. This function is an alias to the toLower() function, and it was introduced as part of Cypher's GQL conformance. Introduced in 5.21.
     stringFunctionFeaturesLower :: Bool,
     -- | The ltrim() function. Returns the given STRING with leading whitespace removed.; Returns the given STRING with leading trimCharacterString characters removed. Introduced in 5.20.
     stringFunctionFeaturesLtrim :: Bool,
@@ -702,7 +702,7 @@ data StringFunctionFeatures =
     stringFunctionFeaturesToUpper :: Bool,
     -- | The trim() function. Returns the given STRING with leading and trailing whitespace removed.; Returns the given STRING with the leading and/or trailing trimCharacterString character removed. Introduced in 5.20.
     stringFunctionFeaturesTrim :: Bool,
-    -- | The upper() function. Returns the given STRING in uppercase. This function is an alias to the toUpper() function, and it was introduced as part of Cypher’s GQL conformance. Introduced in 5.21.
+    -- | The upper() function. Returns the given STRING in uppercase. This function is an alias to the toUpper() function, and it was introduced as part of Cypher's GQL conformance. Introduced in 5.21.
     stringFunctionFeaturesUpper :: Bool}
   deriving (Eq, Ord, Read, Show)
 
