@@ -13,9 +13,9 @@ public class DataHasValue implements Serializable {
   
   public final hydra.ext.org.w3.owl.syntax.DataPropertyExpression property;
   
-  public final hydra.ext.rdf.syntax.Literal value;
+  public final hydra.ext.org.w3.rdf.syntax.Literal value;
   
-  public DataHasValue (hydra.ext.org.w3.owl.syntax.DataPropertyExpression property, hydra.ext.rdf.syntax.Literal value) {
+  public DataHasValue (hydra.ext.org.w3.owl.syntax.DataPropertyExpression property, hydra.ext.org.w3.rdf.syntax.Literal value) {
     java.util.Objects.requireNonNull((property));
     java.util.Objects.requireNonNull((value));
     this.property = property;
@@ -41,7 +41,7 @@ public class DataHasValue implements Serializable {
     return new DataHasValue(property, value);
   }
   
-  public DataHasValue withValue(hydra.ext.rdf.syntax.Literal value) {
+  public DataHasValue withValue(hydra.ext.org.w3.rdf.syntax.Literal value) {
     java.util.Objects.requireNonNull((value));
     return new DataHasValue(property, value);
   }

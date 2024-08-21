@@ -2,8 +2,8 @@ module Hydra.Ext.Shacl.Coder where
 
 import Hydra.Kernel
 import Hydra.Ext.Rdf.Utils
-import qualified Hydra.Ext.Rdf.Syntax as Rdf
-import qualified Hydra.Ext.Shacl.Model as Shacl
+import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Rdf
+import qualified Hydra.Ext.Org.W3.Shacl.Model as Shacl
 import qualified Hydra.Dsl.Literals as Literals
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms

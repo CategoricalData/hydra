@@ -3,7 +3,7 @@ module Hydra.Ext.Yaml.CoderSpec where
 import Hydra.Kernel
 import Hydra.Dsl.Terms
 import Hydra.Ext.Yaml.Coder
-import qualified Hydra.Ext.Yaml.Model as YM
+import qualified Hydra.Ext.Org.Yaml.Model as YM
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Tests
 

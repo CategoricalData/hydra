@@ -12,9 +12,9 @@ public class DataOneOf implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.rdf.syntax.Literal> value;
+  public final java.util.List<hydra.ext.org.w3.rdf.syntax.Literal> value;
   
-  public DataOneOf (java.util.List<hydra.ext.rdf.syntax.Literal> value) {
+  public DataOneOf (java.util.List<hydra.ext.org.w3.rdf.syntax.Literal> value) {
     java.util.Objects.requireNonNull((value));
     this.value = value;
   }

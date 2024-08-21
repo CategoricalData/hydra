@@ -69,9 +69,9 @@ public abstract class DatatypeRestriction_ConstrainingFacet implements Serializa
   }
   
   public static final class Other extends hydra.ext.org.w3.owl.syntax.DatatypeRestriction_ConstrainingFacet implements Serializable {
-    public final hydra.ext.rdf.syntax.Iri value;
+    public final hydra.ext.org.w3.rdf.syntax.Iri value;
     
-    public Other (hydra.ext.rdf.syntax.Iri value) {
+    public Other (hydra.ext.org.w3.rdf.syntax.Iri value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

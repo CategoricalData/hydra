@@ -17,9 +17,9 @@ public class AnnotationPropertyDomain implements Serializable {
   
   public final hydra.ext.org.w3.owl.syntax.AnnotationProperty property;
   
-  public final hydra.ext.rdf.syntax.Iri iri;
+  public final hydra.ext.org.w3.rdf.syntax.Iri iri;
   
-  public AnnotationPropertyDomain (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.AnnotationProperty property, hydra.ext.rdf.syntax.Iri iri) {
+  public AnnotationPropertyDomain (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.AnnotationProperty property, hydra.ext.org.w3.rdf.syntax.Iri iri) {
     java.util.Objects.requireNonNull((annotations));
     java.util.Objects.requireNonNull((property));
     java.util.Objects.requireNonNull((iri));
@@ -52,7 +52,7 @@ public class AnnotationPropertyDomain implements Serializable {
     return new AnnotationPropertyDomain(annotations, property, iri);
   }
   
-  public AnnotationPropertyDomain withIri(hydra.ext.rdf.syntax.Iri iri) {
+  public AnnotationPropertyDomain withIri(hydra.ext.org.w3.rdf.syntax.Iri iri) {
     java.util.Objects.requireNonNull((iri));
     return new AnnotationPropertyDomain(annotations, property, iri);
   }

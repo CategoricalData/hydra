@@ -10,7 +10,7 @@ rdfSyntaxModule :: Module
 rdfSyntaxModule = Module ns elements [hydraCoreModule] tier0Modules $
     Just "An RDF 1.1 syntax model"
   where
-    ns = Namespace "hydra/ext/rdf/syntax"
+    ns = Namespace "hydra/ext/org/w3/rdf/syntax"
     def = datatype ns
     rdf = typeref ns
 

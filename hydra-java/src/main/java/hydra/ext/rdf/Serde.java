@@ -1,9 +1,9 @@
 package hydra.ext.rdf;
 
-import hydra.ext.rdf.syntax.Description;
-import hydra.ext.rdf.syntax.Graph;
-import hydra.ext.rdf.syntax.Node;
-import hydra.ext.rdf.syntax.Triple;
+import hydra.ext.org.w3.rdf.syntax.Description;
+import hydra.ext.org.w3.rdf.syntax.Graph;
+import hydra.ext.org.w3.rdf.syntax.Node;
+import hydra.ext.org.w3.rdf.syntax.Triple;
 import java.io.ByteArrayOutputStream;
 import java.util.Collection;
 import java.util.List;
@@ -55,36 +55,36 @@ public interface Serde {
   /**
    * Convert a blank node to its RDF4j equivalent.
    */
-  static BNode bnode(hydra.ext.rdf.syntax.BlankNode r) {
+  static BNode bnode(hydra.ext.org.w3.rdf.syntax.BlankNode r) {
     return valueFactory.createBNode(r.value);
   }
 
   /**
    * Convert an IRI to its RDF4j equivalent.
    */
-  static IRI iri(hydra.ext.rdf.syntax.Iri r) {
+  static IRI iri(hydra.ext.org.w3.rdf.syntax.Iri r) {
     return valueFactory.createIRI(r.value);
   }
 
   /**
    * Convert an RDF literal to its RDF4j equivalent.
    */
-  static Literal literal(hydra.ext.rdf.syntax.Literal r) {
+  static Literal literal(hydra.ext.org.w3.rdf.syntax.Literal r) {
     return valueFactory.createLiteral(r.lexicalForm, iri(r.datatypeIri));
   }
 
   /**
    * Convert an RDF resource to its RDF4j equivalent.
    */
-  static Resource resource(hydra.ext.rdf.syntax.Resource r) {
-    return r.accept(new hydra.ext.rdf.syntax.Resource.Visitor<Resource>() {
+  static Resource resource(hydra.ext.org.w3.rdf.syntax.Resource r) {
+    return r.accept(new hydra.ext.org.w3.rdf.syntax.Resource.Visitor<Resource>() {
       @Override
-      public Resource visit(hydra.ext.rdf.syntax.Resource.Iri instance) {
+      public Resource visit(hydra.ext.org.w3.rdf.syntax.Resource.Iri instance) {
         return iri(instance.value);
       }
 
       @Override
-      public Resource visit(hydra.ext.rdf.syntax.Resource.Bnode instance) {
+      public Resource visit(hydra.ext.org.w3.rdf.syntax.Resource.Bnode instance) {
         return bnode(instance.value);
       }
     });
@@ -103,7 +103,7 @@ public interface Serde {
   /**
    * Convert an RDF node to its RDF4j equivalent.
    */
-  static Value value(hydra.ext.rdf.syntax.Node r) {
+  static Value value(hydra.ext.org.w3.rdf.syntax.Node r) {
     return r.accept(new Node.Visitor<Value>() {
       @Override
       public Value visit(Node.Iri instance) {

@@ -17,9 +17,9 @@ public class AnnotationPropertyRange implements Serializable {
   
   public final hydra.ext.org.w3.owl.syntax.AnnotationProperty property;
   
-  public final hydra.ext.rdf.syntax.Iri iri;
+  public final hydra.ext.org.w3.rdf.syntax.Iri iri;
   
-  public AnnotationPropertyRange (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.AnnotationProperty property, hydra.ext.rdf.syntax.Iri iri) {
+  public AnnotationPropertyRange (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.AnnotationProperty property, hydra.ext.org.w3.rdf.syntax.Iri iri) {
     java.util.Objects.requireNonNull((annotations));
     java.util.Objects.requireNonNull((property));
     java.util.Objects.requireNonNull((iri));
@@ -52,7 +52,7 @@ public class AnnotationPropertyRange implements Serializable {
     return new AnnotationPropertyRange(annotations, property, iri);
   }
   
-  public AnnotationPropertyRange withIri(hydra.ext.rdf.syntax.Iri iri) {
+  public AnnotationPropertyRange withIri(hydra.ext.org.w3.rdf.syntax.Iri iri) {
     java.util.Objects.requireNonNull((iri));
     return new AnnotationPropertyRange(annotations, property, iri);
   }
