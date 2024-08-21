@@ -13,9 +13,9 @@ public class DatatypeRestriction_Constraint implements Serializable {
   
   public final hydra.ext.org.w3.owl.syntax.DatatypeRestriction_ConstrainingFacet constrainingFacet;
   
-  public final hydra.ext.rdf.syntax.Literal restrictionValue;
+  public final hydra.ext.org.w3.rdf.syntax.Literal restrictionValue;
   
-  public DatatypeRestriction_Constraint (hydra.ext.org.w3.owl.syntax.DatatypeRestriction_ConstrainingFacet constrainingFacet, hydra.ext.rdf.syntax.Literal restrictionValue) {
+  public DatatypeRestriction_Constraint (hydra.ext.org.w3.owl.syntax.DatatypeRestriction_ConstrainingFacet constrainingFacet, hydra.ext.org.w3.rdf.syntax.Literal restrictionValue) {
     java.util.Objects.requireNonNull((constrainingFacet));
     java.util.Objects.requireNonNull((restrictionValue));
     this.constrainingFacet = constrainingFacet;
@@ -41,7 +41,7 @@ public class DatatypeRestriction_Constraint implements Serializable {
     return new DatatypeRestriction_Constraint(constrainingFacet, restrictionValue);
   }
   
-  public DatatypeRestriction_Constraint withRestrictionValue(hydra.ext.rdf.syntax.Literal restrictionValue) {
+  public DatatypeRestriction_Constraint withRestrictionValue(hydra.ext.org.w3.rdf.syntax.Literal restrictionValue) {
     java.util.Objects.requireNonNull((restrictionValue));
     return new DatatypeRestriction_Constraint(constrainingFacet, restrictionValue);
   }

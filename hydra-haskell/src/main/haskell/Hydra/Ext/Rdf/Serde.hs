@@ -5,7 +5,7 @@ module Hydra.Ext.Rdf.Serde (
 ) where
 
 import Hydra.Tools.Serialization
-import qualified Hydra.Ext.Rdf.Syntax as Rdf
+import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Rdf
 import qualified Hydra.Ast as CT
 
 import qualified Data.List as L
