@@ -10,3 +10,47 @@ dependencies {
 tasks.named('sourcesJar') {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from(components.java)
+
+            pom {
+                name = 'hydra-ext'
+                description = 'Hydra language extensions in Java; models, coders, and utilities'
+                url = 'https://github.com/CategoricalData/hydra'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'joshsh'
+                        name = 'Joshua Shinavier'
+                        email = 'josh@fortytwo.net'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/CategoricalData/hydra'
+                    connection = 'scm:git://github.com/ConnectedData/hydra.git'
+                    developerConnection = 'scm:git://github.com/CategoricalData/hydra.git'
+                }
+
+                // Include the subprojects as modules
+                withXml {
+                    asNode().appendNode('modules').with {
+                        appendNode('module', 'hydra-java')
+                        appendNode('module', 'hydra-ext')
+                    }
+                }
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
