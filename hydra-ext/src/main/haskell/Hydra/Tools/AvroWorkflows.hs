@@ -27,10 +27,10 @@ import Hydra.Ext.Avro.Coder
 import Hydra.Ext.Avro.SchemaJson
 import Hydra.Ext.Tinkerpop.Coder
 import qualified Hydra.Ext.Shacl.Coder as Shacl
-import qualified Hydra.Ext.Rdf.Syntax as Rdf
+import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Rdf.Utils as RdfUt
-import qualified Hydra.Ext.Tinkerpop.PropertyGraph as PG
-import qualified Hydra.Ext.Tinkerpop.Mappings as PGM
+import qualified Hydra.Ext.Org.Apache.Tinkerpop.PropertyGraph as PG
+import qualified Hydra.Ext.Org.Apache.Tinkerpop.Mappings as PGM
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Expect as Expect

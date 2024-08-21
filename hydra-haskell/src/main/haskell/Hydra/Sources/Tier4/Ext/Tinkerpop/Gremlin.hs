@@ -15,7 +15,7 @@ gremlinModule = Module ns elements [hydraCoreModule] tier0Modules $
     Just ("A Gremlin model, based on the Gremlin ANTLR grammar "
       ++ "(master branch, as of 2024-06-30).")
   where
-    ns = Namespace "hydra/ext/tinkerpop/gremlin"
+    ns = Namespace "hydra/ext/org/apache/tinkerpop/gremlin"
     gremlin = typeref ns
     def = datatype ns
 

@@ -14,7 +14,7 @@ propertyGraphQueriesModule :: Module
 propertyGraphQueriesModule = Module ns elements [tinkerpopPropertyGraphModule] tier0Modules $
     Just ("A common model for pattern-matching queries over property graphs")
   where
-    ns = Namespace "hydra/ext/tinkerpop/queries"
+    ns = Namespace "hydra/ext/org/apache/tinkerpop/queries"
     pg = typeref $ moduleNamespace tinkerpopPropertyGraphModule
     q = typeref ns
     def = datatype ns
@@ -106,7 +106,7 @@ propertyGraphQueriesModule = Module ns elements [tinkerpopPropertyGraphModule] t
 
       -- TODO: temporary
       def "PropertyValue" $ string,
-      
+
       def "PropertyValuePattern" $
         union [
           "variable">: pg "PropertyKey",

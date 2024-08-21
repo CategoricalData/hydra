@@ -4,7 +4,7 @@ module Hydra.Ext.Org.W3.Owl.Syntax where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Org.W3.Xml.Schema as Schema
-import qualified Hydra.Ext.Rdf.Syntax as Syntax
+import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Syntax
 import Data.Int
 import Data.List as L
 import Data.Map as M
