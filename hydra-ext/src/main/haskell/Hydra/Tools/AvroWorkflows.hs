@@ -25,12 +25,12 @@ import Hydra.Ext.Json.Eliminate
 import Hydra.Ext.Json.Serde
 import Hydra.Ext.Avro.Coder
 import Hydra.Ext.Avro.SchemaJson
-import Hydra.Ext.Tinkerpop.Coder
+import Hydra.Ext.Pg.Coder
 import qualified Hydra.Ext.Shacl.Coder as Shacl
 import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Rdf.Utils as RdfUt
-import qualified Hydra.Ext.Org.Apache.Tinkerpop.PropertyGraph as PG
-import qualified Hydra.Ext.Org.Apache.Tinkerpop.Mappings as PGM
+import qualified Hydra.Pg.Model as PG
+import qualified Hydra.Pg.Mapping as PGM
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Expect as Expect

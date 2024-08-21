@@ -1,7 +1,7 @@
 package hydra.ext.org.apache.tinkerpop.dsl;
 
-import hydra.ext.org.apache.tinkerpop.propertyGraph.VertexLabel;
-import hydra.ext.org.apache.tinkerpop.propertyGraph.VertexType;
+import hydra.pg.model.VertexLabel;
+import hydra.pg.model.VertexType;
 
 /**
  * A builder object for property graph vertex types.

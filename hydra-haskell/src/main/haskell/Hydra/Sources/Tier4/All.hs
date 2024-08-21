@@ -25,12 +25,12 @@ import Hydra.Sources.Tier4.Ext.Shacl.Model
 import Hydra.Sources.Tier4.Ext.Tabular
 import Hydra.Sources.Tier4.Ext.Tinkerpop.Features
 import Hydra.Sources.Tier4.Ext.Tinkerpop.Gremlin
-import Hydra.Sources.Tier4.Ext.Tinkerpop.Mappings
-import Hydra.Sources.Tier4.Ext.Tinkerpop.PropertyGraph
-import Hydra.Sources.Tier4.Ext.Tinkerpop.Queries
-import Hydra.Sources.Tier4.Ext.Tinkerpop.Validate
 import Hydra.Sources.Tier4.Ext.Yaml.Model
 import Hydra.Sources.Tier4.Test.TestSuite
+import Hydra.Sources.Tier4.Ext.Pg.Mapping
+import Hydra.Sources.Tier4.Ext.Pg.Model
+import Hydra.Sources.Tier4.Ext.Pg.Query
+import Hydra.Sources.Tier4.Ext.Pg.Validation
 
 
 allModules :: [Module]
@@ -65,8 +65,8 @@ tier4LangModules = [
   shaclModelModule,
   tabularModule,
   tinkerpopFeaturesModule,
-  tinkerpopMappingsModule,
-  tinkerpopPropertyGraphModule,
-  propertyGraphQueriesModule,
-  tinkerpopValidateModule,
+  pgMappingModule,
+  pgModelModule,
+  pgQueryModule,
+  pgValidationModule,
   yamlModelModule]

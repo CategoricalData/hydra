@@ -1,6 +1,6 @@
 package hydra.ext.org.apache.tinkerpop.dsl;
 
-import hydra.ext.org.apache.tinkerpop.propertyGraph.PropertyKey;
+import hydra.pg.model.PropertyKey;
 
 import java.util.HashMap;
 import java.util.Map;

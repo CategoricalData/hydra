@@ -1,8 +1,8 @@
 package hydra.ext.org.apache.tinkerpop.dsl;
 
-import hydra.ext.org.apache.tinkerpop.propertyGraph.EdgeLabel;
-import hydra.ext.org.apache.tinkerpop.propertyGraph.EdgeType;
-import hydra.ext.org.apache.tinkerpop.propertyGraph.VertexLabel;
+import hydra.pg.model.EdgeLabel;
+import hydra.pg.model.EdgeType;
+import hydra.pg.model.VertexLabel;
 
 /**
  * A builder object for property graph edge types.

@@ -1,7 +1,7 @@
 package hydra.ext.org.apache.tinkerpop.dsl;
 
-import hydra.ext.org.apache.tinkerpop.propertyGraph.PropertyKey;
-import hydra.ext.org.apache.tinkerpop.propertyGraph.PropertyType;
+import hydra.pg.model.PropertyKey;
+import hydra.pg.model.PropertyType;
 
 import java.util.ArrayList;
 import java.util.List;
