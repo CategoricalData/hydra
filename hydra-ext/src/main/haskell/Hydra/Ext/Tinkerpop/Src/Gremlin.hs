@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier4.Ext.Tinkerpop.Gremlin where
+module Hydra.Ext.Tinkerpop.Src.Gremlin where
 
 import Hydra.Sources.Tier3.All
 import Hydra.Dsl.Annotations
