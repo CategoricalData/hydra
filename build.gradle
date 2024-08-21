@@ -6,15 +6,12 @@ plugins {
     id 'checkstyle'
 }
 
+allprojects {
+    group = 'net.fortytwo.hydra'
+    version = '0.7.0'
 
-group = 'net.fortytwo.hydra'
-version = '0.7.0'
-
-subprojects {
-    apply plugin: 'java-library'
     apply plugin: 'signing'
     apply plugin: 'maven-publish'
-    apply plugin: 'checkstyle'
 
     repositories {
         mavenCentral()
@@ -23,6 +20,11 @@ subprojects {
             url "https://linkedin.jfrog.io/artifactory/open-source/" // For Pegasus dependencies
         }
     }
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'checkstyle'
 
     sourceSets {
         main {
@@ -98,6 +100,7 @@ publishing {
                     developer {
                         id = 'joshsh'
                         name = 'Joshua Shinavier'
+                        email = 'josh@fortytwo.net'
                     }
                 }
                 scm {
@@ -113,10 +116,6 @@ publishing {
     // repositories {
     //     mavenLocal()
     // }
-}
-
-signing {
-    sign publishing.publications.mavenJava
 }
 
 nexusPublishing {

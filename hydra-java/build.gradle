@@ -1,11 +1,13 @@
 plugins {
     id 'antlr'
+    id 'maven-publish'
+    id 'signing'
 }
 
 apply plugin: 'antlr'
 
 dependencies {
-    antlr 'org.antlr:antlr4:4.9.2'
+    antlr 'org.antlr:antlr4:4.13.2'
 
     implementation group: 'org.apache.commons', name: 'commons-text', version: '1.10.0'
     implementation group: 'com.cedarsoftware', name: 'json-io', version: '4.14.1'
@@ -32,4 +34,40 @@ generateGrammarSource {
 
 compileJava {
     dependsOn generateGrammarSource
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from(components.java)
+
+            pom {
+                name = 'hydra-java'
+                description = 'Java implementation of the Hydra language'
+                url = 'https://github.com/CategoricalData/hydra'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'joshsh'
+                        name = 'Joshua Shinavier'
+                        email = 'josh@fortytwo.net'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/CategoricalData/hydra'
+                    connection = 'scm:git://github.com/ConnectedData/hydra.git'
+                    developerConnection = 'scm:git://github.com/CategoricalData/hydra.git'
+                }
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
 }
