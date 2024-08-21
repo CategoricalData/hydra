@@ -1,7 +1,7 @@
 module Hydra.Tools.PropertyGraphToRdf where
 
 import Hydra.Kernel
-import qualified Hydra.Ext.Org.Apache.Tinkerpop.PropertyGraph as PG
+import qualified Hydra.Pg.Model as PG
 import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Rdf.Utils as RdfUt
 

@@ -1,8 +1,8 @@
 package hydra.ext.org.apache.tinkerpop.dsl;
 
-import hydra.ext.org.apache.tinkerpop.queries.ApplicationQuery;
-import hydra.ext.org.apache.tinkerpop.queries.Query;
-import hydra.ext.org.apache.tinkerpop.queries.SelectQuery;
+import hydra.pg.query.ApplicationQuery;
+import hydra.pg.query.Query;
+import hydra.pg.query.SelectQuery;
 
 import java.util.Arrays;
 import java.util.List;
