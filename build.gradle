@@ -6,10 +6,11 @@ plugins {
     id 'checkstyle'
 }
 
-subprojects {
-    group = 'net.fortytwo.hydra'
-    version = '0.7.0'
 
+group = 'net.fortytwo.hydra'
+version = '0.7.0'
+
+subprojects {
     apply plugin: 'java-library'
     apply plugin: 'signing'
     apply plugin: 'maven-publish'
@@ -76,46 +77,46 @@ subprojects {
     tasks.withType(Javadoc) {
         options.encoding = 'UTF-8'
     }
-    
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                from(components.java)
+}
 
-                pom {
-                    name = 'hydra'
-                    description = 'The Hydra language for strongly-typed transformations'
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from(components.java)
+
+            pom {
+                name = 'hydra'
+                description = 'The Hydra language for type-safe transformations'
+                url = 'https://github.com/CategoricalData/hydra'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'joshsh'
+                        name = 'Joshua Shinavier'
+                    }
+                }
+                scm {
                     url = 'https://github.com/CategoricalData/hydra'
-                    licenses {
-                        license {
-                            name = 'The Apache License, Version 2.0'
-                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        }
-                    }
-                    developers {
-                        developer {
-                            id = 'joshsh'
-                            name = 'Joshua Shinavier'
-                        }
-                    }
-                    scm {
-                        url = 'https://github.com/CategoricalData/hydra'
-                        connection = 'scm:git://github.com/ConnectedData/hydra.git'
-                        developerConnection = 'scm:git://github.com/CategoricalData/hydra.git'
-                    }
+                    connection = 'scm:git://github.com/ConnectedData/hydra.git'
+                    developerConnection = 'scm:git://github.com/CategoricalData/hydra.git'
                 }
             }
         }
-
-        // Uncomment the below to enable local publishing
-        // repositories {
-        //     mavenLocal()
-        // }
     }
 
-    signing {
-        sign publishing.publications.mavenJava
-    }
+    // Uncomment the below to enable local publishing
+    // repositories {
+    //     mavenLocal()
+    // }
+}
+
+signing {
+    sign publishing.publications.mavenJava
 }
 
 nexusPublishing {
