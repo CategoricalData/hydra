@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation project(':hydra-java')
+    api project(':hydra-java')
 }
 
 // Avoids duplicate KqlWriter.java
