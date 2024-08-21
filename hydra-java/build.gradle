@@ -9,13 +9,15 @@ apply plugin: 'antlr'
 dependencies {
     antlr 'org.antlr:antlr4:4.13.2'
 
-    implementation group: 'org.apache.commons', name: 'commons-text', version: '1.10.0'
-    implementation group: 'com.cedarsoftware', name: 'json-io', version: '4.14.1'
-    implementation 'org.eclipse.rdf4j:rdf4j-rio-ntriples:3.7.7'
+    api group: 'org.apache.commons', name: 'commons-text', version: '1.10.0'
+    api group: 'com.cedarsoftware', name: 'json-io', version: '4.14.1'
+    api 'org.eclipse.rdf4j:rdf4j-rio-ntriples:3.7.7'
 
-    implementation(platform('org.junit:junit-bom:5.9.2'))
-    implementation('org.junit.jupiter:junit-jupiter')
-    implementation('org.junit.jupiter:junit-jupiter-params:5.9.2')
+    // Note: these are currently "main" dependencies rather than "test" dependencies due to reusable test utilities.
+    //       These will likely be broken out into a separate module in the future.
+    api(platform('org.junit:junit-bom:5.9.2'))
+    api('org.junit.jupiter:junit-jupiter')
+    api('org.junit.jupiter:junit-jupiter-params:5.9.2')
 
     testImplementation 'org.apache.commons:commons-csv:1.10.0'
 }
