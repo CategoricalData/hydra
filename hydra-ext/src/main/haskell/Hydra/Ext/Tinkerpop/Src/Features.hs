@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier4.Ext.Tinkerpop.Features where
+module Hydra.Ext.Tinkerpop.Src.Features where
 
 import Hydra.Sources.Tier3.All
 import Hydra.Dsl.Annotations

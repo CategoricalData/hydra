@@ -10,6 +10,8 @@ import Hydra.Ext.Parquet.Src.Format
 import Hydra.Ext.Python.Src.Python3
 import Hydra.Ext.Shex.Src.Syntax
 import Hydra.Ext.Sql.Src.Ansi
+import Hydra.Ext.Tinkerpop.Src.Features
+import Hydra.Ext.Tinkerpop.Src.Gremlin
 import Hydra.Ext.Xml.Src.Schema
 
 import Hydra.Ext.Other.Atlas
@@ -31,6 +33,7 @@ hydraExtModules = [
   dotModule,
   dtldModule,
   geoJsonModule,
+  gremlinModule,
   ianaRelationsModule,
   kqlModule,
   osvSchemaModule,
@@ -40,4 +43,5 @@ hydraExtModules = [
   shexSyntaxModule,
   sqlModule,
   stacModule,
+  tinkerpopFeaturesModule,
   xmlSchemaModule]

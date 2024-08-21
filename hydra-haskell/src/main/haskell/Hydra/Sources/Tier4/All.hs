@@ -23,8 +23,6 @@ import Hydra.Sources.Tier4.Ext.RelationalModel
 import Hydra.Sources.Tier4.Ext.Scala.Meta
 import Hydra.Sources.Tier4.Ext.Shacl.Model
 import Hydra.Sources.Tier4.Ext.Tabular
-import Hydra.Sources.Tier4.Ext.Tinkerpop.Features
-import Hydra.Sources.Tier4.Ext.Tinkerpop.Gremlin
 import Hydra.Sources.Tier4.Ext.Yaml.Model
 import Hydra.Sources.Tier4.Test.TestSuite
 import Hydra.Sources.Tier4.Ext.Pg.Mapping
@@ -47,7 +45,6 @@ tier4LangModules :: [Module]
 tier4LangModules = [
   avroSchemaModule,
   graphqlSyntaxModule,
-  gremlinModule,
   haskellAstModule,
   javaLanguageModule,
   javaSyntaxModule,
@@ -64,7 +61,6 @@ tier4LangModules = [
   scalaMetaModule,
   shaclModelModule,
   tabularModule,
-  tinkerpopFeaturesModule,
   pgMappingModule,
   pgModelModule,
   pgQueryModule,
