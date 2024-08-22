@@ -1,5 +1,6 @@
 package hydra.ext.json;
 
+import hydra.core.Name;
 import hydra.json.Value;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -102,6 +103,13 @@ public abstract class JsonDecoding {
     }
 
     /**
+     * Decode a list field from JSON.
+     */
+    public static <A> List<A> decodeListField(Name name, Function<Value, A> mapping, Value json) {
+        return decodeListField(name.value, mapping, json);
+    }
+
+    /**
      * Decode a number from JSON.
      */
     public static double decodeNumber(Value json) {
@@ -143,6 +151,13 @@ public abstract class JsonDecoding {
     }
 
     /**
+     * Decode an optional double-valued field from JSON.
+     */
+    public static Opt<Double> decodeOptionalDoubleField(Name name, Value json) {
+        return decodeOptionalField(name.value, JsonDecoding::decodeDouble, json, null);
+    }
+
+    /**
      * Decode an optional field from JSON.
      */
     public static <A> Opt<A> decodeOptionalField(String name,
@@ -171,8 +186,25 @@ public abstract class JsonDecoding {
     /**
      * Decode an optional field from JSON.
      */
+    public static <A> Opt<A> decodeOptionalField(Name name,
+                                                 Function<Value, A> mapping,
+                                                 Value json,
+                                                 A defaultValue) {
+        return decodeOptionalField(name.value, mapping, json, defaultValue);
+    }
+
+    /**
+     * Decode an optional field from JSON.
+     */
     public static <A> Opt<A> decodeOptionalField(String name, Function<Value, A> mapping, Value json) {
         return decodeOptionalField(name, mapping, json, null);
+    }
+
+    /**
+     * Decode an optional field from JSON.
+     */
+    public static <A> Opt<A> decodeOptionalField(Name name, Function<Value, A> mapping, Value json) {
+        return decodeOptionalField(name.value, mapping, json, null);
     }
 
     /**
@@ -183,6 +215,13 @@ public abstract class JsonDecoding {
     }
 
     /**
+     * Decode an optional integer-valued field from JSON.
+     */
+    public static Opt<Integer> decodeOptionalIntegerField(Name name, Value json) {
+        return decodeOptionalField(name.value, JsonDecoding::decodeInteger, json, null);
+    }
+
+    /**
      * Decode an optional set-valued field from JSON.
      */
     public static <A> Opt<Set<A>> decodeOptionalSetField(String name, Function<Value, A> mapping, Value json) {
@@ -190,10 +229,24 @@ public abstract class JsonDecoding {
     }
 
     /**
+     * Decode an optional set-valued field from JSON.
+     */
+    public static <A> Opt<Set<A>> decodeOptionalSetField(Name name, Function<Value, A> mapping, Value json) {
+        return decodeOptionalField(name.value, v -> decodeSet(mapping, v), json);
+    }
+
+    /**
      * Decode a required boolean-valued field from JSON.
      */
     public static boolean decodeRequiredBooleanField(String name, Value json) {
         return decodeRequiredField(name, JsonDecoding::decodeBoolean, json);
+    }
+
+    /**
+     * Decode a required boolean-valued field from JSON.
+     */
+    public static boolean decodeRequiredBooleanField(Name name, Value json) {
+        return decodeRequiredField(name.value, JsonDecoding::decodeBoolean, json);
     }
 
     /**
@@ -211,6 +264,13 @@ public abstract class JsonDecoding {
     /**
      * Decode a required field from JSON.
      */
+    public static <A> A decodeRequiredField(Name name, Function<Value, A> mapping, Value json, A defaultValue) {
+        return decodeRequiredField(name.value, mapping, json, defaultValue);
+    }
+
+    /**
+     * Decode a required field from JSON.
+     */
     public static <A> A decodeRequiredField(String name, Function<Value, A> mapping, Value json) {
         Opt<A> opt = decodeOptionalField(name, mapping, json);
         if (opt.isPresent()) {
@@ -221,6 +281,13 @@ public abstract class JsonDecoding {
     }
 
     /**
+     * Decode a required field from JSON.
+     */
+    public static <A> A decodeRequiredField(Name name, Function<Value, A> mapping, Value json) {
+        return decodeRequiredField(name.value, mapping, json, null);
+    }
+
+    /**
      * Decode a required int32-valued field from JSON.
      */
     public static int decodeRequiredIntField(String name, Value json) {
@@ -228,10 +295,24 @@ public abstract class JsonDecoding {
     }
 
     /**
+     * Decode a required int32-valued field from JSON.
+     */
+    public static int decodeRequiredIntField(Name name, Value json) {
+        return decodeRequiredField(name.value, JsonDecoding::decodeInteger, json);
+    }
+
+    /**
      * Decode a required list-valued field from JSON.
      */
     public static <A> List<A> decodeRequiredListField(String name, Function<Value, A> mapping, Value json) {
         return decodeRequiredField(name, v -> decodeList(mapping, v), json, Collections.emptyList());
+    }
+
+    /**
+     * Decode a required list-valued field from JSON.
+     */
+    public static <A> List<A> decodeRequiredListField(Name name, Function<Value, A> mapping, Value json) {
+        return decodeRequiredField(name.value, v -> decodeList(mapping, v), json, Collections.emptyList());
     }
 
     /**
