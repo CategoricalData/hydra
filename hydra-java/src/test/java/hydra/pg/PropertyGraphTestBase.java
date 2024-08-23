@@ -5,7 +5,7 @@ import hydra.core.Literal;
 import hydra.core.LiteralType;
 import hydra.dsl.LiteralTypes;
 import hydra.dsl.Literals;
-import hydra.ext.org.apache.tinkerpop.dsl.Graphs;
+import hydra.pg.dsl.Graphs;
 import hydra.pg.model.Edge;
 import hydra.pg.model.EdgeType;
 import hydra.pg.model.Element;
