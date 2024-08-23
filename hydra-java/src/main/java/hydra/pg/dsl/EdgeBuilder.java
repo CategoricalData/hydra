@@ -1,4 +1,4 @@
-package hydra.ext.org.apache.tinkerpop.dsl;
+package hydra.pg.dsl;
 
 import hydra.pg.model.Edge;
 import hydra.pg.model.EdgeLabel;

@@ -66,8 +66,8 @@ import java.util.Collections;
 import java.util.List;
 import hydra.util.Opt;
 
-import static hydra.ext.org.apache.tinkerpop.dsl.Queries.apply;
-import static hydra.ext.org.apache.tinkerpop.dsl.Queries.query;
+import static hydra.pg.dsl.Queries.apply;
+import static hydra.pg.dsl.Queries.query;
 
 public class FromCypher extends MapperBase {
 
