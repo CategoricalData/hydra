@@ -71,7 +71,7 @@ public abstract class JsonDecoding {
         String key = decodeString(json);
         A value = values.get(key);
         if (value == null) {
-            throw new RuntimeException("no such enum value: " + key);
+            throw new JsonDecodingException("no such enum value: " + key);
         } else {
             return value;
         }
@@ -276,7 +276,7 @@ public abstract class JsonDecoding {
         if (opt.isPresent()) {
             return opt.get();
         } else {
-            throw new RuntimeException("missing required field \"" + name + "\"");
+            throw new JsonDecodingException("missing required field \"" + name + "\"");
         }
     }
 
@@ -361,12 +361,12 @@ public abstract class JsonDecoding {
             public A visit(Value.Object_ instance) {
                 Map<String, Value> map = instance.value;
                 if (map.size() != 1) {
-                    throw new RuntimeException("expected union, found object with " + map.size() + " fields");
+                    throw new JsonDecodingException("expected union, found object with " + map.size() + " fields");
                 }
                 Map.Entry<String, Value> entry = map.entrySet().iterator().next();
                 Function<Value, A> mapping = mappings.get(entry.getKey());
                 if (mapping == null) {
-                    throw new RuntimeException("unexpected union value: " + entry.getKey());
+                    throw new JsonDecodingException("unexpected union value: " + entry.getKey());
                 } else {
                     return mapping.apply(entry.getValue());
                 }
@@ -376,7 +376,7 @@ public abstract class JsonDecoding {
             public A visit(Value.String_ instance) {
                 Function<Value, A> mapping = mappings.get(instance.value);
                 if (mapping == null) {
-                    throw new RuntimeException("unexpected union value: " + instance.value);
+                    throw new JsonDecodingException("unexpected union value: " + instance.value);
                 } else {
                     return mapping.apply(new Value.Null());
                 }
@@ -387,7 +387,13 @@ public abstract class JsonDecoding {
     /**
      * Fail on an unexpected JSON value.
      */
-    public static RuntimeException unexpected(String expected, Value actual) {
-        return new RuntimeException("expected " + expected + ", found " + actual);
+    public static JsonDecodingException unexpected(String expected, Value actual) {
+        return new JsonDecodingException("expected " + expected + ", found " + actual);
+    }
+
+    public static class JsonDecodingException extends RuntimeException {
+        public JsonDecodingException(String message) {
+            super(message);
+        }
     }
 }
