@@ -264,7 +264,7 @@ moduleToHaskell mod = do
 
 nameDecls :: Graph -> Namespaces -> Name -> Type -> [H.DeclarationWithComments]
 nameDecls g namespaces name@(Name nm) typ = if useCoreImport
-    then (toDecl (Name "hydra/core.Name") nameDecl):(toDecl (Name "hydra/core.Name") <$> fieldDecls)
+    then (toDecl _Name nameDecl):(toDecl _Name <$> fieldDecls)
     else []
   where
     toDecl n (k, v) = H.DeclarationWithComments decl Nothing
