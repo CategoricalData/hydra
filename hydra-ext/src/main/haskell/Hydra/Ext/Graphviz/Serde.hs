@@ -39,11 +39,11 @@ writeCompassPt p = case p of
 
 writeEdgeStmt :: Bool -> Dot.EdgeStmt -> CT.Expr
 writeEdgeStmt directed (Dot.EdgeStmt l r attr) = spaceSep $
-    [writeNodeOrSubgraph l]
+    [writeNodeOrSubgraph directed l]
     ++ L.concat (toRhs <$> r)
     ++ Y.maybe [] (\a -> [writeAttrList a]) attr
   where
-    toRhs n = [arrow, writeNodeOrSubgraph n]
+    toRhs n = [arrow, writeNodeOrSubgraph directed n]
     arrow = cst $ if directed then "->" else "--"
 
 writeEqualityPair :: Dot.EqualityPair -> CT.Expr
@@ -54,19 +54,22 @@ writeGraph g = spaceSep [header, body]
   where
     header = if Dot.graphStrict g then spaceSep[cst "strict", graph] else graph
     graph = cst $ if directed then "digraph" else "graph"
-    body = brackets curlyBraces fullBlockStyle $ spaceSep (writeStmt directed <$> Dot.graphStatements g)
+    body = brackets curlyBraces fullBlockStyle $
+      symbolSep ";" fullBlockStyle (writeStmt directed <$> Dot.graphStatements g)
     directed = Dot.graphDirected g
 
 writeId :: Dot.Id -> CT.Expr
-writeId = cst . Dot.unId
+writeId i = cst $ "\"" ++ Dot.unId i ++ "\""
 
 writeNodeId :: Dot.NodeId -> CT.Expr
 writeNodeId (Dot.NodeId i mp) = noSep $ Y.catMaybes [
   Just $ writeId i,
   writePort <$> mp]
 
-writeNodeOrSubgraph :: Dot.NodeOrSubgraph -> CT.Expr
-writeNodeOrSubgraph n = cst "nodeOrSubgraph" -- TODO
+writeNodeOrSubgraph :: Bool -> Dot.NodeOrSubgraph -> CT.Expr
+writeNodeOrSubgraph directed ns = case ns of
+  Dot.NodeOrSubgraphNode n -> writeNodeId n
+  Dot.NodeOrSubgraphSubgraph sg -> writeSubgraph directed sg
 
 writeNodeStmt :: Dot.NodeStmt -> CT.Expr
 writeNodeStmt (Dot.NodeStmt i attr) = spaceSep $ Y.catMaybes [
