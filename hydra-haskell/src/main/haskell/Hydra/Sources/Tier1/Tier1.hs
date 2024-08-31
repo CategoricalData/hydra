@@ -29,6 +29,7 @@ import           Hydra.Sources.Tier0.All
 
 import Hydra.Sources.Tier1.Constants
 import Hydra.Sources.Tier1.Strip
+import Hydra.Dsl.Mantle
 
 
 tier1Definition :: String -> TTerm a -> TElement a
@@ -50,6 +51,7 @@ hydraTier1Module = Module (Namespace "hydra/tier1") elements
      el freeVariablesInTermDef,
      el freeVariablesInTypeDef,
      el subtermsDef,
+     el subtermsWithAccessorsDef,
      el subtypesDef,
      -- Flows.hs
      el emptyTraceDef,
@@ -200,6 +202,77 @@ subtermsDef = tier1Definition "subterms" $
     _Term_union>>: lambda "ut" $ list [Core.fieldTerm @@ (Core.injectionField @@ var "ut")],
     _Term_variable>>: constant $ list [],
     _Term_wrap>>: lambda "n" $ list [Core.wrappedTermObject @@ var "n"]]
+
+subtermsWithAccessorsDef :: TElement (Term -> [(TermAccessor, Term)])
+subtermsWithAccessorsDef = tier1Definition "subtermsWithAccessors" $
+  doc "Find the children of a given term" $
+  function termT (listT $ pairT termAccessorT termT) $
+  match _Term Nothing [
+    _Term_annotated>>: lambda "at" $ single termAccessorAnnotatedSubject $ Core.annotatedTermSubject @@ var "at",
+    _Term_application>>: lambda "p" $ list [
+      result termAccessorApplicationFunction $ Core.applicationFunction @@ var "p",
+      result termAccessorApplicationArgument $ Core.applicationArgument @@ var "p"],
+    _Term_function>>: match _Function (Just none) [
+        _Function_elimination>>: match _Elimination (Just none) [
+            _Elimination_list>>: lambda "fld" $ single termAccessorListFold $ var "fld",
+            _Elimination_optional>>: lambda "oc" $ list [
+              result termAccessorOptionalCasesNothing $ Core.optionalCasesNothing @@ var "oc",
+              result termAccessorOptionalCasesJust $ Core.optionalCasesJust @@ var "oc"],
+            _Elimination_union>>: lambda "cs" $ Lists.concat2
+              @@ ((matchOpt none (lambda "t" $ single termAccessorUnionCasesDefault $ var "t")) @@ (Core.caseStatementDefault @@ var "cs"))
+              @@ (Lists.map
+                @@ (lambda "f" $ result (termAccessorUnionCasesBranch $ Core.fieldName @@ var "f") $ Core.fieldTerm @@ var "f")
+                @@ (Core.caseStatementCases @@ var "cs"))],
+        _Function_lambda>>: lambda "l" $ single termAccessorLambdaBody $ Core.lambdaBody @@ var "l"],
+    _Term_let>>: lambda "lt" $ Lists.cons
+      @@ (result termAccessorLetEnvironment $ Core.letEnvironment @@ var "lt")
+      @@ (Lists.map
+        @@ (lambda "b" $ result (termAccessorLetBinding $ Core.letBindingName @@ var "b") $ Core.letBindingTerm @@ var "b")
+        @@ (Core.letBindings @@ var "lt")),
+    _Term_list>>: Lists.map
+      -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
+      @@ (lambda "e" $ result (termAccessorListElement $ int32 0) $ var "e"),
+    _Term_literal>>: constant none,
+    _Term_map>>: lambda "m" (Lists.concat @@
+      (Lists.map
+        @@ (lambda "p" $ list [
+          -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
+          result (termAccessorMapKey $ int32 0) $ first @@ var "p",
+          result (termAccessorMapValue $ int32 0) $ second @@ var "p"])
+        @@ (Maps.toList @@ var "m"))),
+    _Term_optional>>: matchOpt none (lambda "t" $ single termAccessorOptionalTerm $ var "t"),
+    _Term_product>>: Lists.map
+      -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
+      @@ (lambda "e" $ result (termAccessorProductTerm $ int32 0) $ var "e"),
+    _Term_record>>: lambda "rt" (Lists.map
+      @@ (lambda "f" $ result (termAccessorRecordField $ Core.fieldName @@ var "f") $ Core.fieldTerm @@ var "f")
+      @@ (Core.recordFields @@ var "rt")),
+    _Term_set>>: lambda "s" $ Lists.map
+      -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
+      @@ (lambda "e" $ result (termAccessorListElement $ int32 0) $ var "e")
+      @@ (Sets.toList @@ var "s"),
+    _Term_sum>>: lambda "st" $
+      single termAccessorSumTerm $
+      Core.sumTerm @@ var "st",
+    _Term_typeAbstraction>>: lambda "ta" $
+      single termAccessorTypeAbstractionBody $
+      Core.typeAbstractionBody @@ var "ta",
+    _Term_typeApplication>>: lambda "ta" $
+      single termAccessorTypeApplicationTerm $
+      Core.typedTermTerm @@ var "ta",
+    _Term_typed>>: lambda "tt" $
+      single termAccessorTypedTerm $
+      Core.typedTermTerm @@ var "tt",
+    _Term_union>>: lambda "ut" $
+      single termAccessorInjectionTerm $
+      Core.fieldTerm @@ (Core.injectionField @@ var "ut"),
+    _Term_variable>>: constant none,
+    _Term_wrap>>: lambda "n" $ single termAccessorWrappedTerm $ Core.wrappedTermObject @@ var "n"]
+  where
+    none = list []
+    single accessor term = list [result accessor term]
+    result accessor term = pair accessor term
+    simple term = result termAccessorAnnotatedSubject term
 
 subtypesDef :: TElement (Type -> [Type])
 subtypesDef = tier1Definition "subtypes" $

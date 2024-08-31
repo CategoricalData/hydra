@@ -16,7 +16,7 @@ import           Hydra.Sources.Core
 
 hydraMantleModule :: Module
 hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
-    Just "A set of types which supplement hydra/core with type variants, graphs, and elements"
+    Just "A set of types which supplement hydra/core with variants and accessors"
   where
     ns = Namespace "hydra/mantle"
     core = typeref $ moduleNamespace hydraCoreModule
@@ -62,6 +62,34 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
         union [
           "arbitrary">: unit,
           "bits">: int32],
+
+      def "TermAccessor" $
+        doc "A function which maps from a term to a particular immediate subterm" $
+        union [
+          "annotatedSubject">: unit,
+          "applicationFunction">: unit,
+          "applicationArgument">: unit,
+          "lambdaBody">: unit,
+          "listFold">: unit,
+          "optionalCasesNothing">: unit,
+          "optionalCasesJust">: unit,
+          "unionCasesDefault">: unit,
+          "unionCasesBranch">: core "Name",
+          "letEnvironment">: unit,
+          "letBinding">: core "Name",
+          "listElement">: int32,
+          "mapKey">: int32,
+          "mapValue">: int32,
+          "optionalTerm">: unit,
+          "productTerm">: int32,
+          "recordField">: core "Name",
+          "setElement">: int32,
+          "sumTerm">: unit,
+          "typeAbstractionBody">: unit,
+          "typeApplicationTerm">: unit,
+          "typedTerm">: unit,
+          "injectionTerm">: unit,
+          "wrappedTerm">: unit],
 
       def "TermVariant" $
         doc "The identifier of a term expression constructor" $
