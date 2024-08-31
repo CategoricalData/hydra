@@ -15,22 +15,41 @@ encodeAsDotGraph term = Dot.Graph {
   Dot.graphStrict = False,
   Dot.graphDirected = True,
   Dot.graphId = Nothing,
-  Dot.graphStatements = encodeAsDotStatements standardNamespaces M.empty term}
+  Dot.graphStatements = encodeAsDotStatements standardNamespaces term}
 
-encodeAsDotStatements :: M.Map Namespace String -> M.Map Name Dot.Id -> Term -> [Dot.Stmt]
-encodeAsDotStatements namespaces ids term = fst $ encode Nothing ([], S.empty) (TermAccessorAnnotatedSubject, term)
+encodeAsDotStatements :: M.Map Namespace String -> Term -> [Dot.Stmt]
+encodeAsDotStatements namespaces term = fst $ encode Nothing M.empty Nothing ([], S.empty) (TermAccessorAnnotatedSubject, term)
   where
-    encode mparent (stmts, visited) (accessor, term) = L.foldl
-        (encode (Just selfId))
-        (stmts ++ [nodeStmt] ++ parentStmt, S.insert label visited)
-        (subtermsWithAccessors term)
+    encode mlabel ids mparent (stmts, visited) (accessor, term) = case term of
+        TermFunction (FunctionLambda (Lambda v _ body)) ->
+            encode Nothing ids1 (Just selfId) (selfStmts, selfVisited) (TermAccessorLambdaBody, body)
+          where
+            ids1 = M.insert v selfId ids
+        TermLet (Let bindings env) -> encode Nothing ids1 (Just selfId) (stmts1, visited2) (TermAccessorLetEnvironment, env)
+          where
+            (stmts1, visited2) = L.foldl addBinding (selfStmts, selfVisited) bindings
+              where
+                addBinding (stmts, visited) (LetBinding name trm _) = encode (Just lab) ids1 (Just selfId) (stmts, visited) (TermAccessorLetBinding name, trm)
+                  where
+                    lab = Dot.unId $ Y.fromJust $ M.lookup name ids1
+            (ids1, visited1) = L.foldl addBinding (ids, visited) bindings
+              where
+                addBinding (ids, visited) (LetBinding name trm _) = (M.insert name (Dot.Id lab) ids, S.insert lab visited)
+                  where
+                    lab = labelOf visited trm
+        TermVariable name -> case M.lookup name ids of
+          Just i -> (stmts ++ [toEdgeStmt (Y.fromJust mparent) i], visited)
+          Nothing -> dflt
+        _ -> dflt
       where
+        dflt = L.foldl (encode Nothing ids $ Just selfId) (selfStmts, selfVisited) $ subtermsWithAccessors term
+        selfVisited = S.insert label visited
+        selfStmts = stmts ++ [nodeStmt] ++ parentStmt
         parentStmt = case mparent of
           Nothing -> []
           Just parent -> [toEdgeStmt parent selfId]
         toEdgeStmt i1 i2 = Dot.StmtEdge $ Dot.EdgeStmt (toNodeOrSubgraph i1) [toNodeOrSubgraph i2] attrs
           where
-
             attrs = fmap (\l -> Dot.AttrList [[Dot.EqualityPair (Dot.Id "label") (Dot.Id l)]]) elabel
             elabel = case accessor of
               TermAccessorAnnotatedSubject -> Nothing
@@ -43,20 +62,21 @@ encodeAsDotStatements namespaces ids term = fst $ encode Nothing ([], S.empty) (
               TermAccessorUnionCasesDefault -> Just "default"
               TermAccessorUnionCasesBranch name -> Just $ "." ++ unName name
               TermAccessorLetEnvironment -> Just "env"
-              TermAccessorLetBinding name -> Just $ "." ++ unName name
-              TermAccessorListElement i -> Nothing -- TODO
-              TermAccessorMapKey i -> Just "key" -- TODO
-              TermAccessorMapValue i -> Just "value" -- TODO
+              TermAccessorLetBinding name -> Just $ unName name ++ "="
+              TermAccessorListElement i -> Just $ idx i
+              TermAccessorMapKey i -> Just $ idx i ++ ".key"
+              TermAccessorMapValue i -> Just $ idx i ++ ".value"
               TermAccessorOptionalTerm -> Nothing
-              TermAccessorProductTerm i -> Nothing -- TODO
+              TermAccessorProductTerm i -> Just $ idx i
               TermAccessorRecordField name -> Just $ "." ++ unName name
-              TermAccessorSetElement i -> Nothing -- TODO
+              TermAccessorSetElement i -> Just $ idx i
               TermAccessorSumTerm -> Nothing
               TermAccessorTypeAbstractionBody -> Nothing
               TermAccessorTypeApplicationTerm -> Nothing
               TermAccessorTypedTerm -> Nothing
               TermAccessorInjectionTerm -> Nothing
               TermAccessorWrappedTerm -> Nothing
+        idx i = "[" ++ show i ++ "]"
         toNodeId i = Dot.NodeId i Nothing
         toNodeOrSubgraph = Dot.NodeOrSubgraphNode . toNodeId
         nodeStmt = Dot.StmtNode $ Dot.NodeStmt {
@@ -74,12 +94,15 @@ encodeAsDotStatements namespaces ids term = fst $ encode Nothing ([], S.empty) (
             (QualifiedName mns local) = qualifyNameLazy name
         withLabel = id
         selfId = Dot.Id label
-        label = if S.member label0 visited then label0 ++ "'" else label0
-        label0 = case term of
+        label = Y.fromMaybe (labelOf visited term) mlabel
+        labelOf visited term = if S.member label0 visited then label0 ++ "'" else label0
+          where
+            label0 = rawLabelOf term
+        rawLabelOf term = case term of
           TermAnnotated (AnnotatedTerm term1 _) -> withLabel "@{...}"
           TermApplication _ -> withLabel "apply"
           TermFunction f -> case f of
-            FunctionLambda (Lambda v _ body) -> withLabel $ "\\" ++ unName v ++ "."
+            FunctionLambda (Lambda v _ body) -> withLabel $ "\\\\" ++ unName v ++ "."
             FunctionElimination e -> case e of
               EliminationList _ -> withLabel "fold"
               EliminationOptional _ -> withLabel "foldOpt"
@@ -88,7 +111,7 @@ encodeAsDotStatements namespaces ids term = fst $ encode Nothing ([], S.empty) (
               EliminationUnion (CaseStatement tname _ _) -> withLabel "cases_{" ++ idOf tname ++ "}"
               EliminationWrap name -> withLabel $ "unwrap_{" ++ idOf name ++ "}"
             FunctionPrimitive name -> withLabel $ idOf name
-    --      TermLet (Let bindings env) -> ...
+          TermLet (Let bindings env) -> withLabel "let"
           TermList _ -> withLabel "list"
           TermLiteral l -> withLabel $ case l of
             LiteralBinary s -> s
@@ -111,9 +134,9 @@ encodeAsDotStatements namespaces ids term = fst $ encode Nothing ([], S.empty) (
           TermMap _ -> withLabel "map"
           TermOptional _ -> withLabel "optional"
           TermProduct _ -> withLabel "product"
-          TermRecord (Record name _) -> "record_{" ++ idOf name ++ "}"
-    --      TermTypeAbstraction (TypeAbstraction v term1) -> ...
-    --      TermTypeApplication (TypedTerm term _) -> ...
+          TermRecord (Record name _) -> withLabel $ "record_{" ++ idOf name ++ "}"
+          TermTypeAbstraction (TypeAbstraction v term1) -> withLabel "tyabs"
+          TermTypeApplication (TypedTerm term _) -> withLabel "tyapp"
           TermUnion (Injection tname _) -> "union_{" ++ idOf tname ++ "}"
           TermTyped (TypedTerm term1 _) -> withLabel ":t"
           TermVariable name -> withLabel $ idOf name
@@ -140,18 +163,28 @@ term = Terms.record (Hydra.Core.Name "Person") [
   Terms.field "lastName" $ Terms.string "Dent",
   Terms.field "age" $ Terms.int32 42]
 
-term = Terms.record (Hydra.Core.Name "Person") [
+term = Terms.lambda "x" $ Terms.record (Hydra.Core.Name "Person") [
   Terms.field "firstName" $ Terms.string "Arthur",
   Terms.field "lastName" $ Terms.string "Dent",
   Terms.field "age" $ Terms.int32 42,
   Terms.field "bestFriend" $ Terms.record (Hydra.Core.Name "Person") [
     Terms.field "firstName" $ Terms.string "Ford",
     Terms.field "lastName" $ Terms.string "Prefect",
-    Terms.field "age" $ Terms.int32 42]]
+    Terms.field "age" $ Terms.int32 42,
+    Terms.field "foo" $ Terms.var "x"]]
+
+term = Terms.letMulti [("fortytwo", Terms.int32 42)] $ Terms.record (Hydra.Core.Name "Person") [
+  Terms.field "firstName" $ Terms.string "Ford",
+  Terms.field "lastName" $ Terms.string "Prefect",
+  Terms.field "age" $ Terms.var "fortytwo"]
+
+term = Terms.letMulti [("fortytwo", Terms.int32 42), ("ford", Terms.record (Hydra.Core.Name "Person") [
+  Terms.field "firstName" $ Terms.string "Ford",
+  Terms.field "lastName" $ Terms.string "Prefect",
+  Terms.field "age" $ Terms.var "fortytwo",
+  Terms.field "bestFriend" $ Terms.var "ford"])] $ Terms.string "foo"
 
 putStrLn $ printExpr $ DS.writeGraph $ encodeAsDotGraph term
-
-
 
 vim /tmp/graph.dot \
   && dot -Tpng /tmp/graph.dot -o /tmp/graph.png \
