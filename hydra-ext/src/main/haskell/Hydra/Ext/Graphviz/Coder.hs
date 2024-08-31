@@ -18,17 +18,45 @@ encodeAsDotGraph term = Dot.Graph {
   Dot.graphStatements = encodeAsDotStatements standardNamespaces M.empty term}
 
 encodeAsDotStatements :: M.Map Namespace String -> M.Map Name Dot.Id -> Term -> [Dot.Stmt]
-encodeAsDotStatements namespaces ids = fst . encode Nothing ([], S.empty)
+encodeAsDotStatements namespaces ids term = fst $ encode Nothing ([], S.empty) (TermAccessorAnnotatedSubject, term)
   where
-    encode mparent (stmts, visited) term = L.foldl
+    encode mparent (stmts, visited) (accessor, term) = L.foldl
         (encode (Just selfId))
         (stmts ++ [nodeStmt] ++ parentStmt, S.insert label visited)
-        (subterms term)
+        (subtermsWithAccessors term)
       where
         parentStmt = case mparent of
           Nothing -> []
           Just parent -> [toEdgeStmt parent selfId]
-        toEdgeStmt i1 i2 = Dot.StmtEdge $ Dot.EdgeStmt (toNodeOrSubgraph i1) [toNodeOrSubgraph i2] Nothing
+        toEdgeStmt i1 i2 = Dot.StmtEdge $ Dot.EdgeStmt (toNodeOrSubgraph i1) [toNodeOrSubgraph i2] attrs
+          where
+
+            attrs = fmap (\l -> Dot.AttrList [[Dot.EqualityPair (Dot.Id "label") (Dot.Id l)]]) elabel
+            elabel = case accessor of
+              TermAccessorAnnotatedSubject -> Nothing
+              TermAccessorApplicationFunction -> Just "fun"
+              TermAccessorApplicationArgument -> Just "arg"
+              TermAccessorLambdaBody -> Just "body"
+              TermAccessorListFold -> Nothing
+              TermAccessorOptionalCasesNothing -> Just "nothing"
+              TermAccessorOptionalCasesJust -> Just "just"
+              TermAccessorUnionCasesDefault -> Just "default"
+              TermAccessorUnionCasesBranch name -> Just $ "." ++ unName name
+              TermAccessorLetEnvironment -> Just "env"
+              TermAccessorLetBinding name -> Just $ "." ++ unName name
+              TermAccessorListElement i -> Nothing -- TODO
+              TermAccessorMapKey i -> Just "key" -- TODO
+              TermAccessorMapValue i -> Just "value" -- TODO
+              TermAccessorOptionalTerm -> Nothing
+              TermAccessorProductTerm i -> Nothing -- TODO
+              TermAccessorRecordField name -> Just $ "." ++ unName name
+              TermAccessorSetElement i -> Nothing -- TODO
+              TermAccessorSumTerm -> Nothing
+              TermAccessorTypeAbstractionBody -> Nothing
+              TermAccessorTypeApplicationTerm -> Nothing
+              TermAccessorTypedTerm -> Nothing
+              TermAccessorInjectionTerm -> Nothing
+              TermAccessorWrappedTerm -> Nothing
         toNodeId i = Dot.NodeId i Nothing
         toNodeOrSubgraph = Dot.NodeOrSubgraphNode . toNodeId
         nodeStmt = Dot.StmtNode $ Dot.NodeStmt {
