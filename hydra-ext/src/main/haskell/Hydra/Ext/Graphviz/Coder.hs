@@ -48,9 +48,10 @@ encodeAsDotStatements namespaces term = fst $ encode Nothing M.empty Nothing ([]
         parentStmt = case mparent of
           Nothing -> []
           Just parent -> [toEdgeStmt parent selfId]
+        labelAttrs lab = Dot.AttrList [[Dot.EqualityPair (Dot.Id "label") (Dot.Id lab)]]
         toEdgeStmt i1 i2 = Dot.StmtEdge $ Dot.EdgeStmt (toNodeOrSubgraph i1) [toNodeOrSubgraph i2] attrs
           where
-            attrs = fmap (\l -> Dot.AttrList [[Dot.EqualityPair (Dot.Id "label") (Dot.Id l)]]) elabel
+            attrs = fmap labelAttrs elabel
             elabel = case accessor of
               TermAccessorAnnotatedSubject -> Nothing
               TermAccessorApplicationFunction -> Just "fun"
@@ -61,12 +62,12 @@ encodeAsDotStatements namespaces term = fst $ encode Nothing M.empty Nothing ([]
               TermAccessorOptionalCasesJust -> Just "just"
               TermAccessorUnionCasesDefault -> Just "default"
               TermAccessorUnionCasesBranch name -> Just $ "." ++ unName name
-              TermAccessorLetEnvironment -> Just "env"
+              TermAccessorLetEnvironment -> Just "in"
               TermAccessorLetBinding name -> Just $ unName name ++ "="
               TermAccessorListElement i -> Just $ idx i
               TermAccessorMapKey i -> Just $ idx i ++ ".key"
               TermAccessorMapValue i -> Just $ idx i ++ ".value"
-              TermAccessorOptionalTerm -> Nothing
+              TermAccessorOptionalTerm -> Just "just"
               TermAccessorProductTerm i -> Just $ idx i
               TermAccessorRecordField name -> Just $ "." ++ unName name
               TermAccessorSetElement i -> Just $ idx i
@@ -81,7 +82,7 @@ encodeAsDotStatements namespaces term = fst $ encode Nothing M.empty Nothing ([]
         toNodeOrSubgraph = Dot.NodeOrSubgraphNode . toNodeId
         nodeStmt = Dot.StmtNode $ Dot.NodeStmt {
           Dot.nodeStmtId = toNodeId selfId,
-          Dot.nodeStmtAttributes = Nothing}
+          Dot.nodeStmtAttributes = Just $ labelAttrs rawLabel}
         idOf :: Name -> String
         idOf name = case M.lookup name ids of
             Just (Dot.Id d) -> d
@@ -95,9 +96,10 @@ encodeAsDotStatements namespaces term = fst $ encode Nothing M.empty Nothing ([]
         withLabel = id
         selfId = Dot.Id label
         label = Y.fromMaybe (labelOf visited term) mlabel
-        labelOf visited term = if S.member label0 visited then label0 ++ "'" else label0
+        labelOf visited term = tryLabel $ rawLabelOf term
           where
-            label0 = rawLabelOf term
+            tryLabel l = if S.member l visited then tryLabel (l ++ "'") else l
+        rawLabel = rawLabelOf term
         rawLabelOf term = case term of
           TermAnnotated (AnnotatedTerm term1 _) -> withLabel "@{...}"
           TermApplication _ -> withLabel "apply"
@@ -130,17 +132,17 @@ encodeAsDotStatements namespaces term = fst $ encode Nothing M.empty Nothing ([]
               FloatValueBigfloat v -> show v
               FloatValueFloat32 v -> show v
               FloatValueFloat64 v -> show v
-            LiteralString s -> s
+            LiteralString s -> s -- show s
           TermMap _ -> withLabel "map"
           TermOptional _ -> withLabel "optional"
           TermProduct _ -> withLabel "product"
-          TermRecord (Record name _) -> withLabel $ "record_{" ++ idOf name ++ "}"
+          TermRecord (Record name _) -> withLabel $ "∧{" ++ idOf name ++ "}"
           TermTypeAbstraction (TypeAbstraction v term1) -> withLabel "tyabs"
           TermTypeApplication (TypedTerm term _) -> withLabel "tyapp"
-          TermUnion (Injection tname _) -> "union_{" ++ idOf tname ++ "}"
+          TermUnion (Injection tname _) -> "∨{" ++ idOf tname ++ "}"
           TermTyped (TypedTerm term1 _) -> withLabel ":t"
           TermVariable name -> withLabel $ idOf name
-          TermWrap (WrappedTerm name term1) -> "wrap_{" ++ idOf name ++ "}"
+          TermWrap (WrappedTerm name term1) -> "{" ++ idOf name ++ "}"
           _ -> withLabel "?"
 
 standardNamespaces :: M.Map Namespace String
@@ -154,6 +156,40 @@ standardNamespaces = M.fromList (toPair <$> standardLibraries)
 import Hydra.Dsl.Terms as Terms
 import qualified Data.Map as M
 import Hydra.Ext.Graphviz.Serde as DS
+import Hydra.Sources.Libraries as Libs
+
+name = Hydra.Core.Name
+person n t f = Terms.record (name "Person") [
+  Terms.field "name" $ Terms.string n,
+  Terms.field "twitter" $ Terms.optional (Terms.string <$> t),
+  Terms.field "follows" $ Terms.list (Terms.var <$> f)]
+term = Terms.letMulti [
+    ("p1", person "Joshua" (Just "joshsh") ["p2", "p4", "p5"]),
+    ("p2", person "Deborah" (Just "dlmcuinness") ["p1", "p5"]),
+    ("p3", person "Alastair" Nothing []),
+    ("p4", person "Molham" (Just "molhamaref") ["p5"]),
+    ("p5", person "Ora" (Just "oralassila") ["p1", "p2"])
+  ] $ Terms.letMulti [
+    ("s1", Terms.record (name "Session") [
+      Terms.field "name" $ Terms.string "Graph Standards Rebooted",
+      Terms.field "moderator" $ Terms.var "p1",
+      Terms.field "panelists" $ Terms.list (Terms.var <$> ["p2", "p3", "p4", "p5"])])
+    ] $ Terms.letMulti [
+      ("sessionSize", Terms.lambda "s" (Terms.apply (Terms.apply (Terms.primitive Libs._math_add) (Terms.int32 1))   (Terms.apply (Terms.primitive Libs._lists_length) (Terms.apply (Terms.project (name "Session") (name "panelists")) (Terms.var "s")))    )) -- TODO
+      ] $ Terms.record (name "SessionInfo") [
+        Terms.field "session" $ Terms.var "s1",
+        Terms.field "size" (Terms.apply (Terms.var "sessionSize") (Terms.var "s1")),
+        Terms.field "created" $ Terms.string "2024-05-01T17:32:41Z",
+        Terms.field "updated" $ Terms.string "2024-05-06T08:51:03Z"]
+
+putStrLn $ printExpr $ DS.writeGraph $ encodeAsDotGraph term
+
+
+
+
+
+
+
 
 term = Terms.int32 42
 term = Terms.list [Terms.int32 1, Terms.int32 2, Terms.int32 3]
@@ -184,7 +220,9 @@ term = Terms.letMulti [("fortytwo", Terms.int32 42), ("ford", Terms.record (Hydr
   Terms.field "age" $ Terms.var "fortytwo",
   Terms.field "bestFriend" $ Terms.var "ford"])] $ Terms.string "foo"
 
-putStrLn $ printExpr $ DS.writeGraph $ encodeAsDotGraph term
+
+
+
 
 vim /tmp/graph.dot \
   && dot -Tpng /tmp/graph.dot -o /tmp/graph.png \
