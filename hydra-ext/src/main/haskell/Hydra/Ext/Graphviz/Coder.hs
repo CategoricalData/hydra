@@ -18,18 +18,18 @@ encodeAsDotGraph term = Dot.Graph {
   Dot.graphStatements = encodeAsDotStatements standardNamespaces term}
 
 encodeAsDotStatements :: M.Map Namespace String -> Term -> [Dot.Stmt]
-encodeAsDotStatements namespaces term = fst $ encode Nothing M.empty Nothing ([], S.empty) (TermAccessorAnnotatedSubject, term)
+encodeAsDotStatements namespaces term = fst $ encode Nothing False M.empty Nothing ([], S.empty) (TermAccessorAnnotatedSubject, term)
   where
-    encode mlabel ids mparent (stmts, visited) (accessor, term) = case term of
+    encode mlabel isElement ids mparent (stmts, visited) (accessor, term) = case term of
         TermFunction (FunctionLambda (Lambda v _ body)) ->
-            encode Nothing ids1 (Just selfId) (selfStmts, selfVisited) (TermAccessorLambdaBody, body)
+            encode Nothing False ids1 (Just selfId) (selfStmts, selfVisited) (TermAccessorLambdaBody, body)
           where
             ids1 = M.insert v selfId ids
-        TermLet (Let bindings env) -> encode Nothing ids1 (Just selfId) (stmts1, visited2) (TermAccessorLetEnvironment, env)
+        TermLet (Let bindings env) -> encode Nothing False ids1 (Just selfId) (stmts1, visited2) (TermAccessorLetEnvironment, env)
           where
             (stmts1, visited2) = L.foldl addBinding (selfStmts, selfVisited) bindings
               where
-                addBinding (stmts, visited) (LetBinding name trm _) = encode (Just lab) ids1 (Just selfId) (stmts, visited) (TermAccessorLetBinding name, trm)
+                addBinding (stmts, visited) (LetBinding name trm _) = encode (Just lab) True ids1 (Just selfId) (stmts, visited) (TermAccessorLetBinding name, trm)
                   where
                     lab = Dot.unId $ Y.fromJust $ M.lookup name ids1
             (ids1, visited1) = L.foldl addBinding (ids, visited) bindings
@@ -42,13 +42,20 @@ encodeAsDotStatements namespaces term = fst $ encode Nothing M.empty Nothing ([]
           Nothing -> dflt
         _ -> dflt
       where
-        dflt = L.foldl (encode Nothing ids $ Just selfId) (selfStmts, selfVisited) $ subtermsWithAccessors term
+        dflt = L.foldl (encode Nothing False ids $ Just selfId) (selfStmts, selfVisited) $ subtermsWithAccessors term
         selfVisited = S.insert label visited
         selfStmts = stmts ++ [nodeStmt] ++ parentStmt
         parentStmt = case mparent of
           Nothing -> []
           Just parent -> [toEdgeStmt parent selfId]
-        labelAttrs lab = Dot.AttrList [[Dot.EqualityPair (Dot.Id "label") (Dot.Id lab)]]
+        labelAttrs lab = Dot.AttrList [[labelAttr] ++ styleAttrs]
+          where
+            labelAttr = Dot.EqualityPair (Dot.Id "label") (Dot.Id lab)
+            styleAttrs = if isElement
+              then [
+                Dot.EqualityPair (Dot.Id "style") (Dot.Id "filled"),
+                Dot.EqualityPair (Dot.Id "fillcolor") (Dot.Id "lightyellow")]
+              else []
         toEdgeStmt i1 i2 = Dot.StmtEdge $ Dot.EdgeStmt (toNodeOrSubgraph i1) [toNodeOrSubgraph i2] attrs
           where
             attrs = fmap labelAttrs elabel
