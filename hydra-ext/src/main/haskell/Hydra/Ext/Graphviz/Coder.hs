@@ -17,26 +17,36 @@ encodeAsDotGraph term = Dot.Graph {
   Dot.graphId = Nothing,
   Dot.graphStatements = encodeAsDotStatements standardNamespaces term}
 
+data NodeStyle = NodeStyleSimple | NodeStyleElement | NodeStyleVariable | NodeStylePrimitive
+
 encodeAsDotStatements :: M.Map Namespace String -> Term -> [Dot.Stmt]
 encodeAsDotStatements namespaces term = fst $ encode Nothing False M.empty Nothing ([], S.empty) (TermAccessorAnnotatedSubject, term)
   where
-    encode mlabel isElement ids mparent (stmts, visited) (accessor, term) = case term of
+    encode mlabstyle isElement ids mparent (stmts, visited) (accessor, term) = case term of
         TermFunction (FunctionLambda (Lambda v _ body)) ->
-            encode Nothing False ids1 (Just selfId) (selfStmts, selfVisited) (TermAccessorLambdaBody, body)
+            encode Nothing False ids1 (Just selfId) (selfStmts ++ [varNodeStmt, varEdgeStmt], visited1) (TermAccessorLambdaBody, body)
           where
-            ids1 = M.insert v selfId ids
+            ids1 = M.insert v varId ids
+            var = tryLabel selfVisited (unName v)
+            varId = Dot.Id var
+            visited1 = S.insert var selfVisited
+            varNodeStmt = Dot.StmtNode $ Dot.NodeStmt {
+              Dot.nodeStmtId = toNodeId varId,
+              Dot.nodeStmtAttributes = Just $ labelAttrs NodeStyleVariable $ unName v}
+            varEdgeStmt = Dot.StmtEdge $ Dot.EdgeStmt (toNodeOrSubgraph selfId) [toNodeOrSubgraph varId] $
+              Just $ edgeAttrs "var"
         TermLet (Let bindings env) -> encode Nothing False ids1 (Just selfId) (stmts1, visited2) (TermAccessorLetEnvironment, env)
           where
             (stmts1, visited2) = L.foldl addBinding (selfStmts, selfVisited) bindings
               where
-                addBinding (stmts, visited) (LetBinding name trm _) = encode (Just lab) True ids1 (Just selfId) (stmts, visited) (TermAccessorLetBinding name, trm)
+                addBinding (stmts, visited) (LetBinding name trm _) = encode (Just (lab, NodeStyleElement)) True ids1 (Just selfId) (stmts, visited) (TermAccessorLetBinding name, trm)
                   where
                     lab = Dot.unId $ Y.fromJust $ M.lookup name ids1
             (ids1, visited1) = L.foldl addBinding (ids, visited) bindings
               where
                 addBinding (ids, visited) (LetBinding name trm _) = (M.insert name (Dot.Id lab) ids, S.insert lab visited)
                   where
-                    lab = labelOf visited trm
+                    (lab, style) = labelOf visited trm
         TermVariable name -> case M.lookup name ids of
           Just i -> (stmts ++ [toEdgeStmt (Y.fromJust mparent) i], visited)
           Nothing -> dflt
@@ -48,17 +58,21 @@ encodeAsDotStatements namespaces term = fst $ encode Nothing False M.empty Nothi
         parentStmt = case mparent of
           Nothing -> []
           Just parent -> [toEdgeStmt parent selfId]
-        labelAttrs lab = Dot.AttrList [[labelAttr] ++ styleAttrs]
+        edgeAttrs lab = Dot.AttrList [[Dot.EqualityPair (Dot.Id "label") (Dot.Id lab)]]
+        labelAttrs style lab = Dot.AttrList [[labelAttr] ++ styleAttrs]
           where
             labelAttr = Dot.EqualityPair (Dot.Id "label") (Dot.Id lab)
-            styleAttrs = if isElement
-              then [
-                Dot.EqualityPair (Dot.Id "style") (Dot.Id "filled"),
-                Dot.EqualityPair (Dot.Id "fillcolor") (Dot.Id "lightyellow")]
-              else []
+            styleAttrs = case style of
+              NodeStyleSimple -> []
+              NodeStyleElement -> filled "lightyellow"
+              NodeStyleVariable -> filled "lightcyan"
+              NodeStylePrimitive -> filled "linen"
+            filled color = [
+              Dot.EqualityPair (Dot.Id "style") (Dot.Id "filled"),
+              Dot.EqualityPair (Dot.Id "fillcolor") (Dot.Id color)]
         toEdgeStmt i1 i2 = Dot.StmtEdge $ Dot.EdgeStmt (toNodeOrSubgraph i1) [toNodeOrSubgraph i2] attrs
           where
-            attrs = fmap labelAttrs elabel
+            attrs = fmap (labelAttrs style) elabel
             elabel = case accessor of
               TermAccessorAnnotatedSubject -> Nothing
               TermAccessorApplicationFunction -> Just "fun"
@@ -89,7 +103,7 @@ encodeAsDotStatements namespaces term = fst $ encode Nothing False M.empty Nothi
         toNodeOrSubgraph = Dot.NodeOrSubgraphNode . toNodeId
         nodeStmt = Dot.StmtNode $ Dot.NodeStmt {
           Dot.nodeStmtId = toNodeId selfId,
-          Dot.nodeStmtAttributes = Just $ labelAttrs rawLabel}
+          Dot.nodeStmtAttributes = Just $ labelAttrs style rawLabel}
         idOf :: Name -> String
         idOf name = case M.lookup name ids of
             Just (Dot.Id d) -> d
@@ -100,29 +114,32 @@ encodeAsDotStatements namespaces term = fst $ encode Nothing False M.empty Nothi
                 Nothing -> unName name
           where
             (QualifiedName mns local) = qualifyNameLazy name
-        withLabel = id
+        simpleLabel lab = (lab, NodeStyleSimple)
         selfId = Dot.Id label
-        label = Y.fromMaybe (labelOf visited term) mlabel
-        labelOf visited term = tryLabel $ rawLabelOf term
+        (label, style) = Y.fromMaybe (labelOf visited term) mlabstyle
+        labelOf visited term = (tryLabel visited l, s)
           where
-            tryLabel l = if S.member l visited then tryLabel (l ++ "'") else l
-        rawLabel = rawLabelOf term
+            (l, s) = rawLabelOf term
+        tryLabel visited l = if S.member l visited then tryLabel visited (l ++ "'") else l
+        (rawLabel, nodeStyle) = (l, if isElement then NodeStyleElement else s)
+          where
+            (l, s) = rawLabelOf term
         rawLabelOf term = case term of
-          TermAnnotated (AnnotatedTerm term1 _) -> withLabel "@{...}"
-          TermApplication _ -> withLabel "apply"
+          TermAnnotated (AnnotatedTerm term1 _) -> simpleLabel "@{...}"
+          TermApplication _ -> simpleLabel "apply"
           TermFunction f -> case f of
-            FunctionLambda (Lambda v _ body) -> withLabel $ "\\\\" ++ unName v ++ "."
+            FunctionLambda (Lambda v _ body) -> simpleLabel $ "lambda" -- \\\\" ++ unName v ++ "."
             FunctionElimination e -> case e of
-              EliminationList _ -> withLabel "fold"
-              EliminationOptional _ -> withLabel "foldOpt"
-              EliminationProduct (TupleProjection i _) -> withLabel $ "[" ++ show i ++ "]"
-              EliminationRecord (Projection tname fname) -> withLabel $ "{" ++ idOf tname ++ "}." ++ unName fname
-              EliminationUnion (CaseStatement tname _ _) -> withLabel "cases_{" ++ idOf tname ++ "}"
-              EliminationWrap name -> withLabel $ "unwrap_{" ++ idOf name ++ "}"
-            FunctionPrimitive name -> withLabel $ idOf name
-          TermLet (Let bindings env) -> withLabel "let"
-          TermList _ -> withLabel "list"
-          TermLiteral l -> withLabel $ case l of
+              EliminationList _ -> simpleLabel "fold"
+              EliminationOptional _ -> simpleLabel "foldOpt"
+              EliminationProduct (TupleProjection i _) -> simpleLabel $ "[" ++ show i ++ "]"
+              EliminationRecord (Projection tname fname) -> simpleLabel $ "{" ++ idOf tname ++ "}." ++ unName fname
+              EliminationUnion (CaseStatement tname _ _) -> simpleLabel $ "cases_{" ++ idOf tname ++ "}"
+              EliminationWrap name -> simpleLabel $ "unwrap_{" ++ idOf name ++ "}"
+            FunctionPrimitive name -> (idOf name, NodeStylePrimitive)
+          TermLet (Let bindings env) -> simpleLabel "let"
+          TermList _ -> simpleLabel "list"
+          TermLiteral l -> simpleLabel $ case l of
             LiteralBinary s -> s
             LiteralBoolean b -> show b
             LiteralInteger i -> case i of
@@ -140,17 +157,17 @@ encodeAsDotStatements namespaces term = fst $ encode Nothing False M.empty Nothi
               FloatValueFloat32 v -> show v
               FloatValueFloat64 v -> show v
             LiteralString s -> s -- show s
-          TermMap _ -> withLabel "map"
-          TermOptional _ -> withLabel "optional"
-          TermProduct _ -> withLabel "product"
-          TermRecord (Record name _) -> withLabel $ "∧{" ++ idOf name ++ "}"
-          TermTypeAbstraction (TypeAbstraction v term1) -> withLabel "tyabs"
-          TermTypeApplication (TypedTerm term _) -> withLabel "tyapp"
-          TermUnion (Injection tname _) -> "∨{" ++ idOf tname ++ "}"
-          TermTyped (TypedTerm term1 _) -> withLabel ":t"
-          TermVariable name -> withLabel $ idOf name
-          TermWrap (WrappedTerm name term1) -> "{" ++ idOf name ++ "}"
-          _ -> withLabel "?"
+          TermMap _ -> simpleLabel "map"
+          TermOptional _ -> simpleLabel "optional"
+          TermProduct _ -> simpleLabel "product"
+          TermRecord (Record name _) -> simpleLabel $ "∧{" ++ idOf name ++ "}"
+          TermTypeAbstraction (TypeAbstraction v term1) -> simpleLabel "tyabs"
+          TermTypeApplication (TypedTerm term _) -> simpleLabel "tyapp"
+          TermUnion (Injection tname _) -> simpleLabel $ "∨{" ++ idOf tname ++ "}"
+          TermTyped (TypedTerm term1 _) -> simpleLabel ":t"
+          TermVariable name -> simpleLabel $ idOf name
+          TermWrap (WrappedTerm name term1) -> simpleLabel $ "{" ++ idOf name ++ "}"
+          _ -> simpleLabel "?"
 
 standardNamespaces :: M.Map Namespace String
 standardNamespaces = M.fromList (toPair <$> standardLibraries)
@@ -160,40 +177,51 @@ standardNamespaces = M.fromList (toPair <$> standardLibraries)
 
 {-
 :set +m
+:module
+:module +Prelude
+import Hydra.Kernel
 import Hydra.Dsl.Terms as Terms
 import qualified Data.Map as M
+import Hydra.Ext.Graphviz.Coder
 import Hydra.Ext.Graphviz.Serde as DS
 import Hydra.Sources.Libraries as Libs
+import Hydra.Tools.Serialization
 
-name = Hydra.Core.Name
-person n t f = Terms.record (name "Person") [
-  Terms.field "name" $ Terms.string n,
-  Terms.field "twitter" $ Terms.optional (Terms.string <$> t),
-  Terms.field "follows" $ Terms.list (Terms.var <$> f)]
-term = Terms.letMulti [
+name = Name
+person n t f = record (Name "Person") [
+  field "name" $ string n,
+  field "twitter" $ optional (string <$> t),
+  field "follows" $ list (var <$> f)]
+term = letMulti [
     ("p1", person "Joshua" (Just "joshsh") ["p2", "p4", "p5"]),
     ("p2", person "Deborah" (Just "dlmcuinness") ["p1", "p5"]),
     ("p3", person "Alastair" Nothing []),
     ("p4", person "Molham" (Just "molhamaref") ["p5"]),
     ("p5", person "Ora" (Just "oralassila") ["p1", "p2"])
-  ] $ Terms.letMulti [
-    ("s1", Terms.record (name "Session") [
-      Terms.field "name" $ Terms.string "Graph Standards Rebooted",
-      Terms.field "moderator" $ Terms.var "p1",
-      Terms.field "panelists" $ Terms.list (Terms.var <$> ["p2", "p3", "p4", "p5"])])
-    ] $ Terms.letMulti [
-      ("sessionSize", Terms.lambda "s" (Terms.apply (Terms.apply (Terms.primitive Libs._math_add) (Terms.int32 1))   (Terms.apply (Terms.primitive Libs._lists_length) (Terms.apply (Terms.project (name "Session") (name "panelists")) (Terms.var "s")))    )) -- TODO
-      ] $ Terms.record (name "SessionInfo") [
-        Terms.field "session" $ Terms.var "s1",
-        Terms.field "size" (Terms.apply (Terms.var "sessionSize") (Terms.var "s1")),
-        Terms.field "created" $ Terms.string "2024-05-01T17:32:41Z",
-        Terms.field "updated" $ Terms.string "2024-05-06T08:51:03Z"]
+  ] $ letMulti [
+    ("s1", record (Name "Session") [
+      field "name" $ string "Graph Standards Rebooted",
+      field "moderator" $ var "p1",
+      field "panelists" $ list (var <$> ["p2", "p3", "p4", "p5"])])
+    ] $ letMulti [
+      ("sessionSize", lambda "s" (apply (apply (primitive Libs._math_add) (int32 1))   (apply (primitive Libs._lists_length) (apply (project (Name "Session") (Name "panelists")) (var "s")))))
+      ] $ record (Name "SessionInfo") [
+        field "session" $ var "s1",
+        field "size" (apply (var "sessionSize") (var "s1")),
+        field "created" $ string "2024-05-01T17:32:41Z",
+        field "updated" $ string "2024-05-06T08:51:03Z"]
+
+term = lambda "x" $ var "x"
+term = (lambda "f" $ (var "f" @@ var "y")) @@ (lambda "x" $ var "x")
+term = var "x" @@ var "y"
 
 putStrLn $ printExpr $ DS.writeGraph $ encodeAsDotGraph term
 
 
 
 
+term = lambda "x" $ (primitive Libs._math_add @@ var "x" @@ int32 1)
+term = (lambda "x" $ (primitive Libs._math_add @@ var "x" @@ int32 1)) @@ int32 1
 
 
 
