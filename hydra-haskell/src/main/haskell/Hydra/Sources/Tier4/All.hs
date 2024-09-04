@@ -6,6 +6,7 @@ module Hydra.Sources.Tier4.All(
 
 import Hydra.Sources.Tier3.All
 import Hydra.Sources.Tier4.Ext.Avro.Schema
+import Hydra.Sources.Tier4.Ext.Csharp.Syntax
 import Hydra.Sources.Tier4.Ext.Cypher.Features
 import Hydra.Sources.Tier4.Ext.Cypher.OpenCypher
 import Hydra.Sources.Tier4.Ext.Graphql.Syntax
@@ -44,6 +45,7 @@ testModules = [
 tier4LangModules :: [Module]
 tier4LangModules = [
   avroSchemaModule,
+  csharpSyntaxModule,
   graphqlSyntaxModule,
   haskellAstModule,
   javaLanguageModule,
