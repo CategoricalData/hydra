@@ -109,6 +109,11 @@ just = optional . Just
 lambda :: String -> Term -> Term
 lambda param body = TermFunction $ FunctionLambda $ Lambda (Name param) Nothing body
 
+letMulti :: [(String, Term)] -> Term -> Term
+letMulti bindings body = TermLet $ Let (toBinding <$> bindings) body
+  where
+    toBinding (name, term) = LetBinding (Name name) term Nothing
+
 -- Construct a 'let' term with a single binding
 letTerm :: Name -> Term -> Term -> Term
 letTerm v t1 t2 = TermLet $ Let [LetBinding v t1 Nothing] t2

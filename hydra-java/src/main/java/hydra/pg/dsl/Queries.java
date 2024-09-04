@@ -1,4 +1,4 @@
-package hydra.ext.org.apache.tinkerpop.dsl;
+package hydra.pg.dsl;
 
 import hydra.pg.query.ApplicationQuery;
 import hydra.pg.query.Query;

@@ -220,7 +220,7 @@ symbolSep :: String -> BlockStyle -> [Expr] -> Expr
 symbolSep symb style l = case l of
     [] -> cst ""
     [x] -> x
-    (h:r) -> ifx commaOp h $ commaSep style r
+    (h:r) -> ifx commaOp h $ symbolSep symb style r
   where
     break = case L.length $ L.filter id [blockStyleNewlineBeforeContent style, blockStyleNewlineAfterContent style] of
       0 -> WsSpace

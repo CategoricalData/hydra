@@ -57,17 +57,19 @@ dotModule = Module ns elements [] [hydraCoreModule] $
       def "AttrStmt" $
         record [
           "type">: dot "AttrType",
-          "attributes">: nonemptyList $ list $ dot "EqualityPair"],
+          "attributes">: dot "AttrList"],
       def "AttrType" $
         enum ["graph", "node", "edge"],
+      def "AttrList" $
+        nonemptyList $ nonemptyList $ dot "EqualityPair",
 
 --edge_stmt	:	(node_id | subgraph) edgeRHS [ attr_list ]
 --edgeRHS	:	edgeop (node_id | subgraph) [ edgeRHS ]
       def "EdgeStmt" $
         record [
           "left">: dot "NodeOrSubgraph",
-          "right">: dot "NodeOrSubgraph",
-          "attributes">: list $ dot "EqualityPair"],
+          "right">: nonemptyList $ dot "NodeOrSubgraph",
+          "attributes">: optional $ dot "AttrList"],
       def "NodeOrSubgraph" $
         union [
           "node">: dot "NodeId",
@@ -77,7 +79,7 @@ dotModule = Module ns elements [] [hydraCoreModule] $
       def "NodeStmt" $
         record [
           "id">: dot "NodeId",
-          "attributes">: list $ list $ dot "EqualityPair"],
+          "attributes">: optional $ dot "AttrList"],
 
 --node_id	:	ID [ port ]
       def "NodeId" $

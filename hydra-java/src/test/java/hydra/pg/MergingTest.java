@@ -8,7 +8,7 @@ import hydra.core.LiteralType;
 import hydra.core.Unit;
 import hydra.dsl.LiteralTypes;
 import hydra.dsl.Literals;
-import hydra.ext.org.apache.tinkerpop.Merging;
+import hydra.pg.Merging;
 import hydra.pg.model.Edge;
 import hydra.pg.model.EdgeType;
 import hydra.pg.model.PropertyKey;
