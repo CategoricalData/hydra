@@ -1,4 +1,4 @@
-package hydra.ext.org.apache.tinkerpop;
+package hydra.pg;
 
 import hydra.Flows;
 import hydra.basics.Basics;

@@ -1,4 +1,4 @@
--- | A set of types which supplement hydra/core with type variants, graphs, and elements
+-- | A set of types which supplement hydra/core with variants and accessors
 
 module Hydra.Mantle where
 
@@ -91,6 +91,84 @@ _Precision = (Core.Name "hydra/mantle.Precision")
 _Precision_arbitrary = (Core.Name "arbitrary")
 
 _Precision_bits = (Core.Name "bits")
+
+-- | A function which maps from a term to a particular immediate subterm
+data TermAccessor = 
+  TermAccessorAnnotatedSubject  |
+  TermAccessorApplicationFunction  |
+  TermAccessorApplicationArgument  |
+  TermAccessorLambdaBody  |
+  TermAccessorListFold  |
+  TermAccessorOptionalCasesNothing  |
+  TermAccessorOptionalCasesJust  |
+  TermAccessorUnionCasesDefault  |
+  TermAccessorUnionCasesBranch Core.Name |
+  TermAccessorLetEnvironment  |
+  TermAccessorLetBinding Core.Name |
+  TermAccessorListElement Int |
+  TermAccessorMapKey Int |
+  TermAccessorMapValue Int |
+  TermAccessorOptionalTerm  |
+  TermAccessorProductTerm Int |
+  TermAccessorRecordField Core.Name |
+  TermAccessorSetElement Int |
+  TermAccessorSumTerm  |
+  TermAccessorTypeAbstractionBody  |
+  TermAccessorTypeApplicationTerm  |
+  TermAccessorTypedTerm  |
+  TermAccessorInjectionTerm  |
+  TermAccessorWrappedTerm 
+  deriving (Eq, Ord, Read, Show)
+
+_TermAccessor = (Core.Name "hydra/mantle.TermAccessor")
+
+_TermAccessor_annotatedSubject = (Core.Name "annotatedSubject")
+
+_TermAccessor_applicationFunction = (Core.Name "applicationFunction")
+
+_TermAccessor_applicationArgument = (Core.Name "applicationArgument")
+
+_TermAccessor_lambdaBody = (Core.Name "lambdaBody")
+
+_TermAccessor_listFold = (Core.Name "listFold")
+
+_TermAccessor_optionalCasesNothing = (Core.Name "optionalCasesNothing")
+
+_TermAccessor_optionalCasesJust = (Core.Name "optionalCasesJust")
+
+_TermAccessor_unionCasesDefault = (Core.Name "unionCasesDefault")
+
+_TermAccessor_unionCasesBranch = (Core.Name "unionCasesBranch")
+
+_TermAccessor_letEnvironment = (Core.Name "letEnvironment")
+
+_TermAccessor_letBinding = (Core.Name "letBinding")
+
+_TermAccessor_listElement = (Core.Name "listElement")
+
+_TermAccessor_mapKey = (Core.Name "mapKey")
+
+_TermAccessor_mapValue = (Core.Name "mapValue")
+
+_TermAccessor_optionalTerm = (Core.Name "optionalTerm")
+
+_TermAccessor_productTerm = (Core.Name "productTerm")
+
+_TermAccessor_recordField = (Core.Name "recordField")
+
+_TermAccessor_setElement = (Core.Name "setElement")
+
+_TermAccessor_sumTerm = (Core.Name "sumTerm")
+
+_TermAccessor_typeAbstractionBody = (Core.Name "typeAbstractionBody")
+
+_TermAccessor_typeApplicationTerm = (Core.Name "typeApplicationTerm")
+
+_TermAccessor_typedTerm = (Core.Name "typedTerm")
+
+_TermAccessor_injectionTerm = (Core.Name "injectionTerm")
+
+_TermAccessor_wrappedTerm = (Core.Name "wrappedTerm")
 
 -- | The identifier of a term expression constructor
 data TermVariant = 

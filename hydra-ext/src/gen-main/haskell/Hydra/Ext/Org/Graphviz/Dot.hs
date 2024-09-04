@@ -68,7 +68,7 @@ _EqualityPair_right = (Core.Name "right")
 data AttrStmt = 
   AttrStmt {
     attrStmtType :: AttrType,
-    attrStmtAttributes :: [[EqualityPair]]}
+    attrStmtAttributes :: AttrList}
   deriving (Eq, Ord, Read, Show)
 
 _AttrStmt = (Core.Name "hydra/ext/org/graphviz/dot.AttrStmt")
@@ -91,11 +91,18 @@ _AttrType_node = (Core.Name "node")
 
 _AttrType_edge = (Core.Name "edge")
 
+newtype AttrList = 
+  AttrList {
+    unAttrList :: [[EqualityPair]]}
+  deriving (Eq, Ord, Read, Show)
+
+_AttrList = (Core.Name "hydra/ext/org/graphviz/dot.AttrList")
+
 data EdgeStmt = 
   EdgeStmt {
     edgeStmtLeft :: NodeOrSubgraph,
-    edgeStmtRight :: NodeOrSubgraph,
-    edgeStmtAttributes :: [EqualityPair]}
+    edgeStmtRight :: [NodeOrSubgraph],
+    edgeStmtAttributes :: (Maybe AttrList)}
   deriving (Eq, Ord, Read, Show)
 
 _EdgeStmt = (Core.Name "hydra/ext/org/graphviz/dot.EdgeStmt")
@@ -120,7 +127,7 @@ _NodeOrSubgraph_subgraph = (Core.Name "subgraph")
 data NodeStmt = 
   NodeStmt {
     nodeStmtId :: NodeId,
-    nodeStmtAttributes :: [[EqualityPair]]}
+    nodeStmtAttributes :: (Maybe AttrList)}
   deriving (Eq, Ord, Read, Show)
 
 _NodeStmt = (Core.Name "hydra/ext/org/graphviz/dot.NodeStmt")

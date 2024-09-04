@@ -84,6 +84,7 @@ setT = TypeSet
 stringT = Types.string :: Type
 sumT = TypeVariable _Sum :: Type
 termT = TypeVariable _Term :: Type
+termAccessorT = TypeVariable _TermAccessor :: Type
 termVariantT = TypeVariable _TermVariant :: Type
 traceT = TypeVariable _Trace
 tupleProjectionT = TypeVariable _TupleProjection :: Type
