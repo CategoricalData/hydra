@@ -1,8 +1,13 @@
-module Hydra.Ext.Graphviz.Coder (encodeAsDotGraph) where
+module Hydra.Ext.Graphviz.Coder (
+  termToAccessorDotGraph,
+  termToDotGraph,
+  standardNamespaces,
+) where
 
 import Hydra.Kernel
 import Hydra.Sources.Libraries
 import qualified Hydra.Ext.Org.Graphviz.Dot as Dot
+import Hydra.Tools.Accessors
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -10,24 +15,64 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-encodeAsDotGraph :: Term -> Dot.Graph
-encodeAsDotGraph term = Dot.Graph {
+data NodeStyle = NodeStyleSimple | NodeStyleElement | NodeStyleVariable | NodeStylePrimitive
+
+termToAccessorDotGraph :: Term -> Dot.Graph
+termToAccessorDotGraph term = Dot.Graph {
   Dot.graphStrict = False,
   Dot.graphDirected = True,
   Dot.graphId = Nothing,
-  Dot.graphStatements = encodeAsDotStatements standardNamespaces term}
+  Dot.graphStatements = termToAccessorDotStmts standardNamespaces term}
 
-data NodeStyle = NodeStyleSimple | NodeStyleElement | NodeStyleVariable | NodeStylePrimitive
+termToDotGraph :: Term -> Dot.Graph
+termToDotGraph term = Dot.Graph {
+  Dot.graphStrict = False,
+  Dot.graphDirected = True,
+  Dot.graphId = Nothing,
+  Dot.graphStatements = termToDotStmts standardNamespaces term}
 
-encodeAsDotStatements :: M.Map Namespace String -> Term -> [Dot.Stmt]
-encodeAsDotStatements namespaces term = fst $ encode Nothing False M.empty Nothing ([], S.empty) (TermAccessorAnnotatedSubject, term)
+
+--------------------------------------------------------------------------------
+
+labelAttr :: String -> Dot.EqualityPair
+labelAttr lab = Dot.EqualityPair (Dot.Id "label") (Dot.Id lab)
+
+labelAttrs :: NodeStyle -> String -> Dot.AttrList
+labelAttrs style lab = Dot.AttrList [[labelAttr lab] ++ styleAttrs]
+  where
+    styleAttrs = case style of
+      NodeStyleSimple -> []
+      NodeStyleElement -> filled "lightyellow"
+      NodeStyleVariable -> filled "lightcyan"
+      NodeStylePrimitive -> filled "linen"
+    filled color = [
+      Dot.EqualityPair (Dot.Id "style") (Dot.Id "filled"),
+      Dot.EqualityPair (Dot.Id "fillcolor") (Dot.Id color)]
+
+standardNamespaces :: M.Map Namespace String
+standardNamespaces = M.fromList (toPair <$> standardLibraries)
+  where
+    toPair lib = (libraryNamespace lib, libraryPrefix lib)
+
+termToAccessorDotStmts :: M.Map Namespace String -> Term -> [Dot.Stmt]
+termToAccessorDotStmts namespaces term = (nodeStmt <$> nodes) ++ (edgeStmt <$> edges)
+  where
+    (AccessorGraph nodes edges) = termToAccessorGraph namespaces term
+    nodeStmt (AccessorNode _ rawLabel uniqueLabel)
+      = Dot.StmtNode $ Dot.NodeStmt (toNodeId $ Dot.Id uniqueLabel) $ Just $ Dot.AttrList [[labelAttr rawLabel]]
+    edgeStmt (AccessorEdge (AccessorNode _ _ lab1) path (AccessorNode _ _ lab2))
+      = toEdgeStmt (Dot.Id lab1) (Dot.Id lab2) $ Just $ Dot.AttrList [[labelAttr $ showPath path]]
+    showPath path = L.intercalate "/" $ Y.catMaybes (showTermAccessor <$> path)
+
+termToDotStmts :: M.Map Namespace String -> Term -> [Dot.Stmt]
+termToDotStmts namespaces term = fst $ encode Nothing False M.empty Nothing ([], S.empty) (TermAccessorAnnotatedSubject, term)
   where
     encode mlabstyle isElement ids mparent (stmts, visited) (accessor, term) = case term of
         TermFunction (FunctionLambda (Lambda v _ body)) ->
             encode Nothing False ids1 (Just selfId) (selfStmts ++ [varNodeStmt, varEdgeStmt], visited1) (TermAccessorLambdaBody, body)
           where
             ids1 = M.insert v varId ids
-            var = tryLabel selfVisited (unName v)
+            var = toUniqueLabel selfVisited (unName v)
             varId = Dot.Id var
             visited1 = S.insert var selfVisited
             varNodeStmt = Dot.StmtNode $ Dot.NodeStmt {
@@ -48,7 +93,7 @@ encodeAsDotStatements namespaces term = fst $ encode Nothing False M.empty Nothi
                   where
                     (lab, style) = labelOf visited trm
         TermVariable name -> case M.lookup name ids of
-          Just i -> (stmts ++ [toEdgeStmt (Y.fromJust mparent) i], visited)
+          Just i -> (stmts ++ [toAccessorEdgeStmt accessor style (Y.fromJust mparent) i], visited)
           Nothing -> dflt
         _ -> dflt
       where
@@ -57,70 +102,24 @@ encodeAsDotStatements namespaces term = fst $ encode Nothing False M.empty Nothi
         selfStmts = stmts ++ [nodeStmt] ++ parentStmt
         parentStmt = case mparent of
           Nothing -> []
-          Just parent -> [toEdgeStmt parent selfId]
+          Just parent -> [toAccessorEdgeStmt accessor style parent selfId]
+        toAccessorEdgeStmt accessor style i1 i2 = toEdgeStmt i1 i2 attrs
+          where
+            attrs = fmap (labelAttrs style) (showTermAccessor accessor)
         edgeAttrs lab = Dot.AttrList [[Dot.EqualityPair (Dot.Id "label") (Dot.Id lab)]]
-        labelAttrs style lab = Dot.AttrList [[labelAttr] ++ styleAttrs]
-          where
-            labelAttr = Dot.EqualityPair (Dot.Id "label") (Dot.Id lab)
-            styleAttrs = case style of
-              NodeStyleSimple -> []
-              NodeStyleElement -> filled "lightyellow"
-              NodeStyleVariable -> filled "lightcyan"
-              NodeStylePrimitive -> filled "linen"
-            filled color = [
-              Dot.EqualityPair (Dot.Id "style") (Dot.Id "filled"),
-              Dot.EqualityPair (Dot.Id "fillcolor") (Dot.Id color)]
-        toEdgeStmt i1 i2 = Dot.StmtEdge $ Dot.EdgeStmt (toNodeOrSubgraph i1) [toNodeOrSubgraph i2] attrs
-          where
-            attrs = fmap (labelAttrs style) elabel
-            elabel = case accessor of
-              TermAccessorAnnotatedSubject -> Nothing
-              TermAccessorApplicationFunction -> Just "fun"
-              TermAccessorApplicationArgument -> Just "arg"
-              TermAccessorLambdaBody -> Just "body"
-              TermAccessorListFold -> Nothing
-              TermAccessorOptionalCasesNothing -> Just "nothing"
-              TermAccessorOptionalCasesJust -> Just "just"
-              TermAccessorUnionCasesDefault -> Just "default"
-              TermAccessorUnionCasesBranch name -> Just $ "." ++ unName name
-              TermAccessorLetEnvironment -> Just "in"
-              TermAccessorLetBinding name -> Just $ unName name ++ "="
-              TermAccessorListElement i -> Just $ idx i
-              TermAccessorMapKey i -> Just $ idx i ++ ".key"
-              TermAccessorMapValue i -> Just $ idx i ++ ".value"
-              TermAccessorOptionalTerm -> Just "just"
-              TermAccessorProductTerm i -> Just $ idx i
-              TermAccessorRecordField name -> Just $ "." ++ unName name
-              TermAccessorSetElement i -> Just $ idx i
-              TermAccessorSumTerm -> Nothing
-              TermAccessorTypeAbstractionBody -> Nothing
-              TermAccessorTypeApplicationTerm -> Nothing
-              TermAccessorTypedTerm -> Nothing
-              TermAccessorInjectionTerm -> Nothing
-              TermAccessorWrappedTerm -> Nothing
-        idx i = "[" ++ show i ++ "]"
-        toNodeId i = Dot.NodeId i Nothing
-        toNodeOrSubgraph = Dot.NodeOrSubgraphNode . toNodeId
         nodeStmt = Dot.StmtNode $ Dot.NodeStmt {
           Dot.nodeStmtId = toNodeId selfId,
           Dot.nodeStmtAttributes = Just $ labelAttrs style rawLabel}
         idOf :: Name -> String
         idOf name = case M.lookup name ids of
             Just (Dot.Id d) -> d
-            Nothing -> case mns of
-              Nothing -> unName name
-              Just ns -> case M.lookup ns namespaces of
-                Just pre -> pre ++ ":" ++ local
-                Nothing -> unName name
-          where
-            (QualifiedName mns local) = qualifyNameLazy name
+            Nothing -> toCompactName namespaces name
         simpleLabel lab = (lab, NodeStyleSimple)
         selfId = Dot.Id label
         (label, style) = Y.fromMaybe (labelOf visited term) mlabstyle
-        labelOf visited term = (tryLabel visited l, s)
+        labelOf visited term = (toUniqueLabel visited l, s)
           where
             (l, s) = rawLabelOf term
-        tryLabel visited l = if S.member l visited then tryLabel visited (l ++ "'") else l
         (rawLabel, nodeStyle) = (l, if isElement then NodeStyleElement else s)
           where
             (l, s) = rawLabelOf term
@@ -169,11 +168,17 @@ encodeAsDotStatements namespaces term = fst $ encode Nothing False M.empty Nothi
           TermWrap (WrappedTerm name term1) -> simpleLabel $ "{" ++ idOf name ++ "}"
           _ -> simpleLabel "?"
 
-standardNamespaces :: M.Map Namespace String
-standardNamespaces = M.fromList (toPair <$> standardLibraries)
-  where
-    toPair lib = (libraryNamespace lib, libraryPrefix lib)
+toEdgeStmt :: Dot.Id -> Dot.Id -> Maybe Dot.AttrList -> Dot.Stmt
+toEdgeStmt i1 i2 attrs = Dot.StmtEdge $ Dot.EdgeStmt (toNodeOrSubgraph i1) [toNodeOrSubgraph i2] attrs
 
+toNodeId :: Dot.Id -> Dot.NodeId
+toNodeId i = Dot.NodeId i Nothing
+
+toNodeOrSubgraph :: Dot.Id -> Dot.NodeOrSubgraph
+toNodeOrSubgraph = Dot.NodeOrSubgraphNode . toNodeId
+
+
+--------------------------------------------------------------------------------
 
 {-
 :set +m
@@ -211,13 +216,20 @@ term = letMulti [
         field "created" $ string "2024-05-01T17:32:41Z",
         field "updated" $ string "2024-05-06T08:51:03Z"]
 
+
+-- Accessor graph
+putStrLn $ printExpr $ DS.writeGraph $ termToAccessorDotGraph term
+
+-- Full graph
+putStrLn $ printExpr $ DS.writeGraph $ termToDotGraph term
+
+
+
+
+
 term = lambda "x" $ var "x"
 term = (lambda "f" $ (var "f" @@ var "y")) @@ (lambda "x" $ var "x")
 term = var "x" @@ var "y"
-
-putStrLn $ printExpr $ DS.writeGraph $ encodeAsDotGraph term
-
-
 
 
 term = lambda "x" $ (primitive Libs._math_add @@ var "x" @@ int32 1)
