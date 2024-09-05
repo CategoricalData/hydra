@@ -10,6 +10,7 @@ import Hydra.Graph
 import Hydra.Compute
 import Hydra.Tier1
 import Hydra.Tier2
+import Hydra.Module
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -65,6 +66,15 @@ resolveTerm name = do
 -- Note: assuming for now that primitive functions are the same in the schema graph
 schemaContext :: Graph -> Graph
 schemaContext g = Y.fromMaybe g (graphSchema g)
+
+toCompactName :: M.Map Namespace String -> Name -> String
+toCompactName namespaces name = case mns of
+    Nothing -> unName name
+    Just ns -> case M.lookup ns namespaces of
+      Just pre -> pre ++ ":" ++ local
+      Nothing -> local
+  where
+    (QualifiedName mns local) = qualifyNameLazy name
 
 withSchemaContext :: Flow Graph x -> Flow Graph x
 withSchemaContext f = do
