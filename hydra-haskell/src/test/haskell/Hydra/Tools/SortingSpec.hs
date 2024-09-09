@@ -5,10 +5,10 @@ import qualified Test.Hspec as H
 import Hydra.Tools.Sorting
 
 
-checkSort :: (Ord a, Show a) => [(a, [a])] -> Either [[a]] [a] -> H.Expectation
+checkSort :: (Eq a, Ord a, Show a) => [(a, [a])] -> Either [[a]] [a] -> H.Expectation
 checkSort adj exp = H.shouldBe (topologicalSort adj) exp
 
-checkSortSCC :: (Ord a, Show a) => [(a, [a])] -> [[a]] -> H.Expectation
+checkSortSCC :: (Eq a, Ord a, Show a) => [(a, [a])] -> [[a]] -> H.Expectation
 checkSortSCC adj exp = H.shouldBe (topologicalSortComponents adj) exp
 
 checkSortDiscreteSet :: H.SpecWith ()
