@@ -43,11 +43,11 @@ fname >>: d = Field fname (unTTerm d)
 (<.>) :: TTerm (b -> c) -> TTerm (a -> b) -> TTerm (a -> c)
 f <.> g = compose f g
 
-($$) :: TTerm (a -> b) -> TTerm a -> TTerm b
-f $$ x = apply f x
-
+-- Two alternative symbols for typed term application
 (@@) :: TTerm (a -> b) -> TTerm a -> TTerm b
 f @@ x = apply f x
+($$) :: TTerm (a -> b) -> TTerm a -> TTerm b
+f $$ x = apply f x
 
 infixr 0 @->
 (@->) :: a -> b -> (a, b)
