@@ -21,8 +21,14 @@ import Data.String(IsString(..))
 
 instance IsString Term where fromString = string
 
+-- Two alternative symbols for term application
 (@@) :: Term -> Term -> Term
 f @@ x = apply f x
+($$) :: Term -> Term -> Term
+f $$ x = apply f x
+
+--(<$>) :: Term -> Term -> Term
+--f <$> x = apply f x
 
 (<.>) :: Term -> Term -> Term
 f <.> g = compose f g

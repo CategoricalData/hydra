@@ -13,16 +13,25 @@ import Data.String(IsString(..))
 
 instance IsString (Type) where fromString = var
 
+-- Not available: := ::=
 infixr 0 >:
 (>:) :: String -> Type -> FieldType
 n >: t = field n t
+
+--(::=) :: String -> Type -> FieldType
+n <=> t = field n t
+
+
 
 infixr 0 -->
 (-->) :: Type -> Type -> Type
 a --> b = function a b
 
+-- Two alternative symbols for type application
 (@@) :: Type -> Type -> Type
 f @@ x = apply f x
+($$) :: Type -> Type -> Type
+f $$ x = apply f x
 
 annot :: M.Map Name Term -> Type -> Type
 annot ann t = TypeAnnotated $ AnnotatedType t ann
