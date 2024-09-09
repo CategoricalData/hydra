@@ -7,6 +7,7 @@ import Hydra.Kernel
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+import qualified Data.Maybe as Y
 
 
 type AccessorPath = [TermAccessor]
@@ -27,14 +28,13 @@ showTermAccessor accessor = case accessor of
    TermAccessorUnionCasesBranch name -> Just $ "." ++ unName name
    TermAccessorLetEnvironment -> Just "in"
    TermAccessorLetBinding name -> Just $ unName name ++ "="
---   TermAccessorListElement i -> Just $ idx i -- TODO: restore this
-   TermAccessorListElement i -> Nothing
-   TermAccessorMapKey i -> Just $ idx i ++ ".key"
-   TermAccessorMapValue i -> Just $ idx i ++ ".value"
+   TermAccessorListElement i -> idx i
+   TermAccessorMapKey i -> idxSuff ".key" i
+   TermAccessorMapValue i -> idxSuff ".value" i
    TermAccessorOptionalTerm -> Just "just"
-   TermAccessorProductTerm i -> Just $ idx i
+   TermAccessorProductTerm i -> idx i
    TermAccessorRecordField name -> Just $ "." ++ unName name
-   TermAccessorSetElement i -> Just $ idx i
+   TermAccessorSetElement i -> idx i
    TermAccessorSumTerm -> Nothing
    TermAccessorTypeAbstractionBody -> Nothing
    TermAccessorTypeApplicationTerm -> Nothing
@@ -42,7 +42,9 @@ showTermAccessor accessor = case accessor of
    TermAccessorInjectionTerm -> Nothing
    TermAccessorWrappedTerm -> Nothing
   where
-    idx i = "[" ++ show i ++ "]"
+--    idx i = Just $ "[" ++ show i ++ "]" -- TODO: restore this
+    idx i = Nothing
+    idxSuff suffix i = Y.maybe (Just suffix) Just $ fmap (\s -> s ++ suffix) $ idx i
 
 termToAccessorGraph :: M.Map Namespace String -> Term -> AccessorGraph
 termToAccessorGraph namespaces term = AccessorGraph nodesX edgesX
