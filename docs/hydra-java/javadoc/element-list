@@ -19,8 +19,6 @@ hydra.ext.java.language
 hydra.ext.java.syntax
 hydra.ext.json
 hydra.ext.org.apache.avro.schema
-hydra.ext.org.apache.tinkerpop
-hydra.ext.org.apache.tinkerpop.dsl
 hydra.ext.org.json.decoding
 hydra.ext.org.w3.rdf.syntax
 hydra.ext.org.w3.shacl.model
@@ -54,6 +52,8 @@ hydra.lib.strings
 hydra.mantle
 hydra.messages
 hydra.module
+hydra.pg
+hydra.pg.dsl
 hydra.pg.mapping
 hydra.pg.model
 hydra.pg.query
