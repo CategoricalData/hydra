@@ -13,9 +13,9 @@ public class NodeStmt implements Serializable {
   
   public final hydra.ext.org.graphviz.dot.NodeId id;
   
-  public final java.util.List<java.util.List<hydra.ext.org.graphviz.dot.EqualityPair>> attributes;
+  public final hydra.util.Opt<hydra.ext.org.graphviz.dot.AttrList> attributes;
   
-  public NodeStmt (hydra.ext.org.graphviz.dot.NodeId id, java.util.List<java.util.List<hydra.ext.org.graphviz.dot.EqualityPair>> attributes) {
+  public NodeStmt (hydra.ext.org.graphviz.dot.NodeId id, hydra.util.Opt<hydra.ext.org.graphviz.dot.AttrList> attributes) {
     java.util.Objects.requireNonNull((id));
     java.util.Objects.requireNonNull((attributes));
     this.id = id;
@@ -41,7 +41,7 @@ public class NodeStmt implements Serializable {
     return new NodeStmt(id, attributes);
   }
   
-  public NodeStmt withAttributes(java.util.List<java.util.List<hydra.ext.org.graphviz.dot.EqualityPair>> attributes) {
+  public NodeStmt withAttributes(hydra.util.Opt<hydra.ext.org.graphviz.dot.AttrList> attributes) {
     java.util.Objects.requireNonNull((attributes));
     return new NodeStmt(id, attributes);
   }

@@ -43,7 +43,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Simple serializer for Kusto Query Language (KQL) queries
+ * Simple serializer for Kusto Query Language (KQL) queries.
  */
 public class KqlWriter extends MapperBase {
 
@@ -314,7 +314,7 @@ public class KqlWriter extends MapperBase {
     }
 
     private static String write(DurationUnit u) {
-        return u.accept(new DurationUnit.Visitor<String>(){
+        return u.accept(new DurationUnit.Visitor<String>() {
             @Override
             public String visit(DurationUnit.Second instance) {
                 return "s";
@@ -333,7 +333,7 @@ public class KqlWriter extends MapperBase {
     }
 
     private static String write(Expression e) {
-        return e.accept(new Expression.Visitor<String>(){
+        return e.accept(new Expression.Visitor<String>() {
             @Override
             public String visit(Expression.And instance) {
                 return sep(" and ", instance.value, KqlWriter::write);
@@ -479,7 +479,7 @@ public class KqlWriter extends MapperBase {
     }
 
     private static String write(Literal l) {
-        return l.accept(new Literal.Visitor<String>(){
+        return l.accept(new Literal.Visitor<String>() {
             @Override
             public String visit(Literal.Duration instance) {
                 return write(instance.value);
@@ -580,7 +580,7 @@ public class KqlWriter extends MapperBase {
     }
 
     private static String write(UnaryOperator o) {
-        return o.accept(new UnaryOperator.Visitor<String>(){
+        return o.accept(new UnaryOperator.Visitor<String>() {
             @Override
             public String visit(UnaryOperator.Not instance) {
                 return "not";

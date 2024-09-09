@@ -1,6 +1,7 @@
 package hydra.tools;
 
 import hydra.compute.Trace;
+import java.io.Serializable;
 
 
 public class FlowException extends RuntimeException implements Serializable {
