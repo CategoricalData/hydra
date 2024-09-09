@@ -110,63 +110,62 @@ termToDotStmts namespaces term = fst $ encode Nothing False M.empty Nothing ([],
         nodeStmt = Dot.StmtNode $ Dot.NodeStmt {
           Dot.nodeStmtId = toNodeId selfId,
           Dot.nodeStmtAttributes = Just $ labelAttrs style rawLabel}
-        idOf :: Name -> String
-        idOf name = case M.lookup name ids of
-            Just (Dot.Id d) -> d
-            Nothing -> toCompactName namespaces name
-        simpleLabel lab = (lab, NodeStyleSimple)
         selfId = Dot.Id label
         (label, style) = Y.fromMaybe (labelOf visited term) mlabstyle
         labelOf visited term = (toUniqueLabel visited l, s)
           where
-            (l, s) = rawLabelOf term
+            (l, s) = termLabel True namespaces term
         (rawLabel, nodeStyle) = (l, if isElement then NodeStyleElement else s)
           where
-            (l, s) = rawLabelOf term
-        rawLabelOf term = case term of
-          TermAnnotated (AnnotatedTerm term1 _) -> simpleLabel "@{...}"
-          TermApplication _ -> simpleLabel "apply"
-          TermFunction f -> case f of
-            FunctionLambda (Lambda v _ body) -> simpleLabel $ "lambda" -- \\\\" ++ unName v ++ "."
-            FunctionElimination e -> case e of
-              EliminationList _ -> simpleLabel "fold"
-              EliminationOptional _ -> simpleLabel "foldOpt"
-              EliminationProduct (TupleProjection i _) -> simpleLabel $ "[" ++ show i ++ "]"
-              EliminationRecord (Projection tname fname) -> simpleLabel $ "{" ++ idOf tname ++ "}." ++ unName fname
-              EliminationUnion (CaseStatement tname _ _) -> simpleLabel $ "cases_{" ++ idOf tname ++ "}"
-              EliminationWrap name -> simpleLabel $ "unwrap_{" ++ idOf name ++ "}"
-            FunctionPrimitive name -> (idOf name, NodeStylePrimitive)
-          TermLet (Let bindings env) -> simpleLabel "let"
-          TermList _ -> simpleLabel "list"
-          TermLiteral l -> simpleLabel $ case l of
-            LiteralBinary s -> s
-            LiteralBoolean b -> show b
-            LiteralInteger i -> case i of
-              IntegerValueBigint v -> show v
-              IntegerValueInt8 v -> show v
-              IntegerValueInt16 v -> show v
-              IntegerValueInt32 v -> show v
-              IntegerValueInt64 v -> show v
-              IntegerValueUint8 v -> show v
-              IntegerValueUint16 v -> show v
-              IntegerValueUint32 v -> show v
-              IntegerValueUint64 v -> show v
-            LiteralFloat f -> case f of
-              FloatValueBigfloat v -> show v
-              FloatValueFloat32 v -> show v
-              FloatValueFloat64 v -> show v
-            LiteralString s -> s -- show s
-          TermMap _ -> simpleLabel "map"
-          TermOptional _ -> simpleLabel "optional"
-          TermProduct _ -> simpleLabel "product"
-          TermRecord (Record name _) -> simpleLabel $ "∧{" ++ idOf name ++ "}"
-          TermTypeAbstraction (TypeAbstraction v term1) -> simpleLabel "tyabs"
-          TermTypeApplication (TypedTerm term _) -> simpleLabel "tyapp"
-          TermUnion (Injection tname _) -> simpleLabel $ "∨{" ++ idOf tname ++ "}"
-          TermTyped (TypedTerm term1 _) -> simpleLabel ":t"
-          TermVariable name -> simpleLabel $ idOf name
-          TermWrap (WrappedTerm name term1) -> simpleLabel $ "{" ++ idOf name ++ "}"
-          _ -> simpleLabel "?"
+            (l, s) = termLabel True namespaces term
+
+termLabel :: Bool -> M.Map Namespace String -> Term -> (String, NodeStyle)
+termLabel compact namespaces term = case term of
+    TermAnnotated (AnnotatedTerm term1 _) -> simpleLabel "@{}"
+    TermApplication _ -> simpleLabel $ if compact then "$" else "apply"
+    TermFunction f -> case f of
+      FunctionLambda (Lambda v _ body) -> simpleLabel $ if compact then "\x03BB" else "lambda"
+      FunctionElimination e -> case e of
+        EliminationList _ -> simpleLabel "fold"
+        EliminationOptional _ -> simpleLabel "foldOpt"
+        EliminationProduct (TupleProjection n i) -> simpleLabel $ "[" ++ show i ++ "/" ++ show n ++ "]"
+        EliminationRecord (Projection tname fname) -> simpleLabel $ "{" ++ toCompactName namespaces tname ++ "}." ++ unName fname
+        EliminationUnion (CaseStatement tname _ _) -> simpleLabel $ "cases_{" ++ toCompactName namespaces tname ++ "}"
+        EliminationWrap name -> simpleLabel $ "unwrap_{" ++ toCompactName namespaces name ++ "}"
+      FunctionPrimitive name -> (toCompactName namespaces name, NodeStylePrimitive)
+    TermLet (Let bindings env) -> simpleLabel "let"
+    TermList _ -> simpleLabel $ if compact then "[]" else "list"
+    TermLiteral l -> simpleLabel $ case l of
+      LiteralBinary s -> s
+      LiteralBoolean b -> show b
+      LiteralInteger i -> case i of
+        IntegerValueBigint v -> show v
+        IntegerValueInt8 v -> show v
+        IntegerValueInt16 v -> show v
+        IntegerValueInt32 v -> show v
+        IntegerValueInt64 v -> show v
+        IntegerValueUint8 v -> show v
+        IntegerValueUint16 v -> show v
+        IntegerValueUint32 v -> show v
+        IntegerValueUint64 v -> show v
+      LiteralFloat f -> case f of
+        FloatValueBigfloat v -> show v
+        FloatValueFloat32 v -> show v
+        FloatValueFloat64 v -> show v
+      LiteralString s -> s -- show s
+    TermMap _ -> simpleLabel $ if compact then "<,>" else "map"
+    TermOptional _ -> simpleLabel $ if compact then "opt" else "optional"
+    TermProduct _ -> simpleLabel $ if compact then "\x2227" else "product"
+    TermRecord (Record name _) -> simpleLabel $ "\x2227" ++ toCompactName namespaces name
+    TermTypeAbstraction (TypeAbstraction v term1) -> simpleLabel "tyabs"
+    TermTypeApplication (TypedTerm term _) -> simpleLabel "tyapp"
+    TermUnion (Injection tname _) -> simpleLabel $ "\x22BB" ++ toCompactName namespaces tname
+    TermTyped (TypedTerm term1 _) -> simpleLabel ":t"
+    TermVariable name -> simpleLabel $ toCompactName namespaces name
+    TermWrap (WrappedTerm name term1) -> simpleLabel $ "(" ++ toCompactName namespaces name ++ ")"
+    _ -> simpleLabel "?"
+  where
+    simpleLabel lab = (lab, NodeStyleSimple)
 
 toEdgeStmt :: Dot.Id -> Dot.Id -> Maybe Dot.AttrList -> Dot.Stmt
 toEdgeStmt i1 i2 attrs = Dot.StmtEdge $ Dot.EdgeStmt (toNodeOrSubgraph i1) [toNodeOrSubgraph i2] attrs
@@ -217,14 +216,16 @@ term = letMulti [
         field "updated" $ string "2024-05-06T08:51:03Z"]
 
 
--- Accessor graph
-putStrLn $ printExpr $ DS.writeGraph $ termToAccessorDotGraph term
 
 -- Full graph
 putStrLn $ printExpr $ DS.writeGraph $ termToDotGraph term
 
+-- Accessor graph
+putStrLn $ printExpr $ DS.writeGraph $ termToAccessorDotGraph term
 
 
+term = lambda "x" $ lambda "y" $ pair (var "x") (var "y")
+term = lambda "x" $ lambda "y" $ first @@ (pair (var "x") (var "y"))
 
 
 term = lambda "x" $ var "x"
