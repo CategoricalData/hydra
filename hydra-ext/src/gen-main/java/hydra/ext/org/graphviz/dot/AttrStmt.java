@@ -13,9 +13,9 @@ public class AttrStmt implements Serializable {
   
   public final hydra.ext.org.graphviz.dot.AttrType type;
   
-  public final java.util.List<java.util.List<hydra.ext.org.graphviz.dot.EqualityPair>> attributes;
+  public final hydra.ext.org.graphviz.dot.AttrList attributes;
   
-  public AttrStmt (hydra.ext.org.graphviz.dot.AttrType type, java.util.List<java.util.List<hydra.ext.org.graphviz.dot.EqualityPair>> attributes) {
+  public AttrStmt (hydra.ext.org.graphviz.dot.AttrType type, hydra.ext.org.graphviz.dot.AttrList attributes) {
     java.util.Objects.requireNonNull((type));
     java.util.Objects.requireNonNull((attributes));
     this.type = type;
@@ -41,7 +41,7 @@ public class AttrStmt implements Serializable {
     return new AttrStmt(type, attributes);
   }
   
-  public AttrStmt withAttributes(java.util.List<java.util.List<hydra.ext.org.graphviz.dot.EqualityPair>> attributes) {
+  public AttrStmt withAttributes(hydra.ext.org.graphviz.dot.AttrList attributes) {
     java.util.Objects.requireNonNull((attributes));
     return new AttrStmt(type, attributes);
   }

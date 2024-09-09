@@ -15,11 +15,11 @@ public class EdgeStmt implements Serializable {
   
   public final hydra.ext.org.graphviz.dot.NodeOrSubgraph left;
   
-  public final hydra.ext.org.graphviz.dot.NodeOrSubgraph right;
+  public final java.util.List<hydra.ext.org.graphviz.dot.NodeOrSubgraph> right;
   
-  public final java.util.List<hydra.ext.org.graphviz.dot.EqualityPair> attributes;
+  public final hydra.util.Opt<hydra.ext.org.graphviz.dot.AttrList> attributes;
   
-  public EdgeStmt (hydra.ext.org.graphviz.dot.NodeOrSubgraph left, hydra.ext.org.graphviz.dot.NodeOrSubgraph right, java.util.List<hydra.ext.org.graphviz.dot.EqualityPair> attributes) {
+  public EdgeStmt (hydra.ext.org.graphviz.dot.NodeOrSubgraph left, java.util.List<hydra.ext.org.graphviz.dot.NodeOrSubgraph> right, hydra.util.Opt<hydra.ext.org.graphviz.dot.AttrList> attributes) {
     java.util.Objects.requireNonNull((left));
     java.util.Objects.requireNonNull((right));
     java.util.Objects.requireNonNull((attributes));
@@ -47,12 +47,12 @@ public class EdgeStmt implements Serializable {
     return new EdgeStmt(left, right, attributes);
   }
   
-  public EdgeStmt withRight(hydra.ext.org.graphviz.dot.NodeOrSubgraph right) {
+  public EdgeStmt withRight(java.util.List<hydra.ext.org.graphviz.dot.NodeOrSubgraph> right) {
     java.util.Objects.requireNonNull((right));
     return new EdgeStmt(left, right, attributes);
   }
   
-  public EdgeStmt withAttributes(java.util.List<hydra.ext.org.graphviz.dot.EqualityPair> attributes) {
+  public EdgeStmt withAttributes(hydra.util.Opt<hydra.ext.org.graphviz.dot.AttrList> attributes) {
     java.util.Objects.requireNonNull((attributes));
     return new EdgeStmt(left, right, attributes);
   }
