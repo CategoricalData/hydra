@@ -50,13 +50,13 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --                 ;
       def "SessionActivity" $
         union [
-          "resetCommands">: nonemptyList $ gql "SessionResetCommand",
+          "reset">: nonemptyList $ gql "SessionResetCommand",
           "setAndResetCommands">: gql "SessionSetAndResetCommands"],
 
       def "SessionSetAndResetCommands" $
         record [
-          "setCommands">: nonemptyList $ gql "SessionSetCommand",
-          "resetCommands">: list $ gql "SessionResetCommand"],
+          "set">: nonemptyList $ gql "SessionSetCommand",
+          "reset">: list $ gql "SessionResetCommand"],
 
 -- transactionActivity = startTransactionCommand (procedureSpecification endTransactionCommand?)?
 --                     | procedureSpecification endTransactionCommand?
@@ -64,11 +64,11 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --                     ;
       def "TransactionActivity" $
         union [
-          "startAndMaybeProcedureAndEnd">: gql "StartAndMaybeProcedureAndEnd",
-          "procedureAndMaybeEnd">: gql "ProcedureAndMaybeEnd",
+          "start">: gql "StartAndMaybeProcedureAndMaybeEnd",
+          "procedure">: gql "ProcedureAndMaybeEnd",
           "end">: gql "EndTransactionCommand"],
 
-      def "StartAndMaybeProcedureAndEnd" $
+      def "StartAndMaybeProcedureAndMaybeEnd" $
         record [
           "start">: gql "StartTransactionCommand",
           "procedureAndEnd">: optional $ gql "ProcedureAndMaybeEnd"],
@@ -104,10 +104,7 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 
 -- sessionSetGraphClause = PROPERTY? GRAPH graphExpression
 --                       ;
-      def "SessionSetGraphClause" $
-        record [
-          "property">: boolean,
-          "graphExpression">: gql "GraphExpression"],
+      def "SessionSetGraphClause" $ gql "GraphExpression"],
 
 -- sessionSetTimeZoneClause = TIME ZONE setTimeZoneValue
 --                          ;
@@ -119,30 +116,22 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "SetTimeZoneValue" $
         gql "TimeZoneString",
 
-
-
-
-
-
-
-
 -- sessionSetParameterClause = sessionSetGraphParameterClause
 --                           | sessionSetBindingTableParameterClause
 --                           | sessionSetValueParameterClause
 --                           ;
       def "SessionSetParameterClause" $
         union [
-          "graphParameter">: gql "SessionSetGraphParameterClause",
-          "bindingTableParameter">: gql "SessionSetBindingTableParameterClause",
-          "valueParameter">: gql "SessionSetValueParameterClause"],
+          "graph">: gql "SessionSetGraphParameterClause",
+          "bindings">: gql "SessionSetBindingTableParameterClause",
+          "value">: gql "SessionSetValueParameterClause"],
 
 -- sessionSetGraphParameterClause = PROPERTY? GRAPH sessionSetParameterName optTypedGraphInitializer
 --                                ;
       def "SessionSetGraphParameterClause" $
         record [
-          "property">: boolean,
           "graph">: gql "SessionSetParameterName",
-          "optTypedGraphInitializer">: gql "OptTypedGraphInitializer"],
+          "initializer">: gql "OptTypedGraphInitializer"],
 
 -- sessionSetBindingTableParameterClause = BINDING? TABLE sessionSetParameterName optTypedBindingTableInitializer
 --                                       ;
@@ -150,27 +139,21 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
         record [
           "binding">: boolean,
           "table">: gql "SessionSetParameterName",
-          "optTypedBindingTableInitializer">: gql "OptTypedBindingTableInitializer"],
+          "binding">: gql "OptTypedBindingTableInitializer"],
 
 -- sessionSetValueParameterClause = VALUE sessionSetParameterName optTypedValueInitializer
 --                                ;
       def "SessionSetValueParameterClause" $
         record [
           "value">: gql "SessionSetParameterName",
-          "optTypedValueInitializer">: gql "OptTypedValueInitializer"],
+          "initializer">: gql "OptTypedValueInitializer"],
 
 -- sessionSetParameterName = (IF NOT EXISTS)? sessionParameterSpecification
 --                         ;
       def "SessionSetParameterName" $
         record [
           "ifNotExists">: boolean,
-          "sessionParameterSpecification">: gql "SessionParameterSpecification"]
-
-
-
-
-
-
+          "parameter">: gql "SessionParameterSpecification"]
 
 -- // 7.2 <session reset command>
 --
@@ -189,9 +172,9 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "SessionResetArguments" $
         union [
-          "allParametersOrCharacteristics">: gql "AllParametersOrCharacteristics",
+          "parametersOrCharacteristics">: gql "AllParametersOrCharacteristics",
           "schema">: unit,
-          "propertyGraph">: gql "PropertyGraph",
+          "graph">: unit,
           "timeZone">: unit,
           "parameterSessionSpecification">: gql "ParameterSessionSpecification"],
 
@@ -201,33 +184,20 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
           "type">: gql "ParametersOrCharacteristics"],
 
       def "ParametersOrCharacteristics" $
-        union [
-          "parameters">: unit,
-          "characteristics">: unit],
-
-      def "PropertyGraph" $
-        record [
-          "property">: boolean,
-          "graph">: unit],
+        enum ["parameters", "characteristics"],
 
       def "ParameterSessionSpecification" $
         record [
           "parameter">: boolean,
           "sessionParameterSpecification">: gql "SessionParameterSpecification"]
 
-
-
-
-
 -- // 7.3 <session close command>
 --
 -- sessionCloseCommand
 --     : SESSION CLOSE
 --     ;
-      def "SessionCloseCommand" $
+      def "SessionCloseCommand"
         unit,
-
-
 
 -- // 7.4 <session parameter specification>
 --
@@ -237,10 +207,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "SessionParameterSpecification" $
         gql "GeneralParameterReference",
 
-
-
-
-
 -- // 8.1 <start transaction command>
 --
 -- startTransactionCommand
@@ -248,9 +214,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "StartTransactionCommand" $
         optional $ gql "TransactionCharacteristics",
-
-
-
 
 -- // 8.2 <transaction characteristics>
 
@@ -275,30 +238,21 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
           "readOnly",
           "readWrite"],
 
-
-
-
-
 -- // 8.3 <rollback command>
 
 -- rollbackCommand
 --     : ROLLBACK
 --     ;
-      def "RollbackCommand" $
+      def "RollbackCommand"
         unit,
-
-
-
 
 -- // 8.4 <commit command>
 
 -- commitCommand
 --     : COMMIT
 --     ;
-      def "CommitCommand" $
+      def "CommitCommand"
         unit,
-
-
 
 -- // 9.1 <nested procedure specification>
 
@@ -341,14 +295,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 -- //    : procedureBody
 -- //    ;
 
-
-
-
-
-
-
-
-
 -- // 9.2 <procedure body>
 
 -- procedureBody
@@ -356,9 +302,9 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "ProcedureBody" $
         record [
-          "atSchemaClause":> optional $ gql "AtSchemaClause",
-          "bindingVariableDefinitionBlock":> optional $ gql "BindingVariableDefinitionBlock",
-          "statementBlock":> gql "StatementBlock"],
+          "atSchema":> optional $ gql "AtSchemaClause",
+          "bindings":> optional $ gql "BindingVariableDefinitionBlock",
+          "statements":> gql "StatementBlock"],
 
 -- bindingVariableDefinitionBlock
 --     : bindingVariableDefinition+
@@ -373,9 +319,9 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "BindingVariableDefinition" $
         union [
-          "graphVariable":> gql "GraphVariableDefinition",
-          "bindingTableVariable":> gql "BindingTableVariableDefinition",
-          "valueVariable":> gql "ValueVariableDefinition"],
+          "graph":> gql "GraphVariableDefinition",
+          "table":> gql "BindingTableVariableDefinition",
+          "value":> gql "ValueVariableDefinition"],
 
 -- statementBlock
 --     : statement nextStatement*
@@ -404,10 +350,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
           "yieldClause":> optional $ gql "YieldClause",
           "statement":> gql "Statement"],
 
-
-
-
-
 -- // 10.1 <graph variable definition>
 
 -- graphVariableDefinition
@@ -415,39 +357,26 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "GraphVariableDefinition" $
         record [
-          "property":> boolean,
-          "bindingVariable":> gql "BindingVariable",
-          "optTypedGraphInitializer":> gql "OptTypedGraphInitializer"],
+          "variable":> gql "BindingVariable",
+          "initializer":> gql "OptTypedGraphInitializer"],
 
 -- optTypedGraphInitializer
 --     : (typed? graphReferenceValueType)? graphInitializer
 --     ;
       def "OptTypedGraphInitializer" $
         record [
-          "typedGraphReferenceValueType":> optional $ gql "TypedGraphReferenceValueType",
-          "graphInitializer":> gql "GraphInitializer"],
+          "type":> optional $ gql "TypedGraphReferenceValueType",
+          "initializer":> gql "GraphInitializer"],
 
       def "TypedGraphReferenceValueType" $
         record [
           "typed":> optional $ gql "Typed",
-          "graphReferenceValueType":> gql "GraphReferenceValueType"],
+          "valueType":> gql "GraphReferenceValueType"],
 
 -- graphInitializer
 --     : EQUALS_OPERATOR graphExpression
 --     ;
       def "GraphInitializer" $ gql "GraphExpression",
-
-
-
-
-
-
-
-
-
-
-
-
 
 -- // 10.2 <binding table variable definition>
 
@@ -456,23 +385,23 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "BindingTableVariableDefinition" $
         record [
-          "isBinding":> boolean,
-          "bindingVariable":> gql "BindingVariable",
-          "optTypedInitializer":> gql "OptTypedBindingTableInitializer"],
+          "binding":> boolean,
+          "variable":> gql "BindingVariable",
+          "initializer":> gql "OptTypedBindingTableInitializer"],
 
 -- optTypedBindingTableInitializer
 --     : (typed? bindingTableReferenceValueType)? bindingTableInitializer
 --     ;
       def "OptTypedBindingTableInitializer" $
         record [
-          "typedRefType":> optional $ gql "TypedBindingTableReferenceValueType",
+          "type":> optional $ gql "TypedBindingTableReferenceValueType",
           "initializer":> gql "BindingTableInitializer"],
 
 -- typedBindingTableReferenceValueType
       def "TypedBindingTableReferenceValueType" $
         record [
-          "isTyped":> optional $ gql "Typed",
-          "refValueType":> gql "BindingTableReferenceValueType"],
+          "typed":> optional $ gql "Typed",
+          "valueType":> gql "BindingTableReferenceValueType"],
 
 -- bindingTableInitializer
 --     : EQUALS_OPERATOR bindingTableExpression
@@ -486,21 +415,21 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "ValueVariableDefinition" $
         record [
-          "bindingVariable":> gql "BindingVariable",
-          "optTypedInitializer":> gql "OptTypedValueInitializer"],
+          "variable":> gql "BindingVariable",
+          "initializer":> gql "OptTypedValueInitializer"],
 
 -- optTypedValueInitializer
 --     : (typed? valueType)? valueInitializer
 --     ;
       def "OptTypedValueInitializer" $
         record [
-          "typedValueType":> optional $ gql "TypedValueType",
+          "type":> optional $ gql "TypedValueType",
           "initializer":> gql "ValueInitializer"],
 
 -- typedValueType
       def "TypedValueType" $
         record [
-          "isTyped":> optional $ gql "Typed",
+          "typed":> optional $ gql "Typed",
           "valueType":> gql "ValueType"],
 
 -- valueInitializer
@@ -518,9 +447,9 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "GraphExpression" $
         union [
-          "objectExpr":> gql "ObjectExpressionPrimary",
-          "graphRef":> gql "GraphReference",
-          "nameOrVar":> gql "ObjectNameOrBindingVariable",
+          "object":> gql "ObjectExpressionPrimary",
+          "reference":> gql "GraphReference",
+          "name":> gql "ObjectNameOrBindingVariable",
           "current":> gql "CurrentGraph"],
 
 -- currentGraph
@@ -528,7 +457,7 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | CURRENT_GRAPH
 --     ;
       def "CurrentGraph" $
-        enum ["CurrentPropertyGraph", "CurrentGraph"],
+        enum ["graph", "propertyGraph"],
 
 -- // 11.2 <binding table expression>
 
@@ -540,10 +469,10 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "BindingTableExpression" $
         union [
-          "nestedSpec":> gql "NestedBindingTableQuerySpecification",
-          "objectExpr":> gql "ObjectExpressionPrimary",
-          "tableRef":> gql "BindingTableReference",
-          "nameOrVar":> gql "ObjectNameOrBindingVariable"],
+          "nested":> gql "NestedBindingTableQuerySpecification",
+          "object":> gql "ObjectExpressionPrimary",
+          "table":> gql "BindingTableReference",
+          "name":> gql "ObjectNameOrBindingVariable"],
 
 -- nestedBindingTableQuerySpecification
 --     : nestedQuerySpecification
@@ -559,26 +488,27 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "ObjectExpressionPrimary" $
         union [
-          "variableExpr":> gql "ValueExpressionPrimary",
+          "variable":> gql "ValueExpressionPrimary",
           "parenthesized":> gql "ParenthesizedValueExpression",
           "nonParenthesized":> gql "NonParenthesizedValueExpressionPrimarySpecialCase"],
-
-
-
-
-
 
 -- // 12.1 <linear catalog-modifying statement>
 --
 -- linearCatalogModifyingStatement
 --     : simpleCatalogModifyingStatement+
 --     ;
---
+      def "LinearCatalogModifyingStatement" $
+        nonemptyList $ gql "SimpleCatalogModifyingStatement",
+
 -- simpleCatalogModifyingStatement
 --     : primitiveCatalogModifyingStatement
 --     | callCatalogModifyingProcedureStatement
 --     ;
---
+      def "SimpleCatalogModifyingStatement" $
+        union [
+          "primitive">: gql "PrimitiveCatalogModifyingStatement",
+          "callProcedure">: gql "CallCatalogModifyingProcedureStatement"],
+
 -- primitiveCatalogModifyingStatement
 --     : createSchemaStatement
 --     | dropSchemaStatement
@@ -587,83 +517,156 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | createGraphTypeStatement
 --     | dropGraphTypeStatement
 --     ;
---
+      def "PrimitiveCatalogModifyingStatement" $
+        union [
+          "createSchema">: gql "CreateSchemaStatement",
+          "dropSchema">: gql "DropSchemaStatement",
+          "createGraph">: gql "CreateGraphStatement",
+          "dropGraph">: gql "DropGraphStatement",
+          "createGraphType">: gql "CreateGraphTypeStatement",
+          "dropGraphType">: gql "DropGraphTypeStatement"],
+
 -- // 12.2 <insert schema statement>
 --
 -- createSchemaStatement
 --     : CREATE SCHEMA (IF NOT EXISTS)? catalogSchemaParentAndName
 --     ;
---
+      def "CreateSchemaStatement" $
+        record [
+          "ifNotExists">: boolean,
+          "parentAndName">: gql "CatalogSchemaParentAndName"],
+
 -- // 12.3 <drop schema statement>
 --
 -- dropSchemaStatement
 --     : DROP SCHEMA (IF EXISTS)? catalogSchemaParentAndName
 --     ;
---
+      def "DropSchemaStatement" $
+        record [
+          "ifExists">: boolean,
+          "parentAndName">: gql "CatalogSchemaParentAndName"],
+
 -- // 12.4 <insert graph statement>
 --
 -- createGraphStatement
 --     : CREATE (PROPERTY? GRAPH (IF NOT EXISTS)? | OR REPLACE PROPERTY? GRAPH) catalogGraphParentAndName (openGraphType | ofGraphType) graphSource?
 --     ;
---
+      def "CreateGraphStatement" $
+        record [
+          "createOption">: gql "CreateGraphOption",
+          "parentAndName">: gql "CatalogGraphParentAndName",
+          "type">: gql "GraphTypeOption",
+          "source">: optional $ gql "GraphSource"],
+
+      def "CreateGraphOption" $
+        union [
+          "graphIfNotExists">: boolean,
+          "orReplace">: unit],
+
 -- openGraphType
 --     : typed? ANY (PROPERTY? GRAPH)?
 --     ;
---
+      def "OpenGraphType" $
+        record [
+          "typed">: optional $ gql "Typed",
+          "graph">: boolean],
+
 -- ofGraphType
 --     : graphTypeLikeGraph
 --     | typed? graphTypeReference
 --     | typed? (PROPERTY? GRAPH)? nestedGraphTypeSpecification
 --     ;
---
+      def "OfGraphType" $
+        union [
+          "likeGraph">: gql "GraphTypeLikeGraph",
+          "reference">: gql "TypedGraphTypeReference",
+          "nested">: gql "TypedNestedGraphTypeSpecification"],
+
 -- graphTypeLikeGraph
 --     : LIKE graphExpression
 --     ;
---
+      def "GraphTypeLikeGraph" $
+        gql "GraphExpression",
+
 -- graphSource
 --     : AS COPY OF graphExpression
 --     ;
---
+      def "GraphSource" $
+        gql "GraphExpression",
+
+-- typed? graphTypeReference
+      def "TypedGraphTypeReference" $
+        record [
+          "typed">: optional $ gql "Typed",
+          "reference">: gql "GraphTypeReference"],
+
+-- typed? (PROPERTY? GRAPH)? nestedGraphTypeSpecification
+      def "TypedNestedGraphTypeSpecification" $
+        record [
+          "typed">: optional $ gql "Typed",
+          "graph">: boolean,
+          "specification">: gql "NestedGraphTypeSpecification"],
+
 -- // 12.5 <drop graph statement>
 --
 -- dropGraphStatement
 --     : DROP PROPERTY? GRAPH (IF EXISTS)? catalogGraphParentAndName
 --     ;
---
+      def "DropGraphStatement" $
+        record [
+          "ifExists">: boolean,
+          "parentAndName">: gql "CatalogGraphParentAndName"],
+
 -- // 12.6 <graph type statement>
 --
 -- createGraphTypeStatement
 --     : CREATE (PROPERTY? GRAPH TYPE (IF NOT EXISTS)? | OR REPLACE PROPERTY? GRAPH TYPE) catalogGraphTypeParentAndName graphTypeSource
 --     ;
---
+      def "CreateGraphTypeStatement" $
+        record [
+          "createOption">: gql "CreateGraphTypeOption",
+          "parentAndName">: gql "CatalogGraphTypeParentAndName",
+          "source">: gql "GraphTypeSource"],
+
+      def "CreateGraphTypeOption" $
+        union [
+          "typeIfNotExists">: boolean,
+          "orReplace">: unit],
+
 -- graphTypeSource
 --     : AS? copyOfGraphType
 --     | graphTypeLikeGraph
 --     | AS? nestedGraphTypeSpecification
 --     ;
---
+      def "GraphTypeSource" $
+        union [
+          "copyOf">: gql "CopyOfGraphType",
+          "likeGraph">: gql "GraphTypeLikeGraph",
+          "nestedSpecification">: gql "NestedGraphTypeSpecification"],
+
 -- copyOfGraphType
 --     : COPY OF graphTypeReference
 --     ;
---
--- // 12.7 <drop graph statement>
+      def "CopyOfGraphType" $
+        gql "GraphTypeReference",
+
+-- // 12.7 <drop graph type statement>
 --
 -- dropGraphTypeStatement
 --     : DROP PROPERTY? GRAPH TYPE (IF EXISTS)? catalogGraphTypeParentAndName
 --     ;
---
+      def "DropGraphTypeStatement" $
+        record [
+          "ifExists">: boolean,
+          "parentAndName">: gql "CatalogGraphTypeParentAndName"],
+
 -- // 12.8 <call catalog-modifying statement>
 --
 -- callCatalogModifyingProcedureStatement
 --     : callProcedureStatement
 --     ;
---
-
-
-
-
-
-
+      def "CallCatalogModifyingProcedureStatement" $
+        gql "CallProcedureStatement",
 
 -- // 13.1 <linear data-modifying statement>
 --
@@ -671,199 +674,369 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     : focusedLinearDataModifyingStatement
 --     | ambientLinearDataModifyingStatement
 --     ;
---
+      def "LinearDataModifyingStatement" $
+        union [
+          "focused">: gql "FocusedLinearDataModifyingStatement",
+          "ambient">: gql "AmbientLinearDataModifyingStatement"],
+
 -- focusedLinearDataModifyingStatement
 --     : focusedLinearDataModifyingStatementBody
 --     | focusedNestedDataModifyingProcedureSpecification
 --     ;
---
+      def "FocusedLinearDataModifyingStatement" $
+        union [
+          "body">: gql "FocusedLinearDataModifyingStatementBody",
+          "nested">: gql "FocusedNestedDataModifyingProcedureSpecification"],
+
 -- focusedLinearDataModifyingStatementBody
 --     : useGraphClause simpleLinearDataAccessingStatement primitiveResultStatement?
 --     ;
---
+      def "FocusedLinearDataModifyingStatementBody" $
+        record [
+          "useGraph">: gql "UseGraphClause",
+          "simpleAccess">: gql "SimpleLinearDataAccessingStatement",
+          "primitiveResult">: optional $ gql "PrimitiveResultStatement"],
+
 -- focusedNestedDataModifyingProcedureSpecification
 --     : useGraphClause nestedDataModifyingProcedureSpecification
 --     ;
---
+      def "FocusedNestedDataModifyingProcedureSpecification" $
+        record [
+          "useGraph">: gql "UseGraphClause",
+          "nestedSpec">: gql "NestedDataModifyingProcedureSpecification"],
+
 -- ambientLinearDataModifyingStatement
 --     : ambientLinearDataModifyingStatementBody
 --     | nestedDataModifyingProcedureSpecification
 --     ;
---
+      def "AmbientLinearDataModifyingStatement" $
+        union [
+          "body">: gql "AmbientLinearDataModifyingStatementBody",
+          "nested">: gql "NestedDataModifyingProcedureSpecification"],
+
 -- ambientLinearDataModifyingStatementBody
 --     : simpleLinearDataAccessingStatement primitiveResultStatement?
 --     ;
---
+      def "AmbientLinearDataModifyingStatementBody" $
+        record [
+          "simpleAccess">: gql "SimpleLinearDataAccessingStatement",
+          "primitiveResult">: optional $ gql "PrimitiveResultStatement"],
+
 -- simpleLinearDataAccessingStatement
 --     : simpleDataAccessingStatement+
 --     ;
---
+      def "SimpleLinearDataAccessingStatement" $
+        nonemptyList $ gql "SimpleDataAccessingStatement",
+
 -- simpleDataAccessingStatement
 --     : simpleQueryStatement
 --     | simpleDataModifyingStatement
 --     ;
---
+      def "SimpleDataAccessingStatement" $
+        union [
+          "query">: gql "SimpleQueryStatement",
+          "modifying">: gql "SimpleDataModifyingStatement"],
+
 -- simpleDataModifyingStatement
 --     : primitiveDataModifyingStatement
 --     | callDataModifyingProcedureStatement
 --     ;
---
+      def "SimpleDataModifyingStatement" $
+        union [
+          "primitive">: gql "PrimitiveDataModifyingStatement",
+          "callProcedure">: gql "CallDataModifyingProcedureStatement"],
+
 -- primitiveDataModifyingStatement
 --     : insertStatement
 --     | setStatement
 --     | removeStatement
 --     | deleteStatement
 --     ;
---
--- // 13.2 <insertStatement>
+      def "PrimitiveDataModifyingStatement" $
+        union [
+          "insert">: gql "InsertStatement",
+          "set">: gql "SetStatement",
+          "remove">: gql "RemoveStatement",
+          "delete">: gql "DeleteStatement"],
+
+-- // 13.2 <insert statement>
 --
 -- insertStatement
 --     : INSERT insertGraphPattern
 --     ;
---
+      def "InsertStatement" $
+        gql "InsertGraphPattern",
+
 -- // 13.3 <set statement>
 --
 -- setStatement
 --     : SET setItemList
 --     ;
---
+      def "SetStatement" $
+        gql "SetItemList",
+
 -- setItemList
 --     : setItem (COMMA setItem)*
 --     ;
---
+      def "SetItemList" $
+        nonemptyList $ gql "SetItem",
+
 -- setItem
 --     : setPropertyItem
 --     | setAllPropertiesItem
 --     | setLabelItem
 --     ;
---
+      def "SetItem" $
+        union [
+          "property">: gql "SetPropertyItem",
+          "allProperties">: gql "SetAllPropertiesItem",
+          "label">: gql "SetLabelItem"],
+
 -- setPropertyItem
 --     : bindingVariableReference PERIOD propertyName EQUALS_OPERATOR valueExpression
 --     ;
---
+      def "SetPropertyItem" $
+        record [
+          "variable">: gql "BindingVariableReference",
+          "propertyName">: gql "PropertyName",
+          "value">: gql "ValueExpression"],
+
 -- setAllPropertiesItem
 --     : bindingVariableReference EQUALS_OPERATOR LEFT_BRACE propertyKeyValuePairList? RIGHT_BRACE
 --     ;
---
+      def "SetAllPropertiesItem" $
+        record [
+          "variable">: gql "BindingVariableReference",
+          "properties">: optional $ gql "PropertyKeyValuePairList"],
+
 -- setLabelItem
 --     : bindingVariableReference isOrColon labelName
 --     ;
---
+      def "SetLabelItem" $
+        record [
+          "variable">: gql "BindingVariableReference",
+          "isOrColon">: gql "IsOrColon",
+          "label">: gql "LabelName"],
+
 -- // 13.4 <remove statement>
 --
 -- removeStatement
 --     : REMOVE removeItemList
 --     ;
---
+      def "RemoveStatement" $
+        gql "RemoveItemList",
+
 -- removeItemList
 --     : removeItem (COMMA removeItem)*
 --     ;
---
+      def "RemoveItemList" $
+        nonemptyList $ gql "RemoveItem",
+
 -- removeItem
 --     : removePropertyItem
 --     | removeLabelItem
 --     ;
---
+      def "RemoveItem" $
+        union [
+          "property">: gql "RemovePropertyItem",
+          "label">: gql "RemoveLabelItem"],
+
 -- removePropertyItem
 --     : bindingVariableReference PERIOD propertyName
 --     ;
---
+      def "RemovePropertyItem" $
+        record [
+          "variable">: gql "BindingVariableReference",
+          "propertyName">: gql "PropertyName"],
+
 -- removeLabelItem
 --     : bindingVariableReference isOrColon labelName
 --     ;
---
+      def "RemoveLabelItem" $
+        record [
+          "variable">: gql "BindingVariableReference",
+          "isOrColon">: gql "IsOrColon",
+          "label">: gql "LabelName"],
+
 -- // 13.5 <delete statement>
 --
 -- deleteStatement
 --     : (DETACH | NODETACH)? DELETE deleteItemList
 --     ;
---
+      def "DeleteStatement" $
+        record [
+          "detach">: optional $ gql "DetachOption",
+          "items">: gql "DeleteItemList"],
+
+      def "DetachOption" $
+        enum [
+          "detach",
+          "noDetach"],
+
 -- deleteItemList
 --     : deleteItem (COMMA deleteItem)*
 --     ;
---
+      def "DeleteItemList" $
+        nonemptyList $ gql "DeleteItem",
+
 -- deleteItem
 --     : valueExpression
 --     ;
---
+      def "DeleteItem" $
+        gql "ValueExpression",
+
 -- // 13.6 <call data-modifying procedure statement>
 --
 -- callDataModifyingProcedureStatement
 --     : callProcedureStatement
 --     ;
---
+      def "CallDataModifyingProcedureStatement" $
+        gql "CallProcedureStatement",
+
 -- // 14.1 <composite query statement>
 --
 -- compositeQueryStatement
 --     : compositeQueryExpression
 --     ;
---
+      def "CompositeQueryStatement" $
+        gql "CompositeQueryExpression",
+
 -- // 14.2 <composite query expression>
 --
 -- compositeQueryExpression
 --     : compositeQueryExpression queryConjunction compositeQueryPrimary
 --     | compositeQueryPrimary
 --     ;
---
+      def "CompositeQueryExpression" $
+        union [
+          "conjunction">: gql "CompositeQueryExpressionConjunction",
+          "primary">: gql "CompositeQueryPrimary"],
+
+      def "CompositeQueryExpressionConjunction" $
+        record [
+          "left">: gql "CompositeQueryExpression",
+          "conjunction">: gql "QueryConjunction",
+          "right">: gql "CompositeQueryPrimary"],
+
 -- queryConjunction
 --     : setOperator
 --     | OTHERWISE
 --     ;
---
+      def "QueryConjunction" $
+        union [
+          "setOperator">: gql "SetOperator",
+          "otherwise">: unit],
+
 -- setOperator
 --     : UNION setQuantifier?
 --     | EXCEPT setQuantifier?
 --     | INTERSECT setQuantifier?
 --     ;
---
+      def "SetOperator" $
+        record [
+          "operatorType">: gql "SetOperatorType",
+          "quantifier">: optional $ gql "SetQuantifier"],
+
+      def "SetOperatorType" $
+        enum ["union", "except", "intersect"],
+
 -- compositeQueryPrimary
 --     : linearQueryStatement
 --     ;
---
+      def "CompositeQueryPrimary" $
+        gql "LinearQueryStatement",
+
 -- // 14.3 <linear query statement> and <simple query statement>
 --
 -- linearQueryStatement
 --     : focusedLinearQueryStatement
 --     | ambientLinearQueryStatement
 --     ;
---
+      def "LinearQueryStatement" $
+        union [
+          "focused">: gql "FocusedLinearQueryStatement",
+          "ambient">: gql "AmbientLinearQueryStatement"],
+
 -- focusedLinearQueryStatement
 --     : focusedLinearQueryStatementPart* focusedLinearQueryAndPrimitiveResultStatementPart
 --     | focusedPrimitiveResultStatement
 --     | focusedNestedQuerySpecification
 --     | selectStatement
 --     ;
---
+      def "FocusedLinearQueryStatement" $
+        union [
+          "partsAndResult">: gql "FocusedLinearQueryStatementPartsAndResult",
+          "primitiveResult">: gql "FocusedPrimitiveResultStatement",
+          "nested">: gql "FocusedNestedQuerySpecification",
+          "select">: gql "SelectStatement"],
+
+      def "FocusedLinearQueryStatementPartsAndResult" $
+        record [
+          "parts">: list $ gql "FocusedLinearQueryStatementPart",
+          "result">: gql "FocusedLinearQueryAndPrimitiveResultStatementPart"],
+
 -- focusedLinearQueryStatementPart
 --     : useGraphClause simpleLinearQueryStatement
 --     ;
---
+      def "FocusedLinearQueryStatementPart" $
+        record [
+          "useGraph">: gql "UseGraphClause",
+          "simple">: gql "SimpleLinearQueryStatement"],
+
 -- focusedLinearQueryAndPrimitiveResultStatementPart
 --     : useGraphClause simpleLinearQueryStatement primitiveResultStatement
 --     ;
---
+      def "FocusedLinearQueryAndPrimitiveResultStatementPart" $
+        record [
+          "useGraph">: gql "UseGraphClause",
+          "simple">: gql "SimpleLinearQueryStatement",
+          "primitiveResult">: gql "PrimitiveResultStatement"],
+
 -- focusedPrimitiveResultStatement
 --     : useGraphClause primitiveResultStatement
 --     ;
---
+      def "FocusedPrimitiveResultStatement" $
+        record [
+          "useGraph">: gql "UseGraphClause",
+          "primitiveResult">: gql "PrimitiveResultStatement"],
+
 -- focusedNestedQuerySpecification
 --     : useGraphClause nestedQuerySpecification
 --     ;
---
+      def "FocusedNestedQuerySpecification" $
+        record [
+          "useGraph">: gql "UseGraphClause",
+          "nested">: gql "NestedQuerySpecification"],
+
 -- ambientLinearQueryStatement
 --     : simpleLinearQueryStatement? primitiveResultStatement
 --     | nestedQuerySpecification
 --     ;
---
+      def "AmbientLinearQueryStatement" $
+        union [
+          "simpleAndPrimitiveResult">: gql "AmbientLinearQueryStatementSimpleAndPrimitiveResult",
+          "nested">: gql "NestedQuerySpecification"],
+
+      def "AmbientLinearQueryStatementSimpleAndPrimitiveResult" $
+        record [
+          "simple">: optional $ gql "SimpleLinearQueryStatement",
+          "primitiveResult">: gql "PrimitiveResultStatement"],
+
 -- simpleLinearQueryStatement
 --     : simpleQueryStatement+
 --     ;
---
+      def "SimpleLinearQueryStatement" $
+        nonemptyList $ gql "SimpleQueryStatement",
+
 -- simpleQueryStatement
 --     : primitiveQueryStatement
 --     | callQueryStatement
 --     ;
---
+      def "SimpleQueryStatement" $
+        union [
+          "primitive">: gql "PrimitiveQueryStatement",
+          "call">: gql "CallQueryStatement"],
+
 -- primitiveQueryStatement
 --     : matchStatement
 --     | letStatement
@@ -871,81 +1044,141 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | filterStatement
 --     | orderByAndPageStatement
 --     ;
---
+      def "PrimitiveQueryStatement" $
+        union [
+          "match">: gql "MatchStatement",
+          "let">: gql "LetStatement",
+          "for">: gql "ForStatement",
+          "filter">: gql "FilterStatement",
+          "orderByAndPage">: gql "OrderByAndPageStatement"],
+
 -- // 14.4 <match statement>
 --
 -- matchStatement
 --     : simpleMatchStatement
 --     | optionalMatchStatement
 --     ;
---
+      def "MatchStatement" $
+        union [
+          "simple">: gql "SimpleMatchStatement",
+          "optional">: gql "OptionalMatchStatement"],
+
 -- simpleMatchStatement
 --     : MATCH graphPatternBindingTable
 --     ;
---
+      def "SimpleMatchStatement" $
+        gql "GraphPatternBindingTable",
+
 -- optionalMatchStatement
 --     : OPTIONAL optionalOperand
 --     ;
---
+      def "OptionalMatchStatement" $
+        gql "OptionalOperand",
+
 -- optionalOperand
 --     : simpleMatchStatement
 --     | LEFT_BRACE matchStatementBlock RIGHT_BRACE
 --     | LEFT_PAREN matchStatementBlock RIGHT_PAREN
 --     ;
---
+      def "OptionalOperand" $
+        union [
+          "simple">: gql "SimpleMatchStatement",
+          "braceBlock">: gql "MatchStatementBlock",
+          "parenBlock">: gql "MatchStatementBlock"],
+
 -- matchStatementBlock
 --     : matchStatement+
 --     ;
---
+      def "MatchStatementBlock" $
+        nonemptyList $ gql "MatchStatement",
+
 -- // 14.5 <call query statement>
 --
 -- callQueryStatement
 --     : callProcedureStatement
 --     ;
---
+      def "CallQueryStatement" $
+        gql "CallProcedureStatement",
+
 -- // 14.6 <filter statement>
 --
 -- filterStatement
 --     : FILTER (whereClause | searchCondition)
 --     ;
---
+      def "FilterStatement" $
+        union [
+          "whereClause">: gql "WhereClause",
+          "searchCondition">: gql "SearchCondition"],
+
 -- // 14.7 <let statement>
 --
 -- letStatement
 --     : LET letVariableDefinitionList
 --     ;
---
+      def "LetStatement" $
+        gql "LetVariableDefinitionList",
+
 -- letVariableDefinitionList
 --     : letVariableDefinition (COMMA letVariableDefinition)*
 --     ;
---
+      def "LetVariableDefinitionList" $
+        nonemptyList $ gql "LetVariableDefinition",
+
 -- letVariableDefinition
 --     : valueVariableDefinition
 --     | bindingVariable EQUALS_OPERATOR valueExpression
 --     ;
---
+      def "LetVariableDefinition" $
+        union [
+          "valueVariable">: gql "ValueVariableDefinition",
+          "bindingEqualsValue">: gql "BindingEqualsValue"],
+
+      def "BindingEqualsValue" $
+        record [
+          "binding">: gql "BindingVariable",
+          "value">: gql "ValueExpression"],
+
 -- // 14.8 <for statement>
 --
 -- forStatement
 --     : FOR forItem forOrdinalityOrOffset?
 --     ;
---
+      def "ForStatement" $
+        record [
+          "item">: gql "ForItem",
+          "ordinalityOrOffset">: optional $ gql "ForOrdinalityOrOffset"],
+
 -- forItem
 --     : forItemAlias forItemSource
 --     ;
---
+      def "ForItem" $
+        record [
+          "alias">: gql "ForItemAlias",
+          "source">: gql "ForItemSource"],
+
 -- forItemAlias
 --     : bindingVariable IN
 --     ;
---
+      def "ForItemAlias" $
+        gql "BindingVariable",
+
 -- forItemSource
 --     : valueExpression
 --     ;
---
+      def "ForItemSource" $
+        gql "ValueExpression",
+
 -- forOrdinalityOrOffset
 --     : WITH (ORDINALITY | OFFSET) bindingVariable
 --     ;
---
+      def "ForOrdinalityOrOffset" $
+        record [
+          "type">: gql "OrdinalityOrOffsetType",
+          "variable">: gql "BindingVariable"],
+
+      def "OrdinalityOrOffsetType" $
+        enum ["ordinality", "offset"],
+
 -- // 14.9 <order by and page statement>
 --
 -- orderByAndPageStatement
@@ -953,315 +1186,612 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | offsetClause limitClause?
 --     | limitClause
 --     ;
---
+      def "OrderByAndPageStatement" $
+        union [
+          "orderByAndOptionalOffsetAndLimit">: gql "OrderByAndOptionalOffsetAndLimit",
+          "offsetAndOptionalLimit">: gql "OffsetAndOptionalLimit",
+          "limitOnly">: gql "LimitClause"],
+
+      def "OrderByAndOptionalOffsetAndLimit" $
+        record [
+          "orderBy">: gql "OrderByClause",
+          "offset">: optional $ gql "OffsetClause",
+          "limit">: optional $ gql "LimitClause"],
+
+      def "OffsetAndOptionalLimit" $
+        record [
+          "offset">: gql "OffsetClause",
+          "limit">: optional $ gql "LimitClause"],
+
 -- // 14.10 <primitive result statement>
 --
 -- primitiveResultStatement
 --     : returnStatement orderByAndPageStatement?
 --     | FINISH
 --     ;
---
+      def "PrimitiveResultStatement" $
+        union [
+          "returnAndOptionalOrderBy">: gql "ReturnAndOptionalOrderByAndPage",
+          "finish">: unit],
+
+      def "ReturnAndOptionalOrderByAndPage" $
+        record [
+          "return">: gql "ReturnStatement",
+          "orderByAndPage">: optional $ gql "OrderByAndPageStatement"],
+
 -- // 14.11 <return statement>
 --
 -- returnStatement
 --     : RETURN returnStatementBody
 --     ;
---
+      def "ReturnStatement" $
+        gql "ReturnStatementBody",
+
 -- returnStatementBody
 --     : setQuantifier? (ASTERISK | returnItemList) groupByClause?
 --     | NO BINDINGS
 --     ;
---
+      def "ReturnStatementBody" $
+        union [
+          "items">: gql "ReturnItemsAndGroupBy",
+          "noBindings">: unit],
+
+      def "ReturnItemsAndGroupBy" $
+        record [
+          "quantifier">: optional $ gql "SetQuantifier",
+          "items">: gql "ReturnItems",
+          "groupBy">: optional $ gql "GroupByClause"],
+
+-- returnItems
+--     : ASTERISK
+--     | returnItemList
+--     ;
+      def "ReturnItems" $
+        union [
+          "asterisk">: unit,
+          "itemList">: gql "ReturnItemList"],
+
 -- returnItemList
 --     : returnItem (COMMA returnItem)*
 --     ;
---
+      def "ReturnItemList" $
+        nonemptyList $ gql "ReturnItem",
+
 -- returnItem
 --     : aggregatingValueExpression returnItemAlias?
 --     ;
---
+      def "ReturnItem" $
+        record [
+          "expression">: gql "AggregatingValueExpression",
+          "alias">: optional $ gql "ReturnItemAlias"],
+
 -- returnItemAlias
 --     : AS identifier
 --     ;
---
+      def "ReturnItemAlias" $
+        gql "Identifier",
+
 -- // 14.12 <select statement>
 --
 -- selectStatement
 --     : SELECT setQuantifier? (ASTERISK | selectItemList) (selectStatementBody whereClause? groupByClause? havingClause? orderByClause? offsetClause? limitClause?)?
 --     ;
---
+      def "SelectStatement" $
+        record [
+          "quantifier">: optional $ gql "SetQuantifier",
+          "items">: gql "SelectItems",
+          "body">: optional $ gql "SelectStatementBodyAndClauses"],
+
+      def "SelectItems" $
+        union [
+          "asterisk">: unit,
+          "itemList">: gql "SelectItemList"],
+
+      def "SelectStatementBodyAndClauses" $
+        record [
+          "body">: gql "SelectStatementBody",
+          "where">: optional $ gql "WhereClause",
+          "groupBy">: optional $ gql "GroupByClause",
+          "having">: optional $ gql "HavingClause",
+          "orderBy">: optional $ gql "OrderByClause",
+          "offset">: optional $ gql "OffsetClause",
+          "limit">: optional $ gql "LimitClause"],
+
 -- selectItemList
 --     : selectItem (COMMA selectItem)*
 --     ;
---
+      def "SelectItemList" $
+        nonemptyList $ gql "SelectItem",
+
 -- selectItem
 --     : aggregatingValueExpression selectItemAlias?
 --     ;
---
+      def "SelectItem" $
+        record [
+          "expression">: gql "AggregatingValueExpression",
+          "alias">: optional $ gql "SelectItemAlias"],
+
 -- selectItemAlias
 --     : AS identifier
 --     ;
---
+      def "SelectItemAlias" $
+        gql "Identifier",
+
 -- havingClause
 --     : HAVING searchCondition
 --     ;
---
+      def "HavingClause" $
+        gql "SearchCondition",
+
 -- selectStatementBody
 --     : FROM (selectGraphMatchList | selectQuerySpecification)
 --     ;
---
+      def "SelectStatementBody" $
+        union [
+          "graphMatchList">: gql "SelectGraphMatchList",
+          "querySpecification">: gql "SelectQuerySpecification"],
+
 -- selectGraphMatchList
 --     : selectGraphMatch (COMMA selectGraphMatch)*
 --     ;
---
+      def "SelectGraphMatchList" $
+        nonemptyList $ gql "SelectGraphMatch",
+
 -- selectGraphMatch
 --     : graphExpression matchStatement
 --     ;
---
+      def "SelectGraphMatch" $
+        record [
+          "graphExpression">: gql "GraphExpression",
+          "matchStatement">: gql "MatchStatement"],
+
 -- selectQuerySpecification
 --     : nestedQuerySpecification
 --     | graphExpression nestedQuerySpecification
 --     ;
---
+      def "SelectQuerySpecification" $
+        union [
+          "nested">: gql "NestedQuerySpecification",
+          "graphAndNested">: gql "GraphAndNestedQuerySpecification"],
+
+      def "GraphAndNestedQuerySpecification" $
+        record [
+          "graphExpression">: gql "GraphExpression",
+          "nested">: gql "NestedQuerySpecification"],
+
 -- // 15.1 <call procedure statement> and <procedure call>
 --
 -- callProcedureStatement
 --     : OPTIONAL? CALL procedureCall
 --     ;
---
+      def "CallProcedureStatement" $
+        record [
+          "optional">: boolean,
+          "call">: gql "ProcedureCall"],
+
 -- procedureCall
 --     : inlineProcedureCall
 --     | namedProcedureCall
 --     ;
---
+      def "ProcedureCall" $
+        union [
+          "inline">: gql "InlineProcedureCall",
+          "named">: gql "NamedProcedureCall"],
+
 -- // 15.2 <inline procedure call>
 --
 -- inlineProcedureCall
 --     : variableScopeClause? nestedProcedureSpecification
 --     ;
---
+      def "InlineProcedureCall" $
+        record [
+          "scope">: optional $ gql "VariableScopeClause",
+          "nested">: gql "NestedProcedureSpecification"],
+
 -- variableScopeClause
 --     : LEFT_PAREN bindingVariableReferenceList? RIGHT_PAREN
 --     ;
---
+      def "VariableScopeClause" $
+        optional $ gql "BindingVariableReferenceList",
+
 -- bindingVariableReferenceList
 --     : bindingVariableReference (COMMA bindingVariableReference)*
 --     ;
---
+      def "BindingVariableReferenceList" $
+        nonemptyList $ gql "BindingVariableReference",
+
 -- // 15.3 <named procedure call>
 --
 -- namedProcedureCall
 --     : procedureReference LEFT_PAREN procedureArgumentList? RIGHT_PAREN yieldClause?
 --     ;
---
+      def "NamedProcedureCall" $
+        record [
+          "reference">: gql "ProcedureReference",
+          "arguments">: optional $ gql "ProcedureArgumentList",
+          "yield">: optional $ gql "YieldClause"],
+
 -- procedureArgumentList
 --     : procedureArgument (COMMA procedureArgument)*
 --     ;
---
+      def "ProcedureArgumentList" $
+        nonemptyList $ gql "ProcedureArgument",
+
 -- procedureArgument
 --     : valueExpression
 --     ;
---
--- // 16.1 <at schema clasue>
+      def "ProcedureArgument" $
+        gql "ValueExpression",
+
+
+
+
+
+
+
+
+
+-- // 16.1 <at schema clause>
 --
 -- atSchemaClause
 --     : AT schemaReference
 --     ;
---
+      def "AtSchemaClause" $
+        gql "SchemaReference",
+
 -- // 16.2 <use graph clause>
 --
 -- useGraphClause
 --     : USE graphExpression
 --     ;
---
+      def "UseGraphClause" $
+        gql "GraphExpression",
+
 -- // 16.3 <graph pattern binding table>
 --
 -- graphPatternBindingTable
 --     : graphPattern graphPatternYieldClause?
 --     ;
---
+      def "GraphPatternBindingTable" $
+        record [
+          "pattern">: gql "GraphPattern",
+          "yieldClause">: optional $ gql "GraphPatternYieldClause"],
+
 -- graphPatternYieldClause
 --     : YIELD graphPatternYieldItemList
 --     ;
---
+      def "GraphPatternYieldClause" $
+        gql "GraphPatternYieldItemList",
+
 -- graphPatternYieldItemList
 --     : graphPatternYieldItem (COMMA graphPatternYieldItem)*
 --     | NO BINDINGS
 --     ;
---
--- // <elemement variable reference> and <path variable reference> are identical productions, both consisting
--- // of a single non-terminal <binding variable reference>. Thus <graph pattern yield item> is ambiguous
--- // from a parsing standpoint. So here we simply use bindingVariableReference. Post parsing code must
--- // apply the semantics assocaited with each type of <binding variable reference>.
+      def "GraphPatternYieldItemList" $
+        union [
+          "items">: nonemptyList $ gql "GraphPatternYieldItem",
+          "noBindings">: unit],
+
 -- graphPatternYieldItem
 --     : bindingVariableReference
 -- //    : elementVariableReference
 -- //    | pathVariableReference
 --     ;
---
+      def "GraphPatternYieldItem" $
+        gql "BindingVariableReference",
+
+
+
+
+
+
+
 -- // 16.4 <graph pattern>
 --
 -- graphPattern
 --     : matchMode? pathPatternList keepClause? graphPatternWhereClause?
 --     ;
---
+      def "GraphPattern" $
+        record [
+          "matchMode">: optional $ gql "MatchMode",
+          "pathPatterns">: gql "PathPatternList",
+          "keepClause">: optional $ gql "KeepClause",
+          "whereClause">: optional $ gql "GraphPatternWhereClause"],
+
 -- matchMode
 --     : repeatableElementsMatchMode
 --     | differentEdgesMatchMode
 --     ;
---
+      def "MatchMode" $
+        union [
+          "repeatableElements">: gql "RepeatableElementsMatchMode",
+          "differentEdges">: gql "DifferentEdgesMatchMode"],
+
 -- repeatableElementsMatchMode
 --     : REPEATABLE elementBindingsOrElements
 --     ;
---
+      def "RepeatableElementsMatchMode" $
+        gql "ElementBindingsOrElements",
+
 -- differentEdgesMatchMode
 --     : DIFFERENT edgeBindingsOrEdges
 --     ;
---
+      def "DifferentEdgesMatchMode" $
+        gql "EdgeBindingsOrEdges",
+
 -- elementBindingsOrElements
 --     : ELEMENT BINDINGS?
 --     | ELEMENTS
 --     ;
---
+      def "ElementBindingsOrElements" $
+        union [
+          "elementBindings">: boolean,
+          "elements">: unit],
+
 -- edgeBindingsOrEdges
 --     : edgeSynonym BINDINGS?
 --     | edgesSynonym
 --     ;
---
+      def "EdgeBindingsOrEdges" $
+        union [
+          "edgeBindings">: boolean,
+          "edges">: unit],
+
 -- pathPatternList
 --     : pathPattern (COMMA pathPattern)*
 --     ;
---
+      def "PathPatternList" $
+        nonemptyList $ gql "PathPattern",
+
 -- pathPattern
 --     : pathVariableDeclaration? pathPatternPrefix? pathPatternExpression
 --     ;
---
+      def "PathPattern" $
+        record [
+          "variableDeclaration">: optional $ gql "PathVariableDeclaration",
+          "prefix">: optional $ gql "PathPatternPrefix",
+          "expression">: gql "PathPatternExpression"],
+
 -- pathVariableDeclaration
 --     : pathVariable EQUALS_OPERATOR
 --     ;
---
+      def "PathVariableDeclaration" $
+        gql "PathVariable",
+
 -- keepClause
 --     : KEEP pathPatternPrefix
 --     ;
---
+      def "KeepClause" $
+        gql "PathPatternPrefix",
+
 -- graphPatternWhereClause
 --     : WHERE searchCondition
 --     ;
---
+      def "GraphPatternWhereClause" $
+        gql "SearchCondition",
+
+
+
+
+
+
+
 -- // 16.5 <insert graph pattern>
 --
 -- insertGraphPattern
 --     : insertPathPatternList
 --     ;
---
+      def "InsertGraphPattern" $
+        gql "InsertPathPatternList",
+
 -- insertPathPatternList
 --     : insertPathPattern (COMMA insertPathPattern)*
 --     ;
---
+      def "InsertPathPatternList" $
+        nonemptyList $ gql "InsertPathPattern",
+
 -- insertPathPattern
 --     : insertNodePattern (insertEdgePattern insertNodePattern)*
 --     ;
---
+      def "InsertPathPattern" $
+        record [
+          "startNode">: gql "InsertNodePattern",
+          "edgesAndNodes">: list $ gql "InsertEdgeAndNode"],
+
+      def "InsertEdgeAndNode" $
+        record [
+          "edge">: gql "InsertEdgePattern",
+          "node">: gql "InsertNodePattern"],
+
 -- insertNodePattern
 --     : LEFT_PAREN insertElementPatternFiller? RIGHT_PAREN
 --     ;
---
+      def "InsertNodePattern" $
+        optional $ gql "InsertElementPatternFiller",
+
 -- insertEdgePattern
 --     : insertEdgePointingLeft
 --     | insertEdgePointingRight
 --     | insertEdgeUndirected
 --     ;
---
+      def "InsertEdgePattern" $
+        union [
+          "pointingLeft">: gql "InsertEdgePointingLeft",
+          "pointingRight">: gql "InsertEdgePointingRight",
+          "undirected">: gql "InsertEdgeUndirected"],
+
 -- insertEdgePointingLeft
 --     : LEFT_ARROW_BRACKET insertElementPatternFiller? RIGHT_BRACKET_MINUS
 --     ;
---
+      def "InsertEdgePointingLeft" $
+        optional $ gql "InsertElementPatternFiller",
+
 -- insertEdgePointingRight
 --     : MINUS_LEFT_BRACKET insertElementPatternFiller? BRACKET_RIGHT_ARROW
 --     ;
---
+      def "InsertEdgePointingRight" $
+        optional $ gql "InsertElementPatternFiller",
+
 -- insertEdgeUndirected
 --     : TILDE_LEFT_BRACKET insertElementPatternFiller? RIGHT_BRACKET_TILDE
 --     ;
---
+      def "InsertEdgeUndirected" $
+        optional $ gql "InsertElementPatternFiller",
+
 -- insertElementPatternFiller
 --     : elementVariableDeclaration labelAndPropertySetSpecification?
 --     | elementVariableDeclaration? labelAndPropertySetSpecification
 --     ;
---
+      def "InsertElementPatternFiller" $
+        record [
+          "variableDeclaration">: optional $ gql "ElementVariableDeclaration",
+          "labelAndProperties">: optional $ gql "LabelAndPropertySetSpecification"],
+
 -- labelAndPropertySetSpecification
 --     : isOrColon labelSetSpecification elementPropertySpecification?
 --     | (isOrColon labelSetSpecification)? elementPropertySpecification
 --     ;
---
+      def "LabelAndPropertySetSpecification" $
+        record [
+          "isOrColon">: optional $ gql "IsOrColon",
+          "labelSet">: optional $ gql "LabelSetSpecification",
+          "propertySpecification">: optional $ gql "ElementPropertySpecification"],
+
+
+
+
+
+
+
 -- // 16.6 <path pattern prefix>
 --
 -- pathPatternPrefix
 --     : pathModePrefix
 --     | pathSearchPrefix
 --     ;
---
+      def "PathPatternPrefix" $
+        union [
+          "modePrefix">: gql "PathModePrefix",
+          "searchPrefix">: gql "PathSearchPrefix"],
+
 -- pathModePrefix
 --     : pathMode pathOrPaths?
 --     ;
---
+      def "PathModePrefix" $
+        record [
+          "mode">: gql "PathMode",
+          "orPaths">: optional $ gql "PathOrPaths"],
+
 -- pathMode
 --     : WALK
 --     | TRAIL
 --     | SIMPLE
 --     | ACYCLIC
 --     ;
---
+      def "PathMode" $
+        enum ["walk", "trail", "simple", "acyclic"],
+
 -- pathSearchPrefix
 --     : allPathSearch
 --     | anyPathSearch
 --     | shortestPathSearch
 --     ;
---
+      def "PathSearchPrefix" $
+        union [
+          "all">: gql "AllPathSearch",
+          "any">: gql "AnyPathSearch",
+          "shortest">: gql "ShortestPathSearch"],
+
 -- allPathSearch
 --     : ALL pathMode? pathOrPaths?
 --     ;
---
+      def "AllPathSearch" $
+        record [
+          "mode">: optional $ gql "PathMode",
+          "orPaths">: optional $ gql "PathOrPaths"],
+
 -- pathOrPaths
 --     : PATH
 --     | PATHS
 --     ;
---
+      def "PathOrPaths" $
+        enum ["path", "paths"],
+
 -- anyPathSearch
 --     : ANY numberOfPaths? pathMode? pathOrPaths?
 --     ;
---
+      def "AnyPathSearch" $
+        record [
+          "numberOfPaths">: optional $ gql "NumberOfPaths",
+          "mode">: optional $ gql "PathMode",
+          "orPaths">: optional $ gql "PathOrPaths"],
+
 -- numberOfPaths
 --     : nonNegativeIntegerSpecification
 --     ;
---
+      def "NumberOfPaths" $
+        gql "NonNegativeIntegerSpecification",
+
 -- shortestPathSearch
 --     : allShortestPathSearch
 --     | anyShortestPathSearch
 --     | countedShortestPathSearch
 --     | countedShortestGroupSearch
 --     ;
---
+      def "ShortestPathSearch" $
+        union [
+          "allShortest">: gql "AllShortestPathSearch",
+          "anyShortest">: gql "AnyShortestPathSearch",
+          "countedShortest">: gql "CountedShortestPathSearch",
+          "countedShortestGroup">: gql "CountedShortestGroupSearch"],
+
 -- allShortestPathSearch
 --     : ALL SHORTEST pathMode? pathOrPaths?
 --     ;
---
+      def "AllShortestPathSearch" $
+        record [
+          "mode">: optional $ gql "PathMode",
+          "orPaths">: optional $ gql "PathOrPaths"],
+
 -- anyShortestPathSearch
 --     : ANY SHORTEST pathMode? pathOrPaths?
 --     ;
---
+      def "AnyShortestPathSearch" $
+        record [
+          "mode">: optional $ gql "PathMode",
+          "orPaths">: optional $ gql "PathOrPaths"],
+
 -- countedShortestPathSearch
 --     : SHORTEST numberOfPaths pathMode? pathOrPaths?
 --     ;
---
+      def "CountedShortestPathSearch" $
+        record [
+          "numberOfPaths">: gql "NumberOfPaths",
+          "mode">: optional $ gql "PathMode",
+          "orPaths">: optional $ gql "PathOrPaths"],
+
 -- countedShortestGroupSearch
 --     : SHORTEST numberOfGroups? pathMode? pathOrPaths? (GROUP | GROUPS)
 --     ;
---
+      def "CountedShortestGroupSearch" $
+        record [
+          "numberOfGroups">: optional $ gql "NumberOfGroups",
+          "mode">: optional $ gql "PathMode",
+          "orPaths">: optional $ gql "PathOrPaths",
+          "groups">: boolean],
+
 -- numberOfGroups
 --     : nonNegativeIntegerSpecification
 --     ;
---
+      def "NumberOfGroups" $
+        gql "NonNegativeIntegerSpecification",
+
+
+
+
+
+
+
 -- // 16.7 <path pattern expression>
 --
 -- pathPatternExpression
@@ -1269,75 +1799,139 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | pathTerm (MULTISET_ALTERNATION_OPERATOR pathTerm)+    #ppeMultisetAlternation
 --     | pathTerm (VERTICAL_BAR pathTerm)+                     #ppePatternUnion
 --     ;
---
+      def "PathPatternExpression" $
+        union [
+          "term">: gql "PathTerm",
+          "multisetAlternation">: nonemptyList $ gql "PathTerm",
+          "patternUnion">: nonemptyList $ gql "PathTerm"],
+
 -- pathTerm
 --     : pathFactor+
 --     ;
---
+      def "PathTerm" $
+        nonemptyList $ gql "PathFactor",
+
 -- pathFactor
 --     : pathPrimary                           #pfPathPrimary
 --     | pathPrimary graphPatternQuantifier    #pfQuantifiedPathPrimary
 --     | pathPrimary QUESTION_MARK             #pfQuestionedPathPrimary
 --     ;
---
+      def "PathFactor" $
+        union [
+          "primary">: gql "PathPrimary",
+          "quantifiedPrimary">: gql "QuantifiedPathPrimary",
+          "questionedPrimary">: gql "QuestionedPathPrimary"],
+
+      def "QuantifiedPathPrimary" $
+        record [
+          "primary">: gql "PathPrimary",
+          "quantifier">: gql "GraphPatternQuantifier"],
+
+      def "QuestionedPathPrimary" $
+        gql "PathPrimary",
+
 -- pathPrimary
 --     : elementPattern                        #ppElementPattern
 --     | parenthesizedPathPatternExpression    #ppParenthesizedPathPatternExpression
 --     | simplifiedPathPatternExpression       #ppSimplifiedPathPatternExpression
 --     ;
---
+      def "PathPrimary" $
+        union [
+          "elementPattern">: gql "ElementPattern",
+          "parenthesizedExpression">: gql "ParenthesizedPathPatternExpression",
+          "simplifiedExpression">: gql "SimplifiedPathPatternExpression"],
+
 -- elementPattern
 --     : nodePattern
 --     | edgePattern
 --     ;
---
+      def "ElementPattern" $
+        union [
+          "node">: gql "NodePattern",
+          "edge">: gql "EdgePattern"],
+
 -- nodePattern
 --     : LEFT_PAREN elementPatternFiller RIGHT_PAREN
 --     ;
---
+      def "NodePattern" $
+        gql "ElementPatternFiller",
+
 -- elementPatternFiller
 --     : elementVariableDeclaration? isLabelExpression? elementPatternPredicate?
 --     ;
---
+      def "ElementPatternFiller" $
+        record [
+          "variableDeclaration">: optional $ gql "ElementVariableDeclaration",
+          "isLabelExpression">: optional $ gql "IsLabelExpression",
+          "predicate">: optional $ gql "ElementPatternPredicate"],
+
 -- elementVariableDeclaration
 --     : TEMP? elementVariable
 --     ;
---
+      def "ElementVariableDeclaration" $
+        record [
+          "temp">: optional boolean,
+          "variable">: gql "ElementVariable"],
+
 -- isLabelExpression
 --     : isOrColon labelExpression
 --     ;
---
+      def "IsLabelExpression" $
+        record [
+          "isOrColon">: gql "IsOrColon",
+          "label">: gql "LabelExpression"],
+
 -- isOrColon
 --     : IS
 --     | COLON
 --     ;
---
+      def "IsOrColon" $
+        enum ["is", "colon"],
+
 -- elementPatternPredicate
 --     : elementPatternWhereClause
 --     | elementPropertySpecification
 --     ;
---
+      def "ElementPatternPredicate" $
+        union [
+          "whereClause">: gql "ElementPatternWhereClause",
+          "propertySpecification">: gql "ElementPropertySpecification"],
+
 -- elementPatternWhereClause
 --     : WHERE searchCondition
 --     ;
---
+      def "ElementPatternWhereClause" $
+        gql "SearchCondition",
+
 -- elementPropertySpecification
 --     : LEFT_BRACE propertyKeyValuePairList RIGHT_BRACE
 --     ;
---
+      def "ElementPropertySpecification" $
+        gql "PropertyKeyValuePairList",
+
 -- propertyKeyValuePairList
 --     : propertyKeyValuePair (COMMA propertyKeyValuePair)*
 --     ;
---
+      def "PropertyKeyValuePairList" $
+        nonemptyList $ gql "PropertyKeyValuePair",
+
 -- propertyKeyValuePair
 --     : propertyName COLON valueExpression
 --     ;
---
+      def "PropertyKeyValuePair" $
+        record [
+          "name">: gql "PropertyName",
+          "value">: gql "ValueExpression"],
+
 -- edgePattern
 --     : fullEdgePattern
 --     | abbreviatedEdgePattern
 --     ;
---
+      def "EdgePattern" $
+        union [
+          "fullEdge">: gql "FullEdgePattern",
+          "abbreviatedEdge">: gql "AbbreviatedEdgePattern"],
+
 -- fullEdgePattern
 --     : fullEdgePointingLeft
 --     | fullEdgeUndirected
@@ -1347,35 +1941,58 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | fullEdgeLeftOrRight
 --     | fullEdgeAnyDirection
 --     ;
---
+      def "FullEdgePattern" $
+        union [
+          "pointingLeft">: gql "FullEdgePointingLeft",
+          "undirected">: gql "FullEdgeUndirected",
+          "pointingRight">: gql "FullEdgePointingRight",
+          "leftOrUndirected">: gql "FullEdgeLeftOrUndirected",
+          "undirectedOrRight">: gql "FullEdgeUndirectedOrRight",
+          "leftOrRight">: gql "FullEdgeLeftOrRight",
+          "anyDirection">: gql "FullEdgeAnyDirection"],
+
 -- fullEdgePointingLeft
 --     : LEFT_ARROW_BRACKET elementPatternFiller RIGHT_BRACKET_MINUS
 --     ;
---
+      def "FullEdgePointingLeft" $
+        gql "ElementPatternFiller",
+
 -- fullEdgeUndirected
 --     : TILDE_LEFT_BRACKET elementPatternFiller RIGHT_BRACKET_TILDE
 --     ;
---
+      def "FullEdgeUndirected" $
+        gql "ElementPatternFiller",
+
 -- fullEdgePointingRight
 --     : MINUS_LEFT_BRACKET elementPatternFiller BRACKET_RIGHT_ARROW
 --     ;
---
+      def "FullEdgePointingRight" $
+        gql "ElementPatternFiller",
+
 -- fullEdgeLeftOrUndirected
 --     : LEFT_ARROW_TILDE_BRACKET elementPatternFiller RIGHT_BRACKET_TILDE
 --     ;
---
+      def "FullEdgeLeftOrUndirected" $
+        gql "ElementPatternFiller",
+
 -- fullEdgeUndirectedOrRight
 --     : TILDE_LEFT_BRACKET elementPatternFiller BRACKET_TILDE_RIGHT_ARROW
 --     ;
---
+      def "FullEdgeUndirectedOrRight" $
+        gql "ElementPatternFiller",
+
 -- fullEdgeLeftOrRight
 --     : LEFT_ARROW_BRACKET elementPatternFiller BRACKET_RIGHT_ARROW
 --     ;
---
+      def "FullEdgeLeftOrRight" $
+        gql "ElementPatternFiller",
+
 -- fullEdgeAnyDirection
 --     : MINUS_LEFT_BRACKET elementPatternFiller RIGHT_BRACKET_MINUS
 --     ;
---
+      def "FullEdgeAnyDirection" $
+        gql "ElementPatternFiller",
+
 -- abbreviatedEdgePattern
 --     : LEFT_ARROW
 --     | TILDE
@@ -1385,19 +2002,38 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | LEFT_MINUS_RIGHT
 --     | MINUS_SIGN
 --     ;
---
+      def "AbbreviatedEdgePattern" $
+        enum ["leftArrow", "tilde", "rightArrow", "leftArrowTilde", "tildeRightArrow", "leftMinusRight", "minusSign"],
+
 -- parenthesizedPathPatternExpression
 --     : LEFT_PAREN subpathVariableDeclaration? pathModePrefix? pathPatternExpression parenthesizedPathPatternWhereClause? RIGHT_PAREN
 --     ;
---
+      def "ParenthesizedPathPatternExpression" $
+        record [
+          "subpathDeclaration">: optional $ gql "SubpathVariableDeclaration",
+          "pathMode">: optional $ gql "PathModePrefix",
+          "expression">: gql "PathPatternExpression",
+          "whereClause">: optional $ gql "ParenthesizedPathPatternWhereClause"],
+
 -- subpathVariableDeclaration
 --     : subpathVariable EQUALS_OPERATOR
 --     ;
---
+      def "SubpathVariableDeclaration" $
+        gql "SubpathVariable",
+
 -- parenthesizedPathPatternWhereClause
 --     : WHERE searchCondition
 --     ;
---
+      def "ParenthesizedPathPatternWhereClause" $
+        gql "SearchCondition",
+
+
+
+
+
+
+
+
 -- // 16.8 <label expression>
 --
 -- labelExpression
@@ -1408,19 +2044,48 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | PERCENT                                           #labelExpressionWildcard
 --     | LEFT_PAREN labelExpression RIGHT_PAREN            #labelExpressionParenthesized
 --     ;
---
+      def "LabelExpression" $
+        union [
+          "negation">: gql "LabelExpression",
+          "conjunction">: gql "ConjunctionLabelExpression",
+          "disjunction">: gql "DisjunctionLabelExpression",
+          "name">: gql "LabelName",
+          "wildcard">: unit,
+          "parenthesized">: gql "LabelExpression"],
+
+      def "ConjunctionLabelExpression" $
+        record [
+          "left">: gql "LabelExpression",
+          "right">: gql "LabelExpression"],
+
+      def "DisjunctionLabelExpression" $
+        record [
+          "left">: gql "LabelExpression",
+          "right">: gql "LabelExpression"],
+
 -- // 16.9 <path variable reference>
 --
 -- pathVariableReference
 --     : bindingVariableReference
 --     ;
---
+      def "PathVariableReference" $
+        gql "BindingVariableReference",
+
 -- // 16.10 <element variable reference>
 --
 -- elementVariableReference
 --     : bindingVariableReference
 --     ;
---
+      def "ElementVariableReference" $
+        gql "BindingVariableReference",
+
+
+
+
+
+
+
+
 -- // 16.11 <graph pattern quantifier>
 --
 -- graphPatternQuantifier
@@ -1429,23 +2094,47 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | fixedQuantifier
 --     | generalQuantifier
 --     ;
---
+      def "GraphPatternQuantifier" $
+        union [
+          "asterisk">: unit,
+          "plusSign">: unit,
+          "fixed">: gql "FixedQuantifier",
+          "general">: gql "GeneralQuantifier"],
+
 -- fixedQuantifier
 --     : LEFT_BRACE unsignedInteger RIGHT_BRACE
 --     ;
---
+      def "FixedQuantifier" $
+        gql "UnsignedInteger",
+
 -- generalQuantifier
 --     : LEFT_BRACE lowerBound? COMMA upperBound? RIGHT_BRACE
 --     ;
---
+      def "GeneralQuantifier" $
+        record [
+          "lowerBound">: optional $ gql "LowerBound",
+          "upperBound">: optional $ gql "UpperBound"],
+
 -- lowerBound
 --     : unsignedInteger
 --     ;
---
+      def "LowerBound" $
+        gql "UnsignedInteger",
+
 -- upperBound
 --     : unsignedInteger
 --     ;
---
+      def "UpperBound" $
+        gql "UnsignedInteger",
+
+
+
+
+
+
+
+
+
 -- // 16.12 <simplified path pattern expression>
 --
 -- simplifiedPathPatternExpression
@@ -1457,78 +2146,143 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | simplifiedDefaultingLeftOrRight
 --     | simplifiedDefaultingAnyDirection
 --     ;
---
+      def "SimplifiedPathPatternExpression" $
+        union [
+          "left">: gql "SimplifiedDefaultingLeft",
+          "undirected">: gql "SimplifiedDefaultingUndirected",
+          "right">: gql "SimplifiedDefaultingRight",
+          "leftOrUndirected">: gql "SimplifiedDefaultingLeftOrUndirected",
+          "undirectedOrRight">: gql "SimplifiedDefaultingUndirectedOrRight",
+          "leftOrRight">: gql "SimplifiedDefaultingLeftOrRight",
+          "anyDirection">: gql "SimplifiedDefaultingAnyDirection"],
+
 -- simplifiedDefaultingLeft
 --     : LEFT_MINUS_SLASH simplifiedContents SLASH_MINUS
 --     ;
---
+      def "SimplifiedDefaultingLeft" $
+        gql "SimplifiedContents",
+
 -- simplifiedDefaultingUndirected
 --     : TILDE_SLASH simplifiedContents SLASH_TILDE
 --     ;
---
+      def "SimplifiedDefaultingUndirected" $
+        gql "SimplifiedContents",
+
 -- simplifiedDefaultingRight
 --     : MINUS_SLASH simplifiedContents SLASH_MINUS_RIGHT
 --     ;
---
+      def "SimplifiedDefaultingRight" $
+        gql "SimplifiedContents",
+
 -- simplifiedDefaultingLeftOrUndirected
 --     : LEFT_TILDE_SLASH simplifiedContents SLASH_TILDE
 --     ;
---
+      def "SimplifiedDefaultingLeftOrUndirected" $
+        gql "SimplifiedContents",
+
 -- simplifiedDefaultingUndirectedOrRight
 --     : TILDE_SLASH simplifiedContents SLASH_TILDE_RIGHT
 --     ;
---
+      def "SimplifiedDefaultingUndirectedOrRight" $
+        gql "SimplifiedContents",
+
 -- simplifiedDefaultingLeftOrRight
 --     : LEFT_MINUS_SLASH simplifiedContents SLASH_MINUS_RIGHT
 --     ;
---
+      def "SimplifiedDefaultingLeftOrRight" $
+        gql "SimplifiedContents",
+
 -- simplifiedDefaultingAnyDirection
 --     : MINUS_SLASH simplifiedContents SLASH_MINUS
 --     ;
---
+      def "SimplifiedDefaultingAnyDirection" $
+        gql "SimplifiedContents",
+
 -- simplifiedContents
 --     : simplifiedTerm
 --     | simplifiedPathUnion
 --     | simplifiedMultisetAlternation
 --     ;
---
+      def "SimplifiedContents" $
+        union [
+          "term">: gql "SimplifiedTerm",
+          "pathUnion">: gql "SimplifiedPathUnion",
+          "multisetAlternation">: gql "SimplifiedMultisetAlternation"],
+
 -- simplifiedPathUnion
 --     : simplifiedTerm VERTICAL_BAR simplifiedTerm (VERTICAL_BAR simplifiedTerm)*
 --     ;
---
+      def "SimplifiedPathUnion" $
+        nonemptyList $ gql "SimplifiedTerm",
+
 -- simplifiedMultisetAlternation
 --     : simplifiedTerm MULTISET_ALTERNATION_OPERATOR simplifiedTerm (MULTISET_ALTERNATION_OPERATOR simplifiedTerm)*
 --     ;
---
+      def "SimplifiedMultisetAlternation" $
+        nonemptyList $ gql "SimplifiedTerm",
+
 -- simplifiedTerm
 --     : simplifiedFactorLow                        #simplifiedFactorLowLabel
 --     | simplifiedTerm simplifiedFactorLow      #simplifiedConcatenationLabel
 --     ;
---
+      def "SimplifiedTerm" $
+        union [
+          "factorLow">: gql "SimplifiedFactorLow",
+          "concatenation">: gql "SimplifiedConcatenation"],
+
+      def "SimplifiedConcatenation" $
+        record [
+          "initialTerm">: gql "SimplifiedTerm",
+          "nextFactor">: gql "SimplifiedFactorLow"],
+
 -- simplifiedFactorLow
 --     : simplifiedFactorHigh                                     #simplifiedFactorHighLabel
 --     | simplifiedFactorLow AMPERSAND simplifiedFactorHigh #simplifiedConjunctionLabel
 --     ;
---
+      def "SimplifiedFactorLow" $
+        union [
+          "factorHigh">: gql "SimplifiedFactorHigh",
+          "conjunction">: gql "SimplifiedConjunction"],
+
+      def "SimplifiedConjunction" $
+        record [
+          "left">: gql "SimplifiedFactorLow",
+          "right">: gql "SimplifiedFactorHigh"],
+
 -- simplifiedFactorHigh
 --     : simplifiedTertiary
 --     | simplifiedQuantified
 --     | simplifiedQuestioned
 --     ;
---
+      def "SimplifiedFactorHigh" $
+        union [
+          "tertiary">: gql "SimplifiedTertiary",
+          "quantified">: gql "SimplifiedQuantified",
+          "questioned">: gql "SimplifiedQuestioned"],
+
 -- simplifiedQuantified
 --     : simplifiedTertiary graphPatternQuantifier
 --     ;
---
+      def "SimplifiedQuantified" $
+        record [
+          "tertiary">: gql "SimplifiedTertiary",
+          "quantifier">: gql "GraphPatternQuantifier"],
+
 -- simplifiedQuestioned
 --     : simplifiedTertiary QUESTION_MARK
 --     ;
---
+      def "SimplifiedQuestioned" $
+        gql "SimplifiedTertiary",
+
 -- simplifiedTertiary
 --     : simplifiedDirectionOverride
 --     | simplifiedSecondary
 --     ;
---
+      def "SimplifiedTertiary" $
+        union [
+          "directionOverride">: gql "SimplifiedDirectionOverride",
+          "secondary">: gql "SimplifiedSecondary"],
+
 -- simplifiedDirectionOverride
 --     : simplifiedOverrideLeft
 --     | simplifiedOverrideUndirected
@@ -1538,145 +2292,251 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | simplifiedOverrideLeftOrRight
 --     | simplifiedOverrideAnyDirection
 --     ;
---
+      def "SimplifiedDirectionOverride" $
+        union [
+          "overrideLeft">: gql "SimplifiedOverrideLeft",
+          "overrideUndirected">: gql "SimplifiedOverrideUndirected",
+          "overrideRight">: gql "SimplifiedOverrideRight",
+          "overrideLeftOrUndirected">: gql "SimplifiedOverrideLeftOrUndirected",
+          "overrideUndirectedOrRight">: gql "SimplifiedOverrideUndirectedOrRight",
+          "overrideLeftOrRight">: gql "SimplifiedOverrideLeftOrRight",
+          "overrideAnyDirection">: gql "SimplifiedOverrideAnyDirection"],
+
 -- simplifiedOverrideLeft
 --     : LEFT_ANGLE_BRACKET simplifiedSecondary
 --     ;
---
+      def "SimplifiedOverrideLeft" $
+        gql "SimplifiedSecondary",
+
 -- simplifiedOverrideUndirected
 --     : TILDE simplifiedSecondary
 --     ;
---
+      def "SimplifiedOverrideUndirected" $
+        gql "SimplifiedSecondary",
+
 -- simplifiedOverrideRight
 --     : simplifiedSecondary RIGHT_ANGLE_BRACKET
 --     ;
---
+      def "SimplifiedOverrideRight" $
+        gql "SimplifiedSecondary",
+
 -- simplifiedOverrideLeftOrUndirected
 --     : LEFT_ARROW_TILDE simplifiedSecondary
 --     ;
---
+      def "SimplifiedOverrideLeftOrUndirected" $
+        gql "SimplifiedSecondary",
+
 -- simplifiedOverrideUndirectedOrRight
 --     : TILDE simplifiedSecondary RIGHT_ANGLE_BRACKET
 --     ;
---
+      def "SimplifiedOverrideUndirectedOrRight" $
+        gql "SimplifiedSecondary",
+
 -- simplifiedOverrideLeftOrRight
 --     : LEFT_ANGLE_BRACKET simplifiedSecondary RIGHT_ANGLE_BRACKET
 --     ;
---
+      def "SimplifiedOverrideLeftOrRight" $
+        gql "SimplifiedSecondary",
+
 -- simplifiedOverrideAnyDirection
 --     : MINUS_SIGN simplifiedSecondary
 --     ;
---
+      def "SimplifiedOverrideAnyDirection" $
+        gql "SimplifiedSecondary",
+
 -- simplifiedSecondary
 --     : simplifiedPrimary
 --     | simplifiedNegation
 --     ;
---
+      def "SimplifiedSecondary" $
+        union [
+          "primary">: gql "SimplifiedPrimary",
+          "negation">: gql "SimplifiedNegation"],
+
 -- simplifiedNegation
 --     : EXCLAMATION_MARK simplifiedPrimary
 --     ;
---
+      def "SimplifiedNegation" $
+        gql "SimplifiedPrimary",
+
 -- simplifiedPrimary
 --     : labelName
 --     | LEFT_PAREN simplifiedContents RIGHT_PAREN
 --     ;
---
+      def "SimplifiedPrimary" $
+        union [
+          "labelName">: gql "LabelName",
+          "parenthesizedContents">: gql "SimplifiedContents"],
+
+
+
+
+
+
+
+
+
+
 -- // 16.13 <where clause>
 --
 -- whereClause
 --     : WHERE searchCondition
 --     ;
---
+      def "WhereClause" $
+        gql "SearchCondition",
+
 -- // 16.14 <yield clause>
 --
 -- yieldClause
 --     : YIELD yieldItemList
 --     ;
---
+      def "YieldClause" $
+        gql "YieldItemList",
+
 -- yieldItemList
 --     : yieldItem (COMMA yieldItem)*
 --     ;
---
+      def "YieldItemList" $
+        nonemptyList $ gql "YieldItem",
+
 -- yieldItem
 --     : (yieldItemName yieldItemAlias?)
 --     ;
---
+      def "YieldItem" $
+        record [
+          "name">: gql "YieldItemName",
+          "alias">: optional $ gql "YieldItemAlias"],
+
 -- yieldItemName
 --     : fieldName
 --     ;
---
+      def "YieldItemName" $
+        gql "FieldName",
+
 -- yieldItemAlias
 --     : AS bindingVariable
 --     ;
---
--- // 16.15 <group by clasue>
+      def "YieldItemAlias" $
+        gql "BindingVariable",
+
+
+
+
+
+
+
+
+-- // 16.15 <group by clause>
 --
 -- groupByClause
 --     : GROUP BY groupingElementList
 --     ;
---
+      def "GroupByClause" $
+        gql "GroupingElementList",
+
 -- groupingElementList
 --     : groupingElement (COMMA groupingElement)*
 --     | emptyGroupingSet
 --     ;
---
+      def "GroupingElementList" $
+        union [
+          "elements">: nonemptyList $ gql "GroupingElement",
+          "emptySet">: unit],
+
 -- groupingElement
 --     : bindingVariableReference
 --     ;
---
+      def "GroupingElement" $
+        gql "BindingVariableReference",
+
 -- emptyGroupingSet
 --     : LEFT_PAREN RIGHT_PAREN
 --     ;
---
--- // 16.16 <order by clasue>
+      -- This is already represented as a unit type in GroupingElementList
+
+-- // 16.16 <order by clause>
 --
 -- orderByClause
 --     : ORDER BY sortSpecificationList
 --     ;
---
+      def "OrderByClause" $
+        gql "SortSpecificationList",
+
+
+
+
+
+
 -- // 16.17 <sort specification list>
 --
 -- sortSpecificationList
 --     : sortSpecification (COMMA sortSpecification)*
 --     ;
---
+      def "SortSpecificationList" $
+        nonemptyList $ gql "SortSpecification",
+
 -- sortSpecification
 --     : sortKey orderingSpecification? nullOrdering?
 --     ;
---
+      def "SortSpecification" $
+        record [
+          "sortKey">: gql "SortKey",
+          "ordering">: optional $ gql "OrderingSpecification",
+          "nullOrdering">: optional $ gql "NullOrdering"],
+
 -- sortKey
 --     : aggregatingValueExpression
 --     ;
---
+      def "SortKey" $
+        gql "AggregatingValueExpression",
+
 -- orderingSpecification
 --     : ASC
 --     | ASCENDING
 --     | DESC
 --     | DESCENDING
 --     ;
---
+      def "OrderingSpecification" $
+        enum ["ascending", "descending"],
+
 -- nullOrdering
 --     : NULLS FIRST
 --     | NULLS LAST
 --     ;
---
+      def "NullOrdering" $
+        enum ["nullsFirst", "nullsLast"],
+
 -- // 16.18 <limit clause>
 --
 -- limitClause
 --     : LIMIT nonNegativeIntegerSpecification
 --     ;
---
+      def "LimitClause" $
+        gql "NonNegativeIntegerSpecification",
+
 -- // 16.19 <offset clause>
 --
 -- offsetClause
 --     : offsetSynonym nonNegativeIntegerSpecification
 --     ;
---
+      def "OffsetClause" $
+        record [
+          "synonym">: gql "OffsetSynonym",
+          "value">: gql "NonNegativeIntegerSpecification"],
+
 -- offsetSynonym
 --     : OFFSET
 --     | SKIP_RESERVED_WORD
 --     ;
---
+      def "OffsetSynonym" $
+        enum ["offset", "skipReservedWord"],
+
+
+
+
+
+
+
 -- // 17.1 <schema reference> and <catalog schema parent name>
 --
 -- schemaReference
@@ -1684,39 +2544,81 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | relativeCatalogSchemaReference
 --     | referenceParameterSpecification
 --     ;
---
+      def "SchemaReference" $
+        union [
+          "absoluteReference">: gql "AbsoluteCatalogSchemaReference",
+          "relativeReference">: gql "RelativeCatalogSchemaReference",
+          "parameterSpecification">: gql "ReferenceParameterSpecification"],
+
 -- absoluteCatalogSchemaReference
 --     : SOLIDUS
 --     | absoluteDirectoryPath schemaName
 --     ;
---
+      def "AbsoluteCatalogSchemaReference" $
+        union [
+          "root">: unit,
+          "directoryAndSchema">: gql "AbsoluteDirectoryAndSchema"],
+
+      def "AbsoluteDirectoryAndSchema" $
+        record [
+          "directoryPath">: gql "AbsoluteDirectoryPath",
+          "schemaName">: gql "SchemaName"],
+
 -- catalogSchemaParentAndName
 --     : absoluteDirectoryPath schemaName
 --     ;
---
+      def "CatalogSchemaParentAndName" $
+        gql "AbsoluteDirectoryAndSchema",
+
 -- relativeCatalogSchemaReference
 --     : predefinedSchemaReference
 --     | relativeDirectoryPath schemaName
 --     ;
---
+      def "RelativeCatalogSchemaReference" $
+        union [
+          "predefinedReference">: gql "PredefinedSchemaReference",
+          "directoryAndSchema">: gql "RelativeDirectoryAndSchema"],
+
+      def "RelativeDirectoryAndSchema" $
+        record [
+          "directoryPath">: gql "RelativeDirectoryPath",
+          "schemaName">: gql "SchemaName"],
+
 -- predefinedSchemaReference
 --     : HOME_SCHEMA
 --     | CURRENT_SCHEMA
 --     | PERIOD
 --     ;
---
+      def "PredefinedSchemaReference" $
+        enum ["homeSchema", "currentSchema", "period"],
+
 -- absoluteDirectoryPath
 --     : SOLIDUS simpleDirectoryPath?
 --     ;
---
+      def "AbsoluteDirectoryPath" $
+        optional $ gql "SimpleDirectoryPath",
+
 -- relativeDirectoryPath
 --     : DOUBLE_PERIOD (SOLIDUS DOUBLE_PERIOD)* SOLIDUS simpleDirectoryPath?
 --     ;
---
+      def "RelativeDirectoryPath" $
+        record [
+          "parentDirectories">: nonNegativeInt32,
+          "simplePath">: optional $ gql "SimpleDirectoryPath"],
+
 -- simpleDirectoryPath
 --     : (directoryName SOLIDUS)+
 --     ;
---
+      def "SimpleDirectoryPath" $
+        nonemptyList $ gql "DirectoryName",
+
+
+
+
+
+
+
+
 -- // 17.2 <graph reference> and <catalog graph parent and name>
 --
 -- graphReference
@@ -1725,27 +2627,52 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | homeGraph
 --     | referenceParameterSpecification
 --     ;
---
+      def "GraphReference" $
+        union [
+          "parentAndGraphName">: gql "ParentAndGraphName",
+          "delimitedGraphName">: gql "DelimitedGraphName",
+          "homeGraph">: gql "HomeGraph",
+          "parameterSpecification">: gql "ReferenceParameterSpecification"],
+
+      def "ParentAndGraphName" $
+        record [
+          "parentReference">: gql "CatalogObjectParentReference",
+          "graphName">: gql "GraphName"],
+
 -- catalogGraphParentAndName
 --     : catalogObjectParentReference? graphName
 --     ;
---
+      def "CatalogGraphParentAndName" $
+        record [
+          "parentReference">: optional $ gql "CatalogObjectParentReference",
+          "graphName">: gql "GraphName"],
+
 -- homeGraph
 --     : HOME_PROPERTY_GRAPH
 --     | HOME_GRAPH
 --     ;
---
+      def "HomeGraph" $
+        enum ["homePropertyGraph", "homeGraph"],
+
 -- // 17.3 <graph type reference> and <catalog graph type parent and name>
 --
 -- graphTypeReference
 --     : catalogGraphTypeParentAndName
 --     | referenceParameterSpecification
 --     ;
---
+      def "GraphTypeReference" $
+        union [
+          "parentAndTypeName">: gql "CatalogGraphTypeParentAndName",
+          "parameterSpecification">: gql "ReferenceParameterSpecification"],
+
 -- catalogGraphTypeParentAndName
 --     : catalogObjectParentReference? graphTypeName
 --     ;
---
+      def "CatalogGraphTypeParentAndName" $
+        record [
+          "parentReference">: optional $ gql "CatalogObjectParentReference",
+          "graphTypeName">: gql "GraphTypeName"],
+
 -- // 17.4 <binding table reference> and <catalog binding table parent name>
 --
 -- bindingTableReference
@@ -1753,228 +2680,478 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | delimitedBindingTableName
 --     | referenceParameterSpecification
 --     ;
---
+      def "BindingTableReference" $
+        union [
+          "parentAndTableName">: gql "ParentAndTableName",
+          "delimitedBindingTableName">: gql "DelimitedBindingTableName",
+          "parameterSpecification">: gql "ReferenceParameterSpecification"],
+
+      def "ParentAndTableName" $
+        record [
+          "parentReference">: gql "CatalogObjectParentReference",
+          "tableName">: gql "BindingTableName"],
+
+
+
+
+
+
 -- // 17.5 <procedure reference> and <catalog procedure parent and name>
 --
 -- procedureReference
 --     : catalogProcedureParentAndName
 --     | referenceParameterSpecification
 --     ;
---
+      def "ProcedureReference" $
+        union [
+          "parentAndProcedureName">: gql "CatalogProcedureParentAndName",
+          "parameterSpecification">: gql "ReferenceParameterSpecification"],
+
 -- catalogProcedureParentAndName
 --     : catalogObjectParentReference? procedureName
 --     ;
---
+      def "CatalogProcedureParentAndName" $
+        record [
+          "parentReference">: optional $ gql "CatalogObjectParentReference",
+          "procedureName">: gql "ProcedureName"],
+
 -- // 17.6 <catalog object parent reference>
 --
 -- catalogObjectParentReference
 --     : schemaReference SOLIDUS? (objectName PERIOD)*
---     |  (objectName PERIOD)+
+--     | (objectName PERIOD)+
 --     ;
---
+      def "CatalogObjectParentReference" $
+        union [
+          "schemaAndObjects">: gql "SchemaAndObjects",
+          "objectsOnly">: nonemptyList $ gql "ObjectName"],
+
+      def "SchemaAndObjects" $
+        record [
+          "schemaReference">: gql "SchemaReference",
+          "objects">: list $ gql "ObjectName"],
+
 -- // 17.7 <reference parameter specification>
 --
 -- referenceParameterSpecification
 --     : SUBSTITUTED_PARAMETER_REFERENCE
 --     ;
---
+      def "ReferenceParameterSpecification" $
+        unit,
+
+
+
+
+
+
 -- // 18.1 <nested graph type specification>
 --
 -- nestedGraphTypeSpecification
 --     : LEFT_BRACE graphTypeSpecificationBody RIGHT_BRACE
 --     ;
---
+      def "NestedGraphTypeSpecification" $
+        gql "GraphTypeSpecificationBody",
+
 -- graphTypeSpecificationBody
 --     : elementTypeList
 --     ;
---
+      def "GraphTypeSpecificationBody" $
+        gql "ElementTypeList",
+
 -- elementTypeList
 --     : elementTypeSpecification (COMMA elementTypeSpecification)*
 --     ;
---
+      def "ElementTypeList" $
+        nonemptyList $ gql "ElementTypeSpecification",
+
 -- elementTypeSpecification
 --     : nodeTypeSpecification
 --     | edgeTypeSpecification
 --     ;
---
+      def "ElementTypeSpecification" $
+        union [
+          "nodeType">: gql "NodeTypeSpecification",
+          "edgeType">: gql "EdgeTypeSpecification"],
+
+
+
+
+
+
+
 -- // 18.2 <node type specification>
 --
 -- nodeTypeSpecification
 --     : nodeTypePattern
 --     | nodeTypePhrase
 --     ;
---
+      def "NodeTypeSpecification" $
+        union [
+          "pattern">: gql "NodeTypePattern",
+          "phrase">: gql "NodeTypePhrase"],
+
 -- nodeTypePattern
 --     : (nodeSynonym TYPE? nodeTypeName)? LEFT_PAREN localNodeTypeAlias? nodeTypeFiller? RIGHT_PAREN
 --     ;
---
+      def "NodeTypePattern" $
+        record [
+          "synonymAndTypeName">: optional $ gql "NodeSynonymAndTypeName",
+          "alias">: optional $ gql "LocalNodeTypeAlias",
+          "filler">: optional $ gql "NodeTypeFiller"],
+
+      def "NodeSynonymAndTypeName" $
+        record [
+          "nodeSynonym">: gql "NodeSynonym",
+          "typeName">: optional $ gql "NodeTypeName"],
+
 -- nodeTypePhrase
 --     : nodeSynonym TYPE? nodeTypePhraseFiller (AS localNodeTypeAlias)?
 --     ;
---
+      def "NodeTypePhrase" $
+        record [
+          "synonym">: gql "NodeSynonym",
+          "typePhraseFiller">: gql "NodeTypePhraseFiller",
+          "alias">: optional $ gql "LocalNodeTypeAlias"],
+
 -- nodeTypePhraseFiller
 --     : nodeTypeName nodeTypeFiller?
 --     | nodeTypeFiller
 --     ;
---
+      def "NodeTypePhraseFiller" $
+        union [
+          "typeNameWithFiller">: gql "TypeNameWithFiller",
+          "fillerOnly">: gql "NodeTypeFiller"],
+
+      def "TypeNameWithFiller" $
+        record [
+          "typeName">: gql "NodeTypeName",
+          "filler">: optional $ gql "NodeTypeFiller"],
+
 -- nodeTypeFiller
 --     : nodeTypeKeyLabelSet nodeTypeImpliedContent?
 --     | nodeTypeImpliedContent
 --     ;
---
+      def "NodeTypeFiller" $
+        union [
+          "keyLabelSetWithContent">: gql "KeyLabelSetWithContent",
+          "impliedContent">: gql "NodeTypeImpliedContent"],
+
+      def "KeyLabelSetWithContent" $
+        record [
+          "keyLabelSet">: gql "NodeTypeKeyLabelSet",
+          "impliedContent">: optional $ gql "NodeTypeImpliedContent"],
+
 -- localNodeTypeAlias
 --     : regularIdentifier
 --     ;
---
+      def "LocalNodeTypeAlias" $
+        gql "RegularIdentifier",
+
 -- nodeTypeImpliedContent
 --     : nodeTypeLabelSet
 --     | nodeTypePropertyTypes
 --     | nodeTypeLabelSet nodeTypePropertyTypes
 --     ;
---
+      def "NodeTypeImpliedContent" $
+        union [
+          "labelSet">: gql "NodeTypeLabelSet",
+          "propertyTypes">: gql "NodeTypePropertyTypes",
+          "labelSetWithProperties">: gql "LabelSetWithProperties"],
+
+      def "LabelSetWithProperties" $
+        record [
+          "labelSet">: gql "NodeTypeLabelSet",
+          "propertyTypes">: gql "NodeTypePropertyTypes"],
+
 -- nodeTypeKeyLabelSet
 --     : labelSetPhrase? IMPLIES
 --     ;
---
+      def "NodeTypeKeyLabelSet" $
+        optional $ gql "LabelSetPhrase",
+
 -- nodeTypeLabelSet
 --     : labelSetPhrase
 --     ;
---
+      def "NodeTypeLabelSet" $
+        gql "LabelSetPhrase",
+
 -- nodeTypePropertyTypes
 --     : propertyTypesSpecification
 --     ;
---
+      def "NodeTypePropertyTypes" $
+        gql "PropertyTypesSpecification",
+
+
+
+
+
+
+
 -- // 18.3 <edge type specification>
 --
 -- edgeTypeSpecification
 --     : edgeTypePattern
 --     | edgeTypePhrase
 --     ;
---
+      def "EdgeTypeSpecification" $
+        union [
+          "pattern">: gql "EdgeTypePattern",
+          "phrase">: gql "EdgeTypePhrase"],
+
 -- edgeTypePattern
 --     : (edgeKind? edgeSynonym TYPE? edgeTypeName)? (edgeTypePatternDirected | edgeTypePatternUndirected)
 --     ;
---
+      def "EdgeTypePattern" $
+        record [
+          "kindAndSynonym">: optional $ gql "EdgeKindAndSynonym",
+          "patternType">: gql "EdgeTypePatternType"],
+
+      def "EdgeKindAndSynonym" $
+        record [
+          "kind">: optional $ gql "EdgeKind",
+          "synonym">: gql "EdgeSynonym",
+          "typeName">: optional $ gql "EdgeTypeName"],
+
+      def "EdgeTypePatternType" $
+        union [
+          "directed">: gql "EdgeTypePatternDirected",
+          "undirected">: gql "EdgeTypePatternUndirected"],
+
 -- edgeTypePhrase
 --     : edgeKind edgeSynonym TYPE? edgeTypePhraseFiller endpointPairPhrase
 --     ;
---
+      def "EdgeTypePhrase" $
+        record [
+          "kind">: gql "EdgeKind",
+          "synonym">: gql "EdgeSynonym",
+          "typeNameAndFiller">: gql "EdgeTypePhraseFiller",
+          "endpointPair">: gql "EndpointPairPhrase"],
+
 -- edgeTypePhraseFiller
 --     : edgeTypeName edgeTypeFiller?
 --     | edgeTypeFiller
 --     ;
---
+      def "EdgeTypePhraseFiller" $
+        union [
+          "typeNameWithFiller">: gql "TypeNameWithFiller",
+          "fillerOnly">: gql "EdgeTypeFiller"],
+
+      def "TypeNameWithFiller" $
+        record [
+          "typeName">: gql "EdgeTypeName",
+          "filler">: optional $ gql "EdgeTypeFiller"],
+
 -- edgeTypeFiller
 --     : edgeTypeKeyLabelSet edgeTypeImpliedContent?
 --     | edgeTypeImpliedContent
 --     ;
---
+      def "EdgeTypeFiller" $
+        union [
+          "keyLabelSetWithContent">: gql "KeyLabelSetWithContent",
+          "impliedContent">: gql "EdgeTypeImpliedContent"],
+
+      def "KeyLabelSetWithContent" $
+        record [
+          "keyLabelSet">: gql "EdgeTypeKeyLabelSet",
+          "impliedContent">: optional $ gql "EdgeTypeImpliedContent"],
+
 -- edgeTypeImpliedContent
 --     : edgeTypeLabelSet
 --     | edgeTypePropertyTypes
 --     | edgeTypeLabelSet edgeTypePropertyTypes
 --     ;
---
+      def "EdgeTypeImpliedContent" $
+        union [
+          "labelSet">: gql "EdgeTypeLabelSet",
+          "propertyTypes">: gql "EdgeTypePropertyTypes",
+          "labelSetWithProperties">: gql "LabelSetWithProperties"],
+
+      def "LabelSetWithProperties" $
+        record [
+          "labelSet">: gql "EdgeTypeLabelSet",
+          "propertyTypes">: gql "EdgeTypePropertyTypes"],
+
 -- edgeTypeKeyLabelSet
 --     : labelSetPhrase? IMPLIES
 --     ;
---
+      def "EdgeTypeKeyLabelSet" $
+        optional $ gql "LabelSetPhrase",
+
 -- edgeTypeLabelSet
 --     : labelSetPhrase
 --     ;
---
+      def "EdgeTypeLabelSet" $
+        gql "LabelSetPhrase",
+
 -- edgeTypePropertyTypes
 --     : propertyTypesSpecification
 --     ;
---
+      def "EdgeTypePropertyTypes" $
+        gql "PropertyTypesSpecification",
+
 -- edgeTypePatternDirected
 --     : edgeTypePatternPointingRight
 --     | edgeTypePatternPointingLeft
 --     ;
---
+      def "EdgeTypePatternDirected" $
+        union [
+          "pointingRight">: gql "EdgeTypePatternPointingRight",
+          "pointingLeft">: gql "EdgeTypePatternPointingLeft"],
+
 -- edgeTypePatternPointingRight
 --     : sourceNodeTypeReference arcTypePointingRight destinationNodeTypeReference
 --     ;
---
+      def "EdgeTypePatternPointingRight" $
+        record [
+          "source">: gql "SourceNodeTypeReference",
+          "arc">: gql "ArcTypePointingRight",
+          "destination">: gql "DestinationNodeTypeReference"],
+
 -- edgeTypePatternPointingLeft
 --     : destinationNodeTypeReference arcTypePointingLeft sourceNodeTypeReference
 --     ;
---
+      def "EdgeTypePatternPointingLeft" $
+        record [
+          "destination">: gql "DestinationNodeTypeReference",
+          "arc">: gql "ArcTypePointingLeft",
+          "source">: gql "SourceNodeTypeReference"],
+
 -- edgeTypePatternUndirected
 --     : sourceNodeTypeReference arcTypeUndirected destinationNodeTypeReference
 --     ;
---
+      def "EdgeTypePatternUndirected" $
+        record [
+          "source">: gql "SourceNodeTypeReference",
+          "arc">: gql "ArcTypeUndirected",
+          "destination">: gql "DestinationNodeTypeReference"],
+
 -- arcTypePointingRight
 --     : MINUS_LEFT_BRACKET edgeTypeFiller BRACKET_RIGHT_ARROW
 --     ;
---
+      def "ArcTypePointingRight" $
+        gql "EdgeTypeFiller",
+
 -- arcTypePointingLeft
 --     : LEFT_ARROW_BRACKET edgeTypeFiller RIGHT_BRACKET_MINUS
 --     ;
---
+      def "ArcTypePointingLeft" $
+        gql "EdgeTypeFiller",
+
 -- arcTypeUndirected
 --     : TILDE_LEFT_BRACKET edgeTypeFiller RIGHT_BRACKET_TILDE
 --     ;
---
+      def "ArcTypeUndirected" $
+        gql "EdgeTypeFiller",
+
 -- sourceNodeTypeReference
 --     : LEFT_PAREN sourceNodeTypeAlias RIGHT_PAREN
 --     | LEFT_PAREN nodeTypeFiller? RIGHT_PAREN
 --     ;
---
+      def "SourceNodeTypeReference" $
+        union [
+          "alias">: gql "SourceNodeTypeAlias",
+          "filler">: optional $ gql "NodeTypeFiller"],
+
 -- destinationNodeTypeReference
 --     : LEFT_PAREN destinationNodeTypeAlias RIGHT_PAREN
 --     | LEFT_PAREN nodeTypeFiller? RIGHT_PAREN
 --     ;
---
+      def "DestinationNodeTypeReference" $
+        union [
+          "alias">: gql "DestinationNodeTypeAlias",
+          "filler">: optional $ gql "NodeTypeFiller"],
+
 -- edgeKind
 --     : DIRECTED
 --     | UNDIRECTED
 --     ;
---
+      def "EdgeKind" $
+        enum ["directed", "undirected"],
+
 -- endpointPairPhrase
 --     : CONNECTING endpointPair
 --     ;
---
+      def "EndpointPairPhrase" $
+        gql "EndpointPair",
+
 -- endpointPair
 --     : endpointPairDirected
 --     | endpointPairUndirected
 --     ;
---
+      def "EndpointPair" $
+        union [
+          "directed">: gql "EndpointPairDirected",
+          "undirected">: gql "EndpointPairUndirected"],
+
 -- endpointPairDirected
 --     : endpointPairPointingRight
 --     | endpointPairPointingLeft
 --     ;
---
+      def "EndpointPairDirected" $
+        union [
+          "pointingRight">: gql "EndpointPairPointingRight",
+          "pointingLeft">: gql "EndpointPairPointingLeft"],
+
 -- endpointPairPointingRight
 --     : LEFT_PAREN sourceNodeTypeAlias connectorPointingRight destinationNodeTypeAlias RIGHT_PAREN
 --     ;
---
+      def "EndpointPairPointingRight" $
+        record [
+          "sourceAlias">: gql "SourceNodeTypeAlias",
+          "connector">: gql "ConnectorPointingRight",
+          "destinationAlias">: gql "DestinationNodeTypeAlias"],
+
 -- endpointPairPointingLeft
 --     : LEFT_PAREN destinationNodeTypeAlias LEFT_ARROW sourceNodeTypeAlias RIGHT_PAREN
 --     ;
---
+      def "EndpointPairPointingLeft" $
+        record [
+          "destinationAlias">: gql "DestinationNodeTypeAlias",
+          "sourceAlias">: gql "SourceNodeTypeAlias"],
+
 -- endpointPairUndirected
 --     : LEFT_PAREN sourceNodeTypeAlias connectorUndirected destinationNodeTypeAlias RIGHT_PAREN
 --     ;
---
+      def "EndpointPairUndirected" $
+        record [
+          "sourceAlias">: gql "SourceNodeTypeAlias",
+          "connector">: gql "ConnectorUndirected",
+          "destinationAlias">: gql "DestinationNodeTypeAlias"],
+
 -- connectorPointingRight
 --     : TO
 --     | RIGHT_ARROW
 --     ;
---
+      def "ConnectorPointingRight" $
+        enum ["to", "rightArrow"],
+
 -- connectorUndirected
 --     : TO
 --     | TILDE
 --     ;
---
+      def "ConnectorUndirected" $
+        enum ["to", "tilde"],
+
 -- sourceNodeTypeAlias
 --     : regularIdentifier
 --     ;
---
+      def "SourceNodeTypeAlias" $
+        gql "RegularIdentifier",
+
 -- destinationNodeTypeAlias
 --     : regularIdentifier
 --     ;
---
+      def "DestinationNodeTypeAlias" $
+        gql "RegularIdentifier",
+
+
+
+
+
+
+
+
+
 -- // 18.4 <label set phrase> and <label set specification>
 --
 -- labelSetPhrase
@@ -1982,62 +3159,154 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | LABELS labelSetSpecification
 --     | isOrColon labelSetSpecification
 --     ;
---
+      def "LabelSetPhrase" $
+        union [
+          "singleLabel">: gql "LabelName",
+          "multipleLabels">: gql "LabelSetSpecification",
+          "isOrColonWithLabels">: gql "IsOrColonWithLabels"],
+
+      def "IsOrColonWithLabels" $
+        record [
+          "isOrColon">: gql "IsOrColon",
+          "labels">: gql "LabelSetSpecification"],
+
 -- labelSetSpecification
 --     : labelName (AMPERSAND labelName)*
 --     ;
---
+      def "LabelSetSpecification" $
+        nonemptyList $ gql "LabelName",
+
 -- // 18.5 <property types specification>
 --
 -- propertyTypesSpecification
 --     : LEFT_BRACE propertyTypeList? RIGHT_BRACE
 --     ;
---
+      def "PropertyTypesSpecification" $
+        optional $ gql "PropertyTypeList",
+
 -- propertyTypeList
 --     : propertyType (COMMA propertyType)*
 --     ;
---
+      def "PropertyTypeList" $
+        nonemptyList $ gql "PropertyType",
+
 -- // 18.6 <property type>
 --
 -- propertyType
 --     : propertyName typed? propertyValueType
 --     ;
---
+      def "PropertyType" $
+        record [
+          "name">: gql "PropertyName",
+          "typed">: optional $ gql "Typed",
+          "valueType">: gql "PropertyValueType"],
+
 -- // 18.7 <property value type>
 --
 -- propertyValueType
 --     : valueType
 --     ;
---
+      def "PropertyValueType" $
+        gql "ValueType",
+
+
+
+
+
+
+
 -- // 18.8 <binding table type>
 --
 -- bindingTableType
 --     : BINDING? TABLE fieldTypesSpecification
 --     ;
---
+      def "BindingTableType" $
+        record [
+          "binding">: boolean,
+          "fieldTypes">: gql "FieldTypesSpecification"],
+
+
+
+
+
+
+
+
 -- // 18.9 <value type>
 --
 -- valueType
 --     : predefinedType                                                                                                                              #predefinedTypeLabel
---     // <constructed value type>
 --     | pathValueType                                                                                                                               #pathValueTypeLabel
 --     | listValueTypeName LEFT_ANGLE_BRACKET valueType RIGHT_ANGLE_BRACKET (LEFT_BRACKET maxLength RIGHT_BRACKET)? notNull?     #listValueTypeAlt1
 --     | valueType listValueTypeName (LEFT_BRACKET maxLength RIGHT_BRACKET)? notNull?                                                    #listValueTypeAlt2
 --     | listValueTypeName (LEFT_BRACKET maxLength RIGHT_BRACKET)? notNull?                                                                #listValueTypeAlt3
 --     | recordType                                                                                                                                   #recordTypeLabel
---     // <dynamic union type>
 --     | ANY VALUE? notNull?                                                                                                                        #openDynamicUnionTypeLabel
 --     | ANY? PROPERTY VALUE notNull?                                                                                                             #dynamicPropertyValueTypeLabel
---     // <closed dynamic union type>
 --     | ANY VALUE? LEFT_ANGLE_BRACKET valueType (VERTICAL_BAR valueType)* RIGHT_ANGLE_BRACKET                                         #closedDynamicUnionTypeAtl1
 --     | valueType VERTICAL_BAR valueType                                                                                                        #closedDynamicUnionTypeAtl2
 --     ;
---
+      def "ValueType" $
+        union [
+          "predefinedType">: gql "PredefinedType",
+          "pathValueType">: gql "PathValueType",
+          "listValueTypeAlt1">: gql "ListValueTypeAlt1",
+          "listValueTypeAlt2">: gql "ListValueTypeAlt2",
+          "listValueTypeAlt3">: gql "ListValueTypeAlt3",
+          "recordType">: gql "RecordType",
+          "openDynamicUnionType">: gql "OpenDynamicUnionType",
+          "dynamicPropertyValueType">: gql "DynamicPropertyValueType",
+          "closedDynamicUnionTypeAlt1">: gql "ClosedDynamicUnionTypeAlt1",
+          "closedDynamicUnionTypeAlt2">: gql "ClosedDynamicUnionTypeAlt2"],
+
+      def "ListValueTypeAlt1" $
+        record [
+          "typeName">: gql "ListValueTypeName",
+          "valueType">: gql "ValueType",
+          "maxLength">: optional $ gql "MaxLength",
+          "notNull">: boolean],
+
+      def "ListValueTypeAlt2" $
+        record [
+          "valueType">: gql "ValueType",
+          "typeName">: gql "ListValueTypeName",
+          "maxLength">: optional $ gql "MaxLength",
+          "notNull">: boolean],
+
+      def "ListValueTypeAlt3" $
+        record [
+          "typeName">: gql "ListValueTypeName",
+          "maxLength">: optional $ gql "MaxLength",
+          "notNull">: boolean],
+
+      def "OpenDynamicUnionType" $
+        record [
+          "value">: boolean,
+          "notNull">: boolean],
+
+      def "DynamicPropertyValueType" $
+        record [
+          "any">: optional boolean,
+          "property">: unit,
+          "value">: unit,
+          "notNull">: boolean],
+
+      def "ClosedDynamicUnionTypeAlt1" $
+        record [
+          "anyValue">: optional boolean,
+          "valueTypes">: nonemptyList $ gql "ValueType"],
+
+      def "ClosedDynamicUnionTypeAlt2" $
+        record [
+          "valueTypes">: nonemptyList $ gql "ValueType"],
+
 -- typed
 --     : DOUBLE_COLON
 --     | TYPED
 --     ;
---
+      def "Typed" $
+        unit,
+
 -- predefinedType
 --     : booleanType
 --     | characterStringType
@@ -2047,50 +3316,147 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | referenceValueType
 --     | immaterialValueType
 --     ;
---
+      def "PredefinedType" $
+        union [
+          "booleanType">: gql "BooleanType",
+          "characterStringType">: gql "CharacterStringType",
+          "byteStringType">: gql "ByteStringType",
+          "numericType">: gql "NumericType",
+          "temporalType">: gql "TemporalType",
+          "referenceValueType">: gql "ReferenceValueType",
+          "immaterialValueType">: gql "ImmaterialValueType"],
+
 -- booleanType
 --     : (BOOL | BOOLEAN) notNull?
 --     ;
---
+      def "BooleanType" $
+        record [
+          "notNull">: boolean],
+
 -- characterStringType
 --     : STRING (LEFT_PAREN (minLength COMMA)? maxLength RIGHT_PAREN)? notNull?
 --     | CHAR (LEFT_PAREN fixedLength RIGHT_PAREN)? notNull?
 --     | VARCHAR (LEFT_PAREN maxLength RIGHT_PAREN)? notNull?
 --     ;
---
+      def "CharacterStringType" $
+        union [
+          "stringType">: gql "StringType",
+          "charType">: gql "CharType",
+          "varcharType">: gql "VarcharType"],
+
+      def "StringType" $
+        record [
+          "minLength">: optional $ gql "MinLength",
+          "maxLength">: optional $ gql "MaxLength",
+          "notNull">: boolean],
+
+      def "CharType" $
+        record [
+          "fixedLength">: optional $ gql "FixedLength",
+          "notNull">: boolean],
+
+      def "VarcharType" $
+        record [
+          "maxLength">: optional $ gql "MaxLength",
+          "notNull">: boolean],
+
 -- byteStringType
 --     : BYTES (LEFT_PAREN (minLength COMMA)? maxLength RIGHT_PAREN)? notNull?
 --     | BINARY (LEFT_PAREN fixedLength RIGHT_PAREN)? notNull?
 --     | VARBINARY (LEFT_PAREN maxLength RIGHT_PAREN)? notNull?
 --     ;
---
+      def "ByteStringType" $
+        union [
+          "bytesType">: gql "BytesType",
+          "binaryType">: gql "BinaryType",
+          "varbinaryType">: gql "VarbinaryType"],
+
+      def "BytesType" $
+        record [
+          "minLength">: optional $ gql "MinLength",
+          "maxLength">: optional $ gql "MaxLength",
+          "notNull">: boolean],
+
+      def "BinaryType" $
+        record [
+          "fixedLength">: optional $ gql "FixedLength",
+          "notNull">: boolean],
+
+      def "VarbinaryType" $
+        record [
+          "maxLength">: optional $ gql "MaxLength",
+          "notNull">: boolean],
+
 -- minLength
 --     : unsignedInteger
 --     ;
---
+      def "MinLength" $
+        gql "UnsignedInteger",
+
 -- maxLength
 --     : unsignedInteger
 --     ;
---
+      def "MaxLength" $
+        gql "UnsignedInteger",
+
 -- fixedLength
 --     : unsignedInteger
 --     ;
---
+      def "FixedLength" $
+        gql "UnsignedInteger",
+
+
+
+
+
+
+
+
+-- minLength
+--     : unsignedInteger
+--     ;
+      def "MinLength" $
+        gql "UnsignedInteger",
+
+-- maxLength
+--     : unsignedInteger
+--     ;
+      def "MaxLength" $
+        gql "UnsignedInteger",
+
+-- fixedLength
+--     : unsignedInteger
+--     ;
+      def "FixedLength" $
+        gql "UnsignedInteger",
+
 -- numericType
 --     : exactNumericType
 --     | approximateNumericType
 --     ;
---
+      def "NumericType" $
+        union [
+          "exact">: gql "ExactNumericType",
+          "approximate">: gql "ApproximateNumericType"],
+
 -- exactNumericType
 --     : binaryExactNumericType
 --     | decimalExactNumericType
 --     ;
---
+      def "ExactNumericType" $
+        union [
+          "binary">: gql "BinaryExactNumericType",
+          "decimal">: gql "DecimalExactNumericType"],
+
 -- binaryExactNumericType
 --     : signedBinaryExactNumericType
 --     | unsignedBinaryExactNumericType
 --     ;
---
+      def "BinaryExactNumericType" $
+        union [
+          "signed">: gql "SignedBinaryExactNumericType",
+          "unsigned">: gql "UnsignedBinaryExactNumericType"],
+
 -- signedBinaryExactNumericType
 --     : INT8 notNull?
 --     | INT16 notNull?
@@ -2103,7 +3469,48 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | BIGINT notNull?
 --     | SIGNED? verboseBinaryExactNumericType
 --     ;
---
+      def "SignedBinaryExactNumericType" $
+        union [
+          "int8">: gql "Int8Type",
+          "int16">: gql "Int16Type",
+          "int32">: gql "Int32Type",
+          "int64">: gql "Int64Type",
+          "int128">: gql "Int128Type",
+          "int256">: gql "Int256Type",
+          "smallInt">: gql "SmallIntType",
+          "intWithPrecision">: gql "IntWithPrecision",
+          "bigInt">: gql "BigIntType",
+          "signedVerboseType">: gql "SignedVerboseBinaryExactNumericType"],
+
+      def "Int8Type" $
+        record ["notNull">: boolean],
+
+      def "Int16Type" $
+        record ["notNull">: boolean],
+
+      def "Int32Type" $
+        record ["notNull">: boolean],
+
+      def "Int64Type" $
+        record ["notNull">: boolean],
+
+      def "Int128Type" $
+        record ["notNull">: boolean],
+
+      def "Int256Type" $
+        record ["notNull">: boolean],
+
+      def "SmallIntType" $
+        record ["notNull">: boolean],
+
+      def "BigIntType" $
+        record ["notNull">: boolean],
+
+      def "IntWithPrecision" $
+        record [
+          "precision">: optional $ gql "Precision",
+          "notNull">: boolean],
+
 -- unsignedBinaryExactNumericType
 --     : UINT8 notNull?
 --     | UINT16 notNull?
@@ -2116,7 +3523,48 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | UBIGINT notNull?
 --     | UNSIGNED verboseBinaryExactNumericType
 --     ;
---
+      def "UnsignedBinaryExactNumericType" $
+        union [
+          "uint8">: gql "Uint8Type",
+          "uint16">: gql "Uint16Type",
+          "uint32">: gql "Uint32Type",
+          "uint64">: gql "Uint64Type",
+          "uint128">: gql "Uint128Type",
+          "uint256">: gql "Uint256Type",
+          "uSmallInt">: gql "USmallIntType",
+          "uintWithPrecision">: gql "UintWithPrecision",
+          "uBigInt">: gql "UBigIntType",
+          "unsignedVerboseType">: gql "UnsignedVerboseBinaryExactNumericType"],
+
+      def "Uint8Type" $
+        record ["notNull">: boolean],
+
+      def "Uint16Type" $
+        record ["notNull">: boolean],
+
+      def "Uint32Type" $
+        record ["notNull">: boolean],
+
+      def "Uint64Type" $
+        record ["notNull">: boolean],
+
+      def "Uint128Type" $
+        record ["notNull">: boolean],
+
+      def "Uint256Type" $
+        record ["notNull">: boolean],
+
+      def "USmallIntType" $
+        record ["notNull">: boolean],
+
+      def "UBigIntType" $
+        record ["notNull">: boolean],
+
+      def "UintWithPrecision" $
+        record [
+          "precision">: optional $ gql "Precision",
+          "notNull">: boolean],
+
 -- verboseBinaryExactNumericType
 --     : INTEGER8 notNull?
 --     | INTEGER16 notNull?
@@ -2128,19 +3576,86 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | INTEGER (LEFT_PAREN precision RIGHT_PAREN)? notNull?
 --     | BIG INTEGER notNull?
 --     ;
---
+      def "VerboseBinaryExactNumericType" $
+        union [
+          "integer8">: gql "Integer8Type",
+          "integer16">: gql "Integer16Type",
+          "integer32">: gql "Integer32Type",
+          "integer64">: gql "Integer64Type",
+          "integer128">: gql "Integer128Type",
+          "integer256">: gql "Integer256Type",
+          "smallInteger">: gql "SmallIntegerType",
+          "integerWithPrecision">: gql "IntegerWithPrecision",
+          "bigInteger">: gql "BigIntegerType"],
+
+      def "Integer8Type" $
+        record ["notNull">: boolean],
+
+      def "Integer16Type" $
+        record ["notNull">: boolean],
+
+      def "Integer32Type" $
+        record ["notNull">: boolean],
+
+      def "Integer64Type" $
+        record ["notNull">: boolean],
+
+      def "Integer128Type" $
+        record ["notNull">: boolean],
+
+      def "Integer256Type" $
+        record ["notNull">: boolean],
+
+      def "SmallIntegerType" $
+        record ["notNull">: boolean],
+
+      def "BigIntegerType" $
+        record ["notNull">: boolean],
+
+      def "IntegerWithPrecision" $
+        record [
+          "precision">: optional $ gql "Precision",
+          "notNull">: boolean],
+
+-- Precision
+--     : unsignedDecimalInteger
+--     ;
+      def "Precision" $
+        gql "UnsignedDecimalInteger",
+
+
+
+
+
+
+
+
+
+
 -- decimalExactNumericType
 --     : (DECIMAL | DEC) (LEFT_PAREN precision (COMMA scale)? RIGHT_PAREN notNull?)?
 --     ;
---
+      def "DecimalExactNumericType" $
+        optional $ gql "PrecisionAndScale"],
+
+      def "PrecisionAndScale" $
+        record [
+          "precision">: gql "Precision",
+          "scale">: optional $ gql "Scale",
+          "notNull">: boolean],
+
 -- precision
 --     : unsignedDecimalInteger
 --     ;
---
+      def "Precision" $
+        gql "UnsignedDecimalInteger",
+
 -- scale
 --     : unsignedDecimalInteger
 --     ;
---
+      def "Scale" $
+        gql "UnsignedDecimalInteger",
+
 -- approximateNumericType
 --     : FLOAT16 notNull?
 --     | FLOAT32 notNull?
@@ -2151,12 +3666,60 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | REAL notNull?
 --     | DOUBLE PRECISION? notNull?
 --     ;
---
+      def "ApproximateNumericType" $
+        union [
+          "float16">: gql "Float16Type",
+          "float32">: gql "Float32Type",
+          "float64">: gql "Float64Type",
+          "float128">: gql "Float128Type",
+          "float256">: gql "Float256Type",
+          "floatWithPrecision">: gql "FloatTypeWithPrecision",
+          "real">: gql "RealType",
+          "doubleWithPrecision">: gql "DoubleTypeWithPrecision"],
+
+      def "Float16Type" $
+        record [
+          "notNull">: boolean],
+
+      def "Float32Type" $
+        record [
+          "notNull">: boolean],
+
+      def "Float64Type" $
+        record [
+          "notNull">: boolean],
+
+      def "Float128Type" $
+        record [
+          "notNull">: boolean],
+
+      def "Float256Type" $
+        record [
+          "notNull">: boolean],
+
+      def "FloatTypeWithPrecision" $
+        record [
+          "precisionAndScale">: optional $ gql "PrecisionAndScale",
+          "notNull">: boolean],
+
+      def "RealType" $
+        record [
+          "notNull">: boolean],
+
+      def "DoubleTypeWithPrecision" $
+        record [
+          "precision">: boolean,
+          "notNull">: boolean],
+
 -- temporalType
 --     : temporalInstantType
 --     | temporalDurationType
 --     ;
---
+      def "TemporalType" $
+        union [
+          "instantType">: gql "TemporalInstantType",
+          "durationType">: gql "TemporalDurationType"],
+
 -- temporalInstantType
 --     : datetimeType
 --     | localdatetimeType
@@ -2164,146 +3727,325 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | timeType
 --     | localtimeType
 --     ;
---
+      def "TemporalInstantType" $
+        union [
+          "datetimeType">: gql "DatetimeType",
+          "localdatetimeType">: gql "LocaldatetimeType",
+          "dateType">: gql "DateType",
+          "timeType">: gql "TimeType",
+          "localtimeType">: gql "LocaltimeType"],
+
 -- datetimeType
 --     : ZONED DATETIME notNull?
 --     | TIMESTAMP WITH TIME ZONE notNull?
 --     ;
---
+      def "DatetimeType" $
+        union [
+          "zonedDatetime">: gql "ZonedDatetimeType",
+          "timestampWithTimeZone">: gql "TimestampWithTimeZoneType"],
+
+      def "ZonedDatetimeType" $
+        record [
+          "notNull">: boolean],
+
+      def "TimestampWithTimeZoneType" $
+        record [
+          "notNull">: boolean],
+
 -- localdatetimeType
 --     : LOCAL DATETIME notNull?
 --     | TIMESTAMP (WITHOUT TIME ZONE)? notNull?
 --     ;
---
+      def "LocaldatetimeType" $
+        union [
+          "localDatetime">: gql "LocalDatetimeType",
+          "timestampWithoutTimeZone">: gql "TimestampWithoutTimeZoneType"],
+
+      def "LocalDatetimeType" $
+        record [
+          "notNull">: boolean],
+
+      def "TimestampWithoutTimeZoneType" $
+        record [
+          "notNull">: boolean],
+
 -- dateType
 --     : DATE notNull?
 --     ;
---
+      def "DateType" $
+        record [
+          "notNull">: boolean],
+
 -- timeType
 --     : ZONED TIME notNull?
 --     | TIME WITH TIME ZONE notNull?
 --     ;
---
+      def "TimeType" $
+        union [
+          "zonedTime">: gql "ZonedTimeType",
+          "timeWithTimeZone">: gql "TimeWithTimeZoneType"],
+
+      def "ZonedTimeType" $
+        record [
+          "notNull">: boolean],
+
+      def "TimeWithTimeZoneType" $
+        record [
+          "notNull">: boolean],
+
 -- localtimeType
 --     : LOCAL TIME notNull?
 --     | TIME WITHOUT TIME ZONE notNull?
 --     ;
---
+      def "LocaltimeType" $
+        union [
+          "localTime">: gql "LocalTimeType",
+          "timeWithoutTimeZone">: gql "TimeWithoutTimeZoneType"],
+
+      def "LocalTimeType" $
+        record [
+          "notNull">: boolean],
+
+      def "TimeWithoutTimeZoneType" $
+        record [
+          "notNull">: boolean],
+
 -- temporalDurationType
 --     : DURATION LEFT_PAREN temporalDurationQualifier RIGHT_PAREN notNull?
 --     ;
---
+      def "TemporalDurationType" $
+        record [
+          "qualifier">: gql "TemporalDurationQualifier",
+          "notNull">: boolean],
+
 -- temporalDurationQualifier
 --     : YEAR TO MONTH
 --     | DAY TO SECOND
 --     ;
---
+      def "TemporalDurationQualifier" $
+        enum ["yearToMonth", "dayToSecond"],
+
+
+
+
+
+
+
 -- referenceValueType
 --     : graphReferenceValueType
 --     | bindingTableReferenceValueType
 --     | nodeReferenceValueType
 --     | edgeReferenceValueType
 --     ;
---
+      def "ReferenceValueType" $
+        union [
+          "graph">: gql "GraphReferenceValueType",
+          "bindingTable">: gql "BindingTableReferenceValueType",
+          "node">: gql "NodeReferenceValueType",
+          "edge">: gql "EdgeReferenceValueType"],
+
 -- immaterialValueType
 --     : nullType
 --     | emptyType
 --     ;
---
+      def "ImmaterialValueType" $
+        union [
+          "nullType">: gql "NullType",
+          "emptyType">: gql "EmptyType"],
+
 -- nullType
 --     : NULL_KW
 --     ;
---
+      def "NullType"
+        unit,
+
 -- emptyType
 --     : NULL_KW notNull
 --     | NOTHING
 --     ;
---
+      def "EmptyType" $
+        unit,
+
 -- graphReferenceValueType
 --     : openGraphReferenceValueType
 --     | closedGraphReferenceValueType
 --     ;
---
+      def "GraphReferenceValueType" $
+        union [
+          "open">: gql "OpenGraphReferenceValueType",
+          "closed">: gql "ClosedGraphReferenceValueType"],
+
 -- closedGraphReferenceValueType
 --     : PROPERTY? GRAPH nestedGraphTypeSpecification notNull?
 --     ;
---
+      def "ClosedGraphReferenceValueType" $
+        record [
+          "property">: boolean,
+          "nestedSpec">: gql "NestedGraphTypeSpecification",
+          "notNull">: boolean],
+
 -- openGraphReferenceValueType
 --     : ANY PROPERTY? GRAPH notNull?
 --     ;
---
+      def "OpenGraphReferenceValueType" $
+        record [
+          "any">: optional boolean,
+          "property">: boolean,
+          "notNull">: boolean],
+
 -- bindingTableReferenceValueType
 --     : bindingTableType notNull?
 --     ;
---
+      def "BindingTableReferenceValueType" $
+        record [
+          "bindingTableType">: gql "BindingTableType",
+          "notNull">: boolean],
+
 -- nodeReferenceValueType
 --     : openNodeReferenceValueType
 --     | closedNodeReferenceValueType
 --     ;
---
+      def "NodeReferenceValueType" $
+        union [
+          "open">: gql "OpenNodeReferenceValueType",
+          "closed">: gql "ClosedNodeReferenceValueType"],
+
 -- closedNodeReferenceValueType
 --     : nodeTypeSpecification notNull?
 --     ;
---
+      def "ClosedNodeReferenceValueType" $
+        record [
+          "nodeTypeSpec">: gql "NodeTypeSpecification",
+          "notNull">: boolean],
+
 -- openNodeReferenceValueType
 --     : ANY? nodeSynonym notNull?
 --     ;
---
+      def "OpenNodeReferenceValueType" $
+        record [
+          "any">: boolean,
+          "nodeSynonym">: gql "NodeSynonym",
+          "notNull">: boolean],
+
 -- edgeReferenceValueType
 --     : openEdgeReferenceValueType
 --     | closedEdgeReferenceValueType
 --     ;
---
+      def "EdgeReferenceValueType" $
+        union [
+          "open">: gql "OpenEdgeReferenceValueType",
+          "closed">: gql "ClosedEdgeReferenceValueType"],
+
 -- closedEdgeReferenceValueType
 --     : edgeTypeSpecification notNull?
 --     ;
---
+      def "ClosedEdgeReferenceValueType" $
+        record [
+          "edgeTypeSpec">: gql "EdgeTypeSpecification",
+          "notNull">: boolean],
+
 -- openEdgeReferenceValueType
 --     : ANY? edgeSynonym notNull?
 --     ;
---
+      def "OpenEdgeReferenceValueType" $
+        record [
+          "any">: boolean,
+          "edgeSynonym">: gql "EdgeSynonym",
+          "notNull">: boolean],
+
 -- pathValueType
 --     : PATH notNull?
 --     ;
---
+      def "PathValueType" $
+        record [
+          "notNull">: boolean],
+
 -- listValueTypeName
 --     : GROUP? listValueTypeNameSynonym
 --     ;
---
+      def "ListValueTypeName" $
+        record [
+          "group">: boolean,
+          "synonym">: gql "ListValueTypeNameSynonym"],
+
 -- listValueTypeNameSynonym
 --     : LIST
 --     | ARRAY
 --     ;
---
+      def "ListValueTypeNameSynonym" $
+        enum ["list", "array"],
+
 -- recordType
 --     : ANY? RECORD notNull?
 --     | RECORD? fieldTypesSpecification notNull?
 --     ;
---
+      def "RecordType" $
+        union [
+          "anyRecord">: gql "AnyRecordType",
+          "specifiedRecord">: gql "SpecifiedRecordType"],
+
+      def "AnyRecordType" $
+        record [
+          "any">: boolean,
+          "notNull">: boolean],
+
+      def "SpecifiedRecordType" $
+        record [
+          "record">: boolean,
+          "fieldTypes">: gql "FieldTypesSpecification",
+          "notNull">: boolean],
+
 -- fieldTypesSpecification
 --     : LEFT_BRACE fieldTypeList? RIGHT_BRACE
 --     ;
---
+      def "FieldTypesSpecification" $
+        optional $ gql "FieldTypeList",
+
 -- fieldTypeList
 --     : fieldType (COMMA fieldType)*
 --     ;
---
+      def "FieldTypeList" $
+        nonemptyList $ gql "FieldType",
+
 -- notNull
---     :  NOT NULL_KW
+--     : NOT NULL_KW
 --     ;
---
+      def "NotNull" $
+        unit,
+
+
+
+
+
+
+
+
 -- // 18.10 <field type>
 --
 -- fieldType
 --     : fieldName typed? valueType
 --     ;
---
+      def "FieldType" $
+        record [
+          "fieldName">: gql "FieldName",
+          "typed">: optional $ gql "Typed",
+          "valueType">: gql "ValueType"],
+
+
+
+
+
+
+
+
 -- // 19.1 <search condition>
 --
 -- searchCondition
 --     : booleanValueExpression
 --     ;
---
+      def "SearchCondition" $
+        gql "BooleanValueExpression",
+
 -- // 19.2 <predicate>
 --
 -- predicate
@@ -2317,7 +4059,23 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | samePredicate
 --     | property_existsPredicate
 --     ;
---
+      def "Predicate" $
+        union [
+          "existsPredicate">: gql "ExistsPredicate",
+          "nullPredicate">: gql "NullPredicate",
+          "valueTypePredicate">: gql "ValueTypePredicate",
+          "directedPredicate">: gql "DirectedPredicate",
+          "labeledPredicate">: gql "LabeledPredicate",
+          "sourceDestinationPredicate">: gql "SourceDestinationPredicate",
+          "allDifferentPredicate">: gql "AllDifferentPredicate",
+          "samePredicate">: gql "SamePredicate",
+          "propertyExistsPredicate">: gql "PropertyExistsPredicate"],
+
+
+
+
+
+
 -- // 19.3 <comparison predicate>
 --
 -- // The <comparison predicate> productions moved to valueExpression
@@ -2326,7 +4084,11 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 -- comparisonPredicatePart2
 --     : compOp valueExpression
 --     ;
---
+      def "ComparisonPredicatePart2" $
+        record [
+          "compOp">: gql "CompOp",
+          "valueExpression">: gql "ValueExpression"],
+
 -- compOp
 --     : EQUALS_OPERATOR
 --     | NOT_EQUALS_OPERATOR
@@ -2335,138 +4097,321 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | LESS_THAN_OR_EQUALS_OPERATOR
 --     | GREATER_THAN_OR_EQUALS_OPERATOR
 --     ;
---
+      def "CompOp" $
+        enum [
+          "equals",
+          "notEquals",
+          "lessThan",
+          "greaterThan",
+          "lessThanOrEquals",
+          "greaterThanOrEquals"],
+
 -- // 19.4 <exists predicate>
 --
 -- existsPredicate
 --     : EXISTS (LEFT_BRACE graphPattern RIGHT_BRACE | LEFT_PAREN graphPattern RIGHT_PAREN | LEFT_BRACE matchStatementBlock RIGHT_BRACE | LEFT_PAREN matchStatementBlock RIGHT_PAREN | nestedQuerySpecification)
 --     ;
---
+      def "ExistsPredicate" $
+        union [
+          "graphPatternBrace">: gql "GraphPattern",
+          "graphPatternParen">: gql "GraphPattern",
+          "matchBlockBrace">: gql "MatchStatementBlock",
+          "matchBlockParen">: gql "MatchStatementBlock",
+          "nestedQuery">: gql "NestedQuerySpecification"],
+
+
+
+
+
 -- // 19.5 <null predicate>
 --
 -- nullPredicate
 --     : valueExpressionPrimary nullPredicatePart2
 --     ;
---
+      def "NullPredicate" $
+        record [
+          "valueExpression">: gql "ValueExpressionPrimary",
+          "nullPart">: gql "NullPredicatePart2"],
+
 -- nullPredicatePart2
 --     : IS NOT? NULL_KW
 --     ;
---
+      def "NullPredicatePart2" $
+        record [
+          "not">: boolean],
+
 -- // 19.6 <value type predicate>
 --
 -- valueTypePredicate
 --     : valueExpressionPrimary valueTypePredicatePart2
 --     ;
---
+      def "ValueTypePredicate" $
+        record [
+          "valueExpression">: gql "ValueExpressionPrimary",
+          "valueTypePart">: gql "ValueTypePredicatePart2"],
+
 -- valueTypePredicatePart2
 --     : IS NOT? typed valueType
 --     ;
---
+      def "ValueTypePredicatePart2" $
+        record [
+          "not">: boolean,
+          "typed">: gql "Typed",
+          "valueType">: gql "ValueType"],
+
 -- // 19.7 <normalized predicate>
 --
 -- normalizedPredicatePart2
 --     : IS NOT? normalForm? NORMALIZED
 --     ;
---
+      def "NormalizedPredicatePart2" $
+        record [
+          "not">: boolean,
+          "normalForm">: optional $ gql "NormalForm"],
+
+
+
+
+
+
+
+
 -- // 19.8 <directed predicate>
 --
 -- directedPredicate
 --     : elementVariableReference directedPredicatePart2
 --     ;
---
+      def "DirectedPredicate" $
+        record [
+          "elementVariableReference">: gql "ElementVariableReference",
+          "directedPart">: gql "DirectedPredicatePart2"],
+
 -- directedPredicatePart2
 --     : IS NOT? DIRECTED
 --     ;
---
--- // 19.9 <labled predicate>
+      def "DirectedPredicatePart2" $
+        record [
+          "not">: boolean],
+
+-- // 19.9 <labeled predicate>
 --
 -- labeledPredicate
 --     : elementVariableReference labeledPredicatePart2
 --     ;
---
+      def "LabeledPredicate" $
+        record [
+          "elementVariableReference">: gql "ElementVariableReference",
+          "labeledPart">: gql "LabeledPredicatePart2"],
+
 -- labeledPredicatePart2
 --     : isLabeledOrColon labelExpression
 --     ;
---
+      def "LabeledPredicatePart2" $
+        record [
+          "isLabeledOrColon">: gql "IsLabeledOrColon",
+          "labelExpression">: gql "LabelExpression"],
+
 -- isLabeledOrColon
 --     : IS NOT? LABELED
 --     | COLON
 --     ;
---
+      def "IsLabeledOrColon" $
+        union [
+          "not">: boolean,
+          "colon">: unit],
+
+
+
+
+
+
 -- // 19.10 <source/destination predicate>
 --
 -- sourceDestinationPredicate
 --     : nodeReference sourcePredicatePart2
 --     | nodeReference destinationPredicatePart2
 --     ;
---
+      def "SourceDestinationPredicate" $
+        union [
+          "sourcePredicate">: gql "SourcePredicate",
+          "destinationPredicate">: gql "DestinationPredicate"],
+
 -- nodeReference
 --     : elementVariableReference
 --     ;
---
+      def "NodeReference" $
+        gql "ElementVariableReference",
+
 -- sourcePredicatePart2
 --     : IS NOT? SOURCE OF edgeReference
 --     ;
---
+      def "SourcePredicate" $
+        record [
+          "not">: boolean,
+          "sourceOf">: gql "EdgeReference"],
+
 -- destinationPredicatePart2
 --     : IS NOT? DESTINATION OF edgeReference
 --     ;
---
+      def "DestinationPredicate" $
+        record [
+          "nodeReference">: gql "NodeReference",
+          "not">: boolean,
+          "destinationOf">: gql "EdgeReference"],
+
 -- edgeReference
 --     : elementVariableReference
 --     ;
---
+      def "EdgeReference" $
+        gql "ElementVariableReference",
+
+
+
+
+
+
 -- // 19.11 <all different predicate>
 --
 -- all_differentPredicate
 --     : ALL_DIFFERENT LEFT_PAREN elementVariableReference COMMA elementVariableReference (COMMA elementVariableReference)* RIGHT_PAREN
 --     ;
---
+      def "AllDifferentPredicate" $
+        record [
+          "references">: nonemptyList $ gql "ElementVariableReference"],
+
 -- // 19.12 <same predicate>
 --
 -- samePredicate
 --     : SAME LEFT_PAREN elementVariableReference COMMA elementVariableReference (COMMA elementVariableReference)* RIGHT_PAREN
 --     ;
---
+      def "SamePredicate" $
+        record [
+          "references">: nonemptyList $ gql "ElementVariableReference"],
+
 -- // 19.13 <property exists predicate>
 --
 -- property_existsPredicate
 --     : PROPERTY_EXISTS LEFT_PAREN elementVariableReference COMMA propertyName RIGHT_PAREN
 --     ;
---
+      def "PropertyExistsPredicate" $
+        record [
+          "elementVariableReference">: gql "ElementVariableReference",
+          "propertyName">: gql "PropertyName"],
+
+
+
+
+
 -- // 20.1 <value expression>
 --
--- // This version of valueExpression sucks up rules broken out in the standard to a single production. This
--- // eliminates ambiguity in multiple rules specifying valueExpressionPrimary.
---
 -- valueExpression
---     // Numeric, datetime and duration types all support roughly the same expressions. So here
---     // we define a rule that deals with all of them. It is up to the implementation to post
---     // process the sytnax tree and flag invalid type and function combinations.
 --     : sign = (PLUS_SIGN | MINUS_SIGN) valueExpression                       #signedExprAlt
 --     | valueExpression operator = (ASTERISK | SOLIDUS) valueExpression       #multDivExprAlt
 --     | valueExpression operator = (PLUS_SIGN | MINUS_SIGN) valueExpression   #addSubtractExprAlt
---     // Character strings, byte strings, lists and paths all support the same concatenation
---     // operator. So here we define a rule that deals with all of them. Of course the types
---     // cannot be combined. So it is up to implementation to post process the sytax tree
---     // and flag invalid type and function combinations.
 --     | valueExpression CONCATENATION_OPERATOR valueExpression                #concatenationExprAlt
---     // Boolean value expression included here.
 --     | NOT valueExpression                                                   #notExprAlt
 --     | valueExpression IS NOT? truthValue                                    #isNotExprAlt
 --     | valueExpression AND valueExpression                                   #conjunctiveExprAlt
 --     | valueExpression operator = (OR | XOR) valueExpression                 #disjunctiveExprAlt
---     // The comparisonPredicate productions moved here to eliminate left mutual recursion.
 --     | valueExpression comparisonPredicatePart2                              #comparisonExprAlt
 --     | predicate                                                             #predicateExprAlt
---     // The normalizedPredicate productions moved here to eliminate left mutual recursion.
 --     | valueExpression normalizedPredicatePart2                              #normalizedPredicateExprAlt
 --     | PROPERTY? GRAPH graphExpression                                       #propertyGraphExprAlt
 --     | BINDING? TABLE bindingTableExpression                                 #bindingTableExprAlt
 --     | valueFunction                                                         #valueFunctionExprAlt
 --     | valueExpressionPrimary                                                #primaryExprAlt
 --     ;
---
+      def "ValueExpression" $
+        union [
+          "signed">: gql "SignedExpr",
+          "multDiv">: gql "MultDivExpr",
+          "addSubtract">: gql "AddSubtractExpr",
+          "concatenation">: gql "ConcatenationExpr",
+          "not">: gql "NotExpr",
+          "isNot">: gql "IsNotExpr",
+          "conjunctive">: gql "ConjunctiveExpr",
+          "disjunctive">: gql "DisjunctiveExpr",
+          "comparison">: gql "ComparisonExpr",
+          "predicate">: gql "Predicate",
+          "normalizedPredicate">: gql "NormalizedPredicateExpr",
+          "propertyGraph">: gql "GraphExpression",
+          "bindingTable">: gql "BindingTableExpression",
+          "valueFunction">: gql "ValueFunction",
+          "primary">: gql "ValueExpressionPrimary"],
+
+      def "SignedExpr" $
+        record [
+          "sign">: gql "Sign",
+          "valueExpression">: gql "ValueExpression"],
+
+      def "MultDivExpr" $
+        record [
+          "left">: gql "ValueExpression",
+          "operator">: gql "MultDivOperator",
+          "right">: gql "ValueExpression"],
+
+      def "AddSubtractExpr" $
+        record [
+          "left">: gql "ValueExpression",
+          "operator">: gql "AddSubtractOperator",
+          "right">: gql "ValueExpression"],
+
+      def "ConcatenationExpr" $
+        record [
+          "left">: gql "ValueExpression",
+          "right">: gql "ValueExpression"],
+
+      def "NotExpr" $
+        gql "ValueExpression",
+
+      def "IsNotExpr" $
+        record [
+          "valueExpression">: gql "ValueExpression",
+          "not">: boolean,
+          "truthValue">: gql "TruthValue"],
+
+      def "ConjunctiveExpr" $
+        record [
+          "left">: gql "ValueExpression",
+          "right">: gql "ValueExpression"],
+
+      def "DisjunctiveExpr" $
+        record [
+          "left">: gql "ValueExpression",
+          "operator">: gql "DisjunctiveOperator",
+          "right">: gql "ValueExpression"],
+
+      def "ComparisonExpr" $
+        record [
+          "valueExpression">: gql "ValueExpression",
+          "comparison">: gql "ComparisonPredicatePart2"],
+
+      def "NormalizedPredicateExpr" $
+        record [
+          "valueExpression">: gql "ValueExpression",
+          "normalizedPredicate">: gql "NormalizedPredicatePart2"],
+
+      def "Sign" $
+        enum ["plus", "minus"],
+
+      def "MultDivOperator" $
+        enum ["multiply", "divide"],
+
+      def "AddSubtractOperator" $
+        enum ["add", "subtract"],
+
+      def "DisjunctiveOperator" $
+        enum ["or", "xor"],
+
+      def "TruthValue" $
+        enum ["true", "false"],
+
+
+
+
+
+
+
 -- valueFunction
 --     : numericValueFunction
 --     | datetimeSubtraction
@@ -2475,11 +4420,21 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | characterOrByteStringFunction
 --     | listValueFunction
 --     ;
---
+      def "ValueFunction" $
+        union [
+          "numeric">: gql "NumericValueFunction",
+          "datetimeSubtraction">: gql "DatetimeSubtraction",
+          "datetime">: gql "DatetimeValueFunction",
+          "duration">: gql "DurationValueFunction",
+          "characterOrByteString">: gql "CharacterOrByteStringFunction",
+          "list">: gql "ListValueFunction"],
+
 -- booleanValueExpression
 --     : valueExpression
 --     ;
---
+      def "BooleanValueExpression" $
+        gql "ValueExpression",
+
 -- characterOrByteStringFunction
 --     : subCharacterOrByteString
 --     | trimSingleCharacterOrByteString
@@ -2487,39 +4442,90 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | trimMultiCharacterCharacterString
 --     | normalizeCharacterString
 --     ;
---
+      def "CharacterOrByteStringFunction" $
+        union [
+          "sub">: gql "SubCharacterOrByteString",
+          "trimSingle">: gql "TrimSingleCharacterOrByteString",
+          "fold">: gql "FoldCharacterString",
+          "trimMultiCharacter">: gql "TrimMultiCharacterCharacterString",
+          "normalize">: gql "NormalizeCharacterString"],
+
+
+
+
+
 -- subCharacterOrByteString
 --     : (LEFT | RIGHT) LEFT_PAREN valueExpression COMMA stringLength RIGHT_PAREN
 --     ;
---
+      def "SubCharacterOrByteString" $
+        record [
+          "side">: gql "Side",
+          "valueExpression">: gql "ValueExpression",
+          "stringLength">: gql "StringLength"],
+
+      def "Side" $
+        enum ["left", "right"],
+
 -- trimSingleCharacterOrByteString
 --     : TRIM LEFT_PAREN trimOperands RIGHT_PAREN
 --     ;
---
+      def "TrimSingleCharacterOrByteString" $
+        gql "TrimOperands",
+
 -- foldCharacterString
 --     : (UPPER | LOWER) LEFT_PAREN valueExpression RIGHT_PAREN
 --     ;
---
+      def "FoldCharacterString" $
+        record [
+          "case">: gql "Case",
+          "valueExpression">: gql "ValueExpression"],
+
+      def "Case" $
+        enum ["upper", "lower"],
+
 -- trimMultiCharacterCharacterString
 --     : (BTRIM | LTRIM | RTRIM) LEFT_PAREN valueExpression (COMMA valueExpression)? RIGHT_PAREN
 --     ;
---
+      def "TrimMultiCharacterCharacterString" $
+        record [
+          "trimType">: gql "TrimType",
+          "valueExpression">: gql "ValueExpression",
+          "optionalValueExpression">: optional $ gql "ValueExpression"],
+
+      def "TrimType" $
+        enum ["btrim", "ltrim", "rtrim"],
+
 -- normalizeCharacterString
 --     : NORMALIZE LEFT_PAREN valueExpression (COMMA normalForm)? RIGHT_PAREN
 --     ;
---
+      def "NormalizeCharacterString" $
+        record [
+          "valueExpression">: gql "ValueExpression",
+          "normalForm">: optional $ gql "NormalForm"],
+
 -- nodeReferenceValueExpression
 --     : valueExpressionPrimary
 --     ;
---
+      def "NodeReferenceValueExpression" $
+        gql "ValueExpressionPrimary",
+
 -- edgeReferenceValueExpression
 --     : valueExpressionPrimary
 --     ;
---
+      def "EdgeReferenceValueExpression" $
+        gql "ValueExpressionPrimary",
+
 -- aggregatingValueExpression
 --     : valueExpression
 --     ;
---
+      def "AggregatingValueExpression" $
+        gql "ValueExpression",
+
+
+
+
+
+
 -- // 20.2 <value expression primary>
 --
 -- valueExpressionPrimary
@@ -2563,6 +4569,13 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | letValueExpression
 --     ;
 --
+
+
+
+
+
+
+
 -- // 20.3 <value specification>
 --
 -- unsignedValueSpecification
