@@ -3,7 +3,8 @@
 This project contains additional models, coders, and tools which are too domain-specific to belong in the core Hydra implementations
 (i.e. Hydra-Haskell and Hydra-Java), but which are useful for particular applications.
 Hydra-Ext contains both Haskell and Java code.
-JavaDocs for Hydra-Ext can be found [here](https://categoricaldata.github.io/hydra/hydra-ext/javadoc).
+JavaDocs for Hydra-Ext can be found [here](https://categoricaldata.github.io/hydra/hydra-ext/javadoc),
+and releases can be found on Maven Central [here](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-ext).
 
 ## Models
 

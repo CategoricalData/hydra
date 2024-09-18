@@ -147,6 +147,9 @@ matchWithVariants tname def pairs = match tname def (toField <$> pairs)
   where
     toField (from, to) = Field from $ constant $ unitVariant tname to
 
+nonNegativeInt32 :: Int -> Term
+nonNegativeInt32 = int32
+
 nothing :: Term
 nothing = optional Nothing
 
