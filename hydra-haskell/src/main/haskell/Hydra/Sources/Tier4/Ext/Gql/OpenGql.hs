@@ -76,7 +76,7 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "ProcedureAndMaybeEnd" $
         record [
           "procedure">: gql "ProcedureSpecification",
-          "end">: optional $ gql "EndTransactionCommand"]
+          "end">: optional $ gql "EndTransactionCommand"],
 
 -- endTransactionCommand = rollbackCommand
 --                       | commitCommand
@@ -84,7 +84,7 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "EndTransactionCommand" $
         union [
           "rollback">: gql "RollbackCommand",
-          "commit">: gql "CommitCommand"]
+          "commit">: gql "CommitCommand"],
 
 -- // 7.1 <session set command>
 --
@@ -104,7 +104,8 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 
 -- sessionSetGraphClause = PROPERTY? GRAPH graphExpression
 --                       ;
-      def "SessionSetGraphClause" $ gql "GraphExpression"],
+      def "SessionSetGraphClause" $
+        gql "GraphExpression",
 
 -- sessionSetTimeZoneClause = TIME ZONE setTimeZoneValue
 --                          ;
@@ -153,7 +154,7 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "SessionSetParameterName" $
         record [
           "ifNotExists">: boolean,
-          "parameter">: gql "SessionParameterSpecification"]
+          "parameter">: gql "SessionParameterSpecification"],
 
 -- // 7.2 <session reset command>
 --
@@ -189,7 +190,7 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "ParameterSessionSpecification" $
         record [
           "parameter">: boolean,
-          "sessionParameterSpecification">: gql "SessionParameterSpecification"]
+          "sessionParameterSpecification">: gql "SessionParameterSpecification"],
 
 -- // 7.3 <session close command>
 --
@@ -205,7 +206,7 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     : GENERAL_PARAMETER_REFERENCE
 --     ;
       def "SessionParameterSpecification" $
-        gql "GeneralParameterReference",
+        gql "ParameterName",
 
 -- // 8.1 <start transaction command>
 --
@@ -302,9 +303,9 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "ProcedureBody" $
         record [
-          "atSchema":> optional $ gql "AtSchemaClause",
-          "bindings":> optional $ gql "BindingVariableDefinitionBlock",
-          "statements":> gql "StatementBlock"],
+          "atSchema">: optional $ gql "AtSchemaClause",
+          "bindings">: optional $ gql "BindingVariableDefinitionBlock",
+          "statements">: gql "StatementBlock"],
 
 -- bindingVariableDefinitionBlock
 --     : bindingVariableDefinition+
@@ -319,17 +320,17 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "BindingVariableDefinition" $
         union [
-          "graph":> gql "GraphVariableDefinition",
-          "table":> gql "BindingTableVariableDefinition",
-          "value":> gql "ValueVariableDefinition"],
+          "graph">: gql "GraphVariableDefinition",
+          "table">: gql "BindingTableVariableDefinition",
+          "value">: gql "ValueVariableDefinition"],
 
 -- statementBlock
 --     : statement nextStatement*
 --     ;
       def "StatementBlock" $
         record [
-          "statement":> gql "Statement",
-          "nextStatements":> list $ gql "NextStatement"],
+          "statement">: gql "Statement",
+          "nextStatements">: list $ gql "NextStatement"],
 
 -- statement
 --     : linearCatalogModifyingStatement
@@ -338,17 +339,17 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "Statement" $
         union [
-          "linearCatalogModifying":> gql "LinearCatalogModifyingStatement",
-          "linearDataModifying":> gql "LinearDataModifyingStatement",
-          "compositeQuery":> gql "CompositeQueryStatement"],
+          "linearCatalogModifying">: gql "LinearCatalogModifyingStatement",
+          "linearDataModifying">: gql "LinearDataModifyingStatement",
+          "compositeQuery">: gql "CompositeQueryStatement"],
 
 -- nextStatement
 --     : NEXT yieldClause? statement
 --     ;
       def "NextStatement" $
         record [
-          "yieldClause":> optional $ gql "YieldClause",
-          "statement":> gql "Statement"],
+          "yieldClause">: optional $ gql "YieldClause",
+          "statement">: gql "Statement"],
 
 -- // 10.1 <graph variable definition>
 
@@ -357,21 +358,21 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "GraphVariableDefinition" $
         record [
-          "variable":> gql "BindingVariable",
-          "initializer":> gql "OptTypedGraphInitializer"],
+          "variable">: gql "BindingVariable",
+          "initializer">: gql "OptTypedGraphInitializer"],
 
 -- optTypedGraphInitializer
 --     : (typed? graphReferenceValueType)? graphInitializer
 --     ;
       def "OptTypedGraphInitializer" $
         record [
-          "type":> optional $ gql "TypedGraphReferenceValueType",
-          "initializer":> gql "GraphInitializer"],
+          "type">: optional $ gql "TypedGraphReferenceValueType",
+          "initializer">: gql "GraphInitializer"],
 
       def "TypedGraphReferenceValueType" $
         record [
-          "typed":> optional $ gql "Typed",
-          "valueType":> gql "GraphReferenceValueType"],
+          "typed">: optional $ gql "Typed",
+          "valueType">: gql "GraphReferenceValueType"],
 
 -- graphInitializer
 --     : EQUALS_OPERATOR graphExpression
@@ -385,23 +386,23 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "BindingTableVariableDefinition" $
         record [
-          "binding":> boolean,
-          "variable":> gql "BindingVariable",
-          "initializer":> gql "OptTypedBindingTableInitializer"],
+          "binding">: boolean,
+          "variable">: gql "BindingVariable",
+          "initializer">: gql "OptTypedBindingTableInitializer"],
 
 -- optTypedBindingTableInitializer
 --     : (typed? bindingTableReferenceValueType)? bindingTableInitializer
 --     ;
       def "OptTypedBindingTableInitializer" $
         record [
-          "type":> optional $ gql "TypedBindingTableReferenceValueType",
-          "initializer":> gql "BindingTableInitializer"],
+          "type">: optional $ gql "TypedBindingTableReferenceValueType",
+          "initializer">: gql "BindingTableInitializer"],
 
 -- typedBindingTableReferenceValueType
       def "TypedBindingTableReferenceValueType" $
         record [
-          "typed":> optional $ gql "Typed",
-          "valueType":> gql "BindingTableReferenceValueType"],
+          "typed">: optional $ gql "Typed",
+          "valueType">: gql "BindingTableReferenceValueType"],
 
 -- bindingTableInitializer
 --     : EQUALS_OPERATOR bindingTableExpression
@@ -415,22 +416,22 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "ValueVariableDefinition" $
         record [
-          "variable":> gql "BindingVariable",
-          "initializer":> gql "OptTypedValueInitializer"],
+          "variable">: gql "BindingVariable",
+          "initializer">: gql "OptTypedValueInitializer"],
 
 -- optTypedValueInitializer
 --     : (typed? valueType)? valueInitializer
 --     ;
       def "OptTypedValueInitializer" $
         record [
-          "type":> optional $ gql "TypedValueType",
-          "initializer":> gql "ValueInitializer"],
+          "type">: optional $ gql "TypedValueType",
+          "initializer">: gql "ValueInitializer"],
 
 -- typedValueType
       def "TypedValueType" $
         record [
-          "typed":> optional $ gql "Typed",
-          "valueType":> gql "ValueType"],
+          "typed">: optional $ gql "Typed",
+          "valueType">: gql "ValueType"],
 
 -- valueInitializer
 --     : EQUALS_OPERATOR valueExpression
@@ -447,10 +448,10 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "GraphExpression" $
         union [
-          "object":> gql "ObjectExpressionPrimary",
-          "reference":> gql "GraphReference",
-          "name":> gql "ObjectNameOrBindingVariable",
-          "current":> gql "CurrentGraph"],
+          "object">: gql "ObjectExpressionPrimary",
+          "reference">: gql "GraphReference",
+          "name">: gql "ObjectNameOrBindingVariable",
+          "current">: gql "CurrentGraph"],
 
 -- currentGraph
 --     : CURRENT_PROPERTY_GRAPH
@@ -469,10 +470,10 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "BindingTableExpression" $
         union [
-          "nested":> gql "NestedBindingTableQuerySpecification",
-          "object":> gql "ObjectExpressionPrimary",
-          "table":> gql "BindingTableReference",
-          "name":> gql "ObjectNameOrBindingVariable"],
+          "nested">: gql "NestedBindingTableQuerySpecification",
+          "object">: gql "ObjectExpressionPrimary",
+          "table">: gql "BindingTableReference",
+          "name">: gql "ObjectNameOrBindingVariable"],
 
 -- nestedBindingTableQuerySpecification
 --     : nestedQuerySpecification
@@ -488,9 +489,9 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "ObjectExpressionPrimary" $
         union [
-          "variable":> gql "ValueExpressionPrimary",
-          "parenthesized":> gql "ParenthesizedValueExpression",
-          "nonParenthesized":> gql "NonParenthesizedValueExpressionPrimarySpecialCase"],
+          "variable">: gql "ValueExpressionPrimary",
+          "parenthesized">: gql "ParenthesizedValueExpression",
+          "nonParenthesized">: gql "NonParenthesizedValueExpressionPrimarySpecialCase"],
 
 -- // 12.1 <linear catalog-modifying statement>
 --
@@ -562,6 +563,11 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
         union [
           "graphIfNotExists">: boolean,
           "orReplace">: unit],
+
+      def "GraphTypeOption" $
+        union [
+          "openGraphType">: gql "OpenGraphType",
+          "ofGraphType">: gql "OfGraphType"],
 
 -- openGraphType
 --     : typed? ANY (PROPERTY? GRAPH)?
@@ -1269,7 +1275,7 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     : AS identifier
 --     ;
       def "ReturnItemAlias" $
-        gql "Identifier",
+        string,
 
 -- // 14.12 <select statement>
 --
@@ -1315,7 +1321,7 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     : AS identifier
 --     ;
       def "SelectItemAlias" $
-        gql "Identifier",
+        string,
 
 -- havingClause
 --     : HAVING searchCondition
@@ -1423,14 +1429,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "ProcedureArgument" $
         gql "ValueExpression",
 
-
-
-
-
-
-
-
-
 -- // 16.1 <at schema clause>
 --
 -- atSchemaClause
@@ -1479,12 +1477,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "GraphPatternYieldItem" $
         gql "BindingVariableReference",
-
-
-
-
-
-
 
 -- // 16.4 <graph pattern>
 --
@@ -1570,12 +1562,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "GraphPatternWhereClause" $
         gql "SearchCondition",
 
-
-
-
-
-
-
 -- // 16.5 <insert graph pattern>
 --
 -- insertGraphPattern
@@ -1656,12 +1642,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
           "isOrColon">: optional $ gql "IsOrColon",
           "labelSet">: optional $ gql "LabelSetSpecification",
           "propertySpecification">: optional $ gql "ElementPropertySpecification"],
-
-
-
-
-
-
 
 -- // 16.6 <path pattern prefix>
 --
@@ -1785,12 +1765,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "NumberOfGroups" $
         gql "NonNegativeIntegerSpecification",
-
-
-
-
-
-
 
 -- // 16.7 <path pattern expression>
 --
@@ -2027,13 +2001,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "ParenthesizedPathPatternWhereClause" $
         gql "SearchCondition",
 
-
-
-
-
-
-
-
 -- // 16.8 <label expression>
 --
 -- labelExpression
@@ -2079,13 +2046,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "ElementVariableReference" $
         gql "BindingVariableReference",
 
-
-
-
-
-
-
-
 -- // 16.11 <graph pattern quantifier>
 --
 -- graphPatternQuantifier
@@ -2126,14 +2086,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "UpperBound" $
         gql "UnsignedInteger",
-
-
-
-
-
-
-
-
 
 -- // 16.12 <simplified path pattern expression>
 --
@@ -2368,15 +2320,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
           "labelName">: gql "LabelName",
           "parenthesizedContents">: gql "SimplifiedContents"],
 
-
-
-
-
-
-
-
-
-
 -- // 16.13 <where clause>
 --
 -- whereClause
@@ -2419,13 +2362,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "YieldItemAlias" $
         gql "BindingVariable",
 
-
-
-
-
-
-
-
 -- // 16.15 <group by clause>
 --
 -- groupByClause
@@ -2461,11 +2397,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "OrderByClause" $
         gql "SortSpecificationList",
-
-
-
-
-
 
 -- // 16.17 <sort specification list>
 --
@@ -2530,12 +2461,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "OffsetSynonym" $
         enum ["offset", "skipReservedWord"],
-
-
-
-
-
-
 
 -- // 17.1 <schema reference> and <catalog schema parent name>
 --
@@ -2612,13 +2537,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "SimpleDirectoryPath" $
         nonemptyList $ gql "DirectoryName",
 
-
-
-
-
-
-
-
 -- // 17.2 <graph reference> and <catalog graph parent and name>
 --
 -- graphReference
@@ -2691,11 +2609,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
           "parentReference">: gql "CatalogObjectParentReference",
           "tableName">: gql "BindingTableName"],
 
-
-
-
-
-
 -- // 17.5 <procedure reference> and <catalog procedure parent and name>
 --
 -- procedureReference
@@ -2739,11 +2652,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "ReferenceParameterSpecification" $
         unit,
 
-
-
-
-
-
 -- // 18.1 <nested graph type specification>
 --
 -- nestedGraphTypeSpecification
@@ -2772,12 +2680,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
         union [
           "nodeType">: gql "NodeTypeSpecification",
           "edgeType">: gql "EdgeTypeSpecification"],
-
-
-
-
-
-
 
 -- // 18.2 <node type specification>
 --
@@ -2845,7 +2747,7 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     : regularIdentifier
 --     ;
       def "LocalNodeTypeAlias" $
-        gql "RegularIdentifier",
+        string,
 
 -- nodeTypeImpliedContent
 --     : nodeTypeLabelSet
@@ -2880,12 +2782,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "NodeTypePropertyTypes" $
         gql "PropertyTypesSpecification",
-
-
-
-
-
-
 
 -- // 18.3 <edge type specification>
 --
@@ -3135,22 +3031,14 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 -- sourceNodeTypeAlias
 --     : regularIdentifier
 --     ;
-      def "SourceNodeTypeAlias" $
-        gql "RegularIdentifier",
+      def "SourceNodeTypeAlias"
+        string,
 
 -- destinationNodeTypeAlias
 --     : regularIdentifier
 --     ;
-      def "DestinationNodeTypeAlias" $
-        gql "RegularIdentifier",
-
-
-
-
-
-
-
-
+      def "DestinationNodeTypeAlias"
+        string,
 
 -- // 18.4 <label set phrase> and <label set specification>
 --
@@ -3209,12 +3097,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "PropertyValueType" $
         gql "ValueType",
 
-
-
-
-
-
-
 -- // 18.8 <binding table type>
 --
 -- bindingTableType
@@ -3224,13 +3106,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
         record [
           "binding">: boolean,
           "fieldTypes">: gql "FieldTypesSpecification"],
-
-
-
-
-
-
-
 
 -- // 18.9 <value type>
 --
@@ -3405,13 +3280,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "FixedLength" $
         gql "UnsignedInteger",
 
-
-
-
-
-
-
-
 -- minLength
 --     : unsignedInteger
 --     ;
@@ -3511,6 +3379,11 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
           "precision">: optional $ gql "Precision",
           "notNull">: boolean],
 
+      def "SignedVerboseBinaryExactNumericType" $
+        record [
+          "signed">: boolean,
+          "verboseType">: gql "VerboseBinaryExactNumericType"],
+
 -- unsignedBinaryExactNumericType
 --     : UINT8 notNull?
 --     | UINT16 notNull?
@@ -3534,7 +3407,7 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
           "uSmallInt">: gql "USmallIntType",
           "uintWithPrecision">: gql "UintWithPrecision",
           "uBigInt">: gql "UBigIntType",
-          "unsignedVerboseType">: gql "UnsignedVerboseBinaryExactNumericType"],
+          "unsigned">: gql "VerboseBinaryExactNumericType"],
 
       def "Uint8Type" $
         record ["notNull">: boolean],
@@ -3623,20 +3496,11 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "Precision" $
         gql "UnsignedDecimalInteger",
 
-
-
-
-
-
-
-
-
-
 -- decimalExactNumericType
 --     : (DECIMAL | DEC) (LEFT_PAREN precision (COMMA scale)? RIGHT_PAREN notNull?)?
 --     ;
       def "DecimalExactNumericType" $
-        optional $ gql "PrecisionAndScale"],
+        optional $ gql "PrecisionAndScale",
 
       def "PrecisionAndScale" $
         record [
@@ -3825,12 +3689,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "TemporalDurationQualifier" $
         enum ["yearToMonth", "dayToSecond"],
 
-
-
-
-
-
-
 -- referenceValueType
 --     : graphReferenceValueType
 --     | bindingTableReferenceValueType
@@ -4013,13 +3871,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "NotNull" $
         unit,
 
-
-
-
-
-
-
-
 -- // 18.10 <field type>
 --
 -- fieldType
@@ -4030,13 +3881,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
           "fieldName">: gql "FieldName",
           "typed">: optional $ gql "Typed",
           "valueType">: gql "ValueType"],
-
-
-
-
-
-
-
 
 -- // 19.1 <search condition>
 --
@@ -4070,11 +3914,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
           "allDifferentPredicate">: gql "AllDifferentPredicate",
           "samePredicate">: gql "SamePredicate",
           "propertyExistsPredicate">: gql "PropertyExistsPredicate"],
-
-
-
-
-
 
 -- // 19.3 <comparison predicate>
 --
@@ -4118,10 +3957,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
           "matchBlockBrace">: gql "MatchStatementBlock",
           "matchBlockParen">: gql "MatchStatementBlock",
           "nestedQuery">: gql "NestedQuerySpecification"],
-
-
-
-
 
 -- // 19.5 <null predicate>
 --
@@ -4169,13 +4004,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
           "not">: boolean,
           "normalForm">: optional $ gql "NormalForm"],
 
-
-
-
-
-
-
-
 -- // 19.8 <directed predicate>
 --
 -- directedPredicate
@@ -4220,11 +4048,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
           "not">: boolean,
           "colon">: unit],
 
-
-
-
-
-
 -- // 19.10 <source/destination predicate>
 --
 -- sourceDestinationPredicate
@@ -4265,11 +4088,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "EdgeReference" $
         gql "ElementVariableReference",
 
-
-
-
-
-
 -- // 19.11 <all different predicate>
 --
 -- all_differentPredicate
@@ -4297,10 +4115,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
         record [
           "elementVariableReference">: gql "ElementVariableReference",
           "propertyName">: gql "PropertyName"],
-
-
-
-
 
 -- // 20.1 <value expression>
 --
@@ -4406,12 +4220,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "TruthValue" $
         enum ["true", "false"],
 
-
-
-
-
-
-
 -- valueFunction
 --     : numericValueFunction
 --     | datetimeSubtraction
@@ -4449,10 +4257,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
           "fold">: gql "FoldCharacterString",
           "trimMultiCharacter">: gql "TrimMultiCharacterCharacterString",
           "normalize">: gql "NormalizeCharacterString"],
-
-
-
-
 
 -- subCharacterOrByteString
 --     : (LEFT | RIGHT) LEFT_PAREN valueExpression COMMA stringLength RIGHT_PAREN
@@ -4521,18 +4325,13 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "AggregatingValueExpression" $
         gql "ValueExpression",
 
-
-
-
-
-
 -- // 20.2 <value expression primary>
 --
 -- valueExpressionPrimary
 --     : parenthesizedValueExpression
 --     | aggregateFunction
 --     | unsignedValueSpecification
--- // List and Record literals are reduntantly/abiguously part of the literal production
+-- // List and Record literals are redundantly/ambiguously part of the literal production
 -- //    | listValueConstructor
 -- //    | recordConstructor
 --     | pathValueConstructor
@@ -4544,20 +4343,39 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | letValueExpression
 --     | bindingVariableReference
 --     ;
---
+      def "ValueExpressionPrimary" $
+        union [
+          "parenthesized">: gql "ParenthesizedValueExpression",
+          "aggregateFunction">: gql "AggregateFunction",
+          "unsignedValueSpecification">: gql "UnsignedValueSpecification",
+          "pathValueConstructor">: gql "PathValueConstructor",
+          "propertyReference">: gql "PropertyReference",
+          "valueQueryExpression">: gql "ValueQueryExpression",
+          "caseExpression">: gql "CaseExpression",
+          "castSpecification">: gql "CastSpecification",
+          "elementIdFunction">: gql "ElementIdFunction",
+          "letValueExpression">: gql "LetValueExpression",
+          "bindingVariableReference">: gql "BindingVariableReference"],
+
 -- parenthesizedValueExpression
 --     : LEFT_PAREN valueExpression RIGHT_PAREN
 --     ;
---
+      def "ParenthesizedValueExpression" $
+        gql "ValueExpression",
+
 -- nonParenthesizedValueExpressionPrimary
 --     : nonParenthesizedValueExpressionPrimarySpecialCase
 --     | bindingVariableReference
 --     ;
---
+      def "NonParenthesizedValueExpressionPrimary" $
+        union [
+          "specialCase">: gql "NonParenthesizedValueExpressionPrimarySpecialCase",
+          "bindingVariableReference">: gql "BindingVariableReference"],
+
 -- nonParenthesizedValueExpressionPrimarySpecialCase
 --     : aggregateFunction
 --     | unsignedValueSpecification
--- // List and Record literals are reduntantly/abiguously part of the literal production
+-- // List and Record literals are redundantly/ambiguously part of the literal production
 -- //    | listValueConstructor
 -- //    | recordConstructor
 --     | pathValueConstructor
@@ -4568,13 +4386,17 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | element_idFunction
 --     | letValueExpression
 --     ;
---
-
-
-
-
-
-
+      def "NonParenthesizedValueExpressionPrimarySpecialCase" $
+        union [
+          "aggregateFunction">: gql "AggregateFunction",
+          "unsignedValueSpecification">: gql "UnsignedValueSpecification",
+          "pathValueConstructor">: gql "PathValueConstructor",
+          "propertyReference">: gql "PropertyReference",
+          "valueQueryExpression">: gql "ValueQueryExpression",
+          "caseExpression">: gql "CaseExpression",
+          "castSpecification">: gql "CastSpecification",
+          "elementIdFunction">: gql "ElementIdFunction",
+          "letValueExpression">: gql "LetValueExpression"],
 
 -- // 20.3 <value specification>
 --
@@ -4582,81 +4404,143 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     : unsignedLiteral
 --     | generalValueSpecification
 --     ;
---
+      def "UnsignedValueSpecification" $
+        union [
+          "unsignedLiteral">: gql "UnsignedLiteral",
+          "generalValueSpecification">: gql "GeneralValueSpecification"],
+
 -- nonNegativeIntegerSpecification
 --     : unsignedInteger
 --     | dynamicParameterSpecification
 --     ;
---
+      def "NonNegativeIntegerSpecification" $
+        union [
+          "unsignedInteger">: gql "UnsignedInteger",
+          "dynamicParameterSpecification">: gql "DynamicParameterSpecification"],
+
 -- generalValueSpecification
 --     : dynamicParameterSpecification
 --     | SESSION_USER
 --     ;
---
+      def "GeneralValueSpecification" $
+        union [
+          "dynamicParameterSpecification">: gql "DynamicParameterSpecification",
+          "sessionUser">: unit],
+
 -- // 20.4 <dynamic parameter specification>
 --
 -- dynamicParameterSpecification
 --     : GENERAL_PARAMETER_REFERENCE
 --     ;
---
+      def "DynamicParameterSpecification" $
+        gql "ParameterName",
+
 -- // 20.5 <let value expression>
 --
 -- letValueExpression
 --     : LET letVariableDefinitionList IN valueExpression END
 --     ;
---
+      def "LetValueExpression" $
+        record [
+          "letVariables">: gql "LetVariableDefinitionList",
+          "valueExpression">: gql "ValueExpression"],
+
 -- // 20.6 <value query expression>
 --
 -- valueQueryExpression
 --     : VALUE nestedQuerySpecification
 --     ;
---
+      def "ValueQueryExpression" $
+        gql "NestedQuerySpecification",
+
 -- // 20.7 <case expression>
 --
 -- caseExpression
 --     : caseAbbreviation
 --     | caseSpecification
 --     ;
---
+      def "CaseExpression" $
+        union [
+          "abbreviation">: gql "CaseAbbreviation",
+          "specification">: gql "CaseSpecification"],
+
 -- caseAbbreviation
 --     : NULLIF LEFT_PAREN valueExpression COMMA valueExpression RIGHT_PAREN
 --     | COALESCE LEFT_PAREN valueExpression (COMMA valueExpression)+ RIGHT_PAREN
 --     ;
---
+      def "CaseAbbreviation" $
+        union [
+          "nullIf">: gql "NullIfAbbreviation",
+          "coalesce">: nonemptyList $ gql "ValueExpression"],
+
+      def "NullIfAbbreviation" $
+        record [
+          "first">: gql "ValueExpression",
+          "second">: gql "ValueExpression"],
+
 -- caseSpecification
 --     : simpleCase
 --     | searchedCase
 --     ;
---
+      def "CaseSpecification" $
+        union [
+          "simple">: gql "SimpleCase",
+          "searched">: gql "SearchedCase"],
+
 -- simpleCase
 --     : CASE caseOperand simpleWhenClause+ elseClause? END
 --     ;
---
+      def "SimpleCase" $
+        record [
+          "caseOperand">: gql "CaseOperand",
+          "whenClauses">: nonemptyList $ gql "SimpleWhenClause",
+          "elseClause">: optional $ gql "ElseClause"],
+
 -- searchedCase
 --     : CASE searchedWhenClause+ elseClause? END
 --     ;
---
+      def "SearchedCase" $
+        record [
+          "whenClauses">: nonemptyList $ gql "SearchedWhenClause",
+          "elseClause">: optional $ gql "ElseClause"],
+
 -- simpleWhenClause
 --     : WHEN whenOperandList THEN result
 --     ;
---
+      def "SimpleWhenClause" $
+        record [
+          "whenOperands">: gql "WhenOperandList",
+          "result">: gql "Result"],
+
 -- searchedWhenClause
 --     : WHEN searchCondition THEN result
 --     ;
---
+      def "SearchedWhenClause" $
+        record [
+          "searchCondition">: gql "SearchCondition",
+          "result">: gql "Result"],
+
 -- elseClause
 --     : ELSE result
 --     ;
---
+      def "ElseClause" $
+        gql "Result",
+
 -- caseOperand
 --     : nonParenthesizedValueExpressionPrimary
 --     | elementVariableReference
 --     ;
---
+      def "CaseOperand" $
+        union [
+          "valueExpression">: gql "NonParenthesizedValueExpressionPrimary",
+          "elementReference">: gql "ElementVariableReference"],
+
 -- whenOperandList
 --     : whenOperand (COMMA whenOperand)*
 --     ;
---
+      def "WhenOperandList" $
+        nonemptyList $ gql "WhenOperand",
+
 -- whenOperand
 --     : nonParenthesizedValueExpressionPrimary
 --     | comparisonPredicatePart2
@@ -4668,31 +4552,58 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | sourcePredicatePart2
 --     | destinationPredicatePart2
 --     ;
---
+      def "WhenOperand" $
+        union [
+          "valueExpression">: gql "NonParenthesizedValueExpressionPrimary",
+          "comparison">: gql "ComparisonPredicatePart2",
+          "nullPredicate">: gql "NullPredicatePart2",
+          "valueTypePredicate">: gql "ValueTypePredicatePart2",
+          "normalizedPredicate">: gql "NormalizedPredicatePart2",
+          "directedPredicate">: gql "DirectedPredicatePart2",
+          "labeledPredicate">: gql "LabeledPredicatePart2",
+          "sourcePredicate">: gql "SourcePredicate",
+          "destinationPredicate">: gql "DestinationPredicate"],
+
 -- result
 --     : resultExpression
 --     | nullLiteral
 --     ;
---
+      def "Result" $
+        union [
+          "expression">: gql "ResultExpression",
+          "nullLiteral">: unit],
+
 -- resultExpression
 --     : valueExpression
 --     ;
---
+      def "ResultExpression" $
+        gql "ValueExpression",
+
 -- // 20.8 <cast specification>
 --
 -- castSpecification
 --     : CAST LEFT_PAREN castOperand AS castTarget RIGHT_PAREN
 --     ;
---
+      def "CastSpecification" $
+        record [
+          "operand">: gql "CastOperand",
+          "target">: gql "CastTarget"],
+
 -- castOperand
 --     : valueExpression
 --     | nullLiteral
 --     ;
---
+      def "CastOperand" $
+        union [
+          "valueExpression">: gql "ValueExpression",
+          "nullLiteral">: unit],
+
 -- castTarget
 --     : valueType
 --     ;
---
+      def "CastTarget" $
+        gql "ValueType",
+
 -- // 20.9 <aggregate function>
 --
 -- aggregateFunction
@@ -4700,15 +4611,30 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | generalSetFunction
 --     | binarySetFunction
 --     ;
---
+      def "AggregateFunction" $
+        union [
+          "countAll">: unit,
+          "generalSetFunction">: gql "GeneralSetFunction",
+          "binarySetFunction">: gql "BinarySetFunction"],
+
 -- generalSetFunction
 --     : generalSetFunctionType LEFT_PAREN setQuantifier? valueExpression RIGHT_PAREN
 --     ;
---
+      def "GeneralSetFunction" $
+        record [
+          "functionType">: gql "GeneralSetFunctionType",
+          "setQuantifier">: optional $ gql "SetQuantifier",
+          "valueExpression">: gql "ValueExpression"],
+
 -- binarySetFunction
 --     : binarySetFunctionType LEFT_PAREN dependentValueExpression COMMA independentValueExpression RIGHT_PAREN
 --     ;
---
+      def "BinarySetFunction" $
+        record [
+          "functionType">: gql "BinarySetFunctionType",
+          "dependentValue">: gql "DependentValueExpression",
+          "independentValue">: gql "IndependentValueExpression"],
+
 -- generalSetFunctionType
 --     : AVG
 --     | COUNT
@@ -4719,142 +4645,212 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | STDDEV_SAMP
 --     | STDDEV_POP
 --     ;
---
+      def "GeneralSetFunctionType" $
+        enum [
+          "avg",
+          "count",
+          "max",
+          "min",
+          "sum",
+          "collectList",
+          "stddevSamp",
+          "stddevPop"],
+
 -- setQuantifier
 --     : DISTINCT
 --     | ALL
 --     ;
---
+      def "SetQuantifier" $
+        enum ["distinct", "all"],
+
 -- binarySetFunctionType
 --     : PERCENTILE_CONT
 --     | PERCENTILE_DISC
 --     ;
---
+      def "BinarySetFunctionType" $
+        enum ["percentileCont", "percentileDisc"],
+
 -- dependentValueExpression
 --     : setQuantifier? numericValueExpression
 --     ;
---
+      def "DependentValueExpression" $
+        record [
+          "setQuantifier">: optional $ gql "SetQuantifier",
+          "numericValue">: gql "NumericValueExpression"],
+
 -- independentValueExpression
 --     : numericValueExpression
 --     ;
---
+      def "IndependentValueExpression" $
+        gql "NumericValueExpression",
+
 -- // 20.10 <element_id function>
 --
 -- element_idFunction
 --     : ELEMENT_ID LEFT_PAREN elementVariableReference RIGHT_PAREN
 --     ;
---
+      def "ElementIdFunction" $
+        gql "ElementVariableReference",
+
 -- // 20.11 <property reference>
 --
+-- propertyReference
+--     : valueExpressionPrimary PERIOD propertyName
+--     ;
+      def "PropertyReference" $
+        record [
+          "valueExpression">: gql "ValueExpressionPrimary",
+          "propertyName">: gql "PropertyName"],
+
 -- // 20.12 <binding variable reference>
 --
 -- bindingVariableReference
 --     : bindingVariable
 --     ;
---
--- // The path value expression was combined with list and string value expressions.
--- // See listStringOrPathValueExpression.
---
+      def "BindingVariableReference" $
+        gql "BindingVariable",
+
 -- pathValueExpression
 --     : valueExpression
 --     ;
---
+      def "PathValueExpression" $
+        gql "ValueExpression",
+
 -- // 20.14 <path value constructor>
 --
 -- pathValueConstructor
 --     : pathValueConstructorByEnumeration
 --     ;
---
+      def "PathValueConstructor" $
+        gql "PathValueConstructorByEnumeration",
+
 -- pathValueConstructorByEnumeration
 --     : PATH LEFT_BRACKET pathElementList RIGHT_BRACKET
 --     ;
---
+      def "PathValueConstructorByEnumeration" $
+        gql "PathElementList",
+
 -- pathElementList
 --     : pathElementListStart pathElementListStep*
 --     ;
---
+      def "PathElementList" $
+        record [
+          "start">: gql "PathElementListStart",
+          "steps">: list $ gql "PathElementListStep"],
+
 -- pathElementListStart
 --     : nodeReferenceValueExpression
 --     ;
---
+      def "PathElementListStart" $
+        gql "NodeReferenceValueExpression",
+
 -- pathElementListStep
 --     : COMMA edgeReferenceValueExpression COMMA nodeReferenceValueExpression
 --     ;
---
+      def "PathElementListStep" $
+        record [
+          "edgeReference">: gql "EdgeReferenceValueExpression",
+          "nodeReference">: gql "NodeReferenceValueExpression"],
+
 -- // 20.15 <list value expression>
---
--- // The list value expression was combined with path and string value expressions.
--- // See listStringOrPathValueExpression.
 --
 -- listValueExpression
 --     : valueExpression
 --     ;
---
+      def "ListValueExpression" $
+        gql "ValueExpression",
+
 -- // 20.16 <list value function>
---
--- // Note: ByteString functions were moved to characterByteStringOrListFunction, some alternatives
--- // apply to characterString, byteString and list. Breaking them out separately resulted in
--- // ambiguity.
 --
 -- listValueFunction
 --     : trimListFunction
 --     | elementsFunction
 --     ;
---
+      def "ListValueFunction" $
+        union [
+          "trim">: gql "TrimListFunction",
+          "elements">: gql "ElementsFunction"],
+
 -- trimListFunction
 --     : TRIM LEFT_PAREN listValueExpression COMMA numericValueExpression RIGHT_PAREN
 --     ;
---
+      def "TrimListFunction" $
+        record [
+          "listValue">: gql "ListValueExpression",
+          "numericValue">: gql "NumericValueExpression"],
+
 -- elementsFunction
 --     : ELEMENTS LEFT_PAREN pathValueExpression RIGHT_PAREN
 --     ;
---
+      def "ElementsFunction" $
+        gql "PathValueExpression",
+
 -- // 20.17 <list value constructor>
 --
 -- listValueConstructor
 --     : listValueConstructorByEnumeration
 --     ;
---
+      def "ListValueConstructor" $
+        gql "ListValueConstructorByEnumeration",
+
 -- listValueConstructorByEnumeration
 --     : listValueTypeName? LEFT_BRACKET listElementList? RIGHT_BRACKET
 --     ;
---
+      def "ListValueConstructorByEnumeration" $
+        record [
+          "listValueTypeName">: optional $ gql "ListValueTypeName",
+          "elements">: optional $ gql "ListElementList"],
+
 -- listElementList
 --     : listElement (COMMA listElement)*
 --     ;
---
+      def "ListElementList" $
+        nonemptyList $ gql "ListElement",
+
 -- listElement
 --     : valueExpression
 --     ;
---
+      def "ListElement" $
+        gql "ValueExpression",
+
 -- // 20.18 <record constructor>
 --
 -- recordConstructor
 --     : RECORD? fieldsSpecification
 --     ;
---
+      def "RecordConstructor" $
+        gql "FieldsSpecification",
+
 -- fieldsSpecification
 --     : LEFT_BRACE fieldList? RIGHT_BRACE
 --     ;
---
+      def "FieldsSpecification" $
+        optional $ gql "FieldList",
+
 -- fieldList
 --     : field (COMMA field)*
 --     ;
---
+      def "FieldList" $
+        nonemptyList $ gql "Field",
+
 -- // 20.19 <field>
 --
 -- field
 --     : fieldName COLON valueExpression
 --     ;
---
+      def "Field" $
+        record [
+          "name">: gql "FieldName",
+          "value">: gql "ValueExpression"],
+
 -- // 20.20 <boolean value expression>
---
--- // Most of <boolean value expression> is incorporated in valueExpression
 --
 -- truthValue
 --     : BOOLEAN_LITERAL
 --     ;
---
+      def "TruthValue" $
+        gql "BooleanLiteral",
+
 -- // 20.21 <numeric value expression>
 --
 -- numericValueExpression
@@ -4864,7 +4860,31 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | valueExpressionPrimary
 --     | numericValueFunction
 --     ;
---
+      def "NumericValueExpression" $
+        union [
+          "signed">: gql "SignedNumericValueExpression",
+          "multiplicationOrDivision">: gql "MulDivNumericValueExpression",
+          "additionOrSubtraction">: gql "AddSubNumericValueExpression",
+          "primary">: gql "ValueExpressionPrimary",
+          "function">: gql "NumericValueFunction"],
+
+      def "SignedNumericValueExpression" $
+        record [
+          "sign">: gql "Sign",
+          "expression">: gql "NumericValueExpression"],
+
+      def "MulDivNumericValueExpression" $
+        record [
+          "left">: gql "NumericValueExpression",
+          "operator">: gql "MultDivOperator",
+          "right">: gql "NumericValueExpression"],
+
+      def "AddSubNumericValueExpression" $
+        record [
+          "left">: gql "NumericValueExpression",
+          "operator">: gql "AddSubtractOperator",
+          "right">: gql "NumericValueExpression"],
+
 -- // 20.22 <numeric value function>
 --
 -- numericValueFunction
@@ -4882,55 +4902,97 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | floorFunction
 --     | ceilingFunction
 --     ;
---
+      def "NumericValueFunction" $
+        union [
+          "length">: gql "LengthExpression",
+          "cardinality">: gql "CardinalityExpression",
+          "absoluteValue">: gql "AbsoluteValueExpression",
+          "modulus">: gql "ModulusExpression",
+          "trigonometric">: gql "TrigonometricFunction",
+          "logarithm">: gql "GeneralLogarithmFunction",
+          "commonLogarithm">: gql "CommonLogarithm",
+          "naturalLogarithm">: gql "NaturalLogarithm",
+          "exponential">: gql "ExponentialFunction",
+          "power">: gql "PowerFunction",
+          "squareRoot">: gql "SquareRoot",
+          "floor">: gql "FloorFunction",
+          "ceiling">: gql "CeilingFunction"],
+
 -- lengthExpression
 --     : charLengthExpression
 --     | byteLengthExpression
 --     | pathLengthExpression
 --     ;
---
+      def "LengthExpression" $
+        union [
+          "char">: gql "CharLengthExpression",
+          "byte">: gql "ByteLengthExpression",
+          "path">: gql "PathLengthExpression"],
+
 -- cardinalityExpression
 --     : CARDINALITY LEFT_PAREN cardinalityExpressionArgument RIGHT_PAREN
 --     | SIZE LEFT_PAREN listValueExpression RIGHT_PAREN
 --     ;
---
--- cardinalityExpressionArgument
---     : valueExpression
---     ;
---
+      def "CardinalityExpression" $
+        union [
+          "cardinality">: gql "CardinalityArgumentExpression",
+          "size">: gql "ListValueExpression"],
+
+      def "CardinalityArgumentExpression" $
+        gql "ValueExpression",
+
 -- charLengthExpression
 --     : (CHAR_LENGTH | CHARACTER_LENGTH) LEFT_PAREN characterStringValueExpression RIGHT_PAREN
 --     ;
---
+      def "CharLengthExpression" $
+        gql "CharacterStringValueExpression",
+
 -- byteLengthExpression
 --     : (BYTE_LENGTH | OCTET_LENGTH) LEFT_PAREN byteStringValueExpression RIGHT_PAREN
 --     ;
---
+      def "ByteLengthExpression" $
+        gql "ByteStringValueExpression",
+
 -- pathLengthExpression
 --     : PATH_LENGTH LEFT_PAREN pathValueExpression RIGHT_PAREN
 --     ;
---
--- // absoluteValueExpression applies to both numeric types and duration types. They have the same syntax.
+      def "PathLengthExpression" $
+        gql "PathValueExpression",
+
 -- absoluteValueExpression
 --     : ABS LEFT_PAREN valueExpression RIGHT_PAREN
 --     ;
---
+      def "AbsoluteValueExpression" $
+        gql "ValueExpression",
+
 -- modulusExpression
 --     : MOD LEFT_PAREN numericValueExpressionDividend COMMA numericValueExpressionDivisor RIGHT_PAREN
 --     ;
---
+      def "ModulusExpression" $
+        record [
+          "dividend">: gql "NumericValueExpressionDividend",
+          "divisor">: gql "NumericValueExpressionDivisor"],
+
 -- numericValueExpressionDividend
 --     : numericValueExpression
 --     ;
---
+      def "NumericValueExpressionDividend" $
+        gql "NumericValueExpression",
+
 -- numericValueExpressionDivisor
 --     : numericValueExpression
 --     ;
---
+      def "NumericValueExpressionDivisor" $
+        gql "NumericValueExpression",
+
 -- trigonometricFunction
 --     : trigonometricFunctionName LEFT_PAREN numericValueExpression RIGHT_PAREN
 --     ;
---
+      def "TrigonometricFunction" $
+        record [
+          "name">: gql "TrigonometricFunctionName",
+          "value">: gql "NumericValueExpression"],
+
 -- trigonometricFunctionName
 --     : SIN
 --     | COS
@@ -4945,115 +5007,161 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | DEGREES
 --     | RADIANS
 --     ;
---
+      def "TrigonometricFunctionName" $
+        enum ["sin", "cos", "tan", "cot", "sinh", "cosh", "tanh", "asin", "acos", "atan", "degrees", "radians"],
+
 -- generalLogarithmFunction
 --     : LOG LEFT_PAREN generalLogarithmBase COMMA generalLogarithmArgument RIGHT_PAREN
 --     ;
---
+      def "GeneralLogarithmFunction" $
+        record [
+          "base">: gql "GeneralLogarithmBase",
+          "argument">: gql "GeneralLogarithmArgument"],
+
 -- generalLogarithmBase
 --     : numericValueExpression
 --     ;
---
+      def "GeneralLogarithmBase" $
+        gql "NumericValueExpression",
+
 -- generalLogarithmArgument
 --     : numericValueExpression
 --     ;
---
+      def "GeneralLogarithmArgument" $
+        gql "NumericValueExpression",
+
 -- commonLogarithm
 --     : LOG10 LEFT_PAREN numericValueExpression RIGHT_PAREN
 --     ;
---
+      def "CommonLogarithm" $
+        gql "NumericValueExpression",
+
 -- naturalLogarithm
 --     : LN LEFT_PAREN numericValueExpression RIGHT_PAREN
 --     ;
---
+      def "NaturalLogarithm" $
+        gql "NumericValueExpression",
+
 -- exponentialFunction
 --     : EXP LEFT_PAREN numericValueExpression RIGHT_PAREN
 --     ;
---
+      def "ExponentialFunction" $
+        gql "NumericValueExpression",
+
 -- powerFunction
 --     : POWER LEFT_PAREN numericValueExpressionBase COMMA numericValueExpressionExponent RIGHT_PAREN
 --     ;
---
+      def "PowerFunction" $
+        record [
+          "base">: gql "NumericValueExpressionBase",
+          "exponent">: gql "NumericValueExpressionExponent"],
+
 -- numericValueExpressionBase
 --     : numericValueExpression
 --     ;
---
+      def "NumericValueExpressionBase" $
+        gql "NumericValueExpression",
+
 -- numericValueExpressionExponent
 --     : numericValueExpression
 --     ;
---
+      def "NumericValueExpressionExponent" $
+        gql "NumericValueExpression",
+
 -- squareRoot
 --     : SQRT LEFT_PAREN numericValueExpression RIGHT_PAREN
 --     ;
---
+      def "SquareRoot" $
+        gql "NumericValueExpression",
+
 -- floorFunction
 --     : FLOOR LEFT_PAREN numericValueExpression RIGHT_PAREN
 --     ;
---
+      def "FloorFunction" $
+        gql "NumericValueExpression",
+
 -- ceilingFunction
 --     : (CEIL | CEILING) LEFT_PAREN numericValueExpression RIGHT_PAREN
 --     ;
---
+      def "CeilingFunction" $
+        gql "NumericValueExpression",
+
 -- // 20.23 <string value expression>
---
--- // The string value expressions were combined with list and path value expressions.
 --
 -- characterStringValueExpression
 --     : valueExpression
 --     ;
---
+      def "CharacterStringValueExpression" $
+        gql "ValueExpression",
+
 -- byteStringValueExpression
 --     : valueExpression
 --     ;
---
+      def "ByteStringValueExpression" $
+        gql "ValueExpression",
+
 -- // 20.24 <string value function>
---
--- // Note: String functions were moved to characterByteStringOrListFunction, some alternatives
--- // apply to characterString, byteString and list. Breaking them out separately resulted in
--- // ambiguity.
 --
 -- trimOperands
 --     : (trimSpecification? trimCharacterOrByteString? FROM)? trimCharacterOrByteStringSource
 --     ;
---
+      def "TrimOperands" $
+        record [
+          "specification">: optional $ gql "TrimSpecification",
+          "characterOrByteString">: optional $ gql "TrimCharacterOrByteString",
+          "source">: gql "TrimCharacterOrByteStringSource"],
+
 -- trimCharacterOrByteStringSource
 --     : valueExpression
 --     ;
---
+      def "TrimCharacterOrByteStringSource" $
+        gql "ValueExpression",
+
 -- trimSpecification
 --     : LEADING
 --     | TRAILING
 --     | BOTH
 --     ;
---
+      def "TrimSpecification" $
+        enum ["leading", "trailing", "both"],
+
 -- trimCharacterOrByteString
 --     : valueExpression
 --     ;
---
+      def "TrimCharacterOrByteString" $
+        gql "ValueExpression",
+
 -- normalForm
 --     : NFC
 --     | NFD
 --     | NFKC
 --     | NFKD
 --     ;
---
+      def "NormalForm" $
+        enum ["nfc", "nfd", "nfkc", "nfkd"],
+
 -- stringLength
 --     : numericValueExpression
 --     ;
---
+      def "StringLength" $
+        gql "NumericValueExpression",
+
 -- // 20.25 <byte string function>
 --
 -- // Note: ByteString functions were moved to characterByteStringOrListFunction, some alternatives
 -- // apply to characterString, byteString and list. Breaking them out separately resulted in
 -- // ambiguity.
 --
+
 -- // 20.26 <datetime value expression>
 --
 -- // The implementation should enforce that the data type is a datetime value.
 -- datetimeValueExpression
 --      : valueExpression
 --      ;
---
+      def "DatetimeValueExpression" $
+        gql "ValueExpression",
+
 -- // 20.27 <datetime value function>
 --
 -- datetimeValueFunction
@@ -5063,176 +5171,288 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | localtimeFunction
 --     | localdatetimeFunction
 --     ;
---
+      def "DatetimeValueFunction" $
+        union [
+          "dateFunction">: gql "DateFunction",
+          "timeFunction">: gql "TimeFunction",
+          "datetimeFunction">: gql "DatetimeFunction",
+          "localtimeFunction">: gql "LocaltimeFunction",
+          "localdatetimeFunction">: gql "LocaldatetimeFunction"],
+
 -- dateFunction
 --     : CURRENT_DATE
 --     | DATE LEFT_PAREN dateFunctionParameters? RIGHT_PAREN
 --     ;
---
+      def "DateFunction" $
+        union [
+          "currentDate">: unit,
+          "dateWithParams">: optional $ gql "DateFunctionParameters"],
+
 -- timeFunction
 --     : CURRENT_TIME
 --     | ZONED_TIME LEFT_PAREN timeFunctionParameters? RIGHT_PAREN
 --     ;
---
+      def "TimeFunction" $
+        union [
+          "currentTime">: unit,
+          "zonedTimeWithParams">: optional $ gql "TimeFunctionParameters"],
+
 -- localtimeFunction
 --     : LOCAL_TIME (LEFT_PAREN timeFunctionParameters? RIGHT_PAREN)?
 --     ;
---
+      def "LocaltimeFunction" $
+        optional $ gql "TimeFunctionParameters",
+
 -- datetimeFunction
 --     : CURRENT_TIMESTAMP
 --     | ZONED_DATETIME LEFT_PAREN datetimeFunctionParameters? RIGHT_PAREN
 --     ;
---
+      def "DatetimeFunction" $
+        union [
+          "currentTimestamp">: unit,
+          "zonedDatetimeWithParams">: optional $ gql "DatetimeFunctionParameters"],
+
 -- localdatetimeFunction
 --     : LOCAL_TIMESTAMP
 --     | LOCAL_DATETIME LEFT_PAREN datetimeFunctionParameters? RIGHT_PAREN
 --     ;
---
+      def "LocaldatetimeFunction" $
+        union [
+          "localTimestamp">: unit,
+          "localDatetimeWithParams">: optional $ gql "DatetimeFunctionParameters"],
+
 -- dateFunctionParameters
 --     : dateString
 --     | recordConstructor
 --     ;
---
+      def "DateFunctionParameters" $
+        union [
+          "dateString">: gql "DateString",
+          "recordConstructor">: gql "RecordConstructor"],
+
 -- timeFunctionParameters
 --     : timeString
 --     | recordConstructor
 --     ;
---
+      def "TimeFunctionParameters" $
+        union [
+          "timeString">: gql "TimeString",
+          "recordConstructor">: gql "RecordConstructor"],
+
 -- datetimeFunctionParameters
 --     : datetimeString
 --     | recordConstructor
 --     ;
---
+      def "DatetimeFunctionParameters" $
+        union [
+          "datetimeString">: gql "DatetimeString",
+          "recordConstructor">: gql "RecordConstructor"],
+
 -- // 20.28 <duration value expression>
 --
--- // The implemenation should enforce that the data type is a duration value.
+-- // The implementation should enforce that the data type is a duration value.
 -- durationValueExpression
 --     : valueExpression
 --     ;
---
+      def "DurationValueExpression" $
+        gql "ValueExpression",
+
 -- datetimeSubtraction
 --     : DURATION_BETWEEN LEFT_PAREN datetimeSubtractionParameters RIGHT_PAREN temporalDurationQualifier?
 --     ;
---
+      def "DatetimeSubtraction" $
+        record [
+          "parameters">: gql "DatetimeSubtractionParameters",
+          "temporalDurationQualifier">: optional $ gql "TemporalDurationQualifier"],
+
 -- datetimeSubtractionParameters
 --     : datetimeValueExpression1 COMMA datetimeValueExpression2
 --     ;
---
+      def "DatetimeSubtractionParameters" $
+        record [
+          "expression1">: gql "DatetimeValueExpression1",
+          "expression2">: gql "DatetimeValueExpression2"],
+
 -- datetimeValueExpression1
 --     : datetimeValueExpression
 --     ;
---
+      def "DatetimeValueExpression1" $
+        gql "DatetimeValueExpression",
+
 -- datetimeValueExpression2
 --     : datetimeValueExpression
 --     ;
---
+      def "DatetimeValueExpression2" $
+        gql "DatetimeValueExpression",
+
+-- temporalDurationQualifier
+--     : YEAR TO MONTH
+--     | DAY TO SECOND
+--     ;
+      def "TemporalDurationQualifier" $
+        enum ["yearToMonth", "dayToSecond"],
+
 -- // 20.29 <duration value function>
 --
 -- durationValueFunction
 --     : durationFunction
 --     | absoluteValueExpression
 --     ;
---
+      def "DurationValueFunction" $
+        union [
+          "durationFunction">: gql "DurationFunction",
+          "absoluteValue">: gql "AbsoluteValueExpression"],
+
 -- durationFunction
 --     : DURATION LEFT_PAREN durationFunctionParameters RIGHT_PAREN
 --     ;
---
+      def "DurationFunction" $
+        gql "DurationFunctionParameters",
+
 -- durationFunctionParameters
 --     : durationString
 --     | recordConstructor
 --     ;
---
+      def "DurationFunctionParameters" $
+        union [
+          "durationString">: gql "DurationString",
+          "recordConstructor">: gql "RecordConstructor"],
+
 -- // 21.1 Names and Variables
 --
 -- objectName
 --     : identifier
 --     ;
---
+      def "ObjectName"
+        string,
+
 -- objectNameOrBindingVariable
 --     : regularIdentifier
 --     ;
---
+      def "ObjectNameOrBindingVariable"
+        string,
+
 -- directoryName
 --     : identifier
 --     ;
---
+      def "DirectoryName"
+        string,
+
 -- schemaName
 --     : identifier
 --     ;
---
+      def "SchemaName" $
+        string,
+
 -- graphName
 --     : regularIdentifier
 --     | delimitedGraphName
 --     ;
---
+      def "GraphName" $
+        string,
+
 -- delimitedGraphName
 --     // DELIMITED_IDENTIFIER
 --     : DOUBLE_QUOTED_CHARACTER_SEQUENCE
 --     | ACCENT_QUOTED_CHARACTER_SEQUENCE
 --     ;
---
+      def "DelimitedGraphName"
+        string,
+
 -- graphTypeName
 --     : identifier
 --     ;
---
+      def "GraphTypeName"
+        string,
+
 -- nodeTypeName
 --     : identifier
 --     ;
---
+      def "NodeTypeName"
+        string,
+
 -- edgeTypeName
 --     : identifier
 --     ;
---
+      def "EdgeTypeName"
+        string,
+
 -- bindingTableName
 --     : regularIdentifier
 --     | delimitedBindingTableName
 --     ;
---
+      def "BindingTableName" $
+        union [
+          "regularIdentifier">: string,
+          "delimitedBindingTableName">: gql "DelimitedBindingTableName"],
+
 -- delimitedBindingTableName
 --      // DELIMITED_IDENTIFIER
 --      : DOUBLE_QUOTED_CHARACTER_SEQUENCE
 --      | ACCENT_QUOTED_CHARACTER_SEQUENCE
 --      ;
---
+      def "DelimitedBindingTableName"
+        string,
+
 -- procedureName
 --     : identifier
 --     ;
---
+      def "ProcedureName"
+        string,
+
 -- labelName
 --     : identifier
 --     ;
---
+      def "LabelName"
+        string,
+
 -- propertyName
 --     : identifier
 --     ;
---
+      def "PropertyName"
+        string,
+
 -- fieldName
 --     : identifier
 --     ;
---
+      def "FieldName"
+        string,
+
 -- elementVariable
 --     : bindingVariable
 --     ;
---
+      def "ElementVariable" $
+        gql "BindingVariable",
+
 -- pathVariable
 --     : bindingVariable
 --     ;
---
+      def "PathVariable" $
+        gql "BindingVariable",
+
 -- subpathVariable
 --     : regularIdentifier
 --     ;
---
+      def "SubpathVariable"
+        string,
+
 -- bindingVariable
 --     : regularIdentifier
 --     ;
---
+      def "BindingVariable"
+        string,
+
 -- // 21.2 <literal>
 --
 -- unsignedLiteral
 --     : unsignedNumericLiteral
 --     | generalLiteral
 --     ;
---
+      def "UnsignedLiteral" $
+        union [
+          "numeric">: gql "UnsignedNumericLiteral",
+          "general">: gql "GeneralLiteral"],
+
 -- generalLiteral
 --     : BOOLEAN_LITERAL
 --     | characterStringLiteral
@@ -5243,60 +5463,95 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | listLiteral
 --     | recordLiteral
 --     ;
---
+      def "GeneralLiteral" $
+        union [
+          "boolean">: gql "BooleanLiteral",
+          "characterString">: gql "CharacterStringLiteral",
+          "byteString">: gql "ByteStringLiteral",
+          "temporal">: gql "TemporalLiteral",
+          "duration">: gql "DurationLiteral",
+          "nullLiteral">: gql "NullLiteral",
+          "list">: gql "ListLiteral",
+          "record">: gql "RecordLiteral"],
+
 -- temporalLiteral
 --     : dateLiteral
 --     | timeLiteral
 --     | datetimeLiteral
--- //    | sqlDatetimeLiteral
 --     ;
---
+      def "TemporalLiteral" $
+        union [
+          "date">: gql "DateLiteral",
+          "time">: gql "TimeLiteral",
+          "datetime">: gql "DatetimeLiteral"],
+
 -- dateLiteral
 --     : DATE dateString
 --     ;
---
+      def "DateLiteral" $
+        gql "DateString",
+
 -- timeLiteral
 --     : TIME timeString
 --     ;
---
+      def "TimeLiteral" $
+        gql "TimeString",
+
 -- datetimeLiteral
 --     : (DATETIME | TIMESTAMP) datetimeString
 --     ;
---
+      def "DatetimeLiteral" $
+        gql "DatetimeString",
+
 -- listLiteral
 --     : listValueConstructorByEnumeration
 --     ;
---
+      def "ListLiteral" $
+        gql "ListValueConstructorByEnumeration",
+
 -- recordLiteral
 --     : recordConstructor
 --     ;
---
+      def "RecordLiteral" $
+        gql "RecordConstructor",
+
 -- identifier
 --     : regularIdentifier
---     // DELIMITED_IDENTIFIER
 --     | DOUBLE_QUOTED_CHARACTER_SEQUENCE
 --     | ACCENT_QUOTED_CHARACTER_SEQUENCE
 --     ;
---
+      def "Identifier"
+        string,
+
 -- regularIdentifier
 --     : REGULAR_IDENTIFIER
 --     | nonReservedWords
 --     ;
---
+      def "RegularIdentifier" $
+        string,
+
 -- timeZoneString
 --     : characterStringLiteral
 --     ;
---
+      def "TimeZoneString" $
+        gql "CharacterStringLiteral",
+
 -- characterStringLiteral
 --     : SINGLE_QUOTED_CHARACTER_SEQUENCE
 --     | DOUBLE_QUOTED_CHARACTER_SEQUENCE
 --     ;
---
+      def "CharacterStringLiteral" $
+        string,
+
 -- unsignedNumericLiteral
 --     : exactNumericLiteral
 --     | approximateNumericLiteral
 --     ;
---
+      def "UnsignedNumericLiteral" $
+        union [
+          "exact">: gql "ExactNumericLiteral",
+          "approximate">: gql "ApproximateNumericLiteral"],
+
 -- exactNumericLiteral
 --     : UNSIGNED_DECIMAL_IN_SCIENTIFIC_NOTATION_WITH_EXACT_NUMBER_SUFFIX
 --     | UNSIGNED_DECIMAL_IN_COMMON_NOTATION_WITH_EXACT_NUMBER_SUFFIX
@@ -5304,76 +5559,118 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | UNSIGNED_DECIMAL_INTEGER_WITH_EXACT_NUMBER_SUFFIX
 --     | unsignedInteger
 --     ;
---
+      def "ExactNumericLiteral" $
+        union [
+          "scientificWithSuffix">: string,
+          "commonWithSuffix">: string,
+          "commonWithoutSuffix">: string,
+          "integerWithSuffix">: string,
+          "unsignedInteger">: gql "UnsignedInteger"],
+
 -- approximateNumericLiteral
 --     : UNSIGNED_DECIMAL_IN_SCIENTIFIC_NOTATION_WITH_APPROXIMATE_NUMBER_SUFFIX
 --     | UNSIGNED_DECIMAL_IN_SCIENTIFIC_NOTATION_WITHOUT_SUFFIX
 --     | UNSIGNED_DECIMAL_IN_COMMON_NOTATION_WITH_APPROXIMATE_NUMBER_SUFFIX
 --     | UNSIGNED_DECIMAL_INTEGER_WITH_APPROXIMATE_NUMBER_SUFFIX
 --     ;
---
+      def "ApproximateNumericLiteral" $
+        union [
+          "scientificWithSuffix">: string,
+          "scientificWithoutSuffix">: string,
+          "commonWithSuffix">: string,
+          "integerWithSuffix">: string],
+
 -- unsignedInteger
 --     : UNSIGNED_DECIMAL_INTEGER
 --     | UNSIGNED_HEXADECIMAL_INTEGER
 --     | UNSIGNED_OCTAL_INTEGER
 --     | UNSIGNED_BINARY_INTEGER
 --     ;
---
+      def "UnsignedInteger" $
+        union [
+          "decimal">: string,
+          "hexadecimal">: string,
+          "octal">: string,
+          "binary">: string],
+
 -- unsignedDecimalInteger
 --     : UNSIGNED_DECIMAL_INTEGER
 --     ;
---
+      def "UnsignedDecimalInteger"
+        string,
+
 -- nullLiteral
 --     : NULL_KW
 --     ;
---
+      def "NullLiteral" $
+        unit,
+
 -- dateString
 --     : characterStringLiteral
 --     ;
---
+      def "DateString" $
+        gql "CharacterStringLiteral",
+
 -- timeString
 --     : characterStringLiteral
 --     ;
---
+      def "TimeString" $
+        gql "CharacterStringLiteral",
+
 -- datetimeString
 --     : characterStringLiteral
 --     ;
---
+      def "DatetimeString" $
+        gql "CharacterStringLiteral",
+
 -- durationLiteral
 --     : DURATION durationString
--- //    | sqlIntervalLiteral
 --     ;
---
+      def "DurationLiteral" $
+        gql "DurationString",
+
 -- durationString
 --     : characterStringLiteral
 --     ;
---
+      def "DurationString" $
+        gql "CharacterStringLiteral",
+
 -- nodeSynonym
 --     : NODE
 --     | VERTEX
 --     ;
---
+      def "NodeSynonym" $
+        enum ["node", "vertex"],
+
 -- edgesSynonym
 --     : EDGES
 --     | RELATIONSHIPS
 --     ;
---
+      def "EdgesSynonym" $
+        enum ["edges", "relationships"],
+
 -- edgeSynonym
 --     : EDGE
 --     | RELATIONSHIP
 --     ;
---
+      def "EdgeSynonym" $
+        enum ["edge", "relationship"],
+
 -- // 21.1 Names and Variables
 --
 -- IMPLIES
 --     : RIGHT_DOUBLE_ARROW
 --     | 'IMPLIES'
 --     ;
---
+      def "Implies" $
+        enum ["rightDoubleArrow", "implies"],
+
 -- fragment PARAMETER_NAME
 --     : SEPARATED_IDENTIFIER
 --     ;
---
+      def "ParameterName"
+        string,
+
 -- // 21.2 <literal>
 --
 -- nonReservedWords
@@ -5426,13 +5723,14 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     | WRITE
 --     | ZONE
 --     ;
---
 -- BOOLEAN_LITERAL
 --     : 'TRUE'
 --     | 'FALSE'
 --     | 'UNKNOWN'
 --     ;
---
+      def "BooleanLiteral" $
+        enum ["true", "false", "unknown"],
+
 -- SINGLE_QUOTED_CHARACTER_SEQUENCE
 --     : NO_ESCAPE? UNBROKEN_SINGLE_QUOTED_CHARACTER_SEQUENCE
 --     ;
@@ -5505,7 +5803,10 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 -- BYTE_STRING_LITERAL
 --     : 'X' QUOTE SPACE* (HEX_DIGIT SPACE* HEX_DIGIT SPACE*)* QUOTE
 --     ;
---
+      def "ByteStringLiteral"
+          string] -- End of Hydra definitions
+
+
 -- UNSIGNED_DECIMAL_IN_SCIENTIFIC_NOTATION_WITH_EXACT_NUMBER_SUFFIX
 --     : UNSIGNED_DECIMAL_IN_SCIENTIFIC_NOTATION EXACT_NUMBER_SUFFIX
 --     ;
