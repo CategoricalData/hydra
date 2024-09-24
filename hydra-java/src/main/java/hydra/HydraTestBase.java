@@ -57,6 +57,14 @@ public class HydraTestBase {
         assertFails(roundTrip(coder, initialValue), initialState);
     }
 
+    protected static <S, X> void assertSucceeds(Flow<S, X> flow, S initialState) {
+        checkFlow(flow, initialState, x -> assertTrue(true));
+    }
+
+    protected static <X> void assertSucceeds(Flow<Unit, X> flow) {
+        assertSucceeds(flow, new Unit());
+    }
+
     protected static <X> void assertSucceedsWith(X expected, Flow<Unit, X> flow) {
         assertSucceedsWith(expected, flow, new Unit());
     }
