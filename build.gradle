@@ -15,7 +15,7 @@ allprojects {
 
     ext {
         junitVersion = '5.9.2'
-        rdf4jVersion = '4.3.13'
+        rdf4jVersion = '5.0.2'
     }
 
     repositories {
