@@ -8,10 +8,15 @@ plugins {
 
 allprojects {
     group = 'net.fortytwo.hydra'
-    version = '0.8.0'
+    version = '0.8.2'
 
     apply plugin: 'signing'
     apply plugin: 'maven-publish'
+
+    ext {
+        junitVersion = '5.9.2'
+        rdf4jVersion = '5.0.2'
+    }
 
     repositories {
         mavenCentral()
