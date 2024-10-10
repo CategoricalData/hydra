@@ -274,16 +274,18 @@ passSum t@(TypeSum types) = do
 
 passUnion :: TypeAdapter
 passUnion t@(TypeUnion rt) = do
-    adapters <- M.fromList <$> CM.mapM (\f -> pure ((,) (fieldTypeName f)) <*> fieldAdapter f) sfields
-    let lossy = or $ adapterIsLossy <$> adapters
-    let sfields' = adapterTarget . snd <$> M.toList adapters
+    adapters <- CM.mapM (\f -> pure ((,) (fieldTypeName f)) <*> fieldAdapter f) sfields
+    let adaptersMap = M.fromList adapters
+    let lossy = or $ adapterIsLossy <$> adaptersMap
+    let sfields' = adapterTarget . snd <$> adapters
     return $ Adapter lossy t (TypeUnion $ rt {rowTypeFields = sfields'})
       $ bidirectional $ \dir term -> do
         dfield <- Expect.injection term
-        ad <- getAdapter adapters dfield
+        ad <- getAdapter adaptersMap dfield
         TermUnion . Injection nm <$> encodeDecode dir (adapterCoder ad) dfield
   where
-    getAdapter adapters f = Y.maybe (fail $ "no such field: " ++ unName (fieldName f)) pure $ M.lookup (fieldName f) adapters
+    getAdapter adaptersMap f = Y.maybe (fail $ "no such field: " ++ unName (fieldName f)) pure
+      $ M.lookup (fieldName f) adaptersMap
     sfields = rowTypeFields rt
     nm = rowTypeTypeName rt
 
