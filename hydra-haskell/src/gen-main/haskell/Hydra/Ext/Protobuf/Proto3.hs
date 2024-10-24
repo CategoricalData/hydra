@@ -100,7 +100,7 @@ newtype FieldName =
 _FieldName = (Core.Name "hydra/ext/protobuf/proto3.FieldName")
 
 data FieldType = 
-  FieldTypeMap SimpleType |
+  FieldTypeMap MapType |
   FieldTypeOneof [Field] |
   FieldTypeRepeated SimpleType |
   FieldTypeSimple SimpleType
@@ -122,6 +122,18 @@ newtype FileReference =
   deriving (Eq, Ord, Read, Show)
 
 _FileReference = (Core.Name "hydra/ext/protobuf/proto3.FileReference")
+
+data MapType = 
+  MapType {
+    mapTypeKeys :: SimpleType,
+    mapTypeValues :: SimpleType}
+  deriving (Eq, Ord, Read, Show)
+
+_MapType = (Core.Name "hydra/ext/protobuf/proto3.MapType")
+
+_MapType_keys = (Core.Name "keys")
+
+_MapType_values = (Core.Name "values")
 
 -- | A protocol buffer message type
 data MessageDefinition = 

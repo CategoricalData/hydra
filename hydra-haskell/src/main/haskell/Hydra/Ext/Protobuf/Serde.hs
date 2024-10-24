@@ -79,7 +79,8 @@ writeFieldOptions options0 = if L.null options
 
 writeFieldType :: P3.FieldType -> CT.Expr
 writeFieldType ftyp = case ftyp of
-  P3.FieldTypeMap st -> noSep [cst "map", angleBracesList inlineStyle [cst "string", writeSimpleType st]]
+  P3.FieldTypeMap (P3.MapType kt vt) -> noSep [cst "map", angleBracesList inlineStyle [
+    writeSimpleType kt, writeSimpleType vt]]
   P3.FieldTypeRepeated st -> spaceSep [cst "repeated", writeSimpleType st]
   P3.FieldTypeSimple st -> writeSimpleType st
 

@@ -166,10 +166,8 @@ encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ 
   where
     encodeType typ = case simplifyType typ of
       TypeList lt -> do
-        P3.FieldTypeRepeated <$> encodeSimpleType lt
-      TypeMap (MapType kt vt) -> do
---        checkIsStringType kt
-        P3.FieldTypeMap <$> encodeSimpleType vt
+        P3.FieldTypeRepeated <$> encodeSimpleType True lt
+      TypeMap (MapType kt vt) -> P3.FieldTypeMap <$> (P3.MapType <$> encodeSimpleType False kt <*> encodeSimpleType True vt)
       TypeOptional ot -> case stripType ot of
         TypeLiteral lt -> P3.FieldTypeSimple <$> encodeScalarTypeWrapped lt
         _ -> encodeType ot -- TODO
@@ -177,15 +175,19 @@ encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ 
         pfields <- CM.mapM (encodeFieldType localNs) fields
         return $ P3.FieldTypeOneof pfields
       _ -> do
-        P3.FieldTypeSimple <$> encodeSimpleType typ
-    encodeSimpleType typ = case simplifyType typ of
-      TypeLiteral lt -> P3.SimpleTypeScalar <$> encodeScalarType lt
-      TypeRecord (RowType name _) -> if name == _Unit
-        then pure $ P3.SimpleTypeReference $ P3.TypeName $ "google.protobuf.Empty"
-        else forNominal name
-      TypeUnion (RowType name _) -> forNominal name
-      TypeVariable name -> forNominal name
-      t -> unexpected "simple type" $ show $ removeTypeAnnotations t
+        P3.FieldTypeSimple <$> encodeSimpleType True typ
+    encodeSimpleType noms typ = case simplifyType typ of
+        TypeLiteral lt -> P3.SimpleTypeScalar <$> encodeScalarType lt
+        TypeRecord (RowType name _) -> if name == _Unit
+          then pure $ P3.SimpleTypeReference $ P3.TypeName $ "google.protobuf.Empty"
+          else forNominal name
+        TypeUnion (RowType name _) -> forNominal name
+        TypeVariable name -> if noms
+          then forNominal name
+          else do
+            typ <- (elementData <$> requireElement name) >>= coreDecodeType
+            encodeSimpleType noms typ
+        t -> unexpected "simple type" $ show $ removeTypeAnnotations t
       where
         forNominal name = pure $ P3.SimpleTypeReference $ encodeTypeReference localNs name
 

@@ -78,12 +78,17 @@ proto3Module = Module proto3Ns elements [hydraCoreModule] tier0Modules $
 
       def "FieldType" $
         union [
-          "map">: proto3 "SimpleType",
+          "map">: proto3 "MapType",
           "oneof">: list $ proto3 "Field",
           "repeated">: proto3 "SimpleType",
           "simple">: proto3 "SimpleType"],
 
       def "FileReference" string,
+
+      def "MapType" $
+        record [
+          "keys">: proto3 "SimpleType",
+          "values">: proto3 "SimpleType"],
 
       def "MessageDefinition" $
         doc "A protocol buffer message type" $
