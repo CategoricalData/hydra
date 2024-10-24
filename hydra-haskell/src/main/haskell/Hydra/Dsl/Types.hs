@@ -113,6 +113,9 @@ map kt vt = TypeMap $ MapType kt vt
 mono :: Type -> TypeScheme
 mono = TypeScheme []
 
+nonNegativeInt32 :: Type
+nonNegativeInt32 = int32
+
 optional :: Type -> Type
 optional = TypeOptional
 
