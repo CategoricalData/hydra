@@ -15,6 +15,7 @@ import Hydra.Sources.Tier4.Ext.Haskell.Ast
 import Hydra.Sources.Tier4.Ext.Java.Language
 import Hydra.Sources.Tier4.Ext.Java.Syntax
 import Hydra.Sources.Tier4.Ext.Json.Decoding
+import Hydra.Sources.Tier4.Ext.Json.Schema
 import Hydra.Sources.Tier4.Ext.Pegasus.Pdl
 import Hydra.Sources.Tier4.Ext.Protobuf.Any
 import Hydra.Sources.Tier4.Ext.Protobuf.Language
@@ -52,6 +53,7 @@ tier4LangModules = [
   javaLanguageModule,
   javaSyntaxModule,
   jsonDecodingModule,
+  jsonSchemaModule,
   openCypherModule,
   openCypherFeaturesModule,
   openGqlModule,
