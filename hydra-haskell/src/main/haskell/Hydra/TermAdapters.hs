@@ -5,6 +5,7 @@ module Hydra.TermAdapters (
   functionProxyName,
   functionProxyType,
   termAdapter,
+  unionTypeToRecordType,
 ) where
 
 import Hydra.Printing
@@ -352,7 +353,7 @@ termAdapter typ = case typ of
 ---- Caution: possibility of an infinite loop if neither unions, optionals, nor lists are supported
 unionToRecord :: TypeAdapter
 unionToRecord t@(TypeUnion rt) = do
-    let target = TypeRecord $ rt {rowTypeFields = makeOptional <$> sfields}
+    let target = TypeRecord $ unionTypeToRecordType rt
     ad <- termAdapter target
     return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ Coder {
       coderEncode = \term' -> do
@@ -365,8 +366,6 @@ unionToRecord t@(TypeUnion rt) = do
     nm = rowTypeTypeName rt
     sfields = rowTypeFields rt
 
-    makeOptional (FieldType fn ft) = FieldType fn $ beneathTypeAnnotations Types.optional ft
-
     toRecordField term fn (FieldType fn' _) = Field fn' $
       TermOptional $ if fn' == fn then Just term else Nothing
 
@@ -376,6 +375,11 @@ unionToRecord t@(TypeUnion rt) = do
         else pure $ L.head matches
       where
         matches = Y.mapMaybe (\(Field fn (TermOptional opt)) -> (Just . Field fn) =<< opt) fields
+
+unionTypeToRecordType :: RowType -> RowType
+unionTypeToRecordType rt = rt {rowTypeFields = makeOptional <$> rowTypeFields rt}
+  where
+    makeOptional (FieldType fn ft) = FieldType fn $ beneathTypeAnnotations Types.optional ft
 
 unsupportedToString :: TypeAdapter
 unsupportedToString t = pure $ Adapter False t Types.string $ Coder encode decode

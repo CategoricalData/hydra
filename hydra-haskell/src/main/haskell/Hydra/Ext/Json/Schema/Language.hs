@@ -25,5 +25,6 @@ jsonSchemaLanguage = Language (LanguageName "hydra/ext/json/schema") $ LanguageC
     TypeVariantMap,
     TypeVariantOptional,
     TypeVariantRecord,
+    TypeVariantUnion,
     TypeVariantVariable],
   languageConstraintsTypes = \typ -> True }

@@ -29,8 +29,6 @@ constructModule mod coders pairs = M.fromList <$> CM.mapM toDocument pairs
 
     typeTermToDocument rootName = do
       names <- M.keys <$> typeDependencies rootName
---       fail $ "rootName: " ++ show rootName
---       fail $ "names: " ++ show names
       terms <- fmap elementData <$> (CM.mapM requireElement names)
       types <- CM.mapM coreDecodeType terms
       schemas <- M.fromList <$> (CM.zipWithM typeToKeywordDocumentPair names types)
@@ -88,17 +86,28 @@ encodeType optional typ = case typ of
       let objRes = [JS.RestrictionObject $ JS.ObjectRestrictionAdditionalProperties $ JS.AdditionalItemsSchema vschema]
       pure $ jsType JS.TypeNameObject ++ objRes
     TypeOptional t -> encodeType True t -- Note: nested optionals are lost
-    TypeRecord (RowType tname fields) -> do
-        props <- M.fromList <$> CM.mapM encodeField fields
-        let objRes = [JS.RestrictionObject $ JS.ObjectRestrictionProperties props]
-        let reqRes = if L.null reqs then [] else [JS.RestrictionObject $ JS.ObjectRestrictionRequired reqs]
-        pure $ jsType JS.TypeNameObject ++ objRes ++ reqRes
-      where
-        reqs = Y.catMaybes $ fmap ifReq fields
-        ifReq field = if isRequiredField field then Just (JS.Keyword $ unName $ fieldTypeName field) else Nothing
+    TypeRecord rt -> encodeRecordOrUnion False rt
+    TypeUnion rt -> encodeRecordOrUnion True $ unionTypeToRecordType rt
     TypeVariable name -> pure [referenceRestriction name]
     _ -> fail $ "unsupported type variant: " ++ show (typeVariant typ)
   where
+    encodeRecordOrUnion union (RowType _ fields) = do
+        props <- M.fromList <$> CM.mapM encodeField fields
+        let objRes = [JS.RestrictionObject $ JS.ObjectRestrictionProperties props]
+        let reqRes = if L.null reqs then [] else [JS.RestrictionObject $ JS.ObjectRestrictionRequired reqs]
+        pure $ jsType JS.TypeNameObject ++ objRes ++ reqRes ++ cardRes
+      where
+        reqs = Y.catMaybes $ fmap ifReq fields
+        ifReq field = if isRequiredField field then Just (JS.Keyword $ unName $ fieldTypeName field) else Nothing
+        totalReq = if union then 1 else L.length $ L.filter isRequiredField fields
+        total = if union then 1 else L.length fields
+        cardRes = JS.RestrictionObject <$>
+            [JS.ObjectRestrictionAdditionalProperties $ JS.AdditionalItemsAny False]
+            ++ minRes
+            ++ maxRes
+          where
+            minRes = if totalReq > 0 then [JS.ObjectRestrictionMinProperties totalReq] else []
+            maxRes = [JS.ObjectRestrictionMaxProperties total]
     jsType tname = [JS.RestrictionType jst]
       where
         jst = if optional
