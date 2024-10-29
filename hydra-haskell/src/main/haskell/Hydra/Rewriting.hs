@@ -401,16 +401,6 @@ termDependencyNames withVars withPrims withNoms = foldOverTerm TraversalOrderPre
         prim name = if withPrims then S.insert name names else names
         var name = if withVars then S.insert name names else names
 
--- | Recursively find all free variables in a term, dereference them as elements,
---   and find the dependency names of those elements, adding all names to a set.
-termDependencyNamesRecursive :: Name -> Flow Graph (S.Set Name)
-termDependencyNamesRecursive = forName S.empty
-  where
-    forTerm prev term = CM.foldM forName prev $ freeVariablesInTerm term
-    forName prev name = if S.member name prev
-      then pure prev
-      else (elementData <$> requireElement name) >>= forTerm prev
-
 -- Topological sort of connected components, in terms of dependencies between varable/term binding pairs
 topologicalSortBindings :: M.Map Name Term -> [[(Name, Term)]]
 topologicalSortBindings bindingMap = fmap (fmap toPair) (topologicalSortComponents (depsOf <$> bindings))

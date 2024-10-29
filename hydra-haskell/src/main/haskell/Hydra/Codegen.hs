@@ -5,6 +5,7 @@ module Hydra.Codegen (
   writeGraphql,
   writeHaskell,
   writeJava,
+  writeJsonSchema,
   writePdl,
   writeProtobuf,
   writeScala,
@@ -19,6 +20,7 @@ import Hydra.Ext.Graphql.Coder
 import Hydra.Ext.Haskell.Coder
 import Hydra.Ext.Java.Coder
 import Hydra.Ext.Json.Coder
+import Hydra.Ext.Json.Schema.Coder
 import Hydra.Ext.Pegasus.Coder
 import Hydra.Ext.Protobuf.Coder
 import Hydra.Ext.Scala.Coder
@@ -93,6 +95,9 @@ writeJava = generateSources moduleToJava
 
 -- writeJson :: FP.FilePath -> [Module] -> IO ()
 -- writeJson = generateSources Json.printModule
+
+writeJsonSchema :: FP.FilePath -> [Module] -> IO ()
+writeJsonSchema = generateSources moduleToJsonSchemaFiles
 
 writePdl :: FP.FilePath -> [Module] -> IO ()
 writePdl = generateSources moduleToPdl
