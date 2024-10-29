@@ -70,12 +70,16 @@ _Restriction_title = (Core.Name "title")
 
 _Restriction_description = (Core.Name "description")
 
-newtype Type = 
-  Type {
-    unType :: [TypeName]}
+data Type = 
+  TypeSingle TypeName |
+  TypeMultiple [TypeName]
   deriving (Eq, Ord, Read, Show)
 
 _Type = (Core.Name "hydra/ext/org/json/schema.Type")
+
+_Type_single = (Core.Name "single")
+
+_Type_multiple = (Core.Name "multiple")
 
 data TypeName = 
   TypeNameString  |

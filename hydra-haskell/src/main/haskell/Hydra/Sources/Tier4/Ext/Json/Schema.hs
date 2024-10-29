@@ -24,7 +24,7 @@ jsonSchemaModule = Module ns elements [jsonModelModule] tier0Modules $
     elements = [
 -- Json Documents and Schemas
 -- Let JDOC be an arbitrary JSON Schema Document. We can define its syntax using the following grammar:
--- 
+--
 -- JSDoc := { ( id, )? ( defs, )? JSch }
 
       def "Document" $ record [
@@ -60,7 +60,9 @@ jsonSchemaModule = Module ns elements [jsonModelModule] tier0Modules $
 -- type := "type" : ([typename (, typename)*] | typename)
 
       def "Type" $
-        nonemptyList $ js "TypeName",
+        union [
+          "single">: js "TypeName",
+          "multiple">: nonemptyList $ js "TypeName"],
 
 -- typename := "string" | "integer" | "number" | "boolean" | "null" | "array" | "object"
 
@@ -75,7 +77,7 @@ jsonSchemaModule = Module ns elements [jsonModelModule] tier0Modules $
 -- Besides, string is any string to describe either the title or de description of the nested schema.
 -- Finally, a uri is any possible uri as defined in the standard. Next we specify the remaining restrictions:
 -- strRes, numRes, arrRes, objRes and multRes, as well as referred schemas refSch.
--- 
+--
 -- String Restrictions
 -- strRes :=  minLen | maxLen | pattern
 
@@ -93,7 +95,7 @@ jsonSchemaModule = Module ns elements [jsonModelModule] tier0Modules $
         string,
 
 -- Here n is a natural number and r is a regular expression.
--- 
+--
 -- Numeric Restrictions
 -- numRes := min | max | multiple
 
@@ -114,7 +116,7 @@ jsonSchemaModule = Module ns elements [jsonModelModule] tier0Modules $
 -- exMax := "exclusiveMaximum": bool
 -- multiple := "multipleOf": r   (r >= 0)
 -- Here r is a decimal number and bool is either true or false.
--- 
+--
 -- Array Restrictions
 --  arrRes := items | additems | minitems | maxitems  | unique
 
@@ -134,7 +136,7 @@ jsonSchemaModule = Module ns elements [jsonModelModule] tier0Modules $
           "varItems">: nonemptyList $ js "Schema"],
 
 --  sameitems := "items": { JSch }
---  varitems := "items": [{ JSch }(,{ JSch })*] 
+--  varitems := "items": [{ JSch }(,{ JSch })*]
 --  additems :=  "additionalItems": (bool | { JSch })
 
       def "AdditionalItems" $
@@ -146,7 +148,7 @@ jsonSchemaModule = Module ns elements [jsonModelModule] tier0Modules $
 --  maxitems := "maxItems": n
 --  unique := "uniqueItems": bool
 -- Here n is a natural number and bool is either true or false.
--- 
+--
 -- Object Restrictions
 -- objRes := prop | addprop | req | minprop | maxprop | dep | pattprop
 
@@ -178,7 +180,7 @@ jsonSchemaModule = Module ns elements [jsonModelModule] tier0Modules $
 -- pattprop := "patternProperties": { patSch (, patSch)*}
 -- patSch := "regExp": { JSch }
 -- Here n is a natural number, bool is either true or false and regExp is a regular expression. As above, each kword is representing a keyword that must be unique in the nest level that is occurs.
--- 
+--
 -- Multiple Restrictions
 -- multRes := allOf | anyOf| oneOf | not | enum
 
@@ -199,7 +201,7 @@ jsonSchemaModule = Module ns elements [jsonModelModule] tier0Modules $
 
 -- Referred Schemas
 -- Note that uriRef below is the same grammar we defined earlier for URIs.
--- 
+--
 -- refSch := "$ref": "uriRef"
 
          def "SchemaReference" $
@@ -210,8 +212,8 @@ jsonSchemaModule = Module ns elements [jsonModelModule] tier0Modules $
 -- path := ( unescaped | escaped )
 -- escaped := ~0 | ~1
 -- Where unescaped can be any character except for / and ~. Also, address corresponds to any URI that does not use the # symbol, or more precisely to any URI-reference constructed using the following grammar, as defined in the official standard:
--- 
--- address = (scheme : )? hier-part (? query ) 
+--
+-- address = (scheme : )? hier-part (? query )
 
 
 
