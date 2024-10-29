@@ -7,6 +7,7 @@ import Hydra.Ext.Json.Schema.Language
 import Hydra.Tools.Serialization
 import Hydra.Ext.Json.Schema.Serde
 import qualified Hydra.Ext.Org.Json.Schema as JS
+import qualified Hydra.Json as J
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Control.Monad as CM
@@ -87,7 +88,19 @@ encodeType optional typ = case typ of
       pure $ jsType JS.TypeNameObject ++ objRes
     TypeOptional t -> encodeType True t -- Note: nested optionals are lost
     TypeRecord rt -> encodeRecordOrUnion False rt
-    TypeUnion rt -> encodeRecordOrUnion True $ unionTypeToRecordType rt
+    TypeUnion rt -> if L.null simpleFields
+        then asRecord
+        else do
+          recSchema <- JS.Schema <$> asRecord
+          let names = fieldTypeName <$> simpleFields
+          return [JS.RestrictionMultiple $ JS.MultipleRestrictionOneOf $ [recSchema] ++ (toSimpleSchema <$> names)]
+      where
+        toSimpleSchema (Name n) = JS.Schema [
+          JS.RestrictionType $ JS.TypeSingle $ JS.TypeNameString,
+          JS.RestrictionMultiple $ JS.MultipleRestrictionEnum [J.ValueString n]]
+        asRecord = encodeRecordOrUnion True $ unionTypeToRecordType rt
+        simpleFields = L.filter isSimple $ rowTypeFields rt
+        isSimple (FieldType _ ft) = isUnitType $ stripType ft
     TypeVariable name -> pure [referenceRestriction name]
     _ -> fail $ "unsupported type variant: " ++ show (typeVariant typ)
   where
