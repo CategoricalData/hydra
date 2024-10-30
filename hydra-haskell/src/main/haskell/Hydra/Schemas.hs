@@ -65,7 +65,7 @@ fieldTypes t = case stripType t of
 
 isSerializable :: Element -> Flow Graph Bool
 isSerializable el = do
-    deps <- typeDependencies (elementName el)
+    deps <- typeDependencies id (elementName el)
     let allVariants = S.fromList $ L.concat (variants <$> M.elems deps)
     return $ not $ S.member TypeVariantFunction allVariants
   where
@@ -135,8 +135,8 @@ resolveType typ = case stripType typ of
         Just t -> Just <$> coreDecodeType t
     _ -> pure $ Just typ
 
-typeDependencies :: Name -> Flow Graph (M.Map Name Type)
-typeDependencies name = deps (S.fromList [name]) M.empty
+typeDependencies :: (Type -> Type) -> Name -> Flow Graph (M.Map Name Type)
+typeDependencies transform name = deps (S.fromList [name]) M.empty
   where
     deps seeds names = if S.null seeds
         then return names
@@ -149,7 +149,7 @@ typeDependencies name = deps (S.fromList [name]) M.empty
           deps newSeeds newNames
       where
         toPair name = do
-          typ <- requireType name
+          typ <- transform <$> requireType name
           return (name, typ)
 
     requireType name = do

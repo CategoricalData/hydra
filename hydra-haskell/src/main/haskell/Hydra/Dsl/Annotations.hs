@@ -14,9 +14,11 @@ import qualified Data.Maybe as Y
 
 
 key_deprecated = Name "_deprecated"
+key_exclude = Name "exclude"
 key_maxLength = Name "_maxLength"
 key_minLength = Name "_minLength"
 key_preserveFieldName = Name "_preserveFieldName"
+
 
 annotateTerm :: Name -> Y.Maybe Term -> Term -> Term
 annotateTerm = setTermAnnotation
@@ -53,6 +55,9 @@ doc80 = doc . wrapLine 80
 
 dataDoc :: String -> Term -> Term
 dataDoc s = setTermDescription (Just s)
+
+exclude :: Type -> Type
+exclude = setTypeAnnotation key_exclude $ Just $ Terms.boolean True
 
 minLengthList :: Int -> Type -> Type
 minLengthList len = boundedList (Just len) Nothing

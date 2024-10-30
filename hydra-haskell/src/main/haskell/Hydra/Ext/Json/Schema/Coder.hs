@@ -12,6 +12,7 @@ import Hydra.Ext.Json.Schema.Serde
 import qualified Hydra.Ext.Org.Json.Schema as JS
 import qualified Hydra.Json as J
 import qualified Hydra.Dsl.Types as Types
+import Hydra.Dsl.Annotations
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -37,18 +38,23 @@ constructModule opts mod coders pairs = M.fromList <$> CM.mapM toDocument pairs
       else fail $ "mapping of non-type elements to JSON Schema is not yet supported: " ++ unName (elementName el)
 
     typeTermToDocument rootName = do
-      names <- M.keys <$> typeDependencies rootName
+      nt <- typeDependencies excludeAnnotatedFields rootName
+      let names = M.keys nt
       let nameSubst = toShortNames names
-      terms <- fmap elementData <$> (CM.mapM requireElement names)
-      types <- CM.mapM coreDecodeType terms
-      let types' = substituteTypeVariables nameSubst <$> types
-      let names' = substName nameSubst <$> names
-      schemas <- M.fromList <$> (CM.zipWithM typeToKeywordDocumentPair names' types')
+      let types = substituteTypeVariables nameSubst <$> M.elems nt
+      schemas <- M.fromList <$> (CM.zipWithM typeToKeywordDocumentPair (substName nameSubst <$> names) types)
 
       return (nameToPath rootName, JS.Document Nothing (Just schemas) $
         JS.Schema [referenceRestriction $ substName nameSubst rootName])
 
     substName subst name = Y.fromMaybe name (M.lookup name subst)
+
+    excludeAnnotatedFields = rewriteType $ \recurse typ -> case recurse typ of
+        TypeRecord (RowType n fields) -> TypeRecord $ RowType n $ L.filter (not . isExcluded . fieldTypeType) fields
+        TypeUnion (RowType n fields) -> TypeUnion $ RowType n $ L.filter (not . isExcluded . fieldTypeType) fields
+        t -> t
+      where
+        isExcluded typ = Y.isJust $ getTypeAnnotation key_exclude typ
 
     typeToKeywordDocumentPair name typ = do
       g <- getState
