@@ -1,4 +1,7 @@
-module Hydra.Ext.Json.Schema.Coder (moduleToJsonSchemaFiles) where
+module Hydra.Ext.Json.Schema.Coder (
+  JsonSchemaOptions(..),
+  moduleToJsonSchemaFiles,
+) where
 
 import Hydra.Kernel
 import Hydra.TermAdapters
@@ -17,12 +20,17 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
+data JsonSchemaOptions = JsonSchemaOptions {
+  jsonSchemaOptionsShortNames :: Bool
+}
+
 constructModule
-  :: Module
+  :: JsonSchemaOptions
+  -> Module
   -> M.Map Type (Coder Graph Graph Term ())
   -> [(Element, TypedTerm)]
   -> Flow Graph (M.Map FilePath JS.Document)
-constructModule mod coders pairs = M.fromList <$> CM.mapM toDocument pairs
+constructModule opts mod coders pairs = M.fromList <$> CM.mapM toDocument pairs
   where
     toDocument (el, TypedTerm term typ) = if isType typ
       then typeTermToDocument (elementName el)
@@ -30,17 +38,23 @@ constructModule mod coders pairs = M.fromList <$> CM.mapM toDocument pairs
 
     typeTermToDocument rootName = do
       names <- M.keys <$> typeDependencies rootName
+      let nameSubst = toShortNames names
       terms <- fmap elementData <$> (CM.mapM requireElement names)
       types <- CM.mapM coreDecodeType terms
-      schemas <- M.fromList <$> (CM.zipWithM typeToKeywordDocumentPair names types)
+      let types' = substituteTypeVariables nameSubst <$> types
+      let names' = substName nameSubst <$> names
+      schemas <- M.fromList <$> (CM.zipWithM typeToKeywordDocumentPair names' types')
 
-      return (nameToPath rootName, JS.Document Nothing (Just schemas) $ JS.Schema [referenceRestriction rootName])
+      return (nameToPath rootName, JS.Document Nothing (Just schemas) $
+        JS.Schema [referenceRestriction $ substName nameSubst rootName])
+
+    substName subst name = Y.fromMaybe name (M.lookup name subst)
 
     typeToKeywordDocumentPair name typ = do
       g <- getState
       atyp <- adapterTarget <$> (withState (AdapterContext g jsonSchemaLanguage M.empty) $ termAdapter typ)
       schema <- JS.Schema <$> encodeNamedType name atyp
-      return (JS.Keyword $ encodeName name, schema)
+      return (JS.Keyword $ encodeName $ Name $ localNameOfEager name, schema)
 
     nameToPath name = namespaceToFilePath False (FileExtension "json") (Namespace $ nsPart ++ local)
       where
@@ -132,12 +146,12 @@ isRequiredField (FieldType _ typ) = case stripType typ of
   TypeOptional _ -> False
   _ -> True
 
-moduleToJsonSchemaDocuments :: Module -> Flow Graph (M.Map FilePath JS.Document)
-moduleToJsonSchemaDocuments mod = transformModule jsonSchemaLanguage encodeTerm constructModule mod
+moduleToJsonSchemaDocuments :: JsonSchemaOptions -> Module -> Flow Graph (M.Map FilePath JS.Document)
+moduleToJsonSchemaDocuments opts mod = transformModule jsonSchemaLanguage encodeTerm (constructModule opts) mod
 
-moduleToJsonSchemaFiles :: Module -> Flow Graph (M.Map FilePath String)
-moduleToJsonSchemaFiles mod = do
-  files <- moduleToJsonSchemaDocuments mod
+moduleToJsonSchemaFiles :: JsonSchemaOptions -> Module -> Flow Graph (M.Map FilePath String)
+moduleToJsonSchemaFiles opts mod = do
+  files <- moduleToJsonSchemaDocuments opts mod
   return $ fmap jsonSchemaDocumentToString files
 
 referenceRestriction :: Name -> JS.Restriction
