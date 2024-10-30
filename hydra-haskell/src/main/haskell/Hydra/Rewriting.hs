@@ -358,6 +358,13 @@ stripTermRecursive = rewriteTerm strip
       TermTyped (TypedTerm t _) -> t
       t -> t
 
+substituteTypeVariables :: M.Map Name Name -> Type -> Type
+substituteTypeVariables subst = rewriteType replace
+  where
+    replace recurse typ = case typ of
+      TypeVariable n -> TypeVariable $ Y.fromMaybe n $ M.lookup n subst
+      _ -> recurse typ
+
 substituteVariable :: Name -> Name -> Term -> Term
 substituteVariable from to = rewriteTerm replace
   where
@@ -400,6 +407,20 @@ termDependencyNames withVars withPrims withNoms = foldOverTerm TraversalOrderPre
         nominal name = if withNoms then S.insert name names else names
         prim name = if withPrims then S.insert name names else names
         var name = if withVars then S.insert name names else names
+
+toShortNames :: [Name] -> M.Map Name Name
+toShortNames original = M.fromList $ L.concat (renameGroup <$> M.toList groups)
+  where
+    groups = groupNamesByLocal original
+    renameGroup (local, names) = L.zipWith rename (S.toList names) [1..]
+      where
+        rename name i = (name, Name $ if i > 1 then local ++ show i else local)
+    groupNamesByLocal names = L.foldl addName M.empty names
+      where
+        addName acc name = M.insert local (S.insert name group) acc
+          where
+            local = localNameOfEager name
+            group = Y.fromMaybe S.empty $ M.lookup local acc
 
 -- Topological sort of connected components, in terms of dependencies between varable/term binding pairs
 topologicalSortBindings :: M.Map Name Term -> [[(Name, Term)]]

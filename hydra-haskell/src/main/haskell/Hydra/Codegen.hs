@@ -97,7 +97,7 @@ writeJava = generateSources moduleToJava
 -- writeJson = generateSources Json.printModule
 
 writeJsonSchema :: FP.FilePath -> [Module] -> IO ()
-writeJsonSchema = generateSources moduleToJsonSchemaFiles
+writeJsonSchema = generateSources (moduleToJsonSchemaFiles (JsonSchemaOptions True))
 
 writePdl :: FP.FilePath -> [Module] -> IO ()
 writePdl = generateSources moduleToPdl
