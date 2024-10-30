@@ -109,17 +109,17 @@ encodeType optional typ = case typ of
     TypeOptional t -> encodeType True t -- Note: nested optionals are lost
     TypeRecord rt -> encodeRecordOrUnion False rt
     TypeUnion rt -> if L.null simpleFields
-        then asRecord
+        then asRecord rt
         else do
-          recSchema <- JS.Schema <$> asRecord
+          recSchema <- JS.Schema <$> asRecord (rt {rowTypeFields = nonsimpleFields})
           let names = fieldTypeName <$> simpleFields
-          return [JS.RestrictionMultiple $ JS.MultipleRestrictionOneOf $ [recSchema] ++ (toSimpleSchema <$> names)]
+          return [JS.RestrictionMultiple $ JS.MultipleRestrictionOneOf $ [recSchema, toSimpleSchema names]]
       where
-        toSimpleSchema (Name n) = JS.Schema [
+        toSimpleSchema names = JS.Schema [
           JS.RestrictionType $ JS.TypeSingle $ JS.TypeNameString,
-          JS.RestrictionMultiple $ JS.MultipleRestrictionEnum [J.ValueString n]]
-        asRecord = encodeRecordOrUnion True $ unionTypeToRecordType rt
-        simpleFields = L.filter isSimple $ rowTypeFields rt
+          JS.RestrictionMultiple $ JS.MultipleRestrictionEnum (J.ValueString . unName <$> names)]
+        asRecord rt = encodeRecordOrUnion True $ unionTypeToRecordType rt
+        (simpleFields, nonsimpleFields) = L.partition isSimple $ rowTypeFields rt
         isSimple (FieldType _ ft) = isUnitType $ stripType ft
     TypeVariable name -> pure [referenceRestriction name]
     _ -> fail $ "unsupported type variant: " ++ show (typeVariant typ)
