@@ -132,15 +132,11 @@ encodeType optional typ = case typ of
       where
         reqs = Y.catMaybes $ fmap ifReq fields
         ifReq field = if isRequiredField field then Just (JS.Keyword $ unName $ fieldTypeName field) else Nothing
-        totalReq = if union then 1 else L.length $ L.filter isRequiredField fields
-        total = if union then 1 else L.length fields
         cardRes = JS.RestrictionObject <$>
             [JS.ObjectRestrictionAdditionalProperties $ JS.AdditionalItemsAny False]
-            ++ minRes
-            ++ maxRes
-          where
-            minRes = if totalReq > 0 then [JS.ObjectRestrictionMinProperties totalReq] else []
-            maxRes = [JS.ObjectRestrictionMaxProperties total]
+            ++ if union then [
+              JS.ObjectRestrictionMinProperties 1,
+              JS.ObjectRestrictionMaxProperties 1] else []
     jsType tname = [JS.RestrictionType jst]
       where
         jst = if optional
