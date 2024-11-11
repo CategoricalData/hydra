@@ -144,6 +144,20 @@ public abstract class JsonDecoding {
     }
 
     /**
+     * Decode an optional boolean-valued field from JSON.
+     */
+    public static Opt<Boolean> decodeOptionalBooleanField(String name, Value json) {
+        return decodeOptionalField(name, JsonDecoding::decodeBoolean, json, null);
+    }
+
+    /**
+     * Decode an optional boolean-valued field from JSON.
+     */
+    public static Opt<Boolean> decodeOptionalBooleanField(Name name, Value json) {
+        return decodeOptionalField(name.value, JsonDecoding::decodeBoolean, json, null);
+    }
+
+    /**
      * Decode an optional double-valued field from JSON.
      */
     public static Opt<Double> decodeOptionalDoubleField(String name, Value json) {

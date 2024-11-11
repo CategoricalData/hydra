@@ -129,6 +129,14 @@ public abstract class JsonEncoding {
       return putList(key.value, value, mapping);
     }
 
+    public ObjectBuilder putOpt(String key, Opt<Boolean> value) {
+      return putOpt(key, value, JsonEncoding::toJson);
+    }
+
+    public ObjectBuilder putOpt(Name key, Opt<Boolean> value) {
+      return putOpt(key, value, JsonEncoding::toJson);
+    }
+
     public <L> ObjectBuilder putOpt(String key, Opt<L> value, Function<L, Value> mapping) {
       return put(key, toJson(value, mapping));
     }
