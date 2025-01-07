@@ -1,4 +1,4 @@
-package hydra;
+package hydra.dsl;
 
 import hydra.compute.Flow;
 import hydra.compute.FlowState;
@@ -15,15 +15,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
-import static hydra.Flows.EMPTY_TRACE;
-import static hydra.Flows.MAX_MAPM_SIZE;
-import static hydra.Flows.UNIT;
-import static hydra.Flows.bind;
-import static hydra.Flows.getState;
-import static hydra.Flows.map;
-import static hydra.Flows.mapM;
-import static hydra.Flows.pure;
-import static hydra.Flows.putState;
+import static hydra.dsl.Flows.EMPTY_TRACE;
+import static hydra.dsl.Flows.MAX_MAPM_SIZE;
+import static hydra.dsl.Flows.UNIT;
+import static hydra.dsl.Flows.bind;
+import static hydra.dsl.Flows.getState;
+import static hydra.dsl.Flows.map;
+import static hydra.dsl.Flows.mapM;
+import static hydra.dsl.Flows.pure;
+import static hydra.dsl.Flows.putState;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
