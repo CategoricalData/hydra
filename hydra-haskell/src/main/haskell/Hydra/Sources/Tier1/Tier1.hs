@@ -314,10 +314,7 @@ unqualifyNameDef = tier1Definition "unqualifyName" $
 
 emptyTraceDef :: TElement Trace
 emptyTraceDef = tier1Definition "emptyTrace" $
-  record _Trace [
-    _Trace_stack>>: list [],
-    _Trace_messages>>: list [],
-    _Trace_other>>: Maps.empty]
+  Flows.trace (list []) (list []) Maps.empty
 
 flowSucceedsDef :: TElement (Flow s a -> Bool)
 flowSucceedsDef = tier1Definition "flowSucceeds" $

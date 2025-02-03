@@ -38,9 +38,9 @@ sequence = TTerm $ Terms.primitive _flows_sequence
 
 flowState :: TTerm (Maybe x) -> TTerm s -> TTerm Trace -> TTerm (FlowState s x)
 flowState value state trace = record _FlowState [
-    _FlowState_value>>: value,
-    _FlowState_state>>: state,
-    _FlowState_trace>>: trace]
+  _FlowState_value>>: value,
+  _FlowState_state>>: state,
+  _FlowState_trace>>: trace]
 
 flowStateState :: TTerm (FlowState s x -> s)
 flowStateState = project _FlowState _FlowState_state
@@ -53,10 +53,10 @@ flowStateValue = project _FlowState _FlowState_value
 
 trace :: TTerm [String] -> TTerm [String] -> TTerm (M.Map String (Term)) -> TTerm Trace
 trace stack messages other = record _Trace [
-    _Trace_stack>>: stack,
-    _Trace_messages>>: messages,
-    _Trace_other>>: other]
-    
+  _Trace_stack>>: stack,
+  _Trace_messages>>: messages,
+  _Trace_other>>: other]
+
 traceStack :: TTerm (Trace -> [String])
 traceStack = project _Trace _Trace_stack
 
