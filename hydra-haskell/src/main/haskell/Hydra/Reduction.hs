@@ -177,6 +177,28 @@ etaReduceTerm term = case term of
       _ -> noChange
     noChange = term
 
+-- | Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', in which the implicit
+--   parameters of primitive functions and eliminations are made into explicit lambda parameters.
+--   Variable references are not expanded.
+--   This is useful for targets like Python with weaker support for currying than Hydra or Haskell.
+expandLambdas :: Graph -> Term -> Term
+--expandLambdas g = contractTerm . unshadowVariables . expand
+expandLambdas g = contractTerm . expand
+  where
+    expand = rewriteTerm $ \recurse term -> case recurse term of
+      TermFunction f -> case f of
+          FunctionElimination _ -> pad [1] $ TermFunction f
+          FunctionPrimitive name -> pad [1..(primitiveArity $ Y.fromJust $ lookupPrimitive g name)] $ TermFunction f
+          _ -> TermFunction f
+        where
+          pad is term = if L.null is
+              then term
+              else TermFunction $ FunctionLambda $
+                Lambda var Nothing $ pad (tail is) (TermApplication $ Application term $ TermVariable var)
+            where
+              var = (Name $ "v" ++ show (head is))
+      t -> t
+
 -- | Whether a term is closed, i.e. represents a complete program
 termIsClosed :: Term -> Bool
 termIsClosed = S.null . freeVariablesInTerm
