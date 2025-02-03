@@ -384,7 +384,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] tier0Modules $
 
 -- decorators: ('@' named_expression NEWLINE )+
 
-       def "Decorators" $ nonemptyList $ python "NamedExpression",
+      def "Decorators" $ nonemptyList $ python "NamedExpression",
 
 -- # Class definitions
 -- # -----------------
@@ -731,7 +731,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] tier0Modules $
 
       def "SubjectExpression" $ union [
         "tuple">: nonemptyList $ python "StarNamedExpression",
-        "expression">: python "NamedExpression"],
+        "simple">: python "NamedExpression"],
 
 -- case_block:
 --     | "case" patterns guard? ':' block
@@ -1388,42 +1388,42 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] tier0Modules $
 --     | lambda_param_with_default+ [lambda_star_etc]
 --     | lambda_star_etc
 
-        def "LambdaParameters" $ record [
-          "slashNoDefault">: optional $ python "LambdaSlashNoDefault",
-          "paramNoDefault">: list $ python "LambdaParamNoDefault",
-          "paramWithDefault">: list $ python "LambdaParamWithDefault",
-          "starEtc">: optional $ python "LambdaStarEtc"],
+      def "LambdaParameters" $ record [
+        "slashNoDefault">: optional $ python "LambdaSlashNoDefault",
+        "paramNoDefault">: list $ python "LambdaParamNoDefault",
+        "paramWithDefault">: list $ python "LambdaParamWithDefault",
+        "starEtc">: optional $ python "LambdaStarEtc"],
 
 -- lambda_slash_no_default:
 --     | lambda_param_no_default+ '/' ','
 --     | lambda_param_no_default+ '/' &':'
 
-        def "LambdaSlashNoDefault" $ record [
-            "parameters">: list $ python "LambdaParamNoDefault"],
+      def "LambdaSlashNoDefault" $ record [
+        "parameters">: list $ python "LambdaParamNoDefault"],
 
 -- lambda_slash_with_default:
 --     | lambda_param_no_default* lambda_param_with_default+ '/' ','
 --     | lambda_param_no_default* lambda_param_with_default+ '/' &':'
 
-        def "LambdaSlashWithDefault" $ record [
-            "paramNoDefault">: list $ python "LambdaParamNoDefault",
-            "paramWithDefault">: nonemptyList $ python "LambdaParamWithDefault"],
+      def "LambdaSlashWithDefault" $ record [
+        "paramNoDefault">: list $ python "LambdaParamNoDefault",
+        "paramWithDefault">: nonemptyList $ python "LambdaParamWithDefault"],
 
 -- lambda_star_etc:
 --     | '*' lambda_param_no_default lambda_param_maybe_default* [lambda_kwds]
 --     | '*' ',' lambda_param_maybe_default+ [lambda_kwds]
 --     | lambda_kwds
 
-        def "LambdaStarEtc" $ union [
-            "star">: boolean,
-            "paramNoDefault">: optional $ python "LambdaParamNoDefault",
-            "paramMaybeDefault">: list $ python "LambdaParamMaybeDefault",
-            "kwds">: python "LambdaKwds"],
+      def "LambdaStarEtc" $ union [
+        "star">: boolean,
+        "paramNoDefault">: python "LambdaParamNoDefault",
+        "paramMaybeDefault">: list $ python "LambdaParamMaybeDefault",
+        "kwds">: python "LambdaKwds"],
 
 -- lambda_kwds:
 --     | '**' lambda_param_no_default
 
-        def "LambdaKwds" $ python "LambdaParamNoDefault",
+      def "LambdaKwds" $ python "LambdaParamNoDefault",
 
 -- lambda_param_no_default:
 --     | lambda_param ','
@@ -1437,7 +1437,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] tier0Modules $
 
       def "LambdaParamWithDefault" $ record [
         "param">: python "Name",
-        "default">: python "Default"],
+        "default">: optional $ python "Default"],
 
 -- lambda_param_maybe_default:
 --     | lambda_param default? ','

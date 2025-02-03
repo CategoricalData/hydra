@@ -39,6 +39,11 @@ data PythonModuleMetadata = PythonModuleMetadata {
   pythonModuleMetadataUsesTypeVar :: Bool,
   pythonModuleMetadataUsesNode :: Bool}
 
+encodeField :: PythonEnvironment -> Field -> Flow s (Py.Name, Py.Expression)
+encodeField env (Field fname fterm) = do
+  pterm <- encodeTerm env fterm
+  return (encodeFieldName fname, pterm)
+
 encodeFieldName :: Name -> Py.Name
 encodeFieldName fname = Py.Name $ sanitizePythonName $
   convertCase CaseConventionCamel CaseConventionLowerSnake $ unName fname
@@ -69,14 +74,25 @@ encodeApplication env (Application fun arg) = case fullyStripTerm fun of
     TermFunction f -> case f of
       FunctionElimination elm -> case elm of
 --        EliminationList ...
---        EliminationOptional ...
+        EliminationOptional (OptionalCases nothing just) -> do
+          return $ stringToPyExpression Py.QuoteStyleDouble "optional match expressions not yet supported"
+
 --        EliminationProduct ...
         EliminationRecord (Projection _ fname) -> do
           parg <- encodeTerm env arg
-          return $ pyPrimaryToPyExpression $ Py.PrimaryCompound $
-            Py.PrimaryWithRhs (pyExpressionToPyPrimary parg) $ Py.PrimaryRhsProject $ encodeFieldName fname
---        EliminationUnion (CaseStatement tname mdef cases) -> ...
---        EliminationWrap ...
+          return $ projectFromExpression parg $ encodeFieldName fname
+        EliminationUnion (CaseStatement tname mdef cases) -> do
+--          parg <- encodeTerm env arg
+--          pmdef <- traverse (encodeTerm env) mdef
+--          pcases <- CM.mapM (encodeField env) cases
+--          let subjExpr = Py.SubjectExpressionSimple $ Py.NamedExpressionSimple parg
+--          let caseBlocks = [] -- TODO
+--          return $ Py.MatchStatement subjExpr caseBlocks
+          return $ stringToPyExpression Py.QuoteStyleDouble "match expressions not yet supported"
+
+        EliminationWrap _ -> do
+          parg <- encodeTerm env arg
+          return $ projectFromExpression parg $ Py.Name "value"
         _ -> fail $ "elimination variant is not yet supported in applications: " ++ show (eliminationVariant elm)
       FunctionPrimitive name -> do
         parg <- encodeTerm env arg
@@ -118,7 +134,9 @@ encodeFunction :: PythonEnvironment -> Function -> Flow s Py.Expression
 encodeFunction env f = case f of
   FunctionLambda (Lambda var _ body) -> do
     pbody <- encodeTerm env body
-    return $ Py.ExpressionLambda $ Py.Lambda (Py.LambdaParameters Nothing [] [] $ Just $ Py.LambdaStarEtcKwds $ Py.LambdaKwds $ Py.LambdaParamNoDefault $ encodeName env var) pbody
+    return $ Py.ExpressionLambda $ Py.Lambda (Py.LambdaParameters Nothing [] [] $
+      Just $ Py.LambdaStarEtcParamNoDefault $ Py.LambdaParamNoDefault $ encodeName env var) pbody
+  FunctionPrimitive name -> pure $ variableReference env name -- Only nullary primitives should appear here.
   _ -> fail $ "unexpected function variant: " ++ show (functionVariant f)
 
 encodeIntegerValue :: IntegerValue -> Flow s Py.Expression
@@ -244,6 +262,7 @@ encodeTerm :: PythonEnvironment -> Term -> Flow s Py.Expression
 encodeTerm env term = case fullyStripTerm term of
     TermApplication a -> encodeApplication env a
     TermFunction f -> encodeFunction env f
+    TermLet _ -> pure $ stringToPyExpression Py.QuoteStyleDouble "let terms are not yet supported"
     TermList els -> pyAtomToPyExpression . Py.AtomList . pyList <$> CM.mapM encode els
     TermLiteral lit -> encodeLiteral lit
     TermOptional mt -> case mt of

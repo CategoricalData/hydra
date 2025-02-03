@@ -1015,14 +1015,14 @@ _MatchStatement_cases = (Core.Name "cases")
 
 data SubjectExpression = 
   SubjectExpressionTuple [StarNamedExpression] |
-  SubjectExpressionExpression NamedExpression
+  SubjectExpressionSimple NamedExpression
   deriving (Eq, Ord, Read, Show)
 
 _SubjectExpression = (Core.Name "hydra/ext/python/syntax.SubjectExpression")
 
 _SubjectExpression_tuple = (Core.Name "tuple")
 
-_SubjectExpression_expression = (Core.Name "expression")
+_SubjectExpression_simple = (Core.Name "simple")
 
 data CaseBlock = 
   CaseBlock {
@@ -2026,7 +2026,7 @@ _LambdaSlashWithDefault_paramWithDefault = (Core.Name "paramWithDefault")
 
 data LambdaStarEtc = 
   LambdaStarEtcStar Bool |
-  LambdaStarEtcParamNoDefault (Maybe LambdaParamNoDefault) |
+  LambdaStarEtcParamNoDefault LambdaParamNoDefault |
   LambdaStarEtcParamMaybeDefault [LambdaParamMaybeDefault] |
   LambdaStarEtcKwds LambdaKwds
   deriving (Eq, Ord, Read, Show)
@@ -2058,7 +2058,7 @@ _LambdaParamNoDefault = (Core.Name "hydra/ext/python/syntax.LambdaParamNoDefault
 data LambdaParamWithDefault = 
   LambdaParamWithDefault {
     lambdaParamWithDefaultParam :: Name,
-    lambdaParamWithDefaultDefault :: Default}
+    lambdaParamWithDefaultDefault :: (Maybe Default)}
   deriving (Eq, Ord, Read, Show)
 
 _LambdaParamWithDefault = (Core.Name "hydra/ext/python/syntax.LambdaParamWithDefault")

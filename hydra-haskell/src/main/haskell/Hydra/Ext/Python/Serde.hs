@@ -126,6 +126,7 @@ encodeDoubleStarredKvpair d = case d of
 
 encodeExpression :: Py.Expression -> A.Expr
 encodeExpression e = case e of
+  Py.ExpressionLambda l -> encodeLambda l
   Py.ExpressionSimple d -> encodeDisjunction d
   _ -> unsupportedVariant "expression" e
 
@@ -185,6 +186,27 @@ encodeKwargOrStarred k = case k of
   Py.KwargOrStarredKwarg kw -> encodeKwarg kw
   Py.KwargOrStarredStarred se -> encodeStarredExpression se
 
+encodeLambda :: Py.Lambda -> A.Expr
+encodeLambda (Py.Lambda params body) = spaceSep [cst "lambda", paramSec, encodeExpression body]
+  where
+    paramSec = noSep [encodeLambdaParameters params, cst ":"]
+
+encodeLambdaParamNoDefault :: Py.LambdaParamNoDefault -> A.Expr
+encodeLambdaParamNoDefault (Py.LambdaParamNoDefault name) = encodeName name
+
+encodeLambdaParameters :: Py.LambdaParameters -> A.Expr
+encodeLambdaParameters (Py.LambdaParameters slashNoDefault paramNoDefault paramWithDefault starEtc) =
+  commaSep inlineStyle $ Y.catMaybes [
+    Nothing, -- TODO: slashNoDefault
+    Nothing, -- TODO: paramNoDefault
+    Nothing, -- TODO: paramWithDefault
+    encodeLambdaStarEtc <$> starEtc]
+
+encodeLambdaStarEtc :: Py.LambdaStarEtc -> A.Expr
+encodeLambdaStarEtc l = case l of
+  Py.LambdaStarEtcParamNoDefault p -> encodeLambdaParamNoDefault p
+  _ -> unsupportedVariant "lambda star etc" l
+
 encodeList :: Py.List -> A.Expr
 encodeList (Py.List es) = noSep [cst "[", commaSep inlineStyle (encodeStarNamedExpression <$> es), cst "]"]
 
@@ -225,6 +247,7 @@ encodePrimary p = case p of
 encodePrimaryRhs :: Py.PrimaryRhs -> A.Expr
 encodePrimaryRhs p = case p of
   Py.PrimaryRhsCall args -> noSep [cst "(", encodeArgs args, cst ")"]
+  Py.PrimaryRhsProject name -> noSep [cst ".", encodeName name]
   Py.PrimaryRhsSlices slices -> noSep [cst "[", encodeSlices slices, cst "]"]
   _ -> unsupportedVariant "primary rhs" p
 

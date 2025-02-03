@@ -193,6 +193,10 @@ primaryWithExpressionSlices prim exprs = primaryWithSlices prim
 primaryWithSlices :: Py.Primary -> Py.Slice -> [Py.SliceOrStarredExpression] -> Py.Primary
 primaryWithSlices prim first rest = primaryWithRhs prim $ Py.PrimaryRhsSlices $ Py.Slices first rest
 
+projectFromExpression :: Py.Expression -> Py.Name -> Py.Expression
+projectFromExpression exp name = pyPrimaryToPyExpression $ Py.PrimaryCompound $
+  Py.PrimaryWithRhs (pyExpressionToPyPrimary exp) $ Py.PrimaryRhsProject name
+
 stringToPyExpression :: Py.QuoteStyle -> String -> Py.Expression
 stringToPyExpression style s = pyAtomToPyExpression $ Py.AtomString $ Py.String_ s style
 
