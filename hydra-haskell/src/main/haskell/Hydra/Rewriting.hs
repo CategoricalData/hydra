@@ -53,9 +53,8 @@ elementsWithDependencies original = CM.mapM requireElement allDepNames
     depNames = S.toList . termDependencyNames True False False . elementData
     allDepNames = L.nub $ (elementName <$> original) ++ (L.concat $ depNames <$> original)
 
--- | Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x',
---   whose arity (in the absence of application terms) is equal to the depth of nested lambdas.
---   This is useful for targets like Java with weaker support for currying.
+-- | A variation of expandLambdas which also attaches type annotations when "padding" function terms.
+-- TODO: merge into expandLambdas
 expandTypedLambdas :: Term -> Term
 expandTypedLambdas = rewriteTerm rewrite
   where

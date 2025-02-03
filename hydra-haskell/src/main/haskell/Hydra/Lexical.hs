@@ -47,11 +47,11 @@ requireElement name = do
 --          else strings
 
 requirePrimitive :: Name -> Flow Graph Primitive
-requirePrimitive fn = do
-    cx <- getState
-    Y.maybe err pure $ lookupPrimitive cx fn
+requirePrimitive name = do
+    g <- getState
+    Y.maybe err pure $ lookupPrimitive g name
   where
-    err = fail $ "no such primitive function: " ++ unName fn
+    err = fail $ "no such primitive function: " ++ unName name
 
 -- TODO: distinguish between lambda-bound and let-bound variables
 resolveTerm :: Name -> Flow Graph (Maybe Term)

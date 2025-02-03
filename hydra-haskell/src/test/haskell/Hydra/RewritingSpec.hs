@@ -34,44 +34,140 @@ myQuuxRewriter = rewriteQuux L.length $ \fsub q -> fsub $ case q of
   QuuxPair left right -> QuuxPair QuuxUnit right
   _ -> q
 
-testExpandLambdas :: H.SpecWith ()
-testExpandLambdas = do
-  H.describe "Test expanding to lambda terms" $ do
+testExpandLambdas :: Graph -> H.SpecWith ()
+testExpandLambdas g = do
+  H.describe "Test expanding to (untyped) lambda terms" $ do
 
-    H.it "Try some terms which do not expand" $ do
-      noChange (int32 42)
-      noChange (list ["foo", "bar"])
-      noChange
-        (splitOn @@ "foo" @@ "bar")
-      noChange
-        (lambda "x" $ int32 42)
-      noChange
-        (typed Types.int32 $ int32 42)
+    H.describe "Try terms which do not expand" $ do
+      H.it "test #1" $
+        noChange (int32 42)
+      H.it "test #2" $
+        noChange (list ["foo", "bar"])
+      H.it "test #3" $
+        noChange (splitOn @@ "foo" @@ "bar")
+      H.it "test #4" $
+        noChange (lambda "x" $ lambda "y" $ splitOn @@ var "x" @@ var "y")
+      H.it "test #5" $
+        noChange (lambda "x" $ int32 42)
+      H.it "test #6" $
+        noChange (typed Types.int32 $ int32 42)
 
-    H.it "Expand bare function terms" $ do
-      expandsTo
-        toLower
-        (lambda "v1" $ toLower @@ var "v1")
-      expandsTo
-        splitOn
-        (lambda "v1" $ lambda "v2" $ splitOn @@ var "v1" @@ var "v2")
-      expandsTo
-        (matchOpt (int32 42) length)
-        -- Note two levels of lambda expansion
-        (lambda "v1" $ (matchOpt (int32 42) $ lambda "v1" $ length @@ var "v1") @@ var "v1")
+    H.describe "Try bare function terms" $ do
+      H.it "test #1" $
+        expandsTo
+          toLower
+          (lambda "v1" $ toLower @@ var "v1")
+      H.it "test #2" $
+        expandsTo
+          splitOn
+          (lambda "v1" $ lambda "v2" $ splitOn @@ var "v1" @@ var "v2")
+      H.it "test #3" $
+        expandsTo
+          (matchOpt (int32 42) length)
+          -- Note two levels of lambda expansion
+          (lambda "v1" $ (matchOpt (int32 42) $ lambda "v1" $ length @@ var "v1") @@ var "v1")
+      H.it "test #4" $
+        expandsTo
+          (project (Name "Person") (Name "firstName"))
+          (lambda "v1" $ ((project (Name "Person") (Name "firstName") @@ var "v1")))
+      -- TODO: case statement
 
-    H.it "Expand subterms within applications" $ do
-      expandsTo
-        (splitOn @@ "bar")
-        (lambda "v1" $ splitOn @@ "bar" @@ var "v1")
-      expandsTo
-        ((lambda "x" $ var "x") @@ length)
-        ((lambda "x" $ var "x") @@ (lambda "v1" $ length @@ var "v1"))
+    H.describe "Try subterms within applications" $ do
+      H.it "test #1" $
+        expandsTo
+          (splitOn @@ "bar")
+          (lambda "v2" $ splitOn @@ "bar" @@ var "v2")
+      H.it "test #2" $
+        expandsTo
+          (lambda "x" $ splitOn @@ var "x")
+          (lambda "x" $ lambda "v2" $ splitOn @@ var "x" @@ var "v2")
+      H.it "test #3" $
+        expandsTo
+          ((lambda "x" $ var "x") @@ length)
+          (lambda "v1" $ length @@ var "v1")
 
-    H.it "Expand arbitrary subterms" $ do
-      expandsTo
-        (list [lambda "x" $ list ["foo"], splitOn @@ "bar"])
-        (list [lambda "x" $ list ["foo"], lambda "v1" $ splitOn @@ "bar" @@ var "v1"])
+    H.describe "Try let terms" $ do
+      H.it "test #1" $
+        noChange
+          (int32 42 `with` ["foo">: int32 137])
+      H.it "test #2" $
+        expandsTo
+          (var "foo" `with` ["foo">: splitOn])
+          (var "foo" `with` ["foo">: lambda "v1" $ lambda "v2" $ splitOn @@ var "v1" @@ var "v2"])
+
+    H.describe "Try other subterms" $ do
+      H.it "test #1" $
+        expandsTo
+          (list [lambda "x" $ list ["foo"], splitOn @@ "bar"])
+          (list [lambda "x" $ list ["foo"], lambda "v2" $ splitOn @@ "bar" @@ var "v2"])
+
+    H.it "Check that lambda expansion is idempotent" $ do
+      QC.property $ \term -> do
+        let once = expandLambdas g term
+        let twice = expandLambdas g once
+        H.shouldBe once twice
+
+  where
+    length = primitive $ Name "hydra/lib/strings.length"
+    splitOn = primitive $ Name "hydra/lib/strings.splitOn"
+    toLower = primitive $ Name "hydra/lib/strings.toLower"
+    expandsTo termBefore termAfter = do
+       let result = expandLambdas g termBefore
+       H.shouldBe (show result) (show termAfter)
+    noChange term = expandsTo term term
+
+-- TODO: merge this into expandLambdas
+testExpandTypedLambdas :: H.SpecWith ()
+testExpandTypedLambdas = do
+  H.describe "Test expanding to typed lambda terms" $ do
+
+    H.describe "Try some terms which do not expand" $ do
+      H.it "test #1" $
+        noChange (int32 42)
+      H.it "test #2" $
+        noChange (list ["foo", "bar"])
+      H.it "test #3" $
+        noChange (splitOn @@ "foo" @@ "bar")
+      H.it "test #4" $
+        noChange (lambda "x" $ int32 42)
+      H.it "test #5" $
+        noChange (typed Types.int32 $ int32 42)
+
+    H.describe "Expand bare function terms" $ do
+      H.it "test #1" $
+        expandsTo
+          toLower
+          (lambda "v1" $ toLower @@ var "v1")
+      H.it "test #2" $
+        expandsTo
+          splitOn
+          (lambda "v1" $ lambda "v2" $ splitOn @@ var "v1" @@ var "v2")
+      H.it "test #3" $
+        expandsTo
+          (matchOpt (int32 42) length)
+          -- Note two levels of lambda expansion
+          (lambda "v1" $ (matchOpt (int32 42) $ lambda "v1" $ length @@ var "v1") @@ var "v1")
+      H.it "test #4" $
+        expandsTo
+          (project (Name "Person") (Name "firstName"))
+          (lambda "v1" $ ((project (Name "Person") (Name "firstName") @@ var "v2")))
+      -- TODO: case statement
+
+    H.describe "Expand subterms within applications" $ do
+      H.it "test #1" $
+        expandsTo
+          (splitOn @@ "bar")
+          (lambda "v1" $ splitOn @@ "bar" @@ var "v1")
+      H.it "test #2" $
+        expandsTo
+          ((lambda "x" $ var "x") @@ length)
+          ((lambda "x" $ var "x") @@ (lambda "v1" $ length @@ var "v1"))
+
+    H.describe "Expand arbitrary subterms" $ do
+      H.it "test #1" $
+        expandsTo
+          (list [lambda "x" $ list ["foo"], splitOn @@ "bar"])
+          (list [lambda "x" $ list ["foo"], lambda "v1" $ splitOn @@ "bar" @@ var "v1"])
 
     H.it "Check that lambda expansion is idempotent" $ do
       QC.property $ \term -> do
@@ -90,10 +186,7 @@ testExpandLambdas = do
        inf <- fromFlowIo testGraph $ inferTermType termBefore
        let result = expandTypedLambdas inf
        H.shouldBe (showTerm (removeTermAnnotations result)) (showTerm termAfter)
-
     noChange term = expandsTo term term
-
-    app = lambda "a" $ project testTypePersonName (Name "firstName") @@ var "a"
 
 testFoldOverTerm :: H.SpecWith ()
 testFoldOverTerm = do
@@ -343,7 +436,8 @@ testTopologicalSortBindings = do
 
 spec :: H.Spec
 spec = do
---   testExpandLambdas -- TODO: restore me
+  testExpandLambdas testGraph
+--  testExpandTypedLambdas -- TODO: restore me / merge with testExpandLambdas
   testFoldOverTerm
   testFlattenLetTerms
   testFreeVariablesInTerm

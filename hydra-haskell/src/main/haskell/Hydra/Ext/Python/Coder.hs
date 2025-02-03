@@ -64,6 +64,31 @@ encodeFunctionType env ft = do
       TypeFunction ft2 -> gatherParams (dom:rdoms) ft2
       _ -> (L.reverse (dom:rdoms), cod)
 
+encodeApplication :: PythonEnvironment -> Application -> Flow s Py.Expression
+encodeApplication env (Application fun arg) = case fullyStripTerm fun of
+    TermFunction f -> case f of
+      FunctionElimination elm -> case elm of
+--        EliminationList ...
+--        EliminationOptional ...
+--        EliminationProduct ...
+        EliminationRecord (Projection _ fname) -> do
+          parg <- encodeTerm env arg
+          return $ pyPrimaryToPyExpression $ Py.PrimaryCompound $
+            Py.PrimaryWithRhs (pyExpressionToPyPrimary parg) $ Py.PrimaryRhsProject $ encodeFieldName fname
+--        EliminationUnion (CaseStatement tname mdef cases) -> ...
+--        EliminationWrap ...
+        _ -> fail $ "elimination variant is not yet supported in applications: " ++ show (eliminationVariant elm)
+      FunctionPrimitive name -> do
+        parg <- encodeTerm env arg
+        return $ functionCall (pyNameToPyPrimary $ encodeName env name) [parg]
+      _ -> def
+    _ -> def
+  where
+    def = do
+      pfun <- encodeTerm env fun
+      parg <- encodeTerm env arg
+      return $ functionCall (pyExpressionToPyPrimary pfun) [parg]
+
 encodeApplicationType :: PythonEnvironment -> ApplicationType -> Flow Graph Py.Expression
 encodeApplicationType env at = do
     pybody <- encodeType env body
@@ -84,11 +109,6 @@ encodeDefinition env def = case def of
     comment <- fmap normalizeComment <$> getTypeDescription typ
     encodeTypeAssignment env name typ comment
 
-encodeElimination :: PythonEnvironment -> Elimination -> Flow s Py.Expression
-encodeElimination env elm = case elm of
---  EliminationRecord (Projection _ fname) ->
-  _ -> fail $ "unsupported elimination variant: " ++ show (eliminationVariant elm)
-
 encodeFloatValue :: FloatValue -> Flow s Py.Expression
 encodeFloatValue fv = case fv of
   FloatValueBigfloat f -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberFloat f
@@ -96,11 +116,10 @@ encodeFloatValue fv = case fv of
 
 encodeFunction :: PythonEnvironment -> Function -> Flow s Py.Expression
 encodeFunction env f = case f of
-  FunctionElimination elm -> encodeElimination env elm
   FunctionLambda (Lambda var _ body) -> do
     pbody <- encodeTerm env body
     return $ Py.ExpressionLambda $ Py.Lambda (Py.LambdaParameters Nothing [] [] $ Just $ Py.LambdaStarEtcKwds $ Py.LambdaKwds $ Py.LambdaParamNoDefault $ encodeName env var) pbody
-  FunctionPrimitive name -> pure $ pyNameToPyExpression $ encodeName env name
+  _ -> fail $ "unexpected function variant: " ++ show (functionVariant f)
 
 encodeIntegerValue :: IntegerValue -> Flow s Py.Expression
 encodeIntegerValue iv = case iv of
@@ -223,10 +242,7 @@ encodeRecordType env name (RowType _ tfields) comment = do
 
 encodeTerm :: PythonEnvironment -> Term -> Flow s Py.Expression
 encodeTerm env term = case fullyStripTerm term of
-    TermApplication (Application fun arg) -> do
-      pfun <- encode fun
-      parg <- encode arg
-      return $ functionCall (pyExpressionToPyPrimary pfun) [parg]
+    TermApplication a -> encodeApplication env a
     TermFunction f -> encodeFunction env f
     TermList els -> pyAtomToPyExpression . Py.AtomList . pyList <$> CM.mapM encode els
     TermLiteral lit -> encodeLiteral lit
@@ -247,9 +263,15 @@ encodeTerm env term = case fullyStripTerm term of
   where
     encode = encodeTerm env
 
-encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Type -> Maybe String -> Flow s [Py.Statement]
+encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Type -> Maybe String -> Flow Graph [Py.Statement]
 encodeTermAssignment env name term _ comment = do
-  expr <- encodeTerm env term
+  g <- getState
+--  if name == Name "hydra/tier1.floatValueToBigfloat"
+----    then fail "here"
+----    then fail $ "expanded: " ++ showTerm (fullyStripTerm $ expandTypedLambdas term)
+--    then fail $ "expanded: " ++ show (fullyStripTerm $ expandLambdas g term)
+--    else pure ()
+  expr <- encodeTerm env $ expandLambdas g term
   return [annotatedStatement comment $ assignmentStatement (Py.Name $ localNameOfEager name) expr]
 
 encodeType :: PythonEnvironment -> Type -> Flow Graph Py.Expression
