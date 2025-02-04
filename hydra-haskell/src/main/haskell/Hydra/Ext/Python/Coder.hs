@@ -283,15 +283,16 @@ encodeTerm env term = case fullyStripTerm term of
     encode = encodeTerm env
 
 encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Type -> Maybe String -> Flow Graph [Py.Statement]
-encodeTermAssignment env name term _ comment = do
-  g <- getState
---  if name == Name "hydra/tier1.floatValueToBigfloat"
-----    then fail "here"
-----    then fail $ "expanded: " ++ showTerm (fullyStripTerm $ expandTypedLambdas term)
---    then fail $ "expanded: " ++ show (fullyStripTerm $ expandLambdas g term)
---    else pure ()
-  expr <- encodeTerm env $ expandLambdas g term
-  return [annotatedStatement comment $ assignmentStatement (Py.Name $ localNameOfEager name) expr]
+encodeTermAssignment env name term _ comment = case fullyStripTerm term of
+--  TermFunction f -> ...
+  TermLet (Let bindings env) -> do
+      ...
+    where
+      ...
+  _ -> do
+    g <- getState
+    expr <- encodeTerm env $ expandLambdas g term
+    return [annotatedStatement comment $ assignmentStatement (Py.Name $ localNameOfEager name) expr]
 
 encodeType :: PythonEnvironment -> Type -> Flow Graph Py.Expression
 encodeType env typ = case stripType typ of
