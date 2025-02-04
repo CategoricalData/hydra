@@ -13,7 +13,7 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-type Subst = M.Map Name (Type)
+type Subst = M.Map Name Type
 
 composeSubst :: Subst -> Subst -> Subst
 composeSubst s1 s2 = M.union s1 $ M.map (substituteInType s1) s2
@@ -51,12 +51,12 @@ normalizeScheme ts@(TypeScheme _ body) = TypeScheme (fmap snd ord) (normalizeTyp
         Nothing -> error $ "type variable " ++ show v ++ " not in signature of type scheme: " ++ show ts
       TypeWrap _ -> typ
 
-substituteInScheme :: M.Map Name (Type) -> TypeScheme -> TypeScheme
+substituteInScheme :: M.Map Name Type -> TypeScheme -> TypeScheme
 substituteInScheme s (TypeScheme as t) = TypeScheme as $ substituteInType s' t
   where
     s' = L.foldr M.delete s as
 
-substituteInType :: M.Map Name (Type) -> Type -> Type
+substituteInType :: M.Map Name Type -> Type -> Type
 substituteInType s typ = case typ of
     TypeApplication (ApplicationType lhs rhs) -> TypeApplication (ApplicationType (subst lhs) (subst rhs))
     TypeAnnotated (AnnotatedType t ann) -> TypeAnnotated (AnnotatedType (subst t) ann)

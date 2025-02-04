@@ -118,7 +118,9 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
         record [
           "left">: core "Type",
           "right">: core "Type",
-          "context">: optional string],
+          "comment">:
+            doc "An optional description of the type constraint. This may be used for tracing or debugging." $
+            optional string],
 
       def "TypeVariant" $
         doc "The identifier of a type constructor" $
