@@ -235,7 +235,8 @@ data TypeConstraint =
   TypeConstraint {
     typeConstraintLeft :: Core.Type,
     typeConstraintRight :: Core.Type,
-    typeConstraintContext :: (Maybe String)}
+    -- | An optional description of the type constraint. This may be used for tracing or debugging.
+    typeConstraintComment :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
 _TypeConstraint = (Core.Name "hydra/mantle.TypeConstraint")
@@ -244,7 +245,7 @@ _TypeConstraint_left = (Core.Name "left")
 
 _TypeConstraint_right = (Core.Name "right")
 
-_TypeConstraint_context = (Core.Name "context")
+_TypeConstraint_comment = (Core.Name "comment")
 
 -- | The identifier of a type constructor
 data TypeVariant = 

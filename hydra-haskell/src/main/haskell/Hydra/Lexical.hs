@@ -78,5 +78,5 @@ toCompactName namespaces name = case mns of
 
 withSchemaContext :: Flow Graph x -> Flow Graph x
 withSchemaContext f = do
-  cx <- getState
-  withState (schemaContext cx) f
+  g <- getState
+  withState (schemaContext g) f
