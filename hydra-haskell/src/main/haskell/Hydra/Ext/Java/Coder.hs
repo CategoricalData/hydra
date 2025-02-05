@@ -396,7 +396,7 @@ declarationForUnionType isSer aliases tparams elName fields = do
             Just [returnOtherwise]
           where
             returnOtherwise = Java.BlockStatementStatement $ javaReturnStatement $ Just $
-              javaPrimaryToJavaExpression $ Java.PrimaryNoNewArray $ Java.PrimaryNoNewArrayMethodInvocation $
+              javaPrimaryToJavaExpression $ Java.PrimaryNoNewArray_ $ Java.PrimaryNoNewArrayMethodInvocation $
               methodInvocation Nothing (Java.Identifier otherwiseMethodName) [javaIdentifierToJavaExpression $ Java.Identifier "instance"]
 
     defaultMod = [Java.InterfaceMethodModifierDefault]

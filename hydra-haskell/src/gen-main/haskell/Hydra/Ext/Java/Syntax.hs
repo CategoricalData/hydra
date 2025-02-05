@@ -2220,7 +2220,7 @@ _VariableAccess_expressionName = (Core.Name "expressionName")
 _VariableAccess_fieldAccess = (Core.Name "fieldAccess")
 
 data Primary = 
-  PrimaryNoNewArray PrimaryNoNewArray |
+  PrimaryNoNewArray_ PrimaryNoNewArray |
   PrimaryArrayCreation ArrayCreationExpression
   deriving (Eq, Ord, Read, Show)
 
