@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Core(
-  hydraCore,
+  hydraCoreGraph,
   hydraCoreModule,
   module Hydra.Kernel,
 ) where
@@ -11,8 +11,8 @@ import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
 
-hydraCore :: Graph
-hydraCore = elementsToGraph bootstrapGraph Nothing (moduleElements hydraCoreModule)
+hydraCoreGraph :: Graph
+hydraCoreGraph = elementsToGraph bootstrapGraph Nothing (moduleElements hydraCoreModule)
 
 hydraCoreModule :: Module
 hydraCoreModule = Module ns elements [] [] $
