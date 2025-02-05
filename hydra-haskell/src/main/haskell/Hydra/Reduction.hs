@@ -118,10 +118,8 @@ reduceTerm eager env = rewriteTermM mapping
 
 -- Note: this is eager beta reduction, in that we always descend into subtypes,
 --       and always reduce the right-hand side of an application prior to substitution
-betaReduceType :: Type -> Flow Graph (Type)
-betaReduceType typ = do
-    g <- getState :: Flow Graph Graph
-    rewriteTypeM mapExpr typ
+betaReduceType :: Type -> Flow Graph Type
+betaReduceType typ = rewriteTypeM mapExpr typ
   where
     mapExpr recurse t = do
         r <- recurse t

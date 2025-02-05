@@ -45,8 +45,9 @@ chooseAdapter alts supported describe typ = if supported typ
     -- Uncomment to debug adapter cycles
     -- debugCheckType typ
 
-    raw <- alts typ
-    let candidates = L.filter (supported . adapterTarget) raw
+   raw <- alts typ
+   let candidates = L.filter (supported . adapterTarget) raw
+   do
     if L.null candidates
       then fail $ "no adapters found for " ++ describe typ
         ++ (if L.null raw

@@ -6,6 +6,7 @@ module Hydra.TermAdapters (
   functionProxyType,
   termAdapter,
   unionTypeToRecordType,
+        passApplication,
 ) where
 
 import Hydra.Printing
@@ -165,7 +166,7 @@ passApplication :: TypeAdapter
 passApplication t = do
   reduced <- withGraphContext $ betaReduceType t
   ad <- termAdapter reduced
-  return $ Adapter (adapterIsLossy ad) t reduced $ bidirectional $
+  return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ bidirectional $
     \dir term -> encodeDecode dir (adapterCoder ad) term
 
 passFunction :: TypeAdapter
@@ -319,9 +320,8 @@ termAdapter typ = case typ of
     supported = typeIsSupported . constraints
     variantIsSupported cx t = S.member (typeVariant t) $ languageConstraintsTypeVariants (constraints cx)
     supportedAtTopLevel cx t = variantIsSupported cx t && languageConstraintsTypes (constraints cx) t
-    alts cx t = CM.mapM (\c -> c t) $ if supportedAtTopLevel cx t
-      then pass t
-      else trySubstitution t
+    alts cx t = CM.mapM (\c -> c t) $
+      if supportedAtTopLevel cx t then pass t else trySubstitution t
     pass t = case typeVariant (stripType t) of
       TypeVariantApplication -> [passApplication]
       TypeVariantFunction ->  [passFunction]
