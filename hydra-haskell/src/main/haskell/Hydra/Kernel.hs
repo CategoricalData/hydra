@@ -4,6 +4,7 @@
 module Hydra.Kernel (
   module Hydra.AdapterUtils,
   module Hydra.Adapters,
+  module Hydra.Annotations,
   module Hydra.Basics,
   module Hydra.Coders,
   module Hydra.Compute,
@@ -14,16 +15,18 @@ module Hydra.Kernel (
   module Hydra.CoreEncoding,
   module Hydra.CoreLanguage,
   module Hydra.Extras,
+  module Hydra.Formatting,
   module Hydra.Graph,
   module Hydra.Inference.Inference,
-  module Hydra.Annotations,
   module Hydra.Lexical,
   module Hydra.LiteralAdapters,
+  module Hydra.Literals,
   module Hydra.Mantle,
   module Hydra.Messages,
   module Hydra.Module,
   module Hydra.Phantoms,
   module Hydra.Printing,
+  module Hydra.Qnames,
   module Hydra.Query,
   module Hydra.Reduction,
   module Hydra.Rewriting,
@@ -43,6 +46,7 @@ module Hydra.Kernel (
 
 import Hydra.AdapterUtils
 import Hydra.Adapters
+import Hydra.Annotations
 import Hydra.Basics
 import Hydra.Coders
 import Hydra.Compute
@@ -53,16 +57,18 @@ import Hydra.CoreDecoding
 import Hydra.CoreEncoding
 import Hydra.CoreLanguage
 import Hydra.Extras
+import Hydra.Formatting
 import Hydra.Graph
 import Hydra.Inference.Inference
-import Hydra.Annotations
 import Hydra.Lexical
 import Hydra.LiteralAdapters
+import Hydra.Literals
 import Hydra.Mantle
 import Hydra.Messages
 import Hydra.Module
 import Hydra.Phantoms
 import Hydra.Printing
+import Hydra.Qnames
 import Hydra.Query
 import Hydra.Reduction
 import Hydra.Rewriting

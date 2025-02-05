@@ -1,25 +1,37 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier1.CoreEncoding where
+module Hydra.Sources.Tier0.CoreEncoding where
 
--- TODO: use standard Tier-1 imports
-import Hydra.Sources.Tier0.All
-import qualified Hydra.Dsl.Terms as Terms
-import Hydra.Dsl.ShorthandTypes
-import Hydra.Dsl.Base as Base
-import qualified Hydra.Dsl.Core as Core
-import qualified Hydra.Dsl.Types as Types
-import Hydra.Sources.Libraries
+-- Standard term-level Tier-0 imports
+import           Hydra.Dsl.Base          as Base
+import qualified Hydra.Dsl.Core          as Core
+import qualified Hydra.Dsl.Terms         as Terms
+import qualified Hydra.Dsl.Types         as Types
+import qualified Hydra.Dsl.Lib.Equality  as Equality
+import qualified Hydra.Dsl.Lib.Io        as Io
+import qualified Hydra.Dsl.Lib.Lists     as Lists
+import qualified Hydra.Dsl.Lib.Literals  as Literals
+import qualified Hydra.Dsl.Lib.Logic     as Logic
+import qualified Hydra.Dsl.Lib.Maps      as Maps
+import qualified Hydra.Dsl.Lib.Math      as Math
+import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Sets      as Sets
+import           Hydra.Dsl.Lib.Strings   as Strings
+import           Hydra.Sources.Core
+import           Prelude hiding ((++))
+import qualified Data.List               as L
+import qualified Data.Map                as M
+import qualified Data.Set                as S
+import qualified Data.Maybe              as Y
 
-import qualified Data.Map as M
-import qualified Data.Set as S
+import Hydra.Sources.Libraries -- TODO: use DSL primitives instead of raw primitive references
 
 
 coreEncodingModule :: Module
-coreEncodingModule = Module (Namespace "hydra/coreEncoding") elements [] tier0Modules $
+coreEncodingModule = Module (Namespace "hydra/coreEncoding") elements [] [hydraCoreModule] $
     Just ("Mapping of hydra/core constructs in a host language like Haskell or Java "
-      ++ " to their native Hydra counterparts as terms. "
-      ++ " This includes an implementation of LambdaGraph's epsilon encoding (types to terms).")
+      <> " to their native Hydra counterparts as terms. "
+      <> " This includes an implementation of LambdaGraph's epsilon encoding (types to terms).")
   where
    elements = [
      el coreEncodeAnnotatedTermDef,
@@ -60,7 +72,7 @@ coreEncodingModule = Module (Namespace "hydra/coreEncoding") elements [] tier0Mo
      el coreEncodeWrappedTypeDef]
 
 coreEncodingDefinition :: String -> Type -> TTerm x -> TElement x
-coreEncodingDefinition label dom datum = definitionInModule coreEncodingModule ("coreEncode" ++ label) $
+coreEncodingDefinition label dom datum = definitionInModule coreEncodingModule ("coreEncode" <> label) $
   function dom termT datum
 
 encodedBinary :: TTerm String -> TTerm Term

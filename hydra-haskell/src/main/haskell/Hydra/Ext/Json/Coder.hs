@@ -6,6 +6,7 @@ import Hydra.Graph
 import Hydra.Strip
 import Hydra.Basics
 import Hydra.CoreEncoding
+import Hydra.Literals
 import Hydra.Tier1
 import Hydra.Tier2
 import Hydra.Adapters

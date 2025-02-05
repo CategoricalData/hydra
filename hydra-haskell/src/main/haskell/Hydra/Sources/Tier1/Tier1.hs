@@ -3,11 +3,6 @@
 module Hydra.Sources.Tier1.Tier1 where
 
 -- Standard Tier-1 imports
-import           Prelude hiding ((++))
-import qualified Data.List                 as L
-import qualified Data.Map                  as M
-import qualified Data.Set                  as S
-import qualified Data.Maybe                as Y
 import           Hydra.Dsl.Base            as Base
 import qualified Hydra.Dsl.Core            as Core
 import qualified Hydra.Dsl.Graph           as Graph
@@ -26,9 +21,12 @@ import qualified Hydra.Dsl.Module          as Module
 import qualified Hydra.Dsl.Terms           as Terms
 import qualified Hydra.Dsl.Types           as Types
 import           Hydra.Sources.Tier0.All
+import           Prelude hiding ((++))
+import qualified Data.List                 as L
+import qualified Data.Map                  as M
+import qualified Data.Set                  as S
+import qualified Data.Maybe                as Y
 
-import Hydra.Sources.Tier1.Constants
-import Hydra.Sources.Tier1.Strip
 import Hydra.Dsl.Mantle
 
 
@@ -41,10 +39,7 @@ hydraTier1Module = Module (Namespace "hydra/tier1") elements
     Just ("A module for miscellaneous tier-1 functions and constants.")
   where
    elements = [
-     el floatValueToBigfloatDef,
-     el integerValueToBigintDef,
      el isLambdaDef,
-     el unqualifyNameDef,
      -- Rewriting.hs
      el foldOverTermDef,
      el foldOverTypeDef,
@@ -64,30 +59,6 @@ hydraTier1Module = Module (Namespace "hydra/tier1") elements
      el withStateDef,
      el withTraceDef
      ]
-
-floatValueToBigfloatDef :: TElement (Double -> Double)
-floatValueToBigfloatDef = tier1Definition "floatValueToBigfloat" $
-  doc "Convert a floating-point value of any precision to a bigfloat" $
-  function floatValueT Types.bigfloat $
-  match _FloatValue Nothing [
-    _FloatValue_bigfloat>>: Equality.identity,
-    _FloatValue_float32>>: Literals.float32ToBigfloat,
-    _FloatValue_float64>>: Literals.float64ToBigfloat]
-
-integerValueToBigintDef :: TElement (IntegerValue -> Integer)
-integerValueToBigintDef = tier1Definition "integerValueToBigint" $
-  doc "Convert an integer value of any precision to a bigint" $
-  function integerValueT Types.bigint $
-  match _IntegerValue Nothing [
-    _IntegerValue_bigint>>: Equality.identity,
-    _IntegerValue_int8>>: Literals.int8ToBigint,
-    _IntegerValue_int16>>: Literals.int16ToBigint,
-    _IntegerValue_int32>>: Literals.int32ToBigint,
-    _IntegerValue_int64>>: Literals.int64ToBigint,
-    _IntegerValue_uint8>>: Literals.uint8ToBigint,
-    _IntegerValue_uint16>>: Literals.uint16ToBigint,
-    _IntegerValue_uint32>>: Literals.uint32ToBigint,
-    _IntegerValue_uint64>>: Literals.uint64ToBigint]
 
 isLambdaDef :: TElement (Term -> Bool)
 isLambdaDef = tier1Definition "isLambda" $
@@ -157,13 +128,15 @@ freeVariablesInTypeDef = tier1Definition "freeVariablesInType" $
     (match _Type (Just $ var "dfltVars") [
       _Type_lambda>>: lambda "lt" (Sets.remove
           @@ (Core.lambdaTypeParameter @@ var "lt")
-          @@ (ref freeVariablesInTypeDef @@ (Core.lambdaTypeBody @@ var "lt"))),
+          @@ (recurse @@ (Core.lambdaTypeBody @@ var "lt"))),
       -- TODO: let-types
       _Type_variable>>: lambda "v" (Sets.singleton @@ var "v")] @@ var "typ")
     `with` [
-      "dfltVars">: typed (setT nameT) $ Base.fold (lambda "s" $ lambda "t" $ Sets.union @@ var "s" @@ (ref freeVariablesInTypeDef @@ var "t"))
+      "dfltVars">: typed (setT nameT) $ Base.fold (lambda "s" $ lambda "t" $ Sets.union @@ var "s" @@ (recurse @@ var "t"))
         @@ Sets.empty
         @@ (ref subtypesDef @@ var "typ")])
+  where
+    recurse = ref freeVariablesInTypeDef
 
 subtermsDef :: TElement (Term -> [Term])
 subtermsDef = tier1Definition "subterms" $
@@ -300,15 +273,6 @@ subtypesDef = tier1Definition "subtypes" $
     _Type_union>>: lambda "rt" (Lists.map @@ Core.fieldTypeType @@ (Core.rowTypeFields @@ var "rt")),
     _Type_variable>>: constant $ list [],
     _Type_wrap>>: lambda "nt" $ list [Core.wrappedTypeObject @@ var "nt"]]
-
-unqualifyNameDef :: TElement (QualifiedName -> Name)
-unqualifyNameDef = tier1Definition "unqualifyName" $
-  doc "Convert a qualified name to a dot-separated name" $
-  function qualifiedNameT nameT $
-  lambda "qname" $ (wrap _Name $ var "prefix" ++ (project _QualifiedName _QualifiedName_local @@ var "qname"))
-    `with` [
-      "prefix">: matchOpt (string "") (lambda "n" $ (unwrap _Namespace @@ var "n") ++ string ".")
-        @@ (project _QualifiedName _QualifiedName_namespace @@ var "qname")]
 
 -- Flows.hs
 

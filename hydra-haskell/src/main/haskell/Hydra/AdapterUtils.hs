@@ -5,10 +5,11 @@ module Hydra.AdapterUtils (
   module Hydra.Printing,
 ) where
 
+import Hydra.Basics
 import Hydra.Coders
 import Hydra.Compute
 import Hydra.Core
-import Hydra.Basics
+import Hydra.Qnames
 import Hydra.Module
 import Hydra.Printing
 import Hydra.Mantle

@@ -21,6 +21,7 @@ module Hydra.Schemas (
   ) where
 
 import Hydra.Basics
+import Hydra.Qnames
 import Hydra.Strip
 import Hydra.Coders
 import Hydra.Compute

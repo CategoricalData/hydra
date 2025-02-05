@@ -6,11 +6,8 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
-import qualified Hydra.Module as Module
 import qualified Hydra.Strip as Strip
 import Data.Int
 import Data.List as L
@@ -71,10 +68,6 @@ functionVariants = [
   Mantle.FunctionVariantElimination,
   Mantle.FunctionVariantLambda,
   Mantle.FunctionVariantPrimitive]
-
--- | The identity function
-id_ :: (a -> a)
-id_ x = x
 
 -- | Find whether a given integer type is signed (true) or unsigned (false)
 integerTypeIsSigned :: (Core.IntegerType -> Bool)
@@ -240,21 +233,6 @@ typeVariants = [
   Mantle.TypeVariantUnion,
   Mantle.TypeVariantVariable]
 
--- | Capitalize the first letter of a string
-capitalize :: (String -> String)
-capitalize = (mapFirstLetter Strings.toUpper)
-
--- | Decapitalize the first letter of a string
-decapitalize :: (String -> String)
-decapitalize = (mapFirstLetter Strings.toLower)
-
--- | A helper which maps the first letter of a string to another string
-mapFirstLetter :: ((String -> String) -> String -> String)
-mapFirstLetter mapping s =  
-  let firstLetter = (mapping (Strings.fromList (Lists.pure (Lists.head list)))) 
-      list = (Strings.toList s)
-  in (Logic.ifElse s (Strings.cat2 firstLetter (Strings.fromList (Lists.tail list))) (Strings.isEmpty s))
-
 fieldMap :: ([Core.Field] -> Map Core.Name Core.Term)
 fieldMap fields = (Maps.fromList (Lists.map toPair fields)) 
   where 
@@ -298,42 +276,3 @@ elementsToGraph parent schema elements =
     Graph.graphBody = (Graph.graphBody parent),
     Graph.graphPrimitives = (Graph.graphPrimitives parent),
     Graph.graphSchema = schema}
-
-localNameOfEager :: (Core.Name -> String)
-localNameOfEager x = (Module.qualifiedNameLocal (qualifyNameEager x))
-
-localNameOfLazy :: (Core.Name -> String)
-localNameOfLazy x = (Module.qualifiedNameLocal (qualifyNameLazy x))
-
-namespaceOfEager :: (Core.Name -> Maybe Module.Namespace)
-namespaceOfEager x = (Module.qualifiedNameNamespace (qualifyNameEager x))
-
-namespaceOfLazy :: (Core.Name -> Maybe Module.Namespace)
-namespaceOfLazy x = (Module.qualifiedNameNamespace (qualifyNameLazy x))
-
-namespaceToFilePath :: (Bool -> Module.FileExtension -> Module.Namespace -> String)
-namespaceToFilePath caps ext ns =  
-  let parts = (Lists.map (Logic.ifElse capitalize id_ caps) (Strings.splitOn "/" (Module.unNamespace ns)))
-  in (Strings.cat [
-    Strings.cat [
-      Strings.intercalate "/" parts,
-      "."],
-    (Module.unFileExtension ext)])
-
-qualifyNameEager :: (Core.Name -> Module.QualifiedName)
-qualifyNameEager name =  
-  let parts = (Strings.splitOn "." (Core.unName name))
-  in (Logic.ifElse (Module.QualifiedName {
-    Module.qualifiedNameNamespace = Nothing,
-    Module.qualifiedNameLocal = (Core.unName name)}) (Module.QualifiedName {
-    Module.qualifiedNameNamespace = (Just (Module.Namespace (Lists.head parts))),
-    Module.qualifiedNameLocal = (Strings.intercalate "." (Lists.tail parts))}) (Equality.equalInt32 1 (Lists.length parts)))
-
-qualifyNameLazy :: (Core.Name -> Module.QualifiedName)
-qualifyNameLazy name =  
-  let parts = (Lists.reverse (Strings.splitOn "." (Core.unName name)))
-  in (Logic.ifElse (Module.QualifiedName {
-    Module.qualifiedNameNamespace = Nothing,
-    Module.qualifiedNameLocal = (Core.unName name)}) (Module.QualifiedName {
-    Module.qualifiedNameNamespace = (Just (Module.Namespace (Strings.intercalate "." (Lists.reverse (Lists.tail parts))))),
-    Module.qualifiedNameLocal = (Lists.head parts)}) (Equality.equalInt32 1 (Lists.length parts)))
