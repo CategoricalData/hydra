@@ -25,14 +25,14 @@ validateEdge checkValue showValue labelForVertexId typ el =
       checkProperties = (Optionals.map (\x -> failWith (prepend "Invalid property" x)) (validateProperties checkValue (Model.edgeTypeProperties typ) (Model.edgeProperties el)))
       checkOut = ((\x -> case x of
               Nothing -> Nothing
-              Just v329 -> ((\x -> case x of
+              Just v1 -> ((\x -> case x of
                 Nothing -> (Just (failWith (prepend "Out-vertex does not exist" (showValue (Model.edgeOut el)))))
-                Just v330 -> (verify (Equality.equalString (Model.unVertexLabel v330) (Model.unVertexLabel (Model.edgeTypeOut typ))) (failWith (prepend "Wrong out-vertex label" (vertexLabelMismatch (Model.edgeTypeOut typ) v330))))) (v329 (Model.edgeOut el)))) labelForVertexId)
+                Just v2 -> (verify (Equality.equalString (Model.unVertexLabel v2) (Model.unVertexLabel (Model.edgeTypeOut typ))) (failWith (prepend "Wrong out-vertex label" (vertexLabelMismatch (Model.edgeTypeOut typ) v2))))) (v1 (Model.edgeOut el)))) labelForVertexId)
       checkIn = ((\x -> case x of
               Nothing -> Nothing
-              Just v331 -> ((\x -> case x of
+              Just v1 -> ((\x -> case x of
                 Nothing -> (Just (failWith (prepend "In-vertex does not exist" (showValue (Model.edgeIn el)))))
-                Just v332 -> (verify (Equality.equalString (Model.unVertexLabel v332) (Model.unVertexLabel (Model.edgeTypeIn typ))) (failWith (prepend "Wrong in-vertex label" (vertexLabelMismatch (Model.edgeTypeIn typ) v332))))) (v331 (Model.edgeIn el)))) labelForVertexId)
+                Just v2 -> (verify (Equality.equalString (Model.unVertexLabel v2) (Model.unVertexLabel (Model.edgeTypeIn typ))) (failWith (prepend "Wrong in-vertex label" (vertexLabelMismatch (Model.edgeTypeIn typ) v2))))) (v1 (Model.edgeIn el)))) labelForVertexId)
   in (checkAll [
     checkLabel,
     checkId,
@@ -42,24 +42,24 @@ validateEdge checkValue showValue labelForVertexId typ el =
 
 validateElement :: ((t -> v -> Maybe String) -> (v -> String) -> Maybe (v -> Maybe Model.VertexLabel) -> Model.ElementType t -> Model.Element v -> Maybe String)
 validateElement checkValue showValue labelForVertexId typ el = ((\x -> case x of
-  Model.ElementTypeVertex v333 -> ((\x -> case x of
-    Model.ElementEdge v334 -> (Just (prepend "Edge instead of vertex" (showValue (Model.edgeId v334))))
-    Model.ElementVertex v335 -> (validateVertex checkValue showValue v333 v335)) el)
-  Model.ElementTypeEdge v336 -> ((\x -> case x of
-    Model.ElementVertex v337 -> (Just (prepend "Vertex instead of edge" (showValue (Model.vertexId v337))))
-    Model.ElementEdge v338 -> (validateEdge checkValue showValue labelForVertexId v336 v338)) el)) typ)
+  Model.ElementTypeVertex v1 -> ((\x -> case x of
+    Model.ElementEdge v2 -> (Just (prepend "Edge instead of vertex" (showValue (Model.edgeId v2))))
+    Model.ElementVertex v2 -> (validateVertex checkValue showValue v1 v2)) el)
+  Model.ElementTypeEdge v1 -> ((\x -> case x of
+    Model.ElementVertex v2 -> (Just (prepend "Vertex instead of edge" (showValue (Model.vertexId v2))))
+    Model.ElementEdge v2 -> (validateEdge checkValue showValue labelForVertexId v1 v2)) el)) typ)
 
 validateGraph :: (Ord v) => ((t -> v -> Maybe String) -> (v -> String) -> Model.GraphSchema t -> Model.Graph v -> Maybe String)
 validateGraph checkValue showValue schema graph =  
   let checkVertices =  
           let checkVertex = (\el -> (\x -> case x of
                   Nothing -> (Just (vertexError showValue el (prepend "Unexpected label" (Model.unVertexLabel (Model.vertexLabel el)))))
-                  Just v339 -> (validateVertex checkValue showValue v339 el)) (Maps.lookup (Model.vertexLabel el) (Model.graphSchemaVertices schema)))
+                  Just v1 -> (validateVertex checkValue showValue v1 el)) (Maps.lookup (Model.vertexLabel el) (Model.graphSchemaVertices schema)))
           in (checkAll (Lists.map checkVertex (Maps.values (Model.graphVertices graph)))) 
       checkEdges =  
               let checkEdge = (\el -> (\x -> case x of
                       Nothing -> (Just (edgeError showValue el (prepend "Unexpected label" (Model.unEdgeLabel (Model.edgeLabel el)))))
-                      Just v340 -> (validateEdge checkValue showValue labelForVertexId v340 el)) (Maps.lookup (Model.edgeLabel el) (Model.graphSchemaEdges schema))) 
+                      Just v1 -> (validateEdge checkValue showValue labelForVertexId v1 el)) (Maps.lookup (Model.edgeLabel el) (Model.graphSchemaEdges schema))) 
                   labelForVertexId = (Just (\i -> Optionals.map Model.vertexLabel (Maps.lookup i (Model.graphVertices graph))))
               in (checkAll (Lists.map checkEdge (Maps.values (Model.graphEdges graph))))
   in (checkAll [
@@ -79,7 +79,7 @@ validateProperties checkValue types props =
                               val = (snd pair)
                           in ((\x -> case x of
                             Nothing -> (Just (prepend "Unexpected key" (Model.unPropertyKey key)))
-                            Just v342 -> (Optionals.map (prepend "Invalid value") (checkValue v342 val))) (Maps.lookup key m)))
+                            Just v1 -> (Optionals.map (prepend "Invalid value") (checkValue v1 val))) (Maps.lookup key m)))
               in (checkAll (Lists.map checkPair (Maps.toList props)))
   in (checkAll [
     checkTypes,
