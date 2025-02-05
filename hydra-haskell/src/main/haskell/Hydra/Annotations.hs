@@ -222,3 +222,16 @@ unshadowVariables term = Y.fromJust $ flowStateValue $ unFlow (rewriteTermM rewr
             return $ TermFunction $ FunctionLambda $ Lambda v d body'
         _ -> recurse term
     freshName = (\n -> Name $ "s" ++ show n) <$> nextCount (Name "unshadow")
+
+-- | Provide an integer-valued 'depth' to a flow, where the depth is the number of nested calls.
+--   This is useful for generating variable names while avoiding conflicts between the variables of parents and children.
+--   E.g. a variable in an outer case/match statement might be "v1", whereas the variable of another case/match statement
+--   inside of the first one becomes "v2". See also nextCount.
+withDepth :: Name -> (Int -> Flow s a) -> Flow s a
+withDepth attrName f = do
+  count <- getAttrWithDefault attrName (Terms.int32 0) >>= Expect.int32
+  let inc = count + 1
+  putAttr attrName (Terms.int32 inc)
+  r <- f inc
+  putAttr attrName (Terms.int32 count)
+  return r
