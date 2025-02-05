@@ -163,10 +163,10 @@ optionalToList t@(TypeOptional ot) = do
 -- TODO: only tested for type mappings; not yet for types+terms
 passApplication :: TypeAdapter
 passApplication t = do
-    reduced <- withGraphContext $ betaReduceType t
-    ad <- termAdapter reduced
-    return $ Adapter (adapterIsLossy ad) t reduced $ bidirectional $
-      \dir term -> encodeDecode dir (adapterCoder ad) term
+  reduced <- withGraphContext $ betaReduceType t
+  ad <- termAdapter reduced
+  return $ Adapter (adapterIsLossy ad) t reduced $ bidirectional $
+    \dir term -> encodeDecode dir (adapterCoder ad) term
 
 passFunction :: TypeAdapter
 passFunction t@(TypeFunction (FunctionType dom cod)) = do
@@ -308,46 +308,44 @@ termAdapter typ = case typ of
     TypeAnnotated (AnnotatedType typ2 ann) -> do
       ad <- termAdapter typ2
       return ad {adapterTarget = TypeAnnotated $ AnnotatedType (adapterTarget ad) ann}
-    _ -> withTrace ("adapter for " ++ describeType typ ) $ case typ of
+    _ -> withTrace ("adapter for " ++ describeType typ) $ case typ of
       -- Account for let-bound variables
       TypeVariable name -> forTypeReference name
       _ -> do
-          cx <- getState
-          chooseAdapter (alts cx) (supported cx) describeType typ
-        where
-          alts g t = CM.mapM (\c -> c t) $ if supportedAtTopLevel g t
-              then pass t
-              else trySubstitution t
-            where
-              supportedAtTopLevel cx t = variantIsSupported g t && languageConstraintsTypes (constraints cx) t
-              pass t = case typeVariant (stripType t) of
-                TypeVariantApplication -> [passApplication]
-                TypeVariantFunction ->  [passFunction]
-                TypeVariantLambda -> [passLambda]
-                TypeVariantList -> [passList]
-                TypeVariantLiteral -> [passLiteral]
-                TypeVariantMap -> [passMap]
-                TypeVariantOptional -> [passOptional, optionalToList]
-                TypeVariantProduct -> [passProduct]
-                TypeVariantRecord -> [passRecord]
-                TypeVariantSet -> [passSet]
-                TypeVariantSum -> [passSum]
-                TypeVariantUnion -> [passUnion]
-                TypeVariantWrap -> [passWrapped]
-                _ -> []
-              trySubstitution t = case typeVariant t of
-                TypeVariantApplication -> [simplifyApplication]
-                TypeVariantFunction -> [functionToUnion]
-                TypeVariantLambda -> [lambdaToMonotype]
-                TypeVariantOptional -> [optionalToList]
-                TypeVariantSet ->  [listToSet]
-                TypeVariantUnion -> [unionToRecord]
-                TypeVariantWrap -> [wrapToUnwrapped]
-                _ -> [unsupportedToString]
-    where
-      constraints = languageConstraints . adapterContextLanguage
-      supported = typeIsSupported . constraints
-      variantIsSupported cx t = S.member (typeVariant t) $ languageConstraintsTypeVariants (constraints cx)
+        cx <- getState
+        chooseAdapter (alts cx) (supported cx) describeType typ
+  where
+    constraints = languageConstraints . adapterContextLanguage
+    supported = typeIsSupported . constraints
+    variantIsSupported cx t = S.member (typeVariant t) $ languageConstraintsTypeVariants (constraints cx)
+    supportedAtTopLevel cx t = variantIsSupported cx t && languageConstraintsTypes (constraints cx) t
+    alts cx t = CM.mapM (\c -> c t) $ if supportedAtTopLevel cx t
+      then pass t
+      else trySubstitution t
+    pass t = case typeVariant (stripType t) of
+      TypeVariantApplication -> [passApplication]
+      TypeVariantFunction ->  [passFunction]
+      TypeVariantLambda -> [passLambda]
+      TypeVariantList -> [passList]
+      TypeVariantLiteral -> [passLiteral]
+      TypeVariantMap -> [passMap]
+      TypeVariantOptional -> [passOptional, optionalToList]
+      TypeVariantProduct -> [passProduct]
+      TypeVariantRecord -> [passRecord]
+      TypeVariantSet -> [passSet]
+      TypeVariantSum -> [passSum]
+      TypeVariantUnion -> [passUnion]
+      TypeVariantWrap -> [passWrapped]
+      _ -> []
+    trySubstitution t = case typeVariant t of
+      TypeVariantApplication -> [simplifyApplication]
+      TypeVariantFunction -> [functionToUnion]
+      TypeVariantLambda -> [lambdaToMonotype]
+      TypeVariantOptional -> [optionalToList]
+      TypeVariantSet ->  [listToSet]
+      TypeVariantUnion -> [unionToRecord]
+      TypeVariantWrap -> [wrapToUnwrapped]
+      _ -> [unsupportedToString]
 
 ---- Caution: possibility of an infinite loop if neither unions, optionals, nor lists are supported
 unionToRecord :: TypeAdapter
