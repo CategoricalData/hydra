@@ -29,55 +29,55 @@ describeLiteralType :: (Core.LiteralType -> String)
 describeLiteralType x = case x of
   Core.LiteralTypeBinary -> "binary strings"
   Core.LiteralTypeBoolean -> "boolean values"
-  Core.LiteralTypeFloat v289 -> (describeFloatType v289)
-  Core.LiteralTypeInteger v290 -> (describeIntegerType v290)
+  Core.LiteralTypeFloat v1 -> (describeFloatType v1)
+  Core.LiteralTypeInteger v1 -> (describeIntegerType v1)
   Core.LiteralTypeString -> "character strings"
 
 -- | Display numeric precision as a string
 describePrecision :: (Mantle.Precision -> String)
 describePrecision x = case x of
   Mantle.PrecisionArbitrary -> "arbitrary-precision"
-  Mantle.PrecisionBits v293 -> (Strings.cat [
-    Literals.showInt32 v293,
+  Mantle.PrecisionBits v1 -> (Strings.cat [
+    Literals.showInt32 v1,
     "-bit"])
 
 -- | Display a type as a string
 describeType :: (Core.Type -> String)
 describeType x = case x of
-  Core.TypeAnnotated v294 -> (Strings.cat [
+  Core.TypeAnnotated v1 -> (Strings.cat [
     "annotated ",
-    (describeType (Core.annotatedTypeSubject v294))])
+    (describeType (Core.annotatedTypeSubject v1))])
   Core.TypeApplication _ -> "instances of an application type"
-  Core.TypeLiteral v296 -> (describeLiteralType v296)
-  Core.TypeFunction v297 -> (Strings.cat [
+  Core.TypeLiteral v1 -> (describeLiteralType v1)
+  Core.TypeFunction v1 -> (Strings.cat [
     Strings.cat [
       Strings.cat [
         "functions from ",
-        (describeType (Core.functionTypeDomain v297))],
+        (describeType (Core.functionTypeDomain v1))],
       " to "],
-    (describeType (Core.functionTypeCodomain v297))])
+    (describeType (Core.functionTypeCodomain v1))])
   Core.TypeLambda _ -> "polymorphic terms"
-  Core.TypeList v299 -> (Strings.cat [
+  Core.TypeList v1 -> (Strings.cat [
     "lists of ",
-    (describeType v299)])
-  Core.TypeMap v300 -> (Strings.cat [
+    (describeType v1)])
+  Core.TypeMap v1 -> (Strings.cat [
     Strings.cat [
       Strings.cat [
         "maps from ",
-        (describeType (Core.mapTypeKeys v300))],
+        (describeType (Core.mapTypeKeys v1))],
       " to "],
-    (describeType (Core.mapTypeValues v300))])
-  Core.TypeOptional v301 -> (Strings.cat [
+    (describeType (Core.mapTypeValues v1))])
+  Core.TypeOptional v1 -> (Strings.cat [
     "optional ",
-    (describeType v301)])
+    (describeType v1)])
   Core.TypeProduct _ -> "tuples"
   Core.TypeRecord _ -> "records"
-  Core.TypeSet v304 -> (Strings.cat [
+  Core.TypeSet v1 -> (Strings.cat [
     "sets of ",
-    (describeType v304)])
+    (describeType v1)])
   Core.TypeSum _ -> "variant tuples"
   Core.TypeUnion _ -> "unions"
   Core.TypeVariable _ -> "instances of a named type"
-  Core.TypeWrap v308 -> (Strings.cat [
+  Core.TypeWrap v1 -> (Strings.cat [
     "wrapper for ",
-    (describeType (Core.wrappedTypeObject v308))])
+    (describeType (Core.wrappedTypeObject v1))])

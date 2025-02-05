@@ -18,7 +18,7 @@ bigfloat = (Optionals.compose (Optionals.compose literal floatLiteral) bigfloatV
 
 bigfloatValue :: (Core.FloatValue -> Maybe Double)
 bigfloatValue x = case x of
-  Core.FloatValueBigfloat v75 -> (Optionals.pure v75)
+  Core.FloatValueBigfloat v1 -> (Optionals.pure v1)
   _ -> Nothing
 
 bigint :: (Core.Term -> Maybe Integer)
@@ -26,7 +26,7 @@ bigint = (Optionals.compose (Optionals.compose literal integerLiteral) bigintVal
 
 bigintValue :: (Core.IntegerValue -> Maybe Integer)
 bigintValue x = case x of
-  Core.IntegerValueBigint v76 -> (Optionals.pure v76)
+  Core.IntegerValueBigint v1 -> (Optionals.pure v1)
   _ -> Nothing
 
 binary :: (Core.Term -> Maybe String)
@@ -34,7 +34,7 @@ binary = (Optionals.compose literal binaryLiteral)
 
 binaryLiteral :: (Core.Literal -> Maybe String)
 binaryLiteral x = case x of
-  Core.LiteralBinary v77 -> (Optionals.pure v77)
+  Core.LiteralBinary v1 -> (Optionals.pure v1)
   _ -> Nothing
 
 boolean :: (Core.Term -> Maybe Bool)
@@ -42,7 +42,7 @@ boolean = (Optionals.compose literal booleanLiteral)
 
 booleanLiteral :: (Core.Literal -> Maybe Bool)
 booleanLiteral x = case x of
-  Core.LiteralBoolean v78 -> (Optionals.pure v78)
+  Core.LiteralBoolean v1 -> (Optionals.pure v1)
   _ -> Nothing
 
 casesCase :: (Core.Name -> Core.Name -> Core.Term -> Maybe Core.Term)
@@ -50,11 +50,11 @@ casesCase tname fname = (Optionals.compose (cases tname) (field fname))
 
 cases :: (Core.Name -> Core.Term -> Maybe [Core.Field])
 cases = (nominal Core.caseStatementTypeName Core.caseStatementCases (Optionals.compose (Optionals.compose (\x -> (\x -> case x of
-  Core.TermFunction v79 -> (Optionals.pure v79)
+  Core.TermFunction v1 -> (Optionals.pure v1)
   _ -> Nothing) (Strip.fullyStripTerm x)) (\x -> case x of
-  Core.FunctionElimination v80 -> (Optionals.pure v80)
+  Core.FunctionElimination v1 -> (Optionals.pure v1)
   _ -> Nothing)) (\x -> case x of
-  Core.EliminationUnion v81 -> (Optionals.pure v81)
+  Core.EliminationUnion v1 -> (Optionals.pure v1)
   _ -> Nothing)))
 
 field :: (Core.Name -> [Core.Field] -> Maybe Core.Term)
@@ -67,7 +67,7 @@ float32 = (Optionals.compose (Optionals.compose literal floatLiteral) float32Val
 
 float32Value :: (Core.FloatValue -> Maybe Float)
 float32Value x = case x of
-  Core.FloatValueFloat32 v82 -> (Optionals.pure v82)
+  Core.FloatValueFloat32 v1 -> (Optionals.pure v1)
   _ -> Nothing
 
 float64 :: (Core.Term -> Maybe Double)
@@ -75,12 +75,12 @@ float64 = (Optionals.compose (Optionals.compose literal floatLiteral) float64Val
 
 float64Value :: (Core.FloatValue -> Maybe Double)
 float64Value x = case x of
-  Core.FloatValueFloat64 v83 -> (Optionals.pure v83)
+  Core.FloatValueFloat64 v1 -> (Optionals.pure v1)
   _ -> Nothing
 
 floatLiteral :: (Core.Literal -> Maybe Core.FloatValue)
 floatLiteral x = case x of
-  Core.LiteralFloat v84 -> (Optionals.pure v84)
+  Core.LiteralFloat v1 -> (Optionals.pure v1)
   _ -> Nothing
 
 int16 :: (Core.Term -> Maybe Int16)
@@ -88,7 +88,7 @@ int16 = (Optionals.compose (Optionals.compose literal integerLiteral) int16Value
 
 int16Value :: (Core.IntegerValue -> Maybe Int16)
 int16Value x = case x of
-  Core.IntegerValueInt16 v85 -> (Optionals.pure v85)
+  Core.IntegerValueInt16 v1 -> (Optionals.pure v1)
   _ -> Nothing
 
 int32 :: (Core.Term -> Maybe Int)
@@ -96,7 +96,7 @@ int32 = (Optionals.compose (Optionals.compose literal integerLiteral) int32Value
 
 int32Value :: (Core.IntegerValue -> Maybe Int)
 int32Value x = case x of
-  Core.IntegerValueInt32 v86 -> (Optionals.pure v86)
+  Core.IntegerValueInt32 v1 -> (Optionals.pure v1)
   _ -> Nothing
 
 int64 :: (Core.Term -> Maybe Int64)
@@ -104,7 +104,7 @@ int64 = (Optionals.compose (Optionals.compose literal integerLiteral) int64Value
 
 int64Value :: (Core.IntegerValue -> Maybe Int64)
 int64Value x = case x of
-  Core.IntegerValueInt64 v87 -> (Optionals.pure v87)
+  Core.IntegerValueInt64 v1 -> (Optionals.pure v1)
   _ -> Nothing
 
 int8 :: (Core.Term -> Maybe Int8)
@@ -112,19 +112,19 @@ int8 = (Optionals.compose (Optionals.compose literal integerLiteral) int8Value)
 
 int8Value :: (Core.IntegerValue -> Maybe Int8)
 int8Value x = case x of
-  Core.IntegerValueInt8 v88 -> (Optionals.pure v88)
+  Core.IntegerValueInt8 v1 -> (Optionals.pure v1)
   _ -> Nothing
 
 integerLiteral :: (Core.Literal -> Maybe Core.IntegerValue)
 integerLiteral x = case x of
-  Core.LiteralInteger v89 -> (Optionals.pure v89)
+  Core.LiteralInteger v1 -> (Optionals.pure v1)
   _ -> Nothing
 
 lambda :: (Core.Term -> Maybe Core.Lambda)
 lambda = (Optionals.compose (\x -> (\x -> case x of
-  Core.TermFunction v90 -> (Optionals.pure v90)
+  Core.TermFunction v1 -> (Optionals.pure v1)
   _ -> Nothing) (Strip.fullyStripTerm x)) (\x -> case x of
-  Core.FunctionLambda v91 -> (Optionals.pure v91)
+  Core.FunctionLambda v1 -> (Optionals.pure v1)
   _ -> Nothing))
 
 letBinding :: (Core.Name -> Core.Term -> Maybe Core.LetBinding)
@@ -137,22 +137,22 @@ letBindingWithKey fname bindings =
 
 letTerm :: (Core.Term -> Maybe Core.Let)
 letTerm x = ((\x -> case x of
-  Core.TermLet v92 -> (Optionals.pure v92)
+  Core.TermLet v1 -> (Optionals.pure v1)
   _ -> Nothing) (Strip.fullyStripTerm x))
 
 list :: (Core.Term -> Maybe [Core.Term])
 list x = ((\x -> case x of
-  Core.TermList v93 -> (Optionals.pure v93)
+  Core.TermList v1 -> (Optionals.pure v1)
   _ -> Nothing) (Strip.fullyStripTerm x))
 
 literal :: (Core.Term -> Maybe Core.Literal)
 literal x = ((\x -> case x of
-  Core.TermLiteral v94 -> (Optionals.pure v94)
+  Core.TermLiteral v1 -> (Optionals.pure v1)
   _ -> Nothing) (Strip.fullyStripTerm x))
 
 map :: (Core.Term -> Maybe (Map Core.Term Core.Term))
 map x = ((\x -> case x of
-  Core.TermMap v95 -> (Optionals.pure v95)
+  Core.TermMap v1 -> (Optionals.pure v1)
   _ -> Nothing) (Strip.fullyStripTerm x))
 
 name :: (Core.Term -> Maybe Core.Name)
@@ -163,11 +163,11 @@ nominal getName getB getA expected = (Optionals.compose getA (\a -> Logic.ifElse
 
 optCases :: (Core.Term -> Maybe Core.OptionalCases)
 optCases = (Optionals.compose (Optionals.compose (\x -> (\x -> case x of
-  Core.TermFunction v96 -> (Optionals.pure v96)
+  Core.TermFunction v1 -> (Optionals.pure v1)
   _ -> Nothing) (Strip.fullyStripTerm x)) (\x -> case x of
-  Core.FunctionElimination v97 -> (Optionals.pure v97)
+  Core.FunctionElimination v1 -> (Optionals.pure v1)
   _ -> Nothing)) (\x -> case x of
-  Core.EliminationOptional v98 -> (Optionals.pure v98)
+  Core.EliminationOptional v1 -> (Optionals.pure v1)
   _ -> Nothing))
 
 optCasesJust :: (Core.Term -> Maybe Core.Term)
@@ -178,22 +178,22 @@ optCasesNothing term = (Optionals.map Core.optionalCasesNothing (optCases term))
 
 optional :: (Core.Term -> Maybe (Maybe Core.Term))
 optional x = ((\x -> case x of
-  Core.TermOptional v99 -> (Optionals.pure v99)
+  Core.TermOptional v1 -> (Optionals.pure v1)
   _ -> Nothing) (Strip.fullyStripTerm x))
 
 pair :: (Core.Term -> Maybe (Core.Term, Core.Term))
 pair = (Optionals.compose (\x -> (\x -> case x of
-  Core.TermProduct v100 -> (Optionals.pure v100)
+  Core.TermProduct v1 -> (Optionals.pure v1)
   _ -> Nothing) (Strip.fullyStripTerm x)) (\l -> Logic.ifElse (Just (Lists.at 0 l, (Lists.at 1 l))) Nothing (Equality.equal 2 (Lists.length l))))
 
 record :: (Core.Name -> Core.Term -> Maybe [Core.Field])
 record = (nominal Core.recordTypeName Core.recordFields (\x -> (\x -> case x of
-  Core.TermRecord v101 -> (Optionals.pure v101)
+  Core.TermRecord v1 -> (Optionals.pure v1)
   _ -> Nothing) (Strip.fullyStripTerm x)))
 
 set :: (Core.Term -> Maybe (Set Core.Term))
 set x = ((\x -> case x of
-  Core.TermSet v102 -> (Optionals.pure v102)
+  Core.TermSet v1 -> (Optionals.pure v1)
   _ -> Nothing) (Strip.fullyStripTerm x))
 
 string :: (Core.Term -> Maybe String)
@@ -201,7 +201,7 @@ string = (Optionals.compose literal stringLiteral)
 
 stringLiteral :: (Core.Literal -> Maybe String)
 stringLiteral x = case x of
-  Core.LiteralString v103 -> (Optionals.pure v103)
+  Core.LiteralString v1 -> (Optionals.pure v1)
   _ -> Nothing
 
 uint16 :: (Core.Term -> Maybe Int)
@@ -209,7 +209,7 @@ uint16 = (Optionals.compose (Optionals.compose literal integerLiteral) uint16Val
 
 uint16Value :: (Core.IntegerValue -> Maybe Int)
 uint16Value x = case x of
-  Core.IntegerValueUint16 v104 -> (Optionals.pure v104)
+  Core.IntegerValueUint16 v1 -> (Optionals.pure v1)
   _ -> Nothing
 
 uint32 :: (Core.Term -> Maybe Int64)
@@ -217,7 +217,7 @@ uint32 = (Optionals.compose (Optionals.compose literal integerLiteral) uint32Val
 
 uint32Value :: (Core.IntegerValue -> Maybe Int64)
 uint32Value x = case x of
-  Core.IntegerValueUint32 v105 -> (Optionals.pure v105)
+  Core.IntegerValueUint32 v1 -> (Optionals.pure v1)
   _ -> Nothing
 
 uint64 :: (Core.Term -> Maybe Integer)
@@ -225,7 +225,7 @@ uint64 = (Optionals.compose (Optionals.compose literal integerLiteral) uint64Val
 
 uint64Value :: (Core.IntegerValue -> Maybe Integer)
 uint64Value x = case x of
-  Core.IntegerValueUint64 v106 -> (Optionals.pure v106)
+  Core.IntegerValueUint64 v1 -> (Optionals.pure v1)
   _ -> Nothing
 
 uint8 :: (Core.Term -> Maybe Int16)
@@ -233,7 +233,7 @@ uint8 = (Optionals.compose (Optionals.compose literal integerLiteral) uint8Value
 
 uint8Value :: (Core.IntegerValue -> Maybe Int16)
 uint8Value x = case x of
-  Core.IntegerValueUint8 v107 -> (Optionals.pure v107)
+  Core.IntegerValueUint8 v1 -> (Optionals.pure v1)
   _ -> Nothing
 
 unit :: (Core.Term -> Maybe ())
@@ -244,15 +244,15 @@ unitVariant tname term = (Optionals.map Core.fieldName (variant tname term))
 
 variable :: (Core.Term -> Maybe Core.Name)
 variable x = ((\x -> (\x -> case x of
-  Core.TermVariable v108 -> (Optionals.pure v108)
+  Core.TermVariable v1 -> (Optionals.pure v1)
   _ -> Nothing) (Strip.fullyStripTerm x)) (Strip.fullyStripTerm x))
 
 variant :: (Core.Name -> Core.Term -> Maybe Core.Field)
 variant = (nominal Core.injectionTypeName Core.injectionField (\x -> (\x -> case x of
-  Core.TermUnion v109 -> (Optionals.pure v109)
+  Core.TermUnion v1 -> (Optionals.pure v1)
   _ -> Nothing) (Strip.fullyStripTerm x)))
 
 wrap :: (Core.Name -> Core.Term -> Maybe Core.Term)
 wrap = (nominal Core.wrappedTermTypeName Core.wrappedTermObject (\x -> (\x -> case x of
-  Core.TermWrap v110 -> (Optionals.pure v110)
+  Core.TermWrap v1 -> (Optionals.pure v1)
   _ -> Nothing) (Strip.fullyStripTerm x)))
