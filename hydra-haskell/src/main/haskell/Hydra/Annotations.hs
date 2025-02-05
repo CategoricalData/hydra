@@ -50,6 +50,9 @@ getAttr key = Flow q
 getAttrWithDefault :: Name -> Term -> Flow s Term
 getAttrWithDefault key def = Y.fromMaybe def <$> getAttr key
 
+getCount :: Name -> Flow s Int
+getCount key = getAttrWithDefault key (Terms.int32 0) >>= Expect.int32
+
 getDescription :: M.Map Name Term -> Flow Graph (Y.Maybe String)
 getDescription anns = case getAnnotation key_description anns of
   Nothing -> pure Nothing
@@ -96,14 +99,17 @@ hasTypeDescription = hasDescription . typeAnnotationInternal
 
 -- | Return a zero-indexed counter for the given key: 0, 1, 2, ...
 nextCount :: Name -> Flow s Int
-nextCount attrName = do
-  count <- getAttrWithDefault attrName (Terms.int32 0) >>= Expect.int32
-  putAttr attrName (Terms.int32 $ count + 1)
+nextCount key = do
+  count <- getCount key
+  putCount key $ count + 1
   return count
 
+putCount :: Name -> Int -> Flow s ()
+putCount key count = putAttr key (Terms.int32 count)
+
 resetCount :: Name -> Flow s ()
-resetCount attrName = do
-  putAttr attrName (Terms.int32 0)
+resetCount key = do
+  putAttr key (Terms.int32 0)
   return ()
 
 normalizeTermAnnotations :: Term -> Term
@@ -223,15 +229,15 @@ unshadowVariables term = Y.fromJust $ flowStateValue $ unFlow (rewriteTermM rewr
         _ -> recurse term
     freshName = (\n -> Name $ "s" ++ show n) <$> nextCount (Name "unshadow")
 
--- | Provide an integer-valued 'depth' to a flow, where the depth is the number of nested calls.
+-- | Provide an one-indexed, integer-valued 'depth' to a flow, where the depth is the number of nested calls.
 --   This is useful for generating variable names while avoiding conflicts between the variables of parents and children.
 --   E.g. a variable in an outer case/match statement might be "v1", whereas the variable of another case/match statement
 --   inside of the first one becomes "v2". See also nextCount.
 withDepth :: Name -> (Int -> Flow s a) -> Flow s a
-withDepth attrName f = do
-  count <- getAttrWithDefault attrName (Terms.int32 0) >>= Expect.int32
+withDepth key f = do
+  count <- getCount key
   let inc = count + 1
-  putAttr attrName (Terms.int32 inc)
+  putCount key inc
   r <- f inc
-  putAttr attrName (Terms.int32 count)
+  putCount key count
   return r
