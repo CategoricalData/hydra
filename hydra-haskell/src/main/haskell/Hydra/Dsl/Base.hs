@@ -4,7 +4,7 @@ module Hydra.Dsl.Base (
   module Hydra.Dsl.Base,
   module Hydra.Dsl.PhantomLiterals,
   module Hydra.Dsl.ShorthandTypes,
-  hydraCore,
+  hydraCoreGraph,
 ) where
 
 import Hydra.Coders

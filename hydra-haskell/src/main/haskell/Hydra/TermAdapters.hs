@@ -312,14 +312,14 @@ termAdapter typ = case typ of
       -- Account for let-bound variables
       TypeVariable name -> forTypeReference name
       _ -> do
-          g <- getState
-          chooseAdapter (alts g) (supported g) describeType typ
+          cx <- getState
+          chooseAdapter (alts cx) (supported cx) describeType typ
         where
           alts g t = CM.mapM (\c -> c t) $ if supportedAtTopLevel g t
               then pass t
               else trySubstitution t
             where
-              supportedAtTopLevel g t = variantIsSupported g t && languageConstraintsTypes (constraints g) t
+              supportedAtTopLevel cx t = variantIsSupported g t && languageConstraintsTypes (constraints cx) t
               pass t = case typeVariant (stripType t) of
                 TypeVariantApplication -> [passApplication]
                 TypeVariantFunction ->  [passFunction]
@@ -347,7 +347,7 @@ termAdapter typ = case typ of
     where
       constraints = languageConstraints . adapterContextLanguage
       supported = typeIsSupported . constraints
-      variantIsSupported g t = S.member (typeVariant t) $ languageConstraintsTypeVariants (constraints g)
+      variantIsSupported cx t = S.member (typeVariant t) $ languageConstraintsTypeVariants (constraints cx)
 
 ---- Caution: possibility of an infinite loop if neither unions, optionals, nor lists are supported
 unionToRecord :: TypeAdapter

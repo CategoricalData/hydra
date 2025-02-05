@@ -49,13 +49,13 @@ testElementFirstName = Element {
   elementData = project testTypePersonName $ Name "firstName"}
 
 testGraph :: Graph
-testGraph = elementsToGraph hydraCore (Just testSchemaGraph) [testElementArthur, testElementFirstName]
+testGraph = elementsToGraph hydraCoreGraph (Just testSchemaGraph) [testElementArthur, testElementFirstName]
 
 testNamespace :: Namespace
 testNamespace = Namespace "testGraph"
 
 testSchemaGraph :: Graph
-testSchemaGraph = elementsToGraph hydraCore (Just hydraCore) [
+testSchemaGraph = elementsToGraph hydraCoreGraph (Just hydraCoreGraph) [
     def testTypeBuddyListAName testTypeBuddyListA,
     def testTypeBuddyListBName testTypeBuddyListB,
     def testTypeComparisonName testTypeComparison,
