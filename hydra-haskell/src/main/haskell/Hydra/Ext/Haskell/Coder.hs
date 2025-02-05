@@ -83,9 +83,9 @@ encodeFunction namespaces fun = case fun of
       EliminationOptional (OptionalCases nothing just) -> do
         nothingRhs <- H.CaseRhs <$> encodeTerm namespaces nothing
         let nothingAlt = H.Alternative (H.PatternName $ rawName "Nothing") nothingRhs Nothing
-        justAlt <- do
+        justAlt <- withDepth key_haskellVar $ \depth -> do
           -- Note: some of the following could be brought together with FunctionCases
-          v0 <- (\i -> "v" ++ show i) <$> nextCount key_haskellVar
+          let v0 = "v" ++ show depth
           let rhsTerm = simplifyTerm $ apply just (var v0)
           let v1 = if S.member (Name v0) $ freeVariablesInTerm rhsTerm then v0 else ignoredVariable
           let lhs = applicationPattern (rawName "Just") [H.PatternName $ rawName v1]
@@ -109,8 +109,8 @@ encodeFunction namespaces fun = case fun of
                 let lhs = H.PatternName $ rawName ignoredVariable
                 return [H.Alternative lhs cs Nothing]
             return $ H.ExpressionCase $ H.Expression_Case (hsvar "x") $ ecases ++ dcases
-          toAlt fieldMap (Field fn fun') = do
-            v0 <- (\i -> "v" ++ show i) <$> nextCount key_haskellVar
+          toAlt fieldMap (Field fn fun') = withDepth key_haskellVar $ \depth -> do
+            let v0 = "v" ++ show depth
             let raw = apply fun' (var v0)
             let rhsTerm = simplifyTerm raw
             let v1 = if isFreeIn (Name v0) rhsTerm then ignoredVariable else v0
