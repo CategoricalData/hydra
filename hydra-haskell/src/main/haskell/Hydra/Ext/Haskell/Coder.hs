@@ -333,7 +333,7 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
         cons <- recordCons lname $ rowTypeFields rt
         return $ H.DeclarationData $ H.DataDeclaration H.DataDeclaration_KeywordData [] hd [cons] [deriv]
       TypeUnion rt -> do
-        cons <- CM.mapM (unionCons lname) $ rowTypeFields rt
+        cons <- CM.mapM (unionCons g lname) $ rowTypeFields rt
         return $ H.DeclarationData $ H.DataDeclaration H.DataDeclaration_KeywordData [] hd cons [deriv]
       TypeWrap (WrappedType tname wt) -> do
         cons <- newtypeCons el wt
@@ -377,15 +377,21 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
           comments <- getTypeDescription ftype
           return $ H.FieldWithComments (H.Field hname htype) comments
 
-    unionCons lname (FieldType (Name fname) ftype) = do
-      comments <- getTypeDescription ftype
-      let nm = capitalize lname ++ capitalize fname
-      typeList <- if stripType ftype == Types.unit
-        then pure []
-        else do
-          htype <- adaptTypeToHaskellAndEncode namespaces ftype
-          return [htype]
-      return $ H.ConstructorWithComments (H.ConstructorOrdinary $ H.Constructor_Ordinary (simpleName nm) typeList) comments
+    unionCons g lname (FieldType (Name fname) ftype) = do
+        comments <- getTypeDescription ftype
+        let nm = deconflict $ capitalize lname ++ capitalize fname
+        typeList <- if stripType ftype == Types.unit
+          then pure []
+          else do
+            htype <- adaptTypeToHaskellAndEncode namespaces ftype
+            return [htype]
+        return $ H.ConstructorWithComments (H.ConstructorOrdinary $ H.Constructor_Ordinary (simpleName nm) typeList) comments
+      where
+        deconflict name = if Y.isJust (M.lookup tname $ graphElements g)
+            then deconflict (name ++ "_")
+            else name
+          where
+            tname = unqualifyName $ QualifiedName (Just $ fst $ namespacesFocus namespaces) name
 
 -- | Constructs a Hydra Type definition which can be included along with the nativized Haskell type definition
 typeDecl :: HaskellNamespaces -> Name -> Type -> Flow Graph H.DeclarationWithComments
