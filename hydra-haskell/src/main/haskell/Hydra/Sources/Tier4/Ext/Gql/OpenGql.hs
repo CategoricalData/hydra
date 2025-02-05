@@ -29,13 +29,8 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "GqlProgram" $
         union [
-          "activity">: gql "GqlProgramActivity",
-          "close">: gql "SessionCloseCommand"],
-
-      def "GqlProgramActivity" $
-        record [
-          "programActivity">: gql "ProgramActivity",
-          "sessionCloseCommand">: optional $ gql "SessionCloseCommand"],
+          "activity">: optional $ gql "ProgramActivity",
+          "close">: optional $ gql "SessionCloseCommand"],
 
 -- programActivity = sessionActivity
 --                  | transactionActivity
@@ -139,8 +134,8 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
       def "SessionSetBindingTableParameterClause" $
         record [
           "binding">: boolean,
-          "table">: gql "SessionSetParameterName",
-          "binding">: gql "OptTypedBindingTableInitializer"],
+          "param">: gql "SessionSetParameterName",
+          "init">: gql "OptTypedBindingTableInitializer"],
 
 -- sessionSetValueParameterClause = VALUE sessionSetParameterName optTypedValueInitializer
 --                                ;
@@ -691,7 +686,7 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "FocusedLinearDataModifyingStatement" $
         union [
-          "body">: gql "FocusedLinearDataModifyingStatementBody",
+          "simple">: gql "FocusedLinearDataModifyingStatementBody",
           "nested">: gql "FocusedNestedDataModifyingProcedureSpecification"],
 
 -- focusedLinearDataModifyingStatementBody
@@ -717,7 +712,7 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "AmbientLinearDataModifyingStatement" $
         union [
-          "body">: gql "AmbientLinearDataModifyingStatementBody",
+          "simple">: gql "AmbientLinearDataModifyingStatementBody",
           "nested">: gql "NestedDataModifyingProcedureSpecification"],
 
 -- ambientLinearDataModifyingStatementBody
@@ -915,7 +910,7 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "CompositeQueryExpression" $
         union [
-          "conjunction">: gql "CompositeQueryExpressionConjunction",
+          "simple">: gql "CompositeQueryExpressionConjunction",
           "primary">: gql "CompositeQueryPrimary"],
 
       def "CompositeQueryExpressionConjunction" $
@@ -971,8 +966,8 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "FocusedLinearQueryStatement" $
         union [
-          "partsAndResult">: gql "FocusedLinearQueryStatementPartsAndResult",
-          "primitiveResult">: gql "FocusedPrimitiveResultStatement",
+          "parts">: gql "FocusedLinearQueryStatementPartsAndResult",
+          "primitive">: gql "FocusedPrimitiveResultStatement",
           "nested">: gql "FocusedNestedQuerySpecification",
           "select">: gql "SelectStatement"],
 
@@ -1020,7 +1015,7 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "AmbientLinearQueryStatement" $
         union [
-          "simpleAndPrimitiveResult">: gql "AmbientLinearQueryStatementSimpleAndPrimitiveResult",
+          "simple">: gql "AmbientLinearQueryStatementSimpleAndPrimitiveResult",
           "nested">: gql "NestedQuerySpecification"],
 
       def "AmbientLinearQueryStatementSimpleAndPrimitiveResult" $
@@ -2721,10 +2716,10 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "NodeTypePhraseFiller" $
         union [
-          "typeNameWithFiller">: gql "TypeNameWithFiller",
+          "typeName">: gql "NodeTypeNameWithFiller",
           "fillerOnly">: gql "NodeTypeFiller"],
 
-      def "TypeNameWithFiller" $
+      def "NodeTypeNameWithFiller" $
         record [
           "typeName">: gql "NodeTypeName",
           "filler">: optional $ gql "NodeTypeFiller"],
@@ -2735,10 +2730,10 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "NodeTypeFiller" $
         union [
-          "keyLabelSetWithContent">: gql "KeyLabelSetWithContent",
+          "keyLabelSet">: gql "NodeKeyLabelSetWithContent",
           "impliedContent">: gql "NodeTypeImpliedContent"],
 
-      def "KeyLabelSetWithContent" $
+      def "NodeKeyLabelSetWithContent" $
         record [
           "keyLabelSet">: gql "NodeTypeKeyLabelSet",
           "impliedContent">: optional $ gql "NodeTypeImpliedContent"],
@@ -2758,9 +2753,9 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
         union [
           "labelSet">: gql "NodeTypeLabelSet",
           "propertyTypes">: gql "NodeTypePropertyTypes",
-          "labelSetWithProperties">: gql "LabelSetWithProperties"],
+          "labelSetWithProperties">: gql "NodeLabelSetWithProperties"],
 
-      def "LabelSetWithProperties" $
+      def "NodeLabelSetWithProperties" $
         record [
           "labelSet">: gql "NodeTypeLabelSet",
           "propertyTypes">: gql "NodeTypePropertyTypes"],
@@ -2829,10 +2824,10 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "EdgeTypePhraseFiller" $
         union [
-          "typeNameWithFiller">: gql "TypeNameWithFiller",
+          "typeNameWithFiller">: gql "EdgeTypeNameWithFiller",
           "fillerOnly">: gql "EdgeTypeFiller"],
 
-      def "TypeNameWithFiller" $
+      def "EdgeTypeNameWithFiller" $
         record [
           "typeName">: gql "EdgeTypeName",
           "filler">: optional $ gql "EdgeTypeFiller"],
@@ -2843,10 +2838,10 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     ;
       def "EdgeTypeFiller" $
         union [
-          "keyLabelSetWithContent">: gql "KeyLabelSetWithContent",
+          "keyLabelSetWithContent">: gql "EdgeKeyLabelSetWithContent",
           "impliedContent">: gql "EdgeTypeImpliedContent"],
 
-      def "KeyLabelSetWithContent" $
+      def "EdgeKeyLabelSetWithContent" $
         record [
           "keyLabelSet">: gql "EdgeTypeKeyLabelSet",
           "impliedContent">: optional $ gql "EdgeTypeImpliedContent"],
@@ -2860,9 +2855,9 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
         union [
           "labelSet">: gql "EdgeTypeLabelSet",
           "propertyTypes">: gql "EdgeTypePropertyTypes",
-          "labelSetWithProperties">: gql "LabelSetWithProperties"],
+          "labelSetWithProperties">: gql "EdgeLabelSetWithProperties"],
 
-      def "LabelSetWithProperties" $
+      def "EdgeLabelSetWithProperties" $
         record [
           "labelSet">: gql "EdgeTypeLabelSet",
           "propertyTypes">: gql "EdgeTypePropertyTypes"],
@@ -3271,8 +3266,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 -- maxLength
 --     : unsignedInteger
 --     ;
-      def "MaxLength" $
-        gql "UnsignedInteger",
 
 -- fixedLength
 --     : unsignedInteger
@@ -3283,8 +3276,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 -- minLength
 --     : unsignedInteger
 --     ;
-      def "MinLength" $
-        gql "UnsignedInteger",
 
 -- maxLength
 --     : unsignedInteger
@@ -3295,8 +3286,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 -- fixedLength
 --     : unsignedInteger
 --     ;
-      def "FixedLength" $
-        gql "UnsignedInteger",
 
 -- numericType
 --     : exactNumericType
@@ -3511,8 +3500,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 -- precision
 --     : unsignedDecimalInteger
 --     ;
-      def "Precision" $
-        gql "UnsignedDecimalInteger",
 
 -- scale
 --     : unsignedDecimalInteger
@@ -4216,9 +4203,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 
       def "DisjunctiveOperator" $
         enum ["or", "xor"],
-
-      def "TruthValue" $
-        enum ["true", "false"],
 
 -- valueFunction
 --     : numericValueFunction
@@ -5289,8 +5273,6 @@ openGqlModule = Module ns elements [hydraCoreModule] tier0Modules
 --     : YEAR TO MONTH
 --     | DAY TO SECOND
 --     ;
-      def "TemporalDurationQualifier" $
-        enum ["yearToMonth", "dayToSecond"],
 
 -- // 20.29 <duration value function>
 --
