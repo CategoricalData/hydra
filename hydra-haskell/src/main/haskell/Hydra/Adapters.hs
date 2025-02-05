@@ -53,10 +53,9 @@ constructCoder lang encodeTerm typ = withTrace ("coder for " ++ describeType typ
 -- | Given a target language and a source type, produce an adapter,
 --   which rewrites the type and its terms according to the language's constraints
 languageAdapter :: Language -> Type -> Flow Graph (SymmetricAdapter Graph Type Term)
-languageAdapter lang typ0 = do
-  -- TODO: rather than beta-reducing types all at once, we should incrementally extend the environment when application types are adapted
-  -- typ <- betaReduceType typ0
-  let typ = typ0
+languageAdapter lang typ = do
+  -- TODO: types should be beta-reduced for the sake of term adaptation, but application types must be preserved in languages which support them.
+  --typ <- betaReduceType typ
 
   g  <- getState
   -- Provide an initial adapter context

@@ -11,7 +11,7 @@ module Hydra.Codegen (
   writePython,
   writeScala,
   writeYaml,
-  module Hydra.Sources.Tier4.All
+--  module Hydra.Sources.Tier4.All
 ) where
 
 import Hydra.Kernel
@@ -29,7 +29,7 @@ import Hydra.Ext.Scala.Coder
 import Hydra.Ext.Yaml.Modules
 
 import Hydra.Sources.Libraries
-import Hydra.Sources.Tier4.All
+--import Hydra.Sources.Tier4.All
 
 import qualified Control.Monad as CM
 import qualified System.FilePath as FP
@@ -80,11 +80,11 @@ printTrace isError t = do
       putStrLn $ indentLines $ traceSummary t
 
 runFlow :: s -> Flow s a -> IO (Maybe a)
-runFlow cx f = do
+runFlow s f = do
     printTrace (Y.isNothing v) t
     return v
   where
-    FlowState v _ t = unFlow f cx emptyTrace
+    FlowState v _ t = unFlow f s emptyTrace
 
 writeGraphql :: FP.FilePath -> [Module] -> IO ()
 writeGraphql = generateSources moduleToGraphql
