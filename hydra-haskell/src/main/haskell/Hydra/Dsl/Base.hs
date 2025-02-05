@@ -14,7 +14,7 @@ import Hydra.Graph
 import Hydra.Annotations
 import Hydra.Phantoms
 import Hydra.Module
-import qualified Hydra.Tier1 as Tier1
+import Hydra.Qnames
 import Hydra.Dsl.PhantomLiterals
 import Hydra.Dsl.ShorthandTypes
 import Hydra.Sources.Core
@@ -73,7 +73,7 @@ constant :: TTerm a -> TTerm (b -> a)
 constant (TTerm term) = TTerm $ Terms.constant term
 
 definitionInModule :: Module -> String -> TTerm a -> TElement a
-definitionInModule mod lname = TElement $ Tier1.unqualifyName $ QualifiedName (Just $ moduleNamespace mod) lname
+definitionInModule mod lname = TElement $ unqualifyName $ QualifiedName (Just $ moduleNamespace mod) lname
 
 doc :: String -> TTerm a -> TTerm a
 doc s (TTerm term) = TTerm $ setTermDescription (Just s) term

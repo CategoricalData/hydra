@@ -2,7 +2,7 @@
 
 module Hydra.Lexical where
 
-import Hydra.Basics
+import Hydra.Qnames
 import Hydra.Strip
 import Hydra.Core
 import Hydra.Extras

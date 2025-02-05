@@ -8,39 +8,17 @@ import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
-import qualified Hydra.Module as Module
 import qualified Hydra.Strip as Strip
 import Data.Int
 import Data.List as L
 import Data.Map as M
 import Data.Set as S
-
--- | Convert a floating-point value of any precision to a bigfloat
-floatValueToBigfloat :: (Core.FloatValue -> Double)
-floatValueToBigfloat x = case x of
-  Core.FloatValueBigfloat v1 -> (Equality.identity v1)
-  Core.FloatValueFloat32 v1 -> (Literals.float32ToBigfloat v1)
-  Core.FloatValueFloat64 v1 -> (Literals.float64ToBigfloat v1)
-
--- | Convert an integer value of any precision to a bigint
-integerValueToBigint :: (Core.IntegerValue -> Integer)
-integerValueToBigint x = case x of
-  Core.IntegerValueBigint v1 -> (Equality.identity v1)
-  Core.IntegerValueInt8 v1 -> (Literals.int8ToBigint v1)
-  Core.IntegerValueInt16 v1 -> (Literals.int16ToBigint v1)
-  Core.IntegerValueInt32 v1 -> (Literals.int32ToBigint v1)
-  Core.IntegerValueInt64 v1 -> (Literals.int64ToBigint v1)
-  Core.IntegerValueUint8 v1 -> (Literals.uint8ToBigint v1)
-  Core.IntegerValueUint16 v1 -> (Literals.uint16ToBigint v1)
-  Core.IntegerValueUint32 v1 -> (Literals.uint32ToBigint v1)
-  Core.IntegerValueUint64 v1 -> (Literals.uint64ToBigint v1)
 
 -- | Check whether a term is a lambda, possibly nested within let and/or annotation terms
 isLambda :: (Core.Term -> Bool)
@@ -50,18 +28,6 @@ isLambda term = ((\x -> case x of
     _ -> False) v1)
   Core.TermLet v1 -> (isLambda (Core.letEnvironment v1))
   _ -> False) (Strip.fullyStripTerm term))
-
--- | Convert a qualified name to a dot-separated name
-unqualifyName :: (Module.QualifiedName -> Core.Name)
-unqualifyName qname =  
-  let prefix = ((\x -> case x of
-          Nothing -> ""
-          Just v1 -> (Strings.cat [
-            Module.unNamespace v1,
-            "."])) (Module.qualifiedNameNamespace qname))
-  in (Core.Name (Strings.cat [
-    prefix,
-    (Module.qualifiedNameLocal qname)]))
 
 -- | Fold over a term, traversing its subterms in the specified order
 foldOverTerm :: (Coders.TraversalOrder -> (x -> Core.Term -> x) -> x -> Core.Term -> x)

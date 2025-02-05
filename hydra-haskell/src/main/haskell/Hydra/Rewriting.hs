@@ -2,7 +2,7 @@
 
 module Hydra.Rewriting where
 
-import Hydra.Basics
+import Hydra.Qnames
 import Hydra.Strip
 import Hydra.Coders
 import Hydra.Compute

@@ -2,7 +2,7 @@
 
 module Hydra.Tools.Formatting where
 
-import Hydra.Basics
+import Hydra.Formatting
 import qualified Hydra.Lib.Strings as Strings
 
 import qualified Data.Char as C

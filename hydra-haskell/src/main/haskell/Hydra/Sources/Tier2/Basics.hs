@@ -45,7 +45,6 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements
      el floatValueTypeDef,
      el functionVariantDef,
      el functionVariantsDef,
-     el idDef,
      el integerTypeIsSignedDef,
      el integerTypePrecisionDef,
      el integerTypesDef,
@@ -58,10 +57,6 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements
      el termVariantsDef,
      el typeVariantDef,
      el typeVariantsDef,
-     -- Formatting.hs
-     el capitalizeDef,
-     el decapitalizeDef,
-     el mapFirstLetterDef,
      -- Common.hs
      el fieldMapDef,
      el fieldTypeMapDef,
@@ -69,15 +64,7 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements
      el isTypeDef,
      el isUnitTermDef,
      el isUnitTypeDef,
-     el elementsToGraphDef,
-     el localNameOfEagerDef,
-     el localNameOfLazyDef,
-     el namespaceOfEagerDef,
-     el namespaceOfLazyDef,
-     el namespaceToFilePathDef,
-     el qualifyNameEagerDef,
-     el qualifyNameLazyDef
-     ]
+     el elementsToGraphDef]
 
 eliminationVariantDef :: TElement (Elimination -> EliminationVariant)
 eliminationVariantDef = basicsDefinition "eliminationVariant" $
@@ -147,12 +134,6 @@ functionVariantsDef = basicsDefinition "functionVariants" $
     _FunctionVariant_elimination,
     _FunctionVariant_lambda,
     _FunctionVariant_primitive]
-
-idDef :: TElement (a -> a)
-idDef = basicsDefinition "id" $
-  doc "The identity function" $
-  function aT aT $
-  lambda "x" $ var "x"
 
 integerTypeIsSignedDef :: TElement (IntegerType -> Bool)
 integerTypeIsSignedDef = basicsDefinition "integerTypeIsSigned" $
@@ -342,33 +323,6 @@ typeVariantsDef = basicsDefinition "typeVariants" $
     _TypeVariant_union,
     _TypeVariant_variable]
 
--- Formatting.hs
-
-capitalizeDef :: TElement (String -> String)
-capitalizeDef = basicsDefinition "capitalize" $
-  doc "Capitalize the first letter of a string" $
-  function stringT stringT $
-  ref mapFirstLetterDef @@ Strings.toUpper
-
-decapitalizeDef :: TElement (String -> String)
-decapitalizeDef = basicsDefinition "decapitalize" $
-  doc "Decapitalize the first letter of a string" $
-  function stringT stringT $
-  ref mapFirstLetterDef @@ Strings.toLower
-
--- TODO: simplify this helper
-mapFirstLetterDef :: TElement ((String -> String) -> String -> String)
-mapFirstLetterDef = basicsDefinition "mapFirstLetter" $
-  doc "A helper which maps the first letter of a string to another string" $
-  function (funT stringT stringT) (funT stringT stringT) $
-  lambda "mapping" $ lambda "s" ((Logic.ifElse
-       @@ var "s"
-       @@ (Strings.cat2 @@ var "firstLetter" @@ (Strings.fromList @@ (Lists.tail @@ var "list")))
-       @@ (Strings.isEmpty @@ var "s"))
-    `with` [
-      "firstLetter">: var "mapping" @@ (Strings.fromList @@ (Lists.pure @@ (Lists.head @@ var "list"))),
-      "list">: typed (listT int32T) $ Strings.toList @@ var "s"])
-
 -- Common.hs
 
 fieldMapDef :: TElement ([Field] -> M.Map Name Term)
@@ -431,60 +385,3 @@ elementsToGraphDef = basicsDefinition "elementsToGraph" $
       (var "schema")
   `with` [
     "toPair" >: lambda "el" $ pair (Graph.elementName @@ var "el") (var "el")]
-
-localNameOfEagerDef :: TElement (Name -> String)
-localNameOfEagerDef = basicsDefinition "localNameOfEager" $
-  function nameT stringT $
-  Module.qualifiedNameLocal <.> ref qualifyNameEagerDef
-
-localNameOfLazyDef :: TElement (Name -> String)
-localNameOfLazyDef = basicsDefinition "localNameOfLazy" $
-  function nameT stringT $
-  Module.qualifiedNameLocal <.> ref qualifyNameLazyDef
-
-namespaceOfEagerDef :: TElement (Name -> Maybe Namespace)
-namespaceOfEagerDef = basicsDefinition "namespaceOfEager" $
-  function nameT (optionalT namespaceT) $
-  Module.qualifiedNameNamespace <.> ref qualifyNameEagerDef
-
-namespaceOfLazyDef :: TElement (Name -> Maybe Namespace)
-namespaceOfLazyDef = basicsDefinition "namespaceOfLazy" $
-  function nameT (optionalT namespaceT) $
-  Module.qualifiedNameNamespace <.> ref qualifyNameLazyDef
-
-namespaceToFilePathDef :: TElement (Bool -> FileExtension -> Namespace -> String)
-namespaceToFilePathDef = basicsDefinition "namespaceToFilePath" $
-  function booleanT (funT fileExtensionT (funT namespaceT stringT)) $
-  lambda "caps" $ lambda "ext" $ lambda "ns" $
-    (((Strings.intercalate @@ "/" @@ var "parts") ++ "." ++ (Module.unFileExtension @@ var "ext"))
-    `with` [
-      "parts">: Lists.map
-        @@ (Logic.ifElse
-          @@ ref capitalizeDef
-          @@ ref idDef
-          @@ var "caps")
-        @@ (Strings.splitOn @@ "/" @@ (Core.unNamespace @@ var "ns"))])
-
-qualifyNameEagerDef :: TElement (Name -> QualifiedName)
-qualifyNameEagerDef = basicsDefinition "qualifyNameEager" $
-  function nameT qualifiedNameT $
-  lambda "name" $ ((Logic.ifElse
-      @@ Module.qualifiedName nothing (Core.unName @@ var "name")
-      @@ Module.qualifiedName
-        (just $ wrap _Namespace (Lists.head @@ var "parts"))
-        (Strings.intercalate @@ "." @@ (Lists.tail @@ var "parts"))
-      @@ (Equality.equalInt32 @@ int32 1 @@ (Lists.length @@ var "parts")))
-    `with` [
-      "parts">: Strings.splitOn @@ "." @@ (Core.unName @@ var "name")])
-
-qualifyNameLazyDef :: TElement (Name -> QualifiedName)
-qualifyNameLazyDef = basicsDefinition "qualifyNameLazy" $
-  function nameT qualifiedNameT $
-  lambda "name" $ (Logic.ifElse
-      @@ Module.qualifiedName nothing (Core.unName @@ var "name")
-      @@ Module.qualifiedName
-        (just $ wrap _Namespace (Strings.intercalate @@ "." @@ (Lists.reverse @@ (Lists.tail @@ var "parts"))))
-        (Lists.head @@ var "parts")
-      @@ (Equality.equalInt32 @@ int32 1 @@ (Lists.length @@ var "parts")))
-    `with` [
-      "parts">: Lists.reverse @@ (Strings.splitOn @@ "." @@ (Core.unName @@ var "name"))]
