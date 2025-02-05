@@ -119,7 +119,7 @@ javaConditionalAndExpressionToJavaExpression condAndEx = Java.ExpressionAssignme
 
 javaConstructorCall :: Java.ClassOrInterfaceTypeToInstantiate -> [Java.Expression] -> Maybe Java.ClassBody -> Java.Expression
 javaConstructorCall ci args mbody = javaPrimaryToJavaExpression $
-  Java.PrimaryNoNewArray $
+  Java.PrimaryNoNewArray_ $
   Java.PrimaryNoNewArrayClassInstance $
   Java.ClassInstanceCreationExpression Nothing $
   Java.UnqualifiedClassInstanceCreationExpression [] ci args mbody
@@ -151,13 +151,13 @@ javaExpressionNameToJavaExpression :: Java.ExpressionName -> Java.Expression
 javaExpressionNameToJavaExpression = javaPostfixExpressionToJavaExpression . Java.PostfixExpressionName
 
 javaExpressionToJavaPrimary :: Java.Expression -> Java.Primary
-javaExpressionToJavaPrimary = Java.PrimaryNoNewArray . Java.PrimaryNoNewArrayParens
+javaExpressionToJavaPrimary = Java.PrimaryNoNewArray_ . Java.PrimaryNoNewArrayParens
 
 javaExpressionToJavaUnaryExpression :: Java.Expression -> Java.UnaryExpression
 javaExpressionToJavaUnaryExpression = javaPrimaryToJavaUnaryExpression . javaExpressionToJavaPrimary
 
 javaFieldAccessToJavaExpression :: Java.FieldAccess -> Java.Expression
-javaFieldAccessToJavaExpression = javaPrimaryToJavaExpression . Java.PrimaryNoNewArray . Java.PrimaryNoNewArrayFieldAccess
+javaFieldAccessToJavaExpression = javaPrimaryToJavaExpression . Java.PrimaryNoNewArray_ . Java.PrimaryNoNewArrayFieldAccess
 
 javaIdentifier :: String -> Java.Identifier
 javaIdentifier = Java.Identifier . sanitizeJavaName
@@ -213,7 +213,7 @@ javaLiteralToJavaMultiplicativeExpression = Java.MultiplicativeExpressionUnary .
   javaLiteralToJavaPrimary
 
 javaLiteralToJavaPrimary :: Java.Literal -> Java.Primary
-javaLiteralToJavaPrimary = Java.PrimaryNoNewArray . Java.PrimaryNoNewArrayLiteral
+javaLiteralToJavaPrimary = Java.PrimaryNoNewArray_ . Java.PrimaryNoNewArrayLiteral
 
 javaMemberField :: [Java.FieldModifier] -> Java.Type -> Java.VariableDeclarator -> Java.ClassBodyDeclaration
 javaMemberField mods jt var = Java.ClassBodyDeclarationClassMember $ Java.ClassMemberDeclarationField $
@@ -239,11 +239,11 @@ javaMethodInvocationToJavaStatement = Java.StatementWithoutTrailing . Java.State
   Java.ExpressionStatement . Java.StatementExpressionMethodInvocation
 
 javaMethodInvocationToJavaPostfixExpression :: Java.MethodInvocation -> Java.PostfixExpression
-javaMethodInvocationToJavaPostfixExpression = Java.PostfixExpressionPrimary . Java.PrimaryNoNewArray .
+javaMethodInvocationToJavaPostfixExpression = Java.PostfixExpressionPrimary . Java.PrimaryNoNewArray_ .
   Java.PrimaryNoNewArrayMethodInvocation
 
 javaMethodInvocationToJavaPrimary :: Java.MethodInvocation -> Java.Primary
-javaMethodInvocationToJavaPrimary = Java.PrimaryNoNewArray .
+javaMethodInvocationToJavaPrimary = Java.PrimaryNoNewArray_ .
   Java.PrimaryNoNewArrayMethodInvocation
 
 javaMultiplicativeExpressionToJavaRelationalExpression :: Java.MultiplicativeExpression -> Java.RelationalExpression
@@ -295,7 +295,7 @@ javaRelationalExpressionToJavaExpression = javaEqualityExpressionToJavaExpressio
 
 javaRelationalExpressionToJavaUnaryExpression :: Java.RelationalExpression -> Java.UnaryExpression
 javaRelationalExpressionToJavaUnaryExpression = javaPrimaryToJavaUnaryExpression .
-  Java.PrimaryNoNewArray .
+  Java.PrimaryNoNewArray_ .
   Java.PrimaryNoNewArrayParens .
   javaRelationalExpressionToJavaExpression
 
@@ -325,7 +325,7 @@ javaThrowStatement = Java.StatementWithoutTrailing .
   Java.StatementWithoutTrailingSubstatementThrow . Java.ThrowStatement
 
 javaThis :: Java.Expression
-javaThis = javaPrimaryToJavaExpression $ Java.PrimaryNoNewArray Java.PrimaryNoNewArrayThis
+javaThis = javaPrimaryToJavaExpression $ Java.PrimaryNoNewArray_ Java.PrimaryNoNewArrayThis
 
 javaTypeFromTypeName :: Aliases -> Name -> Java.Type
 javaTypeFromTypeName aliases elName = javaTypeVariableToType $ Java.TypeVariable [] $
@@ -506,7 +506,7 @@ toAssignStmt fname = javaAssignmentStatement lhs rhs
       where
         id = fieldNameToJavaIdentifier fname
     rhs = fieldNameToJavaExpression fname
-    thisField = Java.FieldAccess $ Java.FieldAccess_QualifierPrimary $ Java.PrimaryNoNewArray Java.PrimaryNoNewArrayThis
+    thisField = Java.FieldAccess $ Java.FieldAccess_QualifierPrimary $ Java.PrimaryNoNewArray_ Java.PrimaryNoNewArrayThis
 
 toJavaArrayType :: Java.Type -> Flow (Graph) Java.Type
 toJavaArrayType t = Java.TypeReference . Java.ReferenceTypeArray <$> case t of

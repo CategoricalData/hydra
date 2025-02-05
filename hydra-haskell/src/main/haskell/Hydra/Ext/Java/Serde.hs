@@ -660,7 +660,7 @@ writePreIncrementExpression _ = cst "TODO:PreIncrementExpression"
 
 writePrimary :: Java.Primary -> CT.Expr
 writePrimary p = case p of
-  Java.PrimaryNoNewArray n -> writePrimaryNoNewArray n
+  Java.PrimaryNoNewArray_ n -> writePrimaryNoNewArray n
   Java.PrimaryArrayCreation a -> writeArrayCreationExpression a
 
 writePrimaryNoNewArray :: Java.PrimaryNoNewArray -> CT.Expr
