@@ -1,6 +1,6 @@
 -- | Utilities for working with term accessors
 
-module Hydra.Tools.Accessors where
+module Hydra.Staging.Accessors where
 
 import Hydra.Kernel
 
@@ -17,30 +17,30 @@ data AccessorGraph = AccessorGraph [AccessorNode] [AccessorEdge] deriving Show
 
 showTermAccessor :: TermAccessor -> Maybe String
 showTermAccessor accessor = case accessor of
-   TermAccessorAnnotatedSubject -> Nothing
-   TermAccessorApplicationFunction -> Just "fun"
-   TermAccessorApplicationArgument -> Just "arg"
-   TermAccessorLambdaBody -> Just "body"
-   TermAccessorListFold -> Nothing
-   TermAccessorOptionalCasesNothing -> Just "nothing"
-   TermAccessorOptionalCasesJust -> Just "just"
-   TermAccessorUnionCasesDefault -> Just "default"
-   TermAccessorUnionCasesBranch name -> Just $ "." ++ unName name
-   TermAccessorLetEnvironment -> Just "in"
-   TermAccessorLetBinding name -> Just $ unName name ++ "="
-   TermAccessorListElement i -> idx i
-   TermAccessorMapKey i -> idxSuff ".key" i
-   TermAccessorMapValue i -> idxSuff ".value" i
-   TermAccessorOptionalTerm -> Just "just"
-   TermAccessorProductTerm i -> idx i
-   TermAccessorRecordField name -> Just $ "." ++ unName name
-   TermAccessorSetElement i -> idx i
-   TermAccessorSumTerm -> Nothing
-   TermAccessorTypeAbstractionBody -> Nothing
-   TermAccessorTypeApplicationTerm -> Nothing
-   TermAccessorTypedTerm -> Nothing
-   TermAccessorInjectionTerm -> Nothing
-   TermAccessorWrappedTerm -> Nothing
+    TermAccessorAnnotatedSubject -> Nothing
+    TermAccessorApplicationFunction -> Just "fun"
+    TermAccessorApplicationArgument -> Just "arg"
+    TermAccessorLambdaBody -> Just "body"
+    TermAccessorListFold -> Nothing
+    TermAccessorOptionalCasesNothing -> Just "nothing"
+    TermAccessorOptionalCasesJust -> Just "just"
+    TermAccessorUnionCasesDefault -> Just "default"
+    TermAccessorUnionCasesBranch name -> Just $ "." ++ unName name
+    TermAccessorLetEnvironment -> Just "in"
+    TermAccessorLetBinding name -> Just $ unName name ++ "="
+    TermAccessorListElement i -> idx i
+    TermAccessorMapKey i -> idxSuff ".key" i
+    TermAccessorMapValue i -> idxSuff ".value" i
+    TermAccessorOptionalTerm -> Just "just"
+    TermAccessorProductTerm i -> idx i
+    TermAccessorRecordField name -> Just $ "." ++ unName name
+    TermAccessorSetElement i -> idx i
+    TermAccessorSumTerm -> Nothing
+    TermAccessorTypeAbstractionBody -> Nothing
+    TermAccessorTypeApplicationTerm -> Nothing
+    TermAccessorTypedTerm -> Nothing
+    TermAccessorInjectionTerm -> Nothing
+    TermAccessorWrappedTerm -> Nothing
   where
 --    idx i = Just $ "[" ++ show i ++ "]" -- TODO: restore this
     idx i = Nothing

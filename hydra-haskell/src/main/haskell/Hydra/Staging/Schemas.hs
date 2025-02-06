@@ -1,6 +1,6 @@
 -- | Various functions for dereferencing and decoding schema types
 
-module Hydra.Schemas (
+module Hydra.Staging.Schemas (
   Definition(..),
   Namespaces(..),
   definitionDependencyNamespaces,
@@ -27,13 +27,13 @@ import Hydra.Strip
 import Hydra.Coders
 import Hydra.Compute
 import Hydra.Core
-import Hydra.CoreDecoding
+import Hydra.Staging.CoreDecoding
 import Hydra.CoreEncoding
 import Hydra.Graph
 import Hydra.Mantle
 import Hydra.Module
-import Hydra.Tools.Lexical
-import Hydra.Tools.Rewriting
+import Hydra.Staging.Lexical
+import Hydra.Staging.Rewriting
 import Hydra.Flows
 import Hydra.Rewriting
 import Hydra.Errors

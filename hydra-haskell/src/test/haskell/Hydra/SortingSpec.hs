@@ -1,8 +1,8 @@
-module Hydra.Tools.SortingSpec where
+module Hydra.SortingSpec where
 
 import qualified Test.Hspec as H
 
-import Hydra.Tools.Sorting
+import Hydra.Staging.Sorting
 
 
 checkSort :: [(Int, [Int])] -> Either [[Int]] [Int] -> H.Expectation

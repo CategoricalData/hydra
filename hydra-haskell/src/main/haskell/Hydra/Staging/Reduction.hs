@@ -1,16 +1,16 @@
 -- | Functions for reducing terms and types, i.e. performing computations
 
-module Hydra.Reduction where
+module Hydra.Staging.Reduction where
 
 import Hydra.Arity
 import Hydra.Strip
 import Hydra.Compute
 import Hydra.Core
-import Hydra.Schemas
+import Hydra.Staging.Schemas
 import Hydra.Graph
-import Hydra.Tools.Annotations
-import Hydra.Tools.Lexical
-import Hydra.Tools.Rewriting
+import Hydra.Staging.Annotations
+import Hydra.Staging.Lexical
+import Hydra.Staging.Rewriting
 import Hydra.Rewriting
 import Hydra.Lexical
 import qualified Hydra.Dsl.Expect as Expect

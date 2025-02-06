@@ -1,7 +1,7 @@
 -- | Additional adapter utilities, above and beyond the generated ones
 
-module Hydra.AdapterUtils (
-  module Hydra.AdapterUtils,
+module Hydra.Staging.AdapterUtils (
+  module Hydra.Staging.AdapterUtils,
   module Hydra.Printing,
 ) where
 
@@ -14,7 +14,7 @@ import Hydra.Module
 import Hydra.Printing
 import Hydra.Mantle
 import Hydra.Strip
-import Hydra.Tools.Annotations
+import Hydra.Staging.Annotations
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms

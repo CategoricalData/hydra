@@ -4,7 +4,7 @@ module Hydra.Inference.SubstitutionSpec where
 
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import Hydra.Inference.Inference
+import Hydra.Staging.Inference
 import Hydra.TestUtils
 import Hydra.TestData
 import qualified Hydra.Dsl.Expect as Expect
@@ -12,8 +12,8 @@ import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.ShorthandTypes
-import Hydra.Inference.Substitution
-import Hydra.Inference.Rules
+import Hydra.Staging.Substitution
+import Hydra.Staging.Rules
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC

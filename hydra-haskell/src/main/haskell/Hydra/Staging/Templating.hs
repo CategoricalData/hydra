@@ -1,6 +1,6 @@
 -- | A utility which instantiates a nonrecursive type with default values.
 
-module Hydra.Tools.Templating where
+module Hydra.Staging.Templating where
 
 import Hydra.Kernel
 

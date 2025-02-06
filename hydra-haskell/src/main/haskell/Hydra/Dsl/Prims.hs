@@ -6,7 +6,7 @@ module Hydra.Dsl.Prims where
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Graph
-import Hydra.CoreDecoding
+import Hydra.Staging.CoreDecoding
 import Hydra.CoreEncoding
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
@@ -17,7 +17,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
-import Hydra.Tools.Rewriting (removeTermAnnotations)
+import Hydra.Staging.Rewriting (removeTermAnnotations)
 import Data.String(IsString(..))
 
 instance IsString (TermCoder (Term)) where fromString = variable

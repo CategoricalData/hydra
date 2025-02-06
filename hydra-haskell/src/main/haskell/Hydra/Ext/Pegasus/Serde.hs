@@ -1,7 +1,7 @@
 module Hydra.Ext.Pegasus.Serde where
 
-import Hydra.Tools.Serialization
-import Hydra.Tools.Formatting
+import Hydra.Staging.Serialization
+import Hydra.Staging.Formatting
 import qualified Hydra.Ast as CT
 import qualified Hydra.Ext.Pegasus.Pdl as PDL
 

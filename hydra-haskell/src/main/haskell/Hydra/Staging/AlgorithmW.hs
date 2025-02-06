@@ -6,7 +6,7 @@
 -- to system F translation by Ryan Wisnesky, with extensions for Hydra by Joshua Shinavier
 -- License: Apache 2.0 https://www.apache.org/licenses/LICENSE-2.0
 
-module Hydra.Inference.AlgorithmW where
+module Hydra.Staging.AlgorithmW where
 
 import Hydra.Minimal
 

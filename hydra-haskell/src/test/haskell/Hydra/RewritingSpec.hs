@@ -4,6 +4,7 @@ module Hydra.RewritingSpec where
 
 import Hydra.Kernel
 import Hydra.Flows
+import Hydra.Tools.Monads
 import Hydra.Dsl.Terms as Terms
 import Hydra.Lib.Io
 import qualified Hydra.Dsl.Types as Types
@@ -33,6 +34,37 @@ myQuuxRewriter :: Quux String -> Quux Int
 myQuuxRewriter = rewriteQuux L.length $ \fsub q -> fsub $ case q of
   QuuxPair left right -> QuuxPair QuuxUnit right
   _ -> q
+
+checkFoldOverTerm :: H.SpecWith ()
+checkFoldOverTerm = do
+  H.describe "Test foldOverTerm" $ do
+    H.describe "Pre-order" $ do
+      H.it "test #1" $
+        H.shouldBe
+          (traverse TraversalOrderPre node1)
+          ["a"]
+      H.it "test #2" $
+        H.shouldBe
+          (traverse TraversalOrderPre node2)
+          ["a", "b", "c", "d"]
+    H.describe "Post-order" $ do
+      H.it "test #1" $
+        H.shouldBe
+          (traverse TraversalOrderPost node1)
+          ["a"]
+      H.it "test #1" $
+        H.shouldBe
+          (traverse TraversalOrderPost node2)
+          ["b", "d", "c", "a"]
+  where
+    node label children = Terms.pair (Terms.string label) (Terms.list children)
+    labelOf term = case term of
+      TermProduct [TermLiteral (LiteralString label), _] -> Just label
+      _ -> Nothing
+    traverse :: TraversalOrder -> Term -> [String]
+    traverse order = Y.catMaybes . foldOverTerm order (\l t -> l ++ [labelOf t]) []
+    node1 = node "a" []
+    node2 = node "a" [node "b" [], node "c" [node "d" []]]
 
 testExpandLambdas :: Graph -> H.SpecWith ()
 testExpandLambdas g = do
@@ -436,9 +468,11 @@ testTopologicalSortBindings = do
 
 spec :: H.Spec
 spec = do
+  checkFoldOverTerm
+  testFoldOverTerm
+
   testExpandLambdas testGraph
 --  testExpandTypedLambdas -- TODO: restore me / merge with testExpandLambdas
-  testFoldOverTerm
   testFlattenLetTerms
   testFreeVariablesInTerm
 --  testReplaceFreeName

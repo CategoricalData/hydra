@@ -6,7 +6,7 @@ import qualified Hydra.Ext.Protobuf.Proto3 as P3
 import qualified Hydra.Lib.Strings as Strings
 import Hydra.Ext.Protobuf.Language
 import Hydra.Ext.Protobuf.Serde
-import Hydra.Tools.Serialization
+import Hydra.Staging.Serialization
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Annotations
 import Hydra.Lib.Io

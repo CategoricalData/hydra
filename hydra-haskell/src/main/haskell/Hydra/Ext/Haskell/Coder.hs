@@ -1,11 +1,11 @@
 module Hydra.Ext.Haskell.Coder (moduleToHaskell) where
 
 import Hydra.Kernel
-import Hydra.Adapters
+import Hydra.Staging.Adapters
 import Hydra.Ext.Haskell.Language
 import Hydra.Ext.Haskell.Utils
 import Hydra.Dsl.Terms
-import Hydra.Tools.Serialization
+import Hydra.Staging.Serialization
 import Hydra.Ext.Haskell.Serde
 import Hydra.Ext.Haskell.Settings
 import qualified Hydra.Ext.Haskell.Ast as H

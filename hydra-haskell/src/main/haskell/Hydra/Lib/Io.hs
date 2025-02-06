@@ -12,7 +12,7 @@ import Hydra.Graph
 --import Hydra.Dsl.Annotations
 --import Hydra.Ext.Json.Serde
 import Hydra.CoreEncoding
---import Hydra.Tools.Rewriting
+--import Hydra.Staging.Rewriting
 --import Hydra.Annotations
 import Hydra.Flows
 import qualified Hydra.Json as Json

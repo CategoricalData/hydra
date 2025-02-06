@@ -1,6 +1,6 @@
 -- | Decoding of encoded types (as terms) back to types according to LambdaGraph's epsilon encoding
 
-module Hydra.CoreDecoding (
+module Hydra.Staging.CoreDecoding (
   coreDecodeFieldType,
   coreDecodeFieldTypes,
   coreDecodeFloatType,
@@ -22,8 +22,8 @@ import Hydra.Core
 import Hydra.Graph
 import Hydra.Mantle
 import Hydra.Module
-import Hydra.Tools.Lexical
-import Hydra.Tools.Rewriting
+import Hydra.Staging.Lexical
+import Hydra.Staging.Rewriting
 import Hydra.Rewriting
 import Hydra.Errors
 import qualified Hydra.Dsl.Expect as Expect

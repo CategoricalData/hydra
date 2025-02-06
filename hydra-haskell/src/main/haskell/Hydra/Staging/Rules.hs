@@ -1,21 +1,21 @@
 -- | Inference rules
 
-module Hydra.Inference.Rules where
+module Hydra.Staging.Rules where
 
 import Hydra.Variants
 import Hydra.Strip
 import Hydra.Compute
 import Hydra.Core
-import Hydra.Schemas
+import Hydra.Staging.Schemas
 import Hydra.CoreEncoding
 import Hydra.Graph
-import Hydra.Tools.Lexical
+import Hydra.Staging.Lexical
 import Hydra.Mantle
-import Hydra.Tools.Rewriting
-import Hydra.Inference.Substitution
-import Hydra.Unification
+import Hydra.Staging.Rewriting
+import Hydra.Staging.Substitution
+import Hydra.Staging.Unification
 import Hydra.Tools.Debug
-import Hydra.Tools.Annotations
+import Hydra.Staging.Annotations
 import Hydra.Flows
 import Hydra.Rewriting
 import Hydra.Errors

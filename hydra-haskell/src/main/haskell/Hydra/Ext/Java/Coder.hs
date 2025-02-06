@@ -5,15 +5,15 @@ module Hydra.Ext.Java.Coder (
 ) where
 
 import Hydra.Kernel
-import Hydra.Reduction
+import Hydra.Staging.Reduction
 import Hydra.Ext.Java.Utils
 import Hydra.Ext.Java.Language
 import Hydra.Ext.Java.Names
-import Hydra.Adapters
-import Hydra.Tools.Serialization
+import Hydra.Staging.Adapters
+import Hydra.Staging.Serialization
 import Hydra.Ext.Java.Serde
 import Hydra.Ext.Java.Settings
-import Hydra.AdapterUtils
+import Hydra.Staging.AdapterUtils
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Ext.Java.Syntax as Java

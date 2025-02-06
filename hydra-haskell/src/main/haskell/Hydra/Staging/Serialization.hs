@@ -1,6 +1,6 @@
 -- | Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation.
 
-module Hydra.Tools.Serialization where
+module Hydra.Staging.Serialization where
 
 import Hydra.Ast
 

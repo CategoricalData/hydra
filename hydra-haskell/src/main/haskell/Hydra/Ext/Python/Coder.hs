@@ -1,10 +1,10 @@
 module Hydra.Ext.Python.Coder (moduleToPython) where
 
 import Hydra.Kernel
-import Hydra.Adapters
+import Hydra.Staging.Adapters
 import Hydra.Ext.Python.Language
 import Hydra.Dsl.Terms
-import Hydra.Tools.Serialization
+import Hydra.Staging.Serialization
 import qualified Hydra.Ext.Python.Syntax as Py
 import Hydra.Ext.Python.Utils
 import qualified Hydra.Ext.Python.Serde as PySer
@@ -12,7 +12,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.ShorthandTypes
 import Hydra.Lib.Io
-import Hydra.Tools.Formatting
+import Hydra.Staging.Formatting
 import qualified Hydra.Decode as Decode
 
 import qualified Control.Monad as CM
