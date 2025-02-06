@@ -2,7 +2,6 @@
 
 module Hydra.Reduction where
 
-import Hydra.Basics
 import Hydra.Strip
 import Hydra.Compute
 import Hydra.Core

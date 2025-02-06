@@ -2,7 +2,6 @@
 
 module Hydra.Annotations where
 
-import Hydra.Basics
 import Hydra.Strip
 import Hydra.Core
 import Hydra.Compute

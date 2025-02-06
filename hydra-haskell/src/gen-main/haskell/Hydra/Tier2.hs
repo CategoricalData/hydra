@@ -6,11 +6,24 @@ import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Flows as Flows
+import qualified Hydra.Lib.Lists as Lists
+import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Strings as Strings
 import Data.Int
 import Data.List as L
 import Data.Map as M
 import Data.Set as S
+
+elementsToGraph :: (Graph.Graph -> Maybe Graph.Graph -> [Graph.Element] -> Graph.Graph)
+elementsToGraph parent schema elements =  
+  let toPair = (\el -> (Graph.elementName el, el))
+  in Graph.Graph {
+    Graph.graphElements = (Maps.fromList (Lists.map toPair elements)),
+    Graph.graphEnvironment = (Graph.graphEnvironment parent),
+    Graph.graphTypes = (Graph.graphTypes parent),
+    Graph.graphBody = (Graph.graphBody parent),
+    Graph.graphPrimitives = (Graph.graphPrimitives parent),
+    Graph.graphSchema = schema}
 
 -- | Get the state of the current flow
 getState :: (Compute.Flow s s)

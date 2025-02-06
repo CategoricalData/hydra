@@ -11,7 +11,6 @@ import qualified Hydra.Dsl.LiteralTypes as LiteralTypes
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Sources.Libraries
-import Hydra.Basics
 import Hydra.Strip
 import Hydra.Rewriting
 import Hydra.Coders
