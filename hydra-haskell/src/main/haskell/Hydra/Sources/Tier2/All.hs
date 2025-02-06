@@ -27,6 +27,9 @@ import Hydra.Sources.Tier2.Qnames
 import Hydra.Sources.Tier2.Rewriting
 import Hydra.Sources.Tier2.Variants
 
+kernelModules :: [Module]
+kernelModules = [hydraCoreModule] ++ tier1Modules ++ tier2Modules
+
 tier2Modules :: [Module]
 tier2Modules = [
   hydraAnnotationsModule,

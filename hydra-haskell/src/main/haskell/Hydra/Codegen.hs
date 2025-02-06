@@ -11,7 +11,7 @@ module Hydra.Codegen (
   writePython,
   writeScala,
   writeYaml,
---  module Hydra.Sources.Tier4.All
+--  module Hydra.Sources.Tier3.All
 ) where
 
 import Hydra.Kernel
@@ -29,7 +29,7 @@ import Hydra.Ext.Scala.Coder
 import Hydra.Ext.Yaml.Modules
 
 import Hydra.Sources.Libraries
---import Hydra.Sources.Tier4.All
+--import Hydra.Sources.Tier3.All
 
 import qualified Control.Monad as CM
 import qualified System.FilePath as FP
