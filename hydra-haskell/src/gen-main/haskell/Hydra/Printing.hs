@@ -2,11 +2,11 @@
 
 module Hydra.Printing where
 
-import qualified Hydra.Basics as Basics
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
+import qualified Hydra.Variants as Variants
 import Data.Int
 import Data.List as L
 import Data.Map as M
@@ -15,13 +15,13 @@ import Data.Set as S
 -- | Display a floating-point type as a string
 describeFloatType :: (Core.FloatType -> String)
 describeFloatType t = (Strings.cat [
-  (\x -> describePrecision (Basics.floatTypePrecision x)) t,
+  (\x -> describePrecision (Variants.floatTypePrecision x)) t,
   " floating-point numbers"])
 
 -- | Display an integer type as a string
 describeIntegerType :: (Core.IntegerType -> String)
 describeIntegerType t = (Strings.cat [
-  (\x -> describePrecision (Basics.integerTypePrecision x)) t,
+  (\x -> describePrecision (Variants.integerTypePrecision x)) t,
   " integers"])
 
 -- | Display a literal type as a string

@@ -27,12 +27,12 @@ import qualified Hydra.Dsl.Terms           as Terms
 import qualified Hydra.Dsl.Types           as Types
 import           Hydra.Sources.Tier1.All
 
-import Hydra.Sources.Tier2.Basics
+import Hydra.Sources.Tier1.Variants
 
 
 hydraCoreLanguageModule :: Module
 hydraCoreLanguageModule = Module ns elements
-    [hydraBasicsModule]
+    [hydraVariantsModule]
     tier0Modules $
     Just "Language constraints for Hydra Core"
   where

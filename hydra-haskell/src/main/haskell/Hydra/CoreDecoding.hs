@@ -24,8 +24,8 @@ import Hydra.Graph
 import Hydra.Mantle
 import Hydra.Module
 import Hydra.Lexical
+import Hydra.Tools.Rewriting
 import Hydra.Rewriting
-import Hydra.Tier1
 import Hydra.Tier2
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms

@@ -6,12 +6,11 @@ module Hydra.TermAdapters (
   functionProxyType,
   termAdapter,
   unionTypeToRecordType,
-        passApplication,
 ) where
 
 import Hydra.Printing
 import Hydra.AdapterUtils
-import Hydra.Basics
+import Hydra.Variants
 import Hydra.Strip
 import Hydra.Coders
 import Hydra.Compute
@@ -21,11 +20,10 @@ import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Reduction
-import Hydra.Rewriting
+import Hydra.Tools.Rewriting
 import Hydra.LiteralAdapters
 import Hydra.Dsl.Terms
-import Hydra.Reduction
-import Hydra.Tier1
+import Hydra.Flows
 import Hydra.Tier2
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms

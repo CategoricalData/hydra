@@ -12,9 +12,9 @@ import Hydra.Ext.Json.Coder
 import Hydra.Dsl.Annotations
 import Hydra.Ext.Json.Serde
 import Hydra.CoreEncoding
-import Hydra.Rewriting
+import Hydra.Tools.Rewriting
 import Hydra.Annotations
-import Hydra.Tier1
+import Hydra.Flows
 import qualified Hydra.Json as Json
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types

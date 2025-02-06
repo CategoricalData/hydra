@@ -3,8 +3,8 @@ module Hydra.Inference.Substitution where
 
 import Hydra.Core
 import Hydra.Mantle
+import Hydra.Tools.Rewriting
 import Hydra.Rewriting
-import Hydra.Tier1
 import Hydra.Dsl.Types as Types
 
 import qualified Data.List as L

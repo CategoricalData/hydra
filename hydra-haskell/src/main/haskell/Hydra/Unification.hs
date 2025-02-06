@@ -4,16 +4,16 @@ module Hydra.Unification (
   solveConstraints
 ) where
 
-import Hydra.Basics
+import Hydra.Variants
 import Hydra.Strip
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Printing
-import Hydra.Rewriting
+import Hydra.Tools.Rewriting
 import Hydra.Inference.Substitution
-import Hydra.Tier1
+import Hydra.Rewriting
 import Hydra.Dsl.Types as Types
 import Hydra.Lib.Io
 

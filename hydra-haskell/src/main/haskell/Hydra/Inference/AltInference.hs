@@ -1,12 +1,12 @@
 module Hydra.Inference.AltInference where
 
-import Hydra.Basics
+import Hydra.Variants
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Mantle
-import qualified Hydra.Flows as F
-import qualified Hydra.Tier1 as Tier1
-import qualified Hydra.Lib.Flows as Flows
+import Hydra.Flows
+import Hydra.Lib.Flows as Flows
+import qualified Hydra.Tools.Monads as TM
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Data.List as L
@@ -182,7 +182,7 @@ sInferType :: Term -> Flow SInferenceContext TypeScheme
 sInferType term = Flows.bind (sInferTypeInternal term) unifyAndSubst
   where
     unifyAndSubst :: SInferenceResult -> Flow SInferenceContext TypeScheme
-    unifyAndSubst result = Flows.bind (F.fromEither $ uUnify $ sInferenceResultConstraints result) doSubst
+    unifyAndSubst result = Flows.bind (TM.fromEither $ uUnify $ sInferenceResultConstraints result) doSubst
       where
         doSubst :: SSubst -> Flow SInferenceContext TypeScheme
         doSubst subst = sInstantiateAndNormalize $ sSubstituteTypeVariablesInScheme subst $ sInferenceResultScheme result
@@ -230,7 +230,7 @@ sInferTypeInternal term = case term of
               where
                 -- Unify and substitute over the value constraints
                 -- TODO: save the substitution and pass it along, instead of the original set of constraints
-                withValueType (SInferenceResult rawValueScheme valueConstraints) = Flows.bind (F.fromEither $ uUnify kvConstraints) afterUnification
+                withValueType (SInferenceResult rawValueScheme valueConstraints) = Flows.bind (TM.fromEither $ uUnify kvConstraints) afterUnification
                   where
                     rawValueVars = typeSchemeVariables rawValueScheme
                     kvConstraints = keyConstraint:valueConstraints
@@ -409,11 +409,11 @@ sTestLexicon = M.fromList [
 
 sInitialContext = SInferenceContext sTestLexicon 0 M.empty
 
-_infer term = flowStateValue $ unFlow (sInferType term) sInitialContext Tier1.emptyTrace
+_infer term = flowStateValue $ unFlow (sInferType term) sInitialContext emptyTrace
 
-_inferRaw term = flowStateValue $ unFlow (sInferTypeInternal term) sInitialContext Tier1.emptyTrace
+_inferRaw term = flowStateValue $ unFlow (sInferTypeInternal term) sInitialContext emptyTrace
 
-_instantiate scheme = flowStateValue $ unFlow (sInstantiate scheme) sInitialContext Tier1.emptyTrace
+_instantiate scheme = flowStateValue $ unFlow (sInstantiate scheme) sInitialContext emptyTrace
 
 _con t1 t2 = TypeConstraint t1 t2 $ Just "ctx"
 

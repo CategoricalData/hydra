@@ -13,10 +13,10 @@ import qualified Hydra.Dsl.Types as Types
 import Hydra.Sources.Libraries
 import Hydra.Basics
 import Hydra.Strip
-import Hydra.Tier1
+import Hydra.Rewriting
 import Hydra.Coders
 import Hydra.Inference.Substitution
-import Hydra.Rewriting
+import Hydra.Tools.Rewriting
 
 import qualified Data.List as L
 import qualified Data.Map as M

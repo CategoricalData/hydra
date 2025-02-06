@@ -5,7 +5,7 @@ module Hydra.AdapterUtils (
   module Hydra.Printing,
 ) where
 
-import Hydra.Basics
+import Hydra.Variants
 import Hydra.Coders
 import Hydra.Compute
 import Hydra.Core

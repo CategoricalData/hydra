@@ -3,7 +3,7 @@
 module Hydra.Lib.Flows where
 
 import Hydra.Compute
-import qualified Hydra.Tier1 as Tier1
+import qualified Hydra.Flows as Flows
 
 import qualified Control.Monad as CM
 
@@ -26,7 +26,7 @@ instance Monad (Flow s) where
             Just x' -> unFlow (k x') s1 t1
             Nothing -> FlowState Nothing s1 t1
 instance MonadFail (Flow s) where
-  fail msg = Flow $ \s t -> FlowState Nothing s (Tier1.pushError msg t)
+  fail msg = Flow $ \s t -> FlowState Nothing s (Flows.pushError msg t)
 
 -- Primitive functions
 

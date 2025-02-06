@@ -19,9 +19,9 @@ import Hydra.Strip
 import Hydra.TermAdapters
 import Hydra.AdapterUtils
 import Hydra.Reduction
-import Hydra.Tier1
+import Hydra.Flows
 import Hydra.Tier2
-import Hydra.Basics
+import Hydra.Variants
 import Hydra.CoreDecoding
 
 import qualified Control.Monad as CM
