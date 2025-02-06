@@ -1,8 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier0.Coders where
+module Hydra.Sources.Tier1.Coders where
 
--- Standard type-level Tier-0 imports
+-- Standard type-level Tier-1 imports
 import qualified Data.List             as L
 import qualified Data.Map              as M
 import qualified Data.Set              as S
@@ -13,9 +13,9 @@ import qualified Hydra.Dsl.Terms       as Terms
 import           Hydra.Dsl.Types       as Types
 import           Hydra.Sources.Core
 
-import Hydra.Sources.Tier0.Compute
-import Hydra.Sources.Tier0.Graph
-import Hydra.Sources.Tier0.Mantle
+import Hydra.Sources.Tier1.Compute
+import Hydra.Sources.Tier1.Graph
+import Hydra.Sources.Tier1.Mantle
 
 
 hydraCodersModule :: Module

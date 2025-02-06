@@ -1,8 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier0.CoreEncoding where
+module Hydra.Sources.Tier1.CoreEncoding where
 
--- Standard term-level Tier-0 imports
+-- Standard term-level Tier-1 imports
 import           Hydra.Dsl.Base          as Base
 import qualified Hydra.Dsl.Core          as Core
 import qualified Hydra.Dsl.Terms         as Terms
@@ -25,7 +25,7 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 import Hydra.Sources.Libraries -- TODO: use DSL primitives instead of raw primitive references
-import Hydra.Sources.Tier0.Strip
+import Hydra.Sources.Tier1.Strip
 
 
 coreEncodingModule :: Module

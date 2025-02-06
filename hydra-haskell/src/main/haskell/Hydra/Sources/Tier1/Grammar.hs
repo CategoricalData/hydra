@@ -1,8 +1,8 @@
 -- | A model for Hydra labeled-BNF grammars
 
-module Hydra.Sources.Tier0.Grammar where
+module Hydra.Sources.Tier1.Grammar where
 
--- Standard type-level Tier-0 imports
+-- Standard type-level Tier-1 imports
 import qualified Data.List             as L
 import qualified Data.Map              as M
 import qualified Data.Set              as S

@@ -1,3 +1,5 @@
+-- | Hydra's tier-2 sources add logic for flows (stateful operations), which are defined in tier-1,
+--   as well as operations which depend on flows.
 module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier1.All,
   module Hydra.Sources.Tier2.All,

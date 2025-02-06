@@ -28,7 +28,7 @@ import qualified Hydra.Dsl.Types           as Types
 import           Hydra.Sources.Tier2.All
 
 import qualified Hydra.Json as Json
-import Hydra.Sources.Tier0.Json
+import Hydra.Sources.Tier1.Json
 
 
 jsonDecodingModule :: Module

@@ -1,8 +1,8 @@
 -- | A simple JSON model. This model is part of the Hydra kernel, despite JSON being an external language; JSON support is built in to Hydra
 
-module Hydra.Sources.Tier0.Json where
+module Hydra.Sources.Tier1.Json where
 
--- Standard type-level Tier-0 imports
+-- Standard type-level Tier-1 imports
 import qualified Data.List             as L
 import qualified Data.Map              as M
 import qualified Data.Set              as S
