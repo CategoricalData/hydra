@@ -7,7 +7,7 @@ import Hydra.Core
 import Hydra.Graph
 import Hydra.Strip
 import Hydra.Rewriting
-import Hydra.Tier2
+import Hydra.Errors
 import qualified Hydra.Lib.Flows as Flows
 
 import Prelude hiding (map)

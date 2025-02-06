@@ -1,6 +1,6 @@
 -- | Functions for retrieving elements and primitive functions from a graph context
 
-module Hydra.Lexical where
+module Hydra.Tools.Lexical where
 
 import Hydra.Qnames
 import Hydra.Strip
@@ -9,7 +9,7 @@ import Hydra.Extras
 import Hydra.Graph
 import Hydra.Compute
 import Hydra.Flows
-import Hydra.Tier2
+import Hydra.Errors
 import Hydra.Module
 
 import qualified Data.List as L

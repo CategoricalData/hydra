@@ -22,10 +22,10 @@ import Hydra.Core
 import Hydra.Graph
 import Hydra.Mantle
 import Hydra.Module
-import Hydra.Lexical
+import Hydra.Tools.Lexical
 import Hydra.Tools.Rewriting
 import Hydra.Rewriting
-import Hydra.Tier2
+import Hydra.Errors
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 

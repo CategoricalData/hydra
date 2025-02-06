@@ -20,6 +20,7 @@ module Hydra.Schemas (
   typeDependencyNames,
   ) where
 
+import Hydra.Annotations
 import Hydra.Variants
 import Hydra.Qnames
 import Hydra.Strip
@@ -27,14 +28,16 @@ import Hydra.Coders
 import Hydra.Compute
 import Hydra.Core
 import Hydra.CoreDecoding
+import Hydra.CoreEncoding
 import Hydra.Graph
 import Hydra.Mantle
 import Hydra.Module
-import Hydra.Lexical
+import Hydra.Tools.Lexical
 import Hydra.Tools.Rewriting
 import Hydra.Flows
 import Hydra.Rewriting
-import Hydra.Tier2
+import Hydra.Errors
+import Hydra.Lexical
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 

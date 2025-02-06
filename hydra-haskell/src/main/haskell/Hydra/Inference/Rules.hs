@@ -9,16 +9,16 @@ import Hydra.Core
 import Hydra.Schemas
 import Hydra.CoreEncoding
 import Hydra.Graph
-import Hydra.Lexical
+import Hydra.Tools.Lexical
 import Hydra.Mantle
 import Hydra.Tools.Rewriting
 import Hydra.Inference.Substitution
 import Hydra.Unification
 import Hydra.Tools.Debug
-import Hydra.Annotations
+import Hydra.Tools.Annotations
 import Hydra.Flows
 import Hydra.Rewriting
-import Hydra.Tier2
+import Hydra.Errors
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Control.Monad as CM

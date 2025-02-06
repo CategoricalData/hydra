@@ -30,8 +30,8 @@ hydraFunctionsModule :: Module
 hydraFunctionsModule = Module (Namespace "hydra/functions") elements [] [hydraCoreModule] $
     Just "Utility functions."
   where
-   elements = [
-     el idDef]
+    elements = [
+      el idDef]
 
 idDef :: TElement (a -> a)
 idDef = functionsDefinition "id" $

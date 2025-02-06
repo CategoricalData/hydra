@@ -41,6 +41,7 @@ hydraQnamesModule = Module (Namespace "hydra/qnames") elements [] tier0Modules $
      el namespaceOfEagerDef,
      el namespaceOfLazyDef,
      el namespaceToFilePathDef,
+     el qnameDef,
      el qualifyNameEagerDef,
      el qualifyNameLazyDef,
      el unqualifyNameDef]
@@ -77,6 +78,15 @@ namespaceToFilePathDef = qnamesDefinition "namespaceToFilePath" $
           @@ ref idDef
           @@ var "caps")
         @@ (Strings.splitOn @@ "/" @@ (Core.unNamespace @@ var "ns"))])
+
+qnameDef :: TElement (Namespace -> String -> Name)
+qnameDef = qnamesDefinition "qname" $
+  doc "Construct a qualified (dot-separated) name" $
+  functionN [namespaceT, stringT, nameT] $
+  lambda "ns" $ lambda "name" $
+    nom _Name $
+      apply Strings.cat $
+        list [apply (unwrap _Namespace) (var "ns"), string ".", var "name"]
 
 qualifyNameEagerDef :: TElement (Name -> QualifiedName)
 qualifyNameEagerDef = qnamesDefinition "qualifyNameEager" $

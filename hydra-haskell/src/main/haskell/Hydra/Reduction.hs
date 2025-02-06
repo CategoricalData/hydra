@@ -2,17 +2,18 @@
 
 module Hydra.Reduction where
 
+import Hydra.Arity
 import Hydra.Strip
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Schemas
 import Hydra.Extras
 import Hydra.Graph
-import Hydra.Annotations
-import Hydra.Lexical
+import Hydra.Tools.Annotations
+import Hydra.Tools.Lexical
 import Hydra.Tools.Rewriting
 import Hydra.Rewriting
-import Hydra.Tier2
+import Hydra.Lexical
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 

@@ -1,10 +1,9 @@
--- | A module for miscellaneous tier-2 functions and constants.
+-- | Utilities for working with errors and flow state
 
-module Hydra.Tier2 where
+module Hydra.Errors where
 
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
-import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Io as Io
 import qualified Hydra.Lib.Lists as Lists
@@ -15,17 +14,6 @@ import Data.Int
 import Data.List as L
 import Data.Map as M
 import Data.Set as S
-
-elementsToGraph :: (Graph.Graph -> Maybe Graph.Graph -> [Graph.Element] -> Graph.Graph)
-elementsToGraph parent schema elements =  
-  let toPair = (\el -> (Graph.elementName el, el))
-  in Graph.Graph {
-    Graph.graphElements = (Maps.fromList (Lists.map toPair elements)),
-    Graph.graphEnvironment = (Graph.graphEnvironment parent),
-    Graph.graphTypes = (Graph.graphTypes parent),
-    Graph.graphBody = (Graph.graphBody parent),
-    Graph.graphPrimitives = (Graph.graphPrimitives parent),
-    Graph.graphSchema = schema}
 
 -- | Get the state of the current flow
 getState :: (Compute.Flow s s)
@@ -41,13 +29,6 @@ getState = (Compute.Flow (\s0 -> \t0 ->
       Compute.flowStateState = s,
       Compute.flowStateTrace = t}) v) (Compute.flowStateValue fs1) (Compute.flowStateState fs1) (Compute.flowStateTrace fs1))))
 
--- | Get the annotated type of a given term, if any
-getTermType :: (Core.Term -> Maybe Core.Type)
-getTermType x = case x of
-  Core.TermAnnotated v1 -> (getTermType (Core.annotatedTermSubject v1))
-  Core.TermTyped v1 -> (Just (Core.typedTermType v1))
-  _ -> Nothing
-
 -- | Set the state of a flow
 putState :: (s -> Compute.Flow s ())
 putState cx = (Compute.Flow (\s0 -> \t0 ->  
@@ -56,24 +37,6 @@ putState cx = (Compute.Flow (\s0 -> \t0 ->
     Compute.flowStateValue = (Compute.flowStateValue f1),
     Compute.flowStateState = cx,
     Compute.flowStateTrace = (Compute.flowStateTrace f1)}))
-
--- | Get the annotated type of a given element, or fail if it is missing
-requireElementType :: (Graph.Element -> Compute.Flow Graph.Graph Core.Type)
-requireElementType el =  
-  let withType = (\x -> case x of
-          Nothing -> (Flows.fail (Strings.cat [
-            "missing type annotation for element ",
-            (Core.unName (Graph.elementName el))]))
-          Just v1 -> (Flows.pure v1))
-  in (withType (getTermType (Graph.elementData el)))
-
--- | Get the annotated type of a given term, or fail if it is missing
-requireTermType :: (Core.Term -> Compute.Flow Graph.Graph Core.Type)
-requireTermType x = (withType (getTermType x)) 
-  where 
-    withType = (\x -> case x of
-      Nothing -> (Flows.fail "missing type annotation")
-      Just v1 -> (Flows.pure v1))
 
 -- | Summarize a trace as a string
 traceSummary :: (Compute.Trace -> String)

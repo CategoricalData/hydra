@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier2.Tier2 where
+module Hydra.Sources.Tier2.Errors where
 
 -- Standard Tier-2 imports
 import           Prelude hiding ((++))
@@ -27,41 +27,26 @@ import qualified Hydra.Dsl.Terms           as Terms
 import qualified Hydra.Dsl.Types           as Types
 import           Hydra.Sources.Tier1.All
 
+import Hydra.Sources.Tier1.Variants
 
-tier2Definition :: String -> TTerm a -> TElement a
-tier2Definition = definitionInModule hydraTier2Module
 
-hydraTier2Module :: Module
-hydraTier2Module = Module (Namespace "hydra/tier2") elements
-   [hydraGraphModule, hydraMantleModule, hydraComputeModule, hydraStripModule] tier0Modules $
-    Just ("A module for miscellaneous tier-2 functions and constants.")
+hydraErrorsModule :: Module
+hydraErrorsModule = Module (Namespace "hydra/errors") elements
+    [hydraVariantsModule]
+    tier0Modules $
+    Just "Utilities for working with errors and flow state"
   where
-    elements = [
-      el elementsToGraphDef,
+   elements = [
       el getStateDef,
-      el getTermTypeDef,
       el putStateDef,
-      el requireElementTypeDef,
-      el requireTermTypeDef,
       el traceSummaryDef,
       el unexpectedDef]
 
-elementsToGraphDef :: TElement (Graph -> Maybe Graph -> [Element] -> Graph)
-elementsToGraphDef = tier2Definition "elementsToGraph" $
-  function graphT (funT (optionalT graphT) (funT (TypeList elementT) graphT)) $
-  lambda "parent" $ lambda "schema" $ lambda "elements" $
-    Graph.graph
-      (Maps.fromList @@ (Lists.map @@ var "toPair" @@ var "elements"))
-      (Graph.graphEnvironment @@ var "parent")
-      (Graph.graphTypes @@ var "parent")
-      (Graph.graphBody @@ var "parent")
-      (Graph.graphPrimitives @@ var "parent")
-      (var "schema")
-  `with` [
-    "toPair" >: lambda "el" $ pair (Graph.elementName @@ var "el") (var "el")]
+errorsDefinition :: String -> TTerm a -> TElement a
+errorsDefinition = definitionInModule hydraErrorsModule
 
 getStateDef :: TElement (Flow s s)
-getStateDef = tier2Definition "getState" $
+getStateDef = errorsDefinition "getState" $
   doc "Get the state of the current flow" $
   typed flowSST $
   wrap _Flow (lambda "s0" $ lambda "t0" $ (
@@ -76,16 +61,8 @@ getStateDef = tier2Definition "getState" $
       typed (Types.apply (Types.apply (TypeVariable _FlowState) sT) unitT) $
       Flows.unFlow @@ (Flows.pure @@ unit) @@ var "s0" @@ var "t0"])
 
-getTermTypeDef :: TElement (Term -> Flow Graph (Maybe Type))
-getTermTypeDef = tier2Definition "getTermType" $
-  doc "Get the annotated type of a given term, if any" $
-  function termT (optionalT typeT) $
-  match _Term (Just nothing) [
-    "annotated">: ref getTermTypeDef <.> project _AnnotatedTerm _AnnotatedTerm_subject,
-    "typed">: lambda "tt" $ just (project _TypedTerm _TypedTerm_type @@ var "tt")]
-
 putStateDef :: TElement (s -> Flow s ())
-putStateDef = tier2Definition "putState" $
+putStateDef = errorsDefinition "putState" $
   doc "Set the state of a flow" $
   function sT (flowT sT unitT) $
   lambda "cx" $ wrap _Flow $ lambda "s0" $ lambda "t0" (
@@ -96,28 +73,8 @@ putStateDef = tier2Definition "putState" $
     `with` [
       "f1">: Flows.unFlow @@ (Flows.pure @@ unit) @@ var "s0" @@ var "t0"])
 
-requireElementTypeDef :: TElement (Element -> Flow Graph Type)
-requireElementTypeDef = tier2Definition "requireElementType" $
-  doc "Get the annotated type of a given element, or fail if it is missing" $
-  function elementT (flowT graphT typeT) $
-  lambda "el" $ ((var "withType" @@ (ref getTermTypeDef @@ (project _Element _Element_data @@ var "el")))
-    `with` [
-      "withType">: matchOpt
-       (Flows.fail @@ ("missing type annotation for element " ++ (unwrap _Name @@ (project _Element _Element_name @@ var "el"))))
-       Flows.pure])
-
-requireTermTypeDef :: TElement (Term -> Flow Graph Type)
-requireTermTypeDef = tier2Definition "requireTermType" $
-  doc "Get the annotated type of a given term, or fail if it is missing" $
-  function termT (flowT graphT typeT) $
-  (var "withType" <.> ref getTermTypeDef)
-    `with` [
-      "withType">: matchOpt
-       (Flows.fail @@ "missing type annotation")
-       Flows.pure]
-
 traceSummaryDef :: TElement (Trace -> String)
-traceSummaryDef = tier2Definition "traceSummary" $
+traceSummaryDef = errorsDefinition "traceSummary" $
   doc "Summarize a trace as a string" $
   function traceT stringT $
   lambda "t" $ (
@@ -134,7 +91,7 @@ traceSummaryDef = tier2Definition "traceSummary" $
           lambda "pair" $ "\t" ++ (Core.unName @@ (first @@ var "pair")) ++ ": " ++ (Io.showTerm @@ (second @@ var "pair"))])
 
 unexpectedDef :: TElement (String -> String -> Flow s x)
-unexpectedDef = tier2Definition "unexpected" $
+unexpectedDef = errorsDefinition "unexpected" $
   doc "Fail if an actual value does not match an expected value" $
   function stringT (funT stringT (flowT sT xT)) $
   lambda "expected" $ lambda "actual" $ Flows.fail @@ ("expected " ++ var "expected" ++ " but found: " ++ var "actual")

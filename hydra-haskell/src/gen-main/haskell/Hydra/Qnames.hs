@@ -36,6 +36,13 @@ namespaceToFilePath caps ext ns =
       "."],
     (Module.unFileExtension ext)])
 
+-- | Construct a qualified (dot-separated) name
+qname :: (Module.Namespace -> String -> Core.Name)
+qname ns name = (Core.Name (Strings.cat [
+  Module.unNamespace ns,
+  ".",
+  name]))
+
 qualifyNameEager :: (Core.Name -> Module.QualifiedName)
 qualifyNameEager name =  
   let parts = (Strings.splitOn "." (Core.unName name))

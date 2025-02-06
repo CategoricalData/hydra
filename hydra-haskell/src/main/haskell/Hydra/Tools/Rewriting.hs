@@ -2,6 +2,7 @@
 
 module Hydra.Tools.Rewriting where
 
+import Hydra.Annotations
 import Hydra.Qnames
 import Hydra.Strip
 import Hydra.Coders
@@ -11,11 +12,11 @@ import Hydra.CoreEncoding
 import Hydra.Extras
 import Hydra.Graph
 import Hydra.Module
-import Hydra.Lexical
+import Hydra.Tools.Lexical
 import Hydra.Mantle
 import Hydra.Tools.Sorting
 import Hydra.Rewriting
-import Hydra.Tier2
+import Hydra.Lexical
 import Hydra.Tools.Debug
 
 import qualified Control.Monad as CM

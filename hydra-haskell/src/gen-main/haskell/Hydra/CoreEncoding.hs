@@ -3,9 +3,11 @@
 module Hydra.CoreEncoding where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
+import qualified Hydra.Strip as Strip
 import Data.Int
 import Data.List as L
 import Data.Map as M
@@ -726,3 +728,26 @@ coreEncodeWrappedType nt = (Core.TermRecord (Core.Record {
     Core.Field {
       Core.fieldName = (Core.Name "object"),
       Core.fieldTerm = (coreEncodeType (Core.wrappedTypeObject nt))}]}))
+
+isEncodedType :: (Core.Term -> Bool)
+isEncodedType t = ((\x -> case x of
+  Core.TermApplication v1 -> (isEncodedType (Core.applicationFunction v1))
+  Core.TermUnion v1 -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.injectionTypeName v1)))
+  _ -> False) (Strip.stripTerm t))
+
+isType :: (Core.Type -> Bool)
+isType t = ((\x -> case x of
+  Core.TypeApplication v1 -> (isType (Core.applicationTypeFunction v1))
+  Core.TypeLambda v1 -> (isType (Core.lambdaTypeBody v1))
+  Core.TypeUnion v1 -> (Equality.equalString "hydra/core.Type" (Core.unName (Core.rowTypeTypeName v1)))
+  _ -> False) (Strip.stripType t))
+
+isUnitTerm :: (Core.Term -> Bool)
+isUnitTerm t = (Equality.equalTerm (Strip.fullyStripTerm t) (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra/core.Unit"),
+  Core.recordFields = []})))
+
+isUnitType :: (Core.Type -> Bool)
+isUnitType t = (Equality.equalType (Strip.stripType t) (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+  Core.rowTypeFields = []})))

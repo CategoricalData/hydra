@@ -1,7 +1,8 @@
 -- | Functions for working with term and type annotations
 
-module Hydra.Annotations where
+module Hydra.Tools.Annotations where
 
+import Hydra.Annotations
 import Hydra.Strip
 import Hydra.Core
 import Hydra.Compute
@@ -12,7 +13,8 @@ import Hydra.CoreEncoding
 import Hydra.Mantle
 import Hydra.Tools.Rewriting
 import Hydra.Flows
-import Hydra.Tier2
+import Hydra.Errors
+import Hydra.Lexical
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 

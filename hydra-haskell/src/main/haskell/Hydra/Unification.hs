@@ -8,7 +8,7 @@ import Hydra.Variants
 import Hydra.Strip
 import Hydra.Compute
 import Hydra.Core
-import Hydra.Lexical
+import Hydra.Tools.Lexical
 import Hydra.Mantle
 import Hydra.Printing
 import Hydra.Tools.Rewriting
