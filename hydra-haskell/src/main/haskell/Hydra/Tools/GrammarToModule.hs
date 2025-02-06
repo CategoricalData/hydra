@@ -13,7 +13,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
-import Hydra.Sources.Core
+import Hydra.Sources.Tier0.Core
 
 
 grammarToModule :: Namespace -> G.Grammar -> Maybe String -> Module

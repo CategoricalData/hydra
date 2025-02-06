@@ -32,7 +32,7 @@ variantsDefinition :: String -> TTerm a -> TElement a
 variantsDefinition = definitionInModule hydraVariantsModule
 
 hydraVariantsModule :: Module
-hydraVariantsModule = Module (Namespace "hydra/variants") elements [] tier0Modules $
+hydraVariantsModule = Module (Namespace "hydra/variants") elements [] tier1Modules $
     Just ("Functions for working with term, type, and literal type variants, as well as numeric precision.")
   where
     elements = [

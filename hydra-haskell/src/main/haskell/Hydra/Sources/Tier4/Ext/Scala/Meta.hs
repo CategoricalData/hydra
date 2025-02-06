@@ -7,7 +7,7 @@ import Hydra.Dsl.Types as Types
 
 
 scalaMetaModule :: Module
-scalaMetaModule = Module ns elements [hydraCoreModule] tier0Modules $
+scalaMetaModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just "A Scala syntax model based on Scalameta (https://scalameta.org)"
   where
     ns = Namespace "hydra/ext/scala/meta"

@@ -12,7 +12,7 @@ pbAnyNs = Namespace "hydra/ext/protobuf/any"
 pbAny = typeref pbAnyNs
 
 protobufAnyModule :: Module
-protobufAnyModule = Module pbAnyNs elements [hydraCoreModule] tier0Modules $
+protobufAnyModule = Module pbAnyNs elements [hydraCoreModule] [hydraCoreModule] $
     Just "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/any.proto"
   where
     def = datatype pbAnyNs

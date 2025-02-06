@@ -12,7 +12,7 @@ pythonNs = Namespace "hydra/ext/python/syntax"
 python = typeref pythonNs
 
 pythonSyntaxModule :: Module
-pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] tier0Modules $
+pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule] $
     Just ("A Python syntax model, based on the Python v3 PEG grammar retrieved on 2024-12-22"
       ++ " from https://docs.python.org/3/reference/grammar.html")
   where

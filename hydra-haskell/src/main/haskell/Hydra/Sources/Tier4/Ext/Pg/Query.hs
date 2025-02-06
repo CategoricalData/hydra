@@ -6,12 +6,12 @@ import Hydra.Sources.Tier3.All
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
-import Hydra.Sources.Core
+import Hydra.Sources.Tier0.Core
 import Hydra.Sources.Tier4.Ext.Pg.Model
 
 
 pgQueryModule :: Module
-pgQueryModule = Module ns elements [pgModelModule] tier0Modules $
+pgQueryModule = Module ns elements [pgModelModule] [hydraCoreModule] $
     Just ("A common model for pattern-matching queries over property graphs")
   where
     ns = Namespace "hydra/pg/query"

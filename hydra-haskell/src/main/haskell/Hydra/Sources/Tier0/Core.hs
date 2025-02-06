@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Core(
+module Hydra.Sources.Tier0.Core(
   hydraCoreGraph,
   hydraCoreModule,
   module Hydra.Kernel,

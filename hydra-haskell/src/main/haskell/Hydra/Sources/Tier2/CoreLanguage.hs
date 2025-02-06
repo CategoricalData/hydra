@@ -33,7 +33,7 @@ import Hydra.Sources.Tier2.Variants
 hydraCoreLanguageModule :: Module
 hydraCoreLanguageModule = Module ns elements
     [hydraVariantsModule]
-    tier0Modules $
+    [hydraCoreModule] $
     Just "Language constraints for Hydra Core"
   where
     ns = Namespace "hydra/coreLanguage"

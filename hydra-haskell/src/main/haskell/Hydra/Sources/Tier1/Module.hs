@@ -3,15 +3,15 @@
 module Hydra.Sources.Tier1.Module where
 
 -- Standard type-level Tier-1 imports
-import qualified Data.List             as L
-import qualified Data.Map              as M
-import qualified Data.Set              as S
-import qualified Data.Maybe            as Y
 import           Hydra.Dsl.Annotations
 import           Hydra.Dsl.Bootstrap
 import qualified Hydra.Dsl.Terms       as Terms
 import           Hydra.Dsl.Types       as Types
-import           Hydra.Sources.Core
+import           Hydra.Sources.Tier0.Core
+import qualified Data.List             as L
+import qualified Data.Map              as M
+import qualified Data.Set              as S
+import qualified Data.Maybe            as Y
 
 import Hydra.Sources.Tier1.Graph
 

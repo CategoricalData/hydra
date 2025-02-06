@@ -7,11 +7,11 @@ import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
-import Hydra.Sources.Core
+import Hydra.Sources.Tier0.Core
 
 
 graphsonSyntaxModule :: Module
-graphsonSyntaxModule = Module ns elements [] tier0Modules $
+graphsonSyntaxModule = Module ns elements [] [hydraCoreModule] $
     Just ("A syntax model for TinkerPop's GraphSON format."
       ++ " This model is designed to be as inclusive as possible, supporting GraphSON 4.0 as well as earlier versions."
       ++ " See https://github.com/apache/tinkerpop/blob/master/docs/src/dev/io/graphson.asciidoc.")
