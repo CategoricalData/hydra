@@ -28,7 +28,7 @@ functionsDefinition = definitionInModule hydraFunctionsModule
 
 hydraFunctionsModule :: Module
 hydraFunctionsModule = Module (Namespace "hydra/functions") elements [] [hydraCoreModule] $
-    Just "Utility functions."
+    Just "Placeholder for utilities dealing with Hydra functions."
   where
     elements = [
       el idDef]

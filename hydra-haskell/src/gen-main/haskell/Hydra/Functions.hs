@@ -1,4 +1,4 @@
--- | Utility functions.
+-- | Placeholder for utilities dealing with Hydra functions.
 
 module Hydra.Functions where
 
