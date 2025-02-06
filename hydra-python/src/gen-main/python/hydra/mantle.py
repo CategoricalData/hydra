@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 from hydra.dsl.python import Node
-from typing import TypeVar
+from typing import Annotated, TypeVar
 import hydra.core
 
 A = TypeVar("A")
@@ -160,7 +160,7 @@ class TypeConstraint:
     
     left: hydra.core.Type
     right: hydra.core.Type
-    context: str | None
+    comment: Annotated[str | None, "An optional description of the type constraint. This may be used for tracing or debugging."]
 
 class TypeVariant(Enum):
     """The identifier of a type constructor."""

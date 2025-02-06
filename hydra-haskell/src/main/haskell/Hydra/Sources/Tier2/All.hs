@@ -30,6 +30,14 @@ import Hydra.Sources.Tier2.Variants
 kernelModules :: [Module]
 kernelModules = [hydraCoreModule] ++ tier1Modules ++ tier2Modules
 
+-- | A convenient list of the Hydra kernel modules which contain primarily type definitions.
+--   Not guaranteed to be up to date.
+kernelTypeModules :: [Module]
+kernelTypeModules = [
+  hydraCoreModule, hydraAstModule, hydraCodersModule, hydraComputeModule, hydraConstraintsModule,
+  hydraGrammarModule, hydraGraphModule, jsonModelModule, hydraMantleModule, hydraModuleModule,
+  hydraPhantomsModule, hydraQueryModule, hydraTestingModule, hydraWorkflowModule]
+
 tier2Modules :: [Module]
 tier2Modules = [
   hydraAnnotationsModule,
