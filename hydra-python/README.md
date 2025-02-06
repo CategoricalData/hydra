@@ -68,7 +68,7 @@ pytest
 
 To run a specific test,
 ```bash
-pytest tests/test_grammar.py
+pytest src/test/python/test_grammar.py
 ```
 
 To match a specific test,
