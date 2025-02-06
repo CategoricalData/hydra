@@ -5,12 +5,12 @@ module Hydra.Tools.Lexical where
 import Hydra.Qnames
 import Hydra.Strip
 import Hydra.Core
-import Hydra.Extras
 import Hydra.Graph
 import Hydra.Compute
 import Hydra.Flows
 import Hydra.Errors
 import Hydra.Module
+import Hydra.Lexical
 
 import qualified Data.List as L
 import qualified Data.Map as M

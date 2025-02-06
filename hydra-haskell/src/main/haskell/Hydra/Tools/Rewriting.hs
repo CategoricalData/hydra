@@ -9,7 +9,6 @@ import Hydra.Coders
 import Hydra.Compute
 import Hydra.Core
 import Hydra.CoreEncoding
-import Hydra.Extras
 import Hydra.Graph
 import Hydra.Module
 import Hydra.Tools.Lexical
