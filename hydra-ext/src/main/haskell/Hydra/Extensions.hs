@@ -7,7 +7,6 @@ import Hydra.Ext.Graphviz.Src.Dot
 import Hydra.Ext.Kusto.Src.Kql
 import Hydra.Ext.Owl.Src.Syntax
 import Hydra.Ext.Parquet.Src.Format
-import Hydra.Ext.Python.Src.Python3
 import Hydra.Ext.Shex.Src.Syntax
 import Hydra.Ext.Sql.Src.Ansi
 import Hydra.Ext.Tinkerpop.Src.Features
@@ -39,7 +38,6 @@ hydraExtModules = [
   osvSchemaModule,
   owlSyntaxModule,
   parquetFormatModule,
-  -- python3Module,
   shexSyntaxModule,
   sqlModule,
   stacModule,
