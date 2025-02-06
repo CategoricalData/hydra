@@ -208,7 +208,7 @@ encodeLambdaStarEtc l = case l of
   _ -> unsupportedVariant "lambda star etc" l
 
 encodeList :: Py.List -> A.Expr
-encodeList (Py.List es) = noSep [cst "[", commaSep inlineStyle (encodeStarNamedExpression <$> es), cst "]"]
+encodeList (Py.List es) = bracketListAdaptive (encodeStarNamedExpression <$> es)
 
 encodeModule :: Py.Module -> A.Expr
 encodeModule (Py.Module groups) = doubleNewlineSep (encodeGroup <$> groups)

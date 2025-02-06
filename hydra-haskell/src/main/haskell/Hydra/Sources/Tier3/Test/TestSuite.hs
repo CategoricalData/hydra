@@ -12,7 +12,7 @@ import Hydra.Sources.Tier3.Test.Lib.Strings
 testSuiteNs = Namespace "hydra/test/testSuite"
 
 testSuiteModule :: Module
-testSuiteModule = Module testSuiteNs elements [] [hydraCoreModule] $
+testSuiteModule = Module testSuiteNs elements [] [hydraCoreModule, hydraTestingModule] $
     Just "Test cases for primitive functions"
   where
     elements = [
