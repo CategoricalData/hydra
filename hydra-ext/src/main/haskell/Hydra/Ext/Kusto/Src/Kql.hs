@@ -9,7 +9,7 @@ import Hydra.Dsl.Types as Types
 
 
 kqlModule :: Module
-kqlModule = Module ns elements [hydraCoreModule] tier0Modules $
+kqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just ("A partial KQL (Kusto Query Language) model, based on examples from the documentation. Not normative.")
   where
     ns = Namespace "hydra/ext/com/microsoft/kusto/kql"

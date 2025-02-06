@@ -7,7 +7,7 @@ module Hydra.Ext.Graphviz.Coder (
 import Hydra.Kernel
 import Hydra.Sources.Libraries
 import qualified Hydra.Ext.Org.Graphviz.Dot as Dot
-import Hydra.Tools.Accessors
+import Hydra.Staging.Accessors
 
 import qualified Data.List as L
 import qualified Data.Map as M

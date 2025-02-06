@@ -6,12 +6,12 @@ module Hydra.Tools.OsvToRdf (
 ) where
 
 import Hydra.Kernel
-import Hydra.Flows
+import Hydra.Tools.Monads
 import Hydra.Ext.Json.Serde
 import Hydra.Ext.Json.Coder
-import Hydra.CoreDecoding
+import Hydra.Staging.CoreDecoding
 import Hydra.Codegen
-import Hydra.Tools.Formatting
+import Hydra.Staging.Formatting
 import qualified Hydra.Json as Json
 import qualified Hydra.Ext.Shacl.Coder as Shacl
 import Hydra.Ext.Rdf.Serde

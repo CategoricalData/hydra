@@ -3,7 +3,7 @@ module Hydra.Ext.Owl.Src.Syntax where
 import Hydra.Sources.Tier3.All
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
-import Hydra.Sources.Tier4.Ext.Rdf.Syntax
+import Hydra.Sources.Tier3.Ext.Rdf.Syntax
 import Hydra.Ext.Xml.Src.Schema
 import Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Terms as Terms
@@ -21,7 +21,7 @@ owlIri :: [Char] -> Type -> Type
 owlIri local = withIri $ "http://www.w3.org/2002/07/owl#" ++ local
 
 owlSyntaxModule :: Module
-owlSyntaxModule = Module ns elements [hydraCoreModule, rdfSyntaxModule, xmlSchemaModule] tier0Modules $
+owlSyntaxModule = Module ns elements [hydraCoreModule, rdfSyntaxModule, xmlSchemaModule] [hydraCoreModule] $
     Just "An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax"
   where
     ns = Namespace "hydra/ext/org/w3/owl/syntax"

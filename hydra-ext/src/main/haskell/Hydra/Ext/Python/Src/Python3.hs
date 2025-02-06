@@ -4,7 +4,7 @@ module Hydra.Ext.Python.Src.Python3 (python3Module) where
 
 import Hydra.Kernel
 import Hydra.Dsl.Grammars
-import Hydra.Tools.GrammarToModule
+import Hydra.Staging.GrammarToModule
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Grammar as G
 

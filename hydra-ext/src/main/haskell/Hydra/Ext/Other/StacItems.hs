@@ -1,6 +1,6 @@
 module Hydra.Ext.Other.StacItems where
 
-import Hydra.Sources.Tier4.All
+import Hydra.Sources.Tier3.All
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Annotations

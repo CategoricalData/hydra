@@ -4,7 +4,7 @@ module Hydra.Ext.Shex.Src.Syntax where
 
 import Hydra.Sources.Tier3.All
 import Hydra.Dsl.Grammars
-import Hydra.Tools.GrammarToModule
+import Hydra.Staging.GrammarToModule
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Grammar as G
 
