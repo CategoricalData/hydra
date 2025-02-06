@@ -11,8 +11,8 @@ import Hydra.Graph
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding
 import Hydra.Mantle
-import Hydra.Rewriting
-import Hydra.Tier1
+import Hydra.Tools.Rewriting
+import Hydra.Flows
 import Hydra.Tier2
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms

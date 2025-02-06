@@ -15,6 +15,7 @@ module Hydra.Kernel (
   module Hydra.CoreEncoding,
   module Hydra.CoreLanguage,
   module Hydra.Extras,
+  module Hydra.Flows,
   module Hydra.Formatting,
   module Hydra.Graph,
   module Hydra.Inference.Inference,
@@ -33,12 +34,13 @@ module Hydra.Kernel (
   module Hydra.Schemas,
   module Hydra.Strip,
   module Hydra.TermAdapters,
-  module Hydra.Tier1,
   module Hydra.Tier2,
   module Hydra.Tier3,
   module Hydra.Tools.Debug,
   module Hydra.Tools.Formatting,
+  module Hydra.Tools.Rewriting,
   module Hydra.Tools.Sorting,
+  module Hydra.Variants,
   module Hydra.Workflow,
 --  module Hydra.Ast,
 --  module Hydra.Tools.GrammarToModule,
@@ -57,6 +59,7 @@ import Hydra.CoreDecoding
 import Hydra.CoreEncoding
 import Hydra.CoreLanguage
 import Hydra.Extras
+import Hydra.Flows
 import Hydra.Formatting
 import Hydra.Graph
 import Hydra.Inference.Inference
@@ -75,12 +78,13 @@ import Hydra.Rewriting
 import Hydra.Schemas
 import Hydra.Strip
 import Hydra.TermAdapters
-import Hydra.Tier1
 import Hydra.Tier2
 import Hydra.Tier3
 import Hydra.Tools.Debug
 import Hydra.Tools.Formatting
+import Hydra.Tools.Rewriting
 import Hydra.Tools.Sorting
+import Hydra.Variants
 import Hydra.Workflow
 --import Hydra.Ast
 --import Hydra.Tools.GrammarToModule

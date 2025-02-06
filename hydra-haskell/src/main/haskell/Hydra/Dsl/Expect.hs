@@ -6,7 +6,7 @@ import Hydra.Compute
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Strip
-import Hydra.Tier1
+import Hydra.Rewriting
 import Hydra.Tier2
 import qualified Hydra.Lib.Flows as Flows
 

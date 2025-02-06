@@ -8,14 +8,14 @@ module Hydra.LiteralAdapters (
 
 import Hydra.Printing
 import Hydra.AdapterUtils
-import Hydra.Basics
+import Hydra.Variants
 import Hydra.Coders
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Mantle
-import Hydra.Tier1
+import Hydra.Flows
 import Hydra.Tier2
 
 import qualified Control.Monad as CM

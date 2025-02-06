@@ -8,7 +8,7 @@ import Hydra.Core
 import Hydra.Extras
 import Hydra.Graph
 import Hydra.Compute
-import Hydra.Tier1
+import Hydra.Flows
 import Hydra.Tier2
 import Hydra.Module
 

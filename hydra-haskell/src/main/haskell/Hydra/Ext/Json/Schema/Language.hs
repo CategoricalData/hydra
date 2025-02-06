@@ -4,7 +4,7 @@ import Hydra.Core
 import Hydra.Coders
 import Hydra.Strip
 import Hydra.Mantle
-import qualified Hydra.Basics as Basics
+import Hydra.Variants
 
 import qualified Data.Set as S
 
@@ -17,7 +17,7 @@ jsonSchemaLanguage = Language (LanguageName "hydra/ext/json/schema") $ LanguageC
   languageConstraintsFloatTypes = S.fromList [FloatTypeBigfloat],
   languageConstraintsFunctionVariants = S.empty,
   languageConstraintsIntegerTypes = S.fromList [IntegerTypeBigint],
-  languageConstraintsTermVariants = S.fromList Basics.termVariants,
+  languageConstraintsTermVariants = S.fromList termVariants,
   languageConstraintsTypeVariants = S.fromList [
     TypeVariantAnnotated,
     TypeVariantList,

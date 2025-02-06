@@ -16,11 +16,12 @@ import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Annotations
-import Hydra.Rewriting
+import Hydra.Tools.Rewriting
 import Hydra.Inference.Substitution
 import Hydra.Unification
 import Hydra.Inference.Rules
-import Hydra.Tier1
+import Hydra.Flows
+import Hydra.Rewriting
 import Hydra.Tier2
 import Hydra.Tools.Sorting
 import qualified Hydra.Dsl.Terms as Terms

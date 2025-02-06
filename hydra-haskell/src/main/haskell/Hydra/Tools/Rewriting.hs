@@ -1,6 +1,6 @@
 -- | Functions for type and term rewriting
 
-module Hydra.Rewriting where
+module Hydra.Tools.Rewriting where
 
 import Hydra.Qnames
 import Hydra.Strip
@@ -14,7 +14,7 @@ import Hydra.Module
 import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Tools.Sorting
-import Hydra.Tier1
+import Hydra.Rewriting
 import Hydra.Tier2
 import Hydra.Tools.Debug
 

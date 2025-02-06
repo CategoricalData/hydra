@@ -1,6 +1,6 @@
 -- | Functions and type class implementations for working with Hydra's built-in Flow monad
 
-module Hydra.Flows where
+module Hydra.Tools.Monads where
 
 import Hydra.Kernel
 import qualified Hydra.Lib.Flows as Flows

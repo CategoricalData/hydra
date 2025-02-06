@@ -2,7 +2,7 @@
 
 module Hydra.Inference.Rules where
 
-import Hydra.Basics
+import Hydra.Variants
 import Hydra.Strip
 import Hydra.Compute
 import Hydra.Core
@@ -11,12 +11,13 @@ import Hydra.CoreEncoding
 import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Mantle
-import Hydra.Rewriting
+import Hydra.Tools.Rewriting
 import Hydra.Inference.Substitution
 import Hydra.Unification
 import Hydra.Tools.Debug
 import Hydra.Annotations
-import Hydra.Tier1
+import Hydra.Flows
+import Hydra.Rewriting
 import Hydra.Tier2
 import qualified Hydra.Dsl.Types as Types
 

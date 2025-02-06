@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier1.Tier1 where
+module Hydra.Sources.Tier1.Rewriting where
 
 -- Standard Tier-1 imports
 import           Hydra.Dsl.Base            as Base
@@ -30,50 +30,26 @@ import qualified Data.Maybe                as Y
 import Hydra.Dsl.Mantle
 
 
-tier1Definition :: String -> TTerm a -> TElement a
-tier1Definition = definitionInModule hydraTier1Module
+rewritingDefinition :: String -> TTerm a -> TElement a
+rewritingDefinition = definitionInModule hydraRewritingModule
 
-hydraTier1Module :: Module
-hydraTier1Module = Module (Namespace "hydra/tier1") elements
+hydraRewritingModule :: Module
+hydraRewritingModule = Module (Namespace "hydra/rewriting") elements
     [hydraComputeModule, hydraConstantsModule, hydraStripModule] tier0Modules $
-    Just ("A module for miscellaneous tier-1 functions and constants.")
+    Just ("Utilities for type and term rewriting and analysis.")
   where
    elements = [
-     el isLambdaDef,
-     -- Rewriting.hs
      el foldOverTermDef,
      el foldOverTypeDef,
      el freeVariablesInTermDef,
      el freeVariablesInTypeDef,
+     el isLambdaDef,
      el subtermsDef,
      el subtermsWithAccessorsDef,
-     el subtypesDef,
-     -- Flows.hs
-     el emptyTraceDef,
-     el flowSucceedsDef,
-     el fromFlowDef,
-     el mutateTraceDef,
-     el pushErrorDef,
-     el warnDef,
-     el withFlagDef,
-     el withStateDef,
-     el withTraceDef
-     ]
-
-isLambdaDef :: TElement (Term -> Bool)
-isLambdaDef = tier1Definition "isLambda" $
-  doc "Check whether a term is a lambda, possibly nested within let and/or annotation terms" $
-  function termT Types.boolean $
-  lambda "term" $ (match _Term (Just false) [
-      _Term_function>>: match _Function (Just false) [
-        _Function_lambda>>: constant true],
-      _Term_let>>: lambda "lt" (ref isLambdaDef @@ (project _Let _Let_environment @@ var "lt"))])
-    @@ (ref fullyStripTermDef @@ var "term")
-
--- Rewriting.hs
+     el subtypesDef]
 
 foldOverTermDef :: TElement (TraversalOrder -> (x -> Term -> x) -> x -> Term -> x)
-foldOverTermDef = tier1Definition "foldOverTerm" $
+foldOverTermDef = rewritingDefinition "foldOverTerm" $
   doc "Fold over a term, traversing its subterms in the specified order" $
   functionN [TypeVariable _TraversalOrder, funT xT (funT termT xT), xT, termT, xT] $
   lambda "order" $ lambda "fld" $ lambda "b0" $ lambda "term" $ (match _TraversalOrder Nothing [
@@ -87,7 +63,7 @@ foldOverTermDef = tier1Definition "foldOverTerm" $
       @@ var "term")] @@ var "order")
 
 foldOverTypeDef :: TElement (TraversalOrder -> (x -> Type -> x) -> x -> Type -> x)
-foldOverTypeDef = tier1Definition "foldOverType" $
+foldOverTypeDef = rewritingDefinition "foldOverType" $
   doc "Fold over a type, traversing its subtypes in the specified order" $
   functionN [TypeVariable _TraversalOrder, funT xT (funT typeT xT), xT, typeT, xT] $
   lambda "order" $ lambda "fld" $ lambda "b0" $ lambda "typ" $ (match _TraversalOrder Nothing [
@@ -101,7 +77,7 @@ foldOverTypeDef = tier1Definition "foldOverType" $
       @@ var "typ")] @@ var "order")
 
 freeVariablesInTermDef :: TElement (Term -> S.Set Name)
-freeVariablesInTermDef = tier1Definition "freeVariablesInTerm" $
+freeVariablesInTermDef = rewritingDefinition "freeVariablesInTerm" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a term" $
   function termT (setT nameT) $
   lambda "term" (
@@ -121,7 +97,7 @@ freeVariablesInTermDef = tier1Definition "freeVariablesInTerm" $
         @@ (ref subtermsDef @@ var "term")])
 
 freeVariablesInTypeDef :: TElement (Type -> S.Set Name)
-freeVariablesInTypeDef = tier1Definition "freeVariablesInType" $
+freeVariablesInTypeDef = rewritingDefinition "freeVariablesInType" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a type" $
   function typeT (setT nameT) $
   lambda "typ" (
@@ -138,8 +114,18 @@ freeVariablesInTypeDef = tier1Definition "freeVariablesInType" $
   where
     recurse = ref freeVariablesInTypeDef
 
+isLambdaDef :: TElement (Term -> Bool)
+isLambdaDef = rewritingDefinition "isLambda" $
+  doc "Check whether a term is a lambda, possibly nested within let and/or annotation terms" $
+  function termT Types.boolean $
+  lambda "term" $ (match _Term (Just false) [
+      _Term_function>>: match _Function (Just false) [
+        _Function_lambda>>: constant true],
+      _Term_let>>: lambda "lt" (ref isLambdaDef @@ (project _Let _Let_environment @@ var "lt"))])
+    @@ (ref fullyStripTermDef @@ var "term")
+
 subtermsDef :: TElement (Term -> [Term])
-subtermsDef = tier1Definition "subterms" $
+subtermsDef = rewritingDefinition "subterms" $
   doc "Find the children of a given term" $
   function termT (listT termT) $
   match _Term Nothing [
@@ -177,7 +163,7 @@ subtermsDef = tier1Definition "subterms" $
     _Term_wrap>>: lambda "n" $ list [Core.wrappedTermObject @@ var "n"]]
 
 subtermsWithAccessorsDef :: TElement (Term -> [(TermAccessor, Term)])
-subtermsWithAccessorsDef = tier1Definition "subtermsWithAccessors" $
+subtermsWithAccessorsDef = rewritingDefinition "subtermsWithAccessors" $
   doc "Find the children of a given term" $
   function termT (listT $ pairT termAccessorT termT) $
   match _Term Nothing [
@@ -248,7 +234,7 @@ subtermsWithAccessorsDef = tier1Definition "subtermsWithAccessors" $
     simple term = result termAccessorAnnotatedSubject term
 
 subtypesDef :: TElement (Type -> [Type])
-subtypesDef = tier1Definition "subtypes" $
+subtypesDef = rewritingDefinition "subtypes" $
   doc "Find the children of a given type expression" $
   function typeT (listT typeT) $
   match _Type Nothing [
@@ -273,128 +259,3 @@ subtypesDef = tier1Definition "subtypes" $
     _Type_union>>: lambda "rt" (Lists.map @@ Core.fieldTypeType @@ (Core.rowTypeFields @@ var "rt")),
     _Type_variable>>: constant $ list [],
     _Type_wrap>>: lambda "nt" $ list [Core.wrappedTypeObject @@ var "nt"]]
-
--- Flows.hs
-
-emptyTraceDef :: TElement Trace
-emptyTraceDef = tier1Definition "emptyTrace" $
-  Flows.trace (list []) (list []) Maps.empty
-
-flowSucceedsDef :: TElement (Flow s a -> Bool)
-flowSucceedsDef = tier1Definition "flowSucceeds" $
-  doc "Check whether a flow succeeds" $
-  function (Types.var "s") (Types.function flowSAT Types.boolean) $
-  lambda "cx" $ lambda "f" $
-    Optionals.isJust @@ (Flows.flowStateValue @@ (Flows.unFlow @@ var "f" @@ var "cx" @@ ref emptyTraceDef))
-
-fromFlowDef :: TElement (a -> s -> Flow s a -> a)
-fromFlowDef = tier1Definition "fromFlow" $
-  doc "Get the value of a flow, or a default value if the flow fails" $
-  function (Types.var "a") (Types.function (Types.var "s") (Types.function flowSAT (Types.var "a"))) $
-  lambda "def" $ lambda "cx" $ lambda "f" $
-      matchOpt (var "def") (lambda "x" $ var "x")
-        @@ (Flows.flowStateValue @@ (Flows.unFlow @@ var "f" @@ var "cx" @@ ref emptyTraceDef))
-
-mutateTraceDef :: TElement ((Trace -> Either_ String Trace) -> (Trace -> Trace -> Trace) -> Flow s a -> Flow s a)
-mutateTraceDef = tier1Definition "mutateTrace" $
-    functionN [
-      Types.function traceT (eitherT Types.string traceT),
-      Types.functionN [traceT, traceT, traceT],
-      flowSAT,
-      flowSAT] $
-    lambda "mutate" $ lambda "restore" $ lambda "f" $ wrap _Flow (
-      lambda "s0" $ lambda "t0" (
-        ((match _Either Nothing [
-            _Either_left>>: var "forLeft",
-            _Either_right>>: var "forRight"])
-          @@ (var "mutate" @@ var "t0"))
-        `with` [
-          "forLeft">:
-            lambda "msg" $ Flows.flowState nothing (var "s0") (ref pushErrorDef @@ var "msg" @@ var "t0"),
-          -- retain the updated state, but reset the trace after execution
-          "forRight">:
-            function traceT (flowStateT (Types.var "s") (Types.var "s")) $
-            lambda "t1" ((Flows.flowState
-                (Flows.flowStateValue @@ var "f2")
-                (Flows.flowStateState @@ var "f2")
-                (var "restore" @@ var "t0" @@ (Flows.flowStateTrace @@ var "f2")))
-              `with` [
-                 -- execute the internal flow after augmenting the trace
-                 "f2">: Flows.unFlow @@ var "f" @@ var "s0" @@ var "t1"
-              ])]))
-  where
-    eitherT l r = Types.applyN [TypeVariable _Either, l, r]
-
-pushErrorDef :: TElement (String -> Trace -> Trace)
-pushErrorDef = tier1Definition "pushError" $
-  doc "Push an error message" $
-  functionN [Types.string, traceT, traceT] $
-  lambda "msg" $ lambda "t" $ ((Flows.trace
-      (Flows.traceStack @@ var "t")
-      (Lists.cons @@ var "errorMsg" @@ (Flows.traceMessages @@ var "t"))
-      (Flows.traceOther @@ var "t"))
-    `with` [
-      "errorMsg">: Strings.concat ["Error: ", var "msg", " (", (Strings.intercalate @@ " > " @@ (Lists.reverse @@ (Flows.traceStack @@ var "t"))), ")"]])
-
-warnDef :: TElement (String -> Flow s a -> Flow s a)
-warnDef = tier1Definition "warn" $
-  doc "Continue the current flow after adding a warning message" $
-  functionN [Types.string, flowSAT, flowSAT] $
-  lambda "msg" $ lambda "b" $ wrap _Flow $ lambda "s0" $ lambda "t0" (
-    (Flows.flowState
-      (Flows.flowStateValue @@ var "f1")
-      (Flows.flowStateState @@ var "f1")
-      (var "addMessage" @@ (Flows.flowStateTrace @@ var "f1")))
-    `with` [
-      "f1">: Flows.unFlow @@ var "b" @@ var "s0" @@ var "t0",
-      "addMessage">: lambda "t" $ Flows.trace
-        (Flows.traceStack @@ var "t")
-        (Lists.cons @@ ("Warning: " ++ var "msg") @@ (Flows.traceMessages @@ var "t"))
-        (Flows.traceOther @@ var "t")])
-
-withFlagDef :: TElement (String -> Flow s a -> Flow s a)
-withFlagDef = tier1Definition "withFlag" $
-  doc "Continue the current flow after setting a flag" $
-  function nameT (Types.function flowSAT flowSAT) $
-  lambda "flag" ((ref mutateTraceDef @@ var "mutate" @@ var "restore")
-  `with` [
-    "mutate">: lambda "t" $ inject _Either _Either_right $ (Flows.trace
-      (Flows.traceStack @@ var "t")
-      (Flows.traceMessages @@ var "t")
-      (Maps.insert @@ var "flag" @@ (inject _Term _Term_literal $ inject _Literal _Literal_boolean $ boolean True) @@ (Flows.traceOther @@ var "t"))),
-    "restore">: lambda "ignored" $ lambda "t1" $ Flows.trace
-      (Flows.traceStack @@ var "t1")
-      (Flows.traceMessages @@ var "t1")
-      (Maps.remove @@ var "flag" @@ (Flows.traceOther @@ var "t1"))])
-
-withStateDef :: TElement (s1 -> Flow s1 a -> Flow s2 a)
-withStateDef = tier1Definition "withState" $
-  doc "Continue a flow using a given state" $
-  function (Types.var "s1") (Types.function flowS1AT flowS2AT) $
-  lambda "cx0" $ lambda "f" $
-    wrap _Flow $ lambda "cx1" $ lambda "t1" (
-      (Flows.flowState (Flows.flowStateValue @@ var "f1") (var "cx1") (Flows.flowStateTrace @@ var "f1"))
-      `with` [
-        "f1">:
-          typed (Types.apply (Types.apply (TypeVariable _FlowState) (Types.var "s1")) (Types.var "a")) $
-          Flows.unFlow @@ var "f" @@ var "cx0" @@ var "t1"])
-
-withTraceDef :: TElement (String -> Flow s a -> Flow s a)
-withTraceDef = tier1Definition "withTrace" $
-  doc "Continue the current flow after augmenting the trace" $
-  functionN [Types.string, flowSAT, flowSAT] $
-  lambda "msg" ((ref mutateTraceDef @@ var "mutate" @@ var "restore")
-    `with` [
-      -- augment the trace
-      "mutate">: lambda "t" $ Logic.ifElse
-        @@ (inject _Either _Either_left $ string "maximum trace depth exceeded. This may indicate an infinite loop")
-        @@ (inject _Either _Either_right $ Flows.trace
-          (Lists.cons @@ var "msg" @@ (Flows.traceStack @@ var "t"))
-          (Flows.traceMessages @@ var "t")
-          (Flows.traceOther @@ var "t"))
-        @@ (Equality.gteInt32 @@ (Lists.length @@ (Flows.traceStack @@ var "t")) @@ ref maxTraceDepthDef),
-      -- reset the trace stack after execution
-      "restore">: lambda "t0" $ lambda "t1" $ Flows.trace
-        (Flows.traceStack @@ var "t0")
-        (Flows.traceMessages @@ var "t1")
-        (Flows.traceOther @@ var "t1")])

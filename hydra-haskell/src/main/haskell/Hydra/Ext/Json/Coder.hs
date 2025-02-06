@@ -4,10 +4,10 @@ import Hydra.Core
 import Hydra.Compute
 import Hydra.Graph
 import Hydra.Strip
-import Hydra.Basics
+import Hydra.Variants
 import Hydra.CoreEncoding
 import Hydra.Literals
-import Hydra.Tier1
+import Hydra.Rewriting
 import Hydra.Tier2
 import Hydra.Adapters
 import Hydra.TermAdapters
