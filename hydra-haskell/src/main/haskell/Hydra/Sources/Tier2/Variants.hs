@@ -1,8 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier1.Variants where
+module Hydra.Sources.Tier2.Variants where
 
--- Standard Tier-1 imports
+-- Standard Tier-2 imports
+import           Prelude hiding ((++))
+import qualified Data.List                 as L
+import qualified Data.Map                  as M
+import qualified Data.Set                  as S
+import qualified Data.Maybe                as Y
 import           Hydra.Dsl.Base            as Base
 import qualified Hydra.Dsl.Core            as Core
 import qualified Hydra.Dsl.Graph           as Graph
@@ -20,12 +25,7 @@ import           Hydra.Dsl.Lib.Strings     as Strings
 import qualified Hydra.Dsl.Module          as Module
 import qualified Hydra.Dsl.Terms           as Terms
 import qualified Hydra.Dsl.Types           as Types
-import           Hydra.Sources.Tier0.All
-import           Prelude hiding ((++))
-import qualified Data.List                 as L
-import qualified Data.Map                  as M
-import qualified Data.Set                  as S
-import qualified Data.Maybe                as Y
+import           Hydra.Sources.Tier1.All
 
 
 variantsDefinition :: String -> TTerm a -> TElement a

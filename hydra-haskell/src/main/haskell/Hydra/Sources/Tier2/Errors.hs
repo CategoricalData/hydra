@@ -27,7 +27,7 @@ import qualified Hydra.Dsl.Terms           as Terms
 import qualified Hydra.Dsl.Types           as Types
 import           Hydra.Sources.Tier1.All
 
-import Hydra.Sources.Tier1.Variants
+import Hydra.Sources.Tier2.Variants
 
 
 hydraErrorsModule :: Module
