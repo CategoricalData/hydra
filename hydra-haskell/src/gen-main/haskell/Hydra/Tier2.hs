@@ -6,7 +6,9 @@ import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Flows as Flows
+import qualified Hydra.Lib.Io as Io
 import qualified Hydra.Lib.Lists as Lists
+import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Strings as Strings
 import Data.Int
@@ -72,6 +74,20 @@ requireTermType x = (withType (getTermType x))
     withType = (\x -> case x of
       Nothing -> (Flows.fail "missing type annotation")
       Just v1 -> (Flows.pure v1))
+
+-- | Summarize a trace as a string
+traceSummary :: (Compute.Trace -> String)
+traceSummary t =  
+  let messageLines = (Lists.nub (Compute.traceMessages t)) 
+      keyvalLines = (Logic.ifElse [] (Lists.cons "key/value pairs: " (Lists.map toLine (Maps.toList (Compute.traceOther t)))) (Maps.isEmpty (Compute.traceOther t)))
+      toLine = (\pair -> Strings.cat [
+              Strings.cat [
+                Strings.cat [
+                  "\t",
+                  (Core.unName (fst pair))],
+                ": "],
+              (Io.showTerm (snd pair))])
+  in (Strings.intercalate "\n" (Lists.concat2 messageLines keyvalLines))
 
 -- | Fail if an actual value does not match an expected value
 unexpected :: (String -> String -> Compute.Flow s x)

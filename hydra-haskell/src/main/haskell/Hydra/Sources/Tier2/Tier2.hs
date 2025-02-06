@@ -43,6 +43,7 @@ hydraTier2Module = Module (Namespace "hydra/tier2") elements
       el putStateDef,
       el requireElementTypeDef,
       el requireTermTypeDef,
+      el traceSummaryDef,
       el unexpectedDef]
 
 elementsToGraphDef :: TElement (Graph -> Maybe Graph -> [Element] -> Graph)
@@ -114,6 +115,23 @@ requireTermTypeDef = tier2Definition "requireTermType" $
       "withType">: matchOpt
        (Flows.fail @@ "missing type annotation")
        Flows.pure]
+
+traceSummaryDef :: TElement (Trace -> String)
+traceSummaryDef = tier2Definition "traceSummary" $
+  doc "Summarize a trace as a string" $
+  function traceT stringT $
+  lambda "t" $ (
+    (Strings.intercalate @@ "\n" @@ (Lists.concat2 @@ var "messageLines" @@ var "keyvalLines"))
+      `with` [
+        "messageLines">: (Lists.nub @@ (Flows.traceMessages @@ var "t")),
+        "keyvalLines">: Logic.ifElse
+          @@ (list [])
+          @@ (Lists.cons @@ "key/value pairs: "
+            @@ (Lists.map @@ (var "toLine") @@ (Maps.toList @@ (Flows.traceOther @@ var "t"))))
+          @@ (Maps.isEmpty @@ (Flows.traceOther @@ var "t")),
+        "toLine">:
+          function (pairT stringT termT) stringT $
+          lambda "pair" $ "\t" ++ (Core.unName @@ (first @@ var "pair")) ++ ": " ++ (Io.showTerm @@ (second @@ var "pair"))])
 
 unexpectedDef :: TElement (String -> String -> Flow s x)
 unexpectedDef = tier2Definition "unexpected" $

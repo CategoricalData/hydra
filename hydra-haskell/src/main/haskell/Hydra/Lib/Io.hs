@@ -1,4 +1,4 @@
--- | Tier-1 library which provides Haskell implementations of hydra/lib/io primitives.
+-- | Haskell implementations of hydra/lib/io primitives.
 
 module Hydra.Lib.Io (
   showTerm,
@@ -8,12 +8,12 @@ module Hydra.Lib.Io (
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Graph
-import Hydra.Ext.Json.Coder
-import Hydra.Dsl.Annotations
-import Hydra.Ext.Json.Serde
+--import Hydra.Ext.Json.Coder
+--import Hydra.Dsl.Annotations
+--import Hydra.Ext.Json.Serde
 import Hydra.CoreEncoding
-import Hydra.Tools.Rewriting
-import Hydra.Annotations
+--import Hydra.Tools.Rewriting
+--import Hydra.Annotations
 import Hydra.Flows
 import qualified Hydra.Json as Json
 import qualified Hydra.Dsl.Terms as Terms
@@ -34,7 +34,8 @@ noGraph = Graph {
 
 
 showTerm :: Term -> String
-showTerm term = fromFlow "fail" noGraph (jsonValueToString <$> untypedTermToJson term)
+--showTerm term = fromFlow "fail" noGraph (jsonValueToString <$> untypedTermToJson term)
+showTerm = show
 
 --     coder <- termStringCoder
 --     coderEncode coder encoded
@@ -42,15 +43,15 @@ showTerm term = fromFlow "fail" noGraph (jsonValueToString <$> untypedTermToJson
 --     --encoded = coreEncodeTerm $ rewriteTermMeta (const $ Kv M.empty) term
 --     encoded = rewriteTermMeta (const $ Kv M.empty) term
 
-termStringCoder :: Flow Graph (Coder Graph Graph Term String)
-termStringCoder = do
-    termJsonCoder <- jsonCoder $ TypeVariable _Term
-    return $ Coder (mout termJsonCoder) (min termJsonCoder)
-  where
-    mout termJsonCoder term = jsonValueToString <$> coderEncode termJsonCoder term
-    min termJsonCoder s = case stringToJsonValue s of
-      Left msg -> fail $ "failed to parse JSON value: " ++ msg
-      Right v -> coderDecode termJsonCoder v
+--termStringCoder :: Flow Graph (Coder Graph Graph Term String)
+--termStringCoder = do
+--    termJsonCoder <- jsonCoder $ TypeVariable _Term
+--    return $ Coder (mout termJsonCoder) (min termJsonCoder)
+--  where
+--    mout termJsonCoder term = jsonValueToString <$> coderEncode termJsonCoder term
+--    min termJsonCoder s = case stringToJsonValue s of
+--      Left msg -> fail $ "failed to parse JSON value: " ++ msg
+--      Right v -> coderDecode termJsonCoder v
 
 --showType :: Type -> String
 --showType typ = fromFlow "fail" noGraph $ do
@@ -61,7 +62,8 @@ termStringCoder = do
 
 -- TODO: for now, we are bypassing the complexity of TermAdapters because of issues yet to be resolved
 showType :: Type -> String
-showType = showTerm . coreEncodeType
+--showType = showTerm . coreEncodeType
+showType = show
 --showType typ = case flowStateValue result of
 --    Nothing -> "failed to encode type:\n" ++ show (traceMessages $ flowStateTrace result)
 --    Just s -> s
@@ -69,12 +71,12 @@ showType = showTerm . coreEncodeType
 --    result = unFlow (jsonValueToString <$> untypedTermToJson encoded) noGraph emptyTrace
 --    encoded = stripTermRecursive $ coreEncodeType typ
 
-typeStringCoder :: Flow Graph (Coder Graph Graph Term String)
-typeStringCoder = do
-    typeJsonCoder <- jsonCoder $ TypeVariable _Type
-    return $ Coder (mout typeJsonCoder) (min typeJsonCoder)
-  where
-    mout typeJsonCoder term = jsonValueToString <$> coderEncode typeJsonCoder term
-    min typeJsonCoder s = case stringToJsonValue s of
-      Left msg -> fail $ "failed to parse as JSON value: " ++ msg
-      Right v -> coderDecode typeJsonCoder v
+--typeStringCoder :: Flow Graph (Coder Graph Graph Term String)
+--typeStringCoder = do
+--    typeJsonCoder <- jsonCoder $ TypeVariable _Type
+--    return $ Coder (mout typeJsonCoder) (min typeJsonCoder)
+--  where
+--    mout typeJsonCoder term = jsonValueToString <$> coderEncode typeJsonCoder term
+--    min typeJsonCoder s = case stringToJsonValue s of
+--      Left msg -> fail $ "failed to parse as JSON value: " ++ msg
+--      Right v -> coderDecode typeJsonCoder v
