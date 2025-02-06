@@ -1,4 +1,4 @@
--- | A module for miscellaneous tier-1 functions and constants.
+-- | Utilities for type and term rewriting and analysis.
 
 module Hydra.Rewriting where
 
@@ -13,15 +13,6 @@ import Data.Int
 import Data.List as L
 import Data.Map as M
 import Data.Set as S
-
--- | Check whether a term is a lambda, possibly nested within let and/or annotation terms
-isLambda :: (Core.Term -> Bool)
-isLambda term = ((\x -> case x of
-  Core.TermFunction v1 -> ((\x -> case x of
-    Core.FunctionLambda _ -> True
-    _ -> False) v1)
-  Core.TermLet v1 -> (isLambda (Core.letEnvironment v1))
-  _ -> False) (Strip.fullyStripTerm term))
 
 -- | Fold over a term, traversing its subterms in the specified order
 foldOverTerm :: (Coders.TraversalOrder -> (x -> Core.Term -> x) -> x -> Core.Term -> x)
@@ -54,6 +45,15 @@ freeVariablesInType typ =
     Core.TypeLambda v1 -> (Sets.remove (Core.lambdaTypeParameter v1) (freeVariablesInType (Core.lambdaTypeBody v1)))
     Core.TypeVariable v1 -> (Sets.singleton v1)
     _ -> dfltVars) typ)
+
+-- | Check whether a term is a lambda, possibly nested within let and/or annotation terms
+isLambda :: (Core.Term -> Bool)
+isLambda term = ((\x -> case x of
+  Core.TermFunction v1 -> ((\x -> case x of
+    Core.FunctionLambda _ -> True
+    _ -> False) v1)
+  Core.TermLet v1 -> (isLambda (Core.letEnvironment v1))
+  _ -> False) (Strip.fullyStripTerm term))
 
 -- | Find the children of a given term
 subterms :: (Core.Term -> [Core.Term])

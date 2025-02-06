@@ -36,14 +36,28 @@ hydraTier2Module = Module (Namespace "hydra/tier2") elements
    [hydraGraphModule, hydraMantleModule, hydraComputeModule, hydraStripModule] tier0Modules $
     Just ("A module for miscellaneous tier-2 functions and constants.")
   where
-   elements = [
-     el getStateDef,
-     el getTermTypeDef,
-     el putStateDef,
-     el requireElementTypeDef,
-     el requireTermTypeDef,
-     el unexpectedDef
-     ]
+    elements = [
+      el elementsToGraphDef,
+      el getStateDef,
+      el getTermTypeDef,
+      el putStateDef,
+      el requireElementTypeDef,
+      el requireTermTypeDef,
+      el unexpectedDef]
+
+elementsToGraphDef :: TElement (Graph -> Maybe Graph -> [Element] -> Graph)
+elementsToGraphDef = tier2Definition "elementsToGraph" $
+  function graphT (funT (optionalT graphT) (funT (TypeList elementT) graphT)) $
+  lambda "parent" $ lambda "schema" $ lambda "elements" $
+    Graph.graph
+      (Maps.fromList @@ (Lists.map @@ var "toPair" @@ var "elements"))
+      (Graph.graphEnvironment @@ var "parent")
+      (Graph.graphTypes @@ var "parent")
+      (Graph.graphBody @@ var "parent")
+      (Graph.graphPrimitives @@ var "parent")
+      (var "schema")
+  `with` [
+    "toPair" >: lambda "el" $ pair (Graph.elementName @@ var "el") (var "el")]
 
 getStateDef :: TElement (Flow s s)
 getStateDef = tier2Definition "getState" $

@@ -32,7 +32,7 @@ protobufLanguageDefinition :: String -> TTerm a -> TElement a
 protobufLanguageDefinition = definitionInModule protobufLanguageModule
 
 protobufLanguageModule :: Module
-protobufLanguageModule = Module ns elements [hydraCodersModule, hydraBasicsModule, hydraStripModule] tier0Modules $
+protobufLanguageModule = Module ns elements [hydraCodersModule, hydraTier2Module, hydraStripModule] tier0Modules $
     Just "Language constraints for Protobuf v3"
   where
     ns = Namespace "hydra/ext/protobuf/language"

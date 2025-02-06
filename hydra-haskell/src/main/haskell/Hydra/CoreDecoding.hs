@@ -15,7 +15,6 @@ module Hydra.CoreDecoding (
   coreDecodeType,
   ) where
 
-import Hydra.Basics
 import Hydra.Strip
 import Hydra.Coders
 import Hydra.Compute
