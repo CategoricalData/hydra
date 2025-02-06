@@ -9,7 +9,7 @@ import Hydra.Dsl.Types as Types
 
 
 jsonSchemaModule :: Module
-jsonSchemaModule = Module ns elements [jsonModelModule] tier0Modules $
+jsonSchemaModule = Module ns elements [jsonModelModule] [hydraCoreModule] $
     Just ("A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar")
   where
     ns = Namespace "hydra/ext/org/json/schema"

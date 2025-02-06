@@ -17,7 +17,7 @@ import Hydra.Module
 import Hydra.Qnames
 import Hydra.Dsl.PhantomLiterals
 import Hydra.Dsl.ShorthandTypes
-import Hydra.Sources.Core
+import Hydra.Sources.Tier0.Core
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Lib.Lists as Lists

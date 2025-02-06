@@ -13,7 +13,7 @@ import Hydra.Sources.Tier4.Ext.Pg.Model
 
 pgMappingModule :: Module
 pgMappingModule = Module ns elements
-    [pgModelModule, hydraCoreModule, hydraComputeModule] tier0Modules $
+    [pgModelModule, hydraCoreModule, hydraComputeModule] [hydraCoreModule] $
     Just "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs"
   where
     ns = Namespace "hydra/pg/mapping"

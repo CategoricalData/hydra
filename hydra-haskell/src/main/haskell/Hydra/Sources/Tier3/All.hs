@@ -6,7 +6,7 @@ module Hydra.Sources.Tier3.All(
 import Hydra.Sources.Tier2.All
 
 kernelModules :: [Module]
-kernelModules = tier0Modules ++ tier1Modules ++ tier2Modules ++ tier3Modules
+kernelModules = [hydraCoreModule] ++ tier1Modules ++ tier2Modules ++ tier3Modules
 
 tier3Modules :: [Module]
 tier3Modules = [

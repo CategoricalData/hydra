@@ -9,7 +9,7 @@ import Hydra.Dsl.Types as Types
 
 
 openCypherModule :: Module
-openCypherModule = Module ns elements [hydraCoreModule] tier0Modules $
+openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just ("A Cypher model based on the OpenCypher specification (version 23), copyright Neo Technology, available at:\n" ++
       "  https://opencypher.org/resources/")
   where

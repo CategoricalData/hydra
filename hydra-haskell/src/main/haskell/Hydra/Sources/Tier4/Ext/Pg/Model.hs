@@ -7,11 +7,11 @@ import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
-import Hydra.Sources.Core
+import Hydra.Sources.Tier0.Core
 
 
 pgModelModule :: Module
-pgModelModule = Module ns elements [] tier0Modules $
+pgModelModule = Module ns elements [] [hydraCoreModule] $
     Just ("A typed property graph data model. " ++
       "Property graphs are parameterized a type for property and id values, " ++
       "while property graph schemas are parameterized by a type for property and id types")

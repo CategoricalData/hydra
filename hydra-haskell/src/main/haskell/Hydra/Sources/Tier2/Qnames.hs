@@ -32,7 +32,7 @@ qnamesDefinition :: String -> TTerm a -> TElement a
 qnamesDefinition = definitionInModule hydraQnamesModule
 
 hydraQnamesModule :: Module
-hydraQnamesModule = Module (Namespace "hydra/qnames") elements [] tier0Modules $
+hydraQnamesModule = Module (Namespace "hydra/qnames") elements [] [hydraCoreModule] $
     Just ("Functions for working with qualified names.")
   where
    elements = [

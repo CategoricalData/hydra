@@ -7,7 +7,7 @@ import Hydra.Dsl.Types as Types
 
 
 yamlModelModule :: Module
-yamlModelModule = Module ns elements [hydraCoreModule] tier0Modules $
+yamlModelModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just ("A basic YAML representation model. Based on:\n" ++
       "  https://yaml.org/spec/1.2/spec.html\n" ++
       "The Serialization and Presentation properties of YAML,\n" ++

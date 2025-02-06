@@ -33,7 +33,7 @@ lexicalDefinition = definitionInModule hydraLexicalModule
 
 hydraLexicalModule :: Module
 hydraLexicalModule = Module (Namespace "hydra/lexical") elements
-   [hydraGraphModule, hydraMantleModule, hydraComputeModule, hydraStripModule] tier0Modules $
+   [hydraGraphModule, hydraMantleModule, hydraComputeModule, hydraStripModule] [hydraCoreModule] $
     Just ("A module for lexical operations over graphs.")
   where
     elements = [

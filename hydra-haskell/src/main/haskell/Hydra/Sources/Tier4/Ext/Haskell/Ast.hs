@@ -7,7 +7,7 @@ import Hydra.Dsl.Types as Types
 
 
 haskellAstModule :: Module
-haskellAstModule = Module ns elements [hydraCoreModule] tier0Modules $
+haskellAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just "A Haskell syntax model, loosely based on Language.Haskell.Tools.AST"
   where
     ns = Namespace "hydra/ext/haskell/ast"
