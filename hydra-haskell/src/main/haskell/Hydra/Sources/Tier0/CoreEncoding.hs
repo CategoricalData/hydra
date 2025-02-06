@@ -25,6 +25,7 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 import Hydra.Sources.Libraries -- TODO: use DSL primitives instead of raw primitive references
+import Hydra.Sources.Tier0.Strip
 
 
 coreEncodingModule :: Module
@@ -33,47 +34,56 @@ coreEncodingModule = Module (Namespace "hydra/coreEncoding") elements [] [hydraC
       <> " to their native Hydra counterparts as terms. "
       <> " This includes an implementation of LambdaGraph's epsilon encoding (types to terms).")
   where
-   elements = [
-     el coreEncodeAnnotatedTermDef,
-     el coreEncodeAnnotatedTypeDef,
-     el coreEncodeApplicationDef,
-     el coreEncodeApplicationTypeDef,
-     el coreEncodeCaseStatementDef,
-     el coreEncodeEliminationDef,
-     el coreEncodeFieldDef,
-     el coreEncodeFieldTypeDef,
-     el coreEncodeFloatTypeDef,
-     el coreEncodeFloatValueDef,
-     el coreEncodeFunctionDef,
-     el coreEncodeFunctionTypeDef,
-     el coreEncodeInjectionDef,
-     el coreEncodeIntegerTypeDef,
-     el coreEncodeIntegerValueDef,
-     el coreEncodeLambdaDef,
-     el coreEncodeLambdaTypeDef,
-     el coreEncodeLetDef,
-     el coreEncodeLetBindingDef,
-     el coreEncodeLiteralDef,
-     el coreEncodeLiteralTypeDef,
-     el coreEncodeMapTypeDef,
-     el coreEncodeNameDef,
-     el coreEncodeOptionalCasesDef,
-     el coreEncodeProjectionDef,
-     el coreEncodeRecordDef,
-     el coreEncodeRowTypeDef,
-     el coreEncodeSumDef,
-     el coreEncodeTermDef,
-     el coreEncodeTupleProjectionDef,
-     el coreEncodeTypeDef,
-     el coreEncodeTypeAbstractionDef,
-     el coreEncodeTypeSchemeDef,
-     el coreEncodeTypedTermDef,
-     el coreEncodeWrappedTermDef,
-     el coreEncodeWrappedTypeDef]
+    elements = encodingElements <> extraElements
+    encodingElements = [
+      el coreEncodeAnnotatedTermDef,
+      el coreEncodeAnnotatedTypeDef,
+      el coreEncodeApplicationDef,
+      el coreEncodeApplicationTypeDef,
+      el coreEncodeCaseStatementDef,
+      el coreEncodeEliminationDef,
+      el coreEncodeFieldDef,
+      el coreEncodeFieldTypeDef,
+      el coreEncodeFloatTypeDef,
+      el coreEncodeFloatValueDef,
+      el coreEncodeFunctionDef,
+      el coreEncodeFunctionTypeDef,
+      el coreEncodeInjectionDef,
+      el coreEncodeIntegerTypeDef,
+      el coreEncodeIntegerValueDef,
+      el coreEncodeLambdaDef,
+      el coreEncodeLambdaTypeDef,
+      el coreEncodeLetDef,
+      el coreEncodeLetBindingDef,
+      el coreEncodeLiteralDef,
+      el coreEncodeLiteralTypeDef,
+      el coreEncodeMapTypeDef,
+      el coreEncodeNameDef,
+      el coreEncodeOptionalCasesDef,
+      el coreEncodeProjectionDef,
+      el coreEncodeRecordDef,
+      el coreEncodeRowTypeDef,
+      el coreEncodeSumDef,
+      el coreEncodeTermDef,
+      el coreEncodeTupleProjectionDef,
+      el coreEncodeTypeDef,
+      el coreEncodeTypeAbstractionDef,
+      el coreEncodeTypeSchemeDef,
+      el coreEncodeTypedTermDef,
+      el coreEncodeWrappedTermDef,
+      el coreEncodeWrappedTypeDef]
+    extraElements = [
+      el isEncodedTypeDef,
+      el isTypeDef,
+      el isUnitTermDef,
+      el isUnitTypeDef]
 
 coreEncodingDefinition :: String -> Type -> TTerm x -> TElement x
 coreEncodingDefinition label dom datum = definitionInModule coreEncodingModule ("coreEncode" <> label) $
   function dom termT datum
+
+coreEncodingExtrasDefinition :: String -> TTerm a -> TElement a
+coreEncodingExtrasDefinition = definitionInModule coreEncodingModule
 
 encodedBinary :: TTerm String -> TTerm Term
 encodedBinary = encodedLiteral . Core.literalBinary
@@ -451,3 +461,38 @@ coreEncodeWrappedTypeDef = coreEncodingDefinition "WrappedType" wrappedTypeT $
   lambda "nt" $ encodedRecord _WrappedType [
     field _WrappedType_typeName $ ref coreEncodeNameDef @@ (Core.wrappedTypeTypeName @@ var "nt"),
     field _WrappedType_object $ ref coreEncodeTypeDef @@ (Core.wrappedTypeObject @@ var "nt")]
+
+-- Extra elements
+
+isEncodedTypeDef :: TElement (Term -> Bool)
+isEncodedTypeDef = coreEncodingExtrasDefinition "isEncodedType" $
+  function termT booleanT $
+  lambda "t" $ (match _Term (Just false) [
+      TCase _Term_application --> lambda "a" $
+        ref isEncodedTypeDef @@ (Core.applicationFunction @@ var "a"),
+      TCase _Term_union       --> lambda "i" $
+        Equality.equalString @@ (string $ unName _Type) @@ (Core.unName @@ (Core.injectionTypeName @@ var "i"))
+    ]) @@ (ref stripTermDef @@ var "t")
+
+isTypeDef :: TElement (Type -> Bool)
+isTypeDef = coreEncodingExtrasDefinition "isType" $
+  function typeT booleanT $
+  lambda "t" $ (match _Type (Just false) [
+      TCase _Type_application --> lambda "a" $
+        ref isTypeDef @@ (Core.applicationTypeFunction @@ var "a"),
+      TCase _Type_lambda --> lambda "l" $
+        ref isTypeDef @@ (Core.lambdaTypeBody @@ var "l"),
+      TCase _Type_union --> lambda "rt" $
+        Equality.equalString @@ (string $ unName _Type) @@ (Core.unName @@ (Core.rowTypeTypeName @@ var "rt"))
+--      TCase _Type_variable --> constant true
+    ]) @@ (ref stripTypeDef @@ var "t")
+
+isUnitTermDef :: TElement (Term -> Bool)
+isUnitTermDef = coreEncodingExtrasDefinition "isUnitTerm" $
+  function termT booleanT $
+  lambda "t" $ Equality.equalTerm @@ (ref fullyStripTermDef @@ var "t") @@ TTerm (coreEncodeTerm Terms.unit)
+
+isUnitTypeDef :: TElement (Term -> Bool)
+isUnitTypeDef = coreEncodingExtrasDefinition "isUnitType" $
+  function typeT booleanT $
+  lambda "t" $ Equality.equalType @@ (ref stripTypeDef @@ var "t") @@ TTerm (coreEncodeType unitT)

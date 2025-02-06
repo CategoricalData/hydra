@@ -14,7 +14,7 @@ import Hydra.Module
 import Hydra.Printing
 import Hydra.Mantle
 import Hydra.Strip
-import Hydra.Annotations
+import Hydra.Tools.Annotations
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms

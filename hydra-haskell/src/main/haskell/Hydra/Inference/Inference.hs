@@ -9,20 +9,22 @@ module Hydra.Inference.Inference (
   withInferenceContext,
 ) where
 
+import Hydra.Annotations
 import Hydra.Compute
 import Hydra.Core
 import Hydra.CoreEncoding
 import Hydra.Graph
-import Hydra.Lexical
+import Hydra.Tools.Lexical
 import Hydra.Mantle
-import Hydra.Annotations
+import Hydra.Tools.Annotations
 import Hydra.Tools.Rewriting
 import Hydra.Inference.Substitution
 import Hydra.Unification
 import Hydra.Inference.Rules
 import Hydra.Flows
 import Hydra.Rewriting
-import Hydra.Tier2
+import Hydra.Errors
+import Hydra.Lexical
 import Hydra.Tools.Sorting
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types

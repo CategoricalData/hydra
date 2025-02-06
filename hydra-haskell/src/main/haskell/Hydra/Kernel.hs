@@ -13,6 +13,7 @@ module Hydra.Kernel (
   module Hydra.CoreDecoding,
   module Hydra.CoreEncoding,
   module Hydra.CoreLanguage,
+  module Hydra.Errors,
   module Hydra.Extras,
   module Hydra.Flows,
   module Hydra.Formatting,
@@ -33,9 +34,10 @@ module Hydra.Kernel (
   module Hydra.Schemas,
   module Hydra.Strip,
   module Hydra.TermAdapters,
-  module Hydra.Tier2,
+  module Hydra.Tools.Annotations,
   module Hydra.Tools.Debug,
   module Hydra.Tools.Formatting,
+  module Hydra.Tools.Lexical,
   module Hydra.Tools.Rewriting,
   module Hydra.Tools.Sorting,
   module Hydra.Variants,
@@ -55,6 +57,7 @@ import Hydra.Core
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding
 import Hydra.CoreLanguage
+import Hydra.Errors
 import Hydra.Extras
 import Hydra.Flows
 import Hydra.Formatting
@@ -75,9 +78,10 @@ import Hydra.Rewriting
 import Hydra.Schemas
 import Hydra.Strip
 import Hydra.TermAdapters
-import Hydra.Tier2
+import Hydra.Tools.Annotations
 import Hydra.Tools.Debug
 import Hydra.Tools.Formatting
+import Hydra.Tools.Lexical
 import Hydra.Tools.Rewriting
 import Hydra.Tools.Sorting
 import Hydra.Variants

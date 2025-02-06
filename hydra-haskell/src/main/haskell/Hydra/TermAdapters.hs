@@ -17,14 +17,15 @@ import Hydra.Compute
 import Hydra.Core
 import Hydra.Schemas
 import Hydra.Graph
-import Hydra.Lexical
+import Hydra.Tools.Lexical
 import Hydra.Mantle
 import Hydra.Reduction
 import Hydra.Tools.Rewriting
 import Hydra.LiteralAdapters
 import Hydra.Dsl.Terms
 import Hydra.Flows
-import Hydra.Tier2
+import Hydra.Errors
+import Hydra.Lexical
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types

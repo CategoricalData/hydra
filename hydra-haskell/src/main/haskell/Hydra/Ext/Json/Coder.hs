@@ -8,7 +8,7 @@ import Hydra.Variants
 import Hydra.CoreEncoding
 import Hydra.Literals
 import Hydra.Rewriting
-import Hydra.Tier2
+import Hydra.Errors
 import Hydra.Adapters
 import Hydra.TermAdapters
 import Hydra.Ext.Json.Language

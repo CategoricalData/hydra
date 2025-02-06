@@ -10,9 +10,10 @@ import Hydra.Coders
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Schemas
+import Hydra.CoreEncoding
 import Hydra.CoreLanguage
 import Hydra.Graph
-import Hydra.Lexical
+import Hydra.Tools.Lexical
 import Hydra.Mantle
 import Hydra.Module
 import Hydra.Strip
@@ -20,7 +21,7 @@ import Hydra.TermAdapters
 import Hydra.AdapterUtils
 import Hydra.Reduction
 import Hydra.Flows
-import Hydra.Tier2
+import Hydra.Errors
 import Hydra.Variants
 import Hydra.CoreDecoding
 

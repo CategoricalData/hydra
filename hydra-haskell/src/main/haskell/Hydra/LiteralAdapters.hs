@@ -13,10 +13,10 @@ import Hydra.Coders
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Graph
-import Hydra.Lexical
+import Hydra.Tools.Lexical
 import Hydra.Mantle
 import Hydra.Flows
-import Hydra.Tier2
+import Hydra.Errors
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

@@ -58,11 +58,7 @@ hydraVariantsModule = Module (Namespace "hydra/variants") elements [] tier0Modul
    
       -- Additional definitions; consider moving out of hydra/variants  
       el fieldMapDef,
-      el fieldTypeMapDef,
-      el isEncodedTypeDef,
-      el isTypeDef,
-      el isUnitTermDef,
-      el isUnitTypeDef]
+      el fieldTypeMapDef]
 
 eliminationVariantDef :: TElement (Elimination -> EliminationVariant)
 eliminationVariantDef = variantsDefinition "eliminationVariant" $
@@ -336,36 +332,3 @@ fieldTypeMapDef = variantsDefinition "fieldTypeMap" $
     (lambda "fields" $ Maps.fromList @@ (Lists.map @@ var "toPair" @@ var "fields"))
   `with` [
     "toPair">: lambda "f" $ pair (Core.fieldTypeName @@ var "f") (Core.fieldTypeType @@ var "f")]
-
-isEncodedTypeDef :: TElement (Term -> Bool)
-isEncodedTypeDef = variantsDefinition "isEncodedType" $
-  function termT booleanT $
-  lambda "t" $ (match _Term (Just false) [
-      TCase _Term_application --> lambda "a" $
-        ref isEncodedTypeDef @@ (Core.applicationFunction @@ var "a"),
-      TCase _Term_union       --> lambda "i" $
-        Equality.equalString @@ (string $ unName _Type) @@ (Core.unName @@ (Core.injectionTypeName @@ var "i"))
-    ]) @@ (ref stripTermDef @@ var "t")
-
-isTypeDef :: TElement (Type -> Bool)
-isTypeDef = variantsDefinition "isType" $
-  function typeT booleanT $
-  lambda "t" $ (match _Type (Just false) [
-      TCase _Type_application --> lambda "a" $
-        ref isTypeDef @@ (Core.applicationTypeFunction @@ var "a"),
-      TCase _Type_lambda --> lambda "l" $
-        ref isTypeDef @@ (Core.lambdaTypeBody @@ var "l"),
-      TCase _Type_union --> lambda "rt" $
-        Equality.equalString @@ (string $ unName _Type) @@ (Core.unName @@ (Core.rowTypeTypeName @@ var "rt"))
---      TCase _Type_variable --> constant true
-    ]) @@ (ref stripTypeDef @@ var "t")
-
-isUnitTermDef :: TElement (Term -> Bool)
-isUnitTermDef = variantsDefinition "isUnitTerm" $
-  function termT booleanT $
-  lambda "t" $ Equality.equalTerm @@ (ref fullyStripTermDef @@ var "t") @@ TTerm (coreEncodeTerm Terms.unit)
-
-isUnitTypeDef :: TElement (Term -> Bool)
-isUnitTypeDef = variantsDefinition "isUnitType" $
-  function typeT booleanT $
-  lambda "t" $ Equality.equalType @@ (ref stripTypeDef @@ var "t") @@ TTerm (coreEncodeType unitT)
