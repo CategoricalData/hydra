@@ -7,7 +7,6 @@ import Hydra.Strip
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Schemas
-import Hydra.Extras
 import Hydra.Graph
 import Hydra.Tools.Annotations
 import Hydra.Tools.Lexical

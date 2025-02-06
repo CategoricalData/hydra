@@ -37,7 +37,8 @@ hydraLexicalModule = Module (Namespace "hydra/lexical") elements
     Just ("A module for lexical operations over graphs.")
   where
     elements = [
-      el elementsToGraphDef]
+      el elementsToGraphDef,
+      el lookupPrimitiveDef]
 
 elementsToGraphDef :: TElement (Graph -> Maybe Graph -> [Element] -> Graph)
 elementsToGraphDef = lexicalDefinition "elementsToGraph" $
@@ -52,3 +53,11 @@ elementsToGraphDef = lexicalDefinition "elementsToGraph" $
       (var "schema")
   `with` [
     "toPair" >: lambda "el" $ pair (Graph.elementName @@ var "el") (var "el")]
+
+lookupPrimitiveDef :: TElement (Graph -> Name -> Maybe Primitive)
+lookupPrimitiveDef = lexicalDefinition "lookupPrimitive" $
+  function
+    graphT
+    (Types.function nameT (optionalT primitiveT)) $
+  lambda "g" $ lambda "name" $
+    apply (Maps.lookup @@ var "name") (Graph.graphPrimitives @@ var "g")
