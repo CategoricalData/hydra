@@ -1,6 +1,6 @@
 -- | Functions for type and term rewriting
 
-module Hydra.Tools.Rewriting where
+module Hydra.Staging.Rewriting where
 
 import Hydra.Annotations
 import Hydra.Qnames
@@ -11,9 +11,9 @@ import Hydra.Core
 import Hydra.CoreEncoding
 import Hydra.Graph
 import Hydra.Module
-import Hydra.Tools.Lexical
+import Hydra.Staging.Lexical
 import Hydra.Mantle
-import Hydra.Tools.Sorting
+import Hydra.Staging.Sorting
 import Hydra.Rewriting
 import Hydra.Lexical
 import Hydra.Tools.Debug

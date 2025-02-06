@@ -1,8 +1,8 @@
 module Hydra.TermAdaptersSpec where
 
 import Hydra.Kernel
-import Hydra.TermAdapters
-import Hydra.AdapterUtils
+import Hydra.Staging.TermAdapters
+import Hydra.Staging.AdapterUtils
 import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Tests

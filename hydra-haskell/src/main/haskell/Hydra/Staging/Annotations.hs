@@ -1,16 +1,16 @@
 -- | Functions for working with term and type annotations
 
-module Hydra.Tools.Annotations where
+module Hydra.Staging.Annotations where
 
 import Hydra.Annotations
 import Hydra.Strip
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Graph
-import Hydra.CoreDecoding
+import Hydra.Staging.CoreDecoding
 import Hydra.CoreEncoding
 import Hydra.Mantle
-import Hydra.Tools.Rewriting
+import Hydra.Staging.Rewriting
 import Hydra.Flows
 import Hydra.Errors
 import Hydra.Lexical

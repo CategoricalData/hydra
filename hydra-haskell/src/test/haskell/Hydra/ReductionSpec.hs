@@ -1,7 +1,7 @@
 module Hydra.ReductionSpec where
 
 import Hydra.Kernel
-import Hydra.Reduction
+import Hydra.Staging.Reduction
 import Hydra.Dsl.Terms as Terms
 import Hydra.Lib.Strings
 import qualified Hydra.Dsl.Types as Types

@@ -11,7 +11,7 @@ import Hydra.Coders
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Graph
-import Hydra.Tools.Annotations
+import Hydra.Staging.Annotations
 import Hydra.Phantoms
 import Hydra.Module
 import Hydra.Qnames

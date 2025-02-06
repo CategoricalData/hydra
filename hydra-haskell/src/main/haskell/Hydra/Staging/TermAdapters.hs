@@ -1,6 +1,6 @@
 -- | Adapter framework for types and terms
 
-module Hydra.TermAdapters (
+module Hydra.Staging.TermAdapters (
   fieldAdapter,
   functionProxyName,
   functionProxyType,
@@ -9,19 +9,19 @@ module Hydra.TermAdapters (
 ) where
 
 import Hydra.Printing
-import Hydra.AdapterUtils
+import Hydra.Staging.AdapterUtils
 import Hydra.Variants
 import Hydra.Strip
 import Hydra.Coders
 import Hydra.Compute
 import Hydra.Core
-import Hydra.Schemas
+import Hydra.Staging.Schemas
 import Hydra.Graph
-import Hydra.Tools.Lexical
+import Hydra.Staging.Lexical
 import Hydra.Mantle
-import Hydra.Reduction
-import Hydra.Tools.Rewriting
-import Hydra.LiteralAdapters
+import Hydra.Staging.Reduction
+import Hydra.Staging.Rewriting
+import Hydra.Staging.LiteralAdapters
 import Hydra.Dsl.Terms
 import Hydra.Flows
 import Hydra.Errors

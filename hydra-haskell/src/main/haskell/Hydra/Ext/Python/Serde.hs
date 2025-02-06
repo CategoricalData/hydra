@@ -1,7 +1,7 @@
 module Hydra.Ext.Python.Serde where
 
 import qualified Hydra.Ext.Python.Syntax as Py
-import Hydra.Tools.Serialization
+import Hydra.Staging.Serialization
 import qualified Hydra.Ast as A
 
 import qualified Data.List as L

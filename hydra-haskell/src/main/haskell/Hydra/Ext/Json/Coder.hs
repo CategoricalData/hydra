@@ -9,11 +9,11 @@ import Hydra.CoreEncoding
 import Hydra.Literals
 import Hydra.Rewriting
 import Hydra.Errors
-import Hydra.Adapters
-import Hydra.TermAdapters
+import Hydra.Staging.Adapters
+import Hydra.Staging.TermAdapters
 import Hydra.Ext.Json.Language
 import Hydra.Lib.Literals
-import Hydra.AdapterUtils
+import Hydra.Staging.AdapterUtils
 import qualified Hydra.Json as Json
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types

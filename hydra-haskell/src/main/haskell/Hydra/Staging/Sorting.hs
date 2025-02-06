@@ -1,6 +1,6 @@
 -- | Utilities for sorting
 
-module Hydra.Tools.Sorting (
+module Hydra.Staging.Sorting (
   topologicalSort,
   topologicalSortComponents,
   initGraph

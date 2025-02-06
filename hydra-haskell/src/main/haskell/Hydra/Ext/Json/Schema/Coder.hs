@@ -4,10 +4,10 @@ module Hydra.Ext.Json.Schema.Coder (
 ) where
 
 import Hydra.Kernel
-import Hydra.TermAdapters
-import Hydra.Adapters
+import Hydra.Staging.TermAdapters
+import Hydra.Staging.Adapters
 import Hydra.Ext.Json.Schema.Language
-import Hydra.Tools.Serialization
+import Hydra.Staging.Serialization
 import Hydra.Ext.Json.Schema.Serde
 import qualified Hydra.Ext.Org.Json.Schema as JS
 import qualified Hydra.Json as J

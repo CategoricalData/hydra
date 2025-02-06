@@ -1,9 +1,9 @@
 -- | Variable substitution and normalization of type expressions
-module Hydra.Inference.Substitution where
+module Hydra.Staging.Substitution where
 
 import Hydra.Core
 import Hydra.Mantle
-import Hydra.Tools.Rewriting
+import Hydra.Staging.Rewriting
 import Hydra.Rewriting
 import Hydra.Dsl.Types as Types
 

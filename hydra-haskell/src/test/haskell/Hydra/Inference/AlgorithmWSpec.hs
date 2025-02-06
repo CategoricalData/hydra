@@ -4,7 +4,7 @@ module Hydra.Inference.AlgorithmWSpec where
 
 import Hydra.Kernel
 import Hydra.Sources.Libraries
---import Hydra.Inference
+--import Hydra.Staging
 import Hydra.TestUtils
 import Hydra.TestData
 import qualified Hydra.Dsl.Expect as Expect
@@ -12,7 +12,7 @@ import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.ShorthandTypes
-import qualified Hydra.Inference.AlgorithmWBridge as W
+import qualified Hydra.Staging.AlgorithmWBridge as W
 import Hydra.Lib.Io
 
 

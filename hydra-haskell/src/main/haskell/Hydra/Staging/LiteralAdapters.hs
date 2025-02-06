@@ -1,19 +1,19 @@
 -- | Adapter framework for literal types and terms
 
-module Hydra.LiteralAdapters (
+module Hydra.Staging.LiteralAdapters (
   literalAdapter,
   floatAdapter,
   integerAdapter,
 ) where
 
 import Hydra.Printing
-import Hydra.AdapterUtils
+import Hydra.Staging.AdapterUtils
 import Hydra.Variants
 import Hydra.Coders
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Graph
-import Hydra.Tools.Lexical
+import Hydra.Staging.Lexical
 import Hydra.Mantle
 import Hydra.Flows
 import Hydra.Errors

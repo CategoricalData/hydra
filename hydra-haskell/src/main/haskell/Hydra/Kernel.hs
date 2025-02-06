@@ -2,24 +2,21 @@
 
 -- Note: Hydra.Grammar is part of the kernel, but is not a default import because the names of its types clash with those of other types.
 module Hydra.Kernel (
-  module Hydra.AdapterUtils,
-  module Hydra.Adapters,
   module Hydra.Annotations,
+  module Hydra.Arity,
+--  module Hydra.Ast,
   module Hydra.Coders,
   module Hydra.Compute,
   module Hydra.Constants,
   module Hydra.Constraints,
   module Hydra.Core,
-  module Hydra.CoreDecoding,
   module Hydra.CoreEncoding,
   module Hydra.CoreLanguage,
   module Hydra.Errors,
   module Hydra.Flows,
   module Hydra.Formatting,
   module Hydra.Graph,
-  module Hydra.Inference.Inference,
   module Hydra.Lexical,
-  module Hydra.LiteralAdapters,
   module Hydra.Literals,
   module Hydra.Mantle,
   module Hydra.Messages,
@@ -28,41 +25,42 @@ module Hydra.Kernel (
   module Hydra.Printing,
   module Hydra.Qnames,
   module Hydra.Query,
-  module Hydra.Reduction,
   module Hydra.Rewriting,
-  module Hydra.Schemas,
+  module Hydra.Staging.AdapterUtils,
+  module Hydra.Staging.Adapters,
+  module Hydra.Staging.Annotations,
+  module Hydra.Staging.CoreDecoding,
+  module Hydra.Staging.Formatting,
+--  module Hydra.Staging.GrammarToModule,
+  module Hydra.Staging.Inference,
+  module Hydra.Staging.Lexical,
+  module Hydra.Staging.LiteralAdapters,
+  module Hydra.Staging.Reduction,
+  module Hydra.Staging.Rewriting,
+  module Hydra.Staging.Schemas,
+  module Hydra.Staging.Sorting,
+  module Hydra.Staging.TermAdapters,
   module Hydra.Strip,
-  module Hydra.TermAdapters,
-  module Hydra.Tools.Annotations,
   module Hydra.Tools.Debug,
-  module Hydra.Tools.Formatting,
-  module Hydra.Tools.Lexical,
-  module Hydra.Tools.Rewriting,
-  module Hydra.Tools.Sorting,
   module Hydra.Variants,
   module Hydra.Workflow,
---  module Hydra.Ast,
---  module Hydra.Tools.GrammarToModule,
 ) where
 
-import Hydra.AdapterUtils
-import Hydra.Adapters
 import Hydra.Annotations
+import Hydra.Arity
+--import Hydra.Ast
 import Hydra.Coders
 import Hydra.Compute
 import Hydra.Constants
 import Hydra.Constraints
 import Hydra.Core
-import Hydra.CoreDecoding
 import Hydra.CoreEncoding
 import Hydra.CoreLanguage
 import Hydra.Errors
 import Hydra.Flows
 import Hydra.Formatting
 import Hydra.Graph
-import Hydra.Inference.Inference
 import Hydra.Lexical
-import Hydra.LiteralAdapters
 import Hydra.Literals
 import Hydra.Mantle
 import Hydra.Messages
@@ -71,18 +69,22 @@ import Hydra.Phantoms
 import Hydra.Printing
 import Hydra.Qnames
 import Hydra.Query
-import Hydra.Reduction
 import Hydra.Rewriting
-import Hydra.Schemas
+import Hydra.Staging.AdapterUtils
+import Hydra.Staging.Adapters
+import Hydra.Staging.Annotations
+import Hydra.Staging.CoreDecoding
+import Hydra.Staging.Formatting
+--import Hydra.Staging.GrammarToModule
+import Hydra.Staging.Inference
+import Hydra.Staging.Lexical
+import Hydra.Staging.LiteralAdapters
+import Hydra.Staging.Reduction
+import Hydra.Staging.Rewriting
+import Hydra.Staging.Schemas
+import Hydra.Staging.Sorting
+import Hydra.Staging.TermAdapters
 import Hydra.Strip
-import Hydra.TermAdapters
-import Hydra.Tools.Annotations
 import Hydra.Tools.Debug
-import Hydra.Tools.Formatting
-import Hydra.Tools.Lexical
-import Hydra.Tools.Rewriting
-import Hydra.Tools.Sorting
 import Hydra.Variants
 import Hydra.Workflow
---import Hydra.Ast
---import Hydra.Tools.GrammarToModule

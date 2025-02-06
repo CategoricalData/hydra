@@ -7,9 +7,9 @@ import Hydra.Constants
 import Hydra.Core
 import Hydra.CoreEncoding
 import Hydra.Graph
-import Hydra.Tools.Annotations
+import Hydra.Staging.Annotations
 import Hydra.Module
-import Hydra.Tools.Rewriting
+import Hydra.Staging.Rewriting
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types

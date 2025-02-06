@@ -2,28 +2,28 @@
 --   An adapter takes a type expression which is supported in a source language, and rewrites it to a type which is supported by a target language.
 --   In parallel, terms conforming to the original type are rewritten. Both levels of the transformation are bidirectional.
 
-module Hydra.Adapters where
+module Hydra.Staging.Adapters where
 
-import Hydra.TermAdapters
+import Hydra.Staging.TermAdapters
 import Hydra.Printing
 import Hydra.Coders
 import Hydra.Compute
 import Hydra.Core
-import Hydra.Schemas
+import Hydra.Staging.Schemas
 import Hydra.CoreEncoding
 import Hydra.CoreLanguage
 import Hydra.Graph
-import Hydra.Tools.Lexical
+import Hydra.Staging.Lexical
 import Hydra.Mantle
 import Hydra.Module
 import Hydra.Strip
-import Hydra.TermAdapters
-import Hydra.AdapterUtils
-import Hydra.Reduction
+import Hydra.Staging.TermAdapters
+import Hydra.Staging.AdapterUtils
+import Hydra.Staging.Reduction
 import Hydra.Flows
 import Hydra.Errors
 import Hydra.Variants
-import Hydra.CoreDecoding
+import Hydra.Staging.CoreDecoding
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

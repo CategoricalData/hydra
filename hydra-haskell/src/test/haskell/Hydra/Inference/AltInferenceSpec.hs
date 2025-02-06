@@ -1,8 +1,7 @@
 module Hydra.Inference.AltInferenceSpec where
 
 import Hydra.Kernel
-import Hydra.Inference.AltInference
-import qualified Hydra.Tier1 as Tier1
+import Hydra.Staging.AltInference
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
@@ -223,7 +222,7 @@ shouldSucceedWith f x = case my of
     Nothing -> HL.assertFailure "Unknown error" -- TODO: get error message from trace
     Just y -> y `H.shouldBe` x
   where
-    FlowState my _ trace = unFlow f sInitialContext Tier1.emptyTrace
+    FlowState my _ trace = unFlow f sInitialContext emptyTrace
 
 spec :: H.Spec
 spec = do
