@@ -21,6 +21,16 @@ bracketList style els = case els of
   [] -> cst "[]"
   _ -> brackets squareBrackets style $ commaSep style els
 
+-- | Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width
+--   of the expression.
+bracketListAdaptive :: [Expr] -> Expr
+bracketListAdaptive els = if (expressionLength inlineList) > 70
+    then bracketList halfBlockStyle els
+    else inlineList
+  where
+    inlineList = bracketList inlineStyle els
+    maxLength = L.maximum (expressionLength <$> els)
+
 brackets :: Brackets -> BlockStyle -> Expr -> Expr
 brackets br style e = ExprBrackets $ BracketExpr br e style
 
@@ -59,6 +69,33 @@ doubleNewlineSep = sep $ Op (sym "") (Padding WsBreak WsBreak) (Precedence 0) As
 
 doubleSpace :: String
 doubleSpace = "  "
+
+-- | Find the approximate length (number of characters, including spaces and newlines) of an expression
+--   without actually printing it.
+expressionLength :: Expr -> Int
+expressionLength e = case e of
+    ExprConst s -> symbolLength s
+    ExprIndent ie -> indentedExpressionLength ie
+    ExprOp oe -> opExprLength oe
+    ExprBrackets be -> bracketExprLength be
+  where
+    blockStyleLength (BlockStyle mindent nlBefore nlAfter)
+      = (Y.maybe 0 L.length mindent) + (if nlBefore then 1 else 0) + (if nlAfter then 1 else 0)
+    bracketExprLength (BracketExpr brackets e style)
+      = bracketsLength brackets + expressionLength e + blockStyleLength style
+    bracketsLength (Brackets open close) = symbolLength open + symbolLength close
+    indentedExpressionLength (IndentedExpression style e) = expressionLength e + case style of
+      IndentStyleAllLines s -> L.length s
+      IndentStyleSubsequentLines s -> L.length s
+    opExprLength (OpExpr op el er) = opLength op + expressionLength el + expressionLength er
+    opLength (Op s (Padding pl pr) _ _) = symbolLength s + wsLength pl + wsLength pr
+    symbolLength (Symbol s) = L.length s
+    wsLength ws = case ws of
+      WsNone -> 0
+      WsSpace -> 1
+      WsBreak -> 1
+      WsBreakAndIndent s -> 1 + L.length s
+      WsDoubleBreak -> 2
 
 fullBlockStyle :: BlockStyle
 fullBlockStyle = BlockStyle (Just doubleSpace) True True
