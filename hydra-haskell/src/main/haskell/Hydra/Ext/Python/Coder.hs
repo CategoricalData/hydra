@@ -142,7 +142,9 @@ encodeFunction env f = case f of
 encodeIntegerValue :: IntegerValue -> Flow s Py.Expression
 encodeIntegerValue iv = case iv of
   IntegerValueBigint i -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberInteger i
-  _ -> fail $ "unsupported integer type: " ++ show (integerValueType iv)
+--  _ -> fail $ "unsupported integer type: " ++ show (integerValueType iv)
+  -- TODO: restore the failure behavior; the fact that the int32 type is appearing here is a bug
+  IntegerValueInt32 i -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberInteger $ fromIntegral i
 
 encodeLambdaType :: PythonEnvironment -> LambdaType -> Flow Graph Py.Expression
 encodeLambdaType env lt = do
@@ -175,7 +177,8 @@ encodeLiteralType lt = do
         _ -> fail $ "unsupported floating-point type: " ++ show ft
       LiteralTypeInteger it -> case it of
         IntegerTypeBigint -> pure "int"
-        _ -> fail $ "unsupported integer type: " ++ show it
+--        _ -> fail $ "unsupported integer type: " ++ show it
+        _ -> pure "int" -- TODO: restore the failure behavior; the fact that the int32 type is appearing here is a bug
       LiteralTypeString -> pure "str"
 
 encodeModule :: Module -> Flow Graph Py.Module
