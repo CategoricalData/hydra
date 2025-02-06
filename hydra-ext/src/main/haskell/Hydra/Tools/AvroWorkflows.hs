@@ -18,7 +18,7 @@ module Hydra.Tools.AvroWorkflows (
 ) where
 
 import Hydra.Kernel
-import Hydra.Flows
+import Hydra.Tools.Monads
 import Hydra.Dsl.Annotations
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro
 import qualified Hydra.Json as Json
@@ -37,7 +37,7 @@ import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Expect as Expect
 import Hydra.Ext.Rdf.Serde
-import Hydra.Sources.Core
+import Hydra.Sources.Tier0.Core
 import Hydra.Ext.Pg.Graphson.Coder
 import Hydra.Pg.Graphson.Syntax as G
 
@@ -233,9 +233,9 @@ transformAvroJson format adapter lastMile inFile outFile = do
     let entities = case format of
           Json -> [contents]
           Jsonl -> L.filter (not . L.null) $ lines contents
-    lmEncoder <- fromFlowIo hydraCore $ lastMileEncoder lastMile (adapterTarget adapter)
-    descs <- L.concat <$> fromFlowIo hydraCore (CM.zipWithM (jsonToTarget inFile adapter lmEncoder) [1..] entities)
-    result <- fromFlowIo hydraCore $ lastMileSerializer lastMile descs
+    lmEncoder <- fromFlowIo hydraCoreGraph $ lastMileEncoder lastMile (adapterTarget adapter)
+    descs <- L.concat <$> fromFlowIo hydraCoreGraph (CM.zipWithM (jsonToTarget inFile adapter lmEncoder) [1..] entities)
+    result <- fromFlowIo hydraCoreGraph $ lastMileSerializer lastMile descs
     writeFile outFile result
     putStrLn $ outFile ++ " (" ++ descEntities entities ++ ")"
   where
@@ -245,13 +245,13 @@ transformAvroJson format adapter lastMile inFile outFile = do
         Left msg -> fail $ "Failed to read JSON payload #" ++ show index ++ " in file " ++ inFile ++ ": " ++ msg
         Right json -> withState emptyAvroEnvironment $ do
           -- TODO; the core graph is neither the data nor the schema graph
-          let dataGraph = hydraCore
-          let schemaGraph = Just hydraCore
+          let dataGraph = hydraCoreGraph
+          let schemaGraph = Just hydraCoreGraph
 
           term <- coderEncode (adapterCoder adapter) json
           env <- getState
           let graph = elementsToGraph dataGraph schemaGraph (M.elems $ avroEnvironmentElements env)
-          withState hydraCore $ lmEncoder term graph
+          withState hydraCoreGraph $ lmEncoder term graph
 
 -- | Given a payload format (one JSON object per file, or one per line),
 --   a path to an Avro *.avsc schema, a path to a source directory containing JSON files conforming to the schema,
