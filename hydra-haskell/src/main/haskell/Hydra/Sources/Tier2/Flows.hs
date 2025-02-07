@@ -32,23 +32,74 @@ flowsDefinition :: String -> TTerm a -> TElement a
 flowsDefinition = definitionInModule hydraFlowsModule
 
 hydraFlowsModule :: Module
-hydraFlowsModule = Module (Namespace "hydra/flows") elements [] [hydraCoreModule] $
+hydraFlowsModule = Module (Namespace "hydra/flows") elements [hydraConstantsModule] [hydraMantleModule, hydraComputeModule] $
     Just ("Functions for working with flows (the Hydra state monad).")
   where
     elements = [
+      el bindDef,
+      el bind2Def,
+      el bind3Def,
+      el bind4Def,
       el emptyTraceDef,
+      el failDef,
       el flowSucceedsDef,
       el fromFlowDef,
       el mutateTraceDef,
+      el pureDef,
       el pushErrorDef,
       el warnDef,
       el withFlagDef,
       el withStateDef,
       el withTraceDef]
 
+bindDef :: TElement (Flow s a -> (a -> Flow s b) -> Flow s b)
+bindDef = flowsDefinition "bind" $
+  functionN [flowT sT aT, Types.function aT (flowT sT bT), flowT sT bT] $
+  lambdas ["l", "r"] ((wrap _Flow (var "q"))
+    `with` [
+      "q">: lambdas ["s0", "t0"] ((matchOpt
+            (Flows.flowState nothing (Flows.flowStateState @@ var "fs1") (Flows.flowStateTrace @@ var "fs1"))
+            (lambda "v" $ Flows.unFlow @@ (var "r" @@ var "v") @@ (Flows.flowStateState @@ var "fs1") @@ (Flows.flowStateTrace @@ var "fs1")))
+          @@ (Flows.flowStateValue @@ var "fs1")
+        `with` [
+          "fs1">: Flows.unFlow @@ var "l" @@ var "s0" @@ var "t0"])])
+
+bind2Def :: TElement ((Flow s a) -> (Flow s b) -> (a -> b -> Flow s c) -> Flow s c)
+bind2Def = flowsDefinition "bind2" $
+  doc "Bind the results of two flows into another flow" $
+  functionN [flowT sT aT, flowT sT bT, Types.functionN [aT, bT, flowT sT cT], flowT sT cT] $
+  lambdas ["f1", "f2", "f"] $ ref bindDef @@ var "f1" @@
+    (lambda "r1" $ ref bindDef @@ var "f2" @@
+      (lambda "r2" $ var "f" @@ var "r1" @@ var "r2"))
+
+bind3Def :: TElement ((Flow s a) -> (Flow s b) -> (Flow s c) -> (a -> b -> c -> Flow s d) -> Flow s d)
+bind3Def = flowsDefinition "bind3" $
+  doc "Bind the results of three flows into another flow" $
+  functionN [flowT sT aT, flowT sT bT, flowT sT cT, Types.functionN [aT, bT, cT, flowT sT dT], flowT sT dT] $
+  lambdas ["f1", "f2", "f3", "f"] $ ref bindDef @@ var "f1" @@
+    (lambda "r1" $ ref bindDef @@ var "f2" @@
+      (lambda "r2" $ ref bindDef @@ var "f3" @@
+        (lambda "r3" $ var "f" @@ var "r1" @@ var "r2" @@ var "r3")))
+
+bind4Def :: TElement ((Flow s a) -> (Flow s b) -> (Flow s c) -> (a -> b -> c -> Flow s d) -> Flow s d)
+bind4Def = flowsDefinition "bind4" $
+  doc "Bind the results of four flows into another flow" $
+  functionN [flowT sT aT, flowT sT bT, flowT sT cT, flowT sT dT, Types.functionN [aT, bT, cT, dT, flowT sT eT], flowT sT eT] $
+  lambdas ["f1", "f2", "f3", "f4", "f"] $ ref bindDef @@ var "f1" @@
+    (lambda "r1" $ ref bindDef @@ var "f2" @@
+      (lambda "r2" $ ref bindDef @@ var "f3" @@
+        (lambda "r3" $ ref bindDef @@ var "f4" @@
+          (lambda "r4" $ var "f" @@ var "r1" @@ var "r2" @@ var "r3" @@ var "r4"))))
+
 emptyTraceDef :: TElement Trace
 emptyTraceDef = flowsDefinition "emptyTrace" $
   Flows.trace (list []) (list []) Maps.empty
+
+failDef :: TElement (String -> Flow s a)
+failDef = flowsDefinition "failInternal" $
+  function stringT (flowT sT aT) $
+  lambda "msg" $ wrap _Flow $ lambdas ["s", "t"] $
+    Flows.flowState nothing (var "s") (ref pushErrorDef @@ var "msg" @@ var "t")
 
 flowSucceedsDef :: TElement (Flow s a -> Bool)
 flowSucceedsDef = flowsDefinition "flowSucceeds" $
@@ -94,6 +145,11 @@ mutateTraceDef = flowsDefinition "mutateTrace" $
               ])]))
   where
     eitherT l r = Types.applyN [TypeVariable _Either, l, r]
+
+pureDef :: TElement (a -> Flow s a)
+pureDef = flowsDefinition "pureInternal" $
+  function aT (flowT sT aT) $
+  lambda "x" $ wrap _Flow $ lambdas ["s", "t"] $ Flows.flowState (just $ var "x") (var "s") (var "t")
 
 pushErrorDef :: TElement (String -> Trace -> Trace)
 pushErrorDef = flowsDefinition "pushError" $

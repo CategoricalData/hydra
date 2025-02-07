@@ -199,6 +199,121 @@ data SInferenceResult
 instance Show SInferenceResult where
   show (SInferenceResult scheme constraints) = "{type= " ++ showTypeScheme scheme ++ ", constraints= " ++ show constraints ++ "}"
 
+
+
+
+sInferFromApplication :: Application -> Flow SInferenceContext SInferenceResult
+sInferFromApplication (Application lterm rterm) = bind4 sNewVar sNewVar (sInferTypeInternal lterm) (sInferTypeInternal rterm) withVars
+  where
+    withVars dom cod lresult rresult = Flows.pure $ SInferenceResult (TypeScheme tvars $ TypeVariable cod) $ [
+        TypeConstraint (Types.function (TypeVariable dom) (TypeVariable cod)) ltyp ctx,
+        TypeConstraint (TypeVariable dom) rtyp ctx]
+        ++ sInferenceResultConstraints lresult ++ sInferenceResultConstraints rresult
+      where
+        ctx = Just "application"
+        ltyp = typeSchemeType $ sInferenceResultScheme lresult
+        rtyp = typeSchemeType $ sInferenceResultScheme rresult
+        tvars = typeSchemeVariables (sInferenceResultScheme lresult) ++ typeSchemeVariables (sInferenceResultScheme rresult)
+
+sInferFromFunction :: Function -> Flow SInferenceContext SInferenceResult
+sInferFromFunction f = case f of
+  FunctionLambda (Lambda var _ body) -> Flows.bind sNewVar withVar
+    where
+      withVar tvar = sWithTypeBinding var (Types.mono $ TypeVariable tvar) $ Flows.map withBodyType (sInferTypeInternal body)
+        where
+          -- TODO: prove that tvar will never appear in vars
+          withBodyType (SInferenceResult (TypeScheme vars t) constraints)
+            = SInferenceResult (TypeScheme (tvar:vars) $ Types.function (TypeVariable tvar) t) constraints
+  FunctionPrimitive name -> Flow $ \ctx t -> case M.lookup name (sInferenceContextLexicon ctx) of
+    Just scheme -> unFlow (Flows.map withoutConstraints $ sInstantiate scheme) ctx t
+    Nothing -> unFlow (Flows.fail $ "No such primitive: " ++ unName name) ctx t
+
+-- TODO: propagate rawValueVars and envVars into the final result, possibly after substitution
+-- TODO: recursive and mutually recursive let
+sInferFromLet :: Let -> Flow SInferenceContext SInferenceResult
+sInferFromLet (Let bindings env) = if L.length bindings > 2
+    then sInferTypeInternal $ TermLet (Let [L.head bindings] $ TermLet $ Let (L.tail bindings) env)
+    else forSingleBinding $ L.head bindings
+  where
+    forSingleBinding (LetBinding key value _) = Flows.bind sNewVar withVar
+      where
+        -- Create a temporary type variable for the binding
+        withVar var = sWithTypeBinding key (Types.mono $ TypeVariable var) $
+            Flows.bind (sInferTypeInternal value) withValueType
+          where
+            -- Unify and substitute over the value constraints
+            -- TODO: save the substitution and pass it along, instead of the original set of constraints
+            withValueType (SInferenceResult rawValueScheme valueConstraints) = Flows.bind (TM.fromEither $ uUnify kvConstraints) afterUnification
+              where
+                rawValueVars = typeSchemeVariables rawValueScheme
+                kvConstraints = keyConstraint:valueConstraints
+                keyConstraint = TypeConstraint (TypeVariable var) (typeSchemeType rawValueScheme) $ Just "let binding"
+                -- Now update the type binding to use the inferred type
+                afterUnification subst = sWithTypeBinding key valueScheme
+                    $ Flows.map withEnvType (sInferTypeInternal env)
+                  where
+                    valueScheme = sSubstituteTypeVariablesInScheme subst rawValueScheme
+                    withEnvType (SInferenceResult envScheme envConstraints) = SInferenceResult envScheme constraints
+                      where
+                        constraints = kvConstraints ++ envConstraints
+                        envVars = typeSchemeVariables envScheme
+
+sInferFromList :: [Term] -> Flow SInferenceContext SInferenceResult
+sInferFromList els = Flows.bind sNewVar withVar
+  where
+    withVar tvar = if L.null els
+        then Flows.pure $ yield (TypeScheme [tvar] $ Types.list $ TypeVariable tvar) []
+        else Flows.map fromResults (Flows.sequence (sInferTypeInternal <$> els))
+      where
+        fromResults results = yield (TypeScheme vars $ Types.list $ TypeVariable tvar) constraints
+          where
+            uctx = Just "list element"
+            constraints = cinner ++ couter
+            cinner = L.concat (sInferenceResultConstraints <$> results)
+            couter = fmap (\t -> TypeConstraint (TypeVariable tvar) t uctx) types
+            types = typeSchemeType . sInferenceResultScheme <$> results
+            vars = L.concat (typeSchemeVariables . sInferenceResultScheme <$> results)
+
+sInferFromLiteral :: Literal -> Flow SInferenceContext SInferenceResult
+sInferFromLiteral lit = Flows.pure $ yieldWithoutConstraints $ Types.mono $ TypeLiteral $ literalType lit
+
+sInferFromMap :: M.Map Term Term -> Flow SInferenceContext SInferenceResult
+sInferFromMap m = Flows.bind sNewVar withKeyVar
+  where
+    withKeyVar kvar = Flows.bind sNewVar withValueVar
+      where
+        withValueVar vvar = if M.null m
+           then Flows.pure $ yield (TypeScheme [kvar, vvar] $ Types.map (TypeVariable kvar) (TypeVariable vvar)) []
+           else Flows.map withResults (Flows.sequence $ fmap fromPair $ M.toList m)
+          where
+            fromPair (k, v) = Flows.bind (sInferTypeInternal k) withKeyType
+              where
+                withKeyType (SInferenceResult (TypeScheme kvars kt) kconstraints) = Flows.map withValueType (sInferTypeInternal v)
+                  where
+                    withValueType (SInferenceResult (TypeScheme vvars vt) vconstraints)
+                      = (kvars ++ vvars,
+                         [TypeConstraint (TypeVariable kvar) kt $ Just "map key",
+                          TypeConstraint (TypeVariable vvar) vt $ Just "map value"]
+                          ++ kconstraints ++ vconstraints)
+            withResults pairs = yield (TypeScheme (L.concat (fst <$> pairs)) $ Types.map (TypeVariable kvar) (TypeVariable vvar)) $
+              L.concat (snd <$> pairs)
+
+sInferFromProduct :: [Term] -> Flow SInferenceContext SInferenceResult
+sInferFromProduct els = if L.null els
+    then Flows.pure $ yield (Types.mono $ Types.product []) []
+    else Flows.map fromResults (Flows.sequence (sInferTypeInternal <$> els))
+  where
+    fromResults results = yield (TypeScheme tvars $ TypeProduct tbodies) constraints
+      where
+        tvars = L.concat $ typeSchemeVariables . sInferenceResultScheme <$> results
+        tbodies = typeSchemeType . sInferenceResultScheme <$> results
+        constraints = L.concat $ sInferenceResultConstraints <$> results
+
+sInferFromVariable :: Name -> Flow SInferenceContext SInferenceResult
+sInferFromVariable var = Flow $ \ctx t -> case M.lookup var (sInferenceContextTypingEnvironment ctx) of
+  Just scheme -> unFlow (Flows.map withoutConstraints $ sInstantiate scheme) ctx t
+  Nothing -> unFlow (Flows.fail $ "Variable not bound to type: " ++ unName var) ctx t
+
 sInferType :: Term -> Flow SInferenceContext TypeScheme
 sInferType term = Flows.bind (sInferTypeInternal term) unifyAndSubst
   where
@@ -210,122 +325,22 @@ sInferType term = Flows.bind (sInferTypeInternal term) unifyAndSubst
 
 sInferTypeInternal :: Term -> Flow SInferenceContext SInferenceResult
 sInferTypeInternal term = case term of
-
-    TermApplication (Application lterm rterm) -> Flows.bind sNewVar withVar1
-      where
-        withVar1 dom = Flows.bind sNewVar withVar2
-          where
-            withVar2 cod = Flows.bind (sInferTypeInternal lterm) withLeft
-              where
-                withLeft lresult = Flows.bind (sInferTypeInternal rterm) withRight
-                  where
-                    withRight rresult = Flows.pure $ SInferenceResult (TypeScheme tvars $ TypeVariable cod) $ [
-                        TypeConstraint (Types.function (TypeVariable dom) (TypeVariable cod)) ltyp ctx,
-                        TypeConstraint (TypeVariable dom) rtyp ctx]
-                        ++ sInferenceResultConstraints lresult ++ sInferenceResultConstraints rresult
-                      where
-                        ctx = Just "application"
-                        ltyp = typeSchemeType $ sInferenceResultScheme lresult
-                        rtyp = typeSchemeType $ sInferenceResultScheme rresult
-                        tvars = typeSchemeVariables (sInferenceResultScheme lresult) ++ typeSchemeVariables (sInferenceResultScheme rresult)
-
-    TermFunction (FunctionLambda (Lambda var _ body)) -> Flows.bind sNewVar withVar
-     where
-        withVar tvar = sWithTypeBinding var (Types.mono $ TypeVariable tvar) $ Flows.map withBodyType (sInferTypeInternal body)
-          where
-            -- TODO: prove that tvar will never appear in vars
-            withBodyType (SInferenceResult (TypeScheme vars t) constraints)
-              = SInferenceResult (TypeScheme (tvar:vars) $ Types.function (TypeVariable tvar) t) constraints
-
-    -- TODO: propagate rawValueVars and envVars into the final result, possibly after substitution
-    -- TODO: recursive and mutually recursive let
-    TermLet (Let bindings env) -> if L.length bindings > 2
-        then sInferTypeInternal $ TermLet (Let [L.head bindings] $ TermLet $ Let (L.tail bindings) env)
-        else forSingleBinding $ L.head bindings
-      where
-        forSingleBinding (LetBinding key value _) = Flows.bind sNewVar withVar
-          where
-            -- Create a temporary type variable for the binding
-            withVar var = sWithTypeBinding key (Types.mono $ TypeVariable var) $
-                Flows.bind (sInferTypeInternal value) withValueType
-              where
-                -- Unify and substitute over the value constraints
-                -- TODO: save the substitution and pass it along, instead of the original set of constraints
-                withValueType (SInferenceResult rawValueScheme valueConstraints) = Flows.bind (TM.fromEither $ uUnify kvConstraints) afterUnification
-                  where
-                    rawValueVars = typeSchemeVariables rawValueScheme
-                    kvConstraints = keyConstraint:valueConstraints
-                    keyConstraint = TypeConstraint (TypeVariable var) (typeSchemeType rawValueScheme) $ Just "let binding"
-                    -- Now update the type binding to use the inferred type
-                    afterUnification subst = sWithTypeBinding key valueScheme
-                        $ Flows.map withEnvType (sInferTypeInternal env)
-                      where
-                        valueScheme = sSubstituteTypeVariablesInScheme subst rawValueScheme
-                        withEnvType (SInferenceResult envScheme envConstraints) = SInferenceResult envScheme constraints
-                          where
-                            constraints = kvConstraints ++ envConstraints
-                            envVars = typeSchemeVariables envScheme
-
-    TermList els -> Flows.bind sNewVar withVar
-      where
-        withVar tvar = if L.null els
-            then Flows.pure $ yield (TypeScheme [tvar] $ Types.list $ TypeVariable tvar) []
-            else Flows.map fromResults (Flows.sequence (sInferTypeInternal <$> els))
-          where
-            fromResults results = yield (TypeScheme vars $ Types.list $ TypeVariable tvar) constraints
-              where
-                uctx = Just "list element"
-                constraints = cinner ++ couter
-                cinner = L.concat (sInferenceResultConstraints <$> results)
-                couter = fmap (\t -> TypeConstraint (TypeVariable tvar) t uctx) types
-                types = typeSchemeType . sInferenceResultScheme <$> results
-                vars = L.concat (typeSchemeVariables . sInferenceResultScheme <$> results)
-
-    TermLiteral lit -> Flows.pure $ yieldWithoutConstraints $ Types.mono $ TypeLiteral $ literalType lit
-
-    TermMap m -> Flows.bind sNewVar withKeyVar
-      where
-        withKeyVar kvar = Flows.bind sNewVar withValueVar
-          where
-            withValueVar vvar = if M.null m
-               then Flows.pure $ yield (TypeScheme [kvar, vvar] $ Types.map (TypeVariable kvar) (TypeVariable vvar)) []
-               else Flows.map withResults (Flows.sequence $ fmap fromPair $ M.toList m)
-              where
-                fromPair (k, v) = Flows.bind (sInferTypeInternal k) withKeyType
-                  where
-                    withKeyType (SInferenceResult (TypeScheme kvars kt) kconstraints) = Flows.map withValueType (sInferTypeInternal v)
-                      where
-                        withValueType (SInferenceResult (TypeScheme vvars vt) vconstraints)
-                          = (kvars ++ vvars,
-                             [TypeConstraint (TypeVariable kvar) kt $ Just "map key",
-                              TypeConstraint (TypeVariable vvar) vt $ Just "map value"]
-                              ++ kconstraints ++ vconstraints)
-                withResults pairs = yield (TypeScheme (L.concat (fst <$> pairs)) $ Types.map (TypeVariable kvar) (TypeVariable vvar)) $
-                  L.concat (snd <$> pairs)
-
-    TermFunction (FunctionPrimitive name) -> Flow $ \ctx t -> case M.lookup name (sInferenceContextLexicon ctx) of
-      Just scheme -> unFlow (Flows.map withoutConstraints $ sInstantiate scheme) ctx t
-      Nothing -> unFlow (Flows.fail $ "No such primitive: " ++ unName name) ctx t
-
-    TermProduct els -> if L.null els
-      then Flows.pure $ yield (Types.mono $ Types.product []) []
-      else Flows.map fromResults (Flows.sequence (sInferTypeInternal <$> els))
-      where
-        fromResults results = yield (TypeScheme tvars $ TypeProduct tbodies) constraints
-          where
-            tvars = L.concat $ typeSchemeVariables . sInferenceResultScheme <$> results
-            tbodies = typeSchemeType . sInferenceResultScheme <$> results
-            constraints = L.concat $ sInferenceResultConstraints <$> results
-
-    TermVariable var -> Flow $ \ctx t -> case M.lookup var (sInferenceContextTypingEnvironment ctx) of
-      Just scheme -> unFlow (Flows.map withoutConstraints $ sInstantiate scheme) ctx t
-      Nothing -> unFlow (Flows.fail $ "Variable not bound to type: " ++ unName var) ctx t
-
-  where
-    unsupported = Flows.fail "Not yet supported"
-    yield = SInferenceResult
-    yieldWithoutConstraints scheme = yield scheme []
-    withoutConstraints scheme = SInferenceResult scheme []
+--  TermAnnotated ...
+  TermApplication a -> sInferFromApplication a
+  TermFunction f -> sInferFromFunction f
+  TermLet l -> sInferFromLet l
+  TermList els -> sInferFromList els
+  TermLiteral l -> sInferFromLiteral l
+  TermMap m -> sInferFromMap m
+--  TermOptional ...
+  TermProduct els -> sInferFromProduct els
+--  TermRecord ...
+--  TermSet ...
+--  TermSum ...
+--  TermTyped ...
+--  TermUnion ...
+  TermVariable name -> sInferFromVariable name
+--  TermWrap ...
 
 sInstantiate :: TypeScheme -> Flow SInferenceContext TypeScheme
 sInstantiate scheme = Flows.map doSubst (sNewVars $ L.length oldVars)
@@ -380,6 +395,10 @@ sWithTypeBinding name scheme f = Flow helper
         FlowState e ctx2 t1 = unFlow f ctx1 t0
         ctx3 = ctx2 {sInferenceContextTypingEnvironment = env}
 
+unsupported = Flows.fail "Not yet supported"
+withoutConstraints scheme = SInferenceResult scheme []
+yield = SInferenceResult
+yieldWithoutConstraints scheme = yield scheme []
 
 --------------------------------------------------------------------------------
 -- Testing

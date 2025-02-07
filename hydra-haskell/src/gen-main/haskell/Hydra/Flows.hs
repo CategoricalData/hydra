@@ -17,11 +17,41 @@ import Data.List as L
 import Data.Map as M
 import Data.Set as S
 
+bind :: (Compute.Flow s a -> (a -> Compute.Flow s b) -> Compute.Flow s b)
+bind l r =  
+  let q = (\s0 -> \t0 ->  
+          let fs1 = (Compute.unFlow l s0 t0)
+          in ((\x -> case x of
+            Nothing -> Compute.FlowState {
+              Compute.flowStateValue = Nothing,
+              Compute.flowStateState = (Compute.flowStateState fs1),
+              Compute.flowStateTrace = (Compute.flowStateTrace fs1)}
+            Just v1 -> (Compute.unFlow (r v1) (Compute.flowStateState fs1) (Compute.flowStateTrace fs1))) (Compute.flowStateValue fs1)))
+  in (Compute.Flow q)
+
+-- | Bind the results of two flows into another flow
+bind2 :: (Compute.Flow s a -> Compute.Flow s b -> (a -> b -> Compute.Flow s c) -> Compute.Flow s c)
+bind2 f1 f2 f = (bind f1 (\r1 -> bind f2 (\r2 -> f r1 r2)))
+
+-- | Bind the results of three flows into another flow
+bind3 :: (Compute.Flow s a -> Compute.Flow s b -> Compute.Flow s c -> (a -> b -> c -> Compute.Flow s d) -> Compute.Flow s d)
+bind3 f1 f2 f3 f = (bind f1 (\r1 -> bind f2 (\r2 -> bind f3 (\r3 -> f r1 r2 r3))))
+
+-- | Bind the results of four flows into another flow
+bind4 :: (Compute.Flow s a -> Compute.Flow s b -> Compute.Flow s c -> Compute.Flow s d -> (a -> b -> c -> d -> Compute.Flow s e) -> Compute.Flow s e)
+bind4 f1 f2 f3 f4 f = (bind f1 (\r1 -> bind f2 (\r2 -> bind f3 (\r3 -> bind f4 (\r4 -> f r1 r2 r3 r4)))))
+
 emptyTrace :: Compute.Trace
 emptyTrace = Compute.Trace {
   Compute.traceStack = [],
   Compute.traceMessages = [],
   Compute.traceOther = Maps.empty}
+
+failInternal :: (String -> Compute.Flow s a)
+failInternal msg = (Compute.Flow (\s -> \t -> Compute.FlowState {
+  Compute.flowStateValue = Nothing,
+  Compute.flowStateState = s,
+  Compute.flowStateTrace = (pushError msg t)}))
 
 -- | Check whether a flow succeeds
 flowSucceeds :: (s -> Compute.Flow s a -> Bool)
@@ -48,6 +78,12 @@ mutateTrace mutate restore f = (Compute.Flow (\s0 -> \t0 ->
   in ((\x -> case x of
     Mantle.EitherLeft v1 -> (forLeft v1)
     Mantle.EitherRight v1 -> (forRight v1)) (mutate t0))))
+
+pureInternal :: (a -> Compute.Flow s a)
+pureInternal x = (Compute.Flow (\s -> \t -> Compute.FlowState {
+  Compute.flowStateValue = (Just x),
+  Compute.flowStateState = s,
+  Compute.flowStateTrace = t}))
 
 -- | Push an error message
 pushError :: (String -> Compute.Trace -> Compute.Trace)
