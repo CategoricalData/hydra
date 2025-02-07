@@ -134,6 +134,9 @@ just (TTerm term) = TTerm $ Terms.just term
 lambda :: String -> TTerm x -> TTerm (a -> b)
 lambda v (TTerm body) = TTerm $ Terms.lambda v body
 
+lambdas :: [String] -> TTerm x -> TTerm (a -> b)
+lambdas params (TTerm body) = TTerm $ Terms.lambdas params body
+
 --letTerm :: Var a -> TTerm a -> TTerm b -> TTerm b
 --letTerm (Var k) (TTerm v) (TTerm env) = TTerm $ Terms.letTerm (Name k) v env
 

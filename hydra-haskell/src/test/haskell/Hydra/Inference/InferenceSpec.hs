@@ -11,6 +11,8 @@ import qualified Hydra.Dsl.Expect as Expect
 import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Types as Types
+import qualified Hydra.Dsl.Lib.Logic as Logic
+import qualified Hydra.Dsl.Lib.Math as Math
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
@@ -113,10 +115,22 @@ checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
         (float64 42.0)
         Types.float64
 
-    H.it "Check let terms" $ do
-      expectPolytype
-        (letTerm (Name "x") (float32 42.0) (lambda "y" (lambda "z" (var "x"))))
-        ["t0", "t1"] (Types.function (Types.var "t0") (Types.function (Types.var "t1") Types.float32))
+    H.describe "Check let terms" $ do
+      H.it "test #1" $
+        expectPolytype
+          (letTerm (Name "x") (float32 42.0) (lambda "y" (lambda "z" (var "x"))))
+          ["t0", "t1"] (Types.function (Types.var "t0") (Types.function (Types.var "t1") Types.float32))
+      H.it "test #2" $
+        -- Example from https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf
+        expectMonotype
+          ((lambdas ["f", "x", "y"] $ unTTerm Logic.ifElse
+              @@ (var "f" @@ (var "square" @@ var "x") @@ var "y")
+              @@ (var "f" @@ var "x" @@ (var "f" @@ var "x" @@ var "y"))
+              @@ (var "f" @@ var "x" @@ var "y"))
+            `with` [
+              "square">: lambda "z" $ unTTerm Math.mul @@ var "z" @@ var "z"])
+          (Types.functionN [
+            Types.functionN [Types.int32, Types.boolean, Types.boolean], Types.int32, Types.boolean, Types.boolean])
 
     H.it "Check optionals" $ do
       expectMonotype
