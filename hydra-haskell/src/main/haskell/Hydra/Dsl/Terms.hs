@@ -115,6 +115,11 @@ just = optional . Just
 lambda :: String -> Term -> Term
 lambda param body = TermFunction $ FunctionLambda $ Lambda (Name param) Nothing body
 
+lambdas :: [String] -> Term -> Term
+lambdas params body = case params of
+  [] -> body
+  (h:r) -> lambda h $ lambdas r body
+
 letMulti :: [(String, Term)] -> Term -> Term
 letMulti bindings body = TermLet $ Let (toBinding <$> bindings) body
   where

@@ -1,10 +1,14 @@
 module Hydra.Staging.AltInference where
 
 import Hydra.Variants
+import Hydra.Coders
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Mantle
 import Hydra.Flows
+import Hydra.Strip
+import Hydra.Rewriting
+import Hydra.Staging.Rewriting
 import Hydra.Lib.Flows as Flows
 import qualified Hydra.Tools.Monads as TM
 import qualified Hydra.Dsl.Types as Types
@@ -33,24 +37,22 @@ showConstraint (TypeConstraint ltyp rtyp _) = showType ltyp ++ "≡" ++ showType
 --------------------------------------------------------------------------------
 -- Unification
 
-type UnificationContext = Maybe String
+-- TODO: eliminate lambda types before unification
+-- TODO: reduce application types before unification
 
 data SUnificationError
-  = SUnificationErrorCannotUnify Type Type UnificationContext
-  | SUnificationErrorOccursCheckFailed Name Type UnificationContext
+  = SUnificationErrorCannotUnify Type Type (Maybe String)
+  | SUnificationErrorOccursCheckFailed Name Type (Maybe String)
   deriving (Eq, Ord, Show)
 
+-- | Determine whether a type variable appears within a type expression.
+--   No distinction is made between free and bound type variables.
 sOccursIn :: Name -> Type -> Bool
-sOccursIn var typ = case typ of
-  TypeFunction (FunctionType domTyp codTyp) -> sOccursIn var domTyp || sOccursIn var codTyp
-  TypeList etyp -> sOccursIn var etyp
-  TypeLiteral _ -> False
-  TypeMap (MapType keyTyp valTyp) -> sOccursIn var keyTyp || sOccursIn var valTyp
-  TypeProduct types -> any (sOccursIn var) types
-  TypeVariable name -> var == name
-
--- sComposeSubst :: SSubst -> SSubst -> SSubst
--- sComposeSubst s1 s2 = ...
+sOccursIn var = foldOverType TraversalOrderPre tryType False
+  where
+    tryType b typ = case typ of
+      TypeVariable v -> b || v == var
+      _ -> b
 
 {-
 Robinson's algorithm, following https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf
@@ -61,76 +63,93 @@ Specifically this is an implementation of the following rules:
  * Unify({(f(s1, ..., sn), f(t1, ..., tn))} ∪ E) = Unify({(s1, t1), ..., (sn, tn)} ∪ E)
 -}
 uUnify :: [TypeConstraint] -> Either SUnificationError SSubst
--- uUnify = L.foldl helper sEmptySubst
---   where
---     helper s (TypeConstraint t1 t2 ctx) = case t1 of
---       TypeVariable v1 -> case t2 of
---         TypeVariable v2 -> if v1 == v2
---           then Right s
---           else uBind v1 t2
---         _ -> unifyVar s v1 t2
---       _ -> case t2 of
---         TypeVariable v2 -> unifyVar v2 t1
---         _ -> unifyOther s t1 t2
---     unifyVar s v t = if sOccursIn v t -- TODO: expensive occurs check
---       then Left $ SUnificationErrorOccursCheckFailed v t ctx
---       else Right $ M.singleton v t
---     unifyOther s t1 t2 = ...
-uUnify constraints = case constraints of
-    [] -> Right sEmptySubst
-    ((TypeConstraint t1 t2 ctx):rest) -> case t1 of
-        TypeVariable v1 -> case t2 of
-          TypeVariable v2 -> if v1 == v2
-            then uUnify rest
-            else uBind v1 t2
-          _ -> uBind v1 t2
-        _ -> case t2 of
-          TypeVariable v2 -> uBind v2 t1
-          _ -> uUnifyOther t1 t2
+uUnify [] = Right sEmptySubst
+uUnify ((TypeConstraint left right comment):rest) = case sleft of
+    TypeVariable name -> case sright of
+        TypeVariable name2 -> if name == name2
+          then uUnify rest
+          else bind name sright
+        _ -> tryBinding name sright
+    _ -> case sright of
+      TypeVariable name -> tryBinding name sleft
+      _ -> do
+        constraints2 <- uJoin sleft sright comment
+        uUnify $ constraints2 ++ rest
+  where
+    sleft = stripType left
+    sright = stripType right
+    -- TODO: this occurrence check is expensive; consider delaying it until the time of substitution
+    tryBinding v t = if sOccursIn v t
+      then Left $ SUnificationErrorOccursCheckFailed v t comment
+      else bind v t
+    bind v t = sComposeSubst subst <$> uUnify (uSubstInConstraints subst rest)
       where
-        -- TODO: this occurs check is expensive; consider delaying it until the time of substitution
-        uBind v t = if sOccursIn v t
-            then Left $ SUnificationErrorOccursCheckFailed v t ctx
-            else case uUnify (L.map (uSubstInConstraint v t) rest) of
-              Left err -> Left err
-              Right subst -> Right $ SSubst $ M.union (M.singleton v $ sSubstituteTypeVariables subst t) $ sUnSubst subst
-        uUnifyOther t1 t2 = case t1 of
-            TypeFunction (FunctionType dom1 cod1) -> case t2 of
-              TypeFunction (FunctionType dom2 cod2) -> uUnify $ [
-                (TypeConstraint dom1 dom2 ctx), (TypeConstraint cod1 cod2 ctx)] ++ rest
-              _ -> cannotUnify
-            TypeList l1 -> case t2 of
-              TypeList l2 -> uUnify $ [(TypeConstraint l1 l2 ctx)] ++ rest
-              _ -> cannotUnify
-            TypeLiteral lit1 -> case t2 of
-              TypeLiteral lit2 -> if lit1 == lit2
-                then uUnify rest
-                else cannotUnify
-              _ -> cannotUnify
-            TypeMap (MapType key1 val1) -> case t2 of
-              TypeMap (MapType key2 val2) -> uUnify $ [
-                (TypeConstraint key1 key2 ctx), (TypeConstraint val1 val2 ctx)] ++ rest
-              _ -> cannotUnify
-            TypeProduct types1 -> case t2 of
-              TypeProduct types2 -> if L.length types1 /= L.length types2
-                then cannotUnify
-                else uUnify $ L.zipWith (\t1 t2 -> TypeConstraint t1 t2 ctx) types1 types2 ++ rest
-              _ -> cannotUnify
-          where
-            cannotUnify = Left $ SUnificationErrorCannotUnify t1 t2 ctx
+        subst = sSingletonSubst v t
 
--- TODO: substituting one variable at a time is inefficient
-uSubst :: Name -> Type -> Type -> Type
-uSubst v t typ = case typ of
-  TypeFunction (FunctionType dom cod) -> TypeFunction $ FunctionType (uSubst v t dom) (uSubst v t cod)
-  TypeList etyp -> TypeList $ uSubst v t etyp
-  TypeLiteral _ -> typ
-  TypeMap (MapType key val) -> TypeMap $ MapType (uSubst v t key) (uSubst v t val)
-  TypeProduct types -> TypeProduct $ fmap (uSubst v t) types
-  TypeVariable name -> if name == v then t else typ
+uJoin :: Type -> Type -> Maybe String -> Either SUnificationError [TypeConstraint]
+uJoin left right comment = case sleft of
+    TypeFunction (FunctionType domleft codleft) -> case sright of
+      TypeFunction (FunctionType domright codright) -> Right [
+        joinOne domleft domright,
+        joinOne codleft codright]
+    TypeList eleft -> case sright of
+      TypeList eright -> Right [joinOne eleft eright]
+      _ -> cannotUnify
+    TypeLiteral ltleft -> assertEqual
+    TypeMap (MapType kleft vleft) -> case sright of
+      TypeMap (MapType kright vright) -> Right [
+        joinOne kleft kright,
+        joinOne vleft vright]
+      _ -> cannotUnify
+    TypeOptional eleft -> case sright of
+      TypeOptional eright -> Right [joinOne eleft eright]
+      _ -> cannotUnify
+    TypeProduct lefts -> case sright of
+      TypeProduct rights -> joinList lefts rights
+      _ -> cannotUnify
+    TypeRecord rtleft -> case sright of
+      TypeRecord rtright -> joinRowTypes rtleft rtright
+      _ -> cannotUnify
+    TypeSet eleft -> case sright of
+      TypeSet eright -> Right [joinOne eleft eright]
+      _ -> cannotUnify
+    TypeSum lefts -> case sright of
+      TypeSum rights -> joinList lefts rights
+      _ -> cannotUnify
+    TypeUnion rtleft -> case sright of
+      TypeUnion rtright -> joinRowTypes rtleft rtright
+      _ -> cannotUnify
+    TypeWrap (WrappedType nameLeft eleft) -> case sright of
+      TypeWrap (WrappedType nameRight eright) -> if nameLeft /= nameRight
+        then cannotUnify
+        else Right [joinOne eleft eright]
+      _ -> cannotUnify
+    -- TypeAnnotated, TypeApplication, TypeLambda, TypeVariable should not appear here
+    _ -> cannotUnify
+  where
+    sleft = stripType left
+    sright = stripType right
+    joinOne l r = TypeConstraint l r Nothing
+    cannotUnify = Left $ SUnificationErrorCannotUnify sleft sright comment
+    assertEqual = if sleft == sright
+      then Right []
+      else cannotUnify
+    joinList lefts rights = if L.length lefts == L.length rights
+      then Right $ L.zipWith joinOne lefts rights
+      else cannotUnify
+    fieldNames = fmap fieldTypeName
+    fieldTypes = fmap fieldTypeType
+    joinRowTypes (RowType tnameLeft fieldsLeft) (RowType tnameRight fieldsRight) = if tnameLeft /= tnameRight
+      then cannotUnify
+      else if (fieldNames fieldsLeft) /= (fieldNames fieldsRight)
+      then cannotUnify
+      else joinList (fieldTypes fieldsLeft) (fieldTypes fieldsRight)
 
-uSubstInConstraint :: Name -> Type -> TypeConstraint -> TypeConstraint
-uSubstInConstraint v t (TypeConstraint t1 t2 ctx) = TypeConstraint (uSubst v t t1) (uSubst v t t2) ctx
+uSubstInConstraint :: SSubst -> TypeConstraint -> TypeConstraint
+uSubstInConstraint subst (TypeConstraint t1 t2 ctx) = TypeConstraint (sSubstituteTypeVariables subst t1) (sSubstituteTypeVariables subst t2) ctx
+
+uSubstInConstraints :: SSubst -> [TypeConstraint] -> [TypeConstraint]
+uSubstInConstraints subst = fmap (uSubstInConstraint subst)
 
 --------------------------------------------------------------------------------
 -- Substitution
@@ -142,23 +161,25 @@ instance Show SSubst where
 
 sEmptySubst = SSubst M.empty
 
+sSingletonSubst :: Name -> Type -> SSubst
+sSingletonSubst v t = SSubst $ M.singleton v t
+
 sSubstituteTypeVariables :: SSubst -> Type -> Type
-sSubstituteTypeVariables subst typ = case typ of
-  TypeFunction (FunctionType dom cod) -> TypeFunction $
-    FunctionType (sSubstituteTypeVariables subst dom) (sSubstituteTypeVariables subst cod)
-  TypeList etyp -> TypeList $ sSubstituteTypeVariables subst etyp
-  TypeLiteral _ -> typ
-  TypeMap (MapType key val) -> TypeMap $
-    MapType (sSubstituteTypeVariables subst key) (sSubstituteTypeVariables subst val)
-  TypeProduct types -> TypeProduct $ fmap (sSubstituteTypeVariables subst) types
-  TypeVariable name -> case M.lookup name (sUnSubst subst) of
-    Just styp -> styp
-    Nothing -> typ
+sSubstituteTypeVariables subst = rewriteType rewrite
+  where
+    rewrite recurse typ = case recurse typ of
+      TypeVariable name -> case M.lookup name (sUnSubst subst) of
+        Just styp -> styp
+        Nothing -> typ
+      t -> t
 
 -- TODO: remove unused bound type variables
 sSubstituteTypeVariablesInScheme :: SSubst -> TypeScheme -> TypeScheme
 sSubstituteTypeVariablesInScheme subst (TypeScheme vars typ) = TypeScheme vars $ sSubstituteTypeVariables subst typ
 
+sComposeSubst :: SSubst -> SSubst -> SSubst
+sComposeSubst (SSubst firstMap) second@(SSubst secondMap) = SSubst $
+  M.union (sSubstituteTypeVariables second <$> firstMap) secondMap
 
 --------------------------------------------------------------------------------
 -- Inference
@@ -362,61 +383,6 @@ sWithTypeBinding name scheme f = Flow helper
 
 --------------------------------------------------------------------------------
 -- Testing
-
-_app l r = TermApplication $ Application l r
-_int = TermLiteral . LiteralInteger . IntegerValueInt32
-_lambda v b = TermFunction $ FunctionLambda $ Lambda (Name v) Nothing b
-_list = TermList
-_map = TermMap
-_pair l r = TermProduct [l, r]
-_str = TermLiteral . LiteralString
-_var = TermVariable . Name
-
-(@@) :: Term -> Term -> Term
-f @@ x = TermApplication $ Application f x
-
-infixr 0 >:
-(>:) :: String -> Term -> (Name, Term)
-n >: t = (Name n, t)
-
-int32 = TermLiteral . LiteralInteger . IntegerValueInt32
-lambda v b = TermFunction $ FunctionLambda $ Lambda (Name v) Nothing b
-list = TermList
-map = TermMap
-pair l r = TermProduct [l, r]
-string = TermLiteral . LiteralString
-var = TermVariable . Name
-with env bindings = L.foldl (\e (k, v) -> TermLet $ Let [LetBinding k v Nothing] e) env bindings
-
-
-
-
-infixr 0 ===
-(===) :: Type -> Type -> TypeConstraint
-t1 === t2 = TypeConstraint t1 t2 $ Just "some context"
-
-
-_add = TermFunction $ FunctionPrimitive $ Name "add"
-primPred = TermFunction $ FunctionPrimitive $ Name "primPred"
-primSucc = TermFunction $ FunctionPrimitive $ Name "primSucc"
-
-_unify t1 t2 = uUnify [TypeConstraint t1 t2 $ Just "ctx"]
-
-sTestLexicon = M.fromList [
-  (Name "add", Types.mono $ Types.function Types.int32 Types.int32),
-  (Name "primPred", Types.mono $ Types.function Types.int32 Types.int32),
-  (Name "primSucc", Types.mono $ Types.function Types.int32 Types.int32)]
-
-sInitialContext = SInferenceContext sTestLexicon 0 M.empty
-
-_infer term = flowStateValue $ unFlow (sInferType term) sInitialContext emptyTrace
-
-_inferRaw term = flowStateValue $ unFlow (sInferTypeInternal term) sInitialContext emptyTrace
-
-_instantiate scheme = flowStateValue $ unFlow (sInstantiate scheme) sInitialContext emptyTrace
-
-_con t1 t2 = TypeConstraint t1 t2 $ Just "ctx"
-
 
 
 {-

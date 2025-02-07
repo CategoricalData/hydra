@@ -10,7 +10,20 @@ import qualified Data.Map as M
 import qualified Test.Hspec as H
 import qualified Test.HUnit.Lang as HL
 import qualified Hydra.Dsl.Types as Types
+import Hydra.Dsl.Terms as Terms
 
+
+primPred = TermFunction $ FunctionPrimitive $ Name "primPred"
+primSucc = TermFunction $ FunctionPrimitive $ Name "primSucc"
+
+_unify t1 t2 = uUnify [TypeConstraint t1 t2 $ Just "ctx"]
+
+sTestLexicon = M.fromList [
+  (Name "add", Types.mono $ Types.function Types.int32 Types.int32),
+  (Name "primPred", Types.mono $ Types.function Types.int32 Types.int32),
+  (Name "primSucc", Types.mono $ Types.function Types.int32 Types.int32)]
+
+sInitialContext = SInferenceContext sTestLexicon 0 M.empty
 
 -- @wisnesky's original Algorithm W test cases, modified so as to normalize type variables
 -- Polymorphic recursion is excluded; see checkPolymorphicRecursion
@@ -168,7 +181,7 @@ checkPolymorphicRecursion = H.describe "Check selected polymorphic recursion cas
   testCase "7"
     (var "f" `with` [
       "f">: lambda "x" $ lambda "y" (var "f" @@ int32 0 @@ var "x")])
-    (Types.poly ["t0"] $ Types.function Types.int32 (Types.function Types.int32 (Types.var "t0")))
+    (Types.poly ["t0"] $ Types.functionN [Types.int32, Types.int32, Types.var "t0"])
 
   --Untyped input:
   --	letrecs f = (\x. (\y. (g 0 x)))
@@ -219,7 +232,7 @@ testCase name term typ = H.it ("test #" ++ name) $ expectType term typ
 
 shouldSucceedWith :: (Eq a, Show a) => Flow SInferenceContext a -> a -> H.Expectation
 shouldSucceedWith f x = case my of
-    Nothing -> HL.assertFailure "Unknown error" -- TODO: get error message from trace
+    Nothing -> HL.assertFailure $ "Error: " ++ traceSummary trace
     Just y -> y `H.shouldBe` x
   where
     FlowState my _ trace = unFlow f sInitialContext emptyTrace
