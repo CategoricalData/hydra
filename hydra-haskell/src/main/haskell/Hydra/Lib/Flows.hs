@@ -1,4 +1,4 @@
--- | Haskell implementations of hydra/lib/flows primitives
+-- | Haskell implementations of hydra/lib/flows primitives. These are simply wrappers around hydra/flows functions.
 
 module Hydra.Lib.Flows where
 
@@ -7,26 +7,17 @@ import qualified Hydra.Flows as Flows
 
 import qualified Control.Monad as CM
 
-
 -- Haskell-specific helpers
 
 instance Functor (Flow s) where
   fmap = CM.liftM
 instance Applicative (Flow s) where
-  pure = return
+  pure = Flows.pureInternal
   (<*>) = CM.ap
 instance Monad (Flow s) where
-  return x = Flow $ \s t -> FlowState (Just x) s t
-  p >>= k = Flow q'
-    where
-      q' s0 t0 = FlowState y s2 t2
-        where
-          FlowState x s1 t1 = unFlow p s0 t0
-          FlowState y s2 t2 = case x of
-            Just x' -> unFlow (k x') s1 t1
-            Nothing -> FlowState Nothing s1 t1
+  (>>=) = Flows.bind
 instance MonadFail (Flow s) where
-  fail msg = Flow $ \s t -> FlowState Nothing s (Flows.pushError msg t)
+  fail = Flows.failInternal
 
 -- Primitive functions
 
@@ -34,10 +25,10 @@ apply :: Flow s (x -> y) -> Flow s x -> Flow s y
 apply = (<*>)
 
 bind :: Flow s x -> (x -> Flow s y) -> Flow s y
-bind = (>>=)
+bind = Flows.bind
 
 fail :: String -> Flow s x
-fail = CM.fail
+fail = Flows.failInternal
 
 map :: (x -> y) -> Flow s x -> Flow s y
 map = fmap
@@ -46,7 +37,7 @@ mapList :: (x -> Flow s y) -> [x] -> Flow s [y]
 mapList = CM.mapM
 
 pure :: x -> Flow s x
-pure = return
+pure = Flows.pureInternal
 
 sequence :: [Flow s x] -> Flow s [x]
 sequence = CM.sequence
