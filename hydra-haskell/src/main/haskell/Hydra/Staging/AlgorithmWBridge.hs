@@ -30,77 +30,6 @@ data HydraContext = HydraContext (M.Map Core.Name Graph.Primitive)
 
 ----------------------------------------
 
--- | Find all of the bound variables in the type annotations within a System F term.
---   This function considers the types in "typed terms" (term:type), domain types on lambdas (\v:type.term),
---   and also type abstractions (/\v.term) to provide bound type variables.
-boundTypeVariablesInSystemFTerm :: Core.Term -> [Core.Name]
-boundTypeVariablesInSystemFTerm = L.nub . foldOverTerm TraversalOrderPost addTypeVars []
-  where
-    addTypeVars vars term = typeVarsIn term ++ vars
-    typeVarsIn term = case term of
-      Core.TermFunction (Core.FunctionLambda (Core.Lambda _ (Just typ) _)) -> boundVariablesInTypeOrdered typ
-      Core.TermTypeAbstraction (Core.TypeAbstraction v _) -> [v]
-      Core.TermTyped (Core.TypedTerm term typ) -> boundVariablesInTypeOrdered typ
-      _ -> []
-
-boundTypeVariablesInTermOrdered :: Core.Term -> [Core.Name]
-boundTypeVariablesInTermOrdered = L.nub . foldOverTerm TraversalOrderPre fld []
-  where
-    fld vars term = case term of
-      Core.TermTyped (Core.TypedTerm _ typ) -> variablesInTypeOrdered False typ ++ vars
-      _ -> vars
-
--- | Finds all of the universal type variables in a type expression, in the order in which they appear.
--- Note: this function assumes that there are no shadowed type variables, as in (forall a. forall a. a)
--- TODO: redundant with variablesInTypeOrdered
-boundVariablesInTypeOrdered :: Core.Type -> [Core.Name]
-boundVariablesInTypeOrdered typ = case typ of
-  Core.TypeLambda (Core.LambdaType var body) -> var:(boundVariablesInTypeOrdered body)
-  t -> L.concat (boundVariablesInTypeOrdered <$> subtypes t)
-
--- | Replace arbitrary bound type variables like v, a, v_12 with the systematic type variables t0, t1, t2, ...
---   following a canonical ordering in the term.
---   This function assumes that the bound variables do not also appear free in the type expressions of the term,
---   which in Hydra is made less likely by using the unusual naming convention tv_0, tv_1, etc. for temporary variables.
-normalizeBoundTypeVariablesInSystemFTerm :: Core.Term -> Core.Term
-normalizeBoundTypeVariablesInSystemFTerm term = replaceTypeVariablesInSystemFTerm subst term
-  where
-    actualVars = boundTypeVariablesInSystemFTerm term
-    subst = M.fromList $ L.zip actualVars normalVariables
-
-replaceTypeVariables :: M.Map Core.Name Core.Name -> Core.Type -> Core.Type
-replaceTypeVariables subst = rewriteType $ \recurse t -> case recurse t of
-    Core.TypeVariable v -> Core.TypeVariable $ replace v
-    Core.TypeLambda (Core.LambdaType v body) -> Core.TypeLambda $ Core.LambdaType (replace v) body
-    t1 -> t1
-  where
-    replace v = M.findWithDefault v v subst
-
--- Note: this will replace all occurrences, regardless of boundness or shadowing
-replaceTypeVariablesInSystemFTerm :: M.Map Core.Name Core.Name -> Core.Term -> Core.Term
-replaceTypeVariablesInSystemFTerm subst = rewriteTerm $ \recurse term ->
-  case recurse term of
-    Core.TermFunction (Core.FunctionLambda (Core.Lambda v (Just mt) body)) ->
-        Core.TermFunction $ Core.FunctionLambda $ Core.Lambda v (Just mt2) body
-      where
-        mt2 = replaceTypeVariables subst mt
-    Core.TermTypeAbstraction (Core.TypeAbstraction v body) -> Core.TermTypeAbstraction $ Core.TypeAbstraction v2 body
-      where
-        v2 = M.findWithDefault v v subst
-    Core.TermTyped (Core.TypedTerm term typ) -> Core.TermTyped $ Core.TypedTerm term (replaceTypeVariables subst typ)
-    t -> t
-
--- | Find the variables (both bound and free) in a type expression, following a preorder traversal of the expression.
-variablesInTypeOrdered :: Bool -> Core.Type -> [Core.Name]
-variablesInTypeOrdered onlyBound = L.nub . vars -- Note: we rely on the fact that 'nub' keeps the first occurrence
-  where
-    vars t = case t of
-      Core.TypeLambda (Core.LambdaType v body) -> v:(vars body)
-      Core.TypeVariable v -> if onlyBound then [] else [v]
-      _ -> L.concat (vars <$> subtypes t)
-
-----------------------------------------
-
 -- Note: no support for @wisnesky's Prim constructors other than PrimStr, PrimNat, Cons, and Nil
 hydraTermToStlc :: HydraContext -> Core.Term -> Either String Expr
 hydraTermToStlc context term = case term of
@@ -144,7 +73,6 @@ hydraTypeSchemeToStlc (Core.TypeScheme vars body) = do
       Core.TypeProduct types -> TyTuple <$> (CM.mapM toStlc types)
 --      TypeRecord RowType |
 --      TypeSet Type |
---      TypeStream Type |
       Core.TypeSum types -> if L.length types == 0
         then pure TyVoid
         else if L.length types == 1
@@ -158,110 +86,100 @@ hydraTypeSchemeToStlc (Core.TypeScheme vars body) = do
 --      TypeWrap (Nominal Type)
       _ -> Left $ "unsupported type: " ++ show typ
 
-
--- hydraTypeToTypeScheme :: Core.Type -> Either String TypSch
--- hydraTypeToTypeScheme typ = do
---     let (boundVars, baseType) = splitBoundVars [] typ
---     ty <- toStlc baseType
---     return $ Forall (Core.unName <$> boundVars) ty
---   where
---     splitBoundVars vars typ = case stripType typ of
---       Core.TypeLambda (Core.LambdaType v body) -> (v:vars', typ')
---         where
---           (vars', typ') = splitBoundVars vars body
---       _ -> (vars, typ)
-
-systemFExprToHydra :: FExpr -> Either String Core.Term
-systemFExprToHydra expr = case expr of
+-- | Convert a System F term expression to a Hydra term
+toTerm :: FExpr -> Core.Term
+toTerm expr = case expr of
   FConst prim -> case prim of
-    Lit lit -> pure $ Core.TermLiteral lit
-    TypedPrim (TypedPrimitive name _) -> pure $ Core.TermFunction $ Core.FunctionPrimitive name
-    Nil -> pure $ Core.TermList []
-    _ -> Left $ "Unsupported primitive: " ++ show prim
-    -- Note: other prims are unsupported
-  FVar v -> pure $ Core.TermVariable $ Core.Name v
+    Lit lit -> Core.TermLiteral lit
+    TypedPrim (TypedPrimitive name _) -> Core.TermFunction $ Core.FunctionPrimitive name
+    Nil -> Core.TermList []
+    -- Note: other prims are unsupported; they can be added here as needed
+  FVar v -> Core.TermVariable $ Core.Name v
+  FTuple els -> Core.TermProduct $ (fmap toTerm els)
+  -- FProj i e -> ... TODO
+  FInj i types e -> Core.TermSum $ Core.Sum i (L.length types) $ toTerm e
+  -- FCase... -> ... TODO
   FApp e1 e2 -> case e1 of
-    FApp (FTyApp (FConst Cons) _) hd -> do
-        els <- CM.mapM systemFExprToHydra (hd:(gather e2))
-        return $ Core.TermList els -- TODO: include inferred type
+    FApp (FTyApp (FConst Cons) _) hd -> Core.TermList $
+        fmap toTerm (hd:(gather e2)) -- TODO: include inferred type
       where
         gather e = case e of
           FTyApp (FConst Nil) _ -> []
           FApp (FApp (FTyApp (FConst Cons) _) hd) tl -> hd:(gather tl)
-    FTyApp (FConst Pair) _ -> do
---        els <- CM.mapM systemFExprToHydra (gather expr)
-        els <- pure []
-        return $ Core.TermProduct els -- TODO: include inferred type
+    FTyApp (FConst Pair) _ -> Core.TermProduct els -- TODO: include inferred type
       where
+--        els = fmap toTerm (gather expr)
+        els = []
         gather e = case e of
           FApp (FApp (FTyApp (FConst Pair) _) el) arg -> el:(gather arg)
           _ -> [e]
-    _ -> Core.TermApplication <$> (Core.Application <$> systemFExprToHydra e1 <*> systemFExprToHydra e2)
-  FAbs v dom e -> do
-    term <- systemFExprToHydra e
-    hdom <- Core.typeSchemeType <$> systemFTypeToHydra dom
-    return $ Core.TermFunction $ Core.FunctionLambda (Core.Lambda (Core.Name v) (Just hdom) term)
-  FTyAbs params body -> do
-    hbody <- systemFExprToHydra body
-    return $ L.foldl (\t v -> Core.TermTypeAbstraction $ Core.TypeAbstraction (Core.Name v) t) hbody $ L.reverse params
-  FTyApp fun args -> do
-    hfun <- systemFExprToHydra fun
-    hargs <- CM.mapM (\t -> Core.typeSchemeType <$> systemFTypeToHydra t) args
-    return $ L.foldl (\t a -> Core.TermTypeApplication $ Core.TypedTerm t a) hfun $ L.reverse hargs
-  FLetrec bindings env -> Core.TermLet <$>
-      (Core.Let <$> CM.mapM bindingToHydra bindings <*> systemFExprToHydra env)
+    _ -> Core.TermApplication $ Core.Application (toTerm e1) (toTerm e2)
+  FAbs v dom e -> Core.TermFunction $ Core.FunctionLambda (Core.Lambda (Core.Name v) (Just hdom) (toTerm e))
     where
-      bindingToHydra (v, ty, term) = do
-        hterm <- systemFExprToHydra term
-        hts <- systemFTypeToHydra ty
-        return $ Core.LetBinding (Core.Name v) hterm $ Just hts
-  FTuple els -> Core.TermProduct <$> (CM.mapM systemFExprToHydra els)
-  FInj i types e -> Core.TermSum <$> (Core.Sum i (L.length types) <$> systemFExprToHydra e)
+      hdom = Core.typeSchemeType $ toTypeScheme dom
+  FTyApp fun args -> L.foldl (\t a -> Core.TermTypeApplication $ Core.TypedTerm t a) (toTerm fun) $ L.reverse hargs
+    where
+      hargs = fmap (\t -> Core.typeSchemeType $ toTypeScheme t) args
+  FTyAbs params body -> L.foldl (\t v -> Core.TermTypeAbstraction $ Core.TypeAbstraction (Core.Name v) t) (toTerm body) $ L.reverse params
+  FLetrec bindings env -> Core.TermLet $ Core.Let (fmap bindingToHydra bindings) (toTerm env)
+    where
+      bindingToHydra (v, ty, term) = Core.LetBinding (Core.Name v) (toTerm term) $ Just $ toTypeScheme ty
 
-systemFTypeToHydra :: FTy -> Either String Core.TypeScheme
-systemFTypeToHydra ty = case ty of
-    FForall vars body -> Core.TypeScheme (Core.Name <$> vars) <$> toHydra body
-    _ -> Core.TypeScheme [] <$> toHydra ty
-  where
-    toHydra ty = case ty of
-      FTyVar v -> pure $ Core.TypeVariable $ Core.Name v
-      FTyLit lt -> pure $ Core.TypeLiteral lt
-      FTyList lt -> Core.TypeList <$> toHydra lt
-      FTyFn dom cod -> Core.TypeFunction <$> (Core.FunctionType <$> toHydra dom <*> toHydra cod)
-      FTyProd t1 t2 -> Core.TypeProduct <$> CM.mapM toHydra (t1:(componentsTypesOf t2))
-        where
-          componentsTypesOf t = case t of
-            FTyProd t1 t2 -> t1:(componentsTypesOf t2)
-            _ -> [t]
-      FTySum t1 t2 -> Core.TypeSum <$> CM.mapM toHydra (t1:(componentsTypesOf t2))
-        where
-          componentsTypesOf t = case t of
-            FTySum t1 t2 -> t1:(componentsTypesOf t2)
-            _ -> [t]
-      FTyUnit -> pure $ Core.TypeProduct []
-      FTyVoid -> pure $ Core.TypeSum []
-      FTyTuple tys -> Core.TypeProduct <$> (CM.mapM toHydra tys)
-      FTyVariant tys -> Core.TypeSum <$> (CM.mapM toHydra tys)
+toType :: FTy -> Core.Type
+toType ty = case ty of
+  FTyVar v -> Core.TypeVariable $ Core.Name v
+  FTyLit lt -> Core.TypeLiteral lt
+  FTyList lt -> Core.TypeList $ toType lt
+  FTyFn dom cod -> Core.TypeFunction $ Core.FunctionType (toType dom) (toType cod)
+  FTyProd t1 t2 -> Core.TypeProduct (toType <$> (t1:(componentsTypesOf t2)))
+    where
+      componentsTypesOf t = case t of
+        FTyProd t1 t2 -> t1:(componentsTypesOf t2)
+        _ -> [t]
+  FTySum t1 t2 -> Core.TypeSum (toType <$> (t1:(componentsTypesOf t2)))
+    where
+      componentsTypesOf t = case t of
+        FTySum t1 t2 -> t1:(componentsTypesOf t2)
+        _ -> [t]
+  FTyUnit -> Core.TypeProduct []
+  FTyVoid -> Core.TypeSum []
+  FTyTuple tys -> Core.TypeProduct (toType <$> tys)
+  FTyVariant tys -> Core.TypeSum (toType <$> tys)
 
-inferWithAlgorithmW :: HydraContext -> Core.Term -> IO Core.Term
-inferWithAlgorithmW context term = do
-    stlc <- case hydraTermToStlc context (wrap term) of
-       Left err -> fail err
-       Right t -> return t
-    (fexpr, _) <- inferExpr stlc
-    case systemFExprToHydra fexpr of
-      Left err -> fail err
-      Right t -> normalizeBoundTypeVariablesInSystemFTerm <$> unwrap t
-  where
-    sFieldName = Core.Name "tempVar"
-    wrap term = Core.TermLet $ Core.Let ([Core.LetBinding sFieldName term Nothing]) $
-      Core.TermLiteral $ Core.LiteralString "tempEnvironment"
-    unwrap term = case term of
-      Core.TermLet (Core.Let bindings _) -> case bindings of
-        [(Core.LetBinding fname t _)] -> if fname == sFieldName
-          then pure t
-          else fail "expected let binding matching input"
-        _ -> fail "expected let bindings"
+-- | Convert a System F type expression to a Hydra type scheme
+toTypeScheme :: FTy -> Core.TypeScheme
+toTypeScheme ty = case ty of
+  FTyForall vars body -> Core.TypeScheme (Core.Name <$> vars) $ toType body
+  _ -> Core.TypeScheme [] $ toType ty
+
+termToInferredFExpr :: HydraContext -> Core.Term -> IO (FExpr, FTy)
+termToInferredFExpr context term = do
+  stlc <- case hydraTermToStlc context (wrapTerm term) of
+     Left err -> fail err
+     Right t -> return t
+  inferExpr stlc
+
+termToInferredTerm :: HydraContext -> Core.Term -> IO (Core.Term, Core.TypeScheme)
+termToInferredTerm context term = do
+  fexpr <- fst <$> termToInferredFExpr context term
+  unwrapTerm (normalizeTypeVariablesInTerm $ toTerm fexpr)
+
+sFieldName = Core.Name "tempVar"
+
+-- Wrap a term inside a let-term; the Algorithm W implementation only produces "forall" types for let-bindings.
+wrapTerm :: Core.Term -> Core.Term
+wrapTerm term = Core.TermLet $ Core.Let ([Core.LetBinding sFieldName term Nothing]) $
+  Core.TermLiteral $ Core.LiteralString "tempEnvironment"
+
+unwrapTerm :: Core.Term -> IO (Core.Term, Core.TypeScheme)
+unwrapTerm term = case term of
+  Core.TermLet (Core.Let bindings _) -> case bindings of
+    [(Core.LetBinding fname t mts)] -> if fname == sFieldName
+      then case mts of
+         Nothing -> fail "no type scheme in inferred let binding"
+         Just ts -> pure (t, ts)
+      else fail "expected let binding matching input"
+    _ -> fail "expected let bindings"
 
 inferExpr :: Expr -> IO (FExpr, FTy)
 inferExpr t = case (fst $ runState (runExceptT (w 0 [] [] t)) ([],0)) of

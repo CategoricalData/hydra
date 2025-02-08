@@ -26,7 +26,7 @@ nat = Const . Lit . int32
 str = Const . Lit . string
 
 -- A typed primitive corresponds to the Hydra primitive of the same name
-data TypedPrimitive = TypedPrimitive Name TypSch deriving (Eq)
+data TypedPrimitive = TypedPrimitive Name TypSch deriving (Eq, Show)
 
 
 ------------------------
@@ -41,25 +41,25 @@ data Prim
  | Fst | Snd | Pair | TT
  | Nil | Cons | FoldList
  | FF | Inl | Inr | Case | Con Var | Fold Var
- deriving Eq
+ deriving (Eq, Show)
 
-instance Show Prim where
-  show (Lit l) = show l
-  show (TypedPrim (TypedPrimitive name _)) = unName name ++ "()"
-  show FoldList = "fold"
-  show Fst = "fst"
-  show Snd = "snd"
-  show Nil = "nil"
-  show Cons = "cons"
-  show TT = "tt"
-  show FF = "ff"
-  show Inl = "inl"
-  show Inr = "inr"
-  show Case = "case"
-  show If0 = "if0"
-  show Pair = "pair"
-  show (Con  n) = n
-  show (Fold n) = "fold_" ++ n
+--instance Show Prim where
+--  show (Lit l) = show l
+--  show (TypedPrim (TypedPrimitive name _)) = unName name ++ "()"
+--  show FoldList = "fold"
+--  show Fst = "fst"
+--  show Snd = "snd"
+--  show Nil = "nil"
+--  show Cons = "cons"
+--  show TT = "tt"
+--  show FF = "ff"
+--  show Inl = "inl"
+--  show Inr = "inr"
+--  show Case = "case"
+--  show If0 = "if0"
+--  show Pair = "pair"
+--  show (Con  n) = n
+--  show (Fold n) = "fold_" ++ n
 
 data Expr = Const Prim
  | Var Var
@@ -70,22 +70,22 @@ data Expr = Const Prim
  | App Expr Expr
  | Abs Var Expr
  | Letrec [(Var, Expr)] Expr
- deriving (Eq)
+ deriving (Eq, Show)
 
-instance Show Expr where
-  show (Case' t ts) = "case " ++ show t ++ " of " ++ x ++ " end"
-   where x = foldl (\p q -> p ++ "\n\t\t" ++ q) "" $ map show ts
-  show (Proj i j e) = show e ++ "." ++ show i ++ " (arity " ++ show j ++ ")"
-  show (Inj i j e) = "inj " ++ show i ++ " (arity " ++ show j ++ ") " ++ show e
-  show (Tuple ts) = "<" ++ show (map show ts) ++ ">"
-  show (Const p) = show p
-  show (Var v) = v
-  show (App (App (App a' a) b) b') = "(" ++ show a' ++ " " ++ show a ++ " " ++ show b ++ " " ++ show b' ++ ")"
-  show (App (App a b) b') = "(" ++ show a ++ " " ++ show b ++ " " ++ show b' ++ ")"
-  show (App a b) = "(" ++ show a ++ " " ++ show b ++ ")"
-  show (Abs a b) = "(\\" ++ a ++ ". " ++ show b ++ ")"
-  show (Letrec ab c) = "letrec " ++ d ++ show c
-    where d = foldr (\(p, q) r -> p ++ " = " ++ show q ++ " \n\t\t" ++ r) "in " ab
+--instance Show Expr where
+--  show (Case' t ts) = "case " ++ show t ++ " of " ++ x ++ " end"
+--   where x = foldl (\p q -> p ++ "\n\t\t" ++ q) "" $ map show ts
+--  show (Proj i j e) = show e ++ "." ++ show i ++ " (arity " ++ show j ++ ")"
+--  show (Inj i j e) = "inj " ++ show i ++ " (arity " ++ show j ++ ") " ++ show e
+--  show (Tuple ts) = "<" ++ show (map show ts) ++ ">"
+--  show (Const p) = show p
+--  show (Var v) = v
+--  show (App (App (App a' a) b) b') = "(" ++ show a' ++ " " ++ show a ++ " " ++ show b ++ " " ++ show b' ++ ")"
+--  show (App (App a b) b') = "(" ++ show a ++ " " ++ show b ++ " " ++ show b' ++ ")"
+--  show (App a b) = "(" ++ show a ++ " " ++ show b ++ ")"
+--  show (Abs a b) = "(\\" ++ a ++ ". " ++ show b ++ ")"
+--  show (Letrec ab c) = "letrec " ++ d ++ show c
+--    where d = foldr (\(p, q) r -> p ++ " = " ++ show q ++ " \n\t\t" ++ r) "in " ab
 
 data MTy = TyVar Var
   | TyLit LiteralType
@@ -98,43 +98,42 @@ data MTy = TyVar Var
   | TyTuple [MTy]
   | TyVariant [MTy]
   | TyCon Var [MTy]
- deriving (Eq)
+ deriving (Eq, Show)
 
-instance Show MTy where
-  show (TyLit lt) = case lt of
-    LiteralTypeInteger it -> drop (length "IntegerType") $ show it
-    LiteralTypeFloat ft -> drop (length "FloatType") $ show ft
-    _ -> drop (length "LiteralType") $ show lt
-  show (TyTuple ts) = "(Tuple " ++ show (map show ts) ++ ")"
-  show (TyVariant ts) = "(Variant " ++ show (map show ts) ++ ")"
-  show (TyVar v) = v
-  show (TyList t) = "(List " ++ (show t) ++ ")"
-  show (TyFn t1 t2) = "(" ++ show t1 ++ " -> " ++ show t2 ++ ")"
-  show (TyProd t1 t2) = "(" ++ show t1 ++ " * " ++ show t2 ++  ")"
-  show (TySum t1 t2) = "(" ++ show t1 ++ " + " ++ show t2 ++  ")"
-  show TyUnit = "Unit"
-  show TyVoid = "Void"
-  show (TyCon c ts) = c ++ " " ++ ts'
-   where ts' = foldr (\p r -> show p ++ "" ++ r) "" ts
-
-instance Show TypSch where
-  show (Forall [] t) = show t
-  show (Forall x t) = "forall " ++ d ++ show t
-   where d = foldr (\p q ->  p ++ " " ++ q) ", " x
+--instance Show MTy where
+--  show (TyLit lt) = case lt of
+--    LiteralTypeInteger it -> drop (length "IntegerType") $ show it
+--    LiteralTypeFloat ft -> drop (length "FloatType") $ show ft
+--    _ -> drop (length "LiteralType") $ show lt
+--  show (TyTuple ts) = "(Tuple " ++ show (map show ts) ++ ")"
+--  show (TyVariant ts) = "(Variant " ++ show (map show ts) ++ ")"
+--  show (TyVar v) = v
+--  show (TyList t) = "(List " ++ (show t) ++ ")"
+--  show (TyFn t1 t2) = "(" ++ show t1 ++ " -> " ++ show t2 ++ ")"
+--  show (TyProd t1 t2) = "(" ++ show t1 ++ " * " ++ show t2 ++  ")"
+--  show (TySum t1 t2) = "(" ++ show t1 ++ " + " ++ show t2 ++  ")"
+--  show TyUnit = "Unit"
+--  show TyVoid = "Void"
+--  show (TyCon c ts) = c ++ " " ++ ts'
+--   where ts' = foldr (\p r -> show p ++ "" ++ r) "" ts
 
 data TypSch = Forall [Var] MTy
- deriving Eq
+ deriving (Eq, Show)
+
+--instance Show TypSch where
+--  show (Forall [] t) = show t
+--  show (Forall x t) = "forall " ++ d ++ show t
+--   where d = foldr (\p q ->  p ++ " " ++ q) ", " x
 
 
 type ADTs = [(Var, [Var], [(Var, [MTy])])]
 
 
-
-
 ------------------------
 -- System F
 
-data FExpr = FConst Prim
+data FExpr
+ = FConst Prim
  | FVar Var
  | FTuple [FExpr]
  | FProj Int FExpr
@@ -145,25 +144,25 @@ data FExpr = FConst Prim
  | FTyApp FExpr [FTy]
  | FTyAbs [Var] FExpr
  | FLetrec [(Var, FTy, FExpr)] FExpr
- deriving (Eq)
+ deriving (Eq, Show)
 
-instance Show FExpr where
-  show (FCase t t' []) = "ff " ++ show t ++ " " ++ show t' ++ " "
-  show (FCase t t' ts) = "case " ++ show t ++ " of " ++ show (map show ts) ++ " end"
-  show (FProj i e) = show e ++ "." ++ show i
-  show (FInj i j e) = "inj " ++ show i ++ " (arity " ++ show j ++ ") " ++ show e
-  show (FTuple es) = "<" ++ show (map show es) ++ ">"
-  show (FConst p) = show p
-  show (FVar v) = v
-  show (FTyApp e t) = "(" ++ show e ++ " " ++ show t ++ ")"
-  show (FApp (FApp (FApp a' a) b) b') = "(" ++ show a' ++ " " ++ show a ++ " " ++ show b ++ " " ++ show b' ++ ")"
-  show (FApp (FApp a b) b') = "(" ++ show a ++ " " ++ show b ++ " " ++ show b' ++ ")"
-  show (FApp a b) = "(" ++ show a ++ " " ++ show b ++ ")"
-  show (FAbs a t b) = "(\\" ++ a ++ ":" ++ show t ++ ". " ++ show b ++ ")"
-  show (FLetrec ab c) = "letrecs " ++ d ++ show c
-    where d = foldr (\(p, t, q) r -> p ++ ":" ++ show t ++ " = " ++ show q ++ " \n\t\t" ++ r) "in " ab
-  show (FTyAbs ab c) = "(/\\" ++ d ++ show c ++ ")"
-    where d = foldr (\p r -> p ++ " " ++ r) ". " ab
+--instance Show FExpr where
+--  show (FCase t t' []) = "ff " ++ show t ++ " " ++ show t' ++ " "
+--  show (FCase t t' ts) = "case " ++ show t ++ " of " ++ show (map show ts) ++ " end"
+--  show (FProj i e) = show e ++ "." ++ show i
+--  show (FInj i j e) = "inj " ++ show i ++ " (arity " ++ show j ++ ") " ++ show e
+--  show (FTuple es) = "<" ++ show (map show es) ++ ">"
+--  show (FConst p) = show p
+--  show (FVar v) = v
+--  show (FTyApp e t) = "(" ++ show e ++ " " ++ show t ++ ")"
+--  show (FApp (FApp (FApp a' a) b) b') = "(" ++ show a' ++ " " ++ show a ++ " " ++ show b ++ " " ++ show b' ++ ")"
+--  show (FApp (FApp a b) b') = "(" ++ show a ++ " " ++ show b ++ " " ++ show b' ++ ")"
+--  show (FApp a b) = "(" ++ show a ++ " " ++ show b ++ ")"
+--  show (FAbs a t b) = "(\\" ++ a ++ ":" ++ show t ++ ". " ++ show b ++ ")"
+--  show (FLetrec ab c) = "letrecs " ++ d ++ show c
+--    where d = foldr (\(p, t, q) r -> p ++ ":" ++ show t ++ " = " ++ show q ++ " \n\t\t" ++ r) "in " ab
+--  show (FTyAbs ab c) = "(/\\" ++ d ++ show c ++ ")"
+--    where d = foldr (\p r -> p ++ " " ++ r) ". " ab
 
 data FTy = FTyVar Var
   | FTyLit LiteralType
@@ -176,24 +175,24 @@ data FTy = FTyVar Var
   | FTyTuple [FTy]
   | FTyVariant [FTy]
   | FTyCon Var [FTy]
-  | FForall [Var] FTy
- deriving (Eq)
+  | FTyForall [Var] FTy
+ deriving (Eq, Show)
 
-instance Show FTy where
-  show (FTyLit lt) = show $ TyLit lt
-  show (FTyVariant ts) = "(Variant " ++ show (map show ts) ++ ")"
-  show (FTyTuple ts) = "(Tuple " ++ show (map show ts) ++ ")"
-  show (FTyVar v) = v
-  show (FTyList t) = "(List " ++ (show t) ++ ")"
-  show (FTyFn t1 t2) = "(" ++ show t1 ++ " -> " ++ show t2 ++ ")"
-  show (FTyProd t1 t2) = "(" ++ show t1 ++ " * " ++ show t2 ++  ")"
-  show (FTySum t1 t2) = "(" ++ show t1 ++ " + " ++ show t2 ++  ")"
-  show FTyUnit = "Unit"
-  show FTyVoid = "Void"
-  show (FForall x t) = "(forall " ++ d ++ show t ++ ")"
-   where d = foldr (\p q -> p ++ " " ++ q) ", " x
-  show (FTyCon c ts) = c ++ " " ++ ts'
-   where ts' = foldr (\p r -> show p ++ "" ++ r) " " ts
+--instance Show FTy where
+--  show (FTyLit lt) = show $ TyLit lt
+--  show (FTyVariant ts) = "(Variant " ++ show (map show ts) ++ ")"
+--  show (FTyTuple ts) = "(Tuple " ++ show (map show ts) ++ ")"
+--  show (FTyVar v) = v
+--  show (FTyList t) = "(List " ++ (show t) ++ ")"
+--  show (FTyFn t1 t2) = "(" ++ show t1 ++ " -> " ++ show t2 ++ ")"
+--  show (FTyProd t1 t2) = "(" ++ show t1 ++ " * " ++ show t2 ++  ")"
+--  show (FTySum t1 t2) = "(" ++ show t1 ++ " + " ++ show t2 ++  ")"
+--  show FTyUnit = "Unit"
+--  show FTyVoid = "Void"
+--  show (FTyForall x t) = "(forall " ++ d ++ show t ++ ")"
+--   where d = foldr (\p q -> p ++ " " ++ q) ", " x
+--  show (FTyCon c ts) = c ++ " " ++ ts'
+--   where ts' = foldr (\p r -> show p ++ "" ++ r) " " ts
 
 mTyToFTy :: MTy -> FTy
 mTyToFTy (TyVar v) = FTyVar v
@@ -210,7 +209,7 @@ mTyToFTy (TyCon c ts) = FTyCon c $ map mTyToFTy ts
 
 tyToFTy :: TypSch -> FTy
 tyToFTy (Forall [] t) = mTyToFTy t
-tyToFTy (Forall vs t) = FForall vs (mTyToFTy t)
+tyToFTy (Forall vs t) = FTyForall vs (mTyToFTy t)
 
 --------------------
 -- Contexts
@@ -260,7 +259,7 @@ replaceTCon u s (TyCon t' ts)  | TyCon t' ts == u = s
 
 primTy :: ADTs -> Prim -> Either String TypSch
 primTy _ (Lit l) = Right $ Forall [] $ TyLit $ literalType l
-primTy _ (TypedPrim (TypedPrimitive _ forall)) = Right forall
+primTy _ (TypedPrim (TypedPrimitive _ forAll)) = Right forAll
 primTy [] (Con n) = throwError $ n ++ " not found "
 primTy ((a,t,[]):tl) (Con n) = primTy tl $ Con n
 primTy ((a,t,(c,ts):cs):tl) (Con n) | c == n = return $ Forall t (ts' ts $ TyCon a $ map TyVar t)
@@ -338,7 +337,7 @@ instance Substable FTy where
  subst f (FTyVar v) = case lookup v f of
                         Nothing -> FTyVar v
                         Just y -> mTyToFTy y
- subst f (FForall vs t) = FForall vs $ subst phi' t
+ subst f (FTyForall vs t) = FTyForall vs $ subst phi' t
   where phi' = filter (\(v,f')-> not (elem v vs)) f
  subst f (FTyCon v ts) = FTyCon v $ map (subst f) ts
 
@@ -376,13 +375,13 @@ subst' f (FTySum t1 t2) = FTySum  (subst' f t1) (subst' f t2)
 subst' f (FTyVar v) = case lookup v f of
                         Nothing -> FTyVar v
                         Just y -> y
-subst' f (FForall vs t) = FForall vs $ subst' f' t
- where f' = filter (\(v,f')-> not (elem v vs)) f
+subst' f (FTyForall vs t) = FTyForall vs $ subst' f' t
+  where f' = filter (\(v,f')-> not (elem v vs)) f
 subst' f (FTyCon v ts) = FTyCon v $ map (subst' f) ts
 
-instance Show Ctx where
-  show [] = ""
-  show ((k,v):t) = k ++ ":" ++ show v ++ " " ++ show t
+--instance Show Ctx where
+--  show [] = ""
+--  show ((k,v):t) = k ++ ":" ++ show v ++ " " ++ show t
 
 ------------------------------------
 -- Type checking for F
@@ -429,10 +428,10 @@ typeOf adts tvs g (FApp a b) = do { t1 <- typeOf adts tvs g a
 typeOf adts tvs g (FAbs x t e) = do { t1 <- typeOf adts tvs ((x,t):g) e
                                     ; return $ t `FTyFn` t1 }
 typeOf adts tvs g (FTyAbs vs e) = do { t1 <- typeOf adts (vs++tvs) g e
-                                     ; return $ FForall vs t1 }
+                                     ; return $ FTyForall vs t1 }
 typeOf adts tvs g (FTyApp e ts) = do { t1 <- typeOf adts tvs g e
                                      ; case t1 of
-                                        FForall vs t -> open vs ts t
+                                        FTyForall vs t -> open vs ts t
                                         v -> throwError $ "not a forall type: " ++ show v }
 typeOf adts tvs g (FLetrec es e) = do { let g' = map (\(k,t,e)->(k,t)) es
                                       ; est <- mapM (\(_,_,v)->typeOf adts tvs (g'++g) v) es
@@ -663,7 +662,7 @@ testJoshAdt' = Letrec [("lat1", lat1)] $ App (Var "lat1") body
  where body = App (App (Const $ Con "MkLatLon1") (nat 0)) (nat 1)
        lat1 = Abs "z" $ App (App (Const $ Fold "LatLon1") (Var "z")) $ Abs "p" $ Abs "q" $ (Var "p")
 
-tests = [testJoshAdt, testJoshAdt'] -- testVariant2, testTuple2, testVariant, testTuple, test_j_0, test_j_0' , testJ,  test4, testk, testC, testA, test0, test1, testB, test2, test3a, test5, test6]
+tests = [testJoshAdt, testJoshAdt', testVariant2, testTuple2, testVariant, testTuple, test_j_0, test_j_0' , testJ,  test4, testk, testC, testA, test0, test1, testB, test2, test3a, test5, test6]
 
 testk = Letrec [("f", f), ("g", g)] b
  where b = Tuple [(Var "f"), (Var "g")]

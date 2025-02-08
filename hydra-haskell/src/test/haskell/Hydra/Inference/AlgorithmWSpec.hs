@@ -4,7 +4,6 @@ module Hydra.Inference.AlgorithmWSpec where
 
 import Hydra.Kernel
 import Hydra.Sources.Libraries
---import Hydra.Staging
 import Hydra.TestUtils
 import Hydra.TestData
 import qualified Hydra.Dsl.Expect as Expect
@@ -26,24 +25,20 @@ import Control.Monad
 
 testHydraContext = W.HydraContext $ graphPrimitives testGraph
 
-inferTypedTerm :: Term -> IO Term
-inferTypedTerm = W.inferWithAlgorithmW testHydraContext
+inferType :: Term -> IO (Term, TypeScheme)
+inferType = W.termToInferredTerm testHydraContext
 
-inferType :: Term -> IO Type
-inferType term = do
-  fterm <- inferTypedTerm term
-  case fterm of
-    TermTyped (TypedTerm _ typ) -> pure typ
-    _ -> fail $ "expected a typed term, found: " ++ showTerm fterm
+expectType :: Term -> TypeScheme -> H.Expectation
+expectType term ts = H.shouldReturn (snd <$> inferType term) ts
 
-expectType :: Term -> Type -> H.Expectation
-expectType term typ = H.shouldReturn (inferType term) typ
+expectMonotype :: Term -> Type -> H.Expectation
+expectMonotype term typ = expectType term $ TypeScheme [] typ
 
 expectPolytype :: Term -> [String] -> Type -> H.Expectation
-expectPolytype term vars typ = expectType term (Types.lambdas vars typ)
+expectPolytype term vars typ = expectType term $ TypeScheme (Name <$> vars) typ
 
 expectFailure :: Term -> H.Expectation
-expectFailure term = H.shouldThrow (inferTypedTerm term) H.anyException
+expectFailure term = H.shouldThrow (inferType term) H.anyException
 
 -- Placeholders for the primitives in @wisnesky's test cases; they are not necessarily the same functions,
 -- but they have the same types.
@@ -57,16 +52,16 @@ checkAlgorithmW = H.describe "Check System F syntax" $ do
   --	(\x. x)
   --System F type:
   -- 	(v0 -> v0)
-  H.it "#0" $ expectType
+  H.it "#0" $ expectPolytype
     (lambda "x" $ var "x")
-    (Types.lambda "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
+    ["t0"] $ Types.function (Types.var "t0") (Types.var "t0")
 
   --Untyped input:
   --	letrecs foo = (\x. x)
   --		in 42
   --System F type:
   -- 	Nat
-  H.it "#1" $ expectType
+  H.it "#1" $ expectMonotype
     (int32 32 `with` [
       "foo">: lambda "x" $ var "x"])
     Types.int32
@@ -75,7 +70,7 @@ checkAlgorithmW = H.describe "Check System F syntax" $ do
   --	let f = (\x. x) in (f 0)
   --System F type:
   -- 	Nat
-  H.it "#2" $ expectType
+  H.it "#2" $ expectMonotype
     ((var "f" @@ int32 0) `with` [
       "f">: lambda "x" $ var "x"])
     Types.int32
@@ -84,7 +79,7 @@ checkAlgorithmW = H.describe "Check System F syntax" $ do
   --	let f = ((\x. x) 0) in f
   --System F type:
   -- 	Nat
-  H.it "#3" $ expectType
+  H.it "#3" $ expectMonotype
     (var "f" `with` [
       "f">: (lambda "x" $ var "x") @@ int32 0])
     Types.int32
@@ -93,16 +88,16 @@ checkAlgorithmW = H.describe "Check System F syntax" $ do
   --	let sng = (\x. (cons x nil)) in sng
   --System F type:
   -- 	(v5 -> (List v5))
-  H.it "#4" $ expectType
+  H.it "#4" $ expectPolytype
     (var "sng" `with` [
       "sng">: lambda "x" $ list [var "x"]])
-    (Types.lambda "t0" $ Types.function (Types.var "t0") (Types.list (Types.var "t0")))
+    ["t0"] $ Types.function (Types.var "t0") (Types.list (Types.var "t0"))
 
   --Untyped input:
   --	let sng = (\x. (cons x nil)) in (pair (sng 0) (sng alice))
   --System F type:
   -- 	((List Nat) * (List String))
-  H.it "#5" $ expectType
+  H.it "#5" $ expectMonotype
     (pair (var "sng" @@ int32 0) (var "sng" @@ string "alice") `with` [
       "sng">: lambda "x" $ list [var "x"]])
     (Types.pair (Types.list Types.int32) (Types.list Types.string))
@@ -112,7 +107,7 @@ checkAlgorithmW = H.describe "Check System F syntax" $ do
   --		in (+ (S (S 0)) (S 0))
   --System F type:
   -- 	Nat
-  H.it "#6" $ expectType
+  H.it "#6" $ expectMonotype
     ((var "+" @@ (primSucc @@ (primSucc @@ int32 0)) @@ (primSucc @@ int32 0)) `with` [
       "+" >: lambda "x" $ lambda "y" (primSucc @@ (var "+" @@ (primPred @@ var "x") @@ var "y"))])
     Types.int32
@@ -122,10 +117,10 @@ checkAlgorithmW = H.describe "Check System F syntax" $ do
   --		in f
   --System F type:
   -- 	(Nat -> (Nat -> v5))
-  H.it "#7" $ expectType
+  H.it "#7" $ expectPolytype
     (var "f" `with` [
       "f">: lambda "x" $ lambda "y" (var "f" @@ int32 0 @@ var "x")])
-    (Types.lambda "t0" $ Types.function Types.int32 (Types.function Types.int32 (Types.var "t0")))
+    ["t0"] $ Types.function Types.int32 (Types.function Types.int32 (Types.var "t0"))
 
   --Untyped input:
   --	letrecs f = (\x. (\y. (g 0 x)))
@@ -133,13 +128,13 @@ checkAlgorithmW = H.describe "Check System F syntax" $ do
   --		in (pair f g)
   --System F type:
   -- 	((v12 -> (Nat -> v13)) * (Nat -> (v15 -> v16)))
-  H.it "#9" $ expectType
+  H.it "#9" $ expectPolytype
     ((pair (var "f") (var "g")) `with` [
       "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ var "x"),
       "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)])
-    (Types.lambdas ["t0", "t1", "t2", "t3"] $ Types.pair
+    ["t0", "t1", "t2", "t3"] $ Types.pair
       (Types.function (Types.var "t0") (Types.function Types.int32 (Types.var "t1")))
-      (Types.function Types.int32 (Types.function (Types.var "t2") (Types.var "t3"))))
+      (Types.function Types.int32 (Types.function (Types.var "t2") (Types.var "t3")))
 
   --Untyped input:
   --	letrecs f = (\x. (\y. (g 0 0)))
@@ -147,13 +142,13 @@ checkAlgorithmW = H.describe "Check System F syntax" $ do
   --		in (pair f g)
   --System F type:
   -- 	((Nat -> (Nat -> v12)) * (Nat -> (Nat -> v14)))
-  H.it "#10" $ expectType
+  H.it "#10" $ expectPolytype
     ((pair (var "f") (var "g")) `with` [
       "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ int32 0),
       "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)])
-    (Types.lambdas ["t0", "t1"] $ Types.pair
+    ["t0", "t1"] $ Types.pair
       (Types.function Types.int32 (Types.function Types.int32 (Types.var "t0")))
-      (Types.function Types.int32 (Types.function Types.int32 (Types.var "t1"))))
+      (Types.function Types.int32 (Types.function Types.int32 (Types.var "t1")))
 
   --Untyped input:
   --	letrecs f = (\x. (\y. (g 0 x)))
@@ -161,19 +156,19 @@ checkAlgorithmW = H.describe "Check System F syntax" $ do
   --		in (pair f g)
   --System F type:
   -- 	((Nat -> (Nat -> v12)) * (Nat -> (Nat -> v14)))
-  H.it "#11" $ expectType
+  H.it "#11" $ expectPolytype
     ((pair (var "f") (var "g")) `with` [
       "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ var "x"),
       "g">: lambda "u" $ lambda "v" (var "f" @@ int32 0 @@ int32 0)])
-    (Types.lambdas ["t0", "t1"] $ Types.pair
+    ["t0", "t1"] $ Types.pair
       (Types.function Types.int32 (Types.function Types.int32 (Types.var "t0")))
-      (Types.function Types.int32 (Types.function Types.int32 (Types.var "t1"))))
+      (Types.function Types.int32 (Types.function Types.int32 (Types.var "t1")))
 
 checkEliminations :: H.SpecWith ()
 checkEliminations = H.describe "Check a few hand-picked elimination terms" $ do
 
   H.it "Match statements" $ do
-    expectType
+    expectMonotype
       (match testTypeSimpleNumberName Nothing [
         Field (Name "int") $ lambda "x" $ var "x",
         Field (Name "float") $ lambda "x" $ int32 42])
@@ -184,19 +179,19 @@ checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
 
   H.describe "Literal values" $ do
     H.it "test #1" $
-      expectType
+      expectMonotype
         (int32 42)
         Types.int32
     H.it "test #2" $
-      expectType
+      expectMonotype
         (string "foo")
         Types.string
     H.it "test #3" $
-      expectType
+      expectMonotype
         (boolean False)
         Types.boolean
     H.it "test #4" $
-      expectType
+      expectMonotype
         (float64 42.0)
         Types.float64
 
@@ -207,7 +202,7 @@ checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
 
   H.describe "Optionals" $ do
     H.it "test #1" $
-      expectType
+      expectMonotype
         (optional $ Just $ int32 42)
         (Types.optional Types.int32)
     H.it "test #2" $
@@ -217,19 +212,19 @@ checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
 
   H.describe "Records" $ do
     H.it "test #1" $
-      expectType
+      expectMonotype
         (record testTypeLatLonName [
           Field (Name "lat") $ float32 37.7749,
           Field (Name "lon") $ float32 $ negate 122.4194])
         (TypeVariable testTypeLatLonName)
     H.it "test #2" $
-      expectType
+      expectMonotype
         (record testTypeLatLonPolyName [
           Field (Name "lat") $ float32 37.7749,
           Field (Name "lon") $ float32 $ negate 122.4194])
         (Types.apply (TypeVariable testTypeLatLonPolyName) Types.float32)
     H.it "test #3" $
-      expectType
+      expectMonotype
         (lambda "lon" (record testTypeLatLonPolyName [
           Field (Name "lat") $ float32 37.7749,
           Field (Name "lon") $ var "lon"]))
@@ -243,7 +238,7 @@ checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
 
   H.describe "Record instances of simply recursive record types" $ do
     H.it "test #1" $
-      expectType
+      expectMonotype
         (record testTypeIntListName [
           Field (Name "head") $ int32 42,
           Field (Name "tail") $ optional $ Just $ record testTypeIntListName [
@@ -251,7 +246,7 @@ checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
             Field (Name "tail") $ optional Nothing]])
         (TypeVariable testTypeIntListName)
     H.it "test #2" $
-      expectType
+      expectMonotype
         ((lambda "x" $ record testTypeIntListName [
           Field (Name "head") $ var "x",
           Field (Name "tail") $ optional $ Just $ record testTypeIntListName [
@@ -259,7 +254,7 @@ checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
             Field (Name "tail") $ optional Nothing]]) @@ int32 42)
         (TypeVariable testTypeIntListName)
     H.it "test #3" $
-      expectType
+      expectMonotype
         (record testTypeListName [
           Field (Name "head") $ int32 42,
           Field (Name "tail") $ optional $ Just $ record testTypeListName [
@@ -267,7 +262,7 @@ checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
             Field (Name "tail") $ optional Nothing]])
         (Types.apply (TypeVariable testTypeListName) Types.int32)
     H.it "test #4" $
-      expectType
+      expectMonotype
         ((lambda "x" $ record testTypeListName [
           Field (Name "head") $ var "x",
           Field (Name "tail") $ optional $ Just $ record testTypeListName [
@@ -285,7 +280,7 @@ checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
 
   H.describe "Record instances of mutually recursive record types" $ do
     H.it "test #1" $
-      expectType
+      expectMonotype
         ((lambda "x" $ record testTypeBuddyListAName [
           Field (Name "head") $ var "x",
           Field (Name "tail") $ optional $ Just $ record testTypeBuddyListBName [
@@ -302,13 +297,13 @@ checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
         ["t0"] (Types.function (Types.var "t0") (Types.apply (TypeVariable testTypeBuddyListAName) (Types.var "t0")))
 
   H.it "Unions" $ do
-    expectType
+    expectMonotype
       (inject testTypeTimestampName $ Field (Name "unixTimeMillis") $ uint64 1638200308368)
       (TypeVariable testTypeTimestampName)
 
   H.describe "Sets" $ do
     H.it "test #1" $
-      expectType
+      expectMonotype
         (set $ S.fromList [boolean True])
         (Types.set Types.boolean)
     H.it "test #2" $
@@ -318,7 +313,7 @@ checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
 
   H.describe "Maps" $ do
     H.it "test #1" $
-      expectType
+      expectMonotype
         (mapTerm $ M.fromList [(string "firstName", string "Arthur"), (string "lastName", string "Dent")])
         (Types.map Types.string Types.string)
     H.it "test #2" $
@@ -332,10 +327,10 @@ checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
         ["t0"] (Types.function (Types.var "t0") (Types.function (Types.var "t0") (Types.map (Types.var "t0") Types.float64)))
 
 --    H.it "Check nominal (newtype) terms" $ do
---      expectType
+--      expectMonotype
 --        testDataArthur
 --        (Types.wrap "Person")
-    --   expectType
+    --   expectMonotype
     --     (lambda "x" (record [
     --       Field "firstName" $ var "x",
     --       Field "lastName" $ var "x",
@@ -346,18 +341,18 @@ checkLetTerms :: H.SpecWith ()
 checkLetTerms = H.describe "Check a few hand-picked let terms" $ do
 
   H.it "Empty let" $ do
-    expectType
+    expectMonotype
       ((int32 42) `with` [])
       Types.int32
 
   H.it "Trivial let" $ do
-    expectType
+    expectMonotype
       (var "foo" `with` [
         "foo">: int32 42])
       Types.int32
 
   H.it "Multiple references to a let-bound term" $
-    expectType
+    expectMonotype
       (list [var "foo", var "bar", var "foo"] `with` [
         "foo">: int32 42,
         "bar">: int32 137])
@@ -370,7 +365,7 @@ checkLetTerms = H.describe "Check a few hand-picked let terms" $ do
           "id">: lambda "x" $ var "x"])
         ["t0"] (Types.function (Types.var "t0") (Types.var "t0"))
     H.it "test #2" $
-      expectType
+      expectMonotype
         ((var "id" @@ (list [var "id" @@ int32 42])) `with` [
           "id">: lambda "x" $ var "x"])
         (Types.list Types.int32)
@@ -381,13 +376,13 @@ checkLetTerms = H.describe "Check a few hand-picked let terms" $ do
             "id">: lambda "x" $ var "x"])
         ["t0"] (Types.function (Types.var "t0") (Types.list $ Types.var "t0"))
     H.it "test #4" $
-      expectType
+      expectMonotype
         ((pair (var "id" @@ int32 42) (var "id" @@ string "foo"))
           `with` [
             "id">: lambda "x" $ var "x"])
         (Types.pair Types.int32 Types.string)
     H.it "test #5" $
-      expectType
+      expectMonotype
         ((pair (var "list" @@ int32 42) (var "list" @@ string "foo"))
           `with` [
             "list">: lambda "x" $ list [var "x"]])
@@ -436,7 +431,7 @@ checkLetTerms = H.describe "Check a few hand-picked let terms" $ do
 --        ["t0"] (Types.function Types.int32 $ Types.function (Types.var "t0") Types.int32)
 
 --    H.it "test #3" $
---      expectType
+--      expectMonotype
 --        (int32 0 `with` [
 --          "id">: lambda "z" $ var "z",
 --          "f">: lambda "p0" $ pair (var "id" @@ var "p0") (var "id" @@ var "p0")])
@@ -449,11 +444,11 @@ checkLists :: H.SpecWith ()
 checkLists = H.describe "Check a few hand-picked list terms" $ do
 
   H.it "List of strings" $
-    expectType
+    expectMonotype
       (list [string "foo", string "bar"])
       (Types.list Types.string)
   H.it "List of lists of strings" $
-    expectType
+    expectMonotype
       (list [list [string "foo"], list []])
       (Types.list $ Types.list Types.string)
   H.it "Empty list" $
@@ -469,11 +464,11 @@ checkLists = H.describe "Check a few hand-picked list terms" $ do
       (lambda "x" (list [var "x"]))
       ["t0"] (Types.function (Types.var "t0") (Types.list $ Types.var "t0"))
   H.it "Lambda producing a list of integers" $
-    expectType
+    expectMonotype
       (lambda "x" (list [var "x", int32 42]))
       (Types.function Types.int32 $ Types.list Types.int32)
   H.it "List with repeated variables" $
-    expectType
+    expectMonotype
       (lambda "x" (list [var "x", string "foo", var "x"]))
       (Types.function Types.string (Types.list Types.string))
 
@@ -495,7 +490,7 @@ checkLiterals :: H.SpecWith ()
 checkLiterals = H.describe "Check arbitrary literals" $ do
 
   H.it "Verify that type inference preserves the literal to literal type mapping" $
-    QC.property $ \l -> expectType
+    QC.property $ \l -> expectMonotype
       (TermLiteral l)
       (Types.literal $ literalType l)
 
@@ -514,7 +509,7 @@ checkLambdas = H.describe "Check lambdas" $ do
 
   H.describe "Lambdas and application" $ do
     H.it "test #1" $
-      expectType
+      expectMonotype
         (lambda "x" (var "x") @@ string "foo")
         Types.string
 
@@ -524,25 +519,25 @@ checkOtherFunctionTerms = H.describe "Check a few hand-picked function terms" $ 
   H.describe "List eliminations (folds)" $ do
     let fun = Terms.fold $ primitive _math_add
     H.it "test #1" $
-      expectType
+      expectMonotype
         fun
         (Types.functionN [Types.int32, Types.list Types.int32, Types.int32])
     H.it "test #2" $
-      expectType
+      expectMonotype
         (fun @@ int32 0)
         (Types.function (Types.list Types.int32) Types.int32)
     H.it "test #3" $
-      expectType
+      expectMonotype
         (fun @@ int32 0 @@ (list (int32 <$> [1, 2, 3, 4, 5])))
         Types.int32
 
   H.it "Projections" $ do
-    expectType
+    expectMonotype
       (project testTypePersonName (Name "firstName"))
       (Types.function (TypeVariable testTypePersonName) Types.string)
 
   H.it "Union eliminations (case statements)" $ do
-    expectType
+    expectMonotype
       (match testTypeUnionMonomorphicName Nothing [
         Field (Name "bool") (lambda "x" (boolean True)),
         Field (Name "string") (lambda "x" (boolean False)),
@@ -554,7 +549,7 @@ checkPathologicalTerms = H.describe "Check pathological terms" $ do
 
   H.describe "Infinite lists" $ do
     H.it "test #1" $
-      expectType
+      expectMonotype
         ((var "self") `with` [
           "self">: primitive _lists_cons @@ (int32 42) @@ (var "self")])
         (Types.list Types.int32)
@@ -569,7 +564,7 @@ checkPathologicalTerms = H.describe "Check pathological terms" $ do
           "self">: lambda "e" $ primitive _lists_cons @@ (var "e") @@ (var "self" @@ var "e")])
         ["t0"] (Types.function (Types.var "t0") (Types.list $ Types.var "t0"))
     H.it "test #4" $
-      expectType
+      expectMonotype
         ((var "build" @@ int32 0) `with` [
           "build">: lambda "x" $ primitive _lists_cons @@ var "x" @@ (var "build" @@
             (primitive _math_add @@ var "x" @@ int32 1))])
@@ -588,7 +583,7 @@ checkPolymorphism = H.describe "Check polymorphism" $ do
         (optional Nothing)
         ["t0"] (Types.optional (Types.var "t0"))
     H.it "test #3" $
-      expectType
+      expectMonotype
         (optional $ Just $ int32 42)
         (Types.optional Types.int32)
 
@@ -604,7 +599,7 @@ checkPolymorphism = H.describe "Check polymorphism" $ do
 
   H.describe "Mixed expressions with lambdas, constants, and primitive functions" $ do
     H.it "test #1" $
-      expectType
+      expectMonotype
         (lambda "x" $
             (primitive _math_sub @@ (primitive _math_add @@ var "x" @@ var "x") @@ int32 1))
         (Types.function Types.int32 Types.int32)
@@ -614,11 +609,11 @@ checkPrimitives = H.describe "Check a few hand-picked terms with primitive funct
 
   H.describe "Monomorphic primitive functions" $ do
     H.it "test #1" $
-      expectType
+      expectMonotype
         (primitive $ Name "hydra/lib/strings.length")
         (Types.function Types.string Types.int32)
     H.it "test #2" $
-      expectType
+      expectMonotype
         (primitive _math_sub)
         (Types.function Types.int32 (Types.function Types.int32 Types.int32))
 
@@ -628,7 +623,7 @@ checkPrimitives = H.describe "Check a few hand-picked terms with primitive funct
         (lambda "el" (primitive _lists_length @@ (list [var "el"])))
         ["t0"] (Types.function (Types.var "t0") Types.int32)
     H.it "test #2" $
-      expectType
+      expectMonotype
         (lambda "el" (primitive _lists_length @@ (list [int32 42, var "el"])))
         (Types.function Types.int32 Types.int32)
     H.it "test #3" $
@@ -660,21 +655,21 @@ checkPrimitives = H.describe "Check a few hand-picked terms with primitive funct
 
   H.describe "Primitives and application" $ do
     H.it "test #1" $
-      expectType
+      expectMonotype
         (primitive _lists_concat @@ list [list [int32 42], list []])
         (Types.list Types.int32)
 
   H.describe "Lambdas and primitives" $ do
     H.it "test #1" $
-      expectType
+      expectMonotype
         (primitive _math_add)
         (Types.functionN [Types.int32, Types.int32, Types.int32])
     H.it "test #2" $
-      expectType
+      expectMonotype
         (lambda "x" (primitive _math_add @@ var "x"))
         (Types.functionN [Types.int32, Types.int32, Types.int32])
     H.it "test #3" $
-      expectType
+      expectMonotype
         (lambda "x" (primitive _math_add @@ var "x" @@ var "x"))
         (Types.function Types.int32 Types.int32)
 
@@ -683,26 +678,26 @@ checkProducts :: H.SpecWith ()
 checkProducts = H.describe "Check a few hand-picked product terms" $ do
 
   H.it "Empty product" $ do
-    expectType
+    expectMonotype
       (Terms.product [])
       (Types.product [])
 
   H.it "Unary product" $
-    expectType
+    expectMonotype
       (Terms.product [int32 42])
       (Types.product [Types.int32])
 
   H.describe "Non-empty, monotyped products" $ do
     H.it "test #1" $
-      expectType
+      expectMonotype
         (Terms.product [string "foo", int32 42])
         (Types.product [Types.string, Types.int32])
     H.it "test #2" $
-      expectType
+      expectMonotype
         (Terms.product [string "foo", list [float32 42.0, float32 137.0]])
         (Types.product [Types.string, Types.list Types.float32])
     H.it "test #3" $
-      expectType
+      expectMonotype
         (Terms.product [string "foo", int32 42, list [float32 42.0, float32 137.0]])
         (Types.product [Types.string, Types.int32, Types.list Types.float32])
 
@@ -718,7 +713,7 @@ checkProducts = H.describe "Check a few hand-picked product terms" $ do
 
   H.describe "Pairs" $ do
     H.it "test #1" $
-      expectType
+      expectMonotype
         (pair (int32 42) "foo")
         (Types.pair Types.int32 Types.string)
     H.it "test #2" $
@@ -751,7 +746,7 @@ checkSums = H.describe "Check a few hand-picked sum terms" $ do
 
   H.describe "Singleton sum terms" $ do
     H.it "test #1" $
-      expectType
+      expectMonotype
         (Terms.sum 0 1 $ string "foo")
         (Types.sum [Types.string])
     H.it "test #2" $
@@ -974,43 +969,38 @@ checkWrappedTerms = H.describe "Check nominal introductions and eliminations" $ 
 
   H.describe "Nominal introductions" $ do
     H.it "test #1" $
-      expectType
+      expectMonotype
         (wrap testTypeStringAliasName $ string "foo")
         (TypeVariable testTypeStringAliasName)
     H.it "test #2" $
-      expectType
+      expectMonotype
         (lambda "v" $ wrap testTypeStringAliasName $ var "v")
         (Types.function Types.string (TypeVariable testTypeStringAliasName))
 
   H.it "Nominal eliminations" $ do
---    expectType
+--    expectMonotype
 --      (unwrap testTypeStringAliasName)
 --      (Types.function testTypeStringAlias (Ann.doc "An alias for the string type" Types.string))
-    expectType
+    expectMonotype
       (unwrap testTypeStringAliasName @@ (wrap testTypeStringAliasName $ string "foo"))
       Types.string
 
+-- TODO: restore the test cases which are commented out
 spec :: H.Spec
 spec = do
-  return ()
-
-  -- TODO: restore the following
---   checkAlgorithmW
---
--- --  checkEliminations
--- --  checkIndividualTerms
---   checkLetTerms
---   checkLists
---   checkLiterals
--- --  checkOtherFunctionTerms
---   checkPathologicalTerms
--- --  checkPolymorphism
---   checkPrimitives
---   checkProducts
--- --  checkSums
--- --  checkWrappedTerms
---
--- --  checkSubtermAnnotations
--- --  checkTypeAnnotations
---
--- --  checkUserProvidedTypes -- disabled for now; user-provided type variables are replaced with fresh variables
+  checkAlgorithmW
+--  checkEliminations
+--  checkIndividualTerms
+  checkLetTerms
+  checkLists
+  checkLiterals
+--  checkOtherFunctionTerms
+  checkPathologicalTerms
+--  checkPolymorphism
+  checkPrimitives
+  checkProducts
+--  checkSums
+--  checkWrappedTerms
+--  checkSubtermAnnotations
+--  checkTypeAnnotations
+--  checkUserProvidedTypes -- disabled for now; user-provided type variables are replaced with fresh variables
