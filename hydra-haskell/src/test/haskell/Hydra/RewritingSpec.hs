@@ -8,6 +8,7 @@ import Hydra.Tools.Monads
 import Hydra.Dsl.Terms as Terms
 import Hydra.Lib.Io
 import qualified Hydra.Dsl.Types as Types
+import Hydra.Dsl.ShorthandTypes
 
 import Hydra.TestUtils
 
@@ -327,14 +328,91 @@ testFreeVariablesInTerm = do
         (freeVariablesInTerm (list [var "x", (lambda "y" $ var "y") @@ var "y"]))
         (S.fromList [Name "x", Name "y"])
 
---testReplaceFreeName :: H.SpecWith ()
---testReplaceFreeName = do
---  H.describe "Test replace free type variables" $ do
---
---    H.it "Check that variable types are replaced" $ do
---      H.shouldBe
---        (replaceFreeName (Name "v1") Types.string $ Types.var "v")
---        ()
+testNormalizeTypeVariablesInTerm :: H.SpecWith ()
+testNormalizeTypeVariablesInTerm = do
+    H.describe "No type variables" $ do
+      H.it "test #1" $ noChange
+        (int32 42)
+      H.it "test #2" $ noChange
+        (tlet (int32 42) [
+          ("foo", Nothing, string "foo")])
+      H.it "test #3" $ noChange
+        (tlet (int32 42) [
+          ("foo", Just tsString, string "foo")])
+      H.it "test #4" $ noChange
+        (withMonoFoo $ int32 42)
+
+    H.describe "Only free type variables" $ do
+      H.it "test #1" $ noChange
+        (withPolyFoo $ int32 42)
+      H.it "test #2" $ noChange
+        (withMonoFoo const42)
+      H.it "test #3" $ noChange
+        (withPolyFoo const42)
+
+    H.describe "Simple polymorphic let bindings" $ do
+      H.it "test #1" $ changesTo
+        (withIdBefore id42)
+        (withIdAfter id42)
+
+    H.describe "Rewriting of bindings does not affect environment" $ do
+      H.it "test #1" $ changesTo
+        (withIdBefore const42) -- Free variable "a" coincides with bound variable "a", but in a different branch.
+        (withIdAfter const42)
+      H.it "test #2" $ changesTo -- Same substitution in bindings and environment
+        (withIdBefore (withIdBefore id42))
+        (withIdAfter (withIdAfter id42))
+
+    H.describe "Nested polymorphic let bindings" $ do
+      H.it "Parent variable shadows child variable" $ changesTo
+        (tlet id42 [
+          ("id", Just faa, tlet (lambdaTyped "y" aT $ var "id2" @@ var "y") [
+            ("id2", Just faa, lambdaTyped "x" aT $ var "x")])])
+        (tlet id42 [
+          ("id", Just ft0t0, tlet (lambdaTyped "y" t0 $ var "id2" @@ var "y") [
+            ("id2", Just ft1t1, lambdaTyped "x" t1 $ var "x")])])
+      H.it "No shadowing" $ changesTo
+        (tlet id42 [
+          ("id", Just faa, tlet (lambdaTyped "y" aT $ var "id2" @@ var "y") [
+            ("id2", Just fbb, lambdaTyped "x" bT $ var "x")])])
+        (tlet id42 [
+          ("id", Just ft0t0, tlet (lambdaTyped "y" t0 $ var "id2" @@ var "y") [
+            ("id2", Just ft1t1, lambdaTyped "x" t1 $ var "x")])])
+      H.it "No shadowing, locally free type variable" $ changesTo
+        (tlet (var "fun1" @@ string "foo" @@ int32 42) [
+          ("fun1", Just (Types.poly ["a", "b"] $ Types.functionN [aT, bT, pairT aT bT]), lambdaTyped "x" aT $ lambdaTyped "y" bT $
+            tlet (var "fun2" @@ var "x") [
+              ("fun2", Just (Types.poly ["c"] $ funT cT $ pairT cT bT), lambdaTyped "z" cT $ pair (var "z") (var "y"))])])
+        (tlet (var "fun1" @@ string "foo" @@ int32 42) [
+          ("fun1", Just (Types.poly ["t0", "t1"] $ Types.functionN [t0, t1, pairT t0 t1]), lambdaTyped "x" t0 $ lambdaTyped "y" t1 $
+            tlet (var "fun2" @@ var "x") [
+              ("fun2", Just (Types.poly ["t2"] $ funT t2 $ pairT t2 t1), lambdaTyped "z" t2 $ pair (var "z") (var "y"))])])
+  where
+    changesTo term1 term2 = H.shouldBe (normalize term1) term2
+    noChange term = H.shouldBe (normalize term) term
+    normalize = normalizeTypeVariablesInTerm
+    tlet env triples = TermLet $ Let (toBinding <$> triples) env
+      where
+        toBinding (key, mts, value) = LetBinding (Name key) value mts
+    t0 = Types.var "t0"
+    t1 = Types.var "t1"
+    t2 = Types.var "t2"
+    const42 = lambdaTyped "x" (Types.function aT int32T) $ int32 42
+    faa = Types.poly ["a"] $ funT aT aT
+    fbb = Types.poly ["b"] $ funT bT bT
+    ft0t0 = Types.poly ["t0"] $ funT t0 t0
+    ft1t1 = Types.poly ["t1"] $ funT t1 t1
+    id42 = var "id" @@ int32 42
+    tsString = Types.mono Types.string
+    tsA = Types.mono $ Types.var "a"
+    withIdBefore term = tlet term [
+      ("id", Just faa, lambda "x" $ var "x")]
+    withIdAfter term = tlet term [
+      ("id", Just ft0t0, lambda "x" $ var "x")]
+    withMonoFoo term = tlet term [
+      ("foo", Just tsString, string "foo")]
+    withPolyFoo term = tlet term [
+      ("foo", Just tsA, var "bar")]
 
 testReplaceTerm :: H.SpecWith ()
 testReplaceTerm = do
@@ -475,7 +553,7 @@ spec = do
 --  testExpandTypedLambdas -- TODO: restore me / merge with testExpandLambdas
   testFlattenLetTerms
   testFreeVariablesInTerm
---  testReplaceFreeName
+  testNormalizeTypeVariablesInTerm
   testReplaceTerm
   testRewriteExampleType
   testSimplifyTerm

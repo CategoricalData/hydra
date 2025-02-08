@@ -120,6 +120,9 @@ lambdas params body = case params of
   [] -> body
   (h:r) -> lambda h $ lambdas r body
 
+lambdaTyped :: String -> Type -> Term -> Term
+lambdaTyped param dom body = TermFunction $ FunctionLambda $ Lambda (Name param) (Just dom) body
+
 letMulti :: [(String, Term)] -> Term -> Term
 letMulti bindings body = TermLet $ Let (toBinding <$> bindings) body
   where

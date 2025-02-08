@@ -143,13 +143,18 @@ inlineType schema = rewriteTypeM f
 isFreeIn :: Name -> Term -> Bool
 isFreeIn v term = not $ S.member v $ freeVariablesInTerm term
 
--- | Replace arbitrary type variables like v, a, v_12 in let bindings with the systematic type variables t0, t1, t2, ...
---   following a canonical ordering in the term.
---   This function takes into account type variable shadowing due to nested polymorphic let bindings.
+-- | Recursively replace the type variables of let bindings with the systematic type variables t0, t1, t2, ...,
+--   e.g. (key = value : forall v, a, v_12. type) becomes (key = norm(S,value) : forall t0, t1, t2. S(type)),
+--   S(type) represents the substitution {t0/v, t1/a, t2/v_12} applied to the type, and norm(S, value) is the result
+--   of recursively normalizing the value, replacing the domain type variables of lambdas according to S,
+--   and descending into further let bindings; for the latter, type variable shadowing is taken into account.
+--   Note that the type variables "t0", "t1", etc. are considered to be reserved names;
+--   any free occurrences of these names in the type expressions of a term have undefined semantics.
+--   If collisions are possible, substitute type variables first before applying this function.
 normalizeTypeVariablesInTerm :: Term -> Term
-normalizeTypeVariablesInTerm = rewriteWithSubst M.empty
+normalizeTypeVariablesInTerm = rewriteWithSubst (M.empty, S.empty)
   where
-    rewriteWithSubst subst = rewriteTerm rewrite
+    rewriteWithSubst (subst, boundVars) = rewriteTerm rewrite
       where
         rewrite recurse term = case term of
             TermFunction (FunctionLambda (Lambda v mdom body)) -> TermFunction $ FunctionLambda $
@@ -164,9 +169,9 @@ normalizeTypeVariablesInTerm = rewriteWithSubst M.empty
               Nothing -> b
               Just (TypeScheme vars typ) -> LetBinding key newValue $ Just $ TypeScheme newVars $ substType newSubst typ
                 where
-                  newValue = rewriteWithSubst newSubst value
+                  newValue = rewriteWithSubst (newSubst, S.union boundVars $ S.fromList newVars) value
                   newSubst = M.union (M.fromList $ L.zip vars newVars) subst
-                  newVars = L.take (L.length vars) $ L.filter (\n -> not $ M.member n subst) normalVariables
+                  newVars = L.take (L.length vars) $ L.filter (\n -> not $ S.member n boundVars) normalVariables
     normalVariables = fmap (\i -> Name $ "t" ++ show i) [0..]
     substType subst = rewriteType rewrite
       where
