@@ -143,6 +143,39 @@ inlineType schema = rewriteTypeM f
 isFreeIn :: Name -> Term -> Bool
 isFreeIn v term = not $ S.member v $ freeVariablesInTerm term
 
+-- | Replace arbitrary type variables like v, a, v_12 in let bindings with the systematic type variables t0, t1, t2, ...
+--   following a canonical ordering in the term.
+--   This function takes into account type variable shadowing due to nested polymorphic let bindings.
+normalizeTypeVariablesInTerm :: Term -> Term
+normalizeTypeVariablesInTerm = rewriteWithSubst M.empty
+  where
+    rewriteWithSubst subst = rewriteTerm rewrite
+      where
+        rewrite recurse term = case term of
+            TermFunction (FunctionLambda (Lambda v mdom body)) -> TermFunction $ FunctionLambda $
+              Lambda v (fmap (substType subst) mdom) $ rewrite recurse body
+            TermLet (Let bindings env) -> TermLet $ Let (rewriteBinding <$> bindings) $ rewrite recurse env
+            --TermTyped...
+            --TermTypeAbstraction...
+            --TermTypeApplication...
+            _ -> recurse term
+          where
+            rewriteBinding b@(LetBinding key value mts) = case mts of
+              Nothing -> b
+              Just (TypeScheme vars typ) -> LetBinding key newValue $ Just $ TypeScheme newVars $ substType newSubst typ
+                where
+                  newValue = rewriteWithSubst newSubst value
+                  newSubst = M.union (M.fromList $ L.zip vars newVars) subst
+                  newVars = L.take (L.length vars) $ L.filter (\n -> not $ M.member n subst) normalVariables
+    normalVariables = fmap (\i -> Name $ "t" ++ show i) [0..]
+    substType subst = rewriteType rewrite
+      where
+        rewrite recurse typ = case recurse typ of
+          TypeVariable v -> TypeVariable $ Y.fromMaybe v $ M.lookup v subst
+          --TypeApplication...
+          --TypeLambda...
+          t -> t
+
 -- | Recursively remove term annotations, including within subterms
 removeTermAnnotations :: Term -> Term
 removeTermAnnotations = rewriteTerm remove
