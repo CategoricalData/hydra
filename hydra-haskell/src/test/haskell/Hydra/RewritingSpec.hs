@@ -139,7 +139,6 @@ testExpandLambdas g = do
         let once = expandLambdas g term
         let twice = expandLambdas g once
         H.shouldBe once twice
-
   where
     length = primitive $ Name "hydra/lib/strings.length"
     splitOn = primitive $ Name "hydra/lib/strings.splitOn"
