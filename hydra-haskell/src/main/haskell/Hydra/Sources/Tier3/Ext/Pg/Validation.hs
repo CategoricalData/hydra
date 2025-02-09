@@ -63,16 +63,16 @@ validateEdgeDef :: TElement (
   -> Y.Maybe String)
 validateEdgeDef = validationDefinition "validateEdge" $
   functionN [
-    funT tT (funT vT (optionalT stringT)),
-    funT vT stringT,
-    optionalT (funT vT (optionalT vertexLabelT)),
-    edgeTypeTT,
-    edgeVT,
-    optionalT stringT] $
+    tFun tT (tFun tV (tOpt tString)),
+    tFun tV tString,
+    tOpt (tFun tV (tOpt vertexLabelT)),
+    tEdgeTypeT,
+    tEdgeV,
+    tOpt tString] $
   lambda "checkValue" $ lambda "showValue" $ lambda "labelForVertexId" $ lambda "typ" $ lambda "el" $
     (ref checkAllDef @@ list [var "checkLabel", var "checkId", var "checkProperties", var "checkOut", var "checkIn"]
     `with` [
-      "failWith">: typed (funT stringT stringT) $
+      "failWith">: typed (tFun tString tString) $
         ref edgeErrorDef @@ var "showValue" @@ var "el",
       "checkLabel">: (ref verifyDef
         @@ (Equality.equalString
@@ -119,12 +119,12 @@ validateElementDef :: TElement (
   -> Y.Maybe String)
 validateElementDef = validationDefinition "validateElement" $
   functionN [
-    funT tT (funT vT (optionalT stringT)),
-    funT vT stringT,
-    optionalT (funT vT (optionalT vertexLabelT)),
-    elementTypeTT,
-    elementVT,
-    optionalT stringT] $
+    tFun tT (tFun tV (tOpt tString)),
+    tFun tV tString,
+    tOpt (tFun tV (tOpt vertexLabelT)),
+    tElementTypeT,
+    tElementV,
+    tOpt tString] $
   lambda "checkValue" $ lambda "showValue" $ lambda "labelForVertexId" $ lambda "typ" $ lambda "el" $
     (match _ElementType Nothing [
         _ElementType_vertex>>: lambda "vt" $ (match _Element Nothing [
@@ -152,11 +152,11 @@ validateGraphDef :: TElement (
   -> Y.Maybe String)
 validateGraphDef = validationDefinition "validateGraph" $
   functionNWithClasses [
-    funT tT (funT vT (optionalT stringT)),
-    funT vT stringT,
-    graphSchemaTT,
-    graphVT,
-    optionalT stringT] ordV $
+    tFun tT (tFun tV (tOpt tString)),
+    tFun tV tString,
+    tGraphSchemaT,
+    tGraphV,
+    tOpt tString] ordV $
   lambda "checkValue" $ lambda "showValue" $ lambda "schema" $ lambda "graph" $
     (ref checkAllDef @@ list [var "checkVertices", var "checkEdges"])
     `with` [
@@ -187,7 +187,7 @@ validateGraphDef = validationDefinition "validateGraph" $
               @@ var "labelForVertexId"
               @@ var "t"
               @@ var "el"),
-          "labelForVertexId">: typed (optionalT (funT vT (optionalT vertexLabelT))) $
+          "labelForVertexId">: typed (tOpt (tFun tV (tOpt vertexLabelT))) $
             just $ lambda "i" $ Optionals.map @@ (project _Vertex _Vertex_label) @@ (Maps.lookup @@ var "i" @@ (project _Graph _Graph_vertices @@ var "graph"))]]
 
 validatePropertiesDef :: TElement (
@@ -197,16 +197,16 @@ validatePropertiesDef :: TElement (
   -> Y.Maybe String)
 validatePropertiesDef = validationDefinition "validateProperties" $
   functionN [
-    funT tT (funT vT (optionalT stringT)),
-    listT propertyTypeTT,
-    mapT propertyKeyT vT,
-    optionalT stringT] $
+    tFun tT (tFun tV (tOpt tString)),
+    tList tPropertyTypeT,
+    tMap propertyKeyT tV,
+    tOpt tString] $
   lambda "checkValue" $ lambda "types" $ lambda "props" $
     ((ref checkAllDef @@ list [var "checkTypes", var "checkValues"])
     `with` [
       "checkTypes">: ref checkAllDef @@ (Lists.map @@ var "checkType" @@ var "types"),
       "checkType">:
-        typed (funT propertyTypeTT $ optionalT stringT) $
+        typed (tFun tPropertyTypeT $ tOpt tString) $
         lambda "t" $ ifElse (project _PropertyType _PropertyType_required @@ var "t")
           (ifOpt (Maps.lookup @@ (project _PropertyType _PropertyType_key @@ var "t") @@ var "props")
             (just (ref prependDef @@ "Missing value for " @@ (unwrap _PropertyKey @@ (project _PropertyType _PropertyType_key @@ var "t"))))
@@ -214,7 +214,7 @@ validatePropertiesDef = validationDefinition "validateProperties" $
           nothing,
       "checkValues">: ((ref checkAllDef @@ (Lists.map @@ var "checkPair" @@ (Maps.toList @@ var "props")))
         `with` [
-          "m">: typed (mapT propertyKeyT tT) $
+          "m">: typed (tMap propertyKeyT tT) $
             Maps.fromList @@ (Lists.map
               @@ (lambda "p" $ pair
                 (project _PropertyType _PropertyType_key @@ var "p")
@@ -237,15 +237,15 @@ validateVertexDef :: TElement (
   -> Y.Maybe String)
 validateVertexDef = validationDefinition "validateVertex" $
   functionN [
-    funT tT (funT vT (optionalT stringT)),
-    funT vT stringT,
-    vertexTypeTT,
-    vertexVT,
-    optionalT stringT] $
+    tFun tT (tFun tV (tOpt tString)),
+    tFun tV tString,
+    tVertexTypeT,
+    tVertexV,
+    tOpt tString] $
   lambda "checkValue" $ lambda "showValue" $ lambda "typ" $ lambda "el" $
     ((ref checkAllDef @@ list [var "checkLabel", var "checkId", var "checkProperties"])
     `with` [
-      "failWith">: typed (funT stringT stringT) $
+      "failWith">: typed (tFun tString tString) $
         ref vertexErrorDef @@ var "showValue" @@ var "el",
       "checkLabel">: (ref verifyDef
         @@ (Equality.equalString
@@ -269,7 +269,7 @@ validateVertexDef = validationDefinition "validateVertex" $
 
 checkAllDef :: TElement ([Y.Maybe a] -> Y.Maybe a)
 checkAllDef = validationDefinition "checkAll" $
-  function (listT $ optionalT aT) (optionalT aT) $
+  function (tList $ tOpt tA) (tOpt tA) $
   lambda "checks" (
     (Lists.safeHead @@ var "errors")
     `with` [
@@ -277,25 +277,25 @@ checkAllDef = validationDefinition "checkAll" $
 
 edgeErrorDef :: TElement ((v -> String) -> PG.Edge v -> String -> String)
 edgeErrorDef = validationDefinition "edgeError" $
-  functionN [funT vT stringT, edgeVT, stringT, stringT] $
+  functionN [tFun tV tString, tEdgeV, tString, tString] $
   lambda "showValue" $ lambda "e" $
     ref prependDef @@ ("Invalid edge with id " ++ (var "showValue" @@ (project _Edge _Edge_id @@ var "e")))
 
 edgeLabelMismatchDef :: TElement (PG.EdgeLabel -> PG.EdgeLabel -> String)
 edgeLabelMismatchDef = validationDefinition "edgeLabelMismatch" $
-  functionN [edgeLabelT, edgeLabelT, stringT] $
+  functionN [edgeLabelT, edgeLabelT, tString] $
   lambda "expected" $ lambda "actual" $
     "expected " ++ (unwrap _EdgeLabel @@ var "expected") ++ ", found " ++ (unwrap _EdgeLabel @@ var "actual")
 
 prependDef :: TElement (String -> String -> String)
 prependDef = validationDefinition "prepend" $
-  functionN [stringT, stringT, stringT] $
+  functionN [tString, tString, tString] $
   lambda "prefix" $ lambda "msg" $
     (var "prefix") ++ ": " ++ (var "msg")
 
 verifyDef :: TElement (Bool -> String -> Maybe String)
 verifyDef = validationDefinition "verify" $
-  functionN [booleanT, stringT, optionalT stringT] $
+  functionN [tBoolean, tString, tOpt tString] $
   lambda "b" $ lambda "err" $
     ifElse (var "b")
       nothing
@@ -303,29 +303,30 @@ verifyDef = validationDefinition "verify" $
 
 vertexErrorDef :: TElement ((v -> String) -> PG.Vertex v -> String -> String)
 vertexErrorDef = validationDefinition "vertexError" $
-  functionN [funT vT stringT, vertexVT, stringT, stringT] $
+  functionN [tFun tV tString, tVertexV, tString, tString] $
   lambda "showValue" $ lambda "v" $
     ref prependDef @@ ("Invalid vertex with id " ++ (var "showValue" @@ (project _Vertex _Vertex_id @@ var "v")))
 
 vertexLabelMismatchDef :: TElement (PG.VertexLabel -> PG.VertexLabel -> String)
 vertexLabelMismatchDef = validationDefinition "vertexLabelMismatch" $
-  functionN [vertexLabelT, vertexLabelT, stringT] $
+  functionN [vertexLabelT, vertexLabelT, tString] $
   lambda "expected" $ lambda "actual" $
     "expected " ++ (unwrap _VertexLabel @@ var "expected") ++ ", found " ++ (unwrap _VertexLabel @@ var "actual")
 
 ordV = (M.fromList [(Name "v", S.fromList [TypeClassOrdering])])
 
-edgeLabelT = TypeVariable _EdgeLabel
-edgeTypeTT = Types.apply (TypeVariable _EdgeType) tT
-edgeVT = Types.apply (TypeVariable _Edge) vT
-elementTypeTT = Types.apply (TypeVariable _ElementType) tT
-elementVT = Types.apply (TypeVariable _Element) vT
-graphSchemaTT = Types.apply (TypeVariable _GraphSchema) tT
-graphVT = Types.apply (TypeVariable _Graph) vT
-propertyKeyT = TypeVariable _PropertyKey
-propertyTypeTT = Types.apply (TypeVariable _PropertyType) tT
-vertexLabelT = TypeVariable _VertexLabel
-vertexTypeTT = Types.apply (TypeVariable _VertexType) tT
-vertexVT = Types.apply (TypeVariable _Vertex) vT
+tEdgeTypeT = Types.apply (TypeVariable _EdgeType) tT
+tEdgeV = Types.apply (TypeVariable _Edge) tV
+tElementTypeT = Types.apply (TypeVariable _ElementType) tT
+tElementV = Types.apply (TypeVariable _Element) tV
+tGraphSchemaT = Types.apply (TypeVariable _GraphSchema) tT
+tGraphV = Types.apply (TypeVariable _Graph) tV
+tPropertyTypeT = Types.apply (TypeVariable _PropertyType) tT
+tVertexTypeT = Types.apply (TypeVariable _VertexType) tT
+tVertexV = Types.apply (TypeVariable _Vertex) tV
 tT = Types.var "t"
-vT = Types.var "v"
+tV = Types.var "v"
+
+edgeLabelT = TypeVariable _EdgeLabel
+propertyKeyT = TypeVariable _PropertyKey
+vertexLabelT = TypeVariable _VertexLabel

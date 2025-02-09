@@ -466,7 +466,7 @@ coreEncodeWrappedTypeDef = coreEncodingDefinition "WrappedType" wrappedTypeT $
 
 isEncodedTypeDef :: TElement (Term -> Bool)
 isEncodedTypeDef = coreEncodingExtrasDefinition "isEncodedType" $
-  function termT booleanT $
+  function termT tBoolean $
   lambda "t" $ (match _Term (Just false) [
       TCase _Term_application --> lambda "a" $
         ref isEncodedTypeDef @@ (Core.applicationFunction @@ var "a"),
@@ -476,7 +476,7 @@ isEncodedTypeDef = coreEncodingExtrasDefinition "isEncodedType" $
 
 isTypeDef :: TElement (Type -> Bool)
 isTypeDef = coreEncodingExtrasDefinition "isType" $
-  function typeT booleanT $
+  function typeT tBoolean $
   lambda "t" $ (match _Type (Just false) [
       TCase _Type_application --> lambda "a" $
         ref isTypeDef @@ (Core.applicationTypeFunction @@ var "a"),
@@ -489,10 +489,10 @@ isTypeDef = coreEncodingExtrasDefinition "isType" $
 
 isUnitTermDef :: TElement (Term -> Bool)
 isUnitTermDef = coreEncodingExtrasDefinition "isUnitTerm" $
-  function termT booleanT $
+  function termT tBoolean $
   lambda "t" $ Equality.equalTerm @@ (ref fullyStripTermDef @@ var "t") @@ TTerm (coreEncodeTerm Terms.unit)
 
 isUnitTypeDef :: TElement (Term -> Bool)
 isUnitTypeDef = coreEncodingExtrasDefinition "isUnitType" $
-  function typeT booleanT $
-  lambda "t" $ Equality.equalType @@ (ref stripTypeDef @@ var "t") @@ TTerm (coreEncodeType unitT)
+  function typeT tBoolean $
+  lambda "t" $ Equality.equalType @@ (ref stripTypeDef @@ var "t") @@ TTerm (coreEncodeType tUnit)

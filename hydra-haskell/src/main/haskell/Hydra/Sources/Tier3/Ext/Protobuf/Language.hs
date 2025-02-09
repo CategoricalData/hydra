@@ -86,7 +86,7 @@ protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
 protobufReservedWordsDef :: TElement (S.Set String)
 protobufReservedWordsDef = protobufLanguageDefinition "protobufReservedWords" $
   doc "A set of reserved words in Protobuf" $
-  typed (setT stringT) $
+  typed (tSet tString) $
   (Sets.fromList @@ (Lists.concat @@ list [var "fieldNames"]))
   `with` [
     "fieldNames">:

@@ -36,5 +36,5 @@ hydraFunctionsModule = Module (Namespace "hydra/functions") elements [] [hydraCo
 idDef :: TElement (a -> a)
 idDef = functionsDefinition "id" $
   doc "The identity function" $
-  function aT aT $
+  function tA tA $
   lambda "x" $ var "x"

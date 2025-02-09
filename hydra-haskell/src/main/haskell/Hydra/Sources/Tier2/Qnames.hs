@@ -48,27 +48,27 @@ hydraQnamesModule = Module (Namespace "hydra/qnames") elements [] [hydraCoreModu
 
 localNameOfEagerDef :: TElement (Name -> String)
 localNameOfEagerDef = qnamesDefinition "localNameOfEager" $
-  function nameT stringT $
+  function nameT tString $
   Module.qualifiedNameLocal <.> ref qualifyNameEagerDef
 
 localNameOfLazyDef :: TElement (Name -> String)
 localNameOfLazyDef = qnamesDefinition "localNameOfLazy" $
-  function nameT stringT $
+  function nameT tString $
   Module.qualifiedNameLocal <.> ref qualifyNameLazyDef
 
 namespaceOfEagerDef :: TElement (Name -> Maybe Namespace)
 namespaceOfEagerDef = qnamesDefinition "namespaceOfEager" $
-  function nameT (optionalT namespaceT) $
+  function nameT (tOpt namespaceT) $
   Module.qualifiedNameNamespace <.> ref qualifyNameEagerDef
 
 namespaceOfLazyDef :: TElement (Name -> Maybe Namespace)
 namespaceOfLazyDef = qnamesDefinition "namespaceOfLazy" $
-  function nameT (optionalT namespaceT) $
+  function nameT (tOpt namespaceT) $
   Module.qualifiedNameNamespace <.> ref qualifyNameLazyDef
 
 namespaceToFilePathDef :: TElement (Bool -> FileExtension -> Namespace -> String)
 namespaceToFilePathDef = qnamesDefinition "namespaceToFilePath" $
-  function booleanT (funT fileExtensionT (funT namespaceT stringT)) $
+  function tBoolean (tFun fileExtensionT (tFun namespaceT tString)) $
   lambda "caps" $ lambda "ext" $ lambda "ns" $
     (((Strings.intercalate @@ "/" @@ var "parts") ++ "." ++ (Module.unFileExtension @@ var "ext"))
     `with` [
@@ -82,7 +82,7 @@ namespaceToFilePathDef = qnamesDefinition "namespaceToFilePath" $
 qnameDef :: TElement (Namespace -> String -> Name)
 qnameDef = qnamesDefinition "qname" $
   doc "Construct a qualified (dot-separated) name" $
-  functionN [namespaceT, stringT, nameT] $
+  functionN [namespaceT, tString, nameT] $
   lambda "ns" $ lambda "name" $
     nom _Name $
       apply Strings.cat $
