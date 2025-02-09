@@ -29,13 +29,34 @@ hydraTestingModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
         doc "One of two evaluation styles: eager or lazy" $
         enum ["eager", "lazy"],
 
-      def "TestCase" $
-        doc "A simple test case with an input and an expected output" $
+      def "EvaluationTestCase" $
+        doc "A test case which evaluates (reduces) a given term and compares it with the expected result" $
         record [
-          "description">: optional string,
           "evaluationStyle">: testing "EvaluationStyle",
           "input">: core "Term",
           "output">: core "Term"],
+
+      def "InferenceTestCase" $
+        doc "A test case which performs type inference on a given term and compares the result with an expected type scheme" $
+        record [
+          "input">: core "Term",
+          "output">: core "TypeScheme"],
+
+      def "Tag" string,
+
+      def "TestCase" $
+        doc "A simple test case with an input and an expected output" $
+        union [
+          "evaluation">: testing "EvaluationTestCase",
+          "inference">: testing "InferenceTestCase"],
+
+      def "TestCaseWithMetadata" $
+        doc "One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags" $
+        record [
+          "name">: string,
+          "case">: testing "TestCase",
+          "description">: optional string,
+          "tags">: list $ testing "Tag"],
 
       def "TestGroup" $
         doc "A collection of test cases with a name and optional description" $
@@ -43,4 +64,4 @@ hydraTestingModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "name">: string,
           "description">: optional string,
           "subgroups">: list (testing "TestGroup"),
-          "cases">: list (testing "TestCase")]]
+          "cases">: list (testing "TestCaseWithMetadata")]]

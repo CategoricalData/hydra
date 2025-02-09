@@ -9,8 +9,8 @@ import qualified Data.Maybe as Y
 
 annotatedTerm :: TTerm Term -> TTerm (M.Map String Term) -> TTerm AnnotatedTerm
 annotatedTerm subject annotation = Base.record _AnnotatedTerm [
-    _AnnotatedTerm_subject>>: subject,
-    _AnnotatedTerm_annotation>>: annotation]
+  _AnnotatedTerm_subject>>: subject,
+  _AnnotatedTerm_annotation>>: annotation]
 
 annotatedTermSubject :: TTerm (AnnotatedTerm -> Term)
 annotatedTermSubject = project _AnnotatedTerm _AnnotatedTerm_subject
@@ -20,8 +20,8 @@ annotatedTermAnnotation = project _AnnotatedTerm _AnnotatedTerm_annotation
 
 annotatedType :: TTerm Type -> TTerm (M.Map String Term) -> TTerm AnnotatedType
 annotatedType subject annotation = Base.record _AnnotatedType [
-    _AnnotatedType_subject>>: subject,
-    _AnnotatedType_annotation>>: annotation]
+  _AnnotatedType_subject>>: subject,
+  _AnnotatedType_annotation>>: annotation]
 
 annotatedTypeSubject :: TTerm (AnnotatedType -> Type)
 annotatedTypeSubject = project _AnnotatedType _AnnotatedType_subject
@@ -31,8 +31,8 @@ annotatedTypeAnnotation = project _AnnotatedType _AnnotatedType_annotation
 
 application :: TTerm Term -> TTerm Term -> TTerm (Application)
 application function argument = Base.record _Application [
-    _Application_function>>: function,
-    _Application_argument>>: argument]
+  _Application_function>>: function,
+  _Application_argument>>: argument]
 
 applicationFunction :: TTerm (Application -> Term)
 applicationFunction = project _Application _Application_function
@@ -42,8 +42,8 @@ applicationArgument = project _Application _Application_argument
 
 applicationType :: TTerm Type -> TTerm Type -> TTerm (ApplicationType)
 applicationType function argument = Base.record _ApplicationType [
-    _ApplicationType_function>>: function,
-    _ApplicationType_argument>>: argument]
+  _ApplicationType_function>>: function,
+  _ApplicationType_argument>>: argument]
 
 applicationTypeFunction :: TTerm (ApplicationType -> Type)
 applicationTypeFunction = project _ApplicationType _ApplicationType_function
@@ -53,9 +53,9 @@ applicationTypeArgument = project _ApplicationType _ApplicationType_argument
 
 caseStatement :: TTerm Name -> TTerm (Maybe Term) -> TTerm [Field] -> TTerm (CaseStatement)
 caseStatement typeName defaultTerm cases = Base.record _CaseStatement [
-    _CaseStatement_typeName>>: typeName,
-    _CaseStatement_default>>: defaultTerm,
-    _CaseStatement_cases>>: cases]
+  _CaseStatement_typeName>>: typeName,
+  _CaseStatement_default>>: defaultTerm,
+  _CaseStatement_cases>>: cases]
 
 caseStatementTypeName :: TTerm (CaseStatement -> Name)
 caseStatementTypeName = project _CaseStatement _CaseStatement_typeName
@@ -68,8 +68,8 @@ caseStatementCases = project _CaseStatement _CaseStatement_cases
 
 field :: TTerm Name -> TTerm Term -> TTerm Field
 field name term = Base.record _Field [
-    _Field_name>>: name,
-    _Field_term>>: term]
+  _Field_name>>: name,
+  _Field_term>>: term]
 
 fieldName :: TTerm (Field -> Name)
 fieldName = project _Field _Field_name
@@ -79,8 +79,8 @@ fieldTerm = project _Field _Field_term
 
 fieldType :: TTerm Name -> TTerm Type -> TTerm FieldType
 fieldType name typ = Base.record _FieldType [
-    _FieldType_name>>: name,
-    _FieldType_type>>: typ]
+  _FieldType_name>>: name,
+  _FieldType_type>>: typ]
 
 fieldTypeName :: TTerm (FieldType -> Name)
 fieldTypeName = project _FieldType _FieldType_name
@@ -96,8 +96,8 @@ floatType t = unitVariant _FloatType $ case t of
 
 functionType :: TTerm Type -> TTerm Type -> TTerm FunctionType
 functionType domain codomain = Base.record _FunctionType [
-    _FunctionType_domain>>: domain,
-    _FunctionType_codomain>>: codomain]
+  _FunctionType_domain>>: domain,
+  _FunctionType_codomain>>: codomain]
 
 functionTypeDomain :: TTerm (FunctionType -> Type)
 functionTypeDomain = project _FunctionType _FunctionType_domain
@@ -107,8 +107,8 @@ functionTypeCodomain = project _FunctionType _FunctionType_codomain
 
 injection :: TTerm Name -> TTerm Field -> TTerm Injection
 injection typeName field = Base.record _Injection [
-    _Injection_typeName>>: typeName,
-    _Injection_field>>: field]
+  _Injection_typeName>>: typeName,
+  _Injection_field>>: field]
 
 injectionTypeName :: TTerm (Injection -> Name)
 injectionTypeName = project _Injection _Injection_typeName
@@ -130,8 +130,8 @@ integerType t = unitVariant _IntegerType $ case t of
 
 lambda :: TTerm Name -> TTerm Term -> TTerm Lambda
 lambda parameter body = Base.record _Lambda [
-    _Lambda_parameter>>: parameter,
-    _Lambda_body>>: body]
+  _Lambda_parameter>>: parameter,
+  _Lambda_body>>: body]
 
 lambdaParameter :: TTerm (Lambda -> Name)
 lambdaParameter = project _Lambda _Lambda_parameter
@@ -144,8 +144,8 @@ lambdaDomain = project _Lambda _Lambda_domain
 
 lambdaType :: TTerm Name -> TTerm Type -> TTerm LambdaType
 lambdaType parameter body = Base.record _LambdaType [
-    _LambdaType_parameter>>: parameter,
-    _LambdaType_body>>: body]
+  _LambdaType_parameter>>: parameter,
+  _LambdaType_body>>: body]
 
 lambdaTypeParameter :: TTerm (LambdaType -> Name)
 lambdaTypeParameter = project _LambdaType _LambdaType_parameter
@@ -155,8 +155,8 @@ lambdaTypeBody = project _LambdaType _LambdaType_body
 
 letExpression :: TTerm [LetBinding] -> TTerm Term -> TTerm Let
 letExpression bindings environment = Base.record _Let [
-    _Let_bindings>>: bindings,
-    _Let_environment>>: environment]
+  _Let_bindings>>: bindings,
+  _Let_environment>>: environment]
 
 letBindings :: TTerm (Let -> [LetBinding])
 letBindings = project _Let _Let_bindings
@@ -187,8 +187,8 @@ literalInteger = variant _Literal _Literal_integer
 
 mapType :: TTerm Type -> TTerm Type -> TTerm MapType
 mapType keys values = Base.record _MapType [
-    _MapType_keys>>: keys,
-    _MapType_values>>: values]
+  _MapType_keys>>: keys,
+  _MapType_values>>: values]
 
 mapTypeKeys :: TTerm (MapType -> Type)
 mapTypeKeys = project _MapType _MapType_keys
@@ -201,8 +201,8 @@ name nm = TTerm $ coreEncodeName nm
 
 optionalCases :: TTerm Term -> TTerm Term -> TTerm OptionalCases
 optionalCases nothing just = Base.record _OptionalCases [
-    _OptionalCases_nothing>>: nothing,
-    _OptionalCases_just>>: just]
+  _OptionalCases_nothing>>: nothing,
+  _OptionalCases_just>>: just]
 
 optionalCasesNothing :: TTerm (OptionalCases -> Term)
 optionalCasesNothing = project _OptionalCases _OptionalCases_nothing
@@ -218,8 +218,8 @@ projectionField = project _Projection _Projection_field
 
 record :: TTerm Name -> TTerm [Field] -> TTerm Record
 record typeName fields = Base.record _Record [
-    _Record_typeName>>: typeName,
-    _Record_fields>>: fields]
+  _Record_typeName>>: typeName,
+  _Record_fields>>: fields]
 
 recordTypeName :: TTerm (Record -> Name)
 recordTypeName = project _Record _Record_typeName
@@ -229,8 +229,8 @@ recordFields = project _Record _Record_fields
 
 rowType :: TTerm Name -> TTerm [FieldType] -> TTerm (RowType)
 rowType typeName fields = Base.record _RowType [
-    _RowType_typeName>>: typeName,
-    _RowType_fields>>: fields]
+  _RowType_typeName>>: typeName,
+  _RowType_fields>>: fields]
 
 rowTypeTypeName :: TTerm (RowType -> Name)
 rowTypeTypeName = project _RowType _RowType_typeName
@@ -240,9 +240,9 @@ rowTypeFields = project _RowType _RowType_fields
 
 sum :: TTerm Int -> TTerm Int -> TTerm Term -> TTerm Sum
 sum index size term = Base.record _Sum [
-    _Sum_index>>: index,
-    _Sum_size>>: size,
-    _Sum_term>>: term]
+  _Sum_index>>: index,
+  _Sum_size>>: size,
+  _Sum_term>>: term]
 
 sumIndex :: TTerm (Sum -> Int)
 sumIndex = project _Sum _Sum_index
@@ -285,8 +285,8 @@ unNamespace = unwrap _Namespace
 
 wrappedTerm :: TTerm Name -> TTerm Term -> TTerm WrappedTerm
 wrappedTerm typeName object = Base.record _WrappedTerm [
-    _WrappedTerm_typeName>>: typeName,
-    _WrappedTerm_object>>: object]
+  _WrappedTerm_typeName>>: typeName,
+  _WrappedTerm_object>>: object]
 
 wrappedTermTypeName :: TTerm (WrappedTerm -> Name)
 wrappedTermTypeName = project _WrappedTerm _WrappedTerm_typeName
@@ -296,8 +296,8 @@ wrappedTermObject = project _WrappedTerm _WrappedTerm_object
 
 wrappedType :: TTerm Name -> TTerm Type -> TTerm WrappedType
 wrappedType typeName object = Base.record _WrappedType [
-    _WrappedType_typeName>>: typeName,
-    _WrappedType_object>>: object]
+  _WrappedType_typeName>>: typeName,
+  _WrappedType_object>>: object]
 
 wrappedTypeTypeName :: TTerm (WrappedType -> Name)
 wrappedTypeTypeName = project _WrappedType _WrappedType_typeName
