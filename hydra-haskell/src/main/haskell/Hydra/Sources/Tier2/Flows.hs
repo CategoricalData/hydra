@@ -54,7 +54,7 @@ hydraFlowsModule = Module (Namespace "hydra/flows") elements [hydraConstantsModu
 
 bindDef :: TElement (Flow s a -> (a -> Flow s b) -> Flow s b)
 bindDef = flowsDefinition "bind" $
-  functionN [flowT sT aT, Types.function aT (flowT sT bT), flowT sT bT] $
+  functionN [tFlow tS tA, Types.function tA (tFlow tS tB), tFlow tS tB] $
   lambdas ["l", "r"] ((wrap _Flow (var "q"))
     `with` [
       "q">: lambdas ["s0", "t0"] ((matchOpt
@@ -67,7 +67,7 @@ bindDef = flowsDefinition "bind" $
 bind2Def :: TElement ((Flow s a) -> (Flow s b) -> (a -> b -> Flow s c) -> Flow s c)
 bind2Def = flowsDefinition "bind2" $
   doc "Bind the results of two flows into another flow" $
-  functionN [flowT sT aT, flowT sT bT, Types.functionN [aT, bT, flowT sT cT], flowT sT cT] $
+  functionN [tFlow tS tA, tFlow tS tB, Types.functionN [tA, tB, tFlow tS tC], tFlow tS tC] $
   lambdas ["f1", "f2", "f"] $ ref bindDef @@ var "f1" @@
     (lambda "r1" $ ref bindDef @@ var "f2" @@
       (lambda "r2" $ var "f" @@ var "r1" @@ var "r2"))
@@ -75,7 +75,7 @@ bind2Def = flowsDefinition "bind2" $
 bind3Def :: TElement ((Flow s a) -> (Flow s b) -> (Flow s c) -> (a -> b -> c -> Flow s d) -> Flow s d)
 bind3Def = flowsDefinition "bind3" $
   doc "Bind the results of three flows into another flow" $
-  functionN [flowT sT aT, flowT sT bT, flowT sT cT, Types.functionN [aT, bT, cT, flowT sT dT], flowT sT dT] $
+  functionN [tFlow tS tA, tFlow tS tB, tFlow tS tC, Types.functionN [tA, tB, tC, tFlow tS tD], tFlow tS tD] $
   lambdas ["f1", "f2", "f3", "f"] $ ref bindDef @@ var "f1" @@
     (lambda "r1" $ ref bindDef @@ var "f2" @@
       (lambda "r2" $ ref bindDef @@ var "f3" @@
@@ -84,7 +84,7 @@ bind3Def = flowsDefinition "bind3" $
 bind4Def :: TElement ((Flow s a) -> (Flow s b) -> (Flow s c) -> (a -> b -> c -> Flow s d) -> Flow s d)
 bind4Def = flowsDefinition "bind4" $
   doc "Bind the results of four flows into another flow" $
-  functionN [flowT sT aT, flowT sT bT, flowT sT cT, flowT sT dT, Types.functionN [aT, bT, cT, dT, flowT sT eT], flowT sT eT] $
+  functionN [tFlow tS tA, tFlow tS tB, tFlow tS tC, tFlow tS tD, Types.functionN [tA, tB, tC, tD, tFlow tS tE], tFlow tS tE] $
   lambdas ["f1", "f2", "f3", "f4", "f"] $ ref bindDef @@ var "f1" @@
     (lambda "r1" $ ref bindDef @@ var "f2" @@
       (lambda "r2" $ ref bindDef @@ var "f3" @@
@@ -97,21 +97,21 @@ emptyTraceDef = flowsDefinition "emptyTrace" $
 
 failDef :: TElement (String -> Flow s a)
 failDef = flowsDefinition "failInternal" $
-  function stringT (flowT sT aT) $
+  function tString (tFlow tS tA) $
   lambda "msg" $ wrap _Flow $ lambdas ["s", "t"] $
     Flows.flowState nothing (var "s") (ref pushErrorDef @@ var "msg" @@ var "t")
 
 flowSucceedsDef :: TElement (Flow s a -> Bool)
 flowSucceedsDef = flowsDefinition "flowSucceeds" $
   doc "Check whether a flow succeeds" $
-  function (Types.var "s") (Types.function flowSAT Types.boolean) $
+  function (Types.var "s") (Types.function tFlowSA Types.boolean) $
   lambda "cx" $ lambda "f" $
     Optionals.isJust @@ (Flows.flowStateValue @@ (Flows.unFlow @@ var "f" @@ var "cx" @@ ref emptyTraceDef))
 
 fromFlowDef :: TElement (a -> s -> Flow s a -> a)
 fromFlowDef = flowsDefinition "fromFlow" $
   doc "Get the value of a flow, or a default value if the flow fails" $
-  function (Types.var "a") (Types.function (Types.var "s") (Types.function flowSAT (Types.var "a"))) $
+  function (Types.var "a") (Types.function (Types.var "s") (Types.function tFlowSA (Types.var "a"))) $
   lambda "def" $ lambda "cx" $ lambda "f" $
       matchOpt (var "def") (lambda "x" $ var "x")
         @@ (Flows.flowStateValue @@ (Flows.unFlow @@ var "f" @@ var "cx" @@ ref emptyTraceDef))
@@ -121,8 +121,8 @@ mutateTraceDef = flowsDefinition "mutateTrace" $
     functionN [
       Types.function traceT (eitherT Types.string traceT),
       Types.functionN [traceT, traceT, traceT],
-      flowSAT,
-      flowSAT] $
+      tFlowSA,
+      tFlowSA] $
     lambda "mutate" $ lambda "restore" $ lambda "f" $ wrap _Flow (
       lambda "s0" $ lambda "t0" (
         ((match _Either Nothing [
@@ -134,7 +134,7 @@ mutateTraceDef = flowsDefinition "mutateTrace" $
             lambda "msg" $ Flows.flowState nothing (var "s0") (ref pushErrorDef @@ var "msg" @@ var "t0"),
           -- retain the updated state, but reset the trace after execution
           "forRight">:
-            function traceT (flowStateT (Types.var "s") (Types.var "s")) $
+            function traceT (tFlowState (Types.var "s") (Types.var "s")) $
             lambda "t1" ((Flows.flowState
                 (Flows.flowStateValue @@ var "f2")
                 (Flows.flowStateState @@ var "f2")
@@ -148,7 +148,7 @@ mutateTraceDef = flowsDefinition "mutateTrace" $
 
 pureDef :: TElement (a -> Flow s a)
 pureDef = flowsDefinition "pureInternal" $
-  function aT (flowT sT aT) $
+  function tA (tFlow tS tA) $
   lambda "x" $ wrap _Flow $ lambdas ["s", "t"] $ Flows.flowState (just $ var "x") (var "s") (var "t")
 
 pushErrorDef :: TElement (String -> Trace -> Trace)
@@ -165,7 +165,7 @@ pushErrorDef = flowsDefinition "pushError" $
 warnDef :: TElement (String -> Flow s a -> Flow s a)
 warnDef = flowsDefinition "warn" $
   doc "Continue the current flow after adding a warning message" $
-  functionN [Types.string, flowSAT, flowSAT] $
+  functionN [Types.string, tFlowSA, tFlowSA] $
   lambda "msg" $ lambda "b" $ wrap _Flow $ lambda "s0" $ lambda "t0" (
     (Flows.flowState
       (Flows.flowStateValue @@ var "f1")
@@ -181,7 +181,7 @@ warnDef = flowsDefinition "warn" $
 withFlagDef :: TElement (String -> Flow s a -> Flow s a)
 withFlagDef = flowsDefinition "withFlag" $
   doc "Continue the current flow after setting a flag" $
-  function nameT (Types.function flowSAT flowSAT) $
+  function nameT (Types.function tFlowSA tFlowSA) $
   lambda "flag" ((ref mutateTraceDef @@ var "mutate" @@ var "restore")
   `with` [
     "mutate">: lambda "t" $ inject _Either _Either_right $ (Flows.trace
@@ -196,7 +196,7 @@ withFlagDef = flowsDefinition "withFlag" $
 withStateDef :: TElement (s1 -> Flow s1 a -> Flow s2 a)
 withStateDef = flowsDefinition "withState" $
   doc "Continue a flow using a given state" $
-  function (Types.var "s1") (Types.function flowS1AT flowS2AT) $
+  function (Types.var "s1") (Types.function tFlowS1A tFlowS2A) $
   lambda "cx0" $ lambda "f" $
     wrap _Flow $ lambda "cx1" $ lambda "t1" (
       (Flows.flowState (Flows.flowStateValue @@ var "f1") (var "cx1") (Flows.flowStateTrace @@ var "f1"))
@@ -208,7 +208,7 @@ withStateDef = flowsDefinition "withState" $
 withTraceDef :: TElement (String -> Flow s a -> Flow s a)
 withTraceDef = flowsDefinition "withTrace" $
   doc "Continue the current flow after augmenting the trace" $
-  functionN [Types.string, flowSAT, flowSAT] $
+  functionN [Types.string, tFlowSA, tFlowSA] $
   lambda "msg" ((ref mutateTraceDef @@ var "mutate" @@ var "restore")
     `with` [
       -- augment the trace

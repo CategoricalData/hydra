@@ -50,20 +50,20 @@ printingDefinition = definitionInModule hydraPrintingModule
 describeFloatTypeDef :: TElement (FloatType -> String)
 describeFloatTypeDef = printingDefinition "describeFloatType" $
   doc "Display a floating-point type as a string" $
-  function floatTypeT stringT $
+  function floatTypeT tString $
   lambda "t" $ (ref describePrecisionDef <.> ref floatTypePrecisionDef @@ var "t") ++ string " floating-point numbers"
 
 describeIntegerTypeDef :: TElement (IntegerType -> String)
 describeIntegerTypeDef = printingDefinition "describeIntegerType" $
   doc "Display an integer type as a string" $
-  function integerTypeT stringT $
+  function integerTypeT tString $
   lambda "t" $ (ref describePrecisionDef <.> ref integerTypePrecisionDef @@ var "t")
     ++ string " integers"
 
 describeLiteralTypeDef :: TElement (LiteralType -> String)
 describeLiteralTypeDef = printingDefinition "describeLiteralType" $
   doc "Display a literal type as a string" $
-  function literalTypeT stringT $
+  function literalTypeT tString $
   match _LiteralType Nothing [
     TCase _LiteralType_binary  --> constant $ string "binary strings",
     TCase _LiteralType_boolean --> constant $ string "boolean values",
@@ -74,7 +74,7 @@ describeLiteralTypeDef = printingDefinition "describeLiteralType" $
 describePrecisionDef :: TElement (Precision -> String)
 describePrecisionDef = printingDefinition "describePrecision" $
   doc "Display numeric precision as a string" $
-  function precisionT stringT $
+  function precisionT tString $
   match _Precision Nothing [
     TCase _Precision_arbitrary --> constant $ string "arbitrary-precision",
     TCase _Precision_bits      --> lambda "bits" $ Literals.showInt32 @@ var "bits" ++ string "-bit"]
@@ -82,7 +82,7 @@ describePrecisionDef = printingDefinition "describePrecision" $
 describeTypeDef :: TElement (Type -> String)
 describeTypeDef = printingDefinition "describeType" $
   doc "Display a type as a string" $
-  function typeT stringT $
+  function typeT tString $
     match _Type Nothing [
       TCase _Type_annotated   --> lambda "a" $ string "annotated " ++ (ref describeTypeDef @@
         (project _AnnotatedType _AnnotatedType_subject @@ var "a")),

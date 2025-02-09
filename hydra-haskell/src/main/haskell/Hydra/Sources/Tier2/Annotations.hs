@@ -47,14 +47,14 @@ annotationsDefinition = definitionInModule hydraAnnotationsModule
 
 getAnnotationDef :: TElement (Name -> M.Map Name Term -> Maybe Term)
 getAnnotationDef = annotationsDefinition "getAnnotation" $
-  functionN [nameT, kvT, optionalT termT] $
+  functionN [nameT, tMap nameT termT, tOpt termT] $
   lambda "key" $ lambda "ann" $
     Maps.lookup @@ var "key" @@ var "ann"
 
 getTermTypeDef :: TElement (Term -> Flow Graph (Maybe Type))
 getTermTypeDef = annotationsDefinition "getTermType" $
   doc "Get the annotated type of a given term, if any" $
-  function termT (optionalT typeT) $
+  function termT (tOpt typeT) $
   match _Term (Just nothing) [
     "annotated">: ref getTermTypeDef <.> project _AnnotatedTerm _AnnotatedTerm_subject,
     "typed">: lambda "tt" $ just (project _TypedTerm _TypedTerm_type @@ var "tt")]
@@ -62,7 +62,7 @@ getTermTypeDef = annotationsDefinition "getTermType" $
 requireElementTypeDef :: TElement (Element -> Flow Graph Type)
 requireElementTypeDef = annotationsDefinition "requireElementType" $
   doc "Get the annotated type of a given element, or fail if it is missing" $
-  function elementT (flowT graphT typeT) $
+  function elementT (tFlow graphT typeT) $
   lambda "el" $ ((var "withType" @@ (ref getTermTypeDef @@ (project _Element _Element_data @@ var "el")))
     `with` [
       "withType">: matchOpt
@@ -72,7 +72,7 @@ requireElementTypeDef = annotationsDefinition "requireElementType" $
 requireTermTypeDef :: TElement (Term -> Flow Graph Type)
 requireTermTypeDef = annotationsDefinition "requireTermType" $
   doc "Get the annotated type of a given term, or fail if it is missing" $
-  function termT (flowT graphT typeT) $
+  function termT (tFlow graphT typeT) $
   (var "withType" <.> ref getTermTypeDef)
     `with` [
       "withType">: matchOpt

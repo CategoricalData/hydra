@@ -113,7 +113,7 @@ javaLanguageDef = javaLanguageDefinition "javaLanguage" $
 reservedWordsDef :: TElement (S.Set String)
 reservedWordsDef = javaLanguageDefinition "reservedWords" $
   doc "A set of reserved words in Java" $
-  typed (setT stringT) $
+  typed (tSet tString) $
   (Sets.fromList @@ (Lists.concat @@ list [var "specialNames", var "classNames", var "keywords", var "literals"]))
   `with` [
     "specialNames">:

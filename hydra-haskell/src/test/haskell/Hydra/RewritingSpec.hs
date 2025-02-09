@@ -365,27 +365,27 @@ testNormalizeTypeVariablesInTerm = do
     H.describe "Nested polymorphic let bindings" $ do
       H.it "Parent variable shadows child variable" $ changesTo
         (tlet id42 [
-          ("id", Just faa, tlet (lambdaTyped "y" aT $ var "id2" @@ var "y") [
-            ("id2", Just faa, lambdaTyped "x" aT $ var "x")])])
+          ("id", Just faa, tlet (lambdaTyped "y" tA $ var "id2" @@ var "y") [
+            ("id2", Just faa, lambdaTyped "x" tA $ var "x")])])
         (tlet id42 [
           ("id", Just ft0t0, tlet (lambdaTyped "y" t0 $ var "id2" @@ var "y") [
             ("id2", Just ft1t1, lambdaTyped "x" t1 $ var "x")])])
       H.it "No shadowing" $ changesTo
         (tlet id42 [
-          ("id", Just faa, tlet (lambdaTyped "y" aT $ var "id2" @@ var "y") [
-            ("id2", Just fbb, lambdaTyped "x" bT $ var "x")])])
+          ("id", Just faa, tlet (lambdaTyped "y" tA $ var "id2" @@ var "y") [
+            ("id2", Just fbb, lambdaTyped "x" tB $ var "x")])])
         (tlet id42 [
           ("id", Just ft0t0, tlet (lambdaTyped "y" t0 $ var "id2" @@ var "y") [
             ("id2", Just ft1t1, lambdaTyped "x" t1 $ var "x")])])
       H.it "No shadowing, locally free type variable" $ changesTo
         (tlet (var "fun1" @@ string "foo" @@ int32 42) [
-          ("fun1", Just (Types.poly ["a", "b"] $ Types.functionN [aT, bT, pairT aT bT]), lambdaTyped "x" aT $ lambdaTyped "y" bT $
+          ("fun1", Just (Types.poly ["a", "b"] $ Types.functionN [tA, tB, tPair tA tB]), lambdaTyped "x" tA $ lambdaTyped "y" tB $
             tlet (var "fun2" @@ var "x") [
-              ("fun2", Just (Types.poly ["c"] $ funT cT $ pairT cT bT), lambdaTyped "z" cT $ pair (var "z") (var "y"))])])
+              ("fun2", Just (Types.poly ["c"] $ tFun tC $ tPair tC tB), lambdaTyped "z" tC $ pair (var "z") (var "y"))])])
         (tlet (var "fun1" @@ string "foo" @@ int32 42) [
-          ("fun1", Just (Types.poly ["t0", "t1"] $ Types.functionN [t0, t1, pairT t0 t1]), lambdaTyped "x" t0 $ lambdaTyped "y" t1 $
+          ("fun1", Just (Types.poly ["t0", "t1"] $ Types.functionN [t0, t1, tPair t0 t1]), lambdaTyped "x" t0 $ lambdaTyped "y" t1 $
             tlet (var "fun2" @@ var "x") [
-              ("fun2", Just (Types.poly ["t2"] $ funT t2 $ pairT t2 t1), lambdaTyped "z" t2 $ pair (var "z") (var "y"))])])
+              ("fun2", Just (Types.poly ["t2"] $ tFun t2 $ tPair t2 t1), lambdaTyped "z" t2 $ pair (var "z") (var "y"))])])
   where
     changesTo term1 term2 = H.shouldBe (normalize term1) term2
     noChange term = H.shouldBe (normalize term) term
@@ -396,11 +396,11 @@ testNormalizeTypeVariablesInTerm = do
     t0 = Types.var "t0"
     t1 = Types.var "t1"
     t2 = Types.var "t2"
-    const42 = lambdaTyped "x" (Types.function aT int32T) $ int32 42
-    faa = Types.poly ["a"] $ funT aT aT
-    fbb = Types.poly ["b"] $ funT bT bT
-    ft0t0 = Types.poly ["t0"] $ funT t0 t0
-    ft1t1 = Types.poly ["t1"] $ funT t1 t1
+    const42 = lambdaTyped "x" (Types.function tA tInt32) $ int32 42
+    faa = Types.poly ["a"] $ tFun tA tA
+    fbb = Types.poly ["b"] $ tFun tB tB
+    ft0t0 = Types.poly ["t0"] $ tFun t0 t0
+    ft1t1 = Types.poly ["t1"] $ tFun t1 t1
     id42 = var "id" @@ int32 42
     tsString = Types.mono Types.string
     tsA = Types.mono $ Types.var "a"

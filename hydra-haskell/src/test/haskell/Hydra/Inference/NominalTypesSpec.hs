@@ -31,7 +31,7 @@ checkCaseStatements = check "case statements (variant eliminations)" $ do
       (match testTypeSimpleNumberName Nothing [
         Field (Name "int") $ lambda "x" $ var "x",
         Field (Name "float") $ lambda "x" $ int32 42])
-      (funT (TypeVariable testTypeSimpleNumberName) Types.int32)
+      (tFun (TypeVariable testTypeSimpleNumberName) Types.int32)
 
   H.it "test #2" $ do
     expectType

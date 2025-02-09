@@ -48,7 +48,7 @@ errorsDefinition = definitionInModule hydraErrorsModule
 getStateDef :: TElement (Flow s s)
 getStateDef = errorsDefinition "getState" $
   doc "Get the state of the current flow" $
-  typed flowSST $
+  typed tFlowSS $
   wrap _Flow (lambda "s0" $ lambda "t0" $ (
     (lambda "v" $ lambda "s" $ lambda "t" $ (
       (matchOpt
@@ -58,13 +58,13 @@ getStateDef = errorsDefinition "getState" $
     @@ (Flows.flowStateValue @@ var "fs1") @@ (Flows.flowStateState @@ var "fs1") @@ (Flows.flowStateTrace @@ var "fs1"))
   `with` [
     "fs1">:
-      typed (Types.apply (Types.apply (TypeVariable _FlowState) sT) unitT) $
+      typed (Types.apply (Types.apply (TypeVariable _FlowState) tS) tUnit) $
       Flows.unFlow @@ (Flows.pure @@ unit) @@ var "s0" @@ var "t0"])
 
 putStateDef :: TElement (s -> Flow s ())
 putStateDef = errorsDefinition "putState" $
   doc "Set the state of a flow" $
-  function sT (flowT sT unitT) $
+  function tS (tFlow tS tUnit) $
   lambda "cx" $ wrap _Flow $ lambda "s0" $ lambda "t0" (
     (Flows.flowState
       (Flows.flowStateValue @@ var "f1")
@@ -76,7 +76,7 @@ putStateDef = errorsDefinition "putState" $
 traceSummaryDef :: TElement (Trace -> String)
 traceSummaryDef = errorsDefinition "traceSummary" $
   doc "Summarize a trace as a string" $
-  function traceT stringT $
+  function traceT tString $
   lambda "t" $ (
     (Strings.intercalate @@ "\n" @@ (Lists.concat2 @@ var "messageLines" @@ var "keyvalLines"))
       `with` [
@@ -87,11 +87,11 @@ traceSummaryDef = errorsDefinition "traceSummary" $
             @@ (Lists.map @@ (var "toLine") @@ (Maps.toList @@ (Flows.traceOther @@ var "t"))))
           @@ (Maps.isEmpty @@ (Flows.traceOther @@ var "t")),
         "toLine">:
-          function (pairT stringT termT) stringT $
+          function (tPair tString termT) tString $
           lambda "pair" $ "\t" ++ (Core.unName @@ (first @@ var "pair")) ++ ": " ++ (Io.showTerm @@ (second @@ var "pair"))])
 
 unexpectedDef :: TElement (String -> String -> Flow s x)
 unexpectedDef = errorsDefinition "unexpected" $
   doc "Fail if an actual value does not match an expected value" $
-  function stringT (funT stringT (flowT sT xT)) $
+  function tString (tFun tString (tFlow tS tX)) $
   lambda "expected" $ lambda "actual" $ Flows.fail @@ ("expected " ++ var "expected" ++ " but found: " ++ var "actual")

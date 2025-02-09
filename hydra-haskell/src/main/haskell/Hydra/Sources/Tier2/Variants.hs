@@ -75,7 +75,7 @@ eliminationVariantDef = variantsDefinition "eliminationVariant" $
 eliminationVariantsDef :: TElement [EliminationVariant]
 eliminationVariantsDef = variantsDefinition "eliminationVariants" $
   doc "All elimination variants (constructors), in a canonical order" $
-  typed (listT eliminationVariantT) $
+  typed (tList eliminationVariantT) $
   list $ unitVariant _EliminationVariant <$> [
     _EliminationVariant_list,
     _EliminationVariant_wrap,
@@ -96,7 +96,7 @@ floatTypePrecisionDef = variantsDefinition "floatTypePrecision" $
 floatTypesDef :: TElement [FloatType]
 floatTypesDef = variantsDefinition "floatTypes" $
   doc "All floating-point types in a canonical order" $
-  typed (listT floatTypeT) $
+  typed (tList floatTypeT) $
   list $ unitVariant _FloatType <$> [
     _FloatType_bigfloat,
     _FloatType_float32,
@@ -123,7 +123,7 @@ functionVariantDef = variantsDefinition "functionVariant" $
 functionVariantsDef :: TElement [FunctionVariant]
 functionVariantsDef = variantsDefinition "functionVariants" $
   doc "All function variants (constructors), in a canonical order" $
-  typed (listT functionVariantT) $
+  typed (tList functionVariantT) $
   list $ unitVariant _FunctionVariant <$> [
     _FunctionVariant_elimination,
     _FunctionVariant_lambda,
@@ -132,7 +132,7 @@ functionVariantsDef = variantsDefinition "functionVariants" $
 integerTypeIsSignedDef :: TElement (IntegerType -> Bool)
 integerTypeIsSignedDef = variantsDefinition "integerTypeIsSigned" $
   doc "Find whether a given integer type is signed (true) or unsigned (false)" $
-  function integerTypeT booleanT $
+  function integerTypeT tBoolean $
   matchData _IntegerType Nothing [
     _IntegerType_bigint @-> constant true,
     _IntegerType_int8   @-> constant true,
@@ -162,7 +162,7 @@ integerTypePrecisionDef = variantsDefinition "integerTypePrecision" $
 integerTypesDef :: TElement [IntegerType]
 integerTypesDef = variantsDefinition "integerTypes" $
   doc "All integer types, in a canonical order" $
-  typed (listT integerTypeT) $
+  typed (tList integerTypeT) $
   list $ unitVariant _IntegerType <$> [
     _IntegerType_bigint,
     _IntegerType_int8,
@@ -220,7 +220,7 @@ literalVariantDef = variantsDefinition "literalVariant" $
 literalVariantsDef :: TElement [LiteralVariant]
 literalVariantsDef = variantsDefinition "literalVariants" $
   doc "All literal variants, in a canonical order" $
-  typed (listT literalVariantT) $
+  typed (tList literalVariantT) $
   list $ unitVariant _LiteralVariant <$> [
     _LiteralVariant_binary,
     _LiteralVariant_boolean,
@@ -255,7 +255,7 @@ termVariantDef = variantsDefinition "termVariant" $
 termVariantsDef :: TElement [TermVariant]
 termVariantsDef = variantsDefinition "termVariants" $
   doc "All term (expression) variants, in a canonical order" $
-  typed (listT termVariantT) $
+  typed (tList termVariantT) $
   list $ unitVariant _TermVariant <$> [
     _TermVariant_annotated,
     _TermVariant_application,
@@ -299,7 +299,7 @@ typeVariantDef = variantsDefinition "typeVariant" $
 typeVariantsDef :: TElement [TypeVariant]
 typeVariantsDef = variantsDefinition "typeVariants" $
   doc "All type variants, in a canonical order" $
-  typed (listT typeVariantT) $
+  typed (tList typeVariantT) $
   list $ unitVariant _TypeVariant <$> [
     _TypeVariant_annotated,
     _TypeVariant_application,
@@ -321,14 +321,14 @@ typeVariantsDef = variantsDefinition "typeVariants" $
 
 fieldMapDef :: TElement ([Field] -> M.Map Name Term)
 fieldMapDef = variantsDefinition "fieldMap" $
-  function (TypeList fieldT) (mapT fieldNameT termT) $
+  function (TypeList fieldT) (tMap fieldNameT termT) $
   (lambda "fields" $ Maps.fromList @@ (Lists.map @@ var "toPair" @@ var "fields"))
     `with` [
       "toPair">: lambda "f" $ pair (Core.fieldName @@ var "f") (Core.fieldTerm @@ var "f")]
 
 fieldTypeMapDef :: TElement ([FieldType] -> M.Map Name Type)
 fieldTypeMapDef = variantsDefinition "fieldTypeMap" $
-  function (TypeList fieldTypeT) (mapT fieldNameT typeT) $
+  function (TypeList fieldTypeT) (tMap fieldNameT typeT) $
     (lambda "fields" $ Maps.fromList @@ (Lists.map @@ var "toPair" @@ var "fields"))
   `with` [
     "toPair">: lambda "f" $ pair (Core.fieldTypeName @@ var "f") (Core.fieldTypeType @@ var "f")]

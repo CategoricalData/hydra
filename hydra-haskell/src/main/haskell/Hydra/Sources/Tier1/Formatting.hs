@@ -38,25 +38,25 @@ hydraFormattingModule = Module (Namespace "hydra/formatting") elements [] [hydra
 capitalizeDef :: TElement (String -> String)
 capitalizeDef = formattingDefinition "capitalize" $
   doc "Capitalize the first letter of a string" $
-  function stringT stringT $
+  function tString tString $
   ref mapFirstLetterDef @@ Strings.toUpper
 
 decapitalizeDef :: TElement (String -> String)
 decapitalizeDef = formattingDefinition "decapitalize" $
   doc "Decapitalize the first letter of a string" $
-  function stringT stringT $
+  function tString tString $
   ref mapFirstLetterDef @@ Strings.toLower
 
 -- TODO: simplify this helper
 mapFirstLetterDef :: TElement ((String -> String) -> String -> String)
 mapFirstLetterDef = formattingDefinition "mapFirstLetter" $
   doc "A helper which maps the first letter of a string to another string" $
-  function (funT stringT stringT) (funT stringT stringT) $
+  function (tFun tString tString) (tFun tString tString) $
   lambda "mapping" $ lambda "s" ((Logic.ifElse
        @@ var "s"
        @@ (Strings.cat2 @@ var "firstLetter" @@ (Strings.fromList @@ (Lists.tail @@ var "list")))
        @@ (Strings.isEmpty @@ var "s"))
     `with` [
       "firstLetter">: var "mapping" @@ (Strings.fromList @@ (Lists.pure @@ (Lists.head @@ var "list"))),
-      "list">: typed (listT int32T) $ Strings.toList @@ var "s"])
+      "list">: typed (tList tInt32) $ Strings.toList @@ var "s"])
 
