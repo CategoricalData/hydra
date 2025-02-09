@@ -41,7 +41,7 @@ hydraTermToStlc context term = case term of
           Nothing -> Left $ "no such primitive: " ++ Core.unName name
           Just p -> Right p
         ts <- hydraTypeSchemeToStlc $ Graph.primitiveType prim
-        return $ Const $ TypedPrim $ TypedPrimitive name ts
+        return $ ExprConst $ PrimTyped $ TypedPrimitive name ts
     Core.TermLet (Core.Let bindings env) -> Letrec <$> CM.mapM bindingToStlc bindings <*> toStlc env
       where
         bindingToStlc (Core.LetBinding (Core.Name v) term _) = do
@@ -49,15 +49,15 @@ hydraTermToStlc context term = case term of
           return (v, s)
     Core.TermList els -> do
       sels <- CM.mapM toStlc els
-      return $ foldr (\el acc -> App (App (Const Cons) el) acc) (Const Nil) sels
-    Core.TermLiteral lit -> pure $ Const $ Lit lit
+      return $ foldr (\el acc -> App (App (ExprConst Cons) el) acc) (ExprConst Nil) sels
+    Core.TermLiteral lit -> pure $ ExprConst $ PrimLiteral lit
     Core.TermProduct els -> Tuple <$> (CM.mapM toStlc els)
     Core.TermVariable (Core.Name v) -> pure $ Var v
     _ -> Left $ "Unsupported term: " ++ show term
   where
     HydraContext prims = context
     toStlc = hydraTermToStlc context
-    pair a b = App (App (Const Pair) a) b
+    pair a b = App (App (ExprConst Pair) a) b
 
 hydraTypeSchemeToStlc :: Core.TypeScheme -> Either String TypSch
 hydraTypeSchemeToStlc (Core.TypeScheme vars body) = do
@@ -90,8 +90,8 @@ hydraTypeSchemeToStlc (Core.TypeScheme vars body) = do
 toTerm :: FExpr -> Core.Term
 toTerm expr = case expr of
   FConst prim -> case prim of
-    Lit lit -> Core.TermLiteral lit
-    TypedPrim (TypedPrimitive name _) -> Core.TermFunction $ Core.FunctionPrimitive name
+    PrimLiteral lit -> Core.TermLiteral lit
+    PrimTyped (TypedPrimitive name _) -> Core.TermFunction $ Core.FunctionPrimitive name
     Nil -> Core.TermList []
     -- Note: other prims are unsupported; they can be added here as needed
   FVar v -> Core.TermVariable $ Core.Name v
