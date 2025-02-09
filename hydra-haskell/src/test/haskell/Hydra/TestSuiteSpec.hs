@@ -19,19 +19,22 @@ runTestSuite :: H.SpecWith ()
 runTestSuite = do
     runTestGroup allTests
 
-runTestCase :: Int -> TestCase -> H.SpecWith ()
-runTestCase idx tc = H.it desc $
-  shouldSucceedWith
-    (eval $ testCaseInput tc)
-    (testCaseOutput tc)
+runTestCase :: TestCaseWithMetadata -> H.SpecWith ()
+runTestCase (TestCaseWithMetadata name tcase mdesc _) = H.it desc $
+    case tcase of
+      TestCaseEvaluation ecase -> runEvaluationTestCase ecase
+      TestCaseInference icase -> runInferenceTestCase icase
   where
-    desc = Y.fromMaybe ("test #" ++ show idx) $ testCaseDescription tc
+    desc = name ++ Y.maybe ("") (\d -> ": " ++ d) mdesc
+    runEvaluationTestCase (EvaluationTestCase _ input output) = shouldSucceedWith
+      (eval input)
+      output
+    runInferenceTestCase _ = fail "inference test cases are not yet supported"
 
 runTestGroup :: TestGroup -> H.SpecWith ()
 runTestGroup tg = do
     H.describe desc $ do
-      CM.sequence (L.zipWith runTestCase [1..] (testGroupCases tg))
-      
+      CM.mapM runTestCase $ testGroupCases tg
       CM.sequence (runTestGroup <$> (testGroupSubgroups tg))
       return ()
   where

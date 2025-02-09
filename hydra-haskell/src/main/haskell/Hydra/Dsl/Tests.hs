@@ -20,9 +20,10 @@ intList els = list (int32 <$> els)
 intListList :: [[Int]] -> Term
 intListList lists = list (intList <$> lists)
 
-primCase :: Name -> [Term] -> Term -> TestCase
-primCase name args output = TestCase Nothing EvaluationStyleEager input output
+primCase :: String -> Name -> [Term] -> Term -> TestCaseWithMetadata
+primCase cname name args output = TestCaseWithMetadata cname tcase Nothing []
   where
+    tcase = TestCaseEvaluation $ EvaluationTestCase EvaluationStyleEager input output
     input = L.foldl (\a arg -> a @@ arg) (primitive name) args
 
 stringList :: [String] -> Term
@@ -30,5 +31,3 @@ stringList els = list (string <$> els)
 
 stringSet :: S.Set String -> Term
 stringSet strings = set $ S.fromList $ string <$> S.toList strings
-
-testCase = TestCase Nothing
