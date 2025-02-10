@@ -134,7 +134,10 @@ encodeLiteral av = case av of
       _ -> unexpected "floating-point number" $ show fv
     LiteralInteger iv -> case iv of
       IntegerValueBigint i -> pure $ hslit $ H.LiteralInteger i
+      IntegerValueInt8 i -> pure $ hslit $ H.LiteralInteger $ fromIntegral i
+      IntegerValueInt16 i -> pure $ hslit $ H.LiteralInteger $ fromIntegral i
       IntegerValueInt32 i -> pure $ hslit $ H.LiteralInt i
+      IntegerValueInt64 i -> pure $ hslit $ H.LiteralInteger $ fromIntegral i
       _ -> unexpected "integer" $ show iv
     LiteralString s -> pure $ hslit $ H.LiteralString s
     _ -> unexpected "literal value" $ show av
