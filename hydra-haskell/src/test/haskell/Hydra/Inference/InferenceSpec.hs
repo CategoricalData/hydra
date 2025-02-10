@@ -49,26 +49,6 @@ expectTypeAnnotation path term etyp = shouldSucceedWith atyp etyp
 checkFunctionTerms :: H.SpecWith ()
 checkFunctionTerms = H.describe "Check a few hand-picked function terms" $ do
 
-    H.it "Check lambdas" $ do
-      expectPolytype
-        (lambda "x" (var "x"))
-        ["t0"] (Types.function (Types.var "t0") (Types.var "t0"))
-      expectPolytype
-        (lambda "x" (int16 137))
-        ["t0"] (Types.function (Types.var "t0") Types.int16)
-
-    H.it "Check list eliminations" $ do
-      let fun = Terms.fold $ primitive _math_add
-      expectMonotype
-        fun
-        (Types.functionN [Types.int32, Types.list Types.int32, Types.int32])
-      expectMonotype
-        (apply fun $ int32 0)
-        (Types.function (Types.list Types.int32) Types.int32)
-      expectMonotype
-        (apply (apply fun $ int32 0) (list (int32 <$> [1, 2, 3, 4, 5])))
-        Types.int32
-
     H.it "Check projections" $ do
       expectMonotype
         (project testTypePersonName (Name "firstName"))
