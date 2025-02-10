@@ -46,22 +46,6 @@ expectTypeAnnotation path term etyp = shouldSucceedWith atyp etyp
        TermTyped (TypedTerm _ typ) -> return typ
        _ -> fail $ "no type annotation"
 
-checkApplicationTerms :: H.SpecWith ()
-checkApplicationTerms = H.describe "Check a few hand-picked application terms" $ do
-
-    H.it "Check lambda applications" $ do
-      expectMonotype
-        (apply (lambda "x" (var "x")) (string "foo"))
-        Types.string
-
-    H.it "Check mixed expressions with lambdas, constants, and primitive functions" $ do
-      expectMonotype
-        (lambda "x" $
-          apply
-            (apply (primitive _math_sub) (apply (apply (primitive _math_add) (var "x")) (var "x")))
-            (int32 1))
-        (Types.function Types.int32 Types.int32)
-
 checkFunctionTerms :: H.SpecWith ()
 checkFunctionTerms = H.describe "Check a few hand-picked function terms" $ do
 
@@ -497,7 +481,6 @@ checkSubtermAnnotations = H.describe "Check additional subterm annotations" $ do
 
 spec :: H.Spec
 spec = do
-  checkApplicationTerms
   checkFunctionTerms
   checkIndividualTerms
   checkLetTerms

@@ -4,6 +4,7 @@ import Hydra.Kernel
 import qualified Hydra.Dsl.Terms as Terms
 import Hydra.TestUtils
 import Hydra.Testing
+import Hydra.Staging.Inference
 
 import Hydra.Test.TestSuite
 
@@ -29,7 +30,9 @@ runTestCase (TestCaseWithMetadata name tcase mdesc _) = H.it desc $
     runEvaluationTestCase (EvaluationTestCase _ input output) = shouldSucceedWith
       (eval input)
       output
-    runInferenceTestCase _ = fail "inference test cases are not yet supported"
+    runInferenceTestCase (InferenceTestCase input output) = shouldSucceedWith
+      (snd <$> inferTypeAndConstraints input)
+      output
 
 runTestGroup :: TestGroup -> H.SpecWith ()
 runTestGroup tg = do

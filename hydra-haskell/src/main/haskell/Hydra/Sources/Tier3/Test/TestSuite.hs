@@ -8,6 +8,7 @@ import Hydra.Dsl.Base as Base
 
 import Hydra.Sources.Tier3.Test.Lib.Lists
 import Hydra.Sources.Tier3.Test.Lib.Strings
+import Hydra.Sources.Tier3.Test.Inference
 
 
 testSuiteNs = Namespace "hydra/test/testSuite"
@@ -48,7 +49,7 @@ groupElement lname group = Element name $ setTermType (Just typ) $ encodeGroup g
     typ = TypeVariable _TestGroup
 
 allTests :: TestGroup
-allTests = TestGroup "All tests" Nothing primTests []
+allTests = TestGroup "All tests" Nothing (primTests ++ [inferenceTests]) []
   where
     primTests = [
       listPrimitiveTests,
