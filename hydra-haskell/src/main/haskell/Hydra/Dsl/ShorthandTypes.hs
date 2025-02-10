@@ -44,6 +44,7 @@ tInt32 = Types.int32
 tInt64 = Types.int64
 tList = Types.list
 tMap = Types.map
+tMono = Types.mono
 tOpt = Types.optional
 tPair = Types.pair
 tS = tVar "s"
