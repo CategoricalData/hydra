@@ -9,12 +9,13 @@ import Hydra.Dsl.Base as Base
 import Hydra.Sources.Tier3.Test.Lib.Lists
 import Hydra.Sources.Tier3.Test.Lib.Strings
 import Hydra.Sources.Tier3.Test.Inference
+import Hydra.Sources.Tier3.Test.TestGraph
 
 
 testSuiteNs = Namespace "hydra/test/testSuite"
 
 testSuiteModule :: Module
-testSuiteModule = Module testSuiteNs elements [] [hydraCoreModule, hydraTestingModule] $
+testSuiteModule = Module testSuiteNs elements [testGraphModule] [hydraCoreModule, hydraTestingModule] $
     Just "Test cases for primitive functions"
   where
     elements = [

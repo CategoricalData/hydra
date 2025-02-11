@@ -55,3 +55,16 @@ functionTerms = TestGroup "Function terms" (Just "Check a few hand-picked functi
         expectMono 3
           (apply (apply foldAdd $ int32 0) (list (int32 <$> [1, 2, 3, 4, 5])))
           Types.int32]]
+
+--      TestGroup "Check projections" Nothing [] [
+--        expectMono 1
+--          (project testTypePersonName (Name "firstName"))
+--          (Types.function testTypePerson Types.string)],
+
+--      TestGroup "Check case statements" [] [
+--        expectMono
+--          (match testTypeFoobarValueName Nothing [
+--            Field (Name "bool") (lambda "x" (boolean True)),
+--            Field (Name "string") (lambda "x" (boolean False)),
+--            Field (Name "unit") (lambda "x" (boolean False))])
+--          (Types.function testTypeFoobarValue Types.boolean)]]
