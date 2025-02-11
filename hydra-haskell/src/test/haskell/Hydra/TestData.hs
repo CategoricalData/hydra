@@ -2,7 +2,7 @@ module Hydra.TestData where
 
 import Hydra.Kernel
 import Hydra.Dsl.Terms
-import Hydra.TestGraph
+import Hydra.Staging.TestGraph
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
