@@ -94,11 +94,17 @@ floatType t = unitVariant _FloatType $ case t of
   FloatTypeFloat32 -> _FloatType_float32
   FloatTypeFloat64 -> _FloatType_float64
 
+floatTypeFloat32 :: TTerm FloatType
+floatTypeFloat32 = floatType FloatTypeFloat32
+
 floatValueFloat32 :: TTerm Float -> TTerm FloatValue
 floatValueFloat32 = inject _FloatValue _FloatValue_float32
 
-float32 :: TTerm Float -> TTerm Term
-float32 = termLiteral . literalFloat . floatValueFloat32
+float32Term :: TTerm Float -> TTerm Term
+float32Term = termLiteral . literalFloat . floatValueFloat32
+
+float32Type :: TTerm Type
+float32Type = typeLiteral $ literalTypeFloat floatTypeFloat32
 
 functionLambda :: TTerm Lambda -> TTerm Function
 functionLambda = variant _Function _Function_lambda
@@ -197,6 +203,9 @@ literalFloat = variant _Literal _Literal_float
 literalInteger :: TTerm IntegerValue -> TTerm Literal
 literalInteger = variant _Literal _Literal_integer
 
+literalTypeFloat :: TTerm FloatType -> TTerm LiteralType
+literalTypeFloat = variant _LiteralType _LiteralType_float
+
 mapType :: TTerm Type -> TTerm Type -> TTerm MapType
 mapType keys values = Base.record _MapType [
   _MapType_keys>>: keys,
@@ -288,6 +297,12 @@ typeAbstractionParameter = project _TypeAbstraction _TypeAbstraction_parameter
 
 typeAbstractionBody :: TTerm (TypeAbstraction -> Type)
 typeAbstractionBody = project _TypeAbstraction _TypeAbstraction_body
+
+typeLiteral :: TTerm LiteralType -> TTerm Type
+typeLiteral = variant _Type _Type_literal
+
+typeRecord :: TTerm RowType -> TTerm Type
+typeRecord = variant _Type _Type_record
 
 typeSchemeVariables :: TTerm (TypeScheme -> [Name])
 typeSchemeVariables = project _TypeScheme _TypeScheme_variables
