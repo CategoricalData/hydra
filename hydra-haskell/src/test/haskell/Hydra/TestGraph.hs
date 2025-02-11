@@ -132,8 +132,6 @@ testTypeIntListName = Name "IntList"
 testTypeHydraLiteralType :: Type
 testTypeHydraLiteralType = Ann.doc "An approximation of Hydra's LiteralType type" $
   TypeUnion $ RowType testTypeHydraLiteralTypeName [
---    Types.field "boolean" Types.unit,
---    Types.field "string" Types.unit]
     Types.field "boolean" Types.string,
     Types.field "string" Types.string]
 

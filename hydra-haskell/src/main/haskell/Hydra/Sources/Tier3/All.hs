@@ -34,6 +34,7 @@ import Hydra.Sources.Tier3.Ext.Scala.Meta
 import Hydra.Sources.Tier3.Ext.Shacl.Model
 import Hydra.Sources.Tier3.Ext.Tabular
 import Hydra.Sources.Tier3.Ext.Yaml.Model
+import Hydra.Sources.Tier3.Test.TestGraph
 import Hydra.Sources.Tier3.Test.TestSuite
 
 allModules :: [Module]
@@ -44,6 +45,7 @@ mainModules = kernelModules ++ tier3ExtModules
 
 testModules :: [Module]
 testModules = [
+  testGraphModule,
   testSuiteModule]
 
 tier3ExtModules :: [Module]
