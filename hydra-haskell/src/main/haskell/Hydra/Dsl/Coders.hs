@@ -2,7 +2,7 @@ module Hydra.Dsl.Coders where
 
 import Hydra.Kernel
 import Hydra.Dsl.Base as Base
-import Hydra.Dsl.Core as Core
+import qualified Hydra.Dsl.Core as Core
 import Hydra.Dsl.Lib.Sets as Sets
 import Hydra.Dsl.Mantle as Mantle
 

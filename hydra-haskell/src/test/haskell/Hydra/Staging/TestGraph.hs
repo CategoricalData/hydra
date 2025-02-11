@@ -1,6 +1,7 @@
-module Hydra.TestGraph (
-  module Hydra.TestGraph,
+module Hydra.Staging.TestGraph (
+  module Hydra.Staging.TestGraph,
   module Hydra.Sources.Libraries,
+  module Hydra.Test.TestGraph,
 ) where
 
 import Hydra.Kernel
@@ -10,20 +11,12 @@ import Hydra.Sources.Tier0.Core
 import Hydra.Dsl.Annotations as Ann
 import Hydra.Dsl.Bootstrap
 import qualified Hydra.Dsl.Types as Types
+import Hydra.Test.TestGraph
 
 import qualified Data.Map  as M
 import qualified Data.Set  as S
 import qualified Hydra.Dsl.Terms as Terms
 
-
-testTypeLatLonName :: Name
-testTypeLatLonName = Name "LatLon"
-
-testTypeLatLonPolyName :: Name
-testTypeLatLonPolyName = Name "LatLonPoly"
-
-latlonRecord :: Float -> Float -> Term
-latlonRecord lat lon = record testTypeLatLonName [Field (Name "lat") $ float32 lat, Field (Name "lon") $ float32 lon]
 
 testTypeLatLon :: Type
 testTypeLatLon = TypeRecord $ RowType testTypeLatLonName [Types.field "lat" Types.float32, Types.field "lon" Types.float32]

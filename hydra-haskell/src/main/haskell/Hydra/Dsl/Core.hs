@@ -94,6 +94,15 @@ floatType t = unitVariant _FloatType $ case t of
   FloatTypeFloat32 -> _FloatType_float32
   FloatTypeFloat64 -> _FloatType_float64
 
+floatValueFloat32 :: TTerm Float -> TTerm FloatValue
+floatValueFloat32 = inject _FloatValue _FloatValue_float32
+
+float32 :: TTerm Float -> TTerm Term
+float32 = termLiteral . literalFloat . floatValueFloat32
+
+functionLambda :: TTerm Lambda -> TTerm Function
+functionLambda = variant _Function _Function_lambda
+
 functionType :: TTerm Type -> TTerm Type -> TTerm FunctionType
 functionType domain codomain = Base.record _FunctionType [
   _FunctionType_domain>>: domain,
@@ -172,6 +181,9 @@ letBindingType = project _LetBinding _LetBinding_type
 
 letEnvironment :: TTerm (Let -> Term)
 letEnvironment = project _Let _Let_environment
+
+list :: [TTerm a] -> TTerm [a]
+list els = TTerm $ TermList (unTTerm <$> els)
 
 literalBinary :: TTerm String -> TTerm Literal
 literalBinary = variant _Literal _Literal_binary
@@ -256,6 +268,15 @@ sumTerm = project _Sum _Sum_term
 termAnnotated :: TTerm AnnotatedTerm -> TTerm Term
 termAnnotated = variant _Term _Term_annotated
 
+termFunction :: TTerm Function -> TTerm Term
+termFunction = variant _Term _Term_function
+
+termLiteral :: TTerm Literal -> TTerm Term
+termLiteral = variant _Term _Term_literal
+
+termRecord :: TTerm Record -> TTerm Term
+termRecord = variant _Term _Term_record
+
 tupleProjectionArity :: TTerm (TupleProjection -> Int)
 tupleProjectionArity = project _TupleProjection _TupleProjection_arity
 
@@ -282,6 +303,9 @@ unName = unwrap _Name
 
 unNamespace :: TTerm (Namespace -> String)
 unNamespace = unwrap _Namespace
+
+var :: String -> TTerm a
+var = TTerm . TermVariable . Name
 
 wrappedTerm :: TTerm Name -> TTerm Term -> TTerm WrappedTerm
 wrappedTerm typeName object = Base.record _WrappedTerm [

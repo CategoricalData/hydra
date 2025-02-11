@@ -12,7 +12,7 @@ module Hydra.TestUtils (
   shouldSucceedWith,
   strip,
   termTestContext,
-  module Hydra.TestGraph,
+  module Hydra.Staging.TestGraph,
 ) where
 
 import Hydra.Kernel
@@ -20,7 +20,7 @@ import Hydra.Staging.LiteralAdapters
 import Hydra.Staging.TermAdapters
 import Hydra.Staging.AdapterUtils
 
-import Hydra.TestGraph
+import Hydra.Staging.TestGraph
 import Hydra.ArbitraryCore()
 
 import qualified Test.Hspec as H
