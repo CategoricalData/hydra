@@ -4,6 +4,7 @@ module Hydra.Dsl.Annotations where
 
 import Hydra.Core
 import Hydra.Compute
+import Hydra.Constants
 import Hydra.Staging.Annotations
 import Hydra.Staging.Formatting
 import Hydra.Dsl.Terms as Terms
@@ -11,13 +12,6 @@ import qualified Hydra.Dsl.Types as Types
 
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
-
-
-key_deprecated = Name "_deprecated"
-key_exclude = Name "exclude"
-key_maxLength = Name "_maxLength"
-key_minLength = Name "_minLength"
-key_preserveFieldName = Name "_preserveFieldName"
 
 
 annotateTerm :: Name -> Y.Maybe Term -> Term -> Term
