@@ -32,7 +32,8 @@ testGraphModule = Module (Namespace "hydra/test/testGraph") elements [] [hydraGr
    elements = [
      el testTypeLatLonNameDef,
      el testTypeLatLonPolyNameDef,
-     el latlonRecordDef]
+     el latlonRecordDef,
+     el testTypeLatLonDef]
 
 testTypeLatLonNameDef :: TElement Name
 testTypeLatLonNameDef = testGraphDefinition "testTypeLatLonName" $
@@ -46,10 +47,12 @@ latlonRecordDef :: TElement (Float -> Float -> Term)
 latlonRecordDef = testGraphDefinition "latlonRecord" $
   functionN [tFloat32, tFloat32, termT] $
   lambdas ["lat", "lon"] $ Core.termRecord $ Core.record (ref testTypeLatLonNameDef) $ Core.list [
-    Core.field (Core.name $ Name "lat") $ Core.float32 $ Core.var "lat",
-    Core.field (Core.name $ Name "lon") $ Core.float32 $ Core.var "lon"]
+    Core.field (Core.name $ Name "lat") $ Core.float32Term $ Core.var "lat",
+    Core.field (Core.name $ Name "lon") $ Core.float32Term $ Core.var "lon"]
 
-
-
-
-
+testTypeLatLonDef :: TElement Type
+testTypeLatLonDef = testGraphDefinition "testTypeLatLon" $
+  firstClassType $
+  Core.typeRecord $ Core.rowType (ref testTypeLatLonNameDef) $ Core.list [
+    Core.fieldType (Core.name $ Name "lat") $ Core.float32Type,
+    Core.fieldType (Core.name $ Name "lon") $ Core.float32Type]

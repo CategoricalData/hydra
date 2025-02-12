@@ -18,9 +18,6 @@ import qualified Data.Set  as S
 import qualified Hydra.Dsl.Terms as Terms
 
 
-testTypeLatLon :: Type
-testTypeLatLon = TypeRecord $ RowType testTypeLatLonName [Types.field "lat" Types.float32, Types.field "lon" Types.float32]
-
 testTypeLatLonPoly :: Type
 testTypeLatLonPoly = TypeLambda $ LambdaType (Name "a") $
   TypeRecord $ RowType testTypeLatLonPolyName [Types.field "lat" $ Types.var "a", Types.field "lon" $ Types.var "a"]

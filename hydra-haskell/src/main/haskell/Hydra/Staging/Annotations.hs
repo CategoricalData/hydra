@@ -14,6 +14,7 @@ import Hydra.Staging.Rewriting
 import Hydra.Flows
 import Hydra.Errors
 import Hydra.Lexical
+import qualified Hydra.Decode as Decode
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
@@ -27,6 +28,8 @@ key_classes = Name "classes"
 key_description = Name "description"
 key_type = Name "type"
 
+-- | A flag which tells the language coders to encode a given encoded type as a term rather than a native type
+key_firstClassType = Name "firstClassType"
 
 aggregateAnnotations :: (x -> Maybe y) -> (y -> x) -> (y -> M.Map Name Term) -> x -> M.Map Name Term
 aggregateAnnotations getValue getX getAnns t = M.fromList $ L.concat $ toPairs [] t
@@ -85,6 +88,13 @@ getTypeClasses typ = case getTypeAnnotation key_classes typ of
 
 getTypeDescription :: Type -> Flow Graph (Y.Maybe String)
 getTypeDescription = getDescription . typeAnnotationInternal
+
+-- | For a typed term, decide whether a coder should encode it as a native type expression,
+--   or as a Hydra type expression.
+isNativeType :: TypedTerm -> Bool
+isNativeType (TypedTerm term typ) = isType typ && not isFlaggedAsFirstClassType
+  where
+    isFlaggedAsFirstClassType = Y.fromMaybe False (getTermAnnotation key_firstClassType term >>= Decode.boolean)
 
 hasDescription :: M.Map Name Term -> Bool
 hasDescription anns = case getAnnotation key_description anns of

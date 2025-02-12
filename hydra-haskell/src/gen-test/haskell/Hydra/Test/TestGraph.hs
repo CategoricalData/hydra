@@ -14,6 +14,7 @@ testTypeLatLonName = (Core.Name "LatLon")
 testTypeLatLonPolyName :: Core.Name
 testTypeLatLonPolyName = (Core.Name "LatLonPoly")
 
+
 latlonRecord :: (Float -> Float -> Core.Term)
 latlonRecord lat lon = (Core.TermRecord (Core.Record {
   Core.recordTypeName = testTypeLatLonName,
@@ -24,3 +25,14 @@ latlonRecord lat lon = (Core.TermRecord (Core.Record {
     Core.Field {
       Core.fieldName = (Core.Name "lon"),
       Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 lon)))}]}))
+
+testTypeLatLon :: Core.Type
+testTypeLatLon = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = testTypeLatLonName,
+  Core.rowTypeFields = [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "lat"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "lon"),
+      Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}]}))

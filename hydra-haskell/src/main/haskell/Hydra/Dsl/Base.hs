@@ -18,6 +18,7 @@ import Hydra.Qnames
 import Hydra.Dsl.PhantomLiterals
 import Hydra.Dsl.ShorthandTypes
 import Hydra.Sources.Tier0.Core
+import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Lib.Lists as Lists
@@ -57,6 +58,9 @@ infixr 0 -->
 (-->) :: TCase a -> TTerm (a -> b) -> Field
 c --> t = caseField c t
 
+annot :: Name -> Maybe Term -> TTerm a -> TTerm a
+annot key mvalue (TTerm term) = TTerm $ Ann.annotateTerm key mvalue term
+
 apply :: TTerm (a -> b) -> TTerm a -> TTerm b
 apply (TTerm lhs) (TTerm rhs) = TTerm $ Terms.apply lhs rhs
 
@@ -92,6 +96,9 @@ field fname (TTerm val) = Field fname val
 
 first :: TTerm ((a, b) -> a)
 first = TTerm $ Terms.untuple 2 0
+
+firstClassType :: TTerm Type -> TTerm Type
+firstClassType typ = annot key_firstClassType (Just $ Terms.boolean True) typ
 
 fld :: Name -> TTerm a -> TField a
 fld fname (TTerm val) = TField $ Field fname val

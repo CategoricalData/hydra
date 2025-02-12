@@ -8,6 +8,7 @@ import Hydra.Graph
 import Hydra.Strip
 import Hydra.Rewriting
 import Hydra.Errors
+import Hydra.Staging.Lexical
 import qualified Hydra.Lib.Flows as Flows
 
 import Prelude hiding (map)
@@ -308,9 +309,12 @@ variable term = case fullyStripTerm term of
 variant :: Name -> Term -> Flow s Field
 variant = injectionWithName
 
-wrap :: Name -> Term -> Flow s Term
-wrap expected term = case fullyStripTerm term of
-  TermWrap (WrappedTerm actual term) -> if actual == expected
-    then pure term
-    else unexpected ("wrapper of type " ++ unName expected) (unName actual)
-  _ -> unexpected ("wrap(" ++ unName expected ++ ")") $ show term
+-- TODO: also strip and dereference terms in the other decoders
+wrap :: Name -> Term -> Flow Graph Term
+wrap expected term = do
+  t <- stripAndDereferenceTerm term
+  case t of
+    TermWrap (WrappedTerm actual term) -> if actual == expected
+      then pure term
+      else unexpected ("wrapper of type " ++ unName expected) (unName actual)
+    _ -> unexpected ("wrap(" ++ unName expected ++ ")") $ show term

@@ -10,6 +10,7 @@ import Hydra.Coders
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Staging.Schemas
+import Hydra.Staging.Annotations
 import Hydra.CoreEncoding
 import Hydra.CoreLanguage
 import Hydra.Graph
@@ -101,7 +102,7 @@ adaptedModuleDefinitions lang mod = do
     adapters <- adaptersFor types
     CM.mapM (classify adapters) $ L.zip (elementName <$> moduleElements mod) tterms
   where
-    classify adapters (name, (TypedTerm term typ)) = if isType typ
+    classify adapters (name, tt@(TypedTerm term typ)) = if isNativeType tt
       then do
         typ <- coreDecodeType term >>= adaptType lang
         return $ DefinitionType name typ
