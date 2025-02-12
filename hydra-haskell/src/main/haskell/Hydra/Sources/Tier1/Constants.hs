@@ -32,12 +32,26 @@ hydraConstantsModule = Module (Namespace "hydra/constants") elements [] [hydraCo
   where
    elements = [
      el ignoredVariableDef,
+     el key_classesDef,
+     el key_descriptionDef,
+     el key_typeDef,
      el placeholderNameDef,
      el maxTraceDepthDef]
+
+annotationKeyDef :: String -> Maybe String -> TElement Name
+annotationKeyDef name mdesc = constantsDefinition ("key_" <> name) $ case mdesc of
+    Nothing -> def
+    Just comment -> doc comment def
+  where
+    def = wrap _Name $ string name
 
 ignoredVariableDef :: TElement String
 ignoredVariableDef = constantsDefinition "ignoredVariable" $
   string "_"
+
+key_classesDef = annotationKeyDef "classes" Nothing
+key_descriptionDef = annotationKeyDef "description" Nothing
+key_typeDef = annotationKeyDef "type" Nothing
 
 placeholderNameDef :: TElement Name
 placeholderNameDef = constantsDefinition "placeholderName" $
