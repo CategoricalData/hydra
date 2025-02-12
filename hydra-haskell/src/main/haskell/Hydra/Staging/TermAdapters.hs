@@ -294,7 +294,7 @@ passWrapped t@(TypeWrap (WrappedType tname ot)) = do
     return $ Adapter (adapterIsLossy adapter) t (Types.wrapWithName tname $ adapterTarget adapter) $
       bidirectional (mapTerm $ adapterCoder adapter)
   where
-    mapTerm coder dir term = Terms.wrap tname <$> (Expect.wrap tname term >>= encodeDecode dir coder)
+    mapTerm coder dir term = Terms.wrap tname <$> ((withGraphContext $ Expect.wrap tname term) >>= encodeDecode dir coder)
 
 simplifyApplication :: TypeAdapter
 simplifyApplication t@(TypeApplication (ApplicationType lhs _)) = do
@@ -393,7 +393,7 @@ wrapToUnwrapped t@(TypeWrap (WrappedType tname typ)) = do
     ad <- termAdapter typ
     return $ Adapter False t (adapterTarget ad) $ Coder (encode ad) (decode ad)
   where
-    encode ad term = Expect.wrap tname term >>= coderEncode (adapterCoder ad)
+    encode ad term = withGraphContext (Expect.wrap tname term) >>= coderEncode (adapterCoder ad)
     decode ad term = do
       decoded <- coderDecode (adapterCoder ad) term
       return $ TermWrap $ WrappedTerm tname decoded

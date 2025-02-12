@@ -53,19 +53,33 @@ requirePrimitive name = do
   where
     err = fail $ "no such primitive function: " ++ unName name
 
+requireTerm :: Name -> Flow Graph Term
+requireTerm name = do
+  mt <- resolveTerm name
+  case mt of
+    Nothing -> fail $ "no such element: " ++ unName name
+    Just term -> pure term
+
 -- TODO: distinguish between lambda-bound and let-bound variables
 resolveTerm :: Name -> Flow Graph (Maybe Term)
 resolveTerm name = do
     g <- getState
     Y.maybe (pure Nothing) recurse $ M.lookup name $ graphElements g
   where
-    recurse el = case stripTerm (elementData el) of
+    recurse el = case fullyStripTerm (elementData el) of
       TermVariable name' -> resolveTerm name'
       _ -> pure $ Just $ elementData el
 
 -- Note: assuming for now that primitive functions are the same in the schema graph
 schemaContext :: Graph -> Graph
 schemaContext g = Y.fromMaybe g (graphSchema g)
+
+stripAndDereferenceTerm :: Term -> Flow Graph Term
+stripAndDereferenceTerm term = case fullyStripTerm term of
+  TermVariable v -> do
+    t <- requireTerm v
+    stripAndDereferenceTerm t
+  t -> pure t
 
 toCompactName :: M.Map Namespace String -> Name -> String
 toCompactName namespaces name = case mns of

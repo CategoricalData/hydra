@@ -19,16 +19,18 @@ shaclCoder :: Module -> Flow Graph (Shacl.ShapesGraph, Graph -> Flow Graph Rdf.G
 shaclCoder mod = do
     g <- getState
     -- Note: untested since deprecation of element schemas
-    typeEls <- CM.filterM (isType g) $ moduleElements mod
+    typeEls <- CM.filterM treatAsType $ moduleElements mod
     shapes <- CM.mapM toShape typeEls
     let sg = Shacl.ShapesGraph $ S.fromList shapes
     let termFlow = \g -> do
           fail "not implemented"
     return (sg, termFlow)
   where
-    isType g el = do
-      typ <- requireTermType $ elementData el
-      return $ stripType typ == TypeVariable _Type
+    treatAsType el = do
+        typ <- requireTermType $ elementData el
+        return $ isNativeType (TypedTerm term typ)
+      where
+        term = elementData el
     toShape el = do
       typ <- coreDecodeType $ elementData el
       common <- encodeType typ

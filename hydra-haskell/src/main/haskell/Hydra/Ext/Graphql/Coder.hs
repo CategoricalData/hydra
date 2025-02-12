@@ -16,20 +16,20 @@ import qualified Data.Maybe as Y
 
 type Prefixes = M.Map Namespace String
 
-moduleToGraphql :: Module -> Flow (Graph) (M.Map FilePath String)
+moduleToGraphql :: Module -> Flow Graph (M.Map FilePath String)
 moduleToGraphql mod = do
     files <- moduleToGraphqlSchemas mod
     return $ M.fromList (mapPair <$> M.toList files)
   where
     mapPair (path, sf) = (path, printExpr $ parenthesize $ exprDocument sf)
 
-moduleToGraphqlSchemas :: Module -> Flow (Graph) (M.Map FilePath G.Document)
+moduleToGraphqlSchemas :: Module -> Flow Graph (M.Map FilePath G.Document)
 moduleToGraphqlSchemas mod = transformModule graphqlLanguage encodeTerm constructModule mod
 
 constructModule :: Module
-  -> M.Map (Type) (Coder (Graph) (Graph) (Term) ())
+  -> M.Map Type (Coder Graph Graph Term ())
   -> [(Element, TypedTerm)]
-  -> Flow (Graph) (M.Map FilePath G.Document)
+  -> Flow Graph (M.Map FilePath G.Document)
 constructModule mod coders pairs = do
     -- Gather all dependencies because GraphQL does not support imports (in a standard way)
     withDeps <- elementsWithDependencies $ fst <$> pairs
@@ -46,17 +46,19 @@ constructModule mod coders pairs = do
         namespaces = L.nub $ (Y.fromJust . namespaceOfEager . elementName) <$> els
         toPair ns = (ns, if ns == moduleNamespace mod then "" else (sanitizeWithUnderscores S.empty (unNamespace ns)) ++ "_")
     toTypeDef prefixes el = do
-      typ <- requireTermType (elementData el)
-      if isType typ
+      typ <- requireTermType term
+      if isNativeType (TypedTerm term typ)
         then coreDecodeType (elementData el) >>= encodeNamedType prefixes el
         else fail $ "mapping of non-type elements to GraphQL is not yet supported: " ++ unName (elementName el)
+     where
+       term = elementData el
 
-descriptionFromType :: Type -> Flow (Graph) (Maybe G.Description)
+descriptionFromType :: Type -> Flow Graph (Maybe G.Description)
 descriptionFromType typ = do
   mval <- getTypeDescription typ
   return $ G.Description . G.StringValue <$> mval
 
-encodeEnumFieldType :: FieldType -> Flow (Graph) G.EnumValueDefinition
+encodeEnumFieldType :: FieldType -> Flow Graph G.EnumValueDefinition
 encodeEnumFieldType ft = do
   desc <- descriptionFromType $ fieldTypeType ft
   return G.EnumValueDefinition {
@@ -70,7 +72,7 @@ encodeEnumFieldName = G.EnumValue . G.Name . sanitize . unName
 encodeFieldName :: Name -> G.Name
 encodeFieldName = G.Name . sanitize . unName
 
-encodeFieldType :: Prefixes -> FieldType -> Flow (Graph) G.FieldDefinition
+encodeFieldType :: Prefixes -> FieldType -> Flow Graph G.FieldDefinition
 encodeFieldType prefixes ft = do
   gtype <- encodeType prefixes $ fieldTypeType ft
   desc <- descriptionFromType $ fieldTypeType ft
@@ -81,7 +83,7 @@ encodeFieldType prefixes ft = do
     G.fieldDefinitionType = gtype,
     G.fieldDefinitionDirectives = Nothing}
 
-encodeLiteralType :: LiteralType -> Flow (Graph) G.NamedType
+encodeLiteralType :: LiteralType -> Flow Graph G.NamedType
 encodeLiteralType lt = G.NamedType . G.Name <$> case lt of
   LiteralTypeBoolean -> pure "Boolean"
   LiteralTypeFloat ft -> case ft of
@@ -93,7 +95,7 @@ encodeLiteralType lt = G.NamedType . G.Name <$> case lt of
   LiteralTypeString -> pure "String"
   _ -> unexpected "GraphQL-compatible literal type" $ show lt
 
-encodeNamedType :: Prefixes -> Element -> Type -> Flow (Graph) G.TypeDefinition
+encodeNamedType :: Prefixes -> Element -> Type -> Flow Graph G.TypeDefinition
 encodeNamedType prefixes el typ = do
     g <- getState
     let cx = AdapterContext g graphqlLanguage M.empty
@@ -124,10 +126,10 @@ encodeNamedType prefixes el typ = do
     wrapAsRecord = encodeNamedType prefixes el $ TypeRecord $ RowType (elementName el) [
       FieldType (Name "value") typ]
 
-encodeTerm :: Term -> Flow (Graph) ()
+encodeTerm :: Term -> Flow Graph ()
 encodeTerm term = fail "not yet implemented"
 
-encodeType :: Prefixes -> Type -> Flow (Graph) G.Type
+encodeType :: Prefixes -> Type -> Flow Graph G.Type
 encodeType prefixes typ = case stripType typ of
     TypeOptional et -> case stripType et of
         TypeList et -> G.TypeList . G.ListType <$> encodeType prefixes et

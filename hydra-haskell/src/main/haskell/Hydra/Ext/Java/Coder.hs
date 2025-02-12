@@ -132,7 +132,7 @@ constructModule :: Module
   -> [(Element, TypedTerm)]
   -> Flow Graph (M.Map Name Java.CompilationUnit)
 constructModule mod coders pairs = do
-    let isTypePair = isType . typedTermType . snd
+    let isTypePair = isNativeType . snd
     let typePairs = L.filter isTypePair pairs
     let dataPairs = L.filter (not . isTypePair) pairs
     typeUnits <- CM.mapM typeToClass typePairs

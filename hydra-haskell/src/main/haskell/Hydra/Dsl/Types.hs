@@ -127,7 +127,10 @@ product :: [Type] -> Type
 product = TypeProduct
 
 record :: [FieldType] -> Type
-record fields = TypeRecord $ RowType placeholderName fields
+record = recordWithName placeholderName
+
+recordWithName :: Name -> [FieldType] -> Type
+recordWithName tname fields = TypeRecord $ RowType tname fields
 
 scheme :: [String] -> Type -> TypeScheme
 scheme vars body = TypeScheme (Name <$> vars) body
