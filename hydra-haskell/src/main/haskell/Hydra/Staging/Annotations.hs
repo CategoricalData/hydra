@@ -6,6 +6,7 @@ import Hydra.Annotations
 import Hydra.Strip
 import Hydra.Core
 import Hydra.Compute
+import Hydra.Constants
 import Hydra.Graph
 import Hydra.Staging.CoreDecoding
 import Hydra.CoreEncoding
@@ -23,10 +24,6 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
-
-key_classes = Name "classes"
-key_description = Name "description"
-key_type = Name "type"
 
 -- | A flag which tells the language coders to encode a given encoded type as a term rather than a native type
 key_firstClassType = Name "firstClassType"
