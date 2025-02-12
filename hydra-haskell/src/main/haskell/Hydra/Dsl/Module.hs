@@ -4,6 +4,9 @@ import Hydra.Kernel
 import Hydra.Dsl.Base as Base
 
 
+namespace :: TTerm String -> TTerm Namespace
+namespace ns = wrap _Namespace ns
+
 qualifiedName :: TTerm (Maybe Namespace) -> TTerm String -> TTerm QualifiedName
 qualifiedName ns local = record _QualifiedName [
   _QualifiedName_namespace>>: ns,
