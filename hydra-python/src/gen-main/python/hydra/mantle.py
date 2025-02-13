@@ -1,4 +1,4 @@
-"""A set of types which supplement hydra/core with variants and accessors."""
+"""A set of types which supplement hydra/core with variants and accessors. Currently contains miscellaneous additional types including CaseConvention and Either."""
 
 from __future__ import annotations
 from dataclasses import dataclass
@@ -9,6 +9,15 @@ import hydra.core
 
 A = TypeVar("A")
 B = TypeVar("B")
+
+class CaseConvention(Enum):
+    CAMEL = "camel"
+    
+    PASCAL = "pascal"
+    
+    LOWER_SNAKE = "lowerSnake"
+    
+    UPPER_SNAKE = "upperSnake"
 
 class EitherLeft(Node["A"]): ...
 

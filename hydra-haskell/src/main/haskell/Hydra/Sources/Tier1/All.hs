@@ -50,26 +50,31 @@ import Hydra.Sources.Tier1.Testing
 import Hydra.Sources.Tier1.Workflow
 
 tier1Modules :: [Module]
-tier1Modules = [
+tier1Modules = tier1TypeModules ++ tier1TermModules
+
+tier1TermModules :: [Module]
+tier1TermModules = [
   coreEncodingModule,
   decodeModule,
+  hydraConstantsModule,
+  hydraFormattingModule,
+  hydraFunctionsModule,
+  hydraLiteralsModule,
+  hydraMessagesModule,
+  hydraStripModule]
+
+tier1TypeModules :: [Module]
+tier1TypeModules = [
   hydraAstModule,
   hydraCodersModule,
   hydraComputeModule,
-  hydraConstantsModule,
   hydraConstraintsModule,
-  hydraCoreModule,
-  hydraFormattingModule,
-  hydraFunctionsModule,
   hydraGrammarModule,
   hydraGraphModule,
-  hydraLiteralsModule,
   hydraMantleModule,
-  hydraMessagesModule,
   hydraModuleModule,
   hydraPhantomsModule,
   hydraQueryModule,
-  hydraStripModule,
   hydraTestingModule,
   hydraWorkflowModule,
   jsonModelModule]
