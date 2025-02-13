@@ -22,7 +22,7 @@ moduleToScala :: Module -> Flow Graph (M.Map FilePath String)
 moduleToScala mod = do
   pkg <- moduleToScalaPackage mod
   let s = printExpr $ parenthesize $ writePkg pkg
-  return $ M.fromList [(namespaceToFilePath False (FileExtension "scala") $ moduleNamespace mod, s)]
+  return $ M.fromList [(namespaceToFilePath CaseConventionCamel (FileExtension "scala") $ moduleNamespace mod, s)]
 
 moduleToScalaPackage :: Module -> Flow Graph Scala.Pkg
 moduleToScalaPackage = transformModule scalaLanguage encodeUntypedTerm constructModule

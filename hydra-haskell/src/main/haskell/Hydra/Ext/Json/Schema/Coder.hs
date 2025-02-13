@@ -62,7 +62,7 @@ constructModule opts mod coders pairs = M.fromList <$> CM.mapM toDocument pairs
       schema <- JS.Schema <$> encodeNamedType name atyp
       return (JS.Keyword $ encodeName $ Name $ localNameOfEager name, schema)
 
-    nameToPath name = namespaceToFilePath False (FileExtension "json") (Namespace $ nsPart ++ local)
+    nameToPath name = namespaceToFilePath CaseConventionCamel (FileExtension "json") (Namespace $ nsPart ++ local)
       where
         (QualifiedName mns local) = qualifyNameLazy name
         nsPart = case mns of

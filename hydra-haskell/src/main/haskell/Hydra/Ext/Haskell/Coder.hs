@@ -262,7 +262,7 @@ moduleToHaskell :: Module -> Flow Graph (M.Map FilePath String)
 moduleToHaskell mod = do
   hsmod <- moduleToHaskellModule mod
   let s = printExpr $ parenthesize $ toTree hsmod
-  return $ M.fromList [(namespaceToFilePath True (FileExtension "hs") $ moduleNamespace mod, s)]
+  return $ M.fromList [(namespaceToFilePath CaseConventionPascal (FileExtension "hs") $ moduleNamespace mod, s)]
 
 nameDecls :: Graph -> HaskellNamespaces -> Name -> Type -> [H.DeclarationWithComments]
 nameDecls g namespaces name@(Name nm) typ = if useCoreImport

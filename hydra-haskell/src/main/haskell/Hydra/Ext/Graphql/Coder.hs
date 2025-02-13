@@ -40,7 +40,7 @@ constructModule mod coders pairs = do
     let doc = G.Document $ (G.DefinitionTypeSystem . G.TypeSystemDefinitionOrExtensionDefinition . G.TypeSystemDefinitionType) <$> tdefs
     return $ M.fromList [(filePath, doc)]
   where
-    filePath = namespaceToFilePath False (FileExtension "graphql") (moduleNamespace mod)
+    filePath = namespaceToFilePath CaseConventionCamel (FileExtension "graphql") (moduleNamespace mod)
     findPrefixes els = M.fromList $ toPair <$> namespaces
       where
         namespaces = L.nub $ (Y.fromJust . namespaceOfEager . elementName) <$> els
