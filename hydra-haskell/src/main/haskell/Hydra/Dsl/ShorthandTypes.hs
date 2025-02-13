@@ -64,6 +64,7 @@ annotatedTermT = TypeVariable _AnnotatedTerm :: Type
 annotatedTypeT = TypeVariable _AnnotatedType :: Type
 applicationT = TypeVariable _Application :: Type
 applicationTypeT = TypeVariable _ApplicationType :: Type
+caseConventionT = TypeVariable _CaseConvention :: Type
 caseStatementT = TypeVariable _CaseStatement :: Type
 elementT = TypeVariable _Element :: Type
 eliminationT = TypeVariable _Elimination :: Type

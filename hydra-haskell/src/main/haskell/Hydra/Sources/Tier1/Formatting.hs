@@ -30,8 +30,6 @@ import Hydra.Sources.Tier1.Mantle
 formattingDefinition :: String -> TTerm a -> TElement a
 formattingDefinition = definitionInModule hydraFormattingModule
 
-caseConventionT = TypeVariable _CaseConvention
-
 hydraFormattingModule :: Module
 hydraFormattingModule = Module (Namespace "hydra/formatting") elements [] [hydraMantleModule] $
     Just "String formatting types and functions."
