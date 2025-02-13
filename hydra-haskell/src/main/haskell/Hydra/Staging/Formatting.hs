@@ -12,8 +12,6 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-data CaseConvention = CaseConventionCamel | CaseConventionPascal | CaseConventionLowerSnake | CaseConventionUpperSnake
-
 convertCase :: CaseConvention -> CaseConvention -> String -> String
 convertCase from to original = case to of
     CaseConventionCamel -> decapitalize $ L.concat (capitalize . Strings.toLower <$> parts)

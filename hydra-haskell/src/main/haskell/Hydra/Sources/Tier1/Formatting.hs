@@ -22,18 +22,29 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
+-- Mixed Tier-1 imports
+import Hydra.Dsl.Bootstrap
+
 
 formattingDefinition :: String -> TTerm a -> TElement a
 formattingDefinition = definitionInModule hydraFormattingModule
 
 hydraFormattingModule :: Module
 hydraFormattingModule = Module (Namespace "hydra/formatting") elements [] [hydraCoreModule] $
-    Just "String formatting functions."
+    Just "String formatting types and functions."
   where
-   elements = [
-     el capitalizeDef,
-     el decapitalizeDef,
-     el mapFirstLetterDef]
+    elements = hydraFormattingTypeDefinitions <> [
+      el capitalizeDef,
+      el decapitalizeDef,
+      el mapFirstLetterDef]
+
+hydraFormattingTypeDefinitions :: [Element]
+hydraFormattingTypeDefinitions = [caseConventionDef]
+  where
+    def = datatype $ moduleNamespace hydraFormattingModule
+
+    caseConventionDef = def "CaseConvention" $
+      Types.enum ["Camel", "Pascal", "LowerSnake", "UpperSnake"]
 
 capitalizeDef :: TElement (String -> String)
 capitalizeDef = formattingDefinition "capitalize" $
