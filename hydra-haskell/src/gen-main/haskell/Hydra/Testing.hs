@@ -3,6 +3,7 @@
 module Hydra.Testing where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Mantle as Mantle
 import Data.Int
 import Data.List as L
 import Data.Map as M
@@ -19,6 +20,25 @@ _EvaluationStyle = (Core.Name "hydra/testing.EvaluationStyle")
 _EvaluationStyle_eager = (Core.Name "eager")
 
 _EvaluationStyle_lazy = (Core.Name "lazy")
+
+-- | A test case which checks that strings are converted between different case conventions correctly
+data CaseConversionTestCase = 
+  CaseConversionTestCase {
+    caseConversionTestCaseFromConvention :: Mantle.CaseConvention,
+    caseConversionTestCaseToConvention :: Mantle.CaseConvention,
+    caseConversionTestCaseFromString :: String,
+    caseConversionTestCaseToString :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_CaseConversionTestCase = (Core.Name "hydra/testing.CaseConversionTestCase")
+
+_CaseConversionTestCase_fromConvention = (Core.Name "fromConvention")
+
+_CaseConversionTestCase_toConvention = (Core.Name "toConvention")
+
+_CaseConversionTestCase_fromString = (Core.Name "fromString")
+
+_CaseConversionTestCase_toString = (Core.Name "toString")
 
 -- | A test case which evaluates (reduces) a given term and compares it with the expected result
 data EvaluationTestCase = 
@@ -58,11 +78,14 @@ _Tag = (Core.Name "hydra/testing.Tag")
 
 -- | A simple test case with an input and an expected output
 data TestCase = 
+  TestCaseCaseConversion CaseConversionTestCase |
   TestCaseEvaluation EvaluationTestCase |
   TestCaseInference InferenceTestCase
   deriving (Eq, Ord, Read, Show)
 
 _TestCase = (Core.Name "hydra/testing.TestCase")
+
+_TestCase_caseConversion = (Core.Name "caseConversion")
 
 _TestCase_evaluation = (Core.Name "evaluation")
 

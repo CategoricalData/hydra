@@ -23,10 +23,14 @@ runTestSuite = do
 runTestCase :: TestCaseWithMetadata -> H.SpecWith ()
 runTestCase (TestCaseWithMetadata name tcase mdesc _) = H.it desc $
     case tcase of
+      TestCaseCaseConversion ccase -> runCaseConversionTestCase ccase
       TestCaseEvaluation ecase -> runEvaluationTestCase ecase
       TestCaseInference icase -> runInferenceTestCase icase
   where
     desc = name ++ Y.maybe ("") (\d -> ": " ++ d) mdesc
+    runCaseConversionTestCase (CaseConversionTestCase fromConvention toConvention fromString toString) = H.shouldBe
+      (convertCase fromConvention toConvention fromString)
+      toString
     runEvaluationTestCase (EvaluationTestCase _ input output) = shouldSucceedWith
       (eval input)
       output
