@@ -16,7 +16,8 @@ import qualified Data.Maybe            as Y
 
 hydraMantleModule :: Module
 hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
-    Just "A set of types which supplement hydra/core with variants and accessors"
+    Just ("A set of types which supplement hydra/core with variants and accessors."
+      ++ " Currently contains miscellaneous additional types including CaseConvention and Either.")
   where
     ns = Namespace "hydra/mantle"
     core = typeref $ moduleNamespace hydraCoreModule
@@ -24,6 +25,9 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     def = datatype ns
 
     elements = [
+
+      def "CaseConvention" $
+        Types.enum ["camel", "pascal", "lowerSnake", "upperSnake"],
 
       def "Either" $
         doc "A disjoint union between a 'left' type and a 'right' type" $
