@@ -27,12 +27,14 @@ import qualified Hydra.Dsl.Terms           as Terms
 import qualified Hydra.Dsl.Types           as Types
 import           Hydra.Sources.Tier1.All
 
+import qualified Hydra.Dsl.Mantle as Mantle
+
 
 qnamesDefinition :: String -> TTerm a -> TElement a
 qnamesDefinition = definitionInModule hydraQnamesModule
 
 hydraQnamesModule :: Module
-hydraQnamesModule = Module (Namespace "hydra/qnames") elements [] [hydraCoreModule] $
+hydraQnamesModule = Module (Namespace "hydra/qnames") elements [] [hydraMantleModule, hydraModuleModule] $
     Just ("Functions for working with qualified names.")
   where
    elements = [
@@ -66,17 +68,14 @@ namespaceOfLazyDef = qnamesDefinition "namespaceOfLazy" $
   function nameT (tOpt namespaceT) $
   Module.qualifiedNameNamespace <.> ref qualifyNameLazyDef
 
-namespaceToFilePathDef :: TElement (Bool -> FileExtension -> Namespace -> String)
+namespaceToFilePathDef :: TElement (CaseConvention -> FileExtension -> Namespace -> String)
 namespaceToFilePathDef = qnamesDefinition "namespaceToFilePath" $
-  function tBoolean (tFun fileExtensionT (tFun namespaceT tString)) $
-  lambda "caps" $ lambda "ext" $ lambda "ns" $
+  function caseConventionT (tFun fileExtensionT (tFun namespaceT tString)) $
+  lambda "caseConv" $ lambda "ext" $ lambda "ns" $
     (((Strings.intercalate @@ "/" @@ var "parts") ++ "." ++ (Module.unFileExtension @@ var "ext"))
     `with` [
       "parts">: Lists.map
-        @@ (Logic.ifElse
-          @@ ref capitalizeDef
-          @@ ref idDef
-          @@ var "caps")
+        @@ (ref convertCaseDef @@ Mantle.caseConventionCamel @@ var "caseConv")
         @@ (Strings.splitOn @@ "/" @@ (Core.unNamespace @@ var "ns"))])
 
 qnameDef :: TElement (Namespace -> String -> Name)

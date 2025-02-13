@@ -39,6 +39,7 @@ formattingTests = TestGroup "formatting tests" Nothing [] cases
       where
         tcase = TestCaseCaseConversion $ CaseConversionTestCase fromConvention toConvention fromString toString
         name = "#" ++ show i ++ " (" ++ showConvention fromConvention ++ " -> " ++ showConvention toConvention ++ ")"
+
     showConvention c = case c of
       CaseConventionLowerSnake -> "lower_snake_case"
       CaseConventionUpperSnake -> "UPPER_SNAKE_CASE"

@@ -4,11 +4,11 @@ module Hydra.Qnames where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Formatting as Formatting
-import qualified Hydra.Functions as Functions
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Module as Module
 import Data.Int
 import Data.List as L
@@ -27,9 +27,9 @@ namespaceOfEager x = (Module.qualifiedNameNamespace (qualifyNameEager x))
 namespaceOfLazy :: (Core.Name -> Maybe Module.Namespace)
 namespaceOfLazy x = (Module.qualifiedNameNamespace (qualifyNameLazy x))
 
-namespaceToFilePath :: (Bool -> Module.FileExtension -> Module.Namespace -> String)
-namespaceToFilePath caps ext ns =  
-  let parts = (Lists.map (Logic.ifElse Formatting.capitalize Functions.id_ caps) (Strings.splitOn "/" (Module.unNamespace ns)))
+namespaceToFilePath :: (Mantle.CaseConvention -> Module.FileExtension -> Module.Namespace -> String)
+namespaceToFilePath caseConv ext ns =  
+  let parts = (Lists.map (Formatting.convertCase Mantle.CaseConventionCamel caseConv) (Strings.splitOn "/" (Module.unNamespace ns)))
   in (Strings.cat [
     Strings.cat [
       Strings.intercalate "/" parts,
