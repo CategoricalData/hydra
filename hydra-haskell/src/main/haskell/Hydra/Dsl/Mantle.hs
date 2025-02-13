@@ -8,6 +8,11 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
+caseConventionCamel = unitVariant _CaseConvention _CaseConvention_camel
+caseConventionPascal = unitVariant _CaseConvention _CaseConvention_pascal
+caseConventionLowerSnake = unitVariant _CaseConvention _CaseConvention_lowerSnake
+caseConventionUpperSnake = unitVariant _CaseConvention _CaseConvention_upperSnake
+
 eliminationVariant :: EliminationVariant -> TTerm EliminationVariant
 eliminationVariant v = unitVariant _EliminationVariant $ case v of
   EliminationVariantList -> _EliminationVariant_list

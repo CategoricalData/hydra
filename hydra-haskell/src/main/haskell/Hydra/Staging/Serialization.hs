@@ -56,6 +56,7 @@ customIndent idt s = L.intercalate "\n" $ (idt ++) <$> lines s
 
 customIndentBlock :: String -> [Expr] -> Expr
 customIndentBlock idt els = case els of
+  [] -> cst ""
   [x] -> x
   (head:rest) -> ifx idtOp head $ newlineSep rest
     where

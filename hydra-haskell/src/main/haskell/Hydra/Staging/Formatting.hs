@@ -3,6 +3,7 @@
 module Hydra.Staging.Formatting where
 
 import Hydra.Formatting
+import Hydra.Mantle
 import qualified Hydra.Lib.Chars as Chars
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Strings as Strings
@@ -13,31 +14,6 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
-
-convertCase :: CaseConvention -> CaseConvention -> String -> String
-convertCase from to original = case to of
-    CaseConventionCamel -> decapitalize $ L.concat (capitalize . Strings.toLower <$> parts)
-    CaseConventionPascal -> Lists.concat (capitalize . Strings.toLower <$> parts)
-    CaseConventionLowerSnake -> Lists.intercalate "_" (Strings.toLower <$> parts)
-    CaseConventionUpperSnake -> Lists.intercalate "_" (Strings.toUpper <$> parts)
-  where
-    parts = case from of
-      CaseConventionCamel -> byCaps
-      CaseConventionPascal -> byCaps
-      CaseConventionLowerSnake -> byUnderscores
-      CaseConventionUpperSnake -> byUnderscores
-    byUnderscores = Strings.splitOn "_" original
-    byCaps = fmap Strings.fromList $ Lists.foldl splitOnUppercase [[]] $ Lists.reverse $ Strings.toList $ decapitalize original
-    splitOnUppercase acc c = (if Chars.isUpper c then [[]] else []) ++ (Lists.cons (Lists.cons c $ Lists.head acc) $ Lists.tail acc)
-
-convertCaseCamelToLowerSnake :: String -> String
-convertCaseCamelToLowerSnake = convertCase CaseConventionCamel CaseConventionLowerSnake
-
-convertCaseCamelToUpperSnake :: String -> String
-convertCaseCamelToUpperSnake = convertCase CaseConventionCamel CaseConventionUpperSnake
-
-convertCasePascalToUpperSnake :: String -> String
-convertCasePascalToUpperSnake = convertCase CaseConventionPascal CaseConventionUpperSnake
 
 escapeWithUnderscore :: S.Set String -> String -> String
 escapeWithUnderscore reserved s = if S.member s reserved then s ++ "_" else s

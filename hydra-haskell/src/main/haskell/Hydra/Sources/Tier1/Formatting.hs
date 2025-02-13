@@ -3,6 +3,7 @@ module Hydra.Sources.Tier1.Formatting where
 -- Standard term-level Tier-1 imports
 import           Hydra.Dsl.Base          as Base
 import qualified Hydra.Dsl.Core          as Core
+import qualified Hydra.Dsl.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Lib.Equality  as Equality
 import qualified Hydra.Dsl.Lib.Io        as Io
 import qualified Hydra.Dsl.Lib.Lists     as Lists
@@ -22,37 +23,77 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
--- Mixed Tier-1 imports
-import Hydra.Dsl.Bootstrap
+import qualified Hydra.Dsl.Mantle as Mantle
+import Hydra.Sources.Tier1.Mantle
 
 
 formattingDefinition :: String -> TTerm a -> TElement a
 formattingDefinition = definitionInModule hydraFormattingModule
 
+caseConventionT = TypeVariable _CaseConvention
+
 hydraFormattingModule :: Module
-hydraFormattingModule = Module (Namespace "hydra/formatting") elements [] [hydraCoreModule] $
+hydraFormattingModule = Module (Namespace "hydra/formatting") elements [] [hydraMantleModule] $
     Just "String formatting types and functions."
   where
-    elements = hydraFormattingTypeDefinitions <> [
+    elements = [
       el capitalizeDef,
+      el convertCaseDef,
+      el convertCaseCamelToLowerSnakeDef,
+      el convertCaseCamelToUpperSnakeDef,
+      el convertCasePascalToUpperSnakeDef,
       el decapitalizeDef,
       el mapFirstLetterDef]
-
-hydraFormattingTypeDefinitions :: [Element]
-hydraFormattingTypeDefinitions = [
-    caseConventionDef,
-    charDef]
-  where
-    def = datatype $ moduleNamespace hydraFormattingModule
-    caseConventionDef = def "CaseConvention" $
-      Types.enum ["Camel", "Pascal", "LowerSnake", "UpperSnake"]
-    charDef = def "Char" Types.int32
 
 capitalizeDef :: TElement (String -> String)
 capitalizeDef = formattingDefinition "capitalize" $
   doc "Capitalize the first letter of a string" $
   function tString tString $
   ref mapFirstLetterDef @@ Strings.toUpper
+
+convertCaseDef :: TElement (CaseConvention -> CaseConvention -> String -> String)
+convertCaseDef = formattingDefinition "convertCase" $
+  doc "Convert a string from one case convention to another" $
+  functionN [caseConventionT, caseConventionT, tString, tString] $
+  lambda "from" $ lambda "to" $ lambda "original" $ ((match _CaseConvention Nothing [
+      _CaseConvention_camel>>: constant $ ref decapitalizeDef @@ (Strings.cat @@ (Lists.map @@ (ref capitalizeDef <.> Strings.toLower) @@ var "parts")),
+      _CaseConvention_pascal>>: constant $ Strings.cat @@ (Lists.map @@ (ref capitalizeDef <.> Strings.toLower) @@ var "parts"),
+      _CaseConvention_lowerSnake>>: constant $ Strings.intercalate @@ string "_" @@ (Lists.map @@ Strings.toLower @@ var "parts"),
+      _CaseConvention_upperSnake>>: constant $ Strings.intercalate @@ string "_" @@ (Lists.map @@ Strings.toUpper @@ var "parts")
+      ]) @@ var "to")
+    `with` [
+      "parts">: ((match _CaseConvention Nothing [
+        _CaseConvention_camel>>: constant $ var "byCaps",
+        _CaseConvention_pascal>>: constant $ var "byCaps",
+        _CaseConvention_lowerSnake>>: constant $ var "byUnderscores",
+        _CaseConvention_upperSnake>>: constant $ var "byUnderscores"]) @@ var "from") `with` [
+          "byCaps">: (Lists.map @@ Strings.fromList
+            @@ (Lists.foldl @@ (var "splitOnUppercase") @@ emptyParts
+              @@ (Lists.reverse @@ (Strings.toList @@ (ref decapitalizeDef @@ var "original"))))) `with` [
+              "splitOnUppercase">: lambda "acc" $ lambda "c" $ Lists.concat2
+                @@ (Logic.ifElse @@ emptyParts @@ list [] @@ (Chars.isUpper @@ var "c"))
+                @@ (Lists.cons @@ (Lists.cons @@ var "c" @@ (Lists.head @@ var "acc")) @@ (Lists.tail @@ var "acc"))],
+          "byUnderscores">: Strings.splitOn @@ string "_" @@ var "original"]]
+  where
+    emptyParts = list [list []]
+
+convertCaseCamelToLowerSnakeDef :: TElement (String -> String)
+convertCaseCamelToLowerSnakeDef = formattingDefinition "convertCaseCamelToLowerSnake" $
+  doc "Convert a string from camel case to lower snake case" $
+  function tString tString $
+  ref convertCaseDef @@ Mantle.caseConventionCamel @@ Mantle.caseConventionLowerSnake
+
+convertCaseCamelToUpperSnakeDef :: TElement (String -> String)
+convertCaseCamelToUpperSnakeDef = formattingDefinition "convertCaseCamelToUpperSnake" $
+  doc "Convert a string from camel case to upper snake case" $
+  function tString tString $
+  ref convertCaseDef @@ Mantle.caseConventionCamel @@ Mantle.caseConventionUpperSnake
+
+convertCasePascalToUpperSnakeDef :: TElement (String -> String)
+convertCasePascalToUpperSnakeDef = formattingDefinition "convertCasePascalToUpperSnake" $
+  doc "Convert a string from pascal case to upper snake case" $
+  function tString tString $
+  ref convertCaseDef @@ Mantle.caseConventionPascal @@ Mantle.caseConventionUpperSnake
 
 decapitalizeDef :: TElement (String -> String)
 decapitalizeDef = formattingDefinition "decapitalize" $
