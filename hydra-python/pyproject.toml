@@ -101,6 +101,12 @@ extraPaths = [
     "src/gen-main/python"
 ]
 
+[tool.pytest.ini_options]
+pythonpath = [
+    "src/main/python",
+    "src/gen-main/python"
+]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
