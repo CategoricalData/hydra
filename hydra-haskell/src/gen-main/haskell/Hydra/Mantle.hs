@@ -1,4 +1,4 @@
--- | A set of types which supplement hydra/core with variants and accessors
+-- | A set of types which supplement hydra/core with variants and accessors. Currently contains miscellaneous additional types including CaseConvention and Either.
 
 module Hydra.Mantle where
 
@@ -7,6 +7,23 @@ import Data.Int
 import Data.List as L
 import Data.Map as M
 import Data.Set as S
+
+data CaseConvention = 
+  CaseConventionCamel  |
+  CaseConventionPascal  |
+  CaseConventionLowerSnake  |
+  CaseConventionUpperSnake 
+  deriving (Eq, Ord, Read, Show)
+
+_CaseConvention = (Core.Name "hydra/mantle.CaseConvention")
+
+_CaseConvention_camel = (Core.Name "camel")
+
+_CaseConvention_pascal = (Core.Name "pascal")
+
+_CaseConvention_lowerSnake = (Core.Name "lowerSnake")
+
+_CaseConvention_upperSnake = (Core.Name "upperSnake")
 
 -- | A disjoint union between a 'left' type and a 'right' type
 data Either_ a b = 
