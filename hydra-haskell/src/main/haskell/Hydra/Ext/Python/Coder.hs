@@ -39,37 +39,7 @@ data PythonModuleMetadata = PythonModuleMetadata {
   pythonModuleMetadataUsesTypeVar :: Bool,
   pythonModuleMetadataUsesNode :: Bool}
 
-encodeField :: PythonEnvironment -> Field -> Flow s (Py.Name, Py.Expression)
-encodeField env (Field fname fterm) = do
-  pterm <- encodeTerm env fterm
-  return (encodeFieldName fname, pterm)
-
-encodeFieldName :: Name -> Py.Name
-encodeFieldName fname = Py.Name $ sanitizePythonName $
-  convertCase CaseConventionCamel CaseConventionLowerSnake $ unName fname
-
-encodeFieldType :: PythonEnvironment -> FieldType -> Flow Graph Py.Statement
-encodeFieldType env (FieldType fname ftype) = do
-  comment <- getTypeDescription ftype
-  let pyName = Py.SingleTargetName $ encodeFieldName fname
-  pyType <- annotatedExpression comment <$> encodeType env ftype
-  return $ pyAssignmentToPyStatement $ Py.AssignmentTyped $ Py.TypedAssignment pyName pyType Nothing
-
-encodeFunctionType :: PythonEnvironment -> FunctionType -> Flow Graph Py.Expression
-encodeFunctionType env ft = do
-    pydoms <- CM.mapM encode doms
-    pycod <- encode cod
-    return $ pyPrimaryToPyExpression $ primaryWithSlices (pyNameToPyPrimary $ Py.Name "Callable")
-      (pyPrimaryToPySlice $ Py.PrimarySimple $ Py.AtomList $ pyList pydoms)
-      [Py.SliceOrStarredExpressionSlice $ pyExpressionToPySlice pycod]
-  where
-    encode = encodeType env
-    (doms, cod) = gatherParams [] ft
-    gatherParams rdoms (FunctionType dom cod) = case stripType cod of
-      TypeFunction ft2 -> gatherParams (dom:rdoms) ft2
-      _ -> (L.reverse (dom:rdoms), cod)
-
-encodeApplication :: PythonEnvironment -> Application -> Flow s Py.Expression
+encodeApplication :: PythonEnvironment -> Application -> Flow Graph Py.Expression
 encodeApplication env (Application fun arg) = case fullyStripTerm fun of
     TermFunction f -> case f of
       FunctionElimination elm -> case elm of
@@ -80,7 +50,7 @@ encodeApplication env (Application fun arg) = case fullyStripTerm fun of
 --        EliminationProduct ...
         EliminationRecord (Projection _ fname) -> do
           parg <- encodeTerm env arg
-          return $ projectFromExpression parg $ encodeFieldName fname
+          return $ projectFromExpression parg $ encodeFieldName False fname
         EliminationUnion (CaseStatement tname mdef cases) -> do
 --          parg <- encodeTerm env arg
 --          pmdef <- traverse (encodeTerm env) mdef
@@ -125,12 +95,43 @@ encodeDefinition env def = case def of
     comment <- fmap normalizeComment <$> getTypeDescription typ
     encodeTypeAssignment env name typ comment
 
+encodeField :: PythonEnvironment -> Field -> Flow Graph (Py.Name, Py.Expression)
+encodeField env (Field fname fterm) = do
+  pterm <- encodeTerm env fterm
+  return (encodeFieldName False fname, pterm)
+
+encodeFieldName :: Bool -> Name -> Py.Name
+encodeFieldName isEnum fname = Py.Name $ sanitizePythonName $ convertCase CaseConventionCamel caseConv $ unName fname
+  where
+    caseConv = if isEnum then CaseConventionUpperSnake else CaseConventionLowerSnake
+
+encodeFieldType :: PythonEnvironment -> FieldType -> Flow Graph Py.Statement
+encodeFieldType env (FieldType fname ftype) = do
+  comment <- getTypeDescription ftype
+  let pyName = Py.SingleTargetName $ encodeFieldName False fname
+  pyType <- annotatedExpression comment <$> encodeType env ftype
+  return $ pyAssignmentToPyStatement $ Py.AssignmentTyped $ Py.TypedAssignment pyName pyType Nothing
+
+encodeFunctionType :: PythonEnvironment -> FunctionType -> Flow Graph Py.Expression
+encodeFunctionType env ft = do
+    pydoms <- CM.mapM encode doms
+    pycod <- encode cod
+    return $ pyPrimaryToPyExpression $ primaryWithSlices (pyNameToPyPrimary $ Py.Name "Callable")
+      (pyPrimaryToPySlice $ Py.PrimarySimple $ Py.AtomList $ pyList pydoms)
+      [Py.SliceOrStarredExpressionSlice $ pyExpressionToPySlice pycod]
+  where
+    encode = encodeType env
+    (doms, cod) = gatherParams [] ft
+    gatherParams rdoms (FunctionType dom cod) = case stripType cod of
+      TypeFunction ft2 -> gatherParams (dom:rdoms) ft2
+      _ -> (L.reverse (dom:rdoms), cod)
+
 encodeFloatValue :: FloatValue -> Flow s Py.Expression
 encodeFloatValue fv = case fv of
   FloatValueBigfloat f -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberFloat f
   _ -> fail $ "unsupported floating point type: " ++ show (floatValueType fv)
 
-encodeFunction :: PythonEnvironment -> Function -> Flow s Py.Expression
+encodeFunction :: PythonEnvironment -> Function -> Flow Graph Py.Expression
 encodeFunction env f = case f of
   FunctionLambda (Lambda var _ body) -> do
     pbody <- encodeTerm env body
@@ -262,7 +263,7 @@ encodeRecordType env name (RowType _ tfields) comment = do
     args = fmap (\a -> pyExpressionsToPyArgs [a]) $ genericArg tparamList
     decs = Py.Decorators [pyNameToPyNamedExpression $ Py.Name "dataclass"]
 
-encodeTerm :: PythonEnvironment -> Term -> Flow s Py.Expression
+encodeTerm :: PythonEnvironment -> Term -> Flow Graph Py.Expression
 encodeTerm env term = case fullyStripTerm term of
     TermApplication a -> encodeApplication env a
     TermFunction f -> encodeFunction env f
@@ -276,8 +277,13 @@ encodeTerm env term = case fullyStripTerm term of
       pargs <- CM.mapM (encode . fieldTerm) fields
       return $ functionCall (pyNameToPyPrimary $ encodeName env tname) pargs
     TermUnion (Injection tname field) -> do
-      parg <- encode $ fieldTerm field
-      return $ functionCall (pyNameToPyPrimary $ variantName True env tname (fieldName field)) [parg]
+      rt <- requireUnionType tname
+      if isEnumType rt
+        then return $ projectFromExpression (pyNameToPyExpression $ encodeName env tname)
+          $ encodeFieldName True $ fieldName field
+        else do
+          parg <- encode $ fieldTerm field
+          return $ functionCall (pyNameToPyPrimary $ variantName True env tname (fieldName field)) [parg]
     TermVariable name -> pure $ variableReference env name
     TermWrap (WrappedTerm tname term1) -> do
       parg <- encode term1
@@ -362,9 +368,8 @@ encodeUnionType env name rt@(RowType _ tfields) comment = if isEnumType rt then 
         toVal (FieldType fname ftype) = do
           fcomment <- fmap normalizeComment <$> getTypeDescription ftype
           return $ Y.catMaybes [
-            Just $ assignmentStatement (enumVariantName $ unName fname) (doubleQuotedString $ unName fname),
+            Just $ assignmentStatement (encodeFieldName True fname) (doubleQuotedString $ unName fname),
             pyExpressionToPyStatement . tripleQuotedString <$> fcomment]
-        enumVariantName fname = Py.Name $ convertCase CaseConventionCamel CaseConventionUpperSnake fname
     asUnion = do
       fieldStmts <- CM.mapM toFieldStmt tfields
       return $ fieldStmts ++ [unionStmt]

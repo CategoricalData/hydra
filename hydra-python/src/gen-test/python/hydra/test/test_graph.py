@@ -14,8 +14,8 @@ latlonRecord = lambda lat: lambda lon: hydra.core.TermRecord(hydra.core.Record(t
   hydra.core.Field(hydra.core.Name("lon"), hydra.core.TermLiteral(hydra.core.LiteralFloat(hydra.core.FloatValueFloat32(lon))))]))
 
 testTypeLatLon = hydra.core.TypeRecord(hydra.core.RowType(testTypeLatLonName, [
-  hydra.core.FieldType(hydra.core.Name("lat"), hydra.core.TypeLiteral(hydra.core.LiteralTypeFloat(hydra.core.FloatTypeFloat32(hydra.core.Unit())))),
-  hydra.core.FieldType(hydra.core.Name("lon"), hydra.core.TypeLiteral(hydra.core.LiteralTypeFloat(hydra.core.FloatTypeFloat32(hydra.core.Unit()))))]))
+  hydra.core.FieldType(hydra.core.Name("lat"), hydra.core.TypeLiteral(hydra.core.LiteralTypeFloat(hydra.core.FloatType.FLOAT32))),
+  hydra.core.FieldType(hydra.core.Name("lon"), hydra.core.TypeLiteral(hydra.core.LiteralTypeFloat(hydra.core.FloatType.FLOAT32)))]))
 
 testTypeLatLonPoly = hydra.core.TypeLambda(hydra.core.LambdaType(hydra.core.Name("a"), hydra.core.TypeRecord(hydra.core.RowType(testTypeLatLonPolyName, [
   hydra.core.FieldType(hydra.core.Name("lat"), hydra.core.TypeVariable(hydra.core.Name("a"))),
@@ -65,7 +65,7 @@ testTypeFoobarValue = hydra.core.TypeUnion(hydra.core.RowType(testTypeFoobarValu
 testTypeFoobarValueName = hydra.core.Name("FoobarValue")
 
 testTypeIntList = hydra.core.TypeRecord(hydra.core.RowType(testTypeIntListName, [
-  hydra.core.FieldType(hydra.core.Name("head"), hydra.core.TypeLiteral(hydra.core.LiteralTypeInteger(hydra.core.IntegerTypeInt32(hydra.core.Unit())))),
+  hydra.core.FieldType(hydra.core.Name("head"), hydra.core.TypeLiteral(hydra.core.LiteralTypeInteger(hydra.core.IntegerType.INT32))),
   hydra.core.FieldType(hydra.core.Name("tail"), hydra.core.TypeOptional(hydra.core.TypeVariable(testTypeIntListName)))]))
 
 testTypeIntListName = hydra.core.Name("IntList")
@@ -89,15 +89,15 @@ testTypeList = hydra.core.TypeLambda(hydra.core.LambdaType(hydra.core.Name("a"),
 testTypeListName = hydra.core.Name("List")
 
 testTypeNumber = hydra.core.TypeUnion(hydra.core.RowType(testTypeNumberName, [
-  hydra.core.FieldType(hydra.core.Name("int"), hydra.core.TypeLiteral(hydra.core.LiteralTypeInteger(hydra.core.IntegerTypeInt32(hydra.core.Unit())))),
-  hydra.core.FieldType(hydra.core.Name("float"), hydra.core.TypeLiteral(hydra.core.LiteralTypeFloat(hydra.core.FloatTypeFloat32(hydra.core.Unit()))))]))
+  hydra.core.FieldType(hydra.core.Name("int"), hydra.core.TypeLiteral(hydra.core.LiteralTypeInteger(hydra.core.IntegerType.INT32))),
+  hydra.core.FieldType(hydra.core.Name("float"), hydra.core.TypeLiteral(hydra.core.LiteralTypeFloat(hydra.core.FloatType.FLOAT32)))]))
 
 testTypeNumberName = hydra.core.Name("Number")
 
 testTypePerson = hydra.core.TypeRecord(hydra.core.RowType(testTypePersonName, [
   hydra.core.FieldType(hydra.core.Name("firstName"), hydra.core.TypeLiteral(hydra.core.LiteralTypeString(hydra.core.Unit()))),
   hydra.core.FieldType(hydra.core.Name("lastName"), hydra.core.TypeLiteral(hydra.core.LiteralTypeString(hydra.core.Unit()))),
-  hydra.core.FieldType(hydra.core.Name("age"), hydra.core.TypeLiteral(hydra.core.LiteralTypeInteger(hydra.core.IntegerTypeInt32(hydra.core.Unit()))))]))
+  hydra.core.FieldType(hydra.core.Name("age"), hydra.core.TypeLiteral(hydra.core.LiteralTypeInteger(hydra.core.IntegerType.INT32)))]))
 
 testTypePersonName = hydra.core.Name("Person")
 
@@ -108,13 +108,13 @@ testTypePersonOrSomething = hydra.core.TypeLambda(hydra.core.LambdaType(hydra.co
 testTypePersonOrSomethingName = hydra.core.Name("PersonOrSomething")
 
 testTypeSimpleNumber = hydra.core.TypeUnion(hydra.core.RowType(testTypeSimpleNumberName, [
-  hydra.core.FieldType(hydra.core.Name("int"), hydra.core.TypeLiteral(hydra.core.LiteralTypeInteger(hydra.core.IntegerTypeInt32(hydra.core.Unit())))),
-  hydra.core.FieldType(hydra.core.Name("float"), hydra.core.TypeLiteral(hydra.core.LiteralTypeFloat(hydra.core.FloatTypeFloat32(hydra.core.Unit()))))]))
+  hydra.core.FieldType(hydra.core.Name("int"), hydra.core.TypeLiteral(hydra.core.LiteralTypeInteger(hydra.core.IntegerType.INT32))),
+  hydra.core.FieldType(hydra.core.Name("float"), hydra.core.TypeLiteral(hydra.core.LiteralTypeFloat(hydra.core.FloatType.FLOAT32)))]))
 
 testTypeSimpleNumberName = hydra.core.Name("SimpleNumber")
 
 testTypeTimestamp = hydra.core.TypeUnion(hydra.core.RowType(testTypeTimestampName, [
-  hydra.core.FieldType(hydra.core.Name("unixTimeMillis"), hydra.core.TypeLiteral(hydra.core.LiteralTypeInteger(hydra.core.IntegerTypeUint64(hydra.core.Unit())))),
+  hydra.core.FieldType(hydra.core.Name("unixTimeMillis"), hydra.core.TypeLiteral(hydra.core.LiteralTypeInteger(hydra.core.IntegerType.UINT64))),
   hydra.core.FieldType(hydra.core.Name("date"), hydra.core.TypeLiteral(hydra.core.LiteralTypeString(hydra.core.Unit())))]))
 
 testTypeTimestampName = hydra.core.Name("Timestamp")
