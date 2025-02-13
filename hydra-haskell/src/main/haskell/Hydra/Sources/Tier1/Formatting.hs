@@ -39,12 +39,14 @@ hydraFormattingModule = Module (Namespace "hydra/formatting") elements [] [hydra
       el mapFirstLetterDef]
 
 hydraFormattingTypeDefinitions :: [Element]
-hydraFormattingTypeDefinitions = [caseConventionDef]
+hydraFormattingTypeDefinitions = [
+    caseConventionDef,
+    charDef]
   where
     def = datatype $ moduleNamespace hydraFormattingModule
-
     caseConventionDef = def "CaseConvention" $
       Types.enum ["Camel", "Pascal", "LowerSnake", "UpperSnake"]
+    charDef = def "Char" Types.int32
 
 capitalizeDef :: TElement (String -> String)
 capitalizeDef = formattingDefinition "capitalize" $
