@@ -8,6 +8,7 @@ import Hydra.Dsl.Prims as Prims
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
+import qualified Hydra.Lib.Chars as Chars
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Io as Io
@@ -22,6 +23,23 @@ import qualified Hydra.Lib.Strings as Strings
 
 import qualified Data.List as L
 
+
+_hydra_lib_chars :: Namespace
+_hydra_lib_chars = Namespace "hydra/lib/chars"
+
+_chars_isAlphaNum = qname _hydra_lib_chars "isAlphaNum" :: Name
+_chars_isLower = qname _hydra_lib_chars "isLower" :: Name
+_chars_isSpace = qname _hydra_lib_chars "isSpace" :: Name
+_chars_isUpper = qname _hydra_lib_chars "isUpper" :: Name
+_chars_toLower = qname _hydra_lib_chars "toLower" :: Name
+_chars_toUpper = qname _hydra_lib_chars "toUpper" :: Name
+
+hydraLibChars :: Library
+hydraLibChars = standardLibrary _hydra_lib_strings [
+  prim1 [] _chars_isLower int32 boolean Chars.isLower,
+  prim1 [] _chars_isUpper int32 boolean Chars.isUpper,
+  prim1 [] _chars_toLower int32 int32 Chars.toLower,
+  prim1 [] _chars_toUpper int32 int32 Chars.toUpper]
 
 _hydra_lib_equality :: Namespace
 _hydra_lib_equality = Namespace "hydra/lib/equality"
@@ -420,6 +438,7 @@ standardLibrary ns prims = Library {
 
 standardLibraries :: [Library]
 standardLibraries = [
+  hydraLibChars,
   hydraLibEquality,
   hydraLibFlows,
   hydraLibIo,
