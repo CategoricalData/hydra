@@ -40,7 +40,7 @@ constructModule aliases mod coders pairs = do
     pkg = Nothing
     toPair (schema, imports) = (path, PDL.SchemaFile ns pkg imports [schema])
       where
-        path = namespaceToFilePath False (FileExtension "pdl") (Namespace $ (unNamespace $ moduleNamespace mod) ++ "/" ++ local)
+        path = namespaceToFilePath CaseConventionCamel (FileExtension "pdl") (Namespace $ (unNamespace $ moduleNamespace mod) ++ "/" ++ local)
         local = PDL.unName $ PDL.qualifiedNameName $ PDL.namedSchemaQualifiedName schema
 
     pairByName = L.foldl (\m p -> M.insert (elementName $ fst p) p m) M.empty pairs

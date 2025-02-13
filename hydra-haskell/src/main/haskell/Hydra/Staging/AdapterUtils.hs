@@ -106,8 +106,8 @@ literalTypeIsSupported constraints at = S.member (literalTypeVariant at) (langua
     LiteralTypeInteger it -> integerTypeIsSupported constraints it
     _ -> True
 
-nameToFilePath :: Bool -> FileExtension -> Name -> FilePath
-nameToFilePath caps ext name = namespaceToFilePath caps ext $ Namespace $ prefix ++ local
+nameToFilePath :: CaseConvention -> FileExtension -> Name -> FilePath
+nameToFilePath caseConv ext name = namespaceToFilePath caseConv ext $ Namespace $ prefix ++ local
   where
     QualifiedName ns local = qualifyNameEager name
     prefix = Y.maybe "" (\(Namespace gname) -> gname ++ "/") ns

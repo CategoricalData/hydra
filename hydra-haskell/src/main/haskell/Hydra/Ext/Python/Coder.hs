@@ -480,7 +480,7 @@ moduleToPython :: Module -> Flow Graph (M.Map FilePath String)
 moduleToPython mod = do
   file <- encodeModule mod
   let s = printExpr $ parenthesize $ PySer.encodeModule file
-  let path = namespaceToFilePath False (FileExtension "py") $ moduleNamespace mod
+  let path = namespaceToFilePath CaseConventionLowerSnake (FileExtension "py") $ moduleNamespace mod
   return $ M.fromList [(path, s)]
 
 sanitizePythonName :: String -> String

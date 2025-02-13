@@ -35,5 +35,5 @@ moduleToYaml mod = withTrace ("print module " ++ (unNamespace $ moduleNamespace 
     node <- transformModule yamlLanguage encodeTerm constructModule mod
     return $ M.fromList [(path, hydraYamlToString node)]
   where
-    path = namespaceToFilePath False (FileExtension "yaml") $ moduleNamespace mod
+    path = namespaceToFilePath CaseConventionCamel (FileExtension "yaml") $ moduleNamespace mod
     encodeTerm _ = fail $ "only type definitions are expected in this mapping to YAML"
