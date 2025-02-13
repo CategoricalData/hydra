@@ -3,6 +3,7 @@
 module Hydra.Staging.Formatting where
 
 import Hydra.Formatting
+import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Strings as Strings
 
 import qualified Data.Char as C
@@ -15,9 +16,9 @@ import qualified Data.Maybe as Y
 convertCase :: CaseConvention -> CaseConvention -> String -> String
 convertCase from to original = case to of
     CaseConventionCamel -> decapitalize $ L.concat (capitalize . Strings.toLower <$> parts)
-    CaseConventionPascal -> L.concat (capitalize . Strings.toLower <$> parts)
-    CaseConventionLowerSnake -> L.intercalate "_" (Strings.toLower <$> parts)
-    CaseConventionUpperSnake -> L.intercalate "_" (Strings.toUpper <$> parts)
+    CaseConventionPascal -> Lists.concat (capitalize . Strings.toLower <$> parts)
+    CaseConventionLowerSnake -> Lists.intercalate "_" (Strings.toLower <$> parts)
+    CaseConventionUpperSnake -> Lists.intercalate "_" (Strings.toUpper <$> parts)
   where
     parts = case from of
       CaseConventionCamel -> byCaps
@@ -25,9 +26,8 @@ convertCase from to original = case to of
       CaseConventionLowerSnake -> byUnderscores
       CaseConventionUpperSnake -> byUnderscores
     byUnderscores = Strings.splitOn "_" original
-    byCaps = L.foldl helper [""] $ L.reverse $ decapitalize original
-      where
-        helper (h:r) c = ["" | C.isUpper c] ++ ((c:h):r)
+    byCaps = Lists.foldl splitOnUppercase [""] $ Lists.reverse $ decapitalize original
+    splitOnUppercase acc c = (if C.isUpper c then [""] else []) ++ (Lists.cons (Lists.cons c $ Lists.head acc) $ Lists.tail acc)
 
 convertCaseCamelToLowerSnake :: String -> String
 convertCaseCamelToLowerSnake = convertCase CaseConventionCamel CaseConventionLowerSnake

@@ -28,6 +28,13 @@ _CaseConvention_LowerSnake = (Core.Name "LowerSnake")
 
 _CaseConvention_UpperSnake = (Core.Name "UpperSnake")
 
+newtype Char_ = 
+  Char_ {
+    unChar :: Int}
+  deriving (Eq, Ord, Read, Show)
+
+_Char = (Core.Name "hydra/formatting.Char")
+
 -- | Capitalize the first letter of a string
 capitalize :: (String -> String)
 capitalize = (mapFirstLetter Strings.toUpper)
