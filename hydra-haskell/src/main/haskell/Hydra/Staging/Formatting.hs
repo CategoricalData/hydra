@@ -3,6 +3,7 @@
 module Hydra.Staging.Formatting where
 
 import Hydra.Formatting
+import qualified Hydra.Lib.Chars as Chars
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Strings as Strings
 
@@ -26,8 +27,8 @@ convertCase from to original = case to of
       CaseConventionLowerSnake -> byUnderscores
       CaseConventionUpperSnake -> byUnderscores
     byUnderscores = Strings.splitOn "_" original
-    byCaps = Lists.foldl splitOnUppercase [""] $ Lists.reverse $ decapitalize original
-    splitOnUppercase acc c = (if C.isUpper c then [""] else []) ++ (Lists.cons (Lists.cons c $ Lists.head acc) $ Lists.tail acc)
+    byCaps = fmap Strings.fromList $ Lists.foldl splitOnUppercase [[]] $ Lists.reverse $ Strings.toList $ decapitalize original
+    splitOnUppercase acc c = (if Chars.isUpper c then [[]] else []) ++ (Lists.cons (Lists.cons c $ Lists.head acc) $ Lists.tail acc)
 
 convertCaseCamelToLowerSnake :: String -> String
 convertCaseCamelToLowerSnake = convertCase CaseConventionCamel CaseConventionLowerSnake
@@ -66,12 +67,6 @@ sanitizeWithUnderscores reserved = escapeWithUnderscore reserved . nonAlnumToUnd
 
 stripLeadingAndTrailingWhitespace :: String -> String
 stripLeadingAndTrailingWhitespace s = L.dropWhile C.isSpace $ L.reverse $ L.dropWhile C.isSpace $ L.reverse s
-
-toLowerCase :: String -> String
-toLowerCase = fmap C.toLower
-
-toUpperCase :: String -> String
-toUpperCase = fmap C.toUpper
 
 withCharacterAliases :: String -> String
 withCharacterAliases original = L.filter C.isAlphaNum $ L.concat $ alias <$> original
