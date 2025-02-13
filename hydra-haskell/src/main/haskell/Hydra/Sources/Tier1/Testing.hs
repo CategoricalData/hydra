@@ -13,14 +13,17 @@ import qualified Data.Map              as M
 import qualified Data.Set              as S
 import qualified Data.Maybe            as Y
 
+import Hydra.Sources.Tier1.Mantle
+
 
 hydraTestingModule :: Module
-hydraTestingModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
+hydraTestingModule = Module ns elements [hydraCoreModule, hydraMantleModule] [hydraCoreModule] $
     Just "A model for unit testing"
   where
     ns = Namespace "hydra/testing"
     def = datatype ns
     core = typeref $ moduleNamespace hydraCoreModule
+    mantle = typeref $ moduleNamespace hydraMantleModule
     testing = typeref ns
 
     elements = [
@@ -28,6 +31,14 @@ hydraTestingModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "EvaluationStyle" $
         doc "One of two evaluation styles: eager or lazy" $
         enum ["eager", "lazy"],
+
+      def "CaseConversionTestCase" $
+        doc "A test case which checks that strings are converted between different case conventions correctly" $
+        record [
+          "fromConvention">: mantle "CaseConvention",
+          "toConvention">: mantle "CaseConvention",
+          "fromString">: string,
+          "toString">: string],
 
       def "EvaluationTestCase" $
         doc "A test case which evaluates (reduces) a given term and compares it with the expected result" $
@@ -47,6 +58,7 @@ hydraTestingModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "TestCase" $
         doc "A simple test case with an input and an expected output" $
         union [
+          "caseConversion">: testing "CaseConversionTestCase",
           "evaluation">: testing "EvaluationTestCase",
           "inference">: testing "InferenceTestCase"],
 

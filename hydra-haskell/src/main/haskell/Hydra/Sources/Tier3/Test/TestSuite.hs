@@ -8,6 +8,7 @@ import Hydra.Dsl.Base as Base
 
 import Hydra.Sources.Tier3.Test.Lib.Lists
 import Hydra.Sources.Tier3.Test.Lib.Strings
+import Hydra.Sources.Tier3.Test.Formatting
 import Hydra.Sources.Tier3.Test.Inference
 import Hydra.Sources.Tier3.Test.TestGraph
 
@@ -35,8 +36,19 @@ groupElement lname group = Element name $ setTermType (Just typ) $ encodeGroup g
       Field _TestCaseWithMetadata_description $ Terms.optional (Terms.string <$> mdesc),
       Field _TestCaseWithMetadata_tags $ Terms.list (Terms.string . unTag <$> tags)]
     encodeCase tcase = case tcase of
+      TestCaseCaseConversion ccase -> Terms.variant _TestCase _TestCase_caseConversion $ encodeCaseConversionTestCase ccase
       TestCaseEvaluation ecase -> Terms.variant _TestCase _TestCase_evaluation $ encodeEvaluationTestCase ecase
       TestCaseInference icase -> Terms.variant _TestCase _TestCase_inference $ encodeInferenceTestCase icase
+    encodeCaseConvention c = Terms.unitVariant _CaseConvention $ case c of
+      CaseConventionLowerSnake -> _CaseConvention_lowerSnake
+      CaseConventionUpperSnake -> _CaseConvention_upperSnake
+      CaseConventionCamel -> _CaseConvention_camel
+      CaseConventionPascal -> _CaseConvention_pascal
+    encodeCaseConversionTestCase (CaseConversionTestCase fromConvention toConvention fromString toString) = Terms.record _CaseConversionTestCase [
+      Field _CaseConversionTestCase_fromConvention $ encodeCaseConvention fromConvention,
+      Field _CaseConversionTestCase_toConvention $ encodeCaseConvention toConvention,
+      Field _CaseConversionTestCase_fromString $ Terms.string fromString,
+      Field _CaseConversionTestCase_toString $ Terms.string toString]
     encodeEvaluationTestCase (EvaluationTestCase style input output) = Terms.record _EvaluationTestCase [
       Field _EvaluationTestCase_evaluationStyle $ Terms.variant _EvaluationStyle (case style of
         EvaluationStyleEager -> _EvaluationStyle_eager
@@ -50,7 +62,7 @@ groupElement lname group = Element name $ setTermType (Just typ) $ encodeGroup g
     typ = TypeVariable _TestGroup
 
 allTests :: TestGroup
-allTests = TestGroup "All tests" Nothing (primTests ++ [inferenceTests]) []
+allTests = TestGroup "All tests" Nothing (primTests ++ [formattingTests] ++ [inferenceTests]) []
   where
     primTests = [
       listPrimitiveTests,
