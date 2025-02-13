@@ -100,7 +100,7 @@ cd ../hydra-haskell && stack ghci
 And then running the following commands in the GHC REPL.
 
 ```haskell
-writePython "../hydra-python/src/gen-main/python" (hydraCoreModule:tier0Modules)
+writePython "../hydra-python/src/gen-main/python" (hydraCoreModule:tier1TypeModules)
 writePython "../hydra-python/src/gen-test/python" testModules
 ```
 
