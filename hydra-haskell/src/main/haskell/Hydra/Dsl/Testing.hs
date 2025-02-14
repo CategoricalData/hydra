@@ -5,7 +5,7 @@ import Hydra.Kernel
 import Hydra.Testing
 import Hydra.Dsl.Base as Base
 import qualified Hydra.Dsl.Core as Core
-import Hydra.Dsl.TTerms
+import Hydra.Dsl.TTerms as TTerms
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.TTypes as T
 
@@ -60,6 +60,14 @@ encodeInferenceTestCase (InferenceTestCase input output) = Terms.record _Inferen
 
 ---
 
+encodedTestGroupToElement :: Namespace -> String -> TTerm TestGroup -> Element
+encodedTestGroupToElement ns lname group = Element name $ setTermType (Just typ) $ unTTerm group
+  where
+    name = unqualifyName $ QualifiedName (Just ns) lname
+    typ = TypeVariable _TestGroup
+
+groupRef = TTerms.variableFromName . elementName
+
 inferenceTestCase :: TTerm Term -> TTerm TypeScheme -> TTerm InferenceTestCase
 inferenceTestCase input output = Base.record _InferenceTestCase [
   _InferenceTestCase_input>>: input,
@@ -81,3 +89,6 @@ testGroup name description subgroups cases = Base.record _TestGroup [
   _TestGroup_description>>: description,
   _TestGroup_subgroups>>: subgroups,
   _TestGroup_cases>>: cases]
+
+testGroupToElement :: Namespace -> String -> TestGroup -> Element
+testGroupToElement ns lname group = encodedTestGroupToElement ns lname (TTerm $ encodeGroup group)

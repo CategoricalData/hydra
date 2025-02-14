@@ -6,6 +6,7 @@ import qualified Hydra.Dsl.Types as Types
 import Hydra.Sources.Tier2.All
 import Hydra.Dsl.Base as Base
 import Hydra.Dsl.Testing
+import qualified Hydra.Dsl.TTerms as TTerms
 
 import Hydra.Sources.Tier3.Test.Lib.Lists
 import Hydra.Sources.Tier3.Test.Lib.Strings
@@ -17,25 +18,40 @@ import qualified Data.List as L
 
 
 testSuiteNs = Namespace "hydra/test/testSuite"
+testSuitePrimitivesNs = Namespace "hydra/test/testSuite/primitives"
 
 testSuiteModule :: Module
 testSuiteModule = Module testSuiteNs elements [testGraphModule] [hydraCoreModule, hydraTestingModule] $
     Just "Test cases for primitive functions"
   where
     elements = [
-      groupElement "allTests" allTests]
+      allTestsEl,
+      formattingTestsEl,
+      inferenceTestsEl,
+      listPrimitiveTestsEl,
+      primitiveTestsEl,
+      stringPrimitiveTestsEl]
 
-groupElement :: String -> TTerm TestGroup -> Element
-groupElement lname group = Element name $ setTermType (Just typ) $ unTTerm group
+allTestsEl :: Element
+allTestsEl = encodedTestGroupToElement testSuiteNs "allTests" $ tgroup "All tests" Nothing subgroups []
   where
-    name = unqualifyName $ QualifiedName (Just testSuiteNs) lname
-    typ = TypeVariable _TestGroup
+    subgroups = fmap groupRef [
+      formattingTestsEl,
+      inferenceTestsEl,
+      primitiveTestsEl]
 
-allTests :: TTerm TestGroup
-allTests = tgroup "All tests" Nothing subgroups []
+formattingTestsEl = testGroupToElement testSuiteNs "formattingTests" formattingTests
+
+inferenceTestsEl = encodedTestGroupToElement testSuiteNs "inferenceTests" inferenceTests
+
+listPrimitiveTestsEl = testGroupToElement testSuiteNs "listPrimitiveTests" listPrimitiveTests
+
+primitiveTestsEl = encodedTestGroupToElement testSuiteNs "primitiveTests" $
+    tgroup "Primitive functions" (Just "Test cases for primitive functions") primGroups []
   where
-    subgroups = (TTerm . encodeGroup <$> rawGroups) ++ tgroups
-    tgroups = [inferenceTests]
-    rawGroups = [
-      listPrimitiveTests,
-      stringPrimitiveTests]
+    primGroups = fmap groupRef [
+      listPrimitiveTestsEl,
+      stringPrimitiveTestsEl]
+
+stringPrimitiveTestsEl = testGroupToElement testSuiteNs "stringPrimitiveTests" stringPrimitiveTests
+
