@@ -68,6 +68,12 @@ string = termLiteral . literalString . TTerm . Terms.string
 var :: String -> TTerm Term
 var = termVariable . name
 
+varFromName :: Name -> TTerm Term
+varFromName (Name n) = termVariable $ TTerm $ Terms.string n
+
 -- | Maps a string to a variable encoded term.
 variable :: String -> TTerm a
 variable = TTerm . TermVariable . Name
+
+variableFromName :: Name -> TTerm a
+variableFromName = TTerm . TermVariable
