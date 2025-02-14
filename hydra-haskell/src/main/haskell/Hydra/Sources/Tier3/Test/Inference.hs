@@ -4,7 +4,10 @@ import Hydra.Kernel
 import Hydra.Dsl.Tests
 import Hydra.Dsl.ShorthandTypes
 import Hydra.Dsl.Terms as Terms
+import qualified Hydra.Dsl.Lib.Math as Math
 import qualified Hydra.Dsl.Types as Types
+
+import Hydra.Sources.Tier3.Test.TestGraph
 
 
 inferenceTests :: TestGroup
@@ -59,7 +62,7 @@ functionTerms = TestGroup "Function terms" (Just "Check a few hand-picked functi
 --      TestGroup "Check projections" Nothing [] [
 --        expectMono 1
 --          (project testTypePersonName (Name "firstName"))
---          (Types.function testTypePerson Types.string)],
+--          (Types.function testTypePerson Types.string)]]
 
 --      TestGroup "Check case statements" [] [
 --        expectMono
@@ -68,3 +71,10 @@ functionTerms = TestGroup "Function terms" (Just "Check a few hand-picked functi
 --            Field (Name "string") (lambda "x" (boolean False)),
 --            Field (Name "unit") (lambda "x" (boolean False))])
 --          (Types.function testTypeFoobarValue Types.boolean)]]
+
+
+--elName :: TElement a -> Name
+--elName (TElement name _) = name
+--
+--elTvar :: TElement a -> Type
+--elTvar = TypeVariable . elName

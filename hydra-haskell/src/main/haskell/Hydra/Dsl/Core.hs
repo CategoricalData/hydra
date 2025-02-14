@@ -29,7 +29,7 @@ annotatedTypeSubject = Base.project _AnnotatedType _AnnotatedType_subject
 annotatedTypeAnnotation :: TTerm (AnnotatedType -> M.Map String Term)
 annotatedTypeAnnotation = Base.project _AnnotatedType _AnnotatedType_annotation
 
-application :: TTerm Term -> TTerm Term -> TTerm (Application)
+application :: TTerm Term -> TTerm Term -> TTerm Application
 application function argument = Base.record _Application [
   _Application_function>>: function,
   _Application_argument>>: argument]
@@ -40,7 +40,7 @@ applicationFunction = Base.project _Application _Application_function
 applicationArgument :: TTerm (Application -> Term)
 applicationArgument = Base.project _Application _Application_argument
 
-applicationType :: TTerm Type -> TTerm Type -> TTerm (ApplicationType)
+applicationType :: TTerm Type -> TTerm Type -> TTerm ApplicationType
 applicationType function argument = Base.record _ApplicationType [
   _ApplicationType_function>>: function,
   _ApplicationType_argument>>: argument]
@@ -50,9 +50,6 @@ applicationTypeFunction = Base.project _ApplicationType _ApplicationType_functio
 
 applicationTypeArgument :: TTerm (ApplicationType -> Type)
 applicationTypeArgument = Base.project _ApplicationType _ApplicationType_argument
-
-booleanType :: TTerm Type
-booleanType = typeLiteral literalTypeBoolean
 
 caseStatement :: TTerm Name -> TTerm (Maybe Term) -> TTerm [Field] -> TTerm (CaseStatement)
 caseStatement typeName defaultTerm cases = Base.record _CaseStatement [
@@ -94,23 +91,8 @@ fieldTypeName = Base.project _FieldType _FieldType_name
 fieldTypeType :: TTerm (FieldType -> Type)
 fieldTypeType = Base.project _FieldType _FieldType_type
 
-floatType :: FloatType -> TTerm FloatType
-floatType t = unitVariant _FloatType $ case t of
-  FloatTypeBigfloat -> _FloatType_bigfloat
-  FloatTypeFloat32 -> _FloatType_float32
-  FloatTypeFloat64 -> _FloatType_float64
-
-floatTypeFloat32 :: TTerm FloatType
-floatTypeFloat32 = floatType FloatTypeFloat32
-
 floatValueFloat32 :: TTerm Float -> TTerm FloatValue
 floatValueFloat32 = inject _FloatValue _FloatValue_float32
-
-float32Term :: TTerm Float -> TTerm Term
-float32Term = termLiteral . literalFloat . floatValueFloat32
-
-float32Type :: TTerm Type
-float32Type = typeLiteral $ literalTypeFloat floatTypeFloat32
 
 functionElimination :: TTerm Elimination -> TTerm Function
 functionElimination = variant _Function _Function_elimination
@@ -139,24 +121,6 @@ injectionTypeName = Base.project _Injection _Injection_typeName
 
 injectionField :: TTerm (Injection -> Field)
 injectionField = Base.project _Injection _Injection_field
-
-int32Term :: TTerm Int -> TTerm Term
-int32Term = termLiteral . literalInteger . integerValueInt32
-
-int32Type :: TTerm Type
-int32Type = typeLiteral $ literalTypeInteger integerTypeInt32
-
-integerType :: IntegerType -> TTerm IntegerType
-integerType t = unitVariant _IntegerType $ case t of
-  IntegerTypeBigint -> _IntegerType_bigint
-  IntegerTypeInt8 -> _IntegerType_int8
-  IntegerTypeInt16 -> _IntegerType_int16
-  IntegerTypeInt32 -> _IntegerType_int32
-  IntegerTypeInt64 -> _IntegerType_int64
-  IntegerTypeUint8 -> _IntegerType_uint8
-  IntegerTypeUint16 -> _IntegerType_uint16
-  IntegerTypeUint32 -> _IntegerType_uint32
-  IntegerTypeUint64 -> _IntegerType_uint64
 
 integerTypeInt32 :: TTerm IntegerType
 integerTypeInt32 = unitVariant _IntegerType _IntegerType_int32
@@ -250,9 +214,6 @@ mapTypeKeys = Base.project _MapType _MapType_keys
 mapTypeValues :: TTerm (MapType -> Type)
 mapTypeValues = Base.project _MapType _MapType_values
 
-name :: Name -> TTerm Name
-name nm = TTerm $ coreEncodeName nm
-
 optionalCases :: TTerm Term -> TTerm Term -> TTerm OptionalCases
 optionalCases nothing just = Base.record _OptionalCases [
   _OptionalCases_nothing>>: nothing,
@@ -263,9 +224,6 @@ optionalCasesNothing = Base.project _OptionalCases _OptionalCases_nothing
 
 optionalCasesJust :: TTerm (OptionalCases -> Term)
 optionalCasesJust = Base.project _OptionalCases _OptionalCases_just
-
-project :: TTerm Name -> TTerm Name -> TTerm Term
-project tname fname = termFunction $ functionElimination $ eliminationRecord $ projection tname fname
 
 projection :: TTerm Name -> TTerm Name -> TTerm Projection
 projection tname fname = Base.record _Projection [
@@ -299,12 +257,6 @@ rowTypeTypeName = Base.project _RowType _RowType_typeName
 
 rowTypeFields :: TTerm (RowType -> [FieldType])
 rowTypeFields = Base.project _RowType _RowType_fields
-
-stringTerm :: TTerm String -> TTerm Term
-stringTerm = termLiteral . literalString
-
-stringType :: TTerm Type
-stringType = typeLiteral literalTypeString
 
 sum :: TTerm Int -> TTerm Int -> TTerm Term -> TTerm Sum
 sum index size term = Base.record _Sum [
@@ -348,9 +300,6 @@ typeAbstractionBody = Base.project _TypeAbstraction _TypeAbstraction_body
 typeApplication :: TTerm ApplicationType -> TTerm Type
 typeApplication = variant _Type _Type_application
 
-typeApply :: TTerm Type -> TTerm Type -> TTerm Type
-typeApply l r = typeApplication $ applicationType l r
-
 typeLambda :: TTerm LambdaType -> TTerm Type
 typeLambda = variant _Type _Type_lambda
 
@@ -381,20 +330,11 @@ typeWrap = variant _Type _Type_wrap
 typedTermTerm :: TTerm (TypedTerm -> Term)
 typedTermTerm = Base.project _TypedTerm _TypedTerm_term
 
-uint64Type :: TTerm Type
-uint64Type = typeLiteral $ literalTypeInteger integerTypeUint64
-
 unName :: TTerm (Name -> String)
 unName = unwrap _Name
 
 unNamespace :: TTerm (Namespace -> String)
 unNamespace = unwrap _Namespace
-
-unitType :: TTerm Type
-unitType = typeRecord $ rowType (name _Unit) $ list []
-
-var :: String -> TTerm a
-var = TTerm . TermVariable . Name
 
 wrappedTerm :: TTerm Name -> TTerm Term -> TTerm WrappedTerm
 wrappedTerm typeName object = Base.record _WrappedTerm [
