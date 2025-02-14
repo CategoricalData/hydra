@@ -5,7 +5,7 @@ import Hydra.Dsl.Base as Base
 import qualified Hydra.Dsl.Core as Core
 import Hydra.Dsl.Lib.Sets as Sets
 import Hydra.Dsl.Mantle as Mantle
-
+import qualified Hydra.Dsl.TTypes as T
 
 language
   :: String
@@ -23,9 +23,9 @@ language name eliminationVariants literalVariants floatTypes functionVariants in
   _Language_constraints>>: Base.record _LanguageConstraints [
     _LanguageConstraints_eliminationVariants>>: Sets.fromList @@ list (Mantle.eliminationVariant <$> eliminationVariants),
     _LanguageConstraints_literalVariants>>: Sets.fromList @@ list (Mantle.literalVariant <$> literalVariants),
-    _LanguageConstraints_floatTypes>>: Sets.fromList @@ list (Core.floatType <$> floatTypes),
+    _LanguageConstraints_floatTypes>>: Sets.fromList @@ list (T.floatType <$> floatTypes),
     _LanguageConstraints_functionVariants>>: Sets.fromList @@ list (Mantle.functionVariant <$> functionVariants),
-    _LanguageConstraints_integerTypes>>: Sets.fromList @@ list (Core.integerType <$> integerTypes),
+    _LanguageConstraints_integerTypes>>: Sets.fromList @@ list (T.integerType <$> integerTypes),
     _LanguageConstraints_termVariants>>: Sets.fromList @@ list (Mantle.termVariant <$> termVariants),
     _LanguageConstraints_typeVariants>>: Sets.fromList @@ list (Mantle.typeVariant <$> typeVariants),
     _LanguageConstraints_types>>: typePredicate]]
