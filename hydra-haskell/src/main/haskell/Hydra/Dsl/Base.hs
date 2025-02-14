@@ -44,7 +44,7 @@ fname >>: d = Field fname (unTTerm d)
 (<.>) :: TTerm (b -> c) -> TTerm (a -> b) -> TTerm (a -> c)
 f <.> g = compose f g
 
--- Two alternative symbols for typed term application
+-- Two alternative symbols for typed term application. TODO: remove one
 (@@) :: TTerm (a -> b) -> TTerm a -> TTerm b
 f @@ x = apply f x
 ($$) :: TTerm (a -> b) -> TTerm a -> TTerm b
