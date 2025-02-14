@@ -5,12 +5,15 @@ import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Sources.Tier2.All
 import Hydra.Dsl.Base as Base
+import Hydra.Dsl.Testing
 
 import Hydra.Sources.Tier3.Test.Lib.Lists
 import Hydra.Sources.Tier3.Test.Lib.Strings
 import Hydra.Sources.Tier3.Test.Formatting
 import Hydra.Sources.Tier3.Test.Inference
 import Hydra.Sources.Tier3.Test.TestGraph
+
+import qualified Data.List as L
 
 
 testSuiteNs = Namespace "hydra/test/testSuite"
@@ -22,48 +25,17 @@ testSuiteModule = Module testSuiteNs elements [testGraphModule] [hydraCoreModule
     elements = [
       groupElement "allTests" allTests]
 
-groupElement :: String -> TestGroup -> Element
-groupElement lname group = Element name $ setTermType (Just typ) $ encodeGroup group
+groupElement :: String -> TTerm TestGroup -> Element
+groupElement lname group = Element name $ setTermType (Just typ) $ unTTerm group
   where
-    encodeGroup (TestGroup name desc groups cases) = Terms.record _TestGroup [
-      Field _TestGroup_name $ Terms.string name,
-      Field _TestGroup_description $ Terms.optional (Terms.string <$> desc),
-      Field _TestGroup_subgroups $ Terms.list (encodeGroup <$> groups),
-      Field _TestGroup_cases $ Terms.list (encodeCaseWithMetadata <$> cases)]
-    encodeCaseWithMetadata (TestCaseWithMetadata name tcase mdesc tags) = Terms.record _TestCaseWithMetadata [
-      Field _TestCaseWithMetadata_name $ Terms.string name,
-      Field _TestCaseWithMetadata_case $ encodeCase tcase,
-      Field _TestCaseWithMetadata_description $ Terms.optional (Terms.string <$> mdesc),
-      Field _TestCaseWithMetadata_tags $ Terms.list (Terms.string . unTag <$> tags)]
-    encodeCase tcase = case tcase of
-      TestCaseCaseConversion ccase -> Terms.variant _TestCase _TestCase_caseConversion $ encodeCaseConversionTestCase ccase
-      TestCaseEvaluation ecase -> Terms.variant _TestCase _TestCase_evaluation $ encodeEvaluationTestCase ecase
-      TestCaseInference icase -> Terms.variant _TestCase _TestCase_inference $ encodeInferenceTestCase icase
-    encodeCaseConvention c = Terms.unitVariant _CaseConvention $ case c of
-      CaseConventionLowerSnake -> _CaseConvention_lowerSnake
-      CaseConventionUpperSnake -> _CaseConvention_upperSnake
-      CaseConventionCamel -> _CaseConvention_camel
-      CaseConventionPascal -> _CaseConvention_pascal
-    encodeCaseConversionTestCase (CaseConversionTestCase fromConvention toConvention fromString toString) = Terms.record _CaseConversionTestCase [
-      Field _CaseConversionTestCase_fromConvention $ encodeCaseConvention fromConvention,
-      Field _CaseConversionTestCase_toConvention $ encodeCaseConvention toConvention,
-      Field _CaseConversionTestCase_fromString $ Terms.string fromString,
-      Field _CaseConversionTestCase_toString $ Terms.string toString]
-    encodeEvaluationTestCase (EvaluationTestCase style input output) = Terms.record _EvaluationTestCase [
-      Field _EvaluationTestCase_evaluationStyle $ Terms.variant _EvaluationStyle (case style of
-        EvaluationStyleEager -> _EvaluationStyle_eager
-        EvaluationStyleLazy -> _EvaluationStyle_lazy) Terms.unit,
-      Field _EvaluationTestCase_input $ coreEncodeTerm input,
-      Field _EvaluationTestCase_output $ coreEncodeTerm output]
-    encodeInferenceTestCase (InferenceTestCase input output) = Terms.record _InferenceTestCase [
-      Field _InferenceTestCase_input $ coreEncodeTerm input,
-      Field _InferenceTestCase_output $ coreEncodeTypeScheme output]
     name = unqualifyName $ QualifiedName (Just testSuiteNs) lname
     typ = TypeVariable _TestGroup
 
-allTests :: TestGroup
-allTests = TestGroup "All tests" Nothing (primTests ++ [formattingTests] ++ [inferenceTests]) []
+allTests :: TTerm TestGroup
+allTests = tgroup "All tests" Nothing subgroups []
   where
-    primTests = [
+    subgroups = (TTerm . encodeGroup <$> rawGroups) ++ tgroups
+    tgroups = [inferenceTests]
+    rawGroups = [
       listPrimitiveTests,
       stringPrimitiveTests]

@@ -6,6 +6,7 @@ import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
+import Data.Int
 
 
 annotatedTerm :: TTerm Term -> TTerm (M.Map String Term) -> TTerm AnnotatedTerm
@@ -67,6 +68,9 @@ caseStatementDefault = Base.project _CaseStatement _CaseStatement_default
 caseStatementCases :: TTerm (CaseStatement -> [Field])
 caseStatementCases = Base.project _CaseStatement _CaseStatement_cases
 
+eliminationList :: TTerm Term -> TTerm Elimination
+eliminationList = variant _Elimination _Elimination_list
+
 eliminationRecord :: TTerm Projection -> TTerm Elimination
 eliminationRecord = variant _Elimination _Elimination_record
 
@@ -101,6 +105,9 @@ functionElimination = variant _Function _Function_elimination
 functionLambda :: TTerm Lambda -> TTerm Function
 functionLambda = variant _Function _Function_lambda
 
+functionPrimitive :: TTerm Name -> TTerm Function
+functionPrimitive = variant _Function _Function_primitive
+
 functionType :: TTerm Type -> TTerm Type -> TTerm FunctionType
 functionType domain codomain = Base.record _FunctionType [
   _FunctionType_domain>>: domain,
@@ -123,18 +130,25 @@ injectionTypeName = Base.project _Injection _Injection_typeName
 injectionField :: TTerm (Injection -> Field)
 injectionField = Base.project _Injection _Injection_field
 
+integerTypeInt16 :: TTerm IntegerType
+integerTypeInt16 = unitVariant _IntegerType _IntegerType_int16
+
 integerTypeInt32 :: TTerm IntegerType
 integerTypeInt32 = unitVariant _IntegerType _IntegerType_int32
 
 integerTypeUint64 :: TTerm IntegerType
 integerTypeUint64 = unitVariant _IntegerType _IntegerType_uint64
 
+integerValueInt16 :: TTerm Int16 -> TTerm IntegerValue
+integerValueInt16 = inject _IntegerValue _IntegerValue_int16
+
 integerValueInt32 :: TTerm Int -> TTerm IntegerValue
 integerValueInt32 = inject _IntegerValue _IntegerValue_int32
 
-lambda :: TTerm Name -> TTerm Term -> TTerm Lambda
-lambda parameter body = Base.record _Lambda [
+lambda :: TTerm Name -> TTerm (Maybe Type) -> TTerm Term -> TTerm Lambda
+lambda parameter mdom body = Base.record _Lambda [
   _Lambda_parameter>>: parameter,
+  _Lambda_domain>>: mdom,
   _Lambda_body>>: body]
 
 lambdaParameter :: TTerm (Lambda -> Name)
@@ -281,14 +295,23 @@ sumTerm = Base.project _Sum _Sum_term
 termAnnotated :: TTerm AnnotatedTerm -> TTerm Term
 termAnnotated = variant _Term _Term_annotated
 
+termApplication :: TTerm Application -> TTerm Term
+termApplication = variant _Term _Term_application
+
 termFunction :: TTerm Function -> TTerm Term
 termFunction = variant _Term _Term_function
+
+termList :: TTerm [Term] -> TTerm Term
+termList = variant _Term _Term_list
 
 termLiteral :: TTerm Literal -> TTerm Term
 termLiteral = variant _Term _Term_literal
 
 termRecord :: TTerm Record -> TTerm Term
 termRecord = variant _Term _Term_record
+
+termVariable :: TTerm Name -> TTerm Term
+termVariable = variant _Term _Term_variable
 
 tupleProjectionArity :: TTerm (TupleProjection -> Int)
 tupleProjectionArity = Base.project _TupleProjection _TupleProjection_arity
@@ -305,8 +328,14 @@ typeAbstractionBody = Base.project _TypeAbstraction _TypeAbstraction_body
 typeApplication :: TTerm ApplicationType -> TTerm Type
 typeApplication = variant _Type _Type_application
 
+typeFunction :: TTerm FunctionType -> TTerm Type
+typeFunction = variant _Type _Type_function
+
 typeLambda :: TTerm LambdaType -> TTerm Type
 typeLambda = variant _Type _Type_lambda
+
+typeList :: TTerm Type -> TTerm Type
+typeList = variant _Type _Type_list
 
 typeLiteral :: TTerm LiteralType -> TTerm Type
 typeLiteral = variant _Type _Type_literal
