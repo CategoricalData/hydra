@@ -2,6 +2,7 @@ module Hydra.Dsl.Core where
 
 import Hydra.Kernel
 import Hydra.Dsl.Base as Base
+import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
@@ -213,6 +214,10 @@ mapTypeKeys = Base.project _MapType _MapType_keys
 
 mapTypeValues :: TTerm (MapType -> Type)
 mapTypeValues = Base.project _MapType _MapType_values
+
+-- TODO: this is only here for legacy reasons
+name :: Name -> TTerm Name
+name (Name n) = Base.wrap _Name $ TTerm $ Terms.string n
 
 optionalCases :: TTerm Term -> TTerm Term -> TTerm OptionalCases
 optionalCases nothing just = Base.record _OptionalCases [
