@@ -24,9 +24,9 @@ public class TestGroup implements Serializable {
   
   public final java.util.List<hydra.testing.TestGroup> subgroups;
   
-  public final java.util.List<hydra.testing.TestCase> cases;
+  public final java.util.List<hydra.testing.TestCaseWithMetadata> cases;
   
-  public TestGroup (String name, hydra.util.Opt<String> description, java.util.List<hydra.testing.TestGroup> subgroups, java.util.List<hydra.testing.TestCase> cases) {
+  public TestGroup (String name, hydra.util.Opt<String> description, java.util.List<hydra.testing.TestGroup> subgroups, java.util.List<hydra.testing.TestCaseWithMetadata> cases) {
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((description));
     java.util.Objects.requireNonNull((subgroups));
@@ -66,7 +66,7 @@ public class TestGroup implements Serializable {
     return new TestGroup(name, description, subgroups, cases);
   }
   
-  public TestGroup withCases(java.util.List<hydra.testing.TestCase> cases) {
+  public TestGroup withCases(java.util.List<hydra.testing.TestCaseWithMetadata> cases) {
     java.util.Objects.requireNonNull((cases));
     return new TestGroup(name, description, subgroups, cases);
   }
