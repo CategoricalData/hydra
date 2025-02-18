@@ -27,7 +27,7 @@ atlasModelModule = Module ns elements [xmlSchemaModule] [] $
           "name">: optional string,
           "typeName">: optional string,
           "isOptional">: boolean,
-          "cardinality">: optional $ atlas "AtlasAttributeDef.Cardinality",
+          "cardinality">: optional $ atlas "AtlasAttributeDef_Cardinality",
           "valuesMinCount">: int32,
           "valuesMaxCount">: int32,
           "isUnique">: boolean,
@@ -36,14 +36,14 @@ atlasModelModule = Module ns elements [xmlSchemaModule] [] $
           "defaultValue">: optional string,
           "description">: optional string,
           "searchWeight">: int32,
-          "indexType">: optional $ atlas "AtlasAttributeDef.IndexType",
+          "indexType">: optional $ atlas "AtlasAttributeDef_IndexType",
           "constraints">: list $ atlas "AtlasConstraintDef",
           "options">: Types.map string string,
           "displayName">: optional string],
 
-      def "AtlasAttributeDef.Cardinality" $ enum ["single", "list", "set"],
+      def "AtlasAttributeDef_Cardinality" $ enum ["single", "list", "set"],
 
-      def "AtlasAttributeDef.IndexType" $ enum ["default", "string"],
+      def "AtlasAttributeDef_IndexType" $ enum ["default", "string"],
 
       def "AtlasBaseTypeDef" $
         doc "Base class that captures common-attributes for all Atlas types." $

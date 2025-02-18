@@ -242,13 +242,13 @@ owlSyntaxModule = Module ns elements [hydraCoreModule, rdfSyntaxModule, xmlSchem
         see "https://www.w3.org/TR/owl2-syntax/#Datatype_Restrictions" $
         record [
           "datatype">: owl "Datatype",
-          "constraints">: nonemptyList $ owl "DatatypeRestriction.Constraint"],
+          "constraints">: nonemptyList $ owl "DatatypeRestriction_Constraint"],
 
-      def "DatatypeRestriction.Constraint" $ record [
-        "constrainingFacet">: owl "DatatypeRestriction.ConstrainingFacet",
+      def "DatatypeRestriction_Constraint" $ record [
+        "constrainingFacet">: owl "DatatypeRestriction_ConstrainingFacet",
         "restrictionValue">: rdf "Literal"],
 
-      def "DatatypeRestriction.ConstrainingFacet" $
+      def "DatatypeRestriction_ConstrainingFacet" $
         union [
           "xmlSchema">:
             note ("XML Schema constraining facets are treated as a special case in this model " ++

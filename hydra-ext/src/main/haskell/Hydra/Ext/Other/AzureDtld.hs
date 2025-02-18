@@ -183,7 +183,7 @@ dtldModule = Module dtldNs elements [hydraCoreModule] [] $
           doc (
             "A set of objects that define the contents (Telemetry, Properties, Commands, Relationships, " ++
             "and/or Components) of this interface") $
-          optional $ boundedSet Nothing (Just 300) $ dtld "Interface.Contents",
+          optional $ boundedSet Nothing (Just 300) $ dtld "Interface_Contents",
         descriptionField,
         displayNameField,
         "extends">: -- Note: there is a maximum depth of 10 levels, not captured here
@@ -193,9 +193,9 @@ dtldModule = Module dtldNs elements [hydraCoreModule] [] $
           optional $ boundedSet Nothing (Just 2) $ dtld "Interface",
         "schemas">:
           doc "A set of IRIs or objects that refer to the reusable schemas within this interface." $
-          optional $ set $ dtld "Schema.Interface"],
+          optional $ set $ dtld "Schema_Interface"],
 
-      def "Interface.Contents" $ union [
+      def "Interface_Contents" $ union [
         "command">: dtld "Command",
         "component">: dtld "Component",
         "property">: dtld "Property",
@@ -205,9 +205,9 @@ dtldModule = Module dtldNs elements [hydraCoreModule] [] $
       def "Iri" string,
 
 --      -- Note: this is a helper type; not explicitly definde in DTLD
---      def "IriOrSchema.Interface" $ union [
+--      def "IriOrSchema_Interface" $ union [
 --        "iri">: dtld "Iri",
---        "interfaceSchema">: dtld "Schema.Interface"],
+--        "interfaceSchema">: dtld "Schema_Interface"],
 
       def "MapKey" $
         doc "A MapKey describes the key in a Map. The schema of a MapKey must be string." $
@@ -285,10 +285,10 @@ dtldModule = Module dtldNs elements [hydraCoreModule] [] $
           "in the forms of Arrays, Enums, Maps, and Objects. Schemas described through digital twin's schema " ++
           "definition language are compatible with popular serialization formats, including JSON, Avro, and Protobuf.") $
         union [
-          "primitive">: dtld "Schema.Primitive",
-          "complex">: dtld "Schema.Complex"],
+          "primitive">: dtld "Schema_Primitive",
+          "complex">: dtld "Schema_Complex"],
 
-      def "Schema.Array" $
+      def "Schema_Array" $
         doc (
           "An Array describes an indexable data type where each element is of the same schema. " ++
           "An Array elements' schema can itself be a primitive or complex schema.") $
@@ -302,19 +302,19 @@ dtldModule = Module dtldNs elements [hydraCoreModule] [] $
           descriptionField,
           displayNameField],
 
-      def "Schema.Complex" $
+      def "Schema_Complex" $
         doc ("Complex schemas are designed for supporting complex data types made up of primitive data types. " ++
              "Currently the following complex schemas are provided: Array, Enum, Map, and Object. " ++
              "A complex schema can be specified directly as the value in a schema statement or " ++
              "described in the interface schemas set and referenced in the schema statement.") $
         union [
           -- Note: interface schemas are currently special, and are not included in this union
-          "array">: dtld "Schema.Array",
-          "enum">: dtld "Schema.Enum",
-          "map">: dtld "Schema.Map",
-          "object">: dtld "Schema.Object"],
+          "array">: dtld "Schema_Array",
+          "enum">: dtld "Schema_Enum",
+          "map">: dtld "Schema_Map",
+          "object">: dtld "Schema_Object"],
 
-      def "Schema.Enum" $
+      def "Schema_Enum" $
         doc (
           "An Enum describes a data type with a set of named labels that map to values. The values in an Enum " ++
           "can be either integers or strings, but the labels are always strings.") $
@@ -331,7 +331,7 @@ dtldModule = Module dtldNs elements [hydraCoreModule] [] $
           descriptionField,
           displayNameField],
 
-      def "Schema.Interface" $
+      def "Schema_Interface" $
         doc (
           "Within an interface definition, complex schemas may be defined for reusability across " ++
           "Telemetry, Properties, and Commands. This is designed to promote readability and improved " ++
@@ -341,18 +341,18 @@ dtldModule = Module dtldNs elements [hydraCoreModule] [] $
           idField True 2048 "The globally unique identifier for the schema",
           "type">:
             doc "The type of complex schema. This must refer to one of the complex schema classes (Array, Enum, Map, or Object)." $
-            dtld "Schema.Interface.Type",
+            dtld "Schema_Interface_Type",
           commentField,
           descriptionField,
           displayNameField],
 
-      def "Schema.Interface.Type" $ union [
-        "array">: dtld "Schema.Array",
-        "enum">: dtld "Schema.Enum",
-        "map">: dtld "Schema.Map",
-        "object">: dtld "Schema.Object"],
+      def "Schema_Interface_Type" $ union [
+        "array">: dtld "Schema_Array",
+        "enum">: dtld "Schema_Enum",
+        "map">: dtld "Schema_Map",
+        "object">: dtld "Schema_Object"],
 
-      def "Schema.Map" $
+      def "Schema_Map" $
         doc ("A Map describes a data type of key-value pairs where the values share the same schema. " ++
              "The key in a Map must be a string. The values in a Map can be any schema.") $
         record [
@@ -368,7 +368,7 @@ dtldModule = Module dtldNs elements [hydraCoreModule] [] $
           descriptionField,
           displayNameField],
 
-      def "Schema.Object" $
+      def "Schema_Object" $
         doc (
           "An Object describes a data type made up of named fields (like a struct in C). " ++
           "The fields in an Object map can be primitive or complex schemas.") $
@@ -382,7 +382,7 @@ dtldModule = Module dtldNs elements [hydraCoreModule] [] $
           descriptionField,
           displayNameField],
 
-      def "Schema.Primitive" $
+      def "Schema_Primitive" $
         doc (
           "A full set of primitive data types are provided and can be specified directly as the value " ++
           "in a schema statement in a digital twin interface.") $

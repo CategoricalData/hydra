@@ -72,7 +72,7 @@ data AtlasAttributeDef_Cardinality =
   AtlasAttributeDef_CardinalitySet 
   deriving (Eq, Ord, Read, Show)
 
-_AtlasAttributeDef_Cardinality = (Core.Name "hydra/ext/org/apache/atlas.AtlasAttributeDef.Cardinality")
+_AtlasAttributeDef_Cardinality = (Core.Name "hydra/ext/org/apache/atlas.AtlasAttributeDef_Cardinality")
 
 _AtlasAttributeDef_Cardinality_single = (Core.Name "single")
 
@@ -85,7 +85,7 @@ data AtlasAttributeDef_IndexType =
   AtlasAttributeDef_IndexTypeString 
   deriving (Eq, Ord, Read, Show)
 
-_AtlasAttributeDef_IndexType = (Core.Name "hydra/ext/org/apache/atlas.AtlasAttributeDef.IndexType")
+_AtlasAttributeDef_IndexType = (Core.Name "hydra/ext/org/apache/atlas.AtlasAttributeDef_IndexType")
 
 _AtlasAttributeDef_IndexType_default = (Core.Name "default")
 

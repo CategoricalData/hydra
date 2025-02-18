@@ -217,7 +217,7 @@ data FixAnnot_Measure =
     fixAnnot_MeasureTerm2 :: (Maybe OneTerm)}
   deriving (Eq, Ord, Read, Show)
 
-_FixAnnot_Measure = (Core.Name "hydra/ext/fr/inria/coq/syntax.FixAnnot.Measure")
+_FixAnnot_Measure = (Core.Name "hydra/ext/fr/inria/coq/syntax.FixAnnot_Measure")
 
 _FixAnnot_Measure_term = (Core.Name "term")
 
@@ -231,7 +231,7 @@ data FixAnnot_Wf =
     fixAnnot_WfIdent :: Ident}
   deriving (Eq, Ord, Read, Show)
 
-_FixAnnot_Wf = (Core.Name "hydra/ext/fr/inria/coq/syntax.FixAnnot.Wf")
+_FixAnnot_Wf = (Core.Name "hydra/ext/fr/inria/coq/syntax.FixAnnot_Wf")
 
 _FixAnnot_Wf_term = (Core.Name "term")
 
@@ -246,7 +246,7 @@ data Fix_Decl =
     fix_DeclTerm :: Term}
   deriving (Eq, Ord, Read, Show)
 
-_Fix_Decl = (Core.Name "hydra/ext/fr/inria/coq/syntax.Fix.Decl")
+_Fix_Decl = (Core.Name "hydra/ext/fr/inria/coq/syntax.Fix_Decl")
 
 _Fix_Decl_ident = (Core.Name "ident")
 
@@ -263,7 +263,7 @@ data Fix_Qual =
   Fix_QualWith FixWith
   deriving (Eq, Ord, Read, Show)
 
-_Fix_Qual = (Core.Name "hydra/ext/fr/inria/coq/syntax.Fix.Qual")
+_Fix_Qual = (Core.Name "hydra/ext/fr/inria/coq/syntax.Fix_Qual")
 
 _Fix_Qual_in = (Core.Name "in")
 
@@ -458,7 +458,7 @@ data LetDestructuring_Variant1 =
     letDestructuring_Variant1Term :: Term}
   deriving (Eq, Ord, Read, Show)
 
-_LetDestructuring_Variant1 = (Core.Name "hydra/ext/fr/inria/coq/syntax.LetDestructuring.Variant1")
+_LetDestructuring_Variant1 = (Core.Name "hydra/ext/fr/inria/coq/syntax.LetDestructuring_Variant1")
 
 _LetDestructuring_Variant1_names = (Core.Name "names")
 
@@ -473,7 +473,7 @@ data LetDestructuring_Variant2 =
     letDestructuring_Variant2Return :: (Maybe Term100)}
   deriving (Eq, Ord, Read, Show)
 
-_LetDestructuring_Variant2 = (Core.Name "hydra/ext/fr/inria/coq/syntax.LetDestructuring.Variant2")
+_LetDestructuring_Variant2 = (Core.Name "hydra/ext/fr/inria/coq/syntax.LetDestructuring_Variant2")
 
 _LetDestructuring_Variant2_pattern = (Core.Name "pattern")
 
@@ -489,7 +489,7 @@ data LetDestructuring_Variant3 =
     letDestructuring_Variant3Return :: Term100}
   deriving (Eq, Ord, Read, Show)
 
-_LetDestructuring_Variant3 = (Core.Name "hydra/ext/fr/inria/coq/syntax.LetDestructuring.Variant3")
+_LetDestructuring_Variant3 = (Core.Name "hydra/ext/fr/inria/coq/syntax.LetDestructuring_Variant3")
 
 _LetDestructuring_Variant3_pattern1 = (Core.Name "pattern1")
 
@@ -651,7 +651,7 @@ data Pattern10_As =
     pattern10_AsAs :: Name}
   deriving (Eq, Ord, Read, Show)
 
-_Pattern10_As = (Core.Name "hydra/ext/fr/inria/coq/syntax.Pattern10.As")
+_Pattern10_As = (Core.Name "hydra/ext/fr/inria/coq/syntax.Pattern10_As")
 
 _Pattern10_As_pattern = (Core.Name "pattern")
 
@@ -663,7 +663,7 @@ data Pattern10_Patterns =
     pattern10_PatternsPatterns :: [Pattern1]}
   deriving (Eq, Ord, Read, Show)
 
-_Pattern10_Patterns = (Core.Name "hydra/ext/fr/inria/coq/syntax.Pattern10.Patterns")
+_Pattern10_Patterns = (Core.Name "hydra/ext/fr/inria/coq/syntax.Pattern10_Patterns")
 
 _Pattern10_Patterns_pattern = (Core.Name "pattern")
 
@@ -675,7 +675,7 @@ data Pattern10_Qualid =
     pattern10_QualidPatterns :: [Pattern1]}
   deriving (Eq, Ord, Read, Show)
 
-_Pattern10_Qualid = (Core.Name "hydra/ext/fr/inria/coq/syntax.Pattern10.Qualid")
+_Pattern10_Qualid = (Core.Name "hydra/ext/fr/inria/coq/syntax.Pattern10_Qualid")
 
 _Pattern10_Qualid_qualid = (Core.Name "qualid")
 
@@ -963,7 +963,7 @@ data Universe_Expr =
     universe_ExprNumber :: (Maybe Natural)}
   deriving (Eq, Ord, Read, Show)
 
-_Universe_Expr = (Core.Name "hydra/ext/fr/inria/coq/syntax.Universe.Expr")
+_Universe_Expr = (Core.Name "hydra/ext/fr/inria/coq/syntax.Universe_Expr")
 
 _Universe_Expr_name = (Core.Name "name")
 

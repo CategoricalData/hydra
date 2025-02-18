@@ -41,7 +41,7 @@ data Program_Elmt =
   Program_ElmtRule Rule
   deriving (Eq, Ord, Read, Show)
 
-_Program_Elmt = (Core.Name "hydra/ext/datalog/syntax.Program.Elmt")
+_Program_Elmt = (Core.Name "hydra/ext/datalog/syntax.Program_Elmt")
 
 _Program_Elmt_fact = (Core.Name "fact")
 
@@ -100,7 +100,7 @@ data AtomList_Multiple =
     atomList_MultipleAtomList :: AtomList}
   deriving (Eq, Ord, Read, Show)
 
-_AtomList_Multiple = (Core.Name "hydra/ext/datalog/syntax.AtomList.Multiple")
+_AtomList_Multiple = (Core.Name "hydra/ext/datalog/syntax.AtomList_Multiple")
 
 _AtomList_Multiple_atom = (Core.Name "atom")
 
@@ -134,7 +134,7 @@ data TermList_Multiple =
     termList_MultipleTermList :: TermList}
   deriving (Eq, Ord, Read, Show)
 
-_TermList_Multiple = (Core.Name "hydra/ext/datalog/syntax.TermList.Multiple")
+_TermList_Multiple = (Core.Name "hydra/ext/datalog/syntax.TermList_Multiple")
 
 _TermList_Multiple_term = (Core.Name "term")
 
@@ -157,7 +157,7 @@ data ConstantList_Multiple =
     constantList_MultipleConstantList :: ConstantList}
   deriving (Eq, Ord, Read, Show)
 
-_ConstantList_Multiple = (Core.Name "hydra/ext/datalog/syntax.ConstantList.Multiple")
+_ConstantList_Multiple = (Core.Name "hydra/ext/datalog/syntax.ConstantList_Multiple")
 
 _ConstantList_Multiple_constant = (Core.Name "constant")
 
