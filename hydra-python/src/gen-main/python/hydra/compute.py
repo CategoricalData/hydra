@@ -3,6 +3,7 @@
 from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
+from hydra.dsl.python import Node
 from typing import Annotated, Generic, TypeVar
 import hydra.core
 
@@ -38,8 +39,8 @@ class Coder(Generic[S1, S2, V1, V2]):
     encode: Callable[[V1], Flow[S1, V2]]
     decode: Callable[[V2], Flow[S2, V1]]
 
-# A variant of the State monad with built-in logging and error handling.
-type Flow[S, X] = Callable[[S, Trace], FlowState[S, X]]
+class Flow(Node["Callable[[S, Trace], FlowState[S, X]]"], Generic[S, X]):
+    """A variant of the State monad with built-in logging and error handling."""
 
 @dataclass
 class FlowState(Generic[S, X]):
