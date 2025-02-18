@@ -14,7 +14,7 @@ import Data.Set as S
 
 decodeArray :: ((Json.Value -> Compute.Flow s a) -> Json.Value -> Compute.Flow s [a])
 decodeArray decodeElem x = case x of
-  Json.ValueArray v0 -> (Flows.mapList decodeElem v0)
+  Json.ValueArray v1 -> (Flows.mapList decodeElem v1)
   _ -> (Flows.fail "expected an array")
 
 decodeBoolean :: (Json.Value -> Compute.Flow s Bool)
@@ -27,24 +27,19 @@ decodeField decodeValue name m = (Flows.bind (decodeOptionalField decodeValue na
   Nothing -> (Flows.fail (Strings.cat [
     "missing field: ",
     name]))
-  Just v2 -> (Flows.pure v2)))
-
-decodeNumber :: (Json.Value -> Compute.Flow s Double)
-decodeNumber x = case x of
-  Json.ValueNumber v3 -> (Flows.pure v3)
-  _ -> (Flows.fail "expected a number")
+  Just v1 -> (Flows.pure v1)))
 
 decodeObject :: (Json.Value -> Compute.Flow s (Map String Json.Value))
 decodeObject x = case x of
-  Json.ValueObject v4 -> (Flows.pure v4)
+  Json.ValueObject v1 -> (Flows.pure v1)
   _ -> (Flows.fail "expected an object")
 
 decodeOptionalField :: ((Json.Value -> Compute.Flow s a) -> String -> Map String Json.Value -> Compute.Flow s (Maybe a))
 decodeOptionalField decodeValue name m = ((\x -> case x of
   Nothing -> (Flows.pure Nothing)
-  Just v5 -> (Flows.map (\x -> Just x) (decodeValue v5))) (Maps.lookup name m))
+  Just v1 -> (Flows.map (\x -> Just x) (decodeValue v1))) (Maps.lookup name m))
 
 decodeString :: (Json.Value -> Compute.Flow s String)
 decodeString x = case x of
-  Json.ValueString v6 -> (Flows.pure v6)
+  Json.ValueString v1 -> (Flows.pure v1)
   _ -> (Flows.fail "expected a string")

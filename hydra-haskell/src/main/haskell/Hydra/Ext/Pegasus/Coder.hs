@@ -51,7 +51,7 @@ constructModule aliases mod coders pairs = do
     typeToSchema el typ = do
         res <- encodeAdaptedType aliases typ
         let ptype = case res of
-              Left schema -> PDL.NamedSchema_TypeTyperef schema
+              Left schema -> PDL.NamedSchemaTypeTyperef schema
               Right t -> t
         r <- getTermDescription $ elementData el
         let anns = doc r
@@ -74,7 +74,7 @@ doc s = PDL.Annotations s False
 
 encodeAdaptedType ::
   M.Map Namespace String -> Type
-  -> Flow Graph (Either PDL.Schema PDL.NamedSchema_Type)
+  -> Flow Graph (Either PDL.Schema PDL.NamedSchemaType)
 encodeAdaptedType aliases typ = do
   g <- getState
   let cx = AdapterContext g pdlLanguage M.empty
@@ -84,7 +84,7 @@ encodeAdaptedType aliases typ = do
 encodeTerm :: M.Map Namespace String -> Term -> Flow Graph ()
 encodeTerm aliases term = fail "not yet implemented"
 
-encodeType :: M.Map Namespace String -> Type -> Flow Graph (Either PDL.Schema PDL.NamedSchema_Type)
+encodeType :: M.Map Namespace String -> Type -> Flow Graph (Either PDL.Schema PDL.NamedSchemaType)
 encodeType aliases typ = case typ of
     TypeAnnotated (AnnotatedType typ' _) -> encodeType aliases typ'
     TypeList lt -> Left . PDL.SchemaArray <$> encode lt
@@ -106,11 +106,11 @@ encodeType aliases typ = case typ of
     TypeRecord rt -> do
       let includes = []
       rfields <- CM.mapM encodeRecordField $ rowTypeFields rt
-      return $ Right $ PDL.NamedSchema_TypeRecord $ PDL.RecordSchema rfields includes
+      return $ Right $ PDL.NamedSchemaTypeRecord $ PDL.RecordSchema rfields includes
     TypeUnion rt -> if isEnum
         then do
           fs <- CM.mapM encodeEnumField $ rowTypeFields rt
-          return $ Right $ PDL.NamedSchema_TypeEnum $ PDL.EnumSchema fs
+          return $ Right $ PDL.NamedSchemaTypeEnum $ PDL.EnumSchema fs
         else Left . PDL.SchemaUnion . PDL.UnionSchema <$> CM.mapM encodeUnionField (rowTypeFields rt)
       where
         isEnum = L.foldl (\b t -> b && stripType t == Types.unit) True $ fmap fieldTypeType (rowTypeFields rt)

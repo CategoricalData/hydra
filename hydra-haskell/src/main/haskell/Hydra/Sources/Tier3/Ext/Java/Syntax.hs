@@ -142,8 +142,8 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --ArrayType:
       def "ArrayType" $ record [
         "dims">: java "Dims",
-        "variant">: java "ArrayType.Variant"],
-      def "ArrayType.Variant" $ union [
+        "variant">: java "ArrayType_Variant"],
+      def "ArrayType_Variant" $ union [
 --  PrimitiveType Dims
         "primitive">: java "PrimitiveTypeWithAnnotations",
 --  ClassOrInterfaceType Dims
@@ -171,8 +171,8 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --  extends TypeVariable
         "variable">: java "TypeVariable",
 --  extends ClassOrInterfaceType {AdditionalBound}
-        "classOrInterface">: java "TypeBound.ClassOrInterface"],
-      def "TypeBound.ClassOrInterface" $ record [
+        "classOrInterface">: java "TypeBound_ClassOrInterface"],
+      def "TypeBound_ClassOrInterface" $ record [
         "type">: java "ClassOrInterfaceType",
         "additional">: list $ java "AdditionalBound"],
 
@@ -332,24 +332,24 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --ModuleDirective:
       def "ModuleDirective" $ union [
 --  requires {RequiresModifier} ModuleName ;
-        "requires">: java "ModuleDirective.Requires",
+        "requires">: java "ModuleDirective_Requires",
 --  exports PackageName [to ModuleName {, ModuleName}] ;
-        "exports">: java "ModuleDirective.ExportsOrOpens",
+        "exports">: java "ModuleDirective_ExportsOrOpens",
 --  opens PackageName [to ModuleName {, ModuleName}] ;
-        "opens">: java "ModuleDirective.ExportsOrOpens",
+        "opens">: java "ModuleDirective_ExportsOrOpens",
 --  uses TypeName ;
         "uses">: java "TypeName",
 --  provides TypeName with TypeName {, TypeName} ;
-        "provides">: java "ModuleDirective.Provides"],
-      def "ModuleDirective.Requires" $ record [
+        "provides">: java "ModuleDirective_Provides"],
+      def "ModuleDirective_Requires" $ record [
         "modifiers">: list $ java "RequiresModifier",
         "module">: java "ModuleName"],
-      def "ModuleDirective.ExportsOrOpens" $ record [
+      def "ModuleDirective_ExportsOrOpens" $ record [
         "package">: java "PackageName",
         "modules">:
           doc "At least one module" $
           list $ java "ModuleName"],
-      def "ModuleDirective.Provides" $ record [
+      def "ModuleDirective_Provides" $ record [
         "to">: java "TypeName",
         "with">:
           doc "At least one type" $
@@ -572,10 +572,10 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --FormalParameter:
       def "FormalParameter" $ union [
 --  {VariableModifier} UnannType VariableDeclaratorId
-        "simple">: java "FormalParameter.Simple",
+        "simple">: java "FormalParameter_Simple",
 --  VariableArityParameter
         "variableArity">: java "VariableArityParameter"],
-      def "FormalParameter.Simple" $ record [
+      def "FormalParameter_Simple" $ record [
         "modifiers">: list $ java "VariableModifier",
         "type">: java "UnannType",
         "id">: java "VariableDeclaratorId"],
@@ -662,8 +662,8 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "ExplicitConstructorInvocation" $ record [
         "typeArguments">: list $ java "TypeArgument",
         "arguments">: list $ java "Expression",
-        "variant">: java "ExplicitConstructorInvocation.Variant"],
-      def "ExplicitConstructorInvocation.Variant" $ union [
+        "variant">: java "ExplicitConstructorInvocation_Variant"],
+      def "ExplicitConstructorInvocation_Variant" $ union [
 --  [TypeArguments] this ( [ArgumentList] ) ;
         "this">: unit,
 --  [TypeArguments] super ( [ArgumentList] ) ;
@@ -682,8 +682,8 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --EnumBody:
 --  { [EnumConstantList] [,] [EnumBodyDeclarations] }
-      def "EnumBody" $ list $ java "EnumBody.Element",
-      def "EnumBody.Element" $ record [
+      def "EnumBody" $ list $ java "EnumBody_Element",
+      def "EnumBody_Element" $ record [
         "constants">: list $ java "EnumConstant",
         "bodyDeclarations">: list $ java "ClassBodyDeclaration"],
 
@@ -1043,8 +1043,8 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --  assert Expression ;
         "single">: java "Expression",
 --  assert Expression : Expression ;
-        "pair">: java "AssertStatement.Pair"],
-      def "AssertStatement.Pair" $ record [
+        "pair">: java "AssertStatement_Pair"],
+      def "AssertStatement_Pair" $ record [
         "first">: java "Expression",
         "second">: java "Expression"],
 
@@ -1056,8 +1056,8 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --SwitchBlock:
 --  { {SwitchBlockStatementGroup} {SwitchLabel} }
-      def "SwitchBlock" $ list $ java "SwitchBlock.Pair",
-      def "SwitchBlock.Pair" $ record [
+      def "SwitchBlock" $ list $ java "SwitchBlock_Pair",
+      def "SwitchBlock_Pair" $ record [
         "statements">: list $ java "SwitchBlockStatementGroup",
         "labels">: list $ java "SwitchLabel"],
 
@@ -1183,15 +1183,15 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --TryStatement:
       def "TryStatement" $ union [
 --  try Block Catches
-        "simple">: java "TryStatement.Simple",
+        "simple">: java "TryStatement_Simple",
 --  try Block [Catches] Finally
-        "withFinally">: java "TryStatement.WithFinally",
+        "withFinally">: java "TryStatement_WithFinally",
 --  TryWithResourcesStatement
         "withResources">: java "TryWithResourcesStatement"],
-      def "TryStatement.Simple" $ record [
+      def "TryStatement_Simple" $ record [
         "block">: java "Block",
         "catches">: java "Catches"],
-      def "TryStatement.WithFinally" $ record [
+      def "TryStatement_WithFinally" $ record [
         "block">: java "Block",
         "catches">: optional $ java "Catches",
         "finally">: java "Finally"],
@@ -1240,10 +1240,10 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --Resource:
       def "Resource" $ union [
 --  {VariableModifier} LocalVariableType Identifier = Expression
-        "local">: java "Resource.Local",
+        "local">: java "Resource_Local",
 --  VariableAccess
         "variable">: java "VariableAccess"],
-      def "Resource.Local" $ record [
+      def "Resource_Local" $ record [
         "modifiers">: list $ java "VariableModifier",
         "type">: java "LocalVariableType",
         "identifier">: java "Identifier",
@@ -1313,9 +1313,9 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --  ExpressionName . UnqualifiedClassInstanceCreationExpression
 --  Primary . UnqualifiedClassInstanceCreationExpression
       def "ClassInstanceCreationExpression" $ record [
-        "qualifier">: optional $ java "ClassInstanceCreationExpression.Qualifier",
+        "qualifier">: optional $ java "ClassInstanceCreationExpression_Qualifier",
         "expression">: java "UnqualifiedClassInstanceCreationExpression"],
-      def "ClassInstanceCreationExpression.Qualifier" $ union [
+      def "ClassInstanceCreationExpression_Qualifier" $ union [
         "expression">: java "ExpressionName",
         "primary">: java "Primary"],
 
@@ -1345,9 +1345,9 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --FieldAccess:
       def "FieldAccess" $ record [
-        "qualifier">: java "FieldAccess.Qualifier",
+        "qualifier">: java "FieldAccess_Qualifier",
         "identifier">: java "Identifier"],
-      def "FieldAccess.Qualifier" $ union [
+      def "FieldAccess_Qualifier" $ union [
 --  Primary . Identifier
         "primary">: java "Primary",
 --  super . Identifier
@@ -1358,8 +1358,8 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --ArrayAccess:
       def "ArrayAccess" $ record [
         "expression">: optional $ java "Expression",
-        "variant">: java "ArrayAccess.Variant"],
-      def "ArrayAccess.Variant" $ union [
+        "variant">: java "ArrayAccess_Variant"],
+      def "ArrayAccess_Variant" $ union [
 --  ExpressionName [ Expression ]
         "name">: java "ExpressionName",
 --  PrimaryNoNewArray [ Expression ]
@@ -1367,17 +1367,17 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --MethodInvocation:
       def "MethodInvocation" $ record [
-        "header">: java "MethodInvocation.Header",
+        "header">: java "MethodInvocation_Header",
         "arguments">: list $ java "Expression"],
-      def "MethodInvocation.Header" $ union [
+      def "MethodInvocation_Header" $ union [
 --  MethodName ( [ArgumentList] )
         "simple">: java "MethodName",
-        "complex">: java "MethodInvocation.Complex"],
-      def "MethodInvocation.Complex" $ record [
-        "variant">: java "MethodInvocation.Variant",
+        "complex">: java "MethodInvocation_Complex"],
+      def "MethodInvocation_Complex" $ record [
+        "variant">: java "MethodInvocation_Variant",
         "typeArguments">: list $ java "TypeArgument",
         "identifier">: java "Identifier"],
-      def "MethodInvocation.Variant" $ union [
+      def "MethodInvocation_Variant" $ union [
 --  TypeName . [TypeArguments] Identifier ( [ArgumentList] )
         "type">: java "TypeName",
 --  ExpressionName . [TypeArguments] Identifier ( [ArgumentList] )
@@ -1395,62 +1395,62 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --MethodReference:
       def "MethodReference" $ union [
 --  ExpressionName :: [TypeArguments] Identifier
-        "expression">: java "MethodReference.Expression",
+        "expression">: java "MethodReference_Expression",
 --  Primary :: [TypeArguments] Identifier
-        "primary">: java "MethodReference.Primary",
+        "primary">: java "MethodReference_Primary",
 --  ReferenceType :: [TypeArguments] Identifier
-        "referenceType">: java"MethodReference.ReferenceType",
+        "referenceType">: java"MethodReference_ReferenceType",
 --  super :: [TypeArguments] Identifier
 --  TypeName . super :: [TypeArguments] Identifier
-        "super">: java "MethodReference.Super",
+        "super">: java "MethodReference_Super",
 --  ClassType :: [TypeArguments] new
-        "new">: java "MethodReference.New",
+        "new">: java "MethodReference_New",
 --  ArrayType :: new
-        "array">: java "MethodReference.Array"],
-      def "MethodReference.Expression" $ record [
+        "array">: java "MethodReference_Array"],
+      def "MethodReference_Expression" $ record [
         "name">: java "ExpressionName",
         "typeArguments">: list $ java "TypeArgument",
         "identifier">: java "Identifier"],
-      def "MethodReference.Primary" $ record [
+      def "MethodReference_Primary" $ record [
         "primary">: java "Primary",
         "typeArguments">: list $ java "TypeArgument",
         "identifier">: java "Identifier"],
-      def "MethodReference.ReferenceType" $ record [
+      def "MethodReference_ReferenceType" $ record [
         "referenceType">: java "ReferenceType",
         "typeArguments">: list $ java "TypeArgument",
         "identifier">: java "Identifier"],
-      def "MethodReference.Super" $ record [
+      def "MethodReference_Super" $ record [
         "typeArguments">: list $ java "TypeArgument",
         "identifier">: java "Identifier",
         "super">: boolean],
-      def "MethodReference.New" $ record [
+      def "MethodReference_New" $ record [
         "classType">: java "ClassType",
         "typeArguments">: list $ java "TypeArgument"],
-      def "MethodReference.Array" $ java "ArrayType",
+      def "MethodReference_Array" $ java "ArrayType",
 
 --ArrayCreationExpression:
       def "ArrayCreationExpression" $ union [
 --  new PrimitiveType DimExprs [Dims]
-        "primitive">: java "ArrayCreationExpression.Primitive",
+        "primitive">: java "ArrayCreationExpression_Primitive",
 --  new ClassOrInterfaceType DimExprs [Dims]
-        "classOrInterface">: java "ArrayCreationExpression.ClassOrInterface",
+        "classOrInterface">: java "ArrayCreationExpression_ClassOrInterface",
 --  new PrimitiveType Dims ArrayInitializer
-        "primitiveArray">: java "ArrayCreationExpression.PrimitiveArray",
+        "primitiveArray">: java "ArrayCreationExpression_PrimitiveArray",
 --  new ClassOrInterfaceType Dims ArrayInitializer
-        "classOrInterfaceArray">: java "ArrayCreationExpression.ClassOrInterfaceArray"],
-      def "ArrayCreationExpression.Primitive" $ record [
+        "classOrInterfaceArray">: java "ArrayCreationExpression_ClassOrInterfaceArray"],
+      def "ArrayCreationExpression_Primitive" $ record [
         "type">: java "PrimitiveTypeWithAnnotations",
         "dimExprs">: nonemptyList $ java "DimExpr",
         "dims">: optional $ java "Dims"],
-      def "ArrayCreationExpression.ClassOrInterface" $ record [
+      def "ArrayCreationExpression_ClassOrInterface" $ record [
         "type">: java "ClassOrInterfaceType",
         "dimExprs">: nonemptyList $ java "DimExpr",
         "dims">: optional $ java "Dims"],
-      def "ArrayCreationExpression.PrimitiveArray" $ record [
+      def "ArrayCreationExpression_PrimitiveArray" $ record [
         "type">: java "PrimitiveTypeWithAnnotations",
         "dims">: nonemptyList $ java "Dims",
         "array">: java "ArrayInitializer"],
-      def "ArrayCreationExpression.ClassOrInterfaceArray" $ record [
+      def "ArrayCreationExpression_ClassOrInterfaceArray" $ record [
         "type">: java "ClassOrInterfaceType",
         "dims">: nonemptyList $ java "Dims",
         "array">: java "ArrayInitializer"],
@@ -1489,10 +1489,10 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --LambdaParameter:
       def "LambdaParameter" $ union [
 --  {VariableModifier} LambdaParameterType VariableDeclaratorId
-        "normal">: java "LambdaParameter.Normal",
+        "normal">: java "LambdaParameter_Normal",
 --  VariableArityParameter
         "variableArity">: java "VariableArityParameter"],
-      def "LambdaParameter.Normal" $ record [
+      def "LambdaParameter_Normal" $ record [
         "modifiers">: list $ java "VariableModifier",
         "type">: java "LambdaParameterType",
         "id">: java "VariableDeclaratorId"],
@@ -1546,14 +1546,14 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --  ConditionalOrExpression
         "simple">: java "ConditionalOrExpression",
 --  ConditionalOrExpression ? Expression : ConditionalExpression
-        "ternaryCond">: java "ConditionalExpression.TernaryCond",
+        "ternaryCond">: java "ConditionalExpression_TernaryCond",
 --  ConditionalOrExpression ? Expression : LambdaExpression
-        "ternaryLambda">: java "ConditionalExpression.TernaryLambda"],
-      def "ConditionalExpression.TernaryCond" $ record [
+        "ternaryLambda">: java "ConditionalExpression_TernaryLambda"],
+      def "ConditionalExpression_TernaryCond" $ record [
         "cond">: java "ConditionalOrExpression",
         "ifTrue">: java "Expression",
         "ifFalse">: java "ConditionalExpression"],
-      def "ConditionalExpression.TernaryLambda" $ record [
+      def "ConditionalExpression_TernaryLambda" $ record [
         "cond">: java "ConditionalOrExpression",
         "ifTrue">: java "Expression",
         "ifFalse">: java "LambdaExpression"],
@@ -1588,10 +1588,10 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --  RelationalExpression
         "unary">: java "RelationalExpression",
 --  EqualityExpression == RelationalExpression
-        "equal">: java "EqualityExpression.Binary",
+        "equal">: java "EqualityExpression_Binary",
 --  EqualityExpression != RelationalExpression
-        "notEqual">: java "EqualityExpression.Binary"],
-      def "EqualityExpression.Binary" $ record [
+        "notEqual">: java "EqualityExpression_Binary"],
+      def "EqualityExpression_Binary" $ record [
         "lhs">: java "EqualityExpression",
         "rhs">: java "RelationalExpression"],
 
@@ -1600,28 +1600,28 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --  ShiftExpression
         "simple">: java "ShiftExpression",
 --  RelationalExpression < ShiftExpression
-        "lessThan">: java "RelationalExpression.LessThan",
+        "lessThan">: java "RelationalExpression_LessThan",
 --  RelationalExpression > ShiftExpression
-        "greaterThan">: java "RelationalExpression.GreaterThan",
+        "greaterThan">: java "RelationalExpression_GreaterThan",
 --  RelationalExpression <= ShiftExpression
-        "lessThanEqual">: java "RelationalExpression.LessThanEqual",
+        "lessThanEqual">: java "RelationalExpression_LessThanEqual",
 --  RelationalExpression >= ShiftExpression
-        "greaterThanEqual">: java "RelationalExpression.GreaterThanEqual",
+        "greaterThanEqual">: java "RelationalExpression_GreaterThanEqual",
 --  RelationalExpression instanceof ReferenceType
-        "instanceof">: java "RelationalExpression.InstanceOf"],
-      def "RelationalExpression.LessThan" $ record [
+        "instanceof">: java "RelationalExpression_InstanceOf"],
+      def "RelationalExpression_LessThan" $ record [
         "lhs">: java "RelationalExpression",
         "rhs">: java "ShiftExpression"],
-      def "RelationalExpression.GreaterThan" $ record [
+      def "RelationalExpression_GreaterThan" $ record [
         "lhs">: java "RelationalExpression",
         "rhs">: java "ShiftExpression"],
-      def "RelationalExpression.LessThanEqual" $ record [
+      def "RelationalExpression_LessThanEqual" $ record [
         "lhs">: java "RelationalExpression",
         "rhs">: java "ShiftExpression"],
-      def "RelationalExpression.GreaterThanEqual" $ record [
+      def "RelationalExpression_GreaterThanEqual" $ record [
         "lhs">: java "RelationalExpression",
         "rhs">: java "ShiftExpression"],
-      def "RelationalExpression.InstanceOf" $ record [
+      def "RelationalExpression_InstanceOf" $ record [
         "lhs">: java "RelationalExpression",
         "rhs">: java "ReferenceType"],
 
@@ -1630,12 +1630,12 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --  AdditiveExpression
         "unary">: java "AdditiveExpression",
 --  ShiftExpression << AdditiveExpression
-        "shiftLeft">: java "ShiftExpression.Binary",
+        "shiftLeft">: java "ShiftExpression_Binary",
 --  ShiftExpression >> AdditiveExpression
-        "shiftRight">: java "ShiftExpression.Binary",
+        "shiftRight">: java "ShiftExpression_Binary",
 --  ShiftExpression >>> AdditiveExpression
-        "shiftRightZeroFill">: java "ShiftExpression.Binary"],
-      def "ShiftExpression.Binary" $ record [
+        "shiftRightZeroFill">: java "ShiftExpression_Binary"],
+      def "ShiftExpression_Binary" $ record [
         "lhs">: java "ShiftExpression",
         "rhs">: java "AdditiveExpression"],
 
@@ -1644,10 +1644,10 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --  MultiplicativeExpression
         "unary">: java "MultiplicativeExpression",
 --  AdditiveExpression + MultiplicativeExpression
-        "plus">: java "AdditiveExpression.Binary",
+        "plus">: java "AdditiveExpression_Binary",
 --  AdditiveExpression - MultiplicativeExpression
-        "minus">: java "AdditiveExpression.Binary"],
-      def "AdditiveExpression.Binary" $ record [
+        "minus">: java "AdditiveExpression_Binary"],
+      def "AdditiveExpression_Binary" $ record [
         "lhs">: java "AdditiveExpression",
         "rhs">: java "MultiplicativeExpression"],
 
@@ -1656,12 +1656,12 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --  UnaryExpression
         "unary">: java "UnaryExpression",
 --  MultiplicativeExpression * UnaryExpression
-        "times">: java "MultiplicativeExpression.Binary",
+        "times">: java "MultiplicativeExpression_Binary",
 --  MultiplicativeExpression / UnaryExpression
-        "divide">: java "MultiplicativeExpression.Binary",
+        "divide">: java "MultiplicativeExpression_Binary",
 --  MultiplicativeExpression % UnaryExpression
-        "mod">: java "MultiplicativeExpression.Binary"],
-      def "MultiplicativeExpression.Binary" $ record [
+        "mod">: java "MultiplicativeExpression_Binary"],
+      def "MultiplicativeExpression_Binary" $ record [
         "lhs">: java "MultiplicativeExpression",
         "rhs">: java "UnaryExpression"],
 
@@ -1719,21 +1719,21 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --CastExpression:
       def "CastExpression" $ union [
 --  ( PrimitiveType ) UnaryExpression
-        "primitive">: java "CastExpression.Primitive",
+        "primitive">: java "CastExpression_Primitive",
 --  ( ReferenceType {AdditionalBound} ) UnaryExpressionNotPlusMinus
-        "notPlusMinus">: java "CastExpression.NotPlusMinus",
+        "notPlusMinus">: java "CastExpression_NotPlusMinus",
 --  ( ReferenceType {AdditionalBound} ) LambdaExpression
-        "lambda">: java "CastExpression.Lambda"],
-      def "CastExpression.Primitive" $ record [
+        "lambda">: java "CastExpression_Lambda"],
+      def "CastExpression_Primitive" $ record [
         "type">: java "PrimitiveTypeWithAnnotations",
         "expression">: java "UnaryExpression"],
-      def "CastExpression.NotPlusMinus" $ record [
-        "refAndBounds">: java "CastExpression.RefAndBounds",
+      def "CastExpression_NotPlusMinus" $ record [
+        "refAndBounds">: java "CastExpression_RefAndBounds",
         "expression">: java "UnaryExpression"],
-      def "CastExpression.Lambda" $ record [
-        "refAndBounds">: java "CastExpression.RefAndBounds",
+      def "CastExpression_Lambda" $ record [
+        "refAndBounds">: java "CastExpression_RefAndBounds",
         "expression">: java "LambdaExpression"],
-      def "CastExpression.RefAndBounds" $ record [
+      def "CastExpression_RefAndBounds" $ record [
         "type">: java "ReferenceType",
         "bounds">: list $ java "AdditionalBound"],
 

@@ -90,7 +90,7 @@ encodeFunction namespaces fun = case fun of
           let lhs = applicationPattern (rawName "Just") [H.PatternName $ rawName v1]
           rhs <- H.CaseRhs <$> encodeTerm namespaces rhsTerm
           return $ H.Alternative lhs rhs Nothing
-        return $ hslambda "x" $ H.ExpressionCase $ H.Expression_Case (hsvar "x") [nothingAlt, justAlt]
+        return $ hslambda "x" $ H.ExpressionCase $ H.CaseExpression (hsvar "x") [nothingAlt, justAlt]
       EliminationProduct (TupleProjection arity idx) -> if arity == 2
         then return $ hsvar $ if idx == 0 then "fst" else "snd"
         else fail "Eliminations for tuples of arity > 2 are not supported yet in the Haskell coder"
@@ -107,7 +107,7 @@ encodeFunction namespaces fun = case fun of
                 cs <- H.CaseRhs <$> encodeTerm namespaces d
                 let lhs = H.PatternName $ rawName ignoredVariable
                 return [H.Alternative lhs cs Nothing]
-            return $ H.ExpressionCase $ H.Expression_Case (hsvar "x") $ ecases ++ dcases
+            return $ H.ExpressionCase $ H.CaseExpression (hsvar "x") $ ecases ++ dcases
           toAlt fieldMap (Field fn fun') = withDepth key_haskellVar $ \depth -> do
             let v0 = "v" ++ show depth
             let raw = apply fun' (var v0)
@@ -150,7 +150,7 @@ encodeTerm namespaces term = do
     TermLet (Let bindings env) -> do
         hbindings <- CM.mapM encodeBinding bindings
         hinner <- encode env
-        return $ H.ExpressionLet $ H.Expression_Let hbindings hinner
+        return $ H.ExpressionLet $ H.LetExpression hbindings hinner
       where
         encodeBinding (LetBinding name term _) = do
           let hname = simpleName $ unName name
@@ -171,7 +171,7 @@ encodeTerm namespaces term = do
         else do
             let typeName = elementReference namespaces sname
             updates <- CM.mapM toFieldUpdate fields
-            return $ H.ExpressionConstructRecord $ H.Expression_ConstructRecord typeName updates
+            return $ H.ExpressionConstructRecord $ H.ConstructRecordExpression typeName updates
           where
             toFieldUpdate (Field fn ft) = H.FieldUpdate (recordFieldReference namespaces sname fn) <$> encode ft
     TermUnion (Injection sname (Field fn ft)) -> do
@@ -187,7 +187,7 @@ encodeTerm namespaces term = do
 encodeType :: HaskellNamespaces -> Type -> Flow Graph H.Type
 encodeType namespaces typ = withTrace "encode type" $ case stripType typ of
     TypeApplication (ApplicationType lhs rhs) -> toTypeApplication <$> CM.sequence [encode lhs, encode rhs]
-    TypeFunction (FunctionType dom cod) -> H.TypeFunction <$> (H.Type_Function <$> encode dom <*> encode cod)
+    TypeFunction (FunctionType dom cod) -> H.TypeFunction <$> (H.FunctionType <$> encode dom <*> encode cod)
     TypeLambda (LambdaType (Name v) body) -> toTypeApplication <$> CM.sequence [
       encode body,
       pure $ H.TypeVariable $ simpleName v]
@@ -238,9 +238,9 @@ encodeTypeWithClassAssertions namespaces classes typ = withTrace "encode with as
     else do
       let encoded = encodeAssertion <$> assertPairs
       let hassert = if L.length encoded > 1 then L.head encoded else H.AssertionTuple encoded
-      return $ H.TypeCtx $ H.Type_Context hassert htyp
+      return $ H.TypeCtx $ H.ContextType hassert htyp
   where
-    encodeAssertion (name, cls) = H.AssertionClass $ H.Assertion_Class hname [htype]
+    encodeAssertion (name, cls) = H.AssertionClass $ H.ClassAssertion hname [htype]
       where
         hname = rawName $ case cls of
           TypeClassEquality -> "Eq"
@@ -271,9 +271,9 @@ nameDecls g namespaces name@(Name nm) typ = if useCoreImport
   where
     toDecl n (k, v) = H.DeclarationWithComments decl Nothing
       where
-        decl = H.DeclarationValueBinding $ H.ValueBindingSimple $ H.ValueBinding_Simple pat rhs Nothing
+        decl = H.DeclarationValueBinding $ H.ValueBindingSimple $ H.SimpleValueBinding pat rhs Nothing
         pat = applicationPattern (simpleName k) []
-        rhs = H.RightHandSide $ H.ExpressionApplication $ H.Expression_Application
+        rhs = H.RightHandSide $ H.ExpressionApplication $ H.ApplicationExpression
           (H.ExpressionVariable $ elementReference namespaces n)
           (H.ExpressionLiteral $ H.LiteralString v)
     nameDecl = (constantForTypeName name, nm)
@@ -290,9 +290,9 @@ toDataDeclaration coders namespaces (el, TypedTerm term typ) = do
     hname = simpleName $ localNameOf $ elementName el
 
     rewriteValueBinding vb = case vb of
-      H.ValueBindingSimple (H.ValueBinding_Simple (H.PatternApplication (H.Pattern_Application name args)) rhs bindings) -> case rhs of
-        H.RightHandSide (H.ExpressionLambda (H.Expression_Lambda vars body)) -> rewriteValueBinding $
-          H.ValueBindingSimple $ H.ValueBinding_Simple
+      H.ValueBindingSimple (H.SimpleValueBinding (H.PatternApplication (H.ApplicationPattern name args)) rhs bindings) -> case rhs of
+        H.RightHandSide (H.ExpressionLambda (H.LambdaExpression vars body)) -> rewriteValueBinding $
+          H.ValueBindingSimple $ H.SimpleValueBinding
             (applicationPattern name (args ++ vars)) (H.RightHandSide body) bindings
         _ -> vb
 
@@ -333,17 +333,17 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
     decl <- case stripType t' of
       TypeRecord rt -> do
         cons <- recordCons lname $ rowTypeFields rt
-        return $ H.DeclarationData $ H.DataDeclaration H.DataDeclaration_KeywordData [] hd [cons] [deriv]
+        return $ H.DeclarationData $ H.DataDeclaration H.DataOrNewtypeData [] hd [cons] [deriv]
       TypeUnion rt -> do
         cons <- CM.mapM (unionCons g lname) $ rowTypeFields rt
-        return $ H.DeclarationData $ H.DataDeclaration H.DataDeclaration_KeywordData [] hd cons [deriv]
+        return $ H.DeclarationData $ H.DataDeclaration H.DataOrNewtypeData [] hd cons [deriv]
       TypeWrap (WrappedType tname wt) -> do
         cons <- newtypeCons el wt
-        return $ H.DeclarationData $ H.DataDeclaration H.DataDeclaration_KeywordNewtype [] hd [cons] [deriv]
+        return $ H.DeclarationData $ H.DataDeclaration H.DataOrNewtypeNewtype [] hd [cons] [deriv]
       _ -> if newtypesNotTypedefs
         then do
           cons <- newtypeCons el t'
-          return $ H.DeclarationData $ H.DataDeclaration H.DataDeclaration_KeywordNewtype [] hd [cons] [deriv]
+          return $ H.DeclarationData $ H.DataDeclaration H.DataOrNewtypeNewtype [] hd [cons] [deriv]
         else do
           htype <- adaptTypeToHaskellAndEncode namespaces t
           return $ H.DeclarationType (H.TypeDeclaration hd htype)
@@ -360,18 +360,18 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
     declHead name vars = case vars of
       [] -> H.DeclarationHeadSimple name
       ((Name h):rest) -> H.DeclarationHeadApplication $
-        H.DeclarationHead_Application (declHead name rest) (H.Variable $ simpleName h)
+        H.ApplicationDeclarationHead (declHead name rest) (H.Variable $ simpleName h)
 
     newtypeCons el typ = do
         let hname = simpleName $ newtypeAccessorName $ elementName el
         htype <- adaptTypeToHaskellAndEncode namespaces typ
         let hfield = H.FieldWithComments (H.Field hname htype) Nothing
         return $ H.ConstructorWithComments
-          (H.ConstructorRecord $ H.Constructor_Record (simpleName $ localNameOf $ elementName el) [hfield]) Nothing
+          (H.ConstructorRecord $ H.RecordConstructor (simpleName $ localNameOf $ elementName el) [hfield]) Nothing
 
     recordCons lname fields = do
         hFields <- CM.mapM toField fields
-        return $ H.ConstructorWithComments (H.ConstructorRecord $ H.Constructor_Record (simpleName lname) hFields) Nothing
+        return $ H.ConstructorWithComments (H.ConstructorRecord $ H.RecordConstructor (simpleName lname) hFields) Nothing
       where
         toField (FieldType (Name fname) ftype) = do
           let hname = simpleName $ decapitalize lname ++ capitalize fname
@@ -387,7 +387,7 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
           else do
             htype <- adaptTypeToHaskellAndEncode namespaces ftype
             return [htype]
-        return $ H.ConstructorWithComments (H.ConstructorOrdinary $ H.Constructor_Ordinary (simpleName nm) typeList) comments
+        return $ H.ConstructorWithComments (H.ConstructorOrdinary $ H.OrdinaryConstructor (simpleName nm) typeList) comments
       where
         deconflict name = if Y.isJust (M.lookup tname $ graphElements g)
             then deconflict (name ++ "_")
@@ -404,7 +404,7 @@ typeDecl namespaces name typ = do
     let rhs = H.RightHandSide expr
     let hname = simpleName $ typeNameLocal name
     let pat = applicationPattern hname []
-    let decl = H.DeclarationValueBinding $ H.ValueBindingSimple $ H.ValueBinding_Simple pat rhs Nothing
+    let decl = H.DeclarationValueBinding $ H.ValueBindingSimple $ H.SimpleValueBinding pat rhs Nothing
     return $ H.DeclarationWithComments decl Nothing
   where
     typeName ns name = qname ns (typeNameLocal name)

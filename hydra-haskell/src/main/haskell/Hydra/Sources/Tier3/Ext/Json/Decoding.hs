@@ -33,14 +33,14 @@ import Hydra.Sources.Tier1.Json
 
 jsonDecodingModule :: Module
 jsonDecodingModule = Module (Namespace "hydra/ext/org/json/decoding") elements
-    [jsonModelModule, hydraCoreModule] (jsonModelModule:[hydraCoreModule]) $
+    [jsonModelModule, hydraCoreModule] (jsonModelModule:[hydraCoreModule, hydraComputeModule]) $
     Just "Decoding functions for JSON data"
   where
    elements = [
      Base.el decodeArrayDef,
      Base.el decodeBooleanDef,
      Base.el decodeFieldDef,
-     Base.el decodeNumberDef,
+--     Base.el decodeNumberDef, TODO: restore
      Base.el decodeObjectDef,
      Base.el decodeOptionalFieldDef,
      Base.el decodeStringDef]
@@ -72,7 +72,7 @@ decodeFieldDef  = jsonDecodingDefinition "Field" $
 
 decodeNumberDef :: TElement (Json.Value -> Flow s Double)
 decodeNumberDef  = jsonDecodingDefinition "Number" $
-  function valueT (tFlow tS Types.bigfloat) $
+  function valueT (tFlow tS tBigfloat) $
   match Json._Value (Just $ Flows.fail @@ "expected a number") [
     Json._Value_number>>: Flows.pure]
 

@@ -61,7 +61,7 @@ _FieldName = (Core.Name "hydra/ext/pegasus/pdl.FieldName")
 data NamedSchema = 
   NamedSchema {
     namedSchemaQualifiedName :: QualifiedName,
-    namedSchemaType :: NamedSchema_Type,
+    namedSchemaType :: NamedSchemaType,
     namedSchemaAnnotations :: Annotations}
   deriving (Eq, Ord, Read, Show)
 
@@ -73,19 +73,19 @@ _NamedSchema_type = (Core.Name "type")
 
 _NamedSchema_annotations = (Core.Name "annotations")
 
-data NamedSchema_Type = 
-  NamedSchema_TypeRecord RecordSchema |
-  NamedSchema_TypeEnum EnumSchema |
-  NamedSchema_TypeTyperef Schema
+data NamedSchemaType = 
+  NamedSchemaTypeRecord RecordSchema |
+  NamedSchemaTypeEnum EnumSchema |
+  NamedSchemaTypeTyperef Schema
   deriving (Eq, Ord, Read, Show)
 
-_NamedSchema_Type = (Core.Name "hydra/ext/pegasus/pdl.NamedSchema.Type")
+_NamedSchemaType = (Core.Name "hydra/ext/pegasus/pdl.NamedSchemaType")
 
-_NamedSchema_Type_record = (Core.Name "record")
+_NamedSchemaType_record = (Core.Name "record")
 
-_NamedSchema_Type_enum = (Core.Name "enum")
+_NamedSchemaType_enum = (Core.Name "enum")
 
-_NamedSchema_Type_typeref = (Core.Name "typeref")
+_NamedSchemaType_typeref = (Core.Name "typeref")
 
 newtype Name = 
   Name {

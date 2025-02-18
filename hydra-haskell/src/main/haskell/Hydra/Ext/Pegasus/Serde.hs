@@ -21,11 +21,11 @@ exprImport qn = spaceSep [cst "import", exprQualifiedName qn]
 exprNamedSchema :: PDL.NamedSchema -> CT.Expr
 exprNamedSchema (PDL.NamedSchema qn t anns) = withAnnotations anns $
   case t of
-    PDL.NamedSchema_TypeRecord (PDL.RecordSchema fields _) -> spaceSep [cst "record", exprQualifiedName qn,
+    PDL.NamedSchemaTypeRecord (PDL.RecordSchema fields _) -> spaceSep [cst "record", exprQualifiedName qn,
       curlyBracesList Nothing fullBlockStyle (exprRecordField <$> fields)]
-    PDL.NamedSchema_TypeEnum (PDL.EnumSchema fields) -> spaceSep [cst "enum", exprQualifiedName qn,
+    PDL.NamedSchemaTypeEnum (PDL.EnumSchema fields) -> spaceSep [cst "enum", exprQualifiedName qn,
       curlyBracesList Nothing fullBlockStyle (exprEnumField <$> fields)]
-    PDL.NamedSchema_TypeTyperef schema -> spaceSep [cst "typeref", exprQualifiedName qn, cst "=", exprSchema schema]
+    PDL.NamedSchemaTypeTyperef schema -> spaceSep [cst "typeref", exprQualifiedName qn, cst "=", exprSchema schema]
 
 exprPrimitiveType :: PDL.PrimitiveType -> CT.Expr
 exprPrimitiveType pt = cst $ case pt of

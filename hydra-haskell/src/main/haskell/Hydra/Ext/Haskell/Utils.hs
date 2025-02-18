@@ -13,7 +13,7 @@ import qualified Data.Set as S
 
 type HaskellNamespaces = Namespaces H.ModuleName
 
-applicationPattern name args = H.PatternApplication $ H.Pattern_Application name args
+applicationPattern name args = H.PatternApplication $ H.ApplicationPattern name args
 
 elementReference :: HaskellNamespaces -> Name -> H.Name
 elementReference (Namespaces (gname, H.ModuleName gmod) namespaces) name = case (qualifiedNameNamespace qname) of
@@ -30,10 +30,10 @@ elementReference (Namespaces (gname, H.ModuleName gmod) namespaces) name = case 
     simple = simpleName $ qualifiedNameLocal qname
 
 hsapp :: H.Expression -> H.Expression -> H.Expression
-hsapp l r = H.ExpressionApplication $ H.Expression_Application l r
+hsapp l r = H.ExpressionApplication $ H.ApplicationExpression l r
 
 hslambda :: String -> H.Expression -> H.Expression
-hslambda v rhs = H.ExpressionLambda (H.Expression_Lambda [H.PatternName $ rawName v] rhs)
+hslambda v rhs = H.ExpressionLambda (H.LambdaExpression [H.PatternName $ rawName v] rhs)
 
 hslit :: H.Literal -> H.Expression
 hslit = H.ExpressionLiteral
@@ -79,16 +79,16 @@ simpleName :: String -> H.Name
 simpleName = rawName . sanitizeHaskellName
 
 simpleValueBinding :: H.Name -> H.Expression -> Maybe H.LocalBindings -> H.ValueBinding
-simpleValueBinding hname rhs bindings = H.ValueBindingSimple $ H.ValueBinding_Simple pat (H.RightHandSide rhs) bindings
+simpleValueBinding hname rhs bindings = H.ValueBindingSimple $ H.SimpleValueBinding pat (H.RightHandSide rhs) bindings
   where
-    pat = H.PatternApplication $ H.Pattern_Application hname []
+    pat = H.PatternApplication $ H.ApplicationPattern hname []
 
 toTypeApplication :: [H.Type] -> H.Type
 toTypeApplication = app . L.reverse
   where
     app l = case l of
       [e] -> e
-      (h:r) -> H.TypeApplication $ H.Type_Application (app r) h
+      (h:r) -> H.TypeApplication $ H.ApplicationType (app r) h
 
 typeNameForRecord :: Name -> String
 typeNameForRecord (Name sname) = L.last (Strings.splitOn "." sname)
