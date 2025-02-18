@@ -7,67 +7,128 @@ import java.io.Serializable;
 /**
  * A simple test case with an input and an expected output
  */
-public class TestCase implements Serializable {
+public abstract class TestCase implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/testing.TestCase");
   
-  public static final hydra.core.Name FIELD_NAME_DESCRIPTION = new hydra.core.Name("description");
+  public static final hydra.core.Name FIELD_NAME_CASE_CONVERSION = new hydra.core.Name("caseConversion");
   
-  public static final hydra.core.Name FIELD_NAME_EVALUATION_STYLE = new hydra.core.Name("evaluationStyle");
+  public static final hydra.core.Name FIELD_NAME_EVALUATION = new hydra.core.Name("evaluation");
   
-  public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
+  public static final hydra.core.Name FIELD_NAME_INFERENCE = new hydra.core.Name("inference");
   
-  public static final hydra.core.Name FIELD_NAME_OUTPUT = new hydra.core.Name("output");
+  private TestCase () {
   
-  public final hydra.util.Opt<String> description;
-  
-  public final hydra.testing.EvaluationStyle evaluationStyle;
-  
-  public final hydra.core.Term input;
-  
-  public final hydra.core.Term output;
-  
-  public TestCase (hydra.util.Opt<String> description, hydra.testing.EvaluationStyle evaluationStyle, hydra.core.Term input, hydra.core.Term output) {
-    java.util.Objects.requireNonNull((description));
-    java.util.Objects.requireNonNull((evaluationStyle));
-    java.util.Objects.requireNonNull((input));
-    java.util.Objects.requireNonNull((output));
-    this.description = description;
-    this.evaluationStyle = evaluationStyle;
-    this.input = input;
-    this.output = output;
   }
   
-  @Override
-  public boolean equals(Object other) {
-    if (!(other instanceof TestCase)) {
-      return false;
+  public abstract <R> R accept(Visitor<R> visitor) ;
+  
+  public interface Visitor<R> {
+    R visit(CaseConversion instance) ;
+    
+    R visit(Evaluation instance) ;
+    
+    R visit(Inference instance) ;
+  }
+  
+  public interface PartialVisitor<R> extends Visitor<R> {
+    default R otherwise(TestCase instance) {
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
-    TestCase o = (TestCase) (other);
-    return description.equals(o.description) && evaluationStyle.equals(o.evaluationStyle) && input.equals(o.input) && output.equals(o.output);
+    
+    default R visit(CaseConversion instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Evaluation instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Inference instance) {
+      return otherwise((instance));
+    }
   }
   
-  @Override
-  public int hashCode() {
-    return 2 * description.hashCode() + 3 * evaluationStyle.hashCode() + 5 * input.hashCode() + 7 * output.hashCode();
+  public static final class CaseConversion extends hydra.testing.TestCase implements Serializable {
+    public final hydra.testing.CaseConversionTestCase value;
+    
+    public CaseConversion (hydra.testing.CaseConversionTestCase value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof CaseConversion)) {
+        return false;
+      }
+      CaseConversion o = (CaseConversion) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
   }
   
-  public TestCase withDescription(hydra.util.Opt<String> description) {
-    java.util.Objects.requireNonNull((description));
-    return new TestCase(description, evaluationStyle, input, output);
+  public static final class Evaluation extends hydra.testing.TestCase implements Serializable {
+    public final hydra.testing.EvaluationTestCase value;
+    
+    public Evaluation (hydra.testing.EvaluationTestCase value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Evaluation)) {
+        return false;
+      }
+      Evaluation o = (Evaluation) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
   }
   
-  public TestCase withEvaluationStyle(hydra.testing.EvaluationStyle evaluationStyle) {
-    java.util.Objects.requireNonNull((evaluationStyle));
-    return new TestCase(description, evaluationStyle, input, output);
-  }
-  
-  public TestCase withInput(hydra.core.Term input) {
-    java.util.Objects.requireNonNull((input));
-    return new TestCase(description, evaluationStyle, input, output);
-  }
-  
-  public TestCase withOutput(hydra.core.Term output) {
-    java.util.Objects.requireNonNull((output));
-    return new TestCase(description, evaluationStyle, input, output);
+  public static final class Inference extends hydra.testing.TestCase implements Serializable {
+    public final hydra.testing.InferenceTestCase value;
+    
+    public Inference (hydra.testing.InferenceTestCase value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Inference)) {
+        return false;
+      }
+      Inference o = (Inference) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
   }
 }

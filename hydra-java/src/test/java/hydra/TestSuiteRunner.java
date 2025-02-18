@@ -6,6 +6,7 @@ import hydra.core.Term;
 import hydra.graph.Graph;
 import hydra.test.testSuite.TestSuite;
 import hydra.testing.TestCase;
+import hydra.testing.TestCaseWithMetadata;
 import hydra.testing.TestGroup;
 import hydra.tools.PrettyPrinter;
 import org.junit.jupiter.api.Assertions;
@@ -66,14 +67,33 @@ public class TestSuiteRunner extends HydraTestBase {
         return args;
     }
 
-    private static void addTestCase(TestCase testCase, int idx, String prefix, List<Arguments> args) {
-        args.add(Arguments.of(testCaseDescription(testCase, prefix, idx), testCase.input, testCase.output));
+    private static void addTestCase(TestCaseWithMetadata testCase, int idx, String prefix, List<Arguments> args) {
+        testCase.case_.accept(new TestCase.Visitor() {
+            @Override
+            public Object visit(TestCase.CaseConversion instance) {
+                // TODO
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.Evaluation instance) {
+                args.add(Arguments.of(testCaseDescription(testCase, prefix, idx),
+                        instance.value.input, instance.value.output));
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.Inference instance) {
+                // TODO
+                return null;
+            }
+        });
     }
 
     private static void addTestGroup(TestGroup testGroup, String prefix, List<Arguments> args) {
         String newPrefix = testGroupDescription(testGroup, prefix);
         int idx = 0;
-        for (TestCase testCase : testGroup.cases) {
+        for (TestCaseWithMetadata testCase : testGroup.cases) {
             addTestCase(testCase, ++idx, newPrefix, args);
         }
         for (TestGroup subgroup : testGroup.subgroups) {
@@ -81,7 +101,7 @@ public class TestSuiteRunner extends HydraTestBase {
         }
     }
 
-    private static String testCaseDescription(TestCase testCase, String prefix, int idx) {
+    private static String testCaseDescription(TestCaseWithMetadata testCase, String prefix, int idx) {
         String name = testCase.description.orElse("test #" + idx);
         return prefix == null ? name : prefix + " > " + name;
     }

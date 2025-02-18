@@ -14,21 +14,24 @@ public class TypeConstraint implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_RIGHT = new hydra.core.Name("right");
   
-  public static final hydra.core.Name FIELD_NAME_CONTEXT = new hydra.core.Name("context");
+  public static final hydra.core.Name FIELD_NAME_COMMENT = new hydra.core.Name("comment");
   
   public final hydra.core.Type left;
   
   public final hydra.core.Type right;
   
-  public final hydra.util.Opt<String> context;
+  /**
+   * An optional description of the type constraint. This may be used for tracing or debugging.
+   */
+  public final hydra.util.Opt<String> comment;
   
-  public TypeConstraint (hydra.core.Type left, hydra.core.Type right, hydra.util.Opt<String> context) {
+  public TypeConstraint (hydra.core.Type left, hydra.core.Type right, hydra.util.Opt<String> comment) {
     java.util.Objects.requireNonNull((left));
     java.util.Objects.requireNonNull((right));
-    java.util.Objects.requireNonNull((context));
+    java.util.Objects.requireNonNull((comment));
     this.left = left;
     this.right = right;
-    this.context = context;
+    this.comment = comment;
   }
   
   @Override
@@ -37,26 +40,26 @@ public class TypeConstraint implements Serializable {
       return false;
     }
     TypeConstraint o = (TypeConstraint) (other);
-    return left.equals(o.left) && right.equals(o.right) && context.equals(o.context);
+    return left.equals(o.left) && right.equals(o.right) && comment.equals(o.comment);
   }
   
   @Override
   public int hashCode() {
-    return 2 * left.hashCode() + 3 * right.hashCode() + 5 * context.hashCode();
+    return 2 * left.hashCode() + 3 * right.hashCode() + 5 * comment.hashCode();
   }
   
   public TypeConstraint withLeft(hydra.core.Type left) {
     java.util.Objects.requireNonNull((left));
-    return new TypeConstraint(left, right, context);
+    return new TypeConstraint(left, right, comment);
   }
   
   public TypeConstraint withRight(hydra.core.Type right) {
     java.util.Objects.requireNonNull((right));
-    return new TypeConstraint(left, right, context);
+    return new TypeConstraint(left, right, comment);
   }
   
-  public TypeConstraint withContext(hydra.util.Opt<String> context) {
-    java.util.Objects.requireNonNull((context));
-    return new TypeConstraint(left, right, context);
+  public TypeConstraint withComment(hydra.util.Opt<String> comment) {
+    java.util.Objects.requireNonNull((comment));
+    return new TypeConstraint(left, right, comment);
   }
 }
