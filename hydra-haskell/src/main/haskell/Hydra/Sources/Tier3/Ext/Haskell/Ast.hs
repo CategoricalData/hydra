@@ -26,11 +26,11 @@ haskellAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "Assertion" $ -- UAssertion (UClassAssert)
         doc "A type assertion" $
         union [
-          "class">: ast "Assertion.Class",
+          "class">: ast "ClassAssertion",
           "tuple">: list $ ast "Assertion"],
         -- omitted for now: implicit and infix assertions
 
-      def "Assertion.Class" $ -- UClassAssert
+      def "ClassAssertion" $ -- UClassAssert
         record [
           "name">: ast "Name",
           "types">: list $ ast "Type"],
@@ -44,16 +44,16 @@ haskellAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
         doc "A data constructor" $
         -- omitted for now: ordinary (positional), infix
         union [
-          "ordinary">: ast "Constructor.Ordinary",
-          "record">: ast "Constructor.Record"],
+          "ordinary">: ast "OrdinaryConstructor",
+          "record">: ast "RecordConstructor"],
 
-      def "Constructor.Ordinary" $
+      def "OrdinaryConstructor" $
         doc "An ordinary (positional) data constructor" $
         record [
           "name">: ast "Name",
           "fields">: list $ ast "Type"],
 
-      def "Constructor.Record" $
+      def "RecordConstructor" $
         doc "A record-style data constructor" $
         record [
           "name">: ast "Name",
@@ -68,13 +68,13 @@ haskellAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "DataDeclaration" $ -- UDataDecl
         doc "A data type declaration" $
         record [
-          "keyword">: ast "DataDeclaration.Keyword",
+          "keyword">: ast "DataOrNewtype",
           "context">: list $ ast "Assertion",
           "head">: ast "DeclarationHead",
           "constructors">: list $ ast "ConstructorWithComments",
           "deriving">: list $ ast "Deriving"],
 
-      def "DataDeclaration.Keyword" $
+      def "DataOrNewtype" $
         doc "The 'data' versus 'newtype keyword" $
         enum ["data", "newtype"],
 
@@ -99,11 +99,11 @@ haskellAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
         doc "The left-hand side of a declaration" $
         -- omitted for now: infix application
         union [
-          "application">: ast "DeclarationHead.Application",
+          "application">: ast "ApplicationDeclarationHead",
           "parens">: ast "DeclarationHead",
           "simple">: ast "Name"],
 
-      def "DeclarationHead.Application" $
+      def "ApplicationDeclarationHead" $
         doc "An application-style declaration head" $
         record [
           "function">: ast "DeclarationHead",
@@ -127,88 +127,88 @@ haskellAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
         --                  (all Template Haskell constructors), pragma, arrow definition, arrow application,
         --                  lambda cases, static, unboxed sum, hole
         union [
-          "application">: ast "Expression.Application",
-          "case">: ast "Expression.Case",
-          "constructRecord">: ast "Expression.ConstructRecord",
+          "application">: ast "ApplicationExpression",
+          "case">: ast "CaseExpression",
+          "constructRecord">: ast "ConstructRecordExpression",
           "do">: list $ ast "Statement", -- omitted for now: do vs. mdo
-          "if">: ast "Expression.If",
-          "infixApplication">: ast "Expression.InfixApplication",
+          "if">: ast "IfExpression",
+          "infixApplication">: ast "InfixApplicationExpression",
           "literal">: ast "Literal",
-          "lambda">: ast "Expression.Lambda",
-          "leftSection">: ast "Expression.Section",
-          "let">: ast "Expression.Let",
+          "lambda">: ast "LambdaExpression",
+          "leftSection">: ast "SectionExpression",
+          "let">: ast "LetExpression",
           "list">: list $ ast "Expression",
           "parens">: ast "Expression",
-          "prefixApplication">: ast "Expression.PrefixApplication",
-          "rightSection">: ast "Expression.Section",
+          "prefixApplication">: ast "PrefixApplicationExpression",
+          "rightSection">: ast "SectionExpression",
           "tuple">: list $ ast "Expression",
-          "typeSignature">: ast "Expression.TypeSignature",
-          "updateRecord">: ast "Expression.UpdateRecord",
+          "typeSignature">: ast "TypeSignatureExpression",
+          "updateRecord">: ast "UpdateRecordExpression",
           "variable">: ast "Name"],
 
-      def "Expression.Application" $
+      def "ApplicationExpression" $
         doc "An application expression" $
         record [
           "function">: ast "Expression",
           "argument">: ast "Expression"],
 
-      def "Expression.Case" $
+      def "CaseExpression" $
         doc "A case expression" $
         record [
           "case">: ast "Expression",
           "alternatives">: list $ ast "Alternative"],
 
-      def "Expression.ConstructRecord" $
+      def "ConstructRecordExpression" $
         doc "A record constructor expression" $
         record [
           "name">: ast "Name",
           "fields">: list $ ast "FieldUpdate"],
 
-      def "Expression.If" $
+      def "IfExpression" $
         doc "An 'if' expression" $
         record [
           "condition">: ast "Expression",
           "then">: ast "Expression",
           "else">: ast "Expression"],
 
-      def "Expression.InfixApplication" $
+      def "InfixApplicationExpression" $
         doc "An infix application expression" $
         record [
           "lhs">: ast "Expression",
           "operator">: ast "Operator",
           "rhs">: ast "Expression"],
 
-      def "Expression.Lambda" $
+      def "LambdaExpression" $
         doc "A lambda expression" $
         record [
           "bindings">: list $ ast "Pattern",
           "inner">: ast "Expression"],
 
-      def "Expression.Let" $
+      def "LetExpression" $
         doc "A 'let' expression" $
         record [
           "bindings">: list $ ast "LocalBinding",
           "inner">: ast "Expression"],
 
-      def "Expression.PrefixApplication" $
+      def "PrefixApplicationExpression" $
         doc "A prefix expression" $
         record [
           "operator">: ast "Operator",
           "rhs">: ast "Expression"],
 
-      def "Expression.Section" $
+      def "SectionExpression" $
         doc "A section expression" $
         record [
           "operator">: ast "Operator",
           "expression">: ast "Expression"],
 
-      def "Expression.TypeSignature" $
+      def "TypeSignatureExpression" $
         doc "A type signature expression" $
         record [
           "inner">: ast "Expression",
           "type">: ast "Type"],
 
-      def "Expression.UpdateRecord" $
+      def "UpdateRecordExpression" $
         doc "An update record expression" $
         record [
           "inner">: ast "Expression",
@@ -240,9 +240,9 @@ haskellAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "qualified">: boolean,
           "module">: ast "ModuleName",
           "as">: optional $ ast "ModuleName",
-          "spec">: optional $ ast "Import.Spec"],
+          "spec">: optional $ ast "SpecImport"],
 
-      def "Import.Spec" $
+      def "SpecImport" $
         doc "An import specification" $
         union [
           "list">: list $ ast "ImportExportSpec",
@@ -257,9 +257,9 @@ haskellAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
         record [
           "modifier">: optional $ ast "ImportModifier",
           "name">: ast "Name",
-          "subspec">: optional $ ast "ImportExportSpec.Subspec"],
+          "subspec">: optional $ ast "SubspecImportExportSpec"],
 
-      def "ImportExportSpec.Subspec" $
+      def "SubspecImportExportSpec" $
         union [
           "all">: unit,
           "list">: list $ ast "Name"],
@@ -318,33 +318,33 @@ haskellAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "Pattern" $ -- UPattern
         -- omitted for now: unboxed tuples, parallel arrays, irrefutable, bang, view, splice, quasiquote, plusk, unboxed sum
         union [
-          "application">: ast "Pattern.Application",
-          "as">: ast "Pattern.As",
+          "application">: ast "ApplicationPattern",
+          "as">: ast "AsPattern",
           "list">: list $ ast "Pattern",
           "literal">: ast "Literal",
           "name">: ast "Name",
           "parens">: ast "Pattern",
-          "record">: ast "Pattern.Record",
+          "record">: ast "RecordPattern",
           "tuple">: list $ ast "Pattern",
-          "typed">: ast "Pattern.Typed",
+          "typed">: ast "TypedPattern",
           "wildcard">: unit],
 
-      def "Pattern.Application" $
+      def "ApplicationPattern" $
         record [
           "name">: ast "Name",
           "args">: list $ ast "Pattern"],
 
-      def "Pattern.As" $
+      def "AsPattern" $
         record [
           "name">: ast "Name",
           "inner">: ast "Pattern"],
 
-      def "Pattern.Record" $
+      def "RecordPattern" $
         record [
           "name">: ast "Name",
           "fields">: list $ ast "PatternField"],
 
-      def "Pattern.Typed" $
+      def "TypedPattern" $
         record [
           "inner">: ast "Pattern",
           "type">: ast "Type"],
@@ -371,31 +371,31 @@ haskellAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
         -- omitted for now: forall, unboxed tuple, parallel array, kinded, promoted, splice, quasiquote, bang,
         --                  lazy, unpack, nounpack, wildcard, named wildcard, sum
         union [
-          "application">: ast "Type.Application",
-          "ctx">: ast "Type.Context",
-          "function">: ast "Type.Function",
-          "infix">: ast "Type.Infix",
+          "application">: ast "ApplicationType",
+          "ctx">: ast "ContextType",
+          "function">: ast "FunctionType",
+          "infix">: ast "InfixType",
           "list">: ast "Type",
           "parens">: ast "Type",
           "tuple">: list $ ast "Type",
           "variable">: ast "Name"],
 
-      def "Type.Application" $
+      def "ApplicationType" $
         record [
           "context">: ast "Type",
           "argument">: ast "Type"],
 
-      def "Type.Context" $
+      def "ContextType" $
         record [
           "ctx">: ast "Assertion", -- UContext
           "type">: ast "Type"],
 
-      def "Type.Function" $
+      def "FunctionType" $
         record [
           "domain">: ast "Type",
           "codomain">: ast "Type"],
 
-      def "Type.Infix" $
+      def "InfixType" $
         record [
           "lhs">: ast "Type",
           "operator">: ast "Operator",
@@ -419,9 +419,9 @@ haskellAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "ValueBinding" $ -- UValueBind
         -- omitted for now: funBind
         union [
-          "simple">: ast "ValueBinding.Simple"],
+          "simple">: ast "SimpleValueBinding"],
 
-      def "ValueBinding.Simple" $
+      def "SimpleValueBinding" $
         record [
           "pattern">: ast "Pattern",
           "rhs">: ast "RightHandSide",

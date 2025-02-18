@@ -112,4 +112,4 @@ grammarToModule ns (G.Grammar prods) desc = Module ns elements [hydraCoreModule]
           where
             cpairs = makeElements False (childName lname n) p
 
-    childName lname n = lname ++ "." ++ capitalize n
+    childName lname n = lname ++ "_" ++ capitalize n

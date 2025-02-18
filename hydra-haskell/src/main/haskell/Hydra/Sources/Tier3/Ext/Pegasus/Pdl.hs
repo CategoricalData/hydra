@@ -42,10 +42,10 @@ pegasusPdlModule = Module ns elements [jsonModelModule] [hydraCoreModule] $
       def "NamedSchema" $
         record [
           "qualifiedName">: pdl "QualifiedName",
-          "type">: pdl "NamedSchema.Type",
+          "type">: pdl "NamedSchemaType",
           "annotations">: pdl "Annotations"],
 
-      def "NamedSchema.Type" $
+      def "NamedSchemaType" $
         union [
           "record">: pdl "RecordSchema",
           "enum">: pdl "EnumSchema",

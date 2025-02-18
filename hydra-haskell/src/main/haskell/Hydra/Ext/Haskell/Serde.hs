@@ -27,18 +27,18 @@ instance ToTree H.Assertion where
     H.AssertionClass cls -> toTree cls
     H.AssertionTuple serts -> parenList False (toTree <$> serts)
 
-instance ToTree H.Assertion_Class where
-  toTree (H.Assertion_Class name types) = spaceSep [toTree name, commaSep halfBlockStyle (toTree <$> types)]
+instance ToTree H.ClassAssertion where
+  toTree (H.ClassAssertion name types) = spaceSep [toTree name, commaSep halfBlockStyle (toTree <$> types)]
 
 instance ToTree H.CaseRhs where
   toTree (H.CaseRhs expr) = toTree expr
 
 instance ToTree H.Constructor where
   toTree cons = case cons of
-    H.ConstructorOrdinary (H.Constructor_Ordinary name types) -> spaceSep [
+    H.ConstructorOrdinary (H.OrdinaryConstructor name types) -> spaceSep [
       toTree name,
       spaceSep (toTree <$> types)]
-    H.ConstructorRecord (H.Constructor_Record name fields) -> spaceSep [
+    H.ConstructorRecord (H.RecordConstructor name fields) -> spaceSep [
       toTree name,
       curlyBracesList Nothing halfBlockStyle (toTree <$> fields)]
 
@@ -47,10 +47,10 @@ instance ToTree H.ConstructorWithComments where
     Nothing -> toTree body
     Just c -> newlineSep [cst $ toHaskellComments c, toTree body]
 
-instance ToTree H.DataDeclaration_Keyword where
+instance ToTree H.DataOrNewtype where
   toTree kw = case kw of
-    H.DataDeclaration_KeywordData -> cst "data"
-    H.DataDeclaration_KeywordNewtype -> cst "newtype"
+    H.DataOrNewtypeData -> cst "data"
+    H.DataOrNewtypeNewtype -> cst "newtype"
 
 instance ToTree H.Declaration where
   toTree decl = case decl of
@@ -70,7 +70,7 @@ instance ToTree H.Declaration where
 
 instance ToTree H.DeclarationHead where
   toTree hd = case hd of
-    H.DeclarationHeadApplication (H.DeclarationHead_Application fun op) -> spaceSep [toTree fun, toTree op]
+    H.DeclarationHeadApplication (H.ApplicationDeclarationHead fun op) -> spaceSep [toTree fun, toTree op]
 --    H.DeclarationHeadParens ... ->
     H.DeclarationHeadSimple name -> toTree name
 
@@ -86,12 +86,12 @@ instance ToTree H.Expression where
       H.ExpressionConstructRecord r -> toTree r
       H.ExpressionDo statements -> indentBlock $ [cst "do"] ++ (toTree <$> statements)
       H.ExpressionIf ifte -> toTree ifte
-    --  H.ExpressionInfixApplication Term_InfixApplication
+    --  H.ExpressionInfixApplication InfixApplicationTerm
       H.ExpressionLiteral lit -> toTree lit
       -- Note: the need for extra parens may point to an operator precedence issue
       H.ExpressionLambda lam -> parenthesize $ toTree lam
-    --  H.ExpressionLeftSection Term_Section
-      H.ExpressionLet (H.Expression_Let bindings inner) -> indentBlock [
+    --  H.ExpressionLeftSection SectionTerm
+      H.ExpressionLet (H.LetExpression bindings inner) -> indentBlock [
           cst "",
           spaceSep [cst "let", customIndentBlock "    " (encodeBinding <$> bindings)],
           spaceSep [cst "in", toTree inner]]
@@ -100,37 +100,37 @@ instance ToTree H.Expression where
           encodeBinding = indentSubsequentLines "      " . toTree
       H.ExpressionList exprs -> bracketList halfBlockStyle $ toTree <$> exprs
       H.ExpressionParens expr' -> parenthesize $ toTree expr'
-    --  H.ExpressionPrefixApplication Term_PrefixApplication
-    --  H.ExpressionRightSection Term_Section
+    --  H.ExpressionPrefixApplication PrefixApplicationTerm
+    --  H.ExpressionRightSection SectionTerm
       H.ExpressionTuple exprs -> parenList False $ toTree <$> exprs
-    --  H.ExpressionTypeSignature Term_TypeSignature
-    --  H.ExpressionUpdateRecord Term_UpdateRecord
+    --  H.ExpressionTypeSignature TypeSignatureTerm
+    --  H.ExpressionUpdateRecord UpdateRecordTerm
       H.ExpressionVariable name -> toTree name
 
-instance ToTree H.Expression_Application where
-  toTree (H.Expression_Application fun arg) = ifx appOp (toTree fun) (toTree arg)
+instance ToTree H.ApplicationExpression where
+  toTree (H.ApplicationExpression fun arg) = ifx appOp (toTree fun) (toTree arg)
 
-instance ToTree H.Expression_Case where
-  toTree (H.Expression_Case cs alts) = ifx ofOp lhs rhs
+instance ToTree H.CaseExpression where
+  toTree (H.CaseExpression cs alts) = ifx ofOp lhs rhs
     where
       lhs = spaceSep [cst "case", toTree cs]
       rhs = newlineSep (toTree <$> alts)
       ofOp = Op (Symbol "of") (Padding WsSpace $ WsBreakAndIndent "  ") (Precedence 0) AssociativityNone
 
-instance ToTree H.Expression_ConstructRecord where
-  toTree (H.Expression_ConstructRecord name updates) = spaceSep [toTree name, brackets curlyBraces halfBlockStyle body]
+instance ToTree H.ConstructRecordExpression where
+  toTree (H.ConstructRecordExpression name updates) = spaceSep [toTree name, brackets curlyBraces halfBlockStyle body]
     where
       body = commaSep halfBlockStyle (fromUpdate <$> updates)
       fromUpdate (H.FieldUpdate fn val) = ifx defineOp (toTree fn) (toTree val)
 
-instance ToTree H.Expression_If where
-  toTree (H.Expression_If eif ethen eelse) = ifx ifOp (spaceSep [cst "if", toTree eif]) body
+instance ToTree H.IfExpression where
+  toTree (H.IfExpression eif ethen eelse) = ifx ifOp (spaceSep [cst "if", toTree eif]) body
     where
       ifOp = Op (Symbol "") (Padding WsNone $ WsBreakAndIndent "  ") (Precedence 0) AssociativityNone
       body = newlineSep [spaceSep [cst "then", toTree ethen], spaceSep [cst "else", toTree eelse]]
 
-instance ToTree H.Expression_Lambda where
-  toTree (H.Expression_Lambda bindings inner) = ifx lambdaOp (prefix "\\" head) body
+instance ToTree H.LambdaExpression where
+  toTree (H.LambdaExpression bindings inner) = ifx lambdaOp (prefix "\\" head) body
     where
       head = spaceSep (toTree <$> bindings)
       body = toTree inner
@@ -188,18 +188,18 @@ instance ToTree H.ModuleHead where
 instance ToTree H.Pattern where
   toTree pat = case pat of
       H.PatternApplication app -> toTree app
---      H.PatternAs (H.Pattern_As ) ->
+--      H.PatternAs (H.AsPattern ) ->
       H.PatternList pats -> bracketList halfBlockStyle $ toTree <$> pats
       H.PatternLiteral lit -> toTree lit
       H.PatternName name -> toTree name
       H.PatternParens pat -> parenthesize $ toTree pat
---      H.PatternRecord (H.Pattern_Record ) ->
+--      H.PatternRecord (H.RecordPattern ) ->
       H.PatternTuple pats -> parenList False $ toTree <$> pats
---      H.PatternTyped (H.Pattern_Typed ) ->
+--      H.PatternTyped (H.TypedPattern ) ->
       H.PatternWildcard -> cst "_"
 
-instance ToTree H.Pattern_Application where
-  toTree (H.Pattern_Application name pats) = spaceSep $ toTree name:(toTree <$> pats)
+instance ToTree H.ApplicationPattern where
+  toTree (H.ApplicationPattern name pats) = spaceSep $ toTree name:(toTree <$> pats)
 
 instance ToTree H.RightHandSide where
   toTree (H.RightHandSide expr) = toTree expr
@@ -209,10 +209,10 @@ instance ToTree H.Statement where
 
 instance ToTree H.Type where
   toTree htype = case htype of
-    H.TypeApplication (H.Type_Application lhs rhs) -> ifx appOp (toTree lhs) (toTree rhs)
-    H.TypeCtx (H.Type_Context ctx typ) -> ifx assertOp (toTree ctx) (toTree typ)
-    H.TypeFunction (H.Type_Function dom cod) -> ifx arrowOp (toTree dom) (toTree cod)
---  H.TypeInfix Type_Infix
+    H.TypeApplication (H.ApplicationType lhs rhs) -> ifx appOp (toTree lhs) (toTree rhs)
+    H.TypeCtx (H.ContextType ctx typ) -> ifx assertOp (toTree ctx) (toTree typ)
+    H.TypeFunction (H.FunctionType dom cod) -> ifx arrowOp (toTree dom) (toTree cod)
+--  H.TypeInfix InfixType
     H.TypeList htype -> bracketList inlineStyle [toTree htype]
 --  H.TypeParens Type
     H.TypeTuple types -> parenList False $ toTree <$> types
@@ -223,7 +223,7 @@ instance ToTree H.TypeSignature where
 
 instance ToTree H.ValueBinding where
   toTree vb = case vb of
-    H.ValueBindingSimple (H.ValueBinding_Simple pat rhs local) -> case local of
+    H.ValueBindingSimple (H.SimpleValueBinding pat rhs local) -> case local of
         Nothing -> body
         Just (H.LocalBindings bindings) -> indentBlock [body, indentBlock $ [cst "where"] ++ (toTree <$> bindings)]
       where
