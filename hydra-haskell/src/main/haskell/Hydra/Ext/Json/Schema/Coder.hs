@@ -60,11 +60,11 @@ constructModule opts mod coders pairs = M.fromList <$> CM.mapM toDocument pairs
       g <- getState
       atyp <- adapterTarget <$> (withState (AdapterContext g jsonSchemaLanguage M.empty) $ termAdapter typ)
       schema <- JS.Schema <$> encodeNamedType name atyp
-      return (JS.Keyword $ encodeName $ Name $ localNameOfEager name, schema)
+      return (JS.Keyword $ encodeName $ Name $ localNameOf name, schema)
 
     nameToPath name = namespaceToFilePath CaseConventionCamel (FileExtension "json") (Namespace $ nsPart ++ local)
       where
-        (QualifiedName mns local) = qualifyNameLazy name
+        (QualifiedName mns local) = qualifyName name
         nsPart = case mns of
           Nothing -> ""
           Just (Namespace ns) -> ns ++ "/"

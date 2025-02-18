@@ -246,7 +246,7 @@ encodeName env name = case M.lookup name (snd $ pythonEnvironmentBoundTypeVariab
       else Py.Name $ L.intercalate "." $ Strings.splitOn "/" $ unName name
   where
     focusNs = fst $ namespacesFocus $ pythonEnvironmentNamespaces env
-    QualifiedName ns local = qualifyNameEager name
+    QualifiedName ns local = qualifyName name
 
 encodeNamespace :: Namespace -> Py.DottedName
 encodeNamespace ns = Py.DottedName (Py.Name <$> (Strings.splitOn "/" $ unNamespace ns))
@@ -259,7 +259,7 @@ encodeRecordType env name (RowType _ tfields) comment = do
       Py.ClassDefinition (Just decs) (Py.Name lname) [] args body
   where
     (tparamList, tparamMap) = pythonEnvironmentBoundTypeVariables env
-    lname = localNameOfEager name
+    lname = localNameOf name
     args = fmap (\a -> pyExpressionsToPyArgs [a]) $ genericArg tparamList
     decs = Py.Decorators [pyNameToPyNamedExpression $ Py.Name "dataclass"]
 
@@ -302,7 +302,7 @@ encodeTermAssignment env name term _ comment = case fullyStripTerm term of
   _ -> do
     g <- getState
     expr <- encodeTerm env $ expandLambdas g term
-    return [annotatedStatement comment $ assignmentStatement (Py.Name $ localNameOfEager name) expr]
+    return [annotatedStatement comment $ assignmentStatement (Py.Name $ localNameOf name) expr]
 
 encodeType :: PythonEnvironment -> Type -> Flow Graph Py.Expression
 encodeType env typ = case stripType typ of
@@ -338,11 +338,11 @@ encodeTypeAssignment env name typ comment = encode env typ
           newEnv = env {pythonEnvironmentBoundTypeVariables = (tparamList ++ [var], M.insert var (encodeTypeVariable var) tparamMap)}
       TypeRecord rt -> single <$> encodeRecordType env name rt comment
       TypeUnion rt -> encodeUnionType env name rt comment
---      TypeWrap (WrappedType _ t) -> (single . newtypeStatement (Py.Name $ localNameOfEager name) comment) <$> encodeType env t
+--      TypeWrap (WrappedType _ t) -> (single . newtypeStatement (Py.Name $ localNameOf name) comment) <$> encodeType env t
       TypeWrap (WrappedType _ t) -> single <$> encodeWrappedType env name t comment
       t -> singleTypedef env <$> encodeType env t
     single st = [st]
-    singleTypedef env e = single $ typeAliasStatement (Py.Name $ sanitizePythonName $ localNameOfEager name) tparams comment e
+    singleTypedef env e = single $ typeAliasStatement (Py.Name $ sanitizePythonName $ localNameOf name) tparams comment e
       where
         tparams = environmentTypeParameters env
 
@@ -399,7 +399,7 @@ encodeUnionType env name rt@(RowType _ tfields) comment = if isEnumType rt then 
                 tparams = fieldParams ftype
                 namePrim = pyNameToPyPrimary $ variantName False env name fname
         fieldParams ftype = encodeTypeVariable <$> findTypeParams env ftype
-    lname = localNameOfEager name
+    lname = localNameOf name
 
 encodeWrappedType :: PythonEnvironment -> Name -> Type -> Maybe String -> Flow Graph Py.Statement
 encodeWrappedType env name typ comment = do
@@ -414,7 +414,7 @@ encodeWrappedType env name typ comment = do
         body
   where
     (tparamList, tparamMap) = pythonEnvironmentBoundTypeVariables env
-    lname = localNameOfEager name
+    lname = localNameOf name
 
 environmentTypeParameters :: PythonEnvironment -> [Py.TypeParameter]
 environmentTypeParameters env = pyNameToPyTypeParameter . encodeTypeVariable <$> (fst $ pythonEnvironmentBoundTypeVariables env)
@@ -506,5 +506,5 @@ variantName qual env tname fname = if qual
     then encodeName env $ unqualifyName $ QualifiedName mns vname
     else Py.Name vname
   where
-    (QualifiedName mns local) = qualifyNameEager tname
+    (QualifiedName mns local) = qualifyName tname
     vname = sanitizePythonName $ local ++ (capitalize $ unName fname)

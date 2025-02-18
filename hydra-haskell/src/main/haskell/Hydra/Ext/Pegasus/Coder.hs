@@ -173,7 +173,7 @@ pdlNameForElement aliases withNs name = PDL.QualifiedName (PDL.Name local)
       then PDL.Namespace <$> alias
       else Nothing
   where
-    QualifiedName (Just ns) local = qualifyNameEager name
+    QualifiedName (Just ns) local = qualifyName name
     alias = M.lookup ns aliases
 
 pdlNameForModule :: Module -> PDL.Namespace

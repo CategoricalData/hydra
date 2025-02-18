@@ -141,7 +141,7 @@ encodeEnumDefinition options (RowType tname fields) = do
 encodeEnumValueName :: Name -> Name -> P3.EnumValueName
 encodeEnumValueName tname fname = P3.EnumValueName (prefix ++ "_" ++ suffix)
   where
-    prefix = nonAlnumToUnderscores $ convertCaseCamelToUpperSnake $ localNameOfEager tname
+    prefix = nonAlnumToUnderscores $ convertCaseCamelToUpperSnake $ localNameOf tname
     suffix = nonAlnumToUnderscores $ convertCaseCamelToUpperSnake $ unName fname
 
 encodeFieldName :: Bool -> Name -> P3.FieldName
@@ -234,7 +234,7 @@ encodeScalarTypeWrapped lt = toType <$> case lt of
     toType label = P3.SimpleTypeReference $ P3.TypeName $ "google.protobuf." ++ label ++ "Value"
 
 encodeTypeName :: Name -> P3.TypeName
-encodeTypeName = P3.TypeName . localNameOfEager
+encodeTypeName = P3.TypeName . localNameOf
 
 encodeTypeReference :: Namespace -> Name -> P3.TypeName
 encodeTypeReference localNs name = P3.TypeName $ if nsParts == Just localNsParts
@@ -243,7 +243,7 @@ encodeTypeReference localNs name = P3.TypeName $ if nsParts == Just localNsParts
       Nothing -> local
       Just parts -> L.intercalate "." (parts ++ [local])
   where
-    QualifiedName ns local = qualifyNameEager name
+    QualifiedName ns local = qualifyName name
     nsParts = fmap (\n -> L.init $ Strings.splitOn "/" $ unNamespace n) ns
     localNsParts = L.init $ Strings.splitOn "/" $ unNamespace localNs
 

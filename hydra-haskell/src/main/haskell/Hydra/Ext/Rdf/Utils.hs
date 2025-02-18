@@ -69,7 +69,7 @@ nextBlankNode = do
 propertyIri :: Name -> Name -> Rdf.Iri
 propertyIri rname fname = Rdf.Iri $ "urn:" ++ unNamespace gname ++ "#" ++ decapitalize local ++ capitalize (unName fname)
   where
-    QualifiedName (Just gname) local = qualifyNameLazy rname
+    QualifiedName (Just gname) local = qualifyName rname
 
 rdfIri :: String -> Rdf.Iri
 rdfIri = iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#"

@@ -38,35 +38,22 @@ hydraQnamesModule = Module (Namespace "hydra/qnames") elements [] [hydraMantleMo
     Just ("Functions for working with qualified names.")
   where
    elements = [
-     el localNameOfEagerDef,
-     el localNameOfLazyDef,
-     el namespaceOfEagerDef,
-     el namespaceOfLazyDef,
+     el localNameOfDef,
+     el namespaceOfDef,
      el namespaceToFilePathDef,
      el qnameDef,
-     el qualifyNameEagerDef,
-     el qualifyNameLazyDef,
+     el qualifyNameDef,
      el unqualifyNameDef]
 
-localNameOfEagerDef :: TElement (Name -> String)
-localNameOfEagerDef = qnamesDefinition "localNameOfEager" $
+localNameOfDef :: TElement (Name -> String)
+localNameOfDef = qnamesDefinition "localNameOf" $
   function nameT tString $
-  Module.qualifiedNameLocal <.> ref qualifyNameEagerDef
+  Module.qualifiedNameLocal <.> ref qualifyNameDef
 
-localNameOfLazyDef :: TElement (Name -> String)
-localNameOfLazyDef = qnamesDefinition "localNameOfLazy" $
-  function nameT tString $
-  Module.qualifiedNameLocal <.> ref qualifyNameLazyDef
-
-namespaceOfEagerDef :: TElement (Name -> Maybe Namespace)
-namespaceOfEagerDef = qnamesDefinition "namespaceOfEager" $
+namespaceOfDef :: TElement (Name -> Maybe Namespace)
+namespaceOfDef = qnamesDefinition "namespaceOf" $
   function nameT (tOpt namespaceT) $
-  Module.qualifiedNameNamespace <.> ref qualifyNameEagerDef
-
-namespaceOfLazyDef :: TElement (Name -> Maybe Namespace)
-namespaceOfLazyDef = qnamesDefinition "namespaceOfLazy" $
-  function nameT (tOpt namespaceT) $
-  Module.qualifiedNameNamespace <.> ref qualifyNameLazyDef
+  Module.qualifiedNameNamespace <.> ref qualifyNameDef
 
 namespaceToFilePathDef :: TElement (CaseConvention -> FileExtension -> Namespace -> String)
 namespaceToFilePathDef = qnamesDefinition "namespaceToFilePath" $
@@ -87,20 +74,8 @@ qnameDef = qnamesDefinition "qname" $
       apply Strings.cat $
         list [apply (unwrap _Namespace) (var "ns"), string ".", var "name"]
 
-qualifyNameEagerDef :: TElement (Name -> QualifiedName)
-qualifyNameEagerDef = qnamesDefinition "qualifyNameEager" $
-  function nameT qualifiedNameT $
-  lambda "name" $ ((Logic.ifElse
-      @@ Module.qualifiedName nothing (Core.unName @@ var "name")
-      @@ Module.qualifiedName
-        (just $ wrap _Namespace (Lists.head @@ var "parts"))
-        (Strings.intercalate @@ "." @@ (Lists.tail @@ var "parts"))
-      @@ (Equality.equalInt32 @@ int32 1 @@ (Lists.length @@ var "parts")))
-    `with` [
-      "parts">: Strings.splitOn @@ "." @@ (Core.unName @@ var "name")])
-
-qualifyNameLazyDef :: TElement (Name -> QualifiedName)
-qualifyNameLazyDef = qnamesDefinition "qualifyNameLazy" $
+qualifyNameDef :: TElement (Name -> QualifiedName)
+qualifyNameDef = qnamesDefinition "qualifyName" $
   function nameT qualifiedNameT $
   lambda "name" $ (Logic.ifElse
       @@ Module.qualifiedName nothing (Core.unName @@ var "name")

@@ -166,7 +166,7 @@ constructModule mod coders pairs = do
         el = fst pair
         typ = typedTermType $ snd pair
         tparams = javaTypeParametersForType typ
-        mname = sanitizeJavaName $ decapitalize $ localNameOfEager $ elementName el
+        mname = sanitizeJavaName $ decapitalize $ localNameOf $ elementName el
 
         termToConstant coders el term = do
           jtype <- Java.UnannType <$> adaptTypeToJavaAndEncode aliases typ
@@ -249,7 +249,7 @@ declarationForRecordType isInner isSer aliases tparams elName fields = do
         methodName = "with" ++ nonAlnumToUnderscores (capitalize (unName $ fieldTypeName field))
         nullCheck = fieldToNullCheckStatement field
         result = referenceTypeToResult $ nameToJavaReferenceType aliases False [] elName Nothing
-        consId = Java.Identifier $ sanitizeJavaName $ localNameOfEager elName
+        consId = Java.Identifier $ sanitizeJavaName $ localNameOf elName
         returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just $
           javaConstructorCall (javaConstructorName consId Nothing) fieldArgs Nothing
 
@@ -424,12 +424,12 @@ elementJavaIdentifier isPrim isMethod aliases name = Java.Identifier $ if isPrim
   where
     sep = if isMethod then "::" else "."
     qualify s = Java.unIdentifier $ nameToJavaName aliases $ unqualifyName $ QualifiedName ns s
-    QualifiedName ns local = qualifyNameEager name
+    QualifiedName ns local = qualifyName name
 
 elementNameToFilePath :: Name -> FilePath
 elementNameToFilePath name = nameToFilePath CaseConventionCamel (FileExtension "java") $ unqualifyName $ QualifiedName ns (sanitizeJavaName local)
   where
-    QualifiedName ns local = qualifyNameEager name
+    QualifiedName ns local = qualifyName name
 
 elementsClassName :: Namespace -> String
 elementsClassName (Namespace ns) = capitalize $ L.last $ LS.splitOn "/" ns
@@ -856,7 +856,7 @@ isLambdaBoundVariable :: Name -> Bool
 isLambdaBoundVariable (Name v) = L.length v <= 4
 
 isLocalVariable :: Name -> Bool
-isLocalVariable name = Y.isNothing $ qualifiedNameNamespace $ qualifyNameEager name
+isLocalVariable name = Y.isNothing $ qualifiedNameNamespace $ qualifyName name
 
 isRecursiveVariable :: Aliases -> Name -> Bool
 isRecursiveVariable aliases name = S.member name (aliasesRecursiveVars aliases)
