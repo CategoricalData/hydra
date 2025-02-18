@@ -280,7 +280,7 @@ data BooleanTerm_And =
     booleanTerm_AndRhs :: BooleanFactor}
   deriving (Eq, Ord, Read, Show)
 
-_BooleanTerm_And = (Core.Name "hydra/ext/org/ansi/sql/syntax.BooleanTerm.And")
+_BooleanTerm_And = (Core.Name "hydra/ext/org/ansi/sql/syntax.BooleanTerm_And")
 
 _BooleanTerm_And_lhs = (Core.Name "lhs")
 
@@ -304,7 +304,7 @@ data BooleanTest_Sequence_Option =
     booleanTest_Sequence_OptionTruthValue :: TruthValue}
   deriving (Eq, Ord, Read, Show)
 
-_BooleanTest_Sequence_Option = (Core.Name "hydra/ext/org/ansi/sql/syntax.BooleanTest.Sequence.Option")
+_BooleanTest_Sequence_Option = (Core.Name "hydra/ext/org/ansi/sql/syntax.BooleanTest_Sequence_Option")
 
 _BooleanTest_Sequence_Option_nOT = (Core.Name "nOT")
 
@@ -333,7 +333,7 @@ data BooleanValueExpression_Or =
     booleanValueExpression_OrRhs :: BooleanTerm}
   deriving (Eq, Ord, Read, Show)
 
-_BooleanValueExpression_Or = (Core.Name "hydra/ext/org/ansi/sql/syntax.BooleanValueExpression.Or")
+_BooleanValueExpression_Or = (Core.Name "hydra/ext/org/ansi/sql/syntax.BooleanValueExpression_Or")
 
 _BooleanValueExpression_Or_lhs = (Core.Name "lhs")
 
@@ -460,7 +460,7 @@ data ColumnDefinition_TypeOrDomain_Option =
   ColumnDefinition_TypeOrDomain_OptionDomainName DomainName
   deriving (Eq, Ord, Read, Show)
 
-_ColumnDefinition_TypeOrDomain_Option = (Core.Name "hydra/ext/org/ansi/sql/syntax.ColumnDefinition.TypeOrDomain.Option")
+_ColumnDefinition_TypeOrDomain_Option = (Core.Name "hydra/ext/org/ansi/sql/syntax.ColumnDefinition_TypeOrDomain_Option")
 
 _ColumnDefinition_TypeOrDomain_Option_dataType = (Core.Name "dataType")
 
@@ -472,7 +472,7 @@ data ColumnDefinition_DefaultOrIdentityOrGeneration_Option =
   ColumnDefinition_DefaultOrIdentityOrGeneration_OptionGenerationClause GenerationClause
   deriving (Eq, Ord, Read, Show)
 
-_ColumnDefinition_DefaultOrIdentityOrGeneration_Option = (Core.Name "hydra/ext/org/ansi/sql/syntax.ColumnDefinition.DefaultOrIdentityOrGeneration.Option")
+_ColumnDefinition_DefaultOrIdentityOrGeneration_Option = (Core.Name "hydra/ext/org/ansi/sql/syntax.ColumnDefinition_DefaultOrIdentityOrGeneration_Option")
 
 _ColumnDefinition_DefaultOrIdentityOrGeneration_Option_defaultClause = (Core.Name "defaultClause")
 
@@ -657,7 +657,7 @@ data ExactNumericType_Numeric_Option =
     exactNumericType_Numeric_OptionSequence :: (Maybe Scale)}
   deriving (Eq, Ord, Read, Show)
 
-_ExactNumericType_Numeric_Option = (Core.Name "hydra/ext/org/ansi/sql/syntax.ExactNumericType.Numeric.Option")
+_ExactNumericType_Numeric_Option = (Core.Name "hydra/ext/org/ansi/sql/syntax.ExactNumericType_Numeric_Option")
 
 _ExactNumericType_Numeric_Option_precision = (Core.Name "precision")
 
@@ -669,7 +669,7 @@ data ExactNumericType_Decimal_Option =
     exactNumericType_Decimal_OptionSequence :: (Maybe Scale)}
   deriving (Eq, Ord, Read, Show)
 
-_ExactNumericType_Decimal_Option = (Core.Name "hydra/ext/org/ansi/sql/syntax.ExactNumericType.Decimal.Option")
+_ExactNumericType_Decimal_Option = (Core.Name "hydra/ext/org/ansi/sql/syntax.ExactNumericType_Decimal_Option")
 
 _ExactNumericType_Decimal_Option_precision = (Core.Name "precision")
 
@@ -681,7 +681,7 @@ data ExactNumericType_Dec_Option =
     exactNumericType_Dec_OptionSequence :: (Maybe Scale)}
   deriving (Eq, Ord, Read, Show)
 
-_ExactNumericType_Dec_Option = (Core.Name "hydra/ext/org/ansi/sql/syntax.ExactNumericType.Dec.Option")
+_ExactNumericType_Dec_Option = (Core.Name "hydra/ext/org/ansi/sql/syntax.ExactNumericType_Dec_Option")
 
 _ExactNumericType_Dec_Option_precision = (Core.Name "precision")
 
@@ -976,7 +976,7 @@ data PredefinedType_String =
     predefinedType_StringCollate :: (Maybe CollateClause)}
   deriving (Eq, Ord, Read, Show)
 
-_PredefinedType_String = (Core.Name "hydra/ext/org/ansi/sql/syntax.PredefinedType.String")
+_PredefinedType_String = (Core.Name "hydra/ext/org/ansi/sql/syntax.PredefinedType_String")
 
 _PredefinedType_String_type = (Core.Name "type")
 
@@ -990,7 +990,7 @@ data PredefinedType_NationalString =
     predefinedType_NationalStringCollate :: (Maybe CollateClause)}
   deriving (Eq, Ord, Read, Show)
 
-_PredefinedType_NationalString = (Core.Name "hydra/ext/org/ansi/sql/syntax.PredefinedType.NationalString")
+_PredefinedType_NationalString = (Core.Name "hydra/ext/org/ansi/sql/syntax.PredefinedType_NationalString")
 
 _PredefinedType_NationalString_type = (Core.Name "type")
 
@@ -1215,7 +1215,7 @@ data TableContentsSource_Subtable =
     tableContentsSource_SubtableElements :: (Maybe TableElementList)}
   deriving (Eq, Ord, Read, Show)
 
-_TableContentsSource_Subtable = (Core.Name "hydra/ext/org/ansi/sql/syntax.TableContentsSource.Subtable")
+_TableContentsSource_Subtable = (Core.Name "hydra/ext/org/ansi/sql/syntax.TableContentsSource_Subtable")
 
 _TableContentsSource_Subtable_type = (Core.Name "type")
 

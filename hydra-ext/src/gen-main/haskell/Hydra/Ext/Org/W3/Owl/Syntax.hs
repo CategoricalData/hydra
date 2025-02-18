@@ -342,7 +342,7 @@ data DatatypeRestriction_Constraint =
     datatypeRestriction_ConstraintRestrictionValue :: Syntax.Literal}
   deriving (Eq, Ord, Read, Show)
 
-_DatatypeRestriction_Constraint = (Core.Name "hydra/ext/org/w3/owl/syntax.DatatypeRestriction.Constraint")
+_DatatypeRestriction_Constraint = (Core.Name "hydra/ext/org/w3/owl/syntax.DatatypeRestriction_Constraint")
 
 _DatatypeRestriction_Constraint_constrainingFacet = (Core.Name "constrainingFacet")
 
@@ -354,7 +354,7 @@ data DatatypeRestriction_ConstrainingFacet =
   DatatypeRestriction_ConstrainingFacetOther Syntax.Iri
   deriving (Eq, Ord, Read, Show)
 
-_DatatypeRestriction_ConstrainingFacet = (Core.Name "hydra/ext/org/w3/owl/syntax.DatatypeRestriction.ConstrainingFacet")
+_DatatypeRestriction_ConstrainingFacet = (Core.Name "hydra/ext/org/w3/owl/syntax.DatatypeRestriction_ConstrainingFacet")
 
 _DatatypeRestriction_ConstrainingFacet_xmlSchema = (Core.Name "xmlSchema")
 

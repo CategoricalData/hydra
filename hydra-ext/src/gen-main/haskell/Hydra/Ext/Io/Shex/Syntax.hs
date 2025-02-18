@@ -30,7 +30,7 @@ data ShexDoc_Sequence_Option =
     shexDoc_Sequence_OptionListOfStatement :: [Statement]}
   deriving (Eq, Ord, Read, Show)
 
-_ShexDoc_Sequence_Option = (Core.Name "hydra/ext/io/shex/syntax.ShexDoc.Sequence.Option")
+_ShexDoc_Sequence_Option = (Core.Name "hydra/ext/io/shex/syntax.ShexDoc_Sequence_Option")
 
 _ShexDoc_Sequence_Option_alts = (Core.Name "alts")
 
@@ -41,7 +41,7 @@ data ShexDoc_Sequence_Option_Alts =
   ShexDoc_Sequence_Option_AltsStartActions StartActions
   deriving (Eq, Ord, Read, Show)
 
-_ShexDoc_Sequence_Option_Alts = (Core.Name "hydra/ext/io/shex/syntax.ShexDoc.Sequence.Option.Alts")
+_ShexDoc_Sequence_Option_Alts = (Core.Name "hydra/ext/io/shex/syntax.ShexDoc_Sequence_Option_Alts")
 
 _ShexDoc_Sequence_Option_Alts_notStartAction = (Core.Name "notStartAction")
 
@@ -94,7 +94,7 @@ data NotStartAction_ShapeExprDecl =
     notStartAction_ShapeExprDeclAlts :: NotStartAction_ShapeExprDecl_Alts}
   deriving (Eq, Ord, Read, Show)
 
-_NotStartAction_ShapeExprDecl = (Core.Name "hydra/ext/io/shex/syntax.NotStartAction.ShapeExprDecl")
+_NotStartAction_ShapeExprDecl = (Core.Name "hydra/ext/io/shex/syntax.NotStartAction_ShapeExprDecl")
 
 _NotStartAction_ShapeExprDecl_shapeExprLabel = (Core.Name "shapeExprLabel")
 
@@ -105,7 +105,7 @@ data NotStartAction_ShapeExprDecl_Alts =
   NotStartAction_ShapeExprDecl_AltsEXTERNAL 
   deriving (Eq, Ord, Read, Show)
 
-_NotStartAction_ShapeExprDecl_Alts = (Core.Name "hydra/ext/io/shex/syntax.NotStartAction.ShapeExprDecl.Alts")
+_NotStartAction_ShapeExprDecl_Alts = (Core.Name "hydra/ext/io/shex/syntax.NotStartAction_ShapeExprDecl_Alts")
 
 _NotStartAction_ShapeExprDecl_Alts_shapeExpression = (Core.Name "shapeExpression")
 
@@ -238,7 +238,7 @@ data ShapeAtom_Sequence =
     shapeAtom_SequenceShapeOrRef :: (Maybe ShapeOrRef)}
   deriving (Eq, Ord, Read, Show)
 
-_ShapeAtom_Sequence = (Core.Name "hydra/ext/io/shex/syntax.ShapeAtom.Sequence")
+_ShapeAtom_Sequence = (Core.Name "hydra/ext/io/shex/syntax.ShapeAtom_Sequence")
 
 _ShapeAtom_Sequence_nodeConstraint = (Core.Name "nodeConstraint")
 
@@ -267,7 +267,7 @@ data InlineShapeAtom_Sequence =
     inlineShapeAtom_SequenceInlineShapeOrRef :: (Maybe InlineShapeOrRef)}
   deriving (Eq, Ord, Read, Show)
 
-_InlineShapeAtom_Sequence = (Core.Name "hydra/ext/io/shex/syntax.InlineShapeAtom.Sequence")
+_InlineShapeAtom_Sequence = (Core.Name "hydra/ext/io/shex/syntax.InlineShapeAtom_Sequence")
 
 _InlineShapeAtom_Sequence_nodeConstraint = (Core.Name "nodeConstraint")
 
@@ -279,7 +279,7 @@ data InlineShapeAtom_Sequence2 =
     inlineShapeAtom_Sequence2NodeConstraint :: (Maybe NodeConstraint)}
   deriving (Eq, Ord, Read, Show)
 
-_InlineShapeAtom_Sequence2 = (Core.Name "hydra/ext/io/shex/syntax.InlineShapeAtom.Sequence2")
+_InlineShapeAtom_Sequence2 = (Core.Name "hydra/ext/io/shex/syntax.InlineShapeAtom_Sequence2")
 
 _InlineShapeAtom_Sequence2_inlineShapeOrRef = (Core.Name "inlineShapeOrRef")
 
@@ -348,7 +348,7 @@ data NodeConstraint_Sequence2 =
     nodeConstraint_Sequence2ListOfStringFacet :: [StringFacet]}
   deriving (Eq, Ord, Read, Show)
 
-_NodeConstraint_Sequence2 = (Core.Name "hydra/ext/io/shex/syntax.NodeConstraint.Sequence2")
+_NodeConstraint_Sequence2 = (Core.Name "hydra/ext/io/shex/syntax.NodeConstraint_Sequence2")
 
 _NodeConstraint_Sequence2_nonLiteralKind = (Core.Name "nonLiteralKind")
 
@@ -360,7 +360,7 @@ data NodeConstraint_Sequence3 =
     nodeConstraint_Sequence3ListOfXsFacet :: [XsFacet]}
   deriving (Eq, Ord, Read, Show)
 
-_NodeConstraint_Sequence3 = (Core.Name "hydra/ext/io/shex/syntax.NodeConstraint.Sequence3")
+_NodeConstraint_Sequence3 = (Core.Name "hydra/ext/io/shex/syntax.NodeConstraint_Sequence3")
 
 _NodeConstraint_Sequence3_datatype = (Core.Name "datatype")
 
@@ -372,7 +372,7 @@ data NodeConstraint_Sequence4 =
     nodeConstraint_Sequence4ListOfXsFacet :: [XsFacet]}
   deriving (Eq, Ord, Read, Show)
 
-_NodeConstraint_Sequence4 = (Core.Name "hydra/ext/io/shex/syntax.NodeConstraint.Sequence4")
+_NodeConstraint_Sequence4 = (Core.Name "hydra/ext/io/shex/syntax.NodeConstraint_Sequence4")
 
 _NodeConstraint_Sequence4_valueSet = (Core.Name "valueSet")
 
@@ -384,7 +384,7 @@ data NodeConstraint_Sequence5 =
     nodeConstraint_Sequence5ListOfXsFacet :: [XsFacet]}
   deriving (Eq, Ord, Read, Show)
 
-_NodeConstraint_Sequence5 = (Core.Name "hydra/ext/io/shex/syntax.NodeConstraint.Sequence5")
+_NodeConstraint_Sequence5 = (Core.Name "hydra/ext/io/shex/syntax.NodeConstraint_Sequence5")
 
 _NodeConstraint_Sequence5_valueSet = (Core.Name "valueSet")
 
@@ -432,7 +432,7 @@ data StringFacet_Sequence =
     stringFacet_SequenceInteger :: Integer_}
   deriving (Eq, Ord, Read, Show)
 
-_StringFacet_Sequence = (Core.Name "hydra/ext/io/shex/syntax.StringFacet.Sequence")
+_StringFacet_Sequence = (Core.Name "hydra/ext/io/shex/syntax.StringFacet_Sequence")
 
 _StringFacet_Sequence_stringLength = (Core.Name "stringLength")
 
@@ -469,7 +469,7 @@ data NumericFacet_Sequence =
     numericFacet_SequenceNumericLiteral :: NumericLiteral}
   deriving (Eq, Ord, Read, Show)
 
-_NumericFacet_Sequence = (Core.Name "hydra/ext/io/shex/syntax.NumericFacet.Sequence")
+_NumericFacet_Sequence = (Core.Name "hydra/ext/io/shex/syntax.NumericFacet_Sequence")
 
 _NumericFacet_Sequence_numericRange = (Core.Name "numericRange")
 
@@ -481,7 +481,7 @@ data NumericFacet_Sequence2 =
     numericFacet_Sequence2Integer :: Integer_}
   deriving (Eq, Ord, Read, Show)
 
-_NumericFacet_Sequence2 = (Core.Name "hydra/ext/io/shex/syntax.NumericFacet.Sequence2")
+_NumericFacet_Sequence2 = (Core.Name "hydra/ext/io/shex/syntax.NumericFacet_Sequence2")
 
 _NumericFacet_Sequence2_numericLength = (Core.Name "numericLength")
 
@@ -539,7 +539,7 @@ data ShapeDefinition_ListOfAlts_Elmt =
   ShapeDefinition_ListOfAlts_ElmtCLOSED 
   deriving (Eq, Ord, Read, Show)
 
-_ShapeDefinition_ListOfAlts_Elmt = (Core.Name "hydra/ext/io/shex/syntax.ShapeDefinition.ListOfAlts.Elmt")
+_ShapeDefinition_ListOfAlts_Elmt = (Core.Name "hydra/ext/io/shex/syntax.ShapeDefinition_ListOfAlts_Elmt")
 
 _ShapeDefinition_ListOfAlts_Elmt_includeSet = (Core.Name "includeSet")
 
@@ -565,7 +565,7 @@ data InlineShapeDefinition_ListOfAlts_Elmt =
   InlineShapeDefinition_ListOfAlts_ElmtCLOSED 
   deriving (Eq, Ord, Read, Show)
 
-_InlineShapeDefinition_ListOfAlts_Elmt = (Core.Name "hydra/ext/io/shex/syntax.InlineShapeDefinition.ListOfAlts.Elmt")
+_InlineShapeDefinition_ListOfAlts_Elmt = (Core.Name "hydra/ext/io/shex/syntax.InlineShapeDefinition_ListOfAlts_Elmt")
 
 _InlineShapeDefinition_ListOfAlts_Elmt_includeSet = (Core.Name "includeSet")
 
@@ -676,7 +676,7 @@ data UnaryTripleExpr_Sequence =
     unaryTripleExpr_SequenceAlts :: UnaryTripleExpr_Sequence_Alts}
   deriving (Eq, Ord, Read, Show)
 
-_UnaryTripleExpr_Sequence = (Core.Name "hydra/ext/io/shex/syntax.UnaryTripleExpr.Sequence")
+_UnaryTripleExpr_Sequence = (Core.Name "hydra/ext/io/shex/syntax.UnaryTripleExpr_Sequence")
 
 _UnaryTripleExpr_Sequence_sequence = (Core.Name "sequence")
 
@@ -687,7 +687,7 @@ data UnaryTripleExpr_Sequence_Alts =
   UnaryTripleExpr_Sequence_AltsBracketedTripleExpr BracketedTripleExpr
   deriving (Eq, Ord, Read, Show)
 
-_UnaryTripleExpr_Sequence_Alts = (Core.Name "hydra/ext/io/shex/syntax.UnaryTripleExpr.Sequence.Alts")
+_UnaryTripleExpr_Sequence_Alts = (Core.Name "hydra/ext/io/shex/syntax.UnaryTripleExpr_Sequence_Alts")
 
 _UnaryTripleExpr_Sequence_Alts_tripleConstraint = (Core.Name "tripleConstraint")
 
@@ -793,7 +793,7 @@ data IriRange_Sequence =
     iriRange_SequenceSequence :: (Maybe [Exclusion])}
   deriving (Eq, Ord, Read, Show)
 
-_IriRange_Sequence = (Core.Name "hydra/ext/io/shex/syntax.IriRange.Sequence")
+_IriRange_Sequence = (Core.Name "hydra/ext/io/shex/syntax.IriRange_Sequence")
 
 _IriRange_Sequence_iri = (Core.Name "iri")
 
@@ -830,7 +830,7 @@ data Annotation_Alts =
   Annotation_AltsLiteral Literal
   deriving (Eq, Ord, Read, Show)
 
-_Annotation_Alts = (Core.Name "hydra/ext/io/shex/syntax.Annotation.Alts")
+_Annotation_Alts = (Core.Name "hydra/ext/io/shex/syntax.Annotation_Alts")
 
 _Annotation_Alts_iri = (Core.Name "iri")
 
@@ -860,7 +860,7 @@ data CodeDecl_Alts =
   CodeDecl_AltsPercnt 
   deriving (Eq, Ord, Read, Show)
 
-_CodeDecl_Alts = (Core.Name "hydra/ext/io/shex/syntax.CodeDecl.Alts")
+_CodeDecl_Alts = (Core.Name "hydra/ext/io/shex/syntax.CodeDecl_Alts")
 
 _CodeDecl_Alts_code = (Core.Name "code")
 
@@ -951,7 +951,7 @@ data RdfLiteral_Alts_Option =
   RdfLiteral_Alts_OptionSequence Datatype
   deriving (Eq, Ord, Read, Show)
 
-_RdfLiteral_Alts_Option = (Core.Name "hydra/ext/io/shex/syntax.RdfLiteral.Alts.Option")
+_RdfLiteral_Alts_Option = (Core.Name "hydra/ext/io/shex/syntax.RdfLiteral_Alts_Option")
 
 _RdfLiteral_Alts_Option_langTag = (Core.Name "langTag")
 
@@ -1034,7 +1034,7 @@ data Code_Elmt =
   Code_ElmtUchar Uchar
   deriving (Eq, Ord, Read, Show)
 
-_Code_Elmt = (Core.Name "hydra/ext/io/shex/syntax.Code.Elmt")
+_Code_Elmt = (Core.Name "hydra/ext/io/shex/syntax.Code_Elmt")
 
 _Code_Elmt_regex = (Core.Name "regex")
 
@@ -1059,7 +1059,7 @@ data RepeatRange_Sequence_Option_Option_Option =
   RepeatRange_Sequence_Option_Option_OptionAst 
   deriving (Eq, Ord, Read, Show)
 
-_RepeatRange_Sequence_Option_Option_Option = (Core.Name "hydra/ext/io/shex/syntax.RepeatRange.Sequence.Option.Option.Option")
+_RepeatRange_Sequence_Option_Option_Option = (Core.Name "hydra/ext/io/shex/syntax.RepeatRange_Sequence_Option_Option_Option")
 
 _RepeatRange_Sequence_Option_Option_Option_integer = (Core.Name "integer")
 
@@ -1083,7 +1083,7 @@ data IriRef_Elmt =
   IriRef_ElmtUchar Uchar
   deriving (Eq, Ord, Read, Show)
 
-_IriRef_Elmt = (Core.Name "hydra/ext/io/shex/syntax.IriRef.Elmt")
+_IriRef_Elmt = (Core.Name "hydra/ext/io/shex/syntax.IriRef_Elmt")
 
 _IriRef_Elmt_regex = (Core.Name "regex")
 
@@ -1145,7 +1145,7 @@ data Regexp_ListOfAlts_Elmt =
   Regexp_ListOfAlts_ElmtUchar Uchar
   deriving (Eq, Ord, Read, Show)
 
-_Regexp_ListOfAlts_Elmt = (Core.Name "hydra/ext/io/shex/syntax.Regexp.ListOfAlts.Elmt")
+_Regexp_ListOfAlts_Elmt = (Core.Name "hydra/ext/io/shex/syntax.Regexp_ListOfAlts_Elmt")
 
 _Regexp_ListOfAlts_Elmt_regex = (Core.Name "regex")
 
@@ -1173,7 +1173,7 @@ data BlankNodeLabel_Alts =
   BlankNodeLabel_AltsRegex String
   deriving (Eq, Ord, Read, Show)
 
-_BlankNodeLabel_Alts = (Core.Name "hydra/ext/io/shex/syntax.BlankNodeLabel.Alts")
+_BlankNodeLabel_Alts = (Core.Name "hydra/ext/io/shex/syntax.BlankNodeLabel_Alts")
 
 _BlankNodeLabel_Alts_pnCharsU = (Core.Name "pnCharsU")
 
@@ -1184,7 +1184,7 @@ data BlankNodeLabel_ListOfAlts_Option_Elmt =
   BlankNodeLabel_ListOfAlts_Option_ElmtPeriod 
   deriving (Eq, Ord, Read, Show)
 
-_BlankNodeLabel_ListOfAlts_Option_Elmt = (Core.Name "hydra/ext/io/shex/syntax.BlankNodeLabel.ListOfAlts.Option.Elmt")
+_BlankNodeLabel_ListOfAlts_Option_Elmt = (Core.Name "hydra/ext/io/shex/syntax.BlankNodeLabel_ListOfAlts_Option_Elmt")
 
 _BlankNodeLabel_ListOfAlts_Option_Elmt_pnChars = (Core.Name "pnChars")
 
@@ -1231,7 +1231,7 @@ data StringLiteral1_Elmt =
   StringLiteral1_ElmtUchar Uchar
   deriving (Eq, Ord, Read, Show)
 
-_StringLiteral1_Elmt = (Core.Name "hydra/ext/io/shex/syntax.StringLiteral1.Elmt")
+_StringLiteral1_Elmt = (Core.Name "hydra/ext/io/shex/syntax.StringLiteral1_Elmt")
 
 _StringLiteral1_Elmt_regex = (Core.Name "regex")
 
@@ -1252,7 +1252,7 @@ data StringLiteral2_Elmt =
   StringLiteral2_ElmtUchar Uchar
   deriving (Eq, Ord, Read, Show)
 
-_StringLiteral2_Elmt = (Core.Name "hydra/ext/io/shex/syntax.StringLiteral2.Elmt")
+_StringLiteral2_Elmt = (Core.Name "hydra/ext/io/shex/syntax.StringLiteral2_Elmt")
 
 _StringLiteral2_Elmt_regex = (Core.Name "regex")
 
@@ -1273,7 +1273,7 @@ data StringLiteralLong1_Elmt =
   StringLiteralLong1_ElmtUchar Uchar
   deriving (Eq, Ord, Read, Show)
 
-_StringLiteralLong1_Elmt = (Core.Name "hydra/ext/io/shex/syntax.StringLiteralLong1.Elmt")
+_StringLiteralLong1_Elmt = (Core.Name "hydra/ext/io/shex/syntax.StringLiteralLong1_Elmt")
 
 _StringLiteralLong1_Elmt_sequence = (Core.Name "sequence")
 
@@ -1287,7 +1287,7 @@ data StringLiteralLong1_Elmt_Sequence =
     stringLiteralLong1_Elmt_SequenceRegex :: String}
   deriving (Eq, Ord, Read, Show)
 
-_StringLiteralLong1_Elmt_Sequence = (Core.Name "hydra/ext/io/shex/syntax.StringLiteralLong1.Elmt.Sequence")
+_StringLiteralLong1_Elmt_Sequence = (Core.Name "hydra/ext/io/shex/syntax.StringLiteralLong1_Elmt_Sequence")
 
 _StringLiteralLong1_Elmt_Sequence_alts = (Core.Name "alts")
 
@@ -1298,7 +1298,7 @@ data StringLiteralLong1_Elmt_Sequence_Alts_Option =
   StringLiteralLong1_Elmt_Sequence_Alts_OptionSequence StringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence
   deriving (Eq, Ord, Read, Show)
 
-_StringLiteralLong1_Elmt_Sequence_Alts_Option = (Core.Name "hydra/ext/io/shex/syntax.StringLiteralLong1.Elmt.Sequence.Alts.Option")
+_StringLiteralLong1_Elmt_Sequence_Alts_Option = (Core.Name "hydra/ext/io/shex/syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option")
 
 _StringLiteralLong1_Elmt_Sequence_Alts_Option_apos = (Core.Name "apos")
 
@@ -1308,7 +1308,7 @@ data StringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence =
   StringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence {}
   deriving (Eq, Ord, Read, Show)
 
-_StringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence = (Core.Name "hydra/ext/io/shex/syntax.StringLiteralLong1.Elmt.Sequence.Alts.Option.Sequence")
+_StringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence = (Core.Name "hydra/ext/io/shex/syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence")
 
 newtype StringLiteralLong2 = 
   StringLiteralLong2 {
@@ -1323,7 +1323,7 @@ data StringLiteralLong2_Elmt =
   StringLiteralLong2_ElmtUchar Uchar
   deriving (Eq, Ord, Read, Show)
 
-_StringLiteralLong2_Elmt = (Core.Name "hydra/ext/io/shex/syntax.StringLiteralLong2.Elmt")
+_StringLiteralLong2_Elmt = (Core.Name "hydra/ext/io/shex/syntax.StringLiteralLong2_Elmt")
 
 _StringLiteralLong2_Elmt_sequence = (Core.Name "sequence")
 
@@ -1337,7 +1337,7 @@ data StringLiteralLong2_Elmt_Sequence =
     stringLiteralLong2_Elmt_SequenceRegex :: String}
   deriving (Eq, Ord, Read, Show)
 
-_StringLiteralLong2_Elmt_Sequence = (Core.Name "hydra/ext/io/shex/syntax.StringLiteralLong2.Elmt.Sequence")
+_StringLiteralLong2_Elmt_Sequence = (Core.Name "hydra/ext/io/shex/syntax.StringLiteralLong2_Elmt_Sequence")
 
 _StringLiteralLong2_Elmt_Sequence_alts = (Core.Name "alts")
 
@@ -1348,7 +1348,7 @@ data StringLiteralLong2_Elmt_Sequence_Alts_Option =
   StringLiteralLong2_Elmt_Sequence_Alts_OptionSequence StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence
   deriving (Eq, Ord, Read, Show)
 
-_StringLiteralLong2_Elmt_Sequence_Alts_Option = (Core.Name "hydra/ext/io/shex/syntax.StringLiteralLong2.Elmt.Sequence.Alts.Option")
+_StringLiteralLong2_Elmt_Sequence_Alts_Option = (Core.Name "hydra/ext/io/shex/syntax.StringLiteralLong2_Elmt_Sequence_Alts_Option")
 
 _StringLiteralLong2_Elmt_Sequence_Alts_Option_quot = (Core.Name "quot")
 
@@ -1358,7 +1358,7 @@ data StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence =
   StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence {}
   deriving (Eq, Ord, Read, Show)
 
-_StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence = (Core.Name "hydra/ext/io/shex/syntax.StringLiteralLong2.Elmt.Sequence.Alts.Option.Sequence")
+_StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence = (Core.Name "hydra/ext/io/shex/syntax.StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence")
 
 data Uchar = 
   UcharSequence Uchar_Sequence |
@@ -1379,7 +1379,7 @@ data Uchar_Sequence =
     uchar_SequenceHex4 :: Hex}
   deriving (Eq, Ord, Read, Show)
 
-_Uchar_Sequence = (Core.Name "hydra/ext/io/shex/syntax.Uchar.Sequence")
+_Uchar_Sequence = (Core.Name "hydra/ext/io/shex/syntax.Uchar_Sequence")
 
 _Uchar_Sequence_hex = (Core.Name "hex")
 
@@ -1401,7 +1401,7 @@ data Uchar_Sequence2 =
     uchar_Sequence2Hex8 :: Hex}
   deriving (Eq, Ord, Read, Show)
 
-_Uchar_Sequence2 = (Core.Name "hydra/ext/io/shex/syntax.Uchar.Sequence2")
+_Uchar_Sequence2 = (Core.Name "hydra/ext/io/shex/syntax.Uchar_Sequence2")
 
 _Uchar_Sequence2_hex = (Core.Name "hex")
 
@@ -1480,7 +1480,7 @@ data PnPrefix_Sequence_Option =
     pnPrefix_Sequence_OptionPnChars :: PnChars}
   deriving (Eq, Ord, Read, Show)
 
-_PnPrefix_Sequence_Option = (Core.Name "hydra/ext/io/shex/syntax.PnPrefix.Sequence.Option")
+_PnPrefix_Sequence_Option = (Core.Name "hydra/ext/io/shex/syntax.PnPrefix_Sequence_Option")
 
 _PnPrefix_Sequence_Option_alts = (Core.Name "alts")
 
@@ -1491,7 +1491,7 @@ data PnPrefix_Sequence_Option_Alts =
   PnPrefix_Sequence_Option_AltsPeriod 
   deriving (Eq, Ord, Read, Show)
 
-_PnPrefix_Sequence_Option_Alts = (Core.Name "hydra/ext/io/shex/syntax.PnPrefix.Sequence.Option.Alts")
+_PnPrefix_Sequence_Option_Alts = (Core.Name "hydra/ext/io/shex/syntax.PnPrefix_Sequence_Option_Alts")
 
 _PnPrefix_Sequence_Option_Alts_pnChars = (Core.Name "pnChars")
 
@@ -1516,7 +1516,7 @@ data PnLocal_Alts =
   PnLocal_AltsPlx Plx
   deriving (Eq, Ord, Read, Show)
 
-_PnLocal_Alts = (Core.Name "hydra/ext/io/shex/syntax.PnLocal.Alts")
+_PnLocal_Alts = (Core.Name "hydra/ext/io/shex/syntax.PnLocal_Alts")
 
 _PnLocal_Alts_pnCharsU = (Core.Name "pnCharsU")
 
@@ -1532,7 +1532,7 @@ data PnLocal_Sequence_Option =
     pnLocal_Sequence_OptionAlts :: PnLocal_Sequence_Option_Alts}
   deriving (Eq, Ord, Read, Show)
 
-_PnLocal_Sequence_Option = (Core.Name "hydra/ext/io/shex/syntax.PnLocal.Sequence.Option")
+_PnLocal_Sequence_Option = (Core.Name "hydra/ext/io/shex/syntax.PnLocal_Sequence_Option")
 
 _PnLocal_Sequence_Option_listOfAlts = (Core.Name "listOfAlts")
 
@@ -1545,7 +1545,7 @@ data PnLocal_Sequence_Option_ListOfAlts_Elmt =
   PnLocal_Sequence_Option_ListOfAlts_ElmtPlx Plx
   deriving (Eq, Ord, Read, Show)
 
-_PnLocal_Sequence_Option_ListOfAlts_Elmt = (Core.Name "hydra/ext/io/shex/syntax.PnLocal.Sequence.Option.ListOfAlts.Elmt")
+_PnLocal_Sequence_Option_ListOfAlts_Elmt = (Core.Name "hydra/ext/io/shex/syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt")
 
 _PnLocal_Sequence_Option_ListOfAlts_Elmt_pnChars = (Core.Name "pnChars")
 
@@ -1561,7 +1561,7 @@ data PnLocal_Sequence_Option_Alts =
   PnLocal_Sequence_Option_AltsPlx Plx
   deriving (Eq, Ord, Read, Show)
 
-_PnLocal_Sequence_Option_Alts = (Core.Name "hydra/ext/io/shex/syntax.PnLocal.Sequence.Option.Alts")
+_PnLocal_Sequence_Option_Alts = (Core.Name "hydra/ext/io/shex/syntax.PnLocal_Sequence_Option_Alts")
 
 _PnLocal_Sequence_Option_Alts_pnChars = (Core.Name "pnChars")
 

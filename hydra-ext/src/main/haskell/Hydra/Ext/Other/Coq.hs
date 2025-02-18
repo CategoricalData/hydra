@@ -79,36 +79,36 @@ coqSyntaxModule = Module ns elements [] [] $
       def "FieldIdent" $ coq "Ident",
 
       def "Fix" $ union [
-        "decl">: coq "Fix.Decl",
-        "qual">: optional $ coq "Fix.Qual"],
+        "decl">: coq "Fix_Decl",
+        "qual">: optional $ coq "Fix_Qual"],
 
       def "FixAnnot" $ union [
         "struct">: coq "Ident",
-        "wf">: coq "FixAnnot.Wf",
-        "measure">: coq "FixAnnot.Measure"],
+        "wf">: coq "FixAnnot_Wf",
+        "measure">: coq "FixAnnot_Measure"],
 
-      def "FixAnnot.Measure" $ record [
+      def "FixAnnot_Measure" $ record [
         "term">: coq "OneTerm",
         "ident">: optional $ coq "Ident",
         "term2">: optional $ coq "OneTerm"],
 
-      def "FixAnnot.Wf" $ record [
+      def "FixAnnot_Wf" $ record [
         "term">: coq "OneTerm",
         "ident">: coq "Ident"],
 
-      def "Fix.Decl" $ record [
+      def "Fix_Decl" $ record [
         "ident">: coq "Ident",
         "binders">: list $ coq "Binder",
         "annot">: optional $ coq "FixAnnot",
         "type">: optional $ coq "Type",
         "term">: coq "Term"],
 
-      def "Fix.Qual" $ union [
+      def "Fix_Qual" $ union [
         "in">: coq "Term",
         "with">: coq "FixWith"],
 
       def "FixWith" $ record [
-        "decls">: nonemptyList $ coq "Fix.Decl",
+        "decls">: nonemptyList $ coq "Fix_Decl",
         "for">: optional $ coq "Ident"],
 
       def "Forall" $ record [
@@ -183,21 +183,21 @@ coqSyntaxModule = Module ns elements [] [] $
         "binders">: list $ coq "Binder"],
 
       def "LetDestructuring" $ union [
-        "variant1">: coq "LetDestructuring.Variant1",
-        "variant2">: coq "LetDestructuring.Variant2",
-        "variant3">: coq "LetDestructuring.Variant3"],
+        "variant1">: coq "LetDestructuring_Variant1",
+        "variant2">: coq "LetDestructuring_Variant2",
+        "variant3">: coq "LetDestructuring_Variant3"],
 
-      def "LetDestructuring.Variant1" $ record [
+      def "LetDestructuring_Variant1" $ record [
         "names">: list $ coq "Name",
         "returnAs">: optional $ coq "ReturnAs",
         "term">: coq "Term"],
 
-      def "LetDestructuring.Variant2" $ record [
+      def "LetDestructuring_Variant2" $ record [
         "pattern">: coq "Pattern",
         "term">: coq "Term",
         "return">: optional $ coq "Term100"],
 
-      def "LetDestructuring.Variant3" $ record [
+      def "LetDestructuring_Variant3" $ record [
         "pattern1">: coq "Pattern",
         "pattern2">: coq "Pattern",
         "term">: coq "Term",
@@ -250,19 +250,19 @@ coqSyntaxModule = Module ns elements [] [] $
         "scope">: optional $ coq "ScopeKey"],
 
       def "Pattern10" $ union [
-        "as">: coq "Pattern10.As",
-        "patterns">: coq "Pattern10.Patterns",
-        "qualiid">: coq "Pattern10.Qualid"],
+        "as">: coq "Pattern10_As",
+        "patterns">: coq "Pattern10_Patterns",
+        "qualiid">: coq "Pattern10_Qualid"],
 
-      def "Pattern10.As" $ record [
+      def "Pattern10_As" $ record [
         "pattern">: coq "Pattern1",
         "as">: coq "Name"],
 
-      def "Pattern10.Patterns" $ record [
+      def "Pattern10_Patterns" $ record [
         "pattern">: coq "Pattern1",
         "patterns">: list $ coq "Pattern1"],
 
-      def "Pattern10.Qualid" $ record [
+      def "Pattern10_Qualid" $ record [
         "qualid">: coq "Qualid",
         "patterns">: list $ coq "Pattern1"],
 
@@ -366,10 +366,10 @@ coqSyntaxModule = Module ns elements [] [] $
       def "UnivAnnot" $ list $ coq "UniverseLevel",
 
       def "Universe" $ union [
-        "max">: nonemptyList $ coq "Universe.Expr",
-        "expr">: coq "Universe.Expr"],
+        "max">: nonemptyList $ coq "Universe_Expr",
+        "expr">: coq "Universe_Expr"],
 
-      def "Universe.Expr" $ record [
+      def "Universe_Expr" $ record [
         "name">: coq "UniverseName",
         "number">: optional $ coq "Natural"],
 
