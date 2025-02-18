@@ -660,20 +660,12 @@ public interface Basics {
     }));
   }
 
-  static String localNameOfEager(hydra.core.Name x) {
-    return (hydra.basics.Basics.qualifyNameEager((x))).local;
+  static String localNameOf(hydra.core.Name x) {
+    return (hydra.basics.Basics.qualifyName((x))).local;
   }
 
-  static String localNameOfLazy(hydra.core.Name x) {
-    return (hydra.basics.Basics.qualifyNameLazy((x))).local;
-  }
-
-  static hydra.util.Opt<hydra.module.Namespace> namespaceOfEager(hydra.core.Name x) {
-    return (hydra.basics.Basics.qualifyNameEager((x))).namespace;
-  }
-
-  static hydra.util.Opt<hydra.module.Namespace> namespaceOfLazy(hydra.core.Name x) {
-    return (hydra.basics.Basics.qualifyNameLazy((x))).namespace;
+  static hydra.util.Opt<hydra.module.Namespace> namespaceOf(hydra.core.Name x) {
+    return (hydra.basics.Basics.qualifyName((x))).namespace;
   }
 
   static java.util.function.Function<hydra.module.FileExtension, java.util.function.Function<hydra.module.Namespace, String>> namespaceToFilePath(Boolean caps) {
@@ -696,7 +688,7 @@ public interface Basics {
     }));
   }
 
-  static hydra.module.QualifiedName qualifyNameEager(hydra.core.Name name) {
+  static hydra.module.QualifiedName qualifyName(hydra.core.Name name) {
     java.util.List<String> parts = hydra.lib.strings.SplitOn.apply(
       ".",
       ((name)).value);
@@ -705,20 +697,6 @@ public interface Basics {
       new hydra.module.QualifiedName(hydra.util.Opt.of(new hydra.module.Namespace(hydra.lib.lists.Head.apply((parts)))), hydra.lib.strings.Intercalate.apply(
         ".",
         hydra.lib.lists.Tail.apply((parts)))),
-      hydra.lib.equality.EqualInt32.apply(
-        1,
-        hydra.lib.lists.Length.apply((parts))));
-  }
-
-  static hydra.module.QualifiedName qualifyNameLazy(hydra.core.Name name) {
-    java.util.List<String> parts = hydra.lib.lists.Reverse.apply(hydra.lib.strings.SplitOn.apply(
-      ".",
-      ((name)).value));
-    return hydra.lib.logic.IfElse.apply(
-      new hydra.module.QualifiedName(hydra.util.Opt.empty(), ((name)).value),
-      new hydra.module.QualifiedName(hydra.util.Opt.of(new hydra.module.Namespace(hydra.lib.strings.Intercalate.apply(
-        ".",
-        hydra.lib.lists.Reverse.apply(hydra.lib.lists.Tail.apply((parts)))))), hydra.lib.lists.Head.apply((parts))),
       hydra.lib.equality.EqualInt32.apply(
         1,
         hydra.lib.lists.Length.apply((parts))));

@@ -456,7 +456,7 @@ toShortNames original = M.fromList $ L.concat (renameGroup <$> M.toList groups)
       where
         addName acc name = M.insert local (S.insert name group) acc
           where
-            local = localNameOfEager name
+            local = localNameOf name
             group = Y.fromMaybe S.empty $ M.lookup local acc
 
 -- Topological sort of connected components, in terms of dependencies between varable/term binding pairs

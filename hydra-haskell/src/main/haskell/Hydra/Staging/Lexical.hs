@@ -88,7 +88,7 @@ toCompactName namespaces name = case mns of
       Just pre -> pre ++ ":" ++ local
       Nothing -> local
   where
-    (QualifiedName mns local) = qualifyNameLazy name
+    (QualifiedName mns local) = qualifyName name
 
 withSchemaContext :: Flow Graph x -> Flow Graph x
 withSchemaContext f = do

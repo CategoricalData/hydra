@@ -34,8 +34,8 @@ defaultHaskellGenerationOptions = HaskellGenerationOptions False
 adaptTypeToHaskellAndEncode :: HaskellNamespaces -> Type -> Flow Graph H.Type
 adaptTypeToHaskellAndEncode namespaces = adaptAndEncodeType haskellLanguage (encodeType namespaces)
 
-constantForFieldName tname fname = "_" ++ localNameOfEager tname ++ "_" ++ unName fname
-constantForTypeName tname = "_" ++ localNameOfEager tname
+constantForFieldName tname fname = "_" ++ localNameOf tname ++ "_" ++ unName fname
+constantForTypeName tname = "_" ++ localNameOf tname
 
 constructModule :: HaskellNamespaces
   -> Module
@@ -78,7 +78,7 @@ encodeFunction namespaces fun = case fun of
         rhs <- encodeTerm namespaces fun
         return $ hsapp lhs rhs
       EliminationWrap name -> pure $ H.ExpressionVariable $ elementReference namespaces $
-        qname (Y.fromJust $ namespaceOfEager name) $ newtypeAccessorName name
+        qname (Y.fromJust $ namespaceOf name) $ newtypeAccessorName name
       EliminationOptional (OptionalCases nothing just) -> do
         nothingRhs <- H.CaseRhs <$> encodeTerm namespaces nothing
         let nothingAlt = H.Alternative (H.PatternName $ rawName "Nothing") nothingRhs Nothing
@@ -287,7 +287,7 @@ toDataDeclaration coders namespaces (el, TypedTerm term typ) = do
     toDecl comments hname term coder Nothing
   where
     coder = Y.fromJust $ M.lookup typ coders
-    hname = simpleName $ localNameOfEager $ elementName el
+    hname = simpleName $ localNameOf $ elementName el
 
     rewriteValueBinding vb = case vb of
       H.ValueBindingSimple (H.ValueBinding_Simple (H.PatternApplication (H.Pattern_Application name args)) rhs bindings) -> case rhs of
@@ -320,7 +320,7 @@ toDataDeclaration coders namespaces (el, TypedTerm term typ) = do
 toTypeDeclarations :: HaskellNamespaces -> Element -> Term -> Flow Graph [H.DeclarationWithComments]
 toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (elementName el)) $ do
     g <- getState
-    let lname = localNameOfEager $ elementName el
+    let lname = localNameOf $ elementName el
     let hname = simpleName lname
     t <- coreDecodeType term
 
@@ -367,7 +367,7 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
         htype <- adaptTypeToHaskellAndEncode namespaces typ
         let hfield = H.FieldWithComments (H.Field hname htype) Nothing
         return $ H.ConstructorWithComments
-          (H.ConstructorRecord $ H.Constructor_Record (simpleName $ localNameOfEager $ elementName el) [hfield]) Nothing
+          (H.ConstructorRecord $ H.Constructor_Record (simpleName $ localNameOf $ elementName el) [hfield]) Nothing
 
     recordCons lname fields = do
         hFields <- CM.mapM toField fields
@@ -408,7 +408,7 @@ typeDecl namespaces name typ = do
     return $ H.DeclarationWithComments decl Nothing
   where
     typeName ns name = qname ns (typeNameLocal name)
-    typeNameLocal name = "_" ++ localNameOfEager name ++ "_type_"
+    typeNameLocal name = "_" ++ localNameOf name ++ "_type_"
     rawTerm = coreEncodeType typ
     finalTerm = rewriteTerm rewrite rawTerm
       where
@@ -422,4 +422,4 @@ typeDecl namespaces name typ = do
               else Nothing
             forVariableType name = (\ns -> TermVariable $ qname ns $ "_" ++ local ++ "_type_") <$> mns
               where
-                (QualifiedName mns local) = qualifyNameEager name
+                (QualifiedName mns local) = qualifyName name

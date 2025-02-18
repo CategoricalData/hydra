@@ -55,7 +55,7 @@ data Namespaces n = Namespaces {
   namespacesMapping :: M.Map Namespace n} deriving Show
 
 definitionDependencyNamespaces :: [Definition] -> S.Set Namespace
-definitionDependencyNamespaces defs = S.fromList $ Y.catMaybes (namespaceOfEager <$> S.toList allNames)
+definitionDependencyNamespaces defs = S.fromList $ Y.catMaybes (namespaceOf <$> S.toList allNames)
   where
     allNames = S.unions (defNames <$> defs)
     defNames def = case def of
@@ -66,7 +66,7 @@ definitionDependencyNamespaces defs = S.fromList $ Y.catMaybes (namespaceOfEager
 dependencyNamespaces :: Bool -> Bool -> Bool -> Bool -> [Term] -> Flow Graph (S.Set Namespace)
 dependencyNamespaces withVars withPrims withNoms withSchema terms = do
     allNames <- S.unions <$> (CM.mapM depNames terms)
-    return $ S.fromList $ Y.catMaybes (namespaceOfEager <$> S.toList allNames)
+    return $ S.fromList $ Y.catMaybes (namespaceOf <$> S.toList allNames)
   where
     depNames term = do
       let dataNames = termDependencyNames withVars withPrims withNoms term

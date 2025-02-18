@@ -59,7 +59,7 @@ constructModule mod coders pairs = do
           Scala.DataRef _ -> toVal rhs -- TODO
           _ -> fail $ "unexpected RHS: " ++ show rhs
       where
-        lname = localNameOfEager $ elementName el
+        lname = localNameOf $ elementName el
 
         freeTypeVars = S.toList $ freeVariablesInType typ
 

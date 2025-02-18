@@ -15,17 +15,11 @@ import Data.List as L
 import Data.Map as M
 import Data.Set as S
 
-localNameOfEager :: (Core.Name -> String)
-localNameOfEager x = (Module.qualifiedNameLocal (qualifyNameEager x))
+localNameOf :: (Core.Name -> String)
+localNameOf x = (Module.qualifiedNameLocal (qualifyName x))
 
-localNameOfLazy :: (Core.Name -> String)
-localNameOfLazy x = (Module.qualifiedNameLocal (qualifyNameLazy x))
-
-namespaceOfEager :: (Core.Name -> Maybe Module.Namespace)
-namespaceOfEager x = (Module.qualifiedNameNamespace (qualifyNameEager x))
-
-namespaceOfLazy :: (Core.Name -> Maybe Module.Namespace)
-namespaceOfLazy x = (Module.qualifiedNameNamespace (qualifyNameLazy x))
+namespaceOf :: (Core.Name -> Maybe Module.Namespace)
+namespaceOf x = (Module.qualifiedNameNamespace (qualifyName x))
 
 namespaceToFilePath :: (Mantle.CaseConvention -> Module.FileExtension -> Module.Namespace -> String)
 namespaceToFilePath caseConv ext ns =  
@@ -43,17 +37,8 @@ qname ns name = (Core.Name (Strings.cat [
   ".",
   name]))
 
-qualifyNameEager :: (Core.Name -> Module.QualifiedName)
-qualifyNameEager name =  
-  let parts = (Strings.splitOn "." (Core.unName name))
-  in (Logic.ifElse (Module.QualifiedName {
-    Module.qualifiedNameNamespace = Nothing,
-    Module.qualifiedNameLocal = (Core.unName name)}) (Module.QualifiedName {
-    Module.qualifiedNameNamespace = (Just (Module.Namespace (Lists.head parts))),
-    Module.qualifiedNameLocal = (Strings.intercalate "." (Lists.tail parts))}) (Equality.equalInt32 1 (Lists.length parts)))
-
-qualifyNameLazy :: (Core.Name -> Module.QualifiedName)
-qualifyNameLazy name =  
+qualifyName :: (Core.Name -> Module.QualifiedName)
+qualifyName name =  
   let parts = (Lists.reverse (Strings.splitOn "." (Core.unName name)))
   in (Logic.ifElse (Module.QualifiedName {
     Module.qualifiedNameNamespace = Nothing,

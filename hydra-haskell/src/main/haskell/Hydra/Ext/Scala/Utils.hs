@@ -24,7 +24,7 @@ scalaTypeName qualify name@(Name n) = if qualify || S.member local reservedWords
     then L.intercalate "." $ Strings.splitOn "/" n
     else local
   where
-    local = localNameOfLazy name
+    local = localNameOf name
 
 sapply :: Scala.Data -> [Scala.Data] -> Scala.Data
 sapply fun args = Scala.DataApply $ Scala.Data_Apply fun args
@@ -46,7 +46,7 @@ sname = Scala.DataRef . Scala.Data_RefName . Scala.Data_Name . Scala.PredefStrin
 sprim :: Name -> Scala.Data
 sprim name = sname $ prefix ++ "." ++ qualifiedNameLocal qname
   where
-    qname = qualifyNameLazy name
+    qname = qualifyName name
     prefix = L.last $ Strings.splitOn "/" $ unNamespace $ Y.fromJust $ qualifiedNameNamespace qname
 
 stapply :: Scala.Type -> [Scala.Type] -> Scala.Type
