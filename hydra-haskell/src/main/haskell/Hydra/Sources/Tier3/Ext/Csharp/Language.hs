@@ -19,7 +19,6 @@ import Hydra.Dsl.ShorthandTypes
 
 import qualified Data.Set as S
 
-
 csharpLanguageDefinition :: String -> TTerm a -> TElement a
 csharpLanguageDefinition = definitionInModule csharpLanguageModule
 
