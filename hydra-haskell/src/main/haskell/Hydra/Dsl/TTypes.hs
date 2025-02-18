@@ -1,20 +1,24 @@
 -- | A domain-specific language for constructing term-encoded Hydra types in Haskell.
 
-module Hydra.Dsl.TTypes where
+module Hydra.Dsl.TTypes (
+  module Hydra.Dsl.TBase,
+  module Hydra.Dsl.TTypes,
+) where
 
 import Hydra.Kernel
 import Hydra.Dsl.Base as Base
-import Hydra.Dsl.Core as Core
+import qualified Hydra.Dsl.Core as Core
+import Hydra.Dsl.TBase
 
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
 boolean :: TTerm Type
-boolean = typeLiteral literalTypeBoolean
+boolean = Core.typeLiteral Core.literalTypeBoolean
 
 field :: String -> TTerm Type -> TTerm FieldType
-field s = Core.fieldType (Core.name $ Name s)
+field s = Core.fieldType (name s)
 
 floatType :: FloatType -> TTerm FloatType
 floatType t = unitVariant _FloatType $ case t of
@@ -23,10 +27,10 @@ floatType t = unitVariant _FloatType $ case t of
   FloatTypeFloat64 -> _FloatType_float64
 
 float32 :: TTerm Type
-float32 = typeLiteral $ literalTypeFloat $ floatType FloatTypeFloat32
+float32 = Core.typeLiteral $ Core.literalTypeFloat $ floatType FloatTypeFloat32
 
 int32 :: TTerm Type
-int32 = typeLiteral $ literalTypeInteger integerTypeInt32
+int32 = Core.typeLiteral $ Core.literalTypeInteger Core.integerTypeInt32
 
 integerType :: IntegerType -> TTerm IntegerType
 integerType t = unitVariant _IntegerType $ case t of
@@ -41,7 +45,7 @@ integerType t = unitVariant _IntegerType $ case t of
   IntegerTypeUint64 -> _IntegerType_uint64
 
 lambda :: String -> TTerm Type -> TTerm Type
-lambda var body = typeLambda $ lambdaType (name $ Name var) body
+lambda var body = Core.typeLambda $ Core.lambdaType (name var) body
 
 mono :: TTerm Type -> TTerm TypeScheme
 mono t = Base.record _TypeScheme [
@@ -49,7 +53,7 @@ mono t = Base.record _TypeScheme [
   _TypeScheme_type>>: t]
 
 optional :: TTerm Type -> TTerm Type
-optional = typeOptional
+optional = Core.typeOptional
 
 poly :: TTerm [Name] -> TTerm Type -> TTerm TypeScheme
 poly params t = Base.record _TypeScheme [
@@ -60,19 +64,19 @@ record :: TTerm Name -> [TTerm FieldType] -> TTerm Type
 record name fields = Core.typeRecord $ Core.rowType name $ list fields
 
 string :: TTerm Type
-string = typeLiteral literalTypeString
+string = Core.typeLiteral Core.literalTypeString
 
 apply :: TTerm Type -> TTerm Type -> TTerm Type
-apply l r = typeApplication $ applicationType l r
+apply l r = Core.typeApplication $ Core.applicationType l r
 
 uint64 :: TTerm Type
-uint64 = typeLiteral $ literalTypeInteger integerTypeUint64
+uint64 = Core.typeLiteral $ Core.literalTypeInteger Core.integerTypeUint64
 
 union :: TTerm Name -> [TTerm FieldType] -> TTerm Type
 union name fields = Core.typeUnion $ Core.rowType name $ list fields
 
 unit :: TTerm Type
-unit = typeRecord $ rowType (name _Unit) $ list []
+unit = Core.typeRecord $ Core.rowType (Core.name _Unit) $ list []
 
 var :: String -> TTerm Type
-var = typeVariable . name . Name
+var = Core.typeVariable . name
