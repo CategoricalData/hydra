@@ -1,18 +1,18 @@
 module Hydra.Ext.Csharp.Coder (moduleToCsharp) where
 
 import Hydra.Kernel
-import Hydra.Adapters
 import Hydra.Ext.Csharp.Language
 import qualified Hydra.Ext.Csharp.Syntax as Cs
 import Hydra.Ext.Csharp.Utils
 import Hydra.Ext.Csharp.Serde
 import Hydra.Dsl.Terms
-import Hydra.Tools.Serialization
+import Hydra.Staging.Adapters
+import Hydra.Staging.Serialization
+import Hydra.Staging.Formatting
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.ShorthandTypes
 import Hydra.Lib.Io
-import Hydra.Tools.Formatting
 import qualified Hydra.Decode as Decode
 
 import qualified Control.Monad as CM
