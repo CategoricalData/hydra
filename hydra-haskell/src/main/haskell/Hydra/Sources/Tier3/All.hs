@@ -6,6 +6,7 @@ module Hydra.Sources.Tier3.All(
 
 import Hydra.Sources.Tier2.All
 import Hydra.Sources.Tier3.Ext.Avro.Schema
+import Hydra.Sources.Tier3.Ext.Csharp.Language
 import Hydra.Sources.Tier3.Ext.Csharp.Syntax
 import Hydra.Sources.Tier3.Ext.Cypher.Features
 import Hydra.Sources.Tier3.Ext.Cypher.OpenCypher
@@ -33,6 +34,7 @@ import Hydra.Sources.Tier3.Ext.RelationalModel
 import Hydra.Sources.Tier3.Ext.Scala.Meta
 import Hydra.Sources.Tier3.Ext.Shacl.Model
 import Hydra.Sources.Tier3.Ext.Tabular
+import Hydra.Sources.Tier3.Ext.TypeScript.Language
 import Hydra.Sources.Tier3.Ext.TypeScript.Model
 import Hydra.Sources.Tier3.Ext.Yaml.Model
 import Hydra.Sources.Tier3.Test.TestGraph
@@ -52,6 +54,7 @@ testModules = [
 tier3ExtModules :: [Module]
 tier3ExtModules = [
   avroSchemaModule,
+  csharpLanguageModule,
   csharpSyntaxModule,
   graphqlSyntaxModule,
   haskellAstModule,
@@ -79,5 +82,6 @@ tier3ExtModules = [
   pgQueryModule,
   pgValidationModule,
   graphsonSyntaxModule,
+  typeScriptLanguageModule,
   typeScriptModelModule,
   yamlModelModule]
