@@ -22,7 +22,8 @@ javaLanguageDefinition :: String -> TTerm a -> TElement a
 javaLanguageDefinition = definitionInModule javaLanguageModule
 
 javaLanguageModule :: Module
-javaLanguageModule = Module ns elements [hydraCodersModule, hydraLexicalModule] [hydraCoreModule] $
+javaLanguageModule = Module ns elements
+    [hydraCodersModule, hydraLexicalModule] [hydraCoreModule, hydraGraphModule, hydraCodersModule] $
     Just "Language constraints and reserved words for Java"
   where
     ns = Namespace "hydra/ext/java/language"

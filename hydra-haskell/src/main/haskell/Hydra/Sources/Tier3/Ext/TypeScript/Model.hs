@@ -1,8 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier4.Ext.TypeScript.Model where
+module Hydra.Sources.Tier3.Ext.TypeScript.Model where
 
-import Hydra.Sources.Tier3.All
+import Hydra.Sources.Tier2.All
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types

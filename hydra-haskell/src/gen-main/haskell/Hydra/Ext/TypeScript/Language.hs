@@ -13,7 +13,7 @@ import Data.List as L
 import Data.Map as M
 import Data.Set as S
 
--- | Language constraints for Protocol Buffers v3
+-- | Language constraints for TypeScript
 typeScriptLanguage :: Coders.Language
 typeScriptLanguage = Coders.Language {
   Coders.languageName = (Coders.LanguageName "hydra/langs/typeScript"),
@@ -46,9 +46,9 @@ typeScriptLanguage = Coders.Language {
       Mantle.TypeVariantUnion,
       Mantle.TypeVariantVariable]),
     Coders.languageConstraintsTypes = (\x -> case x of
-      Core.TypeMap v0 -> ((\x -> case x of
+      Core.TypeMap v1 -> ((\x -> case x of
         Core.TypeOptional _ -> False
-        _ -> True) (Strip.stripType (Core.mapTypeValues v0)))
+        _ -> True) (Strip.stripType (Core.mapTypeValues v1)))
       _ -> True)}}
 
 -- | A set of reserved words in TypeScript. Taken directly from https://github.com/microsoft/TypeScript/issues/2536

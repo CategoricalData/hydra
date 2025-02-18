@@ -33,6 +33,7 @@ import Hydra.Sources.Tier3.Ext.RelationalModel
 import Hydra.Sources.Tier3.Ext.Scala.Meta
 import Hydra.Sources.Tier3.Ext.Shacl.Model
 import Hydra.Sources.Tier3.Ext.Tabular
+import Hydra.Sources.Tier3.Ext.TypeScript.Model
 import Hydra.Sources.Tier3.Ext.Yaml.Model
 import Hydra.Sources.Tier3.Test.TestGraph
 import Hydra.Sources.Tier3.Test.TestSuite
@@ -78,4 +79,5 @@ tier3ExtModules = [
   pgQueryModule,
   pgValidationModule,
   graphsonSyntaxModule,
+  typeScriptModelModule,
   yamlModelModule]

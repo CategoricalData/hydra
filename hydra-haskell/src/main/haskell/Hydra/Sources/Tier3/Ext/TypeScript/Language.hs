@@ -1,39 +1,31 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier4.Ext.TypeScript.Language (typeScriptLanguageModule) where
+module Hydra.Sources.Tier3.Ext.TypeScript.Language (typeScriptLanguageModule) where
 
--- Standard Tier-4 imports
-import           Prelude hiding ((++))
-import qualified Data.List                 as L
-import qualified Data.Map                  as M
-import qualified Data.Set                  as S
-import qualified Data.Maybe                as Y
-import           Hydra.Dsl.Base            as Base
-import qualified Hydra.Dsl.Core            as Core
-import qualified Hydra.Dsl.Graph           as Graph
-import qualified Hydra.Dsl.Lib.Equality    as Equality
-import qualified Hydra.Dsl.Lib.Flows       as Flows
-import qualified Hydra.Dsl.Lib.Io          as Io
-import qualified Hydra.Dsl.Lib.Lists       as Lists
-import qualified Hydra.Dsl.Lib.Literals    as Literals
-import qualified Hydra.Dsl.Lib.Logic       as Logic
-import qualified Hydra.Dsl.Lib.Maps        as Maps
-import qualified Hydra.Dsl.Lib.Math        as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Lib.Sets        as Sets
-import           Hydra.Dsl.Lib.Strings     as Strings
-import qualified Hydra.Dsl.Module          as Module
-import qualified Hydra.Dsl.Terms           as Terms
-import qualified Hydra.Dsl.Types           as Types
-import           Hydra.Sources.Tier3.All
+import Hydra.Sources.Tier2.All
+import Hydra.Dsl.Base as Base
+import Hydra.Dsl.Coders as Coders
+import Hydra.Dsl.Lib.Equality as Equality
+import Hydra.Dsl.Lib.Flows as Flows
+import Hydra.Dsl.Lib.Lists as Lists
+import Hydra.Dsl.Lib.Logic as Logic
+import Hydra.Dsl.Lib.Maps as Maps
+import Hydra.Dsl.Lib.Sets as Sets
+import Hydra.Dsl.Lib.Strings as Strings
+import qualified Hydra.Dsl.Core as Core
+import qualified Hydra.Dsl.Terms as Terms
+import qualified Hydra.Dsl.Types as Types
+import Hydra.Dsl.ShorthandTypes
+
+import qualified Data.Set as S
 
 
 typeScriptLanguageDefinition :: String -> TTerm a -> TElement a
 typeScriptLanguageDefinition = definitionInModule typeScriptLanguageModule
 
 typeScriptLanguageModule :: Module
-typeScriptLanguageModule = Module ns elements [hydraCodersModule, hydraBasicsModule, hydraStripModule]
-    [hydraModuleModule, hydraCodersModule] $
+typeScriptLanguageModule = Module ns elements
+    [hydraCodersModule, hydraLexicalModule] [hydraCoreModule, hydraGraphModule, hydraCodersModule] $
     Just "Language constraints for TypeScript"
   where
     ns = Namespace "hydra/ext/typeScript/language"
@@ -43,7 +35,7 @@ typeScriptLanguageModule = Module ns elements [hydraCodersModule, hydraBasicsMod
 
 typeScriptLanguageDef :: TElement Language
 typeScriptLanguageDef = typeScriptLanguageDefinition "typeScriptLanguage" $
-  doc "Language constraints for Protocol Buffers v3" $
+  doc "Language constraints for TypeScript" $
   typed languageT $
   record _Language [
     _Language_name>>: wrap _LanguageName "hydra/langs/typeScript",
@@ -81,10 +73,10 @@ typeScriptLanguageDef = typeScriptLanguageDefinition "typeScriptLanguage" $
 
 typeScriptReservedWordsDef :: TElement (S.Set String)
 typeScriptReservedWordsDef = typeScriptLanguageDefinition "typeScriptReservedWords" $
-  doc "A set of reserved words in TypeScript. Taken directly from https://github.com/microsoft/TypeScript/issues/2536" $
-  typed (setT stringT) $
-  (Sets.fromList @@ (Lists.concat @@
-    list [var "reservedWords", var "strictModeReservedWords", var "contextuallKeywords"]))
+    doc "A set of reserved words in TypeScript. Taken directly from https://github.com/microsoft/TypeScript/issues/2536" $
+    typed (tSet tString) $
+    (Sets.fromList @@ (Lists.concat @@
+      list [var "reservedWords", var "strictModeReservedWords", var "contextuallKeywords"]))
   `with` [
     "reservedWords">: list [
       "delete", "do", "else", "enum", "export", "extends", "false", "finally", "for", "function", "if", "import",
