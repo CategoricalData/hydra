@@ -1,4 +1,4 @@
-"""A set of types which supplement hydra/core with variants and accessors. Currently contains miscellaneous additional types including CaseConvention and Either."""
+"""A set of types which supplement hydra.core with variants and accessors. Currently contains miscellaneous additional types including CaseConvention and Either."""
 
 from __future__ import annotations
 from dataclasses import dataclass

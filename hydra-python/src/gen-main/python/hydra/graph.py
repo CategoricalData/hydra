@@ -1,4 +1,4 @@
-"""The extension to graphs of Hydra's core type system (hydra/core)."""
+"""The extension to graphs of Hydra's core type system (hydra.core)."""
 
 from __future__ import annotations
 from collections.abc import Callable
