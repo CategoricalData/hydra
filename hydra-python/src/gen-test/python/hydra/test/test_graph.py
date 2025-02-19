@@ -9,9 +9,10 @@ testTypeLatLonName = hydra.core.Name("LatLon")
 
 testTypeLatLonPolyName = hydra.core.Name("LatLonPoly")
 
-latlonRecord = lambda lat: lambda lon: hydra.core.TermRecord(hydra.core.Record("testTypeLatLonName", [
-  hydra.core.Field(hydra.core.Name("lat"), hydra.core.TermLiteral(hydra.core.LiteralFloat(hydra.core.FloatValueFloat32(lat)))),
-  hydra.core.Field(hydra.core.Name("lon"), hydra.core.TermLiteral(hydra.core.LiteralFloat(hydra.core.FloatValueFloat32(lon))))]))
+def latlonRecord(lat, lon) :
+    hydra.core.TermRecord(hydra.core.Record("testTypeLatLonName", [
+      hydra.core.Field(hydra.core.Name("lat"), hydra.core.TermLiteral(hydra.core.LiteralFloat(hydra.core.FloatValueFloat32("lat")))),
+      hydra.core.Field(hydra.core.Name("lon"), hydra.core.TermLiteral(hydra.core.LiteralFloat(hydra.core.FloatValueFloat32("lon"))))]))
 
 testTypeLatLon = hydra.core.TypeRecord(hydra.core.RowType("testTypeLatLonName", [
   hydra.core.FieldType(hydra.core.Name("lat"), hydra.core.TypeLiteral(hydra.core.LiteralTypeFloat(hydra.core.FloatType.FLOAT32))),
