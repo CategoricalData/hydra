@@ -18,7 +18,7 @@ hydraComputeModule :: Module
 hydraComputeModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just "Abstractions for single- and bidirectional transformations"
   where
-    ns = Namespace "hydra/compute"
+    ns = Namespace "hydra.compute"
     core = typeref $ moduleNamespace hydraCoreModule
     compute = typeref ns
 

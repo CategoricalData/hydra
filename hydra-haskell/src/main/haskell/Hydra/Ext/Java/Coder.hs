@@ -432,7 +432,7 @@ elementNameToFilePath name = nameToFilePath CaseConventionCamel (FileExtension "
     QualifiedName ns local = qualifyName name
 
 elementsClassName :: Namespace -> String
-elementsClassName (Namespace ns) = capitalize $ L.last $ LS.splitOn "/" ns
+elementsClassName (Namespace ns) = capitalize $ L.last $ LS.splitOn "." ns
 
 encodeApplication :: Aliases -> Application -> Flow Graph Java.Expression
 encodeApplication aliases app@(Application lhs rhs) = case fullyStripTerm fun of

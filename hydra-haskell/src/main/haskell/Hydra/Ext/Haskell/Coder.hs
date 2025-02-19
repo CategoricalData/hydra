@@ -56,7 +56,7 @@ constructModule namespaces mod coders pairs = do
           d <- toDataDeclaration coders namespaces pair
           return [d]
 
-    importName name = H.ModuleName $ L.intercalate "." (capitalize <$> Strings.splitOn "/" name)
+    importName name = H.ModuleName $ L.intercalate "." (capitalize <$> Strings.splitOn "." name)
     imports = domainImports ++ standardImports
       where
         domainImports = toImport <$> M.toList (namespacesMapping namespaces)

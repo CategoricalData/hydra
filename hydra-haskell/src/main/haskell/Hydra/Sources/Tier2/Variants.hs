@@ -32,7 +32,7 @@ variantsDefinition :: String -> TTerm a -> TElement a
 variantsDefinition = definitionInModule hydraVariantsModule
 
 hydraVariantsModule :: Module
-hydraVariantsModule = Module (Namespace "hydra/variants") elements [] tier1Modules $
+hydraVariantsModule = Module (Namespace "hydra.variants") elements [] tier1Modules $
     Just ("Functions for working with term, type, and literal type variants, as well as numeric precision.")
   where
     elements = [
@@ -56,7 +56,7 @@ hydraVariantsModule = Module (Namespace "hydra/variants") elements [] tier1Modul
       el typeVariantDef,
       el typeVariantsDef,
    
-      -- Additional definitions; consider moving out of hydra/variants  
+      -- Additional definitions; consider moving out of hydra.variants  
       el fieldMapDef,
       el fieldTypeMapDef]
 
@@ -317,7 +317,7 @@ typeVariantsDef = variantsDefinition "typeVariants" $
     _TypeVariant_union,
     _TypeVariant_variable]
 
--- Additional definitions; consider moving out of hydra/variants  
+-- Additional definitions; consider moving out of hydra.variants  
 
 fieldMapDef :: TElement ([Field] -> M.Map Name Term)
 fieldMapDef = variantsDefinition "fieldMap" $

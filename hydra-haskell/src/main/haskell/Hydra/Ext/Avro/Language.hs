@@ -6,7 +6,7 @@ import qualified Data.Set as S
 
 
 avroLanguage :: Language
-avroLanguage = Language (LanguageName "hydra/ext/avro") $ LanguageConstraints {
+avroLanguage = Language (LanguageName "hydra.ext.avro") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.empty,
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBinary, LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],

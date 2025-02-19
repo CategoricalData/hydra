@@ -13,7 +13,7 @@ avroSchemaModule = Module ns elements [jsonModelModule] [hydraCoreModule] $
     Just ("A model for Avro schemas. Based on the Avro 1.11.1 specification:\n" ++
       "  https://avro.apache.org/docs/1.11.1/specification")
   where
-    ns = Namespace "hydra/ext/org/apache/avro/schema"
+    ns = Namespace "hydra.ext.org.apache.avro.schema"
     def = datatype ns
     avro = typeref ns
     json = typeref $ moduleNamespace jsonModelModule

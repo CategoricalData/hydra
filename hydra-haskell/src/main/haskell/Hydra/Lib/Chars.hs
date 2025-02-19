@@ -1,4 +1,4 @@
--- | Haskell implementations of hydra/lib/chars primitives
+-- | Haskell implementations of hydra.lib.chars primitives
 
 module Hydra.Lib.Chars where
 

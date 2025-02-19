@@ -13,7 +13,7 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just ("A Cypher model based on the OpenCypher specification (version 23), copyright Neo Technology, available at:\n" ++
       "  https://opencypher.org/resources/")
   where
-    ns = Namespace "hydra/ext/cypher/openCypher"
+    ns = Namespace "hydra.ext.cypher.openCypher"
     def = datatype ns
     cypher = typeref ns
 

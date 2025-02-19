@@ -1,4 +1,4 @@
--- | Haskell implementations of hydra/lib/optionals primitives
+-- | Haskell implementations of hydra.lib.optionals primitives
 
 module Hydra.Lib.Optionals where
 

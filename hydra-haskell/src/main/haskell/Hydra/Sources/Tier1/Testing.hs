@@ -20,7 +20,7 @@ hydraTestingModule :: Module
 hydraTestingModule = Module ns elements [hydraCoreModule, hydraMantleModule] [hydraCoreModule] $
     Just "A model for unit testing"
   where
-    ns = Namespace "hydra/testing"
+    ns = Namespace "hydra.testing"
     def = datatype ns
     core = typeref $ moduleNamespace hydraCoreModule
     mantle = typeref $ moduleNamespace hydraMantleModule

@@ -18,7 +18,7 @@ hydraGrammarModule :: Module
 hydraGrammarModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just "A common API for BNF-based grammars, specifying context-free languages"
   where
-    ns = Namespace "hydra/grammar"
+    ns = Namespace "hydra.grammar"
     grammar = typeref ns
     def = datatype ns
 

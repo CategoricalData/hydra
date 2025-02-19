@@ -1,4 +1,4 @@
--- | Haskell implementations of hydra/lib/lists primitives
+-- | Haskell implementations of hydra.lib.lists primitives
 
 module Hydra.Lib.Lists where
 

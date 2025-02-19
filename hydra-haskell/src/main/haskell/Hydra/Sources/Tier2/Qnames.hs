@@ -34,7 +34,7 @@ qnamesDefinition :: String -> TTerm a -> TElement a
 qnamesDefinition = definitionInModule hydraQnamesModule
 
 hydraQnamesModule :: Module
-hydraQnamesModule = Module (Namespace "hydra/qnames") elements [] [hydraMantleModule, hydraModuleModule] $
+hydraQnamesModule = Module (Namespace "hydra.qnames") elements [] [hydraMantleModule, hydraModuleModule] $
     Just ("Functions for working with qualified names.")
   where
    elements = [
@@ -63,7 +63,7 @@ namespaceToFilePathDef = qnamesDefinition "namespaceToFilePath" $
     `with` [
       "parts">: Lists.map
         @@ (ref convertCaseDef @@ Mantle.caseConventionCamel @@ var "caseConv")
-        @@ (Strings.splitOn @@ "/" @@ (Core.unNamespace @@ var "ns"))])
+        @@ (Strings.splitOn @@ "." @@ (Core.unNamespace @@ var "ns"))])
 
 qnameDef :: TElement (Namespace -> String -> Name)
 qnameDef = qnamesDefinition "qname" $

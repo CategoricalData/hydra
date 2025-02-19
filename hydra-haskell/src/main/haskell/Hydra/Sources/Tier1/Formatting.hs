@@ -31,7 +31,7 @@ formattingDefinition :: String -> TTerm a -> TElement a
 formattingDefinition = definitionInModule hydraFormattingModule
 
 hydraFormattingModule :: Module
-hydraFormattingModule = Module (Namespace "hydra/formatting") elements [] [hydraMantleModule] $
+hydraFormattingModule = Module (Namespace "hydra.formatting") elements [] [hydraMantleModule] $
     Just "String formatting types and functions."
   where
     elements = [

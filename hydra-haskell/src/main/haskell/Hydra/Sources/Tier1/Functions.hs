@@ -27,7 +27,7 @@ functionsDefinition :: String -> TTerm a -> TElement a
 functionsDefinition = definitionInModule hydraFunctionsModule
 
 hydraFunctionsModule :: Module
-hydraFunctionsModule = Module (Namespace "hydra/functions") elements [] [hydraCoreModule] $
+hydraFunctionsModule = Module (Namespace "hydra.functions") elements [] [hydraCoreModule] $
     Just "Placeholder for utilities dealing with Hydra functions."
   where
     elements = [

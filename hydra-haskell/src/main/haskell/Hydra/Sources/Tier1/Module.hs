@@ -20,7 +20,7 @@ hydraModuleModule :: Module
 hydraModuleModule = Module ns elements [hydraGraphModule] [hydraCoreModule] $
     Just "A model for Hydra namespaces and modules"
   where
-    ns = Namespace "hydra/module"
+    ns = Namespace "hydra.module"
     graph = typeref $ moduleNamespace hydraGraphModule
     mod = typeref ns
     def = datatype ns

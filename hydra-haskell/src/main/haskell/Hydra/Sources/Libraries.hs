@@ -25,7 +25,7 @@ import qualified Data.List as L
 
 
 _hydra_lib_chars :: Namespace
-_hydra_lib_chars = Namespace "hydra/lib/chars"
+_hydra_lib_chars = Namespace "hydra.lib.chars"
 
 _chars_isAlphaNum = qname _hydra_lib_chars "isAlphaNum" :: Name
 _chars_isLower = qname _hydra_lib_chars "isLower" :: Name
@@ -42,7 +42,7 @@ hydraLibChars = standardLibrary _hydra_lib_strings [
   prim1 [] _chars_toUpper int32 int32 Chars.toUpper]
 
 _hydra_lib_equality :: Namespace
-_hydra_lib_equality = Namespace "hydra/lib/equality"
+_hydra_lib_equality = Namespace "hydra.lib.equality"
 
 _equality_equal = qname _hydra_lib_equality "equal" :: Name
 _equality_equalBinary = qname _hydra_lib_equality "equalBinary" :: Name
@@ -97,7 +97,7 @@ hydraLibEquality = standardLibrary _hydra_lib_equality [
     x = variable "x"
 
 _hydra_lib_flows :: Namespace
-_hydra_lib_flows = Namespace "hydra/lib/flows"
+_hydra_lib_flows = Namespace "hydra.lib.flows"
 
 _flows_apply = qname _hydra_lib_flows "apply" :: Name
 _flows_bind = qname _hydra_lib_flows "bind" :: Name
@@ -132,7 +132,7 @@ applyInterp funs' args' = do
 bindInterp :: Term -> Term -> Flow Graph Term
 bindInterp args' fun = do
     args <- Expect.list Prelude.pure args'
-    return $ Terms.apply (Terms.primitive $ Name "hydra/lib/lists.concat") (Terms.list $ Terms.apply fun <$> args)
+    return $ Terms.apply (Terms.primitive $ Name "hydra.lib.lists.concat") (Terms.list $ Terms.apply fun <$> args)
 
 mapInterp :: Term -> Term -> Flow Graph Term
 mapInterp fun args' = do
@@ -140,7 +140,7 @@ mapInterp fun args' = do
     return $ Terms.list (Terms.apply fun <$> args)
 
 _hydra_lib_io :: Namespace
-_hydra_lib_io = Namespace "hydra/lib/io"
+_hydra_lib_io = Namespace "hydra.lib.io"
 
 _io_showTerm = qname _hydra_lib_io "showTerm" :: Name
 _io_showType = qname _hydra_lib_io "showType" :: Name
@@ -151,7 +151,7 @@ hydraLibIo = standardLibrary _hydra_lib_io [
     prim1 [] _io_showType type_ string Io.showType]
 
 _hydra_lib_lists :: Namespace
-_hydra_lib_lists = Namespace "hydra/lib/lists"
+_hydra_lib_lists = Namespace "hydra.lib.lists"
 
 _lists_apply = qname _hydra_lib_lists "apply" :: Name
 _lists_at = qname _hydra_lib_lists "at" :: Name
@@ -201,7 +201,7 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     y = variable "y"
 
 _hydra_lib_literals :: Namespace
-_hydra_lib_literals = Namespace "hydra/lib/literals"
+_hydra_lib_literals = Namespace "hydra.lib.literals"
 
 _literals_bigfloatToBigint = qname _hydra_lib_literals "bigfloatToBigint" :: Name
 _literals_bigfloatToFloat32 = qname _hydra_lib_literals "bigfloatToFloat32" :: Name
@@ -256,7 +256,7 @@ hydraLibLiterals = standardLibrary _hydra_lib_literals [
   prim1 [] _literals_uint64ToBigint uint64 bigint Literals.uint64ToBigint]
 
 _hydra_lib_logic :: Namespace
-_hydra_lib_logic = Namespace "hydra/lib/logic"
+_hydra_lib_logic = Namespace "hydra.lib.logic"
 
 _logic_and = qname _hydra_lib_logic "and" :: Name
 _logic_ifElse = qname _hydra_lib_logic "ifElse" :: Name
@@ -273,7 +273,7 @@ hydraLibLogic = standardLibrary _hydra_lib_logic [
     x = variable "x"
 
 _hydra_lib_maps :: Namespace
-_hydra_lib_maps = Namespace "hydra/lib/maps"
+_hydra_lib_maps = Namespace "hydra.lib.maps"
 
 _maps_empty = qname _hydra_lib_maps "empty" :: Name
 _maps_fromList = qname _hydra_lib_maps "fromList" :: Name
@@ -315,7 +315,7 @@ hydraLibMaps = standardLibrary _hydra_lib_maps [
     mapKv = Prims.map k v
 
 _hydra_lib_math :: Namespace
-_hydra_lib_math = Namespace "hydra/lib/math"
+_hydra_lib_math = Namespace "hydra.lib.math"
 
 _math_add = qname _hydra_lib_math "add" :: Name
 _math_div = qname _hydra_lib_math "div" :: Name
@@ -336,7 +336,7 @@ hydraLibMathInt32 = standardLibrary _hydra_lib_math [
   prim2 [] _math_sub int32 int32 int32 Math.sub]
 
 _hydra_lib_optionals :: Namespace
-_hydra_lib_optionals = Namespace "hydra/lib/optionals"
+_hydra_lib_optionals = Namespace "hydra.lib.optionals"
 
 _optionals_apply :: Name
 _optionals_apply = qname _hydra_lib_optionals "apply" :: Name
@@ -368,7 +368,7 @@ hydraLibOptionals = standardLibrary _hydra_lib_optionals [
     z = variable "z"
 
 _hydra_lib_sets :: Namespace
-_hydra_lib_sets = Namespace "hydra/lib/sets"
+_hydra_lib_sets = Namespace "hydra.lib.sets"
 
 _sets_insert = qname _hydra_lib_sets "add" :: Name
 _sets_contains = qname _hydra_lib_sets "contains" :: Name
@@ -404,7 +404,7 @@ hydraLibSets = standardLibrary _hydra_lib_sets [
     y = variable "y"
 
 _hydra_lib_strings :: Namespace
-_hydra_lib_strings = Namespace "hydra/lib/strings"
+_hydra_lib_strings = Namespace "hydra.lib.strings"
 
 _strings_cat = qname _hydra_lib_strings "cat" :: Name
 _strings_cat2 = qname _hydra_lib_strings "cat2" :: Name
@@ -433,7 +433,7 @@ hydraLibStrings = standardLibrary _hydra_lib_strings [
 standardLibrary :: Namespace -> [Primitive] -> Library
 standardLibrary ns prims = Library {
   libraryNamespace = ns,
-  libraryPrefix = L.drop (L.length ("hydra/lib/" :: String)) $ unNamespace ns,
+  libraryPrefix = L.drop (L.length ("hydra.lib." :: String)) $ unNamespace ns,
   libraryPrimitives = prims}
 
 standardLibraries :: [Library]

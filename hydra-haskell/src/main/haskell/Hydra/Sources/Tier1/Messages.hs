@@ -29,7 +29,7 @@ messagesDefinition :: String -> TTerm a -> TElement a
 messagesDefinition = definitionInModule hydraMessagesModule
 
 hydraMessagesModule :: Module
-hydraMessagesModule = Module (Namespace "hydra/messages") elements [] [hydraCoreModule] $
+hydraMessagesModule = Module (Namespace "hydra.messages") elements [] [hydraCoreModule] $
     Just "A collection of standard error and warning messages"
   where
    elements = [

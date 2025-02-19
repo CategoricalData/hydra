@@ -1,4 +1,4 @@
--- | Haskell implementations of hydra/lib/logic (logic and control flow) primitives
+-- | Haskell implementations of hydra.lib.logic (logic and control flow) primitives
 
 module Hydra.Lib.Logic where
 

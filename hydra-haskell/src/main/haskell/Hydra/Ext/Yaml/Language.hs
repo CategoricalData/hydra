@@ -6,7 +6,7 @@ import qualified Data.Set as S
 
 
 yamlLanguage :: Language
-yamlLanguage = Language (LanguageName "hydra/ext/yaml") $ LanguageConstraints {
+yamlLanguage = Language (LanguageName "hydra.ext.yaml") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.empty,
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],

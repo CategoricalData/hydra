@@ -14,7 +14,7 @@ yamlModelModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       "including directives, comments, anchors, style, formatting, and aliases, are not supported by this model.\n" ++
       "In addition, tags are omitted from this model, and non-standard scalars are unsupported.")
   where
-    ns = Namespace "hydra/ext/org/yaml/model"
+    ns = Namespace "hydra.ext.org.yaml.model"
     def = datatype ns
     model = typeref ns
 

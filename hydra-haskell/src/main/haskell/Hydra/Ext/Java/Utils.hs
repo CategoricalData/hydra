@@ -251,7 +251,7 @@ javaMultiplicativeExpressionToJavaRelationalExpression = Java.RelationalExpressi
   Java.ShiftExpressionUnary . Java.AdditiveExpressionUnary
 
 javaPackageDeclaration :: Namespace -> Java.PackageDeclaration
-javaPackageDeclaration (Namespace name) = Java.PackageDeclaration [] (Java.Identifier <$> Strings.splitOn "/" name)
+javaPackageDeclaration (Namespace name) = Java.PackageDeclaration [] (Java.Identifier <$> Strings.splitOn "." name)
 
 javaPostfixExpressionToJavaEqualityExpression :: Java.PostfixExpression -> Java.EqualityExpression
 javaPostfixExpressionToJavaEqualityExpression = Java.EqualityExpressionUnary .
@@ -433,7 +433,7 @@ nameToQualifiedJavaName aliases qualify name mlocal = (jid, pkg)
     alias = case ns of
       Nothing -> Nothing
       Just n -> case M.lookup n (aliasesPackages aliases) of
-          Nothing -> Just $ javaPackageName $ Strings.splitOn "/" $ unNamespace n
+          Nothing -> Just $ javaPackageName $ Strings.splitOn "." $ unNamespace n
           Just id -> Just id
     pkg = if qualify
       then Y.maybe none Java.ClassTypeQualifierPackage alias
@@ -449,7 +449,7 @@ nameToJavaName aliases name = Java.Identifier $ if isEscaped (unName name)
     else case ns of
       Nothing -> local
       Just gname -> case M.lookup gname (aliasesPackages aliases) of
-        Nothing -> fromParts $ Strings.splitOn "/" $ unNamespace gname
+        Nothing -> fromParts $ Strings.splitOn "." $ unNamespace gname
         Just (Java.PackageName parts) -> fromParts (Java.unIdentifier <$> parts)
   where
     QualifiedName ns local = qualifyName name

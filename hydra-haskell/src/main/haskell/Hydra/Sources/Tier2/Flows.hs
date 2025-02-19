@@ -32,7 +32,7 @@ flowsDefinition :: String -> TTerm a -> TElement a
 flowsDefinition = definitionInModule hydraFlowsModule
 
 hydraFlowsModule :: Module
-hydraFlowsModule = Module (Namespace "hydra/flows") elements [hydraConstantsModule] [hydraMantleModule, hydraComputeModule] $
+hydraFlowsModule = Module (Namespace "hydra.flows") elements [hydraConstantsModule] [hydraMantleModule, hydraComputeModule] $
     Just ("Functions for working with flows (the Hydra state monad).")
   where
     elements = [

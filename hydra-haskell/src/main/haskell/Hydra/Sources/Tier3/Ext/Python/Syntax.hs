@@ -8,7 +8,7 @@ import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
 
-pythonNs = Namespace "hydra/ext/python/syntax"
+pythonNs = Namespace "hydra.ext.python.syntax"
 python = typeref pythonNs
 
 pythonSyntaxModule :: Module

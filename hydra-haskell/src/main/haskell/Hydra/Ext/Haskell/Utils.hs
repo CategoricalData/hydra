@@ -42,7 +42,7 @@ hsPrimitiveReference :: Name -> H.Name
 hsPrimitiveReference name = H.NameNormal $ H.QualifiedName [prefix] $ H.NamePart local
   where
     QualifiedName (Just (Namespace ns)) local = qualifyName name
-    prefix = H.NamePart $ capitalize $ L.last $ Strings.splitOn "/" ns
+    prefix = H.NamePart $ capitalize $ L.last $ Strings.splitOn "." ns
 
 hsvar :: String -> H.Expression
 hsvar s = H.ExpressionVariable $ rawName s
@@ -54,7 +54,7 @@ namespacesForModule mod = do
   where
     ns = moduleNamespace mod
     focusPair = toPair ns
-    toModuleName (Namespace n) = H.ModuleName $ capitalize $ L.last $ Strings.splitOn "/" n
+    toModuleName (Namespace n) = H.ModuleName $ capitalize $ L.last $ Strings.splitOn "." n
     toPair name = (name, toModuleName name)
     addPair (m, s) (name, alias@(H.ModuleName aliasStr)) = if S.member alias s
       then addPair (m, s) (name, H.ModuleName $ aliasStr ++ "_")

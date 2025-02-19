@@ -11,7 +11,7 @@ openGqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule]
   $ Just ("A GQL model based on the OpenGQL ANTLR grammar, version 15b256b (2024-09-05), available at:"
     ++ " https://github.com/opengql/grammar/blob/main/GQL.g4")
   where
-    ns = Namespace "hydra/ext/gql/openGql"
+    ns = Namespace "hydra.ext.gql.openGql"
     def = datatype ns
     gql = typeref ns
 

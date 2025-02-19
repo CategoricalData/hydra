@@ -46,7 +46,7 @@ constructModule mod coders pairs = do
           Scala.Importer (Scala.Data_RefName $ toScalaName ns) [Scala.ImporteeWildcard]]
         toPrimImport (Namespace ns) = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
           Scala.Importer (Scala.Data_RefName $ toScalaName ns) []]
-    toScalaName name = Scala.Data_Name $ Scala.PredefString $ L.intercalate "." $ Strings.splitOn "/" name
+    toScalaName name = Scala.Data_Name $ Scala.PredefString $ L.intercalate "." $ Strings.splitOn "." name
     toDef (el, TypedTerm term typ) = withTrace ("element " ++ unName (elementName el)) $ do
         let coder = Y.fromJust $ M.lookup typ coders
         rhs <- coderEncode coder term

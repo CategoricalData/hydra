@@ -31,7 +31,7 @@ import Hydra.Sources.Tier2.Variants
 
 
 hydraErrorsModule :: Module
-hydraErrorsModule = Module (Namespace "hydra/errors") elements
+hydraErrorsModule = Module (Namespace "hydra.errors") elements
     [hydraVariantsModule]
     [hydraCoreModule] $
     Just "Utilities for working with errors and flow state"

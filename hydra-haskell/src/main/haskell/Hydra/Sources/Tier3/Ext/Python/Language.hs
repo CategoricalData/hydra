@@ -26,7 +26,7 @@ pythonLanguageModule = Module ns elements
     [hydraCodersModule, hydraLexicalModule] [hydraCoreModule, hydraGraphModule, hydraCodersModule] $
     Just "Language constraints and reserved words for Python 3"
   where
-    ns = Namespace "hydra/ext/python/language"
+    ns = Namespace "hydra.ext.python.language"
     elements = [
       el pythonLanguageDef,
       el pythonReservedWordsDef]
@@ -35,7 +35,7 @@ pythonLanguageDef :: TElement Language
 pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
     doc "Language constraints for Python 3" $
     typed languageT $
-    Coders.language "hydra/ext/python"
+    Coders.language "hydra.ext.python"
       eliminationVariants
       literalVariants
       floatTypes

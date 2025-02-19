@@ -1,4 +1,4 @@
--- | Haskell implementations of hydra/lib/equality primitives. These simply make use of derived Eq.
+-- | Haskell implementations of hydra.lib.equality primitives. These simply make use of derived Eq.
 
 module Hydra.Lib.Equality where
 

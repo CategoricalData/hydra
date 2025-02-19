@@ -16,7 +16,7 @@ pgMappingModule = Module ns elements
     [pgModelModule, hydraCoreModule, hydraComputeModule] [hydraCoreModule] $
     Just "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs"
   where
-    ns = Namespace "hydra/pg/mapping"
+    ns = Namespace "hydra.pg.mapping"
     mappings = typeref ns
     compute = typeref $ moduleNamespace hydraComputeModule
     core = typeref $ moduleNamespace hydraCoreModule

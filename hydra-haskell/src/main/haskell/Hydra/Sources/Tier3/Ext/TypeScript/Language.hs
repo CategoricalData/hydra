@@ -28,7 +28,7 @@ typeScriptLanguageModule = Module ns elements
     [hydraCodersModule, hydraLexicalModule] [hydraCoreModule, hydraGraphModule, hydraCodersModule] $
     Just "Language constraints for TypeScript"
   where
-    ns = Namespace "hydra/ext/typeScript/language"
+    ns = Namespace "hydra.ext.typeScript.language"
     elements = [
       el typeScriptLanguageDef,
       el typeScriptReservedWordsDef]
@@ -38,7 +38,7 @@ typeScriptLanguageDef = typeScriptLanguageDefinition "typeScriptLanguage" $
   doc "Language constraints for TypeScript" $
   typed languageT $
   record _Language [
-    _Language_name>>: wrap _LanguageName "hydra/langs/typeScript",
+    _Language_name>>: wrap _LanguageName "hydra.langs.typeScript",
     _Language_constraints>>: record _LanguageConstraints [
       _LanguageConstraints_eliminationVariants>>: Sets.empty,
       _LanguageConstraints_literalVariants>>: Sets.fromList @@ list (unitVariant _LiteralVariant <$> [

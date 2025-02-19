@@ -26,7 +26,7 @@ openCypherFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule
       ++ "https://neo4j.com/docs/cypher-manual/current/functions."
       ++ " Current as of August 2024.")
   where
-    ns = Namespace "hydra/ext/cypher/features"
+    ns = Namespace "hydra.ext.cypher.features"
     cypherFeatures = typeref ns
 
     elements = featureSetToType <$> flatten openCypherFeatures
@@ -212,7 +212,7 @@ openCypherFeaturesEnumModule :: Module
 openCypherFeaturesEnumModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just ("A model with an enumeration of (Open)Cypher features.")
   where
-    ns = Namespace "hydra/org/opencypher/features"
+    ns = Namespace "hydra.org/opencypher/features"
     def = datatype ns
     elements = [
       def "CypherFeature" $

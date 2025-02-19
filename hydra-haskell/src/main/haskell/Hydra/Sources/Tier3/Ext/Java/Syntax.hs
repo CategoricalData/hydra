@@ -12,7 +12,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       "  https://docs.oracle.com/javase/specs/jls/se12/html/jls-19.html\n" ++
       "Note: all *WithComments types were added manually, rather than derived from the BNF, which does not allow for comments.")
   where
-    ns = Namespace "hydra/ext/java/syntax"
+    ns = Namespace "hydra.ext.java.syntax"
     def = datatype ns
     java = typeref ns
 

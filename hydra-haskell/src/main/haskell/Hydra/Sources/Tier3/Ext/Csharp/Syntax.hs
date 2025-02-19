@@ -11,7 +11,7 @@ csharpSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just ("A C# syntax module based on the ANTLR grammar dated 02/07/2024 and available at:\n"
       ++ "  https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/grammar")
   where
-    ns = Namespace "hydra/ext/csharp/syntax"
+    ns = Namespace "hydra.ext.csharp.syntax"
     def = datatype ns
     csharp = typeref ns
 

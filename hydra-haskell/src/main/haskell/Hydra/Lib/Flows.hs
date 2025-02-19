@@ -1,4 +1,4 @@
--- | Haskell implementations of hydra/lib/flows primitives. These are simply wrappers around hydra/flows functions.
+-- | Haskell implementations of hydra.lib.flows primitives. These are simply wrappers around hydra.flows functions.
 
 module Hydra.Lib.Flows where
 

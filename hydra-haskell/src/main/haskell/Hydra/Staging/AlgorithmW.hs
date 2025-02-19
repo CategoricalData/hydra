@@ -18,7 +18,7 @@ import Debug.Trace
 
 
 natType = TyLit $ LiteralTypeInteger IntegerTypeInt32
-constNeg = ExprConst $ PrimTyped $ TypedPrimitive (Name "hydra/lib/math.neg") $ Forall [] $ TyFn natType natType
+constNeg = ExprConst $ PrimTyped $ TypedPrimitive (Name "hydra.lib.math.neg") $ Forall [] $ TyFn natType natType
 -- Note: Hydra has no built-in pred or succ functions, but neg has the expected type
 constPred = constNeg
 constSucc = constNeg
