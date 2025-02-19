@@ -21,7 +21,7 @@ def floatValueToBigfloat(v1) :
 
 def integerValueToBigint(v1) :
     """Convert an integer value of any precision to a bigint."""
-
+    
     match v1:
         case hydra.core.IntegerValueBigint(v1):
             return hydra.lib.equality.identity(v1)
