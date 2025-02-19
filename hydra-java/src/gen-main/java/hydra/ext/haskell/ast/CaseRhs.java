@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The right-hand side of a pattern-matching alternative
  */
 public class CaseRhs implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/haskell/ast.CaseRhs");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.CaseRhs");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   

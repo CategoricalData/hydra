@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class StatementNoShortIf implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.StatementNoShortIf");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.StatementNoShortIf");
   
   public static final hydra.core.Name FIELD_NAME_WITHOUT_TRAILING = new hydra.core.Name("withoutTrailing");
   

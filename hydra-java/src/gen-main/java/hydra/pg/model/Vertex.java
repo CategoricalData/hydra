@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A vertex
  */
 public class Vertex<V> implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/model.Vertex");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.Vertex");
   
   public static final hydra.core.Name FIELD_NAME_LABEL = new hydra.core.Name("label");
   

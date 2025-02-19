@@ -8,7 +8,7 @@ import java.io.Serializable;
  * An export statement
  */
 public abstract class Export implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/haskell/ast.Export");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.Export");
   
   public static final hydra.core.Name FIELD_NAME_DECLARATION = new hydra.core.Name("declaration");
   

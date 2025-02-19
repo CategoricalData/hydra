@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A simple test case with an input and an expected output
  */
 public abstract class TestCase implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/testing.TestCase");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.TestCase");
   
   public static final hydra.core.Name FIELD_NAME_CASE_CONVERSION = new hydra.core.Name("caseConversion");
   

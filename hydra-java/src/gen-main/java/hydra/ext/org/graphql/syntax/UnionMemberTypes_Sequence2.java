@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public class UnionMemberTypes_Sequence2 implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.UnionMemberTypes.Sequence2");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.UnionMemberTypes_Sequence2");
   
   public static final hydra.core.Name FIELD_NAME_OR = new hydra.core.Name("or");
   
@@ -13,9 +13,9 @@ public class UnionMemberTypes_Sequence2 implements Serializable {
   
   public final hydra.util.Opt<java.lang.Void> or;
   
-  public final hydra.ext.graphql.syntax.NamedType namedType;
+  public final hydra.ext.org.graphql.syntax.NamedType namedType;
   
-  public UnionMemberTypes_Sequence2 (hydra.util.Opt<java.lang.Void> or, hydra.ext.graphql.syntax.NamedType namedType) {
+  public UnionMemberTypes_Sequence2 (hydra.util.Opt<java.lang.Void> or, hydra.ext.org.graphql.syntax.NamedType namedType) {
     java.util.Objects.requireNonNull((or));
     java.util.Objects.requireNonNull((namedType));
     this.or = or;
@@ -41,7 +41,7 @@ public class UnionMemberTypes_Sequence2 implements Serializable {
     return new UnionMemberTypes_Sequence2(or, namedType);
   }
   
-  public UnionMemberTypes_Sequence2 withNamedType(hydra.ext.graphql.syntax.NamedType namedType) {
+  public UnionMemberTypes_Sequence2 withNamedType(hydra.ext.org.graphql.syntax.NamedType namedType) {
     java.util.Objects.requireNonNull((namedType));
     return new UnionMemberTypes_Sequence2(or, namedType);
   }

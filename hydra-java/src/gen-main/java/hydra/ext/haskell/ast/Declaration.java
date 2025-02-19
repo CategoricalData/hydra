@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A data or value declaration
  */
 public abstract class Declaration implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/haskell/ast.Declaration");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.Declaration");
   
   public static final hydra.core.Name FIELD_NAME_DATA = new hydra.core.Name("data");
   

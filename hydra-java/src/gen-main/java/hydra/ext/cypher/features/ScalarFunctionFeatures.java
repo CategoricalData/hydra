@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Scalar functions
  */
 public class ScalarFunctionFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.ScalarFunctionFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.ScalarFunctionFeatures");
   
   public static final hydra.core.Name FIELD_NAME_CHAR_LENGTH = new hydra.core.Name("char_length");
   

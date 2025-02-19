@@ -8,7 +8,7 @@ import java.io.Serializable;
  * An abstract edge based on a record type
  */
 public class Edge implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/query.Edge");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.Edge");
   
   public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
   

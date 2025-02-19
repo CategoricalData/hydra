@@ -5,7 +5,7 @@ package hydra.ext.scala.meta;
 import java.io.Serializable;
 
 public class Type_Param implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/scala/meta.Type.Param");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.scala.meta.Type_Param");
   
   public static final hydra.core.Name FIELD_NAME_MODS = new hydra.core.Name("mods");
   
@@ -25,13 +25,13 @@ public class Type_Param implements Serializable {
   
   public final java.util.List<hydra.ext.scala.meta.Type_Param> tparams;
   
-  public final java.util.List<hydra.ext.scala.meta.Type_Bounds> tbounds;
+  public final java.util.List<hydra.ext.scala.meta.TypeBounds> tbounds;
   
   public final java.util.List<hydra.ext.scala.meta.Type> vbounds;
   
   public final java.util.List<hydra.ext.scala.meta.Type> cbounds;
   
-  public Type_Param (java.util.List<hydra.ext.scala.meta.Mod> mods, hydra.ext.scala.meta.Name name, java.util.List<hydra.ext.scala.meta.Type_Param> tparams, java.util.List<hydra.ext.scala.meta.Type_Bounds> tbounds, java.util.List<hydra.ext.scala.meta.Type> vbounds, java.util.List<hydra.ext.scala.meta.Type> cbounds) {
+  public Type_Param (java.util.List<hydra.ext.scala.meta.Mod> mods, hydra.ext.scala.meta.Name name, java.util.List<hydra.ext.scala.meta.Type_Param> tparams, java.util.List<hydra.ext.scala.meta.TypeBounds> tbounds, java.util.List<hydra.ext.scala.meta.Type> vbounds, java.util.List<hydra.ext.scala.meta.Type> cbounds) {
     java.util.Objects.requireNonNull((mods));
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((tparams));
@@ -75,7 +75,7 @@ public class Type_Param implements Serializable {
     return new Type_Param(mods, name, tparams, tbounds, vbounds, cbounds);
   }
   
-  public Type_Param withTbounds(java.util.List<hydra.ext.scala.meta.Type_Bounds> tbounds) {
+  public Type_Param withTbounds(java.util.List<hydra.ext.scala.meta.TypeBounds> tbounds) {
     java.util.Objects.requireNonNull((tbounds));
     return new Type_Param(mods, name, tparams, tbounds, vbounds, cbounds);
   }

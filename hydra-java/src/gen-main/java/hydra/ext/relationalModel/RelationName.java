@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A unique relation (table) name
  */
 public class RelationName implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/relationalModel.RelationName");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.relationalModel.RelationName");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   

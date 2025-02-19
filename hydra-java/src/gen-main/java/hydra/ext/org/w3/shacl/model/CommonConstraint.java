@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Any of a number of constraint parameters which can be applied either to node or property shapes
  */
 public abstract class CommonConstraint implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/shacl/model.CommonConstraint");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.shacl.model.CommonConstraint");
   
   public static final hydra.core.Name FIELD_NAME_AND = new hydra.core.Name("and");
   

@@ -5,7 +5,7 @@ package hydra.pg.query;
 import java.io.Serializable;
 
 public abstract class AggregationQuery implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/query.AggregationQuery");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.query.AggregationQuery");
   
   public static final hydra.core.Name FIELD_NAME_COUNT = new hydra.core.Name("count");
   

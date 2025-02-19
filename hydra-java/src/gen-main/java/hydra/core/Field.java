@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A name/term pair
  */
 public class Field implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.Field");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Field");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   

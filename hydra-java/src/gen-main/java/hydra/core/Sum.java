@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The unlabeled equivalent of an Injection term
  */
 public class Sum implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.Sum");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Sum");
   
   public static final hydra.core.Name FIELD_NAME_INDEX = new hydra.core.Name("index");
   

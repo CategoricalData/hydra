@@ -8,7 +8,7 @@ import java.io.Serializable;
  * `SourceContext` represents information about the source of a protobuf element, like the file in which it is defined.
  */
 public class SourceContext implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/protobuf/sourceContext.SourceContext");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.protobuf.sourceContext.SourceContext");
   
   public static final hydra.core.Name FIELD_NAME_FILE_NAME = new hydra.core.Name("fileName");
   

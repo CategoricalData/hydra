@@ -5,7 +5,7 @@ package hydra.ext.pegasus.pdl;
 import java.io.Serializable;
 
 public class NamedSchema implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.NamedSchema");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.pegasus.pdl.NamedSchema");
   
   public static final hydra.core.Name FIELD_NAME_QUALIFIED_NAME = new hydra.core.Name("qualifiedName");
   
@@ -15,11 +15,11 @@ public class NamedSchema implements Serializable {
   
   public final hydra.ext.pegasus.pdl.QualifiedName qualifiedName;
   
-  public final hydra.ext.pegasus.pdl.NamedSchema_Type type;
+  public final hydra.ext.pegasus.pdl.NamedSchemaType type;
   
   public final hydra.ext.pegasus.pdl.Annotations annotations;
   
-  public NamedSchema (hydra.ext.pegasus.pdl.QualifiedName qualifiedName, hydra.ext.pegasus.pdl.NamedSchema_Type type, hydra.ext.pegasus.pdl.Annotations annotations) {
+  public NamedSchema (hydra.ext.pegasus.pdl.QualifiedName qualifiedName, hydra.ext.pegasus.pdl.NamedSchemaType type, hydra.ext.pegasus.pdl.Annotations annotations) {
     java.util.Objects.requireNonNull((qualifiedName));
     java.util.Objects.requireNonNull((type));
     java.util.Objects.requireNonNull((annotations));
@@ -47,7 +47,7 @@ public class NamedSchema implements Serializable {
     return new NamedSchema(qualifiedName, type, annotations);
   }
   
-  public NamedSchema withType(hydra.ext.pegasus.pdl.NamedSchema_Type type) {
+  public NamedSchema withType(hydra.ext.pegasus.pdl.NamedSchemaType type) {
     java.util.Objects.requireNonNull((type));
     return new NamedSchema(qualifiedName, type, annotations);
   }

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A range from min to max, inclusive
  */
 public class Range implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/query.Range");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.Range");
   
   public static final hydra.core.Name FIELD_NAME_MIN = new hydra.core.Name("min");
   

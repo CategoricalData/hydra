@@ -6,7 +6,7 @@ package hydra.workflow;
  * The last mile of a transformation, which encodes and serializes terms to a file
  */
 public class LastMile<S, A> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/workflow.LastMile");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.workflow.LastMile");
   
   public static final hydra.core.Name FIELD_NAME_ENCODER = new hydra.core.Name("encoder");
   

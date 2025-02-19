@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class AssertStatement_Pair implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.AssertStatement.Pair");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.AssertStatement_Pair");
   
   public static final hydra.core.Name FIELD_NAME_FIRST = new hydra.core.Name("first");
   

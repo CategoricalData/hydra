@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The identifier of a function constructor
  */
 public abstract class FunctionVariant implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/mantle.FunctionVariant");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.mantle.FunctionVariant");
   
   public static final hydra.core.Name FIELD_NAME_ELIMINATION = new hydra.core.Name("elimination");
   

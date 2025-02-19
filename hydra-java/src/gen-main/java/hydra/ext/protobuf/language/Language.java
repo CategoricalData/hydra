@@ -7,7 +7,7 @@ package hydra.ext.protobuf.language;
  */
 public interface Language {
   static hydra.coders.Language protobufLanguage() {
-    return new hydra.coders.Language(new hydra.coders.LanguageName("hydra/ext/protobuf"), new hydra.coders.LanguageConstraints(hydra.lib.sets.Empty.apply(), hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
+    return new hydra.coders.Language(new hydra.coders.LanguageName("hydra.ext.protobuf"), new hydra.coders.LanguageConstraints(hydra.lib.sets.Empty.apply(), hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.mantle.LiteralVariant.Binary(),
       new hydra.mantle.LiteralVariant.Boolean_(),
       new hydra.mantle.LiteralVariant.Float_(),

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A field with an optional type scheme, used to bind variables to terms in a 'let' expression
  */
 public class LetBinding implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.LetBinding");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.LetBinding");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   

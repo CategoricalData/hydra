@@ -5,7 +5,7 @@ package hydra.ext.org.apache.avro.schema;
 import java.io.Serializable;
 
 public class Enum_ implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/avro/schema.Enum");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.avro.schema.Enum");
   
   public static final hydra.core.Name FIELD_NAME_SYMBOLS = new hydra.core.Name("symbols");
   

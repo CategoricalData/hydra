@@ -6,7 +6,7 @@ package hydra.module;
  * A library of primitive functions
  */
 public class Library {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/module.Library");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.module.Library");
   
   public static final hydra.core.Name FIELD_NAME_NAMESPACE = new hydra.core.Name("namespace");
   

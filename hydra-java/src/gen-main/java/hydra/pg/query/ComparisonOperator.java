@@ -5,7 +5,7 @@ package hydra.pg.query;
 import java.io.Serializable;
 
 public abstract class ComparisonOperator implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/query.ComparisonOperator");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.query.ComparisonOperator");
   
   public static final hydra.core.Name FIELD_NAME_EQ = new hydra.core.Name("eq");
   

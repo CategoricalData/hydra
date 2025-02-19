@@ -5,7 +5,7 @@ package hydra.ext.scala.meta;
 import java.io.Serializable;
 
 public class Data_NewAnonymous implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/scala/meta.Data.NewAnonymous");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.scala.meta.Data_NewAnonymous");
   
   public static final hydra.core.Name FIELD_NAME_TEMPL = new hydra.core.Name("templ");
   

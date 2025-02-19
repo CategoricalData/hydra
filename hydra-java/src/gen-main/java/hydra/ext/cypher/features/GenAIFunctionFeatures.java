@@ -8,7 +8,7 @@ import java.io.Serializable;
  * GenAI functions
  */
 public class GenAIFunctionFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.GenAIFunctionFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.GenAIFunctionFeatures");
   
   public static final hydra.core.Name FIELD_NAME_GENAI_VECTOR_ENCODE = new hydra.core.Name("genai.vector.encode");
   

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A mapping specification producing vertices of a specified label
  */
 public class VertexSpec implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/mapping.VertexSpec");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.mapping.VertexSpec");
   
   public static final hydra.core.Name FIELD_NAME_LABEL = new hydra.core.Name("label");
   

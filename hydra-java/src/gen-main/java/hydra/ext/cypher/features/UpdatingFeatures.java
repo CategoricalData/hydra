@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Specific syntax related to updating data in the graph
  */
 public class UpdatingFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.UpdatingFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.UpdatingFeatures");
   
   public static final hydra.core.Name FIELD_NAME_CREATE = new hydra.core.Name("create");
   

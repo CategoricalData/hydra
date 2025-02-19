@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public class DirectiveLocations_Sequence2 implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.DirectiveLocations.Sequence2");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.DirectiveLocations_Sequence2");
   
   public static final hydra.core.Name FIELD_NAME_OR = new hydra.core.Name("or");
   
@@ -13,9 +13,9 @@ public class DirectiveLocations_Sequence2 implements Serializable {
   
   public final hydra.util.Opt<java.lang.Void> or;
   
-  public final hydra.ext.graphql.syntax.DirectiveLocation directiveLocation;
+  public final hydra.ext.org.graphql.syntax.DirectiveLocation directiveLocation;
   
-  public DirectiveLocations_Sequence2 (hydra.util.Opt<java.lang.Void> or, hydra.ext.graphql.syntax.DirectiveLocation directiveLocation) {
+  public DirectiveLocations_Sequence2 (hydra.util.Opt<java.lang.Void> or, hydra.ext.org.graphql.syntax.DirectiveLocation directiveLocation) {
     java.util.Objects.requireNonNull((or));
     java.util.Objects.requireNonNull((directiveLocation));
     this.or = or;
@@ -41,7 +41,7 @@ public class DirectiveLocations_Sequence2 implements Serializable {
     return new DirectiveLocations_Sequence2(or, directiveLocation);
   }
   
-  public DirectiveLocations_Sequence2 withDirectiveLocation(hydra.ext.graphql.syntax.DirectiveLocation directiveLocation) {
+  public DirectiveLocations_Sequence2 withDirectiveLocation(hydra.ext.org.graphql.syntax.DirectiveLocation directiveLocation) {
     java.util.Objects.requireNonNull((directiveLocation));
     return new DirectiveLocations_Sequence2(or, directiveLocation);
   }

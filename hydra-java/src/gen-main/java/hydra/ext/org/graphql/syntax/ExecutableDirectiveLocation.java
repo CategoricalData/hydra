@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public abstract class ExecutableDirectiveLocation implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.ExecutableDirectiveLocation");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.ExecutableDirectiveLocation");
   
   public static final hydra.core.Name FIELD_NAME_Q_U_E_R_Y = new hydra.core.Name("qUERY");
   
@@ -85,7 +85,7 @@ public abstract class ExecutableDirectiveLocation implements Serializable {
     }
   }
   
-  public static final class QUERY extends hydra.ext.graphql.syntax.ExecutableDirectiveLocation implements Serializable {
+  public static final class QUERY extends hydra.ext.org.graphql.syntax.ExecutableDirectiveLocation implements Serializable {
     public QUERY () {
     
     }
@@ -110,7 +110,7 @@ public abstract class ExecutableDirectiveLocation implements Serializable {
     }
   }
   
-  public static final class MUTATION extends hydra.ext.graphql.syntax.ExecutableDirectiveLocation implements Serializable {
+  public static final class MUTATION extends hydra.ext.org.graphql.syntax.ExecutableDirectiveLocation implements Serializable {
     public MUTATION () {
     
     }
@@ -135,7 +135,7 @@ public abstract class ExecutableDirectiveLocation implements Serializable {
     }
   }
   
-  public static final class SUBSCRIPTION extends hydra.ext.graphql.syntax.ExecutableDirectiveLocation implements Serializable {
+  public static final class SUBSCRIPTION extends hydra.ext.org.graphql.syntax.ExecutableDirectiveLocation implements Serializable {
     public SUBSCRIPTION () {
     
     }
@@ -160,7 +160,7 @@ public abstract class ExecutableDirectiveLocation implements Serializable {
     }
   }
   
-  public static final class FIELD extends hydra.ext.graphql.syntax.ExecutableDirectiveLocation implements Serializable {
+  public static final class FIELD extends hydra.ext.org.graphql.syntax.ExecutableDirectiveLocation implements Serializable {
     public FIELD () {
     
     }
@@ -185,7 +185,7 @@ public abstract class ExecutableDirectiveLocation implements Serializable {
     }
   }
   
-  public static final class FRAGMENTLowbarDEFINITION extends hydra.ext.graphql.syntax.ExecutableDirectiveLocation implements Serializable {
+  public static final class FRAGMENTLowbarDEFINITION extends hydra.ext.org.graphql.syntax.ExecutableDirectiveLocation implements Serializable {
     public FRAGMENTLowbarDEFINITION () {
     
     }
@@ -210,7 +210,7 @@ public abstract class ExecutableDirectiveLocation implements Serializable {
     }
   }
   
-  public static final class FRAGMENTLowbarSPREAD extends hydra.ext.graphql.syntax.ExecutableDirectiveLocation implements Serializable {
+  public static final class FRAGMENTLowbarSPREAD extends hydra.ext.org.graphql.syntax.ExecutableDirectiveLocation implements Serializable {
     public FRAGMENTLowbarSPREAD () {
     
     }
@@ -235,7 +235,7 @@ public abstract class ExecutableDirectiveLocation implements Serializable {
     }
   }
   
-  public static final class INLINELowbarFRAGMENT extends hydra.ext.graphql.syntax.ExecutableDirectiveLocation implements Serializable {
+  public static final class INLINELowbarFRAGMENT extends hydra.ext.org.graphql.syntax.ExecutableDirectiveLocation implements Serializable {
     public INLINELowbarFRAGMENT () {
     
     }
@@ -260,7 +260,7 @@ public abstract class ExecutableDirectiveLocation implements Serializable {
     }
   }
   
-  public static final class VARIABLELowbarDEFINITION extends hydra.ext.graphql.syntax.ExecutableDirectiveLocation implements Serializable {
+  public static final class VARIABLELowbarDEFINITION extends hydra.ext.org.graphql.syntax.ExecutableDirectiveLocation implements Serializable {
     public VARIABLELowbarDEFINITION () {
     
     }

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * One of several Proto3 scalar types
  */
 public abstract class ScalarType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/protobuf/proto3.ScalarType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.protobuf.proto3.ScalarType");
   
   public static final hydra.core.Name FIELD_NAME_BOOL = new hydra.core.Name("bool");
   

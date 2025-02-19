@@ -5,7 +5,7 @@ package hydra.pg.query;
 import java.io.Serializable;
 
 public class UnaryExpression implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/query.UnaryExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.query.UnaryExpression");
   
   public static final hydra.core.Name FIELD_NAME_OPERATOR = new hydra.core.Name("operator");
   

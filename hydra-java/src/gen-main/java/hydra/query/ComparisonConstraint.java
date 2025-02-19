@@ -8,7 +8,7 @@ import java.io.Serializable;
  * One of several comparison operators
  */
 public abstract class ComparisonConstraint implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/query.ComparisonConstraint");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.ComparisonConstraint");
   
   public static final hydra.core.Name FIELD_NAME_EQUAL = new hydra.core.Name("equal");
   

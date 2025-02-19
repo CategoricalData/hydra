@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Logarithmic functions
  */
 public class LogarithmicFunctionFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.LogarithmicFunctionFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.LogarithmicFunctionFeatures");
   
   public static final hydra.core.Name FIELD_NAME_E = new hydra.core.Name("e");
   

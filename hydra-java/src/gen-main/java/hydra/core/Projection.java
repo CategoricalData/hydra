@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A record elimination; a projection
  */
 public class Projection implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.Projection");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Projection");
   
   public static final hydra.core.Name FIELD_NAME_TYPE_NAME = new hydra.core.Name("typeName");
   

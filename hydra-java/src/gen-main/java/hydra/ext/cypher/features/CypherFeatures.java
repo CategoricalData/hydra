@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A set of features which characterize an OpenCypher query or implementation. Any features which are omitted from the set are assumed to be unsupported or nonrequired.
  */
 public class CypherFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.CypherFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.CypherFeatures");
   
   public static final hydra.core.Name FIELD_NAME_ARITHMETIC = new hydra.core.Name("arithmetic");
   

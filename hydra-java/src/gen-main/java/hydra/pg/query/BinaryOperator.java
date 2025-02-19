@@ -5,7 +5,7 @@ package hydra.pg.query;
 import java.io.Serializable;
 
 public abstract class BinaryOperator implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/query.BinaryOperator");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.query.BinaryOperator");
   
   public static final hydra.core.Name FIELD_NAME_BOOLEAN = new hydra.core.Name("boolean");
   

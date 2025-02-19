@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The identifier of a term expression constructor
  */
 public abstract class TermVariant implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/mantle.TermVariant");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.mantle.TermVariant");
   
   public static final hydra.core.Name FIELD_NAME_ANNOTATED = new hydra.core.Name("annotated");
   

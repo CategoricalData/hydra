@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A data type declaration
  */
 public class DataDeclaration implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/haskell/ast.DataDeclaration");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.DataDeclaration");
   
   public static final hydra.core.Name FIELD_NAME_KEYWORD = new hydra.core.Name("keyword");
   
@@ -20,7 +20,7 @@ public class DataDeclaration implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_DERIVING = new hydra.core.Name("deriving");
   
-  public final hydra.ext.haskell.ast.DataDeclaration_Keyword keyword;
+  public final hydra.ext.haskell.ast.DataOrNewtype keyword;
   
   public final java.util.List<hydra.ext.haskell.ast.Assertion> context;
   
@@ -30,7 +30,7 @@ public class DataDeclaration implements Serializable {
   
   public final java.util.List<hydra.ext.haskell.ast.Deriving> deriving;
   
-  public DataDeclaration (hydra.ext.haskell.ast.DataDeclaration_Keyword keyword, java.util.List<hydra.ext.haskell.ast.Assertion> context, hydra.ext.haskell.ast.DeclarationHead head, java.util.List<hydra.ext.haskell.ast.ConstructorWithComments> constructors, java.util.List<hydra.ext.haskell.ast.Deriving> deriving) {
+  public DataDeclaration (hydra.ext.haskell.ast.DataOrNewtype keyword, java.util.List<hydra.ext.haskell.ast.Assertion> context, hydra.ext.haskell.ast.DeclarationHead head, java.util.List<hydra.ext.haskell.ast.ConstructorWithComments> constructors, java.util.List<hydra.ext.haskell.ast.Deriving> deriving) {
     java.util.Objects.requireNonNull((keyword));
     java.util.Objects.requireNonNull((context));
     java.util.Objects.requireNonNull((head));
@@ -57,7 +57,7 @@ public class DataDeclaration implements Serializable {
     return 2 * keyword.hashCode() + 3 * context.hashCode() + 5 * head.hashCode() + 7 * constructors.hashCode() + 11 * deriving.hashCode();
   }
   
-  public DataDeclaration withKeyword(hydra.ext.haskell.ast.DataDeclaration_Keyword keyword) {
+  public DataDeclaration withKeyword(hydra.ext.haskell.ast.DataOrNewtype keyword) {
     java.util.Objects.requireNonNull((keyword));
     return new DataDeclaration(keyword, context, head, constructors, deriving);
   }

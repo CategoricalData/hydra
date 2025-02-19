@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A protocol buffer message type
  */
 public class MessageDefinition implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/protobuf/proto3.MessageDefinition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.protobuf.proto3.MessageDefinition");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   

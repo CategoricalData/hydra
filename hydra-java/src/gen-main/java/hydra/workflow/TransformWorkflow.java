@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The specification of a workflow which takes a schema specification, reads data from a directory, and writes data to another directory
  */
 public class TransformWorkflow implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/workflow.TransformWorkflow");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.workflow.TransformWorkflow");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   

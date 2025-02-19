@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A test case which performs type inference on a given term and compares the result with an expected type scheme
  */
 public class InferenceTestCase implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/testing.InferenceTestCase");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.InferenceTestCase");
   
   public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
   

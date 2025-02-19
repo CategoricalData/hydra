@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public class VariablesDefinition implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.VariablesDefinition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.VariablesDefinition");
   
   public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
   
@@ -15,15 +15,15 @@ public class VariablesDefinition implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_DIRECTIVES = new hydra.core.Name("directives");
   
-  public final hydra.ext.graphql.syntax.Variable variable;
+  public final hydra.ext.org.graphql.syntax.Variable variable;
   
-  public final hydra.ext.graphql.syntax.Type type;
+  public final hydra.ext.org.graphql.syntax.Type type;
   
-  public final hydra.util.Opt<hydra.ext.graphql.syntax.DefaultValue> defaultValue;
+  public final hydra.util.Opt<hydra.ext.org.graphql.syntax.DefaultValue> defaultValue;
   
-  public final hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives;
   
-  public VariablesDefinition (hydra.ext.graphql.syntax.Variable variable, hydra.ext.graphql.syntax.Type type, hydra.util.Opt<hydra.ext.graphql.syntax.DefaultValue> defaultValue, hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives) {
+  public VariablesDefinition (hydra.ext.org.graphql.syntax.Variable variable, hydra.ext.org.graphql.syntax.Type type, hydra.util.Opt<hydra.ext.org.graphql.syntax.DefaultValue> defaultValue, hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives) {
     java.util.Objects.requireNonNull((variable));
     java.util.Objects.requireNonNull((type));
     java.util.Objects.requireNonNull((defaultValue));
@@ -48,22 +48,22 @@ public class VariablesDefinition implements Serializable {
     return 2 * variable.hashCode() + 3 * type.hashCode() + 5 * defaultValue.hashCode() + 7 * directives.hashCode();
   }
   
-  public VariablesDefinition withVariable(hydra.ext.graphql.syntax.Variable variable) {
+  public VariablesDefinition withVariable(hydra.ext.org.graphql.syntax.Variable variable) {
     java.util.Objects.requireNonNull((variable));
     return new VariablesDefinition(variable, type, defaultValue, directives);
   }
   
-  public VariablesDefinition withType(hydra.ext.graphql.syntax.Type type) {
+  public VariablesDefinition withType(hydra.ext.org.graphql.syntax.Type type) {
     java.util.Objects.requireNonNull((type));
     return new VariablesDefinition(variable, type, defaultValue, directives);
   }
   
-  public VariablesDefinition withDefaultValue(hydra.util.Opt<hydra.ext.graphql.syntax.DefaultValue> defaultValue) {
+  public VariablesDefinition withDefaultValue(hydra.util.Opt<hydra.ext.org.graphql.syntax.DefaultValue> defaultValue) {
     java.util.Objects.requireNonNull((defaultValue));
     return new VariablesDefinition(variable, type, defaultValue, directives);
   }
   
-  public VariablesDefinition withDirectives(hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives) {
+  public VariablesDefinition withDirectives(hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives) {
     java.util.Objects.requireNonNull((directives));
     return new VariablesDefinition(variable, type, defaultValue, directives);
   }

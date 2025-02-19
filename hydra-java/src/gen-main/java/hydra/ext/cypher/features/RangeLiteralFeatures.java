@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Range literals within relationship patterns
  */
 public class RangeLiteralFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.RangeLiteralFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.RangeLiteralFeatures");
   
   public static final hydra.core.Name FIELD_NAME_BOUNDS = new hydra.core.Name("bounds");
   

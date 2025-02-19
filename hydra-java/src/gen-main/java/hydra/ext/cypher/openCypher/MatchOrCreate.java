@@ -5,7 +5,7 @@ package hydra.ext.cypher.openCypher;
 import java.io.Serializable;
 
 public abstract class MatchOrCreate implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/openCypher.MatchOrCreate");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.openCypher.MatchOrCreate");
   
   public static final hydra.core.Name FIELD_NAME_MATCH = new hydra.core.Name("match");
   

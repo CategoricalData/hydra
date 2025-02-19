@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public abstract class NonNullType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.NonNullType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.NonNullType");
   
   public static final hydra.core.Name FIELD_NAME_NAMED = new hydra.core.Name("named");
   
@@ -37,10 +37,10 @@ public abstract class NonNullType implements Serializable {
     }
   }
   
-  public static final class Named extends hydra.ext.graphql.syntax.NonNullType implements Serializable {
-    public final hydra.ext.graphql.syntax.NamedType value;
+  public static final class Named extends hydra.ext.org.graphql.syntax.NonNullType implements Serializable {
+    public final hydra.ext.org.graphql.syntax.NamedType value;
     
-    public Named (hydra.ext.graphql.syntax.NamedType value) {
+    public Named (hydra.ext.org.graphql.syntax.NamedType value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -65,10 +65,10 @@ public abstract class NonNullType implements Serializable {
     }
   }
   
-  public static final class List extends hydra.ext.graphql.syntax.NonNullType implements Serializable {
-    public final hydra.ext.graphql.syntax.ListType value;
+  public static final class List extends hydra.ext.org.graphql.syntax.NonNullType implements Serializable {
+    public final hydra.ext.org.graphql.syntax.ListType value;
     
-    public List (hydra.ext.graphql.syntax.ListType value) {
+    public List (hydra.ext.org.graphql.syntax.ListType value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

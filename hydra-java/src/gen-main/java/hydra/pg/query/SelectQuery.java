@@ -5,7 +5,7 @@ package hydra.pg.query;
 import java.io.Serializable;
 
 public class SelectQuery implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/query.SelectQuery");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.query.SelectQuery");
   
   public static final hydra.core.Name FIELD_NAME_DISTINCT = new hydra.core.Name("distinct");
   

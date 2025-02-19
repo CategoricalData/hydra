@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public abstract class UnionTypeExtension implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.UnionTypeExtension");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.UnionTypeExtension");
   
   public static final hydra.core.Name FIELD_NAME_SEQUENCE = new hydra.core.Name("sequence");
   
@@ -37,10 +37,10 @@ public abstract class UnionTypeExtension implements Serializable {
     }
   }
   
-  public static final class Sequence extends hydra.ext.graphql.syntax.UnionTypeExtension implements Serializable {
-    public final hydra.ext.graphql.syntax.UnionTypeExtension_Sequence value;
+  public static final class Sequence extends hydra.ext.org.graphql.syntax.UnionTypeExtension implements Serializable {
+    public final hydra.ext.org.graphql.syntax.UnionTypeExtension_Sequence value;
     
-    public Sequence (hydra.ext.graphql.syntax.UnionTypeExtension_Sequence value) {
+    public Sequence (hydra.ext.org.graphql.syntax.UnionTypeExtension_Sequence value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -65,10 +65,10 @@ public abstract class UnionTypeExtension implements Serializable {
     }
   }
   
-  public static final class Sequence2 extends hydra.ext.graphql.syntax.UnionTypeExtension implements Serializable {
-    public final hydra.ext.graphql.syntax.UnionTypeExtension_Sequence2 value;
+  public static final class Sequence2 extends hydra.ext.org.graphql.syntax.UnionTypeExtension implements Serializable {
+    public final hydra.ext.org.graphql.syntax.UnionTypeExtension_Sequence2 value;
     
-    public Sequence2 (hydra.ext.graphql.syntax.UnionTypeExtension_Sequence2 value) {
+    public Sequence2 (hydra.ext.org.graphql.syntax.UnionTypeExtension_Sequence2 value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

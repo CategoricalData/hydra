@@ -5,7 +5,7 @@ package hydra.ext.cypher.openCypher;
 import java.io.Serializable;
 
 public class ProjectionBody implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/openCypher.ProjectionBody");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.openCypher.ProjectionBody");
   
   public static final hydra.core.Name FIELD_NAME_DISTINCT = new hydra.core.Name("distinct");
   

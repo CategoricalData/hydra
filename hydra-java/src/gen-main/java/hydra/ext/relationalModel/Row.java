@@ -8,7 +8,7 @@ import java.io.Serializable;
  * An n-tuple which is an element of a given relation
  */
 public class Row<V> implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/relationalModel.Row");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.relationalModel.Row");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   

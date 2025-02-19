@@ -5,7 +5,7 @@ package hydra.ext.cypher.openCypher;
 import java.io.Serializable;
 
 public abstract class ExistentialSubquery implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/openCypher.ExistentialSubquery");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.openCypher.ExistentialSubquery");
   
   public static final hydra.core.Name FIELD_NAME_REGULAR = new hydra.core.Name("regular");
   

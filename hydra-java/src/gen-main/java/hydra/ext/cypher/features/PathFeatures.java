@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Path functions only found in OpenCypher
  */
 public class PathFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.PathFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.PathFeatures");
   
   public static final hydra.core.Name FIELD_NAME_SHORTEST_PATH = new hydra.core.Name("shortestPath");
   

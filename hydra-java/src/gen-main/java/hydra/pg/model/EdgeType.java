@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The type of an edge
  */
 public class EdgeType<T> implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/model.EdgeType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.EdgeType");
   
   public static final hydra.core.Name FIELD_NAME_LABEL = new hydra.core.Name("label");
   

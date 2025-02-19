@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public abstract class Alias implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.Alias");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.Alias");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   
@@ -37,10 +37,10 @@ public abstract class Alias implements Serializable {
     }
   }
   
-  public static final class Name extends hydra.ext.graphql.syntax.Alias implements Serializable {
-    public final hydra.ext.graphql.syntax.Name value;
+  public static final class Name extends hydra.ext.org.graphql.syntax.Alias implements Serializable {
+    public final hydra.ext.org.graphql.syntax.Name value;
     
-    public Name (hydra.ext.graphql.syntax.Name value) {
+    public Name (hydra.ext.org.graphql.syntax.Name value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -65,7 +65,7 @@ public abstract class Alias implements Serializable {
     }
   }
   
-  public static final class Colon extends hydra.ext.graphql.syntax.Alias implements Serializable {
+  public static final class Colon extends hydra.ext.org.graphql.syntax.Alias implements Serializable {
     public Colon () {
     
     }

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * An association with a term-level field with a phantom type
  */
 public class TField<A> implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/phantoms.TField");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.phantoms.TField");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   

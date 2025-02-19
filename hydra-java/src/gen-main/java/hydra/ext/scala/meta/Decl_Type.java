@@ -5,7 +5,7 @@ package hydra.ext.scala.meta;
 import java.io.Serializable;
 
 public class Decl_Type implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/scala/meta.Decl.Type");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.scala.meta.Decl_Type");
   
   public static final hydra.core.Name FIELD_NAME_MODS = new hydra.core.Name("mods");
   
@@ -21,9 +21,9 @@ public class Decl_Type implements Serializable {
   
   public final java.util.List<hydra.ext.scala.meta.Type_Param> tparams;
   
-  public final hydra.ext.scala.meta.Type_Bounds bounds;
+  public final hydra.ext.scala.meta.TypeBounds bounds;
   
-  public Decl_Type (java.util.List<hydra.ext.scala.meta.Mod> mods, hydra.ext.scala.meta.Type_Name name, java.util.List<hydra.ext.scala.meta.Type_Param> tparams, hydra.ext.scala.meta.Type_Bounds bounds) {
+  public Decl_Type (java.util.List<hydra.ext.scala.meta.Mod> mods, hydra.ext.scala.meta.Type_Name name, java.util.List<hydra.ext.scala.meta.Type_Param> tparams, hydra.ext.scala.meta.TypeBounds bounds) {
     java.util.Objects.requireNonNull((mods));
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((tparams));
@@ -63,7 +63,7 @@ public class Decl_Type implements Serializable {
     return new Decl_Type(mods, name, tparams, bounds);
   }
   
-  public Decl_Type withBounds(hydra.ext.scala.meta.Type_Bounds bounds) {
+  public Decl_Type withBounds(hydra.ext.scala.meta.TypeBounds bounds) {
     java.util.Objects.requireNonNull((bounds));
     return new Decl_Type(mods, name, tparams, bounds);
   }

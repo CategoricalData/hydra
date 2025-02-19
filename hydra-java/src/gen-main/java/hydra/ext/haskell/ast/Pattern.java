@@ -5,7 +5,7 @@ package hydra.ext.haskell.ast;
 import java.io.Serializable;
 
 public abstract class Pattern implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/haskell/ast.Pattern");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.Pattern");
   
   public static final hydra.core.Name FIELD_NAME_APPLICATION = new hydra.core.Name("application");
   
@@ -102,9 +102,9 @@ public abstract class Pattern implements Serializable {
   }
   
   public static final class Application extends hydra.ext.haskell.ast.Pattern implements Serializable {
-    public final hydra.ext.haskell.ast.Pattern_Application value;
+    public final hydra.ext.haskell.ast.ApplicationPattern value;
     
-    public Application (hydra.ext.haskell.ast.Pattern_Application value) {
+    public Application (hydra.ext.haskell.ast.ApplicationPattern value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -130,9 +130,9 @@ public abstract class Pattern implements Serializable {
   }
   
   public static final class As extends hydra.ext.haskell.ast.Pattern implements Serializable {
-    public final hydra.ext.haskell.ast.Pattern_As value;
+    public final hydra.ext.haskell.ast.AsPattern value;
     
-    public As (hydra.ext.haskell.ast.Pattern_As value) {
+    public As (hydra.ext.haskell.ast.AsPattern value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -270,9 +270,9 @@ public abstract class Pattern implements Serializable {
   }
   
   public static final class Record extends hydra.ext.haskell.ast.Pattern implements Serializable {
-    public final hydra.ext.haskell.ast.Pattern_Record value;
+    public final hydra.ext.haskell.ast.RecordPattern value;
     
-    public Record (hydra.ext.haskell.ast.Pattern_Record value) {
+    public Record (hydra.ext.haskell.ast.RecordPattern value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -326,9 +326,9 @@ public abstract class Pattern implements Serializable {
   }
   
   public static final class Typed extends hydra.ext.haskell.ast.Pattern implements Serializable {
-    public final hydra.ext.haskell.ast.Pattern_Typed value;
+    public final hydra.ext.haskell.ast.TypedPattern value;
     
-    public Typed (hydra.ext.haskell.ast.Pattern_Typed value) {
+    public Typed (hydra.ext.haskell.ast.TypedPattern value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

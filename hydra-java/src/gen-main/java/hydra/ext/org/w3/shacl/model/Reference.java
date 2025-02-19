@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Either an instance of a type like sh:Shape or sh:NodeShape, or an IRI which refers to an instance of that type
  */
 public abstract class Reference<A> implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/shacl/model.Reference");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.shacl.model.Reference");
   
   public static final hydra.core.Name FIELD_NAME_NAMED = new hydra.core.Name("named");
   

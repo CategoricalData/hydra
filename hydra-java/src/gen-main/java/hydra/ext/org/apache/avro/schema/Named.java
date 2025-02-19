@@ -5,7 +5,7 @@ package hydra.ext.org.apache.avro.schema;
 import java.io.Serializable;
 
 public class Named implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/avro/schema.Named");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.avro.schema.Named");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   

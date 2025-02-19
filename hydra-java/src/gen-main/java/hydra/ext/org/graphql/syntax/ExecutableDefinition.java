@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public abstract class ExecutableDefinition implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.ExecutableDefinition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.ExecutableDefinition");
   
   public static final hydra.core.Name FIELD_NAME_OPERATION = new hydra.core.Name("operation");
   
@@ -37,10 +37,10 @@ public abstract class ExecutableDefinition implements Serializable {
     }
   }
   
-  public static final class Operation extends hydra.ext.graphql.syntax.ExecutableDefinition implements Serializable {
-    public final hydra.ext.graphql.syntax.OperationDefinition value;
+  public static final class Operation extends hydra.ext.org.graphql.syntax.ExecutableDefinition implements Serializable {
+    public final hydra.ext.org.graphql.syntax.OperationDefinition value;
     
-    public Operation (hydra.ext.graphql.syntax.OperationDefinition value) {
+    public Operation (hydra.ext.org.graphql.syntax.OperationDefinition value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -65,10 +65,10 @@ public abstract class ExecutableDefinition implements Serializable {
     }
   }
   
-  public static final class Fragment extends hydra.ext.graphql.syntax.ExecutableDefinition implements Serializable {
-    public final hydra.ext.graphql.syntax.FragmentDefinition value;
+  public static final class Fragment extends hydra.ext.org.graphql.syntax.ExecutableDefinition implements Serializable {
+    public final hydra.ext.org.graphql.syntax.FragmentDefinition value;
     
-    public Fragment (hydra.ext.graphql.syntax.FragmentDefinition value) {
+    public Fragment (hydra.ext.org.graphql.syntax.FragmentDefinition value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

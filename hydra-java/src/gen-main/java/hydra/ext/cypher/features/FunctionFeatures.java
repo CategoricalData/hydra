@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Standard Cypher functions
  */
 public class FunctionFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.FunctionFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.FunctionFeatures");
   
   public static final hydra.core.Name FIELD_NAME_AGGREGATE_FUNCTION = new hydra.core.Name("aggregateFunction");
   

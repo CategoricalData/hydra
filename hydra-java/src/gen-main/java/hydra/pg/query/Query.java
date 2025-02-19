@@ -5,7 +5,7 @@ package hydra.pg.query;
 import java.io.Serializable;
 
 public abstract class Query implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/query.Query");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.query.Query");
   
   public static final hydra.core.Name FIELD_NAME_APPLICATION = new hydra.core.Name("application");
   

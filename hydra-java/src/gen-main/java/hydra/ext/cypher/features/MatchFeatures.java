@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Match queries
  */
 public class MatchFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.MatchFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.MatchFeatures");
   
   public static final hydra.core.Name FIELD_NAME_MATCH = new hydra.core.Name("match");
   

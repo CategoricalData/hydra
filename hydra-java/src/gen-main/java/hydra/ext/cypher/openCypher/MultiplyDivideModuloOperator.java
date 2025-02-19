@@ -5,7 +5,7 @@ package hydra.ext.cypher.openCypher;
 import java.io.Serializable;
 
 public abstract class MultiplyDivideModuloOperator implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/openCypher.MultiplyDivideModuloOperator");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.openCypher.MultiplyDivideModuloOperator");
   
   public static final hydra.core.Name FIELD_NAME_MULTIPLY = new hydra.core.Name("multiply");
   

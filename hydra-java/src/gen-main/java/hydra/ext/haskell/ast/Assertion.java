@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A type assertion
  */
 public abstract class Assertion implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/haskell/ast.Assertion");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.Assertion");
   
   public static final hydra.core.Name FIELD_NAME_CLASS = new hydra.core.Name("class");
   
@@ -41,9 +41,9 @@ public abstract class Assertion implements Serializable {
   }
   
   public static final class Class_ extends hydra.ext.haskell.ast.Assertion implements Serializable {
-    public final hydra.ext.haskell.ast.Assertion_Class value;
+    public final hydra.ext.haskell.ast.ClassAssertion value;
     
-    public Class_ (hydra.ext.haskell.ast.Assertion_Class value) {
+    public Class_ (hydra.ext.haskell.ast.ClassAssertion value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

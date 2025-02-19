@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public abstract class BooleanValue implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.BooleanValue");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.BooleanValue");
   
   public static final hydra.core.Name FIELD_NAME_TRUE = new hydra.core.Name("true");
   
@@ -37,7 +37,7 @@ public abstract class BooleanValue implements Serializable {
     }
   }
   
-  public static final class True extends hydra.ext.graphql.syntax.BooleanValue implements Serializable {
+  public static final class True extends hydra.ext.org.graphql.syntax.BooleanValue implements Serializable {
     public True () {
     
     }
@@ -62,7 +62,7 @@ public abstract class BooleanValue implements Serializable {
     }
   }
   
-  public static final class False extends hydra.ext.graphql.syntax.BooleanValue implements Serializable {
+  public static final class False extends hydra.ext.org.graphql.syntax.BooleanValue implements Serializable {
     public False () {
     
     }

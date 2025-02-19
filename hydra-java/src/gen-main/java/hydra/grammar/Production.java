@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A BNF production
  */
 public class Production implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/grammar.Production");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.grammar.Production");
   
   public static final hydra.core.Name FIELD_NAME_SYMBOL = new hydra.core.Name("symbol");
   

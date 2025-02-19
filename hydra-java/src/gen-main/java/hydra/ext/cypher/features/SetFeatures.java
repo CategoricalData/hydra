@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Set definitions
  */
 public class SetFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.SetFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.SetFeatures");
   
   public static final hydra.core.Name FIELD_NAME_PROPERTY_EQUALS = new hydra.core.Name("propertyEquals");
   

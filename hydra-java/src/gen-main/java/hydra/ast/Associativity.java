@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Operator associativity
  */
 public abstract class Associativity implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ast.Associativity");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ast.Associativity");
   
   public static final hydra.core.Name FIELD_NAME_NONE = new hydra.core.Name("none");
   

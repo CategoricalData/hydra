@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A pattern which matches valid expressions in the language
  */
 public abstract class Pattern implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/grammar.Pattern");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.grammar.Pattern");
   
   public static final hydra.core.Name FIELD_NAME_NIL = new hydra.core.Name("nil");
   

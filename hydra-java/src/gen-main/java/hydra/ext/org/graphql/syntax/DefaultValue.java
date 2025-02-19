@@ -1,17 +1,17 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public class DefaultValue implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.DefaultValue");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.DefaultValue");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
-  public final hydra.ext.graphql.syntax.Value value;
+  public final hydra.ext.org.graphql.syntax.Value value;
   
-  public DefaultValue (hydra.ext.graphql.syntax.Value value) {
+  public DefaultValue (hydra.ext.org.graphql.syntax.Value value) {
     java.util.Objects.requireNonNull((value));
     this.value = value;
   }

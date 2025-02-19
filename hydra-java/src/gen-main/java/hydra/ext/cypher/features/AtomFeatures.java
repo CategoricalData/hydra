@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Various kinds of atomic expressions
  */
 public class AtomFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.AtomFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.AtomFeatures");
   
   public static final hydra.core.Name FIELD_NAME_CASE_EXPRESSION = new hydra.core.Name("caseExpression");
   

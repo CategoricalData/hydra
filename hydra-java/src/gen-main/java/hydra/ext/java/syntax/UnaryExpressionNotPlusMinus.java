@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class UnaryExpressionNotPlusMinus implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.UnaryExpressionNotPlusMinus");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.UnaryExpressionNotPlusMinus");
   
   public static final hydra.core.Name FIELD_NAME_POSTFIX = new hydra.core.Name("postfix");
   

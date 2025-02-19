@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class InterfaceDeclaration implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.InterfaceDeclaration");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.InterfaceDeclaration");
   
   public static final hydra.core.Name FIELD_NAME_NORMAL_INTERFACE = new hydra.core.Name("normalInterface");
   

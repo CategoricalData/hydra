@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Common constraint parameters and other properties for SHACL shapes
  */
 public class CommonProperties implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/shacl/model.CommonProperties");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.shacl.model.CommonProperties");
   
   public static final hydra.core.Name FIELD_NAME_CONSTRAINTS = new hydra.core.Name("constraints");
   

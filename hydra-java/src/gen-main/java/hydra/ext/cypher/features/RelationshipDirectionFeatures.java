@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Relationship directions / arrow patterns
  */
 public class RelationshipDirectionFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.RelationshipDirectionFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.RelationshipDirectionFeatures");
   
   public static final hydra.core.Name FIELD_NAME_BOTH = new hydra.core.Name("both");
   

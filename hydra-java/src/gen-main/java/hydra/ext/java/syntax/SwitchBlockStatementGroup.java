@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class SwitchBlockStatementGroup implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.SwitchBlockStatementGroup");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.SwitchBlockStatementGroup");
   
   public static final hydra.core.Name FIELD_NAME_LABELS = new hydra.core.Name("labels");
   

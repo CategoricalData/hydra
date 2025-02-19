@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A disjoint union between a 'left' type and a 'right' type
  */
 public abstract class Either<A, B> implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/mantle.Either");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.mantle.Either");
   
   public static final hydra.core.Name FIELD_NAME_LEFT = new hydra.core.Name("left");
   

@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class TryStatement_Simple implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.TryStatement.Simple");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.TryStatement_Simple");
   
   public static final hydra.core.Name FIELD_NAME_BLOCK = new hydra.core.Name("block");
   

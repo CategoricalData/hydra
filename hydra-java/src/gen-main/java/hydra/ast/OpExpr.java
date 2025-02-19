@@ -8,7 +8,7 @@ import java.io.Serializable;
  * An operator expression
  */
 public class OpExpr implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ast.OpExpr");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ast.OpExpr");
   
   public static final hydra.core.Name FIELD_NAME_OP = new hydra.core.Name("op");
   

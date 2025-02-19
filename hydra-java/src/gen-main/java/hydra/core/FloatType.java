@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A floating-point type
  */
 public abstract class FloatType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.FloatType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.FloatType");
   
   public static final hydra.core.Name FIELD_NAME_BIGFLOAT = new hydra.core.Name("bigfloat");
   

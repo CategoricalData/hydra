@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A number of constraint parameters which are specific to property shapes, and cannot be applied to node shapes
  */
 public abstract class PropertyShapeConstraint implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/shacl/model.PropertyShapeConstraint");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.shacl.model.PropertyShapeConstraint");
   
   public static final hydra.core.Name FIELD_NAME_LESS_THAN = new hydra.core.Name("lessThan");
   

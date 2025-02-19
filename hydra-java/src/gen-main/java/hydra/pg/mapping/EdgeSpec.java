@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A mapping specification producing edges of a specified label.
  */
 public class EdgeSpec implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/mapping.EdgeSpec");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.mapping.EdgeSpec");
   
   public static final hydra.core.Name FIELD_NAME_LABEL = new hydra.core.Name("label");
   

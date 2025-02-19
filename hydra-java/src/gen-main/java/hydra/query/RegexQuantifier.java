@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A regular expression quantifier
  */
 public abstract class RegexQuantifier implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/query.RegexQuantifier");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.RegexQuantifier");
   
   public static final hydra.core.Name FIELD_NAME_ONE = new hydra.core.Name("one");
   

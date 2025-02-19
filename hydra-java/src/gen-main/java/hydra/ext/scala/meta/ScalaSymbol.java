@@ -5,7 +5,7 @@ package hydra.ext.scala.meta;
 import java.io.Serializable;
 
 public class ScalaSymbol implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/scala/meta.ScalaSymbol");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.scala.meta.ScalaSymbol");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   

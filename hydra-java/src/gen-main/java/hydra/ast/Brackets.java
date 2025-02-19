@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Matching open and close bracket symbols
  */
 public class Brackets implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ast.Brackets");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ast.Brackets");
   
   public static final hydra.core.Name FIELD_NAME_OPEN = new hydra.core.Name("open");
   

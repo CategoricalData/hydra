@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Vector functions
  */
 public class VectorFunctionFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.VectorFunctionFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.VectorFunctionFeatures");
   
   public static final hydra.core.Name FIELD_NAME_VECTOR_SIMILARITY_COSINE = new hydra.core.Name("vector.similarity.cosine");
   

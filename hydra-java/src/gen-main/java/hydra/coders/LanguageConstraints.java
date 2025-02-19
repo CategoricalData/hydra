@@ -6,7 +6,7 @@ package hydra.coders;
  * A set of constraints on valid type and term expressions, characterizing a language
  */
 public class LanguageConstraints {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/coders.LanguageConstraints");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.coders.LanguageConstraints");
   
   public static final hydra.core.Name FIELD_NAME_ELIMINATION_VARIANTS = new hydra.core.Name("eliminationVariants");
   

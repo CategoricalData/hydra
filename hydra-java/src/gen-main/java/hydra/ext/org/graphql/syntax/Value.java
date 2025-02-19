@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public abstract class Value implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.Value");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.Value");
   
   public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
   
@@ -93,10 +93,10 @@ public abstract class Value implements Serializable {
     }
   }
   
-  public static final class Variable extends hydra.ext.graphql.syntax.Value implements Serializable {
-    public final hydra.ext.graphql.syntax.Variable value;
+  public static final class Variable extends hydra.ext.org.graphql.syntax.Value implements Serializable {
+    public final hydra.ext.org.graphql.syntax.Variable value;
     
-    public Variable (hydra.ext.graphql.syntax.Variable value) {
+    public Variable (hydra.ext.org.graphql.syntax.Variable value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -121,10 +121,10 @@ public abstract class Value implements Serializable {
     }
   }
   
-  public static final class Int extends hydra.ext.graphql.syntax.Value implements Serializable {
-    public final hydra.ext.graphql.syntax.IntValue value;
+  public static final class Int extends hydra.ext.org.graphql.syntax.Value implements Serializable {
+    public final hydra.ext.org.graphql.syntax.IntValue value;
     
-    public Int (hydra.ext.graphql.syntax.IntValue value) {
+    public Int (hydra.ext.org.graphql.syntax.IntValue value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -149,10 +149,10 @@ public abstract class Value implements Serializable {
     }
   }
   
-  public static final class Float_ extends hydra.ext.graphql.syntax.Value implements Serializable {
-    public final hydra.ext.graphql.syntax.FloatValue value;
+  public static final class Float_ extends hydra.ext.org.graphql.syntax.Value implements Serializable {
+    public final hydra.ext.org.graphql.syntax.FloatValue value;
     
-    public Float_ (hydra.ext.graphql.syntax.FloatValue value) {
+    public Float_ (hydra.ext.org.graphql.syntax.FloatValue value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -177,10 +177,10 @@ public abstract class Value implements Serializable {
     }
   }
   
-  public static final class String_ extends hydra.ext.graphql.syntax.Value implements Serializable {
-    public final hydra.ext.graphql.syntax.StringValue value;
+  public static final class String_ extends hydra.ext.org.graphql.syntax.Value implements Serializable {
+    public final hydra.ext.org.graphql.syntax.StringValue value;
     
-    public String_ (hydra.ext.graphql.syntax.StringValue value) {
+    public String_ (hydra.ext.org.graphql.syntax.StringValue value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -205,10 +205,10 @@ public abstract class Value implements Serializable {
     }
   }
   
-  public static final class Boolean_ extends hydra.ext.graphql.syntax.Value implements Serializable {
-    public final hydra.ext.graphql.syntax.BooleanValue value;
+  public static final class Boolean_ extends hydra.ext.org.graphql.syntax.Value implements Serializable {
+    public final hydra.ext.org.graphql.syntax.BooleanValue value;
     
-    public Boolean_ (hydra.ext.graphql.syntax.BooleanValue value) {
+    public Boolean_ (hydra.ext.org.graphql.syntax.BooleanValue value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -233,10 +233,10 @@ public abstract class Value implements Serializable {
     }
   }
   
-  public static final class Null extends hydra.ext.graphql.syntax.Value implements Serializable {
-    public final hydra.ext.graphql.syntax.NullValue value;
+  public static final class Null extends hydra.ext.org.graphql.syntax.Value implements Serializable {
+    public final hydra.ext.org.graphql.syntax.NullValue value;
     
-    public Null (hydra.ext.graphql.syntax.NullValue value) {
+    public Null (hydra.ext.org.graphql.syntax.NullValue value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -261,10 +261,10 @@ public abstract class Value implements Serializable {
     }
   }
   
-  public static final class Enum_ extends hydra.ext.graphql.syntax.Value implements Serializable {
-    public final hydra.ext.graphql.syntax.EnumValue value;
+  public static final class Enum_ extends hydra.ext.org.graphql.syntax.Value implements Serializable {
+    public final hydra.ext.org.graphql.syntax.EnumValue value;
     
-    public Enum_ (hydra.ext.graphql.syntax.EnumValue value) {
+    public Enum_ (hydra.ext.org.graphql.syntax.EnumValue value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -289,10 +289,10 @@ public abstract class Value implements Serializable {
     }
   }
   
-  public static final class List extends hydra.ext.graphql.syntax.Value implements Serializable {
-    public final hydra.ext.graphql.syntax.ListValue value;
+  public static final class List extends hydra.ext.org.graphql.syntax.Value implements Serializable {
+    public final hydra.ext.org.graphql.syntax.ListValue value;
     
-    public List (hydra.ext.graphql.syntax.ListValue value) {
+    public List (hydra.ext.org.graphql.syntax.ListValue value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -317,10 +317,10 @@ public abstract class Value implements Serializable {
     }
   }
   
-  public static final class Object_ extends hydra.ext.graphql.syntax.Value implements Serializable {
-    public final hydra.ext.graphql.syntax.ObjectValue value;
+  public static final class Object_ extends hydra.ext.org.graphql.syntax.Value implements Serializable {
+    public final hydra.ext.org.graphql.syntax.ObjectValue value;
     
-    public Object_ (hydra.ext.graphql.syntax.ObjectValue value) {
+    public Object_ (hydra.ext.org.graphql.syntax.ObjectValue value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

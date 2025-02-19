@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public abstract class InterfaceTypeDefinition implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.InterfaceTypeDefinition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.InterfaceTypeDefinition");
   
   public static final hydra.core.Name FIELD_NAME_SEQUENCE = new hydra.core.Name("sequence");
   
@@ -37,10 +37,10 @@ public abstract class InterfaceTypeDefinition implements Serializable {
     }
   }
   
-  public static final class Sequence extends hydra.ext.graphql.syntax.InterfaceTypeDefinition implements Serializable {
-    public final hydra.ext.graphql.syntax.InterfaceTypeDefinition_Sequence value;
+  public static final class Sequence extends hydra.ext.org.graphql.syntax.InterfaceTypeDefinition implements Serializable {
+    public final hydra.ext.org.graphql.syntax.InterfaceTypeDefinition_Sequence value;
     
-    public Sequence (hydra.ext.graphql.syntax.InterfaceTypeDefinition_Sequence value) {
+    public Sequence (hydra.ext.org.graphql.syntax.InterfaceTypeDefinition_Sequence value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -65,10 +65,10 @@ public abstract class InterfaceTypeDefinition implements Serializable {
     }
   }
   
-  public static final class Sequence2 extends hydra.ext.graphql.syntax.InterfaceTypeDefinition implements Serializable {
-    public final hydra.ext.graphql.syntax.InterfaceTypeDefinition_Sequence2 value;
+  public static final class Sequence2 extends hydra.ext.org.graphql.syntax.InterfaceTypeDefinition implements Serializable {
+    public final hydra.ext.org.graphql.syntax.InterfaceTypeDefinition_Sequence2 value;
     
-    public Sequence2 (hydra.ext.graphql.syntax.InterfaceTypeDefinition_Sequence2 value) {
+    public Sequence2 (hydra.ext.org.graphql.syntax.InterfaceTypeDefinition_Sequence2 value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

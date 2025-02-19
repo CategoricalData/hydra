@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A labeled record or union type
  */
 public class RowType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.RowType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.RowType");
   
   public static final hydra.core.Name FIELD_NAME_TYPE_NAME = new hydra.core.Name("typeName");
   

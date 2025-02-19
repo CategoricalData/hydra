@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class ClassMemberDeclaration implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.ClassMemberDeclaration");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ClassMemberDeclaration");
   
   public static final hydra.core.Name FIELD_NAME_FIELD = new hydra.core.Name("field");
   

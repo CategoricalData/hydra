@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public abstract class ObjectTypeExtension implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.ObjectTypeExtension");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.ObjectTypeExtension");
   
   public static final hydra.core.Name FIELD_NAME_SEQUENCE = new hydra.core.Name("sequence");
   
@@ -45,10 +45,10 @@ public abstract class ObjectTypeExtension implements Serializable {
     }
   }
   
-  public static final class Sequence extends hydra.ext.graphql.syntax.ObjectTypeExtension implements Serializable {
-    public final hydra.ext.graphql.syntax.ObjectTypeExtension_Sequence value;
+  public static final class Sequence extends hydra.ext.org.graphql.syntax.ObjectTypeExtension implements Serializable {
+    public final hydra.ext.org.graphql.syntax.ObjectTypeExtension_Sequence value;
     
-    public Sequence (hydra.ext.graphql.syntax.ObjectTypeExtension_Sequence value) {
+    public Sequence (hydra.ext.org.graphql.syntax.ObjectTypeExtension_Sequence value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -73,10 +73,10 @@ public abstract class ObjectTypeExtension implements Serializable {
     }
   }
   
-  public static final class Sequence2 extends hydra.ext.graphql.syntax.ObjectTypeExtension implements Serializable {
-    public final hydra.ext.graphql.syntax.ObjectTypeExtension_Sequence2 value;
+  public static final class Sequence2 extends hydra.ext.org.graphql.syntax.ObjectTypeExtension implements Serializable {
+    public final hydra.ext.org.graphql.syntax.ObjectTypeExtension_Sequence2 value;
     
-    public Sequence2 (hydra.ext.graphql.syntax.ObjectTypeExtension_Sequence2 value) {
+    public Sequence2 (hydra.ext.org.graphql.syntax.ObjectTypeExtension_Sequence2 value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -101,10 +101,10 @@ public abstract class ObjectTypeExtension implements Serializable {
     }
   }
   
-  public static final class Sequence3 extends hydra.ext.graphql.syntax.ObjectTypeExtension implements Serializable {
-    public final hydra.ext.graphql.syntax.ObjectTypeExtension_Sequence3 value;
+  public static final class Sequence3 extends hydra.ext.org.graphql.syntax.ObjectTypeExtension implements Serializable {
+    public final hydra.ext.org.graphql.syntax.ObjectTypeExtension_Sequence3 value;
     
-    public Sequence3 (hydra.ext.graphql.syntax.ObjectTypeExtension_Sequence3 value) {
+    public Sequence3 (hydra.ext.org.graphql.syntax.ObjectTypeExtension_Sequence3 value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

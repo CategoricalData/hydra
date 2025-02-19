@@ -8,7 +8,7 @@ import java.io.Serializable;
  * See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent
  */
 public class QualifiedValueShape implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/shacl/model.QualifiedValueShape");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.shacl.model.QualifiedValueShape");
   
   public static final hydra.core.Name FIELD_NAME_QUALIFIED_VALUE_SHAPE = new hydra.core.Name("qualifiedValueShape");
   

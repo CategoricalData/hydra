@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A field together with any comments
  */
 public class FieldWithComments implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/haskell/ast.FieldWithComments");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.FieldWithComments");
   
   public static final hydra.core.Name FIELD_NAME_FIELD = new hydra.core.Name("field");
   

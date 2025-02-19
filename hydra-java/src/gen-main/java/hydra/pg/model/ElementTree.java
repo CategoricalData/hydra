@@ -8,7 +8,7 @@ import java.io.Serializable;
  * An element together with its dependencies in some context
  */
 public class ElementTree<V> implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/model.ElementTree");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.ElementTree");
   
   public static final hydra.core.Name FIELD_NAME_SELF = new hydra.core.Name("self");
   

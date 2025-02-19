@@ -6,7 +6,7 @@ package hydra.coders;
  * A named language together with language-specific constraints
  */
 public class Language {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/coders.Language");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.coders.Language");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   

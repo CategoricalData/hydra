@@ -5,7 +5,7 @@ package hydra.ext.protobuf.proto3;
 import java.io.Serializable;
 
 public abstract class Definition implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/protobuf/proto3.Definition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.protobuf.proto3.Definition");
   
   public static final hydra.core.Name FIELD_NAME_ENUM = new hydra.core.Name("enum");
   

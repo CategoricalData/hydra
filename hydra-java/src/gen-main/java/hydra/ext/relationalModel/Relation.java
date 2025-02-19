@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A set of distinct n-tuples; a table
  */
 public class Relation<V> implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/relationalModel.Relation");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.relationalModel.Relation");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
-  public final java.util.Set<java.util.List<V>> value;
+  public final java.util.List<hydra.ext.relationalModel.Row<V>> value;
   
-  public Relation (java.util.Set<java.util.List<V>> value) {
+  public Relation (java.util.List<hydra.ext.relationalModel.Row<V>> value) {
     java.util.Objects.requireNonNull((value));
     this.value = value;
   }

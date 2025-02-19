@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public abstract class TypeSystemDefinitionOrExtension implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.TypeSystemDefinitionOrExtension");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.TypeSystemDefinitionOrExtension");
   
   public static final hydra.core.Name FIELD_NAME_DEFINITION = new hydra.core.Name("definition");
   
@@ -37,10 +37,10 @@ public abstract class TypeSystemDefinitionOrExtension implements Serializable {
     }
   }
   
-  public static final class Definition extends hydra.ext.graphql.syntax.TypeSystemDefinitionOrExtension implements Serializable {
-    public final hydra.ext.graphql.syntax.TypeSystemDefinition value;
+  public static final class Definition extends hydra.ext.org.graphql.syntax.TypeSystemDefinitionOrExtension implements Serializable {
+    public final hydra.ext.org.graphql.syntax.TypeSystemDefinition value;
     
-    public Definition (hydra.ext.graphql.syntax.TypeSystemDefinition value) {
+    public Definition (hydra.ext.org.graphql.syntax.TypeSystemDefinition value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -65,10 +65,10 @@ public abstract class TypeSystemDefinitionOrExtension implements Serializable {
     }
   }
   
-  public static final class Extension extends hydra.ext.graphql.syntax.TypeSystemDefinitionOrExtension implements Serializable {
-    public final hydra.ext.graphql.syntax.TypeSystemExtension value;
+  public static final class Extension extends hydra.ext.org.graphql.syntax.TypeSystemDefinitionOrExtension implements Serializable {
+    public final hydra.ext.org.graphql.syntax.TypeSystemExtension value;
     
-    public Extension (hydra.ext.graphql.syntax.TypeSystemExtension value) {
+    public Extension (hydra.ext.org.graphql.syntax.TypeSystemExtension value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

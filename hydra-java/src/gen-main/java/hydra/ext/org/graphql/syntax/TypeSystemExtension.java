@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public abstract class TypeSystemExtension implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.TypeSystemExtension");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.TypeSystemExtension");
   
   public static final hydra.core.Name FIELD_NAME_SCHEMA = new hydra.core.Name("schema");
   
@@ -37,10 +37,10 @@ public abstract class TypeSystemExtension implements Serializable {
     }
   }
   
-  public static final class Schema extends hydra.ext.graphql.syntax.TypeSystemExtension implements Serializable {
-    public final hydra.ext.graphql.syntax.SchemaExtension value;
+  public static final class Schema extends hydra.ext.org.graphql.syntax.TypeSystemExtension implements Serializable {
+    public final hydra.ext.org.graphql.syntax.SchemaExtension value;
     
-    public Schema (hydra.ext.graphql.syntax.SchemaExtension value) {
+    public Schema (hydra.ext.org.graphql.syntax.SchemaExtension value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -65,10 +65,10 @@ public abstract class TypeSystemExtension implements Serializable {
     }
   }
   
-  public static final class Type extends hydra.ext.graphql.syntax.TypeSystemExtension implements Serializable {
-    public final hydra.ext.graphql.syntax.TypeExtension value;
+  public static final class Type extends hydra.ext.org.graphql.syntax.TypeSystemExtension implements Serializable {
+    public final hydra.ext.org.graphql.syntax.TypeExtension value;
     
-    public Type (hydra.ext.graphql.syntax.TypeExtension value) {
+    public Type (hydra.ext.org.graphql.syntax.TypeExtension value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

@@ -5,7 +5,7 @@ package hydra.pg.query;
 import java.io.Serializable;
 
 public abstract class Expression implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/query.Expression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.query.Expression");
   
   public static final hydra.core.Name FIELD_NAME_ASSOCIATIVE = new hydra.core.Name("associative");
   

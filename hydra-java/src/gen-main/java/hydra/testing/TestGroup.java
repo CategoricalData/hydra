@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A collection of test cases with a name and optional description
  */
 public class TestGroup implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/testing.TestGroup");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.TestGroup");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   

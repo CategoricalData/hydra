@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A case statement for matching optional terms
  */
 public class OptionalCases implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.OptionalCases");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.OptionalCases");
   
   public static final hydra.core.Name FIELD_NAME_NOTHING = new hydra.core.Name("nothing");
   

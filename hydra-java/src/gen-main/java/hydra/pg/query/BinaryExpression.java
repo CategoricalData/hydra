@@ -5,7 +5,7 @@ package hydra.pg.query;
 import java.io.Serializable;
 
 public class BinaryExpression implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/query.BinaryExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.query.BinaryExpression");
   
   public static final hydra.core.Name FIELD_NAME_LEFT = new hydra.core.Name("left");
   

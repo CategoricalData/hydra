@@ -8,7 +8,7 @@ import java.io.Serializable;
  * An IRI or a literal; this type is a convenience for downstream models like SHACL which may exclude blank nodes
  */
 public abstract class IriOrLiteral implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/rdf/syntax.IriOrLiteral");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.rdf.syntax.IriOrLiteral");
   
   public static final hydra.core.Name FIELD_NAME_IRI = new hydra.core.Name("iri");
   

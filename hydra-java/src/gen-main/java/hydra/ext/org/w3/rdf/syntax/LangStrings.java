@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A convenience type which provides at most one string value per language, and optionally a value without a language
  */
 public class LangStrings implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/rdf/syntax.LangStrings");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.rdf.syntax.LangStrings");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   

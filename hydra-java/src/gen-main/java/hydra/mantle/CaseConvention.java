@@ -5,7 +5,7 @@ package hydra.mantle;
 import java.io.Serializable;
 
 public abstract class CaseConvention implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/mantle.CaseConvention");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.mantle.CaseConvention");
   
   public static final hydra.core.Name FIELD_NAME_CAMEL = new hydra.core.Name("camel");
   

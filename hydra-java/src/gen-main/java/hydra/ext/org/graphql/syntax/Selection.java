@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public abstract class Selection implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.Selection");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.Selection");
   
   public static final hydra.core.Name FIELD_NAME_FIELD = new hydra.core.Name("field");
   
@@ -45,10 +45,10 @@ public abstract class Selection implements Serializable {
     }
   }
   
-  public static final class Field extends hydra.ext.graphql.syntax.Selection implements Serializable {
-    public final hydra.ext.graphql.syntax.Field value;
+  public static final class Field extends hydra.ext.org.graphql.syntax.Selection implements Serializable {
+    public final hydra.ext.org.graphql.syntax.Field value;
     
-    public Field (hydra.ext.graphql.syntax.Field value) {
+    public Field (hydra.ext.org.graphql.syntax.Field value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -73,10 +73,10 @@ public abstract class Selection implements Serializable {
     }
   }
   
-  public static final class FragmentSpread extends hydra.ext.graphql.syntax.Selection implements Serializable {
-    public final hydra.ext.graphql.syntax.FragmentSpread value;
+  public static final class FragmentSpread extends hydra.ext.org.graphql.syntax.Selection implements Serializable {
+    public final hydra.ext.org.graphql.syntax.FragmentSpread value;
     
-    public FragmentSpread (hydra.ext.graphql.syntax.FragmentSpread value) {
+    public FragmentSpread (hydra.ext.org.graphql.syntax.FragmentSpread value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -101,10 +101,10 @@ public abstract class Selection implements Serializable {
     }
   }
   
-  public static final class InlineFragment extends hydra.ext.graphql.syntax.Selection implements Serializable {
-    public final hydra.ext.graphql.syntax.InlineFragment value;
+  public static final class InlineFragment extends hydra.ext.org.graphql.syntax.Selection implements Serializable {
+    public final hydra.ext.org.graphql.syntax.InlineFragment value;
     
-    public InlineFragment (hydra.ext.graphql.syntax.InlineFragment value) {
+    public InlineFragment (hydra.ext.org.graphql.syntax.InlineFragment value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

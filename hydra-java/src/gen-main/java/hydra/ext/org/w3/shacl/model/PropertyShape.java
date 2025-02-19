@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A SHACL property shape. See https://www.w3.org/TR/shacl/#property-shapes
  */
 public class PropertyShape implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/shacl/model.PropertyShape");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.shacl.model.PropertyShape");
   
   public static final hydra.core.Name FIELD_NAME_COMMON = new hydra.core.Name("common");
   

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * An instance of a type like sh:Shape or sh:NodeShape, together with a unique IRI for that instance
  */
 public class Definition<A> implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/shacl/model.Definition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.shacl.model.Definition");
   
   public static final hydra.core.Name FIELD_NAME_IRI = new hydra.core.Name("iri");
   

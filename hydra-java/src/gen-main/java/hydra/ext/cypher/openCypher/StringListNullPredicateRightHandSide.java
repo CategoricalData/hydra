@@ -5,7 +5,7 @@ package hydra.ext.cypher.openCypher;
 import java.io.Serializable;
 
 public abstract class StringListNullPredicateRightHandSide implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/openCypher.StringListNullPredicateRightHandSide");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.openCypher.StringListNullPredicateRightHandSide");
   
   public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
   

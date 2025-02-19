@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class ElementValue implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.ElementValue");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ElementValue");
   
   public static final hydra.core.Name FIELD_NAME_CONDITIONAL_EXPRESSION = new hydra.core.Name("conditionalExpression");
   

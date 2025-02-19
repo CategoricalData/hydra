@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Configurable annotation keys for property graph mapping specifications
  */
 public class AnnotationSchema implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/mapping.AnnotationSchema");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.mapping.AnnotationSchema");
   
   public static final hydra.core.Name FIELD_NAME_VERTEX_LABEL = new hydra.core.Name("vertexLabel");
   

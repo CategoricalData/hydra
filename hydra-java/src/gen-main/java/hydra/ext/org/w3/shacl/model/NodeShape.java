@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A SHACL node shape. See https://www.w3.org/TR/shacl/#node-shapes
  */
 public class NodeShape implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/shacl/model.NodeShape");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.shacl.model.NodeShape");
   
   public static final hydra.core.Name FIELD_NAME_COMMON = new hydra.core.Name("common");
   

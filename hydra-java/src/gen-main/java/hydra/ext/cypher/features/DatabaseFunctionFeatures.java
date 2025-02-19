@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Database functions
  */
 public class DatabaseFunctionFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.DatabaseFunctionFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.DatabaseFunctionFeatures");
   
   public static final hydra.core.Name FIELD_NAME_DB_NAME_FROM_ELEMENT_ID = new hydra.core.Name("db.nameFromElementId");
   

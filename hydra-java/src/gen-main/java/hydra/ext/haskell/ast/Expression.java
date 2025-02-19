@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A data expression
  */
 public abstract class Expression implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/haskell/ast.Expression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.Expression");
   
   public static final hydra.core.Name FIELD_NAME_APPLICATION = new hydra.core.Name("application");
   
@@ -169,9 +169,9 @@ public abstract class Expression implements Serializable {
   }
   
   public static final class Application extends hydra.ext.haskell.ast.Expression implements Serializable {
-    public final hydra.ext.haskell.ast.Expression_Application value;
+    public final hydra.ext.haskell.ast.ApplicationExpression value;
     
-    public Application (hydra.ext.haskell.ast.Expression_Application value) {
+    public Application (hydra.ext.haskell.ast.ApplicationExpression value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -197,9 +197,9 @@ public abstract class Expression implements Serializable {
   }
   
   public static final class Case extends hydra.ext.haskell.ast.Expression implements Serializable {
-    public final hydra.ext.haskell.ast.Expression_Case value;
+    public final hydra.ext.haskell.ast.CaseExpression value;
     
-    public Case (hydra.ext.haskell.ast.Expression_Case value) {
+    public Case (hydra.ext.haskell.ast.CaseExpression value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -225,9 +225,9 @@ public abstract class Expression implements Serializable {
   }
   
   public static final class ConstructRecord extends hydra.ext.haskell.ast.Expression implements Serializable {
-    public final hydra.ext.haskell.ast.Expression_ConstructRecord value;
+    public final hydra.ext.haskell.ast.ConstructRecordExpression value;
     
-    public ConstructRecord (hydra.ext.haskell.ast.Expression_ConstructRecord value) {
+    public ConstructRecord (hydra.ext.haskell.ast.ConstructRecordExpression value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -281,9 +281,9 @@ public abstract class Expression implements Serializable {
   }
   
   public static final class If extends hydra.ext.haskell.ast.Expression implements Serializable {
-    public final hydra.ext.haskell.ast.Expression_If value;
+    public final hydra.ext.haskell.ast.IfExpression value;
     
-    public If (hydra.ext.haskell.ast.Expression_If value) {
+    public If (hydra.ext.haskell.ast.IfExpression value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -309,9 +309,9 @@ public abstract class Expression implements Serializable {
   }
   
   public static final class InfixApplication extends hydra.ext.haskell.ast.Expression implements Serializable {
-    public final hydra.ext.haskell.ast.Expression_InfixApplication value;
+    public final hydra.ext.haskell.ast.InfixApplicationExpression value;
     
-    public InfixApplication (hydra.ext.haskell.ast.Expression_InfixApplication value) {
+    public InfixApplication (hydra.ext.haskell.ast.InfixApplicationExpression value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -365,9 +365,9 @@ public abstract class Expression implements Serializable {
   }
   
   public static final class Lambda extends hydra.ext.haskell.ast.Expression implements Serializable {
-    public final hydra.ext.haskell.ast.Expression_Lambda value;
+    public final hydra.ext.haskell.ast.LambdaExpression value;
     
-    public Lambda (hydra.ext.haskell.ast.Expression_Lambda value) {
+    public Lambda (hydra.ext.haskell.ast.LambdaExpression value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -393,9 +393,9 @@ public abstract class Expression implements Serializable {
   }
   
   public static final class LeftSection extends hydra.ext.haskell.ast.Expression implements Serializable {
-    public final hydra.ext.haskell.ast.Expression_Section value;
+    public final hydra.ext.haskell.ast.SectionExpression value;
     
-    public LeftSection (hydra.ext.haskell.ast.Expression_Section value) {
+    public LeftSection (hydra.ext.haskell.ast.SectionExpression value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -421,9 +421,9 @@ public abstract class Expression implements Serializable {
   }
   
   public static final class Let extends hydra.ext.haskell.ast.Expression implements Serializable {
-    public final hydra.ext.haskell.ast.Expression_Let value;
+    public final hydra.ext.haskell.ast.LetExpression value;
     
-    public Let (hydra.ext.haskell.ast.Expression_Let value) {
+    public Let (hydra.ext.haskell.ast.LetExpression value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -505,9 +505,9 @@ public abstract class Expression implements Serializable {
   }
   
   public static final class PrefixApplication extends hydra.ext.haskell.ast.Expression implements Serializable {
-    public final hydra.ext.haskell.ast.Expression_PrefixApplication value;
+    public final hydra.ext.haskell.ast.PrefixApplicationExpression value;
     
-    public PrefixApplication (hydra.ext.haskell.ast.Expression_PrefixApplication value) {
+    public PrefixApplication (hydra.ext.haskell.ast.PrefixApplicationExpression value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -533,9 +533,9 @@ public abstract class Expression implements Serializable {
   }
   
   public static final class RightSection extends hydra.ext.haskell.ast.Expression implements Serializable {
-    public final hydra.ext.haskell.ast.Expression_Section value;
+    public final hydra.ext.haskell.ast.SectionExpression value;
     
-    public RightSection (hydra.ext.haskell.ast.Expression_Section value) {
+    public RightSection (hydra.ext.haskell.ast.SectionExpression value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -589,9 +589,9 @@ public abstract class Expression implements Serializable {
   }
   
   public static final class TypeSignature extends hydra.ext.haskell.ast.Expression implements Serializable {
-    public final hydra.ext.haskell.ast.Expression_TypeSignature value;
+    public final hydra.ext.haskell.ast.TypeSignatureExpression value;
     
-    public TypeSignature (hydra.ext.haskell.ast.Expression_TypeSignature value) {
+    public TypeSignature (hydra.ext.haskell.ast.TypeSignatureExpression value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -617,9 +617,9 @@ public abstract class Expression implements Serializable {
   }
   
   public static final class UpdateRecord extends hydra.ext.haskell.ast.Expression implements Serializable {
-    public final hydra.ext.haskell.ast.Expression_UpdateRecord value;
+    public final hydra.ext.haskell.ast.UpdateRecordExpression value;
     
-    public UpdateRecord (hydra.ext.haskell.ast.Expression_UpdateRecord value) {
+    public UpdateRecord (hydra.ext.haskell.ast.UpdateRecordExpression value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

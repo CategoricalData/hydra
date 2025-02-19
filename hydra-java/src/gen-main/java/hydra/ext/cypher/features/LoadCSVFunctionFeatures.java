@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Load CSV functions
  */
 public class LoadCSVFunctionFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.LoadCSVFunctionFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.LoadCSVFunctionFeatures");
   
   public static final hydra.core.Name FIELD_NAME_FILE = new hydra.core.Name("file");
   
