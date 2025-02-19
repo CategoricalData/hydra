@@ -23,7 +23,7 @@ import qualified Data.Set as S
 import Prelude hiding ((++))
 
 
-testNs = Namespace "hydra/demos/meteredEvaluation"
+testNs = Namespace "hydra.demos.meteredEvaluation"
 
 testModule :: Module
 testModule = Module testNs elements [hydraMantleModule] [] Nothing

@@ -12,7 +12,7 @@ kqlModule :: Module
 kqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just ("A partial KQL (Kusto Query Language) model, based on examples from the documentation. Not normative.")
   where
-    ns = Namespace "hydra/ext/com/microsoft/kusto/kql"
+    ns = Namespace "hydra.ext.com.microsoft.kusto.kql"
     def = datatype ns
     kql = typeref ns
 

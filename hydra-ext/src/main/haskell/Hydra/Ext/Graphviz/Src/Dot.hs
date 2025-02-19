@@ -17,7 +17,7 @@ dotModule = Module ns elements [] [hydraCoreModule] $
     Just ("A model from the Graphviz DOT graph description language."
       ++ " Based on the grammar at https://graphviz.org/doc/info/lang.html")
   where
-    ns = Namespace "hydra/ext/org/graphviz/dot"
+    ns = Namespace "hydra.ext.org.graphviz.dot"
     def = datatype ns
     dot = typeref ns
 

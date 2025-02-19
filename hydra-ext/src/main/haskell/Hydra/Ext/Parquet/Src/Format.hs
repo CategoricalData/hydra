@@ -14,7 +14,7 @@ parquetFormatModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just ("A model for the Parquet format. Based on the Thrift-based specification at:\n" ++
       "  https://github.com/apache/parquet-format/blob/master/src/main/thrift/parquet.thrift")
   where
-    ns = Namespace "hydra/ext/org/apache/parquet/format"
+    ns = Namespace "hydra.ext.org.apache.parquet.format"
     def = datatype ns
     parquet = typeref ns
 

@@ -18,7 +18,7 @@ datalogSyntaxModule :: Module
 datalogSyntaxModule = grammarToModule ns datalogGrammar $
     Just "A basic Datalog model"
   where
-    ns = Namespace "hydra/ext/datalog/syntax"
+    ns = Namespace "hydra.ext.datalog.syntax"
 
 datalogGrammar :: G.Grammar
 datalogGrammar = G.Grammar [
