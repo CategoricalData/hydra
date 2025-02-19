@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class EnumBody implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.EnumBody");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.EnumBody");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   

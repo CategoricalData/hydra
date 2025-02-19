@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A record, or labeled tuple; a map of field names to terms
  */
 public class Record implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.Record");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Record");
   
   public static final hydra.core.Name FIELD_NAME_TYPE_NAME = new hydra.core.Name("typeName");
   

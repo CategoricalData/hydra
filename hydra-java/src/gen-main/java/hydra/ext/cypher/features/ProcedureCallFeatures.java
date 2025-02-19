@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Procedure calls
  */
 public class ProcedureCallFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.ProcedureCallFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.ProcedureCallFeatures");
   
   public static final hydra.core.Name FIELD_NAME_IN_QUERY_CALL = new hydra.core.Name("inQueryCall");
   

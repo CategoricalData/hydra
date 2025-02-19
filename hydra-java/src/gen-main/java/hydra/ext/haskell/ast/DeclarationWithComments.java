@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A data declaration together with any comments
  */
 public class DeclarationWithComments implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/haskell/ast.DeclarationWithComments");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.DeclarationWithComments");
   
   public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
   

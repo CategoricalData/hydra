@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public class EnumValueDefinition implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.EnumValueDefinition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.EnumValueDefinition");
   
   public static final hydra.core.Name FIELD_NAME_DESCRIPTION = new hydra.core.Name("description");
   
@@ -13,13 +13,13 @@ public class EnumValueDefinition implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_DIRECTIVES = new hydra.core.Name("directives");
   
-  public final hydra.util.Opt<hydra.ext.graphql.syntax.Description> description;
+  public final hydra.util.Opt<hydra.ext.org.graphql.syntax.Description> description;
   
-  public final hydra.ext.graphql.syntax.EnumValue enumValue;
+  public final hydra.ext.org.graphql.syntax.EnumValue enumValue;
   
-  public final hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives;
   
-  public EnumValueDefinition (hydra.util.Opt<hydra.ext.graphql.syntax.Description> description, hydra.ext.graphql.syntax.EnumValue enumValue, hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives) {
+  public EnumValueDefinition (hydra.util.Opt<hydra.ext.org.graphql.syntax.Description> description, hydra.ext.org.graphql.syntax.EnumValue enumValue, hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives) {
     java.util.Objects.requireNonNull((description));
     java.util.Objects.requireNonNull((enumValue));
     java.util.Objects.requireNonNull((directives));
@@ -42,17 +42,17 @@ public class EnumValueDefinition implements Serializable {
     return 2 * description.hashCode() + 3 * enumValue.hashCode() + 5 * directives.hashCode();
   }
   
-  public EnumValueDefinition withDescription(hydra.util.Opt<hydra.ext.graphql.syntax.Description> description) {
+  public EnumValueDefinition withDescription(hydra.util.Opt<hydra.ext.org.graphql.syntax.Description> description) {
     java.util.Objects.requireNonNull((description));
     return new EnumValueDefinition(description, enumValue, directives);
   }
   
-  public EnumValueDefinition withEnumValue(hydra.ext.graphql.syntax.EnumValue enumValue) {
+  public EnumValueDefinition withEnumValue(hydra.ext.org.graphql.syntax.EnumValue enumValue) {
     java.util.Objects.requireNonNull((enumValue));
     return new EnumValueDefinition(description, enumValue, directives);
   }
   
-  public EnumValueDefinition withDirectives(hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives) {
+  public EnumValueDefinition withDirectives(hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives) {
     java.util.Objects.requireNonNull((directives));
     return new EnumValueDefinition(description, enumValue, directives);
   }

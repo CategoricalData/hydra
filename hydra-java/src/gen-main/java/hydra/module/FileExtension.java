@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A file extension (without the dot), e.g. "json" or "py"
  */
 public class FileExtension implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/module.FileExtension");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.module.FileExtension");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   

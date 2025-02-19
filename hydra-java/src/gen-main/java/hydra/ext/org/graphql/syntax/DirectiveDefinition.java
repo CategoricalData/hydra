@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public class DirectiveDefinition implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.DirectiveDefinition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.DirectiveDefinition");
   
   public static final hydra.core.Name FIELD_NAME_DESCRIPTION = new hydra.core.Name("description");
   
@@ -17,17 +17,17 @@ public class DirectiveDefinition implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_DIRECTIVE_LOCATIONS = new hydra.core.Name("directiveLocations");
   
-  public final hydra.util.Opt<hydra.ext.graphql.syntax.Description> description;
+  public final hydra.util.Opt<hydra.ext.org.graphql.syntax.Description> description;
   
-  public final hydra.ext.graphql.syntax.Name name;
+  public final hydra.ext.org.graphql.syntax.Name name;
   
-  public final hydra.util.Opt<hydra.ext.graphql.syntax.ArgumentsDefinition> argumentsDefinition;
+  public final hydra.util.Opt<hydra.ext.org.graphql.syntax.ArgumentsDefinition> argumentsDefinition;
   
   public final hydra.util.Opt<java.lang.Void> repeatable;
   
-  public final hydra.ext.graphql.syntax.DirectiveLocations directiveLocations;
+  public final hydra.ext.org.graphql.syntax.DirectiveLocations directiveLocations;
   
-  public DirectiveDefinition (hydra.util.Opt<hydra.ext.graphql.syntax.Description> description, hydra.ext.graphql.syntax.Name name, hydra.util.Opt<hydra.ext.graphql.syntax.ArgumentsDefinition> argumentsDefinition, hydra.util.Opt<java.lang.Void> repeatable, hydra.ext.graphql.syntax.DirectiveLocations directiveLocations) {
+  public DirectiveDefinition (hydra.util.Opt<hydra.ext.org.graphql.syntax.Description> description, hydra.ext.org.graphql.syntax.Name name, hydra.util.Opt<hydra.ext.org.graphql.syntax.ArgumentsDefinition> argumentsDefinition, hydra.util.Opt<java.lang.Void> repeatable, hydra.ext.org.graphql.syntax.DirectiveLocations directiveLocations) {
     java.util.Objects.requireNonNull((description));
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((argumentsDefinition));
@@ -54,17 +54,17 @@ public class DirectiveDefinition implements Serializable {
     return 2 * description.hashCode() + 3 * name.hashCode() + 5 * argumentsDefinition.hashCode() + 7 * repeatable.hashCode() + 11 * directiveLocations.hashCode();
   }
   
-  public DirectiveDefinition withDescription(hydra.util.Opt<hydra.ext.graphql.syntax.Description> description) {
+  public DirectiveDefinition withDescription(hydra.util.Opt<hydra.ext.org.graphql.syntax.Description> description) {
     java.util.Objects.requireNonNull((description));
     return new DirectiveDefinition(description, name, argumentsDefinition, repeatable, directiveLocations);
   }
   
-  public DirectiveDefinition withName(hydra.ext.graphql.syntax.Name name) {
+  public DirectiveDefinition withName(hydra.ext.org.graphql.syntax.Name name) {
     java.util.Objects.requireNonNull((name));
     return new DirectiveDefinition(description, name, argumentsDefinition, repeatable, directiveLocations);
   }
   
-  public DirectiveDefinition withArgumentsDefinition(hydra.util.Opt<hydra.ext.graphql.syntax.ArgumentsDefinition> argumentsDefinition) {
+  public DirectiveDefinition withArgumentsDefinition(hydra.util.Opt<hydra.ext.org.graphql.syntax.ArgumentsDefinition> argumentsDefinition) {
     java.util.Objects.requireNonNull((argumentsDefinition));
     return new DirectiveDefinition(description, name, argumentsDefinition, repeatable, directiveLocations);
   }
@@ -74,7 +74,7 @@ public class DirectiveDefinition implements Serializable {
     return new DirectiveDefinition(description, name, argumentsDefinition, repeatable, directiveLocations);
   }
   
-  public DirectiveDefinition withDirectiveLocations(hydra.ext.graphql.syntax.DirectiveLocations directiveLocations) {
+  public DirectiveDefinition withDirectiveLocations(hydra.ext.org.graphql.syntax.DirectiveLocations directiveLocations) {
     java.util.Objects.requireNonNull((directiveLocations));
     return new DirectiveDefinition(description, name, argumentsDefinition, repeatable, directiveLocations);
   }

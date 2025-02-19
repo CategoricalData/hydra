@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A node in a query expression; it may be a term, a variable, or a wildcard
  */
 public abstract class Node implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/query.Node");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.Node");
   
   public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
   

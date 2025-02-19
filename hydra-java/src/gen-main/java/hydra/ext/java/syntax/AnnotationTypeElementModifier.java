@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class AnnotationTypeElementModifier implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.AnnotationTypeElementModifier");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.AnnotationTypeElementModifier");
   
   public static final hydra.core.Name FIELD_NAME_PUBLIC = new hydra.core.Name("public");
   

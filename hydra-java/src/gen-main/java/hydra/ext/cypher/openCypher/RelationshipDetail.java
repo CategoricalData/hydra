@@ -5,7 +5,7 @@ package hydra.ext.cypher.openCypher;
 import java.io.Serializable;
 
 public class RelationshipDetail implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/openCypher.RelationshipDetail");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.openCypher.RelationshipDetail");
   
   public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
   

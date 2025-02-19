@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Note: this is an approximation which ignores encoding
  */
 public class FloatingPointLiteral implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.FloatingPointLiteral");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.FloatingPointLiteral");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   

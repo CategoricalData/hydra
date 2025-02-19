@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A corresponding elimination for an introduction term
  */
 public abstract class Elimination implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.Elimination");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Elimination");
   
   public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
   

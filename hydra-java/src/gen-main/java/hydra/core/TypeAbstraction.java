@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A System F type abstraction term
  */
 public class TypeAbstraction implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.TypeAbstraction");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.TypeAbstraction");
   
   public static final hydra.core.Name FIELD_NAME_PARAMETER = new hydra.core.Name("parameter");
   

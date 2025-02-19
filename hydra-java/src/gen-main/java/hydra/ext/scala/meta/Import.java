@@ -5,7 +5,7 @@ package hydra.ext.scala.meta;
 import java.io.Serializable;
 
 public class Import implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/scala/meta.Import");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.scala.meta.Import");
   
   public static final hydra.core.Name FIELD_NAME_IMPORTERS = new hydra.core.Name("importers");
   

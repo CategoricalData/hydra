@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class NumericType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.NumericType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.NumericType");
   
   public static final hydra.core.Name FIELD_NAME_INTEGRAL = new hydra.core.Name("integral");
   

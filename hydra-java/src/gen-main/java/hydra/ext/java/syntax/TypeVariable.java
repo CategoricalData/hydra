@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class TypeVariable implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.TypeVariable");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.TypeVariable");
   
   public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
   

@@ -3,24 +3,33 @@
 package hydra.ext.java.language;
 
 /**
- * Language constraints for Java
+ * Language constraints and reserved words for Java
  */
 public interface Language {
   Integer javaMaxTupleLength = 9;
   
-  static  hydra.coders.Language javaLanguage() {
-    return new hydra.coders.Language(new hydra.coders.LanguageName("hydra/ext/java"), new hydra.coders.LanguageConstraints(hydra.lib.sets.FromList.apply((hydra.basics.Basics.eliminationVariants)), hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
+  static hydra.coders.Language javaLanguage() {
+    return new hydra.coders.Language(new hydra.coders.LanguageName("hydra.ext.java"), new hydra.coders.LanguageConstraints(hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
+      new hydra.mantle.EliminationVariant.List(),
+      new hydra.mantle.EliminationVariant.Optional(),
+      new hydra.mantle.EliminationVariant.Product(),
+      new hydra.mantle.EliminationVariant.Record(),
+      new hydra.mantle.EliminationVariant.Union(),
+      new hydra.mantle.EliminationVariant.Wrap())), hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.mantle.LiteralVariant.Boolean_(),
       new hydra.mantle.LiteralVariant.Float_(),
       new hydra.mantle.LiteralVariant.Integer_(),
       new hydra.mantle.LiteralVariant.String_())), hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.core.FloatType.Float32(),
-      new hydra.core.FloatType.Float64())), hydra.lib.sets.FromList.apply((hydra.basics.Basics.functionVariants)), hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
+      new hydra.core.FloatType.Float64())), hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
+      new hydra.mantle.FunctionVariant.Elimination(),
+      new hydra.mantle.FunctionVariant.Lambda(),
+      new hydra.mantle.FunctionVariant.Primitive())), hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.core.IntegerType.Bigint(),
+      new hydra.core.IntegerType.Int8(),
       new hydra.core.IntegerType.Int16(),
       new hydra.core.IntegerType.Int32(),
       new hydra.core.IntegerType.Int64(),
-      new hydra.core.IntegerType.Uint8(),
       new hydra.core.IntegerType.Uint16())), hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.mantle.TermVariant.Application(),
       new hydra.mantle.TermVariant.Function(),
@@ -48,7 +57,7 @@ public interface Language {
       new hydra.mantle.TypeVariant.Set(),
       new hydra.mantle.TypeVariant.Union(),
       new hydra.mantle.TypeVariant.Variable(),
-      new hydra.mantle.TypeVariant.Wrap())), (java.util.function.Function<hydra.core.Type, Boolean>) (v1 -> ((v1)).accept(new hydra.core.Type.PartialVisitor<Boolean>() {
+      new hydra.mantle.TypeVariant.Wrap())), (java.util.function.Function<hydra.core.Type, Boolean>) (s6 -> ((s6)).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Type instance) {
         return true;

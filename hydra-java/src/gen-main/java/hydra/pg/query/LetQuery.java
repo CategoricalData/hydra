@@ -5,7 +5,7 @@ package hydra.pg.query;
 import java.io.Serializable;
 
 public class LetQuery implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/query.LetQuery");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.query.LetQuery");
   
   public static final hydra.core.Name FIELD_NAME_BINDINGS = new hydra.core.Name("bindings");
   

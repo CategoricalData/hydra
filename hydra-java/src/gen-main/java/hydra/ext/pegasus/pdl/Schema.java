@@ -5,7 +5,7 @@ package hydra.ext.pegasus.pdl;
 import java.io.Serializable;
 
 public abstract class Schema implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Schema");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.pegasus.pdl.Schema");
   
   public static final hydra.core.Name FIELD_NAME_ARRAY = new hydra.core.Name("array");
   

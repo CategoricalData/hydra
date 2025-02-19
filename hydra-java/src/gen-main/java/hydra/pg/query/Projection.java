@@ -5,7 +5,7 @@ package hydra.pg.query;
 import java.io.Serializable;
 
 public class Projection implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/query.Projection");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.query.Projection");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   

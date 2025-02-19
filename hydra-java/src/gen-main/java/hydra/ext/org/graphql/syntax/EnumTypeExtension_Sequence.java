@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public class EnumTypeExtension_Sequence implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.EnumTypeExtension.Sequence");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.EnumTypeExtension_Sequence");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   
@@ -13,13 +13,13 @@ public class EnumTypeExtension_Sequence implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_ENUM_VALUES_DEFINITION = new hydra.core.Name("enumValuesDefinition");
   
-  public final hydra.ext.graphql.syntax.Name name;
+  public final hydra.ext.org.graphql.syntax.Name name;
   
-  public final hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives;
   
-  public final hydra.ext.graphql.syntax.EnumValuesDefinition enumValuesDefinition;
+  public final hydra.ext.org.graphql.syntax.EnumValuesDefinition enumValuesDefinition;
   
-  public EnumTypeExtension_Sequence (hydra.ext.graphql.syntax.Name name, hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives, hydra.ext.graphql.syntax.EnumValuesDefinition enumValuesDefinition) {
+  public EnumTypeExtension_Sequence (hydra.ext.org.graphql.syntax.Name name, hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives, hydra.ext.org.graphql.syntax.EnumValuesDefinition enumValuesDefinition) {
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((directives));
     java.util.Objects.requireNonNull((enumValuesDefinition));
@@ -42,17 +42,17 @@ public class EnumTypeExtension_Sequence implements Serializable {
     return 2 * name.hashCode() + 3 * directives.hashCode() + 5 * enumValuesDefinition.hashCode();
   }
   
-  public EnumTypeExtension_Sequence withName(hydra.ext.graphql.syntax.Name name) {
+  public EnumTypeExtension_Sequence withName(hydra.ext.org.graphql.syntax.Name name) {
     java.util.Objects.requireNonNull((name));
     return new EnumTypeExtension_Sequence(name, directives, enumValuesDefinition);
   }
   
-  public EnumTypeExtension_Sequence withDirectives(hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives) {
+  public EnumTypeExtension_Sequence withDirectives(hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives) {
     java.util.Objects.requireNonNull((directives));
     return new EnumTypeExtension_Sequence(name, directives, enumValuesDefinition);
   }
   
-  public EnumTypeExtension_Sequence withEnumValuesDefinition(hydra.ext.graphql.syntax.EnumValuesDefinition enumValuesDefinition) {
+  public EnumTypeExtension_Sequence withEnumValuesDefinition(hydra.ext.org.graphql.syntax.EnumValuesDefinition enumValuesDefinition) {
     java.util.Objects.requireNonNull((enumValuesDefinition));
     return new EnumTypeExtension_Sequence(name, directives, enumValuesDefinition);
   }

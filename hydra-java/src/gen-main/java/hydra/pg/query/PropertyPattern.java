@@ -5,7 +5,7 @@ package hydra.pg.query;
 import java.io.Serializable;
 
 public class PropertyPattern implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/query.PropertyPattern");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.query.PropertyPattern");
   
   public static final hydra.core.Name FIELD_NAME_KEY = new hydra.core.Name("key");
   

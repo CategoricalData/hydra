@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A value such as a string, number, or date
  */
 public class Literal implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/rdf/syntax.Literal");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.rdf.syntax.Literal");
   
   public static final hydra.core.Name FIELD_NAME_LEXICAL_FORM = new hydra.core.Name("lexicalForm");
   

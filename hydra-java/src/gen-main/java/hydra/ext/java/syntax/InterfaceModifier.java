@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class InterfaceModifier implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.InterfaceModifier");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.InterfaceModifier");
   
   public static final hydra.core.Name FIELD_NAME_ANNOTATION = new hydra.core.Name("annotation");
   

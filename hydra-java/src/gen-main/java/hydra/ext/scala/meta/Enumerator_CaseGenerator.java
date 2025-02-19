@@ -5,7 +5,7 @@ package hydra.ext.scala.meta;
 import java.io.Serializable;
 
 public class Enumerator_CaseGenerator implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/scala/meta.Enumerator.CaseGenerator");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.scala.meta.Enumerator_CaseGenerator");
   
   public static final hydra.core.Name FIELD_NAME_PAT = new hydra.core.Name("pat");
   

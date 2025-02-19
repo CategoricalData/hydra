@@ -8,7 +8,7 @@ import java.io.Serializable;
  * List functionality
  */
 public class ListFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.ListFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.ListFeatures");
   
   public static final hydra.core.Name FIELD_NAME_LIST_COMPREHENSION = new hydra.core.Name("listComprehension");
   

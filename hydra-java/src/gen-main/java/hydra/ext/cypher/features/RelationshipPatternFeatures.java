@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Relationship patterns
  */
 public class RelationshipPatternFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.RelationshipPatternFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.RelationshipPatternFeatures");
   
   public static final hydra.core.Name FIELD_NAME_MULTIPLE_TYPES = new hydra.core.Name("multipleTypes");
   

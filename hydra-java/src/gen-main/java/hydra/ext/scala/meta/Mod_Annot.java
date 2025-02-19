@@ -5,7 +5,7 @@ package hydra.ext.scala.meta;
 import java.io.Serializable;
 
 public class Mod_Annot implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/scala/meta.Mod.Annot");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.scala.meta.Mod_Annot");
   
   public static final hydra.core.Name FIELD_NAME_INIT = new hydra.core.Name("init");
   

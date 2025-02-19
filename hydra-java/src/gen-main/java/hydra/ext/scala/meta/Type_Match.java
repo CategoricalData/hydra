@@ -5,7 +5,7 @@ package hydra.ext.scala.meta;
 import java.io.Serializable;
 
 public class Type_Match implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/scala/meta.Type.Match");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.scala.meta.Type_Match");
   
   public static final hydra.core.Name FIELD_NAME_TPE = new hydra.core.Name("tpe");
   

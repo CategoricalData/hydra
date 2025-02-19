@@ -5,7 +5,7 @@ package hydra.ext.haskell.ast;
 import java.io.Serializable;
 
 public abstract class Type implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/haskell/ast.Type");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.Type");
   
   public static final hydra.core.Name FIELD_NAME_APPLICATION = new hydra.core.Name("application");
   
@@ -86,9 +86,9 @@ public abstract class Type implements Serializable {
   }
   
   public static final class Application extends hydra.ext.haskell.ast.Type implements Serializable {
-    public final hydra.ext.haskell.ast.Type_Application value;
+    public final hydra.ext.haskell.ast.ApplicationType value;
     
-    public Application (hydra.ext.haskell.ast.Type_Application value) {
+    public Application (hydra.ext.haskell.ast.ApplicationType value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -114,9 +114,9 @@ public abstract class Type implements Serializable {
   }
   
   public static final class Ctx extends hydra.ext.haskell.ast.Type implements Serializable {
-    public final hydra.ext.haskell.ast.Type_Context value;
+    public final hydra.ext.haskell.ast.ContextType value;
     
-    public Ctx (hydra.ext.haskell.ast.Type_Context value) {
+    public Ctx (hydra.ext.haskell.ast.ContextType value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -142,9 +142,9 @@ public abstract class Type implements Serializable {
   }
   
   public static final class Function extends hydra.ext.haskell.ast.Type implements Serializable {
-    public final hydra.ext.haskell.ast.Type_Function value;
+    public final hydra.ext.haskell.ast.FunctionType value;
     
-    public Function (hydra.ext.haskell.ast.Type_Function value) {
+    public Function (hydra.ext.haskell.ast.FunctionType value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -170,9 +170,9 @@ public abstract class Type implements Serializable {
   }
   
   public static final class Infix extends hydra.ext.haskell.ast.Type implements Serializable {
-    public final hydra.ext.haskell.ast.Type_Infix value;
+    public final hydra.ext.haskell.ast.InfixType value;
     
-    public Infix (hydra.ext.haskell.ast.Type_Infix value) {
+    public Infix (hydra.ext.haskell.ast.InfixType value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

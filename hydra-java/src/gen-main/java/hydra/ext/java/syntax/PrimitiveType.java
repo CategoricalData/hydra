@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class PrimitiveType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.PrimitiveType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.PrimitiveType");
   
   public static final hydra.core.Name FIELD_NAME_NUMERIC = new hydra.core.Name("numeric");
   

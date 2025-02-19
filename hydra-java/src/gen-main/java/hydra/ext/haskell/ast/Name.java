@@ -5,7 +5,7 @@ package hydra.ext.haskell.ast;
 import java.io.Serializable;
 
 public abstract class Name implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/haskell/ast.Name");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.Name");
   
   public static final hydra.core.Name FIELD_NAME_IMPLICIT = new hydra.core.Name("implicit");
   

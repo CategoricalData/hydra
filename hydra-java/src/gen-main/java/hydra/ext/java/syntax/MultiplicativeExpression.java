@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class MultiplicativeExpression implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.MultiplicativeExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.MultiplicativeExpression");
   
   public static final hydra.core.Name FIELD_NAME_UNARY = new hydra.core.Name("unary");
   

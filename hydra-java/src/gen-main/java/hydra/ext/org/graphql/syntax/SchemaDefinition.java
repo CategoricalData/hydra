@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public class SchemaDefinition implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.SchemaDefinition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.SchemaDefinition");
   
   public static final hydra.core.Name FIELD_NAME_DESCRIPTION = new hydra.core.Name("description");
   
@@ -13,13 +13,13 @@ public class SchemaDefinition implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_ROOT_OPERATION_TYPE_DEFINITION = new hydra.core.Name("rootOperationTypeDefinition");
   
-  public final hydra.util.Opt<hydra.ext.graphql.syntax.Description> description;
+  public final hydra.util.Opt<hydra.ext.org.graphql.syntax.Description> description;
   
-  public final hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives;
   
-  public final hydra.ext.graphql.syntax.RootOperationTypeDefinition rootOperationTypeDefinition;
+  public final hydra.ext.org.graphql.syntax.RootOperationTypeDefinition rootOperationTypeDefinition;
   
-  public SchemaDefinition (hydra.util.Opt<hydra.ext.graphql.syntax.Description> description, hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives, hydra.ext.graphql.syntax.RootOperationTypeDefinition rootOperationTypeDefinition) {
+  public SchemaDefinition (hydra.util.Opt<hydra.ext.org.graphql.syntax.Description> description, hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives, hydra.ext.org.graphql.syntax.RootOperationTypeDefinition rootOperationTypeDefinition) {
     java.util.Objects.requireNonNull((description));
     java.util.Objects.requireNonNull((directives));
     java.util.Objects.requireNonNull((rootOperationTypeDefinition));
@@ -42,17 +42,17 @@ public class SchemaDefinition implements Serializable {
     return 2 * description.hashCode() + 3 * directives.hashCode() + 5 * rootOperationTypeDefinition.hashCode();
   }
   
-  public SchemaDefinition withDescription(hydra.util.Opt<hydra.ext.graphql.syntax.Description> description) {
+  public SchemaDefinition withDescription(hydra.util.Opt<hydra.ext.org.graphql.syntax.Description> description) {
     java.util.Objects.requireNonNull((description));
     return new SchemaDefinition(description, directives, rootOperationTypeDefinition);
   }
   
-  public SchemaDefinition withDirectives(hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives) {
+  public SchemaDefinition withDirectives(hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives) {
     java.util.Objects.requireNonNull((directives));
     return new SchemaDefinition(description, directives, rootOperationTypeDefinition);
   }
   
-  public SchemaDefinition withRootOperationTypeDefinition(hydra.ext.graphql.syntax.RootOperationTypeDefinition rootOperationTypeDefinition) {
+  public SchemaDefinition withRootOperationTypeDefinition(hydra.ext.org.graphql.syntax.RootOperationTypeDefinition rootOperationTypeDefinition) {
     java.util.Objects.requireNonNull((rootOperationTypeDefinition));
     return new SchemaDefinition(description, directives, rootOperationTypeDefinition);
   }

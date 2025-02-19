@@ -8,7 +8,7 @@ import java.io.Serializable;
  * An integer type
  */
 public abstract class IntegerType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.IntegerType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.IntegerType");
   
   public static final hydra.core.Name FIELD_NAME_BIGINT = new hydra.core.Name("bigint");
   

@@ -5,7 +5,7 @@ package hydra.ext.scala.meta;
 import java.io.Serializable;
 
 public class Data_QuotedMacroExpr implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/scala/meta.Data.QuotedMacroExpr");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.scala.meta.Data_QuotedMacroExpr");
   
   public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
   

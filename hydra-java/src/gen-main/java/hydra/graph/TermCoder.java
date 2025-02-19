@@ -6,7 +6,7 @@ package hydra.graph;
  * A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms
  */
 public class TermCoder<X> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/graph.TermCoder");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.graph.TermCoder");
   
   public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
   

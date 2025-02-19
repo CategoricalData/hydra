@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A data constructor
  */
 public abstract class Constructor implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/haskell/ast.Constructor");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.Constructor");
   
   public static final hydra.core.Name FIELD_NAME_ORDINARY = new hydra.core.Name("ordinary");
   
@@ -41,9 +41,9 @@ public abstract class Constructor implements Serializable {
   }
   
   public static final class Ordinary extends hydra.ext.haskell.ast.Constructor implements Serializable {
-    public final hydra.ext.haskell.ast.Constructor_Ordinary value;
+    public final hydra.ext.haskell.ast.OrdinaryConstructor value;
     
-    public Ordinary (hydra.ext.haskell.ast.Constructor_Ordinary value) {
+    public Ordinary (hydra.ext.haskell.ast.OrdinaryConstructor value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -69,9 +69,9 @@ public abstract class Constructor implements Serializable {
   }
   
   public static final class Record extends hydra.ext.haskell.ast.Constructor implements Serializable {
-    public final hydra.ext.haskell.ast.Constructor_Record value;
+    public final hydra.ext.haskell.ast.RecordConstructor value;
     
-    public Record (hydra.ext.haskell.ast.Constructor_Record value) {
+    public Record (hydra.ext.haskell.ast.RecordConstructor value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

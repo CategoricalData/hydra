@@ -8,7 +8,7 @@ import java.io.Serializable;
  * An assertion that two types can be unified into a single type
  */
 public class TypeConstraint implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/mantle.TypeConstraint");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.mantle.TypeConstraint");
   
   public static final hydra.core.Name FIELD_NAME_LEFT = new hydra.core.Name("left");
   

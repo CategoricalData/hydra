@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class ArrayCreationExpression_ClassOrInterfaceArray implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.ArrayCreationExpression.ClassOrInterfaceArray");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray");
   
   public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
   

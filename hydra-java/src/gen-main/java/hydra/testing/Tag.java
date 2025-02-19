@@ -5,7 +5,7 @@ package hydra.testing;
 import java.io.Serializable;
 
 public class Tag implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/testing.Tag");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.Tag");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   

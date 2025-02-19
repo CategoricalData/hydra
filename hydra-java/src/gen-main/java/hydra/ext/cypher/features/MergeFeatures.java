@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Merge operations
  */
 public class MergeFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.MergeFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.MergeFeatures");
   
   public static final hydra.core.Name FIELD_NAME_MERGE = new hydra.core.Name("merge");
   

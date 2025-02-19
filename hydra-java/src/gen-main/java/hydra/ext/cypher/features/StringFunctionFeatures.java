@@ -8,7 +8,7 @@ import java.io.Serializable;
  * String functions
  */
 public class StringFunctionFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.StringFunctionFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.StringFunctionFeatures");
   
   public static final hydra.core.Name FIELD_NAME_BTRIM = new hydra.core.Name("btrim");
   

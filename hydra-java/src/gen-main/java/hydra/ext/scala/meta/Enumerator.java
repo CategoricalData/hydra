@@ -5,7 +5,7 @@ package hydra.ext.scala.meta;
 import java.io.Serializable;
 
 public abstract class Enumerator implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/scala/meta.Enumerator");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.scala.meta.Enumerator");
   
   public static final hydra.core.Name FIELD_NAME_GENERATOR = new hydra.core.Name("generator");
   

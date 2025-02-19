@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Graph functions
  */
 public class GraphFunctionFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.GraphFunctionFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.GraphFunctionFeatures");
   
   public static final hydra.core.Name FIELD_NAME_GRAPH_BY_ELEMENT_ID = new hydra.core.Name("graph.byElementId");
   

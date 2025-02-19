@@ -5,7 +5,7 @@ package hydra.ext.cypher.openCypher;
 import java.io.Serializable;
 
 public abstract class NumberLiteral implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/openCypher.NumberLiteral");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.openCypher.NumberLiteral");
   
   public static final hydra.core.Name FIELD_NAME_DOUBLE = new hydra.core.Name("double");
   

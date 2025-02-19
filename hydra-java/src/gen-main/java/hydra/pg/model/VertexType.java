@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The type of a vertex
  */
 public class VertexType<T> implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/model.VertexType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.VertexType");
   
   public static final hydra.core.Name FIELD_NAME_LABEL = new hydra.core.Name("label");
   

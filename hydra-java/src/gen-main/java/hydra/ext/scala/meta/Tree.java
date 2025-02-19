@@ -5,7 +5,7 @@ package hydra.ext.scala.meta;
 import java.io.Serializable;
 
 public abstract class Tree implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/scala/meta.Tree");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.scala.meta.Tree");
   
   public static final hydra.core.Name FIELD_NAME_REF = new hydra.core.Name("ref");
   
@@ -226,9 +226,9 @@ public abstract class Tree implements Serializable {
   }
   
   public static final class Bounds extends hydra.ext.scala.meta.Tree implements Serializable {
-    public final hydra.ext.scala.meta.Type_Bounds value;
+    public final hydra.ext.scala.meta.TypeBounds value;
     
-    public Bounds (hydra.ext.scala.meta.Type_Bounds value) {
+    public Bounds (hydra.ext.scala.meta.TypeBounds value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public class UnionTypeExtension_Sequence implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.UnionTypeExtension.Sequence");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.UnionTypeExtension_Sequence");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   
@@ -13,13 +13,13 @@ public class UnionTypeExtension_Sequence implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_UNION_MEMBER_TYPES = new hydra.core.Name("unionMemberTypes");
   
-  public final hydra.ext.graphql.syntax.Name name;
+  public final hydra.ext.org.graphql.syntax.Name name;
   
-  public final hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives;
   
-  public final hydra.ext.graphql.syntax.UnionMemberTypes unionMemberTypes;
+  public final hydra.ext.org.graphql.syntax.UnionMemberTypes unionMemberTypes;
   
-  public UnionTypeExtension_Sequence (hydra.ext.graphql.syntax.Name name, hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives, hydra.ext.graphql.syntax.UnionMemberTypes unionMemberTypes) {
+  public UnionTypeExtension_Sequence (hydra.ext.org.graphql.syntax.Name name, hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives, hydra.ext.org.graphql.syntax.UnionMemberTypes unionMemberTypes) {
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((directives));
     java.util.Objects.requireNonNull((unionMemberTypes));
@@ -42,17 +42,17 @@ public class UnionTypeExtension_Sequence implements Serializable {
     return 2 * name.hashCode() + 3 * directives.hashCode() + 5 * unionMemberTypes.hashCode();
   }
   
-  public UnionTypeExtension_Sequence withName(hydra.ext.graphql.syntax.Name name) {
+  public UnionTypeExtension_Sequence withName(hydra.ext.org.graphql.syntax.Name name) {
     java.util.Objects.requireNonNull((name));
     return new UnionTypeExtension_Sequence(name, directives, unionMemberTypes);
   }
   
-  public UnionTypeExtension_Sequence withDirectives(hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives) {
+  public UnionTypeExtension_Sequence withDirectives(hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives) {
     java.util.Objects.requireNonNull((directives));
     return new UnionTypeExtension_Sequence(name, directives, unionMemberTypes);
   }
   
-  public UnionTypeExtension_Sequence withUnionMemberTypes(hydra.ext.graphql.syntax.UnionMemberTypes unionMemberTypes) {
+  public UnionTypeExtension_Sequence withUnionMemberTypes(hydra.ext.org.graphql.syntax.UnionMemberTypes unionMemberTypes) {
     java.util.Objects.requireNonNull((unionMemberTypes));
     return new UnionTypeExtension_Sequence(name, directives, unionMemberTypes);
   }

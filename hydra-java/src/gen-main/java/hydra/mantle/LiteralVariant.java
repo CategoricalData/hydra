@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The identifier of a literal constructor
  */
 public abstract class LiteralVariant implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/mantle.LiteralVariant");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.mantle.LiteralVariant");
   
   public static final hydra.core.Name FIELD_NAME_BINARY = new hydra.core.Name("binary");
   

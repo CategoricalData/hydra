@@ -5,7 +5,7 @@ package hydra.ext.scala.meta;
 import java.io.Serializable;
 
 public abstract class Data_FunctionData implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/scala/meta.Data.FunctionData");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.scala.meta.Data_FunctionData");
   
   public static final hydra.core.Name FIELD_NAME_CONTEXT_FUNCTION = new hydra.core.Name("contextFunction");
   

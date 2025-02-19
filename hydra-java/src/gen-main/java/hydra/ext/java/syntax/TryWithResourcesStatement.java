@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class TryWithResourcesStatement implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.TryWithResourcesStatement");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.TryWithResourcesStatement");
   
   public static final hydra.core.Name FIELD_NAME_RESOURCE_SPECIFICATION = new hydra.core.Name("resourceSpecification");
   

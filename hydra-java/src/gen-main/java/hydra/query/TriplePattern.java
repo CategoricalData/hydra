@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A subject/predicate/object pattern
  */
 public class TriplePattern implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/query.TriplePattern");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.TriplePattern");
   
   public static final hydra.core.Name FIELD_NAME_SUBJECT = new hydra.core.Name("subject");
   

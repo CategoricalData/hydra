@@ -8,7 +8,7 @@ import java.io.Serializable;
  * String functions/keywords only found in OpenCypher
  */
 public class StringFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.StringFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.StringFeatures");
   
   public static final hydra.core.Name FIELD_NAME_CONTAINS = new hydra.core.Name("contains");
   

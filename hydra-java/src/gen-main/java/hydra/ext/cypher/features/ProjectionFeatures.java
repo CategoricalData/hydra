@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Projections
  */
 public class ProjectionFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.ProjectionFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.ProjectionFeatures");
   
   public static final hydra.core.Name FIELD_NAME_LIMIT = new hydra.core.Name("limit");
   

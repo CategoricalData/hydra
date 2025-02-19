@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A query variable
  */
 public class Variable implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/query.Variable");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.Variable");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   

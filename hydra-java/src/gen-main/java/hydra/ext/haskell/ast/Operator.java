@@ -5,7 +5,7 @@ package hydra.ext.haskell.ast;
 import java.io.Serializable;
 
 public abstract class Operator implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/haskell/ast.Operator");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.Operator");
   
   public static final hydra.core.Name FIELD_NAME_BACKTICK = new hydra.core.Name("backtick");
   

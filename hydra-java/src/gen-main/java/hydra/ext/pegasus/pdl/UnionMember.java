@@ -5,7 +5,7 @@ package hydra.ext.pegasus.pdl;
 import java.io.Serializable;
 
 public class UnionMember implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.UnionMember");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.pegasus.pdl.UnionMember");
   
   public static final hydra.core.Name FIELD_NAME_ALIAS = new hydra.core.Name("alias");
   

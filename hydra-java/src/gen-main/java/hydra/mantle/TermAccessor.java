@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A function which maps from a term to a particular immediate subterm
  */
 public abstract class TermAccessor implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/mantle.TermAccessor");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.mantle.TermAccessor");
   
   public static final hydra.core.Name FIELD_NAME_ANNOTATED_SUBJECT = new hydra.core.Name("annotatedSubject");
   

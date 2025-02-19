@@ -5,7 +5,7 @@ package hydra.ext.pegasus.pdl;
 import java.io.Serializable;
 
 public class Property implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Property");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.pegasus.pdl.Property");
   
   public static final hydra.core.Name FIELD_NAME_KEY = new hydra.core.Name("key");
   

@@ -71,9 +71,9 @@ public interface TestGraph {
   
   static hydra.core.Type testTypeComparison() {
     return new hydra.core.Type.Union(new hydra.core.RowType((hydra.test.testGraph.TestGraph.testTypeComparisonName), java.util.Arrays.asList(
-      new hydra.core.FieldType(new hydra.core.Name("lessThan"), new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList()))),
-      new hydra.core.FieldType(new hydra.core.Name("equalTo"), new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList()))),
-      new hydra.core.FieldType(new hydra.core.Name("greaterThan"), new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList()))))));
+      new hydra.core.FieldType(new hydra.core.Name("lessThan"), new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.core.Unit"), java.util.Arrays.asList()))),
+      new hydra.core.FieldType(new hydra.core.Name("equalTo"), new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.core.Unit"), java.util.Arrays.asList()))),
+      new hydra.core.FieldType(new hydra.core.Name("greaterThan"), new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.core.Unit"), java.util.Arrays.asList()))))));
   }
   
   hydra.core.Name testTypeComparisonName = new hydra.core.Name("Comparison");
@@ -82,7 +82,7 @@ public interface TestGraph {
     return new hydra.core.Type.Union(new hydra.core.RowType((hydra.test.testGraph.TestGraph.testTypeFoobarValueName), java.util.Arrays.asList(
       new hydra.core.FieldType(new hydra.core.Name("bool"), new hydra.core.Type.Literal(new hydra.core.LiteralType.Boolean_())),
       new hydra.core.FieldType(new hydra.core.Name("string"), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())),
-      new hydra.core.FieldType(new hydra.core.Name("unit"), new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList()))))));
+      new hydra.core.FieldType(new hydra.core.Name("unit"), new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.core.Unit"), java.util.Arrays.asList()))))));
   }
   
   hydra.core.Name testTypeFoobarValueName = new hydra.core.Name("FoobarValue");
@@ -164,7 +164,7 @@ public interface TestGraph {
     return new hydra.core.Type.Union(new hydra.core.RowType((hydra.test.testGraph.TestGraph.testTypeUnionMonomorphicName), java.util.Arrays.asList(
       new hydra.core.FieldType(new hydra.core.Name("bool"), new hydra.core.Type.Literal(new hydra.core.LiteralType.Boolean_())),
       new hydra.core.FieldType(new hydra.core.Name("string"), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())),
-      new hydra.core.FieldType(new hydra.core.Name("unit"), new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList()))))));
+      new hydra.core.FieldType(new hydra.core.Name("unit"), new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.core.Unit"), java.util.Arrays.asList()))))));
   }
   
   hydra.core.Name testTypeUnionMonomorphicName = new hydra.core.Name("UnionMonomorphic");

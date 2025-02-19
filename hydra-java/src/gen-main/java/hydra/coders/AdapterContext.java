@@ -6,7 +6,7 @@ package hydra.coders;
  * An evaluation context together with a source language and a target language
  */
 public class AdapterContext {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/coders.AdapterContext");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.coders.AdapterContext");
   
   public static final hydra.core.Name FIELD_NAME_GRAPH = new hydra.core.Name("graph");
   

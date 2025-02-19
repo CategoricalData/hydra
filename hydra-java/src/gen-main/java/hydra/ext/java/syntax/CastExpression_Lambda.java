@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class CastExpression_Lambda implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.CastExpression.Lambda");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.CastExpression_Lambda");
   
   public static final hydra.core.Name FIELD_NAME_REF_AND_BOUNDS = new hydra.core.Name("refAndBounds");
   

@@ -5,7 +5,7 @@ package hydra.ext.cypher.openCypher;
 import java.io.Serializable;
 
 public class NotExpression implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/openCypher.NotExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.openCypher.NotExpression");
   
   public static final hydra.core.Name FIELD_NAME_NOT = new hydra.core.Name("not");
   

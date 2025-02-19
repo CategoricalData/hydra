@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Specific syntax related to reading data from the graph.
  */
 public class ReadingFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.ReadingFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.ReadingFeatures");
   
   public static final hydra.core.Name FIELD_NAME_UNION = new hydra.core.Name("union");
   

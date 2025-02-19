@@ -8,7 +8,7 @@ import java.io.Serializable;
  * An import or export specification
  */
 public class ImportExportSpec implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/haskell/ast.ImportExportSpec");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.ImportExportSpec");
   
   public static final hydra.core.Name FIELD_NAME_MODIFIER = new hydra.core.Name("modifier");
   
@@ -20,9 +20,9 @@ public class ImportExportSpec implements Serializable {
   
   public final hydra.ext.haskell.ast.Name name;
   
-  public final hydra.util.Opt<hydra.ext.haskell.ast.ImportExportSpec_Subspec> subspec;
+  public final hydra.util.Opt<hydra.ext.haskell.ast.SubspecImportExportSpec> subspec;
   
-  public ImportExportSpec (hydra.util.Opt<hydra.ext.haskell.ast.ImportModifier> modifier, hydra.ext.haskell.ast.Name name, hydra.util.Opt<hydra.ext.haskell.ast.ImportExportSpec_Subspec> subspec) {
+  public ImportExportSpec (hydra.util.Opt<hydra.ext.haskell.ast.ImportModifier> modifier, hydra.ext.haskell.ast.Name name, hydra.util.Opt<hydra.ext.haskell.ast.SubspecImportExportSpec> subspec) {
     java.util.Objects.requireNonNull((modifier));
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((subspec));
@@ -55,7 +55,7 @@ public class ImportExportSpec implements Serializable {
     return new ImportExportSpec(modifier, name, subspec);
   }
   
-  public ImportExportSpec withSubspec(hydra.util.Opt<hydra.ext.haskell.ast.ImportExportSpec_Subspec> subspec) {
+  public ImportExportSpec withSubspec(hydra.util.Opt<hydra.ext.haskell.ast.SubspecImportExportSpec> subspec) {
     java.util.Objects.requireNonNull((subspec));
     return new ImportExportSpec(modifier, name, subspec);
   }

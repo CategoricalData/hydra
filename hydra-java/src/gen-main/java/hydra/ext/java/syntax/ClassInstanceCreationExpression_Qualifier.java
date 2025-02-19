@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class ClassInstanceCreationExpression_Qualifier implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.ClassInstanceCreationExpression.Qualifier");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier");
   
   public static final hydra.core.Name FIELD_NAME_EXPRESSION = new hydra.core.Name("expression");
   

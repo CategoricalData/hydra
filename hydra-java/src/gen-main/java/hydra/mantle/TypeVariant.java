@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The identifier of a type constructor
  */
 public abstract class TypeVariant implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/mantle.TypeVariant");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.mantle.TypeVariant");
   
   public static final hydra.core.Name FIELD_NAME_ANNOTATED = new hydra.core.Name("annotated");
   

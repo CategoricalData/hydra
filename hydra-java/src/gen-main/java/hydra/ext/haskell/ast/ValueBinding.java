@@ -5,7 +5,7 @@ package hydra.ext.haskell.ast;
 import java.io.Serializable;
 
 public abstract class ValueBinding implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/haskell/ast.ValueBinding");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.ValueBinding");
   
   public static final hydra.core.Name FIELD_NAME_SIMPLE = new hydra.core.Name("simple");
   
@@ -30,9 +30,9 @@ public abstract class ValueBinding implements Serializable {
   }
   
   public static final class Simple extends hydra.ext.haskell.ast.ValueBinding implements Serializable {
-    public final hydra.ext.haskell.ast.ValueBinding_Simple value;
+    public final hydra.ext.haskell.ast.SimpleValueBinding value;
     
-    public Simple (hydra.ext.haskell.ast.ValueBinding_Simple value) {
+    public Simple (hydra.ext.haskell.ast.SimpleValueBinding value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

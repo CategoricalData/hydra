@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public class EnumTypeDefinition implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.EnumTypeDefinition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.EnumTypeDefinition");
   
   public static final hydra.core.Name FIELD_NAME_DESCRIPTION = new hydra.core.Name("description");
   
@@ -15,15 +15,15 @@ public class EnumTypeDefinition implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_ENUM_VALUES_DEFINITION = new hydra.core.Name("enumValuesDefinition");
   
-  public final hydra.util.Opt<hydra.ext.graphql.syntax.Description> description;
+  public final hydra.util.Opt<hydra.ext.org.graphql.syntax.Description> description;
   
-  public final hydra.ext.graphql.syntax.Name name;
+  public final hydra.ext.org.graphql.syntax.Name name;
   
-  public final hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives;
   
-  public final hydra.util.Opt<hydra.ext.graphql.syntax.EnumValuesDefinition> enumValuesDefinition;
+  public final hydra.util.Opt<hydra.ext.org.graphql.syntax.EnumValuesDefinition> enumValuesDefinition;
   
-  public EnumTypeDefinition (hydra.util.Opt<hydra.ext.graphql.syntax.Description> description, hydra.ext.graphql.syntax.Name name, hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives, hydra.util.Opt<hydra.ext.graphql.syntax.EnumValuesDefinition> enumValuesDefinition) {
+  public EnumTypeDefinition (hydra.util.Opt<hydra.ext.org.graphql.syntax.Description> description, hydra.ext.org.graphql.syntax.Name name, hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives, hydra.util.Opt<hydra.ext.org.graphql.syntax.EnumValuesDefinition> enumValuesDefinition) {
     java.util.Objects.requireNonNull((description));
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((directives));
@@ -48,22 +48,22 @@ public class EnumTypeDefinition implements Serializable {
     return 2 * description.hashCode() + 3 * name.hashCode() + 5 * directives.hashCode() + 7 * enumValuesDefinition.hashCode();
   }
   
-  public EnumTypeDefinition withDescription(hydra.util.Opt<hydra.ext.graphql.syntax.Description> description) {
+  public EnumTypeDefinition withDescription(hydra.util.Opt<hydra.ext.org.graphql.syntax.Description> description) {
     java.util.Objects.requireNonNull((description));
     return new EnumTypeDefinition(description, name, directives, enumValuesDefinition);
   }
   
-  public EnumTypeDefinition withName(hydra.ext.graphql.syntax.Name name) {
+  public EnumTypeDefinition withName(hydra.ext.org.graphql.syntax.Name name) {
     java.util.Objects.requireNonNull((name));
     return new EnumTypeDefinition(description, name, directives, enumValuesDefinition);
   }
   
-  public EnumTypeDefinition withDirectives(hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives) {
+  public EnumTypeDefinition withDirectives(hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives) {
     java.util.Objects.requireNonNull((directives));
     return new EnumTypeDefinition(description, name, directives, enumValuesDefinition);
   }
   
-  public EnumTypeDefinition withEnumValuesDefinition(hydra.util.Opt<hydra.ext.graphql.syntax.EnumValuesDefinition> enumValuesDefinition) {
+  public EnumTypeDefinition withEnumValuesDefinition(hydra.util.Opt<hydra.ext.org.graphql.syntax.EnumValuesDefinition> enumValuesDefinition) {
     java.util.Objects.requireNonNull((enumValuesDefinition));
     return new EnumTypeDefinition(description, name, directives, enumValuesDefinition);
   }

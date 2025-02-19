@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The specification of a Hydra schema, provided as a set of modules and a distinguished type
  */
 public class HydraSchemaSpec implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/workflow.HydraSchemaSpec");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.workflow.HydraSchemaSpec");
   
   public static final hydra.core.Name FIELD_NAME_MODULES = new hydra.core.Name("modules");
   

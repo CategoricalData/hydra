@@ -8,7 +8,7 @@ import java.io.Serializable;
  * An abstract expression
  */
 public abstract class Expr implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ast.Expr");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ast.Expr");
   
   public static final hydra.core.Name FIELD_NAME_CONST = new hydra.core.Name("const");
   

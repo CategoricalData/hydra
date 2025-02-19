@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A graph of RDF statements together with a distinguished subject and/or object node
  */
 public class Description implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/rdf/syntax.Description");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.rdf.syntax.Description");
   
   public static final hydra.core.Name FIELD_NAME_SUBJECT = new hydra.core.Name("subject");
   

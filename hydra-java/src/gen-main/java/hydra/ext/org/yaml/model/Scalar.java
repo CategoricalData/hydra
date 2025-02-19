@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here
  */
 public abstract class Scalar implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/yaml/model.Scalar");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.yaml.model.Scalar");
   
   public static final hydra.core.Name FIELD_NAME_BOOL = new hydra.core.Name("bool");
   

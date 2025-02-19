@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class FieldAccess implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.FieldAccess");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.FieldAccess");
   
   public static final hydra.core.Name FIELD_NAME_QUALIFIER = new hydra.core.Name("qualifier");
   

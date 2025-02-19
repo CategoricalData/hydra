@@ -8,7 +8,7 @@ import java.io.Serializable;
  * One of two evaluation styles: eager or lazy
  */
 public abstract class EvaluationStyle implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/testing.EvaluationStyle");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.EvaluationStyle");
   
   public static final hydra.core.Name FIELD_NAME_EAGER = new hydra.core.Name("eager");
   

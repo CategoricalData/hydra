@@ -1,21 +1,21 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public class Directive implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.Directive");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.Directive");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   
   public static final hydra.core.Name FIELD_NAME_ARGUMENTS = new hydra.core.Name("arguments");
   
-  public final hydra.ext.graphql.syntax.Name name;
+  public final hydra.ext.org.graphql.syntax.Name name;
   
-  public final hydra.util.Opt<hydra.ext.graphql.syntax.Arguments> arguments;
+  public final hydra.util.Opt<hydra.ext.org.graphql.syntax.Arguments> arguments;
   
-  public Directive (hydra.ext.graphql.syntax.Name name, hydra.util.Opt<hydra.ext.graphql.syntax.Arguments> arguments) {
+  public Directive (hydra.ext.org.graphql.syntax.Name name, hydra.util.Opt<hydra.ext.org.graphql.syntax.Arguments> arguments) {
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((arguments));
     this.name = name;
@@ -36,12 +36,12 @@ public class Directive implements Serializable {
     return 2 * name.hashCode() + 3 * arguments.hashCode();
   }
   
-  public Directive withName(hydra.ext.graphql.syntax.Name name) {
+  public Directive withName(hydra.ext.org.graphql.syntax.Name name) {
     java.util.Objects.requireNonNull((name));
     return new Directive(name, arguments);
   }
   
-  public Directive withArguments(hydra.util.Opt<hydra.ext.graphql.syntax.Arguments> arguments) {
+  public Directive withArguments(hydra.util.Opt<hydra.ext.org.graphql.syntax.Arguments> arguments) {
     java.util.Objects.requireNonNull((arguments));
     return new Directive(name, arguments);
   }

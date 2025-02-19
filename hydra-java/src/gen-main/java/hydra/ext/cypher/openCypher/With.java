@@ -5,7 +5,7 @@ package hydra.ext.cypher.openCypher;
 import java.io.Serializable;
 
 public class With implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/openCypher.With");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.openCypher.With");
   
   public static final hydra.core.Name FIELD_NAME_PROJECTION = new hydra.core.Name("projection");
   

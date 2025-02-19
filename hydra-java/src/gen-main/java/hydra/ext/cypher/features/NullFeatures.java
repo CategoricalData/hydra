@@ -8,7 +8,7 @@ import java.io.Serializable;
  * IS NULL / IS NOT NULL checks
  */
 public class NullFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.NullFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.NullFeatures");
   
   public static final hydra.core.Name FIELD_NAME_IS_NULL = new hydra.core.Name("isNull");
   

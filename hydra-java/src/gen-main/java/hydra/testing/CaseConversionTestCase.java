@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A test case which checks that strings are converted between different case conventions correctly
  */
 public class CaseConversionTestCase implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/testing.CaseConversionTestCase");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.CaseConversionTestCase");
   
   public static final hydra.core.Name FIELD_NAME_FROM_CONVENTION = new hydra.core.Name("fromConvention");
   

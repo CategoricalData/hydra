@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class AssignmentExpression implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.AssignmentExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.AssignmentExpression");
   
   public static final hydra.core.Name FIELD_NAME_CONDITIONAL = new hydra.core.Name("conditional");
   

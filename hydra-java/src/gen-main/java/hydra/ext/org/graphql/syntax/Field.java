@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public class Field implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.Field");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.Field");
   
   public static final hydra.core.Name FIELD_NAME_ALIAS = new hydra.core.Name("alias");
   
@@ -17,17 +17,17 @@ public class Field implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_SELECTION_SET = new hydra.core.Name("selectionSet");
   
-  public final hydra.util.Opt<hydra.ext.graphql.syntax.Alias> alias;
+  public final hydra.util.Opt<hydra.ext.org.graphql.syntax.Alias> alias;
   
-  public final hydra.ext.graphql.syntax.Name name;
+  public final hydra.ext.org.graphql.syntax.Name name;
   
-  public final hydra.util.Opt<hydra.ext.graphql.syntax.Arguments> arguments;
+  public final hydra.util.Opt<hydra.ext.org.graphql.syntax.Arguments> arguments;
   
-  public final hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives;
   
-  public final hydra.util.Opt<hydra.ext.graphql.syntax.SelectionSet> selectionSet;
+  public final hydra.util.Opt<hydra.ext.org.graphql.syntax.SelectionSet> selectionSet;
   
-  public Field (hydra.util.Opt<hydra.ext.graphql.syntax.Alias> alias, hydra.ext.graphql.syntax.Name name, hydra.util.Opt<hydra.ext.graphql.syntax.Arguments> arguments, hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives, hydra.util.Opt<hydra.ext.graphql.syntax.SelectionSet> selectionSet) {
+  public Field (hydra.util.Opt<hydra.ext.org.graphql.syntax.Alias> alias, hydra.ext.org.graphql.syntax.Name name, hydra.util.Opt<hydra.ext.org.graphql.syntax.Arguments> arguments, hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives, hydra.util.Opt<hydra.ext.org.graphql.syntax.SelectionSet> selectionSet) {
     java.util.Objects.requireNonNull((alias));
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((arguments));
@@ -54,27 +54,27 @@ public class Field implements Serializable {
     return 2 * alias.hashCode() + 3 * name.hashCode() + 5 * arguments.hashCode() + 7 * directives.hashCode() + 11 * selectionSet.hashCode();
   }
   
-  public Field withAlias(hydra.util.Opt<hydra.ext.graphql.syntax.Alias> alias) {
+  public Field withAlias(hydra.util.Opt<hydra.ext.org.graphql.syntax.Alias> alias) {
     java.util.Objects.requireNonNull((alias));
     return new Field(alias, name, arguments, directives, selectionSet);
   }
   
-  public Field withName(hydra.ext.graphql.syntax.Name name) {
+  public Field withName(hydra.ext.org.graphql.syntax.Name name) {
     java.util.Objects.requireNonNull((name));
     return new Field(alias, name, arguments, directives, selectionSet);
   }
   
-  public Field withArguments(hydra.util.Opt<hydra.ext.graphql.syntax.Arguments> arguments) {
+  public Field withArguments(hydra.util.Opt<hydra.ext.org.graphql.syntax.Arguments> arguments) {
     java.util.Objects.requireNonNull((arguments));
     return new Field(alias, name, arguments, directives, selectionSet);
   }
   
-  public Field withDirectives(hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives) {
+  public Field withDirectives(hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives) {
     java.util.Objects.requireNonNull((directives));
     return new Field(alias, name, arguments, directives, selectionSet);
   }
   
-  public Field withSelectionSet(hydra.util.Opt<hydra.ext.graphql.syntax.SelectionSet> selectionSet) {
+  public Field withSelectionSet(hydra.util.Opt<hydra.ext.org.graphql.syntax.SelectionSet> selectionSet) {
     java.util.Objects.requireNonNull((selectionSet));
     return new Field(alias, name, arguments, directives, selectionSet);
   }

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A path with a regex quantifier
  */
 public class RegexSequence implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/query.RegexSequence");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.RegexSequence");
   
   public static final hydra.core.Name FIELD_NAME_PATH = new hydra.core.Name("path");
   

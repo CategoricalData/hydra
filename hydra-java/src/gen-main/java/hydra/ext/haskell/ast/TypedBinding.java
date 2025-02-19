@@ -5,7 +5,7 @@ package hydra.ext.haskell.ast;
 import java.io.Serializable;
 
 public class TypedBinding implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/haskell/ast.TypedBinding");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.TypedBinding");
   
   public static final hydra.core.Name FIELD_NAME_TYPE_SIGNATURE = new hydra.core.Name("typeSignature");
   

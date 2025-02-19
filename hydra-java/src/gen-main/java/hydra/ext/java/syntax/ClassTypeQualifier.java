@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class ClassTypeQualifier implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.ClassTypeQualifier");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ClassTypeQualifier");
   
   public static final hydra.core.Name FIELD_NAME_NONE = new hydra.core.Name("none");
   

@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public class FieldDefinition implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.FieldDefinition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.FieldDefinition");
   
   public static final hydra.core.Name FIELD_NAME_DESCRIPTION = new hydra.core.Name("description");
   
@@ -17,17 +17,17 @@ public class FieldDefinition implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_DIRECTIVES = new hydra.core.Name("directives");
   
-  public final hydra.util.Opt<hydra.ext.graphql.syntax.Description> description;
+  public final hydra.util.Opt<hydra.ext.org.graphql.syntax.Description> description;
   
-  public final hydra.ext.graphql.syntax.Name name;
+  public final hydra.ext.org.graphql.syntax.Name name;
   
-  public final hydra.util.Opt<hydra.ext.graphql.syntax.ArgumentsDefinition> argumentsDefinition;
+  public final hydra.util.Opt<hydra.ext.org.graphql.syntax.ArgumentsDefinition> argumentsDefinition;
   
-  public final hydra.ext.graphql.syntax.Type type;
+  public final hydra.ext.org.graphql.syntax.Type type;
   
-  public final hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives;
+  public final hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives;
   
-  public FieldDefinition (hydra.util.Opt<hydra.ext.graphql.syntax.Description> description, hydra.ext.graphql.syntax.Name name, hydra.util.Opt<hydra.ext.graphql.syntax.ArgumentsDefinition> argumentsDefinition, hydra.ext.graphql.syntax.Type type, hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives) {
+  public FieldDefinition (hydra.util.Opt<hydra.ext.org.graphql.syntax.Description> description, hydra.ext.org.graphql.syntax.Name name, hydra.util.Opt<hydra.ext.org.graphql.syntax.ArgumentsDefinition> argumentsDefinition, hydra.ext.org.graphql.syntax.Type type, hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives) {
     java.util.Objects.requireNonNull((description));
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((argumentsDefinition));
@@ -54,27 +54,27 @@ public class FieldDefinition implements Serializable {
     return 2 * description.hashCode() + 3 * name.hashCode() + 5 * argumentsDefinition.hashCode() + 7 * type.hashCode() + 11 * directives.hashCode();
   }
   
-  public FieldDefinition withDescription(hydra.util.Opt<hydra.ext.graphql.syntax.Description> description) {
+  public FieldDefinition withDescription(hydra.util.Opt<hydra.ext.org.graphql.syntax.Description> description) {
     java.util.Objects.requireNonNull((description));
     return new FieldDefinition(description, name, argumentsDefinition, type, directives);
   }
   
-  public FieldDefinition withName(hydra.ext.graphql.syntax.Name name) {
+  public FieldDefinition withName(hydra.ext.org.graphql.syntax.Name name) {
     java.util.Objects.requireNonNull((name));
     return new FieldDefinition(description, name, argumentsDefinition, type, directives);
   }
   
-  public FieldDefinition withArgumentsDefinition(hydra.util.Opt<hydra.ext.graphql.syntax.ArgumentsDefinition> argumentsDefinition) {
+  public FieldDefinition withArgumentsDefinition(hydra.util.Opt<hydra.ext.org.graphql.syntax.ArgumentsDefinition> argumentsDefinition) {
     java.util.Objects.requireNonNull((argumentsDefinition));
     return new FieldDefinition(description, name, argumentsDefinition, type, directives);
   }
   
-  public FieldDefinition withType(hydra.ext.graphql.syntax.Type type) {
+  public FieldDefinition withType(hydra.ext.org.graphql.syntax.Type type) {
     java.util.Objects.requireNonNull((type));
     return new FieldDefinition(description, name, argumentsDefinition, type, directives);
   }
   
-  public FieldDefinition withDirectives(hydra.util.Opt<hydra.ext.graphql.syntax.Directives> directives) {
+  public FieldDefinition withDirectives(hydra.util.Opt<hydra.ext.org.graphql.syntax.Directives> directives) {
     java.util.Objects.requireNonNull((directives));
     return new FieldDefinition(description, name, argumentsDefinition, type, directives);
   }

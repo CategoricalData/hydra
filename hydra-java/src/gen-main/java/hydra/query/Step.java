@@ -8,7 +8,7 @@ import java.io.Serializable;
  * An atomic function as part of a query. When applied to a graph, steps are typed by function types.
  */
 public abstract class Step implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/query.Step");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.Step");
   
   public static final hydra.core.Name FIELD_NAME_EDGE = new hydra.core.Name("edge");
   

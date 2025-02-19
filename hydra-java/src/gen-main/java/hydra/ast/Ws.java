@@ -8,7 +8,7 @@ import java.io.Serializable;
  * One of several classes of whitespace
  */
 public abstract class Ws implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ast.Ws");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ast.Ws");
   
   public static final hydra.core.Name FIELD_NAME_NONE = new hydra.core.Name("none");
   

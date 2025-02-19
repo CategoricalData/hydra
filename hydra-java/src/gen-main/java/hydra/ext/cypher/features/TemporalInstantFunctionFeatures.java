@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Temporal instant functions
  */
 public class TemporalInstantFunctionFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.TemporalInstantFunctionFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.TemporalInstantFunctionFeatures");
   
   public static final hydra.core.Name FIELD_NAME_DATE = new hydra.core.Name("date");
   

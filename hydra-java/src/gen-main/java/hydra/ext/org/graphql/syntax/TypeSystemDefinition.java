@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public abstract class TypeSystemDefinition implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.TypeSystemDefinition");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.TypeSystemDefinition");
   
   public static final hydra.core.Name FIELD_NAME_SCHEMA = new hydra.core.Name("schema");
   
@@ -45,10 +45,10 @@ public abstract class TypeSystemDefinition implements Serializable {
     }
   }
   
-  public static final class Schema extends hydra.ext.graphql.syntax.TypeSystemDefinition implements Serializable {
-    public final hydra.ext.graphql.syntax.SchemaDefinition value;
+  public static final class Schema extends hydra.ext.org.graphql.syntax.TypeSystemDefinition implements Serializable {
+    public final hydra.ext.org.graphql.syntax.SchemaDefinition value;
     
-    public Schema (hydra.ext.graphql.syntax.SchemaDefinition value) {
+    public Schema (hydra.ext.org.graphql.syntax.SchemaDefinition value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -73,10 +73,10 @@ public abstract class TypeSystemDefinition implements Serializable {
     }
   }
   
-  public static final class Type extends hydra.ext.graphql.syntax.TypeSystemDefinition implements Serializable {
-    public final hydra.ext.graphql.syntax.TypeDefinition value;
+  public static final class Type extends hydra.ext.org.graphql.syntax.TypeSystemDefinition implements Serializable {
+    public final hydra.ext.org.graphql.syntax.TypeDefinition value;
     
-    public Type (hydra.ext.graphql.syntax.TypeDefinition value) {
+    public Type (hydra.ext.org.graphql.syntax.TypeDefinition value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -101,10 +101,10 @@ public abstract class TypeSystemDefinition implements Serializable {
     }
   }
   
-  public static final class Directive extends hydra.ext.graphql.syntax.TypeSystemDefinition implements Serializable {
-    public final hydra.ext.graphql.syntax.DirectiveDefinition value;
+  public static final class Directive extends hydra.ext.org.graphql.syntax.TypeSystemDefinition implements Serializable {
+    public final hydra.ext.org.graphql.syntax.DirectiveDefinition value;
     
-    public Directive (hydra.ext.graphql.syntax.DirectiveDefinition value) {
+    public Directive (hydra.ext.org.graphql.syntax.DirectiveDefinition value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

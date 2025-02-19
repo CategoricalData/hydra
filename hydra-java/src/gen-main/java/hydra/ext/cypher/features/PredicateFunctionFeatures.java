@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Predicate functions
  */
 public class PredicateFunctionFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.PredicateFunctionFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.PredicateFunctionFeatures");
   
   public static final hydra.core.Name FIELD_NAME_ALL = new hydra.core.Name("all");
   

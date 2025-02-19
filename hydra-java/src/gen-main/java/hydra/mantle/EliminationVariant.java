@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The identifier of an elimination constructor
  */
 public abstract class EliminationVariant implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/mantle.EliminationVariant");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.mantle.EliminationVariant");
   
   public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
   

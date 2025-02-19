@@ -607,7 +607,7 @@ public interface Basics {
       @Override
       public Boolean visit(hydra.core.Term.Union instance) {
         return hydra.lib.equality.EqualString.apply(
-          "hydra/core.Type",
+          "hydra.core.Type",
           (((instance.value)).typeName).value);
       }
     });
@@ -633,7 +633,7 @@ public interface Basics {
       @Override
       public Boolean visit(hydra.core.Type.Union instance) {
         return hydra.lib.equality.EqualString.apply(
-          "hydra/core.Type",
+          "hydra.core.Type",
           (((instance.value)).typeName).value);
       }
     });
@@ -642,13 +642,13 @@ public interface Basics {
   static Boolean isUnitTerm(hydra.core.Term t) {
     return hydra.lib.equality.EqualTerm.apply(
       hydra.strip.Strip.fullyStripTerm((t)),
-      new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList())));
+      new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Unit"), java.util.Arrays.asList())));
   }
 
   static Boolean isUnitType(hydra.core.Type t) {
     return hydra.lib.equality.EqualType.apply(
       hydra.strip.Strip.stripType((t)),
-      new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra/core.Unit"), java.util.Arrays.asList())));
+      new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.core.Unit"), java.util.Arrays.asList())));
   }
 
   static java.util.function.Function<hydra.util.Opt<hydra.graph.Graph>, java.util.function.Function<java.util.List<hydra.graph.Element>, hydra.graph.Graph>> elementsToGraph(hydra.graph.Graph parent) {

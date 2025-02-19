@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class EnhancedForStatement implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.EnhancedForStatement");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.EnhancedForStatement");
   
   public static final hydra.core.Name FIELD_NAME_COND = new hydra.core.Name("cond");
   

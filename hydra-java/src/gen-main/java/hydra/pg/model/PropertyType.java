@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The type of a property
  */
 public class PropertyType<T> implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/model.PropertyType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.PropertyType");
   
   public static final hydra.core.Name FIELD_NAME_KEY = new hydra.core.Name("key");
   

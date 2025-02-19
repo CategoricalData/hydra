@@ -8,7 +8,7 @@ import java.io.Serializable;
  * An import statement
  */
 public class Import implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/haskell/ast.Import");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.Import");
   
   public static final hydra.core.Name FIELD_NAME_QUALIFIED = new hydra.core.Name("qualified");
   
@@ -24,9 +24,9 @@ public class Import implements Serializable {
   
   public final hydra.util.Opt<hydra.ext.haskell.ast.ModuleName> as;
   
-  public final hydra.util.Opt<hydra.ext.haskell.ast.Import_Spec> spec;
+  public final hydra.util.Opt<hydra.ext.haskell.ast.SpecImport> spec;
   
-  public Import (Boolean qualified, hydra.ext.haskell.ast.ModuleName module, hydra.util.Opt<hydra.ext.haskell.ast.ModuleName> as, hydra.util.Opt<hydra.ext.haskell.ast.Import_Spec> spec) {
+  public Import (Boolean qualified, hydra.ext.haskell.ast.ModuleName module, hydra.util.Opt<hydra.ext.haskell.ast.ModuleName> as, hydra.util.Opt<hydra.ext.haskell.ast.SpecImport> spec) {
     java.util.Objects.requireNonNull((qualified));
     java.util.Objects.requireNonNull((module));
     java.util.Objects.requireNonNull((as));
@@ -66,7 +66,7 @@ public class Import implements Serializable {
     return new Import(qualified, module, as, spec);
   }
   
-  public Import withSpec(hydra.util.Opt<hydra.ext.haskell.ast.Import_Spec> spec) {
+  public Import withSpec(hydra.util.Opt<hydra.ext.haskell.ast.SpecImport> spec) {
     java.util.Objects.requireNonNull((spec));
     return new Import(qualified, module, as, spec);
   }

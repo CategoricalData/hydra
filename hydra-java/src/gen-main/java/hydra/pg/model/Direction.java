@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The direction of an edge or edge pattern
  */
 public abstract class Direction implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/model.Direction");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.Direction");
   
   public static final hydra.core.Name FIELD_NAME_OUT = new hydra.core.Name("out");
   

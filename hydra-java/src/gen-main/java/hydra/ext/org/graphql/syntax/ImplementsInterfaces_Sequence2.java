@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public class ImplementsInterfaces_Sequence2 implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.ImplementsInterfaces.Sequence2");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.ImplementsInterfaces_Sequence2");
   
   public static final hydra.core.Name FIELD_NAME_AMP = new hydra.core.Name("amp");
   
@@ -13,9 +13,9 @@ public class ImplementsInterfaces_Sequence2 implements Serializable {
   
   public final hydra.util.Opt<java.lang.Void> amp;
   
-  public final hydra.ext.graphql.syntax.NamedType namedType;
+  public final hydra.ext.org.graphql.syntax.NamedType namedType;
   
-  public ImplementsInterfaces_Sequence2 (hydra.util.Opt<java.lang.Void> amp, hydra.ext.graphql.syntax.NamedType namedType) {
+  public ImplementsInterfaces_Sequence2 (hydra.util.Opt<java.lang.Void> amp, hydra.ext.org.graphql.syntax.NamedType namedType) {
     java.util.Objects.requireNonNull((amp));
     java.util.Objects.requireNonNull((namedType));
     this.amp = amp;
@@ -41,7 +41,7 @@ public class ImplementsInterfaces_Sequence2 implements Serializable {
     return new ImplementsInterfaces_Sequence2(amp, namedType);
   }
   
-  public ImplementsInterfaces_Sequence2 withNamedType(hydra.ext.graphql.syntax.NamedType namedType) {
+  public ImplementsInterfaces_Sequence2 withNamedType(hydra.ext.org.graphql.syntax.NamedType namedType) {
     java.util.Objects.requireNonNull((namedType));
     return new ImplementsInterfaces_Sequence2(amp, namedType);
   }

@@ -6,7 +6,7 @@ package hydra.pg.mapping;
  * A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types
  */
 public class Schema<S, T, V> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/mapping.Schema");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.mapping.Schema");
   
   public static final hydra.core.Name FIELD_NAME_VERTEX_ID_TYPES = new hydra.core.Name("vertexIdTypes");
   

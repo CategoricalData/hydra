@@ -8,7 +8,7 @@ import java.io.Serializable;
  * An expression enclosed by brackets
  */
 public class BracketExpr implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ast.BracketExpr");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ast.BracketExpr");
   
   public static final hydra.core.Name FIELD_NAME_BRACKETS = new hydra.core.Name("brackets");
   

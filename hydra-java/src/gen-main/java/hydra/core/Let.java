@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A set of (possibly recursive) 'let' bindings together with an environment in which they are bound
  */
 public class Let implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.Let");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Let");
   
   public static final hydra.core.Name FIELD_NAME_BINDINGS = new hydra.core.Name("bindings");
   

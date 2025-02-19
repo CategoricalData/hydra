@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class ShiftExpression_Binary implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.ShiftExpression.Binary");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ShiftExpression_Binary");
   
   public static final hydra.core.Name FIELD_NAME_LHS = new hydra.core.Name("lhs");
   

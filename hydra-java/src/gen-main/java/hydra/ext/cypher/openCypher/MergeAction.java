@@ -5,7 +5,7 @@ package hydra.ext.cypher.openCypher;
 import java.io.Serializable;
 
 public class MergeAction implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/openCypher.MergeAction");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.openCypher.MergeAction");
   
   public static final hydra.core.Name FIELD_NAME_ACTION = new hydra.core.Name("action");
   

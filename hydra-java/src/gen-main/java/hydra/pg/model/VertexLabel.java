@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The label of a vertex. The default (null) vertex is represented by the empty string
  */
 public class VertexLabel implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/model.VertexLabel");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.VertexLabel");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   

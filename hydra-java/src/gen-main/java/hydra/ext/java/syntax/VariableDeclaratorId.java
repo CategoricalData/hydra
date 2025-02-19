@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class VariableDeclaratorId implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.VariableDeclaratorId");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.VariableDeclaratorId");
   
   public static final hydra.core.Name FIELD_NAME_IDENTIFIER = new hydra.core.Name("identifier");
   

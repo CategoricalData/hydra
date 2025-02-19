@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Spatial functions
  */
 public class SpatialFunctionFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.SpatialFunctionFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.SpatialFunctionFeatures");
   
   public static final hydra.core.Name FIELD_NAME_POINT_DISTANCE = new hydra.core.Name("point.distance");
   

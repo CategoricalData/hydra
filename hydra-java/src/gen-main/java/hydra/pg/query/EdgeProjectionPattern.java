@@ -5,7 +5,7 @@ package hydra.pg.query;
 import java.io.Serializable;
 
 public class EdgeProjectionPattern implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/query.EdgeProjectionPattern");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.query.EdgeProjectionPattern");
   
   public static final hydra.core.Name FIELD_NAME_DIRECTION = new hydra.core.Name("direction");
   

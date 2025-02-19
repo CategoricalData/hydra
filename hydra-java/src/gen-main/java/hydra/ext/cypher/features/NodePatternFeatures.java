@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Node patterns
  */
 public class NodePatternFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.NodePatternFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.NodePatternFeatures");
   
   public static final hydra.core.Name FIELD_NAME_MULTIPLE_LABELS = new hydra.core.Name("multipleLabels");
   

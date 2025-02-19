@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A field name and value
  */
 public class FieldUpdate implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/haskell/ast.FieldUpdate");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.FieldUpdate");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   

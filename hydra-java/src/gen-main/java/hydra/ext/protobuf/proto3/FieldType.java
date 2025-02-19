@@ -5,7 +5,7 @@ package hydra.ext.protobuf.proto3;
 import java.io.Serializable;
 
 public abstract class FieldType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/protobuf/proto3.FieldType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.protobuf.proto3.FieldType");
   
   public static final hydra.core.Name FIELD_NAME_MAP = new hydra.core.Name("map");
   
@@ -54,9 +54,9 @@ public abstract class FieldType implements Serializable {
   }
   
   public static final class Map extends hydra.ext.protobuf.proto3.FieldType implements Serializable {
-    public final hydra.ext.protobuf.proto3.SimpleType value;
+    public final hydra.ext.protobuf.proto3.MapType value;
     
-    public Map (hydra.ext.protobuf.proto3.SimpleType value) {
+    public Map (hydra.ext.protobuf.proto3.MapType value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

@@ -5,7 +5,7 @@ package hydra.pg.query;
 import java.io.Serializable;
 
 public class MatchQuery implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/query.MatchQuery");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.query.MatchQuery");
   
   public static final hydra.core.Name FIELD_NAME_OPTIONAL = new hydra.core.Name("optional");
   

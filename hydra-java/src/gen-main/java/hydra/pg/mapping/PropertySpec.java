@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A mapping specification producing properties of a specified key, and values of the appropriate type.
  */
 public class PropertySpec implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/mapping.PropertySpec");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.mapping.PropertySpec");
   
   public static final hydra.core.Name FIELD_NAME_KEY = new hydra.core.Name("key");
   

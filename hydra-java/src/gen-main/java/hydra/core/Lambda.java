@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A function abstraction (lambda)
  */
 public class Lambda implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/core.Lambda");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Lambda");
   
   public static final hydra.core.Name FIELD_NAME_PARAMETER = new hydra.core.Name("parameter");
   

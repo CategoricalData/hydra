@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A query pattern
  */
 public abstract class Pattern implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/query.Pattern");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.Pattern");
   
   public static final hydra.core.Name FIELD_NAME_TRIPLE = new hydra.core.Name("triple");
   

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A protocol buffer option, which can be attached to a message, field, enumeration, etc
  */
 public class Option implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/protobuf/proto3.Option");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.protobuf.proto3.Option");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   

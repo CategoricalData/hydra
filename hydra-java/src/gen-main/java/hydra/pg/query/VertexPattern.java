@@ -5,7 +5,7 @@ package hydra.pg.query;
 import java.io.Serializable;
 
 public class VertexPattern implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/query.VertexPattern");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.query.VertexPattern");
   
   public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
   

@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class ExplicitConstructorInvocation_Variant implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.ExplicitConstructorInvocation.Variant");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ExplicitConstructorInvocation_Variant");
   
   public static final hydra.core.Name FIELD_NAME_THIS = new hydra.core.Name("this");
   

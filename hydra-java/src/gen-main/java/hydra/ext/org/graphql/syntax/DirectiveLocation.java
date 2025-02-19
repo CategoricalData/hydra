@@ -1,11 +1,11 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.ext.graphql.syntax;
+package hydra.ext.org.graphql.syntax;
 
 import java.io.Serializable;
 
 public abstract class DirectiveLocation implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/graphql/syntax.DirectiveLocation");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphql.syntax.DirectiveLocation");
   
   public static final hydra.core.Name FIELD_NAME_EXECUTABLE = new hydra.core.Name("executable");
   
@@ -37,10 +37,10 @@ public abstract class DirectiveLocation implements Serializable {
     }
   }
   
-  public static final class Executable extends hydra.ext.graphql.syntax.DirectiveLocation implements Serializable {
-    public final hydra.ext.graphql.syntax.ExecutableDirectiveLocation value;
+  public static final class Executable extends hydra.ext.org.graphql.syntax.DirectiveLocation implements Serializable {
+    public final hydra.ext.org.graphql.syntax.ExecutableDirectiveLocation value;
     
-    public Executable (hydra.ext.graphql.syntax.ExecutableDirectiveLocation value) {
+    public Executable (hydra.ext.org.graphql.syntax.ExecutableDirectiveLocation value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -65,10 +65,10 @@ public abstract class DirectiveLocation implements Serializable {
     }
   }
   
-  public static final class TypeSystem extends hydra.ext.graphql.syntax.DirectiveLocation implements Serializable {
-    public final hydra.ext.graphql.syntax.TypeSystemDirectiveLocation value;
+  public static final class TypeSystem extends hydra.ext.org.graphql.syntax.DirectiveLocation implements Serializable {
+    public final hydra.ext.org.graphql.syntax.TypeSystemDirectiveLocation value;
     
-    public TypeSystem (hydra.ext.graphql.syntax.TypeSystemDirectiveLocation value) {
+    public TypeSystem (hydra.ext.org.graphql.syntax.TypeSystemDirectiveLocation value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

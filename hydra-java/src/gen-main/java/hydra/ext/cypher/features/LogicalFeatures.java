@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Logical operations
  */
 public class LogicalFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/cypher/features.LogicalFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.features.LogicalFeatures");
   
   public static final hydra.core.Name FIELD_NAME_AND = new hydra.core.Name("and");
   

@@ -5,7 +5,7 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class NumericTypeArray implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/java/syntax.NumericTypeArray");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.NumericTypeArray");
   
   public static final hydra.core.Name FIELD_NAME_SIMPLE = new hydra.core.Name("simple");
   

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A mapping specification producing values (usually literal values) whose type is understood in context
  */
 public abstract class ValueSpec implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/pg/mapping.ValueSpec");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.mapping.ValueSpec");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   

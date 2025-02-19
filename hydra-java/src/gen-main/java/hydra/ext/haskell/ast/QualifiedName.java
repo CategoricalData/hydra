@@ -5,7 +5,7 @@ package hydra.ext.haskell.ast;
 import java.io.Serializable;
 
 public class QualifiedName implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/haskell/ast.QualifiedName");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.QualifiedName");
   
   public static final hydra.core.Name FIELD_NAME_QUALIFIERS = new hydra.core.Name("qualifiers");
   

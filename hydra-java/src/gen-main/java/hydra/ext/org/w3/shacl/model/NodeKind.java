@@ -5,7 +5,7 @@ package hydra.ext.org.w3.shacl.model;
 import java.io.Serializable;
 
 public abstract class NodeKind implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/shacl/model.NodeKind");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.shacl.model.NodeKind");
   
   public static final hydra.core.Name FIELD_NAME_BLANK_NODE = new hydra.core.Name("blankNode");
   
