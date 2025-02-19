@@ -5,7 +5,7 @@ import hydra.core
 import hydra.mantle
 import hydra.testing
 
-allTests = hydra.testing.TestGroup("All tests", None, [formattingTests, inferenceTests, primitiveTests], [])
+allTests = hydra.testing.TestGroup("All tests", None, ["formattingTests", "inferenceTests", "primitiveTests"], [])
 
 formattingTests = hydra.testing.TestGroup("formatting tests", None, [], [
   hydra.testing.TestCaseWithMetadata("#1 (lower_snake_case -> UPPER_SNAKE_CASE)", hydra.testing.TestCaseCaseConversion(hydra.testing.CaseConversionTestCase(hydra.mantle.CaseConvention.LOWER_SNAKE, hydra.mantle.CaseConvention.UPPER_SNAKE, "a_hello_world_42_a42_42a_b", "A_HELLO_WORLD_42_A42_42A_B")), None, []),
@@ -149,7 +149,7 @@ listPrimitiveTests = hydra.testing.TestGroup("hydra/lib/lists primitives", None,
   hydra.testing.TestGroup("pure", None, [], [
     hydra.testing.TestCaseWithMetadata("1", hydra.testing.TestCaseEvaluation(hydra.testing.EvaluationTestCase(hydra.testing.EvaluationStyle.EAGER, hydra.core.TermApplication(hydra.core.Application(hydra.core.TermFunction(hydra.core.FunctionPrimitive(hydra.core.Name("hydra/lib/lists.pure"))), hydra.core.TermLiteral(hydra.core.LiteralString("one")))), hydra.core.TermList([hydra.core.TermLiteral(hydra.core.LiteralString("one"))]))), None, [])])], [])
 
-primitiveTests = hydra.testing.TestGroup("Primitive functions", "Test cases for primitive functions", [listPrimitiveTests, stringPrimitiveTests], [])
+primitiveTests = hydra.testing.TestGroup("Primitive functions", "Test cases for primitive functions", ["listPrimitiveTests", "stringPrimitiveTests"], [])
 
 stringPrimitiveTests = hydra.testing.TestGroup("hydra/lib/strings primitives", None, [
   hydra.testing.TestGroup("cat", None, [], [
