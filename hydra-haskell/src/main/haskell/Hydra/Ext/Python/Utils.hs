@@ -106,6 +106,9 @@ pyBitwiseOrToPyExpression = pyConjunctionToPyExpression . pyBitwiseOrToPyConjunc
 pyClassDefinitionToPyStatement :: Py.ClassDefinition -> Py.Statement
 pyClassDefinitionToPyStatement = Py.StatementCompound . Py.CompoundStatementClassDef
 
+pyClosedPatternToPyPatterns :: Py.ClosedPattern -> Py.Patterns
+pyClosedPatternToPyPatterns p =  Py.PatternsPattern $ Py.PatternOr $ Py.OrPattern [p]
+
 pyConjunctionToPyExpression :: Py.Conjunction -> Py.Expression
 pyConjunctionToPyExpression conj = Py.ExpressionSimple $ Py.Disjunction [conj]
 
@@ -196,6 +199,16 @@ primaryWithSlices prim first rest = primaryWithRhs prim $ Py.PrimaryRhsSlices $ 
 projectFromExpression :: Py.Expression -> Py.Name -> Py.Expression
 projectFromExpression exp name = pyPrimaryToPyExpression $ Py.PrimaryCompound $
   Py.PrimaryWithRhs (pyExpressionToPyPrimary exp) $ Py.PrimaryRhsProject name
+
+raiseTypeError :: String -> Py.Statement
+raiseTypeError msg = pySimpleStatementToPyStatement $ Py.SimpleStatementRaise
+    $ Py.RaiseStatement $ Just $ Py.RaiseExpression err Nothing
+  where
+    err :: Py.Expression
+    err = functionCall (pyNameToPyPrimary $ Py.Name "TypeError") [doubleQuotedString msg]
+
+returnSingle :: Py.Expression -> Py.Statement
+returnSingle expr = pySimpleStatementToPyStatement $ Py.SimpleStatementReturn $ Py.ReturnStatement [Py.StarExpressionSimple expr]
 
 stringToPyExpression :: Py.QuoteStyle -> String -> Py.Expression
 stringToPyExpression style s = pyAtomToPyExpression $ Py.AtomString $ Py.String_ s style

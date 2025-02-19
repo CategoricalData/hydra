@@ -46,20 +46,12 @@ encodeApplication env (Application fun arg) = case fullyStripTerm fun of
 --        EliminationList ...
         EliminationOptional (OptionalCases nothing just) -> do
           return $ stringToPyExpression Py.QuoteStyleDouble "optional match expressions not yet supported"
-
 --        EliminationProduct ...
         EliminationRecord (Projection _ fname) -> do
           parg <- encodeTerm env arg
           return $ projectFromExpression parg $ encodeFieldName False fname
         EliminationUnion (CaseStatement tname mdef cases) -> do
---          parg <- encodeTerm env arg
---          pmdef <- traverse (encodeTerm env) mdef
---          pcases <- CM.mapM (encodeField env) cases
---          let subjExpr = Py.SubjectExpressionSimple $ Py.NamedExpressionSimple parg
---          let caseBlocks = [] -- TODO
---          return $ Py.MatchStatement subjExpr caseBlocks
-          return $ stringToPyExpression Py.QuoteStyleDouble "match expressions not yet supported"
-
+          return $ stringToPyExpression Py.QuoteStyleDouble "inline match expressions are unsupported"
         EliminationWrap _ -> do
           parg <- encodeTerm env arg
           return $ projectFromExpression parg $ Py.Name "value"
@@ -77,9 +69,9 @@ encodeApplication env (Application fun arg) = case fullyStripTerm fun of
 
 encodeApplicationType :: PythonEnvironment -> ApplicationType -> Flow Graph Py.Expression
 encodeApplicationType env at = do
-    pybody <- encodeType env body
-    pyargs <- CM.mapM (encodeType env) args
-    return $ primaryAndParams (pyExpressionToPyPrimary pybody) pyargs
+    pyBody <- encodeType env body
+    pyArgs <- CM.mapM (encodeType env) args
+    return $ primaryAndParams (pyExpressionToPyPrimary pyBody) pyArgs
   where
     (body, args) = gatherParams (TypeApplication at) []
     gatherParams t ps = case stripType t of
@@ -143,7 +135,7 @@ encodeFunction env f = case f of
 encodeFunctionDefinition :: PythonEnvironment -> Name -> [Name] -> Term -> Maybe String -> Flow Graph Py.Statement
 encodeFunctionDefinition env name args body comment = do
     let params = Py.ParametersParamNoDefault $ Py.ParamNoDefaultParameters (toParam <$> args) [] Nothing
-    stmts <- encodeTopLevelTerm body
+    stmts <- encodeTopLevelTerm env body
     let block = indentedBlock comment [stmts]
     return $ Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing
       $ Py.FunctionDefRaw False (encodeNameUnqualified name) [] (Just params) Nothing Nothing block
@@ -160,8 +152,8 @@ encodeIntegerValue iv = case iv of
 
 encodeLambdaType :: PythonEnvironment -> LambdaType -> Flow Graph Py.Expression
 encodeLambdaType env lt = do
-    pybody <- encodeType env body
-    return $ primaryAndParams (pyExpressionToPyPrimary pybody) (pyNameToPyExpression . Py.Name . unName <$> params)
+    pyBody <- encodeType env body
+    return $ primaryAndParams (pyExpressionToPyPrimary pyBody) (pyNameToPyExpression . Py.Name . unName <$> params)
   where
     (body, params) = gatherParams (TypeLambda lt) []
     gatherParams t ps = case stripType t of
@@ -327,9 +319,44 @@ encodeTermAssignment env name term _ comment = do
       expr <- encodeTerm env t
       return [annotatedStatement comment $ assignmentStatement (encodeNameUnqualified name) expr]
 
-encodeTopLevelTerm :: Term -> Flow Graph [Py.Statement]
-encodeTopLevelTerm term = do
-  return [pyExpressionToPyStatement $ doubleQuotedString $ "top level term: " ++ show (fullyStripTerm term)]
+encodeTopLevelTerm :: PythonEnvironment -> Term -> Flow Graph [Py.Statement]
+encodeTopLevelTerm env term = if L.length args == 1
+    then withArg body (L.head args)
+    else dflt
+  where
+    (args, body) = gatherArgs [] term
+    gatherArgs rest term = case fullyStripTerm term of
+      TermApplication (Application l r) -> gatherArgs (r:rest) l
+      t -> (rest, t)
+    dflt = do
+      expr <- encodeTerm env term
+      return [pyExpressionToPyStatement expr]
+    withArg body arg = case fullyStripTerm body of
+      TermFunction (FunctionElimination (EliminationUnion (CaseStatement tname dflt cases))) -> do
+          pyArg <- encodeTerm env arg
+          pyCases <- CM.mapM toCaseBlock cases
+          pyDflt <- toDefault dflt
+          let subj = Py.SubjectExpressionSimple $ Py.NamedExpressionSimple pyArg
+          return [Py.StatementCompound $ Py.CompoundStatementMatch $ Py.MatchStatement subj $ pyCases ++ [pyDflt]]
+        where
+          toDefault dflt = do
+            stmt <- case dflt of
+              Nothing -> pure $ raiseTypeError $ "Unsupported " ++ localNameOf tname
+              Just d -> returnSingle <$> encodeTerm env d
+            let patterns = pyClosedPatternToPyPatterns Py.ClosedPatternWildcard
+            let body = indentedBlock Nothing [[stmt]]
+            return $ Py.CaseBlock patterns Nothing body
+          toCaseBlock (Field fname fterm) = case fullyStripTerm fterm of
+            TermFunction (FunctionLambda (Lambda v _ body)) -> do
+              pyReturn <- encodeTerm env body
+              let pyVarName = Py.NameOrAttribute [variantName True env tname fname]
+              let argPattern = Py.PatternOr $ Py.OrPattern [
+                                 Py.ClosedPatternCapture $ Py.CapturePattern $ Py.PatternCaptureTarget (encodeNameUnqualified v)]
+              let patterns = pyClosedPatternToPyPatterns $ Py.ClosedPatternClass $ Py.ClassPattern pyVarName (Just $ Py.PositionalPatterns [argPattern]) Nothing
+              let body = indentedBlock Nothing [[returnSingle pyReturn]]
+              return $ Py.CaseBlock patterns Nothing body
+            _ -> fail "unsupported case"
+      _ -> dflt
 
 encodeType :: PythonEnvironment -> Type -> Flow Graph Py.Expression
 encodeType env typ = case stripType typ of
@@ -365,7 +392,6 @@ encodeTypeAssignment env name typ comment = encode env typ
           newEnv = env {pythonEnvironmentBoundTypeVariables = (tparamList ++ [var], M.insert var (encodeTypeVariable var) tparamMap)}
       TypeRecord rt -> single <$> encodeRecordType env name rt comment
       TypeUnion rt -> encodeUnionType env name rt comment
---      TypeWrap (WrappedType _ t) -> (single . newtypeStatement (encodeNameUnqualified name) comment) <$> encodeType env t
       TypeWrap (WrappedType _ t) -> single <$> encodeWrappedType env name t comment
       t -> singleTypedef env <$> encodeType env t
     single st = [st]
