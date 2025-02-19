@@ -129,7 +129,7 @@ encodeFunction env f = case f of
     pbody <- encodeTerm env body
     return $ Py.ExpressionLambda $ Py.Lambda (Py.LambdaParameters Nothing [] [] $
       Just $ Py.LambdaStarEtcParamNoDefault $ Py.LambdaParamNoDefault $ encodeNameQualified env var) pbody
-  FunctionPrimitive name -> pure $ variableReference env name -- Only nullary primitives should appear here.
+  FunctionPrimitive name -> pure $ variableReference False env name -- Only nullary primitives should appear here.
   _ -> fail $ "unexpected function variant: " ++ show (functionVariant f)
 
 encodeFunctionDefinition :: PythonEnvironment -> Name -> [Name] -> Term -> Maybe String -> Flow Graph Py.Statement
@@ -288,7 +288,7 @@ encodeTerm env term = case fullyStripTerm term of
         else do
           parg <- encode $ fieldTerm field
           return $ functionCall (pyNameToPyPrimary $ variantName True env tname (fieldName field)) [parg]
-    TermVariable name -> pure $ variableReference env name
+    TermVariable name -> pure $ variableReference True env name
     TermWrap (WrappedTerm tname term1) -> do
       parg <- encode term1
       return $ functionCall (pyNameToPyPrimary $ encodeNameQualified env tname) [parg]
@@ -372,11 +372,11 @@ encodeType env typ = case stripType typ of
     TypeOptional et -> orNull . pyExpressionToPyPrimary <$> encode et
     TypeRecord rt -> pure $ if isUnitType (TypeRecord rt)
       then pyNameToPyExpression pyNone
-      else variableReference env $ rowTypeTypeName rt
+      else variableReference False env $ rowTypeTypeName rt
     TypeSet et -> nameAndParams (Py.Name "set") . L.singleton <$> encode et
-    TypeUnion rt -> pure $ variableReference env $ rowTypeTypeName rt
-    TypeVariable name -> pure $ variableReference env name
-    TypeWrap (WrappedType name _) -> pure $ variableReference env name
+    TypeUnion rt -> pure $ variableReference False env $ rowTypeTypeName rt
+    TypeVariable name -> pure $ variableReference False env name
+    TypeWrap (WrappedType name _) -> pure $ variableReference False env name
     _ -> dflt
   where
     encode = encodeType env
@@ -543,8 +543,12 @@ moduleToPython mod = do
 sanitizePythonName :: String -> String
 sanitizePythonName = sanitizeWithUnderscores pythonReservedWords
 
-variableReference :: PythonEnvironment -> Name -> Py.Expression
-variableReference env name = pyNameToPyExpression $ encodeNameQualified env name
+variableReference :: Bool -> PythonEnvironment -> Name -> Py.Expression
+variableReference quoted env name = if quoted
+  then doubleQuotedString $ Py.unName pyName
+  else pyNameToPyExpression pyName
+  where
+    pyName = encodeNameQualified env name
 
 variantArgs :: Py.Expression -> [Name] -> Py.Args
 variantArgs ptype tparams = pyExpressionsToPyArgs $ Y.catMaybes [
