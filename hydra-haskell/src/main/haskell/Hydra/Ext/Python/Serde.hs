@@ -72,6 +72,19 @@ encodeBlock b = case b of
       encodeGroup ss = newlineSep (encodeStatement <$> ss)
   Py.BlockSimple ss -> semicolonSep (encodeSimpleStatement <$> ss)
 
+encodeCapturePattern :: Py.CapturePattern -> A.Expr
+encodeCapturePattern (Py.CapturePattern t) = encodePatternCaptureTarget t
+
+encodeCaseBlock :: Py.CaseBlock -> A.Expr
+encodeCaseBlock (Py.CaseBlock patterns guard body) = newlineSep [
+  noSep [
+    spaceSep $ Y.catMaybes [
+      Just $ cst "case",
+      Just $ encodePatterns patterns,
+      encodeGuard <$> guard],
+    cst ":"],
+  encodeBlock body]
+
 encodeClassDefinition :: Py.ClassDefinition -> A.Expr
 encodeClassDefinition (Py.ClassDefinition mdecs name tparams args body) = newlineSep $
   Y.catMaybes [encodeDecorators <$> mdecs, Just classExpr]
@@ -86,6 +99,21 @@ encodeClassDefinition (Py.ClassDefinition mdecs name tparams args body) = newlin
       Py.BlockSimple _ -> spaceSep [header, encodeBlock body]
       Py.BlockIndented _ -> newlineSep [header, encodeBlock body]
 
+encodeClassPattern :: Py.ClassPattern -> A.Expr
+encodeClassPattern (Py.ClassPattern named mpos mkw) = noSep $ Y.catMaybes [
+    Just $ encodeNameOrAttribute named,
+    Just $ cst "(",
+    encodePositionalPatterns <$> mpos,
+    -- TODO: keyword patterns
+    Just $ cst ")"]
+
+encodeClosedPattern :: Py.ClosedPattern -> A.Expr
+encodeClosedPattern cp = case cp of
+  Py.ClosedPatternCapture c -> encodeCapturePattern c
+  Py.ClosedPatternClass p -> encodeClassPattern p
+  Py.ClosedPatternWildcard -> cst "_"
+  _ -> unsupportedVariant "closed pattern" cp
+
 encodeCompareOpBitwiseOrPair :: Py.CompareOpBitwiseOrPair -> A.Expr
 encodeCompareOpBitwiseOrPair p = unsupportedType "compare op bitwise or pair"
 
@@ -96,6 +124,7 @@ encodeCompoundStatement :: Py.CompoundStatement -> A.Expr
 encodeCompoundStatement c = case c of
   Py.CompoundStatementClassDef d -> encodeClassDefinition d
   Py.CompoundStatementFunction f -> encodeFunctionDefinition f
+  Py.CompoundStatementMatch m -> encodeMatchStatement m
   _ -> unsupportedVariant "compound statement" c
 
 encodeConjunction :: Py.Conjunction -> A.Expr
@@ -139,20 +168,24 @@ encodeFactor f = case f of
   Py.FactorSimple p -> encodePower p
 
 encodeFunctionDefRaw :: Py.FunctionDefRaw -> A.Expr
-encodeFunctionDefRaw (Py.FunctionDefRaw async name tparams params retType ftc block) = spaceSep $ Y.catMaybes [
-  if async then Just $ cst "async" else Nothing,
-  Just $ cst "def",
-  Just $ noSep (Y.catMaybes [
-    Just $ encodeName name,
-    Nothing, -- TODO: tparams
-    Just $ noSep $ Y.catMaybes [Just $ cst "(", encodeParameters <$> params, Just $ cst ")"]]),
-  Nothing, -- TODO: retType
-  Just $ cst ":",
-  Nothing, -- TODO: ftc
-  Just $ encodeBlock block]
+encodeFunctionDefRaw (Py.FunctionDefRaw async name tparams params retType ftc block) = newlineSep [
+  spaceSep $ Y.catMaybes [
+    if async then Just $ cst "async" else Nothing,
+    Just $ cst "def",
+    Just $ noSep (Y.catMaybes [
+      Just $ encodeName name,
+      Nothing, -- TODO: tparams
+      Just $ noSep $ Y.catMaybes [Just $ cst "(", encodeParameters <$> params, Just $ cst ")"]]),
+    Nothing, -- TODO: retType
+    Just $ cst ":",
+    Nothing], -- TODO: ftc
+  encodeBlock block]
 
 encodeFunctionDefinition :: Py.FunctionDefinition -> A.Expr
 encodeFunctionDefinition (Py.FunctionDefinition mdecs raw) = encodeFunctionDefRaw raw
+
+encodeGuard :: Py.Guard -> A.Expr
+encodeGuard (Py.Guard ne) = spaceSep [cst "if", encodeNamedExpression ne]
 
 encodeImportFrom :: Py.ImportFrom -> A.Expr
 encodeImportFrom (Py.ImportFrom prefixes name targets) = spaceSep [cst "from", lhs, cst "import", rhs]
@@ -227,6 +260,11 @@ encodeLambdaStarEtc l = case l of
 encodeList :: Py.List -> A.Expr
 encodeList (Py.List es) = bracketListAdaptive (encodeStarNamedExpression <$> es)
 
+encodeMatchStatement :: Py.MatchStatement -> A.Expr
+encodeMatchStatement (Py.MatchStatement subj cases) = newlineSep [
+  spaceSep [cst "match", noSep [encodeSubjectExpression subj, cst ":"]],
+  tabIndentDoubleSpace (encodeCaseBlock <$> cases)]
+
 encodeModule :: Py.Module -> A.Expr
 encodeModule (Py.Module groups) = doubleNewlineSep (encodeGroup <$> groups)
   where
@@ -240,10 +278,16 @@ encodeNamedExpression ne = case ne of
   Py.NamedExpressionSimple e -> encodeExpression e
   _ -> unsupportedVariant "named expression" ne
 
+encodeNameOrAttribute :: Py.NameOrAttribute -> A.Expr
+encodeNameOrAttribute (Py.NameOrAttribute names) = dotSep (encodeName <$> names)
+
 encodeNumber :: Py.Number -> A.Expr
 encodeNumber n = case n of
   Py.NumberFloat f -> cst $ show f
   Py.NumberInteger i -> cst $ show i
+
+encodeOrPattern :: Py.OrPattern -> A.Expr
+encodeOrPattern (Py.OrPattern p) = symbolSep "|" inlineStyle (encodeClosedPattern <$> p)
 
 encodeParam :: Py.Param -> A.Expr
 encodeParam (Py.Param name annot) = encodeName name
@@ -260,11 +304,27 @@ encodeParameters p = case p of
   Py.ParametersParamNoDefault p -> encodeParamNoDefaultParameters p
   _ -> unsupportedVariant "parameters" p
 
+encodePattern :: Py.Pattern -> A.Expr
+encodePattern p = case p of
+  Py.PatternOr op -> encodeOrPattern op
+  _ -> unsupportedVariant "pattern" p
+
+encodePatternCaptureTarget :: Py.PatternCaptureTarget -> A.Expr
+encodePatternCaptureTarget (Py.PatternCaptureTarget name) = encodeName name
+
+encodePatterns :: Py.Patterns -> A.Expr
+encodePatterns ps = case ps of
+  Py.PatternsPattern p -> encodePattern p
+  _ -> unsupportedVariant "patterns" ps
+
 encodePosArg :: Py.PosArg -> A.Expr
 encodePosArg a = case a of
   Py.PosArgStarred se -> encodeStarredExpression se
   Py.PosArgAssignment ae -> encodeAssignmentExpression ae
   Py.PosArgExpression e -> encodeExpression e
+
+encodePositionalPatterns :: Py.PositionalPatterns -> A.Expr
+encodePositionalPatterns (Py.PositionalPatterns pats) = commaSep inlineStyle (encodePattern <$> pats)
 
 encodePower :: Py.Power -> A.Expr
 encodePower (Py.Power lhs rhs) = spaceSep $ Y.catMaybes [Just $ encodeAwaitPrimary lhs, encodeRhs <$> rhs]
@@ -286,10 +346,21 @@ encodePrimaryRhs p = case p of
 encodePrimaryWithRhs :: Py.PrimaryWithRhs -> A.Expr
 encodePrimaryWithRhs (Py.PrimaryWithRhs primary rhs) = noSep [encodePrimary primary, encodePrimaryRhs rhs]
 
+encodeRaiseExpression :: Py.RaiseExpression -> A.Expr
+encodeRaiseExpression (Py.RaiseExpression expr mfrom) = spaceSep $ Y.catMaybes [Just $ encodeExpression expr, fmap toFrom mfrom]
+  where
+    toFrom e = spaceSep [cst "from", encodeExpression e]
+
+encodeRaiseStatement :: Py.RaiseStatement -> A.Expr
+encodeRaiseStatement (Py.RaiseStatement me) = spaceSep $ Y.catMaybes [Just $ cst "raise", encodeRaiseExpression <$> me]
+
 encodeRelativeImportPrefix :: Py.RelativeImportPrefix -> A.Expr
 encodeRelativeImportPrefix p = cst $ case p of
   Py.RelativeImportPrefixDot -> "."
   Py.RelativeImportPrefixEllipsis -> "..."
+
+encodeReturnStatement :: Py.ReturnStatement -> A.Expr
+encodeReturnStatement (Py.ReturnStatement es) = spaceSep [cst "return", commaSep inlineStyle (encodeStarExpression <$> es)]
 
 encodeShiftExpression :: Py.ShiftExpression -> A.Expr
 encodeShiftExpression (Py.ShiftExpression lhs rhs) = spaceSep $ Y.catMaybes [encodeShiftLhs <$> lhs, Just $ encodeSum rhs]
@@ -302,6 +373,8 @@ encodeSimpleStatement s = case s of
   Py.SimpleStatementAssignment a -> encodeAssignment a
   Py.SimpleStatementImport i -> encodeImportStatement i
   Py.SimpleStatementPass -> cst "pass"
+  Py.SimpleStatementRaise r -> encodeRaiseStatement r
+  Py.SimpleStatementReturn r -> encodeReturnStatement r
   Py.SimpleStatementTypeAlias t -> encodeTypeAlias t
   Py.SimpleStatementStarExpressions exprs -> newlineSep (encodeStarExpression <$> exprs)
   _ -> unsupportedVariant "simple statement" s
@@ -364,6 +437,11 @@ encodeString (Py.String_ s style) = case style of
   Py.QuoteStyleSingle -> cst $ escapePythonString False s
   Py.QuoteStyleDouble -> cst $ escapePythonString True s
   Py.QuoteStyleTriple -> tripleQuotes s
+
+encodeSubjectExpression :: Py.SubjectExpression -> A.Expr
+encodeSubjectExpression s = case s of
+  Py.SubjectExpressionSimple e -> encodeNamedExpression e
+  _ -> unsupportedVariant "subject expression" s
 
 encodeSum :: Py.Sum -> A.Expr
 encodeSum (Py.Sum lhs rhs) = spaceSep $ Y.catMaybes [encodeSumLhs <$> lhs, Just $ encodeTerm rhs]
