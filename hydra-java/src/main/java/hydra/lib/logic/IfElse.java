@@ -19,7 +19,7 @@ import static hydra.dsl.Types.scheme;
 
 public class IfElse extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/logic.ifElse");
+        return new Name("hydra.lib.logic.ifElse");
     }
 
     @Override

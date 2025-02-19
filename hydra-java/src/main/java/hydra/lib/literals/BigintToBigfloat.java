@@ -20,7 +20,7 @@ import static hydra.dsl.Types.scheme;
 
 public class BigintToBigfloat extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/literals.bigintToBigfloat");
+        return new Name("hydra.lib.literals.bigintToBigfloat");
     }
 
     @Override

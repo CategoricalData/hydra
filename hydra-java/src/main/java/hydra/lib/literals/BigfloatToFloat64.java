@@ -19,7 +19,7 @@ import static hydra.dsl.Types.scheme;
 
 public class BigfloatToFloat64 extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/literals.bigfloatToFloat64");
+        return new Name("hydra.lib.literals.bigfloatToFloat64");
     }
 
     @Override

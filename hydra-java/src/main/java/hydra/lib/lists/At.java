@@ -22,7 +22,7 @@ import static hydra.dsl.Types.variable;
 
 public class At extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/lists.at");
+        return new Name("hydra.lib.lists.at");
     }
 
     @Override

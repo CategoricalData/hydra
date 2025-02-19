@@ -27,7 +27,7 @@ import static hydra.dsl.Terms.variable;
 
 public class Bind extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/flows.bind");
+        return new Name("hydra.lib.flows.bind");
     }
 
     @Override

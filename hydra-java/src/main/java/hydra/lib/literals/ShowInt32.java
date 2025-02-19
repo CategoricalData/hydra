@@ -20,7 +20,7 @@ import static hydra.dsl.Types.string;
 
 public class ShowInt32 extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/literals.showInt32");
+        return new Name("hydra.lib.literals.showInt32");
     }
 
     @Override

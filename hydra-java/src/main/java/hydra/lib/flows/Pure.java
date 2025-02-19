@@ -18,7 +18,7 @@ import static hydra.dsl.Terms.just;
 
 public class Pure extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/flows.pure");
+        return new Name("hydra.lib.flows.pure");
     }
 
     @Override

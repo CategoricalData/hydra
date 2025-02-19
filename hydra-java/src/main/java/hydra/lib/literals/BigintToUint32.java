@@ -20,7 +20,7 @@ import static hydra.dsl.Types.scheme;
 
 public class BigintToUint32 extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/literals.bigintToUint32");
+        return new Name("hydra.lib.literals.bigintToUint32");
     }
 
     @Override

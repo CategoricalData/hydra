@@ -23,7 +23,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Cat extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/optionals.cat");
+        return new Name("hydra.lib.optionals.cat");
     }
 
     @Override

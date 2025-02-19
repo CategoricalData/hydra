@@ -20,7 +20,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Uint16ToBigint extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/literals.uint16ToBigint");
+        return new Name("hydra.lib.literals.uint16ToBigint");
     }
 
     @Override

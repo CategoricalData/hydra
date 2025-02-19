@@ -22,7 +22,7 @@ import static hydra.dsl.Types.set;
 
 public class Size extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/sets.size");
+        return new Name("hydra.lib.sets.size");
     }
 
     @Override

@@ -23,7 +23,7 @@ import static hydra.dsl.Types.set;
 
 public class ToList extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/sets.toList");
+        return new Name("hydra.lib.sets.toList");
     }
 
     @Override

@@ -27,7 +27,7 @@ import static hydra.dsl.Terms.variable;
 
 public class Apply extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/flows.apply");
+        return new Name("hydra.lib.flows.apply");
     }
 
     @Override

@@ -21,7 +21,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Intercalate extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/lists.intercalate");
+        return new Name("hydra.lib.lists.intercalate");
     }
 
     @Override

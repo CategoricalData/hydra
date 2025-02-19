@@ -22,7 +22,7 @@ import static hydra.dsl.Types.scheme;
 
 public class MapKeys extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/maps.mapKeys");
+        return new Name("hydra.lib.maps.mapKeys");
     }
 
     @Override

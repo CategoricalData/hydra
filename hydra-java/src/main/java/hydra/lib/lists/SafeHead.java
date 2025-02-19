@@ -23,7 +23,7 @@ import static hydra.dsl.Types.scheme;
 
 public class SafeHead extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/lists.safeHead");
+        return new Name("hydra.lib.lists.safeHead");
     }
 
     @Override

@@ -21,7 +21,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Null extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/lists.null");
+        return new Name("hydra.lib.lists.null");
     }
 
     @Override

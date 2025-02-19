@@ -20,7 +20,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Not extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/logic.not");
+        return new Name("hydra.lib.logic.not");
     }
 
     @Override

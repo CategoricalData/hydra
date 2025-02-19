@@ -21,7 +21,7 @@ import static hydra.dsl.Types.string;
 
 public class Cat extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/strings.cat");
+        return new Name("hydra.lib.strings.cat");
     }
 
     @Override

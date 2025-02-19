@@ -21,7 +21,7 @@ import static hydra.dsl.Types.string;
 
 public class IsEmpty extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/strings.isEmpty");
+        return new Name("hydra.lib.strings.isEmpty");
     }
 
     @Override

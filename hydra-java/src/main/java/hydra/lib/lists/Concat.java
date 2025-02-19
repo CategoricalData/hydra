@@ -20,7 +20,7 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 
 public class Concat extends PrimitiveFunction {
-    public static final Name NAME = new Name("hydra/lib/lists.concat");
+    public static final Name NAME = new Name("hydra.lib.lists.concat");
 
     public Name name() {
         return NAME;

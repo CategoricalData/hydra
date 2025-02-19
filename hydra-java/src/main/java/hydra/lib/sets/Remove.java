@@ -22,7 +22,7 @@ import static hydra.dsl.Types.set;
 
 public class Remove extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/sets.remove");
+        return new Name("hydra.lib.sets.remove");
     }
 
     @Override

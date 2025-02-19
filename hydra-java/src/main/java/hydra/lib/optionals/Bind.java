@@ -21,7 +21,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Bind extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/optionals.bind");
+        return new Name("hydra.lib.optionals.bind");
     }
 
     @Override

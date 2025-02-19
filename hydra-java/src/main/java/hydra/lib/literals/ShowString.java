@@ -19,7 +19,7 @@ import static hydra.dsl.Types.string;
 
 public class ShowString extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/literals.showString");
+        return new Name("hydra.lib.literals.showString");
     }
 
     @Override

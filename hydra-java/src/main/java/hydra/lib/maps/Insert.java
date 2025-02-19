@@ -21,7 +21,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Insert extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/maps.insert");
+        return new Name("hydra.lib.maps.insert");
     }
 
     @Override

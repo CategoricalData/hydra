@@ -21,7 +21,7 @@ import static hydra.dsl.Types.scheme;
 
 public class IsJust extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/optionals.isJust");
+        return new Name("hydra.lib.optionals.isJust");
     }
 
     @Override

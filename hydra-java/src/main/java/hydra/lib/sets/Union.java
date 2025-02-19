@@ -21,7 +21,7 @@ import static hydra.dsl.Types.set;
 
 public class Union extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/sets.union");
+        return new Name("hydra.lib.sets.union");
     }
 
     @Override

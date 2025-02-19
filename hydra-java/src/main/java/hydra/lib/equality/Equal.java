@@ -19,7 +19,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Equal extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/equality.equal");
+        return new Name("hydra.lib.equality.equal");
     }
 
     @Override

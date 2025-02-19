@@ -22,7 +22,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Div extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/math.div");
+        return new Name("hydra.lib.math.div");
     }
 
     @Override

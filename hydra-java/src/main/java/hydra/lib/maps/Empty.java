@@ -19,7 +19,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Empty extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/maps.empty");
+        return new Name("hydra.lib.maps.empty");
     }
 
     @Override

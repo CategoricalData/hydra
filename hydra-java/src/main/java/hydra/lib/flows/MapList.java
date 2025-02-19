@@ -24,7 +24,7 @@ import static hydra.dsl.Terms.variable;
 
 public class MapList extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/flows.mapList");
+        return new Name("hydra.lib.flows.mapList");
     }
 
     private final Term bind = (new Bind()).term();

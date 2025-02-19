@@ -20,7 +20,7 @@ import static hydra.dsl.Types.string;
 
 public class ToLower extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/strings.toLower");
+        return new Name("hydra.lib.strings.toLower");
     }
 
     @Override

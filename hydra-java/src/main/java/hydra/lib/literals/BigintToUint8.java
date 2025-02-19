@@ -20,7 +20,7 @@ import static hydra.dsl.Types.scheme;
 
 public class BigintToUint8 extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/literals.bigintToUint8");
+        return new Name("hydra.lib.literals.bigintToUint8");
     }
 
     @Override

@@ -20,7 +20,7 @@ import static hydra.dsl.Types.variable;
 
 public class ShowTerm extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/io.showTerm");
+        return new Name("hydra.lib.io.showTerm");
     }
 
     @Override

@@ -21,7 +21,7 @@ import static hydra.dsl.Types.set;
 
 public class Singleton extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/sets.singleton");
+        return new Name("hydra.lib.sets.singleton");
     }
 
     @Override

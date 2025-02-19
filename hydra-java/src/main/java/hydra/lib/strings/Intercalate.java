@@ -20,7 +20,7 @@ import static hydra.dsl.Types.string;
 
 public class Intercalate extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/strings.intercalate");
+        return new Name("hydra.lib.strings.intercalate");
     }
 
     @Override
