@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public abstract class NumericFacet implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.NumericFacet");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.NumericFacet");
   
   public static final hydra.core.Name FIELD_NAME_SEQUENCE = new hydra.core.Name("sequence");
   

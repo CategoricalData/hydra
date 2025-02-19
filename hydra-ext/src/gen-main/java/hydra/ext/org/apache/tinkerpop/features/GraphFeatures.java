@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Features specific to a operations of a graph.
  */
 public class GraphFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/tinkerpop/features.GraphFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.GraphFeatures");
   
   public static final hydra.core.Name FIELD_NAME_SUPPORTS_COMPUTER = new hydra.core.Name("supportsComputer");
   

@@ -5,7 +5,7 @@ package hydra.ext.fr.inria.coq.syntax;
 import java.io.Serializable;
 
 public abstract class Application implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/fr/inria/coq/syntax.Application");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.fr.inria.coq.syntax.Application");
   
   public static final hydra.core.Name FIELD_NAME_NORMAL = new hydra.core.Name("normal");
   

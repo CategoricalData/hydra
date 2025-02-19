@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public class RdfType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.RdfType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.RdfType");
   
   public RdfType () {
   

@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public class ShapeAtom_Sequence implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.ShapeAtom.Sequence");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.ShapeAtom_Sequence");
   
   public static final hydra.core.Name FIELD_NAME_NODE_CONSTRAINT = new hydra.core.Name("nodeConstraint");
   

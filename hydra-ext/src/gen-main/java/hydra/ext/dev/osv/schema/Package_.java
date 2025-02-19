@@ -5,7 +5,7 @@ package hydra.ext.dev.osv.schema;
 import java.io.Serializable;
 
 public class Package_ implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/dev/osv/schema.Package");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.dev.osv.schema.Package");
   
   public static final hydra.core.Name FIELD_NAME_ECOSYSTEM = new hydra.core.Name("ecosystem");
   

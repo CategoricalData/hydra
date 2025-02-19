@@ -5,7 +5,7 @@ package hydra.ext.org.graphviz.dot;
 import java.io.Serializable;
 
 public class AttrStmt implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/graphviz/dot.AttrStmt");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphviz.dot.AttrStmt");
   
   public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
   

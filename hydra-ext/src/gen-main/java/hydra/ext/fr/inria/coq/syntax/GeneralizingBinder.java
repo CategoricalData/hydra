@@ -5,7 +5,7 @@ package hydra.ext.fr.inria.coq.syntax;
 import java.io.Serializable;
 
 public abstract class GeneralizingBinder implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/fr/inria/coq/syntax.GeneralizingBinder");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.fr.inria.coq.syntax.GeneralizingBinder");
   
   public static final hydra.core.Name FIELD_NAME_EXPLICIT = new hydra.core.Name("explicit");
   

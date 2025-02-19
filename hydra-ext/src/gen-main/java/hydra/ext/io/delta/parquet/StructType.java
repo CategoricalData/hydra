@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Struct type which contains one or more columns.
  */
 public class StructType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/delta/parquet.StructType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.delta.parquet.StructType");
   
   public static final hydra.core.Name FIELD_NAME_FIELDS = new hydra.core.Name("fields");
   

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Some constructions allow the binding of a variable to value. This is called a “let-binder”.
  */
 public class LetBinder implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/fr/inria/coq/syntax.LetBinder");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.fr.inria.coq.syntax.LetBinder");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   

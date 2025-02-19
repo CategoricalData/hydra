@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A let-in definition
  */
 public class Let implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/fr/inria/coq/syntax.Let");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.fr.inria.coq.syntax.Let");
   
   public static final hydra.core.Name FIELD_NAME_BINDINGS = new hydra.core.Name("bindings");
   

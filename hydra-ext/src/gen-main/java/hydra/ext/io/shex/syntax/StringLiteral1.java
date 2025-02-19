@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public class StringLiteral1 implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.StringLiteral1");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteral1");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   

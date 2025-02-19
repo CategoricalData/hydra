@@ -13,7 +13,7 @@ newtype Id =
     unId :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Id = (Core.Name "hydra/ext/org/graphviz/dot.Id")
+_Id = (Core.Name "hydra.ext.org.graphviz.dot.Id")
 
 data Graph = 
   Graph {
@@ -23,7 +23,7 @@ data Graph =
     graphStatements :: [Stmt]}
   deriving (Eq, Ord, Read, Show)
 
-_Graph = (Core.Name "hydra/ext/org/graphviz/dot.Graph")
+_Graph = (Core.Name "hydra.ext.org.graphviz.dot.Graph")
 
 _Graph_strict = (Core.Name "strict")
 
@@ -41,7 +41,7 @@ data Stmt =
   StmtSubgraph Subgraph
   deriving (Eq, Ord, Read, Show)
 
-_Stmt = (Core.Name "hydra/ext/org/graphviz/dot.Stmt")
+_Stmt = (Core.Name "hydra.ext.org.graphviz.dot.Stmt")
 
 _Stmt_node = (Core.Name "node")
 
@@ -59,7 +59,7 @@ data EqualityPair =
     equalityPairRight :: Id}
   deriving (Eq, Ord, Read, Show)
 
-_EqualityPair = (Core.Name "hydra/ext/org/graphviz/dot.EqualityPair")
+_EqualityPair = (Core.Name "hydra.ext.org.graphviz.dot.EqualityPair")
 
 _EqualityPair_left = (Core.Name "left")
 
@@ -71,7 +71,7 @@ data AttrStmt =
     attrStmtAttributes :: AttrList}
   deriving (Eq, Ord, Read, Show)
 
-_AttrStmt = (Core.Name "hydra/ext/org/graphviz/dot.AttrStmt")
+_AttrStmt = (Core.Name "hydra.ext.org.graphviz.dot.AttrStmt")
 
 _AttrStmt_type = (Core.Name "type")
 
@@ -83,7 +83,7 @@ data AttrType =
   AttrTypeEdge 
   deriving (Eq, Ord, Read, Show)
 
-_AttrType = (Core.Name "hydra/ext/org/graphviz/dot.AttrType")
+_AttrType = (Core.Name "hydra.ext.org.graphviz.dot.AttrType")
 
 _AttrType_graph = (Core.Name "graph")
 
@@ -96,7 +96,7 @@ newtype AttrList =
     unAttrList :: [[EqualityPair]]}
   deriving (Eq, Ord, Read, Show)
 
-_AttrList = (Core.Name "hydra/ext/org/graphviz/dot.AttrList")
+_AttrList = (Core.Name "hydra.ext.org.graphviz.dot.AttrList")
 
 data EdgeStmt = 
   EdgeStmt {
@@ -105,7 +105,7 @@ data EdgeStmt =
     edgeStmtAttributes :: (Maybe AttrList)}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeStmt = (Core.Name "hydra/ext/org/graphviz/dot.EdgeStmt")
+_EdgeStmt = (Core.Name "hydra.ext.org.graphviz.dot.EdgeStmt")
 
 _EdgeStmt_left = (Core.Name "left")
 
@@ -118,7 +118,7 @@ data NodeOrSubgraph =
   NodeOrSubgraphSubgraph Subgraph
   deriving (Eq, Ord, Read, Show)
 
-_NodeOrSubgraph = (Core.Name "hydra/ext/org/graphviz/dot.NodeOrSubgraph")
+_NodeOrSubgraph = (Core.Name "hydra.ext.org.graphviz.dot.NodeOrSubgraph")
 
 _NodeOrSubgraph_node = (Core.Name "node")
 
@@ -130,7 +130,7 @@ data NodeStmt =
     nodeStmtAttributes :: (Maybe AttrList)}
   deriving (Eq, Ord, Read, Show)
 
-_NodeStmt = (Core.Name "hydra/ext/org/graphviz/dot.NodeStmt")
+_NodeStmt = (Core.Name "hydra.ext.org.graphviz.dot.NodeStmt")
 
 _NodeStmt_id = (Core.Name "id")
 
@@ -142,7 +142,7 @@ data NodeId =
     nodeIdPort :: (Maybe Port)}
   deriving (Eq, Ord, Read, Show)
 
-_NodeId = (Core.Name "hydra/ext/org/graphviz/dot.NodeId")
+_NodeId = (Core.Name "hydra.ext.org.graphviz.dot.NodeId")
 
 _NodeId_id = (Core.Name "id")
 
@@ -154,7 +154,7 @@ data Port =
     portPosition :: (Maybe CompassPt)}
   deriving (Eq, Ord, Read, Show)
 
-_Port = (Core.Name "hydra/ext/org/graphviz/dot.Port")
+_Port = (Core.Name "hydra.ext.org.graphviz.dot.Port")
 
 _Port_id = (Core.Name "id")
 
@@ -166,7 +166,7 @@ data Subgraph =
     subgraphStatements :: [Stmt]}
   deriving (Eq, Ord, Read, Show)
 
-_Subgraph = (Core.Name "hydra/ext/org/graphviz/dot.Subgraph")
+_Subgraph = (Core.Name "hydra.ext.org.graphviz.dot.Subgraph")
 
 _Subgraph_subgraphId = (Core.Name "subgraphId")
 
@@ -177,7 +177,7 @@ newtype SubgraphId =
     unSubgraphId :: (Maybe Id)}
   deriving (Eq, Ord, Read, Show)
 
-_SubgraphId = (Core.Name "hydra/ext/org/graphviz/dot.SubgraphId")
+_SubgraphId = (Core.Name "hydra.ext.org.graphviz.dot.SubgraphId")
 
 data CompassPt = 
   CompassPtN  |
@@ -192,7 +192,7 @@ data CompassPt =
   CompassPtNone 
   deriving (Eq, Ord, Read, Show)
 
-_CompassPt = (Core.Name "hydra/ext/org/graphviz/dot.CompassPt")
+_CompassPt = (Core.Name "hydra.ext.org.graphviz.dot.CompassPt")
 
 _CompassPt_n = (Core.Name "n")
 

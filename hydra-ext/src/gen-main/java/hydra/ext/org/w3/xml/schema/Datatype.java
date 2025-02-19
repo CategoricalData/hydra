@@ -5,7 +5,7 @@ package hydra.ext.org.w3.xml.schema;
 import java.io.Serializable;
 
 public abstract class Datatype implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/xml/schema.Datatype");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.xml.schema.Datatype");
   
   public static final hydra.core.Name FIELD_NAME_ANY_SIMPLE_TYPE = new hydra.core.Name("anySimpleType");
   

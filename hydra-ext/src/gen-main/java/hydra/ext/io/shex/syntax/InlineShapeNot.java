@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public class InlineShapeNot implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.InlineShapeNot");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeNot");
   
   public static final hydra.core.Name FIELD_NAME_N_O_T = new hydra.core.Name("nOT");
   

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A position is an array of numbers.  There MUST be two or more elements.  The first two elements are longitude and latitude, or easting and northing, precisely in that order and using decimal numbers.  Altitude or elevation MAY be included as an optional third element.
  */
 public class Position implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/geojson/model.Position");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.geojson.model.Position");
   
   public static final hydra.core.Name FIELD_NAME_LATITUDE = new hydra.core.Name("latitude");
   

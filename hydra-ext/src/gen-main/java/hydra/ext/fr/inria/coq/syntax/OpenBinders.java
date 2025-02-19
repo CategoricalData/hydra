@@ -5,7 +5,7 @@ package hydra.ext.fr.inria.coq.syntax;
 import java.io.Serializable;
 
 public abstract class OpenBinders implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/fr/inria/coq/syntax.OpenBinders");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.fr.inria.coq.syntax.OpenBinders");
   
   public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
   

@@ -5,7 +5,7 @@ package hydra.ext.org.geojson.model;
 import java.io.Serializable;
 
 public abstract class Id implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/geojson/model.Id");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.geojson.model.Id");
   
   public static final hydra.core.Name FIELD_NAME_NUMBER = new hydra.core.Name("number");
   

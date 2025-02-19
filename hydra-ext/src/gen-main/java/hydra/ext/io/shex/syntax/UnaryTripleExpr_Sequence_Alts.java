@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public abstract class UnaryTripleExpr_Sequence_Alts implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.UnaryTripleExpr.Sequence.Alts");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.UnaryTripleExpr_Sequence_Alts");
   
   public static final hydra.core.Name FIELD_NAME_TRIPLE_CONSTRAINT = new hydra.core.Name("tripleConstraint");
   

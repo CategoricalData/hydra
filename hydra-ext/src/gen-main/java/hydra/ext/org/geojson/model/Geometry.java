@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A Geometry object represents points, curves, and surfaces in coordinate space.  Every Geometry object is a GeoJSON object no matter where it occurs in a GeoJSON text.
  */
 public abstract class Geometry implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/geojson/model.Geometry");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.geojson.model.Geometry");
   
   public static final hydra.core.Name FIELD_NAME_POINT = new hydra.core.Name("point");
   

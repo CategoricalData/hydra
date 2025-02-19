@@ -17,7 +17,7 @@ data Ontology =
     ontologyAxioms :: [Axiom]}
   deriving (Eq, Ord, Read, Show)
 
-_Ontology = (Core.Name "hydra/ext/org/w3/owl/syntax.Ontology")
+_Ontology = (Core.Name "hydra.ext.org.w3.owl.syntax.Ontology")
 
 _Ontology_directImports = (Core.Name "directImports")
 
@@ -31,7 +31,7 @@ data Declaration =
     declarationEntity :: Entity}
   deriving (Eq, Ord, Read, Show)
 
-_Declaration = (Core.Name "hydra/ext/org/w3/owl/syntax.Declaration")
+_Declaration = (Core.Name "hydra.ext.org.w3.owl.syntax.Declaration")
 
 _Declaration_annotations = (Core.Name "annotations")
 
@@ -46,7 +46,7 @@ data Entity =
   EntityObjectProperty ObjectProperty
   deriving (Eq, Ord, Read, Show)
 
-_Entity = (Core.Name "hydra/ext/org/w3/owl/syntax.Entity")
+_Entity = (Core.Name "hydra.ext.org.w3.owl.syntax.Entity")
 
 _Entity_annotationProperty = (Core.Name "annotationProperty")
 
@@ -65,7 +65,7 @@ data AnnotationSubject =
   AnnotationSubjectAnonymousIndividual AnonymousIndividual
   deriving (Eq, Ord, Read, Show)
 
-_AnnotationSubject = (Core.Name "hydra/ext/org/w3/owl/syntax.AnnotationSubject")
+_AnnotationSubject = (Core.Name "hydra.ext.org.w3.owl.syntax.AnnotationSubject")
 
 _AnnotationSubject_iri = (Core.Name "iri")
 
@@ -77,7 +77,7 @@ data AnnotationValue =
   AnnotationValueLiteral Syntax.Literal
   deriving (Eq, Ord, Read, Show)
 
-_AnnotationValue = (Core.Name "hydra/ext/org/w3/owl/syntax.AnnotationValue")
+_AnnotationValue = (Core.Name "hydra.ext.org.w3.owl.syntax.AnnotationValue")
 
 _AnnotationValue_anonymousIndividual = (Core.Name "anonymousIndividual")
 
@@ -92,7 +92,7 @@ data Annotation =
     annotationValue :: AnnotationValue}
   deriving (Eq, Ord, Read, Show)
 
-_Annotation = (Core.Name "hydra/ext/org/w3/owl/syntax.Annotation")
+_Annotation = (Core.Name "hydra.ext.org.w3.owl.syntax.Annotation")
 
 _Annotation_annotations = (Core.Name "annotations")
 
@@ -107,7 +107,7 @@ data AnnotationAxiom =
   AnnotationAxiomSubAnnotationPropertyOf SubAnnotationPropertyOf
   deriving (Eq, Ord, Read, Show)
 
-_AnnotationAxiom = (Core.Name "hydra/ext/org/w3/owl/syntax.AnnotationAxiom")
+_AnnotationAxiom = (Core.Name "hydra.ext.org.w3.owl.syntax.AnnotationAxiom")
 
 _AnnotationAxiom_annotationAssertion = (Core.Name "annotationAssertion")
 
@@ -125,7 +125,7 @@ data AnnotationAssertion =
     annotationAssertionValue :: AnnotationValue}
   deriving (Eq, Ord, Read, Show)
 
-_AnnotationAssertion = (Core.Name "hydra/ext/org/w3/owl/syntax.AnnotationAssertion")
+_AnnotationAssertion = (Core.Name "hydra.ext.org.w3.owl.syntax.AnnotationAssertion")
 
 _AnnotationAssertion_annotations = (Core.Name "annotations")
 
@@ -142,7 +142,7 @@ data SubAnnotationPropertyOf =
     subAnnotationPropertyOfSuperProperty :: AnnotationProperty}
   deriving (Eq, Ord, Read, Show)
 
-_SubAnnotationPropertyOf = (Core.Name "hydra/ext/org/w3/owl/syntax.SubAnnotationPropertyOf")
+_SubAnnotationPropertyOf = (Core.Name "hydra.ext.org.w3.owl.syntax.SubAnnotationPropertyOf")
 
 _SubAnnotationPropertyOf_annotations = (Core.Name "annotations")
 
@@ -157,7 +157,7 @@ data AnnotationPropertyDomain =
     annotationPropertyDomainIri :: Syntax.Iri}
   deriving (Eq, Ord, Read, Show)
 
-_AnnotationPropertyDomain = (Core.Name "hydra/ext/org/w3/owl/syntax.AnnotationPropertyDomain")
+_AnnotationPropertyDomain = (Core.Name "hydra.ext.org.w3.owl.syntax.AnnotationPropertyDomain")
 
 _AnnotationPropertyDomain_annotations = (Core.Name "annotations")
 
@@ -172,7 +172,7 @@ data AnnotationPropertyRange =
     annotationPropertyRangeIri :: Syntax.Iri}
   deriving (Eq, Ord, Read, Show)
 
-_AnnotationPropertyRange = (Core.Name "hydra/ext/org/w3/owl/syntax.AnnotationPropertyRange")
+_AnnotationPropertyRange = (Core.Name "hydra.ext.org.w3.owl.syntax.AnnotationPropertyRange")
 
 _AnnotationPropertyRange_annotations = (Core.Name "annotations")
 
@@ -185,7 +185,7 @@ data Class =
   Class {}
   deriving (Eq, Ord, Read, Show)
 
-_Class = (Core.Name "hydra/ext/org/w3/owl/syntax.Class")
+_Class = (Core.Name "hydra.ext.org.w3.owl.syntax.Class")
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Datatypes
 data Datatype = 
@@ -194,7 +194,7 @@ data Datatype =
   DatatypeOther Syntax.Iri
   deriving (Eq, Ord, Read, Show)
 
-_Datatype = (Core.Name "hydra/ext/org/w3/owl/syntax.Datatype")
+_Datatype = (Core.Name "hydra.ext.org.w3.owl.syntax.Datatype")
 
 _Datatype_xmlSchema = (Core.Name "xmlSchema")
 
@@ -205,26 +205,26 @@ data ObjectProperty =
   ObjectProperty {}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectProperty = (Core.Name "hydra/ext/org/w3/owl/syntax.ObjectProperty")
+_ObjectProperty = (Core.Name "hydra.ext.org.w3.owl.syntax.ObjectProperty")
 
 data DataProperty = 
   DataProperty {}
   deriving (Eq, Ord, Read, Show)
 
-_DataProperty = (Core.Name "hydra/ext/org/w3/owl/syntax.DataProperty")
+_DataProperty = (Core.Name "hydra.ext.org.w3.owl.syntax.DataProperty")
 
 data AnnotationProperty = 
   AnnotationProperty {}
   deriving (Eq, Ord, Read, Show)
 
-_AnnotationProperty = (Core.Name "hydra/ext/org/w3/owl/syntax.AnnotationProperty")
+_AnnotationProperty = (Core.Name "hydra.ext.org.w3.owl.syntax.AnnotationProperty")
 
 data Individual = 
   IndividualNamed NamedIndividual |
   IndividualAnonymous AnonymousIndividual
   deriving (Eq, Ord, Read, Show)
 
-_Individual = (Core.Name "hydra/ext/org/w3/owl/syntax.Individual")
+_Individual = (Core.Name "hydra.ext.org.w3.owl.syntax.Individual")
 
 _Individual_named = (Core.Name "named")
 
@@ -234,20 +234,20 @@ data NamedIndividual =
   NamedIndividual {}
   deriving (Eq, Ord, Read, Show)
 
-_NamedIndividual = (Core.Name "hydra/ext/org/w3/owl/syntax.NamedIndividual")
+_NamedIndividual = (Core.Name "hydra.ext.org.w3.owl.syntax.NamedIndividual")
 
 data AnonymousIndividual = 
   AnonymousIndividual {}
   deriving (Eq, Ord, Read, Show)
 
-_AnonymousIndividual = (Core.Name "hydra/ext/org/w3/owl/syntax.AnonymousIndividual")
+_AnonymousIndividual = (Core.Name "hydra.ext.org.w3.owl.syntax.AnonymousIndividual")
 
 data ObjectPropertyExpression = 
   ObjectPropertyExpressionObject ObjectProperty |
   ObjectPropertyExpressionInverseObject InverseObjectProperty
   deriving (Eq, Ord, Read, Show)
 
-_ObjectPropertyExpression = (Core.Name "hydra/ext/org/w3/owl/syntax.ObjectPropertyExpression")
+_ObjectPropertyExpression = (Core.Name "hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression")
 
 _ObjectPropertyExpression_object = (Core.Name "object")
 
@@ -258,14 +258,14 @@ newtype InverseObjectProperty =
     unInverseObjectProperty :: ObjectProperty}
   deriving (Eq, Ord, Read, Show)
 
-_InverseObjectProperty = (Core.Name "hydra/ext/org/w3/owl/syntax.InverseObjectProperty")
+_InverseObjectProperty = (Core.Name "hydra.ext.org.w3.owl.syntax.InverseObjectProperty")
 
 newtype DataPropertyExpression = 
   DataPropertyExpression {
     unDataPropertyExpression :: DataProperty}
   deriving (Eq, Ord, Read, Show)
 
-_DataPropertyExpression = (Core.Name "hydra/ext/org/w3/owl/syntax.DataPropertyExpression")
+_DataPropertyExpression = (Core.Name "hydra.ext.org.w3.owl.syntax.DataPropertyExpression")
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Data_Ranges
 data DataRange = 
@@ -277,7 +277,7 @@ data DataRange =
   DataRangeDatatypeRestriction DatatypeRestriction
   deriving (Eq, Ord, Read, Show)
 
-_DataRange = (Core.Name "hydra/ext/org/w3/owl/syntax.DataRange")
+_DataRange = (Core.Name "hydra.ext.org.w3.owl.syntax.DataRange")
 
 _DataRange_dataComplementOf = (Core.Name "dataComplementOf")
 
@@ -297,7 +297,7 @@ newtype DataIntersectionOf =
     unDataIntersectionOf :: [DataRange]}
   deriving (Eq, Ord, Read, Show)
 
-_DataIntersectionOf = (Core.Name "hydra/ext/org/w3/owl/syntax.DataIntersectionOf")
+_DataIntersectionOf = (Core.Name "hydra.ext.org.w3.owl.syntax.DataIntersectionOf")
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Union_of_Data_Ranges
 newtype DataUnionOf = 
@@ -305,7 +305,7 @@ newtype DataUnionOf =
     unDataUnionOf :: [DataRange]}
   deriving (Eq, Ord, Read, Show)
 
-_DataUnionOf = (Core.Name "hydra/ext/org/w3/owl/syntax.DataUnionOf")
+_DataUnionOf = (Core.Name "hydra.ext.org.w3.owl.syntax.DataUnionOf")
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Complement_of_Data_Ranges
 newtype DataComplementOf = 
@@ -313,7 +313,7 @@ newtype DataComplementOf =
     unDataComplementOf :: DataRange}
   deriving (Eq, Ord, Read, Show)
 
-_DataComplementOf = (Core.Name "hydra/ext/org/w3/owl/syntax.DataComplementOf")
+_DataComplementOf = (Core.Name "hydra.ext.org.w3.owl.syntax.DataComplementOf")
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Enumeration_of_Literals
 newtype DataOneOf = 
@@ -321,7 +321,7 @@ newtype DataOneOf =
     unDataOneOf :: [Syntax.Literal]}
   deriving (Eq, Ord, Read, Show)
 
-_DataOneOf = (Core.Name "hydra/ext/org/w3/owl/syntax.DataOneOf")
+_DataOneOf = (Core.Name "hydra.ext.org.w3.owl.syntax.DataOneOf")
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Datatype_Restrictions
 data DatatypeRestriction = 
@@ -330,7 +330,7 @@ data DatatypeRestriction =
     datatypeRestrictionConstraints :: [DatatypeRestriction_Constraint]}
   deriving (Eq, Ord, Read, Show)
 
-_DatatypeRestriction = (Core.Name "hydra/ext/org/w3/owl/syntax.DatatypeRestriction")
+_DatatypeRestriction = (Core.Name "hydra.ext.org.w3.owl.syntax.DatatypeRestriction")
 
 _DatatypeRestriction_datatype = (Core.Name "datatype")
 
@@ -342,7 +342,7 @@ data DatatypeRestriction_Constraint =
     datatypeRestriction_ConstraintRestrictionValue :: Syntax.Literal}
   deriving (Eq, Ord, Read, Show)
 
-_DatatypeRestriction_Constraint = (Core.Name "hydra/ext/org/w3/owl/syntax.DatatypeRestriction_Constraint")
+_DatatypeRestriction_Constraint = (Core.Name "hydra.ext.org.w3.owl.syntax.DatatypeRestriction_Constraint")
 
 _DatatypeRestriction_Constraint_constrainingFacet = (Core.Name "constrainingFacet")
 
@@ -354,7 +354,7 @@ data DatatypeRestriction_ConstrainingFacet =
   DatatypeRestriction_ConstrainingFacetOther Syntax.Iri
   deriving (Eq, Ord, Read, Show)
 
-_DatatypeRestriction_ConstrainingFacet = (Core.Name "hydra/ext/org/w3/owl/syntax.DatatypeRestriction_ConstrainingFacet")
+_DatatypeRestriction_ConstrainingFacet = (Core.Name "hydra.ext.org.w3.owl.syntax.DatatypeRestriction_ConstrainingFacet")
 
 _DatatypeRestriction_ConstrainingFacet_xmlSchema = (Core.Name "xmlSchema")
 
@@ -380,7 +380,7 @@ data ClassExpression =
   ClassExpressionObjectUnionOf ObjectUnionOf
   deriving (Eq, Ord, Read, Show)
 
-_ClassExpression = (Core.Name "hydra/ext/org/w3/owl/syntax.ClassExpression")
+_ClassExpression = (Core.Name "hydra.ext.org.w3.owl.syntax.ClassExpression")
 
 _ClassExpression_class = (Core.Name "class")
 
@@ -421,28 +421,28 @@ newtype ObjectIntersectionOf =
     unObjectIntersectionOf :: [ClassExpression]}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectIntersectionOf = (Core.Name "hydra/ext/org/w3/owl/syntax.ObjectIntersectionOf")
+_ObjectIntersectionOf = (Core.Name "hydra.ext.org.w3.owl.syntax.ObjectIntersectionOf")
 
 newtype ObjectUnionOf = 
   ObjectUnionOf {
     unObjectUnionOf :: [ClassExpression]}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectUnionOf = (Core.Name "hydra/ext/org/w3/owl/syntax.ObjectUnionOf")
+_ObjectUnionOf = (Core.Name "hydra.ext.org.w3.owl.syntax.ObjectUnionOf")
 
 newtype ObjectComplementOf = 
   ObjectComplementOf {
     unObjectComplementOf :: ClassExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectComplementOf = (Core.Name "hydra/ext/org/w3/owl/syntax.ObjectComplementOf")
+_ObjectComplementOf = (Core.Name "hydra.ext.org.w3.owl.syntax.ObjectComplementOf")
 
 newtype ObjectOneOf = 
   ObjectOneOf {
     unObjectOneOf :: [Individual]}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectOneOf = (Core.Name "hydra/ext/org/w3/owl/syntax.ObjectOneOf")
+_ObjectOneOf = (Core.Name "hydra.ext.org.w3.owl.syntax.ObjectOneOf")
 
 data ObjectSomeValuesFrom = 
   ObjectSomeValuesFrom {
@@ -450,7 +450,7 @@ data ObjectSomeValuesFrom =
     objectSomeValuesFromClass :: ClassExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectSomeValuesFrom = (Core.Name "hydra/ext/org/w3/owl/syntax.ObjectSomeValuesFrom")
+_ObjectSomeValuesFrom = (Core.Name "hydra.ext.org.w3.owl.syntax.ObjectSomeValuesFrom")
 
 _ObjectSomeValuesFrom_property = (Core.Name "property")
 
@@ -462,7 +462,7 @@ data ObjectAllValuesFrom =
     objectAllValuesFromClass :: ClassExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectAllValuesFrom = (Core.Name "hydra/ext/org/w3/owl/syntax.ObjectAllValuesFrom")
+_ObjectAllValuesFrom = (Core.Name "hydra.ext.org.w3.owl.syntax.ObjectAllValuesFrom")
 
 _ObjectAllValuesFrom_property = (Core.Name "property")
 
@@ -474,7 +474,7 @@ data ObjectHasValue =
     objectHasValueIndividual :: Individual}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectHasValue = (Core.Name "hydra/ext/org/w3/owl/syntax.ObjectHasValue")
+_ObjectHasValue = (Core.Name "hydra.ext.org.w3.owl.syntax.ObjectHasValue")
 
 _ObjectHasValue_property = (Core.Name "property")
 
@@ -485,7 +485,7 @@ newtype ObjectHasSelf =
     unObjectHasSelf :: ObjectPropertyExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectHasSelf = (Core.Name "hydra/ext/org/w3/owl/syntax.ObjectHasSelf")
+_ObjectHasSelf = (Core.Name "hydra.ext.org.w3.owl.syntax.ObjectHasSelf")
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Minimum_Cardinality
 data ObjectMinCardinality = 
@@ -495,7 +495,7 @@ data ObjectMinCardinality =
     objectMinCardinalityClass :: [ClassExpression]}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectMinCardinality = (Core.Name "hydra/ext/org/w3/owl/syntax.ObjectMinCardinality")
+_ObjectMinCardinality = (Core.Name "hydra.ext.org.w3.owl.syntax.ObjectMinCardinality")
 
 _ObjectMinCardinality_bound = (Core.Name "bound")
 
@@ -511,7 +511,7 @@ data ObjectMaxCardinality =
     objectMaxCardinalityClass :: [ClassExpression]}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectMaxCardinality = (Core.Name "hydra/ext/org/w3/owl/syntax.ObjectMaxCardinality")
+_ObjectMaxCardinality = (Core.Name "hydra.ext.org.w3.owl.syntax.ObjectMaxCardinality")
 
 _ObjectMaxCardinality_bound = (Core.Name "bound")
 
@@ -527,7 +527,7 @@ data ObjectExactCardinality =
     objectExactCardinalityClass :: [ClassExpression]}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectExactCardinality = (Core.Name "hydra/ext/org/w3/owl/syntax.ObjectExactCardinality")
+_ObjectExactCardinality = (Core.Name "hydra.ext.org.w3.owl.syntax.ObjectExactCardinality")
 
 _ObjectExactCardinality_bound = (Core.Name "bound")
 
@@ -541,7 +541,7 @@ data DataSomeValuesFrom =
     dataSomeValuesFromRange :: DataRange}
   deriving (Eq, Ord, Read, Show)
 
-_DataSomeValuesFrom = (Core.Name "hydra/ext/org/w3/owl/syntax.DataSomeValuesFrom")
+_DataSomeValuesFrom = (Core.Name "hydra.ext.org.w3.owl.syntax.DataSomeValuesFrom")
 
 _DataSomeValuesFrom_property = (Core.Name "property")
 
@@ -553,7 +553,7 @@ data DataAllValuesFrom =
     dataAllValuesFromRange :: DataRange}
   deriving (Eq, Ord, Read, Show)
 
-_DataAllValuesFrom = (Core.Name "hydra/ext/org/w3/owl/syntax.DataAllValuesFrom")
+_DataAllValuesFrom = (Core.Name "hydra.ext.org.w3.owl.syntax.DataAllValuesFrom")
 
 _DataAllValuesFrom_property = (Core.Name "property")
 
@@ -565,7 +565,7 @@ data DataHasValue =
     dataHasValueValue :: Syntax.Literal}
   deriving (Eq, Ord, Read, Show)
 
-_DataHasValue = (Core.Name "hydra/ext/org/w3/owl/syntax.DataHasValue")
+_DataHasValue = (Core.Name "hydra.ext.org.w3.owl.syntax.DataHasValue")
 
 _DataHasValue_property = (Core.Name "property")
 
@@ -578,7 +578,7 @@ data DataMinCardinality =
     dataMinCardinalityRange :: [DataRange]}
   deriving (Eq, Ord, Read, Show)
 
-_DataMinCardinality = (Core.Name "hydra/ext/org/w3/owl/syntax.DataMinCardinality")
+_DataMinCardinality = (Core.Name "hydra.ext.org.w3.owl.syntax.DataMinCardinality")
 
 _DataMinCardinality_bound = (Core.Name "bound")
 
@@ -593,7 +593,7 @@ data DataMaxCardinality =
     dataMaxCardinalityRange :: [DataRange]}
   deriving (Eq, Ord, Read, Show)
 
-_DataMaxCardinality = (Core.Name "hydra/ext/org/w3/owl/syntax.DataMaxCardinality")
+_DataMaxCardinality = (Core.Name "hydra.ext.org.w3.owl.syntax.DataMaxCardinality")
 
 _DataMaxCardinality_bound = (Core.Name "bound")
 
@@ -608,7 +608,7 @@ data DataExactCardinality =
     dataExactCardinalityRange :: [DataRange]}
   deriving (Eq, Ord, Read, Show)
 
-_DataExactCardinality = (Core.Name "hydra/ext/org/w3/owl/syntax.DataExactCardinality")
+_DataExactCardinality = (Core.Name "hydra.ext.org.w3.owl.syntax.DataExactCardinality")
 
 _DataExactCardinality_bound = (Core.Name "bound")
 
@@ -628,7 +628,7 @@ data Axiom =
   AxiomObjectPropertyAxiom ObjectPropertyAxiom
   deriving (Eq, Ord, Read, Show)
 
-_Axiom = (Core.Name "hydra/ext/org/w3/owl/syntax.Axiom")
+_Axiom = (Core.Name "hydra.ext.org.w3.owl.syntax.Axiom")
 
 _Axiom_annotationAxiom = (Core.Name "annotationAxiom")
 
@@ -653,7 +653,7 @@ data ClassAxiom =
   ClassAxiomSubClassOf SubClassOf
   deriving (Eq, Ord, Read, Show)
 
-_ClassAxiom = (Core.Name "hydra/ext/org/w3/owl/syntax.ClassAxiom")
+_ClassAxiom = (Core.Name "hydra.ext.org.w3.owl.syntax.ClassAxiom")
 
 _ClassAxiom_disjointClasses = (Core.Name "disjointClasses")
 
@@ -670,7 +670,7 @@ data SubClassOf =
     subClassOfSuperClass :: ClassExpression}
   deriving (Eq, Ord, Read, Show)
 
-_SubClassOf = (Core.Name "hydra/ext/org/w3/owl/syntax.SubClassOf")
+_SubClassOf = (Core.Name "hydra.ext.org.w3.owl.syntax.SubClassOf")
 
 _SubClassOf_annotations = (Core.Name "annotations")
 
@@ -684,7 +684,7 @@ data EquivalentClasses =
     equivalentClassesClasses :: [ClassExpression]}
   deriving (Eq, Ord, Read, Show)
 
-_EquivalentClasses = (Core.Name "hydra/ext/org/w3/owl/syntax.EquivalentClasses")
+_EquivalentClasses = (Core.Name "hydra.ext.org.w3.owl.syntax.EquivalentClasses")
 
 _EquivalentClasses_annotations = (Core.Name "annotations")
 
@@ -696,7 +696,7 @@ data DisjointClasses =
     disjointClassesClasses :: [ClassExpression]}
   deriving (Eq, Ord, Read, Show)
 
-_DisjointClasses = (Core.Name "hydra/ext/org/w3/owl/syntax.DisjointClasses")
+_DisjointClasses = (Core.Name "hydra.ext.org.w3.owl.syntax.DisjointClasses")
 
 _DisjointClasses_annotations = (Core.Name "annotations")
 
@@ -710,7 +710,7 @@ data DisjointUnion =
     disjointUnionClasses :: [ClassExpression]}
   deriving (Eq, Ord, Read, Show)
 
-_DisjointUnion = (Core.Name "hydra/ext/org/w3/owl/syntax.DisjointUnion")
+_DisjointUnion = (Core.Name "hydra.ext.org.w3.owl.syntax.DisjointUnion")
 
 _DisjointUnion_annotations = (Core.Name "annotations")
 
@@ -734,7 +734,7 @@ data ObjectPropertyAxiom =
   ObjectPropertyAxiomTransitiveObjectProperty TransitiveObjectProperty
   deriving (Eq, Ord, Read, Show)
 
-_ObjectPropertyAxiom = (Core.Name "hydra/ext/org/w3/owl/syntax.ObjectPropertyAxiom")
+_ObjectPropertyAxiom = (Core.Name "hydra.ext.org.w3.owl.syntax.ObjectPropertyAxiom")
 
 _ObjectPropertyAxiom_asymmetricObjectProperty = (Core.Name "asymmetricObjectProperty")
 
@@ -769,7 +769,7 @@ data SubObjectPropertyOf =
     subObjectPropertyOfSuperProperty :: ObjectPropertyExpression}
   deriving (Eq, Ord, Read, Show)
 
-_SubObjectPropertyOf = (Core.Name "hydra/ext/org/w3/owl/syntax.SubObjectPropertyOf")
+_SubObjectPropertyOf = (Core.Name "hydra.ext.org.w3.owl.syntax.SubObjectPropertyOf")
 
 _SubObjectPropertyOf_annotations = (Core.Name "annotations")
 
@@ -783,7 +783,7 @@ data EquivalentObjectProperties =
     equivalentObjectPropertiesProperties :: [ObjectPropertyExpression]}
   deriving (Eq, Ord, Read, Show)
 
-_EquivalentObjectProperties = (Core.Name "hydra/ext/org/w3/owl/syntax.EquivalentObjectProperties")
+_EquivalentObjectProperties = (Core.Name "hydra.ext.org.w3.owl.syntax.EquivalentObjectProperties")
 
 _EquivalentObjectProperties_annotations = (Core.Name "annotations")
 
@@ -795,7 +795,7 @@ data DisjointObjectProperties =
     disjointObjectPropertiesProperties :: [ObjectPropertyExpression]}
   deriving (Eq, Ord, Read, Show)
 
-_DisjointObjectProperties = (Core.Name "hydra/ext/org/w3/owl/syntax.DisjointObjectProperties")
+_DisjointObjectProperties = (Core.Name "hydra.ext.org.w3.owl.syntax.DisjointObjectProperties")
 
 _DisjointObjectProperties_annotations = (Core.Name "annotations")
 
@@ -809,7 +809,7 @@ data ObjectPropertyDomain =
     objectPropertyDomainDomain :: ClassExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectPropertyDomain = (Core.Name "hydra/ext/org/w3/owl/syntax.ObjectPropertyDomain")
+_ObjectPropertyDomain = (Core.Name "hydra.ext.org.w3.owl.syntax.ObjectPropertyDomain")
 
 _ObjectPropertyDomain_annotations = (Core.Name "annotations")
 
@@ -825,7 +825,7 @@ data ObjectPropertyRange =
     objectPropertyRangeRange :: ClassExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectPropertyRange = (Core.Name "hydra/ext/org/w3/owl/syntax.ObjectPropertyRange")
+_ObjectPropertyRange = (Core.Name "hydra.ext.org.w3.owl.syntax.ObjectPropertyRange")
 
 _ObjectPropertyRange_annotations = (Core.Name "annotations")
 
@@ -840,7 +840,7 @@ data InverseObjectProperties =
     inverseObjectPropertiesProperty2 :: ObjectPropertyExpression}
   deriving (Eq, Ord, Read, Show)
 
-_InverseObjectProperties = (Core.Name "hydra/ext/org/w3/owl/syntax.InverseObjectProperties")
+_InverseObjectProperties = (Core.Name "hydra.ext.org.w3.owl.syntax.InverseObjectProperties")
 
 _InverseObjectProperties_annotations = (Core.Name "annotations")
 
@@ -854,7 +854,7 @@ data FunctionalObjectProperty =
     functionalObjectPropertyProperty :: ObjectPropertyExpression}
   deriving (Eq, Ord, Read, Show)
 
-_FunctionalObjectProperty = (Core.Name "hydra/ext/org/w3/owl/syntax.FunctionalObjectProperty")
+_FunctionalObjectProperty = (Core.Name "hydra.ext.org.w3.owl.syntax.FunctionalObjectProperty")
 
 _FunctionalObjectProperty_annotations = (Core.Name "annotations")
 
@@ -866,7 +866,7 @@ data InverseFunctionalObjectProperty =
     inverseFunctionalObjectPropertyProperty :: ObjectPropertyExpression}
   deriving (Eq, Ord, Read, Show)
 
-_InverseFunctionalObjectProperty = (Core.Name "hydra/ext/org/w3/owl/syntax.InverseFunctionalObjectProperty")
+_InverseFunctionalObjectProperty = (Core.Name "hydra.ext.org.w3.owl.syntax.InverseFunctionalObjectProperty")
 
 _InverseFunctionalObjectProperty_annotations = (Core.Name "annotations")
 
@@ -878,7 +878,7 @@ data ReflexiveObjectProperty =
     reflexiveObjectPropertyProperty :: ObjectPropertyExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ReflexiveObjectProperty = (Core.Name "hydra/ext/org/w3/owl/syntax.ReflexiveObjectProperty")
+_ReflexiveObjectProperty = (Core.Name "hydra.ext.org.w3.owl.syntax.ReflexiveObjectProperty")
 
 _ReflexiveObjectProperty_annotations = (Core.Name "annotations")
 
@@ -890,7 +890,7 @@ data IrreflexiveObjectProperty =
     irreflexiveObjectPropertyProperty :: ObjectPropertyExpression}
   deriving (Eq, Ord, Read, Show)
 
-_IrreflexiveObjectProperty = (Core.Name "hydra/ext/org/w3/owl/syntax.IrreflexiveObjectProperty")
+_IrreflexiveObjectProperty = (Core.Name "hydra.ext.org.w3.owl.syntax.IrreflexiveObjectProperty")
 
 _IrreflexiveObjectProperty_annotations = (Core.Name "annotations")
 
@@ -902,7 +902,7 @@ data SymmetricObjectProperty =
     symmetricObjectPropertyProperty :: ObjectPropertyExpression}
   deriving (Eq, Ord, Read, Show)
 
-_SymmetricObjectProperty = (Core.Name "hydra/ext/org/w3/owl/syntax.SymmetricObjectProperty")
+_SymmetricObjectProperty = (Core.Name "hydra.ext.org.w3.owl.syntax.SymmetricObjectProperty")
 
 _SymmetricObjectProperty_annotations = (Core.Name "annotations")
 
@@ -914,7 +914,7 @@ data AsymmetricObjectProperty =
     asymmetricObjectPropertyProperty :: ObjectPropertyExpression}
   deriving (Eq, Ord, Read, Show)
 
-_AsymmetricObjectProperty = (Core.Name "hydra/ext/org/w3/owl/syntax.AsymmetricObjectProperty")
+_AsymmetricObjectProperty = (Core.Name "hydra.ext.org.w3.owl.syntax.AsymmetricObjectProperty")
 
 _AsymmetricObjectProperty_annotations = (Core.Name "annotations")
 
@@ -926,7 +926,7 @@ data TransitiveObjectProperty =
     transitiveObjectPropertyProperty :: ObjectPropertyExpression}
   deriving (Eq, Ord, Read, Show)
 
-_TransitiveObjectProperty = (Core.Name "hydra/ext/org/w3/owl/syntax.TransitiveObjectProperty")
+_TransitiveObjectProperty = (Core.Name "hydra.ext.org.w3.owl.syntax.TransitiveObjectProperty")
 
 _TransitiveObjectProperty_annotations = (Core.Name "annotations")
 
@@ -941,7 +941,7 @@ data DataPropertyAxiom =
   DataPropertyAxiomSubDataPropertyOf SubDataPropertyOf
   deriving (Eq, Ord, Read, Show)
 
-_DataPropertyAxiom = (Core.Name "hydra/ext/org/w3/owl/syntax.DataPropertyAxiom")
+_DataPropertyAxiom = (Core.Name "hydra.ext.org.w3.owl.syntax.DataPropertyAxiom")
 
 _DataPropertyAxiom_dataPropertyAxiom = (Core.Name "dataPropertyAxiom")
 
@@ -962,7 +962,7 @@ data SubDataPropertyOf =
     subDataPropertyOfSuperProperty :: DataPropertyExpression}
   deriving (Eq, Ord, Read, Show)
 
-_SubDataPropertyOf = (Core.Name "hydra/ext/org/w3/owl/syntax.SubDataPropertyOf")
+_SubDataPropertyOf = (Core.Name "hydra.ext.org.w3.owl.syntax.SubDataPropertyOf")
 
 _SubDataPropertyOf_annotations = (Core.Name "annotations")
 
@@ -976,7 +976,7 @@ data EquivalentDataProperties =
     equivalentDataPropertiesProperties :: [DataPropertyExpression]}
   deriving (Eq, Ord, Read, Show)
 
-_EquivalentDataProperties = (Core.Name "hydra/ext/org/w3/owl/syntax.EquivalentDataProperties")
+_EquivalentDataProperties = (Core.Name "hydra.ext.org.w3.owl.syntax.EquivalentDataProperties")
 
 _EquivalentDataProperties_annotations = (Core.Name "annotations")
 
@@ -988,7 +988,7 @@ data DisjointDataProperties =
     disjointDataPropertiesProperties :: [DataPropertyExpression]}
   deriving (Eq, Ord, Read, Show)
 
-_DisjointDataProperties = (Core.Name "hydra/ext/org/w3/owl/syntax.DisjointDataProperties")
+_DisjointDataProperties = (Core.Name "hydra.ext.org.w3.owl.syntax.DisjointDataProperties")
 
 _DisjointDataProperties_annotations = (Core.Name "annotations")
 
@@ -1001,7 +1001,7 @@ data DataPropertyDomain =
     dataPropertyDomainDomain :: ClassExpression}
   deriving (Eq, Ord, Read, Show)
 
-_DataPropertyDomain = (Core.Name "hydra/ext/org/w3/owl/syntax.DataPropertyDomain")
+_DataPropertyDomain = (Core.Name "hydra.ext.org.w3.owl.syntax.DataPropertyDomain")
 
 _DataPropertyDomain_annotations = (Core.Name "annotations")
 
@@ -1016,7 +1016,7 @@ data DataPropertyRange =
     dataPropertyRangeRange :: ClassExpression}
   deriving (Eq, Ord, Read, Show)
 
-_DataPropertyRange = (Core.Name "hydra/ext/org/w3/owl/syntax.DataPropertyRange")
+_DataPropertyRange = (Core.Name "hydra.ext.org.w3.owl.syntax.DataPropertyRange")
 
 _DataPropertyRange_annotations = (Core.Name "annotations")
 
@@ -1030,7 +1030,7 @@ data FunctionalDataProperty =
     functionalDataPropertyProperty :: DataPropertyExpression}
   deriving (Eq, Ord, Read, Show)
 
-_FunctionalDataProperty = (Core.Name "hydra/ext/org/w3/owl/syntax.FunctionalDataProperty")
+_FunctionalDataProperty = (Core.Name "hydra.ext.org.w3.owl.syntax.FunctionalDataProperty")
 
 _FunctionalDataProperty_annotations = (Core.Name "annotations")
 
@@ -1043,7 +1043,7 @@ data DatatypeDefinition =
     datatypeDefinitionRange :: DataRange}
   deriving (Eq, Ord, Read, Show)
 
-_DatatypeDefinition = (Core.Name "hydra/ext/org/w3/owl/syntax.DatatypeDefinition")
+_DatatypeDefinition = (Core.Name "hydra.ext.org.w3.owl.syntax.DatatypeDefinition")
 
 _DatatypeDefinition_annotations = (Core.Name "annotations")
 
@@ -1060,7 +1060,7 @@ data HasKey =
     hasKeyDataProperties :: [DataPropertyExpression]}
   deriving (Eq, Ord, Read, Show)
 
-_HasKey = (Core.Name "hydra/ext/org/w3/owl/syntax.HasKey")
+_HasKey = (Core.Name "hydra.ext.org.w3.owl.syntax.HasKey")
 
 _HasKey_annotations = (Core.Name "annotations")
 
@@ -1080,7 +1080,7 @@ data Assertion =
   AssertionSameIndividual SameIndividual
   deriving (Eq, Ord, Read, Show)
 
-_Assertion = (Core.Name "hydra/ext/org/w3/owl/syntax.Assertion")
+_Assertion = (Core.Name "hydra.ext.org.w3.owl.syntax.Assertion")
 
 _Assertion_classAssertion = (Core.Name "classAssertion")
 
@@ -1102,7 +1102,7 @@ data SameIndividual =
     sameIndividualIndividuals :: [Individual]}
   deriving (Eq, Ord, Read, Show)
 
-_SameIndividual = (Core.Name "hydra/ext/org/w3/owl/syntax.SameIndividual")
+_SameIndividual = (Core.Name "hydra.ext.org.w3.owl.syntax.SameIndividual")
 
 _SameIndividual_annotations = (Core.Name "annotations")
 
@@ -1114,7 +1114,7 @@ data DifferentIndividuals =
     differentIndividualsIndividuals :: [Individual]}
   deriving (Eq, Ord, Read, Show)
 
-_DifferentIndividuals = (Core.Name "hydra/ext/org/w3/owl/syntax.DifferentIndividuals")
+_DifferentIndividuals = (Core.Name "hydra.ext.org.w3.owl.syntax.DifferentIndividuals")
 
 _DifferentIndividuals_annotations = (Core.Name "annotations")
 
@@ -1127,7 +1127,7 @@ data ClassAssertion =
     classAssertionIndividual :: Individual}
   deriving (Eq, Ord, Read, Show)
 
-_ClassAssertion = (Core.Name "hydra/ext/org/w3/owl/syntax.ClassAssertion")
+_ClassAssertion = (Core.Name "hydra.ext.org.w3.owl.syntax.ClassAssertion")
 
 _ClassAssertion_annotations = (Core.Name "annotations")
 
@@ -1143,7 +1143,7 @@ data ObjectPropertyAssertion =
     objectPropertyAssertionTarget :: Individual}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectPropertyAssertion = (Core.Name "hydra/ext/org/w3/owl/syntax.ObjectPropertyAssertion")
+_ObjectPropertyAssertion = (Core.Name "hydra.ext.org.w3.owl.syntax.ObjectPropertyAssertion")
 
 _ObjectPropertyAssertion_annotations = (Core.Name "annotations")
 
@@ -1161,7 +1161,7 @@ data NegativeObjectPropertyAssertion =
     negativeObjectPropertyAssertionTarget :: Individual}
   deriving (Eq, Ord, Read, Show)
 
-_NegativeObjectPropertyAssertion = (Core.Name "hydra/ext/org/w3/owl/syntax.NegativeObjectPropertyAssertion")
+_NegativeObjectPropertyAssertion = (Core.Name "hydra.ext.org.w3.owl.syntax.NegativeObjectPropertyAssertion")
 
 _NegativeObjectPropertyAssertion_annotations = (Core.Name "annotations")
 
@@ -1179,7 +1179,7 @@ data DataPropertyAssertion =
     dataPropertyAssertionTarget :: Individual}
   deriving (Eq, Ord, Read, Show)
 
-_DataPropertyAssertion = (Core.Name "hydra/ext/org/w3/owl/syntax.DataPropertyAssertion")
+_DataPropertyAssertion = (Core.Name "hydra.ext.org.w3.owl.syntax.DataPropertyAssertion")
 
 _DataPropertyAssertion_annotations = (Core.Name "annotations")
 
@@ -1197,7 +1197,7 @@ data NegativeDataPropertyAssertion =
     negativeDataPropertyAssertionTarget :: Individual}
   deriving (Eq, Ord, Read, Show)
 
-_NegativeDataPropertyAssertion = (Core.Name "hydra/ext/org/w3/owl/syntax.NegativeDataPropertyAssertion")
+_NegativeDataPropertyAssertion = (Core.Name "hydra.ext.org.w3.owl.syntax.NegativeDataPropertyAssertion")
 
 _NegativeDataPropertyAssertion_annotations = (Core.Name "annotations")
 

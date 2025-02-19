@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Represent array data type.
  */
 public class ArrayType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/delta/parquet.ArrayType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.delta.parquet.ArrayType");
   
   public static final hydra.core.Name FIELD_NAME_ELEMENT_TYPE = new hydra.core.Name("elementType");
   

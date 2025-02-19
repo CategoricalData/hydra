@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Encodings supported by Parquet.  Not all encodings are valid for all types.  These enums are also used to specify the encoding of definition and repetition levels. See the accompanying doc for the details of the more complicated encodings.
  */
 public abstract class Encoding implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.Encoding");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.Encoding");
   
   public static final hydra.core.Name FIELD_NAME_PLAIN = new hydra.core.Name("plain");
   

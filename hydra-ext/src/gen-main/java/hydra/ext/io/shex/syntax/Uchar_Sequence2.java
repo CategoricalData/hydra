@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public class Uchar_Sequence2 implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.Uchar.Sequence2");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.Uchar_Sequence2");
   
   public static final hydra.core.Name FIELD_NAME_HEX = new hydra.core.Name("hex");
   

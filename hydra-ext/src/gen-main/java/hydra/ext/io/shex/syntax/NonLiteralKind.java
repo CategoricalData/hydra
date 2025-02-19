@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public abstract class NonLiteralKind implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.NonLiteralKind");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.NonLiteralKind");
   
   public static final hydra.core.Name FIELD_NAME_I_R_I = new hydra.core.Name("iRI");
   

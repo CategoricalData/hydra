@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Data page header
  */
 public class DataPageHeader implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.DataPageHeader");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.DataPageHeader");
   
   public static final hydra.core.Name FIELD_NAME_NUM_VALUES = new hydra.core.Name("numValues");
   

@@ -5,7 +5,7 @@ package hydra.ext.org.ansi.sql.syntax;
 import java.io.Serializable;
 
 public class PredefinedType_NationalString implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/ansi/sql/syntax.PredefinedType.NationalString");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.ansi.sql.syntax.PredefinedType_NationalString");
   
   public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
   

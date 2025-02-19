@@ -5,7 +5,7 @@ package hydra.ext.org.apache.atlas;
 import java.io.Serializable;
 
 public abstract class AtlasAttributeDef_Cardinality implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/atlas.AtlasAttributeDef.Cardinality");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.atlas.AtlasAttributeDef_Cardinality");
   
   public static final hydra.core.Name FIELD_NAME_SINGLE = new hydra.core.Name("single");
   

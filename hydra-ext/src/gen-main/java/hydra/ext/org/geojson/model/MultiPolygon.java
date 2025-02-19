@@ -8,7 +8,7 @@ import java.io.Serializable;
  * For type "MultiPolygon", the "coordinates" member is an array of Polygon coordinate arrays.
  */
 public class MultiPolygon implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/geojson/model.MultiPolygon");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.geojson.model.MultiPolygon");
   
   public static final hydra.core.Name FIELD_NAME_COORDINATES = new hydra.core.Name("coordinates");
   

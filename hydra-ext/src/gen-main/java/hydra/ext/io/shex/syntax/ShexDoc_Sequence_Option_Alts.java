@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public abstract class ShexDoc_Sequence_Option_Alts implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.ShexDoc.Sequence.Option.Alts");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.ShexDoc_Sequence_Option_Alts");
   
   public static final hydra.core.Name FIELD_NAME_NOT_START_ACTION = new hydra.core.Name("notStartAction");
   

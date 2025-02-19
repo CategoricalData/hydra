@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Base class that captures common-attributes for all Atlas types.
  */
 public class AtlasBaseTypeDef implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/atlas.AtlasBaseTypeDef");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.atlas.AtlasBaseTypeDef");
   
   public static final hydra.core.Name FIELD_NAME_CATEGORY = new hydra.core.Name("category");
   

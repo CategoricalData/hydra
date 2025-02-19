@@ -5,7 +5,7 @@ package hydra.ext.org.ansi.sql.syntax;
 import java.io.Serializable;
 
 public abstract class BooleanTerm implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/ansi/sql/syntax.BooleanTerm");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.ansi.sql.syntax.BooleanTerm");
   
   public static final hydra.core.Name FIELD_NAME_FACTOR = new hydra.core.Name("factor");
   

@@ -5,7 +5,7 @@ package hydra.ext.org.apache.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class PropertyArgs implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/tinkerpop/gremlin.PropertyArgs");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.PropertyArgs");
   
   public static final hydra.core.Name FIELD_NAME_CARDINALITY_OBJECTS = new hydra.core.Name("cardinalityObjects");
   

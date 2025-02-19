@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Representation of Schemas
  */
 public abstract class FieldRepetitionType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.FieldRepetitionType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.FieldRepetitionType");
   
   public static final hydra.core.Name FIELD_NAME_REQUIRED = new hydra.core.Name("required");
   

@@ -5,7 +5,7 @@ package hydra.ext.fr.inria.coq.syntax;
 import java.io.Serializable;
 
 public class Match implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/fr/inria/coq/syntax.Match");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.fr.inria.coq.syntax.Match");
   
   public static final hydra.core.Name FIELD_NAME_CASE_ITEMS = new hydra.core.Name("caseItems");
   

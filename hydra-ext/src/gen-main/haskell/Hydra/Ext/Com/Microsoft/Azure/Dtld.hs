@@ -36,7 +36,7 @@ data Command =
     commandResponse :: (Maybe CommandPayload)}
   deriving (Eq, Ord, Read, Show)
 
-_Command = (Core.Name "hydra/ext/com/microsoft/azure/dtld.Command")
+_Command = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command")
 
 _Command_type = (Core.Name "type")
 
@@ -73,7 +73,7 @@ data CommandPayload =
     commandPayloadDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_CommandPayload = (Core.Name "hydra/ext/com/microsoft/azure/dtld.CommandPayload")
+_CommandPayload = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload")
 
 _CommandPayload_name = (Core.Name "name")
 
@@ -93,7 +93,7 @@ data CommandType =
   CommandTypeAsynchronous 
   deriving (Eq, Ord, Read, Show)
 
-_CommandType = (Core.Name "hydra/ext/com/microsoft/azure/dtld.CommandType")
+_CommandType = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandType")
 
 _CommandType_synchronous = (Core.Name "synchronous")
 
@@ -118,7 +118,7 @@ data Component =
     componentDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Component = (Core.Name "hydra/ext/com/microsoft/azure/dtld.Component")
+_Component = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component")
 
 _Component_type = (Core.Name "type")
 
@@ -140,7 +140,7 @@ newtype Dtmi =
     unDtmi :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Dtmi = (Core.Name "hydra/ext/com/microsoft/azure/dtld.Dtmi")
+_Dtmi = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Dtmi")
 
 -- | An EnumValue describes an element of an Enum.
 data EnumValue = 
@@ -159,7 +159,7 @@ data EnumValue =
     enumValueDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_EnumValue = (Core.Name "hydra/ext/com/microsoft/azure/dtld.EnumValue")
+_EnumValue = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue")
 
 _EnumValue_name = (Core.Name "name")
 
@@ -190,7 +190,7 @@ data Field =
     fieldDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Field = (Core.Name "hydra/ext/com/microsoft/azure/dtld.Field")
+_Field = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field")
 
 _Field_name = (Core.Name "name")
 
@@ -209,7 +209,7 @@ data IntegerOrString =
   IntegerOrStringString String
   deriving (Eq, Ord, Read, Show)
 
-_IntegerOrString = (Core.Name "hydra/ext/com/microsoft/azure/dtld.IntegerOrString")
+_IntegerOrString = (Core.Name "hydra.ext.com.microsoft.azure.dtld.IntegerOrString")
 
 _IntegerOrString_integer = (Core.Name "integer")
 
@@ -237,7 +237,7 @@ data Interface =
     interfaceSchemas :: (Maybe (Set Schema_Interface))}
   deriving (Eq, Ord, Read, Show)
 
-_Interface = (Core.Name "hydra/ext/com/microsoft/azure/dtld.Interface")
+_Interface = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface")
 
 _Interface_id = (Core.Name "id")
 
@@ -265,7 +265,7 @@ data Interface_Contents =
   Interface_ContentsTelemetry Telemetry
   deriving (Eq, Ord, Read, Show)
 
-_Interface_Contents = (Core.Name "hydra/ext/com/microsoft/azure/dtld.Interface_Contents")
+_Interface_Contents = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface_Contents")
 
 _Interface_Contents_command = (Core.Name "command")
 
@@ -282,7 +282,7 @@ newtype Iri =
     unIri :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Iri = (Core.Name "hydra/ext/com/microsoft/azure/dtld.Iri")
+_Iri = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Iri")
 
 -- | A MapKey describes the key in a Map. The schema of a MapKey must be string.
 data MapKey = 
@@ -301,7 +301,7 @@ data MapKey =
     mapKeyDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_MapKey = (Core.Name "hydra/ext/com/microsoft/azure/dtld.MapKey")
+_MapKey = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey")
 
 _MapKey_name = (Core.Name "name")
 
@@ -332,7 +332,7 @@ data MapValue =
     mapValueDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_MapValue = (Core.Name "hydra/ext/com/microsoft/azure/dtld.MapValue")
+_MapValue = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue")
 
 _MapValue_name = (Core.Name "name")
 
@@ -369,7 +369,7 @@ data Property =
     propertyWritable :: (Maybe Bool)}
   deriving (Eq, Ord, Read, Show)
 
-_Property = (Core.Name "hydra/ext/com/microsoft/azure/dtld.Property")
+_Property = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property")
 
 _Property_type = (Core.Name "type")
 
@@ -416,7 +416,7 @@ data Relationship =
     relationshipWritable :: (Maybe Bool)}
   deriving (Eq, Ord, Read, Show)
 
-_Relationship = (Core.Name "hydra/ext/com/microsoft/azure/dtld.Relationship")
+_Relationship = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship")
 
 _Relationship_type = (Core.Name "type")
 
@@ -446,7 +446,7 @@ data Schema =
   SchemaComplex Schema_Complex
   deriving (Eq, Ord, Read, Show)
 
-_Schema = (Core.Name "hydra/ext/com/microsoft/azure/dtld.Schema")
+_Schema = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema")
 
 _Schema_primitive = (Core.Name "primitive")
 
@@ -469,7 +469,7 @@ data Schema_Array =
     schema_ArrayDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Schema_Array = (Core.Name "hydra/ext/com/microsoft/azure/dtld.Schema_Array")
+_Schema_Array = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array")
 
 _Schema_Array_type = (Core.Name "type")
 
@@ -491,7 +491,7 @@ data Schema_Complex =
   Schema_ComplexObject Schema_Object
   deriving (Eq, Ord, Read, Show)
 
-_Schema_Complex = (Core.Name "hydra/ext/com/microsoft/azure/dtld.Schema_Complex")
+_Schema_Complex = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Complex")
 
 _Schema_Complex_array = (Core.Name "array")
 
@@ -520,7 +520,7 @@ data Schema_Enum =
     schema_EnumDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Schema_Enum = (Core.Name "hydra/ext/com/microsoft/azure/dtld.Schema_Enum")
+_Schema_Enum = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum")
 
 _Schema_Enum_type = (Core.Name "type")
 
@@ -551,7 +551,7 @@ data Schema_Interface =
     schema_InterfaceDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Schema_Interface = (Core.Name "hydra/ext/com/microsoft/azure/dtld.Schema_Interface")
+_Schema_Interface = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface")
 
 _Schema_Interface_id = (Core.Name "id")
 
@@ -570,7 +570,7 @@ data Schema_Interface_Type =
   Schema_Interface_TypeObject Schema_Object
   deriving (Eq, Ord, Read, Show)
 
-_Schema_Interface_Type = (Core.Name "hydra/ext/com/microsoft/azure/dtld.Schema_Interface_Type")
+_Schema_Interface_Type = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface_Type")
 
 _Schema_Interface_Type_array = (Core.Name "array")
 
@@ -599,7 +599,7 @@ data Schema_Map =
     schema_MapDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Schema_Map = (Core.Name "hydra/ext/com/microsoft/azure/dtld.Schema_Map")
+_Schema_Map = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map")
 
 _Schema_Map_type = (Core.Name "type")
 
@@ -632,7 +632,7 @@ data Schema_Object =
     schema_ObjectDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Schema_Object = (Core.Name "hydra/ext/com/microsoft/azure/dtld.Schema_Object")
+_Schema_Object = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object")
 
 _Schema_Object_type = (Core.Name "type")
 
@@ -670,7 +670,7 @@ data Schema_Primitive =
   Schema_PrimitiveTime 
   deriving (Eq, Ord, Read, Show)
 
-_Schema_Primitive = (Core.Name "hydra/ext/com/microsoft/azure/dtld.Schema_Primitive")
+_Schema_Primitive = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Primitive")
 
 _Schema_Primitive_boolean = (Core.Name "boolean")
 
@@ -713,7 +713,7 @@ data Telemetry =
     telemetryUnit :: (Maybe Unit)}
   deriving (Eq, Ord, Read, Show)
 
-_Telemetry = (Core.Name "hydra/ext/com/microsoft/azure/dtld.Telemetry")
+_Telemetry = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry")
 
 _Telemetry_type = (Core.Name "type")
 
@@ -735,4 +735,4 @@ data Unit =
   Unit {}
   deriving (Eq, Ord, Read, Show)
 
-_Unit = (Core.Name "hydra/ext/com/microsoft/azure/dtld.Unit")
+_Unit = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Unit")

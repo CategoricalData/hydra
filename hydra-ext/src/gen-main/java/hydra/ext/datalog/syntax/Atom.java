@@ -5,7 +5,7 @@ package hydra.ext.datalog.syntax;
 import java.io.Serializable;
 
 public class Atom implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/datalog/syntax.Atom");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.datalog.syntax.Atom");
   
   public static final hydra.core.Name FIELD_NAME_RELATION = new hydra.core.Name("relation");
   

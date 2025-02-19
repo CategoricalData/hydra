@@ -5,7 +5,7 @@ package hydra.ext.org.apache.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class TraversalOperator implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/tinkerpop/gremlin.TraversalOperator");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalOperator");
   
   public static final hydra.core.Name FIELD_NAME_ADD_ALL = new hydra.core.Name("addAll");
   

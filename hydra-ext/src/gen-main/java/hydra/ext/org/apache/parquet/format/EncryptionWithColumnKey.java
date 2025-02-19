@@ -5,7 +5,7 @@ package hydra.ext.org.apache.parquet.format;
 import java.io.Serializable;
 
 public class EncryptionWithColumnKey implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.EncryptionWithColumnKey");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.EncryptionWithColumnKey");
   
   public static final hydra.core.Name FIELD_NAME_PATH_IN_SCHEMA = new hydra.core.Name("pathInSchema");
   

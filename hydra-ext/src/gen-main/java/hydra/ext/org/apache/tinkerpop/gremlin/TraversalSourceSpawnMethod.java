@@ -5,7 +5,7 @@ package hydra.ext.org.apache.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class TraversalSourceSpawnMethod implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/tinkerpop/gremlin.TraversalSourceSpawnMethod");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSpawnMethod");
   
   public static final hydra.core.Name FIELD_NAME_ADD_E = new hydra.core.Name("addE");
   

@@ -5,7 +5,7 @@ package hydra.ext.fr.inria.coq.syntax;
 import java.io.Serializable;
 
 public class IdentArg implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/fr/inria/coq/syntax.IdentArg");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.fr.inria.coq.syntax.IdentArg");
   
   public static final hydra.core.Name FIELD_NAME_IDENT = new hydra.core.Name("ident");
   

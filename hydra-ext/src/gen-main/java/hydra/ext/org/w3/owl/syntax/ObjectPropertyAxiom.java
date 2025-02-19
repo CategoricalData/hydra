@@ -5,7 +5,7 @@ package hydra.ext.org.w3.owl.syntax;
 import java.io.Serializable;
 
 public abstract class ObjectPropertyAxiom implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/owl/syntax.ObjectPropertyAxiom");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectPropertyAxiom");
   
   public static final hydra.core.Name FIELD_NAME_ASYMMETRIC_OBJECT_PROPERTY = new hydra.core.Name("asymmetricObjectProperty");
   

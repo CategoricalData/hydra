@@ -8,7 +8,7 @@ import java.io.Serializable;
  * statistics of a given page type and encoding
  */
 public class PageEncodingStats implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.PageEncodingStats");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.PageEncodingStats");
   
   public static final hydra.core.Name FIELD_NAME_PAGE_TYPE = new hydra.core.Name("pageType");
   

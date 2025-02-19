@@ -5,7 +5,7 @@ package hydra.ext.org.apache.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public class RangeArgs implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/tinkerpop/gremlin.RangeArgs");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.RangeArgs");
   
   public static final hydra.core.Name FIELD_NAME_SCOPE = new hydra.core.Name("scope");
   

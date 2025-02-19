@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public class ShexDoc_Sequence_Option implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.ShexDoc.Sequence.Option");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.ShexDoc_Sequence_Option");
   
   public static final hydra.core.Name FIELD_NAME_ALTS = new hydra.core.Name("alts");
   

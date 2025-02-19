@@ -5,7 +5,7 @@ package hydra.ext.com.microsoft.kusto.kql;
 import java.io.Serializable;
 
 public abstract class BuiltInFunction implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/com/microsoft/kusto/kql.BuiltInFunction");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.com.microsoft.kusto.kql.BuiltInFunction");
   
   public static final hydra.core.Name FIELD_NAME_AGO = new hydra.core.Name("ago");
   

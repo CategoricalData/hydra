@@ -5,7 +5,7 @@ package hydra.ext.org.apache.parquet.format;
 import java.io.Serializable;
 
 public abstract class ColumnCryptoMetaData implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.ColumnCryptoMetaData");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.ColumnCryptoMetaData");
   
   public static final hydra.core.Name FIELD_NAME_ENCRYPTION_WITH_FOOTER_KEY = new hydra.core.Name("encryptionWithFooterKey");
   

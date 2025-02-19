@@ -5,7 +5,7 @@ package hydra.ext.org.w3.owl.syntax;
 import java.io.Serializable;
 
 public class SubClassOf implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/owl/syntax.SubClassOf");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.SubClassOf");
   
   public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
   

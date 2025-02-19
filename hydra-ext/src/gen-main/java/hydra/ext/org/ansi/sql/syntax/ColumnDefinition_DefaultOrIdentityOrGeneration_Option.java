@@ -5,7 +5,7 @@ package hydra.ext.org.ansi.sql.syntax;
 import java.io.Serializable;
 
 public abstract class ColumnDefinition_DefaultOrIdentityOrGeneration_Option implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/ansi/sql/syntax.ColumnDefinition.DefaultOrIdentityOrGeneration.Option");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.ansi.sql.syntax.ColumnDefinition_DefaultOrIdentityOrGeneration_Option");
   
   public static final hydra.core.Name FIELD_NAME_DEFAULT_CLAUSE = new hydra.core.Name("defaultClause");
   

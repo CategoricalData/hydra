@@ -5,7 +5,7 @@ package hydra.ext.org.ansi.sql.syntax;
 import java.io.Serializable;
 
 public abstract class ContextuallyTypedRowValueExpression implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/ansi/sql/syntax.ContextuallyTypedRowValueExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.ansi.sql.syntax.ContextuallyTypedRowValueExpression");
   
   public static final hydra.core.Name FIELD_NAME_SPECIAL_CASE = new hydra.core.Name("specialCase");
   

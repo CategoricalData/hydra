@@ -5,7 +5,7 @@ package hydra.ext.org.w3.owl.syntax;
 import java.io.Serializable;
 
 public abstract class ObjectPropertyExpression implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/owl/syntax.ObjectPropertyExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression");
   
   public static final hydra.core.Name FIELD_NAME_OBJECT = new hydra.core.Name("object");
   

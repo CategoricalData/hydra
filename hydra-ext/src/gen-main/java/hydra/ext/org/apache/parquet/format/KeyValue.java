@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Wrapper struct to store key values
  */
 public class KeyValue implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.KeyValue");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.KeyValue");
   
   public static final hydra.core.Name FIELD_NAME_KEY = new hydra.core.Name("key");
   

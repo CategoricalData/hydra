@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public abstract class RepeatRange_Sequence_Option_Option_Option implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.RepeatRange.Sequence.Option.Option.Option");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.RepeatRange_Sequence_Option_Option_Option");
   
   public static final hydra.core.Name FIELD_NAME_INTEGER = new hydra.core.Name("integer");
   

@@ -5,7 +5,7 @@ package hydra.ext.org.geojson.model;
 import java.io.Serializable;
 
 public class CoordinateRange implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/geojson/model.CoordinateRange");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.geojson.model.CoordinateRange");
   
   public static final hydra.core.Name FIELD_NAME_MIN = new hydra.core.Name("min");
   

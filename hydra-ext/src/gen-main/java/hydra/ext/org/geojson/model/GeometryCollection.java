@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A GeoJSON object with type "GeometryCollection" is a Geometry object. A GeometryCollection has a member with the name "geometries".  The value of "geometries" is an array.  Each element of this array is a GeoJSON Geometry object.  It is possible for this array to be empty.
  */
 public class GeometryCollection implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/geojson/model.GeometryCollection");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.geojson.model.GeometryCollection");
   
   public static final hydra.core.Name FIELD_NAME_GEOMETRIES = new hydra.core.Name("geometries");
   

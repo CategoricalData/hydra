@@ -8,7 +8,7 @@ import java.io.Serializable;
  * CommandType is deprecated. Either value, synchronous or asynchronous, has the same meaning: a command that starts execution within a configurable time and that completes execution within a configurable time.
  */
 public abstract class CommandType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/com/microsoft/azure/dtld.CommandType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.com.microsoft.azure.dtld.CommandType");
   
   public static final hydra.core.Name FIELD_NAME_SYNCHRONOUS = new hydra.core.Name("synchronous");
   

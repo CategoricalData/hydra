@@ -5,7 +5,7 @@ package hydra.ext.com.microsoft.azure.dtld;
 import java.io.Serializable;
 
 public abstract class Interface_Contents implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/com/microsoft/azure/dtld.Interface.Contents");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.com.microsoft.azure.dtld.Interface_Contents");
   
   public static final hydra.core.Name FIELD_NAME_COMMAND = new hydra.core.Name("command");
   

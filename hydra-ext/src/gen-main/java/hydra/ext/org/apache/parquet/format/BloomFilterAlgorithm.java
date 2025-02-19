@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The algorithm used in Bloom filter.
  */
 public abstract class BloomFilterAlgorithm implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.BloomFilterAlgorithm");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.BloomFilterAlgorithm");
   
   public static final hydra.core.Name FIELD_NAME_BLOCK = new hydra.core.Name("block");
   

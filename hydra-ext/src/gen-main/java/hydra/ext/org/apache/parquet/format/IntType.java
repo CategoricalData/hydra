@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Integer logical type annotation. bitWidth must be 8, 16, 32, or 64. Allowed for physical types: INT32, INT64
  */
 public class IntType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.IntType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.IntType");
   
   public static final hydra.core.Name FIELD_NAME_BIT_WIDTH = new hydra.core.Name("bitWidth");
   

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Data type representing a map type.
  */
 public class MapType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/delta/parquet.MapType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.delta.parquet.MapType");
   
   public static final hydra.core.Name FIELD_NAME_KEY_TYPE = new hydra.core.Name("keyType");
   

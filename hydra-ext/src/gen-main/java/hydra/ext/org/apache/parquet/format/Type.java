@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Types supported by Parquet.  These types are intended to be used in combination with the encodings to control the on disk storage format. For example INT16 is not included as a type since a good encoding of INT32 would handle this.
  */
 public abstract class Type implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.Type");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.Type");
   
   public static final hydra.core.Name FIELD_NAME_BOOLEAN = new hydra.core.Name("boolean");
   

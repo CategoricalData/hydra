@@ -5,7 +5,7 @@ package hydra.ext.fr.inria.coq.syntax;
 import java.io.Serializable;
 
 public class AnnotatedApplication implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/fr/inria/coq/syntax.AnnotatedApplication");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.fr.inria.coq.syntax.AnnotatedApplication");
   
   public static final hydra.core.Name FIELD_NAME_ANNOT = new hydra.core.Name("annot");
   

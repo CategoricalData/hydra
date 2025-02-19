@@ -8,7 +8,7 @@ import java.io.Serializable;
  * class that captures details of a struct-attribute.
  */
 public class AtlasAttributeDef implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/atlas.AtlasAttributeDef");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.atlas.AtlasAttributeDef");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   

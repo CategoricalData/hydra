@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The roles field is used to describe the purpose of each asset. It is recommended to include one for every asset, to give users a sense of why they might want to make use of the asset. There are some emerging standards that enable clients to take particular action when they encounter particular roles, listed below. But implementors are encouraged to come up with their own terms to describe the role.
  */
 public abstract class Role implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/stacspec/items.Role");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.stacspec.items.Role");
   
   public static final hydra.core.Name FIELD_NAME_THUMBNAIL = new hydra.core.Name("thumbnail");
   

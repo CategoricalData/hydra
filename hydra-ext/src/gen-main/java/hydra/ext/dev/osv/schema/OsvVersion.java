@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A string which follows the SemVer 2.0.0 format, with no leading 'v' prefix
  */
 public class OsvVersion implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/dev/osv/schema.OsvVersion");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.dev.osv.schema.OsvVersion");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   

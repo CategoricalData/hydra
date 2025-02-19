@@ -5,7 +5,7 @@ package hydra.ext.datalog.syntax;
 import java.io.Serializable;
 
 public abstract class TermList implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/datalog/syntax.TermList");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.datalog.syntax.TermList");
   
   public static final hydra.core.Name FIELD_NAME_SINGLE = new hydra.core.Name("single");
   

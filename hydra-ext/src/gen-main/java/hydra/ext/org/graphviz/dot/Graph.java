@@ -5,7 +5,7 @@ package hydra.ext.org.graphviz.dot;
 import java.io.Serializable;
 
 public class Graph implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/graphviz/dot.Graph");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphviz.dot.Graph");
   
   public static final hydra.core.Name FIELD_NAME_STRICT = new hydra.core.Name("strict");
   

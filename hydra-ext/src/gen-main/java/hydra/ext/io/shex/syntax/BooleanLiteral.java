@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public abstract class BooleanLiteral implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.BooleanLiteral");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.BooleanLiteral");
   
   public static final hydra.core.Name FIELD_NAME_TRUE = new hydra.core.Name("true");
   

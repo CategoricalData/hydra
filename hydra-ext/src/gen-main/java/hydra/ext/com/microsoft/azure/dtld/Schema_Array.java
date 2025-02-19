@@ -8,7 +8,7 @@ import java.io.Serializable;
  * An Array describes an indexable data type where each element is of the same schema. An Array elements' schema can itself be a primitive or complex schema.
  */
 public class Schema_Array implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/com/microsoft/azure/dtld.Schema.Array");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.com.microsoft.azure.dtld.Schema_Array");
   
   public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
   

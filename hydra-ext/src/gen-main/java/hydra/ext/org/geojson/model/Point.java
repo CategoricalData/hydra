@@ -8,7 +8,7 @@ import java.io.Serializable;
  * For type "Point", the "coordinates" member is a single position.
  */
 public class Point implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/geojson/model.Point");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.geojson.model.Point");
   
   public static final hydra.core.Name FIELD_NAME_COORDINATES = new hydra.core.Name("coordinates");
   

@@ -5,7 +5,7 @@ package hydra.ext.org.ansi.sql.syntax;
 import java.io.Serializable;
 
 public abstract class ArrayValueConstructor implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/ansi/sql/syntax.ArrayValueConstructor");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.ansi.sql.syntax.ArrayValueConstructor");
   
   public static final hydra.core.Name FIELD_NAME_ENUMERATION = new hydra.core.Name("enumeration");
   

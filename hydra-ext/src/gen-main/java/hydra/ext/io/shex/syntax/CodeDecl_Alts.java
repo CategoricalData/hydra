@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public abstract class CodeDecl_Alts implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.CodeDecl.Alts");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.CodeDecl_Alts");
   
   public static final hydra.core.Name FIELD_NAME_CODE = new hydra.core.Name("code");
   

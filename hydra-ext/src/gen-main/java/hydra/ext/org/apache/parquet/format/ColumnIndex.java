@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Description for ColumnIndex. Each &lt;array-field&gt;[i] refers to the page at OffsetIndex.page_locations[i]
  */
 public class ColumnIndex implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.ColumnIndex");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.ColumnIndex");
   
   public static final hydra.core.Name FIELD_NAME_NULL_PAGES = new hydra.core.Name("nullPages");
   

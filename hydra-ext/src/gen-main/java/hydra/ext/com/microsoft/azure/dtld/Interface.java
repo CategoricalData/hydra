@@ -5,7 +5,7 @@ package hydra.ext.com.microsoft.azure.dtld;
 import java.io.Serializable;
 
 public class Interface implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/com/microsoft/azure/dtld.Interface");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.com.microsoft.azure.dtld.Interface");
   
   public static final hydra.core.Name FIELD_NAME_ID = new hydra.core.Name("id");
   

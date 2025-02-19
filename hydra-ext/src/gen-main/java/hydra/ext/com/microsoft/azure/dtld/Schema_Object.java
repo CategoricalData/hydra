@@ -8,7 +8,7 @@ import java.io.Serializable;
  * An Object describes a data type made up of named fields (like a struct in C). The fields in an Object map can be primitive or complex schemas.
  */
 public class Schema_Object implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/com/microsoft/azure/dtld.Schema.Object");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.com.microsoft.azure.dtld.Schema_Object");
   
   public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
   

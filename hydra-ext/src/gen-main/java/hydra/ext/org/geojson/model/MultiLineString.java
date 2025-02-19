@@ -8,7 +8,7 @@ import java.io.Serializable;
  * For type "MultiLineString", the "coordinates" member is an array of LineString coordinate arrays.
  */
 public class MultiLineString implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/geojson/model.MultiLineString");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.geojson.model.MultiLineString");
   
   public static final hydra.core.Name FIELD_NAME_COORDINATES = new hydra.core.Name("coordinates");
   

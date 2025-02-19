@@ -9,7 +9,7 @@ import java.io.Serializable;
  * For Polygons with more than one of these rings, the first MUST be the exterior ring, and any others MUST be interior rings.  The exterior ring bounds the surface, and the interior rings (if present) bound holes within the surface.
  */
 public class Polygon implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/geojson/model.Polygon");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.geojson.model.Polygon");
   
   public static final hydra.core.Name FIELD_NAME_COORDINATES = new hydra.core.Name("coordinates");
   

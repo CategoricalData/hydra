@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A Feature object represents a spatially bounded thing.  Every Feature object is a GeoJSON object no matter where it occurs in a GeoJSON text.
  */
 public class Feature implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/geojson/model.Feature");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.geojson.model.Feature");
   
   public static final hydra.core.Name FIELD_NAME_GEOMETRY = new hydra.core.Name("geometry");
   

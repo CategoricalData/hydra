@@ -5,7 +5,7 @@ package hydra.ext.org.graphviz.dot;
 import java.io.Serializable;
 
 public class EqualityPair implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/graphviz/dot.EqualityPair");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphviz.dot.EqualityPair");
   
   public static final hydra.core.Name FIELD_NAME_LEFT = new hydra.core.Name("left");
   

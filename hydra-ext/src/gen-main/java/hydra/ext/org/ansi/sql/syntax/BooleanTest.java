@@ -5,7 +5,7 @@ package hydra.ext.org.ansi.sql.syntax;
 import java.io.Serializable;
 
 public class BooleanTest implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/ansi/sql/syntax.BooleanTest");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.ansi.sql.syntax.BooleanTest");
   
   public static final hydra.core.Name FIELD_NAME_BOOLEAN_PRIMARY = new hydra.core.Name("booleanPrimary");
   

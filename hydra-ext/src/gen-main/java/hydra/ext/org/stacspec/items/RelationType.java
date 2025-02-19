@@ -8,7 +8,7 @@ import java.io.Serializable;
  * STAC Items use a variety of rel types in the link object, to describe the exact nature of the link between this Item and the entity it is linking to. It is recommended to use the official IANA Link Relation Types where possible. The following table explains places where STAC use custom rel types are used with Items. This happens where there is not a clear official option, or where STAC uses an official type but adds additional meaning for the STAC context.
  */
 public abstract class RelationType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/stacspec/items.RelationType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.stacspec.items.RelationType");
   
   public static final hydra.core.Name FIELD_NAME_IANA = new hydra.core.Name("iana");
   

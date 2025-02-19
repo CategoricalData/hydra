@@ -8,7 +8,7 @@ import java.io.Serializable;
  * An IANA link relation type
  */
 public abstract class LinkRelationType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/iana/linkrelations.LinkRelationType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.iana.linkrelations.LinkRelationType");
   
   public static final hydra.core.Name FIELD_NAME_ABOUT = new hydra.core.Name("about");
   
@@ -403,9 +403,9 @@ public abstract class LinkRelationType implements Serializable {
     
     R visit(Opener instance) ;
     
-    R visit(Openid2_local_id instance) ;
+    R visit(local_id instance) ;
     
-    R visit(Openid2_provider instance) ;
+    R visit(provider instance) ;
     
     R visit(Original instance) ;
     
@@ -795,11 +795,11 @@ public abstract class LinkRelationType implements Serializable {
       return otherwise((instance));
     }
     
-    default R visit(Openid2_local_id instance) {
+    default R visit(local_id instance) {
       return otherwise((instance));
     }
     
-    default R visit(Openid2_provider instance) {
+    default R visit(provider instance) {
       return otherwise((instance));
     }
     
@@ -3011,17 +3011,17 @@ public abstract class LinkRelationType implements Serializable {
   /**
    * Refers to an OpenID Authentication server on which the context relies for an assertion that the end user controls an Identifier. [OpenID Authentication 2.0 - Final]
    */
-  public static final class Openid2_local_id extends hydra.ext.org.iana.linkrelations.LinkRelationType implements Serializable {
-    public Openid2_local_id () {
+  public static final class local_id extends hydra.ext.org.iana.linkrelations.LinkRelationType implements Serializable {
+    public local_id () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Openid2_local_id)) {
+      if (!(other instanceof local_id)) {
         return false;
       }
-      Openid2_local_id o = (Openid2_local_id) (other);
+      local_id o = (local_id) (other);
       return true;
     }
     
@@ -3039,17 +3039,17 @@ public abstract class LinkRelationType implements Serializable {
   /**
    * Refers to a resource which accepts OpenID Authentication protocol messages for the context. [OpenID Authentication 2.0 - Final]
    */
-  public static final class Openid2_provider extends hydra.ext.org.iana.linkrelations.LinkRelationType implements Serializable {
-    public Openid2_provider () {
+  public static final class provider extends hydra.ext.org.iana.linkrelations.LinkRelationType implements Serializable {
+    public provider () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Openid2_provider)) {
+      if (!(other instanceof provider)) {
         return false;
       }
-      Openid2_provider o = (Openid2_provider) (other);
+      provider o = (provider) (other);
       return true;
     }
     

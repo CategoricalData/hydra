@@ -8,7 +8,7 @@ import java.io.Serializable;
  * In the context of a function definition, these forms specify that name is an implicit argument.
  */
 public abstract class ImplicitBinders implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/fr/inria/coq/syntax.ImplicitBinders");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.fr.inria.coq.syntax.ImplicitBinders");
   
   public static final hydra.core.Name FIELD_NAME_MAXIMALLY_INSERTED = new hydra.core.Name("maximallyInserted");
   

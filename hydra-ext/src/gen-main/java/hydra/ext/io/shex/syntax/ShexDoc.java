@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public class ShexDoc implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.ShexDoc");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.ShexDoc");
   
   public static final hydra.core.Name FIELD_NAME_LIST_OF_DIRECTIVE = new hydra.core.Name("listOfDirective");
   

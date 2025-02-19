@@ -5,7 +5,7 @@ package hydra.ext.org.apache.parquet.format;
 import java.io.Serializable;
 
 public abstract class TimeUnit implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.TimeUnit");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.TimeUnit");
   
   public static final hydra.core.Name FIELD_NAME_MILLIS = new hydra.core.Name("millis");
   

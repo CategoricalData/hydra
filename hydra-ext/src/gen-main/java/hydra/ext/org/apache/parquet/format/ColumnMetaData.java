@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Description for column metadata
  */
 public class ColumnMetaData implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.ColumnMetaData");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.ColumnMetaData");
   
   public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
   

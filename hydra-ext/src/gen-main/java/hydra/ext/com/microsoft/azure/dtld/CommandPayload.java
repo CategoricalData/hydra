@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A CommandPayload describes the inputs to or the outputs from a Command.
  */
 public class CommandPayload implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/com/microsoft/azure/dtld.CommandPayload");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.com.microsoft.azure.dtld.CommandPayload");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   

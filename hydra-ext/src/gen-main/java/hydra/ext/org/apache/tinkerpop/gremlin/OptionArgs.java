@@ -5,7 +5,7 @@ package hydra.ext.org.apache.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public abstract class OptionArgs implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/tinkerpop/gremlin.OptionArgs");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.OptionArgs");
   
   public static final hydra.core.Name FIELD_NAME_PREDICATE_TRAVERSAL = new hydra.core.Name("predicateTraversal");
   

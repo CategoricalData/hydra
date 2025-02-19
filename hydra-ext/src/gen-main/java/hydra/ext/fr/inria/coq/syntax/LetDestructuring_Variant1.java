@@ -5,7 +5,7 @@ package hydra.ext.fr.inria.coq.syntax;
 import java.io.Serializable;
 
 public class LetDestructuring_Variant1 implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/fr/inria/coq/syntax.LetDestructuring.Variant1");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.fr.inria.coq.syntax.LetDestructuring_Variant1");
   
   public static final hydra.core.Name FIELD_NAME_NAMES = new hydra.core.Name("names");
   

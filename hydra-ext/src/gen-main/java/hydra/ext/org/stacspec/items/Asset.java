@@ -8,7 +8,7 @@ import java.io.Serializable;
  * An Asset is an object that contains a URI to data associated with the Item that can be downloaded or streamed. It is allowed to add additional fields.
  */
 public class Asset implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/stacspec/items.Asset");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.stacspec.items.Asset");
   
   public static final hydra.core.Name FIELD_NAME_HREF = new hydra.core.Name("href");
   

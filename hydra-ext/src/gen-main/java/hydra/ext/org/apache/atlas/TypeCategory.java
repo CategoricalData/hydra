@@ -5,7 +5,7 @@ package hydra.ext.org.apache.atlas;
 import java.io.Serializable;
 
 public abstract class TypeCategory implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/atlas.TypeCategory");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.atlas.TypeCategory");
   
   public static final hydra.core.Name FIELD_NAME_PRIMITIVE = new hydra.core.Name("primitive");
   

@@ -5,7 +5,7 @@ package hydra.ext.dev.osv.schema;
 import java.io.Serializable;
 
 public class Credited implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/dev/osv/schema.Credited");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.dev.osv.schema.Credited");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   

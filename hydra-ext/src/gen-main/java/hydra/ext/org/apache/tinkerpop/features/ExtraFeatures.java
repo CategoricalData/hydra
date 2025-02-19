@@ -6,7 +6,7 @@ package hydra.ext.org.apache.tinkerpop.features;
  * Additional features which are needed for the complete specification of language constraints in Hydra, above and beyond TinkerPop Graph.Features
  */
 public class ExtraFeatures<A> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/tinkerpop/features.ExtraFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.ExtraFeatures");
   
   public static final hydra.core.Name FIELD_NAME_SUPPORTS_MAP_KEY = new hydra.core.Name("supportsMapKey");
   

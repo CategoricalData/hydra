@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A base interface for Edge or Vertex Property features.
  */
 public class PropertyFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/tinkerpop/features.PropertyFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.PropertyFeatures");
   
   public static final hydra.core.Name FIELD_NAME_DATA_TYPE_FEATURES = new hydra.core.Name("dataTypeFeatures");
   

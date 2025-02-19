@@ -32,7 +32,7 @@ data AtlasAttributeDef =
     atlasAttributeDefDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_AtlasAttributeDef = (Core.Name "hydra/ext/org/apache/atlas.AtlasAttributeDef")
+_AtlasAttributeDef = (Core.Name "hydra.ext.org.apache.atlas.AtlasAttributeDef")
 
 _AtlasAttributeDef_name = (Core.Name "name")
 
@@ -72,7 +72,7 @@ data AtlasAttributeDef_Cardinality =
   AtlasAttributeDef_CardinalitySet 
   deriving (Eq, Ord, Read, Show)
 
-_AtlasAttributeDef_Cardinality = (Core.Name "hydra/ext/org/apache/atlas.AtlasAttributeDef_Cardinality")
+_AtlasAttributeDef_Cardinality = (Core.Name "hydra.ext.org.apache.atlas.AtlasAttributeDef_Cardinality")
 
 _AtlasAttributeDef_Cardinality_single = (Core.Name "single")
 
@@ -85,7 +85,7 @@ data AtlasAttributeDef_IndexType =
   AtlasAttributeDef_IndexTypeString 
   deriving (Eq, Ord, Read, Show)
 
-_AtlasAttributeDef_IndexType = (Core.Name "hydra/ext/org/apache/atlas.AtlasAttributeDef_IndexType")
+_AtlasAttributeDef_IndexType = (Core.Name "hydra.ext.org.apache.atlas.AtlasAttributeDef_IndexType")
 
 _AtlasAttributeDef_IndexType_default = (Core.Name "default")
 
@@ -108,7 +108,7 @@ data AtlasBaseTypeDef =
     atlasBaseTypeDefOptions :: (Map String String)}
   deriving (Eq, Ord, Read, Show)
 
-_AtlasBaseTypeDef = (Core.Name "hydra/ext/org/apache/atlas.AtlasBaseTypeDef")
+_AtlasBaseTypeDef = (Core.Name "hydra.ext.org.apache.atlas.AtlasBaseTypeDef")
 
 _AtlasBaseTypeDef_category = (Core.Name "category")
 
@@ -141,7 +141,7 @@ data AtlasConstraintDef =
     atlasConstraintDefParams :: (Map String String)}
   deriving (Eq, Ord, Read, Show)
 
-_AtlasConstraintDef = (Core.Name "hydra/ext/org/apache/atlas.AtlasConstraintDef")
+_AtlasConstraintDef = (Core.Name "hydra.ext.org.apache.atlas.AtlasConstraintDef")
 
 _AtlasConstraintDef_type = (Core.Name "type")
 
@@ -160,7 +160,7 @@ data AtlasEntityDef =
     atlasEntityDefBusinessAttributeDefs :: (Map String [AtlasAttributeDef])}
   deriving (Eq, Ord, Read, Show)
 
-_AtlasEntityDef = (Core.Name "hydra/ext/org/apache/atlas.AtlasEntityDef")
+_AtlasEntityDef = (Core.Name "hydra.ext.org.apache.atlas.AtlasEntityDef")
 
 _AtlasEntityDef_asAtlasStructDef = (Core.Name "asAtlasStructDef")
 
@@ -180,7 +180,7 @@ data AtlasRelationshipAttributeDef =
     atlasRelationshipAttributeDefIsLegacyAttribute :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_AtlasRelationshipAttributeDef = (Core.Name "hydra/ext/org/apache/atlas.AtlasRelationshipAttributeDef")
+_AtlasRelationshipAttributeDef = (Core.Name "hydra.ext.org.apache.atlas.AtlasRelationshipAttributeDef")
 
 _AtlasRelationshipAttributeDef_asAtlasAttributeDef = (Core.Name "asAtlasAttributeDef")
 
@@ -195,7 +195,7 @@ data AtlasStructDef =
     atlasStructDefAttributeDefs :: [AtlasAttributeDef]}
   deriving (Eq, Ord, Read, Show)
 
-_AtlasStructDef = (Core.Name "hydra/ext/org/apache/atlas.AtlasStructDef")
+_AtlasStructDef = (Core.Name "hydra.ext.org.apache.atlas.AtlasStructDef")
 
 _AtlasStructDef_asAtlasBaseTypeDef = (Core.Name "asAtlasBaseTypeDef")
 
@@ -214,7 +214,7 @@ data TypeCategory =
   TypeCategoryBusinessMetadata 
   deriving (Eq, Ord, Read, Show)
 
-_TypeCategory = (Core.Name "hydra/ext/org/apache/atlas.TypeCategory")
+_TypeCategory = (Core.Name "hydra.ext.org.apache.atlas.TypeCategory")
 
 _TypeCategory_primitive = (Core.Name "primitive")
 

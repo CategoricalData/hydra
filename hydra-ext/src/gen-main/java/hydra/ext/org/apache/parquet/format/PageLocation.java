@@ -5,7 +5,7 @@ package hydra.ext.org.apache.parquet.format;
 import java.io.Serializable;
 
 public class PageLocation implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.PageLocation");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.PageLocation");
   
   public static final hydra.core.Name FIELD_NAME_OFFSET = new hydra.core.Name("offset");
   
