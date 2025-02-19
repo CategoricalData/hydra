@@ -193,7 +193,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 --     | match_stmt
 
       def "CompoundStatement" $ union [
-        "functionDef">: python "FunctionDefinition",
+        "function">: python "FunctionDefinition",
         "if">: python "IfStatement",
         "classDef">: python "ClassDefinition",
         "with">: python "WithStatement",
@@ -422,7 +422,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
         "async">: boolean,
         "name">: python "Name",
         "typeParams">: list $ python "TypeParameter",
-        "params">: optional $ python "Params",
+        "params">: optional $ python "Parameters",
         "returnType">: optional $ python "Expression",
         "funcTypeComment">: optional $ python "FuncTypeComment",
         "block">: python "Block"],
@@ -432,9 +432,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 --
 -- params:
 --     | parameters
-
-      def "Params" $ python "Parameters",
-
+--
 -- parameters:
 --     | slash_no_default param_no_default* param_with_default* [star_etc]
 --     | slash_with_default param_with_default* [star_etc]

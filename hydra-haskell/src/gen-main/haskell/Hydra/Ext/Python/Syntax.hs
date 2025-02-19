@@ -173,7 +173,7 @@ _SimpleStatement_global = (Core.Name "global")
 _SimpleStatement_nonlocal = (Core.Name "nonlocal")
 
 data CompoundStatement = 
-  CompoundStatementFunctionDef FunctionDefinition |
+  CompoundStatementFunction FunctionDefinition |
   CompoundStatementIf IfStatement |
   CompoundStatementClassDef ClassDefinition |
   CompoundStatementWith WithStatement |
@@ -185,7 +185,7 @@ data CompoundStatement =
 
 _CompoundStatement = (Core.Name "hydra/ext/python/syntax.CompoundStatement")
 
-_CompoundStatement_functionDef = (Core.Name "functionDef")
+_CompoundStatement_function = (Core.Name "function")
 
 _CompoundStatement_if = (Core.Name "if")
 
@@ -512,7 +512,7 @@ data FunctionDefRaw =
     functionDefRawAsync :: Bool,
     functionDefRawName :: Name,
     functionDefRawTypeParams :: [TypeParameter],
-    functionDefRawParams :: (Maybe Params),
+    functionDefRawParams :: (Maybe Parameters),
     functionDefRawReturnType :: (Maybe Expression),
     functionDefRawFuncTypeComment :: (Maybe FuncTypeComment),
     functionDefRawBlock :: Block}
@@ -533,13 +533,6 @@ _FunctionDefRaw_returnType = (Core.Name "returnType")
 _FunctionDefRaw_funcTypeComment = (Core.Name "funcTypeComment")
 
 _FunctionDefRaw_block = (Core.Name "block")
-
-newtype Params = 
-  Params {
-    unParams :: Parameters}
-  deriving (Eq, Ord, Read, Show)
-
-_Params = (Core.Name "hydra/ext/python/syntax.Params")
 
 data Parameters = 
   ParametersSlashNoDefault SlashNoDefaultParameters |
