@@ -126,7 +126,7 @@ import java.util.List;
 import hydra.util.Opt;
 
 /**
- * A parser which constructs Cypher queries using the hydra/ext/cypher/openCypher model.
+ * A parser which constructs Cypher queries using the hydra.ext.cypher.openCypher model.
  * <p>
  * Notes/limitations:
  * * Many syntax features are not yet implemented; the parser will throw an exception when it encounters them.
