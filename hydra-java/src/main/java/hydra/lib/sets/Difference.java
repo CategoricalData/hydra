@@ -21,7 +21,7 @@ import static hydra.dsl.Types.set;
 
 public class Difference extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/sets.difference");
+        return new Name("hydra.lib.sets.difference");
     }
 
     @Override

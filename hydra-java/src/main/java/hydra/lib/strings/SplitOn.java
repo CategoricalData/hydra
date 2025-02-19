@@ -23,7 +23,7 @@ import static hydra.dsl.Types.string;
 
 public class SplitOn extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/strings.splitOn");
+        return new Name("hydra.lib.strings.splitOn");
     }
 
     @Override

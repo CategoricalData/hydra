@@ -21,7 +21,7 @@ import static hydra.dsl.Types.scheme;
 
 public class IsEmpty extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/maps.isEmpty");
+        return new Name("hydra.lib.maps.isEmpty");
     }
 
     @Override

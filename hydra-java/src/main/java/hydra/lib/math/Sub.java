@@ -20,7 +20,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Sub extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/math.sub");
+        return new Name("hydra.lib.math.sub");
     }
 
     @Override

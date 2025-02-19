@@ -19,7 +19,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Mod extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/math.mod");
+        return new Name("hydra.lib.math.mod");
     }
 
     @Override

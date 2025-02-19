@@ -21,7 +21,7 @@ import static hydra.dsl.Types.string;
 
 public class Length extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/strings.length");
+        return new Name("hydra.lib.strings.length");
     }
 
     @Override

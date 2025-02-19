@@ -20,7 +20,7 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 
 public class Reverse extends PrimitiveFunction {
-    public static final Name NAME = new Name("hydra/lib/lists.reverse");
+    public static final Name NAME = new Name("hydra.lib.lists.reverse");
 
     public Name name() {
         return NAME;

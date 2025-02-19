@@ -21,7 +21,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Remove extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/maps.remove");
+        return new Name("hydra.lib.maps.remove");
     }
 
     @Override

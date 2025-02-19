@@ -24,7 +24,7 @@ import static hydra.dsl.Terms.variable;
 
 public class Map extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/flows.map");
+        return new Name("hydra.lib.flows.map");
     }
 
     @Override

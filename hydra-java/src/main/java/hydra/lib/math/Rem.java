@@ -23,7 +23,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Rem extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/math.rem");
+        return new Name("hydra.lib.math.rem");
     }
 
     @Override

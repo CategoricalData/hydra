@@ -20,7 +20,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Neg extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/math.neg");
+        return new Name("hydra.lib.math.neg");
     }
 
     @Override

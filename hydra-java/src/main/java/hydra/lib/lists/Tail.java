@@ -20,7 +20,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Tail extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/lists.tail");
+        return new Name("hydra.lib.lists.tail");
     }
 
     @Override

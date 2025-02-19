@@ -21,7 +21,7 @@ import static hydra.dsl.Types.variable;
 
 public class Foldl extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/lists.foldl");
+        return new Name("hydra.lib.lists.foldl");
     }
 
     @Override

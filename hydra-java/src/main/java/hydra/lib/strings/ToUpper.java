@@ -20,7 +20,7 @@ import static hydra.dsl.Types.string;
 
 public class ToUpper extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/strings.toUpper");
+        return new Name("hydra.lib.strings.toUpper");
     }
 
     @Override

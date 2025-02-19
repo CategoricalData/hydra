@@ -22,7 +22,7 @@ import static hydra.dsl.Types.set;
 
 public class Insert extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/sets.insert");
+        return new Name("hydra.lib.sets.insert");
     }
 
     @Override

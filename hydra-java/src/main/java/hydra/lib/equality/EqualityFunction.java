@@ -52,7 +52,7 @@ public abstract class EqualityFunction<T> extends PrimitiveFunction {
                              Function<Term, Flow<Graph, T>> expect,
                              Comparator<T> comparator,
                              Relation relation) {
-        this.name = new Name("hydra/lib/equality." + relation.prefix + capitalize(typeName));
+        this.name = new Name("hydra.lib.equality." + relation.prefix + capitalize(typeName));
         this.type = scheme(function(datatype, datatype, boolean_()));
         this.expect = expect;
         switch (relation) {

@@ -20,7 +20,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Mul extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/math.mul");
+        return new Name("hydra.lib.math.mul");
     }
 
     @Override

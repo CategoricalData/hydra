@@ -21,7 +21,7 @@ import static hydra.dsl.Types.string;
 
 public class FromList extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/strings.fromList");
+        return new Name("hydra.lib.strings.fromList");
     }
 
     @Override

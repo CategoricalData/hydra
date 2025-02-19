@@ -19,7 +19,7 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 
 public class Cons extends PrimitiveFunction {
-    public static final Name NAME = new Name("hydra/lib/lists.cons");
+    public static final Name NAME = new Name("hydra.lib.lists.cons");
 
     public Name name() {
         return NAME;

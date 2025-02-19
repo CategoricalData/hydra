@@ -16,7 +16,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Identity extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/equality.identity");
+        return new Name("hydra.lib.equality.identity");
     }
 
     @Override

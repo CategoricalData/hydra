@@ -21,7 +21,7 @@ import static hydra.dsl.Types.set;
 
 public class Intersection extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/sets.intersection");
+        return new Name("hydra.lib.sets.intersection");
     }
 
     @Override

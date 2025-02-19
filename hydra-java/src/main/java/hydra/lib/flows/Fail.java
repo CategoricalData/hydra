@@ -25,7 +25,7 @@ import static hydra.dsl.Terms.variable;
 
 public class Fail extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/flows.fail");
+        return new Name("hydra.lib.flows.fail");
     }
 
     @Override

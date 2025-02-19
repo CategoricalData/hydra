@@ -22,7 +22,7 @@ import static hydra.dsl.Types.set;
 
 public class Map extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/sets.map");
+        return new Name("hydra.lib.sets.map");
     }
 
     @Override

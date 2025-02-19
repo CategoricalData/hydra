@@ -20,7 +20,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Length extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/lists.length");
+        return new Name("hydra.lib.lists.length");
     }
 
     @Override

@@ -25,7 +25,7 @@ import static hydra.dsl.Types.variable;
 
 public class FromList extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/maps.fromList");
+        return new Name("hydra.lib.maps.fromList");
     }
 
     @Override

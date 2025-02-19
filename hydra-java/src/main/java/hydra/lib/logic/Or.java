@@ -20,7 +20,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Or extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/logic.or");
+        return new Name("hydra.lib.logic.or");
     }
 
     @Override

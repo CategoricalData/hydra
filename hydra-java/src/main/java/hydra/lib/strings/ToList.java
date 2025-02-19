@@ -22,7 +22,7 @@ import static hydra.dsl.Types.string;
 
 public class ToList extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/strings.toList");
+        return new Name("hydra.lib.strings.toList");
     }
 
     @Override

@@ -20,7 +20,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Intersperse extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/lists.intersperse");
+        return new Name("hydra.lib.lists.intersperse");
     }
 
     @Override

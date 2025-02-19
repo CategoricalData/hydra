@@ -20,7 +20,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Pure extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/optionals.pure");
+        return new Name("hydra.lib.optionals.pure");
     }
 
     @Override

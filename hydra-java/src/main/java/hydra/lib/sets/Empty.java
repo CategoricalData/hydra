@@ -20,7 +20,7 @@ import static hydra.dsl.Types.set;
 
 public class Empty extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/sets.empty");
+        return new Name("hydra.lib.sets.empty");
     }
 
     @Override

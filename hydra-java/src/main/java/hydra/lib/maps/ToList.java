@@ -26,7 +26,7 @@ import static hydra.dsl.Types.variable;
 
 public class ToList extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/maps.toList");
+        return new Name("hydra.lib.maps.toList");
     }
 
     @Override

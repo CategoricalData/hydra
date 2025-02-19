@@ -19,7 +19,7 @@ import static hydra.dsl.Types.scheme;
 
 public class Last extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra/lib/lists.last");
+        return new Name("hydra.lib.lists.last");
     }
 
     @Override
