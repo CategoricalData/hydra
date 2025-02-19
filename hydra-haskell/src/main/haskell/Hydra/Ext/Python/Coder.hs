@@ -60,6 +60,9 @@ encodeApplication env (Application fun arg) = case fullyStripTerm fun of
         parg <- encodeTerm env arg
         return $ functionCall (pyNameToPyPrimary $ encodeNameQualified env name) [parg]
       _ -> def
+    TermVariable name -> do -- Special-casing variables prevents quoting; forward references are allowed for function calls
+      parg <- encodeTerm env arg
+      return $ functionCall (pyNameToPyPrimary $ encodeNameQualified env name) [parg]
     _ -> def
   where
     def = do
@@ -544,11 +547,12 @@ sanitizePythonName :: String -> String
 sanitizePythonName = sanitizeWithUnderscores pythonReservedWords
 
 variableReference :: Bool -> PythonEnvironment -> Name -> Py.Expression
-variableReference quoted env name = if quoted
-  then doubleQuotedString $ Py.unName pyName
-  else pyNameToPyExpression pyName
+variableReference quoted env name = if quoted && Y.isJust (namespaceOf name)
+    then doubleQuotedString $ Py.unName pyName
+    else unquoted
   where
     pyName = encodeNameQualified env name
+    unquoted = pyNameToPyExpression pyName
 
 variantArgs :: Py.Expression -> [Name] -> Py.Args
 variantArgs ptype tparams = pyExpressionsToPyArgs $ Y.catMaybes [
