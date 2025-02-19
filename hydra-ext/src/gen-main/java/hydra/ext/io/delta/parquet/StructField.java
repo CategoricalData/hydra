@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Represents a subfield of StructType with additional properties and metadata.
  */
 public class StructField implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/delta/parquet.StructField");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.delta.parquet.StructField");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   

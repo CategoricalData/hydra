@@ -25,7 +25,7 @@ data Asset =
     assetRoles :: [Role]}
   deriving (Eq, Ord, Read, Show)
 
-_Asset = (Core.Name "hydra/ext/org/stacspec/items.Asset")
+_Asset = (Core.Name "hydra.ext.org.stacspec.items.Asset")
 
 _Asset_href = (Core.Name "href")
 
@@ -53,7 +53,7 @@ data Item =
     itemCollection :: (Maybe Model.Id)}
   deriving (Eq, Ord, Read, Show)
 
-_Item = (Core.Name "hydra/ext/org/stacspec/items.Item")
+_Item = (Core.Name "hydra.ext.org.stacspec.items.Item")
 
 _Item_feature = (Core.Name "feature")
 
@@ -80,7 +80,7 @@ data Link =
     linkTitle :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Link = (Core.Name "hydra/ext/org/stacspec/items.Link")
+_Link = (Core.Name "hydra.ext.org.stacspec.items.Link")
 
 _Link_href = (Core.Name "href")
 
@@ -95,7 +95,7 @@ newtype MediaType =
     unMediaType :: String}
   deriving (Eq, Ord, Read, Show)
 
-_MediaType = (Core.Name "hydra/ext/org/stacspec/items.MediaType")
+_MediaType = (Core.Name "hydra.ext.org.stacspec.items.MediaType")
 
 -- | STAC Items use a variety of rel types in the link object, to describe the exact nature of the link between this Item and the entity it is linking to. It is recommended to use the official IANA Link Relation Types where possible. The following table explains places where STAC use custom rel types are used with Items. This happens where there is not a clear official option, or where STAC uses an official type but adds additional meaning for the STAC context.
 data RelationType = 
@@ -104,7 +104,7 @@ data RelationType =
   RelationTypeOther String
   deriving (Eq, Ord, Read, Show)
 
-_RelationType = (Core.Name "hydra/ext/org/stacspec/items.RelationType")
+_RelationType = (Core.Name "hydra.ext.org.stacspec.items.RelationType")
 
 _RelationType_iana = (Core.Name "iana")
 
@@ -125,7 +125,7 @@ data Role =
   RoleOther String
   deriving (Eq, Ord, Read, Show)
 
-_Role = (Core.Name "hydra/ext/org/stacspec/items.Role")
+_Role = (Core.Name "hydra.ext.org.stacspec.items.Role")
 
 _Role_thumbnail = (Core.Name "thumbnail")
 
@@ -150,7 +150,7 @@ data StacRelationType =
   StacRelationTypeDerivedFrom 
   deriving (Eq, Ord, Read, Show)
 
-_StacRelationType = (Core.Name "hydra/ext/org/stacspec/items.StacRelationType")
+_StacRelationType = (Core.Name "hydra.ext.org.stacspec.items.StacRelationType")
 
 _StacRelationType_self = (Core.Name "self")
 
@@ -167,18 +167,18 @@ newtype StacVersion =
     unStacVersion :: String}
   deriving (Eq, Ord, Read, Show)
 
-_StacVersion = (Core.Name "hydra/ext/org/stacspec/items.StacVersion")
+_StacVersion = (Core.Name "hydra.ext.org.stacspec.items.StacVersion")
 
 newtype Uri = 
   Uri {
     unUri :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Uri = (Core.Name "hydra/ext/org/stacspec/items.Uri")
+_Uri = (Core.Name "hydra.ext.org.stacspec.items.Uri")
 
 newtype Url = 
   Url {
     unUrl :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Url = (Core.Name "hydra/ext/org/stacspec/items.Url")
+_Url = (Core.Name "hydra.ext.org.stacspec.items.Url")

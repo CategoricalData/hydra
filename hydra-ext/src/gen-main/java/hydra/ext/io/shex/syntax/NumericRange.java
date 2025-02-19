@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public abstract class NumericRange implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.NumericRange");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.NumericRange");
   
   public static final hydra.core.Name FIELD_NAME_M_I_N_I_N_C_L_U_S_I_V_E = new hydra.core.Name("mININCLUSIVE");
   

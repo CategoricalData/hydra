@@ -13,7 +13,7 @@ newtype QueryList =
     unQueryList :: [Query]}
   deriving (Eq, Ord, Read, Show)
 
-_QueryList = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.QueryList")
+_QueryList = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.QueryList")
 
 data Query = 
   QueryTraversalSource TraversalSourceQuery |
@@ -22,7 +22,7 @@ data Query =
   QueryEmpty 
   deriving (Eq, Ord, Read, Show)
 
-_Query = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.Query")
+_Query = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.Query")
 
 _Query_traversalSource = (Core.Name "traversalSource")
 
@@ -38,7 +38,7 @@ data TraversalSourceQuery =
     traversalSourceQueryTransactionPart :: (Maybe TransactionPart)}
   deriving (Eq, Ord, Read, Show)
 
-_TraversalSourceQuery = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalSourceQuery")
+_TraversalSourceQuery = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceQuery")
 
 _TraversalSourceQuery_source = (Core.Name "source")
 
@@ -50,7 +50,7 @@ data RootTraversalQuery =
     rootTraversalQueryTerminalMethod :: (Maybe TraversalTerminalMethod)}
   deriving (Eq, Ord, Read, Show)
 
-_RootTraversalQuery = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.RootTraversalQuery")
+_RootTraversalQuery = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.RootTraversalQuery")
 
 _RootTraversalQuery_root = (Core.Name "root")
 
@@ -61,7 +61,7 @@ newtype TraversalSource =
     unTraversalSource :: [TraversalSourceSelfMethod]}
   deriving (Eq, Ord, Read, Show)
 
-_TraversalSource = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalSource")
+_TraversalSource = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalSource")
 
 data TransactionPart = 
   TransactionPartBegin  |
@@ -69,7 +69,7 @@ data TransactionPart =
   TransactionPartRollback 
   deriving (Eq, Ord, Read, Show)
 
-_TransactionPart = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TransactionPart")
+_TransactionPart = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TransactionPart")
 
 _TransactionPart_begin = (Core.Name "begin")
 
@@ -84,7 +84,7 @@ data RootTraversal =
     rootTraversalChained :: [ChainedTraversalElement]}
   deriving (Eq, Ord, Read, Show)
 
-_RootTraversal = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.RootTraversal")
+_RootTraversal = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.RootTraversal")
 
 _RootTraversal_source = (Core.Name "source")
 
@@ -102,7 +102,7 @@ data TraversalSourceSelfMethod =
   TraversalSourceSelfMethodWith StringArgumentAndOptionalGenericLiteralArgument
   deriving (Eq, Ord, Read, Show)
 
-_TraversalSourceSelfMethod = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalSourceSelfMethod")
+_TraversalSourceSelfMethod = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSelfMethod")
 
 _TraversalSourceSelfMethod_withBulk = (Core.Name "withBulk")
 
@@ -124,7 +124,7 @@ data GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument =
     genericLiteralArgumentAndOptionalTraversalBiFunctionArgumentBiFunction :: (Maybe TraversalBiFunctionArgument)}
   deriving (Eq, Ord, Read, Show)
 
-_GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument")
+_GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument")
 
 _GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument_literal = (Core.Name "literal")
 
@@ -136,7 +136,7 @@ data StringArgumentAndGenericLiteralArgument =
     stringArgumentAndGenericLiteralArgumentLiteral :: GenericLiteralArgument}
   deriving (Eq, Ord, Read, Show)
 
-_StringArgumentAndGenericLiteralArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.StringArgumentAndGenericLiteralArgument")
+_StringArgumentAndGenericLiteralArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.StringArgumentAndGenericLiteralArgument")
 
 _StringArgumentAndGenericLiteralArgument_string = (Core.Name "string")
 
@@ -148,7 +148,7 @@ data StringArgumentAndOptionalGenericLiteralArgument =
     stringArgumentAndOptionalGenericLiteralArgumentLiteral :: (Maybe GenericLiteralArgument)}
   deriving (Eq, Ord, Read, Show)
 
-_StringArgumentAndOptionalGenericLiteralArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.StringArgumentAndOptionalGenericLiteralArgument")
+_StringArgumentAndOptionalGenericLiteralArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.StringArgumentAndOptionalGenericLiteralArgument")
 
 _StringArgumentAndOptionalGenericLiteralArgument_string = (Core.Name "string")
 
@@ -167,7 +167,7 @@ data TraversalSourceSpawnMethod =
   TraversalSourceSpawnMethodUnion [NestedTraversal]
   deriving (Eq, Ord, Read, Show)
 
-_TraversalSourceSpawnMethod = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalSourceSpawnMethod")
+_TraversalSourceSpawnMethod = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSpawnMethod")
 
 _TraversalSourceSpawnMethod_addE = (Core.Name "addE")
 
@@ -194,7 +194,7 @@ data GenericLiteralMapNullableArgumentOrNestedTraversal =
   GenericLiteralMapNullableArgumentOrNestedTraversalTraversal NestedTraversal
   deriving (Eq, Ord, Read, Show)
 
-_GenericLiteralMapNullableArgumentOrNestedTraversal = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal")
+_GenericLiteralMapNullableArgumentOrNestedTraversal = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal")
 
 _GenericLiteralMapNullableArgumentOrNestedTraversal_map = (Core.Name "map")
 
@@ -206,7 +206,7 @@ data ServiceCall =
     serviceCallArguments :: ServiceArguments}
   deriving (Eq, Ord, Read, Show)
 
-_ServiceCall = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.ServiceCall")
+_ServiceCall = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.ServiceCall")
 
 _ServiceCall_service = (Core.Name "service")
 
@@ -217,7 +217,7 @@ data ServiceArguments =
   ServiceArgumentsTraversal (Maybe NestedTraversal)
   deriving (Eq, Ord, Read, Show)
 
-_ServiceArguments = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.ServiceArguments")
+_ServiceArguments = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.ServiceArguments")
 
 _ServiceArguments_map = (Core.Name "map")
 
@@ -229,7 +229,7 @@ data ChainedTraversal =
     chainedTraversalRest :: ChainedTraversalElement}
   deriving (Eq, Ord, Read, Show)
 
-_ChainedTraversal = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.ChainedTraversal")
+_ChainedTraversal = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.ChainedTraversal")
 
 _ChainedTraversal_first = (Core.Name "first")
 
@@ -240,7 +240,7 @@ data ChainedTraversalElement =
   ChainedTraversalElementSelf TraversalSelfMethod
   deriving (Eq, Ord, Read, Show)
 
-_ChainedTraversalElement = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.ChainedTraversalElement")
+_ChainedTraversalElement = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.ChainedTraversalElement")
 
 _ChainedTraversalElement_method = (Core.Name "method")
 
@@ -252,7 +252,7 @@ data NestedTraversal =
   NestedTraversalAnonymous ChainedTraversal
   deriving (Eq, Ord, Read, Show)
 
-_NestedTraversal = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.NestedTraversal")
+_NestedTraversal = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal")
 
 _NestedTraversal_root = (Core.Name "root")
 
@@ -266,7 +266,7 @@ data TerminatedTraversal =
     terminatedTraversalTerminal :: TraversalTerminalMethod}
   deriving (Eq, Ord, Read, Show)
 
-_TerminatedTraversal = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TerminatedTraversal")
+_TerminatedTraversal = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TerminatedTraversal")
 
 _TerminatedTraversal_root = (Core.Name "root")
 
@@ -407,7 +407,7 @@ data TraversalMethod =
   TraversalMethodDateDiff DateDiffArgs
   deriving (Eq, Ord, Read, Show)
 
-_TraversalMethod = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalMethod")
+_TraversalMethod = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod")
 
 _TraversalMethod_v = (Core.Name "v")
 
@@ -678,7 +678,7 @@ data StringArgumentOrNestedTraversal =
   StringArgumentOrNestedTraversalTraversal NestedTraversal
   deriving (Eq, Ord, Read, Show)
 
-_StringArgumentOrNestedTraversal = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.StringArgumentOrNestedTraversal")
+_StringArgumentOrNestedTraversal = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.StringArgumentOrNestedTraversal")
 
 _StringArgumentOrNestedTraversal_string = (Core.Name "string")
 
@@ -690,7 +690,7 @@ data OptionalTraversalScopeArgumentAndStringArgument =
     optionalTraversalScopeArgumentAndStringArgumentString :: StringArgument}
   deriving (Eq, Ord, Read, Show)
 
-_OptionalTraversalScopeArgumentAndStringArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.OptionalTraversalScopeArgumentAndStringArgument")
+_OptionalTraversalScopeArgumentAndStringArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndStringArgument")
 
 _OptionalTraversalScopeArgumentAndStringArgument_scope = (Core.Name "scope")
 
@@ -702,7 +702,7 @@ data StringArgumentAndOptionalStringLiteralVarargs =
     stringArgumentAndOptionalStringLiteralVarargsRest :: [StringNullableArgument]}
   deriving (Eq, Ord, Read, Show)
 
-_StringArgumentAndOptionalStringLiteralVarargs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.StringArgumentAndOptionalStringLiteralVarargs")
+_StringArgumentAndOptionalStringLiteralVarargs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.StringArgumentAndOptionalStringLiteralVarargs")
 
 _StringArgumentAndOptionalStringLiteralVarargs_first = (Core.Name "first")
 
@@ -713,7 +713,7 @@ data TraversalSackMethodArgumentOrIntegerArgument =
   TraversalSackMethodArgumentOrIntegerArgumentInt IntegerArgument
   deriving (Eq, Ord, Read, Show)
 
-_TraversalSackMethodArgumentOrIntegerArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalSackMethodArgumentOrIntegerArgument")
+_TraversalSackMethodArgumentOrIntegerArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalSackMethodArgumentOrIntegerArgument")
 
 _TraversalSackMethodArgumentOrIntegerArgument_consumer = (Core.Name "consumer")
 
@@ -725,7 +725,7 @@ data ByArgs =
   ByArgsOther ByOtherArgs
   deriving (Eq, Ord, Read, Show)
 
-_ByArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.ByArgs")
+_ByArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.ByArgs")
 
 _ByArgs_order = (Core.Name "order")
 
@@ -738,7 +738,7 @@ data ByOtherArgs =
   ByOtherArgsOther (Maybe TraversalFunctionArgumentOrStringArgumentOrNestedTraversal)
   deriving (Eq, Ord, Read, Show)
 
-_ByOtherArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.ByOtherArgs")
+_ByOtherArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.ByOtherArgs")
 
 _ByOtherArgs_comparator = (Core.Name "comparator")
 
@@ -750,7 +750,7 @@ data TraversalFunctionArgumentOrStringArgumentOrNestedTraversal =
   TraversalFunctionArgumentOrStringArgumentOrNestedTraversalTraversal NestedTraversal
   deriving (Eq, Ord, Read, Show)
 
-_TraversalFunctionArgumentOrStringArgumentOrNestedTraversal = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal")
+_TraversalFunctionArgumentOrStringArgumentOrNestedTraversal = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal")
 
 _TraversalFunctionArgumentOrStringArgumentOrNestedTraversal_function = (Core.Name "function")
 
@@ -764,7 +764,7 @@ data ChooseArgs =
   ChooseArgsTraversal NestedTraversalArgument
   deriving (Eq, Ord, Read, Show)
 
-_ChooseArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.ChooseArgs")
+_ChooseArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.ChooseArgs")
 
 _ChooseArgs_function = (Core.Name "function")
 
@@ -779,7 +779,7 @@ data PredicateTraversalArgument =
     predicateTraversalArgumentTraversal2 :: (Maybe NestedTraversal)}
   deriving (Eq, Ord, Read, Show)
 
-_PredicateTraversalArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.PredicateTraversalArgument")
+_PredicateTraversalArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.PredicateTraversalArgument")
 
 _PredicateTraversalArgument_predicate = (Core.Name "predicate")
 
@@ -794,7 +794,7 @@ data NestedTraversalArgument =
     nestedTraversalArgumentTraversal3 :: (Maybe NestedTraversal)}
   deriving (Eq, Ord, Read, Show)
 
-_NestedTraversalArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.NestedTraversalArgument")
+_NestedTraversalArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversalArgument")
 
 _NestedTraversalArgument_traversal1 = (Core.Name "traversal1")
 
@@ -807,7 +807,7 @@ data DedupArgs =
   DedupArgsString [StringNullableArgument]
   deriving (Eq, Ord, Read, Show)
 
-_DedupArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.DedupArgs")
+_DedupArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.DedupArgs")
 
 _DedupArgs_scopeString = (Core.Name "scopeString")
 
@@ -819,7 +819,7 @@ data ScopeStringArgument =
     scopeStringArgumentStrings :: [StringNullableArgument]}
   deriving (Eq, Ord, Read, Show)
 
-_ScopeStringArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.ScopeStringArgument")
+_ScopeStringArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.ScopeStringArgument")
 
 _ScopeStringArgument_scope = (Core.Name "scope")
 
@@ -830,7 +830,7 @@ data PredicateOrTraversal =
   PredicateOrTraversalTraversal NestedTraversal
   deriving (Eq, Ord, Read, Show)
 
-_PredicateOrTraversal = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.PredicateOrTraversal")
+_PredicateOrTraversal = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.PredicateOrTraversal")
 
 _PredicateOrTraversal_predicate = (Core.Name "predicate")
 
@@ -842,7 +842,7 @@ data GenericLiteralArgumentAndTraversalBiFunctionArgument =
     genericLiteralArgumentAndTraversalBiFunctionArgumentBiFunction :: TraversalBiFunctionArgument}
   deriving (Eq, Ord, Read, Show)
 
-_GenericLiteralArgumentAndTraversalBiFunctionArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument")
+_GenericLiteralArgumentAndTraversalBiFunctionArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument")
 
 _GenericLiteralArgumentAndTraversalBiFunctionArgument_literal = (Core.Name "literal")
 
@@ -854,7 +854,7 @@ data FromArgs =
   FromArgsTraversal NestedTraversal
   deriving (Eq, Ord, Read, Show)
 
-_FromArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.FromArgs")
+_FromArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.FromArgs")
 
 _FromArgs_string = (Core.Name "string")
 
@@ -867,7 +867,7 @@ data HasArgs =
   HasArgsTraversalToken HasTraversalTokenArgs
   deriving (Eq, Ord, Read, Show)
 
-_HasArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.HasArgs")
+_HasArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.HasArgs")
 
 _HasArgs_string = (Core.Name "string")
 
@@ -879,7 +879,7 @@ data HasStringArgumentAndOptionalStringLiteralVarargs =
     hasStringArgumentAndOptionalStringLiteralVarargsRest :: (Maybe HasStringArgumentAndOptionalStringLiteralVarargsRest)}
   deriving (Eq, Ord, Read, Show)
 
-_HasStringArgumentAndOptionalStringLiteralVarargs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.HasStringArgumentAndOptionalStringLiteralVarargs")
+_HasStringArgumentAndOptionalStringLiteralVarargs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargs")
 
 _HasStringArgumentAndOptionalStringLiteralVarargs_string = (Core.Name "string")
 
@@ -893,7 +893,7 @@ data HasStringArgumentAndOptionalStringLiteralVarargsRest =
   HasStringArgumentAndOptionalStringLiteralVarargsRestTraversal NestedTraversal
   deriving (Eq, Ord, Read, Show)
 
-_HasStringArgumentAndOptionalStringLiteralVarargsRest = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest")
+_HasStringArgumentAndOptionalStringLiteralVarargsRest = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest")
 
 _HasStringArgumentAndOptionalStringLiteralVarargsRest_object = (Core.Name "object")
 
@@ -911,7 +911,7 @@ data StringNullableArgumentAndGenericLiteralArgument =
     stringNullableArgumentAndGenericLiteralArgumentLiteral :: GenericLiteralArgument}
   deriving (Eq, Ord, Read, Show)
 
-_StringNullableArgumentAndGenericLiteralArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.StringNullableArgumentAndGenericLiteralArgument")
+_StringNullableArgumentAndGenericLiteralArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgumentAndGenericLiteralArgument")
 
 _StringNullableArgumentAndGenericLiteralArgument_string = (Core.Name "string")
 
@@ -923,7 +923,7 @@ data StringNullableArgumentAndTraversalPredicate =
     stringNullableArgumentAndTraversalPredicatePredicate :: TraversalPredicate}
   deriving (Eq, Ord, Read, Show)
 
-_StringNullableArgumentAndTraversalPredicate = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.StringNullableArgumentAndTraversalPredicate")
+_StringNullableArgumentAndTraversalPredicate = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgumentAndTraversalPredicate")
 
 _StringNullableArgumentAndTraversalPredicate_string = (Core.Name "string")
 
@@ -935,7 +935,7 @@ data HasTraversalTokenArgs =
     hasTraversalTokenArgsRest :: HasTraversalTokenArgsRest}
   deriving (Eq, Ord, Read, Show)
 
-_HasTraversalTokenArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.HasTraversalTokenArgs")
+_HasTraversalTokenArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.HasTraversalTokenArgs")
 
 _HasTraversalTokenArgs_traversalToken = (Core.Name "traversalToken")
 
@@ -947,7 +947,7 @@ data HasTraversalTokenArgsRest =
   HasTraversalTokenArgsRestTraversal NestedTraversal
   deriving (Eq, Ord, Read, Show)
 
-_HasTraversalTokenArgsRest = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.HasTraversalTokenArgsRest")
+_HasTraversalTokenArgsRest = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.HasTraversalTokenArgsRest")
 
 _HasTraversalTokenArgsRest_literal = (Core.Name "literal")
 
@@ -960,7 +960,7 @@ data GenericLiteralArgumentAndTraversalPredicate =
   GenericLiteralArgumentAndTraversalPredicatePredicate TraversalPredicate
   deriving (Eq, Ord, Read, Show)
 
-_GenericLiteralArgumentAndTraversalPredicate = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.GenericLiteralArgumentAndTraversalPredicate")
+_GenericLiteralArgumentAndTraversalPredicate = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalPredicate")
 
 _GenericLiteralArgumentAndTraversalPredicate_literal = (Core.Name "literal")
 
@@ -971,7 +971,7 @@ data TraversalPredicateOrStringLiteralVarargs =
   TraversalPredicateOrStringLiteralVarargsString [StringNullableArgument]
   deriving (Eq, Ord, Read, Show)
 
-_TraversalPredicateOrStringLiteralVarargs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalPredicateOrStringLiteralVarargs")
+_TraversalPredicateOrStringLiteralVarargs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicateOrStringLiteralVarargs")
 
 _TraversalPredicateOrStringLiteralVarargs_predicate = (Core.Name "predicate")
 
@@ -982,7 +982,7 @@ data TraversalPredicateOrGenericLiteralArgument =
   TraversalPredicateOrGenericLiteralArgumentLiteral [GenericLiteralArgument]
   deriving (Eq, Ord, Read, Show)
 
-_TraversalPredicateOrGenericLiteralArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalPredicateOrGenericLiteralArgument")
+_TraversalPredicateOrGenericLiteralArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicateOrGenericLiteralArgument")
 
 _TraversalPredicateOrGenericLiteralArgument_predicate = (Core.Name "predicate")
 
@@ -996,7 +996,7 @@ data OptionArgs =
   OptionArgsTraversal NestedTraversal
   deriving (Eq, Ord, Read, Show)
 
-_OptionArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.OptionArgs")
+_OptionArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.OptionArgs")
 
 _OptionArgs_predicateTraversal = (Core.Name "predicateTraversal")
 
@@ -1014,7 +1014,7 @@ data TraversalPredicateAndNestedTraversal =
     traversalPredicateAndNestedTraversalTraversal :: NestedTraversal}
   deriving (Eq, Ord, Read, Show)
 
-_TraversalPredicateAndNestedTraversal = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalPredicateAndNestedTraversal")
+_TraversalPredicateAndNestedTraversal = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicateAndNestedTraversal")
 
 _TraversalPredicateAndNestedTraversal_predicate = (Core.Name "predicate")
 
@@ -1027,7 +1027,7 @@ data TraversalMergeArgumentAndGenericLiteralMapNullableArgument =
     traversalMergeArgumentAndGenericLiteralMapNullableArgumentCardinality :: (Maybe TraversalCardinality)}
   deriving (Eq, Ord, Read, Show)
 
-_TraversalMergeArgumentAndGenericLiteralMapNullableArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument")
+_TraversalMergeArgumentAndGenericLiteralMapNullableArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument")
 
 _TraversalMergeArgumentAndGenericLiteralMapNullableArgument_merge = (Core.Name "merge")
 
@@ -1041,7 +1041,7 @@ data TraversalMergeArgumentAndNestedTraversal =
     traversalMergeArgumentAndNestedTraversalTraversal :: NestedTraversal}
   deriving (Eq, Ord, Read, Show)
 
-_TraversalMergeArgumentAndNestedTraversal = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalMergeArgumentAndNestedTraversal")
+_TraversalMergeArgumentAndNestedTraversal = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalMergeArgumentAndNestedTraversal")
 
 _TraversalMergeArgumentAndNestedTraversal_merge = (Core.Name "merge")
 
@@ -1053,7 +1053,7 @@ data GenericLiteralArgumentAndNestedTraversal =
     genericLiteralArgumentAndNestedTraversalTraversal :: NestedTraversal}
   deriving (Eq, Ord, Read, Show)
 
-_GenericLiteralArgumentAndNestedTraversal = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.GenericLiteralArgumentAndNestedTraversal")
+_GenericLiteralArgumentAndNestedTraversal = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgumentAndNestedTraversal")
 
 _GenericLiteralArgumentAndNestedTraversal_object = (Core.Name "object")
 
@@ -1066,7 +1066,7 @@ data PropertyArgs =
   PropertyArgsCardinalityObject GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument
   deriving (Eq, Ord, Read, Show)
 
-_PropertyArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.PropertyArgs")
+_PropertyArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.PropertyArgs")
 
 _PropertyArgs_cardinalityObjects = (Core.Name "cardinalityObjects")
 
@@ -1082,7 +1082,7 @@ data TraversalCardinalityArgumentAndObjects =
     traversalCardinalityArgumentAndObjectsObjects :: [GenericLiteralArgument]}
   deriving (Eq, Ord, Read, Show)
 
-_TraversalCardinalityArgumentAndObjects = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalCardinalityArgumentAndObjects")
+_TraversalCardinalityArgumentAndObjects = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinalityArgumentAndObjects")
 
 _TraversalCardinalityArgumentAndObjects_cardinality = (Core.Name "cardinality")
 
@@ -1094,7 +1094,7 @@ data GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument =
     genericLiteralMapNullableArgumentAndTraversalCardinalityArgumentObject :: GenericLiteralMapNullableArgument}
   deriving (Eq, Ord, Read, Show)
 
-_GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument")
+_GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument")
 
 _GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument_cardinality = (Core.Name "cardinality")
 
@@ -1107,7 +1107,7 @@ data RangeArgs =
     rangeArgsMax :: IntegerArgument}
   deriving (Eq, Ord, Read, Show)
 
-_RangeArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.RangeArgs")
+_RangeArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.RangeArgs")
 
 _RangeArgs_scope = (Core.Name "scope")
 
@@ -1121,7 +1121,7 @@ data OptionalStringArgumentAndNestedTraversal =
     optionalStringArgumentAndNestedTraversalTraversal :: NestedTraversal}
   deriving (Eq, Ord, Read, Show)
 
-_OptionalStringArgumentAndNestedTraversal = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.OptionalStringArgumentAndNestedTraversal")
+_OptionalStringArgumentAndNestedTraversal = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.OptionalStringArgumentAndNestedTraversal")
 
 _OptionalStringArgumentAndNestedTraversal_string = (Core.Name "string")
 
@@ -1135,7 +1135,7 @@ data SelectArgs =
   SelectArgsTraversal NestedTraversal
   deriving (Eq, Ord, Read, Show)
 
-_SelectArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.SelectArgs")
+_SelectArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.SelectArgs")
 
 _SelectArgs_column = (Core.Name "column")
 
@@ -1153,7 +1153,7 @@ data PopStringsArgument =
     popStringsArgumentString :: [StringArgument]}
   deriving (Eq, Ord, Read, Show)
 
-_PopStringsArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.PopStringsArgument")
+_PopStringsArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.PopStringsArgument")
 
 _PopStringsArgument_pop = (Core.Name "pop")
 
@@ -1165,7 +1165,7 @@ data TraversalPopArgumentAndNestedTraversal =
     traversalPopArgumentAndNestedTraversalTraversal :: NestedTraversal}
   deriving (Eq, Ord, Read, Show)
 
-_TraversalPopArgumentAndNestedTraversal = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalPopArgumentAndNestedTraversal")
+_TraversalPopArgumentAndNestedTraversal = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalPopArgumentAndNestedTraversal")
 
 _TraversalPopArgumentAndNestedTraversal_pop = (Core.Name "pop")
 
@@ -1177,7 +1177,7 @@ data OptionalTraversalScopeArgumentAndIntegerArgument =
     optionalTraversalScopeArgumentAndIntegerArgumentLong :: IntegerArgument}
   deriving (Eq, Ord, Read, Show)
 
-_OptionalTraversalScopeArgumentAndIntegerArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.OptionalTraversalScopeArgumentAndIntegerArgument")
+_OptionalTraversalScopeArgumentAndIntegerArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndIntegerArgument")
 
 _OptionalTraversalScopeArgumentAndIntegerArgument_scope = (Core.Name "scope")
 
@@ -1189,7 +1189,7 @@ data TailArgs =
     tailArgsInteger :: (Maybe IntegerArgument)}
   deriving (Eq, Ord, Read, Show)
 
-_TailArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TailArgs")
+_TailArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TailArgs")
 
 _TailArgs_scope = (Core.Name "scope")
 
@@ -1202,7 +1202,7 @@ data ToArgs =
   ToArgsTraversal NestedTraversal
   deriving (Eq, Ord, Read, Show)
 
-_ToArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.ToArgs")
+_ToArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.ToArgs")
 
 _ToArgs_direction = (Core.Name "direction")
 
@@ -1218,7 +1218,7 @@ data DirectionAndVarargs =
     directionAndVarargsVarargs :: [StringNullableArgument]}
   deriving (Eq, Ord, Read, Show)
 
-_DirectionAndVarargs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.DirectionAndVarargs")
+_DirectionAndVarargs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.DirectionAndVarargs")
 
 _DirectionAndVarargs_direction = (Core.Name "direction")
 
@@ -1229,7 +1229,7 @@ data ValueMapArgs =
   ValueMapArgsBoolean ValueMapBooleanArgs
   deriving (Eq, Ord, Read, Show)
 
-_ValueMapArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.ValueMapArgs")
+_ValueMapArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.ValueMapArgs")
 
 _ValueMapArgs_string = (Core.Name "string")
 
@@ -1241,7 +1241,7 @@ data ValueMapBooleanArgs =
     valueMapBooleanArgsKeys :: (Maybe [StringNullableArgument])}
   deriving (Eq, Ord, Read, Show)
 
-_ValueMapBooleanArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.ValueMapBooleanArgs")
+_ValueMapBooleanArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.ValueMapBooleanArgs")
 
 _ValueMapBooleanArgs_value = (Core.Name "value")
 
@@ -1253,7 +1253,7 @@ data WhereArgs =
   WhereArgsTraversal NestedTraversal
   deriving (Eq, Ord, Read, Show)
 
-_WhereArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.WhereArgs")
+_WhereArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.WhereArgs")
 
 _WhereArgs_predicate = (Core.Name "predicate")
 
@@ -1267,7 +1267,7 @@ data WhereWithPredicateArgs =
     whereWithPredicateArgsPredicate :: TraversalPredicate}
   deriving (Eq, Ord, Read, Show)
 
-_WhereWithPredicateArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.WhereWithPredicateArgs")
+_WhereWithPredicateArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.WhereWithPredicateArgs")
 
 _WhereWithPredicateArgs_leftArg = (Core.Name "leftArg")
 
@@ -1279,7 +1279,7 @@ data WithArgs =
     withArgsValues :: (Maybe WithArgsValues)}
   deriving (Eq, Ord, Read, Show)
 
-_WithArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.WithArgs")
+_WithArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.WithArgs")
 
 _WithArgs_keys = (Core.Name "keys")
 
@@ -1290,7 +1290,7 @@ data WithArgsKeys =
   WithArgsKeysString StringArgument
   deriving (Eq, Ord, Read, Show)
 
-_WithArgsKeys = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.WithArgsKeys")
+_WithArgsKeys = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.WithArgsKeys")
 
 _WithArgsKeys_withOption = (Core.Name "withOption")
 
@@ -1302,7 +1302,7 @@ data WithArgsValues =
   WithArgsValuesObject GenericLiteralArgument
   deriving (Eq, Ord, Read, Show)
 
-_WithArgsValues = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.WithArgsValues")
+_WithArgsValues = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.WithArgsValues")
 
 _WithArgsValues_withOptions = (Core.Name "withOptions")
 
@@ -1315,7 +1315,7 @@ data ConcatArgs =
   ConcatArgsString [StringNullableArgument]
   deriving (Eq, Ord, Read, Show)
 
-_ConcatArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.ConcatArgs")
+_ConcatArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.ConcatArgs")
 
 _ConcatArgs_traversal = (Core.Name "traversal")
 
@@ -1328,7 +1328,7 @@ data ReplaceArgs =
     replaceArgsTo :: StringNullableArgument}
   deriving (Eq, Ord, Read, Show)
 
-_ReplaceArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.ReplaceArgs")
+_ReplaceArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.ReplaceArgs")
 
 _ReplaceArgs_scope = (Core.Name "scope")
 
@@ -1342,7 +1342,7 @@ data SplitArgs =
     splitArgsDelimiter :: StringNullableArgument}
   deriving (Eq, Ord, Read, Show)
 
-_SplitArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.SplitArgs")
+_SplitArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.SplitArgs")
 
 _SplitArgs_scope = (Core.Name "scope")
 
@@ -1355,7 +1355,7 @@ data SubstringArgs =
     substringArgsEnd :: (Maybe IntegerArgument)}
   deriving (Eq, Ord, Read, Show)
 
-_SubstringArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.SubstringArgs")
+_SubstringArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.SubstringArgs")
 
 _SubstringArgs_scope = (Core.Name "scope")
 
@@ -1369,7 +1369,7 @@ data DateAddArgs =
     dateAddArgsDuration :: IntegerArgument}
   deriving (Eq, Ord, Read, Show)
 
-_DateAddArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.DateAddArgs")
+_DateAddArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.DateAddArgs")
 
 _DateAddArgs_unit = (Core.Name "unit")
 
@@ -1380,7 +1380,7 @@ data DateDiffArgs =
   DateDiffArgsDate DateArgument
   deriving (Eq, Ord, Read, Show)
 
-_DateDiffArgs = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.DateDiffArgs")
+_DateDiffArgs = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.DateDiffArgs")
 
 _DateDiffArgs_traversal = (Core.Name "traversal")
 
@@ -1393,7 +1393,7 @@ data StructureVertex =
     structureVertexLabel :: StringArgument}
   deriving (Eq, Ord, Read, Show)
 
-_StructureVertex = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.StructureVertex")
+_StructureVertex = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.StructureVertex")
 
 _StructureVertex_new = (Core.Name "new")
 
@@ -1408,7 +1408,7 @@ data TraversalStrategy =
     traversalStrategyConfigurations :: [Configuration]}
   deriving (Eq, Ord, Read, Show)
 
-_TraversalStrategy = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalStrategy")
+_TraversalStrategy = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalStrategy")
 
 _TraversalStrategy_new = (Core.Name "new")
 
@@ -1422,7 +1422,7 @@ data Configuration =
     configurationValue :: GenericLiteralArgument}
   deriving (Eq, Ord, Read, Show)
 
-_Configuration = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.Configuration")
+_Configuration = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.Configuration")
 
 _Configuration_key = (Core.Name "key")
 
@@ -1433,7 +1433,7 @@ data KeywordOrIdentifier =
   KeywordOrIdentifierIdentifier Identifier
   deriving (Eq, Ord, Read, Show)
 
-_KeywordOrIdentifier = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.KeywordOrIdentifier")
+_KeywordOrIdentifier = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.KeywordOrIdentifier")
 
 _KeywordOrIdentifier_keyword = (Core.Name "keyword")
 
@@ -1444,7 +1444,7 @@ data TraversalScope =
   TraversalScopeGlobal 
   deriving (Eq, Ord, Read, Show)
 
-_TraversalScope = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalScope")
+_TraversalScope = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalScope")
 
 _TraversalScope_local = (Core.Name "local")
 
@@ -1457,7 +1457,7 @@ data TraversalToken =
   TraversalTokenValue 
   deriving (Eq, Ord, Read, Show)
 
-_TraversalToken = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalToken")
+_TraversalToken = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalToken")
 
 _TraversalToken_id = (Core.Name "id")
 
@@ -1474,7 +1474,7 @@ data TraversalMerge =
   TraversalMergeInV 
   deriving (Eq, Ord, Read, Show)
 
-_TraversalMerge = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalMerge")
+_TraversalMerge = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalMerge")
 
 _TraversalMerge_onCreate = (Core.Name "onCreate")
 
@@ -1492,7 +1492,7 @@ data TraversalOrder =
   TraversalOrderShuffle 
   deriving (Eq, Ord, Read, Show)
 
-_TraversalOrder = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalOrder")
+_TraversalOrder = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalOrder")
 
 _TraversalOrder_incr = (Core.Name "incr")
 
@@ -1510,7 +1510,7 @@ data TraversalDirection =
   TraversalDirectionBoth 
   deriving (Eq, Ord, Read, Show)
 
-_TraversalDirection = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalDirection")
+_TraversalDirection = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalDirection")
 
 _TraversalDirection_in = (Core.Name "in")
 
@@ -1524,7 +1524,7 @@ data TraversalCardinality =
   TraversalCardinalityList GenericLiteral
   deriving (Eq, Ord, Read, Show)
 
-_TraversalCardinality = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalCardinality")
+_TraversalCardinality = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinality")
 
 _TraversalCardinality_single = (Core.Name "single")
 
@@ -1537,7 +1537,7 @@ data TraversalColumn =
   TraversalColumnValues 
   deriving (Eq, Ord, Read, Show)
 
-_TraversalColumn = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalColumn")
+_TraversalColumn = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalColumn")
 
 _TraversalColumn_keys = (Core.Name "keys")
 
@@ -1550,7 +1550,7 @@ data TraversalPop =
   TraversalPopMixed 
   deriving (Eq, Ord, Read, Show)
 
-_TraversalPop = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalPop")
+_TraversalPop = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalPop")
 
 _TraversalPop_first = (Core.Name "first")
 
@@ -1574,7 +1574,7 @@ data TraversalOperator =
   TraversalOperatorSumLong 
   deriving (Eq, Ord, Read, Show)
 
-_TraversalOperator = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalOperator")
+_TraversalOperator = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalOperator")
 
 _TraversalOperator_addAll = (Core.Name "addAll")
 
@@ -1603,7 +1603,7 @@ data TraversalPick =
   TraversalPickNone 
   deriving (Eq, Ord, Read, Show)
 
-_TraversalPick = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalPick")
+_TraversalPick = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalPick")
 
 _TraversalPick_any = (Core.Name "any")
 
@@ -1616,7 +1616,7 @@ data TraversalDT =
   TraversalDTDay 
   deriving (Eq, Ord, Read, Show)
 
-_TraversalDT = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalDT")
+_TraversalDT = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalDT")
 
 _TraversalDT_second = (Core.Name "second")
 
@@ -1652,7 +1652,7 @@ data TraversalPredicate =
   TraversalPredicateNegate TraversalPredicate
   deriving (Eq, Ord, Read, Show)
 
-_TraversalPredicate = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalPredicate")
+_TraversalPredicate = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicate")
 
 _TraversalPredicate_eq = (Core.Name "eq")
 
@@ -1706,7 +1706,7 @@ data TwoTraversalPredicates =
     twoTraversalPredicatesRight :: TraversalPredicate}
   deriving (Eq, Ord, Read, Show)
 
-_TwoTraversalPredicates = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TwoTraversalPredicates")
+_TwoTraversalPredicates = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TwoTraversalPredicates")
 
 _TwoTraversalPredicates_left = (Core.Name "left")
 
@@ -1723,7 +1723,7 @@ data TraversalTerminalMethod =
   TraversalTerminalMethodToBulkSet 
   deriving (Eq, Ord, Read, Show)
 
-_TraversalTerminalMethod = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalTerminalMethod")
+_TraversalTerminalMethod = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalTerminalMethod")
 
 _TraversalTerminalMethod_explain = (Core.Name "explain")
 
@@ -1745,7 +1745,7 @@ data TraversalSelfMethod =
   TraversalSelfMethodDiscard 
   deriving (Eq, Ord, Read, Show)
 
-_TraversalSelfMethod = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalSelfMethod")
+_TraversalSelfMethod = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalSelfMethod")
 
 _TraversalSelfMethod_discard = (Core.Name "discard")
 
@@ -1754,7 +1754,7 @@ data TraversalFunction =
   TraversalFunctionColumn TraversalColumn
   deriving (Eq, Ord, Read, Show)
 
-_TraversalFunction = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalFunction")
+_TraversalFunction = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalFunction")
 
 _TraversalFunction_token = (Core.Name "token")
 
@@ -1766,7 +1766,7 @@ data RangeArgument =
     rangeArgumentMax :: GenericLiteralArgument}
   deriving (Eq, Ord, Read, Show)
 
-_RangeArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.RangeArgument")
+_RangeArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.RangeArgument")
 
 _RangeArgument_min = (Core.Name "min")
 
@@ -1782,7 +1782,7 @@ data WithOptionKeys =
   WithOptionKeysWithOptionsIndexer 
   deriving (Eq, Ord, Read, Show)
 
-_WithOptionKeys = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.WithOptionKeys")
+_WithOptionKeys = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.WithOptionKeys")
 
 _WithOptionKeys_shortestPath = (Core.Name "shortestPath")
 
@@ -1804,7 +1804,7 @@ data ConnectedComponentConstants =
   ConnectedComponentConstantsPropertyName 
   deriving (Eq, Ord, Read, Show)
 
-_ConnectedComponentConstants = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.ConnectedComponentConstants")
+_ConnectedComponentConstants = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.ConnectedComponentConstants")
 
 _ConnectedComponentConstants_component = (Core.Name "component")
 
@@ -1818,7 +1818,7 @@ data PageRankConstants =
   PageRankConstantsPropertyName 
   deriving (Eq, Ord, Read, Show)
 
-_PageRankConstants = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.PageRankConstants")
+_PageRankConstants = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.PageRankConstants")
 
 _PageRankConstants_edges = (Core.Name "edges")
 
@@ -1832,7 +1832,7 @@ data PeerPressureConstants =
   PeerPressureConstantsPropertyName 
   deriving (Eq, Ord, Read, Show)
 
-_PeerPressureConstants = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.PeerPressureConstants")
+_PeerPressureConstants = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.PeerPressureConstants")
 
 _PeerPressureConstants_edges = (Core.Name "edges")
 
@@ -1848,7 +1848,7 @@ data ShortestPathConstants =
   ShortestPathConstantsIncludeEdges 
   deriving (Eq, Ord, Read, Show)
 
-_ShortestPathConstants = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.ShortestPathConstants")
+_ShortestPathConstants = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.ShortestPathConstants")
 
 _ShortestPathConstants_target = (Core.Name "target")
 
@@ -1872,7 +1872,7 @@ data WithOptionsValues =
   WithOptionsValuesMap 
   deriving (Eq, Ord, Read, Show)
 
-_WithOptionsValues = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.WithOptionsValues")
+_WithOptionsValues = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.WithOptionsValues")
 
 _WithOptionsValues_tokens = (Core.Name "tokens")
 
@@ -1897,7 +1897,7 @@ data IoOptionsKeys =
   IoOptionsKeysWriter 
   deriving (Eq, Ord, Read, Show)
 
-_IoOptionsKeys = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.IoOptionsKeys")
+_IoOptionsKeys = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.IoOptionsKeys")
 
 _IoOptionsKeys_reader = (Core.Name "reader")
 
@@ -1909,7 +1909,7 @@ data IoOptionsValues =
   IoOptionsValuesGraphml 
   deriving (Eq, Ord, Read, Show)
 
-_IoOptionsValues = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.IoOptionsValues")
+_IoOptionsValues = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.IoOptionsValues")
 
 _IoOptionsValues_gryo = (Core.Name "gryo")
 
@@ -1922,7 +1922,7 @@ data BooleanArgument =
   BooleanArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_BooleanArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.BooleanArgument")
+_BooleanArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.BooleanArgument")
 
 _BooleanArgument_value = (Core.Name "value")
 
@@ -1933,7 +1933,7 @@ data IntegerArgument =
   IntegerArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_IntegerArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.IntegerArgument")
+_IntegerArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.IntegerArgument")
 
 _IntegerArgument_value = (Core.Name "value")
 
@@ -1944,7 +1944,7 @@ data FloatArgument =
   FloatArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_FloatArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.FloatArgument")
+_FloatArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.FloatArgument")
 
 _FloatArgument_value = (Core.Name "value")
 
@@ -1955,7 +1955,7 @@ data StringArgument =
   StringArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_StringArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.StringArgument")
+_StringArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.StringArgument")
 
 _StringArgument_value = (Core.Name "value")
 
@@ -1966,7 +1966,7 @@ data StringNullableArgument =
   StringNullableArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_StringNullableArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.StringNullableArgument")
+_StringNullableArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument")
 
 _StringNullableArgument_value = (Core.Name "value")
 
@@ -1977,7 +1977,7 @@ data DateArgument =
   DateArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_DateArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.DateArgument")
+_DateArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.DateArgument")
 
 _DateArgument_value = (Core.Name "value")
 
@@ -1988,7 +1988,7 @@ data GenericLiteralArgument =
   GenericLiteralArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_GenericLiteralArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.GenericLiteralArgument")
+_GenericLiteralArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument")
 
 _GenericLiteralArgument_value = (Core.Name "value")
 
@@ -1999,7 +1999,7 @@ data GenericLiteralListArgument =
   GenericLiteralListArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_GenericLiteralListArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.GenericLiteralListArgument")
+_GenericLiteralListArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralListArgument")
 
 _GenericLiteralListArgument_value = (Core.Name "value")
 
@@ -2010,7 +2010,7 @@ data GenericLiteralMapArgument =
   GenericLiteralMapArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_GenericLiteralMapArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.GenericLiteralMapArgument")
+_GenericLiteralMapArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralMapArgument")
 
 _GenericLiteralMapArgument_value = (Core.Name "value")
 
@@ -2021,7 +2021,7 @@ data GenericLiteralMapNullableArgument =
   GenericLiteralMapNullableArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_GenericLiteralMapNullableArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.GenericLiteralMapNullableArgument")
+_GenericLiteralMapNullableArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralMapNullableArgument")
 
 _GenericLiteralMapNullableArgument_value = (Core.Name "value")
 
@@ -2032,7 +2032,7 @@ data StructureVertexArgument =
   StructureVertexArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_StructureVertexArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.StructureVertexArgument")
+_StructureVertexArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.StructureVertexArgument")
 
 _StructureVertexArgument_value = (Core.Name "value")
 
@@ -2043,7 +2043,7 @@ data TraversalCardinalityArgument =
   TraversalCardinalityArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_TraversalCardinalityArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalCardinalityArgument")
+_TraversalCardinalityArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinalityArgument")
 
 _TraversalCardinalityArgument_value = (Core.Name "value")
 
@@ -2054,7 +2054,7 @@ data TraversalColumnArgument =
   TraversalColumnArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_TraversalColumnArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalColumnArgument")
+_TraversalColumnArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalColumnArgument")
 
 _TraversalColumnArgument_value = (Core.Name "value")
 
@@ -2065,7 +2065,7 @@ data TraversalDirectionArgument =
   TraversalDirectionArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_TraversalDirectionArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalDirectionArgument")
+_TraversalDirectionArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalDirectionArgument")
 
 _TraversalDirectionArgument_value = (Core.Name "value")
 
@@ -2076,7 +2076,7 @@ data TraversalMergeArgument =
   TraversalMergeArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_TraversalMergeArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalMergeArgument")
+_TraversalMergeArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalMergeArgument")
 
 _TraversalMergeArgument_value = (Core.Name "value")
 
@@ -2087,7 +2087,7 @@ data TraversalOrderArgument =
   TraversalOrderArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_TraversalOrderArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalOrderArgument")
+_TraversalOrderArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalOrderArgument")
 
 _TraversalOrderArgument_value = (Core.Name "value")
 
@@ -2098,7 +2098,7 @@ data TraversalPopArgument =
   TraversalPopArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_TraversalPopArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalPopArgument")
+_TraversalPopArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalPopArgument")
 
 _TraversalPopArgument_value = (Core.Name "value")
 
@@ -2109,7 +2109,7 @@ data TraversalSackMethodArgument =
   TraversalSackMethodArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_TraversalSackMethodArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalSackMethodArgument")
+_TraversalSackMethodArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalSackMethodArgument")
 
 _TraversalSackMethodArgument_value = (Core.Name "value")
 
@@ -2120,7 +2120,7 @@ data TraversalScopeArgument =
   TraversalScopeArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_TraversalScopeArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalScopeArgument")
+_TraversalScopeArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument")
 
 _TraversalScopeArgument_value = (Core.Name "value")
 
@@ -2131,7 +2131,7 @@ data TraversalTokenArgument =
   TraversalTokenArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_TraversalTokenArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalTokenArgument")
+_TraversalTokenArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalTokenArgument")
 
 _TraversalTokenArgument_value = (Core.Name "value")
 
@@ -2142,7 +2142,7 @@ data TraversalComparatorArgument =
   TraversalComparatorArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_TraversalComparatorArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalComparatorArgument")
+_TraversalComparatorArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalComparatorArgument")
 
 _TraversalComparatorArgument_value = (Core.Name "value")
 
@@ -2153,7 +2153,7 @@ data TraversalFunctionArgument =
   TraversalFunctionArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_TraversalFunctionArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalFunctionArgument")
+_TraversalFunctionArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalFunctionArgument")
 
 _TraversalFunctionArgument_value = (Core.Name "value")
 
@@ -2164,7 +2164,7 @@ data TraversalBiFunctionArgument =
   TraversalBiFunctionArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_TraversalBiFunctionArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalBiFunctionArgument")
+_TraversalBiFunctionArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalBiFunctionArgument")
 
 _TraversalBiFunctionArgument_value = (Core.Name "value")
 
@@ -2175,7 +2175,7 @@ data TraversalDTArgument =
   TraversalDTArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
 
-_TraversalDTArgument = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.TraversalDTArgument")
+_TraversalDTArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalDTArgument")
 
 _TraversalDTArgument_value = (Core.Name "value")
 
@@ -2186,14 +2186,14 @@ newtype GenericLiteralList =
     unGenericLiteralList :: [GenericLiteral]}
   deriving (Eq, Ord, Read, Show)
 
-_GenericLiteralList = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.GenericLiteralList")
+_GenericLiteralList = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralList")
 
 data GenericLiteralRange = 
   GenericLiteralRangeInteger IntegerRange |
   GenericLiteralRangeString StringRange
   deriving (Eq, Ord, Read, Show)
 
-_GenericLiteralRange = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.GenericLiteralRange")
+_GenericLiteralRange = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralRange")
 
 _GenericLiteralRange_integer = (Core.Name "integer")
 
@@ -2205,7 +2205,7 @@ data IntegerRange =
     integerRangeRight :: IntegerLiteral}
   deriving (Eq, Ord, Read, Show)
 
-_IntegerRange = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.IntegerRange")
+_IntegerRange = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.IntegerRange")
 
 _IntegerRange_left = (Core.Name "left")
 
@@ -2217,7 +2217,7 @@ data StringRange =
     stringRangeRight :: String}
   deriving (Eq, Ord, Read, Show)
 
-_StringRange = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.StringRange")
+_StringRange = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.StringRange")
 
 _StringRange_left = (Core.Name "left")
 
@@ -2228,14 +2228,14 @@ newtype GenericLiteralSet =
     unGenericLiteralSet :: [GenericLiteral]}
   deriving (Eq, Ord, Read, Show)
 
-_GenericLiteralSet = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.GenericLiteralSet")
+_GenericLiteralSet = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralSet")
 
 newtype GenericLiteralCollection = 
   GenericLiteralCollection {
     unGenericLiteralCollection :: [GenericLiteral]}
   deriving (Eq, Ord, Read, Show)
 
-_GenericLiteralCollection = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.GenericLiteralCollection")
+_GenericLiteralCollection = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralCollection")
 
 data GenericLiteral = 
   GenericLiteralNumeric NumericLiteral |
@@ -2260,7 +2260,7 @@ data GenericLiteral =
   GenericLiteralGenericLiteralMap GenericLiteralMap
   deriving (Eq, Ord, Read, Show)
 
-_GenericLiteral = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.GenericLiteral")
+_GenericLiteral = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteral")
 
 _GenericLiteral_numeric = (Core.Name "numeric")
 
@@ -2307,14 +2307,14 @@ newtype GenericLiteralMap =
     unGenericLiteralMap :: [MapEntry]}
   deriving (Eq, Ord, Read, Show)
 
-_GenericLiteralMap = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.GenericLiteralMap")
+_GenericLiteralMap = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralMap")
 
 data MapEntry = 
   MapEntryKey MapKey |
   MapEntryValue GenericLiteral
   deriving (Eq, Ord, Read, Show)
 
-_MapEntry = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.MapEntry")
+_MapEntry = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.MapEntry")
 
 _MapEntry_key = (Core.Name "key")
 
@@ -2332,7 +2332,7 @@ data MapKey =
   MapKeyIdentifier Identifier
   deriving (Eq, Ord, Read, Show)
 
-_MapKey = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.MapKey")
+_MapKey = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.MapKey")
 
 _MapKey_string = (Core.Name "string")
 
@@ -2357,21 +2357,21 @@ newtype IntegerLiteral =
     unIntegerLiteral :: Integer}
   deriving (Eq, Ord, Read, Show)
 
-_IntegerLiteral = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.IntegerLiteral")
+_IntegerLiteral = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.IntegerLiteral")
 
 newtype FloatLiteral = 
   FloatLiteral {
     unFloatLiteral :: Double}
   deriving (Eq, Ord, Read, Show)
 
-_FloatLiteral = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.FloatLiteral")
+_FloatLiteral = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.FloatLiteral")
 
 data NumericLiteral = 
   NumericLiteralInteger IntegerLiteral |
   NumericLiteralFloat FloatLiteral
   deriving (Eq, Ord, Read, Show)
 
-_NumericLiteral = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.NumericLiteral")
+_NumericLiteral = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.NumericLiteral")
 
 _NumericLiteral_integer = (Core.Name "integer")
 
@@ -2382,7 +2382,7 @@ newtype DateLiteral =
     unDateLiteral :: (Maybe StringArgument)}
   deriving (Eq, Ord, Read, Show)
 
-_DateLiteral = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.DateLiteral")
+_DateLiteral = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.DateLiteral")
 
 data Keyword = 
   KeywordEdges  |
@@ -2391,7 +2391,7 @@ data Keyword =
   KeywordValues 
   deriving (Eq, Ord, Read, Show)
 
-_Keyword = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.Keyword")
+_Keyword = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.Keyword")
 
 _Keyword_edges = (Core.Name "edges")
 
@@ -2406,4 +2406,4 @@ newtype Identifier =
     unIdentifier :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Identifier = (Core.Name "hydra/ext/org/apache/tinkerpop/gremlin.Identifier")
+_Identifier = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.Identifier")

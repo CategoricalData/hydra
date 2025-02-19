@@ -55,7 +55,7 @@ data DataTypeFeatures =
     dataTypeFeaturesSupportsUniformListValues :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_DataTypeFeatures = (Core.Name "hydra/ext/org/apache/tinkerpop/features.DataTypeFeatures")
+_DataTypeFeatures = (Core.Name "hydra.ext.org.apache.tinkerpop.features.DataTypeFeatures")
 
 _DataTypeFeatures_supportsBooleanArrayValues = (Core.Name "supportsBooleanArrayValues")
 
@@ -106,7 +106,7 @@ data EdgeFeatures =
     edgeFeaturesSupportsUpsert :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeFeatures = (Core.Name "hydra/ext/org/apache/tinkerpop/features.EdgeFeatures")
+_EdgeFeatures = (Core.Name "hydra.ext.org.apache.tinkerpop.features.EdgeFeatures")
 
 _EdgeFeatures_elementFeatures = (Core.Name "elementFeatures")
 
@@ -124,7 +124,7 @@ data EdgePropertyFeatures =
     edgePropertyFeaturesPropertyFeatures :: PropertyFeatures}
   deriving (Eq, Ord, Read, Show)
 
-_EdgePropertyFeatures = (Core.Name "hydra/ext/org/apache/tinkerpop/features.EdgePropertyFeatures")
+_EdgePropertyFeatures = (Core.Name "hydra.ext.org.apache.tinkerpop.features.EdgePropertyFeatures")
 
 _EdgePropertyFeatures_propertyFeatures = (Core.Name "propertyFeatures")
 
@@ -149,7 +149,7 @@ data ElementFeatures =
     elementFeaturesSupportsUuidIds :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_ElementFeatures = (Core.Name "hydra/ext/org/apache/tinkerpop/features.ElementFeatures")
+_ElementFeatures = (Core.Name "hydra.ext.org.apache.tinkerpop.features.ElementFeatures")
 
 _ElementFeatures_supportsAddProperty = (Core.Name "supportsAddProperty")
 
@@ -172,7 +172,7 @@ data ExtraFeatures a =
   ExtraFeatures {
     extraFeaturesSupportsMapKey :: (Core.Type -> Bool)}
 
-_ExtraFeatures = (Core.Name "hydra/ext/org/apache/tinkerpop/features.ExtraFeatures")
+_ExtraFeatures = (Core.Name "hydra.ext.org.apache.tinkerpop.features.ExtraFeatures")
 
 _ExtraFeatures_supportsMapKey = (Core.Name "supportsMapKey")
 
@@ -189,7 +189,7 @@ data Features =
     featuresVertex :: VertexFeatures}
   deriving (Eq, Ord, Read, Show)
 
-_Features = (Core.Name "hydra/ext/org/apache/tinkerpop/features.Features")
+_Features = (Core.Name "hydra.ext.org.apache.tinkerpop.features.Features")
 
 _Features_edge = (Core.Name "edge")
 
@@ -218,7 +218,7 @@ data GraphFeatures =
     graphFeaturesVariables :: VariableFeatures}
   deriving (Eq, Ord, Read, Show)
 
-_GraphFeatures = (Core.Name "hydra/ext/org/apache/tinkerpop/features.GraphFeatures")
+_GraphFeatures = (Core.Name "hydra.ext.org.apache.tinkerpop.features.GraphFeatures")
 
 _GraphFeatures_supportsComputer = (Core.Name "supportsComputer")
 
@@ -244,7 +244,7 @@ data PropertyFeatures =
     propertyFeaturesSupportsProperties :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_PropertyFeatures = (Core.Name "hydra/ext/org/apache/tinkerpop/features.PropertyFeatures")
+_PropertyFeatures = (Core.Name "hydra.ext.org.apache.tinkerpop.features.PropertyFeatures")
 
 _PropertyFeatures_dataTypeFeatures = (Core.Name "dataTypeFeatures")
 
@@ -258,7 +258,7 @@ data VariableFeatures =
     variableFeaturesSupportsVariables :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_VariableFeatures = (Core.Name "hydra/ext/org/apache/tinkerpop/features.VariableFeatures")
+_VariableFeatures = (Core.Name "hydra.ext.org.apache.tinkerpop.features.VariableFeatures")
 
 _VariableFeatures_dataTypeFeatures = (Core.Name "dataTypeFeatures")
 
@@ -283,7 +283,7 @@ data VertexFeatures =
     vertexFeaturesSupportsUpsert :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_VertexFeatures = (Core.Name "hydra/ext/org/apache/tinkerpop/features.VertexFeatures")
+_VertexFeatures = (Core.Name "hydra.ext.org.apache.tinkerpop.features.VertexFeatures")
 
 _VertexFeatures_elementFeatures = (Core.Name "elementFeatures")
 
@@ -311,7 +311,7 @@ data VertexPropertyFeatures =
     vertexPropertyFeaturesSupportsRemove :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_VertexPropertyFeatures = (Core.Name "hydra/ext/org/apache/tinkerpop/features.VertexPropertyFeatures")
+_VertexPropertyFeatures = (Core.Name "hydra.ext.org.apache.tinkerpop.features.VertexPropertyFeatures")
 
 _VertexPropertyFeatures_dataTypeFeatures = (Core.Name "dataTypeFeatures")
 

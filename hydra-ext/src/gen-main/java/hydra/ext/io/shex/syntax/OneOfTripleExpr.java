@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public abstract class OneOfTripleExpr implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.OneOfTripleExpr");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.OneOfTripleExpr");
   
   public static final hydra.core.Name FIELD_NAME_GROUP_TRIPLE_EXPR = new hydra.core.Name("groupTripleExpr");
   

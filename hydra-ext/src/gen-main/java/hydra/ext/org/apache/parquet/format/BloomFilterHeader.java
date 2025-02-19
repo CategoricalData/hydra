@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Bloom filter header is stored at beginning of Bloom filter data of each column and followed by its bitset.
  */
 public class BloomFilterHeader implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.BloomFilterHeader");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.BloomFilterHeader");
   
   public static final hydra.core.Name FIELD_NAME_NUM_BYTES = new hydra.core.Name("numBytes");
   

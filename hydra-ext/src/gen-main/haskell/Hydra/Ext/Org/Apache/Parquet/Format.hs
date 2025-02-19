@@ -20,7 +20,7 @@ data Type =
   TypeFixedLenByteArray 
   deriving (Eq, Ord, Read, Show)
 
-_Type = (Core.Name "hydra/ext/org/apache/parquet/format.Type")
+_Type = (Core.Name "hydra.ext.org.apache.parquet.format.Type")
 
 _Type_boolean = (Core.Name "boolean")
 
@@ -46,7 +46,7 @@ data FieldRepetitionType =
   FieldRepetitionTypeRepeated 
   deriving (Eq, Ord, Read, Show)
 
-_FieldRepetitionType = (Core.Name "hydra/ext/org/apache/parquet/format.FieldRepetitionType")
+_FieldRepetitionType = (Core.Name "hydra.ext.org.apache.parquet.format.FieldRepetitionType")
 
 _FieldRepetitionType_required = (Core.Name "required")
 
@@ -65,7 +65,7 @@ data Statistics =
     statisticsMinValue :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Statistics = (Core.Name "hydra/ext/org/apache/parquet/format.Statistics")
+_Statistics = (Core.Name "hydra.ext.org.apache.parquet.format.Statistics")
 
 _Statistics_nullCount = (Core.Name "nullCount")
 
@@ -82,7 +82,7 @@ data DecimalType =
     decimalTypePrecision :: Int}
   deriving (Eq, Ord, Read, Show)
 
-_DecimalType = (Core.Name "hydra/ext/org/apache/parquet/format.DecimalType")
+_DecimalType = (Core.Name "hydra.ext.org.apache.parquet.format.DecimalType")
 
 _DecimalType_scale = (Core.Name "scale")
 
@@ -94,7 +94,7 @@ data TimeUnit =
   TimeUnitNanos 
   deriving (Eq, Ord, Read, Show)
 
-_TimeUnit = (Core.Name "hydra/ext/org/apache/parquet/format.TimeUnit")
+_TimeUnit = (Core.Name "hydra.ext.org.apache.parquet.format.TimeUnit")
 
 _TimeUnit_millis = (Core.Name "millis")
 
@@ -109,7 +109,7 @@ data TimestampType =
     timestampTypeUnit :: TimeUnit}
   deriving (Eq, Ord, Read, Show)
 
-_TimestampType = (Core.Name "hydra/ext/org/apache/parquet/format.TimestampType")
+_TimestampType = (Core.Name "hydra.ext.org.apache.parquet.format.TimestampType")
 
 _TimestampType_isAdjustedToUtc = (Core.Name "isAdjustedToUtc")
 
@@ -122,7 +122,7 @@ data TimeType =
     timeTypeUnit :: TimeUnit}
   deriving (Eq, Ord, Read, Show)
 
-_TimeType = (Core.Name "hydra/ext/org/apache/parquet/format.TimeType")
+_TimeType = (Core.Name "hydra.ext.org.apache.parquet.format.TimeType")
 
 _TimeType_isAdjustedToUtc = (Core.Name "isAdjustedToUtc")
 
@@ -135,7 +135,7 @@ data IntType =
     intTypeIsSigned :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_IntType = (Core.Name "hydra/ext/org/apache/parquet/format.IntType")
+_IntType = (Core.Name "hydra.ext.org.apache.parquet.format.IntType")
 
 _IntType_bitWidth = (Core.Name "bitWidth")
 
@@ -171,7 +171,7 @@ data LogicalType =
   LogicalTypeUuid 
   deriving (Eq, Ord, Read, Show)
 
-_LogicalType = (Core.Name "hydra/ext/org/apache/parquet/format.LogicalType")
+_LogicalType = (Core.Name "hydra.ext.org.apache.parquet.format.LogicalType")
 
 _LogicalType_string = (Core.Name "string")
 
@@ -221,7 +221,7 @@ data SchemaElement =
     schemaElementLogicalType :: (Maybe LogicalType)}
   deriving (Eq, Ord, Read, Show)
 
-_SchemaElement = (Core.Name "hydra/ext/org/apache/parquet/format.SchemaElement")
+_SchemaElement = (Core.Name "hydra.ext.org.apache.parquet.format.SchemaElement")
 
 _SchemaElement_type = (Core.Name "type")
 
@@ -264,7 +264,7 @@ data Encoding =
   EncodingByteStreamSplit 
   deriving (Eq, Ord, Read, Show)
 
-_Encoding = (Core.Name "hydra/ext/org/apache/parquet/format.Encoding")
+_Encoding = (Core.Name "hydra.ext.org.apache.parquet.format.Encoding")
 
 _Encoding_plain = (Core.Name "plain")
 
@@ -296,7 +296,7 @@ data CompressionCodec =
   CompressionCodecLz4Raw 
   deriving (Eq, Ord, Read, Show)
 
-_CompressionCodec = (Core.Name "hydra/ext/org/apache/parquet/format.CompressionCodec")
+_CompressionCodec = (Core.Name "hydra.ext.org.apache.parquet.format.CompressionCodec")
 
 _CompressionCodec_uncompressed = (Core.Name "uncompressed")
 
@@ -319,7 +319,7 @@ data PageType =
   PageTypeDataPageV2 
   deriving (Eq, Ord, Read, Show)
 
-_PageType = (Core.Name "hydra/ext/org/apache/parquet/format.PageType")
+_PageType = (Core.Name "hydra.ext.org.apache.parquet.format.PageType")
 
 _PageType_dataPage = (Core.Name "dataPage")
 
@@ -336,7 +336,7 @@ data BoundaryOrder =
   BoundaryOrderDescending 
   deriving (Eq, Ord, Read, Show)
 
-_BoundaryOrder = (Core.Name "hydra/ext/org/apache/parquet/format.BoundaryOrder")
+_BoundaryOrder = (Core.Name "hydra.ext.org.apache.parquet.format.BoundaryOrder")
 
 _BoundaryOrder_unordered = (Core.Name "unordered")
 
@@ -359,7 +359,7 @@ data DataPageHeader =
     dataPageHeaderStatistics :: (Maybe Statistics)}
   deriving (Eq, Ord, Read, Show)
 
-_DataPageHeader = (Core.Name "hydra/ext/org/apache/parquet/format.DataPageHeader")
+_DataPageHeader = (Core.Name "hydra.ext.org.apache.parquet.format.DataPageHeader")
 
 _DataPageHeader_numValues = (Core.Name "numValues")
 
@@ -375,7 +375,7 @@ data IndexPageHeader =
   IndexPageHeader {}
   deriving (Eq, Ord, Read, Show)
 
-_IndexPageHeader = (Core.Name "hydra/ext/org/apache/parquet/format.IndexPageHeader")
+_IndexPageHeader = (Core.Name "hydra.ext.org.apache.parquet.format.IndexPageHeader")
 
 -- | The dictionary page must be placed at the first position of the column chunk if it is partly or completely dictionary encoded. At most one dictionary page can be placed in a column chunk.
 data DictionaryPageHeader = 
@@ -388,7 +388,7 @@ data DictionaryPageHeader =
     dictionaryPageHeaderIsSorted :: (Maybe Bool)}
   deriving (Eq, Ord, Read, Show)
 
-_DictionaryPageHeader = (Core.Name "hydra/ext/org/apache/parquet/format.DictionaryPageHeader")
+_DictionaryPageHeader = (Core.Name "hydra.ext.org.apache.parquet.format.DictionaryPageHeader")
 
 _DictionaryPageHeader_numValues = (Core.Name "numValues")
 
@@ -417,7 +417,7 @@ data DataPageHeaderV2 =
     dataPageHeaderV2Statistics :: (Maybe Statistics)}
   deriving (Eq, Ord, Read, Show)
 
-_DataPageHeaderV2 = (Core.Name "hydra/ext/org/apache/parquet/format.DataPageHeaderV2")
+_DataPageHeaderV2 = (Core.Name "hydra.ext.org.apache.parquet.format.DataPageHeaderV2")
 
 _DataPageHeaderV2_numValues = (Core.Name "numValues")
 
@@ -441,7 +441,7 @@ data BloomFilterAlgorithm =
   BloomFilterAlgorithmBlock 
   deriving (Eq, Ord, Read, Show)
 
-_BloomFilterAlgorithm = (Core.Name "hydra/ext/org/apache/parquet/format.BloomFilterAlgorithm")
+_BloomFilterAlgorithm = (Core.Name "hydra.ext.org.apache.parquet.format.BloomFilterAlgorithm")
 
 _BloomFilterAlgorithm_block = (Core.Name "block")
 
@@ -451,7 +451,7 @@ data BloomFilterHash =
   BloomFilterHashXxhash 
   deriving (Eq, Ord, Read, Show)
 
-_BloomFilterHash = (Core.Name "hydra/ext/org/apache/parquet/format.BloomFilterHash")
+_BloomFilterHash = (Core.Name "hydra.ext.org.apache.parquet.format.BloomFilterHash")
 
 _BloomFilterHash_xxhash = (Core.Name "xxhash")
 
@@ -460,7 +460,7 @@ data BloomFilterCompression =
   BloomFilterCompressionUncompressed 
   deriving (Eq, Ord, Read, Show)
 
-_BloomFilterCompression = (Core.Name "hydra/ext/org/apache/parquet/format.BloomFilterCompression")
+_BloomFilterCompression = (Core.Name "hydra.ext.org.apache.parquet.format.BloomFilterCompression")
 
 _BloomFilterCompression_uncompressed = (Core.Name "uncompressed")
 
@@ -477,7 +477,7 @@ data BloomFilterHeader =
     bloomFilterHeaderCompression :: BloomFilterCompression}
   deriving (Eq, Ord, Read, Show)
 
-_BloomFilterHeader = (Core.Name "hydra/ext/org/apache/parquet/format.BloomFilterHeader")
+_BloomFilterHeader = (Core.Name "hydra.ext.org.apache.parquet.format.BloomFilterHeader")
 
 _BloomFilterHeader_numBytes = (Core.Name "numBytes")
 
@@ -526,7 +526,7 @@ data PageHeader =
     pageHeaderDataPageHeaderV2 :: (Maybe DataPageHeaderV2)}
   deriving (Eq, Ord, Read, Show)
 
-_PageHeader = (Core.Name "hydra/ext/org/apache/parquet/format.PageHeader")
+_PageHeader = (Core.Name "hydra.ext.org.apache.parquet.format.PageHeader")
 
 _PageHeader_type = (Core.Name "type")
 
@@ -551,7 +551,7 @@ data KeyValue =
     keyValueValue :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_KeyValue = (Core.Name "hydra/ext/org/apache/parquet/format.KeyValue")
+_KeyValue = (Core.Name "hydra.ext.org.apache.parquet.format.KeyValue")
 
 _KeyValue_key = (Core.Name "key")
 
@@ -568,7 +568,7 @@ data SortingColumn =
     sortingColumnNullsFirst :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_SortingColumn = (Core.Name "hydra/ext/org/apache/parquet/format.SortingColumn")
+_SortingColumn = (Core.Name "hydra.ext.org.apache.parquet.format.SortingColumn")
 
 _SortingColumn_columnIdx = (Core.Name "columnIdx")
 
@@ -587,7 +587,7 @@ data PageEncodingStats =
     pageEncodingStatsCount :: Int}
   deriving (Eq, Ord, Read, Show)
 
-_PageEncodingStats = (Core.Name "hydra/ext/org/apache/parquet/format.PageEncodingStats")
+_PageEncodingStats = (Core.Name "hydra.ext.org.apache.parquet.format.PageEncodingStats")
 
 _PageEncodingStats_pageType = (Core.Name "pageType")
 
@@ -628,7 +628,7 @@ data ColumnMetaData =
     columnMetaDataBloomFilterOffset :: (Maybe Int64)}
   deriving (Eq, Ord, Read, Show)
 
-_ColumnMetaData = (Core.Name "hydra/ext/org/apache/parquet/format.ColumnMetaData")
+_ColumnMetaData = (Core.Name "hydra.ext.org.apache.parquet.format.ColumnMetaData")
 
 _ColumnMetaData_type = (Core.Name "type")
 
@@ -662,7 +662,7 @@ data EncryptionWithFooterKey =
   EncryptionWithFooterKey {}
   deriving (Eq, Ord, Read, Show)
 
-_EncryptionWithFooterKey = (Core.Name "hydra/ext/org/apache/parquet/format.EncryptionWithFooterKey")
+_EncryptionWithFooterKey = (Core.Name "hydra.ext.org.apache.parquet.format.EncryptionWithFooterKey")
 
 data EncryptionWithColumnKey = 
   EncryptionWithColumnKey {
@@ -672,7 +672,7 @@ data EncryptionWithColumnKey =
     encryptionWithColumnKeyKeyMetadata :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_EncryptionWithColumnKey = (Core.Name "hydra/ext/org/apache/parquet/format.EncryptionWithColumnKey")
+_EncryptionWithColumnKey = (Core.Name "hydra.ext.org.apache.parquet.format.EncryptionWithColumnKey")
 
 _EncryptionWithColumnKey_pathInSchema = (Core.Name "pathInSchema")
 
@@ -683,7 +683,7 @@ data ColumnCryptoMetaData =
   ColumnCryptoMetaDataEncryptionWithColumnKey EncryptionWithColumnKey
   deriving (Eq, Ord, Read, Show)
 
-_ColumnCryptoMetaData = (Core.Name "hydra/ext/org/apache/parquet/format.ColumnCryptoMetaData")
+_ColumnCryptoMetaData = (Core.Name "hydra.ext.org.apache.parquet.format.ColumnCryptoMetaData")
 
 _ColumnCryptoMetaData_encryptionWithFooterKey = (Core.Name "encryptionWithFooterKey")
 
@@ -711,7 +711,7 @@ data ColumnChunk =
     columnChunkEncryptedColumnMetadata :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_ColumnChunk = (Core.Name "hydra/ext/org/apache/parquet/format.ColumnChunk")
+_ColumnChunk = (Core.Name "hydra.ext.org.apache.parquet.format.ColumnChunk")
 
 _ColumnChunk_filePath = (Core.Name "filePath")
 
@@ -749,7 +749,7 @@ data RowGroup =
     rowGroupOrdinal :: (Maybe Int16)}
   deriving (Eq, Ord, Read, Show)
 
-_RowGroup = (Core.Name "hydra/ext/org/apache/parquet/format.RowGroup")
+_RowGroup = (Core.Name "hydra.ext.org.apache.parquet.format.RowGroup")
 
 _RowGroup_columns = (Core.Name "columns")
 
@@ -811,7 +811,7 @@ data ColumnOrder =
   ColumnOrderTypeOrder 
   deriving (Eq, Ord, Read, Show)
 
-_ColumnOrder = (Core.Name "hydra/ext/org/apache/parquet/format.ColumnOrder")
+_ColumnOrder = (Core.Name "hydra.ext.org.apache.parquet.format.ColumnOrder")
 
 _ColumnOrder_typeOrder = (Core.Name "typeOrder")
 
@@ -825,7 +825,7 @@ data PageLocation =
     pageLocationFirstRowIndex :: Int64}
   deriving (Eq, Ord, Read, Show)
 
-_PageLocation = (Core.Name "hydra/ext/org/apache/parquet/format.PageLocation")
+_PageLocation = (Core.Name "hydra.ext.org.apache.parquet.format.PageLocation")
 
 _PageLocation_offset = (Core.Name "offset")
 
@@ -839,7 +839,7 @@ data OffsetIndex =
     offsetIndexPageLocations :: [PageLocation]}
   deriving (Eq, Ord, Read, Show)
 
-_OffsetIndex = (Core.Name "hydra/ext/org/apache/parquet/format.OffsetIndex")
+_OffsetIndex = (Core.Name "hydra.ext.org.apache.parquet.format.OffsetIndex")
 
 _OffsetIndex_pageLocations = (Core.Name "pageLocations")
 
@@ -857,7 +857,7 @@ data ColumnIndex =
     columnIndexNullCounts :: (Maybe [Int64])}
   deriving (Eq, Ord, Read, Show)
 
-_ColumnIndex = (Core.Name "hydra/ext/org/apache/parquet/format.ColumnIndex")
+_ColumnIndex = (Core.Name "hydra.ext.org.apache.parquet.format.ColumnIndex")
 
 _ColumnIndex_nullPages = (Core.Name "nullPages")
 
@@ -879,7 +879,7 @@ data AesGcmV1 =
     aesGcmV1SupplyAadPrefix :: (Maybe Bool)}
   deriving (Eq, Ord, Read, Show)
 
-_AesGcmV1 = (Core.Name "hydra/ext/org/apache/parquet/format.AesGcmV1")
+_AesGcmV1 = (Core.Name "hydra.ext.org.apache.parquet.format.AesGcmV1")
 
 _AesGcmV1_aadPrefix = (Core.Name "aadPrefix")
 
@@ -897,7 +897,7 @@ data AesGcmCtrV1 =
     aesGcmCtrV1SupplyAadPrefix :: (Maybe Bool)}
   deriving (Eq, Ord, Read, Show)
 
-_AesGcmCtrV1 = (Core.Name "hydra/ext/org/apache/parquet/format.AesGcmCtrV1")
+_AesGcmCtrV1 = (Core.Name "hydra.ext.org.apache.parquet.format.AesGcmCtrV1")
 
 _AesGcmCtrV1_aadPrefix = (Core.Name "aadPrefix")
 
@@ -910,7 +910,7 @@ data EncryptionAlgorithm =
   EncryptionAlgorithmAesGcmCtrV1 AesGcmCtrV1
   deriving (Eq, Ord, Read, Show)
 
-_EncryptionAlgorithm = (Core.Name "hydra/ext/org/apache/parquet/format.EncryptionAlgorithm")
+_EncryptionAlgorithm = (Core.Name "hydra.ext.org.apache.parquet.format.EncryptionAlgorithm")
 
 _EncryptionAlgorithm_aesGcmV1 = (Core.Name "aesGcmV1")
 
@@ -941,7 +941,7 @@ data FileMetaData =
     fileMetaDataFooterSigningKeyMetadata :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_FileMetaData = (Core.Name "hydra/ext/org/apache/parquet/format.FileMetaData")
+_FileMetaData = (Core.Name "hydra.ext.org.apache.parquet.format.FileMetaData")
 
 _FileMetaData_version = (Core.Name "version")
 
@@ -970,7 +970,7 @@ data FileCryptoMetaData =
     fileCryptoMetaDataKeyMetadata :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_FileCryptoMetaData = (Core.Name "hydra/ext/org/apache/parquet/format.FileCryptoMetaData")
+_FileCryptoMetaData = (Core.Name "hydra.ext.org.apache.parquet.format.FileCryptoMetaData")
 
 _FileCryptoMetaData_encryptionAlgorithm = (Core.Name "encryptionAlgorithm")
 

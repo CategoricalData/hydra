@@ -5,7 +5,7 @@ package hydra.ext.org.ansi.sql.syntax;
 import java.io.Serializable;
 
 public class ExactNumericType_Numeric_Option implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/ansi/sql/syntax.ExactNumericType.Numeric.Option");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.ansi.sql.syntax.ExactNumericType_Numeric_Option");
   
   public static final hydra.core.Name FIELD_NAME_PRECISION = new hydra.core.Name("precision");
   

@@ -254,7 +254,7 @@ data LinkRelationType =
   LinkRelationTypeWorking_copy_of 
   deriving (Eq, Ord, Read, Show)
 
-_LinkRelationType = (Core.Name "hydra/ext/org/iana/linkrelations.LinkRelationType")
+_LinkRelationType = (Core.Name "hydra.ext.org.iana.linkrelations.LinkRelationType")
 
 _LinkRelationType_about = (Core.Name "about")
 

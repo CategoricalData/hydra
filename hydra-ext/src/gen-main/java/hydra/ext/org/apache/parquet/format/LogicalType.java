@@ -8,7 +8,7 @@ import java.io.Serializable;
  * LogicalType annotations to replace ConvertedType. To maintain compatibility, implementations using LogicalType for a SchemaElement aust also set the corresponding ConvertedType (if any) from the following table.
  */
 public abstract class LogicalType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.LogicalType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.LogicalType");
   
   public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
   

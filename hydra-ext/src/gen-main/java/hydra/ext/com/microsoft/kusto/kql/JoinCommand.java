@@ -5,7 +5,7 @@ package hydra.ext.com.microsoft.kusto.kql;
 import java.io.Serializable;
 
 public class JoinCommand implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/com/microsoft/kusto/kql.JoinCommand");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.com.microsoft.kusto.kql.JoinCommand");
   
   public static final hydra.core.Name FIELD_NAME_KIND = new hydra.core.Name("kind");
   

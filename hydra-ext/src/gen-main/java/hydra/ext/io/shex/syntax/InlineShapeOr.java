@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public class InlineShapeOr implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.InlineShapeOr");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeOr");
   
   public static final hydra.core.Name FIELD_NAME_SHAPE_AND = new hydra.core.Name("shapeAnd");
   

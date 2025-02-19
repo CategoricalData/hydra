@@ -8,7 +8,7 @@ import java.io.Serializable;
  * See https://www.w3.org/TR/owl2-syntax/#Datatypes
  */
 public abstract class Datatype implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/owl/syntax.Datatype");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.Datatype");
   
   public static final hydra.core.Name FIELD_NAME_XML_SCHEMA = new hydra.core.Name("xmlSchema");
   

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The compression used in the Bloom filter.
  */
 public abstract class BloomFilterCompression implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.BloomFilterCompression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.BloomFilterCompression");
   
   public static final hydra.core.Name FIELD_NAME_UNCOMPRESSED = new hydra.core.Name("uncompressed");
   

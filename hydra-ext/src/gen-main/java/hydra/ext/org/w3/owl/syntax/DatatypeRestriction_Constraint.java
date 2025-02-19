@@ -5,7 +5,7 @@ package hydra.ext.org.w3.owl.syntax;
 import java.io.Serializable;
 
 public class DatatypeRestriction_Constraint implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/owl/syntax.DatatypeRestriction.Constraint");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.DatatypeRestriction_Constraint");
   
   public static final hydra.core.Name FIELD_NAME_CONSTRAINING_FACET = new hydra.core.Name("constrainingFacet");
   

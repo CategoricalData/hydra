@@ -5,7 +5,7 @@ package hydra.ext.io.delta.parquet;
 import java.io.Serializable;
 
 public abstract class DataType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/delta/parquet.DataType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.delta.parquet.DataType");
   
   public static final hydra.core.Name FIELD_NAME_ARRAY = new hydra.core.Name("array");
   

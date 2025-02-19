@@ -5,7 +5,7 @@ package hydra.ext.org.w3.owl.syntax;
 import java.io.Serializable;
 
 public abstract class DataPropertyAxiom implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/owl/syntax.DataPropertyAxiom");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataPropertyAxiom");
   
   public static final hydra.core.Name FIELD_NAME_DATA_PROPERTY_AXIOM = new hydra.core.Name("dataPropertyAxiom");
   

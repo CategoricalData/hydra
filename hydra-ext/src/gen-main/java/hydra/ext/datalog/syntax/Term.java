@@ -5,7 +5,7 @@ package hydra.ext.datalog.syntax;
 import java.io.Serializable;
 
 public abstract class Term implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/datalog/syntax.Term");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.datalog.syntax.Term");
   
   public static final hydra.core.Name FIELD_NAME_CONSTANT = new hydra.core.Name("constant");
   

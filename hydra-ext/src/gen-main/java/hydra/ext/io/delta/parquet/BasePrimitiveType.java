@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Base class for all primitive types DataType.
  */
 public abstract class BasePrimitiveType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/delta/parquet.BasePrimitiveType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.delta.parquet.BasePrimitiveType");
   
   public static final hydra.core.Name FIELD_NAME_BINARY = new hydra.core.Name("binary");
   

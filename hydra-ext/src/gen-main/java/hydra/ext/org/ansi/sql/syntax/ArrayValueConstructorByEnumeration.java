@@ -5,7 +5,7 @@ package hydra.ext.org.ansi.sql.syntax;
 import java.io.Serializable;
 
 public class ArrayValueConstructorByEnumeration implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/ansi/sql/syntax.ArrayValueConstructorByEnumeration");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.ansi.sql.syntax.ArrayValueConstructorByEnumeration");
   
   public static final hydra.core.Name FIELD_NAME_LEFT_BRACKET_OR_TRIGRAPH = new hydra.core.Name("leftBracketOrTrigraph");
   

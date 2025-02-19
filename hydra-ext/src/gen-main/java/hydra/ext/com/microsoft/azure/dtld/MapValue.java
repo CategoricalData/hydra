@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A MapValue describes the values in a Map.
  */
 public class MapValue implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/com/microsoft/azure/dtld.MapValue");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.com.microsoft.azure.dtld.MapValue");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   

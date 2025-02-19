@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A GeoJSON object represents a Geometry, Feature, or collection of Features.
  */
 public abstract class Object_ implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/geojson/model.Object");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.geojson.model.Object");
   
   public static final hydra.core.Name FIELD_NAME_GEOMETRY = new hydra.core.Name("geometry");
   

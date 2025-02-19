@@ -5,7 +5,7 @@ package hydra.ext.com.microsoft.kusto.kql;
 import java.io.Serializable;
 
 public class UnaryExpression implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/com/microsoft/kusto/kql.UnaryExpression");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.com.microsoft.kusto.kql.UnaryExpression");
   
   public static final hydra.core.Name FIELD_NAME_OPERATOR = new hydra.core.Name("operator");
   

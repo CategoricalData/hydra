@@ -5,7 +5,7 @@ package hydra.ext.com.microsoft.kusto.kql;
 import java.io.Serializable;
 
 public class FunctionName implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/com/microsoft/kusto/kql.FunctionName");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.com.microsoft.kusto.kql.FunctionName");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   

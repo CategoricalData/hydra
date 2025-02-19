@@ -5,7 +5,7 @@ package hydra.ext.org.apache.parquet.format;
 import java.io.Serializable;
 
 public abstract class PageType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.PageType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.PageType");
   
   public static final hydra.core.Name FIELD_NAME_DATA_PAGE = new hydra.core.Name("dataPage");
   

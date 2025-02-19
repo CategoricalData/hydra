@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public abstract class InlineShapeDefinition_ListOfAlts_Elmt implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.InlineShapeDefinition.ListOfAlts.Elmt");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt");
   
   public static final hydra.core.Name FIELD_NAME_INCLUDE_SET = new hydra.core.Name("includeSet");
   

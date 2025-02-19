@@ -15,7 +15,7 @@ newtype BoundingBox =
     unBoundingBox :: [CoordinateRange]}
   deriving (Eq, Ord, Read, Show)
 
-_BoundingBox = (Core.Name "hydra/ext/org/geojson/model.BoundingBox")
+_BoundingBox = (Core.Name "hydra.ext.org.geojson.model.BoundingBox")
 
 data CoordinateRange = 
   CoordinateRange {
@@ -23,7 +23,7 @@ data CoordinateRange =
     coordinateRangeMax :: Double}
   deriving (Eq, Ord, Read, Show)
 
-_CoordinateRange = (Core.Name "hydra/ext/org/geojson/model.CoordinateRange")
+_CoordinateRange = (Core.Name "hydra.ext.org.geojson.model.CoordinateRange")
 
 _CoordinateRange_min = (Core.Name "min")
 
@@ -41,7 +41,7 @@ data Feature =
     featureBbox :: (Maybe BoundingBox)}
   deriving (Eq, Ord, Read, Show)
 
-_Feature = (Core.Name "hydra/ext/org/geojson/model.Feature")
+_Feature = (Core.Name "hydra.ext.org.geojson.model.Feature")
 
 _Feature_geometry = (Core.Name "geometry")
 
@@ -58,7 +58,7 @@ data FeatureCollection =
     featureCollectionBbox :: (Maybe BoundingBox)}
   deriving (Eq, Ord, Read, Show)
 
-_FeatureCollection = (Core.Name "hydra/ext/org/geojson/model.FeatureCollection")
+_FeatureCollection = (Core.Name "hydra.ext.org.geojson.model.FeatureCollection")
 
 _FeatureCollection_features = (Core.Name "features")
 
@@ -71,7 +71,7 @@ data GeometryCollection =
     geometryCollectionBbox :: (Maybe BoundingBox)}
   deriving (Eq, Ord, Read, Show)
 
-_GeometryCollection = (Core.Name "hydra/ext/org/geojson/model.GeometryCollection")
+_GeometryCollection = (Core.Name "hydra.ext.org.geojson.model.GeometryCollection")
 
 _GeometryCollection_geometries = (Core.Name "geometries")
 
@@ -88,7 +88,7 @@ data Geometry =
   GeometryGeometryCollection GeometryCollection
   deriving (Eq, Ord, Read, Show)
 
-_Geometry = (Core.Name "hydra/ext/org/geojson/model.Geometry")
+_Geometry = (Core.Name "hydra.ext.org.geojson.model.Geometry")
 
 _Geometry_point = (Core.Name "point")
 
@@ -109,7 +109,7 @@ data Id =
   IdString String
   deriving (Eq, Ord, Read, Show)
 
-_Id = (Core.Name "hydra/ext/org/geojson/model.Id")
+_Id = (Core.Name "hydra.ext.org.geojson.model.Id")
 
 _Id_number = (Core.Name "number")
 
@@ -122,7 +122,7 @@ data LineString =
     lineStringBbox :: (Maybe BoundingBox)}
   deriving (Eq, Ord, Read, Show)
 
-_LineString = (Core.Name "hydra/ext/org/geojson/model.LineString")
+_LineString = (Core.Name "hydra.ext.org.geojson.model.LineString")
 
 _LineString_coordinates = (Core.Name "coordinates")
 
@@ -135,7 +135,7 @@ data MultiLineString =
     multiLineStringBbox :: (Maybe BoundingBox)}
   deriving (Eq, Ord, Read, Show)
 
-_MultiLineString = (Core.Name "hydra/ext/org/geojson/model.MultiLineString")
+_MultiLineString = (Core.Name "hydra.ext.org.geojson.model.MultiLineString")
 
 _MultiLineString_coordinates = (Core.Name "coordinates")
 
@@ -148,7 +148,7 @@ data MultiPoint =
     multiPointBbox :: (Maybe BoundingBox)}
   deriving (Eq, Ord, Read, Show)
 
-_MultiPoint = (Core.Name "hydra/ext/org/geojson/model.MultiPoint")
+_MultiPoint = (Core.Name "hydra.ext.org.geojson.model.MultiPoint")
 
 _MultiPoint_coordinates = (Core.Name "coordinates")
 
@@ -161,7 +161,7 @@ data MultiPolygon =
     multiPolygonBbox :: (Maybe BoundingBox)}
   deriving (Eq, Ord, Read, Show)
 
-_MultiPolygon = (Core.Name "hydra/ext/org/geojson/model.MultiPolygon")
+_MultiPolygon = (Core.Name "hydra.ext.org.geojson.model.MultiPolygon")
 
 _MultiPolygon_coordinates = (Core.Name "coordinates")
 
@@ -174,7 +174,7 @@ data Object =
   ObjectFeatureCollection FeatureCollection
   deriving (Eq, Ord, Read, Show)
 
-_Object = (Core.Name "hydra/ext/org/geojson/model.Object")
+_Object = (Core.Name "hydra.ext.org.geojson.model.Object")
 
 _Object_geometry = (Core.Name "geometry")
 
@@ -189,7 +189,7 @@ data Point =
     pointBbox :: (Maybe BoundingBox)}
   deriving (Eq, Ord, Read, Show)
 
-_Point = (Core.Name "hydra/ext/org/geojson/model.Point")
+_Point = (Core.Name "hydra.ext.org.geojson.model.Point")
 
 _Point_coordinates = (Core.Name "coordinates")
 
@@ -203,7 +203,7 @@ data Polygon =
     polygonBbox :: (Maybe BoundingBox)}
   deriving (Eq, Ord, Read, Show)
 
-_Polygon = (Core.Name "hydra/ext/org/geojson/model.Polygon")
+_Polygon = (Core.Name "hydra.ext.org.geojson.model.Polygon")
 
 _Polygon_coordinates = (Core.Name "coordinates")
 
@@ -217,7 +217,7 @@ data Position =
     positionAltitude :: (Maybe Double)}
   deriving (Eq, Ord, Read, Show)
 
-_Position = (Core.Name "hydra/ext/org/geojson/model.Position")
+_Position = (Core.Name "hydra.ext.org.geojson.model.Position")
 
 _Position_latitude = (Core.Name "latitude")
 

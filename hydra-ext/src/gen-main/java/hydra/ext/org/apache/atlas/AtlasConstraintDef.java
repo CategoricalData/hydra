@@ -8,7 +8,7 @@ import java.io.Serializable;
  * class that captures details of a constraint.
  */
 public class AtlasConstraintDef implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/atlas.AtlasConstraintDef");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.atlas.AtlasConstraintDef");
   
   public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
   

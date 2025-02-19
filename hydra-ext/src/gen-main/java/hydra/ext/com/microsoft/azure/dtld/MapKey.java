@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A MapKey describes the key in a Map. The schema of a MapKey must be string.
  */
 public class MapKey implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/com/microsoft/azure/dtld.MapKey");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.com.microsoft.azure.dtld.MapKey");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * This object describes a relationship with another entity. Data providers are advised to be liberal with the links section, to describe things like the Catalog an Item is in, related Items, parent or child Items (modeled in different ways, like an 'acquisition' or derived data). It is allowed to add additional fields such as a title and type.
  */
 public class Link implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/stacspec/items.Link");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.stacspec.items.Link");
   
   public static final hydra.core.Name FIELD_NAME_HREF = new hydra.core.Name("href");
   

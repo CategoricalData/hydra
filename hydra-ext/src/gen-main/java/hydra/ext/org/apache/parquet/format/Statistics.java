@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Statistics per row group and per page. All fields are optional.
  */
 public class Statistics implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.Statistics");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.Statistics");
   
   public static final hydra.core.Name FIELD_NAME_NULL_COUNT = new hydra.core.Name("nullCount");
   

@@ -5,7 +5,7 @@ package hydra.ext.org.w3.owl.syntax;
 import java.io.Serializable;
 
 public abstract class AnnotationAxiom implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/owl/syntax.AnnotationAxiom");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.AnnotationAxiom");
   
   public static final hydra.core.Name FIELD_NAME_ANNOTATION_ASSERTION = new hydra.core.Name("annotationAssertion");
   

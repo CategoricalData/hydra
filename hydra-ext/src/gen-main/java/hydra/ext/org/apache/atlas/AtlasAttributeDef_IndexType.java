@@ -5,7 +5,7 @@ package hydra.ext.org.apache.atlas;
 import java.io.Serializable;
 
 public abstract class AtlasAttributeDef_IndexType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/atlas.AtlasAttributeDef.IndexType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.atlas.AtlasAttributeDef_IndexType");
   
   public static final hydra.core.Name FIELD_NAME_DEFAULT = new hydra.core.Name("default");
   

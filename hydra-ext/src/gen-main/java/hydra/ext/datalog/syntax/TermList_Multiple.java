@@ -5,7 +5,7 @@ package hydra.ext.datalog.syntax;
 import java.io.Serializable;
 
 public class TermList_Multiple implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/datalog/syntax.TermList.Multiple");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.datalog.syntax.TermList_Multiple");
   
   public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
   

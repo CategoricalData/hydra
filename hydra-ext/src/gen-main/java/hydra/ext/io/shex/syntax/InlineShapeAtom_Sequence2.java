@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public class InlineShapeAtom_Sequence2 implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.InlineShapeAtom.Sequence2");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeAtom_Sequence2");
   
   public static final hydra.core.Name FIELD_NAME_INLINE_SHAPE_OR_REF = new hydra.core.Name("inlineShapeOrRef");
   

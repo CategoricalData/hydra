@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Features that are related to Vertex Property objects.
  */
 public class VertexPropertyFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/tinkerpop/features.VertexPropertyFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.VertexPropertyFeatures");
   
   public static final hydra.core.Name FIELD_NAME_DATA_TYPE_FEATURES = new hydra.core.Name("dataTypeFeatures");
   

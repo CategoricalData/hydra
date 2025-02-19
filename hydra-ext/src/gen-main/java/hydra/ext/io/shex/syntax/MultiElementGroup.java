@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public class MultiElementGroup implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.MultiElementGroup");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.MultiElementGroup");
   
   public static final hydra.core.Name FIELD_NAME_UNARY_TRIPLE_EXPR = new hydra.core.Name("unaryTripleExpr");
   

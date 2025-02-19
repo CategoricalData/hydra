@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Base interface for features that relate to supporting different data types.
  */
 public class DataTypeFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/tinkerpop/features.DataTypeFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.DataTypeFeatures");
   
   public static final hydra.core.Name FIELD_NAME_SUPPORTS_BOOLEAN_ARRAY_VALUES = new hydra.core.Name("supportsBooleanArrayValues");
   

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A qualified identifier
  */
 public class Qualid implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/fr/inria/coq/syntax.Qualid");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.fr.inria.coq.syntax.Qualid");
   
   public static final hydra.core.Name FIELD_NAME_ID = new hydra.core.Name("id");
   

@@ -5,7 +5,7 @@ package hydra.ext.org.apache.tinkerpop.gremlin;
 import java.io.Serializable;
 
 public class StringNullableArgumentAndTraversalPredicate implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/tinkerpop/gremlin.StringNullableArgumentAndTraversalPredicate");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgumentAndTraversalPredicate");
   
   public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
   

@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public abstract class StringLiteralLong1_Elmt_Sequence_Alts_Option implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.StringLiteralLong1.Elmt.Sequence.Alts.Option");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option");
   
   public static final hydra.core.Name FIELD_NAME_APOS = new hydra.core.Name("apos");
   

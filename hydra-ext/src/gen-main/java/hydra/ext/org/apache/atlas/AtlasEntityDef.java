@@ -8,7 +8,7 @@ import java.io.Serializable;
  * class that captures details of a entity-type.
  */
 public class AtlasEntityDef implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/atlas.AtlasEntityDef");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.atlas.AtlasEntityDef");
   
   public static final hydra.core.Name FIELD_NAME_AS_ATLAS_STRUCT_DEF = new hydra.core.Name("asAtlasStructDef");
   

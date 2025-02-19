@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Wrapper struct to specify sort order
  */
 public class SortingColumn implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.SortingColumn");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.SortingColumn");
   
   public static final hydra.core.Name FIELD_NAME_COLUMN_IDX = new hydra.core.Name("columnIdx");
   

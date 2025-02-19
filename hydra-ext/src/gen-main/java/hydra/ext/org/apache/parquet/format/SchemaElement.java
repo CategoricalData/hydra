@@ -11,7 +11,7 @@ import java.io.Serializable;
  * the nodes are listed in depth first traversal order.
  */
 public class SchemaElement implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.SchemaElement");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.SchemaElement");
   
   public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
   

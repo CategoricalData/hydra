@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Complex schemas are designed for supporting complex data types made up of primitive data types. Currently the following complex schemas are provided: Array, Enum, Map, and Object. A complex schema can be specified directly as the value in a schema statement or described in the interface schemas set and referenced in the schema statement.
  */
 public abstract class Schema_Complex implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/com/microsoft/azure/dtld.Schema.Complex");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.com.microsoft.azure.dtld.Schema_Complex");
   
   public static final hydra.core.Name FIELD_NAME_ARRAY = new hydra.core.Name("array");
   

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * For type "MultiPoint", the "coordinates" member is an array of positions.
  */
 public class MultiPoint implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/geojson/model.MultiPoint");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.geojson.model.MultiPoint");
   
   public static final hydra.core.Name FIELD_NAME_COORDINATES = new hydra.core.Name("coordinates");
   

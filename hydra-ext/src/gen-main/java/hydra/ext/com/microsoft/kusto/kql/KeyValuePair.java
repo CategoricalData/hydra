@@ -5,7 +5,7 @@ package hydra.ext.com.microsoft.kusto.kql;
 import java.io.Serializable;
 
 public class KeyValuePair implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/com/microsoft/kusto/kql.KeyValuePair");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.com.microsoft.kusto.kql.KeyValuePair");
   
   public static final hydra.core.Name FIELD_NAME_KEY = new hydra.core.Name("key");
   

@@ -5,7 +5,7 @@ package hydra.ext.org.stacspec.items;
 import java.io.Serializable;
 
 public abstract class StacRelationType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/stacspec/items.StacRelationType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.stacspec.items.StacRelationType");
   
   public static final hydra.core.Name FIELD_NAME_SELF = new hydra.core.Name("self");
   

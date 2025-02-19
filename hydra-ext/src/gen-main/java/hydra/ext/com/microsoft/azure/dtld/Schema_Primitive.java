@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A full set of primitive data types are provided and can be specified directly as the value in a schema statement in a digital twin interface.
  */
 public abstract class Schema_Primitive implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/com/microsoft/azure/dtld.Schema.Primitive");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.com.microsoft.azure.dtld.Schema_Primitive");
   
   public static final hydra.core.Name FIELD_NAME_BOOLEAN = new hydra.core.Name("boolean");
   

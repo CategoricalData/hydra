@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public class BracketedTripleExpr implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.BracketedTripleExpr");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.BracketedTripleExpr");
   
   public static final hydra.core.Name FIELD_NAME_INNER_TRIPLE_EXPR = new hydra.core.Name("innerTripleExpr");
   

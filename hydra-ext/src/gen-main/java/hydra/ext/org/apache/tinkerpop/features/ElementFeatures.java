@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Features that are related to Element objects.
  */
 public class ElementFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/tinkerpop/features.ElementFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.ElementFeatures");
   
   public static final hydra.core.Name FIELD_NAME_SUPPORTS_ADD_PROPERTY = new hydra.core.Name("supportsAddProperty");
   

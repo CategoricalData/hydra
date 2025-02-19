@@ -5,7 +5,7 @@ package hydra.ext.org.w3.owl.syntax;
 import java.io.Serializable;
 
 public class ObjectAllValuesFrom implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/owl/syntax.ObjectAllValuesFrom");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectAllValuesFrom");
   
   public static final hydra.core.Name FIELD_NAME_PROPERTY = new hydra.core.Name("property");
   

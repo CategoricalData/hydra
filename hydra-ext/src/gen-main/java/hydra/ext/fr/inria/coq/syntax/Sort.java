@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The types of types are called sorts.
  */
 public abstract class Sort implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/fr/inria/coq/syntax.Sort");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.fr.inria.coq.syntax.Sort");
   
   public static final hydra.core.Name FIELD_NAME_SET = new hydra.core.Name("set");
   

@@ -5,7 +5,7 @@ package hydra.ext.datalog.syntax;
 import java.io.Serializable;
 
 public abstract class Program_Elmt implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/datalog/syntax.Program.Elmt");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.datalog.syntax.Program_Elmt");
   
   public static final hydra.core.Name FIELD_NAME_FACT = new hydra.core.Name("fact");
   

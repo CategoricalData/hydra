@@ -5,7 +5,7 @@ package hydra.ext.fr.inria.coq.syntax;
 import java.io.Serializable;
 
 public class FixAnnot_Measure implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/fr/inria/coq/syntax.FixAnnot.Measure");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.fr.inria.coq.syntax.FixAnnot_Measure");
   
   public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
   

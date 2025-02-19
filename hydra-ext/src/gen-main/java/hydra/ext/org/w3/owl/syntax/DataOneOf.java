@@ -8,7 +8,7 @@ import java.io.Serializable;
  * See https://www.w3.org/TR/owl2-syntax/#Enumeration_of_Literals
  */
 public class DataOneOf implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/owl/syntax.DataOneOf");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataOneOf");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   

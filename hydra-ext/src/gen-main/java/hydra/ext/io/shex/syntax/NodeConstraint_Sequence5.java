@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public class NodeConstraint_Sequence5 implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.NodeConstraint.Sequence5");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.NodeConstraint_Sequence5");
   
   public static final hydra.core.Name FIELD_NAME_VALUE_SET = new hydra.core.Name("valueSet");
   

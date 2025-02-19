@@ -14,7 +14,7 @@ data Credited =
     creditedContact :: (Maybe [Url])}
   deriving (Eq, Ord, Read, Show)
 
-_Credited = (Core.Name "hydra/ext/dev/osv/schema.Credited")
+_Credited = (Core.Name "hydra.ext.dev.osv.schema.Credited")
 
 _Credited_name = (Core.Name "name")
 
@@ -26,7 +26,7 @@ newtype Ecosystem =
     unEcosystem :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Ecosystem = (Core.Name "hydra/ext/dev/osv/schema.Ecosystem")
+_Ecosystem = (Core.Name "hydra.ext.dev.osv.schema.Ecosystem")
 
 data Entry = 
   Entry {
@@ -46,7 +46,7 @@ data Entry =
     entryCredits :: (Maybe [Credited])}
   deriving (Eq, Ord, Read, Show)
 
-_Entry = (Core.Name "hydra/ext/dev/osv/schema.Entry")
+_Entry = (Core.Name "hydra.ext.dev.osv.schema.Entry")
 
 _Entry_schemaVersion = (Core.Name "schemaVersion")
 
@@ -81,7 +81,7 @@ data Event =
   EventLimit VersionOrStar
   deriving (Eq, Ord, Read, Show)
 
-_Event = (Core.Name "hydra/ext/dev/osv/schema.Event")
+_Event = (Core.Name "hydra.ext.dev.osv.schema.Event")
 
 _Event_introduced = (Core.Name "introduced")
 
@@ -97,7 +97,7 @@ newtype Id =
     unId :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Id = (Core.Name "hydra/ext/dev/osv/schema.Id")
+_Id = (Core.Name "hydra.ext.dev.osv.schema.Id")
 
 -- | CommonMark markdown text
 newtype Markdown = 
@@ -105,7 +105,7 @@ newtype Markdown =
     unMarkdown :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Markdown = (Core.Name "hydra/ext/dev/osv/schema.Markdown")
+_Markdown = (Core.Name "hydra.ext.dev.osv.schema.Markdown")
 
 -- | A string which follows the SemVer 2.0.0 format, with no leading 'v' prefix
 newtype OsvVersion = 
@@ -113,7 +113,7 @@ newtype OsvVersion =
     unOsvVersion :: String}
   deriving (Eq, Ord, Read, Show)
 
-_OsvVersion = (Core.Name "hydra/ext/dev/osv/schema.OsvVersion")
+_OsvVersion = (Core.Name "hydra.ext.dev.osv.schema.OsvVersion")
 
 data Package = 
   Package {
@@ -122,7 +122,7 @@ data Package =
     packagePurl :: (Maybe Url)}
   deriving (Eq, Ord, Read, Show)
 
-_Package = (Core.Name "hydra/ext/dev/osv/schema.Package")
+_Package = (Core.Name "hydra.ext.dev.osv.schema.Package")
 
 _Package_ecosystem = (Core.Name "ecosystem")
 
@@ -137,7 +137,7 @@ data PackageVersions =
     packageVersionsVersions :: (Maybe [Version])}
   deriving (Eq, Ord, Read, Show)
 
-_PackageVersions = (Core.Name "hydra/ext/dev/osv/schema.PackageVersions")
+_PackageVersions = (Core.Name "hydra.ext.dev.osv.schema.PackageVersions")
 
 _PackageVersions_package = (Core.Name "package")
 
@@ -151,7 +151,7 @@ data Reference =
     referenceUrl :: Url}
   deriving (Eq, Ord, Read, Show)
 
-_Reference = (Core.Name "hydra/ext/dev/osv/schema.Reference")
+_Reference = (Core.Name "hydra.ext.dev.osv.schema.Reference")
 
 _Reference_type = (Core.Name "type")
 
@@ -163,7 +163,7 @@ newtype ReferenceType =
     unReferenceType :: String}
   deriving (Eq, Ord, Read, Show)
 
-_ReferenceType = (Core.Name "hydra/ext/dev/osv/schema.ReferenceType")
+_ReferenceType = (Core.Name "hydra.ext.dev.osv.schema.ReferenceType")
 
 data Severity = 
   Severity {
@@ -171,7 +171,7 @@ data Severity =
     severityScore :: SeverityScore}
   deriving (Eq, Ord, Read, Show)
 
-_Severity = (Core.Name "hydra/ext/dev/osv/schema.Severity")
+_Severity = (Core.Name "hydra.ext.dev.osv.schema.Severity")
 
 _Severity_type = (Core.Name "type")
 
@@ -182,7 +182,7 @@ newtype SeverityScore =
     unSeverityScore :: String}
   deriving (Eq, Ord, Read, Show)
 
-_SeverityScore = (Core.Name "hydra/ext/dev/osv/schema.SeverityScore")
+_SeverityScore = (Core.Name "hydra.ext.dev.osv.schema.SeverityScore")
 
 -- | The value CVSS_V3, or future supported types
 newtype SeverityType = 
@@ -190,7 +190,7 @@ newtype SeverityType =
     unSeverityType :: String}
   deriving (Eq, Ord, Read, Show)
 
-_SeverityType = (Core.Name "hydra/ext/dev/osv/schema.SeverityType")
+_SeverityType = (Core.Name "hydra.ext.dev.osv.schema.SeverityType")
 
 -- | An RFC3339-formatted timestamp in UTC (ending in 'Z')
 newtype Timestamp = 
@@ -198,14 +198,14 @@ newtype Timestamp =
     unTimestamp :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Timestamp = (Core.Name "hydra/ext/dev/osv/schema.Timestamp")
+_Timestamp = (Core.Name "hydra.ext.dev.osv.schema.Timestamp")
 
 newtype Url = 
   Url {
     unUrl :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Url = (Core.Name "hydra/ext/dev/osv/schema.Url")
+_Url = (Core.Name "hydra.ext.dev.osv.schema.Url")
 
 -- | A version number in an ecosystem-specific format
 newtype Version = 
@@ -213,7 +213,7 @@ newtype Version =
     unVersion :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Version = (Core.Name "hydra/ext/dev/osv/schema.Version")
+_Version = (Core.Name "hydra.ext.dev.osv.schema.Version")
 
 -- | An ecosystem-specific version number, or the string '*' representing infinity
 newtype VersionOrStar = 
@@ -221,7 +221,7 @@ newtype VersionOrStar =
     unVersionOrStar :: String}
   deriving (Eq, Ord, Read, Show)
 
-_VersionOrStar = (Core.Name "hydra/ext/dev/osv/schema.VersionOrStar")
+_VersionOrStar = (Core.Name "hydra.ext.dev.osv.schema.VersionOrStar")
 
 -- | An ecosystem-specific version number, or the string '0' representing a version that sorts before any other version
 newtype VersionOrZero = 
@@ -229,7 +229,7 @@ newtype VersionOrZero =
     unVersionOrZero :: String}
   deriving (Eq, Ord, Read, Show)
 
-_VersionOrZero = (Core.Name "hydra/ext/dev/osv/schema.VersionOrZero")
+_VersionOrZero = (Core.Name "hydra.ext.dev.osv.schema.VersionOrZero")
 
 data VersionRange = 
   VersionRange {
@@ -238,7 +238,7 @@ data VersionRange =
     versionRangeEvents :: [Event]}
   deriving (Eq, Ord, Read, Show)
 
-_VersionRange = (Core.Name "hydra/ext/dev/osv/schema.VersionRange")
+_VersionRange = (Core.Name "hydra.ext.dev.osv.schema.VersionRange")
 
 _VersionRange_type = (Core.Name "type")
 
@@ -252,4 +252,4 @@ newtype VersionType =
     unVersionType :: String}
   deriving (Eq, Ord, Read, Show)
 
-_VersionType = (Core.Name "hydra/ext/dev/osv/schema.VersionType")
+_VersionType = (Core.Name "hydra.ext.dev.osv.schema.VersionType")

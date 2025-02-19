@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Features that are related to Edge Property objects.
  */
 public class EdgePropertyFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/tinkerpop/features.EdgePropertyFeatures");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.EdgePropertyFeatures");
   
   public static final hydra.core.Name FIELD_NAME_PROPERTY_FEATURES = new hydra.core.Name("propertyFeatures");
   

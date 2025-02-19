@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public abstract class NumericLength implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.NumericLength");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.NumericLength");
   
   public static final hydra.core.Name FIELD_NAME_T_O_T_A_L_D_I_G_I_T_S = new hydra.core.Name("tOTALDIGITS");
   

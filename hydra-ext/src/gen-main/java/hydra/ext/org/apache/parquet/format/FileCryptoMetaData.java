@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Crypto metadata for files with encrypted footer
  */
 public class FileCryptoMetaData implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.FileCryptoMetaData");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.FileCryptoMetaData");
   
   public static final hydra.core.Name FIELD_NAME_ENCRYPTION_ALGORITHM = new hydra.core.Name("encryptionAlgorithm");
   

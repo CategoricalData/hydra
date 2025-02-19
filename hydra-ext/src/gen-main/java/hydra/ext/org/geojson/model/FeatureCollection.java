@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A GeoJSON object with the type "FeatureCollection" is a FeatureCollection object.  A FeatureCollection object has a member with the name "features".  The value of "features" is a JSON array. Each element of the array is a Feature object as defined above.  It is possible for this array to be empty.
  */
 public class FeatureCollection implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/geojson/model.FeatureCollection");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.geojson.model.FeatureCollection");
   
   public static final hydra.core.Name FIELD_NAME_FEATURES = new hydra.core.Name("features");
   

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * This object describes a STAC Item. The fields id, type, bbox, geometry and properties are inherited from GeoJSON.
  */
 public class Item implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/stacspec/items.Item");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.stacspec.items.Item");
   
   public static final hydra.core.Name FIELD_NAME_FEATURE = new hydra.core.Name("feature");
   

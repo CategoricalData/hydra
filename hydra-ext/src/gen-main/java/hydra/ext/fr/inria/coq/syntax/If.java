@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Pattern match on boolean values
  */
 public class If implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/fr/inria/coq/syntax.If");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.fr.inria.coq.syntax.If");
   
   public static final hydra.core.Name FIELD_NAME_CONDITION = new hydra.core.Name("condition");
   

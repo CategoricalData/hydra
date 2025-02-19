@@ -5,7 +5,7 @@ package hydra.ext.org.apache.parquet.format;
 import java.io.Serializable;
 
 public class AesGcmCtrV1 implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.AesGcmCtrV1");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.AesGcmCtrV1");
   
   public static final hydra.core.Name FIELD_NAME_AAD_PREFIX = new hydra.core.Name("aadPrefix");
   

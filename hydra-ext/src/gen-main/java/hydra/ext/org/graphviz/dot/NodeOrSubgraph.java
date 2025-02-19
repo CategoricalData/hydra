@@ -5,7 +5,7 @@ package hydra.ext.org.graphviz.dot;
 import java.io.Serializable;
 
 public abstract class NodeOrSubgraph implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/graphviz/dot.NodeOrSubgraph");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.graphviz.dot.NodeOrSubgraph");
   
   public static final hydra.core.Name FIELD_NAME_NODE = new hydra.core.Name("node");
   

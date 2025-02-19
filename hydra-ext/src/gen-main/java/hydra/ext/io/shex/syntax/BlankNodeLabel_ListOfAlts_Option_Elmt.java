@@ -5,7 +5,7 @@ package hydra.ext.io.shex.syntax;
 import java.io.Serializable;
 
 public abstract class BlankNodeLabel_ListOfAlts_Option_Elmt implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/io/shex/syntax.BlankNodeLabel.ListOfAlts.Option.Elmt");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt");
   
   public static final hydra.core.Name FIELD_NAME_PN_CHARS = new hydra.core.Name("pnChars");
   

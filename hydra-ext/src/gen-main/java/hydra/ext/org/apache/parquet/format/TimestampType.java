@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Timestamp logical type annotation. Allowed for physical types: INT64
  */
 public class TimestampType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/apache/parquet/format.TimestampType");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.parquet.format.TimestampType");
   
   public static final hydra.core.Name FIELD_NAME_IS_ADJUSTED_TO_UTC = new hydra.core.Name("isAdjustedToUtc");
   

@@ -5,7 +5,7 @@ package hydra.ext.org.ansi.sql.syntax;
 import java.io.Serializable;
 
 public abstract class ColumnDefinition_TypeOrDomain_Option implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/ansi/sql/syntax.ColumnDefinition.TypeOrDomain.Option");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.ansi.sql.syntax.ColumnDefinition_TypeOrDomain_Option");
   
   public static final hydra.core.Name FIELD_NAME_DATA_TYPE = new hydra.core.Name("dataType");
   

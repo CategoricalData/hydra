@@ -8,7 +8,7 @@ import java.io.Serializable;
  * See https://www.w3.org/TR/owl2-syntax/#Object_Property_Domain
  */
 public class ObjectPropertyDomain implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/org/w3/owl/syntax.ObjectPropertyDomain");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectPropertyDomain");
   
   public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
   

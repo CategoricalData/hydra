@@ -5,7 +5,7 @@ package hydra.ext.com.microsoft.azure.dtld;
 import java.io.Serializable;
 
 public abstract class IntegerOrString implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra/ext/com/microsoft/azure/dtld.IntegerOrString");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.com.microsoft.azure.dtld.IntegerOrString");
   
   public static final hydra.core.Name FIELD_NAME_INTEGER = new hydra.core.Name("integer");
   
