@@ -10,7 +10,7 @@ scalaMetaModule :: Module
 scalaMetaModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just "A Scala syntax model based on Scalameta (https://scalameta.org)"
   where
-    ns = Namespace "hydra/ext/scala/meta"
+    ns = Namespace "hydra.ext.scala.meta"
     def = datatype ns
     meta = typeref ns
 

@@ -4,7 +4,7 @@ import Hydra.Dsl.Tests
 
 
 stringPrimitiveTests :: TestGroup
-stringPrimitiveTests = TestGroup "hydra/lib/strings primitives" Nothing groups []
+stringPrimitiveTests = TestGroup "hydra.lib.strings primitives" Nothing groups []
   where
     groups = [stringsCat, stringsLength, stringsSplitOn, stringsToLower, stringsToUpper]
 

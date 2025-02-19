@@ -37,7 +37,7 @@ decodeNominalFunctionDefinition name cod term = decodeDefinition name $
   function nameT (tFun termT $ tOpt cod) term
 
 decodeModule :: Module
-decodeModule = Module (Namespace "hydra/decode") elements [hydraStripModule] [hydraCoreModule] $
+decodeModule = Module (Namespace "hydra.decode") elements [hydraStripModule] [hydraCoreModule] $
     Just "A module for decoding terms to native objects"
   where
    elements = [

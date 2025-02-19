@@ -26,7 +26,7 @@ javaLanguageModule = Module ns elements
     [hydraCodersModule, hydraLexicalModule] [hydraCoreModule, hydraGraphModule, hydraCodersModule] $
     Just "Language constraints and reserved words for Java"
   where
-    ns = Namespace "hydra/ext/java/language"
+    ns = Namespace "hydra.ext.java.language"
     elements = [
       el javaMaxTupleLengthDef,
       el javaLanguageDef,
@@ -42,7 +42,7 @@ javaLanguageDef :: TElement (Language)
 javaLanguageDef = javaLanguageDefinition "javaLanguage" $
     doc "Language constraints for Java" $
     typed languageT $
-    Coders.language "hydra/ext/java"
+    Coders.language "hydra.ext.java"
       eliminationVariants
       literalVariants
       floatTypes

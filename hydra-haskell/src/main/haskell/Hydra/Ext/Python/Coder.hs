@@ -248,7 +248,7 @@ encodeNameQualified env name = case M.lookup name (snd $ pythonEnvironmentBoundT
     Just n -> n
     Nothing -> if ns == Just focusNs
       then Py.Name $ if _useFutureAnnotations_ then local else PySer.escapePythonString True local
-      else Py.Name $ L.intercalate "." $ Strings.splitOn "/" $ unName name
+      else Py.Name $ L.intercalate "." $ Strings.splitOn "." $ unName name
   where
     focusNs = fst $ namespacesFocus $ pythonEnvironmentNamespaces env
     QualifiedName ns local = qualifyName name
@@ -257,7 +257,7 @@ encodeNameUnqualified :: Name -> Py.Name
 encodeNameUnqualified name = (Py.Name $ sanitizePythonName $ localNameOf name)
 
 encodeNamespace :: Namespace -> Py.DottedName
-encodeNamespace ns = Py.DottedName (Py.Name <$> (Strings.splitOn "/" $ unNamespace ns))
+encodeNamespace ns = Py.DottedName (Py.Name <$> (Strings.splitOn "." $ unNamespace ns))
 
 encodeRecordType :: PythonEnvironment -> Name -> RowType -> Maybe String -> Flow Graph Py.Statement
 encodeRecordType env name (RowType _ tfields) comment = do

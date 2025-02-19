@@ -18,7 +18,7 @@ jsonModelModule :: Module
 jsonModelModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just "A JSON syntax model. See the BNF at https://www.json.org"
   where
-    ns = Namespace "hydra/json"
+    ns = Namespace "hydra.json"
     def = datatype ns
     json = typeref ns
 

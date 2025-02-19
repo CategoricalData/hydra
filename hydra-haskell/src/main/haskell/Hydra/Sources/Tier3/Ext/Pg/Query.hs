@@ -14,7 +14,7 @@ pgQueryModule :: Module
 pgQueryModule = Module ns elements [pgModelModule] [hydraCoreModule] $
     Just ("A common model for pattern-matching queries over property graphs")
   where
-    ns = Namespace "hydra/pg/query"
+    ns = Namespace "hydra.pg.query"
     pg = typeref $ moduleNamespace pgModelModule
     q = typeref ns
     def = datatype ns

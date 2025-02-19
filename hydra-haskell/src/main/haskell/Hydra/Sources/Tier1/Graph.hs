@@ -18,9 +18,9 @@ import Hydra.Sources.Tier1.Compute
 
 hydraGraphModule :: Module
 hydraGraphModule = Module ns elements [hydraComputeModule] [hydraCoreModule] $
-    Just "The extension to graphs of Hydra's core type system (hydra/core)"
+    Just "The extension to graphs of Hydra's core type system (hydra.core)"
   where
-    ns = Namespace "hydra/graph"
+    ns = Namespace "hydra.graph"
     core = typeref $ moduleNamespace hydraCoreModule
     compute = typeref $ moduleNamespace hydraComputeModule
     graph = typeref ns

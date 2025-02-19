@@ -6,7 +6,7 @@ import qualified Data.Set as S
 
 
 scalaLanguage :: Language
-scalaLanguage = Language (LanguageName "hydra/ext/scala") $ LanguageConstraints {
+scalaLanguage = Language (LanguageName "hydra.ext.scala") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.fromList eliminationVariants,
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean,

@@ -16,7 +16,7 @@ pgModelModule = Module ns elements [] [hydraCoreModule] $
       "Property graphs are parameterized a type for property and id values, " ++
       "while property graph schemas are parameterized by a type for property and id types")
   where
-    ns = Namespace "hydra/pg/model"
+    ns = Namespace "hydra.pg.model"
     pg = typeref ns
     def = datatype ns
 

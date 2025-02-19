@@ -10,7 +10,7 @@ haskellAstModule :: Module
 haskellAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just "A Haskell syntax model, loosely based on Language.Haskell.Tools.AST"
   where
-    ns = Namespace "hydra/ext/haskell/ast"
+    ns = Namespace "hydra.ext.haskell.ast"
     def = datatype ns
     ast = typeref ns
 

@@ -20,7 +20,7 @@ hydraPhantomsModule :: Module
 hydraPhantomsModule = Module ns elements [hydraComputeModule] [hydraCoreModule] $
     Just "Phantom types for use with Hydra DSLs"
   where
-    ns = Namespace "hydra/phantoms"
+    ns = Namespace "hydra.phantoms"
     core = typeref $ moduleNamespace hydraCoreModule
     phantoms = typeref ns
     def = datatype ns

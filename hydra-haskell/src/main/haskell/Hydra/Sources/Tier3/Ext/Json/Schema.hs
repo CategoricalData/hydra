@@ -12,7 +12,7 @@ jsonSchemaModule :: Module
 jsonSchemaModule = Module ns elements [jsonModelModule] [hydraCoreModule] $
     Just ("A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar")
   where
-    ns = Namespace "hydra/ext/org/json/schema"
+    ns = Namespace "hydra.ext.org.json.schema"
     def = datatype ns
     js = typeref ns
     json = typeref $ moduleNamespace jsonModelModule

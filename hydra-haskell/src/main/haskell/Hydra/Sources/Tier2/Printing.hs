@@ -31,7 +31,7 @@ import Hydra.Sources.Tier2.Variants
 
 
 hydraPrintingModule :: Module
-hydraPrintingModule = Module (Namespace "hydra/printing") elements
+hydraPrintingModule = Module (Namespace "hydra.printing") elements
     [hydraVariantsModule]
     [hydraCoreModule] $
     Just "Utilities for use in transformations"

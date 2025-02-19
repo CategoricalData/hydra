@@ -16,7 +16,7 @@ hydraAstModule :: Module
 hydraAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just "A model which provides a common syntax tree for Hydra serializers"
   where
-    ns = Namespace "hydra/ast"
+    ns = Namespace "hydra.ast"
     def = datatype ns
     ast = typeref ns
 

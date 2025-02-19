@@ -1,4 +1,4 @@
--- | Haskell implementations of hydra/lib/maps primitives
+-- | Haskell implementations of hydra.lib.maps primitives
 
 module Hydra.Lib.Maps where
 

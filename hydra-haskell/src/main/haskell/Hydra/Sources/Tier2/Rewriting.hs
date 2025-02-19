@@ -34,7 +34,7 @@ rewritingDefinition :: String -> TTerm a -> TElement a
 rewritingDefinition = definitionInModule hydraRewritingModule
 
 hydraRewritingModule :: Module
-hydraRewritingModule = Module (Namespace "hydra/rewriting") elements
+hydraRewritingModule = Module (Namespace "hydra.rewriting") elements
     [hydraComputeModule, hydraConstantsModule, hydraStripModule] [hydraCoreModule] $
     Just ("Utilities for type and term rewriting and analysis.")
   where

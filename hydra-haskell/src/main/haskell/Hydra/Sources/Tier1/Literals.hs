@@ -27,7 +27,7 @@ literalsDefinition :: String -> TTerm a -> TElement a
 literalsDefinition = definitionInModule hydraLiteralsModule
 
 hydraLiteralsModule :: Module
-hydraLiteralsModule = Module (Namespace "hydra/literals") elements [] [hydraCoreModule] $
+hydraLiteralsModule = Module (Namespace "hydra.literals") elements [] [hydraCoreModule] $
     Just "Conversion functions for literal values."
   where
    elements = [

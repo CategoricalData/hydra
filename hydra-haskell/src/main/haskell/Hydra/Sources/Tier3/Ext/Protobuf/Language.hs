@@ -35,7 +35,7 @@ protobufLanguageModule :: Module
 protobufLanguageModule = Module ns elements [hydraCodersModule, hydraLexicalModule, hydraStripModule] [hydraCoreModule] $
     Just "Language constraints for Protobuf v3"
   where
-    ns = Namespace "hydra/ext/protobuf/language"
+    ns = Namespace "hydra.ext.protobuf.language"
     elements = [
       el protobufLanguageDef,
       el protobufReservedWordsDef]
@@ -45,7 +45,7 @@ protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
   doc "Language constraints for Protocol Buffers v3" $
   typed languageT $
   record _Language [
-    _Language_name>>: wrap _LanguageName "hydra/ext/protobuf",
+    _Language_name>>: wrap _LanguageName "hydra.ext.protobuf",
     _Language_constraints>>: record _LanguageConstraints [
       _LanguageConstraints_eliminationVariants>>: Sets.empty,
       _LanguageConstraints_literalVariants>>: Sets.fromList @@ list (unitVariant _LiteralVariant <$> [

@@ -35,7 +35,7 @@ validationDefinition :: String -> TTerm a -> TElement a
 validationDefinition = definitionInModule pgValidationModule
 
 pgValidationModule :: Module
-pgValidationModule = Module (Namespace "hydra/pg/validation") elements
+pgValidationModule = Module (Namespace "hydra.pg.validation") elements
     [] [pgModelModule] $
     Just "Utilities for validating property graphs against property graph schemas"
   where

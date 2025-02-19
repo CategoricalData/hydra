@@ -18,7 +18,7 @@ hydraCoreModule :: Module
 hydraCoreModule = Module ns elements [] [] $
     Just "Hydra's core data model of type and term expressions"
   where
-    ns = Namespace "hydra/core"
+    ns = Namespace "hydra.core"
     core = typeref ns
     def = datatype ns
     doc s = setTypeDescription (Just s)

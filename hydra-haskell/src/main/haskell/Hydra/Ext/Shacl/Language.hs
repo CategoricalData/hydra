@@ -6,7 +6,7 @@ import qualified Data.Set as S
 
 
 shaclLanguage :: Language
-shaclLanguage = Language (LanguageName "hydra/ext/shacl") $ LanguageConstraints {
+shaclLanguage = Language (LanguageName "hydra.ext.shacl") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.empty,
   languageConstraintsLiteralVariants = S.fromList literalVariants,
   languageConstraintsFloatTypes = S.fromList floatTypes,

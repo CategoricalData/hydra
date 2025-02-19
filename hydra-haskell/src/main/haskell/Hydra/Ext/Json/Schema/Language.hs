@@ -10,7 +10,7 @@ import qualified Data.Set as S
 
 
 jsonSchemaLanguage :: Language
-jsonSchemaLanguage = Language (LanguageName "hydra/ext/json/schema") $ LanguageConstraints {
+jsonSchemaLanguage = Language (LanguageName "hydra.ext.json.schema") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.empty,
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],

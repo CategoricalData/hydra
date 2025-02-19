@@ -244,8 +244,8 @@ encodeTypeReference localNs name = P3.TypeName $ if nsParts == Just localNsParts
       Just parts -> L.intercalate "." (parts ++ [local])
   where
     QualifiedName ns local = qualifyName name
-    nsParts = fmap (\n -> L.init $ Strings.splitOn "/" $ unNamespace n) ns
-    localNsParts = L.init $ Strings.splitOn "/" $ unNamespace localNs
+    nsParts = fmap (\n -> L.init $ Strings.splitOn "." $ unNamespace n) ns
+    localNsParts = L.init $ Strings.splitOn "." $ unNamespace localNs
 
 -- Eliminate type lambdas and type applications, simply replacing type variables with the string type
 flattenType :: Type -> Type
@@ -280,11 +280,11 @@ isEnumDefinitionReference name = isEnumDefinition <$> ((elementData <$> requireE
 namespaceToFileReference :: Namespace -> P3.FileReference
 namespaceToFileReference (Namespace ns) = P3.FileReference $ pns ++ ".proto"
   where
-    pns = Strings.intercalate "/" (convertCaseCamelToLowerSnake <$> (Strings.splitOn "/" ns))
+    pns = Strings.intercalate "/" (convertCaseCamelToLowerSnake <$> (Strings.splitOn "." ns))
 
 namespaceToPackageName :: Namespace -> P3.PackageName
 namespaceToPackageName (Namespace ns) = P3.PackageName $ Strings.intercalate "." $
-  convertCaseCamelToLowerSnake <$> (L.init $ Strings.splitOn "/" ns)
+  convertCaseCamelToLowerSnake <$> (L.init $ Strings.splitOn "." ns)
 
 nextIndex :: Flow s Int
 nextIndex = nextCount key_proto_field_index

@@ -8,7 +8,7 @@ import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
 
-typeScriptNs = Namespace "hydra/ext/typeScript/model"
+typeScriptNs = Namespace "hydra.ext.typeScript.model"
 ts = typeref typeScriptNs
 
 typeScriptModelModule :: Module

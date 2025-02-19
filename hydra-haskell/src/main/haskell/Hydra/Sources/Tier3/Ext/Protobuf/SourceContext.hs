@@ -8,7 +8,7 @@ import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 
 
-pbSourceContextNs = Namespace "hydra/ext/protobuf/sourceContext"
+pbSourceContextNs = Namespace "hydra.ext.protobuf.sourceContext"
 pbSourceContext = typeref pbSourceContextNs
 
 protobufSourceContextModule :: Module

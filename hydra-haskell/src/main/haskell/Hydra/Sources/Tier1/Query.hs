@@ -18,7 +18,7 @@ hydraQueryModule :: Module
 hydraQueryModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just "A model for language-agnostic graph pattern queries"
   where
-    ns = Namespace "hydra/query"
+    ns = Namespace "hydra.query"
     core = typeref $ moduleNamespace hydraCoreModule
     query = typeref ns
     def = datatype ns

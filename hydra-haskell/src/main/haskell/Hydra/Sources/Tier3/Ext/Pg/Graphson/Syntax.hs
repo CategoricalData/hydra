@@ -16,7 +16,7 @@ graphsonSyntaxModule = Module ns elements [] [hydraCoreModule] $
       ++ " This model is designed to be as inclusive as possible, supporting GraphSON 4.0 as well as earlier versions."
       ++ " See https://github.com/apache/tinkerpop/blob/master/docs/src/dev/io/graphson.asciidoc.")
   where
-    ns = Namespace "hydra/pg/graphson/syntax"
+    ns = Namespace "hydra.pg.graphson.syntax"
     gson = typeref ns
     def = datatype ns
 

@@ -31,7 +31,7 @@ testGraphDefinition :: String -> TTerm a -> TElement a
 testGraphDefinition = definitionInModule testGraphModule
 
 testGraphModule :: Module
-testGraphModule = Module (Namespace "hydra/test/testGraph") elements [] [hydraGraphModule, hydraModuleModule] $
+testGraphModule = Module (Namespace "hydra.test.testGraph") elements [] [hydraGraphModule, hydraModuleModule] $
     Just ("A module defining the graph used in the test suite.")
   where
     elements = [

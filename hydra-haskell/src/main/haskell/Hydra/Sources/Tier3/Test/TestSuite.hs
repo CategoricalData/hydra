@@ -17,8 +17,8 @@ import Hydra.Sources.Tier3.Test.TestGraph
 import qualified Data.List as L
 
 
-testSuiteNs = Namespace "hydra/test/testSuite"
-testSuitePrimitivesNs = Namespace "hydra/test/testSuite/primitives"
+testSuiteNs = Namespace "hydra.test.testSuite"
+testSuitePrimitivesNs = Namespace "hydra.test.testSuite.primitives"
 
 testSuiteModule :: Module
 testSuiteModule = Module testSuiteNs elements [testGraphModule] [hydraCoreModule, hydraTestingModule] $

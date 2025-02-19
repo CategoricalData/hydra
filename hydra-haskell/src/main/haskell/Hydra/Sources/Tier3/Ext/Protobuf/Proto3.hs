@@ -8,7 +8,7 @@ import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
 
-proto3Ns = Namespace "hydra/ext/protobuf/proto3"
+proto3Ns = Namespace "hydra.ext.protobuf.proto3"
 proto3 = typeref proto3Ns
 
 proto3Module :: Module

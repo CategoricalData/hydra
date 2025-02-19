@@ -1,4 +1,4 @@
--- | Haskell implementations of hydra/lib/sets primitives
+-- | Haskell implementations of hydra.lib.sets primitives
 
 module Hydra.Lib.Sets where
 

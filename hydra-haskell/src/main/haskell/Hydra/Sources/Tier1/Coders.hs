@@ -22,7 +22,7 @@ hydraCodersModule :: Module
 hydraCodersModule = Module ns elements [hydraMantleModule, hydraGraphModule] [hydraCoreModule] $
     Just "Abstractions for paired transformations between languages"
   where
-    ns = Namespace "hydra/coders"
+    ns = Namespace "hydra.coders"
     core = typeref $ moduleNamespace hydraCoreModule
     compute = typeref $ moduleNamespace hydraComputeModule
     graph = typeref $ moduleNamespace hydraGraphModule

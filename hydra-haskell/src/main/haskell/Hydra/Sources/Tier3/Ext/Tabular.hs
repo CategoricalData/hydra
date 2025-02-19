@@ -12,7 +12,7 @@ tabularModule :: Module
 tabularModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just ("A simple, untyped tabular data model, suitable for CSVs and TSVs")
   where
-    ns = Namespace "hydra/ext/tabular"
+    ns = Namespace "hydra.ext.tabular"
     def = datatype ns
     tabular = typeref ns
 

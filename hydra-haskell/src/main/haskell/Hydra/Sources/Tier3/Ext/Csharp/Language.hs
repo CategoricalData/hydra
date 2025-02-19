@@ -27,7 +27,7 @@ csharpLanguageModule = Module ns elements
     [hydraCodersModule, hydraLexicalModule] [hydraCoreModule, hydraGraphModule, hydraCodersModule] $
     Just "Language constraints and reserved words for C Sharp (C#)"
   where
-    ns = Namespace "hydra/ext/csharp/language"
+    ns = Namespace "hydra.ext.csharp.language"
     elements = [
       el csharpLanguageDef,
       el csharpReservedWordsDef]
@@ -36,7 +36,7 @@ csharpLanguageDef :: TElement Language
 csharpLanguageDef = csharpLanguageDefinition "csharpLanguage" $
     doc "Language constraints for C Sharp (C#)" $
     typed languageT $
-    Coders.language "hydra/ext/csharp"
+    Coders.language "hydra.ext.csharp"
       eliminationVariants
       literalVariants
       floatTypes

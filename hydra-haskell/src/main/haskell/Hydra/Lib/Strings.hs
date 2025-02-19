@@ -1,4 +1,4 @@
--- | Haskell implementations of hydra/lib/strings primitives
+-- | Haskell implementations of hydra.lib.strings primitives
 
 module Hydra.Lib.Strings where
 

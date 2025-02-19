@@ -27,7 +27,7 @@ stripDefinition :: String -> TTerm a -> TElement a
 stripDefinition = definitionInModule hydraStripModule
 
 hydraStripModule :: Module
-hydraStripModule = Module (Namespace "hydra/strip") elements [] [hydraCoreModule] $
+hydraStripModule = Module (Namespace "hydra.strip") elements [] [hydraCoreModule] $
     Just "Several functions for stripping annotations from types and terms."
   where
    elements = [

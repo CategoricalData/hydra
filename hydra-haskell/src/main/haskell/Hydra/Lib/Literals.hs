@@ -1,4 +1,4 @@
--- | Haskell implementations of hydra/lib/literals primitives
+-- | Haskell implementations of hydra.lib.literals primitives
 
 module Hydra.Lib.Literals where
 

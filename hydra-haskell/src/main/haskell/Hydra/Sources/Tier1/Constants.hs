@@ -27,7 +27,7 @@ constantsDefinition :: String -> TTerm a -> TElement a
 constantsDefinition = definitionInModule hydraConstantsModule
 
 hydraConstantsModule :: Module
-hydraConstantsModule = Module (Namespace "hydra/constants") elements [] [hydraCoreModule] $
+hydraConstantsModule = Module (Namespace "hydra.constants") elements [] [hydraCoreModule] $
     Just ("A module for tier-0 constants.")
   where
    elements = [

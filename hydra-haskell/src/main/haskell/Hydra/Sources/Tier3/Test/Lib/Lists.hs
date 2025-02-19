@@ -5,7 +5,7 @@ import Hydra.Dsl.Terms
 
 
 listPrimitiveTests :: TestGroup
-listPrimitiveTests = TestGroup "hydra/lib/lists primitives" Nothing groups []
+listPrimitiveTests = TestGroup "hydra.lib.lists primitives" Nothing groups []
   where
     groups = [
       listsApply,

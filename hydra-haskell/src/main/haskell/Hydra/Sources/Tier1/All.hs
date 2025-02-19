@@ -1,5 +1,5 @@
--- | Hydra's tier-1 modules build upon hydra/core by adding type definitions for graphs, modules, flows,
---   and other essential Hydra constructs, as well as programming logic which depends on hydra/core.
+-- | Hydra's tier-1 modules build upon hydra.core by adding type definitions for graphs, modules, flows,
+--   and other essential Hydra constructs, as well as programming logic which depends on hydra.core.
 module Hydra.Sources.Tier1.All(
   module Hydra.Sources.Tier0.Core,
   module Hydra.Sources.Tier1.All,

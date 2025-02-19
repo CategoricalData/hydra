@@ -8,7 +8,7 @@ import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
 
-pbAnyNs = Namespace "hydra/ext/protobuf/any"
+pbAnyNs = Namespace "hydra.ext.protobuf.any"
 pbAny = typeref pbAnyNs
 
 protobufAnyModule :: Module

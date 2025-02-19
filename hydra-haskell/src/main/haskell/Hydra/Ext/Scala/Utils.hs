@@ -21,7 +21,7 @@ qualifyUnionFieldName dlft sname (Name fname) = (Y.maybe dlft (\n -> scalaTypeNa
 
 scalaTypeName :: Bool -> Name -> String
 scalaTypeName qualify name@(Name n) = if qualify || S.member local reservedWords
-    then L.intercalate "." $ Strings.splitOn "/" n
+    then n
     else local
   where
     local = localNameOf name
@@ -47,7 +47,7 @@ sprim :: Name -> Scala.Data
 sprim name = sname $ prefix ++ "." ++ qualifiedNameLocal qname
   where
     qname = qualifyName name
-    prefix = L.last $ Strings.splitOn "/" $ unNamespace $ Y.fromJust $ qualifiedNameNamespace qname
+    prefix = L.last $ Strings.splitOn "." $ unNamespace $ Y.fromJust $ qualifiedNameNamespace qname
 
 stapply :: Scala.Type -> [Scala.Type] -> Scala.Type
 stapply t args = Scala.TypeApply $ Scala.Type_Apply t args

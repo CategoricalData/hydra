@@ -32,7 +32,7 @@ arityDefinition :: String -> TTerm a -> TElement a
 arityDefinition = definitionInModule hydraArityModule
 
 hydraArityModule :: Module
-hydraArityModule = Module (Namespace "hydra/arity") elements [] [hydraCoreModule] $
+hydraArityModule = Module (Namespace "hydra.arity") elements [] [hydraCoreModule] $
     Just ("Functions dealing with arguments and arity.")
   where
     elements = [

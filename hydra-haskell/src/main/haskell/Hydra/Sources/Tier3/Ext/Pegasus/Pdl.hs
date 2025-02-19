@@ -11,7 +11,7 @@ pegasusPdlModule = Module ns elements [jsonModelModule] [hydraCoreModule] $
     Just ("A model for PDL (Pegasus Data Language) schemas. Based on the specification at:\n" ++
       "  https://linkedin.github.io/rest.li/pdl_schema")
   where
-    ns = Namespace "hydra/ext/pegasus/pdl"
+    ns = Namespace "hydra.ext.pegasus.pdl"
     def = datatype ns
     pdl = typeref ns
     json = typeref $ moduleNamespace jsonModelModule

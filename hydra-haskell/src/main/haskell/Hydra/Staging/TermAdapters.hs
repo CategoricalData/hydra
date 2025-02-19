@@ -76,7 +76,7 @@ forTypeReference name = withTrace ("adapt named type " ++ unName name) $ do
     Just ad -> pure ad
 
 functionProxyName :: Name
-functionProxyName = Name "hydra/core.FunctionProxy"
+functionProxyName = Name "hydra.core.FunctionProxy"
 
 functionProxyType :: Type -> Type
 functionProxyType dom = TypeUnion $ RowType functionProxyName [

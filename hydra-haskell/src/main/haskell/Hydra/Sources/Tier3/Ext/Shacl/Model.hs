@@ -13,7 +13,7 @@ shaclModelModule :: Module
 shaclModelModule = Module ns elements [rdfSyntaxModule] [hydraCoreModule] $
     Just "A SHACL syntax model. See https://www.w3.org/TR/shacl"
   where
-    ns = Namespace "hydra/ext/org/w3/shacl/model"
+    ns = Namespace "hydra.ext.org.w3.shacl.model"
     def = datatype ns
     shacl = typeref ns
     rdf = typeref $ moduleNamespace rdfSyntaxModule

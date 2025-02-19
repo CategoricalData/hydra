@@ -36,7 +36,7 @@ hydraCoreLanguageModule = Module ns elements
     [hydraCoreModule] $
     Just "Language constraints for Hydra Core"
   where
-    ns = Namespace "hydra/coreLanguage"
+    ns = Namespace "hydra.coreLanguage"
     elements = [el hydraCoreLanguageDef]
 
 hydraCoreLanguageDef :: TElement Language
@@ -44,7 +44,7 @@ hydraCoreLanguageDef = definitionInModule hydraCoreLanguageModule "hydraCoreLang
   doc "Language constraints for Java" $
   typed languageT $
   record _Language [
-    _Language_name>>: wrap _LanguageName "hydra/core",
+    _Language_name>>: wrap _LanguageName "hydra.core",
     _Language_constraints>>: record _LanguageConstraints [
     _LanguageConstraints_eliminationVariants>>: Sets.fromList @@ ref eliminationVariantsDef,
     _LanguageConstraints_literalVariants>>: Sets.fromList @@ ref literalVariantsDef,

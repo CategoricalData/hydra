@@ -22,7 +22,7 @@ hydraWorkflowModule :: Module
 hydraWorkflowModule = Module ns elements [hydraModuleModule, hydraComputeModule, hydraGraphModule] [hydraCoreModule] $
     Just "A model for Hydra transformation workflows"
   where
-    ns = Namespace "hydra/workflow"
+    ns = Namespace "hydra.workflow"
     mod = typeref $ moduleNamespace hydraModuleModule
     compute = typeref $ moduleNamespace hydraComputeModule
     core = typeref $ moduleNamespace hydraCoreModule

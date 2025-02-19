@@ -47,7 +47,7 @@ graphqlSyntaxModule = grammarToModule ns graphqlGrammar $
     Just ("A GraphQL model. Based on the (extended) BNF at:\n" ++
       "  https://spec.graphql.org/draft/#sec-Appendix-Grammar-Summary")
   where
-    ns = Namespace "hydra/ext/org/graphql/syntax"
+    ns = Namespace "hydra.ext.org.graphql.syntax"
 
 graphqlGrammar :: G.Grammar
 graphqlGrammar = G.Grammar $ tokenDefinitions ++ documentDefinitions
