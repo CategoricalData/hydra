@@ -45,7 +45,7 @@ public class TermsTest {
     /**
      * See {@link hydra.dsl.TypesTest} for a function type corresponding to this term.
      */
-    private final Term stringLength = primitive("hydra/lib/strings.length");
+    private final Term stringLength = primitive("hydra.lib.strings.length");
 
     private final Term cat3 =
             lambda("s1", lambda("s2",
@@ -98,7 +98,7 @@ public class TermsTest {
 
         assertTrue(Strings.length() instanceof Term.Function);
         assertTrue(((Term.Function) Strings.length()).value instanceof Function.Primitive);
-        assertEquals(name("hydra/lib/strings.length"),
+        assertEquals(name("hydra.lib.strings.length"),
                 ((Function.Primitive) ((Term.Function) Strings.length()).value).value);
 
         assertTrue(cat3 instanceof Term.Function);
