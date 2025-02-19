@@ -46,7 +46,7 @@ individualEncoderTestCases = do
               record _FieldType [
                 Field _FieldType_name $ wrap _Name $ string "nothing",
                 Field _FieldType_type $ variant _Type _Type_record $ record _RowType [
-                  Field _RowType_typeName $ wrap _Name $ string "hydra/core.Unit",
+                  Field _RowType_typeName $ wrap _Name $ string "hydra.core.Unit",
                   Field _RowType_fields $ list []]]]])
 
 individualDecoderTestCases :: H.SpecWith ()
