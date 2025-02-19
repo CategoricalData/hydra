@@ -280,6 +280,9 @@ encodeTerm env term = case fullyStripTerm term of
     TermOptional mt -> case mt of
       Nothing -> pure $ pyNameToPyExpression pyNone
       Just term1 -> encode term1
+    TermProduct terms -> do
+      pyExprs <- CM.mapM encode terms
+      return $ pyAtomToPyExpression $ Py.AtomTuple $ Py.Tuple (pyExpressionToPyStarNamedExpression <$> pyExprs)
     TermRecord (Record tname fields) -> do
       pargs <- CM.mapM (encode . fieldTerm) fields
       return $ functionCall (pyNameToPyPrimary $ encodeNameQualified env tname) pargs
