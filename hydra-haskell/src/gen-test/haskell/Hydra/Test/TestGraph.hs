@@ -134,17 +134,17 @@ testTypeComparison = (Core.TypeUnion (Core.RowType {
     Core.FieldType {
       Core.fieldTypeName = (Core.Name "lessThan"),
       Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeTypeName = (Core.Name "hydra.core.Unit"),
         Core.rowTypeFields = []}))},
     Core.FieldType {
       Core.fieldTypeName = (Core.Name "equalTo"),
       Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeTypeName = (Core.Name "hydra.core.Unit"),
         Core.rowTypeFields = []}))},
     Core.FieldType {
       Core.fieldTypeName = (Core.Name "greaterThan"),
       Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeTypeName = (Core.Name "hydra.core.Unit"),
         Core.rowTypeFields = []}))}]}))
 
 testTypeComparisonName :: Core.Name
@@ -163,7 +163,7 @@ testTypeFoobarValue = (Core.TypeUnion (Core.RowType {
     Core.FieldType {
       Core.fieldTypeName = (Core.Name "unit"),
       Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeTypeName = (Core.Name "hydra.core.Unit"),
         Core.rowTypeFields = []}))}]}))
 
 testTypeFoobarValueName :: Core.Name
@@ -317,7 +317,7 @@ testTypeUnionMonomorphic = (Core.TypeUnion (Core.RowType {
     Core.FieldType {
       Core.fieldTypeName = (Core.Name "unit"),
       Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra/core.Unit"),
+        Core.rowTypeTypeName = (Core.Name "hydra.core.Unit"),
         Core.rowTypeFields = []}))}]}))
 
 testTypeUnionMonomorphicName :: Core.Name

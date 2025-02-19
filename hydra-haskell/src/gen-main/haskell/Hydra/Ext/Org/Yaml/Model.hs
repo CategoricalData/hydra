@@ -19,7 +19,7 @@ data Node =
   NodeSequence [Node]
   deriving (Eq, Ord, Read, Show)
 
-_Node = (Core.Name "hydra/ext/org/yaml/model.Node")
+_Node = (Core.Name "hydra.ext/org/yaml/model.Node")
 
 _Node_mapping = (Core.Name "mapping")
 
@@ -41,7 +41,7 @@ data Scalar =
   ScalarStr String
   deriving (Eq, Ord, Read, Show)
 
-_Scalar = (Core.Name "hydra/ext/org/yaml/model.Scalar")
+_Scalar = (Core.Name "hydra.ext/org/yaml/model.Scalar")
 
 _Scalar_bool = (Core.Name "bool")
 

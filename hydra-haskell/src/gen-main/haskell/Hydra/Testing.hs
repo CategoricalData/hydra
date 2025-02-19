@@ -15,7 +15,7 @@ data EvaluationStyle =
   EvaluationStyleLazy 
   deriving (Eq, Ord, Read, Show)
 
-_EvaluationStyle = (Core.Name "hydra/testing.EvaluationStyle")
+_EvaluationStyle = (Core.Name "hydra.testing.EvaluationStyle")
 
 _EvaluationStyle_eager = (Core.Name "eager")
 
@@ -30,7 +30,7 @@ data CaseConversionTestCase =
     caseConversionTestCaseToString :: String}
   deriving (Eq, Ord, Read, Show)
 
-_CaseConversionTestCase = (Core.Name "hydra/testing.CaseConversionTestCase")
+_CaseConversionTestCase = (Core.Name "hydra.testing.CaseConversionTestCase")
 
 _CaseConversionTestCase_fromConvention = (Core.Name "fromConvention")
 
@@ -48,7 +48,7 @@ data EvaluationTestCase =
     evaluationTestCaseOutput :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
-_EvaluationTestCase = (Core.Name "hydra/testing.EvaluationTestCase")
+_EvaluationTestCase = (Core.Name "hydra.testing.EvaluationTestCase")
 
 _EvaluationTestCase_evaluationStyle = (Core.Name "evaluationStyle")
 
@@ -63,7 +63,7 @@ data InferenceTestCase =
     inferenceTestCaseOutput :: Core.TypeScheme}
   deriving (Eq, Ord, Read, Show)
 
-_InferenceTestCase = (Core.Name "hydra/testing.InferenceTestCase")
+_InferenceTestCase = (Core.Name "hydra.testing.InferenceTestCase")
 
 _InferenceTestCase_input = (Core.Name "input")
 
@@ -74,7 +74,7 @@ newtype Tag =
     unTag :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Tag = (Core.Name "hydra/testing.Tag")
+_Tag = (Core.Name "hydra.testing.Tag")
 
 -- | A simple test case with an input and an expected output
 data TestCase = 
@@ -83,7 +83,7 @@ data TestCase =
   TestCaseInference InferenceTestCase
   deriving (Eq, Ord, Read, Show)
 
-_TestCase = (Core.Name "hydra/testing.TestCase")
+_TestCase = (Core.Name "hydra.testing.TestCase")
 
 _TestCase_caseConversion = (Core.Name "caseConversion")
 
@@ -100,7 +100,7 @@ data TestCaseWithMetadata =
     testCaseWithMetadataTags :: [Tag]}
   deriving (Eq, Ord, Read, Show)
 
-_TestCaseWithMetadata = (Core.Name "hydra/testing.TestCaseWithMetadata")
+_TestCaseWithMetadata = (Core.Name "hydra.testing.TestCaseWithMetadata")
 
 _TestCaseWithMetadata_name = (Core.Name "name")
 
@@ -119,7 +119,7 @@ data TestGroup =
     testGroupCases :: [TestCaseWithMetadata]}
   deriving (Eq, Ord, Read, Show)
 
-_TestGroup = (Core.Name "hydra/testing.TestGroup")
+_TestGroup = (Core.Name "hydra.testing.TestGroup")
 
 _TestGroup_name = (Core.Name "name")
 

@@ -16,7 +16,7 @@ data Adapter s1 s2 t1 t2 v1 v2 =
     adapterTarget :: t2,
     adapterCoder :: (Coder s1 s2 v1 v2)}
 
-_Adapter = (Core.Name "hydra/compute.Adapter")
+_Adapter = (Core.Name "hydra.compute.Adapter")
 
 _Adapter_isLossy = (Core.Name "isLossy")
 
@@ -32,7 +32,7 @@ data Bicoder s1 s2 t1 t2 v1 v2 =
     bicoderEncode :: (t1 -> Adapter s1 s2 t1 t2 v1 v2),
     bicoderDecode :: (t2 -> Adapter s2 s1 t2 t1 v2 v1)}
 
-_Bicoder = (Core.Name "hydra/compute.Bicoder")
+_Bicoder = (Core.Name "hydra.compute.Bicoder")
 
 _Bicoder_encode = (Core.Name "encode")
 
@@ -44,7 +44,7 @@ data Coder s1 s2 v1 v2 =
     coderEncode :: (v1 -> Flow s1 v2),
     coderDecode :: (v2 -> Flow s2 v1)}
 
-_Coder = (Core.Name "hydra/compute.Coder")
+_Coder = (Core.Name "hydra.compute.Coder")
 
 _Coder_encode = (Core.Name "encode")
 
@@ -55,7 +55,7 @@ newtype Flow s x =
   Flow {
     unFlow :: (s -> Trace -> FlowState s x)}
 
-_Flow = (Core.Name "hydra/compute.Flow")
+_Flow = (Core.Name "hydra.compute.Flow")
 
 -- | The result of evaluating a Flow
 data FlowState s x = 
@@ -65,7 +65,7 @@ data FlowState s x =
     flowStateTrace :: Trace}
   deriving (Eq, Ord, Read, Show)
 
-_FlowState = (Core.Name "hydra/compute.FlowState")
+_FlowState = (Core.Name "hydra.compute.FlowState")
 
 _FlowState_value = (Core.Name "value")
 
@@ -82,7 +82,7 @@ data Trace =
     traceOther :: (Map Core.Name Core.Term)}
   deriving (Eq, Ord, Read, Show)
 
-_Trace = (Core.Name "hydra/compute.Trace")
+_Trace = (Core.Name "hydra.compute.Trace")
 
 _Trace_stack = (Core.Name "stack")
 

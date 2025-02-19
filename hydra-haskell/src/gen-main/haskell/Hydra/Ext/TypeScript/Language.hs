@@ -16,7 +16,7 @@ import Data.Set as S
 -- | Language constraints for TypeScript
 typeScriptLanguage :: Coders.Language
 typeScriptLanguage = Coders.Language {
-  Coders.languageName = (Coders.LanguageName "hydra/langs/typeScript"),
+  Coders.languageName = (Coders.LanguageName "hydra.langs/typeScript"),
   Coders.languageConstraints = Coders.LanguageConstraints {
     Coders.languageConstraintsEliminationVariants = Sets.empty,
     Coders.languageConstraintsLiteralVariants = (Sets.fromList [

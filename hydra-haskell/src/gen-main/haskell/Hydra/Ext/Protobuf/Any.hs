@@ -17,7 +17,7 @@ data Any =
     anyValue :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Any = (Core.Name "hydra/ext/protobuf/any.Any")
+_Any = (Core.Name "hydra.ext/protobuf/any.Any")
 
 _Any_typeUrl = (Core.Name "typeUrl")
 

@@ -14,7 +14,7 @@ newtype DataRow v =
     unDataRow :: [Maybe v]}
   deriving (Eq, Ord, Read, Show)
 
-_DataRow = (Core.Name "hydra/ext/tabular.DataRow")
+_DataRow = (Core.Name "hydra.ext/tabular.DataRow")
 
 -- | A header row, containing column names (but no types or data)
 newtype HeaderRow = 
@@ -22,7 +22,7 @@ newtype HeaderRow =
     unHeaderRow :: [String]}
   deriving (Eq, Ord, Read, Show)
 
-_HeaderRow = (Core.Name "hydra/ext/tabular.HeaderRow")
+_HeaderRow = (Core.Name "hydra.ext/tabular.HeaderRow")
 
 -- | A simple table as in a CSV file, having an optional header row and any number of data rows
 data Table v = 
@@ -33,7 +33,7 @@ data Table v =
     tableData :: [DataRow v]}
   deriving (Eq, Ord, Read, Show)
 
-_Table = (Core.Name "hydra/ext/tabular.Table")
+_Table = (Core.Name "hydra.ext/tabular.Table")
 
 _Table_header = (Core.Name "header")
 

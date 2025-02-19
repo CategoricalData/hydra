@@ -24,7 +24,7 @@ data Value =
   ValueString String
   deriving (Eq, Ord, Read, Show)
 
-_Value = (Core.Name "hydra/json.Value")
+_Value = (Core.Name "hydra.json.Value")
 
 _Value_array = (Core.Name "array")
 

@@ -18,7 +18,7 @@ data AdapterContext =
     adapterContextLanguage :: Language,
     adapterContextAdapters :: (Map Core.Name (Compute.Adapter AdapterContext AdapterContext Core.Type Core.Type Core.Term Core.Term))}
 
-_AdapterContext = (Core.Name "hydra/coders.AdapterContext")
+_AdapterContext = (Core.Name "hydra.coders.AdapterContext")
 
 _AdapterContext_graph = (Core.Name "graph")
 
@@ -32,7 +32,7 @@ data CoderDirection =
   CoderDirectionDecode 
   deriving (Eq, Ord, Read, Show)
 
-_CoderDirection = (Core.Name "hydra/coders.CoderDirection")
+_CoderDirection = (Core.Name "hydra.coders.CoderDirection")
 
 _CoderDirection_encode = (Core.Name "encode")
 
@@ -44,7 +44,7 @@ data Language =
     languageName :: LanguageName,
     languageConstraints :: LanguageConstraints}
 
-_Language = (Core.Name "hydra/coders.Language")
+_Language = (Core.Name "hydra.coders.Language")
 
 _Language_name = (Core.Name "name")
 
@@ -70,7 +70,7 @@ data LanguageConstraints =
     -- | A logical set of types, as a predicate which tests a type for inclusion
     languageConstraintsTypes :: (Core.Type -> Bool)}
 
-_LanguageConstraints = (Core.Name "hydra/coders.LanguageConstraints")
+_LanguageConstraints = (Core.Name "hydra.coders.LanguageConstraints")
 
 _LanguageConstraints_eliminationVariants = (Core.Name "eliminationVariants")
 
@@ -94,7 +94,7 @@ newtype LanguageName =
     unLanguageName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_LanguageName = (Core.Name "hydra/coders.LanguageName")
+_LanguageName = (Core.Name "hydra.coders.LanguageName")
 
 -- | Specifies either a pre-order or post-order traversal
 data TraversalOrder = 
@@ -104,7 +104,7 @@ data TraversalOrder =
   TraversalOrderPost 
   deriving (Eq, Ord, Read, Show)
 
-_TraversalOrder = (Core.Name "hydra/coders.TraversalOrder")
+_TraversalOrder = (Core.Name "hydra.coders.TraversalOrder")
 
 _TraversalOrder_pre = (Core.Name "pre")
 

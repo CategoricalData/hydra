@@ -13,7 +13,7 @@ data Definition =
   DefinitionMessage MessageDefinition
   deriving (Eq, Ord, Read, Show)
 
-_Definition = (Core.Name "hydra/ext/protobuf/proto3.Definition")
+_Definition = (Core.Name "hydra.ext/protobuf/proto3.Definition")
 
 _Definition_enum = (Core.Name "enum")
 
@@ -30,7 +30,7 @@ data EnumDefinition =
     enumDefinitionOptions :: [Option]}
   deriving (Eq, Ord, Read, Show)
 
-_EnumDefinition = (Core.Name "hydra/ext/protobuf/proto3.EnumDefinition")
+_EnumDefinition = (Core.Name "hydra.ext/protobuf/proto3.EnumDefinition")
 
 _EnumDefinition_name = (Core.Name "name")
 
@@ -49,7 +49,7 @@ data EnumValue =
     enumValueOptions :: [Option]}
   deriving (Eq, Ord, Read, Show)
 
-_EnumValue = (Core.Name "hydra/ext/protobuf/proto3.EnumValue")
+_EnumValue = (Core.Name "hydra.ext/protobuf/proto3.EnumValue")
 
 _EnumValue_name = (Core.Name "name")
 
@@ -62,7 +62,7 @@ newtype EnumValueName =
     unEnumValueName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_EnumValueName = (Core.Name "hydra/ext/protobuf/proto3.EnumValueName")
+_EnumValueName = (Core.Name "hydra.ext/protobuf/proto3.EnumValueName")
 
 -- | A single field of a message type
 data Field = 
@@ -79,7 +79,7 @@ data Field =
     fieldOptions :: [Option]}
   deriving (Eq, Ord, Read, Show)
 
-_Field = (Core.Name "hydra/ext/protobuf/proto3.Field")
+_Field = (Core.Name "hydra.ext/protobuf/proto3.Field")
 
 _Field_name = (Core.Name "name")
 
@@ -97,7 +97,7 @@ newtype FieldName =
     unFieldName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_FieldName = (Core.Name "hydra/ext/protobuf/proto3.FieldName")
+_FieldName = (Core.Name "hydra.ext/protobuf/proto3.FieldName")
 
 data FieldType = 
   FieldTypeMap MapType |
@@ -106,7 +106,7 @@ data FieldType =
   FieldTypeSimple SimpleType
   deriving (Eq, Ord, Read, Show)
 
-_FieldType = (Core.Name "hydra/ext/protobuf/proto3.FieldType")
+_FieldType = (Core.Name "hydra.ext/protobuf/proto3.FieldType")
 
 _FieldType_map = (Core.Name "map")
 
@@ -121,7 +121,7 @@ newtype FileReference =
     unFileReference :: String}
   deriving (Eq, Ord, Read, Show)
 
-_FileReference = (Core.Name "hydra/ext/protobuf/proto3.FileReference")
+_FileReference = (Core.Name "hydra.ext/protobuf/proto3.FileReference")
 
 data MapType = 
   MapType {
@@ -129,7 +129,7 @@ data MapType =
     mapTypeValues :: SimpleType}
   deriving (Eq, Ord, Read, Show)
 
-_MapType = (Core.Name "hydra/ext/protobuf/proto3.MapType")
+_MapType = (Core.Name "hydra.ext/protobuf/proto3.MapType")
 
 _MapType_keys = (Core.Name "keys")
 
@@ -146,7 +146,7 @@ data MessageDefinition =
     messageDefinitionOptions :: [Option]}
   deriving (Eq, Ord, Read, Show)
 
-_MessageDefinition = (Core.Name "hydra/ext/protobuf/proto3.MessageDefinition")
+_MessageDefinition = (Core.Name "hydra.ext/protobuf/proto3.MessageDefinition")
 
 _MessageDefinition_name = (Core.Name "name")
 
@@ -163,7 +163,7 @@ data Option =
     optionValue :: Value}
   deriving (Eq, Ord, Read, Show)
 
-_Option = (Core.Name "hydra/ext/protobuf/proto3.Option")
+_Option = (Core.Name "hydra.ext/protobuf/proto3.Option")
 
 _Option_name = (Core.Name "name")
 
@@ -174,7 +174,7 @@ newtype PackageName =
     unPackageName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_PackageName = (Core.Name "hydra/ext/protobuf/proto3.PackageName")
+_PackageName = (Core.Name "hydra.ext/protobuf/proto3.PackageName")
 
 -- | A .proto file, usually containing one or more enum or message type definitions
 data ProtoFile = 
@@ -185,7 +185,7 @@ data ProtoFile =
     protoFileOptions :: [Option]}
   deriving (Eq, Ord, Read, Show)
 
-_ProtoFile = (Core.Name "hydra/ext/protobuf/proto3.ProtoFile")
+_ProtoFile = (Core.Name "hydra.ext/protobuf/proto3.ProtoFile")
 
 _ProtoFile_package = (Core.Name "package")
 
@@ -214,7 +214,7 @@ data ScalarType =
   ScalarTypeUint64 
   deriving (Eq, Ord, Read, Show)
 
-_ScalarType = (Core.Name "hydra/ext/protobuf/proto3.ScalarType")
+_ScalarType = (Core.Name "hydra.ext/protobuf/proto3.ScalarType")
 
 _ScalarType_bool = (Core.Name "bool")
 
@@ -252,7 +252,7 @@ data SimpleType =
   SimpleTypeScalar ScalarType
   deriving (Eq, Ord, Read, Show)
 
-_SimpleType = (Core.Name "hydra/ext/protobuf/proto3.SimpleType")
+_SimpleType = (Core.Name "hydra.ext/protobuf/proto3.SimpleType")
 
 _SimpleType_reference = (Core.Name "reference")
 
@@ -264,7 +264,7 @@ newtype TypeName =
     unTypeName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_TypeName = (Core.Name "hydra/ext/protobuf/proto3.TypeName")
+_TypeName = (Core.Name "hydra.ext/protobuf/proto3.TypeName")
 
 -- | A reference to an enum type or message type
 newtype TypeReference = 
@@ -272,7 +272,7 @@ newtype TypeReference =
     unTypeReference :: String}
   deriving (Eq, Ord, Read, Show)
 
-_TypeReference = (Core.Name "hydra/ext/protobuf/proto3.TypeReference")
+_TypeReference = (Core.Name "hydra.ext/protobuf/proto3.TypeReference")
 
 -- | A scalar value
 data Value = 
@@ -280,7 +280,7 @@ data Value =
   ValueString String
   deriving (Eq, Ord, Read, Show)
 
-_Value = (Core.Name "hydra/ext/protobuf/proto3.Value")
+_Value = (Core.Name "hydra.ext/protobuf/proto3.Value")
 
 _Value_boolean = (Core.Name "boolean")
 

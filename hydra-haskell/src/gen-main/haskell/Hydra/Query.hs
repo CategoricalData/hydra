@@ -18,7 +18,7 @@ data ComparisonConstraint =
   ComparisonConstraintGreaterThanOrEqual 
   deriving (Eq, Ord, Read, Show)
 
-_ComparisonConstraint = (Core.Name "hydra/query.ComparisonConstraint")
+_ComparisonConstraint = (Core.Name "hydra.query.ComparisonConstraint")
 
 _ComparisonConstraint_equal = (Core.Name "equal")
 
@@ -43,7 +43,7 @@ data Edge =
     edgeIn :: (Maybe Core.Name)}
   deriving (Eq, Ord, Read, Show)
 
-_Edge = (Core.Name "hydra/query.Edge")
+_Edge = (Core.Name "hydra.query.Edge")
 
 _Edge_type = (Core.Name "type")
 
@@ -60,7 +60,7 @@ data GraphPattern =
     graphPatternPatterns :: [Pattern]}
   deriving (Eq, Ord, Read, Show)
 
-_GraphPattern = (Core.Name "hydra/query.GraphPattern")
+_GraphPattern = (Core.Name "hydra.query.GraphPattern")
 
 _GraphPattern_graph = (Core.Name "graph")
 
@@ -76,7 +76,7 @@ data Node =
   NodeWildcard 
   deriving (Eq, Ord, Read, Show)
 
-_Node = (Core.Name "hydra/query.Node")
+_Node = (Core.Name "hydra.query.Node")
 
 _Node_term = (Core.Name "term")
 
@@ -94,7 +94,7 @@ data Path =
   PathInverse Path
   deriving (Eq, Ord, Read, Show)
 
-_Path = (Core.Name "hydra/query.Path")
+_Path = (Core.Name "hydra.query.Path")
 
 _Path_step = (Core.Name "step")
 
@@ -116,7 +116,7 @@ data Pattern =
   PatternGraph GraphPattern
   deriving (Eq, Ord, Read, Show)
 
-_Pattern = (Core.Name "hydra/query.Pattern")
+_Pattern = (Core.Name "hydra.query.Pattern")
 
 _Pattern_triple = (Core.Name "triple")
 
@@ -137,7 +137,7 @@ data Query =
     queryPatterns :: [Pattern]}
   deriving (Eq, Ord, Read, Show)
 
-_Query = (Core.Name "hydra/query.Query")
+_Query = (Core.Name "hydra.query.Query")
 
 _Query_variables = (Core.Name "variables")
 
@@ -150,7 +150,7 @@ data Range =
     rangeMax :: Int}
   deriving (Eq, Ord, Read, Show)
 
-_Range = (Core.Name "hydra/query.Range")
+_Range = (Core.Name "hydra.query.Range")
 
 _Range_min = (Core.Name "min")
 
@@ -174,7 +174,7 @@ data RegexQuantifier =
   RegexQuantifierRange Range
   deriving (Eq, Ord, Read, Show)
 
-_RegexQuantifier = (Core.Name "hydra/query.RegexQuantifier")
+_RegexQuantifier = (Core.Name "hydra.query.RegexQuantifier")
 
 _RegexQuantifier_one = (Core.Name "one")
 
@@ -197,7 +197,7 @@ data RegexSequence =
     regexSequenceQuantifier :: RegexQuantifier}
   deriving (Eq, Ord, Read, Show)
 
-_RegexSequence = (Core.Name "hydra/query.RegexSequence")
+_RegexSequence = (Core.Name "hydra.query.RegexSequence")
 
 _RegexSequence_path = (Core.Name "path")
 
@@ -213,7 +213,7 @@ data Step =
   StepCompare ComparisonConstraint
   deriving (Eq, Ord, Read, Show)
 
-_Step = (Core.Name "hydra/query.Step")
+_Step = (Core.Name "hydra.query.Step")
 
 _Step_edge = (Core.Name "edge")
 
@@ -229,7 +229,7 @@ data TriplePattern =
     triplePatternObject :: Node}
   deriving (Eq, Ord, Read, Show)
 
-_TriplePattern = (Core.Name "hydra/query.TriplePattern")
+_TriplePattern = (Core.Name "hydra.query.TriplePattern")
 
 _TriplePattern_subject = (Core.Name "subject")
 
@@ -243,4 +243,4 @@ newtype Variable =
     unVariable :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Variable = (Core.Name "hydra/query.Variable")
+_Variable = (Core.Name "hydra.query.Variable")

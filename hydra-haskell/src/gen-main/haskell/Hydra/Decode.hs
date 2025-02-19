@@ -156,7 +156,7 @@ map x = ((\x -> case x of
   _ -> Nothing) (Strip.fullyStripTerm x))
 
 name :: (Core.Term -> Maybe Core.Name)
-name term = (Optionals.map (\s -> Core.Name s) (Optionals.bind (wrap (Core.Name "hydra/core.Name") term) string))
+name term = (Optionals.map (\s -> Core.Name s) (Optionals.bind (wrap (Core.Name "hydra.core.Name") term) string))
 
 nominal :: ((a -> Core.Name) -> (a -> b) -> (c -> Maybe a) -> Core.Name -> c -> Maybe b)
 nominal getName getB getA expected = (Optionals.compose getA (\a -> Logic.ifElse (Just (getB a)) Nothing (Equality.equal (getName a) expected)))
@@ -237,7 +237,7 @@ uint8Value x = case x of
   _ -> Nothing
 
 unit :: (Core.Term -> Maybe ())
-unit term = (Optionals.map (\_ -> ()) (record (Core.Name "hydra/core.Unit") term))
+unit term = (Optionals.map (\_ -> ()) (record (Core.Name "hydra.core.Unit") term))
 
 unitVariant :: (Core.Name -> Core.Term -> Maybe Core.Name)
 unitVariant tname term = (Optionals.map Core.fieldName (variant tname term))

@@ -23,7 +23,7 @@ namespaceOf x = (Module.qualifiedNameNamespace (qualifyName x))
 
 namespaceToFilePath :: (Mantle.CaseConvention -> Module.FileExtension -> Module.Namespace -> String)
 namespaceToFilePath caseConv ext ns =  
-  let parts = (Lists.map (Formatting.convertCase Mantle.CaseConventionCamel caseConv) (Strings.splitOn "/" (Module.unNamespace ns)))
+  let parts = (Lists.map (Formatting.convertCase Mantle.CaseConventionCamel caseConv) (Strings.splitOn "." (Module.unNamespace ns)))
   in (Strings.cat [
     Strings.cat [
       Strings.intercalate "/" parts,

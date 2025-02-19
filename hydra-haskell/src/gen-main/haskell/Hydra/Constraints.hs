@@ -16,7 +16,7 @@ data PathEquation =
     pathEquationRight :: Query.Path}
   deriving (Eq, Ord, Read, Show)
 
-_PathEquation = (Core.Name "hydra/constraints.PathEquation")
+_PathEquation = (Core.Name "hydra.constraints.PathEquation")
 
 _PathEquation_left = (Core.Name "left")
 
@@ -29,7 +29,7 @@ data PatternImplication =
     patternImplicationConsequent :: Query.Pattern}
   deriving (Eq, Ord, Read, Show)
 
-_PatternImplication = (Core.Name "hydra/constraints.PatternImplication")
+_PatternImplication = (Core.Name "hydra.constraints.PatternImplication")
 
 _PatternImplication_antecedent = (Core.Name "antecedent")
 

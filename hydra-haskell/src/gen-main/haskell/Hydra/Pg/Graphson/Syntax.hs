@@ -13,7 +13,7 @@ newtype BigDecimalValue =
     unBigDecimalValue :: String}
   deriving (Eq, Ord, Read, Show)
 
-_BigDecimalValue = (Core.Name "hydra/pg/graphson/syntax.BigDecimalValue")
+_BigDecimalValue = (Core.Name "hydra.pg.graphson.syntax.BigDecimalValue")
 
 data CompositeTypedValue = 
   CompositeTypedValue {
@@ -21,7 +21,7 @@ data CompositeTypedValue =
     compositeTypedValueFields :: Map_}
   deriving (Eq, Ord, Read, Show)
 
-_CompositeTypedValue = (Core.Name "hydra/pg/graphson/syntax.CompositeTypedValue")
+_CompositeTypedValue = (Core.Name "hydra.pg.graphson.syntax.CompositeTypedValue")
 
 _CompositeTypedValue_type = (Core.Name "type")
 
@@ -32,7 +32,7 @@ newtype DateTime =
     unDateTime :: String}
   deriving (Eq, Ord, Read, Show)
 
-_DateTime = (Core.Name "hydra/pg/graphson/syntax.DateTime")
+_DateTime = (Core.Name "hydra.pg.graphson.syntax.DateTime")
 
 data DoubleValue = 
   DoubleValueFinite Double |
@@ -41,7 +41,7 @@ data DoubleValue =
   DoubleValueNotANumber 
   deriving (Eq, Ord, Read, Show)
 
-_DoubleValue = (Core.Name "hydra/pg/graphson/syntax.DoubleValue")
+_DoubleValue = (Core.Name "hydra.pg.graphson.syntax.DoubleValue")
 
 _DoubleValue_finite = (Core.Name "finite")
 
@@ -56,14 +56,14 @@ newtype Duration =
     unDuration :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Duration = (Core.Name "hydra/pg/graphson/syntax.Duration")
+_Duration = (Core.Name "hydra.pg.graphson.syntax.Duration")
 
 newtype EdgeLabel = 
   EdgeLabel {
     unEdgeLabel :: String}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeLabel = (Core.Name "hydra/pg/graphson/syntax.EdgeLabel")
+_EdgeLabel = (Core.Name "hydra.pg.graphson.syntax.EdgeLabel")
 
 data FloatValue = 
   FloatValueFinite Float |
@@ -72,7 +72,7 @@ data FloatValue =
   FloatValueNotANumber 
   deriving (Eq, Ord, Read, Show)
 
-_FloatValue = (Core.Name "hydra/pg/graphson/syntax.FloatValue")
+_FloatValue = (Core.Name "hydra.pg.graphson.syntax.FloatValue")
 
 _FloatValue_finite = (Core.Name "finite")
 
@@ -87,7 +87,7 @@ newtype Map_ =
     unMap :: [ValuePair]}
   deriving (Eq, Ord, Read, Show)
 
-_Map = (Core.Name "hydra/pg/graphson/syntax.Map")
+_Map = (Core.Name "hydra.pg.graphson.syntax.Map")
 
 data AdjacentEdge = 
   AdjacentEdge {
@@ -96,7 +96,7 @@ data AdjacentEdge =
     adjacentEdgeProperties :: (Map PropertyKey Value)}
   deriving (Eq, Ord, Read, Show)
 
-_AdjacentEdge = (Core.Name "hydra/pg/graphson/syntax.AdjacentEdge")
+_AdjacentEdge = (Core.Name "hydra.pg.graphson.syntax.AdjacentEdge")
 
 _AdjacentEdge_id = (Core.Name "id")
 
@@ -110,7 +110,7 @@ data PrimitiveTypedValue =
     primitiveTypedValueValue :: String}
   deriving (Eq, Ord, Read, Show)
 
-_PrimitiveTypedValue = (Core.Name "hydra/pg/graphson/syntax.PrimitiveTypedValue")
+_PrimitiveTypedValue = (Core.Name "hydra.pg.graphson.syntax.PrimitiveTypedValue")
 
 _PrimitiveTypedValue_type = (Core.Name "type")
 
@@ -121,21 +121,21 @@ newtype PropertyKey =
     unPropertyKey :: String}
   deriving (Eq, Ord, Read, Show)
 
-_PropertyKey = (Core.Name "hydra/pg/graphson/syntax.PropertyKey")
+_PropertyKey = (Core.Name "hydra.pg.graphson.syntax.PropertyKey")
 
 newtype TypeName = 
   TypeName {
     unTypeName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_TypeName = (Core.Name "hydra/pg/graphson/syntax.TypeName")
+_TypeName = (Core.Name "hydra.pg.graphson.syntax.TypeName")
 
 newtype Uuid = 
   Uuid {
     unUuid :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Uuid = (Core.Name "hydra/pg/graphson/syntax.Uuid")
+_Uuid = (Core.Name "hydra.pg.graphson.syntax.Uuid")
 
 data Value = 
   ValueBigDecimal BigDecimalValue |
@@ -161,7 +161,7 @@ data Value =
   ValueUuid Uuid
   deriving (Eq, Ord, Read, Show)
 
-_Value = (Core.Name "hydra/pg/graphson/syntax.Value")
+_Value = (Core.Name "hydra.pg.graphson.syntax.Value")
 
 _Value_bigDecimal = (Core.Name "bigDecimal")
 
@@ -211,7 +211,7 @@ data ValuePair =
     valuePairSecond :: Value}
   deriving (Eq, Ord, Read, Show)
 
-_ValuePair = (Core.Name "hydra/pg/graphson/syntax.ValuePair")
+_ValuePair = (Core.Name "hydra.pg.graphson.syntax.ValuePair")
 
 _ValuePair_first = (Core.Name "first")
 
@@ -226,7 +226,7 @@ data Vertex =
     vertexProperties :: (Map PropertyKey [VertexPropertyValue])}
   deriving (Eq, Ord, Read, Show)
 
-_Vertex = (Core.Name "hydra/pg/graphson/syntax.Vertex")
+_Vertex = (Core.Name "hydra.pg.graphson.syntax.Vertex")
 
 _Vertex_id = (Core.Name "id")
 
@@ -243,7 +243,7 @@ newtype VertexLabel =
     unVertexLabel :: String}
   deriving (Eq, Ord, Read, Show)
 
-_VertexLabel = (Core.Name "hydra/pg/graphson/syntax.VertexLabel")
+_VertexLabel = (Core.Name "hydra.pg.graphson.syntax.VertexLabel")
 
 data VertexPropertyValue = 
   VertexPropertyValue {
@@ -251,7 +251,7 @@ data VertexPropertyValue =
     vertexPropertyValueValue :: Value}
   deriving (Eq, Ord, Read, Show)
 
-_VertexPropertyValue = (Core.Name "hydra/pg/graphson/syntax.VertexPropertyValue")
+_VertexPropertyValue = (Core.Name "hydra.pg.graphson.syntax.VertexPropertyValue")
 
 _VertexPropertyValue_id = (Core.Name "id")
 

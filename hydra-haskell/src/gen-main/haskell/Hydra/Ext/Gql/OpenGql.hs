@@ -13,7 +13,7 @@ data GqlProgram =
   GqlProgramClose (Maybe SessionCloseCommand)
   deriving (Eq, Ord, Read, Show)
 
-_GqlProgram = (Core.Name "hydra/ext/gql/openGql.GqlProgram")
+_GqlProgram = (Core.Name "hydra.ext/gql/openGql.GqlProgram")
 
 _GqlProgram_activity = (Core.Name "activity")
 
@@ -24,7 +24,7 @@ data ProgramActivity =
   ProgramActivityTransaction TransactionActivity
   deriving (Eq, Ord, Read, Show)
 
-_ProgramActivity = (Core.Name "hydra/ext/gql/openGql.ProgramActivity")
+_ProgramActivity = (Core.Name "hydra.ext/gql/openGql.ProgramActivity")
 
 _ProgramActivity_session = (Core.Name "session")
 
@@ -35,7 +35,7 @@ data SessionActivity =
   SessionActivitySetAndResetCommands SessionSetAndResetCommands
   deriving (Eq, Ord, Read, Show)
 
-_SessionActivity = (Core.Name "hydra/ext/gql/openGql.SessionActivity")
+_SessionActivity = (Core.Name "hydra.ext/gql/openGql.SessionActivity")
 
 _SessionActivity_reset = (Core.Name "reset")
 
@@ -47,7 +47,7 @@ data SessionSetAndResetCommands =
     sessionSetAndResetCommandsReset :: [SessionResetCommand]}
   deriving (Eq, Ord, Read, Show)
 
-_SessionSetAndResetCommands = (Core.Name "hydra/ext/gql/openGql.SessionSetAndResetCommands")
+_SessionSetAndResetCommands = (Core.Name "hydra.ext/gql/openGql.SessionSetAndResetCommands")
 
 _SessionSetAndResetCommands_set = (Core.Name "set")
 
@@ -59,7 +59,7 @@ data TransactionActivity =
   TransactionActivityEnd EndTransactionCommand
   deriving (Eq, Ord, Read, Show)
 
-_TransactionActivity = (Core.Name "hydra/ext/gql/openGql.TransactionActivity")
+_TransactionActivity = (Core.Name "hydra.ext/gql/openGql.TransactionActivity")
 
 _TransactionActivity_start = (Core.Name "start")
 
@@ -73,7 +73,7 @@ data StartAndMaybeProcedureAndMaybeEnd =
     startAndMaybeProcedureAndMaybeEndProcedureAndEnd :: (Maybe ProcedureAndMaybeEnd)}
   deriving (Eq, Ord, Read, Show)
 
-_StartAndMaybeProcedureAndMaybeEnd = (Core.Name "hydra/ext/gql/openGql.StartAndMaybeProcedureAndMaybeEnd")
+_StartAndMaybeProcedureAndMaybeEnd = (Core.Name "hydra.ext/gql/openGql.StartAndMaybeProcedureAndMaybeEnd")
 
 _StartAndMaybeProcedureAndMaybeEnd_start = (Core.Name "start")
 
@@ -85,7 +85,7 @@ data ProcedureAndMaybeEnd =
     procedureAndMaybeEndEnd :: (Maybe EndTransactionCommand)}
   deriving (Eq, Ord, Read, Show)
 
-_ProcedureAndMaybeEnd = (Core.Name "hydra/ext/gql/openGql.ProcedureAndMaybeEnd")
+_ProcedureAndMaybeEnd = (Core.Name "hydra.ext/gql/openGql.ProcedureAndMaybeEnd")
 
 _ProcedureAndMaybeEnd_procedure = (Core.Name "procedure")
 
@@ -96,7 +96,7 @@ data EndTransactionCommand =
   EndTransactionCommandCommit CommitCommand
   deriving (Eq, Ord, Read, Show)
 
-_EndTransactionCommand = (Core.Name "hydra/ext/gql/openGql.EndTransactionCommand")
+_EndTransactionCommand = (Core.Name "hydra.ext/gql/openGql.EndTransactionCommand")
 
 _EndTransactionCommand_rollback = (Core.Name "rollback")
 
@@ -109,7 +109,7 @@ data SessionSetCommand =
   SessionSetCommandParameter SessionSetParameterClause
   deriving (Eq, Ord, Read, Show)
 
-_SessionSetCommand = (Core.Name "hydra/ext/gql/openGql.SessionSetCommand")
+_SessionSetCommand = (Core.Name "hydra.ext/gql/openGql.SessionSetCommand")
 
 _SessionSetCommand_schema = (Core.Name "schema")
 
@@ -124,28 +124,28 @@ newtype SessionSetSchemaClause =
     unSessionSetSchemaClause :: SchemaReference}
   deriving (Eq, Ord, Read, Show)
 
-_SessionSetSchemaClause = (Core.Name "hydra/ext/gql/openGql.SessionSetSchemaClause")
+_SessionSetSchemaClause = (Core.Name "hydra.ext/gql/openGql.SessionSetSchemaClause")
 
 newtype SessionSetGraphClause = 
   SessionSetGraphClause {
     unSessionSetGraphClause :: GraphExpression}
   deriving (Eq, Ord, Read, Show)
 
-_SessionSetGraphClause = (Core.Name "hydra/ext/gql/openGql.SessionSetGraphClause")
+_SessionSetGraphClause = (Core.Name "hydra.ext/gql/openGql.SessionSetGraphClause")
 
 newtype SessionSetTimeZoneClause = 
   SessionSetTimeZoneClause {
     unSessionSetTimeZoneClause :: SetTimeZoneValue}
   deriving (Eq, Ord, Read, Show)
 
-_SessionSetTimeZoneClause = (Core.Name "hydra/ext/gql/openGql.SessionSetTimeZoneClause")
+_SessionSetTimeZoneClause = (Core.Name "hydra.ext/gql/openGql.SessionSetTimeZoneClause")
 
 newtype SetTimeZoneValue = 
   SetTimeZoneValue {
     unSetTimeZoneValue :: TimeZoneString}
   deriving (Eq, Ord, Read, Show)
 
-_SetTimeZoneValue = (Core.Name "hydra/ext/gql/openGql.SetTimeZoneValue")
+_SetTimeZoneValue = (Core.Name "hydra.ext/gql/openGql.SetTimeZoneValue")
 
 data SessionSetParameterClause = 
   SessionSetParameterClauseGraph SessionSetGraphParameterClause |
@@ -153,7 +153,7 @@ data SessionSetParameterClause =
   SessionSetParameterClauseValue SessionSetValueParameterClause
   deriving (Eq, Ord, Read, Show)
 
-_SessionSetParameterClause = (Core.Name "hydra/ext/gql/openGql.SessionSetParameterClause")
+_SessionSetParameterClause = (Core.Name "hydra.ext/gql/openGql.SessionSetParameterClause")
 
 _SessionSetParameterClause_graph = (Core.Name "graph")
 
@@ -167,7 +167,7 @@ data SessionSetGraphParameterClause =
     sessionSetGraphParameterClauseInitializer :: OptTypedGraphInitializer}
   deriving (Eq, Ord, Read, Show)
 
-_SessionSetGraphParameterClause = (Core.Name "hydra/ext/gql/openGql.SessionSetGraphParameterClause")
+_SessionSetGraphParameterClause = (Core.Name "hydra.ext/gql/openGql.SessionSetGraphParameterClause")
 
 _SessionSetGraphParameterClause_graph = (Core.Name "graph")
 
@@ -180,7 +180,7 @@ data SessionSetBindingTableParameterClause =
     sessionSetBindingTableParameterClauseInit :: OptTypedBindingTableInitializer}
   deriving (Eq, Ord, Read, Show)
 
-_SessionSetBindingTableParameterClause = (Core.Name "hydra/ext/gql/openGql.SessionSetBindingTableParameterClause")
+_SessionSetBindingTableParameterClause = (Core.Name "hydra.ext/gql/openGql.SessionSetBindingTableParameterClause")
 
 _SessionSetBindingTableParameterClause_binding = (Core.Name "binding")
 
@@ -194,7 +194,7 @@ data SessionSetValueParameterClause =
     sessionSetValueParameterClauseInitializer :: OptTypedValueInitializer}
   deriving (Eq, Ord, Read, Show)
 
-_SessionSetValueParameterClause = (Core.Name "hydra/ext/gql/openGql.SessionSetValueParameterClause")
+_SessionSetValueParameterClause = (Core.Name "hydra.ext/gql/openGql.SessionSetValueParameterClause")
 
 _SessionSetValueParameterClause_value = (Core.Name "value")
 
@@ -206,7 +206,7 @@ data SessionSetParameterName =
     sessionSetParameterNameParameter :: SessionParameterSpecification}
   deriving (Eq, Ord, Read, Show)
 
-_SessionSetParameterName = (Core.Name "hydra/ext/gql/openGql.SessionSetParameterName")
+_SessionSetParameterName = (Core.Name "hydra.ext/gql/openGql.SessionSetParameterName")
 
 _SessionSetParameterName_ifNotExists = (Core.Name "ifNotExists")
 
@@ -217,7 +217,7 @@ newtype SessionResetCommand =
     unSessionResetCommand :: (Maybe SessionResetArguments)}
   deriving (Eq, Ord, Read, Show)
 
-_SessionResetCommand = (Core.Name "hydra/ext/gql/openGql.SessionResetCommand")
+_SessionResetCommand = (Core.Name "hydra.ext/gql/openGql.SessionResetCommand")
 
 data SessionResetArguments = 
   SessionResetArgumentsParametersOrCharacteristics AllParametersOrCharacteristics |
@@ -227,7 +227,7 @@ data SessionResetArguments =
   SessionResetArgumentsParameterSessionSpecification ParameterSessionSpecification
   deriving (Eq, Ord, Read, Show)
 
-_SessionResetArguments = (Core.Name "hydra/ext/gql/openGql.SessionResetArguments")
+_SessionResetArguments = (Core.Name "hydra.ext/gql/openGql.SessionResetArguments")
 
 _SessionResetArguments_parametersOrCharacteristics = (Core.Name "parametersOrCharacteristics")
 
@@ -245,7 +245,7 @@ data AllParametersOrCharacteristics =
     allParametersOrCharacteristicsType :: ParametersOrCharacteristics}
   deriving (Eq, Ord, Read, Show)
 
-_AllParametersOrCharacteristics = (Core.Name "hydra/ext/gql/openGql.AllParametersOrCharacteristics")
+_AllParametersOrCharacteristics = (Core.Name "hydra.ext/gql/openGql.AllParametersOrCharacteristics")
 
 _AllParametersOrCharacteristics_all = (Core.Name "all")
 
@@ -256,7 +256,7 @@ data ParametersOrCharacteristics =
   ParametersOrCharacteristicsCharacteristics 
   deriving (Eq, Ord, Read, Show)
 
-_ParametersOrCharacteristics = (Core.Name "hydra/ext/gql/openGql.ParametersOrCharacteristics")
+_ParametersOrCharacteristics = (Core.Name "hydra.ext/gql/openGql.ParametersOrCharacteristics")
 
 _ParametersOrCharacteristics_parameters = (Core.Name "parameters")
 
@@ -268,7 +268,7 @@ data ParameterSessionSpecification =
     parameterSessionSpecificationSessionParameterSpecification :: SessionParameterSpecification}
   deriving (Eq, Ord, Read, Show)
 
-_ParameterSessionSpecification = (Core.Name "hydra/ext/gql/openGql.ParameterSessionSpecification")
+_ParameterSessionSpecification = (Core.Name "hydra.ext/gql/openGql.ParameterSessionSpecification")
 
 _ParameterSessionSpecification_parameter = (Core.Name "parameter")
 
@@ -278,42 +278,42 @@ data SessionCloseCommand =
   SessionCloseCommand {}
   deriving (Eq, Ord, Read, Show)
 
-_SessionCloseCommand = (Core.Name "hydra/ext/gql/openGql.SessionCloseCommand")
+_SessionCloseCommand = (Core.Name "hydra.ext/gql/openGql.SessionCloseCommand")
 
 newtype SessionParameterSpecification = 
   SessionParameterSpecification {
     unSessionParameterSpecification :: ParameterName}
   deriving (Eq, Ord, Read, Show)
 
-_SessionParameterSpecification = (Core.Name "hydra/ext/gql/openGql.SessionParameterSpecification")
+_SessionParameterSpecification = (Core.Name "hydra.ext/gql/openGql.SessionParameterSpecification")
 
 newtype StartTransactionCommand = 
   StartTransactionCommand {
     unStartTransactionCommand :: (Maybe TransactionCharacteristics)}
   deriving (Eq, Ord, Read, Show)
 
-_StartTransactionCommand = (Core.Name "hydra/ext/gql/openGql.StartTransactionCommand")
+_StartTransactionCommand = (Core.Name "hydra.ext/gql/openGql.StartTransactionCommand")
 
 newtype TransactionCharacteristics = 
   TransactionCharacteristics {
     unTransactionCharacteristics :: [TransactionMode]}
   deriving (Eq, Ord, Read, Show)
 
-_TransactionCharacteristics = (Core.Name "hydra/ext/gql/openGql.TransactionCharacteristics")
+_TransactionCharacteristics = (Core.Name "hydra.ext/gql/openGql.TransactionCharacteristics")
 
 newtype TransactionMode = 
   TransactionMode {
     unTransactionMode :: TransactionAccessMode}
   deriving (Eq, Ord, Read, Show)
 
-_TransactionMode = (Core.Name "hydra/ext/gql/openGql.TransactionMode")
+_TransactionMode = (Core.Name "hydra.ext/gql/openGql.TransactionMode")
 
 data TransactionAccessMode = 
   TransactionAccessModeReadOnly  |
   TransactionAccessModeReadWrite 
   deriving (Eq, Ord, Read, Show)
 
-_TransactionAccessMode = (Core.Name "hydra/ext/gql/openGql.TransactionAccessMode")
+_TransactionAccessMode = (Core.Name "hydra.ext/gql/openGql.TransactionAccessMode")
 
 _TransactionAccessMode_readOnly = (Core.Name "readOnly")
 
@@ -323,41 +323,41 @@ data RollbackCommand =
   RollbackCommand {}
   deriving (Eq, Ord, Read, Show)
 
-_RollbackCommand = (Core.Name "hydra/ext/gql/openGql.RollbackCommand")
+_RollbackCommand = (Core.Name "hydra.ext/gql/openGql.RollbackCommand")
 
 data CommitCommand = 
   CommitCommand {}
   deriving (Eq, Ord, Read, Show)
 
-_CommitCommand = (Core.Name "hydra/ext/gql/openGql.CommitCommand")
+_CommitCommand = (Core.Name "hydra.ext/gql/openGql.CommitCommand")
 
 newtype NestedProcedureSpecification = 
   NestedProcedureSpecification {
     unNestedProcedureSpecification :: ProcedureSpecification}
   deriving (Eq, Ord, Read, Show)
 
-_NestedProcedureSpecification = (Core.Name "hydra/ext/gql/openGql.NestedProcedureSpecification")
+_NestedProcedureSpecification = (Core.Name "hydra.ext/gql/openGql.NestedProcedureSpecification")
 
 newtype ProcedureSpecification = 
   ProcedureSpecification {
     unProcedureSpecification :: ProcedureBody}
   deriving (Eq, Ord, Read, Show)
 
-_ProcedureSpecification = (Core.Name "hydra/ext/gql/openGql.ProcedureSpecification")
+_ProcedureSpecification = (Core.Name "hydra.ext/gql/openGql.ProcedureSpecification")
 
 newtype NestedDataModifyingProcedureSpecification = 
   NestedDataModifyingProcedureSpecification {
     unNestedDataModifyingProcedureSpecification :: ProcedureBody}
   deriving (Eq, Ord, Read, Show)
 
-_NestedDataModifyingProcedureSpecification = (Core.Name "hydra/ext/gql/openGql.NestedDataModifyingProcedureSpecification")
+_NestedDataModifyingProcedureSpecification = (Core.Name "hydra.ext/gql/openGql.NestedDataModifyingProcedureSpecification")
 
 newtype NestedQuerySpecification = 
   NestedQuerySpecification {
     unNestedQuerySpecification :: ProcedureBody}
   deriving (Eq, Ord, Read, Show)
 
-_NestedQuerySpecification = (Core.Name "hydra/ext/gql/openGql.NestedQuerySpecification")
+_NestedQuerySpecification = (Core.Name "hydra.ext/gql/openGql.NestedQuerySpecification")
 
 data ProcedureBody = 
   ProcedureBody {
@@ -366,7 +366,7 @@ data ProcedureBody =
     procedureBodyStatements :: StatementBlock}
   deriving (Eq, Ord, Read, Show)
 
-_ProcedureBody = (Core.Name "hydra/ext/gql/openGql.ProcedureBody")
+_ProcedureBody = (Core.Name "hydra.ext/gql/openGql.ProcedureBody")
 
 _ProcedureBody_atSchema = (Core.Name "atSchema")
 
@@ -379,7 +379,7 @@ newtype BindingVariableDefinitionBlock =
     unBindingVariableDefinitionBlock :: [BindingVariableDefinition]}
   deriving (Eq, Ord, Read, Show)
 
-_BindingVariableDefinitionBlock = (Core.Name "hydra/ext/gql/openGql.BindingVariableDefinitionBlock")
+_BindingVariableDefinitionBlock = (Core.Name "hydra.ext/gql/openGql.BindingVariableDefinitionBlock")
 
 data BindingVariableDefinition = 
   BindingVariableDefinitionGraph GraphVariableDefinition |
@@ -387,7 +387,7 @@ data BindingVariableDefinition =
   BindingVariableDefinitionValue ValueVariableDefinition
   deriving (Eq, Ord, Read, Show)
 
-_BindingVariableDefinition = (Core.Name "hydra/ext/gql/openGql.BindingVariableDefinition")
+_BindingVariableDefinition = (Core.Name "hydra.ext/gql/openGql.BindingVariableDefinition")
 
 _BindingVariableDefinition_graph = (Core.Name "graph")
 
@@ -401,7 +401,7 @@ data StatementBlock =
     statementBlockNextStatements :: [NextStatement]}
   deriving (Eq, Ord, Read, Show)
 
-_StatementBlock = (Core.Name "hydra/ext/gql/openGql.StatementBlock")
+_StatementBlock = (Core.Name "hydra.ext/gql/openGql.StatementBlock")
 
 _StatementBlock_statement = (Core.Name "statement")
 
@@ -413,7 +413,7 @@ data Statement =
   StatementCompositeQuery CompositeQueryStatement
   deriving (Eq, Ord, Read, Show)
 
-_Statement = (Core.Name "hydra/ext/gql/openGql.Statement")
+_Statement = (Core.Name "hydra.ext/gql/openGql.Statement")
 
 _Statement_linearCatalogModifying = (Core.Name "linearCatalogModifying")
 
@@ -427,7 +427,7 @@ data NextStatement =
     nextStatementStatement :: Statement}
   deriving (Eq, Ord, Read, Show)
 
-_NextStatement = (Core.Name "hydra/ext/gql/openGql.NextStatement")
+_NextStatement = (Core.Name "hydra.ext/gql/openGql.NextStatement")
 
 _NextStatement_yieldClause = (Core.Name "yieldClause")
 
@@ -439,7 +439,7 @@ data GraphVariableDefinition =
     graphVariableDefinitionInitializer :: OptTypedGraphInitializer}
   deriving (Eq, Ord, Read, Show)
 
-_GraphVariableDefinition = (Core.Name "hydra/ext/gql/openGql.GraphVariableDefinition")
+_GraphVariableDefinition = (Core.Name "hydra.ext/gql/openGql.GraphVariableDefinition")
 
 _GraphVariableDefinition_variable = (Core.Name "variable")
 
@@ -451,7 +451,7 @@ data OptTypedGraphInitializer =
     optTypedGraphInitializerInitializer :: GraphInitializer}
   deriving (Eq, Ord, Read, Show)
 
-_OptTypedGraphInitializer = (Core.Name "hydra/ext/gql/openGql.OptTypedGraphInitializer")
+_OptTypedGraphInitializer = (Core.Name "hydra.ext/gql/openGql.OptTypedGraphInitializer")
 
 _OptTypedGraphInitializer_type = (Core.Name "type")
 
@@ -463,7 +463,7 @@ data TypedGraphReferenceValueType =
     typedGraphReferenceValueTypeValueType :: GraphReferenceValueType}
   deriving (Eq, Ord, Read, Show)
 
-_TypedGraphReferenceValueType = (Core.Name "hydra/ext/gql/openGql.TypedGraphReferenceValueType")
+_TypedGraphReferenceValueType = (Core.Name "hydra.ext/gql/openGql.TypedGraphReferenceValueType")
 
 _TypedGraphReferenceValueType_typed = (Core.Name "typed")
 
@@ -474,7 +474,7 @@ newtype GraphInitializer =
     unGraphInitializer :: GraphExpression}
   deriving (Eq, Ord, Read, Show)
 
-_GraphInitializer = (Core.Name "hydra/ext/gql/openGql.GraphInitializer")
+_GraphInitializer = (Core.Name "hydra.ext/gql/openGql.GraphInitializer")
 
 data BindingTableVariableDefinition = 
   BindingTableVariableDefinition {
@@ -483,7 +483,7 @@ data BindingTableVariableDefinition =
     bindingTableVariableDefinitionInitializer :: OptTypedBindingTableInitializer}
   deriving (Eq, Ord, Read, Show)
 
-_BindingTableVariableDefinition = (Core.Name "hydra/ext/gql/openGql.BindingTableVariableDefinition")
+_BindingTableVariableDefinition = (Core.Name "hydra.ext/gql/openGql.BindingTableVariableDefinition")
 
 _BindingTableVariableDefinition_binding = (Core.Name "binding")
 
@@ -497,7 +497,7 @@ data OptTypedBindingTableInitializer =
     optTypedBindingTableInitializerInitializer :: BindingTableInitializer}
   deriving (Eq, Ord, Read, Show)
 
-_OptTypedBindingTableInitializer = (Core.Name "hydra/ext/gql/openGql.OptTypedBindingTableInitializer")
+_OptTypedBindingTableInitializer = (Core.Name "hydra.ext/gql/openGql.OptTypedBindingTableInitializer")
 
 _OptTypedBindingTableInitializer_type = (Core.Name "type")
 
@@ -509,7 +509,7 @@ data TypedBindingTableReferenceValueType =
     typedBindingTableReferenceValueTypeValueType :: BindingTableReferenceValueType}
   deriving (Eq, Ord, Read, Show)
 
-_TypedBindingTableReferenceValueType = (Core.Name "hydra/ext/gql/openGql.TypedBindingTableReferenceValueType")
+_TypedBindingTableReferenceValueType = (Core.Name "hydra.ext/gql/openGql.TypedBindingTableReferenceValueType")
 
 _TypedBindingTableReferenceValueType_typed = (Core.Name "typed")
 
@@ -520,7 +520,7 @@ newtype BindingTableInitializer =
     unBindingTableInitializer :: BindingTableExpression}
   deriving (Eq, Ord, Read, Show)
 
-_BindingTableInitializer = (Core.Name "hydra/ext/gql/openGql.BindingTableInitializer")
+_BindingTableInitializer = (Core.Name "hydra.ext/gql/openGql.BindingTableInitializer")
 
 data ValueVariableDefinition = 
   ValueVariableDefinition {
@@ -528,7 +528,7 @@ data ValueVariableDefinition =
     valueVariableDefinitionInitializer :: OptTypedValueInitializer}
   deriving (Eq, Ord, Read, Show)
 
-_ValueVariableDefinition = (Core.Name "hydra/ext/gql/openGql.ValueVariableDefinition")
+_ValueVariableDefinition = (Core.Name "hydra.ext/gql/openGql.ValueVariableDefinition")
 
 _ValueVariableDefinition_variable = (Core.Name "variable")
 
@@ -540,7 +540,7 @@ data OptTypedValueInitializer =
     optTypedValueInitializerInitializer :: ValueInitializer}
   deriving (Eq, Ord, Read, Show)
 
-_OptTypedValueInitializer = (Core.Name "hydra/ext/gql/openGql.OptTypedValueInitializer")
+_OptTypedValueInitializer = (Core.Name "hydra.ext/gql/openGql.OptTypedValueInitializer")
 
 _OptTypedValueInitializer_type = (Core.Name "type")
 
@@ -552,7 +552,7 @@ data TypedValueType =
     typedValueTypeValueType :: ValueType}
   deriving (Eq, Ord, Read, Show)
 
-_TypedValueType = (Core.Name "hydra/ext/gql/openGql.TypedValueType")
+_TypedValueType = (Core.Name "hydra.ext/gql/openGql.TypedValueType")
 
 _TypedValueType_typed = (Core.Name "typed")
 
@@ -563,7 +563,7 @@ newtype ValueInitializer =
     unValueInitializer :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ValueInitializer = (Core.Name "hydra/ext/gql/openGql.ValueInitializer")
+_ValueInitializer = (Core.Name "hydra.ext/gql/openGql.ValueInitializer")
 
 data GraphExpression = 
   GraphExpressionObject ObjectExpressionPrimary |
@@ -572,7 +572,7 @@ data GraphExpression =
   GraphExpressionCurrent CurrentGraph
   deriving (Eq, Ord, Read, Show)
 
-_GraphExpression = (Core.Name "hydra/ext/gql/openGql.GraphExpression")
+_GraphExpression = (Core.Name "hydra.ext/gql/openGql.GraphExpression")
 
 _GraphExpression_object = (Core.Name "object")
 
@@ -587,7 +587,7 @@ data CurrentGraph =
   CurrentGraphPropertyGraph 
   deriving (Eq, Ord, Read, Show)
 
-_CurrentGraph = (Core.Name "hydra/ext/gql/openGql.CurrentGraph")
+_CurrentGraph = (Core.Name "hydra.ext/gql/openGql.CurrentGraph")
 
 _CurrentGraph_graph = (Core.Name "graph")
 
@@ -600,7 +600,7 @@ data BindingTableExpression =
   BindingTableExpressionName ObjectNameOrBindingVariable
   deriving (Eq, Ord, Read, Show)
 
-_BindingTableExpression = (Core.Name "hydra/ext/gql/openGql.BindingTableExpression")
+_BindingTableExpression = (Core.Name "hydra.ext/gql/openGql.BindingTableExpression")
 
 _BindingTableExpression_nested = (Core.Name "nested")
 
@@ -615,7 +615,7 @@ newtype NestedBindingTableQuerySpecification =
     unNestedBindingTableQuerySpecification :: NestedQuerySpecification}
   deriving (Eq, Ord, Read, Show)
 
-_NestedBindingTableQuerySpecification = (Core.Name "hydra/ext/gql/openGql.NestedBindingTableQuerySpecification")
+_NestedBindingTableQuerySpecification = (Core.Name "hydra.ext/gql/openGql.NestedBindingTableQuerySpecification")
 
 data ObjectExpressionPrimary = 
   ObjectExpressionPrimaryVariable ValueExpressionPrimary |
@@ -623,7 +623,7 @@ data ObjectExpressionPrimary =
   ObjectExpressionPrimaryNonParenthesized NonParenthesizedValueExpressionPrimarySpecialCase
   deriving (Eq, Ord, Read, Show)
 
-_ObjectExpressionPrimary = (Core.Name "hydra/ext/gql/openGql.ObjectExpressionPrimary")
+_ObjectExpressionPrimary = (Core.Name "hydra.ext/gql/openGql.ObjectExpressionPrimary")
 
 _ObjectExpressionPrimary_variable = (Core.Name "variable")
 
@@ -636,14 +636,14 @@ newtype LinearCatalogModifyingStatement =
     unLinearCatalogModifyingStatement :: [SimpleCatalogModifyingStatement]}
   deriving (Eq, Ord, Read, Show)
 
-_LinearCatalogModifyingStatement = (Core.Name "hydra/ext/gql/openGql.LinearCatalogModifyingStatement")
+_LinearCatalogModifyingStatement = (Core.Name "hydra.ext/gql/openGql.LinearCatalogModifyingStatement")
 
 data SimpleCatalogModifyingStatement = 
   SimpleCatalogModifyingStatementPrimitive PrimitiveCatalogModifyingStatement |
   SimpleCatalogModifyingStatementCallProcedure CallCatalogModifyingProcedureStatement
   deriving (Eq, Ord, Read, Show)
 
-_SimpleCatalogModifyingStatement = (Core.Name "hydra/ext/gql/openGql.SimpleCatalogModifyingStatement")
+_SimpleCatalogModifyingStatement = (Core.Name "hydra.ext/gql/openGql.SimpleCatalogModifyingStatement")
 
 _SimpleCatalogModifyingStatement_primitive = (Core.Name "primitive")
 
@@ -658,7 +658,7 @@ data PrimitiveCatalogModifyingStatement =
   PrimitiveCatalogModifyingStatementDropGraphType DropGraphTypeStatement
   deriving (Eq, Ord, Read, Show)
 
-_PrimitiveCatalogModifyingStatement = (Core.Name "hydra/ext/gql/openGql.PrimitiveCatalogModifyingStatement")
+_PrimitiveCatalogModifyingStatement = (Core.Name "hydra.ext/gql/openGql.PrimitiveCatalogModifyingStatement")
 
 _PrimitiveCatalogModifyingStatement_createSchema = (Core.Name "createSchema")
 
@@ -678,7 +678,7 @@ data CreateSchemaStatement =
     createSchemaStatementParentAndName :: CatalogSchemaParentAndName}
   deriving (Eq, Ord, Read, Show)
 
-_CreateSchemaStatement = (Core.Name "hydra/ext/gql/openGql.CreateSchemaStatement")
+_CreateSchemaStatement = (Core.Name "hydra.ext/gql/openGql.CreateSchemaStatement")
 
 _CreateSchemaStatement_ifNotExists = (Core.Name "ifNotExists")
 
@@ -690,7 +690,7 @@ data DropSchemaStatement =
     dropSchemaStatementParentAndName :: CatalogSchemaParentAndName}
   deriving (Eq, Ord, Read, Show)
 
-_DropSchemaStatement = (Core.Name "hydra/ext/gql/openGql.DropSchemaStatement")
+_DropSchemaStatement = (Core.Name "hydra.ext/gql/openGql.DropSchemaStatement")
 
 _DropSchemaStatement_ifExists = (Core.Name "ifExists")
 
@@ -704,7 +704,7 @@ data CreateGraphStatement =
     createGraphStatementSource :: (Maybe GraphSource)}
   deriving (Eq, Ord, Read, Show)
 
-_CreateGraphStatement = (Core.Name "hydra/ext/gql/openGql.CreateGraphStatement")
+_CreateGraphStatement = (Core.Name "hydra.ext/gql/openGql.CreateGraphStatement")
 
 _CreateGraphStatement_createOption = (Core.Name "createOption")
 
@@ -719,7 +719,7 @@ data CreateGraphOption =
   CreateGraphOptionOrReplace 
   deriving (Eq, Ord, Read, Show)
 
-_CreateGraphOption = (Core.Name "hydra/ext/gql/openGql.CreateGraphOption")
+_CreateGraphOption = (Core.Name "hydra.ext/gql/openGql.CreateGraphOption")
 
 _CreateGraphOption_graphIfNotExists = (Core.Name "graphIfNotExists")
 
@@ -730,7 +730,7 @@ data GraphTypeOption =
   GraphTypeOptionOfGraphType OfGraphType
   deriving (Eq, Ord, Read, Show)
 
-_GraphTypeOption = (Core.Name "hydra/ext/gql/openGql.GraphTypeOption")
+_GraphTypeOption = (Core.Name "hydra.ext/gql/openGql.GraphTypeOption")
 
 _GraphTypeOption_openGraphType = (Core.Name "openGraphType")
 
@@ -742,7 +742,7 @@ data OpenGraphType =
     openGraphTypeGraph :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_OpenGraphType = (Core.Name "hydra/ext/gql/openGql.OpenGraphType")
+_OpenGraphType = (Core.Name "hydra.ext/gql/openGql.OpenGraphType")
 
 _OpenGraphType_typed = (Core.Name "typed")
 
@@ -754,7 +754,7 @@ data OfGraphType =
   OfGraphTypeNested TypedNestedGraphTypeSpecification
   deriving (Eq, Ord, Read, Show)
 
-_OfGraphType = (Core.Name "hydra/ext/gql/openGql.OfGraphType")
+_OfGraphType = (Core.Name "hydra.ext/gql/openGql.OfGraphType")
 
 _OfGraphType_likeGraph = (Core.Name "likeGraph")
 
@@ -767,14 +767,14 @@ newtype GraphTypeLikeGraph =
     unGraphTypeLikeGraph :: GraphExpression}
   deriving (Eq, Ord, Read, Show)
 
-_GraphTypeLikeGraph = (Core.Name "hydra/ext/gql/openGql.GraphTypeLikeGraph")
+_GraphTypeLikeGraph = (Core.Name "hydra.ext/gql/openGql.GraphTypeLikeGraph")
 
 newtype GraphSource = 
   GraphSource {
     unGraphSource :: GraphExpression}
   deriving (Eq, Ord, Read, Show)
 
-_GraphSource = (Core.Name "hydra/ext/gql/openGql.GraphSource")
+_GraphSource = (Core.Name "hydra.ext/gql/openGql.GraphSource")
 
 data TypedGraphTypeReference = 
   TypedGraphTypeReference {
@@ -782,7 +782,7 @@ data TypedGraphTypeReference =
     typedGraphTypeReferenceReference :: GraphTypeReference}
   deriving (Eq, Ord, Read, Show)
 
-_TypedGraphTypeReference = (Core.Name "hydra/ext/gql/openGql.TypedGraphTypeReference")
+_TypedGraphTypeReference = (Core.Name "hydra.ext/gql/openGql.TypedGraphTypeReference")
 
 _TypedGraphTypeReference_typed = (Core.Name "typed")
 
@@ -795,7 +795,7 @@ data TypedNestedGraphTypeSpecification =
     typedNestedGraphTypeSpecificationSpecification :: NestedGraphTypeSpecification}
   deriving (Eq, Ord, Read, Show)
 
-_TypedNestedGraphTypeSpecification = (Core.Name "hydra/ext/gql/openGql.TypedNestedGraphTypeSpecification")
+_TypedNestedGraphTypeSpecification = (Core.Name "hydra.ext/gql/openGql.TypedNestedGraphTypeSpecification")
 
 _TypedNestedGraphTypeSpecification_typed = (Core.Name "typed")
 
@@ -809,7 +809,7 @@ data DropGraphStatement =
     dropGraphStatementParentAndName :: CatalogGraphParentAndName}
   deriving (Eq, Ord, Read, Show)
 
-_DropGraphStatement = (Core.Name "hydra/ext/gql/openGql.DropGraphStatement")
+_DropGraphStatement = (Core.Name "hydra.ext/gql/openGql.DropGraphStatement")
 
 _DropGraphStatement_ifExists = (Core.Name "ifExists")
 
@@ -822,7 +822,7 @@ data CreateGraphTypeStatement =
     createGraphTypeStatementSource :: GraphTypeSource}
   deriving (Eq, Ord, Read, Show)
 
-_CreateGraphTypeStatement = (Core.Name "hydra/ext/gql/openGql.CreateGraphTypeStatement")
+_CreateGraphTypeStatement = (Core.Name "hydra.ext/gql/openGql.CreateGraphTypeStatement")
 
 _CreateGraphTypeStatement_createOption = (Core.Name "createOption")
 
@@ -835,7 +835,7 @@ data CreateGraphTypeOption =
   CreateGraphTypeOptionOrReplace 
   deriving (Eq, Ord, Read, Show)
 
-_CreateGraphTypeOption = (Core.Name "hydra/ext/gql/openGql.CreateGraphTypeOption")
+_CreateGraphTypeOption = (Core.Name "hydra.ext/gql/openGql.CreateGraphTypeOption")
 
 _CreateGraphTypeOption_typeIfNotExists = (Core.Name "typeIfNotExists")
 
@@ -847,7 +847,7 @@ data GraphTypeSource =
   GraphTypeSourceNestedSpecification NestedGraphTypeSpecification
   deriving (Eq, Ord, Read, Show)
 
-_GraphTypeSource = (Core.Name "hydra/ext/gql/openGql.GraphTypeSource")
+_GraphTypeSource = (Core.Name "hydra.ext/gql/openGql.GraphTypeSource")
 
 _GraphTypeSource_copyOf = (Core.Name "copyOf")
 
@@ -860,7 +860,7 @@ newtype CopyOfGraphType =
     unCopyOfGraphType :: GraphTypeReference}
   deriving (Eq, Ord, Read, Show)
 
-_CopyOfGraphType = (Core.Name "hydra/ext/gql/openGql.CopyOfGraphType")
+_CopyOfGraphType = (Core.Name "hydra.ext/gql/openGql.CopyOfGraphType")
 
 data DropGraphTypeStatement = 
   DropGraphTypeStatement {
@@ -868,7 +868,7 @@ data DropGraphTypeStatement =
     dropGraphTypeStatementParentAndName :: CatalogGraphTypeParentAndName}
   deriving (Eq, Ord, Read, Show)
 
-_DropGraphTypeStatement = (Core.Name "hydra/ext/gql/openGql.DropGraphTypeStatement")
+_DropGraphTypeStatement = (Core.Name "hydra.ext/gql/openGql.DropGraphTypeStatement")
 
 _DropGraphTypeStatement_ifExists = (Core.Name "ifExists")
 
@@ -879,14 +879,14 @@ newtype CallCatalogModifyingProcedureStatement =
     unCallCatalogModifyingProcedureStatement :: CallProcedureStatement}
   deriving (Eq, Ord, Read, Show)
 
-_CallCatalogModifyingProcedureStatement = (Core.Name "hydra/ext/gql/openGql.CallCatalogModifyingProcedureStatement")
+_CallCatalogModifyingProcedureStatement = (Core.Name "hydra.ext/gql/openGql.CallCatalogModifyingProcedureStatement")
 
 data LinearDataModifyingStatement = 
   LinearDataModifyingStatementFocused FocusedLinearDataModifyingStatement |
   LinearDataModifyingStatementAmbient AmbientLinearDataModifyingStatement
   deriving (Eq, Ord, Read, Show)
 
-_LinearDataModifyingStatement = (Core.Name "hydra/ext/gql/openGql.LinearDataModifyingStatement")
+_LinearDataModifyingStatement = (Core.Name "hydra.ext/gql/openGql.LinearDataModifyingStatement")
 
 _LinearDataModifyingStatement_focused = (Core.Name "focused")
 
@@ -897,7 +897,7 @@ data FocusedLinearDataModifyingStatement =
   FocusedLinearDataModifyingStatementNested FocusedNestedDataModifyingProcedureSpecification
   deriving (Eq, Ord, Read, Show)
 
-_FocusedLinearDataModifyingStatement = (Core.Name "hydra/ext/gql/openGql.FocusedLinearDataModifyingStatement")
+_FocusedLinearDataModifyingStatement = (Core.Name "hydra.ext/gql/openGql.FocusedLinearDataModifyingStatement")
 
 _FocusedLinearDataModifyingStatement_simple = (Core.Name "simple")
 
@@ -910,7 +910,7 @@ data FocusedLinearDataModifyingStatementBody =
     focusedLinearDataModifyingStatementBodyPrimitiveResult :: (Maybe PrimitiveResultStatement)}
   deriving (Eq, Ord, Read, Show)
 
-_FocusedLinearDataModifyingStatementBody = (Core.Name "hydra/ext/gql/openGql.FocusedLinearDataModifyingStatementBody")
+_FocusedLinearDataModifyingStatementBody = (Core.Name "hydra.ext/gql/openGql.FocusedLinearDataModifyingStatementBody")
 
 _FocusedLinearDataModifyingStatementBody_useGraph = (Core.Name "useGraph")
 
@@ -924,7 +924,7 @@ data FocusedNestedDataModifyingProcedureSpecification =
     focusedNestedDataModifyingProcedureSpecificationNestedSpec :: NestedDataModifyingProcedureSpecification}
   deriving (Eq, Ord, Read, Show)
 
-_FocusedNestedDataModifyingProcedureSpecification = (Core.Name "hydra/ext/gql/openGql.FocusedNestedDataModifyingProcedureSpecification")
+_FocusedNestedDataModifyingProcedureSpecification = (Core.Name "hydra.ext/gql/openGql.FocusedNestedDataModifyingProcedureSpecification")
 
 _FocusedNestedDataModifyingProcedureSpecification_useGraph = (Core.Name "useGraph")
 
@@ -935,7 +935,7 @@ data AmbientLinearDataModifyingStatement =
   AmbientLinearDataModifyingStatementNested NestedDataModifyingProcedureSpecification
   deriving (Eq, Ord, Read, Show)
 
-_AmbientLinearDataModifyingStatement = (Core.Name "hydra/ext/gql/openGql.AmbientLinearDataModifyingStatement")
+_AmbientLinearDataModifyingStatement = (Core.Name "hydra.ext/gql/openGql.AmbientLinearDataModifyingStatement")
 
 _AmbientLinearDataModifyingStatement_simple = (Core.Name "simple")
 
@@ -947,7 +947,7 @@ data AmbientLinearDataModifyingStatementBody =
     ambientLinearDataModifyingStatementBodyPrimitiveResult :: (Maybe PrimitiveResultStatement)}
   deriving (Eq, Ord, Read, Show)
 
-_AmbientLinearDataModifyingStatementBody = (Core.Name "hydra/ext/gql/openGql.AmbientLinearDataModifyingStatementBody")
+_AmbientLinearDataModifyingStatementBody = (Core.Name "hydra.ext/gql/openGql.AmbientLinearDataModifyingStatementBody")
 
 _AmbientLinearDataModifyingStatementBody_simpleAccess = (Core.Name "simpleAccess")
 
@@ -958,14 +958,14 @@ newtype SimpleLinearDataAccessingStatement =
     unSimpleLinearDataAccessingStatement :: [SimpleDataAccessingStatement]}
   deriving (Eq, Ord, Read, Show)
 
-_SimpleLinearDataAccessingStatement = (Core.Name "hydra/ext/gql/openGql.SimpleLinearDataAccessingStatement")
+_SimpleLinearDataAccessingStatement = (Core.Name "hydra.ext/gql/openGql.SimpleLinearDataAccessingStatement")
 
 data SimpleDataAccessingStatement = 
   SimpleDataAccessingStatementQuery SimpleQueryStatement |
   SimpleDataAccessingStatementModifying SimpleDataModifyingStatement
   deriving (Eq, Ord, Read, Show)
 
-_SimpleDataAccessingStatement = (Core.Name "hydra/ext/gql/openGql.SimpleDataAccessingStatement")
+_SimpleDataAccessingStatement = (Core.Name "hydra.ext/gql/openGql.SimpleDataAccessingStatement")
 
 _SimpleDataAccessingStatement_query = (Core.Name "query")
 
@@ -976,7 +976,7 @@ data SimpleDataModifyingStatement =
   SimpleDataModifyingStatementCallProcedure CallDataModifyingProcedureStatement
   deriving (Eq, Ord, Read, Show)
 
-_SimpleDataModifyingStatement = (Core.Name "hydra/ext/gql/openGql.SimpleDataModifyingStatement")
+_SimpleDataModifyingStatement = (Core.Name "hydra.ext/gql/openGql.SimpleDataModifyingStatement")
 
 _SimpleDataModifyingStatement_primitive = (Core.Name "primitive")
 
@@ -989,7 +989,7 @@ data PrimitiveDataModifyingStatement =
   PrimitiveDataModifyingStatementDelete DeleteStatement
   deriving (Eq, Ord, Read, Show)
 
-_PrimitiveDataModifyingStatement = (Core.Name "hydra/ext/gql/openGql.PrimitiveDataModifyingStatement")
+_PrimitiveDataModifyingStatement = (Core.Name "hydra.ext/gql/openGql.PrimitiveDataModifyingStatement")
 
 _PrimitiveDataModifyingStatement_insert = (Core.Name "insert")
 
@@ -1004,21 +1004,21 @@ newtype InsertStatement =
     unInsertStatement :: InsertGraphPattern}
   deriving (Eq, Ord, Read, Show)
 
-_InsertStatement = (Core.Name "hydra/ext/gql/openGql.InsertStatement")
+_InsertStatement = (Core.Name "hydra.ext/gql/openGql.InsertStatement")
 
 newtype SetStatement = 
   SetStatement {
     unSetStatement :: SetItemList}
   deriving (Eq, Ord, Read, Show)
 
-_SetStatement = (Core.Name "hydra/ext/gql/openGql.SetStatement")
+_SetStatement = (Core.Name "hydra.ext/gql/openGql.SetStatement")
 
 newtype SetItemList = 
   SetItemList {
     unSetItemList :: [SetItem]}
   deriving (Eq, Ord, Read, Show)
 
-_SetItemList = (Core.Name "hydra/ext/gql/openGql.SetItemList")
+_SetItemList = (Core.Name "hydra.ext/gql/openGql.SetItemList")
 
 data SetItem = 
   SetItemProperty SetPropertyItem |
@@ -1026,7 +1026,7 @@ data SetItem =
   SetItemLabel SetLabelItem
   deriving (Eq, Ord, Read, Show)
 
-_SetItem = (Core.Name "hydra/ext/gql/openGql.SetItem")
+_SetItem = (Core.Name "hydra.ext/gql/openGql.SetItem")
 
 _SetItem_property = (Core.Name "property")
 
@@ -1041,7 +1041,7 @@ data SetPropertyItem =
     setPropertyItemValue :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_SetPropertyItem = (Core.Name "hydra/ext/gql/openGql.SetPropertyItem")
+_SetPropertyItem = (Core.Name "hydra.ext/gql/openGql.SetPropertyItem")
 
 _SetPropertyItem_variable = (Core.Name "variable")
 
@@ -1055,7 +1055,7 @@ data SetAllPropertiesItem =
     setAllPropertiesItemProperties :: (Maybe PropertyKeyValuePairList)}
   deriving (Eq, Ord, Read, Show)
 
-_SetAllPropertiesItem = (Core.Name "hydra/ext/gql/openGql.SetAllPropertiesItem")
+_SetAllPropertiesItem = (Core.Name "hydra.ext/gql/openGql.SetAllPropertiesItem")
 
 _SetAllPropertiesItem_variable = (Core.Name "variable")
 
@@ -1068,7 +1068,7 @@ data SetLabelItem =
     setLabelItemLabel :: LabelName}
   deriving (Eq, Ord, Read, Show)
 
-_SetLabelItem = (Core.Name "hydra/ext/gql/openGql.SetLabelItem")
+_SetLabelItem = (Core.Name "hydra.ext/gql/openGql.SetLabelItem")
 
 _SetLabelItem_variable = (Core.Name "variable")
 
@@ -1081,21 +1081,21 @@ newtype RemoveStatement =
     unRemoveStatement :: RemoveItemList}
   deriving (Eq, Ord, Read, Show)
 
-_RemoveStatement = (Core.Name "hydra/ext/gql/openGql.RemoveStatement")
+_RemoveStatement = (Core.Name "hydra.ext/gql/openGql.RemoveStatement")
 
 newtype RemoveItemList = 
   RemoveItemList {
     unRemoveItemList :: [RemoveItem]}
   deriving (Eq, Ord, Read, Show)
 
-_RemoveItemList = (Core.Name "hydra/ext/gql/openGql.RemoveItemList")
+_RemoveItemList = (Core.Name "hydra.ext/gql/openGql.RemoveItemList")
 
 data RemoveItem = 
   RemoveItemProperty RemovePropertyItem |
   RemoveItemLabel RemoveLabelItem
   deriving (Eq, Ord, Read, Show)
 
-_RemoveItem = (Core.Name "hydra/ext/gql/openGql.RemoveItem")
+_RemoveItem = (Core.Name "hydra.ext/gql/openGql.RemoveItem")
 
 _RemoveItem_property = (Core.Name "property")
 
@@ -1107,7 +1107,7 @@ data RemovePropertyItem =
     removePropertyItemPropertyName :: PropertyName}
   deriving (Eq, Ord, Read, Show)
 
-_RemovePropertyItem = (Core.Name "hydra/ext/gql/openGql.RemovePropertyItem")
+_RemovePropertyItem = (Core.Name "hydra.ext/gql/openGql.RemovePropertyItem")
 
 _RemovePropertyItem_variable = (Core.Name "variable")
 
@@ -1120,7 +1120,7 @@ data RemoveLabelItem =
     removeLabelItemLabel :: LabelName}
   deriving (Eq, Ord, Read, Show)
 
-_RemoveLabelItem = (Core.Name "hydra/ext/gql/openGql.RemoveLabelItem")
+_RemoveLabelItem = (Core.Name "hydra.ext/gql/openGql.RemoveLabelItem")
 
 _RemoveLabelItem_variable = (Core.Name "variable")
 
@@ -1134,7 +1134,7 @@ data DeleteStatement =
     deleteStatementItems :: DeleteItemList}
   deriving (Eq, Ord, Read, Show)
 
-_DeleteStatement = (Core.Name "hydra/ext/gql/openGql.DeleteStatement")
+_DeleteStatement = (Core.Name "hydra.ext/gql/openGql.DeleteStatement")
 
 _DeleteStatement_detach = (Core.Name "detach")
 
@@ -1145,7 +1145,7 @@ data DetachOption =
   DetachOptionNoDetach 
   deriving (Eq, Ord, Read, Show)
 
-_DetachOption = (Core.Name "hydra/ext/gql/openGql.DetachOption")
+_DetachOption = (Core.Name "hydra.ext/gql/openGql.DetachOption")
 
 _DetachOption_detach = (Core.Name "detach")
 
@@ -1156,35 +1156,35 @@ newtype DeleteItemList =
     unDeleteItemList :: [DeleteItem]}
   deriving (Eq, Ord, Read, Show)
 
-_DeleteItemList = (Core.Name "hydra/ext/gql/openGql.DeleteItemList")
+_DeleteItemList = (Core.Name "hydra.ext/gql/openGql.DeleteItemList")
 
 newtype DeleteItem = 
   DeleteItem {
     unDeleteItem :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_DeleteItem = (Core.Name "hydra/ext/gql/openGql.DeleteItem")
+_DeleteItem = (Core.Name "hydra.ext/gql/openGql.DeleteItem")
 
 newtype CallDataModifyingProcedureStatement = 
   CallDataModifyingProcedureStatement {
     unCallDataModifyingProcedureStatement :: CallProcedureStatement}
   deriving (Eq, Ord, Read, Show)
 
-_CallDataModifyingProcedureStatement = (Core.Name "hydra/ext/gql/openGql.CallDataModifyingProcedureStatement")
+_CallDataModifyingProcedureStatement = (Core.Name "hydra.ext/gql/openGql.CallDataModifyingProcedureStatement")
 
 newtype CompositeQueryStatement = 
   CompositeQueryStatement {
     unCompositeQueryStatement :: CompositeQueryExpression}
   deriving (Eq, Ord, Read, Show)
 
-_CompositeQueryStatement = (Core.Name "hydra/ext/gql/openGql.CompositeQueryStatement")
+_CompositeQueryStatement = (Core.Name "hydra.ext/gql/openGql.CompositeQueryStatement")
 
 data CompositeQueryExpression = 
   CompositeQueryExpressionSimple CompositeQueryExpressionConjunction |
   CompositeQueryExpressionPrimary CompositeQueryPrimary
   deriving (Eq, Ord, Read, Show)
 
-_CompositeQueryExpression = (Core.Name "hydra/ext/gql/openGql.CompositeQueryExpression")
+_CompositeQueryExpression = (Core.Name "hydra.ext/gql/openGql.CompositeQueryExpression")
 
 _CompositeQueryExpression_simple = (Core.Name "simple")
 
@@ -1197,7 +1197,7 @@ data CompositeQueryExpressionConjunction =
     compositeQueryExpressionConjunctionRight :: CompositeQueryPrimary}
   deriving (Eq, Ord, Read, Show)
 
-_CompositeQueryExpressionConjunction = (Core.Name "hydra/ext/gql/openGql.CompositeQueryExpressionConjunction")
+_CompositeQueryExpressionConjunction = (Core.Name "hydra.ext/gql/openGql.CompositeQueryExpressionConjunction")
 
 _CompositeQueryExpressionConjunction_left = (Core.Name "left")
 
@@ -1210,7 +1210,7 @@ data QueryConjunction =
   QueryConjunctionOtherwise 
   deriving (Eq, Ord, Read, Show)
 
-_QueryConjunction = (Core.Name "hydra/ext/gql/openGql.QueryConjunction")
+_QueryConjunction = (Core.Name "hydra.ext/gql/openGql.QueryConjunction")
 
 _QueryConjunction_setOperator = (Core.Name "setOperator")
 
@@ -1222,7 +1222,7 @@ data SetOperator =
     setOperatorQuantifier :: (Maybe SetQuantifier)}
   deriving (Eq, Ord, Read, Show)
 
-_SetOperator = (Core.Name "hydra/ext/gql/openGql.SetOperator")
+_SetOperator = (Core.Name "hydra.ext/gql/openGql.SetOperator")
 
 _SetOperator_operatorType = (Core.Name "operatorType")
 
@@ -1234,7 +1234,7 @@ data SetOperatorType =
   SetOperatorTypeIntersect 
   deriving (Eq, Ord, Read, Show)
 
-_SetOperatorType = (Core.Name "hydra/ext/gql/openGql.SetOperatorType")
+_SetOperatorType = (Core.Name "hydra.ext/gql/openGql.SetOperatorType")
 
 _SetOperatorType_union = (Core.Name "union")
 
@@ -1247,14 +1247,14 @@ newtype CompositeQueryPrimary =
     unCompositeQueryPrimary :: LinearQueryStatement}
   deriving (Eq, Ord, Read, Show)
 
-_CompositeQueryPrimary = (Core.Name "hydra/ext/gql/openGql.CompositeQueryPrimary")
+_CompositeQueryPrimary = (Core.Name "hydra.ext/gql/openGql.CompositeQueryPrimary")
 
 data LinearQueryStatement = 
   LinearQueryStatementFocused FocusedLinearQueryStatement |
   LinearQueryStatementAmbient AmbientLinearQueryStatement
   deriving (Eq, Ord, Read, Show)
 
-_LinearQueryStatement = (Core.Name "hydra/ext/gql/openGql.LinearQueryStatement")
+_LinearQueryStatement = (Core.Name "hydra.ext/gql/openGql.LinearQueryStatement")
 
 _LinearQueryStatement_focused = (Core.Name "focused")
 
@@ -1267,7 +1267,7 @@ data FocusedLinearQueryStatement =
   FocusedLinearQueryStatementSelect SelectStatement
   deriving (Eq, Ord, Read, Show)
 
-_FocusedLinearQueryStatement = (Core.Name "hydra/ext/gql/openGql.FocusedLinearQueryStatement")
+_FocusedLinearQueryStatement = (Core.Name "hydra.ext/gql/openGql.FocusedLinearQueryStatement")
 
 _FocusedLinearQueryStatement_parts = (Core.Name "parts")
 
@@ -1283,7 +1283,7 @@ data FocusedLinearQueryStatementPartsAndResult =
     focusedLinearQueryStatementPartsAndResultResult :: FocusedLinearQueryAndPrimitiveResultStatementPart}
   deriving (Eq, Ord, Read, Show)
 
-_FocusedLinearQueryStatementPartsAndResult = (Core.Name "hydra/ext/gql/openGql.FocusedLinearQueryStatementPartsAndResult")
+_FocusedLinearQueryStatementPartsAndResult = (Core.Name "hydra.ext/gql/openGql.FocusedLinearQueryStatementPartsAndResult")
 
 _FocusedLinearQueryStatementPartsAndResult_parts = (Core.Name "parts")
 
@@ -1295,7 +1295,7 @@ data FocusedLinearQueryStatementPart =
     focusedLinearQueryStatementPartSimple :: SimpleLinearQueryStatement}
   deriving (Eq, Ord, Read, Show)
 
-_FocusedLinearQueryStatementPart = (Core.Name "hydra/ext/gql/openGql.FocusedLinearQueryStatementPart")
+_FocusedLinearQueryStatementPart = (Core.Name "hydra.ext/gql/openGql.FocusedLinearQueryStatementPart")
 
 _FocusedLinearQueryStatementPart_useGraph = (Core.Name "useGraph")
 
@@ -1308,7 +1308,7 @@ data FocusedLinearQueryAndPrimitiveResultStatementPart =
     focusedLinearQueryAndPrimitiveResultStatementPartPrimitiveResult :: PrimitiveResultStatement}
   deriving (Eq, Ord, Read, Show)
 
-_FocusedLinearQueryAndPrimitiveResultStatementPart = (Core.Name "hydra/ext/gql/openGql.FocusedLinearQueryAndPrimitiveResultStatementPart")
+_FocusedLinearQueryAndPrimitiveResultStatementPart = (Core.Name "hydra.ext/gql/openGql.FocusedLinearQueryAndPrimitiveResultStatementPart")
 
 _FocusedLinearQueryAndPrimitiveResultStatementPart_useGraph = (Core.Name "useGraph")
 
@@ -1322,7 +1322,7 @@ data FocusedPrimitiveResultStatement =
     focusedPrimitiveResultStatementPrimitiveResult :: PrimitiveResultStatement}
   deriving (Eq, Ord, Read, Show)
 
-_FocusedPrimitiveResultStatement = (Core.Name "hydra/ext/gql/openGql.FocusedPrimitiveResultStatement")
+_FocusedPrimitiveResultStatement = (Core.Name "hydra.ext/gql/openGql.FocusedPrimitiveResultStatement")
 
 _FocusedPrimitiveResultStatement_useGraph = (Core.Name "useGraph")
 
@@ -1334,7 +1334,7 @@ data FocusedNestedQuerySpecification =
     focusedNestedQuerySpecificationNested :: NestedQuerySpecification}
   deriving (Eq, Ord, Read, Show)
 
-_FocusedNestedQuerySpecification = (Core.Name "hydra/ext/gql/openGql.FocusedNestedQuerySpecification")
+_FocusedNestedQuerySpecification = (Core.Name "hydra.ext/gql/openGql.FocusedNestedQuerySpecification")
 
 _FocusedNestedQuerySpecification_useGraph = (Core.Name "useGraph")
 
@@ -1345,7 +1345,7 @@ data AmbientLinearQueryStatement =
   AmbientLinearQueryStatementNested NestedQuerySpecification
   deriving (Eq, Ord, Read, Show)
 
-_AmbientLinearQueryStatement = (Core.Name "hydra/ext/gql/openGql.AmbientLinearQueryStatement")
+_AmbientLinearQueryStatement = (Core.Name "hydra.ext/gql/openGql.AmbientLinearQueryStatement")
 
 _AmbientLinearQueryStatement_simple = (Core.Name "simple")
 
@@ -1357,7 +1357,7 @@ data AmbientLinearQueryStatementSimpleAndPrimitiveResult =
     ambientLinearQueryStatementSimpleAndPrimitiveResultPrimitiveResult :: PrimitiveResultStatement}
   deriving (Eq, Ord, Read, Show)
 
-_AmbientLinearQueryStatementSimpleAndPrimitiveResult = (Core.Name "hydra/ext/gql/openGql.AmbientLinearQueryStatementSimpleAndPrimitiveResult")
+_AmbientLinearQueryStatementSimpleAndPrimitiveResult = (Core.Name "hydra.ext/gql/openGql.AmbientLinearQueryStatementSimpleAndPrimitiveResult")
 
 _AmbientLinearQueryStatementSimpleAndPrimitiveResult_simple = (Core.Name "simple")
 
@@ -1368,14 +1368,14 @@ newtype SimpleLinearQueryStatement =
     unSimpleLinearQueryStatement :: [SimpleQueryStatement]}
   deriving (Eq, Ord, Read, Show)
 
-_SimpleLinearQueryStatement = (Core.Name "hydra/ext/gql/openGql.SimpleLinearQueryStatement")
+_SimpleLinearQueryStatement = (Core.Name "hydra.ext/gql/openGql.SimpleLinearQueryStatement")
 
 data SimpleQueryStatement = 
   SimpleQueryStatementPrimitive PrimitiveQueryStatement |
   SimpleQueryStatementCall CallQueryStatement
   deriving (Eq, Ord, Read, Show)
 
-_SimpleQueryStatement = (Core.Name "hydra/ext/gql/openGql.SimpleQueryStatement")
+_SimpleQueryStatement = (Core.Name "hydra.ext/gql/openGql.SimpleQueryStatement")
 
 _SimpleQueryStatement_primitive = (Core.Name "primitive")
 
@@ -1389,7 +1389,7 @@ data PrimitiveQueryStatement =
   PrimitiveQueryStatementOrderByAndPage OrderByAndPageStatement
   deriving (Eq, Ord, Read, Show)
 
-_PrimitiveQueryStatement = (Core.Name "hydra/ext/gql/openGql.PrimitiveQueryStatement")
+_PrimitiveQueryStatement = (Core.Name "hydra.ext/gql/openGql.PrimitiveQueryStatement")
 
 _PrimitiveQueryStatement_match = (Core.Name "match")
 
@@ -1406,7 +1406,7 @@ data MatchStatement =
   MatchStatementOptional OptionalMatchStatement
   deriving (Eq, Ord, Read, Show)
 
-_MatchStatement = (Core.Name "hydra/ext/gql/openGql.MatchStatement")
+_MatchStatement = (Core.Name "hydra.ext/gql/openGql.MatchStatement")
 
 _MatchStatement_simple = (Core.Name "simple")
 
@@ -1417,14 +1417,14 @@ newtype SimpleMatchStatement =
     unSimpleMatchStatement :: GraphPatternBindingTable}
   deriving (Eq, Ord, Read, Show)
 
-_SimpleMatchStatement = (Core.Name "hydra/ext/gql/openGql.SimpleMatchStatement")
+_SimpleMatchStatement = (Core.Name "hydra.ext/gql/openGql.SimpleMatchStatement")
 
 newtype OptionalMatchStatement = 
   OptionalMatchStatement {
     unOptionalMatchStatement :: OptionalOperand}
   deriving (Eq, Ord, Read, Show)
 
-_OptionalMatchStatement = (Core.Name "hydra/ext/gql/openGql.OptionalMatchStatement")
+_OptionalMatchStatement = (Core.Name "hydra.ext/gql/openGql.OptionalMatchStatement")
 
 data OptionalOperand = 
   OptionalOperandSimple SimpleMatchStatement |
@@ -1432,7 +1432,7 @@ data OptionalOperand =
   OptionalOperandParenBlock MatchStatementBlock
   deriving (Eq, Ord, Read, Show)
 
-_OptionalOperand = (Core.Name "hydra/ext/gql/openGql.OptionalOperand")
+_OptionalOperand = (Core.Name "hydra.ext/gql/openGql.OptionalOperand")
 
 _OptionalOperand_simple = (Core.Name "simple")
 
@@ -1445,21 +1445,21 @@ newtype MatchStatementBlock =
     unMatchStatementBlock :: [MatchStatement]}
   deriving (Eq, Ord, Read, Show)
 
-_MatchStatementBlock = (Core.Name "hydra/ext/gql/openGql.MatchStatementBlock")
+_MatchStatementBlock = (Core.Name "hydra.ext/gql/openGql.MatchStatementBlock")
 
 newtype CallQueryStatement = 
   CallQueryStatement {
     unCallQueryStatement :: CallProcedureStatement}
   deriving (Eq, Ord, Read, Show)
 
-_CallQueryStatement = (Core.Name "hydra/ext/gql/openGql.CallQueryStatement")
+_CallQueryStatement = (Core.Name "hydra.ext/gql/openGql.CallQueryStatement")
 
 data FilterStatement = 
   FilterStatementWhereClause WhereClause |
   FilterStatementSearchCondition SearchCondition
   deriving (Eq, Ord, Read, Show)
 
-_FilterStatement = (Core.Name "hydra/ext/gql/openGql.FilterStatement")
+_FilterStatement = (Core.Name "hydra.ext/gql/openGql.FilterStatement")
 
 _FilterStatement_whereClause = (Core.Name "whereClause")
 
@@ -1470,21 +1470,21 @@ newtype LetStatement =
     unLetStatement :: LetVariableDefinitionList}
   deriving (Eq, Ord, Read, Show)
 
-_LetStatement = (Core.Name "hydra/ext/gql/openGql.LetStatement")
+_LetStatement = (Core.Name "hydra.ext/gql/openGql.LetStatement")
 
 newtype LetVariableDefinitionList = 
   LetVariableDefinitionList {
     unLetVariableDefinitionList :: [LetVariableDefinition]}
   deriving (Eq, Ord, Read, Show)
 
-_LetVariableDefinitionList = (Core.Name "hydra/ext/gql/openGql.LetVariableDefinitionList")
+_LetVariableDefinitionList = (Core.Name "hydra.ext/gql/openGql.LetVariableDefinitionList")
 
 data LetVariableDefinition = 
   LetVariableDefinitionValueVariable ValueVariableDefinition |
   LetVariableDefinitionBindingEqualsValue BindingEqualsValue
   deriving (Eq, Ord, Read, Show)
 
-_LetVariableDefinition = (Core.Name "hydra/ext/gql/openGql.LetVariableDefinition")
+_LetVariableDefinition = (Core.Name "hydra.ext/gql/openGql.LetVariableDefinition")
 
 _LetVariableDefinition_valueVariable = (Core.Name "valueVariable")
 
@@ -1496,7 +1496,7 @@ data BindingEqualsValue =
     bindingEqualsValueValue :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_BindingEqualsValue = (Core.Name "hydra/ext/gql/openGql.BindingEqualsValue")
+_BindingEqualsValue = (Core.Name "hydra.ext/gql/openGql.BindingEqualsValue")
 
 _BindingEqualsValue_binding = (Core.Name "binding")
 
@@ -1508,7 +1508,7 @@ data ForStatement =
     forStatementOrdinalityOrOffset :: (Maybe ForOrdinalityOrOffset)}
   deriving (Eq, Ord, Read, Show)
 
-_ForStatement = (Core.Name "hydra/ext/gql/openGql.ForStatement")
+_ForStatement = (Core.Name "hydra.ext/gql/openGql.ForStatement")
 
 _ForStatement_item = (Core.Name "item")
 
@@ -1520,7 +1520,7 @@ data ForItem =
     forItemSource :: ForItemSource}
   deriving (Eq, Ord, Read, Show)
 
-_ForItem = (Core.Name "hydra/ext/gql/openGql.ForItem")
+_ForItem = (Core.Name "hydra.ext/gql/openGql.ForItem")
 
 _ForItem_alias = (Core.Name "alias")
 
@@ -1531,14 +1531,14 @@ newtype ForItemAlias =
     unForItemAlias :: BindingVariable}
   deriving (Eq, Ord, Read, Show)
 
-_ForItemAlias = (Core.Name "hydra/ext/gql/openGql.ForItemAlias")
+_ForItemAlias = (Core.Name "hydra.ext/gql/openGql.ForItemAlias")
 
 newtype ForItemSource = 
   ForItemSource {
     unForItemSource :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ForItemSource = (Core.Name "hydra/ext/gql/openGql.ForItemSource")
+_ForItemSource = (Core.Name "hydra.ext/gql/openGql.ForItemSource")
 
 data ForOrdinalityOrOffset = 
   ForOrdinalityOrOffset {
@@ -1546,7 +1546,7 @@ data ForOrdinalityOrOffset =
     forOrdinalityOrOffsetVariable :: BindingVariable}
   deriving (Eq, Ord, Read, Show)
 
-_ForOrdinalityOrOffset = (Core.Name "hydra/ext/gql/openGql.ForOrdinalityOrOffset")
+_ForOrdinalityOrOffset = (Core.Name "hydra.ext/gql/openGql.ForOrdinalityOrOffset")
 
 _ForOrdinalityOrOffset_type = (Core.Name "type")
 
@@ -1557,7 +1557,7 @@ data OrdinalityOrOffsetType =
   OrdinalityOrOffsetTypeOffset 
   deriving (Eq, Ord, Read, Show)
 
-_OrdinalityOrOffsetType = (Core.Name "hydra/ext/gql/openGql.OrdinalityOrOffsetType")
+_OrdinalityOrOffsetType = (Core.Name "hydra.ext/gql/openGql.OrdinalityOrOffsetType")
 
 _OrdinalityOrOffsetType_ordinality = (Core.Name "ordinality")
 
@@ -1569,7 +1569,7 @@ data OrderByAndPageStatement =
   OrderByAndPageStatementLimitOnly LimitClause
   deriving (Eq, Ord, Read, Show)
 
-_OrderByAndPageStatement = (Core.Name "hydra/ext/gql/openGql.OrderByAndPageStatement")
+_OrderByAndPageStatement = (Core.Name "hydra.ext/gql/openGql.OrderByAndPageStatement")
 
 _OrderByAndPageStatement_orderByAndOptionalOffsetAndLimit = (Core.Name "orderByAndOptionalOffsetAndLimit")
 
@@ -1584,7 +1584,7 @@ data OrderByAndOptionalOffsetAndLimit =
     orderByAndOptionalOffsetAndLimitLimit :: (Maybe LimitClause)}
   deriving (Eq, Ord, Read, Show)
 
-_OrderByAndOptionalOffsetAndLimit = (Core.Name "hydra/ext/gql/openGql.OrderByAndOptionalOffsetAndLimit")
+_OrderByAndOptionalOffsetAndLimit = (Core.Name "hydra.ext/gql/openGql.OrderByAndOptionalOffsetAndLimit")
 
 _OrderByAndOptionalOffsetAndLimit_orderBy = (Core.Name "orderBy")
 
@@ -1598,7 +1598,7 @@ data OffsetAndOptionalLimit =
     offsetAndOptionalLimitLimit :: (Maybe LimitClause)}
   deriving (Eq, Ord, Read, Show)
 
-_OffsetAndOptionalLimit = (Core.Name "hydra/ext/gql/openGql.OffsetAndOptionalLimit")
+_OffsetAndOptionalLimit = (Core.Name "hydra.ext/gql/openGql.OffsetAndOptionalLimit")
 
 _OffsetAndOptionalLimit_offset = (Core.Name "offset")
 
@@ -1609,7 +1609,7 @@ data PrimitiveResultStatement =
   PrimitiveResultStatementFinish 
   deriving (Eq, Ord, Read, Show)
 
-_PrimitiveResultStatement = (Core.Name "hydra/ext/gql/openGql.PrimitiveResultStatement")
+_PrimitiveResultStatement = (Core.Name "hydra.ext/gql/openGql.PrimitiveResultStatement")
 
 _PrimitiveResultStatement_returnAndOptionalOrderBy = (Core.Name "returnAndOptionalOrderBy")
 
@@ -1621,7 +1621,7 @@ data ReturnAndOptionalOrderByAndPage =
     returnAndOptionalOrderByAndPageOrderByAndPage :: (Maybe OrderByAndPageStatement)}
   deriving (Eq, Ord, Read, Show)
 
-_ReturnAndOptionalOrderByAndPage = (Core.Name "hydra/ext/gql/openGql.ReturnAndOptionalOrderByAndPage")
+_ReturnAndOptionalOrderByAndPage = (Core.Name "hydra.ext/gql/openGql.ReturnAndOptionalOrderByAndPage")
 
 _ReturnAndOptionalOrderByAndPage_return = (Core.Name "return")
 
@@ -1632,14 +1632,14 @@ newtype ReturnStatement =
     unReturnStatement :: ReturnStatementBody}
   deriving (Eq, Ord, Read, Show)
 
-_ReturnStatement = (Core.Name "hydra/ext/gql/openGql.ReturnStatement")
+_ReturnStatement = (Core.Name "hydra.ext/gql/openGql.ReturnStatement")
 
 data ReturnStatementBody = 
   ReturnStatementBodyItems ReturnItemsAndGroupBy |
   ReturnStatementBodyNoBindings 
   deriving (Eq, Ord, Read, Show)
 
-_ReturnStatementBody = (Core.Name "hydra/ext/gql/openGql.ReturnStatementBody")
+_ReturnStatementBody = (Core.Name "hydra.ext/gql/openGql.ReturnStatementBody")
 
 _ReturnStatementBody_items = (Core.Name "items")
 
@@ -1652,7 +1652,7 @@ data ReturnItemsAndGroupBy =
     returnItemsAndGroupByGroupBy :: (Maybe GroupByClause)}
   deriving (Eq, Ord, Read, Show)
 
-_ReturnItemsAndGroupBy = (Core.Name "hydra/ext/gql/openGql.ReturnItemsAndGroupBy")
+_ReturnItemsAndGroupBy = (Core.Name "hydra.ext/gql/openGql.ReturnItemsAndGroupBy")
 
 _ReturnItemsAndGroupBy_quantifier = (Core.Name "quantifier")
 
@@ -1665,7 +1665,7 @@ data ReturnItems =
   ReturnItemsItemList ReturnItemList
   deriving (Eq, Ord, Read, Show)
 
-_ReturnItems = (Core.Name "hydra/ext/gql/openGql.ReturnItems")
+_ReturnItems = (Core.Name "hydra.ext/gql/openGql.ReturnItems")
 
 _ReturnItems_asterisk = (Core.Name "asterisk")
 
@@ -1676,7 +1676,7 @@ newtype ReturnItemList =
     unReturnItemList :: [ReturnItem]}
   deriving (Eq, Ord, Read, Show)
 
-_ReturnItemList = (Core.Name "hydra/ext/gql/openGql.ReturnItemList")
+_ReturnItemList = (Core.Name "hydra.ext/gql/openGql.ReturnItemList")
 
 data ReturnItem = 
   ReturnItem {
@@ -1684,7 +1684,7 @@ data ReturnItem =
     returnItemAlias :: (Maybe ReturnItemAlias)}
   deriving (Eq, Ord, Read, Show)
 
-_ReturnItem = (Core.Name "hydra/ext/gql/openGql.ReturnItem")
+_ReturnItem = (Core.Name "hydra.ext/gql/openGql.ReturnItem")
 
 _ReturnItem_expression = (Core.Name "expression")
 
@@ -1695,7 +1695,7 @@ newtype ReturnItemAlias =
     unReturnItemAlias :: String}
   deriving (Eq, Ord, Read, Show)
 
-_ReturnItemAlias = (Core.Name "hydra/ext/gql/openGql.ReturnItemAlias")
+_ReturnItemAlias = (Core.Name "hydra.ext/gql/openGql.ReturnItemAlias")
 
 data SelectStatement = 
   SelectStatement {
@@ -1704,7 +1704,7 @@ data SelectStatement =
     selectStatementBody :: (Maybe SelectStatementBodyAndClauses)}
   deriving (Eq, Ord, Read, Show)
 
-_SelectStatement = (Core.Name "hydra/ext/gql/openGql.SelectStatement")
+_SelectStatement = (Core.Name "hydra.ext/gql/openGql.SelectStatement")
 
 _SelectStatement_quantifier = (Core.Name "quantifier")
 
@@ -1717,7 +1717,7 @@ data SelectItems =
   SelectItemsItemList SelectItemList
   deriving (Eq, Ord, Read, Show)
 
-_SelectItems = (Core.Name "hydra/ext/gql/openGql.SelectItems")
+_SelectItems = (Core.Name "hydra.ext/gql/openGql.SelectItems")
 
 _SelectItems_asterisk = (Core.Name "asterisk")
 
@@ -1734,7 +1734,7 @@ data SelectStatementBodyAndClauses =
     selectStatementBodyAndClausesLimit :: (Maybe LimitClause)}
   deriving (Eq, Ord, Read, Show)
 
-_SelectStatementBodyAndClauses = (Core.Name "hydra/ext/gql/openGql.SelectStatementBodyAndClauses")
+_SelectStatementBodyAndClauses = (Core.Name "hydra.ext/gql/openGql.SelectStatementBodyAndClauses")
 
 _SelectStatementBodyAndClauses_body = (Core.Name "body")
 
@@ -1755,7 +1755,7 @@ newtype SelectItemList =
     unSelectItemList :: [SelectItem]}
   deriving (Eq, Ord, Read, Show)
 
-_SelectItemList = (Core.Name "hydra/ext/gql/openGql.SelectItemList")
+_SelectItemList = (Core.Name "hydra.ext/gql/openGql.SelectItemList")
 
 data SelectItem = 
   SelectItem {
@@ -1763,7 +1763,7 @@ data SelectItem =
     selectItemAlias :: (Maybe SelectItemAlias)}
   deriving (Eq, Ord, Read, Show)
 
-_SelectItem = (Core.Name "hydra/ext/gql/openGql.SelectItem")
+_SelectItem = (Core.Name "hydra.ext/gql/openGql.SelectItem")
 
 _SelectItem_expression = (Core.Name "expression")
 
@@ -1774,21 +1774,21 @@ newtype SelectItemAlias =
     unSelectItemAlias :: String}
   deriving (Eq, Ord, Read, Show)
 
-_SelectItemAlias = (Core.Name "hydra/ext/gql/openGql.SelectItemAlias")
+_SelectItemAlias = (Core.Name "hydra.ext/gql/openGql.SelectItemAlias")
 
 newtype HavingClause = 
   HavingClause {
     unHavingClause :: SearchCondition}
   deriving (Eq, Ord, Read, Show)
 
-_HavingClause = (Core.Name "hydra/ext/gql/openGql.HavingClause")
+_HavingClause = (Core.Name "hydra.ext/gql/openGql.HavingClause")
 
 data SelectStatementBody = 
   SelectStatementBodyGraphMatchList SelectGraphMatchList |
   SelectStatementBodyQuerySpecification SelectQuerySpecification
   deriving (Eq, Ord, Read, Show)
 
-_SelectStatementBody = (Core.Name "hydra/ext/gql/openGql.SelectStatementBody")
+_SelectStatementBody = (Core.Name "hydra.ext/gql/openGql.SelectStatementBody")
 
 _SelectStatementBody_graphMatchList = (Core.Name "graphMatchList")
 
@@ -1799,7 +1799,7 @@ newtype SelectGraphMatchList =
     unSelectGraphMatchList :: [SelectGraphMatch]}
   deriving (Eq, Ord, Read, Show)
 
-_SelectGraphMatchList = (Core.Name "hydra/ext/gql/openGql.SelectGraphMatchList")
+_SelectGraphMatchList = (Core.Name "hydra.ext/gql/openGql.SelectGraphMatchList")
 
 data SelectGraphMatch = 
   SelectGraphMatch {
@@ -1807,7 +1807,7 @@ data SelectGraphMatch =
     selectGraphMatchMatchStatement :: MatchStatement}
   deriving (Eq, Ord, Read, Show)
 
-_SelectGraphMatch = (Core.Name "hydra/ext/gql/openGql.SelectGraphMatch")
+_SelectGraphMatch = (Core.Name "hydra.ext/gql/openGql.SelectGraphMatch")
 
 _SelectGraphMatch_graphExpression = (Core.Name "graphExpression")
 
@@ -1818,7 +1818,7 @@ data SelectQuerySpecification =
   SelectQuerySpecificationGraphAndNested GraphAndNestedQuerySpecification
   deriving (Eq, Ord, Read, Show)
 
-_SelectQuerySpecification = (Core.Name "hydra/ext/gql/openGql.SelectQuerySpecification")
+_SelectQuerySpecification = (Core.Name "hydra.ext/gql/openGql.SelectQuerySpecification")
 
 _SelectQuerySpecification_nested = (Core.Name "nested")
 
@@ -1830,7 +1830,7 @@ data GraphAndNestedQuerySpecification =
     graphAndNestedQuerySpecificationNested :: NestedQuerySpecification}
   deriving (Eq, Ord, Read, Show)
 
-_GraphAndNestedQuerySpecification = (Core.Name "hydra/ext/gql/openGql.GraphAndNestedQuerySpecification")
+_GraphAndNestedQuerySpecification = (Core.Name "hydra.ext/gql/openGql.GraphAndNestedQuerySpecification")
 
 _GraphAndNestedQuerySpecification_graphExpression = (Core.Name "graphExpression")
 
@@ -1842,7 +1842,7 @@ data CallProcedureStatement =
     callProcedureStatementCall :: ProcedureCall}
   deriving (Eq, Ord, Read, Show)
 
-_CallProcedureStatement = (Core.Name "hydra/ext/gql/openGql.CallProcedureStatement")
+_CallProcedureStatement = (Core.Name "hydra.ext/gql/openGql.CallProcedureStatement")
 
 _CallProcedureStatement_optional = (Core.Name "optional")
 
@@ -1853,7 +1853,7 @@ data ProcedureCall =
   ProcedureCallNamed NamedProcedureCall
   deriving (Eq, Ord, Read, Show)
 
-_ProcedureCall = (Core.Name "hydra/ext/gql/openGql.ProcedureCall")
+_ProcedureCall = (Core.Name "hydra.ext/gql/openGql.ProcedureCall")
 
 _ProcedureCall_inline = (Core.Name "inline")
 
@@ -1865,7 +1865,7 @@ data InlineProcedureCall =
     inlineProcedureCallNested :: NestedProcedureSpecification}
   deriving (Eq, Ord, Read, Show)
 
-_InlineProcedureCall = (Core.Name "hydra/ext/gql/openGql.InlineProcedureCall")
+_InlineProcedureCall = (Core.Name "hydra.ext/gql/openGql.InlineProcedureCall")
 
 _InlineProcedureCall_scope = (Core.Name "scope")
 
@@ -1876,14 +1876,14 @@ newtype VariableScopeClause =
     unVariableScopeClause :: (Maybe BindingVariableReferenceList)}
   deriving (Eq, Ord, Read, Show)
 
-_VariableScopeClause = (Core.Name "hydra/ext/gql/openGql.VariableScopeClause")
+_VariableScopeClause = (Core.Name "hydra.ext/gql/openGql.VariableScopeClause")
 
 newtype BindingVariableReferenceList = 
   BindingVariableReferenceList {
     unBindingVariableReferenceList :: [BindingVariableReference]}
   deriving (Eq, Ord, Read, Show)
 
-_BindingVariableReferenceList = (Core.Name "hydra/ext/gql/openGql.BindingVariableReferenceList")
+_BindingVariableReferenceList = (Core.Name "hydra.ext/gql/openGql.BindingVariableReferenceList")
 
 data NamedProcedureCall = 
   NamedProcedureCall {
@@ -1892,7 +1892,7 @@ data NamedProcedureCall =
     namedProcedureCallYield :: (Maybe YieldClause)}
   deriving (Eq, Ord, Read, Show)
 
-_NamedProcedureCall = (Core.Name "hydra/ext/gql/openGql.NamedProcedureCall")
+_NamedProcedureCall = (Core.Name "hydra.ext/gql/openGql.NamedProcedureCall")
 
 _NamedProcedureCall_reference = (Core.Name "reference")
 
@@ -1905,28 +1905,28 @@ newtype ProcedureArgumentList =
     unProcedureArgumentList :: [ProcedureArgument]}
   deriving (Eq, Ord, Read, Show)
 
-_ProcedureArgumentList = (Core.Name "hydra/ext/gql/openGql.ProcedureArgumentList")
+_ProcedureArgumentList = (Core.Name "hydra.ext/gql/openGql.ProcedureArgumentList")
 
 newtype ProcedureArgument = 
   ProcedureArgument {
     unProcedureArgument :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ProcedureArgument = (Core.Name "hydra/ext/gql/openGql.ProcedureArgument")
+_ProcedureArgument = (Core.Name "hydra.ext/gql/openGql.ProcedureArgument")
 
 newtype AtSchemaClause = 
   AtSchemaClause {
     unAtSchemaClause :: SchemaReference}
   deriving (Eq, Ord, Read, Show)
 
-_AtSchemaClause = (Core.Name "hydra/ext/gql/openGql.AtSchemaClause")
+_AtSchemaClause = (Core.Name "hydra.ext/gql/openGql.AtSchemaClause")
 
 newtype UseGraphClause = 
   UseGraphClause {
     unUseGraphClause :: GraphExpression}
   deriving (Eq, Ord, Read, Show)
 
-_UseGraphClause = (Core.Name "hydra/ext/gql/openGql.UseGraphClause")
+_UseGraphClause = (Core.Name "hydra.ext/gql/openGql.UseGraphClause")
 
 data GraphPatternBindingTable = 
   GraphPatternBindingTable {
@@ -1934,7 +1934,7 @@ data GraphPatternBindingTable =
     graphPatternBindingTableYieldClause :: (Maybe GraphPatternYieldClause)}
   deriving (Eq, Ord, Read, Show)
 
-_GraphPatternBindingTable = (Core.Name "hydra/ext/gql/openGql.GraphPatternBindingTable")
+_GraphPatternBindingTable = (Core.Name "hydra.ext/gql/openGql.GraphPatternBindingTable")
 
 _GraphPatternBindingTable_pattern = (Core.Name "pattern")
 
@@ -1945,14 +1945,14 @@ newtype GraphPatternYieldClause =
     unGraphPatternYieldClause :: GraphPatternYieldItemList}
   deriving (Eq, Ord, Read, Show)
 
-_GraphPatternYieldClause = (Core.Name "hydra/ext/gql/openGql.GraphPatternYieldClause")
+_GraphPatternYieldClause = (Core.Name "hydra.ext/gql/openGql.GraphPatternYieldClause")
 
 data GraphPatternYieldItemList = 
   GraphPatternYieldItemListItems [GraphPatternYieldItem] |
   GraphPatternYieldItemListNoBindings 
   deriving (Eq, Ord, Read, Show)
 
-_GraphPatternYieldItemList = (Core.Name "hydra/ext/gql/openGql.GraphPatternYieldItemList")
+_GraphPatternYieldItemList = (Core.Name "hydra.ext/gql/openGql.GraphPatternYieldItemList")
 
 _GraphPatternYieldItemList_items = (Core.Name "items")
 
@@ -1963,7 +1963,7 @@ newtype GraphPatternYieldItem =
     unGraphPatternYieldItem :: BindingVariableReference}
   deriving (Eq, Ord, Read, Show)
 
-_GraphPatternYieldItem = (Core.Name "hydra/ext/gql/openGql.GraphPatternYieldItem")
+_GraphPatternYieldItem = (Core.Name "hydra.ext/gql/openGql.GraphPatternYieldItem")
 
 data GraphPattern = 
   GraphPattern {
@@ -1973,7 +1973,7 @@ data GraphPattern =
     graphPatternWhereClause :: (Maybe GraphPatternWhereClause)}
   deriving (Eq, Ord, Read, Show)
 
-_GraphPattern = (Core.Name "hydra/ext/gql/openGql.GraphPattern")
+_GraphPattern = (Core.Name "hydra.ext/gql/openGql.GraphPattern")
 
 _GraphPattern_matchMode = (Core.Name "matchMode")
 
@@ -1988,7 +1988,7 @@ data MatchMode =
   MatchModeDifferentEdges DifferentEdgesMatchMode
   deriving (Eq, Ord, Read, Show)
 
-_MatchMode = (Core.Name "hydra/ext/gql/openGql.MatchMode")
+_MatchMode = (Core.Name "hydra.ext/gql/openGql.MatchMode")
 
 _MatchMode_repeatableElements = (Core.Name "repeatableElements")
 
@@ -1999,21 +1999,21 @@ newtype RepeatableElementsMatchMode =
     unRepeatableElementsMatchMode :: ElementBindingsOrElements}
   deriving (Eq, Ord, Read, Show)
 
-_RepeatableElementsMatchMode = (Core.Name "hydra/ext/gql/openGql.RepeatableElementsMatchMode")
+_RepeatableElementsMatchMode = (Core.Name "hydra.ext/gql/openGql.RepeatableElementsMatchMode")
 
 newtype DifferentEdgesMatchMode = 
   DifferentEdgesMatchMode {
     unDifferentEdgesMatchMode :: EdgeBindingsOrEdges}
   deriving (Eq, Ord, Read, Show)
 
-_DifferentEdgesMatchMode = (Core.Name "hydra/ext/gql/openGql.DifferentEdgesMatchMode")
+_DifferentEdgesMatchMode = (Core.Name "hydra.ext/gql/openGql.DifferentEdgesMatchMode")
 
 data ElementBindingsOrElements = 
   ElementBindingsOrElementsElementBindings Bool |
   ElementBindingsOrElementsElements 
   deriving (Eq, Ord, Read, Show)
 
-_ElementBindingsOrElements = (Core.Name "hydra/ext/gql/openGql.ElementBindingsOrElements")
+_ElementBindingsOrElements = (Core.Name "hydra.ext/gql/openGql.ElementBindingsOrElements")
 
 _ElementBindingsOrElements_elementBindings = (Core.Name "elementBindings")
 
@@ -2024,7 +2024,7 @@ data EdgeBindingsOrEdges =
   EdgeBindingsOrEdgesEdges 
   deriving (Eq, Ord, Read, Show)
 
-_EdgeBindingsOrEdges = (Core.Name "hydra/ext/gql/openGql.EdgeBindingsOrEdges")
+_EdgeBindingsOrEdges = (Core.Name "hydra.ext/gql/openGql.EdgeBindingsOrEdges")
 
 _EdgeBindingsOrEdges_edgeBindings = (Core.Name "edgeBindings")
 
@@ -2035,7 +2035,7 @@ newtype PathPatternList =
     unPathPatternList :: [PathPattern]}
   deriving (Eq, Ord, Read, Show)
 
-_PathPatternList = (Core.Name "hydra/ext/gql/openGql.PathPatternList")
+_PathPatternList = (Core.Name "hydra.ext/gql/openGql.PathPatternList")
 
 data PathPattern = 
   PathPattern {
@@ -2044,7 +2044,7 @@ data PathPattern =
     pathPatternExpression :: PathPatternExpression}
   deriving (Eq, Ord, Read, Show)
 
-_PathPattern = (Core.Name "hydra/ext/gql/openGql.PathPattern")
+_PathPattern = (Core.Name "hydra.ext/gql/openGql.PathPattern")
 
 _PathPattern_variableDeclaration = (Core.Name "variableDeclaration")
 
@@ -2057,35 +2057,35 @@ newtype PathVariableDeclaration =
     unPathVariableDeclaration :: PathVariable}
   deriving (Eq, Ord, Read, Show)
 
-_PathVariableDeclaration = (Core.Name "hydra/ext/gql/openGql.PathVariableDeclaration")
+_PathVariableDeclaration = (Core.Name "hydra.ext/gql/openGql.PathVariableDeclaration")
 
 newtype KeepClause = 
   KeepClause {
     unKeepClause :: PathPatternPrefix}
   deriving (Eq, Ord, Read, Show)
 
-_KeepClause = (Core.Name "hydra/ext/gql/openGql.KeepClause")
+_KeepClause = (Core.Name "hydra.ext/gql/openGql.KeepClause")
 
 newtype GraphPatternWhereClause = 
   GraphPatternWhereClause {
     unGraphPatternWhereClause :: SearchCondition}
   deriving (Eq, Ord, Read, Show)
 
-_GraphPatternWhereClause = (Core.Name "hydra/ext/gql/openGql.GraphPatternWhereClause")
+_GraphPatternWhereClause = (Core.Name "hydra.ext/gql/openGql.GraphPatternWhereClause")
 
 newtype InsertGraphPattern = 
   InsertGraphPattern {
     unInsertGraphPattern :: InsertPathPatternList}
   deriving (Eq, Ord, Read, Show)
 
-_InsertGraphPattern = (Core.Name "hydra/ext/gql/openGql.InsertGraphPattern")
+_InsertGraphPattern = (Core.Name "hydra.ext/gql/openGql.InsertGraphPattern")
 
 newtype InsertPathPatternList = 
   InsertPathPatternList {
     unInsertPathPatternList :: [InsertPathPattern]}
   deriving (Eq, Ord, Read, Show)
 
-_InsertPathPatternList = (Core.Name "hydra/ext/gql/openGql.InsertPathPatternList")
+_InsertPathPatternList = (Core.Name "hydra.ext/gql/openGql.InsertPathPatternList")
 
 data InsertPathPattern = 
   InsertPathPattern {
@@ -2093,7 +2093,7 @@ data InsertPathPattern =
     insertPathPatternEdgesAndNodes :: [InsertEdgeAndNode]}
   deriving (Eq, Ord, Read, Show)
 
-_InsertPathPattern = (Core.Name "hydra/ext/gql/openGql.InsertPathPattern")
+_InsertPathPattern = (Core.Name "hydra.ext/gql/openGql.InsertPathPattern")
 
 _InsertPathPattern_startNode = (Core.Name "startNode")
 
@@ -2105,7 +2105,7 @@ data InsertEdgeAndNode =
     insertEdgeAndNodeNode :: InsertNodePattern}
   deriving (Eq, Ord, Read, Show)
 
-_InsertEdgeAndNode = (Core.Name "hydra/ext/gql/openGql.InsertEdgeAndNode")
+_InsertEdgeAndNode = (Core.Name "hydra.ext/gql/openGql.InsertEdgeAndNode")
 
 _InsertEdgeAndNode_edge = (Core.Name "edge")
 
@@ -2116,7 +2116,7 @@ newtype InsertNodePattern =
     unInsertNodePattern :: (Maybe InsertElementPatternFiller)}
   deriving (Eq, Ord, Read, Show)
 
-_InsertNodePattern = (Core.Name "hydra/ext/gql/openGql.InsertNodePattern")
+_InsertNodePattern = (Core.Name "hydra.ext/gql/openGql.InsertNodePattern")
 
 data InsertEdgePattern = 
   InsertEdgePatternPointingLeft InsertEdgePointingLeft |
@@ -2124,7 +2124,7 @@ data InsertEdgePattern =
   InsertEdgePatternUndirected InsertEdgeUndirected
   deriving (Eq, Ord, Read, Show)
 
-_InsertEdgePattern = (Core.Name "hydra/ext/gql/openGql.InsertEdgePattern")
+_InsertEdgePattern = (Core.Name "hydra.ext/gql/openGql.InsertEdgePattern")
 
 _InsertEdgePattern_pointingLeft = (Core.Name "pointingLeft")
 
@@ -2137,21 +2137,21 @@ newtype InsertEdgePointingLeft =
     unInsertEdgePointingLeft :: (Maybe InsertElementPatternFiller)}
   deriving (Eq, Ord, Read, Show)
 
-_InsertEdgePointingLeft = (Core.Name "hydra/ext/gql/openGql.InsertEdgePointingLeft")
+_InsertEdgePointingLeft = (Core.Name "hydra.ext/gql/openGql.InsertEdgePointingLeft")
 
 newtype InsertEdgePointingRight = 
   InsertEdgePointingRight {
     unInsertEdgePointingRight :: (Maybe InsertElementPatternFiller)}
   deriving (Eq, Ord, Read, Show)
 
-_InsertEdgePointingRight = (Core.Name "hydra/ext/gql/openGql.InsertEdgePointingRight")
+_InsertEdgePointingRight = (Core.Name "hydra.ext/gql/openGql.InsertEdgePointingRight")
 
 newtype InsertEdgeUndirected = 
   InsertEdgeUndirected {
     unInsertEdgeUndirected :: (Maybe InsertElementPatternFiller)}
   deriving (Eq, Ord, Read, Show)
 
-_InsertEdgeUndirected = (Core.Name "hydra/ext/gql/openGql.InsertEdgeUndirected")
+_InsertEdgeUndirected = (Core.Name "hydra.ext/gql/openGql.InsertEdgeUndirected")
 
 data InsertElementPatternFiller = 
   InsertElementPatternFiller {
@@ -2159,7 +2159,7 @@ data InsertElementPatternFiller =
     insertElementPatternFillerLabelAndProperties :: (Maybe LabelAndPropertySetSpecification)}
   deriving (Eq, Ord, Read, Show)
 
-_InsertElementPatternFiller = (Core.Name "hydra/ext/gql/openGql.InsertElementPatternFiller")
+_InsertElementPatternFiller = (Core.Name "hydra.ext/gql/openGql.InsertElementPatternFiller")
 
 _InsertElementPatternFiller_variableDeclaration = (Core.Name "variableDeclaration")
 
@@ -2172,7 +2172,7 @@ data LabelAndPropertySetSpecification =
     labelAndPropertySetSpecificationPropertySpecification :: (Maybe ElementPropertySpecification)}
   deriving (Eq, Ord, Read, Show)
 
-_LabelAndPropertySetSpecification = (Core.Name "hydra/ext/gql/openGql.LabelAndPropertySetSpecification")
+_LabelAndPropertySetSpecification = (Core.Name "hydra.ext/gql/openGql.LabelAndPropertySetSpecification")
 
 _LabelAndPropertySetSpecification_isOrColon = (Core.Name "isOrColon")
 
@@ -2185,7 +2185,7 @@ data PathPatternPrefix =
   PathPatternPrefixSearchPrefix PathSearchPrefix
   deriving (Eq, Ord, Read, Show)
 
-_PathPatternPrefix = (Core.Name "hydra/ext/gql/openGql.PathPatternPrefix")
+_PathPatternPrefix = (Core.Name "hydra.ext/gql/openGql.PathPatternPrefix")
 
 _PathPatternPrefix_modePrefix = (Core.Name "modePrefix")
 
@@ -2197,7 +2197,7 @@ data PathModePrefix =
     pathModePrefixOrPaths :: (Maybe PathOrPaths)}
   deriving (Eq, Ord, Read, Show)
 
-_PathModePrefix = (Core.Name "hydra/ext/gql/openGql.PathModePrefix")
+_PathModePrefix = (Core.Name "hydra.ext/gql/openGql.PathModePrefix")
 
 _PathModePrefix_mode = (Core.Name "mode")
 
@@ -2210,7 +2210,7 @@ data PathMode =
   PathModeAcyclic 
   deriving (Eq, Ord, Read, Show)
 
-_PathMode = (Core.Name "hydra/ext/gql/openGql.PathMode")
+_PathMode = (Core.Name "hydra.ext/gql/openGql.PathMode")
 
 _PathMode_walk = (Core.Name "walk")
 
@@ -2226,7 +2226,7 @@ data PathSearchPrefix =
   PathSearchPrefixShortest ShortestPathSearch
   deriving (Eq, Ord, Read, Show)
 
-_PathSearchPrefix = (Core.Name "hydra/ext/gql/openGql.PathSearchPrefix")
+_PathSearchPrefix = (Core.Name "hydra.ext/gql/openGql.PathSearchPrefix")
 
 _PathSearchPrefix_all = (Core.Name "all")
 
@@ -2240,7 +2240,7 @@ data AllPathSearch =
     allPathSearchOrPaths :: (Maybe PathOrPaths)}
   deriving (Eq, Ord, Read, Show)
 
-_AllPathSearch = (Core.Name "hydra/ext/gql/openGql.AllPathSearch")
+_AllPathSearch = (Core.Name "hydra.ext/gql/openGql.AllPathSearch")
 
 _AllPathSearch_mode = (Core.Name "mode")
 
@@ -2251,7 +2251,7 @@ data PathOrPaths =
   PathOrPathsPaths 
   deriving (Eq, Ord, Read, Show)
 
-_PathOrPaths = (Core.Name "hydra/ext/gql/openGql.PathOrPaths")
+_PathOrPaths = (Core.Name "hydra.ext/gql/openGql.PathOrPaths")
 
 _PathOrPaths_path = (Core.Name "path")
 
@@ -2264,7 +2264,7 @@ data AnyPathSearch =
     anyPathSearchOrPaths :: (Maybe PathOrPaths)}
   deriving (Eq, Ord, Read, Show)
 
-_AnyPathSearch = (Core.Name "hydra/ext/gql/openGql.AnyPathSearch")
+_AnyPathSearch = (Core.Name "hydra.ext/gql/openGql.AnyPathSearch")
 
 _AnyPathSearch_numberOfPaths = (Core.Name "numberOfPaths")
 
@@ -2277,7 +2277,7 @@ newtype NumberOfPaths =
     unNumberOfPaths :: NonNegativeIntegerSpecification}
   deriving (Eq, Ord, Read, Show)
 
-_NumberOfPaths = (Core.Name "hydra/ext/gql/openGql.NumberOfPaths")
+_NumberOfPaths = (Core.Name "hydra.ext/gql/openGql.NumberOfPaths")
 
 data ShortestPathSearch = 
   ShortestPathSearchAllShortest AllShortestPathSearch |
@@ -2286,7 +2286,7 @@ data ShortestPathSearch =
   ShortestPathSearchCountedShortestGroup CountedShortestGroupSearch
   deriving (Eq, Ord, Read, Show)
 
-_ShortestPathSearch = (Core.Name "hydra/ext/gql/openGql.ShortestPathSearch")
+_ShortestPathSearch = (Core.Name "hydra.ext/gql/openGql.ShortestPathSearch")
 
 _ShortestPathSearch_allShortest = (Core.Name "allShortest")
 
@@ -2302,7 +2302,7 @@ data AllShortestPathSearch =
     allShortestPathSearchOrPaths :: (Maybe PathOrPaths)}
   deriving (Eq, Ord, Read, Show)
 
-_AllShortestPathSearch = (Core.Name "hydra/ext/gql/openGql.AllShortestPathSearch")
+_AllShortestPathSearch = (Core.Name "hydra.ext/gql/openGql.AllShortestPathSearch")
 
 _AllShortestPathSearch_mode = (Core.Name "mode")
 
@@ -2314,7 +2314,7 @@ data AnyShortestPathSearch =
     anyShortestPathSearchOrPaths :: (Maybe PathOrPaths)}
   deriving (Eq, Ord, Read, Show)
 
-_AnyShortestPathSearch = (Core.Name "hydra/ext/gql/openGql.AnyShortestPathSearch")
+_AnyShortestPathSearch = (Core.Name "hydra.ext/gql/openGql.AnyShortestPathSearch")
 
 _AnyShortestPathSearch_mode = (Core.Name "mode")
 
@@ -2327,7 +2327,7 @@ data CountedShortestPathSearch =
     countedShortestPathSearchOrPaths :: (Maybe PathOrPaths)}
   deriving (Eq, Ord, Read, Show)
 
-_CountedShortestPathSearch = (Core.Name "hydra/ext/gql/openGql.CountedShortestPathSearch")
+_CountedShortestPathSearch = (Core.Name "hydra.ext/gql/openGql.CountedShortestPathSearch")
 
 _CountedShortestPathSearch_numberOfPaths = (Core.Name "numberOfPaths")
 
@@ -2343,7 +2343,7 @@ data CountedShortestGroupSearch =
     countedShortestGroupSearchGroups :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_CountedShortestGroupSearch = (Core.Name "hydra/ext/gql/openGql.CountedShortestGroupSearch")
+_CountedShortestGroupSearch = (Core.Name "hydra.ext/gql/openGql.CountedShortestGroupSearch")
 
 _CountedShortestGroupSearch_numberOfGroups = (Core.Name "numberOfGroups")
 
@@ -2358,7 +2358,7 @@ newtype NumberOfGroups =
     unNumberOfGroups :: NonNegativeIntegerSpecification}
   deriving (Eq, Ord, Read, Show)
 
-_NumberOfGroups = (Core.Name "hydra/ext/gql/openGql.NumberOfGroups")
+_NumberOfGroups = (Core.Name "hydra.ext/gql/openGql.NumberOfGroups")
 
 data PathPatternExpression = 
   PathPatternExpressionTerm PathTerm |
@@ -2366,7 +2366,7 @@ data PathPatternExpression =
   PathPatternExpressionPatternUnion [PathTerm]
   deriving (Eq, Ord, Read, Show)
 
-_PathPatternExpression = (Core.Name "hydra/ext/gql/openGql.PathPatternExpression")
+_PathPatternExpression = (Core.Name "hydra.ext/gql/openGql.PathPatternExpression")
 
 _PathPatternExpression_term = (Core.Name "term")
 
@@ -2379,7 +2379,7 @@ newtype PathTerm =
     unPathTerm :: [PathFactor]}
   deriving (Eq, Ord, Read, Show)
 
-_PathTerm = (Core.Name "hydra/ext/gql/openGql.PathTerm")
+_PathTerm = (Core.Name "hydra.ext/gql/openGql.PathTerm")
 
 data PathFactor = 
   PathFactorPrimary PathPrimary |
@@ -2387,7 +2387,7 @@ data PathFactor =
   PathFactorQuestionedPrimary QuestionedPathPrimary
   deriving (Eq, Ord, Read, Show)
 
-_PathFactor = (Core.Name "hydra/ext/gql/openGql.PathFactor")
+_PathFactor = (Core.Name "hydra.ext/gql/openGql.PathFactor")
 
 _PathFactor_primary = (Core.Name "primary")
 
@@ -2401,7 +2401,7 @@ data QuantifiedPathPrimary =
     quantifiedPathPrimaryQuantifier :: GraphPatternQuantifier}
   deriving (Eq, Ord, Read, Show)
 
-_QuantifiedPathPrimary = (Core.Name "hydra/ext/gql/openGql.QuantifiedPathPrimary")
+_QuantifiedPathPrimary = (Core.Name "hydra.ext/gql/openGql.QuantifiedPathPrimary")
 
 _QuantifiedPathPrimary_primary = (Core.Name "primary")
 
@@ -2412,7 +2412,7 @@ newtype QuestionedPathPrimary =
     unQuestionedPathPrimary :: PathPrimary}
   deriving (Eq, Ord, Read, Show)
 
-_QuestionedPathPrimary = (Core.Name "hydra/ext/gql/openGql.QuestionedPathPrimary")
+_QuestionedPathPrimary = (Core.Name "hydra.ext/gql/openGql.QuestionedPathPrimary")
 
 data PathPrimary = 
   PathPrimaryElementPattern ElementPattern |
@@ -2420,7 +2420,7 @@ data PathPrimary =
   PathPrimarySimplifiedExpression SimplifiedPathPatternExpression
   deriving (Eq, Ord, Read, Show)
 
-_PathPrimary = (Core.Name "hydra/ext/gql/openGql.PathPrimary")
+_PathPrimary = (Core.Name "hydra.ext/gql/openGql.PathPrimary")
 
 _PathPrimary_elementPattern = (Core.Name "elementPattern")
 
@@ -2433,7 +2433,7 @@ data ElementPattern =
   ElementPatternEdge EdgePattern
   deriving (Eq, Ord, Read, Show)
 
-_ElementPattern = (Core.Name "hydra/ext/gql/openGql.ElementPattern")
+_ElementPattern = (Core.Name "hydra.ext/gql/openGql.ElementPattern")
 
 _ElementPattern_node = (Core.Name "node")
 
@@ -2444,7 +2444,7 @@ newtype NodePattern =
     unNodePattern :: ElementPatternFiller}
   deriving (Eq, Ord, Read, Show)
 
-_NodePattern = (Core.Name "hydra/ext/gql/openGql.NodePattern")
+_NodePattern = (Core.Name "hydra.ext/gql/openGql.NodePattern")
 
 data ElementPatternFiller = 
   ElementPatternFiller {
@@ -2453,7 +2453,7 @@ data ElementPatternFiller =
     elementPatternFillerPredicate :: (Maybe ElementPatternPredicate)}
   deriving (Eq, Ord, Read, Show)
 
-_ElementPatternFiller = (Core.Name "hydra/ext/gql/openGql.ElementPatternFiller")
+_ElementPatternFiller = (Core.Name "hydra.ext/gql/openGql.ElementPatternFiller")
 
 _ElementPatternFiller_variableDeclaration = (Core.Name "variableDeclaration")
 
@@ -2467,7 +2467,7 @@ data ElementVariableDeclaration =
     elementVariableDeclarationVariable :: ElementVariable}
   deriving (Eq, Ord, Read, Show)
 
-_ElementVariableDeclaration = (Core.Name "hydra/ext/gql/openGql.ElementVariableDeclaration")
+_ElementVariableDeclaration = (Core.Name "hydra.ext/gql/openGql.ElementVariableDeclaration")
 
 _ElementVariableDeclaration_temp = (Core.Name "temp")
 
@@ -2479,7 +2479,7 @@ data IsLabelExpression =
     isLabelExpressionLabel :: LabelExpression}
   deriving (Eq, Ord, Read, Show)
 
-_IsLabelExpression = (Core.Name "hydra/ext/gql/openGql.IsLabelExpression")
+_IsLabelExpression = (Core.Name "hydra.ext/gql/openGql.IsLabelExpression")
 
 _IsLabelExpression_isOrColon = (Core.Name "isOrColon")
 
@@ -2490,7 +2490,7 @@ data IsOrColon =
   IsOrColonColon 
   deriving (Eq, Ord, Read, Show)
 
-_IsOrColon = (Core.Name "hydra/ext/gql/openGql.IsOrColon")
+_IsOrColon = (Core.Name "hydra.ext/gql/openGql.IsOrColon")
 
 _IsOrColon_is = (Core.Name "is")
 
@@ -2501,7 +2501,7 @@ data ElementPatternPredicate =
   ElementPatternPredicatePropertySpecification ElementPropertySpecification
   deriving (Eq, Ord, Read, Show)
 
-_ElementPatternPredicate = (Core.Name "hydra/ext/gql/openGql.ElementPatternPredicate")
+_ElementPatternPredicate = (Core.Name "hydra.ext/gql/openGql.ElementPatternPredicate")
 
 _ElementPatternPredicate_whereClause = (Core.Name "whereClause")
 
@@ -2512,21 +2512,21 @@ newtype ElementPatternWhereClause =
     unElementPatternWhereClause :: SearchCondition}
   deriving (Eq, Ord, Read, Show)
 
-_ElementPatternWhereClause = (Core.Name "hydra/ext/gql/openGql.ElementPatternWhereClause")
+_ElementPatternWhereClause = (Core.Name "hydra.ext/gql/openGql.ElementPatternWhereClause")
 
 newtype ElementPropertySpecification = 
   ElementPropertySpecification {
     unElementPropertySpecification :: PropertyKeyValuePairList}
   deriving (Eq, Ord, Read, Show)
 
-_ElementPropertySpecification = (Core.Name "hydra/ext/gql/openGql.ElementPropertySpecification")
+_ElementPropertySpecification = (Core.Name "hydra.ext/gql/openGql.ElementPropertySpecification")
 
 newtype PropertyKeyValuePairList = 
   PropertyKeyValuePairList {
     unPropertyKeyValuePairList :: [PropertyKeyValuePair]}
   deriving (Eq, Ord, Read, Show)
 
-_PropertyKeyValuePairList = (Core.Name "hydra/ext/gql/openGql.PropertyKeyValuePairList")
+_PropertyKeyValuePairList = (Core.Name "hydra.ext/gql/openGql.PropertyKeyValuePairList")
 
 data PropertyKeyValuePair = 
   PropertyKeyValuePair {
@@ -2534,7 +2534,7 @@ data PropertyKeyValuePair =
     propertyKeyValuePairValue :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_PropertyKeyValuePair = (Core.Name "hydra/ext/gql/openGql.PropertyKeyValuePair")
+_PropertyKeyValuePair = (Core.Name "hydra.ext/gql/openGql.PropertyKeyValuePair")
 
 _PropertyKeyValuePair_name = (Core.Name "name")
 
@@ -2545,7 +2545,7 @@ data EdgePattern =
   EdgePatternAbbreviatedEdge AbbreviatedEdgePattern
   deriving (Eq, Ord, Read, Show)
 
-_EdgePattern = (Core.Name "hydra/ext/gql/openGql.EdgePattern")
+_EdgePattern = (Core.Name "hydra.ext/gql/openGql.EdgePattern")
 
 _EdgePattern_fullEdge = (Core.Name "fullEdge")
 
@@ -2561,7 +2561,7 @@ data FullEdgePattern =
   FullEdgePatternAnyDirection FullEdgeAnyDirection
   deriving (Eq, Ord, Read, Show)
 
-_FullEdgePattern = (Core.Name "hydra/ext/gql/openGql.FullEdgePattern")
+_FullEdgePattern = (Core.Name "hydra.ext/gql/openGql.FullEdgePattern")
 
 _FullEdgePattern_pointingLeft = (Core.Name "pointingLeft")
 
@@ -2582,49 +2582,49 @@ newtype FullEdgePointingLeft =
     unFullEdgePointingLeft :: ElementPatternFiller}
   deriving (Eq, Ord, Read, Show)
 
-_FullEdgePointingLeft = (Core.Name "hydra/ext/gql/openGql.FullEdgePointingLeft")
+_FullEdgePointingLeft = (Core.Name "hydra.ext/gql/openGql.FullEdgePointingLeft")
 
 newtype FullEdgeUndirected = 
   FullEdgeUndirected {
     unFullEdgeUndirected :: ElementPatternFiller}
   deriving (Eq, Ord, Read, Show)
 
-_FullEdgeUndirected = (Core.Name "hydra/ext/gql/openGql.FullEdgeUndirected")
+_FullEdgeUndirected = (Core.Name "hydra.ext/gql/openGql.FullEdgeUndirected")
 
 newtype FullEdgePointingRight = 
   FullEdgePointingRight {
     unFullEdgePointingRight :: ElementPatternFiller}
   deriving (Eq, Ord, Read, Show)
 
-_FullEdgePointingRight = (Core.Name "hydra/ext/gql/openGql.FullEdgePointingRight")
+_FullEdgePointingRight = (Core.Name "hydra.ext/gql/openGql.FullEdgePointingRight")
 
 newtype FullEdgeLeftOrUndirected = 
   FullEdgeLeftOrUndirected {
     unFullEdgeLeftOrUndirected :: ElementPatternFiller}
   deriving (Eq, Ord, Read, Show)
 
-_FullEdgeLeftOrUndirected = (Core.Name "hydra/ext/gql/openGql.FullEdgeLeftOrUndirected")
+_FullEdgeLeftOrUndirected = (Core.Name "hydra.ext/gql/openGql.FullEdgeLeftOrUndirected")
 
 newtype FullEdgeUndirectedOrRight = 
   FullEdgeUndirectedOrRight {
     unFullEdgeUndirectedOrRight :: ElementPatternFiller}
   deriving (Eq, Ord, Read, Show)
 
-_FullEdgeUndirectedOrRight = (Core.Name "hydra/ext/gql/openGql.FullEdgeUndirectedOrRight")
+_FullEdgeUndirectedOrRight = (Core.Name "hydra.ext/gql/openGql.FullEdgeUndirectedOrRight")
 
 newtype FullEdgeLeftOrRight = 
   FullEdgeLeftOrRight {
     unFullEdgeLeftOrRight :: ElementPatternFiller}
   deriving (Eq, Ord, Read, Show)
 
-_FullEdgeLeftOrRight = (Core.Name "hydra/ext/gql/openGql.FullEdgeLeftOrRight")
+_FullEdgeLeftOrRight = (Core.Name "hydra.ext/gql/openGql.FullEdgeLeftOrRight")
 
 newtype FullEdgeAnyDirection = 
   FullEdgeAnyDirection {
     unFullEdgeAnyDirection :: ElementPatternFiller}
   deriving (Eq, Ord, Read, Show)
 
-_FullEdgeAnyDirection = (Core.Name "hydra/ext/gql/openGql.FullEdgeAnyDirection")
+_FullEdgeAnyDirection = (Core.Name "hydra.ext/gql/openGql.FullEdgeAnyDirection")
 
 data AbbreviatedEdgePattern = 
   AbbreviatedEdgePatternLeftArrow  |
@@ -2636,7 +2636,7 @@ data AbbreviatedEdgePattern =
   AbbreviatedEdgePatternMinusSign 
   deriving (Eq, Ord, Read, Show)
 
-_AbbreviatedEdgePattern = (Core.Name "hydra/ext/gql/openGql.AbbreviatedEdgePattern")
+_AbbreviatedEdgePattern = (Core.Name "hydra.ext/gql/openGql.AbbreviatedEdgePattern")
 
 _AbbreviatedEdgePattern_leftArrow = (Core.Name "leftArrow")
 
@@ -2660,7 +2660,7 @@ data ParenthesizedPathPatternExpression =
     parenthesizedPathPatternExpressionWhereClause :: (Maybe ParenthesizedPathPatternWhereClause)}
   deriving (Eq, Ord, Read, Show)
 
-_ParenthesizedPathPatternExpression = (Core.Name "hydra/ext/gql/openGql.ParenthesizedPathPatternExpression")
+_ParenthesizedPathPatternExpression = (Core.Name "hydra.ext/gql/openGql.ParenthesizedPathPatternExpression")
 
 _ParenthesizedPathPatternExpression_subpathDeclaration = (Core.Name "subpathDeclaration")
 
@@ -2675,14 +2675,14 @@ newtype SubpathVariableDeclaration =
     unSubpathVariableDeclaration :: SubpathVariable}
   deriving (Eq, Ord, Read, Show)
 
-_SubpathVariableDeclaration = (Core.Name "hydra/ext/gql/openGql.SubpathVariableDeclaration")
+_SubpathVariableDeclaration = (Core.Name "hydra.ext/gql/openGql.SubpathVariableDeclaration")
 
 newtype ParenthesizedPathPatternWhereClause = 
   ParenthesizedPathPatternWhereClause {
     unParenthesizedPathPatternWhereClause :: SearchCondition}
   deriving (Eq, Ord, Read, Show)
 
-_ParenthesizedPathPatternWhereClause = (Core.Name "hydra/ext/gql/openGql.ParenthesizedPathPatternWhereClause")
+_ParenthesizedPathPatternWhereClause = (Core.Name "hydra.ext/gql/openGql.ParenthesizedPathPatternWhereClause")
 
 data LabelExpression = 
   LabelExpressionNegation LabelExpression |
@@ -2693,7 +2693,7 @@ data LabelExpression =
   LabelExpressionParenthesized LabelExpression
   deriving (Eq, Ord, Read, Show)
 
-_LabelExpression = (Core.Name "hydra/ext/gql/openGql.LabelExpression")
+_LabelExpression = (Core.Name "hydra.ext/gql/openGql.LabelExpression")
 
 _LabelExpression_negation = (Core.Name "negation")
 
@@ -2713,7 +2713,7 @@ data ConjunctionLabelExpression =
     conjunctionLabelExpressionRight :: LabelExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ConjunctionLabelExpression = (Core.Name "hydra/ext/gql/openGql.ConjunctionLabelExpression")
+_ConjunctionLabelExpression = (Core.Name "hydra.ext/gql/openGql.ConjunctionLabelExpression")
 
 _ConjunctionLabelExpression_left = (Core.Name "left")
 
@@ -2725,7 +2725,7 @@ data DisjunctionLabelExpression =
     disjunctionLabelExpressionRight :: LabelExpression}
   deriving (Eq, Ord, Read, Show)
 
-_DisjunctionLabelExpression = (Core.Name "hydra/ext/gql/openGql.DisjunctionLabelExpression")
+_DisjunctionLabelExpression = (Core.Name "hydra.ext/gql/openGql.DisjunctionLabelExpression")
 
 _DisjunctionLabelExpression_left = (Core.Name "left")
 
@@ -2736,14 +2736,14 @@ newtype PathVariableReference =
     unPathVariableReference :: BindingVariableReference}
   deriving (Eq, Ord, Read, Show)
 
-_PathVariableReference = (Core.Name "hydra/ext/gql/openGql.PathVariableReference")
+_PathVariableReference = (Core.Name "hydra.ext/gql/openGql.PathVariableReference")
 
 newtype ElementVariableReference = 
   ElementVariableReference {
     unElementVariableReference :: BindingVariableReference}
   deriving (Eq, Ord, Read, Show)
 
-_ElementVariableReference = (Core.Name "hydra/ext/gql/openGql.ElementVariableReference")
+_ElementVariableReference = (Core.Name "hydra.ext/gql/openGql.ElementVariableReference")
 
 data GraphPatternQuantifier = 
   GraphPatternQuantifierAsterisk  |
@@ -2752,7 +2752,7 @@ data GraphPatternQuantifier =
   GraphPatternQuantifierGeneral GeneralQuantifier
   deriving (Eq, Ord, Read, Show)
 
-_GraphPatternQuantifier = (Core.Name "hydra/ext/gql/openGql.GraphPatternQuantifier")
+_GraphPatternQuantifier = (Core.Name "hydra.ext/gql/openGql.GraphPatternQuantifier")
 
 _GraphPatternQuantifier_asterisk = (Core.Name "asterisk")
 
@@ -2767,7 +2767,7 @@ newtype FixedQuantifier =
     unFixedQuantifier :: UnsignedInteger}
   deriving (Eq, Ord, Read, Show)
 
-_FixedQuantifier = (Core.Name "hydra/ext/gql/openGql.FixedQuantifier")
+_FixedQuantifier = (Core.Name "hydra.ext/gql/openGql.FixedQuantifier")
 
 data GeneralQuantifier = 
   GeneralQuantifier {
@@ -2775,7 +2775,7 @@ data GeneralQuantifier =
     generalQuantifierUpperBound :: (Maybe UpperBound)}
   deriving (Eq, Ord, Read, Show)
 
-_GeneralQuantifier = (Core.Name "hydra/ext/gql/openGql.GeneralQuantifier")
+_GeneralQuantifier = (Core.Name "hydra.ext/gql/openGql.GeneralQuantifier")
 
 _GeneralQuantifier_lowerBound = (Core.Name "lowerBound")
 
@@ -2786,14 +2786,14 @@ newtype LowerBound =
     unLowerBound :: UnsignedInteger}
   deriving (Eq, Ord, Read, Show)
 
-_LowerBound = (Core.Name "hydra/ext/gql/openGql.LowerBound")
+_LowerBound = (Core.Name "hydra.ext/gql/openGql.LowerBound")
 
 newtype UpperBound = 
   UpperBound {
     unUpperBound :: UnsignedInteger}
   deriving (Eq, Ord, Read, Show)
 
-_UpperBound = (Core.Name "hydra/ext/gql/openGql.UpperBound")
+_UpperBound = (Core.Name "hydra.ext/gql/openGql.UpperBound")
 
 data SimplifiedPathPatternExpression = 
   SimplifiedPathPatternExpressionLeft SimplifiedDefaultingLeft |
@@ -2805,7 +2805,7 @@ data SimplifiedPathPatternExpression =
   SimplifiedPathPatternExpressionAnyDirection SimplifiedDefaultingAnyDirection
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedPathPatternExpression = (Core.Name "hydra/ext/gql/openGql.SimplifiedPathPatternExpression")
+_SimplifiedPathPatternExpression = (Core.Name "hydra.ext/gql/openGql.SimplifiedPathPatternExpression")
 
 _SimplifiedPathPatternExpression_left = (Core.Name "left")
 
@@ -2826,49 +2826,49 @@ newtype SimplifiedDefaultingLeft =
     unSimplifiedDefaultingLeft :: SimplifiedContents}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedDefaultingLeft = (Core.Name "hydra/ext/gql/openGql.SimplifiedDefaultingLeft")
+_SimplifiedDefaultingLeft = (Core.Name "hydra.ext/gql/openGql.SimplifiedDefaultingLeft")
 
 newtype SimplifiedDefaultingUndirected = 
   SimplifiedDefaultingUndirected {
     unSimplifiedDefaultingUndirected :: SimplifiedContents}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedDefaultingUndirected = (Core.Name "hydra/ext/gql/openGql.SimplifiedDefaultingUndirected")
+_SimplifiedDefaultingUndirected = (Core.Name "hydra.ext/gql/openGql.SimplifiedDefaultingUndirected")
 
 newtype SimplifiedDefaultingRight = 
   SimplifiedDefaultingRight {
     unSimplifiedDefaultingRight :: SimplifiedContents}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedDefaultingRight = (Core.Name "hydra/ext/gql/openGql.SimplifiedDefaultingRight")
+_SimplifiedDefaultingRight = (Core.Name "hydra.ext/gql/openGql.SimplifiedDefaultingRight")
 
 newtype SimplifiedDefaultingLeftOrUndirected = 
   SimplifiedDefaultingLeftOrUndirected {
     unSimplifiedDefaultingLeftOrUndirected :: SimplifiedContents}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedDefaultingLeftOrUndirected = (Core.Name "hydra/ext/gql/openGql.SimplifiedDefaultingLeftOrUndirected")
+_SimplifiedDefaultingLeftOrUndirected = (Core.Name "hydra.ext/gql/openGql.SimplifiedDefaultingLeftOrUndirected")
 
 newtype SimplifiedDefaultingUndirectedOrRight = 
   SimplifiedDefaultingUndirectedOrRight {
     unSimplifiedDefaultingUndirectedOrRight :: SimplifiedContents}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedDefaultingUndirectedOrRight = (Core.Name "hydra/ext/gql/openGql.SimplifiedDefaultingUndirectedOrRight")
+_SimplifiedDefaultingUndirectedOrRight = (Core.Name "hydra.ext/gql/openGql.SimplifiedDefaultingUndirectedOrRight")
 
 newtype SimplifiedDefaultingLeftOrRight = 
   SimplifiedDefaultingLeftOrRight {
     unSimplifiedDefaultingLeftOrRight :: SimplifiedContents}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedDefaultingLeftOrRight = (Core.Name "hydra/ext/gql/openGql.SimplifiedDefaultingLeftOrRight")
+_SimplifiedDefaultingLeftOrRight = (Core.Name "hydra.ext/gql/openGql.SimplifiedDefaultingLeftOrRight")
 
 newtype SimplifiedDefaultingAnyDirection = 
   SimplifiedDefaultingAnyDirection {
     unSimplifiedDefaultingAnyDirection :: SimplifiedContents}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedDefaultingAnyDirection = (Core.Name "hydra/ext/gql/openGql.SimplifiedDefaultingAnyDirection")
+_SimplifiedDefaultingAnyDirection = (Core.Name "hydra.ext/gql/openGql.SimplifiedDefaultingAnyDirection")
 
 data SimplifiedContents = 
   SimplifiedContentsTerm SimplifiedTerm |
@@ -2876,7 +2876,7 @@ data SimplifiedContents =
   SimplifiedContentsMultisetAlternation SimplifiedMultisetAlternation
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedContents = (Core.Name "hydra/ext/gql/openGql.SimplifiedContents")
+_SimplifiedContents = (Core.Name "hydra.ext/gql/openGql.SimplifiedContents")
 
 _SimplifiedContents_term = (Core.Name "term")
 
@@ -2889,21 +2889,21 @@ newtype SimplifiedPathUnion =
     unSimplifiedPathUnion :: [SimplifiedTerm]}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedPathUnion = (Core.Name "hydra/ext/gql/openGql.SimplifiedPathUnion")
+_SimplifiedPathUnion = (Core.Name "hydra.ext/gql/openGql.SimplifiedPathUnion")
 
 newtype SimplifiedMultisetAlternation = 
   SimplifiedMultisetAlternation {
     unSimplifiedMultisetAlternation :: [SimplifiedTerm]}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedMultisetAlternation = (Core.Name "hydra/ext/gql/openGql.SimplifiedMultisetAlternation")
+_SimplifiedMultisetAlternation = (Core.Name "hydra.ext/gql/openGql.SimplifiedMultisetAlternation")
 
 data SimplifiedTerm = 
   SimplifiedTermFactorLow SimplifiedFactorLow |
   SimplifiedTermConcatenation SimplifiedConcatenation
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedTerm = (Core.Name "hydra/ext/gql/openGql.SimplifiedTerm")
+_SimplifiedTerm = (Core.Name "hydra.ext/gql/openGql.SimplifiedTerm")
 
 _SimplifiedTerm_factorLow = (Core.Name "factorLow")
 
@@ -2915,7 +2915,7 @@ data SimplifiedConcatenation =
     simplifiedConcatenationNextFactor :: SimplifiedFactorLow}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedConcatenation = (Core.Name "hydra/ext/gql/openGql.SimplifiedConcatenation")
+_SimplifiedConcatenation = (Core.Name "hydra.ext/gql/openGql.SimplifiedConcatenation")
 
 _SimplifiedConcatenation_initialTerm = (Core.Name "initialTerm")
 
@@ -2926,7 +2926,7 @@ data SimplifiedFactorLow =
   SimplifiedFactorLowConjunction SimplifiedConjunction
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedFactorLow = (Core.Name "hydra/ext/gql/openGql.SimplifiedFactorLow")
+_SimplifiedFactorLow = (Core.Name "hydra.ext/gql/openGql.SimplifiedFactorLow")
 
 _SimplifiedFactorLow_factorHigh = (Core.Name "factorHigh")
 
@@ -2938,7 +2938,7 @@ data SimplifiedConjunction =
     simplifiedConjunctionRight :: SimplifiedFactorHigh}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedConjunction = (Core.Name "hydra/ext/gql/openGql.SimplifiedConjunction")
+_SimplifiedConjunction = (Core.Name "hydra.ext/gql/openGql.SimplifiedConjunction")
 
 _SimplifiedConjunction_left = (Core.Name "left")
 
@@ -2950,7 +2950,7 @@ data SimplifiedFactorHigh =
   SimplifiedFactorHighQuestioned SimplifiedQuestioned
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedFactorHigh = (Core.Name "hydra/ext/gql/openGql.SimplifiedFactorHigh")
+_SimplifiedFactorHigh = (Core.Name "hydra.ext/gql/openGql.SimplifiedFactorHigh")
 
 _SimplifiedFactorHigh_tertiary = (Core.Name "tertiary")
 
@@ -2964,7 +2964,7 @@ data SimplifiedQuantified =
     simplifiedQuantifiedQuantifier :: GraphPatternQuantifier}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedQuantified = (Core.Name "hydra/ext/gql/openGql.SimplifiedQuantified")
+_SimplifiedQuantified = (Core.Name "hydra.ext/gql/openGql.SimplifiedQuantified")
 
 _SimplifiedQuantified_tertiary = (Core.Name "tertiary")
 
@@ -2975,14 +2975,14 @@ newtype SimplifiedQuestioned =
     unSimplifiedQuestioned :: SimplifiedTertiary}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedQuestioned = (Core.Name "hydra/ext/gql/openGql.SimplifiedQuestioned")
+_SimplifiedQuestioned = (Core.Name "hydra.ext/gql/openGql.SimplifiedQuestioned")
 
 data SimplifiedTertiary = 
   SimplifiedTertiaryDirectionOverride SimplifiedDirectionOverride |
   SimplifiedTertiarySecondary SimplifiedSecondary
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedTertiary = (Core.Name "hydra/ext/gql/openGql.SimplifiedTertiary")
+_SimplifiedTertiary = (Core.Name "hydra.ext/gql/openGql.SimplifiedTertiary")
 
 _SimplifiedTertiary_directionOverride = (Core.Name "directionOverride")
 
@@ -2998,7 +2998,7 @@ data SimplifiedDirectionOverride =
   SimplifiedDirectionOverrideOverrideAnyDirection SimplifiedOverrideAnyDirection
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedDirectionOverride = (Core.Name "hydra/ext/gql/openGql.SimplifiedDirectionOverride")
+_SimplifiedDirectionOverride = (Core.Name "hydra.ext/gql/openGql.SimplifiedDirectionOverride")
 
 _SimplifiedDirectionOverride_overrideLeft = (Core.Name "overrideLeft")
 
@@ -3019,56 +3019,56 @@ newtype SimplifiedOverrideLeft =
     unSimplifiedOverrideLeft :: SimplifiedSecondary}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedOverrideLeft = (Core.Name "hydra/ext/gql/openGql.SimplifiedOverrideLeft")
+_SimplifiedOverrideLeft = (Core.Name "hydra.ext/gql/openGql.SimplifiedOverrideLeft")
 
 newtype SimplifiedOverrideUndirected = 
   SimplifiedOverrideUndirected {
     unSimplifiedOverrideUndirected :: SimplifiedSecondary}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedOverrideUndirected = (Core.Name "hydra/ext/gql/openGql.SimplifiedOverrideUndirected")
+_SimplifiedOverrideUndirected = (Core.Name "hydra.ext/gql/openGql.SimplifiedOverrideUndirected")
 
 newtype SimplifiedOverrideRight = 
   SimplifiedOverrideRight {
     unSimplifiedOverrideRight :: SimplifiedSecondary}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedOverrideRight = (Core.Name "hydra/ext/gql/openGql.SimplifiedOverrideRight")
+_SimplifiedOverrideRight = (Core.Name "hydra.ext/gql/openGql.SimplifiedOverrideRight")
 
 newtype SimplifiedOverrideLeftOrUndirected = 
   SimplifiedOverrideLeftOrUndirected {
     unSimplifiedOverrideLeftOrUndirected :: SimplifiedSecondary}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedOverrideLeftOrUndirected = (Core.Name "hydra/ext/gql/openGql.SimplifiedOverrideLeftOrUndirected")
+_SimplifiedOverrideLeftOrUndirected = (Core.Name "hydra.ext/gql/openGql.SimplifiedOverrideLeftOrUndirected")
 
 newtype SimplifiedOverrideUndirectedOrRight = 
   SimplifiedOverrideUndirectedOrRight {
     unSimplifiedOverrideUndirectedOrRight :: SimplifiedSecondary}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedOverrideUndirectedOrRight = (Core.Name "hydra/ext/gql/openGql.SimplifiedOverrideUndirectedOrRight")
+_SimplifiedOverrideUndirectedOrRight = (Core.Name "hydra.ext/gql/openGql.SimplifiedOverrideUndirectedOrRight")
 
 newtype SimplifiedOverrideLeftOrRight = 
   SimplifiedOverrideLeftOrRight {
     unSimplifiedOverrideLeftOrRight :: SimplifiedSecondary}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedOverrideLeftOrRight = (Core.Name "hydra/ext/gql/openGql.SimplifiedOverrideLeftOrRight")
+_SimplifiedOverrideLeftOrRight = (Core.Name "hydra.ext/gql/openGql.SimplifiedOverrideLeftOrRight")
 
 newtype SimplifiedOverrideAnyDirection = 
   SimplifiedOverrideAnyDirection {
     unSimplifiedOverrideAnyDirection :: SimplifiedSecondary}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedOverrideAnyDirection = (Core.Name "hydra/ext/gql/openGql.SimplifiedOverrideAnyDirection")
+_SimplifiedOverrideAnyDirection = (Core.Name "hydra.ext/gql/openGql.SimplifiedOverrideAnyDirection")
 
 data SimplifiedSecondary = 
   SimplifiedSecondaryPrimary SimplifiedPrimary |
   SimplifiedSecondaryNegation SimplifiedNegation
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedSecondary = (Core.Name "hydra/ext/gql/openGql.SimplifiedSecondary")
+_SimplifiedSecondary = (Core.Name "hydra.ext/gql/openGql.SimplifiedSecondary")
 
 _SimplifiedSecondary_primary = (Core.Name "primary")
 
@@ -3079,14 +3079,14 @@ newtype SimplifiedNegation =
     unSimplifiedNegation :: SimplifiedPrimary}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedNegation = (Core.Name "hydra/ext/gql/openGql.SimplifiedNegation")
+_SimplifiedNegation = (Core.Name "hydra.ext/gql/openGql.SimplifiedNegation")
 
 data SimplifiedPrimary = 
   SimplifiedPrimaryLabelName LabelName |
   SimplifiedPrimaryParenthesizedContents SimplifiedContents
   deriving (Eq, Ord, Read, Show)
 
-_SimplifiedPrimary = (Core.Name "hydra/ext/gql/openGql.SimplifiedPrimary")
+_SimplifiedPrimary = (Core.Name "hydra.ext/gql/openGql.SimplifiedPrimary")
 
 _SimplifiedPrimary_labelName = (Core.Name "labelName")
 
@@ -3097,21 +3097,21 @@ newtype WhereClause =
     unWhereClause :: SearchCondition}
   deriving (Eq, Ord, Read, Show)
 
-_WhereClause = (Core.Name "hydra/ext/gql/openGql.WhereClause")
+_WhereClause = (Core.Name "hydra.ext/gql/openGql.WhereClause")
 
 newtype YieldClause = 
   YieldClause {
     unYieldClause :: YieldItemList}
   deriving (Eq, Ord, Read, Show)
 
-_YieldClause = (Core.Name "hydra/ext/gql/openGql.YieldClause")
+_YieldClause = (Core.Name "hydra.ext/gql/openGql.YieldClause")
 
 newtype YieldItemList = 
   YieldItemList {
     unYieldItemList :: [YieldItem]}
   deriving (Eq, Ord, Read, Show)
 
-_YieldItemList = (Core.Name "hydra/ext/gql/openGql.YieldItemList")
+_YieldItemList = (Core.Name "hydra.ext/gql/openGql.YieldItemList")
 
 data YieldItem = 
   YieldItem {
@@ -3119,7 +3119,7 @@ data YieldItem =
     yieldItemAlias :: (Maybe YieldItemAlias)}
   deriving (Eq, Ord, Read, Show)
 
-_YieldItem = (Core.Name "hydra/ext/gql/openGql.YieldItem")
+_YieldItem = (Core.Name "hydra.ext/gql/openGql.YieldItem")
 
 _YieldItem_name = (Core.Name "name")
 
@@ -3130,28 +3130,28 @@ newtype YieldItemName =
     unYieldItemName :: FieldName}
   deriving (Eq, Ord, Read, Show)
 
-_YieldItemName = (Core.Name "hydra/ext/gql/openGql.YieldItemName")
+_YieldItemName = (Core.Name "hydra.ext/gql/openGql.YieldItemName")
 
 newtype YieldItemAlias = 
   YieldItemAlias {
     unYieldItemAlias :: BindingVariable}
   deriving (Eq, Ord, Read, Show)
 
-_YieldItemAlias = (Core.Name "hydra/ext/gql/openGql.YieldItemAlias")
+_YieldItemAlias = (Core.Name "hydra.ext/gql/openGql.YieldItemAlias")
 
 newtype GroupByClause = 
   GroupByClause {
     unGroupByClause :: GroupingElementList}
   deriving (Eq, Ord, Read, Show)
 
-_GroupByClause = (Core.Name "hydra/ext/gql/openGql.GroupByClause")
+_GroupByClause = (Core.Name "hydra.ext/gql/openGql.GroupByClause")
 
 data GroupingElementList = 
   GroupingElementListElements [GroupingElement] |
   GroupingElementListEmptySet 
   deriving (Eq, Ord, Read, Show)
 
-_GroupingElementList = (Core.Name "hydra/ext/gql/openGql.GroupingElementList")
+_GroupingElementList = (Core.Name "hydra.ext/gql/openGql.GroupingElementList")
 
 _GroupingElementList_elements = (Core.Name "elements")
 
@@ -3162,21 +3162,21 @@ newtype GroupingElement =
     unGroupingElement :: BindingVariableReference}
   deriving (Eq, Ord, Read, Show)
 
-_GroupingElement = (Core.Name "hydra/ext/gql/openGql.GroupingElement")
+_GroupingElement = (Core.Name "hydra.ext/gql/openGql.GroupingElement")
 
 newtype OrderByClause = 
   OrderByClause {
     unOrderByClause :: SortSpecificationList}
   deriving (Eq, Ord, Read, Show)
 
-_OrderByClause = (Core.Name "hydra/ext/gql/openGql.OrderByClause")
+_OrderByClause = (Core.Name "hydra.ext/gql/openGql.OrderByClause")
 
 newtype SortSpecificationList = 
   SortSpecificationList {
     unSortSpecificationList :: [SortSpecification]}
   deriving (Eq, Ord, Read, Show)
 
-_SortSpecificationList = (Core.Name "hydra/ext/gql/openGql.SortSpecificationList")
+_SortSpecificationList = (Core.Name "hydra.ext/gql/openGql.SortSpecificationList")
 
 data SortSpecification = 
   SortSpecification {
@@ -3185,7 +3185,7 @@ data SortSpecification =
     sortSpecificationNullOrdering :: (Maybe NullOrdering)}
   deriving (Eq, Ord, Read, Show)
 
-_SortSpecification = (Core.Name "hydra/ext/gql/openGql.SortSpecification")
+_SortSpecification = (Core.Name "hydra.ext/gql/openGql.SortSpecification")
 
 _SortSpecification_sortKey = (Core.Name "sortKey")
 
@@ -3198,14 +3198,14 @@ newtype SortKey =
     unSortKey :: AggregatingValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_SortKey = (Core.Name "hydra/ext/gql/openGql.SortKey")
+_SortKey = (Core.Name "hydra.ext/gql/openGql.SortKey")
 
 data OrderingSpecification = 
   OrderingSpecificationAscending  |
   OrderingSpecificationDescending 
   deriving (Eq, Ord, Read, Show)
 
-_OrderingSpecification = (Core.Name "hydra/ext/gql/openGql.OrderingSpecification")
+_OrderingSpecification = (Core.Name "hydra.ext/gql/openGql.OrderingSpecification")
 
 _OrderingSpecification_ascending = (Core.Name "ascending")
 
@@ -3216,7 +3216,7 @@ data NullOrdering =
   NullOrderingNullsLast 
   deriving (Eq, Ord, Read, Show)
 
-_NullOrdering = (Core.Name "hydra/ext/gql/openGql.NullOrdering")
+_NullOrdering = (Core.Name "hydra.ext/gql/openGql.NullOrdering")
 
 _NullOrdering_nullsFirst = (Core.Name "nullsFirst")
 
@@ -3227,7 +3227,7 @@ newtype LimitClause =
     unLimitClause :: NonNegativeIntegerSpecification}
   deriving (Eq, Ord, Read, Show)
 
-_LimitClause = (Core.Name "hydra/ext/gql/openGql.LimitClause")
+_LimitClause = (Core.Name "hydra.ext/gql/openGql.LimitClause")
 
 data OffsetClause = 
   OffsetClause {
@@ -3235,7 +3235,7 @@ data OffsetClause =
     offsetClauseValue :: NonNegativeIntegerSpecification}
   deriving (Eq, Ord, Read, Show)
 
-_OffsetClause = (Core.Name "hydra/ext/gql/openGql.OffsetClause")
+_OffsetClause = (Core.Name "hydra.ext/gql/openGql.OffsetClause")
 
 _OffsetClause_synonym = (Core.Name "synonym")
 
@@ -3246,7 +3246,7 @@ data OffsetSynonym =
   OffsetSynonymSkipReservedWord 
   deriving (Eq, Ord, Read, Show)
 
-_OffsetSynonym = (Core.Name "hydra/ext/gql/openGql.OffsetSynonym")
+_OffsetSynonym = (Core.Name "hydra.ext/gql/openGql.OffsetSynonym")
 
 _OffsetSynonym_offset = (Core.Name "offset")
 
@@ -3258,7 +3258,7 @@ data SchemaReference =
   SchemaReferenceParameterSpecification ReferenceParameterSpecification
   deriving (Eq, Ord, Read, Show)
 
-_SchemaReference = (Core.Name "hydra/ext/gql/openGql.SchemaReference")
+_SchemaReference = (Core.Name "hydra.ext/gql/openGql.SchemaReference")
 
 _SchemaReference_absoluteReference = (Core.Name "absoluteReference")
 
@@ -3271,7 +3271,7 @@ data AbsoluteCatalogSchemaReference =
   AbsoluteCatalogSchemaReferenceDirectoryAndSchema AbsoluteDirectoryAndSchema
   deriving (Eq, Ord, Read, Show)
 
-_AbsoluteCatalogSchemaReference = (Core.Name "hydra/ext/gql/openGql.AbsoluteCatalogSchemaReference")
+_AbsoluteCatalogSchemaReference = (Core.Name "hydra.ext/gql/openGql.AbsoluteCatalogSchemaReference")
 
 _AbsoluteCatalogSchemaReference_root = (Core.Name "root")
 
@@ -3283,7 +3283,7 @@ data AbsoluteDirectoryAndSchema =
     absoluteDirectoryAndSchemaSchemaName :: SchemaName}
   deriving (Eq, Ord, Read, Show)
 
-_AbsoluteDirectoryAndSchema = (Core.Name "hydra/ext/gql/openGql.AbsoluteDirectoryAndSchema")
+_AbsoluteDirectoryAndSchema = (Core.Name "hydra.ext/gql/openGql.AbsoluteDirectoryAndSchema")
 
 _AbsoluteDirectoryAndSchema_directoryPath = (Core.Name "directoryPath")
 
@@ -3294,14 +3294,14 @@ newtype CatalogSchemaParentAndName =
     unCatalogSchemaParentAndName :: AbsoluteDirectoryAndSchema}
   deriving (Eq, Ord, Read, Show)
 
-_CatalogSchemaParentAndName = (Core.Name "hydra/ext/gql/openGql.CatalogSchemaParentAndName")
+_CatalogSchemaParentAndName = (Core.Name "hydra.ext/gql/openGql.CatalogSchemaParentAndName")
 
 data RelativeCatalogSchemaReference = 
   RelativeCatalogSchemaReferencePredefinedReference PredefinedSchemaReference |
   RelativeCatalogSchemaReferenceDirectoryAndSchema RelativeDirectoryAndSchema
   deriving (Eq, Ord, Read, Show)
 
-_RelativeCatalogSchemaReference = (Core.Name "hydra/ext/gql/openGql.RelativeCatalogSchemaReference")
+_RelativeCatalogSchemaReference = (Core.Name "hydra.ext/gql/openGql.RelativeCatalogSchemaReference")
 
 _RelativeCatalogSchemaReference_predefinedReference = (Core.Name "predefinedReference")
 
@@ -3313,7 +3313,7 @@ data RelativeDirectoryAndSchema =
     relativeDirectoryAndSchemaSchemaName :: SchemaName}
   deriving (Eq, Ord, Read, Show)
 
-_RelativeDirectoryAndSchema = (Core.Name "hydra/ext/gql/openGql.RelativeDirectoryAndSchema")
+_RelativeDirectoryAndSchema = (Core.Name "hydra.ext/gql/openGql.RelativeDirectoryAndSchema")
 
 _RelativeDirectoryAndSchema_directoryPath = (Core.Name "directoryPath")
 
@@ -3325,7 +3325,7 @@ data PredefinedSchemaReference =
   PredefinedSchemaReferencePeriod 
   deriving (Eq, Ord, Read, Show)
 
-_PredefinedSchemaReference = (Core.Name "hydra/ext/gql/openGql.PredefinedSchemaReference")
+_PredefinedSchemaReference = (Core.Name "hydra.ext/gql/openGql.PredefinedSchemaReference")
 
 _PredefinedSchemaReference_homeSchema = (Core.Name "homeSchema")
 
@@ -3338,7 +3338,7 @@ newtype AbsoluteDirectoryPath =
     unAbsoluteDirectoryPath :: (Maybe SimpleDirectoryPath)}
   deriving (Eq, Ord, Read, Show)
 
-_AbsoluteDirectoryPath = (Core.Name "hydra/ext/gql/openGql.AbsoluteDirectoryPath")
+_AbsoluteDirectoryPath = (Core.Name "hydra.ext/gql/openGql.AbsoluteDirectoryPath")
 
 data RelativeDirectoryPath = 
   RelativeDirectoryPath {
@@ -3346,7 +3346,7 @@ data RelativeDirectoryPath =
     relativeDirectoryPathSimplePath :: (Maybe SimpleDirectoryPath)}
   deriving (Eq, Ord, Read, Show)
 
-_RelativeDirectoryPath = (Core.Name "hydra/ext/gql/openGql.RelativeDirectoryPath")
+_RelativeDirectoryPath = (Core.Name "hydra.ext/gql/openGql.RelativeDirectoryPath")
 
 _RelativeDirectoryPath_parentDirectories = (Core.Name "parentDirectories")
 
@@ -3357,7 +3357,7 @@ newtype SimpleDirectoryPath =
     unSimpleDirectoryPath :: [DirectoryName]}
   deriving (Eq, Ord, Read, Show)
 
-_SimpleDirectoryPath = (Core.Name "hydra/ext/gql/openGql.SimpleDirectoryPath")
+_SimpleDirectoryPath = (Core.Name "hydra.ext/gql/openGql.SimpleDirectoryPath")
 
 data GraphReference = 
   GraphReferenceParentAndGraphName ParentAndGraphName |
@@ -3366,7 +3366,7 @@ data GraphReference =
   GraphReferenceParameterSpecification ReferenceParameterSpecification
   deriving (Eq, Ord, Read, Show)
 
-_GraphReference = (Core.Name "hydra/ext/gql/openGql.GraphReference")
+_GraphReference = (Core.Name "hydra.ext/gql/openGql.GraphReference")
 
 _GraphReference_parentAndGraphName = (Core.Name "parentAndGraphName")
 
@@ -3382,7 +3382,7 @@ data ParentAndGraphName =
     parentAndGraphNameGraphName :: GraphName}
   deriving (Eq, Ord, Read, Show)
 
-_ParentAndGraphName = (Core.Name "hydra/ext/gql/openGql.ParentAndGraphName")
+_ParentAndGraphName = (Core.Name "hydra.ext/gql/openGql.ParentAndGraphName")
 
 _ParentAndGraphName_parentReference = (Core.Name "parentReference")
 
@@ -3394,7 +3394,7 @@ data CatalogGraphParentAndName =
     catalogGraphParentAndNameGraphName :: GraphName}
   deriving (Eq, Ord, Read, Show)
 
-_CatalogGraphParentAndName = (Core.Name "hydra/ext/gql/openGql.CatalogGraphParentAndName")
+_CatalogGraphParentAndName = (Core.Name "hydra.ext/gql/openGql.CatalogGraphParentAndName")
 
 _CatalogGraphParentAndName_parentReference = (Core.Name "parentReference")
 
@@ -3405,7 +3405,7 @@ data HomeGraph =
   HomeGraphHomeGraph 
   deriving (Eq, Ord, Read, Show)
 
-_HomeGraph = (Core.Name "hydra/ext/gql/openGql.HomeGraph")
+_HomeGraph = (Core.Name "hydra.ext/gql/openGql.HomeGraph")
 
 _HomeGraph_homePropertyGraph = (Core.Name "homePropertyGraph")
 
@@ -3416,7 +3416,7 @@ data GraphTypeReference =
   GraphTypeReferenceParameterSpecification ReferenceParameterSpecification
   deriving (Eq, Ord, Read, Show)
 
-_GraphTypeReference = (Core.Name "hydra/ext/gql/openGql.GraphTypeReference")
+_GraphTypeReference = (Core.Name "hydra.ext/gql/openGql.GraphTypeReference")
 
 _GraphTypeReference_parentAndTypeName = (Core.Name "parentAndTypeName")
 
@@ -3428,7 +3428,7 @@ data CatalogGraphTypeParentAndName =
     catalogGraphTypeParentAndNameGraphTypeName :: GraphTypeName}
   deriving (Eq, Ord, Read, Show)
 
-_CatalogGraphTypeParentAndName = (Core.Name "hydra/ext/gql/openGql.CatalogGraphTypeParentAndName")
+_CatalogGraphTypeParentAndName = (Core.Name "hydra.ext/gql/openGql.CatalogGraphTypeParentAndName")
 
 _CatalogGraphTypeParentAndName_parentReference = (Core.Name "parentReference")
 
@@ -3440,7 +3440,7 @@ data BindingTableReference =
   BindingTableReferenceParameterSpecification ReferenceParameterSpecification
   deriving (Eq, Ord, Read, Show)
 
-_BindingTableReference = (Core.Name "hydra/ext/gql/openGql.BindingTableReference")
+_BindingTableReference = (Core.Name "hydra.ext/gql/openGql.BindingTableReference")
 
 _BindingTableReference_parentAndTableName = (Core.Name "parentAndTableName")
 
@@ -3454,7 +3454,7 @@ data ParentAndTableName =
     parentAndTableNameTableName :: BindingTableName}
   deriving (Eq, Ord, Read, Show)
 
-_ParentAndTableName = (Core.Name "hydra/ext/gql/openGql.ParentAndTableName")
+_ParentAndTableName = (Core.Name "hydra.ext/gql/openGql.ParentAndTableName")
 
 _ParentAndTableName_parentReference = (Core.Name "parentReference")
 
@@ -3465,7 +3465,7 @@ data ProcedureReference =
   ProcedureReferenceParameterSpecification ReferenceParameterSpecification
   deriving (Eq, Ord, Read, Show)
 
-_ProcedureReference = (Core.Name "hydra/ext/gql/openGql.ProcedureReference")
+_ProcedureReference = (Core.Name "hydra.ext/gql/openGql.ProcedureReference")
 
 _ProcedureReference_parentAndProcedureName = (Core.Name "parentAndProcedureName")
 
@@ -3477,7 +3477,7 @@ data CatalogProcedureParentAndName =
     catalogProcedureParentAndNameProcedureName :: ProcedureName}
   deriving (Eq, Ord, Read, Show)
 
-_CatalogProcedureParentAndName = (Core.Name "hydra/ext/gql/openGql.CatalogProcedureParentAndName")
+_CatalogProcedureParentAndName = (Core.Name "hydra.ext/gql/openGql.CatalogProcedureParentAndName")
 
 _CatalogProcedureParentAndName_parentReference = (Core.Name "parentReference")
 
@@ -3488,7 +3488,7 @@ data CatalogObjectParentReference =
   CatalogObjectParentReferenceObjectsOnly [ObjectName]
   deriving (Eq, Ord, Read, Show)
 
-_CatalogObjectParentReference = (Core.Name "hydra/ext/gql/openGql.CatalogObjectParentReference")
+_CatalogObjectParentReference = (Core.Name "hydra.ext/gql/openGql.CatalogObjectParentReference")
 
 _CatalogObjectParentReference_schemaAndObjects = (Core.Name "schemaAndObjects")
 
@@ -3500,7 +3500,7 @@ data SchemaAndObjects =
     schemaAndObjectsObjects :: [ObjectName]}
   deriving (Eq, Ord, Read, Show)
 
-_SchemaAndObjects = (Core.Name "hydra/ext/gql/openGql.SchemaAndObjects")
+_SchemaAndObjects = (Core.Name "hydra.ext/gql/openGql.SchemaAndObjects")
 
 _SchemaAndObjects_schemaReference = (Core.Name "schemaReference")
 
@@ -3510,35 +3510,35 @@ data ReferenceParameterSpecification =
   ReferenceParameterSpecification {}
   deriving (Eq, Ord, Read, Show)
 
-_ReferenceParameterSpecification = (Core.Name "hydra/ext/gql/openGql.ReferenceParameterSpecification")
+_ReferenceParameterSpecification = (Core.Name "hydra.ext/gql/openGql.ReferenceParameterSpecification")
 
 newtype NestedGraphTypeSpecification = 
   NestedGraphTypeSpecification {
     unNestedGraphTypeSpecification :: GraphTypeSpecificationBody}
   deriving (Eq, Ord, Read, Show)
 
-_NestedGraphTypeSpecification = (Core.Name "hydra/ext/gql/openGql.NestedGraphTypeSpecification")
+_NestedGraphTypeSpecification = (Core.Name "hydra.ext/gql/openGql.NestedGraphTypeSpecification")
 
 newtype GraphTypeSpecificationBody = 
   GraphTypeSpecificationBody {
     unGraphTypeSpecificationBody :: ElementTypeList}
   deriving (Eq, Ord, Read, Show)
 
-_GraphTypeSpecificationBody = (Core.Name "hydra/ext/gql/openGql.GraphTypeSpecificationBody")
+_GraphTypeSpecificationBody = (Core.Name "hydra.ext/gql/openGql.GraphTypeSpecificationBody")
 
 newtype ElementTypeList = 
   ElementTypeList {
     unElementTypeList :: [ElementTypeSpecification]}
   deriving (Eq, Ord, Read, Show)
 
-_ElementTypeList = (Core.Name "hydra/ext/gql/openGql.ElementTypeList")
+_ElementTypeList = (Core.Name "hydra.ext/gql/openGql.ElementTypeList")
 
 data ElementTypeSpecification = 
   ElementTypeSpecificationNodeType NodeTypeSpecification |
   ElementTypeSpecificationEdgeType EdgeTypeSpecification
   deriving (Eq, Ord, Read, Show)
 
-_ElementTypeSpecification = (Core.Name "hydra/ext/gql/openGql.ElementTypeSpecification")
+_ElementTypeSpecification = (Core.Name "hydra.ext/gql/openGql.ElementTypeSpecification")
 
 _ElementTypeSpecification_nodeType = (Core.Name "nodeType")
 
@@ -3549,7 +3549,7 @@ data NodeTypeSpecification =
   NodeTypeSpecificationPhrase NodeTypePhrase
   deriving (Eq, Ord, Read, Show)
 
-_NodeTypeSpecification = (Core.Name "hydra/ext/gql/openGql.NodeTypeSpecification")
+_NodeTypeSpecification = (Core.Name "hydra.ext/gql/openGql.NodeTypeSpecification")
 
 _NodeTypeSpecification_pattern = (Core.Name "pattern")
 
@@ -3562,7 +3562,7 @@ data NodeTypePattern =
     nodeTypePatternFiller :: (Maybe NodeTypeFiller)}
   deriving (Eq, Ord, Read, Show)
 
-_NodeTypePattern = (Core.Name "hydra/ext/gql/openGql.NodeTypePattern")
+_NodeTypePattern = (Core.Name "hydra.ext/gql/openGql.NodeTypePattern")
 
 _NodeTypePattern_synonymAndTypeName = (Core.Name "synonymAndTypeName")
 
@@ -3576,7 +3576,7 @@ data NodeSynonymAndTypeName =
     nodeSynonymAndTypeNameTypeName :: (Maybe NodeTypeName)}
   deriving (Eq, Ord, Read, Show)
 
-_NodeSynonymAndTypeName = (Core.Name "hydra/ext/gql/openGql.NodeSynonymAndTypeName")
+_NodeSynonymAndTypeName = (Core.Name "hydra.ext/gql/openGql.NodeSynonymAndTypeName")
 
 _NodeSynonymAndTypeName_nodeSynonym = (Core.Name "nodeSynonym")
 
@@ -3589,7 +3589,7 @@ data NodeTypePhrase =
     nodeTypePhraseAlias :: (Maybe LocalNodeTypeAlias)}
   deriving (Eq, Ord, Read, Show)
 
-_NodeTypePhrase = (Core.Name "hydra/ext/gql/openGql.NodeTypePhrase")
+_NodeTypePhrase = (Core.Name "hydra.ext/gql/openGql.NodeTypePhrase")
 
 _NodeTypePhrase_synonym = (Core.Name "synonym")
 
@@ -3602,7 +3602,7 @@ data NodeTypePhraseFiller =
   NodeTypePhraseFillerFillerOnly NodeTypeFiller
   deriving (Eq, Ord, Read, Show)
 
-_NodeTypePhraseFiller = (Core.Name "hydra/ext/gql/openGql.NodeTypePhraseFiller")
+_NodeTypePhraseFiller = (Core.Name "hydra.ext/gql/openGql.NodeTypePhraseFiller")
 
 _NodeTypePhraseFiller_typeName = (Core.Name "typeName")
 
@@ -3614,7 +3614,7 @@ data NodeTypeNameWithFiller =
     nodeTypeNameWithFillerFiller :: (Maybe NodeTypeFiller)}
   deriving (Eq, Ord, Read, Show)
 
-_NodeTypeNameWithFiller = (Core.Name "hydra/ext/gql/openGql.NodeTypeNameWithFiller")
+_NodeTypeNameWithFiller = (Core.Name "hydra.ext/gql/openGql.NodeTypeNameWithFiller")
 
 _NodeTypeNameWithFiller_typeName = (Core.Name "typeName")
 
@@ -3625,7 +3625,7 @@ data NodeTypeFiller =
   NodeTypeFillerImpliedContent NodeTypeImpliedContent
   deriving (Eq, Ord, Read, Show)
 
-_NodeTypeFiller = (Core.Name "hydra/ext/gql/openGql.NodeTypeFiller")
+_NodeTypeFiller = (Core.Name "hydra.ext/gql/openGql.NodeTypeFiller")
 
 _NodeTypeFiller_keyLabelSet = (Core.Name "keyLabelSet")
 
@@ -3637,7 +3637,7 @@ data NodeKeyLabelSetWithContent =
     nodeKeyLabelSetWithContentImpliedContent :: (Maybe NodeTypeImpliedContent)}
   deriving (Eq, Ord, Read, Show)
 
-_NodeKeyLabelSetWithContent = (Core.Name "hydra/ext/gql/openGql.NodeKeyLabelSetWithContent")
+_NodeKeyLabelSetWithContent = (Core.Name "hydra.ext/gql/openGql.NodeKeyLabelSetWithContent")
 
 _NodeKeyLabelSetWithContent_keyLabelSet = (Core.Name "keyLabelSet")
 
@@ -3648,7 +3648,7 @@ newtype LocalNodeTypeAlias =
     unLocalNodeTypeAlias :: String}
   deriving (Eq, Ord, Read, Show)
 
-_LocalNodeTypeAlias = (Core.Name "hydra/ext/gql/openGql.LocalNodeTypeAlias")
+_LocalNodeTypeAlias = (Core.Name "hydra.ext/gql/openGql.LocalNodeTypeAlias")
 
 data NodeTypeImpliedContent = 
   NodeTypeImpliedContentLabelSet NodeTypeLabelSet |
@@ -3656,7 +3656,7 @@ data NodeTypeImpliedContent =
   NodeTypeImpliedContentLabelSetWithProperties NodeLabelSetWithProperties
   deriving (Eq, Ord, Read, Show)
 
-_NodeTypeImpliedContent = (Core.Name "hydra/ext/gql/openGql.NodeTypeImpliedContent")
+_NodeTypeImpliedContent = (Core.Name "hydra.ext/gql/openGql.NodeTypeImpliedContent")
 
 _NodeTypeImpliedContent_labelSet = (Core.Name "labelSet")
 
@@ -3670,7 +3670,7 @@ data NodeLabelSetWithProperties =
     nodeLabelSetWithPropertiesPropertyTypes :: NodeTypePropertyTypes}
   deriving (Eq, Ord, Read, Show)
 
-_NodeLabelSetWithProperties = (Core.Name "hydra/ext/gql/openGql.NodeLabelSetWithProperties")
+_NodeLabelSetWithProperties = (Core.Name "hydra.ext/gql/openGql.NodeLabelSetWithProperties")
 
 _NodeLabelSetWithProperties_labelSet = (Core.Name "labelSet")
 
@@ -3681,28 +3681,28 @@ newtype NodeTypeKeyLabelSet =
     unNodeTypeKeyLabelSet :: (Maybe LabelSetPhrase)}
   deriving (Eq, Ord, Read, Show)
 
-_NodeTypeKeyLabelSet = (Core.Name "hydra/ext/gql/openGql.NodeTypeKeyLabelSet")
+_NodeTypeKeyLabelSet = (Core.Name "hydra.ext/gql/openGql.NodeTypeKeyLabelSet")
 
 newtype NodeTypeLabelSet = 
   NodeTypeLabelSet {
     unNodeTypeLabelSet :: LabelSetPhrase}
   deriving (Eq, Ord, Read, Show)
 
-_NodeTypeLabelSet = (Core.Name "hydra/ext/gql/openGql.NodeTypeLabelSet")
+_NodeTypeLabelSet = (Core.Name "hydra.ext/gql/openGql.NodeTypeLabelSet")
 
 newtype NodeTypePropertyTypes = 
   NodeTypePropertyTypes {
     unNodeTypePropertyTypes :: PropertyTypesSpecification}
   deriving (Eq, Ord, Read, Show)
 
-_NodeTypePropertyTypes = (Core.Name "hydra/ext/gql/openGql.NodeTypePropertyTypes")
+_NodeTypePropertyTypes = (Core.Name "hydra.ext/gql/openGql.NodeTypePropertyTypes")
 
 data EdgeTypeSpecification = 
   EdgeTypeSpecificationPattern EdgeTypePattern |
   EdgeTypeSpecificationPhrase EdgeTypePhrase
   deriving (Eq, Ord, Read, Show)
 
-_EdgeTypeSpecification = (Core.Name "hydra/ext/gql/openGql.EdgeTypeSpecification")
+_EdgeTypeSpecification = (Core.Name "hydra.ext/gql/openGql.EdgeTypeSpecification")
 
 _EdgeTypeSpecification_pattern = (Core.Name "pattern")
 
@@ -3714,7 +3714,7 @@ data EdgeTypePattern =
     edgeTypePatternPatternType :: EdgeTypePatternType}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeTypePattern = (Core.Name "hydra/ext/gql/openGql.EdgeTypePattern")
+_EdgeTypePattern = (Core.Name "hydra.ext/gql/openGql.EdgeTypePattern")
 
 _EdgeTypePattern_kindAndSynonym = (Core.Name "kindAndSynonym")
 
@@ -3727,7 +3727,7 @@ data EdgeKindAndSynonym =
     edgeKindAndSynonymTypeName :: (Maybe EdgeTypeName)}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeKindAndSynonym = (Core.Name "hydra/ext/gql/openGql.EdgeKindAndSynonym")
+_EdgeKindAndSynonym = (Core.Name "hydra.ext/gql/openGql.EdgeKindAndSynonym")
 
 _EdgeKindAndSynonym_kind = (Core.Name "kind")
 
@@ -3740,7 +3740,7 @@ data EdgeTypePatternType =
   EdgeTypePatternTypeUndirected EdgeTypePatternUndirected
   deriving (Eq, Ord, Read, Show)
 
-_EdgeTypePatternType = (Core.Name "hydra/ext/gql/openGql.EdgeTypePatternType")
+_EdgeTypePatternType = (Core.Name "hydra.ext/gql/openGql.EdgeTypePatternType")
 
 _EdgeTypePatternType_directed = (Core.Name "directed")
 
@@ -3754,7 +3754,7 @@ data EdgeTypePhrase =
     edgeTypePhraseEndpointPair :: EndpointPairPhrase}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeTypePhrase = (Core.Name "hydra/ext/gql/openGql.EdgeTypePhrase")
+_EdgeTypePhrase = (Core.Name "hydra.ext/gql/openGql.EdgeTypePhrase")
 
 _EdgeTypePhrase_kind = (Core.Name "kind")
 
@@ -3769,7 +3769,7 @@ data EdgeTypePhraseFiller =
   EdgeTypePhraseFillerFillerOnly EdgeTypeFiller
   deriving (Eq, Ord, Read, Show)
 
-_EdgeTypePhraseFiller = (Core.Name "hydra/ext/gql/openGql.EdgeTypePhraseFiller")
+_EdgeTypePhraseFiller = (Core.Name "hydra.ext/gql/openGql.EdgeTypePhraseFiller")
 
 _EdgeTypePhraseFiller_typeNameWithFiller = (Core.Name "typeNameWithFiller")
 
@@ -3781,7 +3781,7 @@ data EdgeTypeNameWithFiller =
     edgeTypeNameWithFillerFiller :: (Maybe EdgeTypeFiller)}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeTypeNameWithFiller = (Core.Name "hydra/ext/gql/openGql.EdgeTypeNameWithFiller")
+_EdgeTypeNameWithFiller = (Core.Name "hydra.ext/gql/openGql.EdgeTypeNameWithFiller")
 
 _EdgeTypeNameWithFiller_typeName = (Core.Name "typeName")
 
@@ -3792,7 +3792,7 @@ data EdgeTypeFiller =
   EdgeTypeFillerImpliedContent EdgeTypeImpliedContent
   deriving (Eq, Ord, Read, Show)
 
-_EdgeTypeFiller = (Core.Name "hydra/ext/gql/openGql.EdgeTypeFiller")
+_EdgeTypeFiller = (Core.Name "hydra.ext/gql/openGql.EdgeTypeFiller")
 
 _EdgeTypeFiller_keyLabelSetWithContent = (Core.Name "keyLabelSetWithContent")
 
@@ -3804,7 +3804,7 @@ data EdgeKeyLabelSetWithContent =
     edgeKeyLabelSetWithContentImpliedContent :: (Maybe EdgeTypeImpliedContent)}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeKeyLabelSetWithContent = (Core.Name "hydra/ext/gql/openGql.EdgeKeyLabelSetWithContent")
+_EdgeKeyLabelSetWithContent = (Core.Name "hydra.ext/gql/openGql.EdgeKeyLabelSetWithContent")
 
 _EdgeKeyLabelSetWithContent_keyLabelSet = (Core.Name "keyLabelSet")
 
@@ -3816,7 +3816,7 @@ data EdgeTypeImpliedContent =
   EdgeTypeImpliedContentLabelSetWithProperties EdgeLabelSetWithProperties
   deriving (Eq, Ord, Read, Show)
 
-_EdgeTypeImpliedContent = (Core.Name "hydra/ext/gql/openGql.EdgeTypeImpliedContent")
+_EdgeTypeImpliedContent = (Core.Name "hydra.ext/gql/openGql.EdgeTypeImpliedContent")
 
 _EdgeTypeImpliedContent_labelSet = (Core.Name "labelSet")
 
@@ -3830,7 +3830,7 @@ data EdgeLabelSetWithProperties =
     edgeLabelSetWithPropertiesPropertyTypes :: EdgeTypePropertyTypes}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeLabelSetWithProperties = (Core.Name "hydra/ext/gql/openGql.EdgeLabelSetWithProperties")
+_EdgeLabelSetWithProperties = (Core.Name "hydra.ext/gql/openGql.EdgeLabelSetWithProperties")
 
 _EdgeLabelSetWithProperties_labelSet = (Core.Name "labelSet")
 
@@ -3841,28 +3841,28 @@ newtype EdgeTypeKeyLabelSet =
     unEdgeTypeKeyLabelSet :: (Maybe LabelSetPhrase)}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeTypeKeyLabelSet = (Core.Name "hydra/ext/gql/openGql.EdgeTypeKeyLabelSet")
+_EdgeTypeKeyLabelSet = (Core.Name "hydra.ext/gql/openGql.EdgeTypeKeyLabelSet")
 
 newtype EdgeTypeLabelSet = 
   EdgeTypeLabelSet {
     unEdgeTypeLabelSet :: LabelSetPhrase}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeTypeLabelSet = (Core.Name "hydra/ext/gql/openGql.EdgeTypeLabelSet")
+_EdgeTypeLabelSet = (Core.Name "hydra.ext/gql/openGql.EdgeTypeLabelSet")
 
 newtype EdgeTypePropertyTypes = 
   EdgeTypePropertyTypes {
     unEdgeTypePropertyTypes :: PropertyTypesSpecification}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeTypePropertyTypes = (Core.Name "hydra/ext/gql/openGql.EdgeTypePropertyTypes")
+_EdgeTypePropertyTypes = (Core.Name "hydra.ext/gql/openGql.EdgeTypePropertyTypes")
 
 data EdgeTypePatternDirected = 
   EdgeTypePatternDirectedPointingRight EdgeTypePatternPointingRight |
   EdgeTypePatternDirectedPointingLeft EdgeTypePatternPointingLeft
   deriving (Eq, Ord, Read, Show)
 
-_EdgeTypePatternDirected = (Core.Name "hydra/ext/gql/openGql.EdgeTypePatternDirected")
+_EdgeTypePatternDirected = (Core.Name "hydra.ext/gql/openGql.EdgeTypePatternDirected")
 
 _EdgeTypePatternDirected_pointingRight = (Core.Name "pointingRight")
 
@@ -3875,7 +3875,7 @@ data EdgeTypePatternPointingRight =
     edgeTypePatternPointingRightDestination :: DestinationNodeTypeReference}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeTypePatternPointingRight = (Core.Name "hydra/ext/gql/openGql.EdgeTypePatternPointingRight")
+_EdgeTypePatternPointingRight = (Core.Name "hydra.ext/gql/openGql.EdgeTypePatternPointingRight")
 
 _EdgeTypePatternPointingRight_source = (Core.Name "source")
 
@@ -3890,7 +3890,7 @@ data EdgeTypePatternPointingLeft =
     edgeTypePatternPointingLeftSource :: SourceNodeTypeReference}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeTypePatternPointingLeft = (Core.Name "hydra/ext/gql/openGql.EdgeTypePatternPointingLeft")
+_EdgeTypePatternPointingLeft = (Core.Name "hydra.ext/gql/openGql.EdgeTypePatternPointingLeft")
 
 _EdgeTypePatternPointingLeft_destination = (Core.Name "destination")
 
@@ -3905,7 +3905,7 @@ data EdgeTypePatternUndirected =
     edgeTypePatternUndirectedDestination :: DestinationNodeTypeReference}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeTypePatternUndirected = (Core.Name "hydra/ext/gql/openGql.EdgeTypePatternUndirected")
+_EdgeTypePatternUndirected = (Core.Name "hydra.ext/gql/openGql.EdgeTypePatternUndirected")
 
 _EdgeTypePatternUndirected_source = (Core.Name "source")
 
@@ -3918,28 +3918,28 @@ newtype ArcTypePointingRight =
     unArcTypePointingRight :: EdgeTypeFiller}
   deriving (Eq, Ord, Read, Show)
 
-_ArcTypePointingRight = (Core.Name "hydra/ext/gql/openGql.ArcTypePointingRight")
+_ArcTypePointingRight = (Core.Name "hydra.ext/gql/openGql.ArcTypePointingRight")
 
 newtype ArcTypePointingLeft = 
   ArcTypePointingLeft {
     unArcTypePointingLeft :: EdgeTypeFiller}
   deriving (Eq, Ord, Read, Show)
 
-_ArcTypePointingLeft = (Core.Name "hydra/ext/gql/openGql.ArcTypePointingLeft")
+_ArcTypePointingLeft = (Core.Name "hydra.ext/gql/openGql.ArcTypePointingLeft")
 
 newtype ArcTypeUndirected = 
   ArcTypeUndirected {
     unArcTypeUndirected :: EdgeTypeFiller}
   deriving (Eq, Ord, Read, Show)
 
-_ArcTypeUndirected = (Core.Name "hydra/ext/gql/openGql.ArcTypeUndirected")
+_ArcTypeUndirected = (Core.Name "hydra.ext/gql/openGql.ArcTypeUndirected")
 
 data SourceNodeTypeReference = 
   SourceNodeTypeReferenceAlias SourceNodeTypeAlias |
   SourceNodeTypeReferenceFiller (Maybe NodeTypeFiller)
   deriving (Eq, Ord, Read, Show)
 
-_SourceNodeTypeReference = (Core.Name "hydra/ext/gql/openGql.SourceNodeTypeReference")
+_SourceNodeTypeReference = (Core.Name "hydra.ext/gql/openGql.SourceNodeTypeReference")
 
 _SourceNodeTypeReference_alias = (Core.Name "alias")
 
@@ -3950,7 +3950,7 @@ data DestinationNodeTypeReference =
   DestinationNodeTypeReferenceFiller (Maybe NodeTypeFiller)
   deriving (Eq, Ord, Read, Show)
 
-_DestinationNodeTypeReference = (Core.Name "hydra/ext/gql/openGql.DestinationNodeTypeReference")
+_DestinationNodeTypeReference = (Core.Name "hydra.ext/gql/openGql.DestinationNodeTypeReference")
 
 _DestinationNodeTypeReference_alias = (Core.Name "alias")
 
@@ -3961,7 +3961,7 @@ data EdgeKind =
   EdgeKindUndirected 
   deriving (Eq, Ord, Read, Show)
 
-_EdgeKind = (Core.Name "hydra/ext/gql/openGql.EdgeKind")
+_EdgeKind = (Core.Name "hydra.ext/gql/openGql.EdgeKind")
 
 _EdgeKind_directed = (Core.Name "directed")
 
@@ -3972,14 +3972,14 @@ newtype EndpointPairPhrase =
     unEndpointPairPhrase :: EndpointPair}
   deriving (Eq, Ord, Read, Show)
 
-_EndpointPairPhrase = (Core.Name "hydra/ext/gql/openGql.EndpointPairPhrase")
+_EndpointPairPhrase = (Core.Name "hydra.ext/gql/openGql.EndpointPairPhrase")
 
 data EndpointPair = 
   EndpointPairDirected_ EndpointPairDirected |
   EndpointPairUndirected_ EndpointPairUndirected
   deriving (Eq, Ord, Read, Show)
 
-_EndpointPair = (Core.Name "hydra/ext/gql/openGql.EndpointPair")
+_EndpointPair = (Core.Name "hydra.ext/gql/openGql.EndpointPair")
 
 _EndpointPair_directed = (Core.Name "directed")
 
@@ -3990,7 +3990,7 @@ data EndpointPairDirected =
   EndpointPairDirectedPointingLeft EndpointPairPointingLeft
   deriving (Eq, Ord, Read, Show)
 
-_EndpointPairDirected = (Core.Name "hydra/ext/gql/openGql.EndpointPairDirected")
+_EndpointPairDirected = (Core.Name "hydra.ext/gql/openGql.EndpointPairDirected")
 
 _EndpointPairDirected_pointingRight = (Core.Name "pointingRight")
 
@@ -4003,7 +4003,7 @@ data EndpointPairPointingRight =
     endpointPairPointingRightDestinationAlias :: DestinationNodeTypeAlias}
   deriving (Eq, Ord, Read, Show)
 
-_EndpointPairPointingRight = (Core.Name "hydra/ext/gql/openGql.EndpointPairPointingRight")
+_EndpointPairPointingRight = (Core.Name "hydra.ext/gql/openGql.EndpointPairPointingRight")
 
 _EndpointPairPointingRight_sourceAlias = (Core.Name "sourceAlias")
 
@@ -4017,7 +4017,7 @@ data EndpointPairPointingLeft =
     endpointPairPointingLeftSourceAlias :: SourceNodeTypeAlias}
   deriving (Eq, Ord, Read, Show)
 
-_EndpointPairPointingLeft = (Core.Name "hydra/ext/gql/openGql.EndpointPairPointingLeft")
+_EndpointPairPointingLeft = (Core.Name "hydra.ext/gql/openGql.EndpointPairPointingLeft")
 
 _EndpointPairPointingLeft_destinationAlias = (Core.Name "destinationAlias")
 
@@ -4030,7 +4030,7 @@ data EndpointPairUndirected =
     endpointPairUndirectedDestinationAlias :: DestinationNodeTypeAlias}
   deriving (Eq, Ord, Read, Show)
 
-_EndpointPairUndirected = (Core.Name "hydra/ext/gql/openGql.EndpointPairUndirected")
+_EndpointPairUndirected = (Core.Name "hydra.ext/gql/openGql.EndpointPairUndirected")
 
 _EndpointPairUndirected_sourceAlias = (Core.Name "sourceAlias")
 
@@ -4043,7 +4043,7 @@ data ConnectorPointingRight =
   ConnectorPointingRightRightArrow 
   deriving (Eq, Ord, Read, Show)
 
-_ConnectorPointingRight = (Core.Name "hydra/ext/gql/openGql.ConnectorPointingRight")
+_ConnectorPointingRight = (Core.Name "hydra.ext/gql/openGql.ConnectorPointingRight")
 
 _ConnectorPointingRight_to = (Core.Name "to")
 
@@ -4054,7 +4054,7 @@ data ConnectorUndirected =
   ConnectorUndirectedTilde 
   deriving (Eq, Ord, Read, Show)
 
-_ConnectorUndirected = (Core.Name "hydra/ext/gql/openGql.ConnectorUndirected")
+_ConnectorUndirected = (Core.Name "hydra.ext/gql/openGql.ConnectorUndirected")
 
 _ConnectorUndirected_to = (Core.Name "to")
 
@@ -4065,14 +4065,14 @@ newtype SourceNodeTypeAlias =
     unSourceNodeTypeAlias :: String}
   deriving (Eq, Ord, Read, Show)
 
-_SourceNodeTypeAlias = (Core.Name "hydra/ext/gql/openGql.SourceNodeTypeAlias")
+_SourceNodeTypeAlias = (Core.Name "hydra.ext/gql/openGql.SourceNodeTypeAlias")
 
 newtype DestinationNodeTypeAlias = 
   DestinationNodeTypeAlias {
     unDestinationNodeTypeAlias :: String}
   deriving (Eq, Ord, Read, Show)
 
-_DestinationNodeTypeAlias = (Core.Name "hydra/ext/gql/openGql.DestinationNodeTypeAlias")
+_DestinationNodeTypeAlias = (Core.Name "hydra.ext/gql/openGql.DestinationNodeTypeAlias")
 
 data LabelSetPhrase = 
   LabelSetPhraseSingleLabel LabelName |
@@ -4080,7 +4080,7 @@ data LabelSetPhrase =
   LabelSetPhraseIsOrColonWithLabels IsOrColonWithLabels
   deriving (Eq, Ord, Read, Show)
 
-_LabelSetPhrase = (Core.Name "hydra/ext/gql/openGql.LabelSetPhrase")
+_LabelSetPhrase = (Core.Name "hydra.ext/gql/openGql.LabelSetPhrase")
 
 _LabelSetPhrase_singleLabel = (Core.Name "singleLabel")
 
@@ -4094,7 +4094,7 @@ data IsOrColonWithLabels =
     isOrColonWithLabelsLabels :: LabelSetSpecification}
   deriving (Eq, Ord, Read, Show)
 
-_IsOrColonWithLabels = (Core.Name "hydra/ext/gql/openGql.IsOrColonWithLabels")
+_IsOrColonWithLabels = (Core.Name "hydra.ext/gql/openGql.IsOrColonWithLabels")
 
 _IsOrColonWithLabels_isOrColon = (Core.Name "isOrColon")
 
@@ -4105,21 +4105,21 @@ newtype LabelSetSpecification =
     unLabelSetSpecification :: [LabelName]}
   deriving (Eq, Ord, Read, Show)
 
-_LabelSetSpecification = (Core.Name "hydra/ext/gql/openGql.LabelSetSpecification")
+_LabelSetSpecification = (Core.Name "hydra.ext/gql/openGql.LabelSetSpecification")
 
 newtype PropertyTypesSpecification = 
   PropertyTypesSpecification {
     unPropertyTypesSpecification :: (Maybe PropertyTypeList)}
   deriving (Eq, Ord, Read, Show)
 
-_PropertyTypesSpecification = (Core.Name "hydra/ext/gql/openGql.PropertyTypesSpecification")
+_PropertyTypesSpecification = (Core.Name "hydra.ext/gql/openGql.PropertyTypesSpecification")
 
 newtype PropertyTypeList = 
   PropertyTypeList {
     unPropertyTypeList :: [PropertyType]}
   deriving (Eq, Ord, Read, Show)
 
-_PropertyTypeList = (Core.Name "hydra/ext/gql/openGql.PropertyTypeList")
+_PropertyTypeList = (Core.Name "hydra.ext/gql/openGql.PropertyTypeList")
 
 data PropertyType = 
   PropertyType {
@@ -4128,7 +4128,7 @@ data PropertyType =
     propertyTypeValueType :: PropertyValueType}
   deriving (Eq, Ord, Read, Show)
 
-_PropertyType = (Core.Name "hydra/ext/gql/openGql.PropertyType")
+_PropertyType = (Core.Name "hydra.ext/gql/openGql.PropertyType")
 
 _PropertyType_name = (Core.Name "name")
 
@@ -4141,7 +4141,7 @@ newtype PropertyValueType =
     unPropertyValueType :: ValueType}
   deriving (Eq, Ord, Read, Show)
 
-_PropertyValueType = (Core.Name "hydra/ext/gql/openGql.PropertyValueType")
+_PropertyValueType = (Core.Name "hydra.ext/gql/openGql.PropertyValueType")
 
 data BindingTableType = 
   BindingTableType {
@@ -4149,7 +4149,7 @@ data BindingTableType =
     bindingTableTypeFieldTypes :: FieldTypesSpecification}
   deriving (Eq, Ord, Read, Show)
 
-_BindingTableType = (Core.Name "hydra/ext/gql/openGql.BindingTableType")
+_BindingTableType = (Core.Name "hydra.ext/gql/openGql.BindingTableType")
 
 _BindingTableType_binding = (Core.Name "binding")
 
@@ -4168,7 +4168,7 @@ data ValueType =
   ValueTypeClosedDynamicUnionTypeAlt2 ClosedDynamicUnionTypeAlt2
   deriving (Eq, Ord, Read, Show)
 
-_ValueType = (Core.Name "hydra/ext/gql/openGql.ValueType")
+_ValueType = (Core.Name "hydra.ext/gql/openGql.ValueType")
 
 _ValueType_predefinedType = (Core.Name "predefinedType")
 
@@ -4198,7 +4198,7 @@ data ListValueTypeAlt1 =
     listValueTypeAlt1NotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_ListValueTypeAlt1 = (Core.Name "hydra/ext/gql/openGql.ListValueTypeAlt1")
+_ListValueTypeAlt1 = (Core.Name "hydra.ext/gql/openGql.ListValueTypeAlt1")
 
 _ListValueTypeAlt1_typeName = (Core.Name "typeName")
 
@@ -4216,7 +4216,7 @@ data ListValueTypeAlt2 =
     listValueTypeAlt2NotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_ListValueTypeAlt2 = (Core.Name "hydra/ext/gql/openGql.ListValueTypeAlt2")
+_ListValueTypeAlt2 = (Core.Name "hydra.ext/gql/openGql.ListValueTypeAlt2")
 
 _ListValueTypeAlt2_valueType = (Core.Name "valueType")
 
@@ -4233,7 +4233,7 @@ data ListValueTypeAlt3 =
     listValueTypeAlt3NotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_ListValueTypeAlt3 = (Core.Name "hydra/ext/gql/openGql.ListValueTypeAlt3")
+_ListValueTypeAlt3 = (Core.Name "hydra.ext/gql/openGql.ListValueTypeAlt3")
 
 _ListValueTypeAlt3_typeName = (Core.Name "typeName")
 
@@ -4247,7 +4247,7 @@ data OpenDynamicUnionType =
     openDynamicUnionTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_OpenDynamicUnionType = (Core.Name "hydra/ext/gql/openGql.OpenDynamicUnionType")
+_OpenDynamicUnionType = (Core.Name "hydra.ext/gql/openGql.OpenDynamicUnionType")
 
 _OpenDynamicUnionType_value = (Core.Name "value")
 
@@ -4261,7 +4261,7 @@ data DynamicPropertyValueType =
     dynamicPropertyValueTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_DynamicPropertyValueType = (Core.Name "hydra/ext/gql/openGql.DynamicPropertyValueType")
+_DynamicPropertyValueType = (Core.Name "hydra.ext/gql/openGql.DynamicPropertyValueType")
 
 _DynamicPropertyValueType_any = (Core.Name "any")
 
@@ -4277,7 +4277,7 @@ data ClosedDynamicUnionTypeAlt1 =
     closedDynamicUnionTypeAlt1ValueTypes :: [ValueType]}
   deriving (Eq, Ord, Read, Show)
 
-_ClosedDynamicUnionTypeAlt1 = (Core.Name "hydra/ext/gql/openGql.ClosedDynamicUnionTypeAlt1")
+_ClosedDynamicUnionTypeAlt1 = (Core.Name "hydra.ext/gql/openGql.ClosedDynamicUnionTypeAlt1")
 
 _ClosedDynamicUnionTypeAlt1_anyValue = (Core.Name "anyValue")
 
@@ -4288,7 +4288,7 @@ data ClosedDynamicUnionTypeAlt2 =
     closedDynamicUnionTypeAlt2ValueTypes :: [ValueType]}
   deriving (Eq, Ord, Read, Show)
 
-_ClosedDynamicUnionTypeAlt2 = (Core.Name "hydra/ext/gql/openGql.ClosedDynamicUnionTypeAlt2")
+_ClosedDynamicUnionTypeAlt2 = (Core.Name "hydra.ext/gql/openGql.ClosedDynamicUnionTypeAlt2")
 
 _ClosedDynamicUnionTypeAlt2_valueTypes = (Core.Name "valueTypes")
 
@@ -4296,7 +4296,7 @@ data Typed =
   Typed {}
   deriving (Eq, Ord, Read, Show)
 
-_Typed = (Core.Name "hydra/ext/gql/openGql.Typed")
+_Typed = (Core.Name "hydra.ext/gql/openGql.Typed")
 
 data PredefinedType = 
   PredefinedTypeBooleanType BooleanType |
@@ -4308,7 +4308,7 @@ data PredefinedType =
   PredefinedTypeImmaterialValueType ImmaterialValueType
   deriving (Eq, Ord, Read, Show)
 
-_PredefinedType = (Core.Name "hydra/ext/gql/openGql.PredefinedType")
+_PredefinedType = (Core.Name "hydra.ext/gql/openGql.PredefinedType")
 
 _PredefinedType_booleanType = (Core.Name "booleanType")
 
@@ -4329,7 +4329,7 @@ data BooleanType =
     booleanTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_BooleanType = (Core.Name "hydra/ext/gql/openGql.BooleanType")
+_BooleanType = (Core.Name "hydra.ext/gql/openGql.BooleanType")
 
 _BooleanType_notNull = (Core.Name "notNull")
 
@@ -4339,7 +4339,7 @@ data CharacterStringType =
   CharacterStringTypeVarcharType VarcharType
   deriving (Eq, Ord, Read, Show)
 
-_CharacterStringType = (Core.Name "hydra/ext/gql/openGql.CharacterStringType")
+_CharacterStringType = (Core.Name "hydra.ext/gql/openGql.CharacterStringType")
 
 _CharacterStringType_stringType = (Core.Name "stringType")
 
@@ -4354,7 +4354,7 @@ data StringType =
     stringTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_StringType = (Core.Name "hydra/ext/gql/openGql.StringType")
+_StringType = (Core.Name "hydra.ext/gql/openGql.StringType")
 
 _StringType_minLength = (Core.Name "minLength")
 
@@ -4368,7 +4368,7 @@ data CharType =
     charTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_CharType = (Core.Name "hydra/ext/gql/openGql.CharType")
+_CharType = (Core.Name "hydra.ext/gql/openGql.CharType")
 
 _CharType_fixedLength = (Core.Name "fixedLength")
 
@@ -4380,7 +4380,7 @@ data VarcharType =
     varcharTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_VarcharType = (Core.Name "hydra/ext/gql/openGql.VarcharType")
+_VarcharType = (Core.Name "hydra.ext/gql/openGql.VarcharType")
 
 _VarcharType_maxLength = (Core.Name "maxLength")
 
@@ -4392,7 +4392,7 @@ data ByteStringType =
   ByteStringTypeVarbinaryType VarbinaryType
   deriving (Eq, Ord, Read, Show)
 
-_ByteStringType = (Core.Name "hydra/ext/gql/openGql.ByteStringType")
+_ByteStringType = (Core.Name "hydra.ext/gql/openGql.ByteStringType")
 
 _ByteStringType_bytesType = (Core.Name "bytesType")
 
@@ -4407,7 +4407,7 @@ data BytesType =
     bytesTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_BytesType = (Core.Name "hydra/ext/gql/openGql.BytesType")
+_BytesType = (Core.Name "hydra.ext/gql/openGql.BytesType")
 
 _BytesType_minLength = (Core.Name "minLength")
 
@@ -4421,7 +4421,7 @@ data BinaryType =
     binaryTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_BinaryType = (Core.Name "hydra/ext/gql/openGql.BinaryType")
+_BinaryType = (Core.Name "hydra.ext/gql/openGql.BinaryType")
 
 _BinaryType_fixedLength = (Core.Name "fixedLength")
 
@@ -4433,7 +4433,7 @@ data VarbinaryType =
     varbinaryTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_VarbinaryType = (Core.Name "hydra/ext/gql/openGql.VarbinaryType")
+_VarbinaryType = (Core.Name "hydra.ext/gql/openGql.VarbinaryType")
 
 _VarbinaryType_maxLength = (Core.Name "maxLength")
 
@@ -4444,28 +4444,28 @@ newtype MinLength =
     unMinLength :: UnsignedInteger}
   deriving (Eq, Ord, Read, Show)
 
-_MinLength = (Core.Name "hydra/ext/gql/openGql.MinLength")
+_MinLength = (Core.Name "hydra.ext/gql/openGql.MinLength")
 
 newtype FixedLength = 
   FixedLength {
     unFixedLength :: UnsignedInteger}
   deriving (Eq, Ord, Read, Show)
 
-_FixedLength = (Core.Name "hydra/ext/gql/openGql.FixedLength")
+_FixedLength = (Core.Name "hydra.ext/gql/openGql.FixedLength")
 
 newtype MaxLength = 
   MaxLength {
     unMaxLength :: UnsignedInteger}
   deriving (Eq, Ord, Read, Show)
 
-_MaxLength = (Core.Name "hydra/ext/gql/openGql.MaxLength")
+_MaxLength = (Core.Name "hydra.ext/gql/openGql.MaxLength")
 
 data NumericType = 
   NumericTypeExact ExactNumericType |
   NumericTypeApproximate ApproximateNumericType
   deriving (Eq, Ord, Read, Show)
 
-_NumericType = (Core.Name "hydra/ext/gql/openGql.NumericType")
+_NumericType = (Core.Name "hydra.ext/gql/openGql.NumericType")
 
 _NumericType_exact = (Core.Name "exact")
 
@@ -4476,7 +4476,7 @@ data ExactNumericType =
   ExactNumericTypeDecimal DecimalExactNumericType
   deriving (Eq, Ord, Read, Show)
 
-_ExactNumericType = (Core.Name "hydra/ext/gql/openGql.ExactNumericType")
+_ExactNumericType = (Core.Name "hydra.ext/gql/openGql.ExactNumericType")
 
 _ExactNumericType_binary = (Core.Name "binary")
 
@@ -4487,7 +4487,7 @@ data BinaryExactNumericType =
   BinaryExactNumericTypeUnsigned UnsignedBinaryExactNumericType
   deriving (Eq, Ord, Read, Show)
 
-_BinaryExactNumericType = (Core.Name "hydra/ext/gql/openGql.BinaryExactNumericType")
+_BinaryExactNumericType = (Core.Name "hydra.ext/gql/openGql.BinaryExactNumericType")
 
 _BinaryExactNumericType_signed = (Core.Name "signed")
 
@@ -4506,7 +4506,7 @@ data SignedBinaryExactNumericType =
   SignedBinaryExactNumericTypeSignedVerboseType SignedVerboseBinaryExactNumericType
   deriving (Eq, Ord, Read, Show)
 
-_SignedBinaryExactNumericType = (Core.Name "hydra/ext/gql/openGql.SignedBinaryExactNumericType")
+_SignedBinaryExactNumericType = (Core.Name "hydra.ext/gql/openGql.SignedBinaryExactNumericType")
 
 _SignedBinaryExactNumericType_int8 = (Core.Name "int8")
 
@@ -4533,7 +4533,7 @@ data Int8Type =
     int8TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Int8Type = (Core.Name "hydra/ext/gql/openGql.Int8Type")
+_Int8Type = (Core.Name "hydra.ext/gql/openGql.Int8Type")
 
 _Int8Type_notNull = (Core.Name "notNull")
 
@@ -4542,7 +4542,7 @@ data Int16Type =
     int16TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Int16Type = (Core.Name "hydra/ext/gql/openGql.Int16Type")
+_Int16Type = (Core.Name "hydra.ext/gql/openGql.Int16Type")
 
 _Int16Type_notNull = (Core.Name "notNull")
 
@@ -4551,7 +4551,7 @@ data Int32Type =
     int32TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Int32Type = (Core.Name "hydra/ext/gql/openGql.Int32Type")
+_Int32Type = (Core.Name "hydra.ext/gql/openGql.Int32Type")
 
 _Int32Type_notNull = (Core.Name "notNull")
 
@@ -4560,7 +4560,7 @@ data Int64Type =
     int64TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Int64Type = (Core.Name "hydra/ext/gql/openGql.Int64Type")
+_Int64Type = (Core.Name "hydra.ext/gql/openGql.Int64Type")
 
 _Int64Type_notNull = (Core.Name "notNull")
 
@@ -4569,7 +4569,7 @@ data Int128Type =
     int128TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Int128Type = (Core.Name "hydra/ext/gql/openGql.Int128Type")
+_Int128Type = (Core.Name "hydra.ext/gql/openGql.Int128Type")
 
 _Int128Type_notNull = (Core.Name "notNull")
 
@@ -4578,7 +4578,7 @@ data Int256Type =
     int256TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Int256Type = (Core.Name "hydra/ext/gql/openGql.Int256Type")
+_Int256Type = (Core.Name "hydra.ext/gql/openGql.Int256Type")
 
 _Int256Type_notNull = (Core.Name "notNull")
 
@@ -4587,7 +4587,7 @@ data SmallIntType =
     smallIntTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_SmallIntType = (Core.Name "hydra/ext/gql/openGql.SmallIntType")
+_SmallIntType = (Core.Name "hydra.ext/gql/openGql.SmallIntType")
 
 _SmallIntType_notNull = (Core.Name "notNull")
 
@@ -4596,7 +4596,7 @@ data BigIntType =
     bigIntTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_BigIntType = (Core.Name "hydra/ext/gql/openGql.BigIntType")
+_BigIntType = (Core.Name "hydra.ext/gql/openGql.BigIntType")
 
 _BigIntType_notNull = (Core.Name "notNull")
 
@@ -4606,7 +4606,7 @@ data IntWithPrecision =
     intWithPrecisionNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_IntWithPrecision = (Core.Name "hydra/ext/gql/openGql.IntWithPrecision")
+_IntWithPrecision = (Core.Name "hydra.ext/gql/openGql.IntWithPrecision")
 
 _IntWithPrecision_precision = (Core.Name "precision")
 
@@ -4618,7 +4618,7 @@ data SignedVerboseBinaryExactNumericType =
     signedVerboseBinaryExactNumericTypeVerboseType :: VerboseBinaryExactNumericType}
   deriving (Eq, Ord, Read, Show)
 
-_SignedVerboseBinaryExactNumericType = (Core.Name "hydra/ext/gql/openGql.SignedVerboseBinaryExactNumericType")
+_SignedVerboseBinaryExactNumericType = (Core.Name "hydra.ext/gql/openGql.SignedVerboseBinaryExactNumericType")
 
 _SignedVerboseBinaryExactNumericType_signed = (Core.Name "signed")
 
@@ -4637,7 +4637,7 @@ data UnsignedBinaryExactNumericType =
   UnsignedBinaryExactNumericTypeUnsigned VerboseBinaryExactNumericType
   deriving (Eq, Ord, Read, Show)
 
-_UnsignedBinaryExactNumericType = (Core.Name "hydra/ext/gql/openGql.UnsignedBinaryExactNumericType")
+_UnsignedBinaryExactNumericType = (Core.Name "hydra.ext/gql/openGql.UnsignedBinaryExactNumericType")
 
 _UnsignedBinaryExactNumericType_uint8 = (Core.Name "uint8")
 
@@ -4664,7 +4664,7 @@ data Uint8Type =
     uint8TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Uint8Type = (Core.Name "hydra/ext/gql/openGql.Uint8Type")
+_Uint8Type = (Core.Name "hydra.ext/gql/openGql.Uint8Type")
 
 _Uint8Type_notNull = (Core.Name "notNull")
 
@@ -4673,7 +4673,7 @@ data Uint16Type =
     uint16TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Uint16Type = (Core.Name "hydra/ext/gql/openGql.Uint16Type")
+_Uint16Type = (Core.Name "hydra.ext/gql/openGql.Uint16Type")
 
 _Uint16Type_notNull = (Core.Name "notNull")
 
@@ -4682,7 +4682,7 @@ data Uint32Type =
     uint32TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Uint32Type = (Core.Name "hydra/ext/gql/openGql.Uint32Type")
+_Uint32Type = (Core.Name "hydra.ext/gql/openGql.Uint32Type")
 
 _Uint32Type_notNull = (Core.Name "notNull")
 
@@ -4691,7 +4691,7 @@ data Uint64Type =
     uint64TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Uint64Type = (Core.Name "hydra/ext/gql/openGql.Uint64Type")
+_Uint64Type = (Core.Name "hydra.ext/gql/openGql.Uint64Type")
 
 _Uint64Type_notNull = (Core.Name "notNull")
 
@@ -4700,7 +4700,7 @@ data Uint128Type =
     uint128TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Uint128Type = (Core.Name "hydra/ext/gql/openGql.Uint128Type")
+_Uint128Type = (Core.Name "hydra.ext/gql/openGql.Uint128Type")
 
 _Uint128Type_notNull = (Core.Name "notNull")
 
@@ -4709,7 +4709,7 @@ data Uint256Type =
     uint256TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Uint256Type = (Core.Name "hydra/ext/gql/openGql.Uint256Type")
+_Uint256Type = (Core.Name "hydra.ext/gql/openGql.Uint256Type")
 
 _Uint256Type_notNull = (Core.Name "notNull")
 
@@ -4718,7 +4718,7 @@ data USmallIntType =
     uSmallIntTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_USmallIntType = (Core.Name "hydra/ext/gql/openGql.USmallIntType")
+_USmallIntType = (Core.Name "hydra.ext/gql/openGql.USmallIntType")
 
 _USmallIntType_notNull = (Core.Name "notNull")
 
@@ -4727,7 +4727,7 @@ data UBigIntType =
     uBigIntTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_UBigIntType = (Core.Name "hydra/ext/gql/openGql.UBigIntType")
+_UBigIntType = (Core.Name "hydra.ext/gql/openGql.UBigIntType")
 
 _UBigIntType_notNull = (Core.Name "notNull")
 
@@ -4737,7 +4737,7 @@ data UintWithPrecision =
     uintWithPrecisionNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_UintWithPrecision = (Core.Name "hydra/ext/gql/openGql.UintWithPrecision")
+_UintWithPrecision = (Core.Name "hydra.ext/gql/openGql.UintWithPrecision")
 
 _UintWithPrecision_precision = (Core.Name "precision")
 
@@ -4755,7 +4755,7 @@ data VerboseBinaryExactNumericType =
   VerboseBinaryExactNumericTypeBigInteger BigIntegerType
   deriving (Eq, Ord, Read, Show)
 
-_VerboseBinaryExactNumericType = (Core.Name "hydra/ext/gql/openGql.VerboseBinaryExactNumericType")
+_VerboseBinaryExactNumericType = (Core.Name "hydra.ext/gql/openGql.VerboseBinaryExactNumericType")
 
 _VerboseBinaryExactNumericType_integer8 = (Core.Name "integer8")
 
@@ -4780,7 +4780,7 @@ data Integer8Type =
     integer8TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Integer8Type = (Core.Name "hydra/ext/gql/openGql.Integer8Type")
+_Integer8Type = (Core.Name "hydra.ext/gql/openGql.Integer8Type")
 
 _Integer8Type_notNull = (Core.Name "notNull")
 
@@ -4789,7 +4789,7 @@ data Integer16Type =
     integer16TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Integer16Type = (Core.Name "hydra/ext/gql/openGql.Integer16Type")
+_Integer16Type = (Core.Name "hydra.ext/gql/openGql.Integer16Type")
 
 _Integer16Type_notNull = (Core.Name "notNull")
 
@@ -4798,7 +4798,7 @@ data Integer32Type =
     integer32TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Integer32Type = (Core.Name "hydra/ext/gql/openGql.Integer32Type")
+_Integer32Type = (Core.Name "hydra.ext/gql/openGql.Integer32Type")
 
 _Integer32Type_notNull = (Core.Name "notNull")
 
@@ -4807,7 +4807,7 @@ data Integer64Type =
     integer64TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Integer64Type = (Core.Name "hydra/ext/gql/openGql.Integer64Type")
+_Integer64Type = (Core.Name "hydra.ext/gql/openGql.Integer64Type")
 
 _Integer64Type_notNull = (Core.Name "notNull")
 
@@ -4816,7 +4816,7 @@ data Integer128Type =
     integer128TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Integer128Type = (Core.Name "hydra/ext/gql/openGql.Integer128Type")
+_Integer128Type = (Core.Name "hydra.ext/gql/openGql.Integer128Type")
 
 _Integer128Type_notNull = (Core.Name "notNull")
 
@@ -4825,7 +4825,7 @@ data Integer256Type =
     integer256TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Integer256Type = (Core.Name "hydra/ext/gql/openGql.Integer256Type")
+_Integer256Type = (Core.Name "hydra.ext/gql/openGql.Integer256Type")
 
 _Integer256Type_notNull = (Core.Name "notNull")
 
@@ -4834,7 +4834,7 @@ data SmallIntegerType =
     smallIntegerTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_SmallIntegerType = (Core.Name "hydra/ext/gql/openGql.SmallIntegerType")
+_SmallIntegerType = (Core.Name "hydra.ext/gql/openGql.SmallIntegerType")
 
 _SmallIntegerType_notNull = (Core.Name "notNull")
 
@@ -4843,7 +4843,7 @@ data BigIntegerType =
     bigIntegerTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_BigIntegerType = (Core.Name "hydra/ext/gql/openGql.BigIntegerType")
+_BigIntegerType = (Core.Name "hydra.ext/gql/openGql.BigIntegerType")
 
 _BigIntegerType_notNull = (Core.Name "notNull")
 
@@ -4853,7 +4853,7 @@ data IntegerWithPrecision =
     integerWithPrecisionNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_IntegerWithPrecision = (Core.Name "hydra/ext/gql/openGql.IntegerWithPrecision")
+_IntegerWithPrecision = (Core.Name "hydra.ext/gql/openGql.IntegerWithPrecision")
 
 _IntegerWithPrecision_precision = (Core.Name "precision")
 
@@ -4864,14 +4864,14 @@ newtype Precision =
     unPrecision :: UnsignedDecimalInteger}
   deriving (Eq, Ord, Read, Show)
 
-_Precision = (Core.Name "hydra/ext/gql/openGql.Precision")
+_Precision = (Core.Name "hydra.ext/gql/openGql.Precision")
 
 newtype DecimalExactNumericType = 
   DecimalExactNumericType {
     unDecimalExactNumericType :: (Maybe PrecisionAndScale)}
   deriving (Eq, Ord, Read, Show)
 
-_DecimalExactNumericType = (Core.Name "hydra/ext/gql/openGql.DecimalExactNumericType")
+_DecimalExactNumericType = (Core.Name "hydra.ext/gql/openGql.DecimalExactNumericType")
 
 data PrecisionAndScale = 
   PrecisionAndScale {
@@ -4880,7 +4880,7 @@ data PrecisionAndScale =
     precisionAndScaleNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_PrecisionAndScale = (Core.Name "hydra/ext/gql/openGql.PrecisionAndScale")
+_PrecisionAndScale = (Core.Name "hydra.ext/gql/openGql.PrecisionAndScale")
 
 _PrecisionAndScale_precision = (Core.Name "precision")
 
@@ -4893,7 +4893,7 @@ newtype Scale =
     unScale :: UnsignedDecimalInteger}
   deriving (Eq, Ord, Read, Show)
 
-_Scale = (Core.Name "hydra/ext/gql/openGql.Scale")
+_Scale = (Core.Name "hydra.ext/gql/openGql.Scale")
 
 data ApproximateNumericType = 
   ApproximateNumericTypeFloat16 Float16Type |
@@ -4906,7 +4906,7 @@ data ApproximateNumericType =
   ApproximateNumericTypeDoubleWithPrecision DoubleTypeWithPrecision
   deriving (Eq, Ord, Read, Show)
 
-_ApproximateNumericType = (Core.Name "hydra/ext/gql/openGql.ApproximateNumericType")
+_ApproximateNumericType = (Core.Name "hydra.ext/gql/openGql.ApproximateNumericType")
 
 _ApproximateNumericType_float16 = (Core.Name "float16")
 
@@ -4929,7 +4929,7 @@ data Float16Type =
     float16TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Float16Type = (Core.Name "hydra/ext/gql/openGql.Float16Type")
+_Float16Type = (Core.Name "hydra.ext/gql/openGql.Float16Type")
 
 _Float16Type_notNull = (Core.Name "notNull")
 
@@ -4938,7 +4938,7 @@ data Float32Type =
     float32TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Float32Type = (Core.Name "hydra/ext/gql/openGql.Float32Type")
+_Float32Type = (Core.Name "hydra.ext/gql/openGql.Float32Type")
 
 _Float32Type_notNull = (Core.Name "notNull")
 
@@ -4947,7 +4947,7 @@ data Float64Type =
     float64TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Float64Type = (Core.Name "hydra/ext/gql/openGql.Float64Type")
+_Float64Type = (Core.Name "hydra.ext/gql/openGql.Float64Type")
 
 _Float64Type_notNull = (Core.Name "notNull")
 
@@ -4956,7 +4956,7 @@ data Float128Type =
     float128TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Float128Type = (Core.Name "hydra/ext/gql/openGql.Float128Type")
+_Float128Type = (Core.Name "hydra.ext/gql/openGql.Float128Type")
 
 _Float128Type_notNull = (Core.Name "notNull")
 
@@ -4965,7 +4965,7 @@ data Float256Type =
     float256TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Float256Type = (Core.Name "hydra/ext/gql/openGql.Float256Type")
+_Float256Type = (Core.Name "hydra.ext/gql/openGql.Float256Type")
 
 _Float256Type_notNull = (Core.Name "notNull")
 
@@ -4975,7 +4975,7 @@ data FloatTypeWithPrecision =
     floatTypeWithPrecisionNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_FloatTypeWithPrecision = (Core.Name "hydra/ext/gql/openGql.FloatTypeWithPrecision")
+_FloatTypeWithPrecision = (Core.Name "hydra.ext/gql/openGql.FloatTypeWithPrecision")
 
 _FloatTypeWithPrecision_precisionAndScale = (Core.Name "precisionAndScale")
 
@@ -4986,7 +4986,7 @@ data RealType =
     realTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_RealType = (Core.Name "hydra/ext/gql/openGql.RealType")
+_RealType = (Core.Name "hydra.ext/gql/openGql.RealType")
 
 _RealType_notNull = (Core.Name "notNull")
 
@@ -4996,7 +4996,7 @@ data DoubleTypeWithPrecision =
     doubleTypeWithPrecisionNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_DoubleTypeWithPrecision = (Core.Name "hydra/ext/gql/openGql.DoubleTypeWithPrecision")
+_DoubleTypeWithPrecision = (Core.Name "hydra.ext/gql/openGql.DoubleTypeWithPrecision")
 
 _DoubleTypeWithPrecision_precision = (Core.Name "precision")
 
@@ -5007,7 +5007,7 @@ data TemporalType =
   TemporalTypeDurationType TemporalDurationType
   deriving (Eq, Ord, Read, Show)
 
-_TemporalType = (Core.Name "hydra/ext/gql/openGql.TemporalType")
+_TemporalType = (Core.Name "hydra.ext/gql/openGql.TemporalType")
 
 _TemporalType_instantType = (Core.Name "instantType")
 
@@ -5021,7 +5021,7 @@ data TemporalInstantType =
   TemporalInstantTypeLocaltimeType LocaltimeType
   deriving (Eq, Ord, Read, Show)
 
-_TemporalInstantType = (Core.Name "hydra/ext/gql/openGql.TemporalInstantType")
+_TemporalInstantType = (Core.Name "hydra.ext/gql/openGql.TemporalInstantType")
 
 _TemporalInstantType_datetimeType = (Core.Name "datetimeType")
 
@@ -5038,7 +5038,7 @@ data DatetimeType =
   DatetimeTypeTimestampWithTimeZone TimestampWithTimeZoneType
   deriving (Eq, Ord, Read, Show)
 
-_DatetimeType = (Core.Name "hydra/ext/gql/openGql.DatetimeType")
+_DatetimeType = (Core.Name "hydra.ext/gql/openGql.DatetimeType")
 
 _DatetimeType_zonedDatetime = (Core.Name "zonedDatetime")
 
@@ -5049,7 +5049,7 @@ data ZonedDatetimeType =
     zonedDatetimeTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_ZonedDatetimeType = (Core.Name "hydra/ext/gql/openGql.ZonedDatetimeType")
+_ZonedDatetimeType = (Core.Name "hydra.ext/gql/openGql.ZonedDatetimeType")
 
 _ZonedDatetimeType_notNull = (Core.Name "notNull")
 
@@ -5058,7 +5058,7 @@ data TimestampWithTimeZoneType =
     timestampWithTimeZoneTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_TimestampWithTimeZoneType = (Core.Name "hydra/ext/gql/openGql.TimestampWithTimeZoneType")
+_TimestampWithTimeZoneType = (Core.Name "hydra.ext/gql/openGql.TimestampWithTimeZoneType")
 
 _TimestampWithTimeZoneType_notNull = (Core.Name "notNull")
 
@@ -5067,7 +5067,7 @@ data LocaldatetimeType =
   LocaldatetimeTypeTimestampWithoutTimeZone TimestampWithoutTimeZoneType
   deriving (Eq, Ord, Read, Show)
 
-_LocaldatetimeType = (Core.Name "hydra/ext/gql/openGql.LocaldatetimeType")
+_LocaldatetimeType = (Core.Name "hydra.ext/gql/openGql.LocaldatetimeType")
 
 _LocaldatetimeType_localDatetime = (Core.Name "localDatetime")
 
@@ -5078,7 +5078,7 @@ data LocalDatetimeType =
     localDatetimeTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_LocalDatetimeType = (Core.Name "hydra/ext/gql/openGql.LocalDatetimeType")
+_LocalDatetimeType = (Core.Name "hydra.ext/gql/openGql.LocalDatetimeType")
 
 _LocalDatetimeType_notNull = (Core.Name "notNull")
 
@@ -5087,7 +5087,7 @@ data TimestampWithoutTimeZoneType =
     timestampWithoutTimeZoneTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_TimestampWithoutTimeZoneType = (Core.Name "hydra/ext/gql/openGql.TimestampWithoutTimeZoneType")
+_TimestampWithoutTimeZoneType = (Core.Name "hydra.ext/gql/openGql.TimestampWithoutTimeZoneType")
 
 _TimestampWithoutTimeZoneType_notNull = (Core.Name "notNull")
 
@@ -5096,7 +5096,7 @@ data DateType =
     dateTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_DateType = (Core.Name "hydra/ext/gql/openGql.DateType")
+_DateType = (Core.Name "hydra.ext/gql/openGql.DateType")
 
 _DateType_notNull = (Core.Name "notNull")
 
@@ -5105,7 +5105,7 @@ data TimeType =
   TimeTypeTimeWithTimeZone TimeWithTimeZoneType
   deriving (Eq, Ord, Read, Show)
 
-_TimeType = (Core.Name "hydra/ext/gql/openGql.TimeType")
+_TimeType = (Core.Name "hydra.ext/gql/openGql.TimeType")
 
 _TimeType_zonedTime = (Core.Name "zonedTime")
 
@@ -5116,7 +5116,7 @@ data ZonedTimeType =
     zonedTimeTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_ZonedTimeType = (Core.Name "hydra/ext/gql/openGql.ZonedTimeType")
+_ZonedTimeType = (Core.Name "hydra.ext/gql/openGql.ZonedTimeType")
 
 _ZonedTimeType_notNull = (Core.Name "notNull")
 
@@ -5125,7 +5125,7 @@ data TimeWithTimeZoneType =
     timeWithTimeZoneTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_TimeWithTimeZoneType = (Core.Name "hydra/ext/gql/openGql.TimeWithTimeZoneType")
+_TimeWithTimeZoneType = (Core.Name "hydra.ext/gql/openGql.TimeWithTimeZoneType")
 
 _TimeWithTimeZoneType_notNull = (Core.Name "notNull")
 
@@ -5134,7 +5134,7 @@ data LocaltimeType =
   LocaltimeTypeTimeWithoutTimeZone TimeWithoutTimeZoneType
   deriving (Eq, Ord, Read, Show)
 
-_LocaltimeType = (Core.Name "hydra/ext/gql/openGql.LocaltimeType")
+_LocaltimeType = (Core.Name "hydra.ext/gql/openGql.LocaltimeType")
 
 _LocaltimeType_localTime = (Core.Name "localTime")
 
@@ -5145,7 +5145,7 @@ data LocalTimeType =
     localTimeTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_LocalTimeType = (Core.Name "hydra/ext/gql/openGql.LocalTimeType")
+_LocalTimeType = (Core.Name "hydra.ext/gql/openGql.LocalTimeType")
 
 _LocalTimeType_notNull = (Core.Name "notNull")
 
@@ -5154,7 +5154,7 @@ data TimeWithoutTimeZoneType =
     timeWithoutTimeZoneTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_TimeWithoutTimeZoneType = (Core.Name "hydra/ext/gql/openGql.TimeWithoutTimeZoneType")
+_TimeWithoutTimeZoneType = (Core.Name "hydra.ext/gql/openGql.TimeWithoutTimeZoneType")
 
 _TimeWithoutTimeZoneType_notNull = (Core.Name "notNull")
 
@@ -5164,7 +5164,7 @@ data TemporalDurationType =
     temporalDurationTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_TemporalDurationType = (Core.Name "hydra/ext/gql/openGql.TemporalDurationType")
+_TemporalDurationType = (Core.Name "hydra.ext/gql/openGql.TemporalDurationType")
 
 _TemporalDurationType_qualifier = (Core.Name "qualifier")
 
@@ -5175,7 +5175,7 @@ data TemporalDurationQualifier =
   TemporalDurationQualifierDayToSecond 
   deriving (Eq, Ord, Read, Show)
 
-_TemporalDurationQualifier = (Core.Name "hydra/ext/gql/openGql.TemporalDurationQualifier")
+_TemporalDurationQualifier = (Core.Name "hydra.ext/gql/openGql.TemporalDurationQualifier")
 
 _TemporalDurationQualifier_yearToMonth = (Core.Name "yearToMonth")
 
@@ -5188,7 +5188,7 @@ data ReferenceValueType =
   ReferenceValueTypeEdge EdgeReferenceValueType
   deriving (Eq, Ord, Read, Show)
 
-_ReferenceValueType = (Core.Name "hydra/ext/gql/openGql.ReferenceValueType")
+_ReferenceValueType = (Core.Name "hydra.ext/gql/openGql.ReferenceValueType")
 
 _ReferenceValueType_graph = (Core.Name "graph")
 
@@ -5203,7 +5203,7 @@ data ImmaterialValueType =
   ImmaterialValueTypeEmptyType EmptyType
   deriving (Eq, Ord, Read, Show)
 
-_ImmaterialValueType = (Core.Name "hydra/ext/gql/openGql.ImmaterialValueType")
+_ImmaterialValueType = (Core.Name "hydra.ext/gql/openGql.ImmaterialValueType")
 
 _ImmaterialValueType_nullType = (Core.Name "nullType")
 
@@ -5213,20 +5213,20 @@ data NullType =
   NullType {}
   deriving (Eq, Ord, Read, Show)
 
-_NullType = (Core.Name "hydra/ext/gql/openGql.NullType")
+_NullType = (Core.Name "hydra.ext/gql/openGql.NullType")
 
 data EmptyType = 
   EmptyType {}
   deriving (Eq, Ord, Read, Show)
 
-_EmptyType = (Core.Name "hydra/ext/gql/openGql.EmptyType")
+_EmptyType = (Core.Name "hydra.ext/gql/openGql.EmptyType")
 
 data GraphReferenceValueType = 
   GraphReferenceValueTypeOpen OpenGraphReferenceValueType |
   GraphReferenceValueTypeClosed ClosedGraphReferenceValueType
   deriving (Eq, Ord, Read, Show)
 
-_GraphReferenceValueType = (Core.Name "hydra/ext/gql/openGql.GraphReferenceValueType")
+_GraphReferenceValueType = (Core.Name "hydra.ext/gql/openGql.GraphReferenceValueType")
 
 _GraphReferenceValueType_open = (Core.Name "open")
 
@@ -5239,7 +5239,7 @@ data ClosedGraphReferenceValueType =
     closedGraphReferenceValueTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_ClosedGraphReferenceValueType = (Core.Name "hydra/ext/gql/openGql.ClosedGraphReferenceValueType")
+_ClosedGraphReferenceValueType = (Core.Name "hydra.ext/gql/openGql.ClosedGraphReferenceValueType")
 
 _ClosedGraphReferenceValueType_property = (Core.Name "property")
 
@@ -5254,7 +5254,7 @@ data OpenGraphReferenceValueType =
     openGraphReferenceValueTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_OpenGraphReferenceValueType = (Core.Name "hydra/ext/gql/openGql.OpenGraphReferenceValueType")
+_OpenGraphReferenceValueType = (Core.Name "hydra.ext/gql/openGql.OpenGraphReferenceValueType")
 
 _OpenGraphReferenceValueType_any = (Core.Name "any")
 
@@ -5268,7 +5268,7 @@ data BindingTableReferenceValueType =
     bindingTableReferenceValueTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_BindingTableReferenceValueType = (Core.Name "hydra/ext/gql/openGql.BindingTableReferenceValueType")
+_BindingTableReferenceValueType = (Core.Name "hydra.ext/gql/openGql.BindingTableReferenceValueType")
 
 _BindingTableReferenceValueType_bindingTableType = (Core.Name "bindingTableType")
 
@@ -5279,7 +5279,7 @@ data NodeReferenceValueType =
   NodeReferenceValueTypeClosed ClosedNodeReferenceValueType
   deriving (Eq, Ord, Read, Show)
 
-_NodeReferenceValueType = (Core.Name "hydra/ext/gql/openGql.NodeReferenceValueType")
+_NodeReferenceValueType = (Core.Name "hydra.ext/gql/openGql.NodeReferenceValueType")
 
 _NodeReferenceValueType_open = (Core.Name "open")
 
@@ -5291,7 +5291,7 @@ data ClosedNodeReferenceValueType =
     closedNodeReferenceValueTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_ClosedNodeReferenceValueType = (Core.Name "hydra/ext/gql/openGql.ClosedNodeReferenceValueType")
+_ClosedNodeReferenceValueType = (Core.Name "hydra.ext/gql/openGql.ClosedNodeReferenceValueType")
 
 _ClosedNodeReferenceValueType_nodeTypeSpec = (Core.Name "nodeTypeSpec")
 
@@ -5304,7 +5304,7 @@ data OpenNodeReferenceValueType =
     openNodeReferenceValueTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_OpenNodeReferenceValueType = (Core.Name "hydra/ext/gql/openGql.OpenNodeReferenceValueType")
+_OpenNodeReferenceValueType = (Core.Name "hydra.ext/gql/openGql.OpenNodeReferenceValueType")
 
 _OpenNodeReferenceValueType_any = (Core.Name "any")
 
@@ -5317,7 +5317,7 @@ data EdgeReferenceValueType =
   EdgeReferenceValueTypeClosed ClosedEdgeReferenceValueType
   deriving (Eq, Ord, Read, Show)
 
-_EdgeReferenceValueType = (Core.Name "hydra/ext/gql/openGql.EdgeReferenceValueType")
+_EdgeReferenceValueType = (Core.Name "hydra.ext/gql/openGql.EdgeReferenceValueType")
 
 _EdgeReferenceValueType_open = (Core.Name "open")
 
@@ -5329,7 +5329,7 @@ data ClosedEdgeReferenceValueType =
     closedEdgeReferenceValueTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_ClosedEdgeReferenceValueType = (Core.Name "hydra/ext/gql/openGql.ClosedEdgeReferenceValueType")
+_ClosedEdgeReferenceValueType = (Core.Name "hydra.ext/gql/openGql.ClosedEdgeReferenceValueType")
 
 _ClosedEdgeReferenceValueType_edgeTypeSpec = (Core.Name "edgeTypeSpec")
 
@@ -5342,7 +5342,7 @@ data OpenEdgeReferenceValueType =
     openEdgeReferenceValueTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_OpenEdgeReferenceValueType = (Core.Name "hydra/ext/gql/openGql.OpenEdgeReferenceValueType")
+_OpenEdgeReferenceValueType = (Core.Name "hydra.ext/gql/openGql.OpenEdgeReferenceValueType")
 
 _OpenEdgeReferenceValueType_any = (Core.Name "any")
 
@@ -5355,7 +5355,7 @@ data PathValueType =
     pathValueTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_PathValueType = (Core.Name "hydra/ext/gql/openGql.PathValueType")
+_PathValueType = (Core.Name "hydra.ext/gql/openGql.PathValueType")
 
 _PathValueType_notNull = (Core.Name "notNull")
 
@@ -5365,7 +5365,7 @@ data ListValueTypeName =
     listValueTypeNameSynonym :: ListValueTypeNameSynonym}
   deriving (Eq, Ord, Read, Show)
 
-_ListValueTypeName = (Core.Name "hydra/ext/gql/openGql.ListValueTypeName")
+_ListValueTypeName = (Core.Name "hydra.ext/gql/openGql.ListValueTypeName")
 
 _ListValueTypeName_group = (Core.Name "group")
 
@@ -5376,7 +5376,7 @@ data ListValueTypeNameSynonym =
   ListValueTypeNameSynonymArray 
   deriving (Eq, Ord, Read, Show)
 
-_ListValueTypeNameSynonym = (Core.Name "hydra/ext/gql/openGql.ListValueTypeNameSynonym")
+_ListValueTypeNameSynonym = (Core.Name "hydra.ext/gql/openGql.ListValueTypeNameSynonym")
 
 _ListValueTypeNameSynonym_list = (Core.Name "list")
 
@@ -5387,7 +5387,7 @@ data RecordType =
   RecordTypeSpecifiedRecord SpecifiedRecordType
   deriving (Eq, Ord, Read, Show)
 
-_RecordType = (Core.Name "hydra/ext/gql/openGql.RecordType")
+_RecordType = (Core.Name "hydra.ext/gql/openGql.RecordType")
 
 _RecordType_anyRecord = (Core.Name "anyRecord")
 
@@ -5399,7 +5399,7 @@ data AnyRecordType =
     anyRecordTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_AnyRecordType = (Core.Name "hydra/ext/gql/openGql.AnyRecordType")
+_AnyRecordType = (Core.Name "hydra.ext/gql/openGql.AnyRecordType")
 
 _AnyRecordType_any = (Core.Name "any")
 
@@ -5412,7 +5412,7 @@ data SpecifiedRecordType =
     specifiedRecordTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_SpecifiedRecordType = (Core.Name "hydra/ext/gql/openGql.SpecifiedRecordType")
+_SpecifiedRecordType = (Core.Name "hydra.ext/gql/openGql.SpecifiedRecordType")
 
 _SpecifiedRecordType_record = (Core.Name "record")
 
@@ -5425,20 +5425,20 @@ newtype FieldTypesSpecification =
     unFieldTypesSpecification :: (Maybe FieldTypeList)}
   deriving (Eq, Ord, Read, Show)
 
-_FieldTypesSpecification = (Core.Name "hydra/ext/gql/openGql.FieldTypesSpecification")
+_FieldTypesSpecification = (Core.Name "hydra.ext/gql/openGql.FieldTypesSpecification")
 
 newtype FieldTypeList = 
   FieldTypeList {
     unFieldTypeList :: [FieldType]}
   deriving (Eq, Ord, Read, Show)
 
-_FieldTypeList = (Core.Name "hydra/ext/gql/openGql.FieldTypeList")
+_FieldTypeList = (Core.Name "hydra.ext/gql/openGql.FieldTypeList")
 
 data NotNull = 
   NotNull {}
   deriving (Eq, Ord, Read, Show)
 
-_NotNull = (Core.Name "hydra/ext/gql/openGql.NotNull")
+_NotNull = (Core.Name "hydra.ext/gql/openGql.NotNull")
 
 data FieldType = 
   FieldType {
@@ -5447,7 +5447,7 @@ data FieldType =
     fieldTypeValueType :: ValueType}
   deriving (Eq, Ord, Read, Show)
 
-_FieldType = (Core.Name "hydra/ext/gql/openGql.FieldType")
+_FieldType = (Core.Name "hydra.ext/gql/openGql.FieldType")
 
 _FieldType_fieldName = (Core.Name "fieldName")
 
@@ -5460,7 +5460,7 @@ newtype SearchCondition =
     unSearchCondition :: BooleanValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_SearchCondition = (Core.Name "hydra/ext/gql/openGql.SearchCondition")
+_SearchCondition = (Core.Name "hydra.ext/gql/openGql.SearchCondition")
 
 data Predicate = 
   PredicateExistsPredicate ExistsPredicate |
@@ -5474,7 +5474,7 @@ data Predicate =
   PredicatePropertyExistsPredicate PropertyExistsPredicate
   deriving (Eq, Ord, Read, Show)
 
-_Predicate = (Core.Name "hydra/ext/gql/openGql.Predicate")
+_Predicate = (Core.Name "hydra.ext/gql/openGql.Predicate")
 
 _Predicate_existsPredicate = (Core.Name "existsPredicate")
 
@@ -5500,7 +5500,7 @@ data ComparisonPredicatePart2 =
     comparisonPredicatePart2ValueExpression :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ComparisonPredicatePart2 = (Core.Name "hydra/ext/gql/openGql.ComparisonPredicatePart2")
+_ComparisonPredicatePart2 = (Core.Name "hydra.ext/gql/openGql.ComparisonPredicatePart2")
 
 _ComparisonPredicatePart2_compOp = (Core.Name "compOp")
 
@@ -5515,7 +5515,7 @@ data CompOp =
   CompOpGreaterThanOrEquals 
   deriving (Eq, Ord, Read, Show)
 
-_CompOp = (Core.Name "hydra/ext/gql/openGql.CompOp")
+_CompOp = (Core.Name "hydra.ext/gql/openGql.CompOp")
 
 _CompOp_equals = (Core.Name "equals")
 
@@ -5537,7 +5537,7 @@ data ExistsPredicate =
   ExistsPredicateNestedQuery NestedQuerySpecification
   deriving (Eq, Ord, Read, Show)
 
-_ExistsPredicate = (Core.Name "hydra/ext/gql/openGql.ExistsPredicate")
+_ExistsPredicate = (Core.Name "hydra.ext/gql/openGql.ExistsPredicate")
 
 _ExistsPredicate_graphPatternBrace = (Core.Name "graphPatternBrace")
 
@@ -5555,7 +5555,7 @@ data NullPredicate =
     nullPredicateNullPart :: NullPredicatePart2}
   deriving (Eq, Ord, Read, Show)
 
-_NullPredicate = (Core.Name "hydra/ext/gql/openGql.NullPredicate")
+_NullPredicate = (Core.Name "hydra.ext/gql/openGql.NullPredicate")
 
 _NullPredicate_valueExpression = (Core.Name "valueExpression")
 
@@ -5566,7 +5566,7 @@ data NullPredicatePart2 =
     nullPredicatePart2Not :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_NullPredicatePart2 = (Core.Name "hydra/ext/gql/openGql.NullPredicatePart2")
+_NullPredicatePart2 = (Core.Name "hydra.ext/gql/openGql.NullPredicatePart2")
 
 _NullPredicatePart2_not = (Core.Name "not")
 
@@ -5576,7 +5576,7 @@ data ValueTypePredicate =
     valueTypePredicateValueTypePart :: ValueTypePredicatePart2}
   deriving (Eq, Ord, Read, Show)
 
-_ValueTypePredicate = (Core.Name "hydra/ext/gql/openGql.ValueTypePredicate")
+_ValueTypePredicate = (Core.Name "hydra.ext/gql/openGql.ValueTypePredicate")
 
 _ValueTypePredicate_valueExpression = (Core.Name "valueExpression")
 
@@ -5589,7 +5589,7 @@ data ValueTypePredicatePart2 =
     valueTypePredicatePart2ValueType :: ValueType}
   deriving (Eq, Ord, Read, Show)
 
-_ValueTypePredicatePart2 = (Core.Name "hydra/ext/gql/openGql.ValueTypePredicatePart2")
+_ValueTypePredicatePart2 = (Core.Name "hydra.ext/gql/openGql.ValueTypePredicatePart2")
 
 _ValueTypePredicatePart2_not = (Core.Name "not")
 
@@ -5603,7 +5603,7 @@ data NormalizedPredicatePart2 =
     normalizedPredicatePart2NormalForm :: (Maybe NormalForm)}
   deriving (Eq, Ord, Read, Show)
 
-_NormalizedPredicatePart2 = (Core.Name "hydra/ext/gql/openGql.NormalizedPredicatePart2")
+_NormalizedPredicatePart2 = (Core.Name "hydra.ext/gql/openGql.NormalizedPredicatePart2")
 
 _NormalizedPredicatePart2_not = (Core.Name "not")
 
@@ -5615,7 +5615,7 @@ data DirectedPredicate =
     directedPredicateDirectedPart :: DirectedPredicatePart2}
   deriving (Eq, Ord, Read, Show)
 
-_DirectedPredicate = (Core.Name "hydra/ext/gql/openGql.DirectedPredicate")
+_DirectedPredicate = (Core.Name "hydra.ext/gql/openGql.DirectedPredicate")
 
 _DirectedPredicate_elementVariableReference = (Core.Name "elementVariableReference")
 
@@ -5626,7 +5626,7 @@ data DirectedPredicatePart2 =
     directedPredicatePart2Not :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_DirectedPredicatePart2 = (Core.Name "hydra/ext/gql/openGql.DirectedPredicatePart2")
+_DirectedPredicatePart2 = (Core.Name "hydra.ext/gql/openGql.DirectedPredicatePart2")
 
 _DirectedPredicatePart2_not = (Core.Name "not")
 
@@ -5636,7 +5636,7 @@ data LabeledPredicate =
     labeledPredicateLabeledPart :: LabeledPredicatePart2}
   deriving (Eq, Ord, Read, Show)
 
-_LabeledPredicate = (Core.Name "hydra/ext/gql/openGql.LabeledPredicate")
+_LabeledPredicate = (Core.Name "hydra.ext/gql/openGql.LabeledPredicate")
 
 _LabeledPredicate_elementVariableReference = (Core.Name "elementVariableReference")
 
@@ -5648,7 +5648,7 @@ data LabeledPredicatePart2 =
     labeledPredicatePart2LabelExpression :: LabelExpression}
   deriving (Eq, Ord, Read, Show)
 
-_LabeledPredicatePart2 = (Core.Name "hydra/ext/gql/openGql.LabeledPredicatePart2")
+_LabeledPredicatePart2 = (Core.Name "hydra.ext/gql/openGql.LabeledPredicatePart2")
 
 _LabeledPredicatePart2_isLabeledOrColon = (Core.Name "isLabeledOrColon")
 
@@ -5659,7 +5659,7 @@ data IsLabeledOrColon =
   IsLabeledOrColonColon 
   deriving (Eq, Ord, Read, Show)
 
-_IsLabeledOrColon = (Core.Name "hydra/ext/gql/openGql.IsLabeledOrColon")
+_IsLabeledOrColon = (Core.Name "hydra.ext/gql/openGql.IsLabeledOrColon")
 
 _IsLabeledOrColon_not = (Core.Name "not")
 
@@ -5670,7 +5670,7 @@ data SourceDestinationPredicate =
   SourceDestinationPredicateDestinationPredicate DestinationPredicate
   deriving (Eq, Ord, Read, Show)
 
-_SourceDestinationPredicate = (Core.Name "hydra/ext/gql/openGql.SourceDestinationPredicate")
+_SourceDestinationPredicate = (Core.Name "hydra.ext/gql/openGql.SourceDestinationPredicate")
 
 _SourceDestinationPredicate_sourcePredicate = (Core.Name "sourcePredicate")
 
@@ -5681,7 +5681,7 @@ newtype NodeReference =
     unNodeReference :: ElementVariableReference}
   deriving (Eq, Ord, Read, Show)
 
-_NodeReference = (Core.Name "hydra/ext/gql/openGql.NodeReference")
+_NodeReference = (Core.Name "hydra.ext/gql/openGql.NodeReference")
 
 data SourcePredicate = 
   SourcePredicate {
@@ -5689,7 +5689,7 @@ data SourcePredicate =
     sourcePredicateSourceOf :: EdgeReference}
   deriving (Eq, Ord, Read, Show)
 
-_SourcePredicate = (Core.Name "hydra/ext/gql/openGql.SourcePredicate")
+_SourcePredicate = (Core.Name "hydra.ext/gql/openGql.SourcePredicate")
 
 _SourcePredicate_not = (Core.Name "not")
 
@@ -5702,7 +5702,7 @@ data DestinationPredicate =
     destinationPredicateDestinationOf :: EdgeReference}
   deriving (Eq, Ord, Read, Show)
 
-_DestinationPredicate = (Core.Name "hydra/ext/gql/openGql.DestinationPredicate")
+_DestinationPredicate = (Core.Name "hydra.ext/gql/openGql.DestinationPredicate")
 
 _DestinationPredicate_nodeReference = (Core.Name "nodeReference")
 
@@ -5715,14 +5715,14 @@ newtype EdgeReference =
     unEdgeReference :: ElementVariableReference}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeReference = (Core.Name "hydra/ext/gql/openGql.EdgeReference")
+_EdgeReference = (Core.Name "hydra.ext/gql/openGql.EdgeReference")
 
 data AllDifferentPredicate = 
   AllDifferentPredicate {
     allDifferentPredicateReferences :: [ElementVariableReference]}
   deriving (Eq, Ord, Read, Show)
 
-_AllDifferentPredicate = (Core.Name "hydra/ext/gql/openGql.AllDifferentPredicate")
+_AllDifferentPredicate = (Core.Name "hydra.ext/gql/openGql.AllDifferentPredicate")
 
 _AllDifferentPredicate_references = (Core.Name "references")
 
@@ -5731,7 +5731,7 @@ data SamePredicate =
     samePredicateReferences :: [ElementVariableReference]}
   deriving (Eq, Ord, Read, Show)
 
-_SamePredicate = (Core.Name "hydra/ext/gql/openGql.SamePredicate")
+_SamePredicate = (Core.Name "hydra.ext/gql/openGql.SamePredicate")
 
 _SamePredicate_references = (Core.Name "references")
 
@@ -5741,7 +5741,7 @@ data PropertyExistsPredicate =
     propertyExistsPredicatePropertyName :: PropertyName}
   deriving (Eq, Ord, Read, Show)
 
-_PropertyExistsPredicate = (Core.Name "hydra/ext/gql/openGql.PropertyExistsPredicate")
+_PropertyExistsPredicate = (Core.Name "hydra.ext/gql/openGql.PropertyExistsPredicate")
 
 _PropertyExistsPredicate_elementVariableReference = (Core.Name "elementVariableReference")
 
@@ -5765,7 +5765,7 @@ data ValueExpression =
   ValueExpressionPrimary_ ValueExpressionPrimary
   deriving (Eq, Ord, Read, Show)
 
-_ValueExpression = (Core.Name "hydra/ext/gql/openGql.ValueExpression")
+_ValueExpression = (Core.Name "hydra.ext/gql/openGql.ValueExpression")
 
 _ValueExpression_signed = (Core.Name "signed")
 
@@ -5803,7 +5803,7 @@ data SignedExpr =
     signedExprValueExpression :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_SignedExpr = (Core.Name "hydra/ext/gql/openGql.SignedExpr")
+_SignedExpr = (Core.Name "hydra.ext/gql/openGql.SignedExpr")
 
 _SignedExpr_sign = (Core.Name "sign")
 
@@ -5816,7 +5816,7 @@ data MultDivExpr =
     multDivExprRight :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_MultDivExpr = (Core.Name "hydra/ext/gql/openGql.MultDivExpr")
+_MultDivExpr = (Core.Name "hydra.ext/gql/openGql.MultDivExpr")
 
 _MultDivExpr_left = (Core.Name "left")
 
@@ -5831,7 +5831,7 @@ data AddSubtractExpr =
     addSubtractExprRight :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_AddSubtractExpr = (Core.Name "hydra/ext/gql/openGql.AddSubtractExpr")
+_AddSubtractExpr = (Core.Name "hydra.ext/gql/openGql.AddSubtractExpr")
 
 _AddSubtractExpr_left = (Core.Name "left")
 
@@ -5845,7 +5845,7 @@ data ConcatenationExpr =
     concatenationExprRight :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ConcatenationExpr = (Core.Name "hydra/ext/gql/openGql.ConcatenationExpr")
+_ConcatenationExpr = (Core.Name "hydra.ext/gql/openGql.ConcatenationExpr")
 
 _ConcatenationExpr_left = (Core.Name "left")
 
@@ -5856,7 +5856,7 @@ newtype NotExpr =
     unNotExpr :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_NotExpr = (Core.Name "hydra/ext/gql/openGql.NotExpr")
+_NotExpr = (Core.Name "hydra.ext/gql/openGql.NotExpr")
 
 data IsNotExpr = 
   IsNotExpr {
@@ -5865,7 +5865,7 @@ data IsNotExpr =
     isNotExprTruthValue :: TruthValue}
   deriving (Eq, Ord, Read, Show)
 
-_IsNotExpr = (Core.Name "hydra/ext/gql/openGql.IsNotExpr")
+_IsNotExpr = (Core.Name "hydra.ext/gql/openGql.IsNotExpr")
 
 _IsNotExpr_valueExpression = (Core.Name "valueExpression")
 
@@ -5879,7 +5879,7 @@ data ConjunctiveExpr =
     conjunctiveExprRight :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ConjunctiveExpr = (Core.Name "hydra/ext/gql/openGql.ConjunctiveExpr")
+_ConjunctiveExpr = (Core.Name "hydra.ext/gql/openGql.ConjunctiveExpr")
 
 _ConjunctiveExpr_left = (Core.Name "left")
 
@@ -5892,7 +5892,7 @@ data DisjunctiveExpr =
     disjunctiveExprRight :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_DisjunctiveExpr = (Core.Name "hydra/ext/gql/openGql.DisjunctiveExpr")
+_DisjunctiveExpr = (Core.Name "hydra.ext/gql/openGql.DisjunctiveExpr")
 
 _DisjunctiveExpr_left = (Core.Name "left")
 
@@ -5906,7 +5906,7 @@ data ComparisonExpr =
     comparisonExprComparison :: ComparisonPredicatePart2}
   deriving (Eq, Ord, Read, Show)
 
-_ComparisonExpr = (Core.Name "hydra/ext/gql/openGql.ComparisonExpr")
+_ComparisonExpr = (Core.Name "hydra.ext/gql/openGql.ComparisonExpr")
 
 _ComparisonExpr_valueExpression = (Core.Name "valueExpression")
 
@@ -5918,7 +5918,7 @@ data NormalizedPredicateExpr =
     normalizedPredicateExprNormalizedPredicate :: NormalizedPredicatePart2}
   deriving (Eq, Ord, Read, Show)
 
-_NormalizedPredicateExpr = (Core.Name "hydra/ext/gql/openGql.NormalizedPredicateExpr")
+_NormalizedPredicateExpr = (Core.Name "hydra.ext/gql/openGql.NormalizedPredicateExpr")
 
 _NormalizedPredicateExpr_valueExpression = (Core.Name "valueExpression")
 
@@ -5929,7 +5929,7 @@ data Sign =
   SignMinus 
   deriving (Eq, Ord, Read, Show)
 
-_Sign = (Core.Name "hydra/ext/gql/openGql.Sign")
+_Sign = (Core.Name "hydra.ext/gql/openGql.Sign")
 
 _Sign_plus = (Core.Name "plus")
 
@@ -5940,7 +5940,7 @@ data MultDivOperator =
   MultDivOperatorDivide 
   deriving (Eq, Ord, Read, Show)
 
-_MultDivOperator = (Core.Name "hydra/ext/gql/openGql.MultDivOperator")
+_MultDivOperator = (Core.Name "hydra.ext/gql/openGql.MultDivOperator")
 
 _MultDivOperator_multiply = (Core.Name "multiply")
 
@@ -5951,7 +5951,7 @@ data AddSubtractOperator =
   AddSubtractOperatorSubtract 
   deriving (Eq, Ord, Read, Show)
 
-_AddSubtractOperator = (Core.Name "hydra/ext/gql/openGql.AddSubtractOperator")
+_AddSubtractOperator = (Core.Name "hydra.ext/gql/openGql.AddSubtractOperator")
 
 _AddSubtractOperator_add = (Core.Name "add")
 
@@ -5962,7 +5962,7 @@ data DisjunctiveOperator =
   DisjunctiveOperatorXor 
   deriving (Eq, Ord, Read, Show)
 
-_DisjunctiveOperator = (Core.Name "hydra/ext/gql/openGql.DisjunctiveOperator")
+_DisjunctiveOperator = (Core.Name "hydra.ext/gql/openGql.DisjunctiveOperator")
 
 _DisjunctiveOperator_or = (Core.Name "or")
 
@@ -5977,7 +5977,7 @@ data ValueFunction =
   ValueFunctionList ListValueFunction
   deriving (Eq, Ord, Read, Show)
 
-_ValueFunction = (Core.Name "hydra/ext/gql/openGql.ValueFunction")
+_ValueFunction = (Core.Name "hydra.ext/gql/openGql.ValueFunction")
 
 _ValueFunction_numeric = (Core.Name "numeric")
 
@@ -5996,7 +5996,7 @@ newtype BooleanValueExpression =
     unBooleanValueExpression :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_BooleanValueExpression = (Core.Name "hydra/ext/gql/openGql.BooleanValueExpression")
+_BooleanValueExpression = (Core.Name "hydra.ext/gql/openGql.BooleanValueExpression")
 
 data CharacterOrByteStringFunction = 
   CharacterOrByteStringFunctionSub SubCharacterOrByteString |
@@ -6006,7 +6006,7 @@ data CharacterOrByteStringFunction =
   CharacterOrByteStringFunctionNormalize NormalizeCharacterString
   deriving (Eq, Ord, Read, Show)
 
-_CharacterOrByteStringFunction = (Core.Name "hydra/ext/gql/openGql.CharacterOrByteStringFunction")
+_CharacterOrByteStringFunction = (Core.Name "hydra.ext/gql/openGql.CharacterOrByteStringFunction")
 
 _CharacterOrByteStringFunction_sub = (Core.Name "sub")
 
@@ -6025,7 +6025,7 @@ data SubCharacterOrByteString =
     subCharacterOrByteStringStringLength :: StringLength}
   deriving (Eq, Ord, Read, Show)
 
-_SubCharacterOrByteString = (Core.Name "hydra/ext/gql/openGql.SubCharacterOrByteString")
+_SubCharacterOrByteString = (Core.Name "hydra.ext/gql/openGql.SubCharacterOrByteString")
 
 _SubCharacterOrByteString_side = (Core.Name "side")
 
@@ -6038,7 +6038,7 @@ data Side =
   SideRight 
   deriving (Eq, Ord, Read, Show)
 
-_Side = (Core.Name "hydra/ext/gql/openGql.Side")
+_Side = (Core.Name "hydra.ext/gql/openGql.Side")
 
 _Side_left = (Core.Name "left")
 
@@ -6049,7 +6049,7 @@ newtype TrimSingleCharacterOrByteString =
     unTrimSingleCharacterOrByteString :: TrimOperands}
   deriving (Eq, Ord, Read, Show)
 
-_TrimSingleCharacterOrByteString = (Core.Name "hydra/ext/gql/openGql.TrimSingleCharacterOrByteString")
+_TrimSingleCharacterOrByteString = (Core.Name "hydra.ext/gql/openGql.TrimSingleCharacterOrByteString")
 
 data FoldCharacterString = 
   FoldCharacterString {
@@ -6057,7 +6057,7 @@ data FoldCharacterString =
     foldCharacterStringValueExpression :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_FoldCharacterString = (Core.Name "hydra/ext/gql/openGql.FoldCharacterString")
+_FoldCharacterString = (Core.Name "hydra.ext/gql/openGql.FoldCharacterString")
 
 _FoldCharacterString_case = (Core.Name "case")
 
@@ -6068,7 +6068,7 @@ data Case =
   CaseLower 
   deriving (Eq, Ord, Read, Show)
 
-_Case = (Core.Name "hydra/ext/gql/openGql.Case")
+_Case = (Core.Name "hydra.ext/gql/openGql.Case")
 
 _Case_upper = (Core.Name "upper")
 
@@ -6081,7 +6081,7 @@ data TrimMultiCharacterCharacterString =
     trimMultiCharacterCharacterStringOptionalValueExpression :: (Maybe ValueExpression)}
   deriving (Eq, Ord, Read, Show)
 
-_TrimMultiCharacterCharacterString = (Core.Name "hydra/ext/gql/openGql.TrimMultiCharacterCharacterString")
+_TrimMultiCharacterCharacterString = (Core.Name "hydra.ext/gql/openGql.TrimMultiCharacterCharacterString")
 
 _TrimMultiCharacterCharacterString_trimType = (Core.Name "trimType")
 
@@ -6095,7 +6095,7 @@ data TrimType =
   TrimTypeRtrim 
   deriving (Eq, Ord, Read, Show)
 
-_TrimType = (Core.Name "hydra/ext/gql/openGql.TrimType")
+_TrimType = (Core.Name "hydra.ext/gql/openGql.TrimType")
 
 _TrimType_btrim = (Core.Name "btrim")
 
@@ -6109,7 +6109,7 @@ data NormalizeCharacterString =
     normalizeCharacterStringNormalForm :: (Maybe NormalForm)}
   deriving (Eq, Ord, Read, Show)
 
-_NormalizeCharacterString = (Core.Name "hydra/ext/gql/openGql.NormalizeCharacterString")
+_NormalizeCharacterString = (Core.Name "hydra.ext/gql/openGql.NormalizeCharacterString")
 
 _NormalizeCharacterString_valueExpression = (Core.Name "valueExpression")
 
@@ -6120,21 +6120,21 @@ newtype NodeReferenceValueExpression =
     unNodeReferenceValueExpression :: ValueExpressionPrimary}
   deriving (Eq, Ord, Read, Show)
 
-_NodeReferenceValueExpression = (Core.Name "hydra/ext/gql/openGql.NodeReferenceValueExpression")
+_NodeReferenceValueExpression = (Core.Name "hydra.ext/gql/openGql.NodeReferenceValueExpression")
 
 newtype EdgeReferenceValueExpression = 
   EdgeReferenceValueExpression {
     unEdgeReferenceValueExpression :: ValueExpressionPrimary}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeReferenceValueExpression = (Core.Name "hydra/ext/gql/openGql.EdgeReferenceValueExpression")
+_EdgeReferenceValueExpression = (Core.Name "hydra.ext/gql/openGql.EdgeReferenceValueExpression")
 
 newtype AggregatingValueExpression = 
   AggregatingValueExpression {
     unAggregatingValueExpression :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_AggregatingValueExpression = (Core.Name "hydra/ext/gql/openGql.AggregatingValueExpression")
+_AggregatingValueExpression = (Core.Name "hydra.ext/gql/openGql.AggregatingValueExpression")
 
 data ValueExpressionPrimary = 
   ValueExpressionPrimaryParenthesized ParenthesizedValueExpression |
@@ -6150,7 +6150,7 @@ data ValueExpressionPrimary =
   ValueExpressionPrimaryBindingVariableReference BindingVariableReference
   deriving (Eq, Ord, Read, Show)
 
-_ValueExpressionPrimary = (Core.Name "hydra/ext/gql/openGql.ValueExpressionPrimary")
+_ValueExpressionPrimary = (Core.Name "hydra.ext/gql/openGql.ValueExpressionPrimary")
 
 _ValueExpressionPrimary_parenthesized = (Core.Name "parenthesized")
 
@@ -6179,14 +6179,14 @@ newtype ParenthesizedValueExpression =
     unParenthesizedValueExpression :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ParenthesizedValueExpression = (Core.Name "hydra/ext/gql/openGql.ParenthesizedValueExpression")
+_ParenthesizedValueExpression = (Core.Name "hydra.ext/gql/openGql.ParenthesizedValueExpression")
 
 data NonParenthesizedValueExpressionPrimary = 
   NonParenthesizedValueExpressionPrimarySpecialCase_ NonParenthesizedValueExpressionPrimarySpecialCase |
   NonParenthesizedValueExpressionPrimaryBindingVariableReference BindingVariableReference
   deriving (Eq, Ord, Read, Show)
 
-_NonParenthesizedValueExpressionPrimary = (Core.Name "hydra/ext/gql/openGql.NonParenthesizedValueExpressionPrimary")
+_NonParenthesizedValueExpressionPrimary = (Core.Name "hydra.ext/gql/openGql.NonParenthesizedValueExpressionPrimary")
 
 _NonParenthesizedValueExpressionPrimary_specialCase = (Core.Name "specialCase")
 
@@ -6204,7 +6204,7 @@ data NonParenthesizedValueExpressionPrimarySpecialCase =
   NonParenthesizedValueExpressionPrimarySpecialCaseLetValueExpression LetValueExpression
   deriving (Eq, Ord, Read, Show)
 
-_NonParenthesizedValueExpressionPrimarySpecialCase = (Core.Name "hydra/ext/gql/openGql.NonParenthesizedValueExpressionPrimarySpecialCase")
+_NonParenthesizedValueExpressionPrimarySpecialCase = (Core.Name "hydra.ext/gql/openGql.NonParenthesizedValueExpressionPrimarySpecialCase")
 
 _NonParenthesizedValueExpressionPrimarySpecialCase_aggregateFunction = (Core.Name "aggregateFunction")
 
@@ -6229,7 +6229,7 @@ data UnsignedValueSpecification =
   UnsignedValueSpecificationGeneralValueSpecification GeneralValueSpecification
   deriving (Eq, Ord, Read, Show)
 
-_UnsignedValueSpecification = (Core.Name "hydra/ext/gql/openGql.UnsignedValueSpecification")
+_UnsignedValueSpecification = (Core.Name "hydra.ext/gql/openGql.UnsignedValueSpecification")
 
 _UnsignedValueSpecification_unsignedLiteral = (Core.Name "unsignedLiteral")
 
@@ -6240,7 +6240,7 @@ data NonNegativeIntegerSpecification =
   NonNegativeIntegerSpecificationDynamicParameterSpecification DynamicParameterSpecification
   deriving (Eq, Ord, Read, Show)
 
-_NonNegativeIntegerSpecification = (Core.Name "hydra/ext/gql/openGql.NonNegativeIntegerSpecification")
+_NonNegativeIntegerSpecification = (Core.Name "hydra.ext/gql/openGql.NonNegativeIntegerSpecification")
 
 _NonNegativeIntegerSpecification_unsignedInteger = (Core.Name "unsignedInteger")
 
@@ -6251,7 +6251,7 @@ data GeneralValueSpecification =
   GeneralValueSpecificationSessionUser 
   deriving (Eq, Ord, Read, Show)
 
-_GeneralValueSpecification = (Core.Name "hydra/ext/gql/openGql.GeneralValueSpecification")
+_GeneralValueSpecification = (Core.Name "hydra.ext/gql/openGql.GeneralValueSpecification")
 
 _GeneralValueSpecification_dynamicParameterSpecification = (Core.Name "dynamicParameterSpecification")
 
@@ -6262,7 +6262,7 @@ newtype DynamicParameterSpecification =
     unDynamicParameterSpecification :: ParameterName}
   deriving (Eq, Ord, Read, Show)
 
-_DynamicParameterSpecification = (Core.Name "hydra/ext/gql/openGql.DynamicParameterSpecification")
+_DynamicParameterSpecification = (Core.Name "hydra.ext/gql/openGql.DynamicParameterSpecification")
 
 data LetValueExpression = 
   LetValueExpression {
@@ -6270,7 +6270,7 @@ data LetValueExpression =
     letValueExpressionValueExpression :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_LetValueExpression = (Core.Name "hydra/ext/gql/openGql.LetValueExpression")
+_LetValueExpression = (Core.Name "hydra.ext/gql/openGql.LetValueExpression")
 
 _LetValueExpression_letVariables = (Core.Name "letVariables")
 
@@ -6281,14 +6281,14 @@ newtype ValueQueryExpression =
     unValueQueryExpression :: NestedQuerySpecification}
   deriving (Eq, Ord, Read, Show)
 
-_ValueQueryExpression = (Core.Name "hydra/ext/gql/openGql.ValueQueryExpression")
+_ValueQueryExpression = (Core.Name "hydra.ext/gql/openGql.ValueQueryExpression")
 
 data CaseExpression = 
   CaseExpressionAbbreviation CaseAbbreviation |
   CaseExpressionSpecification CaseSpecification
   deriving (Eq, Ord, Read, Show)
 
-_CaseExpression = (Core.Name "hydra/ext/gql/openGql.CaseExpression")
+_CaseExpression = (Core.Name "hydra.ext/gql/openGql.CaseExpression")
 
 _CaseExpression_abbreviation = (Core.Name "abbreviation")
 
@@ -6299,7 +6299,7 @@ data CaseAbbreviation =
   CaseAbbreviationCoalesce [ValueExpression]
   deriving (Eq, Ord, Read, Show)
 
-_CaseAbbreviation = (Core.Name "hydra/ext/gql/openGql.CaseAbbreviation")
+_CaseAbbreviation = (Core.Name "hydra.ext/gql/openGql.CaseAbbreviation")
 
 _CaseAbbreviation_nullIf = (Core.Name "nullIf")
 
@@ -6311,7 +6311,7 @@ data NullIfAbbreviation =
     nullIfAbbreviationSecond :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_NullIfAbbreviation = (Core.Name "hydra/ext/gql/openGql.NullIfAbbreviation")
+_NullIfAbbreviation = (Core.Name "hydra.ext/gql/openGql.NullIfAbbreviation")
 
 _NullIfAbbreviation_first = (Core.Name "first")
 
@@ -6322,7 +6322,7 @@ data CaseSpecification =
   CaseSpecificationSearched SearchedCase
   deriving (Eq, Ord, Read, Show)
 
-_CaseSpecification = (Core.Name "hydra/ext/gql/openGql.CaseSpecification")
+_CaseSpecification = (Core.Name "hydra.ext/gql/openGql.CaseSpecification")
 
 _CaseSpecification_simple = (Core.Name "simple")
 
@@ -6335,7 +6335,7 @@ data SimpleCase =
     simpleCaseElseClause :: (Maybe ElseClause)}
   deriving (Eq, Ord, Read, Show)
 
-_SimpleCase = (Core.Name "hydra/ext/gql/openGql.SimpleCase")
+_SimpleCase = (Core.Name "hydra.ext/gql/openGql.SimpleCase")
 
 _SimpleCase_caseOperand = (Core.Name "caseOperand")
 
@@ -6349,7 +6349,7 @@ data SearchedCase =
     searchedCaseElseClause :: (Maybe ElseClause)}
   deriving (Eq, Ord, Read, Show)
 
-_SearchedCase = (Core.Name "hydra/ext/gql/openGql.SearchedCase")
+_SearchedCase = (Core.Name "hydra.ext/gql/openGql.SearchedCase")
 
 _SearchedCase_whenClauses = (Core.Name "whenClauses")
 
@@ -6361,7 +6361,7 @@ data SimpleWhenClause =
     simpleWhenClauseResult :: Result}
   deriving (Eq, Ord, Read, Show)
 
-_SimpleWhenClause = (Core.Name "hydra/ext/gql/openGql.SimpleWhenClause")
+_SimpleWhenClause = (Core.Name "hydra.ext/gql/openGql.SimpleWhenClause")
 
 _SimpleWhenClause_whenOperands = (Core.Name "whenOperands")
 
@@ -6373,7 +6373,7 @@ data SearchedWhenClause =
     searchedWhenClauseResult :: Result}
   deriving (Eq, Ord, Read, Show)
 
-_SearchedWhenClause = (Core.Name "hydra/ext/gql/openGql.SearchedWhenClause")
+_SearchedWhenClause = (Core.Name "hydra.ext/gql/openGql.SearchedWhenClause")
 
 _SearchedWhenClause_searchCondition = (Core.Name "searchCondition")
 
@@ -6384,14 +6384,14 @@ newtype ElseClause =
     unElseClause :: Result}
   deriving (Eq, Ord, Read, Show)
 
-_ElseClause = (Core.Name "hydra/ext/gql/openGql.ElseClause")
+_ElseClause = (Core.Name "hydra.ext/gql/openGql.ElseClause")
 
 data CaseOperand = 
   CaseOperandValueExpression NonParenthesizedValueExpressionPrimary |
   CaseOperandElementReference ElementVariableReference
   deriving (Eq, Ord, Read, Show)
 
-_CaseOperand = (Core.Name "hydra/ext/gql/openGql.CaseOperand")
+_CaseOperand = (Core.Name "hydra.ext/gql/openGql.CaseOperand")
 
 _CaseOperand_valueExpression = (Core.Name "valueExpression")
 
@@ -6402,7 +6402,7 @@ newtype WhenOperandList =
     unWhenOperandList :: [WhenOperand]}
   deriving (Eq, Ord, Read, Show)
 
-_WhenOperandList = (Core.Name "hydra/ext/gql/openGql.WhenOperandList")
+_WhenOperandList = (Core.Name "hydra.ext/gql/openGql.WhenOperandList")
 
 data WhenOperand = 
   WhenOperandValueExpression NonParenthesizedValueExpressionPrimary |
@@ -6416,7 +6416,7 @@ data WhenOperand =
   WhenOperandDestinationPredicate DestinationPredicate
   deriving (Eq, Ord, Read, Show)
 
-_WhenOperand = (Core.Name "hydra/ext/gql/openGql.WhenOperand")
+_WhenOperand = (Core.Name "hydra.ext/gql/openGql.WhenOperand")
 
 _WhenOperand_valueExpression = (Core.Name "valueExpression")
 
@@ -6441,7 +6441,7 @@ data Result =
   ResultNullLiteral 
   deriving (Eq, Ord, Read, Show)
 
-_Result = (Core.Name "hydra/ext/gql/openGql.Result")
+_Result = (Core.Name "hydra.ext/gql/openGql.Result")
 
 _Result_expression = (Core.Name "expression")
 
@@ -6452,7 +6452,7 @@ newtype ResultExpression =
     unResultExpression :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ResultExpression = (Core.Name "hydra/ext/gql/openGql.ResultExpression")
+_ResultExpression = (Core.Name "hydra.ext/gql/openGql.ResultExpression")
 
 data CastSpecification = 
   CastSpecification {
@@ -6460,7 +6460,7 @@ data CastSpecification =
     castSpecificationTarget :: CastTarget}
   deriving (Eq, Ord, Read, Show)
 
-_CastSpecification = (Core.Name "hydra/ext/gql/openGql.CastSpecification")
+_CastSpecification = (Core.Name "hydra.ext/gql/openGql.CastSpecification")
 
 _CastSpecification_operand = (Core.Name "operand")
 
@@ -6471,7 +6471,7 @@ data CastOperand =
   CastOperandNullLiteral 
   deriving (Eq, Ord, Read, Show)
 
-_CastOperand = (Core.Name "hydra/ext/gql/openGql.CastOperand")
+_CastOperand = (Core.Name "hydra.ext/gql/openGql.CastOperand")
 
 _CastOperand_valueExpression = (Core.Name "valueExpression")
 
@@ -6482,7 +6482,7 @@ newtype CastTarget =
     unCastTarget :: ValueType}
   deriving (Eq, Ord, Read, Show)
 
-_CastTarget = (Core.Name "hydra/ext/gql/openGql.CastTarget")
+_CastTarget = (Core.Name "hydra.ext/gql/openGql.CastTarget")
 
 data AggregateFunction = 
   AggregateFunctionCountAll  |
@@ -6490,7 +6490,7 @@ data AggregateFunction =
   AggregateFunctionBinarySetFunction BinarySetFunction
   deriving (Eq, Ord, Read, Show)
 
-_AggregateFunction = (Core.Name "hydra/ext/gql/openGql.AggregateFunction")
+_AggregateFunction = (Core.Name "hydra.ext/gql/openGql.AggregateFunction")
 
 _AggregateFunction_countAll = (Core.Name "countAll")
 
@@ -6505,7 +6505,7 @@ data GeneralSetFunction =
     generalSetFunctionValueExpression :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_GeneralSetFunction = (Core.Name "hydra/ext/gql/openGql.GeneralSetFunction")
+_GeneralSetFunction = (Core.Name "hydra.ext/gql/openGql.GeneralSetFunction")
 
 _GeneralSetFunction_functionType = (Core.Name "functionType")
 
@@ -6520,7 +6520,7 @@ data BinarySetFunction =
     binarySetFunctionIndependentValue :: IndependentValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_BinarySetFunction = (Core.Name "hydra/ext/gql/openGql.BinarySetFunction")
+_BinarySetFunction = (Core.Name "hydra.ext/gql/openGql.BinarySetFunction")
 
 _BinarySetFunction_functionType = (Core.Name "functionType")
 
@@ -6539,7 +6539,7 @@ data GeneralSetFunctionType =
   GeneralSetFunctionTypeStddevPop 
   deriving (Eq, Ord, Read, Show)
 
-_GeneralSetFunctionType = (Core.Name "hydra/ext/gql/openGql.GeneralSetFunctionType")
+_GeneralSetFunctionType = (Core.Name "hydra.ext/gql/openGql.GeneralSetFunctionType")
 
 _GeneralSetFunctionType_avg = (Core.Name "avg")
 
@@ -6562,7 +6562,7 @@ data SetQuantifier =
   SetQuantifierAll 
   deriving (Eq, Ord, Read, Show)
 
-_SetQuantifier = (Core.Name "hydra/ext/gql/openGql.SetQuantifier")
+_SetQuantifier = (Core.Name "hydra.ext/gql/openGql.SetQuantifier")
 
 _SetQuantifier_distinct = (Core.Name "distinct")
 
@@ -6573,7 +6573,7 @@ data BinarySetFunctionType =
   BinarySetFunctionTypePercentileDisc 
   deriving (Eq, Ord, Read, Show)
 
-_BinarySetFunctionType = (Core.Name "hydra/ext/gql/openGql.BinarySetFunctionType")
+_BinarySetFunctionType = (Core.Name "hydra.ext/gql/openGql.BinarySetFunctionType")
 
 _BinarySetFunctionType_percentileCont = (Core.Name "percentileCont")
 
@@ -6585,7 +6585,7 @@ data DependentValueExpression =
     dependentValueExpressionNumericValue :: NumericValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_DependentValueExpression = (Core.Name "hydra/ext/gql/openGql.DependentValueExpression")
+_DependentValueExpression = (Core.Name "hydra.ext/gql/openGql.DependentValueExpression")
 
 _DependentValueExpression_setQuantifier = (Core.Name "setQuantifier")
 
@@ -6596,14 +6596,14 @@ newtype IndependentValueExpression =
     unIndependentValueExpression :: NumericValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_IndependentValueExpression = (Core.Name "hydra/ext/gql/openGql.IndependentValueExpression")
+_IndependentValueExpression = (Core.Name "hydra.ext/gql/openGql.IndependentValueExpression")
 
 newtype ElementIdFunction = 
   ElementIdFunction {
     unElementIdFunction :: ElementVariableReference}
   deriving (Eq, Ord, Read, Show)
 
-_ElementIdFunction = (Core.Name "hydra/ext/gql/openGql.ElementIdFunction")
+_ElementIdFunction = (Core.Name "hydra.ext/gql/openGql.ElementIdFunction")
 
 data PropertyReference = 
   PropertyReference {
@@ -6611,7 +6611,7 @@ data PropertyReference =
     propertyReferencePropertyName :: PropertyName}
   deriving (Eq, Ord, Read, Show)
 
-_PropertyReference = (Core.Name "hydra/ext/gql/openGql.PropertyReference")
+_PropertyReference = (Core.Name "hydra.ext/gql/openGql.PropertyReference")
 
 _PropertyReference_valueExpression = (Core.Name "valueExpression")
 
@@ -6622,28 +6622,28 @@ newtype BindingVariableReference =
     unBindingVariableReference :: BindingVariable}
   deriving (Eq, Ord, Read, Show)
 
-_BindingVariableReference = (Core.Name "hydra/ext/gql/openGql.BindingVariableReference")
+_BindingVariableReference = (Core.Name "hydra.ext/gql/openGql.BindingVariableReference")
 
 newtype PathValueExpression = 
   PathValueExpression {
     unPathValueExpression :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_PathValueExpression = (Core.Name "hydra/ext/gql/openGql.PathValueExpression")
+_PathValueExpression = (Core.Name "hydra.ext/gql/openGql.PathValueExpression")
 
 newtype PathValueConstructor = 
   PathValueConstructor {
     unPathValueConstructor :: PathValueConstructorByEnumeration}
   deriving (Eq, Ord, Read, Show)
 
-_PathValueConstructor = (Core.Name "hydra/ext/gql/openGql.PathValueConstructor")
+_PathValueConstructor = (Core.Name "hydra.ext/gql/openGql.PathValueConstructor")
 
 newtype PathValueConstructorByEnumeration = 
   PathValueConstructorByEnumeration {
     unPathValueConstructorByEnumeration :: PathElementList}
   deriving (Eq, Ord, Read, Show)
 
-_PathValueConstructorByEnumeration = (Core.Name "hydra/ext/gql/openGql.PathValueConstructorByEnumeration")
+_PathValueConstructorByEnumeration = (Core.Name "hydra.ext/gql/openGql.PathValueConstructorByEnumeration")
 
 data PathElementList = 
   PathElementList {
@@ -6651,7 +6651,7 @@ data PathElementList =
     pathElementListSteps :: [PathElementListStep]}
   deriving (Eq, Ord, Read, Show)
 
-_PathElementList = (Core.Name "hydra/ext/gql/openGql.PathElementList")
+_PathElementList = (Core.Name "hydra.ext/gql/openGql.PathElementList")
 
 _PathElementList_start = (Core.Name "start")
 
@@ -6662,7 +6662,7 @@ newtype PathElementListStart =
     unPathElementListStart :: NodeReferenceValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_PathElementListStart = (Core.Name "hydra/ext/gql/openGql.PathElementListStart")
+_PathElementListStart = (Core.Name "hydra.ext/gql/openGql.PathElementListStart")
 
 data PathElementListStep = 
   PathElementListStep {
@@ -6670,7 +6670,7 @@ data PathElementListStep =
     pathElementListStepNodeReference :: NodeReferenceValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_PathElementListStep = (Core.Name "hydra/ext/gql/openGql.PathElementListStep")
+_PathElementListStep = (Core.Name "hydra.ext/gql/openGql.PathElementListStep")
 
 _PathElementListStep_edgeReference = (Core.Name "edgeReference")
 
@@ -6681,14 +6681,14 @@ newtype ListValueExpression =
     unListValueExpression :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ListValueExpression = (Core.Name "hydra/ext/gql/openGql.ListValueExpression")
+_ListValueExpression = (Core.Name "hydra.ext/gql/openGql.ListValueExpression")
 
 data ListValueFunction = 
   ListValueFunctionTrim TrimListFunction |
   ListValueFunctionElements ElementsFunction
   deriving (Eq, Ord, Read, Show)
 
-_ListValueFunction = (Core.Name "hydra/ext/gql/openGql.ListValueFunction")
+_ListValueFunction = (Core.Name "hydra.ext/gql/openGql.ListValueFunction")
 
 _ListValueFunction_trim = (Core.Name "trim")
 
@@ -6700,7 +6700,7 @@ data TrimListFunction =
     trimListFunctionNumericValue :: NumericValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_TrimListFunction = (Core.Name "hydra/ext/gql/openGql.TrimListFunction")
+_TrimListFunction = (Core.Name "hydra.ext/gql/openGql.TrimListFunction")
 
 _TrimListFunction_listValue = (Core.Name "listValue")
 
@@ -6711,14 +6711,14 @@ newtype ElementsFunction =
     unElementsFunction :: PathValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ElementsFunction = (Core.Name "hydra/ext/gql/openGql.ElementsFunction")
+_ElementsFunction = (Core.Name "hydra.ext/gql/openGql.ElementsFunction")
 
 newtype ListValueConstructor = 
   ListValueConstructor {
     unListValueConstructor :: ListValueConstructorByEnumeration}
   deriving (Eq, Ord, Read, Show)
 
-_ListValueConstructor = (Core.Name "hydra/ext/gql/openGql.ListValueConstructor")
+_ListValueConstructor = (Core.Name "hydra.ext/gql/openGql.ListValueConstructor")
 
 data ListValueConstructorByEnumeration = 
   ListValueConstructorByEnumeration {
@@ -6726,7 +6726,7 @@ data ListValueConstructorByEnumeration =
     listValueConstructorByEnumerationElements :: (Maybe ListElementList)}
   deriving (Eq, Ord, Read, Show)
 
-_ListValueConstructorByEnumeration = (Core.Name "hydra/ext/gql/openGql.ListValueConstructorByEnumeration")
+_ListValueConstructorByEnumeration = (Core.Name "hydra.ext/gql/openGql.ListValueConstructorByEnumeration")
 
 _ListValueConstructorByEnumeration_listValueTypeName = (Core.Name "listValueTypeName")
 
@@ -6737,35 +6737,35 @@ newtype ListElementList =
     unListElementList :: [ListElement]}
   deriving (Eq, Ord, Read, Show)
 
-_ListElementList = (Core.Name "hydra/ext/gql/openGql.ListElementList")
+_ListElementList = (Core.Name "hydra.ext/gql/openGql.ListElementList")
 
 newtype ListElement = 
   ListElement {
     unListElement :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ListElement = (Core.Name "hydra/ext/gql/openGql.ListElement")
+_ListElement = (Core.Name "hydra.ext/gql/openGql.ListElement")
 
 newtype RecordConstructor = 
   RecordConstructor {
     unRecordConstructor :: FieldsSpecification}
   deriving (Eq, Ord, Read, Show)
 
-_RecordConstructor = (Core.Name "hydra/ext/gql/openGql.RecordConstructor")
+_RecordConstructor = (Core.Name "hydra.ext/gql/openGql.RecordConstructor")
 
 newtype FieldsSpecification = 
   FieldsSpecification {
     unFieldsSpecification :: (Maybe FieldList)}
   deriving (Eq, Ord, Read, Show)
 
-_FieldsSpecification = (Core.Name "hydra/ext/gql/openGql.FieldsSpecification")
+_FieldsSpecification = (Core.Name "hydra.ext/gql/openGql.FieldsSpecification")
 
 newtype FieldList = 
   FieldList {
     unFieldList :: [Field]}
   deriving (Eq, Ord, Read, Show)
 
-_FieldList = (Core.Name "hydra/ext/gql/openGql.FieldList")
+_FieldList = (Core.Name "hydra.ext/gql/openGql.FieldList")
 
 data Field = 
   Field {
@@ -6773,7 +6773,7 @@ data Field =
     fieldValue :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_Field = (Core.Name "hydra/ext/gql/openGql.Field")
+_Field = (Core.Name "hydra.ext/gql/openGql.Field")
 
 _Field_name = (Core.Name "name")
 
@@ -6784,7 +6784,7 @@ newtype TruthValue =
     unTruthValue :: BooleanLiteral}
   deriving (Eq, Ord, Read, Show)
 
-_TruthValue = (Core.Name "hydra/ext/gql/openGql.TruthValue")
+_TruthValue = (Core.Name "hydra.ext/gql/openGql.TruthValue")
 
 data NumericValueExpression = 
   NumericValueExpressionSigned SignedNumericValueExpression |
@@ -6794,7 +6794,7 @@ data NumericValueExpression =
   NumericValueExpressionFunction NumericValueFunction
   deriving (Eq, Ord, Read, Show)
 
-_NumericValueExpression = (Core.Name "hydra/ext/gql/openGql.NumericValueExpression")
+_NumericValueExpression = (Core.Name "hydra.ext/gql/openGql.NumericValueExpression")
 
 _NumericValueExpression_signed = (Core.Name "signed")
 
@@ -6812,7 +6812,7 @@ data SignedNumericValueExpression =
     signedNumericValueExpressionExpression :: NumericValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_SignedNumericValueExpression = (Core.Name "hydra/ext/gql/openGql.SignedNumericValueExpression")
+_SignedNumericValueExpression = (Core.Name "hydra.ext/gql/openGql.SignedNumericValueExpression")
 
 _SignedNumericValueExpression_sign = (Core.Name "sign")
 
@@ -6825,7 +6825,7 @@ data MulDivNumericValueExpression =
     mulDivNumericValueExpressionRight :: NumericValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_MulDivNumericValueExpression = (Core.Name "hydra/ext/gql/openGql.MulDivNumericValueExpression")
+_MulDivNumericValueExpression = (Core.Name "hydra.ext/gql/openGql.MulDivNumericValueExpression")
 
 _MulDivNumericValueExpression_left = (Core.Name "left")
 
@@ -6840,7 +6840,7 @@ data AddSubNumericValueExpression =
     addSubNumericValueExpressionRight :: NumericValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_AddSubNumericValueExpression = (Core.Name "hydra/ext/gql/openGql.AddSubNumericValueExpression")
+_AddSubNumericValueExpression = (Core.Name "hydra.ext/gql/openGql.AddSubNumericValueExpression")
 
 _AddSubNumericValueExpression_left = (Core.Name "left")
 
@@ -6864,7 +6864,7 @@ data NumericValueFunction =
   NumericValueFunctionCeiling CeilingFunction
   deriving (Eq, Ord, Read, Show)
 
-_NumericValueFunction = (Core.Name "hydra/ext/gql/openGql.NumericValueFunction")
+_NumericValueFunction = (Core.Name "hydra.ext/gql/openGql.NumericValueFunction")
 
 _NumericValueFunction_length = (Core.Name "length")
 
@@ -6898,7 +6898,7 @@ data LengthExpression =
   LengthExpressionPath PathLengthExpression
   deriving (Eq, Ord, Read, Show)
 
-_LengthExpression = (Core.Name "hydra/ext/gql/openGql.LengthExpression")
+_LengthExpression = (Core.Name "hydra.ext/gql/openGql.LengthExpression")
 
 _LengthExpression_char = (Core.Name "char")
 
@@ -6911,7 +6911,7 @@ data CardinalityExpression =
   CardinalityExpressionSize ListValueExpression
   deriving (Eq, Ord, Read, Show)
 
-_CardinalityExpression = (Core.Name "hydra/ext/gql/openGql.CardinalityExpression")
+_CardinalityExpression = (Core.Name "hydra.ext/gql/openGql.CardinalityExpression")
 
 _CardinalityExpression_cardinality = (Core.Name "cardinality")
 
@@ -6922,35 +6922,35 @@ newtype CardinalityArgumentExpression =
     unCardinalityArgumentExpression :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_CardinalityArgumentExpression = (Core.Name "hydra/ext/gql/openGql.CardinalityArgumentExpression")
+_CardinalityArgumentExpression = (Core.Name "hydra.ext/gql/openGql.CardinalityArgumentExpression")
 
 newtype CharLengthExpression = 
   CharLengthExpression {
     unCharLengthExpression :: CharacterStringValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_CharLengthExpression = (Core.Name "hydra/ext/gql/openGql.CharLengthExpression")
+_CharLengthExpression = (Core.Name "hydra.ext/gql/openGql.CharLengthExpression")
 
 newtype ByteLengthExpression = 
   ByteLengthExpression {
     unByteLengthExpression :: ByteStringValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ByteLengthExpression = (Core.Name "hydra/ext/gql/openGql.ByteLengthExpression")
+_ByteLengthExpression = (Core.Name "hydra.ext/gql/openGql.ByteLengthExpression")
 
 newtype PathLengthExpression = 
   PathLengthExpression {
     unPathLengthExpression :: PathValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_PathLengthExpression = (Core.Name "hydra/ext/gql/openGql.PathLengthExpression")
+_PathLengthExpression = (Core.Name "hydra.ext/gql/openGql.PathLengthExpression")
 
 newtype AbsoluteValueExpression = 
   AbsoluteValueExpression {
     unAbsoluteValueExpression :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_AbsoluteValueExpression = (Core.Name "hydra/ext/gql/openGql.AbsoluteValueExpression")
+_AbsoluteValueExpression = (Core.Name "hydra.ext/gql/openGql.AbsoluteValueExpression")
 
 data ModulusExpression = 
   ModulusExpression {
@@ -6958,7 +6958,7 @@ data ModulusExpression =
     modulusExpressionDivisor :: NumericValueExpressionDivisor}
   deriving (Eq, Ord, Read, Show)
 
-_ModulusExpression = (Core.Name "hydra/ext/gql/openGql.ModulusExpression")
+_ModulusExpression = (Core.Name "hydra.ext/gql/openGql.ModulusExpression")
 
 _ModulusExpression_dividend = (Core.Name "dividend")
 
@@ -6969,14 +6969,14 @@ newtype NumericValueExpressionDividend =
     unNumericValueExpressionDividend :: NumericValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_NumericValueExpressionDividend = (Core.Name "hydra/ext/gql/openGql.NumericValueExpressionDividend")
+_NumericValueExpressionDividend = (Core.Name "hydra.ext/gql/openGql.NumericValueExpressionDividend")
 
 newtype NumericValueExpressionDivisor = 
   NumericValueExpressionDivisor {
     unNumericValueExpressionDivisor :: NumericValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_NumericValueExpressionDivisor = (Core.Name "hydra/ext/gql/openGql.NumericValueExpressionDivisor")
+_NumericValueExpressionDivisor = (Core.Name "hydra.ext/gql/openGql.NumericValueExpressionDivisor")
 
 data TrigonometricFunction = 
   TrigonometricFunction {
@@ -6984,7 +6984,7 @@ data TrigonometricFunction =
     trigonometricFunctionValue :: NumericValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_TrigonometricFunction = (Core.Name "hydra/ext/gql/openGql.TrigonometricFunction")
+_TrigonometricFunction = (Core.Name "hydra.ext/gql/openGql.TrigonometricFunction")
 
 _TrigonometricFunction_name = (Core.Name "name")
 
@@ -7005,7 +7005,7 @@ data TrigonometricFunctionName =
   TrigonometricFunctionNameRadians 
   deriving (Eq, Ord, Read, Show)
 
-_TrigonometricFunctionName = (Core.Name "hydra/ext/gql/openGql.TrigonometricFunctionName")
+_TrigonometricFunctionName = (Core.Name "hydra.ext/gql/openGql.TrigonometricFunctionName")
 
 _TrigonometricFunctionName_sin = (Core.Name "sin")
 
@@ -7037,7 +7037,7 @@ data GeneralLogarithmFunction =
     generalLogarithmFunctionArgument :: GeneralLogarithmArgument}
   deriving (Eq, Ord, Read, Show)
 
-_GeneralLogarithmFunction = (Core.Name "hydra/ext/gql/openGql.GeneralLogarithmFunction")
+_GeneralLogarithmFunction = (Core.Name "hydra.ext/gql/openGql.GeneralLogarithmFunction")
 
 _GeneralLogarithmFunction_base = (Core.Name "base")
 
@@ -7048,35 +7048,35 @@ newtype GeneralLogarithmBase =
     unGeneralLogarithmBase :: NumericValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_GeneralLogarithmBase = (Core.Name "hydra/ext/gql/openGql.GeneralLogarithmBase")
+_GeneralLogarithmBase = (Core.Name "hydra.ext/gql/openGql.GeneralLogarithmBase")
 
 newtype GeneralLogarithmArgument = 
   GeneralLogarithmArgument {
     unGeneralLogarithmArgument :: NumericValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_GeneralLogarithmArgument = (Core.Name "hydra/ext/gql/openGql.GeneralLogarithmArgument")
+_GeneralLogarithmArgument = (Core.Name "hydra.ext/gql/openGql.GeneralLogarithmArgument")
 
 newtype CommonLogarithm = 
   CommonLogarithm {
     unCommonLogarithm :: NumericValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_CommonLogarithm = (Core.Name "hydra/ext/gql/openGql.CommonLogarithm")
+_CommonLogarithm = (Core.Name "hydra.ext/gql/openGql.CommonLogarithm")
 
 newtype NaturalLogarithm = 
   NaturalLogarithm {
     unNaturalLogarithm :: NumericValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_NaturalLogarithm = (Core.Name "hydra/ext/gql/openGql.NaturalLogarithm")
+_NaturalLogarithm = (Core.Name "hydra.ext/gql/openGql.NaturalLogarithm")
 
 newtype ExponentialFunction = 
   ExponentialFunction {
     unExponentialFunction :: NumericValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ExponentialFunction = (Core.Name "hydra/ext/gql/openGql.ExponentialFunction")
+_ExponentialFunction = (Core.Name "hydra.ext/gql/openGql.ExponentialFunction")
 
 data PowerFunction = 
   PowerFunction {
@@ -7084,7 +7084,7 @@ data PowerFunction =
     powerFunctionExponent :: NumericValueExpressionExponent}
   deriving (Eq, Ord, Read, Show)
 
-_PowerFunction = (Core.Name "hydra/ext/gql/openGql.PowerFunction")
+_PowerFunction = (Core.Name "hydra.ext/gql/openGql.PowerFunction")
 
 _PowerFunction_base = (Core.Name "base")
 
@@ -7095,49 +7095,49 @@ newtype NumericValueExpressionBase =
     unNumericValueExpressionBase :: NumericValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_NumericValueExpressionBase = (Core.Name "hydra/ext/gql/openGql.NumericValueExpressionBase")
+_NumericValueExpressionBase = (Core.Name "hydra.ext/gql/openGql.NumericValueExpressionBase")
 
 newtype NumericValueExpressionExponent = 
   NumericValueExpressionExponent {
     unNumericValueExpressionExponent :: NumericValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_NumericValueExpressionExponent = (Core.Name "hydra/ext/gql/openGql.NumericValueExpressionExponent")
+_NumericValueExpressionExponent = (Core.Name "hydra.ext/gql/openGql.NumericValueExpressionExponent")
 
 newtype SquareRoot = 
   SquareRoot {
     unSquareRoot :: NumericValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_SquareRoot = (Core.Name "hydra/ext/gql/openGql.SquareRoot")
+_SquareRoot = (Core.Name "hydra.ext/gql/openGql.SquareRoot")
 
 newtype FloorFunction = 
   FloorFunction {
     unFloorFunction :: NumericValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_FloorFunction = (Core.Name "hydra/ext/gql/openGql.FloorFunction")
+_FloorFunction = (Core.Name "hydra.ext/gql/openGql.FloorFunction")
 
 newtype CeilingFunction = 
   CeilingFunction {
     unCeilingFunction :: NumericValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_CeilingFunction = (Core.Name "hydra/ext/gql/openGql.CeilingFunction")
+_CeilingFunction = (Core.Name "hydra.ext/gql/openGql.CeilingFunction")
 
 newtype CharacterStringValueExpression = 
   CharacterStringValueExpression {
     unCharacterStringValueExpression :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_CharacterStringValueExpression = (Core.Name "hydra/ext/gql/openGql.CharacterStringValueExpression")
+_CharacterStringValueExpression = (Core.Name "hydra.ext/gql/openGql.CharacterStringValueExpression")
 
 newtype ByteStringValueExpression = 
   ByteStringValueExpression {
     unByteStringValueExpression :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ByteStringValueExpression = (Core.Name "hydra/ext/gql/openGql.ByteStringValueExpression")
+_ByteStringValueExpression = (Core.Name "hydra.ext/gql/openGql.ByteStringValueExpression")
 
 data TrimOperands = 
   TrimOperands {
@@ -7146,7 +7146,7 @@ data TrimOperands =
     trimOperandsSource :: TrimCharacterOrByteStringSource}
   deriving (Eq, Ord, Read, Show)
 
-_TrimOperands = (Core.Name "hydra/ext/gql/openGql.TrimOperands")
+_TrimOperands = (Core.Name "hydra.ext/gql/openGql.TrimOperands")
 
 _TrimOperands_specification = (Core.Name "specification")
 
@@ -7159,7 +7159,7 @@ newtype TrimCharacterOrByteStringSource =
     unTrimCharacterOrByteStringSource :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_TrimCharacterOrByteStringSource = (Core.Name "hydra/ext/gql/openGql.TrimCharacterOrByteStringSource")
+_TrimCharacterOrByteStringSource = (Core.Name "hydra.ext/gql/openGql.TrimCharacterOrByteStringSource")
 
 data TrimSpecification = 
   TrimSpecificationLeading  |
@@ -7167,7 +7167,7 @@ data TrimSpecification =
   TrimSpecificationBoth 
   deriving (Eq, Ord, Read, Show)
 
-_TrimSpecification = (Core.Name "hydra/ext/gql/openGql.TrimSpecification")
+_TrimSpecification = (Core.Name "hydra.ext/gql/openGql.TrimSpecification")
 
 _TrimSpecification_leading = (Core.Name "leading")
 
@@ -7180,7 +7180,7 @@ newtype TrimCharacterOrByteString =
     unTrimCharacterOrByteString :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_TrimCharacterOrByteString = (Core.Name "hydra/ext/gql/openGql.TrimCharacterOrByteString")
+_TrimCharacterOrByteString = (Core.Name "hydra.ext/gql/openGql.TrimCharacterOrByteString")
 
 data NormalForm = 
   NormalFormNfc  |
@@ -7189,7 +7189,7 @@ data NormalForm =
   NormalFormNfkd 
   deriving (Eq, Ord, Read, Show)
 
-_NormalForm = (Core.Name "hydra/ext/gql/openGql.NormalForm")
+_NormalForm = (Core.Name "hydra.ext/gql/openGql.NormalForm")
 
 _NormalForm_nfc = (Core.Name "nfc")
 
@@ -7204,14 +7204,14 @@ newtype StringLength =
     unStringLength :: NumericValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_StringLength = (Core.Name "hydra/ext/gql/openGql.StringLength")
+_StringLength = (Core.Name "hydra.ext/gql/openGql.StringLength")
 
 newtype DatetimeValueExpression = 
   DatetimeValueExpression {
     unDatetimeValueExpression :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_DatetimeValueExpression = (Core.Name "hydra/ext/gql/openGql.DatetimeValueExpression")
+_DatetimeValueExpression = (Core.Name "hydra.ext/gql/openGql.DatetimeValueExpression")
 
 data DatetimeValueFunction = 
   DatetimeValueFunctionDateFunction DateFunction |
@@ -7221,7 +7221,7 @@ data DatetimeValueFunction =
   DatetimeValueFunctionLocaldatetimeFunction LocaldatetimeFunction
   deriving (Eq, Ord, Read, Show)
 
-_DatetimeValueFunction = (Core.Name "hydra/ext/gql/openGql.DatetimeValueFunction")
+_DatetimeValueFunction = (Core.Name "hydra.ext/gql/openGql.DatetimeValueFunction")
 
 _DatetimeValueFunction_dateFunction = (Core.Name "dateFunction")
 
@@ -7238,7 +7238,7 @@ data DateFunction =
   DateFunctionDateWithParams (Maybe DateFunctionParameters)
   deriving (Eq, Ord, Read, Show)
 
-_DateFunction = (Core.Name "hydra/ext/gql/openGql.DateFunction")
+_DateFunction = (Core.Name "hydra.ext/gql/openGql.DateFunction")
 
 _DateFunction_currentDate = (Core.Name "currentDate")
 
@@ -7249,7 +7249,7 @@ data TimeFunction =
   TimeFunctionZonedTimeWithParams (Maybe TimeFunctionParameters)
   deriving (Eq, Ord, Read, Show)
 
-_TimeFunction = (Core.Name "hydra/ext/gql/openGql.TimeFunction")
+_TimeFunction = (Core.Name "hydra.ext/gql/openGql.TimeFunction")
 
 _TimeFunction_currentTime = (Core.Name "currentTime")
 
@@ -7260,14 +7260,14 @@ newtype LocaltimeFunction =
     unLocaltimeFunction :: (Maybe TimeFunctionParameters)}
   deriving (Eq, Ord, Read, Show)
 
-_LocaltimeFunction = (Core.Name "hydra/ext/gql/openGql.LocaltimeFunction")
+_LocaltimeFunction = (Core.Name "hydra.ext/gql/openGql.LocaltimeFunction")
 
 data DatetimeFunction = 
   DatetimeFunctionCurrentTimestamp  |
   DatetimeFunctionZonedDatetimeWithParams (Maybe DatetimeFunctionParameters)
   deriving (Eq, Ord, Read, Show)
 
-_DatetimeFunction = (Core.Name "hydra/ext/gql/openGql.DatetimeFunction")
+_DatetimeFunction = (Core.Name "hydra.ext/gql/openGql.DatetimeFunction")
 
 _DatetimeFunction_currentTimestamp = (Core.Name "currentTimestamp")
 
@@ -7278,7 +7278,7 @@ data LocaldatetimeFunction =
   LocaldatetimeFunctionLocalDatetimeWithParams (Maybe DatetimeFunctionParameters)
   deriving (Eq, Ord, Read, Show)
 
-_LocaldatetimeFunction = (Core.Name "hydra/ext/gql/openGql.LocaldatetimeFunction")
+_LocaldatetimeFunction = (Core.Name "hydra.ext/gql/openGql.LocaldatetimeFunction")
 
 _LocaldatetimeFunction_localTimestamp = (Core.Name "localTimestamp")
 
@@ -7289,7 +7289,7 @@ data DateFunctionParameters =
   DateFunctionParametersRecordConstructor RecordConstructor
   deriving (Eq, Ord, Read, Show)
 
-_DateFunctionParameters = (Core.Name "hydra/ext/gql/openGql.DateFunctionParameters")
+_DateFunctionParameters = (Core.Name "hydra.ext/gql/openGql.DateFunctionParameters")
 
 _DateFunctionParameters_dateString = (Core.Name "dateString")
 
@@ -7300,7 +7300,7 @@ data TimeFunctionParameters =
   TimeFunctionParametersRecordConstructor RecordConstructor
   deriving (Eq, Ord, Read, Show)
 
-_TimeFunctionParameters = (Core.Name "hydra/ext/gql/openGql.TimeFunctionParameters")
+_TimeFunctionParameters = (Core.Name "hydra.ext/gql/openGql.TimeFunctionParameters")
 
 _TimeFunctionParameters_timeString = (Core.Name "timeString")
 
@@ -7311,7 +7311,7 @@ data DatetimeFunctionParameters =
   DatetimeFunctionParametersRecordConstructor RecordConstructor
   deriving (Eq, Ord, Read, Show)
 
-_DatetimeFunctionParameters = (Core.Name "hydra/ext/gql/openGql.DatetimeFunctionParameters")
+_DatetimeFunctionParameters = (Core.Name "hydra.ext/gql/openGql.DatetimeFunctionParameters")
 
 _DatetimeFunctionParameters_datetimeString = (Core.Name "datetimeString")
 
@@ -7322,7 +7322,7 @@ newtype DurationValueExpression =
     unDurationValueExpression :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_DurationValueExpression = (Core.Name "hydra/ext/gql/openGql.DurationValueExpression")
+_DurationValueExpression = (Core.Name "hydra.ext/gql/openGql.DurationValueExpression")
 
 data DatetimeSubtraction = 
   DatetimeSubtraction {
@@ -7330,7 +7330,7 @@ data DatetimeSubtraction =
     datetimeSubtractionTemporalDurationQualifier :: (Maybe TemporalDurationQualifier)}
   deriving (Eq, Ord, Read, Show)
 
-_DatetimeSubtraction = (Core.Name "hydra/ext/gql/openGql.DatetimeSubtraction")
+_DatetimeSubtraction = (Core.Name "hydra.ext/gql/openGql.DatetimeSubtraction")
 
 _DatetimeSubtraction_parameters = (Core.Name "parameters")
 
@@ -7342,7 +7342,7 @@ data DatetimeSubtractionParameters =
     datetimeSubtractionParametersExpression2 :: DatetimeValueExpression2}
   deriving (Eq, Ord, Read, Show)
 
-_DatetimeSubtractionParameters = (Core.Name "hydra/ext/gql/openGql.DatetimeSubtractionParameters")
+_DatetimeSubtractionParameters = (Core.Name "hydra.ext/gql/openGql.DatetimeSubtractionParameters")
 
 _DatetimeSubtractionParameters_expression1 = (Core.Name "expression1")
 
@@ -7353,21 +7353,21 @@ newtype DatetimeValueExpression1 =
     unDatetimeValueExpression1 :: DatetimeValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_DatetimeValueExpression1 = (Core.Name "hydra/ext/gql/openGql.DatetimeValueExpression1")
+_DatetimeValueExpression1 = (Core.Name "hydra.ext/gql/openGql.DatetimeValueExpression1")
 
 newtype DatetimeValueExpression2 = 
   DatetimeValueExpression2 {
     unDatetimeValueExpression2 :: DatetimeValueExpression}
   deriving (Eq, Ord, Read, Show)
 
-_DatetimeValueExpression2 = (Core.Name "hydra/ext/gql/openGql.DatetimeValueExpression2")
+_DatetimeValueExpression2 = (Core.Name "hydra.ext/gql/openGql.DatetimeValueExpression2")
 
 data DurationValueFunction = 
   DurationValueFunctionDurationFunction DurationFunction |
   DurationValueFunctionAbsoluteValue AbsoluteValueExpression
   deriving (Eq, Ord, Read, Show)
 
-_DurationValueFunction = (Core.Name "hydra/ext/gql/openGql.DurationValueFunction")
+_DurationValueFunction = (Core.Name "hydra.ext/gql/openGql.DurationValueFunction")
 
 _DurationValueFunction_durationFunction = (Core.Name "durationFunction")
 
@@ -7378,14 +7378,14 @@ newtype DurationFunction =
     unDurationFunction :: DurationFunctionParameters}
   deriving (Eq, Ord, Read, Show)
 
-_DurationFunction = (Core.Name "hydra/ext/gql/openGql.DurationFunction")
+_DurationFunction = (Core.Name "hydra.ext/gql/openGql.DurationFunction")
 
 data DurationFunctionParameters = 
   DurationFunctionParametersDurationString DurationString |
   DurationFunctionParametersRecordConstructor RecordConstructor
   deriving (Eq, Ord, Read, Show)
 
-_DurationFunctionParameters = (Core.Name "hydra/ext/gql/openGql.DurationFunctionParameters")
+_DurationFunctionParameters = (Core.Name "hydra.ext/gql/openGql.DurationFunctionParameters")
 
 _DurationFunctionParameters_durationString = (Core.Name "durationString")
 
@@ -7396,70 +7396,70 @@ newtype ObjectName =
     unObjectName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectName = (Core.Name "hydra/ext/gql/openGql.ObjectName")
+_ObjectName = (Core.Name "hydra.ext/gql/openGql.ObjectName")
 
 newtype ObjectNameOrBindingVariable = 
   ObjectNameOrBindingVariable {
     unObjectNameOrBindingVariable :: String}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectNameOrBindingVariable = (Core.Name "hydra/ext/gql/openGql.ObjectNameOrBindingVariable")
+_ObjectNameOrBindingVariable = (Core.Name "hydra.ext/gql/openGql.ObjectNameOrBindingVariable")
 
 newtype DirectoryName = 
   DirectoryName {
     unDirectoryName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_DirectoryName = (Core.Name "hydra/ext/gql/openGql.DirectoryName")
+_DirectoryName = (Core.Name "hydra.ext/gql/openGql.DirectoryName")
 
 newtype SchemaName = 
   SchemaName {
     unSchemaName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_SchemaName = (Core.Name "hydra/ext/gql/openGql.SchemaName")
+_SchemaName = (Core.Name "hydra.ext/gql/openGql.SchemaName")
 
 newtype GraphName = 
   GraphName {
     unGraphName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_GraphName = (Core.Name "hydra/ext/gql/openGql.GraphName")
+_GraphName = (Core.Name "hydra.ext/gql/openGql.GraphName")
 
 newtype DelimitedGraphName = 
   DelimitedGraphName {
     unDelimitedGraphName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_DelimitedGraphName = (Core.Name "hydra/ext/gql/openGql.DelimitedGraphName")
+_DelimitedGraphName = (Core.Name "hydra.ext/gql/openGql.DelimitedGraphName")
 
 newtype GraphTypeName = 
   GraphTypeName {
     unGraphTypeName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_GraphTypeName = (Core.Name "hydra/ext/gql/openGql.GraphTypeName")
+_GraphTypeName = (Core.Name "hydra.ext/gql/openGql.GraphTypeName")
 
 newtype NodeTypeName = 
   NodeTypeName {
     unNodeTypeName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_NodeTypeName = (Core.Name "hydra/ext/gql/openGql.NodeTypeName")
+_NodeTypeName = (Core.Name "hydra.ext/gql/openGql.NodeTypeName")
 
 newtype EdgeTypeName = 
   EdgeTypeName {
     unEdgeTypeName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeTypeName = (Core.Name "hydra/ext/gql/openGql.EdgeTypeName")
+_EdgeTypeName = (Core.Name "hydra.ext/gql/openGql.EdgeTypeName")
 
 data BindingTableName = 
   BindingTableNameRegularIdentifier String |
   BindingTableNameDelimitedBindingTableName DelimitedBindingTableName
   deriving (Eq, Ord, Read, Show)
 
-_BindingTableName = (Core.Name "hydra/ext/gql/openGql.BindingTableName")
+_BindingTableName = (Core.Name "hydra.ext/gql/openGql.BindingTableName")
 
 _BindingTableName_regularIdentifier = (Core.Name "regularIdentifier")
 
@@ -7470,70 +7470,70 @@ newtype DelimitedBindingTableName =
     unDelimitedBindingTableName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_DelimitedBindingTableName = (Core.Name "hydra/ext/gql/openGql.DelimitedBindingTableName")
+_DelimitedBindingTableName = (Core.Name "hydra.ext/gql/openGql.DelimitedBindingTableName")
 
 newtype ProcedureName = 
   ProcedureName {
     unProcedureName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_ProcedureName = (Core.Name "hydra/ext/gql/openGql.ProcedureName")
+_ProcedureName = (Core.Name "hydra.ext/gql/openGql.ProcedureName")
 
 newtype LabelName = 
   LabelName {
     unLabelName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_LabelName = (Core.Name "hydra/ext/gql/openGql.LabelName")
+_LabelName = (Core.Name "hydra.ext/gql/openGql.LabelName")
 
 newtype PropertyName = 
   PropertyName {
     unPropertyName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_PropertyName = (Core.Name "hydra/ext/gql/openGql.PropertyName")
+_PropertyName = (Core.Name "hydra.ext/gql/openGql.PropertyName")
 
 newtype FieldName = 
   FieldName {
     unFieldName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_FieldName = (Core.Name "hydra/ext/gql/openGql.FieldName")
+_FieldName = (Core.Name "hydra.ext/gql/openGql.FieldName")
 
 newtype ElementVariable = 
   ElementVariable {
     unElementVariable :: BindingVariable}
   deriving (Eq, Ord, Read, Show)
 
-_ElementVariable = (Core.Name "hydra/ext/gql/openGql.ElementVariable")
+_ElementVariable = (Core.Name "hydra.ext/gql/openGql.ElementVariable")
 
 newtype PathVariable = 
   PathVariable {
     unPathVariable :: BindingVariable}
   deriving (Eq, Ord, Read, Show)
 
-_PathVariable = (Core.Name "hydra/ext/gql/openGql.PathVariable")
+_PathVariable = (Core.Name "hydra.ext/gql/openGql.PathVariable")
 
 newtype SubpathVariable = 
   SubpathVariable {
     unSubpathVariable :: String}
   deriving (Eq, Ord, Read, Show)
 
-_SubpathVariable = (Core.Name "hydra/ext/gql/openGql.SubpathVariable")
+_SubpathVariable = (Core.Name "hydra.ext/gql/openGql.SubpathVariable")
 
 newtype BindingVariable = 
   BindingVariable {
     unBindingVariable :: String}
   deriving (Eq, Ord, Read, Show)
 
-_BindingVariable = (Core.Name "hydra/ext/gql/openGql.BindingVariable")
+_BindingVariable = (Core.Name "hydra.ext/gql/openGql.BindingVariable")
 
 data UnsignedLiteral = 
   UnsignedLiteralNumeric UnsignedNumericLiteral |
   UnsignedLiteralGeneral GeneralLiteral
   deriving (Eq, Ord, Read, Show)
 
-_UnsignedLiteral = (Core.Name "hydra/ext/gql/openGql.UnsignedLiteral")
+_UnsignedLiteral = (Core.Name "hydra.ext/gql/openGql.UnsignedLiteral")
 
 _UnsignedLiteral_numeric = (Core.Name "numeric")
 
@@ -7550,7 +7550,7 @@ data GeneralLiteral =
   GeneralLiteralRecord RecordLiteral
   deriving (Eq, Ord, Read, Show)
 
-_GeneralLiteral = (Core.Name "hydra/ext/gql/openGql.GeneralLiteral")
+_GeneralLiteral = (Core.Name "hydra.ext/gql/openGql.GeneralLiteral")
 
 _GeneralLiteral_boolean = (Core.Name "boolean")
 
@@ -7574,7 +7574,7 @@ data TemporalLiteral =
   TemporalLiteralDatetime DatetimeLiteral
   deriving (Eq, Ord, Read, Show)
 
-_TemporalLiteral = (Core.Name "hydra/ext/gql/openGql.TemporalLiteral")
+_TemporalLiteral = (Core.Name "hydra.ext/gql/openGql.TemporalLiteral")
 
 _TemporalLiteral_date = (Core.Name "date")
 
@@ -7587,70 +7587,70 @@ newtype DateLiteral =
     unDateLiteral :: DateString}
   deriving (Eq, Ord, Read, Show)
 
-_DateLiteral = (Core.Name "hydra/ext/gql/openGql.DateLiteral")
+_DateLiteral = (Core.Name "hydra.ext/gql/openGql.DateLiteral")
 
 newtype TimeLiteral = 
   TimeLiteral {
     unTimeLiteral :: TimeString}
   deriving (Eq, Ord, Read, Show)
 
-_TimeLiteral = (Core.Name "hydra/ext/gql/openGql.TimeLiteral")
+_TimeLiteral = (Core.Name "hydra.ext/gql/openGql.TimeLiteral")
 
 newtype DatetimeLiteral = 
   DatetimeLiteral {
     unDatetimeLiteral :: DatetimeString}
   deriving (Eq, Ord, Read, Show)
 
-_DatetimeLiteral = (Core.Name "hydra/ext/gql/openGql.DatetimeLiteral")
+_DatetimeLiteral = (Core.Name "hydra.ext/gql/openGql.DatetimeLiteral")
 
 newtype ListLiteral = 
   ListLiteral {
     unListLiteral :: ListValueConstructorByEnumeration}
   deriving (Eq, Ord, Read, Show)
 
-_ListLiteral = (Core.Name "hydra/ext/gql/openGql.ListLiteral")
+_ListLiteral = (Core.Name "hydra.ext/gql/openGql.ListLiteral")
 
 newtype RecordLiteral = 
   RecordLiteral {
     unRecordLiteral :: RecordConstructor}
   deriving (Eq, Ord, Read, Show)
 
-_RecordLiteral = (Core.Name "hydra/ext/gql/openGql.RecordLiteral")
+_RecordLiteral = (Core.Name "hydra.ext/gql/openGql.RecordLiteral")
 
 newtype Identifier = 
   Identifier {
     unIdentifier :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Identifier = (Core.Name "hydra/ext/gql/openGql.Identifier")
+_Identifier = (Core.Name "hydra.ext/gql/openGql.Identifier")
 
 newtype RegularIdentifier = 
   RegularIdentifier {
     unRegularIdentifier :: String}
   deriving (Eq, Ord, Read, Show)
 
-_RegularIdentifier = (Core.Name "hydra/ext/gql/openGql.RegularIdentifier")
+_RegularIdentifier = (Core.Name "hydra.ext/gql/openGql.RegularIdentifier")
 
 newtype TimeZoneString = 
   TimeZoneString {
     unTimeZoneString :: CharacterStringLiteral}
   deriving (Eq, Ord, Read, Show)
 
-_TimeZoneString = (Core.Name "hydra/ext/gql/openGql.TimeZoneString")
+_TimeZoneString = (Core.Name "hydra.ext/gql/openGql.TimeZoneString")
 
 newtype CharacterStringLiteral = 
   CharacterStringLiteral {
     unCharacterStringLiteral :: String}
   deriving (Eq, Ord, Read, Show)
 
-_CharacterStringLiteral = (Core.Name "hydra/ext/gql/openGql.CharacterStringLiteral")
+_CharacterStringLiteral = (Core.Name "hydra.ext/gql/openGql.CharacterStringLiteral")
 
 data UnsignedNumericLiteral = 
   UnsignedNumericLiteralExact ExactNumericLiteral |
   UnsignedNumericLiteralApproximate ApproximateNumericLiteral
   deriving (Eq, Ord, Read, Show)
 
-_UnsignedNumericLiteral = (Core.Name "hydra/ext/gql/openGql.UnsignedNumericLiteral")
+_UnsignedNumericLiteral = (Core.Name "hydra.ext/gql/openGql.UnsignedNumericLiteral")
 
 _UnsignedNumericLiteral_exact = (Core.Name "exact")
 
@@ -7664,7 +7664,7 @@ data ExactNumericLiteral =
   ExactNumericLiteralUnsignedInteger UnsignedInteger
   deriving (Eq, Ord, Read, Show)
 
-_ExactNumericLiteral = (Core.Name "hydra/ext/gql/openGql.ExactNumericLiteral")
+_ExactNumericLiteral = (Core.Name "hydra.ext/gql/openGql.ExactNumericLiteral")
 
 _ExactNumericLiteral_scientificWithSuffix = (Core.Name "scientificWithSuffix")
 
@@ -7683,7 +7683,7 @@ data ApproximateNumericLiteral =
   ApproximateNumericLiteralIntegerWithSuffix String
   deriving (Eq, Ord, Read, Show)
 
-_ApproximateNumericLiteral = (Core.Name "hydra/ext/gql/openGql.ApproximateNumericLiteral")
+_ApproximateNumericLiteral = (Core.Name "hydra.ext/gql/openGql.ApproximateNumericLiteral")
 
 _ApproximateNumericLiteral_scientificWithSuffix = (Core.Name "scientificWithSuffix")
 
@@ -7700,7 +7700,7 @@ data UnsignedInteger =
   UnsignedIntegerBinary String
   deriving (Eq, Ord, Read, Show)
 
-_UnsignedInteger = (Core.Name "hydra/ext/gql/openGql.UnsignedInteger")
+_UnsignedInteger = (Core.Name "hydra.ext/gql/openGql.UnsignedInteger")
 
 _UnsignedInteger_decimal = (Core.Name "decimal")
 
@@ -7715,55 +7715,55 @@ newtype UnsignedDecimalInteger =
     unUnsignedDecimalInteger :: String}
   deriving (Eq, Ord, Read, Show)
 
-_UnsignedDecimalInteger = (Core.Name "hydra/ext/gql/openGql.UnsignedDecimalInteger")
+_UnsignedDecimalInteger = (Core.Name "hydra.ext/gql/openGql.UnsignedDecimalInteger")
 
 data NullLiteral = 
   NullLiteral {}
   deriving (Eq, Ord, Read, Show)
 
-_NullLiteral = (Core.Name "hydra/ext/gql/openGql.NullLiteral")
+_NullLiteral = (Core.Name "hydra.ext/gql/openGql.NullLiteral")
 
 newtype DateString = 
   DateString {
     unDateString :: CharacterStringLiteral}
   deriving (Eq, Ord, Read, Show)
 
-_DateString = (Core.Name "hydra/ext/gql/openGql.DateString")
+_DateString = (Core.Name "hydra.ext/gql/openGql.DateString")
 
 newtype TimeString = 
   TimeString {
     unTimeString :: CharacterStringLiteral}
   deriving (Eq, Ord, Read, Show)
 
-_TimeString = (Core.Name "hydra/ext/gql/openGql.TimeString")
+_TimeString = (Core.Name "hydra.ext/gql/openGql.TimeString")
 
 newtype DatetimeString = 
   DatetimeString {
     unDatetimeString :: CharacterStringLiteral}
   deriving (Eq, Ord, Read, Show)
 
-_DatetimeString = (Core.Name "hydra/ext/gql/openGql.DatetimeString")
+_DatetimeString = (Core.Name "hydra.ext/gql/openGql.DatetimeString")
 
 newtype DurationLiteral = 
   DurationLiteral {
     unDurationLiteral :: DurationString}
   deriving (Eq, Ord, Read, Show)
 
-_DurationLiteral = (Core.Name "hydra/ext/gql/openGql.DurationLiteral")
+_DurationLiteral = (Core.Name "hydra.ext/gql/openGql.DurationLiteral")
 
 newtype DurationString = 
   DurationString {
     unDurationString :: CharacterStringLiteral}
   deriving (Eq, Ord, Read, Show)
 
-_DurationString = (Core.Name "hydra/ext/gql/openGql.DurationString")
+_DurationString = (Core.Name "hydra.ext/gql/openGql.DurationString")
 
 data NodeSynonym = 
   NodeSynonymNode  |
   NodeSynonymVertex 
   deriving (Eq, Ord, Read, Show)
 
-_NodeSynonym = (Core.Name "hydra/ext/gql/openGql.NodeSynonym")
+_NodeSynonym = (Core.Name "hydra.ext/gql/openGql.NodeSynonym")
 
 _NodeSynonym_node = (Core.Name "node")
 
@@ -7774,7 +7774,7 @@ data EdgesSynonym =
   EdgesSynonymRelationships 
   deriving (Eq, Ord, Read, Show)
 
-_EdgesSynonym = (Core.Name "hydra/ext/gql/openGql.EdgesSynonym")
+_EdgesSynonym = (Core.Name "hydra.ext/gql/openGql.EdgesSynonym")
 
 _EdgesSynonym_edges = (Core.Name "edges")
 
@@ -7785,7 +7785,7 @@ data EdgeSynonym =
   EdgeSynonymRelationship 
   deriving (Eq, Ord, Read, Show)
 
-_EdgeSynonym = (Core.Name "hydra/ext/gql/openGql.EdgeSynonym")
+_EdgeSynonym = (Core.Name "hydra.ext/gql/openGql.EdgeSynonym")
 
 _EdgeSynonym_edge = (Core.Name "edge")
 
@@ -7796,7 +7796,7 @@ data Implies =
   ImpliesImplies 
   deriving (Eq, Ord, Read, Show)
 
-_Implies = (Core.Name "hydra/ext/gql/openGql.Implies")
+_Implies = (Core.Name "hydra.ext/gql/openGql.Implies")
 
 _Implies_rightDoubleArrow = (Core.Name "rightDoubleArrow")
 
@@ -7807,7 +7807,7 @@ newtype ParameterName =
     unParameterName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_ParameterName = (Core.Name "hydra/ext/gql/openGql.ParameterName")
+_ParameterName = (Core.Name "hydra.ext/gql/openGql.ParameterName")
 
 data BooleanLiteral = 
   BooleanLiteralTrue  |
@@ -7815,7 +7815,7 @@ data BooleanLiteral =
   BooleanLiteralUnknown 
   deriving (Eq, Ord, Read, Show)
 
-_BooleanLiteral = (Core.Name "hydra/ext/gql/openGql.BooleanLiteral")
+_BooleanLiteral = (Core.Name "hydra.ext/gql/openGql.BooleanLiteral")
 
 _BooleanLiteral_true = (Core.Name "true")
 
@@ -7828,4 +7828,4 @@ newtype ByteStringLiteral =
     unByteStringLiteral :: String}
   deriving (Eq, Ord, Read, Show)
 
-_ByteStringLiteral = (Core.Name "hydra/ext/gql/openGql.ByteStringLiteral")
+_ByteStringLiteral = (Core.Name "hydra.ext/gql/openGql.ByteStringLiteral")
