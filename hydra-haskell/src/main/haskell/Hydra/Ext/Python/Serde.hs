@@ -95,6 +95,7 @@ encodeComparison (Py.Comparison lhs rhs) = spaceSep $ [encodeBitwiseOr lhs] ++ (
 encodeCompoundStatement :: Py.CompoundStatement -> A.Expr
 encodeCompoundStatement c = case c of
   Py.CompoundStatementClassDef d -> encodeClassDefinition d
+  Py.CompoundStatementFunction f -> encodeFunctionDefinition f
   _ -> unsupportedVariant "compound statement" c
 
 encodeConjunction :: Py.Conjunction -> A.Expr
@@ -136,6 +137,22 @@ encodeFactor f = case f of
   Py.FactorNegative f -> noSep [cst "-", encodeFactor f]
   Py.FactorComplement f -> noSep [cst "~", encodeFactor f]
   Py.FactorSimple p -> encodePower p
+
+encodeFunctionDefRaw :: Py.FunctionDefRaw -> A.Expr
+encodeFunctionDefRaw (Py.FunctionDefRaw async name tparams params retType ftc block) = spaceSep $ Y.catMaybes [
+  if async then Just $ cst "async" else Nothing,
+  Just $ cst "def",
+  Just $ noSep (Y.catMaybes [
+    Just $ encodeName name,
+    Nothing, -- TODO: tparams
+    Just $ noSep $ Y.catMaybes [Just $ cst "(", encodeParameters <$> params, Just $ cst ")"]]),
+  Nothing, -- TODO: retType
+  Just $ cst ":",
+  Nothing, -- TODO: ftc
+  Just $ encodeBlock block]
+
+encodeFunctionDefinition :: Py.FunctionDefinition -> A.Expr
+encodeFunctionDefinition (Py.FunctionDefinition mdecs raw) = encodeFunctionDefRaw raw
 
 encodeImportFrom :: Py.ImportFrom -> A.Expr
 encodeImportFrom (Py.ImportFrom prefixes name targets) = spaceSep [cst "from", lhs, cst "import", rhs]
@@ -227,6 +244,21 @@ encodeNumber :: Py.Number -> A.Expr
 encodeNumber n = case n of
   Py.NumberFloat f -> cst $ show f
   Py.NumberInteger i -> cst $ show i
+
+encodeParam :: Py.Param -> A.Expr
+encodeParam (Py.Param name annot) = encodeName name
+
+encodeParamNoDefault :: Py.ParamNoDefault -> A.Expr
+encodeParamNoDefault (Py.ParamNoDefault param tcomment) = encodeParam param
+
+encodeParamNoDefaultParameters :: Py.ParamNoDefaultParameters -> A.Expr
+encodeParamNoDefaultParameters (Py.ParamNoDefaultParameters nodef withdef staretc)
+  = commaSep inlineStyle (encodeParamNoDefault <$> nodef) -- TODO: withdef, staretc
+
+encodeParameters :: Py.Parameters -> A.Expr
+encodeParameters p = case p of
+  Py.ParametersParamNoDefault p -> encodeParamNoDefaultParameters p
+  _ -> unsupportedVariant "parameters" p
 
 encodePosArg :: Py.PosArg -> A.Expr
 encodePosArg a = case a of
