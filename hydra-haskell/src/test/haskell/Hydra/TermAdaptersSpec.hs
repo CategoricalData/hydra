@@ -277,7 +277,7 @@ roundTripIsNoop typ term = shouldSucceedWith
     step = adapt typ
 
     -- Use a YAML-like language (but supporting unions) as the default target language
-    testLanguage = Language (LanguageName "hydra/test") $ LanguageConstraints {
+    testLanguage = Language (LanguageName "hydra.test") $ LanguageConstraints {
       languageConstraintsEliminationVariants = S.empty, -- S.fromList eliminationVariants,
       languageConstraintsLiteralVariants = S.fromList [
         LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],

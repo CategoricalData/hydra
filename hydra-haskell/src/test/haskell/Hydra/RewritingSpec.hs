@@ -140,9 +140,9 @@ testExpandLambdas g = do
         let twice = expandLambdas g once
         H.shouldBe once twice
   where
-    length = primitive $ Name "hydra/lib/strings.length"
-    splitOn = primitive $ Name "hydra/lib/strings.splitOn"
-    toLower = primitive $ Name "hydra/lib/strings.toLower"
+    length = primitive $ Name "hydra.lib.strings.length"
+    splitOn = primitive $ Name "hydra.lib.strings.splitOn"
+    toLower = primitive $ Name "hydra.lib.strings.toLower"
     expandsTo termBefore termAfter = do
        let result = expandLambdas g termBefore
        H.shouldBe (show result) (show termAfter)
@@ -209,9 +209,9 @@ testExpandTypedLambdas = do
         H.shouldBe once twice
 
   where
-    length = primitive $ Name "hydra/lib/strings.length"
-    splitOn = primitive $ Name "hydra/lib/strings.splitOn"
-    toLower = primitive $ Name "hydra/lib/strings.toLower"
+    length = primitive $ Name "hydra.lib.strings.length"
+    splitOn = primitive $ Name "hydra.lib.strings.splitOn"
+    toLower = primitive $ Name "hydra.lib.strings.toLower"
     expandsTo termBefore termAfter = do
 --      result <- fromFlowIo testGraph $ expandLambdas termBefore
 --      H.shouldBe result termAfter

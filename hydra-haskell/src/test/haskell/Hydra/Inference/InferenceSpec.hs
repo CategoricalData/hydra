@@ -247,7 +247,7 @@ checkPrimitives = H.describe "Check a few hand-picked terms with primitive funct
 
     H.it "Check monomorphic primitive functions" $ do
       expectMonotype
-        (primitive $ Name "hydra/lib/strings.length")
+        (primitive $ Name "hydra.lib.strings.length")
         (Types.function Types.string Types.int32)
       expectMonotype
         (primitive _math_sub)
