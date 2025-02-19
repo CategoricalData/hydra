@@ -18,7 +18,7 @@ tinkerpopFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule]
       "Users should check features prior to using various functions of TinkerPop to help ensure code portability across implementations.\n" ++
       "For example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().")
   where
-    ns = Namespace "hydra/ext/org/apache/tinkerpop/features"
+    ns = Namespace "hydra.ext.org.apache.tinkerpop.features"
     core = typeref $ moduleNamespace hydraCoreModule
     features = typeref ns
     def = datatype ns

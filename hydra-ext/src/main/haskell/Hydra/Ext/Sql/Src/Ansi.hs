@@ -17,7 +17,7 @@ sqlModule = grammarToModule ns sqlGrammar $
       ++ "https://ronsavage.github.io/SQL/sql-2003-2.bnf.html, which is based on "
       ++ "the Final Committee Draft (FCD) of ISO/IEC 9075-2:2003")
   where
-    ns = Namespace "hydra/ext/org/ansi/sql/syntax"
+    ns = Namespace "hydra.ext.org.ansi.sql.syntax"
 
 sqlGrammar :: G.Grammar
 sqlGrammar = G.Grammar $ tokens ++ productions

@@ -13,7 +13,7 @@ geoJsonModule = Module ns elements [jsonModelModule] [] $
           "For example, it provides MultiPoint not as an object with an array of coordinates which encode points, " ++
           "but as an array of Points. A BoundingBox is not simply an list of numbers, but a list of CoordinateRanges.")
   where
-    ns = Namespace "hydra/ext/org/geojson/model"
+    ns = Namespace "hydra.ext.org.geojson.model"
     def = datatype ns
     geoj = typeref ns
     json = typeref $ moduleNamespace jsonModelModule

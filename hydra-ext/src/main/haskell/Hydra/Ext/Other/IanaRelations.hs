@@ -11,7 +11,7 @@ ianaRelationsModule = Module ns elements [] [] $
     Just ("All IANA Link Relation Types, as of 2022-10-11. " ++
           "See https://www.iana.org/assignments/link-relations/link-relations.xhtml")
   where
-    ns = Namespace "hydra/ext/org/iana/linkrelations"
+    ns = Namespace "hydra.ext.org.iana.linkrelations"
     def = datatype ns
 
     elements = [
