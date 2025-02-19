@@ -14,7 +14,7 @@ newtype TCase a =
     unTCase :: Core.Name}
   deriving (Eq, Ord, Read, Show)
 
-_TCase = (Core.Name "hydra/phantoms.TCase")
+_TCase = (Core.Name "hydra.phantoms.TCase")
 
 -- | An association with a named term (element) with a phantom type
 data TElement a = 
@@ -23,7 +23,7 @@ data TElement a =
     tElementTerm :: (TTerm a)}
   deriving (Eq, Ord, Read, Show)
 
-_TElement = (Core.Name "hydra/phantoms.TElement")
+_TElement = (Core.Name "hydra.phantoms.TElement")
 
 _TElement_name = (Core.Name "name")
 
@@ -35,7 +35,7 @@ newtype TField a =
     unTField :: Core.Field}
   deriving (Eq, Ord, Read, Show)
 
-_TField = (Core.Name "hydra/phantoms.TField")
+_TField = (Core.Name "hydra.phantoms.TField")
 
 -- | An association of a term with a phantom type
 newtype TTerm a = 
@@ -43,4 +43,4 @@ newtype TTerm a =
     unTTerm :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
-_TTerm = (Core.Name "hydra/phantoms.TTerm")
+_TTerm = (Core.Name "hydra.phantoms.TTerm")

@@ -15,7 +15,7 @@ import Data.Set as S
 -- | Language constraints for C Sharp (C#)
 csharpLanguage :: Coders.Language
 csharpLanguage = Coders.Language {
-  Coders.languageName = (Coders.LanguageName "hydra/ext/csharp"),
+  Coders.languageName = (Coders.LanguageName "hydra.ext/csharp"),
   Coders.languageConstraints = Coders.LanguageConstraints {
     Coders.languageConstraintsEliminationVariants = (Sets.fromList [
       Mantle.EliminationVariantList,

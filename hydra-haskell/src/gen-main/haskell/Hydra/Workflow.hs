@@ -20,7 +20,7 @@ data HydraSchemaSpec =
     hydraSchemaSpecTypeName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
 
-_HydraSchemaSpec = (Core.Name "hydra/workflow.HydraSchemaSpec")
+_HydraSchemaSpec = (Core.Name "hydra.workflow.HydraSchemaSpec")
 
 _HydraSchemaSpec_modules = (Core.Name "modules")
 
@@ -36,7 +36,7 @@ data LastMile s a =
     -- | A file extension for the generated file(s)
     lastMileFileExtension :: String}
 
-_LastMile = (Core.Name "hydra/workflow.LastMile")
+_LastMile = (Core.Name "hydra.workflow.LastMile")
 
 _LastMile_encoder = (Core.Name "encoder")
 
@@ -54,7 +54,7 @@ data SchemaSpec =
   SchemaSpecProvided 
   deriving (Eq, Ord, Read, Show)
 
-_SchemaSpec = (Core.Name "hydra/workflow.SchemaSpec")
+_SchemaSpec = (Core.Name "hydra.workflow.SchemaSpec")
 
 _SchemaSpec_hydra = (Core.Name "hydra")
 
@@ -75,7 +75,7 @@ data TransformWorkflow =
     transformWorkflowDestDir :: String}
   deriving (Eq, Ord, Read, Show)
 
-_TransformWorkflow = (Core.Name "hydra/workflow.TransformWorkflow")
+_TransformWorkflow = (Core.Name "hydra.workflow.TransformWorkflow")
 
 _TransformWorkflow_name = (Core.Name "name")
 

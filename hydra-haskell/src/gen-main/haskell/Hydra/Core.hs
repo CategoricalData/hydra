@@ -14,7 +14,7 @@ data AnnotatedTerm =
     annotatedTermAnnotation :: (Map Name Term)}
   deriving (Eq, Ord, Read, Show)
 
-_AnnotatedTerm = (Name "hydra/core.AnnotatedTerm")
+_AnnotatedTerm = (Name "hydra.core.AnnotatedTerm")
 
 _AnnotatedTerm_subject = (Name "subject")
 
@@ -27,7 +27,7 @@ data AnnotatedType =
     annotatedTypeAnnotation :: (Map Name Term)}
   deriving (Eq, Ord, Read, Show)
 
-_AnnotatedType = (Name "hydra/core.AnnotatedType")
+_AnnotatedType = (Name "hydra.core.AnnotatedType")
 
 _AnnotatedType_subject = (Name "subject")
 
@@ -42,7 +42,7 @@ data Application =
     applicationArgument :: Term}
   deriving (Eq, Ord, Read, Show)
 
-_Application = (Name "hydra/core.Application")
+_Application = (Name "hydra.core.Application")
 
 _Application_function = (Name "function")
 
@@ -57,7 +57,7 @@ data ApplicationType =
     applicationTypeArgument :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_ApplicationType = (Name "hydra/core.ApplicationType")
+_ApplicationType = (Name "hydra.core.ApplicationType")
 
 _ApplicationType_function = (Name "function")
 
@@ -71,7 +71,7 @@ data CaseStatement =
     caseStatementCases :: [Field]}
   deriving (Eq, Ord, Read, Show)
 
-_CaseStatement = (Name "hydra/core.CaseStatement")
+_CaseStatement = (Name "hydra.core.CaseStatement")
 
 _CaseStatement_typeName = (Name "typeName")
 
@@ -95,7 +95,7 @@ data Elimination =
   EliminationWrap Name
   deriving (Eq, Ord, Read, Show)
 
-_Elimination = (Name "hydra/core.Elimination")
+_Elimination = (Name "hydra.core.Elimination")
 
 _Elimination_list = (Name "list")
 
@@ -116,7 +116,7 @@ data Field =
     fieldTerm :: Term}
   deriving (Eq, Ord, Read, Show)
 
-_Field = (Name "hydra/core.Field")
+_Field = (Name "hydra.core.Field")
 
 _Field_name = (Name "name")
 
@@ -129,7 +129,7 @@ data FieldType =
     fieldTypeType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_FieldType = (Name "hydra/core.FieldType")
+_FieldType = (Name "hydra.core.FieldType")
 
 _FieldType_name = (Name "name")
 
@@ -142,7 +142,7 @@ data FloatType =
   FloatTypeFloat64 
   deriving (Eq, Ord, Read, Show)
 
-_FloatType = (Name "hydra/core.FloatType")
+_FloatType = (Name "hydra.core.FloatType")
 
 _FloatType_bigfloat = (Name "bigfloat")
 
@@ -160,7 +160,7 @@ data FloatValue =
   FloatValueFloat64 Double
   deriving (Eq, Ord, Read, Show)
 
-_FloatValue = (Name "hydra/core.FloatValue")
+_FloatValue = (Name "hydra.core.FloatValue")
 
 _FloatValue_bigfloat = (Name "bigfloat")
 
@@ -178,7 +178,7 @@ data Function =
   FunctionPrimitive Name
   deriving (Eq, Ord, Read, Show)
 
-_Function = (Name "hydra/core.Function")
+_Function = (Name "hydra.core.Function")
 
 _Function_elimination = (Name "elimination")
 
@@ -193,7 +193,7 @@ data FunctionType =
     functionTypeCodomain :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_FunctionType = (Name "hydra/core.FunctionType")
+_FunctionType = (Name "hydra.core.FunctionType")
 
 _FunctionType_domain = (Name "domain")
 
@@ -206,7 +206,7 @@ data Injection =
     injectionField :: Field}
   deriving (Eq, Ord, Read, Show)
 
-_Injection = (Name "hydra/core.Injection")
+_Injection = (Name "hydra.core.Injection")
 
 _Injection_typeName = (Name "typeName")
 
@@ -225,7 +225,7 @@ data IntegerType =
   IntegerTypeUint64 
   deriving (Eq, Ord, Read, Show)
 
-_IntegerType = (Name "hydra/core.IntegerType")
+_IntegerType = (Name "hydra.core.IntegerType")
 
 _IntegerType_bigint = (Name "bigint")
 
@@ -267,7 +267,7 @@ data IntegerValue =
   IntegerValueUint64 Integer
   deriving (Eq, Ord, Read, Show)
 
-_IntegerValue = (Name "hydra/core.IntegerValue")
+_IntegerValue = (Name "hydra.core.IntegerValue")
 
 _IntegerValue_bigint = (Name "bigint")
 
@@ -298,7 +298,7 @@ data Lambda =
     lambdaBody :: Term}
   deriving (Eq, Ord, Read, Show)
 
-_Lambda = (Name "hydra/core.Lambda")
+_Lambda = (Name "hydra.core.Lambda")
 
 _Lambda_parameter = (Name "parameter")
 
@@ -315,7 +315,7 @@ data LambdaType =
     lambdaTypeBody :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_LambdaType = (Name "hydra/core.LambdaType")
+_LambdaType = (Name "hydra.core.LambdaType")
 
 _LambdaType_parameter = (Name "parameter")
 
@@ -328,7 +328,7 @@ data Let =
     letEnvironment :: Term}
   deriving (Eq, Ord, Read, Show)
 
-_Let = (Name "hydra/core.Let")
+_Let = (Name "hydra.core.Let")
 
 _Let_bindings = (Name "bindings")
 
@@ -342,7 +342,7 @@ data LetBinding =
     letBindingType :: (Maybe TypeScheme)}
   deriving (Eq, Ord, Read, Show)
 
-_LetBinding = (Name "hydra/core.LetBinding")
+_LetBinding = (Name "hydra.core.LetBinding")
 
 _LetBinding_name = (Name "name")
 
@@ -364,7 +364,7 @@ data Literal =
   LiteralString String
   deriving (Eq, Ord, Read, Show)
 
-_Literal = (Name "hydra/core.Literal")
+_Literal = (Name "hydra.core.Literal")
 
 _Literal_binary = (Name "binary")
 
@@ -390,7 +390,7 @@ data LiteralType =
   LiteralTypeString 
   deriving (Eq, Ord, Read, Show)
 
-_LiteralType = (Name "hydra/core.LiteralType")
+_LiteralType = (Name "hydra.core.LiteralType")
 
 _LiteralType_binary = (Name "binary")
 
@@ -409,7 +409,7 @@ data MapType =
     mapTypeValues :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_MapType = (Name "hydra/core.MapType")
+_MapType = (Name "hydra.core.MapType")
 
 _MapType_keys = (Name "keys")
 
@@ -421,7 +421,7 @@ newtype Name =
     unName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Name = (Name "hydra/core.Name")
+_Name = (Name "hydra.core.Name")
 
 -- | A case statement for matching optional terms
 data OptionalCases = 
@@ -432,7 +432,7 @@ data OptionalCases =
     optionalCasesJust :: Term}
   deriving (Eq, Ord, Read, Show)
 
-_OptionalCases = (Name "hydra/core.OptionalCases")
+_OptionalCases = (Name "hydra.core.OptionalCases")
 
 _OptionalCases_nothing = (Name "nothing")
 
@@ -447,7 +447,7 @@ data Projection =
     projectionField :: Name}
   deriving (Eq, Ord, Read, Show)
 
-_Projection = (Name "hydra/core.Projection")
+_Projection = (Name "hydra.core.Projection")
 
 _Projection_typeName = (Name "typeName")
 
@@ -460,7 +460,7 @@ data Record =
     recordFields :: [Field]}
   deriving (Eq, Ord, Read, Show)
 
-_Record = (Name "hydra/core.Record")
+_Record = (Name "hydra.core.Record")
 
 _Record_typeName = (Name "typeName")
 
@@ -475,7 +475,7 @@ data RowType =
     rowTypeFields :: [FieldType]}
   deriving (Eq, Ord, Read, Show)
 
-_RowType = (Name "hydra/core.RowType")
+_RowType = (Name "hydra.core.RowType")
 
 _RowType_typeName = (Name "typeName")
 
@@ -489,7 +489,7 @@ data Sum =
     sumTerm :: Term}
   deriving (Eq, Ord, Read, Show)
 
-_Sum = (Name "hydra/core.Sum")
+_Sum = (Name "hydra.core.Sum")
 
 _Sum_index = (Name "index")
 
@@ -535,7 +535,7 @@ data Term =
   TermWrap WrappedTerm
   deriving (Eq, Ord, Read, Show)
 
-_Term = (Name "hydra/core.Term")
+_Term = (Name "hydra.core.Term")
 
 _Term_annotated = (Name "annotated")
 
@@ -582,7 +582,7 @@ data TupleProjection =
     tupleProjectionIndex :: Int}
   deriving (Eq, Ord, Read, Show)
 
-_TupleProjection = (Name "hydra/core.TupleProjection")
+_TupleProjection = (Name "hydra.core.TupleProjection")
 
 _TupleProjection_arity = (Name "arity")
 
@@ -607,7 +607,7 @@ data Type =
   TypeWrap WrappedType
   deriving (Eq, Ord, Read, Show)
 
-_Type = (Name "hydra/core.Type")
+_Type = (Name "hydra.core.Type")
 
 _Type_annotated = (Name "annotated")
 
@@ -648,7 +648,7 @@ data TypeAbstraction =
     typeAbstractionBody :: Term}
   deriving (Eq, Ord, Read, Show)
 
-_TypeAbstraction = (Name "hydra/core.TypeAbstraction")
+_TypeAbstraction = (Name "hydra.core.TypeAbstraction")
 
 _TypeAbstraction_parameter = (Name "parameter")
 
@@ -661,7 +661,7 @@ data TypeScheme =
     typeSchemeType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_TypeScheme = (Name "hydra/core.TypeScheme")
+_TypeScheme = (Name "hydra.core.TypeScheme")
 
 _TypeScheme_variables = (Name "variables")
 
@@ -674,7 +674,7 @@ data TypedTerm =
     typedTermType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_TypedTerm = (Name "hydra/core.TypedTerm")
+_TypedTerm = (Name "hydra.core.TypedTerm")
 
 _TypedTerm_term = (Name "term")
 
@@ -685,7 +685,7 @@ data Unit =
   Unit {}
   deriving (Eq, Ord, Read, Show)
 
-_Unit = (Name "hydra/core.Unit")
+_Unit = (Name "hydra.core.Unit")
 
 -- | A term wrapped in a type name
 data WrappedTerm = 
@@ -694,7 +694,7 @@ data WrappedTerm =
     wrappedTermObject :: Term}
   deriving (Eq, Ord, Read, Show)
 
-_WrappedTerm = (Name "hydra/core.WrappedTerm")
+_WrappedTerm = (Name "hydra.core.WrappedTerm")
 
 _WrappedTerm_typeName = (Name "typeName")
 
@@ -707,7 +707,7 @@ data WrappedType =
     wrappedTypeObject :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_WrappedType = (Name "hydra/core.WrappedType")
+_WrappedType = (Name "hydra.core.WrappedType")
 
 _WrappedType_typeName = (Name "typeName")
 

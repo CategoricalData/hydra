@@ -16,7 +16,7 @@ data Closed =
     closedIgnoredProperties :: (Maybe (Set Syntax.Property))}
   deriving (Eq, Ord, Read, Show)
 
-_Closed = (Core.Name "hydra/ext/org/w3/shacl/model.Closed")
+_Closed = (Core.Name "hydra.ext/org/w3/shacl/model.Closed")
 
 _Closed_isClosed = (Core.Name "isClosed")
 
@@ -70,7 +70,7 @@ data CommonConstraint =
   CommonConstraintXone (Set (Reference Shape))
   deriving (Eq, Ord, Read, Show)
 
-_CommonConstraint = (Core.Name "hydra/ext/org/w3/shacl/model.CommonConstraint")
+_CommonConstraint = (Core.Name "hydra.ext/org/w3/shacl/model.CommonConstraint")
 
 _CommonConstraint_and = (Core.Name "and")
 
@@ -137,7 +137,7 @@ data CommonProperties =
     commonPropertiesTargetSubjectsOf :: (Set Syntax.Property)}
   deriving (Eq, Ord, Read, Show)
 
-_CommonProperties = (Core.Name "hydra/ext/org/w3/shacl/model.CommonProperties")
+_CommonProperties = (Core.Name "hydra.ext/org/w3/shacl/model.CommonProperties")
 
 _CommonProperties_constraints = (Core.Name "constraints")
 
@@ -162,7 +162,7 @@ data Definition a =
     definitionTarget :: a}
   deriving (Eq, Ord, Read, Show)
 
-_Definition = (Core.Name "hydra/ext/org/w3/shacl/model.Definition")
+_Definition = (Core.Name "hydra.ext/org/w3/shacl/model.Definition")
 
 _Definition_iri = (Core.Name "iri")
 
@@ -183,7 +183,7 @@ data NodeKind =
   NodeKindIriOrLiteral 
   deriving (Eq, Ord, Read, Show)
 
-_NodeKind = (Core.Name "hydra/ext/org/w3/shacl/model.NodeKind")
+_NodeKind = (Core.Name "hydra.ext/org/w3/shacl/model.NodeKind")
 
 _NodeKind_blankNode = (Core.Name "blankNode")
 
@@ -203,7 +203,7 @@ data NodeShape =
     nodeShapeCommon :: CommonProperties}
   deriving (Eq, Ord, Read, Show)
 
-_NodeShape = (Core.Name "hydra/ext/org/w3/shacl/model.NodeShape")
+_NodeShape = (Core.Name "hydra.ext/org/w3/shacl/model.NodeShape")
 
 _NodeShape_common = (Core.Name "common")
 
@@ -214,7 +214,7 @@ data Pattern =
     patternFlags :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Pattern = (Core.Name "hydra/ext/org/w3/shacl/model.Pattern")
+_Pattern = (Core.Name "hydra.ext/org/w3/shacl/model.Pattern")
 
 _Pattern_regex = (Core.Name "regex")
 
@@ -237,7 +237,7 @@ data PropertyShape =
     propertyShapePath :: Syntax.Iri}
   deriving (Eq, Ord, Read, Show)
 
-_PropertyShape = (Core.Name "hydra/ext/org/w3/shacl/model.PropertyShape")
+_PropertyShape = (Core.Name "hydra.ext/org/w3/shacl/model.PropertyShape")
 
 _PropertyShape_common = (Core.Name "common")
 
@@ -269,7 +269,7 @@ data PropertyShapeConstraint =
   PropertyShapeConstraintQualifiedValueShape QualifiedValueShape
   deriving (Eq, Ord, Read, Show)
 
-_PropertyShapeConstraint = (Core.Name "hydra/ext/org/w3/shacl/model.PropertyShapeConstraint")
+_PropertyShapeConstraint = (Core.Name "hydra.ext/org/w3/shacl/model.PropertyShapeConstraint")
 
 _PropertyShapeConstraint_lessThan = (Core.Name "lessThan")
 
@@ -292,7 +292,7 @@ data QualifiedValueShape =
     qualifiedValueShapeQualifiedValueShapesDisjoint :: (Maybe Bool)}
   deriving (Eq, Ord, Read, Show)
 
-_QualifiedValueShape = (Core.Name "hydra/ext/org/w3/shacl/model.QualifiedValueShape")
+_QualifiedValueShape = (Core.Name "hydra.ext/org/w3/shacl/model.QualifiedValueShape")
 
 _QualifiedValueShape_qualifiedValueShape = (Core.Name "qualifiedValueShape")
 
@@ -311,7 +311,7 @@ data Reference a =
   ReferenceDefinition (Definition a)
   deriving (Eq, Ord, Read, Show)
 
-_Reference = (Core.Name "hydra/ext/org/w3/shacl/model.Reference")
+_Reference = (Core.Name "hydra.ext/org/w3/shacl/model.Reference")
 
 _Reference_named = (Core.Name "named")
 
@@ -328,7 +328,7 @@ data Severity =
   SeverityViolation 
   deriving (Eq, Ord, Read, Show)
 
-_Severity = (Core.Name "hydra/ext/org/w3/shacl/model.Severity")
+_Severity = (Core.Name "hydra.ext/org/w3/shacl/model.Severity")
 
 _Severity_info = (Core.Name "info")
 
@@ -342,7 +342,7 @@ data Shape =
   ShapeProperty PropertyShape
   deriving (Eq, Ord, Read, Show)
 
-_Shape = (Core.Name "hydra/ext/org/w3/shacl/model.Shape")
+_Shape = (Core.Name "hydra.ext/org/w3/shacl/model.Shape")
 
 _Shape_node = (Core.Name "node")
 
@@ -354,4 +354,4 @@ newtype ShapesGraph =
     unShapesGraph :: (Set (Definition Shape))}
   deriving (Eq, Ord, Read, Show)
 
-_ShapesGraph = (Core.Name "hydra/ext/org/w3/shacl/model.ShapesGraph")
+_ShapesGraph = (Core.Name "hydra.ext/org/w3/shacl/model.ShapesGraph")

@@ -1,4 +1,4 @@
--- | A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs
+-- | A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra.wiki/Property-graphs
 
 module Hydra.Pg.Mapping where
 
@@ -30,7 +30,7 @@ data AnnotationSchema =
     annotationSchemaIgnore :: String}
   deriving (Eq, Ord, Read, Show)
 
-_AnnotationSchema = (Core.Name "hydra/pg/mapping.AnnotationSchema")
+_AnnotationSchema = (Core.Name "hydra.pg.mapping.AnnotationSchema")
 
 _AnnotationSchema_vertexLabel = (Core.Name "vertexLabel")
 
@@ -77,7 +77,7 @@ data EdgeSpec =
     edgeSpecProperties :: [PropertySpec]}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeSpec = (Core.Name "hydra/pg/mapping.EdgeSpec")
+_EdgeSpec = (Core.Name "hydra.pg.mapping.EdgeSpec")
 
 _EdgeSpec_label = (Core.Name "label")
 
@@ -95,7 +95,7 @@ data ElementSpec =
   ElementSpecEdge EdgeSpec
   deriving (Eq, Ord, Read, Show)
 
-_ElementSpec = (Core.Name "hydra/pg/mapping.ElementSpec")
+_ElementSpec = (Core.Name "hydra.pg.mapping.ElementSpec")
 
 _ElementSpec_vertex = (Core.Name "vertex")
 
@@ -110,7 +110,7 @@ data PropertySpec =
     propertySpecValue :: ValueSpec}
   deriving (Eq, Ord, Read, Show)
 
-_PropertySpec = (Core.Name "hydra/pg/mapping.PropertySpec")
+_PropertySpec = (Core.Name "hydra.pg.mapping.PropertySpec")
 
 _PropertySpec_key = (Core.Name "key")
 
@@ -129,7 +129,7 @@ data Schema s t v =
     schemaDefaultVertexId :: v,
     schemaDefaultEdgeId :: v}
 
-_Schema = (Core.Name "hydra/pg/mapping.Schema")
+_Schema = (Core.Name "hydra.pg.mapping.Schema")
 
 _Schema_vertexIdTypes = (Core.Name "vertexIdTypes")
 
@@ -157,7 +157,7 @@ data ValueSpec =
   ValueSpecPattern String
   deriving (Eq, Ord, Read, Show)
 
-_ValueSpec = (Core.Name "hydra/pg/mapping.ValueSpec")
+_ValueSpec = (Core.Name "hydra.pg.mapping.ValueSpec")
 
 _ValueSpec_value = (Core.Name "value")
 
@@ -174,7 +174,7 @@ data VertexSpec =
     vertexSpecProperties :: [PropertySpec]}
   deriving (Eq, Ord, Read, Show)
 
-_VertexSpec = (Core.Name "hydra/pg/mapping.VertexSpec")
+_VertexSpec = (Core.Name "hydra.pg.mapping.VertexSpec")
 
 _VertexSpec_label = (Core.Name "label")
 

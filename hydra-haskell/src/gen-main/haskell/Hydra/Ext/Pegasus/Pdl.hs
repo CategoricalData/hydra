@@ -17,7 +17,7 @@ data Annotations =
     annotationsDeprecated :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Annotations = (Core.Name "hydra/ext/pegasus/pdl.Annotations")
+_Annotations = (Core.Name "hydra.ext/pegasus/pdl.Annotations")
 
 _Annotations_doc = (Core.Name "doc")
 
@@ -29,7 +29,7 @@ data EnumField =
     enumFieldAnnotations :: Annotations}
   deriving (Eq, Ord, Read, Show)
 
-_EnumField = (Core.Name "hydra/ext/pegasus/pdl.EnumField")
+_EnumField = (Core.Name "hydra.ext/pegasus/pdl.EnumField")
 
 _EnumField_name = (Core.Name "name")
 
@@ -40,14 +40,14 @@ newtype EnumFieldName =
     unEnumFieldName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_EnumFieldName = (Core.Name "hydra/ext/pegasus/pdl.EnumFieldName")
+_EnumFieldName = (Core.Name "hydra.ext/pegasus/pdl.EnumFieldName")
 
 data EnumSchema = 
   EnumSchema {
     enumSchemaFields :: [EnumField]}
   deriving (Eq, Ord, Read, Show)
 
-_EnumSchema = (Core.Name "hydra/ext/pegasus/pdl.EnumSchema")
+_EnumSchema = (Core.Name "hydra.ext/pegasus/pdl.EnumSchema")
 
 _EnumSchema_fields = (Core.Name "fields")
 
@@ -56,7 +56,7 @@ newtype FieldName =
     unFieldName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_FieldName = (Core.Name "hydra/ext/pegasus/pdl.FieldName")
+_FieldName = (Core.Name "hydra.ext/pegasus/pdl.FieldName")
 
 data NamedSchema = 
   NamedSchema {
@@ -65,7 +65,7 @@ data NamedSchema =
     namedSchemaAnnotations :: Annotations}
   deriving (Eq, Ord, Read, Show)
 
-_NamedSchema = (Core.Name "hydra/ext/pegasus/pdl.NamedSchema")
+_NamedSchema = (Core.Name "hydra.ext/pegasus/pdl.NamedSchema")
 
 _NamedSchema_qualifiedName = (Core.Name "qualifiedName")
 
@@ -79,7 +79,7 @@ data NamedSchemaType =
   NamedSchemaTypeTyperef Schema
   deriving (Eq, Ord, Read, Show)
 
-_NamedSchemaType = (Core.Name "hydra/ext/pegasus/pdl.NamedSchemaType")
+_NamedSchemaType = (Core.Name "hydra.ext/pegasus/pdl.NamedSchemaType")
 
 _NamedSchemaType_record = (Core.Name "record")
 
@@ -92,21 +92,21 @@ newtype Name =
     unName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Name = (Core.Name "hydra/ext/pegasus/pdl.Name")
+_Name = (Core.Name "hydra.ext/pegasus/pdl.Name")
 
 newtype Namespace = 
   Namespace {
     unNamespace :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Namespace = (Core.Name "hydra/ext/pegasus/pdl.Namespace")
+_Namespace = (Core.Name "hydra.ext/pegasus/pdl.Namespace")
 
 newtype Package = 
   Package {
     unPackage :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Package = (Core.Name "hydra/ext/pegasus/pdl.Package")
+_Package = (Core.Name "hydra.ext/pegasus/pdl.Package")
 
 data PrimitiveType = 
   PrimitiveTypeBoolean  |
@@ -118,7 +118,7 @@ data PrimitiveType =
   PrimitiveTypeString 
   deriving (Eq, Ord, Read, Show)
 
-_PrimitiveType = (Core.Name "hydra/ext/pegasus/pdl.PrimitiveType")
+_PrimitiveType = (Core.Name "hydra.ext/pegasus/pdl.PrimitiveType")
 
 _PrimitiveType_boolean = (Core.Name "boolean")
 
@@ -139,7 +139,7 @@ newtype PropertyKey =
     unPropertyKey :: String}
   deriving (Eq, Ord, Read, Show)
 
-_PropertyKey = (Core.Name "hydra/ext/pegasus/pdl.PropertyKey")
+_PropertyKey = (Core.Name "hydra.ext/pegasus/pdl.PropertyKey")
 
 data Property = 
   Property {
@@ -147,7 +147,7 @@ data Property =
     propertyValue :: (Maybe Json.Value)}
   deriving (Eq, Ord, Read, Show)
 
-_Property = (Core.Name "hydra/ext/pegasus/pdl.Property")
+_Property = (Core.Name "hydra.ext/pegasus/pdl.Property")
 
 _Property_key = (Core.Name "key")
 
@@ -159,7 +159,7 @@ data QualifiedName =
     qualifiedNameNamespace :: (Maybe Namespace)}
   deriving (Eq, Ord, Read, Show)
 
-_QualifiedName = (Core.Name "hydra/ext/pegasus/pdl.QualifiedName")
+_QualifiedName = (Core.Name "hydra.ext/pegasus/pdl.QualifiedName")
 
 _QualifiedName_name = (Core.Name "name")
 
@@ -174,7 +174,7 @@ data RecordField =
     recordFieldAnnotations :: Annotations}
   deriving (Eq, Ord, Read, Show)
 
-_RecordField = (Core.Name "hydra/ext/pegasus/pdl.RecordField")
+_RecordField = (Core.Name "hydra.ext/pegasus/pdl.RecordField")
 
 _RecordField_name = (Core.Name "name")
 
@@ -192,7 +192,7 @@ data RecordSchema =
     recordSchemaIncludes :: [NamedSchema]}
   deriving (Eq, Ord, Read, Show)
 
-_RecordSchema = (Core.Name "hydra/ext/pegasus/pdl.RecordSchema")
+_RecordSchema = (Core.Name "hydra.ext/pegasus/pdl.RecordSchema")
 
 _RecordSchema_fields = (Core.Name "fields")
 
@@ -209,7 +209,7 @@ data Schema =
   SchemaUnion UnionSchema
   deriving (Eq, Ord, Read, Show)
 
-_Schema = (Core.Name "hydra/ext/pegasus/pdl.Schema")
+_Schema = (Core.Name "hydra.ext/pegasus/pdl.Schema")
 
 _Schema_array = (Core.Name "array")
 
@@ -235,7 +235,7 @@ data SchemaFile =
     schemaFileSchemas :: [NamedSchema]}
   deriving (Eq, Ord, Read, Show)
 
-_SchemaFile = (Core.Name "hydra/ext/pegasus/pdl.SchemaFile")
+_SchemaFile = (Core.Name "hydra.ext/pegasus/pdl.SchemaFile")
 
 _SchemaFile_namespace = (Core.Name "namespace")
 
@@ -252,7 +252,7 @@ data UnionMember =
     unionMemberAnnotations :: Annotations}
   deriving (Eq, Ord, Read, Show)
 
-_UnionMember = (Core.Name "hydra/ext/pegasus/pdl.UnionMember")
+_UnionMember = (Core.Name "hydra.ext/pegasus/pdl.UnionMember")
 
 _UnionMember_alias = (Core.Name "alias")
 
@@ -265,4 +265,4 @@ newtype UnionSchema =
     unUnionSchema :: [UnionMember]}
   deriving (Eq, Ord, Read, Show)
 
-_UnionSchema = (Core.Name "hydra/ext/pegasus/pdl.UnionSchema")
+_UnionSchema = (Core.Name "hydra.ext/pegasus/pdl.UnionSchema")

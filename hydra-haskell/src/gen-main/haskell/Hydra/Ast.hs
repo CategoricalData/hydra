@@ -16,7 +16,7 @@ data Associativity =
   AssociativityBoth 
   deriving (Eq, Ord, Read, Show)
 
-_Associativity = (Core.Name "hydra/ast.Associativity")
+_Associativity = (Core.Name "hydra.ast.Associativity")
 
 _Associativity_none = (Core.Name "none")
 
@@ -34,7 +34,7 @@ data BlockStyle =
     blockStyleNewlineAfterContent :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_BlockStyle = (Core.Name "hydra/ast.BlockStyle")
+_BlockStyle = (Core.Name "hydra.ast.BlockStyle")
 
 _BlockStyle_indent = (Core.Name "indent")
 
@@ -50,7 +50,7 @@ data BracketExpr =
     bracketExprStyle :: BlockStyle}
   deriving (Eq, Ord, Read, Show)
 
-_BracketExpr = (Core.Name "hydra/ast.BracketExpr")
+_BracketExpr = (Core.Name "hydra.ast.BracketExpr")
 
 _BracketExpr_brackets = (Core.Name "brackets")
 
@@ -65,7 +65,7 @@ data Brackets =
     bracketsClose :: Symbol}
   deriving (Eq, Ord, Read, Show)
 
-_Brackets = (Core.Name "hydra/ast.Brackets")
+_Brackets = (Core.Name "hydra.ast.Brackets")
 
 _Brackets_open = (Core.Name "open")
 
@@ -79,7 +79,7 @@ data Expr =
   ExprBrackets BracketExpr
   deriving (Eq, Ord, Read, Show)
 
-_Expr = (Core.Name "hydra/ast.Expr")
+_Expr = (Core.Name "hydra.ast.Expr")
 
 _Expr_const = (Core.Name "const")
 
@@ -96,7 +96,7 @@ data IndentedExpression =
     indentedExpressionExpr :: Expr}
   deriving (Eq, Ord, Read, Show)
 
-_IndentedExpression = (Core.Name "hydra/ast.IndentedExpression")
+_IndentedExpression = (Core.Name "hydra.ast.IndentedExpression")
 
 _IndentedExpression_style = (Core.Name "style")
 
@@ -108,7 +108,7 @@ data IndentStyle =
   IndentStyleSubsequentLines String
   deriving (Eq, Ord, Read, Show)
 
-_IndentStyle = (Core.Name "hydra/ast.IndentStyle")
+_IndentStyle = (Core.Name "hydra.ast.IndentStyle")
 
 _IndentStyle_allLines = (Core.Name "allLines")
 
@@ -123,7 +123,7 @@ data Op =
     opAssociativity :: Associativity}
   deriving (Eq, Ord, Read, Show)
 
-_Op = (Core.Name "hydra/ast.Op")
+_Op = (Core.Name "hydra.ast.Op")
 
 _Op_symbol = (Core.Name "symbol")
 
@@ -141,7 +141,7 @@ data OpExpr =
     opExprRhs :: Expr}
   deriving (Eq, Ord, Read, Show)
 
-_OpExpr = (Core.Name "hydra/ast.OpExpr")
+_OpExpr = (Core.Name "hydra.ast.OpExpr")
 
 _OpExpr_op = (Core.Name "op")
 
@@ -156,7 +156,7 @@ data Padding =
     paddingRight :: Ws}
   deriving (Eq, Ord, Read, Show)
 
-_Padding = (Core.Name "hydra/ast.Padding")
+_Padding = (Core.Name "hydra.ast.Padding")
 
 _Padding_left = (Core.Name "left")
 
@@ -168,7 +168,7 @@ newtype Precedence =
     unPrecedence :: Int}
   deriving (Eq, Ord, Read, Show)
 
-_Precedence = (Core.Name "hydra/ast.Precedence")
+_Precedence = (Core.Name "hydra.ast.Precedence")
 
 -- | Any symbol
 newtype Symbol = 
@@ -176,7 +176,7 @@ newtype Symbol =
     unSymbol :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Symbol = (Core.Name "hydra/ast.Symbol")
+_Symbol = (Core.Name "hydra.ast.Symbol")
 
 -- | One of several classes of whitespace
 data Ws = 
@@ -187,7 +187,7 @@ data Ws =
   WsDoubleBreak 
   deriving (Eq, Ord, Read, Show)
 
-_Ws = (Core.Name "hydra/ast.Ws")
+_Ws = (Core.Name "hydra.ast.Ws")
 
 _Ws_none = (Core.Name "none")
 

@@ -1,4 +1,4 @@
--- | A set of types which supplement hydra/core with variants and accessors. Currently contains miscellaneous additional types including CaseConvention and Either.
+-- | A set of types which supplement hydra.core with variants and accessors. Currently contains miscellaneous additional types including CaseConvention and Either.
 
 module Hydra.Mantle where
 
@@ -15,7 +15,7 @@ data CaseConvention =
   CaseConventionUpperSnake 
   deriving (Eq, Ord, Read, Show)
 
-_CaseConvention = (Core.Name "hydra/mantle.CaseConvention")
+_CaseConvention = (Core.Name "hydra.mantle.CaseConvention")
 
 _CaseConvention_camel = (Core.Name "camel")
 
@@ -31,7 +31,7 @@ data Either_ a b =
   EitherRight b
   deriving (Eq, Ord, Read, Show)
 
-_Either = (Core.Name "hydra/mantle.Either")
+_Either = (Core.Name "hydra.mantle.Either")
 
 _Either_left = (Core.Name "left")
 
@@ -47,7 +47,7 @@ data EliminationVariant =
   EliminationVariantWrap 
   deriving (Eq, Ord, Read, Show)
 
-_EliminationVariant = (Core.Name "hydra/mantle.EliminationVariant")
+_EliminationVariant = (Core.Name "hydra.mantle.EliminationVariant")
 
 _EliminationVariant_list = (Core.Name "list")
 
@@ -68,7 +68,7 @@ data FunctionVariant =
   FunctionVariantPrimitive 
   deriving (Eq, Ord, Read, Show)
 
-_FunctionVariant = (Core.Name "hydra/mantle.FunctionVariant")
+_FunctionVariant = (Core.Name "hydra.mantle.FunctionVariant")
 
 _FunctionVariant_elimination = (Core.Name "elimination")
 
@@ -85,7 +85,7 @@ data LiteralVariant =
   LiteralVariantString 
   deriving (Eq, Ord, Read, Show)
 
-_LiteralVariant = (Core.Name "hydra/mantle.LiteralVariant")
+_LiteralVariant = (Core.Name "hydra.mantle.LiteralVariant")
 
 _LiteralVariant_binary = (Core.Name "binary")
 
@@ -103,7 +103,7 @@ data Precision =
   PrecisionBits Int
   deriving (Eq, Ord, Read, Show)
 
-_Precision = (Core.Name "hydra/mantle.Precision")
+_Precision = (Core.Name "hydra.mantle.Precision")
 
 _Precision_arbitrary = (Core.Name "arbitrary")
 
@@ -137,7 +137,7 @@ data TermAccessor =
   TermAccessorWrappedTerm 
   deriving (Eq, Ord, Read, Show)
 
-_TermAccessor = (Core.Name "hydra/mantle.TermAccessor")
+_TermAccessor = (Core.Name "hydra.mantle.TermAccessor")
 
 _TermAccessor_annotatedSubject = (Core.Name "annotatedSubject")
 
@@ -209,7 +209,7 @@ data TermVariant =
   TermVariantWrap 
   deriving (Eq, Ord, Read, Show)
 
-_TermVariant = (Core.Name "hydra/mantle.TermVariant")
+_TermVariant = (Core.Name "hydra.mantle.TermVariant")
 
 _TermVariant_annotated = (Core.Name "annotated")
 
@@ -256,7 +256,7 @@ data TypeConstraint =
     typeConstraintComment :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_TypeConstraint = (Core.Name "hydra/mantle.TypeConstraint")
+_TypeConstraint = (Core.Name "hydra.mantle.TypeConstraint")
 
 _TypeConstraint_left = (Core.Name "left")
 
@@ -283,7 +283,7 @@ data TypeVariant =
   TypeVariantWrap 
   deriving (Eq, Ord, Read, Show)
 
-_TypeVariant = (Core.Name "hydra/mantle.TypeVariant")
+_TypeVariant = (Core.Name "hydra.mantle.TypeVariant")
 
 _TypeVariant_annotated = (Core.Name "annotated")
 

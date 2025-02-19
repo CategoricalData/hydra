@@ -1,4 +1,4 @@
--- | The extension to graphs of Hydra's core type system (hydra/core)
+-- | The extension to graphs of Hydra's core type system (hydra.core)
 
 module Hydra.Graph where
 
@@ -16,7 +16,7 @@ data Comparison =
   ComparisonGreaterThan 
   deriving (Eq, Ord, Read, Show)
 
-_Comparison = (Core.Name "hydra/graph.Comparison")
+_Comparison = (Core.Name "hydra.graph.Comparison")
 
 _Comparison_lessThan = (Core.Name "lessThan")
 
@@ -40,7 +40,7 @@ data Graph =
     -- | The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph.
     graphSchema :: (Maybe Graph)}
 
-_Graph = (Core.Name "hydra/graph.Graph")
+_Graph = (Core.Name "hydra.graph.Graph")
 
 _Graph_elements = (Core.Name "elements")
 
@@ -61,7 +61,7 @@ data Element =
     elementData :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
-_Element = (Core.Name "hydra/graph.Element")
+_Element = (Core.Name "hydra.graph.Element")
 
 _Element_name = (Core.Name "name")
 
@@ -77,7 +77,7 @@ data Primitive =
     -- | A concrete implementation of the primitive function
     primitiveImplementation :: ([Core.Term] -> Compute.Flow Graph Core.Term)}
 
-_Primitive = (Core.Name "hydra/graph.Primitive")
+_Primitive = (Core.Name "hydra.graph.Primitive")
 
 _Primitive_name = (Core.Name "name")
 
@@ -91,7 +91,7 @@ data TermCoder x =
     termCoderType :: Core.Type,
     termCoderCoder :: (Compute.Coder Graph Graph Core.Term x)}
 
-_TermCoder = (Core.Name "hydra/graph.TermCoder")
+_TermCoder = (Core.Name "hydra.graph.TermCoder")
 
 _TermCoder_type = (Core.Name "type")
 
@@ -103,7 +103,7 @@ data TypeClass =
   TypeClassOrdering 
   deriving (Eq, Ord, Read, Show)
 
-_TypeClass = (Core.Name "hydra/graph.TypeClass")
+_TypeClass = (Core.Name "hydra.graph.TypeClass")
 
 _TypeClass_equality = (Core.Name "equality")
 

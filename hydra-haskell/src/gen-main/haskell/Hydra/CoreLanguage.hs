@@ -13,7 +13,7 @@ import Data.Set as S
 -- | Language constraints for Java
 hydraCoreLanguage :: Coders.Language
 hydraCoreLanguage = Coders.Language {
-  Coders.languageName = (Coders.LanguageName "hydra/core"),
+  Coders.languageName = (Coders.LanguageName "hydra.core"),
   Coders.languageConstraints = Coders.LanguageConstraints {
     Coders.languageConstraintsEliminationVariants = (Sets.fromList Variants.eliminationVariants),
     Coders.languageConstraintsLiteralVariants = (Sets.fromList Variants.literalVariants),

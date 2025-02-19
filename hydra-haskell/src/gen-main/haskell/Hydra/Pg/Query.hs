@@ -13,7 +13,7 @@ data AggregationQuery =
   AggregationQueryCount 
   deriving (Eq, Ord, Read, Show)
 
-_AggregationQuery = (Core.Name "hydra/pg/query.AggregationQuery")
+_AggregationQuery = (Core.Name "hydra.pg.query.AggregationQuery")
 
 _AggregationQuery_count = (Core.Name "count")
 
@@ -22,7 +22,7 @@ newtype ApplicationQuery =
     unApplicationQuery :: [Query]}
   deriving (Eq, Ord, Read, Show)
 
-_ApplicationQuery = (Core.Name "hydra/pg/query.ApplicationQuery")
+_ApplicationQuery = (Core.Name "hydra.pg.query.ApplicationQuery")
 
 data AssociativeExpression = 
   AssociativeExpression {
@@ -30,7 +30,7 @@ data AssociativeExpression =
     associativeExpressionOperands :: [Expression]}
   deriving (Eq, Ord, Read, Show)
 
-_AssociativeExpression = (Core.Name "hydra/pg/query.AssociativeExpression")
+_AssociativeExpression = (Core.Name "hydra.pg.query.AssociativeExpression")
 
 _AssociativeExpression_operator = (Core.Name "operator")
 
@@ -43,7 +43,7 @@ data BinaryExpression =
     binaryExpressionRight :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_BinaryExpression = (Core.Name "hydra/pg/query.BinaryExpression")
+_BinaryExpression = (Core.Name "hydra.pg.query.BinaryExpression")
 
 _BinaryExpression_left = (Core.Name "left")
 
@@ -57,7 +57,7 @@ data BinaryBooleanOperator =
   BinaryBooleanOperatorXor 
   deriving (Eq, Ord, Read, Show)
 
-_BinaryBooleanOperator = (Core.Name "hydra/pg/query.BinaryBooleanOperator")
+_BinaryBooleanOperator = (Core.Name "hydra.pg.query.BinaryBooleanOperator")
 
 _BinaryBooleanOperator_and = (Core.Name "and")
 
@@ -71,7 +71,7 @@ data BinaryOperator =
   BinaryOperatorPower 
   deriving (Eq, Ord, Read, Show)
 
-_BinaryOperator = (Core.Name "hydra/pg/query.BinaryOperator")
+_BinaryOperator = (Core.Name "hydra.pg.query.BinaryOperator")
 
 _BinaryOperator_boolean = (Core.Name "boolean")
 
@@ -85,7 +85,7 @@ data Binding =
     bindingValue :: Query}
   deriving (Eq, Ord, Read, Show)
 
-_Binding = (Core.Name "hydra/pg/query.Binding")
+_Binding = (Core.Name "hydra.pg.query.Binding")
 
 _Binding_key = (Core.Name "key")
 
@@ -100,7 +100,7 @@ data ComparisonOperator =
   ComparisonOperatorGte 
   deriving (Eq, Ord, Read, Show)
 
-_ComparisonOperator = (Core.Name "hydra/pg/query.ComparisonOperator")
+_ComparisonOperator = (Core.Name "hydra.pg.query.ComparisonOperator")
 
 _ComparisonOperator_eq = (Core.Name "eq")
 
@@ -122,7 +122,7 @@ data EdgeProjectionPattern =
     edgeProjectionPatternVertex :: (Maybe VertexPattern)}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeProjectionPattern = (Core.Name "hydra/pg/query.EdgeProjectionPattern")
+_EdgeProjectionPattern = (Core.Name "hydra.pg.query.EdgeProjectionPattern")
 
 _EdgeProjectionPattern_direction = (Core.Name "direction")
 
@@ -141,7 +141,7 @@ data Expression =
   ExpressionVertex VertexPattern
   deriving (Eq, Ord, Read, Show)
 
-_Expression = (Core.Name "hydra/pg/query.Expression")
+_Expression = (Core.Name "hydra.pg.query.Expression")
 
 _Expression_associative = (Core.Name "associative")
 
@@ -161,7 +161,7 @@ data LetQuery =
     letQueryEnvironment :: Query}
   deriving (Eq, Ord, Read, Show)
 
-_LetQuery = (Core.Name "hydra/pg/query.LetQuery")
+_LetQuery = (Core.Name "hydra.pg.query.LetQuery")
 
 _LetQuery_bindings = (Core.Name "bindings")
 
@@ -174,7 +174,7 @@ data MatchQuery =
     matchQueryWhere :: (Maybe Expression)}
   deriving (Eq, Ord, Read, Show)
 
-_MatchQuery = (Core.Name "hydra/pg/query.MatchQuery")
+_MatchQuery = (Core.Name "hydra.pg.query.MatchQuery")
 
 _MatchQuery_optional = (Core.Name "optional")
 
@@ -188,7 +188,7 @@ data Projection =
     projectionAs :: (Maybe Variable)}
   deriving (Eq, Ord, Read, Show)
 
-_Projection = (Core.Name "hydra/pg/query.Projection")
+_Projection = (Core.Name "hydra.pg.query.Projection")
 
 _Projection_value = (Core.Name "value")
 
@@ -200,7 +200,7 @@ data Projections =
     projectionsExplicit :: [Projection]}
   deriving (Eq, Ord, Read, Show)
 
-_Projections = (Core.Name "hydra/pg/query.Projections")
+_Projections = (Core.Name "hydra.pg.query.Projections")
 
 _Projections_all = (Core.Name "all")
 
@@ -212,7 +212,7 @@ data PropertyPattern =
     propertyPatternValue :: PropertyValuePattern}
   deriving (Eq, Ord, Read, Show)
 
-_PropertyPattern = (Core.Name "hydra/pg/query.PropertyPattern")
+_PropertyPattern = (Core.Name "hydra.pg.query.PropertyPattern")
 
 _PropertyPattern_key = (Core.Name "key")
 
@@ -224,7 +224,7 @@ data PropertyProjection =
     propertyProjectionKey :: Model.PropertyKey}
   deriving (Eq, Ord, Read, Show)
 
-_PropertyProjection = (Core.Name "hydra/pg/query.PropertyProjection")
+_PropertyProjection = (Core.Name "hydra.pg.query.PropertyProjection")
 
 _PropertyProjection_base = (Core.Name "base")
 
@@ -235,14 +235,14 @@ newtype PropertyValue =
     unPropertyValue :: String}
   deriving (Eq, Ord, Read, Show)
 
-_PropertyValue = (Core.Name "hydra/pg/query.PropertyValue")
+_PropertyValue = (Core.Name "hydra.pg.query.PropertyValue")
 
 data PropertyValuePattern = 
   PropertyValuePatternVariable Model.PropertyKey |
   PropertyValuePatternValue String
   deriving (Eq, Ord, Read, Show)
 
-_PropertyValuePattern = (Core.Name "hydra/pg/query.PropertyValuePattern")
+_PropertyValuePattern = (Core.Name "hydra.pg.query.PropertyValuePattern")
 
 _PropertyValuePattern_variable = (Core.Name "variable")
 
@@ -257,7 +257,7 @@ data Query =
   QueryValue String
   deriving (Eq, Ord, Read, Show)
 
-_Query = (Core.Name "hydra/pg/query.Query")
+_Query = (Core.Name "hydra.pg.query.Query")
 
 _Query_application = (Core.Name "application")
 
@@ -277,7 +277,7 @@ data SelectQuery =
     selectQueryProjection :: Projections}
   deriving (Eq, Ord, Read, Show)
 
-_SelectQuery = (Core.Name "hydra/pg/query.SelectQuery")
+_SelectQuery = (Core.Name "hydra.pg.query.SelectQuery")
 
 _SelectQuery_distinct = (Core.Name "distinct")
 
@@ -289,7 +289,7 @@ data UnaryExpression =
     unaryExpressionOperand :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_UnaryExpression = (Core.Name "hydra/pg/query.UnaryExpression")
+_UnaryExpression = (Core.Name "hydra.pg.query.UnaryExpression")
 
 _UnaryExpression_operator = (Core.Name "operator")
 
@@ -299,7 +299,7 @@ data UnaryOperator =
   UnaryOperatorNegate 
   deriving (Eq, Ord, Read, Show)
 
-_UnaryOperator = (Core.Name "hydra/pg/query.UnaryOperator")
+_UnaryOperator = (Core.Name "hydra.pg.query.UnaryOperator")
 
 _UnaryOperator_negate = (Core.Name "negate")
 
@@ -308,7 +308,7 @@ newtype Variable =
     unVariable :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Variable = (Core.Name "hydra/pg/query.Variable")
+_Variable = (Core.Name "hydra.pg.query.Variable")
 
 data VertexPattern = 
   VertexPattern {
@@ -318,7 +318,7 @@ data VertexPattern =
     vertexPatternEdges :: [EdgeProjectionPattern]}
   deriving (Eq, Ord, Read, Show)
 
-_VertexPattern = (Core.Name "hydra/pg/query.VertexPattern")
+_VertexPattern = (Core.Name "hydra.pg.query.VertexPattern")
 
 _VertexPattern_variable = (Core.Name "variable")
 

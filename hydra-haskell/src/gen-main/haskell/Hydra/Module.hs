@@ -15,7 +15,7 @@ newtype FileExtension =
     unFileExtension :: String}
   deriving (Eq, Ord, Read, Show)
 
-_FileExtension = (Core.Name "hydra/module.FileExtension")
+_FileExtension = (Core.Name "hydra.module.FileExtension")
 
 -- | A library of primitive functions
 data Library = 
@@ -27,7 +27,7 @@ data Library =
     -- | The primitives defined in this library
     libraryPrimitives :: [Graph.Primitive]}
 
-_Library = (Core.Name "hydra/module.Library")
+_Library = (Core.Name "hydra.module.Library")
 
 _Library_namespace = (Core.Name "namespace")
 
@@ -50,7 +50,7 @@ data Module =
     moduleDescription :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Module = (Core.Name "hydra/module.Module")
+_Module = (Core.Name "hydra.module.Module")
 
 _Module_namespace = (Core.Name "namespace")
 
@@ -68,7 +68,7 @@ newtype Namespace =
     unNamespace :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Namespace = (Core.Name "hydra/module.Namespace")
+_Namespace = (Core.Name "hydra.module.Namespace")
 
 -- | A qualified name consisting of an optional namespace together with a mandatory local name
 data QualifiedName = 
@@ -77,7 +77,7 @@ data QualifiedName =
     qualifiedNameLocal :: String}
   deriving (Eq, Ord, Read, Show)
 
-_QualifiedName = (Core.Name "hydra/module.QualifiedName")
+_QualifiedName = (Core.Name "hydra.module.QualifiedName")
 
 _QualifiedName_namespace = (Core.Name "namespace")
 

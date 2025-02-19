@@ -14,7 +14,7 @@ newtype Constant =
     unConstant :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Constant = (Core.Name "hydra/grammar.Constant")
+_Constant = (Core.Name "hydra.grammar.Constant")
 
 -- | An enhanced Backus-Naur form (BNF) grammar
 newtype Grammar = 
@@ -22,7 +22,7 @@ newtype Grammar =
     unGrammar :: [Production]}
   deriving (Eq, Ord, Read, Show)
 
-_Grammar = (Core.Name "hydra/grammar.Grammar")
+_Grammar = (Core.Name "hydra.grammar.Grammar")
 
 -- | A name for a pattern
 newtype Label = 
@@ -30,7 +30,7 @@ newtype Label =
     unLabel :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Label = (Core.Name "hydra/grammar.Label")
+_Label = (Core.Name "hydra.grammar.Label")
 
 -- | A pattern together with a name (label)
 data LabeledPattern = 
@@ -39,7 +39,7 @@ data LabeledPattern =
     labeledPatternPattern :: Pattern}
   deriving (Eq, Ord, Read, Show)
 
-_LabeledPattern = (Core.Name "hydra/grammar.LabeledPattern")
+_LabeledPattern = (Core.Name "hydra.grammar.LabeledPattern")
 
 _LabeledPattern_label = (Core.Name "label")
 
@@ -60,7 +60,7 @@ data Pattern =
   PatternPlus Pattern
   deriving (Eq, Ord, Read, Show)
 
-_Pattern = (Core.Name "hydra/grammar.Pattern")
+_Pattern = (Core.Name "hydra.grammar.Pattern")
 
 _Pattern_nil = (Core.Name "nil")
 
@@ -91,7 +91,7 @@ data Production =
     productionPattern :: Pattern}
   deriving (Eq, Ord, Read, Show)
 
-_Production = (Core.Name "hydra/grammar.Production")
+_Production = (Core.Name "hydra.grammar.Production")
 
 _Production_symbol = (Core.Name "symbol")
 
@@ -103,7 +103,7 @@ newtype Regex =
     unRegex :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Regex = (Core.Name "hydra/grammar.Regex")
+_Regex = (Core.Name "hydra.grammar.Regex")
 
 -- | A nonterminal symbol
 newtype Symbol = 
@@ -111,4 +111,4 @@ newtype Symbol =
     unSymbol :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Symbol = (Core.Name "hydra/grammar.Symbol")
+_Symbol = (Core.Name "hydra.grammar.Symbol")
