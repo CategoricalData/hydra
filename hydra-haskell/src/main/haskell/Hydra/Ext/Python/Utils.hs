@@ -112,29 +112,32 @@ pyClosedPatternToPyPatterns p =  Py.PatternsPattern $ Py.PatternOr $ Py.OrPatter
 pyConjunctionToPyExpression :: Py.Conjunction -> Py.Expression
 pyConjunctionToPyExpression conj = Py.ExpressionSimple $ Py.Disjunction [conj]
 
--- Extracts the primary from an expression, or wraps it in parentheses if the expression does not contain a primary.
-pyExpressionToPyPrimary :: Py.Expression -> Py.Primary
-pyExpressionToPyPrimary e = case decodePyExpressionToPyPrimary e of
-  Just prim -> prim
-  Nothing -> Py.PrimarySimple $ Py.AtomGroup $ Py.GroupExpression $ Py.NamedExpressionSimple e
-
 pyExpressionToPyAnnotatedRhs :: Py.Expression -> Py.AnnotatedRhs
 pyExpressionToPyAnnotatedRhs expr = Py.AnnotatedRhsStar [Py.StarExpressionSimple expr]
 
 pyExpressionsToPyArgs :: [Py.Expression] -> Py.Args
 pyExpressionsToPyArgs exprs = Py.Args (Py.PosArgExpression <$> exprs) [] []
 
-pyExpressionToPySlice :: Py.Expression -> Py.Slice
-pyExpressionToPySlice = Py.SliceNamed . Py.NamedExpressionSimple
+-- Extracts the primary from an expression, or wraps it in parentheses if the expression does not contain a primary.
+pyExpressionToPyPrimary :: Py.Expression -> Py.Primary
+pyExpressionToPyPrimary e = case decodePyExpressionToPyPrimary e of
+  Just prim -> prim
+  Nothing -> Py.PrimarySimple $ Py.AtomGroup $ Py.GroupExpression $ Py.NamedExpressionSimple e
 
 pyExpressionToPySimpleStatement :: Py.Expression -> Py.SimpleStatement
 pyExpressionToPySimpleStatement expr = Py.SimpleStatementStarExpressions [Py.StarExpressionSimple expr]
+
+pyExpressionToPySlice :: Py.Expression -> Py.Slice
+pyExpressionToPySlice = Py.SliceNamed . Py.NamedExpressionSimple
+
+pyExpressionToPyStarNamedExpression :: Py.Expression -> Py.StarNamedExpression
+pyExpressionToPyStarNamedExpression = Py.StarNamedExpressionSimple . Py.NamedExpressionSimple
 
 pyExpressionToPyStatement :: Py.Expression -> Py.Statement
 pyExpressionToPyStatement = pySimpleStatementToPyStatement . pyExpressionToPySimpleStatement
 
 pyList :: [Py.Expression] -> Py.List
-pyList exprs = Py.List (Py.StarNamedExpressionSimple . Py.NamedExpressionSimple <$> exprs)
+pyList exprs = Py.List (pyExpressionToPyStarNamedExpression <$> exprs)
 
 pyNameToPyExpression :: Py.Name -> Py.Expression
 pyNameToPyExpression =  pyPrimaryToPyExpression . pyNameToPyPrimary
