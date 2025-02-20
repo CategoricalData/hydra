@@ -39,7 +39,7 @@ floatValueToBigfloatDef = literalsDefinition "floatValueToBigfloat" $
   doc "Convert a floating-point value of any precision to a bigfloat" $
   function floatValueT Types.bigfloat $
   match _FloatValue Nothing [
-    _FloatValue_bigfloat>>: Equality.identity,
+    _FloatValue_bigfloat>>: lambda "f" $ Equality.identity $ var "f",
     _FloatValue_float32>>: Literals.float32ToBigfloat,
     _FloatValue_float64>>: Literals.float64ToBigfloat]
 
@@ -48,7 +48,7 @@ integerValueToBigintDef = literalsDefinition "integerValueToBigint" $
   doc "Convert an integer value of any precision to a bigint" $
   function integerValueT Types.bigint $
   match _IntegerValue Nothing [
-    _IntegerValue_bigint>>: Equality.identity,
+    _IntegerValue_bigint>>: lambda "i" $ Equality.identity $ var "i",
     _IntegerValue_int8>>: Literals.int8ToBigint,
     _IntegerValue_int16>>: Literals.int16ToBigint,
     _IntegerValue_int32>>: Literals.int32ToBigint,

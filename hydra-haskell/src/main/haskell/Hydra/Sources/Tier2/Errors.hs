@@ -59,7 +59,7 @@ getStateDef = errorsDefinition "getState" $
   `with` [
     "fs1">:
       typed (Types.apply (Types.apply (TypeVariable _FlowState) tS) tUnit) $
-      Flows.unFlow @@ (Flows.pure @@ unit) @@ var "s0" @@ var "t0"])
+      Flows.unFlow @@ (Flows.pure unit) @@ var "s0" @@ var "t0"])
 
 putStateDef :: TElement (s -> Flow s ())
 putStateDef = errorsDefinition "putState" $
@@ -71,27 +71,26 @@ putStateDef = errorsDefinition "putState" $
       (var "cx")
       (Flows.flowStateTrace @@ var "f1"))
     `with` [
-      "f1">: Flows.unFlow @@ (Flows.pure @@ unit) @@ var "s0" @@ var "t0"])
+      "f1">: Flows.unFlow @@ (Flows.pure unit) @@ var "s0" @@ var "t0"])
 
 traceSummaryDef :: TElement (Trace -> String)
 traceSummaryDef = errorsDefinition "traceSummary" $
   doc "Summarize a trace as a string" $
   function traceT tString $
   lambda "t" $ (
-    (Strings.intercalate @@ "\n" @@ (Lists.concat2 @@ var "messageLines" @@ var "keyvalLines"))
+    (Strings.intercalate "\n" (Lists.concat2 (var "messageLines") (var "keyvalLines")))
       `with` [
-        "messageLines">: (Lists.nub @@ (Flows.traceMessages @@ var "t")),
-        "keyvalLines">: Logic.ifElse
-          @@ (Maps.isEmpty @@ (Flows.traceOther @@ var "t"))
-          @@ (list [])
-          @@ (Lists.cons @@ "key/value pairs: "
-            @@ (Lists.map @@ (var "toLine") @@ (Maps.toList @@ (Flows.traceOther @@ var "t")))),
+        "messageLines">: (Lists.nub (Flows.traceMessages @@ var "t")),
+        "keyvalLines">: Logic.ifElse (Maps.isEmpty (Flows.traceOther @@ var "t"))
+          (list [])
+          (Lists.cons ("key/value pairs: ")
+            (Lists.map (var "toLine") (Maps.toList (Flows.traceOther @@ var "t")))),
         "toLine">:
           function (tPair tString termT) tString $
-          lambda "pair" $ "\t" ++ (Core.unName @@ (first @@ var "pair")) ++ ": " ++ (Io.showTerm @@ (second @@ var "pair"))])
+          lambda "pair" $ "\t" ++ (Core.unName @@ (first @@ var "pair")) ++ ": " ++ (Io.showTerm (second @@ var "pair"))])
 
 unexpectedDef :: TElement (String -> String -> Flow s x)
 unexpectedDef = errorsDefinition "unexpected" $
   doc "Fail if an actual value does not match an expected value" $
   function tString (tFun tString (tFlow tS tX)) $
-  lambda "expected" $ lambda "actual" $ Flows.fail @@ ("expected " ++ var "expected" ++ " but found: " ++ var "actual")
+  lambda "expected" $ lambda "actual" $ Flows.fail ("expected " ++ var "expected" ++ " but found: " ++ var "actual")

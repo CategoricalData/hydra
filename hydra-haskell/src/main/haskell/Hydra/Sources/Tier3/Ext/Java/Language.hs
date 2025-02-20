@@ -109,13 +109,13 @@ javaLanguageDef = javaLanguageDefinition "javaLanguage" $
         TypeVariantVariable,
         TypeVariantWrap]
       typePredicate = match _Type (Just true) [
-        _Type_product>>: lambda "types" $ Equality.ltInt32 @@ (Lists.length @@ var "types") @@ (ref javaMaxTupleLengthDef)]
+        _Type_product>>: lambda "types" $ Equality.ltInt32 (Lists.length $ var "types") (ref javaMaxTupleLengthDef)]
 
 reservedWordsDef :: TElement (S.Set String)
 reservedWordsDef = javaLanguageDefinition "reservedWords" $
   doc "A set of reserved words in Java" $
   typed (tSet tString) $
-  (Sets.fromList @@ (Lists.concat @@ list [var "specialNames", var "classNames", var "keywords", var "literals"]))
+  (Sets.fromList (Lists.concat $ list [var "specialNames", var "classNames", var "keywords", var "literals"]))
   `with` [
     "specialNames">:
       doc "Special names reserved for use by Hydra" $

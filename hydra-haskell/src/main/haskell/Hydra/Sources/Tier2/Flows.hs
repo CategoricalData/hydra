@@ -32,7 +32,8 @@ flowsDefinition :: String -> TTerm a -> TElement a
 flowsDefinition = definitionInModule hydraFlowsModule
 
 hydraFlowsModule :: Module
-hydraFlowsModule = Module (Namespace "hydra.flows") elements [hydraConstantsModule] [hydraMantleModule, hydraComputeModule] $
+hydraFlowsModule = Module (Namespace "hydra.flows") elements
+    [hydraConstantsModule] [hydraMantleModule, hydraComputeModule] $
     Just ("Functions for working with flows (the Hydra state monad).")
   where
     elements = [
@@ -106,7 +107,7 @@ flowSucceedsDef = flowsDefinition "flowSucceeds" $
   doc "Check whether a flow succeeds" $
   function (Types.var "s") (Types.function tFlowSA Types.boolean) $
   lambda "cx" $ lambda "f" $
-    Optionals.isJust @@ (Flows.flowStateValue @@ (Flows.unFlow @@ var "f" @@ var "cx" @@ ref emptyTraceDef))
+    Optionals.isJust (Flows.flowStateValue @@ (Flows.unFlow @@ var "f" @@ var "cx" @@ ref emptyTraceDef))
 
 fromFlowDef :: TElement (a -> s -> Flow s a -> a)
 fromFlowDef = flowsDefinition "fromFlow" $
@@ -157,10 +158,10 @@ pushErrorDef = flowsDefinition "pushError" $
   functionN [Types.string, traceT, traceT] $
   lambda "msg" $ lambda "t" $ ((Flows.trace
       (Flows.traceStack @@ var "t")
-      (Lists.cons @@ var "errorMsg" @@ (Flows.traceMessages @@ var "t"))
+      (Lists.cons (var "errorMsg") (Flows.traceMessages @@ var "t"))
       (Flows.traceOther @@ var "t"))
     `with` [
-      "errorMsg">: Strings.concat ["Error: ", var "msg", " (", (Strings.intercalate @@ " > " @@ (Lists.reverse @@ (Flows.traceStack @@ var "t"))), ")"]])
+      "errorMsg">: Strings.concat ["Error: ", var "msg", " (", (Strings.intercalate " > " (Lists.reverse (Flows.traceStack @@ var "t"))), ")"]])
 
 warnDef :: TElement (String -> Flow s a -> Flow s a)
 warnDef = flowsDefinition "warn" $
@@ -175,7 +176,7 @@ warnDef = flowsDefinition "warn" $
       "f1">: Flows.unFlow @@ var "b" @@ var "s0" @@ var "t0",
       "addMessage">: lambda "t" $ Flows.trace
         (Flows.traceStack @@ var "t")
-        (Lists.cons @@ ("Warning: " ++ var "msg") @@ (Flows.traceMessages @@ var "t"))
+        (Lists.cons ("Warning: " ++ var "msg") (Flows.traceMessages @@ var "t"))
         (Flows.traceOther @@ var "t")])
 
 withFlagDef :: TElement (String -> Flow s a -> Flow s a)
@@ -187,11 +188,11 @@ withFlagDef = flowsDefinition "withFlag" $
     "mutate">: lambda "t" $ inject _Either _Either_right $ (Flows.trace
       (Flows.traceStack @@ var "t")
       (Flows.traceMessages @@ var "t")
-      (Maps.insert @@ var "flag" @@ (inject _Term _Term_literal $ inject _Literal _Literal_boolean $ boolean True) @@ (Flows.traceOther @@ var "t"))),
+      (Maps.insert (var "flag") (inject _Term _Term_literal $ inject _Literal _Literal_boolean $ boolean True) (Flows.traceOther @@ var "t"))),
     "restore">: lambda "ignored" $ lambda "t1" $ Flows.trace
       (Flows.traceStack @@ var "t1")
       (Flows.traceMessages @@ var "t1")
-      (Maps.remove @@ var "flag" @@ (Flows.traceOther @@ var "t1"))])
+      (Maps.remove (var "flag") (Flows.traceOther @@ var "t1"))])
 
 withStateDef :: TElement (s1 -> Flow s1 a -> Flow s2 a)
 withStateDef = flowsDefinition "withState" $
@@ -212,11 +213,10 @@ withTraceDef = flowsDefinition "withTrace" $
   lambda "msg" ((ref mutateTraceDef @@ var "mutate" @@ var "restore")
     `with` [
       -- augment the trace
-      "mutate">: lambda "t" $ Logic.ifElse
-        @@ (Equality.gteInt32 @@ (Lists.length @@ (Flows.traceStack @@ var "t")) @@ ref maxTraceDepthDef)
-        @@ (inject _Either _Either_left $ string "maximum trace depth exceeded. This may indicate an infinite loop")
-        @@ (inject _Either _Either_right $ Flows.trace
-          (Lists.cons @@ var "msg" @@ (Flows.traceStack @@ var "t"))
+      "mutate">: lambda "t" $ Logic.ifElse (Equality.gteInt32 (Lists.length (Flows.traceStack @@ var "t")) $ ref maxTraceDepthDef)
+        (inject _Either _Either_left $ string "maximum trace depth exceeded. This may indicate an infinite loop")
+        (inject _Either _Either_right $ Flows.trace
+          (Lists.cons (var "msg") (Flows.traceStack @@ var "t"))
           (Flows.traceMessages @@ var "t")
           (Flows.traceOther @@ var "t")),
       -- reset the trace stack after execution

@@ -471,7 +471,7 @@ isEncodedTypeDef = coreEncodingExtrasDefinition "isEncodedType" $
       TCase _Term_application --> lambda "a" $
         ref isEncodedTypeDef @@ (Core.applicationFunction @@ var "a"),
       TCase _Term_union       --> lambda "i" $
-        Equality.equalString @@ (string $ unName _Type) @@ (Core.unName @@ (Core.injectionTypeName @@ var "i"))
+        Equality.equalString (string $ unName _Type) (Core.unName @@ (Core.injectionTypeName @@ var "i"))
     ]) @@ (ref stripTermDef @@ var "t")
 
 isTypeDef :: TElement (Type -> Bool)
@@ -483,16 +483,16 @@ isTypeDef = coreEncodingExtrasDefinition "isType" $
       TCase _Type_lambda --> lambda "l" $
         ref isTypeDef @@ (Core.lambdaTypeBody @@ var "l"),
       TCase _Type_union --> lambda "rt" $
-        Equality.equalString @@ (string $ unName _Type) @@ (Core.unName @@ (Core.rowTypeTypeName @@ var "rt"))
+        Equality.equalString (string $ unName _Type) (Core.unName @@ (Core.rowTypeTypeName @@ var "rt"))
 --      TCase _Type_variable --> constant true
     ]) @@ (ref stripTypeDef @@ var "t")
 
 isUnitTermDef :: TElement (Term -> Bool)
 isUnitTermDef = coreEncodingExtrasDefinition "isUnitTerm" $
   function termT tBoolean $
-  lambda "t" $ Equality.equalTerm @@ (ref fullyStripTermDef @@ var "t") @@ TTerm (coreEncodeTerm Terms.unit)
+  lambda "t" $ Equality.equalTerm (ref fullyStripTermDef @@ var "t") $ TTerm (coreEncodeTerm Terms.unit)
 
 isUnitTypeDef :: TElement (Term -> Bool)
 isUnitTypeDef = coreEncodingExtrasDefinition "isUnitType" $
   function typeT tBoolean $
-  lambda "t" $ Equality.equalType @@ (ref stripTypeDef @@ var "t") @@ TTerm (coreEncodeType tUnit)
+  lambda "t" $ Equality.equalType (ref stripTypeDef @@ var "t") $ TTerm (coreEncodeType tUnit)

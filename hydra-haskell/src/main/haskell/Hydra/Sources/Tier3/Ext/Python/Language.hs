@@ -99,7 +99,7 @@ pythonReservedWordsDef :: TElement (S.Set String)
 pythonReservedWordsDef = pythonLanguageDefinition "pythonReservedWords" $
     doc "A set of reserved words in Python" $
     typed (tSet tString) $
-    (Sets.fromList @@ var "keywords")
+    (Sets.fromList $ var "keywords")
   `with` [
     "keywords">:
       doc "Python keywords, as enumerated at https://docs.python.org/3.13/reference/lexical_analysis.html#keywords" $

@@ -84,15 +84,15 @@ freeVariablesInTermDef = rewritingDefinition "freeVariablesInTerm" $
     (match _Term (Just $ var "dfltVars") [
       _Term_function>>: match _Function (Just $ var "dfltVars") [
         _Function_lambda>>: lambda "l" (Sets.remove
-          @@ (Core.lambdaParameter @@ var "l")
-          @@ (ref freeVariablesInTermDef @@ (Core.lambdaBody @@ var "l")))],
+          (Core.lambdaParameter @@ var "l")
+          (ref freeVariablesInTermDef @@ (Core.lambdaBody @@ var "l")))],
 --      TODO: restore the following
 --      _Term_let>>: lambda "l" (Sets.difference
 --        @@ (ref freeVariablesInTermDef @@ (Core.letEnvironment @@ var "l"))
---        @@ (Sets.fromList @@ (Lists.map @@ first @@ (Maps.toList @@ (Core.letBindings @@ var "l"))))),
-      _Term_variable>>: lambda "v" (Sets.singleton @@ var "v")] @@ var "term")
+--        @@ (Sets.fromList (Lists.map first (Maps.toList (Core.letBindings @@ var "l"))))),
+      _Term_variable>>: lambda "v" (Sets.singleton $ var "v")] @@ var "term")
     `with` [
-      "dfltVars">: typed (tSet nameT) $ Base.fold (lambda "s" $ lambda "t" $ Sets.union @@ var "s" @@ (ref freeVariablesInTermDef @@ var "t"))
+      "dfltVars">: typed (tSet nameT) $ Base.fold (lambda "s" $ lambda "t" $ Sets.union (var "s") (ref freeVariablesInTermDef @@ var "t"))
         @@ Sets.empty
         @@ (ref subtermsDef @@ var "term")])
 
@@ -103,12 +103,12 @@ freeVariablesInTypeDef = rewritingDefinition "freeVariablesInType" $
   lambda "typ" (
     (match _Type (Just $ var "dfltVars") [
       _Type_lambda>>: lambda "lt" (Sets.remove
-          @@ (Core.lambdaTypeParameter @@ var "lt")
-          @@ (recurse @@ (Core.lambdaTypeBody @@ var "lt"))),
+          (Core.lambdaTypeParameter @@ var "lt")
+          (recurse @@ (Core.lambdaTypeBody @@ var "lt"))),
       -- TODO: let-types
-      _Type_variable>>: lambda "v" (Sets.singleton @@ var "v")] @@ var "typ")
+      _Type_variable>>: lambda "v" (Sets.singleton $ var "v")] @@ var "typ")
     `with` [
-      "dfltVars">: typed (tSet nameT) $ Base.fold (lambda "s" $ lambda "t" $ Sets.union @@ var "s" @@ (recurse @@ var "t"))
+      "dfltVars">: typed (tSet nameT) $ Base.fold (lambda "s" $ lambda "t" $ Sets.union (var "s") (recurse @@ var "t"))
         @@ Sets.empty
         @@ (ref subtypesDef @@ var "typ")])
   where
@@ -140,20 +140,20 @@ subtermsDef = rewritingDefinition "subterms" $
               Core.optionalCasesNothing @@ var "oc",
               Core.optionalCasesJust @@ var "oc"],
             _Elimination_union>>: lambda "cs" $ Lists.concat2
-              @@ ((matchOpt (list []) (lambda "t" $ list [var "t"])) @@ (Core.caseStatementDefault @@ var "cs"))
-              @@ (Lists.map @@ Core.fieldTerm @@ (Core.caseStatementCases @@ var "cs"))],
+              ((matchOpt (list []) (lambda "t" $ list [var "t"])) @@ (Core.caseStatementDefault @@ var "cs"))
+              (Lists.map Core.fieldTerm (Core.caseStatementCases @@ var "cs"))],
         _Function_lambda>>: lambda "l" $ list [Core.lambdaBody @@ var "l"]],
     _Term_let>>: lambda "lt" $ Lists.cons
-      @@ (Core.letEnvironment @@ var "lt")
-      @@ (Lists.map @@ Core.letBindingTerm @@ (Core.letBindings @@ var "lt")),
+      (Core.letEnvironment @@ var "lt")
+      (Lists.map Core.letBindingTerm (Core.letBindings @@ var "lt")),
     _Term_list>>: lambda "l" $ var "l",
     _Term_literal>>: constant $ list [],
-    _Term_map>>: lambda "m" (Lists.concat @@
-      (Lists.map @@ (lambda "p" $ list [first @@ var "p", second @@ var "p"]) @@ (Maps.toList @@ var "m"))),
+    _Term_map>>: lambda "m" (Lists.concat
+      (Lists.map (lambda "p" $ list [first @@ var "p", second @@ var "p"]) (Maps.toList $ var "m"))),
     _Term_optional>>: matchOpt (list []) (lambda "t" $ list [var "t"]),
     _Term_product>>: lambda "tuple" $ var "tuple",
-    _Term_record>>: lambda "rt" (Lists.map @@ Core.fieldTerm @@ (Core.recordFields @@ var "rt")),
-    _Term_set>>: Sets.toList,
+    _Term_record>>: lambda "rt" (Lists.map Core.fieldTerm (Core.recordFields @@ var "rt")),
+    _Term_set>>: lambda "l" $ Sets.toList $ var "l",
     _Term_sum>>: lambda "st" $ list [Core.sumTerm @@ var "st"],
     _Term_typeAbstraction>>: lambda "ta" $ list [Core.typeAbstractionBody @@ var "ta"],
     _Term_typeApplication>>: lambda "ta" $ list [Core.typedTermTerm @@ var "ta"],
@@ -178,38 +178,40 @@ subtermsWithAccessorsDef = rewritingDefinition "subtermsWithAccessors" $
               result termAccessorOptionalCasesNothing $ Core.optionalCasesNothing @@ var "oc",
               result termAccessorOptionalCasesJust $ Core.optionalCasesJust @@ var "oc"],
             _Elimination_union>>: lambda "cs" $ Lists.concat2
-              @@ ((matchOpt none (lambda "t" $ single termAccessorUnionCasesDefault $ var "t")) @@ (Core.caseStatementDefault @@ var "cs"))
-              @@ (Lists.map
-                @@ (lambda "f" $ result (termAccessorUnionCasesBranch $ Core.fieldName @@ var "f") $ Core.fieldTerm @@ var "f")
-                @@ (Core.caseStatementCases @@ var "cs"))],
+              ((matchOpt none (lambda "t" $ single termAccessorUnionCasesDefault $ var "t")) @@ (Core.caseStatementDefault @@ var "cs"))
+              (Lists.map
+                (lambda "f" $ result (termAccessorUnionCasesBranch $ Core.fieldName @@ var "f") $ Core.fieldTerm @@ var "f")
+                (Core.caseStatementCases @@ var "cs"))],
         _Function_lambda>>: lambda "l" $ single termAccessorLambdaBody $ Core.lambdaBody @@ var "l"],
     _Term_let>>: lambda "lt" $ Lists.cons
-      @@ (result termAccessorLetEnvironment $ Core.letEnvironment @@ var "lt")
-      @@ (Lists.map
-        @@ (lambda "b" $ result (termAccessorLetBinding $ Core.letBindingName @@ var "b") $ Core.letBindingTerm @@ var "b")
-        @@ (Core.letBindings @@ var "lt")),
-    _Term_list>>: Lists.map
-      -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
-      @@ (lambda "e" $ result (termAccessorListElement $ int32 0) $ var "e"),
-    _Term_literal>>: constant none,
-    _Term_map>>: lambda "m" (Lists.concat @@
+      (result termAccessorLetEnvironment $ Core.letEnvironment @@ var "lt")
       (Lists.map
-        @@ (lambda "p" $ list [
+        (lambda "b" $ result (termAccessorLetBinding $ Core.letBindingName @@ var "b") $ Core.letBindingTerm @@ var "b")
+        (Core.letBindings @@ var "lt")),
+    _Term_list>>: lambda "l" $ Lists.map
+      -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
+      (lambda "e" $ result (termAccessorListElement $ int32 0) $ var "e")
+      (var "l"),
+    _Term_literal>>: constant none,
+    _Term_map>>: lambda "m" (Lists.concat
+      (Lists.map
+        (lambda "p" $ list [
           -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
           result (termAccessorMapKey $ int32 0) $ first @@ var "p",
           result (termAccessorMapValue $ int32 0) $ second @@ var "p"])
-        @@ (Maps.toList @@ var "m"))),
+        (Maps.toList $ var "m"))),
     _Term_optional>>: matchOpt none (lambda "t" $ single termAccessorOptionalTerm $ var "t"),
-    _Term_product>>: Lists.map
+    _Term_product>>: lambda "p" $ Lists.map
       -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
-      @@ (lambda "e" $ result (termAccessorProductTerm $ int32 0) $ var "e"),
+      (lambda "e" $ result (termAccessorProductTerm $ int32 0) $ var "e")
+      (var "p"),
     _Term_record>>: lambda "rt" (Lists.map
-      @@ (lambda "f" $ result (termAccessorRecordField $ Core.fieldName @@ var "f") $ Core.fieldTerm @@ var "f")
-      @@ (Core.recordFields @@ var "rt")),
+      (lambda "f" $ result (termAccessorRecordField $ Core.fieldName @@ var "f") $ Core.fieldTerm @@ var "f")
+      (Core.recordFields @@ var "rt")),
     _Term_set>>: lambda "s" $ Lists.map
       -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
-      @@ (lambda "e" $ result (termAccessorListElement $ int32 0) $ var "e")
-      @@ (Sets.toList @@ var "s"),
+      (lambda "e" $ result (termAccessorListElement $ int32 0) $ var "e")
+      (Sets.toList $ var "s"),
     _Term_sum>>: lambda "st" $
       single termAccessorSumTerm $
       Core.sumTerm @@ var "st",
@@ -253,9 +255,9 @@ subtypesDef = rewritingDefinition "subtypes" $
       Core.mapTypeValues @@ var "mt"],
     _Type_optional>>: lambda "ot" $ list [var "ot"],
     _Type_product>>: lambda "pt" $ var "pt",
-    _Type_record>>: lambda "rt" (Lists.map @@ Core.fieldTypeType @@ (Core.rowTypeFields @@ var "rt")),
+    _Type_record>>: lambda "rt" (Lists.map Core.fieldTypeType (Core.rowTypeFields @@ var "rt")),
     _Type_set>>: lambda "st" $ list [var "st"],
     _Type_sum>>: lambda "st" $ var "st",
-    _Type_union>>: lambda "rt" (Lists.map @@ Core.fieldTypeType @@ (Core.rowTypeFields @@ var "rt")),
+    _Type_union>>: lambda "rt" (Lists.map Core.fieldTypeType (Core.rowTypeFields @@ var "rt")),
     _Type_variable>>: constant $ list [],
     _Type_wrap>>: lambda "nt" $ list [Core.wrappedTypeObject @@ var "nt"]]

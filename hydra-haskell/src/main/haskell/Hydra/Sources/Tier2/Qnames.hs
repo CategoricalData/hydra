@@ -59,11 +59,11 @@ namespaceToFilePathDef :: TElement (CaseConvention -> FileExtension -> Namespace
 namespaceToFilePathDef = qnamesDefinition "namespaceToFilePath" $
   function caseConventionT (tFun fileExtensionT (tFun namespaceT tString)) $
   lambda "caseConv" $ lambda "ext" $ lambda "ns" $
-    (((Strings.intercalate @@ "/" @@ var "parts") ++ "." ++ (Module.unFileExtension @@ var "ext"))
+    (((Strings.intercalate "/" $ var "parts") ++ "." ++ (Module.unFileExtension @@ var "ext"))
     `with` [
       "parts">: Lists.map
-        @@ (ref convertCaseDef @@ Mantle.caseConventionCamel @@ var "caseConv")
-        @@ (Strings.splitOn @@ "." @@ (Core.unNamespace @@ var "ns"))])
+        (ref convertCaseDef @@ Mantle.caseConventionCamel @@ var "caseConv")
+        (Strings.splitOn "." (Core.unNamespace @@ var "ns"))])
 
 qnameDef :: TElement (Namespace -> String -> Name)
 qnameDef = qnamesDefinition "qname" $
@@ -71,20 +71,19 @@ qnameDef = qnamesDefinition "qname" $
   functionN [namespaceT, tString, nameT] $
   lambda "ns" $ lambda "name" $
     nom _Name $
-      apply Strings.cat $
+      Strings.cat $
         list [apply (unwrap _Namespace) (var "ns"), string ".", var "name"]
 
 qualifyNameDef :: TElement (Name -> QualifiedName)
 qualifyNameDef = qnamesDefinition "qualifyName" $
   function nameT qualifiedNameT $
-  lambda "name" $ (Logic.ifElse
-      @@ (Equality.equalInt32 @@ int32 1 @@ (Lists.length @@ var "parts"))
-      @@ Module.qualifiedName nothing (Core.unName @@ var "name")
-      @@ Module.qualifiedName
-        (just $ wrap _Namespace (Strings.intercalate @@ "." @@ (Lists.reverse @@ (Lists.tail @@ var "parts"))))
-        (Lists.head @@ var "parts"))
+  lambda "name" $ (Logic.ifElse (Equality.equalInt32 (int32 1) (Lists.length $ var "parts"))
+      (Module.qualifiedName nothing (Core.unName @@ var "name"))
+      (Module.qualifiedName
+        (just $ wrap _Namespace (Strings.intercalate "." (Lists.reverse (Lists.tail $ var "parts"))))
+        (Lists.head $ var "parts")))
     `with` [
-      "parts">: Lists.reverse @@ (Strings.splitOn @@ "." @@ (Core.unName @@ var "name"))]
+      "parts">: Lists.reverse (Strings.splitOn "." (Core.unName @@ var "name"))]
 
 unqualifyNameDef :: TElement (QualifiedName -> Name)
 unqualifyNameDef = qnamesDefinition "unqualifyName" $

@@ -87,12 +87,12 @@ checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
       H.it "test #2" $
         -- Example from https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf
         expectMonotype
-          ((lambdas ["f", "x", "y"] $ unTTerm Logic.ifElse
+          ((lambdas ["f", "x", "y"] $ primitive _logic_ifElse
               @@ (var "f" @@ (var "square" @@ var "x") @@ var "y")
               @@ (var "f" @@ var "x" @@ (var "f" @@ var "x" @@ var "y"))
               @@ (var "f" @@ var "x" @@ var "y"))
             `with` [
-              "square">: lambda "z" $ unTTerm Math.mul @@ var "z" @@ var "z"])
+              "square">: lambda "z" $ primitive _math_mul @@ var "z" @@ var "z"])
           (Types.functionN [
             Types.functionN [Types.int32, Types.boolean, Types.boolean], Types.int32, Types.boolean, Types.boolean])
 
