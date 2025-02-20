@@ -4,16 +4,17 @@ import Hydra.Core
 import Hydra.Phantoms
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
+import Hydra.Dsl.Base
 
 
-and :: TTerm (Bool -> Bool -> Bool)
-and = TTerm $ Terms.primitive _logic_and
+and :: TTerm Bool -> TTerm Bool -> TTerm Bool
+and = primitive2 _logic_and
 
-ifElse :: TTerm (Bool -> a -> a -> a)
-ifElse = TTerm $ Terms.primitive _logic_ifElse
+ifElse :: TTerm Bool -> TTerm a -> TTerm a -> TTerm a
+ifElse = primitive3 _logic_ifElse
 
-not :: TTerm (Bool -> Bool)
-not = TTerm $ Terms.primitive _logic_not
+not :: TTerm Bool -> TTerm Bool
+not = primitive1 _logic_not
 
-or :: TTerm (Bool -> Bool -> Bool)
-or = TTerm $ Terms.primitive _logic_or
+or :: TTerm Bool -> TTerm Bool -> TTerm Bool
+or = primitive2 _logic_or

@@ -45,7 +45,7 @@ elementsToGraphDef = lexicalDefinition "elementsToGraph" $
   function graphT (tFun (tOpt graphT) (tFun (TypeList elementT) graphT)) $
   lambda "parent" $ lambda "schema" $ lambda "elements" $
     Graph.graph
-      (Maps.fromList @@ (Lists.map @@ var "toPair" @@ var "elements"))
+      (Maps.fromList (Lists.map (var "toPair") $ var "elements"))
       (Graph.graphEnvironment @@ var "parent")
       (Graph.graphTypes @@ var "parent")
       (Graph.graphBody @@ var "parent")
@@ -60,4 +60,4 @@ lookupPrimitiveDef = lexicalDefinition "lookupPrimitive" $
     graphT
     (Types.function nameT (tOpt primitiveT)) $
   lambda "g" $ lambda "name" $
-    apply (Maps.lookup @@ var "name") (Graph.graphPrimitives @@ var "g")
+    Maps.lookup (var "name") (Graph.graphPrimitives @@ var "g")

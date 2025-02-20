@@ -151,12 +151,13 @@ casesCaseDef = decodeDefinition "casesCase" $
 fieldDef :: TElement (Name -> [Field] -> Maybe Term)
 fieldDef = decodeDefinition "field" $
   functionN [nameT, tList fieldT, tOpt termT] $
-  lambda "fname" $ lambda "fields" ((Logic.ifElse
-        @@ (Equality.equal @@ int32 1 @@ (Lists.length @@ var "matches"))
-        @@ just (Core.fieldTerm @@ (Lists.head @@ var "matches"))
-        @@ nothing
+  lambda "fname" $ lambda "fields" ((Logic.ifElse (Equality.equal (int32 1) (Lists.length $ var "matches"))
+        (just (Core.fieldTerm @@ (Lists.head $ var "matches")))
+        nothing
     ) `with` [
-      "matches">: Lists.filter @@ (lambda "f" $ Equality.equal @@ (Core.fieldName @@ var "f") @@ var "fname") @@ var "fields"])
+      "matches">: Lists.filter
+        (lambda "f" $ Equality.equal (Core.fieldName @@ var "f") $ var "fname")
+        (var "fields")])
 
 float32Def :: TElement (Term -> Maybe Float)
 float32Def = decodeFunctionDefinition "float32" termT tFloat32 $
@@ -241,20 +242,21 @@ letBindingDef :: TElement (Name -> Term -> Maybe LetBinding)
 letBindingDef = decodeDefinition "letBinding" $
   functionN [nameT, termT, tOpt letBindingT] $
   lambda "fname" $ lambda "term" $ Optionals.bind
-    @@ (Optionals.map
-      @@ Core.letBindings
-      @@ (ref letTermDef @@ var "term"))
-    @@ (ref letBindingWithKeyDef @@ var "fname")
+    (Optionals.map
+      Core.letBindings
+      (ref letTermDef @@ var "term"))
+    (ref letBindingWithKeyDef @@ var "fname")
 
 letBindingWithKeyDef :: TElement (Name -> [LetBinding] -> Maybe LetBinding)
 letBindingWithKeyDef = decodeDefinition "letBindingWithKey" $
   functionN [nameT, tList letBindingT, tOpt letBindingT] $
-  lambda "fname" $ lambda "bindings" ((Logic.ifElse
-        @@ (Equality.equal @@ int32 1 @@ (Lists.length @@ var "matches"))
-        @@ just (Lists.head @@ var "matches")
-        @@ nothing
+  lambda "fname" $ lambda "bindings" ((Logic.ifElse (Equality.equal (int32 1) (Lists.length $ var "matches"))
+        (just (Lists.head $ var "matches"))
+        nothing
     ) `with` [
-      "matches">: Lists.filter @@ (lambda "b" $ Equality.equal @@ (Core.letBindingName @@ var "b") @@ var "fname") @@ var "bindings"])
+      "matches">: Lists.filter
+        (lambda "b" $ Equality.equal (Core.letBindingName @@ var "b") $ var "fname")
+        (var "bindings")])
 
 letTermDef :: TElement (Term -> Maybe Let)
 letTermDef = decodeFunctionDefinition "letTerm" termT letT $
@@ -274,11 +276,10 @@ mapDef = decodeFunctionDefinition "map" termT (tMap termT termT) $
 
 nameDef :: TElement (Term -> Name)
 nameDef = decodeFunctionDefinition "name" termT nameT $
-  lambda "term" $ Optionals.map
-    @@ nm
-    @@ (Optionals.bind
-      @@ (ref wrapDef @@ Core.name _Name @@ var "term")
-      @@ ref stringDef)
+  lambda "term" $ Optionals.map nm
+    (Optionals.bind
+      (ref wrapDef @@ Core.name _Name @@ var "term")
+      (ref stringDef))
   where
     nm :: TTerm (String -> Name)
     nm = TTerm $ Terms.lambda "s" $ TermWrap $ WrappedTerm _Name $ Terms.var "s"
@@ -289,10 +290,9 @@ nominalDef = decodeDefinition "nominal" $
     lambda "getName" $ lambda "getB" $ lambda "getA" $ lambda "expected" $
     compose2
       (var "getA")
-      (lambda "a" $ (Logic.ifElse
-        @@ (Equality.equal @@ (var "getName" @@ var "a") @@ var "expected"))
-        @@ (just (var "getB" @@ var "a"))
-        @@ nothing)
+      (lambda "a" $ (Logic.ifElse (Equality.equal (var "getName" @@ var "a") $ var "expected"))
+        (just (var "getB" @@ var "a"))
+        nothing)
 
 optCasesDef :: TElement (Term -> Maybe OptionalCases)
 optCasesDef = decodeFunctionDefinition "optCases" termT optionalCasesT $
@@ -303,11 +303,11 @@ optCasesDef = decodeFunctionDefinition "optCases" termT optionalCasesT $
 
 optCasesJustDef :: TElement (Term -> Maybe Term)
 optCasesJustDef = decodeFunctionDefinition "optCasesJust" termT termT $
-  lambda "term" $ Optionals.map @@ Core.optionalCasesJust @@ (ref optCasesDef @@ var "term")
+  lambda "term" $ Optionals.map Core.optionalCasesJust (ref optCasesDef @@ var "term")
 
 optCasesNothingDef :: TElement (Term -> Maybe Term)
 optCasesNothingDef = decodeFunctionDefinition "optCasesNothing" termT termT $
-  lambda "term" $ Optionals.map @@ Core.optionalCasesNothing @@ (ref optCasesDef @@ var "term")
+  lambda "term" $ Optionals.map Core.optionalCasesNothing (ref optCasesDef @@ var "term")
 
 optionalDef :: TElement (Term -> Maybe (Maybe Term))
 optionalDef = decodeFunctionDefinition "optional" termT (tOpt termT) $
@@ -317,10 +317,9 @@ pairDef :: TElement (Term -> Maybe (Term, Term))
 pairDef = decodeFunctionDefinition "pair" termT (tPair termT termT) $
   compose2
     (matchTermVariant _Term_product)
-    (lambda "l" $ Logic.ifElse
-      @@ (Equality.equal @@ int32 2 @@ (Lists.length @@ var "l"))
-      @@ (just $ pair (Lists.at @@ int32 0 @@ var "l") (Lists.at @@ int32 1 @@ var "l"))
-      @@ nothing)
+    (lambda "l" $ Logic.ifElse (Equality.equal (int32 2) (Lists.length $ var "l"))
+      (just $ pair (Lists.at (int32 0) $ var "l") (Lists.at (int32 1) $ var "l"))
+      nothing)
 
 recordDef :: TElement (Name -> Term -> Maybe [Field])
 recordDef = decodeNominalFunctionDefinition "record" (tList fieldT) $
@@ -373,15 +372,15 @@ uint64ValueDef = decodeFunctionDefinition "uint64Value" integerValueT tUint64 $
 unitDef :: TElement (Term -> Maybe ())
 unitDef = decodeFunctionDefinition "unit" termT tUnit $
   lambda "term" $ Optionals.map
-    @@ (constant unit)
-    @@ (ref recordDef @@ Core.name _Unit @@ var "term")
+    (constant unit)
+    (ref recordDef @@ Core.name _Unit @@ var "term")
 
 unitVariantDef :: TElement (Name -> Term -> Maybe Name)
 unitVariantDef = decodeDefinition "unitVariant" $
   functionN [nameT, termT, tOpt nameT] $
   lambda "tname" $ lambda "term" $ Optionals.map
-    @@ Core.fieldName
-    @@ (ref variantDef @@ var "tname" @@ var "term")
+    Core.fieldName
+    (ref variantDef @@ var "tname" @@ var "term")
 
 variableDef :: TElement (Term -> Y.Maybe Name)
 variableDef = decodeFunctionDefinition "variable" termT nameT $
@@ -398,10 +397,10 @@ wrapDef = decodeNominalFunctionDefinition "wrap" termT $
 --
 
 compose2 :: TTerm (a -> Maybe b) -> TTerm (b -> Maybe c) -> TTerm (a -> Maybe c)
-compose2 f g = Optionals.compose @@ f @@ g
+compose2 = Optionals.compose
 
 compose3 :: TTerm (a -> Maybe b) -> TTerm (b -> Maybe c) -> TTerm (c -> Maybe d) -> TTerm (a -> Maybe d)
-compose3 f g h = Optionals.compose @@ (Optionals.compose @@ f @@ g) @@ h
+compose3 f g h = Optionals.compose (Optionals.compose f g) h
 
 matchNominal :: Name -> TTerm (a -> Name) -> TTerm (a -> b) -> TTerm (Name -> Term -> Maybe b)
 matchNominal fname getName getB = ref nominalDef @@ getName @@ getB @@ matchTermVariant fname
@@ -410,4 +409,4 @@ matchTermVariant :: Name -> TTerm (Term -> Maybe a)
 matchTermVariant fname = matchVariant _Term fname <.> ref fullyStripTermDef
 
 matchVariant :: Name -> Name -> TTerm (a -> Maybe b)
-matchVariant tname fname = match tname (Just nothing) [TCase fname --> Optionals.pure]
+matchVariant tname fname = match tname (Just nothing) [TCase fname --> lambda "x" $ Optionals.pure $ var "x"]

@@ -47,7 +47,7 @@ functionArityDef = arityDefinition "functionArity" $
   function (TypeVariable _Function) Types.int32 $
   match _Function Nothing [
     TCase _Function_elimination --> constant (int32 1),
-    TCase _Function_lambda --> (Math.add @@ int32 1) <.> (ref termArityDef <.> Core.lambdaBody),
+    TCase _Function_lambda --> (lambda "i" $ Math.add (int32 1) (var "i")) <.> (ref termArityDef <.> Core.lambdaBody),
     TCase _Function_primitive --> constant $
       doc "TODO: This function needs to be monadic, so we can look up the primitive" (int32 42)]
 
@@ -61,7 +61,7 @@ termArityDef :: TElement (Term -> Int)
 termArityDef = arityDefinition "termArity" $
   function termT Types.int32 $
   match _Term (Just $ int32 0) [
-    TCase _Term_application --> (lambda "x" $ Math.sub @@ var "x" @@ int32 1) <.> ref termArityDef <.> Core.applicationFunction,
+    TCase _Term_application --> (lambda "x" $ Math.sub (var "x") (int32 1)) <.> ref termArityDef <.> Core.applicationFunction,
     TCase _Term_function --> ref functionArityDef]
     -- Note: ignoring variables which might resolve to functions
 
@@ -73,7 +73,7 @@ typeArityDef = arityDefinition "typeArity" $
     TCase _Type_application --> ref typeArityDef <.> Core.applicationTypeFunction,
     TCase _Type_lambda --> ref typeArityDef <.> Core.lambdaTypeBody,
     TCase _Type_function --> lambda "f" $
-      Math.add @@ (int32 1) @@ (ref typeArityDef @@ (Core.functionTypeCodomain @@ var "f"))]
+      Math.add (int32 1) (ref typeArityDef @@ (Core.functionTypeCodomain @@ var "f"))]
 
 uncurryTypeDef :: TElement (Type -> [Type])
 uncurryTypeDef = arityDefinition "uncurryType" $
@@ -84,5 +84,5 @@ uncurryTypeDef = arityDefinition "uncurryType" $
     _Type_application>>: ref uncurryTypeDef <.> Core.applicationTypeFunction,
     _Type_lambda>>: ref uncurryTypeDef <.> Core.lambdaTypeBody,
     _Type_function>>: lambda "ft" $ Lists.cons
-      @@ (Core.functionTypeDomain @@ var "ft")
-      @@ (ref uncurryTypeDef @@ (Core.functionTypeCodomain @@ var "ft"))]) @@ var "t")
+      (Core.functionTypeDomain @@ var "ft")
+      (ref uncurryTypeDef @@ (Core.functionTypeCodomain @@ var "ft"))]) @@ var "t")

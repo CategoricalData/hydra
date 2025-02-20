@@ -46,11 +46,11 @@ hydraCoreLanguageDef = definitionInModule hydraCoreLanguageModule "hydraCoreLang
   record _Language [
     _Language_name>>: wrap _LanguageName "hydra.core",
     _Language_constraints>>: record _LanguageConstraints [
-    _LanguageConstraints_eliminationVariants>>: Sets.fromList @@ ref eliminationVariantsDef,
-    _LanguageConstraints_literalVariants>>: Sets.fromList @@ ref literalVariantsDef,
-    _LanguageConstraints_floatTypes>>: Sets.fromList @@ ref floatTypesDef,
-    _LanguageConstraints_functionVariants>>: Sets.fromList @@ ref functionVariantsDef,
-    _LanguageConstraints_integerTypes>>: Sets.fromList @@ ref integerTypesDef,
-    _LanguageConstraints_termVariants>>: Sets.fromList @@ ref termVariantsDef,
-    _LanguageConstraints_typeVariants>>: Sets.fromList @@ ref typeVariantsDef,
+    _LanguageConstraints_eliminationVariants>>: Sets.fromList $ ref eliminationVariantsDef,
+    _LanguageConstraints_literalVariants>>: Sets.fromList $ ref literalVariantsDef,
+    _LanguageConstraints_floatTypes>>: Sets.fromList $ ref floatTypesDef,
+    _LanguageConstraints_functionVariants>>: Sets.fromList $ ref functionVariantsDef,
+    _LanguageConstraints_integerTypes>>: Sets.fromList $ ref integerTypesDef,
+    _LanguageConstraints_termVariants>>: Sets.fromList $ ref termVariantsDef,
+    _LanguageConstraints_typeVariants>>: Sets.fromList $ ref typeVariantsDef,
     _LanguageConstraints_types>>: constant true]]

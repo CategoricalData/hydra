@@ -3,64 +3,65 @@ module Hydra.Dsl.Lib.Lists where
 import Hydra.Phantoms
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
+import Hydra.Dsl.Base
 
 
-apply :: TTerm ([a -> b] -> [a] -> [b])
-apply = TTerm $ Terms.primitive _lists_apply
+apply :: TTerm [a -> b] -> TTerm [a] -> TTerm [b]
+apply = primitive2 _lists_apply
 
-at :: TTerm (Int -> [a] -> a)
-at = TTerm $ Terms.primitive _lists_at
+at :: TTerm Int -> TTerm [a] -> TTerm a
+at = primitive2 _lists_at
 
-bind :: TTerm ([a] -> (a -> [b]) -> [b])
-bind = TTerm $ Terms.primitive _lists_bind
+bind :: TTerm [a] -> TTerm (a -> [b]) -> TTerm [b]
+bind = primitive2 _lists_bind
 
-concat :: TTerm ([[a]] -> [a])
-concat = TTerm $ Terms.primitive _lists_concat
+concat :: TTerm [[a]] -> TTerm [a]
+concat = primitive1 _lists_concat
 
-concat2 :: TTerm ([a] -> [a] -> [a])
-concat2 = TTerm $ Terms.primitive _lists_concat2
+concat2 :: TTerm [a] -> TTerm [a] -> TTerm [a]
+concat2 = primitive2 _lists_concat2
 
-cons :: TTerm (a -> [a] -> [a])
-cons = TTerm $ Terms.primitive _lists_cons
+cons :: TTerm a -> TTerm [a] -> TTerm [a]
+cons = primitive2 _lists_cons
 
-filter :: TTerm ((a -> Bool) -> [a] -> [a])
-filter = TTerm $ Terms.primitive _lists_filter
+filter :: TTerm (a -> Bool) -> TTerm [a] -> TTerm [a]
+filter = primitive2 _lists_filter
 
-foldl :: TTerm ((b -> a -> b) -> b -> [a] -> b)
-foldl = TTerm $ Terms.primitive _lists_foldl
+foldl :: TTerm (b -> a -> b) -> TTerm b -> TTerm [a] -> TTerm b
+foldl = primitive3 _lists_foldl
 
-head :: TTerm ([a] -> a)
-head = TTerm $ Terms.primitive _lists_head
+head :: TTerm [a] -> TTerm a
+head = primitive1 _lists_head
 
-intercalate :: TTerm ([a] -> [[a]] -> [a])
-intercalate = TTerm $ Terms.primitive _lists_intercalate
+intercalate :: TTerm [a] -> TTerm [[a]] -> TTerm [a]
+intercalate = primitive2 _lists_intercalate
 
-intersperse :: TTerm ([a] -> a -> [a])
-intersperse = TTerm $ Terms.primitive _lists_intersperse
+intersperse :: TTerm [a] -> TTerm a -> TTerm [a]
+intersperse = primitive2 _lists_intersperse
 
-last :: TTerm ([a] -> a)
-last = TTerm $ Terms.primitive _lists_last
+last :: TTerm [a] -> TTerm a
+last = primitive1 _lists_last
 
-length :: TTerm ([a] -> Int)
-length = TTerm $ Terms.primitive _lists_length
+length :: TTerm [a] -> TTerm Int
+length = primitive1 _lists_length
 
-map :: TTerm ((a -> b) -> [a] -> [b])
-map = TTerm $ Terms.primitive _lists_map
+map :: TTerm (a -> b) -> TTerm [a] -> TTerm [b]
+map = primitive2 _lists_map
 
-nub :: Eq a => TTerm ([a] -> [a])
-nub = TTerm $ Terms.primitive _lists_nub
+nub :: Eq a => TTerm [a] -> TTerm [a]
+nub = primitive1 _lists_nub
 
-null :: TTerm ([a] -> Bool)
-null = TTerm $ Terms.primitive _lists_null
+null :: TTerm [a] -> TTerm Bool
+null = primitive1 _lists_null
 
-pure :: TTerm (a -> [a])
-pure = TTerm $ Terms.primitive _lists_pure
+pure :: TTerm a -> TTerm [a]
+pure = primitive1 _lists_pure
 
-reverse :: TTerm ([a] -> [a])
-reverse = TTerm $ Terms.primitive _lists_reverse
+reverse :: TTerm [a] -> TTerm [a]
+reverse = primitive1 _lists_reverse
 
-safeHead :: TTerm ([a] -> Maybe a)
-safeHead = TTerm $ Terms.primitive _lists_safeHead
+safeHead :: TTerm [a] -> TTerm (Maybe a)
+safeHead = primitive1 _lists_safeHead
 
-tail :: TTerm ([a] -> [a])
-tail = TTerm $ Terms.primitive _lists_tail
+tail :: TTerm [a] -> TTerm [a]
+tail = primitive1 _lists_tail

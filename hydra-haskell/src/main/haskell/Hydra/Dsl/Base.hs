@@ -21,7 +21,6 @@ import Hydra.Sources.Tier0.Core
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
-import qualified Hydra.Dsl.Lib.Lists as Lists
 import Hydra.Sources.Libraries
 
 import Prelude hiding ((++))
@@ -104,7 +103,7 @@ fld :: Name -> TTerm a -> TField a
 fld fname (TTerm val) = TField $ Field fname val
 
 fold :: TTerm (b -> a -> b) -> TTerm (b -> [a] -> b)
-fold f = Lists.foldl @@ f
+fold f = (primitive _lists_foldl) @@ f
 
 function :: Type -> Type -> TTerm a -> TTerm a
 function dom cod = typed (Types.function dom cod)
@@ -117,11 +116,6 @@ functionNWithClasses ts classes = typed $ setTypeClasses classes (Types.function
 
 functionWithClasses :: Type -> Type -> M.Map Name (S.Set TypeClass) -> TTerm a -> TTerm a
 functionWithClasses dom cod classes = typed $ setTypeClasses classes (Types.function dom cod)
-
--- Note: Haskell has trouble type-checking this construction if the convenience functions from Base are used
-ifElse :: TTerm Bool -> TTerm a -> TTerm a -> TTerm a
-ifElse (TTerm cond) (TTerm ifTrue) (TTerm ifFalse) = TTerm $
-  Terms.apply (Terms.apply (Terms.apply (Terms.primitive _logic_ifElse) cond) ifTrue) ifFalse
 
 ifOpt :: TTerm (Maybe a) -> TTerm b -> TTerm (a -> b) -> TTerm b
 ifOpt m n j = matchOpt n j @@ m
@@ -191,6 +185,15 @@ pair (TTerm l) (TTerm r) = TTerm $ Terms.pair l r
 
 primitive :: Name -> TTerm a
 primitive = TTerm . Terms.primitive
+
+primitive1 :: Name -> TTerm a -> TTerm b
+primitive1 primName (TTerm a) = TTerm $ Terms.primitive primName Terms.@@ a
+
+primitive2 :: Name -> TTerm a -> TTerm b -> TTerm c
+primitive2 primName (TTerm a) (TTerm b) = TTerm $ Terms.primitive primName Terms.@@ a Terms.@@ b
+
+primitive3 :: Name -> TTerm a -> TTerm b -> TTerm c -> TTerm d
+primitive3 primName (TTerm a) (TTerm b) (TTerm c) = TTerm $ Terms.primitive primName Terms.@@ a Terms.@@ b Terms.@@ c
 
 project :: Name -> Name -> TTerm (a -> b)
 project name fname = TTerm $ Terms.project name fname

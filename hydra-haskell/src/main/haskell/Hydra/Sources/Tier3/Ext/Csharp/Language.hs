@@ -116,7 +116,7 @@ csharpReservedWordsDef = csharpLanguageDefinition "csharpReservedWords" $
       <> " section 6.4.4 of the C# documentation:\n"
       <> "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/lexical-structure#64-tokens") $
     typed (tSet tString) $
-    (Sets.fromList @@ (Lists.concat @@ list [var "keywords", var "contextualKeywords"]))
+    (Sets.fromList (Lists.concat $ list [var "keywords", var "contextualKeywords"]))
   `with` [
     "keywords">: list [
         "DEFAULT", "FALSE", "NULL", "TRUE",

@@ -48,29 +48,29 @@ protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
     _Language_name>>: wrap _LanguageName "hydra.ext.protobuf",
     _Language_constraints>>: record _LanguageConstraints [
       _LanguageConstraints_eliminationVariants>>: Sets.empty,
-      _LanguageConstraints_literalVariants>>: Sets.fromList @@ list (unitVariant _LiteralVariant <$> [
+      _LanguageConstraints_literalVariants>>: Sets.fromList $ list (unitVariant _LiteralVariant <$> [
         _LiteralVariant_binary,
         _LiteralVariant_boolean,
         _LiteralVariant_float,
         _LiteralVariant_integer,
         _LiteralVariant_string]),
-      _LanguageConstraints_floatTypes>>: Sets.fromList @@ list (unitVariant _FloatType <$> [
+      _LanguageConstraints_floatTypes>>: Sets.fromList $ list (unitVariant _FloatType <$> [
         _FloatType_float32,
         _FloatType_float64]),
       _LanguageConstraints_functionVariants>>: Sets.empty,
-      _LanguageConstraints_integerTypes>>: Sets.fromList @@ list (unitVariant _IntegerType <$> [
+      _LanguageConstraints_integerTypes>>: Sets.fromList $ list (unitVariant _IntegerType <$> [
         _IntegerType_int32,
         _IntegerType_int64,
         _IntegerType_uint32,
         _IntegerType_uint64]),
-      _LanguageConstraints_termVariants>>: Sets.fromList @@ list (unitVariant _TermVariant <$> [
+      _LanguageConstraints_termVariants>>: Sets.fromList $ list (unitVariant _TermVariant <$> [
         _TermVariant_list,
         _TermVariant_literal,
         _TermVariant_map,
         _TermVariant_optional,
         _TermVariant_record,
         _TermVariant_union]),
-      _LanguageConstraints_typeVariants>>: Sets.fromList @@ list (unitVariant _TypeVariant <$> [
+      _LanguageConstraints_typeVariants>>: Sets.fromList $ list (unitVariant _TypeVariant <$> [
         _TypeVariant_annotated,
         _TypeVariant_list,
         _TypeVariant_literal,
@@ -87,7 +87,7 @@ protobufReservedWordsDef :: TElement (S.Set String)
 protobufReservedWordsDef = protobufLanguageDefinition "protobufReservedWords" $
   doc "A set of reserved words in Protobuf" $
   typed (tSet tString) $
-  (Sets.fromList @@ (Lists.concat @@ list [var "fieldNames"]))
+  (Sets.fromList (Lists.concat $ list [var "fieldNames"]))
   `with` [
     "fieldNames">:
       doc "See: http://google.github.io/proto-lens/reserved-names.html" $
