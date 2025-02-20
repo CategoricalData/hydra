@@ -69,9 +69,9 @@ validateGraph checkValue showValue schema graph =
 validateProperties :: ((t -> v -> Maybe String) -> [Model.PropertyType t] -> Map Model.PropertyKey v -> Maybe String)
 validateProperties checkValue types props =  
   let checkTypes = (checkAll (Lists.map checkType types)) 
-      checkType = (\t -> Logic.ifElse ((\x -> case x of
+      checkType = (\t -> Logic.ifElse (Model.propertyTypeRequired t) ((\x -> case x of
               Nothing -> (Just (prepend "Missing value for " (Model.unPropertyKey (Model.propertyTypeKey t))))
-              Just _ -> Nothing) (Maps.lookup (Model.propertyTypeKey t) props)) Nothing (Model.propertyTypeRequired t))
+              Just _ -> Nothing) (Maps.lookup (Model.propertyTypeKey t) props)) Nothing)
       checkValues =  
               let m = (Maps.fromList (Lists.map (\p -> (Model.propertyTypeKey p, (Model.propertyTypeValue p))) types)) 
                   checkPair = (\pair ->  
@@ -126,7 +126,7 @@ prepend prefix msg = (Strings.cat [
   msg])
 
 verify :: (Bool -> String -> Maybe String)
-verify b err = (Logic.ifElse Nothing (Just err) b)
+verify b err = (Logic.ifElse b Nothing (Just err))
 
 vertexError :: ((v -> String) -> Model.Vertex v -> String -> String)
 vertexError showValue v = (prepend (Strings.cat [

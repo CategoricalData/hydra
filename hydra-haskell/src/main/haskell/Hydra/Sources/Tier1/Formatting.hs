@@ -69,7 +69,10 @@ convertCaseDef = formattingDefinition "convertCase" $
             @@ (Lists.foldl @@ (var "splitOnUppercase") @@ emptyParts
               @@ (Lists.reverse @@ (Strings.toList @@ (ref decapitalizeDef @@ var "original"))))) `with` [
               "splitOnUppercase">: lambda "acc" $ lambda "c" $ Lists.concat2
-                @@ (Logic.ifElse @@ emptyParts @@ list [] @@ (Chars.isUpper @@ var "c"))
+                @@ (Logic.ifElse
+                  @@ (Chars.isUpper @@ var "c")
+                  @@ emptyParts
+                  @@ list [])
                 @@ (Lists.cons @@ (Lists.cons @@ var "c" @@ (Lists.head @@ var "acc")) @@ (Lists.tail @@ var "acc"))],
           "byUnderscores">: Strings.splitOn @@ string "_" @@ var "original"]]
   where
@@ -105,9 +108,9 @@ mapFirstLetterDef = formattingDefinition "mapFirstLetter" $
   doc "A helper which maps the first letter of a string to another string" $
   function (tFun tString tString) (tFun tString tString) $
   lambda "mapping" $ lambda "s" ((Logic.ifElse
+       @@ (Strings.isEmpty @@ var "s")
        @@ var "s"
-       @@ (Strings.cat2 @@ var "firstLetter" @@ (Strings.fromList @@ (Lists.tail @@ var "list")))
-       @@ (Strings.isEmpty @@ var "s"))
+       @@ (Strings.cat2 @@ var "firstLetter" @@ (Strings.fromList @@ (Lists.tail @@ var "list"))))
     `with` [
       "firstLetter">: var "mapping" @@ (Strings.fromList @@ (Lists.pure @@ (Lists.head @@ var "list"))),
       "list">: typed (tList tInt32) $ Strings.toList @@ var "s"])

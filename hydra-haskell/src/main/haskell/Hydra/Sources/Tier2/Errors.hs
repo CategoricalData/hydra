@@ -82,10 +82,10 @@ traceSummaryDef = errorsDefinition "traceSummary" $
       `with` [
         "messageLines">: (Lists.nub @@ (Flows.traceMessages @@ var "t")),
         "keyvalLines">: Logic.ifElse
+          @@ (Maps.isEmpty @@ (Flows.traceOther @@ var "t"))
           @@ (list [])
           @@ (Lists.cons @@ "key/value pairs: "
-            @@ (Lists.map @@ (var "toLine") @@ (Maps.toList @@ (Flows.traceOther @@ var "t"))))
-          @@ (Maps.isEmpty @@ (Flows.traceOther @@ var "t")),
+            @@ (Lists.map @@ (var "toLine") @@ (Maps.toList @@ (Flows.traceOther @@ var "t")))),
         "toLine">:
           function (tPair tString termT) tString $
           lambda "pair" $ "\t" ++ (Core.unName @@ (first @@ var "pair")) ++ ": " ++ (Io.showTerm @@ (second @@ var "pair"))])

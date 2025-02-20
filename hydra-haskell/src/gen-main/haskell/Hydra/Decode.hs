@@ -60,7 +60,7 @@ cases = (nominal Core.caseStatementTypeName Core.caseStatementCases (Optionals.c
 field :: (Core.Name -> [Core.Field] -> Maybe Core.Term)
 field fname fields =  
   let matches = (Lists.filter (\f -> Equality.equal (Core.fieldName f) fname) fields)
-  in (Logic.ifElse (Just (Core.fieldTerm (Lists.head matches))) Nothing (Equality.equal 1 (Lists.length matches)))
+  in (Logic.ifElse (Equality.equal 1 (Lists.length matches)) (Just (Core.fieldTerm (Lists.head matches))) Nothing)
 
 float32 :: (Core.Term -> Maybe Float)
 float32 = (Optionals.compose (Optionals.compose literal floatLiteral) float32Value)
@@ -133,7 +133,7 @@ letBinding fname term = (Optionals.bind (Optionals.map Core.letBindings (letTerm
 letBindingWithKey :: (Core.Name -> [Core.LetBinding] -> Maybe Core.LetBinding)
 letBindingWithKey fname bindings =  
   let matches = (Lists.filter (\b -> Equality.equal (Core.letBindingName b) fname) bindings)
-  in (Logic.ifElse (Just (Lists.head matches)) Nothing (Equality.equal 1 (Lists.length matches)))
+  in (Logic.ifElse (Equality.equal 1 (Lists.length matches)) (Just (Lists.head matches)) Nothing)
 
 letTerm :: (Core.Term -> Maybe Core.Let)
 letTerm x = ((\x -> case x of
@@ -159,7 +159,7 @@ name :: (Core.Term -> Maybe Core.Name)
 name term = (Optionals.map (\s -> Core.Name s) (Optionals.bind (wrap (Core.Name "hydra.core.Name") term) string))
 
 nominal :: ((a -> Core.Name) -> (a -> b) -> (c -> Maybe a) -> Core.Name -> c -> Maybe b)
-nominal getName getB getA expected = (Optionals.compose getA (\a -> Logic.ifElse (Just (getB a)) Nothing (Equality.equal (getName a) expected)))
+nominal getName getB getA expected = (Optionals.compose getA (\a -> Logic.ifElse (Equality.equal (getName a) expected) (Just (getB a)) Nothing))
 
 optCases :: (Core.Term -> Maybe Core.OptionalCases)
 optCases = (Optionals.compose (Optionals.compose (\x -> (\x -> case x of
@@ -184,7 +184,7 @@ optional x = ((\x -> case x of
 pair :: (Core.Term -> Maybe (Core.Term, Core.Term))
 pair = (Optionals.compose (\x -> (\x -> case x of
   Core.TermProduct v1 -> (Optionals.pure v1)
-  _ -> Nothing) (Strip.fullyStripTerm x)) (\l -> Logic.ifElse (Just (Lists.at 0 l, (Lists.at 1 l))) Nothing (Equality.equal 2 (Lists.length l))))
+  _ -> Nothing) (Strip.fullyStripTerm x)) (\l -> Logic.ifElse (Equality.equal 2 (Lists.length l)) (Just (Lists.at 0 l, (Lists.at 1 l))) Nothing))
 
 record :: (Core.Name -> Core.Term -> Maybe [Core.Field])
 record = (nominal Core.recordTypeName Core.recordFields (\x -> (\x -> case x of

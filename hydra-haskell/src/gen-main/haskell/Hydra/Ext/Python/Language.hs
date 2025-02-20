@@ -14,7 +14,7 @@ import Data.Set as S
 -- | Language constraints for Python 3
 pythonLanguage :: Coders.Language
 pythonLanguage = Coders.Language {
-  Coders.languageName = (Coders.LanguageName "hydra.ext/python"),
+  Coders.languageName = (Coders.LanguageName "hydra.ext.python"),
   Coders.languageConstraints = Coders.LanguageConstraints {
     Coders.languageConstraintsEliminationVariants = (Sets.fromList [
       Mantle.EliminationVariantList,

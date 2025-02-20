@@ -121,7 +121,7 @@ functionWithClasses dom cod classes = typed $ setTypeClasses classes (Types.func
 -- Note: Haskell has trouble type-checking this construction if the convenience functions from Base are used
 ifElse :: TTerm Bool -> TTerm a -> TTerm a -> TTerm a
 ifElse (TTerm cond) (TTerm ifTrue) (TTerm ifFalse) = TTerm $
-  Terms.apply (Terms.apply (Terms.apply (Terms.primitive _logic_ifElse) ifTrue) ifFalse) cond
+  Terms.apply (Terms.apply (Terms.apply (Terms.primitive _logic_ifElse) cond) ifTrue) ifFalse
 
 ifOpt :: TTerm (Maybe a) -> TTerm b -> TTerm (a -> b) -> TTerm b
 ifOpt m n j = matchOpt n j @@ m

@@ -40,11 +40,11 @@ qname ns name = (Core.Name (Strings.cat [
 qualifyName :: (Core.Name -> Module.QualifiedName)
 qualifyName name =  
   let parts = (Lists.reverse (Strings.splitOn "." (Core.unName name)))
-  in (Logic.ifElse (Module.QualifiedName {
+  in (Logic.ifElse (Equality.equalInt32 1 (Lists.length parts)) (Module.QualifiedName {
     Module.qualifiedNameNamespace = Nothing,
     Module.qualifiedNameLocal = (Core.unName name)}) (Module.QualifiedName {
     Module.qualifiedNameNamespace = (Just (Module.Namespace (Strings.intercalate "." (Lists.reverse (Lists.tail parts))))),
-    Module.qualifiedNameLocal = (Lists.head parts)}) (Equality.equalInt32 1 (Lists.length parts)))
+    Module.qualifiedNameLocal = (Lists.head parts)}))
 
 -- | Convert a qualified name to a dot-separated name
 unqualifyName :: (Module.QualifiedName -> Core.Name)

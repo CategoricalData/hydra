@@ -16,7 +16,7 @@ data Alternative =
     alternativeBinds :: (Maybe LocalBindings)}
   deriving (Eq, Ord, Read, Show)
 
-_Alternative = (Core.Name "hydra.ext/haskell/ast.Alternative")
+_Alternative = (Core.Name "hydra.ext.haskell.ast.Alternative")
 
 _Alternative_pattern = (Core.Name "pattern")
 
@@ -30,7 +30,7 @@ data Assertion =
   AssertionTuple [Assertion]
   deriving (Eq, Ord, Read, Show)
 
-_Assertion = (Core.Name "hydra.ext/haskell/ast.Assertion")
+_Assertion = (Core.Name "hydra.ext.haskell.ast.Assertion")
 
 _Assertion_class = (Core.Name "class")
 
@@ -42,7 +42,7 @@ data ClassAssertion =
     classAssertionTypes :: [Type]}
   deriving (Eq, Ord, Read, Show)
 
-_ClassAssertion = (Core.Name "hydra.ext/haskell/ast.ClassAssertion")
+_ClassAssertion = (Core.Name "hydra.ext.haskell.ast.ClassAssertion")
 
 _ClassAssertion_name = (Core.Name "name")
 
@@ -54,7 +54,7 @@ newtype CaseRhs =
     unCaseRhs :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_CaseRhs = (Core.Name "hydra.ext/haskell/ast.CaseRhs")
+_CaseRhs = (Core.Name "hydra.ext.haskell.ast.CaseRhs")
 
 -- | A data constructor
 data Constructor = 
@@ -62,7 +62,7 @@ data Constructor =
   ConstructorRecord RecordConstructor
   deriving (Eq, Ord, Read, Show)
 
-_Constructor = (Core.Name "hydra.ext/haskell/ast.Constructor")
+_Constructor = (Core.Name "hydra.ext.haskell.ast.Constructor")
 
 _Constructor_ordinary = (Core.Name "ordinary")
 
@@ -75,7 +75,7 @@ data OrdinaryConstructor =
     ordinaryConstructorFields :: [Type]}
   deriving (Eq, Ord, Read, Show)
 
-_OrdinaryConstructor = (Core.Name "hydra.ext/haskell/ast.OrdinaryConstructor")
+_OrdinaryConstructor = (Core.Name "hydra.ext.haskell.ast.OrdinaryConstructor")
 
 _OrdinaryConstructor_name = (Core.Name "name")
 
@@ -88,7 +88,7 @@ data RecordConstructor =
     recordConstructorFields :: [FieldWithComments]}
   deriving (Eq, Ord, Read, Show)
 
-_RecordConstructor = (Core.Name "hydra.ext/haskell/ast.RecordConstructor")
+_RecordConstructor = (Core.Name "hydra.ext.haskell.ast.RecordConstructor")
 
 _RecordConstructor_name = (Core.Name "name")
 
@@ -101,7 +101,7 @@ data ConstructorWithComments =
     constructorWithCommentsComments :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_ConstructorWithComments = (Core.Name "hydra.ext/haskell/ast.ConstructorWithComments")
+_ConstructorWithComments = (Core.Name "hydra.ext.haskell.ast.ConstructorWithComments")
 
 _ConstructorWithComments_body = (Core.Name "body")
 
@@ -117,7 +117,7 @@ data DataDeclaration =
     dataDeclarationDeriving :: [Deriving]}
   deriving (Eq, Ord, Read, Show)
 
-_DataDeclaration = (Core.Name "hydra.ext/haskell/ast.DataDeclaration")
+_DataDeclaration = (Core.Name "hydra.ext.haskell.ast.DataDeclaration")
 
 _DataDeclaration_keyword = (Core.Name "keyword")
 
@@ -135,7 +135,7 @@ data DataOrNewtype =
   DataOrNewtypeNewtype 
   deriving (Eq, Ord, Read, Show)
 
-_DataOrNewtype = (Core.Name "hydra.ext/haskell/ast.DataOrNewtype")
+_DataOrNewtype = (Core.Name "hydra.ext.haskell.ast.DataOrNewtype")
 
 _DataOrNewtype_data = (Core.Name "data")
 
@@ -148,7 +148,7 @@ data DeclarationWithComments =
     declarationWithCommentsComments :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_DeclarationWithComments = (Core.Name "hydra.ext/haskell/ast.DeclarationWithComments")
+_DeclarationWithComments = (Core.Name "hydra.ext.haskell.ast.DeclarationWithComments")
 
 _DeclarationWithComments_body = (Core.Name "body")
 
@@ -162,7 +162,7 @@ data Declaration =
   DeclarationTypedBinding TypedBinding
   deriving (Eq, Ord, Read, Show)
 
-_Declaration = (Core.Name "hydra.ext/haskell/ast.Declaration")
+_Declaration = (Core.Name "hydra.ext.haskell.ast.Declaration")
 
 _Declaration_data = (Core.Name "data")
 
@@ -179,7 +179,7 @@ data DeclarationHead =
   DeclarationHeadSimple Name
   deriving (Eq, Ord, Read, Show)
 
-_DeclarationHead = (Core.Name "hydra.ext/haskell/ast.DeclarationHead")
+_DeclarationHead = (Core.Name "hydra.ext.haskell.ast.DeclarationHead")
 
 _DeclarationHead_application = (Core.Name "application")
 
@@ -194,7 +194,7 @@ data ApplicationDeclarationHead =
     applicationDeclarationHeadOperand :: Variable}
   deriving (Eq, Ord, Read, Show)
 
-_ApplicationDeclarationHead = (Core.Name "hydra.ext/haskell/ast.ApplicationDeclarationHead")
+_ApplicationDeclarationHead = (Core.Name "hydra.ext.haskell.ast.ApplicationDeclarationHead")
 
 _ApplicationDeclarationHead_function = (Core.Name "function")
 
@@ -206,7 +206,7 @@ newtype Deriving =
     unDeriving :: [Name]}
   deriving (Eq, Ord, Read, Show)
 
-_Deriving = (Core.Name "hydra.ext/haskell/ast.Deriving")
+_Deriving = (Core.Name "hydra.ext.haskell.ast.Deriving")
 
 -- | An export statement
 data Export = 
@@ -214,7 +214,7 @@ data Export =
   ExportModule ModuleName
   deriving (Eq, Ord, Read, Show)
 
-_Export = (Core.Name "hydra.ext/haskell/ast.Export")
+_Export = (Core.Name "hydra.ext.haskell.ast.Export")
 
 _Export_declaration = (Core.Name "declaration")
 
@@ -242,7 +242,7 @@ data Expression =
   ExpressionVariable Name
   deriving (Eq, Ord, Read, Show)
 
-_Expression = (Core.Name "hydra.ext/haskell/ast.Expression")
+_Expression = (Core.Name "hydra.ext.haskell.ast.Expression")
 
 _Expression_application = (Core.Name "application")
 
@@ -287,7 +287,7 @@ data ApplicationExpression =
     applicationExpressionArgument :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_ApplicationExpression = (Core.Name "hydra.ext/haskell/ast.ApplicationExpression")
+_ApplicationExpression = (Core.Name "hydra.ext.haskell.ast.ApplicationExpression")
 
 _ApplicationExpression_function = (Core.Name "function")
 
@@ -300,7 +300,7 @@ data CaseExpression =
     caseExpressionAlternatives :: [Alternative]}
   deriving (Eq, Ord, Read, Show)
 
-_CaseExpression = (Core.Name "hydra.ext/haskell/ast.CaseExpression")
+_CaseExpression = (Core.Name "hydra.ext.haskell.ast.CaseExpression")
 
 _CaseExpression_case = (Core.Name "case")
 
@@ -313,7 +313,7 @@ data ConstructRecordExpression =
     constructRecordExpressionFields :: [FieldUpdate]}
   deriving (Eq, Ord, Read, Show)
 
-_ConstructRecordExpression = (Core.Name "hydra.ext/haskell/ast.ConstructRecordExpression")
+_ConstructRecordExpression = (Core.Name "hydra.ext.haskell.ast.ConstructRecordExpression")
 
 _ConstructRecordExpression_name = (Core.Name "name")
 
@@ -327,7 +327,7 @@ data IfExpression =
     ifExpressionElse :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_IfExpression = (Core.Name "hydra.ext/haskell/ast.IfExpression")
+_IfExpression = (Core.Name "hydra.ext.haskell.ast.IfExpression")
 
 _IfExpression_condition = (Core.Name "condition")
 
@@ -343,7 +343,7 @@ data InfixApplicationExpression =
     infixApplicationExpressionRhs :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_InfixApplicationExpression = (Core.Name "hydra.ext/haskell/ast.InfixApplicationExpression")
+_InfixApplicationExpression = (Core.Name "hydra.ext.haskell.ast.InfixApplicationExpression")
 
 _InfixApplicationExpression_lhs = (Core.Name "lhs")
 
@@ -358,7 +358,7 @@ data LambdaExpression =
     lambdaExpressionInner :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_LambdaExpression = (Core.Name "hydra.ext/haskell/ast.LambdaExpression")
+_LambdaExpression = (Core.Name "hydra.ext.haskell.ast.LambdaExpression")
 
 _LambdaExpression_bindings = (Core.Name "bindings")
 
@@ -371,7 +371,7 @@ data LetExpression =
     letExpressionInner :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_LetExpression = (Core.Name "hydra.ext/haskell/ast.LetExpression")
+_LetExpression = (Core.Name "hydra.ext.haskell.ast.LetExpression")
 
 _LetExpression_bindings = (Core.Name "bindings")
 
@@ -384,7 +384,7 @@ data PrefixApplicationExpression =
     prefixApplicationExpressionRhs :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_PrefixApplicationExpression = (Core.Name "hydra.ext/haskell/ast.PrefixApplicationExpression")
+_PrefixApplicationExpression = (Core.Name "hydra.ext.haskell.ast.PrefixApplicationExpression")
 
 _PrefixApplicationExpression_operator = (Core.Name "operator")
 
@@ -397,7 +397,7 @@ data SectionExpression =
     sectionExpressionExpression :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_SectionExpression = (Core.Name "hydra.ext/haskell/ast.SectionExpression")
+_SectionExpression = (Core.Name "hydra.ext.haskell.ast.SectionExpression")
 
 _SectionExpression_operator = (Core.Name "operator")
 
@@ -410,7 +410,7 @@ data TypeSignatureExpression =
     typeSignatureExpressionType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_TypeSignatureExpression = (Core.Name "hydra.ext/haskell/ast.TypeSignatureExpression")
+_TypeSignatureExpression = (Core.Name "hydra.ext.haskell.ast.TypeSignatureExpression")
 
 _TypeSignatureExpression_inner = (Core.Name "inner")
 
@@ -423,7 +423,7 @@ data UpdateRecordExpression =
     updateRecordExpressionFields :: [FieldUpdate]}
   deriving (Eq, Ord, Read, Show)
 
-_UpdateRecordExpression = (Core.Name "hydra.ext/haskell/ast.UpdateRecordExpression")
+_UpdateRecordExpression = (Core.Name "hydra.ext.haskell.ast.UpdateRecordExpression")
 
 _UpdateRecordExpression_inner = (Core.Name "inner")
 
@@ -436,7 +436,7 @@ data Field =
     fieldType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Field = (Core.Name "hydra.ext/haskell/ast.Field")
+_Field = (Core.Name "hydra.ext.haskell.ast.Field")
 
 _Field_name = (Core.Name "name")
 
@@ -449,7 +449,7 @@ data FieldWithComments =
     fieldWithCommentsComments :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_FieldWithComments = (Core.Name "hydra.ext/haskell/ast.FieldWithComments")
+_FieldWithComments = (Core.Name "hydra.ext.haskell.ast.FieldWithComments")
 
 _FieldWithComments_field = (Core.Name "field")
 
@@ -462,7 +462,7 @@ data FieldUpdate =
     fieldUpdateValue :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_FieldUpdate = (Core.Name "hydra.ext/haskell/ast.FieldUpdate")
+_FieldUpdate = (Core.Name "hydra.ext.haskell.ast.FieldUpdate")
 
 _FieldUpdate_name = (Core.Name "name")
 
@@ -477,7 +477,7 @@ data Import =
     importSpec :: (Maybe SpecImport)}
   deriving (Eq, Ord, Read, Show)
 
-_Import = (Core.Name "hydra.ext/haskell/ast.Import")
+_Import = (Core.Name "hydra.ext.haskell.ast.Import")
 
 _Import_qualified = (Core.Name "qualified")
 
@@ -493,7 +493,7 @@ data SpecImport =
   SpecImportHiding [ImportExportSpec]
   deriving (Eq, Ord, Read, Show)
 
-_SpecImport = (Core.Name "hydra.ext/haskell/ast.SpecImport")
+_SpecImport = (Core.Name "hydra.ext.haskell.ast.SpecImport")
 
 _SpecImport_list = (Core.Name "list")
 
@@ -505,7 +505,7 @@ data ImportModifier =
   ImportModifierType 
   deriving (Eq, Ord, Read, Show)
 
-_ImportModifier = (Core.Name "hydra.ext/haskell/ast.ImportModifier")
+_ImportModifier = (Core.Name "hydra.ext.haskell.ast.ImportModifier")
 
 _ImportModifier_pattern = (Core.Name "pattern")
 
@@ -519,7 +519,7 @@ data ImportExportSpec =
     importExportSpecSubspec :: (Maybe SubspecImportExportSpec)}
   deriving (Eq, Ord, Read, Show)
 
-_ImportExportSpec = (Core.Name "hydra.ext/haskell/ast.ImportExportSpec")
+_ImportExportSpec = (Core.Name "hydra.ext.haskell.ast.ImportExportSpec")
 
 _ImportExportSpec_modifier = (Core.Name "modifier")
 
@@ -532,7 +532,7 @@ data SubspecImportExportSpec =
   SubspecImportExportSpecList [Name]
   deriving (Eq, Ord, Read, Show)
 
-_SubspecImportExportSpec = (Core.Name "hydra.ext/haskell/ast.SubspecImportExportSpec")
+_SubspecImportExportSpec = (Core.Name "hydra.ext.haskell.ast.SubspecImportExportSpec")
 
 _SubspecImportExportSpec_all = (Core.Name "all")
 
@@ -548,7 +548,7 @@ data Literal =
   LiteralString String
   deriving (Eq, Ord, Read, Show)
 
-_Literal = (Core.Name "hydra.ext/haskell/ast.Literal")
+_Literal = (Core.Name "hydra.ext.haskell.ast.Literal")
 
 _Literal_char = (Core.Name "char")
 
@@ -567,7 +567,7 @@ data LocalBinding =
   LocalBindingValue ValueBinding
   deriving (Eq, Ord, Read, Show)
 
-_LocalBinding = (Core.Name "hydra.ext/haskell/ast.LocalBinding")
+_LocalBinding = (Core.Name "hydra.ext.haskell.ast.LocalBinding")
 
 _LocalBinding_signature = (Core.Name "signature")
 
@@ -578,7 +578,7 @@ newtype LocalBindings =
     unLocalBindings :: [LocalBinding]}
   deriving (Eq, Ord, Read, Show)
 
-_LocalBindings = (Core.Name "hydra.ext/haskell/ast.LocalBindings")
+_LocalBindings = (Core.Name "hydra.ext.haskell.ast.LocalBindings")
 
 data Module = 
   Module {
@@ -587,7 +587,7 @@ data Module =
     moduleDeclarations :: [DeclarationWithComments]}
   deriving (Eq, Ord, Read, Show)
 
-_Module = (Core.Name "hydra.ext/haskell/ast.Module")
+_Module = (Core.Name "hydra.ext.haskell.ast.Module")
 
 _Module_head = (Core.Name "head")
 
@@ -602,7 +602,7 @@ data ModuleHead =
     moduleHeadExports :: [Export]}
   deriving (Eq, Ord, Read, Show)
 
-_ModuleHead = (Core.Name "hydra.ext/haskell/ast.ModuleHead")
+_ModuleHead = (Core.Name "hydra.ext.haskell.ast.ModuleHead")
 
 _ModuleHead_comments = (Core.Name "comments")
 
@@ -615,7 +615,7 @@ newtype ModuleName =
     unModuleName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_ModuleName = (Core.Name "hydra.ext/haskell/ast.ModuleName")
+_ModuleName = (Core.Name "hydra.ext.haskell.ast.ModuleName")
 
 data Name = 
   NameImplicit QualifiedName |
@@ -623,7 +623,7 @@ data Name =
   NameParens QualifiedName
   deriving (Eq, Ord, Read, Show)
 
-_Name = (Core.Name "hydra.ext/haskell/ast.Name")
+_Name = (Core.Name "hydra.ext.haskell.ast.Name")
 
 _Name_implicit = (Core.Name "implicit")
 
@@ -636,14 +636,14 @@ newtype NamePart =
     unNamePart :: String}
   deriving (Eq, Ord, Read, Show)
 
-_NamePart = (Core.Name "hydra.ext/haskell/ast.NamePart")
+_NamePart = (Core.Name "hydra.ext.haskell.ast.NamePart")
 
 data Operator = 
   OperatorBacktick QualifiedName |
   OperatorNormal QualifiedName
   deriving (Eq, Ord, Read, Show)
 
-_Operator = (Core.Name "hydra.ext/haskell/ast.Operator")
+_Operator = (Core.Name "hydra.ext.haskell.ast.Operator")
 
 _Operator_backtick = (Core.Name "backtick")
 
@@ -662,7 +662,7 @@ data Pattern =
   PatternWildcard 
   deriving (Eq, Ord, Read, Show)
 
-_Pattern = (Core.Name "hydra.ext/haskell/ast.Pattern")
+_Pattern = (Core.Name "hydra.ext.haskell.ast.Pattern")
 
 _Pattern_application = (Core.Name "application")
 
@@ -690,7 +690,7 @@ data ApplicationPattern =
     applicationPatternArgs :: [Pattern]}
   deriving (Eq, Ord, Read, Show)
 
-_ApplicationPattern = (Core.Name "hydra.ext/haskell/ast.ApplicationPattern")
+_ApplicationPattern = (Core.Name "hydra.ext.haskell.ast.ApplicationPattern")
 
 _ApplicationPattern_name = (Core.Name "name")
 
@@ -702,7 +702,7 @@ data AsPattern =
     asPatternInner :: Pattern}
   deriving (Eq, Ord, Read, Show)
 
-_AsPattern = (Core.Name "hydra.ext/haskell/ast.AsPattern")
+_AsPattern = (Core.Name "hydra.ext.haskell.ast.AsPattern")
 
 _AsPattern_name = (Core.Name "name")
 
@@ -714,7 +714,7 @@ data RecordPattern =
     recordPatternFields :: [PatternField]}
   deriving (Eq, Ord, Read, Show)
 
-_RecordPattern = (Core.Name "hydra.ext/haskell/ast.RecordPattern")
+_RecordPattern = (Core.Name "hydra.ext.haskell.ast.RecordPattern")
 
 _RecordPattern_name = (Core.Name "name")
 
@@ -726,7 +726,7 @@ data TypedPattern =
     typedPatternType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_TypedPattern = (Core.Name "hydra.ext/haskell/ast.TypedPattern")
+_TypedPattern = (Core.Name "hydra.ext.haskell.ast.TypedPattern")
 
 _TypedPattern_inner = (Core.Name "inner")
 
@@ -738,7 +738,7 @@ data PatternField =
     patternFieldPattern :: Pattern}
   deriving (Eq, Ord, Read, Show)
 
-_PatternField = (Core.Name "hydra.ext/haskell/ast.PatternField")
+_PatternField = (Core.Name "hydra.ext.haskell.ast.PatternField")
 
 _PatternField_name = (Core.Name "name")
 
@@ -750,7 +750,7 @@ data QualifiedName =
     qualifiedNameUnqualified :: NamePart}
   deriving (Eq, Ord, Read, Show)
 
-_QualifiedName = (Core.Name "hydra.ext/haskell/ast.QualifiedName")
+_QualifiedName = (Core.Name "hydra.ext.haskell.ast.QualifiedName")
 
 _QualifiedName_qualifiers = (Core.Name "qualifiers")
 
@@ -761,14 +761,14 @@ newtype RightHandSide =
     unRightHandSide :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_RightHandSide = (Core.Name "hydra.ext/haskell/ast.RightHandSide")
+_RightHandSide = (Core.Name "hydra.ext.haskell.ast.RightHandSide")
 
 newtype Statement = 
   Statement {
     unStatement :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_Statement = (Core.Name "hydra.ext/haskell/ast.Statement")
+_Statement = (Core.Name "hydra.ext.haskell.ast.Statement")
 
 data Type = 
   TypeApplication ApplicationType |
@@ -781,7 +781,7 @@ data Type =
   TypeVariable Name
   deriving (Eq, Ord, Read, Show)
 
-_Type = (Core.Name "hydra.ext/haskell/ast.Type")
+_Type = (Core.Name "hydra.ext.haskell.ast.Type")
 
 _Type_application = (Core.Name "application")
 
@@ -805,7 +805,7 @@ data ApplicationType =
     applicationTypeArgument :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_ApplicationType = (Core.Name "hydra.ext/haskell/ast.ApplicationType")
+_ApplicationType = (Core.Name "hydra.ext.haskell.ast.ApplicationType")
 
 _ApplicationType_context = (Core.Name "context")
 
@@ -817,7 +817,7 @@ data ContextType =
     contextTypeType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_ContextType = (Core.Name "hydra.ext/haskell/ast.ContextType")
+_ContextType = (Core.Name "hydra.ext.haskell.ast.ContextType")
 
 _ContextType_ctx = (Core.Name "ctx")
 
@@ -829,7 +829,7 @@ data FunctionType =
     functionTypeCodomain :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_FunctionType = (Core.Name "hydra.ext/haskell/ast.FunctionType")
+_FunctionType = (Core.Name "hydra.ext.haskell.ast.FunctionType")
 
 _FunctionType_domain = (Core.Name "domain")
 
@@ -842,7 +842,7 @@ data InfixType =
     infixTypeRhs :: Operator}
   deriving (Eq, Ord, Read, Show)
 
-_InfixType = (Core.Name "hydra.ext/haskell/ast.InfixType")
+_InfixType = (Core.Name "hydra.ext.haskell.ast.InfixType")
 
 _InfixType_lhs = (Core.Name "lhs")
 
@@ -856,7 +856,7 @@ data TypeDeclaration =
     typeDeclarationType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_TypeDeclaration = (Core.Name "hydra.ext/haskell/ast.TypeDeclaration")
+_TypeDeclaration = (Core.Name "hydra.ext.haskell.ast.TypeDeclaration")
 
 _TypeDeclaration_name = (Core.Name "name")
 
@@ -868,7 +868,7 @@ data TypeSignature =
     typeSignatureType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_TypeSignature = (Core.Name "hydra.ext/haskell/ast.TypeSignature")
+_TypeSignature = (Core.Name "hydra.ext.haskell.ast.TypeSignature")
 
 _TypeSignature_name = (Core.Name "name")
 
@@ -880,7 +880,7 @@ data TypedBinding =
     typedBindingValueBinding :: ValueBinding}
   deriving (Eq, Ord, Read, Show)
 
-_TypedBinding = (Core.Name "hydra.ext/haskell/ast.TypedBinding")
+_TypedBinding = (Core.Name "hydra.ext.haskell.ast.TypedBinding")
 
 _TypedBinding_typeSignature = (Core.Name "typeSignature")
 
@@ -890,7 +890,7 @@ data ValueBinding =
   ValueBindingSimple SimpleValueBinding
   deriving (Eq, Ord, Read, Show)
 
-_ValueBinding = (Core.Name "hydra.ext/haskell/ast.ValueBinding")
+_ValueBinding = (Core.Name "hydra.ext.haskell.ast.ValueBinding")
 
 _ValueBinding_simple = (Core.Name "simple")
 
@@ -901,7 +901,7 @@ data SimpleValueBinding =
     simpleValueBindingLocalBindings :: (Maybe LocalBindings)}
   deriving (Eq, Ord, Read, Show)
 
-_SimpleValueBinding = (Core.Name "hydra.ext/haskell/ast.SimpleValueBinding")
+_SimpleValueBinding = (Core.Name "hydra.ext.haskell.ast.SimpleValueBinding")
 
 _SimpleValueBinding_pattern = (Core.Name "pattern")
 
@@ -914,4 +914,4 @@ newtype Variable =
     unVariable :: Name}
   deriving (Eq, Ord, Read, Show)
 
-_Variable = (Core.Name "hydra.ext/haskell/ast.Variable")
+_Variable = (Core.Name "hydra.ext.haskell.ast.Variable")

@@ -139,10 +139,10 @@ withState cx0 f = (Compute.Flow (\cx1 -> \t1 ->
 -- | Continue the current flow after augmenting the trace
 withTrace :: (String -> Compute.Flow s a -> Compute.Flow s a)
 withTrace msg =  
-  let mutate = (\t -> Logic.ifElse (Mantle.EitherLeft "maximum trace depth exceeded. This may indicate an infinite loop") (Mantle.EitherRight (Compute.Trace {
+  let mutate = (\t -> Logic.ifElse (Equality.gteInt32 (Lists.length (Compute.traceStack t)) Constants.maxTraceDepth) (Mantle.EitherLeft "maximum trace depth exceeded. This may indicate an infinite loop") (Mantle.EitherRight (Compute.Trace {
           Compute.traceStack = (Lists.cons msg (Compute.traceStack t)),
           Compute.traceMessages = (Compute.traceMessages t),
-          Compute.traceOther = (Compute.traceOther t)})) (Equality.gteInt32 (Lists.length (Compute.traceStack t)) Constants.maxTraceDepth)) 
+          Compute.traceOther = (Compute.traceOther t)}))) 
       restore = (\t0 -> \t1 -> Compute.Trace {
               Compute.traceStack = (Compute.traceStack t0),
               Compute.traceMessages = (Compute.traceMessages t1),

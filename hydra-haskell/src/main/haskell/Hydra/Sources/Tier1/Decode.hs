@@ -152,9 +152,9 @@ fieldDef :: TElement (Name -> [Field] -> Maybe Term)
 fieldDef = decodeDefinition "field" $
   functionN [nameT, tList fieldT, tOpt termT] $
   lambda "fname" $ lambda "fields" ((Logic.ifElse
+        @@ (Equality.equal @@ int32 1 @@ (Lists.length @@ var "matches"))
         @@ just (Core.fieldTerm @@ (Lists.head @@ var "matches"))
         @@ nothing
-        @@ (Equality.equal @@ int32 1 @@ (Lists.length @@ var "matches"))
     ) `with` [
       "matches">: Lists.filter @@ (lambda "f" $ Equality.equal @@ (Core.fieldName @@ var "f") @@ var "fname") @@ var "fields"])
 
@@ -250,9 +250,9 @@ letBindingWithKeyDef :: TElement (Name -> [LetBinding] -> Maybe LetBinding)
 letBindingWithKeyDef = decodeDefinition "letBindingWithKey" $
   functionN [nameT, tList letBindingT, tOpt letBindingT] $
   lambda "fname" $ lambda "bindings" ((Logic.ifElse
+        @@ (Equality.equal @@ int32 1 @@ (Lists.length @@ var "matches"))
         @@ just (Lists.head @@ var "matches")
         @@ nothing
-        @@ (Equality.equal @@ int32 1 @@ (Lists.length @@ var "matches"))
     ) `with` [
       "matches">: Lists.filter @@ (lambda "b" $ Equality.equal @@ (Core.letBindingName @@ var "b") @@ var "fname") @@ var "bindings"])
 
@@ -290,9 +290,9 @@ nominalDef = decodeDefinition "nominal" $
     compose2
       (var "getA")
       (lambda "a" $ (Logic.ifElse
+        @@ (Equality.equal @@ (var "getName" @@ var "a") @@ var "expected"))
         @@ (just (var "getB" @@ var "a"))
-        @@ nothing
-        @@ (Equality.equal @@ (var "getName" @@ var "a") @@ var "expected")))
+        @@ nothing)
 
 optCasesDef :: TElement (Term -> Maybe OptionalCases)
 optCasesDef = decodeFunctionDefinition "optCases" termT optionalCasesT $
@@ -318,9 +318,9 @@ pairDef = decodeFunctionDefinition "pair" termT (tPair termT termT) $
   compose2
     (matchTermVariant _Term_product)
     (lambda "l" $ Logic.ifElse
+      @@ (Equality.equal @@ int32 2 @@ (Lists.length @@ var "l"))
       @@ (just $ pair (Lists.at @@ int32 0 @@ var "l") (Lists.at @@ int32 1 @@ var "l"))
-      @@ nothing
-      @@ (Equality.equal @@ int32 2 @@ (Lists.length @@ var "l")))
+      @@ nothing)
 
 recordDef :: TElement (Name -> Term -> Maybe [Field])
 recordDef = decodeNominalFunctionDefinition "record" (tList fieldT) $

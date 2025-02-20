@@ -22,8 +22,8 @@ convertCase :: (Mantle.CaseConvention -> Mantle.CaseConvention -> String -> Stri
 convertCase from to original =  
   let parts =  
           let byCaps =  
-                  let splitOnUppercase = (\acc -> \c -> Lists.concat2 (Logic.ifElse [
-                          []] [] (Chars.isUpper c)) (Lists.cons (Lists.cons c (Lists.head acc)) (Lists.tail acc)))
+                  let splitOnUppercase = (\acc -> \c -> Lists.concat2 (Logic.ifElse (Chars.isUpper c) [
+                          []] []) (Lists.cons (Lists.cons c (Lists.head acc)) (Lists.tail acc)))
                   in (Lists.map Strings.fromList (Lists.foldl splitOnUppercase [
                     []] (Lists.reverse (Strings.toList (decapitalize original))))) 
               byUnderscores = (Strings.splitOn "_" original)
@@ -59,4 +59,4 @@ mapFirstLetter :: ((String -> String) -> String -> String)
 mapFirstLetter mapping s =  
   let firstLetter = (mapping (Strings.fromList (Lists.pure (Lists.head list)))) 
       list = (Strings.toList s)
-  in (Logic.ifElse s (Strings.cat2 firstLetter (Strings.fromList (Lists.tail list))) (Strings.isEmpty s))
+  in (Logic.ifElse (Strings.isEmpty s) s (Strings.cat2 firstLetter (Strings.fromList (Lists.tail list))))

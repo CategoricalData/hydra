@@ -1,4 +1,4 @@
--- | A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra.wiki/Property-graphs
+-- | A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs
 
 module Hydra.Pg.Mapping where
 
