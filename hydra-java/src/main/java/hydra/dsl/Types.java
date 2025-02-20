@@ -452,6 +452,10 @@ public interface Types {
         return record(Unit.TYPE_NAME);
     }
 
+    static Type var (final String name) {
+        return variable(new Name(name));
+    }
+
     /**
      * Construct a type variable.
      */

@@ -16,7 +16,7 @@ import Data.Set as S
 -- | Language constraints for Protocol Buffers v3
 protobufLanguage :: Coders.Language
 protobufLanguage = Coders.Language {
-  Coders.languageName = (Coders.LanguageName "hydra.ext/protobuf"),
+  Coders.languageName = (Coders.LanguageName "hydra.ext.protobuf"),
   Coders.languageConstraints = Coders.LanguageConstraints {
     Coders.languageConstraintsEliminationVariants = Sets.empty,
     Coders.languageConstraintsLiteralVariants = (Sets.fromList [

@@ -15,6 +15,7 @@ import java.util.function.Function;
 import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
+import static hydra.dsl.Types.var;
 
 
 public class IfElse extends PrimitiveFunction {
@@ -25,23 +26,23 @@ public class IfElse extends PrimitiveFunction {
     @Override
     public TypeScheme type() {
         return scheme("a",
-            function("a", "a", function(boolean_(), "a")));
+            function(var("a"), var("a"), boolean_(), var("a")));
     }
 
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(Expect.boolean_(args.get(2)), b -> IfElse.apply(args.get(0), args.get(1), b));
+        return args -> Flows.map(Expect.boolean_(args.get(0)), b -> IfElse.apply(b, args.get(1), args.get(2)));
     }
 
-    public static <X> Function<X, Function<Boolean, X>> apply(X ifBranch) {
-        return elseBranch -> condition -> apply(ifBranch, elseBranch, condition);
+    public static <X> Function<X, Function<X, X>> apply(boolean condition) {
+        return x -> apply(condition, x);
     }
 
-    public static <X> Function<Boolean, X> apply(X ifBranch, X elseBranch) {
-        return condition -> IfElse.apply(ifBranch, elseBranch, condition);
+    public static <X> Function<X, X> apply(boolean condition, X ifBranch) {
+        return elseBranch -> apply(condition, ifBranch, elseBranch);
     }
 
-    public static <X> X apply(X ifBranch, X elseBranch, boolean condition) {
+    public static <X> X apply(boolean condition, X ifBranch, X elseBranch) {
         return condition ? ifBranch : elseBranch;
     }
 }

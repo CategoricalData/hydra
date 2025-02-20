@@ -20,7 +20,7 @@ javaMaxTupleLength = 9
 -- | Language constraints for Java
 javaLanguage :: Coders.Language
 javaLanguage = Coders.Language {
-  Coders.languageName = (Coders.LanguageName "hydra.ext/java"),
+  Coders.languageName = (Coders.LanguageName "hydra.ext.java"),
   Coders.languageConstraints = Coders.LanguageConstraints {
     Coders.languageConstraintsEliminationVariants = (Sets.fromList [
       Mantle.EliminationVariantList,

@@ -9,7 +9,7 @@ import qualified Hydra.Dsl.Terms as Terms
 and :: TTerm (Bool -> Bool -> Bool)
 and = TTerm $ Terms.primitive _logic_and
 
-ifElse :: TTerm (a -> a -> Bool -> a)
+ifElse :: TTerm (Bool -> a -> a -> a)
 ifElse = TTerm $ Terms.primitive _logic_ifElse
 
 not :: TTerm (Bool -> Bool)

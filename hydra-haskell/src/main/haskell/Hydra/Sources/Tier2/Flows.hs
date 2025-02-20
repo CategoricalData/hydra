@@ -213,12 +213,12 @@ withTraceDef = flowsDefinition "withTrace" $
     `with` [
       -- augment the trace
       "mutate">: lambda "t" $ Logic.ifElse
+        @@ (Equality.gteInt32 @@ (Lists.length @@ (Flows.traceStack @@ var "t")) @@ ref maxTraceDepthDef)
         @@ (inject _Either _Either_left $ string "maximum trace depth exceeded. This may indicate an infinite loop")
         @@ (inject _Either _Either_right $ Flows.trace
           (Lists.cons @@ var "msg" @@ (Flows.traceStack @@ var "t"))
           (Flows.traceMessages @@ var "t")
-          (Flows.traceOther @@ var "t"))
-        @@ (Equality.gteInt32 @@ (Lists.length @@ (Flows.traceStack @@ var "t")) @@ ref maxTraceDepthDef),
+          (Flows.traceOther @@ var "t")),
       -- reset the trace stack after execution
       "restore">: lambda "t0" $ lambda "t1" $ Flows.trace
         (Flows.traceStack @@ var "t0")

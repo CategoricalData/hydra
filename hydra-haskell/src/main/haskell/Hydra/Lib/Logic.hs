@@ -10,8 +10,8 @@ import Data.Int
 and :: Bool -> Bool -> Bool
 and x y = x && y
 
-ifElse :: a -> a -> Bool -> a
-ifElse x y b = if b then x else y
+ifElse :: Bool -> a -> a -> a
+ifElse b x y = if b then x else y
 
 not :: Bool -> Bool
 not = Prelude.not

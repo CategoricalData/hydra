@@ -14,7 +14,7 @@ data FunctionType =
     functionTypeRange :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_FunctionType = (Core.Name "hydra.ext/typeScript/model.FunctionType")
+_FunctionType = (Core.Name "hydra.ext.typeScript.model.FunctionType")
 
 _FunctionType_parameters = (Core.Name "parameters")
 
@@ -26,7 +26,7 @@ data Parameter =
     parameterType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Parameter = (Core.Name "hydra.ext/typeScript/model.Parameter")
+_Parameter = (Core.Name "hydra.ext.typeScript.model.Parameter")
 
 _Parameter_name = (Core.Name "name")
 
@@ -51,7 +51,7 @@ data PrimitiveType =
   PrimitiveTypeUndefined 
   deriving (Eq, Ord, Read, Show)
 
-_PrimitiveType = (Core.Name "hydra.ext/typeScript/model.PrimitiveType")
+_PrimitiveType = (Core.Name "hydra.ext.typeScript.model.PrimitiveType")
 
 _PrimitiveType_bigint = (Core.Name "bigint")
 
@@ -88,7 +88,7 @@ data Type =
   TypeVoid 
   deriving (Eq, Ord, Read, Show)
 
-_Type = (Core.Name "hydra.ext/typeScript/model.Type")
+_Type = (Core.Name "hydra.ext.typeScript.model.Type")
 
 _Type_array = (Core.Name "array")
 

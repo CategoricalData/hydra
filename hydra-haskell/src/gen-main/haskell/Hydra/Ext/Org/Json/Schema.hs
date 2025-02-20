@@ -16,7 +16,7 @@ data Document =
     documentRoot :: Schema}
   deriving (Eq, Ord, Read, Show)
 
-_Document = (Core.Name "hydra.ext/org/json/schema.Document")
+_Document = (Core.Name "hydra.ext.org.json.schema.Document")
 
 _Document_id = (Core.Name "id")
 
@@ -29,14 +29,14 @@ newtype Keyword =
     unKeyword :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Keyword = (Core.Name "hydra.ext/org/json/schema.Keyword")
+_Keyword = (Core.Name "hydra.ext.org.json.schema.Keyword")
 
 newtype Schema = 
   Schema {
     unSchema :: [Restriction]}
   deriving (Eq, Ord, Read, Show)
 
-_Schema = (Core.Name "hydra.ext/org/json/schema.Schema")
+_Schema = (Core.Name "hydra.ext.org.json.schema.Schema")
 
 data Restriction = 
   RestrictionType Type |
@@ -50,7 +50,7 @@ data Restriction =
   RestrictionDescription String
   deriving (Eq, Ord, Read, Show)
 
-_Restriction = (Core.Name "hydra.ext/org/json/schema.Restriction")
+_Restriction = (Core.Name "hydra.ext.org.json.schema.Restriction")
 
 _Restriction_type = (Core.Name "type")
 
@@ -75,7 +75,7 @@ data Type =
   TypeMultiple [TypeName]
   deriving (Eq, Ord, Read, Show)
 
-_Type = (Core.Name "hydra.ext/org/json/schema.Type")
+_Type = (Core.Name "hydra.ext.org.json.schema.Type")
 
 _Type_single = (Core.Name "single")
 
@@ -91,7 +91,7 @@ data TypeName =
   TypeNameObject 
   deriving (Eq, Ord, Read, Show)
 
-_TypeName = (Core.Name "hydra.ext/org/json/schema.TypeName")
+_TypeName = (Core.Name "hydra.ext.org.json.schema.TypeName")
 
 _TypeName_string = (Core.Name "string")
 
@@ -113,7 +113,7 @@ data StringRestriction =
   StringRestrictionPattern RegularExpression
   deriving (Eq, Ord, Read, Show)
 
-_StringRestriction = (Core.Name "hydra.ext/org/json/schema.StringRestriction")
+_StringRestriction = (Core.Name "hydra.ext.org.json.schema.StringRestriction")
 
 _StringRestriction_minLength = (Core.Name "minLength")
 
@@ -126,7 +126,7 @@ newtype RegularExpression =
     unRegularExpression :: String}
   deriving (Eq, Ord, Read, Show)
 
-_RegularExpression = (Core.Name "hydra.ext/org/json/schema.RegularExpression")
+_RegularExpression = (Core.Name "hydra.ext.org.json.schema.RegularExpression")
 
 data NumericRestriction = 
   NumericRestrictionMinimum Limit |
@@ -134,7 +134,7 @@ data NumericRestriction =
   NumericRestrictionMultipleOf Int
   deriving (Eq, Ord, Read, Show)
 
-_NumericRestriction = (Core.Name "hydra.ext/org/json/schema.NumericRestriction")
+_NumericRestriction = (Core.Name "hydra.ext.org.json.schema.NumericRestriction")
 
 _NumericRestriction_minimum = (Core.Name "minimum")
 
@@ -148,7 +148,7 @@ data Limit =
     limitExclusive :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Limit = (Core.Name "hydra.ext/org/json/schema.Limit")
+_Limit = (Core.Name "hydra.ext.org.json.schema.Limit")
 
 _Limit_value = (Core.Name "value")
 
@@ -162,7 +162,7 @@ data ArrayRestriction =
   ArrayRestrictionUniqueItems Bool
   deriving (Eq, Ord, Read, Show)
 
-_ArrayRestriction = (Core.Name "hydra.ext/org/json/schema.ArrayRestriction")
+_ArrayRestriction = (Core.Name "hydra.ext.org.json.schema.ArrayRestriction")
 
 _ArrayRestriction_items = (Core.Name "items")
 
@@ -179,7 +179,7 @@ data Items =
   ItemsVarItems [Schema]
   deriving (Eq, Ord, Read, Show)
 
-_Items = (Core.Name "hydra.ext/org/json/schema.Items")
+_Items = (Core.Name "hydra.ext.org.json.schema.Items")
 
 _Items_sameItems = (Core.Name "sameItems")
 
@@ -190,7 +190,7 @@ data AdditionalItems =
   AdditionalItemsSchema Schema
   deriving (Eq, Ord, Read, Show)
 
-_AdditionalItems = (Core.Name "hydra.ext/org/json/schema.AdditionalItems")
+_AdditionalItems = (Core.Name "hydra.ext.org.json.schema.AdditionalItems")
 
 _AdditionalItems_any = (Core.Name "any")
 
@@ -206,7 +206,7 @@ data ObjectRestriction =
   ObjectRestrictionPatternProperties (Map RegularExpression Schema)
   deriving (Eq, Ord, Read, Show)
 
-_ObjectRestriction = (Core.Name "hydra.ext/org/json/schema.ObjectRestriction")
+_ObjectRestriction = (Core.Name "hydra.ext.org.json.schema.ObjectRestriction")
 
 _ObjectRestriction_properties = (Core.Name "properties")
 
@@ -227,7 +227,7 @@ data SchemaOrArray =
   SchemaOrArrayArray [Keyword]
   deriving (Eq, Ord, Read, Show)
 
-_SchemaOrArray = (Core.Name "hydra.ext/org/json/schema.SchemaOrArray")
+_SchemaOrArray = (Core.Name "hydra.ext.org.json.schema.SchemaOrArray")
 
 _SchemaOrArray_schema = (Core.Name "schema")
 
@@ -241,7 +241,7 @@ data MultipleRestriction =
   MultipleRestrictionEnum [Json.Value]
   deriving (Eq, Ord, Read, Show)
 
-_MultipleRestriction = (Core.Name "hydra.ext/org/json/schema.MultipleRestriction")
+_MultipleRestriction = (Core.Name "hydra.ext.org.json.schema.MultipleRestriction")
 
 _MultipleRestriction_allOf = (Core.Name "allOf")
 
@@ -258,4 +258,4 @@ newtype SchemaReference =
     unSchemaReference :: String}
   deriving (Eq, Ord, Read, Show)
 
-_SchemaReference = (Core.Name "hydra.ext/org/json/schema.SchemaReference")
+_SchemaReference = (Core.Name "hydra.ext.org.json.schema.SchemaReference")

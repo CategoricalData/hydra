@@ -78,11 +78,11 @@ qualifyNameDef :: TElement (Name -> QualifiedName)
 qualifyNameDef = qnamesDefinition "qualifyName" $
   function nameT qualifiedNameT $
   lambda "name" $ (Logic.ifElse
+      @@ (Equality.equalInt32 @@ int32 1 @@ (Lists.length @@ var "parts"))
       @@ Module.qualifiedName nothing (Core.unName @@ var "name")
       @@ Module.qualifiedName
         (just $ wrap _Namespace (Strings.intercalate @@ "." @@ (Lists.reverse @@ (Lists.tail @@ var "parts"))))
-        (Lists.head @@ var "parts")
-      @@ (Equality.equalInt32 @@ int32 1 @@ (Lists.length @@ var "parts")))
+        (Lists.head @@ var "parts"))
     `with` [
       "parts">: Lists.reverse @@ (Strings.splitOn @@ "." @@ (Core.unName @@ var "name"))]
 

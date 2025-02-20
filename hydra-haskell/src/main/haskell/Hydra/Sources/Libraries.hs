@@ -266,7 +266,7 @@ _logic_or = qname _hydra_lib_logic "or" :: Name
 hydraLibLogic :: Library
 hydraLibLogic = standardLibrary _hydra_lib_logic [
     prim2 [] _logic_and boolean boolean boolean Logic.and,
-    prim3 ["x"] _logic_ifElse x x boolean x Logic.ifElse,
+    prim3 ["x"] _logic_ifElse boolean x x x Logic.ifElse,
     prim1 [] _logic_not boolean boolean Logic.not,
     prim2 [] _logic_or boolean boolean boolean Logic.or]
   where

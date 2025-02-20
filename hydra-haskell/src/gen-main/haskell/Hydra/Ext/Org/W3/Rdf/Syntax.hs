@@ -13,21 +13,21 @@ newtype BlankNode =
     unBlankNode :: String}
   deriving (Eq, Ord, Read, Show)
 
-_BlankNode = (Core.Name "hydra.ext/org/w3/rdf/syntax.BlankNode")
+_BlankNode = (Core.Name "hydra.ext.org.w3.rdf.syntax.BlankNode")
 
 -- | Stand-in for rdfs:Class
 data RdfsClass = 
   RdfsClass {}
   deriving (Eq, Ord, Read, Show)
 
-_RdfsClass = (Core.Name "hydra.ext/org/w3/rdf/syntax.RdfsClass")
+_RdfsClass = (Core.Name "hydra.ext.org.w3.rdf.syntax.RdfsClass")
 
 newtype Dataset = 
   Dataset {
     unDataset :: (Set Quad)}
   deriving (Eq, Ord, Read, Show)
 
-_Dataset = (Core.Name "hydra.ext/org/w3/rdf/syntax.Dataset")
+_Dataset = (Core.Name "hydra.ext.org.w3.rdf.syntax.Dataset")
 
 -- | A graph of RDF statements together with a distinguished subject and/or object node
 data Description = 
@@ -36,7 +36,7 @@ data Description =
     descriptionGraph :: Graph}
   deriving (Eq, Ord, Read, Show)
 
-_Description = (Core.Name "hydra.ext/org/w3/rdf/syntax.Description")
+_Description = (Core.Name "hydra.ext.org.w3.rdf.syntax.Description")
 
 _Description_subject = (Core.Name "subject")
 
@@ -47,7 +47,7 @@ newtype Graph =
     unGraph :: (Set Triple)}
   deriving (Eq, Ord, Read, Show)
 
-_Graph = (Core.Name "hydra.ext/org/w3/rdf/syntax.Graph")
+_Graph = (Core.Name "hydra.ext.org.w3.rdf.syntax.Graph")
 
 -- | An Internationalized Resource Identifier
 newtype Iri = 
@@ -55,7 +55,7 @@ newtype Iri =
     unIri :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Iri = (Core.Name "hydra.ext/org/w3/rdf/syntax.Iri")
+_Iri = (Core.Name "hydra.ext.org.w3.rdf.syntax.Iri")
 
 -- | An IRI or a literal; this type is a convenience for downstream models like SHACL which may exclude blank nodes
 data IriOrLiteral = 
@@ -63,7 +63,7 @@ data IriOrLiteral =
   IriOrLiteralLiteral Literal
   deriving (Eq, Ord, Read, Show)
 
-_IriOrLiteral = (Core.Name "hydra.ext/org/w3/rdf/syntax.IriOrLiteral")
+_IriOrLiteral = (Core.Name "hydra.ext.org.w3.rdf.syntax.IriOrLiteral")
 
 _IriOrLiteral_iri = (Core.Name "iri")
 
@@ -75,7 +75,7 @@ newtype LangStrings =
     unLangStrings :: (Map (Maybe LanguageTag) String)}
   deriving (Eq, Ord, Read, Show)
 
-_LangStrings = (Core.Name "hydra.ext/org/w3/rdf/syntax.LangStrings")
+_LangStrings = (Core.Name "hydra.ext.org.w3.rdf.syntax.LangStrings")
 
 -- | A BCP47 language tag
 newtype LanguageTag = 
@@ -83,7 +83,7 @@ newtype LanguageTag =
     unLanguageTag :: String}
   deriving (Eq, Ord, Read, Show)
 
-_LanguageTag = (Core.Name "hydra.ext/org/w3/rdf/syntax.LanguageTag")
+_LanguageTag = (Core.Name "hydra.ext.org.w3.rdf.syntax.LanguageTag")
 
 -- | A value such as a string, number, or date
 data Literal = 
@@ -96,7 +96,7 @@ data Literal =
     literalLanguageTag :: (Maybe LanguageTag)}
   deriving (Eq, Ord, Read, Show)
 
-_Literal = (Core.Name "hydra.ext/org/w3/rdf/syntax.Literal")
+_Literal = (Core.Name "hydra.ext.org.w3.rdf.syntax.Literal")
 
 _Literal_lexicalForm = (Core.Name "lexicalForm")
 
@@ -110,7 +110,7 @@ data Node =
   NodeLiteral Literal
   deriving (Eq, Ord, Read, Show)
 
-_Node = (Core.Name "hydra.ext/org/w3/rdf/syntax.Node")
+_Node = (Core.Name "hydra.ext.org.w3.rdf.syntax.Node")
 
 _Node_iri = (Core.Name "iri")
 
@@ -128,7 +128,7 @@ data Property =
     propertySubPropertyOf :: (Set Property)}
   deriving (Eq, Ord, Read, Show)
 
-_Property = (Core.Name "hydra.ext/org/w3/rdf/syntax.Property")
+_Property = (Core.Name "hydra.ext.org.w3.rdf.syntax.Property")
 
 _Property_domain = (Core.Name "domain")
 
@@ -145,7 +145,7 @@ data Quad =
     quadGraph :: (Maybe Iri)}
   deriving (Eq, Ord, Read, Show)
 
-_Quad = (Core.Name "hydra.ext/org/w3/rdf/syntax.Quad")
+_Quad = (Core.Name "hydra.ext.org.w3.rdf.syntax.Quad")
 
 _Quad_subject = (Core.Name "subject")
 
@@ -160,7 +160,7 @@ data Resource =
   ResourceBnode BlankNode
   deriving (Eq, Ord, Read, Show)
 
-_Resource = (Core.Name "hydra.ext/org/w3/rdf/syntax.Resource")
+_Resource = (Core.Name "hydra.ext.org.w3.rdf.syntax.Resource")
 
 _Resource_iri = (Core.Name "iri")
 
@@ -174,7 +174,7 @@ data Triple =
     tripleObject :: Node}
   deriving (Eq, Ord, Read, Show)
 
-_Triple = (Core.Name "hydra.ext/org/w3/rdf/syntax.Triple")
+_Triple = (Core.Name "hydra.ext.org.w3.rdf.syntax.Triple")
 
 _Triple_subject = (Core.Name "subject")
 

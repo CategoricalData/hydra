@@ -14,42 +14,42 @@ newtype Name =
     unName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Name = (Core.Name "hydra.ext/org/graphql/syntax.Name")
+_Name = (Core.Name "hydra.ext.org.graphql.syntax.Name")
 
 newtype IntValue = 
   IntValue {
     unIntValue :: String}
   deriving (Eq, Ord, Read, Show)
 
-_IntValue = (Core.Name "hydra.ext/org/graphql/syntax.IntValue")
+_IntValue = (Core.Name "hydra.ext.org.graphql.syntax.IntValue")
 
 newtype FloatValue = 
   FloatValue {
     unFloatValue :: String}
   deriving (Eq, Ord, Read, Show)
 
-_FloatValue = (Core.Name "hydra.ext/org/graphql/syntax.FloatValue")
+_FloatValue = (Core.Name "hydra.ext.org.graphql.syntax.FloatValue")
 
 newtype StringValue = 
   StringValue {
     unStringValue :: String}
   deriving (Eq, Ord, Read, Show)
 
-_StringValue = (Core.Name "hydra.ext/org/graphql/syntax.StringValue")
+_StringValue = (Core.Name "hydra.ext.org.graphql.syntax.StringValue")
 
 newtype Document = 
   Document {
     unDocument :: [Definition]}
   deriving (Eq, Ord, Read, Show)
 
-_Document = (Core.Name "hydra.ext/org/graphql/syntax.Document")
+_Document = (Core.Name "hydra.ext.org.graphql.syntax.Document")
 
 data Definition = 
   DefinitionExecutable ExecutableDefinition |
   DefinitionTypeSystem TypeSystemDefinitionOrExtension
   deriving (Eq, Ord, Read, Show)
 
-_Definition = (Core.Name "hydra.ext/org/graphql/syntax.Definition")
+_Definition = (Core.Name "hydra.ext.org.graphql.syntax.Definition")
 
 _Definition_executable = (Core.Name "executable")
 
@@ -60,14 +60,14 @@ newtype ExecutableDocument =
     unExecutableDocument :: [ExecutableDefinition]}
   deriving (Eq, Ord, Read, Show)
 
-_ExecutableDocument = (Core.Name "hydra.ext/org/graphql/syntax.ExecutableDocument")
+_ExecutableDocument = (Core.Name "hydra.ext.org.graphql.syntax.ExecutableDocument")
 
 data ExecutableDefinition = 
   ExecutableDefinitionOperation OperationDefinition |
   ExecutableDefinitionFragment FragmentDefinition
   deriving (Eq, Ord, Read, Show)
 
-_ExecutableDefinition = (Core.Name "hydra.ext/org/graphql/syntax.ExecutableDefinition")
+_ExecutableDefinition = (Core.Name "hydra.ext.org.graphql.syntax.ExecutableDefinition")
 
 _ExecutableDefinition_operation = (Core.Name "operation")
 
@@ -78,7 +78,7 @@ data OperationDefinition =
   OperationDefinitionSelectionSet SelectionSet
   deriving (Eq, Ord, Read, Show)
 
-_OperationDefinition = (Core.Name "hydra.ext/org/graphql/syntax.OperationDefinition")
+_OperationDefinition = (Core.Name "hydra.ext.org.graphql.syntax.OperationDefinition")
 
 _OperationDefinition_sequence = (Core.Name "sequence")
 
@@ -93,7 +93,7 @@ data OperationDefinition_Sequence =
     operationDefinition_SequenceSelectionSet :: SelectionSet}
   deriving (Eq, Ord, Read, Show)
 
-_OperationDefinition_Sequence = (Core.Name "hydra.ext/org/graphql/syntax.OperationDefinition_Sequence")
+_OperationDefinition_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.OperationDefinition_Sequence")
 
 _OperationDefinition_Sequence_operationType = (Core.Name "operationType")
 
@@ -111,7 +111,7 @@ data OperationType =
   OperationTypeSubscription 
   deriving (Eq, Ord, Read, Show)
 
-_OperationType = (Core.Name "hydra.ext/org/graphql/syntax.OperationType")
+_OperationType = (Core.Name "hydra.ext.org.graphql.syntax.OperationType")
 
 _OperationType_query = (Core.Name "query")
 
@@ -124,7 +124,7 @@ newtype SelectionSet =
     unSelectionSet :: [Selection]}
   deriving (Eq, Ord, Read, Show)
 
-_SelectionSet = (Core.Name "hydra.ext/org/graphql/syntax.SelectionSet")
+_SelectionSet = (Core.Name "hydra.ext.org.graphql.syntax.SelectionSet")
 
 data Selection = 
   SelectionField Field |
@@ -132,7 +132,7 @@ data Selection =
   SelectionInlineFragment InlineFragment
   deriving (Eq, Ord, Read, Show)
 
-_Selection = (Core.Name "hydra.ext/org/graphql/syntax.Selection")
+_Selection = (Core.Name "hydra.ext.org.graphql.syntax.Selection")
 
 _Selection_field = (Core.Name "field")
 
@@ -149,7 +149,7 @@ data Field =
     fieldSelectionSet :: (Maybe SelectionSet)}
   deriving (Eq, Ord, Read, Show)
 
-_Field = (Core.Name "hydra.ext/org/graphql/syntax.Field")
+_Field = (Core.Name "hydra.ext.org.graphql.syntax.Field")
 
 _Field_alias = (Core.Name "alias")
 
@@ -166,7 +166,7 @@ data Alias =
   AliasColon 
   deriving (Eq, Ord, Read, Show)
 
-_Alias = (Core.Name "hydra.ext/org/graphql/syntax.Alias")
+_Alias = (Core.Name "hydra.ext.org.graphql.syntax.Alias")
 
 _Alias_name = (Core.Name "name")
 
@@ -177,7 +177,7 @@ newtype Arguments =
     unArguments :: [Argument]}
   deriving (Eq, Ord, Read, Show)
 
-_Arguments = (Core.Name "hydra.ext/org/graphql/syntax.Arguments")
+_Arguments = (Core.Name "hydra.ext.org.graphql.syntax.Arguments")
 
 data Argument = 
   Argument {
@@ -185,7 +185,7 @@ data Argument =
     argumentValue :: Value}
   deriving (Eq, Ord, Read, Show)
 
-_Argument = (Core.Name "hydra.ext/org/graphql/syntax.Argument")
+_Argument = (Core.Name "hydra.ext.org.graphql.syntax.Argument")
 
 _Argument_name = (Core.Name "name")
 
@@ -197,7 +197,7 @@ data FragmentSpread =
     fragmentSpreadDirectives :: (Maybe Directives)}
   deriving (Eq, Ord, Read, Show)
 
-_FragmentSpread = (Core.Name "hydra.ext/org/graphql/syntax.FragmentSpread")
+_FragmentSpread = (Core.Name "hydra.ext.org.graphql.syntax.FragmentSpread")
 
 _FragmentSpread_fragmentName = (Core.Name "fragmentName")
 
@@ -210,7 +210,7 @@ data InlineFragment =
     inlineFragmentSelectionSet :: SelectionSet}
   deriving (Eq, Ord, Read, Show)
 
-_InlineFragment = (Core.Name "hydra.ext/org/graphql/syntax.InlineFragment")
+_InlineFragment = (Core.Name "hydra.ext.org.graphql.syntax.InlineFragment")
 
 _InlineFragment_typeCondition = (Core.Name "typeCondition")
 
@@ -226,7 +226,7 @@ data FragmentDefinition =
     fragmentDefinitionSelectionSet :: SelectionSet}
   deriving (Eq, Ord, Read, Show)
 
-_FragmentDefinition = (Core.Name "hydra.ext/org/graphql/syntax.FragmentDefinition")
+_FragmentDefinition = (Core.Name "hydra.ext.org.graphql.syntax.FragmentDefinition")
 
 _FragmentDefinition_fragmentName = (Core.Name "fragmentName")
 
@@ -241,14 +241,14 @@ newtype FragmentName =
     unFragmentName :: Name}
   deriving (Eq, Ord, Read, Show)
 
-_FragmentName = (Core.Name "hydra.ext/org/graphql/syntax.FragmentName")
+_FragmentName = (Core.Name "hydra.ext.org.graphql.syntax.FragmentName")
 
 data TypeCondition = 
   TypeConditionOn  |
   TypeConditionNamedType NamedType
   deriving (Eq, Ord, Read, Show)
 
-_TypeCondition = (Core.Name "hydra.ext/org/graphql/syntax.TypeCondition")
+_TypeCondition = (Core.Name "hydra.ext.org.graphql.syntax.TypeCondition")
 
 _TypeCondition_on = (Core.Name "on")
 
@@ -266,7 +266,7 @@ data Value =
   ValueObject ObjectValue
   deriving (Eq, Ord, Read, Show)
 
-_Value = (Core.Name "hydra.ext/org/graphql/syntax.Value")
+_Value = (Core.Name "hydra.ext.org.graphql.syntax.Value")
 
 _Value_variable = (Core.Name "variable")
 
@@ -291,7 +291,7 @@ data BooleanValue =
   BooleanValueFalse 
   deriving (Eq, Ord, Read, Show)
 
-_BooleanValue = (Core.Name "hydra.ext/org/graphql/syntax.BooleanValue")
+_BooleanValue = (Core.Name "hydra.ext.org.graphql.syntax.BooleanValue")
 
 _BooleanValue_true = (Core.Name "true")
 
@@ -301,21 +301,21 @@ data NullValue =
   NullValue {}
   deriving (Eq, Ord, Read, Show)
 
-_NullValue = (Core.Name "hydra.ext/org/graphql/syntax.NullValue")
+_NullValue = (Core.Name "hydra.ext.org.graphql.syntax.NullValue")
 
 newtype EnumValue = 
   EnumValue {
     unEnumValue :: Name}
   deriving (Eq, Ord, Read, Show)
 
-_EnumValue = (Core.Name "hydra.ext/org/graphql/syntax.EnumValue")
+_EnumValue = (Core.Name "hydra.ext.org.graphql.syntax.EnumValue")
 
 data ListValue = 
   ListValueSequence ListValue_Sequence |
   ListValueSequence2 [Value]
   deriving (Eq, Ord, Read, Show)
 
-_ListValue = (Core.Name "hydra.ext/org/graphql/syntax.ListValue")
+_ListValue = (Core.Name "hydra.ext.org.graphql.syntax.ListValue")
 
 _ListValue_sequence = (Core.Name "sequence")
 
@@ -325,14 +325,14 @@ data ListValue_Sequence =
   ListValue_Sequence {}
   deriving (Eq, Ord, Read, Show)
 
-_ListValue_Sequence = (Core.Name "hydra.ext/org/graphql/syntax.ListValue_Sequence")
+_ListValue_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.ListValue_Sequence")
 
 data ObjectValue = 
   ObjectValueSequence ObjectValue_Sequence |
   ObjectValueSequence2 [ObjectField]
   deriving (Eq, Ord, Read, Show)
 
-_ObjectValue = (Core.Name "hydra.ext/org/graphql/syntax.ObjectValue")
+_ObjectValue = (Core.Name "hydra.ext.org.graphql.syntax.ObjectValue")
 
 _ObjectValue_sequence = (Core.Name "sequence")
 
@@ -342,7 +342,7 @@ data ObjectValue_Sequence =
   ObjectValue_Sequence {}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectValue_Sequence = (Core.Name "hydra.ext/org/graphql/syntax.ObjectValue_Sequence")
+_ObjectValue_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.ObjectValue_Sequence")
 
 data ObjectField = 
   ObjectField {
@@ -350,7 +350,7 @@ data ObjectField =
     objectFieldValue :: Value}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectField = (Core.Name "hydra.ext/org/graphql/syntax.ObjectField")
+_ObjectField = (Core.Name "hydra.ext.org.graphql.syntax.ObjectField")
 
 _ObjectField_name = (Core.Name "name")
 
@@ -364,7 +364,7 @@ data VariablesDefinition =
     variablesDefinitionDirectives :: (Maybe Directives)}
   deriving (Eq, Ord, Read, Show)
 
-_VariablesDefinition = (Core.Name "hydra.ext/org/graphql/syntax.VariablesDefinition")
+_VariablesDefinition = (Core.Name "hydra.ext.org.graphql.syntax.VariablesDefinition")
 
 _VariablesDefinition_variable = (Core.Name "variable")
 
@@ -379,14 +379,14 @@ newtype Variable =
     unVariable :: Name}
   deriving (Eq, Ord, Read, Show)
 
-_Variable = (Core.Name "hydra.ext/org/graphql/syntax.Variable")
+_Variable = (Core.Name "hydra.ext.org.graphql.syntax.Variable")
 
 newtype DefaultValue = 
   DefaultValue {
     unDefaultValue :: Value}
   deriving (Eq, Ord, Read, Show)
 
-_DefaultValue = (Core.Name "hydra.ext/org/graphql/syntax.DefaultValue")
+_DefaultValue = (Core.Name "hydra.ext.org.graphql.syntax.DefaultValue")
 
 data Type = 
   TypeNamed NamedType |
@@ -394,7 +394,7 @@ data Type =
   TypeNonNull NonNullType
   deriving (Eq, Ord, Read, Show)
 
-_Type = (Core.Name "hydra.ext/org/graphql/syntax.Type")
+_Type = (Core.Name "hydra.ext.org.graphql.syntax.Type")
 
 _Type_named = (Core.Name "named")
 
@@ -407,21 +407,21 @@ newtype NamedType =
     unNamedType :: Name}
   deriving (Eq, Ord, Read, Show)
 
-_NamedType = (Core.Name "hydra.ext/org/graphql/syntax.NamedType")
+_NamedType = (Core.Name "hydra.ext.org.graphql.syntax.NamedType")
 
 newtype ListType = 
   ListType {
     unListType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_ListType = (Core.Name "hydra.ext/org/graphql/syntax.ListType")
+_ListType = (Core.Name "hydra.ext.org.graphql.syntax.ListType")
 
 data NonNullType = 
   NonNullTypeNamed NamedType |
   NonNullTypeList ListType
   deriving (Eq, Ord, Read, Show)
 
-_NonNullType = (Core.Name "hydra.ext/org/graphql/syntax.NonNullType")
+_NonNullType = (Core.Name "hydra.ext.org.graphql.syntax.NonNullType")
 
 _NonNullType_named = (Core.Name "named")
 
@@ -432,7 +432,7 @@ newtype Directives =
     unDirectives :: [Directive]}
   deriving (Eq, Ord, Read, Show)
 
-_Directives = (Core.Name "hydra.ext/org/graphql/syntax.Directives")
+_Directives = (Core.Name "hydra.ext.org.graphql.syntax.Directives")
 
 data Directive = 
   Directive {
@@ -440,7 +440,7 @@ data Directive =
     directiveArguments :: (Maybe Arguments)}
   deriving (Eq, Ord, Read, Show)
 
-_Directive = (Core.Name "hydra.ext/org/graphql/syntax.Directive")
+_Directive = (Core.Name "hydra.ext.org.graphql.syntax.Directive")
 
 _Directive_name = (Core.Name "name")
 
@@ -451,7 +451,7 @@ newtype TypeSystemDocment =
     unTypeSystemDocment :: [TypeSystemDefinition]}
   deriving (Eq, Ord, Read, Show)
 
-_TypeSystemDocment = (Core.Name "hydra.ext/org/graphql/syntax.TypeSystemDocment")
+_TypeSystemDocment = (Core.Name "hydra.ext.org.graphql.syntax.TypeSystemDocment")
 
 data TypeSystemDefinition = 
   TypeSystemDefinitionSchema SchemaDefinition |
@@ -459,7 +459,7 @@ data TypeSystemDefinition =
   TypeSystemDefinitionDirective DirectiveDefinition
   deriving (Eq, Ord, Read, Show)
 
-_TypeSystemDefinition = (Core.Name "hydra.ext/org/graphql/syntax.TypeSystemDefinition")
+_TypeSystemDefinition = (Core.Name "hydra.ext.org.graphql.syntax.TypeSystemDefinition")
 
 _TypeSystemDefinition_schema = (Core.Name "schema")
 
@@ -472,14 +472,14 @@ newtype TypeSystemExtensionDocument =
     unTypeSystemExtensionDocument :: [TypeSystemDefinitionOrExtension]}
   deriving (Eq, Ord, Read, Show)
 
-_TypeSystemExtensionDocument = (Core.Name "hydra.ext/org/graphql/syntax.TypeSystemExtensionDocument")
+_TypeSystemExtensionDocument = (Core.Name "hydra.ext.org.graphql.syntax.TypeSystemExtensionDocument")
 
 data TypeSystemDefinitionOrExtension = 
   TypeSystemDefinitionOrExtensionDefinition TypeSystemDefinition |
   TypeSystemDefinitionOrExtensionExtension TypeSystemExtension
   deriving (Eq, Ord, Read, Show)
 
-_TypeSystemDefinitionOrExtension = (Core.Name "hydra.ext/org/graphql/syntax.TypeSystemDefinitionOrExtension")
+_TypeSystemDefinitionOrExtension = (Core.Name "hydra.ext.org.graphql.syntax.TypeSystemDefinitionOrExtension")
 
 _TypeSystemDefinitionOrExtension_definition = (Core.Name "definition")
 
@@ -490,7 +490,7 @@ data TypeSystemExtension =
   TypeSystemExtensionType TypeExtension
   deriving (Eq, Ord, Read, Show)
 
-_TypeSystemExtension = (Core.Name "hydra.ext/org/graphql/syntax.TypeSystemExtension")
+_TypeSystemExtension = (Core.Name "hydra.ext.org.graphql.syntax.TypeSystemExtension")
 
 _TypeSystemExtension_schema = (Core.Name "schema")
 
@@ -503,7 +503,7 @@ data SchemaDefinition =
     schemaDefinitionRootOperationTypeDefinition :: RootOperationTypeDefinition}
   deriving (Eq, Ord, Read, Show)
 
-_SchemaDefinition = (Core.Name "hydra.ext/org/graphql/syntax.SchemaDefinition")
+_SchemaDefinition = (Core.Name "hydra.ext.org.graphql.syntax.SchemaDefinition")
 
 _SchemaDefinition_description = (Core.Name "description")
 
@@ -516,7 +516,7 @@ data SchemaExtension =
   SchemaExtensionSequence2 Directives
   deriving (Eq, Ord, Read, Show)
 
-_SchemaExtension = (Core.Name "hydra.ext/org/graphql/syntax.SchemaExtension")
+_SchemaExtension = (Core.Name "hydra.ext.org.graphql.syntax.SchemaExtension")
 
 _SchemaExtension_sequence = (Core.Name "sequence")
 
@@ -528,7 +528,7 @@ data SchemaExtension_Sequence =
     schemaExtension_SequenceRootOperationTypeDefinition :: RootOperationTypeDefinition}
   deriving (Eq, Ord, Read, Show)
 
-_SchemaExtension_Sequence = (Core.Name "hydra.ext/org/graphql/syntax.SchemaExtension_Sequence")
+_SchemaExtension_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.SchemaExtension_Sequence")
 
 _SchemaExtension_Sequence_directives = (Core.Name "directives")
 
@@ -540,7 +540,7 @@ data RootOperationTypeDefinition =
     rootOperationTypeDefinitionNamedType :: NamedType}
   deriving (Eq, Ord, Read, Show)
 
-_RootOperationTypeDefinition = (Core.Name "hydra.ext/org/graphql/syntax.RootOperationTypeDefinition")
+_RootOperationTypeDefinition = (Core.Name "hydra.ext.org.graphql.syntax.RootOperationTypeDefinition")
 
 _RootOperationTypeDefinition_operationType = (Core.Name "operationType")
 
@@ -551,7 +551,7 @@ newtype Description =
     unDescription :: StringValue}
   deriving (Eq, Ord, Read, Show)
 
-_Description = (Core.Name "hydra.ext/org/graphql/syntax.Description")
+_Description = (Core.Name "hydra.ext.org.graphql.syntax.Description")
 
 data TypeDefinition = 
   TypeDefinitionScalar ScalarTypeDefinition |
@@ -562,7 +562,7 @@ data TypeDefinition =
   TypeDefinitionInputObject InputObjectTypeDefinition
   deriving (Eq, Ord, Read, Show)
 
-_TypeDefinition = (Core.Name "hydra.ext/org/graphql/syntax.TypeDefinition")
+_TypeDefinition = (Core.Name "hydra.ext.org.graphql.syntax.TypeDefinition")
 
 _TypeDefinition_scalar = (Core.Name "scalar")
 
@@ -585,7 +585,7 @@ data TypeExtension =
   TypeExtensionInputObject InputObjectTypeExtension
   deriving (Eq, Ord, Read, Show)
 
-_TypeExtension = (Core.Name "hydra.ext/org/graphql/syntax.TypeExtension")
+_TypeExtension = (Core.Name "hydra.ext.org.graphql.syntax.TypeExtension")
 
 _TypeExtension_scalar = (Core.Name "scalar")
 
@@ -606,7 +606,7 @@ data ScalarTypeDefinition =
     scalarTypeDefinitionDirectives :: (Maybe Directives)}
   deriving (Eq, Ord, Read, Show)
 
-_ScalarTypeDefinition = (Core.Name "hydra.ext/org/graphql/syntax.ScalarTypeDefinition")
+_ScalarTypeDefinition = (Core.Name "hydra.ext.org.graphql.syntax.ScalarTypeDefinition")
 
 _ScalarTypeDefinition_description = (Core.Name "description")
 
@@ -620,7 +620,7 @@ data ScalarTypeExtension =
     scalarTypeExtensionDirectives :: Directives}
   deriving (Eq, Ord, Read, Show)
 
-_ScalarTypeExtension = (Core.Name "hydra.ext/org/graphql/syntax.ScalarTypeExtension")
+_ScalarTypeExtension = (Core.Name "hydra.ext.org.graphql.syntax.ScalarTypeExtension")
 
 _ScalarTypeExtension_name = (Core.Name "name")
 
@@ -635,7 +635,7 @@ data ObjectTypeDefinition =
     objectTypeDefinitionFieldsDefinition :: (Maybe FieldsDefinition)}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectTypeDefinition = (Core.Name "hydra.ext/org/graphql/syntax.ObjectTypeDefinition")
+_ObjectTypeDefinition = (Core.Name "hydra.ext.org.graphql.syntax.ObjectTypeDefinition")
 
 _ObjectTypeDefinition_description = (Core.Name "description")
 
@@ -653,7 +653,7 @@ data ObjectTypeExtension =
   ObjectTypeExtensionSequence3 ObjectTypeExtension_Sequence3
   deriving (Eq, Ord, Read, Show)
 
-_ObjectTypeExtension = (Core.Name "hydra.ext/org/graphql/syntax.ObjectTypeExtension")
+_ObjectTypeExtension = (Core.Name "hydra.ext.org.graphql.syntax.ObjectTypeExtension")
 
 _ObjectTypeExtension_sequence = (Core.Name "sequence")
 
@@ -669,7 +669,7 @@ data ObjectTypeExtension_Sequence =
     objectTypeExtension_SequenceFieldsDefinition :: FieldsDefinition}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectTypeExtension_Sequence = (Core.Name "hydra.ext/org/graphql/syntax.ObjectTypeExtension_Sequence")
+_ObjectTypeExtension_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.ObjectTypeExtension_Sequence")
 
 _ObjectTypeExtension_Sequence_name = (Core.Name "name")
 
@@ -686,7 +686,7 @@ data ObjectTypeExtension_Sequence2 =
     objectTypeExtension_Sequence2Directives :: (Maybe Directives)}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectTypeExtension_Sequence2 = (Core.Name "hydra.ext/org/graphql/syntax.ObjectTypeExtension_Sequence2")
+_ObjectTypeExtension_Sequence2 = (Core.Name "hydra.ext.org.graphql.syntax.ObjectTypeExtension_Sequence2")
 
 _ObjectTypeExtension_Sequence2_name = (Core.Name "name")
 
@@ -700,7 +700,7 @@ data ObjectTypeExtension_Sequence3 =
     objectTypeExtension_Sequence3ImplementsInterfaces :: ImplementsInterfaces}
   deriving (Eq, Ord, Read, Show)
 
-_ObjectTypeExtension_Sequence3 = (Core.Name "hydra.ext/org/graphql/syntax.ObjectTypeExtension_Sequence3")
+_ObjectTypeExtension_Sequence3 = (Core.Name "hydra.ext.org.graphql.syntax.ObjectTypeExtension_Sequence3")
 
 _ObjectTypeExtension_Sequence3_name = (Core.Name "name")
 
@@ -711,7 +711,7 @@ data ImplementsInterfaces =
   ImplementsInterfacesSequence2 ImplementsInterfaces_Sequence2
   deriving (Eq, Ord, Read, Show)
 
-_ImplementsInterfaces = (Core.Name "hydra.ext/org/graphql/syntax.ImplementsInterfaces")
+_ImplementsInterfaces = (Core.Name "hydra.ext.org.graphql.syntax.ImplementsInterfaces")
 
 _ImplementsInterfaces_sequence = (Core.Name "sequence")
 
@@ -723,7 +723,7 @@ data ImplementsInterfaces_Sequence =
     implementsInterfaces_SequenceNamedType :: NamedType}
   deriving (Eq, Ord, Read, Show)
 
-_ImplementsInterfaces_Sequence = (Core.Name "hydra.ext/org/graphql/syntax.ImplementsInterfaces_Sequence")
+_ImplementsInterfaces_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.ImplementsInterfaces_Sequence")
 
 _ImplementsInterfaces_Sequence_implementsInterfaces = (Core.Name "implementsInterfaces")
 
@@ -735,7 +735,7 @@ data ImplementsInterfaces_Sequence2 =
     implementsInterfaces_Sequence2NamedType :: NamedType}
   deriving (Eq, Ord, Read, Show)
 
-_ImplementsInterfaces_Sequence2 = (Core.Name "hydra.ext/org/graphql/syntax.ImplementsInterfaces_Sequence2")
+_ImplementsInterfaces_Sequence2 = (Core.Name "hydra.ext.org.graphql.syntax.ImplementsInterfaces_Sequence2")
 
 _ImplementsInterfaces_Sequence2_amp = (Core.Name "amp")
 
@@ -746,7 +746,7 @@ newtype FieldsDefinition =
     unFieldsDefinition :: [FieldDefinition]}
   deriving (Eq, Ord, Read, Show)
 
-_FieldsDefinition = (Core.Name "hydra.ext/org/graphql/syntax.FieldsDefinition")
+_FieldsDefinition = (Core.Name "hydra.ext.org.graphql.syntax.FieldsDefinition")
 
 data FieldDefinition = 
   FieldDefinition {
@@ -757,7 +757,7 @@ data FieldDefinition =
     fieldDefinitionDirectives :: (Maybe Directives)}
   deriving (Eq, Ord, Read, Show)
 
-_FieldDefinition = (Core.Name "hydra.ext/org/graphql/syntax.FieldDefinition")
+_FieldDefinition = (Core.Name "hydra.ext.org.graphql.syntax.FieldDefinition")
 
 _FieldDefinition_description = (Core.Name "description")
 
@@ -774,7 +774,7 @@ newtype ArgumentsDefinition =
     unArgumentsDefinition :: [InputValueDefinition]}
   deriving (Eq, Ord, Read, Show)
 
-_ArgumentsDefinition = (Core.Name "hydra.ext/org/graphql/syntax.ArgumentsDefinition")
+_ArgumentsDefinition = (Core.Name "hydra.ext.org.graphql.syntax.ArgumentsDefinition")
 
 data InputValueDefinition = 
   InputValueDefinition {
@@ -785,7 +785,7 @@ data InputValueDefinition =
     inputValueDefinitionDirectives :: (Maybe Directives)}
   deriving (Eq, Ord, Read, Show)
 
-_InputValueDefinition = (Core.Name "hydra.ext/org/graphql/syntax.InputValueDefinition")
+_InputValueDefinition = (Core.Name "hydra.ext.org.graphql.syntax.InputValueDefinition")
 
 _InputValueDefinition_description = (Core.Name "description")
 
@@ -802,7 +802,7 @@ data InterfaceTypeDefinition =
   InterfaceTypeDefinitionSequence2 InterfaceTypeDefinition_Sequence2
   deriving (Eq, Ord, Read, Show)
 
-_InterfaceTypeDefinition = (Core.Name "hydra.ext/org/graphql/syntax.InterfaceTypeDefinition")
+_InterfaceTypeDefinition = (Core.Name "hydra.ext.org.graphql.syntax.InterfaceTypeDefinition")
 
 _InterfaceTypeDefinition_sequence = (Core.Name "sequence")
 
@@ -817,7 +817,7 @@ data InterfaceTypeDefinition_Sequence =
     interfaceTypeDefinition_SequenceFieldsDefinition :: FieldsDefinition}
   deriving (Eq, Ord, Read, Show)
 
-_InterfaceTypeDefinition_Sequence = (Core.Name "hydra.ext/org/graphql/syntax.InterfaceTypeDefinition_Sequence")
+_InterfaceTypeDefinition_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.InterfaceTypeDefinition_Sequence")
 
 _InterfaceTypeDefinition_Sequence_description = (Core.Name "description")
 
@@ -837,7 +837,7 @@ data InterfaceTypeDefinition_Sequence2 =
     interfaceTypeDefinition_Sequence2Directives :: (Maybe Directives)}
   deriving (Eq, Ord, Read, Show)
 
-_InterfaceTypeDefinition_Sequence2 = (Core.Name "hydra.ext/org/graphql/syntax.InterfaceTypeDefinition_Sequence2")
+_InterfaceTypeDefinition_Sequence2 = (Core.Name "hydra.ext.org.graphql.syntax.InterfaceTypeDefinition_Sequence2")
 
 _InterfaceTypeDefinition_Sequence2_description = (Core.Name "description")
 
@@ -853,7 +853,7 @@ data InterfaceTypeExtension =
   InterfaceTypeExtensionSequence3 InterfaceTypeExtension_Sequence3
   deriving (Eq, Ord, Read, Show)
 
-_InterfaceTypeExtension = (Core.Name "hydra.ext/org/graphql/syntax.InterfaceTypeExtension")
+_InterfaceTypeExtension = (Core.Name "hydra.ext.org.graphql.syntax.InterfaceTypeExtension")
 
 _InterfaceTypeExtension_sequence = (Core.Name "sequence")
 
@@ -869,7 +869,7 @@ data InterfaceTypeExtension_Sequence =
     interfaceTypeExtension_SequenceFieldsDefinition :: FieldsDefinition}
   deriving (Eq, Ord, Read, Show)
 
-_InterfaceTypeExtension_Sequence = (Core.Name "hydra.ext/org/graphql/syntax.InterfaceTypeExtension_Sequence")
+_InterfaceTypeExtension_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.InterfaceTypeExtension_Sequence")
 
 _InterfaceTypeExtension_Sequence_name = (Core.Name "name")
 
@@ -886,7 +886,7 @@ data InterfaceTypeExtension_Sequence2 =
     interfaceTypeExtension_Sequence2Directives :: Directives}
   deriving (Eq, Ord, Read, Show)
 
-_InterfaceTypeExtension_Sequence2 = (Core.Name "hydra.ext/org/graphql/syntax.InterfaceTypeExtension_Sequence2")
+_InterfaceTypeExtension_Sequence2 = (Core.Name "hydra.ext.org.graphql.syntax.InterfaceTypeExtension_Sequence2")
 
 _InterfaceTypeExtension_Sequence2_name = (Core.Name "name")
 
@@ -900,7 +900,7 @@ data InterfaceTypeExtension_Sequence3 =
     interfaceTypeExtension_Sequence3ImplementsInterfaces :: ImplementsInterfaces}
   deriving (Eq, Ord, Read, Show)
 
-_InterfaceTypeExtension_Sequence3 = (Core.Name "hydra.ext/org/graphql/syntax.InterfaceTypeExtension_Sequence3")
+_InterfaceTypeExtension_Sequence3 = (Core.Name "hydra.ext.org.graphql.syntax.InterfaceTypeExtension_Sequence3")
 
 _InterfaceTypeExtension_Sequence3_name = (Core.Name "name")
 
@@ -914,7 +914,7 @@ data UnionTypeDefinition =
     unionTypeDefinitionUnionMemberTypes :: (Maybe UnionMemberTypes)}
   deriving (Eq, Ord, Read, Show)
 
-_UnionTypeDefinition = (Core.Name "hydra.ext/org/graphql/syntax.UnionTypeDefinition")
+_UnionTypeDefinition = (Core.Name "hydra.ext.org.graphql.syntax.UnionTypeDefinition")
 
 _UnionTypeDefinition_description = (Core.Name "description")
 
@@ -929,7 +929,7 @@ data UnionMemberTypes =
   UnionMemberTypesSequence2 UnionMemberTypes_Sequence2
   deriving (Eq, Ord, Read, Show)
 
-_UnionMemberTypes = (Core.Name "hydra.ext/org/graphql/syntax.UnionMemberTypes")
+_UnionMemberTypes = (Core.Name "hydra.ext.org.graphql.syntax.UnionMemberTypes")
 
 _UnionMemberTypes_sequence = (Core.Name "sequence")
 
@@ -941,7 +941,7 @@ data UnionMemberTypes_Sequence =
     unionMemberTypes_SequenceNamedType :: NamedType}
   deriving (Eq, Ord, Read, Show)
 
-_UnionMemberTypes_Sequence = (Core.Name "hydra.ext/org/graphql/syntax.UnionMemberTypes_Sequence")
+_UnionMemberTypes_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.UnionMemberTypes_Sequence")
 
 _UnionMemberTypes_Sequence_unionMemberTypes = (Core.Name "unionMemberTypes")
 
@@ -953,7 +953,7 @@ data UnionMemberTypes_Sequence2 =
     unionMemberTypes_Sequence2NamedType :: NamedType}
   deriving (Eq, Ord, Read, Show)
 
-_UnionMemberTypes_Sequence2 = (Core.Name "hydra.ext/org/graphql/syntax.UnionMemberTypes_Sequence2")
+_UnionMemberTypes_Sequence2 = (Core.Name "hydra.ext.org.graphql.syntax.UnionMemberTypes_Sequence2")
 
 _UnionMemberTypes_Sequence2_or = (Core.Name "or")
 
@@ -964,7 +964,7 @@ data UnionTypeExtension =
   UnionTypeExtensionSequence2 UnionTypeExtension_Sequence2
   deriving (Eq, Ord, Read, Show)
 
-_UnionTypeExtension = (Core.Name "hydra.ext/org/graphql/syntax.UnionTypeExtension")
+_UnionTypeExtension = (Core.Name "hydra.ext.org.graphql.syntax.UnionTypeExtension")
 
 _UnionTypeExtension_sequence = (Core.Name "sequence")
 
@@ -977,7 +977,7 @@ data UnionTypeExtension_Sequence =
     unionTypeExtension_SequenceUnionMemberTypes :: UnionMemberTypes}
   deriving (Eq, Ord, Read, Show)
 
-_UnionTypeExtension_Sequence = (Core.Name "hydra.ext/org/graphql/syntax.UnionTypeExtension_Sequence")
+_UnionTypeExtension_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.UnionTypeExtension_Sequence")
 
 _UnionTypeExtension_Sequence_name = (Core.Name "name")
 
@@ -991,7 +991,7 @@ data UnionTypeExtension_Sequence2 =
     unionTypeExtension_Sequence2Directives :: Directives}
   deriving (Eq, Ord, Read, Show)
 
-_UnionTypeExtension_Sequence2 = (Core.Name "hydra.ext/org/graphql/syntax.UnionTypeExtension_Sequence2")
+_UnionTypeExtension_Sequence2 = (Core.Name "hydra.ext.org.graphql.syntax.UnionTypeExtension_Sequence2")
 
 _UnionTypeExtension_Sequence2_name = (Core.Name "name")
 
@@ -1005,7 +1005,7 @@ data EnumTypeDefinition =
     enumTypeDefinitionEnumValuesDefinition :: (Maybe EnumValuesDefinition)}
   deriving (Eq, Ord, Read, Show)
 
-_EnumTypeDefinition = (Core.Name "hydra.ext/org/graphql/syntax.EnumTypeDefinition")
+_EnumTypeDefinition = (Core.Name "hydra.ext.org.graphql.syntax.EnumTypeDefinition")
 
 _EnumTypeDefinition_description = (Core.Name "description")
 
@@ -1020,7 +1020,7 @@ newtype EnumValuesDefinition =
     unEnumValuesDefinition :: [EnumValueDefinition]}
   deriving (Eq, Ord, Read, Show)
 
-_EnumValuesDefinition = (Core.Name "hydra.ext/org/graphql/syntax.EnumValuesDefinition")
+_EnumValuesDefinition = (Core.Name "hydra.ext.org.graphql.syntax.EnumValuesDefinition")
 
 data EnumValueDefinition = 
   EnumValueDefinition {
@@ -1029,7 +1029,7 @@ data EnumValueDefinition =
     enumValueDefinitionDirectives :: (Maybe Directives)}
   deriving (Eq, Ord, Read, Show)
 
-_EnumValueDefinition = (Core.Name "hydra.ext/org/graphql/syntax.EnumValueDefinition")
+_EnumValueDefinition = (Core.Name "hydra.ext.org.graphql.syntax.EnumValueDefinition")
 
 _EnumValueDefinition_description = (Core.Name "description")
 
@@ -1042,7 +1042,7 @@ data EnumTypeExtension =
   EnumTypeExtensionSequence2 EnumTypeExtension_Sequence2
   deriving (Eq, Ord, Read, Show)
 
-_EnumTypeExtension = (Core.Name "hydra.ext/org/graphql/syntax.EnumTypeExtension")
+_EnumTypeExtension = (Core.Name "hydra.ext.org.graphql.syntax.EnumTypeExtension")
 
 _EnumTypeExtension_sequence = (Core.Name "sequence")
 
@@ -1055,7 +1055,7 @@ data EnumTypeExtension_Sequence =
     enumTypeExtension_SequenceEnumValuesDefinition :: EnumValuesDefinition}
   deriving (Eq, Ord, Read, Show)
 
-_EnumTypeExtension_Sequence = (Core.Name "hydra.ext/org/graphql/syntax.EnumTypeExtension_Sequence")
+_EnumTypeExtension_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.EnumTypeExtension_Sequence")
 
 _EnumTypeExtension_Sequence_name = (Core.Name "name")
 
@@ -1069,7 +1069,7 @@ data EnumTypeExtension_Sequence2 =
     enumTypeExtension_Sequence2Directives :: Directives}
   deriving (Eq, Ord, Read, Show)
 
-_EnumTypeExtension_Sequence2 = (Core.Name "hydra.ext/org/graphql/syntax.EnumTypeExtension_Sequence2")
+_EnumTypeExtension_Sequence2 = (Core.Name "hydra.ext.org.graphql.syntax.EnumTypeExtension_Sequence2")
 
 _EnumTypeExtension_Sequence2_name = (Core.Name "name")
 
@@ -1080,7 +1080,7 @@ data InputObjectTypeDefinition =
   InputObjectTypeDefinitionSequence2 InputObjectTypeDefinition_Sequence2
   deriving (Eq, Ord, Read, Show)
 
-_InputObjectTypeDefinition = (Core.Name "hydra.ext/org/graphql/syntax.InputObjectTypeDefinition")
+_InputObjectTypeDefinition = (Core.Name "hydra.ext.org.graphql.syntax.InputObjectTypeDefinition")
 
 _InputObjectTypeDefinition_sequence = (Core.Name "sequence")
 
@@ -1094,7 +1094,7 @@ data InputObjectTypeDefinition_Sequence =
     inputObjectTypeDefinition_SequenceInputFieldsDefinition :: InputFieldsDefinition}
   deriving (Eq, Ord, Read, Show)
 
-_InputObjectTypeDefinition_Sequence = (Core.Name "hydra.ext/org/graphql/syntax.InputObjectTypeDefinition_Sequence")
+_InputObjectTypeDefinition_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.InputObjectTypeDefinition_Sequence")
 
 _InputObjectTypeDefinition_Sequence_description = (Core.Name "description")
 
@@ -1111,7 +1111,7 @@ data InputObjectTypeDefinition_Sequence2 =
     inputObjectTypeDefinition_Sequence2Directives :: (Maybe Directives)}
   deriving (Eq, Ord, Read, Show)
 
-_InputObjectTypeDefinition_Sequence2 = (Core.Name "hydra.ext/org/graphql/syntax.InputObjectTypeDefinition_Sequence2")
+_InputObjectTypeDefinition_Sequence2 = (Core.Name "hydra.ext.org.graphql.syntax.InputObjectTypeDefinition_Sequence2")
 
 _InputObjectTypeDefinition_Sequence2_description = (Core.Name "description")
 
@@ -1124,14 +1124,14 @@ newtype InputFieldsDefinition =
     unInputFieldsDefinition :: [InputValueDefinition]}
   deriving (Eq, Ord, Read, Show)
 
-_InputFieldsDefinition = (Core.Name "hydra.ext/org/graphql/syntax.InputFieldsDefinition")
+_InputFieldsDefinition = (Core.Name "hydra.ext.org.graphql.syntax.InputFieldsDefinition")
 
 data InputObjectTypeExtension = 
   InputObjectTypeExtensionSequence InputObjectTypeExtension_Sequence |
   InputObjectTypeExtensionSequence2 InputObjectTypeExtension_Sequence2
   deriving (Eq, Ord, Read, Show)
 
-_InputObjectTypeExtension = (Core.Name "hydra.ext/org/graphql/syntax.InputObjectTypeExtension")
+_InputObjectTypeExtension = (Core.Name "hydra.ext.org.graphql.syntax.InputObjectTypeExtension")
 
 _InputObjectTypeExtension_sequence = (Core.Name "sequence")
 
@@ -1144,7 +1144,7 @@ data InputObjectTypeExtension_Sequence =
     inputObjectTypeExtension_SequenceInputFieldsDefinition :: InputFieldsDefinition}
   deriving (Eq, Ord, Read, Show)
 
-_InputObjectTypeExtension_Sequence = (Core.Name "hydra.ext/org/graphql/syntax.InputObjectTypeExtension_Sequence")
+_InputObjectTypeExtension_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.InputObjectTypeExtension_Sequence")
 
 _InputObjectTypeExtension_Sequence_name = (Core.Name "name")
 
@@ -1158,7 +1158,7 @@ data InputObjectTypeExtension_Sequence2 =
     inputObjectTypeExtension_Sequence2Directives :: Directives}
   deriving (Eq, Ord, Read, Show)
 
-_InputObjectTypeExtension_Sequence2 = (Core.Name "hydra.ext/org/graphql/syntax.InputObjectTypeExtension_Sequence2")
+_InputObjectTypeExtension_Sequence2 = (Core.Name "hydra.ext.org.graphql.syntax.InputObjectTypeExtension_Sequence2")
 
 _InputObjectTypeExtension_Sequence2_name = (Core.Name "name")
 
@@ -1173,7 +1173,7 @@ data DirectiveDefinition =
     directiveDefinitionDirectiveLocations :: DirectiveLocations}
   deriving (Eq, Ord, Read, Show)
 
-_DirectiveDefinition = (Core.Name "hydra.ext/org/graphql/syntax.DirectiveDefinition")
+_DirectiveDefinition = (Core.Name "hydra.ext.org.graphql.syntax.DirectiveDefinition")
 
 _DirectiveDefinition_description = (Core.Name "description")
 
@@ -1190,7 +1190,7 @@ data DirectiveLocations =
   DirectiveLocationsSequence2 DirectiveLocations_Sequence2
   deriving (Eq, Ord, Read, Show)
 
-_DirectiveLocations = (Core.Name "hydra.ext/org/graphql/syntax.DirectiveLocations")
+_DirectiveLocations = (Core.Name "hydra.ext.org.graphql.syntax.DirectiveLocations")
 
 _DirectiveLocations_sequence = (Core.Name "sequence")
 
@@ -1202,7 +1202,7 @@ data DirectiveLocations_Sequence =
     directiveLocations_SequenceDirectiveLocation :: DirectiveLocation}
   deriving (Eq, Ord, Read, Show)
 
-_DirectiveLocations_Sequence = (Core.Name "hydra.ext/org/graphql/syntax.DirectiveLocations_Sequence")
+_DirectiveLocations_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.DirectiveLocations_Sequence")
 
 _DirectiveLocations_Sequence_directiveLocations = (Core.Name "directiveLocations")
 
@@ -1214,7 +1214,7 @@ data DirectiveLocations_Sequence2 =
     directiveLocations_Sequence2DirectiveLocation :: DirectiveLocation}
   deriving (Eq, Ord, Read, Show)
 
-_DirectiveLocations_Sequence2 = (Core.Name "hydra.ext/org/graphql/syntax.DirectiveLocations_Sequence2")
+_DirectiveLocations_Sequence2 = (Core.Name "hydra.ext.org.graphql.syntax.DirectiveLocations_Sequence2")
 
 _DirectiveLocations_Sequence2_or = (Core.Name "or")
 
@@ -1225,7 +1225,7 @@ data DirectiveLocation =
   DirectiveLocationTypeSystem TypeSystemDirectiveLocation
   deriving (Eq, Ord, Read, Show)
 
-_DirectiveLocation = (Core.Name "hydra.ext/org/graphql/syntax.DirectiveLocation")
+_DirectiveLocation = (Core.Name "hydra.ext.org.graphql.syntax.DirectiveLocation")
 
 _DirectiveLocation_executable = (Core.Name "executable")
 
@@ -1242,7 +1242,7 @@ data ExecutableDirectiveLocation =
   ExecutableDirectiveLocationVARIABLELowbarDEFINITION 
   deriving (Eq, Ord, Read, Show)
 
-_ExecutableDirectiveLocation = (Core.Name "hydra.ext/org/graphql/syntax.ExecutableDirectiveLocation")
+_ExecutableDirectiveLocation = (Core.Name "hydra.ext.org.graphql.syntax.ExecutableDirectiveLocation")
 
 _ExecutableDirectiveLocation_qUERY = (Core.Name "qUERY")
 
@@ -1274,7 +1274,7 @@ data TypeSystemDirectiveLocation =
   TypeSystemDirectiveLocationINPUTLowbarFIELDLowbarDEFINITION 
   deriving (Eq, Ord, Read, Show)
 
-_TypeSystemDirectiveLocation = (Core.Name "hydra.ext/org/graphql/syntax.TypeSystemDirectiveLocation")
+_TypeSystemDirectiveLocation = (Core.Name "hydra.ext.org.graphql.syntax.TypeSystemDirectiveLocation")
 
 _TypeSystemDirectiveLocation_sCHEMA = (Core.Name "sCHEMA")
 
