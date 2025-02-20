@@ -41,24 +41,24 @@ typeScriptLanguageDef = typeScriptLanguageDefinition "typeScriptLanguage" $
     _Language_name>>: wrap _LanguageName "hydra.langs.typeScript",
     _Language_constraints>>: record _LanguageConstraints [
       _LanguageConstraints_eliminationVariants>>: Sets.empty,
-      _LanguageConstraints_literalVariants>>: Sets.fromList @@ list (unitVariant _LiteralVariant <$> [
+      _LanguageConstraints_literalVariants>>: Sets.fromList $ list (unitVariant _LiteralVariant <$> [
         _LiteralVariant_boolean,
         _LiteralVariant_float,
         _LiteralVariant_integer,
         _LiteralVariant_string]),
-      _LanguageConstraints_floatTypes>>: Sets.fromList @@ list (unitVariant _FloatType <$> [
+      _LanguageConstraints_floatTypes>>: Sets.fromList $ list (unitVariant _FloatType <$> [
         _FloatType_float64]),
       _LanguageConstraints_functionVariants>>: Sets.empty,
-      _LanguageConstraints_integerTypes>>: Sets.fromList @@ list (unitVariant _IntegerType <$> [
+      _LanguageConstraints_integerTypes>>: Sets.fromList $ list (unitVariant _IntegerType <$> [
         _IntegerType_bigint]),
-      _LanguageConstraints_termVariants>>: Sets.fromList @@ list (unitVariant _TermVariant <$> [
+      _LanguageConstraints_termVariants>>: Sets.fromList $ list (unitVariant _TermVariant <$> [
         _TermVariant_list,
         _TermVariant_literal,
         _TermVariant_map,
         _TermVariant_optional,
         _TermVariant_record,
         _TermVariant_union]),
-      _LanguageConstraints_typeVariants>>: Sets.fromList @@ list (unitVariant _TypeVariant <$> [
+      _LanguageConstraints_typeVariants>>: Sets.fromList $ list (unitVariant _TypeVariant <$> [
         _TypeVariant_annotated,
         _TypeVariant_list,
         _TypeVariant_literal,
@@ -75,7 +75,7 @@ typeScriptReservedWordsDef :: TElement (S.Set String)
 typeScriptReservedWordsDef = typeScriptLanguageDefinition "typeScriptReservedWords" $
     doc "A set of reserved words in TypeScript. Taken directly from https://github.com/microsoft/TypeScript/issues/2536" $
     typed (tSet tString) $
-    (Sets.fromList @@ (Lists.concat @@
+    (Sets.fromList (Lists.concat $
       list [var "reservedWords", var "strictModeReservedWords", var "contextuallKeywords"]))
   `with` [
     "reservedWords">: list [

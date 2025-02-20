@@ -49,7 +49,7 @@ getAnnotationDef :: TElement (Name -> M.Map Name Term -> Maybe Term)
 getAnnotationDef = annotationsDefinition "getAnnotation" $
   functionN [nameT, tMap nameT termT, tOpt termT] $
   lambda "key" $ lambda "ann" $
-    Maps.lookup @@ var "key" @@ var "ann"
+    Maps.lookup (var "key") (var "ann")
 
 getTermTypeDef :: TElement (Term -> Flow Graph (Maybe Type))
 getTermTypeDef = annotationsDefinition "getTermType" $
@@ -66,8 +66,8 @@ requireElementTypeDef = annotationsDefinition "requireElementType" $
   lambda "el" $ ((var "withType" @@ (ref getTermTypeDef @@ (project _Element _Element_data @@ var "el")))
     `with` [
       "withType">: matchOpt
-       (Flows.fail @@ ("missing type annotation for element " ++ (unwrap _Name @@ (project _Element _Element_name @@ var "el"))))
-       Flows.pure])
+       (Flows.fail ("missing type annotation for element " ++ (unwrap _Name @@ (project _Element _Element_name @@ var "el"))))
+       $ lambda "t" $ Flows.pure $ var "t"])
 
 requireTermTypeDef :: TElement (Term -> Flow Graph Type)
 requireTermTypeDef = annotationsDefinition "requireTermType" $
@@ -76,5 +76,5 @@ requireTermTypeDef = annotationsDefinition "requireTermType" $
   (var "withType" <.> ref getTermTypeDef)
     `with` [
       "withType">: matchOpt
-       (Flows.fail @@ "missing type annotation")
-       Flows.pure]
+       (Flows.fail "missing type annotation")
+       $ lambda "t" $ Flows.pure $ var "t"]

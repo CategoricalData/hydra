@@ -3,45 +3,46 @@ module Hydra.Dsl.Lib.Sets where
 import Hydra.Phantoms
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
+import Hydra.Dsl.Base
 
 import Data.Set
 
 
-contains :: TTerm (a -> Set a -> Bool)
-contains = TTerm $ Terms.primitive _sets_contains
+contains :: TTerm a -> TTerm (Set a) -> TTerm Bool
+contains = primitive2 _sets_contains
 
-difference :: TTerm (Set a -> Set a -> Set a)
-difference = TTerm $ Terms.primitive _sets_difference
+difference :: TTerm (Set a) -> TTerm (Set a) -> TTerm (Set a)
+difference = primitive2 _sets_difference
 
 empty :: TTerm (Set a)
-empty = TTerm $ Terms.primitive _sets_empty
+empty = primitive _sets_empty
 
-fromList :: TTerm ([a] -> Set a)
-fromList = TTerm $ Terms.primitive _sets_fromList
+fromList :: TTerm [a] -> TTerm (Set a)
+fromList = primitive1 _sets_fromList
 
-insert :: TTerm (a -> Set a -> Set a)
-insert = TTerm $ Terms.primitive _sets_insert
+insert :: TTerm a -> TTerm (Set a) -> TTerm (Set a)
+insert = primitive2 _sets_insert
 
-intersection :: TTerm (Set a -> Set a -> Set a)
-intersection = TTerm $ Terms.primitive _sets_intersection
+intersection :: TTerm (Set a) -> TTerm (Set a) -> TTerm (Set a)
+intersection = primitive2 _sets_intersection
 
-isEmpty :: TTerm (Set a -> Bool)
-isEmpty = TTerm $ Terms.primitive _sets_isEmpty
+isEmpty :: TTerm (Set a) -> TTerm Bool
+isEmpty = primitive1 _sets_isEmpty
 
-map :: TTerm ((a -> b) -> Set a -> Set b)
-map = TTerm $ Terms.primitive _sets_map
+map :: TTerm (a -> b) -> TTerm (Set a) -> TTerm (Set b)
+map = primitive2 _sets_map
 
-remove :: TTerm (a -> Set a -> Set a)
-remove = TTerm $ Terms.primitive _sets_remove
+remove :: TTerm a -> TTerm (Set a) -> TTerm (Set a)
+remove = primitive2 _sets_remove
 
-singleton :: TTerm (a -> Set a)
-singleton = TTerm $ Terms.primitive _sets_singleton
+singleton :: TTerm a -> TTerm (Set a)
+singleton = primitive1 _sets_singleton
 
-size :: TTerm (Set a -> Int)
-size = TTerm $ Terms.primitive _sets_size
+size :: TTerm (Set a) -> TTerm Int
+size = primitive1 _sets_size
 
-toList :: TTerm (Set a -> [a])
-toList = TTerm $ Terms.primitive _sets_toList
+toList :: TTerm (Set a) -> TTerm [a]
+toList = primitive1 _sets_toList
 
-union :: TTerm (Set a -> Set a -> Set a)
-union = TTerm $ Terms.primitive _sets_union
+union :: TTerm (Set a) -> TTerm (Set a) -> TTerm (Set a)
+union = primitive2 _sets_union

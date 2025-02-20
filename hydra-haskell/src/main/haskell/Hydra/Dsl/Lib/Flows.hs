@@ -13,26 +13,26 @@ import qualified Data.Map as M
 
 -- Primitives
 
-apply :: TTerm (Flow s (x -> y) -> Flow s x -> Flow s y)
-apply = TTerm $ Terms.primitive _flows_apply
+apply :: TTerm (Flow s (x -> y)) -> TTerm (Flow s x) -> TTerm (Flow s y)
+apply = primitive2 _flows_apply
 
-bind :: TTerm (Flow s x -> (x -> Flow s y) -> Flow s y)
-bind = TTerm $ Terms.primitive _flows_bind
+bind :: TTerm (Flow s x) -> TTerm (x -> Flow s y) -> TTerm (Flow s y)
+bind = primitive2 _flows_bind
 
-fail :: TTerm (String -> Flow s x)
-fail = TTerm $ Terms.primitive _flows_fail
+fail :: TTerm String -> TTerm (Flow s x)
+fail = primitive1 _flows_fail
 
-map :: TTerm ((x -> y) -> Flow s x -> Flow s y)
-map = TTerm $ Terms.primitive _flows_map
+map :: TTerm (x -> y) -> TTerm (Flow s x) -> TTerm (Flow s y)
+map = primitive2 _flows_map
 
-mapList :: TTerm ((x -> Flow s y) -> [x] -> Flow s [y])
-mapList = TTerm $ Terms.primitive _flows_mapList
+mapList :: TTerm (x -> Flow s y) -> TTerm [x] -> TTerm (Flow s [y])
+mapList = primitive2 _flows_mapList
 
-pure :: TTerm (x -> Flow s x)
-pure = TTerm $ Terms.primitive _flows_pure
+pure :: TTerm x -> TTerm (Flow s x)
+pure = primitive1 _flows_pure
 
-sequence :: TTerm ([Flow s a] -> Flow s [a])
-sequence = TTerm $ Terms.primitive _flows_sequence
+sequence :: TTerm [Flow s a] -> TTerm (Flow s [a])
+sequence = primitive1 _flows_sequence
 
 -- Accessors
 

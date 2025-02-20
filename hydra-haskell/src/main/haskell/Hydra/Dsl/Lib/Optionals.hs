@@ -3,34 +3,35 @@ module Hydra.Dsl.Lib.Optionals where
 import Hydra.Phantoms
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
+import Hydra.Dsl.Base
 
 
-apply :: TTerm (Maybe (a -> b) -> Maybe a -> Maybe b)
-apply = TTerm $ Terms.primitive _optionals_apply
+apply :: TTerm (Maybe (a -> b)) -> TTerm (Maybe a) -> TTerm (Maybe b)
+apply = primitive2 _optionals_apply
 
-bind :: TTerm (Maybe a -> (a -> Maybe b) -> Maybe b)
-bind = TTerm $ Terms.primitive _optionals_bind
+bind :: TTerm (Maybe a) -> TTerm (a -> Maybe b) -> TTerm (Maybe b)
+bind = primitive2 _optionals_bind
 
-cat :: TTerm ([Maybe a] -> [a])
-cat = TTerm $ Terms.primitive _optionals_cat
+cat :: TTerm [Maybe a] -> TTerm [a]
+cat = primitive1 _optionals_cat
 
-compose :: TTerm ((a -> Maybe b) -> (b -> Maybe c) -> (a -> Maybe c))
-compose = TTerm $ Terms.primitive _optionals_compose
+compose :: TTerm (a -> Maybe b) -> TTerm (b -> Maybe c) -> TTerm (a -> Maybe c)
+compose = primitive2 _optionals_compose
 
-fromMaybe :: TTerm (a -> Maybe a -> a)
-fromMaybe = TTerm $ Terms.primitive _optionals_fromMaybe
+fromMaybe :: TTerm a -> TTerm (Maybe a) -> TTerm a
+fromMaybe = primitive2 _optionals_fromMaybe
 
-isJust :: TTerm (Maybe a -> Bool)
-isJust = TTerm $ Terms.primitive _optionals_isJust
+isJust :: TTerm (Maybe a) -> TTerm Bool
+isJust = primitive1 _optionals_isJust
 
-isNothing :: TTerm (Maybe a -> Bool)
-isNothing = TTerm $ Terms.primitive _optionals_isNothing
+isNothing :: TTerm (Maybe a) -> TTerm Bool
+isNothing = primitive1 _optionals_isNothing
 
-map :: TTerm ((a -> b) -> Maybe a -> Maybe b)
-map = TTerm $ Terms.primitive _optionals_map
+map :: TTerm (a -> b) -> TTerm (Maybe a) -> TTerm (Maybe b)
+map = primitive2 _optionals_map
 
-maybe :: TTerm (b -> (a -> b) -> Maybe a -> b)
-maybe = TTerm $ Terms.primitive _optionals_maybe
+maybe :: TTerm b -> TTerm (a -> b) -> TTerm (Maybe a) -> TTerm b
+maybe = primitive3 _optionals_maybe
 
-pure :: TTerm (a -> Maybe a)
-pure = TTerm $ Terms.primitive _optionals_pure
+pure :: TTerm a -> TTerm (Maybe a)
+pure = primitive1 _optionals_pure

@@ -3,45 +3,46 @@ module Hydra.Dsl.Lib.Maps where
 import Hydra.Phantoms
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
+import Hydra.Dsl.Base
 
 import Data.Map
 
 
 empty :: TTerm (Map k v)
-empty = TTerm $ Terms.primitive _maps_empty
+empty = primitive _maps_empty
 
-fromList :: TTerm ([(k, v)] -> Map k v)
-fromList = TTerm $ Terms.primitive _maps_fromList
+fromList :: TTerm [(k, v)] -> TTerm (Map k v)
+fromList = primitive1 _maps_fromList
 
-insert :: TTerm (k -> v -> Map k v -> Map k v)
-insert = TTerm $ Terms.primitive _maps_insert
+insert :: TTerm k -> TTerm v -> TTerm (Map k v) -> TTerm (Map k v)
+insert = primitive3 _maps_insert
 
-isEmpty :: TTerm (Map k v -> Bool)
-isEmpty = TTerm $ Terms.primitive _maps_isEmpty
+isEmpty :: TTerm (Map k v) -> TTerm Bool
+isEmpty = primitive1 _maps_isEmpty
 
-keys :: TTerm (Map k v -> [k])
-keys = TTerm $ Terms.primitive _maps_keys
+keys :: TTerm (Map k v) -> TTerm [k]
+keys = primitive1 _maps_keys
 
-lookup :: TTerm (k -> Map k v -> Maybe v)
-lookup = TTerm $ Terms.primitive _maps_lookup
+lookup :: TTerm k -> TTerm (Map k v) -> TTerm (Maybe v)
+lookup = primitive2 _maps_lookup
 
-map :: TTerm ((v1 -> v2) -> Map k v1 -> Map k v2)
-map = TTerm $ Terms.primitive _maps_map
+map :: TTerm (v1 -> v2) -> TTerm (Map k v1) -> TTerm (Map k v2)
+map = primitive2 _maps_map
 
-mapKeys :: TTerm ((k1 -> k2) -> Map k1 v -> Map k2 v)
-mapKeys = TTerm $ Terms.primitive _maps_mapKeys
+mapKeys :: TTerm (k1 -> k2) -> TTerm (Map k1 v) -> TTerm (Map k2 v)
+mapKeys = primitive2 _maps_mapKeys
 
-remove :: TTerm (k -> Map k v -> Map k v)
-remove = TTerm $ Terms.primitive _maps_remove
+remove :: TTerm k -> TTerm (Map k v) -> TTerm (Map k v)
+remove = primitive2 _maps_remove
 
-singleton :: TTerm (k -> v -> Map k v)
-singleton = TTerm $ Terms.primitive _maps_singleton
+singleton :: TTerm k -> TTerm v -> TTerm (Map k v)
+singleton = primitive2 _maps_singleton
 
-size :: TTerm (Map k v -> Int)
-size = TTerm $ Terms.primitive _maps_size
+size :: TTerm (Map k v) -> TTerm Int
+size = primitive1 _maps_size
 
-toList :: TTerm (Map k v -> [(k, v)])
-toList = TTerm $ Terms.primitive _maps_toList
+toList :: TTerm (Map k v) -> TTerm [(k, v)]
+toList = primitive1 _maps_toList
 
-values :: TTerm (Map k v -> [v])
-values = TTerm $ Terms.primitive _maps_values
+values :: TTerm (Map k v) -> TTerm [v]
+values = primitive1 _maps_values
