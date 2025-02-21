@@ -8,6 +8,9 @@ import Hydra.Dsl.Base
 import Data.Map
 
 
+bimap :: TTerm (k1 -> k2) -> TTerm (v1 -> v2) -> TTerm (Map k1 v1) -> TTerm (Map k2 v2)
+bimap = primitive3 _maps_bimap
+
 empty :: TTerm (Map k v)
 empty = primitive _maps_empty
 
