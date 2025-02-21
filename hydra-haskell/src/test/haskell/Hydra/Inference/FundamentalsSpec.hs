@@ -39,7 +39,7 @@ checkLetTerms = check "let terms" $ do
 
   H.it "test #0" $ do
     expectPolytype
-      (letTerm (Name "x") (float32 42.0) (lambda "y" (lambda "z" (var "x"))))
+      (let1 "x" (float32 42.0) (lambda "y" (lambda "z" (var "x"))))
       ["t0", "t1"] (Types.function (Types.var "t0") (Types.function (Types.var "t1") Types.float32))
 
   H.it "Empty let" $ do
