@@ -1,4 +1,5 @@
--- | A domain-specific language for constructing term-encoded Hydra terms in Haskell.
+-- | A domain-specific language for constructing term-encoded Hydra terms in Haskell;
+--   these functions enable you to build terms (programs) which build terms.
 
 module Hydra.Dsl.TTerms (
   module Hydra.Dsl.TBase,
@@ -7,7 +8,7 @@ module Hydra.Dsl.TTerms (
 
 import Hydra.Kernel
 import qualified Hydra.Dsl.Terms as Terms
-import Hydra.Dsl.Core as Core hiding (name)
+import qualified Hydra.Dsl.Core as Core
 import Hydra.Dsl.TBase
 import qualified Hydra.Dsl.Base as Base
 
@@ -16,11 +17,24 @@ import qualified Data.Maybe as Y
 import Data.Int
 
 
+infixr 0 >:
+(>:) :: String -> TTerm Term -> TTerm Field
+n >: d = field n d
+
 (@@) :: TTerm Term -> TTerm Term -> TTerm Term
 f @@ x = apply f x
 
 apply :: TTerm Term -> TTerm Term -> TTerm Term
-apply func arg = termApplication $ application func arg
+apply func arg = Core.termApplication $ Core.application func arg
+
+boolean :: Bool -> TTerm Term
+boolean = Core.termLiteral . Core.literalBoolean . TTerm . Terms.boolean
+
+constant :: TTerm Term -> TTerm Term
+constant = lambda ignoredVariable
+
+false :: TTerm Term
+false = boolean False
 
 field :: String -> TTerm Term -> TTerm Field
 field s = Core.field (name s)
@@ -29,47 +43,55 @@ float32 :: Float -> TTerm Term
 float32 = float32Term . TTerm . Terms.float32
 
 float32Term :: TTerm Float -> TTerm Term
-float32Term = termLiteral . literalFloat . floatValueFloat32
+float32Term = Core.termLiteral . Core.literalFloat . Core.floatValueFloat32
 
 fold :: TTerm Term -> TTerm Term
-fold = termFunction . functionElimination . eliminationList
+fold = Core.termFunction . Core.functionElimination . Core.eliminationList
 
 int16 :: Int16 -> TTerm Term
 int16 = int16Term . TTerm . Terms.int16
 
 int16Term :: TTerm Int16 -> TTerm Term
-int16Term = termLiteral . literalInteger . integerValueInt16
+int16Term = Core.termLiteral . Core.literalInteger . Core.integerValueInt16
 
 int32 :: Int -> TTerm Term
 int32 = int32Term . TTerm . Terms.int32
 
 int32Term :: TTerm Int -> TTerm Term
-int32Term = termLiteral . literalInteger . integerValueInt32
+int32Term = Core.termLiteral . Core.literalInteger . Core.integerValueInt32
 
 lambda :: String -> TTerm Term -> TTerm Term
-lambda var body = termFunction $ functionLambda $ Core.lambda (name var) nothing body
+lambda var body = Core.termFunction $ Core.functionLambda $ Core.lambda (name var) nothing body
 
 list :: [TTerm Term] -> TTerm Term
-list = termList . Base.list
+list = Core.termList . Base.list
+
+match :: TTerm Name -> TTerm (Maybe Term) -> [TTerm Field] -> TTerm Term
+match tname def fields = Core.termFunction $ Core.functionElimination $ Core.eliminationUnion
+  $ Core.caseStatement tname def $ Base.list fields
 
 prim :: Name -> TTerm Term
-prim = termFunction . functionPrimitive . TTerm . coreEncodeName
+prim = Core.termFunction . Core.functionPrimitive . TTerm . coreEncodeName
 
 project :: TTerm Name -> TTerm Name -> TTerm Term
-project tname fname = termFunction $ functionElimination $ eliminationRecord $ projection tname fname
+project tname fname = Core.termFunction $ Core.functionElimination $ Core.eliminationRecord
+  $ Core.projection tname fname
 
 record :: TTerm Name -> [TTerm Field] -> TTerm Term
-record name fields = termRecord $ Core.record name $ Base.list fields
+record name fields = Core.termRecord $ Core.record name $ Base.list fields
 
 string :: String -> TTerm Term
-string = termLiteral . literalString . TTerm . Terms.string
+string = Core.termLiteral . Core.literalString . TTerm . Terms.string
+
+true :: TTerm Term
+true = boolean True
 
 -- | Maps a string to an encoded variable term.
 var :: String -> TTerm Term
-var = termVariable . name
+var = Core.termVariable . name
 
 varFromName :: Name -> TTerm Term
-varFromName (Name n) = termVariable $ TTerm $ Terms.string n
+varFromName (Name n) = Core.termVariable $ TTerm $ Terms.string n
 
 -- | Maps a string to a variable encoded term.
 variable :: String -> TTerm a

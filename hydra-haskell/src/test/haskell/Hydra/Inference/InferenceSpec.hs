@@ -46,22 +46,6 @@ expectTypeAnnotation path term etyp = shouldSucceedWith atyp etyp
        TermTyped (TypedTerm _ typ) -> return typ
        _ -> fail $ "no type annotation"
 
-checkFunctionTerms :: H.SpecWith ()
-checkFunctionTerms = H.describe "Check a few hand-picked function terms" $ do
-
-    H.it "Check projections" $ do
-      expectMonotype
-        (project testTypePersonName (Name "firstName"))
-        (Types.function testTypePerson Types.string)
-
-    H.it "Check case statements" $ do
-      expectMonotype
-        (match testTypeFoobarValueName Nothing [
-          Field (Name "bool") (lambda "x" (boolean True)),
-          Field (Name "string") (lambda "x" (boolean False)),
-          Field (Name "unit") (lambda "x" (boolean False))])
-        (Types.function testTypeFoobarValue Types.boolean)
-
 checkIndividualTerms :: H.SpecWith ()
 checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
 
@@ -461,7 +445,6 @@ checkSubtermAnnotations = H.describe "Check additional subterm annotations" $ do
 
 spec :: H.Spec
 spec = do
-  checkFunctionTerms
   checkIndividualTerms
   checkLetTerms
   checkLists

@@ -1,4 +1,5 @@
--- | A domain-specific language for constructing term-encoded Hydra types in Haskell.
+-- | A domain-specific language for constructing term-encoded Hydra types in Haskell;
+--   these functions enable you to build terms (programs) which build types.
 
 module Hydra.Dsl.TTypes (
   module Hydra.Dsl.TBase,

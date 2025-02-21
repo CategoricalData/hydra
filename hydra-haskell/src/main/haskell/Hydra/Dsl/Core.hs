@@ -53,7 +53,7 @@ applicationTypeFunction = Base.project _ApplicationType _ApplicationType_functio
 applicationTypeArgument :: TTerm (ApplicationType -> Type)
 applicationTypeArgument = Base.project _ApplicationType _ApplicationType_argument
 
-caseStatement :: TTerm Name -> TTerm (Maybe Term) -> TTerm [Field] -> TTerm (CaseStatement)
+caseStatement :: TTerm Name -> TTerm (Maybe Term) -> TTerm [Field] -> TTerm CaseStatement
 caseStatement typeName defaultTerm cases = Base.record _CaseStatement [
   _CaseStatement_typeName>>: typeName,
   _CaseStatement_default>>: defaultTerm,
@@ -73,6 +73,9 @@ eliminationList = variant _Elimination _Elimination_list
 
 eliminationRecord :: TTerm Projection -> TTerm Elimination
 eliminationRecord = variant _Elimination _Elimination_record
+
+eliminationUnion :: TTerm CaseStatement -> TTerm Elimination
+eliminationUnion = variant _Elimination _Elimination_union
 
 field :: TTerm Name -> TTerm Term -> TTerm Field
 field name term = Base.record _Field [

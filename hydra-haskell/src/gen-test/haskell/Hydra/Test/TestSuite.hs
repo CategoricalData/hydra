@@ -4,6 +4,7 @@ module Hydra.Test.TestSuite where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Mantle as Mantle
+import qualified Hydra.Test.TestGraph as TestGraph
 import qualified Hydra.Testing as Testing
 import Data.Int
 import Data.List as L
@@ -303,6 +304,61 @@ inferenceTests = Testing.TestGroup {
                 Testing.inferenceTestCaseOutput = Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []}]},
+        Testing.TestGroup {
+          Testing.testGroupName = "Check projections",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = [
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "#1",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+                  Core.projectionTypeName = TestGraph.testTypePersonName,
+                  Core.projectionField = (Core.Name "firstName")})))),
+                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                  Core.typeSchemeVariables = [],
+                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                    Core.functionTypeDomain = TestGraph.testTypePerson,
+                    Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []}]},
+        Testing.TestGroup {
+          Testing.testGroupName = "Check case statements",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = [
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "#1",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                  Core.caseStatementTypeName = TestGraph.testTypeFoobarValueName,
+                  Core.caseStatementDefault = Nothing,
+                  Core.caseStatementCases = [
+                    Core.Field {
+                      Core.fieldName = (Core.Name "bool"),
+                      Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "_"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean True))})))},
+                    Core.Field {
+                      Core.fieldName = (Core.Name "string"),
+                      Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "_"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean False))})))},
+                    Core.Field {
+                      Core.fieldName = (Core.Name "unit"),
+                      Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "_"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean False))})))}]})))),
+                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                  Core.typeSchemeVariables = [],
+                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                    Core.functionTypeDomain = TestGraph.testTypeFoobarValue,
+                    Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeBoolean)}))}})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}],
