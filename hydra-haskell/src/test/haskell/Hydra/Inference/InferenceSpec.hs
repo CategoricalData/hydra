@@ -46,117 +46,6 @@ expectTypeAnnotation path term etyp = shouldSucceedWith atyp etyp
        TermTyped (TypedTerm _ typ) -> return typ
        _ -> fail $ "no type annotation"
 
-checkIndividualTerms :: H.SpecWith ()
-checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
-
-    H.it "Check literal values" $ do
-      expectMonotype
-        (int32 42)
-        Types.int32
-      expectMonotype
-        (string "foo")
-        Types.string
-      expectMonotype
-        (boolean False)
-        Types.boolean
-      expectMonotype
-        (float64 42.0)
-        Types.float64
-
-    H.describe "Check let terms" $ do
-      H.it "test #1" $
-        expectPolytype
-          (letTerm (Name "x") (float32 42.0) (lambda "y" (lambda "z" (var "x"))))
-          ["t0", "t1"] (Types.function (Types.var "t0") (Types.function (Types.var "t1") Types.float32))
-      H.it "test #2" $
-        -- Example from https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf
-        expectMonotype
-          ((lambdas ["f", "x", "y"] $ primitive _logic_ifElse
-              @@ (var "f" @@ (var "square" @@ var "x") @@ var "y")
-              @@ (var "f" @@ var "x" @@ (var "f" @@ var "x" @@ var "y"))
-              @@ (var "f" @@ var "x" @@ var "y"))
-            `with` [
-              "square">: lambda "z" $ primitive _math_mul @@ var "z" @@ var "z"])
-          (Types.functionN [
-            Types.functionN [Types.int32, Types.boolean, Types.boolean], Types.int32, Types.boolean, Types.boolean])
-
-    H.it "Check optionals" $ do
-      expectMonotype
-        (optional $ Just $ int32 42)
-        (Types.optional Types.int32)
-      expectPolytype
-        (optional Nothing)
-        ["t0"] (Types.optional $ Types.var "t0")
-
-    H.it "Check records" $ do
-      expectMonotype
-        (record testTypeLatLonName [
-          Field (Name "lat") $ float32 37.7749,
-          Field (Name "lon") $ float32 $ negate 122.4194])
-        (TypeRecord $ RowType testTypeLatLonName [
-          FieldType (Name "lat") Types.float32,
-          FieldType (Name "lon") Types.float32])
-      expectMonotype
-        (record testTypeLatLonPolyName [
-          Field (Name "lat") $ float32 37.7749,
-          Field (Name "lon") $ float32 $ negate 122.4194])
-        (TypeRecord $ RowType testTypeLatLonPolyName [
-          FieldType (Name "lat") Types.float32,
-          FieldType (Name "lon") Types.float32])
-      expectMonotype
-        (lambda "lon" (record testTypeLatLonPolyName [
-          Field (Name "lat") $ float32 37.7749,
-          Field (Name "lon") $ var "lon"]))
-        (Types.function (Types.float32)
-          (TypeRecord $ RowType testTypeLatLonPolyName [
-            FieldType (Name "lat") $ Types.float32,
-            FieldType (Name "lon") $ Types.float32]))
-      expectPolytype
-        (lambda "latlon" (record testTypeLatLonPolyName [
-          Field (Name "lat") $ var "latlon",
-          Field (Name "lon") $ var "latlon"]))
-        ["t0"] (Types.function (Types.var "t0")
-          (TypeRecord $ RowType testTypeLatLonPolyName [
-            FieldType (Name "lat") $ Types.var "t0",
-            FieldType (Name "lon") $ Types.var "t0"]))
-
-    H.it "Check unions" $ do
-      expectMonotype
-        (inject testTypeTimestampName $ Field (Name "unixTimeMillis") $ uint64 1638200308368)
-        testTypeTimestamp
-
-    H.it "Check sets" $ do
-      expectMonotype
-        (set $ S.fromList [boolean True])
-        (Types.set Types.boolean)
-      expectPolytype
-        (set $ S.fromList [set S.empty])
-        ["t0"] (Types.set $ Types.set $ Types.var "t0")
-
-    H.it "Check maps" $ do
-      expectMonotype
-        (mapTerm $ M.fromList [(string "firstName", string "Arthur"), (string "lastName", string "Dent")])
-        (Types.map Types.string Types.string)
-      expectPolytype
-        (mapTerm M.empty)
-        ["t0", "t1"] (Types.map (Types.var "t0") (Types.var "t1"))
-      expectPolytype
-        (lambda "x" (lambda "y" (mapTerm $ M.fromList
-          [(var "x", float64 0.1), (var "y", float64 0.2)])))
-        ["t0"] (Types.function (Types.var "t0") (Types.function (Types.var "t0") (Types.map (Types.var "t0") Types.float64)))
-
-    -- -- TODO: add a case for a recursive nominal type -- e.g. MyList := () + (int, Mylist)
-    -- H.it "Check nominal (newtype) terms" $ do
-    --   expectMonotype
-    --     testDataArthur
-    --     (Types.wrap "Person")
-    --   expectMonotype
-    --     (lambda "x" (record [
-    --       Field "firstName" $ var "x",
-    --       Field "lastName" $ var "x",
-    --       Field "age" $ int32 42]))
-    --     (Types.function Types.string testTypePerson)
-
 checkLetTerms :: H.SpecWith ()
 checkLetTerms = H.describe "Check a few hand-picked let terms" $ do
 
@@ -445,7 +334,6 @@ checkSubtermAnnotations = H.describe "Check additional subterm annotations" $ do
 
 spec :: H.Spec
 spec = do
-  checkIndividualTerms
   checkLetTerms
   checkLists
   checkLiterals

@@ -94,21 +94,21 @@ testTypeLatLonPolyNameDef = testGraphDefinition "testTypeLatLonPolyName" $
 latlonRecordDef :: TElement (Float -> Float -> Term)
 latlonRecordDef = testGraphDefinition "latlonRecord" $
   Base.functionN [tFloat32, tFloat32, termT] $
-  lambdas ["lat", "lon"] $ record (ref testTypeLatLonNameDef) [
-    field "lat" $ float32Term $ variable "lat",
-    field "lon" $ float32Term $ variable "lon"]
+  Base.lambdas ["lat", "lon"] $ record (ref testTypeLatLonNameDef) [
+    "lat">: float32Term $ variable "lat",
+    "lon">: float32Term $ variable "lon"]
 
 testTypeLatLonDef :: TElement Type
 testTypeLatLonDef = testGraphType "testTypeLatLon" $
   T.record (ref testTypeLatLonNameDef) [
-    T.field "lat" T.float32,
-    T.field "lon" T.float32]
+    "lat">: T.float32,
+    "lon">: T.float32]
 
 testTypeLatLonPolyDef :: TElement Type
 testTypeLatLonPolyDef = testGraphType "testTypeLatLonPoly" $
   T.lambda "a" $ T.record (ref testTypeLatLonPolyNameDef) [
-    T.field "lat" $ T.var "a",
-    T.field "lon" $ T.var "a"]
+    "lat">: T.var "a",
+    "lon">: T.var "a"]
 
 testTypeStringAliasDef :: TElement Type
 testTypeStringAliasDef = testGraphType "testTypeStringAlias" $
@@ -134,8 +134,7 @@ testElementFirstNameDef = testGraphDefinition "testElementFirstName" $
 --testGraph = elementsToGraph hydraCoreGraph (Just testSchemaGraph) [testElementArthur, testElementFirstName]
 
 testNamespaceDef :: TElement Namespace
-testNamespaceDef = testGraphDefinition "testNamespace" $
-  Module.namespace $ Base.string "testGraph"
+testNamespaceDef = testGraphDefinition "testNamespace" $ Module.namespace $ Base.string "testGraph"
 
 --testSchemaGraph :: Graph
 --testSchemaGraph = elementsToGraph hydraCoreGraph (Just hydraCoreGraph) [
@@ -161,21 +160,20 @@ testNamespaceDef = testGraphDefinition "testNamespace" $
 --    def = typeElement
 
 testSchemaNamespaceDef :: TElement Namespace
-testSchemaNamespaceDef = testGraphDefinition "testSchemaNamespace" $
-  Module.namespace $ Base.string "testSchemaGraph"
+testSchemaNamespaceDef = testGraphDefinition "testSchemaNamespace" $ Module.namespace $ Base.string "testSchemaGraph"
 
 testDataArthurDef :: TElement Term
 testDataArthurDef = testGraphDefinition "testDataArthur" $
   record (ref testTypePersonNameDef) [
-    field "firstName" $ string "Arthur",
-    field "lastName" $ string "Dent",
-    field "age" $ int32 42]
+    "firstName">: string "Arthur",
+    "lastName">: string "Dent",
+    "age">: int32 42]
 
 testTypeBuddyListADef :: TElement Type
 testTypeBuddyListADef = testGraphType "testTypeBuddyListA" $
   T.lambda "a" $ T.record (ref testTypeBuddyListANameDef) [
-    T.field "head" $ T.var "a",
-    T.field "tail" $ T.optional $
+    "head">: T.var "a",
+    "tail">: T.optional $
       T.apply (Core.typeVariable $ ref testTypeBuddyListBNameDef) (T.var "a")]
 
 testTypeBuddyListANameDef :: TElement Name
@@ -185,8 +183,8 @@ testTypeBuddyListANameDef = testGraphDefinition "testTypeBuddyListAName" $
 testTypeBuddyListBDef :: TElement Type
 testTypeBuddyListBDef = testGraphType "testTypeBuddyListB" $
   T.lambda "a" $ T.record (ref testTypeBuddyListBNameDef) [
-    T.field "head" $ T.var "a",
-    T.field "tail" $ T.optional $
+    "head">: T.var "a",
+    "tail">: T.optional $
       T.apply (Core.typeVariable $ ref testTypeBuddyListANameDef) (T.var "a")]
 
 testTypeBuddyListBNameDef :: TElement Name
@@ -196,9 +194,9 @@ testTypeBuddyListBNameDef = testGraphDefinition "testTypeBuddyListBName" $
 testTypeComparisonDef :: TElement Type
 testTypeComparisonDef = testGraphType "testTypeComparison" $
   T.union (ref testTypeComparisonNameDef) [
-    T.field "lessThan" T.unit,
-    T.field "equalTo" T.unit,
-    T.field "greaterThan" T.unit]
+    "lessThan">: T.unit,
+    "equalTo">: T.unit,
+    "greaterThan">: T.unit]
 
 testTypeComparisonNameDef :: TElement Name
 testTypeComparisonNameDef = testGraphDefinition "testTypeComparisonName" $
@@ -208,9 +206,9 @@ testTypeComparisonNameDef = testGraphDefinition "testTypeComparisonName" $
 testTypeFoobarValueDef :: TElement Type
 testTypeFoobarValueDef = testGraphType "testTypeFoobarValue" $
   T.union (ref testTypeFoobarValueNameDef) [
-    T.field "bool" T.boolean,
-    T.field "string" T.string,
-    T.field "unit" T.unit]
+    "bool">: T.boolean,
+    "string">: T.string,
+    "unit">: T.unit]
 testTypeFoobarValueNameDef :: TElement Name
 testTypeFoobarValueNameDef = testGraphDefinition "testTypeFoobarValueName" $
   name "FoobarValue"
@@ -218,8 +216,8 @@ testTypeFoobarValueNameDef = testGraphDefinition "testTypeFoobarValueName" $
 testTypeIntListDef :: TElement Type
 testTypeIntListDef = testGraphType "testTypeIntList" $
   T.record (ref testTypeIntListNameDef) [
-    T.field "head" T.int32,
-    T.field "tail" $ T.optional $ Core.typeVariable (ref testTypeIntListNameDef)]
+    "head">: T.int32,
+    "tail">: T.optional $ Core.typeVariable (ref testTypeIntListNameDef)]
 
 testTypeIntListNameDef :: TElement Name
 testTypeIntListNameDef = testGraphDefinition "testTypeIntListName" $
@@ -228,8 +226,8 @@ testTypeIntListNameDef = testGraphDefinition "testTypeIntListName" $
 testTypeHydraLiteralTypeDef :: TElement Type
 testTypeHydraLiteralTypeDef = testGraphType "testTypeHydraLiteralType" $
   T.union (ref testTypeHydraLiteralTypeNameDef) [
-    T.field "boolean" T.boolean,
-    T.field "string" T.string]
+    "boolean">: T.boolean,
+    "string">: T.string]
 
 testTypeHydraLiteralTypeNameDef :: TElement Name
 testTypeHydraLiteralTypeNameDef = testGraphDefinition "testTypeHydraLiteralTypeName" $
@@ -238,8 +236,8 @@ testTypeHydraLiteralTypeNameDef = testGraphDefinition "testTypeHydraLiteralTypeN
 testTypeHydraTypeDef :: TElement Type
 testTypeHydraTypeDef = testGraphType "testTypeHydraType" $
   T.union (ref testTypeHydraTypeNameDef) [
-    T.field "literal" $ Core.typeVariable $ ref testTypeHydraLiteralTypeNameDef,
-    T.field "list" $ Core.typeVariable $ ref testTypeHydraTypeNameDef]
+    "literal">: Core.typeVariable $ ref testTypeHydraLiteralTypeNameDef,
+    "list">: Core.typeVariable $ ref testTypeHydraTypeNameDef]
 
 testTypeHydraTypeNameDef :: TElement Name
 testTypeHydraTypeNameDef = testGraphDefinition "testTypeHydraTypeName" $
@@ -248,8 +246,8 @@ testTypeHydraTypeNameDef = testGraphDefinition "testTypeHydraTypeName" $
 testTypeListDef :: TElement Type
 testTypeListDef = testGraphType "testTypeList" $
   T.lambda "a" $ T.record (ref testTypeListNameDef) [
-    T.field "head" $ T.var "a",
-    T.field "tail" $ T.optional $
+    "head">: T.var "a",
+    "tail">: T.optional $
       T.apply (Core.typeVariable $ ref testTypeListNameDef) (T.var "a")]
 
 testTypeListNameDef :: TElement Name
@@ -259,8 +257,8 @@ testTypeListNameDef = testGraphDefinition "testTypeListName" $
 testTypeNumberDef :: TElement Type
 testTypeNumberDef = testGraphType "testTypeNumber" $
   T.union (ref testTypeNumberNameDef) [
-    T.field "int" T.int32,
-    T.field "float" T.float32]
+    "int">: T.int32,
+    "float">: T.float32]
 
 testTypeNumberNameDef :: TElement Name
 testTypeNumberNameDef = testGraphDefinition "testTypeNumberName" $
@@ -269,9 +267,9 @@ testTypeNumberNameDef = testGraphDefinition "testTypeNumberName" $
 testTypePersonDef :: TElement Type
 testTypePersonDef = testGraphType "testTypePerson" $
   T.record (ref testTypePersonNameDef) [
-    T.field "firstName" T.string,
-    T.field "lastName" T.string,
-    T.field "age" T.int32]
+    "firstName">: T.string,
+    "lastName">: T.string,
+    "age">: T.int32]
 
 testTypePersonNameDef :: TElement Name
 testTypePersonNameDef = testGraphDefinition "testTypePersonName" $
@@ -280,8 +278,8 @@ testTypePersonNameDef = testGraphDefinition "testTypePersonName" $
 testTypePersonOrSomethingDef :: TElement Type
 testTypePersonOrSomethingDef = testGraphType "testTypePersonOrSomething" $
   T.lambda "a" $ T.union (ref testTypePersonOrSomethingNameDef) [
-    T.field "person" $ Core.typeVariable $ ref testTypePersonNameDef,
-    T.field "other" $ T.var "a"]
+    "person">: Core.typeVariable $ ref testTypePersonNameDef,
+    "other">: T.var "a"]
 
 testTypePersonOrSomethingNameDef :: TElement Name
 testTypePersonOrSomethingNameDef = testGraphDefinition "testTypePersonOrSomethingName" $
@@ -290,8 +288,8 @@ testTypePersonOrSomethingNameDef = testGraphDefinition "testTypePersonOrSomethin
 testTypeSimpleNumberDef :: TElement Type
 testTypeSimpleNumberDef = testGraphType "testTypeSimpleNumber" $
   T.union (ref testTypeSimpleNumberNameDef) [
-    T.field "int" T.int32,
-    T.field "float" T.float32]
+    "int">: T.int32,
+    "float">: T.float32]
 
 testTypeSimpleNumberNameDef :: TElement Name
 testTypeSimpleNumberNameDef = testGraphDefinition "testTypeSimpleNumberName" $
@@ -300,8 +298,8 @@ testTypeSimpleNumberNameDef = testGraphDefinition "testTypeSimpleNumberName" $
 testTypeTimestampDef :: TElement Type
 testTypeTimestampDef = testGraphType "testTypeTimestamp" $
   T.union (ref testTypeTimestampNameDef) [
-    T.field "unixTimeMillis" T.uint64,
-    T.field "date" T.string]
+    "unixTimeMillis">: T.uint64,
+    "date">: T.string]
 
 testTypeTimestampNameDef :: TElement Name
 testTypeTimestampNameDef = testGraphDefinition "testTypeTimestampName" $
@@ -310,9 +308,9 @@ testTypeTimestampNameDef = testGraphDefinition "testTypeTimestampName" $
 testTypeUnionMonomorphicDef :: TElement Type
 testTypeUnionMonomorphicDef = testGraphType "testTypeUnionMonomorphic" $
   T.union (ref testTypeUnionMonomorphicNameDef) [
-    T.field "bool" T.boolean,
-    T.field "string" T.string,
-    T.field "unit" T.unit]
+    "bool">: T.boolean,
+    "string">: T.string,
+    "unit">: T.unit]
 
 testTypeUnionMonomorphicNameDef :: TElement Name
 testTypeUnionMonomorphicNameDef = testGraphDefinition "testTypeUnionMonomorphicName" $
@@ -321,9 +319,9 @@ testTypeUnionMonomorphicNameDef = testGraphDefinition "testTypeUnionMonomorphicN
 testTypeUnionPolymorphicRecursiveDef :: TElement Type
 testTypeUnionPolymorphicRecursiveDef = testGraphType "testTypeUnionPolymorphicRecursive" $
   T.lambda "a" $ T.union (ref testTypeUnionPolymorphicRecursiveNameDef) [
-    T.field "bool" T.boolean,
-    T.field "value" $ T.var "a",
-    T.field "other" $ T.apply (Core.typeVariable $ ref testTypeUnionPolymorphicRecursiveNameDef) (T.var "a")]
+    "bool">: T.boolean,
+    "value">: T.var "a",
+    "other">: T.apply (Core.typeVariable $ ref testTypeUnionPolymorphicRecursiveNameDef) (T.var "a")]
 
 testTypeUnionPolymorphicRecursiveNameDef :: TElement Name
 testTypeUnionPolymorphicRecursiveNameDef = testGraphDefinition "testTypeUnionPolymorphicRecursiveName" $

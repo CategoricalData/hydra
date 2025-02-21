@@ -244,7 +244,7 @@ checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
 
   H.it "Let terms" $ do
     expectPolytype
-      (letTerm (Name "x") (float32 42.0) (lambda "y" (lambda "z" (var "x"))))
+      (let1 "x" (float32 42.0) (lambda "y" (lambda "z" (var "x"))))
       [t0, t1] (tFun t0T (tFun t1T Types.float32))
 
   H.describe "Optionals" $ do
