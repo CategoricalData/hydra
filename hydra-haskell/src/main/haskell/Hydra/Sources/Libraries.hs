@@ -275,6 +275,7 @@ hydraLibLogic = standardLibrary _hydra_lib_logic [
 _hydra_lib_maps :: Namespace
 _hydra_lib_maps = Namespace "hydra.lib.maps"
 
+_maps_bimap = qname _hydra_lib_maps "bimap" :: Name
 _maps_empty = qname _hydra_lib_maps "empty" :: Name
 _maps_fromList = qname _hydra_lib_maps "fromList" :: Name
 _maps_insert = qname _hydra_lib_maps "insert" :: Name
@@ -291,6 +292,7 @@ _maps_values = qname _hydra_lib_maps "values" :: Name
 
 hydraLibMaps :: Library
 hydraLibMaps = standardLibrary _hydra_lib_maps [
+    prim3 ["k1", "k2", "v1", "v2"] _maps_bimap (function k1 k2) (function v1 v2) (Prims.map k1 v1) (Prims.map k2 v2) Maps.bimap,
     prim0 ["k", "v"] _maps_empty mapKv Maps.empty,
     prim1 ["k", "v"] _maps_fromList (list $ pair k v) mapKv Maps.fromList,
     prim3 ["k", "v"] _maps_insert k v mapKv mapKv Maps.insert,
