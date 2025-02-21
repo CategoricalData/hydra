@@ -160,6 +160,12 @@ encodeTerm namespaces term = do
           return $ H.LocalBindingValue $ simpleValueBinding hname hexpr Nothing
     TermList els -> H.ExpressionList <$> CM.mapM encode els
     TermLiteral v -> encodeLiteral v
+    TermMap m -> do
+        let lhs = hsvar "M.fromList"
+        rhs <- H.ExpressionList <$> CM.mapM encodePair (M.toList m)
+        return $ hsapp lhs rhs
+      where
+        encodePair (k, v) = H.ExpressionTuple <$> sequence [encode k, encode v]
     TermWrap (WrappedTerm tname term') -> if newtypesNotTypedefs
       then hsapp <$> pure (H.ExpressionVariable $ elementReference namespaces tname) <*> encode term'
       else encode term'
