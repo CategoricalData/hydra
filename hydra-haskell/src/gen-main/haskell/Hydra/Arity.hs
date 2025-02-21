@@ -14,7 +14,7 @@ import Data.Set as S
 functionArity :: (Core.Function -> Int)
 functionArity x = case x of
   Core.FunctionElimination _ -> 1
-  Core.FunctionLambda v1 -> (Math.add 1 (termArity (Core.lambdaBody v1)))
+  Core.FunctionLambda v1 -> ((\i -> Math.add 1 i) (termArity (Core.lambdaBody v1)))
   Core.FunctionPrimitive _ -> 42
 
 -- | Find the arity (expected number of arguments) of a primitive constant or function
