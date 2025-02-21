@@ -123,14 +123,13 @@ lambdas params body = case params of
 lambdaTyped :: String -> Type -> Term -> Term
 lambdaTyped param dom body = TermFunction $ FunctionLambda $ Lambda (Name param) (Just dom) body
 
-letMulti :: [(String, Term)] -> Term -> Term
-letMulti bindings body = TermLet $ Let (toBinding <$> bindings) body
+letN :: [(String, Term)] -> Term -> Term
+letN bindings body = TermLet $ Let (toBinding <$> bindings) body
   where
     toBinding (name, term) = LetBinding (Name name) term Nothing
 
--- Construct a 'let' term with a single binding
-letTerm :: Name -> Term -> Term -> Term
-letTerm v t1 t2 = TermLet $ Let [LetBinding v t1 Nothing] t2
+let1 :: String -> Term -> Term -> Term
+let1 v t1 t2 = TermLet $ Let [LetBinding (Name v) t1 Nothing] t2
 
 list :: [Term] -> Term
 list = TermList

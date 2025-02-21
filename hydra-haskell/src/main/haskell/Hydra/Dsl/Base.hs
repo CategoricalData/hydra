@@ -207,8 +207,8 @@ ref (TElement name _) = TTerm (TermVariable name)
 second :: TTerm ((a, b) -> b)
 second = TTerm $ Terms.untuple 2 1
 
-set :: S.Set (TTerm a) -> TTerm (S.Set a)
-set = TTerm . Terms.set . S.fromList . fmap unTTerm . S.toList
+set :: [TTerm a] -> TTerm (S.Set a)
+set = TTerm . Terms.set . S.fromList . fmap unTTerm
 
 typed :: Type -> TTerm a -> TTerm a
 typed typ (TTerm term) = TTerm $ setTermType (Just typ) term

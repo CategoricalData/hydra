@@ -9,15 +9,18 @@ module Hydra.Dsl.TBase (
 
 import Hydra.Kernel
 import Hydra.Dsl.ShorthandTypes
-import Hydra.Dsl.Base(definitionInModule, el, firstClassType, just, lambdas, nothing, opt, ref, variant)
+import Hydra.Dsl.Base(definitionInModule, el, firstClassType, just, nothing, opt, ref, variant)
 import qualified Hydra.Dsl.Terms as Terms
-import Hydra.Dsl.Core as Core
+import qualified Hydra.Dsl.Core as Core
 import Hydra.Sources.Libraries
 
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
+infixr 0 >:
+(>:) :: String -> a -> (TTerm Name, a)
+n >: d = (name n, d)
+
 name :: String -> TTerm Name
 name s = Core.name $ Name s
-
