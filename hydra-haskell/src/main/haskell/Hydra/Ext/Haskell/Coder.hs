@@ -138,6 +138,8 @@ encodeLiteral av = case av of
       IntegerValueInt16 i -> pure $ hslit $ H.LiteralInteger $ fromIntegral i
       IntegerValueInt32 i -> pure $ hslit $ H.LiteralInt i
       IntegerValueInt64 i -> pure $ hslit $ H.LiteralInteger $ fromIntegral i
+      -- TODO: remove these variants; the fact that the int32 type is appearing here is a bug
+      IntegerValueUint64 i -> pure $ hslit $ H.LiteralInteger $ fromIntegral i
       _ -> unexpected "integer" $ show iv
     LiteralString s -> pure $ hslit $ H.LiteralString s
     _ -> unexpected "literal value" $ show av
@@ -174,6 +176,10 @@ encodeTerm namespaces term = do
             return $ H.ExpressionConstructRecord $ H.ConstructRecordExpression typeName updates
           where
             toFieldUpdate (Field fn ft) = H.FieldUpdate (recordFieldReference namespaces sname fn) <$> encode ft
+    TermSet s -> do
+      let lhs = hsvar "S.fromList"
+      rhs <- encodeTerm namespaces $ TermList $ S.toList s
+      return $ hsapp lhs rhs
     TermUnion (Injection sname (Field fn ft)) -> do
       let lhs = H.ExpressionVariable $ unionFieldReference namespaces sname fn
       case fullyStripTerm ft of
