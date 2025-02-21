@@ -71,6 +71,9 @@ lambda var body = typeLambda $ lambdaType (name var) body
 list :: TTerm Type -> TTerm Type
 list = typeList
 
+map :: TTerm Type -> TTerm Type -> TTerm Type
+map k v = typeMap $ mapType k v
+
 mono :: TTerm Type -> TTerm TypeScheme
 mono t = Base.record _TypeScheme [
   Base.field _TypeScheme_variables $ Base.list [],
@@ -83,6 +86,9 @@ poly :: [String] -> TTerm Type -> TTerm TypeScheme
 poly params t = Base.record _TypeScheme [
   Base.field _TypeScheme_variables (Base.list (name <$> params)),
   Base.field _TypeScheme_type t]
+
+product :: [TTerm Type] -> TTerm Type
+product types = Core.typeProduct $ TTerm $ TermList (unTTerm <$> types)
 
 record :: TTerm Name -> [(TTerm Name, TTerm Type)] -> TTerm Type
 record name pairs = typeRecord $ rowType name $ Base.list (toField <$> pairs)
