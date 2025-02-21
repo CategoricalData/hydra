@@ -85,6 +85,9 @@ lets pairs body = Core.termLet $ Core.letExpression (Base.list $ toBinding pairs
 list :: [TTerm Term] -> TTerm Term
 list = Core.termList . Base.list
 
+mapTerm :: TTerm (M.Map Term Term) -> TTerm Term
+mapTerm = Core.termMap
+
 match :: TTerm Name -> TTerm (Maybe Term) -> [(TTerm Name, TTerm Term)] -> TTerm Term
 match tname def pairs = Core.termFunction $ Core.functionElimination $ Core.eliminationUnion
     $ Core.caseStatement tname def $ Base.list $ toField pairs
@@ -94,8 +97,14 @@ match tname def pairs = Core.termFunction $ Core.functionElimination $ Core.elim
 optional :: TTerm (Maybe Term) -> TTerm Term
 optional = Core.termOptional
 
+pair :: TTerm Term -> TTerm Term -> TTerm Term
+pair t1 t2 = tuple [t1, t2]
+
 primitive :: Name -> TTerm Term
 primitive = Core.termFunction . Core.functionPrimitive . TTerm . coreEncodeName
+
+tuple :: [TTerm Term] -> TTerm Term
+tuple terms = Core.termProduct $ TTerm $ TermList (unTTerm <$> terms)
 
 project :: TTerm Name -> TTerm Name -> TTerm Term
 project tname fname = Core.termFunction $ Core.functionElimination $ Core.eliminationRecord

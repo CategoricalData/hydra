@@ -332,8 +332,14 @@ termList = variant _Term _Term_list
 termLiteral :: TTerm Literal -> TTerm Term
 termLiteral = variant _Term _Term_literal
 
+termMap :: TTerm (M.Map Term Term) -> TTerm Term
+termMap = variant _Term _Term_map
+
 termOptional :: TTerm (Maybe Term) -> TTerm Term
 termOptional = variant _Term _Term_optional
+
+termProduct :: TTerm [Term] -> TTerm Term
+termProduct = variant _Term _Term_product
 
 termRecord :: TTerm Record -> TTerm Term
 termRecord = variant _Term _Term_record
@@ -374,8 +380,14 @@ typeList = variant _Type _Type_list
 typeLiteral :: TTerm LiteralType -> TTerm Type
 typeLiteral = variant _Type _Type_literal
 
+typeMap :: TTerm MapType -> TTerm Type
+typeMap = variant _Type _Type_map
+
 typeOptional :: TTerm Type -> TTerm Type
 typeOptional = variant _Type _Type_optional
+
+typeProduct :: TTerm [Type] -> TTerm Type
+typeProduct = variant _Type _Type_product
 
 typeRecord :: TTerm RowType -> TTerm Type
 typeRecord = variant _Type _Type_record
