@@ -378,19 +378,19 @@ coreEncodeSumDef = coreEncodingDefinition "Sum" sumT $
 
 coreEncodeTermDef :: TElement (Term -> Term)
 coreEncodeTermDef = coreEncodingDefinition "Term" termT $
-  match _Term (Just $ encodedString $ string "not implemented") [
+  match _Term Nothing [
     ecase _Term_annotated (ref coreEncodeAnnotatedTermDef),
     ecase _Term_application (ref coreEncodeApplicationDef),
     ecase _Term_function (ref coreEncodeFunctionDef),
     ecase _Term_let (ref coreEncodeLetDef),
     ecase _Term_literal (ref coreEncodeLiteralDef),
-    ecase' _Term_list $ encodedList $ primitive _lists_map @@ (ref coreEncodeTermDef) @@ var "v",
+    ecase2 _Term_list $ encodedList $ primitive _lists_map @@ (ref coreEncodeTermDef) @@ var "v",
 --     -- TODO: map encoding
---     ecase' _Term_map $ encodedMap
-    ecase' _Term_optional $ encodedOptional (primitive _optionals_map @@ ref coreEncodeTermDef @@ var "v"),
-    ecase' _Term_product $ encodedList (primitive _lists_map @@ ref coreEncodeTermDef @@ var "v"),
+    ecase2 _Term_map $ encodedMap (primitive _maps_bimap @@ ref coreEncodeTermDef @@ ref coreEncodeTermDef @@ var "v"),
+    ecase2 _Term_optional $ encodedOptional (primitive _optionals_map @@ ref coreEncodeTermDef @@ var "v"),
+    ecase2 _Term_product $ encodedList (primitive _lists_map @@ ref coreEncodeTermDef @@ var "v"),
     ecase _Term_record (ref coreEncodeRecordDef),
-    ecase' _Term_set $ encodedSet $ primitive _sets_map @@ (ref coreEncodeTermDef) @@ var "v",
+    ecase2 _Term_set $ encodedSet $ primitive _sets_map @@ (ref coreEncodeTermDef) @@ var "v",
     ecase _Term_sum (ref coreEncodeSumDef),
     ecase _Term_typeAbstraction $ ref coreEncodeTypeAbstractionDef,
     ecase _Term_typeApplication $ ref coreEncodeTypedTermDef,
@@ -400,7 +400,7 @@ coreEncodeTermDef = coreEncodingDefinition "Term" termT $
     ecase _Term_wrap $ ref coreEncodeWrappedTermDef]
   where
     ecase = encodedCase _Term
-    ecase' fname = field fname . lambda "v" . encodedVariant _Term fname
+    ecase2 fname = field fname . lambda "v" . encodedVariant _Term fname
 
 coreEncodeTupleProjectionDef :: TElement (TupleProjection -> Term)
 coreEncodeTupleProjectionDef = coreEncodingDefinition "TupleProjection" tupleProjectionT $

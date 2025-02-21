@@ -5,6 +5,7 @@ module Hydra.CoreEncoding where
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
+import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Strip as Strip
@@ -530,6 +531,11 @@ coreEncodeTerm x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "list"),
       Core.fieldTerm = (Core.TermList (Lists.map coreEncodeTerm v1))}}))
+  Core.TermMap v1 -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "map"),
+      Core.fieldTerm = (Core.TermMap (Maps.bimap coreEncodeTerm coreEncodeTerm v1))}}))
   Core.TermOptional v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {
@@ -585,7 +591,6 @@ coreEncodeTerm x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "wrap"),
       Core.fieldTerm = (coreEncodeWrappedTerm v1)}}))
-  _ -> (Core.TermLiteral (Core.LiteralString "not implemented"))
 
 coreEncodeTupleProjection :: (Core.TupleProjection -> Core.Term)
 coreEncodeTupleProjection tp = (Core.TermRecord (Core.Record {
