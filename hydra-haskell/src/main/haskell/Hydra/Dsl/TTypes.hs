@@ -15,6 +15,9 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
+apply :: TTerm Type -> TTerm Type -> TTerm Type
+apply l r = typeApplication $ applicationType l r
+
 boolean :: TTerm Type
 boolean = typeLiteral literalTypeBoolean
 
@@ -30,6 +33,9 @@ floatType t = Base.unitVariant _FloatType $ case t of
 float32 :: TTerm Type
 float32 = typeLiteral $ literalTypeFloat $ floatType FloatTypeFloat32
 
+float64 :: TTerm Type
+float64 = typeLiteral $ literalTypeFloat $ floatType FloatTypeFloat64
+
 function :: TTerm Type -> TTerm Type -> TTerm Type
 function dom cod = typeFunction $ functionType dom cod
 
@@ -43,6 +49,9 @@ int16 = typeLiteral $ literalTypeInteger integerTypeInt16
 
 int32 :: TTerm Type
 int32 = typeLiteral $ literalTypeInteger integerTypeInt32
+
+int64 :: TTerm Type
+int64 = typeLiteral $ literalTypeInteger integerTypeInt64
 
 integerType :: IntegerType -> TTerm IntegerType
 integerType t = Base.unitVariant _IntegerType $ case t of
@@ -75,20 +84,24 @@ poly params t = Base.record _TypeScheme [
   Base.field _TypeScheme_variables (Base.list (name <$> params)),
   Base.field _TypeScheme_type t]
 
-record :: TTerm Name -> [TTerm FieldType] -> TTerm Type
-record name fields = typeRecord $ rowType name $ Base.list fields
+record :: TTerm Name -> [(TTerm Name, TTerm Type)] -> TTerm Type
+record name pairs = typeRecord $ rowType name $ Base.list (toField <$> pairs)
+  where
+    toField (n, t) = fieldType n t
+
+set :: TTerm Type -> TTerm Type
+set = typeSet
 
 string :: TTerm Type
 string = typeLiteral literalTypeString
 
-apply :: TTerm Type -> TTerm Type -> TTerm Type
-apply l r = typeApplication $ applicationType l r
-
 uint64 :: TTerm Type
 uint64 = typeLiteral $ literalTypeInteger integerTypeUint64
 
-union :: TTerm Name -> [TTerm FieldType] -> TTerm Type
-union name fields = typeUnion $ rowType name $ Base.list fields
+union :: TTerm Name -> [(TTerm Name, TTerm Type)] -> TTerm Type
+union name pairs = typeUnion $ rowType name $ Base.list (toField <$> pairs)
+  where
+    toField (n, t) = fieldType n t
 
 unit :: TTerm Type
 unit = typeRecord $ rowType (Base.wrap _Name $ Base.string $ unName _Unit) $ Base.list []

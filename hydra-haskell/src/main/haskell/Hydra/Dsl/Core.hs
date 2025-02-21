@@ -5,6 +5,7 @@ import Hydra.Dsl.Base as Base
 import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Data.Map as M
+import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import Data.Int
 
@@ -102,6 +103,9 @@ fieldTypeType = Base.project _FieldType _FieldType_type
 floatValueFloat32 :: TTerm Float -> TTerm FloatValue
 floatValueFloat32 = inject _FloatValue _FloatValue_float32
 
+floatValueFloat64 :: TTerm Float -> TTerm FloatValue
+floatValueFloat64 = inject _FloatValue _FloatValue_float64
+
 functionElimination :: TTerm Elimination -> TTerm Function
 functionElimination = variant _Function _Function_elimination
 
@@ -139,6 +143,9 @@ integerTypeInt16 = unitVariant _IntegerType _IntegerType_int16
 integerTypeInt32 :: TTerm IntegerType
 integerTypeInt32 = unitVariant _IntegerType _IntegerType_int32
 
+integerTypeInt64 :: TTerm IntegerType
+integerTypeInt64 = unitVariant _IntegerType _IntegerType_int64
+
 integerTypeUint64 :: TTerm IntegerType
 integerTypeUint64 = unitVariant _IntegerType _IntegerType_uint64
 
@@ -147,6 +154,12 @@ integerValueInt16 = inject _IntegerValue _IntegerValue_int16
 
 integerValueInt32 :: TTerm Int -> TTerm IntegerValue
 integerValueInt32 = inject _IntegerValue _IntegerValue_int32
+
+integerValueInt64 :: TTerm Int -> TTerm IntegerValue
+integerValueInt64 = inject _IntegerValue _IntegerValue_int64
+
+integerValueUint64 :: TTerm Integer -> TTerm IntegerValue
+integerValueUint64 = inject _IntegerValue _IntegerValue_uint64
 
 lambda :: TTerm Name -> TTerm (Maybe Type) -> TTerm Term -> TTerm Lambda
 lambda parameter mdom body = Base.record _Lambda [
@@ -173,6 +186,12 @@ lambdaTypeParameter = Base.project _LambdaType _LambdaType_parameter
 
 lambdaTypeBody :: TTerm (LambdaType -> Type)
 lambdaTypeBody = Base.project _LambdaType _LambdaType_body
+
+letBinding :: TTerm Name -> TTerm Term -> TTerm (Maybe TypeScheme) -> TTerm LetBinding
+letBinding name term mtype = Base.record _LetBinding [
+  _LetBinding_name>>: name,
+  _LetBinding_term>>: term,
+  _LetBinding_type>>: mtype]
 
 letExpression :: TTerm [LetBinding] -> TTerm Term -> TTerm Let
 letExpression bindings environment = Base.record _Let [
@@ -304,14 +323,26 @@ termApplication = variant _Term _Term_application
 termFunction :: TTerm Function -> TTerm Term
 termFunction = variant _Term _Term_function
 
+termLet :: TTerm Let -> TTerm Term
+termLet = variant _Term _Term_let
+
 termList :: TTerm [Term] -> TTerm Term
 termList = variant _Term _Term_list
 
 termLiteral :: TTerm Literal -> TTerm Term
 termLiteral = variant _Term _Term_literal
 
+termOptional :: TTerm (Maybe Term) -> TTerm Term
+termOptional = variant _Term _Term_optional
+
 termRecord :: TTerm Record -> TTerm Term
 termRecord = variant _Term _Term_record
+
+termSet :: TTerm (S.Set Term) -> TTerm Term
+termSet = variant _Term _Term_set
+
+termUnion :: TTerm Injection -> TTerm Term
+termUnion = variant _Term _Term_union
 
 termVariable :: TTerm Name -> TTerm Term
 termVariable = variant _Term _Term_variable
@@ -354,6 +385,9 @@ typeSchemeVariables = Base.project _TypeScheme _TypeScheme_variables
 
 typeSchemeType :: TTerm (TypeScheme -> Type)
 typeSchemeType = Base.project _TypeScheme _TypeScheme_type
+
+typeSet :: TTerm Type -> TTerm Type
+typeSet = variant _Type _Type_set
 
 typeUnion :: TTerm RowType -> TTerm Type
 typeUnion = variant _Type _Type_union
