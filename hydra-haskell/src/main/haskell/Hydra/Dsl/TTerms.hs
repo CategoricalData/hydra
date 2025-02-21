@@ -13,13 +13,10 @@ import Hydra.Dsl.TBase
 import qualified Hydra.Dsl.Base as Base
 
 import qualified Data.Map as M
+import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import Data.Int
 
-
-infixr 0 >:
-(>:) :: String -> TTerm Term -> TTerm Field
-n >: d = field n d
 
 (@@) :: TTerm Term -> TTerm Term -> TTerm Term
 f @@ x = apply f x
@@ -45,8 +42,17 @@ float32 = float32Term . TTerm . Terms.float32
 float32Term :: TTerm Float -> TTerm Term
 float32Term = Core.termLiteral . Core.literalFloat . Core.floatValueFloat32
 
+float64 :: Double -> TTerm Term
+float64 = float64Term . TTerm . Terms.float64
+
+float64Term :: TTerm Float -> TTerm Term
+float64Term = Core.termLiteral . Core.literalFloat . Core.floatValueFloat64
+
 fold :: TTerm Term -> TTerm Term
 fold = Core.termFunction . Core.functionElimination . Core.eliminationList
+
+inject :: TTerm Name -> String -> TTerm Term -> TTerm Term
+inject tname fname = Core.termUnion . Core.injection tname . Core.field (name fname)
 
 int16 :: Int16 -> TTerm Term
 int16 = int16Term . TTerm . Terms.int16
@@ -63,28 +69,57 @@ int32Term = Core.termLiteral . Core.literalInteger . Core.integerValueInt32
 lambda :: String -> TTerm Term -> TTerm Term
 lambda var body = Core.termFunction $ Core.functionLambda $ Core.lambda (name var) nothing body
 
+lambdas :: [String] -> TTerm Term -> TTerm Term
+lambdas params body = case params of
+  [] -> body
+  (h:rest) -> Core.termFunction $ Core.functionLambda $ Core.lambda (name h) nothing $ lambdas rest body
+
+let1 :: String -> TTerm Term -> TTerm Term -> TTerm Term
+let1 v t1 t2 = Core.termLet $ Core.letExpression (Base.list [Core.letBinding (name v) t1 nothing]) t2
+
+lets :: [(TTerm Name, TTerm Term)] -> TTerm Term -> TTerm Term
+lets pairs body = Core.termLet $ Core.letExpression (Base.list $ toBinding pairs) body
+  where
+    toBinding = map (\(n, t) -> Core.letBinding n t nothing)
+
 list :: [TTerm Term] -> TTerm Term
 list = Core.termList . Base.list
 
-match :: TTerm Name -> TTerm (Maybe Term) -> [TTerm Field] -> TTerm Term
-match tname def fields = Core.termFunction $ Core.functionElimination $ Core.eliminationUnion
-  $ Core.caseStatement tname def $ Base.list fields
+match :: TTerm Name -> TTerm (Maybe Term) -> [(TTerm Name, TTerm Term)] -> TTerm Term
+match tname def pairs = Core.termFunction $ Core.functionElimination $ Core.eliminationUnion
+    $ Core.caseStatement tname def $ Base.list $ toField pairs
+  where
+    toField = map (\(n, t) -> Core.field n t)
 
-prim :: Name -> TTerm Term
-prim = Core.termFunction . Core.functionPrimitive . TTerm . coreEncodeName
+optional :: TTerm (Maybe Term) -> TTerm Term
+optional = Core.termOptional
+
+primitive :: Name -> TTerm Term
+primitive = Core.termFunction . Core.functionPrimitive . TTerm . coreEncodeName
 
 project :: TTerm Name -> TTerm Name -> TTerm Term
 project tname fname = Core.termFunction $ Core.functionElimination $ Core.eliminationRecord
   $ Core.projection tname fname
 
-record :: TTerm Name -> [TTerm Field] -> TTerm Term
-record name fields = Core.termRecord $ Core.record name $ Base.list fields
+record :: TTerm Name -> [(TTerm Name, TTerm Term)] -> TTerm Term
+record name pairs = Core.termRecord $ Core.record name $ Base.list (toField <$> pairs)
+  where
+    toField (n, t) = Core.field n t
+
+set :: [TTerm Term] -> TTerm Term
+set els = Core.termSet $ TTerm $ TermSet $ S.fromList (unTTerm <$> els)
 
 string :: String -> TTerm Term
 string = Core.termLiteral . Core.literalString . TTerm . Terms.string
 
 true :: TTerm Term
 true = boolean True
+
+uint64 :: Integer -> TTerm Term
+uint64 = uint64Term . TTerm . Terms.uint64
+
+uint64Term :: TTerm Integer -> TTerm Term
+uint64Term = Core.termLiteral . Core.literalInteger . Core.integerValueUint64
 
 -- | Maps a string to an encoded variable term.
 var :: String -> TTerm Term
