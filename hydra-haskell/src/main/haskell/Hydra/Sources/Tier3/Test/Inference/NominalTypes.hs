@@ -1,0 +1,178 @@
+module Hydra.Sources.Tier3.Test.Inference.NominalTypes (nominalTypesTests) where
+
+import Hydra.Kernel
+import Hydra.Testing
+import qualified Hydra.Dsl.Base as Base
+import qualified Hydra.Dsl.Core as Core
+import Hydra.Dsl.Testing as Testing
+import Hydra.Dsl.ShorthandTypes
+import qualified Hydra.Dsl.Terms as Terms
+import qualified Hydra.Dsl.Lib.Lists as Lists
+import qualified Hydra.Dsl.Lib.Maps as Maps
+import qualified Hydra.Dsl.Lib.Math as Math
+import qualified Hydra.Dsl.Types as Types
+import Hydra.Sources.Tier3.Test.TestGraph
+import Hydra.Dsl.TTerms as TTerms
+import qualified Hydra.Dsl.TTypes as T
+import Hydra.Sources.Tier3.Test.Inference.Fundamentals
+
+import qualified Data.Map as M
+import Prelude hiding (map, product, sum)
+
+
+nominalTypesTests :: TTerm TestGroup
+nominalTypesTests = supergroup "Nominal terms" [
+  testGroupForCaseStatements,
+  testGroupForProjections,
+  testGroupForRecords,
+  testGroupForVariants,
+  testGroupForWrappers]
+
+testGroupForCaseStatements :: TTerm TestGroup
+testGroupForCaseStatements = subgroup "Case statements" [
+    tagAsDisabled $ expectMono 1
+      (match (ref testTypeSimpleNumberNameDef) nothing [
+        "int">: lambda "x" $ var "x",
+        "float">: lambda "x" $ int32 42])
+      (T.function (T.var "t0") T.int32),
+    tagAsDisabled $ expectMono 2
+      (match (ref testTypeUnionMonomorphicNameDef) nothing [
+        "bool">: constant true,
+        "string">: constant false,
+        "unit">: constant false])
+      (T.function (Core.typeVariable $ ref testTypeUnionMonomorphicNameDef) T.boolean)]
+
+testGroupForProjections :: TTerm TestGroup
+testGroupForProjections = supergroup "Projections" [
+    subgroup "Record eliminations" [
+      tagAsDisabled $ expectMono 1
+        (project (ref testTypePersonNameDef) (name "firstName"))
+        (T.function (Core.typeVariable $ ref testTypePersonNameDef) T.string)]]
+
+testGroupForRecords :: TTerm TestGroup
+testGroupForRecords = supergroup "Records" [
+
+    subgroup "Simple records" [
+      tagAsDisabled $ expectMono 1
+        (record (ref testTypeLatLonNameDef) [
+          "lat">: float32 37.7749,
+          "lon">: float32 $ negate 122.4194])
+        (Core.typeVariable (ref testTypeLatLonNameDef)),
+      tagAsDisabled $ expectMono 2
+        (record (ref testTypeLatLonPolyNameDef) [
+          "lat">: float32 37.7749,
+          "lon">: float32 $ negate 122.4194])
+        (T.apply (Core.typeVariable (ref testTypeLatLonPolyNameDef)) T.float32),
+      tagAsDisabled $ expectPoly 3
+        (lambda "lon" (record (ref testTypeLatLonPolyNameDef) [
+          "lat">: float32 37.7749,
+          "lon">: var "lon"]))
+        ["t0"] (T.function T.float32 (T.apply (Core.typeVariable (ref testTypeLatLonPolyNameDef)) T.float32)),
+      tagAsDisabled $ expectPoly 4
+        (lambda "latlon" (record (ref testTypeLatLonPolyNameDef) [
+          "lat">: var "latlon",
+          "lon">: var "latlon"]))
+        ["t0"] (T.function (T.var "t0") (T.apply (Core.typeVariable (ref testTypeLatLonPolyNameDef)) (T.var "t0"))),
+      tagAsDisabled $ expectMono 5
+        (ref testDataArthurDef)
+        (Core.typeVariable (ref testTypePersonNameDef))],
+
+    subgroup "Record instances of simply recursive record types" [
+      tagAsDisabled $ expectMono 1
+        (record (ref testTypeIntListNameDef) [
+          "head">: int32 42,
+          "tail">: optional $ just (record (ref testTypeIntListNameDef) [
+            "head">: int32 43,
+            "tail">: optional nothing])])
+        (Core.typeVariable (ref testTypeIntListNameDef)),
+      tagAsDisabled $ expectMono 2
+        ((lambda "x" $ record (ref testTypeIntListNameDef) [
+          "head">: var "x",
+          "tail">: optional $ just (record (ref testTypeIntListNameDef) [
+            "head">: var "x",
+            "tail">: optional nothing])]) @@ int32 42)
+        (Core.typeVariable (ref testTypeIntListNameDef)),
+      tagAsDisabled $ expectMono 3
+        (record (ref testTypeListNameDef) [
+          "head">: int32 42,
+          "tail">: optional $ just (record (ref testTypeListNameDef) [
+            "head">: int32 43,
+            "tail">: optional nothing])])
+        (T.apply (Core.typeVariable (ref testTypeListNameDef)) T.int32),
+      tagAsDisabled $ expectMono 4
+        ((lambda "x" $ record (ref testTypeListNameDef) [
+          "head">: var "x",
+          "tail">: optional $ just (record (ref testTypeListNameDef) [
+            "head">: var "x",
+            "tail">: optional nothing])]) @@ int32 42)
+        (T.apply (Core.typeVariable (ref testTypeListNameDef)) T.int32),
+      tagAsDisabled $ expectPoly 5
+        (lambda "x" $ record (ref testTypeListNameDef) [
+          "head">: var "x",
+          "tail">: optional $ just (record (ref testTypeListNameDef) [
+            "head">: var "x",
+            "tail">: optional nothing])])
+        ["t0"] (T.function (T.var "t0") (T.apply (Core.typeVariable (ref testTypeListNameDef)) (T.var "t0")))],
+
+    subgroup "Record instances of mutually recursive record types" [
+      tagAsDisabled $ expectMono 1
+        ((lambda "x" $ record (ref testTypeBuddyListANameDef) [
+          "head">: var "x",
+          "tail">: optional $ just $ record (ref testTypeBuddyListBNameDef) [
+            "head">: var "x",
+            "tail">: optional nothing]]) @@ int32 42)
+        (T.apply (Core.typeVariable $ ref testTypeBuddyListANameDef) T.int32),
+      tagAsDisabled $ expectPoly 2
+        (lambda "x" $ record (ref testTypeBuddyListANameDef) [
+          "head">: var "x",
+          "tail">: optional $ just $ record (ref testTypeBuddyListBNameDef) [
+            "head">: var "x",
+            "tail">: optional nothing]])
+        ["t0"] (T.function (T.var "t0") (T.apply (Core.typeVariable $ ref testTypeBuddyListANameDef) (T.var "t0")))]]
+
+testGroupForVariants :: TTerm TestGroup
+testGroupForVariants = supergroup "Variant terms" [
+
+    subgroup "Variants" [
+      tagAsDisabled $ expectMono 1
+        (inject (ref testTypeTimestampNameDef) "unixTimeMillis" $ uint64 1638200308368)
+        (Core.typeVariable (ref testTypeTimestampNameDef)),
+      tagAsDisabled $ expectMono 2
+        (inject (ref testTypeUnionMonomorphicNameDef) "string" $ string "bar")
+        (Core.typeVariable (ref testTypeUnionMonomorphicNameDef))],
+--    TODO: inference failure test cases
+--      H.it "test #3" $
+--        expectFailure
+--          (inject testTypeUnionMonomorphicName $ Field (Name "string") $ int32 42)
+
+    subgroup "Polymorphic and recursive variants" [
+      tagAsDisabled $ expectPoly 1
+        (inject (ref testTypeUnionPolymorphicRecursiveNameDef) "bool" true)
+        ["t0"] (T.apply (Core.typeVariable (ref testTypeUnionPolymorphicRecursiveNameDef)) (T.var "t0")),
+      tagAsDisabled $ expectMono 2
+        (inject (ref testTypeUnionPolymorphicRecursiveNameDef) "value" $ string "foo")
+        (T.apply (Core.typeVariable (ref testTypeUnionPolymorphicRecursiveNameDef)) T.string),
+      tagAsDisabled $ expectMono 3
+        (lets [
+          "other">: inject (ref testTypeUnionPolymorphicRecursiveNameDef) "value" $ int32 42]
+          $ inject (ref testTypeUnionPolymorphicRecursiveNameDef) "other" $ var "other")
+        (T.apply (Core.typeVariable (ref testTypeUnionPolymorphicRecursiveNameDef)) T.int32)]]
+
+testGroupForWrappers :: TTerm TestGroup
+testGroupForWrappers = supergroup "Wrapper introductions and eliminations" [
+
+    subgroup "Wrapper eliminations" [
+      tagAsDisabled $ expectMono 1
+        (wrap (ref testTypeStringAliasNameDef) $ string "foo")
+        (Core.typeVariable $ ref testTypeStringAliasNameDef),
+      tagAsDisabled $ expectMono 2
+        (lambda "v" $ wrap (ref testTypeStringAliasNameDef) $ var "v")
+        (T.function T.string (Core.typeVariable $ ref testTypeStringAliasNameDef))],
+
+    subgroup "Wrapper introductions" [
+      tagAsDisabled $ expectMono 1
+        (unwrap (ref testTypeStringAliasNameDef))
+        (T.function (Core.typeVariable $ ref testTypeStringAliasNameDef) T.string),
+      expectMono 2
+        (unwrap (ref testTypeStringAliasNameDef) @@ (wrap (ref testTypeStringAliasNameDef) $ string "foo"))
+        T.string]]
