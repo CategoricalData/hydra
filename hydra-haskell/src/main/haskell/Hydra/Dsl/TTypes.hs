@@ -13,7 +13,7 @@ import Hydra.Dsl.TBase
 
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
-
+import Prelude hiding (map, product, sum)
 
 apply :: TTerm Type -> TTerm Type -> TTerm Type
 apply l r = typeApplication $ applicationType l r
@@ -81,6 +81,9 @@ mono t = Base.record _TypeScheme [
 
 optional :: TTerm Type -> TTerm Type
 optional = typeOptional
+
+pair :: TTerm Type -> TTerm Type -> TTerm Type
+pair l r = product [l, r]
 
 poly :: [String] -> TTerm Type -> TTerm TypeScheme
 poly params t = Base.record _TypeScheme [

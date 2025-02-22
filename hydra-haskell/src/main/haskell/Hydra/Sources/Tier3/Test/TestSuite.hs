@@ -11,7 +11,7 @@ import qualified Hydra.Dsl.TTerms as TTerms
 import Hydra.Sources.Tier3.Test.Lib.Lists
 import Hydra.Sources.Tier3.Test.Lib.Strings
 import Hydra.Sources.Tier3.Test.Formatting
-import Hydra.Sources.Tier3.Test.Inference
+import Hydra.Sources.Tier3.Test.Inference.InferenceSuite
 import Hydra.Sources.Tier3.Test.TestGraph
 
 import qualified Data.List as L
