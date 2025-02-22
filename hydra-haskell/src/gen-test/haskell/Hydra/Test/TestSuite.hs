@@ -179,6 +179,1353 @@ inferenceTests = Testing.TestGroup {
   Testing.testGroupDescription = Nothing,
   Testing.testGroupSubgroups = [
     Testing.TestGroup {
+      Testing.testGroupName = "Fundamentals",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Lambdas",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = [
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "#1",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                  Core.typeSchemeVariables = [
+                    Core.Name "t0"],
+                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                    Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                    Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "#2",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt16 137)))}))),
+                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                  Core.typeSchemeVariables = [
+                    Core.Name "t0"],
+                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                    Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                    Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt16))}))}})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []}]},
+        Testing.TestGroup {
+          Testing.testGroupName = "Let",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Simple",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "x"),
+                          Core.letBindingTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 42.0))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "y"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                          Core.lambdaParameter = (Core.Name "z"),
+                          Core.lambdaDomain = Nothing,
+                          Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0",
+                        (Core.Name "t1")],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                        Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+                          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t1")),
+                          Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Empty let",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [],
+                      Core.letEnvironment = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Trivial let",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "foo"),
+                          Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "foo"))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Multiple references to a let-bound term",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "foo"),
+                          Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "bar"),
+                          Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermList [
+                        Core.TermVariable (Core.Name "foo"),
+                        Core.TermVariable (Core.Name "bar"),
+                        (Core.TermVariable (Core.Name "foo"))])})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Let-polymorphism",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "id"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "x"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                          Core.applicationArgument = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                        Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Recursive and mutually recursive let (@wisnesky's test cases)",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = []}],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Literals",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = [
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "#1",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                Testing.inferenceTestCaseInput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
+                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                  Core.typeSchemeVariables = [],
+                  Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "#2",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                Testing.inferenceTestCaseInput = (Core.TermLiteral (Core.LiteralString "foo")),
+                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                  Core.typeSchemeVariables = [],
+                  Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeString)}})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "#3",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                Testing.inferenceTestCaseInput = (Core.TermLiteral (Core.LiteralBoolean False)),
+                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                  Core.typeSchemeVariables = [],
+                  Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "#4",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                Testing.inferenceTestCaseInput = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 42.0))),
+                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                  Core.typeSchemeVariables = [],
+                  Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []}]},
+        Testing.TestGroup {
+          Testing.testGroupName = "Polymorphism",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Simple lists and optionals",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermList []),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermOptional Nothing),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeOptional (Core.TypeVariable (Core.Name "t0")))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Lambdas, lists, and products",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                        Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermProduct [
+                        Core.TermVariable (Core.Name "x"),
+                        (Core.TermVariable (Core.Name "x"))])}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                        Core.functionTypeCodomain = (Core.TypeProduct [
+                          Core.TypeVariable (Core.Name "t0"),
+                          (Core.TypeVariable (Core.Name "t0"))])}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermList [
+                        Core.TermVariable (Core.Name "x")])}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                        Core.functionTypeCodomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#4",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermList [
+                      Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "x"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
+                      (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "y"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermVariable (Core.Name "y"))})))]),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeList (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                        Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))})))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#5",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermList [
+                      Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "x"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                          Core.lambdaParameter = (Core.Name "y"),
+                          Core.lambdaDomain = Nothing,
+                          Core.lambdaBody = (Core.TermProduct [
+                            Core.TermVariable (Core.Name "y"),
+                            (Core.TermVariable (Core.Name "x"))])})))}))]),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0",
+                        (Core.Name "t1")],
+                      Core.typeSchemeType = (Core.TypeList (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                        Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+                          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t1")),
+                          Core.functionTypeCodomain = (Core.TypeProduct [
+                            Core.TypeVariable (Core.Name "t1"),
+                            (Core.TypeVariable (Core.Name "t0"))])}))})))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Lambdas and application",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "x"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeString)}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Primitives and application",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
+                      Core.applicationArgument = (Core.TermList [
+                        Core.TermList [
+                          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))],
+                        (Core.TermList [])])})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Lambdas and primitives",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                        Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+                          Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                          Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                        Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+                          Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                          Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                        Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Mixed expressions with lambdas, constants, and primitive functions",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.sub"))),
+                          Core.applicationArgument = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                        Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]}],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Primitives",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Monomorphic primitive functions",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.length"))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),
+                        Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.sub"))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                        Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+                          Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                          Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Polymorphic primitive functions",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "el"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.length"))),
+                        Core.applicationArgument = (Core.TermList [
+                          Core.TermVariable (Core.Name "el")])}))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                        Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "el"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.length"))),
+                        Core.applicationArgument = (Core.TermList [
+                          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
+                          (Core.TermVariable (Core.Name "el"))])}))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                        Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeList (Core.TypeList (Core.TypeVariable (Core.Name "t0")))),
+                        Core.functionTypeCodomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#4",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "lists"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "lists"))}))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeList (Core.TypeList (Core.TypeVariable (Core.Name "t0")))),
+                        Core.functionTypeCodomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#5",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "lists"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.length"))),
+                        Core.applicationArgument = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "lists"))}))}))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeList (Core.TypeList (Core.TypeVariable (Core.Name "t0")))),
+                        Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#6",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "list"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.length"))),
+                        Core.applicationArgument = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
+                          Core.applicationArgument = (Core.TermList [
+                            Core.TermVariable (Core.Name "list"),
+                            (Core.TermList [])])}))}))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
+                        Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#7",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "list"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
+                        Core.applicationArgument = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.length"))),
+                          Core.applicationArgument = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
+                            Core.applicationArgument = (Core.TermList [
+                              Core.TermVariable (Core.Name "list"),
+                              (Core.TermList [])])}))}))}))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
+                        Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#8",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "lists"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.length"))),
+                        Core.applicationArgument = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "lists"))}))}))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeList (Core.TypeList (Core.TypeVariable (Core.Name "t0")))),
+                        Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]}],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
+      Testing.testGroupName = "Nominal terms",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Case statements",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = [
+            (\t -> Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = (Testing.testCaseWithMetadataName t),
+              Testing.testCaseWithMetadataCase = (Testing.testCaseWithMetadataCase t),
+              Testing.testCaseWithMetadataDescription = (Testing.testCaseWithMetadataDescription t),
+              Testing.testCaseWithMetadataTags = [
+                Testing.Tag "disabled"]}) (Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "#1",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                  Core.caseStatementTypeName = TestGraph.testTypeSimpleNumberName,
+                  Core.caseStatementDefault = Nothing,
+                  Core.caseStatementCases = [
+                    Core.Field {
+                      Core.fieldName = (Core.Name "int"),
+                      Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "x"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))},
+                    Core.Field {
+                      Core.fieldName = (Core.Name "float"),
+                      Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "x"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))}]})))),
+                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                  Core.typeSchemeVariables = [],
+                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                    Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                    Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []}),
+            ((\t -> Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = (Testing.testCaseWithMetadataName t),
+              Testing.testCaseWithMetadataCase = (Testing.testCaseWithMetadataCase t),
+              Testing.testCaseWithMetadataDescription = (Testing.testCaseWithMetadataDescription t),
+              Testing.testCaseWithMetadataTags = [
+                Testing.Tag "disabled"]}) (Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "#2",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                  Core.caseStatementTypeName = TestGraph.testTypeUnionMonomorphicName,
+                  Core.caseStatementDefault = Nothing,
+                  Core.caseStatementCases = [
+                    Core.Field {
+                      Core.fieldName = (Core.Name "bool"),
+                      Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "_"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean True))})))},
+                    Core.Field {
+                      Core.fieldName = (Core.Name "string"),
+                      Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "_"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean False))})))},
+                    Core.Field {
+                      Core.fieldName = (Core.Name "unit"),
+                      Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "_"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean False))})))}]})))),
+                Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                  Core.typeSchemeVariables = [],
+                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                    Core.functionTypeDomain = (Core.TypeVariable TestGraph.testTypeUnionMonomorphicName),
+                    Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeBoolean)}))}})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []}))]},
+        Testing.TestGroup {
+          Testing.testGroupName = "Projections",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Record eliminations",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                (\t -> Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = (Testing.testCaseWithMetadataName t),
+                  Testing.testCaseWithMetadataCase = (Testing.testCaseWithMetadataCase t),
+                  Testing.testCaseWithMetadataDescription = (Testing.testCaseWithMetadataDescription t),
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabled"]}) (Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+                      Core.projectionTypeName = TestGraph.testTypePersonName,
+                      Core.projectionField = (Core.Name "firstName")})))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable TestGraph.testTypePersonName),
+                        Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []})]}],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Records",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Simple records",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                (\t -> Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = (Testing.testCaseWithMetadataName t),
+                  Testing.testCaseWithMetadataCase = (Testing.testCaseWithMetadataCase t),
+                  Testing.testCaseWithMetadataDescription = (Testing.testCaseWithMetadataDescription t),
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabled"]}) (Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermRecord (Core.Record {
+                      Core.recordTypeName = TestGraph.testTypeLatLonName,
+                      Core.recordFields = [
+                        Core.Field {
+                          Core.fieldName = (Core.Name "lat"),
+                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 37.7749)))},
+                        Core.Field {
+                          Core.fieldName = (Core.Name "lon"),
+                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (0-122.4194))))}]})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeVariable TestGraph.testTypeLatLonName)}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}),
+                (\t -> Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = (Testing.testCaseWithMetadataName t),
+                  Testing.testCaseWithMetadataCase = (Testing.testCaseWithMetadataCase t),
+                  Testing.testCaseWithMetadataDescription = (Testing.testCaseWithMetadataDescription t),
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabled"]}) (Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermRecord (Core.Record {
+                      Core.recordTypeName = TestGraph.testTypeLatLonPolyName,
+                      Core.recordFields = [
+                        Core.Field {
+                          Core.fieldName = (Core.Name "lat"),
+                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 37.7749)))},
+                        Core.Field {
+                          Core.fieldName = (Core.Name "lon"),
+                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (0-122.4194))))}]})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
+                        Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeLatLonPolyName),
+                        Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}),
+                (\t -> Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = (Testing.testCaseWithMetadataName t),
+                  Testing.testCaseWithMetadataCase = (Testing.testCaseWithMetadataCase t),
+                  Testing.testCaseWithMetadataDescription = (Testing.testCaseWithMetadataDescription t),
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabled"]}) (Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "lon"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermRecord (Core.Record {
+                        Core.recordTypeName = TestGraph.testTypeLatLonPolyName,
+                        Core.recordFields = [
+                          Core.Field {
+                            Core.fieldName = (Core.Name "lat"),
+                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 37.7749)))},
+                          Core.Field {
+                            Core.fieldName = (Core.Name "lon"),
+                            Core.fieldTerm = (Core.TermVariable (Core.Name "lon"))}]}))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)),
+                        Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
+                          Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeLatLonPolyName),
+                          Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}),
+                (\t -> Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = (Testing.testCaseWithMetadataName t),
+                  Testing.testCaseWithMetadataCase = (Testing.testCaseWithMetadataCase t),
+                  Testing.testCaseWithMetadataDescription = (Testing.testCaseWithMetadataDescription t),
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabled"]}) (Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#4",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "latlon"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermRecord (Core.Record {
+                        Core.recordTypeName = TestGraph.testTypeLatLonPolyName,
+                        Core.recordFields = [
+                          Core.Field {
+                            Core.fieldName = (Core.Name "lat"),
+                            Core.fieldTerm = (Core.TermVariable (Core.Name "latlon"))},
+                          Core.Field {
+                            Core.fieldName = (Core.Name "lon"),
+                            Core.fieldTerm = (Core.TermVariable (Core.Name "latlon"))}]}))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                        Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
+                          Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeLatLonPolyName),
+                          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))}))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}),
+                ((\t -> Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = (Testing.testCaseWithMetadataName t),
+                  Testing.testCaseWithMetadataCase = (Testing.testCaseWithMetadataCase t),
+                  Testing.testCaseWithMetadataDescription = (Testing.testCaseWithMetadataDescription t),
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabled"]}) (Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#5",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = TestGraph.testDataArthur,
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeVariable TestGraph.testTypePersonName)}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}))]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Record instances of simply recursive record types",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                (\t -> Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = (Testing.testCaseWithMetadataName t),
+                  Testing.testCaseWithMetadataCase = (Testing.testCaseWithMetadataCase t),
+                  Testing.testCaseWithMetadataDescription = (Testing.testCaseWithMetadataDescription t),
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabled"]}) (Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermRecord (Core.Record {
+                      Core.recordTypeName = TestGraph.testTypeIntListName,
+                      Core.recordFields = [
+                        Core.Field {
+                          Core.fieldName = (Core.Name "head"),
+                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))},
+                        Core.Field {
+                          Core.fieldName = (Core.Name "tail"),
+                          Core.fieldTerm = (Core.TermOptional (Just (Core.TermRecord (Core.Record {
+                            Core.recordTypeName = TestGraph.testTypeIntListName,
+                            Core.recordFields = [
+                              Core.Field {
+                                Core.fieldName = (Core.Name "head"),
+                                Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 43)))},
+                              Core.Field {
+                                Core.fieldName = (Core.Name "tail"),
+                                Core.fieldTerm = (Core.TermOptional Nothing)}]}))))}]})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeVariable TestGraph.testTypeIntListName)}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}),
+                (\t -> Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = (Testing.testCaseWithMetadataName t),
+                  Testing.testCaseWithMetadataCase = (Testing.testCaseWithMetadataCase t),
+                  Testing.testCaseWithMetadataDescription = (Testing.testCaseWithMetadataDescription t),
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabled"]}) (Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "x"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermRecord (Core.Record {
+                          Core.recordTypeName = TestGraph.testTypeIntListName,
+                          Core.recordFields = [
+                            Core.Field {
+                              Core.fieldName = (Core.Name "head"),
+                              Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
+                            Core.Field {
+                              Core.fieldName = (Core.Name "tail"),
+                              Core.fieldTerm = (Core.TermOptional (Just (Core.TermRecord (Core.Record {
+                                Core.recordTypeName = TestGraph.testTypeIntListName,
+                                Core.recordFields = [
+                                  Core.Field {
+                                    Core.fieldName = (Core.Name "head"),
+                                    Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
+                                  Core.Field {
+                                    Core.fieldName = (Core.Name "tail"),
+                                    Core.fieldTerm = (Core.TermOptional Nothing)}]}))))}]}))}))),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeVariable TestGraph.testTypeIntListName)}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}),
+                (\t -> Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = (Testing.testCaseWithMetadataName t),
+                  Testing.testCaseWithMetadataCase = (Testing.testCaseWithMetadataCase t),
+                  Testing.testCaseWithMetadataDescription = (Testing.testCaseWithMetadataDescription t),
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabled"]}) (Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermRecord (Core.Record {
+                      Core.recordTypeName = TestGraph.testTypeListName,
+                      Core.recordFields = [
+                        Core.Field {
+                          Core.fieldName = (Core.Name "head"),
+                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))},
+                        Core.Field {
+                          Core.fieldName = (Core.Name "tail"),
+                          Core.fieldTerm = (Core.TermOptional (Just (Core.TermRecord (Core.Record {
+                            Core.recordTypeName = TestGraph.testTypeListName,
+                            Core.recordFields = [
+                              Core.Field {
+                                Core.fieldName = (Core.Name "head"),
+                                Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 43)))},
+                              Core.Field {
+                                Core.fieldName = (Core.Name "tail"),
+                                Core.fieldTerm = (Core.TermOptional Nothing)}]}))))}]})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
+                        Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeListName),
+                        Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}),
+                (\t -> Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = (Testing.testCaseWithMetadataName t),
+                  Testing.testCaseWithMetadataCase = (Testing.testCaseWithMetadataCase t),
+                  Testing.testCaseWithMetadataDescription = (Testing.testCaseWithMetadataDescription t),
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabled"]}) (Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#4",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "x"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermRecord (Core.Record {
+                          Core.recordTypeName = TestGraph.testTypeListName,
+                          Core.recordFields = [
+                            Core.Field {
+                              Core.fieldName = (Core.Name "head"),
+                              Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
+                            Core.Field {
+                              Core.fieldName = (Core.Name "tail"),
+                              Core.fieldTerm = (Core.TermOptional (Just (Core.TermRecord (Core.Record {
+                                Core.recordTypeName = TestGraph.testTypeListName,
+                                Core.recordFields = [
+                                  Core.Field {
+                                    Core.fieldName = (Core.Name "head"),
+                                    Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
+                                  Core.Field {
+                                    Core.fieldName = (Core.Name "tail"),
+                                    Core.fieldTerm = (Core.TermOptional Nothing)}]}))))}]}))}))),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
+                        Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeListName),
+                        Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}),
+                ((\t -> Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = (Testing.testCaseWithMetadataName t),
+                  Testing.testCaseWithMetadataCase = (Testing.testCaseWithMetadataCase t),
+                  Testing.testCaseWithMetadataDescription = (Testing.testCaseWithMetadataDescription t),
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabled"]}) (Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#5",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermRecord (Core.Record {
+                        Core.recordTypeName = TestGraph.testTypeListName,
+                        Core.recordFields = [
+                          Core.Field {
+                            Core.fieldName = (Core.Name "head"),
+                            Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
+                          Core.Field {
+                            Core.fieldName = (Core.Name "tail"),
+                            Core.fieldTerm = (Core.TermOptional (Just (Core.TermRecord (Core.Record {
+                              Core.recordTypeName = TestGraph.testTypeListName,
+                              Core.recordFields = [
+                                Core.Field {
+                                  Core.fieldName = (Core.Name "head"),
+                                  Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
+                                Core.Field {
+                                  Core.fieldName = (Core.Name "tail"),
+                                  Core.fieldTerm = (Core.TermOptional Nothing)}]}))))}]}))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                        Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
+                          Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeListName),
+                          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))}))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}))]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Record instances of mutually recursive record types",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                (\t -> Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = (Testing.testCaseWithMetadataName t),
+                  Testing.testCaseWithMetadataCase = (Testing.testCaseWithMetadataCase t),
+                  Testing.testCaseWithMetadataDescription = (Testing.testCaseWithMetadataDescription t),
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabled"]}) (Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "x"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermRecord (Core.Record {
+                          Core.recordTypeName = TestGraph.testTypeBuddyListAName,
+                          Core.recordFields = [
+                            Core.Field {
+                              Core.fieldName = (Core.Name "head"),
+                              Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
+                            Core.Field {
+                              Core.fieldName = (Core.Name "tail"),
+                              Core.fieldTerm = (Core.TermOptional (Just (Core.TermRecord (Core.Record {
+                                Core.recordTypeName = TestGraph.testTypeBuddyListBName,
+                                Core.recordFields = [
+                                  Core.Field {
+                                    Core.fieldName = (Core.Name "head"),
+                                    Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
+                                  Core.Field {
+                                    Core.fieldName = (Core.Name "tail"),
+                                    Core.fieldTerm = (Core.TermOptional Nothing)}]}))))}]}))}))),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
+                        Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeBuddyListAName),
+                        Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}),
+                ((\t -> Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = (Testing.testCaseWithMetadataName t),
+                  Testing.testCaseWithMetadataCase = (Testing.testCaseWithMetadataCase t),
+                  Testing.testCaseWithMetadataDescription = (Testing.testCaseWithMetadataDescription t),
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabled"]}) (Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermRecord (Core.Record {
+                        Core.recordTypeName = TestGraph.testTypeBuddyListAName,
+                        Core.recordFields = [
+                          Core.Field {
+                            Core.fieldName = (Core.Name "head"),
+                            Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
+                          Core.Field {
+                            Core.fieldName = (Core.Name "tail"),
+                            Core.fieldTerm = (Core.TermOptional (Just (Core.TermRecord (Core.Record {
+                              Core.recordTypeName = TestGraph.testTypeBuddyListBName,
+                              Core.recordFields = [
+                                Core.Field {
+                                  Core.fieldName = (Core.Name "head"),
+                                  Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
+                                Core.Field {
+                                  Core.fieldName = (Core.Name "tail"),
+                                  Core.fieldTerm = (Core.TermOptional Nothing)}]}))))}]}))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                        Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
+                          Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeBuddyListAName),
+                          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))}))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}))]}],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Variant terms",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Variants",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                (\t -> Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = (Testing.testCaseWithMetadataName t),
+                  Testing.testCaseWithMetadataCase = (Testing.testCaseWithMetadataCase t),
+                  Testing.testCaseWithMetadataDescription = (Testing.testCaseWithMetadataDescription t),
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabled"]}) (Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermUnion (Core.Injection {
+                      Core.injectionTypeName = TestGraph.testTypeTimestampName,
+                      Core.injectionField = Core.Field {
+                        Core.fieldName = (Core.Name "unixTimeMillis"),
+                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint64 1638200308368)))}})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeVariable TestGraph.testTypeTimestampName)}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}),
+                ((\t -> Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = (Testing.testCaseWithMetadataName t),
+                  Testing.testCaseWithMetadataCase = (Testing.testCaseWithMetadataCase t),
+                  Testing.testCaseWithMetadataDescription = (Testing.testCaseWithMetadataDescription t),
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabled"]}) (Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermUnion (Core.Injection {
+                      Core.injectionTypeName = TestGraph.testTypeUnionMonomorphicName,
+                      Core.injectionField = Core.Field {
+                        Core.fieldName = (Core.Name "string"),
+                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeVariable TestGraph.testTypeUnionMonomorphicName)}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}))]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Polymorphic and recursive variants",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                (\t -> Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = (Testing.testCaseWithMetadataName t),
+                  Testing.testCaseWithMetadataCase = (Testing.testCaseWithMetadataCase t),
+                  Testing.testCaseWithMetadataDescription = (Testing.testCaseWithMetadataDescription t),
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabled"]}) (Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermUnion (Core.Injection {
+                      Core.injectionTypeName = TestGraph.testTypeUnionPolymorphicRecursiveName,
+                      Core.injectionField = Core.Field {
+                        Core.fieldName = (Core.Name "bool"),
+                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralBoolean True))}})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
+                        Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeUnionPolymorphicRecursiveName),
+                        Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}),
+                (\t -> Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = (Testing.testCaseWithMetadataName t),
+                  Testing.testCaseWithMetadataCase = (Testing.testCaseWithMetadataCase t),
+                  Testing.testCaseWithMetadataDescription = (Testing.testCaseWithMetadataDescription t),
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabled"]}) (Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermUnion (Core.Injection {
+                      Core.injectionTypeName = TestGraph.testTypeUnionPolymorphicRecursiveName,
+                      Core.injectionField = Core.Field {
+                        Core.fieldName = (Core.Name "value"),
+                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
+                        Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeUnionPolymorphicRecursiveName),
+                        Core.applicationTypeArgument = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}),
+                ((\t -> Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = (Testing.testCaseWithMetadataName t),
+                  Testing.testCaseWithMetadataCase = (Testing.testCaseWithMetadataCase t),
+                  Testing.testCaseWithMetadataDescription = (Testing.testCaseWithMetadataDescription t),
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabled"]}) (Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "other"),
+                          Core.letBindingTerm = (Core.TermUnion (Core.Injection {
+                            Core.injectionTypeName = TestGraph.testTypeUnionPolymorphicRecursiveName,
+                            Core.injectionField = Core.Field {
+                              Core.fieldName = (Core.Name "value"),
+                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}})),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermUnion (Core.Injection {
+                        Core.injectionTypeName = TestGraph.testTypeUnionPolymorphicRecursiveName,
+                        Core.injectionField = Core.Field {
+                          Core.fieldName = (Core.Name "other"),
+                          Core.fieldTerm = (Core.TermVariable (Core.Name "other"))}}))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
+                        Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeUnionPolymorphicRecursiveName),
+                        Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}))]}],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Wrapper introductions and eliminations",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Wrapper eliminations",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermWrap (Core.WrappedTerm {
+                      Core.wrappedTermTypeName = TestGraph.testTypeStringAliasName,
+                      Core.wrappedTermObject = (Core.TermLiteral (Core.LiteralString "foo"))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeVariable TestGraph.testTypeStringAliasName)}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "v"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermWrap (Core.WrappedTerm {
+                        Core.wrappedTermTypeName = TestGraph.testTypeStringAliasName,
+                        Core.wrappedTermObject = (Core.TermVariable (Core.Name "v"))}))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),
+                        Core.functionTypeCodomain = (Core.TypeVariable TestGraph.testTypeStringAliasName)}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Wrapper introductions",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap TestGraph.testTypeStringAliasName))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable TestGraph.testTypeStringAliasName),
+                        Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap TestGraph.testTypeStringAliasName))),
+                      Core.applicationArgument = (Core.TermWrap (Core.WrappedTerm {
+                        Core.wrappedTermTypeName = TestGraph.testTypeStringAliasName,
+                        Core.wrappedTermObject = (Core.TermLiteral (Core.LiteralString "foo"))}))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeString)}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]}],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
       Testing.testGroupName = "Simple terms",
       Testing.testGroupDescription = Nothing,
       Testing.testGroupSubgroups = [
@@ -1193,672 +2540,6 @@ inferenceTests = Testing.TestGroup {
                       Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                         Core.functionTypeDomain = TestGraph.testTypeStringAlias,
                         Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []}]}],
-          Testing.testGroupCases = []}],
-      Testing.testGroupCases = []},
-    Testing.TestGroup {
-      Testing.testGroupName = "fundamentals",
-      Testing.testGroupDescription = Nothing,
-      Testing.testGroupSubgroups = [
-        Testing.TestGroup {
-          Testing.testGroupName = "Lambdas",
-          Testing.testGroupDescription = Nothing,
-          Testing.testGroupSubgroups = [],
-          Testing.testGroupCases = [
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "#1",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                  Core.lambdaParameter = (Core.Name "x"),
-                  Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                  Core.typeSchemeVariables = [
-                    Core.Name "t0"],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                    Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                    Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "#2",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                  Core.lambdaParameter = (Core.Name "x"),
-                  Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt16 137)))}))),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                  Core.typeSchemeVariables = [
-                    Core.Name "t0"],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                    Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                    Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt16))}))}})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []}]},
-        Testing.TestGroup {
-          Testing.testGroupName = "Let",
-          Testing.testGroupDescription = Nothing,
-          Testing.testGroupSubgroups = [
-            Testing.TestGroup {
-              Testing.testGroupName = "Simple",
-              Testing.testGroupDescription = Nothing,
-              Testing.testGroupSubgroups = [],
-              Testing.testGroupCases = [
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#1",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
-                      Core.letBindings = [
-                        Core.LetBinding {
-                          Core.letBindingName = (Core.Name "x"),
-                          Core.letBindingTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 42.0))),
-                          Core.letBindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "y"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                          Core.lambdaParameter = (Core.Name "z"),
-                          Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})))})),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [
-                        Core.Name "t0",
-                        (Core.Name "t1")],
-                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                        Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t1")),
-                          Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}))}))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []}]},
-            Testing.TestGroup {
-              Testing.testGroupName = "Empty let",
-              Testing.testGroupDescription = Nothing,
-              Testing.testGroupSubgroups = [],
-              Testing.testGroupCases = [
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#1",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
-                      Core.letBindings = [],
-                      Core.letEnvironment = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []}]},
-            Testing.TestGroup {
-              Testing.testGroupName = "Trivial let",
-              Testing.testGroupDescription = Nothing,
-              Testing.testGroupSubgroups = [],
-              Testing.testGroupCases = [
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#1",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
-                      Core.letBindings = [
-                        Core.LetBinding {
-                          Core.letBindingName = (Core.Name "foo"),
-                          Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                          Core.letBindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "foo"))})),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []}]},
-            Testing.TestGroup {
-              Testing.testGroupName = "Multiple references to a let-bound term",
-              Testing.testGroupDescription = Nothing,
-              Testing.testGroupSubgroups = [],
-              Testing.testGroupCases = [
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#1",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
-                      Core.letBindings = [
-                        Core.LetBinding {
-                          Core.letBindingName = (Core.Name "foo"),
-                          Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                          Core.letBindingType = Nothing},
-                        Core.LetBinding {
-                          Core.letBindingName = (Core.Name "bar"),
-                          Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137))),
-                          Core.letBindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermList [
-                        Core.TermVariable (Core.Name "foo"),
-                        Core.TermVariable (Core.Name "bar"),
-                        (Core.TermVariable (Core.Name "foo"))])})),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []}]},
-            Testing.TestGroup {
-              Testing.testGroupName = "Let-polymorphism",
-              Testing.testGroupDescription = Nothing,
-              Testing.testGroupSubgroups = [],
-              Testing.testGroupCases = [
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#1",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
-                      Core.letBindings = [
-                        Core.LetBinding {
-                          Core.letBindingName = (Core.Name "id"),
-                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                            Core.lambdaParameter = (Core.Name "x"),
-                            Core.lambdaDomain = Nothing,
-                            Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
-                          Core.letBindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "x"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                          Core.applicationArgument = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))})),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [
-                        Core.Name "t0"],
-                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                        Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []}]},
-            Testing.TestGroup {
-              Testing.testGroupName = "Recursive and mutually recursive let (@wisnesky's test cases)",
-              Testing.testGroupDescription = Nothing,
-              Testing.testGroupSubgroups = [],
-              Testing.testGroupCases = []}],
-          Testing.testGroupCases = []},
-        Testing.TestGroup {
-          Testing.testGroupName = "Literals",
-          Testing.testGroupDescription = Nothing,
-          Testing.testGroupSubgroups = [],
-          Testing.testGroupCases = [
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "#1",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                  Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "#2",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermLiteral (Core.LiteralString "foo")),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                  Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeString)}})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "#3",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermLiteral (Core.LiteralBoolean False)),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                  Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "#4",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 42.0))),
-                Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                  Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []}]},
-        Testing.TestGroup {
-          Testing.testGroupName = "Polymorphism",
-          Testing.testGroupDescription = Nothing,
-          Testing.testGroupSubgroups = [
-            Testing.TestGroup {
-              Testing.testGroupName = "Simple lists and optionals",
-              Testing.testGroupDescription = Nothing,
-              Testing.testGroupSubgroups = [],
-              Testing.testGroupCases = [
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#1",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermList []),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [
-                        Core.Name "t0"],
-                      Core.typeSchemeType = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#2",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermOptional Nothing),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [
-                        Core.Name "t0"],
-                      Core.typeSchemeType = (Core.TypeOptional (Core.TypeVariable (Core.Name "t0")))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#3",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []}]},
-            Testing.TestGroup {
-              Testing.testGroupName = "Lambdas, lists, and products",
-              Testing.testGroupDescription = Nothing,
-              Testing.testGroupSubgroups = [],
-              Testing.testGroupCases = [
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#1",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "x"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [
-                        Core.Name "t0"],
-                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                        Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#2",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "x"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermProduct [
-                        Core.TermVariable (Core.Name "x"),
-                        (Core.TermVariable (Core.Name "x"))])}))),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [
-                        Core.Name "t0"],
-                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                        Core.functionTypeCodomain = (Core.TypeProduct [
-                          Core.TypeVariable (Core.Name "t0"),
-                          (Core.TypeVariable (Core.Name "t0"))])}))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#3",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "x"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermList [
-                        Core.TermVariable (Core.Name "x")])}))),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [
-                        Core.Name "t0"],
-                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                        Core.functionTypeCodomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))}))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#4",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermList [
-                      Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "x"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                      (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "y"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermVariable (Core.Name "y"))})))]),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [
-                        Core.Name "t0"],
-                      Core.typeSchemeType = (Core.TypeList (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                        Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))})))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#5",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermList [
-                      Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "x"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                          Core.lambdaParameter = (Core.Name "y"),
-                          Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermProduct [
-                            Core.TermVariable (Core.Name "y"),
-                            (Core.TermVariable (Core.Name "x"))])})))}))]),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [
-                        Core.Name "t0",
-                        (Core.Name "t1")],
-                      Core.typeSchemeType = (Core.TypeList (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                        Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t1")),
-                          Core.functionTypeCodomain = (Core.TypeProduct [
-                            Core.TypeVariable (Core.Name "t1"),
-                            (Core.TypeVariable (Core.Name "t0"))])}))})))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []}]},
-            Testing.TestGroup {
-              Testing.testGroupName = "Lambdas and application",
-              Testing.testGroupDescription = Nothing,
-              Testing.testGroupSubgroups = [],
-              Testing.testGroupCases = [
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#1",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "x"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
-                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeString)}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []}]},
-            Testing.TestGroup {
-              Testing.testGroupName = "Primitives and application",
-              Testing.testGroupDescription = Nothing,
-              Testing.testGroupSubgroups = [],
-              Testing.testGroupCases = [
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#1",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
-                      Core.applicationArgument = (Core.TermList [
-                        Core.TermList [
-                          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))],
-                        (Core.TermList [])])})),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []}]},
-            Testing.TestGroup {
-              Testing.testGroupName = "Lambdas and primitives",
-              Testing.testGroupDescription = Nothing,
-              Testing.testGroupSubgroups = [],
-              Testing.testGroupCases = [
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#1",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                        Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                          Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                          Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#2",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "x"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                        Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                          Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                          Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#3",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "x"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                        Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []}]},
-            Testing.TestGroup {
-              Testing.testGroupName = "Mixed expressions with lambdas, constants, and primitive functions",
-              Testing.testGroupDescription = Nothing,
-              Testing.testGroupSubgroups = [],
-              Testing.testGroupCases = [
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#1",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "x"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.sub"))),
-                          Core.applicationArgument = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))}))),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                        Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []}]}],
-          Testing.testGroupCases = []},
-        Testing.TestGroup {
-          Testing.testGroupName = "Primitives",
-          Testing.testGroupDescription = Nothing,
-          Testing.testGroupSubgroups = [
-            Testing.TestGroup {
-              Testing.testGroupName = "Monomorphic primitive functions",
-              Testing.testGroupDescription = Nothing,
-              Testing.testGroupSubgroups = [],
-              Testing.testGroupCases = [
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#1",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.length"))),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),
-                        Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#2",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.sub"))),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                        Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                          Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                          Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []}]},
-            Testing.TestGroup {
-              Testing.testGroupName = "Polymorphic primitive functions",
-              Testing.testGroupDescription = Nothing,
-              Testing.testGroupSubgroups = [],
-              Testing.testGroupCases = [
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#1",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "el"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.length"))),
-                        Core.applicationArgument = (Core.TermList [
-                          Core.TermVariable (Core.Name "el")])}))}))),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [
-                        Core.Name "t0"],
-                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                        Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#2",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "el"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.length"))),
-                        Core.applicationArgument = (Core.TermList [
-                          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
-                          (Core.TermVariable (Core.Name "el"))])}))}))),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                        Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#3",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [
-                        Core.Name "t0"],
-                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeList (Core.TypeList (Core.TypeVariable (Core.Name "t0")))),
-                        Core.functionTypeCodomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))}))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#4",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "lists"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "lists"))}))}))),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [
-                        Core.Name "t0"],
-                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeList (Core.TypeList (Core.TypeVariable (Core.Name "t0")))),
-                        Core.functionTypeCodomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))}))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#5",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "lists"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.length"))),
-                        Core.applicationArgument = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "lists"))}))}))}))),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [
-                        Core.Name "t0"],
-                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeList (Core.TypeList (Core.TypeVariable (Core.Name "t0")))),
-                        Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#6",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "list"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.length"))),
-                        Core.applicationArgument = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
-                          Core.applicationArgument = (Core.TermList [
-                            Core.TermVariable (Core.Name "list"),
-                            (Core.TermList [])])}))}))}))),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [
-                        Core.Name "t0"],
-                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
-                        Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#7",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "list"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
-                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
-                        Core.applicationArgument = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.length"))),
-                          Core.applicationArgument = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
-                            Core.applicationArgument = (Core.TermList [
-                              Core.TermVariable (Core.Name "list"),
-                              (Core.TermList [])])}))}))}))}))),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [
-                        Core.Name "t0"],
-                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
-                        Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#8",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "lists"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.length"))),
-                        Core.applicationArgument = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "lists"))}))}))}))),
-                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
-                      Core.typeSchemeVariables = [
-                        Core.Name "t0"],
-                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeList (Core.TypeList (Core.TypeVariable (Core.Name "t0")))),
-                        Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]}],
           Testing.testGroupCases = []}],
