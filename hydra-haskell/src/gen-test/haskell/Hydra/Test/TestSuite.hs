@@ -224,7 +224,7 @@ inferenceTests = Testing.TestGroup {
       Testing.testGroupDescription = Nothing,
       Testing.testGroupSubgroups = [
         Testing.TestGroup {
-          Testing.testGroupName = "Check lambdas",
+          Testing.testGroupName = "Lambdas",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -259,7 +259,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "Check list eliminations",
+          Testing.testGroupName = "List eliminations",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -308,7 +308,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "Check projections",
+          Testing.testGroupName = "Projections",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -326,7 +326,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "Check case statements",
+          Testing.testGroupName = "Case statements",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -368,7 +368,7 @@ inferenceTests = Testing.TestGroup {
       Testing.testGroupDescription = Nothing,
       Testing.testGroupSubgroups = [
         Testing.TestGroup {
-          Testing.testGroupName = "Check literal values",
+          Testing.testGroupName = "Literal values",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -409,7 +409,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "Check let terms",
+          Testing.testGroupName = "Let terms",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -506,7 +506,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "Check optionals",
+          Testing.testGroupName = "Optionals",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -530,7 +530,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "Check products",
+          Testing.testGroupName = "Products",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -557,7 +557,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "Check records",
+          Testing.testGroupName = "Records",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -673,7 +673,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "Check unions",
+          Testing.testGroupName = "Unions",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -691,7 +691,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "Check sets",
+          Testing.testGroupName = "Sets",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -717,7 +717,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "Check maps",
+          Testing.testGroupName = "Maps",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -777,7 +777,7 @@ inferenceTests = Testing.TestGroup {
       Testing.testGroupDescription = Nothing,
       Testing.testGroupSubgroups = [
         Testing.TestGroup {
-          Testing.testGroupName = "Check empty let",
+          Testing.testGroupName = "Empty let",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -793,7 +793,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "Check trivial let",
+          Testing.testGroupName = "Trivial let",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -818,7 +818,7 @@ inferenceTests = Testing.TestGroup {
       Testing.testGroupDescription = Nothing,
       Testing.testGroupSubgroups = [
         Testing.TestGroup {
-          Testing.testGroupName = "Check list of strings",
+          Testing.testGroupName = "List of strings",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -834,7 +834,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "Check list of lists of strings",
+          Testing.testGroupName = "List of lists of strings",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -851,7 +851,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "Check empty list",
+          Testing.testGroupName = "Empty list",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -866,7 +866,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "Check list containing an empty list",
+          Testing.testGroupName = "List containing an empty list",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -882,7 +882,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "Check lambda producing a list of integers",
+          Testing.testGroupName = "Lambda producing a list of integers",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -903,7 +903,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "Check list with bound variables",
+          Testing.testGroupName = "List with bound variables",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -930,7 +930,7 @@ inferenceTests = Testing.TestGroup {
       Testing.testGroupDescription = Nothing,
       Testing.testGroupSubgroups = [
         Testing.TestGroup {
-          Testing.testGroupName = "Check monomorphic primitive functions",
+          Testing.testGroupName = "Monomorphic primitive functions",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -959,7 +959,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "Check polymorphic primitive functions",
+          Testing.testGroupName = "Polymorphic primitive functions",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -988,7 +988,7 @@ inferenceTests = Testing.TestGroup {
       Testing.testGroupDescription = Nothing,
       Testing.testGroupSubgroups = [
         Testing.TestGroup {
-          Testing.testGroupName = "Check empty product",
+          Testing.testGroupName = "Empty product",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -1002,7 +1002,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "Check non-empty, monotyped products",
+          Testing.testGroupName = "Non-empty, monotyped products",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -1035,7 +1035,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "Check polytyped products",
+          Testing.testGroupName = "Polytyped products",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -1059,7 +1059,7 @@ inferenceTests = Testing.TestGroup {
       Testing.testGroupDescription = Nothing,
       Testing.testGroupSubgroups = [
         Testing.TestGroup {
-          Testing.testGroupName = "Check singleton sum terms",
+          Testing.testGroupName = "Singleton sum terms",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -1091,7 +1091,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "Check non-singleton sum terms",
+          Testing.testGroupName = "Non-singleton sum terms",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -1127,11 +1127,11 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []},
     Testing.TestGroup {
-      Testing.testGroupName = "Wrapped terms",
+      Testing.testGroupName = "Wrap terms",
       Testing.testGroupDescription = Nothing,
       Testing.testGroupSubgroups = [
         Testing.TestGroup {
-          Testing.testGroupName = "Check nominal introductions",
+          Testing.testGroupName = "Wrap introductions",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
@@ -1163,7 +1163,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "Check nominal eliminations",
+          Testing.testGroupName = "Wrap eliminations",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
