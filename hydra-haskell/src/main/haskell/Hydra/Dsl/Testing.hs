@@ -9,11 +9,14 @@ import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.TTerms as TTerms
 import qualified Hydra.Dsl.TTypes as T
 
+import qualified Data.List as L
 import qualified Data.Map as M
 
 
+tag_disabled = "disabled"
+
 tagAsDisabled :: TTerm TestCaseWithMetadata -> TTerm TestCaseWithMetadata
-tagAsDisabled tcase = testCaseWithMetadataSetTags ["disabled"] @@ tcase
+tagAsDisabled tcase = testCaseWithMetadataSetTags [tag_disabled] @@ tcase
 
 expectMono i term typ = infTest ("#" ++ show i) term $ T.mono typ
 
@@ -24,6 +27,8 @@ groupRef = TTerms.variableFromName . elementName
 infTest :: String -> TTerm Term -> TTerm TypeScheme -> TTerm TestCaseWithMetadata
 infTest name term ts = testCaseWithMetadata (Base.string name)
   (testCaseInference $ inferenceTestCase term ts) nothing (Base.list [])
+
+isDisabled tcase = (Tag tag_disabled) `L.elem` Testing.testCaseWithMetadataTags tcase
 
 -- Note: this is a cheat for an encoded map term; consider using the TTerms DSL
 mapTermCheat :: [(Term, Term)] -> TTerm Term
