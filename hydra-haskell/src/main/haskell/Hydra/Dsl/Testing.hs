@@ -25,6 +25,10 @@ infTest :: String -> TTerm Term -> TTerm TypeScheme -> TTerm TestCaseWithMetadat
 infTest name term ts = testCaseWithMetadata (Base.string name)
   (testCaseInference $ inferenceTestCase term ts) nothing (Base.list [])
 
+-- Note: this is a cheat for an encoded map term; consider using the TTerms DSL
+mapTermCheat :: [(Term, Term)] -> TTerm Term
+mapTermCheat = TTerm . coreEncodeTerm . Terms.mapTerm . M.fromList
+
 subgroup :: String -> [TTerm TestCaseWithMetadata] -> TTerm TestGroup
 subgroup name = tgroup name Nothing []
 

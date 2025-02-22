@@ -196,10 +196,6 @@ testGroupForIndividualTerms = supergroup "Individual terms" [
 --           Field "lastName" $ var "x",
 --           Field "age" $ int32 42]))
 --         (T.function T.string testTypePerson)
-  where
-    -- Note: this is a cheat for an encoded map term; consider using the TTerms DSL
-    mapTermCheat :: [(Term, Term)] -> TTerm Term
-    mapTermCheat = TTerm . coreEncodeTerm . Terms.mapTerm . M.fromList
 
 testGroupForLetTerms :: TTerm TestGroup
 testGroupForLetTerms = supergroup "Let terms" [

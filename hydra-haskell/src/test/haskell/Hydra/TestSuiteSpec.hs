@@ -15,10 +15,11 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
+{-
+stack ghci hydra:lib hydra:hydra-test
 
-runTestSuite :: H.SpecWith ()
-runTestSuite = do
-    runTestGroup allTests
+Test.Hspec.hspec Hydra.TestSuiteSpec.spec
+-}
 
 runTestCase :: TestCaseWithMetadata -> H.SpecWith ()
 runTestCase (TestCaseWithMetadata name tcase mdesc _) = H.it desc $
@@ -58,5 +59,4 @@ runTestGroup tg = do
     nonDisabled = L.filter (not . isDisabled) cases
 
 spec :: H.Spec
-spec = do
-  runTestSuite
+spec = runTestGroup allTests
