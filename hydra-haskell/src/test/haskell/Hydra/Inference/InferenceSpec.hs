@@ -1,5 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+-- | This module contains additional inference test cases which, for one reason or another,
+--   could not yet be included in the generated test suite.
 module Hydra.Inference.InferenceSpec where
 
 import Hydra.Kernel
@@ -13,6 +15,7 @@ import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Lib.Logic as Logic
 import qualified Hydra.Dsl.Lib.Math as Math
+import Hydra.Inference.InferenceTestUtils
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
@@ -21,30 +24,6 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import Control.Monad
 
-
-checkType :: Term -> Type -> H.Expectation
-checkType term typ = typeAnn term `H.shouldBe` typ
-  where
-    typeAnn (TermTyped (TypedTerm _ typ)) = typ
-
-expectMonotype :: Term -> Type -> H.Expectation
-expectMonotype term = expectPolytype term []
-
-expectPolytype :: Term-> [String] -> Type -> H.Expectation
-expectPolytype term vars typ = do
-    shouldSucceedWith
-      (inferTypeScheme term)
-      (TypeScheme (Name <$> vars) typ)
-
-expectTypeAnnotation :: (Term -> Flow (Graph) (Term)) -> Term -> Type -> H.Expectation
-expectTypeAnnotation path term etyp = shouldSucceedWith atyp etyp
-  where
-   atyp = do
-     iterm <- inferTermType term
-     selected <- path iterm
-     case selected of
-       TermTyped (TypedTerm _ typ) -> return typ
-       _ -> fail $ "no type annotation"
 
 checkLiterals :: H.SpecWith ()
 checkLiterals = H.describe "Check arbitrary literals" $ do
@@ -206,6 +185,32 @@ checkSubtermAnnotations = H.describe "Check additional subterm annotations" $ do
           iterm <- inferTermType term
           fail $ "iterm: " ++ show iterm
 
+checkTypeDefinitions :: H.SpecWith ()
+checkTypeDefinitions = check "type definition terms" $ do
+
+  unit <- pure $ string "ignored"
+  H.describe "Approximation of Hydra type definitions" $ do
+    H.it "test #1.a" $
+      expectType
+        (variant testTypeHydraTypeName (Name "literal")
+          $ variant testTypeHydraLiteralTypeName (Name "boolean") unit)
+        (TypeVariable testTypeHydraTypeName)
+    H.it "test #1.b" $
+      expectFailure
+        (variant testTypeHydraTypeName (Name "literal")
+          $ variant testTypeHydraLiteralTypeName (Name "boolean") $ int32 42)
+    H.it "test #2.a" $
+      expectType
+        ((variant testTypeHydraTypeName (Name "list") $ var "otherType") `with` [
+          "otherType">: variant testTypeHydraTypeName (Name "literal")
+            $ variant testTypeHydraLiteralTypeName (Name "boolean") unit])
+        (TypeVariable testTypeHydraTypeName)
+    H.it "test #2.b" $
+      expectFailure
+        ((variant testTypeHydraTypeName (Name "list") $ var "otherType") `with` [
+          "otherType">: variant testTypeHydraTypeName (Name "literal")
+            $ variant testTypeHydraLiteralTypeName (Name "boolean") $ int32 42])
+
 --checkTypedTerms :: H.SpecWith ()
 --checkTypedTerms = H.describe "Check that term/type pairs are consistent with type inference" $ do
 --
@@ -217,4 +222,5 @@ spec = do
   checkLiterals
   checkSubtermAnnotations
   checkTypeAnnotations
+--  checkTypeDefinitions
 --  checkTypedTerms

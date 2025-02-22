@@ -41,13 +41,21 @@ runTestCase (TestCaseWithMetadata name tcase mdesc _) = H.it desc $
 runTestGroup :: TestGroup -> H.SpecWith ()
 runTestGroup tg = do
     H.describe desc $ do
-      CM.mapM runTestCase $ testGroupCases tg
+      CM.mapM runTestCase nonDisabled
       CM.sequence (runTestGroup <$> (testGroupSubgroups tg))
       return ()
   where
-    desc = testGroupName tg ++ case testGroupDescription tg of
+    cases = testGroupCases tg
+    desc = testGroupName tg ++ disabledSuffix ++ descSuffix
+    descSuffix = case testGroupDescription tg of
       Nothing -> ""
       Just d -> " (" ++ d ++ ")"
+    disabledSuffix = if count > 0 then " [" ++ show count ++ " disabled]" else ""
+      where
+        count = L.length cases - L.length nonDisabled
+    isDisabled tcase = disabledTag `L.elem` testCaseWithMetadataTags tcase
+    disabledTag = Tag "disabled"
+    nonDisabled = L.filter (not . isDisabled) cases
 
 spec :: H.Spec
 spec = do
