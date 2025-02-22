@@ -8,6 +8,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import Data.Int
+import Prelude hiding (map, product, sum)
 
 
 annotatedTerm :: TTerm Term -> TTerm (M.Map String Term) -> TTerm AnnotatedTerm
@@ -77,6 +78,9 @@ eliminationRecord = variant _Elimination _Elimination_record
 
 eliminationUnion :: TTerm CaseStatement -> TTerm Elimination
 eliminationUnion = variant _Elimination _Elimination_union
+
+eliminationWrap :: TTerm Name -> TTerm Elimination
+eliminationWrap = variant _Elimination _Elimination_wrap
 
 field :: TTerm Name -> TTerm Term -> TTerm Field
 field name term = Base.record _Field [
@@ -347,11 +351,17 @@ termRecord = variant _Term _Term_record
 termSet :: TTerm (S.Set Term) -> TTerm Term
 termSet = variant _Term _Term_set
 
+termSum :: TTerm Sum -> TTerm Term
+termSum = variant _Term _Term_sum
+
 termUnion :: TTerm Injection -> TTerm Term
 termUnion = variant _Term _Term_union
 
 termVariable :: TTerm Name -> TTerm Term
 termVariable = variant _Term _Term_variable
+
+termWrap :: TTerm WrappedTerm -> TTerm Term
+termWrap = variant _Term _Term_wrap
 
 tupleProjectionArity :: TTerm (TupleProjection -> Int)
 tupleProjectionArity = Base.project _TupleProjection _TupleProjection_arity
@@ -400,6 +410,9 @@ typeSchemeType = Base.project _TypeScheme _TypeScheme_type
 
 typeSet :: TTerm Type -> TTerm Type
 typeSet = variant _Type _Type_set
+
+typeSum :: TTerm [Type] -> TTerm Type
+typeSum = variant _Type _Type_sum
 
 typeUnion :: TTerm RowType -> TTerm Type
 typeUnion = variant _Type _Type_union

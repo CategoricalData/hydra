@@ -101,6 +101,9 @@ set = typeSet
 string :: TTerm Type
 string = typeLiteral literalTypeString
 
+sum :: [TTerm Type] -> TTerm Type
+sum types = Core.typeSum $ TTerm $ TermList (unTTerm <$> types)
+
 uint64 :: TTerm Type
 uint64 = typeLiteral $ literalTypeInteger integerTypeUint64
 
