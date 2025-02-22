@@ -1,4 +1,4 @@
-module Hydra.Sources.Tier3.Test.Inference (inferenceTests) where
+module Hydra.Sources.Tier3.Test.Inference.Simple (simpleTermsTests) where
 
 import Hydra.Kernel
 import Hydra.Testing
@@ -7,29 +7,30 @@ import qualified Hydra.Dsl.Core as Core
 import Hydra.Dsl.Testing as Testing
 import Hydra.Dsl.ShorthandTypes
 import qualified Hydra.Dsl.Terms as Terms
+import qualified Hydra.Dsl.Lib.Lists as Lists
 import qualified Hydra.Dsl.Lib.Maps as Maps
 import qualified Hydra.Dsl.Lib.Math as Math
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Sources.Tier3.Test.TestGraph
-
 import Hydra.Dsl.TTerms as TTerms
 import qualified Hydra.Dsl.TTypes as T
+import Hydra.Sources.Tier3.Test.Inference.Fundamentals
 
 import qualified Data.Map as M
 import Prelude hiding (map, product, sum)
 
 
-inferenceTests :: TTerm TestGroup
-inferenceTests = supergroup "inference tests" [
-    testGroupForApplicationTerms,
-    testGroupForFunctionTerms,
-    testGroupForIndividualTerms,
-    testGroupForLetTerms,
-    testGroupForListTerms,
-    testGroupForPrimitiveTerms,
-    testGroupForProductTerms,
-    testGroupForSumTerms,
-    testGroupForWrapTerms]
+simpleTermsTests :: TTerm TestGroup
+simpleTermsTests = supergroup "Simple terms" [
+  testGroupForApplicationTerms,
+  testGroupForFunctionTerms,
+  testGroupForIndividualTerms,
+  testGroupForLetTerms,
+  testGroupForListTerms,
+  testGroupForPrimitiveTerms,
+  testGroupForProductTerms,
+  testGroupForSumTerms,
+  testGroupForWrapTerms]
 
 testGroupForApplicationTerms :: TTerm TestGroup
 testGroupForApplicationTerms = subgroup "Application terms" [
@@ -42,6 +43,7 @@ testGroupForApplicationTerms = subgroup "Application terms" [
 
 testGroupForFunctionTerms :: TTerm TestGroup
 testGroupForFunctionTerms = supergroup "Function terms" [
+
     subgroup "Lambdas" [
       expectPoly 1
         (lambda "x" $ var "x")
@@ -78,6 +80,7 @@ testGroupForFunctionTerms = supergroup "Function terms" [
 
 testGroupForIndividualTerms :: TTerm TestGroup
 testGroupForIndividualTerms = supergroup "Individual terms" [
+
     subgroup "Literal values" [
       expectMono 1
         (int32 42)
@@ -200,6 +203,7 @@ testGroupForIndividualTerms = supergroup "Individual terms" [
 
 testGroupForLetTerms :: TTerm TestGroup
 testGroupForLetTerms = supergroup "Let terms" [
+
     subgroup "Empty let" [
       expectMono 1
         (lets [] $ int32 42)
@@ -214,6 +218,7 @@ testGroupForLetTerms = supergroup "Let terms" [
 
 testGroupForListTerms :: TTerm TestGroup
 testGroupForListTerms = supergroup "List terms" [
+
     subgroup "List of strings" [
       expectMono 1
         (list [string "foo", string "bar"])
@@ -241,6 +246,7 @@ testGroupForListTerms = supergroup "List terms" [
 
 testGroupForPrimitiveTerms :: TTerm TestGroup
 testGroupForPrimitiveTerms = supergroup "Primitive terms" [
+
     subgroup "Monomorphic primitive functions" [
       expectMono 1
         (primitive $ Name "hydra.lib.strings.length")
@@ -255,6 +261,7 @@ testGroupForPrimitiveTerms = supergroup "Primitive terms" [
 
 testGroupForProductTerms :: TTerm TestGroup
 testGroupForProductTerms = supergroup "Product terms" [
+
     subgroup "Empty product" [
       expectMono 1
         (product [])
@@ -273,6 +280,7 @@ testGroupForProductTerms = supergroup "Product terms" [
 
 testGroupForSumTerms :: TTerm TestGroup
 testGroupForSumTerms = supergroup "Sum terms" [
+
     subgroup "Singleton sum terms" [
       expectMono 1
         (sum 0 1 $ string "foo")
@@ -290,6 +298,7 @@ testGroupForSumTerms = supergroup "Sum terms" [
 
 testGroupForWrapTerms :: TTerm TestGroup
 testGroupForWrapTerms = supergroup "Wrap terms" [
+
     subgroup "Wrap introductions" [
       expectMono 1
         (wrap (ref testTypeStringAliasNameDef) $ string "foo")
