@@ -16,6 +16,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import Data.Int
+import Prelude hiding (map, product, sum)
 
 
 (@@) :: TTerm Term -> TTerm Term -> TTerm Term
@@ -80,7 +81,7 @@ let1 v t1 t2 = Core.termLet $ Core.letExpression (Base.list [Core.letBinding (na
 lets :: [(TTerm Name, TTerm Term)] -> TTerm Term -> TTerm Term
 lets pairs body = Core.termLet $ Core.letExpression (Base.list $ toBinding pairs) body
   where
-    toBinding = map (\(n, t) -> Core.letBinding n t nothing)
+    toBinding = fmap (\(n, t) -> Core.letBinding n t nothing)
 
 list :: [TTerm Term] -> TTerm Term
 list = Core.termList . Base.list
@@ -92,19 +93,19 @@ match :: TTerm Name -> TTerm (Maybe Term) -> [(TTerm Name, TTerm Term)] -> TTerm
 match tname def pairs = Core.termFunction $ Core.functionElimination $ Core.eliminationUnion
     $ Core.caseStatement tname def $ Base.list $ toField pairs
   where
-    toField = map (\(n, t) -> Core.field n t)
+    toField = fmap (\(n, t) -> Core.field n t)
 
 optional :: TTerm (Maybe Term) -> TTerm Term
 optional = Core.termOptional
 
 pair :: TTerm Term -> TTerm Term -> TTerm Term
-pair t1 t2 = tuple [t1, t2]
+pair t1 t2 = product [t1, t2]
 
 primitive :: Name -> TTerm Term
 primitive = Core.termFunction . Core.functionPrimitive . TTerm . coreEncodeName
 
-tuple :: [TTerm Term] -> TTerm Term
-tuple terms = Core.termProduct $ TTerm $ TermList (unTTerm <$> terms)
+product :: [TTerm Term] -> TTerm Term
+product terms = Core.termProduct $ TTerm $ TermList (unTTerm <$> terms)
 
 project :: TTerm Name -> TTerm Name -> TTerm Term
 project tname fname = Core.termFunction $ Core.functionElimination $ Core.eliminationRecord
@@ -121,6 +122,9 @@ set els = Core.termSet $ TTerm $ TermSet $ S.fromList (unTTerm <$> els)
 string :: String -> TTerm Term
 string = Core.termLiteral . Core.literalString . TTerm . Terms.string
 
+sum :: Int -> Int -> TTerm Term -> TTerm Term
+sum i s = Core.termSum . Core.sum (Base.int32 i) (Base.int32 s)
+
 true :: TTerm Term
 true = boolean True
 
@@ -129,6 +133,9 @@ uint64 = uint64Term . TTerm . Terms.uint64
 
 uint64Term :: TTerm Integer -> TTerm Term
 uint64Term = Core.termLiteral . Core.literalInteger . Core.integerValueUint64
+
+unwrap :: TTerm Name -> TTerm Term
+unwrap = Core.termFunction . Core.functionElimination . Core.eliminationWrap
 
 -- | Maps a string to an encoded variable term.
 var :: String -> TTerm Term
@@ -143,3 +150,6 @@ variable = TTerm . TermVariable . Name
 
 variableFromName :: Name -> TTerm a
 variableFromName = TTerm . TermVariable
+
+wrap :: TTerm Name -> TTerm Term -> TTerm Term
+wrap name = Core.termWrap . Core.wrappedTerm name

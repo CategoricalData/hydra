@@ -9,7 +9,7 @@ import Hydra.Core
 import Hydra.Graph
 import qualified Hydra.Dsl.Literals as Literals
 
-import Prelude hiding (map)
+import Prelude hiding (map, product, sum)
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S

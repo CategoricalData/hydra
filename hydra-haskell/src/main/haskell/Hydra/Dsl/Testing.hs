@@ -73,6 +73,12 @@ inferenceTestCase input output = Base.record _InferenceTestCase [
   _InferenceTestCase_input>>: input,
   _InferenceTestCase_output>>: output]
 
+subgroup :: String -> [TTerm TestCaseWithMetadata] -> TTerm TestGroup
+subgroup name = tgroup name Nothing []
+
+supergroup :: String -> [TTerm TestGroup] -> TTerm TestGroup
+supergroup name subgroups = tgroup name Nothing subgroups []
+
 testCaseInference :: TTerm InferenceTestCase -> TTerm TestCase
 testCaseInference = variant _TestCase _TestCase_inference
 
