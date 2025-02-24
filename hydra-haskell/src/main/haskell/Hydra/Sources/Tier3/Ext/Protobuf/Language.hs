@@ -87,10 +87,10 @@ protobufReservedWordsDef :: TElement (S.Set String)
 protobufReservedWordsDef = protobufLanguageDefinition "protobufReservedWords" $
   doc "A set of reserved words in Protobuf" $
   typed (tSet tString) $
-  (Sets.fromList (Lists.concat $ list [var "fieldNames"]))
-  `with` [
+  lets [
     "fieldNames">:
       doc "See: http://google.github.io/proto-lens/reserved-names.html" $
       list [
         "case", "class", "data", "default", "deriving", "do", "else", "foreign", "if", "import", "in", "infix", "infixl",
         "infixr", "instance", "let", "mdo", "module", "newtype", "of", "pattern", "proc", "rec", "then", "type", "where"]]
+    $ Sets.fromList $ Lists.concat $ list [var "fieldNames"]

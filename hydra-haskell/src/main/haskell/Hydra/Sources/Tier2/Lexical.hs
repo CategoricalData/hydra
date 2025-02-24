@@ -43,16 +43,15 @@ hydraLexicalModule = Module (Namespace "hydra.lexical") elements
 elementsToGraphDef :: TElement (Graph -> Maybe Graph -> [Element] -> Graph)
 elementsToGraphDef = lexicalDefinition "elementsToGraph" $
   function graphT (tFun (tOpt graphT) (tFun (TypeList elementT) graphT)) $
-  lambda "parent" $ lambda "schema" $ lambda "elements" $
-    Graph.graph
+  lambda "parent" $ lambda "schema" $ lambda "elements" $ lets [
+    "toPair" >: lambda "el" $ pair (Graph.elementName @@ var "el") (var "el")]
+    $ Graph.graph
       (Maps.fromList (Lists.map (var "toPair") $ var "elements"))
       (Graph.graphEnvironment @@ var "parent")
       (Graph.graphTypes @@ var "parent")
       (Graph.graphBody @@ var "parent")
       (Graph.graphPrimitives @@ var "parent")
       (var "schema")
-  `with` [
-    "toPair" >: lambda "el" $ pair (Graph.elementName @@ var "el") (var "el")]
 
 lookupPrimitiveDef :: TElement (Graph -> Name -> Maybe Primitive)
 lookupPrimitiveDef = lexicalDefinition "lookupPrimitive" $

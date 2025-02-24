@@ -233,10 +233,5 @@ var v = TTerm $ Terms.var v
 variant :: Name -> Name -> TTerm a -> TTerm b
 variant name fname (TTerm term) = TTerm $ Terms.inject name $ Field fname term
 
-with :: TTerm a -> [Field] -> TTerm a
-(TTerm env) `with` fields = TTerm $ TermLet $ Let (toBinding <$> fields) env
-  where
-     toBinding (Field name value) = LetBinding name value Nothing
-
 wrap :: Name -> TTerm a -> TTerm b
 wrap name (TTerm term) = TTerm $ Terms.wrap name term

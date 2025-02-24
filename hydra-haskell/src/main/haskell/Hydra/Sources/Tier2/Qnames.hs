@@ -58,12 +58,11 @@ namespaceOfDef = qnamesDefinition "namespaceOf" $
 namespaceToFilePathDef :: TElement (CaseConvention -> FileExtension -> Namespace -> String)
 namespaceToFilePathDef = qnamesDefinition "namespaceToFilePath" $
   function caseConventionT (tFun fileExtensionT (tFun namespaceT tString)) $
-  lambda "caseConv" $ lambda "ext" $ lambda "ns" $
-    (((Strings.intercalate "/" $ var "parts") ++ "." ++ (Module.unFileExtension @@ var "ext"))
-    `with` [
-      "parts">: Lists.map
-        (ref convertCaseDef @@ Mantle.caseConventionCamel @@ var "caseConv")
-        (Strings.splitOn "." (Core.unNamespace @@ var "ns"))])
+  lambda "caseConv" $ lambda "ext" $ lambda "ns" $ lets [
+    "parts">: Lists.map
+      (ref convertCaseDef @@ Mantle.caseConventionCamel @@ var "caseConv")
+      (Strings.splitOn "." (Core.unNamespace @@ var "ns"))]
+    $ (Strings.intercalate "/" $ var "parts") ++ "." ++ (Module.unFileExtension @@ var "ext")
 
 qnameDef :: TElement (Namespace -> String -> Name)
 qnameDef = qnamesDefinition "qname" $
@@ -77,19 +76,20 @@ qnameDef = qnamesDefinition "qname" $
 qualifyNameDef :: TElement (Name -> QualifiedName)
 qualifyNameDef = qnamesDefinition "qualifyName" $
   function nameT qualifiedNameT $
-  lambda "name" $ (Logic.ifElse (Equality.equalInt32 (int32 1) (Lists.length $ var "parts"))
+  lambda "name" $ lets [
+    "parts">: Lists.reverse (Strings.splitOn "." (Core.unName @@ var "name"))]
+    $ Logic.ifElse
+      (Equality.equalInt32 (int32 1) (Lists.length $ var "parts"))
       (Module.qualifiedName nothing (Core.unName @@ var "name"))
       (Module.qualifiedName
         (just $ wrap _Namespace (Strings.intercalate "." (Lists.reverse (Lists.tail $ var "parts"))))
-        (Lists.head $ var "parts")))
-    `with` [
-      "parts">: Lists.reverse (Strings.splitOn "." (Core.unName @@ var "name"))]
+        (Lists.head $ var "parts"))
 
 unqualifyNameDef :: TElement (QualifiedName -> Name)
 unqualifyNameDef = qnamesDefinition "unqualifyName" $
   doc "Convert a qualified name to a dot-separated name" $
   function qualifiedNameT nameT $
-  lambda "qname" $ (wrap _Name $ var "prefix" ++ (project _QualifiedName _QualifiedName_local @@ var "qname"))
-    `with` [
-      "prefix">: matchOpt (string "") (lambda "n" $ (unwrap _Namespace @@ var "n") ++ string ".")
-        @@ (project _QualifiedName _QualifiedName_namespace @@ var "qname")]
+  lambda "qname" $ lets [
+    "prefix">: matchOpt (string "") (lambda "n" $ (unwrap _Namespace @@ var "n") ++ string ".")
+      @@ (project _QualifiedName _QualifiedName_namespace @@ var "qname")]
+    $ wrap _Name $ var "prefix" ++ (project _QualifiedName _QualifiedName_local @@ var "qname")

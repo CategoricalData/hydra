@@ -49,45 +49,42 @@ getStateDef :: TElement (Flow s s)
 getStateDef = errorsDefinition "getState" $
   doc "Get the state of the current flow" $
   typed tFlowSS $
-  wrap _Flow (lambda "s0" $ lambda "t0" $ (
-    (lambda "v" $ lambda "s" $ lambda "t" $ (
-      (matchOpt
-        (Flows.flowState nothing (var "s") (var "t"))
-        (constant (Flows.flowState (just $ var "s") (var "s") (var "t"))))
-       @@ var "v"))
-    @@ (Flows.flowStateValue @@ var "fs1") @@ (Flows.flowStateState @@ var "fs1") @@ (Flows.flowStateTrace @@ var "fs1"))
-  `with` [
+  wrap _Flow $ lambda "s0" $ lambda "t0" $ lets [
     "fs1">:
       typed (Types.apply (Types.apply (TypeVariable _FlowState) tS) tUnit) $
-      Flows.unFlow @@ (Flows.pure unit) @@ var "s0" @@ var "t0"])
+      Flows.unFlow @@ (Flows.pure unit) @@ var "s0" @@ var "t0"]
+    $ (lambda "v" $ lambda "s" $ lambda "t" $ (
+        (matchOpt
+          (Flows.flowState nothing (var "s") (var "t"))
+          (constant (Flows.flowState (just $ var "s") (var "s") (var "t"))))
+         @@ var "v"))
+      @@ (Flows.flowStateValue @@ var "fs1") @@ (Flows.flowStateState @@ var "fs1") @@ (Flows.flowStateTrace @@ var "fs1")
 
 putStateDef :: TElement (s -> Flow s ())
 putStateDef = errorsDefinition "putState" $
   doc "Set the state of a flow" $
   function tS (tFlow tS tUnit) $
-  lambda "cx" $ wrap _Flow $ lambda "s0" $ lambda "t0" (
-    (Flows.flowState
+  lambda "cx" $ wrap _Flow $ lambda "s0" $ lambda "t0" $ lets [
+    "f1">: Flows.unFlow @@ (Flows.pure unit) @@ var "s0" @@ var "t0"]
+    $ Flows.flowState
       (Flows.flowStateValue @@ var "f1")
       (var "cx")
-      (Flows.flowStateTrace @@ var "f1"))
-    `with` [
-      "f1">: Flows.unFlow @@ (Flows.pure unit) @@ var "s0" @@ var "t0"])
+      (Flows.flowStateTrace @@ var "f1")
 
 traceSummaryDef :: TElement (Trace -> String)
 traceSummaryDef = errorsDefinition "traceSummary" $
   doc "Summarize a trace as a string" $
   function traceT tString $
-  lambda "t" $ (
-    (Strings.intercalate "\n" (Lists.concat2 (var "messageLines") (var "keyvalLines")))
-      `with` [
-        "messageLines">: (Lists.nub (Flows.traceMessages @@ var "t")),
-        "keyvalLines">: Logic.ifElse (Maps.isEmpty (Flows.traceOther @@ var "t"))
-          (list [])
-          (Lists.cons ("key/value pairs: ")
-            (Lists.map (var "toLine") (Maps.toList (Flows.traceOther @@ var "t")))),
-        "toLine">:
-          function (tPair tString termT) tString $
-          lambda "pair" $ "\t" ++ (Core.unName @@ (first @@ var "pair")) ++ ": " ++ (Io.showTerm (second @@ var "pair"))])
+  lambda "t" $ lets [
+    "messageLines">: (Lists.nub (Flows.traceMessages @@ var "t")),
+    "keyvalLines">: Logic.ifElse (Maps.isEmpty (Flows.traceOther @@ var "t"))
+      (list [])
+      (Lists.cons ("key/value pairs: ")
+        (Lists.map (var "toLine") (Maps.toList (Flows.traceOther @@ var "t")))),
+    "toLine">:
+      function (tPair tString termT) tString $
+      lambda "pair" $ "\t" ++ (Core.unName @@ (first @@ var "pair")) ++ ": " ++ (Io.showTerm (second @@ var "pair"))]
+    $ Strings.intercalate "\n" (Lists.concat2 (var "messageLines") (var "keyvalLines"))
 
 unexpectedDef :: TElement (String -> String -> Flow s x)
 unexpectedDef = errorsDefinition "unexpected" $

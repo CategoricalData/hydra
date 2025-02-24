@@ -112,12 +112,11 @@ csharpLanguageDef = csharpLanguageDefinition "csharpLanguage" $
 
 csharpReservedWordsDef :: TElement (S.Set String)
 csharpReservedWordsDef = csharpLanguageDefinition "csharpReservedWords" $
-    doc ("A set of reserved words in C#. Both the \"keywords\" and \"contextual keywords\" are drawn from"
-      <> " section 6.4.4 of the C# documentation:\n"
-      <> "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/lexical-structure#64-tokens") $
-    typed (tSet tString) $
-    (Sets.fromList (Lists.concat $ list [var "keywords", var "contextualKeywords"]))
-  `with` [
+  doc ("A set of reserved words in C#. Both the \"keywords\" and \"contextual keywords\" are drawn from"
+    <> " section 6.4.4 of the C# documentation:\n"
+    <> "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/lexical-structure#64-tokens") $
+  typed (tSet tString) $
+  lets [
     "keywords">: list [
         "DEFAULT", "FALSE", "NULL", "TRUE",
         "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const",
@@ -131,3 +130,4 @@ csharpReservedWordsDef = csharpLanguageDefinition "csharpReservedWords" $
         "add", "alias", "ascending", "async", "await", "by", "descending", "dynamic", "equals", "from", "get", "global",
         "group", "into", "join", "let", "nameof", "on", "orderby", "partial", "remove", "select", "set", "unmanaged",
         "value", "var", "when", "where", "yield"]]
+    $ Sets.fromList $ Lists.concat $ list [var "keywords", var "contextualKeywords"]

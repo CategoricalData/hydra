@@ -70,18 +70,17 @@ validateEdgeDef = validationDefinition "validateEdge" $
     tEdgeV,
     tOpt tString] $
   lambda "checkValue" $ lambda "showValue" $ lambda "labelForVertexId" $ lambda "typ" $ lambda "el" $
-    (ref checkAllDef @@ list [var "checkLabel", var "checkId", var "checkProperties", var "checkOut", var "checkIn"]
-    `with` [
+    lets [
       "failWith">: typed (tFun tString tString) $
         ref edgeErrorDef @@ var "showValue" @@ var "el",
-      "checkLabel">: (ref verifyDef
-        @@ (Equality.equalString
-          (unwrap _EdgeLabel @@ var "actual")
-          (unwrap _EdgeLabel @@ var "expected"))
-        @@ (var "failWith" @@ (ref prependDef @@ "Wrong label" @@ (ref edgeLabelMismatchDef @@ var "expected" @@ var "actual"))))
-        `with` [
-          "expected">: project _EdgeType _EdgeType_label @@ var "typ",
-          "actual">: project _Edge _Edge_label @@ var "el"],
+      "checkLabel">: lets [
+        "expected">: project _EdgeType _EdgeType_label @@ var "typ",
+        "actual">: project _Edge _Edge_label @@ var "el"]
+        $ ref verifyDef
+          @@ (Equality.equalString
+            (unwrap _EdgeLabel @@ var "actual")
+            (unwrap _EdgeLabel @@ var "expected"))
+          @@ (var "failWith" @@ (ref prependDef @@ "Wrong label" @@ (ref edgeLabelMismatchDef @@ var "expected" @@ var "actual"))),
       "checkId">: Optionals.map
         (var "failWith" <.> (ref prependDef @@ "Invalid id"))
         (var "checkValue" @@ (project _EdgeType _EdgeType_id @@ var "typ") @@ (project _Edge _Edge_id @@ var "el")),
@@ -108,7 +107,8 @@ validateEdgeDef = validationDefinition "validateEdge" $
             @@ (Equality.equalString
               (unwrap _VertexLabel @@ var "label")
               (unwrap _VertexLabel @@ (project _EdgeType _EdgeType_in @@ var "typ")))
-            @@ (var "failWith" @@ (ref prependDef @@ "Wrong in-vertex label" @@ (ref vertexLabelMismatchDef @@ (project _EdgeType _EdgeType_in @@ var "typ") @@ var "label")))))])
+            @@ (var "failWith" @@ (ref prependDef @@ "Wrong in-vertex label" @@ (ref vertexLabelMismatchDef @@ (project _EdgeType _EdgeType_in @@ var "typ") @@ var "label")))))]
+      $ ref checkAllDef @@ list [var "checkLabel", var "checkId", var "checkProperties", var "checkOut", var "checkIn"]
 
 validateElementDef :: TElement (
      (t -> v -> Maybe String)
@@ -157,38 +157,37 @@ validateGraphDef = validationDefinition "validateGraph" $
     tGraphSchemaT,
     tGraphV,
     tOpt tString] ordV $
-  lambda "checkValue" $ lambda "showValue" $ lambda "schema" $ lambda "graph" $
-    (ref checkAllDef @@ list [var "checkVertices", var "checkEdges"])
-    `with` [
-      "checkVertices">: (ref checkAllDef
-          @@ (Lists.map (var "checkVertex") (Maps.values (project _Graph _Graph_vertices @@ var "graph"))))
-        `with` [
-          "checkVertex">: lambda "el" $ ifOpt (Maps.lookup
-              (project _Vertex _Vertex_label @@ var "el")
-              (project _GraphSchema _GraphSchema_vertices @@ var "schema"))
-            (just (ref vertexErrorDef @@ var "showValue" @@ var "el"
-              @@ (ref prependDef @@ "Unexpected label" @@ (unwrap _VertexLabel @@ (project _Vertex _Vertex_label @@ var "el")))))
-            (lambda "t" $ ref validateVertexDef
-              @@ var "checkValue"
-              @@ var "showValue"
-              @@ var "t"
-              @@ var "el")],
-      "checkEdges">: (ref checkAllDef
-          @@ (Lists.map (var "checkEdge") (Maps.values (project _Graph _Graph_edges @@ var "graph"))))
-        `with` [
-          "checkEdge">: lambda "el" $ ifOpt (Maps.lookup
-              (project _Edge _Edge_label @@ var "el")
-              (project _GraphSchema _GraphSchema_edges @@ var "schema"))
-            (just (ref edgeErrorDef @@ var "showValue" @@ var "el"
-              @@ (ref prependDef @@ "Unexpected label" @@ (unwrap _EdgeLabel @@ (project _Edge _Edge_label @@ var "el")))))
-            (lambda "t" $ ref validateEdgeDef
-              @@ var "checkValue"
-              @@ var "showValue"
-              @@ var "labelForVertexId"
-              @@ var "t"
-              @@ var "el"),
-          "labelForVertexId">: typed (tOpt (tFun tV (tOpt vertexLabelT))) $
-            just $ lambda "i" $ Optionals.map (project _Vertex _Vertex_label) (Maps.lookup (var "i") (project _Graph _Graph_vertices @@ var "graph"))]]
+  lambda "checkValue" $ lambda "showValue" $ lambda "schema" $ lambda "graph" $ lets [
+    "checkVertices">: lets [
+      "checkVertex">: lambda "el" $ ifOpt (Maps.lookup
+          (project _Vertex _Vertex_label @@ var "el")
+          (project _GraphSchema _GraphSchema_vertices @@ var "schema"))
+        (just (ref vertexErrorDef @@ var "showValue" @@ var "el"
+          @@ (ref prependDef @@ "Unexpected label" @@ (unwrap _VertexLabel @@ (project _Vertex _Vertex_label @@ var "el")))))
+        (lambda "t" $ ref validateVertexDef
+          @@ var "checkValue"
+          @@ var "showValue"
+          @@ var "t"
+          @@ var "el")]
+      $ ref checkAllDef
+          @@ (Lists.map (var "checkVertex") $ Maps.values $ project _Graph _Graph_vertices @@ var "graph"),
+    "checkEdges">: lets [
+        "checkEdge">: lambda "el" $ ifOpt (Maps.lookup
+            (project _Edge _Edge_label @@ var "el")
+            (project _GraphSchema _GraphSchema_edges @@ var "schema"))
+          (just (ref edgeErrorDef @@ var "showValue" @@ var "el"
+            @@ (ref prependDef @@ "Unexpected label" @@ (unwrap _EdgeLabel @@ (project _Edge _Edge_label @@ var "el")))))
+          (lambda "t" $ ref validateEdgeDef
+            @@ var "checkValue"
+            @@ var "showValue"
+            @@ var "labelForVertexId"
+            @@ var "t"
+            @@ var "el"),
+        "labelForVertexId">: typed (tOpt (tFun tV (tOpt vertexLabelT))) $
+          just $ lambda "i" $ Optionals.map (project _Vertex _Vertex_label) (Maps.lookup (var "i") (project _Graph _Graph_vertices @@ var "graph"))]
+      $ ref checkAllDef
+          @@ (Lists.map (var "checkEdge") $ Maps.values $ project _Graph _Graph_edges @@ var "graph")]
+    $ ref checkAllDef @@ list [var "checkVertices", var "checkEdges"]
 
 validatePropertiesDef :: TElement (
      (t -> v -> Maybe String)
@@ -201,33 +200,33 @@ validatePropertiesDef = validationDefinition "validateProperties" $
     tList tPropertyTypeT,
     tMap propertyKeyT tV,
     tOpt tString] $
-  lambda "checkValue" $ lambda "types" $ lambda "props" $
-    ((ref checkAllDef @@ list [var "checkTypes", var "checkValues"])
-    `with` [
-      "checkTypes">: ref checkAllDef @@ (Lists.map (var "checkType") (var "types")),
-      "checkType">:
-        typed (tFun tPropertyTypeT $ tOpt tString) $
-        lambda "t" $ Logic.ifElse (project _PropertyType _PropertyType_required @@ var "t")
-          (ifOpt (Maps.lookup (project _PropertyType _PropertyType_key @@ var "t") $ var "props")
-            (just (ref prependDef @@ "Missing value for " @@ (unwrap _PropertyKey @@ (project _PropertyType _PropertyType_key @@ var "t"))))
-            (constant nothing))
-          nothing,
-      "checkValues">: ((ref checkAllDef @@ (Lists.map (var "checkPair") (Maps.toList $ var "props")))
-        `with` [
-          "m">: typed (tMap propertyKeyT tT) $
-            Maps.fromList (Lists.map
-              (lambda "p" $ pair
-                (project _PropertyType _PropertyType_key @@ var "p")
-                (project _PropertyType _PropertyType_value @@ var "p"))
-              (var "types")),
-          "checkPair">: lambda "pair" $ ((ifOpt (Maps.lookup (var "key") (var "m"))
-              (just (ref prependDef @@ "Unexpected key" @@ (unwrap _PropertyKey @@ var "key")))
-              (lambda "typ" $ Optionals.map
-                (ref prependDef @@ "Invalid value")
-                (var "checkValue" @@ var "typ" @@ var "val")))
-            `with` [
-              "key">: first @@ var "pair",
-              "val">: second @@ var "pair"])])])
+  lambda "checkValue" $ lambda "types" $ lambda "props" $ lets [
+    "checkTypes">: ref checkAllDef @@ (Lists.map (var "checkType") (var "types")),
+    "checkType">:
+      typed (tFun tPropertyTypeT $ tOpt tString) $
+      lambda "t" $ Logic.ifElse (project _PropertyType _PropertyType_required @@ var "t")
+        (ifOpt (Maps.lookup (project _PropertyType _PropertyType_key @@ var "t") $ var "props")
+          (just (ref prependDef @@ "Missing value for " @@ (unwrap _PropertyKey @@ (project _PropertyType _PropertyType_key @@ var "t"))))
+          (constant nothing))
+        nothing,
+    "checkValues">: lets [
+      "m">: typed (tMap propertyKeyT tT) $
+        Maps.fromList (Lists.map
+          (lambda "p" $ pair
+            (project _PropertyType _PropertyType_key @@ var "p")
+            (project _PropertyType _PropertyType_value @@ var "p"))
+          (var "types")),
+      "checkPair">: lambda "pair" $ lets [
+        "key">: first @@ var "pair",
+        "val">: second @@ var "pair"]
+        $ ifOpt
+          (Maps.lookup (var "key") (var "m"))
+          (just (ref prependDef @@ "Unexpected key" @@ (unwrap _PropertyKey @@ var "key")))
+          (lambda "typ" $ Optionals.map
+            (ref prependDef @@ "Invalid value")
+            (var "checkValue" @@ var "typ" @@ var "val"))]
+      $ ref checkAllDef @@ (Lists.map (var "checkPair") (Maps.toList $ var "props"))]
+    $ ref checkAllDef @@ list [var "checkTypes", var "checkValues"]
 
 validateVertexDef :: TElement (
      (t -> v -> Maybe String)
@@ -242,38 +241,36 @@ validateVertexDef = validationDefinition "validateVertex" $
     tVertexTypeT,
     tVertexV,
     tOpt tString] $
-  lambda "checkValue" $ lambda "showValue" $ lambda "typ" $ lambda "el" $
-    ((ref checkAllDef @@ list [var "checkLabel", var "checkId", var "checkProperties"])
-    `with` [
-      "failWith">: typed (tFun tString tString) $
-        ref vertexErrorDef @@ var "showValue" @@ var "el",
-      "checkLabel">: (ref verifyDef
+  lambda "checkValue" $ lambda "showValue" $ lambda "typ" $ lambda "el" $ lets [
+    "failWith">: typed (tFun tString tString) $
+      ref vertexErrorDef @@ var "showValue" @@ var "el",
+    "checkLabel">: lets [
+      "expected">: project _VertexType _VertexType_label @@ var "typ",
+      "actual">: project _Vertex _Vertex_label @@ var "el"]
+      $ ref verifyDef
         @@ (Equality.equalString
           (unwrap _VertexLabel @@ var "actual")
           (unwrap _VertexLabel @@ var "expected"))
-        @@ (var "failWith" @@ (ref prependDef @@ "Wrong label" @@ (ref vertexLabelMismatchDef @@ var "expected" @@ var "actual"))))
-        `with` [
-          "expected">: project _VertexType _VertexType_label @@ var "typ",
-          "actual">: project _Vertex _Vertex_label @@ var "el"],
-      "checkId">: Optionals.map
-        (var "failWith" <.> (ref prependDef @@ "Invalid id"))
-        (var "checkValue" @@ (project _VertexType _VertexType_id @@ var "typ") @@ (project _Vertex _Vertex_id @@ var "el")),
-      "checkProperties">: Optionals.map
-        (var "failWith" <.> (ref prependDef @@ "Invalid property"))
-        (ref validatePropertiesDef
-          @@ var "checkValue"
-          @@ (project _VertexType _VertexType_properties @@ var "typ")
-          @@ (project _Vertex _Vertex_properties @@ var "el"))])
+        @@ (var "failWith" @@ (ref prependDef @@ "Wrong label" @@ (ref vertexLabelMismatchDef @@ var "expected" @@ var "actual"))),
+    "checkId">: Optionals.map
+      (var "failWith" <.> (ref prependDef @@ "Invalid id"))
+      (var "checkValue" @@ (project _VertexType _VertexType_id @@ var "typ") @@ (project _Vertex _Vertex_id @@ var "el")),
+    "checkProperties">: Optionals.map
+      (var "failWith" <.> (ref prependDef @@ "Invalid property"))
+      (ref validatePropertiesDef
+        @@ var "checkValue"
+        @@ (project _VertexType _VertexType_properties @@ var "typ")
+        @@ (project _Vertex _Vertex_properties @@ var "el"))]
+    $ ref checkAllDef @@ list [var "checkLabel", var "checkId", var "checkProperties"]
 
 ----
 
 checkAllDef :: TElement ([Y.Maybe a] -> Y.Maybe a)
 checkAllDef = validationDefinition "checkAll" $
   function (tList $ tOpt tA) (tOpt tA) $
-  lambda "checks" (
-    (Lists.safeHead $ var "errors")
-    `with` [
-      "errors">: Optionals.cat $ var "checks"])
+  lambda "checks" $ lets [
+    "errors">: Optionals.cat $ var "checks"]
+    $ Lists.safeHead $ var "errors"
 
 edgeErrorDef :: TElement ((v -> String) -> PG.Edge v -> String -> String)
 edgeErrorDef = validationDefinition "edgeError" $

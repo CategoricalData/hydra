@@ -56,14 +56,14 @@ hydraFlowsModule = Module (Namespace "hydra.flows") elements
 bindDef :: TElement (Flow s a -> (a -> Flow s b) -> Flow s b)
 bindDef = flowsDefinition "bind" $
   functionN [tFlow tS tA, Types.function tA (tFlow tS tB), tFlow tS tB] $
-  lambdas ["l", "r"] ((wrap _Flow (var "q"))
-    `with` [
-      "q">: lambdas ["s0", "t0"] ((matchOpt
-            (Flows.flowState nothing (Flows.flowStateState @@ var "fs1") (Flows.flowStateTrace @@ var "fs1"))
-            (lambda "v" $ Flows.unFlow @@ (var "r" @@ var "v") @@ (Flows.flowStateState @@ var "fs1") @@ (Flows.flowStateTrace @@ var "fs1")))
-          @@ (Flows.flowStateValue @@ var "fs1")
-        `with` [
-          "fs1">: Flows.unFlow @@ var "l" @@ var "s0" @@ var "t0"])])
+  lambdas ["l", "r"] $ lets [
+    "q">: lambdas ["s0", "t0"] $ lets [
+      "fs1">: Flows.unFlow @@ var "l" @@ var "s0" @@ var "t0"]
+      $ (matchOpt
+          (Flows.flowState nothing (Flows.flowStateState @@ var "fs1") (Flows.flowStateTrace @@ var "fs1"))
+          (lambda "v" $ Flows.unFlow @@ (var "r" @@ var "v") @@ (Flows.flowStateState @@ var "fs1") @@ (Flows.flowStateTrace @@ var "fs1")))
+        @@ (Flows.flowStateValue @@ var "fs1")]
+    $ wrap _Flow $ var "q"
 
 bind2Def :: TElement ((Flow s a) -> (Flow s b) -> (a -> b -> Flow s c) -> Flow s c)
 bind2Def = flowsDefinition "bind2" $
@@ -124,26 +124,24 @@ mutateTraceDef = flowsDefinition "mutateTrace" $
       Types.functionN [traceT, traceT, traceT],
       tFlowSA,
       tFlowSA] $
-    lambda "mutate" $ lambda "restore" $ lambda "f" $ wrap _Flow (
-      lambda "s0" $ lambda "t0" (
-        ((match _Either Nothing [
-            _Either_left>>: var "forLeft",
-            _Either_right>>: var "forRight"])
-          @@ (var "mutate" @@ var "t0"))
-        `with` [
-          "forLeft">:
-            lambda "msg" $ Flows.flowState nothing (var "s0") (ref pushErrorDef @@ var "msg" @@ var "t0"),
-          -- retain the updated state, but reset the trace after execution
-          "forRight">:
-            function traceT (tFlowState (Types.var "s") (Types.var "s")) $
-            lambda "t1" ((Flows.flowState
+    lambda "mutate" $ lambda "restore" $ lambda "f"
+      $ wrap _Flow $ lambda "s0" $ lambda "t0" $ lets [
+        "forLeft">:
+          lambda "msg" $ Flows.flowState nothing (var "s0") (ref pushErrorDef @@ var "msg" @@ var "t0"),
+        -- retain the updated state, but reset the trace after execution
+        "forRight">:
+          function traceT (tFlowState (Types.var "s") (Types.var "s")) $
+          lambda "t1" $ lets [
+            -- execute the internal flow after augmenting the trace
+            "f2">: Flows.unFlow @@ var "f" @@ var "s0" @@ var "t1"]
+            $ Flows.flowState
                 (Flows.flowStateValue @@ var "f2")
                 (Flows.flowStateState @@ var "f2")
-                (var "restore" @@ var "t0" @@ (Flows.flowStateTrace @@ var "f2")))
-              `with` [
-                 -- execute the internal flow after augmenting the trace
-                 "f2">: Flows.unFlow @@ var "f" @@ var "s0" @@ var "t1"
-              ])]))
+                (var "restore" @@ var "t0" @@ (Flows.flowStateTrace @@ var "f2"))]
+        $ (match _Either Nothing [
+            _Either_left>>: var "forLeft",
+            _Either_right>>: var "forRight"])
+          @@ (var "mutate" @@ var "t0")
   where
     eitherT l r = Types.applyN [TypeVariable _Either, l, r]
 
@@ -156,35 +154,33 @@ pushErrorDef :: TElement (String -> Trace -> Trace)
 pushErrorDef = flowsDefinition "pushError" $
   doc "Push an error message" $
   functionN [Types.string, traceT, traceT] $
-  lambda "msg" $ lambda "t" $ ((Flows.trace
-      (Flows.traceStack @@ var "t")
-      (Lists.cons (var "errorMsg") (Flows.traceMessages @@ var "t"))
-      (Flows.traceOther @@ var "t"))
-    `with` [
-      "errorMsg">: Strings.concat ["Error: ", var "msg", " (", (Strings.intercalate " > " (Lists.reverse (Flows.traceStack @@ var "t"))), ")"]])
+  lambda "msg" $ lambda "t" $ lets [
+    "errorMsg">: Strings.concat ["Error: ", var "msg", " (", (Strings.intercalate " > " (Lists.reverse (Flows.traceStack @@ var "t"))), ")"]]
+    $ Flows.trace
+        (Flows.traceStack @@ var "t")
+        (Lists.cons (var "errorMsg") (Flows.traceMessages @@ var "t"))
+        (Flows.traceOther @@ var "t")
 
 warnDef :: TElement (String -> Flow s a -> Flow s a)
 warnDef = flowsDefinition "warn" $
   doc "Continue the current flow after adding a warning message" $
   functionN [Types.string, tFlowSA, tFlowSA] $
-  lambda "msg" $ lambda "b" $ wrap _Flow $ lambda "s0" $ lambda "t0" (
-    (Flows.flowState
-      (Flows.flowStateValue @@ var "f1")
-      (Flows.flowStateState @@ var "f1")
-      (var "addMessage" @@ (Flows.flowStateTrace @@ var "f1")))
-    `with` [
-      "f1">: Flows.unFlow @@ var "b" @@ var "s0" @@ var "t0",
-      "addMessage">: lambda "t" $ Flows.trace
-        (Flows.traceStack @@ var "t")
-        (Lists.cons ("Warning: " ++ var "msg") (Flows.traceMessages @@ var "t"))
-        (Flows.traceOther @@ var "t")])
+  lambda "msg" $ lambda "b" $ wrap _Flow $ lambda "s0" $ lambda "t0" $ lets [
+    "f1">: Flows.unFlow @@ var "b" @@ var "s0" @@ var "t0",
+    "addMessage">: lambda "t" $ Flows.trace
+      (Flows.traceStack @@ var "t")
+      (Lists.cons ("Warning: " ++ var "msg") (Flows.traceMessages @@ var "t"))
+      (Flows.traceOther @@ var "t")]
+    $ Flows.flowState
+        (Flows.flowStateValue @@ var "f1")
+        (Flows.flowStateState @@ var "f1")
+        (var "addMessage" @@ (Flows.flowStateTrace @@ var "f1"))
 
 withFlagDef :: TElement (String -> Flow s a -> Flow s a)
 withFlagDef = flowsDefinition "withFlag" $
   doc "Continue the current flow after setting a flag" $
   function nameT (Types.function tFlowSA tFlowSA) $
-  lambda "flag" ((ref mutateTraceDef @@ var "mutate" @@ var "restore")
-  `with` [
+  lambda "flag" $ lets [
     "mutate">: lambda "t" $ inject _Either _Either_right $ (Flows.trace
       (Flows.traceStack @@ var "t")
       (Flows.traceMessages @@ var "t")
@@ -192,35 +188,38 @@ withFlagDef = flowsDefinition "withFlag" $
     "restore">: lambda "ignored" $ lambda "t1" $ Flows.trace
       (Flows.traceStack @@ var "t1")
       (Flows.traceMessages @@ var "t1")
-      (Maps.remove (var "flag") (Flows.traceOther @@ var "t1"))])
+      (Maps.remove (var "flag") (Flows.traceOther @@ var "t1"))]
+    $ ref mutateTraceDef @@ var "mutate" @@ var "restore"
 
 withStateDef :: TElement (s1 -> Flow s1 a -> Flow s2 a)
 withStateDef = flowsDefinition "withState" $
   doc "Continue a flow using a given state" $
   function (Types.var "s1") (Types.function tFlowS1A tFlowS2A) $
   lambda "cx0" $ lambda "f" $
-    wrap _Flow $ lambda "cx1" $ lambda "t1" (
-      (Flows.flowState (Flows.flowStateValue @@ var "f1") (var "cx1") (Flows.flowStateTrace @@ var "f1"))
-      `with` [
-        "f1">:
-          typed (Types.apply (Types.apply (TypeVariable _FlowState) (Types.var "s1")) (Types.var "a")) $
-          Flows.unFlow @@ var "f" @@ var "cx0" @@ var "t1"])
+    wrap _Flow $ lambda "cx1" $ lambda "t1" $ lets [
+      "f1">:
+        typed (Types.apply (Types.apply (TypeVariable _FlowState) (Types.var "s1")) (Types.var "a")) $
+        Flows.unFlow @@ var "f" @@ var "cx0" @@ var "t1"]
+      $ Flows.flowState
+          (Flows.flowStateValue @@ var "f1")
+          (var "cx1")
+          (Flows.flowStateTrace @@ var "f1")
 
 withTraceDef :: TElement (String -> Flow s a -> Flow s a)
 withTraceDef = flowsDefinition "withTrace" $
   doc "Continue the current flow after augmenting the trace" $
   functionN [Types.string, tFlowSA, tFlowSA] $
-  lambda "msg" ((ref mutateTraceDef @@ var "mutate" @@ var "restore")
-    `with` [
-      -- augment the trace
-      "mutate">: lambda "t" $ Logic.ifElse (Equality.gteInt32 (Lists.length (Flows.traceStack @@ var "t")) $ ref maxTraceDepthDef)
-        (inject _Either _Either_left $ string "maximum trace depth exceeded. This may indicate an infinite loop")
-        (inject _Either _Either_right $ Flows.trace
-          (Lists.cons (var "msg") (Flows.traceStack @@ var "t"))
-          (Flows.traceMessages @@ var "t")
-          (Flows.traceOther @@ var "t")),
-      -- reset the trace stack after execution
-      "restore">: lambda "t0" $ lambda "t1" $ Flows.trace
-        (Flows.traceStack @@ var "t0")
-        (Flows.traceMessages @@ var "t1")
-        (Flows.traceOther @@ var "t1")])
+  lambda "msg" $ lets [
+    -- augment the trace
+    "mutate">: lambda "t" $ Logic.ifElse (Equality.gteInt32 (Lists.length (Flows.traceStack @@ var "t")) $ ref maxTraceDepthDef)
+      (inject _Either _Either_left $ string "maximum trace depth exceeded. This may indicate an infinite loop")
+      (inject _Either _Either_right $ Flows.trace
+        (Lists.cons (var "msg") (Flows.traceStack @@ var "t"))
+        (Flows.traceMessages @@ var "t")
+        (Flows.traceOther @@ var "t")),
+    -- reset the trace stack after execution
+    "restore">: lambda "t0" $ lambda "t1" $ Flows.trace
+      (Flows.traceStack @@ var "t0")
+      (Flows.traceMessages @@ var "t1")
+      (Flows.traceOther @@ var "t1")]
+    $ ref mutateTraceDef @@ var "mutate" @@ var "restore"

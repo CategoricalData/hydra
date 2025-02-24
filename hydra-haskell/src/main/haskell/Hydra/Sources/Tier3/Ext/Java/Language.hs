@@ -115,12 +115,10 @@ reservedWordsDef :: TElement (S.Set String)
 reservedWordsDef = javaLanguageDefinition "reservedWords" $
   doc "A set of reserved words in Java" $
   typed (tSet tString) $
-  (Sets.fromList (Lists.concat $ list [var "specialNames", var "classNames", var "keywords", var "literals"]))
-  `with` [
+  lets [
     "specialNames">:
       doc "Special names reserved for use by Hydra" $
       list ["Elements"],
-
     "classNames">:
       doc ("java.lang classes as of JDK 7\n"
         <> "See: https://docs.oracle.com/javase/7/docs/api/java/lang/package-summary.html") $
@@ -144,7 +142,6 @@ reservedWordsDef = javaLanguageDefinition "reservedWords" $
         "ThreadGroup", "ThreadLocal", "Throwable", "TypeNotPresentException",
         "UnknownError", "UnsatisfiedLinkError", "UnsupportedClassVersionError",
         "UnsupportedOperationException", "VerifyError", "VirtualMachineError", "Void"],
-
     "keywords">:
       doc ("Keywords and literals are taken from Oracle's Java Tutorials on 2022-05-27; said to be complete for Java 1.8 only\n"
           <> "See: https://docs.oracle.com/javase/tutorial/java/nutsandbolts/_keywords.html") $
@@ -154,6 +151,6 @@ reservedWordsDef = javaLanguageDefinition "reservedWords" $
         "implements", "import", "instanceof", "int", "interface", "long", "native", "new", "package", "private",
         "protected", "public", "return", "short", "static", "strictfp", "super", "switch", "synchronized", "this",
         "throw", "throws", "transient", "try", "void", "volatile", "while"],
-
     "literals">:
       list ["false", "null", "true"]]
+    $ Sets.fromList $ Lists.concat $ list [var "specialNames", var "classNames", var "keywords", var "literals"]

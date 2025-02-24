@@ -123,13 +123,13 @@ lambdas params body = case params of
 lambdaTyped :: String -> Type -> Term -> Term
 lambdaTyped param dom body = TermFunction $ FunctionLambda $ Lambda (Name param) (Just dom) body
 
-letN :: [(String, Term)] -> Term -> Term
-letN bindings body = TermLet $ Let (toBinding <$> bindings) body
-  where
-    toBinding (name, term) = LetBinding (Name name) term Nothing
-
 let1 :: String -> Term -> Term -> Term
 let1 v t1 t2 = TermLet $ Let [LetBinding (Name v) t1 Nothing] t2
+
+lets :: [Field] -> Term -> Term
+lets bindings env = TermLet $ Let (toBinding <$> bindings) env
+  where
+    toBinding (Field name value) = LetBinding name value Nothing
 
 list :: [Term] -> Term
 list = TermList
@@ -222,11 +222,6 @@ var = TermVariable . Name
 
 variant :: Name -> Name -> Term -> Term
 variant tname fname term = TermUnion $ Injection tname $ Field fname term
-
-with :: Term -> [Field] -> Term
-env `with` bindings = TermLet $ Let (toBinding <$> bindings) env
-  where
-     toBinding (Field name value) = LetBinding name value Nothing
 
 withVariant :: Name -> Name -> Term
 withVariant tname = constant . unitVariant tname
