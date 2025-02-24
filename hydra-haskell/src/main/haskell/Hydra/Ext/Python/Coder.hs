@@ -85,7 +85,8 @@ encodeDefinition :: PythonEnvironment -> Definition -> Flow Graph [Py.Statement]
 encodeDefinition env def = case def of
   DefinitionTerm name term typ -> withTrace ("data element " ++ unName name) $ do
     comment <- fmap normalizeComment <$> getTermDescription term
-    encodeTermAssignment env name term typ comment
+    g <- getState
+    encodeTermAssignment env name (expandLambdas g term) comment []
   DefinitionType name typ -> withTrace ("type element " ++ unName name) $ do
     comment <- fmap normalizeComment <$> getTypeDescription typ
     encodeTypeAssignment env name typ comment
@@ -208,7 +209,7 @@ encodeModule mod = do
     return $ Py.Module body
   where
     singleton s = [s]
-    tvarStmt name = assignmentStatement name $ functionCall (pyNameToPyPrimary $ Py.Name "TypeVar")
+    tvarStmt name = assignmentToExpression name $ functionCall (pyNameToPyPrimary $ Py.Name "TypeVar")
       [doubleQuotedString $ Py.unName name]
     imports namespaces meta = pySimpleStatementToPyStatement . Py.SimpleStatementImport <$> (standardImports ++ domainImports)
       where
@@ -274,7 +275,7 @@ encodeTerm :: PythonEnvironment -> Term -> Flow Graph Py.Expression
 encodeTerm env term = case fullyStripTerm term of
     TermApplication a -> encodeApplication env a
     TermFunction f -> encodeFunction env f
-    TermLet _ -> pure $ stringToPyExpression Py.QuoteStyleDouble "let terms are not yet supported"
+    TermLet _ -> pure $ stringToPyExpression Py.QuoteStyleDouble "let terms are not supported here"
     TermList els -> pyAtomToPyExpression . Py.AtomList . pyList <$> CM.mapM encode els
     TermLiteral lit -> encodeLiteral lit
     TermOptional mt -> case mt of
@@ -298,32 +299,37 @@ encodeTerm env term = case fullyStripTerm term of
     TermWrap (WrappedTerm tname term1) -> do
       parg <- encode term1
       return $ functionCall (pyNameToPyPrimary $ encodeNameQualified env tname) [parg]
-    t -> fail $ "unsupported term variant: " ++ show (termVariant t)
+    t -> fail $ "unsupported term variant: " ++ show (termVariant t) ++ " in " ++ show term
   where
     encode = encodeTerm env
 
-encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Type -> Maybe String -> Flow Graph [Py.Statement]
-encodeTermAssignment env name term _ comment = do
-  g <- getState
-  case (expandLambdas g $ fullyStripTerm term) of
-    TermFunction (FunctionLambda l) -> do
-        st <- encodeFunctionDefinition env name args body comment
-        return [st]
+encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Maybe String -> [Py.Statement] -> Flow Graph [Py.Statement]
+encodeTermAssignment env name term comment helpers = case fullyStripTerm term of
+    TermFunction (FunctionLambda l) -> asFunction args body
       where
         (args, body) = gatherArgs [] l
         gatherArgs prev (Lambda v _ body) = case fullyStripTerm body of
           TermFunction (FunctionLambda l1) -> gatherArgs (v:prev) l1
           _ -> (L.reverse (v:prev), body)
---    TermLet (Let bindings env) -> do
---        ...
---      where
---        ...
-    t -> do
---      if localNameOf name == "floatValueToBigfloat"
---        then fail $ "whee: " ++ show (fullyStripTerm term)
---        else return ()
-      expr <- encodeTerm env t
-      return [annotatedStatement comment $ assignmentStatement (encodeNameUnqualified name) expr]
+    TermLet (Let bindings body) -> if L.null bindings
+      then encodeTermAssignment env name body comment helpers
+      else do
+        -- TODO: topological sort of bindings
+        bindingStmts <- L.concat <$> CM.mapM encodeBinding bindings
+        encodeTermAssignment env name body comment $ helpers ++ bindingStmts
+      where
+        encodeBinding (LetBinding name1 term1 ts) = do
+          comment <- fmap normalizeComment <$> getTermDescription term1
+          encodeTermAssignment env name1 term1 comment []
+    t -> if L.null helpers
+      then do
+        expr <- encodeTerm env t
+        return [annotatedStatement comment $ assignmentToExpression (encodeNameUnqualified name) expr]
+      else asFunction [] t
+  where
+    asFunction args body = do
+      st <- encodeFunctionDefinition env name args body comment
+      return $ helpers ++ [st]
 
 encodeTopLevelTerm :: PythonEnvironment -> Term -> Flow Graph [Py.Statement]
 encodeTopLevelTerm env term = if L.length args == 1
@@ -427,7 +433,7 @@ encodeUnionType env name rt@(RowType _ tfields) comment = if isEnumType rt then 
         toVal (FieldType fname ftype) = do
           fcomment <- fmap normalizeComment <$> getTypeDescription ftype
           return $ Y.catMaybes [
-            Just $ assignmentStatement (encodeFieldName True fname) (doubleQuotedString $ unName fname),
+            Just $ assignmentToExpression (encodeFieldName True fname) (doubleQuotedString $ unName fname),
             pyExpressionToPyStatement . tripleQuotedString <$> fcomment]
     asUnion = do
       fieldStmts <- CM.mapM toFieldStmt tfields

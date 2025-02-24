@@ -151,13 +151,13 @@ casesCaseDef = decodeDefinition "casesCase" $
 fieldDef :: TElement (Name -> [Field] -> Maybe Term)
 fieldDef = decodeDefinition "field" $
   functionN [nameT, tList fieldT, tOpt termT] $
-  lambda "fname" $ lambda "fields" ((Logic.ifElse (Equality.equal (int32 1) (Lists.length $ var "matches"))
-        (just (Core.fieldTerm @@ (Lists.head $ var "matches")))
-        nothing
-    ) `with` [
-      "matches">: Lists.filter
-        (lambda "f" $ Equality.equal (Core.fieldName @@ var "f") $ var "fname")
-        (var "fields")])
+  lambdas ["fname", "fields"] $ lets [
+    "matches">: Lists.filter
+      (lambda "f" $ Equality.equal (Core.fieldName @@ var "f") $ var "fname")
+      (var "fields")]
+    $ Logic.ifElse (Equality.equal (int32 1) (Lists.length $ var "matches"))
+      (just (Core.fieldTerm @@ (Lists.head $ var "matches")))
+      nothing
 
 float32Def :: TElement (Term -> Maybe Float)
 float32Def = decodeFunctionDefinition "float32" termT tFloat32 $
@@ -250,13 +250,13 @@ letBindingDef = decodeDefinition "letBinding" $
 letBindingWithKeyDef :: TElement (Name -> [LetBinding] -> Maybe LetBinding)
 letBindingWithKeyDef = decodeDefinition "letBindingWithKey" $
   functionN [nameT, tList letBindingT, tOpt letBindingT] $
-  lambda "fname" $ lambda "bindings" ((Logic.ifElse (Equality.equal (int32 1) (Lists.length $ var "matches"))
-        (just (Lists.head $ var "matches"))
-        nothing
-    ) `with` [
-      "matches">: Lists.filter
-        (lambda "b" $ Equality.equal (Core.letBindingName @@ var "b") $ var "fname")
-        (var "bindings")])
+  lambda "fname" $ lambda "bindings" $ lets [
+    "matches">: Lists.filter
+      (lambda "b" $ Equality.equal (Core.letBindingName @@ var "b") $ var "fname")
+      (var "bindings")]
+    $ Logic.ifElse (Equality.equal (int32 1) (Lists.length $ var "matches"))
+      (just (Lists.head $ var "matches"))
+      nothing
 
 letTermDef :: TElement (Term -> Maybe Let)
 letTermDef = decodeFunctionDefinition "letTerm" termT letT $

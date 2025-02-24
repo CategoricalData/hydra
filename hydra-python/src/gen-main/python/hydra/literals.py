@@ -7,8 +7,8 @@ import hydra.lib.literals
 
 def floatValueToBigfloat(v1) :
     match v1:
-        case hydra.core.FloatValueBigfloat(v1):
-            return hydra.lib.equality.identity(v1)
+        case hydra.core.FloatValueBigfloat(f):
+            return hydra.lib.equality.identity(f)
         
         case hydra.core.FloatValueFloat32(v1):
             return hydra.lib.literals.float32ToBigfloat(v1)
@@ -23,8 +23,8 @@ def integerValueToBigint(v1) :
     """Convert an integer value of any precision to a bigint."""
     
     match v1:
-        case hydra.core.IntegerValueBigint(v1):
-            return hydra.lib.equality.identity(v1)
+        case hydra.core.IntegerValueBigint(i):
+            return hydra.lib.equality.identity(i)
         
         case hydra.core.IntegerValueInt8(v1):
             return hydra.lib.literals.int8ToBigint(v1)
