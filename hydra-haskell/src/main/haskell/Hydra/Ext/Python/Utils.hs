@@ -6,12 +6,6 @@ import qualified Hydra.Ext.Python.Syntax as Py
 import qualified Data.List as L
 
 
-assignmentStatement :: Py.Name -> Py.Expression -> Py.Statement
-assignmentStatement name expr = pyAssignmentToPyStatement $ Py.AssignmentUntyped $ Py.UntypedAssignment
-    [pyNameToPyStarTarget name]
-    (pyExpressionToPyAnnotatedRhs expr)
-    Nothing
-
 annotatedExpression :: Maybe String -> Py.Expression -> Py.Expression
 annotatedExpression mcomment expr = case mcomment of
   Nothing -> expr
@@ -23,6 +17,13 @@ annotatedStatement :: Maybe String -> Py.Statement -> Py.Statement
 annotatedStatement mcomment stmt = case mcomment of
   Nothing -> stmt
   Just c -> Py.StatementAnnotated $ Py.AnnotatedStatement c stmt
+
+assignment :: Py.Name -> Py.AnnotatedRhs -> Py.Statement
+assignment name rhs = pyAssignmentToPyStatement $ Py.AssignmentUntyped
+  $ Py.UntypedAssignment [pyNameToPyStarTarget name] rhs Nothing
+
+assignmentToExpression :: Py.Name -> Py.Expression -> Py.Statement
+assignmentToExpression name expr = assignment name $ pyExpressionToPyAnnotatedRhs expr
 
 commentStatement :: String -> Py.Statement
 commentStatement = pyExpressionToPyStatement . tripleQuotedString
@@ -74,8 +75,8 @@ nameAndParams :: Py.Name -> [Py.Expression] -> Py.Expression
 nameAndParams pyName params = primaryAndParams (pyNameToPyPrimary pyName) params
 
 newtypeStatement :: Py.Name -> Maybe String -> Py.Expression -> Py.Statement
-newtypeStatement name mcomment expr = annotatedStatement mcomment $ assignmentStatement name $
-  functionCall (pyNameToPyPrimary $ Py.Name "NewType") [doubleQuotedString $ Py.unName name, expr]
+newtypeStatement name mcomment expr = annotatedStatement mcomment $ assignmentToExpression name
+  $ functionCall (pyNameToPyPrimary $ Py.Name "NewType") [doubleQuotedString $ Py.unName name, expr]
 
 normalizeComment :: String -> String
 normalizeComment s = if L.null stripped
