@@ -97,13 +97,13 @@ pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
 
 pythonReservedWordsDef :: TElement (S.Set String)
 pythonReservedWordsDef = pythonLanguageDefinition "pythonReservedWords" $
-    doc "A set of reserved words in Python" $
-    typed (tSet tString) $
-    (Sets.fromList $ var "keywords")
-  `with` [
+  doc "A set of reserved words in Python" $
+  typed (tSet tString) $
+  lets [
     "keywords">:
       doc "Python keywords, as enumerated at https://docs.python.org/3.13/reference/lexical_analysis.html#keywords" $
       list [
         "False", "None", "True", "and", "as", "assert", "async", "await", "break", "class", "continue", "def", "del",
         "elif", "else", "except", "finally", "for", "from", "global", "if", "import", "in", "is", "lambda", "nonlocal",
         "not", "or", "pass", "raise", "return", "try", "while", "with", "yield"]]
+    $ Sets.fromList $ var "keywords"

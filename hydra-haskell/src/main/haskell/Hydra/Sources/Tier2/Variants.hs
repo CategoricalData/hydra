@@ -322,13 +322,13 @@ typeVariantsDef = variantsDefinition "typeVariants" $
 fieldMapDef :: TElement ([Field] -> M.Map Name Term)
 fieldMapDef = variantsDefinition "fieldMap" $
   function (TypeList fieldT) (tMap fieldNameT termT) $
-  (lambda "fields" $ Maps.fromList (Lists.map (var "toPair") (var "fields")))
-    `with` [
-      "toPair">: lambda "f" $ pair (Core.fieldName @@ var "f") (Core.fieldTerm @@ var "f")]
+  lets [
+    "toPair">: lambda "f" $ pair (Core.fieldName @@ var "f") (Core.fieldTerm @@ var "f")]
+    $ lambda "fields" $ Maps.fromList $ Lists.map (var "toPair") (var "fields")
 
 fieldTypeMapDef :: TElement ([FieldType] -> M.Map Name Type)
 fieldTypeMapDef = variantsDefinition "fieldTypeMap" $
   function (TypeList fieldTypeT) (tMap fieldNameT typeT) $
-    (lambda "fields" $ Maps.fromList (Lists.map (var "toPair") (var "fields")))
-  `with` [
+  lets [
     "toPair">: lambda "f" $ pair (Core.fieldTypeName @@ var "f") (Core.fieldTypeType @@ var "f")]
+    $ lambda "fields" $ Maps.fromList $ Lists.map (var "toPair") (var "fields")

@@ -38,13 +38,15 @@ checkRawInference = check "raw inference" $ do
     H.describe "test #2" $ do
       H.it "Raw" $
         expectRawType
-          ((var "id" @@ (list [var "id" @@ int32 42])) `with` [
-            "id">: lambda "x" $ var "x"])
+          (lets [
+            "id">: lambda "x" $ var "x"]
+            $ var "id" @@ (list [var "id" @@ int32 42]))
           (Types.var "tv_6")
       H.it "Unified and normalized" $
         expectType
-          ((var "id" @@ (list [var "id" @@ int32 42])) `with` [
-            "id">: lambda "x" $ var "x"])
+          (lets [
+            "id">: lambda "x" $ var "x"]
+            $ var "id" @@ (list [var "id" @@ int32 42]))
           (Types.list Types.int32)
 
 checkTypeAnnotations :: H.SpecWith ()
@@ -154,11 +156,10 @@ checkSubtermAnnotations = check "additional subterm annotations" $ do
 
     H.describe "Unannotated 'let' terms" $ do
       H.describe "test #1" $ do
-        let testCase = lambda "i" $
-                         (Terms.primitive _strings_cat @@ list [string "foo", var "i", string "bar"])
-                         `with` [
-                           "foo">: string "FOO",
-                           "bar">: string "BAR"]
+        let testCase = lambda "i" $ lets [
+                         "foo">: string "FOO",
+                         "bar">: string "BAR"]
+                         $ Terms.primitive _strings_cat @@ list [string "foo", var "i", string "bar"]
         H.it "condition #1" $
           expectTypeAnnotation pure testCase
             (Types.function Types.string Types.string)
@@ -166,9 +167,7 @@ checkSubtermAnnotations = check "additional subterm annotations" $ do
           expectTypeAnnotation Expect.lambdaBody testCase
             Types.string
       H.describe "test #2" $ do
-        let testCase = lambda "original" $
-                         var "alias" `with` [
-                           "alias">: var "original"]
+        let testCase = lambda "original" $ lets ["alias">:  var "original"] $ var "alias"
         H.it "condition #1" $
           expectTypeAnnotation pure testCase
             (Types.lambda "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
@@ -179,9 +178,9 @@ checkSubtermAnnotations = check "additional subterm annotations" $ do
           expectTypeAnnotation (Expect.lambdaBody >=> Expect.letBinding "alias") testCase
             (Types.lambda "t0" $ Types.var "t0")
       H.describe "test #3" $ do
-        let testCase = lambda "fun" $ lambda "t" $
-                         ((var "funAlias" @@ var "t") `with` [
-                           "funAlias">: var "fun"])
+        let testCase = lambda "fun" $ lambda "t" $ lets [
+                         "funAlias">: var "fun"]
+                         $ var "funAlias" @@ var "t"
         let funType = Types.function (Types.var "t0") (Types.var "t1")
         H.it "condition #1" $
           expectTypeAnnotation pure testCase

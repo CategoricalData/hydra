@@ -63,18 +63,17 @@ requireElementTypeDef :: TElement (Element -> Flow Graph Type)
 requireElementTypeDef = annotationsDefinition "requireElementType" $
   doc "Get the annotated type of a given element, or fail if it is missing" $
   function elementT (tFlow graphT typeT) $
-  lambda "el" $ ((var "withType" @@ (ref getTermTypeDef @@ (project _Element _Element_data @@ var "el")))
-    `with` [
-      "withType">: matchOpt
-       (Flows.fail ("missing type annotation for element " ++ (unwrap _Name @@ (project _Element _Element_name @@ var "el"))))
-       $ lambda "t" $ Flows.pure $ var "t"])
+  lambda "el" $ lets [
+    "withType">: matchOpt
+      (Flows.fail ("missing type annotation for element " ++ (unwrap _Name @@ (project _Element _Element_name @@ var "el"))))
+        $ lambda "t" $ Flows.pure $ var "t"]
+    $ var "withType" @@ (ref getTermTypeDef @@ (project _Element _Element_data @@ var "el"))
 
 requireTermTypeDef :: TElement (Term -> Flow Graph Type)
 requireTermTypeDef = annotationsDefinition "requireTermType" $
   doc "Get the annotated type of a given term, or fail if it is missing" $
-  function termT (tFlow graphT typeT) $
-  (var "withType" <.> ref getTermTypeDef)
-    `with` [
-      "withType">: matchOpt
-       (Flows.fail "missing type annotation")
-       $ lambda "t" $ Flows.pure $ var "t"]
+  function termT (tFlow graphT typeT) $ lets [
+    "withType">: matchOpt
+     (Flows.fail "missing type annotation")
+     $ lambda "t" $ Flows.pure $ var "t"]
+    $ var "withType" <.> ref getTermTypeDef

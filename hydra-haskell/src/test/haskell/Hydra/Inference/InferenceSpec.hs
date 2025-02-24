@@ -140,11 +140,10 @@ checkSubtermAnnotations = H.describe "Check additional subterm annotations" $ do
 
     H.describe "Check unannotated 'let' terms" $ do
       H.describe "test #1" $ do
-        let testCase = lambda "i" $
-                         (Terms.primitive _strings_cat @@ list [string "foo", var "i", string "bar"])
-                         `with` [
-                           "foo">: string "FOO",
-                           "bar">: string "BAR"]
+        let testCase = lambda "i" $ lets [
+                         "foo">: string "FOO",
+                         "bar">: string "BAR"]
+                         $ Terms.primitive _strings_cat @@ list [string "foo", var "i", string "bar"]
         H.it "case #1" $
           expectTypeAnnotation pure testCase
             (Types.function Types.string Types.string)
@@ -152,9 +151,9 @@ checkSubtermAnnotations = H.describe "Check additional subterm annotations" $ do
           expectTypeAnnotation Expect.lambdaBody testCase
             Types.string
       H.describe "test #2" $ do
-        let testCase = lambda "original" $
-                         var "alias" `with` [
-                           "alias">: var "original"]
+        let testCase = lambda "original" $ lets [
+                         "alias">: var "original"]
+                         $ var "alias"
         H.it "case #1" $
           expectTypeAnnotation pure testCase
             (Types.function (Types.var "t0") (Types.var "t0"))
@@ -165,9 +164,9 @@ checkSubtermAnnotations = H.describe "Check additional subterm annotations" $ do
           expectTypeAnnotation (Expect.lambdaBody >=> Expect.letBinding "alias") testCase
             (Types.var "t0")
       H.describe "test #3" $ do
-        let testCase = lambda "fun" $ lambda "t" $
-                         ((var "funAlias" @@ var "t") `with` [
-                           "funAlias">: var "fun"])
+        let testCase = lambda "fun" $ lambda "t" $ lets [
+                         "funAlias">: var "fun"]
+                         $ var "funAlias" @@ var "t"
         let funType = Types.function (Types.var "t1") (Types.var "t2")
         H.it "case #1" $
           expectTypeAnnotation pure testCase
@@ -201,15 +200,17 @@ checkTypeDefinitions = check "type definition terms" $ do
           $ variant testTypeHydraLiteralTypeName (Name "boolean") $ int32 42)
     H.it "test #2.a" $
       expectType
-        ((variant testTypeHydraTypeName (Name "list") $ var "otherType") `with` [
+        (lets [
           "otherType">: variant testTypeHydraTypeName (Name "literal")
-            $ variant testTypeHydraLiteralTypeName (Name "boolean") unit])
+            $ variant testTypeHydraLiteralTypeName (Name "boolean") unit]
+          $ variant testTypeHydraTypeName (Name "list") $ var "otherType")
         (TypeVariable testTypeHydraTypeName)
     H.it "test #2.b" $
       expectFailure
-        ((variant testTypeHydraTypeName (Name "list") $ var "otherType") `with` [
+        (lets [
           "otherType">: variant testTypeHydraTypeName (Name "literal")
-            $ variant testTypeHydraLiteralTypeName (Name "boolean") $ int32 42])
+            $ variant testTypeHydraLiteralTypeName (Name "boolean") $ int32 42]
+          $ variant testTypeHydraTypeName (Name "list") $ var "otherType")
 
 --checkTypedTerms :: H.SpecWith ()
 --checkTypedTerms = H.describe "Check that term/type pairs are consistent with type inference" $ do

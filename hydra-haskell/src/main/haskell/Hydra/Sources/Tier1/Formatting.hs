@@ -54,25 +54,26 @@ convertCaseDef :: TElement (CaseConvention -> CaseConvention -> String -> String
 convertCaseDef = formattingDefinition "convertCase" $
   doc "Convert a string from one case convention to another" $
   functionN [caseConventionT, caseConventionT, tString, tString] $
-  lambda "from" $ lambda "to" $ lambda "original" $ ((match _CaseConvention Nothing [
+  lambda "from" $ lambda "to" $ lambda "original" $ lets [
+    "parts">: lets [
+      "byCaps">: lets [
+        "splitOnUppercase">: lambda "acc" $ lambda "c" $ Lists.concat2
+          (Logic.ifElse (Chars.isUpper $ var "c") emptyParts (list []))
+          (Lists.cons (Lists.cons (var "c") (Lists.head $ var "acc")) (Lists.tail $ var "acc"))]
+        $ Lists.map (primitive _strings_fromList) $ Lists.foldl (var "splitOnUppercase") emptyParts
+          $ Lists.reverse $ Strings.toList (ref decapitalizeDef @@ var "original"),
+      "byUnderscores">: Strings.splitOn (string "_") $ var "original"]
+      $ (match _CaseConvention Nothing [
+        _CaseConvention_camel>>: constant $ var "byCaps",
+        _CaseConvention_pascal>>: constant $ var "byCaps",
+        _CaseConvention_lowerSnake>>: constant $ var "byUnderscores",
+        _CaseConvention_upperSnake>>: constant $ var "byUnderscores"]) @@ var "from"]
+    $ (match _CaseConvention Nothing [
       _CaseConvention_camel>>: constant $ ref decapitalizeDef @@ (Strings.cat (Lists.map (ref capitalizeDef <.> primitive _strings_toLower) $ var "parts")),
       _CaseConvention_pascal>>: constant $ Strings.cat (Lists.map (ref capitalizeDef <.> primitive _strings_toLower) $ var "parts"),
       _CaseConvention_lowerSnake>>: constant $ Strings.intercalate (string "_") (Lists.map (primitive _strings_toLower) $ var "parts"),
       _CaseConvention_upperSnake>>: constant $ Strings.intercalate (string "_") (Lists.map (primitive _strings_toUpper) $ var "parts")
-      ]) @@ var "to")
-    `with` [
-      "parts">: ((match _CaseConvention Nothing [
-        _CaseConvention_camel>>: constant $ var "byCaps",
-        _CaseConvention_pascal>>: constant $ var "byCaps",
-        _CaseConvention_lowerSnake>>: constant $ var "byUnderscores",
-        _CaseConvention_upperSnake>>: constant $ var "byUnderscores"]) @@ var "from") `with` [
-          "byCaps">: (Lists.map (primitive _strings_fromList)
-            (Lists.foldl (var "splitOnUppercase") emptyParts
-              (Lists.reverse (Strings.toList (ref decapitalizeDef @@ var "original"))))) `with` [
-              "splitOnUppercase">: lambda "acc" $ lambda "c" $ Lists.concat2
-                (Logic.ifElse (Chars.isUpper $ var "c") emptyParts (list []))
-                (Lists.cons (Lists.cons (var "c") (Lists.head $ var "acc")) (Lists.tail $ var "acc"))],
-          "byUnderscores">: Strings.splitOn (string "_") $ var "original"]]
+      ]) @@ var "to"
   where
     emptyParts = list [list []]
 
@@ -105,10 +106,10 @@ mapFirstLetterDef :: TElement ((String -> String) -> String -> String)
 mapFirstLetterDef = formattingDefinition "mapFirstLetter" $
   doc "A helper which maps the first letter of a string to another string" $
   function (tFun tString tString) (tFun tString tString) $
-  lambda "mapping" $ lambda "s" ((Logic.ifElse (Strings.isEmpty $ var "s")
-       (var "s")
-       (Strings.cat2 (var "firstLetter") (Strings.fromList (Lists.tail $ var "list"))))
-    `with` [
-      "firstLetter">: var "mapping" @@ (Strings.fromList (Lists.pure (Lists.head $ var "list"))),
-      "list">: typed (tList tInt32) $ Strings.toList $ var "s"])
-
+  lambda "mapping" $ lambda "s" $ lets [
+    "firstLetter">: var "mapping" @@ (Strings.fromList (Lists.pure (Lists.head $ var "list"))),
+    "list">: typed (tList tInt32) $ Strings.toList $ var "s"]
+    $ Logic.ifElse
+        (Strings.isEmpty $ var "s")
+        (var "s")
+        (Strings.cat2 (var "firstLetter") (Strings.fromList (Lists.tail $ var "list")))
