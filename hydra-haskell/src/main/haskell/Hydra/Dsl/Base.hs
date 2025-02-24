@@ -141,6 +141,11 @@ lambdas params (TTerm body) = TTerm $ Terms.lambdas params body
 --letTerm :: Var a -> TTerm a -> TTerm b -> TTerm b
 --letTerm (Var k) (TTerm v) (TTerm env) = TTerm $ Terms.letTerm (Name k) v env
 
+lets :: [Field] -> TTerm a -> TTerm a
+lets fields (TTerm env) = TTerm $ TermLet $ Let (toBinding <$> fields) env
+  where
+     toBinding (Field name value) = LetBinding name value Nothing
+
 list :: [TTerm a] -> TTerm [a]
 list els = TTerm $ Terms.list (unTTerm <$> els)
 

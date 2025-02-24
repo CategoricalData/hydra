@@ -4,6 +4,7 @@ from __future__ import annotations
 import hydra.core
 import hydra.lib.equality
 import hydra.lib.lists
+import hydra.lib.maps
 import hydra.lib.optionals
 import hydra.lib.sets
 import hydra.strip
@@ -295,6 +296,9 @@ def coreEncodeTerm(v1) :
         case hydra.core.TermList(v):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("list"), hydra.core.TermList(hydra.lib.lists.map("coreEncodeTerm")(v)))))
         
+        case hydra.core.TermMap(v):
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("map"), hydra.core.TermMap(hydra.lib.maps.bimap("coreEncodeTerm")("coreEncodeTerm")(v)))))
+        
         case hydra.core.TermOptional(v):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("optional"), hydra.core.TermOptional(hydra.lib.optionals.map("coreEncodeTerm")(v)))))
         
@@ -329,7 +333,7 @@ def coreEncodeTerm(v1) :
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("wrap"), coreEncodeWrappedTerm(v))))
         
         case _:
-            return hydra.core.TermLiteral(hydra.core.LiteralString("not implemented"))
+            raise TypeError("Unsupported Term")
 
 def coreEncodeTupleProjection(tp) :
     hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TupleProjection"), [
