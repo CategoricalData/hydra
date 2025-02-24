@@ -122,11 +122,11 @@ testExpandLambdas g = do
     H.describe "Try let terms" $ do
       H.it "test #1" $
         noChange
-          (int32 42 `with` ["foo">: int32 137])
+          (lets ["foo">: int32 137] $ int32 42)
       H.it "test #2" $
         expandsTo
-          (var "foo" `with` ["foo">: splitOn])
-          (var "foo" `with` ["foo">: lambda "v1" $ lambda "v2" $ splitOn @@ var "v1" @@ var "v2"])
+          (lets ["foo">: splitOn] $ var "foo")
+          (lets ["foo">: lambda "v1" $ lambda "v2" $ splitOn @@ var "v1" @@ var "v2"] $ var "foo")
 
     H.describe "Try other subterms" $ do
       H.it "test #1" $

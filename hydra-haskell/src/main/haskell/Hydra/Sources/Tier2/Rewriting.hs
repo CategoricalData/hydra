@@ -80,8 +80,11 @@ freeVariablesInTermDef :: TElement (Term -> S.Set Name)
 freeVariablesInTermDef = rewritingDefinition "freeVariablesInTerm" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a term" $
   function termT (tSet nameT) $
-  lambda "term" (
-    (match _Term (Just $ var "dfltVars") [
+  lambda "term" $ lets [
+    "dfltVars">: typed (tSet nameT) $ Base.fold (lambda "s" $ lambda "t" $ Sets.union (var "s") (ref freeVariablesInTermDef @@ var "t"))
+      @@ Sets.empty
+      @@ (ref subtermsDef @@ var "term")]
+    $ match _Term (Just $ var "dfltVars") [
       _Term_function>>: match _Function (Just $ var "dfltVars") [
         _Function_lambda>>: lambda "l" (Sets.remove
           (Core.lambdaParameter @@ var "l")
@@ -90,27 +93,22 @@ freeVariablesInTermDef = rewritingDefinition "freeVariablesInTerm" $
 --      _Term_let>>: lambda "l" (Sets.difference
 --        @@ (ref freeVariablesInTermDef @@ (Core.letEnvironment @@ var "l"))
 --        @@ (Sets.fromList (Lists.map first (Maps.toList (Core.letBindings @@ var "l"))))),
-      _Term_variable>>: lambda "v" (Sets.singleton $ var "v")] @@ var "term")
-    `with` [
-      "dfltVars">: typed (tSet nameT) $ Base.fold (lambda "s" $ lambda "t" $ Sets.union (var "s") (ref freeVariablesInTermDef @@ var "t"))
-        @@ Sets.empty
-        @@ (ref subtermsDef @@ var "term")])
+      _Term_variable>>: lambda "v" (Sets.singleton $ var "v")] @@ var "term"
 
 freeVariablesInTypeDef :: TElement (Type -> S.Set Name)
 freeVariablesInTypeDef = rewritingDefinition "freeVariablesInType" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a type" $
   function typeT (tSet nameT) $
-  lambda "typ" (
-    (match _Type (Just $ var "dfltVars") [
+  lambda "typ" $ lets [
+    "dfltVars">: typed (tSet nameT) $ Base.fold (lambda "s" $ lambda "t" $ Sets.union (var "s") (recurse @@ var "t"))
+      @@ Sets.empty
+      @@ (ref subtypesDef @@ var "typ")]
+    $ match _Type (Just $ var "dfltVars") [
       _Type_lambda>>: lambda "lt" (Sets.remove
           (Core.lambdaTypeParameter @@ var "lt")
           (recurse @@ (Core.lambdaTypeBody @@ var "lt"))),
       -- TODO: let-types
-      _Type_variable>>: lambda "v" (Sets.singleton $ var "v")] @@ var "typ")
-    `with` [
-      "dfltVars">: typed (tSet nameT) $ Base.fold (lambda "s" $ lambda "t" $ Sets.union (var "s") (recurse @@ var "t"))
-        @@ Sets.empty
-        @@ (ref subtypesDef @@ var "typ")])
+      _Type_variable>>: lambda "v" (Sets.singleton $ var "v")] @@ var "typ"
   where
     recurse = ref freeVariablesInTypeDef
 

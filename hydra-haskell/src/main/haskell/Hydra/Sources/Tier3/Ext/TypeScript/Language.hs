@@ -75,15 +75,15 @@ typeScriptReservedWordsDef :: TElement (S.Set String)
 typeScriptReservedWordsDef = typeScriptLanguageDefinition "typeScriptReservedWords" $
     doc "A set of reserved words in TypeScript. Taken directly from https://github.com/microsoft/TypeScript/issues/2536" $
     typed (tSet tString) $
-    (Sets.fromList (Lists.concat $
-      list [var "reservedWords", var "strictModeReservedWords", var "contextuallKeywords"]))
-  `with` [
-    "reservedWords">: list [
-      "delete", "do", "else", "enum", "export", "extends", "false", "finally", "for", "function", "if", "import",
-      "in", "instanceof", "new", "null", "return", "super", "switch", "this", "throw", "true", "try", "typeof", "var",
-      "void", "while", "with"],
-    "strictModeReservedWords">: list [
-      "as", "implements", "interface", "let", "package", "private", "protected", "public", "static", "yield"],
-    "contextuallKeywords">: list [
-      "any", "boolean", "constructor", "declare", "from", "get", "module", "number", "of", "require", "set", "string",
-      "symbol", "type"]]
+    lets [
+      "reservedWords">: list [
+        "delete", "do", "else", "enum", "export", "extends", "false", "finally", "for", "function", "if", "import",
+        "in", "instanceof", "new", "null", "return", "super", "switch", "this", "throw", "true", "try", "typeof", "var",
+        "void", "while", "with"],
+      "strictModeReservedWords">: list [
+        "as", "implements", "interface", "let", "package", "private", "protected", "public", "static", "yield"],
+      "contextuallKeywords">: list [
+        "any", "boolean", "constructor", "declare", "from", "get", "module", "number", "of", "require", "set", "string",
+        "symbol", "type"]]
+      $ Sets.fromList $ Lists.concat $
+        list [var "reservedWords", var "strictModeReservedWords", var "contextuallKeywords"]
