@@ -54,7 +54,7 @@ convertCaseDef :: TElement (CaseConvention -> CaseConvention -> String -> String
 convertCaseDef = formattingDefinition "convertCase" $
   doc "Convert a string from one case convention to another" $
   functionN [caseConventionT, caseConventionT, tString, tString] $
-  lambda "from" $ lambda "to" $ lambda "original" $ lets [
+  lambdas ["from", "to", "original"] $ lets [
     "parts">: lets [
       "byCaps">: lets [
         "splitOnUppercase">: lambda "acc" $ lambda "c" $ Lists.concat2
