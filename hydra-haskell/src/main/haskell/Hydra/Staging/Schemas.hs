@@ -1,24 +1,6 @@
 -- | Various functions for dereferencing and decoding schema types
 
-module Hydra.Staging.Schemas (
-  Definition(..),
-  Namespaces(..),
-  definitionDependencyNamespaces,
-  dependencyNamespaces,
-  elementAsTypedTerm,
-  fieldTypes,
-  isEnumType,
-  isSerializable,
-  moduleDependencyNamespaces,
-  namespacesForDefinitions,
-  requireRecordType,
-  requireType,
-  requireUnionType,
-  requireWrappedType,
-  resolveType,
-  typeDependencies,
-  typeDependencyNames,
-  ) where
+module Hydra.Staging.Schemas where
 
 import Hydra.Annotations
 import Hydra.Variants
@@ -91,6 +73,13 @@ dereferenceType name = do
 elementAsTypedTerm :: Element -> Flow Graph TypedTerm
 elementAsTypedTerm el = do
   typ <- requireTermType $ elementData el
+  return $ TypedTerm (elementData el) typ
+
+-- TODO: a graph is a let-expression, so it should be trivial to get the type scheme of an element upon lookup. See issue #159.
+lookupTypedTerm :: Graph -> Name -> Maybe TypedTerm
+lookupTypedTerm g name = do
+  el <- lookupElement g name
+  typ <- getTermType $ elementData el
   return $ TypedTerm (elementData el) typ
 
 fieldTypes :: Type -> Flow Graph (M.Map Name Type)

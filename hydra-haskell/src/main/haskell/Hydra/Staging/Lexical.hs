@@ -19,9 +19,7 @@ import Control.Monad
 
 
 dereferenceElement :: Name -> Flow Graph (Maybe Element)
-dereferenceElement name = do
-  g <- getState
-  return $ M.lookup name (graphElements g)
+dereferenceElement name = lookupElement <$> getState <*> pure name
 
 fieldsOf :: Type -> [FieldType]
 fieldsOf t = case stripType t of
@@ -29,6 +27,9 @@ fieldsOf t = case stripType t of
   TypeRecord rt -> rowTypeFields rt
   TypeUnion rt -> rowTypeFields rt
   _ -> []
+
+lookupElement :: Graph -> Name -> Maybe Element
+lookupElement g name = M.lookup name $ graphElements g
 
 requireElement :: Name -> Flow Graph Element
 requireElement name = do
