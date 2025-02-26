@@ -33,7 +33,7 @@ import Hydra.Sources.Tier2.Variants
 hydraAnnotationsModule :: Module
 hydraAnnotationsModule = Module (Namespace "hydra.annotations") elements
     [hydraVariantsModule]
-    [hydraCoreModule] $
+    [hydraGraphModule] $
     Just "Utilities for reading and writing type and term annotations"
   where
    elements = [
