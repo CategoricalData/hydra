@@ -34,7 +34,8 @@ qnamesDefinition :: String -> TTerm a -> TElement a
 qnamesDefinition = definitionInModule hydraQnamesModule
 
 hydraQnamesModule :: Module
-hydraQnamesModule = Module (Namespace "hydra.qnames") elements [] [hydraMantleModule, hydraModuleModule] $
+hydraQnamesModule = Module (Namespace "hydra.qnames") elements
+    [hydraFormattingModule] [hydraMantleModule, hydraModuleModule] $
     Just ("Functions for working with qualified names.")
   where
    elements = [
