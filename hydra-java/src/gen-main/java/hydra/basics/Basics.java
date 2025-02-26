@@ -570,11 +570,11 @@ public interface Basics {
       java.util.List<Integer> list = hydra.lib.strings.ToList.apply((s));
       String firstLetter = ((mapping)).apply(hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(hydra.lib.lists.Head.apply((list)))));
       return hydra.lib.logic.IfElse.apply(
+              hydra.lib.strings.IsEmpty.apply((s)),
         (s),
         hydra.lib.strings.Cat2.apply(
           (firstLetter),
-          hydra.lib.strings.FromList.apply(hydra.lib.lists.Tail.apply((list)))),
-        hydra.lib.strings.IsEmpty.apply((s)));
+          hydra.lib.strings.FromList.apply(hydra.lib.lists.Tail.apply((list)))));
     });
   }
 
@@ -672,9 +672,9 @@ public interface Basics {
     return (java.util.function.Function<hydra.module.FileExtension, java.util.function.Function<hydra.module.Namespace, String>>) (ext -> (java.util.function.Function<hydra.module.Namespace, String>) (ns -> {
       java.util.List<String> parts = hydra.lib.lists.Map.apply(
           hydra.lib.logic.IfElse.apply(
+                  caps,
               (hydra.basics.Basics::capitalize),
-              (hydra.basics.Basics::id),
-              (caps)),
+              (hydra.basics.Basics::id)),
           hydra.lib.strings.SplitOn.apply(
               "/",
               ((ns)).value));
@@ -693,12 +693,13 @@ public interface Basics {
       ".",
       ((name)).value);
     return hydra.lib.logic.IfElse.apply(
+            hydra.lib.equality.EqualInt32.apply(
+                    1,
+                    hydra.lib.lists.Length.apply((parts))),
       new hydra.module.QualifiedName(hydra.util.Opt.empty(), ((name)).value),
       new hydra.module.QualifiedName(hydra.util.Opt.of(new hydra.module.Namespace(hydra.lib.lists.Head.apply((parts)))), hydra.lib.strings.Intercalate.apply(
         ".",
-        hydra.lib.lists.Tail.apply((parts)))),
-      hydra.lib.equality.EqualInt32.apply(
-        1,
-        hydra.lib.lists.Length.apply((parts))));
+        hydra.lib.lists.Tail.apply((parts))))
+      );
   }
 }

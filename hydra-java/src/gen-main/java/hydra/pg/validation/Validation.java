@@ -119,11 +119,12 @@ public interface Validation {
         (checkValues_checkPair),
         hydra.lib.maps.ToList.apply((props))));
       java.util.function.Function<hydra.pg.model.PropertyType<T>, Opt<String>> checkType = (java.util.function.Function<hydra.pg.model.PropertyType<T>, Opt<String>>) (t -> hydra.lib.logic.IfElse.apply(
+              ((t)).required,
         ((hydra.lib.maps.Lookup.apply(
           ((t)).key,
           (props))).map((java.util.function.Function<V, Opt<String>>) (ignored -> Opt.empty()))).orElse(Opt.of((hydra.pg.validation.Validation.prepend("Missing value for ")).apply((((t)).key).value))),
-        Opt.empty(),
-        ((t)).required));
+        Opt.empty()
+        ));
       Opt<String> checkTypes = hydra.pg.validation.Validation.checkAll(hydra.lib.lists.Map.apply(
         (checkType),
         (types)));
@@ -185,9 +186,9 @@ public interface Validation {
   
   static java.util.function.Function<String, Opt<String>> verify(Boolean b) {
     return (java.util.function.Function<String, Opt<String>>) (err -> hydra.lib.logic.IfElse.apply(
+            b,
       Opt.empty(),
-      Opt.of((err)),
-      (b)));
+      Opt.of((err))));
   }
   
   static <V> java.util.function.Function<hydra.pg.model.Vertex<V>, java.util.function.Function<String, String>> vertexError(java.util.function.Function<V, String> a1) {
