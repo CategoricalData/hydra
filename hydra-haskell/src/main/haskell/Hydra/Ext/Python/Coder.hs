@@ -86,7 +86,7 @@ encodeDefinition env def = case def of
   DefinitionTerm name term typ -> withTrace ("data element " ++ unName name) $ do
     comment <- fmap normalizeComment <$> getTermDescription term
     g <- getState
-    encodeTermAssignment env name (expandLambdas g term) comment []
+    encodeTermAssignment env name (expandLambdas g term) comment
   DefinitionType name typ -> withTrace ("type element " ++ unName name) $ do
     comment <- fmap normalizeComment <$> getTypeDescription typ
     encodeTypeAssignment env name typ comment
@@ -136,11 +136,11 @@ encodeFunction env f = case f of
   FunctionPrimitive name -> pure $ variableReference False env name -- Only nullary primitives should appear here.
   _ -> fail $ "unexpected function variant: " ++ show (functionVariant f)
 
-encodeFunctionDefinition :: PythonEnvironment -> Name -> [Name] -> Term -> Maybe String -> Flow Graph Py.Statement
-encodeFunctionDefinition env name args body comment = do
+encodeFunctionDefinition :: PythonEnvironment -> Name -> [Name] -> Term -> Maybe String -> [Py.Statement] -> Flow Graph Py.Statement
+encodeFunctionDefinition env name args body comment prefixes = do
     let params = Py.ParametersParamNoDefault $ Py.ParamNoDefaultParameters (toParam <$> args) [] Nothing
     stmts <- encodeTopLevelTerm env body
-    let block = indentedBlock comment [stmts]
+    let block = indentedBlock comment [prefixes ++ stmts]
     return $ Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing
       $ Py.FunctionDefRaw False (encodeNameUnqualified name) [] (Just params) Nothing Nothing block
   where
@@ -249,7 +249,7 @@ encodeNameQualified env name = case M.lookup name (snd $ pythonEnvironmentBoundT
     Just n -> n
     Nothing -> if ns == Just focusNs
       then Py.Name $ if _useFutureAnnotations_ then local else PySer.escapePythonString True local
-      else Py.Name $ L.intercalate "." $ Strings.splitOn "." $ unName name
+      else Py.Name $ L.intercalate "." (sanitizePythonName <$> (Strings.splitOn "." $ unName name))
   where
     focusNs = fst $ namespacesFocus $ pythonEnvironmentNamespaces env
     QualifiedName ns local = qualifyName name
@@ -303,33 +303,27 @@ encodeTerm env term = case fullyStripTerm term of
   where
     encode = encodeTerm env
 
-encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Maybe String -> [Py.Statement] -> Flow Graph [Py.Statement]
-encodeTermAssignment env name term comment helpers = case fullyStripTerm term of
-    TermFunction (FunctionLambda l) -> asFunction args body
-      where
-        (args, body) = gatherArgs [] l
-        gatherArgs prev (Lambda v _ body) = case fullyStripTerm body of
-          TermFunction (FunctionLambda l1) -> gatherArgs (v:prev) l1
-          _ -> (L.reverse (v:prev), body)
-    TermLet (Let bindings body) -> if L.null bindings
-      then encodeTermAssignment env name body comment helpers
-      else do
+encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Maybe String -> Flow Graph [Py.Statement]
+encodeTermAssignment env name term comment = if L.null args && L.null bindings
+    -- If there are no arguments or let bindings, use a simple a = b assignment.
+    then do
+      bodyExpr <- encodeTerm env body
+      return [annotatedStatement comment $ assignmentToExpression (encodeNameUnqualified name) bodyExpr]
+    -- If there are either arguments or let bindings, then only a function definition will work.
+    else do
         -- TODO: topological sort of bindings
         bindingStmts <- L.concat <$> CM.mapM encodeBinding bindings
-        encodeTermAssignment env name body comment $ helpers ++ bindingStmts
-      where
-        encodeBinding (LetBinding name1 term1 ts) = do
-          comment <- fmap normalizeComment <$> getTermDescription term1
-          encodeTermAssignment env name1 term1 comment []
-    t -> if L.null helpers
-      then do
-        expr <- encodeTerm env t
-        return [annotatedStatement comment $ assignmentToExpression (encodeNameUnqualified name) expr]
-      else asFunction [] t
+        bodyStmt <- encodeFunctionDefinition env name args body comment bindingStmts
+        return [bodyStmt]
   where
-    asFunction args body = do
-      st <- encodeFunctionDefinition env name args body comment
-      return $ helpers ++ [st]
+    encodeBinding (LetBinding name1 term1 ts) = do
+      comment <- fmap normalizeComment <$> getTermDescription term1
+      encodeTermAssignment env name1 term1 comment
+    (args, bindings, body) = gatherArgsAndBindings [] [] term
+    gatherArgsAndBindings prevArgs prevBindings term = case fullyStripTerm term of
+      TermFunction (FunctionLambda (Lambda var _ body)) -> gatherArgsAndBindings (var:prevArgs) prevBindings body
+      TermLet (Let bindings body) -> gatherArgsAndBindings prevArgs (bindings ++ prevBindings) body
+      t -> (L.reverse prevArgs, L.reverse prevBindings, t)
 
 encodeTopLevelTerm :: PythonEnvironment -> Term -> Flow Graph [Py.Statement]
 encodeTopLevelTerm env term = if L.length args == 1
