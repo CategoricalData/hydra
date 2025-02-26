@@ -43,6 +43,7 @@ encodeAtom a = case a of
   Py.AtomNumber n -> encodeNumber n
   Py.AtomString s -> encodeString s
   Py.AtomTrue -> cst "True"
+  Py.AtomTuple t -> encodeTuple t
   _ -> unsupportedVariant "atom" a
 
 encodeAwaitPrimary :: Py.AwaitPrimary -> A.Expr
@@ -459,6 +460,9 @@ encodeTargetWithStarAtom :: Py.TargetWithStarAtom -> A.Expr
 encodeTargetWithStarAtom t = case t of
   Py.TargetWithStarAtomAtom a -> encodeStarAtom a
   _ -> unsupportedVariant "target with star atom" t
+
+encodeTuple :: Py.Tuple -> A.Expr
+encodeTuple (Py.Tuple es) = parenList False (encodeStarNamedExpression <$> es)
 
 encodeTypeAlias :: Py.TypeAlias -> A.Expr
 encodeTypeAlias (Py.TypeAlias name tparams body) = spaceSep [cst "type", alias, cst "=", encodeExpression body]
