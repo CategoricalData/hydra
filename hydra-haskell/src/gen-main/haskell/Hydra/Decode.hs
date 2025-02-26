@@ -49,13 +49,17 @@ casesCase :: (Core.Name -> Core.Name -> Core.Term -> Maybe Core.Term)
 casesCase tname fname = (Optionals.compose (cases tname) (field fname))
 
 cases :: (Core.Name -> Core.Term -> Maybe [Core.Field])
-cases = (nominal Core.caseStatementTypeName Core.caseStatementCases (Optionals.compose (Optionals.compose (\x -> (\x -> case x of
-  Core.TermFunction v1 -> (Optionals.pure v1)
-  _ -> Nothing) (Strip.fullyStripTerm x)) (\x -> case x of
-  Core.FunctionElimination v1 -> (Optionals.pure v1)
-  _ -> Nothing)) (\x -> case x of
-  Core.EliminationUnion v1 -> (Optionals.pure v1)
-  _ -> Nothing)))
+cases = (nominal Core.caseStatementTypeName Core.caseStatementCases (Optionals.compose (Optionals.compose matchFunction matchElimination) matchUnion)) 
+  where 
+    matchFunction = (\x -> (\x -> case x of
+      Core.TermFunction v1 -> (Optionals.pure v1)
+      _ -> Nothing) (Strip.fullyStripTerm x))
+    matchElimination = (\x -> case x of
+      Core.FunctionElimination v1 -> (Optionals.pure v1)
+      _ -> Nothing)
+    matchUnion = (\x -> case x of
+      Core.EliminationUnion v1 -> (Optionals.pure v1)
+      _ -> Nothing)
 
 field :: (Core.Name -> [Core.Field] -> Maybe Core.Term)
 field fname fields =  
@@ -121,11 +125,14 @@ integerLiteral x = case x of
   _ -> Nothing
 
 lambda :: (Core.Term -> Maybe Core.Lambda)
-lambda = (Optionals.compose (\x -> (\x -> case x of
-  Core.TermFunction v1 -> (Optionals.pure v1)
-  _ -> Nothing) (Strip.fullyStripTerm x)) (\x -> case x of
-  Core.FunctionLambda v1 -> (Optionals.pure v1)
-  _ -> Nothing))
+lambda = (Optionals.compose matchFunction matchLambda) 
+  where 
+    matchFunction = (\x -> (\x -> case x of
+      Core.TermFunction v1 -> (Optionals.pure v1)
+      _ -> Nothing) (Strip.fullyStripTerm x))
+    matchLambda = (\x -> case x of
+      Core.FunctionLambda v1 -> (Optionals.pure v1)
+      _ -> Nothing)
 
 letBinding :: (Core.Name -> Core.Term -> Maybe Core.LetBinding)
 letBinding fname term = (Optionals.bind (Optionals.map Core.letBindings (letTerm term)) (letBindingWithKey fname))
@@ -162,13 +169,17 @@ nominal :: ((a -> Core.Name) -> (a -> b) -> (c -> Maybe a) -> Core.Name -> c -> 
 nominal getName getB getA expected = (Optionals.compose getA (\a -> Logic.ifElse (Equality.equal (getName a) expected) (Just (getB a)) Nothing))
 
 optCases :: (Core.Term -> Maybe Core.OptionalCases)
-optCases = (Optionals.compose (Optionals.compose (\x -> (\x -> case x of
-  Core.TermFunction v1 -> (Optionals.pure v1)
-  _ -> Nothing) (Strip.fullyStripTerm x)) (\x -> case x of
-  Core.FunctionElimination v1 -> (Optionals.pure v1)
-  _ -> Nothing)) (\x -> case x of
-  Core.EliminationOptional v1 -> (Optionals.pure v1)
-  _ -> Nothing))
+optCases = (Optionals.compose (Optionals.compose matchFunction matchElimination) matchOptional) 
+  where 
+    matchFunction = (\x -> (\x -> case x of
+      Core.TermFunction v1 -> (Optionals.pure v1)
+      _ -> Nothing) (Strip.fullyStripTerm x))
+    matchElimination = (\x -> case x of
+      Core.FunctionElimination v1 -> (Optionals.pure v1)
+      _ -> Nothing)
+    matchOptional = (\x -> case x of
+      Core.EliminationOptional v1 -> (Optionals.pure v1)
+      _ -> Nothing)
 
 optCasesJust :: (Core.Term -> Maybe Core.Term)
 optCasesJust term = (Optionals.map Core.optionalCasesJust (optCases term))
@@ -182,9 +193,11 @@ optional x = ((\x -> case x of
   _ -> Nothing) (Strip.fullyStripTerm x))
 
 pair :: (Core.Term -> Maybe (Core.Term, Core.Term))
-pair = (Optionals.compose (\x -> (\x -> case x of
-  Core.TermProduct v1 -> (Optionals.pure v1)
-  _ -> Nothing) (Strip.fullyStripTerm x)) (\l -> Logic.ifElse (Equality.equal 2 (Lists.length l)) (Just (Lists.at 0 l, (Lists.at 1 l))) Nothing))
+pair = (Optionals.compose matchProduct (\l -> Logic.ifElse (Equality.equal 2 (Lists.length l)) (Just (Lists.at 0 l, (Lists.at 1 l))) Nothing)) 
+  where 
+    matchProduct = (\x -> (\x -> case x of
+      Core.TermProduct v1 -> (Optionals.pure v1)
+      _ -> Nothing) (Strip.fullyStripTerm x))
 
 record :: (Core.Name -> Core.Term -> Maybe [Core.Field])
 record = (nominal Core.recordTypeName Core.recordFields (\x -> (\x -> case x of
@@ -243,9 +256,9 @@ unitVariant :: (Core.Name -> Core.Term -> Maybe Core.Name)
 unitVariant tname term = (Optionals.map Core.fieldName (variant tname term))
 
 variable :: (Core.Term -> Maybe Core.Name)
-variable x = ((\x -> (\x -> case x of
+variable x = ((\x -> case x of
   Core.TermVariable v1 -> (Optionals.pure v1)
-  _ -> Nothing) (Strip.fullyStripTerm x)) (Strip.fullyStripTerm x))
+  _ -> Nothing) (Strip.fullyStripTerm x))
 
 variant :: (Core.Name -> Core.Term -> Maybe Core.Field)
 variant = (nominal Core.injectionTypeName Core.injectionField (\x -> (\x -> case x of
