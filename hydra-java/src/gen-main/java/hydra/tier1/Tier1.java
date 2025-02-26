@@ -202,13 +202,13 @@ public interface Tier1 {
   static <A, S> java.util.function.Function<hydra.compute.Flow<S, A>, hydra.compute.Flow<S, A>> withTrace(String a1) {
     java.util.function.Function<hydra.compute.Trace, java.util.function.Function<hydra.compute.Trace, hydra.compute.Trace>> restore = (java.util.function.Function<hydra.compute.Trace, java.util.function.Function<hydra.compute.Trace, hydra.compute.Trace>>) (t0 -> (java.util.function.Function<hydra.compute.Trace, hydra.compute.Trace>) (t1 -> new hydra.compute.Trace(((t0)).stack, ((t1)).messages, ((t1)).other)));
     java.util.function.Function<hydra.compute.Trace, hydra.mantle.Either<String, hydra.compute.Trace>> mutate = (java.util.function.Function<hydra.compute.Trace, hydra.mantle.Either<String, hydra.compute.Trace>>) (t -> hydra.lib.logic.IfElse.apply(
+            hydra.lib.equality.GteInt32.apply(
+                    hydra.lib.lists.Length.apply(((t)).stack),
+                    (hydra.constants.Constants.maxTraceDepth)),
         new hydra.mantle.Either.Left<>("maximum trace depth exceeded. This may indicate an infinite loop"),
         new hydra.mantle.Either.Right<>(new hydra.compute.Trace(hydra.lib.lists.Cons.apply(
             (a1),
-            ((t)).stack), ((t)).messages, ((t)).other)),
-        hydra.lib.equality.GteInt32.apply(
-            hydra.lib.lists.Length.apply(((t)).stack),
-            (hydra.constants.Constants.maxTraceDepth))));
+            ((t)).stack), ((t)).messages, ((t)).other))));
 
     Function<Function<Trace, Function<Trace, Trace>>, Function<Flow<S, A>, Flow<S, A>>> r = mutateTrace(mutate);
     return r.apply(restore);
