@@ -178,6 +178,7 @@ etaReduceTerm term = case term of
 --   parameters of primitive functions and eliminations are made into explicit lambda parameters.
 --   Variable references are not expanded.
 --   This is useful for targets like Python with weaker support for currying than Hydra or Haskell.
+--   Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references.
 expandLambdas :: Graph -> Term -> Term
 --expandLambdas g = contractTerm . unshadowVariables . expand
 expandLambdas g = contractTerm . expand
@@ -187,14 +188,20 @@ expandLambdas g = contractTerm . expand
           FunctionElimination _ -> pad [1] $ TermFunction f
           FunctionPrimitive name -> pad [1..(primitiveArity $ Y.fromJust $ lookupPrimitive g name)] $ TermFunction f
           _ -> TermFunction f
+      TermVariable name -> if 0 == arity
+          then TermVariable name
+          else pad [1..arity] $ TermVariable name
         where
-          pad is term = if L.null is
-              then term
-              else TermFunction $ FunctionLambda $
-                Lambda var Nothing $ pad (tail is) (TermApplication $ Application term $ TermVariable var)
-            where
-              var = (Name $ "v" ++ show (head is))
+          arity = case typedTermType <$> lookupTypedTerm g name of
+            Nothing -> 0
+            Just typ -> typeArity typ
       t -> t
+    pad is term = if L.null is
+        then term
+        else TermFunction $ FunctionLambda $
+          Lambda var Nothing $ pad (tail is) (TermApplication $ Application term $ TermVariable var)
+      where
+        var = (Name $ "v" ++ show (head is))
 
 -- | Whether a term is closed, i.e. represents a complete program
 termIsClosed :: Term -> Bool
