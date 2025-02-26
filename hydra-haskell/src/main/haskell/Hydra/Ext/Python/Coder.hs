@@ -86,7 +86,7 @@ encodeDefinition env def = case def of
   DefinitionTerm name term typ -> withTrace ("data element " ++ unName name) $ do
     comment <- fmap normalizeComment <$> getTermDescription term
     g <- getState
-    encodeTermAssignment env name (expandLambdas g term) comment
+    encodeTermAssignment env name (fullyStripTerm $ expandLambdas g term) comment
   DefinitionType name typ -> withTrace ("type element " ++ unName name) $ do
     comment <- fmap normalizeComment <$> getTypeDescription typ
     encodeTypeAssignment env name typ comment
