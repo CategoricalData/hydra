@@ -402,6 +402,11 @@ typeProduct = variant _Type _Type_product
 typeRecord :: TTerm RowType -> TTerm Type
 typeRecord = variant _Type _Type_record
 
+typeScheme :: TTerm [Name] -> TTerm Type -> TTerm TypeScheme
+typeScheme variables body = Base.record _TypeScheme [
+  _TypeScheme_variables>>: variables,
+  _TypeScheme_type>>: body]
+
 typeSchemeVariables :: TTerm (TypeScheme -> [Name])
 typeSchemeVariables = Base.project _TypeScheme _TypeScheme_variables
 

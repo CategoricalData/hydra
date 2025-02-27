@@ -35,6 +35,14 @@ hydraGraphModule = Module ns elements [hydraComputeModule] [hydraCoreModule] $
           "equalTo",
           "greaterThan"],
 
+      -- TODO: merge with hydra.core.LetBinding
+      def "Element" $
+        doc "A graph element, having a name, data term (value), and schema term (type)" $
+        record [
+          "name">: core "Name",
+          "term">: core "Term",
+          "type">: optional $ core "TypeScheme"],
+
       def "Graph" $
         doc "A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph" $
         record [
@@ -59,12 +67,6 @@ hydraGraphModule = Module ns elements [hydraComputeModule] [hydraCoreModule] $
           "schema">:
             doc "The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph." $
             optional $ graph "Graph"],
-
-      def "Element" $
-        doc "A graph element, having a name, data term (value), and schema term (type)" $
-        record [
-          "name">: core "Name",
-          "data">: core "Term"],
 
       def "Primitive" $
         doc "A built-in function" $

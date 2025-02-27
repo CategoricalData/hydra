@@ -53,7 +53,7 @@ constructModule aliases mod coders pairs = do
         let ptype = case res of
               Left schema -> PDL.NamedSchemaTypeTyperef schema
               Right t -> t
-        r <- getTermDescription $ elementData el
+        r <- getTermDescription $ elementTerm el
         let anns = doc r
         return (PDL.NamedSchema qname ptype anns, imports)
       where
@@ -61,7 +61,7 @@ constructModule aliases mod coders pairs = do
         imports = []
 --        imports = L.filter isExternal (pdlNameForElement aliases True <$> deps)
 --          where
---            deps = S.toList $ termDependencyNames False False False $ elementData el
+--            deps = S.toList $ termDependencyNames False False False $ elementTerm el
 --            isExternal qn = PDL.qualifiedNameNamespace qn /= PDL.qualifiedNameNamespace qname
 
 moduleToPegasusSchemas :: Module -> Flow Graph (M.Map FilePath PDL.SchemaFile)

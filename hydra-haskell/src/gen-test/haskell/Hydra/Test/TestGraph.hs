@@ -62,14 +62,22 @@ testTypeStringAliasName = (Core.Name "StringTypeAlias")
 testElementArthur :: Graph.Element
 testElementArthur = Graph.Element {
   Graph.elementName = (Core.Name "firstName"),
-  Graph.elementData = testDataArthur}
+  Graph.elementTerm = testDataArthur,
+  Graph.elementType = (Just (Core.TypeScheme {
+    Core.typeSchemeVariables = [],
+    Core.typeSchemeType = (Core.TypeVariable testTypePersonName)}))}
 
 testElementFirstName :: Graph.Element
 testElementFirstName = Graph.Element {
   Graph.elementName = (Core.Name "firstName"),
-  Graph.elementData = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+  Graph.elementTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = testTypePersonName,
-    Core.projectionField = (Core.Name "firstName")}))))}
+    Core.projectionField = (Core.Name "firstName")})))),
+  Graph.elementType = (Just (Core.TypeScheme {
+    Core.typeSchemeVariables = [],
+    Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+      Core.functionTypeDomain = (Core.TypeVariable testTypePersonName),
+      Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)}))}))}
 
 testNamespace :: Module.Namespace
 testNamespace = (Module.Namespace "testGraph")

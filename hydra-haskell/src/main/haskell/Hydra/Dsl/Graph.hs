@@ -6,10 +6,11 @@ import Hydra.Dsl.Base as Base
 import qualified Data.Map as M
 
 
-element :: TTerm Name -> TTerm Term -> TTerm Element
-element name term = record _Element [
+element :: TTerm Name -> TTerm Term -> TTerm (Maybe TypeScheme) -> TTerm Element
+element name term mtyp = record _Element [
   _Element_name>>: name,
-  _Element_data>>: term]
+  _Element_term>>: term,
+  _Element_type>>: mtyp]
 
 elementName :: TTerm (Element -> Name)
 elementName = project _Element _Element_name

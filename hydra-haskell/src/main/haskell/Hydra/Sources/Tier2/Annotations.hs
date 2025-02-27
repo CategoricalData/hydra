@@ -67,7 +67,7 @@ requireElementTypeDef = annotationsDefinition "requireElementType" $
     "withType">: matchOpt
       (Flows.fail ("missing type annotation for element " ++ (unwrap _Name @@ (project _Element _Element_name @@ var "el"))))
         $ lambda "t" $ Flows.pure $ var "t"]
-    $ var "withType" @@ (ref getTermTypeDef @@ (project _Element _Element_data @@ var "el"))
+    $ var "withType" @@ (ref getTermTypeDef @@ (project _Element _Element_term @@ var "el"))
 
 requireTermTypeDef :: TElement (Term -> Flow Graph Type)
 requireTermTypeDef = annotationsDefinition "requireTermType" $

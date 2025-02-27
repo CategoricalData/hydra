@@ -50,7 +50,7 @@ beneathTypeAnnotations f t = case t of
 elementsWithDependencies :: [Element] -> Flow Graph [Element]
 elementsWithDependencies original = CM.mapM requireElement allDepNames
   where
-    depNames = S.toList . termDependencyNames True False False . elementData
+    depNames = S.toList . termDependencyNames True False False . elementTerm
     allDepNames = L.nub $ (elementName <$> original) ++ (L.concat $ depNames <$> original)
 
 -- | A variation of expandLambdas which also attaches type annotations when "padding" function terms.
@@ -477,7 +477,7 @@ topologicalSortBindings bindingMap = fmap (fmap toPair) (topologicalSortComponen
 topologicalSortElements :: [Element] -> Either [[Name]] [Name]
 topologicalSortElements els = topologicalSort $ adjlist <$> els
   where
-    adjlist e = (elementName e, S.toList $ termDependencyNames False True True $ elementData e)
+    adjlist e = (elementName e, S.toList $ termDependencyNames False True True $ elementTerm e)
 
 typeDependencyNames :: Type -> S.Set Name
 typeDependencyNames = freeVariablesInType

@@ -31,7 +31,7 @@ requireElementType el =
             "missing type annotation for element ",
             (Core.unName (Graph.elementName el))]))
           Just v1 -> (Flows.pure v1))
-  in (withType (getTermType (Graph.elementData el)))
+  in (withType (getTermType (Graph.elementTerm el)))
 
 -- | Get the annotated type of a given term, or fail if it is missing
 requireTermType :: (Core.Term -> Compute.Flow Graph.Graph Core.Type)

@@ -42,6 +42,6 @@ demoMeteredEvaluation = do
   where
     context = modulesToGraph [testModule]
     evaluateSelectedTerm = do
-      original <- elementData <$> (requireElement $ unqualifyName $ QualifiedName (Just testNs) "catStrings")
+      original <- elementTerm <$> (requireElement $ unqualifyName $ QualifiedName (Just testNs) "catStrings")
       reduced <- reduceTerm False M.empty original
       return reduced

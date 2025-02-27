@@ -27,12 +27,12 @@ shaclCoder mod = do
     return (sg, termFlow)
   where
     treatAsType el = do
-        typ <- requireTermType $ elementData el
+        typ <- requireTermType $ elementTerm el
         return $ isNativeType (TypedTerm term typ)
       where
-        term = elementData el
+        term = elementTerm el
     toShape el = do
-      typ <- coreDecodeType $ elementData el
+      typ <- coreDecodeType $ elementTerm el
       common <- encodeType typ
       return $ Shacl.Definition (elementIri el) $ Shacl.ShapeNode $ Shacl.NodeShape common
 
