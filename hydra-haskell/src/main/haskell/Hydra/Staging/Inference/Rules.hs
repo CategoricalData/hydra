@@ -316,9 +316,6 @@ termType term = case stripTerm term of
 termTypeScheme :: Term -> TypeScheme
 termTypeScheme = monotype . termType
 
-typeOfPrimitive :: Name -> Flow Graph TypeScheme
-typeOfPrimitive name = primitiveType <$> requirePrimitive name
-
 typeOfTerm :: Term -> Maybe Type
 typeOfTerm term = case term of
   TermAnnotated (AnnotatedTerm term1 _) -> typeOfTerm term1
