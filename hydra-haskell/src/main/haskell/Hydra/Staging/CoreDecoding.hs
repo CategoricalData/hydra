@@ -150,7 +150,7 @@ matchUnion :: Name -> [(Name, Term -> Flow Graph b)] -> Term -> Flow Graph b
 matchUnion tname pairs term = case fullyStripTerm term of
     TermVariable name -> do
       el <- requireElement name
-      matchUnion tname pairs (elementData el)
+      matchUnion tname pairs (elementTerm el)
     TermUnion (Injection tname' (Field fname val)) -> if tname' == tname
       then case M.lookup fname mapping of
         Nothing -> fail $ "no matching case for field " ++ show fname

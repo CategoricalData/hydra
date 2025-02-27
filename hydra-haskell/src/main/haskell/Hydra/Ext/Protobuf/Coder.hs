@@ -71,7 +71,7 @@ constructModule mod@(Module ns els _ _ desc) _ pairs = do
           return (el, t)
         else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ unName (elementName el)
     toDef (el, typ) = do
-      typ <- coreDecodeType $ elementData el
+      typ <- coreDecodeType $ elementTerm el
       adaptAndEncodeType protobufLanguage (encodeDefinition ns (elementName el)) $ flattenType typ
     checkFields checkType checkFieldType types = L.foldl (||) False (hasMatches <$> types)
       where
@@ -185,7 +185,7 @@ encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ 
         TypeVariable name -> if noms
           then forNominal name
           else do
-            typ <- (elementData <$> requireElement name) >>= coreDecodeType
+            typ <- (elementTerm <$> requireElement name) >>= coreDecodeType
             encodeSimpleType noms typ
         t -> unexpected "simple type" $ show $ removeTypeAnnotations t
       where
@@ -275,7 +275,7 @@ isEnumDefinition typ = case simplifyType typ of
   _ -> False
 
 isEnumDefinitionReference :: Name -> Flow Graph Bool
-isEnumDefinitionReference name = isEnumDefinition <$> ((elementData <$> requireElement name) >>= coreDecodeType)
+isEnumDefinitionReference name = isEnumDefinition <$> ((elementTerm <$> requireElement name) >>= coreDecodeType)
 
 namespaceToFileReference :: Namespace -> P3.FileReference
 namespaceToFileReference (Namespace ns) = P3.FileReference $ pns ++ ".proto"

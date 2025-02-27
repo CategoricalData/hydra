@@ -49,9 +49,9 @@ annotateElements g sortedEls = withInferenceContext $ do
   where
     -- Note: the following defaults to user-provided type annotations where provided.
     --       In the future, we should trust unification to perform this defaulting, and not override the inferred type.
-    rewriteElement subst el = el { elementData = setTermType (Just typ) term1 }
+    rewriteElement subst el = el { elementTerm = setTermType (Just typ) term1 }
       where
-        term0 = elementData el
+        term0 = elementTerm el
         term1 = rewriteDataType (substituteInType subst) term0
         typ = Y.fromMaybe (termType term1) $ getTermType term0
 
@@ -69,8 +69,8 @@ inferTermType term0 = do
 
 inferElementType :: Element -> Flow Graph (Inferred Element)
 inferElementType el = withTrace ("infer type of " ++ unName (elementName el)) $ do
-  (Inferred iterm t c) <- infer $ elementData el
-  return (Inferred (el {elementData = iterm}) t c)
+  (Inferred iterm t c) <- infer $ elementTerm el
+  return (Inferred (el {elementTerm = iterm}) t c)
 
 inferGraphTypes :: Flow Graph Graph
 inferGraphTypes = getState >>= annotateGraph
@@ -120,11 +120,11 @@ sortGraphElements g = do
       Right names -> return $ Y.catMaybes ((\n -> M.lookup n els) <$> names)
   where
     els = graphElements g
-    ifAnnotated el = case (getTermType $ elementData el) of
+    ifAnnotated el = case (getTermType $ elementTerm el) of
       Nothing -> Nothing
       Just _ -> Just $ elementName el
     toAdj annotated el = do
-        let deps = L.filter isNotAnnotated $ L.filter isElName $ S.toList $ freeVariablesInTerm $ elementData el
+        let deps = L.filter isNotAnnotated $ L.filter isElName $ S.toList $ freeVariablesInTerm $ elementTerm el
 
         return (elementName el, deps)
       where
@@ -140,4 +140,4 @@ withInferenceContext flow = do
   where
     initialEnv g = M.fromList $ Y.catMaybes (toPair <$> (M.elems $ graphElements g))
       where
-        toPair el = (\t -> (elementName el, monotype t)) <$> (getTermType $ elementData el)
+        toPair el = (\t -> (elementName el, monotype t)) <$> (getTermType $ elementTerm el)

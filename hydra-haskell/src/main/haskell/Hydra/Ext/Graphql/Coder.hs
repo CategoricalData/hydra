@@ -48,10 +48,10 @@ constructModule mod coders pairs = do
     toTypeDef prefixes el = do
       typ <- requireTermType term
       if isNativeType (TypedTerm term typ)
-        then coreDecodeType (elementData el) >>= encodeNamedType prefixes el
+        then coreDecodeType (elementTerm el) >>= encodeNamedType prefixes el
         else fail $ "mapping of non-type elements to GraphQL is not yet supported: " ++ unName (elementName el)
      where
-       term = elementData el
+       term = elementTerm el
 
 descriptionFromType :: Type -> Flow Graph (Maybe G.Description)
 descriptionFromType typ = do

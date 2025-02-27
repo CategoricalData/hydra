@@ -133,7 +133,7 @@ avroHydraAdapter schema = case schema of
               [field] -> do
                   s <- termToString $ fieldTerm field
                   let name = constr s
-                  let el = Element name term
+                  let el = Element name term Nothing
                   env <- getState
                   putState $ env {avroEnvironmentElements = M.insert name el (avroEnvironmentElements env)}
                   return ()

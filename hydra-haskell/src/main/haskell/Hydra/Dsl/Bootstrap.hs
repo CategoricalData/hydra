@@ -56,10 +56,12 @@ typeref ns = TypeVariable . qualify ns . Name
 qualify :: Namespace -> Name -> Name
 qualify (Namespace gname) (Name lname) = Name $ gname ++ "." ++ lname
 
+-- TODO: provide a TypeScheme, not just a type, and there is no need to term-encode the type.
 typeElement :: Name -> Type -> Element
 typeElement name typ = Element {
     elementName = name,
-    elementData = dataTerm}
+    elementTerm = dataTerm,
+    elementType = Just $ TypeScheme [] typ}
   where
     -- These type annotations allow type inference to proceed despite cyclic type definitions, e.g. in Hydra Core
     dataTerm = normalizeTermAnnotations $ TermAnnotated $ AnnotatedTerm (coreEncodeType typ) $ M.fromList [(key_type, schemaTerm)]

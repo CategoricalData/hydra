@@ -88,7 +88,7 @@ doc80 :: String -> TTerm a -> TTerm a
 doc80 = doc . wrapLine 80
 
 el :: TElement a -> Element
-el (TElement name (TTerm term)) = Element name term
+el (TElement name (TTerm term)) = Element name term Nothing
 
 field :: Name -> TTerm a -> Field
 field fname (TTerm val) = Field fname val
