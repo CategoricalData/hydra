@@ -1,5 +1,5 @@
 -- | Variable substitution and normalization of type expressions
-module Hydra.Staging.Substitution where
+module Hydra.Staging.Inference.Substitution where
 
 import Hydra.Core
 import Hydra.Mantle

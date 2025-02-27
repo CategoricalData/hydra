@@ -16,7 +16,7 @@ import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.ShorthandTypes
-import qualified Hydra.Staging.AlgorithmWBridge as W
+import qualified Hydra.Staging.Inference.AlgorithmWBridge as W
 import Hydra.Lib.Io
 
 import qualified Hydra.TestUtils as TU

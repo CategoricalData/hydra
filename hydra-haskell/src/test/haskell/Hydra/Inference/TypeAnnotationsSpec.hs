@@ -4,7 +4,7 @@ module Hydra.Inference.TypeAnnotationsSpec where
 
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import Hydra.Staging.Inference
+import Hydra.Staging.Inference.Inference
 import Hydra.TestUtils
 import Hydra.TestData
 import qualified Hydra.Dsl.Expect as Expect
