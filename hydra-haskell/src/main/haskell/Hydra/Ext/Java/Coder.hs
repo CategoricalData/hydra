@@ -74,7 +74,7 @@ classifyDataReference name = do
     Nothing -> return JavaSymbolLocalVariable
     Just el -> do
       typ <- requireElementType el
-      return $ classifyDataTerm typ $ elementData el
+      return $ classifyDataTerm typ $ elementTerm el
 
 classifyDataTerm :: Type -> Term -> JavaSymbolClass
 classifyDataTerm typ term = if isLambda term
@@ -89,7 +89,7 @@ classifyDataTerm typ term = if isLambda term
       _ -> False
 
 commentsFromElement :: Element -> Flow Graph (Maybe String)
-commentsFromElement = getTermDescription . elementData
+commentsFromElement = getTermDescription . elementTerm
 
 commentsFromFieldType :: FieldType -> Flow Graph (Maybe String)
 commentsFromFieldType = getTypeDescription . fieldTypeType

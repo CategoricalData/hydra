@@ -24,6 +24,22 @@ _Comparison_equalTo = (Core.Name "equalTo")
 
 _Comparison_greaterThan = (Core.Name "greaterThan")
 
+-- | A graph element, having a name, data term (value), and schema term (type)
+data Element = 
+  Element {
+    elementName :: Core.Name,
+    elementTerm :: Core.Term,
+    elementType :: (Maybe Core.TypeScheme)}
+  deriving (Eq, Ord, Read, Show)
+
+_Element = (Core.Name "hydra.graph.Element")
+
+_Element_name = (Core.Name "name")
+
+_Element_term = (Core.Name "term")
+
+_Element_type = (Core.Name "type")
+
 -- | A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph
 data Graph = 
   Graph {
@@ -53,19 +69,6 @@ _Graph_body = (Core.Name "body")
 _Graph_primitives = (Core.Name "primitives")
 
 _Graph_schema = (Core.Name "schema")
-
--- | A graph element, having a name, data term (value), and schema term (type)
-data Element = 
-  Element {
-    elementName :: Core.Name,
-    elementData :: Core.Term}
-  deriving (Eq, Ord, Read, Show)
-
-_Element = (Core.Name "hydra.graph.Element")
-
-_Element_name = (Core.Name "name")
-
-_Element_data = (Core.Name "data")
 
 -- | A built-in function
 data Primitive = 

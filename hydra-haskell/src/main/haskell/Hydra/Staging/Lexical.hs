@@ -67,9 +67,9 @@ resolveTerm name = do
     g <- getState
     Y.maybe (pure Nothing) recurse $ M.lookup name $ graphElements g
   where
-    recurse el = case fullyStripTerm (elementData el) of
+    recurse el = case fullyStripTerm (elementTerm el) of
       TermVariable name' -> resolveTerm name'
-      _ -> pure $ Just $ elementData el
+      _ -> pure $ Just $ elementTerm el
 
 -- Note: assuming for now that primitive functions are the same in the schema graph
 schemaContext :: Graph -> Graph

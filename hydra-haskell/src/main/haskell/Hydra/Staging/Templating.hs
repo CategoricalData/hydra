@@ -13,7 +13,7 @@ graphToSchema :: Graph -> Flow Graph (M.Map Name Type)
 graphToSchema g = M.fromList <$> (mapM toPair $ M.toList $ graphElements g)
   where
     toPair (name, el) = do
-      t <- coreDecodeType $ elementData el
+      t <- coreDecodeType $ elementTerm el
       return (name, t)
 
 -- | Given a graph schema and a nonrecursive type, instantiate it with default values.

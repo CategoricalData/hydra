@@ -68,19 +68,19 @@ dereferenceType name = do
   mel <- dereferenceElement name
   case mel of
     Nothing -> return Nothing
-    Just el -> Just <$> coreDecodeType (elementData el)
+    Just el -> Just <$> coreDecodeType (elementTerm el)
 
 elementAsTypedTerm :: Element -> Flow Graph TypedTerm
 elementAsTypedTerm el = do
-  typ <- requireTermType $ elementData el
-  return $ TypedTerm (elementData el) typ
+  typ <- requireTermType $ elementTerm el
+  return $ TypedTerm (elementTerm el) typ
 
 -- TODO: a graph is a let-expression, so it should be trivial to get the type scheme of an element upon lookup. See issue #159.
 lookupTypedTerm :: Graph -> Name -> Maybe TypedTerm
 lookupTypedTerm g name = do
   el <- lookupElement g name
-  typ <- getTermType $ elementData el
-  return $ TypedTerm (elementData el) typ
+  typ <- getTermType $ elementTerm el
+  return $ TypedTerm (elementTerm el) typ
 
 fieldTypes :: Type -> Flow Graph (M.Map Name Type)
 fieldTypes t = case stripType t of
@@ -90,7 +90,7 @@ fieldTypes t = case stripType t of
     TypeVariable name -> do
       withTrace ("field types of " ++ unName name) $ do
         el <- requireElement name
-        coreDecodeType (elementData el) >>= fieldTypes
+        coreDecodeType (elementTerm el) >>= fieldTypes
     _ -> unexpected "record or union type" $ show t
   where
     toMap fields = M.fromList (toPair <$> fields)
@@ -113,7 +113,7 @@ isSerializable el = do
 moduleDependencyNamespaces :: Bool -> Bool -> Bool -> Bool -> Module -> Flow Graph (S.Set Namespace)
 moduleDependencyNamespaces withVars withPrims withNoms withSchema mod =
   S.delete (moduleNamespace mod) <$> (dependencyNamespaces withVars withPrims withNoms withSchema $
-    (elementData <$> moduleElements mod))
+    (elementTerm <$> moduleElements mod))
 
 namespacesForDefinitions :: (Namespace -> a) -> Namespace -> [Definition] -> Namespaces a
 namespacesForDefinitions encodeNamespace focusNs defs = Namespaces (toPair focusNs) $ M.fromList (toPair <$> S.toList nss)
@@ -140,7 +140,7 @@ requireRowType label getter name = do
 
 requireType :: Name -> Flow Graph Type
 requireType name = withTrace ("require type " ++ unName name) $
-  (withSchemaContext $ requireElement name) >>= (coreDecodeType . elementData)
+  (withSchemaContext $ requireElement name) >>= (coreDecodeType . elementTerm)
 
 requireUnionType :: Name -> Flow Graph RowType
 requireUnionType = requireRowType "union" $ \t -> case t of
@@ -184,4 +184,4 @@ typeDependencies transform name = deps (S.fromList [name]) M.empty
     requireType name = do
       withTrace ("type dependencies of " ++ unName name) $ do
         el <- requireElement name
-        coreDecodeType (elementData el)
+        coreDecodeType (elementTerm el)
