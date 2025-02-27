@@ -16,6 +16,16 @@ angleBracesList style els = case els of
   [] -> cst "<>"
   _ -> brackets angleBraces style $ commaSep style els
 
+-- | Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width
+--   of the expression.
+bracesListAdaptive :: [Expr] -> Expr
+bracesListAdaptive els = if (expressionLength inlineList) > 70
+    then curlyBracesList Nothing halfBlockStyle els
+    else inlineList
+  where
+    inlineList = curlyBracesList Nothing inlineStyle els
+    maxLength = L.maximum (expressionLength <$> els)
+
 bracketList :: BlockStyle -> [Expr] -> Expr
 bracketList style els = case els of
   [] -> cst "[]"
