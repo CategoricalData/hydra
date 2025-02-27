@@ -32,7 +32,7 @@ module Hydra.Kernel (
   module Hydra.Staging.CoreDecoding,
   module Hydra.Staging.Formatting,
 --  module Hydra.Staging.GrammarToModule,
-  module Hydra.Staging.Inference,
+  module Hydra.Staging.Inference.Inference,
   module Hydra.Staging.Lexical,
   module Hydra.Staging.LiteralAdapters,
   module Hydra.Staging.Reduction,
@@ -76,7 +76,7 @@ import Hydra.Staging.Annotations
 import Hydra.Staging.CoreDecoding
 import Hydra.Staging.Formatting
 --import Hydra.Staging.GrammarToModule
-import Hydra.Staging.Inference
+import Hydra.Staging.Inference.Inference
 import Hydra.Staging.Lexical
 import Hydra.Staging.LiteralAdapters
 import Hydra.Staging.Reduction

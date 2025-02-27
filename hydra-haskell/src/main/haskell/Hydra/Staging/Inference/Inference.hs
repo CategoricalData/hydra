@@ -1,6 +1,6 @@
 -- | Entry point for Hydra type inference, which is a variation on on Hindley-Milner
 
-module Hydra.Staging.Inference (
+module Hydra.Staging.Inference.Inference (
   inferTermType,
   inferGraphTypes,
   inferredTypeOf,
@@ -18,9 +18,9 @@ import Hydra.Staging.Lexical
 import Hydra.Mantle
 import Hydra.Staging.Annotations
 import Hydra.Staging.Rewriting
-import Hydra.Staging.Substitution
-import Hydra.Staging.Unification
-import Hydra.Staging.Rules
+import Hydra.Staging.Inference.Substitution
+import Hydra.Staging.Inference.Unification
+import Hydra.Staging.Inference.Rules
 import Hydra.Flows
 import Hydra.Rewriting
 import Hydra.Errors
