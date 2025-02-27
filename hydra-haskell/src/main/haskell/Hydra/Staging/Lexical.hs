@@ -91,6 +91,9 @@ toCompactName namespaces name = case mns of
   where
     (QualifiedName mns local) = qualifyName name
 
+typeOfPrimitive :: Name -> Flow Graph TypeScheme
+typeOfPrimitive name = primitiveType <$> requirePrimitive name
+
 withSchemaContext :: Flow Graph x -> Flow Graph x
 withSchemaContext f = do
   g <- getState
