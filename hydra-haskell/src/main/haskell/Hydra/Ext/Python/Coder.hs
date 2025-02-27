@@ -125,7 +125,10 @@ encodeFunctionType env ft = do
 encodeFloatValue :: FloatValue -> Flow s Py.Expression
 encodeFloatValue fv = case fv of
   FloatValueBigfloat f -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberFloat f
-  _ -> fail $ "unsupported floating point type: " ++ show (floatValueType fv)
+  -- TODO: remove these variants; the fact that the float32 type is appearing here is a bug
+  FloatValueFloat32 f -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberFloat $ realToFrac f
+  FloatValueFloat64 f -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberFloat $ realToFrac f
+--  _ -> fail $ "unsupported floating point type: " ++ show (floatValueType fv)
 
 encodeFunction :: PythonEnvironment -> Function -> Flow Graph Py.Expression
 encodeFunction env f = case f of
@@ -150,9 +153,15 @@ encodeIntegerValue :: IntegerValue -> Flow s Py.Expression
 encodeIntegerValue iv = case iv of
   IntegerValueBigint i -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberInteger i
   -- TODO: remove these variants; the fact that the int32 type is appearing here is a bug
+  IntegerValueInt8 i -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberInteger $ fromIntegral i
   IntegerValueInt16 i -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberInteger $ fromIntegral i
   IntegerValueInt32 i -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberInteger $ fromIntegral i
-  _ -> fail $ "unsupported integer type: " ++ show (integerValueType iv)
+  IntegerValueInt64 i -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberInteger $ fromIntegral i
+  IntegerValueUint8 i -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberInteger $ fromIntegral i
+  IntegerValueUint16 i -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberInteger $ fromIntegral i
+  IntegerValueUint32 i -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberInteger $ fromIntegral i
+  IntegerValueUint64 i -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberInteger $ fromIntegral i
+--  _ -> fail $ "unsupported integer type: " ++ show (integerValueType iv)
 
 encodeLambdaType :: PythonEnvironment -> LambdaType -> Flow Graph Py.Expression
 encodeLambdaType env lt = do
@@ -278,6 +287,14 @@ encodeTerm env term = case fullyStripTerm term of
     TermLet _ -> pure $ stringToPyExpression Py.QuoteStyleDouble "let terms are not supported here"
     TermList els -> pyAtomToPyExpression . Py.AtomList . pyList <$> CM.mapM encode els
     TermLiteral lit -> encodeLiteral lit
+    TermMap m -> do
+        pairs <- CM.mapM encodePair $ M.toList m
+        return $ pyAtomToPyExpression $ Py.AtomDict $ Py.Dict pairs
+      where
+        encodePair (k, v) = do
+          pyK <- encode k
+          pyV <- encode v
+          return $ Py.DoubleStarredKvpairPair $ Py.Kvpair pyK pyV
     TermOptional mt -> case mt of
       Nothing -> pure $ pyNameToPyExpression pyNone
       Just term1 -> encode term1
@@ -287,6 +304,9 @@ encodeTerm env term = case fullyStripTerm term of
     TermRecord (Record tname fields) -> do
       pargs <- CM.mapM (encode . fieldTerm) fields
       return $ functionCall (pyNameToPyPrimary $ encodeNameQualified env tname) pargs
+    TermSet s -> do
+      pyEls <- CM.mapM encode $ S.toList s
+      return $ pyAtomToPyExpression $ Py.AtomSet $ Py.Set_ (pyExpressionToPyStarNamedExpression <$> pyEls)
     TermUnion (Injection tname field) -> do
       rt <- requireUnionType tname
       if isEnumType rt

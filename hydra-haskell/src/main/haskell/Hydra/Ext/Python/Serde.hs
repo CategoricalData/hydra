@@ -41,6 +41,7 @@ encodeAtom a = case a of
   Py.AtomList l -> encodeList l
   Py.AtomName n -> encodeName n
   Py.AtomNumber n -> encodeNumber n
+  Py.AtomSet s -> encodeSet s
   Py.AtomString s -> encodeString s
   Py.AtomTrue -> cst "True"
   Py.AtomTuple t -> encodeTuple t
@@ -137,7 +138,7 @@ encodeDecorators (Py.Decorators exprs) = newlineSep (encodeDec <$> exprs)
     encodeDec ne = noSep [cst "@", encodeNamedExpression ne]
 
 encodeDict :: Py.Dict -> A.Expr
-encodeDict (Py.Dict items) = noSep [cst "{", commaSep inlineStyle (encodeDoubleStarredKvpair <$> items), cst "}"]
+encodeDict (Py.Dict items) = curlyBracesList Nothing halfBlockStyle (encodeDoubleStarredKvpair <$> items)
 
 encodeDisjunction :: Py.Disjunction -> A.Expr
 encodeDisjunction (Py.Disjunction cs) = symbolSep "or" inlineStyle (encodeConjunction <$> cs)
@@ -362,6 +363,9 @@ encodeRelativeImportPrefix p = cst $ case p of
 
 encodeReturnStatement :: Py.ReturnStatement -> A.Expr
 encodeReturnStatement (Py.ReturnStatement es) = spaceSep [cst "return", commaSep inlineStyle (encodeStarExpression <$> es)]
+
+encodeSet :: Py.Set_ -> A.Expr
+encodeSet (Py.Set_ es) = bracesListAdaptive (encodeStarNamedExpression <$> es)
 
 encodeShiftExpression :: Py.ShiftExpression -> A.Expr
 encodeShiftExpression (Py.ShiftExpression lhs rhs) = spaceSep $ Y.catMaybes [encodeShiftLhs <$> lhs, Just $ encodeSum rhs]
