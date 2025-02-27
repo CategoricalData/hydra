@@ -1,4 +1,4 @@
-module Hydra.Staging.AltInference where
+module Hydra.Staging.Inference.AltInference where
 
 import Hydra.Variants
 import Hydra.Coders

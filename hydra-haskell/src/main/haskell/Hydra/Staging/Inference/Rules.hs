@@ -1,6 +1,6 @@
 -- | Inference rules
 
-module Hydra.Staging.Rules where
+module Hydra.Staging.Inference.Rules where
 
 import Hydra.Variants
 import Hydra.Strip
@@ -12,8 +12,8 @@ import Hydra.Graph
 import Hydra.Staging.Lexical
 import Hydra.Mantle
 import Hydra.Staging.Rewriting
-import Hydra.Staging.Substitution
-import Hydra.Staging.Unification
+import Hydra.Staging.Inference.Substitution
+import Hydra.Staging.Inference.Unification
 import Hydra.Tools.Debug
 import Hydra.Staging.Annotations
 import Hydra.Flows

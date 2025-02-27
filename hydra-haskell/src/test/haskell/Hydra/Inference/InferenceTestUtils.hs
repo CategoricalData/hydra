@@ -3,8 +3,8 @@ module Hydra.Inference.InferenceTestUtils where
 import Hydra.Kernel
 import qualified Hydra.Dsl.Types as Types
 import Hydra.TestUtils
-import Hydra.Staging.Inference
-import Hydra.Staging.Rules
+import Hydra.Staging.Inference.Inference
+import Hydra.Staging.Inference.Rules
 
 import qualified Test.Hspec as H
 

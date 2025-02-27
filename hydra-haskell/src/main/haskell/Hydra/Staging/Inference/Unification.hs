@@ -1,6 +1,6 @@
 -- | Hindley-Milner style type unification
 
-module Hydra.Staging.Unification (
+module Hydra.Staging.Inference.Unification (
   solveConstraints
 ) where
 
@@ -12,7 +12,7 @@ import Hydra.Staging.Lexical
 import Hydra.Mantle
 import Hydra.Printing
 import Hydra.Staging.Rewriting
-import Hydra.Staging.Substitution
+import Hydra.Staging.Inference.Substitution
 import Hydra.Rewriting
 import Hydra.Dsl.Types as Types
 import Hydra.Lib.Io

@@ -6,7 +6,7 @@ Test.Hspec.hspec Hydra.Inference.AltInferenceSpec.spec
 module Hydra.Inference.AltInferenceSpec where
 
 import Hydra.Kernel
-import Hydra.Staging.AltInference
+import Hydra.Staging.Inference.AltInference
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
