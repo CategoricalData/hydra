@@ -53,7 +53,7 @@ hydraTestingModule = Module ns elements [hydraCoreModule, hydraMantleModule] [hy
           "input">: core "Term",
           "output">: core "TypeScheme"],
 
-      def "Tag" string,
+      def "Tag" $ wrap string,
 
       def "TestCase" $
         doc "A simple test case with an input and an expected output" $
