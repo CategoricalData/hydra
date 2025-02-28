@@ -4,10 +4,10 @@
 module Hydra.Ext.Org.Apache.Parquet.Format where
 
 import qualified Hydra.Core as Core
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | Types supported by Parquet.  These types are intended to be used in combination with the encodings to control the on disk storage format. For example INT16 is not included as a type since a good encoding of INT32 would handle this.
 data Type = 
@@ -131,7 +131,7 @@ _TimeType_unit = (Core.Name "unit")
 -- | Integer logical type annotation. bitWidth must be 8, 16, 32, or 64. Allowed for physical types: INT32, INT64
 data IntType = 
   IntType {
-    intTypeBitWidth :: Int16,
+    intTypeBitWidth :: I.Int16,
     intTypeIsSigned :: Bool}
   deriving (Eq, Ord, Read, Show)
 
@@ -607,25 +607,25 @@ data ColumnMetaData =
     -- | Compression codec
     columnMetaDataCodec :: CompressionCodec,
     -- | Number of values in this column
-    columnMetaDataNumValues :: Int64,
+    columnMetaDataNumValues :: I.Int64,
     -- | total byte size of all uncompressed pages in this column chunk (including the headers)
-    columnMetaDataTotalUncompressedSize :: Int64,
+    columnMetaDataTotalUncompressedSize :: I.Int64,
     -- | total byte size of all compressed, and potentially encrypted, pages in this column chunk (including the headers)
-    columnMetaDataTotalCompressedSize :: Int64,
+    columnMetaDataTotalCompressedSize :: I.Int64,
     -- | Optional key/value metadata
     columnMetaDataKeyValueMetadata :: (Maybe [KeyValue]),
     -- | Byte offset from beginning of file to first data page
-    columnMetaDataDataPageOffset :: Int64,
+    columnMetaDataDataPageOffset :: I.Int64,
     -- | Byte offset from beginning of file to root index page
-    columnMetaDataIndexPageOffset :: (Maybe Int64),
+    columnMetaDataIndexPageOffset :: (Maybe I.Int64),
     -- | Byte offset from the beginning of file to first (only) dictionary page
-    columnMetaDataDictionaryPageOffset :: (Maybe Int64),
+    columnMetaDataDictionaryPageOffset :: (Maybe I.Int64),
     -- | optional statistics for this column chunk
     columnMetaDataStatistics :: (Maybe Statistics),
     -- | Set of all encodings used for pages in this column chunk. This information can be used to determine if all data pages are dictionary encoded for example
     columnMetaDataEncodingStats :: (Maybe [PageEncodingStats]),
     -- | Byte offset from beginning of file to Bloom filter data.
-    columnMetaDataBloomFilterOffset :: (Maybe Int64)}
+    columnMetaDataBloomFilterOffset :: (Maybe I.Int64)}
   deriving (Eq, Ord, Read, Show)
 
 _ColumnMetaData = (Core.Name "hydra.ext.org.apache.parquet.format.ColumnMetaData")
@@ -694,15 +694,15 @@ data ColumnChunk =
     -- | File where column data is stored.  If not set, assumed to be same file as metadata.  This path is relative to the current file.
     columnChunkFilePath :: (Maybe String),
     -- | Byte offset in file_path to the ColumnMetaData
-    columnChunkFileOffset :: Int64,
+    columnChunkFileOffset :: I.Int64,
     -- | Column metadata for this chunk. This is the same content as what is at file_path/file_offset.  Having it here has it replicated in the file metadata.
     columnChunkMetaData :: (Maybe ColumnMetaData),
     -- | File offset of ColumnChunk's OffsetIndex
-    columnChunkOffsetIndexOffset :: (Maybe Int64),
+    columnChunkOffsetIndexOffset :: (Maybe I.Int64),
     -- | Size of ColumnChunk's OffsetIndex, in bytes
     columnChunkOffsetIndexLength :: (Maybe Int),
     -- | File offset of ColumnChunk's ColumnIndex
-    columnChunkColumnIndexOffset :: (Maybe Int64),
+    columnChunkColumnIndexOffset :: (Maybe I.Int64),
     -- | Size of ColumnChunk's ColumnIndex, in bytes
     columnChunkColumnIndexLength :: (Maybe Int),
     -- | Crypto metadata of encrypted columns
@@ -736,17 +736,17 @@ data RowGroup =
     -- | Metadata for each column chunk in this row group. This list must have the same order as the SchemaElement list in FileMetaData.
     rowGroupColumns :: [ColumnChunk],
     -- | Total byte size of all the uncompressed column data in this row group
-    rowGroupTotalByteSize :: Int64,
+    rowGroupTotalByteSize :: I.Int64,
     -- | Number of rows in this row group
-    rowGroupNumRows :: Int64,
+    rowGroupNumRows :: I.Int64,
     -- | If set, specifies a sort ordering of the rows in this RowGroup. The sorting columns can be a subset of all the columns.
     rowGroupSortingColumns :: (Maybe [SortingColumn]),
     -- | Byte offset from beginning of file to first page (data or dictionary) in this row group
-    rowGroupFileOffset :: (Maybe Int64),
+    rowGroupFileOffset :: (Maybe I.Int64),
     -- | Total byte size of all compressed (and potentially encrypted) column data in this row group
-    rowGroupTotalCompressedSize :: (Maybe Int64),
+    rowGroupTotalCompressedSize :: (Maybe I.Int64),
     -- | Row group ordinal in the file
-    rowGroupOrdinal :: (Maybe Int16)}
+    rowGroupOrdinal :: (Maybe I.Int16)}
   deriving (Eq, Ord, Read, Show)
 
 _RowGroup = (Core.Name "hydra.ext.org.apache.parquet.format.RowGroup")
@@ -818,11 +818,11 @@ _ColumnOrder_typeOrder = (Core.Name "typeOrder")
 data PageLocation = 
   PageLocation {
     -- | Offset of the page in the file
-    pageLocationOffset :: Int64,
+    pageLocationOffset :: I.Int64,
     -- | Size of the page, including header. Sum of compressed_page_size and header length
     pageLocationCompressedPageSize :: Int,
     -- | Index within the RowGroup of the first row of the page; this means pages change on record boundaries (r = 0).
-    pageLocationFirstRowIndex :: Int64}
+    pageLocationFirstRowIndex :: I.Int64}
   deriving (Eq, Ord, Read, Show)
 
 _PageLocation = (Core.Name "hydra.ext.org.apache.parquet.format.PageLocation")
@@ -854,7 +854,7 @@ data ColumnIndex =
     -- | Stores whether both min_values and max_values are orderd and if so, in which direction. This allows readers to perform binary searches in both lists. Readers cannot assume that max_values[i] <= min_values[i+1], even if the lists are ordered.
     columnIndexBoundaryOrder :: BoundaryOrder,
     -- | A list containing the number of null values for each page
-    columnIndexNullCounts :: (Maybe [Int64])}
+    columnIndexNullCounts :: (Maybe [I.Int64])}
   deriving (Eq, Ord, Read, Show)
 
 _ColumnIndex = (Core.Name "hydra.ext.org.apache.parquet.format.ColumnIndex")
@@ -924,7 +924,7 @@ data FileMetaData =
     -- | Parquet schema for this file.  This schema contains metadata for all the columns. The schema is represented as a tree with a single root.  The nodes of the tree are flattened to a list by doing a depth-first traversal. The column metadata contains the path in the schema for that column which can be used to map columns to nodes in the schema. The first element is the root
     fileMetaDataSchema :: [SchemaElement],
     -- | Number of rows in this file
-    fileMetaDataNumRows :: Int64,
+    fileMetaDataNumRows :: I.Int64,
     -- | Row groups in this file
     fileMetaDataRowGroups :: [RowGroup],
     -- | Optional key/value metadata
