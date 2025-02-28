@@ -11,8 +11,8 @@ testTypeLatLonPolyName = hydra.core.Name("LatLonPoly")
 
 def latlonRecord(lat, lon) :
     hydra.core.TermRecord(hydra.core.Record("testTypeLatLonName", [
-      hydra.core.Field(hydra.core.Name("lat"), hydra.core.TermLiteral(hydra.core.LiteralFloat(hydra.core.FloatValueFloat32("lat")))),
-      hydra.core.Field(hydra.core.Name("lon"), hydra.core.TermLiteral(hydra.core.LiteralFloat(hydra.core.FloatValueFloat32("lon"))))]))
+      hydra.core.Field(hydra.core.Name("lat"), hydra.core.TermLiteral(hydra.core.LiteralFloat(hydra.core.FloatValueFloat32(lat)))),
+      hydra.core.Field(hydra.core.Name("lon"), hydra.core.TermLiteral(hydra.core.LiteralFloat(hydra.core.FloatValueFloat32(lon))))]))
 
 testTypeLatLon = hydra.core.TypeRecord(hydra.core.RowType("testTypeLatLonName", [
   hydra.core.FieldType(hydra.core.Name("lat"), hydra.core.TypeLiteral(hydra.core.LiteralTypeFloat(hydra.core.FloatType.FLOAT32))),
@@ -26,9 +26,9 @@ testTypeStringAlias = hydra.core.TypeWrap(hydra.core.WrappedType("testTypeString
 
 testTypeStringAliasName = hydra.core.Name("StringTypeAlias")
 
-testElementArthur = hydra.graph.Element(hydra.core.Name("firstName"), "testDataArthur")
+testElementArthur = hydra.graph.Element(hydra.core.Name("firstName"), "testDataArthur", hydra.core.TypeScheme([], hydra.core.TypeVariable("testTypePersonName")))
 
-testElementFirstName = hydra.graph.Element(hydra.core.Name("firstName"), hydra.core.TermFunction(hydra.core.FunctionElimination(hydra.core.EliminationRecord(hydra.core.Projection("testTypePersonName", hydra.core.Name("firstName"))))))
+testElementFirstName = hydra.graph.Element(hydra.core.Name("firstName"), hydra.core.TermFunction(hydra.core.FunctionElimination(hydra.core.EliminationRecord(hydra.core.Projection("testTypePersonName", hydra.core.Name("firstName"))))), hydra.core.TypeScheme([], hydra.core.TypeFunction(hydra.core.FunctionType(hydra.core.TypeVariable("testTypePersonName"), hydra.core.TypeLiteral(hydra.core.LiteralTypeString(hydra.core.Unit()))))))
 
 testNamespace = hydra.module.Namespace("testGraph")
 
@@ -52,16 +52,16 @@ testTypeBuddyListB = hydra.core.TypeLambda(hydra.core.LambdaType(hydra.core.Name
 testTypeBuddyListBName = hydra.core.Name("BuddyListB")
 
 testTypeComparison = hydra.core.TypeUnion(hydra.core.RowType("testTypeComparisonName", [
-  hydra.core.FieldType(hydra.core.Name("lessThan"), hydra.core.TypeRecord(hydra.core.RowType(hydra.core.Name("hydra/core.Unit"), []))),
-  hydra.core.FieldType(hydra.core.Name("equalTo"), hydra.core.TypeRecord(hydra.core.RowType(hydra.core.Name("hydra/core.Unit"), []))),
-  hydra.core.FieldType(hydra.core.Name("greaterThan"), hydra.core.TypeRecord(hydra.core.RowType(hydra.core.Name("hydra/core.Unit"), [])))]))
+  hydra.core.FieldType(hydra.core.Name("lessThan"), hydra.core.TypeRecord(hydra.core.RowType(hydra.core.Name("hydra.core.Unit"), []))),
+  hydra.core.FieldType(hydra.core.Name("equalTo"), hydra.core.TypeRecord(hydra.core.RowType(hydra.core.Name("hydra.core.Unit"), []))),
+  hydra.core.FieldType(hydra.core.Name("greaterThan"), hydra.core.TypeRecord(hydra.core.RowType(hydra.core.Name("hydra.core.Unit"), [])))]))
 
 testTypeComparisonName = hydra.core.Name("Comparison")
 
 testTypeFoobarValue = hydra.core.TypeUnion(hydra.core.RowType("testTypeFoobarValueName", [
   hydra.core.FieldType(hydra.core.Name("bool"), hydra.core.TypeLiteral(hydra.core.LiteralTypeBoolean(hydra.core.Unit()))),
   hydra.core.FieldType(hydra.core.Name("string"), hydra.core.TypeLiteral(hydra.core.LiteralTypeString(hydra.core.Unit()))),
-  hydra.core.FieldType(hydra.core.Name("unit"), hydra.core.TypeRecord(hydra.core.RowType(hydra.core.Name("hydra/core.Unit"), [])))]))
+  hydra.core.FieldType(hydra.core.Name("unit"), hydra.core.TypeRecord(hydra.core.RowType(hydra.core.Name("hydra.core.Unit"), [])))]))
 
 testTypeFoobarValueName = hydra.core.Name("FoobarValue")
 
@@ -123,7 +123,7 @@ testTypeTimestampName = hydra.core.Name("Timestamp")
 testTypeUnionMonomorphic = hydra.core.TypeUnion(hydra.core.RowType("testTypeUnionMonomorphicName", [
   hydra.core.FieldType(hydra.core.Name("bool"), hydra.core.TypeLiteral(hydra.core.LiteralTypeBoolean(hydra.core.Unit()))),
   hydra.core.FieldType(hydra.core.Name("string"), hydra.core.TypeLiteral(hydra.core.LiteralTypeString(hydra.core.Unit()))),
-  hydra.core.FieldType(hydra.core.Name("unit"), hydra.core.TypeRecord(hydra.core.RowType(hydra.core.Name("hydra/core.Unit"), [])))]))
+  hydra.core.FieldType(hydra.core.Name("unit"), hydra.core.TypeRecord(hydra.core.RowType(hydra.core.Name("hydra.core.Unit"), [])))]))
 
 testTypeUnionMonomorphicName = hydra.core.Name("UnionMonomorphic")
 

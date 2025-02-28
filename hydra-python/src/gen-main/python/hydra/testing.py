@@ -38,7 +38,7 @@ class InferenceTestCase:
     input: hydra.core.Term
     output: hydra.core.TypeScheme
 
-type Tag = str
+class Tag(Node[str]): ...
 
 class TestCaseCaseConversion(Node["CaseConversionTestCase"]): ...
 
