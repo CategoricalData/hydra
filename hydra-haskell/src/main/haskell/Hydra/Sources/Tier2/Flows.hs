@@ -25,7 +25,7 @@ import           Hydra.Dsl.Lib.Strings     as Strings
 import qualified Hydra.Dsl.Module          as Module
 import qualified Hydra.Dsl.Terms           as Terms
 import qualified Hydra.Dsl.Types           as Types
-import           Hydra.Sources.Tier1.All
+import           Hydra.Sources.Tier1.All hiding (mapDef)
 
 
 flowsDefinition :: String -> TTerm a -> TElement a
@@ -45,6 +45,8 @@ hydraFlowsModule = Module (Namespace "hydra.flows") elements
       el failDef,
       el flowSucceedsDef,
       el fromFlowDef,
+      el mapDef,
+      el map2Def,
       el mutateTraceDef,
       el pureDef,
       el pushErrorDef,
@@ -116,6 +118,27 @@ fromFlowDef = flowsDefinition "fromFlow" $
   lambda "def" $ lambda "cx" $ lambda "f" $
       matchOpt (var "def") (lambda "x" $ var "x")
         @@ (Flows.flowStateValue @@ (Flows.unFlow @@ var "f" @@ var "cx" @@ ref emptyTraceDef))
+
+mapDef :: TElement ((a -> b) -> Flow s a -> Flow s b)
+mapDef = flowsDefinition "map" $
+  doc "Map a function over a flow" $
+  functionN [Types.function tA tB, tFlow tS tA, tFlow tS tB] $
+  lambdas ["f", "f1"] $ wrap _Flow $ lambdas ["s0", "t0"] $ lets [
+    "f2">: Flows.unFlow @@ var "f1" @@ var "s0" @@ var "t0"]
+    $ Flows.flowState
+      (Optionals.map (var "f") $ Flows.flowStateValue @@ var "f2")
+      (Flows.flowStateState @@ var "f2")
+      (Flows.flowStateTrace @@ var "f2")
+
+map2Def :: TElement ((Flow s a) -> (Flow s b) -> (a -> b -> c) -> Flow s c)
+map2Def = flowsDefinition "map2" $
+  doc "Map a function over two flows" $
+  functionN [tFlow tS tA, tFlow tS tB, Types.functionN [tA, tB, tC], tFlow tS tC] $
+  lambdas ["f1", "f2", "f"] $ ref bindDef
+    @@ var "f1"
+    @@ (lambda "r1" $ ref mapDef
+      @@ (lambda "r2" $ var "f" @@ var "r1" @@ var "r2")
+      @@ var "f2")
 
 mutateTraceDef :: TElement ((Trace -> Either_ String Trace) -> (Trace -> Trace -> Trace) -> Flow s a -> Flow s a)
 mutateTraceDef = flowsDefinition "mutateTrace" $
