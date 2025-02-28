@@ -9,10 +9,10 @@
 module Hydra.Ext.Org.Apache.Tinkerpop.Features where
 
 import qualified Hydra.Core as Core
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | Base interface for features that relate to supporting different data types.
 data DataTypeFeatures = 

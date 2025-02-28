@@ -4,10 +4,10 @@ module Hydra.Ext.Org.Geojson.Model where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Json as Json
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | A GeoJSON object MAY have a member named "bbox" to include information on the coordinate range for its Geometries, Features, or FeatureCollections.  The value of the bbox member MUST be an array of length 2*n where n is the number of dimensions represented in the contained geometries, with all axes of the most southwesterly point followed by all axes of the more northeasterly point.  The axes order of a bbox follows the axes order of geometries.
 newtype BoundingBox = 
@@ -35,7 +35,7 @@ data Feature =
     -- | A Feature object has a member with the name "geometry".  The value of the geometry member SHALL be either a Geometry object as defined above or, in the case that the Feature is unlocated, a JSON null value.
     featureGeometry :: (Maybe Geometry),
     -- | A Feature object has a member with the name "properties".  The value of the properties member is an object (any JSON object or a JSON null value).
-    featureProperties :: (Maybe (Map String Json.Value)),
+    featureProperties :: (Maybe (M.Map String Json.Value)),
     -- | If a Feature has a commonly used identifier, that identifier SHOULD be included as a member of the Feature object with the name "id", and the value of this member is either a JSON string or number.
     featureId :: (Maybe Id),
     featureBbox :: (Maybe BoundingBox)}
