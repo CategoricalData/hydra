@@ -106,8 +106,8 @@ optionalList mapping els = if L.null els
   then Nothing
   else Just $ Json.ValueArray $ fmap mapping els
 
-mapToJson :: G.Map_ -> Json.Value
-mapToJson (G.Map_ pairs) = Json.ValueArray $ L.concat $ fmap fromPair pairs
+mapToJson :: G.Map -> Json.Value
+mapToJson (G.Map pairs) = Json.ValueArray $ L.concat $ fmap fromPair pairs
   where
     fromPair (G.ValuePair k v) = [valueToJson k, valueToJson v]
 

@@ -48,7 +48,7 @@ avroHydraAdapter schema = case schema of
             coderEncode = \(Json.ValueArray vals) -> Terms.list <$> (CM.mapM (coderEncode $ adapterCoder ad) vals),
             coderDecode = \(TermList vals) -> Json.ValueArray <$> (CM.mapM (coderDecode $ adapterCoder ad) vals)}
       return $ Adapter (adapterIsLossy ad) schema (Types.list $ adapterTarget ad) coder
-    Avro.SchemaMap (Avro.Map_ s) -> do
+    Avro.SchemaMap (Avro.Map s) -> do
       ad <- avroHydraAdapter s
       let pairToHydra (k, v) = do
             v' <- coderEncode (adapterCoder ad) v
@@ -323,7 +323,7 @@ rewriteAvroSchemaM f = rewrite fsub f
   where
     fsub recurse schema = case schema of
         Avro.SchemaArray (Avro.Array els) -> Avro.SchemaArray <$> (Avro.Array <$> recurse els)
-        Avro.SchemaMap (Avro.Map_ vschema) -> Avro.SchemaMap <$> (Avro.Map_ <$> recurse vschema)
+        Avro.SchemaMap (Avro.Map vschema) -> Avro.SchemaMap <$> (Avro.Map <$> recurse vschema)
         Avro.SchemaNamed n -> do
           nt <- case Avro.namedType n of
             Avro.NamedTypeRecord (Avro.Record fields) -> Avro.NamedTypeRecord <$> (Avro.Record <$> (CM.mapM forField fields))

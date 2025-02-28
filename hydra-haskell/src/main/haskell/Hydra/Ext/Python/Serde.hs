@@ -364,8 +364,8 @@ encodeRelativeImportPrefix p = cst $ case p of
 encodeReturnStatement :: Py.ReturnStatement -> A.Expr
 encodeReturnStatement (Py.ReturnStatement es) = spaceSep [cst "return", commaSep inlineStyle (encodeStarExpression <$> es)]
 
-encodeSet :: Py.Set_ -> A.Expr
-encodeSet (Py.Set_ es) = bracesListAdaptive (encodeStarNamedExpression <$> es)
+encodeSet :: Py.Set -> A.Expr
+encodeSet (Py.Set es) = bracesListAdaptive (encodeStarNamedExpression <$> es)
 
 encodeShiftExpression :: Py.ShiftExpression -> A.Expr
 encodeShiftExpression (Py.ShiftExpression lhs rhs) = spaceSep $ Y.catMaybes [encodeShiftLhs <$> lhs, Just $ encodeSum rhs]
